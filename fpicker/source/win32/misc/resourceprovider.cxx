@@ -25,13 +25,14 @@
 #include <rtl/ustrbuf.hxx>
 #include "resourceprovider.hxx"
 #include <osl/mutex.hxx>
-#include <vcl/fpicker.hrc>
+#include <fpicker/fpicker.hrc>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
 #include <tools/simplerm.hxx>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
+#include "fpsofficeResMgr.hxx"
 
 using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
@@ -44,7 +45,7 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 struct Entry
 {
     sal_Int32 ctrlId;
-    sal_Int16 resId;
+    const char* resId;
 };
 
 Entry const CtrlIdToResIdTable[] = {
@@ -65,68 +66,33 @@ Entry const CtrlIdToResIdTable[] = {
 
 const sal_Int32 SIZE_TABLE = SAL_N_ELEMENTS( CtrlIdToResIdTable );
 
-sal_Int16 CtrlIdToResId( sal_Int32 aControlId )
+const char* CtrlIdToResId( sal_Int32 aControlId )
 {
-    sal_Int16 aResId = -1;
+    const char* pResId = nullptr;
 
     for ( sal_Int32 i = 0; i < SIZE_TABLE; i++ )
     {
         if ( CtrlIdToResIdTable[i].ctrlId == aControlId )
         {
-            aResId = CtrlIdToResIdTable[i].resId;
+            pResId = CtrlIdToResIdTable[i].resId;
             break;
         }
     }
 
-    return aResId;
+    return pResId;
 }
 
-class CResourceProvider_Impl
+namespace CResourceProvider
 {
-public:
-
-
-    CResourceProvider_Impl( )
-    {
-        const SolarMutexGuard aGuard;
-        m_ResMgr = o3tl::make_unique<SimpleResMgr>(
-            "fps_office", Application::GetSettings().GetUILanguageTag());
-    }
-
     OUString getResString( sal_Int16 aId )
     {
         OUString aResOUString;
-
-        try
-        {
-            // translate the control id to a resource id
-            sal_Int16 aResId = CtrlIdToResId( aId );
-
-            if ( aResId > -1 )
-                aResOUString = m_ResMgr->ReadString( aResId );
-        }
-        catch(...)
-        {
-        }
-
+        // translate the control id to a resource id
+        const char *pResId = CtrlIdToResId(aId);
+        if (pResId)
+            aResOUString = FpsResId(pResId);
         return aResOUString;
     }
-
-public:
-    std::unique_ptr<SimpleResMgr> m_ResMgr;
-};
-
-CResourceProvider::CResourceProvider( ) :
-    m_pImpl( o3tl::make_unique<CResourceProvider_Impl>() )
-{
-}
-
-CResourceProvider::~CResourceProvider( )
-{}
-
-OUString CResourceProvider::getResString( sal_Int16 aId )
-{
-   return m_pImpl->getResString( aId );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

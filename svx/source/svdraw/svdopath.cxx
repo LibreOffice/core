@@ -32,7 +32,7 @@
 #include <svx/svdhdl.hxx>
 #include <svx/svdview.hxx>
 #include "svdglob.hxx"
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 
 #include <svx/xlnwtit.hxx>
 #include <svx/xlnclit.hxx>
@@ -1877,7 +1877,7 @@ OUString SdrPathObj::TakeObjNameSingul() const
 
     if(OBJ_LINE == meKind)
     {
-        sal_uInt16 nId(STR_ObjNameSingulLINE);
+        const char* pId(STR_ObjNameSingulLINE);
 
         if(lcl_ImpIsLine(GetPathPoly()))
         {
@@ -1889,11 +1889,11 @@ OUString SdrPathObj::TakeObjNameSingul() const
             {
                 if(aB2DPoint0.getY() == aB2DPoint1.getY())
                 {
-                    nId = STR_ObjNameSingulLINE_Hori;
+                    pId = STR_ObjNameSingulLINE_Hori;
                 }
                 else if(aB2DPoint0.getX() == aB2DPoint1.getX())
                 {
-                    nId = STR_ObjNameSingulLINE_Vert;
+                    pId = STR_ObjNameSingulLINE_Vert;
                 }
                 else
                 {
@@ -1902,31 +1902,31 @@ OUString SdrPathObj::TakeObjNameSingul() const
 
                     if(fDx == fDy)
                     {
-                        nId = STR_ObjNameSingulLINE_Diag;
+                        pId = STR_ObjNameSingulLINE_Diag;
                     }
                 }
             }
         }
 
-        sName.append(ImpGetResStr(nId));
+        sName.append(ImpGetResStr(pId));
     }
     else if(OBJ_PLIN == meKind || OBJ_POLY == meKind)
     {
         const bool bClosed(OBJ_POLY == meKind);
-        sal_uInt16 nId(0);
+        const char* pId(nullptr);
 
         if(mpDAC && mpDAC->IsCreating())
         {
             if(bClosed)
             {
-                nId = STR_ObjNameSingulPOLY;
+                pId = STR_ObjNameSingulPOLY;
             }
             else
             {
-                nId = STR_ObjNameSingulPLIN;
+                pId = STR_ObjNameSingulPLIN;
             }
 
-            sName.append(ImpGetResStr(nId));
+            sName.append(ImpGetResStr(pId));
         }
         else
         {
@@ -1941,14 +1941,14 @@ OUString SdrPathObj::TakeObjNameSingul() const
 
             if(bClosed)
             {
-                nId = STR_ObjNameSingulPOLY_PointCount;
+                pId = STR_ObjNameSingulPOLY_PointCount;
             }
             else
             {
-                nId = STR_ObjNameSingulPLIN_PointCount;
+                pId = STR_ObjNameSingulPLIN_PointCount;
             }
 
-            OUString sTemp(ImpGetResStr(nId));
+            OUString sTemp(ImpGetResStr(pId));
             // #i96537#
             sName.append(sTemp.replaceFirst("%2", OUString::number(nPointCount)));
         }

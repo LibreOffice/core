@@ -1,0 +1,114 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SVX_INC_TXENCTAB_HRC
+#define INCLUDED_SVX_INC_TXENCTAB_HRC
+
+#include <rtl/textenc.h>
+#include <utility>
+
+#define N_(String) (u8##String)
+
+// Encodings for which no conversion exist yet are commented out.
+
+const std::pair<const char*, rtl_TextEncoding> RID_SVXSTR_TEXTENCODING_TABLE[] =
+{
+    { N_("Western Europe (Windows-1252/WinLatin 1)")           , RTL_TEXTENCODING_MS_1252          },
+    { N_("Western Europe (Apple Macintosh)")                    , RTL_TEXTENCODING_APPLE_ROMAN      },
+    { N_("Western Europe (DOS/OS2-850/International)")          , RTL_TEXTENCODING_IBM_850          },
+    { N_("Western Europe (DOS/OS2-437/US)")                     , RTL_TEXTENCODING_IBM_437          },
+    { N_("Western Europe (DOS/OS2-860/Portuguese)")         , RTL_TEXTENCODING_IBM_860          },
+    { N_("Western Europe (DOS/OS2-861/Icelandic)")              , RTL_TEXTENCODING_IBM_861          },
+    { N_("Western Europe (DOS/OS2-863/French (Can.))")  , RTL_TEXTENCODING_IBM_863          },
+    { N_("Western Europe (DOS/OS2-865/Nordic)")             , RTL_TEXTENCODING_IBM_865          },
+    { N_("Western Europe (ASCII/US)")                           , RTL_TEXTENCODING_ASCII_US         },
+    { N_("Western Europe (ISO-8859-1)")                         , RTL_TEXTENCODING_ISO_8859_1       },
+    { N_("Eastern Europe (ISO-8859-2)")                         , RTL_TEXTENCODING_ISO_8859_2       },
+    { N_("Latin 3 (ISO-8859-3)")                            , RTL_TEXTENCODING_ISO_8859_3       },
+    { N_("Baltic (ISO-8859-4)")                         , RTL_TEXTENCODING_ISO_8859_4       },
+    { N_("Cyrillic (ISO-8859-5)")                           , RTL_TEXTENCODING_ISO_8859_5       },
+    { N_("Arabic (ISO-8859-6)")                             , RTL_TEXTENCODING_ISO_8859_6       },
+    { N_("Greek (ISO-8859-7)")                          , RTL_TEXTENCODING_ISO_8859_7       },
+    { N_("Hebrew (ISO-8859-8)")                         , RTL_TEXTENCODING_ISO_8859_8       },
+    { N_("Turkish (ISO-8859-9)")                            , RTL_TEXTENCODING_ISO_8859_9       },
+    { N_("Western Europe (ISO-8859-14)")                        , RTL_TEXTENCODING_ISO_8859_14      },
+    { N_("Western Europe (ISO-8859-15/EURO)")                   , RTL_TEXTENCODING_ISO_8859_15      },
+    { N_("Greek (DOS/OS2-737)")                     , RTL_TEXTENCODING_IBM_737          },
+    { N_("Baltic (DOS/OS2-775)")                            , RTL_TEXTENCODING_IBM_775          },
+    { N_("Eastern Europe (DOS/OS2-852)")                            , RTL_TEXTENCODING_IBM_852          },
+    { N_("Cyrillic (DOS/OS2-855)")                      , RTL_TEXTENCODING_IBM_855          },
+    { N_("Turkish (DOS/OS2-857)")                           , RTL_TEXTENCODING_IBM_857          },
+    { N_("Hebrew (DOS/OS2-862)")                            , RTL_TEXTENCODING_IBM_862          },
+    { N_("Arabic (DOS/OS2-864)")                            , RTL_TEXTENCODING_IBM_864          },
+    { N_("Cyrillic (DOS/OS2-866/Russian)")              , RTL_TEXTENCODING_IBM_866          },
+    { N_("Greek (DOS/OS2-869/Modern)")                  , RTL_TEXTENCODING_IBM_869          },
+    { N_("Eastern Europe (Windows-1250/WinLatin 2)")                , RTL_TEXTENCODING_MS_1250          },
+    { N_("Cyrillic (Windows-1251)")                     , RTL_TEXTENCODING_MS_1251          },
+    { N_("Greek (Windows-1253)")                        , RTL_TEXTENCODING_MS_1253          },
+    { N_("Turkish (Windows-1254)")                          , RTL_TEXTENCODING_MS_1254          },
+    { N_("Hebrew (Windows-1255)")                       , RTL_TEXTENCODING_MS_1255          },
+    { N_("Arabic (Windows-1256)")                           , RTL_TEXTENCODING_MS_1256          },
+    { N_("Baltic (Windows-1257)")                           , RTL_TEXTENCODING_MS_1257          },
+    { N_("Vietnamese (Windows-1258)")                       , RTL_TEXTENCODING_MS_1258          },
+    { N_("Eastern Europe (Apple Macintosh)")                        , RTL_TEXTENCODING_APPLE_CENTEURO   },
+    { N_("Eastern Europe (Apple Macintosh/Croatian)")           , RTL_TEXTENCODING_APPLE_CROATIAN   },
+    { N_("Cyrillic (Apple Macintosh)")                  , RTL_TEXTENCODING_APPLE_CYRILLIC   },
+    { N_("Greek (Apple Macintosh)")                 , RTL_TEXTENCODING_APPLE_GREEK      },
+    { N_("Western Europe (Apple Macintosh/Icelandic)")          , RTL_TEXTENCODING_APPLE_ICELAND    },
+    { N_("Eastern Europe (Apple Macintosh/Romanian)")           , RTL_TEXTENCODING_APPLE_ROMANIAN   },
+    { N_("Turkish (Apple Macintosh)")                       , RTL_TEXTENCODING_APPLE_TURKISH    },
+    { N_("Cyrillic (Apple Macintosh/Ukrainian)")            , RTL_TEXTENCODING_APPLE_UKRAINIAN  },
+    { N_("Chinese simplified (Apple Macintosh)")        , RTL_TEXTENCODING_APPLE_CHINSIMP   },
+    { N_("Chinese traditional (Apple Macintosh)")       , RTL_TEXTENCODING_APPLE_CHINTRAD   },
+    { N_("Japanese (Apple Macintosh)")                      , RTL_TEXTENCODING_APPLE_JAPANESE   },
+    { N_("Korean (Apple Macintosh)")                    , RTL_TEXTENCODING_APPLE_KOREAN     },
+    { N_("Japanese (Windows-932)")                          , RTL_TEXTENCODING_MS_932           },
+    { N_("Chinese simplified (Windows-936)")            , RTL_TEXTENCODING_MS_936           },
+    { N_("Korean (Windows-949)")                        , RTL_TEXTENCODING_MS_949           },
+    { N_("Chinese traditional (Windows-950)")           , RTL_TEXTENCODING_MS_950           },
+    { N_("Japanese (Shift-JIS)")                            , RTL_TEXTENCODING_SHIFT_JIS        },
+    { N_("Chinese simplified (GB-2312)")                , RTL_TEXTENCODING_GB_2312          },
+    { N_("Chinese simplified (GB-18030)")               , RTL_TEXTENCODING_GB_18030         },
+    { N_("Chinese traditional (GBT-12345)")             , RTL_TEXTENCODING_GBT_12345        },
+    { N_("Chinese simplified (GBK/GB-2312-80)")         , RTL_TEXTENCODING_GBK              },
+    { N_("Chinese traditional (Big5)")                  , RTL_TEXTENCODING_BIG5             },
+    { N_("Chinese traditional (BIG5-HKSCS)")            , RTL_TEXTENCODING_BIG5_HKSCS       },
+    { N_("Japanese (EUC-JP)")                               , RTL_TEXTENCODING_EUC_JP           },
+    { N_("Chinese simplified (EUC-CN)")                 , RTL_TEXTENCODING_EUC_CN           },
+    { N_("Chinese traditional (EUC-TW)")                , RTL_TEXTENCODING_EUC_TW           },
+    { N_("Japanese (ISO-2022-JP)")                         , RTL_TEXTENCODING_ISO_2022_JP      },
+    { N_("Chinese simplified (ISO-2022-CN)")            , RTL_TEXTENCODING_ISO_2022_CN      },
+    { N_("Cyrillic (KOI8-R)")                               , RTL_TEXTENCODING_KOI8_R           },
+    { N_("Unicode (UTF-7)")                                 , RTL_TEXTENCODING_UTF7             },
+    { N_("Unicode (UTF-8)")                                 , RTL_TEXTENCODING_UTF8             },
+    { N_("Eastern Europe (ISO-8859-10)")                            , RTL_TEXTENCODING_ISO_8859_10      },
+    { N_("Eastern Europe (ISO-8859-13)")                            , RTL_TEXTENCODING_ISO_8859_13      },
+    { N_("Korean (EUC-KR)")                             , RTL_TEXTENCODING_EUC_KR           },
+    { N_("Korean (ISO-2022-KR)")                        , RTL_TEXTENCODING_ISO_2022_KR      },
+    { N_("Korean (Windows-Johab-1361)")                 , RTL_TEXTENCODING_MS_1361          },
+    { N_("Unicode (UTF-16)")                            , RTL_TEXTENCODING_UCS2             },
+    { N_("Thai (ISO-8859-11/TIS-620)")                                  , RTL_TEXTENCODING_TIS_620          },
+    { N_("Thai (Windows-874)")                              , RTL_TEXTENCODING_MS_874           },
+    { N_("Cyrillic (KOI8-U)")                             , RTL_TEXTENCODING_KOI8_U           },
+    { N_("Cyrillic (PT154)")                                , RTL_TEXTENCODING_PT154            }
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

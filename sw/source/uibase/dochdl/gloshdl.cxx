@@ -44,7 +44,7 @@
 #include <swdtflvr.hxx>
 #include <docsh.hxx>
 
-#include <dochdl.hrc>
+#include <strings.hrc>
 #include <swerror.h>
 #include <frmmgr.hxx>
 #include <vcl/layout.hxx>

@@ -33,6 +33,7 @@
 #include "cfgitem.hxx"
 
 #include "starmath.hrc"
+#include "strings.hrc"
 #include "smdll.hxx"
 #include "smmod.hxx"
 #include "format.hxx"

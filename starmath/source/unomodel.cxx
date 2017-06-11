@@ -49,6 +49,7 @@
 #include <view.hxx>
 #include <symbol.hxx>
 #include <starmath.hrc>
+#include <strings.hrc>
 #include <smdll.hxx>
 #include "cfgitem.hxx"
 

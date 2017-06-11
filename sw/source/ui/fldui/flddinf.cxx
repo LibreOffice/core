@@ -27,6 +27,7 @@
 #include <helpid.h>
 #include <swtypes.hxx>
 #include <globals.hrc>
+#include <strings.hrc>
 #include <fldbas.hxx>
 #include <docufld.hxx>
 #include <wrtsh.hxx>
@@ -160,7 +161,7 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
 
                     if( rProperties.getLength() )
                     {
-                        pInfo = m_pTypeTLB->InsertEntry( SwResId( STR_CUSTOM ) );
+                        pInfo = m_pTypeTLB->InsertEntry(SwResId(STR_CUSTOM_FIELD));
                         pInfo->SetUserData(reinterpret_cast<void*>(USHRT_MAX));
 
                         for (sal_Int32 n=0; n < rProperties.getLength(); n++)

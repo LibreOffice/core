@@ -23,7 +23,7 @@
 #include "fmhelp.hrc"
 #include "fmitems.hxx"
 #include "fmprop.hrc"
-#include "svx/fmresids.hrc"
+#include <svx/strings.hrc>
 
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XControl.hpp>

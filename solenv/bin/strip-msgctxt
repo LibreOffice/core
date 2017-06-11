@@ -1,0 +1,67 @@
+#!/usr/bin/python
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# strip msgctxt from a po file
+# which could be achieved with sed '/^msgctxt/,/^msgid/{/^msgid/!d}'
+# and fix up trivial missing/added newlines between msgid and msgstr
+
+import fileinput
+
+msgctxt = False
+msgid = False
+msgstr = False;
+
+prevline = ""
+lastmsgidline = ""
+lastmsgstrline = ""
+
+for line in fileinput.input():
+	prevmsgid = msgid
+	prevmsgstr = msgstr
+
+        if line.startswith('"#-#-#-#-#'):
+            print line,
+            continue
+
+	if line.startswith("msgctxt"):
+		msgctxt = True
+		msgid = False
+		msgstr = False
+	elif line.startswith("msgid"):
+		msgctxt = False
+		msgid = True
+		msgstr = False
+	elif line.startswith("msgstr"):
+		msgctxt = False
+		msgid = False
+		msgstr = True
+	elif msgid and not line.startswith('"'):
+		msgid = False
+	elif msgstr and not line.startswith('"'):
+		msgstr = False
+
+	if prevmsgid and not msgid:
+		lastmsgidline = prevline
+
+	if prevmsgstr and not msgstr:
+		lastmsgstrline = prevline
+
+	prevline = line
+
+        if msgctxt:
+            continue
+
+        if prevmsgstr and not msgstr and lastmsgstrline != 'msgstr ""\n':
+            if lastmsgidline.endswith('\\n"\n') and not lastmsgstrline.endswith('\\n"\n'):
+	        #insert missing newlines
+                print '"\\n"\n',
+            elif not lastmsgidline.endswith('\\n"\n') and lastmsgstrline.endswith('\\n"\n'):
+	        #insert something not a newline
+                print '" "\n',
+
+	print line,

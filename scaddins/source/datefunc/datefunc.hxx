@@ -34,7 +34,6 @@
 #include <com/sun/star/sheet/addin/XMiscFunctions.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <tools/resid.hxx>
-#include <tools/resary.hxx>
 
 class ScaResId : public ResId
 {
@@ -55,8 +54,8 @@ enum class ScaCategory
 struct ScaFuncDataBase
 {
     const sal_Char*             pIntName;           // internal name (get***)
-    sal_uInt16                  nUINameID;          // resource ID to UI name
-    sal_uInt16                  nDescrID;           // resource ID to description, parameter names and ~ description
+    const char*                 pUINameID;          // resource ID to UI name
+    const char**                pDescrID;           // resource ID to description, parameter names and ~ description
     const char**                pCompListID;        // list of valid names
     sal_uInt16                  nParamCount;        // number of named / described parameters
     ScaCategory                 eCat;               // function category
@@ -68,8 +67,8 @@ class ScaFuncData final
 {
 private:
     OUString                    aIntName;           // internal name (get***)
-    sal_uInt16                  nUINameID;          // resource ID to UI name
-    sal_uInt16                  nDescrID;           // leads also to parameter descriptions!
+    const char*                 pUINameID;          // resource ID to UI name
+    const char**                pDescrID;           // leads also to parameter descriptions!
     sal_uInt16                  nParamCount;        // num of parameters
     std::vector<OUString>       aCompList;          // list of all valid names
     ScaCategory                 eCat;               // function category
@@ -80,8 +79,8 @@ public:
                                 ScaFuncData(const ScaFuncDataBase& rBaseData);
                                 ~ScaFuncData();
 
-    sal_uInt16           GetUINameID() const     { return nUINameID; }
-    sal_uInt16           GetDescrID() const      { return nDescrID; }
+    const char*          GetUINameID() const     { return pUINameID; }
+    const char**         GetDescrID() const      { return pDescrID; }
     ScaCategory          GetCategory() const     { return eCat; }
     bool                 IsDouble() const        { return bDouble; }
 
@@ -120,21 +119,21 @@ class ScaDateAddIn : public ::cppu::WeakImplHelper<
 private:
     css::lang::Locale                          aFuncLoc;
     std::unique_ptr< css::lang::Locale[] >     pDefLocales;
-    std::unique_ptr< ResMgr >                  pResMgr;
+    std::locale                                aResLocale;
     std::unique_ptr< ScaFuncDataList >         pFuncDataList;
 
 
     void                        InitDefLocales();
     const css::lang::Locale& GetLocale( sal_uInt32 nIndex );
-    /// @throws css::uno::RuntimeException
-    ResMgr&                     GetResMgr();
     void                        InitData();
 
     /// @throws css::uno::RuntimeException
-    OUString                    GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex );
+    OUString                    GetFuncDescrStr(const char** pResId, sal_uInt16 nStrIndex);
 
 public:
                                 ScaDateAddIn();
+
+    OUString ScaResId(const char* pId);
 
     static OUString      getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();

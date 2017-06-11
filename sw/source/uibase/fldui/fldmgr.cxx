@@ -35,12 +35,15 @@
 #include <comphelper/string.hxx>
 #include <editeng/unolingu.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <tools/resary.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/app.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
+#include <svx/strarray.hxx>
 #include <basic/basmgr.hxx>
 #include <editeng/langitem.hxx>
 #include <svl/macitem.hxx>
@@ -74,6 +77,7 @@
 #include <fldmgr.hxx>
 #include <flddropdown.hxx>
 #include <fldui.hrc>
+#include <strings.hrc>
 #include <tox.hxx>
 #include <misc.hrc>
 #include <cnttab.hxx>
@@ -136,70 +140,214 @@ static const sal_uInt16 VF_COUNT = 1; // { 0 }
 static const sal_uInt16 VF_USR_COUNT = 2; // { 0, nsSwExtendedSubType::SUB_CMD }
 static const sal_uInt16 VF_DB_COUNT = 1; // { nsSwExtendedSubType::SUB_OWN_FMT }
 
+static const char* FLD_EU_ARY[] =
+{
+    FLD_EU_FIRMA,
+    FLD_EU_VORNAME,
+    FLD_EU_NAME,
+    FLD_EU_ABK,
+    FLD_EU_STRASSE,
+    FLD_EU_LAND,
+    FLD_EU_PLZ,
+    FLD_EU_ORT,
+    FLD_EU_TITEL,
+    FLD_EU_POS,
+    FLD_EU_TELPRIV,
+    FLD_EU_TELFIRMA,
+    FLD_EU_FAX,
+    FLD_EU_EMAIL,
+    FLD_EU_STATE
+};
+
+static const char* FMT_AUTHOR_ARY[] =
+{
+    FMT_AUTHOR_NAME,
+    FMT_AUTHOR_SCUT
+};
+
+static const char* FLD_DATE_ARY[] =
+{
+    FLD_DATE_FIX,
+    FLD_DATE_STD,
+};
+
+static const char* FLD_TIME_ARY[] =
+{
+    FLD_TIME_FIX,
+    FLD_TIME_STD
+};
+
+static const char* FMT_NUM_ARY[] =
+{
+    FMT_NUM_ABC,
+    FMT_NUM_SABC,
+    FMT_NUM_ABC_N,
+    FMT_NUM_SABC_N,
+    FMT_NUM_ROMAN,
+    FMT_NUM_SROMAN,
+    FMT_NUM_ARABIC,
+    FMT_NUM_PAGEDESC,
+    FMT_NUM_PAGESPECIAL
+};
+
+static const char* FMT_FF_ARY[] =
+{
+    FMT_FF_NAME,
+    FMT_FF_PATHNAME,
+    FMT_FF_PATH,
+    FMT_FF_NAME_NOEXT,
+    FMT_FF_UI_NAME,
+    FMT_FF_UI_RANGE
+};
+
+static const char* FLD_STAT_ARY[] =
+{
+    FLD_STAT_PAGE,
+    FLD_STAT_PARA,
+    FLD_STAT_WORD,
+    FLD_STAT_CHAR,
+    FLD_STAT_TABLE,
+    FLD_STAT_GRF,
+    FLD_STAT_OBJ
+};
+
+static const char* FMT_CHAPTER_ARY[] =
+{
+    FMT_CHAPTER_NO,
+    FMT_CHAPTER_NAME,
+    FMT_CHAPTER_NAMENO,
+    FMT_CHAPTER_NO_NOSEPARATOR
+};
+
+static const char* FLD_INPUT_ARY[] =
+{
+    FLD_INPUT_TEXT
+};
+
+static const char* FMT_MARK_ARY[] =
+{
+    FMT_MARK_TEXT,
+    FMT_MARK_TABLE,
+    FMT_MARK_FRAME,
+    FMT_MARK_GRAFIC,
+    FMT_MARK_OLE
+};
+
+static const char* FMT_REF_ARY[] =
+{
+    FMT_REF_PAGE,
+    FMT_REF_CHAPTER,
+    FMT_REF_TEXT,
+    FMT_REF_UPDOWN,
+    FMT_REF_PAGE_PGDSC,
+    FMT_REF_ONLYNUMBER,
+    FMT_REF_ONLYCAPTION,
+    FMT_REF_ONLYSEQNO,
+    FMT_REF_NUMBER,
+    FMT_REF_NUMBER_NO_CONTEXT,
+    FMT_REF_NUMBER_FULL_CONTEXT
+};
+
+static const char* FMT_DBFLD_ARY[] =
+{
+    FMT_DBFLD_DB,
+    FMT_DBFLD_SYS
+};
+
+static const char* FMT_SETVAR_ARY[] =
+{
+    FMT_SETVAR_SYS,
+    FMT_SETVAR_TEXT
+};
+
+static const char* FMT_GETVAR_ARY[] =
+{
+    FMT_GETVAR_TEXT,
+    FMT_GETVAR_NAME
+};
+
+static const char* FMT_DDE_ARY[] =
+{
+    FMT_DDE_NORMAL,
+    FMT_DDE_HOT
+};
+
+static const char* FLD_PAGEREF_ARY[] =
+{
+    FLD_PAGEREF_OFF,
+    FLD_PAGEREF_ON
+};
+
+static const char* FMT_USERVAR_ARY[] =
+{
+    FMT_USERVAR_TEXT,
+    FMT_USERVAR_CMD
+};
+
 // field types and subtypes
 struct SwFieldPack
 {
-    sal_uInt16  nTypeId;
+    sal_uInt16   nTypeId;
 
-    sal_uInt16  nSubTypeStart;
-    sal_uInt16  nSubTypeEnd;
+    const char** pSubTypeResIds;
+    size_t       nSubTypeLength;
 
-    sal_uLong   nFormatBegin;
-    sal_uLong   nFormatEnd;
+    const char** pFormatResIds;
+    size_t       nFormatLength;
 };
 
 // strings and formats
 static const SwFieldPack aSwFields[] =
 {
     // Document
-    { TYP_EXTUSERFLD,       FLD_EU_BEGIN,       FLD_EU_END,     0,                  0 },
-    { TYP_AUTHORFLD,        0,                  0,              FMT_AUTHOR_BEGIN,   FMT_AUTHOR_END },
-    { TYP_DATEFLD,          FLD_DATE_BEGIN,     FLD_DATE_END,   0,                  0 },
-    { TYP_TIMEFLD,          FLD_TIME_BEGIN,     FLD_TIME_END,   0,                  0 },
-    { TYP_PAGENUMBERFLD,    0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END-1 },
-    { TYP_NEXTPAGEFLD,      0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END },
-    { TYP_PREVPAGEFLD,      0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END },
-    { TYP_FILENAMEFLD,      0,                  0,              FMT_FF_BEGIN,       FMT_FF_END },
-    { TYP_DOCSTATFLD,       FLD_STAT_BEGIN,     FLD_STAT_END,   FMT_NUM_BEGIN,      FMT_NUM_END-1 },
+    { TYP_EXTUSERFLD,       FLD_EU_ARY,         SAL_N_ELEMENTS(FLD_EU_ARY),     nullptr,          0 },
+    { TYP_AUTHORFLD,        nullptr,            0,                              FMT_AUTHOR_ARY,   SAL_N_ELEMENTS(FMT_AUTHOR_ARY) },
+    { TYP_DATEFLD,          FLD_DATE_ARY,       SAL_N_ELEMENTS(FLD_DATE_ARY),   nullptr,          0 },
+    { TYP_TIMEFLD,          FLD_TIME_ARY,       SAL_N_ELEMENTS(FLD_TIME_ARY),   nullptr,          0 },
+    { TYP_PAGENUMBERFLD,    nullptr,            0,                              FMT_NUM_ARY,      SAL_N_ELEMENTS(FMT_NUM_ARY) -1 },
+    { TYP_NEXTPAGEFLD,      nullptr,            0,                              FMT_NUM_ARY,      SAL_N_ELEMENTS(FMT_NUM_ARY) },
+    { TYP_PREVPAGEFLD,      nullptr,            0,                              FMT_NUM_ARY,      SAL_N_ELEMENTS(FMT_NUM_ARY) },
+    { TYP_FILENAMEFLD,      nullptr,            0,                              FMT_FF_ARY,       SAL_N_ELEMENTS(FMT_FF_ARY) },
+    { TYP_DOCSTATFLD,       FLD_STAT_ARY,       SAL_N_ELEMENTS(FLD_STAT_ARY),   FMT_NUM_ARY,      SAL_N_ELEMENTS(FMT_NUM_ARY) -1 },
 
-    { TYP_CHAPTERFLD,       0,                  0,              FMT_CHAPTER_BEGIN,  FMT_CHAPTER_END },
-    { TYP_TEMPLNAMEFLD,     0,                  0,              FMT_FF_BEGIN,       FMT_FF_END },
+    { TYP_CHAPTERFLD,       nullptr,            0,                              FMT_CHAPTER_ARY,  SAL_N_ELEMENTS(FMT_CHAPTER_ARY) },
+    { TYP_TEMPLNAMEFLD,     nullptr,            0,                              FMT_FF_ARY,       SAL_N_ELEMENTS(FMT_FF_ARY) },
 
     // Functions
-    { TYP_CONDTXTFLD,       0,                  0,              0,                  0 },
-    { TYP_DROPDOWN,         0,                  0,              0,                  0 },
-    { TYP_INPUTFLD,         FLD_INPUT_BEGIN,    FLD_INPUT_END,  0,                  0 },
-    { TYP_MACROFLD,         0,                  0,              0,                  0 },
-    { TYP_JUMPEDITFLD,      0,                  0,              FMT_MARK_BEGIN,     FMT_MARK_END },
-    { TYP_COMBINED_CHARS,   0,                  0,              0,                  0 },
-    { TYP_HIDDENTXTFLD,     0,                  0,              0,                  0 },
-    { TYP_HIDDENPARAFLD,    0,                  0,              0,                  0 },
+    { TYP_CONDTXTFLD,       nullptr,            0,                              nullptr,          0 },
+    { TYP_DROPDOWN,         nullptr,            0,                              nullptr,          0 },
+    { TYP_INPUTFLD,         FLD_INPUT_ARY,      SAL_N_ELEMENTS(FLD_INPUT_ARY),  nullptr,          0 },
+    { TYP_MACROFLD,         nullptr,            0,                              nullptr,          0 },
+    { TYP_JUMPEDITFLD,      nullptr,            0,                              FMT_MARK_ARY,     SAL_N_ELEMENTS(FMT_MARK_ARY) },
+    { TYP_COMBINED_CHARS,   nullptr,            0,                              nullptr,          0 },
+    { TYP_HIDDENTXTFLD,     nullptr,            0,                              nullptr,          0 },
+    { TYP_HIDDENPARAFLD,    nullptr,            0,                              nullptr,          0 },
 
     // Cross-References
-    { TYP_SETREFFLD,        0,                  0,              0,                  0 },
-    { TYP_GETREFFLD,        0,                  0,              FMT_REF_BEGIN,      FMT_REF_END },
+    { TYP_SETREFFLD,        nullptr,            0,                              nullptr,          0 },
+    { TYP_GETREFFLD,        nullptr,            0,                              FMT_REF_ARY,      SAL_N_ELEMENTS(FMT_REF_ARY) },
 
     // DocInformation
-    { TYP_DOCINFOFLD,       0,                  0,              FMT_REG_BEGIN,      FMT_REG_END },
+    { TYP_DOCINFOFLD,       nullptr,            0,                              FMT_REF_ARY,      SAL_N_ELEMENTS(FMT_REF_ARY) },
 
     // Database
-    { TYP_DBFLD,            0,                  0,              FMT_DBFLD_BEGIN,    FMT_DBFLD_END },
-    { TYP_DBNEXTSETFLD,     0,                  0,              0,                  0 },
-    { TYP_DBNUMSETFLD,      0,                  0,              0,                  0 },
-    { TYP_DBSETNUMBERFLD,   0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END-2 },
-    { TYP_DBNAMEFLD,        0,                  0,              0,                  0 },
+    { TYP_DBFLD,            nullptr,            0,                              FMT_DBFLD_ARY,    SAL_N_ELEMENTS(FMT_DBFLD_ARY) },
+    { TYP_DBNEXTSETFLD,     nullptr,            0,                              nullptr,          0 },
+    { TYP_DBNUMSETFLD,      nullptr,            0,                              nullptr,          0 },
+    { TYP_DBSETNUMBERFLD,   nullptr,            0,                              FMT_NUM_ARY,      SAL_N_ELEMENTS(FMT_NUM_ARY) - 2 },
+    { TYP_DBNAMEFLD,        nullptr,            0,                              nullptr,          0 },
 
     // Variables
-    { TYP_SETFLD,           0,                  0,              FMT_SETVAR_BEGIN,   FMT_SETVAR_END },
+    { TYP_SETFLD,           nullptr,            0,                              FMT_SETVAR_ARY,   SAL_N_ELEMENTS(FMT_SETVAR_ARY) },
 
-    { TYP_GETFLD,           0,                  0,              FMT_GETVAR_BEGIN,   FMT_GETVAR_END },
-    { TYP_DDEFLD,           0,                  0,              FMT_DDE_BEGIN,      FMT_DDE_END },
-    { TYP_FORMELFLD,        0,                  0,              FMT_GETVAR_BEGIN,   FMT_GETVAR_END },
-    { TYP_INPUTFLD,         FLD_INPUT_BEGIN,    FLD_INPUT_END,  0,                  0 },
-    { TYP_SEQFLD,           0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END-2 },
-    { TYP_SETREFPAGEFLD,    FLD_PAGEREF_BEGIN,  FLD_PAGEREF_END,0,                  0 },
-    { TYP_GETREFPAGEFLD,    0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END-1 },
-    { TYP_USERFLD,          0,                  0,              FMT_USERVAR_BEGIN,  FMT_USERVAR_END }
+    { TYP_GETFLD,           nullptr,            0,                              FMT_GETVAR_ARY,   SAL_N_ELEMENTS(FMT_GETVAR_ARY) },
+    { TYP_DDEFLD,           nullptr,            0,                              FMT_DDE_ARY,      SAL_N_ELEMENTS(FMT_DDE_ARY) },
+    { TYP_FORMELFLD,        nullptr,            0,                              FMT_GETVAR_ARY,   SAL_N_ELEMENTS(FMT_GETVAR_ARY) },
+    { TYP_INPUTFLD,         FLD_INPUT_ARY,      SAL_N_ELEMENTS(FLD_INPUT_ARY),  nullptr,          0 },
+    { TYP_SEQFLD,           nullptr,            0,                              FMT_NUM_ARY,      SAL_N_ELEMENTS(FMT_NUM_ARY) - 2 },
+    { TYP_SETREFPAGEFLD,    FLD_PAGEREF_ARY,    SAL_N_ELEMENTS(FLD_PAGEREF_ARY),nullptr,          0 },
+    { TYP_GETREFPAGEFLD,    nullptr,            0,                              FMT_NUM_ARY,      SAL_N_ELEMENTS(FMT_NUM_ARY) - 1 },
+    { TYP_USERFLD,          nullptr,            0,                              FMT_USERVAR_ARY,  SAL_N_ELEMENTS(FMT_USERVAR_ARY) }
 };
 
 // access to the shell
@@ -442,7 +590,7 @@ void SwFieldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<OUString>& rToFill)
             }
             case TYP_INPUTFLD:
             {
-                rToFill.push_back(SwResId(aSwFields[nPos].nSubTypeStart));
+                rToFill.push_back(SwResId(aSwFields[nPos].pSubTypeResIds[0]));
                 SAL_FALLTHROUGH; // move on at generic types
             }
             case TYP_DDEFLD:
@@ -497,7 +645,7 @@ void SwFieldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<OUString>& rToFill)
                     if (nTypeId == TYP_DOCINFOFLD)
                         nCount = DI_SUBTYPE_END - DI_SUBTYPE_BEGIN;
                     else
-                        nCount = aSwFields[nPos].nSubTypeEnd - aSwFields[nPos].nSubTypeStart;
+                        nCount = aSwFields[nPos].nSubTypeLength;
 
                     for(sal_uInt16 i = 0; i < nCount; ++i)
                     {
@@ -505,12 +653,12 @@ void SwFieldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<OUString>& rToFill)
                         if (nTypeId == TYP_DOCINFOFLD)
                         {
                             if ( i == DI_CUSTOM )
-                                sNew = SwResId( STR_CUSTOM );
+                                sNew = SwResId(STR_CUSTOM_FIELD);
                             else
                                 sNew = SwViewShell::GetShellRes()->aDocInfoLst[i];
                         }
                         else
-                            sNew = SwResId(aSwFields[nPos].nSubTypeStart + i);
+                            sNew = SwResId(aSwFields[nPos].pSubTypeResIds[i]);
 
                         rToFill.push_back(sNew);
                     }
@@ -528,45 +676,46 @@ sal_uInt16 SwFieldMgr::GetFormatCount(sal_uInt16 nTypeId, bool bHtmlMode) const
     {
         const sal_uInt16 nPos = GetPos(nTypeId);
 
-        if(nPos == USHRT_MAX || (bHtmlMode && nTypeId == TYP_SETFLD))
+        if (nPos == USHRT_MAX || (bHtmlMode && nTypeId == TYP_SETFLD))
             return 0;
 
-        sal_uLong nStart = aSwFields[nPos].nFormatBegin;
-        sal_uLong nEnd   = aSwFields[nPos].nFormatEnd;
+        sal_uInt16 nCount = aSwFields[nPos].nFormatLength;
 
         if (nTypeId == TYP_FILENAMEFLD)
-            nEnd -= 2;  // no range or template
+            nCount -= 2;  // no range or template
 
-        switch(nStart)
+        const char** pStart = aSwFields[nPos].pFormatResIds;
+        if (!pStart)
+            return nCount;
+
+        if (strcmp(*pStart, FMT_GETVAR_ARY[0]) == 0 || strcmp(*pStart, FMT_SETVAR_ARY[0]) == 0)
+            return VF_COUNT;
+        else if (strcmp(*pStart, FMT_USERVAR_ARY[0]) == 0)
+            return VF_USR_COUNT;
+        else if (strcmp(*pStart, FMT_DBFLD_ARY[0]) == 0)
+            return VF_DB_COUNT;
+        else if (strcmp(*pStart, FMT_NUM_ARY[0]) == 0)
         {
-            case FMT_GETVAR_BEGIN:
-            case FMT_SETVAR_BEGIN:  return VF_COUNT;
-            case FMT_USERVAR_BEGIN: return VF_USR_COUNT;
-            case FMT_DBFLD_BEGIN:   return VF_DB_COUNT;
-            case FMT_NUM_BEGIN:
+            GetNumberingInfo();
+            if(xNumberingInfo.is())
             {
-                sal_uInt16 nCount = (sal_uInt16)(nEnd - nStart);
-                GetNumberingInfo();
-                if(xNumberingInfo.is())
+                Sequence<sal_Int16> aTypes = xNumberingInfo->getSupportedNumberingTypes();
+                const sal_Int16* pTypes = aTypes.getConstArray();
+                for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
                 {
-                    Sequence<sal_Int16> aTypes = xNumberingInfo->getSupportedNumberingTypes();
-                    const sal_Int16* pTypes = aTypes.getConstArray();
-                    for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
+                    sal_Int16 nCurrent = pTypes[nType];
+                    //skip all values below or equal to CHARS_LOWER_LETTER_N
+                    if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
                     {
-                        sal_Int16 nCurrent = pTypes[nType];
-                        //skip all values below or equal to CHARS_LOWER_LETTER_N
-                        if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
-                        {
-                            // #i28073# it's not necessarily a sorted sequence
-                            ++nCount;
-                        }
+                        // #i28073# it's not necessarily a sorted sequence
+                        ++nCount;
                     }
                 }
-                return nCount;
             }
-
+            return nCount;
         }
-        return (sal_uInt16)(nEnd - nStart);
+
+        return nCount;
     }
 }
 
@@ -576,42 +725,39 @@ OUString SwFieldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const
     OSL_ENSURE(nTypeId < TYP_END, "forbidden TypeId");
     const sal_uInt16 nPos = GetPos(nTypeId);
 
-    if(nPos == USHRT_MAX)
+    if (nPos == USHRT_MAX)
         return OUString();
 
-    sal_uLong nStart;
-
-    nStart = aSwFields[nPos].nFormatBegin;
+    const char** pStart = aSwFields[nPos].pFormatResIds;
+    if (!pStart)
+        return OUString();
 
     if (TYP_AUTHORFLD == nTypeId|| TYP_FILENAMEFLD == nTypeId)
         nFormatId &= ~FF_FIXED;     // mask out Fixed-Flag
 
-    if((nStart + nFormatId) < aSwFields[nPos].nFormatEnd)
-        return SwResId((sal_uInt16)(nStart + nFormatId));
+    if (nFormatId < aSwFields[nPos].nFormatLength)
+        return SwResId(pStart[nFormatId]);
 
     OUString aRet;
-    if( FMT_NUM_BEGIN == nStart)
+    if (strcmp(*pStart, FMT_NUM_ARY[0]))
     {
-        if(xNumberingInfo.is())
+        if (xNumberingInfo.is())
         {
-            ResStringArray aNames(ResId(RID_SVXSTRARY_NUMBERINGTYPE, DIALOG_MGR()));
-
             Sequence<sal_Int16> aTypes = xNumberingInfo->getSupportedNumberingTypes();
             const sal_Int16* pTypes = aTypes.getConstArray();
-            sal_Int32 nOffset = aSwFields[nPos].nFormatEnd - nStart;
             sal_Int32 nValidEntry = 0;
-            for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
+            for (sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
             {
                 sal_Int16 nCurrent = pTypes[nType];
                 if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N &&
                         (nCurrent != (NumberingType::BITMAP | LINK_TOKEN)))
                 {
-                    if(nValidEntry == ((sal_Int32)nFormatId) - nOffset)
+                    if (nValidEntry == ((sal_Int32)nFormatId))
                     {
-                        sal_uInt32 n = aNames.FindIndex(pTypes[nType]);
+                        sal_uInt32 n = SvxNumberingTypeTable::FindIndex(pTypes[nType]);
                         if (n != RESARRAY_INDEX_NOTFOUND)
                         {
-                            aRet = aNames.GetString(n);
+                            aRet = SvxNumberingTypeTable::GetString(n);
                         }
                         else
                         {
@@ -634,74 +780,80 @@ sal_uInt16 SwFieldMgr::GetFormatId(sal_uInt16 nTypeId, sal_uLong nFormatId) cons
     sal_uInt16 nId = (sal_uInt16)nFormatId;
     switch( nTypeId )
     {
-    case TYP_DOCINFOFLD:
-        switch( aSwFields[ GetPos( nTypeId ) ].nFormatBegin + nFormatId )
+        case TYP_DOCINFOFLD:
         {
-        case FMT_REG_AUTHOR:    nId = DI_SUB_AUTHOR;    break;
-        case FMT_REG_TIME:      nId = DI_SUB_TIME;      break;
-        case FMT_REG_DATE:      nId = DI_SUB_DATE;      break;
+            const OString sId(aSwFields[GetPos(nTypeId)].pFormatResIds[nFormatId]);
+            if (sId == FMT_REG_AUTHOR)
+                nId = DI_SUB_AUTHOR;
+            else if (sId == FMT_REG_TIME)
+                nId = DI_SUB_TIME;
+            else if (sId == FMT_REG_DATE)
+                nId = DI_SUB_DATE;
+            break;
         }
-        break;
-
-    case TYP_PAGENUMBERFLD:
-    case TYP_NEXTPAGEFLD:
-    case TYP_PREVPAGEFLD:
-    case TYP_DOCSTATFLD:
-    case TYP_DBSETNUMBERFLD:
-    case TYP_SEQFLD:
-    case TYP_GETREFPAGEFLD:
-    {
-        sal_uInt16 nPos = GetPos( nTypeId );
-        sal_uLong nBegin = aSwFields[ nPos ].nFormatBegin;
-        sal_uLong nEnd = aSwFields[nPos].nFormatEnd;
-        if((nBegin + nFormatId) < nEnd)
+        case TYP_PAGENUMBERFLD:
+        case TYP_NEXTPAGEFLD:
+        case TYP_PREVPAGEFLD:
+        case TYP_DOCSTATFLD:
+        case TYP_DBSETNUMBERFLD:
+        case TYP_SEQFLD:
+        case TYP_GETREFPAGEFLD:
         {
-            switch( nBegin + nFormatId )
+            sal_uInt16 nPos = GetPos(nTypeId);
+            if (nFormatId < aSwFields[nPos].nFormatLength)
             {
-            case FMT_NUM_ABC:               nId = SVX_NUM_CHARS_UPPER_LETTER;   break;
-            case FMT_NUM_SABC:              nId = SVX_NUM_CHARS_LOWER_LETTER;   break;
-            case FMT_NUM_ROMAN:             nId = SVX_NUM_ROMAN_UPPER;          break;
-            case FMT_NUM_SROMAN:            nId = SVX_NUM_ROMAN_LOWER;          break;
-            case FMT_NUM_ARABIC:            nId = SVX_NUM_ARABIC;               break;
-            case FMT_NUM_PAGEDESC:          nId = SVX_NUM_PAGEDESC;             break;
-            case FMT_NUM_PAGESPECIAL:       nId = SVX_NUM_CHAR_SPECIAL;         break;
-            case FMT_NUM_ABC_N:             nId = SVX_NUM_CHARS_UPPER_LETTER_N; break;
-            case FMT_NUM_SABC_N:            nId = SVX_NUM_CHARS_LOWER_LETTER_N; break;
+                const OString sId(aSwFields[nPos].pFormatResIds[nFormatId]);
+                if (sId == FMT_NUM_ABC)
+                    nId = SVX_NUM_CHARS_UPPER_LETTER;
+                else if (sId == FMT_NUM_SABC)
+                    nId = SVX_NUM_CHARS_LOWER_LETTER;
+                else if (sId == FMT_NUM_ROMAN)
+                    nId = SVX_NUM_ROMAN_UPPER;
+                else if (sId == FMT_NUM_SROMAN)
+                    nId = SVX_NUM_ROMAN_LOWER;
+                else if (sId == FMT_NUM_ARABIC)
+                    nId = SVX_NUM_ARABIC;
+                else if (sId == FMT_NUM_PAGEDESC)
+                    nId = SVX_NUM_PAGEDESC;
+                else if (sId == FMT_NUM_PAGESPECIAL)
+                    nId = SVX_NUM_CHAR_SPECIAL;
+                else if (sId == FMT_NUM_ABC_N)
+                    nId = SVX_NUM_CHARS_UPPER_LETTER_N;
+                else if (sId == FMT_NUM_SABC_N)
+                    nId = SVX_NUM_CHARS_LOWER_LETTER_N;
             }
-        }
-        else if(xNumberingInfo.is())
-        {
-            Sequence<sal_Int16> aTypes = xNumberingInfo->getSupportedNumberingTypes();
-            const sal_Int16* pTypes = aTypes.getConstArray();
-            sal_Int32 nOffset = nEnd - nBegin;
-            sal_Int32 nValidEntry = 0;
-            for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
+            else if (xNumberingInfo.is())
             {
-                sal_Int16 nCurrent = pTypes[nType];
-                if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
+                Sequence<sal_Int16> aTypes = xNumberingInfo->getSupportedNumberingTypes();
+                const sal_Int16* pTypes = aTypes.getConstArray();
+                sal_Int32 nValidEntry = 0;
+                for (sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
                 {
-                    if(nValidEntry == ((sal_Int32)nFormatId) - nOffset)
+                    sal_Int16 nCurrent = pTypes[nType];
+                    if (nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
                     {
-                        nId = pTypes[nType];
-                        break;
+                        if (nValidEntry == ((sal_Int32)nFormatId))
+                        {
+                            nId = pTypes[nType];
+                            break;
+                        }
+                        ++nValidEntry;
                     }
-                    ++nValidEntry;
                 }
             }
+            break;
         }
-    }
-    break;
-    case TYP_DDEFLD:
-        switch ( aSwFields[ GetPos( nTypeId ) ].nFormatBegin + nFormatId )
+        case TYP_DDEFLD:
         {
-        case FMT_DDE_NORMAL:    nId = static_cast<sal_uInt16>(SfxLinkUpdateMode::ONCALL); break;
-        case FMT_DDE_HOT:       nId = static_cast<sal_uInt16>(SfxLinkUpdateMode::ALWAYS); break;
+            const OString sId(aSwFields[GetPos(nTypeId)].pFormatResIds[nFormatId]);
+            if (sId == FMT_DDE_NORMAL)
+                nId = static_cast<sal_uInt16>(SfxLinkUpdateMode::ONCALL);
+            else if (sId == FMT_DDE_HOT)
+                nId = static_cast<sal_uInt16>(SfxLinkUpdateMode::ALWAYS);
+            break;
         }
-        break;
     }
-
     return nId;
-
 }
 
 // Traveling
@@ -1558,7 +1710,8 @@ LanguageType SwFieldMgr::GetCurrLanguage() const
 
 void SwFieldType::GetFieldName_()
 {
-    static const sal_uInt16 coFieldNms[] = {
+    static const char* coFieldNms[] =
+    {
         FLD_DATE_STD,
         FLD_TIME_STD,
         STR_FILENAMEFLD,
@@ -1602,15 +1755,15 @@ void SwFieldType::GetFieldName_()
         STR_AUTHORITY,
         STR_COMBINED_CHARS,
         STR_DROPDOWN,
-        STR_CUSTOM
+        STR_CUSTOM_FIELD
     };
 
     // insert infos for fields
     SwFieldType::s_pFieldNames = new std::vector<OUString>;
     SwFieldType::s_pFieldNames->reserve(SAL_N_ELEMENTS(coFieldNms));
-    for(sal_uInt16 i : coFieldNms)
+    for (const char* id : coFieldNms)
     {
-        const OUString aTmp(SwResId( i ));
+        const OUString aTmp(SwResId(id));
         SwFieldType::s_pFieldNames->push_back(MnemonicGenerator::EraseAllMnemonicChars( aTmp ));
     }
 }
