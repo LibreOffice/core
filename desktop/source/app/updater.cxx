@@ -338,7 +338,7 @@ update_file parse_update_file(const orcus::json::detail::node& rNode)
         throw invalid_update_info();
     }
 
-    if (rNode.child_count() != 4)
+    if (rNode.child_count() < 4)
     {
         SAL_WARN("desktop.update", "invalid update or language file entry");
         throw invalid_update_info();
