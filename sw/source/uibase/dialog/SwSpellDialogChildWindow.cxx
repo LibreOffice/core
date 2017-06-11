@@ -50,6 +50,7 @@
 #include <drawbase.hxx>
 #include <unotextrange.hxx>
 #include <dialog.hrc>
+#include <strings.hrc>
 #include <cmdid.h>
 
 using namespace ::com::sun::star;

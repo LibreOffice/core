@@ -20,7 +20,7 @@
 #include <standard/vclxaccessibletoolboxitem.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <helper/accresmgr.hxx>
-#include <helper/accessiblestrings.hrc>
+#include <strings.hrc>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>

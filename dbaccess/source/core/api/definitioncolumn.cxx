@@ -20,7 +20,7 @@
 #include <bitset>
 
 #include "apitools.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include "definitioncolumn.hxx"
 #include "sdbcoretools.hxx"
 

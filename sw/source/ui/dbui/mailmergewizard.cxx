@@ -26,6 +26,7 @@
 #include <mmconfigitem.hxx>
 #include <swabstdlg.hxx>
 #include <dbui.hrc>
+#include <strings.hrc>
 #include <view.hxx>
 #include <dbmgr.hxx>
 #include <sfx2/viewfrm.hxx>

@@ -19,7 +19,7 @@
 #include <svx/sidebar/LineWidthPopup.hxx>
 #include <svx/sidebar/LinePropertyPanelBase.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/xlnwtit.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/svapp.hxx>
