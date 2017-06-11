@@ -34,7 +34,7 @@
 #include <svtools/svtabbx.hxx>
 #include "svtools/treelistentry.hxx"
 
-#include <svuidlg.hrc>
+#include <strings.hrc>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/linksrc.hxx>
 #include <svtools/soerr.hxx>

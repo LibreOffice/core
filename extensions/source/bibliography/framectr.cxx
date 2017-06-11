@@ -27,7 +27,7 @@
 #include "datman.hxx"
 #include "bibview.hxx"
 #include "bibresid.hxx"
-#include "bib.hrc"
+#include "strings.hrc"
 #include <toolkit/helper/vclunohelper.hxx>
 #include "bibconfig.hxx"
 #include <cppuhelper/implbase.hxx>

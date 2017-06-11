@@ -24,7 +24,7 @@
 #include "property.hrc"
 #include "services.hxx"
 #include "frm_resource.hxx"
-#include "frm_resource.hrc"
+#include "strings.hrc"
 #include "BaseListBox.hxx"
 #include "listenercontainers.hxx"
 #include "componenttools.hxx"

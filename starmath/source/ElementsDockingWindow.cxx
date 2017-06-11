@@ -21,6 +21,7 @@
 #include <ElementsDockingWindow.hxx>
 
 #include <starmath.hrc>
+#include <strings.hrc>
 #include <smmod.hxx>
 #include <view.hxx>
 #include <visitors.hxx>
@@ -54,7 +55,7 @@ SmElementSeparator::SmElementSeparator() :
     SmElement(std::unique_ptr<SmNode>(), OUString(), OUString())
 {}
 
-const std::pair<const char*, sal_uInt16> SmElementsControl::aUnaryBinaryOperatorsList[] =
+const std::pair<const char*, const char*> SmElementsControl::aUnaryBinaryOperatorsList[] =
 {
     {RID_PLUSX, RID_PLUSX_HELP}, {RID_MINUSX, RID_MINUSX_HELP},
     {RID_PLUSMINUSX, RID_PLUSMINUSX_HELP}, {RID_MINUSPLUSX, RID_MINUSPLUSX_HELP},
@@ -71,7 +72,7 @@ const std::pair<const char*, sal_uInt16> SmElementsControl::aUnaryBinaryOperator
     {RID_NEGX, RID_NEGX_HELP}, {RID_XANDY, RID_XANDY_HELP}, {RID_XORY, RID_XORY_HELP},
 };
 
-const std::pair<const char*, sal_uInt16> SmElementsControl::aRelationsList[] =
+const std::pair<const char*, const char*> SmElementsControl::aRelationsList[] =
 {
     {RID_XEQY, RID_XEQY_HELP}, {RID_XNEQY, RID_XNEQY_HELP}, {RID_XLTY, RID_XLTY_HELP},
     {RID_XLEY, RID_XLEY_HELP}, {RID_XLESLANTY, RID_XLESLANTY_HELP}, {RID_XGTY, RID_XGTY_HELP},
@@ -92,7 +93,7 @@ const std::pair<const char*, sal_uInt16> SmElementsControl::aRelationsList[] =
     {RID_XNOTPRECEDESY, RID_XNOTPRECEDESY_HELP}, {RID_XNOTSUCCEEDSY, RID_XNOTSUCCEEDSY_HELP},
 };
 
-const std::pair<const char*, sal_uInt16> SmElementsControl::aSetOperations[] =
+const std::pair<const char*, const char*> SmElementsControl::aSetOperations[] =
 {
     {RID_XINY, RID_XINY_HELP}, {RID_XNOTINY, RID_XNOTINY_HELP}, {RID_XOWNSY, RID_XOWNSY_HELP},
     {nullptr, 0},
@@ -107,7 +108,7 @@ const std::pair<const char*, sal_uInt16> SmElementsControl::aSetOperations[] =
     {RID_SETZ, RID_SETZ_HELP}, {RID_SETQ, RID_SETQ_HELP}, {RID_SETR, RID_SETR_HELP}, {RID_SETC, RID_SETC_HELP}
 };
 
-const std::pair<const char*, sal_uInt16> SmElementsControl::aFunctions[] =
+const std::pair<const char*, const char*> SmElementsControl::aFunctions[] =
 {
     {RID_ABSX, RID_ABSX_HELP}, {RID_FACTX, RID_FACTX_HELP}, {RID_SQRTX, RID_SQRTX_HELP},
     {RID_NROOTXY, RID_NROOTXY_HELP}, {RID_RSUPX, RID_RSUPX_HELP}, {RID_EX, RID_EX_HELP},
@@ -122,7 +123,7 @@ const std::pair<const char*, sal_uInt16> SmElementsControl::aFunctions[] =
     {RID_ARTANHX, RID_ARTANHX_HELP}, {RID_ARCOTHX, RID_ARCOTHX_HELP}
 };
 
-const std::pair<const char*, sal_uInt16> SmElementsControl::aOperators[] =
+const std::pair<const char*, const char*> SmElementsControl::aOperators[] =
 {
     {RID_LIMX, RID_LIMX_HELP}, {RID_LIM_FROMX, RID_LIM_FROMX_HELP},
     {RID_LIM_TOX, RID_LIM_TOX_HELP}, {RID_LIM_FROMTOX, RID_LIM_FROMTOX_HELP},
@@ -161,7 +162,7 @@ const std::pair<const char*, sal_uInt16> SmElementsControl::aOperators[] =
     {RID_LLLINT_TOX, RID_LLLINT_TOX_HELP}, {RID_LLLINT_FROMTOX, RID_LLLINT_FROMTOX_HELP},
 };
 
-const std::pair<const char*, sal_uInt16> SmElementsControl::aAttributes[] =
+const std::pair<const char*, const char*> SmElementsControl::aAttributes[] =
 {
     {RID_ACUTEX, RID_ACUTEX_HELP}, {RID_GRAVEX, RID_GRAVEX_HELP}, {RID_BREVEX, RID_BREVEX_HELP},
     {RID_CIRCLEX, RID_CIRCLEX_HELP}, {RID_DOTX, RID_DOTX_HELP}, {RID_DDOTX, RID_DDOTX_HELP},
@@ -184,7 +185,7 @@ const std::pair<const char*, sal_uInt16> SmElementsControl::aAttributes[] =
     {RID_COLORX_TEAL, RID_COLORX_TEAL_HELP}
 };
 
-const std::pair<const char*, sal_uInt16> SmElementsControl::aBrackets[] =
+const std::pair<const char*, const char*> SmElementsControl::aBrackets[] =
 {
     {RID_LRGROUPX, RID_LRGROUPX_HELP},
     {nullptr, 0},
@@ -204,7 +205,7 @@ const std::pair<const char*, sal_uInt16> SmElementsControl::aBrackets[] =
     {RID_XOVERBRACEY, RID_XOVERBRACEY_HELP}, {RID_XUNDERBRACEY, RID_XUNDERBRACEY_HELP},
 };
 
-const std::pair<const char*, sal_uInt16> SmElementsControl::aFormats[] =
+const std::pair<const char*, const char*> SmElementsControl::aFormats[] =
 {
     {RID_RSUPX, RID_RSUPX_HELP}, {RID_RSUBX, RID_RSUBX_HELP}, {RID_LSUPX, RID_LSUPX_HELP},
     {RID_LSUBX, RID_LSUBX_HELP}, {RID_CSUPX, RID_CSUPX_HELP}, {RID_CSUBX, RID_CSUBX_HELP},
@@ -217,7 +218,7 @@ const std::pair<const char*, sal_uInt16> SmElementsControl::aFormats[] =
     {RID_MATRIX, RID_MATRIX_HELP},
 };
 
-const std::pair<const char*, sal_uInt16> SmElementsControl::aOthers[] =
+const std::pair<const char*, const char*> SmElementsControl::aOthers[] =
 {
     {RID_INFINITY, RID_INFINITY_HELP}, {RID_PARTIAL, RID_PARTIAL_HELP}, {RID_NABLA, RID_NABLA_HELP},
     {RID_EXISTS, RID_EXISTS_HELP}, {RID_NOTEXISTS, RID_NOTEXISTS_HELP}, {RID_FORALL, RID_FORALL_HELP},
@@ -234,7 +235,6 @@ const std::pair<const char*, sal_uInt16> SmElementsControl::aOthers[] =
 SmElementsControl::SmElementsControl(vcl::Window *pParent)
     : Control(pParent, WB_TABSTOP)
     , mpDocShell(new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT))
-    , maCurrentSetId(0)
     , mpCurrentElement(nullptr)
     , mbVerticalMode(true)
     , mxScroll(VclPtr<ScrollBar>::Create(this, WB_VERT))
@@ -541,104 +541,104 @@ void SmElementsControl::addElement(const OUString& aElementVisual, const OUStrin
     maElementList.push_back(o3tl::make_unique<SmElement>(std::move(pNode), aElementSource, aHelpText));
 }
 
-void SmElementsControl::setElementSetId(sal_uInt16 aSetId)
+void SmElementsControl::setElementSetId(const char* pSetId)
 {
-    maCurrentSetId = aSetId;
+    msCurrentSetId = pSetId;
     maMaxElementDimensions = Size();
     build();
 }
 
-void SmElementsControl::addElements(const std::pair<const char*, sal_uInt16> aElementsArray[], sal_uInt16 aElementsArraySize)
+void SmElementsControl::addElements(const std::pair<const char*, const char*> aElementsArray[], sal_uInt16 aElementsArraySize)
 {
     for (sal_uInt16 i = 0; i < aElementsArraySize ; i++)
     {
         const char* pElement = aElementsArray[i].first;
-        sal_uInt16 aElementHelp = aElementsArray[i].second;
+        const char* pElementHelp = aElementsArray[i].second;
         if (!pElement) {
             maElementList.push_back(o3tl::make_unique<SmElementSeparator>());
         } else {
             OUString aElement(OUString::createFromAscii(pElement));
             if (aElement == RID_NEWLINE)
-                addElement(OUString( "\xe2\x86\xb5", 3, RTL_TEXTENCODING_UTF8 ), aElement, SmResId(aElementHelp));
+                addElement(OUString( "\xe2\x86\xb5", 3, RTL_TEXTENCODING_UTF8 ), aElement, SmResId(pElementHelp));
             else if (aElement == RID_SBLANK)
-                addElement("\"`\"", aElement, SmResId(aElementHelp));
+                addElement("\"`\"", aElement, SmResId(pElementHelp));
             else if (aElement == RID_BLANK)
-                addElement("\"~\"", aElement, SmResId(aElementHelp));
+                addElement("\"~\"", aElement, SmResId(pElementHelp));
             else if (aElement == RID_PHANTOMX)
-                addElement("\"" + SmResId(STR_HIDE) +"\"", aElement, SmResId(aElementHelp));
+                addElement("\"" + SmResId(STR_HIDE) +"\"", aElement, SmResId(pElementHelp));
             else if (aElement == RID_BOLDX)
-                addElement("bold B", aElement, SmResId(aElementHelp));
+                addElement("bold B", aElement, SmResId(pElementHelp));
             else if (aElement == RID_ITALX)
-                addElement("ital I", aElement, SmResId(aElementHelp));
+                addElement("ital I", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SIZEXY)
-                addElement("\"" + SmResId(STR_SIZE) + "\"", aElement, SmResId(aElementHelp));
+                addElement("\"" + SmResId(STR_SIZE) + "\"", aElement, SmResId(pElementHelp));
             else if (aElement == RID_FONTXY)
-                addElement("\"" + SmResId(STR_FONT) + "\"", aElement, SmResId(aElementHelp));
+                addElement("\"" + SmResId(STR_FONT) + "\"", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_BLACK)
-                addElement("color black { \"" + SmResId(STR_BLACK) + "\" }", aElement, SmResId(aElementHelp));
+                addElement("color black { \"" + SmResId(STR_BLACK) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_BLUE)
-                addElement("color blue { \"" + SmResId(STR_BLUE) + "\" }", aElement, SmResId(aElementHelp));
+                addElement("color blue { \"" + SmResId(STR_BLUE) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_GREEN)
-                addElement("color green { \"" + SmResId(STR_GREEN) + "\" }", aElement, SmResId(aElementHelp));
+                addElement("color green { \"" + SmResId(STR_GREEN) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_RED)
-                addElement("color red { \"" + SmResId(STR_RED) + "\" }", aElement, SmResId(aElementHelp));
+                addElement("color red { \"" + SmResId(STR_RED) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_CYAN)
-                addElement("color cyan { \"" + SmResId(STR_CYAN) + "\" }", aElement, SmResId(aElementHelp));
+                addElement("color cyan { \"" + SmResId(STR_CYAN) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_MAGENTA)
-                addElement("color magenta { \"" + SmResId(STR_MAGENTA) + "\" }", aElement, SmResId(aElementHelp));
+                addElement("color magenta { \"" + SmResId(STR_MAGENTA) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_YELLOW)
-                addElement("color yellow { \"" + SmResId(STR_YELLOW) + "\" }", aElement, SmResId(aElementHelp));
+                addElement("color yellow { \"" + SmResId(STR_YELLOW) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_GRAY)
-                addElement("color gray { \"" + SmResId(STR_GRAY) + "\" }", aElement, SmResId(aElementHelp));
+                addElement("color gray { \"" + SmResId(STR_GRAY) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_LIME)
-                addElement("color lime { \"" + SmResId(STR_LIME) + "\" }", aElement, SmResId(aElementHelp));
+                addElement("color lime { \"" + SmResId(STR_LIME) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_MAROON)
-                addElement("color maroon { \"" + SmResId(STR_MAROON) + "\" }", aElement, SmResId(aElementHelp));
+                addElement("color maroon { \"" + SmResId(STR_MAROON) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_NAVY)
-                addElement("color navy { \"" + SmResId(STR_NAVY) + "\" }", aElement, SmResId(aElementHelp));
+                addElement("color navy { \"" + SmResId(STR_NAVY) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_OLIVE)
-                addElement("color olive { \"" + SmResId(STR_OLIVE) + "\" }", aElement, SmResId(aElementHelp));
+                addElement("color olive { \"" + SmResId(STR_OLIVE) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_PURPLE)
-                addElement("color purple { \"" + SmResId(STR_PURPLE) + "\" }", aElement, SmResId(aElementHelp));
+                addElement("color purple { \"" + SmResId(STR_PURPLE) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_SILVER)
-                addElement("color silver { \"" + SmResId(STR_SILVER) + "\" }", aElement, SmResId(aElementHelp));
+                addElement("color silver { \"" + SmResId(STR_SILVER) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_COLORX_TEAL)
-                addElement("color teal { \"" + SmResId(STR_TEAL) + "\" }", aElement, SmResId(aElementHelp));
+                addElement("color teal { \"" + SmResId(STR_TEAL) + "\" }", aElement, SmResId(pElementHelp));
             else if (aElement == RID_ALIGNLX)
-                addElement("\"" + SmResId(STR_ALIGN_LEFT) + "\"", aElement, SmResId(aElementHelp));
+                addElement("\"" + SmResId(STR_ALIGN_LEFT) + "\"", aElement, SmResId(pElementHelp));
             else if (aElement == RID_ALIGNCX)
-                addElement("\"" + SmResId(STR_ALIGN_CENTER) + "\"", aElement, SmResId(aElementHelp));
+                addElement("\"" + SmResId(STR_ALIGN_CENTER) + "\"", aElement, SmResId(pElementHelp));
             else if (aElement == RID_ALIGNRX)
-                addElement("\"" + SmResId(STR_ALIGN_RIGHT) + "\"", aElement, SmResId(aElementHelp));
+                addElement("\"" + SmResId(STR_ALIGN_RIGHT) + "\"", aElement, SmResId(pElementHelp));
 
             else if (aElement == RID_SLRPARENTX)
-                addElement("left ( binom{<?>}{<?>} right ) ", aElement, SmResId(aElementHelp));
+                addElement("left ( binom{<?>}{<?>} right ) ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SLRBRACKETX)
-                addElement("left [ binom{<?>}{<?>} right ] ", aElement, SmResId(aElementHelp));
+                addElement("left [ binom{<?>}{<?>} right ] ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SLRDBRACKETX)
-                addElement("left ldbracket binom{<?>}{<?>} right rdbracket ", aElement, SmResId(aElementHelp));
+                addElement("left ldbracket binom{<?>}{<?>} right rdbracket ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SLRBRACEX)
-                addElement("left lbrace binom{<?>}{<?>} right rbrace ", aElement, SmResId(aElementHelp));
+                addElement("left lbrace binom{<?>}{<?>} right rbrace ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SLRANGLEX)
-                addElement("left langle binom{<?>}{<?>} right rangle ", aElement, SmResId(aElementHelp));
+                addElement("left langle binom{<?>}{<?>} right rangle ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SLRCEILX)
-                addElement("left lceil binom{<?>}{<?>} right rceil ", aElement, SmResId(aElementHelp));
+                addElement("left lceil binom{<?>}{<?>} right rceil ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SLRFLOORX)
-                addElement("left lfloor binom{<?>}{<?>} right rfloor ", aElement, SmResId(aElementHelp));
+                addElement("left lfloor binom{<?>}{<?>} right rfloor ", aElement, SmResId(pElementHelp));
 
             else if (aElement == RID_SLRLINEX)
-                addElement("left lline binom{<?>}{<?>} right rline ", aElement, SmResId(aElementHelp));
+                addElement("left lline binom{<?>}{<?>} right rline ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SLRDLINEX)
-                addElement("left ldline binom{<?>}{<?>} right rdline ", aElement, SmResId(aElementHelp));
+                addElement("left ldline binom{<?>}{<?>} right rdline ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_SLMRANGLEXY)
-                addElement("left langle binom{<?>}{<?>} mline binom{<?>}{<?>} right rangle ", aElement, SmResId(aElementHelp));
+                addElement("left langle binom{<?>}{<?>} mline binom{<?>}{<?>} right rangle ", aElement, SmResId(pElementHelp));
 
             else if (aElement == RID_XOVERBRACEY)
-                addElement("{<?><?><?>} overbrace {<?>} ", aElement, SmResId(aElementHelp));
+                addElement("{<?><?><?>} overbrace {<?>} ", aElement, SmResId(pElementHelp));
             else if (aElement == RID_XUNDERBRACEY)
-                addElement("{<?><?><?>} underbrace {<?>} ", aElement, SmResId(aElementHelp));
+                addElement("{<?><?><?>} underbrace {<?>} ", aElement, SmResId(pElementHelp));
             else
-                addElement(aElement, aElement, SmResId(aElementHelp));
+                addElement(aElement, aElement, SmResId(pElementHelp));
         }
     }
 }
@@ -647,49 +647,36 @@ void SmElementsControl::build()
 {
     maElementList.clear();
 
-    switch(maCurrentSetId)
+    if (msCurrentSetId == RID_CATEGORY_UNARY_BINARY_OPERATORS)
+        addElements(aUnaryBinaryOperatorsList, SAL_N_ELEMENTS(aUnaryBinaryOperatorsList));
+    else if (msCurrentSetId == RID_CATEGORY_RELATIONS)
+        addElements(aRelationsList, SAL_N_ELEMENTS(aRelationsList));
+    else if (msCurrentSetId == RID_CATEGORY_SET_OPERATIONS)
+        addElements(aSetOperations, SAL_N_ELEMENTS(aSetOperations));
+    else if (msCurrentSetId == RID_CATEGORY_FUNCTIONS)
+        addElements(aFunctions, SAL_N_ELEMENTS(aFunctions));
+    else if (msCurrentSetId == RID_CATEGORY_OPERATORS)
+        addElements(aOperators, SAL_N_ELEMENTS(aOperators));
+    else if (msCurrentSetId == RID_CATEGORY_ATTRIBUTES)
+        addElements(aAttributes, SAL_N_ELEMENTS(aAttributes));
+    else if (msCurrentSetId ==  RID_CATEGORY_BRACKETS)
+        addElements(aBrackets, SAL_N_ELEMENTS(aBrackets));
+    else if (msCurrentSetId == RID_CATEGORY_FORMATS)
+        addElements(aFormats, SAL_N_ELEMENTS(aFormats));
+    else if (msCurrentSetId == RID_CATEGORY_OTHERS)
+        addElements(aOthers, SAL_N_ELEMENTS(aOthers));
+    else if (msCurrentSetId == RID_CATEGORY_EXAMPLES)
     {
-        case RID_CATEGORY_UNARY_BINARY_OPERATORS:
-            addElements(aUnaryBinaryOperatorsList, SAL_N_ELEMENTS(aUnaryBinaryOperatorsList));
-        break;
-        case RID_CATEGORY_RELATIONS:
-            addElements(aRelationsList, SAL_N_ELEMENTS(aRelationsList));
-        break;
-        case RID_CATEGORY_SET_OPERATIONS:
-            addElements(aSetOperations, SAL_N_ELEMENTS(aSetOperations));
-        break;
-        case RID_CATEGORY_FUNCTIONS:
-            addElements(aFunctions, SAL_N_ELEMENTS(aFunctions));
-        break;
-        case RID_CATEGORY_OPERATORS:
-            addElements(aOperators, SAL_N_ELEMENTS(aOperators));
-        break;
-        case RID_CATEGORY_ATTRIBUTES:
-            addElements(aAttributes, SAL_N_ELEMENTS(aAttributes));
-        break;
-        case RID_CATEGORY_BRACKETS:
-            addElements(aBrackets, SAL_N_ELEMENTS(aBrackets));
-        break;
-        case RID_CATEGORY_FORMATS:
-            addElements(aFormats, SAL_N_ELEMENTS(aFormats));
-        break;
-        case RID_CATEGORY_OTHERS:
-            addElements(aOthers, SAL_N_ELEMENTS(aOthers));
-        break;
-        case RID_CATEGORY_EXAMPLES:
-        {
-            OUString aEquation = "C=%pi cdot d = 2 cdot %pi cdot r";
-            addElement(aEquation, aEquation, "");
-            aEquation = "E=mc^2";
-            addElement(aEquation, aEquation, "");
-            aEquation = "a^2 + b^2 = c^2";
-            addElement(aEquation, aEquation, "");
-            aEquation = "f ( x ) = sum from { { i = 0 } } to { infinity } { {f^{(i)}(0)} over {i!} x^i}";
-            addElement(aEquation, aEquation, "");
-            aEquation = "f ( x ) = {1} over {%sigma sqrt{2%pi} }func e^-{{(x-%mu)^2} over {2%sigma^2}}";
-            addElement(aEquation, aEquation, "");
-        }
-        break;
+        OUString aEquation = "C=%pi cdot d = 2 cdot %pi cdot r";
+        addElement(aEquation, aEquation, "");
+        aEquation = "E=mc^2";
+        addElement(aEquation, aEquation, "");
+        aEquation = "a^2 + b^2 = c^2";
+        addElement(aEquation, aEquation, "");
+        aEquation = "f ( x ) = sum from { { i = 0 } } to { infinity } { {f^{(i)}(0)} over {i!} x^i}";
+        addElement(aEquation, aEquation, "");
+        aEquation = "f ( x ) = {1} over {%sigma sqrt{2%pi} }func e^-{{(x-%mu)^2} over {2%sigma^2}}";
+        addElement(aEquation, aEquation, "");
     }
     LayoutOrPaintContents();
     Invalidate();
@@ -705,7 +692,7 @@ FactoryFunction SmElementsControl::GetUITestFactory() const
     return ElementSelectorUIObject::create;
 }
 
-const sal_uInt16 SmElementsDockingWindow::aCategories[] = {
+const char* SmElementsDockingWindow::aCategories[] = {
     RID_CATEGORY_UNARY_BINARY_OPERATORS,
     RID_CATEGORY_RELATIONS,
     RID_CATEGORY_SET_OPERATIONS,
@@ -732,9 +719,9 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
 
     mpElementListBox->SetDropDownLineCount( SAL_N_ELEMENTS(aCategories) );
 
-    for (sal_uInt16 nCategory : aCategories)
+    for (const char* pCategory : aCategories)
     {
-        mpElementListBox->InsertEntry(SmResId(nCategory));
+        mpElementListBox->InsertEntry(SmResId(pCategory));
     }
 
     mpElementListBox->SetSelectHdl(LINK(this, SmElementsDockingWindow, ElementSelectedHandle));
@@ -789,12 +776,12 @@ IMPL_LINK(SmElementsDockingWindow, SelectClickHandler, SmElement&, rElement, voi
 
 IMPL_LINK( SmElementsDockingWindow, ElementSelectedHandle, ListBox&, rList, void)
 {
-    for (sal_uInt16 aCurrentCategory : aCategories)
+    for (const char* pCurrentCategory : aCategories)
     {
-        OUString aCurrentCategoryString = SmResId(aCurrentCategory);
+        OUString aCurrentCategoryString = SmResId(pCurrentCategory);
         if (aCurrentCategoryString == rList.GetSelectEntry())
         {
-            mpElementsControl->setElementSetId(aCurrentCategory);
+            mpElementsControl->setElementSetId(pCurrentCategory);
             return;
         }
     }
