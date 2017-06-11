@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="CharDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Character</property>
+    <property name="title" translatable="yes" context="chardialog|CharDialog">Character</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -97,7 +97,7 @@
               <object class="GtkLabel" id="font">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Font</property>
+                <property name="label" translatable="yes" context="chardialog|font">Font</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -110,7 +110,7 @@
               <object class="GtkLabel" id="fonteffects">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Font Effects</property>
+                <property name="label" translatable="yes" context="chardialog|fonteffects">Font Effects</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -124,7 +124,7 @@
               <object class="GtkLabel" id="position">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Position</property>
+                <property name="label" translatable="yes" context="chardialog|position">Position</property>
               </object>
               <packing>
                 <property name="position">2</property>

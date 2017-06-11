@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkBox" id="AreaTabPage">
@@ -26,7 +26,7 @@
             <property name="layout_style">center</property>
             <child>
               <object class="GtkButton" id="btnnone">
-                <property name="label" translatable="yes">None</property>
+                <property name="label" translatable="yes" context="areatabpage|btnnone">None</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -39,7 +39,7 @@
             </child>
             <child>
               <object class="GtkButton" id="btncolor">
-                <property name="label" translatable="yes">Color</property>
+                <property name="label" translatable="yes" context="areatabpage|btncolor">Color</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -52,7 +52,7 @@
             </child>
             <child>
               <object class="GtkButton" id="btngradient">
-                <property name="label" translatable="yes">Gradient</property>
+                <property name="label" translatable="yes" context="areatabpage|btngradient">Gradient</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -65,7 +65,7 @@
             </child>
             <child>
               <object class="GtkButton" id="btnhatch">
-                <property name="label" translatable="yes">Hatch</property>
+                <property name="label" translatable="yes" context="areatabpage|btnhatch">Hatch</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -78,7 +78,7 @@
             </child>
             <child>
               <object class="GtkButton" id="btnbitmap">
-                <property name="label" translatable="yes">Bitmap</property>
+                <property name="label" translatable="yes" context="areatabpage|btnbitmap">Bitmap</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -91,7 +91,7 @@
             </child>
             <child>
               <object class="GtkButton" id="btnpattern">
-                <property name="label" translatable="yes">Pattern</property>
+                <property name="label" translatable="yes" context="areatabpage|btnpattern">Pattern</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

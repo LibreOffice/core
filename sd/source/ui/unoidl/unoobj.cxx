@@ -71,7 +71,7 @@
 #include "DrawDocShell.hxx"
 #include "helpids.h"
 #include "glob.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "unolayer.hxx"
 #include "imapinfo.hxx"
 #include "EffectMigration.hxx"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="pcr">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="GeneralPage">
     <property name="visible">True</property>
@@ -33,7 +33,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Short name</property>
+                    <property name="label" translatable="yes" context="generalpage|shortname">_Short name</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -49,7 +49,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Type</property>
+                    <property name="label" translatable="yes" context="generalpage|authtype">_Type</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -64,7 +64,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Author(s)</property>
+                    <property name="label" translatable="yes" context="generalpage|authors">Author(s)</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -79,7 +79,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Publisher</property>
+                    <property name="label" translatable="yes" context="generalpage|publisher">_Publisher</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -94,7 +94,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Chapter</property>
+                    <property name="label" translatable="yes" context="generalpage|chapter">_Chapter</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -110,7 +110,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Tit_le</property>
+                    <property name="label" translatable="yes" context="generalpage|title">Tit_le</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -126,7 +126,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">A_ddress</property>
+                    <property name="label" translatable="yes" context="generalpage|address">A_ddress</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -142,7 +142,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Pa_ge(s)</property>
+                    <property name="label" translatable="yes" context="generalpage|pages">Pa_ge(s)</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -158,7 +158,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Year</property>
+                    <property name="label" translatable="yes" context="generalpage|year">_Year</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -174,7 +174,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_ISBN</property>
+                    <property name="label" translatable="yes" context="generalpage|isbn">_ISBN</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -207,7 +207,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Editor</property>
+                    <property name="label" translatable="yes" context="generalpage|editor">Editor</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -222,7 +222,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Book title</property>
+                    <property name="label" translatable="yes" context="generalpage|booktitle">_Book title</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -238,7 +238,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Ed_ition</property>
+                    <property name="label" translatable="yes" context="generalpage|edition">Ed_ition</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -254,7 +254,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Volume</property>
+                    <property name="label" translatable="yes" context="generalpage|volume">Volume</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -270,7 +270,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Instit_ution</property>
+                    <property name="label" translatable="yes" context="generalpage|institution">Instit_ution</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -286,7 +286,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Month</property>
+                    <property name="label" translatable="yes" context="generalpage|month">_Month</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -302,7 +302,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Publication t_ype</property>
+                    <property name="label" translatable="yes" context="generalpage|publicationtype">Publication t_ype</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -318,7 +318,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">University</property>
+                    <property name="label" translatable="yes" context="generalpage|university">University</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -333,7 +333,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Type of re_port</property>
+                    <property name="label" translatable="yes" context="generalpage|reporttype">Type of re_port</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -348,7 +348,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Organi_zation</property>
+                    <property name="label" translatable="yes" context="generalpage|organization">Organi_zation</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -381,7 +381,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Journal</property>
+                    <property name="label" translatable="yes" context="generalpage|journal">_Journal</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -396,7 +396,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Ann_otation</property>
+                    <property name="label" translatable="yes" context="generalpage|annotation">Ann_otation</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -412,7 +412,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Numb_er</property>
+                    <property name="label" translatable="yes" context="generalpage|number">Numb_er</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -428,7 +428,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Note</property>
+                    <property name="label" translatable="yes" context="generalpage|note">_Note</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -444,7 +444,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Se_ries</property>
+                    <property name="label" translatable="yes" context="generalpage|series">Se_ries</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -460,7 +460,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">URL</property>
+                    <property name="label" translatable="yes" context="generalpage|url">URL</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -493,7 +493,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">User-defined field _1</property>
+                    <property name="label" translatable="yes" context="generalpage|custom1">User-defined field _1</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -508,7 +508,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">User-defined field _4</property>
+                    <property name="label" translatable="yes" context="generalpage|custom4">User-defined field _4</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -524,7 +524,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">User-defined field _2</property>
+                    <property name="label" translatable="yes" context="generalpage|custom2">User-defined field _2</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -540,7 +540,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">User-defined field _5</property>
+                    <property name="label" translatable="yes" context="generalpage|custom5">User-defined field _5</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -556,7 +556,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">User-defined field _3</property>
+                    <property name="label" translatable="yes" context="generalpage|custom3">User-defined field _3</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>

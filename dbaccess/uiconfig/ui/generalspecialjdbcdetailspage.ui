@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="dba">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="GeneralSpecialJDBCDetails">
@@ -36,7 +36,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">_Host name:</property>
+                    <property name="label" translatable="yes" context="generalspecialjdbcdetailspage|label2">_Host name:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">hostNameEntry</property>
                   </object>
@@ -50,7 +50,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">_Port number:</property>
+                    <property name="label" translatable="yes" context="generalspecialjdbcdetailspage|label3">_Port number:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">portNumberSpinbutton</property>
                   </object>
@@ -75,7 +75,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">Socket:</property>
+                    <property name="label" translatable="yes" context="generalspecialjdbcdetailspage|socketLabel">Socket:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -87,7 +87,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">MySQL JDBC d_river class:</property>
+                    <property name="label" translatable="yes" context="generalspecialjdbcdetailspage|driverClassLabel">MySQL JDBC d_river class:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">jdbcDriverClassEntry</property>
                   </object>
@@ -109,7 +109,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="testDriverClassButton">
-                    <property name="label" translatable="yes">Test Class</property>
+                    <property name="label" translatable="yes" context="generalspecialjdbcdetailspage|testDriverClassButton">Test Class</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -159,7 +159,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Connection Settings</property>
+            <property name="label" translatable="yes" context="generalspecialjdbcdetailspage|label1">Connection Settings</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -196,7 +196,7 @@
                   <object class="GtkLabel" id="charsetlabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Character set:</property>
+                    <property name="label" translatable="yes" context="generalspecialjdbcdetailspage|charsetlabel">_Character set:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">charset</property>
                   </object>
@@ -226,7 +226,7 @@
           <object class="GtkLabel" id="charsetheader">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Data Conversion</property>
+            <property name="label" translatable="yes" context="generalspecialjdbcdetailspage|charsetheader">Data Conversion</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

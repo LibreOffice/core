@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="rpt">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkImage" id="image1">
@@ -53,8 +53,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <items>
-                  <item translatable="yes">Field Value Is</item>
-                  <item translatable="yes">Expression Is</item>
+                  <item translatable="yes" context="conditionwin|typeCombobox">Field Value Is</item>
+                  <item translatable="yes" context="conditionwin|typeCombobox">Expression Is</item>
                 </items>
               </object>
               <packing>
@@ -68,14 +68,14 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <items>
-                  <item translatable="yes">between</item>
-                  <item translatable="yes">not between</item>
-                  <item translatable="yes">equal to</item>
-                  <item translatable="yes">not equal to</item>
-                  <item translatable="yes">greater than</item>
-                  <item translatable="yes">less than</item>
-                  <item translatable="yes">greater than or equal to</item>
-                  <item translatable="yes">less than or equal to</item>
+                  <item translatable="yes" context="conditionwin|opCombobox">between</item>
+                  <item translatable="yes" context="conditionwin|opCombobox">not between</item>
+                  <item translatable="yes" context="conditionwin|opCombobox">equal to</item>
+                  <item translatable="yes" context="conditionwin|opCombobox">not equal to</item>
+                  <item translatable="yes" context="conditionwin|opCombobox">greater than</item>
+                  <item translatable="yes" context="conditionwin|opCombobox">less than</item>
+                  <item translatable="yes" context="conditionwin|opCombobox">greater than or equal to</item>
+                  <item translatable="yes" context="conditionwin|opCombobox">less than or equal to</item>
                 </items>
               </object>
               <packing>
@@ -104,7 +104,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="lhsButton">
-                    <property name="label" translatable="yes">...</property>
+                    <property name="label" translatable="yes" context="conditionwin|lhsButton">...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -127,7 +127,7 @@
               <object class="GtkLabel" id="andLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">and</property>
+                <property name="label" translatable="yes" context="conditionwin|andLabel">and</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -155,7 +155,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="rhsButton">
-                    <property name="label" translatable="yes">...</property>
+                    <property name="label" translatable="yes" context="conditionwin|rhsButton">...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -217,7 +217,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">.uno:Bold</property>
-                    <property name="label" translatable="yes">Bold</property>
+                    <property name="label" translatable="yes" context="conditionwin|ToolBoxItem1">Bold</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_bold.png</property>
                   </object>
@@ -232,7 +232,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">.uno:Italic</property>
-                    <property name="label" translatable="yes">Italic</property>
+                    <property name="label" translatable="yes" context="conditionwin|ToolBoxItem2">Italic</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_italic.png</property>
                   </object>
@@ -247,7 +247,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">.uno:Underline</property>
-                    <property name="label" translatable="yes">Underline</property>
+                    <property name="label" translatable="yes" context="conditionwin|ToolBoxItem3">Underline</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_underline.png</property>
                   </object>
@@ -272,7 +272,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">.uno:BackgroundColor</property>
-                    <property name="label" translatable="yes">Background Color</property>
+                    <property name="label" translatable="yes" context="conditionwin|ToolBoxItem4">Background Color</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_backgroundcolor.png</property>
                   </object>
@@ -287,7 +287,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">.uno:FontColor</property>
-                    <property name="label" translatable="yes">Font Color</property>
+                    <property name="label" translatable="yes" context="conditionwin|ToolBoxItem5">Font Color</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_fontcolor.png</property>
                   </object>
@@ -302,7 +302,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">.uno:FontDialog</property>
-                    <property name="label" translatable="yes">Character Formatting</property>
+                    <property name="label" translatable="yes" context="conditionwin|ToolBoxItem6">Character Formatting</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_fontdialog.png</property>
                   </object>
@@ -368,7 +368,7 @@
         <property name="column_spacing">6</property>
         <child>
           <object class="GtkButton" id="removeButton">
-            <property name="label" translatable="yes">-</property>
+            <property name="label" translatable="yes" context="conditionwin|removeButton">-</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -382,7 +382,7 @@
         </child>
         <child>
           <object class="GtkButton" id="addButton">
-            <property name="label" translatable="yes">+</property>
+            <property name="label" translatable="yes" context="conditionwin|addButton">+</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>

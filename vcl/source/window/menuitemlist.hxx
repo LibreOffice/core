@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rsc/rsc-vcl-shared-types.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/image.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/menu.hxx>

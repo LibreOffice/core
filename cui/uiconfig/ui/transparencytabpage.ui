@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustmentDegrees">
@@ -22,27 +22,27 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Linear</col>
+        <col id="0" translatable="yes" context="transparencytabpage|liststoreTYPE">Linear</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Axial</col>
+        <col id="0" translatable="yes" context="transparencytabpage|liststoreTYPE">Axial</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Radial</col>
+        <col id="0" translatable="yes" context="transparencytabpage|liststoreTYPE">Radial</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Ellipsoid</col>
+        <col id="0" translatable="yes" context="transparencytabpage|liststoreTYPE">Ellipsoid</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Quadratic</col>
+        <col id="0" translatable="yes" context="transparencytabpage|liststoreTYPE">Quadratic</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Square</col>
+        <col id="0" translatable="yes" context="transparencytabpage|liststoreTYPE">Square</col>
         <col id="1">0</col>
       </row>
     </data>
@@ -82,7 +82,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkRadioButton" id="RBT_TRANS_OFF">
-                        <property name="label" translatable="yes">_No transparency</property>
+                        <property name="label" translatable="yes" context="transparencytabpage|RBT_TRANS_OFF">_No transparency</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -100,7 +100,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="RBT_TRANS_LINEAR">
-                        <property name="label" translatable="yes">_Transparency:</property>
+                        <property name="label" translatable="yes" context="transparencytabpage|RBT_TRANS_LINEAR">_Transparency:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -121,7 +121,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="RBT_TRANS_GRADIENT">
-                        <property name="label" translatable="yes">_Gradient</property>
+                        <property name="label" translatable="yes" context="transparencytabpage|RBT_TRANS_GRADIENT">_Gradient</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -263,7 +263,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Ty_pe:</property>
+                            <property name="label" translatable="yes" context="transparencytabpage|FT_TRGR_TYPE">Ty_pe:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">LB_TRGR_GRADIENT_TYPES</property>
                           </object>
@@ -284,7 +284,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Center _X:</property>
+                            <property name="label" translatable="yes" context="transparencytabpage|FT_TRGR_CENTER_X">Center _X:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">MTR_TRGR_CENTER_X:0%</property>
                           </object>
@@ -305,7 +305,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Center _Y:</property>
+                            <property name="label" translatable="yes" context="transparencytabpage|FT_TRGR_CENTER_Y">Center _Y:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">MTR_TRGR_CENTER_Y:0%</property>
                           </object>
@@ -326,7 +326,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">_Angle:</property>
+                            <property name="label" translatable="yes" context="transparencytabpage|FT_TRGR_ANGLE">_Angle:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">MTR_TRGR_ANGLE:0degree</property>
                           </object>
@@ -347,7 +347,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">_Border:</property>
+                            <property name="label" translatable="yes" context="transparencytabpage|FT_TRGR_BORDER">_Border:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">MTR_TRGR_BORDER:0%</property>
                           </object>
@@ -368,7 +368,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">_Start value:</property>
+                            <property name="label" translatable="yes" context="transparencytabpage|FT_TRGR_START_VALUE">_Start value:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">MTR_TRGR_START_VALUE:0%</property>
                           </object>
@@ -389,7 +389,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">_End value:</property>
+                            <property name="label" translatable="yes" context="transparencytabpage|FT_TRGR_END_VALUE">_End value:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">MTR_TRGR_END_VALUE:0%</property>
                           </object>
@@ -432,7 +432,7 @@
                     <property name="vexpand">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="CTL_BITMAP_PREVIEW-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Example</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="transparencytabpage|CTL_BITMAP_PREVIEW-atkobject">Example</property>
                       </object>
                     </child>
                   </object>
@@ -450,7 +450,7 @@
                     <property name="vexpand">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="CTL_TRANS_PREVIEW-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Example</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="transparencytabpage|CTL_TRANS_PREVIEW-atkobject">Example</property>
                       </object>
                     </child>
                   </object>
@@ -491,7 +491,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Area Transparency Mode</property>
+        <property name="label" translatable="yes" context="transparencytabpage|FL_PROP">Area Transparency Mode</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>

@@ -22,6 +22,7 @@ $(eval $(call gb_Module_Module,vcl))
 $(eval $(call gb_Module_add_targets,vcl,\
     Library_vcl \
 	Package_opengl \
+    UIConfig_vcl \
 	$(if $(filter WNT,$(OS)), \
 		Package_opengl_blacklist ) \
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
@@ -51,8 +52,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
 endif
 
 $(eval $(call gb_Module_add_l10n_targets,vcl,\
-    AllLangResTarget_vcl \
-    UIConfig_vcl \
+    AllLangMoTarget_vcl \
 ))
 
 ifeq ($(USING_X11),TRUE)

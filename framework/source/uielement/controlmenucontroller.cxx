@@ -37,7 +37,6 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svl/solar.hrc>
-#include <tools/rcid.h>
 #include <vcl/image.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>

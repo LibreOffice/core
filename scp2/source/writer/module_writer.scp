@@ -57,7 +57,7 @@ Module gid_Module_Langpack_Writer_Template
     Name = "gid_Module_Langpack_Writer_Template";
     Description = "gid_Module_Langpack_Writer_Template";
     Styles = (TEMPLATEMODULE);
-    Files = (gid_File_Res_T602Filter);
+    Files = ();
 End
 
 Module gid_Module_Prg_Wrt_MSO_Reg

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="ValidationDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Validity</property>
+    <property name="title" translatable="yes" context="validationdialog|ValidationDialog">Validity</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -102,7 +102,7 @@
                   <object class="GtkLabel" id="criteria">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Criteria</property>
+                    <property name="label" translatable="yes" context="validationdialog|criteria">Criteria</property>
                   </object>
                   <packing>
                     <property name="tab_fill">False</property>
@@ -115,7 +115,7 @@
                   <object class="GtkLabel" id="inputhelp">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Input Help</property>
+                    <property name="label" translatable="yes" context="validationdialog|inputhelp">Input Help</property>
                   </object>
                   <packing>
                     <property name="position">1</property>
@@ -129,7 +129,7 @@
                   <object class="GtkLabel" id="erroralert">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Error Alert</property>
+                    <property name="label" translatable="yes" context="validationdialog|erroralert">Error Alert</property>
                   </object>
                   <packing>
                     <property name="position">2</property>

@@ -19,7 +19,7 @@
 
 
 #include <memory>
-#include "dp_gui_shared.hxx"
+#include "dp_shared.hxx"
 #include "dp_gui.h"
 #include "dp_gui_theextmgr.hxx"
 #include <cppuhelper/implbase.hxx>
@@ -175,9 +175,9 @@ ServiceImpl::ServiceImpl( Sequence<Any> const& args,
     } catch ( const css::lang::IllegalArgumentException & ) {
     }
 
-    ResHookProc pProc = ResMgr::GetReadStringHook();
+    ResHookProc pProc = Translate::GetReadStringHook();
     if ( !pProc )
-        ResMgr::SetReadStringHook( ReplaceProductNameHookProc );
+        Translate::SetReadStringHook(ReplaceProductNameHookProc);
 }
 
 // XAsynchronousExecutableDialog

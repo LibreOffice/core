@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkGrid" id="SectionPage">
@@ -48,7 +48,7 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">New Section</property>
+            <property name="label" translatable="yes" context="sectionpage|label4">New Section</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -89,7 +89,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="link">
-                        <property name="label" translatable="yes">_Link</property>
+                        <property name="label" translatable="yes" context="sectionpage|link">_Link</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -105,7 +105,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="dde">
-                        <property name="label" translatable="yes">DD_E</property>
+                        <property name="label" translatable="yes" context="sectionpage|dde">DD_E</property>
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
@@ -126,7 +126,7 @@
                         <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Section</property>
+                        <property name="label" translatable="yes" context="sectionpage|sectionlabel">_Section</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">sectionname</property>
                       </object>
@@ -179,7 +179,7 @@
                             <property name="sensitive">False</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_File name</property>
+                            <property name="label" translatable="yes" context="sectionpage|filelabel">_File name</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">filename</property>
                           </object>
@@ -194,7 +194,7 @@
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">DDE _command</property>
+                            <property name="label" translatable="yes" context="sectionpage|ddelabel">DDE _command</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">filename</property>
                           </object>
@@ -212,7 +212,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="selectfile">
-                        <property name="label" translatable="yes">Browse...</property>
+                        <property name="label" translatable="yes" context="sectionpage|selectfile">Browse...</property>
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
@@ -235,7 +235,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Link</property>
+                <property name="label" translatable="yes" context="sectionpage|label1">Link</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -270,7 +270,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="protect">
-                        <property name="label" translatable="yes">_Protect</property>
+                        <property name="label" translatable="yes" context="sectionpage|protect">_Protect</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -286,7 +286,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="selectpassword">
-                        <property name="label" translatable="yes">Password...</property>
+                        <property name="label" translatable="yes" context="sectionpage|selectpassword">Password...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -299,7 +299,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="withpassword">
-                        <property name="label" translatable="yes">Wit_h password</property>
+                        <property name="label" translatable="yes" context="sectionpage|withpassword">Wit_h password</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -322,7 +322,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Write Protection</property>
+                <property name="label" translatable="yes" context="sectionpage|label2">Write Protection</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -370,7 +370,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="hide">
-                        <property name="label" translatable="yes">H_ide</property>
+                        <property name="label" translatable="yes" context="sectionpage|hide">H_ide</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -390,7 +390,7 @@
                         <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_With Condition</property>
+                        <property name="label" translatable="yes" context="sectionpage|condlabel">_With Condition</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">withcond</property>
                       </object>
@@ -407,7 +407,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Hide</property>
+                <property name="label" translatable="yes" context="sectionpage|label3">Hide</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -435,7 +435,7 @@
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkCheckButton" id="editable">
-                    <property name="label" translatable="yes">E_ditable in read-only document</property>
+                    <property name="label" translatable="yes" context="sectionpage|editable">E_ditable in read-only document</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -450,7 +450,7 @@
               <object class="GtkLabel" id="label5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Properties</property>
+                <property name="label" translatable="yes" context="sectionpage|label5">Properties</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

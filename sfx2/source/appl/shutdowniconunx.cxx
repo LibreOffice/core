@@ -27,7 +27,7 @@
 #include <glib.h>
 #include <osl/module.hxx>
 #include <sfx2/app.hxx>
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 #include "shutdownicon.hxx"
 
 #include <config_gio.h>
@@ -197,7 +197,6 @@ add_image_menu_item( GtkMenuShell *pMenuShell,
 
 static void populate_menu( GtkWidget *pMenu )
 {
-    ShutdownIcon *pShutdownIcon = ShutdownIcon::getInstance();
     GtkMenuShell *pMenuShell = GTK_MENU_SHELL( pMenu );
     SvtModuleOptions aModuleOptions;
 
@@ -225,7 +224,7 @@ static void populate_menu( GtkWidget *pMenu )
         add_item (pMenuShell, MATH_URL, nullptr,
                   SV_ICON_ID_FORMULA, G_CALLBACK( open_url_cb ));
 
-    OUString aULabel = pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE );
+    OUString aULabel = ShutdownIcon::GetResString(STR_QUICKSTART_FROMTEMPLATE);
     add_item (pMenuShell, "dummy", &aULabel,
               SV_ICON_ID_TEMPLATE, G_CALLBACK( open_template_cb ));
 
@@ -236,7 +235,7 @@ static void populate_menu( GtkWidget *pMenu )
 
     pOpenMenuItem = add_image_menu_item
         (pMenuShell, GTK_STOCK_OPEN,
-         pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ),
+         ShutdownIcon::GetResString(STR_QUICKSTART_FILEOPEN),
          G_CALLBACK( open_file_cb ));
 
 
@@ -245,7 +244,7 @@ static void populate_menu( GtkWidget *pMenu )
 
     pDisableMenuItem = add_image_menu_item
         ( pMenuShell, GTK_STOCK_CLOSE,
-          pShutdownIcon->GetResString( STR_QUICKSTART_PRELAUNCH_UNX ),
+          ShutdownIcon::GetResString(STR_QUICKSTART_PRELAUNCH_UNX),
           G_CALLBACK( systray_disable_cb ) );
 
     pMenuItem = gtk_separator_menu_item_new();
@@ -253,7 +252,7 @@ static void populate_menu( GtkWidget *pMenu )
 
     pExitMenuItem = add_image_menu_item
         ( pMenuShell, GTK_STOCK_QUIT,
-          pShutdownIcon->GetResString( STR_QUICKSTART_EXIT ),
+          ShutdownIcon::GetResString(STR_QUICKSTART_EXIT),
           G_CALLBACK( exit_quickstarter_cb ) );
 
     gtk_widget_show_all( pMenu );
@@ -325,7 +324,7 @@ void plugin_init_sys_tray()
     ShutdownIcon *pShutdownIcon = ShutdownIcon::getInstance();
 
     aLabel = OUStringToOString (
-            pShutdownIcon->GetResString( STR_QUICKSTART_TIP ),
+            ShutdownIcon::GetResString(STR_QUICKSTART_TIP),
             RTL_TEXTENCODING_UTF8 );
 
     pTrayIcon = gtk_status_icon_new_from_icon_name ("libreoffice-startcenter");

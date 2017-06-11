@@ -26,7 +26,7 @@
 #include "xmlComponent.hxx"
 #include "xmlHierarchyCollection.hxx"
 #include "xmlEnums.hxx"
-#include "xmlstrings.hrc"
+#include "stringconstants.hxx"
 
 namespace dbaxml
 {

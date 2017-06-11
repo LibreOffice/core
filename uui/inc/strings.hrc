@@ -1,0 +1,80 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_UUI_INC_STRINGS_HRC
+#define INCLUDED_UUI_INC_STRINGS_HRC
+
+#define NC_(Context, String) (Context "\004" u8##String)
+
+#define STR_ENTER_PASSWORD_TO_OPEN              NC_("STR_ENTER_PASSWORD_TO_OPEN", "Enter password to open file: \n")
+#define STR_ENTER_PASSWORD_TO_MODIFY            NC_("STR_ENTER_PASSWORD_TO_MODIFY", "Enter password to modify file: \n")
+#define STR_ENTER_SIMPLE_PASSWORD               NC_("STR_ENTER_SIMPLE_PASSWORD", "Enter password: ")
+#define STR_CONFIRM_SIMPLE_PASSWORD             NC_("STR_CONFIRM_SIMPLE_PASSWORD", "Confirm password: ")
+#define STR_TITLE_CREATE_PASSWORD               NC_("STR_TITLE_CREATE_PASSWORD", "Set Password")
+#define STR_TITLE_ENTER_PASSWORD                NC_("STR_TITLE_ENTER_PASSWORD", "Enter Password")
+#define STR_PASSWORD_MISMATCH                   NC_("STR_PASSWORD_MISMATCH", "The confirmation password did not match the password. Set the password again by entering the same password in both boxes.")
+
+#define STR_ALREADYOPEN_TITLE                   NC_("STR_ALREADYOPEN_TITLE", "Document in Use")
+#define STR_ALREADYOPEN_MSG                     NC_("STR_ALREADYOPEN_MSG", "Document file '$(ARG1)' is locked for editing by yourself on a different system since $(ARG2)\n\nOpen document read-only, or ignore own file locking and open the document for editing.\n\n")
+#define STR_ALREADYOPEN_READONLY_BTN            NC_("STR_ALREADYOPEN_READONLY_BTN", "Open ~Read-Only")
+#define STR_ALREADYOPEN_OPEN_BTN                NC_("STR_ALREADYOPEN_OPEN_BTN", "~Open")
+#define STR_ALREADYOPEN_SAVE_MSG                NC_("STR_ALREADYOPEN_SAVE_MSG", "Document file '$(ARG1)' is locked for editing by yourself on a different system since $(ARG2)\n\nClose document on other system and retry saving or ignore own file locking and save current document.\n\n")
+#define STR_ALREADYOPEN_RETRY_SAVE_BTN          NC_("STR_ALREADYOPEN_RETRY_SAVE_BTN", "~Retry Saving")
+#define STR_ALREADYOPEN_SAVE_BTN                NC_("STR_ALREADYOPEN_SAVE_BTN", "~Save")
+
+#define RID_KEEP_PASSWORD                       NC_("RID_KEEP_PASSWORD", "~Remember password until end of session")
+#define RID_SAVE_PASSWORD                       NC_("RID_SAVE_PASSWORD", "~Remember password")
+#define STR_WARNING_INCOMPLETE_ENCRYPTION_TITLE NC_("STR_WARNING_INCOMPLETE_ENCRYPTION_TITLE", "Non-Encrypted Streams")
+
+#define STR_LOCKFAILED_TITLE                    NC_("STR_LOCKFAILED_TITLE", "Document Could Not Be Locked")
+#define STR_LOCKFAILED_MSG                      NC_("STR_LOCKFAILED_MSG", "The lock file could not be created for exclusive access by %PRODUCTNAME, due to missing permission to create a lock file on that file location or lack of free disk space.")
+#define STR_LOCKFAILED_OPENREADONLY_BTN         NC_("STR_LOCKFAILED_OPENREADONLY_BTN", "Open ~Read-Only")
+
+#define STR_OPENLOCKED_TITLE                    NC_("STR_OPENLOCKED_TITLE", "Document in Use")
+#define STR_OPENLOCKED_MSG                      NC_("STR_OPENLOCKED_MSG", "Document file '$(ARG1)' is locked for editing by:\n\n$(ARG2)\n\nOpen document read-only or open a copy of the document for editing.\n\n")
+#define STR_OPENLOCKED_OPENREADONLY_BTN         NC_("STR_OPENLOCKED_OPENREADONLY_BTN", "Open ~Read-Only")
+#define STR_OPENLOCKED_OPENCOPY_BTN             NC_("STR_OPENLOCKED_OPENCOPY_BTN", "Open ~Copy")
+#define STR_UNKNOWNUSER                         NC_("STR_UNKNOWNUSER", "Unknown User")
+
+#define STR_FILECHANGED_TITLE                   NC_("STR_FILECHANGED_TITLE", "Document Has Been Changed by Others")
+#define STR_FILECHANGED_MSG                     NC_("STR_FILECHANGED_MSG", "The file has been changed since it was opened for editing in %PRODUCTNAME. Saving your version of the document will overwrite changes made by others.\n\nDo you want to save anyway?\n\n")
+#define STR_FILECHANGED_SAVEANYWAY_BTN          NC_("STR_FILECHANGED_SAVEANYWAY_BTN", "~Save Anyway")
+
+#define STR_TRYLATER_TITLE                      NC_("STR_TRYLATER_TITLE", "Document in Use")
+#define STR_TRYLATER_MSG                        NC_("STR_TRYLATER_MSG", "Document file '$(ARG1)' is locked for editing by:\n\n$(ARG2)\n\nTry again later to save document or save a copy of that document.\n\n")
+#define STR_TRYLATER_RETRYSAVING_BTN            NC_("STR_TRYLATER_RETRYSAVING_BTN", "~Retry Saving")
+#define STR_TRYLATER_SAVEAS_BTN                 NC_("STR_TRYLATER_SAVEAS_BTN", "~Save As...")
+
+#define STR_RENAME_OR_REPLACE                   NC_("STR_RENAME_OR_REPLACE", "A file with the name \"%NAME\" already exists in the location \"%FOLDER\".\nChoose Replace to overwrite the existing file or provide a new name.")
+#define STR_NAME_CLASH_RENAME_ONLY              NC_("STR_NAME_CLASH_RENAME_ONLY", "A file with the name \"%NAME\" already exists in the location \"%FOLDER\".\nPlease enter a new name.")
+#define STR_SAME_NAME_USED                      NC_("STR_SAME_NAME_USED", "Please provide a different file name!")
+
+#define STR_ERROR_PASSWORD_TO_OPEN_WRONG        NC_("STR_ERROR_PASSWORD_TO_OPEN_WRONG", "The password is incorrect. The file cannot be opened.")
+#define STR_ERROR_PASSWORD_TO_MODIFY_WRONG      NC_("STR_ERROR_PASSWORD_TO_MODIFY_WRONG", "The password is incorrect. The file cannot be modified.")
+#define STR_ERROR_MASTERPASSWORD_WRONG          NC_("STR_ERROR_MASTERPASSWORD_WRONG", "The master password is incorrect.")
+#define STR_ERROR_SIMPLE_PASSWORD_WRONG         NC_("STR_ERROR_SIMPLE_PASSWORD_WRONG", "The password is incorrect.")
+#define STR_ERROR_PASSWORDS_NOT_IDENTICAL       NC_("STR_ERROR_PASSWORDS_NOT_IDENTICAL", "The password confirmation does not match.")
+
+#define STR_LOCKCORRUPT_TITLE                   NC_("STR_LOCKCORRUPT_TITLE", "Lock file is corrupted")
+#define STR_LOCKCORRUPT_MSG                     NC_("STR_LOCKCORRUPT_MSG", "The lock file is corrupted and probably empty. Opening the document read-only and closing it again removes the corrupted lock file.")
+#define STR_LOCKCORRUPT_OPENREADONLY_BTN        NC_("STR_LOCKCORRUPT_OPENREADONLY_BTN", "Open ~Read-Only")
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

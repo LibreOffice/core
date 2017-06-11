@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkVBox" id="PersonalizationTabPage">
     <property name="visible">True</property>
@@ -28,7 +28,7 @@
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkRadioButton" id="no_persona">
-                    <property name="label" translatable="yes">Default look, do not use Themes</property>
+                    <property name="label" translatable="yes" context="personalization_tab|no_persona">Default look, do not use Themes</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -44,7 +44,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="default_persona">
-                    <property name="label" translatable="yes">Pre-installed Theme (if available)</property>
+                    <property name="label" translatable="yes" context="personalization_tab|default_persona">Pre-installed Theme (if available)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -116,7 +116,7 @@
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkRadioButton" id="own_persona">
-                        <property name="label" translatable="yes">Own Theme</property>
+                        <property name="label" translatable="yes" context="personalization_tab|own_persona">Own Theme</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -143,7 +143,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="select_persona">
-                        <property name="label" translatable="yes">Select Theme</property>
+                        <property name="label" translatable="yes" context="personalization_tab|select_persona">Select Theme</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -165,7 +165,7 @@
                   <object class="GtkLabel" id="extensions_label">
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Or, select from the Themes installed via extensions:</property>
+                    <property name="label" translatable="yes" context="personalization_tab|extensions_label">Or, select from the Themes installed via extensions:</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -217,7 +217,7 @@
           <object class="GtkLabel" id="personas_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Firefox Themes</property>
+            <property name="label" translatable="yes" context="personalization_tab|personas_label">Firefox Themes</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

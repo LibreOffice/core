@@ -35,7 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <tools/urlobj.hxx>
-#include <classes/resource.hrc>
+#include <strings.hrc>
 #include <classes/fwkresid.hxx>
 #include <framework/menuconfiguration.hxx>
 #include <uielement/menubarmanager.hxx>

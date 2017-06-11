@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.6"/>
   <object class="GtkMessageDialog" id="NoLoadedFileDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">No Loaded File</property>
+    <property name="title" translatable="yes" context="querynoloadedfiledialog|NoLoadedFileDialog">No Loaded File</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">error</property>
     <property name="buttons">ok</property>
-    <property name="text" translatable="yes">The file could not be loaded!</property>
+    <property name="text" translatable="yes" context="querynoloadedfiledialog|NoLoadedFileDialog">The file could not be loaded!</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>

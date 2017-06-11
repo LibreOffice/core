@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sw">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="FindEntryDialog">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Find Entry</property>
+    <property name="title" translatable="yes" context="findentrydialog|FindEntryDialog">Find Entry</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -88,7 +88,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">F_ind</property>
+                    <property name="label" translatable="yes" context="findentrydialog|label1">F_ind</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">entry</property>
                   </object>
@@ -128,7 +128,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="findin">
-                    <property name="label" translatable="yes">Find _only in</property>
+                    <property name="label" translatable="yes" context="findentrydialog|findin">Find _only in</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>

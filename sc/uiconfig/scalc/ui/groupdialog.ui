@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="GroupDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Group</property>
+    <property name="title" translatable="yes" context="groupdialog|GroupDialog">Group</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -95,7 +95,7 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="rows">
-                        <property name="label" translatable="yes">_Rows</property>
+                        <property name="label" translatable="yes" context="groupdialog|rows">_Rows</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -113,7 +113,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="cols">
-                        <property name="label" translatable="yes">_Columns</property>
+                        <property name="label" translatable="yes" context="groupdialog|cols">_Columns</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -138,7 +138,7 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Include</property>
+                <property name="label" translatable="yes" context="groupdialog|includeLabel">Include</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

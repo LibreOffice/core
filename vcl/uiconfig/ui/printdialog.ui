@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.19.0 -->
-<interface>
+<!-- Generated with glade 3.20.0 -->
+<interface domain="vcl">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -43,31 +43,31 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">1</col>
+        <col id="0" translatable="yes" context="printdialog|liststore1">1</col>
         <col id="1">1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">2</col>
+        <col id="0" translatable="yes" context="printdialog|liststore1">2</col>
         <col id="1">2</col>
       </row>
       <row>
-        <col id="0" translatable="yes">4</col>
+        <col id="0" translatable="yes" context="printdialog|liststore1">4</col>
         <col id="1">4</col>
       </row>
       <row>
-        <col id="0" translatable="yes">6</col>
+        <col id="0" translatable="yes" context="printdialog|liststore1">6</col>
         <col id="1">6</col>
       </row>
       <row>
-        <col id="0" translatable="yes">9</col>
+        <col id="0" translatable="yes" context="printdialog|liststore1">9</col>
         <col id="1">9</col>
       </row>
       <row>
-        <col id="0" translatable="yes">16</col>
+        <col id="0" translatable="yes" context="printdialog|liststore1">16</col>
         <col id="1">16</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Custom</col>
+        <col id="0" translatable="yes" context="printdialog|liststore1">Custom</col>
         <col id="1">65535</col>
       </row>
     </data>
@@ -79,16 +79,16 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">left to right, then down</col>
+        <col id="0" translatable="yes" context="printdialog|liststore2">left to right, then down</col>
       </row>
       <row>
-        <col id="0" translatable="yes">top to bottom, then right</col>
+        <col id="0" translatable="yes" context="printdialog|liststore2">top to bottom, then right</col>
       </row>
       <row>
-        <col id="0" translatable="yes">top to bottom, then left</col>
+        <col id="0" translatable="yes" context="printdialog|liststore2">top to bottom, then left</col>
       </row>
       <row>
-        <col id="0" translatable="yes">right to left, then down</col>
+        <col id="0" translatable="yes" context="printdialog|liststore2">right to left, then down</col>
       </row>
     </data>
   </object>
@@ -99,20 +99,20 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Automatic</col>
+        <col id="0" translatable="yes" context="printdialog|liststore3">Automatic</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Portrait</col>
+        <col id="0" translatable="yes" context="printdialog|liststore3">Portrait</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Landscape</col>
+        <col id="0" translatable="yes" context="printdialog|liststore3">Landscape</col>
       </row>
     </data>
   </object>
   <object class="GtkDialog" id="PrintDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Print</property>
+    <property name="title" translatable="yes" context="printdialog|PrintDialog">Print</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -230,7 +230,7 @@
                       <object class="GtkLabel" id="totalnumpages">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">/ %n</property>
+                        <property name="label" translatable="yes" context="printdialog|totalnumpages">/ %n</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -329,8 +329,8 @@
                                           <object class="GtkLabel" id="label7">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="label" translatable="yes" context="printdialog|label7">Status:</property>
                                             <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">Status:</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -341,8 +341,8 @@
                                           <object class="GtkLabel" id="label8">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="label" translatable="yes" context="printdialog|label8">Location:</property>
                                             <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">Location:</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -353,8 +353,8 @@
                                           <object class="GtkLabel" id="label9">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="label" translatable="yes" context="printdialog|label9">Comment:</property>
                                             <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">Comment:</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -365,8 +365,8 @@
                                           <object class="GtkLabel" id="status">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="label" translatable="yes" context="printdialog|status">Default printer</property>
                                             <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">Default printer</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -377,8 +377,8 @@
                                           <object class="GtkLabel" id="location">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="label" translatable="yes" context="printdialog|location">Place</property>
                                             <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">Place</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -389,8 +389,8 @@
                                           <object class="GtkLabel" id="comment">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="label" translatable="yes" context="printdialog|comment">Long printer name</property>
                                             <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">Long printer name</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -403,7 +403,7 @@
                                       <object class="GtkLabel" id="label6">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">Details</property>
+                                        <property name="label" translatable="yes" context="printdialog|label6">Details</property>
                                       </object>
                                     </child>
                                   </object>
@@ -414,7 +414,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="setup">
-                                    <property name="label" translatable="yes">Properties...</property>
+                                    <property name="label" translatable="yes" context="printdialog|setup">Properties...</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
@@ -450,7 +450,7 @@
                           <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Printer</property>
+                            <property name="label" translatable="yes" context="printdialog|label5">Printer</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -490,7 +490,7 @@
                                       <object class="GtkLabel" id="label14">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">Number of copies</property>
+                                        <property name="label" translatable="yes" context="printdialog|label14">Number of copies</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">copycount</property>
                                       </object>
@@ -528,7 +528,7 @@
                                     <property name="spacing">12</property>
                                     <child>
                                       <object class="GtkCheckButton" id="collate">
-                                        <property name="label" translatable="yes">Collate</property>
+                                        <property name="label" translatable="yes" context="printdialog|collate">Collate</property>
                                         <property name="visible">True</property>
                                         <property name="sensitive">False</property>
                                         <property name="can_focus">True</property>
@@ -585,7 +585,7 @@
                                     <property name="spacing">6</property>
                                     <child>
                                       <object class="GtkRadioButton" id="printallsheets">
-                                        <property name="label" translatable="yes">All sheets</property>
+                                        <property name="label" translatable="yes" context="printdialog|printallsheets">All sheets</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="no_show_all">True</property>
@@ -602,7 +602,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkRadioButton" id="printselectedsheets">
-                                        <property name="label" translatable="yes">Selected sheets</property>
+                                        <property name="label" translatable="yes" context="printdialog|printselectedsheets">Selected sheets</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="no_show_all">True</property>
@@ -618,7 +618,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkRadioButton" id="printselectedcells">
-                                        <property name="label" translatable="yes">Selected cells</property>
+                                        <property name="label" translatable="yes" context="printdialog|printselectedcells">Selected cells</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="no_show_all">True</property>
@@ -643,8 +643,8 @@
                                   <object class="GtkLabel" id="fromwhich">
                                     <property name="can_focus">False</property>
                                     <property name="no_show_all">True</property>
+                                    <property name="label" translatable="yes" context="printdialog|fromwhich">From which print</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">From which print</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -661,7 +661,7 @@
                                     <property name="spacing">6</property>
                                     <child>
                                       <object class="GtkRadioButton" id="printallpages">
-                                        <property name="label" translatable="yes">All pages</property>
+                                        <property name="label" translatable="yes" context="printdialog|printallpages">All pages</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="no_show_all">True</property>
@@ -682,7 +682,7 @@
                                         <property name="spacing">12</property>
                                         <child>
                                           <object class="GtkRadioButton" id="printpages">
-                                            <property name="label" translatable="yes">Pages</property>
+                                            <property name="label" translatable="yes" context="printdialog|printpages">Pages</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="no_show_all">True</property>
@@ -717,7 +717,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkRadioButton" id="printselection">
-                                        <property name="label" translatable="yes">Selection</property>
+                                        <property name="label" translatable="yes" context="printdialog|printselection">Selection</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="no_show_all">True</property>
@@ -733,7 +733,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkCheckButton" id="reverseorder">
-                                        <property name="label" translatable="yes">Print in reverse page order</property>
+                                        <property name="label" translatable="yes" context="printdialog|reverseorder">Print in reverse page order</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
@@ -765,7 +765,7 @@
                           <object class="GtkLabel" id="label13">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Range and Copies</property>
+                            <property name="label" translatable="yes" context="printdialog|label13">Range and Copies</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -798,7 +798,7 @@
                                   <object class="GtkLabel" id="label16">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Comments</property>
+                                    <property name="label" translatable="yes" context="printdialog|label16">Comments</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">writercomments</property>
                                   </object>
@@ -827,7 +827,7 @@
                           <object class="GtkLabel" id="label15">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Print</property>
+                            <property name="label" translatable="yes" context="printdialog|label15">Print</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -866,7 +866,7 @@
                                       <object class="GtkLabel" id="label10">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">Document</property>
+                                        <property name="label" translatable="yes" context="printdialog|label10">Document</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">impressdocument</property>
                                       </object>
@@ -903,7 +903,7 @@
                                       <object class="GtkLabel" id="label12">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">Slides per page</property>
+                                        <property name="label" translatable="yes" context="printdialog|label12">Slides per page</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">slidesperpage</property>
                                       </object>
@@ -928,7 +928,7 @@
                                       <object class="GtkLabel" id="label19">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">Order</property>
+                                        <property name="label" translatable="yes" context="printdialog|label19">Order</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">slidesperpageorder</property>
                                       </object>
@@ -964,7 +964,7 @@
                           <object class="GtkLabel" id="label11">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Print</property>
+                            <property name="label" translatable="yes" context="printdialog|label11">Print</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -982,7 +982,7 @@
                 <child type="tab">
                   <object class="GtkLabel" id="label1">
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">General</property>
+                    <property name="label" translatable="yes" context="printdialog|label1">General</property>
                   </object>
                   <packing>
                     <property name="tab_fill">False</property>
@@ -1006,7 +1006,7 @@
                   <object class="GtkLabel" id="customlabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">custom</property>
+                    <property name="label" translatable="yes" context="printdialog|customlabel">custom</property>
                   </object>
                   <packing>
                     <property name="position">1</property>
@@ -1056,7 +1056,7 @@
                                     <property name="can_focus">False</property>
                                     <child>
                                       <object class="GtkRadioButton" id="pagespersheetbtn">
-                                        <property name="label" translatable="yes">Pages per sheet</property>
+                                        <property name="label" translatable="yes" context="printdialog|pagespersheetbtn">Pages per sheet</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
@@ -1089,7 +1089,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkRadioButton" id="brochure">
-                                    <property name="label" translatable="yes">Brochure</property>
+                                    <property name="label" translatable="yes" context="printdialog|brochure">Brochure</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -1109,7 +1109,7 @@
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
                                     <property name="margin_left">12</property>
-                                    <property name="label" translatable="yes">Pages</property>
+                                    <property name="label" translatable="yes" context="printdialog|pagestxt">Pages</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">pagecols</property>
                                   </object>
@@ -1124,7 +1124,7 @@
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
                                     <property name="margin_left">12</property>
-                                    <property name="label" translatable="yes">Margin</property>
+                                    <property name="label" translatable="yes" context="printdialog|sheetmargintxt1">Margin</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">sheetmarginsb:0mm</property>
                                   </object>
@@ -1139,7 +1139,7 @@
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
                                     <property name="margin_left">12</property>
-                                    <property name="label" translatable="yes">Orientation</property>
+                                    <property name="label" translatable="yes" context="printdialog|orientationtxt">Orientation</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">orientationlb</property>
                                   </object>
@@ -1154,7 +1154,7 @@
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
                                     <property name="margin_left">12</property>
-                                    <property name="label" translatable="yes">Distance</property>
+                                    <property name="label" translatable="yes" context="printdialog|pagemargintxt1">Distance</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">pagemarginsb:0mm</property>
                                   </object>
@@ -1241,7 +1241,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="label" translatable="yes">by</property>
+                                    <property name="label" translatable="yes" context="printdialog|by">by</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">pagerows</property>
                                   </object>
@@ -1255,7 +1255,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="label" translatable="yes">between pages</property>
+                                    <property name="label" translatable="yes" context="printdialog|pagemargintxt2">between pages</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">2</property>
@@ -1268,7 +1268,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="label" translatable="yes">to sheet border</property>
+                                    <property name="label" translatable="yes" context="printdialog|sheetmargintxt2">to sheet border</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">2</property>
@@ -1278,7 +1278,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="bordercb">
-                                    <property name="label" translatable="yes">Draw a border around each page</property>
+                                    <property name="label" translatable="yes" context="printdialog|bordercb">Draw a border around each page</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -1299,7 +1299,7 @@
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
                                     <property name="margin_left">12</property>
-                                    <property name="label" translatable="yes">Order</property>
+                                    <property name="label" translatable="yes" context="printdialog|ordertxt">Order</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">orderlb</property>
                                   </object>
@@ -1338,7 +1338,7 @@
                           <object class="GtkLabel" id="label18">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Layout</property>
+                            <property name="label" translatable="yes" context="printdialog|label18">Layout</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -1372,7 +1372,7 @@
                                   <object class="GtkLabel" id="label17">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Include</property>
+                                    <property name="label" translatable="yes" context="printdialog|label17">Include</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">brochureinclude</property>
                                   </object>
@@ -1401,7 +1401,7 @@
                           <object class="GtkLabel" id="label3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Page Sides</property>
+                            <property name="label" translatable="yes" context="printdialog|label3">Page Sides</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -1423,7 +1423,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Page Layout</property>
+                    <property name="label" translatable="yes" context="printdialog|label2">Page Layout</property>
                   </object>
                   <packing>
                     <property name="position">2</property>
@@ -1450,7 +1450,7 @@
                             <property name="row_spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="singleprintjob">
-                                <property name="label" translatable="yes">Create single print jobs for collated output</property>
+                                <property name="label" translatable="yes" context="printdialog|singleprintjob">Create single print jobs for collated output</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -1464,7 +1464,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="printpaperfromsetup">
-                                <property name="label" translatable="yes">Use only paper tray from printer preferences</property>
+                                <property name="label" translatable="yes" context="printdialog|printpaperfromsetup">Use only paper tray from printer preferences</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="xalign">0</property>
@@ -1477,7 +1477,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="papersizefromsetup">
-                                <property name="label" translatable="yes">Use only paper size from printer preferences</property>
+                                <property name="label" translatable="yes" context="printdialog|papersizefromsetup">Use only paper size from printer preferences</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -1498,7 +1498,7 @@
                       <object class="GtkLabel" id="label21">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Options</property>
+                        <property name="label" translatable="yes" context="printdialog|label21">Options</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -1513,7 +1513,7 @@
                   <object class="GtkLabel" id="label20">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Options</property>
+                    <property name="label" translatable="yes" context="printdialog|label20">Options</property>
                   </object>
                   <packing>
                     <property name="position">3</property>

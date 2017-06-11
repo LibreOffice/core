@@ -18,7 +18,7 @@
  */
 
 
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include "svdglob.hxx"
 #include <svx/svdpage.hxx>
 #include "svx/globl3d.hxx"

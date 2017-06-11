@@ -20,8 +20,10 @@
 #include "browserids.hxx"
 #include "brwctrlr.hxx"
 #include "brwview.hxx"
-#include "dbu_brw.hrc"
-#include "dbustrings.hrc"
+#include "strings.hrc"
+#include "strings.hxx"
+#include "core_resource.hxx"
+#include "stringconstants.hxx"
 #include "queryfilter.hxx"
 #include "queryorder.hxx"
 #include "sqlmessage.hxx"
@@ -536,8 +538,8 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< css::uno::
     ,m_nRowSetPrivileges(0)
     ,m_aAsyncGetCellFocus(LINK(this, SbaXDataBrowserController, OnAsyncGetCellFocus))
     ,m_aAsyncDisplayError( LINK( this, SbaXDataBrowserController, OnAsyncDisplayError ) )
-    ,m_sStateSaveRecord(ModuleRes(RID_STR_SAVE_CURRENT_RECORD))
-    ,m_sStateUndoRecord(ModuleRes(RID_STR_UNDO_MODIFY_RECORD))
+    ,m_sStateSaveRecord(DBA_RES(RID_STR_SAVE_CURRENT_RECORD))
+    ,m_sStateUndoRecord(DBA_RES(RID_STR_UNDO_MODIFY_RECORD))
     ,m_sModuleIdentifier( OUString( "com.sun.star.sdb.DataSourceBrowser" ) )
     ,m_pFormControllerImpl(nullptr)
     ,m_nFormActionNestingLevel(0)
@@ -750,7 +752,7 @@ bool SbaXDataBrowserController::Construct(vcl::Window* pParent)
     // marry them
     Reference< css::container::XNameContainer >  xNameCont(m_xRowSet, UNO_QUERY);
     {
-        OUString sText(ModuleRes(STR_DATASOURCE_GRIDCONTROL_NAME));
+        OUString sText(DBA_RES(STR_DATASOURCE_GRIDCONTROL_NAME));
         xNameCont->insertByName(sText, makeAny(m_xGridModel));
     }
 
@@ -1370,7 +1372,7 @@ void SbaXDataBrowserController::resetted(const css::lang::EventObject& rEvent)
 
 sal_Bool SbaXDataBrowserController::confirmDelete(const css::sdb::RowChangeEvent& /*aEvent*/)
 {
-    if (ScopedVclPtrInstance<MessageDialog>(getBrowserView(), ModuleRes(STR_QUERY_BRW_DELETE_ROWS), VclMessageType::Question, VclButtonsType::YesNo)->Execute() != RET_YES)
+    if (ScopedVclPtrInstance<MessageDialog>(getBrowserView(), DBA_RES(STR_QUERY_BRW_DELETE_ROWS), VclMessageType::Question, VclButtonsType::YesNo)->Execute() != RET_YES)
         return false;
 
     return true;
@@ -1982,7 +1984,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             HANDLE_SQL_ERRORS(
                 xParser->setOrder(OUString()); xParser->appendOrderByColumn(xField, bSortUp),
                 bParserSuccess,
-                ModuleRes(SBA_BROWSER_SETTING_ORDER),
+                DBA_RES(SBA_BROWSER_SETTING_ORDER),
                 "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
             )
 
@@ -2039,7 +2041,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 HANDLE_SQL_ERRORS(
                     xParser->appendHavingClauseByColumn(xField,true,nOp),
                     bParserSuccess,
-                    ModuleRes(SBA_BROWSER_SETTING_FILTER),
+                    DBA_RES(SBA_BROWSER_SETTING_FILTER),
                     "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
                 )
             }
@@ -2048,7 +2050,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 HANDLE_SQL_ERRORS(
                     xParser->appendFilterByColumn(xField,true,nOp),
                     bParserSuccess,
-                    ModuleRes(SBA_BROWSER_SETTING_FILTER),
+                    DBA_RES(SBA_BROWSER_SETTING_FILTER),
                     "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
                 )
             }

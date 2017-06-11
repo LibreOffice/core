@@ -18,7 +18,7 @@
  */
 
 
-#include "deployment.hrc"
+#include "strings.hrc"
 #include "dp_misc.h"
 #include "dp_ucb.h"
 #include <rtl/uri.hxx>

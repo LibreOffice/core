@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="InsertAutoTextDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Insert AutoText</property>
+    <property name="title" translatable="yes" context="insertautotextdialog|InsertAutoTextDialog">Insert AutoText</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -101,7 +101,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Autotexts for Shortcut </property>
+                <property name="label" translatable="yes" context="insertautotextdialog|label1">Autotexts for Shortcut </property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="flt">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkBox" id="PdfLinksPage">
     <property name="visible">True</property>
@@ -26,7 +26,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="export">
-                    <property name="label" translatable="yes">Export bookmarks as named destinations</property>
+                    <property name="label" translatable="yes" context="pdflinkspage|export">Export bookmarks as named destinations</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -44,7 +44,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="convert">
-                    <property name="label" translatable="yes">_Convert document references to PDF targets</property>
+                    <property name="label" translatable="yes" context="pdflinkspage|convert">_Convert document references to PDF targets</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -62,7 +62,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="exporturl">
-                    <property name="label" translatable="yes">Export _URLs relative to file system</property>
+                    <property name="label" translatable="yes" context="pdflinkspage|exporturl">Export _URLs relative to file system</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -86,7 +86,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">General</property>
+            <property name="label" translatable="yes" context="pdflinkspage|label1">General</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -118,7 +118,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkRadioButton" id="default">
-                    <property name="label" translatable="yes">Default mode</property>
+                    <property name="label" translatable="yes" context="pdflinkspage|default">Default mode</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -137,7 +137,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="openpdf">
-                    <property name="label" translatable="yes">Open with PDF reader application</property>
+                    <property name="label" translatable="yes" context="pdflinkspage|openpdf">Open with PDF reader application</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -155,7 +155,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="openinternet">
-                    <property name="label" translatable="yes">Open _with Internet browser</property>
+                    <property name="label" translatable="yes" context="pdflinkspage|openinternet">Open _with Internet browser</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -179,7 +179,7 @@
           <object class="GtkLabel" id="label5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Cross-document Links</property>
+            <property name="label" translatable="yes" context="pdflinkspage|label5">Cross-document Links</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

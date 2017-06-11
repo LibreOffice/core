@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sd">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="HeaderFooterDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Header and Footer</property>
+    <property name="title" translatable="yes" context="headerfooterdialog|HeaderFooterDialog">Header and Footer</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -18,7 +18,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="apply_all">
-                <property name="label" translatable="yes">Appl_y to All</property>
+                <property name="label" translatable="yes" context="headerfooterdialog|apply_all">Appl_y to All</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_default">True</property>
@@ -97,7 +97,7 @@
               <object class="GtkLabel" id="slides">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Slides</property>
+                <property name="label" translatable="yes" context="headerfooterdialog|slides">Slides</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -110,7 +110,7 @@
               <object class="GtkLabel" id="notes">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Notes and Handouts</property>
+                <property name="label" translatable="yes" context="headerfooterdialog|notes">Notes and Handouts</property>
               </object>
               <packing>
                 <property name="position">1</property>

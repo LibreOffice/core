@@ -30,7 +30,6 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/strong_int.hxx>
 
-class ResMgr;
 namespace vcl { class Window; }
 class ToolBox;
 class SfxItemPool;

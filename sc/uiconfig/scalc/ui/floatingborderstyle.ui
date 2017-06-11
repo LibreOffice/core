@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkWindow" id="FloatingBorderStyle">
     <property name="can_focus">False</property>
@@ -29,7 +29,7 @@
               <object class="GtkToolButton" id="none">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">No Border</property>
+                <property name="tooltip_text" translatable="yes" context="floatingborderstyle|none|tooltip_text">No Border</property>
                 <property name="action_name">none</property>
                 <property name="icon_name">sc/res/sidebar/CellBorder_Empty_18x18.png</property>
               </object>
@@ -42,7 +42,7 @@
               <object class="GtkToolButton" id="all">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">All Borders</property>
+                <property name="tooltip_text" translatable="yes" context="floatingborderstyle|all|tooltip_text">All Borders</property>
                 <property name="action_name">all</property>
                 <property name="icon_name">sc/res/sidebar/CellBorder_All_18x18.png</property>
               </object>
@@ -55,7 +55,7 @@
               <object class="GtkToolButton" id="outside">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Outside Borders</property>
+                <property name="tooltip_text" translatable="yes" context="floatingborderstyle|outside|tooltip_text">Outside Borders</property>
                 <property name="action_name">outside</property>
                 <property name="icon_name">sc/res/sidebar/CellBorder_FourBorders_18x18.png</property>
               </object>
@@ -68,7 +68,7 @@
               <object class="GtkToolButton" id="thickbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Thick Box Border</property>
+                <property name="tooltip_text" translatable="yes" context="floatingborderstyle|thickbox|tooltip_text">Thick Box Border</property>
                 <property name="action_name">thickbox</property>
                 <property name="icon_name">sc/res/sidebar/CellBorder_FourBorders_Thick_18x18.png</property>
               </object>
@@ -92,7 +92,7 @@
               <object class="GtkToolButton" id="thickbottom">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Thick Bottom Border</property>
+                <property name="tooltip_text" translatable="yes" context="floatingborderstyle|thickbottom|tooltip_text">Thick Bottom Border</property>
                 <property name="action_name">thickbottom</property>
                 <property name="icon_name">sc/res/sidebar/CellBorder_Bottom_Thick_18x18.png</property>
               </object>
@@ -105,7 +105,7 @@
               <object class="GtkToolButton" id="doublebottom">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Double Bottom Border</property>
+                <property name="tooltip_text" translatable="yes" context="floatingborderstyle|doublebottom|tooltip_text">Double Bottom Border</property>
                 <property name="action_name">doublebottom</property>
                 <property name="icon_name">sc/res/sidebar/CellBorder_Bottom_Double_18x18.png</property>
               </object>
@@ -118,7 +118,7 @@
               <object class="GtkToolButton" id="topthickbottom">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Top and Thick Bottom Borders</property>
+                <property name="tooltip_text" translatable="yes" context="floatingborderstyle|topthickbottom|tooltip_text">Top and Thick Bottom Borders</property>
                 <property name="action_name">topthickbottom</property>
                 <property name="icon_name">sc/res/sidebar/CellBorder_TopThin_BottomThick_18x18.png</property>
               </object>
@@ -131,7 +131,7 @@
               <object class="GtkToolButton" id="topdoublebottom">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Top and Double Bottom Borders</property>
+                <property name="tooltip_text" translatable="yes" context="floatingborderstyle|topdoublebottom|tooltip_text">Top and Double Bottom Borders</property>
                 <property name="action_name">topdoublebottom</property>
                 <property name="icon_name">sc/res/sidebar/CellBorder_TopSingle_BottomDouble_18x18.png</property>
               </object>
@@ -155,7 +155,7 @@
               <object class="GtkToolButton" id="left">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Left Border</property>
+                <property name="tooltip_text" translatable="yes" context="floatingborderstyle|left|tooltip_text">Left Border</property>
                 <property name="action_name">left</property>
                 <property name="icon_name">sc/res/sidebar/CellBorder_Left_18x18.png</property>
               </object>
@@ -168,7 +168,7 @@
               <object class="GtkToolButton" id="right">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Right Border</property>
+                <property name="tooltip_text" translatable="yes" context="floatingborderstyle|right|tooltip_text">Right Border</property>
                 <property name="action_name">right</property>
                 <property name="icon_name">sc/res/sidebar/CellBorder_Right_18x18.png</property>
               </object>
@@ -181,7 +181,7 @@
               <object class="GtkToolButton" id="top">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Top Border</property>
+                <property name="tooltip_text" translatable="yes" context="floatingborderstyle|top|tooltip_text">Top Border</property>
                 <property name="action_name">top</property>
                 <property name="icon_name">sc/res/sidebar/CellBorder_Top_18x18.png</property>
               </object>
@@ -194,7 +194,7 @@
               <object class="GtkToolButton" id="bottom">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Bottom Border</property>
+                <property name="tooltip_text" translatable="yes" context="floatingborderstyle|bottom|tooltip_text">Bottom Border</property>
                 <property name="action_name">bottom</property>
                 <property name="icon_name">sc/res/sidebar/CellBorder_Bottom_18x18.png</property>
               </object>
@@ -207,7 +207,7 @@
               <object class="GtkToolButton" id="diagup">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Diagonal Up Border</property>
+                <property name="tooltip_text" translatable="yes" context="floatingborderstyle|diagup|tooltip_text">Diagonal Up Border</property>
                 <property name="action_name">diagup</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">sc/res/sidebar/CellBorder_RightDiagonal_18x18.png</property>
@@ -221,7 +221,7 @@
               <object class="GtkToolButton" id="diagdown">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Diagonal Down Border</property>
+                <property name="tooltip_text" translatable="yes" context="floatingborderstyle|diagdown|tooltip_text">Diagonal Down Border</property>
                 <property name="action_name">diagdown</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">sc/res/sidebar/CellBorder_LeftDiagonal_18x18.png</property>
@@ -235,7 +235,7 @@
               <object class="GtkToolButton" id="topbottom">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Top and Bottom Borders</property>
+                <property name="tooltip_text" translatable="yes" context="floatingborderstyle|topbottom|tooltip_text">Top and Bottom Borders</property>
                 <property name="action_name">topbottom</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">sc/res/sidebar/CellBorder_TopAndBottom_18x18.png</property>
@@ -249,7 +249,7 @@
               <object class="GtkToolButton" id="leftright">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Left and Right Borders</property>
+                <property name="tooltip_text" translatable="yes" context="floatingborderstyle|leftright|tooltip_text">Left and Right Borders</property>
                 <property name="action_name">leftright</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">sc/res/sidebar/CellBorder_LeftAndRight_18x18.png</property>

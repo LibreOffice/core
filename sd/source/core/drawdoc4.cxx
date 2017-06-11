@@ -43,7 +43,7 @@
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/numdef.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <editeng/bulletitem.hxx>
 #include <svx/xtable.hxx>
@@ -97,7 +97,7 @@
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "glob.hxx"
 #include "stlpool.hxx"
 #include "helpids.h"

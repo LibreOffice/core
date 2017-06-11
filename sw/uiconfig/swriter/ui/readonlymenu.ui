@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkMenu" id="menu">
     <property name="visible">True</property>
@@ -9,7 +9,7 @@
       <object class="GtkMenuItem" id="openurl">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Open</property>
+        <property name="label" translatable="yes" context="readonlymenu|openurl">_Open</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -17,7 +17,7 @@
       <object class="GtkMenuItem" id="opendoc">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Open in New Window</property>
+        <property name="label" translatable="yes" context="readonlymenu|opendoc">Open in New Window</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -25,7 +25,7 @@
       <object class="GtkMenuItem" id="edit">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Edit</property>
+        <property name="label" translatable="yes" context="readonlymenu|edit">_Edit</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -33,7 +33,7 @@
       <object class="GtkCheckMenuItem" id="selection">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Select Text</property>
+        <property name="label" translatable="yes" context="readonlymenu|selection">Select Text</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -41,7 +41,7 @@
       <object class="GtkMenuItem" id="reload">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Re_load</property>
+        <property name="label" translatable="yes" context="readonlymenu|reload">Re_load</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -49,7 +49,7 @@
       <object class="GtkMenuItem" id="reloadframe">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Reload Frame</property>
+        <property name="label" translatable="yes" context="readonlymenu|reloadframe">Reload Frame</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -57,7 +57,7 @@
       <object class="GtkCheckMenuItem" id="html">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">HT_ML Source</property>
+        <property name="label" translatable="yes" context="readonlymenu|html">HT_ML Source</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -71,7 +71,7 @@
       <object class="GtkMenuItem" id="backward">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Backwards</property>
+        <property name="label" translatable="yes" context="readonlymenu|backward">Backwards</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -79,7 +79,7 @@
       <object class="GtkMenuItem" id="forward">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Forward</property>
+        <property name="label" translatable="yes" context="readonlymenu|forward">_Forward</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -93,7 +93,7 @@
       <object class="GtkMenuItem" id="savegraphic">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Save Image...</property>
+        <property name="label" translatable="yes" context="readonlymenu|savegraphic">Save Image...</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -101,7 +101,7 @@
       <object class="GtkMenuItem" id="graphictogallery">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Add Image</property>
+        <property name="label" translatable="yes" context="readonlymenu|graphictogallery">Add Image</property>
         <property name="use_underline">True</property>
         <child type="submenu">
           <object class="GtkMenu">
@@ -111,7 +111,7 @@
               <object class="GtkMenuItem" id="graphicaslink">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">As Link</property>
+                <property name="label" translatable="yes" context="readonlymenu|graphicaslink">As Link</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -119,7 +119,7 @@
               <object class="GtkMenuItem" id="graphicascopy">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Copy</property>
+                <property name="label" translatable="yes" context="readonlymenu|graphicascopy">Copy</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -137,7 +137,7 @@
       <object class="GtkMenuItem" id="savebackground">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Save Background...</property>
+        <property name="label" translatable="yes" context="readonlymenu|savebackground">Save Background...</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -181,7 +181,7 @@
       <object class="GtkMenuItem" id="copylink">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Copy _Link</property>
+        <property name="label" translatable="yes" context="readonlymenu|copylink">Copy _Link</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -189,7 +189,7 @@
       <object class="GtkMenuItem" id="copygraphic">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Copy _Image</property>
+        <property name="label" translatable="yes" context="readonlymenu|copygraphic">Copy _Image</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -203,7 +203,7 @@
       <object class="GtkMenuItem" id="loadgraphic">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Load Image</property>
+        <property name="label" translatable="yes" context="readonlymenu|loadgraphic">Load Image</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -211,7 +211,7 @@
       <object class="GtkCheckMenuItem" id="imagesoff">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Image Off</property>
+        <property name="label" translatable="yes" context="readonlymenu|imagesoff">Image Off</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -225,7 +225,7 @@
       <object class="GtkCheckMenuItem" id="fullscreen">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Leave Full-Screen Mode</property>
+        <property name="label" translatable="yes" context="readonlymenu|fullscreen">Leave Full-Screen Mode</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -239,7 +239,7 @@
       <object class="GtkMenuItem" id="copy">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Copy</property>
+        <property name="label" translatable="yes" context="readonlymenu|copy">_Copy</property>
         <property name="use_underline">True</property>
       </object>
     </child>

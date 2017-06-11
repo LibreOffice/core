@@ -490,10 +490,6 @@ ${MYCMD} --files sw/source/uibase/wrtsh/wrtsh.src
 
 ${MYCMD} --base uui/source --files alreadyopen.src filechanged.src ids.src lockfailed.src lockcorrupt.src nameclashdlg.src openlocked.src passworddlg.src passworderrs.src trylater.src
 
-${MYCMD} --files vcl/source/edit/textundo.src
-
-${MYCMD} --base vcl/source/src --files app.src btntext.src fpicker.src helptext.src images.src menu.src print.src stdtext.src throbber.src units.src
-
 ${MYCMD} --files wizards/source/euro/euro.src
 
 ${MYCMD} --files wizards/source/formwizard/dbwizres.src

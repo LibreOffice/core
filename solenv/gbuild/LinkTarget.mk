@@ -978,7 +978,6 @@ gb_BUILD_HELPER_LIBS := basegfx \
 # tools libmerged depends on, so they link against gb_BUILD_HELPER_LIBS
 gb_BUILD_HELPER_TOOLS := $(foreach exe,\
 	cppumaker \
-	rsc \
 	svidl \
 	unoidl-check \
 	unoidl-write \
@@ -1491,16 +1490,6 @@ define gb_LinkTarget_use_external_project
 $(call gb_LinkTarget_get_target,$(1)) :| $(call gb_ExternalProject_get_target,$(2))
 $(call gb_LinkTarget_get_headers_target,$(1)) :| \
     $(if $(3),$(call gb_ExternalProject_get_target,$(2)),$(call gb_UnpackedTarball_get_final_target,$(2)))
-
-endef
-
-# Delay linking until a res target has been built. This is needed so that
-# unit tests using libraries do not fail if the res target is not yet built.
-#
-# call gb_LinkTarget_use_restarget,linktarget,restarget(s)
-define gb_LinkTarget_use_restarget
-$(call gb_LinkTarget_get_target,$(1)) :| \
-	$(foreach res,$(2),$(call gb_AllLangResTarget_get_target,$(res)))
 
 endef
 

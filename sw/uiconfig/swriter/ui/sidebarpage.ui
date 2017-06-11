@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkGrid" id="PagePropertyPanel">
@@ -28,7 +28,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Orientation</property>
+                <property name="tooltip_text" translatable="yes" context="sidebarpage|orientation|tooltip_text">Orientation</property>
                 <property name="action_name">.uno:Orientation</property>
                 <property name="use_underline">True</property>
               </object>
@@ -54,7 +54,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Size</property>
+                <property name="tooltip_text" translatable="yes" context="sidebarpage|size|tooltip_text">Size</property>
                 <property name="action_name">.uno:AttributePageSize</property>
                 <property name="label" translatable="no">toolbutton3</property>
                 <property name="use_underline">True</property>
@@ -82,7 +82,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Columns</property>
+                <property name="tooltip_text" translatable="yes" context="sidebarpage|column|tooltip_text">Columns</property>
                 <property name="action_name">.uno:PageColumnType</property>
                 <property name="label" translatable="no">toolbutton4</property>
                 <property name="use_underline">True</property>
@@ -109,7 +109,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Margin</property>
+                <property name="tooltip_text" translatable="yes" context="sidebarpage|margin|tooltip_text">Margin</property>
                 <property name="action_name">.uno:PageMargin</property>
                 <property name="label" translatable="no">toolbutton2</property>
                 <property name="use_underline">True</property>

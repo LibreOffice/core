@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="dba">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="QueryFilterDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Standard Filter</property>
+    <property name="title" translatable="yes" context="queryfilterdialog|QueryFilterDialog">Standard Filter</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -93,7 +93,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Operator</property>
+                        <property name="label" translatable="yes" context="queryfilterdialog|label2">Operator</property>
                         <property name="ellipsize">end</property>
                       </object>
                       <packing>
@@ -105,7 +105,7 @@
                       <object class="GtkLabel" id="label5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Field name</property>
+                        <property name="label" translatable="yes" context="queryfilterdialog|label5">Field name</property>
                         <property name="ellipsize">end</property>
                       </object>
                       <packing>
@@ -117,7 +117,7 @@
                       <object class="GtkLabel" id="label6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Condition</property>
+                        <property name="label" translatable="yes" context="queryfilterdialog|label6">Condition</property>
                         <property name="ellipsize">end</property>
                       </object>
                       <packing>
@@ -131,7 +131,7 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <items>
-                          <item translatable="yes">- none -</item>
+                          <item translatable="yes" context="queryfilterdialog|field1">- none -</item>
                         </items>
                       </object>
                       <packing>
@@ -145,16 +145,16 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <items>
-                          <item translatable="yes">=</item>
-                          <item translatable="yes">&lt;&gt;</item>
-                          <item translatable="yes">&lt;</item>
-                          <item translatable="yes">&lt;=</item>
-                          <item translatable="yes">&gt;</item>
-                          <item translatable="yes">&gt;=</item>
-                          <item translatable="yes">like</item>
-                          <item translatable="yes">not like</item>
-                          <item translatable="yes">null</item>
-                          <item translatable="yes">not null</item>
+                          <item translatable="yes" context="queryfilterdialog|cond1">=</item>
+                          <item translatable="yes" context="queryfilterdialog|cond1">&lt;&gt;</item>
+                          <item translatable="yes" context="queryfilterdialog|cond1">&lt;</item>
+                          <item translatable="yes" context="queryfilterdialog|cond1">&lt;=</item>
+                          <item translatable="yes" context="queryfilterdialog|cond1">&gt;</item>
+                          <item translatable="yes" context="queryfilterdialog|cond1">&gt;=</item>
+                          <item translatable="yes" context="queryfilterdialog|cond1">like</item>
+                          <item translatable="yes" context="queryfilterdialog|cond1">not like</item>
+                          <item translatable="yes" context="queryfilterdialog|cond1">null</item>
+                          <item translatable="yes" context="queryfilterdialog|cond1">not null</item>
                         </items>
                       </object>
                       <packing>
@@ -168,7 +168,7 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <items>
-                          <item translatable="yes">- none -</item>
+                          <item translatable="yes" context="queryfilterdialog|field2">- none -</item>
                         </items>
                       </object>
                       <packing>
@@ -182,7 +182,7 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <items>
-                          <item translatable="yes">- none -</item>
+                          <item translatable="yes" context="queryfilterdialog|field3">- none -</item>
                         </items>
                       </object>
                       <packing>
@@ -216,7 +216,7 @@
                       <object class="GtkLabel" id="label7">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Value</property>
+                        <property name="label" translatable="yes" context="queryfilterdialog|label7">Value</property>
                         <property name="ellipsize">end</property>
                       </object>
                       <packing>
@@ -260,8 +260,8 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <items>
-                          <item translatable="yes">AND</item>
-                          <item translatable="yes">OR</item>
+                          <item translatable="yes" context="queryfilterdialog|op2">AND</item>
+                          <item translatable="yes" context="queryfilterdialog|op2">OR</item>
                         </items>
                       </object>
                       <packing>
@@ -275,8 +275,8 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <items>
-                          <item translatable="yes">AND</item>
-                          <item translatable="yes">OR</item>
+                          <item translatable="yes" context="queryfilterdialog|op3">AND</item>
+                          <item translatable="yes" context="queryfilterdialog|op3">OR</item>
                         </items>
                       </object>
                       <packing>
@@ -295,7 +295,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Criteria</property>
+                <property name="label" translatable="yes" context="queryfilterdialog|label1">Criteria</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

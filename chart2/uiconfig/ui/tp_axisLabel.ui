@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="chart">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkAdjustment" id="adjustmentSpinDegrees">
@@ -17,7 +17,7 @@
     <property name="spacing">12</property>
     <child>
       <object class="GtkCheckButton" id="showlabelsCB">
-        <property name="label" translatable="yes">Sho_w labels</property>
+        <property name="label" translatable="yes" context="tp_axisLabel|showlabelsCB">Sho_w labels</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -60,7 +60,7 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="tile">
-                        <property name="label" translatable="yes">_Tile</property>
+                        <property name="label" translatable="yes" context="tp_axisLabel|tile">_Tile</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -78,7 +78,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="odd">
-                        <property name="label" translatable="yes">St_agger odd</property>
+                        <property name="label" translatable="yes" context="tp_axisLabel|odd">St_agger odd</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -95,7 +95,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="even">
-                        <property name="label" translatable="yes">Stagger _even</property>
+                        <property name="label" translatable="yes" context="tp_axisLabel|even">Stagger _even</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -112,7 +112,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="auto">
-                        <property name="label" translatable="yes">A_utomatic</property>
+                        <property name="label" translatable="yes" context="tp_axisLabel|auto">A_utomatic</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -135,7 +135,7 @@
               <object class="GtkLabel" id="orderL">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Order</property>
+                <property name="label" translatable="yes" context="tp_axisLabel|orderL">Order</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -170,7 +170,7 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="overlapCB">
-                        <property name="label" translatable="yes">O_verlap</property>
+                        <property name="label" translatable="yes" context="tp_axisLabel|overlapCB">O_verlap</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -186,7 +186,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="breakCB">
-                        <property name="label" translatable="yes">_Break</property>
+                        <property name="label" translatable="yes" context="tp_axisLabel|breakCB">_Break</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -208,7 +208,7 @@
               <object class="GtkLabel" id="textflowL">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Text Flow</property>
+                <property name="label" translatable="yes" context="tp_axisLabel|textflowL">Text Flow</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -277,7 +277,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_top">40</property>
-                        <property name="label" translatable="yes">_Degrees</property>
+                        <property name="label" translatable="yes" context="tp_axisLabel|degreeL">_Degrees</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -330,7 +330,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="stackedCB">
-                        <property name="label" translatable="yes">Ve_rtically stacked</property>
+                        <property name="label" translatable="yes" context="tp_axisLabel|stackedCB">Ve_rtically stacked</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -349,7 +349,7 @@
                     <child>
                       <object class="GtkLabel" id="labelABCD">
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">ABCD</property>
+                        <property name="label" translatable="yes" context="tp_axisLabel|labelABCD">ABCD</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -370,7 +370,7 @@
                   <object class="GtkLabel" id="textdirL">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Te_xt direction:</property>
+                    <property name="label" translatable="yes" context="tp_axisLabel|textdirL">Te_xt direction:</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -400,7 +400,7 @@
           <object class="GtkLabel" id="labelTextOrient">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Text Orientation</property>
+            <property name="label" translatable="yes" context="tp_axisLabel|labelTextOrient">Text Orientation</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

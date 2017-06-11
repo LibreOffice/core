@@ -20,7 +20,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYSIZETABWINUNDOACT_HXX
 
 #include "QueryDesignUndoAction.hxx"
-#include "dbu_qry.hrc"
+#include "strings.hrc"
 
 namespace dbaui
 {

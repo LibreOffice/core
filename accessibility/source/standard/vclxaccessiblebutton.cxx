@@ -19,7 +19,7 @@
 
 #include <standard/vclxaccessiblebutton.hxx>
 #include <helper/accresmgr.hxx>
-#include <helper/accessiblestrings.hrc>
+#include <strings.hrc>
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/accessiblekeybindinghelper.hxx>

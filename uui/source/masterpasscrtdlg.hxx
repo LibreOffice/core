@@ -40,14 +40,14 @@ private:
     DECL_LINK(EditHdl_Impl, Edit&, void);
 
 public:
-    MasterPasswordCreateDialog( vcl::Window* pParent, ResMgr * pResMgr );
+    MasterPasswordCreateDialog(vcl::Window* pParent, const std::locale& rLocale);
     virtual ~MasterPasswordCreateDialog() override;
     virtual void dispose() override;
 
     OUString GetMasterPassword() const { return m_pEDMasterPasswordCrt->GetText(); }
 
 private:
-    ResMgr*                                         pResourceMgr;
+    const std::locale&          rResLocale;
 };
 
 #endif // INCLUDED_UUI_SOURCE_MASTERPASSCRTDLG_HXX

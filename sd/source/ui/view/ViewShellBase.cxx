@@ -26,7 +26,7 @@
 #include "sdresid.hxx"
 #include "app.hrc"
 #include "strings.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "slideshow.hxx"
 #include "unokywds.hxx"
 #include <svx/svxids.hrc>

@@ -54,7 +54,7 @@
 #include <acorrect.hxx>
 #include <dcontact.hxx>
 
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <undo.hrc>
 
 using namespace ::com::sun::star;

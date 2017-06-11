@@ -1,0 +1,36 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_VCL_INC_STRINGS_HRC
+#define INCLUDED_VCL_INC_STRINGS_HRC
+
+#define NC_(Context, String) (Context "\004" u8##String)
+
+#define STR_OPTIONAL        NC_("STR_OPTIONAL", "(optional)")
+#define STR_REQUIRED        NC_("STR_REQUIRED", "(required)")
+
+#define STR_TITLE1          NC_("STR_TITLE1", "Function Wizard")
+#define STR_TITLE2          NC_("STR_TITLE2", "Function Wizard  -")
+#define STR_END             NC_("STR_END", "~End")
+#define RID_STR_SHRINK      NC_("RID_STR_SHRINK", "Shrink")
+#define RID_STR_EXPAND      NC_("RID_STR_EXPAND", "Expand")
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

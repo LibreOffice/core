@@ -27,7 +27,7 @@
 #include <tools/time.hxx>
 #include <vcl/lstbox.hxx>
 #include "bitmaps.hlst"
-#include "mediacontrol.hrc"
+#include "strings.hrc"
 #include "helpids.hrc"
 #include "mediamisc.hxx"
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="svx">
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkMenu" id="menu">
     <property name="visible">True</property>
@@ -9,7 +9,7 @@
       <object class="GtkMenuItem" id="ConvertToEdit">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Text Box</property>
+        <property name="label" translatable="yes" context="convertmenu|ConvertToEdit">_Text Box</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -17,7 +17,7 @@
       <object class="GtkMenuItem" id="ConvertToButton">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Button</property>
+        <property name="label" translatable="yes" context="convertmenu|ConvertToButton">_Button</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -25,7 +25,7 @@
       <object class="GtkMenuItem" id="ConvertToFixed">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">La_bel field</property>
+        <property name="label" translatable="yes" context="convertmenu|ConvertToFixed">La_bel field</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -33,7 +33,7 @@
       <object class="GtkMenuItem" id="ConvertToGroup">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">G_roup Box</property>
+        <property name="label" translatable="yes" context="convertmenu|ConvertToGroup">G_roup Box</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -41,7 +41,7 @@
       <object class="GtkMenuItem" id="ConvertToList">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">L_ist Box</property>
+        <property name="label" translatable="yes" context="convertmenu|ConvertToList">L_ist Box</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -49,7 +49,7 @@
       <object class="GtkMenuItem" id="ConvertToCheckBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Check Box</property>
+        <property name="label" translatable="yes" context="convertmenu|ConvertToCheckBox">_Check Box</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -57,7 +57,7 @@
       <object class="GtkMenuItem" id="ConvertToRadio">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Radio Button</property>
+        <property name="label" translatable="yes" context="convertmenu|ConvertToRadio">_Radio Button</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -65,7 +65,7 @@
       <object class="GtkMenuItem" id="ConvertToCombo">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Combo Bo_x</property>
+        <property name="label" translatable="yes" context="convertmenu|ConvertToCombo">Combo Bo_x</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -73,7 +73,7 @@
       <object class="GtkMenuItem" id="ConvertToImageBtn">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">I_mage Button</property>
+        <property name="label" translatable="yes" context="convertmenu|ConvertToImageBtn">I_mage Button</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -81,7 +81,7 @@
       <object class="GtkMenuItem" id="ConvertToFileControl">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_File Selection</property>
+        <property name="label" translatable="yes" context="convertmenu|ConvertToFileControl">_File Selection</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -89,7 +89,7 @@
       <object class="GtkMenuItem" id="ConvertToDate">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Date Field</property>
+        <property name="label" translatable="yes" context="convertmenu|ConvertToDate">_Date Field</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -97,21 +97,21 @@
       <object class="GtkMenuItem" id="ConvertToTime">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Tim_e Field</property>
+        <property name="label" translatable="yes" context="convertmenu|ConvertToTime">Tim_e Field</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="ConvertToNumeric">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Numerical Field</property>
+        <property name="label" translatable="yes" context="convertmenu|ConvertToNumeric">_Numerical Field</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="ConvertToCurrency">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">C_urrency Field</property>
+        <property name="label" translatable="yes" context="convertmenu|ConvertToCurrency">C_urrency Field</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -119,7 +119,7 @@
       <object class="GtkMenuItem" id="ConvertToPattern">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Pattern Field</property>
+        <property name="label" translatable="yes" context="convertmenu|ConvertToPattern">_Pattern Field</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -127,7 +127,7 @@
       <object class="GtkMenuItem" id="ConvertToImageControl">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Ima_ge Control</property>
+        <property name="label" translatable="yes" context="convertmenu|ConvertToImageControl">Ima_ge Control</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -135,7 +135,7 @@
       <object class="GtkMenuItem" id="ConvertToFormatted">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Fo_rmatted Field</property>
+        <property name="label" translatable="yes" context="convertmenu|ConvertToFormatted">Fo_rmatted Field</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -143,7 +143,7 @@
       <object class="GtkMenuItem" id="ConvertToScrollBar">
         <property name="sensitive">False</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Scroll bar</property>
+        <property name="label" translatable="yes" context="convertmenu|ConvertToScrollBar">Scroll bar</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -151,7 +151,7 @@
       <object class="GtkMenuItem" id="ConvertToSpinButton">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Spin Button</property>
+        <property name="label" translatable="yes" context="convertmenu|ConvertToSpinButton">Spin Button</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -159,7 +159,7 @@
       <object class="GtkMenuItem" id="ConvertToNavigationBar">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Navigation Bar</property>
+        <property name="label" translatable="yes" context="convertmenu|ConvertToNavigationBar">Navigation Bar</property>
         <property name="use_underline">True</property>
       </object>
     </child>

@@ -1,0 +1,95 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SCADDINS_INC_PRICING_HRC
+#define INCLUDED_SCADDINS_INC_PRICING_HRC
+
+#define NC_(Context, String) (Context "\004" u8##String)
+
+const char* DATE_FUNCDESC_DiffWeeks[] =
+{
+    NC_("DATE_FUNCDESC_DiffWeeks", "Calculates the number of weeks in a specific period"),
+    NC_("DATE_FUNCDESC_DiffWeeks", "Start date"),
+    NC_("DATE_FUNCDESC_DiffWeeks", "First day of the period"),
+    NC_("DATE_FUNCDESC_DiffWeeks", "End date"),
+    NC_("DATE_FUNCDESC_DiffWeeks", "Last day of the period"),
+    NC_("DATE_FUNCDESC_DiffWeeks", "Type"),
+    NC_("DATE_FUNCDESC_DiffWeeks", "Type of calculation: Type=0 means the time interval, Type=1 means calendar weeks.")
+};
+
+const char* DATE_FUNCDESC_DiffMonths[] =
+{
+    NC_("DATE_FUNCDESC_DiffMonths", "Determines the number of months in a specific period."),
+    NC_("DATE_FUNCDESC_DiffMonths", "Start date"),
+    NC_("DATE_FUNCDESC_DiffMonths", "First day of the period."),
+    NC_("DATE_FUNCDESC_DiffMonths", "End date"),
+    NC_("DATE_FUNCDESC_DiffMonths", "Last day of the period."),
+    NC_("DATE_FUNCDESC_DiffMonths", "Type"),
+    NC_("DATE_FUNCDESC_DiffMonths", "Type of calculation: Type=0 means the time interval, Type=1 means calendar months.")
+};
+
+const char* DATE_FUNCDESC_DiffYears[] =
+{
+    NC_("DATE_FUNCDESC_DiffYears", "Calculates the number of years in a specific period."),
+    NC_("DATE_FUNCDESC_DiffYears", "Start date"),
+    NC_("DATE_FUNCDESC_DiffYears", "First day of the period"),
+    NC_("DATE_FUNCDESC_DiffYears", "End date"),
+    NC_("DATE_FUNCDESC_DiffYears", "Last day of the period"),
+    NC_("DATE_FUNCDESC_DiffYears", "Type"),
+    NC_("DATE_FUNCDESC_DiffYears", "Type of calculation: Type=0 means the time interval, Type=1 means calendar years.")
+};
+
+const char* DATE_FUNCDESC_IsLeapYear[] =
+{
+    NC_("DATE_FUNCDESC_IsLeapYear", "Returns 1 (TRUE) if the date is a day of a leap year, otherwise 0 (FALSE)."),
+    NC_("DATE_FUNCDESC_IsLeapYear", "Date"),
+    NC_("DATE_FUNCDESC_IsLeapYear", "Any day in the desired year")
+};
+
+const char* DATE_FUNCDESC_DaysInMonth[] =
+{
+    NC_("DATE_FUNCDESC_DaysInMonth", "Returns the number of days of the month in which the date entered occurs"),
+    NC_("DATE_FUNCDESC_DaysInMonth", "Date"),
+    NC_("DATE_FUNCDESC_DaysInMonth", "Any day in the desired month")
+};
+
+const char* DATE_FUNCDESC_DaysInYear[] =
+{
+    NC_("DATE_FUNCDESC_DaysInYear", "Returns the number of days of the year in which the date entered occurs."),
+    NC_("DATE_FUNCDESC_DaysInYear", "Date"),
+    NC_("DATE_FUNCDESC_DaysInYear", "Any day in the desired year")
+};
+
+const char* DATE_FUNCDESC_WeeksInYear[] =
+{
+    NC_("DATE_FUNCDESC_WeeksInYear", "Returns the number of weeks of the year in which the date entered occurs"),
+    NC_("DATE_FUNCDESC_WeeksInYear", "Date"),
+    NC_("DATE_FUNCDESC_WeeksInYear", "Any day in the desired year")
+};
+
+const char* DATE_FUNCDESC_Rot13[] =
+{
+    NC_("DATE_FUNCDESC_Rot13", "Encrypts or decrypts a text using the ROT13 algorithm"),
+    NC_("DATE_FUNCDESC_Rot13", "Text"),
+    NC_("DATE_FUNCDESC_Rot13", "Text to be encrypted or text already encrypted")
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,7 +24,7 @@
 #include "swmodule.hxx"
 #include "view.hxx"
 #include "edtwin.hxx"
-#include "label.hrc"
+#include "strings.hrc"
 
 #include "syncbtn.hxx"
 #include "swtypes.hxx"

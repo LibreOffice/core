@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="chart">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkAdjustment" id="adjustmentDEGREE">
@@ -28,7 +28,7 @@
             <property name="left_padding">12</property>
             <child>
               <object class="GtkCheckButton" id="CB_CLOCKWISE">
-                <property name="label" translatable="yes">_Clockwise direction</property>
+                <property name="label" translatable="yes" context="tp_PolarOptions|CB_CLOCKWISE">_Clockwise direction</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="receives_default">False</property>
@@ -44,7 +44,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Orientation</property>
+            <property name="label" translatable="yes" context="tp_PolarOptions|label1">Orientation</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -105,7 +105,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Degrees</property>
+                    <property name="label" translatable="yes" context="tp_PolarOptions|FT_ROTATION_DEGREES">_Degrees</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">NF_STARTING_ANGLE</property>
                   </object>
@@ -124,7 +124,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Starting Angle</property>
+            <property name="label" translatable="yes" context="tp_PolarOptions|label2">Starting Angle</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -151,7 +151,7 @@
             <property name="left_padding">12</property>
             <child>
               <object class="GtkCheckButton" id="CB_INCLUDE_HIDDEN_CELLS_POLAR">
-                <property name="label" translatable="yes">Include _values from hidden cells</property>
+                <property name="label" translatable="yes" context="tp_PolarOptions|CB_INCLUDE_HIDDEN_CELLS_POLAR">Include _values from hidden cells</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="receives_default">False</property>
@@ -167,7 +167,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Plot Options</property>
+            <property name="label" translatable="yes" context="tp_PolarOptions|label3">Plot Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

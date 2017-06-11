@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sw">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
@@ -33,7 +33,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkRadioButton" id="auto">
-                    <property name="label" translatable="yes">A_uto</property>
+                    <property name="label" translatable="yes" context="optcomparison|auto">A_uto</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -52,7 +52,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="byword">
-                    <property name="label" translatable="yes">By w_ord</property>
+                    <property name="label" translatable="yes" context="optcomparison|byword">By w_ord</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -70,7 +70,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="bycharacter">
-                    <property name="label" translatable="yes">By _character</property>
+                    <property name="label" translatable="yes" context="optcomparison|bycharacter">By _character</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -93,7 +93,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Compare Documents</property>
+            <property name="label" translatable="yes" context="optcomparison|label1">Compare Documents</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -126,7 +126,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="ignore">
-                    <property name="label" translatable="yes">Ignore _pieces of length</property>
+                    <property name="label" translatable="yes" context="optcomparison|ignore">Ignore _pieces of length</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -143,7 +143,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="useRSID">
-                    <property name="label" translatable="yes">Take it into account when comparing</property>
+                    <property name="label" translatable="yes" context="optcomparison|useRSID">Take it into account when comparing</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -176,7 +176,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="storeRSID">
-                    <property name="label" translatable="yes">Store it when changing the document</property>
+                    <property name="label" translatable="yes" context="optcomparison|storeRSID">Store it when changing the document</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -204,7 +204,7 @@
           <object class="GtkLabel" id="setting">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Random number to improve accuracy of document comparison</property>
+            <property name="label" translatable="yes" context="optcomparison|setting">Random number to improve accuracy of document comparison</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

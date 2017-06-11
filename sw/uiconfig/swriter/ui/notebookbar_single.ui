@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.12"/>
   <requires lib="LibreOffice" version="1.0"/>
   <!-- interface-local-resource-path ../../../icon-themes/galaxy/cmd/ -->
@@ -470,7 +470,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Horizontal Alignment</property>
+                <property name="tooltip_text" translatable="yes" context="notebookbar_single|halignment|tooltip_text">Horizontal Alignment</property>
                 <property name="halign">start</property>
                 <property name="show_arrow">False</property>
                 <child>
@@ -593,7 +593,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Indent</property>
+                <property name="tooltip_text" translatable="yes" context="notebookbar_single|outlineindent|tooltip_text">Indent</property>
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkMenuToolButton" id="bullet">
@@ -675,7 +675,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Indent</property>
+                <property name="tooltip_text" translatable="yes" context="notebookbar_single|insert|tooltip_text">Indent</property>
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkMenuToolButton" id="table">

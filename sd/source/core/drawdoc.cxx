@@ -83,7 +83,7 @@
 #include "sdpage.hxx"
 #include "pglink.hxx"
 #include "sdattr.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "glob.hxx"
 #include "stlpool.hxx"
 #include "sdiocmpt.hxx"

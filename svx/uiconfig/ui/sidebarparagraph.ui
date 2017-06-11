@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="svx">
   <requires lib="gtk+" version="3.4"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -23,7 +23,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="has_tooltip">True</property>
-            <property name="tooltip_text" translatable="yes">Bullets and Numbering</property>
+            <property name="tooltip_text" translatable="yes" context="sidebarparagraph|numberbullet|tooltip_text">Bullets and Numbering</property>
             <property name="show_arrow">False</property>
             <child>
               <object class="GtkMenuToolButton" id="bullet">
@@ -68,7 +68,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Horizontal Alignment</property>
+                <property name="tooltip_text" translatable="yes" context="sidebarparagraph|horizontalalignment|tooltip_text">Horizontal Alignment</property>
                 <property name="halign">start</property>
                 <property name="show_arrow">False</property>
                 <child>
@@ -169,7 +169,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Vertical Alignment</property>
+                <property name="tooltip_text" translatable="yes" context="sidebarparagraph|verticalalignment|tooltip_text">Vertical Alignment</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
                 <property name="show_arrow">False</property>
@@ -235,7 +235,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="label" translatable="yes">_Spacing:</property>
+                <property name="label" translatable="yes" context="sidebarparagraph|spacinglabel">_Spacing:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">paraspacing</property>
                 <property name="xalign">0</property>
@@ -251,7 +251,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Spacing</property>
+                <property name="tooltip_text" translatable="yes" context="sidebarparagraph|paraspacing|tooltip_text">Spacing</property>
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="paraspaceinc">
@@ -310,14 +310,14 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Above Paragraph Spacing</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebarparagraph|aboveparaspacing|tooltip_text">Above Paragraph Spacing</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <property name="text">0</property>
                     <property name="adjustment">adjustment1</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="aboveparaspacing-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Above Paragraph Spacing</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|aboveparaspacing-atkobject">Above Paragraph Spacing</property>
                       </object>
                     </child>
                   </object>
@@ -360,14 +360,14 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Below Paragraph Spacing</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebarparagraph|belowparaspacing|tooltip_text">Below Paragraph Spacing</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <property name="text">0</property>
                     <property name="adjustment">adjustment1</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="belowparaspacing-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Below Paragraph Spacing</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|belowparaspacing-atkobject">Below Paragraph Spacing</property>
                       </object>
                     </child>
                   </object>
@@ -396,7 +396,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Line Spacing</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebarparagraph|setlinespacing|tooltip_text">Line Spacing</property>
                     <property name="action_name">.uno:LineSpacing</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -429,7 +429,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="label" translatable="yes">_Indent:</property>
+                <property name="label" translatable="yes" context="sidebarparagraph|indentlabel">_Indent:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">indent</property>
                 <property name="xalign">0</property>
@@ -445,14 +445,14 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Indent</property>
+                <property name="tooltip_text" translatable="yes" context="sidebarparagraph|indent|tooltip_text">Indent</property>
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="increaseindent">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Increase Indent</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebarparagraph|increaseindent|tooltip_text">Increase Indent</property>
                     <property name="action_name">.uno:IncrementIndent</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -466,7 +466,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Decrease Indent</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebarparagraph|decreaseindent|tooltip_text">Decrease Indent</property>
                     <property name="action_name">.uno:DecrementIndent</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -480,7 +480,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Switch to Hanging Indent</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebarparagraph|hangingindent|tooltip_text">Switch to Hanging Indent</property>
                     <property name="action_name">.uno:HangingIndent</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -521,14 +521,14 @@
                   <object class="svxlo-SvxRelativeField" id="beforetextindent">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes">Before Text Indent</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebarparagraph|beforetextindent|tooltip_text">Before Text Indent</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <property name="text">0</property>
                     <property name="adjustment">adjustment1</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="beforetextindent-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Before Text Indent</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|beforetextindent-atkobject">Before Text Indent</property>
                       </object>
                     </child>
                   </object>
@@ -570,14 +570,14 @@
                   <object class="svxlo-SvxRelativeField" id="aftertextindent">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes">After Text Indent</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebarparagraph|aftertextindent|tooltip_text">After Text Indent</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <property name="text">0</property>
                     <property name="adjustment">adjustment1</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="aftertextindent-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">After Text Indent</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|aftertextindent-atkobject">After Text Indent</property>
                       </object>
                     </child>
                   </object>
@@ -619,14 +619,14 @@
                   <object class="svxlo-SvxRelativeField" id="firstlineindent">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes">First Line Indent</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebarparagraph|firstlineindent|tooltip_text">First Line Indent</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                     <property name="text">0</property>
                     <property name="adjustment">adjustment1</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="firstlineindent-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">First Line Indent</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|firstlineindent-atkobject">First Line Indent</property>
                       </object>
                     </child>
                   </object>
@@ -658,7 +658,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Paragraph Background Color</property>
+                <property name="tooltip_text" translatable="yes" context="sidebarparagraph|backgroundcolor|tooltip_text">Paragraph Background Color</property>
                 <property name="halign">end</property>
                 <child>
                   <object class="GtkMenuToolButton" id="parabkcolor">

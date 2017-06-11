@@ -22,22 +22,22 @@ include $(SRCDIR)/sw/ooxmlexport_setup.mk
 $(eval $(call gb_Module_Module,sw))
 
 $(eval $(call gb_Module_add_targets,sw,\
-        CustomTarget_generated \
+	CustomTarget_generated \
 	Library_msword \
 	Library_sw \
 	Library_swd \
 	$(call gb_Helper_optional,DESKTOP,Library_swui) \
-))
-
-ifneq ($(OS),IOS)
-$(eval $(call gb_Module_add_l10n_targets,sw,\
-    AllLangResTarget_sw \
 	UIConfig_sglobal \
 	UIConfig_sweb \
 	UIConfig_swform \
 	UIConfig_swreport \
 	UIConfig_swriter \
 	UIConfig_swxform \
+))
+
+ifneq ($(OS),IOS)
+$(eval $(call gb_Module_add_l10n_targets,sw,\
+    AllLangMoTarget_sw \
 ))
 
 ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)

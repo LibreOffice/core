@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="flt">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="XSLTFilterDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">XML Filter: %s</property>
+    <property name="title" translatable="yes" context="xsltfilterdialog|XSLTFilterDialog">XML Filter: %s</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -83,7 +83,7 @@
               <object class="GtkLabel" id="general">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">General</property>
+                <property name="label" translatable="yes" context="xsltfilterdialog|general">General</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -96,7 +96,7 @@
               <object class="GtkLabel" id="transformation">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Transformation</property>
+                <property name="label" translatable="yes" context="xsltfilterdialog|transformation">Transformation</property>
               </object>
               <packing>
                 <property name="position">1</property>

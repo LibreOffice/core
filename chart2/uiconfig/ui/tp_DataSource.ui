@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="chart">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkImage" id="imageIMB_RANGE_CAT">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="tooltip_text" translatable="yes">Select data range</property>
+    <property name="tooltip_text" translatable="yes" context="tp_DataSource|imageIMB_RANGE_CAT|tooltip_text">Select data range</property>
     <property name="pixbuf">chart2/res/selectrange.png</property>
   </object>
   <object class="GtkImage" id="imageIMB_RANGE_MAIN">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="tooltip_text" translatable="yes">Select data range</property>
+    <property name="tooltip_text" translatable="yes" context="tp_DataSource|imageIMB_RANGE_MAIN|tooltip_text">Select data range</property>
     <property name="pixbuf">chart2/res/selectrange.png</property>
   </object>
   <object class="GtkBox" id="tp_DataSource">
@@ -25,7 +25,7 @@
       <object class="GtkLabel" id="FT_CAPTION_FOR_WIZARD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Customize Data Ranges for Individual Data Series</property>
+        <property name="label" translatable="yes" context="tp_DataSource|FT_CAPTION_FOR_WIZARD">Customize Data Ranges for Individual Data Series</property>
         <property name="xalign">0</property>
         <attributes>
           <attribute name="weight" value="bold"/>
@@ -55,7 +55,7 @@
               <object class="GtkLabel" id="FT_SERIES">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Data _series:</property>
+                <property name="label" translatable="yes" context="tp_DataSource|FT_SERIES">Data _series:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">LB_SERIES:border</property>
                 <property name="xalign">0</property>
@@ -92,7 +92,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkButton" id="BTN_ADD">
-                    <property name="label" translatable="yes">_Add</property>
+                    <property name="label" translatable="yes" context="tp_DataSource|BTN_ADD">_Add</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -113,7 +113,7 @@
                     <property name="always_show_image">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="BTN_UP-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Up</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="tp_DataSource|BTN_UP-atkobject">Up</property>
                       </object>
                     </child>
                   </object>
@@ -124,7 +124,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="BTN_REMOVE">
-                    <property name="label" translatable="yes">_Remove</property>
+                    <property name="label" translatable="yes" context="tp_DataSource|BTN_REMOVE">_Remove</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -145,7 +145,7 @@
                     <property name="receives_default">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="BTN_DOWN-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Down</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="tp_DataSource|BTN_DOWN-atkobject">Down</property>
                       </object>
                     </child>
                   </object>
@@ -180,7 +180,7 @@
               <object class="GtkLabel" id="FT_ROLE">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Data ranges:</property>
+                <property name="label" translatable="yes" context="tp_DataSource|FT_ROLE">_Data ranges:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">LB_ROLE:border</property>
                 <property name="xalign">0</property>
@@ -211,7 +211,7 @@
               <object class="GtkLabel" id="FT_RANGE">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Ran_ge for %VALUETYPE</property>
+                <property name="label" translatable="yes" context="tp_DataSource|FT_RANGE">Ran_ge for %VALUETYPE</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">EDT_RANGE</property>
                 <property name="xalign">0</property>
@@ -269,7 +269,7 @@
                   <object class="GtkLabel" id="FT_CATEGORIES">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Categories</property>
+                    <property name="label" translatable="yes" context="tp_DataSource|FT_CATEGORIES">_Categories</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">EDT_CATEGORIES</property>
                     <property name="xalign">0</property>
@@ -284,7 +284,7 @@
                   <object class="GtkLabel" id="FT_DATALABELS">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Data _labels</property>
+                    <property name="label" translatable="yes" context="tp_DataSource|FT_DATALABELS">Data _labels</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                   </object>

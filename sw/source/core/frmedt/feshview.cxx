@@ -18,6 +18,7 @@
  */
 
 #include "hintids.hxx"
+#include <svx/strings.hrc>
 #include <svx/sdrobjectfilter.hxx>
 #include <svx/svddrgmt.hxx>
 #include <svx/svditer.hxx>
@@ -30,7 +31,6 @@
 #include <svx/sxciaitm.hxx>
 #include <svx/xfillit.hxx>
 #include <svx/svdocapt.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnedwit.hxx>
@@ -52,7 +52,7 @@
 #include <cmdid.h>
 #include <drawdoc.hxx>
 #include <textboxhelper.hxx>
-#include <poolfmt.hrc>
+#include <strings.hrc>
 #include <frmfmt.hxx>
 #include <frmatr.hxx>
 #include <fmtfsize.hxx>
@@ -110,14 +110,14 @@ using namespace com::sun::star;
 
 namespace {
 
-::basegfx::B2DPolyPolygon getPolygon( sal_uInt16 nResId, SdrModel* pDoc )
+::basegfx::B2DPolyPolygon getPolygon(const char* pResId, SdrModel* pDoc)
 {
     ::basegfx::B2DPolyPolygon aRetval;
     XLineEndListRef pLineEndList = pDoc->GetLineEndList();
 
     if( pLineEndList.is() )
     {
-        OUString aArrowName( SvxResId(nResId) );
+        OUString aArrowName( SvxResId(pResId) );
         long nCount = pLineEndList->Count();
         long nIndex;
         for( nIndex = 0L; nIndex < nCount; nIndex++ )

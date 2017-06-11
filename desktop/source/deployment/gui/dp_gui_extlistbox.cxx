@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/controldims.hrc>
+#include <svtools/controldims.hxx>
 
+#include "dp_shared.hxx"
 #include "dp_gui.h"
 #include "dp_gui_extlistbox.hxx"
 #include "dp_gui_theextmgr.hxx"
@@ -96,7 +97,7 @@ Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
             m_aIcon = Image( xGraphic );
 
         if ( eState == AMBIGUOUS )
-            m_sErrorText = DialogHelper::getResourceString( RID_STR_ERROR_UNKNOWN_STATUS );
+            m_sErrorText = DpResId( RID_STR_ERROR_UNKNOWN_STATUS );
         else if ( eState == NOT_REGISTERED )
             checkDependencies();
     }
@@ -138,7 +139,7 @@ void Entry_Impl::checkDependencies()
         deployment::DependencyException depExc;
         if ( e.Cause >>= depExc )
         {
-            OUString aMissingDep( DialogHelper::getResourceString( RID_STR_ERROR_MISSING_DEPENDENCIES ) );
+            OUString aMissingDep( DpResId( RID_STR_ERROR_MISSING_DEPENDENCIES ) );
             for ( sal_Int32 i = 0; i < depExc.UnsatisfiedDependencies.getLength(); ++i )
             {
                 aMissingDep += "\n";
@@ -951,7 +952,7 @@ void ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
     pEntry->m_bMissingLic = bLicenseMissing;
 
     if ( bLicenseMissing )
-        pEntry->m_sErrorText = DialogHelper::getResourceString( RID_STR_ERROR_MISSING_LICENSE );
+        pEntry->m_sErrorText = DpResId( RID_STR_ERROR_MISSING_LICENSE );
 
     //access to m_nActive must be guarded
     if ( !m_bInCheckMode && m_bHasActive && ( m_nActive >= nPos ) )
@@ -982,7 +983,7 @@ void ExtensionBox_Impl::updateEntry( const uno::Reference< deployment::XPackage 
                 (*iIndex)->m_bMissingLic = false;
 
             if ( eState == AMBIGUOUS )
-                (*iIndex)->m_sErrorText = DialogHelper::getResourceString( RID_STR_ERROR_UNKNOWN_STATUS );
+                (*iIndex)->m_sErrorText = DpResId( RID_STR_ERROR_UNKNOWN_STATUS );
             else if ( ! (*iIndex)->m_bMissingLic )
                 (*iIndex)->m_sErrorText.clear();
 

@@ -40,7 +40,7 @@
 #include <connectivity/dbexception.hxx>
 #include <osl/thread.h>
 #include <osl/nlsupport.h>
-#include "resource/file_res.hrc"
+#include "strings.hrc"
 
 using namespace connectivity::file;
 using namespace dbtools;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="intervaladjustment">
@@ -23,16 +23,16 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Left</col>
+        <col id="0" translatable="yes" context="linenumbering|positionstore">Left</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Right</col>
+        <col id="0" translatable="yes" context="linenumbering|positionstore">Right</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Inner</col>
+        <col id="0" translatable="yes" context="linenumbering|positionstore">Inner</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Outer</col>
+        <col id="0" translatable="yes" context="linenumbering|positionstore">Outer</col>
       </row>
     </data>
   </object>
@@ -45,7 +45,7 @@
   <object class="GtkDialog" id="LineNumberingDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Line Numbering</property>
+    <property name="title" translatable="yes" context="linenumbering|LineNumberingDialog">Line Numbering</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -116,7 +116,7 @@
             <property name="spacing">6</property>
             <child>
               <object class="GtkCheckButton" id="shownumbering">
-                <property name="label" translatable="yes">Show numbering</property>
+                <property name="label" translatable="yes" context="linenumbering|shownumbering">Show numbering</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -159,7 +159,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Character style:</property>
+                                <property name="label" translatable="yes" context="linenumbering|characterstyle">Character style:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">styledropdown</property>
                               </object>
@@ -173,7 +173,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Format:</property>
+                                <property name="label" translatable="yes" context="linenumbering|format">Format:</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -185,7 +185,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Position:</property>
+                                <property name="label" translatable="yes" context="linenumbering|position">Position:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">positiondropdown</property>
                               </object>
@@ -199,7 +199,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Spacing:</property>
+                                <property name="label" translatable="yes" context="linenumbering|spacing">Spacing:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">spacingspin:0.00cm</property>
                               </object>
@@ -213,7 +213,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Interval:</property>
+                                <property name="label" translatable="yes" context="linenumbering|interval">Interval:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">intervalspin</property>
                               </object>
@@ -298,7 +298,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">lines</property>
+                                    <property name="label" translatable="yes" context="linenumbering|intervallines">lines</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -321,7 +321,7 @@
                       <object class="GtkLabel" id="view">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">View</property>
+                        <property name="label" translatable="yes" context="linenumbering|view">View</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -362,7 +362,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Text:</property>
+                                    <property name="label" translatable="yes" context="linenumbering|text">Text:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">textentry</property>
                                   </object>
@@ -376,7 +376,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Every:</property>
+                                    <property name="label" translatable="yes" context="linenumbering|every">Every:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">linesspin</property>
                                   </object>
@@ -403,7 +403,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">lines</property>
+                                    <property name="label" translatable="yes" context="linenumbering|lines">lines</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">2</property>
@@ -430,7 +430,7 @@
                           <object class="GtkLabel" id="separator">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Separator</property>
+                            <property name="label" translatable="yes" context="linenumbering|separator">Separator</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -463,7 +463,7 @@
                                 <property name="spacing">6</property>
                                 <child>
                                   <object class="GtkCheckButton" id="blanklines">
-                                    <property name="label" translatable="yes">Blank lines</property>
+                                    <property name="label" translatable="yes" context="linenumbering|blanklines">Blank lines</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -479,7 +479,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="linesintextframes">
-                                    <property name="label" translatable="yes">Lines in text frames</property>
+                                    <property name="label" translatable="yes" context="linenumbering|linesintextframes">Lines in text frames</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -494,7 +494,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="showfooterheadernumbering">
-                                    <property name="label" translatable="yes">Include header and footer</property>
+                                    <property name="label" translatable="yes" context="linenumbering|showfooterheadernumbering">Include header and footer</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -509,7 +509,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="restarteverynewpage">
-                                    <property name="label" translatable="yes">Restart every new page</property>
+                                    <property name="label" translatable="yes" context="linenumbering|restarteverynewpage">Restart every new page</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -531,7 +531,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="ypad">1</property>
-                            <property name="label" translatable="yes">Count</property>
+                            <property name="label" translatable="yes" context="linenumbering|count">Count</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>

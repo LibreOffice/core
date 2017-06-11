@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="rpt">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="PageNumberDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Page Numbers</property>
+    <property name="title" translatable="yes" context="pagenumberdialog|PageNumberDialog">Page Numbers</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -95,7 +95,7 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="pagen">
-                        <property name="label" translatable="yes">_Page N</property>
+                        <property name="label" translatable="yes" context="pagenumberdialog|pagen">_Page N</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -113,7 +113,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="pagenofm">
-                        <property name="label" translatable="yes">Page _N of M</property>
+                        <property name="label" translatable="yes" context="pagenumberdialog|pagenofm">Page _N of M</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -137,7 +137,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Format</property>
+                <property name="label" translatable="yes" context="pagenumberdialog|label1">Format</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -174,7 +174,7 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="toppage">
-                        <property name="label" translatable="yes">_Top of Page (Header)</property>
+                        <property name="label" translatable="yes" context="pagenumberdialog|toppage">_Top of Page (Header)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -192,7 +192,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="bottompage">
-                        <property name="label" translatable="yes">_Bottom of Page (Footer)</property>
+                        <property name="label" translatable="yes" context="pagenumberdialog|bottompage">_Bottom of Page (Footer)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -216,7 +216,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Position</property>
+                <property name="label" translatable="yes" context="pagenumberdialog|label2">Position</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -259,9 +259,9 @@
                         <property name="halign">start</property>
                         <property name="hexpand">True</property>
                         <items>
-                          <item translatable="yes">Left</item>
-                          <item translatable="yes">Center</item>
-                          <item translatable="yes">Right</item>
+                          <item translatable="yes" context="pagenumberdialog|alignment">Left</item>
+                          <item translatable="yes" context="pagenumberdialog|alignment">Center</item>
+                          <item translatable="yes" context="pagenumberdialog|alignment">Right</item>
                         </items>
                       </object>
                       <packing>
@@ -274,7 +274,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Alignment:</property>
+                        <property name="label" translatable="yes" context="pagenumberdialog|alignment_label">_Alignment:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">alignment</property>
                       </object>
@@ -285,7 +285,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="shownumberonfirstpage">
-                        <property name="label" translatable="yes">Show Number on First Page</property>
+                        <property name="label" translatable="yes" context="pagenumberdialog|shownumberonfirstpage">Show Number on First Page</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -306,7 +306,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">General</property>
+                <property name="label" translatable="yes" context="pagenumberdialog|label3">General</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

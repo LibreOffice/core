@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="cui">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkBox" id="OptPathsPage">
     <property name="visible">True</property>
@@ -37,7 +37,7 @@
                       <object class="GtkLabel" id="type">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Type</property>
+                        <property name="label" translatable="yes" context="optpathspage|type">Type</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -50,7 +50,7 @@
                       <object class="GtkLabel" id="path">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Path</property>
+                        <property name="label" translatable="yes" context="optpathspage|path">Path</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -63,7 +63,7 @@
                       <object class="GtkLabel" id="editpaths">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Edit Paths: %1</property>
+                        <property name="label" translatable="yes" context="optpathspage|editpaths">Edit Paths: %1</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -113,7 +113,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Paths used by %PRODUCTNAME</property>
+            <property name="label" translatable="yes" context="optpathspage|label1">Paths used by %PRODUCTNAME</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -134,7 +134,7 @@
         <property name="layout_style">end</property>
         <child>
           <object class="GtkButton" id="default">
-            <property name="label" translatable="yes">_Default</property>
+            <property name="label" translatable="yes" context="optpathspage|default">_Default</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -148,7 +148,7 @@
         </child>
         <child>
           <object class="GtkButton" id="edit">
-            <property name="label" translatable="yes">_Edit...</property>
+            <property name="label" translatable="yes" context="optpathspage|edit">_Edit...</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>

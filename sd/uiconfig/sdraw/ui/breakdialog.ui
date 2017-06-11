@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sd">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="BreakDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Break</property>
+    <property name="title" translatable="yes" context="breakdialog|BreakDialog">Break</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -48,7 +48,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Processing metafile:</property>
+                <property name="label" translatable="yes" context="breakdialog|label1">Processing metafile:</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -62,7 +62,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Broken down metaobjects:</property>
+                <property name="label" translatable="yes" context="breakdialog|label2">Broken down metaobjects:</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -76,7 +76,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Inserted drawing objects:</property>
+                <property name="label" translatable="yes" context="breakdialog|label3">Inserted drawing objects:</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>

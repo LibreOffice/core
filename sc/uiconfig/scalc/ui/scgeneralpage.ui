@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">0.5</property>
@@ -45,7 +45,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0.039999999105930328</property>
-                        <property name="label" translatable="yes">Measurement _unit:</property>
+                        <property name="label" translatable="yes" context="scgeneralpage|label4">Measurement _unit:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">unitlb</property>
                       </object>
@@ -59,7 +59,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Tab stops:</property>
+                        <property name="label" translatable="yes" context="scgeneralpage|label5">_Tab stops:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">tabmf:0.00cm</property>
                       </object>
@@ -99,7 +99,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Metrics</property>
+                <property name="label" translatable="yes" context="scgeneralpage|label1">Metrics</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -135,7 +135,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Update links when opening</property>
+                        <property name="label" translatable="yes" context="scgeneralpage|label6">Update links when opening</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -154,7 +154,7 @@
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkRadioButton" id="alwaysrb">
-                                <property name="label" translatable="yes">_Always</property>
+                                <property name="label" translatable="yes" context="scgeneralpage|alwaysrb">_Always</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -172,7 +172,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="requestrb">
-                                <property name="label" translatable="yes">_On request</property>
+                                <property name="label" translatable="yes" context="scgeneralpage|requestrb">_On request</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -190,7 +190,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="neverrb">
-                                <property name="label" translatable="yes">_Never</property>
+                                <property name="label" translatable="yes" context="scgeneralpage|neverrb">_Never</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -222,7 +222,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Updating</property>
+                <property name="label" translatable="yes" context="scgeneralpage|label2">Updating</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -262,7 +262,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="editmodecb">
-                    <property name="label" translatable="yes">Press Enter to switch to _edit mode</property>
+                    <property name="label" translatable="yes" context="scgeneralpage|editmodecb">Press Enter to switch to _edit mode</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -278,7 +278,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="formatcb">
-                    <property name="label" translatable="yes">Expand _formatting</property>
+                    <property name="label" translatable="yes" context="scgeneralpage|formatcb">Expand _formatting</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -294,7 +294,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="exprefcb">
-                    <property name="label" translatable="yes">Expand _references when new columns/rows are inserted</property>
+                    <property name="label" translatable="yes" context="scgeneralpage|exprefcb">Expand _references when new columns/rows are inserted</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -315,10 +315,10 @@
                     <property name="halign">start</property>
                     <property name="hexpand">True</property>
                     <items>
-                      <item translatable="yes">Down</item>
-                      <item translatable="yes">Right</item>
-                      <item translatable="yes">Up</item>
-                      <item translatable="yes">Left</item>
+                      <item translatable="yes" context="scgeneralpage|alignlb">Down</item>
+                      <item translatable="yes" context="scgeneralpage|alignlb">Right</item>
+                      <item translatable="yes" context="scgeneralpage|alignlb">Up</item>
+                      <item translatable="yes" context="scgeneralpage|alignlb">Left</item>
                     </items>
                   </object>
                   <packing>
@@ -328,7 +328,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="aligncb">
-                    <property name="label" translatable="yes">Press Enter to _move selection</property>
+                    <property name="label" translatable="yes" context="scgeneralpage|aligncb">Press Enter to _move selection</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -343,7 +343,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="legacy_cell_selection_cb">
-                    <property name="label" translatable="yes">Use legacy cursor movement behavior when selecting</property>
+                    <property name="label" translatable="yes" context="scgeneralpage|legacy_cell_selection_cb">Use legacy cursor movement behavior when selecting</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -358,7 +358,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="replwarncb">
-                    <property name="label" translatable="yes">Show overwrite _warning when pasting data</property>
+                    <property name="label" translatable="yes" context="scgeneralpage|replwarncb">Show overwrite _warning when pasting data</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -373,7 +373,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="textfmtcb">
-                    <property name="label" translatable="yes">Use printer metrics for text formatting</property>
+                    <property name="label" translatable="yes" context="scgeneralpage|textfmtcb">Use printer metrics for text formatting</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -387,7 +387,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="markhdrcb">
-                    <property name="label" translatable="yes">Highlight sele_ction in column/row headers</property>
+                    <property name="label" translatable="yes" context="scgeneralpage|markhdrcb">Highlight sele_ction in column/row headers</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -402,7 +402,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="sortrefupdatecb">
-                    <property name="label" translatable="yes">Update references when sorting range of cells</property>
+                    <property name="label" translatable="yes" context="scgeneralpage|sortrefupdatecb">Update references when sorting range of cells</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -437,7 +437,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Input Settings</property>
+            <property name="label" translatable="yes" context="scgeneralpage|label3">Input Settings</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

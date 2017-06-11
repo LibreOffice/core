@@ -44,6 +44,7 @@
 #include "initui.hxx"
 #include <frmui.hrc>
 #include <globals.hrc>
+#include <strings.hrc>
 #include <SwStyleNameMapper.hxx>
 
 using namespace ::com::sun::star;

@@ -8,7 +8,7 @@
  */
 
 #include <globals.hrc>
-#include <utlui.hrc>
+#include <strings.hrc>
 #include "bitmaps.hlst"
 
 #include <cmdid.h>

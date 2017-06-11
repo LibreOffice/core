@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -45,11 +45,11 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="case">
-                    <property name="label" translatable="yes">Case se_nsitive</property>
+                    <property name="label" translatable="yes" context="optcalculatepage|case">Case se_nsitive</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Disable case sensitivity for interoperability with Microsoft Excel</property>
+                    <property name="tooltip_text" translatable="yes" context="optcalculatepage|case|tooltip_text">Disable case sensitivity for interoperability with Microsoft Excel</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -62,7 +62,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="calc">
-                    <property name="label" translatable="yes">_Precision as shown</property>
+                    <property name="label" translatable="yes" context="optcalculatepage|calc">_Precision as shown</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -78,11 +78,11 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="match">
-                    <property name="label" translatable="yes">Search criteria = and &lt;&gt; must apply to _whole cells</property>
+                    <property name="label" translatable="yes" context="optcalculatepage|match">Search criteria = and &lt;&gt; must apply to _whole cells</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Enable this for interoperability with Microsoft Excel</property>
+                    <property name="tooltip_text" translatable="yes" context="optcalculatepage|match|tooltip_text">Enable this for interoperability with Microsoft Excel</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -95,11 +95,11 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="formulawildcards">
-                    <property name="label" translatable="yes">Enable w_ildcards in formulas</property>
+                    <property name="label" translatable="yes" context="optcalculatepage|formulawildcards">Enable w_ildcards in formulas</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Enable wildcards for interoperability with Microsoft Excel</property>
+                    <property name="tooltip_text" translatable="yes" context="optcalculatepage|formulawildcards|tooltip_text">Enable wildcards for interoperability with Microsoft Excel</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
@@ -114,7 +114,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="formularegex">
-                    <property name="label" translatable="yes">Enable r_egular expressions in formulas</property>
+                    <property name="label" translatable="yes" context="optcalculatepage|formularegex">Enable r_egular expressions in formulas</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -132,7 +132,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="formulaliteral">
-                    <property name="label" translatable="yes">No wildcards or regular expressions in formulas</property>
+                    <property name="label" translatable="yes" context="optcalculatepage|formulaliteral">No wildcards or regular expressions in formulas</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -150,7 +150,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="lookup">
-                    <property name="label" translatable="yes">_Automatically find column and row labels</property>
+                    <property name="label" translatable="yes" context="optcalculatepage|lookup">_Automatically find column and row labels</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -166,7 +166,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="generalprec">
-                    <property name="label" translatable="yes">_Limit decimals for general number format</property>
+                    <property name="label" translatable="yes" context="optcalculatepage|generalprec">_Limit decimals for general number format</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -190,7 +190,7 @@
                       <object class="GtkLabel" id="precft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Decimal places:</property>
+                        <property name="label" translatable="yes" context="optcalculatepage|precft">_Decimal places:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">prec</property>
                       </object>
@@ -227,7 +227,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">General Calculations</property>
+            <property name="label" translatable="yes" context="optcalculatepage|label1">General Calculations</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -261,7 +261,7 @@
                 <property name="row_homogeneous">True</property>
                 <child>
                   <object class="GtkCheckButton" id="iterate">
-                    <property name="label" translatable="yes">_Iterations</property>
+                    <property name="label" translatable="yes" context="optcalculatepage|iterate">_Iterations</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -281,7 +281,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Steps:</property>
+                    <property name="label" translatable="yes" context="optcalculatepage|stepsft">_Steps:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">steps</property>
                   </object>
@@ -296,7 +296,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_left">12</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Minimum change:</property>
+                    <property name="label" translatable="yes" context="optcalculatepage|minchangeft">_Minimum change:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">minchange</property>
                   </object>
@@ -338,7 +338,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Iterative References</property>
+            <property name="label" translatable="yes" context="optcalculatepage|label2">Iterative References</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -369,11 +369,11 @@
                 <property name="row_homogeneous">True</property>
                 <child>
                   <object class="GtkRadioButton" id="datestd">
-                    <property name="label" translatable="yes">12/30/1899 (defa_ult)</property>
+                    <property name="label" translatable="yes" context="optcalculatepage|datestd">12/30/1899 (defa_ult)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Value 0 corresponds to 12/30/1899</property>
+                    <property name="tooltip_text" translatable="yes" context="optcalculatepage|datestd|tooltip_text">Value 0 corresponds to 12/30/1899</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
@@ -387,11 +387,11 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="datesc10">
-                    <property name="label" translatable="yes">01/01/1900 (Star_Calc 1.0)</property>
+                    <property name="label" translatable="yes" context="optcalculatepage|datesc10">01/01/1900 (Star_Calc 1.0)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Value 0 corresponds to 01/01/1900</property>
+                    <property name="tooltip_text" translatable="yes" context="optcalculatepage|datesc10|tooltip_text">Value 0 corresponds to 01/01/1900</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -404,11 +404,11 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="date1904">
-                    <property name="label" translatable="yes">_01/01/1904</property>
+                    <property name="label" translatable="yes" context="optcalculatepage|date1904">_01/01/1904</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">0 corresponds to 01/01/1904</property>
+                    <property name="tooltip_text" translatable="yes" context="optcalculatepage|date1904|tooltip_text">0 corresponds to 01/01/1904</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -427,7 +427,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Date</property>
+            <property name="label" translatable="yes" context="optcalculatepage|label3">Date</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

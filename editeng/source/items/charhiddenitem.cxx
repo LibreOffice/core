@@ -41,11 +41,11 @@ bool SvxCharHiddenItem::GetPresentation
     const IntlWrapper * /*pIntl*/
 )   const
 {
-    sal_uInt16 nId = RID_SVXITEMS_CHARHIDDEN_FALSE;
+    const char* pId = RID_SVXITEMS_CHARHIDDEN_FALSE;
 
     if ( GetValue() )
-        nId = RID_SVXITEMS_CHARHIDDEN_TRUE;
-    rText = EditResId::GetString(nId);
+        pId = RID_SVXITEMS_CHARHIDDEN_TRUE;
+    rText = EditResId(pId);
     return true;
 }
 

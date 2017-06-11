@@ -37,7 +37,7 @@
 #include "gradtrns.hxx"
 #include <svx/xflftrit.hxx>
 #include <svx/dialmgr.hxx>
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include <svx/svdundo.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/scene3d.hxx>
@@ -2024,9 +2024,9 @@ const tools::Rectangle& SdrMarkView::GetMarkedObjRect() const
 }
 
 
-void SdrMarkView::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, ImpTakeDescriptionOptions nOpt) const
+void SdrMarkView::ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr, ImpTakeDescriptionOptions nOpt) const
 {
-    rStr = ImpGetResStr(nStrCacheID);
+    rStr = ImpGetResStr(pStrCacheID);
     sal_Int32 nPos = rStr.indexOf("%1");
 
     if(nPos != -1)

@@ -40,7 +40,7 @@
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/outliner.hxx>
-#include "editeng.hrc"
+#include <editeng/editrids.hrc>
 #include <svtools/colorcfg.hxx>
 
 
@@ -136,7 +136,7 @@ namespace accessibility
         SolarMutexGuard aGuard;
 
         // Get the string from the resource for the specified id.
-        return EditResId::GetString(RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION);
+        return EditResId(RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION);
     }
 
     OUString SAL_CALL  AccessibleImageBullet::getAccessibleName()
@@ -145,7 +145,7 @@ namespace accessibility
         SolarMutexGuard aGuard;
 
         // Get the string from the resource for the specified id.
-        return EditResId::GetString(RID_SVXSTR_A11Y_IMAGEBULLET_NAME);
+        return EditResId(RID_SVXSTR_A11Y_IMAGEBULLET_NAME);
     }
 
     uno::Reference< XAccessibleRelationSet > SAL_CALL AccessibleImageBullet::getAccessibleRelationSet()

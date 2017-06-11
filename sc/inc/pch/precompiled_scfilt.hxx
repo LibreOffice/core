@@ -220,7 +220,6 @@
 #include <postit.hxx>
 #include <rangelst.hxx>
 #include <rangenam.hxx>
-#include <rsc/rscsfx.hxx>
 #include <sax/fastattribs.hxx>
 #include <sax/fshelper.hxx>
 #include <scerrors.hxx>

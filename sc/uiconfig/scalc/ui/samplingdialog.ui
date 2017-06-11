@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="period-adjustment">
@@ -18,7 +18,7 @@
   <object class="GtkDialog" id="SamplingDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Sampling</property>
+    <property name="title" translatable="yes" context="samplingdialog|SamplingDialog">Sampling</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -110,7 +110,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Input range:</property>
+                        <property name="label" translatable="yes" context="samplingdialog|input-range-label">Input range:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">input-range-edit</property>
                       </object>
@@ -149,7 +149,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Results to:</property>
+                        <property name="label" translatable="yes" context="samplingdialog|output-range-label">Results to:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">output-range-edit</property>
                       </object>
@@ -191,7 +191,7 @@
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Data</property>
+                <property name="label" translatable="yes" context="samplingdialog|label4">Data</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -247,7 +247,7 @@
                         <property name="hexpand">True</property>
                         <property name="xalign">0</property>
                         <property name="xpad">12</property>
-                        <property name="label" translatable="yes">Sample size:</property>
+                        <property name="label" translatable="yes" context="samplingdialog|label1">Sample size:</property>
                         <property name="use_underline">True</property>
                         <property name="justify">center</property>
                         <property name="mnemonic_widget">sample-size-spin</property>
@@ -259,7 +259,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="random-method-radio">
-                        <property name="label" translatable="yes">Random</property>
+                        <property name="label" translatable="yes" context="samplingdialog|random-method-radio">Random</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -275,7 +275,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="periodic-method-radio">
-                        <property name="label" translatable="yes">Periodic</property>
+                        <property name="label" translatable="yes" context="samplingdialog|periodic-method-radio">Periodic</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -312,7 +312,7 @@
                         <property name="hexpand">True</property>
                         <property name="xalign">0</property>
                         <property name="xpad">12</property>
-                        <property name="label" translatable="yes">Period:</property>
+                        <property name="label" translatable="yes" context="samplingdialog|label3">Period:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">period-spin</property>
                       </object>
@@ -329,7 +329,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Sampling Method</property>
+                <property name="label" translatable="yes" context="samplingdialog|label2">Sampling Method</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

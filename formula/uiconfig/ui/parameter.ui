@@ -27,7 +27,7 @@
             <property name="hexpand">True</property>
             <property name="xalign">0</property>
             <property name="yalign">0</property>
-            <property name="label" translatable="yes">Function not known</property>
+            <property name="label" translatable="yes" context="parameter|editdesc">Function not known</property>
             <property name="wrap">True</property>
           </object>
           <packing>
@@ -276,7 +276,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Select</property>
+                <property name="tooltip_text" translatable="yes" context="parameter|RB_ARG1|tooltip_text">Select</property>
                 <property name="halign">end</property>
               </object>
               <packing>
@@ -292,7 +292,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Select</property>
+                <property name="tooltip_text" translatable="yes" context="parameter|RB_ARG2|tooltip_text">Select</property>
                 <property name="halign">end</property>
               </object>
               <packing>
@@ -308,7 +308,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Select</property>
+                <property name="tooltip_text" translatable="yes" context="parameter|RB_ARG3|tooltip_text">Select</property>
                 <property name="halign">end</property>
               </object>
               <packing>
@@ -324,7 +324,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Select</property>
+                <property name="tooltip_text" translatable="yes" context="parameter|RB_ARG4|tooltip_text">Select</property>
                 <property name="halign">end</property>
               </object>
               <packing>

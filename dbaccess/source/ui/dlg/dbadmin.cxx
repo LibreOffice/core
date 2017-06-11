@@ -22,14 +22,16 @@
 #include "DriverSettings.hxx"
 #include "adminpages.hxx"
 #include "dbadmin.hxx"
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include "dbustrings.hrc"
+#include "core_resource.hxx"
+#include "stringconstants.hxx"
+#include "strings.hrc"
 #include "dsitems.hxx"
 #include "dsnItem.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include "optionalboolitem.hxx"
 #include "propertysetitem.hxx"
 #include "stringlistitem.hxx"
@@ -96,9 +98,9 @@ void ODbAdminDialog::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
     SfxTabDialog::PageCreated(_nId, _rPage);
 }
 
-void ODbAdminDialog::addDetailPage(sal_uInt16 _nPageId, sal_uInt16 _nTextId, CreateTabPage _pCreateFunc)
+void ODbAdminDialog::addDetailPage(sal_uInt16 _nPageId, const char* pTextId, CreateTabPage _pCreateFunc)
 {
-    AddTabPage(_nPageId, OUString(ModuleRes(_nTextId)), _pCreateFunc, nullptr);
+    AddTabPage(_nPageId, DBA_RES(pTextId), _pCreateFunc, nullptr);
     m_aCurrentDetailPages.push(_nPageId);
 }
 
@@ -157,7 +159,7 @@ void ODbAdminDialog::impl_selectDataSource(const css::uno::Any& _aDataSourceName
         case  ::dbaccess::DST_USERDEFINE9:
         case  ::dbaccess::DST_USERDEFINE10:
             {
-                OUString aTitle(ModuleRes(STR_PAGETITLE_ADVANCED));
+                OUString aTitle(DBA_RES(STR_PAGETITLE_ADVANCED));
                 AddTabPage(PAGE_USERDRIVER, aTitle, ODriversSettings::CreateUser, nullptr, 1);
                 m_aCurrentDetailPages.push(PAGE_USERDRIVER);
             }
@@ -203,7 +205,7 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
     ::dbaccess::ODsnTypeCollection* pCollection = rCollectionItem.getCollection();
     if ( pCollection->determineType(getDatasourceType( *m_pExampleSet )) == ::dbaccess::DST_MYSQL_NATIVE )
     {
-        AddTabPage( PAGE_MYSQL_NATIVE, OUString( ModuleRes( STR_PAGETITLE_CONNECTION ) ), ODriversSettings::CreateMySQLNATIVE, nullptr );
+        AddTabPage( PAGE_MYSQL_NATIVE, DBA_RES(STR_PAGETITLE_CONNECTION), ODriversSettings::CreateMySQLNATIVE, nullptr );
         RemoveTabPage("advanced");
         m_nMainPageID = PAGE_MYSQL_NATIVE;
     }

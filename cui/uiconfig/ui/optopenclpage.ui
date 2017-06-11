@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkFrame" id="OptOpenCLPage">
@@ -27,7 +27,7 @@
             <property name="spacing">12</property>
             <child>
               <object class="GtkCheckButton" id="useswinterpreter">
-                <property name="label" translatable="yes">Allow use of Software Interpreter (even when OpenCL is not available)</property>
+                <property name="label" translatable="yes" context="optopenclpage|useswinterpreter">Allow use of Software Interpreter (even when OpenCL is not available)</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -43,7 +43,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="useopencl">
-                <property name="label" translatable="yes">Allow use of OpenCL</property>
+                <property name="label" translatable="yes" context="optopenclpage|useopencl">Allow use of OpenCL</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -61,7 +61,7 @@
               <object class="GtkLabel" id="openclused">
                 <property name="visible">False</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">OpenCL is available for use.</property>
+                <property name="label" translatable="yes" context="optopenclpage|openclused">OpenCL is available for use.</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -73,7 +73,7 @@
               <object class="GtkLabel" id="openclnotused">
                 <property name="visible">False</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">OpenCL is not used.</property>
+                <property name="label" translatable="yes" context="optopenclpage|openclnotused">OpenCL is not used.</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -89,7 +89,7 @@
       <object class="GtkLabel" id="label1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">OpenCL Options</property>
+        <property name="label" translatable="yes" context="optopenclpage|label1">OpenCL Options</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>

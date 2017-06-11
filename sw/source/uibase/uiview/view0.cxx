@@ -54,7 +54,7 @@
 #include "cmdid.h"
 #include "globdoc.hxx"
 #include "wview.hxx"
-#include "shells.hrc"
+#include "strings.hrc"
 
 #define SwView
 #define Text

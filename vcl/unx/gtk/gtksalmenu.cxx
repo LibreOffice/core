@@ -23,7 +23,7 @@
 
 #include <sal/log.hxx>
 #include <window.h>
-#include <svids.hrc>
+#include <strings.hrc>
 
 static bool bUnityMode = false;
 

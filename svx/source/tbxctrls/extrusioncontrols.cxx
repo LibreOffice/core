@@ -31,7 +31,7 @@
 #include <svl/intitem.hxx>
 #include <editeng/colritem.hxx>
 
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/svdtrans.hxx>
 #include <svx/sdasitm.hxx>
 #include <svx/dialmgr.hxx>
@@ -39,7 +39,6 @@
 #include "coreservices.hxx"
 #include "helpid.hrc"
 #include "extrusioncontrols.hxx"
-#include "extrusioncontrols.hrc"
 #include "extrusiondepthdialog.hxx"
 
 #include "bitmaps.hlst"
@@ -109,6 +108,19 @@ static const OUStringLiteral aDirectionBmps[] =
     RID_SVXBMP_DIRECTION_DIRECTION_SE
 };
 
+static const char* aDirectionStrs[] =
+{
+    RID_SVXSTR_DIRECTION_NW,
+    RID_SVXSTR_DIRECTION_N,
+    RID_SVXSTR_DIRECTION_NE,
+    RID_SVXSTR_DIRECTION_W,
+    RID_SVXSTR_DIRECTION_NONE,
+    RID_SVXSTR_DIRECTION_E,
+    RID_SVXSTR_DIRECTION_SW,
+    RID_SVXSTR_DIRECTION_S,
+    RID_SVXSTR_DIRECTION_SE
+};
+
 ExtrusionDirectionWindow::ExtrusionDirectionWindow(
     svt::ToolboxController& rController,
     vcl::Window* pParentWindow
@@ -132,8 +144,7 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow(
 
     for (sal_uInt16 i = DIRECTION_NW; i <= DIRECTION_SE; ++i)
     {
-        OUString aText(SvxResId(RID_SVXSTR_DIRECTION + i));
-        mpDirectionSet->InsertItem(i + 1, maImgDirection[i], aText);
+        mpDirectionSet->InsertItem(i + 1, maImgDirection[i], SvxResId(aDirectionStrs[i]));
     }
 
     mpDirectionSet->SetOutputSizePixel(Size(72, 72));
@@ -417,19 +428,38 @@ void ExtrusionDepthWindow::implSetDepth( double fDepth )
     }
 }
 
-
 void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
 {
     meUnit = eUnit;
-    sal_uInt16 nResource = IsMetric( eUnit ) ? RID_SVXSTR_DEPTH_0 : RID_SVXSTR_DEPTH_0_INCH;
 
-    for( int i = 0; i < 5; i++ )
+    const char* aDepths[] =
     {
-        OUString aStr( SvxResId( nResource + i ) );
-        setEntryText( i, aStr );
+        RID_SVXSTR_DEPTH_0,
+        RID_SVXSTR_DEPTH_1,
+        RID_SVXSTR_DEPTH_2,
+        RID_SVXSTR_DEPTH_3,
+        RID_SVXSTR_DEPTH_4
+    };
+
+    const char* aDepthsInch[] =
+    {
+        RID_SVXSTR_DEPTH_0_INCH,
+        RID_SVXSTR_DEPTH_1_INCH,
+        RID_SVXSTR_DEPTH_2_INCH,
+        RID_SVXSTR_DEPTH_3_INCH,
+        RID_SVXSTR_DEPTH_4_INCH
+    };
+
+    assert(SAL_N_ELEMENTS(aDepths) == SAL_N_ELEMENTS(aDepthsInch));
+
+    const char** pResource = IsMetric(eUnit) ? aDepths : aDepthsInch;
+
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aDepths); ++i)
+    {
+        OUString aStr(SvxResId(pResource[i]));
+        setEntryText(i, aStr);
     }
 }
-
 
 void ExtrusionDepthWindow::statusChanged(
     const css::frame::FeatureStateEvent& Event

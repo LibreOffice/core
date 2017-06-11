@@ -23,8 +23,7 @@
 #include <txttypes.hxx>
 
 // for portion replacement in Special()
-#include "access.hrc"
-#include <tools/resid.hxx>
+#include "strings.hrc"
 #include "viewopt.hxx"
 
 // for GetWordBoundary(...), GetSentenceBoundary(...):

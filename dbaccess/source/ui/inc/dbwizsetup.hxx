@@ -28,7 +28,7 @@
 #include <memory>
 #include <svtools/roadmapwizard.hxx>
 #include <connectivity/dbtools.hxx>
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace beans {
@@ -56,11 +56,10 @@ class ODbDataSourceAdministrationHelper;
 class OMySQLIntroPageSetup;
 class OFinalDBPageSetup;
 
-class ODbTypeWizDialogSetup : public svt::RoadmapWizard , public IItemSetHelper, public IDatabaseSettingsDialog,public dbaui::OModuleClient
+class ODbTypeWizDialogSetup : public svt::RoadmapWizard , public IItemSetHelper, public IDatabaseSettingsDialog, public dbaccess::OModuleClient
 {
-
 private:
-    OModuleClient           m_aModuleClient;
+    dbaccess::OModuleClient m_aModuleClient;
     std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
     SfxItemSet*             m_pOutSet;
     OUString                m_sURL;

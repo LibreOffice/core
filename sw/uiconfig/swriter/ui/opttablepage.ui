@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment">
     <property name="lower">0.25</property>
@@ -43,7 +43,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="header">
-                        <property name="label" translatable="yes">H_eading</property>
+                        <property name="label" translatable="yes" context="opttablepage|header">H_eading</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -58,7 +58,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="repeatheader">
-                        <property name="label" translatable="yes">Re_peat on each page</property>
+                        <property name="label" translatable="yes" context="opttablepage|repeatheader">Re_peat on each page</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -74,7 +74,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="dontsplit">
-                        <property name="label" translatable="yes">_Do not split</property>
+                        <property name="label" translatable="yes" context="opttablepage|dontsplit">_Do not split</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -89,7 +89,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="border">
-                        <property name="label" translatable="yes">B_order</property>
+                        <property name="label" translatable="yes" context="opttablepage|border">B_order</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -110,7 +110,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">New Table Defaults</property>
+                <property name="label" translatable="yes" context="opttablepage|label1">New Table Defaults</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -146,7 +146,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="numformatting">
-                        <property name="label" translatable="yes">_Number recognition</property>
+                        <property name="label" translatable="yes" context="opttablepage|numformatting">_Number recognition</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -161,7 +161,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="numfmtformatting">
-                        <property name="label" translatable="yes">N_umber format recognition</property>
+                        <property name="label" translatable="yes" context="opttablepage|numfmtformatting">N_umber format recognition</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -177,7 +177,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="numalignment">
-                        <property name="label" translatable="yes">_Alignment</property>
+                        <property name="label" translatable="yes" context="opttablepage|numalignment">_Alignment</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -199,7 +199,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Input in Tables</property>
+                <property name="label" translatable="yes" context="opttablepage|label2">Input in Tables</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -253,7 +253,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Behavior of rows/columns</property>
+                        <property name="label" translatable="yes" context="opttablepage|label10">Behavior of rows/columns</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -263,7 +263,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="fix">
-                        <property name="label" translatable="yes">_Fixed</property>
+                        <property name="label" translatable="yes" context="opttablepage|fix">_Fixed</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -281,7 +281,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="fixprop">
-                        <property name="label" translatable="yes">Fi_xed, proportional</property>
+                        <property name="label" translatable="yes" context="opttablepage|fixprop">Fi_xed, proportional</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -299,7 +299,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="var">
-                        <property name="label" translatable="yes">_Variable</property>
+                        <property name="label" translatable="yes" context="opttablepage|var">_Variable</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -321,7 +321,7 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Changes affect the adjacent area only</property>
+                        <property name="label" translatable="yes" context="opttablepage|label11">Changes affect the adjacent area only</property>
                         <property name="wrap">True</property>
                         <property name="wrap_mode">char</property>
                         <property name="max_width_chars">50</property>
@@ -337,7 +337,7 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Changes affect the entire table</property>
+                        <property name="label" translatable="yes" context="opttablepage|label12">Changes affect the entire table</property>
                         <property name="wrap">True</property>
                         <property name="max_width_chars">50</property>
                       </object>
@@ -352,7 +352,7 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Changes affect the table size</property>
+                        <property name="label" translatable="yes" context="opttablepage|label13">Changes affect the table size</property>
                         <property name="wrap">True</property>
                         <property name="max_width_chars">50</property>
                       </object>
@@ -388,7 +388,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Move cells</property>
+                            <property name="label" translatable="yes" context="opttablepage|label4">Move cells</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -430,7 +430,7 @@
                             <property name="can_focus">False</property>
                             <property name="margin_left">12</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Row:</property>
+                            <property name="label" translatable="yes" context="opttablepage|label5">_Row:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">rowmove:0.00cm</property>
                           </object>
@@ -445,7 +445,7 @@
                             <property name="can_focus">False</property>
                             <property name="margin_left">12</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Column:</property>
+                            <property name="label" translatable="yes" context="opttablepage|label6">_Column:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">colmove:0.00cm</property>
                           </object>
@@ -504,7 +504,7 @@
                             <property name="can_focus">False</property>
                             <property name="margin_left">12</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Ro_w:</property>
+                            <property name="label" translatable="yes" context="opttablepage|label15">Ro_w:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">rowinsert:0.00cm</property>
                           </object>
@@ -519,7 +519,7 @@
                             <property name="can_focus">False</property>
                             <property name="margin_left">12</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Colu_mn:</property>
+                            <property name="label" translatable="yes" context="opttablepage|label16">Colu_mn:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">colinsert:0.00cm</property>
                           </object>
@@ -533,7 +533,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Insert cell</property>
+                            <property name="label" translatable="yes" context="opttablepage|label14">Insert cell</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -562,7 +562,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Keyboard Handling</property>
+            <property name="label" translatable="yes" context="opttablepage|label3">Keyboard Handling</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

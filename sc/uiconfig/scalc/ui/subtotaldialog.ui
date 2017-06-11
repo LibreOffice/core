@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="SubTotalDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Subtotals</property>
+    <property name="title" translatable="yes" context="subtotaldialog|SubTotalDialog">Subtotals</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -112,7 +112,7 @@
               <object class="GtkLabel" id="1stgroup">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">1st Group</property>
+                <property name="label" translatable="yes" context="subtotaldialog|1stgroup">1st Group</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -125,7 +125,7 @@
               <object class="GtkLabel" id="2ndgroup">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">2nd Group</property>
+                <property name="label" translatable="yes" context="subtotaldialog|2ndgroup">2nd Group</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -139,7 +139,7 @@
               <object class="GtkLabel" id="3rdgroup">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">3rd Group</property>
+                <property name="label" translatable="yes" context="subtotaldialog|3rdgroup">3rd Group</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -153,7 +153,7 @@
               <object class="GtkLabel" id="options">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Options</property>
+                <property name="label" translatable="yes" context="subtotaldialog|options">Options</property>
               </object>
               <packing>
                 <property name="position">3</property>

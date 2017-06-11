@@ -17,8 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "core_resource.hxx"
 #include "directsql.hxx"
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
+#include "strings.hrc"
 #include <vcl/layout.hxx>
 #include <comphelper/types.hxx>
 #include <vcl/svapp.hxx>
@@ -105,7 +107,7 @@ namespace dbaui
             "DirectSQLDialog::_disposing: where does this come from?");
 
         {
-            OUString sMessage(ModuleRes(STR_DIRECTSQL_CONNECTIONLOST));
+            OUString sMessage(DBA_RES(STR_DIRECTSQL_CONNECTIONLOST));
             ScopedVclPtrInstance< MessageDialog > aError(this, sMessage);
             aError->Execute();
         }
@@ -228,7 +230,7 @@ namespace dbaui
             }
 
             // successful
-            sStatus = ModuleRes(STR_COMMAND_EXECUTED_SUCCESSFULLY);
+            sStatus = DBA_RES(STR_COMMAND_EXECUTED_SUCCESSFULLY);
 
             // dispose the statement
             ::comphelper::disposeComponent(xStatement);
