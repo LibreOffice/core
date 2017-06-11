@@ -1,0 +1,1106 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SCADDINS_INC_ANALYSIS_HRC
+#define INCLUDED_SCADDINS_INC_ANALYSIS_HRC
+
+#define NC_(Context, String) (Context "\004" u8##String)
+
+const char* ANALYSIS_Workday[] =
+{
+    NC_("ANALYSIS_Workday", "Returns the serial number of the date before or after a specified number of workdays"),
+    NC_("ANALYSIS_Workday", "Start date"),
+    NC_("ANALYSIS_Workday", "The start date"),
+    NC_("ANALYSIS_Workday", "Days"),
+    NC_("ANALYSIS_Workday", "The number of workdays before or after the start date"),
+    NC_("ANALYSIS_Workday", "Holidays"),
+    NC_("ANALYSIS_Workday", "List of date values of days off (vacation, holidays, etc.)")
+};
+
+const char* ANALYSIS_Yearfrac[] =
+{
+    NC_("ANALYSIS_Yearfrac", "Returns the number of years (including fractional part) between two dates"),
+    NC_("ANALYSIS_Yearfrac", "Start date"),
+    NC_("ANALYSIS_Yearfrac", "The start date"),
+    NC_("ANALYSIS_Yearfrac", "End date"),
+    NC_("ANALYSIS_Yearfrac", "The end date"),
+    NC_("ANALYSIS_Yearfrac", "Basis"),
+    NC_("ANALYSIS_Yearfrac", "Basis indicates the day-count convention to use in the calculation")
+};
+
+const char* ANALYSIS_Edate[] =
+{
+    NC_("ANALYSIS_Edate", "Returns the serial number of the date that is a specified number of months before or after the start date"),
+    NC_("ANALYSIS_Edate", "Start date"),
+    NC_("ANALYSIS_Edate", "The start date"),
+    NC_("ANALYSIS_Edate", "Months"),
+    NC_("ANALYSIS_Edate", "Number of months before or after the start date")
+};
+
+const char* ANALYSIS_Weeknum[] =
+{
+    NC_("ANALYSIS_Weeknum", "Returns the number of the calendar week in which the specified date occurs.\nThis function exists for interoperability with older Microsoft Excel documents, for new documents use WEEKNUM instead."),
+    NC_("ANALYSIS_Weeknum", "Date"),
+    NC_("ANALYSIS_Weeknum", "The date or date serial number"),
+    NC_("ANALYSIS_Weeknum", "Return type"),
+    NC_("ANALYSIS_Weeknum", "Indicates the first day of the week (1 = Sunday, 2 = Monday)")
+};
+
+const char* ANALYSIS_Eomonth[] =
+{
+    NC_("ANALYSIS_Eomonth", "Returns the serial number of the last day of the month that comes a certain number of months before or after the start date"),
+    NC_("ANALYSIS_Eomonth", "Start date"),
+    NC_("ANALYSIS_Eomonth", "The start date"),
+    NC_("ANALYSIS_Eomonth", "Months"),
+    NC_("ANALYSIS_Eomonth", "Number of months before or after the start date")
+};
+
+const char* ANALYSIS_Networkdays[] =
+{
+    NC_("ANALYSIS_Networkdays", "Returns the number of workdays between two dates.\nThis function exists for interoperability with older Microsoft Excel documents, for new documents use NETWORKDAYS instead."),
+    NC_("ANALYSIS_Networkdays", "Start date"),
+    NC_("ANALYSIS_Networkdays", "The start date"),
+    NC_("ANALYSIS_Networkdays", "End date"),
+    NC_("ANALYSIS_Networkdays", "The end date"),
+    NC_("ANALYSIS_Networkdays", "Holidays"),
+    NC_("ANALYSIS_Networkdays", "List of date values representing days off (vacation, holidays, etc.)")
+};
+
+const char* ANALYSIS_Iseven[] =
+{
+    NC_("ANALYSIS_Iseven", "Returns the value 'true' if the number is even"),
+    NC_("ANALYSIS_Iseven", "Number"),
+    NC_("ANALYSIS_Iseven", "The number")
+};
+
+const char* ANALYSIS_Isodd[] =
+{
+    NC_("ANALYSIS_Isodd", "Returns the value 'true' if the number is odd"),
+    NC_("ANALYSIS_Isodd", "Number"),
+    NC_("ANALYSIS_Isodd", "The number")
+};
+
+const char* ANALYSIS_Multinomial[] =
+{
+    NC_("ANALYSIS_Multinomial", "Returns the multinomial coefficient of a set of numbers"),
+    NC_("ANALYSIS_Multinomial", "Number"),
+    NC_("ANALYSIS_Multinomial", "Number or list of numbers for which you want the multinomial coefficient")
+};
+
+const char* ANALYSIS_Seriessum[] =
+{
+    NC_("ANALYSIS_Seriessum", "Returns the sum of a power series"),
+    NC_("ANALYSIS_Seriessum", "X"),
+    NC_("ANALYSIS_Seriessum", "The independent variable of the power series"),
+    NC_("ANALYSIS_Seriessum", "N"),
+    NC_("ANALYSIS_Seriessum", "The initial power to which x is to be raised"),
+    NC_("ANALYSIS_Seriessum", "M"),
+    NC_("ANALYSIS_Seriessum", "The increment by which to increase n for each term in the series"),
+    NC_("ANALYSIS_Seriessum", "Coefficients"),
+    NC_("ANALYSIS_Seriessum", "Set of coefficients by which each successive power of the variable x is multiplied")
+};
+
+const char* ANALYSIS_Quotient[] =
+{
+    NC_("ANALYSIS_Quotient", "Returns the integer portion of a division"),
+    NC_("ANALYSIS_Quotient", "Numerator"),
+    NC_("ANALYSIS_Quotient", "The dividend"),
+    NC_("ANALYSIS_Quotient", "Denominator"),
+    NC_("ANALYSIS_Quotient", "The divisor")
+};
+
+const char* ANALYSIS_Mround[] =
+{
+    NC_("ANALYSIS_Mround", "Returns a number rounded to a specified multiple"),
+    NC_("ANALYSIS_Mround", "Number"),
+    NC_("ANALYSIS_Mround", "The number to round off"),
+    NC_("ANALYSIS_Mround", "Multiple"),
+    NC_("ANALYSIS_Mround", "The multiple to which you want to round number")
+};
+
+const char* ANALYSIS_Sqrtpi[] =
+{
+    NC_("ANALYSIS_Sqrtpi", "Returns the square root of a number which has been multiplied by pi"),
+    NC_("ANALYSIS_Sqrtpi", "Number"),
+    NC_("ANALYSIS_Sqrtpi", "The number by which pi is multiplied")
+};
+
+const char* ANALYSIS_Randbetween[] =
+{
+    NC_("ANALYSIS_Randbetween", "Returns a random integer between the numbers you specify"),
+    NC_("ANALYSIS_Randbetween", "Bottom"),
+    NC_("ANALYSIS_Randbetween", "The smallest integer returned"),
+    NC_("ANALYSIS_Randbetween", "Top"),
+    NC_("ANALYSIS_Randbetween", "The largest integer returned")
+};
+
+const char* ANALYSIS_Gcd[] =
+{
+    NC_("ANALYSIS_Gcd", "Returns the greatest common divisor.\nThis function exists for interoperability with older Microsoft Excel documents, for new documents use GCD instead."),
+    NC_("ANALYSIS_Gcd", "Number"),
+    NC_("ANALYSIS_Gcd", "Number or list of numbers")
+};
+
+const char* ANALYSIS_Lcm[] =
+{
+    NC_("ANALYSIS_Lcm", "Returns the least common multiple.\nThis function exists for interoperability with older Microsoft Excel documents, for new documents use LCM instead."),
+    NC_("ANALYSIS_Lcm", "Number"),
+    NC_("ANALYSIS_Lcm", "Number or list of numbers")
+};
+
+const char* ANALYSIS_Besseli[] =
+{
+    NC_("ANALYSIS_Besseli", "Returns the modified Bessel function In(x)"),
+    NC_("ANALYSIS_Besseli", "X"),
+    NC_("ANALYSIS_Besseli", "The value at which the function is to be evaluated"),
+    NC_("ANALYSIS_Besseli", "N"),
+    NC_("ANALYSIS_Besseli", "The order of the Bessel function")
+};
+
+const char* ANALYSIS_Besselj[] =
+{
+    NC_("ANALYSIS_Besselj", "Returns the Bessel function Jn(x)"),
+    NC_("ANALYSIS_Besselj", "X"),
+    NC_("ANALYSIS_Besselj", "The value at which the function is to be evaluated"),
+    NC_("ANALYSIS_Besselj", "N"),
+    NC_("ANALYSIS_Besselj", "The order of the Bessel function")
+};
+
+const char* ANALYSIS_Besselk[] =
+{
+    NC_("ANALYSIS_Besselk", "Returns the Bessel function Kn(x)"),
+    NC_("ANALYSIS_Besselk", "X"),
+    NC_("ANALYSIS_Besselk", "The value at which the function is to be evaluated"),
+    NC_("ANALYSIS_Besselk", "N"),
+    NC_("ANALYSIS_Besselk", "The order of the Bessel function")
+};
+
+const char* ANALYSIS_Bessely[] =
+{
+    NC_("ANALYSIS_Bessely", "Returns the Bessel function Yn(x)"),
+    NC_("ANALYSIS_Bessely", "X"),
+    NC_("ANALYSIS_Bessely", "The value at which the function is to be evaluated"),
+    NC_("ANALYSIS_Bessely", "N"),
+    NC_("ANALYSIS_Bessely", "The order of the Bessel function")
+};
+
+const char* ANALYSIS_Bin2Oct[] =
+{
+    NC_("ANALYSIS_Bin2Oct", "Converts a binary number to an octal number"),
+    NC_("ANALYSIS_Bin2Oct", "Number"),
+    NC_("ANALYSIS_Bin2Oct", "The binary number to be converted (as text)"),
+    NC_("ANALYSIS_Bin2Oct", "Places"),
+    NC_("ANALYSIS_Bin2Oct", "Number of places used")
+};
+
+const char* ANALYSIS_Bin2Dec[] =
+{
+    NC_("ANALYSIS_Bin2Dec", "Converts a binary number to a decimal number"),
+    NC_("ANALYSIS_Bin2Dec", "Number"),
+    NC_("ANALYSIS_Bin2Dec", "The binary number to be converted (as text)")
+};
+
+const char* ANALYSIS_Bin2Hex[] =
+{
+    NC_("ANALYSIS_Bin2Hex", "Converts a binary number to a hexadecimal number"),
+    NC_("ANALYSIS_Bin2Hex", "Number"),
+    NC_("ANALYSIS_Bin2Hex", "The binary number to be converted (as text)"),
+    NC_("ANALYSIS_Bin2Hex", "Places"),
+    NC_("ANALYSIS_Bin2Hex", "Number of places used.")
+};
+
+const char* ANALYSIS_Oct2Bin[] =
+{
+    NC_("ANALYSIS_Oct2Bin", "Converts an octal number to a binary number"),
+    NC_("ANALYSIS_Oct2Bin", "Number"),
+    NC_("ANALYSIS_Oct2Bin", "The octal number to be converted (as text)"),
+    NC_("ANALYSIS_Oct2Bin", "Places"),
+    NC_("ANALYSIS_Oct2Bin", "Number of places used")
+};
+
+const char* ANALYSIS_Oct2Dec[] =
+{
+    NC_("ANALYSIS_Oct2Dec", "Converts an octal number to a decimal number"),
+    NC_("ANALYSIS_Oct2Dec", "Number"),
+    NC_("ANALYSIS_Oct2Dec", "The octal number to be converted (as text)")
+};
+
+const char* ANALYSIS_Oct2Hex[] =
+{
+    NC_("ANALYSIS_Oct2Hex", "Converts an octal number to a hexadecimal number"),
+    NC_("ANALYSIS_Oct2Hex", "Number"),
+    NC_("ANALYSIS_Oct2Hex", "The octal number to be converted (as text)"),
+    NC_("ANALYSIS_Oct2Hex", "Places"),
+    NC_("ANALYSIS_Oct2Hex", "Number of places used")
+};
+
+const char* ANALYSIS_Dec2Bin[] =
+{
+    NC_("ANALYSIS_Dec2Bin", "Converts a decimal number to a binary number"),
+    NC_("ANALYSIS_Dec2Bin", "Number"),
+    NC_("ANALYSIS_Dec2Bin", "The decimal integer to be converted"),
+    NC_("ANALYSIS_Dec2Bin", "Places"),
+    NC_("ANALYSIS_Dec2Bin", "Number of places used")
+};
+
+const char* ANALYSIS_Dec2Hex[] =
+{
+    NC_("ANALYSIS_Dec2Hex", "Converts a decimal number to a hexadecimal number"),
+    NC_("ANALYSIS_Dec2Hex", "Number"),
+    NC_("ANALYSIS_Dec2Hex", "The decimal integer to be converted"),
+    NC_("ANALYSIS_Dec2Hex", "Places"),
+    NC_("ANALYSIS_Dec2Hex", "Number of places used")
+};
+
+const char* ANALYSIS_Dec2Oct[] =
+{
+    NC_("ANALYSIS_Dec2Oct", "Converts a decimal number into an octal number"),
+    NC_("ANALYSIS_Dec2Oct", "Number"),
+    NC_("ANALYSIS_Dec2Oct", "The decimal number"),
+    NC_("ANALYSIS_Dec2Oct", "Places"),
+    NC_("ANALYSIS_Dec2Oct", "Number of places used")
+};
+
+const char* ANALYSIS_Hex2Bin[] =
+{
+    NC_("ANALYSIS_Hex2Bin", "Converts a hexadecimal number to a binary number"),
+    NC_("ANALYSIS_Hex2Bin", "Number"),
+    NC_("ANALYSIS_Hex2Bin", "The hexadecimal number to be converted (as text)"),
+    NC_("ANALYSIS_Hex2Bin", "Places"),
+    NC_("ANALYSIS_Hex2Bin", "Number of places used")
+};
+
+const char* ANALYSIS_Hex2Dec[] =
+{
+    NC_("ANALYSIS_Hex2Dec", "Converts a hexadecimal number to a decimal number"),
+    NC_("ANALYSIS_Hex2Dec", "Number"),
+    NC_("ANALYSIS_Hex2Dec", "The hexadecimal number to be converted (as text)")
+};
+
+const char* ANALYSIS_Hex2Oct[] =
+{
+    NC_("ANALYSIS_Hex2Oct", "Converts a hexadecimal number to an octal number"),
+    NC_("ANALYSIS_Hex2Oct", "Number"),
+    NC_("ANALYSIS_Hex2Oct", "The hexadecimal number to be converted (as text)"),
+    NC_("ANALYSIS_Hex2Oct", "Places"),
+    NC_("ANALYSIS_Hex2Oct", "Number of places used")
+};
+
+const char* ANALYSIS_Delta[] =
+{
+    NC_("ANALYSIS_Delta", "Tests whether two values are equal"),
+    NC_("ANALYSIS_Delta", "Number 1"),
+    NC_("ANALYSIS_Delta", "The first number"),
+    NC_("ANALYSIS_Delta", "Number 2"),
+    NC_("ANALYSIS_Delta", "The second number")
+};
+
+const char* ANALYSIS_Erf[] =
+{
+    NC_("ANALYSIS_Erf", "Returns the error function"),
+    NC_("ANALYSIS_Erf", "Lower limit"),
+    NC_("ANALYSIS_Erf", "The lower limit for integration"),
+    NC_("ANALYSIS_Erf", "Upper limit"),
+    NC_("ANALYSIS_Erf", "The upper limit for integration")
+};
+
+const char* ANALYSIS_Erfc[] =
+{
+    NC_("ANALYSIS_Erfc", "Returns the complementary error function"),
+    NC_("ANALYSIS_Erfc", "Lower limit"),
+    NC_("ANALYSIS_Erfc", "The lower limit for integration")
+};
+
+const char* ANALYSIS_Gestep[] =
+{
+    NC_("ANALYSIS_Gestep", "Tests whether a number is greater than a threshold value"),
+    NC_("ANALYSIS_Gestep", "Number"),
+    NC_("ANALYSIS_Gestep", "The value to test against step"),
+    NC_("ANALYSIS_Gestep", "Step"),
+    NC_("ANALYSIS_Gestep", "The threshold value")
+};
+
+const char* ANALYSIS_Factdouble[] =
+{
+    NC_("ANALYSIS_Factdouble", "Returns the double factorial of Number"),
+    NC_("ANALYSIS_Factdouble", "Number"),
+    NC_("ANALYSIS_Factdouble", "The number")
+};
+
+const char* ANALYSIS_Imabs[] =
+{
+    NC_("ANALYSIS_Imabs", "Returns the absolute value (modulus) of a complex number"),
+    NC_("ANALYSIS_Imabs", "Complex number"),
+    NC_("ANALYSIS_Imabs", "The complex number")
+};
+
+const char* ANALYSIS_Imaginary[] =
+{
+    NC_("ANALYSIS_Imaginary", "Returns the imaginary coefficient of a complex number"),
+    NC_("ANALYSIS_Imaginary", "Complex number"),
+    NC_("ANALYSIS_Imaginary", "The complex number")
+};
+
+const char* ANALYSIS_Impower[] =
+{
+    NC_("ANALYSIS_Impower", "Returns a complex number raised to a real power"),
+    NC_("ANALYSIS_Impower", "Complex number"),
+    NC_("ANALYSIS_Impower", "The complex number"),
+    NC_("ANALYSIS_Impower", "Number"),
+    NC_("ANALYSIS_Impower", "Power to which the complex number is raised")
+};
+
+const char* ANALYSIS_Imargument[] =
+{
+    NC_("ANALYSIS_Imargument", "Returns the argument theta, an angle expressed in radians"),
+    NC_("ANALYSIS_Imargument", "Complex number"),
+    NC_("ANALYSIS_Imargument", "A complex number")
+};
+
+const char* ANALYSIS_Imcos[] =
+{
+    NC_("ANALYSIS_Imcos", "Returns the cosine of a complex number"),
+    NC_("ANALYSIS_Imcos", "Complex number"),
+    NC_("ANALYSIS_Imcos", "A complex number")
+};
+
+const char* ANALYSIS_Imdiv[] =
+{
+    NC_("ANALYSIS_Imdiv", "Returns the quotient of two complex numbers"),
+    NC_("ANALYSIS_Imdiv", "Numerator"),
+    NC_("ANALYSIS_Imdiv", "The dividend"),
+    NC_("ANALYSIS_Imdiv", "Denominator"),
+    NC_("ANALYSIS_Imdiv", "The divisor")
+};
+
+const char* ANALYSIS_Imexp[] =
+{
+    NC_("ANALYSIS_Imexp", "Returns the algebraic form of the exponential of a complex number"),
+    NC_("ANALYSIS_Imexp", "Complex number"),
+    NC_("ANALYSIS_Imexp", "The complex number")
+};
+
+const char* ANALYSIS_Imconjugate[] =
+{
+    NC_("ANALYSIS_Imconjugate", "Returns the complex conjugate of a complex number"),
+    NC_("ANALYSIS_Imconjugate", "Complex number"),
+    NC_("ANALYSIS_Imconjugate", "The complex number")
+};
+
+const char* ANALYSIS_Imln[] =
+{
+    NC_("ANALYSIS_Imln", "Returns the natural logarithm of a complex number"),
+    NC_("ANALYSIS_Imln", "Complex number"),
+    NC_("ANALYSIS_Imln", "The complex number")
+};
+
+const char* ANALYSIS_Imlog10[] =
+{
+    NC_("ANALYSIS_Imlog10", "Returns the base-10 logarithm of a complex number"),
+    NC_("ANALYSIS_Imlog10", "Complex number"),
+    NC_("ANALYSIS_Imlog10", "The complex number")
+};
+
+const char* ANALYSIS_Imlog2[] =
+{
+    NC_("ANALYSIS_Imlog2", "Returns the base-2 logarithm of a complex number"),
+    NC_("ANALYSIS_Imlog2", "Complex number"),
+    NC_("ANALYSIS_Imlog2", "The complex number")
+};
+
+const char* ANALYSIS_Improduct[] =
+{
+    NC_("ANALYSIS_Improduct", "Returns the product of several complex numbers"),
+    NC_("ANALYSIS_Improduct", "Complex number"),
+    NC_("ANALYSIS_Improduct", "The first complex number"),
+    NC_("ANALYSIS_Improduct", "Complex number"),
+    NC_("ANALYSIS_Improduct", "Another complex number")
+};
+
+const char* ANALYSIS_Imreal[] =
+{
+    NC_("ANALYSIS_Imreal", "Returns the real coefficient of a complex number"),
+    NC_("ANALYSIS_Imreal", "Complex number"),
+    NC_("ANALYSIS_Imreal", "The complex number")
+};
+
+const char* ANALYSIS_Imsin[] =
+{
+    NC_("ANALYSIS_Imsin", "Returns the sine of a complex number"),
+    NC_("ANALYSIS_Imsin", "Complex number"),
+    NC_("ANALYSIS_Imsin", "The complex number")
+};
+
+const char* ANALYSIS_Imsub[] =
+{
+    NC_("ANALYSIS_Imsub", "Returns the difference of two complex numbers"),
+    NC_("ANALYSIS_Imsub", "Complex number 1"),
+    NC_("ANALYSIS_Imsub", "Complex number 1"),
+    NC_("ANALYSIS_Imsub", "Complex number 2"),
+    NC_("ANALYSIS_Imsub", "Complex number 2")
+};
+
+const char* ANALYSIS_Imsqrt[] =
+{
+    NC_("ANALYSIS_Imsqrt", "Returns the square root of a complex number"),
+    NC_("ANALYSIS_Imsqrt", "Complex number"),
+    NC_("ANALYSIS_Imsqrt", "The complex number")
+};
+
+const char* ANALYSIS_Imsum[] =
+{
+    NC_("ANALYSIS_Imsum", "Returns the sum of complex numbers"),
+    NC_("ANALYSIS_Imsum", "Complex number"),
+    NC_("ANALYSIS_Imsum", "The complex number")
+};
+
+const char* ANALYSIS_Imtan[] =
+{
+    NC_("ANALYSIS_Imtan", "Returns the tangent of a complex number"),
+    NC_("ANALYSIS_Imtan", "Complex number"),
+    NC_("ANALYSIS_Imtan", "A complex number")
+};
+
+const char* ANALYSIS_Imsec[] =
+{
+    NC_("ANALYSIS_Imsec", "Returns the secant of a complex number"),
+    NC_("ANALYSIS_Imsec", "Complex number"),
+    NC_("ANALYSIS_Imsec", "A complex number")
+};
+
+const char* ANALYSIS_Imcsc[] =
+{
+    NC_("ANALYSIS_Imcsc", "Returns the cosecant of a complex number"),
+    NC_("ANALYSIS_Imcsc", "Complex number"),
+    NC_("ANALYSIS_Imcsc", "A complex number")
+};
+
+const char* ANALYSIS_Imcot[] =
+{
+    NC_("ANALYSIS_Imcot", "Returns the cotangent of a complex number"),
+    NC_("ANALYSIS_Imcot", "Complex number"),
+    NC_("ANALYSIS_Imcot", "A complex number")
+};
+
+const char* ANALYSIS_Imsinh[] =
+{
+    NC_("ANALYSIS_Imsinh", "Returns the hyperbolic sine of a complex number"),
+    NC_("ANALYSIS_Imsinh", "Complex number"),
+    NC_("ANALYSIS_Imsinh", "A complex number")
+};
+
+const char* ANALYSIS_Imcosh[] =
+{
+    NC_("ANALYSIS_Imcosh", "Returns the hyperbolic cosine of a complex number"),
+    NC_("ANALYSIS_Imcosh", "Complex number"),
+    NC_("ANALYSIS_Imcosh", "A complex number")
+};
+
+const char* ANALYSIS_Imsech[] =
+{
+    NC_("ANALYSIS_Imsech", "Returns the hyperbolic secant of a complex number"),
+    NC_("ANALYSIS_Imsech", "Complex number"),
+    NC_("ANALYSIS_Imsech", "A complex number")
+};
+
+const char* ANALYSIS_Imcsch[] =
+{
+    NC_("ANALYSIS_Imcsch", "Returns the hyperbolic cosecant of a complex number"),
+    NC_("ANALYSIS_Imcsch", "Complex number"),
+    NC_("ANALYSIS_Imcsch", "A complex number")
+};
+
+const char* ANALYSIS_Complex[] =
+{
+    NC_("ANALYSIS_Complex", "Converts real and imaginary coefficients into a complex number"),
+    NC_("ANALYSIS_Complex", "Real num"),
+    NC_("ANALYSIS_Complex", "The real coefficient"),
+    NC_("ANALYSIS_Complex", "I num"),
+    NC_("ANALYSIS_Complex", "The imaginary coefficient"),
+    NC_("ANALYSIS_Complex", "Suffix"),
+    NC_("ANALYSIS_Complex", "The suffix")
+};
+
+const char* ANALYSIS_Convert[] =
+{
+    NC_("ANALYSIS_Convert", "Converts a number from one measurement system to another"),
+    NC_("ANALYSIS_Convert", "Number"),
+    NC_("ANALYSIS_Convert", "The number"),
+    NC_("ANALYSIS_Convert", "From unit"),
+    NC_("ANALYSIS_Convert", "Unit of measure for number"),
+    NC_("ANALYSIS_Convert", "To unit"),
+    NC_("ANALYSIS_Convert", "Unit of measure for the result")
+};
+
+const char* ANALYSIS_Amordegrc[] =
+{
+    NC_("ANALYSIS_Amordegrc", "Returns the prorated linear depreciation of an asset for each accounting period"),
+    NC_("ANALYSIS_Amordegrc", "Cost"),
+    NC_("ANALYSIS_Amordegrc", "Cost of the asset"),
+    NC_("ANALYSIS_Amordegrc", "Date purchased"),
+    NC_("ANALYSIS_Amordegrc", "Purchase date of the asset"),
+    NC_("ANALYSIS_Amordegrc", "First period"),
+    NC_("ANALYSIS_Amordegrc", "Date the first period ends"),
+    NC_("ANALYSIS_Amordegrc", "Salvage"),
+    NC_("ANALYSIS_Amordegrc", "Salvage value of an asset at the end of its life"),
+    NC_("ANALYSIS_Amordegrc", "Period"),
+    NC_("ANALYSIS_Amordegrc", "The period"),
+    NC_("ANALYSIS_Amordegrc", "Rate"),
+    NC_("ANALYSIS_Amordegrc", "The rate of depreciation"),
+    NC_("ANALYSIS_Amordegrc", "Basis"),
+    NC_("ANALYSIS_Amordegrc", "The year basis to be used")
+};
+
+const char* ANALYSIS_Amorlinc[] =
+{
+    NC_("ANALYSIS_Amorlinc", "Returns the prorated linear depreciation of an asset for each accounting period"),
+    NC_("ANALYSIS_Amorlinc", "Cost"),
+    NC_("ANALYSIS_Amorlinc", "Cost of the asset"),
+    NC_("ANALYSIS_Amorlinc", "Date purchased"),
+    NC_("ANALYSIS_Amorlinc", "Purchase date of the asset"),
+    NC_("ANALYSIS_Amorlinc", "First period"),
+    NC_("ANALYSIS_Amorlinc", "The date the first period ends"),
+    NC_("ANALYSIS_Amorlinc", "Salvage"),
+    NC_("ANALYSIS_Amorlinc", "The salvage value of an asset at the end of its life"),
+    NC_("ANALYSIS_Amorlinc", "Period"),
+    NC_("ANALYSIS_Amorlinc", "The period"),
+    NC_("ANALYSIS_Amorlinc", "Rate"),
+    NC_("ANALYSIS_Amorlinc", "The rate of depreciation"),
+    NC_("ANALYSIS_Amorlinc", "Basis"),
+    NC_("ANALYSIS_Amorlinc", "The year basis to be used")
+};
+
+const char* ANALYSIS_Accrint[] =
+{
+    NC_("ANALYSIS_Accrint", "Returns the accrued interest for a security that pays periodic interest"),
+    NC_("ANALYSIS_Accrint", "Issue"),
+    NC_("ANALYSIS_Accrint", "Issue date of the security"),
+    NC_("ANALYSIS_Accrint", "First interest"),
+    NC_("ANALYSIS_Accrint", "First interest date of the security"),
+    NC_("ANALYSIS_Accrint", "Settlement"),
+    NC_("ANALYSIS_Accrint", "The settlement"),
+    NC_("ANALYSIS_Accrint", "Rate"),
+    NC_("ANALYSIS_Accrint", "The rate"),
+    NC_("ANALYSIS_Accrint", "Par"),
+    NC_("ANALYSIS_Accrint", "The par value"),
+    NC_("ANALYSIS_Accrint", "Frequency"),
+    NC_("ANALYSIS_Accrint", "The frequency"),
+    NC_("ANALYSIS_Accrint", "Basis"),
+    NC_("ANALYSIS_Accrint", "The basis")
+};
+
+const char* ANALYSIS_Accrintm[] =
+{
+    NC_("ANALYSIS_Accrintm", "Returns the accrued interest for a security that pays interest at maturity"),
+    NC_("ANALYSIS_Accrintm", "Issue"),
+    NC_("ANALYSIS_Accrintm", "The issue date"),
+    NC_("ANALYSIS_Accrintm", "Settlement"),
+    NC_("ANALYSIS_Accrintm", "The settlement"),
+    NC_("ANALYSIS_Accrintm", "Rate"),
+    NC_("ANALYSIS_Accrintm", "The rate"),
+    NC_("ANALYSIS_Accrintm", "Par"),
+    NC_("ANALYSIS_Accrintm", "The par value"),
+    NC_("ANALYSIS_Accrintm", "Basis"),
+    NC_("ANALYSIS_Accrintm", "The basis")
+};
+
+const char* ANALYSIS_Received[] =
+{
+    NC_("ANALYSIS_Received", "Returns the amount paid out at maturity for a fully invested security"),
+    NC_("ANALYSIS_Received", "Settlement"),
+    NC_("ANALYSIS_Received", "The settlement"),
+    NC_("ANALYSIS_Received", "Maturity"),
+    NC_("ANALYSIS_Received", "The maturity"),
+    NC_("ANALYSIS_Received", "Investment"),
+    NC_("ANALYSIS_Received", "The investment"),
+    NC_("ANALYSIS_Received", "Discount"),
+    NC_("ANALYSIS_Received", "The discount"),
+    NC_("ANALYSIS_Received", "Basis"),
+    NC_("ANALYSIS_Received", "The basis")
+};
+
+const char* ANALYSIS_Disc[] =
+{
+    NC_("ANALYSIS_Disc", "Returns the discount rate for a security"),
+    NC_("ANALYSIS_Disc", "Settlement"),
+    NC_("ANALYSIS_Disc", "The settlement"),
+    NC_("ANALYSIS_Disc", "Maturity"),
+    NC_("ANALYSIS_Disc", "The maturity"),
+    NC_("ANALYSIS_Disc", "Price"),
+    NC_("ANALYSIS_Disc", "The price"),
+    NC_("ANALYSIS_Disc", "Redemption"),
+    NC_("ANALYSIS_Disc", "The redemption value"),
+    NC_("ANALYSIS_Disc", "Basis"),
+    NC_("ANALYSIS_Disc", "The basis")
+};
+
+const char* ANALYSIS_Duration[] =
+{
+    NC_("ANALYSIS_Duration", "Returns the annual Macaulay duration of a security with periodic interest payments"),
+    NC_("ANALYSIS_Duration", "Settlement"),
+    NC_("ANALYSIS_Duration", "The settlement"),
+    NC_("ANALYSIS_Duration", "Maturity"),
+    NC_("ANALYSIS_Duration", "The maturity"),
+    NC_("ANALYSIS_Duration", "Coupon"),
+    NC_("ANALYSIS_Duration", "The coupon rate"),
+    NC_("ANALYSIS_Duration", "Yield"),
+    NC_("ANALYSIS_Duration", "The yield"),
+    NC_("ANALYSIS_Duration", "Frequency"),
+    NC_("ANALYSIS_Duration", "The frequency"),
+    NC_("ANALYSIS_Duration", "Basis"),
+    NC_("ANALYSIS_Duration", "The basis")
+};
+
+const char* ANALYSIS_Effect[] =
+{
+    NC_("ANALYSIS_Effect", "Returns the effective annual interest rate"),
+    NC_("ANALYSIS_Effect", "Nominal rate"),
+    NC_("ANALYSIS_Effect", "The nominal rate"),
+    NC_("ANALYSIS_Effect", "Npery"),
+    NC_("ANALYSIS_Effect", "The periods")
+};
+
+const char* ANALYSIS_Cumprinc[] =
+{
+    NC_("ANALYSIS_Cumprinc", "Returns the cumulative principal on a loan to be paid between two periods"),
+    NC_("ANALYSIS_Cumprinc", "Rate"),
+    NC_("ANALYSIS_Cumprinc", "The rate"),
+    NC_("ANALYSIS_Cumprinc", "Nper"),
+    NC_("ANALYSIS_Cumprinc", "Number of payment periods"),
+    NC_("ANALYSIS_Cumprinc", "Pv"),
+    NC_("ANALYSIS_Cumprinc", "The present value"),
+    NC_("ANALYSIS_Cumprinc", "Start period"),
+    NC_("ANALYSIS_Cumprinc", "The start period"),
+    NC_("ANALYSIS_Cumprinc", "End period"),
+    NC_("ANALYSIS_Cumprinc", "The end period"),
+    NC_("ANALYSIS_Cumprinc", "Type"),
+    NC_("ANALYSIS_Cumprinc", "The type of maturity")
+};
+
+const char* ANALYSIS_Cumipmt[] =
+{
+    NC_("ANALYSIS_Cumipmt", "Returns the cumulative interest to be paid between two periods"),
+    NC_("ANALYSIS_Cumipmt", "Rate"),
+    NC_("ANALYSIS_Cumipmt", "The rate"),
+    NC_("ANALYSIS_Cumipmt", "Nper"),
+    NC_("ANALYSIS_Cumipmt", "Number of payment periods"),
+    NC_("ANALYSIS_Cumipmt", "Pv"),
+    NC_("ANALYSIS_Cumipmt", "The present value"),
+    NC_("ANALYSIS_Cumipmt", "Start period"),
+    NC_("ANALYSIS_Cumipmt", "The start period"),
+    NC_("ANALYSIS_Cumipmt", "End period"),
+    NC_("ANALYSIS_Cumipmt", "The end period"),
+    NC_("ANALYSIS_Cumipmt", "Type"),
+    NC_("ANALYSIS_Cumipmt", "The type of maturity")
+};
+
+const char* ANALYSIS_Price[] =
+{
+    NC_("ANALYSIS_Price", "Returns the price per 100 currency units face value of a security that pays periodic interest"),
+    NC_("ANALYSIS_Price", "Settlement"),
+    NC_("ANALYSIS_Price", "The settlement"),
+    NC_("ANALYSIS_Price", "Maturity"),
+    NC_("ANALYSIS_Price", "The maturity"),
+    NC_("ANALYSIS_Price", "Rate"),
+    NC_("ANALYSIS_Price", "The rate"),
+    NC_("ANALYSIS_Price", "Yield"),
+    NC_("ANALYSIS_Price", "The yield"),
+    NC_("ANALYSIS_Price", "Redemption"),
+    NC_("ANALYSIS_Price", "The redemption value"),
+    NC_("ANALYSIS_Price", "Frequency"),
+    NC_("ANALYSIS_Price", "The frequency"),
+    NC_("ANALYSIS_Price", "Basis"),
+    NC_("ANALYSIS_Price", "The basis")
+};
+
+const char* ANALYSIS_Pricedisc[] =
+{
+    NC_("ANALYSIS_Pricedisc", "Returns the price per 100 currency units face value of a discounted security"),
+    NC_("ANALYSIS_Pricedisc", "Settlement"),
+    NC_("ANALYSIS_Pricedisc", "The settlement"),
+    NC_("ANALYSIS_Pricedisc", "Maturity"),
+    NC_("ANALYSIS_Pricedisc", "The maturity"),
+    NC_("ANALYSIS_Pricedisc", "Discount"),
+    NC_("ANALYSIS_Pricedisc", "The discount"),
+    NC_("ANALYSIS_Pricedisc", "Redemption"),
+    NC_("ANALYSIS_Pricedisc", "The redemption value"),
+    NC_("ANALYSIS_Pricedisc", "Basis"),
+    NC_("ANALYSIS_Pricedisc", "The basis")
+};
+
+const char* ANALYSIS_Pricemat[] =
+{
+    NC_("ANALYSIS_Pricemat", "Returns the price per 100 currency units face value of a security that pays interest at maturity"),
+    NC_("ANALYSIS_Pricemat", "Settlement"),
+    NC_("ANALYSIS_Pricemat", "The settlement"),
+    NC_("ANALYSIS_Pricemat", "Maturity"),
+    NC_("ANALYSIS_Pricemat", "The maturity"),
+    NC_("ANALYSIS_Pricemat", "Issue"),
+    NC_("ANALYSIS_Pricemat", "The issue date"),
+    NC_("ANALYSIS_Pricemat", "Rate"),
+    NC_("ANALYSIS_Pricemat", "The rate"),
+    NC_("ANALYSIS_Pricemat", "Yield"),
+    NC_("ANALYSIS_Pricemat", "The yield"),
+    NC_("ANALYSIS_Pricemat", "Basis"),
+    NC_("ANALYSIS_Pricemat", "The basis")
+};
+
+const char* ANALYSIS_Mduration[] =
+{
+    NC_("ANALYSIS_Mduration", "Returns the Macaulay modified duration for a security with an assumed par value of 100 currency units"),
+    NC_("ANALYSIS_Mduration", "Settlement"),
+    NC_("ANALYSIS_Mduration", "The settlement"),
+    NC_("ANALYSIS_Mduration", "Maturity"),
+    NC_("ANALYSIS_Mduration", "The maturity"),
+    NC_("ANALYSIS_Mduration", "Coupon"),
+    NC_("ANALYSIS_Mduration", "The coupon rate"),
+    NC_("ANALYSIS_Mduration", "Yield"),
+    NC_("ANALYSIS_Mduration", "The yield"),
+    NC_("ANALYSIS_Mduration", "Frequency"),
+    NC_("ANALYSIS_Mduration", "The frequency"),
+    NC_("ANALYSIS_Mduration", "Basis"),
+    NC_("ANALYSIS_Mduration", "The basis")
+};
+
+const char* ANALYSIS_Nominal[] =
+{
+    NC_("ANALYSIS_Nominal", "Returns the annual nominal interest rate"),
+    NC_("ANALYSIS_Nominal", "Effective rate"),
+    NC_("ANALYSIS_Nominal", "The effective interest rate"),
+    NC_("ANALYSIS_Nominal", "Npery"),
+    NC_("ANALYSIS_Nominal", "The periods")
+};
+
+const char* ANALYSIS_Dollarfr[] =
+{
+    NC_("ANALYSIS_Dollarfr", "Converts a price expressed as a decimal into a price expressed as a fraction"),
+    NC_("ANALYSIS_Dollarfr", "Decimal dollar"),
+    NC_("ANALYSIS_Dollarfr", "The decimal number"),
+    NC_("ANALYSIS_Dollarfr", "Fraction"),
+    NC_("ANALYSIS_Dollarfr", "The divisor")
+};
+
+const char* ANALYSIS_Dollarde[] =
+{
+    NC_("ANALYSIS_Dollarde", "Converts a price expressed as a fraction into a price expressed as a decimal"),
+    NC_("ANALYSIS_Dollarde", "Fractional dollar"),
+    NC_("ANALYSIS_Dollarde", "The number as a fraction"),
+    NC_("ANALYSIS_Dollarde", "Fraction"),
+    NC_("ANALYSIS_Dollarde", "The divisor")
+};
+
+const char* ANALYSIS_Yield[] =
+{
+    NC_("ANALYSIS_Yield", "Returns the yield on a security that pays periodic interest"),
+    NC_("ANALYSIS_Yield", "Settlement"),
+    NC_("ANALYSIS_Yield", "The settlement"),
+    NC_("ANALYSIS_Yield", "Maturity"),
+    NC_("ANALYSIS_Yield", "The maturity"),
+    NC_("ANALYSIS_Yield", "Rate"),
+    NC_("ANALYSIS_Yield", "The rate"),
+    NC_("ANALYSIS_Yield", "Price"),
+    NC_("ANALYSIS_Yield", "The price"),
+    NC_("ANALYSIS_Yield", "Redemption"),
+    NC_("ANALYSIS_Yield", "The redemption value"),
+    NC_("ANALYSIS_Yield", "Frequency"),
+    NC_("ANALYSIS_Yield", "The frequency"),
+    NC_("ANALYSIS_Yield", "Basis"),
+    NC_("ANALYSIS_Yield", "The basis")
+};
+
+const char* ANALYSIS_Yielddisc[] =
+{
+    NC_("ANALYSIS_Yielddisc", "Returns the annual yield for a discounted security"),
+    NC_("ANALYSIS_Yielddisc", "Settlement"),
+    NC_("ANALYSIS_Yielddisc", "The settlement"),
+    NC_("ANALYSIS_Yielddisc", "Maturity"),
+    NC_("ANALYSIS_Yielddisc", "The maturity"),
+    NC_("ANALYSIS_Yielddisc", "Price"),
+    NC_("ANALYSIS_Yielddisc", "The price"),
+    NC_("ANALYSIS_Yielddisc", "Redemption"),
+    NC_("ANALYSIS_Yielddisc", "The redemption value"),
+    NC_("ANALYSIS_Yielddisc", "Basis"),
+    NC_("ANALYSIS_Yielddisc", "The basis")
+};
+
+const char* ANALYSIS_Yieldmat[] =
+{
+    NC_("ANALYSIS_Yieldmat", "Returns the annual yield of a security that pays interest at maturity"),
+    NC_("ANALYSIS_Yieldmat", "Settlement"),
+    NC_("ANALYSIS_Yieldmat", "The settlement"),
+    NC_("ANALYSIS_Yieldmat", "Maturity"),
+    NC_("ANALYSIS_Yieldmat", "The maturity"),
+    NC_("ANALYSIS_Yieldmat", "Issue"),
+    NC_("ANALYSIS_Yieldmat", "The issue date"),
+    NC_("ANALYSIS_Yieldmat", "Rate"),
+    NC_("ANALYSIS_Yieldmat", "The rate"),
+    NC_("ANALYSIS_Yieldmat", "Price"),
+    NC_("ANALYSIS_Yieldmat", "The price"),
+    NC_("ANALYSIS_Yieldmat", "Basis"),
+    NC_("ANALYSIS_Yieldmat", "The basis")
+};
+
+const char* ANALYSIS_Tbilleq[] =
+{
+    NC_("ANALYSIS_Tbilleq", "Returns the bond-equivalent yield for a treasury bill"),
+    NC_("ANALYSIS_Tbilleq", "Settlement"),
+    NC_("ANALYSIS_Tbilleq", "The settlement"),
+    NC_("ANALYSIS_Tbilleq", "Maturity"),
+    NC_("ANALYSIS_Tbilleq", "The maturity"),
+    NC_("ANALYSIS_Tbilleq", "Discount"),
+    NC_("ANALYSIS_Tbilleq", "The discount rate")
+};
+
+const char* ANALYSIS_Tbillprice[] =
+{
+    NC_("ANALYSIS_Tbillprice", "Returns the price of 100 currency units face value for a treasury bill"),
+    NC_("ANALYSIS_Tbillprice", "Settlement"),
+    NC_("ANALYSIS_Tbillprice", "The settlement"),
+    NC_("ANALYSIS_Tbillprice", "Maturity"),
+    NC_("ANALYSIS_Tbillprice", "The maturity"),
+    NC_("ANALYSIS_Tbillprice", "Discount"),
+    NC_("ANALYSIS_Tbillprice", "The discount rate")
+};
+
+const char* ANALYSIS_Tbillyield[] =
+{
+    NC_("ANALYSIS_Tbillyield", "Returns the yield for a treasury bill"),
+    NC_("ANALYSIS_Tbillyield", "Settlement"),
+    NC_("ANALYSIS_Tbillyield", "The settlement"),
+    NC_("ANALYSIS_Tbillyield", "Maturity"),
+    NC_("ANALYSIS_Tbillyield", "The maturity"),
+    NC_("ANALYSIS_Tbillyield", "Price"),
+    NC_("ANALYSIS_Tbillyield", "The price")
+};
+
+const char* ANALYSIS_Oddfprice[] =
+{
+    NC_("ANALYSIS_Oddfprice", "Returns the price per $100 face value of a security with an odd first period"),
+    NC_("ANALYSIS_Oddfprice", "Settlement"),
+    NC_("ANALYSIS_Oddfprice", "The settlement"),
+    NC_("ANALYSIS_Oddfprice", "Maturity"),
+    NC_("ANALYSIS_Oddfprice", "The maturity"),
+    NC_("ANALYSIS_Oddfprice", "Issue"),
+    NC_("ANALYSIS_Oddfprice", "The issue date"),
+    NC_("ANALYSIS_Oddfprice", "First coupon"),
+    NC_("ANALYSIS_Oddfprice", "The first coupon date"),
+    NC_("ANALYSIS_Oddfprice", "Rate"),
+    NC_("ANALYSIS_Oddfprice", "The rate"),
+    NC_("ANALYSIS_Oddfprice", "Yield"),
+    NC_("ANALYSIS_Oddfprice", "The yield"),
+    NC_("ANALYSIS_Oddfprice", "Redemption"),
+    NC_("ANALYSIS_Oddfprice", "The redemption value"),
+    NC_("ANALYSIS_Oddfprice", "Frequency"),
+    NC_("ANALYSIS_Oddfprice", "The frequency"),
+    NC_("ANALYSIS_Oddfprice", "Basis"),
+    NC_("ANALYSIS_Oddfprice", "The basis")
+};
+
+const char* ANALYSIS_Oddfyield[] =
+{
+    NC_("ANALYSIS_Oddfyield", "Returns the yield of a security with an odd first period"),
+    NC_("ANALYSIS_Oddfyield", "Settlement"),
+    NC_("ANALYSIS_Oddfyield", "The settlement"),
+    NC_("ANALYSIS_Oddfyield", "Maturity"),
+    NC_("ANALYSIS_Oddfyield", "The maturity"),
+    NC_("ANALYSIS_Oddfyield", "Issue"),
+    NC_("ANALYSIS_Oddfyield", "The issue date"),
+    NC_("ANALYSIS_Oddfyield", "First coupon"),
+    NC_("ANALYSIS_Oddfyield", "The first coupon date"),
+    NC_("ANALYSIS_Oddfyield", "Rate"),
+    NC_("ANALYSIS_Oddfyield", "The rate"),
+    NC_("ANALYSIS_Oddfyield", "Price"),
+    NC_("ANALYSIS_Oddfyield", "The price"),
+    NC_("ANALYSIS_Oddfyield", "Redemption"),
+    NC_("ANALYSIS_Oddfyield", "The redemption value"),
+    NC_("ANALYSIS_Oddfyield", "Frequency"),
+    NC_("ANALYSIS_Oddfyield", "The frequency"),
+    NC_("ANALYSIS_Oddfyield", "Basis"),
+    NC_("ANALYSIS_Oddfyield", "The basis")
+};
+
+const char* ANALYSIS_Oddlprice[] =
+{
+    NC_("ANALYSIS_Oddlprice", "Returns the price per $100 face value of a security with an odd last period"),
+    NC_("ANALYSIS_Oddlprice", "Settlement"),
+    NC_("ANALYSIS_Oddlprice", "The settlement"),
+    NC_("ANALYSIS_Oddlprice", "Maturity"),
+    NC_("ANALYSIS_Oddlprice", "The maturity"),
+    NC_("ANALYSIS_Oddlprice", "Last interest"),
+    NC_("ANALYSIS_Oddlprice", "The last interest date"),
+    NC_("ANALYSIS_Oddlprice", "Rate"),
+    NC_("ANALYSIS_Oddlprice", "The rate"),
+    NC_("ANALYSIS_Oddlprice", "Yield"),
+    NC_("ANALYSIS_Oddlprice", "The yield"),
+    NC_("ANALYSIS_Oddlprice", "Redemption"),
+    NC_("ANALYSIS_Oddlprice", "The redemption value"),
+    NC_("ANALYSIS_Oddlprice", "Frequency"),
+    NC_("ANALYSIS_Oddlprice", "The frequency"),
+    NC_("ANALYSIS_Oddlprice", "Basis"),
+    NC_("ANALYSIS_Oddlprice", "The basis")
+};
+
+const char* ANALYSIS_Oddlyield[] =
+{
+    NC_("ANALYSIS_Oddlyield", "Returns the yield of a security with an odd last period"),
+    NC_("ANALYSIS_Oddlyield", "Settlement"),
+    NC_("ANALYSIS_Oddlyield", "The settlement"),
+    NC_("ANALYSIS_Oddlyield", "Maturity"),
+    NC_("ANALYSIS_Oddlyield", "The maturity"),
+    NC_("ANALYSIS_Oddlyield", "Last interest"),
+    NC_("ANALYSIS_Oddlyield", "The last interest date"),
+    NC_("ANALYSIS_Oddlyield", "Rate"),
+    NC_("ANALYSIS_Oddlyield", "The rate"),
+    NC_("ANALYSIS_Oddlyield", "Price"),
+    NC_("ANALYSIS_Oddlyield", "The price"),
+    NC_("ANALYSIS_Oddlyield", "Redemption"),
+    NC_("ANALYSIS_Oddlyield", "The redemption value"),
+    NC_("ANALYSIS_Oddlyield", "Frequency"),
+    NC_("ANALYSIS_Oddlyield", "The frequency"),
+    NC_("ANALYSIS_Oddlyield", "Basis"),
+    NC_("ANALYSIS_Oddlyield", "The basis")
+};
+
+const char* ANALYSIS_Xirr[] =
+{
+    NC_("ANALYSIS_Xirr", "Returns the internal rate of return for a non-periodic schedule of payments"),
+    NC_("ANALYSIS_Xirr", "Values"),
+    NC_("ANALYSIS_Xirr", "The values"),
+    NC_("ANALYSIS_Xirr", "Dates"),
+    NC_("ANALYSIS_Xirr", "The dates"),
+    NC_("ANALYSIS_Xirr", "Guess"),
+    NC_("ANALYSIS_Xirr", "The guess")
+};
+
+const char* ANALYSIS_Xnpv[] =
+{
+    NC_("ANALYSIS_Xnpv", "Returns the net present value for a non-periodic schedule of payments"),
+    NC_("ANALYSIS_Xnpv", "Rate"),
+    NC_("ANALYSIS_Xnpv", "The rate"),
+    NC_("ANALYSIS_Xnpv", "Values"),
+    NC_("ANALYSIS_Xnpv", "The values"),
+    NC_("ANALYSIS_Xnpv", "Dates"),
+    NC_("ANALYSIS_Xnpv", "The dates")
+};
+
+const char* ANALYSIS_Intrate[] =
+{
+    NC_("ANALYSIS_Intrate", "Returns the interest rate for a fully invested security"),
+    NC_("ANALYSIS_Intrate", "Settlement"),
+    NC_("ANALYSIS_Intrate", "The settlement"),
+    NC_("ANALYSIS_Intrate", "Maturity"),
+    NC_("ANALYSIS_Intrate", "The maturity"),
+    NC_("ANALYSIS_Intrate", "Investment"),
+    NC_("ANALYSIS_Intrate", "The investment"),
+    NC_("ANALYSIS_Intrate", "Redemption"),
+    NC_("ANALYSIS_Intrate", "The redemption value"),
+    NC_("ANALYSIS_Intrate", "Basis"),
+    NC_("ANALYSIS_Intrate", "The basis")
+};
+
+const char* ANALYSIS_Coupncd[] =
+{
+    NC_("ANALYSIS_Coupncd", "Returns the first coupon date after the settlement date"),
+    NC_("ANALYSIS_Coupncd", "Settlement"),
+    NC_("ANALYSIS_Coupncd", "The settlement"),
+    NC_("ANALYSIS_Coupncd", "Maturity"),
+    NC_("ANALYSIS_Coupncd", "The maturity"),
+    NC_("ANALYSIS_Coupncd", "Frequency"),
+    NC_("ANALYSIS_Coupncd", "The frequency"),
+    NC_("ANALYSIS_Coupncd", "Basis"),
+    NC_("ANALYSIS_Coupncd", "The basis")
+};
+
+const char* ANALYSIS_Coupdays[] =
+{
+    NC_("ANALYSIS_Coupdays", "Returns the number of days in the coupon period containing the settlement date"),
+    NC_("ANALYSIS_Coupdays", "Settlement"),
+    NC_("ANALYSIS_Coupdays", "The settlement"),
+    NC_("ANALYSIS_Coupdays", "Maturity"),
+    NC_("ANALYSIS_Coupdays", "The maturity"),
+    NC_("ANALYSIS_Coupdays", "Frequency"),
+    NC_("ANALYSIS_Coupdays", "The frequency"),
+    NC_("ANALYSIS_Coupdays", "Basis"),
+    NC_("ANALYSIS_Coupdays", "The basis")
+};
+
+const char* ANALYSIS_Coupdaysnc[] =
+{
+    NC_("ANALYSIS_Coupdaysnc", "Returns the number of days from the settlement date to the next coupon date"),
+    NC_("ANALYSIS_Coupdaysnc", "Settlement"),
+    NC_("ANALYSIS_Coupdaysnc", "The settlement"),
+    NC_("ANALYSIS_Coupdaysnc", "Maturity"),
+    NC_("ANALYSIS_Coupdaysnc", "The maturity"),
+    NC_("ANALYSIS_Coupdaysnc", "Frequency"),
+    NC_("ANALYSIS_Coupdaysnc", "The frequency"),
+    NC_("ANALYSIS_Coupdaysnc", "Basis"),
+    NC_("ANALYSIS_Coupdaysnc", "The basis")
+};
+
+const char* ANALYSIS_Coupdaybs[] =
+{
+    NC_("ANALYSIS_Coupdaybs", "Returns the number of days from the beginning of the coupon period to the settlement date"),
+    NC_("ANALYSIS_Coupdaybs", "Settlement"),
+    NC_("ANALYSIS_Coupdaybs", "The settlement"),
+    NC_("ANALYSIS_Coupdaybs", "Maturity"),
+    NC_("ANALYSIS_Coupdaybs", "The maturity"),
+    NC_("ANALYSIS_Coupdaybs", "Frequency"),
+    NC_("ANALYSIS_Coupdaybs", "The frequency"),
+    NC_("ANALYSIS_Coupdaybs", "Basis"),
+    NC_("ANALYSIS_Coupdaybs", "The basis")
+};
+
+const char* ANALYSIS_Couppcd[] =
+{
+    NC_("ANALYSIS_Couppcd", "Returns the last coupon date preceding the settlement date"),
+    NC_("ANALYSIS_Couppcd", "Settlement"),
+    NC_("ANALYSIS_Couppcd", "The settlement"),
+    NC_("ANALYSIS_Couppcd", "Maturity"),
+    NC_("ANALYSIS_Couppcd", "The maturity"),
+    NC_("ANALYSIS_Couppcd", "Frequency"),
+    NC_("ANALYSIS_Couppcd", "The frequency"),
+    NC_("ANALYSIS_Couppcd", "Basis"),
+    NC_("ANALYSIS_Couppcd", "The basis")
+};
+
+const char* ANALYSIS_Coupnum[] =
+{
+    NC_("ANALYSIS_Coupnum", "Returns the number of coupons payable between the settlement and maturity dates"),
+    NC_("ANALYSIS_Coupnum", "Settlement"),
+    NC_("ANALYSIS_Coupnum", "The settlement"),
+    NC_("ANALYSIS_Coupnum", "Maturity"),
+    NC_("ANALYSIS_Coupnum", "The maturity"),
+    NC_("ANALYSIS_Coupnum", "Frequency"),
+    NC_("ANALYSIS_Coupnum", "The frequency"),
+    NC_("ANALYSIS_Coupnum", "Basis"),
+    NC_("ANALYSIS_Coupnum", "The basis")
+};
+
+const char* ANALYSIS_Fvschedule[] =
+{
+    NC_("ANALYSIS_Fvschedule", "Returns the future value of the initial principal after a series of compound interest rates are applied"),
+    NC_("ANALYSIS_Fvschedule", "Principal"),
+    NC_("ANALYSIS_Fvschedule", "The principal"),
+    NC_("ANALYSIS_Fvschedule", "Schedule"),
+    NC_("ANALYSIS_Fvschedule", "The schedule")
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

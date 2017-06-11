@@ -44,11 +44,11 @@
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 
-#include "res_bmp.hrc"
+
 #include "sdresid.hxx"
 #include "strings.hrc"
 #include "app.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;

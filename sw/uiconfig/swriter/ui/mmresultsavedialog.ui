@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="MMResultSaveDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Save merged document</property>
+    <property name="title" translatable="yes" context="mmresultsavedialog|MMResultSaveDialog">Save merged document</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -18,7 +18,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="ok">
-                <property name="label" translatable="yes">Save Documents</property>
+                <property name="label" translatable="yes" context="mmresultsavedialog|ok">Save Documents</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -91,7 +91,7 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="singlerb">
-                        <property name="label" translatable="yes">S_ave as a single large document</property>
+                        <property name="label" translatable="yes" context="mmresultsavedialog|singlerb">S_ave as a single large document</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -108,7 +108,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="individualrb">
-                        <property name="label" translatable="yes">Sa_ve as individual documents</property>
+                        <property name="label" translatable="yes" context="mmresultsavedialog|individualrb">Sa_ve as individual documents</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -129,7 +129,7 @@
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkRadioButton" id="fromrb">
-                            <property name="label" translatable="yes">_From</property>
+                            <property name="label" translatable="yes" context="mmresultsavedialog|fromrb">_From</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -150,7 +150,7 @@
                           <object class="GtkLabel" id="toft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_To</property>
+                            <property name="label" translatable="yes" context="mmresultsavedialog|toft">_To</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">to-nospin</property>
                           </object>
@@ -198,7 +198,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Save As options</property>
+                <property name="label" translatable="yes" context="mmresultsavedialog|label2">Save As options</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

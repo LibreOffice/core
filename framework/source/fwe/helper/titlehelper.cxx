@@ -19,7 +19,7 @@
 
 #include <framework/titlehelper.hxx>
 #include <classes/fwkresid.hxx>
-#include <classes/resource.hrc>
+#include <strings.hrc>
 #include <services.h>
 #include <properties.h>
 

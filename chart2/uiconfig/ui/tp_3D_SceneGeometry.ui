@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="chart">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustmentPERSPECTIVE">
     <property name="upper">100</property>
@@ -21,7 +21,7 @@
     <property name="column_spacing">12</property>
     <child>
       <object class="GtkCheckButton" id="CBX_RIGHT_ANGLED_AXES">
-        <property name="label" translatable="yes">_Right-angled axes</property>
+        <property name="label" translatable="yes" context="tp_3D_SceneGeometry|CBX_RIGHT_ANGLED_AXES">_Right-angled axes</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="receives_default">False</property>
@@ -39,7 +39,7 @@
       <object class="GtkLabel" id="FT_X_ROTATION">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_X rotation</property>
+        <property name="label" translatable="yes" context="tp_3D_SceneGeometry|FT_X_ROTATION">_X rotation</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">MTR_FLD_X_ROTATION:0degrees</property>
         <property name="xalign">0</property>
@@ -53,7 +53,7 @@
       <object class="GtkLabel" id="FT_Y_ROTATION">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Y rotation</property>
+        <property name="label" translatable="yes" context="tp_3D_SceneGeometry|FT_Y_ROTATION">_Y rotation</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">MTR_FLD_Y_ROTATION:0degrees</property>
         <property name="xalign">0</property>
@@ -67,7 +67,7 @@
       <object class="GtkLabel" id="FT_Z_ROTATION">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Z rotation</property>
+        <property name="label" translatable="yes" context="tp_3D_SceneGeometry|FT_Z_ROTATION">_Z rotation</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">MTR_FLD_Z_ROTATION:0degrees</property>
         <property name="xalign">0</property>
@@ -79,7 +79,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="CBX_PERSPECTIVE">
-        <property name="label" translatable="yes">_Perspective</property>
+        <property name="label" translatable="yes" context="tp_3D_SceneGeometry|CBX_PERSPECTIVE">_Perspective</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="receives_default">False</property>
@@ -106,7 +106,7 @@
         </accessibility>
         <child internal-child="accessible">
           <object class="AtkObject" id="MTR_FLD_PERSPECTIVE:0%-atkobject">
-            <property name="AtkObject::accessible-name" translatable="yes">Perspective</property>
+            <property name="AtkObject::accessible-name" translatable="yes" context="tp_3D_SceneGeometry|MTR_FLD_PERSPECTIVE:0%-atkobject">Perspective</property>
           </object>
         </child>
       </object>

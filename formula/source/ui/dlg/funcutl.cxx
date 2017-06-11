@@ -27,7 +27,7 @@
 #include "formula/IControlReferenceHandler.hxx"
 #include "ControlHelper.hxx"
 #include "ModuleHelper.hxx"
-#include "ForResId.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include "com/sun/star/accessibility/AccessibleRole.hpp"
 
@@ -523,8 +523,8 @@ RefButton::RefButton( vcl::Window* _pParent, WinBits nStyle ) :
     ImageButton(_pParent, nStyle),
     aImgRefStart(BitmapEx(RID_BMP_REFBTN1)),
     aImgRefDone(BitmapEx(RID_BMP_REFBTN2)),
-    aShrinkQuickHelp( ModuleRes( RID_STR_SHRINK ).toString() ),
-    aExpandQuickHelp( ModuleRes( RID_STR_EXPAND ).toString() ),
+    aShrinkQuickHelp( ModuleRes( RID_STR_SHRINK ) ),
+    aExpandQuickHelp( ModuleRes( RID_STR_EXPAND ) ),
     pAnyRefDlg( nullptr ),
     pRefEdit( nullptr )
 {

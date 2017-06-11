@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -46,7 +46,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Position</property>
+            <property name="label" translatable="yes" context="paratabspage|label1">Position</property>
             <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -81,7 +81,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkRadioButton" id="radiobuttonBTN_TABTYPE_DECIMAL">
-                    <property name="label" translatable="yes">Deci_mal</property>
+                    <property name="label" translatable="yes" context="paratabspage|radiobuttonBTN_TABTYPE_DECIMAL">Deci_mal</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -154,7 +154,7 @@
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkRadioButton" id="radiobuttonBTN_TABTYPE_LEFT">
-                        <property name="label" translatable="yes">_Left</property>
+                        <property name="label" translatable="yes" context="paratabspage|radiobuttonBTN_TABTYPE_LEFT">_Left</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
@@ -171,7 +171,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="radiobuttonST_LEFTTAB_ASIAN">
-                        <property name="label" translatable="yes">_Left/Top</property>
+                        <property name="label" translatable="yes" context="paratabspage|radiobuttonST_LEFTTAB_ASIAN">_Left/Top</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
@@ -198,7 +198,7 @@
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkRadioButton" id="radiobuttonBTN_TABTYPE_RIGHT">
-                        <property name="label" translatable="yes">Righ_t</property>
+                        <property name="label" translatable="yes" context="paratabspage|radiobuttonBTN_TABTYPE_RIGHT">Righ_t</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
@@ -214,7 +214,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="radiobuttonST_RIGHTTAB_ASIAN">
-                        <property name="label" translatable="yes">Righ_t/Bottom</property>
+                        <property name="label" translatable="yes" context="paratabspage|radiobuttonST_RIGHTTAB_ASIAN">Righ_t/Bottom</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
@@ -236,7 +236,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="radiobuttonBTN_TABTYPE_CENTER">
-                    <property name="label" translatable="yes">C_entered</property>
+                    <property name="label" translatable="yes" context="paratabspage|radiobuttonBTN_TABTYPE_CENTER">C_entered</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -260,7 +260,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
-                        <property name="label" translatable="yes">_Character</property>
+                        <property name="label" translatable="yes" context="paratabspage|labelFT_TABTYPE_DECCHAR">_Character</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">entryED_TABTYPE_DECCHAR</property>
                         <property name="xalign">0</property>
@@ -280,7 +280,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Type</property>
+            <property name="label" translatable="yes" context="paratabspage|label2">Type</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -314,7 +314,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkRadioButton" id="radiobuttonBTN_FILLCHAR_NO">
-                    <property name="label" translatable="yes">N_one</property>
+                    <property name="label" translatable="yes" context="paratabspage|radiobuttonBTN_FILLCHAR_NO">N_one</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -331,7 +331,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="radiobuttonBTN_FILLCHAR_POINTS">
-                    <property name="label" translatable="yes">_........</property>
+                    <property name="label" translatable="yes" context="paratabspage|radiobuttonBTN_FILLCHAR_POINTS">_........</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -348,7 +348,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="radiobuttonBTN_FILLCHAR_DASHLINE">
-                    <property name="label" translatable="yes">_--------</property>
+                    <property name="label" translatable="yes" context="paratabspage|radiobuttonBTN_FILLCHAR_DASHLINE">_--------</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -365,7 +365,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="radiobuttonBTN_FILLCHAR_UNDERSCORE">
-                    <property name="label" translatable="yes">______</property>
+                    <property name="label" translatable="yes" context="paratabspage|radiobuttonBTN_FILLCHAR_UNDERSCORE">______</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -382,7 +382,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="radiobuttonBTN_FILLCHAR_OTHER">
-                    <property name="label" translatable="yes">C_haracter</property>
+                    <property name="label" translatable="yes" context="paratabspage|radiobuttonBTN_FILLCHAR_OTHER">C_haracter</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -422,7 +422,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Fill Character</property>
+            <property name="label" translatable="yes" context="paratabspage|label3">Fill Character</property>
             <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -460,7 +460,7 @@
         </child>
         <child>
           <object class="GtkButton" id="buttonBTN_DELALL">
-            <property name="label" translatable="yes">Delete _all</property>
+            <property name="label" translatable="yes" context="paratabspage|buttonBTN_DELALL">Delete _all</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="receives_default">True</property>
@@ -489,7 +489,7 @@
         <child>
           <object class="GtkLabel" id="label4">
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">points</property>
+            <property name="label" translatable="yes" context="paratabspage|label4">points</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">radiobuttonBTN_FILLCHAR_POINTS</property>
           </object>
@@ -502,7 +502,7 @@
         <child>
           <object class="GtkLabel" id="label5">
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">dashes</property>
+            <property name="label" translatable="yes" context="paratabspage|label5">dashes</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">radiobuttonBTN_FILLCHAR_DASHLINE</property>
           </object>
@@ -515,7 +515,7 @@
         <child>
           <object class="GtkLabel" id="label6">
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">underscores</property>
+            <property name="label" translatable="yes" context="paratabspage|label6">underscores</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">radiobuttonBTN_FILLCHAR_UNDERSCORE</property>
           </object>

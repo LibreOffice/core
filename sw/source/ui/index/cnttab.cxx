@@ -53,7 +53,7 @@
 #include <cnttab.hxx>
 #include <swuicnttab.hxx>
 #include <poolfmt.hxx>
-#include <poolfmt.hrc>
+#include <strings.hrc>
 #include <uitool.hxx>
 #include <fmtcol.hxx>
 #include <fldbas.hxx>
@@ -66,9 +66,10 @@
 
 #include <cmdid.h>
 #include <helpid.h>
-#include <utlui.hrc>
+#include <strings.hrc>
 #include <index.hrc>
 #include <globals.hrc>
+#include <cnttab.hrc>
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <toxwrap.hxx>
@@ -779,7 +780,6 @@ IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, Button*, pBtn, void)
 SwTOXSelectTabPage::SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet)
     : SfxTabPage(pParent, "TocIndexPage",
         "modules/swriter/ui/tocindexpage.ui", &rAttrSet)
-    , aFromNames(ResId(RES_SRCTYPES, *pSwResMgr))
     , pIndexRes(nullptr)
     , sAutoMarkType(SwResId(STR_AUTOMARK_TYPE))
     , m_bWaitingInitialSettings(true)
@@ -848,11 +848,10 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& r
 
     sAddStyleContent = m_pAddStylesCB->GetText();
 
-    ResStringArray& rNames = aFromNames.GetNames();
-    for(sal_uInt32 i = 0; i < rNames.Count(); i++)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(RES_SRCTYPES); i++)
     {
-        m_pFromObjCLB->InsertEntry(rNames.GetString(i));
-        m_pFromObjCLB->SetEntryData( i, reinterpret_cast<void*>(rNames.GetValue(i)) );
+        m_pFromObjCLB->InsertEntry(SwResId(RES_SRCTYPES[i].first));
+        m_pFromObjCLB->SetEntryData(i, reinterpret_cast<void*>(RES_SRCTYPES[i].second));
     }
 
     SetExchangeSupport();
@@ -1790,6 +1789,44 @@ void SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
         SvTreeListBox::RequestHelp(rHEvt);
 }
 
+namespace
+{
+    const char* STR_AUTH_FIELD_ARY[] =
+    {
+        STR_AUTH_FIELD_IDENTIFIER,
+        STR_AUTH_FIELD_AUTHORITY_TYPE,
+        STR_AUTH_FIELD_ADDRESS,
+        STR_AUTH_FIELD_ANNOTE,
+        STR_AUTH_FIELD_AUTHOR,
+        STR_AUTH_FIELD_BOOKTITLE,
+        STR_AUTH_FIELD_CHAPTER,
+        STR_AUTH_FIELD_EDITION,
+        STR_AUTH_FIELD_EDITOR,
+        STR_AUTH_FIELD_HOWPUBLISHED,
+        STR_AUTH_FIELD_INSTITUTION,
+        STR_AUTH_FIELD_JOURNAL,
+        STR_AUTH_FIELD_MONTH,
+        STR_AUTH_FIELD_NOTE,
+        STR_AUTH_FIELD_NUMBER,
+        STR_AUTH_FIELD_ORGANIZATIONS,
+        STR_AUTH_FIELD_PAGES,
+        STR_AUTH_FIELD_PUBLISHER,
+        STR_AUTH_FIELD_SCHOOL,
+        STR_AUTH_FIELD_SERIES,
+        STR_AUTH_FIELD_TITLE,
+        STR_AUTH_FIELD_TYPE,
+        STR_AUTH_FIELD_VOLUME,
+        STR_AUTH_FIELD_YEAR,
+        STR_AUTH_FIELD_URL,
+        STR_AUTH_FIELD_CUSTOM1,
+        STR_AUTH_FIELD_CUSTOM2,
+        STR_AUTH_FIELD_CUSTOM3,
+        STR_AUTH_FIELD_CUSTOM4,
+        STR_AUTH_FIELD_CUSTOM5,
+        STR_AUTH_FIELD_ISBN
+    };
+}
+
 SwTOXEntryTabPage::SwTOXEntryTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet)
     : SfxTabPage(pParent, "TocEntriesPage",
         "modules/swriter/ui/tocentriespage.ui", &rAttrSet)
@@ -1919,7 +1956,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(vcl::Window* pParent, const SfxItemSet& rAt
     //fill the types in
     for (sal_uInt16 i = 0; i < AUTH_FIELD_END; ++i)
     {
-        sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(SwResId(STR_AUTH_FIELD_START + i));
+        sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(SwResId(STR_AUTH_FIELD_ARY[i]));
         m_pAuthFieldsLB->SetEntryData(nPos, reinterpret_cast< void * >(sal::static_int_cast< sal_uIntPtr >(i)));
     }
     sal_Int32 nPos = m_pFirstKeyLB->InsertEntry(sNoCharSortKey);
@@ -2255,7 +2292,7 @@ void SwTOXEntryTabPage::PreTokenButtonRemoved(const SwFormToken& rToken)
 {
     //fill it into the ListBox
     sal_uInt32 nData = rToken.nAuthorityField;
-    sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(SwResId(STR_AUTH_FIELD_START + nData));
+    sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(SwResId(STR_AUTH_FIELD_ARY[nData]));
     m_pAuthFieldsLB->SetEntryData(nPos, reinterpret_cast<void*>((sal_uIntPtr)nData));
 }
 
@@ -2380,7 +2417,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox, void)
         m_pAuthFieldsLB->Clear();
         for( sal_uInt32 i = 0; i < AUTH_FIELD_END; i++)
         {
-            sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(SwResId(STR_AUTH_FIELD_START + i));
+            sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(SwResId(STR_AUTH_FIELD_ARY[i]));
             m_pAuthFieldsLB->SetEntryData(nPos, reinterpret_cast<void*>((sal_uIntPtr)i));
         }
 
@@ -2675,6 +2712,34 @@ OUString SwTOXEntryTabPage::GetLevelHelp(sal_uInt16 nLevel) const
     return sRet;
 }
 
+static const char* STR_TOKEN_ARY[] =
+{
+    STR_TOKEN_ENTRY_NO,
+    STR_TOKEN_ENTRY,    //mapped from original STR_TOKEN_ENTRY_TEXT,
+    STR_TOKEN_ENTRY,
+    STR_TOKEN_TAB_STOP,
+    nullptr,
+    STR_TOKEN_PAGE_NUMS,
+    STR_TOKEN_CHAPTER_INFO,
+    STR_TOKEN_LINK_START,
+    STR_TOKEN_LINK_END,
+    STR_TOKEN_AUTHORITY
+};
+
+static const char* STR_TOKEN_HELP_ARY[] =
+{
+    STR_TOKEN_HELP_ENTRY_NO,
+    STR_TOKEN_HELP_ENTRY,   // mapped from original STR_TOKEN_HELP_ENTRY_TEXT,
+    STR_TOKEN_HELP_ENTRY,
+    STR_TOKEN_HELP_TAB_STOP,
+    STR_TOKEN_HELP_TEXT,
+    STR_TOKEN_HELP_PAGE_NUMS,
+    STR_TOKEN_HELP_CHAPTER_INFO,
+    STR_TOKEN_HELP_LINK_START,
+    STR_TOKEN_HELP_LINK_END,
+    STR_TOKEN_HELP_AUTHORITY
+};
+
 SwTokenWindow::SwTokenWindow(vcl::Window* pParent)
     : VclHBox(pParent)
     , m_pForm(nullptr)
@@ -2693,15 +2758,12 @@ SwTokenWindow::SwTokenWindow(vcl::Window* pParent)
 
     for (sal_uInt32 i = 0; i < TOKEN_END; ++i)
     {
-        sal_uInt32 nTextId = STR_BUTTON_TEXT_START + i;
-        if( STR_TOKEN_ENTRY_TEXT == nTextId )
-            nTextId = STR_TOKEN_ENTRY;
-        m_aButtonTexts[i] = SwResId(nTextId);
+        const char* pTextId = STR_TOKEN_ARY[i];
+        if (pTextId)
+            m_aButtonTexts[i] = SwResId(pTextId);
 
-        sal_uInt32 nHelpId = STR_BUTTON_HELP_TEXT_START + i;
-        if(STR_TOKEN_HELP_ENTRY_TEXT == nHelpId)
-            nHelpId = STR_TOKEN_HELP_ENTRY;
-        m_aButtonHelpTexts[i] = SwResId(nHelpId);
+        const char* pHelpId = STR_TOKEN_HELP_ARY[i];
+        m_aButtonHelpTexts[i] = SwResId(pHelpId);
     }
 
     m_sAccessibleName = SwResId(STR_STRUCTURE);

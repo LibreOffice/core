@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">19.989999999999998</property>
@@ -61,7 +61,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Level</property>
+            <property name="label" translatable="yes" context="numberingoptionspage|label1">Level</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -107,7 +107,7 @@
                           <object class="GtkLabel" id="label4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Number:</property>
+                            <property name="label" translatable="yes" context="numberingoptionspage|label4">Number:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">numfmtlb</property>
                             <property name="xalign">1</property>
@@ -156,7 +156,7 @@
                           <object class="GtkLabel" id="startatft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Start at:</property>
+                            <property name="label" translatable="yes" context="numberingoptionspage|startatft">Start at:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">startat</property>
                             <property name="xalign">1</property>
@@ -180,7 +180,7 @@
                           <object class="GtkLabel" id="bitmapft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Graphics:</property>
+                            <property name="label" translatable="yes" context="numberingoptionspage|bitmapft">Graphics:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">bitmap:bitmapmenu</property>
                             <property name="xalign">1</property>
@@ -194,7 +194,7 @@
                           <object class="GtkLabel" id="widthft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Width:</property>
+                            <property name="label" translatable="yes" context="numberingoptionspage|widthft">Width:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">widthmf:0.00cm</property>
                             <property name="xalign">1</property>
@@ -221,7 +221,7 @@
                           <object class="GtkLabel" id="heightft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Height:</property>
+                            <property name="label" translatable="yes" context="numberingoptionspage|heightft">Height:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">heightmf:0.00cm</property>
                             <property name="ellipsize">end</property>
@@ -247,7 +247,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="keepratio">
-                            <property name="label" translatable="yes">Keep ratio</property>
+                            <property name="label" translatable="yes" context="numberingoptionspage|keepratio">Keep ratio</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -263,7 +263,7 @@
                           <object class="GtkLabel" id="orientft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Alignment:</property>
+                            <property name="label" translatable="yes" context="numberingoptionspage|orientft">Alignment:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">orientlb</property>
                             <property name="xalign">1</property>
@@ -278,15 +278,15 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <items>
-                              <item translatable="yes">Top of baseline</item>
-                              <item translatable="yes">Center of baseline</item>
-                              <item translatable="yes">Bottom of baseline</item>
-                              <item translatable="yes">Top of character</item>
-                              <item translatable="yes">Center of character</item>
-                              <item translatable="yes">Bottom of character</item>
-                              <item translatable="yes">Top of line</item>
-                              <item translatable="yes">Center of line</item>
-                              <item translatable="yes">Bottom of line</item>
+                              <item translatable="yes" context="numberingoptionspage|orientlb">Top of baseline</item>
+                              <item translatable="yes" context="numberingoptionspage|orientlb">Center of baseline</item>
+                              <item translatable="yes" context="numberingoptionspage|orientlb">Bottom of baseline</item>
+                              <item translatable="yes" context="numberingoptionspage|orientlb">Top of character</item>
+                              <item translatable="yes" context="numberingoptionspage|orientlb">Center of character</item>
+                              <item translatable="yes" context="numberingoptionspage|orientlb">Bottom of character</item>
+                              <item translatable="yes" context="numberingoptionspage|orientlb">Top of line</item>
+                              <item translatable="yes" context="numberingoptionspage|orientlb">Center of line</item>
+                              <item translatable="yes" context="numberingoptionspage|orientlb">Bottom of line</item>
                             </items>
                           </object>
                           <packing>
@@ -296,7 +296,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="bitmap:bitmapmenu">
-                            <property name="label" translatable="yes">Select...</property>
+                            <property name="label" translatable="yes" context="numberingoptionspage|bitmap:bitmapmenu">Select...</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -333,9 +333,9 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <items>
-                              <item translatable="yes">Left</item>
-                              <item translatable="yes">Centered</item>
-                              <item translatable="yes">Right</item>
+                              <item translatable="yes" context="numberingoptionspage|numalign">Left</item>
+                              <item translatable="yes" context="numberingoptionspage|numalign">Centered</item>
+                              <item translatable="yes" context="numberingoptionspage|numalign">Right</item>
                             </items>
                           </object>
                           <packing>
@@ -345,7 +345,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="bullet">
-                            <property name="label" translatable="yes">Select...</property>
+                            <property name="label" translatable="yes" context="numberingoptionspage|bullet">Select...</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -364,7 +364,7 @@
                               <object class="GtkLabel" id="prefixft">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Before:</property>
+                                <property name="label" translatable="yes" context="numberingoptionspage|prefixft">Before:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">prefix</property>
                                 <property name="xalign">1</property>
@@ -385,7 +385,7 @@
                               <object class="GtkLabel" id="separator">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Separator</property>
+                                <property name="label" translatable="yes" context="numberingoptionspage|separator">Separator</property>
                                 <property name="xalign">1</property>
                               </object>
                             </child>
@@ -421,7 +421,7 @@
                           <object class="GtkLabel" id="suffixft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">After:</property>
+                            <property name="label" translatable="yes" context="numberingoptionspage|suffixft">After:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">suffix</property>
                             <property name="xalign">1</property>
@@ -435,7 +435,7 @@
                           <object class="GtkLabel" id="sublevelsft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Show sublevels:</property>
+                            <property name="label" translatable="yes" context="numberingoptionspage|sublevelsft">Show sublevels:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">sublevels</property>
                             <property name="ellipsize">end</property>
@@ -450,7 +450,7 @@
                           <object class="GtkLabel" id="bulletft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Character:</property>
+                            <property name="label" translatable="yes" context="numberingoptionspage|bulletft">Character:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">bullet</property>
                             <property name="xalign">1</property>
@@ -464,7 +464,7 @@
                           <object class="GtkLabel" id="relsizeft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Relative size:</property>
+                            <property name="label" translatable="yes" context="numberingoptionspage|relsizeft">_Relative size:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">relsize:0%</property>
                             <property name="xalign">1</property>
@@ -478,7 +478,7 @@
                           <object class="GtkLabel" id="colorft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Color:</property>
+                            <property name="label" translatable="yes" context="numberingoptionspage|colorft">Color:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">color</property>
                             <property name="xalign">1</property>
@@ -492,7 +492,7 @@
                           <object class="GtkLabel" id="charstyleft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Character style:</property>
+                            <property name="label" translatable="yes" context="numberingoptionspage|charstyleft">Character style:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">charstyle</property>
                             <property name="xalign">1</property>
@@ -506,7 +506,7 @@
                           <object class="GtkLabel" id="numalignft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Alignment:</property>
+                            <property name="label" translatable="yes" context="numberingoptionspage|numalignft">_Alignment:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">numalign</property>
                             <property name="xalign">1</property>
@@ -550,7 +550,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Numbering</property>
+                <property name="label" translatable="yes" context="numberingoptionspage|label2">Numbering</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -577,7 +577,7 @@
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkCheckButton" id="allsame">
-                    <property name="label" translatable="yes">_Consecutive numbering</property>
+                    <property name="label" translatable="yes" context="numberingoptionspage|allsame">_Consecutive numbering</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -593,7 +593,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">All Levels</property>
+                <property name="label" translatable="yes" context="numberingoptionspage|label3">All Levels</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -621,7 +621,7 @@
       <object class="GtkMenuItem" id="fromfile">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">From file...</property>
+        <property name="label" translatable="yes" context="numberingoptionspage|fromfile">From file...</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -629,7 +629,7 @@
       <object class="GtkMenuItem" id="gallery">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Gallery</property>
+        <property name="label" translatable="yes" context="numberingoptionspage|gallery">Gallery</property>
         <property name="use_underline">True</property>
       </object>
     </child>

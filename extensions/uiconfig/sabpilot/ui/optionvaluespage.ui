@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="pcr">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="OptionValuesPage">
     <property name="visible">True</property>
@@ -25,7 +25,7 @@
             <property name="halign">start</property>
             <property name="valign">start</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">When you select an option, the option group is given a specific value.</property>
+            <property name="label" translatable="yes" context="optionvaluespage|label1">When you select an option, the option group is given a specific value.</property>
             <property name="wrap">True</property>
             <property name="max_width_chars">40</property>
           </object>
@@ -42,7 +42,7 @@
             <property name="halign">start</property>
             <property name="valign">start</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Which _value do you want to assign to each option?</property>
+            <property name="label" translatable="yes" context="optionvaluespage|label2">Which _value do you want to assign to each option?</property>
             <property name="use_underline">True</property>
             <property name="wrap">True</property>
             <property name="max_width_chars">40</property>
@@ -87,7 +87,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">_Option fields</property>
+            <property name="label" translatable="yes" context="optionvaluespage|label3">_Option fields</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">radiobuttons:border</property>
           </object>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkGrid" id="grid">
@@ -55,10 +55,10 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <items>
-              <item translatable="yes">All Cells</item>
-              <item translatable="yes">Cell value is</item>
-              <item translatable="yes">Formula is</item>
-              <item translatable="yes">Date is</item>
+              <item translatable="yes" context="conditionalentry|type">All Cells</item>
+              <item translatable="yes" context="conditionalentry|type">Cell value is</item>
+              <item translatable="yes" context="conditionalentry|type">Formula is</item>
+              <item translatable="yes" context="conditionalentry|type">Date is</item>
             </items>
           </object>
           <packing>
@@ -69,7 +69,7 @@
         <child>
           <object class="GtkLabel" id="styleft">
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Apply Style:</property>
+            <property name="label" translatable="yes" context="conditionalentry|styleft">Apply Style:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">style</property>
             <property name="xalign">0</property>
@@ -83,7 +83,7 @@
           <object class="GtkComboBoxText" id="style">
             <property name="can_focus">False</property>
             <items>
-              <item translatable="yes">New Style...</item>
+              <item translatable="yes" context="conditionalentry|style">New Style...</item>
             </items>
           </object>
           <packing>
@@ -94,7 +94,7 @@
         <child>
           <object class="GtkLabel" id="valueft">
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Enter a value:</property>
+            <property name="label" translatable="yes" context="conditionalentry|valueft">Enter a value:</property>
             <property name="xalign">0</property>
           </object>
           <packing>
@@ -159,7 +159,7 @@
         </child>
         <child>
           <object class="GtkButton" id="options">
-            <property name="label" translatable="yes">More Options...</property>
+            <property name="label" translatable="yes" context="conditionalentry|options">More Options...</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
           </object>
@@ -172,13 +172,13 @@
           <object class="GtkComboBoxText" id="colscalemin">
             <property name="can_focus">False</property>
             <items>
-              <item translatable="yes">Automatic</item>
-              <item translatable="yes">Min</item>
-              <item translatable="yes">Max</item>
-              <item translatable="yes">Percentile</item>
-              <item translatable="yes">Value</item>
-              <item translatable="yes">Percent</item>
-              <item translatable="yes">Formula</item>
+              <item translatable="yes" context="conditionalentry|colscalemin">Automatic</item>
+              <item translatable="yes" context="conditionalentry|colscalemin">Min</item>
+              <item translatable="yes" context="conditionalentry|colscalemin">Max</item>
+              <item translatable="yes" context="conditionalentry|colscalemin">Percentile</item>
+              <item translatable="yes" context="conditionalentry|colscalemin">Value</item>
+              <item translatable="yes" context="conditionalentry|colscalemin">Percent</item>
+              <item translatable="yes" context="conditionalentry|colscalemin">Formula</item>
             </items>
           </object>
           <packing>
@@ -190,13 +190,13 @@
           <object class="GtkComboBoxText" id="colscalemiddle">
             <property name="can_focus">False</property>
             <items>
-              <item translatable="yes">Automatic</item>
-              <item translatable="yes">Min</item>
-              <item translatable="yes">Max</item>
-              <item translatable="yes">Percentile</item>
-              <item translatable="yes">Value</item>
-              <item translatable="yes">Percent</item>
-              <item translatable="yes">Formula</item>
+              <item translatable="yes" context="conditionalentry|colscalemiddle">Automatic</item>
+              <item translatable="yes" context="conditionalentry|colscalemiddle">Min</item>
+              <item translatable="yes" context="conditionalentry|colscalemiddle">Max</item>
+              <item translatable="yes" context="conditionalentry|colscalemiddle">Percentile</item>
+              <item translatable="yes" context="conditionalentry|colscalemiddle">Value</item>
+              <item translatable="yes" context="conditionalentry|colscalemiddle">Percent</item>
+              <item translatable="yes" context="conditionalentry|colscalemiddle">Formula</item>
             </items>
           </object>
           <packing>
@@ -208,13 +208,13 @@
           <object class="GtkComboBoxText" id="colscalemax">
             <property name="can_focus">False</property>
             <items>
-              <item translatable="yes">Automatic</item>
-              <item translatable="yes">Min</item>
-              <item translatable="yes">Max</item>
-              <item translatable="yes">Percentile</item>
-              <item translatable="yes">Value</item>
-              <item translatable="yes">Percent</item>
-              <item translatable="yes">Formula</item>
+              <item translatable="yes" context="conditionalentry|colscalemax">Automatic</item>
+              <item translatable="yes" context="conditionalentry|colscalemax">Min</item>
+              <item translatable="yes" context="conditionalentry|colscalemax">Max</item>
+              <item translatable="yes" context="conditionalentry|colscalemax">Percentile</item>
+              <item translatable="yes" context="conditionalentry|colscalemax">Value</item>
+              <item translatable="yes" context="conditionalentry|colscalemax">Percent</item>
+              <item translatable="yes" context="conditionalentry|colscalemax">Formula</item>
             </items>
           </object>
           <packing>
@@ -225,7 +225,7 @@
         <child>
           <object class="svxlo-SvxFontPrevWindow" id="preview:border">
             <property name="can_focus">False</property>
-            <property name="tooltip_text" translatable="yes">Example</property>
+            <property name="tooltip_text" translatable="yes" context="conditionalentry|preview:border|tooltip_text">Example</property>
             <property name="hexpand">True</property>
           </object>
           <packing>
@@ -248,30 +248,30 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <items>
-                      <item translatable="yes">equal to</item>
-                      <item translatable="yes">less than</item>
-                      <item translatable="yes">greater than</item>
-                      <item translatable="yes">less than or equal to</item>
-                      <item translatable="yes">greater than or equal to</item>
-                      <item translatable="yes">not equal to</item>
-                      <item translatable="yes">between</item>
-                      <item translatable="yes">not between</item>
-                      <item translatable="yes">duplicate</item>
-                      <item translatable="yes">not duplicate</item>
-                      <item translatable="yes">top 10 elements</item>
-                      <item translatable="yes">bottom 10 elements</item>
-                      <item translatable="yes">top 10 percent</item>
-                      <item translatable="yes">bottom 10 percent</item>
-                      <item translatable="yes">above average</item>
-                      <item translatable="yes">below average</item>
-                      <item translatable="yes">above or equal average</item>
-                      <item translatable="yes">below or equal average</item>
-                      <item translatable="yes">Error</item>
-                      <item translatable="yes">No Error</item>
-                      <item translatable="yes">Begins with</item>
-                      <item translatable="yes">Ends with</item>
-                      <item translatable="yes">Contains</item>
-                      <item translatable="yes">Not Contains</item>
+                      <item translatable="yes" context="conditionalentry|typeis">equal to</item>
+                      <item translatable="yes" context="conditionalentry|typeis">less than</item>
+                      <item translatable="yes" context="conditionalentry|typeis">greater than</item>
+                      <item translatable="yes" context="conditionalentry|typeis">less than or equal to</item>
+                      <item translatable="yes" context="conditionalentry|typeis">greater than or equal to</item>
+                      <item translatable="yes" context="conditionalentry|typeis">not equal to</item>
+                      <item translatable="yes" context="conditionalentry|typeis">between</item>
+                      <item translatable="yes" context="conditionalentry|typeis">not between</item>
+                      <item translatable="yes" context="conditionalentry|typeis">duplicate</item>
+                      <item translatable="yes" context="conditionalentry|typeis">not duplicate</item>
+                      <item translatable="yes" context="conditionalentry|typeis">top 10 elements</item>
+                      <item translatable="yes" context="conditionalentry|typeis">bottom 10 elements</item>
+                      <item translatable="yes" context="conditionalentry|typeis">top 10 percent</item>
+                      <item translatable="yes" context="conditionalentry|typeis">bottom 10 percent</item>
+                      <item translatable="yes" context="conditionalentry|typeis">above average</item>
+                      <item translatable="yes" context="conditionalentry|typeis">below average</item>
+                      <item translatable="yes" context="conditionalentry|typeis">above or equal average</item>
+                      <item translatable="yes" context="conditionalentry|typeis">below or equal average</item>
+                      <item translatable="yes" context="conditionalentry|typeis">Error</item>
+                      <item translatable="yes" context="conditionalentry|typeis">No Error</item>
+                      <item translatable="yes" context="conditionalentry|typeis">Begins with</item>
+                      <item translatable="yes" context="conditionalentry|typeis">Ends with</item>
+                      <item translatable="yes" context="conditionalentry|typeis">Contains</item>
+                      <item translatable="yes" context="conditionalentry|typeis">Not Contains</item>
                     </items>
                   </object>
                   <packing>
@@ -284,19 +284,19 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <items>
-                      <item translatable="yes">Today</item>
-                      <item translatable="yes">Yesterday</item>
-                      <item translatable="yes">Tomorrow</item>
-                      <item translatable="yes">Last 7 days</item>
-                      <item translatable="yes">This week</item>
-                      <item translatable="yes">Last week</item>
-                      <item translatable="yes">Next week</item>
-                      <item translatable="yes">This month</item>
-                      <item translatable="yes">Last month</item>
-                      <item translatable="yes">Next month</item>
-                      <item translatable="yes">This year</item>
-                      <item translatable="yes">Last year</item>
-                      <item translatable="yes">Next year</item>
+                      <item translatable="yes" context="conditionalentry|datetype">Today</item>
+                      <item translatable="yes" context="conditionalentry|datetype">Yesterday</item>
+                      <item translatable="yes" context="conditionalentry|datetype">Tomorrow</item>
+                      <item translatable="yes" context="conditionalentry|datetype">Last 7 days</item>
+                      <item translatable="yes" context="conditionalentry|datetype">This week</item>
+                      <item translatable="yes" context="conditionalentry|datetype">Last week</item>
+                      <item translatable="yes" context="conditionalentry|datetype">Next week</item>
+                      <item translatable="yes" context="conditionalentry|datetype">This month</item>
+                      <item translatable="yes" context="conditionalentry|datetype">Last month</item>
+                      <item translatable="yes" context="conditionalentry|datetype">Next month</item>
+                      <item translatable="yes" context="conditionalentry|datetype">This year</item>
+                      <item translatable="yes" context="conditionalentry|datetype">Last year</item>
+                      <item translatable="yes" context="conditionalentry|datetype">Next year</item>
                     </items>
                   </object>
                   <packing>
@@ -309,10 +309,10 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <items>
-                      <item translatable="yes">Color Scale (2 Entries)</item>
-                      <item translatable="yes">Color Scale (3 Entries)</item>
-                      <item translatable="yes">Data Bar</item>
-                      <item translatable="yes">Icon Set</item>
+                      <item translatable="yes" context="conditionalentry|colorformat">Color Scale (2 Entries)</item>
+                      <item translatable="yes" context="conditionalentry|colorformat">Color Scale (3 Entries)</item>
+                      <item translatable="yes" context="conditionalentry|colorformat">Data Bar</item>
+                      <item translatable="yes" context="conditionalentry|colorformat">Icon Set</item>
                     </items>
                   </object>
                   <packing>
@@ -356,28 +356,28 @@
                   <object class="GtkComboBoxText" id="iconsettype">
                     <property name="can_focus">False</property>
                     <items>
-                      <item translatable="yes">3 Arrows</item>
-                      <item translatable="yes">3 Gray Arrows</item>
-                      <item translatable="yes">3 Flags</item>
-                      <item translatable="yes">3 Traffic Lights 1</item>
-                      <item translatable="yes">3 Traffic Lights 2</item>
-                      <item translatable="yes">3 Signs</item>
-                      <item translatable="yes">3 Symbols 1</item>
-                      <item translatable="yes">3 Symbols 2</item>
-                      <item translatable="yes">3 Smileys</item>
-                      <item translatable="yes">3 Stars</item>
-                      <item translatable="yes">3 Triangles</item>
-                      <item translatable="yes">3 Colored Smileys</item>
-                      <item translatable="yes">4 Arrows</item>
-                      <item translatable="yes">4 Gray Arrows</item>
-                      <item translatable="yes">4 Circles Red to Black</item>
-                      <item translatable="yes">4 Ratings</item>
-                      <item translatable="yes">4 Traffic Lights</item>
-                      <item translatable="yes">5 Arrows</item>
-                      <item translatable="yes">5 Gray Arrows</item>
-                      <item translatable="yes">5 Ratings</item>
-                      <item translatable="yes">5 Quarters</item>
-                      <item translatable="yes">5 Boxes</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Arrows</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Gray Arrows</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Flags</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Traffic Lights 1</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Traffic Lights 2</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Signs</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Symbols 1</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Symbols 2</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Smileys</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Stars</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Triangles</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">3 Colored Smileys</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">4 Arrows</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">4 Gray Arrows</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">4 Circles Red to Black</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">4 Ratings</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">4 Traffic Lights</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">5 Arrows</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">5 Gray Arrows</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">5 Ratings</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">5 Quarters</item>
+                      <item translatable="yes" context="conditionalentry|iconsettype">5 Boxes</item>
                     </items>
                   </object>
                   <packing>

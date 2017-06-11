@@ -351,9 +351,9 @@ public:
     virtual bool SetSelectedState(bool bSeleted);
     bool  IsSeletedInDoc() { return m_isSelectedInDoc; }
 
-    static OUString GetResource( sal_uInt16 nResId,
-                                        const OUString *pArg1 = nullptr,
-                                        const OUString *pArg2 = nullptr );
+    static OUString GetResource(const char* pResId,
+                                const OUString *pArg1 = nullptr,
+                                const OUString *pArg2 = nullptr);
 };
 
 #endif

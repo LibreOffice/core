@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="svx">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">359</property>
@@ -40,7 +40,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">_Angle:</property>
+                <property name="label" translatable="yes" context="floatingareastyle|label1">_Angle:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">angle:0degrees</property>
               </object>
@@ -59,7 +59,7 @@
                   <object class="GtkSpinButton" id="angle:0degrees">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes">Specify the angle of rotation for the gradient shading style.</property>
+                    <property name="tooltip_text" translatable="yes" context="floatingareastyle|angle:0degrees|tooltip_text">Specify the angle of rotation for the gradient shading style.</property>
                     <property name="adjustment">adjustment1</property>
                   </object>
                   <packing>
@@ -79,7 +79,7 @@
                           <object class="GtkToolButton" id="left">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes">Rotate counterclockwise by 45 degrees.</property>
+                            <property name="tooltip_text" translatable="yes" context="floatingareastyle|left|tooltip_text">Rotate counterclockwise by 45 degrees.</property>
                             <property name="icon_name">svx/res/symphony/rotate_left.png</property>
                           </object>
                           <packing>
@@ -101,7 +101,7 @@
                           <object class="GtkToolButton" id="right">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes">Rotate clockwise by 45 degrees.</property>
+                            <property name="tooltip_text" translatable="yes" context="floatingareastyle|right|tooltip_text">Rotate clockwise by 45 degrees.</property>
                             <property name="icon_name">svx/res/symphony/rotate_right.png</property>
                           </object>
                           <packing>
@@ -144,7 +144,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">_Start value:</property>
+                <property name="label" translatable="yes" context="floatingareastyle|label4">_Start value:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">start:0%</property>
               </object>
@@ -158,7 +158,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">_End value:</property>
+                <property name="label" translatable="yes" context="floatingareastyle|label5">_End value:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">end:0%</property>
               </object>
@@ -171,7 +171,7 @@
               <object class="GtkSpinButton" id="start:0%">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="tooltip_text" translatable="yes">Enter a transparency value for the beginning point of the gradient, where 0% is fully opaque and 100% is fully transparent.</property>
+                <property name="tooltip_text" translatable="yes" context="floatingareastyle|start:0%|tooltip_text">Enter a transparency value for the beginning point of the gradient, where 0% is fully opaque and 100% is fully transparent.</property>
                 <property name="adjustment">adjustment2</property>
               </object>
               <packing>
@@ -183,7 +183,7 @@
               <object class="GtkSpinButton" id="end:0%">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="tooltip_text" translatable="yes">Enter a transparency value for the endpoint of the gradient, where 0% is fully opaque and 100% is fully transparent.</property>
+                <property name="tooltip_text" translatable="yes" context="floatingareastyle|end:0%|tooltip_text">Enter a transparency value for the endpoint of the gradient, where 0% is fully opaque and 100% is fully transparent.</property>
                 <property name="adjustment">adjustment2</property>
               </object>
               <packing>
@@ -207,7 +207,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">_Border:</property>
+                <property name="label" translatable="yes" context="floatingareastyle|label6">_Border:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">border:0%</property>
               </object>
@@ -220,7 +220,7 @@
               <object class="GtkSpinButton" id="border:0%">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="tooltip_text" translatable="yes">Specify the border value of gradient transparency.</property>
+                <property name="tooltip_text" translatable="yes" context="floatingareastyle|border:0%|tooltip_text">Specify the border value of gradient transparency.</property>
                 <property name="adjustment">adjustment2</property>
               </object>
               <packing>
@@ -245,7 +245,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Center _X:</property>
+                <property name="label" translatable="yes" context="floatingareastyle|label2">Center _X:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">centerx:0%</property>
               </object>
@@ -259,7 +259,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Center _Y:</property>
+                <property name="label" translatable="yes" context="floatingareastyle|label3">Center _Y:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">centery:0%</property>
               </object>
@@ -272,7 +272,7 @@
               <object class="GtkSpinButton" id="centerx:0%">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="tooltip_text" translatable="yes">Specify the horizontal offset percentage from the center for the gradient shading style. 50% is the horizontal center.</property>
+                <property name="tooltip_text" translatable="yes" context="floatingareastyle|centerx:0%|tooltip_text">Specify the horizontal offset percentage from the center for the gradient shading style. 50% is the horizontal center.</property>
                 <property name="adjustment">adjustment2</property>
               </object>
               <packing>
@@ -284,7 +284,7 @@
               <object class="GtkSpinButton" id="centery:0%">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="tooltip_text" translatable="yes">Specify the vertical offset percentage from the center for the gradient shading style.  50% is the vertical center.</property>
+                <property name="tooltip_text" translatable="yes" context="floatingareastyle|centery:0%|tooltip_text">Specify the vertical offset percentage from the center for the gradient shading style.  50% is the vertical center.</property>
                 <property name="adjustment">adjustment2</property>
               </object>
               <packing>

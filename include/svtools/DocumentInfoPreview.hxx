@@ -29,7 +29,6 @@
 #include <vcl/window.hxx>
 
 class ExtMultiLineEdit;
-class SvtDocInfoTable_Impl;
 
 namespace com { namespace sun { namespace star {
     namespace document { class XDocumentProperties; }
@@ -53,7 +52,6 @@ public:
 
 private:
     VclPtr<ExtMultiLineEdit> m_pEditWin;
-    std::unique_ptr< SvtDocInfoTable_Impl > m_xInfoTable;
 
     void insertEntry(OUString const & title, OUString const & value);
 

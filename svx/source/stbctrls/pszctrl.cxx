@@ -41,7 +41,8 @@
 #include "svx/dlgutil.hxx"
 #include "stbctrls.h"
 
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
+#include <svx/svxids.hrc>
 #include "bitmaps.hlst"
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>

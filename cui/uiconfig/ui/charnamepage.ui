@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="CharNamePage">
@@ -43,7 +43,7 @@
                 <property name="halign">start</property>
                 <property name="hexpand">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Language:</property>
+                <property name="label" translatable="yes" context="charnamepage|westlangft-nocjk">Language:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">westlanglb-nocjk</property>
               </object>
@@ -103,7 +103,7 @@
               <object class="GtkLabel" id="westfontnameft-nocjk">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Family:</property>
+                <property name="label" translatable="yes" context="charnamepage|westfontnameft-nocjk">Family:</property>
               </object>
             </child>
           </object>
@@ -142,7 +142,7 @@
               <object class="GtkLabel" id="weststyleft-nocjk">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Style:</property>
+                <property name="label" translatable="yes" context="charnamepage|weststyleft-nocjk">Style:</property>
               </object>
             </child>
           </object>
@@ -182,7 +182,7 @@
               <object class="GtkLabel" id="westsizeft-nocjk">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Size:</property>
+                <property name="label" translatable="yes" context="charnamepage|westsizeft-nocjk">Size:</property>
               </object>
             </child>
           </object>
@@ -224,7 +224,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Family:</property>
+                    <property name="label" translatable="yes" context="charnamepage|westfontnameft-cjk">Family:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">westfontnamelb-cjk</property>
                   </object>
@@ -239,7 +239,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Style:</property>
+                    <property name="label" translatable="yes" context="charnamepage|weststyleft-cjk">Style:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">weststylelb-cjk</property>
                   </object>
@@ -254,7 +254,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Size:</property>
+                    <property name="label" translatable="yes" context="charnamepage|westsizeft-cjk">Size:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">westsizelb-cjk</property>
                   </object>
@@ -269,7 +269,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Language:</property>
+                    <property name="label" translatable="yes" context="charnamepage|westlangft-cjk">Language:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">westlanglb-cjk</property>
                   </object>
@@ -343,7 +343,7 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Western Text Font</property>
+            <property name="label" translatable="yes" context="charnamepage|label4">Western Text Font</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -382,7 +382,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Family:</property>
+                    <property name="label" translatable="yes" context="charnamepage|eastfontnameft">Family:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">eastfontnamelb</property>
                   </object>
@@ -397,7 +397,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Style:</property>
+                    <property name="label" translatable="yes" context="charnamepage|eaststyleft">Style:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">eaststylelb</property>
                   </object>
@@ -412,7 +412,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Size:</property>
+                    <property name="label" translatable="yes" context="charnamepage|eastsizeft">Size:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">eastsizelb</property>
                   </object>
@@ -427,7 +427,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Language:</property>
+                    <property name="label" translatable="yes" context="charnamepage|eastlangft">Language:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">eastlanglb</property>
                   </object>
@@ -500,7 +500,7 @@
           <object class="GtkLabel" id="label5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Asian Text Font</property>
+            <property name="label" translatable="yes" context="charnamepage|label5">Asian Text Font</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -539,7 +539,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Family:</property>
+                    <property name="label" translatable="yes" context="charnamepage|ctlfontnameft">Family:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">ctlfontnamelb</property>
                   </object>
@@ -554,7 +554,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Style:</property>
+                    <property name="label" translatable="yes" context="charnamepage|ctlstyleft">Style:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">ctlstylelb</property>
                   </object>
@@ -569,7 +569,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Size:</property>
+                    <property name="label" translatable="yes" context="charnamepage|ctlsizeft">Size:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">ctlsizelb</property>
                   </object>
@@ -584,7 +584,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Language:</property>
+                    <property name="label" translatable="yes" context="charnamepage|ctllangft">Language:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">ctllanglb</property>
                   </object>
@@ -658,7 +658,7 @@
           <object class="GtkLabel" id="label6">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">CTL Font</property>
+            <property name="label" translatable="yes" context="charnamepage|label6">CTL Font</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -685,7 +685,7 @@
             <property name="can_focus">False</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="preview:border-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes">Preview</property>
+                <property name="AtkObject::accessible-name" translatable="yes" context="charnamepage|preview:border-atkobject">Preview</property>
               </object>
             </child>
           </object>

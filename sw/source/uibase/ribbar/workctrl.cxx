@@ -34,7 +34,7 @@
 #include <glosdoc.hxx>
 #include <gloslst.hxx>
 #include <workctrl.hxx>
-#include <ribbar.hrc>
+#include <strings.hrc>
 #include <cmdid.h>
 #include <helpid.h>
 #include <wrtsh.hxx>
@@ -48,6 +48,7 @@
 #include <vcl/svapp.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include "bitmaps.hlst"
 
 // Size check
@@ -234,6 +235,77 @@ static const char* aNavigationHelpIds[ NAVI_ENTRIES ] =
     HID_NID_NEXT
 };
 
+static const char* aNavigationStrIds[ NAVI_ENTRIES ] =
+{
+    // -- first line
+    ST_TBL,
+    ST_FRM,
+    ST_GRF,
+    ST_OLE,
+    ST_PGE,
+    ST_OUTL,
+    ST_MARK,
+    ST_DRW,
+    ST_CTRL,
+    STR_IMGBTN_PGE_UP,
+    // -- second line
+    ST_REG,
+    ST_BKM,
+    ST_SEL,
+    ST_FTN,
+    ST_POSTIT,
+    ST_SRCH_REP,
+    ST_INDEX_ENTRY,
+    ST_TABLE_FORMULA,
+    ST_TABLE_FORMULA_ERROR,
+    STR_IMGBTN_PGE_DOWN
+};
+
+// these are global strings
+static const char* STR_IMGBTN_ARY[] =
+{
+    nullptr,
+    nullptr,
+    STR_IMGBTN_TBL_DOWN,
+    STR_IMGBTN_FRM_DOWN,
+    STR_IMGBTN_PGE_DOWN,
+    STR_IMGBTN_DRW_DOWN,
+    STR_IMGBTN_CTRL_DOWN,
+    STR_IMGBTN_REG_DOWN,
+    STR_IMGBTN_BKM_DOWN,
+    STR_IMGBTN_GRF_DOWN,
+    STR_IMGBTN_OLE_DOWN,
+    STR_IMGBTN_OUTL_DOWN,
+    STR_IMGBTN_SEL_DOWN,
+    STR_IMGBTN_FTN_DOWN,
+    STR_IMGBTN_MARK_DOWN,
+    STR_IMGBTN_POSTIT_DOWN,
+    STR_IMGBTN_SRCH_REP_DOWN,
+    STR_IMGBTN_INDEX_ENTRY_DOWN,
+    STR_IMGBTN_TBLFML_DOWN,
+    STR_IMGBTN_TBLFML_ERR_DOWN,
+    nullptr,
+    nullptr,
+    STR_IMGBTN_TBL_UP,
+    STR_IMGBTN_FRM_UP,
+    STR_IMGBTN_PGE_UP,
+    STR_IMGBTN_DRW_UP,
+    STR_IMGBTN_CTRL_UP,
+    STR_IMGBTN_REG_UP,
+    STR_IMGBTN_BKM_UP,
+    STR_IMGBTN_GRF_UP,
+    STR_IMGBTN_OLE_UP,
+    STR_IMGBTN_OUTL_UP,
+    STR_IMGBTN_SEL_UP,
+    STR_IMGBTN_FTN_UP,
+    STR_IMGBTN_MARK_UP,
+    STR_IMGBTN_POSTIT_UP,
+    STR_IMGBTN_SRCH_REP_UP,
+    STR_IMGBTN_INDEX_ENTRY_UP,
+    STR_IMGBTN_TBLFML_UP,
+    STR_IMGBTN_TBLFML_ERR_UP
+};
+
 SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window *pParent)
     : SfxPopupWindow(nId, pParent, "FloatingNavigation",
         "modules/swriter/ui/floatingnavigation.ui", rFrame)
@@ -249,34 +321,22 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
     for( i = 0; i < NID_COUNT; i++)
     {
         sal_uInt16 nNaviId = aNavigationInsertIds[i];
-        OUString sText;
-        ToolBoxItemBits  nTbxBits = ToolBoxItemBits::NONE;
-        if((NID_PREV != nNaviId) && (NID_NEXT != nNaviId))
-        {
-            // -2, there's no string for Next/Prev
-            sal_uInt16 nResStr = ST_TBL - 2 + nNaviId - NID_START;
-            sText = SwResId(nResStr);
+        ToolBoxItemBits nTbxBits = ToolBoxItemBits::NONE;
+        if ((NID_PREV != nNaviId) && (NID_NEXT != nNaviId))
             nTbxBits = ToolBoxItemBits::CHECKABLE;
-        }
-        else
-        {
-            if (nNaviId == NID_PREV)
-                sText = SwResId(STR_IMGBTN_PGE_UP);
-            else if (nNaviId == NID_NEXT)
-                sText = SwResId(STR_IMGBTN_PGE_DOWN);
-        }
-
         m_pToolBox->InsertItem(nNaviId, Image(BitmapEx(aNavigationImgIds[i])),
-                              sText, nTbxBits);
+                              SwResId(aNavigationStrIds[i]), nTbxBits);
         m_pToolBox->SetHelpId(nNaviId, aNavigationHelpIds[i]);
     }
 
     m_pToolBox->InsertBreak(NID_COUNT/2);
 
-    // these are global strings
-    for( i = 0; i < 2 * NID_COUNT; i++)
+    for (i = 0; i < SAL_N_ELEMENTS(STR_IMGBTN_ARY); ++i)
     {
-        sQuickHelp[i] = SwResId(STR_IMGBTN_START + i);
+        const char* id = STR_IMGBTN_ARY[i];
+        if (!id)
+            continue;
+        sQuickHelp[i] = SwResId(id);
     }
 
     sal_uInt16 nItemId = SwView::GetMoveType();
@@ -354,11 +414,11 @@ void  SwScrollNaviToolBox::RequestHelp( const HelpEvent& rHEvt )
 
 OUString SwScrollNaviPopup::GetToolTip(bool bNext)
 {
-    sal_uInt16 nResId = STR_IMGBTN_START;
-    nResId += SwView::GetMoveType() - NID_START;
-    if(!bNext)
+    sal_uInt16 nResId = SwView::GetMoveType();
+    if (!bNext)
         nResId += NID_COUNT;
-    return SwResId(nResId);
+    const char* id = STR_IMGBTN_ARY[nResId];
+    return id ? SwResId(id): OUString();
 }
 
 class SwZoomBox_Impl : public ComboBox
@@ -387,18 +447,17 @@ SwZoomBox_Impl::SwZoomBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
     SetHelpId(HID_PVIEW_ZOOM_LB);
     SetSizePixel(LogicToPixel(Size(30, 86), MapUnit::MapAppFont));
     EnableAutocomplete( false );
-    sal_uInt16 aZoomValues[] =
+    const char* aZoomValues[] =
     { RID_SVXSTR_ZOOM_25 , RID_SVXSTR_ZOOM_50 ,
       RID_SVXSTR_ZOOM_75 , RID_SVXSTR_ZOOM_100 ,
       RID_SVXSTR_ZOOM_150 , RID_SVXSTR_ZOOM_200 ,
       RID_SVXSTR_ZOOM_WHOLE_PAGE, RID_SVXSTR_ZOOM_PAGE_WIDTH ,
       RID_SVXSTR_ZOOM_OPTIMAL_VIEW };
-    for(sal_uInt16 aZoomValue : aZoomValues)
+    for(const char* pZoomValue : aZoomValues)
     {
-        OUString sEntry = SvxResId( aZoomValue );
+        OUString sEntry = SvxResId(pZoomValue);
         InsertEntry(sEntry);
     }
-
 }
 
 void    SwZoomBox_Impl::Select()

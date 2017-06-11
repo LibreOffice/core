@@ -84,12 +84,12 @@
 #include "sfxtypes.hxx"
 #include <sfx2/evntconf.hxx>
 #include <sfx2/request.hxx>
-#include "doc.hrc"
-#include "sfxlocal.hrc"
+#include "sfx2/strings.hrc"
+#include "sfx2/strings.hrc"
 #include "appdata.hxx"
 #include <sfx2/sfxsids.hrc>
 #include <basic/basmgr.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <sfx2/QuerySaveDocument.hxx>
 #include "helpid.hrc"
 #include <sfx2/msg.hxx>

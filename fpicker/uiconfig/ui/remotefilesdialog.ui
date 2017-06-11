@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="fps">
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
@@ -15,7 +15,7 @@
   <object class="GtkDialog" id="RemoteFilesDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Remote Files</property>
+    <property name="title" translatable="yes" context="remotefilesdialog|RemoteFilesDialog">Remote Files</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -102,7 +102,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Service:</property>
+                <property name="label" translatable="yes" context="remotefilesdialog|label1">Service:</property>
                 <accessibility>
                   <relation type="label-for" target="services_lb"/>
                 </accessibility>
@@ -129,7 +129,7 @@
             </child>
             <child>
               <object class="GtkButton" id="add_service_btn:service_edit_menu">
-                <property name="label" translatable="yes">Add service</property>
+                <property name="label" translatable="yes" context="remotefilesdialog|add_service_btn:service_edit_menu">Add service</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -174,7 +174,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">List view</property>
+                <property name="tooltip_text" translatable="yes" context="remotefilesdialog|list_view|tooltip_text">List view</property>
                 <property name="image">image2</property>
               </object>
               <packing>
@@ -189,7 +189,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Icon view</property>
+                <property name="tooltip_text" translatable="yes" context="remotefilesdialog|icon_view|tooltip_text">Icon view</property>
                 <property name="image">image1</property>
               </object>
               <packing>
@@ -207,7 +207,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Create New Folder</property>
+                <property name="tooltip_text" translatable="yes" context="remotefilesdialog|new_folder|tooltip_text">Create New Folder</property>
                 <property name="margin_left">6</property>
               </object>
               <packing>
@@ -252,7 +252,7 @@
               <object class="GtkLabel" id="filterLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Filter</property>
+                <property name="label" translatable="yes" context="remotefilesdialog|filterLabel">Filter</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -264,7 +264,7 @@
               <object class="GtkLabel" id="nameLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">File name</property>
+                <property name="label" translatable="yes" context="remotefilesdialog|nameLabel">File name</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -315,7 +315,7 @@
       <object class="GtkMenuItem" id="edit_service">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Edit service</property>
+        <property name="label" translatable="yes" context="remotefilesdialog|edit_service">_Edit service</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -323,7 +323,7 @@
       <object class="GtkMenuItem" id="delete_service">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Delete service</property>
+        <property name="label" translatable="yes" context="remotefilesdialog|delete_service">_Delete service</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -331,7 +331,7 @@
       <object class="GtkMenuItem" id="change_password">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Change password</property>
+        <property name="label" translatable="yes" context="remotefilesdialog|change_password">_Change password</property>
         <property name="use_underline">True</property>
       </object>
     </child>

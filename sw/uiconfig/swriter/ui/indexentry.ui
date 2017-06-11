@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
@@ -43,7 +43,7 @@
   <object class="GtkDialog" id="IndexEntryDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Insert Index Entry</property>
+    <property name="title" translatable="yes" context="indexentry|IndexEntryDialog">Insert Index Entry</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -56,7 +56,7 @@
             <property name="layout_style">start</property>
             <child>
               <object class="GtkButton" id="insert">
-                <property name="label" translatable="yes">Insert</property>
+                <property name="label" translatable="yes" context="indexentry|insert">Insert</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
@@ -232,7 +232,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_right">6</property>
-                        <property name="label" translatable="yes">Index</property>
+                        <property name="label" translatable="yes" context="indexentry|typeft">Index</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">typecb</property>
                         <property name="xalign">0</property>
@@ -258,7 +258,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">New User-defined Index</property>
+                        <property name="tooltip_text" translatable="yes" context="indexentry|new|tooltip_text">New User-defined Index</property>
                         <property name="image">image1</property>
                         <accessibility>
                           <relation type="member-of" target="label1"/>
@@ -274,7 +274,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_right">6</property>
-                        <property name="label" translatable="yes">Entry</property>
+                        <property name="label" translatable="yes" context="indexentry|label3">Entry</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">entryed</property>
                         <property name="xalign">0</property>
@@ -290,7 +290,7 @@
                         <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
                         <property name="margin_right">6</property>
-                        <property name="label" translatable="yes">1st key</property>
+                        <property name="label" translatable="yes" context="indexentry|key1ft">1st key</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">key1cb</property>
                         <property name="xalign">0</property>
@@ -306,7 +306,7 @@
                         <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
                         <property name="margin_right">6</property>
-                        <property name="label" translatable="yes">2nd key</property>
+                        <property name="label" translatable="yes" context="indexentry|key2ft">2nd key</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">key2cb</property>
                         <property name="xalign">0</property>
@@ -321,7 +321,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_right">6</property>
-                        <property name="label" translatable="yes">Level</property>
+                        <property name="label" translatable="yes" context="indexentry|levelft">Level</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">levelnf</property>
                         <property name="xalign">0</property>
@@ -347,7 +347,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="mainentrycb">
-                        <property name="label" translatable="yes">Main entry</property>
+                        <property name="label" translatable="yes" context="indexentry|mainentrycb">Main entry</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -362,7 +362,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="applytoallcb">
-                        <property name="label" translatable="yes">Apply to all similar texts</property>
+                        <property name="label" translatable="yes" context="indexentry|applytoallcb">Apply to all similar texts</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
@@ -377,7 +377,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="searchcasesensitivecb">
-                        <property name="label" translatable="yes">Match case</property>
+                        <property name="label" translatable="yes" context="indexentry|searchcasesensitivecb">Match case</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
@@ -393,7 +393,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="searchcasewordonlycb">
-                        <property name="label" translatable="yes">Whole words only</property>
+                        <property name="label" translatable="yes" context="indexentry|searchcasewordonlycb">Whole words only</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
@@ -413,7 +413,7 @@
                         <property name="no_show_all">True</property>
                         <property name="margin_left">12</property>
                         <property name="margin_right">6</property>
-                        <property name="label" translatable="yes">Phonetic reading</property>
+                        <property name="label" translatable="yes" context="indexentry|phonetic0ft">Phonetic reading</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">phonetic0ed</property>
                         <property name="xalign">0</property>
@@ -429,7 +429,7 @@
                         <property name="no_show_all">True</property>
                         <property name="margin_left">12</property>
                         <property name="margin_right">6</property>
-                        <property name="label" translatable="yes">Phonetic reading</property>
+                        <property name="label" translatable="yes" context="indexentry|phonetic1ft">Phonetic reading</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">phonetic1ed</property>
                         <property name="xalign">0</property>
@@ -445,7 +445,7 @@
                         <property name="no_show_all">True</property>
                         <property name="margin_left">12</property>
                         <property name="margin_right">6</property>
-                        <property name="label" translatable="yes">Phonetic reading</property>
+                        <property name="label" translatable="yes" context="indexentry|phonetic2ft">Phonetic reading</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">phonetic2ed</property>
                         <property name="xalign">0</property>
@@ -531,7 +531,7 @@
                       <object class="GtkButton" id="sync">
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Update entry from selection</property>
+                        <property name="tooltip_text" translatable="yes" context="indexentry|sync|tooltip_text">Update entry from selection</property>
                         <property name="image">image6</property>
                       </object>
                       <packing>
@@ -594,7 +594,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Selection</property>
+                <property name="label" translatable="yes" context="indexentry|label1">Selection</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

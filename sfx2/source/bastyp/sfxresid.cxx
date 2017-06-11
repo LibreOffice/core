@@ -19,24 +19,30 @@
 
 
 #include <sfx2/sfxresid.hxx>
-#include "tools/resmgr.hxx"
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+#include "tools/simplerm.hxx"
 
-static ResMgr* pMgr=nullptr;
+static std::locale* pResLocale = nullptr;
 
-ResMgr* SfxResMgr::GetResMgr()
+std::locale* SfxResLocale::GetResLocale()
 {
-    if ( !pMgr )
+    if (!pResLocale)
     {
-        pMgr = ResMgr::CreateResMgr("sfx");
+        pResLocale = new std::locale(Translate::Create("sfx", Application::GetSettings().GetUILanguageTag()));
     }
 
-    return pMgr;
+    return pResLocale;
 }
 
-void SfxResMgr::DeleteResMgr()
+void SfxResLocale::DeleteResLocale()
 {
-    DELETEZ( pMgr );
+    DELETEZ(pResLocale);
 }
 
+OUString SfxResId(const char* pId)
+{
+    return Translate::get(pId, *SfxResLocale::GetResLocale());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
