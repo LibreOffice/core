@@ -22,7 +22,7 @@
 #include "writer/WCatalog.hxx"
 #include "writer/WDriver.hxx"
 #include "resource/sharedresources.hxx"
-#include "resource/common_res.hrc"
+#include "strings.hrc"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>

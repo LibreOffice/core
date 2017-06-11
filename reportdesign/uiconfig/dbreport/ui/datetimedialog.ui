@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="rpt">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="DateTimeDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Date and Time</property>
+    <property name="title" translatable="yes" context="datetimedialog|DateTimeDialog">Date and Time</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -84,7 +84,7 @@
             <property name="column_spacing">12</property>
             <child>
               <object class="GtkCheckButton" id="date">
-                <property name="label" translatable="yes">_Include Date</property>
+                <property name="label" translatable="yes" context="datetimedialog|date">_Include Date</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -105,7 +105,7 @@
                 <property name="can_focus">False</property>
                 <property name="margin_left">12</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">_Format:</property>
+                <property name="label" translatable="yes" context="datetimedialog|datelistbox_label">_Format:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">datelistbox</property>
               </object>
@@ -116,7 +116,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="time">
-                <property name="label" translatable="yes">Include _Time</property>
+                <property name="label" translatable="yes" context="datetimedialog|time">Include _Time</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -137,7 +137,7 @@
                 <property name="can_focus">False</property>
                 <property name="margin_left">12</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Fo_rmat:</property>
+                <property name="label" translatable="yes" context="datetimedialog|timelistbox_label">Fo_rmat:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">timelistbox</property>
               </object>

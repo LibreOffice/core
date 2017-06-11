@@ -23,8 +23,7 @@
 #include <svx/svxdlg.hxx>
 #include <editeng/svxenum.hxx>
 #include "dlgpage.hxx"
-#include "ModuleHelper.hxx"
-#include "RptResId.hrc"
+#include "strings.hrc"
 #include <svl/intitem.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/aeitem.hxx>

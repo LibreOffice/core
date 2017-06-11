@@ -36,6 +36,7 @@
 #include <swunohelper.hxx>
 
 #include <misc.hrc>
+#include <strings.hrc>
 
 #define PATH_CASE_SENSITIVE 0x01
 #define PATH_READONLY       0x02

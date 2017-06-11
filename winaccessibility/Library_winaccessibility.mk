@@ -44,7 +44,6 @@ $(eval $(call gb_Library_add_exception_objects,winaccessibility,\
 	winaccessibility/source/service/AccTreeEventListener \
 	winaccessibility/source/service/AccTopWindowListener \
 	winaccessibility/source/service/msaaservice_impl \
-	winaccessibility/source/service/AccResource \
 ))
 
 $(eval $(call gb_Library_use_externals,winaccessibility,\

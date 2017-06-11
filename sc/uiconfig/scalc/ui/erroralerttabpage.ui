@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sc">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkBox" id="ErrorAlertTabPage">
     <property name="visible">True</property>
@@ -11,7 +11,7 @@
     <property name="spacing">12</property>
     <child>
       <object class="GtkCheckButton" id="tsbshow">
-        <property name="label" translatable="yes">Show error _message when invalid values are entered</property>
+        <property name="label" translatable="yes" context="erroralerttabpage|tsbshow">Show error _message when invalid values are entered</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -56,7 +56,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Action:</property>
+                    <property name="label" translatable="yes" context="erroralerttabpage|action_label">_Action:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">actionCB</property>
                   </object>
@@ -73,7 +73,7 @@
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="yalign">0</property>
-                    <property name="label" translatable="yes">_Title:</property>
+                    <property name="label" translatable="yes" context="erroralerttabpage|title_label">_Title:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">title</property>
                   </object>
@@ -125,7 +125,7 @@
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="yalign">0</property>
-                    <property name="label" translatable="yes">_Error message:</property>
+                    <property name="label" translatable="yes" context="erroralerttabpage|errormsg_label">_Error message:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">errorMsg:border</property>
                   </object>
@@ -138,7 +138,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="browseBtn">
-                    <property name="label" translatable="yes">_Browse...</property>
+                    <property name="label" translatable="yes" context="erroralerttabpage|browseBtn">_Browse...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -157,10 +157,10 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <items>
-                      <item translatable="yes">Stop</item>
-                      <item translatable="yes">Warning</item>
-                      <item translatable="yes">Information</item>
-                      <item translatable="yes">Macro</item>
+                      <item translatable="yes" context="erroralerttabpage|actionCB">Stop</item>
+                      <item translatable="yes" context="erroralerttabpage|actionCB">Warning</item>
+                      <item translatable="yes" context="erroralerttabpage|actionCB">Information</item>
+                      <item translatable="yes" context="erroralerttabpage|actionCB">Macro</item>
                     </items>
                   </object>
                   <packing>
@@ -178,7 +178,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Contents</property>
+            <property name="label" translatable="yes" context="erroralerttabpage|label1">Contents</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

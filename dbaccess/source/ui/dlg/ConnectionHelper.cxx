@@ -17,10 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "core_resource.hxx"
 #include "dsnItem.hxx"
 #include "ConnectionHelper.hxx"
-#include "dbu_dlg.hrc"
-#include "dbu_misc.hrc"
+#include "dbu_dlg.hxx"
+#include "strings.hrc"
 #include <svl/itemset.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -30,7 +31,7 @@
 #include <svl/intitem.hxx>
 #include "dsitems.hxx"
 #include "dbaccess_helpid.hrc"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include <osl/process.h>
 #include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
@@ -42,7 +43,7 @@
 #include "odbcconfig.hxx"
 #include "dsselect.hxx"
 #include <svl/filenotation.hxx>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -227,7 +228,7 @@ namespace dbaui
             case  ::dbaccess::DST_MSACCESS:
             {
                 const OUString sExt("*.mdb;*.mde");
-                OUString sFilterName(ModuleRes (STR_MSACCESS_FILTERNAME));
+                OUString sFilterName(DBA_RES (STR_MSACCESS_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION);
                 aFileDlg.AddFilter(sFilterName,sExt);
@@ -238,7 +239,7 @@ namespace dbaui
             case  ::dbaccess::DST_MSACCESS_2007:
             {
                 const OUString sAccdb("*.accdb;*.accde");
-                OUString sFilterName2(ModuleRes (STR_MSACCESS_2007_FILTERNAME));
+                OUString sFilterName2(DBA_RES (STR_MSACCESS_2007_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION);
                 aFileDlg.AddFilter(sFilterName2,sAccdb);
@@ -318,7 +319,7 @@ namespace dbaui
             case ::dbaccess::DST_FIREBIRD:
             {
                 const OUString sExt("*.fdb");
-                OUString sFilterName(ModuleRes (STR_FIREBIRD_FILTERNAME));
+                OUString sFilterName(DBA_RES (STR_FIREBIRD_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE);
                 aFileDlg.AddFilter(sFilterName,sExt);
@@ -342,7 +343,7 @@ namespace dbaui
         case ::dbaccess::DST_FIREBIRD:
             {
                 const OUString sExt("*.fdb");
-                OUString sFilterName(ModuleRes (STR_FIREBIRD_FILTERNAME));
+                OUString sFilterName(DBA_RES (STR_FIREBIRD_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION);
                 aFileDlg.AddFilter(sFilterName,sExt);
@@ -456,7 +457,7 @@ namespace dbaui
         if (!m_pCollection->supportsDBCreation(m_eType) &&
             (( e_exists == PATH_NOT_EXIST) || ( e_exists == PATH_NOT_KNOWN)))
         {
-            OUString sQuery(ModuleRes(STR_ASK_FOR_DIRECTORY_CREATION));
+            OUString sQuery(DBA_RES(STR_ASK_FOR_DIRECTORY_CREATION));
             OFileNotation aTransformer(_rURL);
             sQuery = sQuery.replaceFirst("$path$", aTransformer.get(OFileNotation::N_SYSTEM));
 
@@ -474,7 +475,7 @@ namespace dbaui
                     {
                         if ( !createDirectoryDeep(_rURL) )
                         {   // could not create the directory
-                            sQuery = ModuleRes(STR_COULD_NOT_CREATE_DIRECTORY);
+                            sQuery = DBA_RES(STR_COULD_NOT_CREATE_DIRECTORY);
                             sQuery = sQuery.replaceFirst("$name$", aTransformer.get(OFileNotation::N_SYSTEM));
 
                             m_bUserGrabFocus = false;
@@ -668,7 +669,7 @@ namespace dbaui
                 {
                     if( pathExists(sURL, true) == PATH_NOT_EXIST )
                     {
-                        OUString sFile = ModuleRes( STR_FILE_DOES_NOT_EXIST );
+                        OUString sFile = DBA_RES( STR_FILE_DOES_NOT_EXIST );
                         sFile = sFile.replaceFirst("$file$", aTransformer.get(OFileNotation::N_SYSTEM));
                         ScopedVclPtrInstance<OSQLWarningBox>(this, sFile)->Execute();
                         setURLNoPrefix(sOldPath);

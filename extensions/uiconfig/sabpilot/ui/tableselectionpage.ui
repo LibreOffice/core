@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="pcr">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="TableSelectionPage">
     <property name="visible">True</property>
@@ -39,7 +39,7 @@
                     <property name="halign">start</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="label" translatable="yes">Currently, the form the control belongs to is not (or not completely) bound to a data source.
+                    <property name="label" translatable="yes" context="tableselectionpage|label3">Currently, the form the control belongs to is not (or not completely) bound to a data source.
 
 Please choose a data source and a table.
 
@@ -69,7 +69,7 @@ Please note that the settings made on this page will take effect immediately upo
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">_Data source:</property>
+                        <property name="label" translatable="yes" context="tableselectionpage|datasourcelabel">_Data source:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">datasource:border</property>
                       </object>
@@ -97,7 +97,7 @@ Please note that the settings made on this page will take effect immediately upo
                     </child>
                     <child>
                       <object class="GtkButton" id="search">
-                        <property name="label" translatable="yes">_...</property>
+                        <property name="label" translatable="yes" context="tableselectionpage|search">_...</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -130,7 +130,7 @@ Please note that the settings made on this page will take effect immediately upo
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">_Table / Query:</property>
+                        <property name="label" translatable="yes" context="tableselectionpage|tablelabel">_Table / Query:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">table:border</property>
                       </object>
@@ -171,7 +171,7 @@ Please note that the settings made on this page will take effect immediately upo
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Data</property>
+            <property name="label" translatable="yes" context="tableselectionpage|label1">Data</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

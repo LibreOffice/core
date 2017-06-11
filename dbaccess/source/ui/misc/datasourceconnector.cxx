@@ -17,9 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "core_resource.hxx"
 #include "datasourceconnector.hxx"
 #include <osl/diagnose.h>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
@@ -39,8 +40,9 @@
 #include <svl/filenotation.hxx>
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/exc_hlp.hxx>
-#include "dbu_misc.hrc"
-#include "moduledbu.hxx"
+#include "strings.hrc"
+#include "strings.hxx"
+#include "core_resource.hxx"
 
 namespace dbaui
 {
@@ -159,7 +161,7 @@ namespace dbaui
                     Any aWarnings( xConnectionWarnings->getWarnings() );
                     if ( aWarnings.hasValue() )
                     {
-                        OUString sMessage( ModuleRes( STR_WARNINGS_DURING_CONNECT ) );
+                        OUString sMessage( DBA_RES( STR_WARNINGS_DURING_CONNECT ) );
                         sMessage = sMessage.replaceFirst( "$buttontext$", Button::GetStandardText( StandardButtonType::More ) );
                         sMessage = OutputDevice::GetNonMnemonicString( sMessage );
 

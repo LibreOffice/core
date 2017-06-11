@@ -428,13 +428,20 @@ sal_uInt16 SvxAdjustItem::GetValueCount() const
     return (sal_uInt16)SvxAdjust::End;  // SvxAdjust::BlockLine + 1
 }
 
-
 OUString SvxAdjustItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
-    DBG_ASSERT( nPos <= (sal_uInt16)SvxAdjust::BlockLine, "enum overflow!" );
-    return EditResId::GetString(RID_SVXITEMS_ADJUST_BEGIN + nPos);
+    static const char* RID_SVXITEMS_ADJUST[] =
+    {
+        RID_SVXITEMS_ADJUST_LEFT,
+        RID_SVXITEMS_ADJUST_RIGHT,
+        RID_SVXITEMS_ADJUST_BLOCK,
+        RID_SVXITEMS_ADJUST_CENTER,
+        RID_SVXITEMS_ADJUST_BLOCKLINE
+    };
+    static_assert(SAL_N_ELEMENTS(RID_SVXITEMS_ADJUST) - 1 == (size_t)SvxAdjust::BlockLine, "unexpected size");
+    assert(nPos <= (sal_uInt16)SvxAdjust::BlockLine && "enum overflow!");
+    return EditResId(RID_SVXITEMS_ADJUST[nPos]);
 }
-
 
 sal_uInt16 SvxAdjustItem::GetEnumValue() const
 {
@@ -530,13 +537,13 @@ bool SvxWidowsItem::GetPresentation
     {
         case SfxItemPresentation::Nameless:
         {
-            rText = EditResId::GetString(RID_SVXITEMS_LINES);
+            rText = EditResId(RID_SVXITEMS_LINES);
             break;
         }
 
         case SfxItemPresentation::Complete:
         {
-            rText = EditResId::GetString(RID_SVXITEMS_WIDOWS_COMPLETE) + " " + EditResId::GetString(RID_SVXITEMS_LINES);
+            rText = EditResId(RID_SVXITEMS_WIDOWS_COMPLETE) + " " + EditResId(RID_SVXITEMS_LINES);
             break;
         }
 
@@ -591,13 +598,13 @@ bool SvxOrphansItem::GetPresentation
     {
         case SfxItemPresentation::Nameless:
         {
-            rText = EditResId::GetString(RID_SVXITEMS_LINES);
+            rText = EditResId(RID_SVXITEMS_LINES);
             break;
         }
 
         case SfxItemPresentation::Complete:
         {
-            rText = EditResId::GetString(RID_SVXITEMS_ORPHANS_COMPLETE) + " " + EditResId::GetString(RID_SVXITEMS_LINES);
+            rText = EditResId(RID_SVXITEMS_ORPHANS_COMPLETE) + " " + EditResId(RID_SVXITEMS_LINES);
             break;
         }
 
@@ -704,16 +711,16 @@ bool SvxHyphenZoneItem::GetPresentation
     {
         case SfxItemPresentation::Nameless:
         {
-            sal_uInt16 nId = RID_SVXITEMS_HYPHEN_FALSE;
+            const char* pId = RID_SVXITEMS_HYPHEN_FALSE;
 
             if ( bHyphen )
-                nId = RID_SVXITEMS_HYPHEN_TRUE;
-            rText = EditResId::GetString(nId) + cpDelimTmp;
-            nId = RID_SVXITEMS_PAGE_END_FALSE;
+                pId = RID_SVXITEMS_HYPHEN_TRUE;
+            rText = EditResId(pId) + cpDelimTmp;
+            pId = RID_SVXITEMS_PAGE_END_FALSE;
 
             if ( bPageEnd )
-                nId = RID_SVXITEMS_PAGE_END_TRUE;
-            rText = rText + EditResId::GetString(nId) + cpDelimTmp +
+                pId = RID_SVXITEMS_PAGE_END_TRUE;
+            rText = rText + EditResId(pId) + cpDelimTmp +
                     OUString::number( nMinLead ) + cpDelimTmp +
                     OUString::number( nMinTrail ) + cpDelimTmp +
                     OUString::number( nMaxHyphens );
@@ -721,23 +728,23 @@ bool SvxHyphenZoneItem::GetPresentation
         }
         case SfxItemPresentation::Complete:
         {
-            sal_uInt16 nId = RID_SVXITEMS_HYPHEN_FALSE;
+            const char* pId = RID_SVXITEMS_HYPHEN_FALSE;
 
             if ( bHyphen )
-                nId = RID_SVXITEMS_HYPHEN_TRUE;
-            rText = EditResId::GetString(nId) + cpDelimTmp;
-            nId = RID_SVXITEMS_PAGE_END_FALSE;
+                pId = RID_SVXITEMS_HYPHEN_TRUE;
+            rText = EditResId(pId) + cpDelimTmp;
+            pId = RID_SVXITEMS_PAGE_END_FALSE;
 
             if ( bPageEnd )
-                nId = RID_SVXITEMS_PAGE_END_TRUE;
+                pId = RID_SVXITEMS_PAGE_END_TRUE;
             rText = rText +
-                    EditResId::GetString(nId) +
+                    EditResId(pId) +
                     cpDelimTmp +
-                    EditResId::GetString(RID_SVXITEMS_HYPHEN_MINLEAD).replaceAll("%1", OUString::number(nMinLead)) +
+                    EditResId(RID_SVXITEMS_HYPHEN_MINLEAD).replaceAll("%1", OUString::number(nMinLead)) +
                     cpDelimTmp +
-                    EditResId::GetString(RID_SVXITEMS_HYPHEN_MINTRAIL).replaceAll("%1", OUString::number(nMinTrail)) +
+                    EditResId(RID_SVXITEMS_HYPHEN_MINTRAIL).replaceAll("%1", OUString::number(nMinTrail)) +
                     cpDelimTmp +
-                    EditResId::GetString(RID_SVXITEMS_HYPHEN_MAX).replaceAll("%1", OUString::number(nMaxHyphens));
+                    EditResId(RID_SVXITEMS_HYPHEN_MAX).replaceAll("%1", OUString::number(nMaxHyphens));
             return true;
         }
         default: ;//prevent warning
@@ -1038,7 +1045,7 @@ bool SvxTabStopItem::GetPresentation
                 ((*this)[i]).GetTabPos(), eCoreUnit, ePresUnit, pIntl );
             if ( SfxItemPresentation::Complete == ePres )
             {
-                rText += " " + EditResId::GetString(GetMetricId(ePresUnit));
+                rText += " " + EditResId(GetMetricId(ePresUnit));
             }
             bComma = true;
         }
@@ -1182,11 +1189,11 @@ bool SvxFormatSplitItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    sal_uInt16 nId = RID_SVXITEMS_FMTSPLIT_FALSE;
+    const char* pId = RID_SVXITEMS_FMTSPLIT_FALSE;
 
     if ( GetValue() )
-        nId = RID_SVXITEMS_FMTSPLIT_TRUE;
-    rText = EditResId::GetString(nId);
+        pId = RID_SVXITEMS_FMTSPLIT_TRUE;
+    rText = EditResId(pId);
     return true;
 }
 
@@ -1255,7 +1262,7 @@ bool SvxPageModelItem::GetPresentation
         case SfxItemPresentation::Complete:
             if ( bSet )
             {
-                rText = EditResId::GetString(RID_SVXITEMS_PAGEMODEL_COMPLETE) + GetValue();
+                rText = EditResId(RID_SVXITEMS_PAGEMODEL_COMPLETE) + GetValue();
             }
             return true;
         default: ;//prevent warning
@@ -1296,7 +1303,7 @@ bool SvxScriptSpaceItem::GetPresentation(
         MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
         OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
-    rText = EditResId::GetString( !GetValue()
+    rText = EditResId( !GetValue()
                             ? RID_SVXITEMS_SCRPTSPC_OFF
                             : RID_SVXITEMS_SCRPTSPC_ON );
     return true;
@@ -1336,7 +1343,7 @@ bool SvxHangingPunctuationItem::GetPresentation(
         MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
         OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
-    rText = EditResId::GetString( !GetValue()
+    rText = EditResId( !GetValue()
                             ? RID_SVXITEMS_HNGPNCT_OFF
                             : RID_SVXITEMS_HNGPNCT_ON );
     return true;
@@ -1376,7 +1383,7 @@ bool SvxForbiddenRuleItem::GetPresentation(
         MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
         OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
-    rText = EditResId::GetString( !GetValue()
+    rText = EditResId( !GetValue()
                             ? RID_SVXITEMS_FORBIDDEN_RULE_OFF
                             : RID_SVXITEMS_FORBIDDEN_RULE_ON );
     return true;
@@ -1420,16 +1427,16 @@ bool SvxParaVertAlignItem::GetPresentation(
         MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
         OUString &rText, const IntlWrapper*  ) const
 {
-    sal_uInt16 nTmp;
+    const char* pTmp;
     switch( GetValue() )
     {
-        case Align::Automatic: nTmp = RID_SVXITEMS_PARAVERTALIGN_AUTO; break;
-        case Align::Top:       nTmp = RID_SVXITEMS_PARAVERTALIGN_TOP; break;
-        case Align::Center:    nTmp = RID_SVXITEMS_PARAVERTALIGN_CENTER; break;
-        case Align::Bottom:    nTmp = RID_SVXITEMS_PARAVERTALIGN_BOTTOM; break;
-        default:    nTmp = RID_SVXITEMS_PARAVERTALIGN_BASELINE; break;
+        case Align::Automatic: pTmp = RID_SVXITEMS_PARAVERTALIGN_AUTO; break;
+        case Align::Top:       pTmp = RID_SVXITEMS_PARAVERTALIGN_TOP; break;
+        case Align::Center:    pTmp = RID_SVXITEMS_PARAVERTALIGN_CENTER; break;
+        case Align::Bottom:    pTmp = RID_SVXITEMS_PARAVERTALIGN_BOTTOM; break;
+        default:    pTmp = RID_SVXITEMS_PARAVERTALIGN_BASELINE; break;
     }
-    rText = EditResId::GetString( nTmp );
+    rText = EditResId(pTmp);
     return true;
 }
 
@@ -1493,8 +1500,8 @@ bool SvxParaGridItem::GetPresentation(
         OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
     rText = GetValue() ?
-            EditResId::GetString( RID_SVXITEMS_PARASNAPTOGRID_ON ) :
-            EditResId::GetString( RID_SVXITEMS_PARASNAPTOGRID_OFF );
+            EditResId( RID_SVXITEMS_PARASNAPTOGRID_ON ) :
+            EditResId( RID_SVXITEMS_PARASNAPTOGRID_OFF );
 
     return true;
 }

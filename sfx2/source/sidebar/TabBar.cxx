@@ -26,9 +26,9 @@
 #include <sfx2/sidebar/Tools.hxx>
 #include <sfx2/sidebar/FocusManager.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
+#include <sfx2/strings.hrc>
 
 #include <sfx2/sfxresid.hxx>
-#include "Sidebar.hrc"
 
 #include <vcl/gradient.hxx>
 #include <vcl/image.hxx>

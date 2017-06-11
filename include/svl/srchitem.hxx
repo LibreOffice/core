@@ -27,7 +27,7 @@
 #include <i18nutil/transliteration.hxx>
 #include <i18nutil/searchopt.hxx>
 #include <unotools/configitem.hxx>
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/srchdefs.hxx>
 

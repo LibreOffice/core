@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="ColWidthDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Column Width</property>
+    <property name="title" translatable="yes" context="colwidthdialog|ColWidthDialog">Column Width</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -85,7 +85,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Width</property>
+                <property name="label" translatable="yes" context="colwidthdialog|label1">Width</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">value:0.00cm</property>
               </object>
@@ -109,7 +109,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="default">
-                <property name="label" translatable="yes">_Default value</property>
+                <property name="label" translatable="yes" context="colwidthdialog|default">_Default value</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>

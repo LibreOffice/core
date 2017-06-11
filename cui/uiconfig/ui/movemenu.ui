@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkImage" id="image1">
@@ -16,7 +16,7 @@
   <object class="GtkDialog" id="MoveMenuDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">New Menu</property>
+    <property name="title" translatable="yes" context="movemenu|MoveMenuDialog">New Menu</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -100,7 +100,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Menu name:</property>
+                    <property name="label" translatable="yes" context="movemenu|menunameft">Menu name:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">menuname</property>
                   </object>
@@ -194,7 +194,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Menu _position:</property>
+                    <property name="label" translatable="yes" context="movemenu|label1">Menu _position:</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -241,7 +241,7 @@
                             <property name="image">image1</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="up-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes">Up</property>
+                                <property name="AtkObject::accessible-name" translatable="yes" context="movemenu|up-atkobject">Up</property>
                               </object>
                             </child>
                           </object>
@@ -259,7 +259,7 @@
                             <property name="image">image2</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="down-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes">Down</property>
+                                <property name="AtkObject::accessible-name" translatable="yes" context="movemenu|down-atkobject">Down</property>
                               </object>
                             </child>
                           </object>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="BaseLinksDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Edit Links</property>
+    <property name="title" translatable="yes" context="baselinksdialog|BaseLinksDialog">Edit Links</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -51,7 +51,7 @@
             </child>
             <child>
               <object class="GtkButton" id="UPDATE_NOW">
-                <property name="label" translatable="yes">_Update</property>
+                <property name="label" translatable="yes" context="baselinksdialog|UPDATE_NOW">_Update</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -66,7 +66,7 @@
             </child>
             <child>
               <object class="GtkButton" id="OPEN">
-                <property name="label" translatable="yes">_Open</property>
+                <property name="label" translatable="yes" context="baselinksdialog|OPEN">_Open</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -81,7 +81,7 @@
             </child>
             <child>
               <object class="GtkButton" id="CHANGE_SOURCE">
-                <property name="label" translatable="yes">_Modify...</property>
+                <property name="label" translatable="yes" context="baselinksdialog|CHANGE_SOURCE">_Modify...</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -96,7 +96,7 @@
             </child>
             <child>
               <object class="GtkButton" id="BREAK_LINK">
-                <property name="label" translatable="yes">_Break Link</property>
+                <property name="label" translatable="yes" context="baselinksdialog|BREAK_LINK">_Break Link</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -144,7 +144,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Source file</property>
+                        <property name="label" translatable="yes" context="baselinksdialog|FILES">Source file</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -158,7 +158,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Element:</property>
+                        <property name="label" translatable="yes" context="baselinksdialog|LINKS">Element:</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -172,7 +172,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Type</property>
+                        <property name="label" translatable="yes" context="baselinksdialog|TYPE">Type</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -187,7 +187,7 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Status</property>
+                        <property name="label" translatable="yes" context="baselinksdialog|STATUS">Status</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -214,7 +214,7 @@
                     </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="TB_LINKS:border-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Edit Links</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="baselinksdialog|TB_LINKS-atkobject">Edit Links</property>
                       </object>
                     </child>
                   </object>
@@ -243,7 +243,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Source file</property>
+                    <property name="label" translatable="yes" context="baselinksdialog|FILES2">Source file</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">TB_LINKS:border</property>
                   </object>
@@ -259,7 +259,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Element:</property>
+                    <property name="label" translatable="yes" context="baselinksdialog|SOURCE2">Element:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -273,7 +273,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Type:</property>
+                    <property name="label" translatable="yes" context="baselinksdialog|TYPE2">Type:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -287,7 +287,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Update:</property>
+                    <property name="label" translatable="yes" context="baselinksdialog|UPDATE">Update:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -342,7 +342,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkRadioButton" id="AUTOMATIC">
-                        <property name="label" translatable="yes">_Automatic</property>
+                        <property name="label" translatable="yes" context="baselinksdialog|AUTOMATIC">_Automatic</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -362,7 +362,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="MANUAL">
-                        <property name="label" translatable="yes">Ma_nual</property>
+                        <property name="label" translatable="yes" context="baselinksdialog|MANUAL">Ma_nual</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>

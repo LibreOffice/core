@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/resid.hxx>
 #include <swcrsr.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -25,7 +24,7 @@
 #include <pamtyp.hxx>
 #include <swundo.hxx>
 #include <SwRewriter.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 
 /// parameters for a search for FormatCollections
 struct SwFindParaFormatColl : public SwFindParas

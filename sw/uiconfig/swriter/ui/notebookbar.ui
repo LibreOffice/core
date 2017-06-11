@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.12"/>
   <requires lib="LibreOffice" version="1.0"/>
   <!-- interface-local-resource-path ../../../icon-themes/galaxy/cmd/ -->
@@ -448,7 +448,7 @@
               <object class="GtkLabel" id="FileLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">File</property>
+                <property name="label" translatable="yes" context="notebookbar|FileLabel">File</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -580,7 +580,7 @@
                   <object class="sfxlo-DropdownBox" id="FontSection">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Font</property>
+                    <property name="tooltip_text" translatable="yes" context="notebookbar|FontSection|tooltip_text">Font</property>
                     <property name="valign">center</property>
                     <property name="orientation">vertical</property>
                     <child>
@@ -866,7 +866,7 @@
                   <object class="sfxlo-DropdownBox" id="FontSection2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Font</property>
+                    <property name="tooltip_text" translatable="yes" context="notebookbar|FontSection2|tooltip_text">Font</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkBox" id="box77">
@@ -975,7 +975,7 @@
                   <object class="sfxlo-DropdownBox" id="OutlineSection">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Outline</property>
+                    <property name="tooltip_text" translatable="yes" context="notebookbar|OutlineSection|tooltip_text">Outline</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkBox" id="box8">
@@ -1004,7 +1004,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property name="tooltip_text" translatable="yes">Bullets and Numbering</property>
+                                <property name="tooltip_text" translatable="yes" context="notebookbar|numberbullet|tooltip_text">Bullets and Numbering</property>
                                 <property name="show_arrow">False</property>
                                 <child>
                                   <object class="GtkMenuToolButton" id="bullet">
@@ -1057,7 +1057,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property name="tooltip_text" translatable="yes">Horizontal Alignment</property>
+                                <property name="tooltip_text" translatable="yes" context="notebookbar|level|tooltip_text">Horizontal Alignment</property>
                                 <property name="halign">start</property>
                                 <property name="show_arrow">False</property>
                                 <child>
@@ -1143,7 +1143,7 @@
                   <object class="sfxlo-DropdownBox" id="AlignmentSection">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Alignment</property>
+                    <property name="tooltip_text" translatable="yes" context="notebookbar|AlignmentSection|tooltip_text">Alignment</property>
                     <child>
                       <object class="GtkBox" id="box5">
                         <property name="visible">True</property>
@@ -1170,7 +1170,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property name="tooltip_text" translatable="yes">Vertical Alignment</property>
+                                <property name="tooltip_text" translatable="yes" context="notebookbar|verticalalignment1|tooltip_text">Vertical Alignment</property>
                                 <property name="halign">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="show_arrow">False</property>
@@ -1221,7 +1221,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property name="tooltip_text" translatable="yes">Horizontal Alignment</property>
+                                <property name="tooltip_text" translatable="yes" context="notebookbar|horizontalalignment|tooltip_text">Horizontal Alignment</property>
                                 <property name="halign">start</property>
                                 <property name="show_arrow">False</property>
                                 <child>
@@ -1360,7 +1360,7 @@
                   <object class="sfxlo-DropdownBox" id="SpacingSection">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Spacing</property>
+                    <property name="tooltip_text" translatable="yes" context="notebookbar|SpacingSection|tooltip_text">Spacing</property>
                     <child>
                       <object class="GtkBox" id="box31">
                         <property name="visible">True</property>
@@ -1392,14 +1392,14 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="has_tooltip">True</property>
-                                    <property name="tooltip_text" translatable="yes">Indent</property>
+                                    <property name="tooltip_text" translatable="yes" context="notebookbar|indent|tooltip_text">Indent</property>
                                     <child>
                                       <object class="GtkToolButton" id="increaseindent1">
                                         <property name="use_action_appearance">False</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="has_tooltip">True</property>
-                                        <property name="tooltip_text" translatable="yes">Increase Indent</property>
+                                        <property name="tooltip_text" translatable="yes" context="notebookbar|increaseindent1|tooltip_text">Increase Indent</property>
                                         <property name="is_important">True</property>
                                         <property name="action_name">.uno:IncrementIndent</property>
                                         <property name="use_underline">True</property>
@@ -1415,7 +1415,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="has_tooltip">True</property>
-                                        <property name="tooltip_text" translatable="yes">Decrease Indent</property>
+                                        <property name="tooltip_text" translatable="yes" context="notebookbar|decreaseindent1|tooltip_text">Decrease Indent</property>
                                         <property name="is_important">True</property>
                                         <property name="action_name">.uno:DecrementIndent</property>
                                         <property name="use_underline">True</property>
@@ -1437,7 +1437,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="has_tooltip">True</property>
-                                    <property name="tooltip_text" translatable="yes">Indent</property>
+                                    <property name="tooltip_text" translatable="yes" context="notebookbar|controlcodes|tooltip_text">Indent</property>
                                     <child>
                                       <object class="GtkToolButton" id="ControlCodes">
                                         <property name="use_action_appearance">False</property>
@@ -1545,7 +1545,7 @@
                   <object class="sfxlo-DropdownBox" id="StyleSection">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Style</property>
+                    <property name="tooltip_text" translatable="yes" context="notebookbar|StyleSection|tooltip_text">Style</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkBox" id="box9">
@@ -1676,7 +1676,7 @@
                   <object class="sfxlo-DropdownBox" id="FindSection">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Find</property>
+                    <property name="tooltip_text" translatable="yes" context="notebookbar|FindSection|tooltip_text">Find</property>
                     <child>
                       <object class="GtkBox" id="box95">
                         <property name="visible">True</property>
@@ -1731,7 +1731,7 @@
                   <object class="sfxlo-DropdownBox" id="FindSection1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Find</property>
+                    <property name="tooltip_text" translatable="yes" context="notebookbar|FindSection1|tooltip_text">Find</property>
                     <child>
                       <object class="GtkBox" id="box18">
                         <property name="visible">True</property>
@@ -1796,7 +1796,7 @@
               <object class="GtkLabel" id="HomeLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Home</property>
+                <property name="label" translatable="yes" context="notebookbar|HomeLabel">Home</property>
                 <property name="use_underline">True</property>
                 <style>
                   <class name="context-any"/>
@@ -1817,7 +1817,7 @@
                   <object class="sfxlo-DropdownBox" id="BreakSection">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Break</property>
+                    <property name="tooltip_text" translatable="yes" context="notebookbar|BreakSection|tooltip_text">Break</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkBox" id="box14">
@@ -1976,13 +1976,13 @@
                   <object class="sfxlo-DropdownBox" id="box70">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Gallery</property>
+                    <property name="tooltip_text" translatable="yes" context="notebookbar|box70|tooltip_text">Gallery</property>
                     <child>
                       <object class="vcllo-SmallButton" id="Gallery">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Open Clip Art and Media Gallery</property>
+                        <property name="tooltip_text" translatable="yes" context="notebookbar|Gallery|tooltip_text">Open Clip Art and Media Gallery</property>
                         <property name="action_name">.uno:Gallery</property>
                         <property name="image">GalleryImg</property>
                         <property name="relief">none</property>
@@ -2026,7 +2026,7 @@
                   <object class="sfxlo-DropdownBox" id="box69">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Symbol</property>
+                    <property name="tooltip_text" translatable="yes" context="notebookbar|box69|tooltip_text">Symbol</property>
                     <child>
                       <object class="vcllo-SmallButton" id="InsertSymbol">
                         <property name="visible">True</property>
@@ -2058,7 +2058,7 @@
                   <object class="sfxlo-DropdownBox" id="box17">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Basic</property>
+                    <property name="tooltip_text" translatable="yes" context="notebookbar|box17|tooltip_text">Basic</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkBox" id="box83">
@@ -2086,7 +2086,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Insert Audio or Video</property>
+                            <property name="tooltip_text" translatable="yes" context="notebookbar|InsertAVMedia|tooltip_text">Insert Audio or Video</property>
                             <property name="action_name">.uno:InsertAVMedia</property>
                             <property name="relief">none</property>
                             <property name="xalign">0</property>
@@ -2118,7 +2118,7 @@
                   <object class="sfxlo-DropdownBox" id="ShapesSection">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Shapes</property>
+                    <property name="tooltip_text" translatable="yes" context="notebookbar|ShapesSection|tooltip_text">Shapes</property>
                     <child>
                       <object class="GtkBox" id="box81">
                         <property name="visible">True</property>
@@ -2412,7 +2412,7 @@
                   <object class="sfxlo-DropdownBox" id="LinksSection">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Links</property>
+                    <property name="tooltip_text" translatable="yes" context="notebookbar|LinksSection|tooltip_text">Links</property>
                     <child>
                       <object class="GtkBox" id="box200">
                         <property name="visible">True</property>
@@ -2486,7 +2486,7 @@
                   <object class="sfxlo-DropdownBox" id="TextSection">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Text</property>
+                    <property name="tooltip_text" translatable="yes" context="notebookbar|TextSection|tooltip_text">Text</property>
                     <child>
                       <object class="GtkBox" id="box109">
                         <property name="visible">True</property>
@@ -2522,7 +2522,7 @@
                         </child>
                         <child>
                           <object class="vcllo-SmallButton" id="FontWork">
-                            <property name="label" translatable="yes">Fontwork</property>
+                            <property name="label" translatable="yes" context="notebookbar|FontWork">Fontwork</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -2604,7 +2604,7 @@
                   <object class="sfxlo-DropdownBox" id="FieldsSection">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Fields</property>
+                    <property name="tooltip_text" translatable="yes" context="notebookbar|FieldsSection|tooltip_text">Fields</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkBox" id="box82">
@@ -2693,7 +2693,7 @@
               <object class="GtkLabel" id="InsertLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Insert</property>
+                <property name="label" translatable="yes" context="notebookbar|InsertLabel">Insert</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -2863,7 +2863,7 @@
                   <object class="sfxlo-DropdownBox" id="box15">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Setup</property>
+                    <property name="tooltip_text" translatable="yes" context="notebookbar|box15|tooltip_text">Setup</property>
                     <child>
                       <object class="GtkBox" id="box29">
                         <property name="visible">True</property>
@@ -3061,7 +3061,7 @@
               <object class="GtkLabel" id="LayoutLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Page layout</property>
+                <property name="label" translatable="yes" context="notebookbar|LayoutLabel">Page layout</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -3439,7 +3439,7 @@
               <object class="GtkLabel" id="ReferencesLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">References</property>
+                <property name="label" translatable="yes" context="notebookbar|ReferencesLabel">References</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -3931,7 +3931,7 @@
               <object class="GtkLabel" id="ReviewLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Review</property>
+                <property name="label" translatable="yes" context="notebookbar|ReviewLabel">Review</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -3947,7 +3947,7 @@
                   <object class="sfxlo-DropdownBox" id="PageViewSection">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Page View</property>
+                    <property name="tooltip_text" translatable="yes" context="notebookbar|PageViewSection|tooltip_text">Page View</property>
                     <child>
                       <object class="GtkBox" id="box122">
                         <property name="visible">True</property>
@@ -4041,7 +4041,7 @@
                   <object class="sfxlo-DropdownBox" id="DocumentAreaElementsSection">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Document Area Elements</property>
+                    <property name="tooltip_text" translatable="yes" context="notebookbar|DocumentAreaElementsSection|tooltip_text">Document Area Elements</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkBox" id="box22">
@@ -4196,7 +4196,7 @@
                   <object class="sfxlo-DropdownBox" id="ZoomSection">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Zoom</property>
+                    <property name="tooltip_text" translatable="yes" context="notebookbar|ZoomSection|tooltip_text">Zoom</property>
                     <child>
                       <object class="GtkBox" id="box">
                         <property name="visible">True</property>
@@ -4329,7 +4329,7 @@
               <object class="GtkLabel" id="ViewLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">View</property>
+                <property name="label" translatable="yes" context="notebookbar|ViewLabel">View</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -4907,7 +4907,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="has_tooltip">True</property>
-                            <property name="tooltip_text" translatable="yes">Indent</property>
+                            <property name="tooltip_text" translatable="yes" context="notebookbar|formattable|tooltip_text">Indent</property>
                             <child>
                               <object class="GtkMenuToolButton" id="FrameLineColor">
                                 <property name="use_action_appearance">False</property>
@@ -4949,7 +4949,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="has_tooltip">True</property>
-                            <property name="tooltip_text" translatable="yes">Indent</property>
+                            <property name="tooltip_text" translatable="yes" context="notebookbar|formattable1|tooltip_text">Indent</property>
                             <child>
                               <object class="GtkMenuToolButton" id="SetBorderStyle">
                                 <property name="use_action_appearance">False</property>
@@ -5012,7 +5012,7 @@
               <object class="GtkLabel" id="TableLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Table</property>
+                <property name="label" translatable="yes" context="notebookbar|TableLabel">Table</property>
                 <property name="use_underline">True</property>
                 <style>
                   <class name="context-Table"/>
@@ -5031,11 +5031,11 @@
                   <object class="sfxlo-DropdownBox" id="BasicsSection">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Basics</property>
+                    <property name="tooltip_text" translatable="yes" context="notebookbar|BasicsSection|tooltip_text">Basics</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="vcllo-SmallButton" id="GraphicDialog">
-                        <property name="label" translatable="yes">Properties</property>
+                        <property name="label" translatable="yes" context="notebookbar|GraphicDialog">Properties</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -5065,11 +5065,11 @@
                   <object class="sfxlo-DropdownBox" id="SizeSection">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Basics</property>
+                    <property name="tooltip_text" translatable="yes" context="notebookbar|SizeSection|tooltip_text">Basics</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="vcllo-SmallButton" id="Crop1">
-                        <property name="label" translatable="yes">Crop</property>
+                        <property name="label" translatable="yes" context="notebookbar|Crop1">Crop</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -5697,7 +5697,7 @@
               <object class="GtkLabel" id="ImageLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Image</property>
+                <property name="label" translatable="yes" context="notebookbar|ImageLabel">Image</property>
                 <property name="use_underline">True</property>
                 <style>
                   <class name="context-Graphic"/>
@@ -5714,7 +5714,7 @@
                 <property name="can_focus">False</property>
                 <child>
                   <object class="vcllo-SmallButton" id="LineFormat">
-                    <property name="label" translatable="yes">Line</property>
+                    <property name="label" translatable="yes" context="notebookbar|LineFormat">Line</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -5732,7 +5732,7 @@
                 </child>
                 <child>
                   <object class="vcllo-SmallButton" id="AreaFormat">
-                    <property name="label" translatable="yes">Area</property>
+                    <property name="label" translatable="yes" context="notebookbar|AreaFormat">Area</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -5863,7 +5863,7 @@
               <object class="GtkLabel" id="ShapeLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Shape / Textbox</property>
+                <property name="label" translatable="yes" context="notebookbar|ShapeLabel">Shape / Textbox</property>
                 <style>
                   <class name="context-Draw"/>
                 </style>
@@ -5892,7 +5892,7 @@
                         <property name="can_focus">False</property>
                         <property name="is_important">True</property>
                         <property name="action_name">.uno:AnchorMenu</property>
-                        <property name="label" translatable="yes">Anchor</property>
+                        <property name="label" translatable="yes" context="notebookbar|AnchorMenu">Anchor</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -6421,7 +6421,7 @@
               <object class="GtkLabel" id="FrameLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Frame / OLE</property>
+                <property name="label" translatable="yes" context="notebookbar|FrameLabel">Frame / OLE</property>
                 <style>
                   <class name="context-Frame"/>
                   <class name="context-OLE"/>

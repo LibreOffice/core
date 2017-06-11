@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="cui">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkBox" id="OptJSearchPage">
     <property name="visible">True</property>
@@ -30,7 +30,7 @@
                 <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkCheckButton" id="matchcase">
-                    <property name="label" translatable="yes">_uppercase/lowercase</property>
+                    <property name="label" translatable="yes" context="optjsearchpage|matchcase">_uppercase/lowercase</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -47,7 +47,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="matchfullhalfwidth">
-                    <property name="label" translatable="yes">_full-width/half-width forms</property>
+                    <property name="label" translatable="yes" context="optjsearchpage|matchfullhalfwidth">_full-width/half-width forms</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -64,7 +64,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="matchhiraganakatakana">
-                    <property name="label" translatable="yes">_hiragana/katakana</property>
+                    <property name="label" translatable="yes" context="optjsearchpage|matchhiraganakatakana">_hiragana/katakana</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -81,7 +81,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="matchcontractions">
-                    <property name="label" translatable="yes">_contractions (yo-on, sokuon)</property>
+                    <property name="label" translatable="yes" context="optjsearchpage|matchcontractions">_contractions (yo-on, sokuon)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -98,7 +98,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="matchminusdashchoon">
-                    <property name="label" translatable="yes">_minus/dash/cho-on</property>
+                    <property name="label" translatable="yes" context="optjsearchpage|matchminusdashchoon">_minus/dash/cho-on</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -115,7 +115,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="matchrepeatcharmarks">
-                    <property name="label" translatable="yes">'re_peat character' marks</property>
+                    <property name="label" translatable="yes" context="optjsearchpage|matchrepeatcharmarks">'re_peat character' marks</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -132,7 +132,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="matchvariantformkanji">
-                    <property name="label" translatable="yes">_variant-form kanji (itaiji)</property>
+                    <property name="label" translatable="yes" context="optjsearchpage|matchvariantformkanji">_variant-form kanji (itaiji)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -149,7 +149,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="matcholdkanaforms">
-                    <property name="label" translatable="yes">_old Kana forms</property>
+                    <property name="label" translatable="yes" context="optjsearchpage|matcholdkanaforms">_old Kana forms</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -166,7 +166,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="matchdiziduzu">
-                    <property name="label" translatable="yes">_di/zi, du/zu</property>
+                    <property name="label" translatable="yes" context="optjsearchpage|matchdiziduzu">_di/zi, du/zu</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -183,7 +183,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="matchbavahafa">
-                    <property name="label" translatable="yes">_ba/va, ha/fa</property>
+                    <property name="label" translatable="yes" context="optjsearchpage|matchbavahafa">_ba/va, ha/fa</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -200,7 +200,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="matchtsithichidhizi">
-                    <property name="label" translatable="yes">_tsi/thi/chi, dhi/zi</property>
+                    <property name="label" translatable="yes" context="optjsearchpage|matchtsithichidhizi">_tsi/thi/chi, dhi/zi</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -217,7 +217,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="matchhyuiyubyuvyu">
-                    <property name="label" translatable="yes">h_yu/fyu, byu/vyu</property>
+                    <property name="label" translatable="yes" context="optjsearchpage|matchhyuiyubyuvyu">h_yu/fyu, byu/vyu</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -234,7 +234,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="matchseshezeje">
-                    <property name="label" translatable="yes">_se/she, ze/je</property>
+                    <property name="label" translatable="yes" context="optjsearchpage|matchseshezeje">_se/she, ze/je</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -251,7 +251,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="matchiaiya">
-                    <property name="label" translatable="yes">_ia/iya (piano/piyano)</property>
+                    <property name="label" translatable="yes" context="optjsearchpage|matchiaiya">_ia/iya (piano/piyano)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -268,7 +268,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="matchkiku">
-                    <property name="label" translatable="yes">_ki/ku (tekisuto/tekusuto)</property>
+                    <property name="label" translatable="yes" context="optjsearchpage|matchkiku">_ki/ku (tekisuto/tekusuto)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -285,7 +285,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="matchprolongedsoundmark">
-                    <property name="label" translatable="yes">Prolon_ged vowels (ka-/kaa)</property>
+                    <property name="label" translatable="yes" context="optjsearchpage|matchprolongedsoundmark">Prolon_ged vowels (ka-/kaa)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -308,7 +308,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Treat as Equal</property>
+            <property name="label" translatable="yes" context="optjsearchpage|label1">Treat as Equal</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -342,7 +342,7 @@
                 <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkCheckButton" id="ignorepunctuation">
-                    <property name="label" translatable="yes">Pu_nctuation characters</property>
+                    <property name="label" translatable="yes" context="optjsearchpage|ignorepunctuation">Pu_nctuation characters</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -359,7 +359,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="ignorewhitespace">
-                    <property name="label" translatable="yes">_Whitespace characters</property>
+                    <property name="label" translatable="yes" context="optjsearchpage|ignorewhitespace">_Whitespace characters</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -376,7 +376,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="ignoremiddledot">
-                    <property name="label" translatable="yes">Midd_le dots</property>
+                    <property name="label" translatable="yes" context="optjsearchpage|ignoremiddledot">Midd_le dots</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -402,7 +402,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Ignore</property>
+            <property name="label" translatable="yes" context="optjsearchpage|label2">Ignore</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

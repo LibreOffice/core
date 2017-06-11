@@ -59,8 +59,6 @@ namespace scui
     {
         if ( !pFactory )
             pFactory = new ScAbstractDialogFactory_Impl;
-        //if ( !pSwResMgr)
-        //  ScDialogsResMgr::GetResMgr();
         return pFactory;
     }
 }

@@ -30,7 +30,7 @@
 #include <swtable.hxx>
 #include <frmtool.hxx>
 #include <doc.hxx>
-#include <poolfmt.hrc>
+#include <strings.hrc>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <poolfmt.hxx>
@@ -349,6 +349,21 @@ void SwPageDesc::ChgFirstShare( bool bNew )
         m_eUse &= UseOnPage::NoFirstShare;
 }
 
+// Page styles
+static const char* STR_POOLPAGE[] =
+{
+    STR_POOLPAGE_STANDARD,
+    STR_POOLPAGE_FIRST,
+    STR_POOLPAGE_LEFT,
+    STR_POOLPAGE_RIGHT,
+    STR_POOLPAGE_JAKET,
+    STR_POOLPAGE_REGISTER,
+    STR_POOLPAGE_HTML,
+    STR_POOLPAGE_FOOTNOTE,
+    STR_POOLPAGE_ENDNOTE,
+    STR_POOLPAGE_LANDSCAPE
+};
+
 SwPageDesc* SwPageDesc::GetByName(SwDoc& rDoc, const OUString& rName)
 {
     const size_t nDCount = rDoc.GetPageDescCnt();
@@ -362,12 +377,12 @@ SwPageDesc* SwPageDesc::GetByName(SwDoc& rDoc, const OUString& rName)
         }
     }
 
-    for( sal_Int32 i = RC_POOLPAGEDESC_BEGIN; i <= STR_POOLPAGE_LANDSCAPE; ++i)
+    for (size_t i = 0; i <= SAL_N_ELEMENTS(STR_POOLPAGE); ++i)
     {
-        if (rName==SwResId(i))
+        if (rName == SwResId(STR_POOLPAGE[i]))
         {
             return rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( static_cast< sal_uInt16 >(
-                        i - RC_POOLPAGEDESC_BEGIN + RES_POOLPAGE_BEGIN) );
+                        i + RES_POOLPAGE_BEGIN) );
         }
     }
 
