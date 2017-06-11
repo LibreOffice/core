@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkGrid" id="StatisticsInfoPage">
     <property name="visible">True</property>
@@ -13,7 +13,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">end</property>
-        <property name="label" translatable="yes">Pages:</property>
+        <property name="label" translatable="yes" context="statisticsinfopage|label4">Pages:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">nopages</property>
       </object>
@@ -27,7 +27,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">end</property>
-        <property name="label" translatable="yes">Tables:</property>
+        <property name="label" translatable="yes" context="statisticsinfopage|label5">Tables:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">notables</property>
       </object>
@@ -41,7 +41,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">end</property>
-        <property name="label" translatable="yes">Images:</property>
+        <property name="label" translatable="yes" context="statisticsinfopage|label6">Images:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">nogrfs</property>
       </object>
@@ -55,7 +55,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">end</property>
-        <property name="label" translatable="yes">OLE objects:</property>
+        <property name="label" translatable="yes" context="statisticsinfopage|label31">OLE objects:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">nooles</property>
       </object>
@@ -69,7 +69,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">end</property>
-        <property name="label" translatable="yes">Paragraphs:</property>
+        <property name="label" translatable="yes" context="statisticsinfopage|label32">Paragraphs:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">noparas</property>
       </object>
@@ -83,7 +83,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">end</property>
-        <property name="label" translatable="yes">Words:</property>
+        <property name="label" translatable="yes" context="statisticsinfopage|label33">Words:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">nowords</property>
       </object>
@@ -97,7 +97,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">end</property>
-        <property name="label" translatable="yes">Characters:</property>
+        <property name="label" translatable="yes" context="statisticsinfopage|label34">Characters:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">nochars</property>
       </object>
@@ -111,7 +111,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">end</property>
-        <property name="label" translatable="yes">Characters excluding spaces:</property>
+        <property name="label" translatable="yes" context="statisticsinfopage|label35">Characters excluding spaces:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">nocharsexspaces</property>
       </object>
@@ -125,7 +125,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">end</property>
-        <property name="label" translatable="yes">Lines:</property>
+        <property name="label" translatable="yes" context="statisticsinfopage|lineft">Lines:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">nolines</property>
       </object>
@@ -245,7 +245,7 @@
     </child>
     <child>
       <object class="GtkButton" id="update">
-        <property name="label" translatable="yes">Update</property>
+        <property name="label" translatable="yes" context="statisticsinfopage|update">Update</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>

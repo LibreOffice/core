@@ -18,7 +18,6 @@
  */
 
 #include <rolbck.hxx>
-#include <tools/resid.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <hints.hxx>
@@ -53,7 +52,7 @@
 #include <UndoCore.hxx>
 #include <IMark.hxx>
 #include <charfmt.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <undo.hrc>
 #include <bookmrk.hxx>
 #include <memory>

@@ -34,6 +34,7 @@
 #include <calc.hxx>
 #include <svl/zformat.hxx>
 #include <globals.hrc>
+#include <strings.hrc>
 #include <fldui.hrc>
 
 #define USER_DATA_VERSION_1 "1"

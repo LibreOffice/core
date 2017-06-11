@@ -39,6 +39,7 @@
 #include "headertablistbox.hxx"
 #include "macropg_impl.hxx"
 #include <svx/dialogs.hrc>
+#include "strings.hrc"
 #include <vcl/builderfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <o3tl/make_unique.hxx>
@@ -529,7 +530,7 @@ void SvxMacroTabPage_::DisplayAppEvents( bool appEvents)
         }
 
         OUString eventURL = h_it->second.second;
-        OUString displayName(CuiResId(displayableEvent->nEventResourceID));
+        OUString displayName(CuiResId(displayableEvent->pEventResourceID));
 
         displayName += "\t";
 

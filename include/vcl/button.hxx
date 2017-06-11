@@ -27,7 +27,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/salnativewidgets.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
 #include <memory>
 #include <vector>

@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_MENU_HXX
 
 #include <memory>
-#include <rsc/rsc-vcl-shared-types.hxx>
+#include <vcl/vclenum.hxx>
 #include <tools/color.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>

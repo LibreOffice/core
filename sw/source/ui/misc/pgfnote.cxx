@@ -41,6 +41,7 @@
 #include <sfx2/objsh.hxx>
 
 #include <globals.hrc>
+#include <strings.hrc>
 #include <misc.hrc>
 #include <memory>
 

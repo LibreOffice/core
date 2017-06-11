@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.19.0 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
@@ -51,7 +51,7 @@
                   <object class="GtkLabel" id="label6">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Use for %PRODUCTNAME:</property>
+                    <property name="label" translatable="yes" context="optmemorypage|label6">_Use for %PRODUCTNAME:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">graphiccache</property>
                     <property name="xalign">1</property>
@@ -65,7 +65,7 @@
                   <object class="GtkLabel" id="label7">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Memory per object:</property>
+                    <property name="label" translatable="yes" context="optmemorypage|label7">_Memory per object:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">objectcache</property>
                     <property name="xalign">1</property>
@@ -79,7 +79,7 @@
                   <object class="GtkLabel" id="label8">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Remove _from memory after:</property>
+                    <property name="label" translatable="yes" context="optmemorypage|label8">Remove _from memory after:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">objecttime:hh:mm</property>
                     <property name="xalign">1</property>
@@ -93,7 +93,7 @@
                   <object class="GtkLabel" id="label9">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">MB</property>
+                    <property name="label" translatable="yes" context="optmemorypage|label9">MB</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -105,7 +105,7 @@
                   <object class="GtkLabel" id="label10">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">MB</property>
+                    <property name="label" translatable="yes" context="optmemorypage|label10">MB</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -152,7 +152,7 @@
                   <object class="GtkLabel" id="label12">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">hh:mm</property>
+                    <property name="label" translatable="yes" context="optmemorypage|label12">hh:mm</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -167,7 +167,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Image Cache</property>
+            <property name="label" translatable="yes" context="optmemorypage|label2">Image Cache</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -213,7 +213,7 @@
                   <object class="GtkLabel" id="label11">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Number of objects:</property>
+                    <property name="label" translatable="yes" context="optmemorypage|label11">Number of objects:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">olecache</property>
                     <property name="xalign">1</property>
@@ -231,7 +231,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Cache for Inserted Objects</property>
+            <property name="label" translatable="yes" context="optmemorypage|label3">Cache for Inserted Objects</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -263,7 +263,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="quicklaunch">
-                    <property name="label" translatable="yes">Load %PRODUCTNAME during system start-up</property>
+                    <property name="label" translatable="yes" context="optmemorypage|quicklaunch">Load %PRODUCTNAME during system start-up</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
@@ -277,7 +277,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="systray">
-                    <property name="label" translatable="yes">Enable systray Quickstarter</property>
+                    <property name="label" translatable="yes" context="optmemorypage|systray">Enable systray Quickstarter</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
@@ -297,7 +297,7 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">%PRODUCTNAME Quickstarter</property>
+            <property name="label" translatable="yes" context="optmemorypage|label4">%PRODUCTNAME Quickstarter</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

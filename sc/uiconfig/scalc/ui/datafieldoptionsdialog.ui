@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
@@ -12,7 +12,7 @@
   <object class="GtkDialog" id="DataFieldOptionsDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Data Field Options</property>
+    <property name="title" translatable="yes" context="datafieldoptionsdialog|DataFieldOptionsDialog">Data Field Options</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -107,7 +107,7 @@
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkRadioButton" id="ascending">
-                            <property name="label" translatable="yes">_Ascending</property>
+                            <property name="label" translatable="yes" context="datafieldoptionsdialog|ascending">_Ascending</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -124,7 +124,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="descending">
-                            <property name="label" translatable="yes">_Descending</property>
+                            <property name="label" translatable="yes" context="datafieldoptionsdialog|descending">_Descending</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -140,7 +140,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="manual">
-                            <property name="label" translatable="yes">_Manual</property>
+                            <property name="label" translatable="yes" context="datafieldoptionsdialog|manual">_Manual</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -178,7 +178,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Sort by</property>
+                    <property name="label" translatable="yes" context="datafieldoptionsdialog|label1">Sort by</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -210,7 +210,7 @@
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkCheckButton" id="repeatitemlabels">
-                            <property name="label" translatable="yes">_Repeat item labels</property>
+                            <property name="label" translatable="yes" context="datafieldoptionsdialog|repeatitemlabels">_Repeat item labels</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -226,7 +226,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="emptyline">
-                            <property name="label" translatable="yes">_Empty line after each item</property>
+                            <property name="label" translatable="yes" context="datafieldoptionsdialog|emptyline">_Empty line after each item</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -245,7 +245,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Layout:</property>
+                            <property name="label" translatable="yes" context="datafieldoptionsdialog|label3">_Layout:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">layout</property>
                           </object>
@@ -260,9 +260,9 @@
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <items>
-                              <item translatable="yes">Tabular layout</item>
-                              <item translatable="yes">Outline layout with subtotals at the top</item>
-                              <item translatable="yes">Outline layout with subtotals at the bottom</item>
+                              <item translatable="yes" context="datafieldoptionsdialog|layout">Tabular layout</item>
+                              <item translatable="yes" context="datafieldoptionsdialog|layout">Outline layout with subtotals at the top</item>
+                              <item translatable="yes" context="datafieldoptionsdialog|layout">Outline layout with subtotals at the bottom</item>
                             </items>
                           </object>
                           <packing>
@@ -278,7 +278,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Display Options</property>
+                    <property name="label" translatable="yes" context="datafieldoptionsdialog|label2">Display Options</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -310,7 +310,7 @@
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkCheckButton" id="show">
-                            <property name="label" translatable="yes">_Show:</property>
+                            <property name="label" translatable="yes" context="datafieldoptionsdialog|show">_Show:</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -331,7 +331,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_From:</property>
+                            <property name="label" translatable="yes" context="datafieldoptionsdialog|showfromft">_From:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">from</property>
                           </object>
@@ -345,7 +345,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Using field:</property>
+                            <property name="label" translatable="yes" context="datafieldoptionsdialog|usingft">_Using field:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">using</property>
                           </object>
@@ -364,7 +364,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">items</property>
+                                <property name="label" translatable="yes" context="datafieldoptionsdialog|showft">items</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">layout</property>
                               </object>
@@ -398,8 +398,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <items>
-                              <item translatable="yes">Top</item>
-                              <item translatable="yes">Bottom</item>
+                              <item translatable="yes" context="datafieldoptionsdialog|from">Top</item>
+                              <item translatable="yes" context="datafieldoptionsdialog|from">Bottom</item>
                             </items>
                           </object>
                           <packing>
@@ -425,7 +425,7 @@
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Show Automatically</property>
+                    <property name="label" translatable="yes" context="datafieldoptionsdialog|label4">Show Automatically</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -470,7 +470,7 @@
                   <object class="GtkLabel" id="label9">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Hide Items</property>
+                    <property name="label" translatable="yes" context="datafieldoptionsdialog|label9">Hide Items</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -502,7 +502,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Hierarch_y:</property>
+                    <property name="label" translatable="yes" context="datafieldoptionsdialog|hierarchyft">Hierarch_y:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">hierarchy</property>
                   </object>

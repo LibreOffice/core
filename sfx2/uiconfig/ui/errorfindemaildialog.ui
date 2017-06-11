@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sfx">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkMessageDialog" id="ErrorFindEmailDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">No e-mail configuration</property>
+    <property name="title" translatable="yes" context="errorfindemaildialog|ErrorFindEmailDialog">No e-mail configuration</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">error</property>
     <property name="buttons">ok</property>
-    <property name="text" translatable="yes">%PRODUCTNAME was unable to find a working e-mail configuration.</property>
-    <property name="secondary_text" translatable="yes">Please save this document locally instead and attach it from within your e-mail client.</property>
+    <property name="text" translatable="yes" context="errorfindemaildialog|ErrorFindEmailDialog">%PRODUCTNAME was unable to find a working e-mail configuration.</property>
+    <property name="secondary_text" translatable="yes" context="errorfindemaildialog|ErrorFindEmailDialog">Please save this document locally instead and attach it from within your e-mail client.</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>

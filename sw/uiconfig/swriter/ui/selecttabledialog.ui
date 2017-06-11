@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="SelectTableDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Select Table</property>
+    <property name="title" translatable="yes" context="selecttabledialog|SelectTableDialog">Select Table</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -88,7 +88,7 @@
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">The file you have selected contains more than one table. Please select the table containing the address list you want to use.</property>
+                <property name="label" translatable="yes" context="selecttabledialog|select">The file you have selected contains more than one table. Please select the table containing the address list you want to use.</property>
                 <property name="use_underline">True</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">90</property>
@@ -124,7 +124,7 @@
                 <property name="layout_style">start</property>
                 <child>
                   <object class="GtkButton" id="preview">
-                    <property name="label" translatable="yes">_Preview</property>
+                    <property name="label" translatable="yes" context="selecttabledialog|preview">_Preview</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>

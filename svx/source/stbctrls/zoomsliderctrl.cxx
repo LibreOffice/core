@@ -25,7 +25,7 @@
 #include <vcl/settings.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <basegfx/tools/zoomtools.hxx>
 #include "bitmaps.hlst"
 

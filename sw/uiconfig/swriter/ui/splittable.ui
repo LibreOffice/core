@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sw">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="SplitTableDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Split Table</property>
+    <property name="title" translatable="yes" context="splittable|SplitTableDialog">Split Table</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -86,7 +86,7 @@
                     <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="copyheading">
-                        <property name="label" translatable="yes">Copy heading</property>
+                        <property name="label" translatable="yes" context="splittable|copyheading">Copy heading</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -105,7 +105,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="customheadingapplystyle">
-                        <property name="label" translatable="yes">Custom heading (apply Style)</property>
+                        <property name="label" translatable="yes" context="splittable|customheadingapplystyle">Custom heading (apply Style)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -122,7 +122,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="customheading">
-                        <property name="label" translatable="yes">Custom heading</property>
+                        <property name="label" translatable="yes" context="splittable|customheading">Custom heading</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -139,7 +139,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="noheading">
-                        <property name="label" translatable="yes">No heading</property>
+                        <property name="label" translatable="yes" context="splittable|noheading">No heading</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -162,7 +162,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Mode</property>
+                <property name="label" translatable="yes" context="splittable|label1">Mode</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

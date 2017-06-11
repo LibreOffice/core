@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sc">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkVBox" id="HeaderFooterContent">
@@ -19,7 +19,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">_Left area</property>
+            <property name="label" translatable="yes" context="headerfootercontent|labelFT_LEFT">_Left area</property>
             <property name="use_underline">True</property>
           </object>
           <packing>
@@ -34,7 +34,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">_Center area</property>
+            <property name="label" translatable="yes" context="headerfootercontent|labelFT_CENTER">_Center area</property>
             <property name="use_underline">True</property>
           </object>
           <packing>
@@ -49,7 +49,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">R_ight area</property>
+            <property name="label" translatable="yes" context="headerfootercontent|labelFT_RIGHT">R_ight area</property>
             <property name="use_underline">True</property>
           </object>
           <packing>
@@ -120,7 +120,7 @@
                 <property name="can_focus">False</property>
                 <property name="vexpand">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">_Header</property>
+                <property name="label" translatable="yes" context="headerfootercontent|labelFT_H_DEFINED">_Header</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -134,7 +134,7 @@
                 <property name="can_focus">False</property>
                 <property name="vexpand">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">_Footer</property>
+                <property name="label" translatable="yes" context="headerfootercontent|labelFT_F_DEFINED">_Footer</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -161,7 +161,7 @@
                 <property name="can_focus">False</property>
                 <property name="vexpand">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Custom header</property>
+                <property name="label" translatable="yes" context="headerfootercontent|labelFT_H_CUSTOM">Custom header</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -174,7 +174,7 @@
                 <property name="can_focus">False</property>
                 <property name="vexpand">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Custom footer</property>
+                <property name="label" translatable="yes" context="headerfootercontent|labelFT_F_CUSTOM">Custom footer</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -201,7 +201,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Text Attributes</property>
+                <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_TEXT|tooltip_text">Text Attributes</property>
                 <property name="image">imageBTN_TEXT</property>
               </object>
               <packing>
@@ -215,7 +215,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Title</property>
+                <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_FILE|tooltip_text">Title</property>
                 <property name="image">imageBTN_FILE</property>
               </object>
               <packing>
@@ -230,7 +230,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Sheet Name</property>
+                <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_TABLE|tooltip_text">Sheet Name</property>
                 <property name="image">imageBTN_TABLE</property>
                 <property name="yalign">0.47999998927116394</property>
               </object>
@@ -246,7 +246,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Page</property>
+                <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_PAGE|tooltip_text">Page</property>
                 <property name="image">imageBTN_PAGE</property>
               </object>
               <packing>
@@ -261,7 +261,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Pages</property>
+                <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_PAGES|tooltip_text">Pages</property>
                 <property name="image">imageBTN_PAGES</property>
                 <property name="yalign">0.49000000953674316</property>
               </object>
@@ -277,7 +277,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Date</property>
+                <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_DATE|tooltip_text">Date</property>
                 <property name="image">imageBTN_DATE</property>
                 <property name="yalign">0.37000000476837158</property>
               </object>
@@ -293,7 +293,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Time</property>
+                <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_TIME|tooltip_text">Time</property>
                 <property name="image">imageBTN_TIME</property>
                 <property name="yalign">0.41999998688697815</property>
               </object>
@@ -346,7 +346,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Use the buttons to change the font or insert field commands such as date, time, etc.</property>
+                <property name="label" translatable="yes" context="headerfootercontent|label2">Use the buttons to change the font or insert field commands such as date, time, etc.</property>
               </object>
             </child>
           </object>
@@ -355,7 +355,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Note</property>
+            <property name="label" translatable="yes" context="headerfootercontent|label1">Note</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -376,7 +376,7 @@
           <object class="GtkLabel" id="labelSTR_HF_NONE_IN_BRACKETS">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">(none)</property>
+            <property name="label" translatable="yes" context="headerfootercontent|labelSTR_HF_NONE_IN_BRACKETS">(none)</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -388,7 +388,7 @@
           <object class="GtkLabel" id="labelSTR_PAGE">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Page</property>
+            <property name="label" translatable="yes" context="headerfootercontent|labelSTR_PAGE">Page</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -400,7 +400,7 @@
           <object class="GtkLabel" id="labelSTR_HF_OF_QUESTION">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">of ?</property>
+            <property name="label" translatable="yes" context="headerfootercontent|labelSTR_HF_OF_QUESTION">of ?</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -412,7 +412,7 @@
           <object class="GtkLabel" id="labelSTR_HF_CONFIDENTIAL">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Confidential</property>
+            <property name="label" translatable="yes" context="headerfootercontent|labelSTR_HF_CONFIDENTIAL">Confidential</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -424,7 +424,7 @@
           <object class="GtkLabel" id="labelSTR_HF_CREATED_BY">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Created by</property>
+            <property name="label" translatable="yes" context="headerfootercontent|labelSTR_HF_CREATED_BY">Created by</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -436,7 +436,7 @@
           <object class="GtkLabel" id="labelSTR_HF_CUSTOMIZED">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Customized</property>
+            <property name="label" translatable="yes" context="headerfootercontent|labelSTR_HF_CUSTOMIZED">Customized</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -448,7 +448,7 @@
           <object class="GtkLabel" id="labelSTR_HF_OF">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">of</property>
+            <property name="label" translatable="yes" context="headerfootercontent|labelSTR_HF_OF">of</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -506,7 +506,7 @@
       <object class="GtkMenuItem" id="title">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Title</property>
+        <property name="label" translatable="yes" context="headerfootercontent|title">Title</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -514,7 +514,7 @@
       <object class="GtkMenuItem" id="filename">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">File Name</property>
+        <property name="label" translatable="yes" context="headerfootercontent|filename">File Name</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -522,7 +522,7 @@
       <object class="GtkMenuItem" id="pathname">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Path/File Name</property>
+        <property name="label" translatable="yes" context="headerfootercontent|pathname">Path/File Name</property>
         <property name="use_underline">True</property>
       </object>
     </child>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.19.0 -->
-<interface>
+<interface domain="pcr">
   <requires lib="gtk+" version="3.4"/>
   <object class="GtkToolbar" id="toolbar">
     <property name="visible">True</property>
@@ -11,7 +11,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">TBC_FT_SOURCE</property>
-        <property name="label" translatable="yes">Table</property>
+        <property name="label" translatable="yes" context="toolbar|TBC_FT_SOURCE">Table</property>
         <property name="use_underline">True</property>
       </object>
       <packing>
@@ -46,7 +46,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">TBC_FT_QUERY</property>
-        <property name="label" translatable="yes">Search Key</property>
+        <property name="label" translatable="yes" context="toolbar|TBC_FT_QUERY">Search Key</property>
         <property name="use_underline">True</property>
       </object>
       <packing>
@@ -81,7 +81,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Bib/autoFilter</property>
-        <property name="label" translatable="yes">AutoFilter</property>
+        <property name="label" translatable="yes" context="toolbar|TBC_BT_AUTOFILTER">AutoFilter</property>
         <property name="use_underline">True</property>
       </object>
       <packing>
@@ -94,7 +94,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Bib/standardFilter</property>
-        <property name="label" translatable="yes">Standard Filter</property>
+        <property name="label" translatable="yes" context="toolbar|TBC_BT_FILTERCRIT">Standard Filter</property>
         <property name="use_underline">True</property>
       </object>
       <packing>
@@ -107,7 +107,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Bib/removeFilter</property>
-        <property name="label" translatable="yes">Reset Filter</property>
+        <property name="label" translatable="yes" context="toolbar|TBC_BT_REMOVEFILTER">Reset Filter</property>
         <property name="use_underline">True</property>
       </object>
       <packing>
@@ -120,7 +120,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">TBC_BT_COL_ASSIGN</property>
-        <property name="label" translatable="yes">Column Arrangement</property>
+        <property name="label" translatable="yes" context="toolbar|TBC_BT_COL_ASSIGN">Column Arrangement</property>
         <property name="use_underline">True</property>
       </object>
       <packing>
@@ -133,7 +133,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Bib/sdbsource</property>
-        <property name="label" translatable="yes">Data Source</property>
+        <property name="label" translatable="yes" context="toolbar|TBC_BT_CHANGESOURCE">Data Source</property>
         <property name="use_underline">True</property>
       </object>
       <packing>

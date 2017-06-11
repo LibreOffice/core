@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="AdvancedFilterDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Advanced Filter</property>
+    <property name="title" translatable="yes" context="advancedfilterdialog|AdvancedFilterDialog">Advanced Filter</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -148,7 +148,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Read _Filter Criteria From</property>
+                <property name="label" translatable="yes" context="advancedfilterdialog|label1">Read _Filter Criteria From</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">lbfilterarea</property>
                 <attributes>
@@ -189,7 +189,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="case">
-                        <property name="label" translatable="yes">_Case sensitive</property>
+                        <property name="label" translatable="yes" context="advancedfilterdialog|case">_Case sensitive</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -205,7 +205,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="header">
-                        <property name="label" translatable="yes">Range c_ontains column labels</property>
+                        <property name="label" translatable="yes" context="advancedfilterdialog|header">Range c_ontains column labels</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -221,7 +221,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="regexp">
-                        <property name="label" translatable="yes">Regular _expressions</property>
+                        <property name="label" translatable="yes" context="advancedfilterdialog|regexp">Regular _expressions</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -237,7 +237,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="unique">
-                        <property name="label" translatable="yes">_No duplications</property>
+                        <property name="label" translatable="yes" context="advancedfilterdialog|unique">_No duplications</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -253,7 +253,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="copyresult">
-                        <property name="label" translatable="yes">Co_py results to:</property>
+                        <property name="label" translatable="yes" context="advancedfilterdialog|copyresult">Co_py results to:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -273,7 +273,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="destpers">
-                        <property name="label" translatable="yes">_Keep filter criteria</property>
+                        <property name="label" translatable="yes" context="advancedfilterdialog|destpers">_Keep filter criteria</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -312,7 +312,7 @@
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="lbcopyarea-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Copy results to:</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="advancedfilterdialog|lbcopyarea-atkobject">Copy results to:</property>
                           </object>
                         </child>
                       </object>
@@ -334,7 +334,7 @@
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edcopyarea-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Copy results to:</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="advancedfilterdialog|edcopyarea-atkobject">Copy results to:</property>
                           </object>
                         </child>
                       </object>
@@ -372,7 +372,7 @@
                       <object class="GtkLabel" id="dbarealabel">
                         <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Data range:</property>
+                        <property name="label" translatable="yes" context="advancedfilterdialog|dbarealabel">Data range:</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -385,7 +385,7 @@
                         <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">dummy</property>
+                        <property name="label" translatable="yes" context="advancedfilterdialog|dbarea">dummy</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -405,7 +405,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Op_tions</property>
+                <property name="label" translatable="yes" context="advancedfilterdialog|label2">Op_tions</property>
                 <property name="use_underline">True</property>
               </object>
             </child>

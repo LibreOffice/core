@@ -63,9 +63,8 @@
 #include <cmdid.h>
 #include <globals.hrc>
 #include <app.hrc>
-#include <poolfmt.hrc>
+#include <strings.hrc>
 #include "swabstdlg.hxx"
-#include "envelp.hrc"
 #include "envimg.hxx"
 #include <appenv.hxx>
 

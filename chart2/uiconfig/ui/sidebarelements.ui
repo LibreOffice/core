@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="chart">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkGrid" id="ChartElementsPanel">
     <property name="visible">True</property>
@@ -32,7 +32,7 @@
                     <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_subtitle">
-                        <property name="label" translatable="yes">Subtitle</property>
+                        <property name="label" translatable="yes" context="sidebarelements|checkbutton_subtitle">Subtitle</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -46,7 +46,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_title">
-                        <property name="label" translatable="yes">Title</property>
+                        <property name="label" translatable="yes" context="sidebarelements|checkbutton_title">Title</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -66,7 +66,7 @@
               <object class="GtkLabel" id="l">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Titles</property>
+                <property name="label" translatable="yes" context="sidebarelements|l">Titles</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -97,7 +97,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_legend">
-                        <property name="tooltip_text" translatable="yes">Show Legend</property>
+                        <property name="tooltip_text" translatable="yes" context="sidebarelements|checkbutton_legend|tooltip_text">Show Legend</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -120,7 +120,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
-                            <property name="label" translatable="yes">_Placement:</property>
+                            <property name="label" translatable="yes" context="sidebarelements|placement_label">_Placement:</property>
                             <property name="use_underline">True</property>
                             <property name="ellipsize">end</property>
                           </object>
@@ -136,11 +136,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <items>
-                              <item translatable="yes">Right</item>
-                              <item translatable="yes">Top</item>
-                              <item translatable="yes">Bottom</item>
-                              <item translatable="yes">Left</item>
-                              <item translatable="yes">Manual</item>
+                              <item translatable="yes" context="sidebarelements|comboboxtext_legend">Right</item>
+                              <item translatable="yes" context="sidebarelements|comboboxtext_legend">Top</item>
+                              <item translatable="yes" context="sidebarelements|comboboxtext_legend">Bottom</item>
+                              <item translatable="yes" context="sidebarelements|comboboxtext_legend">Left</item>
+                              <item translatable="yes" context="sidebarelements|comboboxtext_legend">Manual</item>
                             </items>
                           </object>
                           <packing>
@@ -163,7 +163,7 @@
               <object class="GtkLabel" id="label_legen">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Legend</property>
+                <property name="label" translatable="yes" context="sidebarelements|label_legen">Legend</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -196,7 +196,7 @@
                     <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_x_axis">
-                        <property name="label" translatable="yes">X axis</property>
+                        <property name="label" translatable="yes" context="sidebarelements|checkbutton_x_axis">X axis</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -210,7 +210,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_x_axis_title">
-                        <property name="label" translatable="yes">X axis title</property>
+                        <property name="label" translatable="yes" context="sidebarelements|checkbutton_x_axis_title">X axis title</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -224,7 +224,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_y_axis">
-                        <property name="label" translatable="yes">Y axis</property>
+                        <property name="label" translatable="yes" context="sidebarelements|checkbutton_y_axis">Y axis</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -238,7 +238,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_y_axis_title">
-                        <property name="label" translatable="yes">Y axis title</property>
+                        <property name="label" translatable="yes" context="sidebarelements|checkbutton_y_axis_title">Y axis title</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -252,7 +252,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_z_axis">
-                        <property name="label" translatable="yes">Z axis</property>
+                        <property name="label" translatable="yes" context="sidebarelements|checkbutton_z_axis">Z axis</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -266,7 +266,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_z_axis_title">
-                        <property name="label" translatable="yes">Z axis title</property>
+                        <property name="label" translatable="yes" context="sidebarelements|checkbutton_z_axis_title">Z axis title</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -280,7 +280,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_2nd_x_axis">
-                        <property name="label" translatable="yes">2nd X axis</property>
+                        <property name="label" translatable="yes" context="sidebarelements|checkbutton_2nd_x_axis">2nd X axis</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="xalign">0</property>
@@ -293,7 +293,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_2nd_x_axis_title">
-                        <property name="label" translatable="yes">2nd X axis title</property>
+                        <property name="label" translatable="yes" context="sidebarelements|checkbutton_2nd_x_axis_title">2nd X axis title</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="xalign">0</property>
@@ -306,7 +306,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_2nd_y_axis">
-                        <property name="label" translatable="yes">2nd Y axis</property>
+                        <property name="label" translatable="yes" context="sidebarelements|checkbutton_2nd_y_axis">2nd Y axis</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="xalign">0</property>
@@ -319,7 +319,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_2nd_y_axis_title">
-                        <property name="label" translatable="yes">2nd Y axis title</property>
+                        <property name="label" translatable="yes" context="sidebarelements|checkbutton_2nd_y_axis_title">2nd Y axis title</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="xalign">0</property>
@@ -338,7 +338,7 @@
               <object class="GtkLabel" id="label_axes">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Axes</property>
+                <property name="label" translatable="yes" context="sidebarelements|label_axes">Axes</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -371,7 +371,7 @@
                     <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_gridline_horizontal_major">
-                        <property name="label" translatable="yes">Horizontal major</property>
+                        <property name="label" translatable="yes" context="sidebarelements|checkbutton_gridline_horizontal_major">Horizontal major</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -385,7 +385,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_gridline_vertical_major">
-                        <property name="label" translatable="yes">Vertical major</property>
+                        <property name="label" translatable="yes" context="sidebarelements|checkbutton_gridline_vertical_major">Vertical major</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -399,7 +399,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_gridline_horizontal_minor">
-                        <property name="label" translatable="yes">Horizontal minor</property>
+                        <property name="label" translatable="yes" context="sidebarelements|checkbutton_gridline_horizontal_minor">Horizontal minor</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -413,7 +413,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_gridline_vertical_minor">
-                        <property name="label" translatable="yes">Vertical minor</property>
+                        <property name="label" translatable="yes" context="sidebarelements|checkbutton_gridline_vertical_minor">Vertical minor</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -433,7 +433,7 @@
               <object class="GtkLabel" id="label_gri">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Gridlines</property>
+                <property name="label" translatable="yes" context="sidebarelements|label_gri">Gridlines</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -452,7 +452,7 @@
             <child>
               <object class="GtkLabel" id="text_title">
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Title</property>
+                <property name="label" translatable="yes" context="sidebarelements|text_title">Title</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -462,7 +462,7 @@
             <child>
               <object class="GtkLabel" id="text_subtitle">
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Subtitle</property>
+                <property name="label" translatable="yes" context="sidebarelements|text_subtitle">Subtitle</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -56,15 +56,15 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Left-to-right</col>
+        <col id="0" translatable="yes" context="columnpage|liststore1">Left-to-right</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Right-to-left</col>
+        <col id="0" translatable="yes" context="columnpage|liststore1">Right-to-left</col>
         <col id="1">1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Use superordinate object settings</col>
+        <col id="0" translatable="yes" context="columnpage|liststore1">Use superordinate object settings</col>
         <col id="1">4</col>
       </row>
     </data>
@@ -78,23 +78,23 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Selection</col>
+        <col id="0" translatable="yes" context="columnpage|liststore2">Selection</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Current Section</col>
+        <col id="0" translatable="yes" context="columnpage|liststore2">Current Section</col>
         <col id="1">1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Selected section</col>
+        <col id="0" translatable="yes" context="columnpage|liststore2">Selected section</col>
         <col id="1">2</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Frame</col>
+        <col id="0" translatable="yes" context="columnpage|liststore2">Frame</col>
         <col id="1">4</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Page Style: </col>
+        <col id="0" translatable="yes" context="columnpage|liststore2">Page Style: </col>
         <col id="1">3</col>
       </row>
     </data>
@@ -131,7 +131,7 @@
                   <object class="GtkLabel" id="columnft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Column:</property>
+                    <property name="label" translatable="yes" context="columnpage|columnft">Column:</property>
                     <property name="xalign">1</property>
                     <accessibility>
                       <relation type="label-for" target="back"/>
@@ -192,7 +192,7 @@
                   <object class="GtkLabel" id="widthft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Width:</property>
+                    <property name="label" translatable="yes" context="columnpage|widthft">Width:</property>
                     <property name="xalign">1</property>
                     <accessibility>
                       <relation type="label-for" target="width3mf:0.00cm"/>
@@ -263,7 +263,7 @@
                   <object class="GtkLabel" id="distft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Spacing:</property>
+                    <property name="label" translatable="yes" context="columnpage|distft">Spacing:</property>
                     <property name="xalign">1</property>
                     <accessibility>
                       <relation type="label-for" target="spacing1mf:0.00cm"/>
@@ -324,7 +324,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="autowidth">
-                    <property name="label" translatable="yes">Auto_Width</property>
+                    <property name="label" translatable="yes" context="columnpage|autowidth">Auto_Width</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -397,7 +397,7 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Width and Spacing</property>
+            <property name="label" translatable="yes" context="columnpage|label4">Width and Spacing</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -434,7 +434,7 @@
                   <object class="GtkLabel" id="linestyleft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">St_yle:</property>
+                    <property name="label" translatable="yes" context="columnpage|linestyleft">St_yle:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">linestylelb</property>
                     <property name="xalign">1</property>
@@ -448,7 +448,7 @@
                   <object class="GtkLabel" id="linewidthft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Width:</property>
+                    <property name="label" translatable="yes" context="columnpage|linewidthft">_Width:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">linewidthmf:0.00pt</property>
                     <property name="xalign">1</property>
@@ -462,7 +462,7 @@
                   <object class="GtkLabel" id="lineheightft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">H_eight:</property>
+                    <property name="label" translatable="yes" context="columnpage|lineheightft">H_eight:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">linewidthmf:0.00pt</property>
                     <property name="xalign">1</property>
@@ -476,7 +476,7 @@
                   <object class="GtkLabel" id="lineposft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Position:</property>
+                    <property name="label" translatable="yes" context="columnpage|lineposft">_Position:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">lineposlb</property>
                     <property name="xalign">1</property>
@@ -502,9 +502,9 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <items>
-                      <item translatable="yes">Top</item>
-                      <item translatable="yes">Centered</item>
-                      <item translatable="yes">Bottom</item>
+                      <item translatable="yes" context="columnpage|lineposlb">Top</item>
+                      <item translatable="yes" context="columnpage|lineposlb">Centered</item>
+                      <item translatable="yes" context="columnpage|lineposlb">Bottom</item>
                     </items>
                   </object>
                   <packing>
@@ -552,7 +552,7 @@
                   <object class="GtkLabel" id="linecolorft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Color:</property>
+                    <property name="label" translatable="yes" context="columnpage|linecolorft">_Color:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">colorlb</property>
                     <property name="xalign">1</property>
@@ -576,7 +576,7 @@
           <object class="GtkLabel" id="label11">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Separator Line</property>
+            <property name="label" translatable="yes" context="columnpage|label11">Separator Line</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -628,7 +628,7 @@
                           <object class="GtkLabel" id="label3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Columns:</property>
+                            <property name="label" translatable="yes" context="columnpage|label3">Columns:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">colsnf</property>
                             <property name="xalign">1</property>
@@ -663,7 +663,7 @@
                         <property name="row_spacing">6</property>
                         <child>
                           <object class="GtkCheckButton" id="balance">
-                            <property name="label" translatable="yes">Evenly distribute contents _to all columns</property>
+                            <property name="label" translatable="yes" context="columnpage|balance">Evenly distribute contents _to all columns</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="no_show_all">True</property>
@@ -697,7 +697,7 @@
                               <object class="GtkLabel" id="applytoft">
                                 <property name="can_focus">False</property>
                                 <property name="no_show_all">True</property>
-                                <property name="label" translatable="yes">_Apply to:</property>
+                                <property name="label" translatable="yes" context="columnpage|applytoft">_Apply to:</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">1</property>
                               </object>
@@ -721,7 +721,7 @@
                               <object class="GtkLabel" id="textdirectionft">
                                 <property name="can_focus">False</property>
                                 <property name="no_show_all">True</property>
-                                <property name="label" translatable="yes">Text _direction:</property>
+                                <property name="label" translatable="yes" context="columnpage|textdirectionft">Text _direction:</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">1</property>
                               </object>
@@ -777,7 +777,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Settings</property>
+                <property name="label" translatable="yes" context="columnpage|label2">Settings</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

@@ -29,7 +29,7 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 #include <algorithm>
-#include "resource/ado_res.hrc"
+#include "strings.hrc"
 
 using namespace connectivity::ado;
 using namespace connectivity;

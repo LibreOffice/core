@@ -21,8 +21,7 @@
 #include <vcl/msgbox.hxx>
 #include "logindlg.hxx"
 
-#include "ids.hrc"
-#include <tools/resid.hxx>
+#include "strings.hrc"
 #include <osl/file.hxx>
 
 #ifdef UNX

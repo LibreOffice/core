@@ -33,7 +33,6 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/sfxresid.hxx>
-#include "view.hrc"
 
 // struct SfxPrinter_Impl ------------------------------------------------
 

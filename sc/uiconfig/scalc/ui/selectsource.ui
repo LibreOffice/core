@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="SelectSourceDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Select Source</property>
+    <property name="title" translatable="yes" context="selectsource|SelectSourceDialog">Select Source</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -91,7 +91,7 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="selection">
-                        <property name="label" translatable="yes">_Current selection</property>
+                        <property name="label" translatable="yes" context="selectsource|selection">_Current selection</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -114,7 +114,7 @@
                         <property name="spacing">12</property>
                         <child>
                           <object class="GtkRadioButton" id="namedrange">
-                            <property name="label" translatable="yes">_Named range:</property>
+                            <property name="label" translatable="yes" context="selectsource|namedrange">_Named range:</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -155,7 +155,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="database">
-                        <property name="label" translatable="yes">_Data source registered in %PRODUCTNAME</property>
+                        <property name="label" translatable="yes" context="selectsource|database">_Data source registered in %PRODUCTNAME</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -172,7 +172,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="external">
-                        <property name="label" translatable="yes">_External source/interface</property>
+                        <property name="label" translatable="yes" context="selectsource|external">_External source/interface</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -195,7 +195,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Selection</property>
+                <property name="label" translatable="yes" context="selectsource|label1">Selection</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
