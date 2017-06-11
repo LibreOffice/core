@@ -28,7 +28,7 @@
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <comphelper/processfactory.hxx>
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <unotools/configmgr.hxx>
