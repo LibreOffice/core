@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkListStore" id="liststore1">
@@ -10,19 +10,19 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Bookmarks</col>
+        <col id="0" translatable="yes" context="fldrefpage|liststore1">Bookmarks</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Footnotes</col>
+        <col id="0" translatable="yes" context="fldrefpage|liststore1">Footnotes</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Endnotes</col>
+        <col id="0" translatable="yes" context="fldrefpage|liststore1">Endnotes</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Headings</col>
+        <col id="0" translatable="yes" context="fldrefpage|liststore1">Headings</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Numbered Paragraphs</col>
+        <col id="0" translatable="yes" context="fldrefpage|liststore1">Numbered Paragraphs</col>
       </row>
     </data>
   </object>
@@ -78,7 +78,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Type</property>
+                    <property name="label" translatable="yes" context="fldrefpage|label1">_Type</property>
                     <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -123,7 +123,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Insert _reference to</property>
+                    <property name="label" translatable="yes" context="fldrefpage|label3">Insert _reference to</property>
                     <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -166,7 +166,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_right">5</property>
-                        <property name="label" translatable="yes">Selection</property>
+                        <property name="label" translatable="yes" context="fldrefpage|label4">Selection</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -192,7 +192,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="shadow_type">out</property>
-                    <property name="placeholder_text" translatable="yes">Filter Selection</property>
+                    <property name="placeholder_text" translatable="yes" context="fldrefpage|filter">Filter Selection</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -266,7 +266,7 @@
                     <property name="visible">False</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">S_election</property>
+                    <property name="label" translatable="yes" context="fldrefpage|label2">S_election</property>
                     <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -293,7 +293,7 @@
                     <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Value</property>
+                    <property name="label" translatable="yes" context="fldrefpage|valueft">_Value</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">value</property>
                   </object>
@@ -320,7 +320,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Na_me</property>
+                    <property name="label" translatable="yes" context="fldrefpage|nameft">Na_me</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">name</property>
                   </object>

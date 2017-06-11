@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sd">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkGrid" id="SlideBackgroundPanel">
@@ -23,7 +23,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
-            <property name="label" translatable="yes">_Format:</property>
+            <property name="label" translatable="yes" context="sidebarslidebackground|label2">_Format:</property>
             <property name="use_underline">True</property>
           </object>
           <packing>
@@ -36,7 +36,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
-            <property name="label" translatable="yes">Background:</property>
+            <property name="label" translatable="yes" context="sidebarslidebackground|label3">Background:</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -49,8 +49,8 @@
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
             <items>
-              <item translatable="yes">Landscape</item>
-              <item translatable="yes">Portrait</item>
+              <item translatable="yes" context="sidebarslidebackground|orientation">Landscape</item>
+              <item translatable="yes" context="sidebarslidebackground|orientation">Portrait</item>
             </items>
           </object>
           <packing>
@@ -83,7 +83,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="displaymasterobjects">
-            <property name="label" translatable="yes">Display Objects</property>
+            <property name="label" translatable="yes" context="sidebarslidebackground|displaymasterobjects">Display Objects</property>
             <property name="use_action_appearance">True</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -122,7 +122,7 @@
         </child>
         <child>
           <object class="GtkButton" id="button2">
-            <property name="label" translatable="yes">Insert Image</property>
+            <property name="label" translatable="yes" context="sidebarslidebackground|button2">Insert Image</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -160,7 +160,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="displaymasterbackground">
-            <property name="label" translatable="yes">Display Background</property>
+            <property name="label" translatable="yes" context="sidebarslidebackground|displaymasterbackground">Display Background</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -189,7 +189,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
-            <property name="label" translatable="yes">Orientation: </property>
+            <property name="label" translatable="yes" context="sidebarslidebackground|label4">Orientation: </property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -204,7 +204,7 @@
             <property name="homogeneous">True</property>
             <child>
               <object class="GtkButton" id="masterslidebutton">
-                <property name="label" translatable="yes">Master Slide</property>
+                <property name="label" translatable="yes" context="sidebarslidebackground|masterslidebutton">Master Slide</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -218,7 +218,7 @@
             </child>
             <child>
               <object class="GtkButton" id="closemasterslide">
-                <property name="label" translatable="yes">Close Master View</property>
+                <property name="label" translatable="yes" context="sidebarslidebackground|closemasterslide">Close Master View</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

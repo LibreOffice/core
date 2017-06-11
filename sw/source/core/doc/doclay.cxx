@@ -91,7 +91,7 @@
 #include <ftninfo.hxx>
 #include <pagedesc.hxx>
 #include <PostItMgr.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <tools/datetimeutils.hxx>
 
 #include <unoframe.hxx>
@@ -1276,7 +1276,7 @@ SwFlyFrameFormat* SwDoc::InsertDrawLabel(
     return pNewFormat;
 }
 
-static OUString lcl_GetUniqueFlyName(const SwDoc* pDoc, sal_uInt16 nDefStrId, RES_FMT eType)
+static OUString lcl_GetUniqueFlyName(const SwDoc* pDoc, const char* pDefStrId, RES_FMT eType)
 {
     if( pDoc->IsInMailMerge())
     {
@@ -1286,8 +1286,7 @@ static OUString lcl_GetUniqueFlyName(const SwDoc* pDoc, sal_uInt16 nDefStrId, RE
         return newName;
     }
 
-    ResId aId( nDefStrId, *pSwResMgr );
-    OUString aName( aId );
+    OUString aName(SwResId(pDefStrId));
     sal_Int32 nNmLen = aName.getLength();
 
     const SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
@@ -1392,22 +1391,22 @@ void SwDoc::SetFlyName( SwFlyFrameFormat& rFormat, const OUString& rName )
     OUString sName( rName );
     if( sName.isEmpty() || FindFlyByName( sName ) )
     {
-        sal_uInt16 nTyp = STR_FRAME_DEFNAME;
+        const char* pTyp = STR_FRAME_DEFNAME;
         const SwNodeIndex* pIdx = rFormat.GetContent().GetContentIdx();
         if( pIdx && pIdx->GetNode().GetNodes().IsDocNodes() )
         {
             switch( GetNodes()[ pIdx->GetIndex() + 1 ]->GetNodeType() )
             {
                 case SwNodeType::Grf:
-                    nTyp = STR_GRAPHIC_DEFNAME;
+                    pTyp = STR_GRAPHIC_DEFNAME;
                     break;
                 case SwNodeType::Ole:
-                    nTyp = STR_OBJECT_DEFNAME;
+                    pTyp = STR_OBJECT_DEFNAME;
                     break;
                 default: break;
             }
         }
-        sName = lcl_GetUniqueFlyName(this, nTyp, RES_FLYFRMFMT);
+        sName = lcl_GetUniqueFlyName(this, pTyp, RES_FLYFRMFMT);
     }
     rFormat.SetName( sName, true );
     getIDocumentState().SetModified();
@@ -1417,12 +1416,9 @@ void SwDoc::SetAllUniqueFlyNames()
 {
     sal_Int32 n, nFlyNum = 0, nGrfNum = 0, nOLENum = 0;
 
-    ResId nFrameId( STR_FRAME_DEFNAME, *pSwResMgr ),
-          nGrfId( STR_GRAPHIC_DEFNAME, *pSwResMgr ),
-          nOLEId( STR_OBJECT_DEFNAME, *pSwResMgr );
-    const OUString sFlyNm( nFrameId );
-    const OUString sGrfNm( nGrfId );
-    const OUString sOLENm( nOLEId );
+    const OUString sFlyNm(SwResId(STR_FRAME_DEFNAME));
+    const OUString sGrfNm(SwResId(STR_GRAPHIC_DEFNAME));
+    const OUString sOLENm(SwResId(STR_OBJECT_DEFNAME));
 
     if( 255 < ( n = GetSpzFrameFormats()->size() ))
         n = 255;

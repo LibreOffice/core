@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="svx">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="DataNavigator">
     <property name="visible">True</property>
@@ -36,7 +36,7 @@
             </child>
             <child>
               <object class="GtkButton" id="modelsbutton:modelsmenu">
-                <property name="label" translatable="yes">_Models</property>
+                <property name="label" translatable="yes" context="datanavigator|modelsbutton:modelsmenu">_Models</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -70,7 +70,7 @@
               <object class="GtkLabel" id="instance">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Instance</property>
+                <property name="label" translatable="yes" context="datanavigator|instance">Instance</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -83,7 +83,7 @@
               <object class="GtkLabel" id="submissions">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Submissions</property>
+                <property name="label" translatable="yes" context="datanavigator|submissions">Submissions</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -97,7 +97,7 @@
               <object class="GtkLabel" id="bindings">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Bindings</property>
+                <property name="label" translatable="yes" context="datanavigator|bindings">Bindings</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -113,7 +113,7 @@
         </child>
         <child>
           <object class="GtkButton" id="instances:instancesmenu">
-            <property name="label" translatable="yes">_Instances</property>
+            <property name="label" translatable="yes" context="datanavigator|instances:instancesmenu">_Instances</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -141,21 +141,21 @@
       <object class="GtkMenuItem" id="instancesadd">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Add...</property>
+        <property name="label" translatable="yes" context="datanavigator|instancesadd">_Add...</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="instancesedit">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Edit...</property>
+        <property name="label" translatable="yes" context="datanavigator|instancesedit">_Edit...</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="instancesremove">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Remove...</property>
+        <property name="label" translatable="yes" context="datanavigator|instancesremove">_Remove...</property>
       </object>
     </child>
     <child>
@@ -168,7 +168,7 @@
       <object class="GtkMenuItem" id="instancesdetails">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Show Details</property>
+        <property name="label" translatable="yes" context="datanavigator|instancesdetails">_Show Details</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -180,7 +180,7 @@
       <object class="GtkMenuItem" id="modelsadd">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Add...</property>
+        <property name="label" translatable="yes" context="datanavigator|modelsadd">_Add...</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -188,7 +188,7 @@
       <object class="GtkMenuItem" id="modelsedit">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Edit...</property>
+        <property name="label" translatable="yes" context="datanavigator|modelsedit">_Edit...</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -196,7 +196,7 @@
       <object class="GtkMenuItem" id="modelsremove">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Remove</property>
+        <property name="label" translatable="yes" context="datanavigator|modelsremove">_Remove</property>
         <property name="use_underline">True</property>
       </object>
     </child>

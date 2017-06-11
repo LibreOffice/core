@@ -1,0 +1,83 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_REPORTDESIGN_INC_FNP_HRC
+#define INCLUDED_REPORTDESIGN_INC_FNP_HRC
+
+#define NC_(Context, String) (Context "\004" u8##String)
+
+const char* RID_STR_FORCENEWPAGE_CONST[] =
+{
+    NC_("RID_STR_FORCENEWPAGE_CONST", "None"),
+    NC_("RID_STR_FORCENEWPAGE_CONST", "Before Section"),
+    NC_("RID_STR_FORCENEWPAGE_CONST", "After Section"),
+    NC_("RID_STR_FORCENEWPAGE_CONST", "Before & After Section"),
+    nullptr
+};
+
+const char* RID_STR_GROUPKEEPTOGETHER_CONST[] =
+{
+    NC_("RID_STR_GROUPKEEPTOGETHER_CONST", "Per Page"),
+    NC_("RID_STR_GROUPKEEPTOGETHER_CONST", "Per Column"),
+    nullptr
+};
+
+const char* RID_STR_REPORTPRINTOPTION_CONST[] =
+{
+    NC_("RID_STR_REPORTPRINTOPTION_CONST", "All Pages"),
+    NC_("RID_STR_REPORTPRINTOPTION_CONST", "Not With Report Header"),
+    NC_("RID_STR_REPORTPRINTOPTION_CONST", "Not With Report Footer"),
+    NC_("RID_STR_REPORTPRINTOPTION_CONST", "Not With Report Header/Footer"),
+    nullptr
+};
+
+const char* RID_STR_TYPE_CONST[] =
+{
+    NC_("RID_STR_TYPE_CONST", "Field or Formula"),
+    NC_("RID_STR_TYPE_CONST", "Function"),
+    NC_("RID_STR_TYPE_CONST", "Counter"),
+    NC_("RID_STR_TYPE_CONST", "User defined Function"),
+    nullptr
+};
+
+const char* RID_STR_BOOL[] =
+{
+    NC_("RID_STR_BOOL", "No"),
+    NC_("RID_STR_BOOL", "Yes"),
+    nullptr
+};
+
+const char* RID_STR_KEEPTOGETHER_CONST[] =
+{
+    NC_("RID_STR_KEEPTOGETHER_CONST", "No"),
+    NC_("RID_STR_KEEPTOGETHER_CONST", "Whole Group"),
+    NC_("RID_STR_KEEPTOGETHER_CONST", "With First Detail"),
+    nullptr
+};
+
+const char* RID_STR_VERTICAL_ALIGN_CONST[] =
+{
+    NC_("RID_STR_VERTICAL_ALIGN_CONST", "Top"),
+    NC_("RID_STR_VERTICAL_ALIGN_CONST", "Middle"),
+    NC_("RID_STR_VERTICAL_ALIGN_CONST", "Bottom"),
+    nullptr
+};
+
+const char* RID_STR_PARAADJUST_CONST[] =
+{
+    NC_("RID_STR_PARAADJUST_CONST", "Left"),
+    NC_("RID_STR_PARAADJUST_CONST", "Right"),
+    NC_("RID_STR_PARAADJUST_CONST", "Block"),
+    NC_("RID_STR_PARAADJUST_CONST", "Center"),
+    nullptr
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

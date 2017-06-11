@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="svx">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="0to100adjustment">
     <property name="upper">100</property>
@@ -43,7 +43,7 @@
               <object class="GtkLabel" id="brightnesslabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Brightness:</property>
+                <property name="label" translatable="yes" context="sidebargraphic|brightnesslabel">_Brightness:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">setbrightness:%</property>
                 <property name="xalign">0</property>
@@ -58,7 +58,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Specify the luminance of the graphic.</property>
+                <property name="tooltip_text" translatable="yes" context="sidebargraphic|setbrightness:%|tooltip_text">Specify the luminance of the graphic.</property>
                 <property name="invisible_char">•</property>
                 <property name="adjustment">plusminus100adjustment</property>
                 <property name="climb_rate">1</property>
@@ -67,7 +67,7 @@
                 </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="setbrightness:%-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">Brightness</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setbrightness:%-atkobject">Brightness</property>
                   </object>
                 </child>
               </object>
@@ -80,7 +80,7 @@
               <object class="GtkLabel" id="contrastlabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Contrast:</property>
+                <property name="label" translatable="yes" context="sidebargraphic|contrastlabel">_Contrast:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">setcontrast:%</property>
                 <property name="xalign">0</property>
@@ -95,7 +95,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Specify the degree of difference between the lightest and darkest parts of the graphic.</property>
+                <property name="tooltip_text" translatable="yes" context="sidebargraphic|setcontrast:%|tooltip_text">Specify the degree of difference between the lightest and darkest parts of the graphic.</property>
                 <property name="invisible_char">•</property>
                 <property name="adjustment">plusminus100adjustment</property>
                 <property name="climb_rate">1</property>
@@ -104,7 +104,7 @@
                 </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="setcontrast:%-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">Contrast</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setcontrast:%-atkobject">Contrast</property>
                   </object>
                 </child>
               </object>
@@ -117,7 +117,7 @@
               <object class="GtkLabel" id="colorlmodelabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Color _mode:</property>
+                <property name="label" translatable="yes" context="sidebargraphic|colorlmodelabel">Color _mode:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">setcolormode</property>
                 <property name="xalign">0</property>
@@ -136,7 +136,7 @@
                 </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="setcolormode-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">Color mode</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setcolormode-atkobject">Color mode</property>
                   </object>
                 </child>
               </object>
@@ -149,7 +149,7 @@
               <object class="GtkLabel" id="transparencylabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Transparency:</property>
+                <property name="label" translatable="yes" context="sidebargraphic|transparencylabel">_Transparency:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">settransparency:%</property>
                 <property name="xalign">0</property>
@@ -164,7 +164,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Specify the percentage of transparency; 0% is fully opaque and 100% is fully transparent.</property>
+                <property name="tooltip_text" translatable="yes" context="sidebargraphic|settransparency:%|tooltip_text">Specify the percentage of transparency; 0% is fully opaque and 100% is fully transparent.</property>
                 <property name="invisible_char">•</property>
                 <property name="adjustment">0to100adjustment</property>
                 <property name="climb_rate">1</property>
@@ -173,7 +173,7 @@
                 </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="settransparency:%-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">Transparency</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|settransparency:%-atkobject">Transparency</property>
                   </object>
                 </child>
               </object>
@@ -206,13 +206,13 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Red</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebargraphic|setred:%|tooltip_text">Red</property>
                     <property name="invisible_char">•</property>
                     <property name="adjustment">plusminus100adjustment</property>
                     <property name="climb_rate">1</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="setred:%-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Red</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setred:%-atkobject">Red</property>
                       </object>
                     </child>
                   </object>
@@ -252,13 +252,13 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Green</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebargraphic|setgreen:%|tooltip_text">Green</property>
                     <property name="invisible_char">•</property>
                     <property name="adjustment">plusminus100adjustment</property>
                     <property name="climb_rate">1</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="setgreen:%-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Green</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setgreen:%-atkobject">Green</property>
                       </object>
                     </child>
                   </object>
@@ -299,13 +299,13 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Blue</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebargraphic|setblue:%|tooltip_text">Blue</property>
                     <property name="invisible_char">•</property>
                     <property name="adjustment">plusminus100adjustment</property>
                     <property name="climb_rate">1</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="setblue:%-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Blue</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setblue:%-atkobject">Blue</property>
                       </object>
                     </child>
                   </object>
@@ -345,7 +345,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Specify the gamma value that affects the brightness of the midtone values.</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebargraphic|setgamma:0|tooltip_text">Specify the gamma value that affects the brightness of the midtone values.</property>
                     <property name="invisible_char">•</property>
                     <property name="adjustment">gammaadjustment</property>
                     <property name="climb_rate">0.10000000000000001</property>
@@ -355,7 +355,7 @@
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="setgamma:0-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Gamma value</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setgamma:0-atkobject">Gamma value</property>
                       </object>
                     </child>
                   </object>

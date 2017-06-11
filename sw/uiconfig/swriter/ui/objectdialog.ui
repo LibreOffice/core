@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="ObjectDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Object</property>
+    <property name="title" translatable="yes" context="objectdialog|ObjectDialog">Object</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -97,7 +97,7 @@
               <object class="GtkLabel" id="type">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Type</property>
+                <property name="label" translatable="yes" context="objectdialog|type">Type</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -110,7 +110,7 @@
               <object class="GtkLabel" id="options">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Options</property>
+                <property name="label" translatable="yes" context="objectdialog|options">Options</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -124,7 +124,7 @@
               <object class="GtkLabel" id="wrap">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Wrap</property>
+                <property name="label" translatable="yes" context="objectdialog|wrap">Wrap</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -138,7 +138,7 @@
               <object class="GtkLabel" id="hyperlink">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Hyperlink</property>
+                <property name="label" translatable="yes" context="objectdialog|hyperlink">Hyperlink</property>
               </object>
               <packing>
                 <property name="position">3</property>
@@ -152,7 +152,7 @@
               <object class="GtkLabel" id="borders">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Borders</property>
+                <property name="label" translatable="yes" context="objectdialog|borders">Borders</property>
               </object>
               <packing>
                 <property name="position">4</property>
@@ -166,7 +166,7 @@
               <object class="GtkLabel" id="area">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Area</property>
+                <property name="label" translatable="yes" context="objectdialog|area">Area</property>
               </object>
               <packing>
                 <property name="position">5</property>
@@ -180,7 +180,7 @@
               <object class="GtkLabel" id="transparence">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Transparency</property>
+                <property name="label" translatable="yes" context="objectdialog|transparence">Transparency</property>
               </object>
               <packing>
                 <property name="position">6</property>
@@ -194,7 +194,7 @@
               <object class="GtkLabel" id="macro">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Macro</property>
+                <property name="label" translatable="yes" context="objectdialog|macro">Macro</property>
               </object>
               <packing>
                 <property name="position">7</property>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="svx">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="ChineseConversionDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Chinese Conversion</property>
+    <property name="title" translatable="yes" context="chineseconversiondialog|ChineseConversionDialog">Chinese Conversion</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -100,7 +100,7 @@
                         <property name="row_spacing">6</property>
                         <child>
                           <object class="GtkRadioButton" id="tosimplified">
-                            <property name="label" translatable="yes">_Traditional Chinese to simplified Chinese</property>
+                            <property name="label" translatable="yes" context="chineseconversiondialog|tosimplified">_Traditional Chinese to simplified Chinese</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -117,7 +117,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="totraditional">
-                            <property name="label" translatable="yes">_Simplified Chinese to traditional Chinese</property>
+                            <property name="label" translatable="yes" context="chineseconversiondialog|totraditional">_Simplified Chinese to traditional Chinese</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -139,7 +139,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Conversion Direction</property>
+                    <property name="label" translatable="yes" context="chineseconversiondialog|label1">Conversion Direction</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -176,7 +176,7 @@
                         <property name="column_spacing">6</property>
                         <child>
                           <object class="GtkCheckButton" id="commonterms">
-                            <property name="label" translatable="yes">Translate _common terms</property>
+                            <property name="label" translatable="yes" context="chineseconversiondialog|commonterms">Translate _common terms</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -192,7 +192,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="editterms">
-                            <property name="label" translatable="yes">_Edit Terms...</property>
+                            <property name="label" translatable="yes" context="chineseconversiondialog|editterms">_Edit Terms...</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -211,7 +211,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Common Terms</property>
+                    <property name="label" translatable="yes" context="chineseconversiondialog|label2">Common Terms</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

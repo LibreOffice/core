@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="pcr">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="LabelSelectionDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Label Field Selection</property>
+    <property name="title" translatable="yes" context="labelselectiondialog|LabelSelectionDialog">Label Field Selection</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -85,7 +85,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">These are control fields that can be used as label fields for the $controlclass$ $controlname$.</property>
+                <property name="label" translatable="yes" context="labelselectiondialog|label">These are control fields that can be used as label fields for the $controlclass$ $controlname$.</property>
                 <property name="use_underline">True</property>
                 <property name="wrap">True</property>
                 <property name="mnemonic_widget">control:border</property>
@@ -119,7 +119,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="noassignment">
-                <property name="label" translatable="yes">_No assignment</property>
+                <property name="label" translatable="yes" context="labelselectiondialog|noassignment">_No assignment</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>

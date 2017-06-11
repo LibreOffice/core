@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="dba">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkBox" id="AuthentificationPage">
     <property name="visible">True</property>
@@ -15,7 +15,7 @@
         <property name="can_focus">False</property>
         <property name="halign">start</property>
         <property name="margin_bottom">12</property>
-        <property name="label" translatable="yes">Set up the user authentication</property>
+        <property name="label" translatable="yes" context="authentificationpage|header">Set up the user authentication</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
@@ -32,7 +32,7 @@
         <property name="can_focus">False</property>
         <property name="margin_bottom">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Some databases require you to enter a user name.</property>
+        <property name="label" translatable="yes" context="authentificationpage|helptext">Some databases require you to enter a user name.</property>
         <property name="wrap">True</property>
         <property name="max_width_chars">60</property>
       </object>
@@ -57,7 +57,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">_User name</property>
+            <property name="label" translatable="yes" context="authentificationpage|generalUserNameLabel">_User name</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">generalUserNameEntry</property>
           </object>
@@ -83,7 +83,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="passRequiredCheckbutton">
-            <property name="label" translatable="yes">Password re_quired</property>
+            <property name="label" translatable="yes" context="authentificationpage|passRequiredCheckbutton">Password re_quired</property>
             <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -108,7 +108,7 @@
     </child>
     <child>
       <object class="GtkButton" id="testConnectionButton">
-        <property name="label" translatable="yes">_Test Connection</property>
+        <property name="label" translatable="yes" context="authentificationpage|testConnectionButton">_Test Connection</property>
         <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>

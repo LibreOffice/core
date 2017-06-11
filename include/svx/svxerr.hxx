@@ -88,8 +88,10 @@ public:
     static void ensure();
 };
 
-#endif
+SVX_DLLPUBLIC const ErrMsgCode* getRID_SVXERRCODE();
+SVX_DLLPUBLIC const ErrMsgCode* getRID_SVXERRCTX();
 
+#endif
 
 #endif
 

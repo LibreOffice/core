@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="pcr">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="MappingDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Column Layout for Table %1</property>
+    <property name="title" translatable="yes" context="mappingdialog|MappingDialog">Column Layout for Table %1</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -104,7 +104,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">_Short name</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label2">_Short name</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">identifierCombobox</property>
                       </object>
@@ -119,7 +119,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">_Author(s)</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label3">_Author(s)</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">authorCombobox</property>
                       </object>
@@ -134,7 +134,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">_Publisher</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label4">_Publisher</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">publisherCombobox</property>
                       </object>
@@ -149,7 +149,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">_Chapter</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label5">_Chapter</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">chapterCombobox</property>
                       </object>
@@ -164,7 +164,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">Editor</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label6">Editor</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -225,7 +225,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">_Type</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label7">_Type</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">authorityTypeCombobox</property>
                       </object>
@@ -240,7 +240,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">_Year</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label8">_Year</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">yearCombobox</property>
                       </object>
@@ -255,7 +255,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">Tit_le</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label9">Tit_le</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">titleCombobox</property>
                       </object>
@@ -306,7 +306,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">A_ddress</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label10">A_ddress</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">addressCombobox</property>
                       </object>
@@ -321,7 +321,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">_ISBN</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label11">_ISBN</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">ISBNCombobox</property>
                       </object>
@@ -336,7 +336,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">Pa_ge(s)</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label12">Pa_ge(s)</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">pagesCombobox</property>
                       </object>
@@ -387,7 +387,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">Ed_ition</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label13">Ed_ition</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">editionCombobox</property>
                       </object>
@@ -414,7 +414,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">_Book title</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label14">_Book title</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">bookTitleCombobox</property>
                       </object>
@@ -429,7 +429,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">Volume</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label15">Volume</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -442,7 +442,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">Publication t_ype</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label16">Publication t_ype</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">howPublishedCombobox</property>
                       </object>
@@ -493,7 +493,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">Organi_zation</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label17">Organi_zation</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">organizationCombobox</property>
                       </object>
@@ -508,7 +508,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">Instit_ution</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label18">Instit_ution</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">institutionCombobox</property>
                       </object>
@@ -523,7 +523,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">Uni_versity</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label19">Uni_versity</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">schoolCombobox</property>
                       </object>
@@ -574,7 +574,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">Type of re_port</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label20">Type of re_port</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">reportTypeCombobox</property>
                       </object>
@@ -589,7 +589,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">_Month</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label21">_Month</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">monthCombobox</property>
                       </object>
@@ -628,7 +628,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">_Journal</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label22">_Journal</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">journalCombobox</property>
                       </object>
@@ -643,7 +643,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">Numb_er</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label23">Numb_er</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">numberCombobox</property>
                       </object>
@@ -658,7 +658,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">Se_ries</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label24">Se_ries</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">seriesCombobox</property>
                       </object>
@@ -709,7 +709,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">Ann_otation</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label25">Ann_otation</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">annoteCombobox</property>
                       </object>
@@ -724,7 +724,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">_Note</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label26">_Note</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">noteCombobox</property>
                       </object>
@@ -739,7 +739,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">URL</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label27">URL</property>
                       </object>
                       <packing>
                         <property name="left_attach">4</property>
@@ -788,7 +788,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">User-defined field _1</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label28">User-defined field _1</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">custom1Combobox</property>
                       </object>
@@ -803,7 +803,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">User-defined field _2</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label29">User-defined field _2</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">custom2Combobox</property>
                       </object>
@@ -818,7 +818,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">User-defined field _3</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label30">User-defined field _3</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">custom3Combobox</property>
                       </object>
@@ -833,7 +833,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">User-defined field _4</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label31">User-defined field _4</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">custom4Combobox</property>
                       </object>
@@ -848,7 +848,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="vexpand">True</property>
-                        <property name="label" translatable="yes">User-defined field _5</property>
+                        <property name="label" translatable="yes" context="mappingdialog|label32">User-defined field _5</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">custom5Combobox</property>
                       </object>
@@ -967,7 +967,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Column Names</property>
+                <property name="label" translatable="yes" context="mappingdialog|label1">Column Names</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

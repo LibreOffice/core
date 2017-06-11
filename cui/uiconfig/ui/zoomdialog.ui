@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
@@ -11,7 +11,7 @@
   <object class="GtkDialog" id="ZoomDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Zoom &amp; View Layout</property>
+    <property name="title" translatable="yes" context="zoomdialog|ZoomDialog">Zoom &amp; View Layout</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -100,7 +100,7 @@
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkRadioButton" id="optimal">
-                            <property name="label" translatable="yes">Optimal</property>
+                            <property name="label" translatable="yes" context="zoomdialog|optimal">Optimal</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -117,7 +117,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="fitwandh">
-                            <property name="label" translatable="yes">Fit width and height</property>
+                            <property name="label" translatable="yes" context="zoomdialog|fitwandh">Fit width and height</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -134,7 +134,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="fitw">
-                            <property name="label" translatable="yes">Fit width</property>
+                            <property name="label" translatable="yes" context="zoomdialog|fitw">Fit width</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -151,7 +151,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="100pc">
-                            <property name="label" translatable="yes">100%</property>
+                            <property name="label" translatable="yes" context="zoomdialog|100pc">100%</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -173,7 +173,7 @@
                             <property name="spacing">12</property>
                             <child>
                               <object class="GtkRadioButton" id="variable">
-                                <property name="label" translatable="yes">Variable:</property>
+                                <property name="label" translatable="yes" context="zoomdialog|variable">Variable:</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -201,7 +201,7 @@
                                 </accessibility>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="zoomsb:0%-atkobject">
-                                    <property name="AtkObject::accessible-name" translatable="yes">Variable</property>
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="zoomdialog|zoomsb:0%-atkobject">Variable</property>
                                   </object>
                                 </child>
                               </object>
@@ -226,7 +226,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Zoom Factor</property>
+                    <property name="label" translatable="yes" context="zoomdialog|label2">Zoom Factor</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -259,7 +259,7 @@
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkRadioButton" id="automatic">
-                            <property name="label" translatable="yes">Automatic</property>
+                            <property name="label" translatable="yes" context="zoomdialog|automatic">Automatic</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -276,7 +276,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="singlepage">
-                            <property name="label" translatable="yes">Single page</property>
+                            <property name="label" translatable="yes" context="zoomdialog|singlepage">Single page</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -298,7 +298,7 @@
                             <property name="spacing">12</property>
                             <child>
                               <object class="GtkRadioButton" id="columns">
-                                <property name="label" translatable="yes">Columns:</property>
+                                <property name="label" translatable="yes" context="zoomdialog|columns">Columns:</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -329,7 +329,7 @@
                                 </accessibility>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="columnssb-atkobject">
-                                    <property name="AtkObject::accessible-name" translatable="yes">Columns</property>
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="zoomdialog|columnssb-atkobject">Columns</property>
                                   </object>
                                 </child>
                               </object>
@@ -353,7 +353,7 @@
                             <property name="left_padding">12</property>
                             <child>
                               <object class="GtkCheckButton" id="bookmode">
-                                <property name="label" translatable="yes">Book mode</property>
+                                <property name="label" translatable="yes" context="zoomdialog|bookmode">Book mode</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -380,7 +380,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">View Layout</property>
+                    <property name="label" translatable="yes" context="zoomdialog|label1">View Layout</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

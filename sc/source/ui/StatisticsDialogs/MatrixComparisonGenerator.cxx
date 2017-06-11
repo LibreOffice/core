@@ -21,8 +21,8 @@
 #include "reffact.hxx"
 #include "docfunc.hxx"
 #include "TableFillingAndNavigationTools.hxx"
-
 #include "MatrixComparisonGenerator.hxx"
+#include "strings.hrc"
 
 namespace
 {
@@ -59,7 +59,7 @@ ScMatrixComparisonGenerator::ScMatrixComparisonGenerator(
 ScMatrixComparisonGenerator::~ScMatrixComparisonGenerator()
 {}
 
-sal_Int16 ScMatrixComparisonGenerator::GetUndoNameId()
+const char* ScMatrixComparisonGenerator::GetUndoNameId()
 {
     return STR_CORRELATION_UNDO_NAME;
 }

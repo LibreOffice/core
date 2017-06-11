@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sd">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -88,7 +88,7 @@
                 <property name="can_focus">False</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Add Effect</property>
+                <property name="tooltip_text" translatable="yes" context="customanimationspanel|add_effect|tooltip_text">Add Effect</property>
                 <property name="image">image_add</property>
               </object>
               <packing>
@@ -103,7 +103,7 @@
                 <property name="can_focus">False</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Remove Effect</property>
+                <property name="tooltip_text" translatable="yes" context="customanimationspanel|remove_effect|tooltip_text">Remove Effect</property>
                 <property name="image">image_remove</property>
               </object>
               <packing>
@@ -118,7 +118,7 @@
                 <property name="can_focus">False</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Move Up</property>
+                <property name="tooltip_text" translatable="yes" context="customanimationspanel|move_up|tooltip_text">Move Up</property>
                 <property name="image">image_up</property>
               </object>
               <packing>
@@ -133,7 +133,7 @@
                 <property name="can_focus">False</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Move Down</property>
+                <property name="tooltip_text" translatable="yes" context="customanimationspanel|move_down|tooltip_text">Move Down</property>
                 <property name="image">image_down</property>
               </object>
               <packing>
@@ -161,7 +161,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Category:</property>
+                <property name="label" translatable="yes" context="customanimationspanel|categorylabel">Category:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">categorylb</property>
               </object>
@@ -175,7 +175,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Effect:</property>
+                <property name="label" translatable="yes" context="customanimationspanel|effectlabel">Effect:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">effect_list</property>
               </object>
@@ -190,11 +190,11 @@
                 <property name="can_focus">False</property>
                 <property name="popup_fixed_width">False</property>
                 <items>
-                  <item translatable="yes">Entrance</item>
-                  <item translatable="yes">Emphasis</item>
-                  <item translatable="yes">Exit</item>
-                  <item translatable="yes">Motion Paths</item>
-                  <item translatable="yes">Misc Effects</item>
+                  <item translatable="yes" context="customanimationspanel|categorylb">Entrance</item>
+                  <item translatable="yes" context="customanimationspanel|categorylb">Emphasis</item>
+                  <item translatable="yes" context="customanimationspanel|categorylb">Exit</item>
+                  <item translatable="yes" context="customanimationspanel|categorylb">Motion Paths</item>
+                  <item translatable="yes" context="customanimationspanel|categorylb">Misc Effects</item>
                 </items>
               </object>
               <packing>
@@ -239,7 +239,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes">_Start:</property>
+                    <property name="label" translatable="yes" context="customanimationspanel|start_effect">_Start:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">start_effect_list</property>
                   </object>
@@ -253,7 +253,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes">_Direction:</property>
+                    <property name="label" translatable="yes" context="customanimationspanel|effect_property">_Direction:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">placeholder</property>
                   </object>
@@ -267,7 +267,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes">D_uration:</property>
+                    <property name="label" translatable="yes" context="customanimationspanel|effect_duration">D_uration:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">anim_duration:0.00sec</property>
                   </object>
@@ -282,9 +282,9 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <items>
-                      <item translatable="yes">On click</item>
-                      <item translatable="yes">With previous</item>
-                      <item translatable="yes">After previous</item>
+                      <item translatable="yes" context="customanimationspanel|start_effect_list">On click</item>
+                      <item translatable="yes" context="customanimationspanel|start_effect_list">With previous</item>
+                      <item translatable="yes" context="customanimationspanel|start_effect_list">After previous</item>
                     </items>
                   </object>
                   <packing>
@@ -321,7 +321,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes">Options</property>
+                    <property name="tooltip_text" translatable="yes" context="customanimationspanel|more_properties|tooltip_text">Options</property>
                     <property name="image">image1</property>
                     <property name="always_show_image">True</property>
                   </object>
@@ -347,7 +347,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes">_Delay:</property>
+                    <property name="label" translatable="yes" context="customanimationspanel|delay_label">_Delay:</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -384,7 +384,7 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Effect</property>
+                <property name="label" translatable="yes" context="customanimationspanel|effect_label">Effect</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -426,7 +426,7 @@
                 <property name="spacing">18</property>
                 <child>
                   <object class="GtkCheckButton" id="auto_preview">
-                    <property name="label" translatable="yes">Automatic Preview</property>
+                    <property name="label" translatable="yes" context="customanimationspanel|auto_preview">Automatic Preview</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -443,12 +443,12 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="play">
-                    <property name="label" translatable="yes">Play</property>
+                    <property name="label" translatable="yes" context="customanimationspanel|play">Play</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Preview Effect</property>
+                    <property name="tooltip_text" translatable="yes" context="customanimationspanel|play|tooltip_text">Preview Effect</property>
                     <property name="image">image_play</property>
                     <property name="image_position">right</property>
                     <property name="always_show_image">True</property>
@@ -476,7 +476,7 @@
         <child>
           <object class="GtkLabel" id="box1_label">
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Animation Deck</property>
+            <property name="label" translatable="yes" context="customanimationspanel|box1_label">Animation Deck</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">box1</property>
           </object>
@@ -489,7 +489,7 @@
         <child>
           <object class="GtkLabel" id="custom_animation_list_label">
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Animation List</property>
+            <property name="label" translatable="yes" context="customanimationspanel|custom_animation_list_label">Animation List</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">custom_animation_list</property>
           </object>

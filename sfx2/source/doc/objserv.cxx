@@ -69,10 +69,10 @@
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/viewsh.hxx>
+#include <sfx2/dinfdlg.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/dinfdlg.hxx>
 #include <sfx2/objitem.hxx>
 #include <sfx2/objsh.hxx>
 #include "objshimp.hxx"
@@ -80,7 +80,7 @@
 #include <sfx2/module.hxx>
 #include <sfx2/viewfrm.hxx>
 #include "versdlg.hxx"
-#include "doc.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/docfac.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/sfxhelp.hxx>
@@ -89,7 +89,7 @@
 #include <sfx2/checkin.hxx>
 #include <sfx2/infobar.hxx>
 
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
