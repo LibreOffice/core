@@ -23,7 +23,7 @@
 
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include <svtools/controldims.hrc>
+#include <svtools/controldims.hxx>
 
 namespace chart
 {

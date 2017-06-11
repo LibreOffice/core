@@ -26,7 +26,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include "accpage.hxx"
 
-#include "access.hrc"
+#include "strings.hrc"
 #include <pagefrm.hxx>
 
 using namespace ::com::sun::star;

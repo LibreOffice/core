@@ -107,8 +107,7 @@
 #include <swerror.h>
 #include <SwCapObjType.hxx>
 #include <cmdid.h>
-#include <dochdl.hrc>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <sot/stg.hxx>
 #include <svx/svditer.hxx>
 #include <editeng/eeitem.hxx>
@@ -1614,7 +1613,7 @@ SotExchangeDest SwTransferable::GetSotDestination( const SwWrtShell& rSh )
 bool SwTransferable::PasteFileContent( TransferableDataHelper& rData,
                                     SwWrtShell& rSh, SotClipboardFormatId nFormat, bool bMsg )
 {
-    sal_uInt16 nResId = STR_CLPBRD_FORMAT_ERROR;
+    const char* pResId = STR_CLPBRD_FORMAT_ERROR;
     bool bRet = false;
 
     MSE40HTMLClipFormatObj aMSE40ClpObj;
@@ -1685,10 +1684,10 @@ bool SwTransferable::PasteFileContent( TransferableDataHelper& rData,
         SwReader aReader( *pStream, aEmptyOUStr, OUString(), *rSh.GetCursor() );
         rSh.SaveTableBoxContent( &rInsPos );
         if( aReader.Read( *pRead ).IsError() )
-            nResId = STR_ERROR_CLPBRD_READ;
+            pResId = STR_ERROR_CLPBRD_READ;
         else
         {
-            nResId = 0;
+            pResId = nullptr;
             bRet = true;
         }
 
@@ -1697,15 +1696,15 @@ bool SwTransferable::PasteFileContent( TransferableDataHelper& rData,
             rSh.CallChgLnk();
     }
     else
-        nResId = STR_CLPBRD_FORMAT_ERROR;
+        pResId = STR_CLPBRD_FORMAT_ERROR;
 
     // Exist a SvMemoryStream? (data in the OUString and xStrm is empty)
     if( pStream && !xStrm.is() )
         delete pStream;
 
-    if( bMsg && nResId )
+    if (bMsg && pResId)
     {
-        ScopedVclPtrInstance<MessageDialog>(nullptr, SwResId(nResId), VclMessageType::Info)->Execute();
+        ScopedVclPtrInstance<MessageDialog>(nullptr, SwResId(pResId), VclMessageType::Info)->Execute();
     }
     return bRet;
 }
@@ -2897,19 +2896,19 @@ bool SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rDat
     if( pClipboard )
     {
         aDesc = pClipboard->m_aObjDesc;
-        sal_uInt16 nResId;
+        const char* pResId;
         if( pClipboard->m_eBufferType & TransferBufferType::Document )
-            nResId = STR_PRIVATETEXT;
+            pResId = STR_PRIVATETEXT;
         else if( pClipboard->m_eBufferType & TransferBufferType::Graphic )
-            nResId = STR_PRIVATEGRAPHIC;
+            pResId = STR_PRIVATEGRAPHIC;
         else if( pClipboard->m_eBufferType == TransferBufferType::Ole )
-            nResId = STR_PRIVATEOLE;
+            pResId = STR_PRIVATEOLE;
         else
-            nResId = 0;
+            pResId = nullptr;
 
-        if( nResId )
+        if (pResId)
         {
-            if( STR_PRIVATEOLE == nResId || STR_PRIVATEGRAPHIC == nResId )
+            if (strcmp(STR_PRIVATEOLE, pResId) == 0 || strcmp(STR_PRIVATEGRAPHIC, pResId) == 0)
             {
                 // add SotClipboardFormatId::EMBED_SOURCE to the formats. This
                 // format display then the private format name.
@@ -2918,7 +2917,7 @@ bool SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rDat
                 aFormats.insert( aFormats.begin(), aFlavorEx );
             }
             pDlg->SetObjName( pClipboard->m_aObjDesc.maClassName,
-                                SwResId( nResId ) );
+                                SwResId(pResId) );
             pDlg->Insert( SotClipboardFormatId::EMBED_SOURCE, aEmptyOUStr );
         }
     }
@@ -2963,19 +2962,19 @@ void SwTransferable::FillClipFormatItem( const SwWrtShell& rSh,
     SwTransferable *pClipboard = GetSwTransferable( rData );
     if( pClipboard )
     {
-        sal_uInt16 nResId;
+        const char* pResId;
         if( pClipboard->m_eBufferType & TransferBufferType::Document )
-            nResId = STR_PRIVATETEXT;
+            pResId = STR_PRIVATETEXT;
         else if( pClipboard->m_eBufferType & TransferBufferType::Graphic )
-            nResId = STR_PRIVATEGRAPHIC;
+            pResId = STR_PRIVATEGRAPHIC;
         else if( pClipboard->m_eBufferType == TransferBufferType::Ole )
-            nResId = STR_PRIVATEOLE;
+            pResId = STR_PRIVATEOLE;
         else
-            nResId = 0;
+            pResId = nullptr;
 
-        if( nResId )
-            rToFill.AddClipbrdFormat( SotClipboardFormatId::EMBED_SOURCE,
-                                        SwResId( nResId ) );
+        if (pResId)
+            rToFill.AddClipbrdFormat(SotClipboardFormatId::EMBED_SOURCE,
+                                       SwResId(pResId));
     }
     else
     {

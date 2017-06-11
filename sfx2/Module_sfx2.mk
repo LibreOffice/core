@@ -27,7 +27,7 @@ $(eval $(call gb_Module_add_targets,sfx2,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,sfx2,\
-    AllLangResTarget_sfx2 \
+    AllLangMoTarget_sfx2 \
     UIConfig_sfx \
 ))
 

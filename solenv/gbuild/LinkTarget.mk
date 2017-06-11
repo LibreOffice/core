@@ -1494,16 +1494,6 @@ $(call gb_LinkTarget_get_headers_target,$(1)) :| \
 
 endef
 
-# Delay linking until a res target has been built. This is needed so that
-# unit tests using libraries do not fail if the res target is not yet built.
-#
-# call gb_LinkTarget_use_restarget,linktarget,restarget(s)
-define gb_LinkTarget_use_restarget
-$(call gb_LinkTarget_get_target,$(1)) :| \
-	$(foreach res,$(2),$(call gb_AllLangResTarget_get_target,$(res)))
-
-endef
-
 # this forwards to functions that must be defined in RepositoryExternal.mk.
 # Automatically forward for libmerged library too when linktarget is merged.
 #

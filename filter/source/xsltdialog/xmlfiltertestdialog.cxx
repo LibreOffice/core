@@ -44,7 +44,7 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include "xmlfilterdialogstrings.hrc"
+#include "strings.hrc"
 #include "xmlfiltersettingsdialog.hxx"
 #include "xmlfiltertestdialog.hxx"
 

@@ -24,7 +24,7 @@
 class TryLaterQueryBox : public MessBox
 {
 public:
-    TryLaterQueryBox( vcl::Window* pParent, ResMgr* pResMgr, const OUString& aMessage );
+    TryLaterQueryBox(vcl::Window* pParent, const std::locale& rLocale, const OUString& aMessage);
     virtual ~TryLaterQueryBox() override;
 };
 

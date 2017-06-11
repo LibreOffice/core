@@ -21,10 +21,7 @@ $(eval $(call gb_Module_add_targets,dbaccess,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,dbaccess,\
-    AllLangResTarget_dba \
-    AllLangResTarget_dbmm \
-    AllLangResTarget_dbu \
-    AllLangResTarget_sdbt \
+	AllLangMoTarget_dba \
 	UIConfig_dbaccess \
 	UIConfig_dbapp \
 	UIConfig_dbbrowser \
