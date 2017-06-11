@@ -20,14 +20,13 @@
 #include <memory>
 #include "resource/sharedresources.hxx"
 
-#include <comphelper/processfactory.hxx>
-#include <comphelper/officeresourcebundle.hxx>
-
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <tools/diagnose_ex.h>
+#include <tools/simplerm.hxx>
 #include <osl/diagnose.h>
-
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 namespace connectivity
 {
@@ -44,8 +43,7 @@ namespace connectivity
         static  oslInterlockedCount     s_nClients;
 
     private:
-        std::unique_ptr< ::comphelper::OfficeResourceBundle >
-                                        m_pResourceBundle;
+        std::locale                     m_aLocale;
 
     public:
         static void     registerClient();
@@ -54,7 +52,7 @@ namespace connectivity
         static SharedResources_Impl&
                         getInstance();
 
-        OUString getResourceString( ResourceId _nId );
+        OUString getResourceString(const char* pId);
 
     private:
         SharedResources_Impl();
@@ -66,42 +64,23 @@ namespace connectivity
         }
     };
 
-
     SharedResources_Impl*   SharedResources_Impl::s_pInstance( nullptr );
     oslInterlockedCount     SharedResources_Impl::s_nClients( 0 );
 
-
     SharedResources_Impl::SharedResources_Impl()
+        : m_aLocale(Translate::Create("cnr", Application::GetSettings().GetUILanguageTag()))
     {
-        try
-        {
-            Reference< XComponentContext > xContext(
-                comphelper::getProcessComponentContext() );
-            m_pResourceBundle.reset( new ::comphelper::OfficeResourceBundle( xContext, "cnr" ) );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
     }
 
-
-    OUString SharedResources_Impl::getResourceString( ResourceId _nId )
+    OUString SharedResources_Impl::getResourceString(const char* pId)
     {
-        if ( m_pResourceBundle.get() == nullptr )
-            // this should never happen, but we gracefully ignore it. It has been reported
-            // in the constructor in non-product builds.
-            return OUString();
-
-        return m_pResourceBundle->loadString( _nId );
+        return Translate::get(pId, m_aLocale);
     }
-
 
     void SharedResources_Impl::registerClient()
     {
         osl_atomic_increment( &s_nClients );
     }
-
 
     void SharedResources_Impl::revokeClient()
     {
@@ -156,48 +135,48 @@ namespace connectivity
     }
 
 
-    OUString SharedResources::getResourceString( ResourceId _nResId ) const
+    OUString SharedResources::getResourceString(const char* pResId) const
     {
-        return SharedResources_Impl::getInstance().getResourceString( _nResId );
+        return SharedResources_Impl::getInstance().getResourceString(pResId);
     }
 
 
-    OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
+    OUString SharedResources::getResourceStringWithSubstitution(const char* pResId,
                 const sal_Char* _pAsciiPatternToReplace, const OUString& _rStringToSubstitute ) const
     {
-        OUString sString( SharedResources_Impl::getInstance().getResourceString( _nResId ) );
+        OUString sString( SharedResources_Impl::getInstance().getResourceString(pResId) );
         OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace, _rStringToSubstitute ) );
         return sString;
     }
 
 
-    OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
+    OUString SharedResources::getResourceStringWithSubstitution(const char* pResId,
                 const sal_Char* _pAsciiPatternToReplace1, const OUString& _rStringToSubstitute1,
                 const sal_Char* _pAsciiPatternToReplace2, const OUString& _rStringToSubstitute2 ) const
     {
-        OUString sString( SharedResources_Impl::getInstance().getResourceString( _nResId ) );
+        OUString sString( SharedResources_Impl::getInstance().getResourceString(pResId) );
         OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace1, _rStringToSubstitute1 ) );
         OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace2, _rStringToSubstitute2 ) );
         return sString;
     }
 
 
-    OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
+    OUString SharedResources::getResourceStringWithSubstitution(const char* pResId,
                 const sal_Char* _pAsciiPatternToReplace1, const OUString& _rStringToSubstitute1,
                 const sal_Char* _pAsciiPatternToReplace2, const OUString& _rStringToSubstitute2,
                 const sal_Char* _pAsciiPatternToReplace3, const OUString& _rStringToSubstitute3 ) const
     {
-        OUString sString( SharedResources_Impl::getInstance().getResourceString( _nResId ) );
+        OUString sString( SharedResources_Impl::getInstance().getResourceString(pResId) );
         OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace1, _rStringToSubstitute1 ) );
         OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace2, _rStringToSubstitute2 ) );
         OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace3, _rStringToSubstitute3 ) );
         return sString;
     }
 
-    OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
+    OUString SharedResources::getResourceStringWithSubstitution(const char* pResId,
                     const std::list< std::pair<const sal_Char* , OUString > >& _rStringToSubstitutes) const
     {
-        OUString sString( SharedResources_Impl::getInstance().getResourceString( _nResId ) );
+        OUString sString( SharedResources_Impl::getInstance().getResourceString(pResId) );
         std::list< std::pair<const sal_Char* , OUString > >::const_iterator aIter = _rStringToSubstitutes.begin();
         std::list< std::pair<const sal_Char* , OUString > >::const_iterator aEnd  = _rStringToSubstitutes.end();
         for(;aIter != aEnd; ++aIter)

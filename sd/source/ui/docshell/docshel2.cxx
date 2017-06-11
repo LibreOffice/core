@@ -34,7 +34,7 @@
 #include "ClientView.hxx"
 #include "Window.hxx"
 #include "strings.hrc"
-#include "res_bmp.hrc"
+
 #include "sdresid.hxx"
 #include "strmname.h"
 #include "fupoor.hxx"

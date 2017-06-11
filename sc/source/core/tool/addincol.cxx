@@ -44,7 +44,7 @@
 #include "scmatrix.hxx"
 #include "addinlis.hxx"
 #include <formula/errorcodes.hxx>
-#include "scfuncs.hrc"
+#include "sc.hrc"
 #include "optutil.hxx"
 #include "addincfg.hxx"
 #include "scmod.hxx"

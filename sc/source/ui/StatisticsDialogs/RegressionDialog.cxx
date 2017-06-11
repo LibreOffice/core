@@ -22,12 +22,12 @@
 #include "reffact.hxx"
 #include "docfunc.hxx"
 #include "TableFillingAndNavigationTools.hxx"
-
 #include "RegressionDialog.hxx"
+#include "strings.hrc"
 
 namespace
 {
-    sal_Int16 constRegressionModel[] =
+    const char* constRegressionModel[] =
     {
         STR_LABEL_LINEAR,
         STR_LABEL_LOGARITHMIC,
@@ -101,7 +101,7 @@ void ScRegressionDialog::dispose()
     ScStatisticsTwoVariableDialog::dispose();
 }
 
-sal_Int16 ScRegressionDialog::GetUndoNameId()
+const char* ScRegressionDialog::GetUndoNameId()
 {
     return STR_REGRESSION_UNDO_NAME;
 }

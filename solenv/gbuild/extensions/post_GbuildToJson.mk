@@ -146,7 +146,6 @@ gb_WinResTarget_add_defs =
 gb_LinkTarget_set_nativeres =
 gb_LinkTarget_add_nativeres =
 gb_Library_set_componentfile =
-gb_LinkTarget_use_restarget =
 
 #$(call gb_Library_get_exports_target,%):
 $(WORKDIR)/LinkTarget/Library/%.exports:

@@ -105,7 +105,4 @@ $(WORKDIR)/CppunitTest/testEmptyStdlibSave.odb : $(SRCDIR)/dbaccess/qa/extras/te
 	cp -P -f "$<" "$@"
 .PHONY: $(WORKDIR)/CppunitTest/testEmptyStdlibSave.odb
 
-$(call gb_CppunitTest_get_target,dbaccess_empty_stdlib_save): \
-    $(call gb_AllLangResTarget_get_target,ofa)
-
 # vim: set noet sw=4 ts=4:

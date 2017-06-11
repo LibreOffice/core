@@ -25,6 +25,7 @@
 #include <tools/resary.hxx>
 #include <memory>
 #include <set>
+#include <vector>
 #include <swdbdata.hxx>
 #include "swdllapi.h"
 #include "sharedconnection.hxx"
@@ -81,7 +82,7 @@ public:
 
     void Commit();
 
-    const ResStringArray& GetDefaultAddressHeaders() const;
+    const std::vector<std::pair<OUString, int>>& GetDefaultAddressHeaders() const;
 
     void SetCurrentConnection(
         css::uno::Reference< css::sdbc::XDataSource> const & xSource,
