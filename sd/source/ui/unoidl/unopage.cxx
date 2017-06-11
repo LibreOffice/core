@@ -41,7 +41,7 @@
 #include <svl/itemset.hxx>
 #include <svx/svdmodel.hxx>
 #include <sdresid.hxx>
-#include <glob.hrc>
+#include <strings.hrc>
 #include <sdpage.hxx>
 #include <unoprnms.hxx>
 #include <sdattr.hxx>
@@ -63,7 +63,7 @@
 #include "ViewShell.hxx"
 #include "DrawViewShell.hxx"
 #include "unoobj.hxx"
-#include "res_bmp.hrc"
+
 #include "strings.hxx"
 #include "bitmaps.hlst"
 #include "unokywds.hxx"

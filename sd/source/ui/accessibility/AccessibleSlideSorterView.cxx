@@ -35,7 +35,7 @@
 #include "drawdoc.hxx"
 
 #include "sdresid.hxx"
-#include "accessibility.hrc"
+#include "strings.hrc"
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>

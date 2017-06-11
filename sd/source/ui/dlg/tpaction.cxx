@@ -29,6 +29,7 @@
 
 #include "sdattr.hxx"
 #include <sfx2/sfxresid.hxx>
+#include <sfx2/strings.hrc>
 
 #include <vcl/waitobj.hxx>
 #include <osl/file.hxx>
@@ -59,7 +60,7 @@
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #include "strings.hrc"
-#include "res_bmp.hrc"
+
 #include "filedlg.hxx"
 
 #include <algorithm>
@@ -265,8 +266,8 @@ void SdTPAction::Construct()
     // fill Action-Listbox
     for (presentation::ClickAction & rAction : maCurrentActions)
     {
-        sal_uInt16 nRId = GetClickActionSdResId( rAction );
-        m_pLbAction->InsertEntry( SdResId( nRId ) );
+        const char* pRId = GetClickActionSdResId(rAction);
+        m_pLbAction->InsertEntry(SdResId(pRId));
     }
 
 }
@@ -843,7 +844,7 @@ OUString SdTPAction::GetEditText( bool bFullDocDestination )
     return aStr;
 }
 
-sal_uInt16 SdTPAction::GetClickActionSdResId( presentation::ClickAction eCA )
+const char* SdTPAction::GetClickActionSdResId( presentation::ClickAction eCA )
 {
     switch( eCA )
     {
@@ -861,7 +862,7 @@ sal_uInt16 SdTPAction::GetClickActionSdResId( presentation::ClickAction eCA )
         case presentation::ClickAction_STOPPRESENTATION: return STR_CLICK_ACTION_STOPPRESENTATION;
         default: OSL_FAIL( "No StringResource for ClickAction available!" );
     }
-    return 0;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

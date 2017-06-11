@@ -32,8 +32,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-#include <doc.hrc>
-#include "templateview.hrc"
+#include <sfx2/strings.hrc>
+#include "sfx2/strings.hrc"
 #include "bitmaps.hlst"
 
 #define MNI_OPEN               1

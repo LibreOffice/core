@@ -23,8 +23,7 @@
 #include <sfx2/dialoghelper.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
-#include <svx/dialogs.hrc>
-#include <accessibility.hrc>
+#include <svx/strings.hrc>
 #include "bitmaps.hlst"
 #include <svx/dlgctrl.hxx>
 #include <svx/dialmgr.hxx>

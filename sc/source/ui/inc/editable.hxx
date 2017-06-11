@@ -79,7 +79,7 @@ public:
 
     bool IsEditable() const { return mbIsEditable; }
     bool IsFormatEditable() const { return mbIsEditable || mbOnlyMatrix; }
-    sal_uInt16  GetMessageId() const;
+    const char* GetMessageId() const;
 };
 
 #endif

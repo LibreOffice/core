@@ -32,7 +32,7 @@
 #include "macros.hxx"
 #include "PropertyHelper.hxx"
 #include "ResId.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "DiagramHelper.hxx"
 #include <com/sun/star/chart2/XChartDocument.hpp>
 

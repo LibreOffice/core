@@ -18,7 +18,8 @@
  */
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <LinePropertyPanel.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
+#include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/bindings.hxx>

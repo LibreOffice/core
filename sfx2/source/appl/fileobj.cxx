@@ -39,7 +39,7 @@
 #include <sfx2/opengrf.hxx>
 #include <sfx2/sfxresid.hxx>
 #include "fileobj.hxx"
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 #include <vcl/dibtools.hxx>
 
 #define FILETYPE_TEXT       1
