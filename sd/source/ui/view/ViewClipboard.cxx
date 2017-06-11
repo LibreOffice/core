@@ -28,7 +28,7 @@
 #include "sdpage.hxx"
 #include "sdxfer.hxx"
 #include "sdresid.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "strings.hxx"
 
 #include <svx/svdpagv.hxx>

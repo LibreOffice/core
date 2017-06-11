@@ -45,10 +45,9 @@
 
 namespace svtools {
 
-ODocumentInfoPreview::ODocumentInfoPreview(vcl::Window * pParent, WinBits nBits):
-    Window(pParent, WB_DIALOGCONTROL),
-    m_pEditWin( VclPtr<ExtMultiLineEdit>::Create(this, nBits) ),
-    m_xInfoTable(new SvtDocInfoTable_Impl)
+ODocumentInfoPreview::ODocumentInfoPreview(vcl::Window * pParent, WinBits nBits)
+    : Window(pParent, WB_DIALOGCONTROL)
+    , m_pEditWin( VclPtr<ExtMultiLineEdit>::Create(this, nBits) )
 {
     m_pEditWin->SetLeftMargin(10);
     m_pEditWin->Show();
@@ -141,7 +140,7 @@ void ODocumentInfoPreview::insertEntry(
 void ODocumentInfoPreview::insertNonempty(long id, OUString const & value)
 {
     if (!value.isEmpty()) {
-        insertEntry(m_xInfoTable->GetString(id), value);
+        insertEntry(SvtDocInfoTable_Impl::GetString(id), value);
     }
 }
 
@@ -157,7 +156,7 @@ void ODocumentInfoPreview::insertDateTime(
         OUStringBuffer buf(rLocaleWrapper.getDate(aToolsDT));
         buf.append(", ");
         buf.append(rLocaleWrapper.getTime(aToolsDT));
-        insertEntry(m_xInfoTable->GetString(id), buf.makeStringAndClear());
+        insertEntry(SvtDocInfoTable_Impl::GetString(id), buf.makeStringAndClear());
     }
 }
 

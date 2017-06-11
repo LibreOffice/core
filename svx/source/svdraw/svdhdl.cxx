@@ -32,7 +32,7 @@
 #include <vcl/bitmapaccess.hxx>
 
 #include <svx/sxekitm.hxx>
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include "svdglob.hxx"
 
 #include <svx/svdmodel.hxx>

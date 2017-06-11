@@ -50,7 +50,7 @@
 #include <poolfmt.hxx>
 #include <ndtxt.hxx>
 #include <editsh.hxx>
-#include <poolfmt.hrc>
+#include <strings.hrc>
 #include "xmlimp.hxx"
 #include "xmltexti.hxx"
 #include <xmloff/DocumentSettingsContext.hxx>

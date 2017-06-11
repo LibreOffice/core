@@ -26,7 +26,7 @@
 #include "formula/formdata.hxx"
 #include "formula/IFunctionDescription.hxx"
 #include "ModuleHelper.hxx"
-#include "ForResId.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 
 #define VAR_ARGS 30
