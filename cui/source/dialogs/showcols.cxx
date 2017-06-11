@@ -18,7 +18,7 @@
  */
 
 #include "showcols.hxx"
-#include "fmsearch.hrc"
+#include "strings.hrc"
 
 #include <dialmgr.hxx>
 #include <vcl/msgbox.hxx>

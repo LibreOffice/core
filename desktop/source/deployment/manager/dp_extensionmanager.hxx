@@ -20,8 +20,9 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_MANAGER_DP_EXTENSIONMANAGER_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_MANAGER_DP_EXTENSIONMANAGER_HXX
 
-#include "dp_manager.hrc"
+#include "strings.hrc"
 #include "dp_misc.h"
+#include "dp_shared.hxx"
 #include "dp_interact.h"
 #include "dp_activepackages.hxx"
 #include <rtl/ref.hxx>
@@ -137,8 +138,7 @@ public:
 
 private:
 
-    struct StrSyncRepository : public ::dp_misc::StaticResourceString<
-        StrSyncRepository, RID_STR_SYNCHRONIZING_REPOSITORY> {};
+    static OUString StrSyncRepository() { return DpResId(RID_STR_SYNCHRONIZING_REPOSITORY); }
 
     css::uno::Reference< css::uno::XComponentContext> m_xContext;
     css::uno::Reference<css::deployment::XPackageManagerFactory> m_xPackageManagerFactory;

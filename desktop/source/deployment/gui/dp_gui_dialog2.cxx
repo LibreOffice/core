@@ -17,14 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dp_gui.hrc"
-#include <svtools/controldims.hrc>
-#include <svtools/svtools.hrc>
+#include "strings.hrc"
+#include "helpid.hrc"
+#include <svtools/controldims.hxx>
+#include <svtools/strings.hrc>
 
 #include "dp_gui.h"
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_extlistbox.hxx"
-#include "dp_gui_shared.hxx"
+#include "dp_shared.hxx"
 #include "dp_gui_theextmgr.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
 #include "dp_misc.h"
@@ -32,6 +33,8 @@
 #include "dp_update.hxx"
 #include "dp_identifier.hxx"
 #include "dp_descriptioninfoset.hxx"
+
+#include "fpicker/fpicker.hrc"
 
 #include <vcl/ctrl.hxx>
 #include <vcl/menu.hxx>
@@ -92,15 +95,12 @@ struct StrAllFiles : public rtl::StaticWithInit< OUString, StrAllFiles >
 {
     const OUString operator () () {
         const SolarMutexGuard guard;
-        std::unique_ptr< ResMgr > const resmgr( ResMgr::CreateResMgr( "fps_office" ) );
-        OSL_ASSERT( resmgr.get() != nullptr );
-        return ResId(STR_FILTERNAME_ALL, *resmgr.get());
+        std::locale loc = Translate::Create("fps", Application::GetSettings().GetUILanguageTag());
+        return Translate::get(STR_FILTERNAME_ALL, loc);
     }
 };
 
-
 //                            ExtBoxWithBtns_Impl
-
 
 enum MENU_COMMAND
 {
@@ -250,7 +250,7 @@ MENU_COMMAND ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long 
     ScopedVclPtrInstance<PopupMenu> aPopup;
 
 #if ENABLE_EXTENSION_UPDATE
-    aPopup->InsertItem( CMD_UPDATE, DialogHelper::getResourceString( RID_CTX_ITEM_CHECK_UPDATE ) );
+    aPopup->InsertItem( CMD_UPDATE, DpResId( RID_CTX_ITEM_CHECK_UPDATE ) );
 #endif
 
     if ( ! GetEntryData( nPos )->m_bLocked )
@@ -258,18 +258,18 @@ MENU_COMMAND ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long 
         if ( GetEntryData( nPos )->m_bUser )
         {
             if ( GetEntryData( nPos )->m_eState == REGISTERED )
-                aPopup->InsertItem( CMD_DISABLE, DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
+                aPopup->InsertItem( CMD_DISABLE, DpResId( RID_CTX_ITEM_DISABLE ) );
             else if ( GetEntryData( nPos )->m_eState != NOT_AVAILABLE )
-                aPopup->InsertItem( CMD_ENABLE, DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
+                aPopup->InsertItem( CMD_ENABLE, DpResId( RID_CTX_ITEM_ENABLE ) );
         }
         if (!officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionRemoval::get())
         {
-            aPopup->InsertItem( CMD_REMOVE, DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
+            aPopup->InsertItem( CMD_REMOVE, DpResId( RID_CTX_ITEM_REMOVE ) );
         }
     }
 
     if ( !GetEntryData( nPos )->m_sLicenseText.isEmpty() )
-        aPopup->InsertItem( CMD_SHOW_LICENSE, DialogHelper::getResourceString( RID_STR_SHOW_LICENSE_CMD ) );
+        aPopup->InsertItem( CMD_SHOW_LICENSE, DpResId( RID_STR_SHOW_LICENSE_CMD ) );
 
     return (MENU_COMMAND) aPopup->Execute( this, rPos );
 }
@@ -352,25 +352,6 @@ DialogHelper::~DialogHelper()
 }
 
 
-ResId DialogHelper::getResId( sal_uInt16 nId )
-{
-    const SolarMutexGuard guard;
-    return ResId( nId, *DeploymentGuiResMgr::get() );
-}
-
-
-OUString DialogHelper::getResourceString(sal_uInt16 id)
-{
-    const SolarMutexGuard guard;
-    OUString ret(ResId(id, *DeploymentGuiResMgr::get()));
-    if (ret.indexOf("%PRODUCTNAME" ) != -1)
-    {
-        ret = ret.replaceAll("%PRODUCTNAME", utl::ConfigManager::getProductName());
-    }
-    return ret;
-}
-
-
 bool DialogHelper::IsSharedPkgMgr( const uno::Reference< deployment::XPackage > &xPackage )
 {
     return xPackage->getRepositoryName() == SHARED_PACKAGE_MANAGER;
@@ -379,13 +360,13 @@ bool DialogHelper::IsSharedPkgMgr( const uno::Reference< deployment::XPackage > 
 
 bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::XPackage > &xPackage,
                                               vcl::Window *pParent,
-                                              const sal_uInt16 nResID,
+                                              const char* pResID,
                                               bool &bHadWarning )
 {
     if ( !bHadWarning && IsSharedPkgMgr( xPackage ) )
     {
         const SolarMutexGuard guard;
-        ScopedVclPtrInstance<MessageDialog> aInfoBox(pParent, getResId(nResID),
+        ScopedVclPtrInstance<MessageDialog> aInfoBox(pParent, DpResId(pResID),
                                                      VclMessageType::Warning, VclButtonsType::OkCancel);
         bHadWarning = true;
 
@@ -427,14 +408,14 @@ bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
     // Check if extension installation is disabled in the expert configurations
     if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionInstallation::get())
     {
-        ScopedVclPtrInstance<MessageDialog> aWarn(m_pVCLWindow, getResId(RID_STR_WARNING_INSTALL_EXTENSION_DISABLED),
+        ScopedVclPtrInstance<MessageDialog> aWarn(m_pVCLWindow, DpResId(RID_STR_WARNING_INSTALL_EXTENSION_DISABLED),
                                                   VclMessageType::Warning, VclButtonsType::Ok);
         aWarn->Execute();
 
         return false;
     }
 
-    ScopedVclPtrInstance<MessageDialog> aInfo(m_pVCLWindow, getResId(RID_STR_WARNING_INSTALL_EXTENSION),
+    ScopedVclPtrInstance<MessageDialog> aInfo(m_pVCLWindow, DpResId(RID_STR_WARNING_INSTALL_EXTENSION),
                                               VclMessageType::Warning, VclButtonsType::OkCancel);
 
     OUString sText(aInfo->get_primary_text());
@@ -470,7 +451,7 @@ void DialogHelper::PostUserEvent( const Link<void*,void>& rLink, void* pCaller )
 ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, Dialog::InitFlag eFlag)
     : ModelessDialog(pParent, "ExtensionManagerDialog", "desktop/ui/extensionmanager.ui", eFlag)
     , DialogHelper(pManager->getContext(), static_cast<Dialog*>(this))
-    , m_sAddPackages(getResourceString(RID_STR_ADD_PACKAGES))
+    , m_sAddPackages(DpResId(RID_STR_ADD_PACKAGES))
     , m_bHasProgress(false)
     , m_bProgressChanged(false)
     , m_bStartProgress(false)
@@ -529,12 +510,12 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
     if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionInstallation::get())
     {
         m_pAddBtn->Disable();
-        m_pAddBtn->SetQuickHelpText(getResId(RID_STR_WARNING_INSTALL_EXTENSION_DISABLED));
+        m_pAddBtn->SetQuickHelpText(DpResId(RID_STR_WARNING_INSTALL_EXTENSION_DISABLED));
     }
     if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionRemoval::get())
     {
         m_pRemoveBtn->Disable();
-        m_pRemoveBtn->SetQuickHelpText(getResId(RID_STR_WARNING_REMOVE_EXTENSION_DISABLED));
+        m_pRemoveBtn->SetQuickHelpText(DpResId(RID_STR_WARNING_REMOVE_EXTENSION_DISABLED));
     }
 
     m_aIdle.SetPriority(TaskPriority::LOWEST);
@@ -607,7 +588,7 @@ void ExtMgrDialog::checkEntries()
 bool ExtMgrDialog::removeExtensionWarn( const OUString &rExtensionName ) const
 {
     const SolarMutexGuard guard;
-    ScopedVclPtrInstance<MessageDialog> aInfo(const_cast<ExtMgrDialog*>(this), getResId(RID_STR_WARNING_REMOVE_EXTENSION),
+    ScopedVclPtrInstance<MessageDialog> aInfo(const_cast<ExtMgrDialog*>(this), DpResId(RID_STR_WARNING_REMOVE_EXTENSION),
                                               VclMessageType::Warning, VclButtonsType::OkCancel);
 
     OUString sText(aInfo->get_primary_text());
@@ -767,7 +748,7 @@ void ExtMgrDialog::enableRemoveButton( bool bEnable )
 
     if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionRemoval::get())
     {
-        m_pRemoveBtn->SetQuickHelpText(getResId(RID_STR_WARNING_REMOVE_EXTENSION_DISABLED));
+        m_pRemoveBtn->SetQuickHelpText(DpResId(RID_STR_WARNING_REMOVE_EXTENSION_DISABLED));
     }
     else
     {
@@ -784,12 +765,12 @@ void ExtMgrDialog::enableButtontoEnable( bool bEnable )
 {
     if (bEnable)
     {
-        m_pEnableBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
+        m_pEnableBtn->SetText( DpResId( RID_CTX_ITEM_ENABLE ) );
         m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_ENABLE );
     }
     else
     {
-        m_pEnableBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
+        m_pEnableBtn->SetText( DpResId( RID_CTX_ITEM_DISABLE ) );
         m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_DISABLE );
     }
 }
@@ -840,7 +821,7 @@ IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface, void )
     m_pAddBtn->Enable( !bLockInterface && !officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionInstallation::get());
     if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionInstallation::get())
     {
-        m_pAddBtn->SetQuickHelpText(getResId(RID_STR_WARNING_INSTALL_EXTENSION_DISABLED));
+        m_pAddBtn->SetQuickHelpText(DpResId(RID_STR_WARNING_INSTALL_EXTENSION_DISABLED));
     }
     else
     {
@@ -1066,7 +1047,7 @@ bool ExtMgrDialog::Close()
 UpdateRequiredDialog::UpdateRequiredDialog(vcl::Window *pParent, TheExtensionManager *pManager)
     : ModalDialog(pParent, "UpdateRequiredDialog", "desktop/ui/updaterequireddialog.ui")
     , DialogHelper(pManager->getContext(), static_cast<Dialog*>(this))
-    , m_sCloseText(getResourceString(RID_STR_CLOSE_BTN))
+    , m_sCloseText(DpResId(RID_STR_CLOSE_BTN))
     , m_bHasProgress(false)
     , m_bProgressChanged(false)
     , m_bStartProgress(false)
@@ -1338,8 +1319,8 @@ short UpdateRequiredDialog::Execute()
     if ( m_bHasLockedEntries )
     {
         // Set other text, disable update btn, remove not shared entries from list;
-        m_pUpdateNeeded->SetText( DialogHelper::getResourceString( RID_STR_NO_ADMIN_PRIVILEGE ) );
-        m_pCloseBtn->SetText( DialogHelper::getResourceString( RID_STR_EXIT_BTN ) );
+        m_pUpdateNeeded->SetText( DpResId( RID_STR_NO_ADMIN_PRIVILEGE ) );
+        m_pCloseBtn->SetText( DpResId( RID_STR_EXIT_BTN ) );
         m_pUpdateBtn->Enable( false );
         m_pExtensionBox->RemoveUnlocked();
         Resize();

@@ -20,8 +20,9 @@
 #include "UITools.hxx"
 #include <sfx2/docfilt.hxx>
 #include "callbacks.hxx"
-#include "dbustrings.hrc"
-#include "dbu_resource.hrc"
+#include "core_resource.hxx"
+#include "stringconstants.hxx"
+#include "dbu_pageids.hxx"
 #include "dlgsave.hxx"
 #include "dbtreelistbox.hxx"
 #include "defaultobjectnamecheck.hxx"
@@ -87,7 +88,7 @@
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
-#include "dbu_misc.hrc"
+#include "strings.hrc"
 #include "sqlmessage.hxx"
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/URL.hpp>
@@ -227,7 +228,7 @@ Reference< XDataSource > getDataSourceByName( const OUString& _rDataSourceName,
                 )
             )
         {
-            OUString sErrorMessage( ModuleRes( STR_FILE_DOES_NOT_EXIST ) );
+            OUString sErrorMessage( DBA_RES( STR_FILE_DOES_NOT_EXIST ) );
             OFileNotation aTransformer( e.Message );
             sErrorMessage = sErrorMessage.replaceFirst( "$file$", aTransformer.get( OFileNotation::N_SYSTEM ) );
             aSQLError = SQLExceptionInfo( sErrorMessage ).get();
@@ -933,7 +934,7 @@ bool appendToFilter(const Reference<XConnection>& _xConnection,
             {
                 if(! ::dbaui::checkDataSourceAvailable(::comphelper::getString(xProp->getPropertyValue(PROPERTY_NAME)),_rxContext))
                 {
-                    OUString aMessage(ModuleRes(STR_TABLEDESIGN_DATASOURCE_DELETED));
+                    OUString aMessage(DBA_RES(STR_TABLEDESIGN_DATASOURCE_DELETED));
                     ScopedVclPtrInstance<OSQLWarningBox>(_pParent, aMessage)->Execute();
                     bRet = false;
                 }
@@ -1205,15 +1206,15 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
     return pTypeInfo;
 }
 
-sal_Int32 askForUserAction(vcl::Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText,bool _bAll,const OUString& _sName)
+sal_Int32 askForUserAction(vcl::Window* _pParent, const char* pTitle, const char* pText, bool _bAll, const OUString& _sName)
 {
     SolarMutexGuard aGuard;
-    OUString aMsg = ModuleRes(_nText);
+    OUString aMsg = DBA_RES(pText);
     aMsg = aMsg.replaceFirst("%1", _sName);
-    ScopedVclPtrInstance< OSQLMessageBox > aAsk(_pParent, ModuleRes(_nTitle ), aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query);
+    ScopedVclPtrInstance<OSQLMessageBox> aAsk(_pParent, DBA_RES(pTitle), aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query);
     if ( _bAll )
     {
-        aAsk->AddButton(ModuleRes(STR_BUTTON_TEXT_ALL), RET_ALL);
+        aAsk->AddButton(DBA_RES(STR_BUTTON_TEXT_ALL), RET_ALL);
         aAsk->GetPushButton(RET_ALL)->SetHelpId(HID_CONFIRM_DROP_BUTTON_ALL);
     }
     return aAsk->Execute();
@@ -1347,8 +1348,8 @@ bool insertHierachyElement( vcl::Window* _pParent, const Reference< XComponentCo
             if ( !sNewName.isEmpty() )
                 sTargetName = sNewName;
             else
-                sTargetName = ModuleRes( _bCollection ? STR_NEW_FOLDER : ((_bForm) ? RID_STR_FORM : RID_STR_REPORT));
-            sLabel = ModuleRes( _bCollection ? STR_FOLDER_LABEL  : ((_bForm) ? STR_FRM_LABEL : STR_RPT_LABEL));
+                sTargetName = DBA_RES( _bCollection ? STR_NEW_FOLDER : ((_bForm) ? RID_STR_FORM : RID_STR_REPORT));
+            sLabel = DBA_RES( _bCollection ? STR_FOLDER_LABEL  : ((_bForm) ? STR_FRM_LABEL : STR_RPT_LABEL));
             sTargetName = ::dbtools::createUniqueName(xNameAccess,sTargetName);
 
             // here we have everything needed to create a new query object ...
@@ -1370,7 +1371,7 @@ bool insertHierachyElement( vcl::Window* _pParent, const Reference< XComponentCo
     }
     else if ( xNameAccess->hasByName(sNewName) )
     {
-        OUString sError(ModuleRes(STR_NAME_ALREADY_EXISTS));
+        OUString sError(DBA_RES(STR_NAME_ALREADY_EXISTS));
         sError = sError.replaceFirst("#",sNewName);
         throw SQLException(sError,nullptr,"S1000",0,Any());
     }

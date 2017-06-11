@@ -38,6 +38,7 @@
 #include <NumberFormatControl.hxx>
 
 #include <svtools/parhtml.hxx>
+#include <tools/simplerm.hxx>
 #include <sot/formats.hxx>
 
 #include "scitems.hxx"
@@ -107,9 +108,9 @@
 #include <o3tl/make_unique.hxx>
 #include "scabstdlg.hxx"
 
-OUString ScResId(sal_uInt16 nId)
+OUString ScResId(const char* pId)
 {
-    return ResId(nId, *SC_MOD()->GetResMgr());
+    return Translate::get(pId, SC_MOD()->GetResLocale());
 }
 
 void ScDLL::Init()

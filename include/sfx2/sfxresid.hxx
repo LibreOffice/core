@@ -22,16 +22,13 @@
 #include <sfx2/dllapi.h>
 #include <tools/resid.hxx>
 
-struct SFX2_DLLPUBLIC SfxResMgr
+struct SFX2_DLLPUBLIC SfxResLocale
 {
-    static ResMgr* GetResMgr();
-    static void DeleteResMgr();
+    static std::locale* GetResLocale();
+    static void DeleteResLocale();
 };
 
-inline OUString SfxResId(sal_uInt16 nId)
-{
-    return ResId(nId, *SfxResMgr::GetResMgr());
-}
+SFX2_DLLPUBLIC OUString SfxResId(const char* pId);
 
 #endif
 

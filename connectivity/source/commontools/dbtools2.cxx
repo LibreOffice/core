@@ -23,7 +23,7 @@
 #include <connectivity/SQLStatementHelper.hxx>
 #include <unotools/confignode.hxx>
 #include "resource/sharedresources.hxx"
-#include "resource/common_res.hrc"
+#include "strings.hrc"
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>

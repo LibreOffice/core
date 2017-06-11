@@ -27,7 +27,6 @@
 #include <vcl/settings.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/pathoptions.hxx>
-#include <tools/resary.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
@@ -63,6 +62,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
+#include "doctemplateslocal.hxx"
 #include "sfxurlrelocator.hxx"
 
 using namespace ::com::sun::star;
@@ -85,8 +85,7 @@ using namespace ::ucbhelper;
 #include "sfxtypes.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/sfxresid.hxx>
-#include <sfx2/templatelocnames.hrc>
-#include "doc.hrc"
+#include "sfx2/strings.hrc"
 #include "strings.hxx"
 #include <sfx2/fcontnr.hxx>
 #include <svtools/templatefoldercache.hxx>
@@ -103,7 +102,6 @@ using ::std::advance;
 #define TARGET_URL              "TargetURL"
 
 #define COMMAND_TRANSFER        "transfer"
-
 
 class RegionData_Impl;
 
@@ -490,10 +488,26 @@ OUString SfxDocumentTemplates::ConvertResourceString(const OUString& rString)
         STR_TEMPLATE_NAME10_DEF
     };
 
-    for (int i = 0; i < NUM_TEMPLATE_NAMES; ++i)
+    const char* STR_TEMPLATE_NAME[] =
+    {
+        STR_TEMPLATE_NAME1,
+        STR_TEMPLATE_NAME2,
+        STR_TEMPLATE_NAME3,
+        STR_TEMPLATE_NAME4,
+        STR_TEMPLATE_NAME5,
+        STR_TEMPLATE_NAME6,
+        STR_TEMPLATE_NAME7,
+        STR_TEMPLATE_NAME8,
+        STR_TEMPLATE_NAME9,
+        STR_TEMPLATE_NAME10,
+    };
+
+    assert(SAL_N_ELEMENTS(aTemplateNames) == SAL_N_ELEMENTS(STR_TEMPLATE_NAME));
+
+    for (size_t i = 0; i < SAL_N_ELEMENTS(STR_TEMPLATE_NAME); ++i)
     {
         if (rString == aTemplateNames[i])
-            return SfxResId(STR_TEMPLATE_NAME1 + i);
+            return SfxResId(STR_TEMPLATE_NAME[i]);
     }
     return rString;
 }
@@ -1601,11 +1615,7 @@ bool SfxDocTemplate_Impl::Construct( )
     mbConstructed = true;
     maRootURL = aRootContent->getIdentifier()->getContentIdentifier();
 
-    ResStringArray aLongNames(ResId(TEMPLATE_LONG_NAMES_ARY, *SfxResMgr::GetResMgr()));
-
-    if ( aLongNames.Count() )
-        maStandardGroup = aLongNames.GetString( 0 );
-
+    maStandardGroup = DocTemplLocaleHelper::GetStandardGroupString();
     Content aTemplRoot( aRootContent, aCmdEnv, xContext );
     CreateFromHierarchy( aTemplRoot );
 

@@ -18,7 +18,7 @@
  */
 
 #include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <i18nlangtag/mslangid.hxx>
 #include <svtools/valueset.hxx>
 #include <svl/languageoptions.hxx>
@@ -385,6 +385,42 @@ SvxNumValueSet::SvxNumValueSet(vcl::Window* pParent, WinBits nWinBits)
 
 VCL_BUILDER_FACTORY_ARGS(SvxNumValueSet, WB_TABSTOP)
 
+static const char* RID_SVXSTR_BULLET_DESCRIPTIONS[] =
+{
+    RID_SVXSTR_BULLET_DESCRIPTION_0,
+    RID_SVXSTR_BULLET_DESCRIPTION_1,
+    RID_SVXSTR_BULLET_DESCRIPTION_2,
+    RID_SVXSTR_BULLET_DESCRIPTION_3,
+    RID_SVXSTR_BULLET_DESCRIPTION_4,
+    RID_SVXSTR_BULLET_DESCRIPTION_5,
+    RID_SVXSTR_BULLET_DESCRIPTION_6,
+    RID_SVXSTR_BULLET_DESCRIPTION_7
+};
+
+static const char* RID_SVXSTR_SINGLENUM_DESCRIPTIONS[] =
+{
+    RID_SVXSTR_SINGLENUM_DESCRIPTION_0,
+    RID_SVXSTR_SINGLENUM_DESCRIPTION_1,
+    RID_SVXSTR_SINGLENUM_DESCRIPTION_2,
+    RID_SVXSTR_SINGLENUM_DESCRIPTION_3,
+    RID_SVXSTR_SINGLENUM_DESCRIPTION_4,
+    RID_SVXSTR_SINGLENUM_DESCRIPTION_5,
+    RID_SVXSTR_SINGLENUM_DESCRIPTION_6,
+    RID_SVXSTR_SINGLENUM_DESCRIPTION_7
+};
+
+static const char* RID_SVXSTR_OUTLINENUM_DESCRIPTIONS[] =
+{
+    RID_SVXSTR_OUTLINENUM_DESCRIPTION_0,
+    RID_SVXSTR_OUTLINENUM_DESCRIPTION_1,
+    RID_SVXSTR_OUTLINENUM_DESCRIPTION_2,
+    RID_SVXSTR_OUTLINENUM_DESCRIPTION_3,
+    RID_SVXSTR_OUTLINENUM_DESCRIPTION_4,
+    RID_SVXSTR_OUTLINENUM_DESCRIPTION_5,
+    RID_SVXSTR_OUTLINENUM_DESCRIPTION_6,
+    RID_SVXSTR_OUTLINENUM_DESCRIPTION_7
+};
+
 void SvxNumValueSet::init(NumberingPageType eType)
 {
     ePageType = eType;
@@ -398,7 +434,7 @@ void SvxNumValueSet::init(NumberingPageType eType)
         for ( sal_uInt16 i = 0; i < 8; i++ )
         {
             InsertItem( i + 1, i );
-            SetItemText( i + 1, SvxResId( RID_SVXSTR_BULLET_DESCRIPTIONS + i ) );
+            SetItemText(i + 1, SvxResId(RID_SVXSTR_BULLET_DESCRIPTIONS[i]));
         }
     }
 }
@@ -428,7 +464,7 @@ void SvxNumValueSet::SetNumberingSettings(
     {
             InsertItem( i + 1, i );
             if( i < 8 )
-                SetItemText( i + 1, SvxResId( RID_SVXSTR_SINGLENUM_DESCRIPTIONS + i ));
+                SetItemText(i + 1, SvxResId(RID_SVXSTR_SINGLENUM_DESCRIPTIONS[i]));
     }
 }
 
@@ -446,7 +482,7 @@ void SvxNumValueSet::SetOutlineNumberingSettings(
     {
         InsertItem( i + 1, i );
         if( i < 8 )
-            SetItemText( i + 1, SvxResId( RID_SVXSTR_OUTLINENUM_DESCRIPTIONS + i ));
+            SetItemText(i + 1, SvxResId(RID_SVXSTR_OUTLINENUM_DESCRIPTIONS[i]));
     }
 }
 

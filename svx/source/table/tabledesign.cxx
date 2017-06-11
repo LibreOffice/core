@@ -42,7 +42,7 @@
 #include "svx/unoprov.hxx"
 #include "svx/sdr/table/tabledesign.hxx"
 #include "svx/dialmgr.hxx"
-#include "svx/dialogs.hrc"
+#include "svx/strings.hrc"
 
 #include "celltypes.hxx"
 

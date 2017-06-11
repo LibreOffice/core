@@ -28,7 +28,7 @@
 #include "view/SlsTheme.hxx"
 #include "model/SlideSorterModel.hxx"
 
-#include "glob.hrc"
+#include "strings.hrc"
 #include "DrawController.hxx"
 #include "ViewShellBase.hxx"
 #include "ViewShellManager.hxx"

@@ -46,6 +46,9 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <tools/simplerm.hxx>
 
+#include <boost/locale.hpp>
+#include <boost/locale/gnu_gettext.hpp>
+
 #include <algorithm>
 #include <list>
 #include <set>
@@ -189,8 +192,8 @@ void ResMgrContainer::init()
     assert( m_aResFiles.empty() );
 
     // get resource path
-    OUString uri("$BRAND_BASE_DIR/" LIBO_SHARE_RESOURCE_FOLDER "/");
-    rtl::Bootstrap::expandMacros(uri); //TODO: detect failure
+    OUString uri("$BRAND_BASE_DIR/$BRAND_SHARE_RESOURCE_SUBDIR/");
+    rtl::Bootstrap::expandMacros(uri);
 
     // collect all possible resource files
     Directory aDir( uri );
@@ -1294,6 +1297,44 @@ SimpleResMgr::~SimpleResMgr()
 SimpleResMgr* SimpleResMgr::Create(const sal_Char* pPrefixName, const LanguageTag& rLocale)
 {
     return new SimpleResMgr(pPrefixName, rLocale);
+}
+
+namespace Translate
+{
+    std::locale Create(const sal_Char* pPrefixName, const LanguageTag& rLocale)
+    {
+        boost::locale::generator gen;
+        gen.characters(boost::locale::char_facet);
+        gen.categories(boost::locale::message_facet);
+        OUString uri("$BRAND_BASE_DIR/$BRAND_SHARE_RESOURCE_SUBDIR/");
+        rtl::Bootstrap::expandMacros(uri);
+        OUString path;
+        osl::File::getSystemPathFromFileURL(uri, path);
+        gen.add_messages_path(OUStringToOString(path, osl_getThreadTextEncoding()).getStr());
+        gen.add_messages_domain(pPrefixName);
+        OString sIdentifier = rLocale.getGlibcLocaleString(".UTF-8").toUtf8();
+        return gen(sIdentifier.getStr());
+    }
+
+    OUString get(const char* pId, const std::locale &loc)
+    {
+        //if its a key id locale, generate it here
+        if (loc.name() == "qtz")
+            return "somekey" + OUStringLiteral1(0x2016) + OUString::createFromAscii(pId);
+
+        std::string ret = boost::locale::gettext(pId, loc);
+
+        OUString aTarget;
+        bool bSuccess = rtl_convertStringToUString(&aTarget.pData,
+                                                   ret.data(),
+                                                   ret.size(),
+                                                   RTL_TEXTENCODING_UTF8,
+                                                   RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR|RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR|RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR);
+        (void) bSuccess;
+        assert(bSuccess);
+
+        return ResMgr::ExpandVariables(aTarget);
+    }
 }
 
 bool SimpleResMgr::IsAvailable( RESOURCE_TYPE _resourceType, sal_uInt32 _resourceId )

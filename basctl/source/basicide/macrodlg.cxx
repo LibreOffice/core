@@ -19,9 +19,8 @@
 
 
 #include <macrodlg.hxx>
-#include <macrodlg.hrc>
 #include <basidesh.hxx>
-#include <basidesh.hrc>
+#include <strings.hrc>
 
 #include <iderdll.hxx>
 #include <iderdll2.hxx>

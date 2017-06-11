@@ -19,21 +19,45 @@
 #ifndef INCLUDED_SVX_STRARRAY_HXX
 #define INCLUDED_SVX_STRARRAY_HXX
 
-#include <tools/resary.hxx>
+#include <tools/fldunit.hxx>
 #include <svx/svxdllapi.h>
+#include <vector>
 
 //  class SvxStringArray -------------------------------------------------
 
-class SVX_DLLPUBLIC SvxStringArray : public ResStringArray
+class SVX_DLLPUBLIC SvxStringArray
 {
+    std::vector<OUString> m_aTranslations;
 public:
-    SvxStringArray( sal_uInt32 nResId );
-    SvxStringArray( const ResId& rResId );
-    ~SvxStringArray();
-
-    const OUString GetStringByPos( sal_uInt32 nPos ) const;
+    SvxStringArray(const char** pResId, size_t nLength);
+    const OUString GetString(sal_uInt32 nPos) const;
 };
 
+class SVX_DLLPUBLIC SvxFieldUnitTable
+{
+public:
+    static OUString GetString(sal_uInt32 i);
+    static sal_uInt32 Count();
+    static FieldUnit GetValue(sal_uInt32 i);
+};
+
+class SVX_DLLPUBLIC SvxNumberingTypeTable
+{
+public:
+    static OUString GetString(sal_uInt32 i);
+    static sal_uInt32 Count();
+    static int GetValue(sal_uInt32 i);
+    static sal_uInt32 FindIndex(int nValue);
+};
+
+class SVX_DLLPUBLIC SvxAttrNameTable
+{
+public:
+    static OUString GetString(sal_uInt32 i);
+    static sal_uInt32 Count();
+    static sal_uInt16 GetValue(sal_uInt32 i);
+    static sal_uInt32 FindIndex(int nValue);
+};
 
 #endif
 

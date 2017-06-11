@@ -18,10 +18,11 @@
  */
 
 #include "querydlg.hxx"
-#include "dbu_qry.hrc"
+#include "strings.hrc"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include "QTableConnectionData.hxx"
+#include "core_resource.hxx"
 #include "querycontroller.hxx"
 #include "QueryTableView.hxx"
 #include "QueryDesignView.hxx"
@@ -165,7 +166,7 @@ IMPL_LINK_NOARG( DlgQryJoin, LBChangeHdl, ListBox&, void )
     OUString sFirstWinName    = m_pConnData->getReferencingTable()->GetWinName();
     OUString sSecondWinName   = m_pConnData->getReferencedTable()->GetWinName();
     const EJoinType eOldJoinType = eJoinType;
-    sal_uInt16 nResId = 0;
+    const char* pResId = nullptr;
     const sal_Int32 nPos = m_pLB_JoinType->GetSelectEntryPos();
     const sal_IntPtr nJoinType = reinterpret_cast<sal_IntPtr>(m_pLB_JoinType->GetEntryData(nPos));
     bool bAddHint = true;
@@ -173,17 +174,17 @@ IMPL_LINK_NOARG( DlgQryJoin, LBChangeHdl, ListBox&, void )
     {
         default:
         case ID_INNER_JOIN:
-            nResId = STR_QUERY_INNER_JOIN;
+            pResId = STR_QUERY_INNER_JOIN;
             bAddHint = false;
             eJoinType = INNER_JOIN;
             break;
         case ID_LEFT_JOIN:
-            nResId = STR_QUERY_LEFTRIGHT_JOIN;
+            pResId = STR_QUERY_LEFTRIGHT_JOIN;
             eJoinType = LEFT_JOIN;
             break;
         case ID_RIGHT_JOIN:
             {
-                nResId = STR_QUERY_LEFTRIGHT_JOIN;
+                pResId = STR_QUERY_LEFTRIGHT_JOIN;
                 eJoinType = RIGHT_JOIN;
                 OUString sTemp = sFirstWinName;
                 sFirstWinName = sSecondWinName;
@@ -191,12 +192,12 @@ IMPL_LINK_NOARG( DlgQryJoin, LBChangeHdl, ListBox&, void )
             }
             break;
         case ID_FULL_JOIN:
-            nResId = STR_QUERY_FULL_JOIN;
+            pResId = STR_QUERY_FULL_JOIN;
             eJoinType = FULL_JOIN;
             break;
         case ID_CROSS_JOIN:
             {
-                nResId = STR_QUERY_CROSS_JOIN;
+                pResId = STR_QUERY_CROSS_JOIN;
                 eJoinType = CROSS_JOIN;
 
                 m_pConnData->ResetConnLines();
@@ -223,7 +224,7 @@ IMPL_LINK_NOARG( DlgQryJoin, LBChangeHdl, ListBox&, void )
 
     m_pTableControl->Invalidate();
 
-    OUString sHelpText = ModuleRes( nResId );
+    OUString sHelpText = DBA_RES(pResId);
     if( nPos )
     {
         sHelpText = sHelpText.replaceFirst( "%1", sFirstWinName );
@@ -232,7 +233,7 @@ IMPL_LINK_NOARG( DlgQryJoin, LBChangeHdl, ListBox&, void )
     if ( bAddHint )
     {
         sHelpText += "\n";
-        sHelpText += ModuleRes( STR_JOIN_TYPE_HINT );
+        sHelpText += DBA_RES( STR_JOIN_TYPE_HINT );
     }
 
     m_pML_HelpText->SetText( sHelpText );

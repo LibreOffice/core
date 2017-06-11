@@ -38,10 +38,11 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 
-#include "deployment.hrc"
+#include "strings.hrc"
 #include "unopkg_shared.h"
 #include "dp_identifier.hxx"
-#include "dp_gui.hrc"
+#include "dp_shared.hxx"
+#include "strings.hrc"
 #include "lockfile.hxx"
 
 using namespace ::com::sun::star;
@@ -441,10 +442,10 @@ Reference<XComponentContext> getUNO(
     {
         if (! s_lockfile.check( nullptr ))
         {
-            OUString sMsg(ResId(RID_STR_CONCURRENTINSTANCE, *DeploymentResMgr::get()));
+            OUString sMsg(DpResId(RID_STR_CONCURRENTINSTANCE));
             //Create this string before we call DeInitVCL, because this will kill
             //the ResMgr
-            OUString sError(ResId(RID_STR_UNOPKG_ERROR, *DeploymentResMgr::get()));
+            OUString sError(DpResId(RID_STR_UNOPKG_ERROR));
 
             sMsg += "\n" + getLockFilePath();
 

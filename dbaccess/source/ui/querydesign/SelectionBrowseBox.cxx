@@ -30,10 +30,11 @@
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include "TableFieldInfo.hxx"
-#include "dbu_qry.hrc"
+#include "strings.hrc"
+#include "strings.hxx"
 #include "dbaccess_helpid.hrc"
 #include <com/sun/star/container/XNameAccess.hpp>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include "QTableWindow.hxx"
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
@@ -98,7 +99,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
                                   BrowserMode::HIDECURSOR | BrowserMode::HLINES | BrowserMode::VLINES )
                    ,m_nSeekRow(0)
                    ,m_nMaxColumns(0)
-                   ,m_aFunctionStrings(ModuleRes(STR_QUERY_FUNCTIONS))
+                   ,m_aFunctionStrings(DBA_RES(STR_QUERY_FUNCTIONS))
                    ,m_nVisibleCount(0)
                    ,m_nLastSortColumn(SORT_COLUMN_NONE)
                    ,m_bOrderByUnRelated(true)
@@ -135,7 +136,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
     aTitleFont.SetFontSize(Size(0, 6));
     SetTitleFont(aTitleFont);
 
-    OUString aTxt(ModuleRes(STR_QUERY_SORTTEXT));
+    OUString aTxt(DBA_RES(STR_QUERY_SORTTEXT));
     sal_Int32 nCount = comphelper::string::getTokenCount(aTxt, ';');
     for (sal_Int32 nIdx = 0; nIdx < nCount; nIdx++)
         m_pOrderCell->InsertEntry(aTxt.getToken(nIdx, ';'));
@@ -498,11 +499,11 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
                 for(;aIter != aEnd;++aIter)
                     m_pTableCell->InsertEntry(static_cast<OQueryTableWindow*>(aIter->second.get())->GetAliasName());
 
-                m_pTableCell->InsertEntry(OUString(ModuleRes(STR_QUERY_NOTABLE)), 0);
+                m_pTableCell->InsertEntry(DBA_RES(STR_QUERY_NOTABLE), 0);
                 if (!pEntry->GetAlias().isEmpty())
                     m_pTableCell->SelectEntry(pEntry->GetAlias());
                 else
-                    m_pTableCell->SelectEntry(OUString(ModuleRes(STR_QUERY_NOTABLE)));
+                    m_pTableCell->SelectEntry(DBA_RES(STR_QUERY_NOTABLE));
             }
         }   break;
         case BROW_VIS_ROW:
@@ -520,7 +521,7 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
                 m_pVisibleCell->GetBox().SaveValue();
                 m_pVisibleCell->GetBox().Disable();
                 m_pVisibleCell->GetBox().EnableInput(false);
-                OUString aMessage(ModuleRes(STR_QRY_ORDERBY_UNRELATED));
+                OUString aMessage(DBA_RES(STR_QRY_ORDERBY_UNRELATED));
                 OQueryDesignView* paDView = getDesignView();
                 ScopedVclPtrInstance<InfoBox>(paDView, aMessage)->Execute();
             }
@@ -610,7 +611,7 @@ bool OSelectionBrowseBox::fillColumnRef(const OUString& _sColumnName, const OUSt
         sal_uInt16 nTabCount = 0;
         if ( !static_cast<OQueryTableView*>(getDesignView()->getTableView())->FindTableFromField(_sColumnName,_pEntry,nTabCount) ) // error occurred: column not in table window
         {
-            OUString sErrorMsg(ModuleRes(RID_STR_FIELD_DOESNT_EXIST));
+            OUString sErrorMsg(DBA_RES(RID_STR_FIELD_DOESNT_EXIST));
             sErrorMsg = sErrorMsg.replaceFirst("$name$",_sColumnName);
             ScopedVclPtrInstance<OSQLErrorBox>(this, sErrorMsg)->Execute();
             bError = true;
@@ -714,7 +715,7 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef& _
     if ( pParseNode == nullptr )
     {
         // something different which we have to check
-        OUString sErrorMessage( ModuleRes( STR_QRY_COLUMN_NOT_FOUND ) );
+        OUString sErrorMessage( DBA_RES( STR_QRY_COLUMN_NOT_FOUND ) );
         sErrorMessage = sErrorMessage.replaceFirst("$name$",_sFieldName);
         ScopedVclPtrInstance<OSQLErrorBox>(this, sErrorMessage)->Execute();
 
@@ -870,7 +871,7 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef& _
 
             if ( i > 0 && !InsertField(aSelEntry,BROWSER_INVALIDID,true,false).is() ) // may we have to append more than one field
             { // the field could not be inserted
-                OUString sErrorMessage( ModuleRes( RID_STR_FIELD_DOESNT_EXIST ) );
+                OUString sErrorMessage( DBA_RES( RID_STR_FIELD_DOESNT_EXIST ) );
                 sErrorMessage = sErrorMessage.replaceFirst("$name$",aSelEntry->GetField());
                 ScopedVclPtrInstance<OSQLErrorBox>(this, sErrorMessage)->Execute();
                 bError = true;
@@ -1231,7 +1232,7 @@ void OSelectionBrowseBox::PaintStatusCell(OutputDevice& rDev, const tools::Recta
 {
     tools::Rectangle aRect(rRect);
     aRect.TopLeft().Y() -= 2;
-    OUString  aLabel(ModuleRes(STR_QUERY_HANDLETEXT));
+    OUString  aLabel(DBA_RES(STR_QUERY_HANDLETEXT));
 
    // from BROW_CRIT2_ROW onwards all rows are shown "or"
     sal_Int32 nToken = (m_nSeekRow >= GetBrowseRow(BROW_CRIT2_ROW))
@@ -2127,7 +2128,7 @@ OUString OSelectionBrowseBox::GetCellText(long nRow, sal_uInt16 nColId) const
         }   break;
         case BROW_ORDER_ROW:
             if (pEntry->GetOrderDir() != ORDER_NONE)
-                aText = OUString(ModuleRes(STR_QUERY_SORTTEXT)).getToken(sal::static_int_cast< sal_uInt16 >(pEntry->GetOrderDir()), ';');
+                aText = DBA_RES(STR_QUERY_SORTTEXT).getToken(sal::static_int_cast< sal_uInt16 >(pEntry->GetOrderDir()), ';');
             break;
         case BROW_VIS_ROW:
             break;
@@ -2560,7 +2561,7 @@ void OSelectionBrowseBox::DeactivateCell(bool _bUpdate)
 
 OUString OSelectionBrowseBox::GetRowDescription( sal_Int32 _nRow ) const
 {
-    OUString  aLabel(ModuleRes(STR_QUERY_HANDLETEXT));
+    OUString  aLabel(DBA_RES(STR_QUERY_HANDLETEXT));
 
     // from BROW_CRIT2_ROW onwards all rows are shown as "or"
     sal_Int32 nToken = (_nRow >= GetBrowseRow(BROW_CRIT2_ROW))

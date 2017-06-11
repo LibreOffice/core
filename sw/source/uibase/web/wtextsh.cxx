@@ -30,8 +30,8 @@
 #include "wtextsh.hxx"
 #include "basesh.hxx"
 #include "globals.hrc"
-#include "shells.hrc"
-#include "web.hrc"
+#include "strings.hrc"
+#include "strings.hrc"
 
 #include <unomid.h>
 

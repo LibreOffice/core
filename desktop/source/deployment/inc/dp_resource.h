@@ -27,21 +27,7 @@
 
 namespace dp_misc {
 
-
-ResId getResId( sal_uInt16 id );
-
-
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString getResourceString( sal_uInt16 id );
-
-template <typename Unique, sal_uInt16 id>
-struct StaticResourceString :
-        public ::rtl::StaticWithInit< OUString, Unique > {
-    const OUString operator () () { return getResourceString(id); }
-};
-
-
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-const LanguageTag & getOfficeLanguageTag();
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC const LanguageTag & getOfficeLanguageTag();
 
 }
 

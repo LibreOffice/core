@@ -31,6 +31,8 @@
 #include <view.hxx>
 
 #include "globals.hrc"
+#include "strings.hrc"
+#include "optload.hrc"
 #include "cmdid.h"
 
 #include "optload.hxx"
@@ -43,6 +45,7 @@
 
 #include <svtools/insdlg.hxx>
 #include <svtools/treelistentry.hxx>
+#include <tools/resary.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
 
@@ -50,7 +53,6 @@
 #include <unotools/configmgr.hxx>
 #include <docsh.hxx>
 #include <app.hrc>
-#include <config.hrc>
 #include <SwStyleNameMapper.hxx>
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
@@ -61,6 +63,25 @@
 using namespace ::com::sun::star;
 
 #include <svl/eitem.hxx>
+
+sal_uInt32 SwFieldUnitTable::Count()
+{
+    return SAL_N_ELEMENTS(STR_ARR_METRIC);
+}
+
+OUString SwFieldUnitTable::GetString(sal_uInt32 nPos)
+{
+    if (RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count())
+        return SwResId(STR_ARR_METRIC[nPos].first);
+    return OUString();
+}
+
+FieldUnit SwFieldUnitTable::GetValue(sal_uInt32 nPos)
+{
+    if (RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count())
+        return STR_ARR_METRIC[nPos].second;
+    return FUNIT_NONE;
+}
 
 SwLoadOptPage::SwLoadOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptGeneralPage", "modules/swriter/ui/optgeneralpage.ui", &rSet)
@@ -82,11 +103,10 @@ SwLoadOptPage::SwLoadOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pShowStandardizedPageCount, "standardizedpageshow");
     get(m_pStandardizedPageSizeNF, "standardpagesize");
 
-    SvxStringArray aMetricArr(ResId(STR_ARR_METRIC, *pSwResMgr));
-    for ( sal_uInt32 i = 0; i < aMetricArr.Count(); ++i )
+    for (sal_uInt32 i = 0; i < SwFieldUnitTable::Count(); ++i)
     {
-        const OUString sMetric = aMetricArr.GetStringByPos( i );
-        FieldUnit eFUnit = (FieldUnit)aMetricArr.GetValue( i );
+        const OUString sMetric = SwFieldUnitTable::GetString(i);
+        FieldUnit eFUnit = SwFieldUnitTable::GetValue(i);
 
         switch ( eFUnit )
         {

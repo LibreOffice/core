@@ -23,9 +23,9 @@
 #include <config_vclplug.h>
 
 #include "app.hxx"
+#include "dp_shared.hxx"
 #include "cmdlineargs.hxx"
-#include "desktopresid.hxx"
-#include "desktop.hrc"
+#include "strings.hrc"
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -238,13 +238,7 @@ void Desktop::CreateTemporaryDirectory()
     {
         // Catch runtime exception here: We have to add language dependent info
         // to the exception message. Fallback solution uses hard coded string.
-        OUString aMsg;
-        DesktopResId aResId( STR_BOOTSTRAP_ERR_NO_PATHSET_SERVICE );
-        aResId.SetRT( RSC_STRING );
-        if ( aResId.GetResMgr()->IsAvailable( aResId ))
-            aMsg = aResId;
-        else
-            aMsg = "The path manager is not available.\n";
+        OUString aMsg = DpResId(STR_BOOTSTRAP_ERR_NO_PATHSET_SERVICE);
         e.Message = aMsg + e.Message;
         throw;
     }

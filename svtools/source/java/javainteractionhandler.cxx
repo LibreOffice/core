@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <tools/resid.hxx>
 #include <com/sun/star/task/XInteractionContinuation.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>

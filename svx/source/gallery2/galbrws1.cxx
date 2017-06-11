@@ -32,9 +32,9 @@
 #include "svx/galmisc.hxx"
 #include "galbrws1.hxx"
 #include <com/sun/star/util/DateTime.hpp>
-#include "gallery.hrc"
+#include "svx/strings.hrc"
 #include <algorithm>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 
 #include <svx/svxdlg.hxx>
@@ -121,7 +121,7 @@ GalleryBrowser1::GalleryBrowser1(
     StartListening( *mpGallery );
 
     maNewTheme->SetHelpId( HID_GALLERY_NEWTHEME );
-    maNewTheme->SetText( GalResId(RID_SVXSTR_GALLERY_CREATETHEME));
+    maNewTheme->SetText( SvxResId(RID_SVXSTR_GALLERY_CREATETHEME));
     maNewTheme->SetClickHdl( LINK( this, GalleryBrowser1, ClickNewThemeHdl ) );
 
     // disable creation of new themes if a writable directory is not available
@@ -604,7 +604,7 @@ IMPL_LINK_NOARG(GalleryBrowser1, SelectThemeHdl, ListBox&, void)
 
 IMPL_LINK_NOARG(GalleryBrowser1, ClickNewThemeHdl, Button*, void)
 {
-    OUString  aNewTheme( GalResId(RID_SVXSTR_GALLERY_NEWTHEME) );
+    OUString  aNewTheme( SvxResId(RID_SVXSTR_GALLERY_NEWTHEME) );
     OUString  aName( aNewTheme );
     sal_uIntPtr nCount = 0;
 

@@ -81,7 +81,7 @@
 #include <swunohelper.hxx>
 #include <dbui.hrc>
 #include <globals.hrc>
-#include <statstr.hrc>
+#include <strings.hrc>
 #include <mmconfigitem.hxx>
 #include <sfx2/request.hxx>
 #include <hintids.hxx>
@@ -123,7 +123,6 @@
 #include <sal/log.hxx>
 #include <swabstdlg.hxx>
 #include <fmthdft.hxx>
-#include <envelp.hrc>
 #include <vector>
 #include <unomid.h>
 #include <section.hxx>

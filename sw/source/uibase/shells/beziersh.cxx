@@ -35,7 +35,7 @@
 #include "globals.hrc"
 #include "drawbase.hxx"
 #include "beziersh.hxx"
-#include "shells.hrc"
+#include "strings.hrc"
 #define SwBezierShell
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"

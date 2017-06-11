@@ -34,7 +34,7 @@
 
 #include "PhysicalFontCollection.hxx"
 
-#include "svids.hrc"
+#include "strings.hrc"
 
 FontMetric OutputDevice::GetDevFont( int nDevFontIndex ) const
 {
@@ -981,14 +981,10 @@ void OutputDevice::ImplInitFontList() const
             if( !mpFontCollection->Count() )
             {
                 OUString aError( "Application error: no fonts and no vcl resource found on your system" );
-                ResMgr* pMgr = ImplGetResMgr();
-                if( pMgr )
-                {
-                    OUString aResStr(ResId(SV_ACCESSERROR_NO_FONTS, *pMgr));
-                    if( !aResStr.isEmpty() )
-                        aError = aResStr;
-                }
-                Application::Abort( aError );
+                OUString aResStr(VclResId(SV_ACCESSERROR_NO_FONTS));
+                if (!aResStr.isEmpty())
+                    aError = aResStr;
+                Application::Abort(aError);
             }
         }
     }

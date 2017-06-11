@@ -30,7 +30,7 @@
  module com {  module sun {  module star {  module resource {
 
 /** offers some operations on com::sun::star::lang::Locale
-    structures.@see         XResourceBundle
+    structures.
         @see         Locale
  */
 published interface XLocale: com::sun::star::uno::XInterface

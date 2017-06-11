@@ -63,7 +63,7 @@
 #include "DrawDocShell.hxx"
 #include "sdmod.hxx"
 #include "sdpage.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "sdresid.hxx"
 #include "DrawViewShell.hxx"
 #include "futext.hxx"

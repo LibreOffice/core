@@ -52,9 +52,9 @@
 #include "optsitem.hxx"
 
 #include "app.hrc"
-#include "glob.hrc"
 #include "strings.hrc"
-#include "res_bmp.hrc"
+#include "strings.hrc"
+
 
 #include "sdundogr.hxx"
 #include "undopage.hxx"

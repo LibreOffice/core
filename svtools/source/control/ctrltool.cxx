@@ -29,7 +29,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/settings.hxx>
 #include <sal/macros.h>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <svtools/ctrltool.hxx>
 #include <o3tl/typed_flags_set.hxx>

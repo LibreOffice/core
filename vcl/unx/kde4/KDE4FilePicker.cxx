@@ -30,7 +30,7 @@
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
-#include <vcl/fpicker.hrc>
+#include <fpicker/fpicker.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/syswin.hxx>
@@ -58,7 +58,7 @@
 
 #include "unx/geninst.h"
 
-#include "svids.hrc"
+#include "strings.hrc"
 
 // The dialog should check whether LO also supports the protocol
 // provided by KIO, and KFileWidget::dirOperator() is only 4.3+ .
@@ -508,20 +508,14 @@ OUString SAL_CALL KDE4FilePicker::getLabel(sal_Int16 controlId)
     return toOUString(label);
 }
 
-QString KDE4FilePicker::getResString( sal_Int16 aRedId )
+QString KDE4FilePicker::getResString(const char *pRedId)
 {
     QString aResString;
 
-    if( aRedId < 0 )
+    if (pRedId == nullptr)
         return aResString;
 
-    try
-    {
-        aResString = toQString(ResId(aRedId, *ImplGetResMgr()));
-    }
-    catch(...)
-    {
-    }
+    aResString = toQString(VclResId(pRedId));
 
     return aResString.replace('~', '&');
 }
@@ -529,7 +523,7 @@ QString KDE4FilePicker::getResString( sal_Int16 aRedId )
 void KDE4FilePicker::addCustomControl(sal_Int16 controlId)
 {
     QWidget* widget = nullptr;
-    sal_Int32 resId = -1;
+    const char* resId = nullptr;
 
     switch (controlId)
     {
@@ -723,7 +717,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
 
     _dialog->setOperationMode( operationMode );
 
-    sal_Int16 resId = -1;
+    const char *resId = nullptr;
     switch (_dialog->operationMode())
     {
     case KFileDialog::Opening:

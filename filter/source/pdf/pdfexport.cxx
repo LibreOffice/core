@@ -22,6 +22,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/fract.hxx>
 #include <tools/poly.hxx>
+#include <tools/simplerm.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/metaact.hxx>
@@ -50,7 +51,7 @@
 
 #include "pdfexport.hxx"
 #include "impdialog.hxx"
-#include "pdf.hrc"
+#include "strings.hrc"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -883,14 +884,11 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
 
                 if ( mxStatusIndicator.is() )
                 {
-                    std::unique_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr( "pdffilter", Application::GetSettings().GetUILanguageTag() ));
-                    if ( pResMgr )
-                    {
-                        sal_Int32 nTotalPageCount = aRangeEnum.size();
-                        if ( bExportPages && bExportNotesPages )
-                            nTotalPageCount *= 2;
-                        mxStatusIndicator->start( ResId( PDF_PROGRESS_BAR, *pResMgr ), nTotalPageCount );
-                    }
+                    std::locale loc(Translate::Create("flt", Application::GetSettings().GetUILanguageTag()));
+                    sal_Int32 nTotalPageCount = aRangeEnum.size();
+                    if ( bExportPages && bExportNotesPages )
+                        nTotalPageCount *= 2;
+                    mxStatusIndicator->start(Translate::get(PDF_PROGRESS_BAR, loc), nTotalPageCount);
                 }
 
                 bRet = nPageCount > 0;

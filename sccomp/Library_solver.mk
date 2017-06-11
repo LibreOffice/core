@@ -24,12 +24,18 @@ $(if $(ENABLE_LPSOLVE),$(eval $(call gb_Library_set_componentfile,solver,sccomp/
 
 $(eval $(call gb_Library_use_sdk_api,solver))
 
+$(eval $(call gb_Library_set_include,solver,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/sccomp/inc \
+))
+
 $(eval $(call gb_Library_use_libraries,solver,\
 	comphelper \
 	cppu \
 	cppuhelper \
 	sal \
 	tl \
+	vcl \
 	i18nlangtag \
 ))
 

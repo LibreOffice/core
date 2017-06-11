@@ -105,8 +105,8 @@
 #include <swbaslnk.hxx>
 #include <printdata.hxx>
 #include <cmdid.h>
-#include <statstr.hrc>
-#include <comcore.hrc>
+#include <strings.hrc>
+#include <strings.hrc>
 #include <SwUndoTOXChange.hxx>
 #include <unocrsr.hxx>
 #include <docsh.hxx>

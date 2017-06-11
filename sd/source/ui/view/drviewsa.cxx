@@ -50,7 +50,7 @@
 #include "view/viewoverlaymanager.hxx"
 #include "app.hrc"
 #include "strings.hrc"
-#include "res_bmp.hrc"
+
 #include "sdpage.hxx"
 #include "FrameView.hxx"
 #include "drawdoc.hxx"

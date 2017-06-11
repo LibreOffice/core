@@ -35,7 +35,7 @@
 #include "FrameView.hxx"
 #include "stlpool.hxx"
 #include "View.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "glob.hxx"
 #include "strings.hrc"
 #include "strmname.h"

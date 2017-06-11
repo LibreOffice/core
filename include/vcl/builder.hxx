@@ -247,9 +247,6 @@ private:
     static void     mungeAdjustment(ScrollBar &rTarget, const Adjustment &rAdjustment);
     static void     mungeAdjustment(Slider &rTarget, const Adjustment &rAdjustment);
 
-    typedef std::map<OString, OString> WidgetTranslations;
-    typedef std::map<OString, WidgetTranslations> Translations;
-
     struct stockinfo
     {
         OUString m_sStock;
@@ -270,6 +267,8 @@ private:
 
     struct ParserState
     {
+        std::locale m_aResLocale;
+
         std::vector<RadioButtonGroupMap> m_aGroupMaps;
 
         std::vector<ComboBoxModelMap> m_aModelMaps;
@@ -291,8 +290,6 @@ private:
 
         std::vector<ButtonMenuMap> m_aButtonMenuMaps;
 
-        Translations m_aTranslations;
-
         std::map<VclPtr<vcl::Window>, VclPtr<vcl::Window>> m_aRedundantParentWidgets;
 
         std::vector<SizeGroup> m_aSizeGroups;
@@ -309,9 +306,6 @@ private:
 
         ParserState();
     };
-
-    void        loadTranslations(const LanguageTag &rLanguageTag, const OUString &rUri);
-    OString     getTranslation(const OString &rId, const OString &rProperty) const;
 
     OString     m_sID;
     OString     m_sHelpRoot;
@@ -361,8 +355,6 @@ private:
     bool        extractButtonImage(const OString &id, stringmap &rMap, bool bRadio);
     bool        extractStock(const OString &id, stringmap &rMap);
     void        extractMnemonicWidget(const OString &id, stringmap &rMap);
-
-    void        handleTranslations(xmlreader::XmlReader &reader);
 
     void        handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader);
     VclPtr<vcl::Window> handleObject(vcl::Window *pParent, xmlreader::XmlReader &reader);

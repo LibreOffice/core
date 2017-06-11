@@ -8,10 +8,9 @@
  */
 
 #include "GL3DBarChartDialogController.hxx"
-#include <Strings.hrc>
+#include <strings.hrc>
 #include <bitmaps.hlst>
 #include <ResId.hxx>
-
 #include <svtools/valueset.hxx>
 
 namespace chart {

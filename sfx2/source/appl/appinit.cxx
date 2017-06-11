@@ -26,8 +26,10 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <basic/sbdef.hxx>
 #include <svtools/soerr.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
+#include <tools/simplerm.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/saveopt.hxx>
 #include <svl/intitem.hxx>
@@ -48,8 +50,8 @@
 #include <vcl/scheduler.hxx>
 
 #include <sfx2/unoctitm.hxx>
-#include "app.hrc"
-#include "sfxlocal.hrc"
+#include "sfx2/strings.hrc"
+#include "sfx2/strings.hrc"
 #include "appdata.hxx"
 #include "arrdecl.hxx"
 #include <sfx2/dispatch.hxx>
@@ -211,18 +213,18 @@ void SfxApplication::Initialize_Impl()
     Help::EnableExtHelp();
 
     pImpl->m_pToolsErrorHdl = new SfxErrorHandler(
-        RID_ERRHDL, ErrCode(ERRCODE_AREA_IO), ErrCode(ERRCODE_AREA_SVX));
+        getRID_ERRHDL(), ErrCode(ERRCODE_AREA_IO), ErrCode(ERRCODE_AREA_SVX));
 
 #if HAVE_FEATURE_SCRIPTING
-    pImpl->pBasicResMgr = ResMgr::CreateResMgr("sb");
+    pImpl->aBasicResLocale = Translate::Create("sb", Application::GetSettings().GetUILanguageTag());
 #endif
-    pImpl->pSvtResMgr = ResMgr::CreateResMgr("svt");
+    pImpl->aSvtResLocale = Translate::Create("svt", Application::GetSettings().GetUILanguageTag());
 
     pImpl->m_pSoErrorHdl = new SfxErrorHandler(
-        RID_SO_ERROR_HANDLER, ErrCode(ERRCODE_AREA_SO), ErrCode(ERRCODE_AREA_SO_END), pImpl->pSvtResMgr );
+        getRID_SO_ERROR_HANDLER(), ErrCode(ERRCODE_AREA_SO), ErrCode(ERRCODE_AREA_SO_END), &(pImpl->aSvtResLocale));
 #if HAVE_FEATURE_SCRIPTING
     pImpl->m_pSbxErrorHdl = new SfxErrorHandler(
-        RID_BASIC_START, ErrCode(ERRCODE_AREA_SBX), ErrCode(ERRCODE_AREA_SBX_END), pImpl->pBasicResMgr );
+        getRID_BASIC_START(), ErrCode(ERRCODE_AREA_SBX), ErrCode(ERRCODE_AREA_SBX_END), &(pImpl->aBasicResLocale));
 #endif
 
     if (!utl::ConfigManager::IsAvoidConfig())
