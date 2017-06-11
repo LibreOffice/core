@@ -90,7 +90,7 @@
 #include <svx/svdovirt.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpool.hxx>
-#include <svx/svdstr.hrc>
+#include <svx/strings.hrc>
 #include <svx/svdtrans.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdview.hxx>
@@ -1010,9 +1010,9 @@ OUString SdrObject::TakeObjNamePlural() const
     return ImpGetResStr(STR_ObjNamePluralNONE);
 }
 
-void SdrObject::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr) const
+void SdrObject::ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr) const
 {
-    rStr = ImpGetResStr(nStrCacheID);
+    rStr = ImpGetResStr(pStrCacheID);
     sal_Int32 nPos = rStr.indexOf("%1");
     if (nPos >= 0)
     {

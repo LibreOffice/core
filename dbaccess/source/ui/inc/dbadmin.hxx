@@ -97,7 +97,7 @@ public:
 
 protected:
     // adds a new detail page and remove all the old ones
-    void addDetailPage(sal_uInt16 _nPageId,sal_uInt16 _nTextId,CreateTabPage pCreateFunc);
+    void addDetailPage(sal_uInt16 _nPageId, const char* pTextId, CreateTabPage pCreateFunc);
 
     virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage) override;
     virtual short Ok() override;

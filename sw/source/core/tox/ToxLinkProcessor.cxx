@@ -13,7 +13,7 @@
 #include "SwStyleNameMapper.hxx"
 #include "ndtxt.hxx"
 #include <o3tl/make_unique.hxx>
-#include <poolfmt.hrc>
+#include <strings.hrc>
 
 #include <stdexcept>
 

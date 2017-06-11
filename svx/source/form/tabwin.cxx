@@ -22,6 +22,7 @@
 #include "svx/fmtools.hxx"
 #include "fmservs.hxx"
 
+#include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <svx/dbaexchange.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -41,7 +42,6 @@
 
 #include "fmprop.hrc"
 
-#include "svx/fmresids.hrc"
 #include <svx/dialmgr.hxx>
 #include <svx/svdpagv.hxx>
 #include <sfx2/objitem.hxx>
@@ -50,8 +50,8 @@
 #include <sfx2/frame.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include "svtools/treelistentry.hxx"
-#include <tools/resary.hxx>
 #include <vcl/settings.hxx>
+#include "tabwin.hrc"
 
 const long STD_WIN_SIZE_X = 120;
 const long STD_WIN_SIZE_Y = 150;
@@ -332,18 +332,17 @@ void FmFieldWin::UpdateContent(const css::uno::Reference< css::form::XForm > & x
 
         // set prefix
         OUString  aPrefix;
-        ResStringArray aPrefixes(ResId(RID_RSC_TABWIN_PREFIX, DIALOG_MGR()));
 
         switch (m_nObjectType)
         {
             case CommandType::TABLE:
-                aPrefix = aPrefixes.GetString(0);
+                aPrefix = SvxResId(RID_RSC_TABWIN_PREFIX[0]);
                 break;
             case CommandType::QUERY:
-                aPrefix = aPrefixes.GetString(1);
+                aPrefix = SvxResId(RID_RSC_TABWIN_PREFIX[1]);
                 break;
             default:
-                aPrefix = aPrefixes.GetString(2);
+                aPrefix = SvxResId(RID_RSC_TABWIN_PREFIX[2]);
                 break;
         }
 

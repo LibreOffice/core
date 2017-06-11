@@ -135,7 +135,7 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
 
     bool                                m_bIsEMailSupported;
 
-    ResStringArray                          m_AddressHeaderSA;
+    std::vector<std::pair<OUString, int>> m_AddressHeaderSA;
 
     //these addresses are not stored in the configuration
     std::vector< SwDocMergeInfo >           m_aMergeInfos;
@@ -200,12 +200,16 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
         m_bIsAuthentication(false),
 
         m_bIsEMailSupported(false),
-        m_AddressHeaderSA(ResId(SA_ADDRESS_HEADER, *pSwResMgr)),
         m_bUserSettingWereOverwritten(false),
         m_bIsAddressBlock_LastUserSetting(false),
         m_bIsGreetingLineInMail_LastUserSetting(false),
         m_bIsGreetingLine_LastUserSetting(false)
 {
+    for (size_t i = 0; i < SAL_N_ELEMENTS(SA_ADDRESS_HEADER); ++i)
+    {
+        m_AddressHeaderSA.push_back(std::make_pair(SwResId(SA_ADDRESS_HEADER[i].first), SA_ADDRESS_HEADER[i].second));
+    }
+
     const Sequence<OUString>& rNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(rNames);
     const Any* pValues = aValues.getConstArray();
@@ -378,20 +382,20 @@ static OUString lcl_CreateNodeName(Sequence<OUString>& rAssignments )
     return sNewName;
 }
 
-static void lcl_ConvertToNumbers(OUString& rBlock, const ResStringArray& rHeaders )
+static void lcl_ConvertToNumbers(OUString& rBlock, const std::vector<std::pair<OUString, int>>& rHeaders )
 {
     //convert the strings used for UI to numbers used for the configuration
     OUString sBlock(rBlock.replaceAll("\n", "\\n"));
-    for(sal_uInt32 i = 0; i < rHeaders.Count(); ++i)
+    for (size_t i = 0; i < rHeaders.size(); ++i)
     {
-        OUString sHeader = "<" + rHeaders.GetString( i ) + ">";
+        OUString sHeader = "<" + rHeaders[i].first + ">";
         OUString sReplace = "<" + OUStringLiteral1('0' + i) + ">";
         sBlock = sBlock.replaceAll(sHeader, sReplace);
     }
     rBlock = sBlock;
 }
 
-static void lcl_ConvertFromNumbers(OUString& rBlock, const ResStringArray& rHeaders)
+static void lcl_ConvertFromNumbers(OUString& rBlock, const std::vector<std::pair<OUString, int>>& rHeaders)
 {
     //convert the numbers used for the configuration to strings used for UI to numbers
     //doesn't use ReplaceAll to prevent expansion of numbers inside of the headers
@@ -409,8 +413,8 @@ static void lcl_ConvertFromNumbers(OUString& rBlock, const ResStringArray& rHead
             {
                 sBlock += "<";
                 sal_uInt16 nHeader = cChar - '0';
-                if(nHeader < rHeaders.Count())
-                    sBlock += rHeaders.GetString( nHeader );
+                if(nHeader < rHeaders.size())
+                    sBlock += rHeaders[nHeader].first;
                 sBlock += ">";
             }
             else
@@ -737,7 +741,7 @@ void  SwMailMergeConfigItem::Commit()
         m_pImpl->Commit();
 }
 
-const ResStringArray&   SwMailMergeConfigItem::GetDefaultAddressHeaders() const
+const std::vector<std::pair<OUString, int>>&   SwMailMergeConfigItem::GetDefaultAddressHeaders() const
 {
     return m_pImpl->m_AddressHeaderSA;
 }
@@ -1162,8 +1166,8 @@ OUString     SwMailMergeConfigItem::GetAssignedColumn(sal_uInt32 nColumn) const
     Sequence< OUString> aAssignment = GetColumnAssignment( m_pImpl->m_aDBData );
     if(aAssignment.getLength() > sal::static_int_cast< sal_Int32, sal_uInt32>(nColumn) && !aAssignment[nColumn].isEmpty())
         sRet = aAssignment[nColumn];
-    else if(nColumn < m_pImpl->m_AddressHeaderSA.Count())
-        sRet = m_pImpl->m_AddressHeaderSA.GetString(nColumn);
+    else if(nColumn < m_pImpl->m_AddressHeaderSA.size())
+        sRet = m_pImpl->m_AddressHeaderSA[nColumn].first;
     return sRet;
 }
 
@@ -1206,7 +1210,7 @@ bool SwMailMergeConfigItem::IsAddressFieldsAssigned() const
         return false;
     uno::Reference<container::XNameAccess> xCols = xColsSupp->getColumns();
 
-    const ResStringArray& rHeaders = GetDefaultAddressHeaders();
+    const std::vector<std::pair<OUString, int>>& rHeaders = GetDefaultAddressHeaders();
     Sequence< OUString> aAssignment =
                         GetColumnAssignment( GetCurrentDBData() );
     const OUString* pAssignment = aAssignment.getConstArray();
@@ -1222,10 +1226,10 @@ bool SwMailMergeConfigItem::IsAddressFieldsAssigned() const
         {
             OUString sConvertedColumn = aItem.sText;
             for(sal_uInt32 nColumn = 0;
-                    nColumn < rHeaders.Count() && nColumn < sal_uInt32(aAssignment.getLength());
+                    nColumn < rHeaders.size() && nColumn < sal_uInt32(aAssignment.getLength());
                                                                                 ++nColumn)
             {
-                if (rHeaders.GetString(nColumn).equals(aItem.sText) &&
+                if (rHeaders[nColumn].first.equals(aItem.sText) &&
                     !pAssignment[nColumn].isEmpty())
                 {
                     sConvertedColumn = pAssignment[nColumn];
@@ -1254,7 +1258,7 @@ bool SwMailMergeConfigItem::IsGreetingFieldsAssigned() const
     uno::Reference< XColumnsSupplier > xColsSupp( xResultSet, UNO_QUERY );
     if(!xColsSupp.is())
         return false;
-    const ResStringArray& rHeaders = GetDefaultAddressHeaders();
+    const std::vector<std::pair<OUString, int>>& rHeaders = GetDefaultAddressHeaders();
     uno::Reference<container::XNameAccess> xCols = xColsSupp->getColumns();
 
     Sequence< OUString> aAssignment =
@@ -1281,10 +1285,10 @@ bool SwMailMergeConfigItem::IsGreetingFieldsAssigned() const
         {
             OUString sConvertedColumn = aItem.sText;
             for(sal_uInt32 nColumn = 0;
-                    nColumn < rHeaders.Count() && nColumn < sal_uInt32(aAssignment.getLength());
+                    nColumn < rHeaders.size() && nColumn < sal_uInt32(aAssignment.getLength());
                                                                                 ++nColumn)
             {
-                if (rHeaders.GetString(nColumn).equals(aItem.sText) &&
+                if (rHeaders[nColumn].first.equals(aItem.sText) &&
                     !pAssignment[nColumn].isEmpty())
                 {
                     sConvertedColumn = pAssignment[nColumn];

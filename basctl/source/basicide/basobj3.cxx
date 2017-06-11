@@ -25,7 +25,7 @@
 #include <iderdll.hxx>
 #include <iderdll2.hxx>
 #include <basdoc.hxx>
-#include <basidesh.hrc>
+#include <strings.hrc>
 
 #include <baside2.hxx>
 #include <baside3.hxx>

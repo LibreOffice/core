@@ -26,10 +26,12 @@
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include "dbustrings.hrc"
-#include "dbu_rel.hrc"
+#include "stringconstants.hxx"
+#include "strings.hrc"
+#include "strings.hxx"
 #include "UITools.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
+#include "core_resource.hxx"
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 
@@ -373,7 +375,7 @@ xKey.clear();
     if ( bDropRelation )
     {
         DropRelation();
-        OUString sError(ModuleRes(STR_QUERY_REL_COULD_NOT_CREATE));
+        OUString sError(DBA_RES(STR_QUERY_REL_COULD_NOT_CREATE));
         ::dbtools::throwGenericSQLException(sError,nullptr);
     }
 

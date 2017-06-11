@@ -158,7 +158,6 @@
 #include <svx/xtable.hxx>
 #include <tablink.hxx>
 #include <tools/color.hxx>
-#include <tools/resary.hxx>
 #include <tools/resid.hxx>
 #include <tools/urlobj.hxx>
 #include <typedstrdata.hxx>

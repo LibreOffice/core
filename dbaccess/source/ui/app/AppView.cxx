@@ -18,7 +18,7 @@
  */
 
 #include "AppView.hxx"
-#include "dbu_app.hrc"
+#include "strings.hrc"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include "dbaccess_helpid.hrc"
@@ -39,7 +39,7 @@
 #include <vcl/settings.hxx>
 #include "AppTitleWindow.hxx"
 #include "dsntypes.hxx"
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include <dbaccess/IController.hxx>
 #include "browserids.hxx"
 #include <unotools/pathoptions.hxx>
