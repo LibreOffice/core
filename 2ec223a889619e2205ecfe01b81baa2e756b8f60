@@ -1,0 +1,349 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_bfee1fb2",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4117,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-11T13:59:10Z",
+      "side": 1,
+      "message": "Maybe \"... so that we don\u0027t get the CLASS of the PRE style\"?\n\nChanges:\n* it\u0027s about class *of* not class *in*\n* template -\u003e style (as in translation on linen 4162, 4206 and earlier comments by Michael Stahl, if I remember it correctly)",
+      "range": {
+        "startLine": 4117,
+        "startChar": 52,
+        "endLine": 4117,
+        "endChar": 79
+      },
+      "revId": "2ec223a889619e2205ecfe01b81baa2e756b8f60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_1f365352",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4134,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-11T13:59:10Z",
+      "side": 1,
+      "message": "isn\u0027t this \"style\" again?",
+      "range": {
+        "startLine": 4134,
+        "startChar": 36,
+        "endLine": 4134,
+        "endChar": 44
+      },
+      "revId": "2ec223a889619e2205ecfe01b81baa2e756b8f60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_df2bebe9",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4162,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-11T13:59:10Z",
+      "side": 1,
+      "message": "\"new\" (maybe the same in the context, but who knows - no need to risk a change of meaning)",
+      "range": {
+        "startLine": 4162,
+        "startChar": 15,
+        "endLine": 4162,
+        "endChar": 22
+      },
+      "revId": "2ec223a889619e2205ecfe01b81baa2e756b8f60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_ff2ee7f8",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4187,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-11T13:59:10Z",
+      "side": 1,
+      "message": "isn\u0027t this \"style\" again?",
+      "range": {
+        "startLine": 4187,
+        "startChar": 36,
+        "endLine": 4187,
+        "endChar": 44
+      },
+      "revId": "2ec223a889619e2205ecfe01b81baa2e756b8f60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_3f394f42",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4198,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-11T13:59:10Z",
+      "side": 1,
+      "message": "maybe \"end the\" (because \"close\" can be mistaken for \"near\", as in located nearby\"; and \"end\" on itself can be confused for being a noun - it\u0027s a verb here)",
+      "range": {
+        "startLine": 4198,
+        "startChar": 15,
+        "endLine": 4198,
+        "endChar": 20
+      },
+      "revId": "2ec223a889619e2205ecfe01b81baa2e756b8f60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_5f40dba5",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4202,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-11T13:59:10Z",
+      "side": 1,
+      "message": "\"attributes\" (plural",
+      "range": {
+        "startLine": 4202,
+        "startChar": 59,
+        "endLine": 4202,
+        "endChar": 68
+      },
+      "revId": "2ec223a889619e2205ecfe01b81baa2e756b8f60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_7f3bd738",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4325,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-11T13:59:10Z",
+      "side": 1,
+      "message": "maybe \"from the\" (instead of \"of\" - the stack just contains it, it\u0027s not its own context, I guess)",
+      "range": {
+        "startLine": 4325,
+        "startChar": 27,
+        "endLine": 4325,
+        "endChar": 29
+      },
+      "revId": "2ec223a889619e2205ecfe01b81baa2e756b8f60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_7f22f702",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4328,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-11T13:59:10Z",
+      "side": 1,
+      "message": "maybe \"end the\" instead of \"close\" (as on 4198 above)?",
+      "range": {
+        "startLine": 4328,
+        "startChar": 15,
+        "endLine": 4328,
+        "endChar": 20
+      },
+      "revId": "2ec223a889619e2205ecfe01b81baa2e756b8f60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_9f4a43c4",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4363,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-11T13:59:10Z",
+      "side": 1,
+      "message": "\"implicitly\" (i.e., with \"ly\" at the end, as it\u0027s an adverb here - it refers to the verb \"open\")",
+      "range": {
+        "startLine": 4363,
+        "startChar": 20,
+        "endLine": 4363,
+        "endChar": 28
+      },
+      "revId": "2ec223a889619e2205ecfe01b81baa2e756b8f60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_bf453fb4",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4368,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-11T13:59:10Z",
+      "side": 1,
+      "message": "\"an\"",
+      "range": {
+        "startLine": 4368,
+        "startChar": 21,
+        "endLine": 4368,
+        "endChar": 22
+      },
+      "revId": "2ec223a889619e2205ecfe01b81baa2e756b8f60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_df120bb4",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4412,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-11T13:59:10Z",
+      "side": 1,
+      "message": "maybe \"end the\" (as on lines above)",
+      "range": {
+        "startLine": 4412,
+        "startChar": 15,
+        "endLine": 4412,
+        "endChar": 20
+      },
+      "revId": "2ec223a889619e2205ecfe01b81baa2e756b8f60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_ff15079b",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5321,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-11T13:59:10Z",
+      "side": 1,
+      "message": "\"from the\"? (as above)",
+      "range": {
+        "startLine": 5321,
+        "startChar": 27,
+        "endLine": 5321,
+        "endChar": 29
+      },
+      "revId": "2ec223a889619e2205ecfe01b81baa2e756b8f60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_1f0d7390",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5443,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-11T13:59:10Z",
+      "side": 1,
+      "message": "\"anew\" (instead of \"new\") (it\u0027s the adverb form of \"new\", as in \"to create anew\")",
+      "range": {
+        "startLine": 5443,
+        "startChar": 28,
+        "endLine": 5443,
+        "endChar": 31
+      },
+      "revId": "2ec223a889619e2205ecfe01b81baa2e756b8f60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_3f106fa8",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5446,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-11T13:59:10Z",
+      "side": 1,
+      "message": "-\u003e taken *over* (because taken *on* would mean \"to work on\" - which is something different)",
+      "range": {
+        "startLine": 5446,
+        "startChar": 39,
+        "endLine": 5446,
+        "endChar": 41
+      },
+      "revId": "2ec223a889619e2205ecfe01b81baa2e756b8f60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_5f27fb11",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5461,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-11T13:59:10Z",
+      "side": 1,
+      "message": "- maybe \"remove\" (which is more general; it doesn\u0027t have to be by setting them to the null pointer as is the case now)\n\n- \"links\" (plural)",
+      "range": {
+        "startLine": 5461,
+        "startChar": 28,
+        "endLine": 5461,
+        "endChar": 35
+      },
+      "revId": "2ec223a889619e2205ecfe01b81baa2e756b8f60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
