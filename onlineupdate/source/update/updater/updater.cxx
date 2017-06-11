@@ -2360,16 +2360,6 @@ ProcessReplaceRequest()
     NS_tsnprintf(tmpDir, sizeof(tmpDir)/sizeof(tmpDir[0]),
                  NS_T("%s.bak"), destDir);
 
-    NS_tchar newDir[MAXPATHLEN];
-    NS_tsnprintf(newDir, sizeof(newDir)/sizeof(newDir[0]),
-#ifdef MACOSX
-                 NS_T("%s/Contents"),
-                 gWorkingDirPath);
-#else
-                 NS_T("%s"),
-                 gWorkingDirPath);
-#endif
-
     // First try to remove the possibly existing temp directory, because if this
     // directory exists, we will fail to rename destDir.
     // No need to error check here because if this fails, we will fail in the
@@ -2378,6 +2368,7 @@ ProcessReplaceRequest()
 
     LOG(("Begin moving destDir (" LOG_S ") to tmpDir (" LOG_S ")",
          destDir, tmpDir));
+    LogFlush();
     int rv = rename_file(destDir, tmpDir, true);
 #ifdef _WIN32
     // On Windows, if Firefox is launched using the shortcut, it will hold a handle
@@ -2403,6 +2394,21 @@ ProcessReplaceRequest()
         // returning an error specific for this failure.
         LOG(("Moving destDir to tmpDir failed, err: %d", rv));
         return rv;
+    }
+
+    NS_tchar newDir[MAXPATHLEN];
+    if (is_userprofile_in_instdir())
+    {
+        LOG(("user profile in instdir"));
+        NS_tstrcpy(newDir, tmpDir);
+        NS_tstrcat(newDir, gWorkingDirPath + NS_tstrlen(gInstallDirPath));
+        LOG((LOG_S, newDir));
+    }
+    else
+    {
+        NS_tsnprintf(newDir, sizeof(newDir)/sizeof(newDir[0]),
+                NS_T("%s"),
+                gWorkingDirPath);
     }
 
     LOG(("Begin moving newDir (" LOG_S ") to destDir (" LOG_S ")",
@@ -2440,21 +2446,21 @@ ProcessReplaceRequest()
         NS_tchar userprofile[MAXPATHLEN];
 
         NS_tstrcpy(userprofile, gPatchDirPath);
-        NS_tchar *slash = (NS_tchar *) NS_tstrrchr(userprofile, NS_T('/'));
+        NS_tchar* slash = (NS_tchar *) NS_tstrrchr(userprofile, NS_T('/'));
         if (slash)
             *slash = NS_T('\0');
         NS_tstrcpy(backup_user_profile, tmpDir);
         size_t installdir_len = NS_tstrlen(destDir);
 
         NS_tstrcat(backup_user_profile, userprofile + installdir_len);
-        if (slash)
-            *slash = NS_T('/');
         LOG(("copy user profile back from " LOG_S " to " LOG_S, backup_user_profile, userprofile));
         int rv2 = rename_file(backup_user_profile, userprofile);
         if (rv2)
         {
             LOG(("failed to copy user profile back"));
         }
+        if (slash)
+            *slash = NS_T('/');
     }
 
 #if !defined(_WIN32) && !defined(MACOSX)
