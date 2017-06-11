@@ -34,7 +34,7 @@
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 
-#include "res_bmp.hrc"
+
 #include "bitmaps.hlst"
 #include "sdresid.hxx"
 

@@ -304,7 +304,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/report/inspection
 	DefaultComponentInspectorModel \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/resource,\
-	OfficeResourceLoader \
 	StringResource \
 	StringResourceWithLocation \
 	StringResourceWithStorage \
@@ -3085,8 +3084,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/report/meta,\
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/resource,\
 	MissingResourceException \
 	XLocale \
-	XResourceBundle \
-	XResourceBundleLoader \
 	XStringResourceManager \
 	XStringResourcePersistence \
 	XStringResourceResolver \

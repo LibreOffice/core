@@ -22,13 +22,6 @@
 
 #include "rcid.hrc"
 
-#define STR_HYP_OK                      (RC_LINGU_BEGIN + 3)
-#define STR_LANGSTATUS_NONE             (RC_LINGU_BEGIN + 6)
-#define STR_LANGSTATUS_MORE             (RC_LINGU_BEGIN + 7)
-#define STR_IGNORE_SELECTION            (RC_LINGU_BEGIN + 8)
-#define STR_RESET_TO_DEFAULT_LANGUAGE   (RC_LINGU_BEGIN + 9)
-#define STR_EXPLANATION_LINK            (RC_LINGU_BEGIN + 10)
-
 //! Don't change these values. You may break context menu modifying extensions!
 #define MN_IGNORE_SELECTION             201
 #define MN_SHORT_COMMENT                208

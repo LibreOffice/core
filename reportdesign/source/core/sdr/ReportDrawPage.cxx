@@ -20,7 +20,7 @@
 #include "RptObject.hxx"
 #include "RptModel.hxx"
 #include "RptDef.hxx"
-#include "corestrings.hrc"
+#include "strings.hxx"
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>

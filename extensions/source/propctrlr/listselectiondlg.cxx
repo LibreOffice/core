@@ -20,7 +20,7 @@
 #include "listselectiondlg.hxx"
 
 #include "modulepcr.hxx"
-#include "formresid.hrc"
+#include "strings.hrc"
 #include "formstrings.hxx"
 #include <vcl/msgbox.hxx>
 #include <comphelper/sequence.hxx>

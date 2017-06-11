@@ -65,7 +65,6 @@ class SW_DLLPUBLIC SwOneExampleFrame
     Idle            m_aLoadedIdle;
     Link<SwOneExampleFrame&,void> m_aInitializedLink;
 
-    ResStringArray  m_aMenuRes;
     OUString        m_sArgumentURL;
 
     SwView*         m_pModuleView;

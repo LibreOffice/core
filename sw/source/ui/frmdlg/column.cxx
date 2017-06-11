@@ -24,6 +24,7 @@
 #include "hintids.hxx"
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 #include <sfx2/htmlmode.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/xtable.hxx>
@@ -58,12 +59,12 @@
 #include "prcntfld.hxx"
 #include "paratr.hxx"
 #include "frmui.hrc"
-#include "poolfmt.hrc"
+#include "strings.hrc"
 #include <section.hxx>
 #include <docary.hxx>
 #include <pagedesc.hxx>
 
-#include "access.hrc"
+#include "strings.hrc"
 
 //to match associated data in ColumnPage.ui
 #define LISTBOX_SELECTION       0

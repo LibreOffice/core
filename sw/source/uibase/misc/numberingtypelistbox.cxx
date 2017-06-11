@@ -29,6 +29,7 @@
 #include <editeng/numitem.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/strarray.hxx>
 
 #include <unomid.h>
 
@@ -90,10 +91,10 @@ void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
             pTypes = aTypes.getConstArray();
         }
     }
-    ResStringArray aNames(ResId(RID_SVXSTRARY_NUMBERINGTYPE, DIALOG_MGR()));
-    for(size_t i = 0; i < aNames.Count(); i++)
+
+    for(size_t i = 0; i < SvxNumberingTypeTable::Count(); i++)
     {
-        sal_IntPtr nValue = aNames.GetValue(i);
+        sal_IntPtr nValue = SvxNumberingTypeTable::GetValue(i);
         bool bInsert = true;
         sal_Int32 nPos = LISTBOX_APPEND;
         switch(nValue)
@@ -139,7 +140,7 @@ void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
         }
         if(bInsert)
         {
-            sal_Int32 nEntry = InsertEntry(aNames.GetString(i), nPos);
+            sal_Int32 nEntry = InsertEntry(SvxNumberingTypeTable::GetString(i), nPos);
             SetEntryData( nEntry, reinterpret_cast<void*>(nValue) );
         }
     }

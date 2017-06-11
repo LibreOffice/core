@@ -44,7 +44,7 @@
 #include <edtwin.hxx>
 #include <mmconfigitem.hxx>
 
-#include <view.hrc>
+#include <strings.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

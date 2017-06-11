@@ -25,6 +25,7 @@
 #include <sfx2/module.hxx>
 
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <svx/colorbox.hxx>
 #include "svx/xattr.hxx"
 #include <svx/xpool.hxx>
@@ -51,6 +52,7 @@
 #include "sfx2/opengrf.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <vcl/settings.hxx>
 #include <cuitabarea.hxx>
 

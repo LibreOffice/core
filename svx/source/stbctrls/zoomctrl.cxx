@@ -26,7 +26,7 @@
 #include <sfx2/dispatch.hxx>
 #include <tools/urlobj.hxx>
 
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 
 #include <svx/zoomctrl.hxx>
 #include <svx/zoomslideritem.hxx>
