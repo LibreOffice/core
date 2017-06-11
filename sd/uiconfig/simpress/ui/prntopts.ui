@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sd">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="prntopts">
     <property name="visible">True</property>
@@ -34,7 +34,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="pagenmcb">
-                        <property name="label" translatable="yes">_Page name</property>
+                        <property name="label" translatable="yes" context="prntopts|pagenmcb">_Page name</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -51,7 +51,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="datecb">
-                        <property name="label" translatable="yes">D_ate</property>
+                        <property name="label" translatable="yes" context="prntopts|datecb">D_ate</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -68,7 +68,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="timecb">
-                        <property name="label" translatable="yes">Ti_me</property>
+                        <property name="label" translatable="yes" context="prntopts|timecb">Ti_me</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -85,7 +85,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="hiddenpgcb">
-                        <property name="label" translatable="yes">H_idden pages</property>
+                        <property name="label" translatable="yes" context="prntopts|hiddenpgcb">H_idden pages</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -108,7 +108,7 @@
               <object class="GtkLabel" id="printlbl">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Print</property>
+                <property name="label" translatable="yes" context="prntopts|printlbl">Print</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -142,7 +142,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkRadioButton" id="pagedefaultrb">
-                        <property name="label" translatable="yes">Default</property>
+                        <property name="label" translatable="yes" context="prntopts|pagedefaultrb">Default</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -160,7 +160,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="fittopgrb">
-                        <property name="label" translatable="yes">_Fit to page</property>
+                        <property name="label" translatable="yes" context="prntopts|fittopgrb">_Fit to page</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -178,7 +178,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="tilepgrb">
-                        <property name="label" translatable="yes">_Tile pages</property>
+                        <property name="label" translatable="yes" context="prntopts|tilepgrb">_Tile pages</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -196,7 +196,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="brouchrb">
-                        <property name="label" translatable="yes">B_rochure</property>
+                        <property name="label" translatable="yes" context="prntopts|brouchrb">B_rochure</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -214,7 +214,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="papertryfrmprntrcb">
-                        <property name="label" translatable="yes">Paper tray from printer s_ettings</property>
+                        <property name="label" translatable="yes" context="prntopts|papertryfrmprntrcb">Paper tray from printer s_ettings</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -237,7 +237,7 @@
                         <property name="spacing">12</property>
                         <child>
                           <object class="GtkCheckButton" id="frontcb">
-                            <property name="label" translatable="yes">Fr_ont</property>
+                            <property name="label" translatable="yes" context="prntopts|frontcb">Fr_ont</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">False</property>
@@ -256,7 +256,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="backcb">
-                            <property name="label" translatable="yes">Ba_ck</property>
+                            <property name="label" translatable="yes" context="prntopts|backcb">Ba_ck</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">False</property>
@@ -290,7 +290,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Page Options</property>
+                <property name="label" translatable="yes" context="prntopts|label3">Page Options</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -336,7 +336,7 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="drawingcb">
-                        <property name="label" translatable="yes">Drawing</property>
+                        <property name="label" translatable="yes" context="prntopts|drawingcb">Drawing</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -352,7 +352,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="notecb">
-                        <property name="label" translatable="yes">Notes</property>
+                        <property name="label" translatable="yes" context="prntopts|notecb">Notes</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -368,7 +368,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="handoutcb">
-                        <property name="label" translatable="yes">Handouts</property>
+                        <property name="label" translatable="yes" context="prntopts|handoutcb">Handouts</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -384,7 +384,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="outlinecb">
-                        <property name="label" translatable="yes">Outline</property>
+                        <property name="label" translatable="yes" context="prntopts|outlinecb">Outline</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -406,7 +406,7 @@
               <object class="GtkLabel" id="contentlbl">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Content</property>
+                <property name="label" translatable="yes" context="prntopts|contentlbl">Content</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -439,7 +439,7 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="defaultrb">
-                        <property name="label" translatable="yes">Default</property>
+                        <property name="label" translatable="yes" context="prntopts|defaultrb">Default</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -456,7 +456,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="grayscalerb">
-                        <property name="label" translatable="yes">Gra_yscale</property>
+                        <property name="label" translatable="yes" context="prntopts|grayscalerb">Gra_yscale</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -474,7 +474,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="blackwhiterb">
-                        <property name="label" translatable="yes">Black &amp; _white</property>
+                        <property name="label" translatable="yes" context="prntopts|blackwhiterb">Black &amp; _white</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -498,7 +498,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Quality</property>
+                <property name="label" translatable="yes" context="prntopts|label2">Quality</property>
                 <property name="use_underline">True</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>

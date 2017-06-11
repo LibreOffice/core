@@ -19,14 +19,13 @@
 
 #include "svx/svxerr.hxx"
 #include <svx/dialmgr.hxx>
-
-#include <svx/dialogs.hrc>
-
+#include <svx/strings.hrc>
 #include <rtl/instance.hxx>
+#include "svxerr.hrc"
 
 SvxErrorHandler::SvxErrorHandler() :
   SfxErrorHandler(
-      RID_SVXERRCODE, ErrCode(ERRCODE_AREA_SVX), ErrCode(ERRCODE_AREA_SVX_END), &DIALOG_MGR() )
+      getRID_SVXERRCODE(), ErrCode(ERRCODE_AREA_SVX), ErrCode(ERRCODE_AREA_SVX_END), &SvxResLocale())
 {
 }
 
@@ -39,6 +38,16 @@ namespace
 void SvxErrorHandler::ensure()
 {
     theSvxErrorHandler::get();
+}
+
+const ErrMsgCode* getRID_SVXERRCODE()
+{
+    return RID_SVXERRCODE;
+}
+
+const ErrMsgCode* getRID_SVXERRCTX()
+{
+    return RID_SVXERRCTX;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

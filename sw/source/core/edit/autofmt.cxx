@@ -62,7 +62,7 @@
 #include <frmatr.hxx>
 #include <charatr.hxx>
 #include <mdiexp.hxx>
-#include <statstr.hrc>
+#include <strings.hrc>
 #include <comcore.hrc>
 #include <numrule.hxx>
 

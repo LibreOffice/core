@@ -29,7 +29,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <vcl/settings.hxx>
 
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include "bitmaps.hlst"
 
 #include <tools/rcid.h>

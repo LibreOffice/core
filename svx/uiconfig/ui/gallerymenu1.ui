@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="svx">
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkMenu" id="menu">
     <property name="visible">True</property>
@@ -9,7 +9,7 @@
       <object class="GtkMenuItem" id="update">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Update</property>
+        <property name="label" translatable="yes" context="gallerymenu1|update">Update</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -23,14 +23,14 @@
       <object class="GtkMenuItem" id="delete">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Delete</property>
+        <property name="label" translatable="yes" context="gallerymenu1|delete">_Delete</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="rename">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Rename</property>
+        <property name="label" translatable="yes" context="gallerymenu1|rename">_Rename</property>
       </object>
     </child>
     <child>
@@ -43,7 +43,7 @@
       <object class="GtkMenuItem" id="assign">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Assign _ID</property>
+        <property name="label" translatable="yes" context="gallerymenu1|assign">Assign _ID</property>
       </object>
     </child>
     <child>
@@ -56,7 +56,7 @@
       <object class="GtkMenuItem" id="properties">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Propert_ies...</property>
+        <property name="label" translatable="yes" context="gallerymenu1|properties">Propert_ies...</property>
       </object>
     </child>
   </object>

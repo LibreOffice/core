@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sfx">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkGrid" id="DescriptionInfoPage">
     <property name="visible">True</property>
@@ -15,7 +15,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">1</property>
-        <property name="label" translatable="yes">_Title:</property>
+        <property name="label" translatable="yes" context="descriptioninfopage|label27">_Title:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">title</property>
       </object>
@@ -29,7 +29,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">1</property>
-        <property name="label" translatable="yes">_Subject:</property>
+        <property name="label" translatable="yes" context="descriptioninfopage|label28">_Subject:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">subject</property>
       </object>
@@ -43,7 +43,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">1</property>
-        <property name="label" translatable="yes">_Keywords:</property>
+        <property name="label" translatable="yes" context="descriptioninfopage|label29">_Keywords:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">keywords</property>
       </object>
@@ -58,7 +58,7 @@
         <property name="can_focus">False</property>
         <property name="valign">start</property>
         <property name="xalign">1</property>
-        <property name="label" translatable="yes">_Comments:</property>
+        <property name="label" translatable="yes" context="descriptioninfopage|label30">_Comments:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">comments:border</property>
       </object>

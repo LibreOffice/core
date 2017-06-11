@@ -22,8 +22,10 @@
 #include <sfx2/module.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <bitmaps.hlst>
 #include "helpid.hrc"
 
@@ -970,10 +972,10 @@ sal_uInt16 SvxBorderTabPage::GetPresetImageId( sal_uInt16 nValueSetIdx ) const
     return ppnImgIds[ nLine ][ nValueSetIdx - 1 ];
 }
 
-sal_uInt16 SvxBorderTabPage::GetPresetStringId( sal_uInt16 nValueSetIdx ) const
+const char* SvxBorderTabPage::GetPresetStringId( sal_uInt16 nValueSetIdx ) const
 {
     // string resource IDs for each image (in order of the IID_PRE_* image IDs)
-    static const sal_uInt16 pnStrIds[] =
+    static const char* pnStrIds[] =
     {
         RID_SVXSTR_TABLE_PRESET_NONE,
         RID_SVXSTR_PARA_PRESET_ALL,
@@ -1029,7 +1031,7 @@ void SvxBorderTabPage::FillShadowVS()
     m_pWndShadows->SetColCount( SVX_BORDER_SHADOW_COUNT );
 
     // string resource IDs for each image
-    static const sal_uInt16 pnStrIds[ SVX_BORDER_SHADOW_COUNT ] =
+    static const char* pnStrIds[ SVX_BORDER_SHADOW_COUNT ] =
         { RID_SVXSTR_SHADOW_STYLE_NONE, RID_SVXSTR_SHADOW_STYLE_BOTTOMRIGHT, RID_SVXSTR_SHADOW_STYLE_TOPRIGHT, RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT, RID_SVXSTR_SHADOW_STYLE_TOPLEFT };
 
     // insert images and help texts

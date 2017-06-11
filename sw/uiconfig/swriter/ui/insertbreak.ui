@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">9999</property>
@@ -15,14 +15,14 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">[None]</col>
+        <col id="0" translatable="yes" context="insertbreak|liststore1">[None]</col>
       </row>
     </data>
   </object>
   <object class="GtkDialog" id="BreakDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Insert Break</property>
+    <property name="title" translatable="yes" context="insertbreak|BreakDialog">Insert Break</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -107,7 +107,7 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="linerb">
-                        <property name="label" translatable="yes">Line break</property>
+                        <property name="label" translatable="yes" context="insertbreak|linerb">Line break</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -124,7 +124,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="columnrb">
-                        <property name="label" translatable="yes">Column break</property>
+                        <property name="label" translatable="yes" context="insertbreak|columnrb">Column break</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -141,7 +141,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="pagerb">
-                        <property name="label" translatable="yes">Page break</property>
+                        <property name="label" translatable="yes" context="insertbreak|pagerb">Page break</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -161,7 +161,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_top">6</property>
-                        <property name="label" translatable="yes">Style:</property>
+                        <property name="label" translatable="yes" context="insertbreak|styleft">Style:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">stylelb</property>
                         <property name="xalign">0</property>
@@ -186,7 +186,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="pagenumcb">
-                        <property name="label" translatable="yes">Change page number</property>
+                        <property name="label" translatable="yes" context="insertbreak|pagenumcb">Change page number</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -212,7 +212,7 @@
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="pagenumsb-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Change page number</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="insertbreak|pagenumsb-atkobject">Change page number</property>
                           </object>
                         </child>
                       </object>
@@ -230,7 +230,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Type</property>
+                <property name="label" translatable="yes" context="insertbreak|label1">Type</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

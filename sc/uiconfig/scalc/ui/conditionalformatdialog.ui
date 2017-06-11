@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sc">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="ConditionalFormatDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Conditional Formatting for</property>
+    <property name="title" translatable="yes" context="conditionalformatdialog|ConditionalFormatDialog">Conditional Formatting for</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -125,7 +125,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Conditions</property>
+                <property name="label" translatable="yes" context="conditionalformatdialog|label1">Conditions</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -220,7 +220,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
-                        <property name="label" translatable="yes">Range:</property>
+                        <property name="label" translatable="yes" context="conditionalformatdialog|ftassign">Range:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">edassign</property>
                       </object>
@@ -265,7 +265,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Cell Range</property>
+                <property name="label" translatable="yes" context="conditionalformatdialog|label2">Cell Range</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

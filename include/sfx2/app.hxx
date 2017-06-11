@@ -134,8 +134,8 @@ public:
     static SfxApplication*      GetOrCreate();
     static SfxApplication*      Get();
 
-    // Resource Manager
-    static ResMgr*              GetSfxResManager();
+    // Resource Locale
+    static std::locale*         GetSfxResLocale();
 
     // DDE
 #if defined(_WIN32)

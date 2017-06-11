@@ -23,6 +23,7 @@
 #include <basic/sbxdef.hxx>
 #include <rtl/ustring.hxx>
 #include <basic/basicdllapi.h>
+#include <svtools/ehdl.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 // Returns type name for Basic type, array flag is ignored
@@ -66,6 +67,8 @@ enum class PropertyMode
     Let,
     Set
 };
+
+BASIC_DLLPUBLIC const ErrMsgCode* getRID_BASIC_START();
 
 #endif
 

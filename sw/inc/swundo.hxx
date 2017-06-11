@@ -175,6 +175,8 @@ enum class SwUndoId
     CONFLICT
 };
 
+OUString GetUndoComment(SwUndoId eId);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

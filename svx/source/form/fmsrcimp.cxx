@@ -19,7 +19,6 @@
 
 
 #include <rtl/strbuf.hxx>
-#include "svx/fmresids.hrc"
 #include "svx/fmtools.hxx"
 #include "svx/fmsrccfg.hxx"
 #include <tools/debug.hxx>

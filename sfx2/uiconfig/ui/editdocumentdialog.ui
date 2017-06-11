@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sfx">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkMessageDialog" id="EditDocumentDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Confirm editing of document</property>
+    <property name="title" translatable="yes" context="editdocumentdialog|EditDocumentDialog">Confirm editing of document</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">question</property>
-    <property name="text" translatable="yes">Are you sure you want to edit the document?</property>
-    <property name="secondary_text" translatable="yes">The original file can be signed without editing the document. Existing signatures on the document will be lost in case of saving an edited version.</property>
+    <property name="text" translatable="yes" context="editdocumentdialog|EditDocumentDialog">Are you sure you want to edit the document?</property>
+    <property name="secondary_text" translatable="yes" context="editdocumentdialog|EditDocumentDialog">The original file can be signed without editing the document. Existing signatures on the document will be lost in case of saving an edited version.</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>
@@ -24,7 +24,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="edit">
-                <property name="label" translatable="yes">Edit Document</property>
+                <property name="label" translatable="yes" context="editdocumentdialog|edit">Edit Document</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -41,7 +41,7 @@
             </child>
             <child>
               <object class="GtkButton" id="cancel">
-                <property name="label" translatable="yes">Cancel</property>
+                <property name="label" translatable="yes" context="editdocumentdialog|cancel">Cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

@@ -17,7 +17,7 @@
 #include <officecfg/Office/Common.hxx>
 
 #include <svtools/svtdllapi.h>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <svtools/treelistentry.hxx>
 

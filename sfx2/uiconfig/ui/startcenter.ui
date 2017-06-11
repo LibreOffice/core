@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sfx">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="3.0"/>
   <object class="GtkImage" id="calc_all_image">
@@ -15,7 +15,7 @@
       <object class="GtkMenuItem" id="clear_all">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Clear Recent Documents</property>
+        <property name="label" translatable="yes" context="startcenter|clear_all">Clear Recent Documents</property>
       </object>
     </child>
   </object>
@@ -36,28 +36,28 @@
       <object class="GtkMenuItem" id="filter_writer">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Writer Templates</property>
+        <property name="label" translatable="yes" context="startcenter|filter_writer">Writer Templates</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="filter_calc">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Calc Templates</property>
+        <property name="label" translatable="yes" context="startcenter|filter_calc">Calc Templates</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="filter_impress">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Impress Templates</property>
+        <property name="label" translatable="yes" context="startcenter|filter_impress">Impress Templates</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="filter_draw">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Draw Templates</property>
+        <property name="label" translatable="yes" context="startcenter|filter_draw">Draw Templates</property>
       </object>
     </child>
     <child>
@@ -70,7 +70,7 @@
       <object class="GtkMenuItem" id="manage">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Manage Templates</property>
+        <property name="label" translatable="yes" context="startcenter|manage">Manage Templates</property>
       </object>
     </child>
   </object>
@@ -143,7 +143,7 @@
                         <property name="spacing">3</property>
                         <child>
                           <object class="GtkButton" id="open_all">
-                            <property name="label" translatable="yes">_Open File</property>
+                            <property name="label" translatable="yes" context="startcenter|open_all">_Open File</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -163,7 +163,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="open_remote">
-                            <property name="label" translatable="yes">Remote File_s</property>
+                            <property name="label" translatable="yes" context="startcenter|open_remote">Remote File_s</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -195,7 +195,7 @@
                         </child>
                         <child>
                           <object class="GtkToggleButton" id="open_recent:clearmenu">
-                            <property name="label" translatable="yes">_Recent Files</property>
+                            <property name="label" translatable="yes" context="startcenter|open_recent">_Recent Files</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -214,7 +214,7 @@
                         </child>
                         <child>
                           <object class="GtkToggleButton" id="templates_all:filtermenu">
-                            <property name="label" translatable="yes">T_emplates</property>
+                            <property name="label" translatable="yes" context="startcenter|templates_all">T_emplates</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -250,7 +250,7 @@
                             <property name="can_focus">False</property>
                             <property name="margin_left">12</property>
                             <property name="margin_bottom">6</property>
-                            <property name="label" translatable="yes">Create:</property>
+                            <property name="label" translatable="yes" context="startcenter|create_label">Create:</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -261,7 +261,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="writer_all">
-                            <property name="label" translatable="yes">_Writer Document</property>
+                            <property name="label" translatable="yes" context="startcenter|writer_all">_Writer Document</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -281,7 +281,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="calc_all">
-                            <property name="label" translatable="yes">_Calc Spreadsheet</property>
+                            <property name="label" translatable="yes" context="startcenter|calc_all">_Calc Spreadsheet</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -301,7 +301,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="impress_all">
-                            <property name="label" translatable="yes">_Impress Presentation</property>
+                            <property name="label" translatable="yes" context="startcenter|impress_all">_Impress Presentation</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -321,7 +321,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="draw_all">
-                            <property name="label" translatable="yes">_Draw Drawing</property>
+                            <property name="label" translatable="yes" context="startcenter|draw_all">_Draw Drawing</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -341,7 +341,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="math_all">
-                            <property name="label" translatable="yes">_Math Formula</property>
+                            <property name="label" translatable="yes" context="startcenter|math_all">_Math Formula</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -361,7 +361,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="database_all">
-                            <property name="label" translatable="yes">_Base Database</property>
+                            <property name="label" translatable="yes" context="startcenter|database_all">_Base Database</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -394,7 +394,7 @@
                           <object class="GtkLabel" id="althelplabel">
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
-                            <property name="label" translatable="yes">He_lp</property>
+                            <property name="label" translatable="yes" context="startcenter|althelplabel">He_lp</property>
                             <property name="use_underline">True</property>
                           </object>
                           <packing>
@@ -451,7 +451,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="extensions">
-                            <property name="label" translatable="yes">E_xtensions</property>
+                            <property name="label" translatable="yes" context="startcenter|extensions">E_xtensions</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -479,7 +479,7 @@
             <child type="label">
               <object class="GtkLabel" id="label1">
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Application</property>
+                <property name="label" translatable="yes" context="startcenter|label1">Application</property>
               </object>
             </child>
           </object>
@@ -497,7 +497,7 @@
             <child>
               <object class="GtkLabel" id="all_recent_label">
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Recent Files List</property>
+                <property name="label" translatable="yes" context="startcenter|all_recent_label">Recent Files List</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">all_recent</property>
               </object>
@@ -510,7 +510,7 @@
             <child>
               <object class="GtkLabel" id="local_view_label">
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Templates List</property>
+                <property name="label" translatable="yes" context="startcenter|local_view_label">Templates List</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">local_view</property>
               </object>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="PivotTableGroupByNumber">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Grouping</property>
+    <property name="title" translatable="yes" context="groupbynumber|PivotTableGroupByNumber">Grouping</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -97,7 +97,7 @@
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkRadioButton" id="auto_start">
-                            <property name="label" translatable="yes">_Automatically</property>
+                            <property name="label" translatable="yes" context="groupbynumber|auto_start">_Automatically</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -114,7 +114,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="manual_start">
-                            <property name="label" translatable="yes">_Manually at:</property>
+                            <property name="label" translatable="yes" context="groupbynumber|manual_start">_Manually at:</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -152,7 +152,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Start</property>
+                    <property name="label" translatable="yes" context="groupbynumber|label1">Start</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -187,7 +187,7 @@
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkRadioButton" id="auto_end">
-                            <property name="label" translatable="yes">A_utomatically</property>
+                            <property name="label" translatable="yes" context="groupbynumber|auto_end">A_utomatically</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -204,7 +204,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="manual_end">
-                            <property name="label" translatable="yes">Ma_nually at:</property>
+                            <property name="label" translatable="yes" context="groupbynumber|manual_end">Ma_nually at:</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -242,7 +242,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">End</property>
+                    <property name="label" translatable="yes" context="groupbynumber|label2">End</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -280,7 +280,7 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Group by</property>
+                    <property name="label" translatable="yes" context="groupbynumber|label3">Group by</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

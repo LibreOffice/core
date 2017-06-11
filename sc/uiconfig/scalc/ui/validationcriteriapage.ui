@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkListStore" id="liststore1">
@@ -12,35 +12,35 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">All values</col>
+        <col id="0" translatable="yes" context="validationcriteriapage|liststore1">All values</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Whole Numbers</col>
+        <col id="0" translatable="yes" context="validationcriteriapage|liststore1">Whole Numbers</col>
         <col id="1">1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Decimal</col>
+        <col id="0" translatable="yes" context="validationcriteriapage|liststore1">Decimal</col>
         <col id="1">2</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Date</col>
+        <col id="0" translatable="yes" context="validationcriteriapage|liststore1">Date</col>
         <col id="1">3</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Time</col>
+        <col id="0" translatable="yes" context="validationcriteriapage|liststore1">Time</col>
         <col id="1">4</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Cell range</col>
+        <col id="0" translatable="yes" context="validationcriteriapage|liststore1">Cell range</col>
         <col id="1">5</col>
       </row>
       <row>
-        <col id="0" translatable="yes">List</col>
+        <col id="0" translatable="yes" context="validationcriteriapage|liststore1">List</col>
         <col id="1">6</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Text length</col>
+        <col id="0" translatable="yes" context="validationcriteriapage|liststore1">Text length</col>
         <col id="1">7</col>
       </row>
     </data>
@@ -54,35 +54,35 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">equal</col>
+        <col id="0" translatable="yes" context="validationcriteriapage|liststore2">equal</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">less than</col>
+        <col id="0" translatable="yes" context="validationcriteriapage|liststore2">less than</col>
         <col id="1">1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">greater than</col>
+        <col id="0" translatable="yes" context="validationcriteriapage|liststore2">greater than</col>
         <col id="1">2</col>
       </row>
       <row>
-        <col id="0" translatable="yes">less than or equal</col>
+        <col id="0" translatable="yes" context="validationcriteriapage|liststore2">less than or equal</col>
         <col id="1">3</col>
       </row>
       <row>
-        <col id="0" translatable="yes">greater than or equal to</col>
+        <col id="0" translatable="yes" context="validationcriteriapage|liststore2">greater than or equal to</col>
         <col id="1">4</col>
       </row>
       <row>
-        <col id="0" translatable="yes">not equal</col>
+        <col id="0" translatable="yes" context="validationcriteriapage|liststore2">not equal</col>
         <col id="1">5</col>
       </row>
       <row>
-        <col id="0" translatable="yes">valid range</col>
+        <col id="0" translatable="yes" context="validationcriteriapage|liststore2">valid range</col>
         <col id="1">6</col>
       </row>
       <row>
-        <col id="0" translatable="yes">invalid range</col>
+        <col id="0" translatable="yes" context="validationcriteriapage|liststore2">invalid range</col>
         <col id="1">7</col>
       </row>
     </data>
@@ -100,7 +100,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">_Allow:</property>
+        <property name="label" translatable="yes" context="validationcriteriapage|label1">_Allow:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">allow</property>
       </object>
@@ -114,7 +114,7 @@
         <property name="can_focus">False</property>
         <property name="no_show_all">True</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">_Data:</property>
+        <property name="label" translatable="yes" context="validationcriteriapage|valueft">_Data:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">data</property>
       </object>
@@ -150,7 +150,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">_Minimum:</property>
+        <property name="label" translatable="yes" context="validationcriteriapage|minft">_Minimum:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">mingrid</property>
       </object>
@@ -232,7 +232,7 @@
         <property name="can_focus">False</property>
         <property name="no_show_all">True</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Ma_ximum:</property>
+        <property name="label" translatable="yes" context="validationcriteriapage|maxft">Ma_ximum:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">max</property>
       </object>
@@ -243,7 +243,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="allowempty">
-        <property name="label" translatable="yes">Allow _empty cells</property>
+        <property name="label" translatable="yes" context="validationcriteriapage|allowempty">Allow _empty cells</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -258,7 +258,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="showlist">
-        <property name="label" translatable="yes">Show selection _list</property>
+        <property name="label" translatable="yes" context="validationcriteriapage|showlist">Show selection _list</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -273,7 +273,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="sortascend">
-        <property name="label" translatable="yes">Sor_t entries ascending</property>
+        <property name="label" translatable="yes" context="validationcriteriapage|sortascend">Sor_t entries ascending</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -294,7 +294,7 @@
         <property name="no_show_all">True</property>
         <property name="xalign">0</property>
         <property name="yalign">0</property>
-        <property name="label" translatable="yes">A valid source can only consist of a contiguous selection of rows and columns, or a formula that results in an area or array.</property>
+        <property name="label" translatable="yes" context="validationcriteriapage|hintft">A valid source can only consist of a contiguous selection of rows and columns, or a formula that results in an area or array.</property>
         <property name="wrap">True</property>
         <property name="max_width_chars">50</property>
       </object>

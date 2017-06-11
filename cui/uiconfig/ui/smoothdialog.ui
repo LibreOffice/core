@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -13,7 +13,7 @@
   <object class="GtkDialog" id="SmoothDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Smooth</property>
+    <property name="title" translatable="yes" context="smoothdialog|SmoothDialog">Smooth</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -135,7 +135,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Smooth radius:</property>
+                            <property name="label" translatable="yes" context="smoothdialog|label2">_Smooth radius:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">radius</property>
                           </object>
@@ -158,7 +158,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Parameters</property>
+                <property name="label" translatable="yes" context="smoothdialog|label1">Parameters</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

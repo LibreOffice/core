@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="TocDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Table of Contents, Index or Bibliography</property>
+    <property name="title" translatable="yes" context="tocdialog|TocDialog">Table of Contents, Index or Bibliography</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -79,7 +79,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="showexample">
-                <property name="label" translatable="yes">Preview</property>
+                <property name="label" translatable="yes" context="tocdialog|showexample">Preview</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -116,7 +116,7 @@
                 <property name="can_focus">False</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="example-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">Preview</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="tocdialog|example-atkobject">Preview</property>
                   </object>
                 </child>
               </object>
@@ -139,7 +139,7 @@
                   <object class="GtkLabel" id="index">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Type</property>
+                    <property name="label" translatable="yes" context="tocdialog|index">Type</property>
                   </object>
                   <packing>
                     <property name="tab_fill">False</property>
@@ -152,7 +152,7 @@
                   <object class="GtkLabel" id="entries">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Entries</property>
+                    <property name="label" translatable="yes" context="tocdialog|entries">Entries</property>
                   </object>
                   <packing>
                     <property name="position">1</property>
@@ -166,7 +166,7 @@
                   <object class="GtkLabel" id="styles">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Styles</property>
+                    <property name="label" translatable="yes" context="tocdialog|styles">Styles</property>
                   </object>
                   <packing>
                     <property name="position">2</property>
@@ -180,7 +180,7 @@
                   <object class="GtkLabel" id="columns">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Columns</property>
+                    <property name="label" translatable="yes" context="tocdialog|columns">Columns</property>
                   </object>
                   <packing>
                     <property name="position">3</property>
@@ -194,7 +194,7 @@
                   <object class="GtkLabel" id="background">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Background</property>
+                    <property name="label" translatable="yes" context="tocdialog|background">Background</property>
                   </object>
                   <packing>
                     <property name="position">4</property>

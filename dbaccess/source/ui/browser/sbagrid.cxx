@@ -18,6 +18,7 @@
  */
 
 #include "sbagrid.hrc"
+#include "core_resource.hxx"
 #include "dbaccess_helpid.hrc"
 #include "uiservices.hxx"
 
@@ -70,9 +71,10 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <vcl/msgbox.hxx>
-#include "dbu_brw.hrc"
 #include "browserids.hxx"
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
+#include "strings.hrc"
+#include "strings.hxx"
 #include "dbu_reghelper.hxx"
 #include "dbexchange.hxx"
 #include "TableRowExchange.hxx"
@@ -666,13 +668,13 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rM
             case DataType::REF:
                 break;
             default:
-                rMenu.InsertItem(ID_BROWSER_COLATTRSET, ModuleRes(RID_STR_COLUMN_FORMAT), MenuItemBits::NONE, OString(), nPos++);
+                rMenu.InsertItem(ID_BROWSER_COLATTRSET, DBA_RES(RID_STR_COLUMN_FORMAT), MenuItemBits::NONE, OString(), nPos++);
                 rMenu.SetHelpId(ID_BROWSER_COLATTRSET, HID_BROWSER_COLUMNFORMAT);
                 rMenu.InsertSeparator(OString(), nPos++);
             }
         }
 
-        rMenu.InsertItem(ID_BROWSER_COLWIDTH, ModuleRes(RID_STR_COLUMN_WIDTH), MenuItemBits::NONE, OString(), nPos++);
+        rMenu.InsertItem(ID_BROWSER_COLWIDTH, DBA_RES(RID_STR_COLUMN_WIDTH), MenuItemBits::NONE, OString(), nPos++);
         rMenu.SetHelpId(ID_BROWSER_COLWIDTH, HID_BROWSER_COLUMNWIDTH);
         rMenu.InsertSeparator(OString(), nPos++);
     }
@@ -751,17 +753,17 @@ void SbaGridControl::PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu)
 
     if (!IsReadOnlyDB())
     {
-        rMenu.InsertItem(ID_BROWSER_TABLEATTR, ModuleRes(RID_STR_TABLE_FORMAT), MenuItemBits::NONE, OString(), nPos++);
+        rMenu.InsertItem(ID_BROWSER_TABLEATTR, DBA_RES(RID_STR_TABLE_FORMAT), MenuItemBits::NONE, OString(), nPos++);
         rMenu.SetHelpId(ID_BROWSER_TABLEATTR, HID_BROWSER_TABLEFORMAT);
 
-        rMenu.InsertItem(ID_BROWSER_ROWHEIGHT, ModuleRes(RID_STR_ROW_HEIGHT), MenuItemBits::NONE, OString(), nPos++);
+        rMenu.InsertItem(ID_BROWSER_ROWHEIGHT, DBA_RES(RID_STR_ROW_HEIGHT), MenuItemBits::NONE, OString(), nPos++);
         rMenu.SetHelpId(ID_BROWSER_ROWHEIGHT, HID_BROWSER_ROWHEIGHT);
         rMenu.InsertSeparator(OString(), nPos++);
     }
 
     if ( GetSelectRowCount() > 0 )
     {
-        rMenu.InsertItem(ID_BROWSER_COPY, ModuleRes(RID_STR_COPY), MenuItemBits::NONE, OString(), nPos++);
+        rMenu.InsertItem(ID_BROWSER_COPY, DBA_RES(RID_STR_COPY), MenuItemBits::NONE, OString(), nPos++);
         rMenu.InsertSeparator(OString(), nPos++);
     }
 }
@@ -1425,7 +1427,7 @@ IMPL_LINK_NOARG(SbaGridControl, AsynchDropEvent, void*, void)
                 m_pMasterListener->BeforeDrop();
             if(!pImExport->Read())
             {
-                OUString sError = OUString(ModuleRes(STR_NO_COLUMNNAME_MATCHING));
+                OUString sError = DBA_RES(STR_NO_COLUMNNAME_MATCHING);
                 throwGenericSQLException(sError,nullptr);
             }
             if (m_pMasterListener)
@@ -1458,7 +1460,7 @@ OUString SbaGridControl::GetAccessibleObjectDescription( ::svt::AccessibleBrowse
     if ( ::svt::BBTYPE_BROWSEBOX == eObjType )
     {
         SolarMutexGuard aGuard;
-        sRet = OUString(ModuleRes(STR_DATASOURCE_GRIDCONTROL_DESC));
+        sRet = DBA_RES(STR_DATASOURCE_GRIDCONTROL_DESC);
     }
     else
         sRet = FmGridControl::GetAccessibleObjectDescription( eObjType,_nPosition);
