@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="StandardFilterDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Standard Filter</property>
+    <property name="title" translatable="yes" context="standardfilterdialog|StandardFilterDialog">Standard Filter</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -116,15 +116,15 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <items>
-                          <item translatable="yes">AND</item>
-                          <item translatable="yes">OR</item>
+                          <item translatable="yes" context="standardfilterdialog|connect1">AND</item>
+                          <item translatable="yes" context="standardfilterdialog|connect1">OR</item>
                         </items>
                         <accessibility>
                           <relation type="labelled-by" target="label2"/>
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="connect1-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Operator 1</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|connect1-atkobject">Operator 1</property>
                           </object>
                         </child>
                       </object>
@@ -138,15 +138,15 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <items>
-                          <item translatable="yes">AND</item>
-                          <item translatable="yes">OR</item>
+                          <item translatable="yes" context="standardfilterdialog|connect2">AND</item>
+                          <item translatable="yes" context="standardfilterdialog|connect2">OR</item>
                         </items>
                         <accessibility>
                           <relation type="labelled-by" target="label2"/>
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="connect2-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Operator 2</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|connect2-atkobject">Operator 2</property>
                           </object>
                         </child>
                       </object>
@@ -160,12 +160,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <items>
-                          <item translatable="yes">AND</item>
-                          <item translatable="yes">OR</item>
+                          <item translatable="yes" context="standardfilterdialog|connect3">AND</item>
+                          <item translatable="yes" context="standardfilterdialog|connect3">OR</item>
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="connect3-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Operator 3</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|connect3-atkobject">Operator 3</property>
                           </object>
                         </child>
                       </object>
@@ -179,12 +179,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <items>
-                          <item translatable="yes">AND</item>
-                          <item translatable="yes">OR</item>
+                          <item translatable="yes" context="standardfilterdialog|connect4">AND</item>
+                          <item translatable="yes" context="standardfilterdialog|connect4">OR</item>
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="connect4-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Operator 4</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|connect4-atkobject">Operator 4</property>
                           </object>
                         </child>
                       </object>
@@ -197,7 +197,7 @@
                       <object class="GtkLabel" id="label2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Operator</property>
+                        <property name="label" translatable="yes" context="standardfilterdialog|label2">Operator</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -208,7 +208,7 @@
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Field name</property>
+                        <property name="label" translatable="yes" context="standardfilterdialog|label3">Field name</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -219,7 +219,7 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Condition</property>
+                        <property name="label" translatable="yes" context="standardfilterdialog|label4">Condition</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -230,7 +230,7 @@
                       <object class="GtkLabel" id="label5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Value</property>
+                        <property name="label" translatable="yes" context="standardfilterdialog|label5">Value</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -246,7 +246,7 @@
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="field1-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Field Name 1</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|field1-atkobject">Field Name 1</property>
                           </object>
                         </child>
                       </object>
@@ -264,7 +264,7 @@
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="field2-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Field Name 2</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|field2-atkobject">Field Name 2</property>
                           </object>
                         </child>
                       </object>
@@ -282,7 +282,7 @@
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="field3-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Field Name 3</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|field3-atkobject">Field Name 3</property>
                           </object>
                         </child>
                       </object>
@@ -297,7 +297,7 @@
                         <property name="can_focus">False</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="field4-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Field Name 4</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|field4-atkobject">Field Name 4</property>
                           </object>
                         </child>
                       </object>
@@ -317,23 +317,23 @@
                           <item translatable="no">&lt;=</item>
                           <item translatable="no">&gt;=</item>
                           <item translatable="no">&lt;&gt;</item>
-                          <item translatable="yes">Largest</item>
-                          <item translatable="yes">Smallest</item>
-                          <item translatable="yes">Largest %</item>
-                          <item translatable="yes">Smallest %</item>
-                          <item translatable="yes">Contains</item>
-                          <item translatable="yes">Does not contain</item>
-                          <item translatable="yes">Begins with</item>
-                          <item translatable="yes">Does not begin with</item>
-                          <item translatable="yes">Ends with</item>
-                          <item translatable="yes">Does not end with</item>
+                          <item translatable="yes" context="standardfilterdialog|cond1">Largest</item>
+                          <item translatable="yes" context="standardfilterdialog|cond1">Smallest</item>
+                          <item translatable="yes" context="standardfilterdialog|cond1">Largest %</item>
+                          <item translatable="yes" context="standardfilterdialog|cond1">Smallest %</item>
+                          <item translatable="yes" context="standardfilterdialog|cond1">Contains</item>
+                          <item translatable="yes" context="standardfilterdialog|cond1">Does not contain</item>
+                          <item translatable="yes" context="standardfilterdialog|cond1">Begins with</item>
+                          <item translatable="yes" context="standardfilterdialog|cond1">Does not begin with</item>
+                          <item translatable="yes" context="standardfilterdialog|cond1">Ends with</item>
+                          <item translatable="yes" context="standardfilterdialog|cond1">Does not end with</item>
                         </items>
                         <accessibility>
                           <relation type="labelled-by" target="label4"/>
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="cond1-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Condition 1</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|cond1-atkobject">Condition 1</property>
                           </object>
                         </child>
                       </object>
@@ -353,23 +353,23 @@
                           <item translatable="no">&lt;=</item>
                           <item translatable="no">&gt;=</item>
                           <item translatable="no">&lt;&gt;</item>
-                          <item translatable="yes">Largest</item>
-                          <item translatable="yes">Smallest</item>
-                          <item translatable="yes">Largest %</item>
-                          <item translatable="yes">Smallest %</item>
-                          <item translatable="yes">Contains</item>
-                          <item translatable="yes">Does not contain</item>
-                          <item translatable="yes">Begins with</item>
-                          <item translatable="yes">Does not begin with</item>
-                          <item translatable="yes">Ends with</item>
-                          <item translatable="yes">Does not end with</item>
+                          <item translatable="yes" context="standardfilterdialog|cond2">Largest</item>
+                          <item translatable="yes" context="standardfilterdialog|cond2">Smallest</item>
+                          <item translatable="yes" context="standardfilterdialog|cond2">Largest %</item>
+                          <item translatable="yes" context="standardfilterdialog|cond2">Smallest %</item>
+                          <item translatable="yes" context="standardfilterdialog|cond2">Contains</item>
+                          <item translatable="yes" context="standardfilterdialog|cond2">Does not contain</item>
+                          <item translatable="yes" context="standardfilterdialog|cond2">Begins with</item>
+                          <item translatable="yes" context="standardfilterdialog|cond2">Does not begin with</item>
+                          <item translatable="yes" context="standardfilterdialog|cond2">Ends with</item>
+                          <item translatable="yes" context="standardfilterdialog|cond2">Does not end with</item>
                         </items>
                         <accessibility>
                           <relation type="labelled-by" target="label4"/>
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="cond2-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Condition 2</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|cond2-atkobject">Condition 2</property>
                           </object>
                         </child>
                       </object>
@@ -389,23 +389,23 @@
                           <item translatable="no">&lt;=</item>
                           <item translatable="no">&gt;=</item>
                           <item translatable="no">&lt;&gt;</item>
-                          <item translatable="yes">Largest</item>
-                          <item translatable="yes">Smallest</item>
-                          <item translatable="yes">Largest %</item>
-                          <item translatable="yes">Smallest %</item>
-                          <item translatable="yes">Contains</item>
-                          <item translatable="yes">Does not contain</item>
-                          <item translatable="yes">Begins with</item>
-                          <item translatable="yes">Does not begin with</item>
-                          <item translatable="yes">Ends with</item>
-                          <item translatable="yes">Does not end with</item>
+                          <item translatable="yes" context="standardfilterdialog|cond3">Largest</item>
+                          <item translatable="yes" context="standardfilterdialog|cond3">Smallest</item>
+                          <item translatable="yes" context="standardfilterdialog|cond3">Largest %</item>
+                          <item translatable="yes" context="standardfilterdialog|cond3">Smallest %</item>
+                          <item translatable="yes" context="standardfilterdialog|cond3">Contains</item>
+                          <item translatable="yes" context="standardfilterdialog|cond3">Does not contain</item>
+                          <item translatable="yes" context="standardfilterdialog|cond3">Begins with</item>
+                          <item translatable="yes" context="standardfilterdialog|cond3">Does not begin with</item>
+                          <item translatable="yes" context="standardfilterdialog|cond3">Ends with</item>
+                          <item translatable="yes" context="standardfilterdialog|cond3">Does not end with</item>
                         </items>
                         <accessibility>
                           <relation type="labelled-by" target="label4"/>
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="cond3-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Condition 3</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|cond3-atkobject">Condition 3</property>
                           </object>
                         </child>
                       </object>
@@ -425,20 +425,20 @@
                           <item translatable="no">&lt;=</item>
                           <item translatable="no">&gt;=</item>
                           <item translatable="no">&lt;&gt;</item>
-                          <item translatable="yes">Largest</item>
-                          <item translatable="yes">Smallest</item>
-                          <item translatable="yes">Largest %</item>
-                          <item translatable="yes">Smallest %</item>
-                          <item translatable="yes">Contains</item>
-                          <item translatable="yes">Does not contain</item>
-                          <item translatable="yes">Begins with</item>
-                          <item translatable="yes">Does not begin with</item>
-                          <item translatable="yes">Ends with</item>
-                          <item translatable="yes">Does not end with</item>
+                          <item translatable="yes" context="standardfilterdialog|cond4">Largest</item>
+                          <item translatable="yes" context="standardfilterdialog|cond4">Smallest</item>
+                          <item translatable="yes" context="standardfilterdialog|cond4">Largest %</item>
+                          <item translatable="yes" context="standardfilterdialog|cond4">Smallest %</item>
+                          <item translatable="yes" context="standardfilterdialog|cond4">Contains</item>
+                          <item translatable="yes" context="standardfilterdialog|cond4">Does not contain</item>
+                          <item translatable="yes" context="standardfilterdialog|cond4">Begins with</item>
+                          <item translatable="yes" context="standardfilterdialog|cond4">Does not begin with</item>
+                          <item translatable="yes" context="standardfilterdialog|cond4">Ends with</item>
+                          <item translatable="yes" context="standardfilterdialog|cond4">Does not end with</item>
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="cond4-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Condition 4</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|cond4-atkobject">Condition 4</property>
                           </object>
                         </child>
                       </object>
@@ -463,7 +463,7 @@
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="val1-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Value 1</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val1-atkobject">Value 1</property>
                           </object>
                         </child>
                       </object>
@@ -488,7 +488,7 @@
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="val2-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Value 2</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val2-atkobject">Value 2</property>
                           </object>
                         </child>
                       </object>
@@ -513,7 +513,7 @@
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="val3-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Value 3</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val3-atkobject">Value 3</property>
                           </object>
                         </child>
                       </object>
@@ -535,7 +535,7 @@
                         </child>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="val4-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Value 4</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val4-atkobject">Value 4</property>
                           </object>
                         </child>
                       </object>
@@ -552,7 +552,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Filter Criteria</property>
+                <property name="label" translatable="yes" context="standardfilterdialog|label1">Filter Criteria</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -590,7 +590,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="case">
-                        <property name="label" translatable="yes">_Case sensitive</property>
+                        <property name="label" translatable="yes" context="standardfilterdialog|case">_Case sensitive</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -606,7 +606,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="header">
-                        <property name="label" translatable="yes">Range c_ontains column labels</property>
+                        <property name="label" translatable="yes" context="standardfilterdialog|header">Range c_ontains column labels</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -622,7 +622,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="regexp">
-                        <property name="label" translatable="yes">Regular _expressions</property>
+                        <property name="label" translatable="yes" context="standardfilterdialog|regexp">Regular _expressions</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -638,7 +638,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="unique">
-                        <property name="label" translatable="yes">_No duplications</property>
+                        <property name="label" translatable="yes" context="standardfilterdialog|unique">_No duplications</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -654,7 +654,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="copyresult">
-                        <property name="label" translatable="yes">Co_py results to:</property>
+                        <property name="label" translatable="yes" context="standardfilterdialog|copyresult">Co_py results to:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -674,7 +674,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="destpers">
-                        <property name="label" translatable="yes">_Keep filter criteria</property>
+                        <property name="label" translatable="yes" context="standardfilterdialog|destpers">_Keep filter criteria</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -710,7 +710,7 @@
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="lbcopyarea-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Copy results to</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|lbcopyarea-atkobject">Copy results to</property>
                           </object>
                         </child>
                       </object>
@@ -732,7 +732,7 @@
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edcopyarea-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Copy results to</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|edcopyarea-atkobject">Copy results to</property>
                           </object>
                         </child>
                       </object>
@@ -770,7 +770,7 @@
                       <object class="GtkLabel" id="dbarealabel">
                         <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Data range:</property>
+                        <property name="label" translatable="yes" context="standardfilterdialog|dbarealabel">Data range:</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -783,7 +783,7 @@
                         <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">dummy</property>
+                        <property name="label" translatable="yes" context="standardfilterdialog|dbarea">dummy</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -803,7 +803,7 @@
               <object class="GtkLabel" id="label6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Op_tions</property>
+                <property name="label" translatable="yes" context="standardfilterdialog|label6">Op_tions</property>
                 <property name="use_underline">True</property>
               </object>
             </child>

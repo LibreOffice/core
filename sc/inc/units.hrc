@@ -1,0 +1,40 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SC_INC_UNITS_HRC
+#define INCLUDED_SC_INC_UNITS_HRC
+
+#define NC_(Context, String) (Context "\004" u8##String)
+
+const std::pair<const char*, FieldUnit> SCSTR_UNIT[] =
+{
+    { NC_("SCSTR_UNIT", "Millimeter") , FUNIT_MM },
+    { NC_("SCSTR_UNIT", "Centimeter") , FUNIT_CM },
+    { NC_("SCSTR_UNIT", "Meter") , FUNIT_M },
+    { NC_("SCSTR_UNIT", "Kilometer") , FUNIT_KM },
+    { NC_("SCSTR_UNIT", "Inch") , FUNIT_INCH },
+    { NC_("SCSTR_UNIT", "Foot") , FUNIT_FOOT },
+    { NC_("SCSTR_UNIT", "Miles") , FUNIT_MILE },
+    { NC_("SCSTR_UNIT", "Pica") , FUNIT_PICA },
+    { NC_("SCSTR_UNIT", "Point") , FUNIT_POINT }
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

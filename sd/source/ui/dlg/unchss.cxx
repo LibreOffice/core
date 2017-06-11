@@ -32,7 +32,7 @@
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
 #include "stlsheet.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "strings.hxx"
 
 StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,

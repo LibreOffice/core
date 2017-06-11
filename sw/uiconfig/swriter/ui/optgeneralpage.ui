@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment-sps">
     <property name="lower">1</property>
@@ -56,7 +56,7 @@
                         <property name="row_spacing">6</property>
                         <child>
                           <object class="GtkRadioButton" id="always">
-                            <property name="label" translatable="yes">_Always</property>
+                            <property name="label" translatable="yes" context="optgeneralpage|always">_Always</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -73,7 +73,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="onrequest">
-                            <property name="label" translatable="yes">_On request</property>
+                            <property name="label" translatable="yes" context="optgeneralpage|onrequest">_On request</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -89,7 +89,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="never">
-                            <property name="label" translatable="yes">_Never</property>
+                            <property name="label" translatable="yes" context="optgeneralpage|never">_Never</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -111,7 +111,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Update Links when Loading</property>
+                    <property name="label" translatable="yes" context="optgeneralpage|label1">Update Links when Loading</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -143,7 +143,7 @@
                         <property name="row_spacing">6</property>
                         <child>
                           <object class="GtkCheckButton" id="updatefields">
-                            <property name="label" translatable="yes">_Fields</property>
+                            <property name="label" translatable="yes" context="optgeneralpage|updatefields">_Fields</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -158,7 +158,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="updatecharts">
-                            <property name="label" translatable="yes">_Charts</property>
+                            <property name="label" translatable="yes" context="optgeneralpage|updatecharts">_Charts</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -179,7 +179,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Automatically Update</property>
+                    <property name="label" translatable="yes" context="optgeneralpage|label2">Automatically Update</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -225,7 +225,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">_Measurement unit:</property>
+                            <property name="label" translatable="yes" context="optgeneralpage|label5">_Measurement unit:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">metric</property>
                           </object>
@@ -250,7 +250,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">_Tab stops:</property>
+                            <property name="label" translatable="yes" context="optgeneralpage|tablabel">_Tab stops:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">tab:0.00cm</property>
                           </object>
@@ -288,7 +288,7 @@
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkCheckButton" id="usecharunit">
-                            <property name="label" translatable="yes">_Enable char unit</property>
+                            <property name="label" translatable="yes" context="optgeneralpage|usecharunit">_Enable char unit</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -304,7 +304,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="squaremode">
-                            <property name="label" translatable="yes">_Use square page mode for text grid</property>
+                            <property name="label" translatable="yes" context="optgeneralpage|squaremode">_Use square page mode for text grid</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -332,7 +332,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Settings</property>
+                <property name="label" translatable="yes" context="optgeneralpage|label3">Settings</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -375,7 +375,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Additional separators:</property>
+                            <property name="label" translatable="yes" context="optgeneralpage|label7">_Additional separators:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">wordcount</property>
                           </object>
@@ -409,7 +409,7 @@
                         <property name="row_spacing">6</property>
                         <child>
                           <object class="GtkCheckButton" id="standardizedpageshow">
-                            <property name="label" translatable="yes">Show standardized page count</property>
+                            <property name="label" translatable="yes" context="optgeneralpage|standardizedpageshow">Show standardized page count</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -437,7 +437,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Characters per standardized page:</property>
+                                    <property name="label" translatable="yes" context="optgeneralpage|labelstandardpages">Characters per standardized page:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">standardpagesize</property>
                                   </object>
@@ -483,7 +483,7 @@
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Word Count</property>
+                <property name="label" translatable="yes" context="optgeneralpage|label4">Word Count</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

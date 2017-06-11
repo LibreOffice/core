@@ -31,7 +31,8 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
-#include "xmlstrings.hrc"
+#include "stringconstants.hxx"
+#include "strings.hxx"
 #include "xmlEnums.hxx"
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

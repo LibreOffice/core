@@ -1,0 +1,70 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_VCL_INC_PRINT_HRC
+#define INCLUDED_VCL_INC_PRINT_HRC
+
+#define NC_(Context, String) (Context "\004" u8##String)
+
+const char* RID_STR_PAPERNAMES[] =
+{
+    // To translators: This is the first entry of a sequence of paper size names
+    NC_("RID_STR_PAPERNAMES", "A0"),
+    NC_("RID_STR_PAPERNAMES", "A1"),
+    NC_("RID_STR_PAPERNAMES", "A2"),
+    NC_("RID_STR_PAPERNAMES", "A3"),
+    NC_("RID_STR_PAPERNAMES", "A4"),
+    NC_("RID_STR_PAPERNAMES", "A5"),
+    NC_("RID_STR_PAPERNAMES", "B4 (ISO)"),
+    NC_("RID_STR_PAPERNAMES", "B5 (ISO)"),
+    NC_("RID_STR_PAPERNAMES", "Letter"),
+    NC_("RID_STR_PAPERNAMES", "Legal"),
+    NC_("RID_STR_PAPERNAMES", "Tabloid"),
+    NC_("RID_STR_PAPERNAMES", "User Defined"),
+    NC_("RID_STR_PAPERNAMES", "B6 (ISO)"),
+    NC_("RID_STR_PAPERNAMES", "C4 Envelope"),
+    NC_("RID_STR_PAPERNAMES", "C5 Envelope"),
+    NC_("RID_STR_PAPERNAMES", "C6 Envelope"),
+    NC_("RID_STR_PAPERNAMES", "C6/5 Envelope"),
+    NC_("RID_STR_PAPERNAMES", "DL Envelope"),
+    NC_("RID_STR_PAPERNAMES", "Dia Slide"),
+    NC_("RID_STR_PAPERNAMES", "C"),
+    NC_("RID_STR_PAPERNAMES", "D"),
+    NC_("RID_STR_PAPERNAMES", "E"),
+    NC_("RID_STR_PAPERNAMES", "Executive"),
+    NC_("RID_STR_PAPERNAMES", "Long Bond"),
+    NC_("RID_STR_PAPERNAMES", "#8 (Monarch) Envelope"),
+    NC_("RID_STR_PAPERNAMES", "#6 3/4 (Personal) Envelope"),
+    NC_("RID_STR_PAPERNAMES", "#9 Envelope"),
+    NC_("RID_STR_PAPERNAMES", "#10 Envelope"),
+    NC_("RID_STR_PAPERNAMES", "#11 Envelope"),
+    NC_("RID_STR_PAPERNAMES", "#12 Envelope"),
+    NC_("RID_STR_PAPERNAMES", "16 Kai"),
+    NC_("RID_STR_PAPERNAMES", "32 Kai"),
+    NC_("RID_STR_PAPERNAMES", "Big 32 Kai"),
+    NC_("RID_STR_PAPERNAMES", "B4 (JIS)"),
+    NC_("RID_STR_PAPERNAMES", "B5 (JIS)"),
+    NC_("RID_STR_PAPERNAMES", "B6 (JIS)"),
+    // To translators: This is the last entry of the sequence of paper size names
+    NC_("RID_STR_PAPERNAMES", "Japanese Postcard")
+};
+
+#endif // INCLUDED_VCL_INC_PRINT_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

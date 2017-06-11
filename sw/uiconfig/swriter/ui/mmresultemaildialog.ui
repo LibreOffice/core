@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkListStore" id="liststore1">
     <columns>
@@ -11,23 +11,23 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">OpenDocument Text</col>
+        <col id="0" translatable="yes" context="mmresultemaildialog|liststore1">OpenDocument Text</col>
         <col id="1">1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Adobe PDF-Document</col>
+        <col id="0" translatable="yes" context="mmresultemaildialog|liststore1">Adobe PDF-Document</col>
         <col id="1">2</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Microsoft Word Document</col>
+        <col id="0" translatable="yes" context="mmresultemaildialog|liststore1">Microsoft Word Document</col>
         <col id="1">3</col>
       </row>
       <row>
-        <col id="0" translatable="yes">HTML Message</col>
+        <col id="0" translatable="yes" context="mmresultemaildialog|liststore1">HTML Message</col>
         <col id="1">4</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Plain Text</col>
+        <col id="0" translatable="yes" context="mmresultemaildialog|liststore1">Plain Text</col>
         <col id="1">5</col>
       </row>
     </data>
@@ -35,7 +35,7 @@
   <object class="GtkDialog" id="MMResultEmailDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">E-Mail merged document</property>
+    <property name="title" translatable="yes" context="mmresultemaildialog|MMResultEmailDialog">E-Mail merged document</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -48,7 +48,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="ok">
-                <property name="label" translatable="yes">Send Documents</property>
+                <property name="label" translatable="yes" context="mmresultemaildialog|ok">Send Documents</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -130,7 +130,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">T_o</property>
+                            <property name="label" translatable="yes" context="mmresultemaildialog|mailtoft">T_o</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">mailto</property>
                           </object>
@@ -152,7 +152,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="copyto">
-                            <property name="label" translatable="yes">_Copy to...</property>
+                            <property name="label" translatable="yes" context="mmresultemaildialog|copyto">_Copy to...</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -168,7 +168,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">S_ubject</property>
+                            <property name="label" translatable="yes" context="mmresultemaildialog|subjectft">S_ubject</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">subject</property>
                           </object>
@@ -193,7 +193,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Sen_d as</property>
+                            <property name="label" translatable="yes" context="mmresultemaildialog|sendasft">Sen_d as</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">sendas</property>
                           </object>
@@ -216,7 +216,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="sendassettings">
-                            <property name="label" translatable="yes">Pr_operties...</property>
+                            <property name="label" translatable="yes" context="mmresultemaildialog|sendassettings">Pr_operties...</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -262,7 +262,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Name of the a_ttachment</property>
+                            <property name="label" translatable="yes" context="mmresultemaildialog|attachft">Name of the a_ttachment</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">attach</property>
                           </object>
@@ -281,7 +281,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">E-Mail options</property>
+                <property name="label" translatable="yes" context="mmresultemaildialog|label2">E-Mail options</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -313,7 +313,7 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="sendallrb">
-                        <property name="label" translatable="yes">S_end all documents</property>
+                        <property name="label" translatable="yes" context="mmresultemaildialog|sendallrb">S_end all documents</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -336,7 +336,7 @@
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkRadioButton" id="fromrb">
-                            <property name="label" translatable="yes">_From</property>
+                            <property name="label" translatable="yes" context="mmresultemaildialog|fromrb">_From</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -357,7 +357,7 @@
                           <object class="GtkLabel" id="toft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_To</property>
+                            <property name="label" translatable="yes" context="mmresultemaildialog|toft">_To</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">to-nospin</property>
                           </object>
@@ -406,7 +406,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Send records</property>
+                <property name="label" translatable="yes" context="mmresultemaildialog|label1">Send records</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

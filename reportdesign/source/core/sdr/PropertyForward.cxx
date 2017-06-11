@@ -23,7 +23,7 @@
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include "corestrings.hrc"
+#include "strings.hxx"
 
 namespace rptui
 {

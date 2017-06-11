@@ -50,7 +50,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/FValue.hxx>
 #include <connectivity/dbconversion.hxx>
-#include "resource/dbase_res.hrc"
+#include "strings.hrc"
 #include <rtl/strbuf.hxx>
 
 #include <algorithm>
@@ -1106,7 +1106,7 @@ bool ODbaseTable::CreateImpl()
     return true;
 }
 
-void ODbaseTable::throwInvalidColumnType(const sal_uInt16 _nErrorId, const OUString& _sColumnName)
+void ODbaseTable::throwInvalidColumnType(const char* pErrorId, const OUString& _sColumnName)
 {
     try
     {
@@ -1118,7 +1118,7 @@ void ODbaseTable::throwInvalidColumnType(const sal_uInt16 _nErrorId, const OUStr
     }
 
     const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
-            _nErrorId,
+            pErrorId,
             "$columnname$", _sColumnName
          ) );
     ::dbtools::throwGenericSQLException( sError, *this );

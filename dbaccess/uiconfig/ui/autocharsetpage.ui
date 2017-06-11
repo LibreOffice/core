@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="dba">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="AutoCharset">
@@ -35,7 +35,7 @@
                   <object class="GtkLabel" id="charsetlabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Character set:</property>
+                    <property name="label" translatable="yes" context="autocharsetpage|charsetlabel">_Character set:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">charset</property>
                   </object>
@@ -65,7 +65,7 @@
           <object class="GtkLabel" id="charsetheader">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Data Conversion</property>
+            <property name="label" translatable="yes" context="autocharsetpage|charsetheader">Data Conversion</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

@@ -36,7 +36,7 @@
 #include "viewopt.hxx"
 #include <numpara.hxx>
 #include "chrdlg.hrc"
-#include "poolfmt.hrc"
+#include "strings.hrc"
 #include <svx/svxids.hrc>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

@@ -21,7 +21,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/IndexType.hpp>
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include <connectivity/dbtools.hxx>
 #include <comphelper/extract.hxx>
 

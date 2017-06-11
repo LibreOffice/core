@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sfx">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="DocumentPropertiesDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Properties of “%1”</property>
+    <property name="title" translatable="yes" context="documentpropertiesdialog|DocumentPropertiesDialog">Properties of “%1”</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -94,7 +94,7 @@
               <object class="GtkLabel" id="general">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">General </property>
+                <property name="label" translatable="yes" context="documentpropertiesdialog|general">General </property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -107,7 +107,7 @@
               <object class="GtkLabel" id="description">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Description</property>
+                <property name="label" translatable="yes" context="documentpropertiesdialog|description">Description</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -121,7 +121,7 @@
               <object class="GtkLabel" id="customprops">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Custom Properties</property>
+                <property name="label" translatable="yes" context="documentpropertiesdialog|customprops">Custom Properties</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -135,7 +135,7 @@
               <object class="GtkLabel" id="cmisprops">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">CMIS Properties</property>
+                <property name="label" translatable="yes" context="documentpropertiesdialog|cmisprops">CMIS Properties</property>
               </object>
               <packing>
                 <property name="position">3</property>
@@ -149,7 +149,7 @@
               <object class="GtkLabel" id="security">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Security</property>
+                <property name="label" translatable="yes" context="documentpropertiesdialog|security">Security</property>
               </object>
               <packing>
                 <property name="position">4</property>

@@ -1,0 +1,39 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef ACCESSIBILITY_HELPER_ACCESSIBLESTRINGS_HRC_
+#define ACCESSIBILITY_HELPER_ACCESSIBLESTRINGS_HRC_
+
+#define NC_(Context, String) (Context "\004" u8##String)
+
+#define RID_STR_ACC_NAME_BROWSEBUTTON           NC_("RID_STR_ACC_NAME_BROWSEBUTTON", "Browse")
+#define STR_SVT_ACC_ACTION_EXPAND               NC_("STR_SVT_ACC_ACTION_EXPAND", "Expand" )
+#define STR_SVT_ACC_ACTION_COLLAPSE             NC_("STR_SVT_ACC_ACTION_COLLAPSE", "Collapse")
+#define STR_SVT_ACC_LISTENTRY_SELCTED_STATE     NC_("STR_SVT_ACC_LISTENTRY_SELCTED_STATE", "(Selected)")
+#define RID_STR_ACC_ACTION_CHECK                NC_("RID_STR_ACC_ACTION_CHECK", "Check")
+#define RID_STR_ACC_ACTION_UNCHECK              NC_("RID_STR_ACC_ACTION_UNCHECK", "Uncheck")
+#define RID_STR_ACC_SCROLLBAR_NAME_VERTICAL     NC_("RID_STR_ACC_SCROLLBAR_NAME_VERTICAL", "Vertical scroll bar")
+#define RID_STR_ACC_SCROLLBAR_NAME_HORIZONTAL   NC_("RID_STR_ACC_SCROLLBAR_NAME_HORIZONTAL", "Horizontal scroll bar")
+#define RID_STR_ACC_PANEL_DESCRIPTION           NC_("RID_STR_ACC_PANEL_DESCRIPTION", "Please press enter to go into child control for more operations")
+#define RID_STR_ACC_COLUMN_NUM                  NC_("RID_STR_ACC_COLUMN_NUM", "Column %COLUMNNUMBER")
+#define RID_STR_ACC_ROW_NUM                     NC_("RID_STR_ACC_ROW_NUM", "Row %ROWNUMBER")
+
+#endif          // ACCESSIBILITY_HELPER_ACCESSIBLESTRINGS_HRC_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

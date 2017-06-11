@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sw">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
@@ -18,7 +18,7 @@
   <object class="GtkDialog" id="AbstractDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Create AutoAbstract</property>
+    <property name="title" translatable="yes" context="abstractdialog|AbstractDialog">Create AutoAbstract</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -111,7 +111,7 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Included outline levels</property>
+                        <property name="label" translatable="yes" context="abstractdialog|label2">Included outline levels</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -127,7 +127,7 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Paragraphs per level</property>
+                        <property name="label" translatable="yes" context="abstractdialog|label3">Paragraphs per level</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -143,7 +143,7 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">The abstract contains the selected number of paragraphs from the included outline levels.</property>
+                        <property name="label" translatable="yes" context="abstractdialog|label4">The abstract contains the selected number of paragraphs from the included outline levels.</property>
                         <property name="use_underline">True</property>
                         <property name="wrap">True</property>
                         <property name="max_width_chars">52</property>
@@ -194,7 +194,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Properties</property>
+                <property name="label" translatable="yes" context="abstractdialog|label1">Properties</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

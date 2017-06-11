@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.6"/>
   <object class="GtkMessageDialog" id="QuerySaveLabelDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Save label?</property>
+    <property name="title" translatable="yes" context="querysavelabeldialog|QuerySaveLabelDialog">Save label?</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">question</property>
     <property name="buttons">yes-no</property>
-    <property name="text" translatable="yes">A label named "%1 / %2" already exists. Do you want to replace it?</property>
-    <property name="secondary_text" translatable="yes">A label already exists with brand "%1" and type "%2". Replacing it will overwrite its contents.</property>
+    <property name="text" translatable="yes" context="querysavelabeldialog|QuerySaveLabelDialog">A label named "%1 / %2" already exists. Do you want to replace it?</property>
+    <property name="secondary_text" translatable="yes" context="querysavelabeldialog|QuerySaveLabelDialog">A label already exists with brand "%1" and type "%2". Replacing it will overwrite its contents.</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>

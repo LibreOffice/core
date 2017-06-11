@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="svx">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkWindow" id="ImapDialog">
@@ -8,7 +8,7 @@
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">ImageMap Editor</property>
+    <property name="title" translatable="yes" context="imapdialog|ImapDialog">ImageMap Editor</property>
     <child>
       <object class="GtkBox" id="mainbox">
         <property name="visible">True</property>
@@ -29,7 +29,7 @@
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
                 <property name="action_name">TBI_APPLY</property>
-                <property name="label" translatable="yes">Apply</property>
+                <property name="label" translatable="yes" context="imapdialog|TBI_APPLY">Apply</property>
                 <property name="icon_name">svx/res/id01.png</property>
               </object>
               <packing>
@@ -44,7 +44,7 @@
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
                 <property name="action_name">TBI_OPEN</property>
-                <property name="label" translatable="yes">Open...</property>
+                <property name="label" translatable="yes" context="imapdialog|TBI_OPEN">Open...</property>
                 <property name="icon_name">svx/res/id02.png</property>
               </object>
               <packing>
@@ -59,7 +59,7 @@
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
                 <property name="action_name">TBI_SAVEAS</property>
-                <property name="label" translatable="yes">Save...</property>
+                <property name="label" translatable="yes" context="imapdialog|TBI_SAVEAS">Save...</property>
                 <property name="icon_name">svx/res/id03.png</property>
               </object>
               <packing>
@@ -74,7 +74,7 @@
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
                 <property name="action_name">TBI_CLOSE</property>
-                <property name="label" translatable="yes">Close</property>
+                <property name="label" translatable="yes" context="imapdialog|TBI_CLOSE">Close</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -88,7 +88,7 @@
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
                 <property name="action_name">TBI_SELECT</property>
-                <property name="label" translatable="yes">Select</property>
+                <property name="label" translatable="yes" context="imapdialog|TBI_SELECT">Select</property>
                 <property name="icon_name">svx/res/id04.png</property>
               </object>
               <packing>
@@ -103,7 +103,7 @@
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
                 <property name="action_name">TBI_RECT</property>
-                <property name="label" translatable="yes">Rectangle</property>
+                <property name="label" translatable="yes" context="imapdialog|TBI_RECT">Rectangle</property>
                 <property name="icon_name">svx/res/id05.png</property>
               </object>
               <packing>
@@ -118,7 +118,7 @@
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
                 <property name="action_name">TBI_CIRCLE</property>
-                <property name="label" translatable="yes">Ellipse</property>
+                <property name="label" translatable="yes" context="imapdialog|TBI_CIRCLE">Ellipse</property>
                 <property name="icon_name">svx/res/id06.png</property>
               </object>
               <packing>
@@ -133,7 +133,7 @@
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
                 <property name="action_name">TBI_POLY</property>
-                <property name="label" translatable="yes">Polygon</property>
+                <property name="label" translatable="yes" context="imapdialog|TBI_POLY">Polygon</property>
                 <property name="icon_name">svx/res/id07.png</property>
               </object>
               <packing>
@@ -148,7 +148,7 @@
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
                 <property name="action_name">TBI_FREEPOLY</property>
-                <property name="label" translatable="yes">Freeform Polygon</property>
+                <property name="label" translatable="yes" context="imapdialog|TBI_FREEPOLY">Freeform Polygon</property>
                 <property name="icon_name">svx/res/id08.png</property>
               </object>
               <packing>
@@ -163,7 +163,7 @@
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
                 <property name="action_name">TBI_POLYEDIT</property>
-                <property name="label" translatable="yes">Edit Points</property>
+                <property name="label" translatable="yes" context="imapdialog|TBI_POLYEDIT">Edit Points</property>
                 <property name="icon_name">svx/res/id030.png</property>
               </object>
               <packing>
@@ -178,7 +178,7 @@
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
                 <property name="action_name">TBI_POLYMOVE</property>
-                <property name="label" translatable="yes">Move Points</property>
+                <property name="label" translatable="yes" context="imapdialog|TBI_POLYMOVE">Move Points</property>
                 <property name="icon_name">svx/res/id031.png</property>
               </object>
               <packing>
@@ -193,7 +193,7 @@
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
                 <property name="action_name">TBI_POLYINSERT</property>
-                <property name="label" translatable="yes">Insert Points</property>
+                <property name="label" translatable="yes" context="imapdialog|TBI_POLYINSERT">Insert Points</property>
                 <property name="icon_name">svx/res/id032.png</property>
               </object>
               <packing>
@@ -208,7 +208,7 @@
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
                 <property name="action_name">TBI_POLYDELETE</property>
-                <property name="label" translatable="yes">Delete Points</property>
+                <property name="label" translatable="yes" context="imapdialog|TBI_POLYDELETE">Delete Points</property>
                 <property name="icon_name">svx/res/id033.png</property>
               </object>
               <packing>
@@ -223,7 +223,7 @@
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
                 <property name="action_name">TBI_UNDO</property>
-                <property name="label" translatable="yes">Undo </property>
+                <property name="label" translatable="yes" context="imapdialog|TBI_UNDO">Undo </property>
                 <property name="icon_name">svx/res/id040.png</property>
               </object>
               <packing>
@@ -238,7 +238,7 @@
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
                 <property name="action_name">TBI_REDO</property>
-                <property name="label" translatable="yes">Redo</property>
+                <property name="label" translatable="yes" context="imapdialog|TBI_REDO">Redo</property>
                 <property name="icon_name">svx/res/id041.png</property>
               </object>
               <packing>
@@ -253,7 +253,7 @@
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
                 <property name="action_name">TBI_ACTIVE</property>
-                <property name="label" translatable="yes">Active</property>
+                <property name="label" translatable="yes" context="imapdialog|TBI_ACTIVE">Active</property>
                 <property name="icon_name">svx/res/id016.png</property>
               </object>
               <packing>
@@ -268,7 +268,7 @@
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
                 <property name="action_name">TBI_MACRO</property>
-                <property name="label" translatable="yes">Macro...</property>
+                <property name="label" translatable="yes" context="imapdialog|TBI_MACRO">Macro...</property>
                 <property name="icon_name">svx/res/id018.png</property>
               </object>
               <packing>
@@ -283,7 +283,7 @@
                 <property name="can_focus">False</property>
                 <property name="valign">start</property>
                 <property name="action_name">TBI_PROPERTY</property>
-                <property name="label" translatable="yes">Properties...</property>
+                <property name="label" translatable="yes" context="imapdialog|TBI_PROPERTY">Properties...</property>
                 <property name="icon_name">svx/res/id019.png</property>
               </object>
               <packing>
@@ -309,7 +309,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Address:</property>
+                <property name="label" translatable="yes" context="imapdialog|urlft">Address:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">url</property>
               </object>
@@ -344,7 +344,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Frame:</property>
+                    <property name="label" translatable="yes" context="imapdialog|targetft">Frame:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">target</property>
                   </object>
@@ -399,7 +399,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Text:</property>
+                <property name="label" translatable="yes" context="imapdialog|textft">Text:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">text</property>
               </object>

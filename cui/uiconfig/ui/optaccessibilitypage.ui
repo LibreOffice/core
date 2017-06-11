@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="OptAccessibilityPage">
     <property name="visible">True</property>
@@ -28,7 +28,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="acctool">
-                    <property name="label" translatable="yes">Support _assistive technology tools (program restart required)</property>
+                    <property name="label" translatable="yes" context="optaccessibilitypage|acctool">Support _assistive technology tools (program restart required)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -44,7 +44,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="textselinreadonly">
-                    <property name="label" translatable="yes">Use te_xt selection cursor in read-only text documents</property>
+                    <property name="label" translatable="yes" context="optaccessibilitypage|textselinreadonly">Use te_xt selection cursor in read-only text documents</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -60,7 +60,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="animatedgraphics">
-                    <property name="label" translatable="yes">Allow animated _images</property>
+                    <property name="label" translatable="yes" context="optaccessibilitypage|animatedgraphics">Allow animated _images</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -76,7 +76,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="animatedtext">
-                    <property name="label" translatable="yes">Allow animated _text</property>
+                    <property name="label" translatable="yes" context="optaccessibilitypage|animatedtext">Allow animated _text</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -98,7 +98,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Miscellaneous Options</property>
+            <property name="label" translatable="yes" context="optaccessibilitypage|label1">Miscellaneous Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -131,7 +131,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="autodetecthc">
-                    <property name="label" translatable="yes">Automatically _detect high contrast mode of operating system</property>
+                    <property name="label" translatable="yes" context="optaccessibilitypage|autodetecthc">Automatically _detect high contrast mode of operating system</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -147,7 +147,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="autofontcolor">
-                    <property name="label" translatable="yes">Use automatic font _color for screen display</property>
+                    <property name="label" translatable="yes" context="optaccessibilitypage|autofontcolor">Use automatic font _color for screen display</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -163,7 +163,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="systempagepreviewcolor">
-                    <property name="label" translatable="yes">_Use system colors for page previews</property>
+                    <property name="label" translatable="yes" context="optaccessibilitypage|systempagepreviewcolor">_Use system colors for page previews</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -185,7 +185,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Options for High Contrast Appearance</property>
+            <property name="label" translatable="yes" context="optaccessibilitypage|label2">Options for High Contrast Appearance</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

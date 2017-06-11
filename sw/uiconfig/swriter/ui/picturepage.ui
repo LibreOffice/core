@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkGrid" id="PicturePage">
@@ -29,7 +29,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkButton" id="browse">
-                    <property name="label" translatable="yes">Browse...</property>
+                    <property name="label" translatable="yes" context="picturepage|browse">Browse...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -56,7 +56,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_File name</property>
+                    <property name="label" translatable="yes" context="picturepage|label1">_File name</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">entry</property>
                   </object>
@@ -74,7 +74,7 @@
           <object class="GtkLabel" id="label11">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Link</property>
+            <property name="label" translatable="yes" context="picturepage|label11">Link</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -109,7 +109,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="vert">
-                    <property name="label" translatable="yes">_Vertically</property>
+                    <property name="label" translatable="yes" context="picturepage|vert">_Vertically</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -124,7 +124,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="hori">
-                    <property name="label" translatable="yes">Hori_zontally</property>
+                    <property name="label" translatable="yes" context="picturepage|hori">Hori_zontally</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -139,7 +139,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="allpages">
-                    <property name="label" translatable="yes">On all pages</property>
+                    <property name="label" translatable="yes" context="picturepage|allpages">On all pages</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -156,7 +156,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="leftpages">
-                    <property name="label" translatable="yes">On left pages</property>
+                    <property name="label" translatable="yes" context="picturepage|leftpages">On left pages</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -172,7 +172,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="rightpages">
-                    <property name="label" translatable="yes">On right pages</property>
+                    <property name="label" translatable="yes" context="picturepage|rightpages">On right pages</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -228,7 +228,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Flip</property>
+            <property name="label" translatable="yes" context="picturepage|label2">Flip</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

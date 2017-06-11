@@ -52,8 +52,10 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include "svx/srchdlg.hxx"
+#include "svx/strarray.hxx"
 
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
+#include <svx/svxids.hrc>
 #include <svx/svxitems.hrc>
 
 #include <svl/srchitem.hxx>
@@ -2118,7 +2120,6 @@ IMPL_LINK( SvxSearchDialog, TimeoutHdl_Impl, Timer *, pTimer, void )
     pTimer->Start();
 }
 
-
 OUString& SvxSearchDialog::BuildAttrText_Impl( OUString& rStr,
                                              bool bSrchFlag ) const
 {
@@ -2155,8 +2156,6 @@ OUString& SvxSearchDialog::BuildAttrText_Impl( OUString& rStr,
         default: ;//prevent warning
     }
 
-    ResStringArray aAttrNames(ResId(RID_ATTR_NAMES, DIALOG_MGR()));
-
     for ( sal_uInt16 i = 0; i < pList->Count(); ++i )
     {
         const SearchAttrItem& rItem = pList->GetObject(i);
@@ -2178,9 +2177,9 @@ OUString& SvxSearchDialog::BuildAttrText_Impl( OUString& rStr,
         }
         else
         {
-            sal_uInt32 nId  = aAttrNames.FindIndex( rItem.nSlot );
+            sal_uInt32 nId = SvxAttrNameTable::FindIndex(rItem.nSlot);
             if ( RESARRAY_INDEX_NOTFOUND != nId )
-                rStr += aAttrNames.GetString( nId );
+                rStr += SvxAttrNameTable::GetString(nId);
         }
     }
     return rStr;

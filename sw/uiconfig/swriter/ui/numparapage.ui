@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sw">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAdjustment" id="adjustmentNF_RESTART_PARA">
     <property name="lower">1</property>
@@ -47,7 +47,7 @@
                     <property name="halign">start</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Outline level:</property>
+                    <property name="label" translatable="yes" context="numparapage|labelFT_OUTLINE_LEVEL">Outline level:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">comboLB_OUTLINE_LEVEL</property>
                   </object>
@@ -65,17 +65,17 @@
                     <property name="entry_text_column">0</property>
                     <property name="id_column">1</property>
                     <items>
-                      <item translatable="yes">Body text</item>
-                      <item translatable="yes">Level 1</item>
-                      <item translatable="yes">Level 2</item>
-                      <item translatable="yes">Level 3</item>
-                      <item translatable="yes">Level 4</item>
-                      <item translatable="yes">Level 5</item>
-                      <item translatable="yes">Level 6</item>
-                      <item translatable="yes">Level 7</item>
-                      <item translatable="yes">Level 8</item>
-                      <item translatable="yes">Level 9</item>
-                      <item translatable="yes">Level 10</item>
+                      <item translatable="yes" context="numparapage|comboLB_OUTLINE_LEVEL">Body text</item>
+                      <item translatable="yes" context="numparapage|comboLB_OUTLINE_LEVEL">Level 1</item>
+                      <item translatable="yes" context="numparapage|comboLB_OUTLINE_LEVEL">Level 2</item>
+                      <item translatable="yes" context="numparapage|comboLB_OUTLINE_LEVEL">Level 3</item>
+                      <item translatable="yes" context="numparapage|comboLB_OUTLINE_LEVEL">Level 4</item>
+                      <item translatable="yes" context="numparapage|comboLB_OUTLINE_LEVEL">Level 5</item>
+                      <item translatable="yes" context="numparapage|comboLB_OUTLINE_LEVEL">Level 6</item>
+                      <item translatable="yes" context="numparapage|comboLB_OUTLINE_LEVEL">Level 7</item>
+                      <item translatable="yes" context="numparapage|comboLB_OUTLINE_LEVEL">Level 8</item>
+                      <item translatable="yes" context="numparapage|comboLB_OUTLINE_LEVEL">Level 9</item>
+                      <item translatable="yes" context="numparapage|comboLB_OUTLINE_LEVEL">Level 10</item>
                     </items>
                   </object>
                   <packing>
@@ -92,7 +92,7 @@
           <object class="GtkLabel" id="labelOutline">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Outline</property>
+            <property name="label" translatable="yes" context="numparapage|labelOutline">Outline</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -139,7 +139,7 @@
                         <property name="halign">start</property>
                         <property name="hexpand">True</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Numbering style:</property>
+                        <property name="label" translatable="yes" context="numparapage|labelFT_NUMBER_STYLE">_Numbering style:</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -156,7 +156,7 @@
                         <property name="entry_text_column">0</property>
                         <property name="id_column">1</property>
                         <items>
-                          <item translatable="yes">None</item>
+                          <item translatable="yes" context="numparapage|comboLB_NUMBER_STYLE">None</item>
                         </items>
                       </object>
                       <packing>
@@ -167,7 +167,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="editnumstyle">
-                        <property name="label" translatable="yes">Edit Style</property>
+                        <property name="label" translatable="yes" context="numparapage|editnumstyle">Edit Style</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -186,7 +186,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="checkCB_NEW_START">
-                    <property name="label" translatable="yes">R_estart at this paragraph</property>
+                    <property name="label" translatable="yes" context="numparapage|checkCB_NEW_START">R_estart at this paragraph</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
@@ -217,7 +217,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkCheckButton" id="checkCB_NUMBER_NEW_START">
-                            <property name="label" translatable="yes">S_tart with:</property>
+                            <property name="label" translatable="yes" context="numparapage|checkCB_NUMBER_NEW_START">S_tart with:</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -274,7 +274,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Numbering</property>
+            <property name="label" translatable="yes" context="numparapage|label2">Numbering</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -310,7 +310,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="checkCB_COUNT_PARA">
-                    <property name="label" translatable="yes">_Include this paragraph in line numbering</property>
+                    <property name="label" translatable="yes" context="numparapage|checkCB_COUNT_PARA">_Include this paragraph in line numbering</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -328,7 +328,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="checkCB_RESTART_PARACOUNT">
-                    <property name="label" translatable="yes">Rest_art at this paragraph</property>
+                    <property name="label" translatable="yes" context="numparapage|checkCB_RESTART_PARACOUNT">Rest_art at this paragraph</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -364,7 +364,7 @@
                             <property name="halign">start</property>
                             <property name="margin_left">12</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Start with:</property>
+                            <property name="label" translatable="yes" context="numparapage|labelFT_RESTART_NO">_Start with:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">spinNF_RESTART_PARA</property>
                           </object>
@@ -412,7 +412,7 @@
           <object class="GtkLabel" id="labelLINE_NUMBERING">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Line Numbering</property>
+            <property name="label" translatable="yes" context="numparapage|labelLINE_NUMBERING">Line Numbering</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

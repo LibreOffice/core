@@ -25,15 +25,13 @@
 #include <vcl/edit.hxx>
 #include <vcl/button.hxx>
 
-
-#define STR_FILECTRL_BUTTONTEXT     333     // ID-Range?!
-
 // Flags for internal use of FileControl
 enum class FileControlMode_Internal
 {
     INRESIZE               = 0x0001,
     ORIGINALBUTTONTEXT     = 0x0002,
 };
+
 namespace o3tl
 {
     template<> struct typed_flags<FileControlMode_Internal> : is_typed_flags<FileControlMode_Internal, 0x03> {};

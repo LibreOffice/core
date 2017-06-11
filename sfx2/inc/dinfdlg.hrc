@@ -1,0 +1,79 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SFX2_INC_DINFDLG_HRC
+#define INCLUDED_SFX2_INC_DINFDLG_HRC
+
+#define NC_(Context, String) (Context "\004" u8##String)
+
+const char* SFX_CB_PROPERTY_STRINGARRAY[] =
+{
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Checked by"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Client"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Date completed"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Department"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Destinations"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Disposition"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Division"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Document number"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Editor"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "E-Mail"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Forward to"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Group"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Info"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Language"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Mailstop"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Matter"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Office"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Owner"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Project"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Publisher"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Purpose"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Received from"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Recorded by"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Recorded date"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Reference"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Source"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Status"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Telephone number"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "Typist"),
+    NC_("SFX_CB_PROPERTY_STRINGARRAY", "URL")
+};
+
+#define CUSTOM_TYPE_UNKNOWN     0
+#define CUSTOM_TYPE_TEXT        1
+#define CUSTOM_TYPE_NUMBER      2
+#define CUSTOM_TYPE_DATE        3
+#define CUSTOM_TYPE_BOOLEAN     4
+#define CUSTOM_TYPE_DURATION    5
+#define CUSTOM_TYPE_DATETIME    6
+
+const std::pair<const char*, int> SFX_LB_PROPERTY_STRINGARRAY[] =
+{
+    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Text")        , CUSTOM_TYPE_TEXT },
+    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "DateTime")    , CUSTOM_TYPE_DATETIME },
+    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Date")        , CUSTOM_TYPE_DATE },
+    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Duration")    , CUSTOM_TYPE_DURATION },
+    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Number")      , CUSTOM_TYPE_NUMBER },
+    { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Yes or no")   , CUSTOM_TYPE_BOOLEAN }
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
