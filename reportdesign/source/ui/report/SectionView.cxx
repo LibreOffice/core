@@ -26,7 +26,7 @@
 #include <vcl/scrbar.hxx>
 #include "ReportSection.hxx"
 #include "ReportWindow.hxx"
-#include "uistrings.hrc"
+#include "strings.hxx"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
