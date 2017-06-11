@@ -76,8 +76,4 @@ $(eval $(call gb_CppunitTest_add_arguments,sd_export_ooxml2,\
 	-env:SVG_DISABLE_FONT_EMBEDDING= \
 ))
 
-$(call gb_CppunitTest_get_target,sd_export_ooxml2): \
-	$(call gb_AllLangResTarget_get_target,avmedia) \
-	$(call gb_AllLangResTarget_get_target,sd)
-
 # vim: set noet sw=4 ts=4:

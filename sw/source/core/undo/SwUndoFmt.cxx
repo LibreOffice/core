@@ -29,7 +29,7 @@
 #include <fmtcol.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 
 SwUndoFormatCreate::SwUndoFormatCreate
 (SwUndoId nUndoId, SwFormat * _pNew, SwFormat * _pDerivedFrom, SwDoc * _pDoc)

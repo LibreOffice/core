@@ -18,7 +18,7 @@
  */
 
 
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/prtqry.hxx>
 #include <svx/dialmgr.hxx>
 
