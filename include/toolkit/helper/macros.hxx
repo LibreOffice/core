@@ -60,22 +60,12 @@ css::uno::Sequence< sal_Int8 > ClassName::getImplementationId() \
 IMPL_IMPLEMENTATION_ID( ClassName ) \
 css::uno::Sequence< css::uno::Type > ClassName::getTypes() \
 { \
-    static ::cppu::OTypeCollection* pCollection = nullptr; \
-    if( !pCollection ) \
-    { \
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ); \
-        if( !pCollection ) \
-        { \
-            static ::cppu::OTypeCollection collection( \
+    static ::cppu::OTypeCollection collection( \
             cppu::UnoType<css::lang::XTypeProvider>::get(),
-
 
 #define IMPL_XTYPEPROVIDER_END \
             ); \
-            pCollection = &collection; \
-        } \
-    } \
-    return (*pCollection).getTypes(); \
+    return collection.getTypes(); \
 }
 
 

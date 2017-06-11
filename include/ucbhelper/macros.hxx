@@ -48,20 +48,13 @@ Class::getImplementationId()          \
 css::uno::Sequence< css::uno::Type > SAL_CALL         \
 Class::getTypes()          \
 {                                                                           \
-    static cppu::OTypeCollection* pCollection = nullptr;                       \
-      if ( !pCollection )                                                     \
-      {                                                                       \
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );    \
-        if ( !pCollection )                                                 \
-        {                                                                   \
-            static cppu::OTypeCollection collection(
+    static cppu::OTypeCollection collection(
+
 
 #define GETTYPES_IMPL_END                                                   \
                 );                                                          \
-            pCollection = &collection;                                      \
-        }                                                                   \
-    }                                                                       \
-    return (*pCollection).getTypes();                                       \
+                                                                            \
+    return collection.getTypes();                                           \
 }
 
 
