@@ -21,9 +21,9 @@
 
 #include "table.hxx"
 #include <definitioncolumn.hxx>
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include "core_resource.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include "CIndexes.hxx"
 
 #include <osl/diagnose.h>

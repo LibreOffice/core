@@ -41,7 +41,7 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
-#include "resource/common_res.hrc"
+#include "strings.hrc"
 #include "resource/sharedresources.hxx"
 #include "java/LocalRef.hxx"
 

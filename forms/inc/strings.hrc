@@ -1,0 +1,87 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_VCL_INC_STRINGS_HRC
+#define INCLUDED_VCL_INC_STRINGS_HRC
+
+#define N_(String) (u8##String)
+
+#define RID_BASELISTBOX_ERROR_FILLLIST              N_("The contents of a combo box or list field could not be determined.")
+#define RID_STR_IMPORT_GRAPHIC                      N_("Insert Image" )
+#define RID_STR_CONTROL_SUBSTITUTED_NAME            N_("substituted")
+#define RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN        N_("An error occurred while this control was being loaded. It was therefore replaced with a placeholder.")
+#define RID_STR_READERROR                           N_("Error reading data from database" )
+#define RID_STR_CONNECTERROR                        N_("Connection failed" )
+#define RID_ERR_LOADING_FORM                        N_("The data content could not be loaded.")
+#define RID_ERR_REFRESHING_FORM                     N_("The data content could not be updated")
+#define RID_STR_ERR_INSERTRECORD                    N_("Error inserting the new record")
+#define RID_STR_ERR_UPDATERECORD                    N_("Error updating the current record")
+#define RID_STR_ERR_DELETERECORD                    N_("Error deleting the current record")
+#define RID_STR_ERR_DELETERECORDS                   N_("Error deleting the specified records")
+#define RID_STR_NEED_NON_NULL_OBJECT                N_("The object cannot be NULL.")
+#define RID_STR_OPEN_GRAPHICS                       N_("Insert Image from...")
+#define RID_STR_CLEAR_GRAPHICS                      N_("Remove Image")
+#define RID_STR_INVALIDSTREAM                       N_("The given stream is invalid.")
+#define RID_STR_SYNTAXERROR                         N_("Syntax error in query expression" )
+#define RID_STR_INCOMPATIBLE_TYPES                  N_("The value types supported by the binding cannot be used for exchanging data with this control.")
+#define RID_STR_LABEL_RECORD                        N_("Record")
+#define RID_STR_INVALID_VALIDATOR                   N_("The control is connected to an external value binding, which at the same time acts as validator. You need to revoke the value binding, before you can set a new validator.")
+#define RID_STR_LABEL_OF                            N_("of")
+#define RID_STR_QUERY_SAVE_MODIFIED_ROW             N_("The content of the current form has been modified.\nDo you want to save your changes?")
+#define RID_STR_COULD_NOT_SET_ORDER                 N_("Error setting the sort criteria")
+#define RID_STR_COULD_NOT_SET_FILTER                N_("Error setting the filter criteria")
+#define RID_STR_FEATURE_REQUIRES_PARAMETERS         N_("To execute this function, parameters are needed.")
+#define RID_STR_FEATURE_NOT_EXECUTABLE              N_("This function cannot be executed, but is only for status queries.")
+#define RID_STR_FEATURE_UNKNOWN                     N_("Unknown function.")
+
+#define RID_STR_XFORMS_NO_BINDING_EXPRESSION        N_("Please enter a binding expression.")
+#define RID_STR_XFORMS_INVALID_BINDING_EXPRESSION   N_("This is an invalid binding expression.")
+#define RID_STR_XFORMS_INVALID_VALUE                N_("Value is invalid.")
+#define RID_STR_XFORMS_REQUIRED                     N_("A value is required.")
+#define RID_STR_XFORMS_INVALID_CONSTRAINT           N_("The constraint '$1' not validated.")
+#define RID_STR_XFORMS_VALUE_IS_NOT_A               N_("The value is not of the type '$2'.")
+#define RID_STR_XFORMS_VALUE_MAX_INCL               N_("The value must be smaller than or equal to $2.")
+#define RID_STR_XFORMS_VALUE_MAX_EXCL               N_("The value must be smaller than $2.")
+#define RID_STR_XFORMS_VALUE_MIN_INCL               N_("The value must be greater than or equal to $2.")
+#define RID_STR_XFORMS_VALUE_MIN_EXCL               N_("The value must be greater than $2.")
+#define RID_STR_XFORMS_VALUE_TOTAL_DIGITS           N_("$2 digits allowed at most.")
+#define RID_STR_XFORMS_VALUE_FRACTION_DIGITS        N_("$2 fraction digits allowed at most.")
+#define RID_STR_XFORMS_VALUE_LENGTH                 N_("The string must be $2 characters long.")
+#define RID_STR_XFORMS_VALUE_MIN_LENGTH             N_("The string must be at least $2 characters long.")
+#define RID_STR_XFORMS_VALUE_MAX_LENGTH             N_("The string can only be $2 characters long at most.")
+#define RID_STR_DATATYPE_STRING                     N_("String")
+#define RID_STR_DATATYPE_URL                        N_("Hyperlink")
+#define RID_STR_DATATYPE_BOOLEAN                    N_("True/False (Boolean)")
+#define RID_STR_DATATYPE_DECIMAL                    N_("Decimal")
+#define RID_STR_DATATYPE_FLOAT                      N_("Floating point")
+#define RID_STR_DATATYPE_DOUBLE                     N_("Double")
+#define RID_STR_DATATYPE_DATE                       N_("Date")
+#define RID_STR_DATATYPE_TIME                       N_("Time")
+#define RID_STR_DATATYPE_DATETIME                   N_("Date and Time")
+#define RID_STR_DATATYPE_YEAR                       N_("Year")
+#define RID_STR_DATATYPE_MONTH                      N_("Month")
+#define RID_STR_DATATYPE_DAY                        N_("Day")
+#define RID_STR_XFORMS_CANT_EVALUATE                N_("Error during evaluation")
+#define RID_STR_XFORMS_PATTERN_DOESNT_MATCH         N_("The string '$1' does not match the required regular expression '$2'.")
+#define RID_STR_XFORMS_BINDING_UI_NAME              N_("Binding" )
+#define RID_STR_XFORMS_CANT_REMOVE_TYPE             N_("This is a built-in type and cannot be removed." )
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

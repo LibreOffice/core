@@ -73,9 +73,6 @@ class SvxSwPosSizeTabPage : public SfxTabPage
 
     Link<SvxSwFrameValidation&,void> m_aValidateLink;
 
-    //'string provider'
-    SvxSwFramePosString m_aFramePosString;
-
     ::tools::Rectangle           m_aRect; //size of all selected objects
     ::tools::Rectangle           m_aWorkArea;
     Point               m_aAnchorPos;
