@@ -29,10 +29,6 @@
 // Acceleratoren, Menus, ...
 #define RID_DRAW_STATUSBAR          (SFX_ITEMTYPE_SD_BEGIN + 7)
 
-// Toolbars
-#define RID_DRAW_TABLE_TOOLBOX      (SFX_ITEMTYPE_SD_BEGIN + 18)
-#define RID_DRAW_MEDIA_TOOLBOX      (SFX_ITEMTYPE_SD_BEGIN + 31)
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

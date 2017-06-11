@@ -63,15 +63,6 @@ enum class SgaObjKind
 
 #define ID_IMAPINFO             2
 
-class ResMgr;
-
-SVX_DLLPUBLIC ResMgr* GetGalleryResMgr();
-
-inline OUString GalResId(sal_uInt16 nId)
-{
-    return ResId(nId, *GetGalleryResMgr());
-}
-
 #define STREAMBUF_SIZE          16384L
 
 enum class GalleryGraphicImportRet

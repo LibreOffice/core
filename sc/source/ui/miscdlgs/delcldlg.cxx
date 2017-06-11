@@ -21,7 +21,7 @@
 
 #include "delcldlg.hxx"
 #include "scresid.hxx"
-#include "scres.hrc"
+#include "strings.hrc"
 
 static sal_uInt8 nDelItemChecked=0;
 

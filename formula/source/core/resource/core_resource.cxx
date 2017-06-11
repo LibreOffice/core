@@ -19,7 +19,7 @@
 
 #include "core_resource.hxx"
 
-#include <tools/resmgr.hxx>
+#include <tools/simplerm.hxx>
 
 // ---- needed as long as we have no contexts for components ---
 #include <vcl/svapp.hxx>
@@ -39,25 +39,23 @@ namespace formula
         // access safety
         struct theResourceManagerMutex : public rtl::Static< osl::Mutex, theResourceManagerMutex > {};
     }
-    sal_Int32       ResourceManager::s_nClients = 0;
-    ResMgr*         ResourceManager::m_pImpl = nullptr;
 
+    sal_Int32       ResourceManager::s_nClients = 0;
+    std::locale*    ResourceManager::m_pImpl = nullptr;
 
     void ResourceManager::ensureImplExists()
     {
         if (m_pImpl)
             return;
 
-        m_pImpl = ResMgr::CreateResMgr("for", Application::GetSettings().GetUILanguageTag());
+        m_pImpl = new std::locale(Translate::Create("for", Application::GetSettings().GetUILanguageTag()));
     }
-
 
     void ResourceManager::registerClient()
     {
         ::osl::MutexGuard aGuard(theResourceManagerMutex::get());
         ++s_nClients;
     }
-
 
     void ResourceManager::revokeClient()
     {
@@ -68,10 +66,11 @@ namespace formula
             m_pImpl = nullptr;
         }
     }
-    ResMgr* ResourceManager::getResManager()
+
+    const std::locale& ResourceManager::getResLocale()
     {
         ensureImplExists();
-        return m_pImpl;
+        return *m_pImpl;
     }
 
 

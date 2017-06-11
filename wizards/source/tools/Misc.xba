@@ -306,7 +306,7 @@ Dim aArgs(5) as Any
 	oResSrv = getProcessServiceManager().createInstanceWithArguments( &quot;com.sun.star.resource.StringResourceWithLocation&quot;, aArgs() )
 	If (IsNull(oResSrv)) then
 		InitResources = FALSE
-		MsgBox(&quot;could not initialize ResourceIndexAccess&quot;)
+		MsgBox(&quot;could not initialize StringResourceWithLocation&quot;)
 	Else
 		InitResources = TRUE
 	End If

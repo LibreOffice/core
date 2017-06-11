@@ -45,7 +45,7 @@
 #include <txtfrm.hxx>
 #include <pamtyp.hxx>
 #include <redline.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <editeng/adjustitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <frmatr.hxx>

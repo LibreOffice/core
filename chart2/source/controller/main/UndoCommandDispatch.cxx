@@ -28,7 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 
 using namespace ::com::sun::star;

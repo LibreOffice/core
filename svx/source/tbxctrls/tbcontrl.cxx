@@ -61,13 +61,15 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/svxitems.hrc>
+#include <svx/svxids.hrc>
 #include "helpid.hrc"
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <svx/xtable.hxx>
+#include <editeng/editids.hrc>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -1302,7 +1304,7 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
         case SID_ATTR_CHAR_COLOR2:
         case SID_EXTRUSION_3D_COLOR:
         {
-            mpButtonAutoColor->SetText(EditResId::GetString(RID_SVXSTR_AUTOMATIC));
+            mpButtonAutoColor->SetText(EditResId(RID_SVXSTR_AUTOMATIC));
             break;
         }
         case SID_FM_CTL_PROPERTIES:
@@ -1428,7 +1430,7 @@ namespace
             case SID_EXTRUSION_3D_COLOR:
             default:
                 aColor = COL_AUTO;
-                sColorName = EditResId::GetString(RID_SVXSTR_AUTOMATIC);
+                sColorName = EditResId(RID_SVXSTR_AUTOMATIC);
                 break;
         }
 

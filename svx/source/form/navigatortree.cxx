@@ -27,7 +27,6 @@
 
 #include "fmhelp.hrc"
 #include "fmexpl.hxx"
-#include "svx/fmresids.hrc"
 #include "fmshimp.hxx"
 #include "fmservs.hxx"
 #include "fmundo.hxx"
@@ -50,7 +49,7 @@
 #include <svx/sdrpaintwindow.hxx>
 
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include "bitmaps.hlst"
 #include "svtools/treelistentry.hxx"
 

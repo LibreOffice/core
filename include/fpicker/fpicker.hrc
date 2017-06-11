@@ -1,0 +1,34 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+#ifndef INCLUDED_FPICKER_FPICKER_HRC
+#define INCLUDED_FPICKER_FPICKER_HRC
+
+#define N_(String) (u8##String)
+
+#define STR_SVT_FILEPICKER_AUTO_EXTENSION           N_("~Automatic file name extension")
+#define STR_SVT_FILEPICKER_PASSWORD                 N_("Save with pass~word")
+#define STR_SVT_FILEPICKER_FILTER_OPTIONS           N_("~Edit filter settings")
+#define STR_SVT_FILEPICKER_READONLY                 N_("~Read-only")
+#define STR_SVT_FILEPICKER_INSERT_AS_LINK           N_("~Link")
+#define STR_SVT_FILEPICKER_SHOW_PREVIEW             N_("Pr~eview")
+#define STR_SVT_FILEPICKER_PLAY                     N_("~Play")
+#define STR_SVT_FILEPICKER_VERSION                  N_("~Version:")
+#define STR_SVT_FILEPICKER_TEMPLATES                N_("S~tyles:")
+#define STR_SVT_FILEPICKER_IMAGE_TEMPLATE           N_("Style:")
+#define STR_SVT_FILEPICKER_SELECTION                N_("~Selection")
+#define STR_SVT_FILEPICKER_FILTER_TITLE             N_("File ~type:")
+#define STR_SVT_FOLDERPICKER_DEFAULT_TITLE          N_("Select Path")
+#define STR_SVT_FOLDERPICKER_DEFAULT_DESCRIPTION    N_("Please select a folder.")
+#define STR_SVT_ALREADYEXISTOVERWRITE               N_("A file named \"$filename$\" already exists.\n\nDo you want to replace it?")
+#define STR_SVT_DELETESERVICE                       N_("Are you sure you want to delete the service?\n\"$servicename$\"")
+#define STR_SVT_ROOTLABEL                           N_("Root")
+#define STR_FILTERNAME_ALL                          N_("All files")
+
+#endif
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

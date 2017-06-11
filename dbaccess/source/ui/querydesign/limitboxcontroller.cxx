@@ -21,7 +21,7 @@
 
 #include "LimitBox.hxx"
 #include "dbu_reghelper.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 
 
 using namespace ::com::sun::star;
