@@ -227,11 +227,6 @@ namespace comphelper
         :osl::Guard<SolarMutex>( SolarMutex::get() )
         ,OContextEntryGuard( _pContext )
     {
-        // Only lock the external mutex,
-        // release the ::osl::Mutex of the OAccessibleContextHelper instance.
-        // If you call into another UNO object with locked ::osl::Mutex,
-        // this may lead to dead locks.
-        clear();
     }
 
 
