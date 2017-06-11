@@ -201,7 +201,4 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/uitest/uiobject \
 ))
 
-# Runtime dependency for unit-tests
-$(eval $(call gb_Library_use_restarget,chartcontroller,chartcontroller))
-
 # vim: set noet sw=4 ts=4:

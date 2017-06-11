@@ -77,6 +77,7 @@ define gb_CppunitTest__make_args
 $(HEADLESS) \
 "-env:BRAND_BASE_DIR=$(call gb_Helper_make_url,$(INSTROOT))" \
 "-env:BRAND_SHARE_SUBDIR=$(LIBO_SHARE_FOLDER)" \
+"-env:BRAND_SHARE_RESOURCE_SUBDIR=$(LIBO_SHARE_RESOURCE_FOLDER)" \
 "-env:UserInstallation=$(call gb_Helper_make_url,$(call gb_CppunitTest_get_target,$*).user)" \
 $(if $(URE),\
     $(if $(strip $(CONFIGURATION_LAYERS)),\

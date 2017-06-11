@@ -68,12 +68,12 @@ public:
 
     /** Initialize the description with the specified string from the
         resource followed by the shape's style in parantheses and a colon.
-        @param nResourceId
+        @param pResourceId
             A resource id the specifies the introductory description of the
             shape that is made more specific by later calls to
             <member>addProperty</member>.
     */
-    void Initialize (sal_Int32 nResourceId);
+    void Initialize(const char* pResourceId);
 
     /**  Returns the description string and then resets it.  Usually called
          as last method before destroying the object.
@@ -114,7 +114,7 @@ public:
         @param aType
             Type of the property's value.  It controls the transformation
             into the value's string representation.
-        @param nResourceId
+        @param pResourceId
             Id of the localized name of the property int the resource.
         @param nWhichId
             This which id is used to localize the property value.  If it is
@@ -122,7 +122,7 @@ public:
     */
     void AddProperty (const OUString& sPropertyName,
         PropertyType aType,
-        sal_Int32 nResourceId,
+        const char* pResourceId,
         long nWhichId=-1);
 
     /** Append the given string as is to the current description.

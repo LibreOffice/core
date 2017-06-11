@@ -25,28 +25,7 @@
 
 #define DLG_COLUMN              (RC_FRMDLG_BEGIN +  4)
 
-#define STR_FRMUI_BORDER        (RC_FRMDLG_BEGIN + 16)
-#define STR_FRMUI_PATTERN       (RC_FRMDLG_BEGIN + 17)
-
 #define MN_BACKGROUND           (RC_FRMDLG_BEGIN + 27)
-
-#define STR_FRMDLG_BEGIN        (RC_FRMDLG_BEGIN + 31)
-
-#define STR_COLUMN              (STR_FRMDLG_BEGIN + 17)
-
-#define STR_OLE_INSERT          (STR_FRMDLG_BEGIN + 45)
-#define STR_OLE_EDIT            (STR_FRMDLG_BEGIN + 46)
-#define STR_COLL_HEADER         (STR_FRMDLG_BEGIN + 47)
-
-#define STR_LINE_TOP            (STR_FRMDLG_BEGIN + 50)
-#define STR_LINE_BOTTOM         (STR_FRMDLG_BEGIN + 51)
-#define STR_LINE_CENTER         (STR_FRMDLG_BEGIN + 52)
-
-#define FRMDLG_ACT_END                  STR_LINE_CENTER
-
-#if FRMDLG_ACT_END > RC_FRMDLG_END
-#error Resource-Id Ueberlauf in #file, #line
-#endif
 
 #endif // FRMUI_HRC
 

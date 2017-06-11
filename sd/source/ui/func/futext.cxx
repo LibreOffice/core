@@ -54,7 +54,7 @@
 
 #include "sdresid.hxx"
 #include "app.hrc"
-#include "res_bmp.hrc"
+
 #include "ViewShell.hxx"
 #include "ViewShellBase.hxx"
 #include "View.hxx"
@@ -66,7 +66,7 @@
 #include "FrameView.hxx"
 #include "ToolBarManager.hxx"
 #include "DrawDocShell.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "pres.hxx"
 #include "optsitem.hxx"
 

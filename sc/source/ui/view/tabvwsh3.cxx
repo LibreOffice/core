@@ -34,6 +34,7 @@
 #include <vcl/vclenum.hxx>
 
 #include "globstr.hrc"
+#include "strings.hrc"
 #include "scmod.hxx"
 #include "appoptio.hxx"
 #include "tabvwsh.hxx"

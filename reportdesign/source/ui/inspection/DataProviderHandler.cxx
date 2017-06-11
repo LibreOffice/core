@@ -22,7 +22,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "uistrings.hrc"
+#include "strings.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/syslocale.hxx>
 #include <com/sun/star/form/inspection/FormComponentPropertyHandler.hpp>
@@ -47,8 +47,9 @@
 #include "metadata.hxx"
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
+#include "core_resource.hxx"
 #include "helpids.hrc"
-#include "RptResId.hrc"
+#include "strings.hrc"
 #include "PropertyForward.hxx"
 
 namespace rptui
@@ -495,13 +496,13 @@ bool DataProviderHandler::impl_dialogLinkedFields_nothrow( ::osl::ClearableMutex
     aSeq[2] <<= aParam;
 
     aParam.Name = "Explanation";
-    aParam.Value <<= OUString(ModuleRes(RID_STR_EXPLANATION));
+    aParam.Value <<= RptResId(RID_STR_EXPLANATION);
     aSeq[3] <<= aParam;
     aParam.Name = "DetailLabel";
-    aParam.Value <<= OUString(ModuleRes(RID_STR_DETAILLABEL));
+    aParam.Value <<= RptResId(RID_STR_DETAILLABEL);
     aSeq[4] <<= aParam;
     aParam.Name = "MasterLabel";
-    aParam.Value <<= OUString(ModuleRes(RID_STR_MASTERLABEL));
+    aParam.Value <<= RptResId(RID_STR_MASTERLABEL);
     aSeq[5] <<= aParam;
 
     uno::Reference< ui::dialogs::XExecutableDialog > xDialog(

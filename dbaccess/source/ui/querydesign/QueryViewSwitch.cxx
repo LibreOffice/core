@@ -21,7 +21,7 @@
 #include "QueryDesignView.hxx"
 #include "QueryTextView.hxx"
 #include "querycontainerwindow.hxx"
-#include "dbu_qry.hrc"
+#include "strings.hrc"
 #include "browserids.hxx"
 #include "adtabdlg.hxx"
 #include "querycontroller.hxx"

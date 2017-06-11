@@ -27,8 +27,10 @@
 #include "uiitems.hxx"
 #include "scresid.hxx"
 #include "docsh.hxx"
-#include "scres.hrc"
+#include "sc.hrc"
+#include "strings.hrc"
 #include "globstr.hrc"
+#include "units.hrc"
 #include <appoptio.hxx>
 #include <scmod.hxx>
 #include <svx/colorbox.hxx>
@@ -329,7 +331,6 @@ ScTpLayoutOptions::ScTpLayoutOptions(   vcl::Window* pParent,
                                         const SfxItemSet&   rArgSet ) :
     SfxTabPage( pParent, "ScGeneralPage",
                 "modules/scalc/ui/scgeneralpage.ui", &rArgSet),
-    aUnitArr(ResId(SCSTR_UNIT, *SC_MOD()->GetResMgr())),
     pDoc(nullptr)
 {
     get( m_pUnitLB, "unitlb");
@@ -356,10 +357,10 @@ ScTpLayoutOptions::ScTpLayoutOptions(   vcl::Window* pParent,
 
     m_pAlignCB->SetClickHdl(LINK(this, ScTpLayoutOptions, AlignHdl));
 
-    for ( sal_uInt32 i = 0; i < aUnitArr.Count(); ++i )
+    for (size_t i = 0; i < SAL_N_ELEMENTS(SCSTR_UNIT); ++i)
     {
-        OUString sMetric = aUnitArr.GetStringByPos( i );
-        FieldUnit eFUnit = (FieldUnit)aUnitArr.GetValue( i );
+        OUString sMetric = ScResId(SCSTR_UNIT[i].first);
+        FieldUnit eFUnit = SCSTR_UNIT[i].second;
 
         switch ( eFUnit )
         {
@@ -380,7 +381,6 @@ ScTpLayoutOptions::ScTpLayoutOptions(   vcl::Window* pParent,
             }
         }
     }
-
 }
 
 ScTpLayoutOptions::~ScTpLayoutOptions()

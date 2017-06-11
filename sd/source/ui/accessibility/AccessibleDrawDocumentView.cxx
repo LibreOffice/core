@@ -52,7 +52,7 @@
 #include "slideshow.hxx"
 #include "anminfo.hxx"
 
-#include "accessibility.hrc"
+#include "strings.hrc"
 #include "sdresid.hxx"
 #include <osl/mutex.hxx>
 
