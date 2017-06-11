@@ -20,7 +20,7 @@
 #ifndef INCLUDED_XMLSECURITY_SOURCE_DIALOGS_RESOURCEMANAGER_HXX
 #define INCLUDED_XMLSECURITY_SOURCE_DIALOGS_RESOURCEMANAGER_HXX
 
-#include <tools/resmgr.hxx>
+#include <tools/simplerm.hxx>
 #include <tools/datetime.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -33,7 +33,7 @@ class LocaleDataWrapper;
 
 namespace XmlSec
 {
-    ResMgr*         GetResMgr();
+    const std::locale& GetResLocale();
 
     const LocaleDataWrapper&    GetLocaleData();
     DateTime        GetDateTime( const css::util::DateTime& _rDT );
@@ -49,9 +49,9 @@ namespace XmlSec
     OUString        GetHexString( const css::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep, sal_uInt16 _nLineBreak = 0xFFFF );
 }
 
-inline OUString XsResId(sal_uInt16 nId)
+inline OUString XsResId(const char* pId)
 {
-    return ResId(nId, *XmlSec::GetResMgr());
+    return Translate::get(pId, XmlSec::GetResLocale());
 }
 
 #endif

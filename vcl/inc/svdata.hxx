@@ -48,7 +48,6 @@ struct ImplHotKey;
 struct ImplEventHook;
 struct ImplSchedulerData;
 class Point;
-class ResMgr;
 class ImplAccelManager;
 class PhysicalFontCollection;
 class ImplFontCache;
@@ -329,7 +328,8 @@ struct ImplSVData
     SalTimer*               mpSalTimer = nullptr;           // interface to sal event loop/timers
     SalI18NImeStatus*       mpImeStatus = nullptr;          // interface to ime status window
     SalSystem*              mpSalSystem = nullptr;          // SalSystem interface
-    ResMgr*                 mpResMgr = nullptr;             // SV-Resource-Manager
+    bool                    mbResLocaleSet = false;         // SV-Resource-Manager
+    std::locale             maResLocale;                    // Resource locale
     sal_uInt64              mnTimerPeriod = 0;              // current timer period
     ImplSVAppData           maAppData;                      // indepen data for class Application
     ImplSVGDIData           maGDIData;                      // indepen data for Output classes
@@ -356,8 +356,8 @@ struct ImplSVData
 void        ImplDeInitSVData();
 VCL_PLUGIN_PUBLIC vcl::Window* ImplGetDefaultWindow();
 VCL_PLUGIN_PUBLIC vcl::Window* ImplGetDefaultContextWindow();
-VCL_PLUGIN_PUBLIC ResMgr*     ImplGetResMgr();
-VCL_PLUGIN_PUBLIC ResId VclResId( sal_Int32 nId ); // throws std::bad_alloc if no res mgr
+VCL_PLUGIN_PUBLIC const std::locale& ImplGetResLocale();
+VCL_PLUGIN_PUBLIC OUString VclResId(const char* pId);
 DockingManager*     ImplGetDockingManager();
 BlendFrameCache*    ImplGetBlendFrameCache();
 

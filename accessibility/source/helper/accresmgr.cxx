@@ -27,22 +27,19 @@ using namespace accessibility;
 
 // TkResMgr
 
-
-SimpleResMgr* TkResMgr::m_pImpl = nullptr;
-
+std::locale* TkResMgr::m_pImpl = nullptr;
 
 TkResMgr::EnsureDelete::~EnsureDelete()
 {
     delete TkResMgr::m_pImpl;
 }
 
-
 void TkResMgr::ensureImplExists()
 {
     if (m_pImpl)
         return;
 
-    m_pImpl = SimpleResMgr::Create("acc", Application::GetSettings().GetUILanguageTag() );
+    m_pImpl = new std::locale(Translate::Create("acc", Application::GetSettings().GetUILanguageTag()));
 
     if (m_pImpl)
     {
@@ -51,17 +48,15 @@ void TkResMgr::ensureImplExists()
     }
 }
 
-
-OUString TkResMgr::loadString( sal_uInt16 nResId )
+OUString TkResMgr::loadString(const char *pResId)
 {
     OUString sReturn;
 
     ensureImplExists();
-    if ( m_pImpl )
-        sReturn = m_pImpl->ReadString( nResId );
+    if (m_pImpl)
+        sReturn = Translate::get(pResId, *m_pImpl);
 
     return sReturn;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

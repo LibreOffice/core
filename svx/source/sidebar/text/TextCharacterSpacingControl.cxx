@@ -19,7 +19,7 @@
 #include <sfx2/bindings.hxx>
 #include "TextCharacterSpacingControl.hxx"
 #include "TextPropertyPanel.hrc"
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <unotools/viewoptions.hxx>
 #include <editeng/kernitem.hxx>

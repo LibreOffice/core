@@ -32,6 +32,7 @@
 #include "tblafmt.hxx"
 
 #include "app.hrc"
+#include "strings.hrc"
 #include "table.hrc"
 #include "swabstdlg.hxx"
 #include <swuiexp.hxx>

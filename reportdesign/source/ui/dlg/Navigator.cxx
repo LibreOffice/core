@@ -19,7 +19,7 @@
 
 #include "Navigator.hxx"
 
-#include "uistrings.hrc"
+#include "strings.hxx"
 #include "bitmaps.hlst"
 #include "ReportController.hxx"
 #include "UITools.hxx"
@@ -33,7 +33,7 @@
 #include <com/sun/star/report/XImageControl.hpp>
 #include <com/sun/star/report/XShape.hpp>
 #include "helpids.hrc"
-#include "RptResId.hrc"
+#include "strings.hrc"
 #include "rptui_slotid.hrc"
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/containermultiplexer.hxx>
@@ -44,7 +44,7 @@
 #include <svtools/treelistentry.hxx>
 #include <svl/solar.hrc>
 #include "ReportVisitor.hxx"
-#include "ModuleHelper.hxx"
+#include "core_resource.hxx"
 #include <rtl/ref.hxx>
 
 #include <memory>
@@ -553,7 +553,7 @@ void NavigatorTree::traverseSection(const uno::Reference< report::XSection>& _xS
 
 void NavigatorTree::traverseFunctions(const uno::Reference< report::XFunctions>& _xFunctions,SvTreeListEntry* _pParent)
 {
-    SvTreeListEntry* pFunctions = insertEntry(OUString(ModuleRes(RID_STR_FUNCTIONS)), _pParent, RID_SVXBMP_RPT_NEW_FUNCTION, TREELIST_APPEND, new UserData(this,_xFunctions));
+    SvTreeListEntry* pFunctions = insertEntry(RptResId(RID_STR_FUNCTIONS), _pParent, RID_SVXBMP_RPT_NEW_FUNCTION, TREELIST_APPEND, new UserData(this,_xFunctions));
     const sal_Int32 nCount = _xFunctions->getCount();
     for (sal_Int32 i = 0; i< nCount; ++i)
     {
@@ -623,7 +623,7 @@ void NavigatorTree::traversePageFooter(const uno::Reference< report::XSection>& 
 void NavigatorTree::traverseGroups(const uno::Reference< report::XGroups>& _xGroups)
 {
     SvTreeListEntry* pReport = find(_xGroups->getReportDefinition());
-    insertEntry(OUString(ModuleRes(RID_STR_GROUPS)), pReport, RID_SVXBMP_SORTINGANDGROUPING, TREELIST_APPEND, new UserData(this,_xGroups));
+    insertEntry(RptResId(RID_STR_GROUPS), pReport, RID_SVXBMP_SORTINGANDGROUPING, TREELIST_APPEND, new UserData(this,_xGroups));
 }
 
 void NavigatorTree::traverseGroup(const uno::Reference< report::XGroup>& _xGroup)

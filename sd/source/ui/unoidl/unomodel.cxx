@@ -82,7 +82,7 @@
 
 #include <Annotation.hxx>
 #include <drawdoc.hxx>
-#include <glob.hrc>
+#include <strings.hrc>
 #include <sdresid.hxx>
 #include <sdpage.hxx>
 

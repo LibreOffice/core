@@ -24,8 +24,8 @@
 #include "undosqledit.hxx"
 #include "browserids.hxx"
 #include "querycontroller.hxx"
-#include "dbu_qry.hrc"
-#include "dbustrings.hrc"
+#include "strings.hrc"
+#include "stringconstants.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>

@@ -20,8 +20,7 @@
 #include <sfx2/sidebar/DeckTitleBar.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sfxresid.hxx>
-
-#include "Sidebar.hrc"
+#include <sfx2/strings.hrc>
 
 #include <vcl/image.hxx>
 
