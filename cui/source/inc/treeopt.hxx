@@ -24,7 +24,6 @@
 
 #include <memory>
 
-#include <tools/resary.hxx>
 #include <vcl/fixed.hxx>
 
 class SfxModule;
@@ -194,40 +193,6 @@ public:
 
     // helper functions to call the language settings TabPage from the SpellDialog
     static void         ApplyLanguageOptions(const SfxItemSet& rSet);
-};
-
-// class OfaPageResource -------------------------------------------------
-
-class OfaPageResource
-{
-    ResStringArray      aGeneralDlgAry;
-    ResStringArray      aInetDlgAry;
-    ResStringArray      aLangDlgAry;
-    ResStringArray      aTextDlgAry;
-    ResStringArray      aHTMLDlgAry;
-    ResStringArray      aCalcDlgAry;
-    ResStringArray      aStarMathDlgAry;
-    ResStringArray      aImpressDlgAry;
-    ResStringArray      aDrawDlgAry;
-    ResStringArray      aChartDlgAry;
-    ResStringArray      aFilterDlgAry;
-    ResStringArray      aDatasourcesDlgAry;
-
-public:
-    OfaPageResource();
-
-    ResStringArray& GetGeneralArray()       {return aGeneralDlgAry;}
-    ResStringArray& GetInetArray()          {return aInetDlgAry;}
-    ResStringArray& GetLangArray()          {return aLangDlgAry;}
-    ResStringArray& GetTextArray()          {return aTextDlgAry;}
-    ResStringArray& GetHTMLArray()          {return aHTMLDlgAry;}
-    ResStringArray& GetCalcArray()          {return aCalcDlgAry;}
-    ResStringArray& GetStarMathArray()      {return aStarMathDlgAry;}
-    ResStringArray& GetImpressArray()       {return aImpressDlgAry;}
-    ResStringArray& GetDrawArray()          {return aDrawDlgAry;}
-    ResStringArray& GetChartArray()         {return aChartDlgAry;}
-    ResStringArray& GetFilterArray()        {return aFilterDlgAry;}
-    ResStringArray& GetDatasourcesArray()   {return aDatasourcesDlgAry;}
 };
 
 // class ExtensionsTabPage -----------------------------------------------

@@ -24,7 +24,7 @@
 #include "view/SlsTheme.hxx"
 #include "tools/IconCache.hxx"
 #include "Window.hxx"
-#include "res_bmp.hrc"
+
 #include "bitmaps.hlst"
 
 namespace sd { namespace slidesorter { namespace view {

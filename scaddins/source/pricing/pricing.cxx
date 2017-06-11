@@ -25,6 +25,7 @@
 #include "pricing.hxx"
 #include "black_scholes.hxx"
 #include "pricing.hrc"
+#include "strings.hrc"
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -33,6 +34,7 @@
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/rcid.h>
+#include <tools/simplerm.hxx>
 #include <tools/resmgr.hxx>
 
 using namespace ::com::sun::star;
@@ -42,11 +44,6 @@ using namespace sca::pricing;
 #define ADDIN_SERVICE           "com.sun.star.sheet.AddIn"
 #define MY_SERVICE              "com.sun.star.sheet.addin.PricingFunctions"
 #define MY_IMPLNAME             "com.sun.star.sheet.addin.PricingFunctionsImpl"
-
-ScaResId::ScaResId( sal_uInt16 nId, ResMgr& rResMgr ) :
-    ResId( nId, rResMgr )
-{
-}
 
 #define UNIQUE              false   // function name does not exist in Calc
 
@@ -67,8 +64,8 @@ const ScaFuncDataBase pFuncDataArr[] =
 
 ScaFuncData::ScaFuncData( const ScaFuncDataBase& rBaseData ) :
     aIntName( OUString::createFromAscii( rBaseData.pIntName ) ),
-    nUINameID( rBaseData.nUINameID ),
-    nDescrID( rBaseData.nDescrID ),
+    pUINameID( rBaseData.pUINameID ),
+    pDescrID( rBaseData.pDescrID ),
     nParamCount( rBaseData.nParamCount ),
     eCat( rBaseData.eCat ),
     bDouble( rBaseData.bDouble ),
@@ -132,7 +129,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL pricing_component_getFactory(
 //  "normal" service implementation
 ScaPricingAddIn::ScaPricingAddIn() :
     pDefLocales( nullptr ),
-    pResMgr( nullptr ),
     pFuncDataList( nullptr )
 {
 }
@@ -140,7 +136,6 @@ ScaPricingAddIn::ScaPricingAddIn() :
 ScaPricingAddIn::~ScaPricingAddIn()
 {
     delete pFuncDataList;
-    delete pResMgr;
     delete[] pDefLocales;
 }
 
@@ -167,32 +162,13 @@ const lang::Locale& ScaPricingAddIn::GetLocale( sal_uInt32 nIndex )
     return (nIndex < sizeof( pLang )) ? pDefLocales[ nIndex ] : aFuncLoc;
 }
 
-ResMgr& ScaPricingAddIn::GetResMgr()
-{
-    if( !pResMgr )
-    {
-        InitData();     // try to get resource manager
-        if( !pResMgr )
-            throw uno::RuntimeException();
-    }
-    return *pResMgr;
-}
-
 void ScaPricingAddIn::InitData()
 {
-    delete pResMgr;
-    pResMgr = ResMgr::CreateResMgr("pricing", LanguageTag( aFuncLoc) );
+    aResLocale = Translate::Create("sca", LanguageTag(aFuncLoc));
     delete pFuncDataList;
 
-    if(pResMgr)
-    {
-        pFuncDataList = new ScaFuncDataList;
-        InitScaFuncDataList(*pFuncDataList);
-    }
-    else
-    {
-        pFuncDataList = nullptr;
-    }
+    pFuncDataList = new ScaFuncDataList;
+    InitScaFuncDataList(*pFuncDataList);
 
     if( pDefLocales )
     {
@@ -201,10 +177,9 @@ void ScaPricingAddIn::InitData()
     }
 }
 
-OUString ScaPricingAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex )
+OUString ScaPricingAddIn::GetFuncDescrStr(const char** pResId, sal_uInt16 nStrIndex)
 {
-    ResStringArray aArr(ScaResId(nResId, GetResMgr()));
-    return aArr.GetString(nStrIndex - 1);
+    return ScaResId(pResId[nStrIndex - 1]);
 }
 
 OUString ScaPricingAddIn::getImplementationName_Static()
@@ -271,9 +246,9 @@ OUString SAL_CALL ScaPricingAddIn::getDisplayFunctionName( const OUString& aProg
 
     auto fDataIt = std::find_if(pFuncDataList->begin(), pFuncDataList->end(),
                                 FindScaFuncData( aProgrammaticName ) );
-    if(fDataIt != pFuncDataList->end() )
+    if (fDataIt != pFuncDataList->end() )
     {
-        aRet = ScaResId(fDataIt->GetUINameID(), GetResMgr());
+        aRet = ScaResId(fDataIt->GetUINameID());
         if( fDataIt->IsDouble() )
             aRet += "_ADD";
     }
@@ -583,5 +558,9 @@ double SAL_CALL ScaPricingAddIn::getOptProbInMoney( double spot, double vol,
     RETURN_FINITE( fRet );
 }
 
+OUString ScaPricingAddIn::ScaResId(const char* pResId)
+{
+    return Translate::get(pResId, aResLocale);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

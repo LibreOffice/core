@@ -20,6 +20,7 @@
 #include "RelationTableView.hxx"
 #include "JoinExchange.hxx"
 #include <comphelper/extract.hxx>
+#include "core_resource.hxx"
 #include "browserids.hxx"
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -29,7 +30,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include <connectivity/dbtools.hxx>
 #include <comphelper/sequence.hxx>
 #include "dbaccess_helpid.hrc"
@@ -41,7 +42,7 @@
 #include "RTableConnectionData.hxx"
 #include "RelationDlg.hxx"
 #include "sqlmessage.hxx"
-#include "dbu_rel.hrc"
+#include "strings.hrc"
 #include "UITools.hxx"
 #include <connectivity/dbexception.hxx>
 #include "RTableWindow.hxx"
@@ -322,7 +323,7 @@ void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUStrin
 
 void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
 {
-    ScopedVclPtrInstance< OSQLWarningBox > aDlg( this, ModuleRes( STR_QUERY_REL_DELETE_WINDOW ), WB_YES_NO | WB_DEF_YES );
+    ScopedVclPtrInstance< OSQLWarningBox > aDlg( this, DBA_RES( STR_QUERY_REL_DELETE_WINDOW ), WB_YES_NO | WB_DEF_YES );
     if ( m_bInRemove || aDlg->Execute() == RET_YES )
     {
         m_pView->getController().ClearUndoManager();
@@ -338,13 +339,13 @@ void ORelationTableView::lookForUiActivities()
 {
     if(m_pExistingConnection)
     {
-        OUString sTitle(ModuleRes(STR_RELATIONDESIGN));
+        OUString sTitle(DBA_RES(STR_RELATIONDESIGN));
         sTitle = sTitle.copy(3);
-        ScopedVclPtrInstance< OSQLMessageBox > aDlg(this,ModuleRes(STR_QUERY_REL_EDIT_RELATION),OUString(),0);
+        ScopedVclPtrInstance< OSQLMessageBox > aDlg(this,DBA_RES(STR_QUERY_REL_EDIT_RELATION),OUString(),0);
         aDlg->SetText(sTitle);
         aDlg->RemoveButton(aDlg->GetButtonId(0));
-        aDlg->AddButton( ModuleRes(STR_QUERY_REL_EDIT), RET_OK, ButtonDialogFlags::Default | ButtonDialogFlags::Focus);
-        aDlg->AddButton( ModuleRes(STR_QUERY_REL_CREATE), RET_YES);
+        aDlg->AddButton( DBA_RES(STR_QUERY_REL_EDIT), RET_OK, ButtonDialogFlags::Default | ButtonDialogFlags::Focus);
+        aDlg->AddButton( DBA_RES(STR_QUERY_REL_CREATE), RET_YES);
         aDlg->AddButton( StandardButtonType::Cancel,RET_CANCEL);
         sal_uInt16 nRet = aDlg->Execute();
         if( nRet == RET_CANCEL)

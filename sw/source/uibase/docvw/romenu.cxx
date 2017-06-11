@@ -45,7 +45,7 @@
 
 #include <cmdid.h>
 #include <helpid.h>
-#include <docvw.hrc>
+#include <strings.hrc>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;

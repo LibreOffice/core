@@ -22,7 +22,7 @@
 #include <vcl/wrkwin.hxx>
 
 #include <vcl/svapp.hxx>
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
 #include "dbaccess_helpid.hrc"
 #include <com/sun/star/sdbc/KeyRule.hpp>
 

@@ -45,7 +45,7 @@
 #include "addinlis.hxx"
 #include <formula/errorcodes.hxx>
 #include <formula/funcvarargs.h>
-#include "scfuncs.hrc"
+#include "sc.hrc"
 #include "optutil.hxx"
 #include "addincfg.hxx"
 #include "scmod.hxx"

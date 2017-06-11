@@ -40,7 +40,7 @@
 #include <svtools/langtab.hxx>
 #include <classes/fwkresid.hxx>
 
-#include <classes/resource.hrc>
+#include <strings.hrc>
 
 #include "helper/mischelper.hxx"
 #include <osl/mutex.hxx>

@@ -26,14 +26,11 @@
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/sdb/SQLErrorEvent.hpp>
 #include "TConnection.hxx"
-#include "resource/common_res.hrc"
+#include "strings.hrc"
 #include "resource/sharedresources.hxx"
-
 
 namespace dbtools
 {
-
-
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbc;

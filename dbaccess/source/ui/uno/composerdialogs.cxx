@@ -22,7 +22,7 @@
 
 #include "dbu_reghelper.hxx"
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include "queryfilter.hxx"
 #include "queryorder.hxx"
 #include <comphelper/processfactory.hxx>

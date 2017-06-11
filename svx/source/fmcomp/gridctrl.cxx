@@ -48,7 +48,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 
-#include "svx/fmresids.hrc"
+#include "svx/strings.hrc"
 
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>

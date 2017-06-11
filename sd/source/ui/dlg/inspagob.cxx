@@ -20,7 +20,7 @@
 #include "inspagob.hxx"
 
 #include "strings.hrc"
-#include "res_bmp.hrc"
+
 #include "bitmaps.hlst"
 #include "sdresid.hxx"
 #include "drawdoc.hxx"

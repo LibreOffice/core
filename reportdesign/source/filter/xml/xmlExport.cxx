@@ -31,7 +31,7 @@
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/numehelp.hxx>
 #include "xmlHelper.hxx"
-#include "xmlstrings.hrc"
+#include "strings.hxx"
 #include "xmlPropertyHandler.hxx"
 #include <sax/tools/converter.hxx>
 #include <com/sun/star/awt/ImagePosition.hpp>

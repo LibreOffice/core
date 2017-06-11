@@ -175,7 +175,6 @@ class SwTOXSelectTabPage : public SfxTabPage
     VclPtr<MenuButton>     m_pAutoMarkPB;
 
     // object only
-    SwOLENames      aFromNames;
     VclPtr<SvxCheckListBox> m_pFromObjCLB;
     VclPtr<VclContainer>   m_pFromObjFrame;
 

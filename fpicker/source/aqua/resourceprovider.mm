@@ -23,7 +23,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
-#include <vcl/fpicker.hrc>
+#include <fpicker/fpicker.hrc>
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
@@ -31,19 +31,24 @@
 
 #include <svtools/filedlg2.hrc>
 #include "NSString_OOoAdditions.hxx"
-
+#include "fpsofficeResMgr.hxx"
 #include "resourceprovider.hxx"
 
 using rtl::OUString;
 using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 
-static const char* const RES_NAME = "fps_office";
 static const char* const OTHER_RES_NAME = "svt";
 
 // we have to translate control ids to resource ids
 
 struct Entry
+{
+    sal_Int32 ctrlId;
+    const char* resId;
+};
+
+struct OldEntry
 {
     sal_Int32 ctrlId;
     sal_Int16 resId;
@@ -67,7 +72,7 @@ Entry const CtrlIdToResIdTable[] = {
     { LISTBOX_FILTER_LABEL,                     STR_SVT_FILEPICKER_FILTER_TITLE}
 };
 
-Entry const OtherCtrlIdToResIdTable[] = {
+OldEntry const OtherCtrlIdToResIdTable[] = {
     { FILE_PICKER_TITLE_OPEN,                   STR_FILEDLG_OPEN },
     { FILE_PICKER_TITLE_SAVE,                   STR_FILEDLG_SAVE },
     { FILE_PICKER_FILE_TYPE,                    STR_FILEDLG_TYPE }
@@ -76,20 +81,20 @@ Entry const OtherCtrlIdToResIdTable[] = {
 const sal_Int32 SIZE_TABLE = SAL_N_ELEMENTS( CtrlIdToResIdTable );
 const sal_Int32 OTHER_SIZE_TABLE = SAL_N_ELEMENTS( OtherCtrlIdToResIdTable );
 
-sal_Int16 CtrlIdToResId( sal_Int32 aControlId )
+const char* CtrlIdToResId(sal_Int32 aControlId)
 {
-    sal_Int16 aResId = -1;
+    const char *pResId = nullptr;
 
     for ( sal_Int32 i = 0; i < SIZE_TABLE; i++ )
     {
         if ( CtrlIdToResIdTable[i].ctrlId == aControlId )
         {
-            aResId = CtrlIdToResIdTable[i].resId;
+            pResId = CtrlIdToResIdTable[i].resId;
             break;
         }
     }
 
-    return aResId;
+    return pResId;
 }
 
 sal_Int16 OtherCtrlIdToResId( sal_Int32 aControlId )
@@ -113,13 +118,11 @@ class CResourceProvider_Impl
 public:
     CResourceProvider_Impl( )
     {
-        m_ResMgr = ResMgr::CreateResMgr( RES_NAME );
         m_OtherResMgr = ResMgr::CreateResMgr( OTHER_RES_NAME );
     }
 
     ~CResourceProvider_Impl( )
     {
-        delete m_ResMgr;
         delete m_OtherResMgr;
     }
 
@@ -131,15 +134,15 @@ public:
 
         try
         {
-            OSL_ASSERT( m_ResMgr && m_OtherResMgr );
+            OSL_ASSERT(m_OtherResMgr);
 
             // translate the control id to a resource id
-            sal_Int16 aResId = CtrlIdToResId( aId );
-            if ( aResId > -1 )
-                aResString = ResId( aResId, *m_ResMgr );
+            const char* pResId = CtrlIdToResId(aId);
+            if (pResId)
+                aResString = FpsResId(pResId);
             else
             {
-                aResId = OtherCtrlIdToResId( aId );
+                sal_Int16 aResId = OtherCtrlIdToResId( aId );
                 if ( aResId > -1 ) {
                     aResString = ResId( aResId, *m_OtherResMgr );
                 }
@@ -153,7 +156,6 @@ public:
     }
 
 public:
-    ResMgr* m_ResMgr;
     ResMgr* m_OtherResMgr;
 };
 

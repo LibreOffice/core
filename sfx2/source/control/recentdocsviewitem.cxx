@@ -23,7 +23,7 @@
 #include <unotools/historyoptions.hxx>
 #include <vcl/svapp.hxx>
 
-#include <templateview.hrc>
+#include <sfx2/strings.hrc>
 #include "bitmaps.hlst"
 
 using namespace basegfx;

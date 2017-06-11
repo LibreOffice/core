@@ -20,7 +20,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYDESIGNFIELDUNDOACT_HXX
 
 #include "GeneralUndo.hxx"
-#include "dbu_qry.hrc"
+#include "strings.hrc"
 #include "SelectionBrowseBox.hxx"
 
 namespace dbaui
@@ -37,7 +37,7 @@ namespace dbaui
         virtual void    Redo() override = 0;
 
     public:
-        OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, sal_uInt16 nCommentID);
+        OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, const char* pCommentID);
         virtual ~OQueryDesignFieldUndoAct() override;
 
         void SetColumnPosition(sal_uInt16 _nColumnPosition)
@@ -92,7 +92,7 @@ namespace dbaui
         OTableFieldDescRef      pDescr;     // the deleted column description
 
     public:
-        OTabFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, sal_uInt16 nCommentID) : OQueryDesignFieldUndoAct(pSelBrwBox, nCommentID) { }
+        OTabFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, const char* pCommentID) : OQueryDesignFieldUndoAct(pSelBrwBox, pCommentID) { }
 
         void SetTabFieldDescr(OTableFieldDescRef const & pDescription) { pDescr = pDescription; }
     };

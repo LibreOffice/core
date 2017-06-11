@@ -29,7 +29,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmlEnums.hxx"
-#include "xmlstrings.hrc"
+#include "stringconstants.hxx"
 #include <rtl/strbuf.hxx>
 
 namespace dbaxml

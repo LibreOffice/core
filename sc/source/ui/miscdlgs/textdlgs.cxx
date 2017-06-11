@@ -20,6 +20,7 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <svx/svxids.hrc>
+#include <svx/dialogs.hrc>
 
 #include <editeng/flstitem.hxx>
 #include <sfx2/objsh.hxx>

@@ -156,7 +156,7 @@ protected:
     SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SdrLayerIDSet* pMVisLay, SdrObject*& rpRootObj) const;
     SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SdrLayerIDSet* pMVisLay, SdrObject*& rpRootObj,const SdrMarkList * pMarkList) const;
     bool ImpIsFrameHandles() const;
-    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, ImpTakeDescriptionOptions nOpt=ImpTakeDescriptionOptions::NONE) const;
+    void ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr, ImpTakeDescriptionOptions nOpt=ImpTakeDescriptionOptions::NONE) const;
 
     // Generates a string including degrees symbol, from an angel specification in 1/100deg
     bool ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark);

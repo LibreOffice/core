@@ -20,7 +20,7 @@
 #include "ImageControl.hxx"
 
 #include "property.hrc"
-#include "frm_resource.hrc"
+#include "strings.hrc"
 #include "frm_resource.hxx"
 #include "services.hxx"
 #include "componenttools.hxx"

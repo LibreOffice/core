@@ -66,11 +66,7 @@ Module gid_Module_Langpack_Calc_Template
     Name = "gid_Module_Langpack_Calc_Template";
     Description = "gid_Module_Langpack_Calc_Template";
     Styles = (TEMPLATEMODULE);
-    Files = (gid_File_Res_Analysis,
-             gid_File_Res_Date,
-             gid_File_Res_Pricing,
-             gid_File_Res_Sc,
-             gid_File_Res_Solver);
+    Files = ();
 End
 
 Module gid_Module_Prg_Calc_MSO_Reg

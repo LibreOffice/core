@@ -10,6 +10,7 @@ $(eval $(call gb_Module_Module,i18nlangtag))
 
 $(eval $(call gb_Module_add_targets,i18nlangtag,\
 	Library_i18nlangtag \
+	Executable_localestr \
 ))
 
 $(eval $(call gb_Module_add_check_targets,i18nlangtag,\

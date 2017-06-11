@@ -86,7 +86,7 @@ protected:
     css::uno::Sequence< double >                            maSolution;
     OUString                                                maStatus;
 
-    static OUString GetResourceString( sal_uInt32 nId );
+    static OUString GetResourceString(const char* pId);
     static css::uno::Reference<css::table::XCell> GetCell(
             const css::uno::Reference<css::sheet::XSpreadsheetDocument>& xDoc,
             const css::table::CellAddress& rPos );

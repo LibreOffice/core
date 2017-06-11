@@ -27,9 +27,8 @@
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include "TConnection.hxx"
-#include "resource/common_res.hrc"
+#include "strings.hrc"
 #include "resource/sharedresources.hxx"
-
 
 namespace connectivity
 {

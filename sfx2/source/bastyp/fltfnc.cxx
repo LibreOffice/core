@@ -72,7 +72,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/progress.hxx>
 #include "openflag.hxx"
-#include "bastyp.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/doctempl.hxx>
 #include <sfx2/frame.hxx>

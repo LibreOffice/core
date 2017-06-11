@@ -40,13 +40,14 @@
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include <connectivity/dbtools.hxx>
 #include <comphelper/sequence.hxx>
 #include "querydlg.hxx"
 #include "JoinExchange.hxx"
 #include <comphelper/extract.hxx>
-#include "dbu_qry.hrc"
+#include "strings.hrc"
+#include "strings.hxx"
 #include <vcl/msgbox.hxx>
 #include "svtools/treelistentry.hxx"
 
@@ -696,7 +697,7 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
         OQueryDesignView* pParent = static_cast<OQueryDesignView*>(getDesignView());
 
         SfxUndoManager& rUndoMgr = m_pView->getController().GetUndoManager();
-        rUndoMgr.EnterListAction( OUString( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), OUString(), 0, ViewShellId(-1) );
+        rUndoMgr.EnterListAction(DBA_RES(STR_QUERY_UNDO_TABWINDELETE) , OUString(), 0, ViewShellId(-1));
 
         // add the Undo-Action
         OQueryTabWinDelUndoAct* pUndoAction = new OQueryTabWinDelUndoAct(this);
@@ -902,7 +903,7 @@ bool OQueryTableView::ExistsAVisitedConn(const OQueryTableWindow* pFrom) const
 
 void OQueryTableView::onNoColumns_throw()
 {
-    OUString sError( ModuleRes( STR_STATEMENT_WITHOUT_RESULT_SET ) );
+    OUString sError(DBA_RES(STR_STATEMENT_WITHOUT_RESULT_SET));
     ::dbtools::throwSQLException( sError, ::dbtools::StandardSQLState::GENERAL_ERROR, nullptr );
 }
 
