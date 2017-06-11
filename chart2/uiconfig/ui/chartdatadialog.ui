@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="chart">
   <requires lib="gtk+" version="3.4"/>
   <object class="GtkDialog" id="ChartDataDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Data Table</property>
+    <property name="title" translatable="yes" context="chartdatadialog|ChartDataDialog">Data Table</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -85,7 +85,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">InsertRow</property>
-                    <property name="label" translatable="yes">Insert Row</property>
+                    <property name="label" translatable="yes" context="chartdatadialog|InsertRow">Insert Row</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon01.png</property>
                   </object>
@@ -99,7 +99,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">InsertColumn</property>
-                    <property name="label" translatable="yes">Insert Series</property>
+                    <property name="label" translatable="yes" context="chartdatadialog|InsertColumn">Insert Series</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon02.png</property>
                   </object>
@@ -113,7 +113,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">InsertTextColumn</property>
-                    <property name="label" translatable="yes">Insert Text Column</property>
+                    <property name="label" translatable="yes" context="chartdatadialog|InsertTextColumn">Insert Text Column</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon07.png</property>
                   </object>
@@ -127,7 +127,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">RemoveRow</property>
-                    <property name="label" translatable="yes">Delete Row</property>
+                    <property name="label" translatable="yes" context="chartdatadialog|RemoveRow">Delete Row</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon03.png</property>
                   </object>
@@ -141,7 +141,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">RemoveColumn</property>
-                    <property name="label" translatable="yes">Delete Series</property>
+                    <property name="label" translatable="yes" context="chartdatadialog|RemoveColumn">Delete Series</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon04.png</property>
                   </object>
@@ -165,7 +165,7 @@
                       <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">MoveLeftColumn</property>
-                    <property name="label" translatable="yes">Move Series Left</property>
+                    <property name="label" translatable="yes" context="chartdatadialog|MoveLeftColumn">Move Series Left</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon08.png</property>
                   </object>
@@ -179,7 +179,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">MoveRightColumn</property>
-                    <property name="label" translatable="yes">Move Series Right</property>
+                    <property name="label" translatable="yes" context="chartdatadialog|MoveRightColumn">Move Series Right</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon05.png</property>
                   </object>
@@ -193,7 +193,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">MoveUpRow</property>
-                    <property name="label" translatable="yes">Move Row Up</property>
+                    <property name="label" translatable="yes" context="chartdatadialog|MoveUpRow">Move Row Up</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon09.png</property>
                   </object>
@@ -207,7 +207,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">MoveDownRow</property>
-                    <property name="label" translatable="yes">Move Row Down</property>
+                    <property name="label" translatable="yes" context="chartdatadialog|MoveDownRow">Move Row Down</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">chart2/res/dataeditor_icon06.png</property>
                   </object>

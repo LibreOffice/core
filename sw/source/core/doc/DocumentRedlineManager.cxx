@@ -26,7 +26,7 @@
 #include <UndoRedline.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <swmodule.hxx>
 #include <editsh.hxx>
 #include <vcl/layout.hxx>

@@ -33,7 +33,7 @@
 #include <viewimp.hxx>
 #include <viewopt.hxx>
 #include <swregion.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <frmtool.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <printdata.hxx>

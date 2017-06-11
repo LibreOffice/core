@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="svx">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="AddInstanceDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Add Instance</property>
+    <property name="title" translatable="yes" context="addinstancedialog|AddInstanceDialog">Add Instance</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -95,7 +95,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">1</property>
-                <property name="label" translatable="yes">_Name:</property>
+                <property name="label" translatable="yes" context="addinstancedialog|label2">_Name:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">name</property>
               </object>
@@ -108,7 +108,7 @@
               <object class="GtkLabel" id="alttitle">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Edit Instance</property>
+                <property name="label" translatable="yes" context="addinstancedialog|alttitle">Edit Instance</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -121,7 +121,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">1</property>
-                <property name="label" translatable="yes">_URL:</property>
+                <property name="label" translatable="yes" context="addinstancedialog|urlft">_URL:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">name</property>
               </object>
@@ -143,7 +143,7 @@
             </child>
             <child>
               <object class="GtkButton" id="browse">
-                <property name="label" translatable="yes">_Browse...</property>
+                <property name="label" translatable="yes" context="addinstancedialog|browse">_Browse...</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -156,7 +156,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="link">
-                <property name="label" translatable="yes">_Link instance</property>
+                <property name="label" translatable="yes" context="addinstancedialog|link">_Link instance</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>

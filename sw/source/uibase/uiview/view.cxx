@@ -86,8 +86,8 @@
 #include <barcfg.hxx>
 #include <pview.hxx>
 #include <swdtflvr.hxx>
-#include <view.hrc>
-#include <globdoc.hrc>
+#include <strings.hrc>
+#include <strings.hrc>
 #include <frmui.hrc>
 #include <cfgitems.hxx>
 #include <prtopt.hxx>

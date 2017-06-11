@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="SolverSuccessDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Solving Result</property>
+    <property name="title" translatable="yes" context="solversuccessdialog|SolverSuccessDialog">Solving Result</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -23,7 +23,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Do you want to keep the result or do you want to restore previous values?</property>
+                <property name="label" translatable="yes" context="solversuccessdialog|label1">Do you want to keep the result or do you want to restore previous values?</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">40</property>
               </object>
@@ -37,7 +37,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Solving successfully finished.</property>
+                <property name="label" translatable="yes" context="solversuccessdialog|label2">Solving successfully finished.</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -49,7 +49,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Result:</property>
+                <property name="label" translatable="yes" context="solversuccessdialog|result">Result:</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -69,7 +69,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="ok">
-                <property name="label" translatable="yes">Keep Result</property>
+                <property name="label" translatable="yes" context="solversuccessdialog|ok">Keep Result</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -85,7 +85,7 @@
             </child>
             <child>
               <object class="GtkButton" id="cancel">
-                <property name="label" translatable="yes">Restore Previous</property>
+                <property name="label" translatable="yes" context="solversuccessdialog|cancel">Restore Previous</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

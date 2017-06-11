@@ -180,7 +180,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/window.hxx>
-#include <ModuleHelper.hxx>
 #include <RptDef.hxx>
 #include <RptModel.hxx>
 #include <RptObject.hxx>
@@ -379,8 +378,6 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <reportformula.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
-#include <rsc/rscsfx.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/linksrc.hxx>
 #include <sot/exchange.hxx>
@@ -527,7 +524,6 @@
 #include <tools/multisel.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
-#include <tools/resid.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>

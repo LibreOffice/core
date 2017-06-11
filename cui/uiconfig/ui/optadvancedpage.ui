@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.19.0 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="OptAdvancedPage">
@@ -35,7 +35,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="javaenabled">
-                    <property name="label" translatable="yes">_Use a Java runtime environment</property>
+                    <property name="label" translatable="yes" context="optadvancedpage|javaenabled">_Use a Java runtime environment</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -69,7 +69,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes">_Java runtime environments (JRE) already installed:</property>
+                            <property name="label" translatable="yes" context="optadvancedpage|label2">_Java runtime environments (JRE) already installed:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">javas</property>
                           </object>
@@ -95,7 +95,7 @@
                                 <property name="layout_style">start</property>
                                 <child>
                                   <object class="GtkButton" id="add">
-                                    <property name="label" translatable="yes">_Add...</property>
+                                    <property name="label" translatable="yes" context="optadvancedpage|add">_Add...</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
@@ -109,7 +109,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="parameters">
-                                    <property name="label" translatable="yes">_Parameters...</property>
+                                    <property name="label" translatable="yes" context="optadvancedpage|parameters">_Parameters...</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
@@ -123,7 +123,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="classpath">
-                                    <property name="label" translatable="yes">_Class Path...</property>
+                                    <property name="label" translatable="yes" context="optadvancedpage|classpath">_Class Path...</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
@@ -156,7 +156,7 @@
                                       <object class="GtkLabel" id="vendor">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">Vendor</property>
+                                        <property name="label" translatable="yes" context="optadvancedpage|vendor">Vendor</property>
                                         <property name="xalign">0</property>
                                       </object>
                                       <packing>
@@ -168,7 +168,7 @@
                                       <object class="GtkLabel" id="version">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">Version</property>
+                                        <property name="label" translatable="yes" context="optadvancedpage|version">Version</property>
                                         <property name="xalign">0</property>
                                       </object>
                                       <packing>
@@ -180,7 +180,7 @@
                                       <object class="GtkLabel" id="features">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">Features</property>
+                                        <property name="label" translatable="yes" context="optadvancedpage|features">Features</property>
                                         <property name="xalign">0</property>
                                       </object>
                                       <packing>
@@ -192,7 +192,7 @@
                                       <object class="GtkLabel" id="a11y">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">with accessibility support</property>
+                                        <property name="label" translatable="yes" context="optadvancedpage|a11y">with accessibility support</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -203,7 +203,7 @@
                                       <object class="GtkLabel" id="selectruntime">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">Select a Java Runtime Environment</property>
+                                        <property name="label" translatable="yes" context="optadvancedpage|selectruntime">Select a Java Runtime Environment</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">2</property>
@@ -251,7 +251,7 @@
                           <object class="GtkLabel" id="javapath">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Location: </property>
+                            <property name="label" translatable="yes" context="optadvancedpage|javapath">Location: </property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -277,7 +277,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Java Options</property>
+            <property name="label" translatable="yes" context="optadvancedpage|label1">Java Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -312,7 +312,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="experimental">
-                    <property name="label" translatable="yes">Enable experimental features (may be unstable)</property>
+                    <property name="label" translatable="yes" context="optadvancedpage|experimental">Enable experimental features (may be unstable)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -327,7 +327,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="macrorecording">
-                    <property name="label" translatable="yes">Enable macro recording (may be limited)</property>
+                    <property name="label" translatable="yes" context="optadvancedpage|macrorecording">Enable macro recording (may be limited)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -341,7 +341,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="expertconfig">
-                    <property name="label" translatable="yes">Open Expert Configuration</property>
+                    <property name="label" translatable="yes" context="optadvancedpage|expertconfig">Open Expert Configuration</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -361,7 +361,7 @@
           <object class="GtkLabel" id="label12">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Optional Features</property>
+            <property name="label" translatable="yes" context="optadvancedpage|label12">Optional Features</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

@@ -24,6 +24,7 @@
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
+#include <svx/svxids.hrc>
 #include <svx/svdundo.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
@@ -33,7 +34,7 @@
 #include <svx/xsflclit.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svdoashp.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/svdview.hxx>
 #include <editeng/colritem.hxx>
 #include "svx/chrtitem.hxx"
@@ -451,7 +452,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
 void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBindings )
 {
     sal_uInt16 nSID = rReq.GetSlot();
-    sal_uInt16 nStrResId = 0;
+    const char* pStrResId = nullptr;
 
     const bool bUndo = pSdrView && pSdrView->IsUndoEnabled();
 
@@ -459,74 +460,74 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
     {
         case SID_EXTRUSION_TOOGLE:
         {
-            if ( !nStrResId )
-                nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ON_OFF;
+            if ( !pStrResId )
+                pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ON_OFF;
             SAL_FALLTHROUGH;
         }
         case SID_EXTRUSION_TILT_DOWN:
         {
-            if ( !nStrResId )
-                nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ROTATE_DOWN;
+            if ( !pStrResId )
+                pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ROTATE_DOWN;
             SAL_FALLTHROUGH;
         }
         case SID_EXTRUSION_TILT_UP:
         {
-            if ( !nStrResId )
-                nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ROTATE_UP;
+            if ( !pStrResId )
+                pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ROTATE_UP;
             SAL_FALLTHROUGH;
         }
         case SID_EXTRUSION_TILT_LEFT:
         {
-            if ( !nStrResId )
-                nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ROTATE_LEFT;
+            if ( !pStrResId )
+                pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ROTATE_LEFT;
             SAL_FALLTHROUGH;
         }
         case SID_EXTRUSION_TILT_RIGHT:
         {
-            if ( !nStrResId )
-                nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ROTATE_RIGHT;
+            if ( !pStrResId )
+                pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ROTATE_RIGHT;
             SAL_FALLTHROUGH;
         }
         case SID_EXTRUSION_DIRECTION:
         {
-            if ( !nStrResId )
-                nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ORIENTATION;
+            if ( !pStrResId )
+                pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ORIENTATION;
             SAL_FALLTHROUGH;
         }
         case SID_EXTRUSION_PROJECTION:
         {
-            if ( !nStrResId )
-                nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_PROJECTION;
+            if ( !pStrResId )
+                pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_PROJECTION;
             SAL_FALLTHROUGH;
         }
         case SID_EXTRUSION_DEPTH:
         {
-            if ( !nStrResId )
-                nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_DEPTH;
+            if ( !pStrResId )
+                pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_DEPTH;
             SAL_FALLTHROUGH;
         }
         case SID_EXTRUSION_3D_COLOR:
         {
-            if ( !nStrResId )
-                nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_COLOR;
+            if ( !pStrResId )
+                pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_COLOR;
             SAL_FALLTHROUGH;
         }
         case SID_EXTRUSION_SURFACE:
         {
-            if ( !nStrResId )
-                nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_SURFACE;
+            if ( !pStrResId )
+                pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_SURFACE;
             SAL_FALLTHROUGH;
         }
         case SID_EXTRUSION_LIGHTING_INTENSITY:
         {
-            if ( !nStrResId )
-                nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_BRIGHTNESS;
+            if ( !pStrResId )
+                pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_BRIGHTNESS;
             SAL_FALLTHROUGH;
         }
         case SID_EXTRUSION_LIGHTING_DIRECTION:
         {
-            if ( !nStrResId )
-                nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_LIGHTING;
+            if ( !pStrResId )
+                pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_LIGHTING;
 
             if (pSdrView)
             {
@@ -540,7 +541,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
                     {
                         if( bUndo )
                         {
-                            OUString aStr( SvxResId( nStrResId ) );
+                            OUString aStr( SvxResId( pStrResId ) );
                             pSdrView->BegUndo( aStr );
                             pSdrView->AddUndo( pSdrView->GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pObj ) );
                         }

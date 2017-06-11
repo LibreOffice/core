@@ -35,7 +35,7 @@ class MasterPasswordDialog : public ModalDialog
     DECL_LINK(OKHdl_Impl, Button*, void);
 
 public:
-    MasterPasswordDialog( vcl::Window* pParent, css::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr );
+    MasterPasswordDialog(vcl::Window* pParent, css::task::PasswordRequestMode nDlgMode, const std::locale& rLocale);
     virtual ~MasterPasswordDialog() override;
     virtual void dispose() override;
 
@@ -43,7 +43,7 @@ public:
 
 private:
     css::task::PasswordRequestMode     nDialogMode;
-    ResMgr*                            pResourceMgr;
+    const std::locale&                 rResLocale;
 };
 
 #endif // INCLUDED_UUI_SOURCE_MASTERPASSWORDDLG_HXX

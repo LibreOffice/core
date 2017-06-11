@@ -75,7 +75,6 @@ namespace vcl { class Window; }
 struct SfxChildWinFactory;
 struct SfxStbCtrlFactory;
 struct SfxTbxCtrlFactory;
-class SimpleResMgr;
 class ModalDialog;
 class SbxArray;
 class SbxValue;
@@ -134,8 +133,8 @@ public:
     static SfxApplication*      GetOrCreate();
     static SfxApplication*      Get();
 
-    // Resource Manager
-    static ResMgr*              GetSfxResManager();
+    // Resource Locale
+    static std::locale*         GetSfxResLocale();
 
     // DDE
 #if defined(_WIN32)

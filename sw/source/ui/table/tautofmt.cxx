@@ -33,6 +33,7 @@
 #include <svtools/accessibilityoptions.hxx>
 #include <svx/framelinkarray.hxx>
 #include "app.hrc"
+#include "strings.hrc"
 #include "swmodule.hxx"
 #include "swtypes.hxx"
 #include "view.hxx"

@@ -49,10 +49,8 @@
 #include <sfx2/app.hxx>
 #include <cmdid.h>
 #include <helpid.h>
-#include <ribbar.hrc>
-#include <utlui.hrc>
 
-#include "access.hrc"
+#include "strings.hrc"
 #include "globals.hrc"
 #include "bitmaps.hlst"
 
@@ -582,6 +580,13 @@ void SwNavigationPI::ZoomIn()
     m_aContentToolBox->CheckItem(m_aContentToolBox->GetItemId("listbox"), false);
 }
 
+enum StatusIndex
+{
+    IDX_STR_HIDDEN = 0,
+    IDX_STR_ACTIVE = 1,
+    IDX_STR_INACTIVE = 2
+};
+
 SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
                                vcl::Window* pParent)
     : PanelLayout(pParent, "NavigatorPanel", "modules/swriter/ui/navigatorpanel.ui", nullptr)
@@ -651,10 +656,27 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
         m_aContentToolBox->HideItem(m_aContentToolBox->GetItemId("toggle"));
     }
 
+    const char* REGIONNAME_ARY[] =
+    {
+        STR_HYPERLINK,
+        STR_LINK_REGION,
+        STR_COPY_REGION
+    };
+
+    const char* REGIONMODE_ARY[] =
+    {
+        STR_HIDDEN,
+        STR_ACTIVE,
+        STR_INACTIVE
+    };
+
+    static_assert(SAL_N_ELEMENTS(REGIONNAME_ARY) == SAL_N_ELEMENTS(REGIONMODE_ARY), "### unexpected size!");
+    static_assert(SAL_N_ELEMENTS(REGIONNAME_ARY) == static_cast<sal_uInt16>(RegionMode::EMBEDDED) + 1, "### unexpected size!");
+
     for (sal_uInt16 i = 0; i <= static_cast<sal_uInt16>(RegionMode::EMBEDDED); ++i)
     {
-        m_aContextArr[i] = SwResId(STR_HYPERLINK + i);
-        m_aStatusArr[i] = SwResId(STR_STATUS_FIRST + i);
+        m_aContextArr[i] = SwResId(REGIONNAME_ARY[i]);
+        m_aStatusArr[i] = SwResId(REGIONMODE_ARY[i]);
     }
 
     m_aStatusArr[3] = SwResId(STR_ACTIVE_VIEW);
@@ -931,10 +953,10 @@ void SwNavigationPI::UpdateListBox()
             if (pView == pActView)
             {
                 nAct = nCount;
-                sEntry += m_aStatusArr[STR_ACTIVE - STR_STATUS_FIRST];
+                sEntry += m_aStatusArr[IDX_STR_ACTIVE];
             }
             else
-                sEntry += m_aStatusArr[STR_INACTIVE - STR_STATUS_FIRST];
+                sEntry += m_aStatusArr[IDX_STR_INACTIVE];
             sEntry += ")";
             m_aDocListBox->InsertEntry(sEntry);
 
@@ -953,7 +975,7 @@ void SwNavigationPI::UpdateListBox()
         OUString sEntry = m_aContentTree->GetHiddenWrtShell()->GetView().
                                         GetDocShell()->GetTitle();
         sEntry += " (";
-        sEntry += m_aStatusArr[STR_HIDDEN - STR_STATUS_FIRST];
+        sEntry += m_aStatusArr[IDX_STR_HIDDEN];
         sEntry += ")";
         m_aDocListBox->InsertEntry(sEntry);
         bDisable = false;

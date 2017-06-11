@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -13,7 +13,7 @@
   <object class="GtkDialog" id="TextImportCsvDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Text Import</property>
+    <property name="title" translatable="yes" context="textimportcsv|TextImportCsvDialog">Text Import</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -107,7 +107,7 @@
                           <object class="GtkLabel" id="textcharset">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Ch_aracter set:</property>
+                            <property name="label" translatable="yes" context="textimportcsv|textcharset">Ch_aracter set:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">charset</property>
                             <property name="xalign">0</property>
@@ -121,7 +121,7 @@
                           <object class="GtkLabel" id="textlanguage">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Language:</property>
+                            <property name="label" translatable="yes" context="textimportcsv|textlanguage">_Language:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">language</property>
                             <property name="xalign">0</property>
@@ -135,7 +135,7 @@
                           <object class="GtkLabel" id="textfromrow">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">From ro_w:</property>
+                            <property name="label" translatable="yes" context="textimportcsv|textfromrow">From ro_w:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">fromrow</property>
                             <property name="xalign">0</property>
@@ -186,7 +186,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Import</property>
+                    <property name="label" translatable="yes" context="textimportcsv|label1">Import</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -228,7 +228,7 @@
                             <property name="homogeneous">True</property>
                             <child>
                               <object class="GtkRadioButton" id="tofixedwidth">
-                                <property name="label" translatable="yes">_Fixed width</property>
+                                <property name="label" translatable="yes" context="textimportcsv|tofixedwidth">_Fixed width</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -245,7 +245,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="toseparatedby">
-                                <property name="label" translatable="yes">_Separated by</property>
+                                <property name="label" translatable="yes" context="textimportcsv|toseparatedby">_Separated by</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -283,7 +283,7 @@
                                 <property name="column_spacing">12</property>
                                 <child>
                                   <object class="GtkCheckButton" id="tab">
-                                    <property name="label" translatable="yes">_Tab</property>
+                                    <property name="label" translatable="yes" context="textimportcsv|tab">_Tab</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -299,7 +299,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="mergedelimiters">
-                                    <property name="label" translatable="yes">Merge _delimiters</property>
+                                    <property name="label" translatable="yes" context="textimportcsv|mergedelimiters">Merge _delimiters</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -317,7 +317,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="comma">
-                                    <property name="label" translatable="yes">_Comma</property>
+                                    <property name="label" translatable="yes" context="textimportcsv|comma">_Comma</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -333,7 +333,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="semicolon">
-                                    <property name="label" translatable="yes">S_emicolon</property>
+                                    <property name="label" translatable="yes" context="textimportcsv|semicolon">S_emicolon</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -349,7 +349,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="space">
-                                    <property name="label" translatable="yes">S_pace</property>
+                                    <property name="label" translatable="yes" context="textimportcsv|space">S_pace</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -371,7 +371,7 @@
                                     <property name="column_spacing">12</property>
                                     <child>
                                       <object class="GtkCheckButton" id="other">
-                                        <property name="label" translatable="yes">Othe_r</property>
+                                        <property name="label" translatable="yes" context="textimportcsv|other">Othe_r</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
@@ -400,7 +400,7 @@
                                         </accessibility>
                                         <child internal-child="accessible">
                                           <object class="AtkObject" id="inputother-atkobject">
-                                            <property name="AtkObject::accessible-name" translatable="yes">Other</property>
+                                            <property name="AtkObject::accessible-name" translatable="yes" context="textimportcsv|inputother-atkobject">Other</property>
                                           </object>
                                         </child>
                                       </object>
@@ -425,7 +425,7 @@
                                       <object class="GtkLabel" id="texttextdelimiter">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">Te_xt delimiter:</property>
+                                        <property name="label" translatable="yes" context="textimportcsv|texttextdelimiter">Te_xt delimiter:</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">textdelimiter</property>
                                         <property name="xalign">0</property>
@@ -476,7 +476,7 @@
                   <object class="GtkLabel" id="separatoroptions">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Separator Options</property>
+                    <property name="label" translatable="yes" context="textimportcsv|separatoroptions">Separator Options</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -510,7 +510,7 @@
                         <property name="homogeneous">True</property>
                         <child>
                           <object class="GtkCheckButton" id="quotedfieldastext">
-                            <property name="label" translatable="yes">_Quoted field as text</property>
+                            <property name="label" translatable="yes" context="textimportcsv|quotedfieldastext">_Quoted field as text</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -526,7 +526,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="detectspecialnumbers">
-                            <property name="label" translatable="yes">Detect special _numbers</property>
+                            <property name="label" translatable="yes" context="textimportcsv|detectspecialnumbers">Detect special _numbers</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -548,7 +548,7 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Other Options</property>
+                    <property name="label" translatable="yes" context="textimportcsv|label3">Other Options</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -590,7 +590,7 @@
                               <object class="GtkLabel" id="textcolumntype">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Column t_ype:</property>
+                                <property name="label" translatable="yes" context="textimportcsv|textcolumntype">Column t_ype:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">columntype</property>
                               </object>
@@ -635,7 +635,7 @@
                           <object class="GtkLabel" id="textalttitle">
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
-                            <property name="label" translatable="yes">Text to Columns</property>
+                            <property name="label" translatable="yes" context="textimportcsv|textalttitle">Text to Columns</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -651,7 +651,7 @@
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Fields</property>
+                    <property name="label" translatable="yes" context="textimportcsv|label4">Fields</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_INC_GLOB_HXX
 #define INCLUDED_SD_INC_GLOB_HXX
 
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 #include <sal/types.h>
 
 #define SD_IF_SDAPP                     SFX_INTERFACE_SD_START + SfxInterfaceId(0)

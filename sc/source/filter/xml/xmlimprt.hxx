@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLIMPRT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLIMPRT_HXX
 
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltkmap.hxx>

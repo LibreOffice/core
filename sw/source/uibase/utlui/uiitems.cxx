@@ -24,8 +24,7 @@
 #include "cmdid.h"
 #include "uiitems.hxx"
 
-#include "utlui.hrc"
-#include "attrdesc.hrc"
+#include "strings.hrc"
 #include <unomid.h>
 #include <numrule.hxx>
 

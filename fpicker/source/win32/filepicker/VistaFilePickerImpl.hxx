@@ -316,9 +316,6 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
 
 
         OUString m_sFilename;
-
-        // Resource provider
-        CResourceProvider m_ResProvider;
 };
 
 } // namespace vista

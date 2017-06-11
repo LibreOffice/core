@@ -21,7 +21,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
-#include <tools/resary.hxx>
 #include <vcl/graph.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/itemiter.hxx>
@@ -32,6 +31,7 @@
 #include <sal/macros.h>
 
 #include <cuires.hrc>
+#include <strings.hrc>
 #include "helpid.hrc"
 #include "page.hxx"
 #include <svx/pageitem.hxx>

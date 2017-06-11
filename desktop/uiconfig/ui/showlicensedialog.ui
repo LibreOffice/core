@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="dkt">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="ShowLicenseDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Extension Software License Agreement</property>
+    <property name="title" translatable="yes" context="showlicensedialog|ShowLicenseDialog">Extension Software License Agreement</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="cui">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkFrame" id="PickGraphicPage">
     <property name="visible">True</property>
@@ -42,7 +42,7 @@
               <object class="GtkLabel" id="errorft">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">The Gallery theme 'Bullets' is empty (no images).</property>
+                <property name="label" translatable="yes" context="pickgraphicpage|errorft">The Gallery theme 'Bullets' is empty (no images).</property>
                 <property name="wrap">True</property>
               </object>
               <packing>
@@ -54,7 +54,7 @@
             </child>
             <child>
               <object class="GtkButton" id="browseBtn">
-                <property name="label" translatable="yes">Add and Resize</property>
+                <property name="label" translatable="yes" context="pickgraphicpage|browseBtn">Add and Resize</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
@@ -72,7 +72,7 @@
       <object class="GtkLabel" id="label25">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Selection</property>
+        <property name="label" translatable="yes" context="pickgraphicpage|label25">Selection</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>

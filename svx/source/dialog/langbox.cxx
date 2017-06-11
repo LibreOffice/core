@@ -30,7 +30,7 @@
 #include <editeng/unolingu.hxx>
 #include <svx/langbox.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include "bitmaps.hlst"
 #include <vcl/builderfactory.hxx>
 #include <vcl/i18nhelp.hxx>

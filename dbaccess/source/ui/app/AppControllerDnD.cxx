@@ -22,7 +22,8 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/processfactory.hxx>
-#include "dbustrings.hrc"
+#include "core_resource.hxx"
+#include "stringconstants.hxx"
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -55,7 +56,7 @@
 #include <svx/dbaobjectex.hxx>
 #include "browserids.hxx"
 #include "dbu_reghelper.hxx"
-#include "dbu_app.hrc"
+#include "strings.hrc"
 #include <vcl/menu.hxx>
 #include <comphelper/uno3.hxx>
 #include <vcl/svapp.hxx>
@@ -176,7 +177,7 @@ void OApplicationController::deleteTables(const std::vector< OUString>& _rList)
         }
         else
         {
-            OUString sMessage(ModuleRes(STR_MISSING_TABLES_XDROP));
+            OUString sMessage(DBA_RES(STR_MISSING_TABLES_XDROP));
             ScopedVclPtrInstance< MessageDialog > aError(getView(), sMessage);
             aError->Execute();
         }
@@ -345,7 +346,7 @@ const SharedConnection& OApplicationController::ensureConnection( ::dbtools::SQL
     {
         SolarMutexGuard aSolarGuard;
 
-        OUString sConnectingContext( ModuleRes( STR_COULDNOTCONNECT_DATASOURCE ) );
+        OUString sConnectingContext(DBA_RES(STR_COULDNOTCONNECT_DATASOURCE));
         sConnectingContext = sConnectingContext.replaceFirst("$name$", getStrippedDatabaseName());
 
         // do the connection *without* holding getMutex() to avoid deadlock
@@ -621,7 +622,7 @@ bool OApplicationController::paste( ElementType _eType, const svx::ODataAccessDe
 
                     if ( sTargetName.isEmpty() )
                     {
-                        OUString sDefaultName = OUString( ModuleRes( STR_QRY_TITLE ) );
+                        OUString sDefaultName = DBA_RES(STR_QRY_TITLE);
                         sDefaultName = sDefaultName.getToken( 0, ' ' );
 
                         Reference< XNameAccess > xQueries( getQueryDefinitions(), UNO_QUERY_THROW );

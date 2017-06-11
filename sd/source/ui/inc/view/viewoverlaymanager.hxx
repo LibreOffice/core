@@ -24,7 +24,6 @@
 #include <svl/lstner.hxx>
 #include "EventMultiplexer.hxx"
 #include "ViewShellBase.hxx"
-#include "res_bmp.hrc"
 
 namespace sd
 {

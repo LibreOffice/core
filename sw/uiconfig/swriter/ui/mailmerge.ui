@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
@@ -9,7 +9,7 @@
   <object class="GtkDialog" id="MailmergeDialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
-    <property name="title" translatable="yes">Mail Merge</property>
+    <property name="title" translatable="yes" context="mailmerge|MailmergeDialog">Mail Merge</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -128,7 +128,7 @@
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkRadioButton" id="all">
-                                <property name="label" translatable="yes">_All</property>
+                                <property name="label" translatable="yes" context="mailmerge|all">_All</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -146,7 +146,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="selected">
-                                <property name="label" translatable="yes">_Selected records</property>
+                                <property name="label" translatable="yes" context="mailmerge|selected">_Selected records</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -169,7 +169,7 @@
                                 <property name="spacing">12</property>
                                 <child>
                                   <object class="GtkRadioButton" id="rbfrom">
-                                    <property name="label" translatable="yes">_From:</property>
+                                    <property name="label" translatable="yes" context="mailmerge|rbfrom">_From:</property>
                                     <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
@@ -203,7 +203,7 @@
                                   <object class="GtkLabel" id="label3">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">_To:</property>
+                                    <property name="label" translatable="yes" context="mailmerge|label3">_To:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">to</property>
                                   </object>
@@ -242,7 +242,7 @@
                       <object class="GtkLabel" id="recordslabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Records</property>
+                        <property name="label" translatable="yes" context="mailmerge|recordslabel">Records</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -282,7 +282,7 @@
                                 <property name="spacing">6</property>
                                 <child>
                                   <object class="GtkRadioButton" id="printer">
-                                    <property name="label" translatable="yes">_Printer</property>
+                                    <property name="label" translatable="yes" context="mailmerge|printer">_Printer</property>
                                     <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
@@ -300,7 +300,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkRadioButton" id="electronic">
-                                    <property name="label" translatable="yes">_Electronic</property>
+                                    <property name="label" translatable="yes" context="mailmerge|electronic">_Electronic</property>
                                     <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
@@ -318,7 +318,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkRadioButton" id="file">
-                                    <property name="label" translatable="yes">File</property>
+                                    <property name="label" translatable="yes" context="mailmerge|file">File</property>
                                     <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
@@ -342,7 +342,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="singlejobs">
-                                <property name="label" translatable="yes">_Single print jobs</property>
+                                <property name="label" translatable="yes" context="mailmerge|singlejobs">_Single print jobs</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -391,7 +391,7 @@
                                                 <property name="column_spacing">6</property>
                                                 <child>
                                                   <object class="GtkCheckButton" id="generate">
-                                                    <property name="label" translatable="yes">Generate file name from _database</property>
+                                                    <property name="label" translatable="yes" context="mailmerge|generate">Generate file name from _database</property>
                                                     <property name="use_action_appearance">False</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
@@ -412,7 +412,7 @@
                                                     <property name="can_focus">False</property>
                                                     <property name="halign">start</property>
                                                     <property name="xalign">0</property>
-                                                    <property name="label" translatable="yes">Field:</property>
+                                                    <property name="label" translatable="yes" context="mailmerge|fieldlabel">Field:</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -425,7 +425,7 @@
                                                     <property name="can_focus">False</property>
                                                     <property name="halign">start</property>
                                                     <property name="xalign">0</property>
-                                                    <property name="label" translatable="yes">_Path:</property>
+                                                    <property name="label" translatable="yes" context="mailmerge|pathlabel">_Path:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">path</property>
                                                   </object>
@@ -440,7 +440,7 @@
                                                     <property name="can_focus">False</property>
                                                     <property name="halign">start</property>
                                                     <property name="xalign">0</property>
-                                                    <property name="label" translatable="yes">F_ile format:</property>
+                                                    <property name="label" translatable="yes" context="mailmerge|fileformatlabel">F_ile format:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">fileformat</property>
                                                   </object>
@@ -503,7 +503,7 @@
                                                     <property name="can_focus">False</property>
                                                     <property name="halign">start</property>
                                                     <property name="xalign">0</property>
-                                                    <property name="label" translatable="yes">_Subject:</property>
+                                                    <property name="label" translatable="yes" context="mailmerge|subjectlabel">_Subject:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">subject</property>
                                                   </object>
@@ -531,7 +531,7 @@
                                                     <property name="can_focus">False</property>
                                                     <property name="halign">start</property>
                                                     <property name="xalign">0</property>
-                                                    <property name="label" translatable="yes">Attachments:</property>
+                                                    <property name="label" translatable="yes" context="mailmerge|attachmentslabel">Attachments:</property>
                                                     <property name="mnemonic_widget">attachments</property>
                                                   </object>
                                                   <packing>
@@ -573,7 +573,7 @@
                                                     <property name="can_focus">False</property>
                                                     <property name="halign">start</property>
                                                     <property name="xalign">0</property>
-                                                    <property name="label" translatable="yes">Mail format:</property>
+                                                    <property name="label" translatable="yes" context="mailmerge|mailformatlabel">Mail format:</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -593,7 +593,7 @@
                                                 </child>
                                                 <child>
                                                   <object class="GtkCheckButton" id="html">
-                                                    <property name="label" translatable="yes">HTM_L</property>
+                                                    <property name="label" translatable="yes" context="mailmerge|html">HTM_L</property>
                                                     <property name="use_action_appearance">False</property>
                                                     <property name="visible">True</property>
                                                     <property name="sensitive">False</property>
@@ -610,7 +610,7 @@
                                                 </child>
                                                 <child>
                                                   <object class="GtkCheckButton" id="rtf">
-                                                    <property name="label" translatable="yes">RT_F</property>
+                                                    <property name="label" translatable="yes" context="mailmerge|rtf">RT_F</property>
                                                     <property name="use_action_appearance">False</property>
                                                     <property name="visible">True</property>
                                                     <property name="sensitive">False</property>
@@ -627,7 +627,7 @@
                                                 </child>
                                                 <child>
                                                   <object class="GtkCheckButton" id="swriter">
-                                                    <property name="label" translatable="yes">%PRODUCTNAME Writer</property>
+                                                    <property name="label" translatable="yes" context="mailmerge|swriter">%PRODUCTNAME Writer</property>
                                                     <property name="use_action_appearance">False</property>
                                                     <property name="visible">True</property>
                                                     <property name="sensitive">False</property>
@@ -677,7 +677,7 @@
                                             <property name="spacing">6</property>
                                             <child>
                                               <object class="GtkRadioButton" id="singledocument">
-                                                <property name="label" translatable="yes">S_ave as single document</property>
+                                                <property name="label" translatable="yes" context="mailmerge|singledocument">S_ave as single document</property>
                                                 <property name="use_action_appearance">False</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
@@ -695,7 +695,7 @@
                                             </child>
                                             <child>
                                               <object class="GtkRadioButton" id="individualdocuments">
-                                                <property name="label" translatable="yes">Sa_ve as individual documents</property>
+                                                <property name="label" translatable="yes" context="mailmerge|individualdocuments">Sa_ve as individual documents</property>
                                                 <property name="use_action_appearance">False</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
@@ -721,7 +721,7 @@
                                   <object class="GtkLabel" id="savemergeddoclabel">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Save Merged Document</property>
+                                    <property name="label" translatable="yes" context="mailmerge|savemergeddoclabel">Save Merged Document</property>
                                     <attributes>
                                       <attribute name="weight" value="bold"/>
                                     </attributes>
@@ -742,7 +742,7 @@
                       <object class="GtkLabel" id="outputlabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Output</property>
+                        <property name="label" translatable="yes" context="mailmerge|outputlabel">Output</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>

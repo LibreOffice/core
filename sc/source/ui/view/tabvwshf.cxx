@@ -41,6 +41,7 @@
 #include "shtabdlg.hxx"
 #include "scresid.hxx"
 #include "globstr.hrc"
+#include "strings.hrc"
 #include "docfunc.hxx"
 #include "eventuno.hxx"
 #include "dpobject.hxx"

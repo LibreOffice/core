@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkTextBuffer" id="textbuffer1">
-    <property name="text" translatable="yes">A document with the name '%1' already exists.</property>
+    <property name="text" translatable="yes" context="alreadyexistsdialog|textbuffer1">A document with the name '%1' already exists.</property>
   </object>
   <object class="GtkTextBuffer" id="textbuffer2">
-    <property name="text" translatable="yes">Please save this document under a different name.</property>
+    <property name="text" translatable="yes" context="alreadyexistsdialog|textbuffer2">Please save this document under a different name.</property>
   </object>
   <object class="GtkDialog" id="AlreadyExistsDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">File already exists</property>
+    <property name="title" translatable="yes" context="alreadyexistsdialog|AlreadyExistsDialog">File already exists</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -123,7 +123,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">New document name:</property>
+                    <property name="label" translatable="yes" context="alreadyexistsdialog|label1">New document name:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">edit</property>
                   </object>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="pcr">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="OptionDBField">
     <property name="visible">True</property>
@@ -32,7 +32,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="label" translatable="yes">Do you want to save the value in a database field?</property>
+        <property name="label" translatable="yes" context="optiondbfieldpage|label1">Do you want to save the value in a database field?</property>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -50,7 +50,7 @@
         <property name="column_spacing">12</property>
         <child>
           <object class="GtkRadioButton" id="yesRadiobutton">
-            <property name="label" translatable="yes">_Yes, I want to save it in the following database field:</property>
+            <property name="label" translatable="yes" context="optiondbfieldpage|yesRadiobutton">_Yes, I want to save it in the following database field:</property>
             <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -70,7 +70,7 @@
         </child>
         <child>
           <object class="GtkRadioButton" id="noRadiobutton">
-            <property name="label" translatable="yes">_No, I only want to save the value in the form.</property>
+            <property name="label" translatable="yes" context="optiondbfieldpage|noRadiobutton">_No, I only want to save the value in the form.</property>
             <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>

@@ -109,7 +109,4 @@ $(eval $(call gb_SdiTarget_set_include,starmath/sdi/smslots,\
         $$(INCLUDE) \
 ))
 
-# Runtime dependency for unit-tests
-$(eval $(call gb_Library_use_restarget,sm,sm))
-
 # vim: set noet sw=4 ts=4:

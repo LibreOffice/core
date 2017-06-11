@@ -34,7 +34,7 @@ class OpenGLWindow;
 namespace chart {
 
 // Be careful here not to clash with the SYMBOL_FOO #defines in
-// <rsc/rsc-vcl-shared-types.hxx>
+// <vcl/vclenum.hxx>
 enum SymbolEnum { Symbol_Square=0
                  , Symbol_Diamond
                  , Symbol_DownArrow

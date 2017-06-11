@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="SecurityOptionsDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Security Options and Warnings</property>
+    <property name="title" translatable="yes" context="securityoptionsdialog|SecurityOptionsDialog">Security Options and Warnings</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -102,7 +102,7 @@
                             <property name="column_spacing">12</property>
                             <child>
                               <object class="GtkCheckButton" id="savesenddocs">
-                                <property name="label" translatable="yes">_When saving or sending</property>
+                                <property name="label" translatable="yes" context="securityoptionsdialog|savesenddocs">_When saving or sending</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -117,7 +117,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="whensigning">
-                                <property name="label" translatable="yes">When _signing</property>
+                                <property name="label" translatable="yes" context="securityoptionsdialog|whensigning">When _signing</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -132,7 +132,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="whenprinting">
-                                <property name="label" translatable="yes">When _printing</property>
+                                <property name="label" translatable="yes" context="securityoptionsdialog|whenprinting">When _printing</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -147,7 +147,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="whenpdf">
-                                <property name="label" translatable="yes">When creating PDF _files</property>
+                                <property name="label" translatable="yes" context="securityoptionsdialog|whenpdf">When creating PDF _files</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -224,7 +224,7 @@
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Warn if document contains recorded changes, versions, hidden information or notes:</property>
+                            <property name="label" translatable="yes" context="securityoptionsdialog|label3">Warn if document contains recorded changes, versions, hidden information or notes:</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -239,7 +239,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Security Warnings</property>
+                    <property name="label" translatable="yes" context="securityoptionsdialog|label1">Security Warnings</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -273,7 +273,7 @@
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkCheckButton" id="removepersonal">
-                            <property name="label" translatable="yes">_Remove personal information on saving</property>
+                            <property name="label" translatable="yes" context="securityoptionsdialog|removepersonal">_Remove personal information on saving</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -289,7 +289,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="password">
-                            <property name="label" translatable="yes">Recommend password protection on sa_ving</property>
+                            <property name="label" translatable="yes" context="securityoptionsdialog|password">Recommend password protection on sa_ving</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -305,7 +305,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="ctrlclick">
-                            <property name="label" translatable="yes">Ctrl-click required _to follow hyperlinks</property>
+                            <property name="label" translatable="yes" context="securityoptionsdialog|ctrlclick">Ctrl-click required _to follow hyperlinks</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -321,7 +321,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="blockuntrusted">
-                            <property name="label" translatable="yes">Block any links from documents not among the trusted locations (see Macro Security)</property>
+                            <property name="label" translatable="yes" context="securityoptionsdialog|blockuntrusted">Block any links from documents not among the trusted locations (see Macro Security)</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -392,7 +392,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Security Options</property>
+                    <property name="label" translatable="yes" context="securityoptionsdialog|label2">Security Options</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

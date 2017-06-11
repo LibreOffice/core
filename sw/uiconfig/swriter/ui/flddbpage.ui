@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sw">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkBox" id="FieldDbPage">
@@ -54,7 +54,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Type</property>
+                    <property name="label" translatable="yes" context="flddbpage|label1">_Type</property>
                     <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -83,7 +83,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Condition</property>
+                        <property name="label" translatable="yes" context="flddbpage|label5">_Condition</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">condition</property>
                       </object>
@@ -142,7 +142,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Record number</property>
+                        <property name="label" translatable="yes" context="flddbpage|label4">Record number</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">recnumber</property>
                       </object>
@@ -215,7 +215,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Database s_election</property>
+                    <property name="label" translatable="yes" context="flddbpage|label2">Database s_election</property>
                     <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -240,7 +240,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Add database file</property>
+                    <property name="label" translatable="yes" context="flddbpage|browseft">Add database file</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">browse</property>
                   </object>
@@ -253,7 +253,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="browse">
-                    <property name="label" translatable="yes">Browse...</property>
+                    <property name="label" translatable="yes" context="flddbpage|browse">Browse...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -294,7 +294,7 @@
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkRadioButton" id="fromdatabasecb">
-                            <property name="label" translatable="yes">From database</property>
+                            <property name="label" translatable="yes" context="flddbpage|fromdatabasecb">From database</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -312,7 +312,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="userdefinedcb">
-                            <property name="label" translatable="yes">User-defined</property>
+                            <property name="label" translatable="yes" context="flddbpage|userdefinedcb">User-defined</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -386,7 +386,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Format</property>
+                    <property name="label" translatable="yes" context="flddbpage|label3">Format</property>
                     <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>

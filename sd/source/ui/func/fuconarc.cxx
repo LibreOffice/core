@@ -33,7 +33,7 @@
 #include "app.hrc"
 #include "Window.hxx"
 #include "drawdoc.hxx"
-#include "res_bmp.hrc"
+
 #include "View.hxx"
 #include "ViewShell.hxx"
 #include "ViewShellBase.hxx"

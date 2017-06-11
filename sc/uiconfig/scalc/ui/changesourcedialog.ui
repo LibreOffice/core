@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="ChangeSourceDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Change Source Data Range</property>
+    <property name="title" translatable="yes" context="changesourcedialog|ChangeSourceDialog">Change Source Data Range</property>
     <property name="resizable">False</property>
     <property name="type_hint">normal</property>
     <child internal-child="vbox">
@@ -89,7 +89,7 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="col">
-                        <property name="label" translatable="yes">First _column as label</property>
+                        <property name="label" translatable="yes" context="changesourcedialog|col">First _column as label</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -104,7 +104,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="row">
-                        <property name="label" translatable="yes">First _row as label</property>
+                        <property name="label" translatable="yes" context="changesourcedialog|row">First _row as label</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -125,7 +125,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Labels</property>
+                <property name="label" translatable="yes" context="changesourcedialog|label1">Labels</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

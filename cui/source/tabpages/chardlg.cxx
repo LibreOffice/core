@@ -69,6 +69,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <svx/svxdlg.hxx>
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 #include "svx/flagsdef.hxx"

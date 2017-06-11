@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="rpt">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkWindow" id="FloatingNavigator">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="no_show_all">True</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Report navigator</property>
+    <property name="title" translatable="yes" context="floatingnavigator|FloatingNavigator">Report navigator</property>
     <property name="type_hint">utility</property>
     <child>
       <object class="GtkBox" id="box">

@@ -46,7 +46,7 @@
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
 #include "stlpool.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "app.hrc"
 #include "strings.hxx"
 #include "glob.hxx"

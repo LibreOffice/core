@@ -13,6 +13,7 @@ $(eval $(call gb_Library_Library,ado))
 $(eval $(call gb_Library_set_componentfile,ado,connectivity/source/drivers/ado/ado))
 
 $(eval $(call gb_Library_set_include,ado,\
+	-I$(SRCDIR)/connectivity/inc \
 	-I$(SRCDIR)/connectivity/source/inc \
 	$$(INCLUDE) \
 	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \

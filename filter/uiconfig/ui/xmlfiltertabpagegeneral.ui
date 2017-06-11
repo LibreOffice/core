@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="flt">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="XmlFilterTabPageGeneral">
     <property name="visible">True</property>
@@ -20,7 +20,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Filter name:</property>
+            <property name="label" translatable="yes" context="xmlfiltertabpagegeneral|label2">_Filter name:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">filtername</property>
           </object>
@@ -34,7 +34,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Application:</property>
+            <property name="label" translatable="yes" context="xmlfiltertabpagegeneral|label3">_Application:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">application</property>
           </object>
@@ -48,7 +48,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Name of file type:</property>
+            <property name="label" translatable="yes" context="xmlfiltertabpagegeneral|label4">_Name of file type:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">interfacename</property>
           </object>
@@ -62,7 +62,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">1</property>
-            <property name="label" translatable="yes">File _extension:</property>
+            <property name="label" translatable="yes" context="xmlfiltertabpagegeneral|label5">File _extension:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">extension</property>
           </object>
@@ -77,7 +77,7 @@
             <property name="can_focus">False</property>
             <property name="xalign">1</property>
             <property name="yalign">0</property>
-            <property name="label" translatable="yes">Comment_s:</property>
+            <property name="label" translatable="yes" context="xmlfiltertabpagegeneral|label6">Comment_s:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">description:border</property>
           </object>

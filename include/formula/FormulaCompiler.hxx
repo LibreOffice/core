@@ -361,8 +361,8 @@ private:
     void InitSymbolsEnglishXL() const; /// only SymbolsEnglishXL, on demand
     void InitSymbolsOOXML() const;     /// only SymbolsOOXML, on demand
 
-    void loadSymbols( sal_uInt16 nSymbols, FormulaGrammar::Grammar eGrammar, NonConstOpCodeMapPtr& rxMap,
-            SeparatorType eSepType = SeparatorType::SEMICOLON_BASE ) const;
+    void loadSymbols(const std::pair<const char*, int>* pSymbols, FormulaGrammar::Grammar eGrammar, NonConstOpCodeMapPtr& rxMap,
+            SeparatorType eSepType = SeparatorType::SEMICOLON_BASE) const;
 
     /** Check pCurrentFactorToken for nParam's (0-based) ForceArray types and
         set ForceArray at rCurr if so. Set nParam+1 as 1-based

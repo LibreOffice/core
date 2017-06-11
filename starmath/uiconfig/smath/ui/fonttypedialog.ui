@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sm">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="FontsDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Fonts</property>
+    <property name="title" translatable="yes" context="fonttypedialog|FontsDialog">Fonts</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
@@ -51,7 +51,7 @@
             </child>
             <child>
               <object class="GtkButton" id="modify:menu1">
-                <property name="label" translatable="yes">_Modify</property>
+                <property name="label" translatable="yes" context="fonttypedialog|modify">_Modify</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -79,7 +79,7 @@
             </child>
             <child>
               <object class="GtkButton" id="default">
-                <property name="label" translatable="yes">_Default</property>
+                <property name="label" translatable="yes" context="fonttypedialog|default">_Default</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -132,7 +132,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Variables:</property>
+                            <property name="label" translatable="yes" context="fonttypedialog|label1">_Variables:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">variableCB</property>
                             <attributes>
@@ -149,7 +149,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Functions:</property>
+                            <property name="label" translatable="yes" context="fonttypedialog|label2">_Functions:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">functionCB</property>
                             <attributes>
@@ -166,7 +166,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Numbers:</property>
+                            <property name="label" translatable="yes" context="fonttypedialog|label3">_Numbers:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">numberCB</property>
                             <attributes>
@@ -183,7 +183,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Text:</property>
+                            <property name="label" translatable="yes" context="fonttypedialog|label4">_Text:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">textCB</property>
                             <attributes>
@@ -247,7 +247,7 @@
                   <object class="GtkLabel" id="formulaL">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Formula Fonts</property>
+                    <property name="label" translatable="yes" context="fonttypedialog|formulaL">Formula Fonts</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -285,7 +285,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Serif:</property>
+                            <property name="label" translatable="yes" context="fonttypedialog|label5">_Serif:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">serifCB</property>
                             <attributes>
@@ -302,7 +302,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">S_ans-serif:</property>
+                            <property name="label" translatable="yes" context="fonttypedialog|label6">S_ans-serif:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">sansCB</property>
                             <attributes>
@@ -319,7 +319,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">F_ixed-width:</property>
+                            <property name="label" translatable="yes" context="fonttypedialog|label7">F_ixed-width:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">fixedCB</property>
                             <attributes>
@@ -372,7 +372,7 @@
                   <object class="GtkLabel" id="customL">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Custom Fonts</property>
+                    <property name="label" translatable="yes" context="fonttypedialog|customL">Custom Fonts</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -420,7 +420,7 @@
       <object class="GtkMenuItem" id="menuitem1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Variables</property>
+        <property name="label" translatable="yes" context="fonttypedialog|menuitem1">_Variables</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -428,7 +428,7 @@
       <object class="GtkMenuItem" id="menuitem2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Functions</property>
+        <property name="label" translatable="yes" context="fonttypedialog|menuitem2">_Functions</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -436,7 +436,7 @@
       <object class="GtkMenuItem" id="menuitem3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Numbers</property>
+        <property name="label" translatable="yes" context="fonttypedialog|menuitem3">_Numbers</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -444,7 +444,7 @@
       <object class="GtkMenuItem" id="menuitem4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Text</property>
+        <property name="label" translatable="yes" context="fonttypedialog|menuitem4">_Text</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -452,7 +452,7 @@
       <object class="GtkMenuItem" id="menuitem5">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Serif</property>
+        <property name="label" translatable="yes" context="fonttypedialog|menuitem5">_Serif</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -460,7 +460,7 @@
       <object class="GtkMenuItem" id="menuitem6">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">S_ans-serif</property>
+        <property name="label" translatable="yes" context="fonttypedialog|menuitem6">S_ans-serif</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -468,7 +468,7 @@
       <object class="GtkMenuItem" id="menuitem7">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Fixe_d-width</property>
+        <property name="label" translatable="yes" context="fonttypedialog|menuitem7">Fixe_d-width</property>
         <property name="use_underline">True</property>
       </object>
     </child>

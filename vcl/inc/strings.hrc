@@ -1,0 +1,143 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_VCL_INC_STRINGS_HRC
+#define INCLUDED_VCL_INC_STRINGS_HRC
+
+#define NC_(Context, String) (Context "\004" u8##String)
+
+#define SV_RESID_STRING_NOSELECTIONPOSSIBLE          NC_("SV_RESID_STRING_NOSELECTIONPOSSIBLE", "<No selection possible>")
+
+#define SV_MENU_MAC_SERVICES                         NC_("SV_MENU_MAC_SERVICES", "Services")
+#define SV_MENU_MAC_HIDEAPP                          NC_("SV_MENU_MAC_HIDEAPP", "Hide %PRODUCTNAME")
+#define SV_MENU_MAC_HIDEALL                          NC_("SV_MENU_MAC_HIDEALL", "Hide Others")
+#define SV_MENU_MAC_SHOWALL                          NC_("SV_MENU_MAC_SHOWALL", "Show All")
+#define SV_MENU_MAC_QUITAPP                          NC_("SV_MENU_MAC_QUITAPP", "Quit %PRODUCTNAME")
+
+#define SV_HELPTEXT_CLOSE                            NC_("SV_HELPTEXT_CLOSE", "Close")
+#define SV_HELPTEXT_MINIMIZE                         NC_("SV_HELPTEXT_MINIMIZE", "Minimize")
+#define SV_HELPTEXT_MAXIMIZE                         NC_("SV_HELPTEXT_MAXIMIZE", "Maximize")
+#define SV_HELPTEXT_RESTORE                          NC_("SV_HELPTEXT_RESTORE", "Restore")
+#define SV_HELPTEXT_ROLLDOWN                         NC_("SV_HELPTEXT_ROLLDOWN", "Drop down")
+#define SV_HELPTEXT_ROLLUP                           NC_("SV_HELPTEXT_ROLLUP", "Roll up")
+#define SV_HELPTEXT_HELP                             NC_("SV_HELPTEXT_HELP", "Help")
+#define SV_HELPTEXT_SCREENSHOT                       NC_("SV_HELPTEXT_SCREENSHOT", "Take and annotate a screenshot")
+#define SV_HELPTEXT_FADEIN                           NC_("SV_HELPTEXT_FADEIN", "Show")
+#define SV_HELPTEXT_FADEOUT                          NC_("SV_HELPTEXT_FADEOUT", "Hide")
+#define SV_HELPTEXT_CLOSEDOCUMENT                    NC_("SV_HELPTEXT_CLOSEDOCUMENT", "Close Document")
+
+// To translators: This is used on buttons for platforms other than windows, there should be a ~ mnemonic in this string
+#define SV_BUTTONTEXT_OK                             NC_("SV_BUTTONTEXT_OK", "~OK")
+// To translators: This is used on buttons for platforms other than windows, there should be a ~ mnemonic in this string
+#define SV_BUTTONTEXT_CANCEL                         NC_("SV_BUTTONTEXT_CANCEL", "~Cancel")
+// To translators: This is used on buttons for Windows, there should be no ~ mnemonic in this string
+#define SV_BUTTONTEXT_OK_NOMNEMONIC                  NC_("SV_BUTTONTEXT_OK_NOMNEMONIC", "OK")
+// To translators: This is used on buttons for Windows, there should be no ~ mnemonic in this string
+#define SV_BUTTONTEXT_CANCEL_NOMNEMONIC              NC_("SV_BUTTONTEXT_CANCEL_NOMNEMONIC", "Cancel")
+#define SV_BUTTONTEXT_YES                            NC_("SV_BUTTONTEXT_YES", "~Yes")
+#define SV_BUTTONTEXT_NO                             NC_("SV_BUTTONTEXT_NO", "~No")
+#define SV_BUTTONTEXT_RETRY                          NC_("SV_BUTTONTEXT_RETRY", "~Retry")
+#define SV_BUTTONTEXT_HELP                           NC_("SV_BUTTONTEXT_HELP", "~Help")
+#define SV_BUTTONTEXT_CLOSE                          NC_("SV_BUTTONTEXT_CLOSE", "~Close")
+#define SV_BUTTONTEXT_MORE                           NC_("SV_BUTTONTEXT_MORE", "~More")
+#define SV_BUTTONTEXT_IGNORE                         NC_("SV_BUTTONTEXT_IGNORE", "~Ignore")
+#define SV_BUTTONTEXT_ABORT                          NC_("SV_BUTTONTEXT_ABORT", "~Abort")
+#define SV_BUTTONTEXT_LESS                           NC_("SV_BUTTONTEXT_LESS", "~Less")
+#define SV_BUTTONTEXT_RESET                          NC_("SV_BUTTONTEXT_RESET", "R~eset")
+#define SV_BUTTONTEXT_ADD                            NC_("SV_BUTTONTEXT_ADD", "~Add")
+#define SV_BUTTONTEXT_DELETE                         NC_("SV_BUTTONTEXT_DELETE", "~Delete")
+#define SV_BUTTONTEXT_REMOVE                         NC_("SV_BUTTONTEXT_REMOVE", "~Remove")
+#define SV_BUTTONTEXT_NEW                            NC_("SV_BUTTONTEXT_NEW", "~New")
+#define SV_BUTTONTEXT_EDIT                           NC_("SV_BUTTONTEXT_EDIT", "~Edit")
+#define SV_BUTTONTEXT_APPLY                          NC_("SV_BUTTONTEXT_APPLY", "~Apply")
+#define SV_BUTTONTEXT_SAVE                           NC_("SV_BUTTONTEXT_SAVE", "~Save")
+#define SV_BUTTONTEXT_UNDO                           NC_("SV_BUTTONTEXT_UNDO", "~Undo")
+#define SV_BUTTONTEXT_PASTE                          NC_("SV_BUTTONTEXT_PASTE", "~Paste")
+#define SV_BUTTONTEXT_NEXT                           NC_("SV_BUTTONTEXT_NEXT", "~Next")
+#define SV_BUTTONTEXT_GO_UP                          NC_("SV_BUTTONTEXT_GO_UP", "~Up")
+#define SV_BUTTONTEXT_GO_DOWN                        NC_("SV_BUTTONTEXT_GO_DOWN", "Do~wn")
+#define SV_BUTTONTEXT_CLEAR                          NC_("SV_BUTTONTEXT_CLEAR", "~Clear")
+#define SV_BUTTONTEXT_OPEN                           NC_("SV_BUTTONTEXT_OPEN", "~Open")
+#define SV_BUTTONTEXT_PLAY                           NC_("SV_BUTTONTEXT_PLAY", "~Play")
+#define SV_BUTTONTEXT_FIND                           NC_("SV_BUTTONTEXT_FIND", "~Find")
+#define SV_BUTTONTEXT_STOP                           NC_("SV_BUTTONTEXT_STOP", "~Stop")
+#define SV_BUTTONTEXT_CONNECT                        NC_("SV_BUTTONTEXT_CONNECT", "C~onnect")
+#define SV_BUTTONTEXT_SCREENSHOT                     NC_("SV_BUTTONTEXT_SCREENSHOT", "~Screenshot")
+
+#define SV_STDTEXT_SERVICENOTAVAILABLE               NC_("SV_STDTEXT_SERVICENOTAVAILABLE", "The component (%s) could not be loaded.\nPlease start setup with the repair option.")
+
+#define SV_STDTEXT_DONTASKAGAIN                      NC_("SV_STDTEXT_DONTASKAGAIN", "Do not show this question again.")
+#define SV_STDTEXT_DONTWARNAGAIN                     NC_("SV_STDTEXT_DONTWARNAGAIN", "Do not show warning again.")
+
+#define SV_STDTEXT_ABOUT                             NC_("SV_STDTEXT_ABOUT", "About %PRODUCTNAME")
+#define SV_STDTEXT_PREFERENCES                       NC_("SV_STDTEXT_PREFERENCES", "Preferences...")
+#define SV_STDTEXT_ALLFILETYPES                      NC_("SV_STDTEXT_ALLFILETYPES", "Any type")
+
+#define STR_FPICKER_AUTO_EXTENSION                   NC_("STR_FPICKER_AUTO_EXTENSION", "~Automatic file name extension")
+#define STR_FPICKER_PASSWORD                         NC_("STR_FPICKER_PASSWORD", "Save with pass~word")
+#define STR_FPICKER_FILTER_OPTIONS                   NC_("STR_FPICKER_FILTER_OPTIONS", "~Edit filter settings")
+#define STR_FPICKER_READONLY                         NC_("STR_FPICKER_READONLY", "~Read-only")
+#define STR_FPICKER_INSERT_AS_LINK                   NC_("STR_FPICKER_INSERT_AS_LINK", "Insert as ~Link")
+#define STR_FPICKER_SHOW_PREVIEW                     NC_("STR_FPICKER_SHOW_PREVIEW", "Pr~eview")
+#define STR_FPICKER_PLAY                             NC_("STR_FPICKER_PLAY", "~Play")
+#define STR_FPICKER_VERSION                          NC_("STR_FPICKER_VERSION", "~Version:")
+#define STR_FPICKER_TEMPLATES                        NC_("STR_FPICKER_TEMPLATES", "S~tyles:")
+#define STR_FPICKER_IMAGE_TEMPLATE                   NC_("STR_FPICKER_IMAGE_TEMPLATE", "Frame Style: ")
+#define STR_FPICKER_SELECTION                        NC_("STR_FPICKER_SELECTION", "~Selection")
+#define STR_FPICKER_FOLDER_DEFAULT_TITLE             NC_("STR_FPICKER_FOLDER_DEFAULT_TITLE", "Select Path")
+#define STR_FPICKER_FOLDER_DEFAULT_DESCRIPTION       NC_("STR_FPICKER_FOLDER_DEFAULT_DESCRIPTION", "Please select a folder.")
+#define STR_FPICKER_ALREADYEXISTOVERWRITE_PRIMARY    NC_("STR_FPICKER_ALREADYEXISTOVERWRITE_PRIMARY", "A file named \"$filename$\" already exists. Do you want to replace it?")
+#define STR_FPICKER_ALREADYEXISTOVERWRITE_SECONDARY  NC_("STR_FPICKER_ALREADYEXISTOVERWRITE_SECONDARY", "The file already exists in \"$dirname$\". Replacing it will overwrite its contents.")
+#define STR_FPICKER_ALLFORMATS                       NC_("STR_FPICKER_ALLFORMATS", "All Formats")
+#define STR_FPICKER_OPEN                             NC_("STR_FPICKER_OPEN", "Open")
+#define STR_FPICKER_SAVE                             NC_("STR_FPICKER_SAVE", "Save")
+#define STR_FPICKER_TYPE                             NC_("STR_FPICKER_TYPE", "File ~type")
+
+#define SV_ACCESSERROR_NO_FONTS                      NC_("SV_ACCESSERROR_NO_FONTS", "No fonts could be found on the system.")
+
+#define SV_PRINT_NOPAGES                             NC_("SV_PRINT_NOPAGES", "No pages")
+#define SV_PRINT_TOFILE_TXT                          NC_("SV_PRINT_TOFILE_TXT", "Print to File...")
+#define SV_PRINT_DEFPRT_TXT                          NC_("SV_PRINT_DEFPRT_TXT", "Default printer")
+#define SV_PRINT_PRINTPREVIEW_TXT                    NC_("SV_PRINT_PRINTPREVIEW_TXT", "Print preview")
+#define SV_PRINT_QUERYFAXNUMBER_TXT                  NC_("SV_PRINT_QUERYFAXNUMBER_TXT", "Please enter the fax number")
+#define SV_PRINT_INVALID_TXT                         NC_("SV_PRINT_INVALID_TXT", "<ignore>")
+#define SV_PRINT_CUSTOM_TXT                          NC_("SV_PRINT_CUSTOM_TXT", "Custom")
+
+#define SV_EDIT_WARNING_STR                          NC_("SV_EDIT_WARNING_STR", "The inserted text exceeded the maximum length of this text field. The text was truncated.")
+
+#define SV_APP_CPUTHREADS                            NC_("SV_APP_CPUTHREADS", "CPU threads: ")
+#define SV_APP_OSVERSION                             NC_("SV_APP_OSVERSION", "OS: ")
+#define SV_APP_UIRENDER                              NC_("SV_APP_UIRENDER", "UI render: ")
+#define SV_APP_GL                                    NC_("SV_APP_GL", "GL")
+#define SV_APP_DEFAULT                               NC_("SV_APP_DEFAULT", "default")
+
+#define SV_MSGBOX_INFO                               NC_("SV_MSGBOX_INFO", "Information")
+#define SV_MSGBOX_WARNING                            NC_("SV_MSGBOX_WARNING", "Warning")
+#define SV_MSGBOX_ERROR                              NC_("SV_MSGBOX_ERROR", "Error")
+#define SV_MSGBOX_QUERY                              NC_("SV_MSGBOX_QUERY", "Confirmation")
+
+#define STR_TEXTUNDO_DELPARA                         NC_("STR_TEXTUNDO_DELPARA", "delete line")
+#define STR_TEXTUNDO_CONNECTPARAS                    NC_("STR_TEXTUNDO_CONNECTPARAS", "delete multiple lines")
+#define STR_TEXTUNDO_SPLITPARA                       NC_("STR_TEXTUNDO_SPLITPARA", "insert multiple lines")
+#define STR_TEXTUNDO_INSERTCHARS                     NC_("STR_TEXTUNDO_INSERTCHARS", "insert '$1'")
+#define STR_TEXTUNDO_REMOVECHARS                     NC_("STR_TEXTUNDO_REMOVECHARS", "delete '$1'")
+
+#endif // INCLUDED_VCL_INC_STRINGS_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

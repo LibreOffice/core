@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.19.0 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkFrame" id="OptOnlineUpdatePage">
     <property name="visible">True</property>
@@ -25,7 +25,7 @@
             <property name="column_spacing">12</property>
             <child>
               <object class="GtkCheckButton" id="autocheck">
-                <property name="label" translatable="yes">_Check for updates automatically</property>
+                <property name="label" translatable="yes" context="optonlineupdatepage|autocheck">_Check for updates automatically</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -51,7 +51,7 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="everyday">
-                        <property name="label" translatable="yes">Every da_y</property>
+                        <property name="label" translatable="yes" context="optonlineupdatepage|everyday">Every da_y</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -68,7 +68,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="everyweek">
-                        <property name="label" translatable="yes">Every _week</property>
+                        <property name="label" translatable="yes" context="optonlineupdatepage|everyweek">Every _week</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -84,7 +84,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="everymonth">
-                        <property name="label" translatable="yes">Every _month</property>
+                        <property name="label" translatable="yes" context="optonlineupdatepage|everymonth">Every _month</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -111,7 +111,7 @@
               <object class="GtkLabel" id="lastchecked">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Last checked: %DATE%, %TIME%</property>
+                <property name="label" translatable="yes" context="optonlineupdatepage|lastchecked">Last checked: %DATE%, %TIME%</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -122,7 +122,7 @@
             </child>
             <child>
               <object class="GtkButton" id="checknow">
-                <property name="label" translatable="yes">Check _Now</property>
+                <property name="label" translatable="yes" context="optonlineupdatepage|checknow">Check _Now</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -137,7 +137,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="autodownload">
-                <property name="label" translatable="yes">_Download updates automatically</property>
+                <property name="label" translatable="yes" context="optonlineupdatepage|autodownload">_Download updates automatically</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -169,7 +169,7 @@
                       <object class="GtkLabel" id="destpathlabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Download destination:</property>
+                        <property name="label" translatable="yes" context="optonlineupdatepage|destpathlabel">Download destination:</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -179,7 +179,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="changepath">
-                        <property name="label" translatable="yes">Ch_ange...</property>
+                        <property name="label" translatable="yes" context="optonlineupdatepage|changepath">Ch_ange...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -217,11 +217,11 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="extrabits">
-                <property name="label" translatable="yes">_Send OS version and basic hardware information</property>
+                <property name="label" translatable="yes" context="optonlineupdatepage|extrabits">_Send OS version and basic hardware information</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">This information lets us make optimizations for your hardware and operating system.</property>
+                <property name="tooltip_text" translatable="yes" context="optonlineupdatepage|extrabits|tooltip_text">This information lets us make optimizations for your hardware and operating system.</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
@@ -241,7 +241,7 @@
                   <object class="GtkLabel" id="useragent_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">User Agent:</property>
+                    <property name="label" translatable="yes" context="optonlineupdatepage|useragent_label">User Agent:</property>
                     <property name="yalign">0</property>
                   </object>
                   <packing>
@@ -253,7 +253,7 @@
                 <child>
                   <object class="GtkLabel" id="useragent_changed">
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Hit apply to update</property>
+                    <property name="label" translatable="yes" context="optonlineupdatepage|useragent_changed">Hit apply to update</property>
                     <property name="yalign">0</property>
                   </object>
                   <packing>
@@ -285,7 +285,7 @@
               <object class="GtkLabel" id="neverchecked">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Last checked: Not yet</property>
+                <property name="label" translatable="yes" context="optonlineupdatepage|neverchecked">Last checked: Not yet</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -302,7 +302,7 @@
       <object class="GtkLabel" id="label1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Online Update Options</property>
+        <property name="label" translatable="yes" context="optonlineupdatepage|label1">Online Update Options</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>

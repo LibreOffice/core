@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "ParaPropertyPanel.hxx"
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <sfx2/sidebar/Tools.hxx>
 #include <sfx2/dispatch.hxx>
 #include <editeng/lrspitem.hxx>

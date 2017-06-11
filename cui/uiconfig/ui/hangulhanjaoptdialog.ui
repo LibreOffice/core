@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="HangulHanjaOptDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Hangul/Hanja Options</property>
+    <property name="title" translatable="yes" context="hangulhanjaoptdialog|HangulHanjaOptDialog">Hangul/Hanja Options</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -104,7 +104,7 @@
                             <property name="layout_style">start</property>
                             <child>
                               <object class="GtkButton" id="new">
-                                <property name="label" translatable="yes">New...</property>
+                                <property name="label" translatable="yes" context="hangulhanjaoptdialog|new">New...</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -118,7 +118,7 @@
                             </child>
                             <child>
                               <object class="GtkButton" id="edit">
-                                <property name="label" translatable="yes">Edit...</property>
+                                <property name="label" translatable="yes" context="hangulhanjaoptdialog|edit">Edit...</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -169,7 +169,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">User-defined Dictionaries</property>
+                    <property name="label" translatable="yes" context="hangulhanjaoptdialog|label1">User-defined Dictionaries</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -200,7 +200,7 @@
                         <property name="row_spacing">6</property>
                         <child>
                           <object class="GtkCheckButton" id="ignorepost">
-                            <property name="label" translatable="yes">Ignore post-positional word</property>
+                            <property name="label" translatable="yes" context="hangulhanjaoptdialog|ignorepost">Ignore post-positional word</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -215,7 +215,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="showrecentfirst">
-                            <property name="label" translatable="yes">Show recently used entries first</property>
+                            <property name="label" translatable="yes" context="hangulhanjaoptdialog|showrecentfirst">Show recently used entries first</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -229,7 +229,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="autoreplaceunique">
-                            <property name="label" translatable="yes">Replace all unique entries automatically</property>
+                            <property name="label" translatable="yes" context="hangulhanjaoptdialog|autoreplaceunique">Replace all unique entries automatically</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -249,7 +249,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Options</property>
+                    <property name="label" translatable="yes" context="hangulhanjaoptdialog|label2">Options</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

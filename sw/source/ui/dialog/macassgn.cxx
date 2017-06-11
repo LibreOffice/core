@@ -31,6 +31,7 @@
 #include "swevent.hxx"
 #include "docsh.hxx"
 #include "globals.hrc"
+#include "strings.hrc"
 #include "view.hxx"
 #include <sfx2/viewfrm.hxx>
 

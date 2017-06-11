@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="cui">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="PasteSpecialDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Paste Special</property>
+    <property name="title" translatable="yes" context="pastespecial|PasteSpecialDialog">Paste Special</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox3">
@@ -84,7 +84,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Source:</property>
+                    <property name="label" translatable="yes" context="pastespecial|label2">Source:</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -154,7 +154,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Selection</property>
+                    <property name="label" translatable="yes" context="pastespecial|label1">Selection</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

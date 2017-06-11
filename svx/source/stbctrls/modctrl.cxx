@@ -24,7 +24,7 @@
 #include <svl/eitem.hxx>
 #include <sfx2/app.hxx>
 
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/modctrl.hxx>
 #include <svx/dialmgr.hxx>
 
@@ -89,8 +89,8 @@ void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
 
     _repaint();
 
-    int nResId = modified ? RID_SVXSTR_DOC_MODIFIED_YES : RID_SVXSTR_DOC_MODIFIED_NO;
-    GetStatusBar().SetQuickHelpText(GetId(), SvxResId(nResId));
+    const char* pResId = modified ? RID_SVXSTR_DOC_MODIFIED_YES : RID_SVXSTR_DOC_MODIFIED_NO;
+    GetStatusBar().SetQuickHelpText(GetId(), SvxResId(pResId));
 
     if ( start )
         mxImpl->maIdle.Start();

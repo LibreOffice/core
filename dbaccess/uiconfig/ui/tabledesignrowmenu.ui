@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="dba">
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkMenu" id="menu">
     <property name="visible">True</property>
@@ -9,7 +9,7 @@
       <object class="GtkMenuItem" id="cut">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Cu_t</property>
+        <property name="label" translatable="yes" context="tabledesignrowmenu|cut">Cu_t</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -17,7 +17,7 @@
       <object class="GtkMenuItem" id="copy">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Copy</property>
+        <property name="label" translatable="yes" context="tabledesignrowmenu|copy">_Copy</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -25,21 +25,21 @@
       <object class="GtkMenuItem" id="paste">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Paste</property>
+        <property name="label" translatable="yes" context="tabledesignrowmenu|paste">_Paste</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="delete">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Delete</property>
+        <property name="label" translatable="yes" context="tabledesignrowmenu|delete">_Delete</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="insert">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Insert Rows</property>
+        <property name="label" translatable="yes" context="tabledesignrowmenu|insert">Insert Rows</property>
       </object>
     </child>
     <child>
@@ -52,7 +52,7 @@
       <object class="GtkCheckMenuItem" id="primarykey">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Primary Key</property>
+        <property name="label" translatable="yes" context="tabledesignrowmenu|primarykey">Primary Key</property>
       </object>
     </child>
   </object>

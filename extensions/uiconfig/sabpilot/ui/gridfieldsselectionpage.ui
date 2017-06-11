@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
-<interface>
+<!-- Generated with glade 4.16.1 -->
+<interface domain="pcr">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="GridFieldsSelection">
     <property name="height_request">200</property>
@@ -41,7 +41,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">Data source</property>
+                        <property name="label" translatable="yes" context="gridfieldsselectionpage|datasourcelabel">Data source</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -55,7 +55,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">Content type</property>
+                        <property name="label" translatable="yes" context="gridfieldsselectionpage|contenttypelabel">Content type</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -69,7 +69,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">Content</property>
+                        <property name="label" translatable="yes" context="gridfieldsselectionpage|formtablelabel">Content</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -145,7 +145,7 @@
           <object class="GtkLabel" id="formsettings">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Form</property>
+            <property name="label" translatable="yes" context="gridfieldsselectionpage|formsettings">Form</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -202,7 +202,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Selected fields</property>
+                    <property name="label" translatable="yes" context="gridfieldsselectionpage|label3">Selected fields</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">selectedfields:border</property>
                   </object>
@@ -228,7 +228,7 @@
                         <property name="layout_style">start</property>
                         <child>
                           <object class="GtkButton" id="fieldright">
-                            <property name="label" translatable="yes">-&gt;</property>
+                            <property name="label" translatable="yes" context="gridfieldsselectionpage|fieldright">-&gt;</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -242,7 +242,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="allfieldsright">
-                            <property name="label" translatable="yes">=&gt;&gt;</property>
+                            <property name="label" translatable="yes" context="gridfieldsselectionpage|allfieldsright">=&gt;&gt;</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -270,7 +270,7 @@
                         <property name="layout_style">start</property>
                         <child>
                           <object class="GtkButton" id="fieldleft">
-                            <property name="label" translatable="yes">&lt;-</property>
+                            <property name="label" translatable="yes" context="gridfieldsselectionpage|fieldleft">&lt;-</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -284,7 +284,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="allfieldsleft">
-                            <property name="label" translatable="yes">&lt;&lt;=</property>
+                            <property name="label" translatable="yes" context="gridfieldsselectionpage|allfieldsleft">&lt;&lt;=</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -333,7 +333,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Existing fields</property>
+                    <property name="label" translatable="yes" context="gridfieldsselectionpage|label1">Existing fields</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">existingfields:border</property>
                   </object>
@@ -355,7 +355,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Table element</property>
+            <property name="label" translatable="yes" context="gridfieldsselectionpage|label2">Table element</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

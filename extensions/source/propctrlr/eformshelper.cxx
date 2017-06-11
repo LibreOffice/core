@@ -20,7 +20,7 @@
 #include <memory>
 #include "eformshelper.hxx"
 #include "formstrings.hxx"
-#include "formresid.hrc"
+#include "strings.hrc"
 #include "modulepcr.hxx"
 #include "propeventtranslation.hxx"
 #include "formbrowsertools.hxx"
@@ -541,7 +541,7 @@ namespace pcr
                     if ( xBinding.is() )
                     {
                         // find a nice name for it
-                        OUString sBaseName(PcrRes(RID_STR_BINDING_UI_NAME));
+                        OUString sBaseName(PcrRes(RID_STR_BINDING_NAME));
                         sBaseName += " ";
                         OUString sNewName;
                         sal_Int32 nNumber = 1;

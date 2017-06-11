@@ -29,7 +29,7 @@
 #include <svx/pageitem.hxx>
 #include <unotools/charclass.hxx>
 #include <sot/storage.hxx>
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 #include <com/sun/star/xml/dom/XNode.hpp>
 
 #include <svx/svdundo.hxx>

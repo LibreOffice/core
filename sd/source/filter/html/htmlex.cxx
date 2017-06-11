@@ -78,7 +78,7 @@
 #include "Outliner.hxx"
 #include "sdpage.hxx"
 #include "sdattr.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "strings.hxx"
 #include "anminfo.hxx"
 #include "imapinfo.hxx"
@@ -3193,18 +3193,18 @@ void EasyFile::close()
 
 // This class helps reporting errors during file i/o
 HtmlErrorContext::HtmlErrorContext()
-: ErrorContext(nullptr)
+    : ErrorContext(nullptr)
+    , mpResId(nullptr)
 {
-    mnResId = 0;
 }
 
 bool HtmlErrorContext::GetString( ErrCode, OUString& rCtxStr )
 {
-    DBG_ASSERT( mnResId != 0, "No error context set" );
-    if( mnResId == 0 )
+    DBG_ASSERT(mpResId, "No error context set");
+    if (!mpResId)
         return false;
 
-    rCtxStr = SdResId(mnResId);
+    rCtxStr = SdResId(mpResId);
 
     rCtxStr = rCtxStr.replaceAll( "$(URL1)", maURL1 );
     rCtxStr = rCtxStr.replaceAll( "$(URL2)", maURL2 );
@@ -3212,16 +3212,16 @@ bool HtmlErrorContext::GetString( ErrCode, OUString& rCtxStr )
     return true;
 }
 
-void HtmlErrorContext::SetContext( sal_uInt16 nResId, const OUString& rURL )
+void HtmlErrorContext::SetContext(const char* pResId, const OUString& rURL)
 {
-    mnResId = nResId;
+    mpResId = pResId;
     maURL1 = rURL;
     maURL2.clear();
 }
 
-void HtmlErrorContext::SetContext( sal_uInt16 nResId, const OUString& rURL1, const OUString& rURL2 )
+void HtmlErrorContext::SetContext(const char* pResId, const OUString& rURL1, const OUString& rURL2 )
 {
-    mnResId = nResId;
+    mpResId = pResId;
     maURL1 = rURL1;
     maURL2 = rURL2;
 }

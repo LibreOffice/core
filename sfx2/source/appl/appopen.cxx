@@ -82,7 +82,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/viewsh.hxx>
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/objface.hxx>

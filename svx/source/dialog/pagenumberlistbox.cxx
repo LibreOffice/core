@@ -16,23 +16,20 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/pagenumberlistbox.hxx>
 #include <editeng/numitem.hxx>
-#include <tools/resary.hxx>
 #include <vcl/builderfactory.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
+#include "numberingtype.hrc"
 
 PageNumberListBox::PageNumberListBox(vcl::Window* pParent)
     : ListBox( pParent, WB_BORDER | WB_DROPDOWN)
 {
-    ResStringArray aPaperAry( ResId(RID_SVXSTRARY_NUMBERINGTYPE, DIALOG_MGR()) );
-    sal_uInt32 nCnt = aPaperAry.Count();
-
-    for ( sal_uInt32 i = 0; i < nCnt; ++i )
+    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_SVXSTRARY_NUMBERINGTYPE); ++i)
     {
-        sal_uInt16 nData = aPaperAry.GetValue(i);
+        sal_uInt16 nData = RID_SVXSTRARY_NUMBERINGTYPE[i].second;
         switch (nData)
         {
             // String list array is also used in Writer and contains strings
@@ -43,7 +40,7 @@ PageNumberListBox::PageNumberListBox(vcl::Window* pParent)
             break;
             default:
                 {
-                    OUString aStr = aPaperAry.GetString(i);
+                    OUString aStr = SvxResId(RID_SVXSTRARY_NUMBERINGTYPE[i].first);
                     sal_Int32 nPos = InsertEntry( aStr );
                     SetEntryData( nPos, reinterpret_cast<void*>((sal_uLong)nData) );
                 }

@@ -1,0 +1,37 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+#ifndef INCLUDED_FPICKER_FPICKER_HRC
+#define INCLUDED_FPICKER_FPICKER_HRC
+
+#define NC_(Context, String) (Context "\004" u8##String)
+
+#define STR_SVT_FILEPICKER_AUTO_EXTENSION           NC_("STR_SVT_FILEPICKER_AUTO_EXTENSION", "~Automatic file name extension")
+#define STR_SVT_FILEPICKER_PASSWORD                 NC_("STR_SVT_FILEPICKER_PASSWORD", "Save with pass~word")
+#define STR_SVT_FILEPICKER_FILTER_OPTIONS           NC_("STR_SVT_FILEPICKER_FILTER_OPTIONS", "~Edit filter settings")
+#define STR_SVT_FILEPICKER_READONLY                 NC_("STR_SVT_FILEPICKER_READONLY", "~Read-only")
+#define STR_SVT_FILEPICKER_INSERT_AS_LINK           NC_("STR_SVT_FILEPICKER_INSERT_AS_LINK", "~Link")
+#define STR_SVT_FILEPICKER_SHOW_PREVIEW             NC_("STR_SVT_FILEPICKER_SHOW_PREVIEW", "Pr~eview")
+#define STR_SVT_FILEPICKER_PLAY                     NC_("STR_SVT_FILEPICKER_PLAY", "~Play")
+#define STR_SVT_FILEPICKER_VERSION                  NC_("STR_SVT_FILEPICKER_VERSION", "~Version:")
+#define STR_SVT_FILEPICKER_TEMPLATES                NC_("STR_SVT_FILEPICKER_TEMPLATES", "S~tyles:")
+#define STR_SVT_FILEPICKER_IMAGE_TEMPLATE           NC_("STR_SVT_FILEPICKER_IMAGE_TEMPLATE", "Style:")
+#define STR_SVT_FILEPICKER_SELECTION                NC_("STR_SVT_FILEPICKER_SELECTION", "~Selection")
+#define STR_SVT_FILEPICKER_FILTER_TITLE             NC_("STR_SVT_FILEPICKER_FILTER_TITLE", "File ~type:")
+#define STR_SVT_FOLDERPICKER_DEFAULT_TITLE          NC_("STR_SVT_FOLDERPICKER_DEFAULT_TITLE", "Select Path")
+#define STR_SVT_FOLDERPICKER_DEFAULT_DESCRIPTION    NC_("STR_SVT_FOLDERPICKER_DEFAULT_DESCRIPTION", "Please select a folder.")
+#define STR_SVT_ALREADYEXISTOVERWRITE               NC_("STR_SVT_ALREADYEXISTOVERWRITE", "A file named \"$filename$\" already exists.\n\nDo you want to replace it?")
+#define STR_SVT_DELETESERVICE                       NC_("STR_SVT_DELETESERVICE", "Are you sure you want to delete the service?\n\"$servicename$\"")
+#define STR_SVT_ROOTLABEL                           NC_("STR_SVT_ROOTLABEL", "Root")
+#define STR_FILTERNAME_ALL                          NC_("STR_FILTERNAME_ALL", "All files")
+#define STR_FILEDLG_OPEN                            NC_("STR_FILEDLG_OPEN", "Open")
+#define STR_FILEDLG_TYPE                            NC_("STR_FILEDLG_TYPE", "File ~type")
+#define STR_FILEDLG_SAVE                            NC_("STR_FILEDLG_SAVE", "Save")
+
+#endif
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

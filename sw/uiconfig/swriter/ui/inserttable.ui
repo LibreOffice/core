@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
@@ -12,7 +12,7 @@
   <object class="GtkDialog" id="InsertTableDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Insert Table</property>
+    <property name="title" translatable="yes" context="inserttable|InsertTableDialog">Insert Table</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -25,7 +25,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="ok">
-                <property name="label" translatable="yes">Insert</property>
+                <property name="label" translatable="yes" context="inserttable|ok">Insert</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -120,7 +120,7 @@
                           <object class="GtkLabel" id="label3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Name:</property>
+                            <property name="label" translatable="yes" context="inserttable|label3">_Name:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">nameedit</property>
                             <property name="xalign">0</property>
@@ -134,7 +134,7 @@
                           <object class="GtkLabel" id="3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Columns:</property>
+                            <property name="label" translatable="yes" context="inserttable|3">_Columns:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">colspin</property>
                             <property name="xalign">0</property>
@@ -163,7 +163,7 @@
                           <object class="GtkLabel" id="4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Rows:</property>
+                            <property name="label" translatable="yes" context="inserttable|4">_Rows:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">rowspin</property>
                             <property name="xalign">1</property>
@@ -196,7 +196,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">General</property>
+                    <property name="label" translatable="yes" context="inserttable|label1">General</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -229,7 +229,7 @@
                         <property name="row_spacing">6</property>
                         <child>
                           <object class="GtkCheckButton" id="headercb">
-                            <property name="label" translatable="yes">Hea_ding</property>
+                            <property name="label" translatable="yes" context="inserttable|headercb">Hea_ding</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -244,7 +244,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="repeatcb">
-                            <property name="label" translatable="yes">Repeat heading rows on new _pages</property>
+                            <property name="label" translatable="yes" context="inserttable|repeatcb">Repeat heading rows on new _pages</property>
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
@@ -262,7 +262,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="bordercb">
-                            <property name="label" translatable="yes">_Border</property>
+                            <property name="label" translatable="yes" context="inserttable|bordercb">_Border</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -278,7 +278,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="dontsplitcb">
-                            <property name="label" translatable="yes">Don’t _split table over pages</property>
+                            <property name="label" translatable="yes" context="inserttable|dontsplitcb">Don’t _split table over pages</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -317,7 +317,7 @@
                               <object class="GtkLabel" id="repeatheaderafter">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Heading ro_ws:</property>
+                                <property name="label" translatable="yes" context="inserttable|repeatheaderafter">Heading ro_ws:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">repeatheaderspin</property>
                               </object>
@@ -334,7 +334,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="autoformat">
-                            <property name="label" translatable="yes">Auto_Format</property>
+                            <property name="label" translatable="yes" context="inserttable|autoformat">Auto_Format</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -356,7 +356,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Options</property>
+                    <property name="label" translatable="yes" context="inserttable|label2">Options</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

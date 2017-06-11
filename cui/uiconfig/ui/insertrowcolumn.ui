@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
@@ -12,7 +12,7 @@
   <object class="GtkDialog" id="InsertRowColumnDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Insert Row</property>
+    <property name="title" translatable="yes" context="insertrowcolumn|InsertRowColumnDialog">Insert Row</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -103,7 +103,7 @@
                           <object class="GtkLabel" id="label3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Number:</property>
+                            <property name="label" translatable="yes" context="insertrowcolumn|label3">_Number:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">insert_number</property>
                           </object>
@@ -135,7 +135,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Insert</property>
+                    <property name="label" translatable="yes" context="insertrowcolumn|label1">Insert</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -166,7 +166,7 @@
                         <property name="row_spacing">6</property>
                         <child>
                           <object class="GtkRadioButton" id="insert_before">
-                            <property name="label" translatable="yes">_Before</property>
+                            <property name="label" translatable="yes" context="insertrowcolumn|insert_before">_Before</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -184,7 +184,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="insert_after">
-                            <property name="label" translatable="yes">A_fter</property>
+                            <property name="label" translatable="yes" context="insertrowcolumn|insert_after">A_fter</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -207,7 +207,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Position</property>
+                    <property name="label" translatable="yes" context="insertrowcolumn|label2">Position</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

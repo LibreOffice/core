@@ -158,15 +158,6 @@ namespace gb { namespace types
             /// just a few need to be modified.
             void set_include(List<Path> include);
     };
-    /// A target using the resource compiler
-    class UsesRsc
-    {
-        public:
-            /// The command to execute rsc.
-            static const Command RSCCOMMAND;
-            /// The target on with to depend to make sure the rsc executable is available.
-            static const Path RSCTARGET;
-    };
     /// A target processing a set of srs files
     class HasSrs
     {

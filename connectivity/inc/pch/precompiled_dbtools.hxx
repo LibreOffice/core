@@ -132,7 +132,6 @@
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/numbers.hxx>
-#include <comphelper/officeresourcebundle.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propagg.hxx>
 #include <comphelper/proparrhlp.hxx>

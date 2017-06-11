@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="chart">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkAdjustment" id="adjustment1">
@@ -17,16 +17,16 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Bar</col>
+        <col id="0" translatable="yes" context="tp_ChartType|liststore1">Bar</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Cylinder</col>
+        <col id="0" translatable="yes" context="tp_ChartType|liststore1">Cylinder</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Cone</col>
+        <col id="0" translatable="yes" context="tp_ChartType|liststore1">Cone</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Pyramid</col>
+        <col id="0" translatable="yes" context="tp_ChartType|liststore1">Pyramid</col>
       </row>
     </data>
   </object>
@@ -50,7 +50,7 @@
             <property name="visible">False</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Choose a Chart Type</property>
+            <property name="label" translatable="yes" context="tp_ChartType|FT_CAPTION_FOR_WIZARD">Choose a Chart Type</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -99,7 +99,7 @@
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkCheckButton" id="3dlook">
-                            <property name="label" translatable="yes">_3D Look</property>
+                            <property name="label" translatable="yes" context="tp_ChartType|3dlook">_3D Look</property>
                             <property name="visible">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -122,8 +122,8 @@
                             <property name="visible">False</property>
                             <property name="can_focus">False</property>
                             <items>
-                              <item translatable="yes">Simple</item>
-                              <item translatable="yes">Realistic</item>
+                              <item translatable="yes" context="tp_ChartType|3dscheme">Simple</item>
+                              <item translatable="yes" context="tp_ChartType|3dscheme">Realistic</item>
                             </items>
                             <accessibility>
                               <relation type="labelled-by" target="3dlook"/>
@@ -149,7 +149,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Sh_ape</property>
+                        <property name="label" translatable="yes" context="tp_ChartType|shapeft">Sh_ape</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">shape:border</property>
                         <property name="angle">0.02</property>
@@ -192,7 +192,7 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="stack">
-                        <property name="label" translatable="yes">_Stack series</property>
+                        <property name="label" translatable="yes" context="tp_ChartType|stack">_Stack series</property>
                         <property name="visible">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -219,7 +219,7 @@
                             <property name="row_spacing">6</property>
                             <child>
                               <object class="GtkRadioButton" id="ontop">
-                                <property name="label" translatable="yes">On top</property>
+                                <property name="label" translatable="yes" context="tp_ChartType|ontop">On top</property>
                                 <property name="visible">False</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -238,7 +238,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="percent">
-                                <property name="label" translatable="yes">Percent</property>
+                                <property name="label" translatable="yes" context="tp_ChartType|percent">Percent</property>
                                 <property name="visible">False</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -256,7 +256,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="deep">
-                                <property name="label" translatable="yes">Deep</property>
+                                <property name="label" translatable="yes" context="tp_ChartType|deep">Deep</property>
                                 <property name="visible">False</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -292,7 +292,7 @@
                             <property name="visible">False</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Line type</property>
+                            <property name="label" translatable="yes" context="tp_ChartType|linetypeft">_Line type</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">linetype</property>
                             <property name="ellipsize">end</property>
@@ -309,9 +309,9 @@
                             <property name="visible">False</property>
                             <property name="can_focus">False</property>
                             <items>
-                              <item translatable="yes">Straight</item>
-                              <item translatable="yes">Smooth</item>
-                              <item translatable="yes">Stepped</item>
+                              <item translatable="yes" context="tp_ChartType|linetype">Straight</item>
+                              <item translatable="yes" context="tp_ChartType|linetype">Smooth</item>
+                              <item translatable="yes" context="tp_ChartType|linetype">Stepped</item>
                             </items>
                           </object>
                           <packing>
@@ -323,7 +323,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="properties">
-                            <property name="label" translatable="yes">Properties...</property>
+                            <property name="label" translatable="yes" context="tp_ChartType|properties">Properties...</property>
                             <property name="visible">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -346,7 +346,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="sort">
-                        <property name="label" translatable="yes">_Sort by X values</property>
+                        <property name="label" translatable="yes" context="tp_ChartType|sort">_Sort by X values</property>
                         <property name="visible">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -371,7 +371,7 @@
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Number of lines</property>
+                            <property name="label" translatable="yes" context="tp_ChartType|nolinesft">_Number of lines</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">nolines</property>
                             <property name="ellipsize">end</property>
@@ -418,7 +418,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkCheckButton" id="rounded-edge">
-                        <property name="label" translatable="yes">Rounded edge</property>
+                        <property name="label" translatable="yes" context="tp_ChartType|rounded-edge">Rounded edge</property>
                         <property name="visible">False</property>
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
