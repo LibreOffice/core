@@ -82,7 +82,6 @@ class OfficeConnection:
         if 'LIBO_LANG' in environ:
             env = environ
             env['LC_ALL'] = environ['LIBO_LANG']
-            print(env)
 
         self.pro = subprocess.Popen(argv, env=env)
         return self.pro
