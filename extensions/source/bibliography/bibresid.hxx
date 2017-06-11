@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 
-OUString BibResId(sal_uInt16 nId);
+OUString BibResId(const char* pId);
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBRESID_HXX
 

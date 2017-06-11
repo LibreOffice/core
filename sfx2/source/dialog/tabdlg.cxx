@@ -39,7 +39,7 @@
 
 #include "uitest/sfx_uiobject.hxx"
 
-#include "dialog.hrc"
+#include "sfx2/strings.hrc"
 #include "helpid.hrc"
 
 using namespace ::com::sun::star::uno;

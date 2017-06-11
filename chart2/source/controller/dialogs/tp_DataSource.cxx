@@ -18,7 +18,7 @@
  */
 
 #include "tp_DataSource.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "ResId.hxx"
 #include "chartview/ChartSfxItemIds.hxx"
 #include "macros.hxx"

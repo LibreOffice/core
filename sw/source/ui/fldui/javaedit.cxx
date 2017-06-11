@@ -35,6 +35,7 @@
 
 #include <fldui.hrc>
 #include <globals.hrc>
+#include <strings.hrc>
 
 using namespace ::com::sun::star;
 

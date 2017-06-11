@@ -28,7 +28,7 @@
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include "xmlstrings.hrc"
+#include "strings.hxx"
 
 namespace rptxml
 {

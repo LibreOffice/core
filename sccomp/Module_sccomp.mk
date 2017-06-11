@@ -24,7 +24,7 @@ $(eval $(call gb_Module_add_targets,sccomp,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,sccomp,\
-	$(if $(ENABLE_COINMP)$(ENABLE_LPSOLVE), AllLangResTarget_solver) \
+	$(if $(ENABLE_COINMP)$(ENABLE_LPSOLVE), AllLangMoTarget_scc) \
 ))
 
 $(eval $(call gb_Module_add_check_targets,sccomp,\
