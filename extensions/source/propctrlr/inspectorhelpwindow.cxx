@@ -18,7 +18,7 @@
  */
 #include "inspectorhelpwindow.hxx"
 #include "modulepcr.hxx"
-#include "propresid.hrc"
+#include "strings.hrc"
 
 
 namespace pcr

@@ -44,8 +44,8 @@
 
 #include <tools/bigint.hxx>
 #include <svl/itemset.hxx>
-#include <svx/dialogs.hrc>
-#include "svx/svdstr.hrc"
+#include <svx/strings.hrc>
+#include "svx/strings.hrc"
 #include "svx/xattr.hxx"
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>
@@ -136,7 +136,7 @@ SvStream& NameOrIndex::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
     Argument pPool2 can be null.
     If returned string equals NameOrIndex->GetName(), the name was already unique.
 */
-OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, const SfxItemPool* /*pPool2*/, SvxCompareValueFunc pCompareValueFunc, sal_uInt16 nPrefixResId, const XPropertyListRef &pDefaults )
+OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, const SfxItemPool* /*pPool2*/, SvxCompareValueFunc pCompareValueFunc, const char* pPrefixResId, const XPropertyListRef &pDefaults )
 {
     bool bForceNew = false;
 
@@ -173,7 +173,7 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
     if (aUniqueName.isEmpty())
     {
         sal_Int32 nUserIndex = 1;
-        OUString aUser(SvxResId(nPrefixResId));
+        OUString aUser(SvxResId(pPrefixResId));
         aUser += " ";
 
         if( pDefaults.get() )
@@ -392,21 +392,21 @@ bool XLineStyleItem::GetPresentation
 {
     rText.clear();
 
-    sal_uInt16 nId = 0;
+    const char* pId = nullptr;
 
     switch( GetValue() )
     {
         case css::drawing::LineStyle_NONE:
-            nId = RID_SVXSTR_INVISIBLE;
+            pId = RID_SVXSTR_INVISIBLE;
             break;
         case css::drawing::LineStyle_SOLID:
-            nId = RID_SVXSTR_SOLID;
+            pId = RID_SVXSTR_SOLID;
             break;
         default: break;
     }
 
-    if ( nId )
-        rText = SvxResId( nId );
+    if (pId)
+        rText = SvxResId(pId);
     return true;
 }
 
@@ -1049,7 +1049,7 @@ bool XLineWidthItem::GetPresentation
 {
     rText = GetMetricText( (long) GetValue(),
                             eCoreUnit, ePresUnit, pIntl) +
-            " " + EditResId::GetString( GetMetricId( ePresUnit) );
+            " " + EditResId( GetMetricId( ePresUnit) );
     return true;
 }
 
@@ -1938,7 +1938,7 @@ bool XLineStartWidthItem::GetPresentation
 {
     rText = GetMetricText( (long) GetValue(),
                             eCoreUnit, ePresUnit, pIntl) +
-            " " + EditResId::GetString( GetMetricId( ePresUnit) );
+            " " + EditResId( GetMetricId( ePresUnit) );
     return true;
 }
 
@@ -1986,7 +1986,7 @@ bool XLineEndWidthItem::GetPresentation
 {
     rText = GetMetricText( (long) GetValue(),
                             eCoreUnit, ePresUnit, pIntl) +
-            " " + EditResId::GetString( GetMetricId( ePresUnit) );
+            " " + EditResId( GetMetricId( ePresUnit) );
     return true;
 }
 
@@ -2032,8 +2032,7 @@ bool XLineStartCenterItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString( ResId( GetValue() ? RID_SVXSTR_CENTERED :
-                    RID_SVXSTR_NOTCENTERED, DIALOG_MGR() ) );
+    rText = SvxResId(GetValue() ? RID_SVXSTR_CENTERED : RID_SVXSTR_NOTCENTERED);
     return true;
 }
 
@@ -2082,8 +2081,7 @@ bool XLineEndCenterItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString( ResId( GetValue() ? RID_SVXSTR_CENTERED :
-                    RID_SVXSTR_NOTCENTERED, DIALOG_MGR() ) );
+    rText = SvxResId(GetValue() ? RID_SVXSTR_CENTERED : RID_SVXSTR_NOTCENTERED);
     return true;
 }
 
@@ -2139,30 +2137,30 @@ bool XFillStyleItem::GetPresentation
 {
     rText.clear();
 
-    sal_uInt16 nId = 0;
+    const char* pId = nullptr;
 
     switch( GetValue() )
     {
         case drawing::FillStyle_NONE:
-            nId = RID_SVXSTR_INVISIBLE;
+            pId = RID_SVXSTR_INVISIBLE;
             break;
         case drawing::FillStyle_SOLID:
-            nId = RID_SVXSTR_SOLID;
+            pId = RID_SVXSTR_SOLID;
             break;
         case drawing::FillStyle_GRADIENT:
-            nId = RID_SVXSTR_GRADIENT;
+            pId = RID_SVXSTR_GRADIENT;
             break;
         case drawing::FillStyle_HATCH:
-            nId = RID_SVXSTR_HATCH;
+            pId = RID_SVXSTR_HATCH;
             break;
         case drawing::FillStyle_BITMAP:
-            nId = RID_SVXSTR_BITMAP;
+            pId = RID_SVXSTR_BITMAP;
             break;
         default: break;
     }
 
-    if ( nId )
-        rText = SvxResId( nId );
+    if (pId)
+        rText = SvxResId(pId);
     return true;
 }
 

@@ -18,7 +18,7 @@
  */
 
 #include "dlg_DataEditor.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "DataBrowser.hxx"
 
 #include "ResId.hxx"

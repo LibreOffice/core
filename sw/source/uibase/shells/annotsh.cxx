@@ -88,7 +88,7 @@
 
 #include <cmdid.h>
 #include <globals.hrc>
-#include <shells.hrc>
+#include <strings.hrc>
 #include <breakit.hxx>
 #include "annotsh.hxx"
 #include "view.hxx"

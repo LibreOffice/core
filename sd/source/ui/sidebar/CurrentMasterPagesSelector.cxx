@@ -28,7 +28,7 @@
 #include "EventMultiplexer.hxx"
 #include "app.hrc"
 #include "DrawDocShell.hxx"
-#include "res_bmp.hrc"
+
 #include "sdresid.hxx"
 #include "helpids.h"
 

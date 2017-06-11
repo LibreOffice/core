@@ -68,10 +68,9 @@
 #include <svx/dialogs.hrc>
 #include "sdresid.hxx"
 
-#include "glob.hrc"
+#include "strings.hrc"
 #include "CustomAnimationDialog.hxx"
 #include "CustomAnimationPane.hxx"
-#include "CustomAnimation.hrc"
 #include "STLPropertySet.hxx"
 
 #include <avmedia/mediawindow.hxx>

@@ -36,7 +36,7 @@
 #include "sbobjmod.hxx"
 #include "stdobj.hxx"
 #include "filefmt.hxx"
-#include "sb.hrc"
+#include "basic.hrc"
 #include <basrid.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -1584,18 +1584,30 @@ void StarBASIC::SetErrorData( SbError nCode, sal_uInt16 nLine,
     aGlobals.nCol2 = nCol2;
 }
 
+const ErrMsgCode* getRID_BASIC_START()
+{
+    return RID_BASIC_START;
+}
+
 void StarBASIC::MakeErrorText( SbError nId, const OUString& aMsg )
 {
     SolarMutexGuard aSolarGuard;
     sal_uInt16 nOldID = GetVBErrorCode( nId );
 
-    // instantiate the help class
-    ResStringArray aMyStringList(BasResId(RID_BASIC_START));
-    sal_uInt32 nErrIdx = aMyStringList.FindIndex(sal_uInt16(nId & ERRCODE_RES_MASK));
-    if (nErrIdx != RESARRAY_INDEX_NOTFOUND)
+    const char* pErrorMsg = nullptr;
+    for (ErrMsgCode* pItem = RID_BASIC_START; pItem->second; ++pItem)
+    {
+        if (nId == pItem->second)
+        {
+            pErrorMsg = pItem->first;
+            break;
+        }
+    }
+
+    if (pErrorMsg)
     {
         // merge message with additional text
-        OUString sError = aMyStringList.GetString(nErrIdx);
+        OUString sError = BasResId(pErrorMsg);
         OUStringBuffer aMsg1(sError);
         // replace argument placeholder with %s
         OUString aSrgStr( "$(ARG1)" );
