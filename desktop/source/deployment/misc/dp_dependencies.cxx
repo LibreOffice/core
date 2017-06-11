@@ -33,8 +33,9 @@
 #include <tools/resid.hxx>
 #include <unotools/configmgr.hxx>
 
-#include "deployment.hrc"
+#include "strings.hrc"
 #include "dp_resource.h"
+#include "dp_shared.hxx"
 
 #include "dp_dependencies.hxx"
 #include "dp_descriptioninfoset.hxx"
@@ -85,7 +86,7 @@ OUString produceErrorText(
 {
     return reason.replaceFirst("%VERSION",
         (version.isEmpty()
-         ?  dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN)
+         ?  DpResId(RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN)
          : version));
 }
 
@@ -156,27 +157,27 @@ OUString getErrorText(
     if ( dependency->getNamespaceURI() == namespaceOpenOfficeOrg && dependency->getTagName() == minimalVersionOpenOfficeOrg )
     {
         return produceErrorText(
-                dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MIN),
+                DpResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MIN),
             dependency->getAttribute("value"));
     } else if (dependency->getNamespaceURI() == namespaceOpenOfficeOrg && dependency->getTagName() == maximalVersionOpenOfficeOrg )
     {
         return produceErrorText(
-                dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MAX),
+                DpResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MAX),
             dependency->getAttribute("value"));
     } else if (dependency->getNamespaceURI() == namespaceLibreOffice && dependency->getTagName() == minimalVersionLibreOffice )
     {
         return produceErrorText(
-                dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_LO_MIN),
+                DpResId(RID_DEPLOYMENT_DEPENDENCIES_LO_MIN),
             dependency->getAttribute("value"));
     } else if (dependency->hasAttributeNS(namespaceOpenOfficeOrg,
                    minimalVersionOpenOfficeOrg))
     {
         return produceErrorText(
-                dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MIN),
+                DpResId(RID_DEPLOYMENT_DEPENDENCIES_OOO_MIN),
             dependency->getAttributeNS(namespaceOpenOfficeOrg,
                 minimalVersionOpenOfficeOrg));
     } else {
-        return dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN);
+        return DpResId(RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN);
     }
 }
 

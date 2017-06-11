@@ -58,7 +58,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase12.hxx>
 #include <cppuhelper/implbase10.hxx>
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 
 namespace dbaui
 {
@@ -120,7 +120,7 @@ namespace dbaui
         ,public SbaXFormAdapter_BASE3
     {
     private:
-        OModuleClient                m_aModuleClient;
+        dbaccess::OModuleClient             m_aModuleClient;
         css::uno::Reference< css::sdbc::XRowSet >                             m_xMainForm;
         ::osl::Mutex                        m_aMutex;
 

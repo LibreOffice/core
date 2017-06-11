@@ -24,13 +24,13 @@
 #include <svx/numinf.hxx>
 
 #include <svx/dialogs.hrc>
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
 #include <svl/itemset.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/svxids.hrc>
 #include <svx/flagsdef.hxx>
 #include <svl/intitem.hxx>
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 using namespace dbaui;
 
 

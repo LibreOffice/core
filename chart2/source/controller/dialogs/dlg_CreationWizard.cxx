@@ -20,7 +20,7 @@
 #include "dlg_CreationWizard.hxx"
 #include "ResId.hxx"
 #include "macros.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "HelpIds.hrc"
 
 #include "tp_ChartType.hxx"
@@ -169,25 +169,27 @@ void CreationWizard::setValidPage( TabPage * /* pTabPage */ )
 
 OUString CreationWizard::getStateDisplayName( WizardState nState ) const
 {
-    sal_uInt16 nResId = 0;
+    const char* pResId = nullptr;
     switch( nState )
     {
     case STATE_CHARTTYPE:
-        nResId = STR_PAGE_CHARTTYPE;
+        pResId = STR_PAGE_CHARTTYPE;
         break;
     case STATE_SIMPLE_RANGE:
-        nResId = STR_PAGE_DATA_RANGE;
+        pResId = STR_PAGE_DATA_RANGE;
         break;
     case STATE_DATA_SERIES:
-        nResId = STR_OBJECT_DATASERIES_PLURAL;
+        pResId = STR_OBJECT_DATASERIES_PLURAL;
         break;
     case STATE_OBJECTS:
-        nResId = STR_PAGE_CHART_ELEMENTS;
+        pResId = STR_PAGE_CHART_ELEMENTS;
         break;
     default:
         break;
     }
-    return SchResId(nResId);
+    if (!pResId)
+        return OUString();
+    return SchResId(pResId);
 }
 
 } //namespace chart

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "basidesh.hrc"
+#include "strings.hrc"
 #include "helpid.hrc"
 
 #include "accessibledialogwindow.hxx"
@@ -46,6 +46,7 @@
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svdundo.hxx>
+#include <svx/svxids.hrc>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>

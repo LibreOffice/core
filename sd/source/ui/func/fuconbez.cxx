@@ -39,7 +39,7 @@
 #include "Window.hxx"
 #include "ToolBarManager.hxx"
 #include "drawdoc.hxx"
-#include "res_bmp.hrc"
+
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
