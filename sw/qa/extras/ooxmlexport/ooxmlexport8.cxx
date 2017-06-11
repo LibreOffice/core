@@ -2194,6 +2194,12 @@ DECLARE_OOXMLEXPORT_TEST( testTdf107359, "tdf107359-char-pitch.docx" )
     CPPUNIT_ASSERT_EQUAL( sal_Int32(convertTwipToMm100(24 * 20)), nBaseWidth );
 }
 
+DECLARE_OOXMLEXPORT_TEST( testTdf85161, "tdf85161.docx" )
+{
+    CPPUNIT_ASSERT_EQUAL(OUString("Symbol"), getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(OUString(sal_Unicode(94)),getParagraph(1)->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
