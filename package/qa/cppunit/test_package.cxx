@@ -53,11 +53,9 @@ namespace
         BootstrapFixtureBase::setUp();
         OUString aURL = m_directories.getURLFromSrc("/package/qa/cppunit/data/a2z.zip");
 
-        uno::Sequence<beans::NamedValue> aNVs(2);
+        uno::Sequence<beans::NamedValue> aNVs(1);
         aNVs[0].Name = "URL";
         aNVs[0].Value <<= aURL;
-        aNVs[1].Name = "UseBufferedStream";
-        aNVs[1].Value <<= true;
 
         uno::Sequence<uno::Any> aArgs(1);
         aArgs[0] <<= aNVs;

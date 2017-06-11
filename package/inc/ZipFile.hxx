@@ -64,7 +64,6 @@ class ZipFile
     const css::uno::Reference < css::uno::XComponentContext > m_xContext;
 
     bool bRecoveryMode;
-    bool mbUseBufferedStream;
 
     // aMediaType parameter is used only for raw stream header creation
     css::uno::Reference < css::io::XInputStream >  createStreamForZipEntry(
@@ -104,8 +103,6 @@ public:
     ~ZipFile();
 
     EntryHash& GetEntryHash() { return aEntries; }
-
-    void setUseBufferedStream( bool b );
 
     void setInputStream ( const css::uno::Reference < css::io::XInputStream >& xNewStream );
     css::uno::Reference< css::io::XInputStream > getRawData(
