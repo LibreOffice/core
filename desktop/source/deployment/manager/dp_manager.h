@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_MANAGER_DP_MANAGER_H
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_MANAGER_DP_MANAGER_H
 
-#include "dp_manager.hrc"
+#include "strings.hrc"
 #include "dp_misc.h"
 #include "dp_interact.h"
 #include "dp_activepackages.hxx"

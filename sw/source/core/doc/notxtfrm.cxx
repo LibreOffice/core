@@ -64,7 +64,7 @@
 #include <poolfmt.hxx>
 #include <mdiexp.hxx>
 #include <swwait.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <accessibilityoptions.hxx>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
@@ -961,22 +961,22 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
             }
             else
             {
-                sal_uInt16 nResId = 0;
+                const char* pResId = nullptr;
 
                 if( GraphicType::NONE == rGrfObj.GetType() )
-                    nResId = STR_COMCORE_READERROR;
+                    pResId = STR_COMCORE_READERROR;
                 else if ( !rGrfObj.GetGraphic().IsSupportedGraphic() )
-                    nResId = STR_COMCORE_CANT_SHOW;
+                    pResId = STR_COMCORE_CANT_SHOW;
 
                 OUString aText;
-                if ( !nResId &&
+                if ( !pResId &&
                      (aText = pGrfNd->GetTitle()).isEmpty() &&
                      (!GetRealURL( *pGrfNd, aText ) || aText.isEmpty()))
                 {
-                    nResId = STR_COMCORE_READERROR;
+                    pResId = STR_COMCORE_READERROR;
                 }
-                if ( nResId )
-                    aText = SwResId( nResId );
+                if (pResId)
+                    aText = SwResId(pResId);
 
                 ::lcl_PaintReplacement( aAlignedGrfArea, aText, *pShell, this, true );
             }

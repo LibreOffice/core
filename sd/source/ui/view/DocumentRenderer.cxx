@@ -20,6 +20,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include "DocumentRenderer.hxx"
+#include "DocumentRenderer.hrc"
 
 #include "drawdoc.hxx"
 #include "optsitem.hxx"
@@ -395,7 +396,7 @@ namespace {
                                     SdResId(STR_IMPRESS_PRINT_UI_CONTENT),
                                     aHelpIds,
                                     "PageContentType" ,
-                                    CreateChoice(STR_IMPRESS_PRINT_UI_CONTENT_CHOICES),
+                                    CreateChoice(STR_IMPRESS_PRINT_UI_CONTENT_CHOICES, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_CONTENT_CHOICES)),
                                     0)
                                 );
 
@@ -420,7 +421,7 @@ namespace {
                                     SdResId(STR_IMPRESS_PRINT_UI_ORDER),
                                     aHelpIds,
                                     "SlidesPerPageOrder" ,
-                                    CreateChoice(STR_IMPRESS_PRINT_UI_ORDER_CHOICES),
+                                    CreateChoice(STR_IMPRESS_PRINT_UI_ORDER_CHOICES, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_ORDER_CHOICES)),
                                     0,
                                     Sequence< sal_Bool >(),
                                     aSlidesPerPageOpt )
@@ -486,7 +487,7 @@ namespace {
                                 "",
                                 aHelpIds,
                                 "Quality" ,
-                                CreateChoice(STR_IMPRESS_PRINT_UI_QUALITY_CHOICES),
+                                CreateChoice(STR_IMPRESS_PRINT_UI_QUALITY_CHOICES, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_QUALITY_CHOICES)),
                                 0)
                             );
 
@@ -510,7 +511,8 @@ namespace {
                                 "",
                                 aHelpIds,
                                 "PageOptions" ,
-                                CreateChoice(mbImpress ? STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES : STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW),
+                                mbImpress ? CreateChoice(STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES)) :
+                                            CreateChoice(STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW)),
                                 0,
                                 Sequence< sal_Bool >(),
                                 aPageOptionsOpt
@@ -543,7 +545,7 @@ namespace {
                                 SdResId(STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE),
                                 aHelpIds,
                                 "PrintProspectInclude" ,
-                                CreateChoice(STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST),
+                                CreateChoice(STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST)),
                                 0,
                                 Sequence< sal_Bool >(),
                                 aIncludeOpt
@@ -612,9 +614,8 @@ namespace {
             AddDialogControl( vcl::PrinterOptionsHelper::setChoiceRadiosControlOpt(aWidgetIds, "",
                                 aHelpIds,
                                 aPrintRangeName,
-                                CreateChoice(mbImpress
-                                             ? STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE
-                                             : STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE),
+                                mbImpress ? CreateChoice(STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE)) :
+                                            CreateChoice(STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE, SAL_N_ELEMENTS(STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE)),
                                 nPrintRange )
                             );
             // create a an Edit dependent on "Pages" selected
@@ -631,23 +632,18 @@ namespace {
             maProperties.push_back( aVal );
         }
 
-        static Sequence<OUString> CreateChoice (const sal_uInt16 nResourceId)
+        static Sequence<OUString> CreateChoice(const char** pResourceId, size_t nCount)
         {
-            ResId aResourceId(nResourceId, *SD_MOD()->GetResMgr());
-            ResStringArray aChoiceStrings (aResourceId);
-
-            const sal_uInt32 nCount (aChoiceStrings.Count());
             Sequence<OUString> aChoices (nCount);
-            for (sal_uInt32 nIndex=0; nIndex<nCount; ++nIndex)
-                aChoices[nIndex] = aChoiceStrings.GetString(nIndex);
-
+            for (size_t nIndex=0; nIndex < nCount; ++nIndex)
+                aChoices[nIndex] = SdResId(pResourceId[nIndex]);
             return aChoices;
         }
 
         Sequence<OUString> GetSlidesPerPageSequence()
         {
             const Sequence<OUString> aChoice (
-                CreateChoice(STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES));
+                CreateChoice(STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES)));
             maSlidesPerPage.clear();
             maSlidesPerPage.push_back(0); // first is using the default
             for (sal_Int32 nIndex=1,nCount=aChoice.getLength(); nIndex<nCount; ++nIndex)

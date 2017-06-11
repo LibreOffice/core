@@ -19,7 +19,7 @@
 
 
 #include "CRowSetDataColumn.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include "apitools.hxx"
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>

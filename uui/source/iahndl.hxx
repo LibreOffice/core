@@ -30,7 +30,6 @@
 #include <com/sun/star/task/InteractionClassification.hpp>
 
 #include <vcl/errcode.hxx>
-#include <tools/resary.hxx>
 #include <tools/wintypes.hxx>
 
 #include <unordered_map>
@@ -248,10 +247,14 @@ private:
 
 class ErrorResource
 {
-    ResStringArray m_aStringArray;
+    const std::pair<const char*, ErrCode>* m_pStringArray;
+    const std::locale& m_rResLocale;
 public:
-    explicit ErrorResource(ResId& rResId) : m_aStringArray(rResId) {}
-
+    explicit ErrorResource(const std::pair<const char*, ErrCode>* pStringArray, const std::locale& rResLocale)
+        : m_pStringArray(pStringArray)
+        , m_rResLocale(rResLocale)
+    {
+    }
     bool getString(ErrCode nErrorCode, OUString &rString) const;
 };
 

@@ -22,7 +22,7 @@
 
 /* Function descriptions for function wizard / autopilot */
 
-#include "scfuncs.hrc"
+#include "scfuncs.hxx"
 
 #include <formula/IFunctionDescription.hxx>
 #include <sal/types.h>

@@ -28,7 +28,8 @@
 #include "tabvwsh.hxx"
 #include "globstr.hrc"
 #include "global.hxx"
-#include "scres.hrc"
+#include "sc.hrc"
+#include "strings.hrc"
 #include "undoolk.hxx"
 #include "target.hxx"
 #include "uiitems.hxx"
@@ -1146,17 +1147,17 @@ bool ScUndoShowHideTab::CanRepeat(SfxRepeatTarget& rTarget) const
 
 OUString ScUndoShowHideTab::GetComment() const
 {
-    sal_uInt16 nId;
+    const char* pId;
     if (undoTabs.size() > 1)
     {
-        nId = bShow ? STR_UNDO_SHOWTABS : STR_UNDO_HIDETABS;
+        pId = bShow ? STR_UNDO_SHOWTABS : STR_UNDO_HIDETABS;
     }
     else
     {
-        nId = bShow ? STR_UNDO_SHOWTAB : STR_UNDO_HIDETAB;
+        pId = bShow ? STR_UNDO_SHOWTAB : STR_UNDO_HIDETAB;
     }
 
-    return ScGlobal::GetRscString( nId );
+    return ScGlobal::GetRscString(pId);
 }
 
 ScUndoDocProtect::ScUndoDocProtect(ScDocShell* pShell, unique_ptr<ScDocProtection> && pProtectSettings) :
@@ -1222,8 +1223,8 @@ bool ScUndoDocProtect::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 
 OUString ScUndoDocProtect::GetComment() const
 {
-    sal_uInt16 nId = mpProtectSettings->isProtected() ? STR_UNDO_PROTECT_DOC : STR_UNDO_UNPROTECT_DOC;
-    return ScGlobal::GetRscString( nId );
+    const char* pId = mpProtectSettings->isProtected() ? STR_UNDO_PROTECT_DOC : STR_UNDO_UNPROTECT_DOC;
+    return ScGlobal::GetRscString(pId);
 }
 
 ScUndoTabProtect::ScUndoTabProtect(ScDocShell* pShell, SCTAB nTab, unique_ptr<ScTableProtection> && pProtectSettings) :
@@ -1290,8 +1291,8 @@ bool ScUndoTabProtect::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 
 OUString ScUndoTabProtect::GetComment() const
 {
-    sal_uInt16 nId = mpProtectSettings->isProtected() ? STR_UNDO_PROTECT_TAB : STR_UNDO_UNPROTECT_TAB;
-    return ScGlobal::GetRscString( nId );
+    const char* pId = mpProtectSettings->isProtected() ? STR_UNDO_PROTECT_TAB : STR_UNDO_UNPROTECT_TAB;
+    return ScGlobal::GetRscString(pId);
 }
 
 ScUndoPrintRange::ScUndoPrintRange( ScDocShell* pShell, SCTAB nNewTab,

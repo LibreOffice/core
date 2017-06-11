@@ -19,8 +19,8 @@
 #include "FormattedField.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include "corestrings.hrc"
-#include "core_resource.hrc"
+#include "strings.hxx"
+#include "strings.hrc"
 #include "core_resource.hxx"
 #include <tools/color.hxx>
 #include <connectivity/dbtools.hxx>
@@ -54,7 +54,7 @@ OFormattedField::OFormattedField(uno::Reference< uno::XComponentContext > const 
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nFormatKey(0)
 {
-    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FORMATTEDFIELD);
+    m_aProps.aComponent.m_sName  = RptResId(RID_STR_FORMATTEDFIELD);
 }
 
 OFormattedField::OFormattedField(uno::Reference< uno::XComponentContext > const & _xContext
@@ -65,7 +65,7 @@ OFormattedField::OFormattedField(uno::Reference< uno::XComponentContext > const 
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nFormatKey(0)
 {
-    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FORMATTEDFIELD);
+    m_aProps.aComponent.m_sName  = RptResId(RID_STR_FORMATTEDFIELD);
     m_aProps.aComponent.m_xFactory = _xFactory;
     osl_atomic_increment( &m_refCount );
     {
