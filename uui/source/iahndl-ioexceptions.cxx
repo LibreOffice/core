@@ -22,7 +22,7 @@
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <comphelper/fileurl.hxx>
 
-#include "ids.hrc"
+#include "ids.hxx"
 
 #include "iahndl.hxx"
 

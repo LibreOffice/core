@@ -1,0 +1,39 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef ACCESSIBILITY_HELPER_ACCESSIBLESTRINGS_HRC_
+#define ACCESSIBILITY_HELPER_ACCESSIBLESTRINGS_HRC_
+
+#define N_(String) (u8##String)
+
+#define RID_STR_ACC_NAME_BROWSEBUTTON           N_("Browse")
+#define STR_SVT_ACC_ACTION_EXPAND               N_("Expand" )
+#define STR_SVT_ACC_ACTION_COLLAPSE             N_("Collapse")
+#define STR_SVT_ACC_LISTENTRY_SELCTED_STATE     N_("(Selected)")
+#define RID_STR_ACC_ACTION_CHECK                N_("Check")
+#define RID_STR_ACC_ACTION_UNCHECK              N_("Uncheck")
+#define RID_STR_ACC_SCROLLBAR_NAME_VERTICAL     N_("Vertical scroll bar")
+#define RID_STR_ACC_SCROLLBAR_NAME_HORIZONTAL   N_("Horizontal scroll bar")
+#define RID_STR_ACC_PANEL_DESCRIPTION           N_("Please press enter to go into child control for more operations")
+#define RID_STR_ACC_COLUMN_NUM                  N_("Column %COLUMNNUMBER")
+#define RID_STR_ACC_ROW_NUM                     N_("Row %ROWNUMBER")
+
+#endif          // ACCESSIBILITY_HELPER_ACCESSIBLESTRINGS_HRC_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,7 +20,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_DBTREELISTBOX_HXX
 
 #include "ScrollHelper.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -51,7 +51,7 @@ namespace dbaui
     class IContextMenuProvider;
     class DBTreeListBox     :public SvTreeListBox
     {
-        OModuleClient               m_aModuleClient;
+        dbaccess::OModuleClient     m_aModuleClient;
         OScrollHelper               m_aScrollHelper;
         Timer                       m_aTimer; // is needed for table updates
         Point                       m_aMousePos;

@@ -53,7 +53,7 @@
 #include "ViewShellBase.hxx"
 #include "DrawViewShell.hxx"
 #include "DrawController.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "sdresid.hxx"
 #include "EventMultiplexer.hxx"
 

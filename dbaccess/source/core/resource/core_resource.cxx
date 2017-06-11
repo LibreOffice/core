@@ -19,7 +19,7 @@
 
 #include "core_resource.hxx"
 
-#include <tools/resmgr.hxx>
+#include <tools/simplerm.hxx>
 
 // ---- needed as long as we have no contexts for components ---
 #include <vcl/svapp.hxx>
@@ -38,37 +38,37 @@ namespace dbaccess
     }
 
     sal_Int32       ResourceManager::s_nClients = 0;
-    ResMgr*         ResourceManager::m_pImpl = nullptr;
+    std::locale*    ResourceManager::m_pImpl = nullptr;
 
     void ResourceManager::ensureImplExists()
     {
         if (m_pImpl)
             return;
 
-        m_pImpl = ResMgr::CreateResMgr("dba", Application::GetSettings().GetUILanguageTag());
+        m_pImpl = new std::locale(Translate::Create("dba", Application::GetSettings().GetUILanguageTag()));
     }
 
-    OUString ResourceManager::loadString(sal_uInt16 _nResId)
+    OUString ResourceManager::loadString(const char* pResId)
     {
         OUString sReturn;
 
         ensureImplExists();
         if (m_pImpl)
-            sReturn = OUString(ResId(_nResId,*m_pImpl));
+            sReturn = Translate::get(pResId, *m_pImpl);
 
         return sReturn;
     }
 
-    OUString ResourceManager::loadString( sal_uInt16 _nResId, const sal_Char* _pPlaceholderAscii, const OUString& _rReplace )
+    OUString ResourceManager::loadString(const char* pResId, const sal_Char* _pPlaceholderAscii, const OUString& _rReplace)
     {
-        OUString sString( loadString( _nResId ) );
+        OUString sString(loadString(pResId));
         return sString.replaceFirst( OUString::createFromAscii(_pPlaceholderAscii), _rReplace );
     }
 
-    OUString ResourceManager::loadString( sal_uInt16 _nResId, const sal_Char* _pPlaceholderAscii1, const OUString& _rReplace1,
-        const sal_Char* _pPlaceholderAscii2, const OUString& _rReplace2 )
+    OUString ResourceManager::loadString(const char* pResId, const sal_Char* _pPlaceholderAscii1, const OUString& _rReplace1,
+        const sal_Char* _pPlaceholderAscii2, const OUString& _rReplace2)
     {
-        OUString sString( loadString( _nResId ) );
+        OUString sString(loadString(pResId));
         sString = sString.replaceFirst( OUString::createFromAscii(_pPlaceholderAscii1), _rReplace1 );
         sString = sString.replaceFirst( OUString::createFromAscii(_pPlaceholderAscii2), _rReplace2 );
         return sString;

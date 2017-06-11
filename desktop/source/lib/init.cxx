@@ -64,6 +64,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <svx/ucsubset.hxx>
 #include <vcl/svapp.hxx>

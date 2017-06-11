@@ -17,12 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/papersizelistbox.hxx>
-#include <tools/resary.hxx>
 #include <vcl/builderfactory.hxx>
-
+#include "page.hrc"
 
 PaperSizeListBox::PaperSizeListBox(vcl::Window* pParent)
     : ListBox( pParent, WB_BORDER | WB_DROPDOWN)
@@ -34,14 +33,15 @@ VCL_BUILDER_FACTORY(PaperSizeListBox);
 
 void PaperSizeListBox::FillPaperSizeEntries( PaperSizeApp eApp )
 {
-    ResStringArray aPaperAry( ResId( ( eApp == PaperSizeApp::Std  ) ?
-                              RID_SVXSTRARY_PAPERSIZE_STD : RID_SVXSTRARY_PAPERSIZE_DRAW, DIALOG_MGR() ) );
-    sal_uInt32 nCnt = aPaperAry.Count();
+    const std::pair<const char*, int>* pPaperAry = eApp == PaperSizeApp::Std ?
+        RID_SVXSTRARY_PAPERSIZE_STD : RID_SVXSTRARY_PAPERSIZE_DRAW;
+    sal_uInt32 nCnt = eApp == PaperSizeApp::Std ?
+        SAL_N_ELEMENTS(RID_SVXSTRARY_PAPERSIZE_STD) : SAL_N_ELEMENTS(RID_SVXSTRARY_PAPERSIZE_DRAW);
 
     for ( sal_uInt32 i = 0; i < nCnt; ++i )
     {
-        OUString aStr = aPaperAry.GetString(i);
-        Paper eSize = (Paper)aPaperAry.GetValue(i);
+        OUString aStr = SvxResId(pPaperAry[i].first);
+        Paper eSize = (Paper)pPaperAry[i].second;
         sal_Int32 nPos = InsertEntry( aStr );
         SetEntryData( nPos, reinterpret_cast<void*>((sal_uLong)eSize) );
     }

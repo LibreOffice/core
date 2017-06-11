@@ -22,7 +22,7 @@
 #include <math.h>
 
 #include <svx/svdundo.hxx>
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include "svdglob.hxx"
 #include <svx/svdpagv.hxx>
 #include <svx/svdglue.hxx>

@@ -515,12 +515,12 @@ End
 
 #include <langmacros.inc>
 
-#define UI_FILELIST_ALL_LANG(name, file) \
-    File CONCAT3(gid_File_Share_Config_Sofficecfg_uiconfig_, name, _Lang) \
+#define MO_FILELIST_ALL_LANG(name) \
+    File CONCAT3(gid_File_Res_, name, _Lang) \
         TXT_FILE_BODY; \
         Styles = (PACKED); \
-        Dir = gid_Dir_Share_Config_Sofficecfg; \
-        UI_ALL_LANG_BUT_EN_US(file); \
+        Dir = gid_Dir_Resource; \
+        MO_ALL_LANG_EXCEPT_EN_US_AND_QTZ(name); \
     End
 
 #define URE_PRIVATE_LIB(id,name) \

@@ -66,7 +66,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 
 #include "svdata.hxx"
-#include "svids.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include "impbmp.hxx"
 

@@ -46,7 +46,7 @@
 #include <breakit.hxx>
 #include <vcl/msgbox.hxx>
 #include <mdiexp.hxx>
-#include <statstr.hrc>
+#include <strings.hrc>
 #include <redline.hxx>
 #include <txatbase.hxx>
 #include <memory>

@@ -18,11 +18,11 @@
  */
 
 #include "query.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include <connectivity/warningscontainer.hxx>
 #include "HelperCollections.hxx"
 #include "core_resource.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 
 #include <cppuhelper/queryinterface.hxx>
 #include <tools/debug.hxx>

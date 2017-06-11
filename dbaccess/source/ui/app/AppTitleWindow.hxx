@@ -34,7 +34,7 @@ namespace dbaui
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
-        OTitleWindow(vcl::Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,bool _bShift = true);
+        OTitleWindow(vcl::Window* _pParent, const char* pTitleId, WinBits _nBits, bool _bShift = true);
         virtual ~OTitleWindow() override;
         virtual void dispose() override;
 
@@ -58,10 +58,10 @@ namespace dbaui
         vcl::Window* getChildWindow() const { return m_pChild; }
 
         /** sets the title text out of the resource
-            @param  _nTitleId
+            @param  pTitleId
                 The resource id of the title text.
         */
-        void setTitle(sal_uInt16 _nTitleId);
+        void setTitle(const char* pTitleId);
 
         /** Gets the min Width in Pixel which is needed to display the whole
 

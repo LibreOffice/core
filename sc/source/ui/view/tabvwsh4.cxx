@@ -23,6 +23,7 @@
 #include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
+#include <svx/dialogs.hrc>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <editeng/boxitem.hxx>

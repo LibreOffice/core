@@ -21,12 +21,10 @@
 #define INCLUDED_FORMULA_SOURCE_UI_INC_MODULEHELPER_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <tools/resmgr.hxx>
+#include <tools/simplerm.hxx>
 
 namespace formula
 {
-
-
     //= OModule
 
     class OModuleClient;
@@ -44,7 +42,7 @@ namespace formula
 
     public:
         /// get the vcl res manager of the module
-        static ResMgr*  getResManager();
+        static const std::locale&  getResLocale();
     protected:
         /// register a client for the module
         static void registerClient();
@@ -58,19 +56,9 @@ namespace formula
         static void ensureImpl();
     };
 
-
     //= ModuleRes
-
-    /** specialized ResId, using the resource manager provided by the global module
-    */
-    class ModuleRes : public ::ResId
-    {
-    public:
-        ModuleRes(sal_uInt16 _nId) : ResId(_nId, *OModule::getResManager()) { }
-    };
-
+    OUString ModuleRes(const char *pId);
 }   // namespace formula
-
 
 #endif // INCLUDED_FORMULA_SOURCE_UI_INC_MODULEHELPER_HXX
 

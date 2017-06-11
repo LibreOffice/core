@@ -89,9 +89,6 @@ class SwFramePage: public SfxTabPage
     // example
     VclPtr<SvxSwFrameExample>  m_pExampleWN;
 
-    //'string provider'
-    SvxSwFramePosString m_aFramePosString;
-
     bool            m_bAtHorzPosModified;
     bool            m_bAtVertPosModified;
 
@@ -166,7 +163,7 @@ class SwFramePage: public SfxTabPage
                                const sal_Int16 _nRel,
                                ListBox& _rLB,
                                FixedText& _rFT );
-    sal_Int32       GetMapPos( const FrameMap *pMap, ListBox &rAlignLB );
+    static sal_Int32 GetMapPos(const FrameMap *pMap, ListBox &rAlignLB);
     static sal_Int16 GetAlignment(FrameMap *pMap, sal_Int32 nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
     static sal_Int16 GetRelation(FrameMap *pMap, ListBox &rRelationLB);
     RndStdIds       GetAnchor();

@@ -32,6 +32,7 @@
 #include <unomid.h>
 
 #include <dbui.hrc>
+#include <strings.hrc>
 #include <helpid.h>
 
 using namespace ::com::sun::star;

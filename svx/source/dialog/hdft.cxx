@@ -25,7 +25,7 @@
 #include <vcl/graph.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svx/svxids.hrc>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 
 #include <svl/intitem.hxx>
 

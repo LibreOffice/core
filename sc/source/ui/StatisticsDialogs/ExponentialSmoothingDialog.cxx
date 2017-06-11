@@ -22,8 +22,8 @@
 #include "reffact.hxx"
 #include "docfunc.hxx"
 #include "TableFillingAndNavigationTools.hxx"
-
 #include "ExponentialSmoothingDialog.hxx"
+#include "strings.hrc"
 
 ScExponentialSmoothingDialog::ScExponentialSmoothingDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
@@ -51,7 +51,7 @@ bool ScExponentialSmoothingDialog::Close()
     return DoClose( ScExponentialSmoothingDialogWrapper::GetChildWindowId() );
 }
 
-sal_Int16 ScExponentialSmoothingDialog::GetUndoNameId()
+const char* ScExponentialSmoothingDialog::GetUndoNameId()
 {
     return STR_EXPONENTIAL_SMOOTHING_UNDO_NAME;
 }

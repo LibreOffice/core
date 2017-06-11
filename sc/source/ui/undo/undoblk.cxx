@@ -1939,8 +1939,8 @@ ScUndoIndent::~ScUndoIndent()
 
 OUString ScUndoIndent::GetComment() const
 {
-    sal_uInt16 nId = bIsIncrement ? STR_UNDO_INC_INDENT : STR_UNDO_DEC_INDENT;
-    return ScGlobal::GetRscString( nId );
+    const char* pId = bIsIncrement ? STR_UNDO_INC_INDENT : STR_UNDO_DEC_INDENT;
+    return ScGlobal::GetRscString(pId);
 }
 
 void ScUndoIndent::Undo()

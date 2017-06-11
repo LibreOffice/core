@@ -18,7 +18,7 @@
  */
 
 #include "RptUndo.hxx"
-#include "uistrings.hrc"
+#include "strings.hxx"
 #include "rptui_slotid.hrc"
 #include "UITools.hxx"
 #include "UndoEnv.hxx"
@@ -113,8 +113,8 @@ namespace
 OSectionUndo::OSectionUndo(OReportModel& _rMod
                            ,sal_uInt16 _nSlot
                            ,Action _eAction
-                           ,sal_uInt16 nCommentID)
-: OCommentUndoAction(_rMod,nCommentID)
+                           ,const char* pCommentID)
+: OCommentUndoAction(_rMod,pCommentID)
 ,m_eAction(_eAction)
 ,m_nSlot(_nSlot)
 ,m_bInserted(false)
@@ -220,7 +220,7 @@ OReportSectionUndo::OReportSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
                                             ,OReportHelper> _pMemberFunction
                                        ,const uno::Reference< report::XReportDefinition >& _xReport
                                        ,Action _eAction)
-: OSectionUndo(_rMod,_nSlot,_eAction,0)
+: OSectionUndo(_rMod,_nSlot,_eAction,nullptr)
 ,m_aReportHelper(_xReport)
 ,m_pMemberFunction(_pMemberFunction)
 {
@@ -257,8 +257,8 @@ OGroupSectionUndo::OGroupSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
                                             ,OGroupHelper> _pMemberFunction
                                        ,const uno::Reference< report::XGroup >& _xGroup
                                        ,Action _eAction
-                                       ,sal_uInt16 nCommentID)
-: OSectionUndo(_rMod,_nSlot,_eAction,nCommentID)
+                                       ,const char* pCommentID)
+: OSectionUndo(_rMod,_nSlot,_eAction,pCommentID)
 ,m_aGroupHelper(_xGroup)
 ,m_pMemberFunction(_pMemberFunction)
 {
@@ -323,11 +323,11 @@ void OGroupSectionUndo::implReRemove( )
 
 
 OGroupUndo::OGroupUndo(OReportModel& _rMod
-                       ,sal_uInt16 nCommentID
+                       ,const char* pCommentID
                        ,Action  _eAction
                        ,const uno::Reference< report::XGroup>& _xGroup
                        ,const uno::Reference< report::XReportDefinition >& _xReportDefinition)
-: OCommentUndoAction(_rMod,nCommentID)
+: OCommentUndoAction(_rMod,pCommentID)
 ,m_xGroup(_xGroup)
 ,m_xReportDefinition(_xReportDefinition)
 ,m_eAction(_eAction)

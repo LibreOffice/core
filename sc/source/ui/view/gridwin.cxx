@@ -83,6 +83,7 @@
 #include "cbutton.hxx"
 #include "sc.hrc"
 #include "globstr.hrc"
+#include "strings.hrc"
 #include "editutil.hxx"
 #include "scresid.hxx"
 #include "inputhdl.hxx"

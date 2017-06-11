@@ -58,7 +58,7 @@
 #include "pres.hxx"
 #include "OutlineViewShell.hxx"
 #include "app.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "sdresid.hxx"
 #include "Outliner.hxx"
 #include "strings.hrc"

@@ -21,7 +21,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_BRWCTRLR_HXX
 
 #include <dbaccess/genericcontroller.hxx>
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include "brwview.hxx"
 #include "sbagrid.hxx"
 
@@ -76,7 +76,7 @@ namespace dbaui
         // for implementing the XFormController
         class FormControllerImpl;
         friend class FormControllerImpl;
-        OModuleClient                                         m_aModuleClient;
+        dbaccess::OModuleClient                               m_aModuleClient;
 
         css::uno::Reference< css::sdbc::XRowSet >             m_xRowSet;      // our rowset
         css::uno::Reference< css::sdbcx::XColumnsSupplier >   m_xColumnsSupplier; // queried from the rowset member

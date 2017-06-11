@@ -39,6 +39,7 @@
 #include <dialmgr.hxx>
 #include "optcolor.hxx"
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <svx/dlgutil.hxx>
 
 using namespace ::com::sun::star;

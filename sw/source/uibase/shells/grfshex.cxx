@@ -24,7 +24,7 @@
 #include <textsh.hxx>
 #include <viewopt.hxx>
 #include <swundo.hxx>
-#include <shells.hrc>
+#include <strings.hrc>
 #include <caption.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <sfx2/htmlmode.hxx>
@@ -40,7 +40,7 @@
 #include <svx/svdpagv.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <poolfmt.hrc>
+#include <strings.hrc>
 
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -50,7 +50,7 @@
 
 // -> #111827#
 #include <SwRewriter.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 // <- #111827#
 
 using namespace ::com::sun::star;

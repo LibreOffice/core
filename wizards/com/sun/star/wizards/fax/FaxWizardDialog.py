@@ -27,7 +27,7 @@ class FaxWizardDialog(WizardDialog):
         super(FaxWizardDialog,self).__init__(xmsf, HIDMAIN )
 
         #Load Resources
-        self.resources = FaxWizardDialogResources(self.oWizardResource)
+        self.resources = FaxWizardDialogResources()
 
         #set dialog properties...
         self.setDialogProperties(True, 210, True, 104, 52, 1, 1,

@@ -32,7 +32,7 @@
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
 #include <helper/accresmgr.hxx>
-#include <helper/accessiblestrings.hrc>
+#include <strings.hrc>
 #include "strings.hxx"
 
 using namespace ::com::sun::star;

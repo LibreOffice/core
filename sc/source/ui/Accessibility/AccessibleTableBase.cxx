@@ -21,7 +21,7 @@
 #include "miscuno.hxx"
 #include "document.hxx"
 #include "scresid.hxx"
-#include "scres.hrc"
+#include "strings.hrc"
 #include "strings.hxx"
 #include "table.hxx"
 

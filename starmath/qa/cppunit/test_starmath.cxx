@@ -23,6 +23,7 @@
 #include <editeng/editview.hxx>
 
 #include <sfx2/zoomitem.hxx>
+#include "starmath.hrc"
 #include <memory>
 
 typedef tools::SvRef<SmDocShell> SmDocShellRef;

@@ -29,8 +29,8 @@
 #include "cmdid.h"
 #include "wformsh.hxx"
 #include "globals.hrc"
-#include "web.hrc"
-#include "shells.hrc"
+#include "strings.hrc"
+#include "strings.hrc"
 
 #include <sfx2/request.hxx>
     // needed for -fsanitize=function visibility of typeinfo for functions of

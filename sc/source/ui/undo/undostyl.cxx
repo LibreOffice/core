@@ -80,10 +80,10 @@ ScUndoModifyStyle::~ScUndoModifyStyle()
 
 OUString ScUndoModifyStyle::GetComment() const
 {
-    sal_uInt16 nId = (eFamily == SfxStyleFamily::Para) ?
+    const char* pId = (eFamily == SfxStyleFamily::Para) ?
                                 STR_UNDO_EDITCELLSTYLE :
                                 STR_UNDO_EDITPAGESTYLE;
-    return ScGlobal::GetRscString( nId );
+    return ScGlobal::GetRscString(pId);
 }
 
 static void lcl_DocStyleChanged( ScDocument* pDoc, SfxStyleSheetBase* pStyle, bool bRemoved )

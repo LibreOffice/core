@@ -18,8 +18,8 @@
  */
 
 #include "svx/dialcontrol.hxx"
-#include "bmpmask.hrc"
 #include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 #include <tools/rcid.h>
 #include <cmath>
 #include <vcl/virdev.hxx>

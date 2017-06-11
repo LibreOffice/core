@@ -88,7 +88,7 @@ private:
     void                    SetActualClickAction( css::presentation::ClickAction eCA );
     void                    SetEditText( OUString const & rStr );
     OUString                GetEditText( bool bURL = false );
-    static sal_uInt16       GetClickActionSdResId( css::presentation::ClickAction eCA );
+    static const char*      GetClickActionSdResId(css::presentation::ClickAction eCA);
 
 public:
             SdTPAction( vcl::Window* pParent, const SfxItemSet& rInAttrs );

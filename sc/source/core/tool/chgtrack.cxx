@@ -18,6 +18,7 @@
  */
 
 #include "chgtrack.hxx"
+#include "compiler.hxx"
 #include "formulacell.hxx"
 #include "document.hxx"
 #include "dociter.hxx"
@@ -504,7 +505,7 @@ OUString ScChangeAction::GetRefString(
     OUStringBuffer aBuf;
     ScRefFlags nFlags = ( rRange.IsValid( pDoc ) ? ScRefFlags::VALID : ScRefFlags::ZERO );
     if ( nFlags == ScRefFlags::ZERO )
-        aBuf.append(ScGlobal::GetRscString(STR_NOREF_STR));
+        aBuf.append(ScCompiler::GetNativeSymbol(ocErrRef));
     else
     {
         ScRange aTmpRange( rRange.MakeRange() );
@@ -700,17 +701,17 @@ void ScChangeActionIns::GetDescription(
 {
     ScChangeAction::GetDescription( rStr, pDoc, bSplitRange, bWarning );
 
-    sal_uInt16 nWhatId;
+    const char* pWhatId;
     switch ( GetType() )
     {
         case SC_CAT_INSERT_COLS :
-            nWhatId = STR_COLUMN;
+            pWhatId = STR_COLUMN;
         break;
         case SC_CAT_INSERT_ROWS :
-            nWhatId = STR_ROW;
+            pWhatId = STR_ROW;
         break;
         default:
-            nWhatId = STR_AREA;
+            pWhatId = STR_AREA;
     }
 
     OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_INSERT);
@@ -718,7 +719,7 @@ void ScChangeActionIns::GetDescription(
     if (nPos >= 0)
     {
         // Construct a range string to replace '#1' first.
-        OUStringBuffer aBuf(ScGlobal::GetRscString(nWhatId));
+        OUStringBuffer aBuf(ScGlobal::GetRscString(pWhatId));
         aBuf.append(' ');
         aBuf.append(GetRefString(GetBigRange(), pDoc));
         OUString aRangeStr = aBuf.makeStringAndClear();
@@ -937,17 +938,17 @@ void ScChangeActionDel::GetDescription(
 {
     ScChangeAction::GetDescription( rStr, pDoc, bSplitRange, bWarning );
 
-    sal_uInt16 nWhatId;
+    const char* pWhatId;
     switch ( GetType() )
     {
         case SC_CAT_DELETE_COLS :
-            nWhatId = STR_COLUMN;
+            pWhatId = STR_COLUMN;
         break;
         case SC_CAT_DELETE_ROWS :
-            nWhatId = STR_ROW;
+            pWhatId = STR_ROW;
         break;
         default:
-            nWhatId = STR_AREA;
+            pWhatId = STR_AREA;
     }
 
     ScBigRange aTmpRange( GetBigRange() );
@@ -968,7 +969,7 @@ void ScChangeActionDel::GetDescription(
     {
         // Build a string to replace with.
         OUStringBuffer aBuf;
-        aBuf.append(ScGlobal::GetRscString(nWhatId));
+        aBuf.append(ScGlobal::GetRscString(pWhatId));
         aBuf.append(' ');
         aBuf.append(GetRefString(aTmpRange, pDoc));
         OUString aRangeStr = aBuf.makeStringAndClear();
@@ -1521,7 +1522,7 @@ void ScChangeActionContent::GetRefString(
         }
     }
     else
-        rStr = ScGlobal::GetRscString( STR_NOREF_STR );
+        rStr = ScCompiler::GetNativeSymbol(ocErrRef);
 }
 
 bool ScChangeActionContent::Reject( ScDocument* pDoc )

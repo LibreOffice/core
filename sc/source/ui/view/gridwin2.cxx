@@ -31,6 +31,7 @@
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "globstr.hrc"
+#include "strings.hrc"
 #include "pagedata.hxx"
 #include "dpobject.hxx"
 #include "dpsave.hxx"

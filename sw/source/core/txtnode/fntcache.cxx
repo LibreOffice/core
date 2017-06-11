@@ -54,7 +54,7 @@
 #include <doc.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <docsh.hxx>
-#include <poolfmt.hrc>
+#include <strings.hrc>
 #include <fntcap.hxx>
 
 using namespace ::com::sun::star;

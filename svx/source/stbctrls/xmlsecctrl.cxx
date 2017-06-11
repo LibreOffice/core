@@ -33,7 +33,7 @@
 
 #include <svl/eitem.hxx>
 
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include "svx/xmlsecctrl.hxx"
 #include <tools/urlobj.hxx>
@@ -86,17 +86,17 @@ void XmlSecStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState, cons
 
     GetStatusBar().SetItemText( GetId(), "" );    // necessary ?
 
-    sal_uInt16 nResId = RID_SVXSTR_XMLSEC_NO_SIG;
+    const char* pResId = RID_SVXSTR_XMLSEC_NO_SIG;
     if ( mpImpl->mnState == SignatureState::OK )
-        nResId = RID_SVXSTR_XMLSEC_SIG_OK;
+        pResId = RID_SVXSTR_XMLSEC_SIG_OK;
     else if ( mpImpl->mnState == SignatureState::BROKEN )
-        nResId = RID_SVXSTR_XMLSEC_SIG_NOT_OK;
+        pResId = RID_SVXSTR_XMLSEC_SIG_NOT_OK;
     else if ( mpImpl->mnState == SignatureState::NOTVALIDATED )
-        nResId = RID_SVXSTR_XMLSEC_SIG_OK_NO_VERIFY;
+        pResId = RID_SVXSTR_XMLSEC_SIG_OK_NO_VERIFY;
     else if ( mpImpl->mnState == SignatureState::PARTIAL_OK )
-        nResId = RID_SVXSTR_XMLSEC_SIG_CERT_OK_PARTIAL_SIG;
+        pResId = RID_SVXSTR_XMLSEC_SIG_CERT_OK_PARTIAL_SIG;
 
-    GetStatusBar().SetQuickHelpText( GetId(), SvxResId( nResId ) );
+    GetStatusBar().SetQuickHelpText(GetId(), SvxResId(pResId));
 }
 
 void XmlSecStatusBarControl::Command( const CommandEvent& rCEvt )

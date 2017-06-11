@@ -18,14 +18,14 @@
  */
 
 #include "tablecontainer.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include "table.hxx"
 #include <comphelper/property.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/enumhelper.hxx>
 #include "core_resource.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>

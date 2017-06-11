@@ -18,7 +18,7 @@
  */
 
 #include "dlg_DataSource.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "ResId.hxx"
 #include "ChartTypeTemplateProvider.hxx"
 #include "DiagramHelper.hxx"

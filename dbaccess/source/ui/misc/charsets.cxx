@@ -18,11 +18,12 @@
  */
 
 #include "charsets.hxx"
+#include "core_resource.hxx"
 #include <osl/diagnose.h>
-#include "dbu_misc.hrc"
+#include "strings.hrc"
 #include <rtl/tencinfo.h>
 #include <tools/rcid.h>
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 
 namespace dbaui
 {
@@ -30,9 +31,8 @@ namespace dbaui
 
     // OCharsetDisplay
     OCharsetDisplay::OCharsetDisplay()
-        :OCharsetMap()
-        ,SvxTextEncodingTable()
-        , m_aSystemDisplayName(ModuleRes( STR_RSC_CHARSETS ))
+        : OCharsetMap()
+        , m_aSystemDisplayName(DBA_RES( STR_RSC_CHARSETS ))
     {
     }
 
@@ -44,7 +44,7 @@ namespace dbaui
         if ( RTL_TEXTENCODING_DONTKNOW == _eEncoding )
             return true;
 
-        return !GetTextString(_eEncoding).isEmpty();
+        return !SvxTextEncodingTable::GetTextString(_eEncoding).isEmpty();
     }
 
     OCharsetDisplay::const_iterator OCharsetDisplay::begin() const
@@ -74,7 +74,7 @@ namespace dbaui
         rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
         if ( _rDisplayName != m_aSystemDisplayName )
         {
-            eEncoding = GetTextEncoding( _rDisplayName );
+            eEncoding = SvxTextEncodingTable::GetTextEncoding(_rDisplayName);
             OSL_ENSURE( RTL_TEXTENCODING_DONTKNOW != eEncoding,
                 "OCharsetDisplay::find: non-empty display name, but DONTKNOW!" );
         }
@@ -116,7 +116,7 @@ namespace dbaui
         rtl_TextEncoding eEncoding = (*m_aPosition).getEncoding();
         return CharsetDisplayDerefHelper(
             *m_aPosition,
-            RTL_TEXTENCODING_DONTKNOW == eEncoding ? m_pContainer->m_aSystemDisplayName : m_pContainer->GetTextString( eEncoding )
+            RTL_TEXTENCODING_DONTKNOW == eEncoding ? m_pContainer->m_aSystemDisplayName : SvxTextEncodingTable::GetTextString(eEncoding)
         );
     }
 

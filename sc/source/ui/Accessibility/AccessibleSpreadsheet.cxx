@@ -38,7 +38,7 @@
 #include <svtools/colorcfg.hxx>
 #include <vcl/svapp.hxx>
 #include "scresid.hxx"
-#include "scres.hrc"
+#include "strings.hrc"
 
 #include <algorithm>
 

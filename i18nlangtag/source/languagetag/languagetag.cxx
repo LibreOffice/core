@@ -279,6 +279,7 @@ private:
     OUString            getRegion() const;
     OUString const &    getVariants() const;
     bool                hasScript() const;
+    OUString            getGlibcLocaleString() const;
 
     void                setScriptType(LanguageTag::ScriptType st);
     LanguageTag::ScriptType getScriptType() const;
@@ -1920,6 +1921,25 @@ OUString LanguageTag::getVariants() const
     return aRet;
 }
 
+OUString LanguageTagImpl::getGlibcLocaleString() const
+{
+    OUString sLocale;
+    if (!mpImplLangtag)
+    {
+        meIsLiblangtagNeeded = DECISION_YES;
+        const_cast<LanguageTagImpl*>(this)->synCanonicalize();
+    }
+    if (mpImplLangtag)
+    {
+        char* pLang = lt_tag_convert_to_locale(mpImplLangtag, nullptr);
+        if (pLang)
+        {
+            sLocale = OUString::createFromAscii( pLang);
+            free(pLang);
+        }
+    }
+    return sLocale;
+}
 
 OUString LanguageTag::getGlibcLocaleString( const OUString & rEncoding ) const
 {
@@ -1934,15 +1954,15 @@ OUString LanguageTag::getGlibcLocaleString( const OUString & rEncoding ) const
     }
     else
     {
-        /* FIXME: use the aImplIsoLangGLIBCModifiersEntries table from
-         * i18nlangtag/source/isolang/isolang.cxx or let liblangtag handle it.
-         * So far no code was prepared for anything else than a simple
-         * language_country locale so we don't lose anything here right now.
-         * */
+        aRet = getImpl()->getGlibcLocaleString();
+        sal_Int32 nAt = aRet.indexOf('@');
+        if (nAt != -1)
+            aRet = aRet.copy(0, nAt) + rEncoding + aRet.copy(nAt);
+        else
+            aRet += rEncoding;
     }
     return aRet;
 }
-
 
 bool LanguageTagImpl::hasScript() const
 {

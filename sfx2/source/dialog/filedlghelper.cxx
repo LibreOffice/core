@@ -84,12 +84,12 @@
 #include <sfx2/passwd.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/sfxsids.hrc>
-#include "filedlghelper.hrc"
+#include "sfx2/strings.hrc"
 #include "filtergrouping.hxx"
 #include <sfx2/request.hxx>
 #include "filedlgimpl.hxx"
 #include <helpid.hrc>
-#include <sfxlocal.hrc>
+#include <sfx2/strings.hrc>
 #include <rtl/strbuf.hxx>
 #include <comphelper/sequence.hxx>
 

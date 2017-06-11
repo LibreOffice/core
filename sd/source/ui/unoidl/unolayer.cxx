@@ -44,7 +44,7 @@
 #include "app.hrc"
 #include "strings.hrc"
 #include "sdresid.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 
 #include "unokywds.hxx"
 #include "unowcntr.hxx"

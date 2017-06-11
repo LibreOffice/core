@@ -20,7 +20,7 @@
 #include "docsh.hxx"
 #include "scresid.hxx"
 #include "globstr.hrc"
-#include "scres.hrc"
+#include "strings.hrc"
 #include "dpobject.hxx"
 #include "hints.hxx"
 

@@ -25,7 +25,7 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/ilstitem.hxx>
-#include <svtools/controldims.hrc>
+#include <svtools/controldims.hxx>
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 

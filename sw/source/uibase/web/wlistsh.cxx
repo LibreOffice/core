@@ -27,7 +27,7 @@
 #include "wrtsh.hxx"
 #include "swmodule.hxx"
 #include "globals.hrc"
-#include "shells.hrc"
+#include "strings.hrc"
 #include "uinums.hxx"
 #include "wlistsh.hxx"
 

@@ -20,7 +20,7 @@
 #include "ChartTypeDialogController.hxx"
 #include "ResId.hxx"
 #include "HelpIds.hrc"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include "macros.hxx"
 #include "ChartModelHelper.hxx"
@@ -33,7 +33,7 @@
 #include <com/sun/star/chart2/PieChartOffsetMode.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 
-#include <svtools/controldims.hrc>
+#include <svtools/controldims.hxx>
 #include <svtools/valueset.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/builder.hxx>

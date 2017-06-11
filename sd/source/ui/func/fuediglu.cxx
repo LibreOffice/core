@@ -25,7 +25,7 @@
 
 #include "app.hrc"
 #include "strings.hrc"
-#include "res_bmp.hrc"
+
 #include "Window.hxx"
 #include "drawdoc.hxx"
 #include "FrameView.hxx"

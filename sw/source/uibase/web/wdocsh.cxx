@@ -31,7 +31,7 @@
 
 #include "shellio.hxx"
 #include "wdocsh.hxx"
-#include "web.hrc"
+#include "strings.hrc"
 
 #include <sfx2/request.hxx>
     // needed for -fsanitize=function visibility of typeinfo for functions of

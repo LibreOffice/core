@@ -33,8 +33,10 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/settings.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 
 #include <cuires.hrc>
+#include <strings.hrc>
 #include "helpid.hrc"
 #include "svx/xattr.hxx"
 #include <svx/xpool.hxx>
@@ -468,9 +470,8 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
 
     if ( nPos != VALUESET_ITEM_NOTFOUND )
     {
-        ResMgr& rMgr = CUI_MGR();
-        OUString aDesc( ResId( RID_SVXSTR_DESC_NEW_PATTERN, rMgr ) );
-        OUString aName( m_pPatternList->GetBitmap( nPos )->GetName() );
+        OUString aDesc(CuiResId(RID_SVXSTR_DESC_NEW_PATTERN));
+        OUString aName(m_pPatternList->GetBitmap(nPos)->GetName());
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         assert(pFact && "Dialog creation failed!");

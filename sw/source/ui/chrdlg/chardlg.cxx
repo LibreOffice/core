@@ -43,6 +43,7 @@
 
 #include <globals.hrc>
 #include <chrdlg.hrc>
+#include <strings.hrc>
 #include <chrdlgmodes.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker2.hpp>

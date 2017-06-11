@@ -69,7 +69,7 @@
 #include "pglink.hxx"
 #include "sdresid.hxx"
 #include "stlsheet.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "strings.hxx"
 #include "bitmaps.hlst"
 #include "glob.hxx"

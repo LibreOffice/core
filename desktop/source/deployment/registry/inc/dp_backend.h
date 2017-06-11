@@ -22,6 +22,7 @@
 
 #include "dp_misc.h"
 #include "dp_resource.h"
+#include "dp_shared.hxx"
 #include "dp_interact.h"
 #include <rtl/ref.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -33,7 +34,7 @@
 #include <com/sun/star/deployment/InvalidRemovedParameterException.hpp>
 #include <list>
 #include <unordered_map>
-#include "dp_registry.hrc"
+#include "strings.hrc"
 
 namespace dp_registry
 {
@@ -221,10 +222,8 @@ protected:
         Unknown, User, Shared, Bundled, Tmp, Document
     } m_eContext;
 
-    struct StrCannotDetectMediaType : public ::dp_misc::StaticResourceString<
-        StrCannotDetectMediaType, RID_STR_CANNOT_DETECT_MEDIA_TYPE> {};
-    struct StrUnsupportedMediaType : public ::dp_misc::StaticResourceString<
-        StrUnsupportedMediaType, RID_STR_UNSUPPORTED_MEDIA_TYPE> {};
+    static OUString StrCannotDetectMediaType() { return DpResId(RID_STR_CANNOT_DETECT_MEDIA_TYPE); }
+    static OUString StrUnsupportedMediaType() { return DpResId(RID_STR_UNSUPPORTED_MEDIA_TYPE); }
 
     // @@@ to be implemented by specific backend:
     virtual css::uno::Reference<css::deployment::XPackage> bindPackage_(
@@ -261,10 +260,8 @@ protected:
         OUString const & folderUrl);
 
 public:
-    struct StrRegisteringPackage : public ::dp_misc::StaticResourceString<
-        StrRegisteringPackage, RID_STR_REGISTERING_PACKAGE> {};
-    struct StrRevokingPackage : public ::dp_misc::StaticResourceString<
-        StrRevokingPackage, RID_STR_REVOKING_PACKAGE> {};
+    static OUString StrRegisteringPackage() { return DpResId(RID_STR_REGISTERING_PACKAGE); }
+    static OUString StrRevokingPackage() { return DpResId(RID_STR_REVOKING_PACKAGE); }
 
     css::uno::Reference<css::uno::XComponentContext> const &
     getComponentContext() const { return m_xComponentContext; }

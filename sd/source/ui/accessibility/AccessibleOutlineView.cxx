@@ -44,7 +44,7 @@
 #include "AccessibleOutlineView.hxx"
 #include "AccessibleOutlineEditSource.hxx"
 #include <drawdoc.hxx>
-#include "accessibility.hrc"
+#include "strings.hrc"
 #include "sdresid.hxx"
 
 #include <memory>

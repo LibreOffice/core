@@ -20,7 +20,7 @@
 #include <limits.h>
 #include <tools/time.hxx>
 
-#include <svids.hrc>
+#include <strings.hrc>
 #include <bitmaps.hlst>
 #include <svdata.hxx>
 #include <scrwnd.hxx>

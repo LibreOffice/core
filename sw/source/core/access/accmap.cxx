@@ -30,7 +30,7 @@
 #include <accmap.hxx>
 #include <acccontext.hxx>
 #include <accdoc.hxx>
-#include <access.hrc>
+#include <strings.hrc>
 #include <accpreview.hxx>
 #include <accpage.hxx>
 #include <accpara.hxx>

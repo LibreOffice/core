@@ -26,7 +26,7 @@
 #include "officecfg/Office/BasicIDE.hxx"
 
 #include "helpid.hrc"
-#include <basidesh.hrc>
+#include <strings.hrc>
 
 #include <basic/basmgr.hxx>
 #include <basic/basrdll.hxx>
@@ -47,6 +47,7 @@
 #include <svl/srchitem.hxx>
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
+#include <svx/svxids.hrc>
 #include <vcl/xtextedt.hxx>
 #include <vcl/settings.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -134,7 +135,7 @@ void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage,
 
         if( bOutput )
         {
-            OUString aPageStr = " [" + OUString(IDEResId(RID_STR_PAGE)) + " " + OUString::number( nCurPage ) + "]";
+            OUString aPageStr = " [" + IDEResId(RID_STR_PAGE) + " " + OUString::number( nCurPage ) + "]";
             pPrinter->DrawText( aPos, aPageStr );
         }
     }
@@ -1069,11 +1070,11 @@ void ModulWindow::GetState( SfxItemSet &rSet )
                 if ( pView )
                 {
                     TextSelection aSel = pView->GetSelection();
-                    OUString aPos = OUString( IDEResId( RID_STR_LINE ) ) +
+                    OUString aPos = IDEResId( RID_STR_LINE ) +
                                    " " +
                                    OUString::number(aSel.GetEnd().GetPara()+1) +
                                    ", " +
-                                   OUString( IDEResId( RID_STR_COLUMN ) ) +
+                                   IDEResId( RID_STR_COLUMN ) +
                                    " " +
                                    OUString::number(aSel.GetEnd().GetIndex()+1);
                     SfxStringItem aItem( SID_BASICIDE_STAT_POS, aPos );
@@ -1305,7 +1306,7 @@ EntryDescriptor ModulWindow::CreateEntryDescriptor()
         {
             case script::ModuleType::DOCUMENT:
             {
-                aLibSubName = OUString( IDEResId( RID_STR_DOCUMENT_OBJECTS ) );
+                aLibSubName = IDEResId( RID_STR_DOCUMENT_OBJECTS );
                 uno::Reference< container::XNameContainer > xLib = aDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
                 if( xLib.is() )
                 {
@@ -1319,13 +1320,13 @@ EntryDescriptor ModulWindow::CreateEntryDescriptor()
                 break;
             }
             case script::ModuleType::FORM:
-                aLibSubName = OUString( IDEResId( RID_STR_USERFORMS ) );
+                aLibSubName = IDEResId( RID_STR_USERFORMS );
                 break;
             case script::ModuleType::NORMAL:
-                aLibSubName = OUString( IDEResId( RID_STR_NORMAL_MODULES ) );
+                aLibSubName = IDEResId( RID_STR_NORMAL_MODULES );
                 break;
             case script::ModuleType::CLASS:
-                aLibSubName = OUString( IDEResId( RID_STR_CLASS_MODULES ) );
+                aLibSubName = IDEResId( RID_STR_CLASS_MODULES );
                 break;
         }
     }

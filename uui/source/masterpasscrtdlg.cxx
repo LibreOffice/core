@@ -18,9 +18,9 @@
  */
 
 #include <sal/macros.h>
+#include <tools/simplerm.hxx>
 #include <vcl/layout.hxx>
-
-#include "ids.hrc"
+#include "strings.hrc"
 #include "masterpasscrtdlg.hxx"
 
 // MasterPasswordCreateDialog---------------------------------------------------
@@ -38,7 +38,7 @@ IMPL_LINK_NOARG(MasterPasswordCreateDialog, OKHdl_Impl, Button*, void)
         EndDialog( RET_OK );
     else
     {
-        OUString aErrorMsg( ResId( STR_ERROR_PASSWORDS_NOT_IDENTICAL, *pResourceMgr ));
+        OUString aErrorMsg(Translate::get(STR_ERROR_PASSWORDS_NOT_IDENTICAL, rResLocale));
         ScopedVclPtrInstance< MessageDialog > aErrorBox(this, aErrorMsg);
         aErrorBox->Execute();
         m_pEDMasterPasswordCrt->SetText( OUString() );
@@ -47,9 +47,9 @@ IMPL_LINK_NOARG(MasterPasswordCreateDialog, OKHdl_Impl, Button*, void)
     }
 }
 
-MasterPasswordCreateDialog::MasterPasswordCreateDialog(vcl::Window* pParent, ResMgr* pResMgr)
+MasterPasswordCreateDialog::MasterPasswordCreateDialog(vcl::Window* pParent, const std::locale& rLocale)
     : ModalDialog(pParent, "SetMasterPasswordDialog", "uui/ui/setmasterpassworddlg.ui")
-    , pResourceMgr(pResMgr)
+    , rResLocale(rLocale)
 {
     get(m_pEDMasterPasswordCrt, "password1");
     get(m_pEDMasterPasswordRepeat, "password2");

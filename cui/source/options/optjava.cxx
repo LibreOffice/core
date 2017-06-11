@@ -33,6 +33,7 @@
 
 #include <cuires.hrc>
 #include "helpid.hrc"
+#include <strings.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <tools/urlobj.hxx>

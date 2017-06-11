@@ -208,7 +208,6 @@ public:
     std::vector<Link<SdrObjUserDataCreatorParams, SdrObjUserData*>>
                         aUserMakeObjUserDataHdl;
     SdrEngineDefaults*  pDefaults;
-    ResMgr*             pResMgr;
     OLEObjCache         aOLEObjCache;
 
 
@@ -224,7 +223,7 @@ SVX_DLLPUBLIC SdrGlobalData & GetSdrGlobalData();
 
 namespace sdr
 {
-    SVX_DLLPUBLIC OUString GetResourceString(sal_uInt16 nResID);
+    SVX_DLLPUBLIC OUString GetResourceString(const char* pResID);
 }
 
 

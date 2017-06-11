@@ -24,7 +24,7 @@
 #include "ObjectHierarchy.hxx"
 #include "ObjectIdentifier.hxx"
 #include "ResId.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "AccessibleViewForwarder.hxx"
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>

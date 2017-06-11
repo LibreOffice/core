@@ -38,7 +38,7 @@
 #include <svl/whiter.hxx>
 #include <unotools/saveopt.hxx>
 #include <svtools/transfer.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <svx/svxids.hrc>
 #include <svtools/htmlcfg.hxx>
@@ -73,9 +73,9 @@
 #include <cmdid.h>
 #include <helpid.h>
 #include <globals.hrc>
-#include <shells.hrc>
-#include <web.hrc>
-#include <view.hrc>
+#include <strings.hrc>
+#include <strings.hrc>
+#include <strings.hrc>
 #include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <sfx2/filedlghelper.hxx>

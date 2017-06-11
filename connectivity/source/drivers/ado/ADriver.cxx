@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "resource/ado_res.hrc"
+#include "strings.hrc"
 #include <objbase.h>
 
 #include "resource/sharedresources.hxx"

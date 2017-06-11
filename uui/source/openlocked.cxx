@@ -17,20 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ids.hrc"
+#include "strings.hrc"
 #include "openlocked.hxx"
+#include <tools/simplerm.hxx>
 
-OpenLockedQueryBox::OpenLockedQueryBox( vcl::Window* pParent, ResMgr* pResMgr, const OUString& aMessage ) :
+OpenLockedQueryBox::OpenLockedQueryBox( vcl::Window* pParent, const std::locale& rResLocale, const OUString& aMessage ) :
     MessBox(pParent, 0,
-            ResId(STR_OPENLOCKED_TITLE, *pResMgr).toString(),
+            Translate::get(STR_OPENLOCKED_TITLE, rResLocale),
             aMessage )
 {
     SetImage( QueryBox::GetStandardImage() );
 
-    AddButton(ResId(STR_OPENLOCKED_OPENREADONLY_BTN, *pResMgr).toString(), RET_YES,
+    AddButton(Translate::get(STR_OPENLOCKED_OPENREADONLY_BTN, rResLocale), RET_YES,
             ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);
 
-    AddButton(ResId(STR_OPENLOCKED_OPENCOPY_BTN, *pResMgr).toString(), RET_NO);
+    AddButton(Translate::get(STR_OPENLOCKED_OPENCOPY_BTN, rResLocale), RET_NO);
 
     AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
     SetButtonHelpText( RET_YES, OUString() );

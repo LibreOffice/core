@@ -22,7 +22,9 @@
 #include "dlgprov.hxx"
 
 #include <sfx2/sfx.hrc>
+#include <sfx2/strings.hrc>
 #include <sfx2/app.hxx>
+#include <sfx2/sfxresid.hxx>
 #include <vcl/layout.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -616,23 +618,19 @@ namespace dlgprov
         }
         else
         {
-            ResMgr* pResMgr = SfxApplication::GetSfxResManager();
-            if( pResMgr )
-            {
-                OUString aRes( ResId(STR_ERRUNOEVENTBINDUNG, *pResMgr) );
-                OUString aQuoteChar( "\"" );
+            OUString aRes(SfxResId(STR_ERRUNOEVENTBINDUNG));
+            OUString aQuoteChar( "\"" );
 
-                sal_Int32 nIndex = aRes.indexOf( '%' );
+            sal_Int32 nIndex = aRes.indexOf( '%' );
 
-                OUString aOUFinal;
-                aOUFinal += aRes.copy( 0, nIndex );
-                aOUFinal += aQuoteChar;
-                aOUFinal += aMethodName;
-                aOUFinal += aQuoteChar;
-                aOUFinal += aRes.copy( nIndex + 2 );
+            OUString aOUFinal;
+            aOUFinal += aRes.copy( 0, nIndex );
+            aOUFinal += aQuoteChar;
+            aOUFinal += aMethodName;
+            aOUFinal += aQuoteChar;
+            aOUFinal += aRes.copy( nIndex + 2 );
 
-                ScopedVclPtrInstance<MessageDialog>(nullptr, aOUFinal)->Execute();
-            }
+            ScopedVclPtrInstance<MessageDialog>(nullptr, aOUFinal)->Execute();
         }
     }
 

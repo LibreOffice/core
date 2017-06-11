@@ -21,7 +21,8 @@
 
 #include <sot/exchange.hxx>
 #include <sot/storage.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
+#include <svx/svxids.hrc>
 
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>

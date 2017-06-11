@@ -20,7 +20,7 @@
 #include <memory>
 #include "scriptdocument.hxx"
 #include "basobj.hxx"
-#include "basidesh.hrc"
+#include "strings.hrc"
 #include "iderid.hxx"
 #include "dlgeddef.hxx"
 #include "doceventnotifier.hxx"

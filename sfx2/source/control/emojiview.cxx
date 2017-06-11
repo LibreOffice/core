@@ -25,7 +25,7 @@
 #include <fstream>
 #include <streambuf>
 
-#include <doc.hrc>
+#include <sfx2/strings.hrc>
 
 #include <vcl/builderfactory.hxx>
 using namespace ::com::sun::star;

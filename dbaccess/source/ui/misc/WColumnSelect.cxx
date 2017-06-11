@@ -18,17 +18,18 @@
  */
 
 #include "WColumnSelect.hxx"
-#include "dbu_misc.hrc"
+#include "strings.hrc"
 #include <osl/diagnose.h>
 #include "WCopyTable.hxx"
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
-#include "dbustrings.hrc"
+#include "core_resource.hxx"
+#include "stringconstants.hxx"
 #include <functional>
 
 using namespace ::com::sun::star::uno;
@@ -40,7 +41,7 @@ using namespace dbaui;
 
 namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;
 
-OUString OWizColumnSelect::GetTitle() const { return ModuleRes(STR_WIZ_COLUMN_SELECT_TITEL); }
+OUString OWizColumnSelect::GetTitle() const { return DBA_RES(STR_WIZ_COLUMN_SELECT_TITEL); }
 
 OWizardPage::OWizardPage(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
     : TabPage(pParent, rID, rUIXMLDescription)

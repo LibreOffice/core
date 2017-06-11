@@ -27,7 +27,6 @@
 #include <svx/dialogs.hrc>
 #include "numfmt.hxx"
 #include "splitcelldlg.hxx"
-#include "gallery.hrc"
 #include "dstribut.hxx"
 #include "cuiimapwnd.hxx"
 #include "hlmarkwn.hxx"

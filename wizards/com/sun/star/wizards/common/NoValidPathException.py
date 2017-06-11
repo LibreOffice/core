@@ -22,6 +22,8 @@ class NoValidPathException(Exception):
         # TODO: NEVER open a dialog in an exception
         from .SystemDialog import SystemDialog
         if xMSF:
-            SystemDialog.showErrorBox(xMSF,
-                "dbwizres", "dbw", 521) #OfficePathnotavailable
+            import imp, os
+            imp.load_source('strings', os.path.join(os.path.dirname(__file__), '../common/strings.hrc'))
+            import strings
+            SystemDialog.showErrorBox(xMSF, strings.RID_COMMON_START_21) #OfficePathnotavailable
 

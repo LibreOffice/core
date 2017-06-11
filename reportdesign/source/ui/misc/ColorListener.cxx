@@ -20,7 +20,7 @@
 #include <svl/hint.hxx>
 #include <vcl/settings.hxx>
 
-#include "uistrings.hrc"
+#include "strings.hxx"
 
 
 namespace rptui

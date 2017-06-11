@@ -29,7 +29,6 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-#include <tools/resary.hxx>
 #include "swdllapi.h"
 
 class SwOneExampleFrame;
@@ -65,7 +64,6 @@ class SW_DLLPUBLIC SwOneExampleFrame
     Idle            m_aLoadedIdle;
     Link<SwOneExampleFrame&,void> m_aInitializedLink;
 
-    ResStringArray  m_aMenuRes;
     OUString        m_sArgumentURL;
 
     SwView*         m_pModuleView;

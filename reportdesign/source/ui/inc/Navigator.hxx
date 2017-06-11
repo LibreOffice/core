@@ -20,7 +20,6 @@
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_NAVIGATOR_HXX
 
 #include <vcl/floatwin.hxx>
-#include "ModuleHelper.hxx"
 #include <memory>
 namespace rptui
 {
@@ -28,7 +27,6 @@ namespace rptui
     class ONavigatorImpl;
     class ONavigator :  public FloatingWindow
     {
-        OModuleClient       m_aModuleClient;
         ::std::unique_ptr<ONavigatorImpl> m_pImpl;
         ONavigator(const ONavigator&) = delete;
         void operator =(const ONavigator&) = delete;

@@ -23,12 +23,10 @@
 #include "svtools/treelistentry.hxx"
 
 #include "structpg.hxx"
-#include "formdlgs.hrc"
 #include "formula/formdata.hxx"
 #include "formula/formula.hxx"
 #include "ModuleHelper.hxx"
 #include "formula/IFunctionDescription.hxx"
-#include "ForResId.hrc"
 #include "bitmaps.hlst"
 
 namespace formula

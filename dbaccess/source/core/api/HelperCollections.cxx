@@ -19,7 +19,8 @@
 
 #include "HelperCollections.hxx"
 
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
+#include "strings.hxx"
 
 namespace dbaccess
 {

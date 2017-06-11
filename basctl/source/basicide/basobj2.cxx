@@ -21,7 +21,7 @@
 #include "iderdll2.hxx"
 #include "macrodlg.hxx"
 #include "moduldlg.hxx"
-#include "basidesh.hrc"
+#include "strings.hrc"
 #include "baside2.hxx"
 
 #include <com/sun/star/document/XScriptInvocationContext.hpp>

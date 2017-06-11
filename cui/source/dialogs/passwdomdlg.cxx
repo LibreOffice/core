@@ -20,6 +20,7 @@
 #include "passwdomdlg.hxx"
 
 #include "cuires.hrc"
+#include "strings.hrc"
 #include "dialmgr.hxx"
 
 #include <sfx2/tabdlg.hxx>

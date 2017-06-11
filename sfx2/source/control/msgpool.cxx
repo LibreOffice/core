@@ -32,6 +32,7 @@
 #include <sfx2/module.hxx>
 
 #include <sfx2/sfx.hrc>
+#include <sfx2/strings.hrc>
 
 SfxSlotPool::SfxSlotPool(SfxSlotPool *pParent)
  : _pParentPool( pParent )
@@ -48,6 +49,65 @@ SfxSlotPool::~SfxSlotPool()
         delete pIF;
 }
 
+namespace
+{
+    const char* getGidResId(SfxGroupId nId)
+    {
+        if (nId == GID_INTERN)
+            return STR_GID_INTERN;
+        else if (nId == GID_APPLICATION)
+            return STR_GID_APPLICATION;
+        else if (nId == GID_VIEW)
+            return STR_GID_VIEW;
+        else if (nId == GID_DOCUMENT)
+            return STR_GID_DOCUMENT;
+        else if (nId == GID_EDIT)
+            return STR_GID_EDIT;
+        else if (nId == GID_MACRO)
+            return STR_GID_MACRO;
+        else if (nId == GID_OPTIONS)
+            return STR_GID_OPTIONS;
+        else if (nId == GID_MATH)
+            return STR_GID_MATH;
+        else if (nId == GID_NAVIGATOR)
+            return STR_GID_NAVIGATOR;
+        else if (nId == GID_INSERT)
+            return STR_GID_INSERT;
+        else if (nId == GID_FORMAT)
+            return STR_GID_FORMAT;
+        else if (nId == GID_TEMPLATE)
+            return STR_GID_TEMPLATE;
+        else if (nId == GID_TEXT)
+            return STR_GID_TEXT;
+        else if (nId == GID_FRAME)
+            return STR_GID_FRAME;
+        else if (nId == GID_GRAPHIC)
+            return STR_GID_GRAPHIC;
+        else if (nId == GID_TABLE)
+            return STR_GID_TABLE;
+        else if (nId == GID_ENUMERATION)
+            return STR_GID_ENUMERATION;
+        else if (nId == GID_DATA)
+            return STR_GID_DATA;
+        else if (nId == GID_SPECIAL)
+            return STR_GID_SPECIAL;
+        else if (nId == GID_IMAGE)
+            return STR_GID_IMAGE;
+        else if (nId == GID_CHART)
+            return STR_GID_CHART;
+        else if (nId == GID_EXPLORER)
+            return STR_GID_EXPLORER;
+        else if (nId == GID_CONNECTOR)
+            return STR_GID_CONNECTOR;
+        else if (nId == GID_MODIFY)
+            return STR_GID_MODIFY;
+        else if (nId == GID_DRAWING)
+            return STR_GID_DRAWING;
+        else if (nId == GID_CONTROLS)
+            return STR_GID_CONTROLS;
+        return nullptr;
+    }
+}
 
 // registers the availability of the Interface of functions
 
@@ -143,15 +203,14 @@ OUString SfxSlotPool::SeekGroup( sal_uInt16 nNo )
             }
         }
 
-        ResId aResId((sal_uInt16)_vGroups[_nCurGroup], *SfxResMgr::GetResMgr());
-        aResId.SetRT(RSC_STRING);
-        if ( !SfxResMgr::GetResMgr()->IsAvailable(aResId) )
+        const char* pResId = getGidResId(_vGroups[_nCurGroup]);
+        if (!pResId)
         {
             OSL_FAIL( "GroupId-Name not defined in SFX!" );
             return OUString();
         }
 
-        return aResId;
+        return SfxResId(pResId);
     }
 
     return OUString();

@@ -10,6 +10,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,connectivity_ado))
 
 $(eval $(call gb_CppunitTest_set_include,connectivity_ado,\
+	-I$(SRCDIR)/connectivity/inc \
 	-I$(SRCDIR)/connectivity/source/inc \
 	-I$(SRCDIR)/connectivity/source/drivers/ado \
 	$$(INCLUDE) \

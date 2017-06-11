@@ -28,6 +28,7 @@
 #include <vcl/outdev.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <editeng/langitem.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/transliterationwrapper.hxx>
@@ -749,6 +750,26 @@ void ScAutoFormatData::GetFromItemSet( sal_uInt16 nIndex, const SfxItemSet& rIte
     rField.SetRotateMode    ( static_cast<const SvxRotateModeItem&>    (rItemSet.Get( ATTR_ROTATE_MODE )) );
 }
 
+static const char* RID_SVXSTR_TBLAFMT[] =
+{
+    RID_SVXSTR_TBLAFMT_3D,
+    RID_SVXSTR_TBLAFMT_BLACK1,
+    RID_SVXSTR_TBLAFMT_BLACK2,
+    RID_SVXSTR_TBLAFMT_BLUE,
+    RID_SVXSTR_TBLAFMT_BROWN,
+    RID_SVXSTR_TBLAFMT_CURRENCY,
+    RID_SVXSTR_TBLAFMT_CURRENCY_3D,
+    RID_SVXSTR_TBLAFMT_CURRENCY_GRAY,
+    RID_SVXSTR_TBLAFMT_CURRENCY_LAVENDER,
+    RID_SVXSTR_TBLAFMT_CURRENCY_TURQUOISE,
+    RID_SVXSTR_TBLAFMT_GRAY,
+    RID_SVXSTR_TBLAFMT_GREEN,
+    RID_SVXSTR_TBLAFMT_LAVENDER,
+    RID_SVXSTR_TBLAFMT_RED,
+    RID_SVXSTR_TBLAFMT_TURQUOISE,
+    RID_SVXSTR_TBLAFMT_YELLOW
+};
+
 bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
 {
     sal_uInt16  nVer = 0;
@@ -769,12 +790,8 @@ bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
         if( AUTOFORMAT_DATA_ID_552 <= nVer )
         {
             rStream.ReadUInt16( nStrResId );
-            sal_uInt16 nId = RID_SVXSTR_TBLAFMT_BEGIN + nStrResId;
-            if( RID_SVXSTR_TBLAFMT_BEGIN <= nId &&
-                nId < RID_SVXSTR_TBLAFMT_END )
-            {
-                aName = SvxResId( nId );
-            }
+            if (nStrResId < SAL_N_ELEMENTS(RID_SVXSTR_TBLAFMT))
+                aName = SvxResId(RID_SVXSTR_TBLAFMT[nStrResId]);
             else
                 nStrResId = USHRT_MAX;
         }

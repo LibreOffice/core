@@ -35,6 +35,7 @@
 
 #include <frmui.hrc>
 #include <globals.hrc>
+#include <strings.hrc>
 #include <svx/svxids.hrc>
 #include <svx/flagsdef.hxx>
 #include <svx/svxdlg.hxx>
@@ -78,7 +79,7 @@ SwFrameDlg::SwFrameDlg( SfxViewFrame*       pViewFrame,
 
     if(pStr)
     {
-        SetText(GetText() + SwResId(STR_COLL_HEADER) + *pStr + ")");
+        SetText(GetText() + SwResId(STR_FRMUI_COLL_HEADER) + *pStr + ")");
     }
 
     m_nStdId = AddTabPage("type",  SwFramePage::Create, nullptr);

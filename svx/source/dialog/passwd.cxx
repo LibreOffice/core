@@ -21,7 +21,7 @@
 #include <vcl/layout.hxx>
 #include "svx/passwd.hxx"
 #include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 
 IMPL_LINK_NOARG(SvxPasswordDialog, ButtonHdl, Button*, void)
 {

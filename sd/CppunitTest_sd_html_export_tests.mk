@@ -107,6 +107,4 @@ $(eval $(call gb_CppunitTest_use_components,sd_html_export_tests,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sd_html_export_tests))
 
-$(call gb_CppunitTest_get_target,sd_html_export_tests) : $(call gb_AllLangResTarget_get_target,sd)
-
 # vim: set noet sw=4 ts=4:

@@ -24,7 +24,7 @@
 #include <unotools/syslocale.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include "res_bmp.hrc"
+
 #include "slideshow.hxx"
 #include "ViewShellBase.hxx"
 #include "sdresid.hxx"

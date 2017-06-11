@@ -17,26 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbmm_module.hxx"
+#include <cppuhelper/factory.hxx>
 #include "macromigrationwizard.hxx"
-
-namespace dbmm
-{
-
-    static void initializeModule()
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        createRegistryInfo_MacroMigrationDialogService();
-    }
-
-} // namespace dbmm
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL dbmm_component_getFactory(
     const sal_Char* pImplementationName, SAL_UNUSED_PARAMETER void*,
     SAL_UNUSED_PARAMETER void* )
 {
-    ::dbmm::initializeModule();
-    return ::dbmm::MacroMigrationModule::getInstance().getComponentFactory( pImplementationName );
+    css::uno::Reference<css::uno::XInterface> xRet;
+
+    if (dbmm::MacroMigrationDialogService::getImplementationName_static() == OUString::createFromAscii(pImplementationName))
+    {
+        xRet = ::cppu::createSingleComponentFactory(dbmm::MacroMigrationDialogService::Create,
+                    dbmm::MacroMigrationDialogService::getImplementationName_static(),
+                    dbmm::MacroMigrationDialogService::getSupportedServiceNames_static(), nullptr);
+    }
+
+    if (xRet.is())
+        xRet->acquire();
+    return xRet.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

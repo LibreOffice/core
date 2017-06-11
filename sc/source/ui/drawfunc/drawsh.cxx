@@ -19,6 +19,7 @@
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
+#include "sc.hrc"
 
 #include "scitems.hxx"
 
@@ -36,7 +37,7 @@
 
 #include "drawsh.hxx"
 #include "drwlayer.hxx"
-#include "scres.hrc"
+#include "strings.hrc"
 #include "viewdata.hxx"
 #include "document.hxx"
 #include "docpool.hxx"

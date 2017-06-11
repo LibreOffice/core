@@ -18,7 +18,8 @@
  */
 
 
-#include "dp_component.hrc"
+#include "strings.hrc"
+#include "dp_shared.hxx"
 #include "dp_backend.h"
 #include "dp_platform.hxx"
 #include "dp_services.hxx"
@@ -495,33 +496,33 @@ BackendImpl::BackendImpl(
              "application/vnd.sun.star.uno-component;type=native;platform=" +
                                    getPlatformString(),
                                    "*" SAL_DLLEXTENSION,
-                                   getResourceString(RID_STR_DYN_COMPONENT)
+                                   DpResId(RID_STR_DYN_COMPONENT)
                                    ) ),
       m_xJavaComponentTypeInfo( new Package::TypeInfo(
              "application/vnd.sun.star.uno-component;type=Java",
                                     "*.jar",
-                                    getResourceString(RID_STR_JAVA_COMPONENT)
+                                    DpResId(RID_STR_JAVA_COMPONENT)
                                     ) ),
       m_xPythonComponentTypeInfo( new Package::TypeInfo(
              "application/vnd.sun.star.uno-component;type=Python",
                                       "*.py",
-                                      getResourceString(
+                                      DpResId(
                                           RID_STR_PYTHON_COMPONENT)
                                       ) ),
       m_xComponentsTypeInfo( new Package::TypeInfo(
                                  "application/vnd.sun.star.uno-components",
                                  "*.components",
-                                 getResourceString(RID_STR_COMPONENTS)
+                                 DpResId(RID_STR_COMPONENTS)
                                  ) ),
       m_xRDBTypelibTypeInfo( new Package::TypeInfo(
              "application/vnd.sun.star.uno-typelibrary;type=RDB",
                                  "*.rdb",
-                                 getResourceString(RID_STR_RDB_TYPELIB)
+                                 DpResId(RID_STR_RDB_TYPELIB)
                                  ) ),
       m_xJavaTypelibTypeInfo( new Package::TypeInfo(
              "application/vnd.sun.star.uno-typelibrary;type=Java",
                                   "*.jar",
-                                  getResourceString(RID_STR_JAVA_TYPELIB)
+                                  DpResId(RID_STR_JAVA_TYPELIB)
                                   ) ),
       m_typeInfos( 6 )
 {
@@ -629,7 +630,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         }
         if (mediaType.isEmpty())
             throw lang::IllegalArgumentException(
-                StrCannotDetectMediaType::get() + url,
+                StrCannotDetectMediaType() + url,
                 static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
     }
 
@@ -721,7 +722,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         }
     }
     throw lang::IllegalArgumentException(
-        StrUnsupportedMediaType::get() + mediaType,
+        StrUnsupportedMediaType() + mediaType,
         static_cast<OWeakObject *>(this),
         static_cast<sal_Int16>(-1) );
 }

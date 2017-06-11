@@ -29,7 +29,7 @@
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <sdr/primitive2d/sdrgrafprimitive2d.hxx>
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include <svdglob.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

@@ -24,7 +24,7 @@
 class LockFailedQueryBox : public MessBox
 {
 public:
-    LockFailedQueryBox( vcl::Window* pParent, ResMgr* pResMgr );
+    LockFailedQueryBox(vcl::Window* pParent, const std::locale& rResLocale);
     virtual ~LockFailedQueryBox() override;
 };
 

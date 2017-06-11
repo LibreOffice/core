@@ -29,7 +29,7 @@
 #include <frmfmt.hxx>
 #include <wrtasc.hxx>
 
-#include <statstr.hrc>
+#include <strings.hrc>
 
 SwASCWriter::SwASCWriter( const OUString& rFltNm )
 {

@@ -18,9 +18,7 @@
  */
 
 #include "dbaccess_helpid.hrc"
-#include "dbmm_module.hxx"
-#include "dbmm_global.hrc"
-#include "macromigration.hrc"
+#include "strings.hrc"
 #include "macromigrationpages.hxx"
 #include "macromigrationdialog.hxx"
 

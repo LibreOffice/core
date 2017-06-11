@@ -683,7 +683,7 @@ void SvxSwPosSizeTabPage::setOptimalFrmWidth()
     for (std::vector<SvxSwFramePosString::StringId>::const_iterator aI = aFrames.begin(), aEnd = aFrames.end();
         aI != aEnd; ++aI)
     {
-        m_pHoriLB->InsertEntry(m_aFramePosString.GetString(*aI));
+        m_pHoriLB->InsertEntry(SvxSwFramePosString::GetString(*aI));
     }
 
     Size aBiggest(m_pHoriLB->GetOptimalSize());
@@ -724,7 +724,7 @@ void SvxSwPosSizeTabPage::setOptimalRelWidth()
     for (std::vector<SvxSwFramePosString::StringId>::const_iterator aI = aRels.begin(), aEnd = aRels.end();
         aI != aEnd; ++aI)
     {
-        m_pHoriLB->InsertEntry(m_aFramePosString.GetString(*aI));
+        m_pHoriLB->InsertEntry(SvxSwFramePosString::GetString(*aI));
     }
 
     Size aBiggest(m_pHoriLB->GetOptimalSize());
@@ -1462,7 +1462,7 @@ sal_uInt16 SvxSwPosSizeTabPage::GetMapPos(FrmMap *pMap, ListBox &rAlignLB)
             {
                 SvxSwFramePosString::StringId eResId = pMap[i].eStrId;
 
-                OUString sEntry = m_aFramePosString.GetString(eResId);
+                OUString sEntry = SvxSwFramePosString::GetString(eResId);
 
                 if (sEntry == sSelEntry)
                 {
@@ -1688,7 +1688,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_uInt16
                             SvxSwFramePosString::StringId sStrId1 = aAsCharRelationMap[nRelPos].eStrId;
 
                             sStrId1 = lcl_ChangeResIdToVerticalOrRTL(sStrId1, m_bIsVerticalFrame, m_bIsInRightToLeft);
-                            OUString sEntry = m_aFramePosString.GetString(sStrId1);
+                            OUString sEntry = SvxSwFramePosString::GetString(sStrId1);
                             sal_Int32 nPos = rLB.InsertEntry(sEntry);
                             rLB.SetEntryData(nPos, &aAsCharRelationMap[nRelPos]);
                             if (pMap[_nMapPos].nAlign == nAlign)
@@ -1745,7 +1745,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_uInt16
                         {
                             SvxSwFramePosString::StringId sStrId1 = m_pHoriMirrorCB->IsChecked() ? aRelationMap[nRelPos].eMirrorStrId : aRelationMap[nRelPos].eStrId;
                             sStrId1 = lcl_ChangeResIdToVerticalOrRTL(sStrId1, m_bIsVerticalFrame, m_bIsInRightToLeft);
-                            OUString sEntry = m_aFramePosString.GetString(sStrId1);
+                            OUString sEntry = SvxSwFramePosString::GetString(sStrId1);
                             sal_Int32 nPos = rLB.InsertEntry(sEntry);
                             rLB.SetEntryData(nPos, &aRelationMap[nRelPos]);
                             if (sSelEntry.isEmpty() && aRelationMap[nRelPos].nRelation == nRel)
@@ -1826,7 +1826,7 @@ sal_uInt16 SvxSwPosSizeTabPage::FillPosLB(FrmMap *_pMap,
         {
             SvxSwFramePosString::StringId eStrId = m_pHoriMirrorCB->IsChecked() ? _pMap[i].eMirrorStrId : _pMap[i].eStrId;
             eStrId = lcl_ChangeResIdToVerticalOrRTL(eStrId, m_bIsVerticalFrame, m_bIsInRightToLeft);
-            OUString sEntry(m_aFramePosString.GetString(eStrId));
+            OUString sEntry(SvxSwFramePosString::GetString(eStrId));
             if (_rLB.GetEntryPos(sEntry) == LISTBOX_ENTRY_NOTFOUND)
             {
                 // don't insert duplicate entries at character wrapped borders

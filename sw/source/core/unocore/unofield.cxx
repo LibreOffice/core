@@ -76,7 +76,7 @@
 #include <chpfld.hxx>
 #include <flddropdown.hxx>
 #include <poolfmt.hxx>
-#include <poolfmt.hrc>
+#include <strings.hrc>
 #include <pagedesc.hxx>
 #include <docary.hxx>
 #include <reffld.hxx>

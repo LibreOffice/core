@@ -1,0 +1,48 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_AVMEDIA_INC_STRINGS_HRC
+#define INCLUDED_AVMEDIA_INC_STRINGS_HRC
+
+#define N_(String) (u8##String)
+
+#define AVMEDIA_STR_OPEN            N_("Open")
+#define AVMEDIA_STR_INSERT          N_("Apply")
+#define AVMEDIA_STR_PLAY            N_("Play")
+#define AVMEDIA_STR_PAUSE           N_("Pause")
+#define AVMEDIA_STR_STOP            N_("Stop")
+#define AVMEDIA_STR_LOOP            N_("Repeat")
+#define AVMEDIA_STR_MUTE            N_("Mute")
+#define AVMEDIA_STR_ZOOM            N_("View")
+#define AVMEDIA_STR_ZOOM_50         N_("50%")
+#define AVMEDIA_STR_ZOOM_100        N_("100%")
+#define AVMEDIA_STR_ZOOM_200        N_("200%")
+#define AVMEDIA_STR_ZOOM_FIT        N_("Scaled")
+#define AVMEDIA_STR_MEDIAPLAYER     N_("Media Player")
+#define AVMEDIA_MEDIA_PATH          N_("Media Path")
+#define AVMEDIA_MEDIA_PATH_DEFAULT  N_("No Media Selected")
+#define AVMEDIA_STR_INSERTMEDIA_DLG N_("Insert Audio or Video")
+#define AVMEDIA_STR_OPENMEDIA_DLG   N_("Open Audio or Video")
+#define AVMEDIA_STR_ALL_MEDIAFILES  N_("All audio and video files")
+#define AVMEDIA_STR_ALL_FILES       N_("All files")
+#define AVMEDIA_STR_ERR_URL         N_("The format of the selected file is not supported.")
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+
+#endif

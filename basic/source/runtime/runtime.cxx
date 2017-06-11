@@ -53,7 +53,6 @@
 
 #include <basic/sbuno.hxx>
 
-#include "basrid.hxx"
 #include "codegen.hxx"
 #include "comenumwrapper.hxx"
 #include "ddectrl.hxx"
@@ -63,7 +62,6 @@
 #include "iosys.hxx"
 #include "opcodes.hxx"
 #include "runtime.hxx"
-#include "sb.hrc"
 #include "sb.hxx"
 #include "sbintern.hxx"
 #include "sbunoobj.hxx"

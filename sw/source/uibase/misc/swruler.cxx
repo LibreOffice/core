@@ -24,6 +24,7 @@
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 #include "misc.hrc"
+#include "strings.hrc"
 
 #define CONTROL_BORDER_WIDTH    1
 
@@ -256,12 +257,12 @@ void SwCommentRuler::Update()
 
 void SwCommentRuler::UpdateCommentHelpText()
 {
-    int nTooltipResId;
+    const char* pTooltipResId;
     if ( mpViewShell->GetPostItMgr()->ShowNotes() )
-        nTooltipResId = STR_HIDE_COMMENTS;
+        pTooltipResId = STR_HIDE_COMMENTS;
     else
-        nTooltipResId = STR_SHOW_COMMENTS;
-    SetQuickHelpText( SwResId( nTooltipResId ) );
+        pTooltipResId = STR_SHOW_COMMENTS;
+    SetQuickHelpText(SwResId(pTooltipResId));
 }
 
 // TODO Make Ruler return its central rectangle instead of margins.

@@ -20,7 +20,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TOKENWRITER_HXX
 
 #include "DExport.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include "commontypes.hxx"
 
 #include <com/sun/star/awt/FontDescriptor.hpp>
@@ -184,7 +184,7 @@ namespace dbaui
 
     class ORowSetImportExport : public ODatabaseImportExport
     {
-        OModuleClient               m_aModuleClient;
+        dbaccess::OModuleClient   m_aModuleClient;
         std::vector<sal_Int32>    m_aColumnMapping;
         std::vector<sal_Int32>    m_aColumnTypes;
         css::uno::Reference< css::sdbc::XResultSetUpdate >    m_xTargetResultSetUpdate;

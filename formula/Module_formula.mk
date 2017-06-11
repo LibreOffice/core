@@ -15,8 +15,7 @@ $(eval $(call gb_Module_add_targets,formula,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,formula,\
-    AllLangResTarget_for \
-    AllLangResTarget_forui \
+    AllLangMoTarget_for \
     UIConfig_formula \
 ))
 

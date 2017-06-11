@@ -21,7 +21,7 @@
 
 #include "services.h"
 
-#include <classes/resource.hrc>
+#include <strings.hrc>
 #include <classes/fwkresid.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>

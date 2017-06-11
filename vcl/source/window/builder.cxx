@@ -13,7 +13,7 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/module.hxx>
 #include <sal/log.hxx>
-#include <unotools/configmgr.hxx>
+#include <tools/simplerm.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
@@ -39,10 +39,10 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <svdata.hxx>
 #include <bitmaps.hlst>
-#include <svids.hrc>
 #include <window.h>
 #include <xmlreader/xmlreader.hxx>
 #include <desktop/crashreport.hxx>
+#include "strings.hrc"
 
 #ifdef DISABLE_DYNLOADING
 #include <dlfcn.h>
@@ -101,68 +101,6 @@ namespace
     void setupFromActionName(Button *pButton, VclBuilder::stringmap &rMap, const css::uno::Reference<css::frame::XFrame>& rFrame);
 }
 
-void VclBuilder::loadTranslations(const LanguageTag &rLanguageTag, const OUString& rUri)
-{
-    /* FIXME-BCP47: support language tags with
-     * LanguageTag::getFallbackStrings() ? */
-    for (int i = rLanguageTag.getCountry().isEmpty() ? 1 : 0; i < 2; ++i)
-    {
-        OUStringBuffer aTransBuf;
-        sal_Int32 nLastSlash = rUri.lastIndexOf('/');
-        if (nLastSlash != -1)
-            aTransBuf.append(rUri.copy(0, nLastSlash));
-        else
-        {
-            aTransBuf.append('.');
-            nLastSlash = 0;
-        }
-        aTransBuf.append("/res/");
-        OUString sLang(rLanguageTag.getLanguage());
-        switch (i)
-        {
-            case 0:
-                sLang = sLang + "-" + rLanguageTag.getCountry();
-                break;
-            default:
-                break;
-        }
-        aTransBuf.append(sLang);
-        aTransBuf.append(".zip");
-        sal_Int32 nEndName = rUri.lastIndexOf('.');
-        if (nEndName == -1)
-            nEndName = rUri.getLength();
-        OUString sZippedFile(rUri.copy(nLastSlash + 1, nEndName - nLastSlash - 1) + "/" + sLang + ".ui");
-        try
-        {
-            css::uno::Reference<css::packages::zip::XZipFileAccess2> xNameAccess =
-                css::packages::zip::ZipFileAccess::createWithURL(
-                        comphelper::getProcessComponentContext(), aTransBuf.makeStringAndClear());
-            if (!xNameAccess.is())
-                continue;
-            css::uno::Reference<css::io::XInputStream> xInputStream(xNameAccess->getByName(sZippedFile), css::uno::UNO_QUERY);
-            if (!xInputStream.is())
-                continue;
-            OStringBuffer sStr;
-            for (;;)
-            {
-                sal_Int32 const size = 2048;
-                css::uno::Sequence< sal_Int8 > data(size);
-                sal_Int32 n = xInputStream->readBytes(data, size);
-                sStr.append(reinterpret_cast<const sal_Char *>(data.getConstArray()), n);
-                if (n < size)
-                    break;
-            }
-
-            xmlreader::XmlReader reader(sStr.getStr(), sStr.getLength());
-            handleTranslations(reader);
-            break;
-        }
-        catch (const css::uno::Exception &)
-        {
-        }
-    }
-}
-
 #if defined SAL_LOG_WARN
 namespace
 {
@@ -200,11 +138,6 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
     m_sHelpRoot = m_sHelpRoot + OString('/');
 
     OUString sUri = sUIDir + sUIFile;
-
-    const LanguageTag& rLanguageTag = Application::GetSettings().GetUILanguageTag();
-    bool bEN_US = (rLanguageTag.getBcp47() == "en-US");
-    if (!bEN_US)
-        loadTranslations(rLanguageTag, sUri);
 
     try
     {
@@ -542,55 +475,6 @@ void VclBuilder::disposeBuilder()
     }
     m_aMenus.clear();
     m_pParent.clear();
-}
-
-void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
-{
-    xmlreader::Span name;
-    int nsId;
-
-    OString sID, sProperty;
-
-    while(true)
-    {
-        xmlreader::XmlReader::Result res = reader.nextItem(
-            xmlreader::XmlReader::Text::Raw, &name, &nsId);
-
-        if (res == xmlreader::XmlReader::Result::Begin)
-        {
-            if (name.equals("e"))
-            {
-                while (reader.nextAttribute(&nsId, &name))
-                {
-                    if (name.equals("g"))
-                    {
-                        name = reader.getAttributeValue(false);
-                        sID = OString(name.begin, name.length);
-                        sal_Int32 nDelim = sID.indexOf(':');
-                        if (nDelim != -1)
-                            sID = sID.copy(nDelim);
-                    }
-                    else if (name.equals("i"))
-                    {
-                        name = reader.getAttributeValue(false);
-                        sProperty = OString(name.begin, name.length);
-                    }
-                }
-            }
-        }
-
-        if (res == xmlreader::XmlReader::Result::Text && !sID.isEmpty())
-        {
-            OString sTranslation(name.begin, name.length);
-            m_pParserState->m_aTranslations[sID][sProperty] = sTranslation;
-        }
-
-        if (res == xmlreader::XmlReader::Result::End)
-            sID.clear();
-
-        if (res == xmlreader::XmlReader::Result::Done)
-            break;
-    }
 }
 
 OUString VclBuilder::extractCustomProperty(VclBuilder::stringmap &rMap)
@@ -2186,6 +2070,19 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
             {
                 handlePacking(pCurrentChild, pParent, reader);
             }
+            else if (name.equals("interface"))
+            {
+                while (reader.nextAttribute(&nsId, &name))
+                {
+                    if (name.equals("domain"))
+                    {
+                        name = reader.getAttributeValue(false);
+                        sType = OString(name.begin, name.length);
+                        m_pParserState->m_aResLocale = Translate::Create(sType.getStr(), Application::GetSettings().GetUILanguageTag());
+                    }
+                }
+                ++nLevel;
+            }
             else
                 ++nLevel;
         }
@@ -2275,7 +2172,7 @@ void VclBuilder::collectAtkAttribute(xmlreader::XmlReader &reader, stringmap &rM
         rMap[sProperty] = OUString::fromUtf8(sValue);
 }
 
-void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID, sal_Int32 nRowIndex)
+void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID, sal_Int32 /*nRowIndex*/)
 {
     int nLevel = 1;
 
@@ -2298,7 +2195,6 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID, sal
             if (name.equals("col"))
             {
                 bool bTranslated = false;
-                OString sValue;
                 sal_uInt32 nId = 0;
 
                 while (reader.nextAttribute(&nsId, &name))
@@ -2310,20 +2206,24 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID, sal
                     }
                     else if (nId == 0 && name.equals("translatable") && reader.getAttributeValue(false).equals("yes"))
                     {
-                        sValue = getTranslation(rID, OString::number(nRowIndex));
-                        bTranslated = !sValue.isEmpty();
+                        bTranslated = true;
                     }
                 }
 
                 reader.nextItem(
                     xmlreader::XmlReader::Text::Raw, &name, &nsId);
 
-                if (!bTranslated)
-                    sValue = OString(name.begin, name.length);
+                OString sValue = OString(name.begin, name.length);
+                OUString sFinalValue;
+                if (bTranslated)
+                    sFinalValue = Translate::get(sValue.getStr(), m_pParserState->m_aResLocale);
+                else
+                    sFinalValue = OUString::fromUtf8(sValue);
+
 
                 if (aRow.size() < nId+1)
                     aRow.resize(nId+1);
-                aRow[nId] = OUString::fromUtf8(sValue);
+                aRow[nId] = sFinalValue;
             }
         }
 
@@ -2420,7 +2320,7 @@ void VclBuilder::handleAtkObject(xmlreader::XmlReader &reader, const OString &rI
     }
 }
 
-std::vector<OUString> VclBuilder::handleItems(xmlreader::XmlReader &reader, const OString & rID)
+std::vector<OUString> VclBuilder::handleItems(xmlreader::XmlReader &reader, const OString & /*rID*/)
 {
     int nLevel = 1;
 
@@ -2444,30 +2344,29 @@ std::vector<OUString> VclBuilder::handleItems(xmlreader::XmlReader &reader, cons
             if (name.equals("item"))
             {
                 bool bTranslated = false;
-                OString sValue;
 
                 while (reader.nextAttribute(&nsId, &name))
                 {
                     if (name.equals("translatable") && reader.getAttributeValue(false).equals("yes"))
                     {
-                        sValue = getTranslation(rID, OString::number(nItemIndex));
-                        bTranslated = !sValue.isEmpty();
+                        bTranslated = true;
                     }
                 }
 
                 reader.nextItem(
                     xmlreader::XmlReader::Text::Raw, &name, &nsId);
 
-                if (!bTranslated)
-                    sValue = OString(name.begin, name.length);
+                OString sValue = OString(name.begin, name.length);
+                OUString sFinalValue;
+                if (bTranslated)
+                    sFinalValue = Translate::get(sValue.getStr(), m_pParserState->m_aResLocale);
+                else
+                    sFinalValue = OUString::fromUtf8(sValue);
 
                 if (m_pStringReplace)
-                {
-                    OUString sTmp = (*m_pStringReplace)(OStringToOUString(sValue, RTL_TEXTENCODING_UTF8));
-                    sValue = OUStringToOString(sTmp, RTL_TEXTENCODING_UTF8);
-                }
+                    sFinalValue = (*m_pStringReplace)(sFinalValue);
 
-                aItems.push_back(OUString::fromUtf8(sValue));
+                aItems.push_back(sFinalValue);
                 ++nItemIndex;
             }
         }
@@ -3184,26 +3083,12 @@ OString VclBuilder::getStyleClass(xmlreader::XmlReader &reader)
     return aRet;
 }
 
-OString VclBuilder::getTranslation(const OString &rID, const OString &rProperty) const
-{
-    Translations::const_iterator aWidgetFind = m_pParserState->m_aTranslations.find(rID);
-    if (aWidgetFind != m_pParserState->m_aTranslations.end())
-    {
-        const WidgetTranslations &rWidgetTranslations = aWidgetFind->second;
-        WidgetTranslations::const_iterator aPropertyFind = rWidgetTranslations.find(rProperty);
-        if (aPropertyFind != rWidgetTranslations.end())
-            return aPropertyFind->second;
-    }
-    return OString();
-}
-
-void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const OString &rID, stringmap &rMap)
+void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const OString & /*rID*/, stringmap &rMap)
 {
     xmlreader::Span name;
     int nsId;
 
     OString sProperty;
-    OString sValue;
 
     bool bTranslated = false;
 
@@ -3216,28 +3101,24 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const OString &rI
         }
         else if (name.equals("translatable") && reader.getAttributeValue(false).equals("yes"))
         {
-            sValue = getTranslation(rID, sProperty);
-            bTranslated = !sValue.isEmpty();
+            bTranslated = true;
         }
-
     }
 
     reader.nextItem(xmlreader::XmlReader::Text::Raw, &name, &nsId);
-    if (!bTranslated)
-        sValue = OString(name.begin, name.length);
+    OString sValue = OString(name.begin, name.length);
+    OUString sFinalValue;
+    if (bTranslated)
+        sFinalValue = Translate::get(sValue.getStr(), m_pParserState->m_aResLocale);
+    else
+        sFinalValue = OUString::fromUtf8(sValue);
 
     if (!sProperty.isEmpty())
     {
         sProperty = sProperty.replace('_', '-');
         if (m_pStringReplace)
-        {
-            OUString sTmp = (*m_pStringReplace)(OStringToOUString(sValue, RTL_TEXTENCODING_UTF8));
-            rMap[sProperty] = sTmp;
-        }
-        else
-        {
-            rMap[sProperty] = OUString::fromUtf8(sValue);
-        }
+            sFinalValue = (*m_pStringReplace)(sFinalValue);
+        rMap[sProperty] = sFinalValue;
     }
 }
 

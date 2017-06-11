@@ -42,7 +42,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <helper/accresmgr.hxx>
-#include <helper/accessiblestrings.hrc>
+#include <strings.hrc>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #define ACCESSIBLE_ACTION_COUNT 1
 

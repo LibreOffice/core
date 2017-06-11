@@ -35,8 +35,8 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include "querycontroller.hxx"
-#include "dbu_qry.hrc"
-#include "dbustrings.hrc"
+#include "strings.hrc"
+#include "stringconstants.hxx"
 #include "bitmaps.hlst"
 #include <comphelper/extract.hxx>
 #include "UITools.hxx"

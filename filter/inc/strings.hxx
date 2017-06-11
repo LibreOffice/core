@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_FILTER_INC_STRINGS_HRC
-#define INCLUDED_FILTER_INC_STRINGS_HRC
+#ifndef INCLUDED_FILTER_INC_STRINGS_HXX
+#define INCLUDED_FILTER_INC_STRINGS_HXX
 
 #define STR_APPL_NAME_WRITER        "%PRODUCTNAME Writer (.sxw)"
 #define STR_APPL_NAME_CALC          "%PRODUCTNAME Calc (.sxc)"

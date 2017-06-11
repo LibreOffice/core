@@ -25,7 +25,7 @@
 #include "IItemSetHelper.hxx"
 #include <comphelper/uno3.hxx>
 #include <svtools/wizardmachine.hxx>
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include <memory>
 
 namespace com { namespace sun { namespace star {
@@ -52,10 +52,10 @@ class OGeneralPage;
 class ODbDataSourceAdministrationHelper;
 /** tab dialog for administrating the office wide registered data sources
 */
-class ODbTypeWizDialog : public svt::OWizardMachine , public IItemSetHelper, public IDatabaseSettingsDialog,public dbaui::OModuleClient
+class ODbTypeWizDialog : public svt::OWizardMachine , public IItemSetHelper, public IDatabaseSettingsDialog, public dbaccess::OModuleClient
 {
 private:
-    OModuleClient           m_aModuleClient;
+    dbaccess::OModuleClient m_aModuleClient;
     std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
     SfxItemSet*             m_pOutSet;
     ::dbaccess::ODsnTypeCollection*

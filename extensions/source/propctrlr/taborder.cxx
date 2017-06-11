@@ -20,7 +20,7 @@
 #include "taborder.hxx"
 
 #include "modulepcr.hxx"
-#include "formresid.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include "formstrings.hxx"
 #include <comphelper/types.hxx>

@@ -27,7 +27,7 @@
 #include <svtools/imagemgr.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include "bitmaps.hlst"
 #include <svtools/viewdataentry.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

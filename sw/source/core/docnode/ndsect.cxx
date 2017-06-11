@@ -52,7 +52,7 @@
 #include <node2lay.hxx>
 #include <doctxm.hxx>
 #include <fmtftntx.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <viewsh.hxx>
 #include <txtfrm.hxx>
 #include <memory>
@@ -1359,7 +1359,7 @@ OUString SwDoc::GetUniqueSectionName( const OUString* pChkStr ) const
         return newName;
     }
 
-    const OUString aName( ResId( STR_REGION_DEFNAME, *pSwResMgr ) );
+    const OUString aName(SwResId(STR_REGION_DEFNAME));
 
     SwSectionFormats::size_type nNum = 0;
     const SwSectionFormats::size_type nFlagSize = ( mpSectionFormatTable->size() / 8 ) + 2;

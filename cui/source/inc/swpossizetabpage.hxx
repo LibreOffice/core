@@ -73,9 +73,6 @@ class SvxSwPosSizeTabPage : public SfxTabPage
 
     Link<SvxSwFrameValidation&,void> m_aValidateLink;
 
-    //'string provider'
-    SvxSwFramePosString m_aFramePosString;
-
     ::tools::Rectangle           m_aRect; //size of all selected objects
     ::tools::Rectangle           m_aWorkArea;
     Point               m_aAnchorPos;
@@ -110,7 +107,7 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     void            InitPos(RndStdIds nAnchorType, sal_uInt16 nH, sal_uInt16 nHRel,
                             sal_uInt16 nV,  sal_uInt16 nVRel,
                             long   nX,  long   nY);
-    sal_uInt16          GetMapPos(FrmMap *pMap, ListBox &rAlignLB);
+    static sal_uInt16   GetMapPos(FrmMap *pMap, ListBox &rAlignLB);
     static short        GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
     static short        GetRelation(FrmMap *pMap, ListBox &rRelationLB);
     RndStdIds           GetAnchorType(bool* pbHasChanged = nullptr);

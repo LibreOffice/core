@@ -24,7 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <hffrm.hxx>
 #include "accheaderfooter.hxx"
-#include "access.hrc"
+#include "strings.hrc"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -62,13 +62,13 @@ OUString SAL_CALL SwAccessibleHeaderFooter::getAccessibleDescription()
 
     ThrowIfDisposed();
 
-    sal_uInt16 nResId = AccessibleRole::HEADER == GetRole()
+    const char* pResId = AccessibleRole::HEADER == GetRole()
         ? STR_ACCESS_HEADER_DESC
         : STR_ACCESS_FOOTER_DESC ;
 
     OUString sArg( GetFormattedPageNumber() );
 
-    return GetResource( nResId, &sArg );
+    return GetResource(pResId, &sArg);
 }
 
 OUString SAL_CALL SwAccessibleHeaderFooter::getImplementationName()

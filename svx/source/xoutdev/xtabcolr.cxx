@@ -21,7 +21,7 @@
 #include "svx/XPropertyTable.hxx"
 #include <unotools/pathoptions.hxx>
 
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
