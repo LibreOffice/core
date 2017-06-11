@@ -241,7 +241,8 @@ static bool lcl_MayBeDBase( SvStream& rStream )
     }
 
     // tdf#84834 sanity check of size
-    if (0 == nRecords || nSize < nHeaderLen + nRecords * sal_uInt64(nRecordSize))
+    // tdf#106423: a dbf file can have 0 record, so no need to check nRecords
+    if (nSize < nHeaderLen + nRecords * sal_uInt64(nRecordSize))
         return false;
 
     // Last byte of header must be 0x0d, this is how it's specified.
