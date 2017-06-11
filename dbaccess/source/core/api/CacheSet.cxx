@@ -19,7 +19,8 @@
 
 #include "CacheSet.hxx"
 #include "core_resource.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
+#include "strings.hxx"
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -27,7 +28,7 @@
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
 

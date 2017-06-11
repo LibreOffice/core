@@ -26,7 +26,7 @@
 #include "dialog.hxx"
 #include "cfgitem.hxx"
 #include "smmod.hxx"
-#include "starmath.hrc"
+#include "strings.hrc"
 
 
 SmSym::SmSym() :

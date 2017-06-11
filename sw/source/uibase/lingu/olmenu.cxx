@@ -20,7 +20,7 @@
 #include "SwRewriter.hxx"
 #include "chrdlg.hrc"
 #include "cmdid.h"
-#include "comcore.hrc"
+#include "strings.hrc"
 #include "doc.hxx"
 #include "docsh.hxx"
 #include "edtwin.hxx"

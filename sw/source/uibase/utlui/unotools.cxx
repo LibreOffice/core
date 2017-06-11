@@ -21,8 +21,7 @@
 #include <globals.hrc>
 #include <misc.hrc>
 
-#include <utlui.hrc>
-#include <unotools.hrc>
+#include <strings.hrc>
 #include <unotools.hxx>
 #include <unoprnms.hxx>
 #include <i18nutil/unicode.hxx>
@@ -67,7 +66,6 @@ SwOneExampleFrame::SwOneExampleFrame( vcl::Window& rWin,
                                         const OUString* pURL ) :
     m_aTopWindow(VclPtr<SwFrameCtrlWindow>::Create(&rWin, this)),
     m_aLoadedIdle("sw uibase SwOneExampleFrame Loaded"),
-    m_aMenuRes(ResId(RES_FRMEX_MENU, *pSwResMgr)),
     m_pModuleView(SW_MOD()->GetView()),
     m_nStyleFlags(nFlags),
     m_bIsInitialized(false),
@@ -448,14 +446,14 @@ void SwOneExampleFrame::CreatePopup(const Point& rPt)
 {
     ScopedVclPtrInstance<PopupMenu> aPop;
 
-    aPop->InsertItem(ITEM_UP,   m_aMenuRes.GetString(m_aMenuRes.FindIndex(ST_MENU_UP)));
-    aPop->InsertItem(ITEM_DOWN, m_aMenuRes.GetString(m_aMenuRes.FindIndex(ST_MENU_DOWN)));
+    aPop->InsertItem(ITEM_UP,   SwResId(STR_MENU_UP));
+    aPop->InsertItem(ITEM_DOWN, SwResId(STR_MENU_DOWN));
 
     Link<Menu*,bool> aSelLk = LINK(this, SwOneExampleFrame, PopupHdl );
     aPop->SetSelectHdl(aSelLk);
     if(EX_SHOW_ONLINE_LAYOUT == m_nStyleFlags)
     {
-        aPop->InsertItem(ITEM_ZOOM, m_aMenuRes.GetString(m_aMenuRes.FindIndex(ST_MENU_ZOOM)));
+        aPop->InsertItem(ITEM_ZOOM, SwResId(STR_MENU_ZOOM));
 
         uno::Reference< view::XViewSettingsSupplier >  xSettings(m_xController, uno::UNO_QUERY);
         uno::Reference< beans::XPropertySet >  xViewProps = xSettings->getViewSettings();
