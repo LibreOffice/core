@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sc">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="DapiserviceDialog">
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">External Source</property>
+    <property name="title" translatable="yes" context="dapiservicedialog|DapiserviceDialog">External Source</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -105,7 +105,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Service</property>
+                        <property name="label" translatable="yes" context="dapiservicedialog|label2">_Service</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -121,7 +121,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">So_urce</property>
+                        <property name="label" translatable="yes" context="dapiservicedialog|label3">So_urce</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -137,7 +137,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Name</property>
+                        <property name="label" translatable="yes" context="dapiservicedialog|label4">_Name</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -153,7 +153,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Us_er</property>
+                        <property name="label" translatable="yes" context="dapiservicedialog|label5">Us_er</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -169,7 +169,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Password</property>
+                        <property name="label" translatable="yes" context="dapiservicedialog|label6">_Password</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -256,7 +256,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Selection</property>
+                <property name="label" translatable="yes" context="dapiservicedialog|label1">Selection</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

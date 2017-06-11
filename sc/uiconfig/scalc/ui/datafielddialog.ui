@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="DataFieldDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Data Field</property>
+    <property name="title" translatable="yes" context="datafielddialog|DataFieldDialog">Data Field</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -127,7 +127,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Function</property>
+                    <property name="label" translatable="yes" context="datafielddialog|label1">Function</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -141,7 +141,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="checkbutton1">
-                <property name="label" translatable="yes">Show it_ems without data</property>
+                <property name="label" translatable="yes" context="datafielddialog|checkbutton1">Show it_ems without data</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -164,7 +164,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Name:</property>
+                    <property name="label" translatable="yes" context="datafielddialog|label2">Name:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -212,7 +212,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Type:</property>
+                            <property name="label" translatable="yes" context="datafielddialog|label4">_Type:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">type</property>
                             <property name="ellipsize">end</property>
@@ -227,7 +227,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Base field:</property>
+                            <property name="label" translatable="yes" context="datafielddialog|basefieldft">_Base field:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">basefield</property>
                             <property name="ellipsize">end</property>
@@ -242,7 +242,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Ba_se item:</property>
+                            <property name="label" translatable="yes" context="datafielddialog|baseitemft">Ba_se item:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">baseitem</property>
                             <property name="ellipsize">end</property>
@@ -257,15 +257,15 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <items>
-                              <item translatable="yes">Normal</item>
-                              <item translatable="yes">Difference from</item>
-                              <item translatable="yes">% of</item>
-                              <item translatable="yes">% difference from</item>
-                              <item translatable="yes">Running total in</item>
-                              <item translatable="yes">% of row</item>
-                              <item translatable="yes">% of column</item>
-                              <item translatable="yes">% of total</item>
-                              <item translatable="yes">Index</item>
+                              <item translatable="yes" context="datafielddialog|type">Normal</item>
+                              <item translatable="yes" context="datafielddialog|type">Difference from</item>
+                              <item translatable="yes" context="datafielddialog|type">% of</item>
+                              <item translatable="yes" context="datafielddialog|type">% difference from</item>
+                              <item translatable="yes" context="datafielddialog|type">Running total in</item>
+                              <item translatable="yes" context="datafielddialog|type">% of row</item>
+                              <item translatable="yes" context="datafielddialog|type">% of column</item>
+                              <item translatable="yes" context="datafielddialog|type">% of total</item>
+                              <item translatable="yes" context="datafielddialog|type">Index</item>
                             </items>
                           </object>
                           <packing>
@@ -288,8 +288,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <items>
-                              <item translatable="yes">- previous item -</item>
-                              <item translatable="yes">- next item -</item>
+                              <item translatable="yes" context="datafielddialog|baseitem">- previous item -</item>
+                              <item translatable="yes" context="datafielddialog|baseitem">- next item -</item>
                             </items>
                           </object>
                           <packing>
@@ -305,7 +305,7 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Displayed value</property>
+                    <property name="label" translatable="yes" context="datafielddialog|label3">Displayed value</property>
                   </object>
                 </child>
               </object>

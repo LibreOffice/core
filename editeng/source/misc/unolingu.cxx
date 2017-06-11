@@ -732,16 +732,16 @@ short SvxDicError( vcl::Window *pParent, linguistic::DictionaryError nError )
     short nRes = 0;
     if (linguistic::DictionaryError::NONE != nError)
     {
-        int nRid;
+        const char* pRid;
         switch (nError)
         {
-            case linguistic::DictionaryError::FULL     : nRid = RID_SVXSTR_DIC_ERR_FULL;  break;
-            case linguistic::DictionaryError::READONLY : nRid = RID_SVXSTR_DIC_ERR_READONLY;  break;
+            case linguistic::DictionaryError::FULL     : pRid = RID_SVXSTR_DIC_ERR_FULL;  break;
+            case linguistic::DictionaryError::READONLY : pRid = RID_SVXSTR_DIC_ERR_READONLY;  break;
             default:
-                nRid = RID_SVXSTR_DIC_ERR_UNKNOWN;
+                pRid = RID_SVXSTR_DIC_ERR_UNKNOWN;
                 SAL_WARN("editeng", "unexpected case");
         }
-        nRes = ScopedVclPtrInstance<InfoBox>(pParent, EditResId::GetString(nRid))->Execute();
+        nRes = ScopedVclPtrInstance<InfoBox>(pParent, EditResId(pRid))->Execute();
     }
     return nRes;
 }

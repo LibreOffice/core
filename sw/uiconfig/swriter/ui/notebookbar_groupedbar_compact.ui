@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.12"/>
   <requires lib="LibreOffice" version="1.0"/>
   <!-- interface-local-resource-path ../../../icon-themes/galaxy/cmd/ -->
@@ -1149,7 +1149,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:MenuBar</property>
-        <property name="label" translatable="yes">Menubar</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|menubarD1">Menubar</property>
       </object>
     </child>
     <child>
@@ -3090,7 +3090,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:MenuBar</property>
-        <property name="label" translatable="yes">Menubar</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|menubarD">Menubar</property>
       </object>
     </child>
     <child>
@@ -3849,7 +3849,7 @@
                         <property name="can_focus">False</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="fileb:MenuFile">
-                            <property name="label" translatable="yes">_File</property>
+                            <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|fileb">_File</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -3988,7 +3988,7 @@
                         <property name="can_focus">False</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="editb:MenuEdit">
-                            <property name="label" translatable="yes">_Edit</property>
+                            <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|editb">_Edit</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -4127,7 +4127,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="paragraphstyleb:MenuStyle">
-                                    <property name="label" translatable="yes">_Styles</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|paragraphstyleb">_Styles</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -4302,7 +4302,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="formatb:MenuFormat">
-                                    <property name="label" translatable="yes">F_ormat</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|formatb">F_ormat</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -4552,7 +4552,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="paragraphb:MenuParagraph">
-                                    <property name="label" translatable="yes">_Paragraph</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|paragraphb">_Paragraph</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -4721,7 +4721,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="insertb:MenuInsert">
-                                    <property name="label" translatable="yes">_Insert</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|insertb">_Insert</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -4866,7 +4866,7 @@
                             </child>
                             <child>
                               <object class="svtlo-ManagedMenuButton" id="referenceb:MenuReference">
-                                <property name="label" translatable="yes">Reference_s</property>
+                                <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|referenceb">Reference_s</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -4970,7 +4970,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="reviewb:MenuReview">
-                                    <property name="label" translatable="yes">_Review</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|reviewb">_Review</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -5081,7 +5081,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="viewb:MenuView">
-                                    <property name="label" translatable="yes">_View</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|viewb">_View</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -5181,7 +5181,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="paragraphstylet:MenuStyle">
-                                    <property name="label" translatable="yes">_Styles</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|paragraphstylet">_Styles</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -5356,7 +5356,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="formatt:MenuFormat">
-                                    <property name="label" translatable="yes">F_ormat</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|formatt">F_ormat</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -5571,7 +5571,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="paragrapht:MenuParagraph">
-                                    <property name="label" translatable="yes">_Paragraph</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|paragrapht">_Paragraph</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -5696,7 +5696,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="tableT:MenuTable">
-                                    <property name="label" translatable="yes">T_able</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|tableT">T_able</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -5832,7 +5832,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="merged:MenuMerge">
-                                    <property name="label" translatable="yes">_Merge</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|merged">_Merge</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -5954,7 +5954,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="rowscolumnst:MenuRowsColumns">
-                                    <property name="label" translatable="yes">R_ows</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|rowscolumnst">R_ows</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -6079,7 +6079,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="selectt:MenuSelect">
-                                    <property name="label" translatable="yes">Selec_t</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|selectt">Selec_t</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -6190,7 +6190,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="calculatet:MenuCalculate">
-                                    <property name="label" translatable="yes">_Calc</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|calculatet">_Calc</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -6325,7 +6325,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="graphicB:MenuGraphic">
-                                    <property name="label" translatable="yes">_Graphic</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|graphicB">_Graphic</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -6440,7 +6440,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="colorb:MenuColor">
-                                    <property name="label" translatable="yes">C_olor</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|colorb">C_olor</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -6757,7 +6757,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="arrange:MenuArrange">
-                                    <property name="label" translatable="yes">_Arrange</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|arrange">_Arrange</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -6917,7 +6917,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="GridB:MenuGrid">
-                                    <property name="label" translatable="yes">_Grid</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|GridB">_Grid</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -7037,7 +7037,7 @@
                             </child>
                             <child>
                               <object class="svtlo-ManagedMenuButton" id="languageb:MenuLanguage">
-                                <property name="label" translatable="yes">_Language</property>
+                                <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|languageb">_Language</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -7163,7 +7163,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="revieb:MenuReviews">
-                                    <property name="label" translatable="yes">_Review</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|revieb">_Review</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -7313,7 +7313,7 @@
                             </child>
                             <child>
                               <object class="svtlo-ManagedMenuButton" id="commentsb:MenuComments">
-                                <property name="label" translatable="yes">_Comments</property>
+                                <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|commentsb">_Comments</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -7413,7 +7413,7 @@
                             </child>
                             <child>
                               <object class="svtlo-ManagedMenuButton" id="compareb:MenuCompare">
-                                <property name="label" translatable="yes">Com_pare</property>
+                                <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|compareb">Com_pare</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -7513,7 +7513,7 @@
                             </child>
                             <child>
                               <object class="svtlo-ManagedMenuButton" id="viewA:MenuView">
-                                <property name="label" translatable="yes">_View</property>
+                                <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|viewA">_View</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -7697,7 +7697,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="editdrawb:MenuDrawEdit">
-                                    <property name="label" translatable="yes">_Styles</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|editdrawb">_Styles</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -7913,7 +7913,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="drawb:MenuDraw">
-                                    <property name="label" translatable="yes">D_raw</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|drawb">D_raw</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -8140,7 +8140,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="arrangeD:MenuArrange">
-                                    <property name="label" translatable="yes">_Arrange</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|arrangeD">_Arrange</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -8276,7 +8276,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="Grid:MenuGrid">
-                                    <property name="label" translatable="yes">_Grid</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|Grid">_Grid</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -8385,7 +8385,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="viewDrawb:MenuGroup">
-                                    <property name="label" translatable="yes">Grou_p</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|viewDrawb">Grou_p</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -8493,7 +8493,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="3Db:Menu3D">
-                                    <property name="label" translatable="yes">3_D</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|3Db">3_D</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -8676,7 +8676,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="oleB:MenuOLE">
-                                    <property name="label" translatable="yes">F_rame</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|oleB">F_rame</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -8883,7 +8883,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="arrangeO:MenuArrange">
-                                    <property name="label" translatable="yes">_Arrange</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|arrangeO">_Arrange</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -8992,7 +8992,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="GridO:MenuGrid">
-                                    <property name="label" translatable="yes">_Grid</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|GridO">_Grid</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -9102,7 +9102,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="viewO:MenuView">
-                                    <property name="label" translatable="yes">_View</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|viewO">_View</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -9207,7 +9207,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="paragraphstyles:MenuStyle">
-                                    <property name="label" translatable="yes">_Styles</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|paragraphstyles">_Styles</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -9382,7 +9382,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="formats:MenuFormat">
-                                    <property name="label" translatable="yes">F_ormat</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|formats">F_ormat</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -9643,7 +9643,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="paragraphs:MenuParagraph">
-                                    <property name="label" translatable="yes">_Paragraph</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|paragraphs">_Paragraph</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -9802,7 +9802,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="svtlo-ManagedMenuButton" id="viewc:MenuView">
-                                    <property name="label" translatable="yes">_View</property>
+                                    <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|viewc">_View</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -9912,7 +9912,7 @@
                         </child>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="menub:MenuSettings">
-                            <property name="label" translatable="yes">_Menu</property>
+                            <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|menub">_Menu</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -9967,7 +9967,7 @@
                         </child>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="toolsb:MenuTools">
-                            <property name="label" translatable="yes">_Tools</property>
+                            <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|toolsb">_Tools</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>

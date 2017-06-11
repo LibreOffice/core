@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkGrid" id="NavigatorPanel">
     <property name="visible">True</property>
@@ -27,7 +27,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Column:</property>
+                <property name="label" translatable="yes" context="navigatorpanel|label1">Column:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">column</property>
               </object>
@@ -41,7 +41,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Row:</property>
+                <property name="label" translatable="yes" context="navigatorpanel|label2">Row:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">row</property>
               </object>
@@ -55,7 +55,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="tooltip_text" translatable="yes">Column</property>
+                <property name="tooltip_text" translatable="yes" context="navigatorpanel|column|tooltip_text">Column</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -67,7 +67,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="tooltip_text" translatable="yes">Row</property>
+                <property name="tooltip_text" translatable="yes" context="navigatorpanel|row|tooltip_text">Row</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -83,7 +83,7 @@
                   <object class="GtkToolButton" id="datarange">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Data Range</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|datarange|tooltip_text">Data Range</property>
                     <property name="action_name">datarange</property>
                     <property name="icon_name">sc/res/na03.png</property>
                   </object>
@@ -96,7 +96,7 @@
                   <object class="GtkToolButton" id="start">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Start</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|start|tooltip_text">Start</property>
                     <property name="action_name">start</property>
                     <property name="icon_name">sc/res/na05.png</property>
                   </object>
@@ -109,7 +109,7 @@
                   <object class="GtkToolButton" id="end">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">End</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|end|tooltip_text">End</property>
                     <property name="action_name">end</property>
                     <property name="icon_name">sc/res/na06.png</property>
                   </object>
@@ -122,7 +122,7 @@
                   <object class="GtkToolButton" id="contents">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Contents</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|contents|tooltip_text">Contents</property>
                     <property name="action_name">contents</property>
                     <property name="icon_name">sc/res/na011.png</property>
                   </object>
@@ -135,7 +135,7 @@
                   <object class="GtkToolButton" id="toggle">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Toggle</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|toggle|tooltip_text">Toggle</property>
                     <property name="action_name">toggle</property>
                     <property name="icon_name">sc/res/na010.png</property>
                   </object>
@@ -148,7 +148,7 @@
                   <object class="GtkToolButton" id="scenarios">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Scenarios</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|scenarios|tooltip_text">Scenarios</property>
                     <property name="action_name">scenarios</property>
                     <property name="icon_name">sc/res/na07.png</property>
                   </object>
@@ -161,7 +161,7 @@
                   <object class="GtkMenuToolButton" id="dragmode">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Drag Mode</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|dragmode|tooltip_text">Drag Mode</property>
                     <property name="action_name">dragmode</property>
                     <property name="icon_name">sc/res/na09.png</property>
                   </object>
@@ -187,10 +187,10 @@
           <object class="GtkComboBox" id="documents">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="tooltip_text" translatable="yes">Document</property>
+            <property name="tooltip_text" translatable="yes" context="navigatorpanel|documents|tooltip_text">Document</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="documents-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes">Active Window</property>
+                <property name="AtkObject::accessible-name" translatable="yes" context="navigatorpanel|documents-atkobject">Active Window</property>
               </object>
             </child>
           </object>

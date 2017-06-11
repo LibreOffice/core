@@ -19,7 +19,7 @@
 
 
 #include <svx/dlgctl3d.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/view3d.hxx>
 #include <svx/fmmodel.hxx>
 #include <svl/itempool.hxx>

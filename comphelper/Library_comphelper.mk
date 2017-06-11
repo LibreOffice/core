@@ -115,7 +115,6 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/namedvaluecollection \
     comphelper/source/misc/numberedcollection \
     comphelper/source/misc/numbers \
-    comphelper/source/misc/officeresourcebundle \
     comphelper/source/misc/officerestartmanager \
     comphelper/source/misc/profilezone \
     comphelper/source/misc/proxyaggregation \

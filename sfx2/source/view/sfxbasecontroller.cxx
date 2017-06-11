@@ -76,6 +76,7 @@
 
 #include <sfx2/event.hxx>
 #include <sfx2/viewfac.hxx>
+#include <sfx2/strings.hrc>
 #include "sfxbasecontroller_internal.hxx"
 
 #include <unordered_map>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sw">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">100</property>
@@ -32,7 +32,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkRadioButton" id="top">
-                    <property name="label" translatable="yes">_Print from top</property>
+                    <property name="label" translatable="yes" context="envprinterpage|top">_Print from top</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -51,7 +51,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="bottom">
-                    <property name="label" translatable="yes">Print from _bottom</property>
+                    <property name="label" translatable="yes" context="envprinterpage|bottom">Print from _bottom</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -72,7 +72,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Shift right</property>
+                    <property name="label" translatable="yes" context="envprinterpage|label3">_Shift right</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -87,7 +87,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Shift _down</property>
+                    <property name="label" translatable="yes" context="envprinterpage|label4">Shift _down</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -135,9 +135,9 @@
                       <object class="GtkToolButton" id="horileft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Horizontal Left</property>
+                        <property name="tooltip_text" translatable="yes" context="envprinterpage|horileft|tooltip_text">Horizontal Left</property>
                         <property name="action_name">horileft</property>
-                        <property name="label" translatable="yes">Horizontal Left</property>
+                        <property name="label" translatable="yes" context="envprinterpage|horileft">Horizontal Left</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -149,9 +149,9 @@
                       <object class="GtkToolButton" id="horicenter">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Horizontal Center</property>
+                        <property name="tooltip_text" translatable="yes" context="envprinterpage|horicenter|tooltip_text">Horizontal Center</property>
                         <property name="action_name">horicenter</property>
-                        <property name="label" translatable="yes">Horizontal Center</property>
+                        <property name="label" translatable="yes" context="envprinterpage|horicenter">Horizontal Center</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -163,9 +163,9 @@
                       <object class="GtkToolButton" id="horiright">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Horizontal Right</property>
+                        <property name="tooltip_text" translatable="yes" context="envprinterpage|horiright|tooltip_text">Horizontal Right</property>
                         <property name="action_name">horiright</property>
-                        <property name="label" translatable="yes">Horizontal Right</property>
+                        <property name="label" translatable="yes" context="envprinterpage|horiright">Horizontal Right</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -177,9 +177,9 @@
                       <object class="GtkToolButton" id="vertleft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Vertical Left</property>
+                        <property name="tooltip_text" translatable="yes" context="envprinterpage|vertleft|tooltip_text">Vertical Left</property>
                         <property name="action_name">vertleft</property>
-                        <property name="label" translatable="yes">Vertical Left</property>
+                        <property name="label" translatable="yes" context="envprinterpage|vertleft">Vertical Left</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -191,9 +191,9 @@
                       <object class="GtkToolButton" id="vertcenter">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Vertical Center</property>
+                        <property name="tooltip_text" translatable="yes" context="envprinterpage|vertcenter|tooltip_text">Vertical Center</property>
                         <property name="action_name">vertcenter</property>
-                        <property name="label" translatable="yes">Vertical Center</property>
+                        <property name="label" translatable="yes" context="envprinterpage|vertcenter">Vertical Center</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -205,9 +205,9 @@
                       <object class="GtkToolButton" id="vertright">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Vertical Right</property>
+                        <property name="tooltip_text" translatable="yes" context="envprinterpage|vertright|tooltip_text">Vertical Right</property>
                         <property name="action_name">vertright</property>
-                        <property name="label" translatable="yes">Vertical Right</property>
+                        <property name="label" translatable="yes" context="envprinterpage|vertright">Vertical Right</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -231,7 +231,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Envelope Orientation</property>
+            <property name="label" translatable="yes" context="envprinterpage|label1">Envelope Orientation</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -266,7 +266,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkButton" id="setup">
-                    <property name="label" translatable="yes">Setup...</property>
+                    <property name="label" translatable="yes" context="envprinterpage|setup">Setup...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -285,7 +285,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Printer Name</property>
+                    <property name="label" translatable="yes" context="envprinterpage|printername">Printer Name</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">setup</property>
                   </object>
@@ -304,7 +304,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Current Printer</property>
+            <property name="label" translatable="yes" context="envprinterpage|label2">Current Printer</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

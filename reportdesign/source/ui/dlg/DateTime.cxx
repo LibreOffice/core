@@ -18,16 +18,15 @@
  */
 #include "DateTime.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "RptResId.hrc"
+#include "strings.hrc"
 #include "rptui_slotid.hrc"
-#include "ModuleHelper.hxx"
 #include "helpids.hrc"
 #include <vcl/msgbox.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <unotools/syslocale.hxx>
 #include "UITools.hxx"
 #include "RptDef.hxx"
-#include "uistrings.hrc"
+#include "strings.hxx"
 #include "ReportController.hxx"
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>

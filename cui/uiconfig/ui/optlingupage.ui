@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkGrid" id="OptLinguPage">
@@ -44,7 +44,7 @@
                       <object class="GtkLabel" id="lingumodulesft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Available language modules:</property>
+                        <property name="label" translatable="yes" context="optlingupage|lingumodulesft">_Available language modules:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">lingumodules:border</property>
                         <property name="xalign">0</property>
@@ -71,7 +71,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="lingumodulesedit">
-                        <property name="label" translatable="yes">_Edit...</property>
+                        <property name="label" translatable="yes" context="optlingupage|lingumodulesedit">_Edit...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -79,7 +79,7 @@
                         <property name="use_underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="lingumodulesedit-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Edit Available language modules</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="optlingupage|lingumodulesedit-atkobject">Edit Available language modules</property>
                           </object>
                         </child>
                       </object>
@@ -109,7 +109,7 @@
                       <object class="GtkLabel" id="lingudictsft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_User-defined dictionaries:</property>
+                        <property name="label" translatable="yes" context="optlingupage|lingudictsft">_User-defined dictionaries:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">lingudicts:border</property>
                         <property name="xalign">0</property>
@@ -143,7 +143,7 @@
                         <property name="layout_style">start</property>
                         <child>
                           <object class="GtkButton" id="lingudictsnew">
-                            <property name="label" translatable="yes">_New...</property>
+                            <property name="label" translatable="yes" context="optlingupage|lingudictsnew">_New...</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -157,14 +157,14 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="lingudictsedit">
-                            <property name="label" translatable="yes">Ed_it...</property>
+                            <property name="label" translatable="yes" context="optlingupage|lingudictsedit">Ed_it...</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="use_underline">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="lingudictsedit-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes">Edit User-defined dictionaries</property>
+                                <property name="AtkObject::accessible-name" translatable="yes" context="optlingupage|lingudictsedit-atkobject">Edit User-defined dictionaries</property>
                               </object>
                             </child>
                           </object>
@@ -176,7 +176,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="lingudictsdelete">
-                            <property name="label" translatable="yes">_Delete</property>
+                            <property name="label" translatable="yes" context="optlingupage|lingudictsdelete">_Delete</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -215,7 +215,7 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Options:</property>
+                        <property name="label" translatable="yes" context="optlingupage|label4">_Options:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">linguoptions:border</property>
                         <property name="xalign">0</property>
@@ -227,7 +227,7 @@
                     </child>
                     <child>
                       <object class="GtkLinkButton" id="moredictslink">
-                        <property name="label" translatable="yes">Get more dictionaries online...</property>
+                        <property name="label" translatable="yes" context="optlingupage|moredictslink">Get more dictionaries online...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -259,7 +259,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="linguoptionsedit">
-                        <property name="label" translatable="yes">Edi_t...</property>
+                        <property name="label" translatable="yes" context="optlingupage|linguoptionsedit">Edi_t...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -267,7 +267,7 @@
                         <property name="use_underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="linguoptionsedit-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Edit Options</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="optlingupage|linguoptionsedit-atkobject">Edit Options</property>
                           </object>
                         </child>
                       </object>
@@ -293,7 +293,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Writing Aids</property>
+            <property name="label" translatable="yes" context="optlingupage|label1">Writing Aids</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

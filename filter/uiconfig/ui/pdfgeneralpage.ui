@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="flt">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
@@ -40,7 +40,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkRadioButton" id="all">
-                        <property name="label" translatable="yes">_All</property>
+                        <property name="label" translatable="yes" context="pdfgeneralpage|all">_All</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -58,7 +58,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="range">
-                        <property name="label" translatable="yes">_Pages:</property>
+                        <property name="label" translatable="yes" context="pdfgeneralpage|range">_Pages:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -77,7 +77,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="selection">
-                        <property name="label" translatable="yes">_Selection</property>
+                        <property name="label" translatable="yes" context="pdfgeneralpage|selection">_Selection</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -111,7 +111,7 @@
                       <object class="GtkLabel" id="slides">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="label" translatable="yes">Slides:</property>
+                        <property name="label" translatable="yes" context="pdfgeneralpage|slides">Slides:</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -123,7 +123,7 @@
                       <object class="GtkLabel" id="selectedsheets">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="label" translatable="yes">_Selection/Selected sheet(s)</property>
+                        <property name="label" translatable="yes" context="pdfgeneralpage|selectedsheets">_Selection/Selected sheet(s)</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -139,7 +139,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Range</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage|label1">Range</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -200,7 +200,7 @@
                                   <object class="GtkLabel" id="label6">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">_Quality:</property>
+                                    <property name="label" translatable="yes" context="pdfgeneralpage|label6">_Quality:</property>
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                   </object>
@@ -225,7 +225,7 @@
                             <property name="column_spacing">12</property>
                             <child>
                               <object class="GtkCheckButton" id="reduceresolution">
-                                <property name="label" translatable="yes">_Reduce image resolution</property>
+                                <property name="label" translatable="yes" context="pdfgeneralpage|reduceresolution">_Reduce image resolution</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -247,17 +247,17 @@
                                 <property name="can_focus">False</property>
                                 <property name="has_entry">True</property>
                                 <items>
-                                  <item translatable="yes">75 DPI</item>
-                                  <item translatable="yes">150 DPI</item>
-                                  <item translatable="yes">300 DPI</item>
-                                  <item translatable="yes">600 DPI</item>
-                                  <item translatable="yes">1200 DPI</item>
+                                  <item translatable="yes" context="pdfgeneralpage|resolution">75 DPI</item>
+                                  <item translatable="yes" context="pdfgeneralpage|resolution">150 DPI</item>
+                                  <item translatable="yes" context="pdfgeneralpage|resolution">300 DPI</item>
+                                  <item translatable="yes" context="pdfgeneralpage|resolution">600 DPI</item>
+                                  <item translatable="yes" context="pdfgeneralpage|resolution">1200 DPI</item>
                                 </items>
                                 <child internal-child="entry">
                                   <object class="GtkEntry" id="comboboxtext-entry">
                                     <property name="can_focus">False</property>
                                     <property name="invisible_char">●</property>
-                                    <property name="text" translatable="yes">75 DPI</property>
+                                    <property name="text" translatable="yes" context="pdfgeneralpage|comboboxtext-entry">75 DPI</property>
                                   </object>
                                 </child>
                               </object>
@@ -281,7 +281,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="losslesscompress">
-                        <property name="label" translatable="yes">_Lossless compression</property>
+                        <property name="label" translatable="yes" context="pdfgeneralpage|losslesscompress">_Lossless compression</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -298,7 +298,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="jpegcompress">
-                        <property name="label" translatable="yes">_JPEG compression</property>
+                        <property name="label" translatable="yes" context="pdfgeneralpage|jpegcompress">_JPEG compression</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -320,7 +320,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Images</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage|label2">Images</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -352,7 +352,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="watermark">
-                        <property name="label" translatable="yes">Sign with _watermark</property>
+                        <property name="label" translatable="yes" context="pdfgeneralpage|watermark">Sign with _watermark</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -387,7 +387,7 @@
                           <object class="GtkLabel" id="watermarklabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Text:</property>
+                            <property name="label" translatable="yes" context="pdfgeneralpage|watermarklabel">Text:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">watermarkentry</property>
                             <property name="xalign">0</property>
@@ -407,7 +407,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Watermark</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage|label3">Watermark</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -444,11 +444,11 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="embed">
-                    <property name="label" translatable="yes">Hybrid PDF (em_bed ODF file)</property>
+                    <property name="label" translatable="yes" context="pdfgeneralpage|embed">Hybrid PDF (em_bed ODF file)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Creates a PDF that is easily editable in %PRODUCTNAME</property>
+                    <property name="tooltip_text" translatable="yes" context="pdfgeneralpage|embed|tooltip_text">Creates a PDF that is easily editable in %PRODUCTNAME</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -460,11 +460,11 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="pdfa">
-                    <property name="label" translatable="yes">Archive P_DF/A-1a (ISO 19005-1)</property>
+                    <property name="label" translatable="yes" context="pdfgeneralpage|pdfa">Archive P_DF/A-1a (ISO 19005-1)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Creates an ISO 19005-1 compliant PDF file, ideal for long-term document preservation</property>
+                    <property name="tooltip_text" translatable="yes" context="pdfgeneralpage|pdfa|tooltip_text">Creates an ISO 19005-1 compliant PDF file, ideal for long-term document preservation</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -476,11 +476,11 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="tagged">
-                    <property name="label" translatable="yes">_Tagged PDF (add document structure)</property>
+                    <property name="label" translatable="yes" context="pdfgeneralpage|tagged">_Tagged PDF (add document structure)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Includes a document's content structure information in a PDF</property>
+                    <property name="tooltip_text" translatable="yes" context="pdfgeneralpage|tagged|tooltip_text">Includes a document's content structure information in a PDF</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -492,11 +492,11 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="forms">
-                    <property name="label" translatable="yes">_Create PDF form</property>
+                    <property name="label" translatable="yes" context="pdfgeneralpage|forms">_Create PDF form</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Creates a PDF with fields that can be filled out</property>
+                    <property name="tooltip_text" translatable="yes" context="pdfgeneralpage|forms|tooltip_text">Creates a PDF with fields that can be filled out</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -521,7 +521,7 @@
                           <object class="GtkLabel" id="label7">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Submit _format:</property>
+                            <property name="label" translatable="yes" context="pdfgeneralpage|label7">Submit _format:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">format</property>
                             <property name="xalign">0</property>
@@ -536,10 +536,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <items>
-                              <item translatable="yes">FDF</item>
-                              <item translatable="yes">PDF</item>
-                              <item translatable="yes">HTML</item>
-                              <item translatable="yes">XML</item>
+                              <item translatable="yes" context="pdfgeneralpage|format">FDF</item>
+                              <item translatable="yes" context="pdfgeneralpage|format">PDF</item>
+                              <item translatable="yes" context="pdfgeneralpage|format">HTML</item>
+                              <item translatable="yes" context="pdfgeneralpage|format">XML</item>
                             </items>
                           </object>
                           <packing>
@@ -549,7 +549,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="allowdups">
-                            <property name="label" translatable="yes">Allow duplicate field _names</property>
+                            <property name="label" translatable="yes" context="pdfgeneralpage|allowdups">Allow duplicate field _names</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -573,7 +573,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="bookmarks">
-                    <property name="label" translatable="yes">Export _bookmarks</property>
+                    <property name="label" translatable="yes" context="pdfgeneralpage|bookmarks">Export _bookmarks</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -588,7 +588,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="exportplaceholders">
-                    <property name="label" translatable="yes">Expo_rt placeholders</property>
+                    <property name="label" translatable="yes" context="pdfgeneralpage|exportplaceholders">Expo_rt placeholders</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -603,7 +603,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="comments">
-                    <property name="label" translatable="yes">_Export comments</property>
+                    <property name="label" translatable="yes" context="pdfgeneralpage|comments">_Export comments</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -618,7 +618,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="emptypages">
-                    <property name="label" translatable="yes">Exp_ort automatically inserted blank pages</property>
+                    <property name="label" translatable="yes" context="pdfgeneralpage|emptypages">Exp_ort automatically inserted blank pages</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -633,7 +633,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="viewpdf">
-                    <property name="label" translatable="yes">_View PDF after export</property>
+                    <property name="label" translatable="yes" context="pdfgeneralpage|viewpdf">_View PDF after export</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -648,7 +648,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="usereferencexobject">
-                    <property name="label" translatable="yes">Use reference XObjects</property>
+                    <property name="label" translatable="yes" context="pdfgeneralpage|usereferencexobject">Use reference XObjects</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -663,7 +663,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="hiddenpages">
-                    <property name="label" translatable="yes">Export _hidden pages</property>
+                    <property name="label" translatable="yes" context="pdfgeneralpage|hiddenpages">Export _hidden pages</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -678,7 +678,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="notes">
-                    <property name="label" translatable="yes">Export _notes pages</property>
+                    <property name="label" translatable="yes" context="pdfgeneralpage|notes">Export _notes pages</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -698,7 +698,7 @@
                     <property name="left_padding">12</property>
                     <child>
                       <object class="GtkCheckButton" id="onlynotes">
-                        <property name="label" translatable="yes">Export onl_y notes pages</property>
+                        <property name="label" translatable="yes" context="pdfgeneralpage|onlynotes">Export onl_y notes pages</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -721,7 +721,7 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">General</property>
+            <property name="label" translatable="yes" context="pdfgeneralpage|label4">General</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

@@ -572,12 +572,6 @@ void DeInitVCL()
     delete pSVData->maGDIData.mpScreenFontCache;
     pSVData->maGDIData.mpScreenFontCache = nullptr;
 
-    if ( pSVData->mpResMgr )
-    {
-        delete pSVData->mpResMgr;
-        pSVData->mpResMgr = nullptr;
-    }
-
     ResMgr::DestroyAllResMgr();
 
     // destroy all Sal interfaces before destroying the instance

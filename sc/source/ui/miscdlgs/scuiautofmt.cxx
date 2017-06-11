@@ -34,8 +34,9 @@
 #include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
 #include <comphelper/processfactory.hxx>
+#include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
-#include "scres.hrc"
+#include "strings.hrc"
 #include "scmod.hxx"
 #include "attrib.hxx"
 #include "zforauto.hxx"
@@ -46,6 +47,7 @@
 #include "scuiautofmt.hxx"
 #include "scresid.hxx"
 #include "document.hxx"
+#include "helpids.h"
 
 // AutoFormat-Dialog:
 

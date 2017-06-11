@@ -26,6 +26,7 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <sfx2/sfxsids.hrc>
 #include "drawdoc.hxx"
 #include "Outliner.hxx"
 #include <unotools/streamwrap.hxx>
@@ -68,7 +69,7 @@
 #include "sderror.hxx"
 #include "sdresid.hxx"
 #include "sdtransform.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 
 #include <sfx2/frame.hxx>
 

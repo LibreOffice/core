@@ -21,8 +21,9 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
-#include "dp_script.hrc"
+#include "strings.hrc"
 #include "dp_resource.h"
+#include "dp_shared.hxx"
 #include "dp_xml.h"
 #include "dp_lib_container.h"
 
@@ -41,10 +42,8 @@ namespace backend {
 namespace script {
 
 namespace {
-struct StrCannotDetermineLibName : public StaticResourceString<
-    StrCannotDetermineLibName, RID_STR_CANNOT_DETERMINE_LIBNAME> {};
+    OUString StrCannotDetermineLibName() { return DpResId(RID_STR_CANNOT_DETERMINE_LIBNAME); }
 }
-
 
 OUString LibraryContainer::get_libname(
     OUString const & url,
@@ -56,7 +55,7 @@ OUString LibraryContainer::get_libname(
     xml_parse( ::xmlscript::importLibrary( import ), ucb_content, xContext );
 
     if (import.aName.isEmpty()) {
-        throw Exception( StrCannotDetermineLibName::get(),
+        throw Exception( StrCannotDetermineLibName(),
                          Reference<XInterface>() );
     }
     return import.aName;

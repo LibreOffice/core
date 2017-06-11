@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="xsc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkGrid" id="SecurityLevelPage">
     <property name="visible">True</property>
@@ -11,7 +11,7 @@
     <property name="row_homogeneous">True</property>
     <child>
       <object class="GtkRadioButton" id="low:wrap">
-        <property name="label" translatable="yes">_Low (not recommended).
+        <property name="label" translatable="yes" context="securitylevelpage|low">_Low (not recommended).
 All macros will be executed without confirmation.
 Use this setting only if you are certain that all documents that will be opened are safe.</property>
         <property name="visible">True</property>
@@ -29,7 +29,7 @@ Use this setting only if you are certain that all documents that will be opened 
     </child>
     <child>
       <object class="GtkRadioButton" id="med:wrap">
-        <property name="label" translatable="yes">_Medium.
+        <property name="label" translatable="yes" context="securitylevelpage|med">_Medium.
 Confirmation required before executing macros from untrusted sources.</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
@@ -46,7 +46,7 @@ Confirmation required before executing macros from untrusted sources.</property>
     </child>
     <child>
       <object class="GtkRadioButton" id="high:wrap">
-        <property name="label" translatable="yes">H_igh.
+        <property name="label" translatable="yes" context="securitylevelpage|high">H_igh.
 Only signed macros from trusted sources are allowed to run.
 Unsigned macros are disabled.</property>
         <property name="visible">True</property>
@@ -65,7 +65,7 @@ Unsigned macros are disabled.</property>
     </child>
     <child>
       <object class="GtkRadioButton" id="vhigh:wrap">
-        <property name="label" translatable="yes">_Very high.
+        <property name="label" translatable="yes" context="securitylevelpage|vhigh">_Very high.
 Only macros from trusted file locations are allowed to run.
 All other macros, regardless whether signed or not, are disabled.</property>
         <property name="visible">True</property>

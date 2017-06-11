@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="SelectPersonaDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Select Firefox Theme</property>
+    <property name="title" translatable="yes" context="select_persona_dialog|SelectPersonaDialog">Select Firefox Theme</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -53,7 +53,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="search_personas">
-                            <property name="label" translatable="yes">_Go</property>
+                            <property name="label" translatable="yes" context="select_persona_dialog|search_personas">_Go</property>
                             <property name="width_request">85</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -83,7 +83,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Search Term or Firefox Theme URL</property>
+                <property name="label" translatable="yes" context="select_persona_dialog|label1">Search Term or Firefox Theme URL</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -225,7 +225,7 @@
               <object class="GtkLabel" id="label6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Categories</property>
+                <property name="label" translatable="yes" context="select_persona_dialog|label6">Categories</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

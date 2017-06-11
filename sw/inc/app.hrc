@@ -1,0 +1,93 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SW_INC_APP_HRC
+#define INCLUDED_SW_INC_APP_HRC
+
+#define NC_(Context, String) (Context "\004" u8##String)
+
+#include <svl/style.hrc>
+#include <sfx2/sfx.hrc>
+#include "swstyle.h"
+
+const std::pair<const char*, int> RID_PARAGRAPHSTYLEFAMILY[] =
+{
+    { NC_("RID_PARAGRAPHSTYLEFAMILY", "All Styles")          , SFXSTYLEBIT_ALL_VISIBLE },
+    { NC_("RID_PARAGRAPHSTYLEFAMILY", "Hidden Styles")       , SFXSTYLEBIT_HIDDEN    },
+    { NC_("RID_PARAGRAPHSTYLEFAMILY", "Applied Styles")      , SFXSTYLEBIT_USED      },
+    { NC_("RID_PARAGRAPHSTYLEFAMILY", "Custom Styles")       , SFXSTYLEBIT_USERDEF   },
+    { NC_("RID_PARAGRAPHSTYLEFAMILY", "Automatic")           , SFXSTYLEBIT_AUTO      },
+    { NC_("RID_PARAGRAPHSTYLEFAMILY", "Text Styles")         , SWSTYLEBIT_TEXT       },
+    { NC_("RID_PARAGRAPHSTYLEFAMILY", "Chapter Styles")      , SWSTYLEBIT_CHAPTER    },
+    { NC_("RID_PARAGRAPHSTYLEFAMILY", "List Styles")         , SWSTYLEBIT_LIST       },
+    { NC_("RID_PARAGRAPHSTYLEFAMILY", "Index Styles")        , SWSTYLEBIT_IDX        },
+    { NC_("RID_PARAGRAPHSTYLEFAMILY", "Special Styles")      , SWSTYLEBIT_EXTRA      },
+    { NC_("RID_PARAGRAPHSTYLEFAMILY", "HTML Styles")         , SWSTYLEBIT_HTML       },
+    { NC_("RID_PARAGRAPHSTYLEFAMILY", "Conditional Styles")  , SWSTYLEBIT_CONDCOLL   },
+    { nullptr, 0 }
+};
+
+const std::pair<const char*, int> RID_CHARACTERSTYLEFAMILY[] =
+{
+    { NC_("RID_CHARACTERSTYLEFAMILY", "All")             , SFXSTYLEBIT_ALL_VISIBLE },
+    { NC_("RID_CHARACTERSTYLEFAMILY", "Hidden Styles")   , SFXSTYLEBIT_HIDDEN    },
+    { NC_("RID_CHARACTERSTYLEFAMILY", "Applied Styles")  , SFXSTYLEBIT_USED      },
+    { NC_("RID_CHARACTERSTYLEFAMILY", "Custom Styles")   , SFXSTYLEBIT_USERDEF   },
+    { nullptr, 0 }
+};
+
+const std::pair<const char*, int> RID_FRAMESTYLEFAMILY[] =
+{
+    { NC_("RID_FRAMESTYLEFAMILY", "All")             , SFXSTYLEBIT_ALL_VISIBLE },
+    { NC_("RID_FRAMESTYLEFAMILY", "Hidden Styles")   , SFXSTYLEBIT_HIDDEN    },
+    { NC_("RID_FRAMESTYLEFAMILY", "Applied Styles")  , SFXSTYLEBIT_USED      },
+    { NC_("RID_FRAMESTYLEFAMILY", "Custom Styles")   , SFXSTYLEBIT_USERDEF   },
+    { nullptr, 0 }
+};
+
+const std::pair<const char*, int> RID_PAGESTYLEFAMILY[] =
+{
+    { NC_("RID_PAGESTYLEFAMILY", "All")             , SFXSTYLEBIT_ALL_VISIBLE },
+    { NC_("RID_PAGESTYLEFAMILY", "Hidden Styles")   , SFXSTYLEBIT_HIDDEN    },
+    { NC_("RID_PAGESTYLEFAMILY", "Applied Styles")  , SFXSTYLEBIT_USED      },
+    { NC_("RID_PAGESTYLEFAMILY", "Custom Styles")   , SFXSTYLEBIT_USERDEF   },
+    { nullptr, 0 }
+};
+
+const std::pair<const char*, int> RID_LISTSTYLEFAMILY[] =
+{
+    { NC_("RID_LISTSTYLEFAMILY", "All")             , SFXSTYLEBIT_ALL_VISIBLE },
+    { NC_("RID_LISTSTYLEFAMILY", "Hidden Styles")   , SFXSTYLEBIT_HIDDEN    },
+    { NC_("RID_LISTSTYLEFAMILY", "Applied Styles")  , SFXSTYLEBIT_USED      },
+    { NC_("RID_LISTSTYLEFAMILY", "Custom Styles")   , SFXSTYLEBIT_USERDEF   },
+    { nullptr, 0 }
+};
+
+const std::pair<const char*, int> RID_TABLESTYLEFAMILY[] =
+{
+    { NC_("RID_TABLESTYLEFAMILY", "All")             , SFXSTYLEBIT_ALL_VISIBLE },
+    { NC_("RID_TABLESTYLEFAMILY", "Hidden Styles")   , SFXSTYLEBIT_HIDDEN    },
+    { NC_("RID_TABLESTYLEFAMILY", "Applied Styles")  , SFXSTYLEBIT_USED      },
+    { NC_("RID_TABLESTYLEFAMILY", "Custom Styles")   , SFXSTYLEBIT_USERDEF   },
+    { nullptr, 0 }
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

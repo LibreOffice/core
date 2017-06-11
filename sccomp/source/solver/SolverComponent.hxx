@@ -66,8 +66,6 @@ class SolverComponent : public comphelper::OMutexAndBroadcastHelper,
                         public SolverComponent_Base
 {
 protected:
-    static ResMgr* pSolverResMgr;
-
     // settings
     css::uno::Reference< css::sheet::XSpreadsheetDocument > mxDoc;
     css::table::CellAddress                                 maObjective;
@@ -86,7 +84,7 @@ protected:
     css::uno::Sequence< double >                            maSolution;
     OUString                                                maStatus;
 
-    static OUString GetResourceString( sal_uInt32 nId );
+    static OUString GetResourceString(const char* pId);
     static css::uno::Reference<css::table::XCell> GetCell(
             const css::uno::Reference<css::sheet::XSpreadsheetDocument>& xDoc,
             const css::table::CellAddress& rPos );
