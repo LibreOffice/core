@@ -33,6 +33,26 @@
 
 class ValueSet;
 
+// enum to index light images
+#define FROM_TOP_LEFT       0
+#define FROM_TOP            1
+#define FROM_TOP_RIGHT      2
+#define FROM_LEFT           3
+#define FROM_FRONT          4
+#define FROM_RIGHT          5
+#define FROM_BOTTOM_LEFT    6
+#define FROM_BOTTOM         7
+#define FROM_BOTTOM_RIGHT   8
+
+#define DIRECTION_NW        0
+#define DIRECTION_N         1
+#define DIRECTION_NE        2
+#define DIRECTION_W         3
+#define DIRECTION_NONE      4
+#define DIRECTION_E         5
+#define DIRECTION_SW        6
+#define DIRECTION_S         7
+#define DIRECTION_SE        8
 
 namespace svx
 {

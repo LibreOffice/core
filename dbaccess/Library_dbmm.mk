@@ -24,6 +24,7 @@ $(eval $(call gb_Library_use_libraries,dbmm,\
     comphelper \
     cppu \
     cppuhelper \
+    dba \
     sal \
     svl \
     svt \
@@ -39,7 +40,6 @@ $(eval $(call gb_Library_use_libraries,dbmm,\
 $(eval $(call gb_Library_set_componentfile,dbmm,dbaccess/source/ext/macromigration/dbmm))
 
 $(eval $(call gb_Library_add_exception_objects,dbmm,\
-    dbaccess/source/ext/macromigration/dbmm_module \
     dbaccess/source/ext/macromigration/dbmm_services \
     dbaccess/source/ext/macromigration/dbmm_types \
     dbaccess/source/ext/macromigration/docinteraction \

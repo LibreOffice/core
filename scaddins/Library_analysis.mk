@@ -21,6 +21,11 @@ $(eval $(call gb_Library_Library,analysis))
 
 $(eval $(call gb_Library_set_componentfile,analysis,scaddins/source/analysis/analysis))
 
+$(eval $(call gb_Library_set_include,analysis,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/scaddins/inc \
+))
+
 $(eval $(call gb_Library_use_external,analysis,boost_headers))
 
 $(eval $(call gb_Library_use_internal_comprehensive_api,analysis,\

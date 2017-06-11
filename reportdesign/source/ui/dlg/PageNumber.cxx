@@ -18,16 +18,15 @@
  */
 #include "PageNumber.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "RptResId.hrc"
+#include "strings.hrc"
 #include "rptui_slotid.hrc"
-#include "ModuleHelper.hxx"
 #include "RptDef.hxx"
 #include "helpids.hrc"
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 
 #include "UITools.hxx"
-#include "uistrings.hrc"
+#include "strings.hxx"
 #include "ReportController.hxx"
 #include <comphelper/propertysequence.hxx>
 #include <algorithm>

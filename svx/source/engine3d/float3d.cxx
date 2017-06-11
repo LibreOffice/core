@@ -46,7 +46,7 @@
 #include <svx/viewpt3d.hxx>
 
 #include <svx/svxids.hrc>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 
 #include <editeng/colritem.hxx>
 #include <svx/e3ditem.hxx>

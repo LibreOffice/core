@@ -21,6 +21,11 @@ $(eval $(call gb_Library_Library,pricing))
 
 $(eval $(call gb_Library_set_componentfile,pricing,scaddins/source/pricing/pricing))
 
+$(eval $(call gb_Library_set_include,pricing,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/scaddins/inc \
+))
+
 $(eval $(call gb_Library_use_external,pricing,boost_headers))
 
 $(eval $(call gb_Library_use_internal_comprehensive_api,pricing,\

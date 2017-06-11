@@ -59,8 +59,8 @@
 #include <pgjump.hxx>
 #include "PaneHider.hxx"
 
-#include "glob.hrc"
-#include "res_bmp.hrc"
+#include "strings.hrc"
+
 #include "bitmaps.hlst"
 #include "sdresid.hxx"
 #include <vcl/canvastools.hxx>
