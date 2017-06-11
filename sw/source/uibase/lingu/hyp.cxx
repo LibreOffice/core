@@ -31,6 +31,7 @@
 #include "hyp.hxx"
 #include "mdiexp.hxx"
 #include "olmenu.hrc"
+#include "strings.hrc"
 
 #include <unomid.h>
 

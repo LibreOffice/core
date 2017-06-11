@@ -17,8 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "core_resource.hxx"
 #include "indexfieldscontrol.hxx"
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
+#include "strings.hrc"
 #include <osl/diagnose.h>
 #include "dbaccess_helpid.hrc"
 #include <vcl/settings.hxx>
@@ -200,11 +202,11 @@ namespace dbaui
 
         if ( m_bAddIndexAppendix )
         {
-            m_sAscendingText = ModuleRes(STR_ORDER_ASCENDING);
-            m_sDescendingText = ModuleRes(STR_ORDER_DESCENDING);
+            m_sAscendingText = DBA_RES(STR_ORDER_ASCENDING);
+            m_sDescendingText = DBA_RES(STR_ORDER_DESCENDING);
 
             // the "sort order" column
-            OUString sColumnName = ModuleRes(STR_TAB_INDEX_SORTORDER);
+            OUString sColumnName = DBA_RES(STR_TAB_INDEX_SORTORDER);
             // the width of the order column is the maximum widths of the texts used
             // (the title of the column)
             sal_Int32 nSortOrderColumnWidth = GetTextWidth(sColumnName);
@@ -229,7 +231,7 @@ namespace dbaui
         nFieldNameWidth -= aSystemStyle.GetScrollBarSize();
         nFieldNameWidth -= 8;
         // the "field name" column
-        OUString sColumnName = ModuleRes(STR_TAB_INDEX_FIELD);
+        OUString sColumnName = DBA_RES(STR_TAB_INDEX_FIELD);
         InsertDataColumn(COLUMN_ID_FIELDNAME, sColumnName, nFieldNameWidth, HeaderBarItemBits::STDSTYLE, 0);
 
         // create the cell controllers

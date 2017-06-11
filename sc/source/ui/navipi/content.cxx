@@ -48,7 +48,7 @@
 #include "lnktrans.hxx"
 #include "formulacell.hxx"
 #include "dociter.hxx"
-#include "scres.hrc"
+#include "strings.hrc"
 #include "scresid.hxx"
 #include "globstr.hrc"
 #include "bitmaps.hlst"
@@ -226,6 +226,19 @@ OUString ScContentTree::GetEntryLongDescription( SvTreeListEntry* pEntry ) const
     return getAltLongDescText( pEntry, false );
 }
 
+static const char* SCSTR_CONTENT_ARY[] =
+{
+    SCSTR_CONTENT_ROOT,
+    SCSTR_CONTENT_TABLE,
+    SCSTR_CONTENT_RANGENAME,
+    SCSTR_CONTENT_DBAREA,
+    SCSTR_CONTENT_GRAPHIC,
+    SCSTR_CONTENT_OLEOBJECT,
+    SCSTR_CONTENT_NOTE,
+    SCSTR_CONTENT_AREALINK,
+    SCSTR_CONTENT_DRAWING
+};
+
 void ScContentTree::InitRoot( ScContentId nType )
 {
     if ( nType == ScContentId::ROOT )
@@ -239,7 +252,7 @@ void ScContentTree::InitRoot( ScContentId nType )
 
     BitmapEx aBitmap(aContentBmps[(int)nType - 1]);
     Image aImage(aBitmap);
-    OUString aName(ScResId(SCSTR_CONTENT_ROOT + (int)nType));
+    OUString aName(ScResId(SCSTR_CONTENT_ARY[(int)nType]));
     // wieder an die richtige Position:
     sal_uInt16 nPos = nRootType != ScContentId::ROOT ? 0 : pPosList[nType]-1;
     SvTreeListEntry* pNew = InsertEntry( aName, aImage, aImage, nullptr, false, nPos );

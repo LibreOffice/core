@@ -1,0 +1,138 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_VCL_INC_STRINGS_HRC
+#define INCLUDED_VCL_INC_STRINGS_HRC
+
+#define N_(String) (u8##String)
+
+#define SV_RESID_STRING_NOSELECTIONPOSSIBLE          N_("<No selection possible>")
+
+#define SV_MENU_MAC_SERVICES                         N_("Services")
+#define SV_MENU_MAC_HIDEAPP                          N_("Hide %PRODUCTNAME")
+#define SV_MENU_MAC_HIDEALL                          N_("Hide Others")
+#define SV_MENU_MAC_SHOWALL                          N_("Show All")
+#define SV_MENU_MAC_QUITAPP                          N_("Quit %PRODUCTNAME")
+
+#define SV_HELPTEXT_CLOSE                            N_("Close")
+#define SV_HELPTEXT_MINIMIZE                         N_("Minimize")
+#define SV_HELPTEXT_MAXIMIZE                         N_("Maximize")
+#define SV_HELPTEXT_RESTORE                          N_("Restore")
+#define SV_HELPTEXT_ROLLDOWN                         N_("Drop down")
+#define SV_HELPTEXT_ROLLUP                           N_("Roll up")
+#define SV_HELPTEXT_HELP                             N_("Help")
+#define SV_HELPTEXT_SCREENSHOT                       N_("Take and annotate a screenshot")
+#define SV_HELPTEXT_FADEIN                           N_("Show")
+#define SV_HELPTEXT_FADEOUT                          N_("Hide")
+#define SV_HELPTEXT_CLOSEDOCUMENT                    N_("Close Document")
+
+// To translators: This is used on buttons for platforms other than windows, there should be a ~ mnemonic in this string
+#define SV_BUTTONTEXT_OK                             N_("~OK")
+// To translators: This is used on buttons for platforms other than windows, there should be a ~ mnemonic in this string
+#define SV_BUTTONTEXT_CANCEL                         N_("~Cancel")
+// To translators: This is used on buttons for Windows, there should be no ~ mnemonic in this string
+#define SV_BUTTONTEXT_OK_NOMNEMONIC                  N_("OK")
+// To translators: This is used on buttons for Windows, there should be no ~ mnemonic in this string
+#define SV_BUTTONTEXT_CANCEL_NOMNEMONIC              N_("Cancel")
+#define SV_BUTTONTEXT_YES                            N_("~Yes")
+#define SV_BUTTONTEXT_NO                             N_("~No")
+#define SV_BUTTONTEXT_RETRY                          N_("~Retry")
+#define SV_BUTTONTEXT_HELP                           N_("~Help")
+#define SV_BUTTONTEXT_CLOSE                          N_("~Close")
+#define SV_BUTTONTEXT_MORE                           N_("~More")
+#define SV_BUTTONTEXT_IGNORE                         N_("~Ignore")
+#define SV_BUTTONTEXT_ABORT                          N_("~Abort")
+#define SV_BUTTONTEXT_LESS                           N_("~Less")
+#define SV_BUTTONTEXT_RESET                          N_("R~eset")
+#define SV_BUTTONTEXT_ADD                            N_("~Add")
+#define SV_BUTTONTEXT_DELETE                         N_("~Delete")
+#define SV_BUTTONTEXT_REMOVE                         N_("~Remove")
+#define SV_BUTTONTEXT_NEW                            N_("~New")
+#define SV_BUTTONTEXT_EDIT                           N_("~Edit")
+#define SV_BUTTONTEXT_APPLY                          N_("~Apply")
+#define SV_BUTTONTEXT_SAVE                           N_("~Save")
+#define SV_BUTTONTEXT_UNDO                           N_("~Undo")
+#define SV_BUTTONTEXT_PASTE                          N_("~Paste")
+#define SV_BUTTONTEXT_NEXT                           N_("~Next")
+#define SV_BUTTONTEXT_GO_UP                          N_("~Up")
+#define SV_BUTTONTEXT_GO_DOWN                        N_("Do~wn")
+#define SV_BUTTONTEXT_CLEAR                          N_("~Clear")
+#define SV_BUTTONTEXT_OPEN                           N_("~Open")
+#define SV_BUTTONTEXT_PLAY                           N_("~Play")
+#define SV_BUTTONTEXT_FIND                           N_("~Find")
+#define SV_BUTTONTEXT_STOP                           N_("~Stop")
+#define SV_BUTTONTEXT_CONNECT                        N_("C~onnect")
+#define SV_BUTTONTEXT_SCREENSHOT                     N_("~Screenshot")
+
+#define SV_STDTEXT_SERVICENOTAVAILABLE               N_("The component (%s) could not be loaded.\nPlease start setup with the repair option.")
+
+#define SV_STDTEXT_DONTASKAGAIN                      N_("Do not show this question again.")
+#define SV_STDTEXT_DONTWARNAGAIN                     N_("Do not show warning again.")
+
+#define SV_STDTEXT_ABOUT                             N_("About %PRODUCTNAME")
+#define SV_STDTEXT_PREFERENCES                       N_("Preferences...")
+#define SV_STDTEXT_ALLFILETYPES                      N_("Any type")
+
+#define STR_FPICKER_AUTO_EXTENSION                   N_("~Automatic file name extension")
+#define STR_FPICKER_PASSWORD                         N_("Save with pass~word")
+#define STR_FPICKER_FILTER_OPTIONS                   N_("~Edit filter settings")
+#define STR_FPICKER_READONLY                         N_("~Read-only")
+#define STR_FPICKER_INSERT_AS_LINK                   N_("Insert as ~Link")
+#define STR_FPICKER_SHOW_PREVIEW                     N_("Pr~eview")
+#define STR_FPICKER_PLAY                             N_("~Play")
+#define STR_FPICKER_VERSION                          N_("~Version:")
+#define STR_FPICKER_TEMPLATES                        N_("S~tyles:")
+#define STR_FPICKER_IMAGE_TEMPLATE                   N_("Frame Style: ")
+#define STR_FPICKER_SELECTION                        N_("~Selection")
+#define STR_FPICKER_FOLDER_DEFAULT_TITLE             N_("Select Path")
+#define STR_FPICKER_FOLDER_DEFAULT_DESCRIPTION       N_("Please select a folder.")
+#define STR_FPICKER_ALREADYEXISTOVERWRITE_PRIMARY    N_("A file named \"$filename$\" already exists. Do you want to replace it?")
+#define STR_FPICKER_ALREADYEXISTOVERWRITE_SECONDARY  N_("The file already exists in \"$dirname$\". Replacing it will overwrite its contents.")
+#define STR_FPICKER_ALLFORMATS                       N_("All Formats")
+#define STR_FPICKER_OPEN                             N_("Open")
+#define STR_FPICKER_SAVE                             N_("Save")
+#define STR_FPICKER_TYPE                             N_("File ~type")
+
+#define SV_ACCESSERROR_NO_FONTS                      N_("No fonts could be found on the system.")
+
+#define SV_PRINT_NOPAGES                             N_("No pages")
+#define SV_PRINT_TOFILE_TXT                          N_("Print to File...")
+#define SV_PRINT_DEFPRT_TXT                          N_("Default printer")
+#define SV_PRINT_PRINTPREVIEW_TXT                    N_("Print preview")
+#define SV_PRINT_QUERYFAXNUMBER_TXT                  N_("Please enter the fax number")
+#define SV_PRINT_INVALID_TXT                         N_("<ignore>")
+#define SV_PRINT_CUSTOM_TXT                          N_("Custom")
+
+#define SV_EDIT_WARNING_STR                          N_("The inserted text exceeded the maximum length of this text field. The text was truncated.")
+
+#define SV_APP_CPUTHREADS                            N_("CPU threads: ")
+#define SV_APP_OSVERSION                             N_("OS: ")
+#define SV_APP_UIRENDER                              N_("UI render: ")
+#define SV_APP_GL                                    N_("GL")
+#define SV_APP_DEFAULT                               N_("default")
+
+#define STR_TEXTUNDO_DELPARA                         N_("delete line")
+#define STR_TEXTUNDO_CONNECTPARAS                    N_("delete multiple lines")
+#define STR_TEXTUNDO_SPLITPARA                       N_("insert multiple lines")
+#define STR_TEXTUNDO_INSERTCHARS                     N_("insert '$1'")
+#define STR_TEXTUNDO_REMOVECHARS                     N_("delete '$1'")
+
+#endif // INCLUDED_VCL_INC_STRINGS_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

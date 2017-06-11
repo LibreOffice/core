@@ -30,7 +30,7 @@
 #undef WB_RIGHT
 
 #include "shutdownicon.hxx"
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 #include <shlobj.h>
 #include <objidl.h>
 #include <osl/thread.h>
@@ -201,13 +201,13 @@ static HMENU createSystrayMenu( )
 
     // insert the remaining menu entries
     addMenuItem( hMenu, IDM_TEMPLATE, ICON_TEMPLATE,
-        pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), pos, true, "");
+        ShutdownIcon::GetResString( STR_QUICKSTART_FROMTEMPLATE ), pos, true, "");
     addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, "" );
-    addMenuItem( hMenu, IDM_OPEN,   ICON_OPEN, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), pos, true, "SHELL32");
+    addMenuItem( hMenu, IDM_OPEN,   ICON_OPEN, ShutdownIcon::GetResString(STR_QUICKSTART_FILEOPEN), pos, true, "SHELL32");
     addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, "" );
-    addMenuItem( hMenu, IDM_INSTALL,0, pShutdownIcon->GetResString( STR_QUICKSTART_PRELAUNCH ), pos, false, "" );
+    addMenuItem( hMenu, IDM_INSTALL,0, ShutdownIcon::GetResString(STR_QUICKSTART_PRELAUNCH), pos, false, "" );
     addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, "" );
-    addMenuItem( hMenu, IDM_EXIT,   0, pShutdownIcon->GetResString( STR_QUICKSTART_EXIT ), pos, false, "" );
+    addMenuItem( hMenu, IDM_EXIT,   0, ShutdownIcon::GetResString(STR_QUICKSTART_EXIT), pos, false, "" );
 
     // indicate status of autostart folder
     CheckMenuItem( hMenu, IDM_INSTALL, MF_BYCOMMAND | (ShutdownIcon::GetAutostart() ? MF_CHECKED : MF_UNCHECKED) );
@@ -242,9 +242,7 @@ static void deleteSystrayMenu( HMENU hMenu )
 
 static void addTaskbarIcon( HWND hWnd )
 {
-    OUString strTip;
-    if( ShutdownIcon::getInstance() )
-        strTip = ShutdownIcon::getInstance()->GetResString( STR_QUICKSTART_TIP );
+    OUString strTip = ShutdownIcon::GetResString(STR_QUICKSTART_TIP);
 
     // add taskbar icon
     NOTIFYICONDATAW nid;

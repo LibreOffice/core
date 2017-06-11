@@ -20,14 +20,10 @@
 #ifndef INCLUDED_SD_INC_SDRESID_HXX
 #define INCLUDED_SD_INC_SDRESID_HXX
 
-#include <tools/resid.hxx>
 #include "sddllapi.h"
 #include "sdmod.hxx"
 
-inline OUString SdResId(sal_uInt16 nId)
-{
-    return ResId(nId, *SD_MOD()->GetResMgr());
-}
+SD_DLLPUBLIC OUString SdResId(const char* pId);
 
 #endif /* _SD_SDRESID_HXX */
 

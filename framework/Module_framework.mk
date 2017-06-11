@@ -33,7 +33,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,framework,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,framework,\
-    AllLangResTarget_fwe \
+    AllLangMoTarget_fwk \
     UIConfig_startmodule \
 ))
 

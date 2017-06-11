@@ -36,6 +36,7 @@
 #include <svl/stritem.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <pam.hxx>
 #include <doc.hxx>
 #include <docfunc.hxx>
@@ -48,7 +49,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <swerror.h>
 #include <wrtxml.hxx>
-#include <statstr.hrc>
+#include <strings.hrc>
 
 #include <comphelper/documentconstants.hxx>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>

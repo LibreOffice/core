@@ -24,7 +24,7 @@
 #include <comphelper/evtlistenerhlp.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include "resource/sharedresources.hxx"
-#include "resource/common_res.hrc"
+#include "strings.hrc"
 #include <connectivity/dbexception.hxx>
 #include <sal/macros.h>
 

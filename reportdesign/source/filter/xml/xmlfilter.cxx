@@ -57,7 +57,7 @@
 #include <svtools/sfxecode.hxx>
 #include "xmlEnums.hxx"
 #include "xmlStyleImport.hxx"
-#include "xmlstrings.hrc"
+#include "strings.hxx"
 #include "xmlPropertyHandler.hxx"
 #include <xmloff/txtprmap.hxx>
 #include "ReportDefinition.hxx"

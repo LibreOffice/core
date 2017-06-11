@@ -1,0 +1,74 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SW_INC_ERROR_HRC
+#define INCLUDED_SW_INC_ERROR_HRC
+
+#include "swerror.h"
+
+#define N_(String) (u8##String)
+
+#define ERR_CODE( class, err )  ErrCode(class | (sal_uInt32(err) - ERRCODE_AREA_SW))
+#define WARN_CODE( class, err ) ErrCode(class | (sal_uInt32(err) - WARN_SW_BASE))
+
+const ErrMsgCode RID_SW_ERRHDL[] =
+{
+    // Import-Errors
+    { N_("File format error found.") , ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_FILE_FORMAT_ERROR ) },
+    { N_("Error reading file.") , ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_READ_ERROR ) },
+    { N_("Input file error.") , ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_INPUT_FILE ) },
+    { N_("This is not a %PRODUCTNAME Writer file.") , ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_NOWRITER_FILE ) },
+    { N_("Unexpected end of file.") , ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_UNEXPECTED_EOF ) },
+    { N_("Password-protected files cannot be opened.") , ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_PASSWD ) },
+    { N_("This is not a valid WinWord6 file.") , ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_NO_WW6_FILE_ERR ) },
+    { N_("This file was saved with WinWord in 'Fast Save' mode. Please unmark the WinWord option 'Allow Fast Saves' and save the file again.") , ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_FASTSAVE_ERR ) },
+    { N_("File format error found at $(ARG1)(row,col).") , ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_ROWCOL ) },
+    { N_("File has been written in a newer version.") , ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_NEW_VERSION ) },
+    { N_("This is not a valid WinWord97 file."), ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW8_NO_WW8_FILE_ERR ) },
+    { N_("Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)."), ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_FILE_ROWCOL ) },
+    // Export-Errors
+    { N_("Error writing file.") , ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_WRITE_ERROR ) },
+    { N_("Wrong AutoText document version.") , ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_OLD_GLOSSARY ) },
+    { N_("Error in writing sub-document $(ARG1)."), ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_WRITE_ERROR_FILE ) },
+    // Import-/Export-Errors
+    { N_("Internal error in %PRODUCTNAME Writer file format.") , ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_INTERNAL_ERROR ) },
+    { N_("Internal error in %PRODUCTNAME Writer file format.") , ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_INTERNAL_ERROR ) },
+    { N_("$(ARG1) has changed.") , ERR_CODE ( ERRCODE_CLASS_LOCKING , ERR_TXTBLOCK_NEWFILE_ERROR ) },
+    { N_("$(ARG1) does not exist.") , ERR_CODE ( ERRCODE_CLASS_PATH , ERR_AUTOPATH_ERROR ) },
+    { N_("Cells cannot be further split.") , ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLSPLIT_ERROR ) },
+    { N_("Additional columns cannot be inserted.") , ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLINSCOL_ERROR ) },
+    { N_("The structure of a linked table cannot be modified.") , ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLDDECHG_ERROR ) },
+
+    { N_("No drawings could be read.") , WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_NO_DRAWINGS ) },
+    { N_("This file was saved with WinWord in 'Fast Save' mode. Please unmark the WinWord option 'Allow Fast Saves' and save the file again.") , WARN_CODE ( ERRCODE_CLASS_READ , WARN_WW6_FASTSAVE_ERR ) },
+    { N_("Not all attributes could be read.") , WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_FEATURES_LOST ) },
+    { N_("Not all attributes could be recorded.") , WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_FEATURES_LOST ) },
+    { N_("Some OLE objects could only be loaded as images.") , WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_OLE ) },
+    { N_("Some OLE objects could only be saved as images.") , WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_OLE ) },
+    { N_("Document could not be completely loaded.") , WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_POOR_LOAD ) },
+    { N_("Document could not be completely saved.") , WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_POOR_LOAD ) },
+    { N_("This HTML document contains %PRODUCTNAME Basic macros.\nThey were not saved with the current export settings."), WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_HTML_NO_MACROS) },
+    { N_("Error in writing sub-document $(ARG1)."), ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_WRITE_ERROR_FILE ) },
+    { N_("Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)."), ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_FORMAT_FILE_ROWCOL ) },
+    { nullptr, ERRCODE_NONE }
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

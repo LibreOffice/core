@@ -23,7 +23,7 @@
 #include "fmobj.hxx"
 #include "fmpgeimp.hxx"
 #include "fmprop.hrc"
-#include "svx/fmresids.hrc"
+#include "svx/strings.hrc"
 #include "fmservs.hxx"
 #include "fmshimp.hxx"
 #include "svx/fmtools.hxx"

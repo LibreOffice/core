@@ -95,9 +95,7 @@ ScUndoCursorAttr::~ScUndoCursorAttr()
 OUString ScUndoCursorAttr::GetComment() const
 {
     //! own text for automatic attribution
-
-    sal_uInt16 nId = STR_UNDO_CURSORATTR;        // "Attribute"
-    return ScGlobal::GetRscString( nId );
+    return ScGlobal::GetRscString(STR_UNDO_CURSORATTR); // "Attribute"
 }
 
 void ScUndoCursorAttr::SetEditData( EditTextObject* pOld, EditTextObject* pNew )
@@ -876,18 +874,18 @@ ScUndoDetective::~ScUndoDetective()
 
 OUString ScUndoDetective::GetComment() const
 {
-    sal_uInt16 nId = STR_UNDO_DETDELALL;
+    const char* pId = STR_UNDO_DETDELALL;
     if ( !bIsDelete )
         switch ( (ScDetOpType) nAction )
         {
-            case SCDETOP_ADDSUCC:   nId = STR_UNDO_DETADDSUCC;  break;
-            case SCDETOP_DELSUCC:   nId = STR_UNDO_DETDELSUCC;  break;
-            case SCDETOP_ADDPRED:   nId = STR_UNDO_DETADDPRED;  break;
-            case SCDETOP_DELPRED:   nId = STR_UNDO_DETDELPRED;  break;
-            case SCDETOP_ADDERROR:  nId = STR_UNDO_DETADDERROR; break;
+            case SCDETOP_ADDSUCC:   pId = STR_UNDO_DETADDSUCC;  break;
+            case SCDETOP_DELSUCC:   pId = STR_UNDO_DETDELSUCC;  break;
+            case SCDETOP_ADDPRED:   pId = STR_UNDO_DETADDPRED;  break;
+            case SCDETOP_DELPRED:   pId = STR_UNDO_DETDELPRED;  break;
+            case SCDETOP_ADDERROR:  pId = STR_UNDO_DETADDERROR; break;
         }
 
-    return ScGlobal::GetRscString( nId );
+    return ScGlobal::GetRscString(pId);
 }
 
 void ScUndoDetective::Undo()

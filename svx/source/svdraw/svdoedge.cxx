@@ -19,7 +19,7 @@
 
 #include "svddrgm1.hxx"
 #include "svdglob.hxx"
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

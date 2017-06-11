@@ -43,7 +43,7 @@
 #include "pgjump.hxx"
 #include "app.hrc"
 #include "strings.hrc"
-#include "res_bmp.hrc"
+
 #include "bitmaps.hlst"
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
@@ -267,11 +267,11 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox, void )
 
         for (sal_uInt16 nID = NAVIGATOR_DRAGTYPE_URL; nID < NAVIGATOR_DRAGTYPE_COUNT; ++nID)
         {
-            sal_uInt16 nRId = GetDragTypeSdStrId((NavigatorDragType)nID);
-            if( nRId > 0 )
+            const char* pRId = GetDragTypeSdStrId((NavigatorDragType)nID);
+            if (pRId)
             {
                 DBG_ASSERT(aHIDs[nID-NAVIGATOR_DRAGTYPE_URL],"HelpId not added!");
-                pMenu->InsertItem(nID, SdResId(nRId), MenuItemBits::RADIOCHECK);
+                pMenu->InsertItem(nID, SdResId(pRId), MenuItemBits::RADIOCHECK);
                 pMenu->SetHelpId(nID, aHIDs[nID - NAVIGATOR_DRAGTYPE_URL]);
             }
 
@@ -617,12 +617,12 @@ void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
     maLbDocs->SelectEntryPos( nPos );
 }
 
-sal_uInt16 SdNavigatorWin::GetDragTypeSdStrId(NavigatorDragType eDT)
+const char* SdNavigatorWin::GetDragTypeSdStrId(NavigatorDragType eDT)
 {
     switch( eDT )
     {
         case NAVIGATOR_DRAGTYPE_NONE:
-                return STR_NONE;
+                return STR_SD_NONE;
         case NAVIGATOR_DRAGTYPE_URL:
                 return STR_DRAGTYPE_URL;
         case NAVIGATOR_DRAGTYPE_EMBEDDED:
@@ -631,7 +631,7 @@ sal_uInt16 SdNavigatorWin::GetDragTypeSdStrId(NavigatorDragType eDT)
                 return STR_DRAGTYPE_LINK;
         default: OSL_FAIL( "No resource for DragType available!" );
     }
-    return 0;
+    return nullptr;
 }
 
 OUString SdNavigatorWin::GetDragTypeSdBmpId(NavigatorDragType eDT)

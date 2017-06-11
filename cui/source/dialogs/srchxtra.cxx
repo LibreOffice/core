@@ -26,6 +26,7 @@
 #include <cuires.hrc>
 #include <svx/svxitems.hrc>
 #include <svx/dialmgr.hxx>
+#include <svx/strarray.hxx>
 #include <editeng/flstitem.hxx>
 #include "chardlg.hxx"
 #include "paragrph.hxx"
@@ -137,7 +138,6 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(vcl::Window* pParent,
     SfxObjectShell* pSh = SfxObjectShell::Current();
     DBG_ASSERT( pSh, "No DocShell" );
 
-    ResStringArray aAttrNames(ResId(RID_ATTR_NAMES, DIALOG_MGR()));
     SfxItemPool& rPool = pSh->GetPool();
     SfxItemSet aSet( rPool, pWhRanges );
     SfxWhichIter aIter( aSet );
@@ -160,10 +160,10 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(vcl::Window* pParent,
             }
 
             // item resources are in svx
-            sal_uInt32 nId  = aAttrNames.FindIndex( nSlot );
+            sal_uInt32 nId  = SvxAttrNameTable::FindIndex(nSlot);
             SvTreeListEntry* pEntry = nullptr;
             if ( RESARRAY_INDEX_NOTFOUND != nId )
-                pEntry = m_pAttrLB->SvTreeListBox::InsertEntry( aAttrNames.GetString(nId) );
+                pEntry = m_pAttrLB->SvTreeListBox::InsertEntry(SvxAttrNameTable::GetString(nId));
             else
                 SAL_WARN( "cui.dialogs", "no resource for slot id " << static_cast<sal_Int32>(nSlot) );
 

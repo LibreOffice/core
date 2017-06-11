@@ -864,24 +864,24 @@ OUString lclGetDataFieldCaption( const OUString& rFieldName, ScGeneralFunction e
 {
     OUString aCaption;
 
-    sal_uInt16 nResIdx = 0;
+    const char* pResIdx = nullptr;
     switch( eFunc )
     {
-        case ScGeneralFunction::SUM:       nResIdx = STR_FUN_TEXT_SUM;     break;
-        case ScGeneralFunction::COUNT:     nResIdx = STR_FUN_TEXT_COUNT;   break;
-        case ScGeneralFunction::AVERAGE:   nResIdx = STR_FUN_TEXT_AVG;     break;
-        case ScGeneralFunction::MAX:       nResIdx = STR_FUN_TEXT_MAX;     break;
-        case ScGeneralFunction::MIN:       nResIdx = STR_FUN_TEXT_MIN;     break;
-        case ScGeneralFunction::PRODUCT:   nResIdx = STR_FUN_TEXT_PRODUCT; break;
-        case ScGeneralFunction::COUNTNUMS: nResIdx = STR_FUN_TEXT_COUNT;   break;
-        case ScGeneralFunction::STDEV:     nResIdx = STR_FUN_TEXT_STDDEV;  break;
-        case ScGeneralFunction::STDEVP:    nResIdx = STR_FUN_TEXT_STDDEV;  break;
-        case ScGeneralFunction::VAR:       nResIdx = STR_FUN_TEXT_VAR;     break;
-        case ScGeneralFunction::VARP:      nResIdx = STR_FUN_TEXT_VAR;     break;
+        case ScGeneralFunction::SUM:       pResIdx = STR_FUN_TEXT_SUM;     break;
+        case ScGeneralFunction::COUNT:     pResIdx = STR_FUN_TEXT_COUNT;   break;
+        case ScGeneralFunction::AVERAGE:   pResIdx = STR_FUN_TEXT_AVG;     break;
+        case ScGeneralFunction::MAX:       pResIdx = STR_FUN_TEXT_MAX;     break;
+        case ScGeneralFunction::MIN:       pResIdx = STR_FUN_TEXT_MIN;     break;
+        case ScGeneralFunction::PRODUCT:   pResIdx = STR_FUN_TEXT_PRODUCT; break;
+        case ScGeneralFunction::COUNTNUMS: pResIdx = STR_FUN_TEXT_COUNT;   break;
+        case ScGeneralFunction::STDEV:     pResIdx = STR_FUN_TEXT_STDDEV;  break;
+        case ScGeneralFunction::STDEVP:    pResIdx = STR_FUN_TEXT_STDDEV;  break;
+        case ScGeneralFunction::VAR:       pResIdx = STR_FUN_TEXT_VAR;     break;
+        case ScGeneralFunction::VARP:      pResIdx = STR_FUN_TEXT_VAR;     break;
         default:;
     }
-    if( nResIdx )
-        aCaption = ScGlobal::GetRscString( nResIdx ) + " - ";
+    if (pResIdx)
+        aCaption = ScGlobal::GetRscString(pResIdx) + " - ";
     aCaption += rFieldName;
     return aCaption;
 }

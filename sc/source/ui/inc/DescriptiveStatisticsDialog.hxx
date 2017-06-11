@@ -25,7 +25,7 @@ public:
     virtual bool Close() override;
 
 protected:
-    virtual sal_Int16 GetUndoNameId() override;
+    virtual const char* GetUndoNameId() override;
     virtual ScRange ApplyOutput(ScDocShell* pDocShell) override;
 };
 

@@ -61,7 +61,7 @@
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
 #include <mdiexp.hxx>
-#include <statstr.hrc>
+#include <strings.hrc>
 #include <ptqueue.hxx>
 #include <tabfrm.hxx>
 #include <txtfrm.hxx>

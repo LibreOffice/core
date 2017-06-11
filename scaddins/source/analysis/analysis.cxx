@@ -18,7 +18,7 @@
  */
 
 #include "analysis.hxx"
-#include "analysis.hrc"
+#include "strings.hrc"
 #include "bessel.hxx"
 #include <cppuhelper/factory.hxx>
 #include <comphelper/processfactory.hxx>
@@ -29,9 +29,8 @@
 #include <rtl/math.hxx>
 #include <sal/macros.h>
 #include <string.h>
-#include <tools/resary.hxx>
 #include <tools/resmgr.hxx>
-#include <tools/rcid.h>
+#include <tools/simplerm.hxx>
 #include <algorithm>
 #include <cmath>
 
@@ -66,29 +65,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL analysis_component_getFactory(
     return pRet;
 }
 
-ResMgr& AnalysisAddIn::GetResMgr()
+OUString AnalysisAddIn::GetFuncDescrStr(const char** pResId, sal_uInt16 nStrIndex)
 {
-    if( !pResMgr )
-    {
-        InitData();     // try to get resource manager
-
-        if( !pResMgr )
-            throw uno::RuntimeException();
-    }
-
-    return *pResMgr;
-}
-
-OUString AnalysisAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex )
-{
-    ResStringArray aArr(AnalysisResId(nResId, GetResMgr()));
-    return aArr.GetString(nStrIndex - 1);
+    return AnalysisResId(pResId[nStrIndex - 1]);
 }
 
 void AnalysisAddIn::InitData()
 {
-    delete pResMgr;
-    pResMgr = ResMgr::CreateResMgr("analysis", LanguageTag(aFuncLoc));
+    aResLocale = Translate::Create("analysis", LanguageTag(aFuncLoc));
 
     delete pFD;
     pFD = new FuncDataList;
@@ -103,14 +87,12 @@ AnalysisAddIn::AnalysisAddIn( const uno::Reference< uno::XComponentContext >& xC
     pFD( nullptr ),
     pFactDoubles( nullptr ),
     pCDL( nullptr ),
-    pResMgr( nullptr ),
     aAnyConv( xContext )
 {
 }
 
 AnalysisAddIn::~AnalysisAddIn()
 {
-    delete pResMgr;
     delete pCDL;
     delete[] pFactDoubles;
     delete pFD;
@@ -241,7 +223,7 @@ OUString SAL_CALL AnalysisAddIn::getDisplayFunctionName( const OUString& aProgra
     auto it = std::find_if(pFD->begin(), pFD->end(), FindFuncData( aProgrammaticName ) );
     if( it != pFD->end() )
     {
-        aRet = AnalysisResId(it->GetUINameID(), GetResMgr());
+        aRet = AnalysisResId(it->GetUINameID());
         if( it->IsDouble() )
         {
             const OUString& rSuffix = it->GetSuffix();
@@ -1123,6 +1105,11 @@ double SAL_CALL AnalysisAddIn::getConvert( double f, const OUString& aFU, const 
 
     double fRet = pCDL->Convert( f, aFU, aTU );
     RETURN_FINITE( fRet );
+}
+
+OUString AnalysisAddIn::AnalysisResId(const char* pResId)
+{
+    return Translate::get(pResId, aResLocale);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

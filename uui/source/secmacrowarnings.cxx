@@ -31,7 +31,6 @@
 
 using namespace ::com::sun::star::security;
 
-#include "ids.hrc"
 #include "secmacrowarnings.hxx"
 
 using namespace ::com::sun::star;

@@ -20,6 +20,7 @@
 #include "RptModel.hxx"
 #include "RptPage.hxx"
 #include <dbaccess/dbsubcomponentcontroller.hxx>
+#include <tools/simplerm.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/svapp.hxx>
 
@@ -31,7 +32,7 @@
 #include <svx/tbcontrl.hxx>
 #include "rptui_slotid.hrc"
 #include "RptDef.hxx"
-#include "corestrings.hrc"
+#include "strings.hxx"
 #include "FixedLine.hxx"
 #include "FormattedField.hxx"
 #include "FixedText.hxx"
@@ -185,6 +186,5 @@ uno::Reference< uno::XInterface > OReportModel::createShape(const OUString& aSer
 }
 
 }   //rptui
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

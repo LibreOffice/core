@@ -21,6 +21,7 @@
 #include <tools/stream.hxx>
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>
+#include <tools/simplerm.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graph.hxx>
@@ -442,14 +443,9 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
 
     if ( mbStatus && mnLevelWarning && pFilterConfigItem )
     {
-        ResMgr* pResMgr;
-        pResMgr = ResMgr::CreateResMgr( "eps", Application::GetSettings().GetUILanguageTag() );
-        if( pResMgr )
-        {
-            ScopedVclPtrInstance< InfoBox > aInfoBox( nullptr, ResId(KEY_VERSION_CHECK, *pResMgr) );
-            aInfoBox->Execute();
-            delete pResMgr;
-        }
+        std::locale loc = Translate::Create("flt", Application::GetSettings().GetUILanguageTag());
+        ScopedVclPtrInstance< InfoBox > aInfoBox(nullptr, Translate::get(KEY_VERSION_CHECK, loc));
+        aInfoBox->Execute();
     }
 
     if ( xStatusIndicator.is() )

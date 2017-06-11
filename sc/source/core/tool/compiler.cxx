@@ -5019,7 +5019,7 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
         }
         else
         {
-            rBuffer.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
+            rBuffer.append(ScCompiler::GetNativeSymbol(ocErrName));
             pConv->makeRefStr(rBuffer, meGrammar, aPos, aErrRef,
                               GetSetupTabNames(), aRef, true, (pArr && pArr->IsFromRangeName()));
         }
@@ -5085,7 +5085,7 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
                         aBuffer.append( aName);
                     }
                     else
-                        aBuffer.append( ScGlobal::GetRscString( STR_NO_NAME_REF));
+                        aBuffer.append(ScCompiler::GetNativeSymbol(ocErrName));
                     aBuffer.append( pConv->getSpecialSymbol( ScCompiler::Convention::SHEET_SEPARATOR));
                 }
                 aBuffer.append(pData->GetName());
@@ -5145,7 +5145,7 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
     if ( !aBuffer.isEmpty() )
         rBuffer.append(aBuffer.makeStringAndClear());
     else
-        rBuffer.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
+        rBuffer.append(ScCompiler::GetNativeSymbol(ocErrName));
 }
 
 void ScCompiler::LocalizeString( OUString& rName ) const

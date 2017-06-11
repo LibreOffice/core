@@ -42,7 +42,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <jni.h>
-#include "resource/common_res.hrc"
+#include "strings.hrc"
 #include <unotools/confignode.hxx>
 #include "strings.hxx"
 

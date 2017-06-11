@@ -48,8 +48,7 @@
 #include <tools/time.hxx>
 #include <svtools/treelistentry.hxx>
 
-#include "dialogs.hrc"
-#include "digitalsignaturesdialog.hrc"
+#include "strings.hrc"
 #include "resourcemanager.hxx"
 
 #include <vcl/layout.hxx>

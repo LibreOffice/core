@@ -18,6 +18,11 @@ $(eval $(call gb_Library_add_nativeres,fps,fps/Fps))
 
 $(eval $(call gb_Library_set_componentfile,fps,fpicker/source/win32/fps))
 
+$(eval $(call gb_Library_set_include,fps,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/fpicker/inc \
+))
+
 $(eval $(call gb_Library_use_external,fps,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,fps))

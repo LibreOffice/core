@@ -1330,7 +1330,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
         return;
     }
 
-    sal_uInt16 nErrorId = 0;
+    const char* pErrorId = nullptr;
 
     pDPObj->BuildAllDimensionMembers();
     ScDPSaveData aData( *pDPObj->GetSaveData() );
@@ -1361,7 +1361,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
                     bChange = true;
                 }
                 else
-                    nErrorId = STR_INVALIDNAME;
+                    pErrorId = STR_INVALIDNAME;
             }
         }
         else if (nOrient == DataPilotFieldOrientation_COLUMN || nOrient == DataPilotFieldOrientation_ROW)
@@ -1384,10 +1384,10 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
                         bChange = true;
                     }
                     else
-                        nErrorId = STR_INVALIDNAME;
+                        pErrorId = STR_INVALIDNAME;
                 }
                 else
-                    nErrorId = STR_INVALIDNAME;
+                    pErrorId = STR_INVALIDNAME;
             }
         }
     }
@@ -1410,10 +1410,10 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
                     bChange = true;
                 }
                 else
-                    nErrorId = STR_INVALIDNAME;
+                    pErrorId = STR_INVALIDNAME;
             }
             else
-                nErrorId = STR_INVALIDNAME;
+                pErrorId = STR_INVALIDNAME;
         }
     }
     else
@@ -1457,7 +1457,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
                         bChange = true;
                     }
                     else
-                        nErrorId = STR_INVALIDNAME;
+                        pErrorId = STR_INVALIDNAME;
                  }
             }
             else if ((aPosData.Flags & MemberResultFlags::GRANDTOTAL))
@@ -1483,7 +1483,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
 
                         if (rString.isEmpty())
                         {
-                            nErrorId = STR_INVALIDNAME;
+                            pErrorId = STR_INVALIDNAME;
                             break;
                         }
 
@@ -1498,7 +1498,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
                             bChange = true;
                         }
                         else
-                            nErrorId = STR_INVALIDNAME;
+                            pErrorId = STR_INVALIDNAME;
                     }
                     while (false);
                 }
@@ -1556,10 +1556,10 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
                                     bChange = true;
                                 }
                                 else
-                                    nErrorId = STR_INVALIDNAME;
+                                    pErrorId = STR_INVALIDNAME;
                             }
                             else
-                                nErrorId = STR_INVALIDNAME;
+                                pErrorId = STR_INVALIDNAME;
                         }
                     }
                     while (false);
@@ -1577,9 +1577,9 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
     }
     else
     {
-        if ( !nErrorId )
-            nErrorId = STR_ERR_DATAPILOT_INPUT;
-        ErrorMessage( nErrorId );
+        if (!pErrorId)
+            pErrorId = STR_ERR_DATAPILOT_INPUT;
+        ErrorMessage(pErrorId);
     }
 }
 

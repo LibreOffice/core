@@ -43,7 +43,8 @@
 #include <com/sun/star/uno/XNamingService.hpp>
 #include "xmlDatabase.hxx"
 #include "xmlEnums.hxx"
-#include "xmlstrings.hrc"
+#include "stringconstants.hxx"
+#include "strings.hxx"
 #include <xmloff/DocumentSettingsContext.hxx>
 #include "xmlStyleImport.hxx"
 #include <xmloff/xmluconv.hxx>

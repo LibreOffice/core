@@ -19,7 +19,7 @@
 
 #include "abspilot.hxx"
 #include "abpilot.hrc"
-#include "abpresid.hrc"
+#include "strings.hrc"
 #include "componentmodule.hxx"
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
@@ -48,6 +48,9 @@ namespace abp
 #define PATH_NO_SETTINGS            2
 #define PATH_NO_FIELDS              3
 #define PATH_NO_SETTINGS_NO_FIELDS  4
+
+#define WINDOW_SIZE_X   240
+#define WINDOW_SIZE_Y   185
 
     using namespace ::svt;
     using namespace ::com::sun::star::uno;
@@ -123,21 +126,21 @@ namespace abp
 
     OUString OAddressBookSourcePilot::getStateDisplayName( WizardState _nState ) const
     {
-        sal_uInt16 nResId = 0;
+        const char* pResId = nullptr;
         switch ( _nState )
         {
-            case STATE_SELECT_ABTYPE:        nResId = RID_STR_SELECT_ABTYPE; break;
-            case STATE_INVOKE_ADMIN_DIALOG:  nResId = RID_STR_INVOKE_ADMIN_DIALOG; break;
-            case STATE_TABLE_SELECTION:      nResId = RID_STR_TABLE_SELECTION; break;
-            case STATE_MANUAL_FIELD_MAPPING: nResId = RID_STR_MANUAL_FIELD_MAPPING; break;
-            case STATE_FINAL_CONFIRM:        nResId = RID_STR_FINAL_CONFIRM; break;
+            case STATE_SELECT_ABTYPE:        pResId = RID_STR_SELECT_ABTYPE; break;
+            case STATE_INVOKE_ADMIN_DIALOG:  pResId = RID_STR_INVOKE_ADMIN_DIALOG; break;
+            case STATE_TABLE_SELECTION:      pResId = RID_STR_TABLE_SELECTION; break;
+            case STATE_MANUAL_FIELD_MAPPING: pResId = RID_STR_MANUAL_FIELD_MAPPING; break;
+            case STATE_FINAL_CONFIRM:        pResId = RID_STR_FINAL_CONFIRM; break;
         }
-        DBG_ASSERT( nResId, "OAddressBookSourcePilot::getStateDisplayName: don't know this state!" );
+        DBG_ASSERT( pResId, "OAddressBookSourcePilot::getStateDisplayName: don't know this state!" );
 
         OUString sDisplayName;
-        if ( nResId )
+        if (pResId)
         {
-            sDisplayName = ModuleRes(nResId);
+            sDisplayName = ModuleRes(pResId);
         }
 
         return sDisplayName;

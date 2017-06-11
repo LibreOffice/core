@@ -21,7 +21,7 @@
 #include <memory>
 #include <svtools/addresstemplate.hxx>
 #include "addresstemplate.hrc"
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <svtools/helpid.hrc>
 #include <svtools/svtresid.hxx>
 #include <tools/debug.hxx>

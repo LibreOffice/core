@@ -37,7 +37,7 @@
 #include <sfx2/docfile.hxx>
 #include <svx/svdetc.hxx>
 #include "svdglob.hxx"
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include <svx/svdpool.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
@@ -740,11 +740,11 @@ OUString SdrGrafObj::TakeObjNameSingul() const
         {
             case GraphicType::Bitmap:
             {
-                const sal_uInt16 nId = ( ( pGraphic->IsTransparent() || static_cast<const SdrGrafTransparenceItem&>( GetObjectItem( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ) ?
+                const char* pId = ( ( pGraphic->IsTransparent() || static_cast<const SdrGrafTransparenceItem&>( GetObjectItem( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ) ?
                                      ( IsLinkedGraphic() ? STR_ObjNameSingulGRAFBMPTRANSLNK : STR_ObjNameSingulGRAFBMPTRANS ) :
                                      ( IsLinkedGraphic() ? STR_ObjNameSingulGRAFBMPLNK : STR_ObjNameSingulGRAFBMP ) );
 
-                sName.append(ImpGetResStr(nId));
+                sName.append(ImpGetResStr(pId));
             }
             break;
 
@@ -793,11 +793,11 @@ OUString SdrGrafObj::TakeObjNamePlural() const
         {
             case GraphicType::Bitmap:
             {
-                const sal_uInt16 nId = ( ( pGraphic->IsTransparent() || static_cast<const SdrGrafTransparenceItem&>( GetObjectItem( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ) ?
+                const char* pId = ( ( pGraphic->IsTransparent() || static_cast<const SdrGrafTransparenceItem&>( GetObjectItem( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ) ?
                                      ( IsLinkedGraphic() ? STR_ObjNamePluralGRAFBMPTRANSLNK : STR_ObjNamePluralGRAFBMPTRANS ) :
                                      ( IsLinkedGraphic() ? STR_ObjNamePluralGRAFBMPLNK : STR_ObjNamePluralGRAFBMP ) );
 
-                sName.append(ImpGetResStr(nId));
+                sName.append(ImpGetResStr(pId));
             }
             break;
 

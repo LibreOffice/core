@@ -818,7 +818,7 @@ sal_Int64 SfxInPlaceClient::GetAspect() const
 
 ErrCode SfxInPlaceClient::DoVerb( long nVerb )
 {
-    SfxErrorContext aEc( ERRCTX_SO_DOVERB, m_pViewSh->GetWindow(), RID_SO_ERRCTX );
+    SfxErrorContext aEc(ERRCTX_SO_DOVERB, m_pViewSh->GetWindow(), getRID_SO_ERRCTX());
     ErrCode nError = ERRCODE_NONE;
 
     if ( m_xImp->m_xObject.is() )

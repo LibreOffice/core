@@ -28,7 +28,6 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <tools/link.hxx>
-#include <tools/resary.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
@@ -114,9 +113,6 @@ private:
 
     ::comphelper::OInterfaceContainerHelper2 maFocusListeners;
     ::comphelper::OInterfaceContainerHelper2 maPropertyListeners;
-
-    ResStringArray      maNames;
-    ResStringArray      maDescriptions;
 
     ::comphelper::AccessibleEventNotifier::TClientId    mnClientId;
 };

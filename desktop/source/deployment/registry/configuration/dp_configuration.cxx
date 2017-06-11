@@ -22,7 +22,6 @@
 
 #include <config_features.h>
 
-#include "dp_configuration.hrc"
 #include "dp_backend.h"
 #if HAVE_FEATURE_EXTENSIONS
 #include "dp_persmap.h"
@@ -186,12 +185,12 @@ BackendImpl::BackendImpl(
       m_xConfDataTypeInfo( new Package::TypeInfo(
                                "application/vnd.sun.star.configuration-data",
                                "*.xcu",
-                               getResourceString(RID_STR_CONF_DATA)
+                               DpResId(RID_STR_CONF_DATA)
                                ) ),
       m_xConfSchemaTypeInfo( new Package::TypeInfo(
                                  "application/vnd.sun.star.configuration-schema",
                                  "*.xcs",
-                                 getResourceString(RID_STR_CONF_SCHEMA)
+                                 DpResId(RID_STR_CONF_SCHEMA)
                                  ) ),
       m_typeInfos( 2 )
 {
@@ -317,7 +316,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         }
         if (mediaType.isEmpty())
             throw lang::IllegalArgumentException(
-                StrCannotDetectMediaType::get() + url,
+                StrCannotDetectMediaType() + url,
                 static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
     }
 
@@ -349,7 +348,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         }
     }
     throw lang::IllegalArgumentException(
-        StrUnsupportedMediaType::get() + mediaType,
+        StrUnsupportedMediaType() + mediaType,
         static_cast<OWeakObject *>(this),
         static_cast<sal_Int16>(-1) );
 }

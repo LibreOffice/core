@@ -128,9 +128,9 @@ protected:
 protected:
     SdrUndoObj(SdrObject& rNewObj);
 
-    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, bool bRepeat = false) const;
+    void ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr, bool bRepeat = false) const;
 
-    static SAL_WARN_UNUSED_RESULT OUString GetDescriptionStringForObject( const SdrObject& _rForObject, sal_uInt16 nStrCacheID, bool bRepeat = false );
+    static SAL_WARN_UNUSED_RESULT OUString GetDescriptionStringForObject( const SdrObject& _rForObject, const char* pStrCacheID, bool bRepeat = false );
 
     // #94278# new method for evtl. PageChange at UNDO/REDO
     void ImpShowPageOfThisObject();
@@ -557,7 +557,7 @@ protected:
 protected:
     SdrUndoPage(SdrPage& rNewPg);
 
-    static void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr);
+    static void ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr);
 };
 
 /**

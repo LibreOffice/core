@@ -26,7 +26,7 @@
 #include <o3tl/make_unique.hxx>
 #include <swtypes.hxx>
 #include <tools/resid.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <authfld.hxx>
 #include <expfld.hxx>
 #include <pam.hxx>

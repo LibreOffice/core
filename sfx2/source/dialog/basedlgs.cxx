@@ -25,7 +25,7 @@
 #include <vcl/msgbox.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/viewoptions.hxx>
-#include <svtools/controldims.hrc>
+#include <svtools/controldims.hxx>
 #include <vcl/idle.hxx>
 
 #include <sfx2/basedlgs.hxx>
@@ -39,7 +39,7 @@
 #include <sfx2/sfxhelp.hxx>
 #include "workwin.hxx"
 #include <sfx2/sfxresid.hxx>
-#include "dialog.hrc"
+#include "sfx2/strings.hrc"
 
 using namespace ::com::sun::star::uno;
 

@@ -51,9 +51,9 @@
 #include <vcl/settings.hxx>
 
 #include <sfx2/app.hxx>
+#include <sfx2/dinfdlg.hxx>
 #include <sfx2/sfxresid.hxx>
 #include "appdata.hxx"
-#include <sfx2/dinfdlg.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/viewsh.hxx>
@@ -64,10 +64,10 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
 #include <basic/basmgr.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/doctempl.hxx>
-#include "doc.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/request.hxx>

@@ -1087,8 +1087,8 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
                 else
                     bTest = true;
             }
-            OUString sPosition( ScAddress( nDocCol, nDocRow, nTab).GetColRowString());
-            OUString sEncoding( SvxTextEncodingTable().GetTextString( eCharSet));
+            OUString sPosition(ScAddress(nDocCol, nDocRow, nTab).GetColRowString());
+            OUString sEncoding(SvxTextEncodingTable::GetTextString(eCharSet));
             nErr = *new TwoStringErrorInfo( (bEncErr ? SCERR_EXPORT_ENCODING :
                         SCERR_EXPORT_FIELDWIDTH), sPosition, sEncoding,
                     DialogMask::ButtonsOk | DialogMask::MessageError);

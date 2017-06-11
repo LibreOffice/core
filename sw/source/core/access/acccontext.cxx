@@ -1407,16 +1407,11 @@ bool SwAccessibleContext::Select( SwPaM *pPaM, SdrObject *pObj,
     return bRet;
 }
 
-OUString SwAccessibleContext::GetResource( sal_uInt16 nResId,
-                                           const OUString *pArg1,
-                                           const OUString *pArg2 )
+OUString SwAccessibleContext::GetResource(const char* pResId,
+                                          const OUString *pArg1,
+                                          const OUString *pArg2)
 {
-    OUString sStr;
-    {
-        SolarMutexGuard aGuard;
-
-        sStr = SwResId( nResId );
-    }
+    OUString sStr = SwResId(pResId);
 
     if( pArg1 )
     {

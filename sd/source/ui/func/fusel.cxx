@@ -44,7 +44,7 @@
 
 #include "app.hrc"
 #include "strings.hrc"
-#include "res_bmp.hrc"
+
 #include "GraphicDocShell.hxx"
 #include "sdmod.hxx"
 #include "DrawDocShell.hxx"

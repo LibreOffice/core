@@ -18,7 +18,7 @@
  */
 
 #include "documentdefinition.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include "sdbcoretools.hxx"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -83,7 +83,7 @@
 #include <sal/macros.h>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include "core_resource.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include "datasource.hxx"
 #include <com/sun/star/embed/XStateChangeBroadcaster.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>

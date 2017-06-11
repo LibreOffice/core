@@ -51,7 +51,7 @@
 #include <sot/formats.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <svx/charthelper.hxx>
 #include <comphelper/threadpool.hxx>
 #include <atomic>

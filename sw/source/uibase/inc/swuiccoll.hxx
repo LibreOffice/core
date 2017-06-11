@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_SWUICCOLL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_SWUICCOLL_HXX
 
-#include <tools/resary.hxx>
-
 class SwWrtShell;
 class SwFormat;
 
