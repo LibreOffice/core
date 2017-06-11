@@ -39,8 +39,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 
 // Includes for string resources.
-#include "accessibility.hrc"
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include <svx/dialmgr.hxx>
 
 #include <svx/xdef.hxx>
@@ -67,13 +66,13 @@ DescriptionGenerator::~DescriptionGenerator()
 }
 
 
-void DescriptionGenerator::Initialize (sal_Int32 nResourceId)
+void DescriptionGenerator::Initialize(const char* pResourceId)
 {
     // Get the string from the resource for the specified id.
     OUString sPrefix;
     {
         SolarMutexGuard aGuard;
-        sPrefix = SvxResId (nResourceId);
+        sPrefix = SvxResId(pResourceId);
     }
 
     // Forward the call with the resulting string.
@@ -127,13 +126,13 @@ OUString DescriptionGenerator::operator() (void)
 void DescriptionGenerator::AddProperty (
     const OUString& sPropertyName,
     PropertyType aType,
-    const sal_Int32 nLocalizedNameId,
+    const char* pLocalizedNameId,
     long nWhichId)
 {
     OUString sLocalizedName;
     {
         SolarMutexGuard aGuard;
-        sLocalizedName = SvxResId (nLocalizedNameId);
+        sLocalizedName = SvxResId(pLocalizedNameId);
     }
     AddProperty (sPropertyName, aType, sLocalizedName, nWhichId);
 }

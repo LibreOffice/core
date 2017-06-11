@@ -23,7 +23,6 @@
 #include "ascfldlg.hxx"
 #include "break.hxx"
 #include "convert.hxx"
-#include "dialmgr.hxx"
 #include "dbinsdlg.hxx"
 #include "DropDownFieldDialog.hxx"
 #include "fldtdlg.hxx"
@@ -53,8 +52,6 @@ namespace swui
     {
         if ( !pFactory )
             pFactory = new SwAbstractDialogFactory_Impl;
-        if ( !pSwResMgr)
-            SwDialogsResMgr::GetResMgr();
         return pFactory;
     }
 }

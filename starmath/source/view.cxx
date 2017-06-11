@@ -70,6 +70,7 @@
 #include "dialog.hxx"
 #include "document.hxx"
 #include "starmath.hrc"
+#include "strings.hrc"
 #include "mathmlimport.hxx"
 #include "cursor.hxx"
 #include "accessibility.hxx"

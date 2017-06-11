@@ -27,7 +27,7 @@
 #include "templdgi.hxx"
 
 #include <sfx2/sfx.hrc>
-#include "dialog.hrc"
+#include "sfx2/strings.hrc"
 
 // Constructor
 

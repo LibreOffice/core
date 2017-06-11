@@ -21,7 +21,6 @@
 #include "TConnection.hxx"
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/types.hxx>
-#include <comphelper/officeresourcebundle.hxx>
 #include <connectivity/dbexception.hxx>
 
 using namespace connectivity;
@@ -76,11 +75,11 @@ Sequence< sal_Int8 > OMetaConnection::getUnoTunnelImplementationId()
     return s_aPropertyNameMap;
 }
 
-void OMetaConnection::throwGenericSQLException( sal_uInt16 _nErrorResourceId,const Reference< XInterface>& _xContext )
+void OMetaConnection::throwGenericSQLException(const char* pErrorResourceId, const Reference< XInterface>& _xContext )
 {
     OUString sErrorMessage;
-    if ( _nErrorResourceId )
-        sErrorMessage = m_aResources.getResourceString( _nErrorResourceId );
+    if (pErrorResourceId)
+        sErrorMessage = m_aResources.getResourceString(pErrorResourceId);
     Reference< XInterface> xContext = _xContext;
     if ( !xContext.is() )
         xContext = *this;
