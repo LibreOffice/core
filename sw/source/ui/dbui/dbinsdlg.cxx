@@ -86,6 +86,7 @@
 #include <comphelper/uno3.hxx>
 #include "tabsh.hxx"
 #include "swabstdlg.hxx"
+#include "strings.hrc"
 #include "table.hrc"
 #include <unomid.h>
 #include <IDocumentMarkAccess.hxx>

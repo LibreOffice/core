@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="DeleteContentsDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Delete Contents</property>
+    <property name="title" translatable="yes" context="deletecontents|DeleteContentsDialog">Delete Contents</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -90,7 +90,7 @@
                     <property name="spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="deleteall">
-                        <property name="label" translatable="yes">Delete _all</property>
+                        <property name="label" translatable="yes" context="deletecontents|deleteall">Delete _all</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -113,7 +113,7 @@
                         <property name="column_homogeneous">True</property>
                         <child>
                           <object class="GtkCheckButton" id="text">
-                            <property name="label" translatable="yes">_Text</property>
+                            <property name="label" translatable="yes" context="deletecontents|text">_Text</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -128,7 +128,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="numbers">
-                            <property name="label" translatable="yes">_Numbers</property>
+                            <property name="label" translatable="yes" context="deletecontents|numbers">_Numbers</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -143,7 +143,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="datetime">
-                            <property name="label" translatable="yes">_Date &amp; time</property>
+                            <property name="label" translatable="yes" context="deletecontents|datetime">_Date &amp; time</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -158,7 +158,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="formulas">
-                            <property name="label" translatable="yes">_Formulas</property>
+                            <property name="label" translatable="yes" context="deletecontents|formulas">_Formulas</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -173,7 +173,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="comments">
-                            <property name="label" translatable="yes">_Comments</property>
+                            <property name="label" translatable="yes" context="deletecontents|comments">_Comments</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -188,7 +188,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="formats">
-                            <property name="label" translatable="yes">For_mats</property>
+                            <property name="label" translatable="yes" context="deletecontents|formats">For_mats</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -203,7 +203,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="objects">
-                            <property name="label" translatable="yes">_Objects</property>
+                            <property name="label" translatable="yes" context="deletecontents|objects">_Objects</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -234,7 +234,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Selection</property>
+                <property name="label" translatable="yes" context="deletecontents|label2">Selection</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

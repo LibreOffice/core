@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sc">
   <!-- interface-requires LibreOffice 1.0 -->
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="SearchResultsDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Search Results</property>
+    <property name="title" translatable="yes" context="searchresults|SearchResultsDialog">Search Results</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -57,7 +57,7 @@
           <object class="GtkLabel" id="skipped">
             <property name="visible">False</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">skipped $1 ...</property>
+            <property name="label" translatable="yes" context="searchresults|skipped">skipped $1 ...</property>
           </object>
         </child>
       </object>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="dba">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="RelationDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Relations</property>
+    <property name="title" translatable="yes" context="relationdialog|RelationDialog">Relations</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -129,7 +129,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Tables Involved</property>
+                    <property name="label" translatable="yes" context="relationdialog|label1">Tables Involved</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -170,7 +170,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Fields Involved</property>
+                    <property name="label" translatable="yes" context="relationdialog|label2">Fields Involved</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -208,7 +208,7 @@
                             <property name="row_spacing">6</property>
                             <child>
                               <object class="GtkRadioButton" id="addaction">
-                                <property name="label" translatable="yes">_No action</property>
+                                <property name="label" translatable="yes" context="relationdialog|addaction">_No action</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -225,7 +225,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="addcascade">
-                                <property name="label" translatable="yes">_Update cascade</property>
+                                <property name="label" translatable="yes" context="relationdialog|addcascade">_Update cascade</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -241,7 +241,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="addnull">
-                                <property name="label" translatable="yes">_Set null</property>
+                                <property name="label" translatable="yes" context="relationdialog|addnull">_Set null</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -257,7 +257,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="adddefault">
-                                <property name="label" translatable="yes">Set _default</property>
+                                <property name="label" translatable="yes" context="relationdialog|adddefault">Set _default</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -279,7 +279,7 @@
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Update Options</property>
+                        <property name="label" translatable="yes" context="relationdialog|label3">Update Options</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -312,7 +312,7 @@
                             <property name="row_spacing">6</property>
                             <child>
                               <object class="GtkRadioButton" id="delaction">
-                                <property name="label" translatable="yes">_No action</property>
+                                <property name="label" translatable="yes" context="relationdialog|delaction">_No action</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -328,7 +328,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="delcascade">
-                                <property name="label" translatable="yes">Delete _cascade</property>
+                                <property name="label" translatable="yes" context="relationdialog|delcascade">Delete _cascade</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -343,7 +343,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="delnull">
-                                <property name="label" translatable="yes">_Set null</property>
+                                <property name="label" translatable="yes" context="relationdialog|delnull">_Set null</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -358,7 +358,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="deldefault">
-                                <property name="label" translatable="yes">Set _default</property>
+                                <property name="label" translatable="yes" context="relationdialog|deldefault">Set _default</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -379,7 +379,7 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Delete Options</property>
+                        <property name="label" translatable="yes" context="relationdialog|label4">Delete Options</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -432,23 +432,23 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Inner join</col>
+        <col id="0" translatable="yes" context="relationdialog|liststore1">Inner join</col>
         <col id="1">1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Left join</col>
+        <col id="0" translatable="yes" context="relationdialog|liststore1">Left join</col>
         <col id="1">2</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Right join</col>
+        <col id="0" translatable="yes" context="relationdialog|liststore1">Right join</col>
         <col id="1">3</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Full (outer) join</col>
+        <col id="0" translatable="yes" context="relationdialog|liststore1">Full (outer) join</col>
         <col id="1">4</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Cross join</col>
+        <col id="0" translatable="yes" context="relationdialog|liststore1">Cross join</col>
         <col id="1">5</col>
       </row>
     </data>

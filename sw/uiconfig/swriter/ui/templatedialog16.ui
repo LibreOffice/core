@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="TemplateDialog16">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Numbering Style</property>
+    <property name="title" translatable="yes" context="templatedialog16|TemplateDialog16">Numbering Style</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -113,7 +113,7 @@
               <object class="GtkLabel" id="organizer">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Organizer</property>
+                <property name="label" translatable="yes" context="templatedialog16|organizer">Organizer</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -126,7 +126,7 @@
               <object class="GtkLabel" id="bullets">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Bullets</property>
+                <property name="label" translatable="yes" context="templatedialog16|bullets">Bullets</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -140,7 +140,7 @@
               <object class="GtkLabel" id="numbering">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Numbering Style</property>
+                <property name="label" translatable="yes" context="templatedialog16|numbering">Numbering Style</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -154,7 +154,7 @@
               <object class="GtkLabel" id="outline">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Outline</property>
+                <property name="label" translatable="yes" context="templatedialog16|outline">Outline</property>
               </object>
               <packing>
                 <property name="position">3</property>
@@ -168,7 +168,7 @@
               <object class="GtkLabel" id="graphics">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Image</property>
+                <property name="label" translatable="yes" context="templatedialog16|graphics">Image</property>
               </object>
               <packing>
                 <property name="position">4</property>
@@ -182,7 +182,7 @@
               <object class="GtkLabel" id="position">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Position</property>
+                <property name="label" translatable="yes" context="templatedialog16|position">Position</property>
               </object>
               <packing>
                 <property name="position">5</property>
@@ -196,7 +196,7 @@
               <object class="GtkLabel" id="customize">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Customize</property>
+                <property name="label" translatable="yes" context="templatedialog16|customize">Customize</property>
               </object>
               <packing>
                 <property name="position">6</property>

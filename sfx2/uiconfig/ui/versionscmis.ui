@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sfx">
   <requires lib="gtk+" version="3.6"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="VersionsCmisDialog">
@@ -49,7 +49,7 @@
             </child>
             <child>
               <object class="GtkButton" id="show">
-                <property name="label" translatable="yes">_Show...</property>
+                <property name="label" translatable="yes" context="versionscmis|show">_Show...</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -80,7 +80,7 @@
             </child>
             <child>
               <object class="GtkButton" id="compare">
-                <property name="label" translatable="yes">_Compare</property>
+                <property name="label" translatable="yes" context="versionscmis|compare">_Compare</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -157,7 +157,7 @@
                               <object class="GtkLabel" id="datetime">
                                 <property name="can_focus">False</property>
                                 <property name="no_show_all">True</property>
-                                <property name="label" translatable="yes">Date and time</property>
+                                <property name="label" translatable="yes" context="versionscmis|datetime">Date and time</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -169,7 +169,7 @@
                               <object class="GtkLabel" id="savedby">
                                 <property name="can_focus">False</property>
                                 <property name="no_show_all">True</property>
-                                <property name="label" translatable="yes">Saved by</property>
+                                <property name="label" translatable="yes" context="versionscmis|savedby">Saved by</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -181,7 +181,7 @@
                               <object class="GtkLabel" id="comments">
                                 <property name="can_focus">False</property>
                                 <property name="no_show_all">True</property>
-                                <property name="label" translatable="yes">Comments</property>
+                                <property name="label" translatable="yes" context="versionscmis|comments">Comments</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -218,7 +218,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Existing Versions</property>
+                    <property name="label" translatable="yes" context="versionscmis|label2">Existing Versions</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

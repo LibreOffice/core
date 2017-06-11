@@ -58,7 +58,7 @@ Module gid_Module_Langpack_Math_Template
     Name = "gid_Module_Langpack_Math_Template";
     Description = "gid_Module_Langpack_Math_Template";
     Styles = (TEMPLATEMODULE);
-    Files = (gid_File_Res_Sm);
+    Files = ();
 End
 
 #include "alllangmodules_math.inc"

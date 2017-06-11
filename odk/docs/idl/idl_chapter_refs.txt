@@ -5358,7 +5358,6 @@ com.sun.star.uno.XInterface
 LINK:Documentation/DevGuide/FirstSteps/Objects%2C_Interfaces%2C_and_Services#Interfaces
 DESCR:FirstSteps - Objects, Interfaces, and Services - Interfaces
 REF:
-com.sun.star.resource.XResourceBundle
 com.sun.star.container.XNameAccess
 TOPIC:
 

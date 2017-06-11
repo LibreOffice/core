@@ -28,7 +28,7 @@ class LetterWizardDialog(WizardDialog):
         super(LetterWizardDialog, self).__init__(xmsf, HIDMAIN )
 
         #Load Resources
-        self.resources = LetterWizardDialogResources(self.oWizardResource)
+        self.resources = LetterWizardDialogResources()
         
         #set dialog properties...        
         self.setDialogProperties(True, 210, True, 104, 52, 1, 1, 

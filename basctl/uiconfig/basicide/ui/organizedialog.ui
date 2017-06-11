@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="basctl">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="OrganizeDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">%PRODUCTNAME Basic Macro Organizer</property>
+    <property name="title" translatable="yes" context="organizedialog|OrganizeDialog">%PRODUCTNAME Basic Macro Organizer</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -69,7 +69,7 @@
               <object class="GtkLabel" id="modules">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Modules</property>
+                <property name="label" translatable="yes" context="organizedialog|modules">Modules</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -82,7 +82,7 @@
               <object class="GtkLabel" id="dialogs">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Dialogs</property>
+                <property name="label" translatable="yes" context="organizedialog|dialogs">Dialogs</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -96,7 +96,7 @@
               <object class="GtkLabel" id="libraries">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Libraries</property>
+                <property name="label" translatable="yes" context="organizedialog|libraries">Libraries</property>
               </object>
               <packing>
                 <property name="position">2</property>

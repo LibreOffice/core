@@ -24,10 +24,10 @@
 #include <vcl/help.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include "TableWindowListBox.hxx"
 #include "TableConnection.hxx"
-#include "dbu_qry.hrc"
+#include "strings.hrc"
 #include "QueryDesignView.hxx"
 #include "JoinController.hxx"
 

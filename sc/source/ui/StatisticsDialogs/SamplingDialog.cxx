@@ -19,8 +19,8 @@
 #include "uiitems.hxx"
 #include "reffact.hxx"
 #include "docfunc.hxx"
-
 #include "SamplingDialog.hxx"
+#include "strings.hrc"
 
 ScSamplingDialog::ScSamplingDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,

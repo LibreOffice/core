@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <basidesh.hrc>
+#include <strings.hrc>
 #include <basidesh.hxx>
 
 #include <basicbox.hxx>
@@ -25,7 +25,6 @@
 
 #include "localizationmgr.hxx"
 #include "managelang.hxx"
-#include "dlgresid.hrc"
 
 #include <sfx2/dispatch.hxx>
 #include <svtools/langtab.hxx>

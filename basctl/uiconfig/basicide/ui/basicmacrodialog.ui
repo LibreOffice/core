@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.0 on Fri Jan  3 21:01:14 2014 -->
-<interface>
+<interface domain="basctl">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="BasicMacroDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">%PRODUCTNAME Basic Macros</property>
+    <property name="title" translatable="yes" context="basicmacrodialog|BasicMacroDialog">%PRODUCTNAME Basic Macros</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -19,7 +19,7 @@
             <property name="layout_style">start</property>
             <child>
               <object class="GtkButton" id="run">
-                <property name="label" translatable="yes">Run</property>
+                <property name="label" translatable="yes" context="basicmacrodialog|run">Run</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -35,7 +35,7 @@
             </child>
             <child>
               <object class="GtkButton" id="assign">
-                <property name="label" translatable="yes">Assign...</property>
+                <property name="label" translatable="yes" context="basicmacrodialog|assign">Assign...</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -49,7 +49,7 @@
             </child>
             <child>
               <object class="GtkButton" id="edit">
-                <property name="label" translatable="yes">Edit</property>
+                <property name="label" translatable="yes" context="basicmacrodialog|edit">Edit</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -78,7 +78,7 @@
             </child>
             <child>
               <object class="GtkButton" id="organize">
-                <property name="label" translatable="yes">Organizer...</property>
+                <property name="label" translatable="yes" context="basicmacrodialog|organize">Organizer...</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -92,7 +92,7 @@
             </child>
             <child>
               <object class="GtkButton" id="newlibrary">
-                <property name="label" translatable="yes">New Library</property>
+                <property name="label" translatable="yes" context="basicmacrodialog|newlibrary">New Library</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
@@ -106,7 +106,7 @@
             </child>
             <child>
               <object class="GtkButton" id="newmodule">
-                <property name="label" translatable="yes">New Module</property>
+                <property name="label" translatable="yes" context="basicmacrodialog|newmodule">New Module</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
@@ -195,7 +195,7 @@
                   <object class="GtkLabel" id="existingmacrosft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Existing Macros In:</property>
+                    <property name="label" translatable="yes" context="basicmacrodialog|existingmacrosft">Existing Macros In:</property>
                     <property name="track_visited_links">False</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -249,7 +249,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Macro From</property>
+                        <property name="label" translatable="yes" context="basicmacrodialog|macrofromft">Macro From</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -265,7 +265,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Save Macro In</property>
+                        <property name="label" translatable="yes" context="basicmacrodialog|macrotoft">Save Macro In</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -311,7 +311,7 @@
                   <object class="GtkLabel" id="libraryft1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Macro Name</property>
+                    <property name="label" translatable="yes" context="basicmacrodialog|libraryft1">Macro Name</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

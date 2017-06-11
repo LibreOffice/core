@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkImage" id="image_column1">
     <property name="visible">True</property>
@@ -73,7 +73,7 @@
         <property name="spacing">6</property>
         <child>
           <object class="GtkButton" id="column1">
-            <property name="label" translatable="yes">1 Column</property>
+            <property name="label" translatable="yes" context="pagecolumncontrol|column1">1 Column</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="image">image_column1</property>
@@ -88,7 +88,7 @@
         </child>
         <child>
           <object class="GtkButton" id="column2">
-            <property name="label" translatable="yes">2 Columns</property>
+            <property name="label" translatable="yes" context="pagecolumncontrol|column2">2 Columns</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="image">image_column2</property>
@@ -103,7 +103,7 @@
         </child>
         <child>
           <object class="GtkButton" id="column3">
-            <property name="label" translatable="yes">3 Columns</property>
+            <property name="label" translatable="yes" context="pagecolumncontrol|column3">3 Columns</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="image">image_column3</property>
@@ -118,7 +118,7 @@
         </child>
         <child>
           <object class="GtkButton" id="columnleft">
-            <property name="label" translatable="yes">Left</property>
+            <property name="label" translatable="yes" context="pagecolumncontrol|columnleft">Left</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="image">image_columnleft</property>
@@ -133,7 +133,7 @@
         </child>
         <child>
           <object class="GtkButton" id="columnright">
-            <property name="label" translatable="yes">Right</property>
+            <property name="label" translatable="yes" context="pagecolumncontrol|columnright">Right</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="image">image_columnright</property>
@@ -148,7 +148,7 @@
         </child>
         <child>
           <object class="GtkButton" id="column1L">
-            <property name="label" translatable="yes">1 Column</property>
+            <property name="label" translatable="yes" context="pagecolumncontrol|column1L">1 Column</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="image">image_column1L</property>
@@ -163,7 +163,7 @@
         </child>
         <child>
           <object class="GtkButton" id="column2L">
-            <property name="label" translatable="yes">2 Columns</property>
+            <property name="label" translatable="yes" context="pagecolumncontrol|column2L">2 Columns</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="image">image_column2L</property>
@@ -178,7 +178,7 @@
         </child>
         <child>
           <object class="GtkButton" id="column3L">
-            <property name="label" translatable="yes">3 Columns</property>
+            <property name="label" translatable="yes" context="pagecolumncontrol|column3L">3 Columns</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="image">image_column3L</property>
@@ -193,7 +193,7 @@
         </child>
         <child>
           <object class="GtkButton" id="columnleftL">
-            <property name="label" translatable="yes">Left</property>
+            <property name="label" translatable="yes" context="pagecolumncontrol|columnleftL">Left</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="image">image_columnleftL</property>
@@ -208,7 +208,7 @@
         </child>
         <child>
           <object class="GtkButton" id="columnrightL">
-            <property name="label" translatable="yes">Right</property>
+            <property name="label" translatable="yes" context="pagecolumncontrol|columnrightL">Right</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="image">image_columnrightL</property>
@@ -223,11 +223,11 @@
         </child>
         <child>
           <object class="GtkButton" id="moreoptions">
-            <property name="label" translatable="yes">_More Options</property>
+            <property name="label" translatable="yes" context="pagecolumncontrol|moreoptions">_More Options</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="tooltip_text" translatable="yes">More Options</property>
+            <property name="tooltip_text" translatable="yes" context="pagecolumncontrol|moreoptions|tooltip_text">More Options</property>
             <property name="relief">none</property>
             <property name="use_underline">True</property>
             <property name="always_show_image">True</property>

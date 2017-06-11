@@ -21,8 +21,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/image.hxx>
 #include <vcl/metaact.hxx>
-#include <tools/rcid.h>
-#include <tools/resid.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svl/solar.hrc>
 #include <vcl/salbtype.hxx>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkGrid" id="ConditionalIconSet">
     <property name="visible">True</property>
@@ -17,7 +17,7 @@
           <object class="GtkLabel" id="label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes"> &gt;= </property>
+            <property name="label" translatable="yes" context="conditionaliconset|label"> &gt;= </property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -40,10 +40,10 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <items>
-              <item translatable="yes">Value</item>
-              <item translatable="yes">Percent</item>
-              <item translatable="yes">Percentile</item>
-              <item translatable="yes">Formula</item>
+              <item translatable="yes" context="conditionaliconset|listbox">Value</item>
+              <item translatable="yes" context="conditionaliconset|listbox">Percent</item>
+              <item translatable="yes" context="conditionaliconset|listbox">Percentile</item>
+              <item translatable="yes" context="conditionaliconset|listbox">Formula</item>
             </items>
           </object>
           <packing>

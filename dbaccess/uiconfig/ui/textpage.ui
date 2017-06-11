@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="dba">
   <requires lib="gtk+" version="3.6"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="TextPage">
@@ -36,7 +36,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkRadioButton" id="textfile">
-                    <property name="label" translatable="yes">Plain text files (*.txt)</property>
+                    <property name="label" translatable="yes" context="textpage|textfile">Plain text files (*.txt)</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -53,7 +53,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="csvfile">
-                    <property name="label" translatable="yes">Comma-separated value files (*.csv)</property>
+                    <property name="label" translatable="yes" context="textpage|csvfile">Comma-separated value files (*.csv)</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -70,7 +70,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="custom">
-                    <property name="label" translatable="yes">Custom:</property>
+                    <property name="label" translatable="yes" context="textpage|custom">Custom:</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -103,7 +103,7 @@
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Custom: *.abc</property>
+                    <property name="label" translatable="yes" context="textpage|example">Custom: *.abc</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -118,7 +118,7 @@
           <object class="GtkLabel" id="extensionheader">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Specify the Type of Files You Want to Access</property>
+            <property name="label" translatable="yes" context="textpage|extensionheader">Specify the Type of Files You Want to Access</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -156,7 +156,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="containsheaders">
-                    <property name="label" translatable="yes">_Text contains headers</property>
+                    <property name="label" translatable="yes" context="textpage|containsheaders">_Text contains headers</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -178,7 +178,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">Field separator:</property>
+                    <property name="label" translatable="yes" context="textpage|fieldlabel">Field separator:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">fieldseparator</property>
                   </object>
@@ -192,7 +192,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">Text separator:</property>
+                    <property name="label" translatable="yes" context="textpage|textlabel">Text separator:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">textseparator</property>
                   </object>
@@ -206,7 +206,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">Decimal separator:</property>
+                    <property name="label" translatable="yes" context="textpage|decimallabel">Decimal separator:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">decimalseparator</property>
                   </object>
@@ -220,7 +220,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">Thousands separator:</property>
+                    <property name="label" translatable="yes" context="textpage|thousandslabel">Thousands separator:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">thousandsseparator</property>
                   </object>
@@ -270,10 +270,10 @@
                     <property name="hexpand">True</property>
                     <property name="has_entry">True</property>
                     <items>
-                      <item translatable="yes">.</item>
-                      <item translatable="yes">,</item>
-                      <item translatable="yes">;</item>
-                      <item translatable="yes">:</item>
+                      <item translatable="yes" context="textpage|decimalseparator">.</item>
+                      <item translatable="yes" context="textpage|decimalseparator">,</item>
+                      <item translatable="yes" context="textpage|decimalseparator">;</item>
+                      <item translatable="yes" context="textpage|decimalseparator">:</item>
                     </items>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="comboboxtext-entry6">
@@ -293,8 +293,8 @@
                     <property name="hexpand">True</property>
                     <property name="has_entry">True</property>
                     <items>
-                      <item translatable="yes">.</item>
-                      <item translatable="yes">,</item>
+                      <item translatable="yes" context="textpage|thousandsseparator">.</item>
+                      <item translatable="yes" context="textpage|thousandsseparator">,</item>
                     </items>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="comboboxtext-entry8">
@@ -315,7 +315,7 @@
           <object class="GtkLabel" id="formatlabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Row Format</property>
+            <property name="label" translatable="yes" context="textpage|formatlabel">Row Format</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -356,7 +356,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Character set:</property>
+                    <property name="label" translatable="yes" context="textpage|charsetlabel">_Character set:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">charset</property>
                   </object>
@@ -386,7 +386,7 @@
           <object class="GtkLabel" id="charsetheader">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Data Conversion</property>
+            <property name="label" translatable="yes" context="textpage|charsetheader">Data Conversion</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

@@ -42,7 +42,7 @@ static const sal_Int32 spnDateParts[] =
     css::sheet::DataPilotFieldGroupBy::YEARS
 };
 
-static const sal_uInt16 nDatePartResIds[] =
+static const char* aDatePartResIds[] =
 {
     STR_DPFIELD_GROUP_BY_SECONDS,
     STR_DPFIELD_GROUP_BY_MINUTES,
@@ -227,9 +227,9 @@ ScDPDateGroupDlg::ScDPDateGroupDlg( vcl::Window* pParent,
     maStartHelper   ( mpRbAutoStart, mpRbManStart, mpEdStart, rNullDate ),
     maEndHelper     ( mpRbAutoEnd, mpRbManEnd, mpEdEnd, rNullDate )
 {
-    static const size_t nCount = SAL_N_ELEMENTS( nDatePartResIds );
-    for(sal_uInt16 nDatePartResId : nDatePartResIds)
-        mpLbUnits->InsertEntry( ScGlobal::GetRscString( nDatePartResId ) );
+    static const size_t nCount = SAL_N_ELEMENTS(aDatePartResIds);
+    for (const char* pDatePartResId : aDatePartResIds)
+        mpLbUnits->InsertEntry(ScGlobal::GetRscString(pDatePartResId));
 
     mpEdStart->SetShowDateCentury( true );
     mpEdEnd->SetShowDateCentury( true );

@@ -73,7 +73,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
-#include "annotations.hrc"
+#include "strings.hrc"
 #include "annotationwindow.hxx"
 #include "annotationmanagerimpl.hxx"
 

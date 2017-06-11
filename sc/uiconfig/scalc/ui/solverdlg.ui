@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="SolverDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Solver</property>
+    <property name="title" translatable="yes" context="solverdlg|SolverDialog">Solver</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -19,7 +19,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="options">
-                <property name="label" translatable="yes">O_ptions...</property>
+                <property name="label" translatable="yes" context="solverdlg|options">O_ptions...</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -62,7 +62,7 @@
             </child>
             <child>
               <object class="GtkButton" id="solve">
-                <property name="label" translatable="yes">_Solve</property>
+                <property name="label" translatable="yes" context="solverdlg|solve">_Solve</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -104,7 +104,7 @@
                   <object class="GtkLabel" id="targetlabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Target cell</property>
+                    <property name="label" translatable="yes" context="solverdlg|targetlabel">_Target cell</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                   </object>
@@ -117,7 +117,7 @@
                   <object class="GtkLabel" id="result">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Optimize result to</property>
+                    <property name="label" translatable="yes" context="solverdlg|result">Optimize result to</property>
                     <property name="xalign">0</property>
                     <property name="yalign">0.029999999329447746</property>
                   </object>
@@ -130,7 +130,7 @@
                   <object class="GtkLabel" id="changelabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_By changing cells</property>
+                    <property name="label" translatable="yes" context="solverdlg|changelabel">_By changing cells</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                   </object>
@@ -141,7 +141,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="min">
-                    <property name="label" translatable="yes">Minim_um</property>
+                    <property name="label" translatable="yes" context="solverdlg|min">Minim_um</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -160,7 +160,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="max">
-                    <property name="label" translatable="yes">_Maximum</property>
+                    <property name="label" translatable="yes" context="solverdlg|max">_Maximum</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -260,7 +260,7 @@
                     <property name="spacing">12</property>
                     <child>
                       <object class="GtkRadioButton" id="value">
-                        <property name="label" translatable="yes">_Value of</property>
+                        <property name="label" translatable="yes" context="solverdlg|value">_Value of</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -363,7 +363,7 @@
                           <object class="GtkLabel" id="cellreflabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Cell reference</property>
+                            <property name="label" translatable="yes" context="solverdlg|cellreflabel">_Cell reference</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                           </object>
@@ -377,7 +377,7 @@
                           <object class="GtkLabel" id="oplabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Operator</property>
+                            <property name="label" translatable="yes" context="solverdlg|oplabel">_Operator</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                           </object>
@@ -391,7 +391,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_left">6</property>
-                            <property name="label" translatable="yes">V_alue</property>
+                            <property name="label" translatable="yes" context="solverdlg|constraintlabel">V_alue</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                           </object>
@@ -410,7 +410,7 @@
                             <property name="width_chars">20</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="ref1edit-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes">Cell reference</property>
+                                <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|ref1edit-atkobject">Cell reference</property>
                               </object>
                             </child>
                           </object>
@@ -428,7 +428,7 @@
                             <property name="width_chars">20</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="ref2edit-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes">Cell reference</property>
+                                <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|ref2edit-atkobject">Cell reference</property>
                               </object>
                             </child>
                           </object>
@@ -446,7 +446,7 @@
                             <property name="width_chars">20</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="ref3edit-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes">Cell reference</property>
+                                <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|ref3edit-atkobject">Cell reference</property>
                               </object>
                             </child>
                           </object>
@@ -464,7 +464,7 @@
                             <property name="width_chars">20</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="ref4edit-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes">Cell reference</property>
+                                <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|ref4edit-atkobject">Cell reference</property>
                               </object>
                             </child>
                           </object>
@@ -524,15 +524,15 @@
                             <property name="entry_text_column">0</property>
                             <property name="id_column">1</property>
                             <items>
-                              <item translatable="yes">&lt;=</item>
-                              <item translatable="yes">=</item>
-                              <item translatable="yes">=&gt;</item>
-                              <item translatable="yes">Integer</item>
-                              <item translatable="yes">Binary</item>
+                              <item translatable="yes" context="solverdlg|op1list">&lt;=</item>
+                              <item translatable="yes" context="solverdlg|op1list">=</item>
+                              <item translatable="yes" context="solverdlg|op1list">=&gt;</item>
+                              <item translatable="yes" context="solverdlg|op1list">Integer</item>
+                              <item translatable="yes" context="solverdlg|op1list">Binary</item>
                             </items>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="op1list-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes">Operator</property>
+                                <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|op1list-atkobject">Operator</property>
                               </object>
                             </child>
                           </object>
@@ -548,15 +548,15 @@
                             <property name="entry_text_column">0</property>
                             <property name="id_column">1</property>
                             <items>
-                              <item translatable="yes">&lt;=</item>
-                              <item translatable="yes">=</item>
-                              <item translatable="yes">=&gt;</item>
-                              <item translatable="yes">Integer</item>
-                              <item translatable="yes">Binary</item>
+                              <item translatable="yes" context="solverdlg|op2list">&lt;=</item>
+                              <item translatable="yes" context="solverdlg|op2list">=</item>
+                              <item translatable="yes" context="solverdlg|op2list">=&gt;</item>
+                              <item translatable="yes" context="solverdlg|op2list">Integer</item>
+                              <item translatable="yes" context="solverdlg|op2list">Binary</item>
                             </items>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="op2list-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes">Operator</property>
+                                <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|op2list-atkobject">Operator</property>
                               </object>
                             </child>
                           </object>
@@ -572,15 +572,15 @@
                             <property name="entry_text_column">0</property>
                             <property name="id_column">1</property>
                             <items>
-                              <item translatable="yes">&lt;=</item>
-                              <item translatable="yes">=</item>
-                              <item translatable="yes">=&gt;</item>
-                              <item translatable="yes">Integer</item>
-                              <item translatable="yes">Binary</item>
+                              <item translatable="yes" context="solverdlg|op3list">&lt;=</item>
+                              <item translatable="yes" context="solverdlg|op3list">=</item>
+                              <item translatable="yes" context="solverdlg|op3list">=&gt;</item>
+                              <item translatable="yes" context="solverdlg|op3list">Integer</item>
+                              <item translatable="yes" context="solverdlg|op3list">Binary</item>
                             </items>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="op3list-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes">Operator</property>
+                                <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|op3list-atkobject">Operator</property>
                               </object>
                             </child>
                           </object>
@@ -596,15 +596,15 @@
                             <property name="entry_text_column">0</property>
                             <property name="id_column">1</property>
                             <items>
-                              <item translatable="yes">&lt;=</item>
-                              <item translatable="yes">=</item>
-                              <item translatable="yes">=&gt;</item>
-                              <item translatable="yes">Integer</item>
-                              <item translatable="yes">Binary</item>
+                              <item translatable="yes" context="solverdlg|op4list">&lt;=</item>
+                              <item translatable="yes" context="solverdlg|op4list">=</item>
+                              <item translatable="yes" context="solverdlg|op4list">=&gt;</item>
+                              <item translatable="yes" context="solverdlg|op4list">Integer</item>
+                              <item translatable="yes" context="solverdlg|op4list">Binary</item>
                             </items>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="op4list-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes">Operator</property>
+                                <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|op4list-atkobject">Operator</property>
                               </object>
                             </child>
                           </object>
@@ -623,7 +623,7 @@
                             <property name="width_chars">15</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="val1edit-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes">Value</property>
+                                <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|val1edit-atkobject">Value</property>
                               </object>
                             </child>
                           </object>
@@ -642,7 +642,7 @@
                             <property name="width_chars">15</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="val2edit-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes">Value</property>
+                                <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|val2edit-atkobject">Value</property>
                               </object>
                             </child>
                           </object>
@@ -661,7 +661,7 @@
                             <property name="width_chars">15</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="val3edit-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes">Value</property>
+                                <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|val3edit-atkobject">Value</property>
                               </object>
                             </child>
                           </object>
@@ -680,7 +680,7 @@
                             <property name="width_chars">15</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="val4edit-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes">Value</property>
+                                <property name="AtkObject::accessible-name" translatable="yes" context="solverdlg|val4edit-atkobject">Value</property>
                               </object>
                             </child>
                           </object>
@@ -739,7 +739,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
-                            <property name="tooltip_text" translatable="yes">Remove</property>
+                            <property name="tooltip_text" translatable="yes" context="solverdlg|del2|tooltip_text">Remove</property>
                           </object>
                           <packing>
                             <property name="left_attach">5</property>
@@ -752,7 +752,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
-                            <property name="tooltip_text" translatable="yes">Remove</property>
+                            <property name="tooltip_text" translatable="yes" context="solverdlg|del1|tooltip_text">Remove</property>
                           </object>
                           <packing>
                             <property name="left_attach">5</property>
@@ -765,7 +765,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
-                            <property name="tooltip_text" translatable="yes">Remove</property>
+                            <property name="tooltip_text" translatable="yes" context="solverdlg|del3|tooltip_text">Remove</property>
                           </object>
                           <packing>
                             <property name="left_attach">5</property>
@@ -778,7 +778,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
-                            <property name="tooltip_text" translatable="yes">Remove</property>
+                            <property name="tooltip_text" translatable="yes" context="solverdlg|del4|tooltip_text">Remove</property>
                           </object>
                           <packing>
                             <property name="left_attach">5</property>
@@ -806,7 +806,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Limiting Conditions</property>
+                    <property name="label" translatable="yes" context="solverdlg|label1">Limiting Conditions</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
