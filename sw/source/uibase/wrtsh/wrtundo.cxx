@@ -25,7 +25,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <swdtflvr.hxx>
 #include <svtools/svtresid.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <wrtsh.hrc>
 #include <sfx2/sfx.hrc>
 
@@ -97,21 +97,21 @@ void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
 OUString SwWrtShell::GetDoString( DoType eDoType ) const
 {
     OUString aUndoStr;
-    sal_uInt16 nResStr = STR_UNDO;
+    const char* pResStr = STR_UNDO;
     switch( eDoType )
     {
     case UNDO:
-        nResStr = STR_UNDO;
+        pResStr = STR_UNDO;
         (void)GetLastUndoInfo(&aUndoStr, nullptr, &m_rView);
         break;
     case REDO:
-        nResStr = STR_REDO;
+        pResStr = STR_REDO;
         (void)GetFirstRedoInfo(&aUndoStr, nullptr, &m_rView);
         break;
     default:;//prevent warning
     }
 
-    return  SvtResId(nResStr) + aUndoStr;
+    return SvtResId(pResStr) + aUndoStr;
 }
 
 void SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) const

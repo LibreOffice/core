@@ -809,7 +809,7 @@ OUString ScDPDimensionSaveData::CreateGroupDimName(
 
 namespace
 {
-    static const sal_uInt16 nDatePartIds[] =
+    static const char* aDatePartIds[] =
     {
         STR_DPFIELD_GROUP_BY_SECONDS,
         STR_DPFIELD_GROUP_BY_MINUTES,
@@ -829,13 +829,13 @@ OUString ScDPDimensionSaveData::CreateDateGroupDimName(
     OUString aPartName;
     switch( nDatePart )
     {
-        case SECONDS:  aPartName = ScGlobal::GetRscString( nDatePartIds[0] ); break;
-        case MINUTES:  aPartName = ScGlobal::GetRscString( nDatePartIds[1] ); break;
-        case HOURS:    aPartName = ScGlobal::GetRscString( nDatePartIds[2] ); break;
-        case DAYS:     aPartName = ScGlobal::GetRscString( nDatePartIds[3] ); break;
-        case MONTHS:   aPartName = ScGlobal::GetRscString( nDatePartIds[4] ); break;
-        case QUARTERS: aPartName = ScGlobal::GetRscString( nDatePartIds[5] ); break;
-        case YEARS:    aPartName = ScGlobal::GetRscString( nDatePartIds[6] ); break;
+        case SECONDS:  aPartName = ScGlobal::GetRscString(aDatePartIds[0]); break;
+        case MINUTES:  aPartName = ScGlobal::GetRscString(aDatePartIds[1]); break;
+        case HOURS:    aPartName = ScGlobal::GetRscString(aDatePartIds[2]); break;
+        case DAYS:     aPartName = ScGlobal::GetRscString(aDatePartIds[3]); break;
+        case MONTHS:   aPartName = ScGlobal::GetRscString(aDatePartIds[4]); break;
+        case QUARTERS: aPartName = ScGlobal::GetRscString(aDatePartIds[5]); break;
+        case YEARS:    aPartName = ScGlobal::GetRscString(aDatePartIds[6]); break;
     }
     OSL_ENSURE(!aPartName.isEmpty(), "ScDPDimensionSaveData::CreateDateGroupDimName - invalid date part");
     return CreateGroupDimName( aPartName, rObject, bAllowSource, pDeletedNames );

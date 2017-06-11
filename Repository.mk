@@ -42,6 +42,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	libtest \
 	lngconvex \
 	localize \
+	localestr \
 	makedepend \
 	mbsdiff \
 	mork_helper \
@@ -388,7 +389,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	pcr \
 	pdffilter \
 	$(call gb_Helper_optional,SCRIPTING,protocolhandler) \
-	res \
 	sax \
 	sb \
 	$(call gb_Helper_optional,DBCONNECTIVITY,sdbt) \
@@ -1058,59 +1058,45 @@ $(eval $(call gb_ExternalExecutable_register_executables,\
 
 # Resources
 $(eval $(call gb_Helper_register_resources,\
-	abp \
-	acc \
 	analysis \
-	avmedia \
-	$(call gb_Helper_optional,SCRIPTING,basctl) \
-	$(call gb_Helper_optional,DBCONNECTIVITY,bib) \
-	chartcontroller \
-	cnr \
-	cui \
 	date \
-	$(call gb_Helper_optional,DBCONNECTIVITY,\
-		dba \
-		dbmm \
-		dbp \
-		dbu \
-	) \
-	dbw \
-	deployment \
-	deploymentgui \
-	dkt \
-	editeng \
-	eps \
 	for \
 	forui \
-	$(call gb_Helper_optional,DESKTOP,fps_office) \
-	frm \
-	fwe \
-	gal \
-	$(call gb_Helper_optional,DBCONNECTIVITY,pcr) \
-	pdffilter \
 	pricing \
+))
+
+# Resources
+$(eval $(call gb_Helper_register_mos,\
+	acc \
+	avmedia \
+	$(call gb_Helper_optional,SCRIPTING,basctl) \
+	chart \
+	cnr \
+	cui \
+	$(call gb_Helper_optional,DBCONNECTIVITY,dba) \
+	dkt \
+	editeng \
+	flt \
+	$(call gb_Helper_optional,DESKTOP,fps) \
+	frm \
+	fwk \
+	pcr \
 	rpt \
-	rptui \
 	$(call gb_Helper_optional,SCRIPTING,sb) \
 	sc \
-	scn \
+	$(if $(ENABLE_COINMP)$(ENABLE_LPSOLVE),scc) \
 	sd \
-	sdberr \
-	$(call gb_Helper_optional,DBCONNECTIVITY,sdbt) \
 	sfx \
 	sm \
-	$(if $(ENABLE_COINMP)$(ENABLE_LPSOLVE),solver) \
 	svl \
 	svt \
 	svx \
 	sw \
-	t602filter \
-	upd \
-	uui \
 	vcl \
-	writerperfect \
-	$(if $(ENABLE_NSS),xmlsec) \
-	xsltdlg \
+	uui \
+	wiz \
+	wpt \
+	$(if $(ENABLE_NSS),xsc) \
 ))
 
 # UI configuration

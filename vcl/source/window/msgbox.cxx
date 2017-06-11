@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svids.hrc>
+#include <strings.hrc>
 #include <bitmaps.hlst>
 #include <svdata.hxx>
 #include <brdwin.hxx>
@@ -405,9 +405,7 @@ WarningBox::WarningBox( vcl::Window* pParent, WinBits nStyle,
 
 void WarningBox::SetDefaultCheckBoxText()
 {
-    ResMgr* pResMgr = ImplGetResMgr();
-    if( pResMgr )
-        maCheckBoxText = ResId(SV_STDTEXT_DONTWARNAGAIN, *pResMgr);
+    maCheckBoxText = VclResId(SV_STDTEXT_DONTWARNAGAIN);
 }
 
 Image WarningBox::GetStandardImage()
@@ -454,9 +452,7 @@ QueryBox::QueryBox( vcl::Window* pParent, WinBits nStyle, const OUString& rMessa
 
 void QueryBox::SetDefaultCheckBoxText()
 {
-    ResMgr* pResMgr = ImplGetResMgr();
-    if( pResMgr )
-        maCheckBoxText = ResId(SV_STDTEXT_DONTASKAGAIN, *pResMgr);
+    maCheckBoxText = VclResId(SV_STDTEXT_DONTASKAGAIN);
 }
 
 Image QueryBox::GetStandardImage()

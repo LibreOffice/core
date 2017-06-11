@@ -33,7 +33,7 @@
 #include "svx/xtable.hxx"
 
 #include "strings.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "drawdoc.hxx"
 #include "ViewShell.hxx"
 #include "ViewShellBase.hxx"

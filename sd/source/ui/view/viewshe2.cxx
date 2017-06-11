@@ -718,7 +718,7 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 {
     ErrCode aErrCode = 0;
 
-    SfxErrorContext aEC(ERRCTX_SO_DOVERB, GetActiveWindow(), RID_SO_ERRCTX);
+    SfxErrorContext aEC(ERRCTX_SO_DOVERB, GetActiveWindow(), getRID_SO_ERRCTX());
     bool bAbort = false;
     GetDocSh()->SetWaitCursor( true );
     SfxViewShell* pViewShell = GetViewShell();

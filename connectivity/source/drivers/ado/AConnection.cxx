@@ -31,7 +31,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>
 #include <osl/file.hxx>
-#include "resource/ado_res.hrc"
+#include "strings.hrc"
 
 using namespace dbtools;
 using namespace connectivity::ado;

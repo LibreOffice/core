@@ -34,7 +34,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>
-#include "resource/file_res.hrc"
+#include "strings.hrc"
 #include <algorithm>
 
 namespace connectivity
