@@ -144,17 +144,20 @@ char** createCommandLine()
         OUString aPatchDir = Updater::getPatchDirURL();
         rtl::Bootstrap::expandMacros(aPatchDir);
         OUString aTempDirPath = getPathFromURL(aPatchDir);
+        Updater::log("Patch Dir: " + aTempDirPath);
         createStr(aTempDirPath, pArgs, 1);
     }
     {
         // the actual update directory
         OUString aInstallPath = getPathFromURL(aLibExecDirURL);
+        Updater::log("Install Dir: " + aInstallPath);
         createStr(aInstallPath, pArgs, 2);
     }
     {
         // the temporary updated build
         OUString aUpdateDirURL = Updater::getUpdateDirURL();
         OUString aWorkingDir = getPathFromURL(aUpdateDirURL);
+        Updater::log("Working Dir: " + aWorkingDir);
         createStr(aWorkingDir, pArgs, 3);
     }
     {
@@ -164,6 +167,7 @@ char** createCommandLine()
     {
         OUString aExeDir = Updater::getExecutableDirURL();
         OUString aSofficePath = getPathFromURL(aExeDir);
+        Updater::log("soffice Path: " + aSofficePath);
         createStr(aSofficePath, pArgs, 5);
     }
     {
@@ -215,7 +219,9 @@ void update()
     OUString aTempDirPath = getPathFromURL(aTempDirURL);
     OString aPath = OUStringToOString(aTempDirPath + "/" + OUString::fromUtf8(pUpdaterName), RTL_TEXTENCODING_UTF8);
 
+    Updater::log("Calling the updater with parameters: ");
     char** pArgs = createCommandLine();
+
 
 #if UNX
     if (execv(aPath.getStr(), pArgs))
@@ -728,6 +734,14 @@ void Updater::log(const OString& rMessage)
     SvFileStream aLog(aUpdateLog, StreamMode::STD_READWRITE);
     aLog.Seek(aLog.Tell() + aLog.remainingSize()); // make sure we are at the end
     aLog.WriteLine(rMessage);
+}
+
+void Updater::log(const char* pMessage)
+{
+    OUString aUpdateLog = getUpdateInfoLog();
+    SvFileStream aLog(aUpdateLog, StreamMode::STD_READWRITE);
+    aLog.Seek(aLog.Tell() + aLog.remainingSize()); // make sure we are at the end
+    aLog.WriteCharPtr(pMessage);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

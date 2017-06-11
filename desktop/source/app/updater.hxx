@@ -30,6 +30,7 @@ public:
 
     static void log(const OUString& rMessage);
     static void log(const OString& rMessage);
+    static void log(const char* pMessage);
 };
 
 #endif
