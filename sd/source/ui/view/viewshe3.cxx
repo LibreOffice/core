@@ -24,7 +24,7 @@
 #include "GraphicViewShellBase.hxx"
 
 #include <sfx2/viewfrm.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <com/sun/star/lang/Locale.hpp>
 #include <svtools/svtresid.hxx>
 #include <utility>
@@ -32,8 +32,8 @@
 
 #include "app.hrc"
 #include "strings.hrc"
-#include "res_bmp.hrc"
-#include "glob.hrc"
+
+#include "strings.hrc"
 #include "sdabstdlg.hxx"
 
 #include "fupoor.hxx"

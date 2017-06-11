@@ -18,7 +18,7 @@
  */
 
 
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include "apitools.hxx"
 #include "CRowSetColumn.hxx"
 

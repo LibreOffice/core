@@ -60,6 +60,7 @@
 
 #include "formatsh.hxx"
 #include "sc.hrc"
+#include "scres.hrc"
 #include "globstr.hrc"
 #include "docsh.hxx"
 #include "patattr.hxx"

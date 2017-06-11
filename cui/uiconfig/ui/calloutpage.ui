@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -193,7 +193,7 @@
                   <item translatable="yes">Middle</item>
                   <item translatable="yes">Bottom</item>
                   <item translatable="yes">Left</item>
-                  <item translatable="yes">Middle</item>
+                  <item translatable="yes">Center</item>
                   <item translatable="yes">Right</item>
                 </items>
               </object>

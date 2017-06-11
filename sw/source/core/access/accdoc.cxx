@@ -32,7 +32,7 @@
 #include <doc.hxx>
 #include <accmap.hxx>
 #include <accdoc.hxx>
-#include "access.hrc"
+#include "strings.hrc"
 #include <pagefrm.hxx>
 
 #include <editeng/brushitem.hxx>

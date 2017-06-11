@@ -27,7 +27,8 @@
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/popupwindowcontroller.hxx>
 
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
+#include <svx/svxids.hrc>
 #include "helpid.hrc"
 
 #include "svx/drawitem.hxx"

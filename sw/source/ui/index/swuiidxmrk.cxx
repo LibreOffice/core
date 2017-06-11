@@ -51,7 +51,7 @@
 #include <swmodule.hxx>
 #include <fldmgr.hxx>
 #include <fldbas.hxx>
-#include <utlui.hrc>
+#include <strings.hrc>
 #include <swcont.hxx>
 #include <svl/cjkoptions.hxx>
 #include <ndtxt.hxx>
@@ -1431,6 +1431,44 @@ void SwAuthorMarkPane::Activate()
     m_pActionBT->Enable(!pSh->HasReadonlySel());
 }
 
+namespace
+{
+    const char* STR_AUTH_FIELD_ARY[] =
+    {
+        STR_AUTH_FIELD_IDENTIFIER,
+        STR_AUTH_FIELD_AUTHORITY_TYPE,
+        STR_AUTH_FIELD_ADDRESS,
+        STR_AUTH_FIELD_ANNOTE,
+        STR_AUTH_FIELD_AUTHOR,
+        STR_AUTH_FIELD_BOOKTITLE,
+        STR_AUTH_FIELD_CHAPTER,
+        STR_AUTH_FIELD_EDITION,
+        STR_AUTH_FIELD_EDITOR,
+        STR_AUTH_FIELD_HOWPUBLISHED,
+        STR_AUTH_FIELD_INSTITUTION,
+        STR_AUTH_FIELD_JOURNAL,
+        STR_AUTH_FIELD_MONTH,
+        STR_AUTH_FIELD_NOTE,
+        STR_AUTH_FIELD_NUMBER,
+        STR_AUTH_FIELD_ORGANIZATIONS,
+        STR_AUTH_FIELD_PAGES,
+        STR_AUTH_FIELD_PUBLISHER,
+        STR_AUTH_FIELD_SCHOOL,
+        STR_AUTH_FIELD_SERIES,
+        STR_AUTH_FIELD_TITLE,
+        STR_AUTH_FIELD_TYPE,
+        STR_AUTH_FIELD_VOLUME,
+        STR_AUTH_FIELD_YEAR,
+        STR_AUTH_FIELD_URL,
+        STR_AUTH_FIELD_CUSTOM1,
+        STR_AUTH_FIELD_CUSTOM2,
+        STR_AUTH_FIELD_CUSTOM3,
+        STR_AUTH_FIELD_CUSTOM4,
+        STR_AUTH_FIELD_CUSTOM5,
+        STR_AUTH_FIELD_ISBN
+    };
+}
+
 SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
         const OUString pFields[],
         SwWrtShell& rSh,
@@ -1461,14 +1499,14 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
 
         pFixedTexts[nIndex]->set_grid_left_attach(0);
         pFixedTexts[nIndex]->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
-        pFixedTexts[nIndex]->SetText(SwResId(STR_AUTH_FIELD_START + aCurInfo.nToxField));
+        pFixedTexts[nIndex]->SetText(SwResId(STR_AUTH_FIELD_ARY[aCurInfo.nToxField]));
         pFixedTexts[nIndex]->Show();
         pEdits[nIndex] = nullptr;
         if( AUTH_FIELD_AUTHORITY_TYPE == aCurInfo.nToxField )
         {
             pTypeListBox = VclPtr<ListBox>::Create(bLeft ? pLeft : pRight, WB_DROPDOWN|WB_BORDER|WB_VCENTER);
-            for(int j = 0; j < AUTH_TYPE_END; j++)
-                pTypeListBox->InsertEntry(SwResId(STR_AUTH_TYPE_START + j));
+            for (int j = 0; j < AUTH_TYPE_END; j++)
+                pTypeListBox->InsertEntry(SwResId(STR_AUTH_FIELD_ARY[j]));
             if(!pFields[aCurInfo.nToxField].isEmpty())
             {
                 pTypeListBox->SelectEntryPos(pFields[aCurInfo.nToxField].toInt32());

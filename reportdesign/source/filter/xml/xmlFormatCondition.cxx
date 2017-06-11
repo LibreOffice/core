@@ -27,7 +27,7 @@
 #include <comphelper/genericpropertyset.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include "xmlstrings.hrc"
+#include "strings.hxx"
 #include "xmlStyleImport.hxx"
 
 namespace rptxml
