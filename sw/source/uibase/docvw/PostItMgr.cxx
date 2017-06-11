@@ -57,8 +57,8 @@
 #include <unotools/datetime.hxx>
 
 #include <swmodule.hxx>
-#include <annotation.hrc>
-#include <utlui.hrc>
+#include <strings.hrc>
+#include <strings.hrc>
 #include "cmdid.h"
 
 #include <sfx2/request.hxx>

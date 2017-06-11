@@ -52,6 +52,7 @@
 #include <cmdid.h>
 #include <swstyle.h>
 #include <app.hrc>
+#include <strings.hrc>
 #include <paratr.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <svl/cjkoptions.hxx>

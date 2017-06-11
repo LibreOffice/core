@@ -16,7 +16,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="label" translatable="yes">_Search</property>
+        <property name="label" translatable="yes" context="functionpage|label_search">_Search</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">search</property>
       </object>
@@ -44,7 +44,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="label" translatable="yes">_Category</property>
+        <property name="label" translatable="yes" context="functionpage|label1">_Category</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">category</property>
       </object>
@@ -60,8 +60,8 @@
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
         <items>
-          <item translatable="yes">Last Used</item>
-          <item translatable="yes">All</item>
+          <item translatable="yes" context="functionpage|category">Last Used</item>
+          <item translatable="yes" context="functionpage|category">All</item>
         </items>
       </object>
       <packing>
@@ -75,7 +75,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="label" translatable="yes">_Function</property>
+        <property name="label" translatable="yes" context="functionpage|label2">_Function</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">function</property>
       </object>

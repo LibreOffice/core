@@ -2053,7 +2053,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
             // whether it's part of an array or not or whether explicit cell
             // activation is requested (double-click or F2) or a click in input
             // line.
-            bool bShowError = (!bInputActivated || aTester.GetMessageId() != STR_PROTECTIONERR) &&
+            bool bShowError = (!bInputActivated || !aTester.GetMessageId() || strcmp(aTester.GetMessageId(), STR_PROTECTIONERR) != 0) &&
                 !pActiveViewSh->GetViewData().GetDocShell()->IsReadOnly();
             if (bShowError)
             {

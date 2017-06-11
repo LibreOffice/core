@@ -24,17 +24,12 @@
 #include <sal/config.h>
 #include <svx/svxdllapi.h>
 
-class ResMgr;
-
-// Get the resource manager for the app
-ResMgr* ImpGetResMgr();
-
 // ResourceCache for frequently used strings.
 // Global string resources with the IDs from
 // SDR_StringCacheBegin (256) to SDR_StringCacheEnd
 // are cached.
 // See also SvdStr.Hrc
-SVX_DLLPUBLIC OUString ImpGetResStr(sal_uInt16 nResID);
+SVX_DLLPUBLIC OUString ImpGetResStr(const char* pResID);
 
 #endif // INCLUDED_SVX_INC_SVDGLOB_HXX
 

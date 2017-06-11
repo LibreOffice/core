@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include <toolkit/awt/vclxwindow.hxx>
 #include "dbu_reghelper.hxx"
 #include "unoadmin.hxx"

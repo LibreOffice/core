@@ -87,30 +87,30 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, FormulaError nErrCode )
             return true;
         }
 
-        sal_uInt16 nGlobStrId = 0;
+        const char* pGlobStrId = nullptr;
         switch (eFunc)
         {
-            case SUBTOTAL_FUNC_AVE:  nGlobStrId = STR_FUN_TEXT_AVG; break;
-            case SUBTOTAL_FUNC_CNT:  nGlobStrId = STR_FUN_TEXT_COUNT; break;
-            case SUBTOTAL_FUNC_CNT2: nGlobStrId = STR_FUN_TEXT_COUNT2; break;
-            case SUBTOTAL_FUNC_MAX:  nGlobStrId = STR_FUN_TEXT_MAX; break;
-            case SUBTOTAL_FUNC_MIN:  nGlobStrId = STR_FUN_TEXT_MIN; break;
-            case SUBTOTAL_FUNC_SUM:  nGlobStrId = STR_FUN_TEXT_SUM; break;
-            case SUBTOTAL_FUNC_SELECTION_COUNT: nGlobStrId = STR_FUN_TEXT_SELECTION_COUNT; break;
+            case SUBTOTAL_FUNC_AVE:  pGlobStrId = STR_FUN_TEXT_AVG; break;
+            case SUBTOTAL_FUNC_CNT:  pGlobStrId = STR_FUN_TEXT_COUNT; break;
+            case SUBTOTAL_FUNC_CNT2: pGlobStrId = STR_FUN_TEXT_COUNT2; break;
+            case SUBTOTAL_FUNC_MAX:  pGlobStrId = STR_FUN_TEXT_MAX; break;
+            case SUBTOTAL_FUNC_MIN:  pGlobStrId = STR_FUN_TEXT_MIN; break;
+            case SUBTOTAL_FUNC_SUM:  pGlobStrId = STR_FUN_TEXT_SUM; break;
+            case SUBTOTAL_FUNC_SELECTION_COUNT: pGlobStrId = STR_FUN_TEXT_SELECTION_COUNT; break;
 
             default:
             {
                 // added to avoid warnings
             }
         }
-        if (nGlobStrId)
+        if (pGlobStrId)
         {
             ScDocument* pDoc        = rViewData.GetDocument();
             SCCOL       nPosX       = rViewData.GetCurX();
             SCROW       nPosY       = rViewData.GetCurY();
             SCTAB       nTab        = rViewData.GetTabNo();
 
-            aStr = ScGlobal::GetRscString(nGlobStrId);
+            aStr = ScGlobal::GetRscString(pGlobStrId);
             aStr += ": ";
 
             ScAddress aCursor( nPosX, nPosY, nTab );

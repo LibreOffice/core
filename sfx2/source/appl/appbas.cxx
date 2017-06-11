@@ -44,6 +44,7 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 
+#include <sfx2/dinfdlg.hxx>
 #include <sfx2/module.hxx>
 #include "arrdecl.hxx"
 #include <sfx2/app.hxx>
@@ -59,14 +60,13 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/minfitem.hxx>
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/evntconf.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/dinfdlg.hxx>
 #include "appdata.hxx"
 #include <sfx2/sfxhelp.hxx>
 #include <basic/basmgr.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <unotools/configmgr.hxx>
 #include "sorgitm.hxx"
 #include "appbaslib.hxx"

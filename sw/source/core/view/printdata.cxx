@@ -20,6 +20,7 @@
 #include <printdata.hxx>
 
 #include <globals.hrc>
+#include <strings.hrc>
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <unotxdoc.hxx>
@@ -29,7 +30,6 @@
 
 #include <svl/languageoptions.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
-#include <tools/resary.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <vcl/outdev.hxx>
 

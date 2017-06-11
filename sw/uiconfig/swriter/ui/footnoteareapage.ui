@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sw">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkAdjustment" id="adjustment1">
@@ -63,7 +63,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkRadioButton" id="maxheightpage">
-                    <property name="label" translatable="yes">_Not larger than page area</property>
+                    <property name="label" translatable="yes" context="footnoteareapage|maxheightpage">_Not larger than page area</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -83,7 +83,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="maxheight">
-                    <property name="label" translatable="yes">Maximum footnote _height</property>
+                    <property name="label" translatable="yes" context="footnoteareapage|maxheight">Maximum footnote _height</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -109,7 +109,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Space to text</property>
+                    <property name="label" translatable="yes" context="footnoteareapage|label3">Space to text</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">spacetotext:0.00cm</property>
                   </object>
@@ -170,7 +170,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Footnote Area</property>
+            <property name="label" translatable="yes" context="footnoteareapage|label1">Footnote Area</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -210,7 +210,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Position</property>
+                    <property name="label" translatable="yes" context="footnoteareapage|label4">_Position</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">position</property>
                   </object>
@@ -227,7 +227,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Style</property>
+                    <property name="label" translatable="yes" context="footnoteareapage|label5">_Style</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">style</property>
                   </object>
@@ -244,7 +244,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Thickness</property>
+                    <property name="label" translatable="yes" context="footnoteareapage|label6">_Thickness</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">thickness:0.00pt</property>
                   </object>
@@ -261,7 +261,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Color</property>
+                    <property name="label" translatable="yes" context="footnoteareapage|label7">_Color</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">color</property>
                   </object>
@@ -278,7 +278,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Length</property>
+                    <property name="label" translatable="yes" context="footnoteareapage|label8">_Length</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">length:0%</property>
                   </object>
@@ -295,7 +295,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Spacing to footnote contents</property>
+                    <property name="label" translatable="yes" context="footnoteareapage|label9">_Spacing to footnote contents</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">spacingtocontents:0.00cm</property>
                   </object>
@@ -315,9 +315,9 @@
                     <property name="entry_text_column">0</property>
                     <property name="id_column">1</property>
                     <items>
-                      <item translatable="yes">Left</item>
-                      <item translatable="yes">Centered</item>
-                      <item translatable="yes">Right</item>
+                      <item translatable="yes" context="footnoteareapage|position">Left</item>
+                      <item translatable="yes" context="footnoteareapage|position">Centered</item>
+                      <item translatable="yes" context="footnoteareapage|position">Right</item>
                     </items>
                   </object>
                   <packing>
@@ -414,7 +414,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Separator Line</property>
+            <property name="label" translatable="yes" context="footnoteareapage|label2">Separator Line</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

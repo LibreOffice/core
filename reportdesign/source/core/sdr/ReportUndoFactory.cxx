@@ -19,13 +19,13 @@
 #include "ReportUndoFactory.hxx"
 #include "RptObject.hxx"
 #include "UndoActions.hxx"
-#include "RptResId.hrc"
+#include "strings.hrc"
 
 namespace rptui
 {
     using namespace ::com::sun::star;
 
-SdrUndoAction* lcl_createUndo(SdrObject& rObject,Action _eAction,sal_uInt16 _nCommentId)
+SdrUndoAction* lcl_createUndo(SdrObject& rObject, Action _eAction, const char* pCommentId)
 {
     OObjectBase* pObj = dynamic_cast<OObjectBase*>(&rObject);
     if ( !pObj )
@@ -35,9 +35,9 @@ SdrUndoAction* lcl_createUndo(SdrObject& rObject,Action _eAction,sal_uInt16 _nCo
     uno::Reference< report::XGroup> xGroup = xSection->getGroup();
     SdrUndoAction* pUndo = nullptr;
     if ( xGroup.is() )
-        pUndo = new OUndoGroupSectionAction(*rObject.GetModel(),_eAction,OGroupHelper::getMemberFunction(xSection),xGroup,xReportComponent,_nCommentId);
+        pUndo = new OUndoGroupSectionAction(*rObject.GetModel(),_eAction,OGroupHelper::getMemberFunction(xSection),xGroup,xReportComponent,pCommentId);
     else
-        pUndo = new OUndoReportSectionAction(*rObject.GetModel(),_eAction,OReportHelper::getMemberFunction(xSection),xSection->getReportDefinition(),xReportComponent,_nCommentId);
+        pUndo = new OUndoReportSectionAction(*rObject.GetModel(),_eAction,OReportHelper::getMemberFunction(xSection),xSection->getReportDefinition(),xReportComponent,pCommentId);
     return pUndo;
 }
 

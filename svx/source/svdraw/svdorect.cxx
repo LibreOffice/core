@@ -35,7 +35,7 @@
 #include <svx/svdundo.hxx>
 #include <svx/svdopath.hxx>
 #include "svdglob.hxx"
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
@@ -221,14 +221,17 @@ OUString SdrRectObj::TakeObjNameSingul() const
 
     OUStringBuffer sName;
 
-    sal_uInt16 nResId=STR_ObjNameSingulRECT;
-    if (aGeo.nShearAngle!=0) {
-        nResId+=4;  // parallelogram or, maybe, rhombus
-    } else {
-        if (maRect.GetWidth() == maRect.GetHeight()) nResId+=2; // square
+    bool bRounded = GetEckenradius() != 0; // rounded down
+    const char* pResId = bRounded ? STR_ObjNameSingulRECTRND : STR_ObjNameSingulRECT;
+    if (aGeo.nShearAngle!=0)
+    {
+        pResId = bRounded ? STR_ObjNameSingulPARALRND : STR_ObjNameSingulPARAL;  // parallelogram or, maybe, rhombus
     }
-    if (GetEckenradius()!=0) nResId+=8; // rounded down
-    sName.append(ImpGetResStr(nResId));
+    else if (maRect.GetWidth() == maRect.GetHeight())
+    {
+        pResId = bRounded ? STR_ObjNameSingulQUADRND : STR_ObjNameSingulQUAD; // square
+    }
+    sName.append(ImpGetResStr(pResId));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
@@ -249,22 +252,18 @@ OUString SdrRectObj::TakeObjNamePlural() const
         return SdrTextObj::TakeObjNamePlural();
     }
 
-    sal_uInt16 nResId=STR_ObjNamePluralRECT;
-
+    bool bRounded = GetEckenradius() != 0; // rounded down
+    const char* pResId = bRounded ? STR_ObjNamePluralRECTRND : STR_ObjNamePluralRECT;
     if (aGeo.nShearAngle!=0)
     {
-        nResId+=4;  // parallelogram or rhombus
+        pResId = bRounded ? STR_ObjNamePluralPARALRND : STR_ObjNamePluralPARAL;  // parallelogram or rhombus
     }
-    else
+    else if (maRect.GetWidth() == maRect.GetHeight())
     {
-        if (maRect.GetWidth() == maRect.GetHeight())
-            nResId+=2; // square
+        pResId = bRounded ? STR_ObjNamePluralQUADRND : STR_ObjNamePluralQUAD; // square
     }
 
-    if (GetEckenradius()!=0)
-        nResId+=8; // rounded down
-
-    return ImpGetResStr(nResId);
+    return ImpGetResStr(pResId);
 }
 
 SdrRectObj* SdrRectObj::Clone() const

@@ -60,7 +60,7 @@
 #include <editeng/borderline.hxx>
 #include <editeng/colritem.hxx>
 #include "editeng/lineitem.hxx"
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include "svdglob.hxx"
 #include "svx/svdpage.hxx"
 #include "tableundo.hxx"

@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define BTN_CANCEL          7
-#define BTN_END             10
-#define ED_FORMULA          17
-#define ED_REF              19
-#define RB_REF              20
-
 // For tab page
 #define TP_FUNCTION         1
 #define TP_STRUCT           2

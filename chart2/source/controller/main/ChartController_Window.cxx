@@ -29,7 +29,7 @@
 #include "UndoGuard.hxx"
 #include "ControllerLockGuard.hxx"
 #include "ObjectNameProvider.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "macros.hxx"
 #include "DragMethod_PieSegment.hxx"
 #include "DragMethod_RotateDiagram.hxx"

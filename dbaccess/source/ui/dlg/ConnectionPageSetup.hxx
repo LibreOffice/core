@@ -60,7 +60,7 @@ namespace dbaui
         virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
 
     protected:
-        OConnectionTabPageSetup(vcl::Window* pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId);
+        OConnectionTabPageSetup(vcl::Window* pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rCoreAttrs, const char* pHelpTextResId, const char* pHeaderResId, const char* pUrlResId);
         virtual bool checkTestConnection() override;
             // nControlFlags is a combination of the CBTP_xxx-constants
     };

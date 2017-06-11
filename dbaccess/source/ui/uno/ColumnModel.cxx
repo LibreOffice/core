@@ -25,7 +25,7 @@
 
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/extract.hxx>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include "dbu_reghelper.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/property.hxx>

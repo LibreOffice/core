@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="sw">
   <!-- interface-requires LibreOffice 1.0 -->
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="AssignFieldsDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Match Fields</property>
+    <property name="title" translatable="yes" context="assignfieldsdialog|AssignFieldsDialog">Match Fields</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -82,7 +82,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Assign the fields from your data source to match the address elements.</property>
+                <property name="label" translatable="yes" context="assignfieldsdialog|MATCHING_LABEL">Assign the fields from your data source to match the address elements.</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">FIELDS:border</property>
               </object>
@@ -108,7 +108,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Address block preview</property>
+                <property name="label" translatable="yes" context="assignfieldsdialog|PREVIEW_LABEL">Address block preview</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">PREVIEW:border</property>
               </object>

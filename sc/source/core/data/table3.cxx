@@ -2119,27 +2119,27 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                             if (aOutString.isEmpty())
                                 aOutString = ScGlobal::GetRscString( STR_EMPTYDATA );
                             aOutString += " ";
-                            sal_uInt16 nStrId = STR_TABLE_ERGEBNIS;
+                            const char* pStrId = STR_TABLE_ERGEBNIS;
                             if ( nResCount == 1 )
                                 switch ( eResFunc[0] )
                                 {
-                                    case SUBTOTAL_FUNC_AVE:     nStrId = STR_FUN_TEXT_AVG;      break;
+                                    case SUBTOTAL_FUNC_AVE:     pStrId = STR_FUN_TEXT_AVG;      break;
                                     case SUBTOTAL_FUNC_CNT:
-                                    case SUBTOTAL_FUNC_CNT2:    nStrId = STR_FUN_TEXT_COUNT;    break;
-                                    case SUBTOTAL_FUNC_MAX:     nStrId = STR_FUN_TEXT_MAX;      break;
-                                    case SUBTOTAL_FUNC_MIN:     nStrId = STR_FUN_TEXT_MIN;      break;
-                                    case SUBTOTAL_FUNC_PROD:    nStrId = STR_FUN_TEXT_PRODUCT;  break;
+                                    case SUBTOTAL_FUNC_CNT2:    pStrId = STR_FUN_TEXT_COUNT;    break;
+                                    case SUBTOTAL_FUNC_MAX:     pStrId = STR_FUN_TEXT_MAX;      break;
+                                    case SUBTOTAL_FUNC_MIN:     pStrId = STR_FUN_TEXT_MIN;      break;
+                                    case SUBTOTAL_FUNC_PROD:    pStrId = STR_FUN_TEXT_PRODUCT;  break;
                                     case SUBTOTAL_FUNC_STD:
-                                    case SUBTOTAL_FUNC_STDP:    nStrId = STR_FUN_TEXT_STDDEV;   break;
-                                    case SUBTOTAL_FUNC_SUM:     nStrId = STR_FUN_TEXT_SUM;      break;
+                                    case SUBTOTAL_FUNC_STDP:    pStrId = STR_FUN_TEXT_STDDEV;   break;
+                                    case SUBTOTAL_FUNC_SUM:     pStrId = STR_FUN_TEXT_SUM;      break;
                                     case SUBTOTAL_FUNC_VAR:
-                                    case SUBTOTAL_FUNC_VARP:    nStrId = STR_FUN_TEXT_VAR;      break;
+                                    case SUBTOTAL_FUNC_VARP:    pStrId = STR_FUN_TEXT_VAR;      break;
                                     default:
                                     {
                                         // added to avoid warnings
                                     }
                                 }
-                            aOutString += ScGlobal::GetRscString( nStrId );
+                            aOutString += ScGlobal::GetRscString(pStrId);
                         }
                         SetString( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, nTab, aOutString );
                         ApplyStyle( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, pStyle );

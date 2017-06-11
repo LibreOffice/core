@@ -35,7 +35,7 @@
 #include <svl/cjkoptions.hxx>
 
 #include "DrawDocShell.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "sdresid.hxx"
 #include "prltempl.hxx"
 #include "prltempl.hrc"

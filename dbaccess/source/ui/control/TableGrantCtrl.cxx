@@ -18,12 +18,13 @@
  */
 
 #include "TableGrantCtrl.hxx"
+#include "core_resource.hxx"
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/sdbcx/XAuthorizable.hpp>
-#include "dbu_control.hrc"
+#include "strings.hrc"
 #include "UITools.hxx"
 
 using namespace ::com::sun::star::accessibility;
@@ -54,15 +55,15 @@ OTableGrantControl::OTableGrantControl( vcl::Window* pParent, WinBits nBits)
 {
     // insert columns
     sal_uInt16 i=1;
-    InsertDataColumn( i, OUString(ModuleRes(STR_TABLE_PRIV_NAME)  ), 75);
+    InsertDataColumn( i, DBA_RES(STR_TABLE_PRIV_NAME), 75);
     FreezeColumn(i++);
-    InsertDataColumn( i++, OUString(ModuleRes(STR_TABLE_PRIV_SELECT)), 75);
-    InsertDataColumn( i++, OUString(ModuleRes(STR_TABLE_PRIV_INSERT)), 75);
-    InsertDataColumn( i++, OUString(ModuleRes(STR_TABLE_PRIV_DELETE)), 75);
-    InsertDataColumn( i++, OUString(ModuleRes(STR_TABLE_PRIV_UPDATE)), 75);
-    InsertDataColumn( i++, OUString(ModuleRes(STR_TABLE_PRIV_ALTER)), 75);
-    InsertDataColumn( i++, OUString(ModuleRes(STR_TABLE_PRIV_REFERENCE)), 75);
-    InsertDataColumn( i++, OUString(ModuleRes(STR_TABLE_PRIV_DROP)), 75);
+    InsertDataColumn( i++, DBA_RES(STR_TABLE_PRIV_SELECT), 75);
+    InsertDataColumn( i++, DBA_RES(STR_TABLE_PRIV_INSERT), 75);
+    InsertDataColumn( i++, DBA_RES(STR_TABLE_PRIV_DELETE), 75);
+    InsertDataColumn( i++, DBA_RES(STR_TABLE_PRIV_UPDATE), 75);
+    InsertDataColumn( i++, DBA_RES(STR_TABLE_PRIV_ALTER), 75);
+    InsertDataColumn( i++, DBA_RES(STR_TABLE_PRIV_REFERENCE), 75);
+    InsertDataColumn( i++, DBA_RES(STR_TABLE_PRIV_DROP), 75);
 
     while(--i)
         SetColumnWidth(i,GetAutoColumnWidth(i));

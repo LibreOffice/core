@@ -24,7 +24,7 @@
 #include "services.hxx"
 
 #include "frm_resource.hxx"
-#include "frm_resource.hrc"
+#include "strings.hrc"
 #include "BaseListBox.hxx"
 
 #include <com/sun/star/sdb/SQLErrorEvent.hpp>

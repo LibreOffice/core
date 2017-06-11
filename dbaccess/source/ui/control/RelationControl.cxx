@@ -31,7 +31,7 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include "RelControliFace.hxx"
-#include "dbu_control.hrc"
+#include "strings.hrc"
 #include "dbaccess_helpid.hrc"
 #include <osl/diagnose.h>
 

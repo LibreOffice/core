@@ -24,12 +24,11 @@
 #include <vector>
 
 #include <rtl/ustring.hxx>
-#include <tools/resid.hxx>
 #include <vcl/dialog.hxx>
 
-#include "dp_gui.hrc"
+#include "strings.hrc"
 #include "dp_gui_dependencydialog.hxx"
-#include "dp_gui_shared.hxx"
+#include "dp_shared.hxx"
 
 namespace vcl { class Window; }
 

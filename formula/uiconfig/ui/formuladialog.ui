@@ -19,7 +19,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkCheckButton" id="array">
-                <property name="label" translatable="yes">Array</property>
+                <property name="label" translatable="yes" context="formuladialog|array">Array</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -54,7 +54,7 @@
             </child>
             <child>
               <object class="GtkButton" id="back">
-                <property name="label" translatable="yes">&lt;&lt; _Back</property>
+                <property name="label" translatable="yes" context="formuladialog|back">&lt;&lt; _Back</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -69,7 +69,7 @@
             </child>
             <child>
               <object class="GtkButton" id="next">
-                <property name="label" translatable="yes">_Next &gt;&gt;</property>
+                <property name="label" translatable="yes" context="formuladialog|next">_Next &gt;&gt;</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -149,7 +149,7 @@
                       <object class="GtkLabel" id="function">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Functions</property>
+                        <property name="label" translatable="yes" context="formuladialog|function">Functions</property>
                       </object>
                       <packing>
                         <property name="tab_fill">False</property>
@@ -162,7 +162,7 @@
                       <object class="GtkLabel" id="struct">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Structure</property>
+                        <property name="label" translatable="yes" context="formuladialog|struct">Structure</property>
                       </object>
                       <packing>
                         <property name="position">1</property>
@@ -200,7 +200,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
-                            <property name="label" translatable="yes">Function result</property>
+                            <property name="label" translatable="yes" context="formuladialog|label2">Function result</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">result</property>
                           </object>
@@ -341,7 +341,7 @@
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="hexpand">True</property>
-                            <property name="label" translatable="yes">For_mula</property>
+                            <property name="label" translatable="yes" context="formuladialog|formula">For_mula</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">ed_formula</property>
                             <property name="yalign">1</property>
@@ -356,7 +356,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
-                            <property name="label" translatable="yes">Result</property>
+                            <property name="label" translatable="yes" context="formuladialog|label1">Result</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">formula_result</property>
                           </object>
@@ -391,7 +391,7 @@
                         <property name="hexpand">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="ed_formula-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Formula</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="formuladialog|ed_formula-atkobject">Formula</property>
                           </object>
                         </child>
                       </object>
@@ -440,7 +440,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Maximize</property>
+                    <property name="tooltip_text" translatable="yes" context="formuladialog|RB_REF|tooltip_text">Maximize</property>
                     <property name="halign">end</property>
                   </object>
                   <packing>

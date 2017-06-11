@@ -26,7 +26,7 @@
 
 #include "propertysetitem.hxx"
 
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
 
 namespace dbaui
 {

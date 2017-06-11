@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="dba">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="DbasePage">
@@ -35,7 +35,7 @@
                   <object class="GtkLabel" id="charsetlabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Character set:</property>
+                    <property name="label" translatable="yes" context="dbasepage|charsetlabel">_Character set:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">charset</property>
                   </object>
@@ -65,7 +65,7 @@
           <object class="GtkLabel" id="charsetheader">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Data Conversion</property>
+            <property name="label" translatable="yes" context="dbasepage|charsetheader">Data Conversion</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -101,7 +101,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="showDelRowsCheckbutton">
-                    <property name="label" translatable="yes">Display deleted records as well</property>
+                    <property name="label" translatable="yes" context="dbasepage|showDelRowsCheckbutton">Display deleted records as well</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -120,7 +120,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Note: When deleted, and thus inactive, records are displayed, you will not be able to delete records from the data source.</property>
+                    <property name="label" translatable="yes" context="dbasepage|specMessageLabel">Note: When deleted, and thus inactive, records are displayed, you will not be able to delete records from the data source.</property>
                     <property name="wrap">True</property>
                     <property name="max_width_chars">60</property>
                   </object>
@@ -138,7 +138,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Optional Settings</property>
+            <property name="label" translatable="yes" context="dbasepage|label1">Optional Settings</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -153,7 +153,7 @@
     </child>
     <child>
       <object class="GtkButton" id="indiciesButton">
-        <property name="label" translatable="yes">Indexes...</property>
+        <property name="label" translatable="yes" context="dbasepage|indiciesButton">Indexes...</property>
         <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>

@@ -28,7 +28,7 @@
 
 #include <svx/xoutbmp.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <imapdlg.hrc>
 #include <imapwnd.hxx>

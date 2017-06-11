@@ -30,7 +30,7 @@
 
 #include <window.h>
 #include <svdata.hxx>
-#include <svids.hrc>
+#include <strings.hrc>
 #include <controldata.hxx>
 
 #include <com/sun/star/i18n/BreakIterator.hpp>
@@ -775,12 +775,8 @@ uno::Reference < i18n::XExtendedInputSequenceChecker > const & Edit::ImplGetInpu
 
 void Edit::ShowTruncationWarning( vcl::Window* pParent )
 {
-    ResMgr* pResMgr = ImplGetResMgr();
-    if( pResMgr )
-    {
-        ScopedVclPtrInstance< MessageDialog > aBox( pParent, ResId(SV_EDIT_WARNING_STR, *pResMgr), VclMessageType::Warning );
-        aBox->Execute();
-    }
+    ScopedVclPtrInstance< MessageDialog > aBox(pParent, VclResId(SV_EDIT_WARNING_STR), VclMessageType::Warning);
+    aBox->Execute();
 }
 
 bool Edit::ImplTruncateToMaxLen( OUString& rStr, sal_Int32 nSelectionLen ) const

@@ -26,6 +26,7 @@
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #include <cuires.hrc>
+#include <strings.hrc>
 #include "helpid.hrc"
 #include <svx/dialmgr.hxx>
 #include <svx/svdobj.hxx>
@@ -45,6 +46,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 
 #include <o3tl/make_unique.hxx>
 
@@ -310,8 +312,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl, Button*, void)
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        ResMgr& rMgr = CUI_MGR();
-        OUString aDesc( ResId( RID_SVXSTR_DESC_LINEEND, rMgr ) );
+        OUString aDesc(CuiResId(RID_SVXSTR_DESC_LINEEND));
         OUString aName( m_pEdtName->GetText() );
         long nCount = pLineEndList->Count();
         bool bDifferent = true;
@@ -417,9 +418,8 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl, Button*, void)
 
         SdrObject::Free( pConvPolyObj );
 
-        ResMgr& rMgr = CUI_MGR();
-        OUString aNewName( SvxResId( RID_SVXSTR_LINEEND ) );
-        OUString aDesc( ResId( RID_SVXSTR_DESC_LINEEND, rMgr ) );
+        OUString aNewName(SvxResId(RID_SVXSTR_LINEEND));
+        OUString aDesc(CuiResId(RID_SVXSTR_DESC_LINEEND));
         OUString aName;
 
         long nCount = pLineEndList->Count();

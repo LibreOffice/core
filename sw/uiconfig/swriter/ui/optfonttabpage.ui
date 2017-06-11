@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkBox" id="OptFontTabPage">
@@ -100,7 +100,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Font</property>
+                    <property name="label" translatable="yes" context="optfonttabpage|font_label">Font</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -114,7 +114,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Size</property>
+                    <property name="label" translatable="yes" context="optfonttabpage|size_label">_Size</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">standardheight</property>
                   </object>
@@ -130,7 +130,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">De_fault:</property>
+                    <property name="label" translatable="yes" context="optfonttabpage|default_label">De_fault:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">standardbox</property>
                   </object>
@@ -146,7 +146,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">Headin_g:</property>
+                    <property name="label" translatable="yes" context="optfonttabpage|heading_label">Headin_g:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">titlebox</property>
                   </object>
@@ -162,7 +162,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">_List:</property>
+                    <property name="label" translatable="yes" context="optfonttabpage|list_label">_List:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">listbox</property>
                   </object>
@@ -178,7 +178,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">C_aption:</property>
+                    <property name="label" translatable="yes" context="optfonttabpage|caption_label">C_aption:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">labelbox</property>
                   </object>
@@ -194,7 +194,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">_Index:</property>
+                    <property name="label" translatable="yes" context="optfonttabpage|index_label">_Index:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">idxbox</property>
                   </object>
@@ -316,7 +316,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Basic Fonts (%1)</property>
+            <property name="label" translatable="yes" context="optfonttabpage|label1">Basic Fonts (%1)</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -340,7 +340,7 @@
         <property name="layout_style">start</property>
         <child>
           <object class="GtkButton" id="standard">
-            <property name="label" translatable="yes">_Default</property>
+            <property name="label" translatable="yes" context="optfonttabpage|standard">_Default</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>

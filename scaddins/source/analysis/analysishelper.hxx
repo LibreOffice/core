@@ -32,14 +32,10 @@
 
 #include <math.h>
 
-#include <tools/resid.hxx>
-
 #include "analysisdefs.hxx"
 
 #include <vector>
 
-
-class ResMgr;
 
 namespace sca { namespace analysis {
 
@@ -202,8 +198,8 @@ enum class FDCategory
 struct FuncDataBase
 {
     const sal_Char*         pIntName;
-    sal_uInt16              nUINameID;          // resource ID to UI name
-    sal_uInt16              nDescrID;           // resource ID to description, parameter names and ~ description
+    const char*             pUINameID;          // resource ID to UI name
+    const char**            pDescrID;           // resource ID to description, parameter names and ~ description
     bool                    bDouble;            // name already exist in Calc
     bool                    bWithOpt;           // first parameter is internal
     const char**            pCompListID;        // list of valid names
@@ -217,8 +213,8 @@ class FuncData final
 {
 private:
     OUString                aIntName;
-    sal_uInt16              nUINameID;
-    sal_uInt16              nDescrID;           // leads also to parameter descriptions!
+    const char*             pUINameID;
+    const char**            pDescrID;           // leads also to parameter descriptions!
     bool                    bDouble;            // flag for names that already exist in Calc
     bool                    bWithOpt;           // has internal parameter on first position
 
@@ -231,8 +227,8 @@ public:
                             FuncData(const FuncDataBase& rBaseData);
                             ~FuncData();
 
-    inline sal_uInt16       GetUINameID() const;
-    inline sal_uInt16       GetDescrID() const;
+    inline const char*      GetUINameID() const;
+    inline const char**     GetDescrID() const;
     inline bool             IsDouble() const;
     inline const OUString&  GetSuffix() const;
 
@@ -255,12 +251,6 @@ struct FindFuncData
     const OUString& m_rId;
     explicit FindFuncData( const OUString& rId ) : m_rId(rId) {}
     bool operator() ( FuncData const & rCandidate ) const { return rCandidate.Is(m_rId); }
-};
-
-class AnalysisResId : public ResId
-{
- public:
-                    AnalysisResId( sal_uInt16 nId, ResMgr& rResMgr );
 };
 
 /// sorted list with unique sal_Int32 values
@@ -626,15 +616,15 @@ inline double GetYearFrac( const css::uno::Reference< css::beans::XPropertySet >
 }
 
 
-inline sal_uInt16 FuncData::GetUINameID() const
+inline const char* FuncData::GetUINameID() const
 {
-    return nUINameID;
+    return pUINameID;
 }
 
 
-inline sal_uInt16 FuncData::GetDescrID() const
+inline const char** FuncData::GetDescrID() const
 {
-    return nDescrID;
+    return pDescrID;
 }
 
 

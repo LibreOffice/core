@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="chart">
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkGrid" id="ChartAxisPanel">
     <property name="visible">True</property>
@@ -15,7 +15,7 @@
         <property name="column_spacing">6</property>
         <child>
           <object class="GtkCheckButton" id="checkbutton_show_label">
-            <property name="label" translatable="yes">Show labels</property>
+            <property name="label" translatable="yes" context="sidebaraxis|checkbutton_show_label">Show labels</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -29,7 +29,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="checkbutton_reverse">
-            <property name="label" translatable="yes">Reverse direction</property>
+            <property name="label" translatable="yes" context="sidebaraxis|checkbutton_reverse">Reverse direction</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -53,7 +53,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">_Label position:</property>
+                <property name="label" translatable="yes" context="sidebaraxis|label1">_Label position:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">comboboxtext_label_position</property>
               </object>
@@ -67,10 +67,10 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <items>
-                  <item translatable="yes">Near Axis</item>
-                  <item translatable="yes">Near Axis (other side)</item>
-                  <item translatable="yes">Outside start</item>
-                  <item translatable="yes">Outside end</item>
+                  <item translatable="yes" context="sidebaraxis|comboboxtext_label_position">Near Axis</item>
+                  <item translatable="yes" context="sidebaraxis|comboboxtext_label_position">Near Axis (other side)</item>
+                  <item translatable="yes" context="sidebaraxis|comboboxtext_label_position">Outside start</item>
+                  <item translatable="yes" context="sidebaraxis|comboboxtext_label_position">Outside end</item>
                 </items>
               </object>
               <packing>
@@ -84,7 +84,7 @@
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
                 <property name="valign">center</property>
-                <property name="label" translatable="yes">_Text orientation:</property>
+                <property name="label" translatable="yes" context="sidebaraxis|label2">_Text orientation:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">spinbutton1:0degrees</property>
               </object>

@@ -35,7 +35,7 @@
 #include "sdresid.hxx"
 #include "sdpage.hxx"
 #include "glob.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "drawdoc.hxx"
 #include "stlpool.hxx"
 #include "pglink.hxx"

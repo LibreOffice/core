@@ -23,7 +23,7 @@
 #include "CustomAnimationCloner.hxx"
 
 #include "undoanim.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "sdpage.hxx"
 #include "sdresid.hxx"
 #include "CustomAnimationEffect.hxx"

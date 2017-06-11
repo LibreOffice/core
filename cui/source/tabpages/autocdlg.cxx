@@ -53,6 +53,7 @@
 #include <editeng/svxacorr.hxx>
 #include "cuicharmap.hxx"
 #include "cuires.hrc"
+#include "strings.hrc"
 #include <editeng/unolingu.hxx>
 #include <dialmgr.hxx>
 #include <svx/svxids.hrc>

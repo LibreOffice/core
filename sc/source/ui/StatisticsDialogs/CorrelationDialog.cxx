@@ -10,8 +10,8 @@
 
 #include "docsh.hxx"
 #include "reffact.hxx"
-
 #include "CorrelationDialog.hxx"
+#include "strings.hrc"
 
 ScCorrelationDialog::ScCorrelationDialog(
                         SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,

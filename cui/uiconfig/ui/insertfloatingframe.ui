@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">99</property>
@@ -10,7 +10,7 @@
   <object class="GtkDialog" id="InsertFloatingFrameDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Floating Frame Properties</property>
+    <property name="title" translatable="yes" context="insertfloatingframe|InsertFloatingFrameDialog">Floating Frame Properties</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -62,7 +62,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="margin_right">12</property>
-                    <property name="label" translatable="yes">Name:</property>
+                    <property name="label" translatable="yes" context="insertfloatingframe|label6">Name:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -75,7 +75,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="margin_right">12</property>
-                    <property name="label" translatable="yes">Contents:</property>
+                    <property name="label" translatable="yes" context="insertfloatingframe|label7">Contents:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -84,7 +84,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="buttonbrowse">
-                    <property name="label" translatable="yes">Browse...</property>
+                    <property name="label" translatable="yes" context="insertfloatingframe|buttonbrowse">Browse...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -127,7 +127,7 @@
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkRadioButton" id="scrollbaron">
-                                <property name="label" translatable="yes">On</property>
+                                <property name="label" translatable="yes" context="insertfloatingframe|scrollbaron">On</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -144,7 +144,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="scrollbaroff">
-                                <property name="label" translatable="yes">Off</property>
+                                <property name="label" translatable="yes" context="insertfloatingframe|scrollbaroff">Off</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -160,7 +160,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="scrollbarauto">
-                                <property name="label" translatable="yes">Automatic</property>
+                                <property name="label" translatable="yes" context="insertfloatingframe|scrollbarauto">Automatic</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -182,7 +182,7 @@
                       <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Scroll Bar</property>
+                        <property name="label" translatable="yes" context="insertfloatingframe|label1">Scroll Bar</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -215,7 +215,7 @@
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkRadioButton" id="borderon">
-                                <property name="label" translatable="yes">On</property>
+                                <property name="label" translatable="yes" context="insertfloatingframe|borderon">On</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -232,7 +232,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="borderoff">
-                                <property name="label" translatable="yes">Off</property>
+                                <property name="label" translatable="yes" context="insertfloatingframe|borderoff">Off</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -257,7 +257,7 @@
                       <object class="GtkLabel" id="label2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Border</property>
+                        <property name="label" translatable="yes" context="insertfloatingframe|label2">Border</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -294,7 +294,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="margin_right">12</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Width:</property>
+                                <property name="label" translatable="yes" context="insertfloatingframe|widthlabel">Width:</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -307,7 +307,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="margin_right">12</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Height:</property>
+                                <property name="label" translatable="yes" context="insertfloatingframe|heightlabel">Height:</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -342,7 +342,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="defaultwidth">
-                                <property name="label" translatable="yes">Default</property>
+                                <property name="label" translatable="yes" context="insertfloatingframe|defaultwidth">Default</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -356,7 +356,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="defaultheight">
-                                <property name="label" translatable="yes">Default</property>
+                                <property name="label" translatable="yes" context="insertfloatingframe|defaultheight">Default</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -376,7 +376,7 @@
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Spacing to Contents</property>
+                        <property name="label" translatable="yes" context="insertfloatingframe|label3">Spacing to Contents</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>

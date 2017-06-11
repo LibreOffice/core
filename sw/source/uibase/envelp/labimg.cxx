@@ -21,7 +21,6 @@
 
 #include <o3tl/any.hxx>
 #include <tools/stream.hxx>
-#include <tools/resid.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <unotools/useroptions.hxx>
 #include <swmodule.hxx>

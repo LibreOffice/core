@@ -228,8 +228,7 @@ showmodules :
 
 translations : $(WORKDIR)/pot.done
 
-$(WORKDIR)/pot.done : $(foreach exec,cfgex helpex localize transex3 \
-									propex uiex ulfex xrmex treex, \
+$(WORKDIR)/pot.done : $(foreach exec,cfgex helpex localize propex ulfex xrmex treex, \
 							$(call gb_Executable_get_target_for_build,$(exec)))
 	$(call gb_Output_announce,$(subst .pot,,$(subst $(WORKDIR)/,,$@)),$(true),POT,1)
 	$(call gb_Helper_abbreviate_dirs,\
@@ -292,7 +291,7 @@ endif
 endef
 
 define gb_Module_add_target
-$(if $(filter AllLang% Dictionary% UIConfig% Package_registry,$(2)),$(warning target $(2) should be a l10n target))
+$(if $(filter AllLang% Dictionary% Package_registry,$(2)),$(warning target $(2) should be a l10n target))
 $(call gb_Module__read_targetfile,$(1),$(2),target)
 
 $(call gb_Module_get_nonl10n_target,$(1)) : $$(gb_Module_CURRENTTARGET)
@@ -301,7 +300,7 @@ $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 endef
 
 define gb_Module_add_l10n_target
-$(if $(filter AllLang% CustomTarget_autotextshare Dictionary% UIConfig% Package_registry,$(2)),,$(warning target $(2) should not be a l10n target))
+$(if $(filter AllLang% CustomTarget_autotextshare Dictionary% Package_registry,$(2)),,$(warning target $(2) should not be a l10n target))
 $(call gb_Module__read_targetfile,$(1),$(2),target)
 
 $(call gb_Module_get_l10n_target,$(1)) : $$(gb_Module_CURRENTTARGET)

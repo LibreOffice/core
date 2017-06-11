@@ -17,6 +17,7 @@ $(eval $(call gb_Library_use_externals,firebird_sdbc,\
 ))
 
 $(eval $(call gb_Library_set_include,firebird_sdbc,\
+	-I$(SRCDIR)/connectivity/inc \
 	-I$(SRCDIR)/connectivity/source/inc \
 	$$(INCLUDE) \
 	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \

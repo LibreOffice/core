@@ -82,7 +82,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <svtools/asynclink.hxx>
 #include <svl/sharecontrolfile.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <framework/framelistanalyzer.hxx>
 #include <shellimpl.hxx>
@@ -125,7 +125,6 @@ using ::com::sun::star::container::XIndexContainer;
 #include "viewimp.hxx"
 #include <sfx2/sfxbasecontroller.hxx>
 #include <sfx2/sfx.hrc>
-#include "view.hrc"
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/progress.hxx>
@@ -133,7 +132,7 @@ using ::com::sun::star::container::XIndexContainer;
 #include "workwin.hxx"
 #include "helper.hxx"
 #include <sfx2/minfitem.hxx>
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 #include "impviewframe.hxx"
 
 #define SfxViewFrame

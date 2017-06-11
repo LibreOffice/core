@@ -18,8 +18,8 @@
  */
 #include "FixedLine.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include "corestrings.hrc"
-#include "core_resource.hrc"
+#include "strings.hxx"
+#include "strings.hrc"
 #include "core_resource.hxx"
 #include <comphelper/property.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -136,7 +136,7 @@ OFixedLine::OFixedLine(uno::Reference< uno::XComponentContext > const & _xContex
 ,m_LineTransparence(0)
 ,m_LineWidth(0)
 {
-    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDLINE);
+    m_aProps.aComponent.m_sName  = RptResId(RID_STR_FIXEDLINE);
     m_aProps.aComponent.m_nWidth = MIN_WIDTH;
 }
 
@@ -153,7 +153,7 @@ OFixedLine::OFixedLine(uno::Reference< uno::XComponentContext > const & _xContex
 ,m_LineTransparence(0)
 ,m_LineWidth(0)
 {
-    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDLINE);
+    m_aProps.aComponent.m_sName  = RptResId(RID_STR_FIXEDLINE);
     m_aProps.aComponent.m_xFactory = _xFactory;
     osl_atomic_increment( &m_refCount );
     try

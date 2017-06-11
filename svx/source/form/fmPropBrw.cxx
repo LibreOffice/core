@@ -23,7 +23,7 @@
 #include "fmhelp.hrc"
 #include "fmprop.hrc"
 #include "fmPropBrw.hxx"
-#include "svx/fmresids.hrc"
+#include "svx/strings.hrc"
 #include "fmservs.hxx"
 #include "fmshimp.hxx"
 #include "fmpgeimp.hxx"
@@ -104,7 +104,7 @@ const long STD_MIN_SIZE_Y = 250;
 
 OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
 {
-    sal_uInt16 nClassNameResourceId = 0;
+    const char* pClassNameResourceId = nullptr;
 
     switch ( nClassId )
     {
@@ -112,12 +112,12 @@ OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
         {
             Reference< XInterface >  xIFace;
             aUnoObj >>= xIFace;
-            nClassNameResourceId = RID_STR_PROPTITLE_EDIT;
+            pClassNameResourceId = RID_STR_PROPTITLE_EDIT;
             if (xIFace.is())
             {   // we have a chance to check if it's a formatted field model
                 Reference< XServiceInfo >  xInfo(xIFace, UNO_QUERY);
                 if (xInfo.is() && (xInfo->supportsService(FM_SUN_COMPONENT_FORMATTEDFIELD)))
-                    nClassNameResourceId = RID_STR_PROPTITLE_FORMATTED;
+                    pClassNameResourceId = RID_STR_PROPTITLE_FORMATTED;
                 else if (!xInfo.is())
                 {
                     // couldn't distinguish between formatted and edit with the service name, so try with the properties
@@ -126,7 +126,7 @@ OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
                     {
                         Reference< XPropertySetInfo >  xPropsInfo = xProps->getPropertySetInfo();
                         if (xPropsInfo.is() && xPropsInfo->hasPropertyByName(FM_PROP_FORMATSSUPPLIER))
-                            nClassNameResourceId = RID_STR_PROPTITLE_FORMATTED;
+                            pClassNameResourceId = RID_STR_PROPTITLE_FORMATTED;
                     }
                 }
             }
@@ -134,51 +134,51 @@ OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
         break;
 
         case FormComponentType::COMMANDBUTTON:
-            nClassNameResourceId = RID_STR_PROPTITLE_PUSHBUTTON; break;
+            pClassNameResourceId = RID_STR_PROPTITLE_PUSHBUTTON; break;
         case FormComponentType::RADIOBUTTON:
-            nClassNameResourceId = RID_STR_PROPTITLE_RADIOBUTTON; break;
+            pClassNameResourceId = RID_STR_PROPTITLE_RADIOBUTTON; break;
         case FormComponentType::CHECKBOX:
-            nClassNameResourceId = RID_STR_PROPTITLE_CHECKBOX; break;
+            pClassNameResourceId = RID_STR_PROPTITLE_CHECKBOX; break;
         case FormComponentType::LISTBOX:
-            nClassNameResourceId = RID_STR_PROPTITLE_LISTBOX; break;
+            pClassNameResourceId = RID_STR_PROPTITLE_LISTBOX; break;
         case FormComponentType::COMBOBOX:
-            nClassNameResourceId = RID_STR_PROPTITLE_COMBOBOX; break;
+            pClassNameResourceId = RID_STR_PROPTITLE_COMBOBOX; break;
         case FormComponentType::GROUPBOX:
-            nClassNameResourceId = RID_STR_PROPTITLE_GROUPBOX; break;
+            pClassNameResourceId = RID_STR_PROPTITLE_GROUPBOX; break;
         case FormComponentType::IMAGEBUTTON:
-            nClassNameResourceId = RID_STR_PROPTITLE_IMAGEBUTTON; break;
+            pClassNameResourceId = RID_STR_PROPTITLE_IMAGEBUTTON; break;
         case FormComponentType::FIXEDTEXT:
-            nClassNameResourceId = RID_STR_PROPTITLE_FIXEDTEXT; break;
+            pClassNameResourceId = RID_STR_PROPTITLE_FIXEDTEXT; break;
         case FormComponentType::GRIDCONTROL:
-            nClassNameResourceId = RID_STR_PROPTITLE_DBGRID; break;
+            pClassNameResourceId = RID_STR_PROPTITLE_DBGRID; break;
         case FormComponentType::FILECONTROL:
-            nClassNameResourceId = RID_STR_PROPTITLE_FILECONTROL; break;
+            pClassNameResourceId = RID_STR_PROPTITLE_FILECONTROL; break;
         case FormComponentType::DATEFIELD:
-            nClassNameResourceId = RID_STR_PROPTITLE_DATEFIELD; break;
+            pClassNameResourceId = RID_STR_PROPTITLE_DATEFIELD; break;
         case FormComponentType::TIMEFIELD:
-            nClassNameResourceId = RID_STR_PROPTITLE_TIMEFIELD; break;
+            pClassNameResourceId = RID_STR_PROPTITLE_TIMEFIELD; break;
         case FormComponentType::NUMERICFIELD:
-            nClassNameResourceId = RID_STR_PROPTITLE_NUMERICFIELD; break;
+            pClassNameResourceId = RID_STR_PROPTITLE_NUMERICFIELD; break;
         case FormComponentType::CURRENCYFIELD:
-            nClassNameResourceId = RID_STR_PROPTITLE_CURRENCYFIELD; break;
+            pClassNameResourceId = RID_STR_PROPTITLE_CURRENCYFIELD; break;
         case FormComponentType::PATTERNFIELD:
-            nClassNameResourceId = RID_STR_PROPTITLE_PATTERNFIELD; break;
+            pClassNameResourceId = RID_STR_PROPTITLE_PATTERNFIELD; break;
         case FormComponentType::IMAGECONTROL:
-            nClassNameResourceId = RID_STR_PROPTITLE_IMAGECONTROL; break;
+            pClassNameResourceId = RID_STR_PROPTITLE_IMAGECONTROL; break;
         case FormComponentType::HIDDENCONTROL:
-            nClassNameResourceId = RID_STR_PROPTITLE_HIDDEN; break;
+            pClassNameResourceId = RID_STR_PROPTITLE_HIDDEN; break;
         case FormComponentType::SCROLLBAR:
-            nClassNameResourceId = RID_STR_PROPTITLE_SCROLLBAR; break;
+            pClassNameResourceId = RID_STR_PROPTITLE_SCROLLBAR; break;
         case FormComponentType::SPINBUTTON:
-            nClassNameResourceId = RID_STR_PROPTITLE_SPINBUTTON; break;
+            pClassNameResourceId = RID_STR_PROPTITLE_SPINBUTTON; break;
         case FormComponentType::NAVIGATIONBAR:
-            nClassNameResourceId = RID_STR_PROPTITLE_NAVBAR; break;
+            pClassNameResourceId = RID_STR_PROPTITLE_NAVBAR; break;
         case FormComponentType::CONTROL:
         default:
-            nClassNameResourceId = RID_STR_CONTROL; break;
+            pClassNameResourceId = RID_STR_CONTROL; break;
     }
 
-    return SvxResId(nClassNameResourceId);
+    return SvxResId(pClassNameResourceId);
 }
 
 FmPropBrw::FmPropBrw( const Reference< XComponentContext >& _xORB, SfxBindings* _pBindings,

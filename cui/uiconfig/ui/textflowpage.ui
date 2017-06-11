@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">2</property>
@@ -50,7 +50,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="checkAuto">
-                    <property name="label" translatable="yes">A_utomatically</property>
+                    <property name="label" translatable="yes" context="textflowpage|checkAuto">A_utomatically</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -115,7 +115,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">C_haracters at line end</property>
+                    <property name="label" translatable="yes" context="textflowpage|labelLineEnd">C_haracters at line end</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">spinLineEnd</property>
                   </object>
@@ -129,7 +129,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Cha_racters at line begin</property>
+                    <property name="label" translatable="yes" context="textflowpage|labelLineBegin">Cha_racters at line begin</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">spinLineBegin</property>
                   </object>
@@ -143,7 +143,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Maximum number of consecutive hyphens</property>
+                    <property name="label" translatable="yes" context="textflowpage|labelMaxNum">_Maximum number of consecutive hyphens</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">spinMaxNum</property>
                   </object>
@@ -160,7 +160,7 @@
           <object class="GtkLabel" id="LabelHyphenation">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Hyphenation</property>
+            <property name="label" translatable="yes" context="textflowpage|LabelHyphenation">Hyphenation</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -193,7 +193,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="checkInsert">
-                    <property name="label" translatable="yes">_Insert</property>
+                    <property name="label" translatable="yes" context="textflowpage|checkInsert">_Insert</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -209,7 +209,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="checkPageStyle">
-                    <property name="label" translatable="yes">With page st_yle:</property>
+                    <property name="label" translatable="yes" context="textflowpage|checkPageStyle">With page st_yle:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -228,7 +228,7 @@
                   <object class="GtkLabel" id="labelType">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Type:</property>
+                    <property name="label" translatable="yes" context="textflowpage|labelType">_Type:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">comboBreakType</property>
                     <property name="xalign">0</property>
@@ -257,7 +257,7 @@
                   <object class="GtkCheckButton" id="labelPageNum">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">Page _number:</property>
+                    <property name="label" translatable="yes" context="textflowpage|labelPageNum">Page _number:</property>
                     <property name="use_underline">True</property>
                     <property name="inconsistent">True</property>
                     <property name="justify">right</property>
@@ -272,7 +272,7 @@
                   <object class="GtkLabel" id="labelPosition">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Position:</property>
+                    <property name="label" translatable="yes" context="textflowpage|labelPosition">Position:</property>
                     <property name="use_underline">True</property>
                     <property name="justify">right</property>
                     <property name="mnemonic_widget">comboBreakPosition</property>
@@ -292,7 +292,7 @@
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="comboPageStyle-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Page Style</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="textflowpage|comboPageStyle-atkobject">Page Style</property>
                       </object>
                     </child>
                   </object>
@@ -306,8 +306,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <items>
-                      <item translatable="yes">Page</item>
-                      <item translatable="yes">Column</item>
+                      <item translatable="yes" context="textflowpage|comboBreakType">Page</item>
+                      <item translatable="yes" context="textflowpage|comboBreakType">Column</item>
                     </items>
                   </object>
                   <packing>
@@ -320,8 +320,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <items>
-                      <item translatable="yes">Before</item>
-                      <item translatable="yes">After</item>
+                      <item translatable="yes" context="textflowpage|comboBreakPosition">Before</item>
+                      <item translatable="yes" context="textflowpage|comboBreakPosition">After</item>
                     </items>
                   </object>
                   <packing>
@@ -340,7 +340,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Breaks</property>
+            <property name="label" translatable="yes" context="textflowpage|label3">Breaks</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -372,7 +372,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="checkSplitPara">
-                    <property name="label" translatable="yes">_Do not split paragraph</property>
+                    <property name="label" translatable="yes" context="textflowpage|checkSplitPara">_Do not split paragraph</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -388,7 +388,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="checkKeepPara">
-                    <property name="label" translatable="yes">_Keep with next paragraph</property>
+                    <property name="label" translatable="yes" context="textflowpage|checkKeepPara">_Keep with next paragraph</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -404,7 +404,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="checkOrphan">
-                    <property name="label" translatable="yes">_Orphan control</property>
+                    <property name="label" translatable="yes" context="textflowpage|checkOrphan">_Orphan control</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -420,7 +420,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="checkWidow">
-                    <property name="label" translatable="yes">_Widow control</property>
+                    <property name="label" translatable="yes" context="textflowpage|checkWidow">_Widow control</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -470,7 +470,7 @@
                   <object class="GtkLabel" id="labelOrphan">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">lines</property>
+                    <property name="label" translatable="yes" context="textflowpage|labelOrphan">lines</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -482,7 +482,7 @@
                   <object class="GtkLabel" id="labelWidow">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">lines</property>
+                    <property name="label" translatable="yes" context="textflowpage|labelWidow">lines</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -510,7 +510,7 @@
           <object class="GtkLabel" id="labelOptions">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Options</property>
+            <property name="label" translatable="yes" context="textflowpage|labelOptions">Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

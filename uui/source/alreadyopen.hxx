@@ -24,7 +24,7 @@
 class AlreadyOpenQueryBox : public MessBox
 {
 public:
-    AlreadyOpenQueryBox( vcl::Window* pParent, ResMgr* pResMgr, const OUString& aMessage, bool bIsStoring );
+    AlreadyOpenQueryBox( vcl::Window* pParent, const std::locale& rResLocale, const OUString& aMessage, bool bIsStoring );
     virtual ~AlreadyOpenQueryBox() override;
 };
 

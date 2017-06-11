@@ -41,7 +41,7 @@
 #include <svtools/treelistentry.hxx>
 
 #include <helpid.h>
-#include <utlui.hrc>
+#include <strings.hrc>
 #include "bitmaps.hlst"
 
 #include <unomid.h>

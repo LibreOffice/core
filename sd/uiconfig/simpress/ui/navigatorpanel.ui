@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sd">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkGrid" id="NavigatorPanel">
     <property name="visible">True</property>
@@ -19,10 +19,10 @@
           <object class="GtkComboBox" id="documents">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="tooltip_text" translatable="yes">Document</property>
+            <property name="tooltip_text" translatable="yes" context="navigatorpanel|documents|tooltip_text">Document</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="documents-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes">Active Window</property>
+                <property name="AtkObject::accessible-name" translatable="yes" context="navigatorpanel|documents-atkobject">Active Window</property>
               </object>
             </child>
           </object>
@@ -55,7 +55,7 @@
               <object class="GtkToolButton" id="first">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">First Slide</property>
+                <property name="tooltip_text" translatable="yes" context="navigatorpanel|first|tooltip_text">First Slide</property>
                 <property name="action_name">first</property>
                 <property name="icon_name">sd/res/nv03.png</property>
               </object>
@@ -68,7 +68,7 @@
               <object class="GtkToolButton" id="previous">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Previous Slide</property>
+                <property name="tooltip_text" translatable="yes" context="navigatorpanel|previous|tooltip_text">Previous Slide</property>
                 <property name="action_name">previous</property>
                 <property name="icon_name">sd/res/nv04.png</property>
               </object>
@@ -81,7 +81,7 @@
               <object class="GtkToolButton" id="next">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Next Slide</property>
+                <property name="tooltip_text" translatable="yes" context="navigatorpanel|next|tooltip_text">Next Slide</property>
                 <property name="action_name">next</property>
                 <property name="icon_name">sd/res/nv05.png</property>
               </object>
@@ -94,7 +94,7 @@
               <object class="GtkToolButton" id="last">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Last Slide</property>
+                <property name="tooltip_text" translatable="yes" context="navigatorpanel|last|tooltip_text">Last Slide</property>
                 <property name="action_name">last</property>
                 <property name="icon_name">sd/res/nv06.png</property>
               </object>
@@ -117,7 +117,7 @@
               <object class="GtkMenuToolButton" id="dragmode">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Drag Mode</property>
+                <property name="tooltip_text" translatable="yes" context="navigatorpanel|dragmode|tooltip_text">Drag Mode</property>
                 <property name="action_name">dragmode</property>
                 <property name="icon_name">sd/res/nv09.png</property>
               </object>
@@ -130,7 +130,7 @@
               <object class="GtkMenuToolButton" id="shapes">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Show Shapes</property>
+                <property name="tooltip_text" translatable="yes" context="navigatorpanel|shapes|tooltip_text">Show Shapes</property>
                 <property name="action_name">shapes</property>
                 <property name="icon_name">sd/res/graphic.png</property>
               </object>

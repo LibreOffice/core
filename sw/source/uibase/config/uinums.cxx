@@ -27,7 +27,6 @@
 #include <sfx2/docfile.hxx>
 #include <svl/itemiter.hxx>
 
-#include <tools/resid.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
 #include <poolfmt.hxx>

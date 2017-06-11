@@ -26,6 +26,7 @@ $(eval $(call gb_Module_add_targets,framework,\
     Library_fwl \
     Library_fwm \
     Package_dtd \
+    UIConfig_startmodule \
 ))
 
 $(eval $(call gb_Module_add_slowcheck_targets,framework,\
@@ -33,8 +34,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,framework,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,framework,\
-    AllLangResTarget_fwe \
-    UIConfig_startmodule \
+    AllLangMoTarget_fwk \
 ))
 
 ifneq ($(OOO_JUNIT_JAR),)

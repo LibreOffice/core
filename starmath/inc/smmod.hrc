@@ -1,0 +1,92 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+#ifndef INCLUDED_VCL_INC_STRINGS_HRC
+#define INCLUDED_VCL_INC_STRINGS_HRC
+
+#define NC_(Context, String) (Context "\004" u8##String)
+
+const char* RID_UI_SYMBOLSET_NAMES[] =
+{
+    NC_("RID_UI_SYMBOLSET_NAMES", "Greek"),
+    NC_("RID_UI_SYMBOLSET_NAMES", "Special")
+};
+
+const char* RID_UI_SYMBOL_NAMES[] =
+{
+    NC_("RID_UI_SYMBOL_NAMES", "alpha"),
+    NC_("RID_UI_SYMBOL_NAMES", "ALPHA"),
+    NC_("RID_UI_SYMBOL_NAMES", "beta"),
+    NC_("RID_UI_SYMBOL_NAMES", "BETA"),
+    NC_("RID_UI_SYMBOL_NAMES", "gamma"),
+    NC_("RID_UI_SYMBOL_NAMES", "GAMMA"),
+    NC_("RID_UI_SYMBOL_NAMES", "delta"),
+    NC_("RID_UI_SYMBOL_NAMES", "DELTA"),
+    NC_("RID_UI_SYMBOL_NAMES", "epsilon"),
+    NC_("RID_UI_SYMBOL_NAMES", "EPSILON"),
+    NC_("RID_UI_SYMBOL_NAMES", "zeta"),
+    NC_("RID_UI_SYMBOL_NAMES", "ZETA"),
+    NC_("RID_UI_SYMBOL_NAMES", "eta"),
+    NC_("RID_UI_SYMBOL_NAMES", "ETA"),
+    NC_("RID_UI_SYMBOL_NAMES", "theta"),
+    NC_("RID_UI_SYMBOL_NAMES", "THETA"),
+    NC_("RID_UI_SYMBOL_NAMES", "iota"),
+    NC_("RID_UI_SYMBOL_NAMES", "IOTA"),
+    NC_("RID_UI_SYMBOL_NAMES", "kappa"),
+    NC_("RID_UI_SYMBOL_NAMES", "KAPPA"),
+    NC_("RID_UI_SYMBOL_NAMES", "lambda"),
+    NC_("RID_UI_SYMBOL_NAMES", "LAMBDA"),
+    NC_("RID_UI_SYMBOL_NAMES", "mu"),
+    NC_("RID_UI_SYMBOL_NAMES", "MU"),
+    NC_("RID_UI_SYMBOL_NAMES", "nu"),
+    NC_("RID_UI_SYMBOL_NAMES", "NU"),
+    NC_("RID_UI_SYMBOL_NAMES", "xi"),
+    NC_("RID_UI_SYMBOL_NAMES", "XI"),
+    NC_("RID_UI_SYMBOL_NAMES", "omicron"),
+    NC_("RID_UI_SYMBOL_NAMES", "OMICRON"),
+    NC_("RID_UI_SYMBOL_NAMES", "pi"),
+    NC_("RID_UI_SYMBOL_NAMES", "PI"),
+    NC_("RID_UI_SYMBOL_NAMES", "rho"),
+    NC_("RID_UI_SYMBOL_NAMES", "RHO"),
+    NC_("RID_UI_SYMBOL_NAMES", "sigma"),
+    NC_("RID_UI_SYMBOL_NAMES", "SIGMA"),
+    NC_("RID_UI_SYMBOL_NAMES", "tau"),
+    NC_("RID_UI_SYMBOL_NAMES", "TAU"),
+    NC_("RID_UI_SYMBOL_NAMES", "upsilon"),
+    NC_("RID_UI_SYMBOL_NAMES", "UPSILON"),
+    NC_("RID_UI_SYMBOL_NAMES", "phi"),
+    NC_("RID_UI_SYMBOL_NAMES", "PHI"),
+    NC_("RID_UI_SYMBOL_NAMES", "chi"),
+    NC_("RID_UI_SYMBOL_NAMES", "CHI"),
+    NC_("RID_UI_SYMBOL_NAMES", "psi"),
+    NC_("RID_UI_SYMBOL_NAMES", "PSI"),
+    NC_("RID_UI_SYMBOL_NAMES", "omega"),
+    NC_("RID_UI_SYMBOL_NAMES", "OMEGA"),
+    NC_("RID_UI_SYMBOL_NAMES", "varepsilon"),
+    NC_("RID_UI_SYMBOL_NAMES", "vartheta"),
+    NC_("RID_UI_SYMBOL_NAMES", "varpi"),
+    NC_("RID_UI_SYMBOL_NAMES", "varrho"),
+    NC_("RID_UI_SYMBOL_NAMES", "varsigma"),
+    NC_("RID_UI_SYMBOL_NAMES", "varphi"),
+    NC_("RID_UI_SYMBOL_NAMES", "element"),
+    NC_("RID_UI_SYMBOL_NAMES", "noelement"),
+    NC_("RID_UI_SYMBOL_NAMES", "strictlylessthan"),
+    NC_("RID_UI_SYMBOL_NAMES", "strictlygreaterthan"),
+    NC_("RID_UI_SYMBOL_NAMES", "notequal"),
+    NC_("RID_UI_SYMBOL_NAMES", "identical"),
+    NC_("RID_UI_SYMBOL_NAMES", "tendto"),
+    NC_("RID_UI_SYMBOL_NAMES", "infinite"),
+    NC_("RID_UI_SYMBOL_NAMES", "angle"),
+    NC_("RID_UI_SYMBOL_NAMES", "perthousand"),
+    NC_("RID_UI_SYMBOL_NAMES", "and"),
+    NC_("RID_UI_SYMBOL_NAMES", "or")
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

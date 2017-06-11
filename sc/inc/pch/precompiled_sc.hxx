@@ -408,8 +408,6 @@
 #include <rechead.hxx>
 #include <refupdatecontext.hxx>
 #include <rowheightcontext.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
-#include <rsc/rscsfx.hxx>
 #include <sax/tools/converter.hxx>
 #include <scabstdlg.hxx>
 #include <scerrors.hxx>
@@ -564,7 +562,6 @@
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
-#include <tools/resid.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>

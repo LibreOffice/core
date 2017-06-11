@@ -18,7 +18,7 @@
  */
 
 #include "browserlistbox.hxx"
-#include "propresid.hrc"
+#include "strings.hrc"
 #include "proplinelistener.hxx"
 #include "propcontrolobserver.hxx"
 #include "linedescriptor.hxx"

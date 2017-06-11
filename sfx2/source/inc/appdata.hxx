@@ -48,7 +48,6 @@ class SfxFrame;
 class SfxFrameArr_Impl;
 class SvtSaveOptions;
 class SvtHelpOptions;
-class ResMgr;
 class SfxViewFrame;
 class SfxSlotPool;
 class SfxDispatcher;
@@ -84,9 +83,9 @@ public:
     // application members
     SfxFilterMatcher*                   pMatcher;
 #if HAVE_FEATURE_SCRIPTING
-    ResMgr*                             pBasicResMgr;
+    std::locale                         aBasicResLocale;
 #endif
-    ResMgr*                             pSvtResMgr;
+    std::locale                         aSvtResLocale;
     SfxErrorHandler *m_pToolsErrorHdl;
     SfxErrorHandler *m_pSoErrorHdl;
 #if HAVE_FEATURE_SCRIPTING

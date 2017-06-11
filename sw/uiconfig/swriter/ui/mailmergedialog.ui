@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sw">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="MailMergeDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Mail Merge</property>
+    <property name="title" translatable="yes" context="mailmergedialog|MailMergeDialog">Mail Merge</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -90,7 +90,7 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="document">
-                        <property name="label" translatable="yes">From this _document</property>
+                        <property name="label" translatable="yes" context="mailmergedialog|document">From this _document</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -109,7 +109,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="template">
-                        <property name="label" translatable="yes">From a _template</property>
+                        <property name="label" translatable="yes" context="mailmergedialog|template">From a _template</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -133,7 +133,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Create</property>
+                <property name="label" translatable="yes" context="mailmergedialog|label1">Create</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

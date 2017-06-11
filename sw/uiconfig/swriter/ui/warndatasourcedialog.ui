@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.6"/>
   <object class="GtkMessageDialog" id="WarnDataSourceDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Data Source Not Found</property>
+    <property name="title" translatable="yes" context="warndatasourcedialog|WarnDataSourceDialog">Data Source Not Found</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">warning</property>
-    <property name="text" translatable="yes">The data source “%1” was not found.</property>
-    <property name="secondary_text" translatable="yes">The connection to the data source could not be established. Please check the connection settings.</property>
+    <property name="text" translatable="yes" context="warndatasourcedialog|WarnDataSourceDialog">The data source “%1” was not found.</property>
+    <property name="secondary_text" translatable="yes" context="warndatasourcedialog|WarnDataSourceDialog">The connection to the data source could not be established. Please check the connection settings.</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>
@@ -23,7 +23,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="check">
-                <property name="label" translatable="yes">Check Connection Settings...</property>
+                <property name="label" translatable="yes" context="warndatasourcedialog|check">Check Connection Settings...</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>

@@ -63,7 +63,7 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdoole2.hxx>
 #include "svdglob.hxx"
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include "svdoutlinercache.hxx"
 
 #include "svx/xflclit.hxx"

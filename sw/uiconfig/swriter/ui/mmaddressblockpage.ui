@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkImage" id="image1">
@@ -59,7 +59,7 @@
                         <property name="row_spacing">6</property>
                         <child>
                           <object class="GtkButton" id="addresslist">
-                            <property name="label" translatable="yes">Select A_ddress List...</property>
+                            <property name="label" translatable="yes" context="mmaddressblockpage|addresslist">Select A_ddress List...</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -74,7 +74,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="differentlist">
-                            <property name="label" translatable="yes">Select Different A_ddress List...</property>
+                            <property name="label" translatable="yes" context="mmaddressblockpage|differentlist">Select Different A_ddress List...</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="no_show_all">True</property>
@@ -100,7 +100,7 @@
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">Current address list: %1</property>
+                        <property name="label" translatable="yes" context="mmaddressblockpage|currentaddress">Current address list: %1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -122,7 +122,7 @@
                             <property name="hexpand">True</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
-                            <property name="label" translatable="yes">Select the address list containing the address data you want to use. This data is needed to create the address block.</property>
+                            <property name="label" translatable="yes" context="mmaddressblockpage|label2">Select the address list containing the address data you want to use. This data is needed to create the address block.</property>
                             <property name="wrap">True</property>
                             <property name="max_width_chars">56</property>
                           </object>
@@ -139,7 +139,7 @@
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
-                            <property name="label" translatable="yes">1.</property>
+                            <property name="label" translatable="yes" context="mmaddressblockpage|label3">1.</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -172,7 +172,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkButton" id="assign">
-                        <property name="label" translatable="yes">Match _Fields...</property>
+                        <property name="label" translatable="yes" context="mmaddressblockpage|assign">Match _Fields...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -199,7 +199,7 @@
                             <property name="hexpand">True</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
-                            <property name="label" translatable="yes">Match the field name used in the mail merge to the column headers in your data source.</property>
+                            <property name="label" translatable="yes" context="mmaddressblockpage|label4">Match the field name used in the mail merge to the column headers in your data source.</property>
                             <property name="wrap">True</property>
                             <property name="max_width_chars">56</property>
                           </object>
@@ -216,7 +216,7 @@
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
-                            <property name="label" translatable="yes">3.</property>
+                            <property name="label" translatable="yes" context="mmaddressblockpage|settingsft1">3.</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -255,7 +255,7 @@
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
                         <property name="yalign">0</property>
-                        <property name="label" translatable="yes">2.</property>
+                        <property name="label" translatable="yes" context="mmaddressblockpage|settingsft">2.</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -266,7 +266,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="address">
-                        <property name="label" translatable="yes">_This document shall contain an address block</property>
+                        <property name="label" translatable="yes" context="mmaddressblockpage|address">_This document shall contain an address block</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -304,7 +304,7 @@
                                 <property name="column_spacing">12</property>
                                 <child>
                                   <object class="GtkButton" id="settings">
-                                    <property name="label" translatable="yes">_More...</property>
+                                    <property name="label" translatable="yes" context="mmaddressblockpage|settings">_More...</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
@@ -342,7 +342,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="hideempty">
-                                <property name="label" translatable="yes">_Suppress lines with just empty fields</property>
+                                <property name="label" translatable="yes" context="mmaddressblockpage|hideempty">_Suppress lines with just empty fields</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -420,7 +420,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
-                                    <property name="tooltip_text" translatable="yes">Preview Previous Address Block</property>
+                                    <property name="tooltip_text" translatable="yes" context="mmaddressblockpage|prev|tooltip_text">Preview Previous Address Block</property>
                                     <property name="image">image1</property>
                                   </object>
                                   <packing>
@@ -435,7 +435,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
-                                    <property name="tooltip_text" translatable="yes">Preview Next Address Block</property>
+                                    <property name="tooltip_text" translatable="yes" context="mmaddressblockpage|next|tooltip_text">Preview Next Address Block</property>
                                     <property name="image">image2</property>
                                   </object>
                                   <packing>
@@ -451,7 +451,7 @@
                                     <property name="can_focus">False</property>
                                     <property name="hexpand">True</property>
                                     <property name="xalign">1</property>
-                                    <property name="label" translatable="yes">Document: %1</property>
+                                    <property name="label" translatable="yes" context="mmaddressblockpage|documentindex">Document: %1</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -491,7 +491,7 @@
                             <property name="hexpand">True</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
-                            <property name="label" translatable="yes">Check if the address data matches correctly.</property>
+                            <property name="label" translatable="yes" context="mmaddressblockpage|label6">Check if the address data matches correctly.</property>
                             <property name="wrap">True</property>
                             <property name="max_width_chars">56</property>
                           </object>
@@ -508,7 +508,7 @@
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
-                            <property name="label" translatable="yes">4.</property>
+                            <property name="label" translatable="yes" context="mmaddressblockpage|settingsft2">4.</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -541,7 +541,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Insert Address Block</property>
+            <property name="label" translatable="yes" context="mmaddressblockpage|label1">Insert Address Block</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

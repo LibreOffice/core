@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.10"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="HangulHanjaEditDictDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Edit Custom Dictionary</property>
+    <property name="title" translatable="yes" context="hangulhanjaeditdictdialog|HangulHanjaEditDictDialog">Edit Custom Dictionary</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -104,7 +104,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Book</property>
+                    <property name="label" translatable="yes" context="hangulhanjaeditdictdialog|label4">Book</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">book</property>
                     <attributes>
@@ -210,7 +210,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Original</property>
+                    <property name="label" translatable="yes" context="hangulhanjaeditdictdialog|label2">Original</property>
                     <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -323,7 +323,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Suggestions</property>
+                    <property name="label" translatable="yes" context="hangulhanjaeditdictdialog|label3">Suggestions</property>
                     <property name="use_underline">True</property>
                     <property name="ellipsize">end</property>
                     <attributes>

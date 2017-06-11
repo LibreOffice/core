@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="dkt">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="ExtensionManagerDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Extension Manager</property>
+    <property name="title" translatable="yes" context="extensionmanager|ExtensionManagerDialog">Extension Manager</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -79,7 +79,7 @@
                 <property name="layout_style">start</property>
                 <child>
                   <object class="GtkButton" id="optionsbtn">
-                    <property name="label" translatable="yes">_Options</property>
+                    <property name="label" translatable="yes" context="extensionmanager|optionsbtn">_Options</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -93,7 +93,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="updatebtn">
-                    <property name="label" translatable="yes">Check for _Updates</property>
+                    <property name="label" translatable="yes" context="extensionmanager|updatebtn">Check for _Updates</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -108,7 +108,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="addbtn">
-                    <property name="label" translatable="yes">_Add</property>
+                    <property name="label" translatable="yes" context="extensionmanager|addbtn">_Add</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="can_default">True</property>
@@ -125,7 +125,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="removebtn">
-                    <property name="label" translatable="yes">_Remove</property>
+                    <property name="label" translatable="yes" context="extensionmanager|removebtn">_Remove</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -140,7 +140,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="enablebtn">
-                    <property name="label" translatable="yes">_Enable</property>
+                    <property name="label" translatable="yes" context="extensionmanager|enablebtn">_Enable</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -184,7 +184,7 @@
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkCheckButton" id="shared">
-                            <property name="label" translatable="yes">Installed for all users</property>
+                            <property name="label" translatable="yes" context="extensionmanager|shared">Installed for all users</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -200,7 +200,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="user">
-                            <property name="label" translatable="yes">Installed for current user</property>
+                            <property name="label" translatable="yes" context="extensionmanager|user">Installed for current user</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -216,7 +216,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="bundled">
-                            <property name="label" translatable="yes">Bundled with %PRODUCTNAME</property>
+                            <property name="label" translatable="yes" context="extensionmanager|bundled">Bundled with %PRODUCTNAME</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -238,7 +238,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Display Extensions</property>
+                    <property name="label" translatable="yes" context="extensionmanager|label1">Display Extensions</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -260,7 +260,7 @@
                   <object class="GtkLabel" id="progressft">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="label" translatable="yes">Adding %EXTENSION_NAME</property>
+                    <property name="label" translatable="yes" context="extensionmanager|progressft">Adding %EXTENSION_NAME</property>
                     <property name="justify">right</property>
                   </object>
                   <packing>
@@ -295,7 +295,7 @@
                 </child>
                 <child>
                   <object class="GtkLinkButton" id="getextensions">
-                    <property name="label" translatable="yes">Get more extensions online...</property>
+                    <property name="label" translatable="yes" context="extensionmanager|getextensions">Get more extensions online...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>

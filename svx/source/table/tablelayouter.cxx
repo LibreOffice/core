@@ -35,7 +35,7 @@
 #include "editeng/borderline.hxx"
 #include "editeng/boxitem.hxx"
 #include "svx/svdmodel.hxx"
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include "svdglob.hxx"
 
 using ::editeng::SvxBorderLine;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkGrid" id="FunctionPanel">
     <property name="visible">True</property>
@@ -42,7 +42,7 @@
                         <property name="can_default">True</property>
                         <property name="has_default">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Insert Function into calculation sheet</property>
+                        <property name="tooltip_text" translatable="yes" context="functionpanel|insert|tooltip_text">Insert Function into calculation sheet</property>
                         <property name="image">image1</property>
                       </object>
                       <packing>
@@ -56,19 +56,19 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <items>
-                          <item translatable="yes">Last Used</item>
-                          <item translatable="yes">All</item>
-                          <item translatable="yes">Database</item>
-                          <item translatable="yes">Date&amp;Time</item>
-                          <item translatable="yes">Financial</item>
-                          <item translatable="yes">Information</item>
-                          <item translatable="yes">Logical</item>
-                          <item translatable="yes">Mathematical</item>
-                          <item translatable="yes">Array</item>
-                          <item translatable="yes">Statistical</item>
-                          <item translatable="yes">Spreadsheet</item>
-                          <item translatable="yes">Text</item>
-                          <item translatable="yes">Add-in</item>
+                          <item translatable="yes" context="functionpanel|category">Last Used</item>
+                          <item translatable="yes" context="functionpanel|category">All</item>
+                          <item translatable="yes" context="functionpanel|category">Database</item>
+                          <item translatable="yes" context="functionpanel|category">Date&amp;Time</item>
+                          <item translatable="yes" context="functionpanel|category">Financial</item>
+                          <item translatable="yes" context="functionpanel|category">Information</item>
+                          <item translatable="yes" context="functionpanel|category">Logical</item>
+                          <item translatable="yes" context="functionpanel|category">Mathematical</item>
+                          <item translatable="yes" context="functionpanel|category">Array</item>
+                          <item translatable="yes" context="functionpanel|category">Statistical</item>
+                          <item translatable="yes" context="functionpanel|category">Spreadsheet</item>
+                          <item translatable="yes" context="functionpanel|category">Text</item>
+                          <item translatable="yes" context="functionpanel|category">Add-in</item>
                         </items>
                       </object>
                       <packing>
@@ -109,7 +109,7 @@
                 <property name="width_request">0</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">label</property>
+                <property name="label" translatable="yes" context="functionpanel|funcdesc">label</property>
                 <property name="wrap">True</property>
                 <property name="xalign">0</property>
                 <property name="yalign">0</property>

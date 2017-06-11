@@ -354,7 +354,4 @@ $(eval $(call gb_Library_use_system_win32_libs,sfx,\
 
 endif
 
-# Runtime dependency for unit-tests
-$(eval $(call gb_Library_use_restarget,sfx,sfx))
-
 # vim: set noet sw=4 ts=4:

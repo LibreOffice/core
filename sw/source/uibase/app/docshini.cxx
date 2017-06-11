@@ -19,7 +19,6 @@
 
 #include <hintids.hxx>
 
-#include <svx/dialogs.hrc>
 #include <i18nlangtag/mslangid.hxx>
 #include <sot/storinfo.hxx>
 #include <sot/storage.hxx>

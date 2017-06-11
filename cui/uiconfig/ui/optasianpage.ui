@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkGrid" id="OptAsianPage">
@@ -28,7 +28,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkRadioButton" id="charkerning">
-                    <property name="label" translatable="yes">_Western text only</property>
+                    <property name="label" translatable="yes" context="optasianpage|charkerning">_Western text only</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -46,7 +46,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="charpunctkerning">
-                    <property name="label" translatable="yes">Western _text and Asian punctuation</property>
+                    <property name="label" translatable="yes" context="optasianpage|charpunctkerning">Western _text and Asian punctuation</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -70,7 +70,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Kerning</property>
+            <property name="label" translatable="yes" context="optasianpage|label1">Kerning</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -102,7 +102,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkRadioButton" id="nocompression">
-                    <property name="label" translatable="yes">_No compression</property>
+                    <property name="label" translatable="yes" context="optasianpage|nocompression">_No compression</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -120,7 +120,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="punctcompression">
-                    <property name="label" translatable="yes">_Compress punctuation only</property>
+                    <property name="label" translatable="yes" context="optasianpage|punctcompression">_Compress punctuation only</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -138,7 +138,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="punctkanacompression">
-                    <property name="label" translatable="yes">Compress punctuation and Japanese Kana</property>
+                    <property name="label" translatable="yes" context="optasianpage|punctkanacompression">Compress punctuation and Japanese Kana</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -162,7 +162,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Character Spacing</property>
+            <property name="label" translatable="yes" context="optasianpage|label2">Character Spacing</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -223,7 +223,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="standard">
-                            <property name="label" translatable="yes">_Default</property>
+                            <property name="label" translatable="yes" context="optasianpage|standard">_Default</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -248,7 +248,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Language:</property>
+                        <property name="label" translatable="yes" context="optasianpage|languageft">_Language:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">language</property>
                       </object>
@@ -262,7 +262,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Not _at start of line:</property>
+                        <property name="label" translatable="yes" context="optasianpage|startft">Not _at start of line:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">start</property>
                       </object>
@@ -276,7 +276,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Not at _end of line:</property>
+                        <property name="label" translatable="yes" context="optasianpage|endft">Not at _end of line:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">end</property>
                       </object>
@@ -321,7 +321,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Without user-defined line break symbols</property>
+                    <property name="label" translatable="yes" context="optasianpage|hintft">Without user-defined line break symbols</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -337,7 +337,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">First and Last Characters</property>
+            <property name="label" translatable="yes" context="optasianpage|label3">First and Last Characters</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

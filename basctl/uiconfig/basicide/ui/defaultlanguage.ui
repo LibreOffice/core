@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="basctl">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="DefaultLanguageDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Set Default User Interface Language</property>
+    <property name="title" translatable="yes" context="defaultlanguage|DefaultLanguageDialog">Set Default User Interface Language</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -90,7 +90,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Default language:</property>
+                    <property name="label" translatable="yes" context="defaultlanguage|defaultlabel">Default language:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">entries:border</property>
                   </object>
@@ -132,7 +132,7 @@
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Available languages:</property>
+                    <property name="label" translatable="yes" context="defaultlanguage|checkedlabel">Available languages:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">checkedentries:border</property>
                   </object>
@@ -152,7 +152,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Select a language to define the default user interface language. All currently present strings will be assigned to the resources created for the selected language.</property>
+                <property name="label" translatable="yes" context="defaultlanguage|defined">Select a language to define the default user interface language. All currently present strings will be assigned to the resources created for the selected language.</property>
                 <property name="wrap">True</property>
                 <property name="wrap_mode">word-char</property>
                 <property name="max_width_chars">72</property>
@@ -167,7 +167,7 @@
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Select languages to be added. Resources for these languages will be created in the library. Strings of the current default user interface language will be copied to these new resources by default.</property>
+                <property name="label" translatable="yes" context="defaultlanguage|added">Select languages to be added. Resources for these languages will be created in the library. Strings of the current default user interface language will be copied to these new resources by default.</property>
                 <property name="wrap">True</property>
                 <property name="wrap_mode">word-char</property>
                 <property name="max_width_chars">72</property>
@@ -181,7 +181,7 @@
               <object class="GtkLabel" id="alttitle">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Add User Interface Languages</property>
+                <property name="label" translatable="yes" context="defaultlanguage|alttitle">Add User Interface Languages</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>

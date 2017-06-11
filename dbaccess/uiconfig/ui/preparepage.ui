@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="dba">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkGrid" id="PreparePage">
     <property name="visible">True</property>
@@ -14,7 +14,7 @@
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Welcome to the Database Macro Migration Wizard</property>
+        <property name="label" translatable="yes" context="preparepage|label1">Welcome to the Database Macro Migration Wizard</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
@@ -31,7 +31,7 @@
         <property name="hexpand">True</property>
         <property name="xalign">0</property>
         <property name="yalign">0</property>
-        <property name="label" translatable="yes">This wizard will guide you through the task of migrating your macros.
+        <property name="label" translatable="yes" context="preparepage|label2">This wizard will guide you through the task of migrating your macros.
 
 After you finished it, all macros which were formerly embedded into the forms and reports of the current database document will have been moved to the document itself. In this course, libraries will be renamed as needed.
 
@@ -53,7 +53,7 @@ Before the migration can start, all forms, reports, queries and tables belonging
         <property name="hexpand">True</property>
         <property name="xalign">0</property>
         <property name="yalign">0</property>
-        <property name="label" translatable="yes">Not all objects could be closed. Please close them manually, and re-start the wizard.</property>
+        <property name="label" translatable="yes" context="preparepage|closedocerror">Not all objects could be closed. Please close them manually, and re-start the wizard.</property>
         <property name="wrap">True</property>
         <property name="max_width_chars">64</property>
       </object>

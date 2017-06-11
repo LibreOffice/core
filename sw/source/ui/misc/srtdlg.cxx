@@ -38,6 +38,7 @@
 #include <wrtsh.hxx>
 #include <misc.hrc>
 #include <app.hrc>
+#include <strings.hrc>
 #include <swtable.hxx>
 #include <node.hxx>
 #include <tblsel.hxx>

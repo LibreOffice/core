@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -40,7 +40,7 @@
             <property name="row_spacing">6</property>
             <child>
               <object class="GtkButton" id="delete">
-                <property name="label" translatable="yes">_Delete Entry</property>
+                <property name="label" translatable="yes" context="wordcompletionpage|delete">_Delete Entry</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -84,7 +84,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Max. entries:</property>
+                    <property name="label" translatable="yes" context="wordcompletionpage|label1">_Max. entries:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">maxentries</property>
                   </object>
@@ -123,7 +123,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Mi_n. word length:</property>
+                    <property name="label" translatable="yes" context="wordcompletionpage|label2">Mi_n. word length:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">maxentries</property>
                   </object>
@@ -169,7 +169,7 @@
                         <property name="row_spacing">6</property>
                         <child>
                           <object class="GtkCheckButton" id="appendspace">
-                            <property name="label" translatable="yes">_Append space</property>
+                            <property name="label" translatable="yes" context="wordcompletionpage|appendspace">_Append space</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -184,7 +184,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="showastip">
-                            <property name="label" translatable="yes">_Show as tip</property>
+                            <property name="label" translatable="yes" context="wordcompletionpage|showastip">_Show as tip</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -207,7 +207,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="enablewordcomplete">
-                    <property name="label" translatable="yes">Enable word _completion</property>
+                    <property name="label" translatable="yes" context="wordcompletionpage|enablewordcomplete">Enable word _completion</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -243,7 +243,7 @@
                         <property name="row_spacing">6</property>
                         <child>
                           <object class="GtkCheckButton" id="whenclosing:wrap">
-                            <property name="label" translatable="yes">_When closing a document, remove the words collected from it from the list</property>
+                            <property name="label" translatable="yes" context="wordcompletionpage|whenclosing">_When closing a document, remove the words collected from it from the list</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -266,7 +266,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="collectwords">
-                    <property name="label" translatable="yes">C_ollect words</property>
+                    <property name="label" translatable="yes" context="wordcompletionpage|collectwords">C_ollect words</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -296,7 +296,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Acc_ept with:</property>
+                    <property name="label" translatable="yes" context="wordcompletionpage|label3">Acc_ept with:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">acceptwith</property>
                   </object>

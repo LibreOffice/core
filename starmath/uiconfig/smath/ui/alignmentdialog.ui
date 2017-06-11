@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sm">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="AlignmentDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Alignment</property>
+    <property name="title" translatable="yes" context="alignmentdialog|AlignmentDialog">Alignment</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
@@ -64,7 +64,7 @@
             </child>
             <child>
               <object class="GtkButton" id="default">
-                <property name="label" translatable="yes">_Default</property>
+                <property name="label" translatable="yes" context="alignmentdialog|default">_Default</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -108,7 +108,7 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="left">
-                        <property name="label" translatable="yes">_Left</property>
+                        <property name="label" translatable="yes" context="alignmentdialog|left">_Left</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -125,7 +125,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="center">
-                        <property name="label" translatable="yes">_Centered</property>
+                        <property name="label" translatable="yes" context="alignmentdialog|center">_Centered</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -143,7 +143,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="right">
-                        <property name="label" translatable="yes">_Right</property>
+                        <property name="label" translatable="yes" context="alignmentdialog|right">_Right</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -166,7 +166,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Horizontal</property>
+                <property name="label" translatable="yes" context="alignmentdialog|label1">Horizontal</property>
                 <property name="use_underline">True</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>

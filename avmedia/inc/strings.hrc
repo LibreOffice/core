@@ -1,0 +1,48 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_AVMEDIA_INC_STRINGS_HRC
+#define INCLUDED_AVMEDIA_INC_STRINGS_HRC
+
+#define NC_(Context, String) (Context "\004" u8##String)
+
+#define AVMEDIA_STR_OPEN            NC_("AVMEDIA_STR_OPEN", "Open")
+#define AVMEDIA_STR_INSERT          NC_("AVMEDIA_STR_INSERT", "Apply")
+#define AVMEDIA_STR_PLAY            NC_("AVMEDIA_STR_PLAY", "Play")
+#define AVMEDIA_STR_PAUSE           NC_("AVMEDIA_STR_PAUSE", "Pause")
+#define AVMEDIA_STR_STOP            NC_("AVMEDIA_STR_STOP", "Stop")
+#define AVMEDIA_STR_LOOP            NC_("AVMEDIA_STR_LOOP", "Repeat")
+#define AVMEDIA_STR_MUTE            NC_("AVMEDIA_STR_MUTE", "Mute")
+#define AVMEDIA_STR_ZOOM            NC_("AVMEDIA_STR_ZOOM", "View")
+#define AVMEDIA_STR_ZOOM_50         NC_("AVMEDIA_STR_ZOOM_50", "50%")
+#define AVMEDIA_STR_ZOOM_100        NC_("AVMEDIA_STR_ZOOM_100", "100%")
+#define AVMEDIA_STR_ZOOM_200        NC_("AVMEDIA_STR_ZOOM_200", "200%")
+#define AVMEDIA_STR_ZOOM_FIT        NC_("AVMEDIA_STR_ZOOM_FIT", "Scaled")
+#define AVMEDIA_STR_MEDIAPLAYER     NC_("AVMEDIA_STR_MEDIAPLAYER", "Media Player")
+#define AVMEDIA_MEDIA_PATH          NC_("AVMEDIA_MEDIA_PATH", "Media Path")
+#define AVMEDIA_MEDIA_PATH_DEFAULT  NC_("AVMEDIA_MEDIA_PATH_DEFAULT", "No Media Selected")
+#define AVMEDIA_STR_INSERTMEDIA_DLG NC_("AVMEDIA_STR_INSERTMEDIA_DLG", "Insert Audio or Video")
+#define AVMEDIA_STR_OPENMEDIA_DLG   NC_("AVMEDIA_STR_OPENMEDIA_DLG", "Open Audio or Video")
+#define AVMEDIA_STR_ALL_MEDIAFILES  NC_("AVMEDIA_STR_ALL_MEDIAFILES", "All audio and video files")
+#define AVMEDIA_STR_ALL_FILES       NC_("AVMEDIA_STR_ALL_FILES", "All files")
+#define AVMEDIA_STR_ERR_URL         NC_("AVMEDIA_STR_ERR_URL", "The format of the selected file is not supported.")
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+
+#endif

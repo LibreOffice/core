@@ -18,7 +18,6 @@
  */
 
 #include <UndoOverwrite.hxx>
-#include <tools/resid.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <comphelper/processfactory.hxx>
@@ -33,7 +32,7 @@
 #include <rolbck.hxx>
 #include <acorrect.hxx>
 #include <docary.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <undo.hrc>
 
 using namespace ::com::sun::star;

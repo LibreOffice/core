@@ -57,14 +57,7 @@ Module gid_Module_Langpack_Base_Template
     Name = "gid_Module_Langpack_Base_Template";
     Description = "gid_Module_Langpack_Base_Template";
     Styles = (TEMPLATEMODULE);
-    Files = (gid_File_Res_Abp,
-             gid_File_Res_Cnr,
-             gid_File_Res_Dbp,
-             gid_File_Res_Dbu,
-             gid_File_Res_Rpt,
-             gid_File_Res_Rptui,
-             gid_File_Res_Sdbcl,
-             gid_File_Res_Sdberr);
+    Files = ();
 End
 
 #include "alllangmodules_base.inc"

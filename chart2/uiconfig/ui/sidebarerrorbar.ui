@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="chart">
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
@@ -45,7 +45,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Category:</property>
+                    <property name="label" translatable="yes" context="sidebarerrorbar|label2">Category:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">comboboxtext_type</property>
                   </object>
@@ -61,13 +61,13 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <items>
-                      <item translatable="yes">Constant</item>
-                      <item translatable="yes">Percentage</item>
-                      <item translatable="yes">Cell Range or Data Table</item>
-                      <item translatable="yes">Standard deviation</item>
-                      <item translatable="yes">Standard error</item>
-                      <item translatable="yes">Variance</item>
-                      <item translatable="yes">Error margin</item>
+                      <item translatable="yes" context="sidebarerrorbar|comboboxtext_type">Constant</item>
+                      <item translatable="yes" context="sidebarerrorbar|comboboxtext_type">Percentage</item>
+                      <item translatable="yes" context="sidebarerrorbar|comboboxtext_type">Cell Range or Data Table</item>
+                      <item translatable="yes" context="sidebarerrorbar|comboboxtext_type">Standard deviation</item>
+                      <item translatable="yes" context="sidebarerrorbar|comboboxtext_type">Standard error</item>
+                      <item translatable="yes" context="sidebarerrorbar|comboboxtext_type">Variance</item>
+                      <item translatable="yes" context="sidebarerrorbar|comboboxtext_type">Error margin</item>
                     </items>
                   </object>
                   <packing>
@@ -82,7 +82,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Positive (+):</property>
+                    <property name="label" translatable="yes" context="sidebarerrorbar|label3">Positive (+):</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -96,7 +96,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Negative (-):</property>
+                    <property name="label" translatable="yes" context="sidebarerrorbar|label4">Negative (-):</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -110,7 +110,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
-                    <property name="text" translatable="yes">0.00</property>
+                    <property name="text" translatable="yes" context="sidebarerrorbar|spinbutton_pos">0.00</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">2</property>
                   </object>
@@ -126,7 +126,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
-                    <property name="text" translatable="yes">0.00</property>
+                    <property name="text" translatable="yes" context="sidebarerrorbar|spinbutton_neg">0.00</property>
                     <property name="input_purpose">alpha</property>
                     <property name="climb_rate">1</property>
                     <property name="digits">2</property>
@@ -148,7 +148,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="tooltip_text" translatable="yes">Positive and Negative</property>
+                        <property name="tooltip_text" translatable="yes" context="sidebarerrorbar|radiobutton_positive_negative|tooltip_text">Positive and Negative</property>
                         <property name="image">image2</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
@@ -164,7 +164,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="tooltip_text" translatable="yes">Positive</property>
+                        <property name="tooltip_text" translatable="yes" context="sidebarerrorbar|radiobutton_positive|tooltip_text">Positive</property>
                         <property name="image">image1</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
@@ -180,7 +180,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="tooltip_text" translatable="yes">Negative</property>
+                        <property name="tooltip_text" translatable="yes" context="sidebarerrorbar|radiobutton_negative|tooltip_text">Negative</property>
                         <property name="image">image3</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
@@ -202,7 +202,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Indicator</property>
+                    <property name="label" translatable="yes" context="sidebarerrorbar|label5">Indicator</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>

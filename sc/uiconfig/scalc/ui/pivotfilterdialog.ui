@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="PivotFilterDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Filter</property>
+    <property name="title" translatable="yes" context="pivotfilterdialog|PivotFilterDialog">Filter</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -101,8 +101,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <items>
-                          <item translatable="yes">AND</item>
-                          <item translatable="yes">OR</item>
+                          <item translatable="yes" context="pivotfilterdialog|connect1">AND</item>
+                          <item translatable="yes" context="pivotfilterdialog|connect1">OR</item>
                         </items>
                         <accessibility>
                           <relation type="labelled-by" target="label2"/>
@@ -118,8 +118,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <items>
-                          <item translatable="yes">AND</item>
-                          <item translatable="yes">OR</item>
+                          <item translatable="yes" context="pivotfilterdialog|connect2">AND</item>
+                          <item translatable="yes" context="pivotfilterdialog|connect2">OR</item>
                         </items>
                       </object>
                       <packing>
@@ -131,7 +131,7 @@
                       <object class="GtkLabel" id="label2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Operator</property>
+                        <property name="label" translatable="yes" context="pivotfilterdialog|label2">Operator</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -142,7 +142,7 @@
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Field name</property>
+                        <property name="label" translatable="yes" context="pivotfilterdialog|label3">Field name</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -153,7 +153,7 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Condition</property>
+                        <property name="label" translatable="yes" context="pivotfilterdialog|label4">Condition</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -164,7 +164,7 @@
                       <object class="GtkLabel" id="label5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Value</property>
+                        <property name="label" translatable="yes" context="pivotfilterdialog|label5">Value</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -344,7 +344,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Filter Criteria</property>
+                <property name="label" translatable="yes" context="pivotfilterdialog|label1">Filter Criteria</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -382,7 +382,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="case">
-                        <property name="label" translatable="yes">_Case sensitive</property>
+                        <property name="label" translatable="yes" context="pivotfilterdialog|case">_Case sensitive</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -398,7 +398,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="regexp">
-                        <property name="label" translatable="yes">Regular _expressions</property>
+                        <property name="label" translatable="yes" context="pivotfilterdialog|regexp">Regular _expressions</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -414,7 +414,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="unique">
-                        <property name="label" translatable="yes">_No duplications</property>
+                        <property name="label" translatable="yes" context="pivotfilterdialog|unique">_No duplications</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -447,7 +447,7 @@
                         <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Data range:</property>
+                        <property name="label" translatable="yes" context="pivotfilterdialog|dbarealabel">Data range:</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -460,7 +460,7 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">dummy</property>
+                        <property name="label" translatable="yes" context="pivotfilterdialog|dbarea">dummy</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -479,7 +479,7 @@
               <object class="GtkLabel" id="label6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Op_tions</property>
+                <property name="label" translatable="yes" context="pivotfilterdialog|label6">Op_tions</property>
                 <property name="use_underline">True</property>
               </object>
             </child>

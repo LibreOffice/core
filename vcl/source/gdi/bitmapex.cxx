@@ -22,7 +22,6 @@
 
 #include <o3tl/any.hxx>
 #include <tools/debug.hxx>
-#include <tools/rcid.h>
 #include <tools/resmgr.hxx>
 #include <tools/stream.hxx>
 #include <vcl/ImageTree.hxx>

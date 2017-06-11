@@ -127,19 +127,19 @@ OUString OutlinerEditEng::GetUndoComment( sal_uInt16 nUndoId ) const
     switch( nUndoId )
     {
         case OLUNDO_DEPTH:
-            return EditResId::GetString(RID_OUTLUNDO_DEPTH);
+            return EditResId(RID_OUTLUNDO_DEPTH);
 
         case OLUNDO_EXPAND:
-            return EditResId::GetString(RID_OUTLUNDO_EXPAND);
+            return EditResId(RID_OUTLUNDO_EXPAND);
 
         case OLUNDO_COLLAPSE:
-            return EditResId::GetString(RID_OUTLUNDO_COLLAPSE);
+            return EditResId(RID_OUTLUNDO_COLLAPSE);
 
         case OLUNDO_ATTR:
-            return EditResId::GetString(RID_OUTLUNDO_ATTR);
+            return EditResId(RID_OUTLUNDO_ATTR);
 
         case OLUNDO_INSERT:
-            return EditResId::GetString(RID_OUTLUNDO_INSERT);
+            return EditResId(RID_OUTLUNDO_INSERT);
 
         default:
             return EditEngine::GetUndoComment( nUndoId );

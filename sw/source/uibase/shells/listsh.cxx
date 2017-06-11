@@ -38,7 +38,7 @@
 #include "frmatr.hxx"
 #include "helpid.h"
 #include "globals.hrc"
-#include "shells.hrc"
+#include "strings.hrc"
 #include "uinums.hxx"
 #include "listsh.hxx"
 #include "poolfmt.hxx"

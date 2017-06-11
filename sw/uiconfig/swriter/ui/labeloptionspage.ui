@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sw">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
@@ -34,7 +34,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkRadioButton" id="entirepage">
-                    <property name="label" translatable="yes">_Entire page</property>
+                    <property name="label" translatable="yes" context="labeloptionspage|entirepage">_Entire page</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -53,7 +53,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="singlelabel">
-                    <property name="label" translatable="yes">_Single label</property>
+                    <property name="label" translatable="yes" context="labeloptionspage|singlelabel">_Single label</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -85,7 +85,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Colu_mn</property>
+                            <property name="label" translatable="yes" context="labeloptionspage|label4">Colu_mn</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">cols</property>
                           </object>
@@ -128,7 +128,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Ro_w</property>
+                            <property name="label" translatable="yes" context="labeloptionspage|label5">Ro_w</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">rows</property>
                           </object>
@@ -171,7 +171,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="synchronize">
-                    <property name="label" translatable="yes">Synchroni_ze contents</property>
+                    <property name="label" translatable="yes" context="labeloptionspage|synchronize">Synchroni_ze contents</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -194,7 +194,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Distribute</property>
+            <property name="label" translatable="yes" context="labeloptionspage|label1">Distribute</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -229,7 +229,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkButton" id="setup">
-                    <property name="label" translatable="yes">Setup...</property>
+                    <property name="label" translatable="yes" context="labeloptionspage|setup">Setup...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -248,7 +248,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Printer Name</property>
+                    <property name="label" translatable="yes" context="labeloptionspage|printername">Printer Name</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">setup</property>
                   </object>
@@ -267,7 +267,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Printer</property>
+            <property name="label" translatable="yes" context="labeloptionspage|label2">Printer</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

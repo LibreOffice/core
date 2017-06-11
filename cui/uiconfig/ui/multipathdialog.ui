@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="MultiPathDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Select Paths</property>
+    <property name="title" translatable="yes" context="multipathdialog|MultiPathDialog">Select Paths</property>
     <property name="resizable">False</property>
     <property name="type_hint">normal</property>
     <child internal-child="vbox">
@@ -104,7 +104,7 @@
                         <property name="layout_style">start</property>
                         <child>
                           <object class="GtkButton" id="add">
-                            <property name="label" translatable="yes">_Add...</property>
+                            <property name="label" translatable="yes" context="multipathdialog|add">_Add...</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -161,7 +161,7 @@
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Path list:</property>
+                            <property name="label" translatable="yes" context="multipathdialog|pathlist">Path list:</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -182,7 +182,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Mark the Default Path for New Files</property>
+                <property name="label" translatable="yes" context="multipathdialog|label1">Mark the Default Path for New Files</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

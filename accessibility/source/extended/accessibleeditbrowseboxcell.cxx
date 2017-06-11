@@ -18,7 +18,7 @@
  */
 
 #include <helper/accresmgr.hxx>
-#include <helper/accessiblestrings.hrc>
+#include <strings.hrc>
 
 #include <extended/accessibleeditbrowseboxcell.hxx>
 #include <svtools/editbrowsebox.hxx>

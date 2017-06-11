@@ -28,8 +28,6 @@
 #include <memory>
 
 
-class ResMgr;
-
 class SVGDialog final:
     public ::svt::OGenericUnoDialog,
     public ::comphelper::OPropertyArrayUsageHelper< SVGDialog >,

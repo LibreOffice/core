@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkImage" id="image1">
@@ -11,7 +11,7 @@
   <object class="GtkDialog" id="ThesaurusDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Thesaurus</property>
+    <property name="title" translatable="yes" context="thesaurus|ThesaurusDialog">Thesaurus</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -40,7 +40,7 @@
             </child>
             <child>
               <object class="GtkButton" id="replace">
-                <property name="label" translatable="yes">_Replace</property>
+                <property name="label" translatable="yes" context="thesaurus|replace">_Replace</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_default">True</property>
@@ -86,7 +86,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Current word:</property>
+                <property name="label" translatable="yes" context="thesaurus|label1">Current word:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">wordcb</property>
               </object>
@@ -101,7 +101,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Alternatives:</property>
+                <property name="label" translatable="yes" context="thesaurus|label2">Alternatives:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">alternatives</property>
               </object>
@@ -116,7 +116,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Replace with:</property>
+                <property name="label" translatable="yes" context="thesaurus|label3">Replace with:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">replaceed</property>
               </object>
