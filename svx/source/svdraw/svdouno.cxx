@@ -38,7 +38,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdmodel.hxx>
 #include "svdglob.hxx"
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include <svx/svdetc.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdorect.hxx>

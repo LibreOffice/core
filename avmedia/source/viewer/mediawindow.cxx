@@ -21,7 +21,7 @@
 #include "mediawindow_impl.hxx"
 #include "mediamisc.hxx"
 #include "bitmaps.hlst"
-#include "mediawindow.hrc"
+#include "strings.hrc"
 #include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
 #include <unotools/pathoptions.hxx>

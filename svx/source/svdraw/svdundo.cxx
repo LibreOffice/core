@@ -29,7 +29,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdview.hxx>
 #include <svx/xfillit0.hxx>
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include "svdglob.hxx"
 #include <svx/scene3d.hxx>
 #include <editeng/editdata.hxx>
@@ -214,9 +214,9 @@ SdrUndoObj::SdrUndoObj(SdrObject& rNewObj)
 {
 }
 
-OUString SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, sal_uInt16 nStrCacheID, bool bRepeat )
+OUString SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, const char* pStrCacheID, bool bRepeat )
 {
-    const OUString rStr {ImpGetResStr(nStrCacheID)};
+    const OUString rStr {ImpGetResStr(pStrCacheID)};
 
     const sal_Int32 nPos = rStr.indexOf("%1");
     if (nPos < 0)
@@ -228,10 +228,10 @@ OUString SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject
     return rStr.replaceAt(nPos, 2, _rForObject.TakeObjNameSingul());
 }
 
-void SdrUndoObj::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, bool bRepeat) const
+void SdrUndoObj::ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr, bool bRepeat) const
 {
     if ( pObj )
-        rStr = GetDescriptionStringForObject( *pObj, nStrCacheID, bRepeat );
+        rStr = GetDescriptionStringForObject( *pObj, pStrCacheID, bRepeat );
 }
 
 // common call method for possible change of the page when UNDO/REDO is triggered
@@ -1419,9 +1419,9 @@ void SdrUndoPage::ImpMovePage(sal_uInt16 nOldNum, sal_uInt16 nNewNum)
     }
 }
 
-void SdrUndoPage::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr)
+void SdrUndoPage::ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr)
 {
-    rStr = ImpGetResStr(nStrCacheID);
+    rStr = ImpGetResStr(pStrCacheID);
 }
 
 

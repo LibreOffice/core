@@ -1,0 +1,70 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_VCL_INC_PRINT_HRC
+#define INCLUDED_VCL_INC_PRINT_HRC
+
+#define N_(String) (u8##String)
+
+const char* RID_STR_PAPERNAMES[] =
+{
+    // To translators: This is the first entry of a sequence of paper size names
+    N_("A0"),
+    N_("A1"),
+    N_("A2"),
+    N_("A3"),
+    N_("A4"),
+    N_("A5"),
+    N_("B4 (ISO)"),
+    N_("B5 (ISO)"),
+    N_("Letter"),
+    N_("Legal"),
+    N_("Tabloid"),
+    N_("User Defined"),
+    N_("B6 (ISO)"),
+    N_("C4 Envelope"),
+    N_("C5 Envelope"),
+    N_("C6 Envelope"),
+    N_("C6/5 Envelope"),
+    N_("DL Envelope"),
+    N_("Dia Slide"),
+    N_("C"),
+    N_("D"),
+    N_("E"),
+    N_("Executive"),
+    N_("Long Bond"),
+    N_("#8 (Monarch) Envelope"),
+    N_("#6 3/4 (Personal) Envelope"),
+    N_("#9 Envelope"),
+    N_("#10 Envelope"),
+    N_("#11 Envelope"),
+    N_("#12 Envelope"),
+    N_("16 Kai"),
+    N_("32 Kai"),
+    N_("Big 32 Kai"),
+    N_("B4 (JIS)"),
+    N_("B5 (JIS)"),
+    N_("B6 (JIS)"),
+    // To translators: This is the last entry of the sequence of paper size names
+    N_("Japanese Postcard")
+};
+
+#endif // INCLUDED_VCL_INC_PRINT_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -68,14 +68,14 @@
 #include "annotationmanager.hxx"
 #include "annotationmanagerimpl.hxx"
 #include "annotationwindow.hxx"
-#include "annotations.hrc"
+#include "strings.hrc"
 
 #include "Annotation.hxx"
 #include "ToolBarManager.hxx"
 #include "DrawDocShell.hxx"
 #include "DrawViewShell.hxx"
 #include "DrawController.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "sdresid.hxx"
 #include "EventMultiplexer.hxx"
 #include "ViewShellManager.hxx"
@@ -831,15 +831,15 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
 
         // The question text depends on the search direction.
         bool bImpress = mpDoc->GetDocumentType() == DocumentType::Impress;
-        sal_uInt16 nStringId;
+        const char* pStringId;
         if(bForeward)
-            nStringId = bImpress ? STR_ANNOTATION_WRAP_FORWARD : STR_ANNOTATION_WRAP_FORWARD_DRAW;
+            pStringId = bImpress ? STR_ANNOTATION_WRAP_FORWARD : STR_ANNOTATION_WRAP_FORWARD_DRAW;
         else
-            nStringId = bImpress ? STR_ANNOTATION_WRAP_BACKWARD : STR_ANNOTATION_WRAP_BACKWARD_DRAW;
+            pStringId = bImpress ? STR_ANNOTATION_WRAP_BACKWARD : STR_ANNOTATION_WRAP_BACKWARD_DRAW;
 
         // Pop up question box that asks the user whether to wrap around.
         // The dialog is made modal with respect to the whole application.
-        ScopedVclPtrInstance< QueryBox > aQuestionBox( nullptr, (WB_YES_NO | WB_DEF_YES), SdResId(nStringId));
+        ScopedVclPtrInstance< QueryBox > aQuestionBox( nullptr, (WB_YES_NO | WB_DEF_YES), SdResId(pStringId));
         aQuestionBox->SetImage( QueryBox::GetStandardImage() );
         if (aQuestionBox->Execute() != RET_YES)
             break;
