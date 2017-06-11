@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="chart">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="PolynomialsAdjustment">
     <property name="lower">1</property>
@@ -19,7 +19,7 @@
   <object class="GtkDialog" id="SmoothLinesDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Smooth Lines</property>
+    <property name="title" translatable="yes" context="smoothlinesdlg|SmoothLinesDialog">Smooth Lines</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -101,7 +101,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Line _Type:</property>
+                    <property name="label" translatable="yes" context="smoothlinesdlg|TypeLabel">Line _Type:</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -116,8 +116,8 @@
                     <property name="can_focus">False</property>
                     <property name="active">0</property>
                     <items>
-                      <item translatable="yes">Cubic spline</item>
-                      <item translatable="yes">B-spline</item>
+                      <item translatable="yes" context="smoothlinesdlg|SplineTypeComboBox">Cubic spline</item>
+                      <item translatable="yes" context="smoothlinesdlg|SplineTypeComboBox">B-spline</item>
                     </items>
                   </object>
                   <packing>
@@ -150,7 +150,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">_Resolution:</property>
+                        <property name="label" translatable="yes" context="smoothlinesdlg|ResolutionLabel">_Resolution:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">ResolutionSpinbutton</property>
                       </object>
@@ -164,7 +164,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">_Degree of polynomials:</property>
+                        <property name="label" translatable="yes" context="smoothlinesdlg|PolynomialsLabel">_Degree of polynomials:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">PolynomialsSpinButton</property>
                       </object>
@@ -232,11 +232,11 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Cubic Spline</col>
+        <col id="0" translatable="yes" context="smoothlinesdlg|SplineTypeModel">Cubic Spline</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">B-Spline</col>
+        <col id="0" translatable="yes" context="smoothlinesdlg|SplineTypeModel">B-Spline</col>
         <col id="1">1</col>
       </row>
     </data>

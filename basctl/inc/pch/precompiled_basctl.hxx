@@ -545,7 +545,6 @@
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
-#include <tools/resary.hxx>
 #include <tools/resid.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/solar.h>

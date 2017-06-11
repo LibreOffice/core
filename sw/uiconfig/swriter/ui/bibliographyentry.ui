@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sw">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="BibliographyEntryDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Insert Bibliography Entry</property>
+    <property name="title" translatable="yes" context="bibliographyentry|BibliographyEntryDialog">Insert Bibliography Entry</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -17,7 +17,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="insert">
-                <property name="label" translatable="yes">Insert</property>
+                <property name="label" translatable="yes" context="bibliographyentry|insert">Insert</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
@@ -32,7 +32,7 @@
             </child>
             <child>
               <object class="GtkButton" id="modify">
-                <property name="label" translatable="yes">Apply</property>
+                <property name="label" translatable="yes" context="bibliographyentry|modify">Apply</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
@@ -134,7 +134,7 @@
                         <property name="can_focus">False</property>
                         <property name="margin_top">12</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Author</property>
+                        <property name="label" translatable="yes" context="bibliographyentry|label2">Author</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -151,7 +151,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Title</property>
+                        <property name="label" translatable="yes" context="bibliographyentry|label3">Title</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -182,7 +182,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Short name</property>
+                        <property name="label" translatable="yes" context="bibliographyentry|label5">Short name</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">entrylb</property>
                       </object>
@@ -221,7 +221,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="frombibliography">
-                        <property name="label" translatable="yes">From bibliography database</property>
+                        <property name="label" translatable="yes" context="bibliographyentry|frombibliography">From bibliography database</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -239,7 +239,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="fromdocument">
-                        <property name="label" translatable="yes">From document content</property>
+                        <property name="label" translatable="yes" context="bibliographyentry|fromdocument">From document content</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -276,7 +276,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Entry</property>
+                <property name="label" translatable="yes" context="bibliographyentry|label1">Entry</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

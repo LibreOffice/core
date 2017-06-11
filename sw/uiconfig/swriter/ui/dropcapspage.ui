@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustmentFLD_DISTANCE">
@@ -53,7 +53,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="checkCB_SWITCH">
-                        <property name="label" translatable="yes">_Display drop caps</property>
+                        <property name="label" translatable="yes" context="dropcapspage|checkCB_SWITCH">_Display drop caps</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -69,7 +69,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkCB_WORD">
-                        <property name="label" translatable="yes">_Whole word</property>
+                        <property name="label" translatable="yes" context="dropcapspage|checkCB_WORD">_Whole word</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -88,7 +88,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">Number of _characters:</property>
+                        <property name="label" translatable="yes" context="dropcapspage|labelFT_DROPCAPS">Number of _characters:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">spinFLD_DROPCAPS</property>
                       </object>
@@ -102,7 +102,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">_Lines:</property>
+                        <property name="label" translatable="yes" context="dropcapspage|labelTXT_LINES">_Lines:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">spinFLD_LINES</property>
                       </object>
@@ -116,7 +116,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">_Space to text:</property>
+                        <property name="label" translatable="yes" context="dropcapspage|labelTXT_DISTANCE">_Space to text:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">spinFLD_DISTANCE:0cm</property>
                       </object>
@@ -173,7 +173,7 @@
               <object class="GtkLabel" id="labelFL_SETTING">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Settings</property>
+                <property name="label" translatable="yes" context="dropcapspage|labelFL_SETTING">Settings</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -208,7 +208,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">_Text:</property>
+                        <property name="label" translatable="yes" context="dropcapspage|labelTXT_TEXT">_Text:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">entryEDT_TEXT</property>
                       </object>
@@ -222,7 +222,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">Character st_yle:</property>
+                        <property name="label" translatable="yes" context="dropcapspage|labelTXT_TEMPLATE">Character st_yle:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">comboBOX_TEMPLATE</property>
                       </object>
@@ -261,7 +261,7 @@
               <object class="GtkLabel" id="labelFL_CONTENT">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Contents</property>
+                <property name="label" translatable="yes" context="dropcapspage|labelFL_CONTENT">Contents</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

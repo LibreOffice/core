@@ -34,6 +34,7 @@
 
 #include <osl/diagnose.h>
 #include <rtl/digest.h>
+#include <tools/simplerm.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/msgbox.hxx>
@@ -41,7 +42,7 @@
 #include <vcl/svapp.hxx>
 
 #include "authfallbackdlg.hxx"
-#include "ids.hrc"
+#include "strings.hrc"
 #include "getcontinuations.hxx"
 #include "passwordcontainer.hxx"
 #include "loginerr.hxx"
@@ -100,12 +101,12 @@ executeLoginDialog(
 
         if (bSavePassword)
         {
-            std::unique_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
+            std::locale aLocale(Translate::Create("uui", Application::GetSettings().GetUILanguageTag()));
             xDialog->SetSavePasswordText(
-                ResId(rInfo.GetIsRememberPersistent()
+                Translate::get(rInfo.GetIsRememberPersistent()
                           ? RID_SAVE_PASSWORD
                           : RID_KEEP_PASSWORD,
-                      *xManager.get()));
+                      aLocale));
 
             xDialog->SetSavePassword(rInfo.GetIsRememberPassword());
         }
@@ -413,11 +414,11 @@ executeMasterPasswordDialog(
     {
         SolarMutexGuard aGuard;
 
-        std::unique_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
+        std::locale aResLocale(Translate::Create("uui", Application::GetSettings().GetUILanguageTag()));
         if( nMode == task::PasswordRequestMode_PASSWORD_CREATE )
         {
             ScopedVclPtrInstance< MasterPasswordCreateDialog > xDialog(
-                pParent, xManager.get());
+                pParent, aResLocale);
             rInfo.SetResult(xDialog->Execute()
                 == RET_OK ? DialogMask::ButtonsOk : DialogMask::ButtonsCancel);
             aMaster = OUStringToOString(
@@ -426,7 +427,7 @@ executeMasterPasswordDialog(
         else
         {
             ScopedVclPtrInstance< MasterPasswordDialog > xDialog(
-                pParent, nMode, xManager.get());
+                pParent, nMode, aResLocale);
             rInfo.SetResult(xDialog->Execute()
                 == RET_OK ? DialogMask::ButtonsOk : DialogMask::ButtonsCancel);
             aMaster = OUStringToOString(
@@ -511,12 +512,12 @@ executePasswordDialog(
     {
         SolarMutexGuard aGuard;
 
-        std::unique_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
+        std::locale aResLocale(Translate::Create("uui", Application::GetSettings().GetUILanguageTag()));
         if( nMode == task::PasswordRequestMode_PASSWORD_CREATE )
         {
             if (bIsSimplePasswordRequest)
             {
-                ScopedVclPtrInstance<PasswordDialog> xDialog(pParent, nMode, xManager.get(), aDocName,
+                ScopedVclPtrInstance<PasswordDialog> xDialog(pParent, nMode, aResLocale, aDocName,
                     bIsPasswordToModify, bIsSimplePasswordRequest);
                 xDialog->SetMinLen(0);
 
@@ -539,7 +540,7 @@ executePasswordDialog(
         }
         else // enter password or reenter password
         {
-            ScopedVclPtrInstance<PasswordDialog> xDialog(pParent, nMode, xManager.get(), aDocName,
+            ScopedVclPtrInstance<PasswordDialog> xDialog(pParent, nMode, aResLocale, aDocName,
                 bIsPasswordToModify, bIsSimplePasswordRequest);
             xDialog->SetMinLen(0);
 

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <DocumentStylePoolManager.hxx>
+#include <SwStyleNameMapper.hxx>
 #include <doc.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentState.hxx>
@@ -58,6 +59,7 @@
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/scriptspaceitem.hxx>
 #include <rcid.hrc>
+#include <strings.hrc>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -270,6 +272,271 @@ namespace
     }
 }
 
+static const char* STR_POOLCOLL_TEXT_ARY[] =
+{
+    // Category Text
+    STR_POOLCOLL_STANDARD,
+    STR_POOLCOLL_TEXT,
+    STR_POOLCOLL_TEXT_IDENT,
+    STR_POOLCOLL_TEXT_NEGIDENT,
+    STR_POOLCOLL_TEXT_MOVE,
+    STR_POOLCOLL_GREETING,
+    STR_POOLCOLL_SIGNATURE,
+    STR_POOLCOLL_CONFRONTATION,
+    STR_POOLCOLL_MARGINAL,
+    // Subcategory Headlines
+    STR_POOLCOLL_HEADLINE_BASE,
+    STR_POOLCOLL_HEADLINE1,
+    STR_POOLCOLL_HEADLINE2,
+    STR_POOLCOLL_HEADLINE3,
+    STR_POOLCOLL_HEADLINE4,
+    STR_POOLCOLL_HEADLINE5,
+    STR_POOLCOLL_HEADLINE6,
+    STR_POOLCOLL_HEADLINE7,
+    STR_POOLCOLL_HEADLINE8,
+    STR_POOLCOLL_HEADLINE9,
+    STR_POOLCOLL_HEADLINE10
+};
+
+static const char* STR_POOLCOLL_LISTS_ARY[]
+{
+    // Category Lists
+    STR_POOLCOLL_NUMBUL_BASE,
+    // Subcategory Numbering
+    STR_POOLCOLL_NUM_LEVEL1S,
+    STR_POOLCOLL_NUM_LEVEL1,
+    STR_POOLCOLL_NUM_LEVEL1E,
+    STR_POOLCOLL_NUM_NONUM1,
+    STR_POOLCOLL_NUM_LEVEL2S,
+    STR_POOLCOLL_NUM_LEVEL2,
+    STR_POOLCOLL_NUM_LEVEL2E,
+    STR_POOLCOLL_NUM_NONUM2,
+    STR_POOLCOLL_NUM_LEVEL3S,
+    STR_POOLCOLL_NUM_LEVEL3,
+    STR_POOLCOLL_NUM_LEVEL3E,
+    STR_POOLCOLL_NUM_NONUM3,
+    STR_POOLCOLL_NUM_LEVEL4S,
+    STR_POOLCOLL_NUM_LEVEL4,
+    STR_POOLCOLL_NUM_LEVEL4E,
+    STR_POOLCOLL_NUM_NONUM4,
+    STR_POOLCOLL_NUM_LEVEL5S,
+    STR_POOLCOLL_NUM_LEVEL5,
+    STR_POOLCOLL_NUM_LEVEL5E,
+    STR_POOLCOLL_NUM_NONUM5,
+
+    // Subcategory Enumeration
+    STR_POOLCOLL_BUL_LEVEL1S,
+    STR_POOLCOLL_BUL_LEVEL1,
+    STR_POOLCOLL_BUL_LEVEL1E,
+    STR_POOLCOLL_BUL_NONUM1,
+    STR_POOLCOLL_BUL_LEVEL2S,
+    STR_POOLCOLL_BUL_LEVEL2,
+    STR_POOLCOLL_BUL_LEVEL2E,
+    STR_POOLCOLL_BUL_NONUM2,
+    STR_POOLCOLL_BUL_LEVEL3S,
+    STR_POOLCOLL_BUL_LEVEL3,
+    STR_POOLCOLL_BUL_LEVEL3E,
+    STR_POOLCOLL_BUL_NONUM3,
+    STR_POOLCOLL_BUL_LEVEL4S,
+    STR_POOLCOLL_BUL_LEVEL4,
+    STR_POOLCOLL_BUL_LEVEL4E,
+    STR_POOLCOLL_BUL_NONUM4,
+    STR_POOLCOLL_BUL_LEVEL5S,
+    STR_POOLCOLL_BUL_LEVEL5,
+    STR_POOLCOLL_BUL_LEVEL5E,
+    STR_POOLCOLL_BUL_NONUM5
+};
+
+// Special Areas
+static const char* STR_POOLCOLL_EXTRA_ARY[]
+{
+    // Subcategory Header
+    STR_POOLCOLL_HEADER,
+    STR_POOLCOLL_HEADERL,
+    STR_POOLCOLL_HEADERR,
+    // Subcategroy Footer
+    STR_POOLCOLL_FOOTER,
+    STR_POOLCOLL_FOOTERL,
+    STR_POOLCOLL_FOOTERR,
+    // Subcategroy Table
+    STR_POOLCOLL_TABLE,
+    STR_POOLCOLL_TABLE_HDLN,
+    // Subcategroy Labels
+    STR_POOLCOLL_LABEL,
+    STR_POOLCOLL_LABEL_ABB,
+    STR_POOLCOLL_LABEL_TABLE,
+    STR_POOLCOLL_LABEL_FRAME,
+    // Miscellaneous
+    STR_POOLCOLL_FRAME,
+    STR_POOLCOLL_FOOTNOTE,
+    STR_POOLCOLL_JAKETADRESS,
+    STR_POOLCOLL_SENDADRESS,
+    STR_POOLCOLL_ENDNOTE,
+    STR_POOLCOLL_LABEL_DRAWING
+};
+
+static const char* STR_POOLCOLL_REGISTER_ARY[] =
+{
+    // Category Directories
+    STR_POOLCOLL_REGISTER_BASE,
+    // Subcategory Index-Directories
+    STR_POOLCOLL_TOX_IDXH,
+    STR_POOLCOLL_TOX_IDX1,
+    STR_POOLCOLL_TOX_IDX2,
+    STR_POOLCOLL_TOX_IDX3,
+    STR_POOLCOLL_TOX_IDXBREAK,
+    // Subcategory Tables of Contents
+    STR_POOLCOLL_TOX_CNTNTH,
+    STR_POOLCOLL_TOX_CNTNT1,
+    STR_POOLCOLL_TOX_CNTNT2,
+    STR_POOLCOLL_TOX_CNTNT3,
+    STR_POOLCOLL_TOX_CNTNT4,
+    STR_POOLCOLL_TOX_CNTNT5,
+    // Subcategory User-Directories:
+    STR_POOLCOLL_TOX_USERH,
+    STR_POOLCOLL_TOX_USER1,
+    STR_POOLCOLL_TOX_USER2,
+    STR_POOLCOLL_TOX_USER3,
+    STR_POOLCOLL_TOX_USER4,
+    STR_POOLCOLL_TOX_USER5,
+    // Subcategory Table of Contents more Levels 5 - 10
+    STR_POOLCOLL_TOX_CNTNT6,
+    STR_POOLCOLL_TOX_CNTNT7,
+    STR_POOLCOLL_TOX_CNTNT8,
+    STR_POOLCOLL_TOX_CNTNT9,
+    STR_POOLCOLL_TOX_CNTNT10,
+    // Illustrations Index
+    STR_POOLCOLL_TOX_ILLUSH,
+    STR_POOLCOLL_TOX_ILLUS1,
+    //  Object Index
+    STR_POOLCOLL_TOX_OBJECTH,
+    STR_POOLCOLL_TOX_OBJECT1,
+    //  Tables Index
+    STR_POOLCOLL_TOX_TABLESH,
+    STR_POOLCOLL_TOX_TABLES1,
+    //  Index of Authorities
+    STR_POOLCOLL_TOX_AUTHORITIESH,
+    STR_POOLCOLL_TOX_AUTHORITIES1,
+    // Subcategory User-Directories more Levels 5 - 10
+    STR_POOLCOLL_TOX_USER6,
+    STR_POOLCOLL_TOX_USER7,
+    STR_POOLCOLL_TOX_USER8,
+    STR_POOLCOLL_TOX_USER9,
+    STR_POOLCOLL_TOX_USER10
+};
+
+static const char* STR_POOLCOLL_DOC_ARY[] =
+{
+    // Category Chapter/Document
+    STR_POOLCOLL_DOC_TITEL,
+    STR_POOLCOLL_DOC_SUBTITEL
+};
+
+static const char* STR_POOLCOLL_HTML_ARY[] =
+{
+    // Category HTML-Templates
+    STR_POOLCOLL_HTML_BLOCKQUOTE,
+    STR_POOLCOLL_HTML_PRE,
+    STR_POOLCOLL_HTML_HR,
+    STR_POOLCOLL_HTML_DD,
+    STR_POOLCOLL_HTML_DT
+};
+
+static const char* STR_POOLCHR_ARY[] =
+{
+    STR_POOLCHR_FOOTNOTE,
+    STR_POOLCHR_PAGENO,
+    STR_POOLCHR_LABEL,
+    STR_POOLCHR_DROPCAPS,
+    STR_POOLCHR_NUM_LEVEL,
+    STR_POOLCHR_BUL_LEVEL,
+    STR_POOLCHR_INET_NORMAL,
+    STR_POOLCHR_INET_VISIT,
+    STR_POOLCHR_JUMPEDIT,
+    STR_POOLCHR_TOXJUMP,
+    STR_POOLCHR_ENDNOTE,
+    STR_POOLCHR_LINENUM,
+    STR_POOLCHR_IDX_MAIN_ENTRY,
+    STR_POOLCHR_FOOTNOTE_ANCHOR,
+    STR_POOLCHR_ENDNOTE_ANCHOR,
+    STR_POOLCHR_RUBYTEXT,
+    STR_POOLCHR_VERT_NUM
+};
+
+static const char* STR_POOLCHR_HTML_ARY[] =
+{
+    STR_POOLCHR_HTML_EMPHASIS,
+    STR_POOLCHR_HTML_CITIATION,
+    STR_POOLCHR_HTML_STRONG,
+    STR_POOLCHR_HTML_CODE,
+    STR_POOLCHR_HTML_SAMPLE,
+    STR_POOLCHR_HTML_KEYBOARD,
+    STR_POOLCHR_HTML_VARIABLE,
+    STR_POOLCHR_HTML_DEFINSTANCE,
+    STR_POOLCHR_HTML_TELETYPE
+};
+
+static const char* STR_POOLFRM_ARY[] =
+{
+    STR_POOLFRM_FRAME,
+    STR_POOLFRM_GRAPHIC,
+    STR_POOLFRM_OLE,
+    STR_POOLFRM_FORMEL,
+    STR_POOLFRM_MARGINAL,
+    STR_POOLFRM_WATERSIGN,
+    STR_POOLFRM_LABEL
+};
+
+static const char* STR_POOLPAGE_ARY[] =
+{
+    // Page styles
+    STR_POOLPAGE_STANDARD,
+    STR_POOLPAGE_FIRST,
+    STR_POOLPAGE_LEFT,
+    STR_POOLPAGE_RIGHT,
+    STR_POOLPAGE_JAKET,
+    STR_POOLPAGE_REGISTER,
+    STR_POOLPAGE_HTML,
+    STR_POOLPAGE_FOOTNOTE,
+    STR_POOLPAGE_ENDNOTE,
+    STR_POOLPAGE_LANDSCAPE
+};
+
+static const char* STR_POOLNUMRULE_NUM_ARY[] =
+{
+    // Numbering styles
+    STR_POOLNUMRULE_NUM1,
+    STR_POOLNUMRULE_NUM2,
+    STR_POOLNUMRULE_NUM3,
+    STR_POOLNUMRULE_NUM4,
+    STR_POOLNUMRULE_NUM5,
+    STR_POOLNUMRULE_BUL1,
+    STR_POOLNUMRULE_BUL2,
+    STR_POOLNUMRULE_BUL3,
+    STR_POOLNUMRULE_BUL4,
+    STR_POOLNUMRULE_BUL5
+};
+
+static const char* STR_TABSTYLE_ARY[] =
+{
+    STR_TABSTYLE_DEFAULT,
+    STR_TABSTYLE_3D,
+    STR_TABSTYLE_BLACK1,
+    STR_TABSTYLE_BLACK2,
+    STR_TABSTYLE_BLUE,
+    STR_TABSTYLE_BROWN,
+    STR_TABSTYLE_CURRENCY,
+    STR_TABSTYLE_CURRENCY_3D,
+    STR_TABSTYLE_CURRENCY_GRAY,
+    STR_TABSTYLE_CURRENCY_LAVENDER,
+    STR_TABSTYLE_CURRENCY_TURQUOISE,
+    STR_TABSTYLE_GRAY,
+    STR_TABSTYLE_GREEN,
+    STR_TABSTYLE_LAVENDER,
+    STR_TABSTYLE_RED,
+    STR_TABSTYLE_TURQUOISE,
+    STR_TABSTYLE_YELLOW
+};
 
 namespace sw
 {
@@ -303,26 +570,43 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
     }
 
     // Didn't find it until here -> create anew
-    sal_uInt16 nResId = 0;
-    if( RES_POOLCOLL_TEXT_BEGIN <= nId && nId < RES_POOLCOLL_TEXT_END )
-        nResId = RC_POOLCOLL_TEXT_BEGIN - RES_POOLCOLL_TEXT_BEGIN;
+    const char* pResId = nullptr;
+    if (RES_POOLCOLL_TEXT_BEGIN <= nId && nId < RES_POOLCOLL_TEXT_END)
+    {
+        static_assert(SAL_N_ELEMENTS(STR_POOLCOLL_TEXT_ARY) == RES_POOLCOLL_TEXT_END - RES_POOLCOLL_TEXT_BEGIN, "### unexpected size!");
+        pResId = STR_POOLCOLL_TEXT_ARY[nId - RES_POOLCOLL_TEXT_BEGIN];
+    }
     else if (RES_POOLCOLL_LISTS_BEGIN <= nId && nId < RES_POOLCOLL_LISTS_END)
-        nResId = RC_POOLCOLL_LISTS_BEGIN - RES_POOLCOLL_LISTS_BEGIN;
+    {
+        static_assert(SAL_N_ELEMENTS(STR_POOLCOLL_LISTS_ARY) == RES_POOLCOLL_LISTS_END - RES_POOLCOLL_LISTS_BEGIN, "### unexpected size!");
+        pResId = STR_POOLCOLL_LISTS_ARY[nId - RES_POOLCOLL_LISTS_BEGIN];
+    }
     else if (RES_POOLCOLL_EXTRA_BEGIN <= nId && nId < RES_POOLCOLL_EXTRA_END)
-        nResId = RC_POOLCOLL_EXTRA_BEGIN - RES_POOLCOLL_EXTRA_BEGIN;
+    {
+        static_assert(SAL_N_ELEMENTS(STR_POOLCOLL_EXTRA_ARY) == RES_POOLCOLL_EXTRA_END - RES_POOLCOLL_EXTRA_BEGIN, "### unexpected size!");
+        pResId = STR_POOLCOLL_EXTRA_ARY[nId - RES_POOLCOLL_EXTRA_BEGIN];
+    }
     else if (RES_POOLCOLL_REGISTER_BEGIN <= nId && nId < RES_POOLCOLL_REGISTER_END)
-        nResId = RC_POOLCOLL_REGISTER_BEGIN - RES_POOLCOLL_REGISTER_BEGIN;
+    {
+        static_assert(SAL_N_ELEMENTS(STR_POOLCOLL_REGISTER_ARY) == RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN, "### unexpected size!");
+        pResId = STR_POOLCOLL_REGISTER_ARY[nId - RES_POOLCOLL_REGISTER_BEGIN];
+    }
     else if (RES_POOLCOLL_DOC_BEGIN <= nId && nId < RES_POOLCOLL_DOC_END)
-        nResId = RC_POOLCOLL_DOC_BEGIN - RES_POOLCOLL_DOC_BEGIN;
+    {
+        static_assert(SAL_N_ELEMENTS(STR_POOLCOLL_DOC_ARY) == RES_POOLCOLL_DOC_END - RES_POOLCOLL_DOC_BEGIN, "### unexpected size!");
+        pResId = STR_POOLCOLL_DOC_ARY[nId - RES_POOLCOLL_DOC_BEGIN];
+    }
     else if (RES_POOLCOLL_HTML_BEGIN <= nId && nId < RES_POOLCOLL_HTML_END)
-        nResId = RC_POOLCOLL_HTML_BEGIN - RES_POOLCOLL_HTML_BEGIN;
+    {
+        static_assert(SAL_N_ELEMENTS(STR_POOLCOLL_HTML_ARY) == RES_POOLCOLL_HTML_END - RES_POOLCOLL_HTML_BEGIN, "### unexpected size!");
+        pResId = STR_POOLCOLL_HTML_ARY[nId - RES_POOLCOLL_HTML_BEGIN];
+    }
 
-    OSL_ENSURE( nResId, "Invalid Pool ID" );
-    if( !nResId )
-        return GetTextCollFromPool( RES_POOLCOLL_STANDARD );
+    OSL_ENSURE(pResId, "Invalid Pool ID");
+    if (!pResId)
+        return GetTextCollFromPool(RES_POOLCOLL_STANDARD);
 
-    ResId aResId( nResId + nId, *pSwResMgr );
-    OUString aNm( aResId );
+    OUString aNm(SwResId(pResId));
 
     // A Set for all to-be-set Attributes
     SwAttrSet aSet( m_rDoc.GetAttrPool(), aTextFormatCollSetRange );
@@ -1085,7 +1369,8 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
     SwFormat *pDeriveFormat = nullptr;
 
     SwFormatsBase* pArray[ 2 ];
-    sal_uInt16 nArrCnt = 1, nRCId = 0;
+    sal_uInt16 nArrCnt = 1;
+    const char* pRCId = nullptr;
     sal_uInt16* pWhichRange = nullptr;
 
     switch( nId & (COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID) )
@@ -1094,12 +1379,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         {
             pArray[0] = m_rDoc.GetCharFormats();
             pDeriveFormat = m_rDoc.GetDfltCharFormat();
-
-            if( nId > RES_POOLCHR_NORMAL_END )
-                nRCId = RC_POOLCHRFMT_HTML_BEGIN - RES_POOLCHR_HTML_BEGIN;
-            else
-                nRCId = RC_POOLCHRFMT_BEGIN - RES_POOLCHR_BEGIN;
-            pWhichRange =  aCharFormatSetRange;
+            pWhichRange = aCharFormatSetRange;
 
             // Fault: unknown Format, but a CharFormat
             //             -> return the first one
@@ -1108,6 +1388,11 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
                 OSL_ENSURE( false, "invalid Id" );
                 nId = RES_POOLCHR_BEGIN;
             }
+
+            if (nId > RES_POOLCHR_NORMAL_END)
+                pRCId = STR_POOLCHR_HTML_ARY[nId - RES_POOLCHR_HTML_BEGIN];
+            else
+                pRCId = STR_POOLCHR_ARY[nId - RES_POOLCHR_BEGIN];
         }
         break;
     case POOLGRP_FRAMEFMT:
@@ -1116,7 +1401,6 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
             pArray[1] = m_rDoc.GetSpzFrameFormats();
             pDeriveFormat = m_rDoc.GetDfltFrameFormat();
             nArrCnt = 2;
-            nRCId = RC_POOLFRMFMT_BEGIN - RES_POOLFRM_BEGIN;
             pWhichRange = aFrameFormatSetRange;
 
             // Fault: unknown Format, but a FrameFormat
@@ -1126,6 +1410,8 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
                 OSL_ENSURE( false, "invalid Id" );
                 nId = RES_POOLFRM_BEGIN;
             }
+
+            pRCId = STR_POOLFRM_ARY[nId - RES_POOLFRM_BEGIN];
         }
         break;
 
@@ -1134,7 +1420,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         OSL_ENSURE( nId, "invalid Id" );
         return nullptr;
     }
-    OSL_ENSURE( nRCId, "invalid Id" );
+    OSL_ENSURE(pRCId, "invalid Id");
 
     while( nArrCnt-- )
         for( size_t n = 0; n < (*pArray[nArrCnt]).GetFormatCount(); ++n )
@@ -1144,8 +1430,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
                 return pNewFormat;
             }
 
-    ResId aResId( nRCId + nId, *pSwResMgr );
-    OUString aNm( aResId );
+    OUString aNm(SwResId(pRCId));
     SwAttrSet aSet( m_rDoc.GetAttrPool(), pWhichRange );
 
     {
@@ -1391,8 +1676,8 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
 
     SwPageDesc* pNewPgDsc = nullptr;
     {
-        const ResId aResId( sal_uInt32(RC_POOLPAGEDESC_BEGIN + nId - RES_POOLPAGE_BEGIN), *pSwResMgr );
-        const OUString aNm( aResId );
+        static_assert(SAL_N_ELEMENTS(STR_POOLPAGE_ARY) == RES_POOLPAGE_END - RES_POOLPAGE_BEGIN, "### unexpected size!");
+        const OUString aNm(SwResId(STR_POOLPAGE_ARY[nId - RES_POOLPAGE_BEGIN]));
         const bool bIsModified = m_rDoc.getIDocumentState().IsModified();
 
         {
@@ -1564,8 +1849,8 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
         nId = RES_POOLNUMRULE_BEGIN;
     }
 
-    ResId aResId( sal_uInt32(RC_POOLNUMRULE_BEGIN + nId - RES_POOLNUMRULE_BEGIN), *pSwResMgr );
-    OUString aNm( aResId );
+    static_assert(SAL_N_ELEMENTS(STR_POOLNUMRULE_NUM_ARY) == RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN, "### unexpected size!");
+    OUString aNm(SwResId(STR_POOLNUMRULE_NUM_ARY[nId - RES_POOLNUMRULE_BEGIN]));
 
     SwCharFormat *pNumCFormat = nullptr, *pBullCFormat = nullptr;
 
@@ -2218,5 +2503,113 @@ DocumentStylePoolManager::~DocumentStylePoolManager()
 
 }
 
+// Initialise UI names to 0
+std::vector<OUString> *SwStyleNameMapper::s_pTextUINameArray = nullptr,
+                *SwStyleNameMapper::s_pListsUINameArray = nullptr,
+                *SwStyleNameMapper::s_pExtraUINameArray = nullptr,
+                *SwStyleNameMapper::s_pRegisterUINameArray = nullptr,
+                *SwStyleNameMapper::s_pDocUINameArray = nullptr,
+                *SwStyleNameMapper::s_pHTMLUINameArray = nullptr,
+                *SwStyleNameMapper::s_pFrameFormatUINameArray = nullptr,
+                *SwStyleNameMapper::s_pChrFormatUINameArray = nullptr,
+                *SwStyleNameMapper::s_pHTMLChrFormatUINameArray = nullptr,
+                *SwStyleNameMapper::s_pPageDescUINameArray = nullptr,
+                *SwStyleNameMapper::s_pNumRuleUINameArray = nullptr,
+                *SwStyleNameMapper::s_pTableStyleUINameArray = nullptr,
+                *SwStyleNameMapper::s_pCellStyleUINameArray = nullptr;
+
+std::vector<OUString>*
+lcl_NewUINameArray(const char** pIds, const size_t nLen)
+{
+    std::vector<OUString> *const pNameArray = new std::vector<OUString>;
+    pNameArray->reserve(nLen);
+    for (size_t i = 0; i < nLen; ++i)
+        pNameArray->push_back(SwResId(pIds[i]));
+    return pNameArray;
+}
+
+const std::vector<OUString>& SwStyleNameMapper::GetTextUINameArray()
+{
+    if (!s_pTextUINameArray)
+        s_pTextUINameArray = lcl_NewUINameArray(STR_POOLCOLL_TEXT_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_TEXT_ARY));
+    return *s_pTextUINameArray;
+}
+
+const std::vector<OUString>& SwStyleNameMapper::GetListsUINameArray()
+{
+    if (!s_pListsUINameArray)
+        s_pListsUINameArray = lcl_NewUINameArray(STR_POOLCOLL_LISTS_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_LISTS_ARY));
+    return *s_pListsUINameArray;
+}
+
+const std::vector<OUString>& SwStyleNameMapper::GetExtraUINameArray()
+{
+    if (!s_pExtraUINameArray)
+        s_pExtraUINameArray = lcl_NewUINameArray(STR_POOLCOLL_EXTRA_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_EXTRA_ARY));
+    return *s_pExtraUINameArray;
+}
+
+const std::vector<OUString>& SwStyleNameMapper::GetRegisterUINameArray()
+{
+    if (!s_pRegisterUINameArray)
+        s_pRegisterUINameArray = lcl_NewUINameArray(STR_POOLCOLL_REGISTER_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_REGISTER_ARY));
+    return *s_pRegisterUINameArray;
+}
+
+const std::vector<OUString>& SwStyleNameMapper::GetDocUINameArray()
+{
+    if (!s_pDocUINameArray)
+        s_pDocUINameArray = lcl_NewUINameArray(STR_POOLCOLL_DOC_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_DOC_ARY));
+    return *s_pDocUINameArray;
+}
+
+const std::vector<OUString>& SwStyleNameMapper::GetHTMLUINameArray()
+{
+    if (!s_pHTMLUINameArray)
+        s_pHTMLUINameArray = lcl_NewUINameArray(STR_POOLCOLL_HTML_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_HTML_ARY));
+    return *s_pHTMLUINameArray;
+}
+
+const std::vector<OUString>& SwStyleNameMapper::GetFrameFormatUINameArray()
+{
+    if (!s_pFrameFormatUINameArray)
+        s_pFrameFormatUINameArray = lcl_NewUINameArray(STR_POOLFRM_ARY, SAL_N_ELEMENTS(STR_POOLFRM_ARY));
+    return *s_pFrameFormatUINameArray;
+}
+
+const std::vector<OUString>& SwStyleNameMapper::GetChrFormatUINameArray()
+{
+    if (!s_pChrFormatUINameArray)
+        s_pChrFormatUINameArray = lcl_NewUINameArray(STR_POOLCHR_ARY, SAL_N_ELEMENTS(STR_POOLCHR_ARY));
+    return *s_pChrFormatUINameArray;
+}
+
+const std::vector<OUString>& SwStyleNameMapper::GetHTMLChrFormatUINameArray()
+{
+    if (!s_pHTMLChrFormatUINameArray)
+        s_pHTMLChrFormatUINameArray = lcl_NewUINameArray(STR_POOLCHR_HTML_ARY, SAL_N_ELEMENTS(STR_POOLCHR_HTML_ARY));
+    return *s_pHTMLChrFormatUINameArray;
+}
+
+const std::vector<OUString>& SwStyleNameMapper::GetPageDescUINameArray()
+{
+    if (!s_pPageDescUINameArray)
+        s_pPageDescUINameArray = lcl_NewUINameArray(STR_POOLPAGE_ARY, SAL_N_ELEMENTS(STR_POOLPAGE_ARY));
+    return *s_pPageDescUINameArray;
+}
+
+const std::vector<OUString>& SwStyleNameMapper::GetNumRuleUINameArray()
+{
+    if (!s_pNumRuleUINameArray)
+        s_pNumRuleUINameArray = lcl_NewUINameArray(STR_POOLNUMRULE_NUM_ARY, SAL_N_ELEMENTS(STR_POOLNUMRULE_NUM_ARY));
+    return *s_pNumRuleUINameArray;
+}
+
+const std::vector<OUString>& SwStyleNameMapper::GetTableStyleUINameArray()
+{
+    if (!s_pTableStyleUINameArray)
+        s_pTableStyleUINameArray = lcl_NewUINameArray(STR_TABSTYLE_ARY, SAL_N_ELEMENTS(STR_TABSTYLE_ARY));
+    return *s_pTableStyleUINameArray;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

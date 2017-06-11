@@ -37,7 +37,8 @@
 
 #include "docfunc.hxx"
 
-#include "scres.hrc"
+#include "sc.hrc"
+#include "strings.hrc"
 
 #include "arealink.hxx"
 #include "attrib.hxx"
@@ -5574,9 +5575,9 @@ void ScDocFunc::ConvertFormulaToValue( const ScRange& rRange, bool bInteraction 
     aModificator.SetDocumentModified();
 }
 
-void ScDocFunc::EnterListAction( sal_uInt16 nNameResId )
+void ScDocFunc::EnterListAction(const char* pNameResId)
 {
-    OUString aUndo( ScGlobal::GetRscString( nNameResId ) );
+    OUString aUndo(ScGlobal::GetRscString(pNameResId));
     ViewShellId nViewShellId(-1);
     if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
         nViewShellId = pViewSh->GetViewShellId();

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="vcl">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="PrinterPropertiesDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Properties of %s</property>
+    <property name="title" translatable="yes" context="printerpropertiesdialog|PrinterPropertiesDialog">Properties of %s</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -68,7 +68,7 @@
               <object class="GtkLabel" id="paper">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Paper</property>
+                <property name="label" translatable="yes" context="printerpropertiesdialog|paper">Paper</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -82,7 +82,7 @@
               <object class="GtkLabel" id="device">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Device</property>
+                <property name="label" translatable="yes" context="printerpropertiesdialog|device">Device</property>
               </object>
               <packing>
                 <property name="position">2</property>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -35,37 +35,37 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">All</col>
+        <col id="0" translatable="yes" context="numberingformatpage|liststore1">All</col>
       </row>
       <row>
-        <col id="0" translatable="yes">User-defined</col>
+        <col id="0" translatable="yes" context="numberingformatpage|liststore1">User-defined</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Number</col>
+        <col id="0" translatable="yes" context="numberingformatpage|liststore1">Number</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Percent</col>
+        <col id="0" translatable="yes" context="numberingformatpage|liststore1">Percent</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Currency</col>
+        <col id="0" translatable="yes" context="numberingformatpage|liststore1">Currency</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Date</col>
+        <col id="0" translatable="yes" context="numberingformatpage|liststore1">Date</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Time</col>
+        <col id="0" translatable="yes" context="numberingformatpage|liststore1">Time</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Scientific</col>
+        <col id="0" translatable="yes" context="numberingformatpage|liststore1">Scientific</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Fraction</col>
+        <col id="0" translatable="yes" context="numberingformatpage|liststore1">Fraction</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Boolean Value</col>
+        <col id="0" translatable="yes" context="numberingformatpage|liststore1">Boolean Value</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Text</col>
+        <col id="0" translatable="yes" context="numberingformatpage|liststore1">Text</col>
       </row>
     </data>
   </object>
@@ -76,7 +76,7 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Automatically</col>
+        <col id="0" translatable="yes" context="numberingformatpage|liststore2">Automatically</col>
       </row>
     </data>
   </object>
@@ -123,7 +123,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Add</property>
+                    <property name="tooltip_text" translatable="yes" context="numberingformatpage|add|tooltip_text">Add</property>
                     <property name="valign">center</property>
                     <property name="image">image2</property>
                   </object>
@@ -138,7 +138,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Edit Comment</property>
+                    <property name="tooltip_text" translatable="yes" context="numberingformatpage|edit|tooltip_text">Edit Comment</property>
                     <property name="valign">center</property>
                     <property name="image">image3</property>
                   </object>
@@ -153,7 +153,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Remove</property>
+                    <property name="tooltip_text" translatable="yes" context="numberingformatpage|delete|tooltip_text">Remove</property>
                     <property name="valign">center</property>
                     <property name="image">image1</property>
                   </object>
@@ -194,7 +194,7 @@
           <object class="GtkLabel" id="formatf">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">_Format code</property>
+            <property name="label" translatable="yes" context="numberingformatpage|formatf">_Format code</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">formatted</property>
             <attributes>
@@ -290,7 +290,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">_Decimal places:</property>
+                        <property name="label" translatable="yes" context="numberingformatpage|decimalsft">_Decimal places:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">decimalsed</property>
                       </object>
@@ -305,7 +305,7 @@
                         <property name="visible">False</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">Den_ominator places:</property>
+                        <property name="label" translatable="yes" context="numberingformatpage|denominatorft">Den_ominator places:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">denominatored</property>
                       </object>
@@ -326,7 +326,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">Leading _zeroes:</property>
+                    <property name="label" translatable="yes" context="numberingformatpage|leadzerosft">Leading _zeroes:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">leadzerosed</property>
                   </object>
@@ -337,7 +337,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="negnumred">
-                    <property name="label" translatable="yes">_Negative numbers red</property>
+                    <property name="label" translatable="yes" context="numberingformatpage|negnumred">_Negative numbers red</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -359,7 +359,7 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="thousands">
-                        <property name="label" translatable="yes">_Thousands separator</property>
+                        <property name="label" translatable="yes" context="numberingformatpage|thousands">_Thousands separator</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -375,7 +375,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="engineering">
-                        <property name="label" translatable="yes">_Engineering notation</property>
+                        <property name="label" translatable="yes" context="numberingformatpage|engineering">_Engineering notation</property>
                         <property name="visible">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -403,7 +403,7 @@
           <object class="GtkLabel" id="optionsft">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Options</property>
+            <property name="label" translatable="yes" context="numberingformatpage|optionsft">Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -460,7 +460,7 @@
               <object class="GtkLabel" id="categoryft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">C_ategory</property>
+                <property name="label" translatable="yes" context="numberingformatpage|categoryft">C_ategory</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">categorylb:border</property>
                 <attributes>
@@ -533,7 +533,7 @@
               <object class="GtkLabel" id="formatft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Fo_rmat</property>
+                <property name="label" translatable="yes" context="numberingformatpage|formatft">Fo_rmat</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">formatlb:border</property>
                 <attributes>
@@ -593,7 +593,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="sourceformat">
-                        <property name="label" translatable="yes">So_urce format</property>
+                        <property name="label" translatable="yes" context="numberingformatpage|sourceformat">So_urce format</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
@@ -614,7 +614,7 @@
               <object class="GtkLabel" id="languageft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Language</property>
+                <property name="label" translatable="yes" context="numberingformatpage|languageft">_Language</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">languagelb</property>
                 <attributes>

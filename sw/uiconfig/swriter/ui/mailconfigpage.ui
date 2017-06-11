@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.19.0 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.6"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
@@ -82,7 +82,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes">_Your name:</property>
+                    <property name="label" translatable="yes" context="mailconfigpage|displayname_label">_Your name:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">displayname</property>
                   </object>
@@ -96,7 +96,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes">_E-mail address:</property>
+                    <property name="label" translatable="yes" context="mailconfigpage|address_label">_E-mail address:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">address</property>
                   </object>
@@ -107,7 +107,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="replytocb">
-                    <property name="label" translatable="yes">Send replies to _different e-mail address</property>
+                    <property name="label" translatable="yes" context="mailconfigpage|replytocb">Send replies to _different e-mail address</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -126,7 +126,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes">_Reply address:</property>
+                    <property name="label" translatable="yes" context="mailconfigpage|replyto_label">_Reply address:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">replyto</property>
                   </object>
@@ -143,7 +143,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">User Information</property>
+            <property name="label" translatable="yes" context="mailconfigpage|label1">User Information</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -181,7 +181,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="secure">
-                    <property name="label" translatable="yes">_Use secure connection (SSL)</property>
+                    <property name="label" translatable="yes" context="mailconfigpage|secure">_Use secure connection (SSL)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -219,7 +219,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">_Server name:</property>
+                        <property name="label" translatable="yes" context="mailconfigpage|server_label">_Server name:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">server</property>
                       </object>
@@ -233,7 +233,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">_Port:</property>
+                        <property name="label" translatable="yes" context="mailconfigpage|port_label">_Port:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">port</property>
                       </object>
@@ -271,7 +271,7 @@
                     <property name="layout_style">center</property>
                     <child>
                       <object class="GtkButton" id="serverauthentication">
-                        <property name="label" translatable="yes">Ser_ver Authentication…</property>
+                        <property name="label" translatable="yes" context="mailconfigpage|serverauthentication">Ser_ver Authentication…</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -297,7 +297,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Outgoing Server (SMTP) Settings</property>
+            <property name="label" translatable="yes" context="mailconfigpage|label2">Outgoing Server (SMTP) Settings</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -319,7 +319,7 @@
         <property name="layout_style">center</property>
         <child>
           <object class="GtkButton" id="test">
-            <property name="label" translatable="yes">_Test Settings</property>
+            <property name="label" translatable="yes" context="mailconfigpage|test">_Test Settings</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>

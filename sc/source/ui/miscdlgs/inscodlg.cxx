@@ -21,7 +21,7 @@
 
 #include "inscodlg.hxx"
 #include "scresid.hxx"
-#include "scres.hrc"
+#include "strings.hrc"
 
 bool       ScInsertContentsDlg::bPreviousAllCheck = false;
 InsertDeleteFlags ScInsertContentsDlg::nPreviousChecks   = (InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME | InsertDeleteFlags::STRING);

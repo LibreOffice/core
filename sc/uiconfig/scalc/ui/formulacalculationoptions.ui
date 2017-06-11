@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.6"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -13,7 +13,7 @@
     <property name="can_focus">False</property>
     <property name="vexpand">True</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Detailed Calculation Settings</property>
+    <property name="title" translatable="yes" context="formulacalculationoptions|FormulaCalculationOptions">Detailed Calculation Settings</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -43,7 +43,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Conversion from text to number:</property>
+                        <property name="label" translatable="yes" context="formulacalculationoptions|labelConvT2N">Conversion from text to number:</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -52,7 +52,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkEmptyAsZero">
-                        <property name="label" translatable="yes">Treat _empty string as zero</property>
+                        <property name="label" translatable="yes" context="formulacalculationoptions|checkEmptyAsZero">Treat _empty string as zero</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -70,7 +70,7 @@
                       <object class="GtkLabel" id="labelSyntaxRef">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Reference syntax for string reference:</property>
+                        <property name="label" translatable="yes" context="formulacalculationoptions|labelSyntaxRef">Reference syntax for string reference:</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -82,7 +82,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <items>
-                          <item id="0" translatable="yes">Use formula syntax</item>
+                          <item id="0" translatable="yes" context="formulacalculationoptions|comboSyntaxRef">Use formula syntax</item>
                           <item id="1">Calc A1</item>
                           <item id="2">Excel A1</item>
                           <item id="3">Excel R1C1</item>
@@ -99,10 +99,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <items>
-                          <item id="0" translatable="yes">Generate #VALUE! error</item>
-                          <item id="1" translatable="yes">Treat as zero</item>
-                          <item id="2" translatable="yes">Convert only if unambiguous</item>
-                          <item id="3" translatable="yes">Convert also locale dependent</item>
+                          <item id="0" translatable="yes" context="formulacalculationoptions|comboConversion">Generate #VALUE! error</item>
+                          <item id="1" translatable="yes" context="formulacalculationoptions|comboConversion">Treat as zero</item>
+                          <item id="2" translatable="yes" context="formulacalculationoptions|comboConversion">Convert only if unambiguous</item>
+                          <item id="3" translatable="yes" context="formulacalculationoptions|comboConversion">Convert also locale dependent</item>
                         </items>
                       </object>
                       <packing>
@@ -112,7 +112,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="current_doc">
-                        <property name="label" translatable="yes">Apply those settings to current document only</property>
+                        <property name="label" translatable="yes" context="formulacalculationoptions|current_doc">Apply those settings to current document only</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -133,7 +133,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Contents to Numbers</property>
+                <property name="label" translatable="yes" context="formulacalculationoptions|label3">Contents to Numbers</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
