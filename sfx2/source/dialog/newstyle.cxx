@@ -22,7 +22,7 @@
 #include <svl/style.hxx>
 
 #include <sfx2/newstyle.hxx>
-#include "dialog.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/sfxresid.hxx>
 #include <vcl/layout.hxx>
 

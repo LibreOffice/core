@@ -89,9 +89,6 @@ class SwFramePage: public SfxTabPage
     // example
     VclPtr<SvxSwFrameExample>  m_pExampleWN;
 
-    //'string provider'
-    SvxSwFramePosString m_aFramePosString;
-
     bool            m_bAtHorzPosModified;
     bool            m_bAtVertPosModified;
 

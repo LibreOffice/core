@@ -54,7 +54,7 @@
 #include "framework/FrameworkHelper.hxx"
 #include "TableDesignPane.hxx"
 #include "app.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "tablefunction.hxx"
 #include "DrawViewShell.hxx"
 #include "drawdoc.hxx"

@@ -21,16 +21,20 @@
 
 #include <rtl/instance.hxx>
 #include <osl/getglobalmutex.hxx>
-
+#include <tools/simplerm.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 namespace pcr
 {
-
-
     IMPLEMENT_MODULE( PcrModule, "pcr" )
 
+    OUString PcrRes(const char* pId)
+    {
+        return Translate::get(pId, PcrModule::getInstance().getResLocale());
+
+    }
 
 } // namespace pcr
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
