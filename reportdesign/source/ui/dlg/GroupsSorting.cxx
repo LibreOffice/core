@@ -26,14 +26,14 @@
 #include <com/sun/star/report/GroupOn.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 
-#include "RptResId.hrc"
+#include "strings.hrc"
 #include "rptui_slotid.hrc"
-#include "ModuleHelper.hxx"
+#include "core_resource.hxx"
 #include "helpids.hrc"
 #include "GroupExchange.hxx"
 #include "UITools.hxx"
 #include "UndoActions.hxx"
-#include "uistrings.hrc"
+#include "strings.hxx"
 #include "ReportController.hxx"
 #include "ColumnInfo.hxx"
 
@@ -318,7 +318,7 @@ void OFieldExpressionControl::moveGroups(const uno::Sequence<uno::Any>& _aGroups
         m_bIgnoreEvent = true;
         {
             sal_Int32 nRow = _nRow;
-            const OUString sUndoAction(ModuleRes(RID_STR_UNDO_MOVE_GROUP));
+            const OUString sUndoAction(RptResId(RID_STR_UNDO_MOVE_GROUP));
             const UndoContext aUndoContext( m_pParent->m_pController->getUndoManager(), sUndoAction );
 
             uno::Reference< report::XGroups> xGroups = m_pParent->getGroups();
@@ -379,7 +379,7 @@ void OFieldExpressionControl::lateInit()
         SetFont(aFont);
 
         InsertHandleColumn(static_cast<sal_uInt16>(GetTextWidth(OUString('0')) * 4)/*, sal_True */);
-        InsertDataColumn( FIELD_EXPRESSION, OUString(ModuleRes(STR_RPT_EXPRESSION)), 100);
+        InsertDataColumn( FIELD_EXPRESSION, RptResId(STR_RPT_EXPRESSION), 100);
 
         m_pComboCell = VclPtr<ComboBoxControl>::Create( &GetDataWindow() );
         m_pComboCell->SetSelectHdl(LINK(this,OFieldExpressionControl,CBChangeHdl));
@@ -430,7 +430,7 @@ bool OFieldExpressionControl::SaveModified()
             if ( m_aGroupPositions[nRow] == NO_GROUP )
             {
                 bAppend = true;
-                OUString sUndoAction(ModuleRes(RID_STR_UNDO_APPEND_GROUP));
+                OUString sUndoAction(RptResId(RID_STR_UNDO_APPEND_GROUP));
                 m_pParent->m_pController->getUndoManager().EnterListAction( sUndoAction, OUString(), 0, ViewShellId(-1) );
                 xGroup = m_pParent->getGroups()->createGroup();
                 xGroup->setHeaderOn(true);
@@ -756,7 +756,7 @@ void OFieldExpressionControl::DeleteRows()
             if ( bFirstTime )
             {
                 bFirstTime = false;
-                OUString sUndoAction(ModuleRes(RID_STR_UNDO_REMOVE_SELECTION));
+                OUString sUndoAction(RptResId(RID_STR_UNDO_REMOVE_SELECTION));
                 m_pParent->m_pController->getUndoManager().EnterListAction( sUndoAction, OUString(), 0, ViewShellId(-1) );
             }
 
@@ -972,10 +972,18 @@ IMPL_LINK(OGroupsSortingDialog, OnControlFocusGot, Control&, rControl, void )
 {
     if ( m_pFieldExpression && m_pFieldExpression->getExpressionControl() )
     {
-        Control* pControls[] = { m_pFieldExpression->getExpressionControl(), m_pHeaderLst, m_pFooterLst, m_pGroupOnLst, m_pGroupIntervalEd, m_pKeepTogetherLst, m_pOrderLst};
+        const std::pair<Control*, const char*> pControls[] = {
+            { m_pFieldExpression->getExpressionControl(), STR_RPT_HELP_FIELD },
+            { m_pHeaderLst, STR_RPT_HELP_HEADER },
+            { m_pFooterLst, STR_RPT_HELP_FOOTER },
+            { m_pGroupOnLst, STR_RPT_HELP_GROUPON },
+            { m_pGroupIntervalEd, STR_RPT_HELP_INTERVAL },
+            { m_pKeepTogetherLst, STR_RPT_HELP_KEEP },
+            { m_pOrderLst, STR_RPT_HELP_SORT }
+        };
         for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
         {
-            if ( &rControl == pControls[i] )
+            if (&rControl == pControls[i].first)
             {
                 ListBox* pListBox = dynamic_cast< ListBox* >( &rControl );
                 if ( pListBox )
@@ -984,7 +992,7 @@ IMPL_LINK(OGroupsSortingDialog, OnControlFocusGot, Control&, rControl, void )
                 if ( pNumericField )
                     pNumericField->SaveValue();
                 //shows the text given by the id in the multiline edit
-                m_pHelpWindow->SetText(OUString(ModuleRes(static_cast<sal_uInt16>(i+STR_RPT_HELP_FIELD))));
+                m_pHelpWindow->SetText(RptResId(pControls[i].second));
                 break;
             }
         }
@@ -1106,23 +1114,23 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
         case sdbc::DataType::LONGVARCHAR:
         case sdbc::DataType::VARCHAR:
         case sdbc::DataType::CHAR:
-            m_pGroupOnLst->InsertEntry(OUString(ModuleRes(STR_RPT_PREFIXCHARS)));
+            m_pGroupOnLst->InsertEntry(RptResId(STR_RPT_PREFIXCHARS));
             m_pGroupOnLst->SetEntryData(1,reinterpret_cast<void*>(report::GroupOn::PREFIX_CHARACTERS));
             break;
         case sdbc::DataType::DATE:
         case sdbc::DataType::TIME:
         case sdbc::DataType::TIMESTAMP:
             {
-                const sal_uInt16 nIds[] = { STR_RPT_YEAR, STR_RPT_QUARTER,STR_RPT_MONTH,STR_RPT_WEEK,STR_RPT_DAY,STR_RPT_HOUR,STR_RPT_MINUTE };
-                for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(nIds); ++i)
+                const char* aIds[] = { STR_RPT_YEAR, STR_RPT_QUARTER,STR_RPT_MONTH,STR_RPT_WEEK,STR_RPT_DAY,STR_RPT_HOUR,STR_RPT_MINUTE };
+                for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
                 {
-                    m_pGroupOnLst->InsertEntry(OUString(ModuleRes(nIds[i])));
+                    m_pGroupOnLst->InsertEntry(RptResId(aIds[i]));
                     m_pGroupOnLst->SetEntryData(i+1,reinterpret_cast<void*>(i+2));
                 }
             }
             break;
         default:
-            m_pGroupOnLst->InsertEntry(OUString(ModuleRes(STR_RPT_INTERVAL)));
+            m_pGroupOnLst->InsertEntry(RptResId(STR_RPT_INTERVAL));
             m_pGroupOnLst->SetEntryData(1,reinterpret_cast<void*>(report::GroupOn::INTERVAL));
             break;
     }

@@ -20,8 +20,9 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include "tabbgcolordlg.hxx"
+#include "sc.hrc"
 #include "scresid.hxx"
-#include "scres.hrc"
+#include "strings.hrc"
 
 #include <tools/color.hxx>
 #include <sfx2/objsh.hxx>

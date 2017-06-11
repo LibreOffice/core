@@ -35,7 +35,7 @@
 #include <svtools/miscopt.hxx>
 
 #include "versdlg.hxx"
-#include "dialog.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/dialoghelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxresid.hxx>

@@ -21,24 +21,16 @@
 #include <tools/resary.hxx>
 #include <tools/debug.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
+#include "swframeposstrings.hrc"
 
-SvxSwFramePosString::SvxSwFramePosString() :
-    pImpl(new ResStringArray(ResId(RID_SVXSW_FRAMEPOSITIONS, DIALOG_MGR())))
+OUString SvxSwFramePosString::GetString(StringId eId)
 {
-    assert(pImpl->Count() == SvxSwFramePosString::STR_MAX);
-}
-
-SvxSwFramePosString::~SvxSwFramePosString()
-{
-}
-
-OUString SvxSwFramePosString::GetString(StringId eId) const
-{
+    assert(SAL_N_ELEMENTS(RID_SVXSW_FRAMEPOSITIONS) == SvxSwFramePosString::STR_MAX);
     DBG_ASSERT(eId >= 0 && eId < STR_MAX, "invalid StringId");
     if(!(eId >= 0 && eId < STR_MAX))
         eId = LEFT;
-    return pImpl->GetString(eId);
+    return SvxResId(RID_SVXSW_FRAMEPOSITIONS[eId]);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

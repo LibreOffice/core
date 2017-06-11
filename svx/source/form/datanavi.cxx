@@ -27,15 +27,16 @@
 
 #include "fmhelp.hrc"
 #include "bitmaps.hlst"
+#include "fpicker/fpicker.hrc"
 #include <svx/svxids.hrc>
 #include <tools/rcid.h>
 #include <tools/diagnose_ex.h>
+#include <tools/simplerm.hxx>
 #include <svx/xmlexchg.hxx>
 #include <svx/fmshell.hxx>
 #include <svtools/miscopt.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>
-#include <svtools/svtools.hrc>
 #include "svtools/treelistentry.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -517,7 +518,7 @@ namespace svxform
                 ItemNode* pNode = nullptr;
                 Reference< css::xml::dom::XNode > xParentNode;
                 Reference< XPropertySet > xNewBinding;
-                sal_uInt16 nResId = 0;
+                const char* pResId = nullptr;
                 bool bIsElement = true;
                 if ( DGTInstance == m_eGroup )
                 {
@@ -537,7 +538,7 @@ namespace svxform
                     {
                         try
                         {
-                            nResId = RID_STR_DATANAV_ADD_ELEMENT;
+                            pResId = RID_STR_DATANAV_ADD_ELEMENT;
                             xNewNode = m_xUIHelper->createElement( xParentNode, NEW_ELEMENT );
                         }
                         catch ( Exception& )
@@ -547,7 +548,7 @@ namespace svxform
                     }
                     else
                     {
-                        nResId = RID_STR_DATANAV_ADD_ATTRIBUTE;
+                        pResId = RID_STR_DATANAV_ADD_ATTRIBUTE;
                         bIsElement = false;
                         eType = DITAttribute;
                         try
@@ -605,7 +606,7 @@ namespace svxform
                 {
                     try
                     {
-                        nResId = RID_STR_DATANAV_ADD_BINDING;
+                        pResId = RID_STR_DATANAV_ADD_BINDING;
                         xNewBinding = xModel->createBinding();
                         Reference< XSet > xBindings( xModel->getBindings(), UNO_QUERY );
                         xBindings->insert( makeAny( xNewBinding ) );
@@ -619,7 +620,7 @@ namespace svxform
                 }
 
                 ScopedVclPtrInstance< AddDataItemDialog > aDlg( this, pNode, m_xUIHelper );
-                aDlg->SetText( SvxResId( nResId ) );
+                aDlg->SetText( SvxResId( pResId ) );
                 aDlg->InitText( eType );
                 short nReturn = aDlg->Execute();
                 if (  DGTInstance == m_eGroup )
@@ -693,7 +694,7 @@ namespace svxform
 
                     ScopedVclPtrInstance< AddDataItemDialog > aDlg( this, pNode, m_xUIHelper );
                     DataItemType eType = DITElement;
-                    sal_uInt16 nResId = RID_STR_DATANAV_EDIT_ELEMENT;
+                    const char* pResId = RID_STR_DATANAV_EDIT_ELEMENT;
                     if ( pNode && pNode->m_xNode.is() )
                     {
                         try
@@ -701,7 +702,7 @@ namespace svxform
                             css::xml::dom::NodeType eChildType = pNode->m_xNode->getNodeType();
                             if ( eChildType == css::xml::dom::NodeType_ATTRIBUTE_NODE )
                             {
-                                nResId = RID_STR_DATANAV_EDIT_ATTRIBUTE;
+                                pResId = RID_STR_DATANAV_EDIT_ATTRIBUTE;
                                 eType = DITAttribute;
                             }
                         }
@@ -712,10 +713,10 @@ namespace svxform
                     }
                     else if ( DGTBinding == m_eGroup )
                     {
-                        nResId = RID_STR_DATANAV_EDIT_BINDING;
+                        pResId = RID_STR_DATANAV_EDIT_BINDING;
                         eType = DITBinding;
                     }
-                    aDlg->SetText( SvxResId( nResId ) );
+                    aDlg->SetText( SvxResId( pResId ) );
                     aDlg->InitText( eType );
                     if ( aDlg->Execute() == RET_OK )
                     {
@@ -953,9 +954,9 @@ namespace svxform
                     DBG_ASSERT( pNode->m_xNode.is(), "XFormsPage::RemoveEntry(): no XNode" );
                     css::xml::dom::NodeType eChildType = pNode->m_xNode->getNodeType();
                     bool bIsElement = ( eChildType == css::xml::dom::NodeType_ELEMENT_NODE );
-                    sal_uInt16 nResId = bIsElement ? RID_STR_QRY_REMOVE_ELEMENT : RID_STR_QRY_REMOVE_ATTRIBUTE;
+                    const char* pResId = bIsElement ? RID_STR_QRY_REMOVE_ELEMENT : RID_STR_QRY_REMOVE_ATTRIBUTE;
                     OUString sVar = bIsElement ? OUString(ELEMENTNAME) : OUString(ATTRIBUTENAME);
-                    ScopedVclPtrInstance< MessageDialog > aQBox(this, SvxResId(nResId), VclMessageType::Question, VclButtonsType::YesNo);
+                    ScopedVclPtrInstance< MessageDialog > aQBox(this, SvxResId(pResId), VclMessageType::Question, VclButtonsType::YesNo);
                     OUString sMessText = aQBox->get_primary_text();
                     sMessText = sMessText.replaceFirst(
                         sVar, m_xUIHelper->getNodeDisplayName( pNode->m_xNode, false ) );
@@ -985,7 +986,7 @@ namespace svxform
             {
                 DBG_ASSERT( pNode->m_xPropSet.is(), "XFormsPage::RemoveEntry(): no propset" );
                 bool bSubmission = ( DGTSubmission == m_eGroup );
-                sal_uInt16 nResId = bSubmission ? RID_STR_QRY_REMOVE_SUBMISSION : RID_STR_QRY_REMOVE_BINDING;
+                const char* pResId = bSubmission ? RID_STR_QRY_REMOVE_SUBMISSION : RID_STR_QRY_REMOVE_BINDING;
                 OUString sProperty = bSubmission ? OUString(PN_SUBMISSION_ID) : OUString(PN_BINDING_ID);
                 OUString sSearch = bSubmission ? OUString(SUBMISSIONNAME) : OUString(BINDINGNAME);
                 OUString sName;
@@ -997,7 +998,7 @@ namespace svxform
                 {
                     SAL_WARN( "svx.form", "XFormsPage::RemoveEntry(): exception caught" );
                 }
-                ScopedVclPtrInstance<MessageDialog> aQBox(this, SvxResId(nResId),
+                ScopedVclPtrInstance<MessageDialog> aQBox(this, SvxResId(pResId),
                                                           VclMessageType::Question, VclButtonsType::YesNo);
                 OUString sMessText = aQBox->get_primary_text();
                 sMessText = sMessText.replaceFirst( sSearch, sName);
@@ -1320,8 +1321,8 @@ namespace svxform
         }
         if ( DGTInstance == m_eGroup )
         {
-            sal_uInt16 nResId1 = RID_STR_DATANAV_EDIT_ELEMENT;
-            sal_uInt16 nResId2 = RID_STR_DATANAV_REMOVE_ELEMENT;
+            const char* pResId1 = RID_STR_DATANAV_EDIT_ELEMENT;
+            const char* pResId2 = RID_STR_DATANAV_REMOVE_ELEMENT;
             if ( pEntry )
             {
                 ItemNode* pNode = static_cast< ItemNode* >( pEntry->GetUserData() );
@@ -1332,8 +1333,8 @@ namespace svxform
                         css::xml::dom::NodeType eChildType = pNode->m_xNode->getNodeType();
                         if ( eChildType == css::xml::dom::NodeType_ATTRIBUTE_NODE )
                         {
-                            nResId1 = RID_STR_DATANAV_EDIT_ATTRIBUTE;
-                            nResId2 = RID_STR_DATANAV_REMOVE_ATTRIBUTE;
+                            pResId1 = RID_STR_DATANAV_EDIT_ATTRIBUTE;
+                            pResId2 = RID_STR_DATANAV_REMOVE_ATTRIBUTE;
                         }
                     }
                     catch ( Exception& )
@@ -1342,12 +1343,12 @@ namespace svxform
                     }
                 }
             }
-            m_pToolBox->SetItemText( m_nEditId, SvxResId( nResId1 ) );
-            m_pToolBox->SetItemText( m_nRemoveId, SvxResId( nResId2 ) );
+            m_pToolBox->SetItemText( m_nEditId, SvxResId( pResId1 ) );
+            m_pToolBox->SetItemText( m_nRemoveId, SvxResId( pResId2 ) );
             if ( _pMenu )
             {
-                _pMenu->SetItemText(_pMenu->GetItemId("edit"), SvxResId( nResId1 ) );
-                _pMenu->SetItemText(_pMenu->GetItemId("delete"), SvxResId( nResId2 ) );
+                _pMenu->SetItemText(_pMenu->GetItemId("edit"), SvxResId( pResId1 ) );
+                _pMenu->SetItemText(_pMenu->GetItemId("delete"), SvxResId( pResId2 ) );
             }
         }
     }
@@ -3362,8 +3363,8 @@ namespace svxform
         m_pURLED->DisableHistory();
         m_pFilePickerBtn->SetClickHdl( LINK( this, AddInstanceDialog, FilePickerHdl ) );
 
-        // load the filter name from fps_office resource
-        m_sAllFilterName = ResId(STR_FILTERNAME_ALL, *ResMgr::CreateResMgr("fps_office"));
+        // load the filter name from fps resource
+        m_sAllFilterName = Translate::get(STR_FILTERNAME_ALL, Translate::Create("fps", Application::GetSettings().GetUILanguageTag()));
     }
 
     AddInstanceDialog::~AddInstanceDialog()

@@ -1,0 +1,53 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SW_INC_UTLUI_HRC
+#define INCLUDED_SW_INC_UTLUI_HRC
+
+#define N_(String) (u8##String)
+
+const char* RID_SHELLRES_AUTOFMTSTRS[] =
+{
+    N_("Remove empty paragraphs"),
+    N_("Use replacement table"),
+    N_("Correct TWo INitial CApitals"),
+    N_("Capitalize first letter of sentences"),
+    N_("Replace \"standard\" quotes with %1 \bcustom%2 quotes"),
+    N_("Replace Custom Styles"),
+    N_("Bullets replaced"),
+    N_("Automatic _underline_"),
+    N_("Automatic *bold*"),
+    N_("Replace 1/2 ... with ½ ..."),
+    N_("URL recognition"),
+    N_("Replace dashes"),
+    N_("Replace 1st... with 1^st..."),
+    N_("Combine single line paragraphs"),
+    N_("Set \"Text body\" Style"),
+    N_("Set \"Text body indent\" Style"),
+    N_("Set \"Hanging indent\" Style"),
+    N_("Set \"Text body indent\" Style"),
+    N_("Set \"Heading $(ARG1)\" Style"),
+    N_("Set \"Bullet\" or \"Numbering\" Style"),
+    N_("Combine paragraphs"),
+    N_("Add non breaking space")
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -75,15 +75,15 @@ class SmElementsControl : public Control
     friend class ElementSelectorUIObject;
     friend class ElementUIObject;
 
-    static const std::pair<const char*, sal_uInt16> aUnaryBinaryOperatorsList[];
-    static const std::pair<const char*, sal_uInt16> aRelationsList[];
-    static const std::pair<const char*, sal_uInt16> aSetOperations[];
-    static const std::pair<const char*, sal_uInt16> aFunctions[];
-    static const std::pair<const char*, sal_uInt16> aOperators[];
-    static const std::pair<const char*, sal_uInt16> aAttributes[];
-    static const std::pair<const char*, sal_uInt16> aBrackets[];
-    static const std::pair<const char*, sal_uInt16> aFormats[];
-    static const std::pair<const char*, sal_uInt16> aOthers[];
+    static const std::pair<const char*, const char*> aUnaryBinaryOperatorsList[];
+    static const std::pair<const char*, const char*> aRelationsList[];
+    static const std::pair<const char*, const char*> aSetOperations[];
+    static const std::pair<const char*, const char*> aFunctions[];
+    static const std::pair<const char*, const char*> aOperators[];
+    static const std::pair<const char*, const char*> aAttributes[];
+    static const std::pair<const char*, const char*> aBrackets[];
+    static const std::pair<const char*, const char*> aFormats[];
+    static const std::pair<const char*, const char*> aOthers[];
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
@@ -92,7 +92,7 @@ class SmElementsControl : public Control
 
     SmDocShell*   mpDocShell;
     SmFormat      maFormat;
-    sal_uInt16    maCurrentSetId;
+    OString       msCurrentSetId;
     SmElement*    mpCurrentElement;
     Link<SmElement&,void> maSelectHdlLink;
 
@@ -103,7 +103,7 @@ class SmElementsControl : public Control
 
     void addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
 
-    void addElements(const std::pair<const char*, sal_uInt16> aElementsArray[], sal_uInt16 size);
+    void addElements(const std::pair<const char*, const char*> aElementsArray[], sal_uInt16 size);
 
     void build();
 
@@ -116,7 +116,7 @@ public:
     virtual ~SmElementsControl() override;
     virtual void dispose() override;
 
-    void setElementSetId(sal_uInt16 aSetId);
+    void setElementSetId(const char* pSetId);
 
     void setVerticalMode(bool bVertical);
 
@@ -132,7 +132,7 @@ public:
 
 class SmElementsDockingWindow : public SfxDockingWindow
 {
-    static const sal_uInt16 aCategories[];
+    static const char* aCategories[];
 
     VclPtr<SmElementsControl>  mpElementsControl;
     VclPtr<ListBox>            mpElementListBox;

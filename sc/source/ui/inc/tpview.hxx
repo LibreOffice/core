@@ -105,8 +105,6 @@ class ScTpLayoutOptions : public SfxTabPage
     VclPtr<CheckBox>       m_pReplWarnCB;
     VclPtr<CheckBox>       m_pLegacyCellSelectionCB;
 
-    SvxStringArray  aUnitArr;
-
     DECL_LINK(MetricHdl, ListBox&, void );
     DECL_LINK( AlignHdl, Button*, void );
 
