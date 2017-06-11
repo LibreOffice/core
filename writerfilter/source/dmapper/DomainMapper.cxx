@@ -3125,6 +3125,9 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
                     m_pImpl->CloseFieldCommand();
                     return;
                 case cFieldEnd:
+                    // In case there isn't any field seperator.
+                    if ( m_pImpl->IsOpenFieldCommand() )
+                        m_pImpl->CloseFieldCommand();
                     m_pImpl->PopFieldContext();
                     return;
                 default:
