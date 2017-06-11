@@ -1431,7 +1431,7 @@
 				<value-of select="'}'"/>
 				 -->
 
-				<if test="$superscript and not($superscript-left)">
+				<if test="$superscript and not($superscript-left) and not(boolean(ancestor::text:note))">
 					<text>&lt;sup&gt;</text>
 				</if>
 				<if test="$subscript and not($subscript-left)">
@@ -1469,7 +1469,7 @@
 				<if test="$subscript and not($subscript-right)">
 					<text>&lt;/sub&gt;</text>
 				</if>
-				<if test="$superscript and not($superscript-right)">
+				<if test="$superscript and not($superscript-right) and not(boolean(ancestor::text:note))">
 					<text>&lt;/sup&gt;</text>
 				</if>
 
