@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="basctl">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="ManageBreakpointsDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Manage Breakpoints</property>
+    <property name="title" translatable="yes" context="managebreakpoints|ManageBreakpointsDialog">Manage Breakpoints</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -126,7 +126,7 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="active">
-                        <property name="label" translatable="yes">Active</property>
+                        <property name="label" translatable="yes" context="managebreakpoints|active">Active</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -179,7 +179,7 @@
                           <object class="GtkLabel" id="label2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Pass count:</property>
+                            <property name="label" translatable="yes" context="managebreakpoints|label2">Pass count:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">pass-nospin</property>
                           </object>
@@ -202,7 +202,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Breakpoints</property>
+                <property name="label" translatable="yes" context="managebreakpoints|label1">Breakpoints</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

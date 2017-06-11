@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sc">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkBox" id="SubTotalOptionsPage">
@@ -32,7 +32,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="pagebreak">
-                    <property name="label" translatable="yes">_Page break between groups</property>
+                    <property name="label" translatable="yes" context="subtotaloptionspage|pagebreak">_Page break between groups</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -50,7 +50,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="case">
-                    <property name="label" translatable="yes">_Case sensitive</property>
+                    <property name="label" translatable="yes" context="subtotaloptionspage|case">_Case sensitive</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -68,7 +68,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="sort">
-                    <property name="label" translatable="yes">Pre-_sort area according to groups</property>
+                    <property name="label" translatable="yes" context="subtotaloptionspage|sort">Pre-_sort area according to groups</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -92,7 +92,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Groups</property>
+            <property name="label" translatable="yes" context="subtotaloptionspage|label1">Groups</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -130,7 +130,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkRadioButton" id="ascending">
-                    <property name="label" translatable="yes">_Ascending</property>
+                    <property name="label" translatable="yes" context="subtotaloptionspage|ascending">_Ascending</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -150,7 +150,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="descending">
-                    <property name="label" translatable="yes">D_escending</property>
+                    <property name="label" translatable="yes" context="subtotaloptionspage|descending">D_escending</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -170,7 +170,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="formats">
-                    <property name="label" translatable="yes">I_nclude formats</property>
+                    <property name="label" translatable="yes" context="subtotaloptionspage|formats">I_nclude formats</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -188,7 +188,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="btnuserdef">
-                    <property name="label" translatable="yes">C_ustom sort order</property>
+                    <property name="label" translatable="yes" context="subtotaloptionspage|btnuserdef">C_ustom sort order</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -234,7 +234,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Sort</property>
+            <property name="label" translatable="yes" context="subtotaloptionspage|label2">Sort</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

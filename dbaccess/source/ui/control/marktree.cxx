@@ -18,7 +18,7 @@
  */
 
 #include "marktree.hxx"
-#include "dbu_control.hrc"
+#include "strings.hrc"
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

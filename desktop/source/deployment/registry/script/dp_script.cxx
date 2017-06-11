@@ -18,7 +18,7 @@
  */
 
 
-#include "dp_script.hrc"
+#include "strings.hrc"
 #include "dp_services.hxx"
 #include "dp_lib_container.h"
 #include "dp_backend.h"
@@ -144,12 +144,12 @@ BackendImpl::BackendImpl(
       m_xBasicLibTypeInfo( new Package::TypeInfo(
                                "application/vnd.sun.star.basic-library",
                                OUString() /* no file filter */,
-                               getResourceString(RID_STR_BASIC_LIB)
+                               DpResId(RID_STR_BASIC_LIB)
                                ) ),
       m_xDialogLibTypeInfo( new Package::TypeInfo(
                                 "application/vnd.sun.star.dialog-library",
                                 OUString() /* no file filter */,
-                                getResourceString(RID_STR_DIALOG_LIB)
+                                DpResId(RID_STR_DIALOG_LIB)
                                 ) ),
       m_typeInfos( 2 )
 {
@@ -233,7 +233,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         }
         if (mediaType.isEmpty())
             throw lang::IllegalArgumentException(
-                StrCannotDetectMediaType::get() + url,
+                StrCannotDetectMediaType() + url,
                 static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
     }
 
@@ -272,7 +272,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         }
     }
     throw lang::IllegalArgumentException(
-        StrUnsupportedMediaType::get() + mediaType,
+        StrUnsupportedMediaType() + mediaType,
         static_cast<OWeakObject *>(this),
         static_cast<sal_Int16>(-1) );
 }

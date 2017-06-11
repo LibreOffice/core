@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="HyperlinkDialog">
@@ -8,7 +8,7 @@
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Hyperlink</property>
+    <property name="title" translatable="yes" context="hyperlinkdialog|HyperlinkDialog">Hyperlink</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -39,7 +39,7 @@
             </child>
             <child>
               <object class="GtkButton" id="apply">
-                <property name="label" translatable="yes">Apply</property>
+                <property name="label" translatable="yes" context="hyperlinkdialog|apply">Apply</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -81,7 +81,7 @@
             </child>
             <child>
               <object class="GtkButton" id="reset">
-                <property name="label" translatable="yes">Reset</property>
+                <property name="label" translatable="yes" context="hyperlinkdialog|reset">Reset</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

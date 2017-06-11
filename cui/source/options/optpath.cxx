@@ -36,6 +36,7 @@
 #include <dialmgr.hxx>
 #include <cuires.hrc>
 #include "helpid.hrc"
+#include "strings.hrc"
 #include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -276,7 +277,6 @@ bool SvxPathTabPage::FillItemSet( SfxItemSet* )
     return true;
 }
 
-
 void SvxPathTabPage::Reset( const SfxItemSet* )
 {
     pPathBox->Clear();
@@ -292,51 +292,74 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
             && !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
             continue;
 
+        const char* pId = nullptr;
+
         switch (i)
         {
             case SvtPathOptions::PATH_AUTOCORRECT:
+                pId = RID_SVXSTR_KEY_AUTOCORRECT_DIR;
+                break;
             case SvtPathOptions::PATH_AUTOTEXT:
+                pId = RID_SVXSTR_KEY_GLOSSARY_PATH;
+                break;
             case SvtPathOptions::PATH_BACKUP:
+                pId = RID_SVXSTR_KEY_BACKUP_PATH;
+                break;
             case SvtPathOptions::PATH_GALLERY:
+                pId = RID_SVXSTR_KEY_GALLERY_DIR;
+                break;
             case SvtPathOptions::PATH_GRAPHIC:
+                pId = RID_SVXSTR_KEY_GRAPHICS_PATH;
+                break;
             case SvtPathOptions::PATH_TEMP:
+                pId = RID_SVXSTR_KEY_TEMP_PATH;
+                break;
             case SvtPathOptions::PATH_TEMPLATE:
+                pId = RID_SVXSTR_KEY_TEMPLATE_PATH;
+                break;
             case SvtPathOptions::PATH_DICTIONARY:
+                pId = RID_SVXSTR_KEY_DICTIONARY_PATH;
+                break;
             case SvtPathOptions::PATH_CLASSIFICATION:
+                pId = RID_SVXSTR_KEY_CLASSIFICATION_PATH;
+                break;
 #if OSL_DEBUG_LEVEL > 1
             case SvtPathOptions::PATH_LINGUISTIC:
+                pId = RID_SVXSTR_KEY_LINGUISTIC_DIR;
+                break;
 #endif
             case SvtPathOptions::PATH_WORK:
-            {
-                sal_uInt32 nId = RID_SVXSTR_PATH_NAME_START + i;
-                if (i == SvtPathOptions::PATH_CLASSIFICATION)
-                    // RID_SVXSTR_KEY_USERDICTIONARY_DIR already took our slot, so name the key explicitly.
-                    nId = RID_SVXSTR_KEY_CLASSIFICATION_PATH;
-                OUString aStr(CuiResId(nId));
-
-                nWidth1 = std::max(nWidth1, pPathBox->GetTextWidth(aStr));
-                aStr += "\t";
-                OUString sInternal, sUser, sWritable;
-                bool bReadOnly = false;
-                GetPathList( i, sInternal, sUser, sWritable, bReadOnly );
-                OUString sTmpPath = sUser;
-                if ( !sTmpPath.isEmpty() && !sWritable.isEmpty() )
-                    sTmpPath += OUStringLiteral1(MULTIPATH_DELIMITER);
-                sTmpPath += sWritable;
-                const OUString aValue = Convert_Impl( sTmpPath );
-                nWidth2 = std::max(nWidth2, pPathBox->GetTextWidth(aValue));
-                aStr += aValue;
-                SvTreeListEntry* pEntry = pPathBox->InsertEntry( aStr );
-                if ( bReadOnly )
-                {
-                    pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->m_aLockImage );
-                }
-                PathUserData_Impl* pPathImpl = new PathUserData_Impl(i);
-                pPathImpl->sUserPath = sUser;
-                pPathImpl->sWritablePath = sWritable;
-                pEntry->SetUserData( pPathImpl );
-            }
+                pId = RID_SVXSTR_KEY_WORK_PATH;
+                break;
         }
+
+        if (pId)
+        {
+            OUString aStr(CuiResId(pId));
+
+            nWidth1 = std::max(nWidth1, pPathBox->GetTextWidth(aStr));
+            aStr += "\t";
+            OUString sInternal, sUser, sWritable;
+            bool bReadOnly = false;
+            GetPathList( i, sInternal, sUser, sWritable, bReadOnly );
+            OUString sTmpPath = sUser;
+            if ( !sTmpPath.isEmpty() && !sWritable.isEmpty() )
+                sTmpPath += OUStringLiteral1(MULTIPATH_DELIMITER);
+            sTmpPath += sWritable;
+            const OUString aValue = Convert_Impl( sTmpPath );
+            nWidth2 = std::max(nWidth2, pPathBox->GetTextWidth(aValue));
+            aStr += aValue;
+            SvTreeListEntry* pEntry = pPathBox->InsertEntry( aStr );
+            if ( bReadOnly )
+            {
+                pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->m_aLockImage );
+            }
+            PathUserData_Impl* pPathImpl = new PathUserData_Impl(i);
+            pPathImpl->sUserPath = sUser;
+            pPathImpl->sWritablePath = sWritable;
+            pEntry->SetUserData( pPathImpl );
+        }
+
     }
 
     long aTabs[] = {3, 0, 0, 0};

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="cui">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="MacroSelectorDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Macro Selector</property>
+    <property name="title" translatable="yes" context="macroselectordialog|MacroSelectorDialog">Macro Selector</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -34,7 +34,7 @@
             </child>
             <child>
               <object class="GtkButton" id="add">
-                <property name="label" translatable="yes">Add</property>
+                <property name="label" translatable="yes" context="macroselectordialog|add">Add</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
@@ -111,7 +111,7 @@
                 <property name="no_show_all">True</property>
                 <property name="hexpand">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Select the library that contains the macro you want. Then select the macro under 'Macro name'.</property>
+                <property name="label" translatable="yes" context="macroselectordialog|helpmacro">Select the library that contains the macro you want. Then select the macro under 'Macro name'.</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">60</property>
               </object>
@@ -127,7 +127,7 @@
                 <property name="no_show_all">True</property>
                 <property name="hexpand">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">To add a command to a toolbar, select the category and then the command. Then drag the command to the Commands list of the Toolbars tab page in the Customize dialog.</property>
+                <property name="label" translatable="yes" context="macroselectordialog|helptoolbar">To add a command to a toolbar, select the category and then the command. Then drag the command to the Commands list of the Toolbars tab page in the Customize dialog.</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">60</property>
               </object>
@@ -181,7 +181,7 @@
                           <object class="GtkLabel" id="libraryft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Library</property>
+                            <property name="label" translatable="yes" context="macroselectordialog|libraryft">Library</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -196,7 +196,7 @@
                           <object class="GtkLabel" id="categoryft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Category</property>
+                            <property name="label" translatable="yes" context="macroselectordialog|categoryft">Category</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -253,7 +253,7 @@
                           <object class="GtkLabel" id="macronameft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Macro Name</property>
+                            <property name="label" translatable="yes" context="macroselectordialog|macronameft">Macro Name</property>
                             <property name="track_visited_links">False</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
@@ -269,7 +269,7 @@
                           <object class="GtkLabel" id="commandsft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Commands</property>
+                            <property name="label" translatable="yes" context="macroselectordialog|commandsft">Commands</property>
                             <property name="track_visited_links">False</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
@@ -338,7 +338,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Description</property>
+                    <property name="label" translatable="yes" context="macroselectordialog|label1">Description</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

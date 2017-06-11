@@ -21,7 +21,6 @@
 #include <tuple>
 
 #include <SwStyleNameMapper.hxx>
-#include <tools/resmgr.hxx>
 #include <poolfmt.hxx>
 #include <rcid.hrc>
 
@@ -29,23 +28,8 @@
 #include <stdlib.h>
 #endif
 
-extern ResMgr* pSwResMgr;
-// Initialise UI names to 0
-std::vector<OUString> *SwStyleNameMapper::s_pTextUINameArray = nullptr,
-                *SwStyleNameMapper::s_pListsUINameArray = nullptr,
-                *SwStyleNameMapper::s_pExtraUINameArray = nullptr,
-                *SwStyleNameMapper::s_pRegisterUINameArray = nullptr,
-                *SwStyleNameMapper::s_pDocUINameArray = nullptr,
-                *SwStyleNameMapper::s_pHTMLUINameArray = nullptr,
-                *SwStyleNameMapper::s_pFrameFormatUINameArray = nullptr,
-                *SwStyleNameMapper::s_pChrFormatUINameArray = nullptr,
-                *SwStyleNameMapper::s_pHTMLChrFormatUINameArray = nullptr,
-                *SwStyleNameMapper::s_pPageDescUINameArray = nullptr,
-                *SwStyleNameMapper::s_pNumRuleUINameArray = nullptr,
-                *SwStyleNameMapper::s_pTableStyleUINameArray = nullptr,
-                *SwStyleNameMapper::s_pCellStyleUINameArray = nullptr,
-
 // Initialise programmatic names to 0
+std::vector<OUString>
                 *SwStyleNameMapper::s_pTextProgNameArray = nullptr,
                 *SwStyleNameMapper::s_pListsProgNameArray = nullptr,
                 *SwStyleNameMapper::s_pExtraProgNameArray = nullptr,
@@ -341,20 +325,6 @@ const struct SwTableEntry TableStyleProgNameTable [] =
     { 0, nullptr }
 };
 #undef ENTRY
-
-std::vector<OUString>*
-lcl_NewUINameArray(sal_uInt16 nStt, sal_uInt16 const nEnd)
-{
-    std::vector<OUString> *const pNameArray = new std::vector<OUString>;
-    pNameArray->reserve(nEnd - nStt);
-    while( nStt < nEnd )
-    {
-        const ResId aRId( nStt, *pSwResMgr );
-        pNameArray->push_back(aRId);
-        ++nStt;
-    }
-    return pNameArray;
-}
 
 std::vector<OUString>*
 lcl_NewProgNameArray(const SwTableEntry *pTable, sal_uInt8 const nCount)
@@ -767,102 +737,6 @@ sal_uInt16 SwStyleNameMapper::GetPoolIdFromProgName(
     const NameToIdHash & rHashMap = getHashTable ( eFlags, true );
     NameToIdHash::const_iterator aIter = rHashMap.find(rName);
     return aIter != rHashMap.end() ? (*aIter).second : USHRT_MAX;
-}
-
-const std::vector<OUString>& SwStyleNameMapper::GetTextUINameArray()
-{
-    if (!s_pTextUINameArray)
-        s_pTextUINameArray = lcl_NewUINameArray( RC_POOLCOLL_TEXT_BEGIN,
-            RC_POOLCOLL_TEXT_BEGIN + (RES_POOLCOLL_TEXT_END - RES_POOLCOLL_TEXT_BEGIN) );
-    return *s_pTextUINameArray;
-}
-
-const std::vector<OUString>& SwStyleNameMapper::GetListsUINameArray()
-{
-    if (!s_pListsUINameArray)
-        s_pListsUINameArray = lcl_NewUINameArray( RC_POOLCOLL_LISTS_BEGIN,
-            RC_POOLCOLL_LISTS_BEGIN + (RES_POOLCOLL_LISTS_END - RES_POOLCOLL_LISTS_BEGIN) );
-    return *s_pListsUINameArray;
-}
-
-const std::vector<OUString>& SwStyleNameMapper::GetExtraUINameArray()
-{
-    if (!s_pExtraUINameArray)
-        s_pExtraUINameArray = lcl_NewUINameArray( RC_POOLCOLL_EXTRA_BEGIN,
-            RC_POOLCOLL_EXTRA_BEGIN + (RES_POOLCOLL_EXTRA_END - RES_POOLCOLL_EXTRA_BEGIN) );
-    return *s_pExtraUINameArray;
-}
-
-const std::vector<OUString>& SwStyleNameMapper::GetRegisterUINameArray()
-{
-    if (!s_pRegisterUINameArray)
-        s_pRegisterUINameArray = lcl_NewUINameArray( RC_POOLCOLL_REGISTER_BEGIN,
-            RC_POOLCOLL_REGISTER_BEGIN + (RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN) );
-    return *s_pRegisterUINameArray;
-}
-
-const std::vector<OUString>& SwStyleNameMapper::GetDocUINameArray()
-{
-    if (!s_pDocUINameArray)
-        s_pDocUINameArray = lcl_NewUINameArray( RC_POOLCOLL_DOC_BEGIN,
-            RC_POOLCOLL_DOC_BEGIN + (RES_POOLCOLL_DOC_END - RES_POOLCOLL_DOC_BEGIN) );
-    return *s_pDocUINameArray;
-}
-
-const std::vector<OUString>& SwStyleNameMapper::GetHTMLUINameArray()
-{
-    if (!s_pHTMLUINameArray)
-        s_pHTMLUINameArray = lcl_NewUINameArray( RC_POOLCOLL_HTML_BEGIN,
-            RC_POOLCOLL_HTML_BEGIN + (RES_POOLCOLL_HTML_END - RES_POOLCOLL_HTML_BEGIN) );
-    return *s_pHTMLUINameArray;
-}
-
-const std::vector<OUString>& SwStyleNameMapper::GetFrameFormatUINameArray()
-{
-    if (!s_pFrameFormatUINameArray)
-        s_pFrameFormatUINameArray = lcl_NewUINameArray( RC_POOLFRMFMT_BEGIN,
-            RC_POOLFRMFMT_BEGIN + (RES_POOLFRM_END - RES_POOLFRM_BEGIN) );
-    return *s_pFrameFormatUINameArray;
-}
-
-const std::vector<OUString>& SwStyleNameMapper::GetChrFormatUINameArray()
-{
-    if (!s_pChrFormatUINameArray)
-        s_pChrFormatUINameArray = lcl_NewUINameArray( RC_POOLCHRFMT_BEGIN,
-            RC_POOLCHRFMT_BEGIN + (RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN) );
-    return *s_pChrFormatUINameArray;
-}
-
-const std::vector<OUString>& SwStyleNameMapper::GetHTMLChrFormatUINameArray()
-{
-    if (!s_pHTMLChrFormatUINameArray)
-        s_pHTMLChrFormatUINameArray = lcl_NewUINameArray( RC_POOLCHRFMT_HTML_BEGIN,
-            RC_POOLCHRFMT_HTML_BEGIN + (RES_POOLCHR_HTML_END - RES_POOLCHR_HTML_BEGIN) );
-    return *s_pHTMLChrFormatUINameArray;
-}
-
-const std::vector<OUString>& SwStyleNameMapper::GetPageDescUINameArray()
-{
-    if (!s_pPageDescUINameArray)
-        s_pPageDescUINameArray = lcl_NewUINameArray( RC_POOLPAGEDESC_BEGIN,
-            RC_POOLPAGEDESC_BEGIN + (RES_POOLPAGE_END - RES_POOLPAGE_BEGIN) );
-    return *s_pPageDescUINameArray;
-}
-
-const std::vector<OUString>& SwStyleNameMapper::GetNumRuleUINameArray()
-{
-    if (!s_pNumRuleUINameArray)
-        s_pNumRuleUINameArray = lcl_NewUINameArray( RC_POOLNUMRULE_BEGIN,
-            RC_POOLNUMRULE_BEGIN + (RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN) );
-    return *s_pNumRuleUINameArray;
-}
-
-const std::vector<OUString>& SwStyleNameMapper::GetTableStyleUINameArray()
-{
-    if (!s_pTableStyleUINameArray)
-        s_pTableStyleUINameArray = lcl_NewUINameArray( RC_POOLTABSTYLE_BEGIN,
-            RC_POOLTABSTYLE_BEGIN + (RES_POOLTABSTYLE_END - RES_POOLTABSTYLE_BEGIN) );
-    return *s_pTableStyleUINameArray;
 }
 
 /// returns an empty array because Cell Names aren't translated

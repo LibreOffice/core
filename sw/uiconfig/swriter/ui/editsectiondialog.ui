@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="EditSectionDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Edit Sections</property>
+    <property name="title" translatable="yes" context="editsectiondialog|EditSectionDialog">Edit Sections</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -50,7 +50,7 @@
             </child>
             <child>
               <object class="GtkButton" id="options">
-                <property name="label" translatable="yes">_Options...</property>
+                <property name="label" translatable="yes" context="editsectiondialog|options">_Options...</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -165,7 +165,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Section</property>
+                    <property name="label" translatable="yes" context="editsectiondialog|label1">Section</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -208,7 +208,7 @@
                             <property name="row_spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="link">
-                                <property name="label" translatable="yes">_Link</property>
+                                <property name="label" translatable="yes" context="editsectiondialog|link">_Link</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -225,7 +225,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="dde">
-                                <property name="label" translatable="yes">DD_E</property>
+                                <property name="label" translatable="yes" context="editsectiondialog|dde">DD_E</property>
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">True</property>
@@ -255,7 +255,7 @@
                                     <property name="column_spacing">12</property>
                                     <child>
                                       <object class="GtkButton" id="file">
-                                        <property name="label" translatable="yes">Browse...</property>
+                                        <property name="label" translatable="yes" context="editsectiondialog|file">Browse...</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
@@ -283,7 +283,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">_Section</property>
+                                        <property name="label" translatable="yes" context="editsectiondialog|sectionft">_Section</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">section</property>
                                       </object>
@@ -321,7 +321,7 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">_File name</property>
+                                            <property name="label" translatable="yes" context="editsectiondialog|filenameft">_File name</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">filename</property>
                                           </object>
@@ -336,7 +336,7 @@
                                             <property name="can_focus">False</property>
                                             <property name="no_show_all">True</property>
                                             <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">DDE _Command</property>
+                                            <property name="label" translatable="yes" context="editsectiondialog|ddeft">DDE _Command</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">filename</property>
                                           </object>
@@ -368,7 +368,7 @@
                       <object class="GtkLabel" id="label8">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Link</property>
+                        <property name="label" translatable="yes" context="editsectiondialog|label8">Link</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -405,7 +405,7 @@
                             <property name="column_spacing">12</property>
                             <child>
                               <object class="GtkCheckButton" id="protect">
-                                <property name="label" translatable="yes">_Protected</property>
+                                <property name="label" translatable="yes" context="editsectiondialog|protect">_Protected</property>
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">True</property>
@@ -433,7 +433,7 @@
                                     <property name="column_spacing">12</property>
                                     <child>
                                       <object class="GtkCheckButton" id="withpassword">
-                                        <property name="label" translatable="yes">Wit_h password</property>
+                                        <property name="label" translatable="yes" context="editsectiondialog|withpassword">Wit_h password</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
@@ -452,7 +452,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkButton" id="password">
-                                        <property name="label" translatable="yes">Password...</property>
+                                        <property name="label" translatable="yes" context="editsectiondialog|password">Password...</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
@@ -482,7 +482,7 @@
                       <object class="GtkLabel" id="label6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Write Protection</property>
+                        <property name="label" translatable="yes" context="editsectiondialog|label6">Write Protection</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -519,7 +519,7 @@
                             <property name="column_spacing">12</property>
                             <child>
                               <object class="GtkCheckButton" id="hide">
-                                <property name="label" translatable="yes">Hide</property>
+                                <property name="label" translatable="yes" context="editsectiondialog|hide">Hide</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -551,7 +551,7 @@
                                         <property name="sensitive">False</property>
                                         <property name="can_focus">False</property>
                                         <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">_With Condition</property>
+                                        <property name="label" translatable="yes" context="editsectiondialog|conditionft">_With Condition</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">condition</property>
                                       </object>
@@ -589,7 +589,7 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Hide</property>
+                        <property name="label" translatable="yes" context="editsectiondialog|label4">Hide</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -625,7 +625,7 @@
                             <property name="column_spacing">12</property>
                             <child>
                               <object class="GtkCheckButton" id="editinro">
-                                <property name="label" translatable="yes">E_ditable in read-only document</property>
+                                <property name="label" translatable="yes" context="editsectiondialog|editinro">E_ditable in read-only document</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -648,7 +648,7 @@
                       <object class="GtkLabel" id="label9">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Properties</property>
+                        <property name="label" translatable="yes" context="editsectiondialog|label9">Properties</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="dba">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="UserDetailsPage">
@@ -37,7 +37,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">_Host name:</property>
+                    <property name="label" translatable="yes" context="userdetailspage|hostnameft">_Host name:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">hostname</property>
                     <property name="ellipsize">end</property>
@@ -53,7 +53,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">_Port number:</property>
+                    <property name="label" translatable="yes" context="userdetailspage|portnumberft">_Port number:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">portnumber</property>
                   </object>
@@ -86,7 +86,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="usecatalog">
-                    <property name="label" translatable="yes">_Use catalog</property>
+                    <property name="label" translatable="yes" context="userdetailspage|usecatalog">_Use catalog</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -106,7 +106,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">_Driver settings:</property>
+                    <property name="label" translatable="yes" context="userdetailspage|optionslabel">_Driver settings:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">options</property>
                   </object>
@@ -134,7 +134,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Connection Settings</property>
+            <property name="label" translatable="yes" context="userdetailspage|label1">Connection Settings</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -172,7 +172,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">_Character set:</property>
+                    <property name="label" translatable="yes" context="userdetailspage|charsetlabel">_Character set:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">charset</property>
                   </object>
@@ -202,7 +202,7 @@
           <object class="GtkLabel" id="charsetheader">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Data conversion</property>
+            <property name="label" translatable="yes" context="userdetailspage|charsetheader">Data conversion</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

@@ -67,8 +67,9 @@
 #include <vcl/svapp.hxx>
 #include <svtools/embedhlp.hxx>
 #include <tools/resmgr.hxx>
+#include <tools/simplerm.hxx>
 #include <vcl/settings.hxx>
-#include <sfx2/sfx.hrc>
+#include <sfx2/strings.hrc>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -970,8 +971,8 @@ bool DocumentHolder::LoadDocToFrame( bool bInPlace )
             if( xModelTitle.is() )
             {
                 LanguageTag aLocale( Application::GetSettings().GetUILanguageTag() );
-                ResMgr* pResMgr = ResMgr::SearchCreateResMgr( "sfx", aLocale );
-                OUString nTitle = ResId( STR_EMBEDDED_TITLE, *pResMgr );
+                std::locale aResLoc = Translate::Create("sfx", aLocale);
+                OUString nTitle = Translate::get(STR_EMBEDDED_TITLE, aResLoc);
                 xModelTitle->setTitle( m_pEmbedObj->getContainerName() + nTitle );
             }
 

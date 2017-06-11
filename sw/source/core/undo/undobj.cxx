@@ -38,7 +38,7 @@
 #include <redline.hxx>
 #include <crossrefbookmark.hxx>
 #include <undo.hrc>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <docsh.hxx>
 #include <view.hxx>
 #include <o3tl/make_unique.hxx>
@@ -263,6 +263,174 @@ void SwUndo::RepeatImpl( ::sw::RepeatContext & )
 {
 }
 
+OUString GetUndoComment(SwUndoId eId)
+{
+    // Undo
+    const char* STR_UNDO_ARY[] =
+    {
+        STR_CANT_UNDO,
+        STR_DELETE_UNDO,
+        STR_INSERT_UNDO,
+        STR_OVR_UNDO,
+        STR_SPLITNODE_UNDO,
+        STR_MOVE_UNDO,
+        STR_INSATTR_UNDO,
+        STR_SETFMTCOLL_UNDO,
+        STR_RESET_ATTR_UNDO,
+        STR_INSFMT_ATTR_UNDO,
+        STR_INSERT_DOC_UNDO,
+        STR_INSERT_GLOSSARY,
+        STR_DELBOOKMARK,
+        STR_INSBOOKMARK,
+        STR_SORT_TBL,
+        STR_SORT_TXT,
+        STR_INSTABLE_UNDO,
+        STR_TEXTTOTABLE_UNDO,
+        STR_TABLETOTEXT_UNDO,
+        STR_COPY_UNDO,
+        STR_REPLACE_UNDO,
+        STR_INSERT_PAGE_BREAK_UNDO,
+        STR_INSERT_COLUMN_BREAK_UNDO,
+        STR_PLAY_MACRO_UNDO,
+        STR_INSERT_ENV_UNDO,
+        STR_DRAG_AND_COPY,
+        STR_DRAG_AND_MOVE,
+        STR_INSERT_CHART,
+        STR_INSERTFLY,
+        STR_DELETEFLY,
+        STR_AUTOFORMAT,
+        STR_TABLEHEADLINE,
+        STR_REPLACE,
+        STR_INSERTSECTION,
+        STR_DELETESECTION,
+        STR_CHANGESECTION,
+        STR_CHANGESECTPASSWD,
+        STR_CHANGEDEFATTR,
+        STR_REPLACE_STYLE,
+        STR_DELETE_PAGE_BREAK,
+        STR_TEXT_CORRECTION,
+        STR_OUTLINE_LR,
+        STR_OUTLINE_UD,
+        STR_INSNUM,
+        STR_NUMUP,
+        STR_NUMDOWN,
+        STR_MOVENUM,
+        STR_INSERTDRAW,
+        STR_NUMORNONUM,
+        STR_INC_LEFTMARGIN,
+        STR_DEC_LEFTMARGIN,
+        STR_INSERTLABEL,
+        STR_SETNUMRULESTART,
+        STR_CHANGEFTN,
+        nullptr, /* !! sollte NIE gebraucht/uebersetzt werden !! */
+        STR_ACCEPT_REDLINE,
+        STR_REJECT_REDLINE,
+        STR_SPLIT_TABLE,
+        STR_DONTEXPAND,
+        STR_AUTOCORRECT,
+        STR_MERGE_TABLE,
+        STR_TRANSLITERATE,
+        STR_DELNUM,
+        STR_DRAWUNDO,
+        STR_DRAWGROUP,
+        STR_DRAWUNGROUP,
+        STR_DRAWDELETE,
+        STR_REREAD,
+        STR_DELGRF,
+        STR_DELOLE,
+        STR_TABLE_ATTR,
+        STR_UNDO_TABLE_AUTOFMT,
+        STR_UNDO_TABLE_INSCOL,
+        STR_UNDO_TABLE_INSROW,
+        STR_UNDO_TABLE_DELBOX,
+        STR_UNDO_COL_DELETE,
+        STR_UNDO_ROW_DELETE,
+        STR_UNDO_TABLE_SPLIT,
+        STR_UNDO_TABLE_MERGE,
+        STR_TABLE_NUMFORMAT,
+        STR_INSERT_TOX,
+        STR_CLEAR_TOX_RANGE,
+        STR_TABLE_TBLCPYTBL,
+        STR_TABLE_CPYTBL,
+        STR_INS_FROM_SHADOWCRSR,
+        STR_UNDO_CHAIN,
+        STR_UNDO_UNCHAIN,
+        STR_UNDO_FTNINFO,
+        STR_UNDO_ENDNOTEINFO,
+        STR_UNDO_COMPAREDOC,
+        STR_UNDO_SETFLYFRMFMT,
+        STR_UNDO_SETRUBYATTR,
+        STR_UNDO_TMPAUTOCORR,
+        STR_INSERT_FOOTNOTE,
+        STR_INSERT_URLBTN,
+        STR_INSERT_URLTXT,
+        STR_DELETE_INVISIBLECNTNT,
+        STR_TOXCHANGE,
+        STR_START_QUOTE,
+        STR_END_QUOTE,
+        STR_LDOTS,
+        STR_MULTISEL,
+        STR_TYPING_UNDO,
+        STR_PASTE_CLIPBOARD_UNDO,
+        STR_YIELDS,
+        STR_OCCURRENCES_OF,
+        STR_UNDO_TABS,
+        STR_UNDO_NLS,
+        STR_UNDO_PAGEBREAKS,
+        STR_UNDO_COLBRKS,
+        STR_UNDO_REDLINE_INSERT,
+        STR_UNDO_REDLINE_DELETE,
+        STR_UNDO_REDLINE_FORMAT,
+        STR_UNDO_REDLINE_TABLE,
+        STR_UNDO_REDLINE_FMTCOLL,
+        STR_N_REDLINES,
+        STR_UNDO_PAGEDESC,
+        STR_UNDO_PAGEDESC_CREATE,
+        STR_UNDO_PAGEDESC_DELETE,
+        STR_UNDO_PAGEDESC_RENAME,
+        STR_UNDO_HEADER_FOOTER,
+        STR_UNDO_FIELD,
+        STR_UNDO_TXTFMTCOL_CREATE,
+        STR_UNDO_TXTFMTCOL_DELETE,
+        STR_UNDO_TXTFMTCOL_RENAME,
+        STR_UNDO_CHARFMT_CREATE,
+        STR_UNDO_CHARFMT_DELETE,
+        STR_UNDO_CHARFMT_RENAME,
+        STR_UNDO_FRMFMT_CREATE,
+        STR_UNDO_FRMFMT_DELETE,
+        STR_UNDO_FRMFMT_RENAME,
+        STR_UNDO_NUMRULE_CREATE,
+        STR_UNDO_NUMRULE_DELETE,
+        STR_UNDO_NUMRULE_RENAME,
+        STR_UNDO_BOOKMARK_RENAME,
+        STR_UNDO_INDEX_ENTRY_INSERT,
+        STR_UNDO_INDEX_ENTRY_DELETE,
+        STR_FIELD,
+        STR_PARAGRAPHS,
+        STR_FRAME,
+        STR_OLE,
+        STR_MATH_FORMULA,
+        STR_CHART,
+        STR_NOTE,
+        STR_REFERENCE,
+        STR_SCRIPT,
+        STR_AUTHORITY_ENTRY,
+        STR_SPECIALCHAR,
+        STR_FOOTNOTE,
+        STR_GRAPHIC,
+        STR_DRAWING_OBJECTS,
+        STR_TABLE_NAME,
+        STR_PARAGRAPH_UNDO,
+        STR_UNDO_FLYFRMFMT_TITLE,
+        STR_UNDO_FLYFRMFMT_DESCRITPTION,
+        STR_UNDO_TBLSTYLE_CREATE,
+        STR_UNDO_TBLSTYLE_DELETE,
+        STR_UNDO_TBLSTYLE_UPDATE,
+        STR_UNDO_TABLE_DELETE
+    };
+    return SwResId(STR_UNDO_ARY[(int)eId]);
+}
+
 OUString SwUndo::GetComment() const
 {
     OUString aResult;
@@ -271,7 +439,7 @@ OUString SwUndo::GetComment() const
     {
         if (! pComment)
         {
-            pComment.reset( new OUString(SwResId(UNDO_BASE + (int)GetId())) );
+            pComment.reset(new OUString(GetUndoComment(GetId())));
 
             SwRewriter aRewriter = GetRewriter();
 
@@ -282,7 +450,7 @@ OUString SwUndo::GetComment() const
     }
     else
     {
-        aResult = SwResId(UNDO_BASE + (int)GetId());
+        aResult = GetUndoComment(GetId());
 
         SwRewriter aRewriter = GetRewriter();
 

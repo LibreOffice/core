@@ -19,9 +19,8 @@
 
 #include <AnnotationMenuButton.hxx>
 
-#include <annotation.hrc>
 #include <app.hrc>
-#include <access.hrc>
+#include <strings.hrc>
 
 #include <unotools/useroptions.hxx>
 

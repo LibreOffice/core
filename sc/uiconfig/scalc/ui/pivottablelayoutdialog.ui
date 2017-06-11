@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="PivotTableLayout">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Pivot Table Layout</property>
+    <property name="title" translatable="yes" context="pivottablelayoutdialog|PivotTableLayout">Pivot Table Layout</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -107,7 +107,7 @@
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
                             <property name="xpad">4</property>
-                            <property name="label" translatable="yes">Column Fields:</property>
+                            <property name="label" translatable="yes" context="pivottablelayoutdialog|label3">Column Fields:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">listbox-column</property>
                             <attributes>
@@ -159,7 +159,7 @@
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
                             <property name="xpad">4</property>
-                            <property name="label" translatable="yes">Data Fields:</property>
+                            <property name="label" translatable="yes" context="pivottablelayoutdialog|label5">Data Fields:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">listbox-data</property>
                             <attributes>
@@ -211,7 +211,7 @@
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
                             <property name="xpad">4</property>
-                            <property name="label" translatable="yes">Row Fields:</property>
+                            <property name="label" translatable="yes" context="pivottablelayoutdialog|label4">Row Fields:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">listbox-row</property>
                             <attributes>
@@ -262,7 +262,7 @@
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
                             <property name="xpad">4</property>
-                            <property name="label" translatable="yes">Page Fields:</property>
+                            <property name="label" translatable="yes" context="pivottablelayoutdialog|label2">Page Fields:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">listbox-page</property>
                             <attributes>
@@ -323,7 +323,7 @@
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
                         <property name="xpad">4</property>
-                        <property name="label" translatable="yes">Available Fields:</property>
+                        <property name="label" translatable="yes" context="pivottablelayoutdialog|label1">Available Fields:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">listbox-fields</property>
                         <attributes>
@@ -373,7 +373,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="label" translatable="yes">Drag the Items into the Desired Position</property>
+                <property name="label" translatable="yes" context="pivottablelayoutdialog|label6">Drag the Items into the Desired Position</property>
                 <attributes>
                   <attribute name="underline" value="True"/>
                 </attributes>
@@ -398,7 +398,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="check-ignore-empty-rows">
-                        <property name="label" translatable="yes">Ignore empty rows</property>
+                        <property name="label" translatable="yes" context="pivottablelayoutdialog|check-ignore-empty-rows">Ignore empty rows</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -413,7 +413,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="check-identify-categories">
-                        <property name="label" translatable="yes">Identify categories</property>
+                        <property name="label" translatable="yes" context="pivottablelayoutdialog|check-identify-categories">Identify categories</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -428,7 +428,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="check-total-rows">
-                        <property name="label" translatable="yes">Total rows</property>
+                        <property name="label" translatable="yes" context="pivottablelayoutdialog|check-total-rows">Total rows</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -443,7 +443,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="check-total-columns">
-                        <property name="label" translatable="yes">Total columns</property>
+                        <property name="label" translatable="yes" context="pivottablelayoutdialog|check-total-columns">Total columns</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -458,7 +458,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="check-add-filter">
-                        <property name="label" translatable="yes">Add filter</property>
+                        <property name="label" translatable="yes" context="pivottablelayoutdialog|check-add-filter">Add filter</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -473,7 +473,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="check-drill-to-details">
-                        <property name="label" translatable="yes">Enable drill to details</property>
+                        <property name="label" translatable="yes" context="pivottablelayoutdialog|check-drill-to-details">Enable drill to details</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -492,7 +492,7 @@
                   <object class="GtkLabel" id="label11">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Options</property>
+                    <property name="label" translatable="yes" context="pivottablelayoutdialog|label11">Options</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -543,7 +543,7 @@
                                 <property name="column_spacing">12</property>
                                 <child>
                                   <object class="GtkRadioButton" id="destination-radio-new-sheet">
-                                    <property name="label" translatable="yes">New sheet</property>
+                                    <property name="label" translatable="yes" context="pivottablelayoutdialog|destination-radio-new-sheet">New sheet</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -559,7 +559,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkRadioButton" id="destination-radio-selection">
-                                    <property name="label" translatable="yes">Selection</property>
+                                    <property name="label" translatable="yes" context="pivottablelayoutdialog|destination-radio-selection">Selection</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -608,7 +608,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkRadioButton" id="destination-radio-named-range">
-                                    <property name="label" translatable="yes">Named range</property>
+                                    <property name="label" translatable="yes" context="pivottablelayoutdialog|destination-radio-named-range">Named range</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -629,7 +629,7 @@
                           <object class="GtkLabel" id="label8">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Destination</property>
+                            <property name="label" translatable="yes" context="pivottablelayoutdialog|label8">Destination</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -665,7 +665,7 @@
                                 <property name="column_spacing">12</property>
                                 <child>
                                   <object class="GtkRadioButton" id="source-radio-selection">
-                                    <property name="label" translatable="yes">Selection</property>
+                                    <property name="label" translatable="yes" context="pivottablelayoutdialog|source-radio-selection">Selection</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -703,7 +703,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkRadioButton" id="source-radio-named-range">
-                                    <property name="label" translatable="yes">Named range</property>
+                                    <property name="label" translatable="yes" context="pivottablelayoutdialog|source-radio-named-range">Named range</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -735,7 +735,7 @@
                           <object class="GtkLabel" id="label9">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Source</property>
+                            <property name="label" translatable="yes" context="pivottablelayoutdialog|label9">Source</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -753,7 +753,7 @@
                   <object class="GtkLabel" id="label7">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Source and Destination</property>
+                    <property name="label" translatable="yes" context="pivottablelayoutdialog|label7">Source and Destination</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

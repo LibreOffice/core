@@ -4952,7 +4952,7 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
                         NameType::const_iterator it = rCxt.maGlobalRangeNames.find(nIndex);
                         if (it == rCxt.maGlobalRangeNames.end())
                         {
-                            rBuf.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
+                            rBuf.append(ScCompiler::GetNativeSymbol(ocErrName));
                             break;
                         }
 
@@ -4973,14 +4973,14 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
                                 rBuf.append( aName);
                             }
                             else
-                                rBuf.append( ScGlobal::GetRscString( STR_NO_NAME_REF));
+                                rBuf.append(ScCompiler::GetNativeSymbol(ocErrName));
                             rBuf.append( rCxt.mpRefConv->getSpecialSymbol( ScCompiler::Convention::SHEET_SEPARATOR));
                         }
 
                         sc::TokenStringContext::TabIndexMapType::const_iterator itTab = rCxt.maSheetRangeNames.find(nTab);
                         if (itTab == rCxt.maSheetRangeNames.end())
                         {
-                            rBuf.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
+                            rBuf.append(ScCompiler::GetNativeSymbol(ocErrName));
                             break;
                         }
 
@@ -4988,7 +4988,7 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
                         NameType::const_iterator it = rNames.find(nIndex);
                         if (it == rNames.end())
                         {
-                            rBuf.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
+                            rBuf.append(ScCompiler::GetNativeSymbol(ocErrName));
                             break;
                         }
 
@@ -5005,7 +5005,7 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
                 }
                 break;
                 default:
-                    rBuf.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
+                    rBuf.append(ScCompiler::GetNativeSymbol(ocErrName));
             }
         }
         break;
