@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="chart">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkAdjustment" id="adjustmentDEGREE">
@@ -17,55 +17,55 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Best fit</col>
+        <col id="0" translatable="yes" context="tp_DataLabel|liststorePLACEMENT">Best fit</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Center</col>
+        <col id="0" translatable="yes" context="tp_DataLabel|liststorePLACEMENT">Center</col>
         <col id="1">1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Above</col>
+        <col id="0" translatable="yes" context="tp_DataLabel|liststorePLACEMENT">Above</col>
         <col id="1">2</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Top left</col>
+        <col id="0" translatable="yes" context="tp_DataLabel|liststorePLACEMENT">Top left</col>
         <col id="1">3</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Left</col>
+        <col id="0" translatable="yes" context="tp_DataLabel|liststorePLACEMENT">Left</col>
         <col id="1">4</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Bottom left</col>
+        <col id="0" translatable="yes" context="tp_DataLabel|liststorePLACEMENT">Bottom left</col>
         <col id="1">5</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Below</col>
+        <col id="0" translatable="yes" context="tp_DataLabel|liststorePLACEMENT">Below</col>
         <col id="1">6</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Bottom right</col>
+        <col id="0" translatable="yes" context="tp_DataLabel|liststorePLACEMENT">Bottom right</col>
         <col id="1">7</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Right</col>
+        <col id="0" translatable="yes" context="tp_DataLabel|liststorePLACEMENT">Right</col>
         <col id="1">8</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Top right</col>
+        <col id="0" translatable="yes" context="tp_DataLabel|liststorePLACEMENT">Top right</col>
         <col id="1">9</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Inside</col>
+        <col id="0" translatable="yes" context="tp_DataLabel|liststorePLACEMENT">Inside</col>
         <col id="1">10</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Outside</col>
+        <col id="0" translatable="yes" context="tp_DataLabel|liststorePLACEMENT">Outside</col>
         <col id="1">11</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Near origin</col>
+        <col id="0" translatable="yes" context="tp_DataLabel|liststorePLACEMENT">Near origin</col>
         <col id="1">12</col>
       </row>
     </data>
@@ -79,19 +79,19 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Space</col>
+        <col id="0" translatable="yes" context="tp_DataLabel|liststoreSEPARATOR">Space</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Comma</col>
+        <col id="0" translatable="yes" context="tp_DataLabel|liststoreSEPARATOR">Comma</col>
         <col id="1">1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Semicolon</col>
+        <col id="0" translatable="yes" context="tp_DataLabel|liststoreSEPARATOR">Semicolon</col>
         <col id="1">2</col>
       </row>
       <row>
-        <col id="0" translatable="yes">New line</col>
+        <col id="0" translatable="yes" context="tp_DataLabel|liststoreSEPARATOR">New line</col>
         <col id="1">3</col>
       </row>
     </data>
@@ -123,7 +123,7 @@
                 <property name="row_homogeneous">True</property>
                 <child>
                   <object class="GtkCheckButton" id="CB_VALUE_AS_NUMBER">
-                    <property name="label" translatable="yes">Show value as _number</property>
+                    <property name="label" translatable="yes" context="tp_DataLabel|CB_VALUE_AS_NUMBER">Show value as _number</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -140,7 +140,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="CB_VALUE_AS_PERCENTAGE">
-                    <property name="label" translatable="yes">Show value as _percentage</property>
+                    <property name="label" translatable="yes" context="tp_DataLabel|CB_VALUE_AS_PERCENTAGE">Show value as _percentage</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -157,7 +157,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="CB_CATEGORY">
-                    <property name="label" translatable="yes">Show _category</property>
+                    <property name="label" translatable="yes" context="tp_DataLabel|CB_CATEGORY">Show _category</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -174,7 +174,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="CB_SYMBOL">
-                    <property name="label" translatable="yes">Show _legend key</property>
+                    <property name="label" translatable="yes" context="tp_DataLabel|CB_SYMBOL">Show _legend key</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -191,7 +191,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="CB_WRAP_TEXT">
-                    <property name="label" translatable="yes">Auto text _wrap</property>
+                    <property name="label" translatable="yes" context="tp_DataLabel|CB_WRAP_TEXT">Auto text _wrap</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -208,7 +208,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="PB_NUMBERFORMAT">
-                    <property name="label" translatable="yes">Number _format...</property>
+                    <property name="label" translatable="yes" context="tp_DataLabel|PB_NUMBERFORMAT">Number _format...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
@@ -224,7 +224,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="PB_PERCENT_NUMBERFORMAT">
-                    <property name="label" translatable="yes">Percentage f_ormat...</property>
+                    <property name="label" translatable="yes" context="tp_DataLabel|PB_PERCENT_NUMBERFORMAT">Percentage f_ormat...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
@@ -242,7 +242,7 @@
                   <object class="GtkLabel" id="CT_LABEL_DIAL">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="label" translatable="yes">ABCD</property>
+                    <property name="label" translatable="yes" context="tp_DataLabel|CT_LABEL_DIAL">ABCD</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -264,7 +264,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Separator</property>
+                        <property name="label" translatable="yes" context="tp_DataLabel|FT_TEXT_SEPARATOR">_Separator</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">LB_TEXT_SEPARATOR</property>
                       </object>
@@ -305,7 +305,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Place_ment</property>
+                        <property name="label" translatable="yes" context="tp_DataLabel|FT_LABEL_PLACEMENT">Place_ment</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">LB_LABEL_PLACEMENT</property>
                       </object>
@@ -339,7 +339,7 @@
                 <child>
                   <object class="GtkLabel" id="STR_DLG_NUMBERFORMAT_FOR_PERCENTAGE_VALUE">
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Number Format for Percentage Value</property>
+                    <property name="label" translatable="yes" context="tp_DataLabel|STR_DLG_NUMBERFORMAT_FOR_PERCENTAGE_VALUE">Number Format for Percentage Value</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -357,7 +357,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Text Attributes</property>
+            <property name="label" translatable="yes" context="tp_DataLabel|label1">Text Attributes</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -423,7 +423,7 @@
                       <object class="GtkLabel" id="FT_LABEL_DEGREES">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Degrees</property>
+                        <property name="label" translatable="yes" context="tp_DataLabel|FT_LABEL_DEGREES">_Degrees</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -448,7 +448,7 @@
                       <object class="GtkLabel" id="FT_LABEL_TEXTDIR">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Te_xt direction</property>
+                        <property name="label" translatable="yes" context="tp_DataLabel|FT_LABEL_TEXTDIR">Te_xt direction</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">LB_LABEL_TEXTDIR</property>
                       </object>
@@ -485,7 +485,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Rotate Text</property>
+            <property name="label" translatable="yes" context="tp_DataLabel|label2">Rotate Text</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="FillSeriesDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Fill Series</property>
+    <property name="title" translatable="yes" context="filldlg|FillSeriesDialog">Fill Series</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -97,7 +97,7 @@
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkRadioButton" id="down">
-                            <property name="label" translatable="yes">_Down</property>
+                            <property name="label" translatable="yes" context="filldlg|down">_Down</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -115,7 +115,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="right">
-                            <property name="label" translatable="yes">_Right</property>
+                            <property name="label" translatable="yes" context="filldlg|right">_Right</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -132,7 +132,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="up">
-                            <property name="label" translatable="yes">_Up</property>
+                            <property name="label" translatable="yes" context="filldlg|up">_Up</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -149,7 +149,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="left">
-                            <property name="label" translatable="yes">_Left</property>
+                            <property name="label" translatable="yes" context="filldlg|left">_Left</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -173,7 +173,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Direction</property>
+                    <property name="label" translatable="yes" context="filldlg|label1">Direction</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -208,7 +208,7 @@
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkRadioButton" id="linear">
-                            <property name="label" translatable="yes">Li_near</property>
+                            <property name="label" translatable="yes" context="filldlg|linear">Li_near</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -226,7 +226,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="growth">
-                            <property name="label" translatable="yes">_Growth</property>
+                            <property name="label" translatable="yes" context="filldlg|growth">_Growth</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -243,7 +243,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="date">
-                            <property name="label" translatable="yes">Da_te</property>
+                            <property name="label" translatable="yes" context="filldlg|date">Da_te</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -260,7 +260,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="autofill">
-                            <property name="label" translatable="yes">_AutoFill</property>
+                            <property name="label" translatable="yes" context="filldlg|autofill">_AutoFill</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -284,7 +284,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Series Type</property>
+                    <property name="label" translatable="yes" context="filldlg|label2">Series Type</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -319,7 +319,7 @@
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkRadioButton" id="day">
-                            <property name="label" translatable="yes">Da_y</property>
+                            <property name="label" translatable="yes" context="filldlg|day">Da_y</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -337,7 +337,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="week">
-                            <property name="label" translatable="yes">_Weekday</property>
+                            <property name="label" translatable="yes" context="filldlg|week">_Weekday</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -355,7 +355,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="month">
-                            <property name="label" translatable="yes">_Month</property>
+                            <property name="label" translatable="yes" context="filldlg|month">_Month</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -372,7 +372,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="year">
-                            <property name="label" translatable="yes">Y_ear</property>
+                            <property name="label" translatable="yes" context="filldlg|year">Y_ear</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -396,7 +396,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Time Unit</property>
+                    <property name="label" translatable="yes" context="filldlg|tuL">Time Unit</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -419,7 +419,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Start value:</property>
+                    <property name="label" translatable="yes" context="filldlg|startL">_Start value:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">startValue</property>
                   </object>
@@ -433,7 +433,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">End _value:</property>
+                    <property name="label" translatable="yes" context="filldlg|endL">End _value:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">endValue</property>
                   </object>
@@ -447,7 +447,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">In_crement:</property>
+                    <property name="label" translatable="yes" context="filldlg|incrementL">In_crement:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">increment</property>
                   </object>

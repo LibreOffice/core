@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -54,7 +54,7 @@
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkRadioButton" id="superscript">
-                        <property name="label" translatable="yes">Superscript</property>
+                        <property name="label" translatable="yes" context="positionpage|superscript">Superscript</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -70,7 +70,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="normal">
-                        <property name="label" translatable="yes">Normal</property>
+                        <property name="label" translatable="yes" context="positionpage|normal">Normal</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -86,7 +86,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="subscript">
-                        <property name="label" translatable="yes">Subscript</property>
+                        <property name="label" translatable="yes" context="positionpage|subscript">Subscript</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -118,7 +118,7 @@
                       <object class="GtkLabel" id="raiselower">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Raise/lower by</property>
+                        <property name="label" translatable="yes" context="positionpage|raiselower">Raise/lower by</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">raiselowersb:0%</property>
                         <property name="xalign">0</property>
@@ -154,7 +154,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="automatic">
-                        <property name="label" translatable="yes">Automatic</property>
+                        <property name="label" translatable="yes" context="positionpage|automatic">Automatic</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -170,7 +170,7 @@
                       <object class="GtkLabel" id="relativefontsize">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Relative font size</property>
+                        <property name="label" translatable="yes" context="positionpage|relativefontsize">Relative font size</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">fontsizesb:0%</property>
                         <property name="xalign">0</property>
@@ -198,7 +198,7 @@
           <object class="GtkLabel" id="label20">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Position</property>
+            <property name="label" translatable="yes" context="positionpage|label20">Position</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -236,7 +236,7 @@
                     <property name="spacing">12</property>
                     <child>
                       <object class="GtkRadioButton" id="0deg">
-                        <property name="label" translatable="yes">0 degrees</property>
+                        <property name="label" translatable="yes" context="positionpage|0deg">0 degrees</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -252,7 +252,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="90deg">
-                        <property name="label" translatable="yes">90 degrees</property>
+                        <property name="label" translatable="yes" context="positionpage|90deg">90 degrees</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -268,7 +268,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="270deg">
-                        <property name="label" translatable="yes">270 degrees</property>
+                        <property name="label" translatable="yes" context="positionpage|270deg">270 degrees</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -284,7 +284,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="fittoline">
-                        <property name="label" translatable="yes">Fit to line</property>
+                        <property name="label" translatable="yes" context="positionpage|fittoline">Fit to line</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -313,7 +313,7 @@
                       <object class="GtkLabel" id="label24">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Scale width</property>
+                        <property name="label" translatable="yes" context="positionpage|label24">Scale width</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">scalewidthsb:0%</property>
                       </object>
@@ -356,7 +356,7 @@
               <object class="GtkLabel" id="rotateandscale">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Rotation / Scaling</property>
+                <property name="label" translatable="yes" context="positionpage|rotateandscale">Rotation / Scaling</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -372,7 +372,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Scaling</property>
+                <property name="label" translatable="yes" context="positionpage|scale">Scaling</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -425,7 +425,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="pairkerning">
-                    <property name="label" translatable="yes">Pair kerning</property>
+                    <property name="label" translatable="yes" context="positionpage|pairkerning">Pair kerning</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -446,7 +446,7 @@
           <object class="GtkLabel" id="label22">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Spacing</property>
+            <property name="label" translatable="yes" context="positionpage|label22">Spacing</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -475,7 +475,7 @@
             <property name="vexpand">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="preview:border-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes">Preview</property>
+                <property name="AtkObject::accessible-name" translatable="yes" context="positionpage|preview:border-atkobject">Preview</property>
               </object>
             </child>
           </object>

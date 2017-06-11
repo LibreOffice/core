@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.12"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkGrid" id="PageFormatPanel">
@@ -20,7 +20,7 @@
           <object class="GtkLabel" id="size">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Size:</property>
+            <property name="label" translatable="yes" context="pageformatpanel|size">Size:</property>
             <property name="xalign">1</property>
           </object>
           <packing>
@@ -32,7 +32,7 @@
           <object class="GtkLabel" id="width">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Width:</property>
+            <property name="label" translatable="yes" context="pageformatpanel|width">Width:</property>
             <property name="xalign">1</property>
           </object>
           <packing>
@@ -44,7 +44,7 @@
           <object class="GtkLabel" id="height">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Height:</property>
+            <property name="label" translatable="yes" context="pageformatpanel|height">Height:</property>
             <property name="xalign">1</property>
           </object>
           <packing>
@@ -56,7 +56,7 @@
           <object class="GtkLabel" id="orientation">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Orientation:</property>
+            <property name="label" translatable="yes" context="pageformatpanel|orientation">Orientation:</property>
             <property name="xalign">1</property>
           </object>
           <packing>
@@ -69,7 +69,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="has_tooltip">True</property>
-            <property name="tooltip_text" translatable="yes">Paper Width</property>
+            <property name="tooltip_text" translatable="yes" context="pageformatpanel|paperwidth|tooltip_text">Paper Width</property>
             <property name="hexpand">True</property>
             <property name="invisible_char">•</property>
             <property name="text">0</property>
@@ -84,7 +84,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="has_tooltip">True</property>
-            <property name="tooltip_text" translatable="yes">Paper Height</property>
+            <property name="tooltip_text" translatable="yes" context="pageformatpanel|paperheight|tooltip_text">Paper Height</property>
             <property name="hexpand">True</property>
             <property name="invisible_char">•</property>
             <property name="text">0</property>
@@ -100,8 +100,8 @@
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
             <items>
-              <item translatable="yes">Portrait</item>
-              <item translatable="yes">Landscape</item>
+              <item translatable="yes" context="pageformatpanel|paperorientation">Portrait</item>
+              <item translatable="yes" context="pageformatpanel|paperorientation">Landscape</item>
             </items>
           </object>
           <packing>
@@ -124,7 +124,7 @@
           <object class="GtkLabel" id="margin">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Margins:</property>
+            <property name="label" translatable="yes" context="pageformatpanel|margin">Margins:</property>
             <property name="xalign">1</property>
           </object>
           <packing>
@@ -137,14 +137,14 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <items>
-              <item translatable="yes">None</item>
-              <item translatable="yes">Narrow</item>
-              <item translatable="yes">Moderate</item>
-              <item translatable="yes">Normal 0.75"</item>
-              <item translatable="yes">Normal 1"</item>
-              <item translatable="yes">Normal 1.25"</item>
-              <item translatable="yes">Wide</item>
-              <item translatable="yes">Mirrored</item>
+              <item translatable="yes" context="pageformatpanel|marginLB">None</item>
+              <item translatable="yes" context="pageformatpanel|marginLB">Narrow</item>
+              <item translatable="yes" context="pageformatpanel|marginLB">Moderate</item>
+              <item translatable="yes" context="pageformatpanel|marginLB">Normal 0.75"</item>
+              <item translatable="yes" context="pageformatpanel|marginLB">Normal 1"</item>
+              <item translatable="yes" context="pageformatpanel|marginLB">Normal 1.25"</item>
+              <item translatable="yes" context="pageformatpanel|marginLB">Wide</item>
+              <item translatable="yes" context="pageformatpanel|marginLB">Mirrored</item>
             </items>
           </object>
           <packing>
@@ -155,7 +155,7 @@
         <child>
           <object class="GtkLabel" id="customlabel">
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Custom</property>
+            <property name="label" translatable="yes" context="pageformatpanel|customlabel">Custom</property>
           </object>
           <packing>
             <property name="left_attach">1</property>

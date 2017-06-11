@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.19.0 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="SpellingDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Spelling and Grammar: $LANGUAGE ($LOCATION)</property>
+    <property name="title" translatable="yes" context="spellingdialog|SpellingDialog">Spelling and Grammar: $LANGUAGE ($LOCATION)</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -35,7 +35,7 @@
             </child>
             <child>
               <object class="GtkButton" id="options">
-                <property name="label" translatable="yes">_Options...</property>
+                <property name="label" translatable="yes" context="spellingdialog|options">_Options...</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -107,7 +107,7 @@
             </child>
             <child>
               <object class="GtkButton" id="ignore">
-                <property name="label" translatable="yes">_Ignore Once</property>
+                <property name="label" translatable="yes" context="spellingdialog|ignore">_Ignore Once</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -135,7 +135,7 @@
             </child>
             <child>
               <object class="GtkButton" id="change">
-                <property name="label" translatable="yes">Co_rrect</property>
+                <property name="label" translatable="yes" context="spellingdialog|change">Co_rrect</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -149,7 +149,7 @@
             </child>
             <child>
               <object class="GtkButton" id="changeall">
-                <property name="label" translatable="yes">Correct A_ll</property>
+                <property name="label" translatable="yes" context="spellingdialog|changeall">Correct A_ll</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -163,7 +163,7 @@
             </child>
             <child>
               <object class="GtkButton" id="autocorrect">
-                <property name="label" translatable="yes">Alwa_ys Correct</property>
+                <property name="label" translatable="yes" context="spellingdialog|autocorrect">Alwa_ys Correct</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -177,7 +177,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="checkgrammar">
-                <property name="label" translatable="yes">Chec_k grammar</property>
+                <property name="label" translatable="yes" context="spellingdialog|checkgrammar">Chec_k grammar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -193,7 +193,7 @@
             </child>
             <child>
               <object class="GtkButton" id="ignoreall">
-                <property name="label" translatable="yes">I_gnore All</property>
+                <property name="label" translatable="yes" context="spellingdialog|ignoreall">I_gnore All</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
@@ -207,7 +207,7 @@
             </child>
             <child>
               <object class="GtkButton" id="ignorerule">
-                <property name="label" translatable="yes">I_gnore Rule</property>
+                <property name="label" translatable="yes" context="spellingdialog|ignorerule">I_gnore Rule</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
@@ -223,7 +223,7 @@
               <object class="GtkLabel" id="languageft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Text languag_e:</property>
+                <property name="label" translatable="yes" context="spellingdialog|languageft">Text languag_e:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">languagelb</property>
                 <property name="xalign">0</property>
@@ -249,7 +249,7 @@
             </child>
             <child>
               <object class="GtkLinkButton" id="explainlink">
-                <property name="label" translatable="yes">More...</property>
+                <property name="label" translatable="yes" context="spellingdialog|explainlink">More...</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
@@ -265,7 +265,7 @@
               <object class="GtkLabel" id="resumeft">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Res_ume</property>
+                <property name="label" translatable="yes" context="spellingdialog|resumeft">Res_ume</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -277,7 +277,7 @@
               <object class="GtkLabel" id="nosuggestionsft">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">(no suggestions)</property>
+                <property name="label" translatable="yes" context="spellingdialog|nosuggestionsft">(no suggestions)</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -289,7 +289,7 @@
               <object class="GtkLabel" id="alttitleft">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Spelling: $LANGUAGE ($LOCATION)</property>
+                <property name="label" translatable="yes" context="spellingdialog|alttitleft">Spelling: $LANGUAGE ($LOCATION)</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -316,7 +316,7 @@
             </child>
             <child>
               <object class="GtkButton" id="add">
-                <property name="label" translatable="yes">_Add to Dictionary</property>
+                <property name="label" translatable="yes" context="spellingdialog|add">_Add to Dictionary</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -330,7 +330,7 @@
             </child>
             <child>
               <object class="GtkButton" id="addmb:addmenu">
-                <property name="label" translatable="yes">_Add to Dictionary</property>
+                <property name="label" translatable="yes" context="spellingdialog|addmb:addmenu">_Add to Dictionary</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
@@ -346,7 +346,7 @@
               <object class="GtkLabel" id="suggestionsft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Suggestions</property>
+                <property name="label" translatable="yes" context="spellingdialog|suggestionsft">_Suggestions</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">suggestionslb</property>
                 <property name="xalign">0</property>
@@ -362,7 +362,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="label" translatable="yes">_Not in dictionary</property>
+                <property name="label" translatable="yes" context="spellingdialog|notindictft">_Not in dictionary</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">sentence</property>
                 <property name="xalign">0</property>
@@ -383,7 +383,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">paste</property>
-                    <property name="label" translatable="yes">Paste</property>
+                    <property name="label" translatable="yes" context="spellingdialog|paste">Paste</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_paste.png</property>
                   </object>
@@ -397,7 +397,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">insert</property>
-                    <property name="label" translatable="yes">Special Character</property>
+                    <property name="label" translatable="yes" context="spellingdialog|insert">Special Character</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">cmd/sc_insertsymbol.png</property>
                   </object>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">56</property>
@@ -33,7 +33,7 @@
     <property name="row_spacing">6</property>
     <child>
       <object class="GtkCheckButton" id="adaptwidth">
-        <property name="label" translatable="yes">Adapt table _width</property>
+        <property name="label" translatable="yes" context="tablecolumnpage|adaptwidth">Adapt table _width</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -48,7 +48,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="adaptcolumns">
-        <property name="label" translatable="yes">Ad_just columns proportionally</property>
+        <property name="label" translatable="yes" context="tablecolumnpage|adaptcolumns">Ad_just columns proportionally</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -70,7 +70,7 @@
           <object class="GtkLabel" id="spaceft">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Remaining space:</property>
+            <property name="label" translatable="yes" context="tablecolumnpage|spaceft">Remaining space:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">space-nospin:0.00cm</property>
           </object>
@@ -131,7 +131,7 @@
                     <property name="digits">2</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="width2:0.0cm-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Column 2 Width</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="tablecolumnpage|width2:0.0cm-atkobject">Column 2 Width</property>
                       </object>
                     </child>
                   </object>
@@ -152,7 +152,7 @@
                     <property name="digits">2</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="width3:0.00cm-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Column 3 Width</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="tablecolumnpage|width3:0.00cm-atkobject">Column 3 Width</property>
                       </object>
                     </child>
                   </object>
@@ -173,7 +173,7 @@
                     <property name="digits">2</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="width4:0.00cm-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Column 4 Width</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="tablecolumnpage|width4:0.00cm-atkobject">Column 4 Width</property>
                       </object>
                     </child>
                   </object>
@@ -194,7 +194,7 @@
                     <property name="digits">2</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="width5:0.00cm-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Column 5 Width</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="tablecolumnpage|width5:0.00cm-atkobject">Column 5 Width</property>
                       </object>
                     </child>
                   </object>
@@ -215,7 +215,7 @@
                     <property name="digits">2</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="width6:0.00cm-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Column 6 Width</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="tablecolumnpage|width6:0.00cm-atkobject">Column 6 Width</property>
                       </object>
                     </child>
                   </object>
@@ -321,7 +321,7 @@
                     <property name="digits">2</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="width1:0.00cm-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Column 1 Width</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="tablecolumnpage|width1:0.00cm-atkobject">Column 1 Width</property>
                       </object>
                     </child>
                   </object>
@@ -367,7 +367,7 @@
           <object class="GtkLabel" id="label26">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Column Width</property>
+            <property name="label" translatable="yes" context="tablecolumnpage|label26">Column Width</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

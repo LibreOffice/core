@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkGrid" id="OptRedLinePage">
@@ -36,7 +36,7 @@
                   <object class="GtkLabel" id="insert_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Attributes:</property>
+                    <property name="label" translatable="yes" context="optredlinepage|insert_label">_Attributes:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">insert</property>
                     <property name="xalign">0</property>
@@ -50,7 +50,7 @@
                   <object class="GtkLabel" id="insertcolor_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Co_lor:</property>
+                    <property name="label" translatable="yes" context="optredlinepage|insertcolor_label">Co_lor:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">insertcolor</property>
                     <property name="xalign">0</property>
@@ -66,17 +66,17 @@
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
                     <items>
-                      <item translatable="yes">[None]</item>
-                      <item translatable="yes">Bold</item>
-                      <item translatable="yes">Italic</item>
-                      <item translatable="yes">Underlined</item>
-                      <item translatable="yes">Underlined: double</item>
-                      <item translatable="yes">Strikethrough</item>
-                      <item translatable="yes">Uppercase</item>
-                      <item translatable="yes">Lowercase</item>
-                      <item translatable="yes">Small caps</item>
-                      <item translatable="yes">Title font</item>
-                      <item translatable="yes">Background color</item>
+                      <item translatable="yes" context="optredlinepage|insert">[None]</item>
+                      <item translatable="yes" context="optredlinepage|insert">Bold</item>
+                      <item translatable="yes" context="optredlinepage|insert">Italic</item>
+                      <item translatable="yes" context="optredlinepage|insert">Underlined</item>
+                      <item translatable="yes" context="optredlinepage|insert">Underlined: double</item>
+                      <item translatable="yes" context="optredlinepage|insert">Strikethrough</item>
+                      <item translatable="yes" context="optredlinepage|insert">Uppercase</item>
+                      <item translatable="yes" context="optredlinepage|insert">Lowercase</item>
+                      <item translatable="yes" context="optredlinepage|insert">Small caps</item>
+                      <item translatable="yes" context="optredlinepage|insert">Title font</item>
+                      <item translatable="yes" context="optredlinepage|insert">Background color</item>
                     </items>
                   </object>
                   <packing>
@@ -91,7 +91,7 @@
                     <property name="valign">center</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="insertcolor-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Color of Insertions</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="optredlinepage|insertcolor-atkobject">Color of Insertions</property>
                       </object>
                     </child>
                   </object>
@@ -105,7 +105,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="text" translatable="yes">Insert</property>
+                    <property name="text" translatable="yes" context="optredlinepage|insertedpreview:border">Insert</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -121,7 +121,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Insertions</property>
+            <property name="label" translatable="yes" context="optredlinepage|label2">Insertions</property>
             <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -160,7 +160,7 @@
                   <object class="GtkLabel" id="deleted_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Attri_butes:</property>
+                    <property name="label" translatable="yes" context="optredlinepage|deleted_label">Attri_butes:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">deleted</property>
                     <property name="xalign">0</property>
@@ -174,7 +174,7 @@
                   <object class="GtkLabel" id="deletedcolor_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Col_or:</property>
+                    <property name="label" translatable="yes" context="optredlinepage|deletedcolor_label">Col_or:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">deletedcolor</property>
                     <property name="xalign">0</property>
@@ -202,7 +202,7 @@
                     <property name="valign">center</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="deletedcolor-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Color of Deletions</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="optredlinepage|deletedcolor-atkobject">Color of Deletions</property>
                       </object>
                     </child>
                   </object>
@@ -216,7 +216,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="text" translatable="yes">Delete</property>
+                    <property name="text" translatable="yes" context="optredlinepage|deletedpreview:border">Delete</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -232,7 +232,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Deletions</property>
+            <property name="label" translatable="yes" context="optredlinepage|label3">Deletions</property>
             <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -271,7 +271,7 @@
                   <object class="GtkLabel" id="changed_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Attrib_utes:</property>
+                    <property name="label" translatable="yes" context="optredlinepage|changed_label">Attrib_utes:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">changed</property>
                     <property name="xalign">0</property>
@@ -285,7 +285,7 @@
                   <object class="GtkLabel" id="changedcolor_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Colo_r:</property>
+                    <property name="label" translatable="yes" context="optredlinepage|changedcolor_label">Colo_r:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">changedcolor</property>
                     <property name="xalign">0</property>
@@ -313,7 +313,7 @@
                     <property name="valign">center</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="changedcolor-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Color of Changed Attributes</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="optredlinepage|changedcolor-atkobject">Color of Changed Attributes</property>
                       </object>
                     </child>
                   </object>
@@ -327,7 +327,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="text" translatable="yes">Attributes</property>
+                    <property name="text" translatable="yes" context="optredlinepage|changedpreview:border">Attributes</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -343,7 +343,7 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Changed Attributes</property>
+            <property name="label" translatable="yes" context="optredlinepage|label4">Changed Attributes</property>
             <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -385,7 +385,7 @@
                     <property name="valign">center</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="markcolor-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Color of Mark</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="optredlinepage|markcolor-atkobject">Color of Mark</property>
                       </object>
                     </child>
                   </object>
@@ -398,7 +398,7 @@
                   <object class="GtkLabel" id="markpos_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Mar_k:</property>
+                    <property name="label" translatable="yes" context="optredlinepage|markpos_label">Mar_k:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">markpos</property>
                     <property name="xalign">0</property>
@@ -412,7 +412,7 @@
                   <object class="GtkLabel" id="markcolor_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Color:</property>
+                    <property name="label" translatable="yes" context="optredlinepage|markcolor_label">_Color:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">markcolor</property>
                     <property name="xalign">0</property>
@@ -440,11 +440,11 @@
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
                     <items>
-                      <item translatable="yes">[None]</item>
-                      <item translatable="yes">Left margin</item>
-                      <item translatable="yes">Right margin</item>
-                      <item translatable="yes">Outer margin</item>
-                      <item translatable="yes">Inner margin</item>
+                      <item translatable="yes" context="optredlinepage|markpos">[None]</item>
+                      <item translatable="yes" context="optredlinepage|markpos">Left margin</item>
+                      <item translatable="yes" context="optredlinepage|markpos">Right margin</item>
+                      <item translatable="yes" context="optredlinepage|markpos">Outer margin</item>
+                      <item translatable="yes" context="optredlinepage|markpos">Inner margin</item>
                     </items>
                   </object>
                   <packing>
@@ -460,7 +460,7 @@
           <object class="GtkLabel" id="label5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Lines Changed</property>
+            <property name="label" translatable="yes" context="optredlinepage|label5">Lines Changed</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sd">
   <requires lib="gtk+" version="3.12"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkImage" id="BringToFrontImg">
@@ -331,7 +331,7 @@
               <object class="GtkLabel" id="FileLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">File</property>
+                <property name="label" translatable="yes" context="notebookbar|FileLabel">File</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -412,7 +412,7 @@
                         </child>
                         <child>
                           <object class="vcllo-SmallButton" id="FormatPaintbrush">
-                            <property name="label" translatable="yes">Clone</property>
+                            <property name="label" translatable="yes" context="notebookbar|FormatPaintbrush">Clone</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -909,7 +909,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property name="tooltip_text" translatable="yes">Bullets and Numbering</property>
+                                <property name="tooltip_text" translatable="yes" context="notebookbar|numberbullet|tooltip_text">Bullets and Numbering</property>
                                 <property name="show_arrow">False</property>
                                 <child>
                                   <object class="GtkMenuToolButton" id="bullet">
@@ -949,14 +949,14 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property name="tooltip_text" translatable="yes">Indent</property>
+                                <property name="tooltip_text" translatable="yes" context="notebookbar|indent|tooltip_text">Indent</property>
                                 <child>
                                   <object class="GtkToolButton" id="increaseindent">
                                     <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="has_tooltip">True</property>
-                                    <property name="tooltip_text" translatable="yes">Increase Indent</property>
+                                    <property name="tooltip_text" translatable="yes" context="notebookbar|increaseindent|tooltip_text">Increase Indent</property>
                                     <property name="is_important">True</property>
                                     <property name="action_name">.uno:IncrementIndent</property>
                                     <property name="use_underline">True</property>
@@ -972,7 +972,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="has_tooltip">True</property>
-                                    <property name="tooltip_text" translatable="yes">Decrease Indent</property>
+                                    <property name="tooltip_text" translatable="yes" context="notebookbar|decreaseindent|tooltip_text">Decrease Indent</property>
                                     <property name="is_important">True</property>
                                     <property name="action_name">.uno:DecrementIndent</property>
                                     <property name="use_underline">True</property>
@@ -1006,7 +1006,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property name="tooltip_text" translatable="yes">Horizontal Alignment</property>
+                                <property name="tooltip_text" translatable="yes" context="notebookbar|horizontalalignment|tooltip_text">Horizontal Alignment</property>
                                 <property name="halign">start</property>
                                 <property name="show_arrow">False</property>
                                 <child>
@@ -1482,7 +1482,7 @@
               <object class="GtkLabel" id="ImpressLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Home</property>
+                <property name="label" translatable="yes" context="notebookbar|ImpressLabel">Home</property>
                 <property name="use_underline">True</property>
                 <style>
                   <class name="context-default"/>
@@ -1601,7 +1601,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Insert Audio or Video</property>
+                            <property name="tooltip_text" translatable="yes" context="notebookbar|InsertAVMedia|tooltip_text">Insert Audio or Video</property>
                             <property name="action_name">.uno:InsertAVMedia</property>
                             <property name="relief">none</property>
                             <property name="xalign">0</property>
@@ -1915,7 +1915,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="vcllo-SmallButton" id="InsertSymbol">
-                        <property name="label" translatable="yes">Symbol</property>
+                        <property name="label" translatable="yes" context="notebookbar|InsertSymbol">Symbol</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1990,7 +1990,7 @@
               <object class="GtkLabel" id="InsertLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Insert</property>
+                <property name="label" translatable="yes" context="notebookbar|InsertLabel">Insert</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -2012,7 +2012,7 @@
               <object class="GtkLabel" id="TransitionsLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Transitions</property>
+                <property name="label" translatable="yes" context="notebookbar|TransitionsLabel">Transitions</property>
               </object>
               <packing>
                 <property name="position">3</property>
@@ -2032,7 +2032,7 @@
               <object class="GtkLabel" id="AnimationLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Animation</property>
+                <property name="label" translatable="yes" context="notebookbar|AnimationLabel">Animation</property>
               </object>
               <packing>
                 <property name="position">4</property>
@@ -2195,7 +2195,7 @@
               <object class="GtkLabel" id="SlideShowLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Slide Show</property>
+                <property name="label" translatable="yes" context="notebookbar|SlideShowLabel">Slide Show</property>
               </object>
               <packing>
                 <property name="position">5</property>
@@ -2229,7 +2229,7 @@
                     </child>
                     <child>
                       <object class="vcllo-SmallButton" id="SpellOnline">
-                        <property name="label" translatable="yes">Auto Spellcheck</property>
+                        <property name="label" translatable="yes" context="notebookbar|SpellOnline">Auto Spellcheck</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2330,7 +2330,7 @@
               <object class="GtkLabel" id="ReviewLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Review</property>
+                <property name="label" translatable="yes" context="notebookbar|ReviewLabel">Review</property>
               </object>
               <packing>
                 <property name="position">6</property>
@@ -2522,7 +2522,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="GridVisible">
-                        <property name="label" translatable="yes">Grid</property>
+                        <property name="label" translatable="yes" context="notebookbar|GridVisible">Grid</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2710,7 +2710,7 @@
               <object class="GtkLabel" id="ViewLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">View</property>
+                <property name="label" translatable="yes" context="notebookbar|ViewLabel">View</property>
               </object>
               <packing>
                 <property name="position">7</property>
@@ -2730,7 +2730,7 @@
               <object class="GtkLabel" id="TableLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Table</property>
+                <property name="label" translatable="yes" context="notebookbar|TableLabel">Table</property>
                 <style>
                   <class name="context-Table"/>
                 </style>
@@ -3246,7 +3246,7 @@
               <object class="GtkLabel" id="ImageLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Image</property>
+                <property name="label" translatable="yes" context="notebookbar|ImageLabel">Image</property>
                 <property name="use_underline">True</property>
                 <style>
                   <class name="context-Graphic"/>

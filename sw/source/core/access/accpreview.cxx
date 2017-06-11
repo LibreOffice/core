@@ -21,7 +21,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "access.hrc"
+#include "strings.hrc"
 #include <accpreview.hxx>
 
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleDocumentPageView";

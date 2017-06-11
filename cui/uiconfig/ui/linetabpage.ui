@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="cui">
   <!-- interface-requires LibreOffice 1.0 -->
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustmentPERCENT">
@@ -27,15 +27,15 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Flat</col>
+        <col id="0" translatable="yes" context="linetabpage|liststoreCAP_STYLE">Flat</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Round</col>
+        <col id="0" translatable="yes" context="linetabpage|liststoreCAP_STYLE">Round</col>
         <col id="1">1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Square</col>
+        <col id="0" translatable="yes" context="linetabpage|liststoreCAP_STYLE">Square</col>
         <col id="1">2</col>
       </row>
     </data>
@@ -49,19 +49,19 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Rounded</col>
+        <col id="0" translatable="yes" context="linetabpage|liststoreEDGE_STYLE">Rounded</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">- none -</col>
+        <col id="0" translatable="yes" context="linetabpage|liststoreEDGE_STYLE">- none -</col>
         <col id="1">1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Mitered</col>
+        <col id="0" translatable="yes" context="linetabpage|liststoreEDGE_STYLE">Mitered</col>
         <col id="1">2</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Beveled</col>
+        <col id="0" translatable="yes" context="linetabpage|liststoreEDGE_STYLE">Beveled</col>
         <col id="1">3</col>
       </row>
     </data>
@@ -106,7 +106,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Style:</property>
+                            <property name="label" translatable="yes" context="linetabpage|FT_LINE_STYLE">_Style:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">LB_LINE_STYLE</property>
                           </object>
@@ -145,7 +145,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Colo_r:</property>
+                            <property name="label" translatable="yes" context="linetabpage|FT_COLOR">Colo_r:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">LB_COLOR</property>
                           </object>
@@ -183,7 +183,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Width:</property>
+                            <property name="label" translatable="yes" context="linetabpage|FT_LINE_WIDTH">_Width:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">MTR_FLD_LINE_WIDTH:0cm</property>
                           </object>
@@ -225,7 +225,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Transparency:</property>
+                            <property name="label" translatable="yes" context="linetabpage|FT_TRANSPARENT">_Transparency:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">MTR_LINE_TRANSPARENT:0%</property>
                           </object>
@@ -264,7 +264,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Line Properties</property>
+                <property name="label" translatable="yes" context="linetabpage|label1">Line Properties</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -312,7 +312,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Start st_yle:</property>
+                                <property name="label" translatable="yes" context="linetabpage|FT_LINE_ENDS_STYLE">Start st_yle:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">LB_START_STYLE</property>
                               </object>
@@ -352,7 +352,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">End sty_le:</property>
+                                <property name="label" translatable="yes" context="linetabpage|label5">End sty_le:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">LB_END_STYLE</property>
                               </object>
@@ -374,7 +374,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Wi_dth:</property>
+                                    <property name="label" translatable="yes" context="linetabpage|FT_LINE_START_WIDTH">Wi_dth:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">MTR_FLD_START_WIDTH:0cm</property>
                                   </object>
@@ -401,7 +401,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="TSB_CENTER_START">
-                                    <property name="label" translatable="yes">Ce_nter</property>
+                                    <property name="label" translatable="yes" context="linetabpage|TSB_CENTER_START">Ce_nter</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="receives_default">False</property>
@@ -435,7 +435,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">W_idth:</property>
+                                    <property name="label" translatable="yes" context="linetabpage|FT_LINE_END_WIDTH">W_idth:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">MTR_FLD_END_WIDTH:0cm</property>
                                   </object>
@@ -462,7 +462,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="TSB_CENTER_END">
-                                    <property name="label" translatable="yes">C_enter</property>
+                                    <property name="label" translatable="yes" context="linetabpage|TSB_CENTER_END">C_enter</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="receives_default">False</property>
@@ -494,7 +494,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="CBX_SYNCHRONIZE">
-                            <property name="label" translatable="yes">Synchroni_ze ends</property>
+                            <property name="label" translatable="yes" context="linetabpage|CBX_SYNCHRONIZE">Synchroni_ze ends</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">False</property>
@@ -516,7 +516,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Arrow Styles</property>
+                    <property name="label" translatable="yes" context="linetabpage|label2">Arrow Styles</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -552,7 +552,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Corner style:</property>
+                            <property name="label" translatable="yes" context="linetabpage|FT_EDGE_STYLE">_Corner style:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">LB_EDGE_STYLE</property>
                           </object>
@@ -568,7 +568,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Ca_p style:</property>
+                            <property name="label" translatable="yes" context="linetabpage|FT_CAP_STYLE">Ca_p style:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">LB_CAP_STYLE</property>
                           </object>
@@ -613,7 +613,7 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Corner and Cap Styles</property>
+                    <property name="label" translatable="yes" context="linetabpage|label3">Corner and Cap Styles</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -646,7 +646,7 @@
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkButton" id="MB_SYMBOL_BITMAP:menuSELECT">
-                            <property name="label" translatable="yes">Select...</property>
+                            <property name="label" translatable="yes" context="linetabpage|MB_SYMBOL_BITMAP:menuSELECT">Select...</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">True</property>
@@ -668,7 +668,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Widt_h:</property>
+                                <property name="label" translatable="yes" context="linetabpage|FT_SYMBOL_WIDTH">Widt_h:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">MF_SYMBOL_WIDTH:0cm</property>
                               </object>
@@ -696,7 +696,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="CB_SYMBOL_RATIO">
-                                <property name="label" translatable="yes">_Keep ratio</property>
+                                <property name="label" translatable="yes" context="linetabpage|CB_SYMBOL_RATIO">_Keep ratio</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="receives_default">False</property>
@@ -716,7 +716,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Hei_ght:</property>
+                                <property name="label" translatable="yes" context="linetabpage|FT_SYMBOL_HEIGHT">Hei_ght:</property>
                                 <property name="use_underline">True</property>
                               </object>
                               <packing>
@@ -756,7 +756,7 @@
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Icon</property>
+                    <property name="label" translatable="yes" context="linetabpage|label4">Icon</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -795,7 +795,7 @@
             <property name="can_focus">False</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="CTL_PREVIEW:border-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes">Example</property>
+                <property name="AtkObject::accessible-name" translatable="yes" context="linetabpage|CTL_PREVIEW:border-atkobject">Example</property>
               </object>
             </child>
           </object>
@@ -821,7 +821,7 @@
       <object class="GtkMenuItem" id="menuitem1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_No Symbol</property>
+        <property name="label" translatable="yes" context="linetabpage|menuitem1">_No Symbol</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -829,7 +829,7 @@
       <object class="GtkMenuItem" id="menuitem2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Automatic</property>
+        <property name="label" translatable="yes" context="linetabpage|menuitem2">_Automatic</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -837,7 +837,7 @@
       <object class="GtkMenuItem" id="menuitem3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_From file...</property>
+        <property name="label" translatable="yes" context="linetabpage|menuitem3">_From file...</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -845,7 +845,7 @@
       <object class="GtkMenuItem" id="menuitem4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Gallery</property>
+        <property name="label" translatable="yes" context="linetabpage|menuitem4">_Gallery</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -853,7 +853,7 @@
       <object class="GtkMenuItem" id="menuitem5">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Symbols</property>
+        <property name="label" translatable="yes" context="linetabpage|menuitem5">_Symbols</property>
         <property name="use_underline">True</property>
       </object>
     </child>

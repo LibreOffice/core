@@ -22,6 +22,7 @@
 #include "cfgchart.hxx"
 #include <dialmgr.hxx>
 #include <cuires.hrc>
+#include <strings.hrc>
 
 #define ROW_COLOR_COUNT 12
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
@@ -12,7 +12,7 @@
   <object class="GtkDialog" id="InsertSheetDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Insert Sheet</property>
+    <property name="title" translatable="yes" context="insertsheet|InsertSheetDialog">Insert Sheet</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -102,7 +102,7 @@
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkRadioButton" id="before">
-                            <property name="label" translatable="yes">B_efore current sheet</property>
+                            <property name="label" translatable="yes" context="insertsheet|before">B_efore current sheet</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -120,7 +120,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="after">
-                            <property name="label" translatable="yes">_After current sheet</property>
+                            <property name="label" translatable="yes" context="insertsheet|after">_After current sheet</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -143,7 +143,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Position</property>
+                    <property name="label" translatable="yes" context="insertsheet|label1">Position</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -189,7 +189,7 @@
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkRadioButton" id="new">
-                                <property name="label" translatable="yes">_New sheet</property>
+                                <property name="label" translatable="yes" context="insertsheet|new">_New sheet</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -223,7 +223,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">N_o. of sheets:</property>
+                                        <property name="label" translatable="yes" context="insertsheet|countft">N_o. of sheets:</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">countnf</property>
                                       </object>
@@ -239,7 +239,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">Na_me:</property>
+                                        <property name="label" translatable="yes" context="insertsheet|nameft">Na_me:</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">nameed</property>
                                       </object>
@@ -272,7 +272,7 @@
                                         <property name="hexpand">True</property>
                                         <property name="invisible_char">•</property>
                                         <property name="width_chars">52</property>
-                                        <property name="text" translatable="yes">Sheet...</property>
+                                        <property name="text" translatable="yes" context="insertsheet|nameed">Sheet...</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -307,7 +307,7 @@
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkRadioButton" id="fromfile">
-                                <property name="label" translatable="yes">_From file</property>
+                                <property name="label" translatable="yes" context="insertsheet|fromfile">_From file</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -368,7 +368,7 @@
                                             </child>
                                             <child internal-child="accessible">
                                               <object class="AtkObject" id="tables:border-atkobject">
-                                                <property name="AtkObject::accessible-name" translatable="yes">Tables in file</property>
+                                                <property name="AtkObject::accessible-name" translatable="yes" context="insertsheet|tables:border-atkobject">Tables in file</property>
                                               </object>
                                             </child>
                                           </object>
@@ -388,7 +388,7 @@
                                         <property name="row_spacing">12</property>
                                         <child>
                                           <object class="GtkButton" id="browse">
-                                            <property name="label" translatable="yes">_Browse...</property>
+                                            <property name="label" translatable="yes" context="insertsheet|browse">_Browse...</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">True</property>
@@ -403,7 +403,7 @@
                                         </child>
                                         <child>
                                           <object class="GtkCheckButton" id="link">
-                                            <property name="label" translatable="yes">Lin_k</property>
+                                            <property name="label" translatable="yes" context="insertsheet|link">Lin_k</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
@@ -452,7 +452,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Sheet</property>
+                    <property name="label" translatable="yes" context="insertsheet|label2">Sheet</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

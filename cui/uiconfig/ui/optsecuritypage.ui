@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkGrid" id="OptSecurityPage">
     <property name="visible">True</property>
@@ -33,7 +33,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Maintain a list of Time Stamping Authority (TSA) URLs to be used for digital signatures in PDF export.</property>
+                    <property name="label" translatable="yes" context="optsecuritypage|label9">Maintain a list of Time Stamping Authority (TSA) URLs to be used for digital signatures in PDF export.</property>
                     <property name="wrap">True</property>
                     <property name="max_width_chars">56</property>
                   </object>
@@ -46,7 +46,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="tsas">
-                    <property name="label" translatable="yes">_TSAs...</property>
+                    <property name="label" translatable="yes" context="optsecuritypage|tsas">_TSAs...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -68,7 +68,7 @@
           <object class="GtkLabel" id="label10">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">TSAs</property>
+            <property name="label" translatable="yes" context="optsecuritypage|label10">TSAs</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -108,7 +108,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Select the Network Security Services certificate directory to use for digital signatures.</property>
+                    <property name="label" translatable="yes" context="optsecuritypage|label7">Select the Network Security Services certificate directory to use for digital signatures.</property>
                     <property name="wrap">True</property>
                     <property name="max_width_chars">56</property>
                   </object>
@@ -121,7 +121,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="cert">
-                    <property name="label" translatable="yes">_Certificate...</property>
+                    <property name="label" translatable="yes" context="optsecuritypage|cert">_Certificate...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -143,7 +143,7 @@
           <object class="GtkLabel" id="label8">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Certificate Path</property>
+            <property name="label" translatable="yes" context="optsecuritypage|label8">Certificate Path</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -183,7 +183,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Adjust the security level for executing macros and specify trusted macro developers.</property>
+                    <property name="label" translatable="yes" context="optsecuritypage|label5">Adjust the security level for executing macros and specify trusted macro developers.</property>
                     <property name="wrap">True</property>
                     <property name="max_width_chars">56</property>
                   </object>
@@ -196,7 +196,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="macro">
-                    <property name="label" translatable="yes">Macro Securit_y...</property>
+                    <property name="label" translatable="yes" context="optsecuritypage|macro">Macro Securit_y...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -218,7 +218,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Macro Security</property>
+            <property name="label" translatable="yes" context="optsecuritypage|label3">Macro Security</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -260,7 +260,7 @@
                     <property name="row_spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="savepassword:wrap">
-                        <property name="label" translatable="yes">Persistently _save passwords for web connections</property>
+                        <property name="label" translatable="yes" context="optsecuritypage|savepassword:wrap">Persistently _save passwords for web connections</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -289,7 +289,7 @@
                             <property name="row_spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="usemasterpassword">
-                                <property name="label" translatable="yes">Protected _by a master password (recommended)</property>
+                                <property name="label" translatable="yes" context="optsecuritypage|usemasterpassword">Protected _by a master password (recommended)</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -310,7 +310,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Passwords are protected by a master password. You will be asked to enter it once per session, if %PRODUCTNAME retrieves a password from the protected password list.</property>
+                                <property name="label" translatable="yes" context="optsecuritypage|masterpasswordtext">Passwords are protected by a master password. You will be asked to enter it once per session, if %PRODUCTNAME retrieves a password from the protected password list.</property>
                                 <property name="wrap">True</property>
                                 <property name="max_width_chars">56</property>
                               </object>
@@ -327,7 +327,7 @@
                                 <property name="no_show_all">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Disabling the function to persistently store passwords deletes the list of passwords stored and resets the master password.
+                                <property name="label" translatable="yes" context="optsecuritypage|nopasswordsave">Disabling the function to persistently store passwords deletes the list of passwords stored and resets the master password.
 
 Do you want to delete password list and reset master password?</property>
                                 <property name="wrap">True</property>
@@ -364,7 +364,7 @@ Do you want to delete password list and reset master password?</property>
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkButton" id="connections">
-                        <property name="label" translatable="yes">Connect_ions...</property>
+                        <property name="label" translatable="yes" context="optsecuritypage|connections">Connect_ions...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -381,7 +381,7 @@ Do you want to delete password list and reset master password?</property>
                     </child>
                     <child>
                       <object class="GtkButton" id="masterpassword">
-                        <property name="label" translatable="yes">_Master Password...</property>
+                        <property name="label" translatable="yes" context="optsecuritypage|masterpassword">_Master Password...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -412,7 +412,7 @@ Do you want to delete password list and reset master password?</property>
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Passwords for Web Connections</property>
+            <property name="label" translatable="yes" context="optsecuritypage|label2">Passwords for Web Connections</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -452,7 +452,7 @@ Do you want to delete password list and reset master password?</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Adjust security related options and define warnings for hidden information in documents.  </property>
+                    <property name="label" translatable="yes" context="optsecuritypage|label4">Adjust security related options and define warnings for hidden information in documents.  </property>
                     <property name="wrap">True</property>
                     <property name="max_width_chars">56</property>
                   </object>
@@ -465,7 +465,7 @@ Do you want to delete password list and reset master password?</property>
                 </child>
                 <child>
                   <object class="GtkButton" id="options">
-                    <property name="label" translatable="yes">O_ptions...</property>
+                    <property name="label" translatable="yes" context="optsecuritypage|options">O_ptions...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -487,7 +487,7 @@ Do you want to delete password list and reset master password?</property>
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Security Options and Warnings</property>
+            <property name="label" translatable="yes" context="optsecuritypage|label1">Security Options and Warnings</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

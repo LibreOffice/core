@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="sd">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
@@ -60,7 +60,7 @@
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Animation</property>
+    <property name="title" translatable="yes" context="dockinganimation|DockingAnimation">Animation</property>
     <property name="type_hint">dock</property>
     <child>
       <object class="GtkBox" id="box1">
@@ -88,7 +88,7 @@
                   <object class="GtkBox" id="box">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Preview</property>
+                    <property name="tooltip_text" translatable="yes" context="dockinganimation|box|tooltip_text">Preview</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="orientation">vertical</property>
@@ -113,7 +113,7 @@
                       <object class="GtkComboBoxText" id="loopcount">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Loop Count</property>
+                        <property name="tooltip_text" translatable="yes" context="dockinganimation|loopcount|tooltip_text">Loop Count</property>
                         <items>
                           <item translatable="no">1</item>
                           <item translatable="no">2</item>
@@ -133,7 +133,7 @@
                           <item translatable="no">100</item>
                           <item translatable="no">500</item>
                           <item translatable="no">1000</item>
-                          <item translatable="yes">Max.</item>
+                          <item translatable="yes" context="dockinganimation|loopcount">Max.</item>
                         </items>
                       </object>
                       <packing>
@@ -147,7 +147,7 @@
                       <object class="GtkSpinButton" id="duration:hh:mm">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="tooltip_text" translatable="yes">Duration</property>
+                        <property name="tooltip_text" translatable="yes" context="dockinganimation|duration:hh:mm|tooltip_text">Duration</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -161,7 +161,7 @@
                       <object class="GtkSpinButton" id="numbitmap">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="tooltip_text" translatable="yes">Image Number</property>
+                        <property name="tooltip_text" translatable="yes" context="dockinganimation|numbitmap|tooltip_text">Image Number</property>
                         <property name="text" translatable="no">1</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="value">1</property>
@@ -184,7 +184,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">First Image</property>
+                            <property name="tooltip_text" translatable="yes" context="dockinganimation|first|tooltip_text">First Image</property>
                             <property name="image">image5</property>
                           </object>
                           <packing>
@@ -199,7 +199,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Backwards</property>
+                            <property name="tooltip_text" translatable="yes" context="dockinganimation|prev|tooltip_text">Backwards</property>
                             <property name="image">image6</property>
                           </object>
                           <packing>
@@ -214,7 +214,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Stop</property>
+                            <property name="tooltip_text" translatable="yes" context="dockinganimation|stop|tooltip_text">Stop</property>
                             <property name="image">image7</property>
                           </object>
                           <packing>
@@ -229,7 +229,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Play</property>
+                            <property name="tooltip_text" translatable="yes" context="dockinganimation|next|tooltip_text">Play</property>
                             <property name="image">image8</property>
                           </object>
                           <packing>
@@ -244,7 +244,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Last Image</property>
+                            <property name="tooltip_text" translatable="yes" context="dockinganimation|last|tooltip_text">Last Image</property>
                             <property name="image">image9</property>
                           </object>
                           <packing>
@@ -297,7 +297,7 @@
                         <property name="row_spacing">6</property>
                         <child>
                           <object class="GtkRadioButton" id="group">
-                            <property name="label" translatable="yes">Group object</property>
+                            <property name="label" translatable="yes" context="dockinganimation|group">Group object</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -315,7 +315,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="bitmap">
-                            <property name="label" translatable="yes">Bitmap object</property>
+                            <property name="label" translatable="yes" context="dockinganimation|bitmap">Bitmap object</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -338,7 +338,7 @@
                             <child>
                               <object class="GtkLabel" id="alignmentft">
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Alignment</property>
+                                <property name="label" translatable="yes" context="dockinganimation|alignmentft">Alignment</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">alignment</property>
                               </object>
@@ -353,15 +353,15 @@
                               <object class="GtkComboBoxText" id="alignment">
                                 <property name="can_focus">False</property>
                                 <items>
-                                  <item translatable="yes">Top Left</item>
-                                  <item translatable="yes">Left</item>
-                                  <item translatable="yes">Bottom Left</item>
-                                  <item translatable="yes">Top</item>
-                                  <item translatable="yes">Centered</item>
-                                  <item translatable="yes">Bottom</item>
-                                  <item translatable="yes">Top Right</item>
-                                  <item translatable="yes">Right</item>
-                                  <item translatable="yes">Bottom Right</item>
+                                  <item translatable="yes" context="dockinganimation|alignment">Top Left</item>
+                                  <item translatable="yes" context="dockinganimation|alignment">Left</item>
+                                  <item translatable="yes" context="dockinganimation|alignment">Bottom Left</item>
+                                  <item translatable="yes" context="dockinganimation|alignment">Top</item>
+                                  <item translatable="yes" context="dockinganimation|alignment">Centered</item>
+                                  <item translatable="yes" context="dockinganimation|alignment">Bottom</item>
+                                  <item translatable="yes" context="dockinganimation|alignment">Top Right</item>
+                                  <item translatable="yes" context="dockinganimation|alignment">Right</item>
+                                  <item translatable="yes" context="dockinganimation|alignment">Bottom Right</item>
                                 </items>
                               </object>
                               <packing>
@@ -387,7 +387,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Animation group</property>
+                    <property name="label" translatable="yes" context="dockinganimation|label1">Animation group</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -431,7 +431,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="tooltip_text" translatable="yes">Apply Object</property>
+                                <property name="tooltip_text" translatable="yes" context="dockinganimation|getone|tooltip_text">Apply Object</property>
                                 <property name="image">image1</property>
                               </object>
                               <packing>
@@ -446,7 +446,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="tooltip_text" translatable="yes">Apply Objects Individually</property>
+                                <property name="tooltip_text" translatable="yes" context="dockinganimation|getall|tooltip_text">Apply Objects Individually</property>
                                 <property name="image">image2</property>
                               </object>
                               <packing>
@@ -476,7 +476,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Number</property>
+                                <property name="label" translatable="yes" context="dockinganimation|label3">Number</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -519,7 +519,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="tooltip_text" translatable="yes">Delete Current Image</property>
+                                <property name="tooltip_text" translatable="yes" context="dockinganimation|delone|tooltip_text">Delete Current Image</property>
                                 <property name="image">image3</property>
                               </object>
                               <packing>
@@ -534,7 +534,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="tooltip_text" translatable="yes">Delete All Images</property>
+                                <property name="tooltip_text" translatable="yes" context="dockinganimation|delall|tooltip_text">Delete All Images</property>
                                 <property name="image">image4</property>
                               </object>
                               <packing>
@@ -560,7 +560,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Image</property>
+                    <property name="label" translatable="yes" context="dockinganimation|label2">Image</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -603,7 +603,7 @@
             </child>
             <child>
               <object class="GtkButton" id="create">
-                <property name="label" translatable="yes">Create</property>
+                <property name="label" translatable="yes" context="dockinganimation|create">Create</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>

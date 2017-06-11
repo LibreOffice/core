@@ -27,7 +27,7 @@ class AgendaWizardDialog(WizardDialog):
         super(AgendaWizardDialog,self).__init__(xmsf, HID )
 
         #Load Resources
-        self.resources = AgendaWizardDialogResources(self.oWizardResource)
+        self.resources = AgendaWizardDialogResources()
 
         #set dialog properties...
         self.setDialogProperties(True, 210, True, 200, 52, 1, 1,

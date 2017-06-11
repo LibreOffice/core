@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="GotoPageDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Go to Page</property>
+    <property name="title" translatable="yes" context="gotopagedialog|GotoPageDialog">Go to Page</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -68,7 +68,7 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">of $1</property>
+                <property name="label" translatable="yes" context="gotopagedialog|page_count">of $1</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -94,7 +94,7 @@
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Page:</property>
+                <property name="label" translatable="yes" context="gotopagedialog|page_label">Page:</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="pcr">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="FieldSelectionPage">
     <property name="visible">True</property>
@@ -31,7 +31,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Existing fields</property>
+                <property name="label" translatable="yes" context="contentfieldpage|label1">Existing fields</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">selectfield:border</property>
               </object>
@@ -78,7 +78,7 @@
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>
-                <property name="label" translatable="yes">Display field</property>
+                <property name="label" translatable="yes" context="contentfieldpage|label3">Display field</property>
                 <property name="use_underline">True</property>
                 <property name="wrap">True</property>
                 <property name="mnemonic_widget">displayfield</property>

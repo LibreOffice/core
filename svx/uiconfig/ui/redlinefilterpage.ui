@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="svx">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">19851231</property>
@@ -28,7 +28,7 @@
     <property name="column_spacing">6</property>
     <child>
       <object class="GtkCheckButton" id="date">
-        <property name="label" translatable="yes">_Date:</property>
+        <property name="label" translatable="yes" context="redlinefilterpage|date">_Date:</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -43,7 +43,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="author">
-        <property name="label" translatable="yes">_Author:</property>
+        <property name="label" translatable="yes" context="redlinefilterpage|author">_Author:</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -58,7 +58,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="comment">
-        <property name="label" translatable="yes">C_omment:</property>
+        <property name="label" translatable="yes" context="redlinefilterpage|comment">C_omment:</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -84,7 +84,7 @@
         <property name="invisible_char">•</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="commentedit-atkobject">
-            <property name="AtkObject::accessible-name" translatable="yes">Comment</property>
+            <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|commentedit-atkobject">Comment</property>
           </object>
         </child>
       </object>
@@ -95,7 +95,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="range">
-        <property name="label" translatable="yes">_Range:</property>
+        <property name="label" translatable="yes" context="redlinefilterpage|range">_Range:</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -120,7 +120,7 @@
         </accessibility>
         <child internal-child="accessible">
           <object class="AtkObject" id="actionlist-atkobject">
-            <property name="AtkObject::accessible-name" translatable="yes">Action</property>
+            <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|actionlist-atkobject">Action</property>
           </object>
         </child>
       </object>
@@ -131,7 +131,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="action">
-        <property name="label" translatable="yes">A_ction:</property>
+        <property name="label" translatable="yes" context="redlinefilterpage|action">A_ction:</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -156,7 +156,7 @@
         </accessibility>
         <child internal-child="accessible">
           <object class="AtkObject" id="authorlist-atkobject">
-            <property name="AtkObject::accessible-name" translatable="yes">Author</property>
+            <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|authorlist-atkobject">Author</property>
           </object>
         </child>
       </object>
@@ -183,7 +183,7 @@
             </accessibility>
             <child internal-child="accessible">
               <object class="AtkObject" id="rangeedit-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes">Range</property>
+                <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|rangeedit-atkobject">Range</property>
               </object>
             </child>
           </object>
@@ -201,7 +201,7 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="has_tooltip">True</property>
-            <property name="tooltip_text" translatable="yes">Set reference</property>
+            <property name="tooltip_text" translatable="yes" context="redlinefilterpage|dotdotdot|tooltip_text">Set reference</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -229,19 +229,19 @@
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
             <items>
-              <item translatable="yes">earlier than</item>
-              <item translatable="yes">since</item>
-              <item translatable="yes">equal to</item>
-              <item translatable="yes">not equal to</item>
-              <item translatable="yes">between</item>
-              <item translatable="yes">since saving</item>
+              <item translatable="yes" context="redlinefilterpage|datecond">earlier than</item>
+              <item translatable="yes" context="redlinefilterpage|datecond">since</item>
+              <item translatable="yes" context="redlinefilterpage|datecond">equal to</item>
+              <item translatable="yes" context="redlinefilterpage|datecond">not equal to</item>
+              <item translatable="yes" context="redlinefilterpage|datecond">between</item>
+              <item translatable="yes" context="redlinefilterpage|datecond">since saving</item>
             </items>
             <accessibility>
               <relation type="labelled-by" target="date"/>
             </accessibility>
             <child internal-child="accessible">
               <object class="AtkObject" id="datecond-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes">Date Condition</property>
+                <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|datecond-atkobject">Date Condition</property>
               </object>
             </child>
           </object>
@@ -263,7 +263,7 @@
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">a_nd</property>
+                <property name="label" translatable="yes" context="redlinefilterpage|and">a_nd</property>
                 <property name="use_underline">True</property>
                 <property name="ellipsize">end</property>
                 <property name="xalign">1</property>
@@ -284,7 +284,7 @@
                 <property name="adjustment">adjustment1</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="startdate:yy:mm:dd-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">Start Date</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|startdate:yy:mm:dd-atkobject">Start Date</property>
                   </object>
                 </child>
               </object>
@@ -303,7 +303,7 @@
                 <property name="invisible_char">•</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="starttime:hh:mm-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">Start Time</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|starttime:hh:mm-atkobject">Start Time</property>
                   </object>
                 </child>
               </object>
@@ -319,7 +319,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Set current time and date</property>
+                <property name="tooltip_text" translatable="yes" context="redlinefilterpage|startclock|tooltip_text">Set current time and date</property>
                 <property name="image">image1</property>
               </object>
               <packing>
@@ -338,7 +338,7 @@
                 <property name="adjustment">adjustment1</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="enddate:yy:mm:dd-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">End Date</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|enddate:yy:mm:dd-atkobject">End Date</property>
                   </object>
                 </child>
               </object>
@@ -357,7 +357,7 @@
                 <property name="invisible_char">•</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="endtime:hh:mm-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">End Time</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|endtime:hh:mm-atkobject">End Time</property>
                   </object>
                 </child>
               </object>
@@ -373,7 +373,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Set current time and date</property>
+                <property name="tooltip_text" translatable="yes" context="redlinefilterpage|endclock|tooltip_text">Set current time and date</property>
                 <property name="image">image2</property>
               </object>
               <packing>

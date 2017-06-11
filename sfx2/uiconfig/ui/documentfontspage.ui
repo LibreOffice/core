@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sfx">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkGrid" id="DocumentFontsPage">
     <property name="visible">True</property>
@@ -22,7 +22,7 @@
             <property name="left_padding">12</property>
             <child>
               <object class="GtkCheckButton" id="embedFonts">
-                <property name="label" translatable="yes">_Embed fonts in the document</property>
+                <property name="label" translatable="yes" context="documentfontspage|embedFonts">_Embed fonts in the document</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -37,7 +37,7 @@
           <object class="GtkLabel" id="fontEmbeddingLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Font Embedding</property>
+            <property name="label" translatable="yes" context="documentfontspage|fontEmbeddingLabel">Font Embedding</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

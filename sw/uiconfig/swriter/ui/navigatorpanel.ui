@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkGrid" id="NavigatorPanel">
     <property name="visible">True</property>
@@ -31,7 +31,7 @@
                   <object class="GtkToolButton" id="contenttoggle">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Toggle Master View</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|contenttoggle|tooltip_text">Toggle Master View</property>
                     <property name="action_name">toggle</property>
                     <property name="icon_name">sw/res/sc20244.png</property>
                   </object>
@@ -44,7 +44,7 @@
                   <object class="GtkMenuToolButton" id="navigation">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Navigation</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|navigation|tooltip_text">Navigation</property>
                     <property name="action_name">navigation</property>
                     <property name="icon_name">sw/res/sc20249.png</property>
                   </object>
@@ -57,7 +57,7 @@
                   <object class="GtkToolButton" id="back">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Back</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|back|tooltip_text">Back</property>
                     <property name="action_name">back</property>
                     <property name="icon_name">sw/res/sc20186.png</property>
                   </object>
@@ -70,7 +70,7 @@
                   <object class="GtkToolButton" id="forward">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Forward</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|forward|tooltip_text">Forward</property>
                     <property name="action_name">forward</property>
                     <property name="icon_name">sw/res/sc20175.png</property>
                   </object>
@@ -83,7 +83,7 @@
                   <object class="GtkToolButton" id="dragmode">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Drag Mode</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|dragmode|tooltip_text">Drag Mode</property>
                     <property name="action_name">dragmode</property>
                     <property name="icon_name">sw/res/sc20235.png</property>
                   </object>
@@ -106,7 +106,7 @@
                   <object class="GtkToolButton" id="chapterup">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Promote Chapter</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|chapterup|tooltip_text">Promote Chapter</property>
                     <property name="action_name">up</property>
                     <property name="icon_name">sw/res/sc20174.png</property>
                   </object>
@@ -119,7 +119,7 @@
                   <object class="GtkToolButton" id="chapterdown">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Demote Chapter</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|chapterdown|tooltip_text">Demote Chapter</property>
                     <property name="action_name">down</property>
                     <property name="icon_name">sw/res/sc20171.png</property>
                   </object>
@@ -132,7 +132,7 @@
                   <object class="GtkToolButton" id="listbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">List Box On/Off</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|listbox|tooltip_text">List Box On/Off</property>
                     <property name="action_name">listbox</property>
                     <property name="icon_name">sw/res/sc20233.png</property>
                   </object>
@@ -145,7 +145,7 @@
                   <object class="GtkToolButton" id="root">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Content Navigation View</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|root|tooltip_text">Content Navigation View</property>
                     <property name="action_name">root</property>
                     <property name="icon_name">sw/res/sc20234.png</property>
                   </object>
@@ -168,7 +168,7 @@
                   <object class="GtkToolButton" id="reminder">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Set Reminder</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|reminder|tooltip_text">Set Reminder</property>
                     <property name="action_name">reminder</property>
                     <property name="icon_name">sw/res/sc20183.png</property>
                   </object>
@@ -191,7 +191,7 @@
                   <object class="GtkToolButton" id="header">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Header</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|header|tooltip_text">Header</property>
                     <property name="action_name">header</property>
                     <property name="icon_name">sw/res/sc20179.png</property>
                   </object>
@@ -204,7 +204,7 @@
                   <object class="GtkToolButton" id="footer">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Footer</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|footer|tooltip_text">Footer</property>
                     <property name="action_name">footer</property>
                     <property name="icon_name">sw/res/sc20177.png</property>
                   </object>
@@ -217,7 +217,7 @@
                   <object class="GtkToolButton" id="anchor">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Anchor&lt;-&gt;Text</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|anchor|tooltip_text">Anchor&lt;-&gt;Text</property>
                     <property name="action_name">anchor</property>
                     <property name="icon_name">sw/res/sc20182.png</property>
                   </object>
@@ -240,7 +240,7 @@
                   <object class="GtkMenuToolButton" id="headings">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Heading Levels Shown</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|headings|tooltip_text">Heading Levels Shown</property>
                     <property name="action_name">headings</property>
                     <property name="icon_name">sw/res/sc20236.png</property>
                   </object>
@@ -263,7 +263,7 @@
                   <object class="GtkToolButton" id="promote">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Promote Level</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|promote|tooltip_text">Promote Level</property>
                     <property name="action_name">promote</property>
                     <property name="icon_name">sw/res/sc20172.png</property>
                   </object>
@@ -276,7 +276,7 @@
                   <object class="GtkToolButton" id="demote">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Demote Level</property>
+                    <property name="tooltip_text" translatable="yes" context="navigatorpanel|demote|tooltip_text">Demote Level</property>
                     <property name="action_name">demote</property>
                     <property name="icon_name">sw/res/sc20173.png</property>
                   </object>
@@ -301,10 +301,10 @@
           <object class="GtkComboBox" id="documents">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="tooltip_text" translatable="yes">Document</property>
+            <property name="tooltip_text" translatable="yes" context="navigatorpanel|documents|tooltip_text">Document</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="documents-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes">Active Window</property>
+                <property name="AtkObject::accessible-name" translatable="yes" context="navigatorpanel|documents-atkobject">Active Window</property>
               </object>
             </child>
           </object>
@@ -338,7 +338,7 @@
               <object class="GtkToolButton" id="globaltoggle">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Toggle Master View</property>
+                <property name="tooltip_text" translatable="yes" context="navigatorpanel|globaltoggle|tooltip_text">Toggle Master View</property>
                 <property name="action_name">toggle</property>
                 <property name="icon_name">sw/res/sc20244.png</property>
               </object>
@@ -361,7 +361,7 @@
               <object class="GtkToolButton" id="edit">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Edit</property>
+                <property name="tooltip_text" translatable="yes" context="navigatorpanel|edit|tooltip_text">Edit</property>
                 <property name="action_name">edit</property>
                 <property name="icon_name">sw/res/sc20245.png</property>
               </object>
@@ -374,7 +374,7 @@
               <object class="GtkToolButton" id="update">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Update</property>
+                <property name="tooltip_text" translatable="yes" context="navigatorpanel|update|tooltip_text">Update</property>
                 <property name="action_name">update</property>
                 <property name="icon_name">sw/res/sc20246.png</property>
               </object>
@@ -387,7 +387,7 @@
               <object class="GtkToolButton" id="insert">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Insert</property>
+                <property name="tooltip_text" translatable="yes" context="navigatorpanel|insert|tooltip_text">Insert</property>
                 <property name="action_name">insert</property>
                 <property name="icon_name">sw/res/sc20247.png</property>
               </object>
@@ -410,7 +410,7 @@
               <object class="GtkToolButton" id="save">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Save Contents as well</property>
+                <property name="tooltip_text" translatable="yes" context="navigatorpanel|save|tooltip_text">Save Contents as well</property>
                 <property name="action_name">save</property>
                 <property name="icon_name">sw/res/sc20248.png</property>
               </object>
@@ -433,7 +433,7 @@
               <object class="GtkToolButton" id="moveup">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Move Up</property>
+                <property name="tooltip_text" translatable="yes" context="navigatorpanel|moveup|tooltip_text">Move Up</property>
                 <property name="action_name">up</property>
                 <property name="icon_name">sw/res/sc20174.png</property>
               </object>
@@ -446,7 +446,7 @@
               <object class="GtkToolButton" id="movedown">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Move Down</property>
+                <property name="tooltip_text" translatable="yes" context="navigatorpanel|movedown|tooltip_text">Move Down</property>
                 <property name="action_name">down</property>
                 <property name="icon_name">sw/res/sc20171.png</property>
               </object>

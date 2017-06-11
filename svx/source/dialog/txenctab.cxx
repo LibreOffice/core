@@ -18,38 +18,32 @@
  */
 
 
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include "svx/txenctab.hxx"
+#include "txenctab.hrc"
 
-SvxTextEncodingTable::SvxTextEncodingTable()
-    : ResStringArray(ResId(RID_SVXSTR_TEXTENCODING_TABLE, DIALOG_MGR()))
+const OUString SvxTextEncodingTable::GetTextString(const rtl_TextEncoding nEnc)
 {
-}
+    const size_t nCount = SAL_N_ELEMENTS(RID_SVXSTR_TEXTENCODING_TABLE);
 
-SvxTextEncodingTable::~SvxTextEncodingTable()
-{
-}
-
-const OUString SvxTextEncodingTable::GetTextString( const rtl_TextEncoding nEnc ) const
-{
-    sal_uInt32 nPos = FindIndex( (long)nEnc );
-
-    if ( RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count() )
-        return ResStringArray::GetString( nPos );
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        if (RID_SVXSTR_TEXTENCODING_TABLE[i].second == nEnc)
+            return SvxResId(RID_SVXSTR_TEXTENCODING_TABLE[i].first);
+    }
 
     return OUString();
 }
 
-
-rtl_TextEncoding SvxTextEncodingTable::GetTextEncoding( const OUString& rStr ) const
+rtl_TextEncoding SvxTextEncodingTable::GetTextEncoding(const OUString& rStr)
 {
-    sal_uInt32 nCount = Count();
+    const size_t nCount = SAL_N_ELEMENTS(RID_SVXSTR_TEXTENCODING_TABLE);
 
-    for ( sal_uInt32 i = 0; i < nCount; ++i )
+    for (size_t i = 0; i < nCount; ++i)
     {
-        if (ResStringArray::GetString( i ).equals(rStr))
-            return rtl_TextEncoding( GetValue( i ) );
+        if (SvxResId(RID_SVXSTR_TEXTENCODING_TABLE[i].first).equals(rStr))
+            return RID_SVXSTR_TEXTENCODING_TABLE[i].second;
     }
     return RTL_TEXTENCODING_DONTKNOW;
 }

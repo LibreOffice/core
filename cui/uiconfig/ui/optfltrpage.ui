@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="cui">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkBox" id="OptFltrPage">
     <property name="visible">True</property>
@@ -26,7 +26,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="wo_basic">
-                    <property name="label" translatable="yes">Load Basic _code</property>
+                    <property name="label" translatable="yes" context="optfltrpage|wo_basic">Load Basic _code</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -43,7 +43,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="wo_exec">
-                    <property name="label" translatable="yes">E_xecutable code</property>
+                    <property name="label" translatable="yes" context="optfltrpage|wo_exec">E_xecutable code</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -61,7 +61,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="wo_saveorig">
-                    <property name="label" translatable="yes">Save _original Basic code</property>
+                    <property name="label" translatable="yes" context="optfltrpage|wo_saveorig">Save _original Basic code</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -84,7 +84,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Microsoft Word 97/2000/XP</property>
+            <property name="label" translatable="yes" context="optfltrpage|label1">Microsoft Word 97/2000/XP</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -116,7 +116,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="ex_basic">
-                    <property name="label" translatable="yes">Lo_ad Basic code</property>
+                    <property name="label" translatable="yes" context="optfltrpage|ex_basic">Lo_ad Basic code</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -133,7 +133,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="ex_exec">
-                    <property name="label" translatable="yes">E_xecutable code</property>
+                    <property name="label" translatable="yes" context="optfltrpage|ex_exec">E_xecutable code</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -151,7 +151,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="ex_saveorig">
-                    <property name="label" translatable="yes">Sa_ve original Basic code</property>
+                    <property name="label" translatable="yes" context="optfltrpage|ex_saveorig">Sa_ve original Basic code</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -174,7 +174,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Microsoft Excel 97/2000/XP</property>
+            <property name="label" translatable="yes" context="optfltrpage|label2">Microsoft Excel 97/2000/XP</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -206,7 +206,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="pp_basic">
-                    <property name="label" translatable="yes">Load Ba_sic code</property>
+                    <property name="label" translatable="yes" context="optfltrpage|pp_basic">Load Ba_sic code</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -223,7 +223,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="pp_saveorig">
-                    <property name="label" translatable="yes">Sav_e original Basic code</property>
+                    <property name="label" translatable="yes" context="optfltrpage|pp_saveorig">Sav_e original Basic code</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -246,7 +246,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Microsoft PowerPoint 97/2000/XP</property>
+            <property name="label" translatable="yes" context="optfltrpage|label3">Microsoft PowerPoint 97/2000/XP</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

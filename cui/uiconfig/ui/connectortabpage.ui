@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -31,7 +31,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">_Type:</property>
+                <property name="label" translatable="yes" context="connectortabpage|FT_TYPE">_Type:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">LB_TYPE</property>
               </object>
@@ -82,7 +82,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Line _1:</property>
+                        <property name="label" translatable="yes" context="connectortabpage|FT_LINE_1">Line _1:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_LINE_1:0.00cm</property>
                       </object>
@@ -96,7 +96,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Line _2:</property>
+                        <property name="label" translatable="yes" context="connectortabpage|FT_LINE_2">Line _2:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_LINE_2:0.00cm</property>
                       </object>
@@ -110,7 +110,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Line _3:</property>
+                        <property name="label" translatable="yes" context="connectortabpage|FT_LINE_3">Line _3:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_LINE_3:0.00cm</property>
                       </object>
@@ -167,7 +167,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Line Skew</property>
+                <property name="label" translatable="yes" context="connectortabpage|label2">Line Skew</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -203,7 +203,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Begin horizontal:</property>
+                        <property name="label" translatable="yes" context="connectortabpage|FT_HORZ_1">_Begin horizontal:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_HORZ_1:0.00mm</property>
                       </object>
@@ -217,7 +217,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">End _horizontal:</property>
+                        <property name="label" translatable="yes" context="connectortabpage|FT_HORZ_2">End _horizontal:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_HORZ_2:0.00mm</property>
                       </object>
@@ -231,7 +231,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Begin _vertical:</property>
+                        <property name="label" translatable="yes" context="connectortabpage|FT_VERT_1">Begin _vertical:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_VERT_1:0.00mm</property>
                       </object>
@@ -245,7 +245,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_End vertical:</property>
+                        <property name="label" translatable="yes" context="connectortabpage|FT_VERT_2">_End vertical:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_VERT_2:0.00mm</property>
                       </object>
@@ -315,7 +315,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Line Spacing</property>
+                <property name="label" translatable="yes" context="connectortabpage|label3">Line Spacing</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -339,12 +339,12 @@
       <object class="svxlo-SvxXConnectionPreview" id="CTL_PREVIEW:border">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Preview</property>
+        <property name="tooltip_text" translatable="yes" context="connectortabpage|CTL_PREVIEW:border|tooltip_text">Preview</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="CTL_PREVIEW:border-atkobject">
-            <property name="AtkObject::accessible-name" translatable="yes">Example</property>
+            <property name="AtkObject::accessible-name" translatable="yes" context="connectortabpage|CTL_PREVIEW:border-atkobject">Example</property>
           </object>
         </child>
       </object>

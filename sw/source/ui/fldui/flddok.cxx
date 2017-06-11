@@ -21,6 +21,7 @@
 #include <flddat.hxx>
 #include <docufld.hxx>
 #include <globals.hrc>
+#include <strings.hrc>
 #include <chpfld.hxx>
 #include <fldui.hrc>
 #include <flddok.hxx>
@@ -467,27 +468,27 @@ IMPL_LINK_NOARG(SwFieldDokPage, SubTypeHdl, ListBox&, void)
     const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pSelectionLB->GetEntryData(nPos));
     FillFormatLB(nTypeId);
 
-    sal_uInt32 nTextRes = 0;
+    const char* pTextRes = nullptr;
     switch (nTypeId)
     {
     case TYP_CHAPTERFLD:
-        nTextRes = STR_LEVEL;
+        pTextRes = STR_LEVEL;
         break;
 
     case TYP_PREVPAGEFLD:
     case TYP_NEXTPAGEFLD:
-        nTextRes = SVX_NUM_CHAR_SPECIAL == (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFormatLB->GetEntryData(
+        pTextRes = SVX_NUM_CHAR_SPECIAL == (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFormatLB->GetEntryData(
                                         m_pFormatLB->GetSelectEntryPos() ))
                         ? STR_VALUE : STR_OFFSET;
         break;
 
     case TYP_PAGENUMBERFLD:
-        nTextRes = STR_OFFSET;
+        pTextRes = STR_OFFSET;
         break;
     }
 
-    if( nTextRes )
-        m_pValueFT->SetText( SwResId( nTextRes ));
+    if (pTextRes)
+        m_pValueFT->SetText(SwResId(pTextRes));
 }
 
 sal_Int32 SwFieldDokPage::FillFormatLB(sal_uInt16 nTypeId)

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.19.0 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="CustomizeDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Customize</property>
+    <property name="title" translatable="yes" context="customizedialog|CustomizeDialog">Customize</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -96,7 +96,7 @@
               <object class="GtkLabel" id="menus">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Menus</property>
+                <property name="label" translatable="yes" context="customizedialog|menus">Menus</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -109,7 +109,7 @@
               <object class="GtkLabel" id="contextmenus">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Context Menus</property>
+                <property name="label" translatable="yes" context="customizedialog|contextmenus">Context Menus</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -123,7 +123,7 @@
               <object class="GtkLabel" id="keyboard">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Keyboard</property>
+                <property name="label" translatable="yes" context="customizedialog|keyboard">Keyboard</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -137,7 +137,7 @@
               <object class="GtkLabel" id="toolbars">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Toolbars</property>
+                <property name="label" translatable="yes" context="customizedialog|toolbars">Toolbars</property>
               </object>
               <packing>
                 <property name="position">3</property>
@@ -151,7 +151,7 @@
               <object class="GtkLabel" id="events">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Events</property>
+                <property name="label" translatable="yes" context="customizedialog|events">Events</property>
               </object>
               <packing>
                 <property name="position">4</property>

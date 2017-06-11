@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="AutoTextDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">AutoText</property>
+    <property name="title" translatable="yes" context="autotext|AutoTextDialog">AutoText</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -19,7 +19,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="insert">
-                <property name="label" translatable="yes">_Insert</property>
+                <property name="label" translatable="yes" context="autotext|insert">_Insert</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -64,7 +64,7 @@
             </child>
             <child>
               <object class="GtkButton" id="autotext:editmenu">
-                <property name="label" translatable="yes">AutoTe_xt</property>
+                <property name="label" translatable="yes" context="autotext|autotext:editmenu">AutoTe_xt</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -78,7 +78,7 @@
             </child>
             <child>
               <object class="GtkButton" id="categories">
-                <property name="label" translatable="yes">Cat_egories...</property>
+                <property name="label" translatable="yes" context="autotext|categories">Cat_egories...</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -92,7 +92,7 @@
             </child>
             <child>
               <object class="GtkButton" id="path">
-                <property name="label" translatable="yes">_Path...</property>
+                <property name="label" translatable="yes" context="autotext|path">_Path...</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -139,7 +139,7 @@
                         <property name="column_spacing">18</property>
                         <child>
                           <object class="GtkCheckButton" id="relfile">
-                            <property name="label" translatable="yes">_File system</property>
+                            <property name="label" translatable="yes" context="autotext|relfile">_File system</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -154,7 +154,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="relnet">
-                            <property name="label" translatable="yes">Inter_net</property>
+                            <property name="label" translatable="yes" context="autotext|relnet">Inter_net</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -175,7 +175,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Save Links Relative To</property>
+                    <property name="label" translatable="yes" context="autotext|label1">Save Links Relative To</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -202,7 +202,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="inserttip">
-                        <property name="label" translatable="yes">_Display remainder of name as suggestion while typing</property>
+                        <property name="label" translatable="yes" context="autotext|inserttip">_Display remainder of name as suggestion while typing</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -227,7 +227,7 @@
                           <object class="GtkLabel" id="nameft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Name:</property>
+                            <property name="label" translatable="yes" context="autotext|nameft">Name:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">name</property>
                           </object>
@@ -240,7 +240,7 @@
                           <object class="GtkLabel" id="shortnameft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Shortcut:</property>
+                            <property name="label" translatable="yes" context="autotext|shortnameft">Shortcut:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">shortname</property>
                           </object>
@@ -295,7 +295,7 @@
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="category-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Category</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="autotext|category-atkobject">Category</property>
                           </object>
                         </child>
                       </object>
@@ -380,7 +380,7 @@
       <object class="GtkMenuItem" id="new">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_New</property>
+        <property name="label" translatable="yes" context="autotext|new">_New</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -388,7 +388,7 @@
       <object class="GtkMenuItem" id="newtext">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">New (text only)</property>
+        <property name="label" translatable="yes" context="autotext|newtext">New (text only)</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -396,7 +396,7 @@
       <object class="GtkMenuItem" id="copy">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Copy</property>
+        <property name="label" translatable="yes" context="autotext|copy">_Copy</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -404,7 +404,7 @@
       <object class="GtkMenuItem" id="replace">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Replace</property>
+        <property name="label" translatable="yes" context="autotext|replace">Replace</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -412,7 +412,7 @@
       <object class="GtkMenuItem" id="replacetext">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Rep_lace (text only)</property>
+        <property name="label" translatable="yes" context="autotext|replacetext">Rep_lace (text only)</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -420,7 +420,7 @@
       <object class="GtkMenuItem" id="rename">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Rename...</property>
+        <property name="label" translatable="yes" context="autotext|rename">Rename...</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -428,7 +428,7 @@
       <object class="GtkMenuItem" id="delete">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Delete</property>
+        <property name="label" translatable="yes" context="autotext|delete">_Delete</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -442,7 +442,7 @@
       <object class="GtkMenuItem" id="edit">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Edit</property>
+        <property name="label" translatable="yes" context="autotext|edit">_Edit</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -456,7 +456,7 @@
       <object class="GtkMenuItem" id="macro">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Macro...</property>
+        <property name="label" translatable="yes" context="autotext|macro">_Macro...</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -470,7 +470,7 @@
       <object class="GtkMenuItem" id="import">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Import...</property>
+        <property name="label" translatable="yes" context="autotext|import">_Import...</property>
         <property name="use_underline">True</property>
       </object>
     </child>

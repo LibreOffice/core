@@ -20,9 +20,11 @@
 #include <config_features.h>
 
 #include "DBSetupConnectionPages.hxx"
+#include "core_resource.hxx"
 #include "sqlmessage.hxx"
-#include "dbu_dlg.hrc"
-#include "dbu_resource.hrc"
+#include "dbu_dlg.hxx"
+#include "strings.hrc"
+#include "dbu_pageids.hxx"
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
@@ -43,14 +45,14 @@
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include <svl/filenotation.hxx>
 
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include "finteraction.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include <unotools/pathoptions.hxx>
 #include <svtools/roadmapwizard.hxx>
 #include "TextConnectionHelper.hxx"
@@ -378,7 +380,7 @@ using namespace ::com::sun::star;
     }
 
     // OMySQLJDBCConnectionPageSetup
-    OGeneralSpecialJDBCConnectionPageSetup::OGeneralSpecialJDBCConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs ,sal_uInt16 _nPortId, sal_uInt16 _nDefaultPortResId, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderTextResId, sal_uInt16 _nDriverClassId)
+    OGeneralSpecialJDBCConnectionPageSetup::OGeneralSpecialJDBCConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs ,sal_uInt16 _nPortId, const char* pDefaultPortResId, const char* pHelpTextResId, const char* pHeaderTextResId, const char* pDriverClassId)
         :OGenericAdministrationPage(pParent, "SpecialJDBCConnectionPage", "dbaccess/ui/specialjdbcconnectionpage.ui", _rCoreAttrs)
         ,m_nPortId(_nPortId)
     {
@@ -396,13 +398,13 @@ using namespace ::com::sun::star;
         get(m_pETDriverClass, "jdbcDriverEntry");
         get(m_pPBTestJavaDriver, "testDriverButton");
 
-        m_pFTDriverClass->SetText(OUString(ModuleRes(_nDriverClassId)));
+        m_pFTDriverClass->SetText(DBA_RES(pDriverClassId));
 
-        m_pFTDefaultPortNumber->SetText(OUString(ModuleRes(_nDefaultPortResId)));
-        OUString sHelpText = OUString(ModuleRes(_nHelpTextResId));
+        m_pFTDefaultPortNumber->SetText(DBA_RES(pDefaultPortResId));
+        OUString sHelpText = DBA_RES(pHelpTextResId);
         m_pFTHelpText->SetText(sHelpText);
         //TODO this code snippet is redundant
-        m_pHeaderText->SetText(ModuleRes(_nHeaderTextResId));
+        m_pHeaderText->SetText(DBA_RES(pHeaderTextResId));
 
         m_pETDatabasename->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
         m_pETHostname->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
@@ -552,9 +554,9 @@ using namespace ::com::sun::star;
         {
         }
 #endif
-        const sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
+        const char *pMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         const OSQLMessageBox::MessageType mt = bSuccess ? OSQLMessageBox::Info : OSQLMessageBox::Error;
-        ScopedVclPtrInstance< OSQLMessageBox > aMsg( this, OUString( ModuleRes( nMessage ) ), OUString(), WB_OK | WB_DEF_OK, mt );
+        ScopedVclPtrInstance<OSQLMessageBox> aMsg(this, DBA_RES(pMessage), OUString(), WB_OK | WB_DEF_OK, mt);
         aMsg->Execute();
     }
 
@@ -675,8 +677,8 @@ using namespace ::com::sun::star;
 #else
         (void) bSuccess;
 #endif
-        sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
-        ScopedVclPtrInstance< OSQLMessageBox > aMsg( this, OUString( ModuleRes( nMessage ) ), OUString() );
+        const char* pMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
+        ScopedVclPtrInstance<OSQLMessageBox> aMsg(this, DBA_RES(pMessage), OUString());
         aMsg->Execute();
     }
 

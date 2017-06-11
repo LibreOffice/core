@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -40,7 +40,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="TSB_AUTOGROW_WIDTH">
-                        <property name="label" translatable="yes">Fit wi_dth to text</property>
+                        <property name="label" translatable="yes" context="textattrtabpage|TSB_AUTOGROW_WIDTH">Fit wi_dth to text</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -56,7 +56,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="TSB_AUTOGROW_HEIGHT">
-                        <property name="label" translatable="yes">Fit h_eight to text</property>
+                        <property name="label" translatable="yes" context="textattrtabpage|TSB_AUTOGROW_HEIGHT">Fit h_eight to text</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -72,7 +72,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="TSB_FIT_TO_SIZE">
-                        <property name="label" translatable="yes">_Fit to frame</property>
+                        <property name="label" translatable="yes" context="textattrtabpage|TSB_FIT_TO_SIZE">_Fit to frame</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -88,7 +88,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="TSB_CONTOUR">
-                        <property name="label" translatable="yes">_Adjust to contour</property>
+                        <property name="label" translatable="yes" context="textattrtabpage|TSB_CONTOUR">_Adjust to contour</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -110,7 +110,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Drawing Object Text</property>
+                <property name="label" translatable="yes" context="textattrtabpage|label1">Drawing Object Text</property>
                 <property name="xalign">0</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
@@ -143,7 +143,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="TSB_WORDWRAP_TEXT">
-                        <property name="label" translatable="yes">_Word wrap text in shape</property>
+                        <property name="label" translatable="yes" context="textattrtabpage|TSB_WORDWRAP_TEXT">_Word wrap text in shape</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -159,7 +159,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="TSB_AUTOGROW_SIZE">
-                        <property name="label" translatable="yes">_Resize shape to fit text</property>
+                        <property name="label" translatable="yes" context="textattrtabpage|TSB_AUTOGROW_SIZE">_Resize shape to fit text</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -187,7 +187,7 @@
               <object class="GtkLabel" id="label8">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Custom Shape Text</property>
+                <property name="label" translatable="yes" context="textattrtabpage|label8">Custom Shape Text</property>
                 <property name="xalign">0</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
@@ -234,7 +234,7 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Left:</property>
+                        <property name="label" translatable="yes" context="textattrtabpage|label4">_Left:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_LEFT:0.00cm</property>
                         <property name="xalign">0</property>
@@ -248,7 +248,7 @@
                       <object class="GtkLabel" id="label5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Right:</property>
+                        <property name="label" translatable="yes" context="textattrtabpage|label5">_Right:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_RIGHT:0.00cm</property>
                         <property name="xalign">0</property>
@@ -262,7 +262,7 @@
                       <object class="GtkLabel" id="label6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Top:</property>
+                        <property name="label" translatable="yes" context="textattrtabpage|label6">_Top:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_TOP:0.00cm</property>
                         <property name="xalign">0</property>
@@ -276,7 +276,7 @@
                       <object class="GtkLabel" id="label7">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Bottom:</property>
+                        <property name="label" translatable="yes" context="textattrtabpage|label7">_Bottom:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_BOTTOM:0.00cm</property>
                         <property name="xalign">0</property>
@@ -346,7 +346,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Spacing to Borders</property>
+                <property name="label" translatable="yes" context="textattrtabpage|label2">Spacing to Borders</property>
                 <property name="xalign">0</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
@@ -395,7 +395,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="TSB_FULL_WIDTH">
-                        <property name="label" translatable="yes">Full _width</property>
+                        <property name="label" translatable="yes" context="textattrtabpage|TSB_FULL_WIDTH">Full _width</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -418,7 +418,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Text Anchor</property>
+                <property name="label" translatable="yes" context="textattrtabpage|label3">Text Anchor</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
