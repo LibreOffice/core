@@ -20,7 +20,6 @@
 #include <svl/eitem.hxx>
 #include <svl/urihelper.hxx>
 #include <tools/datetime.hxx>
-#include <tools/resary.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/mnemonic.hxx>
@@ -29,6 +28,7 @@
 #include <unotools/cmdoptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/useroptions.hxx>
+#include <svtools/controldims.hxx>
 #include <svtools/imagemgr.hxx>
 
 #include <memory>
@@ -51,7 +51,6 @@
 
 #include <vcl/timer.hxx>
 #include <vcl/settings.hxx>
-#include <sfx2/dinfdlg.hxx>
 #include <sfx2/securitypage.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/frame.hxx>
@@ -59,6 +58,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include <sfx2/dinfdlg.hxx>
 #include "helper.hxx"
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
@@ -67,9 +67,8 @@
 #include "documentfontsdialog.hxx"
 #include <sfx2/sfx.hrc>
 #include "dinfdlg.hrc"
-#include "app.hrc"
-#include "sfxlocal.hrc"
-#include <dialog.hrc>
+#include "sfx2/strings.hrc"
+#include "strings.hxx"
 #include "bitmaps.hlst"
 #include <vcl/help.hxx>
 #include <vcl/builderfactory.hxx>
@@ -1409,9 +1408,8 @@ namespace
                                                                     WB_AUTOSIZE|WB_AUTOHSCROLL));
         aNameBox->SetPosSizePixel(aNameBox->LogicToPixel(Point(0, 2), MapUnit::MapAppFont),
                                   aNameBox->LogicToPixel(Size(60, 72), MapUnit::MapAppFont));
-        ResStringArray aStrArr(ResId(SFX_CB_PROPERTY_STRINGARRAY, *SfxResMgr::GetResMgr()));
-        for (sal_uInt32 i = 0; i < aStrArr.Count(); ++i)
-            aNameBox->InsertEntry(aStrArr.GetString(i));
+        for (size_t i = 0; i < SAL_N_ELEMENTS(SFX_CB_PROPERTY_STRINGARRAY); ++i)
+            aNameBox->InsertEntry(SfxResId(SFX_CB_PROPERTY_STRINGARRAY[i]));
         return aNameBox;
     }
 }
@@ -1422,11 +1420,10 @@ CustomPropertiesTypeBox::CustomPropertiesTypeBox(vcl::Window* pParent, CustomPro
 {
     SetPosSizePixel(LogicToPixel(Point(63, 2), MapUnit::MapAppFont),
                     LogicToPixel(Size(60, 80), MapUnit::MapAppFont));
-    ResStringArray aStrArr(ResId(SFX_LB_PROPERTY_STRINGARRAY, *SfxResMgr::GetResMgr()));
-    for (sal_uInt32 i = 0; i < aStrArr.Count(); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(SFX_LB_PROPERTY_STRINGARRAY); ++i)
     {
-        InsertEntry(aStrArr.GetString(i));
-        SetEntryData(i, reinterpret_cast<void*>(aStrArr.GetValue(i)));
+        InsertEntry(SfxResId(SFX_LB_PROPERTY_STRINGARRAY[i].first));
+        SetEntryData(i, reinterpret_cast<void*>(SFX_LB_PROPERTY_STRINGARRAY[i].second));
     }
     SelectEntryPos(0);
 }
@@ -1454,7 +1451,7 @@ CustomPropertyLine::CustomPropertyLine( vcl::Window* pParent ) :
     m_aRemoveButton->SetModeImage(Image(BitmapEx(SFX_BMP_PROPERTY_REMOVE)));
     m_aRemoveButton->SetQuickHelpText(SfxResId(STR_SFX_REMOVE_PROPERTY));
 
-    m_aEditButton->SetText(SfxResId(SFX_ST_EDIT));
+    m_aEditButton->SetText(SFX_ST_EDIT);
 }
 
 void CustomPropertyLine::SetRemoved()

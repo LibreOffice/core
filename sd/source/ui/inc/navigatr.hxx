@@ -127,7 +127,7 @@ private:
     */
     //    bool                        mbShowAllShapes;
 
-    static sal_uInt16           GetDragTypeSdStrId(NavigatorDragType eDT);
+    static const char*          GetDragTypeSdStrId(NavigatorDragType eDT);
     static OUString             GetDragTypeSdBmpId(NavigatorDragType eDT);
     NavDocInfo*                 GetDocInfo();
 

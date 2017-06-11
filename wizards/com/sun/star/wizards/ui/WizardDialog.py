@@ -20,7 +20,6 @@ import traceback
 from abc import ABCMeta, abstractmethod
 from .UnoDialog2 import UnoDialog2, Desktop, PropertyNames, UIConsts, \
     ItemListenerProcAdapter
-from ..common.Resource import Resource
 from ..common.HelpIds import HelpIds
 from ..common.FileAccess import FileAccess
 
@@ -28,6 +27,10 @@ from com.sun.star.lang import NoSuchMethodException
 from com.sun.star.frame import TerminationVetoException
 from com.sun.star.awt.PushButtonType import HELP, STANDARD
 from com.sun.star.awt.FontWeight import BOLD
+
+import imp, os
+imp.load_source('strings', os.path.join(os.path.dirname(__file__), '../common/strings.hrc'))
+import strings
 
 class WizardDialog(UnoDialog2):
 
@@ -60,7 +63,6 @@ class WizardDialog(UnoDialog2):
         self.nOldStep = 1
         self.nMaxStep = 1
         self.bTerminateListenermustberemoved = True
-        self.oWizardResource = Resource(xMSF, "dbw")
         self.oRoadmap = None
         self.terminateListener = None
 
@@ -161,10 +163,13 @@ class WizardDialog(UnoDialog2):
             xRoadmapControl.addItemListener(
                 ItemListenerProcAdapter(method))
 
-            self.oRoadmap.Text = \
-                self.oWizardResource.getResText(UIConsts.RID_COMMON + 16)
+            self.oRoadmap.Text = strings.RID_COMMON_START_16
         except NoSuchMethodException:
-            Resource.showCommonResourceError(xMSF)
+            from com.sun.star.awt.VclWindowPeerAttribute import OK
+            from .SystemDialog import SystemDialog
+            sError = "The files required could not be found.\n" + \
+                "Please start the LibreOffice Setup and choose 'Repair'."
+            SystemDialog.showMessageBox(xMSF, "ErrorBox", OK, sError)
         except Exception:
             traceback.print_exc()
 
@@ -272,26 +277,26 @@ class WizardDialog(UnoDialog2):
                     PropertyNames.PROPERTY_TABINDEX,
                     PropertyNames.PROPERTY_WIDTH),
                 (True, iButtonHeight,
-                    self.oWizardResource.getResText(UIConsts.RID_COMMON + 15),
+                    strings.RID_COMMON_START_15,
                     iHelpPosX, iBtnPosY,
                     uno.Any("short",HELP), iCurStep,
                     uno.Any("short",(curtabindex + 1)), iButtonWidth), self)
             self.insertButton("btnWizardBack",
                 WizardDialog.__BACK_ACTION_PERFORMED, propNames,
                 (False, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 2),
-                    self.oWizardResource.getResText(UIConsts.RID_COMMON + 13),
+                    strings.RID_COMMON_START_13,
                     iBackPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep,
                     uno.Any("short",(curtabindex + 1)), iButtonWidth), self)
             self.insertButton("btnWizardNext",
                 WizardDialog.__NEXT_ACTION_PERFORMED, propNames,
                 (True, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 3),
-                    self.oWizardResource.getResText(UIConsts.RID_COMMON + 14),
+                    strings.RID_COMMON_START_14,
                     iNextPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep,
                     uno.Any("short",(curtabindex + 1)), iButtonWidth), self)
             self.insertButton("btnWizardFinish",
                 WizardDialog.__FINISH_ACTION_PERFORMED, propNames,
                 (True, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 4),
-                    self.oWizardResource.getResText(UIConsts.RID_COMMON + 12),
+                    strings.RID_COMMON_START_12,
                         iFinishPosX, iBtnPosY, uno.Any("short",STANDARD),
                         iCurStep,
                         uno.Any("short",(curtabindex + 1)),
@@ -299,7 +304,7 @@ class WizardDialog(UnoDialog2):
             self.insertButton("btnWizardCancel",
                 WizardDialog.__CANCEL_ACTION_PERFORMED, propNames,
                 (True, iButtonHeight, HelpIds.getHelpIdString(self.__hid + 5),
-                    self.oWizardResource.getResText(UIConsts.RID_COMMON + 11),
+                    strings.RID_COMMON_START_11,
                     iCancelPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep,
                     uno.Any("short",(curtabindex + 1)),
                     iButtonWidth), self)

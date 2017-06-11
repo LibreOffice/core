@@ -25,7 +25,7 @@
 #include <pamtyp.hxx>
 #include <swundo.hxx>
 #include <SwRewriter.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 
 /// parameters for a search for FormatCollections
 struct SwFindParaFormatColl : public SwFindParas

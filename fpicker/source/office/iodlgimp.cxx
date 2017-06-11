@@ -20,6 +20,7 @@
 #include "iodlgimp.hxx"
 #include "svtools/headbar.hxx"
 #include <tools/debug.hxx>
+#include <tools/simplerm.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
@@ -31,44 +32,16 @@
 #include "svtools/fileview.hxx"
 #include "svtools/inettbc.hxx"
 #include "iodlg.hxx"
-#include "iodlg.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include "svtools/imagemgr.hxx"
 #include <unotools/localfilehelper.hxx>
 #include "unotools/useroptions.hxx"
-#include "rtl/instance.hxx"
-#include <osl/getglobalmutex.hxx>
 #include <svl/svl.hrc>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::utl;
-
-
-// ResMgrHolder / SvtSimpleResId
-
-namespace
-{
-    struct ResMgrHolder
-    {
-        ResMgr * operator ()()
-        {
-            return ResMgr::CreateResMgr ("svl");
-        }
-        static ResMgr * getOrCreate()
-        {
-            return rtl_Instance<
-                ResMgr, ResMgrHolder,
-                osl::MutexGuard, osl::GetGlobalMutex >::create (
-                    ResMgrHolder(), osl::GetGlobalMutex());
-        }
-    };
-
-    struct SvtSimpleResId : public ResId
-    {
-        explicit SvtSimpleResId (sal_uInt16 nId) : ResId (nId, *ResMgrHolder::getOrCreate()) {}
-    };
-}
 
 SvtFileDialogFilter_Impl::SvtFileDialogFilter_Impl( const OUString& rName, const OUString& rType )
     :m_aName( rName )
@@ -171,12 +144,12 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
         if ( nCount == 1 )
         {
             // adjust the title of the top level entry (the workspace)
-            _pMenu->SetItemText( --nItemId, SvtSimpleResId(STR_SVT_MIMETYPE_CNT_FSYSBOX).toString() );
+            std::locale loc = Translate::Create("svl");
+            _pMenu->SetItemText(--nItemId, Translate::get(STR_SVT_MIMETYPE_CNT_FSYSBOX, loc));
         }
         --nCount;
     }
 }
-
 
 void SvtUpButton_Impl::Select()
 {

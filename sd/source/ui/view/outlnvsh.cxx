@@ -63,8 +63,8 @@
 #include "optsitem.hxx"
 
 #include "strings.hrc"
-#include "glob.hrc"
-#include "res_bmp.hrc"
+#include "strings.hrc"
+
 #include "Outliner.hxx"
 #include "Window.hxx"
 #include "TextObjectBar.hxx"

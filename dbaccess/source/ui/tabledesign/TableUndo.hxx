@@ -40,7 +40,7 @@ namespace dbaui
         virtual void    Undo() override;
         virtual void    Redo() override;
     public:
-        OTableDesignUndoAct( OTableRowView* pOwner ,sal_uInt16 nCommentID);
+        OTableDesignUndoAct(OTableRowView* pOwner, const char* pCommentID);
         virtual ~OTableDesignUndoAct() override;
     };
 
@@ -51,7 +51,7 @@ namespace dbaui
         VclPtr<OTableEditorCtrl> pTabEdCtrl;
 
     public:
-        OTableEditorUndoAct( OTableEditorCtrl* pOwner,sal_uInt16 nCommentID );
+        OTableEditorUndoAct(OTableEditorCtrl* pOwner, const char* pCommentID);
         virtual ~OTableEditorUndoAct() override;
     };
 
