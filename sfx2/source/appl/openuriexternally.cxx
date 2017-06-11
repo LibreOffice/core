@@ -26,7 +26,7 @@
 
 #include "openuriexternally.hxx"
 
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 
 bool sfx2::openUriExternally(
     OUString const & uri, bool handleSystemShellExecuteException)

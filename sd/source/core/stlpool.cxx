@@ -58,7 +58,7 @@
 #include "stlpool.hxx"
 #include "sdresid.hxx"
 #include "stlsheet.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "glob.hxx"
 #include "drawdoc.hxx"
 #include "sdmod.hxx"
@@ -952,28 +952,28 @@ void SdStyleSheetPool::UpdateStdNames()
 
             bool bHelpKnown = true;
             OUString aNewName;
-            sal_uInt16 nNameId = 0;
+            const char* pNameId = nullptr;
             switch( nHelpId )
             {
-                case HID_STANDARD_STYLESHEET_NAME:  nNameId = STR_STANDARD_STYLESHEET_NAME; break;
-                case HID_POOLSHEET_OBJWITHARROW:    nNameId = STR_POOLSHEET_OBJWITHARROW;   break;
-                case HID_POOLSHEET_OBJWITHSHADOW:   nNameId = STR_POOLSHEET_OBJWITHSHADOW;  break;
-                case HID_POOLSHEET_OBJWITHOUTFILL:  nNameId = STR_POOLSHEET_OBJWITHOUTFILL; break;
-                case HID_POOLSHEET_OBJNOLINENOFILL: nNameId = STR_POOLSHEET_OBJNOLINENOFILL;break;
-                case HID_POOLSHEET_TEXT:            nNameId = STR_POOLSHEET_TEXT;           break;
-                case HID_POOLSHEET_TEXTBODY:        nNameId = STR_POOLSHEET_TEXTBODY;       break;
-                case HID_POOLSHEET_TEXTBODY_JUSTIFY:nNameId = STR_POOLSHEET_TEXTBODY_JUSTIFY;break;
-                case HID_POOLSHEET_TEXTBODY_INDENT: nNameId = STR_POOLSHEET_TEXTBODY_INDENT;break;
-                case HID_POOLSHEET_TITLE:           nNameId = STR_POOLSHEET_TITLE;          break;
-                case HID_POOLSHEET_TITLE1:          nNameId = STR_POOLSHEET_TITLE1;         break;
-                case HID_POOLSHEET_TITLE2:          nNameId = STR_POOLSHEET_TITLE2;         break;
-                case HID_POOLSHEET_HEADLINE:        nNameId = STR_POOLSHEET_HEADLINE;       break;
-                case HID_POOLSHEET_HEADLINE1:       nNameId = STR_POOLSHEET_HEADLINE1;      break;
-                case HID_POOLSHEET_HEADLINE2:       nNameId = STR_POOLSHEET_HEADLINE2;      break;
-                case HID_POOLSHEET_MEASURE:         nNameId = STR_POOLSHEET_MEASURE;        break;
+                case HID_STANDARD_STYLESHEET_NAME:  pNameId = STR_STANDARD_STYLESHEET_NAME; break;
+                case HID_POOLSHEET_OBJWITHARROW:    pNameId = STR_POOLSHEET_OBJWITHARROW;   break;
+                case HID_POOLSHEET_OBJWITHSHADOW:   pNameId = STR_POOLSHEET_OBJWITHSHADOW;  break;
+                case HID_POOLSHEET_OBJWITHOUTFILL:  pNameId = STR_POOLSHEET_OBJWITHOUTFILL; break;
+                case HID_POOLSHEET_OBJNOLINENOFILL: pNameId = STR_POOLSHEET_OBJNOLINENOFILL;break;
+                case HID_POOLSHEET_TEXT:            pNameId = STR_POOLSHEET_TEXT;           break;
+                case HID_POOLSHEET_TEXTBODY:        pNameId = STR_POOLSHEET_TEXTBODY;       break;
+                case HID_POOLSHEET_TEXTBODY_JUSTIFY:pNameId = STR_POOLSHEET_TEXTBODY_JUSTIFY;break;
+                case HID_POOLSHEET_TEXTBODY_INDENT: pNameId = STR_POOLSHEET_TEXTBODY_INDENT;break;
+                case HID_POOLSHEET_TITLE:           pNameId = STR_POOLSHEET_TITLE;          break;
+                case HID_POOLSHEET_TITLE1:          pNameId = STR_POOLSHEET_TITLE1;         break;
+                case HID_POOLSHEET_TITLE2:          pNameId = STR_POOLSHEET_TITLE2;         break;
+                case HID_POOLSHEET_HEADLINE:        pNameId = STR_POOLSHEET_HEADLINE;       break;
+                case HID_POOLSHEET_HEADLINE1:       pNameId = STR_POOLSHEET_HEADLINE1;      break;
+                case HID_POOLSHEET_HEADLINE2:       pNameId = STR_POOLSHEET_HEADLINE2;      break;
+                case HID_POOLSHEET_MEASURE:         pNameId = STR_POOLSHEET_MEASURE;        break;
 
-                case HID_PSEUDOSHEET_TITLE:         nNameId = STR_PSEUDOSHEET_TITLE;        break;
-                case HID_PSEUDOSHEET_SUBTITLE:      nNameId = STR_PSEUDOSHEET_SUBTITLE;     break;
+                case HID_PSEUDOSHEET_TITLE:         pNameId = STR_PSEUDOSHEET_TITLE;        break;
+                case HID_PSEUDOSHEET_SUBTITLE:      pNameId = STR_PSEUDOSHEET_SUBTITLE;     break;
                 case HID_PSEUDOSHEET_OUTLINE1:
                 case HID_PSEUDOSHEET_OUTLINE2:
                 case HID_PSEUDOSHEET_OUTLINE3:
@@ -982,17 +982,17 @@ void SdStyleSheetPool::UpdateStdNames()
                 case HID_PSEUDOSHEET_OUTLINE6:
                 case HID_PSEUDOSHEET_OUTLINE7:
                 case HID_PSEUDOSHEET_OUTLINE8:
-                case HID_PSEUDOSHEET_OUTLINE9:      nNameId = STR_PSEUDOSHEET_OUTLINE;      break;
-                case HID_PSEUDOSHEET_BACKGROUNDOBJECTS: nNameId = STR_PSEUDOSHEET_BACKGROUNDOBJECTS; break;
-                case HID_PSEUDOSHEET_BACKGROUND:    nNameId = STR_PSEUDOSHEET_BACKGROUND;   break;
-                case HID_PSEUDOSHEET_NOTES:         nNameId = STR_PSEUDOSHEET_NOTES;        break;
+                case HID_PSEUDOSHEET_OUTLINE9:      pNameId = STR_PSEUDOSHEET_OUTLINE;      break;
+                case HID_PSEUDOSHEET_BACKGROUNDOBJECTS: pNameId = STR_PSEUDOSHEET_BACKGROUNDOBJECTS; break;
+                case HID_PSEUDOSHEET_BACKGROUND:    pNameId = STR_PSEUDOSHEET_BACKGROUND;   break;
+                case HID_PSEUDOSHEET_NOTES:         pNameId = STR_PSEUDOSHEET_NOTES;        break;
 
-                case HID_SD_CELL_STYLE_DEFAULT:         nNameId = STR_STANDARD_STYLESHEET_NAME; break;
-                case HID_SD_CELL_STYLE_BANDED:          nNameId = STR_POOLSHEET_BANDED_CELL; break;
-                case HID_SD_CELL_STYLE_HEADER:          nNameId = STR_POOLSHEET_HEADER; break;
-                case HID_SD_CELL_STYLE_TOTAL:           nNameId = STR_POOLSHEET_TOTAL; break;
-                case HID_SD_CELL_STYLE_FIRST_COLUMN:    nNameId = STR_POOLSHEET_FIRST_COLUMN; break;
-                case HID_SD_CELL_STYLE_LAST_COLUMN:     nNameId = STR_POOLSHEET_LAST_COLUMN; break;
+                case HID_SD_CELL_STYLE_DEFAULT:         pNameId = STR_STANDARD_STYLESHEET_NAME; break;
+                case HID_SD_CELL_STYLE_BANDED:          pNameId = STR_POOLSHEET_BANDED_CELL; break;
+                case HID_SD_CELL_STYLE_HEADER:          pNameId = STR_POOLSHEET_HEADER; break;
+                case HID_SD_CELL_STYLE_TOTAL:           pNameId = STR_POOLSHEET_TOTAL; break;
+                case HID_SD_CELL_STYLE_FIRST_COLUMN:    pNameId = STR_POOLSHEET_FIRST_COLUMN; break;
+                case HID_SD_CELL_STYLE_LAST_COLUMN:     pNameId = STR_POOLSHEET_LAST_COLUMN; break;
 
                 default:
                     // 0 or wrong (old) HelpId
@@ -1000,10 +1000,10 @@ void SdStyleSheetPool::UpdateStdNames()
             }
             if( bHelpKnown )
             {
-                if( nNameId )
+                if (pNameId)
                 {
-                    aNewName = SdResId( nNameId );
-                    if( nNameId == STR_PSEUDOSHEET_OUTLINE )
+                    aNewName = SdResId(pNameId);
+                    if (strcmp(pNameId, STR_PSEUDOSHEET_OUTLINE) == 0)
                     {
                         aNewName += " " + OUString::number( sal_Int32( nHelpId - HID_PSEUDOSHEET_OUTLINE ) );
                     }

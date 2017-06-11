@@ -34,7 +34,8 @@
 #include <editdbg.hxx>
 #include <eerdll2.hxx>
 #include <editeng/eerdll.hxx>
-#include <editeng.hrc>
+#include <editeng/editrids.hrc>
+#include <editeng.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/txtrange.hxx>
@@ -2523,12 +2524,12 @@ OUString EditEngine::GetUndoComment( sal_uInt16 nId ) const
         case EDITUNDO_DELCONTENT:
         case EDITUNDO_DELETE:
         case EDITUNDO_CUT:
-            aComment = EditResId::GetString(RID_EDITUNDO_DEL);
+            aComment = EditResId(RID_EDITUNDO_DEL);
         break;
         case EDITUNDO_MOVEPARAGRAPHS:
         case EDITUNDO_MOVEPARAS:
         case EDITUNDO_DRAGANDDROP:
-            aComment = EditResId::GetString(RID_EDITUNDO_MOVE);
+            aComment = EditResId(RID_EDITUNDO_MOVE);
         break;
         case EDITUNDO_INSERTFEATURE:
         case EDITUNDO_SPLITPARA:
@@ -2536,27 +2537,27 @@ OUString EditEngine::GetUndoComment( sal_uInt16 nId ) const
         case EDITUNDO_PASTE:
         case EDITUNDO_INSERT:
         case EDITUNDO_READ:
-            aComment = EditResId::GetString(RID_EDITUNDO_INSERT);
+            aComment = EditResId(RID_EDITUNDO_INSERT);
         break;
         case EDITUNDO_REPLACEALL:
-            aComment = EditResId::GetString(RID_EDITUNDO_REPLACE);
+            aComment = EditResId(RID_EDITUNDO_REPLACE);
         break;
         case EDITUNDO_ATTRIBS:
         case EDITUNDO_PARAATTRIBS:
-            aComment = EditResId::GetString(RID_EDITUNDO_SETATTRIBS);
+            aComment = EditResId(RID_EDITUNDO_SETATTRIBS);
         break;
         case EDITUNDO_RESETATTRIBS:
-            aComment = EditResId::GetString(RID_EDITUNDO_RESETATTRIBS);
+            aComment = EditResId(RID_EDITUNDO_RESETATTRIBS);
         break;
         case EDITUNDO_STYLESHEET:
-            aComment = EditResId::GetString(RID_EDITUNDO_SETSTYLE);
+            aComment = EditResId(RID_EDITUNDO_SETSTYLE);
         break;
         case EDITUNDO_TRANSLITERATE:
-            aComment = EditResId::GetString(RID_EDITUNDO_TRANSLITERATE);
+            aComment = EditResId(RID_EDITUNDO_TRANSLITERATE);
         break;
         case EDITUNDO_INDENTBLOCK:
         case EDITUNDO_UNINDENTBLOCK:
-            aComment = EditResId::GetString(RID_EDITUNDO_INDENT);
+            aComment = EditResId(RID_EDITUNDO_INDENT);
         break;
     }
     return aComment;
