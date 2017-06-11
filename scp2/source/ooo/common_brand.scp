@@ -638,6 +638,14 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Brand_Share_Subdir
     Value = LIBO_SHARE_FOLDER;
 End
 
+ProfileItem gid_Brand_Profileitem_Fundamental_Brand_Resource_Subdir
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "BRAND_SHARE_RESOURCE_SUBDIR";
+    Value = LIBO_SHARE_RESOURCE_FOLDER;
+End
+
 ProfileItem gid_Brand_Profileitem_Fundamental_Brand_Bin_Subdir
     ModuleID = gid_Module_Root_Brand;
     ProfileID = gid_Brand_Profile_Fundamental_Ini;

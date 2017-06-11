@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/processfactory.hxx>
@@ -59,7 +59,7 @@
 #include <unotextrange.hxx>
 #include <swmodule.hxx>
 #include <SwXMLSectionList.hxx>
-#include <statstr.hrc>
+#include <strings.hrc>
 
 #include <SwStyleNameMapper.hxx>
 #include <poolfmt.hxx>
@@ -73,6 +73,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
 #include <sfx2/docfilt.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <istyleaccess.hxx>
 
 #include <sfx2/DocumentMetadataAccess.hxx>

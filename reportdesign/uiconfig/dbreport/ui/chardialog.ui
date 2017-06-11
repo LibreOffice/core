@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="rpt">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="CharDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Character Settings</property>
+    <property name="title" translatable="yes" context="chardialog|CharDialog">Character Settings</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -96,7 +96,7 @@
               <object class="GtkLabel" id="font">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Font</property>
+                <property name="label" translatable="yes" context="chardialog|font">Font</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -109,7 +109,7 @@
               <object class="GtkLabel" id="fonteffects">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Font Effects</property>
+                <property name="label" translatable="yes" context="chardialog|fonteffects">Font Effects</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -123,7 +123,7 @@
               <object class="GtkLabel" id="position">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Position</property>
+                <property name="label" translatable="yes" context="chardialog|position">Position</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -137,7 +137,7 @@
               <object class="GtkLabel" id="asianlayout">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Asian Layout</property>
+                <property name="label" translatable="yes" context="chardialog|asianlayout">Asian Layout</property>
               </object>
               <packing>
                 <property name="position">3</property>
@@ -151,7 +151,7 @@
               <object class="GtkLabel" id="background">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Highlighting</property>
+                <property name="label" translatable="yes" context="chardialog|background">Highlighting</property>
               </object>
               <packing>
                 <property name="position">4</property>
@@ -165,7 +165,7 @@
               <object class="GtkLabel" id="alignment">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Alignment</property>
+                <property name="label" translatable="yes" context="chardialog|alignment">Alignment</property>
               </object>
               <packing>
                 <property name="position">5</property>

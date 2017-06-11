@@ -21,14 +21,10 @@
 
 #include <comphelper/componentmodule.hxx>
 #include <unotools/unotoolsdllapi.h>
-
-#include <tools/resid.hxx>
-
 #include <osl/getglobalmutex.hxx>
-
 #include <memory>
 
-class ResMgr;
+class LanguageTag;
 
 namespace utl
 {
@@ -49,30 +45,16 @@ namespace utl
         ::std::unique_ptr< OComponentResModuleImpl >  m_pImpl;
 
     public:
-        OComponentResourceModule( const OString& _rResFilePrefix );
+        OComponentResourceModule(const OString& _rResFilePrefix, const LanguageTag& rLanguage);
         virtual ~OComponentResourceModule() override;
 
-        /// get the vcl res manager of the module
-        ResMgr* getResManager();
-
-    protected:
-        // OModule overridables
-        virtual void onLastClient() override;
-    };
-
-    //= ModuleRes
-
-    /** specialized ResId, using the resource manager provided by a given OModule
-    */
-    class UNOTOOLS_DLLPUBLIC ModuleRes : public ::ResId
-    {
-    public:
-        ModuleRes( sal_uInt16 _nId, OComponentResourceModule& _rModule ) : ResId( _nId, *_rModule.getResManager() ) { }
+        /// get the resource locale of the module
+        const std::locale& getResLocale();
     };
 
     //= defining a concrete module
 
-#define DEFINE_MODULE( ModuleClass, ClientClass, ResClass ) \
+#define DEFINE_MODULE( ModuleClass, ClientClass ) \
     /* -------------------------------------------------------------------- */ \
     class ModuleClass : public ::utl::OComponentResourceModule \
     { \
@@ -94,18 +76,6 @@ namespace utl
     \
     public: \
         ClientClass() : BaseClass( ModuleClass::getInstance() ) \
-        { \
-        } \
-    }; \
-    \
-    /* -------------------------------------------------------------------- */ \
-    class ResClass : public ::utl::ModuleRes \
-    { \
-    private: \
-        typedef ::utl::ModuleRes    BaseClass; \
-    \
-    public: \
-        ResClass( sal_uInt16 _nId ) : BaseClass( _nId, ModuleClass::getInstance() ) \
         { \
         } \
     }; \
@@ -143,7 +113,7 @@ namespace utl
     }; \
     \
     ModuleClass::ModuleClass() \
-        :BaseClass( OString( resprefix ) ) \
+        :BaseClass( OString( resprefix ), Application::GetSettings().GetUILanguageTag() ) \
     { \
     } \
     \

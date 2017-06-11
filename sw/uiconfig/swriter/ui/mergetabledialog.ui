@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sw">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="MergeTableDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Merge Tables</property>
+    <property name="title" translatable="yes" context="mergetabledialog|MergeTableDialog">Merge Tables</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -87,7 +87,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkRadioButton" id="prev">
-                        <property name="label" translatable="yes">Join with _previous table</property>
+                        <property name="label" translatable="yes" context="mergetabledialog|prev">Join with _previous table</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -106,7 +106,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="next">
-                        <property name="label" translatable="yes">Join with _next table</property>
+                        <property name="label" translatable="yes" context="mergetabledialog|next">Join with _next table</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -130,7 +130,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Mode</property>
+                <property name="label" translatable="yes" context="mergetabledialog|label1">Mode</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

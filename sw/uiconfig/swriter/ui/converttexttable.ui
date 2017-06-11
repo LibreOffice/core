@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
@@ -12,7 +12,7 @@
   <object class="GtkDialog" id="ConvertTextTableDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Convert Table to Text</property>
+    <property name="title" translatable="yes" context="converttexttable|ConvertTextTableDialog">Convert Table to Text</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -109,13 +109,13 @@
                             <property name="can_focus">True</property>
                             <property name="invisible_char">●</property>
                             <property name="width_chars">1</property>
-                            <property name="text" translatable="yes">,</property>
+                            <property name="text" translatable="yes" context="converttexttable|othered">,</property>
                             <accessibility>
                               <relation type="labelled-by" target="other"/>
                             </accessibility>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="othered-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes">Symbol</property>
+                                <property name="AtkObject::accessible-name" translatable="yes" context="converttexttable|othered-atkobject">Symbol</property>
                               </object>
                             </child>
                           </object>
@@ -126,7 +126,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="other">
-                            <property name="label" translatable="yes">Other:</property>
+                            <property name="label" translatable="yes" context="converttexttable|other">Other:</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -145,7 +145,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="semicolons">
-                            <property name="label" translatable="yes">Semicolons</property>
+                            <property name="label" translatable="yes" context="converttexttable|semicolons">Semicolons</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -162,7 +162,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="paragraph">
-                            <property name="label" translatable="yes">Paragraph</property>
+                            <property name="label" translatable="yes" context="converttexttable|paragraph">Paragraph</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -178,7 +178,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="tabs">
-                            <property name="label" translatable="yes">Tabs</property>
+                            <property name="label" translatable="yes" context="converttexttable|tabs">Tabs</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -197,7 +197,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="keepcolumn">
-                            <property name="label" translatable="yes">Equal width for all columns</property>
+                            <property name="label" translatable="yes" context="converttexttable|keepcolumn">Equal width for all columns</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="xalign">0</property>
@@ -218,7 +218,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Separate Text At</property>
+                    <property name="label" translatable="yes" context="converttexttable|label1">Separate Text At</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -251,7 +251,7 @@
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkCheckButton" id="headingcb">
-                            <property name="label" translatable="yes">Heading</property>
+                            <property name="label" translatable="yes" context="converttexttable|headingcb">Heading</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -265,7 +265,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="repeatheading">
-                            <property name="label" translatable="yes">Repeat heading</property>
+                            <property name="label" translatable="yes" context="converttexttable|repeatheading">Repeat heading</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -281,7 +281,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="dontsplitcb">
-                            <property name="label" translatable="yes">Don't split table</property>
+                            <property name="label" translatable="yes" context="converttexttable|dontsplitcb">Don't split table</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -295,7 +295,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="bordercb">
-                            <property name="label" translatable="yes">Border</property>
+                            <property name="label" translatable="yes" context="converttexttable|bordercb">Border</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -319,7 +319,7 @@
                               <object class="GtkLabel" id="label3">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">The first </property>
+                                <property name="label" translatable="yes" context="converttexttable|label3">The first </property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">repeatheadersb</property>
                               </object>
@@ -332,7 +332,7 @@
                               <object class="GtkLabel" id="label4">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">rows</property>
+                                <property name="label" translatable="yes" context="converttexttable|label4">rows</property>
                               </object>
                               <packing>
                                 <property name="left_attach">2</property>
@@ -362,7 +362,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="autofmt">
-                            <property name="label" translatable="yes">AutoFormat...</property>
+                            <property name="label" translatable="yes" context="converttexttable|autofmt">AutoFormat...</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                           </object>
@@ -379,7 +379,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Options</property>
+                    <property name="label" translatable="yes" context="converttexttable|label2">Options</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

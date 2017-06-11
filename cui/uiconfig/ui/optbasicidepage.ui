@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="OptBasicIDEPage">
     <property name="visible">True</property>
@@ -26,7 +26,7 @@
                 <property name="can_focus">False</property>
                 <child>
                   <object class="GtkCheckButton" id="codecomplete_enable">
-                    <property name="label" translatable="yes">Enable code completion</property>
+                    <property name="label" translatable="yes" context="optbasicidepage|codecomplete_enable">Enable code completion</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -46,7 +46,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Code Completion</property>
+            <property name="label" translatable="yes" context="optbasicidepage|label1">Code Completion</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -78,7 +78,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="autoclose_proc">
-                    <property name="label" translatable="yes">Autoclose procedures</property>
+                    <property name="label" translatable="yes" context="optbasicidepage|autoclose_proc">Autoclose procedures</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -92,7 +92,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="autoclose_paren">
-                    <property name="label" translatable="yes">Autoclose parenthesis</property>
+                    <property name="label" translatable="yes" context="optbasicidepage|autoclose_paren">Autoclose parenthesis</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -106,7 +106,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="autoclose_quotes">
-                    <property name="label" translatable="yes">Autoclose quotes</property>
+                    <property name="label" translatable="yes" context="optbasicidepage|autoclose_quotes">Autoclose quotes</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -120,7 +120,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="autocorrect">
-                    <property name="label" translatable="yes">Autocorrection</property>
+                    <property name="label" translatable="yes" context="optbasicidepage|autocorrect">Autocorrection</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -141,7 +141,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Code Suggestion</property>
+            <property name="label" translatable="yes" context="optbasicidepage|label2">Code Suggestion</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -173,7 +173,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="extendedtypes_enable">
-                    <property name="label" translatable="yes">Use extended types</property>
+                    <property name="label" translatable="yes" context="optbasicidepage|extendedtypes_enable">Use extended types</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -193,7 +193,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Language Features</property>
+            <property name="label" translatable="yes" context="optbasicidepage|label3">Language Features</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="InsertBookmarkDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Bookmark</property>
+    <property name="title" translatable="yes" context="insertbookmark|InsertBookmarkDialog">Bookmark</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -37,7 +37,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkButton" id="insert">
-                    <property name="label" translatable="yes">Insert</property>
+                    <property name="label" translatable="yes" context="insertbookmark|insert">Insert</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="can_default">True</property>
@@ -119,7 +119,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkButton" id="rename">
-                    <property name="label" translatable="yes">Rename</property>
+                    <property name="label" translatable="yes" context="insertbookmark|rename">Rename</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -132,7 +132,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="delete">
-                    <property name="label" translatable="yes">Delete</property>
+                    <property name="label" translatable="yes" context="insertbookmark|delete">Delete</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -145,7 +145,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="goto">
-                    <property name="label" translatable="yes">Go to</property>
+                    <property name="label" translatable="yes" context="insertbookmark|goto">Go to</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>

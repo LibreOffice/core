@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.0 on Sat Jan  4 16:52:18 2014 -->
-<interface>
+<interface domain="cui">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="NewLibDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Create Library</property>
+    <property name="title" translatable="yes" context="newlibdialog|NewLibDialog">Create Library</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -25,7 +25,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Enter the name for the new library.</property>
+                <property name="label" translatable="yes" context="newlibdialog|newlibft">Enter the name for the new library.</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">entry</property>
               </object>
@@ -54,7 +54,7 @@
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Enter the name for the new macro.</property>
+                <property name="label" translatable="yes" context="newlibdialog|newmacroft">Enter the name for the new macro.</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">entry</property>
               </object>
@@ -70,7 +70,7 @@
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Enter the new name for the selected object.</property>
+                <property name="label" translatable="yes" context="newlibdialog|renameft">Enter the new name for the selected object.</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">entry</property>
               </object>
@@ -85,7 +85,7 @@
               <object class="GtkLabel" id="altmacrotitle">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Create Macro</property>
+                <property name="label" translatable="yes" context="newlibdialog|altmacrotitle">Create Macro</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -99,7 +99,7 @@
               <object class="GtkLabel" id="altrenametitle">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Rename</property>
+                <property name="label" translatable="yes" context="newlibdialog|altrenametitle">Rename</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>

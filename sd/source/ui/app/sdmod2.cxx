@@ -47,9 +47,9 @@
 
 #include "sdmod.hxx"
 #include "app.hrc"
-#include "glob.hrc"
+#include "family.hrc"
 #include "strings.hrc"
-#include "res_bmp.hrc"
+
 #include "bitmaps.hlst"
 #include "ViewShell.hxx"
 #include "FrameView.hxx"
@@ -799,12 +799,12 @@ SfxStyleFamilies* SdModule::CreateStyleFamilies()
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Para,
                                                     SdResId(STR_GRAPHICS_STYLE_FAMILY),
                                                     Image(BitmapEx(BMP_STYLES_FAMILY_GRAPHICS)),
-                                                    ResId(RID_GRAPHICSTYLEFAMILY, *SD_MOD()->GetResMgr())));
+                                                    RID_GRAPHICSTYLEFAMILY, SD_MOD()->GetResLocale()));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Pseudo,
                                                     SdResId(STR_PRESENTATIONS_STYLE_FAMILY),
                                                     Image(BitmapEx(BMP_STYLES_FAMILY_PRESENTATIONS)),
-                                                    ResId(RID_PRESENTATIONSTYLEFAMILY, *SD_MOD()->GetResMgr())));
+                                                    RID_PRESENTATIONSTYLEFAMILY, SD_MOD()->GetResLocale()));
 
     return pStyleFamilies;
 }

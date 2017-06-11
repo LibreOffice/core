@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="pcr">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="SaneDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Scanner</property>
+    <property name="title" translatable="yes" context="sanedialog|SaneDialog">Scanner</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -43,7 +43,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Left:</property>
+                            <property name="label" translatable="yes" context="sanedialog|label3">_Left:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">leftSpinbutton:0</property>
                           </object>
@@ -59,7 +59,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">To_p:</property>
+                            <property name="label" translatable="yes" context="sanedialog|label4">To_p:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">topSpinbutton:0</property>
                           </object>
@@ -75,7 +75,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Right:</property>
+                            <property name="label" translatable="yes" context="sanedialog|label5">_Right:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">rightSpinbutton:0</property>
                           </object>
@@ -91,7 +91,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Bottom:</property>
+                            <property name="label" translatable="yes" context="sanedialog|label6">_Bottom:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">bottomSpinbutton:0</property>
                           </object>
@@ -163,7 +163,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Scan area</property>
+                    <property name="label" translatable="yes" context="sanedialog|label1">Scan area</property>
                   </object>
                 </child>
               </object>
@@ -205,7 +205,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Preview</property>
+                    <property name="label" translatable="yes" context="sanedialog|label2">Preview</property>
                   </object>
                 </child>
               </object>
@@ -239,7 +239,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Device _used</property>
+                    <property name="label" translatable="yes" context="sanedialog|label7">Device _used</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">deviceCombobox</property>
                   </object>
@@ -255,7 +255,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Resolution [_DPI]</property>
+                    <property name="label" translatable="yes" context="sanedialog|label8">Resolution [_DPI]</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">reslCombobox</property>
                   </object>
@@ -309,7 +309,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="advancedCheckbutton">
-                    <property name="label" translatable="yes">Show advanced options</property>
+                    <property name="label" translatable="yes" context="sanedialog|advancedCheckbutton">Show advanced options</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -341,7 +341,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Options:</property>
+                            <property name="label" translatable="yes" context="sanedialog|label10">Options:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">optionSvTreeListBox:border</property>
                           </object>
@@ -413,7 +413,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="optionsButton">
-                            <property name="label" translatable="yes">Se_t</property>
+                            <property name="label" translatable="yes" context="sanedialog|optionsButton">Se_t</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -497,7 +497,7 @@
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Vector element</property>
+                            <property name="label" translatable="yes" context="sanedialog|vectorLabel">Vector element</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">vectorSpinbutton-nospin</property>
                           </object>
@@ -626,7 +626,7 @@
             </child>
             <child>
               <object class="GtkButton" id="deviceInfoButton">
-                <property name="label" translatable="yes">About Dev_ice</property>
+                <property name="label" translatable="yes" context="sanedialog|deviceInfoButton">About Dev_ice</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -641,7 +641,7 @@
             </child>
             <child>
               <object class="GtkButton" id="previewButton">
-                <property name="label" translatable="yes">Create Previe_w</property>
+                <property name="label" translatable="yes" context="sanedialog|previewButton">Create Previe_w</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -656,7 +656,7 @@
             </child>
             <child>
               <object class="GtkButton" id="scanButton">
-                <property name="label" translatable="yes">_Scan</property>
+                <property name="label" translatable="yes" context="sanedialog|scanButton">_Scan</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>

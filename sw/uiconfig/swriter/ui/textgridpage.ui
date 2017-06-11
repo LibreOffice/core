@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustmentCHARSPERLINE">
@@ -53,7 +53,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkRadioButton" id="radioRB_NOGRID">
-                        <property name="label" translatable="yes">No grid</property>
+                        <property name="label" translatable="yes" context="textgridpage|radioRB_NOGRID">No grid</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -69,7 +69,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="radioRB_LINESGRID">
-                        <property name="label" translatable="yes">Grid (lines only)</property>
+                        <property name="label" translatable="yes" context="textgridpage|radioRB_LINESGRID">Grid (lines only)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -84,7 +84,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="radioRB_CHARSGRID">
-                        <property name="label" translatable="yes">Grid (lines and characters)</property>
+                        <property name="label" translatable="yes" context="textgridpage|radioRB_CHARSGRID">Grid (lines and characters)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -99,7 +99,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkCB_SNAPTOCHARS">
-                        <property name="label" translatable="yes">_Snap to characters</property>
+                        <property name="label" translatable="yes" context="textgridpage|checkCB_SNAPTOCHARS">_Snap to characters</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -144,7 +144,7 @@
           <object class="GtkLabel" id="labelGrid">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Grid</property>
+            <property name="label" translatable="yes" context="textgridpage|labelGrid">Grid</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -194,7 +194,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes">Characters per line:</property>
+                            <property name="label" translatable="yes" context="textgridpage|labelFT_CHARSPERLINE">Characters per line:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">spinNF_CHARSPERLINE</property>
                           </object>
@@ -220,7 +220,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes">(1-45)</property>
+                            <property name="label" translatable="yes" context="textgridpage|labelFT_CHARRANGE">(1-45)</property>
                             <property name="use_underline">True</property>
                           </object>
                           <packing>
@@ -233,7 +233,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes">Lines per page:</property>
+                            <property name="label" translatable="yes" context="textgridpage|labelFT_LINESPERPAGE">Lines per page:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">spinNF_LINESPERPAGE</property>
                           </object>
@@ -262,7 +262,7 @@
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="ypad">4</property>
-                            <property name="label" translatable="yes">(1-48)</property>
+                            <property name="label" translatable="yes" context="textgridpage|labelFT_LINERANGE">(1-48)</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -300,7 +300,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes">Character _width:</property>
+                            <property name="label" translatable="yes" context="textgridpage|labelFT_CHARWIDTH">Character _width:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">spinMF_CHARWIDTH:0pt</property>
                           </object>
@@ -314,7 +314,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes">Max. Ruby text size:</property>
+                            <property name="label" translatable="yes" context="textgridpage|labelFT_RUBYSIZE">Max. Ruby text size:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">spinMF_RUBYSIZE:0pt</property>
                           </object>
@@ -340,7 +340,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes">Max. base text size:</property>
+                            <property name="label" translatable="yes" context="textgridpage|labelFT_TEXTSIZE">Max. base text size:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">spinMF_TEXTSIZE:0pt</property>
                           </object>
@@ -376,7 +376,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="checkCB_RUBYBELOW">
-                    <property name="label" translatable="yes">Ruby text below/left from base text</property>
+                    <property name="label" translatable="yes" context="textgridpage|checkCB_RUBYBELOW">Ruby text below/left from base text</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -399,7 +399,7 @@
           <object class="GtkLabel" id="labelGridLayout">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Grid Layout</property>
+            <property name="label" translatable="yes" context="textgridpage|labelGridLayout">Grid Layout</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -432,7 +432,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="checkCB_DISPLAY">
-                    <property name="label" translatable="yes">Display grid</property>
+                    <property name="label" translatable="yes" context="textgridpage|checkCB_DISPLAY">Display grid</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -447,7 +447,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="checkCB_PRINT">
-                    <property name="label" translatable="yes">Print grid</property>
+                    <property name="label" translatable="yes" context="textgridpage|checkCB_PRINT">Print grid</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -466,7 +466,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes">Grid color:</property>
+                    <property name="label" translatable="yes" context="textgridpage|labelFT_COLOR">Grid color:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">listLB_COLOR</property>
                   </object>
@@ -501,7 +501,7 @@
           <object class="GtkLabel" id="labelFL_DISPLAY">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Grid Display</property>
+            <property name="label" translatable="yes" context="textgridpage|labelFL_DISPLAY">Grid Display</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

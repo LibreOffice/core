@@ -166,7 +166,7 @@ private:
 
     typedef ::std::pair<MasterPageContainerChangeEvent::EventType,Token> EventData;
 
-    Image GetPreviewSubstitution (sal_uInt16 nId, PreviewSize ePreviewSize);
+    Image GetPreviewSubstitution(const char* pId, PreviewSize ePreviewSize);
 
     void CleanContainer();
 };
@@ -867,44 +867,38 @@ SdDrawDocument* MasterPageContainer::Implementation::GetDocument()
 }
 
 Image MasterPageContainer::Implementation::GetPreviewSubstitution (
-    sal_uInt16 nId,
+    const char* pId,
     PreviewSize ePreviewSize)
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
     Image aPreview;
 
-    switch (nId)
+    if (strcmp(pId, STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION) == 0)
     {
-        case STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION:
+        Image& rPreview (ePreviewSize==SMALL
+            ? maSmallPreviewBeingCreated
+            : maLargePreviewBeingCreated);
+        if (rPreview.GetSizePixel().Width() == 0)
         {
-            Image& rPreview (ePreviewSize==SMALL
-                ? maSmallPreviewBeingCreated
-                : maLargePreviewBeingCreated);
-            if (rPreview.GetSizePixel().Width() == 0)
-            {
-                rPreview = maPreviewRenderer.RenderSubstitution(
-                    ePreviewSize==SMALL ? maSmallPreviewSizePixel : maLargePreviewSizePixel,
-                    SdResId(STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION));
-            }
-            aPreview = rPreview;
+            rPreview = maPreviewRenderer.RenderSubstitution(
+                ePreviewSize==SMALL ? maSmallPreviewSizePixel : maLargePreviewSizePixel,
+                SdResId(STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION));
         }
-        break;
-
-        case STR_TASKPANEL_NOT_AVAILABLE_SUBSTITUTION:
+        aPreview = rPreview;
+    }
+    else if (strcmp(pId, STR_TASKPANEL_NOT_AVAILABLE_SUBSTITUTION) == 0)
+    {
+        Image& rPreview (ePreviewSize==SMALL
+            ? maSmallPreviewNotAvailable
+            : maLargePreviewNotAvailable);
+        if (rPreview.GetSizePixel().Width() == 0)
         {
-            Image& rPreview (ePreviewSize==SMALL
-                ? maSmallPreviewNotAvailable
-                : maLargePreviewNotAvailable);
-            if (rPreview.GetSizePixel().Width() == 0)
-            {
-                rPreview = maPreviewRenderer.RenderSubstitution(
-                    ePreviewSize==SMALL ? maSmallPreviewSizePixel : maLargePreviewSizePixel,
-                    SdResId(STR_TASKPANEL_NOT_AVAILABLE_SUBSTITUTION));
-            }
-            aPreview = rPreview;
+            rPreview = maPreviewRenderer.RenderSubstitution(
+                ePreviewSize==SMALL ? maSmallPreviewSizePixel : maLargePreviewSizePixel,
+                SdResId(STR_TASKPANEL_NOT_AVAILABLE_SUBSTITUTION));
         }
-        break;
+        aPreview = rPreview;
     }
 
     return aPreview;

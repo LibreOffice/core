@@ -90,7 +90,6 @@ class Desktop : public Application
         DECL_STATIC_LINK( Desktop, EnableAcceptors_Impl, void*, void);
 
         static void             HandleAppEvent( const ApplicationEvent& rAppEvent );
-        static ResMgr*          GetDesktopResManager();
         static CommandLineArgs& GetCommandLineArgs();
 
         static void             HandleBootstrapErrors(
@@ -176,8 +175,6 @@ class Desktop : public Application
         std::unique_ptr<Lockfile> m_xLockfile;
         Timer                   m_firstRunTimer;
         std::thread             m_aUpdateThread;
-
-        static ResMgr*          pResMgr;
 };
 
 OUString GetURL_Impl(

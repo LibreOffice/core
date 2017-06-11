@@ -21,7 +21,7 @@
 
 #include "ResId.hxx"
 #include "ResourceIds.hrc"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "chartview/ChartSfxItemIds.hxx"
 #include "AxisHelper.hxx"
 
@@ -32,7 +32,7 @@
 #include <svl/intitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/zformat.hxx>
-#include <svtools/controldims.hrc>
+#include <svtools/controldims.hxx>
 
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>

@@ -18,7 +18,7 @@
  */
 
 #include "PropertyForward.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>

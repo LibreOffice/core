@@ -27,7 +27,7 @@
 #include <dbfld.hxx>
 #include <reffld.hxx>
 #include <flddropdown.hxx>
-#include <poolfmt.hrc>
+#include <strings.hrc>
 #include <SwUndoField.hxx>
 #include <flddat.hxx>
 #include <cntfrm.hxx>

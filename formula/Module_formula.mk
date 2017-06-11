@@ -12,12 +12,11 @@ $(eval $(call gb_Module_Module,formula))
 $(eval $(call gb_Module_add_targets,formula,\
     Library_for \
     Library_forui \
+    UIConfig_formula \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,formula,\
-    AllLangResTarget_for \
-    AllLangResTarget_forui \
-    UIConfig_formula \
+    AllLangMoTarget_for \
 ))
 
 # screenshots

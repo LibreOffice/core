@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkListStore" id="liststorePageLayout">
@@ -12,19 +12,19 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Right and left</col>
+        <col id="0" translatable="yes" context="pageformatpage|liststorePageLayout">Right and left</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Mirrored</col>
+        <col id="0" translatable="yes" context="pageformatpage|liststorePageLayout">Mirrored</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Only right</col>
+        <col id="0" translatable="yes" context="pageformatpage|liststorePageLayout">Only right</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Only left</col>
+        <col id="0" translatable="yes" context="pageformatpage|liststorePageLayout">Only left</col>
         <col id="1">0</col>
       </row>
     </data>
@@ -69,7 +69,7 @@
                       <object class="GtkLabel" id="labelFormat">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Format:</property>
+                        <property name="label" translatable="yes" context="pageformatpage|labelFormat">_Format:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">comboPageFormat</property>
                         <property name="xalign">0</property>
@@ -93,7 +93,7 @@
                       <object class="GtkLabel" id="labelWidth">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Width:</property>
+                        <property name="label" translatable="yes" context="pageformatpage|labelWidth">_Width:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">spinWidth:0.00cm</property>
                         <property name="xalign">0</property>
@@ -120,7 +120,7 @@
                       <object class="GtkLabel" id="labelHeight">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Height:</property>
+                        <property name="label" translatable="yes" context="pageformatpage|labelHeight">_Height:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">spinHeight:0.00cm</property>
                         <property name="xalign">0</property>
@@ -146,7 +146,7 @@
                       <object class="GtkLabel" id="labelOrientation">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Orientation:</property>
+                        <property name="label" translatable="yes" context="pageformatpage|labelOrientation">_Orientation:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">radiobuttonPortrait</property>
                         <property name="xalign">0</property>
@@ -158,7 +158,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="radiobuttonPortrait">
-                        <property name="label" translatable="yes">_Portrait</property>
+                        <property name="label" translatable="yes" context="pageformatpage|radiobuttonPortrait">_Portrait</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -179,7 +179,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="radiobuttonLandscape">
-                        <property name="label" translatable="yes">L_andscape</property>
+                        <property name="label" translatable="yes" context="pageformatpage|radiobuttonLandscape">L_andscape</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -202,7 +202,7 @@
                       <object class="GtkLabel" id="labelTextFlow">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="label" translatable="yes">_Text direction:</property>
+                        <property name="label" translatable="yes" context="pageformatpage|labelTextFlow">_Text direction:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">comboTextFlowBox</property>
                         <property name="xalign">0</property>
@@ -263,7 +263,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
-                            <property name="label" translatable="yes">Paper _tray:</property>
+                            <property name="label" translatable="yes" context="pageformatpage|labelPaperTray">Paper _tray:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">comboPaperTray</property>
                             <property name="xalign">0</property>
@@ -299,7 +299,7 @@
           <object class="GtkLabel" id="labelPaperFormat">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Paper Format</property>
+            <property name="label" translatable="yes" context="pageformatpage|labelPaperFormat">Paper Format</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -343,7 +343,7 @@
                       <object class="GtkLabel" id="labelTopMargin">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Top:</property>
+                        <property name="label" translatable="yes" context="pageformatpage|labelTopMargin">Top:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">spinMargTop:0.00cm</property>
                         <property name="xalign">0</property>
@@ -357,7 +357,7 @@
                       <object class="GtkLabel" id="labelBottomMargin">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Bottom:</property>
+                        <property name="label" translatable="yes" context="pageformatpage|labelBottomMargin">Bottom:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">spinMargBot:0.00cm</property>
                         <property name="xalign">0</property>
@@ -420,7 +420,7 @@
                         <child>
                           <object class="GtkLabel" id="labelRightMargin">
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Right:</property>
+                            <property name="label" translatable="yes" context="pageformatpage|labelRightMargin">Right:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">spinMargRight:0.00cm</property>
                             <property name="xalign">0</property>
@@ -434,7 +434,7 @@
                         <child>
                           <object class="GtkLabel" id="labelOuter">
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">O_uter:</property>
+                            <property name="label" translatable="yes" context="pageformatpage|labelOuter">O_uter:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">spinMargRight:0.00cm</property>
                             <property name="xalign">0</property>
@@ -460,7 +460,7 @@
                         <child>
                           <object class="GtkLabel" id="labelLeftMargin">
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Left:</property>
+                            <property name="label" translatable="yes" context="pageformatpage|labelLeftMargin">Left:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">spinMargLeft:0.00cm</property>
                             <property name="xalign">0</property>
@@ -474,7 +474,7 @@
                         <child>
                           <object class="GtkLabel" id="labelInner">
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">I_nner:</property>
+                            <property name="label" translatable="yes" context="pageformatpage|labelInner">I_nner:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">spinMargLeft:0.00cm</property>
                             <property name="xalign">0</property>
@@ -499,7 +499,7 @@
               <object class="GtkLabel" id="labelMargins">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Margins</property>
+                <property name="label" translatable="yes" context="pageformatpage|labelMargins">Margins</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -536,7 +536,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">_Page layout:</property>
+                        <property name="label" translatable="yes" context="pageformatpage|labelPageLayout">_Page layout:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">comboPageLayout</property>
                         <property name="xalign">0</property>
@@ -551,7 +551,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Page numbers:</property>
+                        <property name="label" translatable="yes" context="pageformatpage|label4">Page numbers:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">comboLayoutFormat</property>
                         <property name="xalign">0</property>
@@ -563,7 +563,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkRegisterTrue">
-                        <property name="label" translatable="yes">Register-tr_ue</property>
+                        <property name="label" translatable="yes" context="pageformatpage|checkRegisterTrue">Register-tr_ue</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
@@ -603,7 +603,7 @@
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Table alignment:</property>
+                        <property name="label" translatable="yes" context="pageformatpage|labelTblAlign">Table alignment:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">checkbuttonHorz</property>
                         <property name="xalign">0</property>
@@ -615,7 +615,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbuttonHorz">
-                        <property name="label" translatable="yes">Hori_zontal</property>
+                        <property name="label" translatable="yes" context="pageformatpage|checkbuttonHorz">Hori_zontal</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
@@ -630,7 +630,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbuttonVert">
-                        <property name="label" translatable="yes">_Vertical</property>
+                        <property name="label" translatable="yes" context="pageformatpage|checkbuttonVert">_Vertical</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
@@ -645,7 +645,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkAdaptBox">
-                        <property name="label" translatable="yes">_Fit object to paper format</property>
+                        <property name="label" translatable="yes" context="pageformatpage|checkAdaptBox">_Fit object to paper format</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
@@ -676,7 +676,7 @@
                               <object class="GtkLabel" id="labelRegisterStyle">
                                 <property name="can_focus">False</property>
                                 <property name="no_show_all">True</property>
-                                <property name="label" translatable="yes">Reference _Style:</property>
+                                <property name="label" translatable="yes" context="pageformatpage|labelRegisterStyle">Reference _Style:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">comboRegisterStyle</property>
                                 <property name="xalign">0</property>
@@ -718,7 +718,7 @@
               <object class="GtkLabel" id="label5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Layout Settings</property>
+                <property name="label" translatable="yes" context="pageformatpage|label5">Layout Settings</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -739,7 +739,7 @@
     <child>
       <object class="GtkLabel" id="labelMsg">
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">The margin settings are out of print range.
+        <property name="label" translatable="yes" context="pageformatpage|labelMsg">The margin settings are out of print range.
 
 Do you still want to apply these settings?</property>
       </object>
