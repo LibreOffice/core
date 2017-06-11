@@ -22,7 +22,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 
 #include "svx/insctrl.hxx"
 #include <svx/dialmgr.hxx>

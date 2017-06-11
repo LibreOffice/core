@@ -29,9 +29,9 @@
 #include <swmodule.hxx>
 #include <swtypes.hxx>
 #include <envimg.hxx>
+#include "strings.hrc"
 
 #include <cmdid.h>
-#include <envelp.hrc>
 
 #include <unomid.h>
 

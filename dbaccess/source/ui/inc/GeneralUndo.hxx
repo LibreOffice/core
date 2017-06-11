@@ -20,7 +20,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_GENERALUNDO_HXX
 
 #include <svl/undo.hxx>
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 
 namespace dbaui
 {
@@ -29,13 +29,13 @@ namespace dbaui
 
     class OCommentUndoAction : public SfxUndoAction
     {
-        OModuleClient    m_aModuleClient;
+        dbaccess::OModuleClient    m_aModuleClient;
 
     protected:
         OUString         m_strComment; // undo, redo comment
 
     public:
-        OCommentUndoAction(sal_uInt16 nCommentID) { m_strComment = OUString(ModuleRes(nCommentID)); }
+        OCommentUndoAction(const char* pCommentID) { m_strComment = DBA_RES(pCommentID); }
 
         virtual OUString GetComment() const override { return m_strComment; }
     };

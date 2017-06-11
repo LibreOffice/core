@@ -27,7 +27,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdorect.hxx>
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include "svdglob.hxx"
 
 

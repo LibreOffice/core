@@ -41,7 +41,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/unoctitm.hxx>
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/sfxresid.hxx>
 #include "objshimp.hxx"
 #include "imestatuswindow.hxx"
@@ -91,10 +91,6 @@ SfxAppData_Impl::SfxAppData_Impl()
     , pFactArr(nullptr)
     , pTopFrames( new SfxFrameArr_Impl )
     , pMatcher( nullptr )
-#if HAVE_FEATURE_SCRIPTING
-    , pBasicResMgr( nullptr )
-#endif
-    , pSvtResMgr( nullptr )
     , m_pToolsErrorHdl(nullptr)
     , m_pSoErrorHdl(nullptr)
 #if HAVE_FEATURE_SCRIPTING
