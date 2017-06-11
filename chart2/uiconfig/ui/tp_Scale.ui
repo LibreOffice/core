@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="chart">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkAdjustment" id="adjustmentINTERVAL">
@@ -17,15 +17,15 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Days</col>
+        <col id="0" translatable="yes" context="tp_Scale|liststoreDATE">Days</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Months</col>
+        <col id="0" translatable="yes" context="tp_Scale|liststoreDATE">Months</col>
         <col id="1">1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Years</col>
+        <col id="0" translatable="yes" context="tp_Scale|liststoreDATE">Years</col>
         <col id="1">2</col>
       </row>
     </data>
@@ -56,7 +56,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="CBX_REVERSE">
-                    <property name="label" translatable="yes">_Reverse direction</property>
+                    <property name="label" translatable="yes" context="tp_Scale|CBX_REVERSE">_Reverse direction</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -72,7 +72,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="CBX_LOGARITHM">
-                    <property name="label" translatable="yes">_Logarithmic scale</property>
+                    <property name="label" translatable="yes" context="tp_Scale|CBX_LOGARITHM">_Logarithmic scale</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -96,7 +96,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">T_ype</property>
+                        <property name="label" translatable="yes" context="tp_Scale|TXT_AXIS_TYPE">T_ype</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">LB_AXIS_TYPE</property>
                       </object>
@@ -113,9 +113,9 @@
                         <property name="entry_text_column">0</property>
                         <property name="id_column">1</property>
                         <items>
-                          <item translatable="yes">Automatic</item>
-                          <item translatable="yes">Text</item>
-                          <item translatable="yes">Date</item>
+                          <item translatable="yes" context="tp_Scale|LB_AXIS_TYPE">Automatic</item>
+                          <item translatable="yes" context="tp_Scale|LB_AXIS_TYPE">Text</item>
+                          <item translatable="yes" context="tp_Scale|LB_AXIS_TYPE">Date</item>
                         </items>
                       </object>
                       <packing>
@@ -149,7 +149,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Minimum</property>
+                    <property name="label" translatable="yes" context="tp_Scale|TXT_MIN">_Minimum</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">EDT_MIN</property>
                   </object>
@@ -165,7 +165,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Ma_ximum</property>
+                    <property name="label" translatable="yes" context="tp_Scale|TXT_MAX">Ma_ximum</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">EDT_MAX</property>
                   </object>
@@ -178,7 +178,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="CBX_AUTO_MIN">
-                    <property name="label" translatable="yes">_Automatic</property>
+                    <property name="label" translatable="yes" context="tp_Scale|CBX_AUTO_MIN">_Automatic</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -195,7 +195,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="CBX_AUTO_MAX">
-                    <property name="label" translatable="yes">A_utomatic</property>
+                    <property name="label" translatable="yes" context="tp_Scale|CBX_AUTO_MAX">A_utomatic</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -253,7 +253,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">R_esolution</property>
+                    <property name="label" translatable="yes" context="tp_Scale|TXT_TIME_RESOLUTION">R_esolution</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">LB_TIME_RESOLUTION</property>
                   </object>
@@ -277,7 +277,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="CBX_AUTO_TIME_RESOLUTION">
-                    <property name="label" translatable="yes">Automat_ic</property>
+                    <property name="label" translatable="yes" context="tp_Scale|CBX_AUTO_TIME_RESOLUTION">Automat_ic</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -308,7 +308,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Ma_jor interval</property>
+                    <property name="label" translatable="yes" context="tp_Scale|TXT_STEP_MAIN">Ma_jor interval</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -380,7 +380,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="CBX_AUTO_STEP_MAIN">
-                    <property name="label" translatable="yes">Au_tomatic</property>
+                    <property name="label" translatable="yes" context="tp_Scale|CBX_AUTO_STEP_MAIN">Au_tomatic</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -416,7 +416,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Minor inter_val</property>
+                        <property name="label" translatable="yes" context="tp_Scale|TXT_STEP_HELP">Minor inter_val</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -430,7 +430,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Minor inter_val count</property>
+                        <property name="label" translatable="yes" context="tp_Scale|TXT_STEP_HELP_COUNT">Minor inter_val count</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -474,7 +474,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="CBX_AUTO_STEP_HELP">
-                    <property name="label" translatable="yes">Aut_omatic</property>
+                    <property name="label" translatable="yes" context="tp_Scale|CBX_AUTO_STEP_HELP">Aut_omatic</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -505,7 +505,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Re_ference value</property>
+                    <property name="label" translatable="yes" context="tp_Scale|TXT_ORIGIN">Re_ference value</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -528,7 +528,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="CBX_AUTO_ORIGIN">
-                    <property name="label" translatable="yes">Automat_ic</property>
+                    <property name="label" translatable="yes" context="tp_Scale|CBX_AUTO_ORIGIN">Automat_ic</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -558,7 +558,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Scale</property>
+        <property name="label" translatable="yes" context="tp_Scale|FL_SCALE">Scale</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>

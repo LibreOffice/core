@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">2</property>
@@ -22,7 +22,7 @@
   <object class="GtkDialog" id="SplitCellsDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Split Cells</property>
+    <property name="title" translatable="yes" context="splitcellsdialog|SplitCellsDialog">Split Cells</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -114,7 +114,7 @@
                           <object class="GtkLabel" id="label3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Split cell into:</property>
+                            <property name="label" translatable="yes" context="splitcellsdialog|label3">_Split cell into:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">countnf</property>
                           </object>
@@ -143,7 +143,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Split</property>
+                    <property name="label" translatable="yes" context="splitcellsdialog|label1">Split</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -175,7 +175,7 @@
                         <property name="row_spacing">6</property>
                         <child>
                           <object class="GtkRadioButton" id="hori">
-                            <property name="label" translatable="yes">H_orizontally</property>
+                            <property name="label" translatable="yes" context="splitcellsdialog|hori">H_orizontally</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -193,7 +193,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="vert">
-                            <property name="label" translatable="yes">_Vertically</property>
+                            <property name="label" translatable="yes" context="splitcellsdialog|vert">_Vertically</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -215,7 +215,7 @@
                             <property name="left_padding">12</property>
                             <child>
                               <object class="GtkCheckButton" id="prop">
-                                <property name="label" translatable="yes">_Into equal proportions</property>
+                                <property name="label" translatable="yes" context="splitcellsdialog|prop">_Into equal proportions</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -238,7 +238,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Direction</property>
+                    <property name="label" translatable="yes" context="splitcellsdialog|label2">Direction</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

@@ -23,7 +23,7 @@
 #include <vcl/settings.hxx>
 
 #include <vcl/virdev.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/xtable.hxx>
 

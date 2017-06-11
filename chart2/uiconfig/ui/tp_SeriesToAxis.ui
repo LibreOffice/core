@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="chart">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAdjustment" id="adjustmentGAP">
     <property name="upper">600</property>
@@ -38,7 +38,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkRadioButton" id="RBT_OPT_AXIS_1">
-                    <property name="label" translatable="yes">Primary Y axis</property>
+                    <property name="label" translatable="yes" context="tp_SeriesToAxis|RBT_OPT_AXIS_1">Primary Y axis</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -55,7 +55,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="RBT_OPT_AXIS_2">
-                    <property name="label" translatable="yes">Secondary Y axis</property>
+                    <property name="label" translatable="yes" context="tp_SeriesToAxis|RBT_OPT_AXIS_2">Secondary Y axis</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -79,7 +79,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Align Data Series to</property>
+            <property name="label" translatable="yes" context="tp_SeriesToAxis|label1">Align Data Series to</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -120,7 +120,7 @@
                       <object class="GtkLabel" id="FT_GAP">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Spacing</property>
+                        <property name="label" translatable="yes" context="tp_SeriesToAxis|FT_GAP">_Spacing</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MT_GAP:0%</property>
                       </object>
@@ -135,7 +135,7 @@
                       <object class="GtkLabel" id="FT_OVERLAP">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Overlap</property>
+                        <property name="label" translatable="yes" context="tp_SeriesToAxis|FT_OVERLAP">_Overlap</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MT_OVERLAP:0%</property>
                       </object>
@@ -183,7 +183,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="CB_BARS_SIDE_BY_SIDE">
-                    <property name="label" translatable="yes">Show _bars side by side</property>
+                    <property name="label" translatable="yes" context="tp_SeriesToAxis|CB_BARS_SIDE_BY_SIDE">Show _bars side by side</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -199,7 +199,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="CB_CONNECTOR">
-                    <property name="label" translatable="yes">Connection lines</property>
+                    <property name="label" translatable="yes" context="tp_SeriesToAxis|CB_CONNECTOR">Connection lines</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -221,7 +221,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Settings</property>
+            <property name="label" translatable="yes" context="tp_SeriesToAxis|label2">Settings</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -263,7 +263,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Plot missing values</property>
+                        <property name="label" translatable="yes" context="tp_SeriesToAxis|FT_MISSING_VALUES">Plot missing values</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -274,7 +274,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="RB_DONT_PAINT">
-                        <property name="label" translatable="yes">_Leave gap</property>
+                        <property name="label" translatable="yes" context="tp_SeriesToAxis|RB_DONT_PAINT">_Leave gap</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -293,7 +293,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="RB_ASSUME_ZERO">
-                        <property name="label" translatable="yes">_Assume zero</property>
+                        <property name="label" translatable="yes" context="tp_SeriesToAxis|RB_ASSUME_ZERO">_Assume zero</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -312,7 +312,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="RB_CONTINUE_LINE">
-                        <property name="label" translatable="yes">_Continue line</property>
+                        <property name="label" translatable="yes" context="tp_SeriesToAxis|RB_CONTINUE_LINE">_Continue line</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -344,7 +344,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="CB_INCLUDE_HIDDEN_CELLS">
-                    <property name="label" translatable="yes">Include _values from hidden cells</property>
+                    <property name="label" translatable="yes" context="tp_SeriesToAxis|CB_INCLUDE_HIDDEN_CELLS">Include _values from hidden cells</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -367,7 +367,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Plot Options</property>
+            <property name="label" translatable="yes" context="tp_SeriesToAxis|label3">Plot Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

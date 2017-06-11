@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="svx">
   <!-- interface-requires LibreOffice 1.0 -->
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -14,7 +14,7 @@
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Contour Editor</property>
+    <property name="title" translatable="yes" context="floatingcontour|FloatingContour">Contour Editor</property>
     <child>
       <object class="GtkBox" id="mainbox">
         <property name="visible">True</property>
@@ -43,7 +43,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="action_name">TBI_APPLY</property>
-                    <property name="label" translatable="yes">Apply</property>
+                    <property name="label" translatable="yes" context="floatingcontour|TBI_APPLY">Apply</property>
                     <property name="icon_name">svx/res/cd01.png</property>
                   </object>
                   <packing>
@@ -68,7 +68,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="action_name">TBI_WORKPLACE</property>
-                    <property name="label" translatable="yes">Workspace</property>
+                    <property name="label" translatable="yes" context="floatingcontour|TBI_WORKPLACE">Workspace</property>
                     <property name="icon_name">svx/res/cd02.png</property>
                   </object>
                   <packing>
@@ -93,7 +93,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="action_name">TBI_SELECT</property>
-                    <property name="label" translatable="yes">Select</property>
+                    <property name="label" translatable="yes" context="floatingcontour|TBI_SELECT">Select</property>
                     <property name="icon_name">svx/res/cd05.png</property>
                   </object>
                   <packing>
@@ -108,7 +108,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="action_name">TBI_RECT</property>
-                    <property name="label" translatable="yes">Rectangle</property>
+                    <property name="label" translatable="yes" context="floatingcontour|TBI_RECT">Rectangle</property>
                     <property name="icon_name">svx/res/cd06.png</property>
                   </object>
                   <packing>
@@ -123,7 +123,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="action_name">TBI_CIRCLE</property>
-                    <property name="label" translatable="yes">Ellipse</property>
+                    <property name="label" translatable="yes" context="floatingcontour|TBI_CIRCLE">Ellipse</property>
                     <property name="icon_name">svx/res/cd07.png</property>
                   </object>
                   <packing>
@@ -138,7 +138,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="action_name">TBI_POLY</property>
-                    <property name="label" translatable="yes">Polygon</property>
+                    <property name="label" translatable="yes" context="floatingcontour|TBI_POLY">Polygon</property>
                     <property name="icon_name">svx/res/cd08.png</property>
                   </object>
                   <packing>
@@ -163,7 +163,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="action_name">TBI_POLYEDIT</property>
-                    <property name="label" translatable="yes">Edit Points</property>
+                    <property name="label" translatable="yes" context="floatingcontour|TBI_POLYEDIT">Edit Points</property>
                     <property name="icon_name">svx/res/cd015.png</property>
                   </object>
                   <packing>
@@ -178,7 +178,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="action_name">TBI_POLYMOVE</property>
-                    <property name="label" translatable="yes">Move Points</property>
+                    <property name="label" translatable="yes" context="floatingcontour|TBI_POLYMOVE">Move Points</property>
                     <property name="icon_name">svx/res/cd016.png</property>
                   </object>
                   <packing>
@@ -193,7 +193,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="action_name">TBI_POLYINSERT</property>
-                    <property name="label" translatable="yes">Insert Points</property>
+                    <property name="label" translatable="yes" context="floatingcontour|TBI_POLYINSERT">Insert Points</property>
                     <property name="icon_name">svx/res/cd017.png</property>
                   </object>
                   <packing>
@@ -208,7 +208,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="action_name">TBI_POLYDELETE</property>
-                    <property name="label" translatable="yes">Delete Points</property>
+                    <property name="label" translatable="yes" context="floatingcontour|TBI_POLYDELETE">Delete Points</property>
                     <property name="icon_name">svx/res/cd018.png</property>
                   </object>
                   <packing>
@@ -231,7 +231,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">TBI_AUTOCONTOUR</property>
-                    <property name="label" translatable="yes">AutoContour</property>
+                    <property name="label" translatable="yes" context="floatingcontour|TBI_AUTOCONTOUR">AutoContour</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">svx/res/cd025.png</property>
                   </object>
@@ -257,7 +257,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="action_name">TBI_UNDO</property>
-                    <property name="label" translatable="yes">Undo </property>
+                    <property name="label" translatable="yes" context="floatingcontour|TBI_UNDO">Undo </property>
                     <property name="icon_name">svx/res/cd020.png</property>
                   </object>
                   <packing>
@@ -272,7 +272,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="action_name">TBI_REDO</property>
-                    <property name="label" translatable="yes">Redo</property>
+                    <property name="label" translatable="yes" context="floatingcontour|TBI_REDO">Redo</property>
                     <property name="icon_name">svx/res/cd021.png</property>
                   </object>
                   <packing>
@@ -287,7 +287,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="action_name">TBI_PIPETTE</property>
-                    <property name="label" translatable="yes">Pipette</property>
+                    <property name="label" translatable="yes" context="floatingcontour|TBI_PIPETTE">Pipette</property>
                     <property name="icon_name">svx/res/cd026.png</property>
                   </object>
                   <packing>
@@ -307,7 +307,7 @@
               <object class="GtkSpinButton" id="spinbutton:0%">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="tooltip_text" translatable="yes">Color Tolerance</property>
+                <property name="tooltip_text" translatable="yes" context="floatingcontour|spinbutton|tooltip_text">Color Tolerance</property>
                 <property name="adjustment">adjustment1</property>
               </object>
               <packing>

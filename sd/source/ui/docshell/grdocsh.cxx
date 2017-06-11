@@ -29,7 +29,7 @@
 
 #include "app.hrc"
 #include "strings.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "GraphicDocShell.hxx"
 #include "DrawDocShell.hxx"
 #include "drawdoc.hxx"

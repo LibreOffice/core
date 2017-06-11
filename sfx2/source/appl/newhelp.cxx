@@ -31,7 +31,7 @@
 #include <sfx2/sfxhelp.hxx>
 #include <svtools/treelistentry.hxx>
 
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 #include "newhelp.hrc"
 #include "helpid.hrc"
 #include "bitmaps.hlst"

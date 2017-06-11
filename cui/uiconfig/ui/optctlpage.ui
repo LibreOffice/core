@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="OptCTLPage">
     <property name="visible">True</property>
@@ -28,7 +28,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="sequencechecking">
-                    <property name="label" translatable="yes">Use se_quence checking</property>
+                    <property name="label" translatable="yes" context="optctlpage|sequencechecking">Use se_quence checking</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -53,7 +53,7 @@
                         <property name="row_spacing">6</property>
                         <child>
                           <object class="GtkCheckButton" id="restricted">
-                            <property name="label" translatable="yes">Restricted</property>
+                            <property name="label" translatable="yes" context="optctlpage|restricted">Restricted</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -67,7 +67,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="typeandreplace">
-                            <property name="label" translatable="yes">_Type and replace</property>
+                            <property name="label" translatable="yes" context="optctlpage|typeandreplace">_Type and replace</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -96,7 +96,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Sequence Checking</property>
+            <property name="label" translatable="yes" context="optctlpage|label1">Sequence Checking</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -131,7 +131,7 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Movement:</property>
+                    <property name="label" translatable="yes" context="optctlpage|label3">Movement:</property>
                     <property name="xalign">1</property>
                   </object>
                   <packing>
@@ -141,7 +141,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="movementlogical">
-                    <property name="label" translatable="yes">Lo_gical</property>
+                    <property name="label" translatable="yes" context="optctlpage|movementlogical">Lo_gical</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -158,7 +158,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="movementvisual">
-                    <property name="label" translatable="yes">_Visual</property>
+                    <property name="label" translatable="yes" context="optctlpage|movementvisual">_Visual</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -183,7 +183,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Cursor Control</property>
+            <property name="label" translatable="yes" context="optctlpage|label2">Cursor Control</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -217,7 +217,7 @@
                   <object class="GtkLabel" id="label5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Numerals:</property>
+                    <property name="label" translatable="yes" context="optctlpage|label5">_Numerals:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">numerals</property>
                     <property name="xalign">1</property>
@@ -232,10 +232,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <items>
-                      <item translatable="yes">Arabic (1, 2, 3…)</item>
-                      <item translatable="yes">Eastern Arabic (٣ ,٢ ,١…)</item>
-                      <item translatable="yes">System</item>
-                      <item translatable="yes">Context</item>
+                      <item translatable="yes" context="optctlpage|numerals">Arabic (1, 2, 3…)</item>
+                      <item translatable="yes" context="optctlpage|numerals">Eastern Arabic (٣ ,٢ ,١…)</item>
+                      <item translatable="yes" context="optctlpage|numerals">System</item>
+                      <item translatable="yes" context="optctlpage|numerals">Context</item>
                     </items>
                   </object>
                   <packing>
@@ -251,7 +251,7 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">General Options</property>
+            <property name="label" translatable="yes" context="optctlpage|label4">General Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

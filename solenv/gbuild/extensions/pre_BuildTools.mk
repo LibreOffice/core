@@ -27,9 +27,7 @@ gb_BUILD_TOOLS = \
 		rsc \
 		saxparser \
 		svidl \
-		transex3 \
 		treex \
-		uiex \
 		ulfex \
 		unoidl-check \
 		unoidl-write \

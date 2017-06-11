@@ -17,10 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "core_resource.hxx"
 #include "dbwizsetup.hxx"
 #include "dsmeta.hxx"
 #include "DBSetupConnectionPages.hxx"
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
+#include "strings.hrc"
+#include "strings.hxx"
 #include "dsitems.hxx"
 #include "dsnItem.hxx"
 
@@ -29,7 +32,7 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/msgbox.hxx>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include "adminpages.hxx"
 #include <sfx2/docfilt.hxx>
 #include <unotools/ucbhelper.hxx>
@@ -109,20 +112,20 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(vcl::Window* _pParent
 
     , m_pOutSet(nullptr)
     , m_bIsConnectable( false)
-    , m_sRM_IntroText( ModuleRes( STR_PAGETITLE_INTROPAGE ) )
-    , m_sRM_dBaseText( ModuleRes( STR_PAGETITLE_DBASE ) )
-    , m_sRM_TextText( ModuleRes( STR_PAGETITLE_TEXT ) )
-    , m_sRM_MSAccessText( ModuleRes( STR_PAGETITLE_MSACCESS ) )
-    , m_sRM_LDAPText( ModuleRes( STR_PAGETITLE_LDAP ) )
-    , m_sRM_ADOText( ModuleRes( STR_PAGETITLE_ADO ) )
-    , m_sRM_JDBCText( ModuleRes( STR_PAGETITLE_JDBC ) )
-    , m_sRM_MySQLNativePageTitle( ModuleRes( STR_PAGETITLE_MYSQL_NATIVE ) )
-    , m_sRM_OracleText( ModuleRes( STR_PAGETITLE_ORACLE ) )
-    , m_sRM_MySQLText( ModuleRes( STR_PAGETITLE_MYSQL ) )
-    , m_sRM_ODBCText( ModuleRes( STR_PAGETITLE_ODBC ) )
-    , m_sRM_SpreadSheetText( ModuleRes( STR_PAGETITLE_SPREADSHEET ) )
-    , m_sRM_AuthentificationText( ModuleRes( STR_PAGETITLE_AUTHENTIFICATION ) )
-    , m_sRM_FinalText( ModuleRes( STR_PAGETITLE_FINAL ) )
+    , m_sRM_IntroText( DBA_RES( STR_PAGETITLE_INTROPAGE ) )
+    , m_sRM_dBaseText( DBA_RES( STR_PAGETITLE_DBASE ) )
+    , m_sRM_TextText( DBA_RES( STR_PAGETITLE_TEXT ) )
+    , m_sRM_MSAccessText( DBA_RES( STR_PAGETITLE_MSACCESS ) )
+    , m_sRM_LDAPText( DBA_RES( STR_PAGETITLE_LDAP ) )
+    , m_sRM_ADOText( DBA_RES( STR_PAGETITLE_ADO ) )
+    , m_sRM_JDBCText( DBA_RES( STR_PAGETITLE_JDBC ) )
+    , m_sRM_MySQLNativePageTitle( DBA_RES( STR_PAGETITLE_MYSQL_NATIVE ) )
+    , m_sRM_OracleText( DBA_RES( STR_PAGETITLE_ORACLE ) )
+    , m_sRM_MySQLText( DBA_RES( STR_PAGETITLE_MYSQL ) )
+    , m_sRM_ODBCText( DBA_RES( STR_PAGETITLE_ODBC ) )
+    , m_sRM_SpreadSheetText( DBA_RES( STR_PAGETITLE_SPREADSHEET ) )
+    , m_sRM_AuthentificationText( DBA_RES( STR_PAGETITLE_AUTHENTIFICATION ) )
+    , m_sRM_FinalText( DBA_RES( STR_PAGETITLE_FINAL ) )
     , m_sWorkPath( SvtPathOptions().GetWorkPath() )
     , m_pGeneralPage( nullptr )
     , m_pMySQLIntroPage( nullptr )
@@ -173,7 +176,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(vcl::Window* _pParent
     m_pFinish->SetHelpId(HID_DBWIZ_FINISH);
     SetRoadmapInteractive( true );
     ActivatePage();
-    setTitleBase(ModuleRes(STR_DBWIZARDTITLE));
+    setTitleBase(DBA_RES(STR_DBWIZARDTITLE));
 }
 
 void ODbTypeWizDialogSetup::declareAuthDepPath( const OUString& _sURL, PathId _nPathId, const svt::RoadmapWizardTypes::WizardPath& _rPaths)
@@ -247,7 +250,7 @@ OUString ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ) const
             sRoadmapItem = m_sRM_AuthentificationText;
             break;
         case PAGE_DBSETUPWIZARD_USERDEFINED:
-            sRoadmapItem = ModuleRes(STR_PAGETITLE_CONNECTION);
+            sRoadmapItem = DBA_RES(STR_PAGETITLE_CONNECTION);
             break;
         case PAGE_DBSETUPWIZARD_FINAL:
             sRoadmapItem = m_sRM_FinalText;
@@ -793,7 +796,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             INetURLObject aWorkURL( m_sWorkPath );
             aFileDlg.SetDisplayFolder( aWorkURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ));
 
-            OUString sDefaultName = ModuleRes( STR_DATABASEDEFAULTNAME );
+            OUString sDefaultName = DBA_RES( STR_DATABASEDEFAULTNAME );
             OUString sExtension = pFilter->GetDefaultExtension();
             sDefaultName += sExtension.replaceAt( 0, 1, OUString() );
             aWorkURL.Append( sDefaultName );

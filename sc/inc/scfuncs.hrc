@@ -16,18 +16,4070 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "scres.hrc"
+#ifndef INCLUDED_SC_INC_SCFUNCS_HRC
+#define INCLUDED_SC_INC_SCFUNCS_HRC
 
-#define ID_FUNCTION_GRP_DATABASE    1
-#define ID_FUNCTION_GRP_DATETIME    2
-#define ID_FUNCTION_GRP_FINANZ      3
-#define ID_FUNCTION_GRP_INFO        4
-#define ID_FUNCTION_GRP_LOGIC       5
-#define ID_FUNCTION_GRP_MATH        6
-#define ID_FUNCTION_GRP_MATRIX      7
-#define ID_FUNCTION_GRP_STATISTIC   8
-#define ID_FUNCTION_GRP_TABLE       9
-#define ID_FUNCTION_GRP_TEXT        10
-#define ID_FUNCTION_GRP_ADDINS      11
+#define NC_(Context, String) (Context "\004" u8##String)
+
+/* Resource file for the function wizard / autopilot.
+ *
+ *  For every function there is a StringArray with a resource id (offset by
+ *  RID_SC_FUNC_DESCRIPTIONS_START) with the OpCode of the function
+ *
+ *  In this stringarray, the description of the function is given as the first
+ *  entry, followed by two entries for each parameter, first the type or name
+ *  of the parameter, second a description of the parameter.
+ */
+
+// -=*# Resource for function DCOUNT #*=-
+const char* SC_OPCODE_DB_COUNT_ARY[] =
+{
+    NC_("SC_OPCODE_DB_COUNT", "Counts the cells of a data range whose contents match the search criteria."),
+    NC_("SC_OPCODE_DB_COUNT", "Database"),
+    NC_("SC_OPCODE_DB_COUNT", "The range of cells containing data."),
+    NC_("SC_OPCODE_DB_COUNT", "Database field"),
+    NC_("SC_OPCODE_DB_COUNT", "Indicates which database field (column) is to be used for the search criteria."),
+    NC_("SC_OPCODE_DB_COUNT", "Search criteria"),
+    NC_("SC_OPCODE_DB_COUNT", "Defines the cell range containing the search criteria.")
+};
+
+// -=*# Resource for function DCOUNTA #*=-
+const char* SC_OPCODE_DB_COUNT_2_ARY[] =
+{
+    NC_("SC_OPCODE_DB_COUNT_2", "Counts all non-blank cells of a data range where the content corresponds to the search criteria."),
+    NC_("SC_OPCODE_DB_COUNT_2", "Database"),
+    NC_("SC_OPCODE_DB_COUNT_2", "The range of cells containing data."),
+    NC_("SC_OPCODE_DB_COUNT_2", "Database field"),
+    NC_("SC_OPCODE_DB_COUNT_2", "Indicates which database field (column) is to be used for the search criteria."),
+    NC_("SC_OPCODE_DB_COUNT_2", "Search criteria"),
+    NC_("SC_OPCODE_DB_COUNT_2", "Defines the cell range containing the search criteria.")
+};
+
+// -=*# Resource for function DAVERAGE #*=-
+const char* SC_OPCODE_DB_AVERAGE_ARY[] =
+{
+    NC_("SC_OPCODE_DB_AVERAGE", "Returns the average value of all the cells of a data range whose contents match the search criteria."),
+    NC_("SC_OPCODE_DB_AVERAGE", "Database"),
+    NC_("SC_OPCODE_DB_AVERAGE", "The range of cells containing data."),
+    NC_("SC_OPCODE_DB_AVERAGE", "Database field"),
+    NC_("SC_OPCODE_DB_AVERAGE", "Indicates which database field (column) is to be used for the search criteria."),
+    NC_("SC_OPCODE_DB_AVERAGE", "Search criteria"),
+    NC_("SC_OPCODE_DB_AVERAGE", "Defines the cell range containing the search criteria.")
+};
+
+// -=*# Resource for function DGET #*=-
+const char* SC_OPCODE_DB_GET_ARY[] =
+{
+    NC_("SC_OPCODE_DB_GET", "Defines the contents of the cell of a data range which matches the search criteria."),
+    NC_("SC_OPCODE_DB_GET", "Database"),
+    NC_("SC_OPCODE_DB_GET", "The range of cells containing data."),
+    NC_("SC_OPCODE_DB_GET", "Database field"),
+    NC_("SC_OPCODE_DB_GET", "Indicates which database field (column) is to be used for the search criteria."),
+    NC_("SC_OPCODE_DB_GET", "Search criteria"),
+    NC_("SC_OPCODE_DB_GET", "Defines the cell range containing the search criteria.")
+};
+
+// -=*# Resource for function DMAX #*=-
+const char* SC_OPCODE_DB_MAX_ARY[] =
+{
+    NC_("SC_OPCODE_DB_MAX", "Returns the maximum value from all of the cells of a data range which correspond to the search criteria."),
+    NC_("SC_OPCODE_DB_MAX", "Database"),
+    NC_("SC_OPCODE_DB_MAX", "The range of cells containing data."),
+    NC_("SC_OPCODE_DB_MAX", "Database field"),
+    NC_("SC_OPCODE_DB_MAX", "Indicates which database field (column) is to be used for the search criteria."),
+    NC_("SC_OPCODE_DB_MAX", "Search criteria"),
+    NC_("SC_OPCODE_DB_MAX", "Defines the cell range containing the search criteria.")
+};
+
+// -=*# Resource for function DMIN #*=-
+const char* SC_OPCODE_DB_MIN_ARY[] =
+{
+    NC_("SC_OPCODE_DB_MIN", "Returns the minimum of all cells of a data range where the contents correspond to the search criteria."),
+    NC_("SC_OPCODE_DB_MIN", "Database"),
+    NC_("SC_OPCODE_DB_MIN", "The range of cells containing data."),
+    NC_("SC_OPCODE_DB_MIN", "Database field"),
+    NC_("SC_OPCODE_DB_MIN", "Indicates which database field (column) is to be used for the search criteria."),
+    NC_("SC_OPCODE_DB_MIN", "Search criteria"),
+    NC_("SC_OPCODE_DB_MIN", "Defines the cell range containing the search criteria.")
+};
+
+// -=*# Resource for function DPRODUCT #*=-
+const char* SC_OPCODE_DB_PRODUCT_ARY[] =
+{
+    NC_("SC_OPCODE_DB_PRODUCT", "Multiplies all cells of a data range where the contents match the search criteria."),
+    NC_("SC_OPCODE_DB_PRODUCT", "Database"),
+    NC_("SC_OPCODE_DB_PRODUCT", "The range of cells containing data."),
+    NC_("SC_OPCODE_DB_PRODUCT", "Database field"),
+    NC_("SC_OPCODE_DB_PRODUCT", "Indicates which database field (column) is to be used for the search criteria."),
+    NC_("SC_OPCODE_DB_PRODUCT", "Search criteria"),
+    NC_("SC_OPCODE_DB_PRODUCT", "Defines the cell range containing the search criteria.")
+};
+
+// -=*# Resource for function DSTDEV #*=-
+const char* SC_OPCODE_DB_STD_DEV_ARY[] =
+{
+    NC_("SC_OPCODE_DB_STD_DEV", "Calculates the standard deviation of all cells in a data range whose contents match the search criteria."),
+    NC_("SC_OPCODE_DB_STD_DEV", "Database"),
+    NC_("SC_OPCODE_DB_STD_DEV", "The range of cells containing data."),
+    NC_("SC_OPCODE_DB_STD_DEV", "Database field"),
+    NC_("SC_OPCODE_DB_STD_DEV", "Indicates which database field (column) is to be used for the search criteria."),
+    NC_("SC_OPCODE_DB_STD_DEV", "Search criteria"),
+    NC_("SC_OPCODE_DB_STD_DEV", "Defines the cell range containing the search criteria.")
+};
+
+// -=*# Resource for function DSTDEVP #*=-
+const char* SC_OPCODE_DB_STD_DEV_P_ARY[] =
+{
+    NC_("SC_OPCODE_DB_STD_DEV_P", "Returns the standard deviation with regards to the population of all cells of a data range matching the search criteria."),
+    NC_("SC_OPCODE_DB_STD_DEV_P", "Database"),
+    NC_("SC_OPCODE_DB_STD_DEV_P", "The range of cells containing data."),
+    NC_("SC_OPCODE_DB_STD_DEV_P", "Database field"),
+    NC_("SC_OPCODE_DB_STD_DEV_P", "Indicates which database field (column) is to be used for the search criteria."),
+    NC_("SC_OPCODE_DB_STD_DEV_P", "Search criteria"),
+    NC_("SC_OPCODE_DB_STD_DEV_P", "Defines the cell range containing the search criteria.")
+};
+
+// -=*# Resource for function DSUM #*=-
+const char* SC_OPCODE_DB_SUM_ARY[] =
+{
+    NC_("SC_OPCODE_DB_SUM", "Adds all the cells of a data range where the contents match the search criteria."),
+    NC_("SC_OPCODE_DB_SUM", "Database"),
+    NC_("SC_OPCODE_DB_SUM", "The range of cells containing data."),
+    NC_("SC_OPCODE_DB_SUM", "Database field"),
+    NC_("SC_OPCODE_DB_SUM", "Indicates which database field (column) is to be used for the search criteria."),
+    NC_("SC_OPCODE_DB_SUM", "Search criteria"),
+    NC_("SC_OPCODE_DB_SUM", "Defines the cell range containing the search criteria.")
+};
+
+// -=*# Resource for function DVAR #*=-
+const char* SC_OPCODE_DB_VAR_ARY[] =
+{
+    NC_("SC_OPCODE_DB_VAR", "Determines the variance of all the cells in a data range where the contents match the search criteria."),
+    NC_("SC_OPCODE_DB_VAR", "Database"),
+    NC_("SC_OPCODE_DB_VAR", "The range of cells containing data."),
+    NC_("SC_OPCODE_DB_VAR", "Database field"),
+    NC_("SC_OPCODE_DB_VAR", "Indicates which database field (column) is to be used for the search criteria."),
+    NC_("SC_OPCODE_DB_VAR", "Search criteria"),
+    NC_("SC_OPCODE_DB_VAR", "Defines the cell range containing the search criteria.")
+};
+
+// -=*# Resource for function DVARP #*=-
+const char* SC_OPCODE_DB_VAR_P_ARY[] =
+{
+    NC_("SC_OPCODE_DB_VAR_P", "Determines variance of a population based on all cells in a data range where contents match the search criteria."),
+    NC_("SC_OPCODE_DB_VAR_P", "Database"),
+    NC_("SC_OPCODE_DB_VAR_P", "The range of cells containing data."),
+    NC_("SC_OPCODE_DB_VAR_P", "Database field"),
+    NC_("SC_OPCODE_DB_VAR_P", "Indicates which database field (column) is to be used for the search criteria."),
+    NC_("SC_OPCODE_DB_VAR_P", "Search criteria"),
+    NC_("SC_OPCODE_DB_VAR_P", "Defines the cell range containing the search criteria.")
+};
+
+// -=*# Resource for function DATE #*=-
+const char* SC_OPCODE_GET_DATE_ARY[] =
+{
+    NC_("SC_OPCODE_GET_DATE", "Provides an internal number for the date given."),
+    NC_("SC_OPCODE_GET_DATE", "year"),
+    NC_("SC_OPCODE_GET_DATE", "An integer between 1583 and 9956 or 0 and 99 (19xx or 20xx depending on the defined option)."),
+    NC_("SC_OPCODE_GET_DATE", "month"),
+    NC_("SC_OPCODE_GET_DATE", "An integer between 1 and 12 representing the month."),
+    NC_("SC_OPCODE_GET_DATE", "day"),
+    NC_("SC_OPCODE_GET_DATE", "An integer between 1 and 31 representing the day of the month.")
+};
+
+// -=*# Resource for function DATE_VALUE #*=-
+const char* SC_OPCODE_GET_DATE_VALUE_ARY[] =
+{
+    NC_("SC_OPCODE_GET_DATE_VALUE", "Returns an internal number for a text having a possible date format."),
+    NC_("SC_OPCODE_GET_DATE_VALUE", "text"),
+    NC_("SC_OPCODE_GET_DATE_VALUE", "A text enclosed in quotation marks which returns a date in a %PRODUCTNAME date format.")
+};
+
+// -=*# Resource for function DAY #*=-
+const char* SC_OPCODE_GET_DAY_ARY[] =
+{
+    NC_("SC_OPCODE_GET_DAY", "Returns the sequential date of the month as an integer (1-31) in relation to the date value."),
+    NC_("SC_OPCODE_GET_DAY", "Number"),
+    NC_("SC_OPCODE_GET_DAY", "The internal number for the date.")
+};
+
+// -=*# Resource for function DAYS360 #*=-
+const char* SC_OPCODE_GET_DIFF_DATE_360_ARY[] =
+{
+    NC_("SC_OPCODE_GET_DIFF_DATE_360", "Calculates the number of days between two dates based on a 360-day year."),
+    NC_("SC_OPCODE_GET_DIFF_DATE_360", "Date_1"),
+    NC_("SC_OPCODE_GET_DIFF_DATE_360", "The start date for calculating the difference in days."),
+    NC_("SC_OPCODE_GET_DIFF_DATE_360", "Date_2"),
+    NC_("SC_OPCODE_GET_DIFF_DATE_360", "The end date for calculating the difference in days."),
+    NC_("SC_OPCODE_GET_DIFF_DATE_360", "Type"),
+    NC_("SC_OPCODE_GET_DIFF_DATE_360", "Method used to form differences: Type = 0 denotes US method (NASD), Type = 1 denotes the European method.")
+};
+
+// -=*# Resource for function NETWORKDAYS #*=-
+const char* SC_OPCODE_NETWORKDAYS_ARY[] =
+{
+    NC_("SC_OPCODE_NETWORKDAYS", "Returns the number of workdays between two dates using arguments to indicate weekenddays and holidays."),
+    NC_("SC_OPCODE_NETWORKDAYS", "Start Date"),
+    NC_("SC_OPCODE_NETWORKDAYS", "Start date for calculation."),
+    NC_("SC_OPCODE_NETWORKDAYS", "End Date"),
+    NC_("SC_OPCODE_NETWORKDAYS", "End date for calculation."),
+    NC_("SC_OPCODE_NETWORKDAYS", "list of dates"),
+    NC_("SC_OPCODE_NETWORKDAYS", "Optional set of one or more dates to be considered as holiday."),
+    NC_("SC_OPCODE_NETWORKDAYS", "array"),
+    NC_("SC_OPCODE_NETWORKDAYS", "Optional list of numbers to indicate working (0) and weekend (non-zero) days. When omitted, weekend is Saturday and Sunday.")
+};
+
+// -=*# Resource for function NETWORKDAYS.INTL #*=-
+const char* SC_OPCODE_NETWORKDAYS_MS_ARY[] =
+{
+    NC_("SC_OPCODE_NETWORKDAYS_MS", "Returns the number of workdays between two dates using arguments to indicate weekend days and holidays."),
+    NC_("SC_OPCODE_NETWORKDAYS_MS", "Start Date"),
+    NC_("SC_OPCODE_NETWORKDAYS_MS", "Start date for calculation."),
+    NC_("SC_OPCODE_NETWORKDAYS_MS", "End Date"),
+    NC_("SC_OPCODE_NETWORKDAYS_MS", "End date for calculation."),
+    NC_("SC_OPCODE_NETWORKDAYS_MS", "number or string"),
+    NC_("SC_OPCODE_NETWORKDAYS_MS", "Optional number or string to indicate when weekends occur. When omitted, weekend is Saturday and Sunday."),
+    NC_("SC_OPCODE_NETWORKDAYS_MS", "array"),
+    NC_("SC_OPCODE_NETWORKDAYS_MS", "Optional set of one or more dates to be considered as holiday.")
+};
+
+// -=*# Resource for function WORKDAY.INTL #*=-
+const char* SC_OPCODE_WORKDAY_MS_ARY[] =
+{
+    NC_("SC_OPCODE_WORKDAY_MS", "Returns the serial number of the date before or after a number of workdays using arguments to indicate weekend days and holidays."),
+    NC_("SC_OPCODE_WORKDAY_MS", "Start Date"),
+    NC_("SC_OPCODE_WORKDAY_MS", "Start date for calculation."),
+    NC_("SC_OPCODE_WORKDAY_MS", "Days"),
+    NC_("SC_OPCODE_WORKDAY_MS", "The number of workdays before or after start date."),
+    NC_("SC_OPCODE_WORKDAY_MS", "number or string"),
+    NC_("SC_OPCODE_WORKDAY_MS", "Optional number or string to indicate when weekends occur. When omitted, weekend is Saturday and Sunday."),
+    NC_("SC_OPCODE_WORKDAY_MS", "array"),
+    NC_("SC_OPCODE_WORKDAY_MS", "Optional set of one or more dates to be considered as holiday.")
+};
+
+// -=*# Resource for function HOUR #*=-
+const char* SC_OPCODE_GET_HOUR_ARY[] =
+{
+    NC_("SC_OPCODE_GET_HOUR", "Determines the sequential number of the hour of the day (0-23) for the time value."),
+    NC_("SC_OPCODE_GET_HOUR", "Number"),
+    NC_("SC_OPCODE_GET_HOUR", "Internal time value")
+};
+
+// -=*# Resource for function MINUTE #*=-
+const char* SC_OPCODE_GET_MIN_ARY[] =
+{
+    NC_("SC_OPCODE_GET_MIN", "Determines the sequential number for the minute of the hour (0-59) for the time value."),
+    NC_("SC_OPCODE_GET_MIN", "Number"),
+    NC_("SC_OPCODE_GET_MIN", "Internal time value.")
+};
+
+// -=*# Resource for function MONTH #*=-
+const char* SC_OPCODE_GET_MONTH_ARY[] =
+{
+    NC_("SC_OPCODE_GET_MONTH", "Determines the sequential number of a month of the year (1-12) for the date value."),
+    NC_("SC_OPCODE_GET_MONTH", "Number"),
+    NC_("SC_OPCODE_GET_MONTH", "The internal number of the date.")
+};
+
+// -=*# Resource for function NOW #*=-
+const char* SC_OPCODE_GET_ACT_TIME_ARY[] =
+{
+    NC_("SC_OPCODE_GET_ACT_TIME", "Determines the current time of the computer.")
+};
+
+// -=*# Resource for function SECOND #*=-
+const char*SC_OPCODE_GET_SEC_ARY[] =
+{
+    NC_("SC_OPCODE_GET_SEC", "Determines the sequential number of the second of a minute (0-59) for the time value."),
+    NC_("SC_OPCODE_GET_SEC", "Number"),
+    NC_("SC_OPCODE_GET_SEC", "The internal time value.")
+};
+
+// -=*# Resource for function TIME #*=-
+const char* SC_OPCODE_GET_TIME_ARY[] =
+{
+    NC_("SC_OPCODE_GET_TIME", "Determines a time value from the details for hour, minute and second."),
+    NC_("SC_OPCODE_GET_TIME", "hour"),
+    NC_("SC_OPCODE_GET_TIME", "The integer for the hour."),
+    NC_("SC_OPCODE_GET_TIME", "minute"),
+    NC_("SC_OPCODE_GET_TIME", "The integer for the minute."),
+    NC_("SC_OPCODE_GET_TIME", "second"),
+    NC_("SC_OPCODE_GET_TIME", "The integer for the second.")
+};
+
+// -=*# Resource for function TIMEVALUE #*=-
+const char* SC_OPCODE_GET_TIME_VALUE_ARY[] =
+{
+    NC_("SC_OPCODE_GET_TIME_VALUE", "Returns a sequential number for a text shown in a possible time entry format."),
+    NC_("SC_OPCODE_GET_TIME_VALUE", "text"),
+    NC_("SC_OPCODE_GET_TIME_VALUE", "A text enclosed in quotation marks which returns a time in a %PRODUCTNAME time format.")
+};
+
+// -=*# Resource for function TODAY #*=-
+const char* SC_OPCODE_GET_ACT_DATE_ARY[] =
+{
+    NC_("SC_OPCODE_GET_ACT_DATE", "Determines the current date of the computer.")
+};
+
+// -=*# Resource for function WEEKDAY #*=-
+const char* SC_OPCODE_GET_DAY_OF_WEEK_ARY[] =
+{
+    NC_("SC_OPCODE_GET_DAY_OF_WEEK", "Returns the day of the week for the date value as an integer."),
+    NC_("SC_OPCODE_GET_DAY_OF_WEEK", "Number"),
+    NC_("SC_OPCODE_GET_DAY_OF_WEEK", "The internal number for the date."),
+    NC_("SC_OPCODE_GET_DAY_OF_WEEK", "Type"),
+    NC_("SC_OPCODE_GET_DAY_OF_WEEK", "Fixes the beginning of the week and the type of calculation to be used.")
+};
+
+// -=*# Resource for function YEAR #*=-
+const char* SC_OPCODE_GET_YEAR_ARY[] =
+{
+    NC_("SC_OPCODE_GET_YEAR", "Returns the year of a date value as an integer."),
+    NC_("SC_OPCODE_GET_YEAR", "Number"),
+    NC_("SC_OPCODE_GET_YEAR", "Internal number of the date.")
+};
+
+// -=*# Resource for function DAYS #*=-
+const char* SC_OPCODE_GET_DIFF_DATE_ARY[] =
+{
+    NC_("SC_OPCODE_GET_DIFF_DATE", "Calculates the number of days between two dates."),
+    NC_("SC_OPCODE_GET_DIFF_DATE", "Date_2"),
+    NC_("SC_OPCODE_GET_DIFF_DATE", "The end date for calculating the difference in days."),
+    NC_("SC_OPCODE_GET_DIFF_DATE", "Date_1"),
+    NC_("SC_OPCODE_GET_DIFF_DATE", "The start date for calculating the difference in days.")
+};
+
+// -=*# Resource for function DATEDIF #*=-
+const char* SC_OPCODE_GET_DATEDIF_ARY[] =
+{
+    NC_("SC_OPCODE_GET_DATEDIF", "Returns the number of whole days, months or years between 'start date' and 'end date'."),
+    NC_("SC_OPCODE_GET_DATEDIF", "Start date"),
+    NC_("SC_OPCODE_GET_DATEDIF", "The start date."),
+    NC_("SC_OPCODE_GET_DATEDIF", "End date"),
+    NC_("SC_OPCODE_GET_DATEDIF", "The end date."),
+    NC_("SC_OPCODE_GET_DATEDIF", "Interval"),
+    NC_("SC_OPCODE_GET_DATEDIF", "Interval to be calculated. Can be \"d\", \"m\", \"y\", \"ym\", \"md\" or \"yd\".")
+};
+
+// -=*# Resource for function WEEKNUM #*=-
+const char* SC_OPCODE_WEEK_ARY[] =
+{
+    NC_("SC_OPCODE_WEEK", "Calculates the calendar week corresponding to the given date."),
+    NC_("SC_OPCODE_WEEK", "Number"),
+    NC_("SC_OPCODE_WEEK", "The internal number of the date."),
+    NC_("SC_OPCODE_WEEK", "mode"),
+    NC_("SC_OPCODE_WEEK", "Indicates the first day of the week and when week 1 starts.")
+};
+
+// -=*# Resource for function ISOWEEKNUM #*=-
+const char* SC_OPCODE_ISOWEEKNUM_ARY[] =
+{
+    NC_("SC_OPCODE_ISOWEEKNUM", "Calculates the ISO 8601 calendar week for the given date."),
+    NC_("SC_OPCODE_ISOWEEKNUM", "Number"),
+    NC_("SC_OPCODE_ISOWEEKNUM", "The internal number of the date.")
+};
+
+const char* SC_OPCODE_WEEKNUM_OOO_ARY[] =
+{
+    NC_("SC_OPCODE_WEEKNUM_OOO", "Calculates the calendar week corresponding to the given date.\nThis function only provides interoperability with %PRODUCTNAME 5.0 and earlier and OpenOffice.org."),
+    NC_("SC_OPCODE_WEEKNUM_OOO", "Number"),
+    NC_("SC_OPCODE_WEEKNUM_OOO", "The internal number of the date."),
+    NC_("SC_OPCODE_WEEKNUM_OOO", "mode"),
+    NC_("SC_OPCODE_WEEKNUM_OOO", "Indicates the first day of the week (1 = Sunday, other values = Monday).")
+};
+
+// -=*# Resource for function EASTERSUNDAY #*=-
+const char* SC_OPCODE_EASTERSUNDAY_ARY[] =
+{
+    NC_("SC_OPCODE_EASTERSUNDAY", "Calculates the date of Easter Sunday in a given year."),
+    NC_("SC_OPCODE_EASTERSUNDAY", "year"),
+    NC_("SC_OPCODE_EASTERSUNDAY", "An integer between 1583 and 9956, or 0 and 99 (19xx or 20xx depending on the option set).")
+};
+
+// -=*# Resource for function PV #*=-
+const char* SC_OPCODE_PV_ARY[] =
+{
+    NC_("SC_OPCODE_PV", "Present value. Calculates the present value of an investment."),
+    NC_("SC_OPCODE_PV", "Rate"),
+    NC_("SC_OPCODE_PV", "The rate of interest for the period given."),
+    NC_("SC_OPCODE_PV", "NPER"),
+    NC_("SC_OPCODE_PV", "The payment period. The total number of periods in which the annuity is paid."),
+    NC_("SC_OPCODE_PV", "PMT"),
+    NC_("SC_OPCODE_PV", "Regular payments. The constant amount of annuity that is paid in each period."),
+    NC_("SC_OPCODE_PV", "FV"),
+    NC_("SC_OPCODE_PV", "Future value. The value (final value) to be attained after the last payment."),
+    NC_("SC_OPCODE_PV", "Type"),
+    NC_("SC_OPCODE_PV", "Type = 1 denotes due at the beginning of the period, = 0 at the end.")
+};
+
+// -=*# Resource for function FV #*=-
+const char* SC_OPCODE_FV_ARY[] =
+{
+    NC_("SC_OPCODE_FV", "Future value. Returns the future value of an investment based on regular payments and a constant interest rate."),
+    NC_("SC_OPCODE_FV", "Rate"),
+    NC_("SC_OPCODE_FV", "The rate of interest per period."),
+    NC_("SC_OPCODE_FV", "NPER"),
+    NC_("SC_OPCODE_FV", "Payment period. The total number of periods in which the annuity (pension) is paid."),
+    NC_("SC_OPCODE_FV", "PMT"),
+    NC_("SC_OPCODE_FV", "Regular payments. The constant annuity to be paid in each period."),
+    NC_("SC_OPCODE_FV", "PV"),
+    NC_("SC_OPCODE_FV", "Present value. The current value of a series of payments"),
+    NC_("SC_OPCODE_FV", "Type"),
+    NC_("SC_OPCODE_FV", "Type = 1 denotes due at the beginning of the period, = 0 at the end.")
+};
+
+// -=*# Resource for function NPER #*=-
+const char* SC_OPCODE_NPER_ARY[] =
+{
+    NC_("SC_OPCODE_NPER", "Payment period. Calculates the number of payment periods for an investment based on regular payments and a constant interest rate."),
+    NC_("SC_OPCODE_NPER", "Rate"),
+    NC_("SC_OPCODE_NPER", "The rate of interest per period."),
+    NC_("SC_OPCODE_NPER", "PMT"),
+    NC_("SC_OPCODE_NPER", "Regular payments. The constant annuity to be paid in each period."),
+    NC_("SC_OPCODE_NPER", "PV"),
+    NC_("SC_OPCODE_NPER", "Present value. The current value of a series of payments"),
+    NC_("SC_OPCODE_NPER", "FV"),
+    NC_("SC_OPCODE_NPER", "Future value. The value (end value) to be attained after the final payment."),
+    NC_("SC_OPCODE_NPER", "Type"),
+    NC_("SC_OPCODE_NPER", "Type = 1 denotes due at the beginning of the period, = 0 at the end.")
+};
+
+// -=*# Resource for function PMT #*=-
+const char* SC_OPCODE_PMT_ARY[] =
+{
+    NC_("SC_OPCODE_PMT", "Regular payments. Returns the periodic payment of an annuity, based on regular payments and a fixed periodic interest rate."),
+    NC_("SC_OPCODE_PMT", "Rate"),
+    NC_("SC_OPCODE_PMT", "The rate of interest per period."),
+    NC_("SC_OPCODE_PMT", "NPER"),
+    NC_("SC_OPCODE_PMT", "Payment period. The total number of periods in which the annuity (pension) is paid."),
+    NC_("SC_OPCODE_PMT", "PV"),
+    NC_("SC_OPCODE_PMT", "Present value. The current value of a series of payments"),
+    NC_("SC_OPCODE_PMT", "FV"),
+    NC_("SC_OPCODE_PMT", "Future value. The value (end value) to be attained after the final payment."),
+    NC_("SC_OPCODE_PMT", "Type"),
+    NC_("SC_OPCODE_PMT", "Type = 1 denotes due at the beginning of the period, = 0 at the end.")
+};
+
+// -=*# Resource for function RATE #*=-
+const char* SC_OPCODE_RATE_ARY[] =
+{
+    NC_("SC_OPCODE_RATE", "Calculates the constant interest rate of an investment with regular payments."),
+    NC_("SC_OPCODE_RATE", "NPER"),
+    NC_("SC_OPCODE_RATE", "Payment period. The total number of periods in which the annuity (pension) is paid."),
+    NC_("SC_OPCODE_RATE", "PMT"),
+    NC_("SC_OPCODE_RATE", "Regular payments. The constant annuity to be paid in each period."),
+    NC_("SC_OPCODE_RATE", "PV"),
+    NC_("SC_OPCODE_RATE", "Present value. The current value of a series of payments"),
+    NC_("SC_OPCODE_RATE", "FV"),
+    NC_("SC_OPCODE_RATE", "Future value. The value (end value) to be attained after the final payment."),
+    NC_("SC_OPCODE_RATE", "Type"),
+    NC_("SC_OPCODE_RATE", "Type = 1 denotes due at the beginning of the period, = 0 at the end."),
+    NC_("SC_OPCODE_RATE", "Guess"),
+    NC_("SC_OPCODE_RATE", "Guess. The estimate of the interest rate for the iterative calculating method.")
+};
+
+// -=*# Resource for function IPMT #*=-
+const char* SC_OPCODE_IPMT_ARY[] =
+{
+    NC_("SC_OPCODE_IPMT", "Compounded interest. Calculates the interest payment on the principal for an investment with regular payments and a constant interest rate for a given period."),
+    NC_("SC_OPCODE_IPMT", "Rate"),
+    NC_("SC_OPCODE_IPMT", "The rate of interest per period."),
+    NC_("SC_OPCODE_IPMT", "Period"),
+    NC_("SC_OPCODE_IPMT", "Periods. The periods for which the compounded interest is to be calculated. P = 1 denotes for the first period, P = NPER for the last one."),
+    NC_("SC_OPCODE_IPMT", "NPER"),
+    NC_("SC_OPCODE_IPMT", "Payment period. The total number of periods in which the annuity (pension) is paid."),
+    NC_("SC_OPCODE_IPMT", "pv"),
+    NC_("SC_OPCODE_IPMT", "Present value. The current value of a series of payments"),
+    NC_("SC_OPCODE_IPMT", "FV"),
+    NC_("SC_OPCODE_IPMT", "Future value. The value (end value) to be attained after the final payment."),
+    NC_("SC_OPCODE_IPMT", "Type"),
+    NC_("SC_OPCODE_IPMT", "Type = 1 denotes due at the beginning of the period, = 0 at the end.")
+};
+
+// -=*# Resource for function PPMT #*=-
+const char* SC_OPCODE_PPMT_ARY[] =
+{
+    NC_("SC_OPCODE_PPMT", "Repayment. Calculates the repayment amount for a period for an investment whereby the payments are at regular intervals and the interest rate constant."),
+    NC_("SC_OPCODE_PPMT", "Rate"),
+    NC_("SC_OPCODE_PPMT", "The interest rate per period."),
+    NC_("SC_OPCODE_PPMT", "Period"),
+    NC_("SC_OPCODE_PPMT", "Period. The period for which the repayments are to be calculated. Per = 1 denotes for the first period, P = NPER for the last"),
+    NC_("SC_OPCODE_PPMT", "NPER"),
+    NC_("SC_OPCODE_PPMT", "The payment period. The total number of periods in which the annuity (pension) is paid."),
+    NC_("SC_OPCODE_PPMT", "PV"),
+    NC_("SC_OPCODE_PPMT", "The present value. The present value or the amount the annuity is currently worth."),
+    NC_("SC_OPCODE_PPMT", "FV"),
+    NC_("SC_OPCODE_PPMT", "Future value. The value (end value) attained after the last payment has been made."),
+    NC_("SC_OPCODE_PPMT", "Type"),
+    NC_("SC_OPCODE_PPMT", "Type = 1 denotes due at the beginning of the period, = 0 at the end.")
+};
+
+// -=*# Resource for function CUMPRINC #*=-
+const char* SC_OPCODE_CUM_PRINC_ARY[] =
+{
+    NC_("SC_OPCODE_CUM_PRINC", "Cumulative Capital. Calculates the total amount of the repayment share in a period for an investment with constant interest rate."),
+    NC_("SC_OPCODE_CUM_PRINC", "Rate"),
+    NC_("SC_OPCODE_CUM_PRINC", "The rate of interest per period."),
+    NC_("SC_OPCODE_CUM_PRINC", "NPER"),
+    NC_("SC_OPCODE_CUM_PRINC", "Payment period. The total number of periods in which the annuity (pension) is paid."),
+    NC_("SC_OPCODE_CUM_PRINC", "PV"),
+    NC_("SC_OPCODE_CUM_PRINC", "The present value. The present value or the amount the annuity is currently worth."),
+    NC_("SC_OPCODE_CUM_PRINC", "S"),
+    NC_("SC_OPCODE_CUM_PRINC", "The start period. The first period to be taken into account. S = 1 denotes the very first period."),
+    NC_("SC_OPCODE_CUM_PRINC", "E"),
+    NC_("SC_OPCODE_CUM_PRINC", "End period. The last period to be taken into account."),
+    NC_("SC_OPCODE_CUM_PRINC", "Type"),
+    NC_("SC_OPCODE_CUM_PRINC", "Type = 1 denotes due at the beginning of the period, = 0 at the end.")
+};
+
+// -=*# Resource for function CUMIPMT #*=-
+const char* SC_OPCODE_CUM_IPMT_ARY[] =
+{
+    NC_("SC_OPCODE_CUM_IPMT", "Cumulative compounded interest. Calculates the total amount of the interest share in a period for an investment with a constant interest rate."),
+    NC_("SC_OPCODE_CUM_IPMT", "Rate"),
+    NC_("SC_OPCODE_CUM_IPMT", "The rate of interest per period."),
+    NC_("SC_OPCODE_CUM_IPMT", "NPER"),
+    NC_("SC_OPCODE_CUM_IPMT", "Payment period. The total number of periods in which the annuity (pension) is paid."),
+    NC_("SC_OPCODE_CUM_IPMT", "pv"),
+    NC_("SC_OPCODE_CUM_IPMT", "The present value. The present value or the amount the annuity is currently worth."),
+    NC_("SC_OPCODE_CUM_IPMT", "S"),
+    NC_("SC_OPCODE_CUM_IPMT", "The start period. The first period to be taken into account. S = 1 denotes the very first period."),
+    NC_("SC_OPCODE_CUM_IPMT", "E"),
+    NC_("SC_OPCODE_CUM_IPMT", "The end period. The last period to be taken into account."),
+    NC_("SC_OPCODE_CUM_IPMT", "Type"),
+    NC_("SC_OPCODE_CUM_IPMT", "Type = 1 denotes due at the beginning of the period, = 0 at the end.")
+};
+
+// -=*# Resource for function SYD #*=-
+const char* SC_OPCODE_SYD_ARY[] =
+{
+    NC_("SC_OPCODE_SYD", "Calculates the arithmetically declining value of an asset (depreciation) for a specified period."),
+    NC_("SC_OPCODE_SYD", "Cost"),
+    NC_("SC_OPCODE_SYD", "Acquisition costs. The initial cost of the asset."),
+    NC_("SC_OPCODE_SYD", "Salvage"),
+    NC_("SC_OPCODE_SYD", "Salvage: The remaining value of the asset at the end of its life."),
+    NC_("SC_OPCODE_SYD", "Life"),
+    NC_("SC_OPCODE_SYD", "Useful life. The number of periods in the useful life of the asset."),
+    NC_("SC_OPCODE_SYD", "Period"),
+    NC_("SC_OPCODE_SYD", "Period. The depreciation period which must have the same time unit as average useful life.")
+};
+
+// -=*# Resource for function SLN #*=-
+const char* SC_OPCODE_SLN_ARY[] =
+{
+    NC_("SC_OPCODE_SLN", "Calculates the linear depreciation per period."),
+    NC_("SC_OPCODE_SLN", "Cost"),
+    NC_("SC_OPCODE_SLN", "Acquisition cost. The initial cost of an asset."),
+    NC_("SC_OPCODE_SLN", "Salvage"),
+    NC_("SC_OPCODE_SLN", "Salvage: The remaining value of the asset at the end of its life."),
+    NC_("SC_OPCODE_SLN", "Life"),
+    NC_("SC_OPCODE_SLN", "Useful life. The number of periods in the useful life of the asset.")
+};
+
+// -=*# Resource for function DDB #*=-
+const char* SC_OPCODE_DDB_ARY[] =
+{
+    NC_("SC_OPCODE_DDB", "Calculates the depreciation of an asset for a specific period using the double-declining balance method or declining balance factor."),
+    NC_("SC_OPCODE_DDB", "Cost"),
+    NC_("SC_OPCODE_DDB", "Acquisition costs. The initial cost of the asset."),
+    NC_("SC_OPCODE_DDB", "Salvage"),
+    NC_("SC_OPCODE_DDB", "Salvage: The remaining value of the asset at the end of its life."),
+    NC_("SC_OPCODE_DDB", "Life"),
+    NC_("SC_OPCODE_DDB", "Useful life. The number of periods in the useful life of the asset."),
+    NC_("SC_OPCODE_DDB", "Period"),
+    NC_("SC_OPCODE_DDB", "Period. The depreciation period in the same time unit as the average useful life entry."),
+    NC_("SC_OPCODE_DDB", "Factor"),
+    NC_("SC_OPCODE_DDB", "Factor. The factor for balance decline. F = 2 means a double declining balance factor")
+};
+
+// -=*# Resource for function DB #*=-
+const char* SC_OPCODE_DB_ARY[] =
+{
+    NC_("SC_OPCODE_DB", "Returns the real depreciation of an asset for a specified period using the fixed-declining balance method."),
+    NC_("SC_OPCODE_DB", "Cost"),
+    NC_("SC_OPCODE_DB", "Acquisition costs: The initial cost of the asset."),
+    NC_("SC_OPCODE_DB", "Salvage"),
+    NC_("SC_OPCODE_DB", "Salvage: The remaining value of the asset at the end of its life."),
+    NC_("SC_OPCODE_DB", "Life"),
+    NC_("SC_OPCODE_DB", "Useful life. The number of periods in the useful life of the asset."),
+    NC_("SC_OPCODE_DB", "Period"),
+    NC_("SC_OPCODE_DB", "Periods: The period for which the depreciation is calculated. The time unit used for period must be the same as that for the useful life."),
+    NC_("SC_OPCODE_DB", "month"),
+    NC_("SC_OPCODE_DB", "Months: The number of months in the first year of depreciation.")
+};
+
+// -=*# Resource for function VDB #*=-
+const char* SC_OPCODE_VBD_ARY[] =
+{
+    NC_("SC_OPCODE_VBD", "Variable declining balance. Returns the declining balance depreciation for a particular period."),
+    NC_("SC_OPCODE_VBD", "Cost"),
+    NC_("SC_OPCODE_VBD", "Cost. The initial cost of the asset."),
+    NC_("SC_OPCODE_VBD", "Salvage"),
+    NC_("SC_OPCODE_VBD", "Salvage. The salvage value of an asset at the end of its useful life."),
+    NC_("SC_OPCODE_VBD", "Life"),
+    NC_("SC_OPCODE_VBD", "Useful life. The number of periods in the useful life of the asset."),
+    NC_("SC_OPCODE_VBD", "S"),
+    NC_("SC_OPCODE_VBD", "Start. The first period for depreciation in the same time unit as the useful life."),
+    NC_("SC_OPCODE_VBD", "end"),
+    NC_("SC_OPCODE_VBD", "End. The last period of the depreciation using the same time unit as for the useful life."),
+    NC_("SC_OPCODE_VBD", "Factor"),
+    NC_("SC_OPCODE_VBD", "Factor. The factor for the reduction of the depreciation. F = 2 denotes double rate depreciation."),
+    NC_("SC_OPCODE_VBD", "Type"),
+    NC_("SC_OPCODE_VBD", "Do not alter. Type = 1 denotes switch to linear depreciation, type = 0 do not switch.")
+};
+
+// -=*# Resource for function EFFECT #*=-
+const char* SC_OPCODE_EFFECT_ARY[] =
+{
+    NC_("SC_OPCODE_EFFECT", "Calculates the annual net interest rate for a nominal interest rate."),
+    NC_("SC_OPCODE_EFFECT", "NOM"),
+    NC_("SC_OPCODE_EFFECT", "Nominal Interest"),
+    NC_("SC_OPCODE_EFFECT", "P"),
+    NC_("SC_OPCODE_EFFECT", "Periods. The number of interest payments per year.")
+};
+
+// -=*# Resource for function NOMINAL #*=-
+const char* SC_OPCODE_NOMINAL_ARY[] =
+{
+    NC_("SC_OPCODE_NOMINAL", "Calculates the yearly nominal interest rate as an effective interest rate."),
+    NC_("SC_OPCODE_NOMINAL", "effect_rate"),
+    NC_("SC_OPCODE_NOMINAL", "The effective interest rate"),
+    NC_("SC_OPCODE_NOMINAL", "npery"),
+    NC_("SC_OPCODE_NOMINAL", "Periods. The number of interest payment per year.")
+};
+
+// -=*# Resource for function NPV #*=-
+const char* SC_OPCODE_NPV_ARY[] =
+{
+    NC_("SC_OPCODE_NPV", "Net present value. Calculates the net present value of an investment based on a series of periodic payments and a discount rate."),
+    NC_("SC_OPCODE_NPV", "RATE"),
+    NC_("SC_OPCODE_NPV", "The rate of discount for one period."),
+    NC_("SC_OPCODE_NPV", "value "),
+    NC_("SC_OPCODE_NPV", "Value 1, value 2,... are arguments representing payments and income.")
+};
+
+// -=*# Resource for function IRR #*=-
+const char* SC_OPCODE_IRR_ARY[] =
+{
+    NC_("SC_OPCODE_IRR", "Returns the actuarial rate of interest of an investment excluding costs or profits."),
+    NC_("SC_OPCODE_IRR", "Values"),
+    NC_("SC_OPCODE_IRR", "An array or reference to cells whose contents correspond to the payments."),
+    NC_("SC_OPCODE_IRR", "Guess"),
+    NC_("SC_OPCODE_IRR", "Guess. An estimated value of the rate of return to be used for the iteration calculation.")
+};
+
+// -=*# Resource for function MIRR #*=-
+const char* SC_OPCODE_MIRR_ARY[] =
+{
+    NC_("SC_OPCODE_MIRR", "Returns the modified internal rate of return for a series of investments."),
+    NC_("SC_OPCODE_MIRR", "Values"),
+    NC_("SC_OPCODE_MIRR", "An array or reference to cells whose contents correspond to the payments."),
+    NC_("SC_OPCODE_MIRR", "investment"),
+    NC_("SC_OPCODE_MIRR", "Interest rate for investments (the negative values in the array)."),
+    NC_("SC_OPCODE_MIRR", "reinvest_rate"),
+    NC_("SC_OPCODE_MIRR", "interest rate for reinvestments (the positive values in the array).")
+};
+
+// -=*# Resource for function ISPMT #*=-
+const char* SC_OPCODE_ISPMT_ARY[] =
+{
+    NC_("SC_OPCODE_ISPMT", "Returns the amount of interest for constant amortization rates."),
+    NC_("SC_OPCODE_ISPMT", "rate"),
+    NC_("SC_OPCODE_ISPMT", "Interest rate for a single amortization rate."),
+    NC_("SC_OPCODE_ISPMT", "Period"),
+    NC_("SC_OPCODE_ISPMT", "Number of amortization periods for the calculation of the interest."),
+    NC_("SC_OPCODE_ISPMT", "total_periods"),
+    NC_("SC_OPCODE_ISPMT", "Sum total of amortization periods."),
+    NC_("SC_OPCODE_ISPMT", "invest"),
+    NC_("SC_OPCODE_ISPMT", "Amount of the investment.")
+};
+
+// -=*# Resource for function PDURATION #*=-
+const char* SC_OPCODE_PDURATION_ARY[] =
+{
+    NC_("SC_OPCODE_PDURATION", "Duration. Calculates the number of periods required by an investment to attain the desired value."),
+    NC_("SC_OPCODE_PDURATION", "RATE"),
+    NC_("SC_OPCODE_PDURATION", "The constant rate of interest."),
+    NC_("SC_OPCODE_PDURATION", "pv"),
+    NC_("SC_OPCODE_PDURATION", "The present value. The current value of the investment."),
+    NC_("SC_OPCODE_PDURATION", "FV"),
+    NC_("SC_OPCODE_PDURATION", "The future value of the investment.")
+};
+
+// -=*# Resource for function RRI #*=-
+const char* SC_OPCODE_RRI_ARY[] =
+{
+    NC_("SC_OPCODE_RRI", "Interest. Calculates the interest rate which represents the rate of return from an investment."),
+    NC_("SC_OPCODE_RRI", "P"),
+    NC_("SC_OPCODE_RRI", "The number of periods used in the calculation."),
+    NC_("SC_OPCODE_RRI", "pv"),
+    NC_("SC_OPCODE_RRI", "Present value. The current value of the investment."),
+    NC_("SC_OPCODE_RRI", "FV"),
+    NC_("SC_OPCODE_RRI", "The future value of the investment.")
+};
+
+// -=*# Resource for function ISREF #*=-
+const char* SC_OPCODE_IS_REF_ARY[] =
+{
+    NC_("SC_OPCODE_IS_REF", "Returns TRUE if value is a reference."),
+    NC_("SC_OPCODE_IS_REF", "value"),
+    NC_("SC_OPCODE_IS_REF", "The value to be tested.")
+};
+
+// -=*# Resource for function ISERR #*=-
+const char* SC_OPCODE_IS_ERR_ARY[] =
+{
+    NC_("SC_OPCODE_IS_ERR", "Returns TRUE if the value is an error value not equal to #N/A."),
+    NC_("SC_OPCODE_IS_ERR", "value"),
+    NC_("SC_OPCODE_IS_ERR", "The value to be tested.")
+};
+
+// -=*# Resource for function ISERROR #*=-
+const char* SC_OPCODE_IS_ERROR_ARY[] =
+{
+    NC_("SC_OPCODE_IS_ERROR", "Returns TRUE if the value is an error value."),
+    NC_("SC_OPCODE_IS_ERROR", "value"),
+    NC_("SC_OPCODE_IS_ERROR", "The value to be tested.")
+};
+
+// -=*# Resource for function ISBLANK #*=-
+const char* SC_OPCODE_IS_EMPTY_ARY[] =
+{
+    NC_("SC_OPCODE_IS_EMPTY", "Returns TRUE if value refers to an empty cell."),
+    NC_("SC_OPCODE_IS_EMPTY", "value"),
+    NC_("SC_OPCODE_IS_EMPTY", "The value to be tested.")
+};
+
+// -=*# Resource for function ISLOGICAL #*=-
+const char* SC_OPCODE_IS_LOGICAL_ARY[] =
+{
+    NC_("SC_OPCODE_IS_LOGICAL", "Returns TRUE if the value carries a logical number format."),
+    NC_("SC_OPCODE_IS_LOGICAL", "value"),
+    NC_("SC_OPCODE_IS_LOGICAL", "The value to be tested.")
+};
+
+// -=*# Resource for function ISNA #*=-
+const char* SC_OPCODE_IS_NV_ARY[] =
+{
+    NC_("SC_OPCODE_IS_NV", "Returns TRUE if value equals #N/A."),
+    NC_("SC_OPCODE_IS_NV", "value"),
+    NC_("SC_OPCODE_IS_NV", "The value to be tested.")
+};
+
+// -=*# Resource for function ISNONTEXT #*=-
+const char* SC_OPCODE_IS_NON_STRING_ARY[] =
+{
+    NC_("SC_OPCODE_IS_NON_STRING", "Returns TRUE if the value is not text."),
+    NC_("SC_OPCODE_IS_NON_STRING", "value"),
+    NC_("SC_OPCODE_IS_NON_STRING", "The value to be tested.")
+};
+
+// -=*# Resource for function ISTEXT #*=-
+const char* SC_OPCODE_IS_STRING_ARY[] =
+{
+    NC_("SC_OPCODE_IS_STRING", "Returns TRUE if value is text."),
+    NC_("SC_OPCODE_IS_STRING", "value"),
+    NC_("SC_OPCODE_IS_STRING", "The value to be tested.")
+};
+
+// -=*# Resource for function ISNUMBER #*=-
+const char* SC_OPCODE_IS_VALUE_ARY[] =
+{
+    NC_("SC_OPCODE_IS_VALUE", "Returns TRUE if value is a number."),
+    NC_("SC_OPCODE_IS_VALUE", "value"),
+    NC_("SC_OPCODE_IS_VALUE", "The value to be tested.")
+};
+
+// -=*# Resource for function ISFORMULA #*=-
+const char* SC_OPCODE_IS_FORMULA_ARY[] =
+{
+    NC_("SC_OPCODE_IS_FORMULA", "Returns TRUE if the cell is a formula cell."),
+    NC_("SC_OPCODE_IS_FORMULA", "reference"),
+    NC_("SC_OPCODE_IS_FORMULA", "The cell to be checked.")
+};
+
+// -=*# Resource for function FORMULA #*=-
+const char* SC_OPCODE_FORMULA_ARY[] =
+{
+    NC_("SC_OPCODE_FORMULA", "Returns the formula of a formula cell."),
+    NC_("SC_OPCODE_FORMULA", "Reference"),
+    NC_("SC_OPCODE_FORMULA", "The formula cell.")
+};
+
+// -=*# Resource for function N #*=-
+const char* SC_OPCODE_N_ARY[] =
+{
+    NC_("SC_OPCODE_N", "Converts a value to a number."),
+    NC_("SC_OPCODE_N", "value"),
+    NC_("SC_OPCODE_N", "The value to be interpreted as a number.")
+};
+
+// -=*# Resource for function NA #*=-
+const char* SC_OPCODE_NO_VALUE_ARY[] =
+{
+    NC_("SC_OPCODE_NO_VALUE", "Not available. Returns the error value #N/A.")
+};
+
+// -=*# Resource for function TYPE #*=-
+const char* SC_OPCODE_TYPE_ARY[] =
+{
+    NC_("SC_OPCODE_TYPE", "Returns the data type of a value (1 = number, 2 = text, 4 = Boolean value, 8 = formula, 16 = error value, 64 = array)."),
+    NC_("SC_OPCODE_TYPE", "value"),
+    NC_("SC_OPCODE_TYPE", "The value for which the data type is to be determined.")
+};
+
+// -=*# Resource for function CELL #*=-
+const char* SC_OPCODE_CELL_ARY[] =
+{
+    NC_("SC_OPCODE_CELL", "Determines information about address, formatting or contents of a cell."),
+    NC_("SC_OPCODE_CELL", "info_type"),
+    NC_("SC_OPCODE_CELL", "String that specifies the type of information."),
+    NC_("SC_OPCODE_CELL", "Reference"),
+    NC_("SC_OPCODE_CELL", "The position of the cell you want to examine.")
+};
+
+// -=*# Resource for function CURRENT #*=-
+const char* SC_OPCODE_CURRENT_ARY[] =
+{
+    NC_("SC_OPCODE_CURRENT", "Calculates the current value of the formula at the present location.")
+};
+
+// -=*# Resource for function FALSE #*=-
+const char* SC_OPCODE_FALSE_ARY[] =
+{
+    NC_("SC_OPCODE_FALSE", "Defines the logical value as FALSE.")
+};
+
+// -=*# Resource for function NOT #*=-
+const char* SC_OPCODE_NOT_ARY[] =
+{
+    NC_("SC_OPCODE_NOT", "Reverses the value of the argument."),
+    NC_("SC_OPCODE_NOT", "Logical value"),
+    NC_("SC_OPCODE_NOT", "An expression that can be either TRUE or FALSE.")
+};
+
+// -=*# Resource for function TRUE #*=-
+const char* SC_OPCODE_TRUE_ARY[] =
+{
+    NC_("SC_OPCODE_TRUE", "Returns the logical value TRUE.")
+};
+
+// -=*# Resource for function IF #*=-
+const char* SC_OPCODE_IF_ARY[] =
+{
+    NC_("SC_OPCODE_IF", "Specifies a logical test to be performed."),
+    NC_("SC_OPCODE_IF", "Test"),
+    NC_("SC_OPCODE_IF", "Any value or expression which can be either TRUE or FALSE."),
+    NC_("SC_OPCODE_IF", "Then_value"),
+    NC_("SC_OPCODE_IF", "The result of the function if the logical test returns a TRUE."),
+    NC_("SC_OPCODE_IF", "Otherwise_value"),
+    NC_("SC_OPCODE_IF", "The result of the function if the logical test returns FALSE.")
+};
+
+// -=*# Resource for function IFERROR #*=-
+const char* SC_OPCODE_IF_ERROR_ARY[] =
+{
+    NC_("SC_OPCODE_IF_ERROR", "Returns value if not an error value, else alternative."),
+    NC_("SC_OPCODE_IF_ERROR", "value"),
+    NC_("SC_OPCODE_IF_ERROR", "The value to be calculated."),
+    NC_("SC_OPCODE_IF_ERROR", "alternative value"),
+    NC_("SC_OPCODE_IF_ERROR", "The alternative to be returned, should value be an error value.")
+};
+
+// -=*# Resource for function IFNA #*=-
+const char* SC_OPCODE_IF_NA_ARY[] =
+{
+    NC_("SC_OPCODE_IF_NA", "Returns value if not a #N/A error, else alternative."),
+    NC_("SC_OPCODE_IF_NA", "value"),
+    NC_("SC_OPCODE_IF_NA", "The value to be calculated."),
+    NC_("SC_OPCODE_IF_NA", "alternative value"),
+    NC_("SC_OPCODE_IF_NA", "The alternative to be returned, should value be a #N/A error.")
+};
+
+// -=*# Resource for function OR #*=-
+const char* SC_OPCODE_OR_ARY[] =
+{
+    NC_("SC_OPCODE_OR", "Returns TRUE if an argument is TRUE."),
+    NC_("SC_OPCODE_OR", "Logical value "),
+    NC_("SC_OPCODE_OR", "Logical value 1, logical value 2,... are conditions to be tested and which return either TRUE or FALSE.")
+};
+
+// -=*# Resource for function XOR #*=-
+const char* SC_OPCODE_XOR_ARY[] =
+{
+    NC_("SC_OPCODE_XOR", "Returns TRUE if an odd number of arguments evaluates to TRUE."),
+    NC_("SC_OPCODE_XOR", "Logical value "),
+    NC_("SC_OPCODE_XOR", "Logical value 1, logical value 2, ... are conditions to be tested and which return either TRUE or FALSE.")
+};
+
+// -=*# Resource for function AND #*=-
+const char* SC_OPCODE_AND_ARY[] =
+{
+    NC_("SC_OPCODE_AND", "Returns TRUE if all arguments are TRUE."),
+    NC_("SC_OPCODE_AND", "Logical value "),
+    NC_("SC_OPCODE_AND", "Logical value 1, logical value 2;...are conditions to be tested and each returns either TRUE or FALSE.")
+};
+
+// -=*# Resource for function ABS #*=-
+const char* SC_OPCODE_ABS_ARY[] =
+{
+    NC_("SC_OPCODE_ABS", "Absolute value of a number."),
+    NC_("SC_OPCODE_ABS", "Number"),
+    NC_("SC_OPCODE_ABS", "The number whose absolute value is to be returned.")
+};
+
+// -=*# Resource for function POWER #*=-
+const char* SC_OPCODE_POWER_ARY[] =
+{
+    NC_("SC_OPCODE_POWER", "Returns a^b, base a raised to the power of exponent b."),
+    NC_("SC_OPCODE_POWER", "Base"),
+    NC_("SC_OPCODE_POWER", "The base a of the power a^b."),
+    NC_("SC_OPCODE_POWER", "Exponent"),
+    NC_("SC_OPCODE_POWER", "The exponent b of the power a^b.")
+};
+
+// -=*# Resource for function COUNTBLANK #*=-
+const char* SC_OPCODE_COUNT_EMPTY_CELLS_ARY[] =
+{
+    NC_("SC_OPCODE_COUNT_EMPTY_CELLS", "Counts the blank cells in a specified range."),
+    NC_("SC_OPCODE_COUNT_EMPTY_CELLS", "range"),
+    NC_("SC_OPCODE_COUNT_EMPTY_CELLS", "The range in which empty cells are to be counted.")
+};
+
+// -=*# Resource for function PI #*=-
+const char* SC_OPCODE_PI_ARY[] =
+{
+    NC_("SC_OPCODE_PI", "Returns the value of the number Pi.")
+};
+
+// -=*# Resource for function SUM #*=-
+const char* SC_OPCODE_SUM_ARY[] =
+{
+    NC_("SC_OPCODE_SUM", "Returns the sum of all arguments."),
+    NC_("SC_OPCODE_SUM", "number "),
+    NC_("SC_OPCODE_SUM", "Number 1, number 2, ... are arguments whose total is to be calculated.")
+};
+
+// -=*# Resource for function SUMSQ #*=-
+const char* SC_OPCODE_SUM_SQ_ARY[] =
+{
+    NC_("SC_OPCODE_SUM_SQ", "Returns the sum of the squares of the arguments."),
+    NC_("SC_OPCODE_SUM_SQ", "number "),
+    NC_("SC_OPCODE_SUM_SQ", "Number 1, number 2,... are arguments for which the sum of the squares is to be calculated.")
+};
+
+// -=*# Resource for function PRODUCT #*=-
+const char* SC_OPCODE_PRODUCT_ARY[] =
+{
+    NC_("SC_OPCODE_PRODUCT", "Multiplies the arguments."),
+    NC_("SC_OPCODE_PRODUCT", "Number "),
+    NC_("SC_OPCODE_PRODUCT", "Number 1, number 2, ... are arguments to be multiplied and a result returned.")
+};
+
+// -=*# Resource for function SUMIF #*=-
+const char* SC_OPCODE_SUM_IF_ARY[] =
+{
+    NC_("SC_OPCODE_SUM_IF", "Totals the arguments that meet the condition."),
+    NC_("SC_OPCODE_SUM_IF", "range"),
+    NC_("SC_OPCODE_SUM_IF", "The range to be evaluated by the criteria given."),
+    NC_("SC_OPCODE_SUM_IF", "criteria"),
+    NC_("SC_OPCODE_SUM_IF", "The criteria to be applied to the range."),
+    NC_("SC_OPCODE_SUM_IF", "sum_range"),
+    NC_("SC_OPCODE_SUM_IF", "The range from which the values are to be totalled.")
+};
+
+// -=*# Resource for function AVERAGEIF #*=-
+const char* SC_OPCODE_AVERAGE_IF_ARY[] =
+{
+    NC_("SC_OPCODE_AVERAGE_IF", "Averages the arguments that meet the conditions."),
+    NC_("SC_OPCODE_AVERAGE_IF", "range"),
+    NC_("SC_OPCODE_AVERAGE_IF", "The range to be evaluated by the criteria given."),
+    NC_("SC_OPCODE_AVERAGE_IF", "criteria"),
+    NC_("SC_OPCODE_AVERAGE_IF", "The criteria to be applied to the range."),
+    NC_("SC_OPCODE_AVERAGE_IF", "average_range"),
+    NC_("SC_OPCODE_AVERAGE_IF", "The range from which the values are to be averaged.")
+};
+
+const char* SC_OPCODE_SUM_IFS_ARY[] =
+{
+    NC_("SC_OPCODE_SUM_IFS", "Totals the values of cells in a range that meet multiple criteria in multiple ranges."),
+    NC_("SC_OPCODE_SUM_IFS", "sum_range"),
+    NC_("SC_OPCODE_SUM_IFS", "The range from which the values are to be totalled."),
+    NC_("SC_OPCODE_SUM_IFS", "range "),
+    NC_("SC_OPCODE_SUM_IFS", "Range 1, range 2,... are the ranges to be evaluated by the criteria given."),
+    NC_("SC_OPCODE_SUM_IFS", "criteria "),
+    NC_("SC_OPCODE_SUM_IFS", "Criteria 1, criteria 2,... are the criteria to be applied to the ranges given.")
+};
+
+// -=*# Resource for function AVERAGEIFS #*=-
+const char* SC_OPCODE_AVERAGE_IFS_ARY[] =
+{
+    NC_("SC_OPCODE_AVERAGE_IFS", "Averages the value of the cells that meet multiple criteria in multiple ranges."),
+    NC_("SC_OPCODE_AVERAGE_IFS", "average_range"),
+    NC_("SC_OPCODE_AVERAGE_IFS", "The range from which the values are to be averaged."),
+    NC_("SC_OPCODE_AVERAGE_IFS", "range "),
+    NC_("SC_OPCODE_AVERAGE_IFS", "Range 1, range 2,... are the ranges to be evaluated by the criteria given."),
+    NC_("SC_OPCODE_AVERAGE_IFS", "criteria "),
+    NC_("SC_OPCODE_AVERAGE_IFS", "Criteria 1, criteria 2,... are the criteria to be applied to the ranges given.")
+};
+
+// -=*# Resource for function COUNTIFS #*=-
+const char* SC_OPCODE_COUNT_IFS_ARY[] =
+{
+    NC_("SC_OPCODE_COUNT_IFS", "Counts the cells that meet multiple criteria in multiple ranges."),
+    NC_("SC_OPCODE_COUNT_IFS", "range "),
+    NC_("SC_OPCODE_COUNT_IFS", "Range 1, range 2,... are the ranges to be evaluated by the criteria given."),
+    NC_("SC_OPCODE_COUNT_IFS", "criteria "),
+    NC_("SC_OPCODE_COUNT_IFS", "Criteria 1, criteria 2,... are the criteria to be applied to the ranges given.")
+};
+
+// -=*# Resource for function COUNTIF #*=-
+const char* SC_OPCODE_COUNT_IF_ARY[] =
+{
+    NC_("SC_OPCODE_COUNT_IF", "Counts the arguments which meet the set conditions."),
+    NC_("SC_OPCODE_COUNT_IF", "range"),
+    NC_("SC_OPCODE_COUNT_IF", "The range of cells to be evaluated by the criteria given."),
+    NC_("SC_OPCODE_COUNT_IF", "criteria"),
+    NC_("SC_OPCODE_COUNT_IF", "The criteria to be applied to the range.")
+};
+
+// -=*# Resource for function SQRT #*=-
+const char* SC_OPCODE_SQRT_ARY[] =
+{
+    NC_("SC_OPCODE_SQRT", "Returns the square root of a number."),
+    NC_("SC_OPCODE_SQRT", "number"),
+    NC_("SC_OPCODE_SQRT", "A positive value for which the square root is to be calculated.")
+};
+
+// -=*# Resource for function RAND #*=-
+const char* SC_OPCODE_RANDOM_ARY[] =
+{
+    NC_("SC_OPCODE_RANDOM", "Returns a random number between 0 and 1.")
+};
+
+// -=*# Resource for function ISEVEN #*=-
+const char* SC_OPCODE_IS_EVEN_ARY[] =
+{
+    NC_("SC_OPCODE_IS_EVEN", "Returns TRUE if value is an even integer."),
+    NC_("SC_OPCODE_IS_EVEN", "value"),
+    NC_("SC_OPCODE_IS_EVEN", "The value to be tested.")
+};
+
+// -=*# Resource for function ISODD #*=-
+const char* SC_OPCODE_IS_ODD_ARY[] =
+{
+    NC_("SC_OPCODE_IS_ODD", "Returns TRUE if value is an odd integer."),
+    NC_("SC_OPCODE_IS_ODD", "value"),
+    NC_("SC_OPCODE_IS_ODD", "The value to be tested.")
+};
+
+// -=*# Resource for function COMBIN #*=-
+const char* SC_OPCODE_COMBIN_ARY[] =
+{
+    NC_("SC_OPCODE_COMBIN", "Calculates the number of combinations for elements without repetition."),
+    NC_("SC_OPCODE_COMBIN", "number_1"),
+    NC_("SC_OPCODE_COMBIN", "The total number of elements."),
+    NC_("SC_OPCODE_COMBIN", "number_2"),
+    NC_("SC_OPCODE_COMBIN", "The number of elements selected.")
+};
+
+// -=*# Resource for function COMBINA #*=-
+const char* SC_OPCODE_COMBIN_A_ARY[] =
+{
+    NC_("SC_OPCODE_COMBIN_A", "Calculates the number of combinations of elements including repetition."),
+    NC_("SC_OPCODE_COMBIN_A", "number_1"),
+    NC_("SC_OPCODE_COMBIN_A", "The total number of elements."),
+    NC_("SC_OPCODE_COMBIN_A", "number_2"),
+    NC_("SC_OPCODE_COMBIN_A", "The number of elements selected.")
+};
+
+// -=*# Resource for function ARCCOS #*=-
+const char* SC_OPCODE_ARC_COS_ARY[] =
+{
+    NC_("SC_OPCODE_ARC_COS", "Returns the arccosine of a number."),
+    NC_("SC_OPCODE_ARC_COS", "Number"),
+    NC_("SC_OPCODE_ARC_COS", "A value between -1 and 1 for which the arccosine is to be returned.")
+};
+
+// -=*# Resource for function ARCSIN #*=-
+const char* SC_OPCODE_ARC_SIN_ARY[] =
+{
+    NC_("SC_OPCODE_ARC_SIN", "Returns the arcsine of a number."),
+    NC_("SC_OPCODE_ARC_SIN", "Number"),
+    NC_("SC_OPCODE_ARC_SIN", "A value between -1 and 1 for which the arcsine is to be returned.")
+};
+
+// -=*# Resource for function ARCCOSHYP #*=-
+const char* SC_OPCODE_ARC_COS_HYP_ARY[] =
+{
+    NC_("SC_OPCODE_ARC_COS_HYP", "Returns the inverse hyperbolic cosine of a number."),
+    NC_("SC_OPCODE_ARC_COS_HYP", "Number"),
+    NC_("SC_OPCODE_ARC_COS_HYP", "A value greater than or equal to 1 for which the inverse hyperbolic cosine is to be returned.")
+};
+
+// -=*# Resource for function ARCSINHYP #*=-
+const char* SC_OPCODE_ARC_SIN_HYP_ARY[] =
+{
+    NC_("SC_OPCODE_ARC_SIN_HYP", "Returns the inverse hyperbolic sine of a number."),
+    NC_("SC_OPCODE_ARC_SIN_HYP", "Number"),
+    NC_("SC_OPCODE_ARC_SIN_HYP", "The value for which the inverse hyperbolic sine is to be returned.")
+};
+
+// -=*# Resource for function ARCCOT #*=-
+const char* SC_OPCODE_ARC_COT_ARY[] =
+{
+    NC_("SC_OPCODE_ARC_COT", "Returns the inverse cotangent of a number."),
+    NC_("SC_OPCODE_ARC_COT", "Number"),
+    NC_("SC_OPCODE_ARC_COT", "The value for which the inverse cotangent is to be returned.")
+};
+
+// -=*# Resource for function ARCTAN #*=-
+const char* SC_OPCODE_ARC_TAN_ARY[] =
+{
+    NC_("SC_OPCODE_ARC_TAN", "Returns the arctangent of a number."),
+    NC_("SC_OPCODE_ARC_TAN", "Number"),
+    NC_("SC_OPCODE_ARC_TAN", "The value for which the arctangent is to be returned.")
+};
+
+// -=*# Resource for function ARCCOTHYP #*=-
+const char* SC_OPCODE_ARC_COT_HYP_ARY[] =
+{
+    NC_("SC_OPCODE_ARC_COT_HYP", "Returns the inverse hyperbolic cotangent of a number."),
+    NC_("SC_OPCODE_ARC_COT_HYP", "Number"),
+    NC_("SC_OPCODE_ARC_COT_HYP", "A value smaller than -1 or greater than 1 for which the inverse hyperbolic cotangent is to be returned.")
+};
+
+// -=*# Resource for function ARCTANHYP #*=-
+const char* SC_OPCODE_ARC_TAN_HYP_ARY[] =
+{
+    NC_("SC_OPCODE_ARC_TAN_HYP", "Returns the inverse hyperbolic tangent of a number."),
+    NC_("SC_OPCODE_ARC_TAN_HYP", "Number"),
+    NC_("SC_OPCODE_ARC_TAN_HYP", "A value between -1 and 1 for which the inverse hyperbolic tangent is to be returned.")
+};
+
+// -=*# Resource for function COS #*=-
+const char* SC_OPCODE_COS_ARY[] =
+{
+    NC_("SC_OPCODE_COS", "Returns the cosine of a number."),
+    NC_("SC_OPCODE_COS", "Number"),
+    NC_("SC_OPCODE_COS", "The angle in the radians for which the cosine is to be returned.")
+};
+
+// -=*# Resource for function SIN #*=-
+const char* SC_OPCODE_SIN_ARY[] =
+{
+    NC_("SC_OPCODE_SIN", "Returns the sine of a number."),
+    NC_("SC_OPCODE_SIN", "number"),
+    NC_("SC_OPCODE_SIN", "The angle in radians for which the sine is to be calculated.")
+};
+
+// -=*# Resource for function COT #*=-
+const char* SC_OPCODE_COT_ARY[] =
+{
+    NC_("SC_OPCODE_COT", "Returns the cotangent of a number."),
+    NC_("SC_OPCODE_COT", "Number"),
+    NC_("SC_OPCODE_COT", "The angle in radians whose cotangent value is to be returned.")
+};
+
+// -=*# Resource for function TAN #*=-
+const char* SC_OPCODE_TAN_ARY[] =
+{
+    NC_("SC_OPCODE_TAN", "Returns the tangent of a number."),
+    NC_("SC_OPCODE_TAN", "number"),
+    NC_("SC_OPCODE_TAN", "The angle in radians for which the tangent is to be calculated.")
+};
+
+// -=*# Resource for function COSHYP #*=-
+const char* SC_OPCODE_COS_HYP_ARY[] =
+{
+    NC_("SC_OPCODE_COS_HYP", "Returns the hyperbolic cosine of a number."),
+    NC_("SC_OPCODE_COS_HYP", "Number"),
+    NC_("SC_OPCODE_COS_HYP", "The value for which the hyperbolic cosine is to be returned.")
+};
+
+// -=*# Resource for function SINHYP #*=-
+const char* SC_OPCODE_SIN_HYP_ARY[] =
+{
+    NC_("SC_OPCODE_SIN_HYP", "Returns the hyperbolic sine of a number."),
+    NC_("SC_OPCODE_SIN_HYP", "number"),
+    NC_("SC_OPCODE_SIN_HYP", "The value for which the hyperbolic sine is to be calculated.")
+};
+
+// -=*# Resource for function COTHYP #*=-
+const char* SC_OPCODE_COT_HYP_ARY[] =
+{
+    NC_("SC_OPCODE_COT_HYP", "Returns the hyperbolic cotangent of a number."),
+    NC_("SC_OPCODE_COT_HYP", "Number"),
+    NC_("SC_OPCODE_COT_HYP", "A value not equal to 0 for which the hyperbolic cotangent is to be returned.")
+};
+
+// -=*# Resource for function TANHYP #*=-
+const char* SC_OPCODE_TAN_HYP_ARY[] =
+{
+    NC_("SC_OPCODE_TAN_HYP", "Returns the hyperbolic tangent of a number."),
+    NC_("SC_OPCODE_TAN_HYP", "number"),
+    NC_("SC_OPCODE_TAN_HYP", "The value for which the hyperbolic tangent is to be calculated.")
+};
+
+// -=*# Resource for function ARCTAN2 #*=-
+const char* SC_OPCODE_ARC_TAN_2_ARY[] =
+{
+    NC_("SC_OPCODE_ARC_TAN_2", "Returns the arctangent for the specified coordinates."),
+    NC_("SC_OPCODE_ARC_TAN_2", "number_x"),
+    NC_("SC_OPCODE_ARC_TAN_2", "The value for the x coordinate."),
+    NC_("SC_OPCODE_ARC_TAN_2", "number_y"),
+    NC_("SC_OPCODE_ARC_TAN_2", "The value for the y coordinate.")
+};
+
+// -=*# Resource for function CSC #*=-
+const char* SC_OPCODE_COSECANT_ARY[] =
+{
+    NC_("SC_OPCODE_COSECANT", "Return the cosecant of an angle. CSC(x)=1/SIN(x)"),
+    NC_("SC_OPCODE_COSECANT", "Angle"),
+    NC_("SC_OPCODE_COSECANT", "The angle in radians for which the cosecant is to be calculated.")
+};
+
+// -=*# Resource for function SEC #*=-
+const char* SC_OPCODE_SECANT_ARY[] =
+{
+    NC_("SC_OPCODE_SECANT", "Return the secant of an angle. SEC(x)=1/COS(x)"),
+    NC_("SC_OPCODE_SECANT", "Angle"),
+    NC_("SC_OPCODE_SECANT", "The angle in radians for which the secant is to be calculated.")
+};
+
+// -=*# Resource for function CSCH #*=-
+const char* SC_OPCODE_COSECANT_HYP_ARY[] =
+{
+    NC_("SC_OPCODE_COSECANT_HYP", "Return the hyperbolic cosecant of a hyperbolic angle. CSCH(x)=1/SINH(x)"),
+    NC_("SC_OPCODE_COSECANT_HYP", "Angle"),
+    NC_("SC_OPCODE_COSECANT_HYP", "The hyperbolic angle in radians for which the hyperbolic cosecant is to be calculated.")
+};
+
+// -=*# Resource for function SECH #*=-
+const char* SC_OPCODE_SECANT_HYP_ARY[] =
+{
+    NC_("SC_OPCODE_SECANT_HYP", "Return the hyperbolic secant of a hyperbolic angle. SECH(x)=1/COSH(x)"),
+    NC_("SC_OPCODE_SECANT_HYP", "Angle"),
+    NC_("SC_OPCODE_SECANT_HYP", "The hyperbolic angle in radians for which the hyperbolic secant is to be calculated.")
+};
+
+// -=*# Resource for function DEG #*=-
+const char* SC_OPCODE_DEG_ARY[] =
+{
+    NC_("SC_OPCODE_DEG", "Converts a radian to degrees"),
+    NC_("SC_OPCODE_DEG", "Number"),
+    NC_("SC_OPCODE_DEG", "The angle in a radian")
+};
+
+// -=*# Resource for function RAD #*=-
+const char* SC_OPCODE_RAD_ARY[] =
+{
+    NC_("SC_OPCODE_RAD", "Converts degrees to radians"),
+    NC_("SC_OPCODE_RAD", "Number"),
+    NC_("SC_OPCODE_RAD", "The angle in degrees.")
+};
+
+// -=*# Resource for function EXP #*=-
+const char* SC_OPCODE_EXP_ARY[] =
+{
+    NC_("SC_OPCODE_EXP", "Calculates the exponent for basis e."),
+    NC_("SC_OPCODE_EXP", "Number"),
+    NC_("SC_OPCODE_EXP", "The exponent applied to base e.")
+};
+
+// -=*# Resource for function LOG #*=-
+const char* SC_OPCODE_LOG_ARY[] =
+{
+    NC_("SC_OPCODE_LOG", "Calculates the logarithm to any specified base."),
+    NC_("SC_OPCODE_LOG", "Number"),
+    NC_("SC_OPCODE_LOG", "A value greater than 0 for which the logarithm is to be calculated."),
+    NC_("SC_OPCODE_LOG", "Base"),
+    NC_("SC_OPCODE_LOG", "The base of the logarithm. If omitted, the base is regarded as 10.")
+};
+
+// -=*# Resource for function LN #*=-
+const char* SC_OPCODE_LN_ARY[] =
+{
+    NC_("SC_OPCODE_LN", "Calculates the natural logarithm of a number."),
+    NC_("SC_OPCODE_LN", "Number"),
+    NC_("SC_OPCODE_LN", "A value greater than 0 for which the natural logarithm is to be calculated.")
+};
+
+// -=*# Resource for function LOG10 #*=-
+const char* SC_OPCODE_LOG10_ARY[] =
+{
+    NC_("SC_OPCODE_LOG10", "Calculates the base-10 logarithm of a number."),
+    NC_("SC_OPCODE_LOG10", "Number"),
+    NC_("SC_OPCODE_LOG10", "A value greater than 0 for which the logarithm is to be calculated.")
+};
+
+// -=*# Resource for function FACT #*=-
+const char* SC_OPCODE_FACT_ARY[] =
+{
+    NC_("SC_OPCODE_FACT", "Calculates the factorial of a number."),
+    NC_("SC_OPCODE_FACT", "Number"),
+    NC_("SC_OPCODE_FACT", "The number for which the factorial is to be calculated.")
+};
+
+// -=*# Resource for function MOD #*=-
+const char* SC_OPCODE_MOD_ARY[] =
+{
+    NC_("SC_OPCODE_MOD", "Calculates the remainder of a division."),
+    NC_("SC_OPCODE_MOD", "Dividend"),
+    NC_("SC_OPCODE_MOD", "The number to be divided."),
+    NC_("SC_OPCODE_MOD", "Divisor"),
+    NC_("SC_OPCODE_MOD", "The number by which the dividend is divided.")
+};
+
+// -=*# Resource for function SIGN #*=-
+const char* SC_OPCODE_PLUS_MINUS_ARY[] =
+{
+    NC_("SC_OPCODE_PLUS_MINUS", "Returns the algebraic sign of a number."),
+    NC_("SC_OPCODE_PLUS_MINUS", "Number"),
+    NC_("SC_OPCODE_PLUS_MINUS", "The number for which the algebraic sign is to be determined.")
+};
+
+// -=*# Resource for function SUBTOTAL #*=-
+const char* SC_OPCODE_SUB_TOTAL_ARY[] =
+{
+    NC_("SC_OPCODE_SUB_TOTAL", "Calculates subtotals in a spreadsheet."),
+    NC_("SC_OPCODE_SUB_TOTAL", "Function"),
+    NC_("SC_OPCODE_SUB_TOTAL", "Function index. Is an index of the possible functions Total, Max, ..."),
+    NC_("SC_OPCODE_SUB_TOTAL", "range"),
+    NC_("SC_OPCODE_SUB_TOTAL", "The cells of the range which are to be taken into account.")
+};
+
+// -=*# Resource for function AGGREGATE #*=-
+const char* SC_OPCODE_AGGREGATE_ARY[] =
+{
+    NC_("SC_OPCODE_AGGREGATE", "Calculates an aggregate in a spreadsheet."),
+    NC_("SC_OPCODE_AGGREGATE", "Function"),
+    NC_("SC_OPCODE_AGGREGATE", "Function index. Is an index of the possible functions Total, Max, ..."),
+    NC_("SC_OPCODE_AGGREGATE", "Options"),
+    NC_("SC_OPCODE_AGGREGATE", "Option index. Is an index of the possible ignore options."),
+    NC_("SC_OPCODE_AGGREGATE", "Ref1 or array "),
+    NC_("SC_OPCODE_AGGREGATE", "The cell(s) of the range which are to be taken into account."),
+    NC_("SC_OPCODE_AGGREGATE", "Ref2..n or k "),
+    NC_("SC_OPCODE_AGGREGATE", "The cells of the range which are to be taken into account or mandatory 2nd argument for certain functions.")
+};
+
+// -=*# Resource for function INT #*=-
+const char* SC_OPCODE_INT_ARY[] =
+{
+    NC_("SC_OPCODE_INT", "Rounds a number down to the nearest integer."),
+    NC_("SC_OPCODE_INT", "Number"),
+    NC_("SC_OPCODE_INT", "The number to be rounded down.")
+};
+
+// -=*# Resource for function TRUNC #*=-
+const char* SC_OPCODE_TRUNC_ARY[] =
+{
+    NC_("SC_OPCODE_TRUNC", "Truncates the decimal places of a number."),
+    NC_("SC_OPCODE_TRUNC", "number"),
+    NC_("SC_OPCODE_TRUNC", "The number to be truncated."),
+    NC_("SC_OPCODE_TRUNC", "count"),
+    NC_("SC_OPCODE_TRUNC", "The number of places after the decimal point that are not to be truncated.")
+};
+
+// -=*# Resource for function ROUND #*=-
+const char* SC_OPCODE_ROUND_ARY[] =
+{
+    NC_("SC_OPCODE_ROUND", "Rounds a number to a predefined accuracy."),
+    NC_("SC_OPCODE_ROUND", "number"),
+    NC_("SC_OPCODE_ROUND", "The number to be rounded."),
+    NC_("SC_OPCODE_ROUND", "count"),
+    NC_("SC_OPCODE_ROUND", "The number of places to which a number is to be rounded.")
+};
+
+// -=*# Resource for function ROUNDUP #*=-
+const char* SC_OPCODE_ROUND_UP_ARY[] =
+{
+    NC_("SC_OPCODE_ROUND_UP", "Rounds a number up to the predefined accuracy."),
+    NC_("SC_OPCODE_ROUND_UP", "number"),
+    NC_("SC_OPCODE_ROUND_UP", "The number to be rounded up."),
+    NC_("SC_OPCODE_ROUND_UP", "count"),
+    NC_("SC_OPCODE_ROUND_UP", "The number of places to which a number is to be rounded.")
+};
+
+// -=*# Resource for function ROUNDDOWN #*=-
+const char* SC_OPCODE_ROUND_DOWN_ARY[] =
+{
+    NC_("SC_OPCODE_ROUND_DOWN", "Rounds a number down to a predefined accuracy."),
+    NC_("SC_OPCODE_ROUND_DOWN", "number"),
+    NC_("SC_OPCODE_ROUND_DOWN", "The number to be rounded down."),
+    NC_("SC_OPCODE_ROUND_DOWN", "count"),
+    NC_("SC_OPCODE_ROUND_DOWN", "The number of places down to which a number is to be rounded.")
+};
+
+// -=*# Resource for function EVEN #*=-
+const char* SC_OPCODE_EVEN_ARY[] =
+{
+    NC_("SC_OPCODE_EVEN", "Rounds a positive number up and negative number down to the nearest even integer."),
+    NC_("SC_OPCODE_EVEN", "Number"),
+    NC_("SC_OPCODE_EVEN", "The number to be rounded up.")
+};
+
+// -=*# Resource for function ODD #*=-
+const char* SC_OPCODE_ODD_ARY[] =
+{
+    NC_("SC_OPCODE_ODD", "Rounds a positive number up and negative number down to the nearest odd integer."),
+    NC_("SC_OPCODE_ODD", "Number"),
+    NC_("SC_OPCODE_ODD", "The number to be rounded up.")
+};
+
+// -=*# Resource for function CEILING.XCL #*=-
+const char* SC_OPCODE_CEIL_MS_ARY[] =
+{
+    NC_("SC_OPCODE_CEIL_MS", "Rounds a number away from zero to the nearest multiple of significance.\nThis function exists for interoperability with Microsoft Excel 2007 or older versions."),
+    NC_("SC_OPCODE_CEIL_MS", "Number"),
+    NC_("SC_OPCODE_CEIL_MS", "The number to be rounded up."),
+    NC_("SC_OPCODE_CEIL_MS", "Significance"),
+    NC_("SC_OPCODE_CEIL_MS", "The number to whose multiple the value is rounded.")
+};
+
+// -=*# Resource for function CEILING.PRECISE #*=-
+const char* SC_OPCODE_CEIL_PRECISE_ARY[] =
+{
+    NC_("SC_OPCODE_CEIL_PRECISE", "Rounds a number up to the nearest multiple of significance, regardless of sign of significance."),
+    NC_("SC_OPCODE_CEIL_PRECISE", "Number"),
+    NC_("SC_OPCODE_CEIL_PRECISE", "The number to be rounded up."),
+    NC_("SC_OPCODE_CEIL_PRECISE", "Significance"),
+    NC_("SC_OPCODE_CEIL_PRECISE", "The number to whose multiple the value is rounded.")
+};
+
+// -=*# Resource for function ISO.CEILING #*=-
+const char* SC_OPCODE_CEIL_ISO_ARY[] =
+{
+    NC_("SC_OPCODE_CEIL_ISO", "Rounds a number up to the nearest multiple of significance, regardless of sign of significance."),
+    NC_("SC_OPCODE_CEIL_ISO", "Number"),
+    NC_("SC_OPCODE_CEIL_ISO", "The number to be rounded up."),
+    NC_("SC_OPCODE_CEIL_ISO", "Significance"),
+    NC_("SC_OPCODE_CEIL_ISO", "The number to whose multiple the value is rounded.")
+};
+
+// -=*# Resource for function CEILING #*=-
+const char* SC_OPCODE_CEIL_ARY[] =
+{
+    NC_("SC_OPCODE_CEIL", "Rounds a number up to the nearest multiple of significance."),
+    NC_("SC_OPCODE_CEIL", "Number"),
+    NC_("SC_OPCODE_CEIL", "The number to be rounded up."),
+    NC_("SC_OPCODE_CEIL", "Significance"),
+    NC_("SC_OPCODE_CEIL", "If given the number to whose multiple the value is rounded, else -1 or 1 depending on sign of Number."),
+    NC_("SC_OPCODE_CEIL", "Mode"),
+    NC_("SC_OPCODE_CEIL", "If given and not equal to zero then rounded up according to amount when a negative number and significance.")
+};
+
+// -=*# Resource for function CEILING.MATH #*=-
+const char* SC_OPCODE_CEIL_MATH_ARY[] =
+{
+    NC_("SC_OPCODE_CEIL_MATH", "Rounds a number up to the nearest multiple of significance."),
+    NC_("SC_OPCODE_CEIL_MATH", "Number"),
+    NC_("SC_OPCODE_CEIL_MATH", "The number to be rounded up."),
+    NC_("SC_OPCODE_CEIL_MATH", "Significance"),
+    NC_("SC_OPCODE_CEIL_MATH", "If given the number to whose multiple the value is rounded, else 1."),
+    NC_("SC_OPCODE_CEIL_MATH", "Mode"),
+    NC_("SC_OPCODE_CEIL_MATH", "For negative numbers; if given and not equal to zero then rounds away from zero, else rounds towards zero.")
+};
+
+// -=*# Resource for function FLOOR #*=-
+const char* SC_OPCODE_FLOOR_ARY[] =
+{
+    NC_("SC_OPCODE_FLOOR", "Rounds number down to the nearest multiple of significance."),
+    NC_("SC_OPCODE_FLOOR", "Number"),
+    NC_("SC_OPCODE_FLOOR", "The number to be rounded down."),
+    NC_("SC_OPCODE_FLOOR", "Significance"),
+    NC_("SC_OPCODE_FLOOR", "The number to whose multiple the value is to be rounded down."),
+    NC_("SC_OPCODE_FLOOR", "Mode"),
+    NC_("SC_OPCODE_FLOOR", "If given and not equal to zero then rounded towards zero with negative number and significance.")
+};
+
+// -=*# Resource for function FLOOR.XCL #*=-
+const char* SC_OPCODE_FLOOR_MS_ARY[] =
+{
+    NC_("SC_OPCODE_FLOOR_MS", "Rounds number towards zero to the nearest multiple of absolute value of significance.\nThis function exists for interoperability with Microsoft Excel 2007 or older versions."),
+    NC_("SC_OPCODE_FLOOR_MS", "Number"),
+    NC_("SC_OPCODE_FLOOR_MS", "The number to be rounded down."),
+    NC_("SC_OPCODE_FLOOR_MS", "Significance"),
+    NC_("SC_OPCODE_FLOOR_MS", "The number to whose multiple the value is to be rounded down.")
+};
+
+// -=*# Resource for function FLOOR.MATH #*=-
+const char* SC_OPCODE_FLOOR_MATH_ARY[] =
+{
+    NC_("SC_OPCODE_FLOOR_MATH", "Rounds number down to the nearest multiple of significance, regardless of sign of significance."),
+    NC_("SC_OPCODE_FLOOR_MATH", "Number"),
+    NC_("SC_OPCODE_FLOOR_MATH", "The number to be rounded down."),
+    NC_("SC_OPCODE_FLOOR_MATH", "Significance"),
+    NC_("SC_OPCODE_FLOOR_MATH", "The number to whose multiple the value is to be rounded down."),
+    NC_("SC_OPCODE_FLOOR_MATH", "Mode"),
+    NC_("SC_OPCODE_FLOOR_MATH", "For negative numbers; if given and not equal to or less than zero rounds towards zero.")
+};
+
+// -=*# Resource for function FLOOR.PRECISE #*=-
+const char* SC_OPCODE_FLOOR_PRECISE_ARY[] =
+{
+    NC_("SC_OPCODE_FLOOR_PRECISE", "Rounds number down (towards -∞) to the nearest multiple of significance."),
+    NC_("SC_OPCODE_FLOOR_PRECISE", "Number"),
+    NC_("SC_OPCODE_FLOOR_PRECISE", "The number to be rounded down."),
+    NC_("SC_OPCODE_FLOOR_PRECISE", "Significance"),
+    NC_("SC_OPCODE_FLOOR_PRECISE", "The number to whose multiple the value is to be rounded down. Sign has no meaning.")
+};
+
+// -=*# Resource for function GCD #*=-
+const char* SC_OPCODE_GCD_ARY[] =
+{
+    NC_("SC_OPCODE_GCD", "Greatest Common Divisor"),
+    NC_("SC_OPCODE_GCD", "Integer "),
+    NC_("SC_OPCODE_GCD", "Integer 1; integer 2,... are integers for which the greatest common divisor is to be calculated.")
+};
+
+// -=*# Resource for function LCM #*=-
+const char* SC_OPCODE_LCM_ARY[] =
+{
+    NC_("SC_OPCODE_LCM", "Lowest common multiple"),
+    NC_("SC_OPCODE_LCM", "Integer "),
+    NC_("SC_OPCODE_LCM", "Integer 1; integer 2,... are integers whose smallest common multiple is to be calculated.")
+};
+
+// -=*# Resource for function TRANSPOSE #*=-
+const char* SC_OPCODE_MAT_TRANS_ARY[] =
+{
+    NC_("SC_OPCODE_MAT_TRANS", "Array transposition. Exchanges the rows and columns of an array."),
+    NC_("SC_OPCODE_MAT_TRANS", "array"),
+    NC_("SC_OPCODE_MAT_TRANS", "The array in which the rows and columns have been transposed.")
+};
+
+// -=*# Resource for function MMULT #*=-
+const char* SC_OPCODE_MAT_MULT_ARY[] =
+{
+    NC_("SC_OPCODE_MAT_MULT", "Array multiplication. Returns the product of two arrays."),
+    NC_("SC_OPCODE_MAT_MULT", "array_1"),
+    NC_("SC_OPCODE_MAT_MULT", "The first array for the array product."),
+    NC_("SC_OPCODE_MAT_MULT", "array_2"),
+    NC_("SC_OPCODE_MAT_MULT", "The second array having the same number of rows as the first array has columns.")
+};
+
+// -=*# Resource for function MDETERM #*=-
+const char* SC_OPCODE_MAT_DET_ARY[] =
+{
+    NC_("SC_OPCODE_MAT_DET", "Returns the array determinant."),
+    NC_("SC_OPCODE_MAT_DET", "array"),
+    NC_("SC_OPCODE_MAT_DET", "The array for which the determinant is to be determined.")
+};
+
+// -=*# Resource for function MINVERSE #*=-
+const char* SC_OPCODE_MAT_INV_ARY[] =
+{
+    NC_("SC_OPCODE_MAT_INV", "Returns the inverse of an array."),
+    NC_("SC_OPCODE_MAT_INV", "array"),
+    NC_("SC_OPCODE_MAT_INV", "The array to be inverted.")
+};
+
+// -=*# Resource for function MUNIT #*=-
+const char* SC_OPCODE_MATRIX_UNIT_ARY[] =
+{
+    NC_("SC_OPCODE_MATRIX_UNIT", "Returns the unitary square array of a certain size."),
+    NC_("SC_OPCODE_MATRIX_UNIT", "Dimensions"),
+    NC_("SC_OPCODE_MATRIX_UNIT", "The size of the unitary array.")
+};
+
+// -=*# Resource for function SUMPRODUCT #*=-
+const char* SC_OPCODE_SUM_PRODUCT_ARY[] =
+{
+    NC_("SC_OPCODE_SUM_PRODUCT", "(Inner products) Returns the sum of the products of array arguments."),
+    NC_("SC_OPCODE_SUM_PRODUCT", "Array "),
+    NC_("SC_OPCODE_SUM_PRODUCT", "Array 1, array 2, ... are arrays whose arguments are to be multiplied.")
+};
+
+// -=*# Resource for function SUMX2MY2 #*=-
+const char* SC_OPCODE_SUM_X2MY2_ARY[] =
+{
+    NC_("SC_OPCODE_SUM_X2MY2", "Returns the sum of the difference of squares of two arrays."),
+    NC_("SC_OPCODE_SUM_X2MY2", "array_x"),
+    NC_("SC_OPCODE_SUM_X2MY2", "First array where the square of the arguments are totalled."),
+    NC_("SC_OPCODE_SUM_X2MY2", "array_y"),
+    NC_("SC_OPCODE_SUM_X2MY2", "Second array where the square of the arguments is to be subtracted.")
+};
+
+// -=*# Resource for function SUMX2PY2 #*=-
+const char* SC_OPCODE_SUM_X2DY2_ARY[] =
+{
+    NC_("SC_OPCODE_SUM_X2DY2", "Returns the total of the square sum of two arrays."),
+    NC_("SC_OPCODE_SUM_X2DY2", "array_x"),
+    NC_("SC_OPCODE_SUM_X2DY2", "First array where the square of the arguments are totalled."),
+    NC_("SC_OPCODE_SUM_X2DY2", "array_y"),
+    NC_("SC_OPCODE_SUM_X2DY2", "Second array where the square of the arguments is to be totalled.")
+};
+
+// -=*# Resource for function SUMXMY2 #*=-
+const char* SC_OPCODE_SUM_XMY2_ARY[] =
+{
+    NC_("SC_OPCODE_SUM_XMY2", "Returns the sum of squares of differences of two arrays."),
+    NC_("SC_OPCODE_SUM_XMY2", "array_x"),
+    NC_("SC_OPCODE_SUM_XMY2", "First array for forming argument differences."),
+    NC_("SC_OPCODE_SUM_XMY2", "array_y"),
+    NC_("SC_OPCODE_SUM_XMY2", "Second array for forming the argument differences.")
+};
+
+// -=*# Resource for function FREQUENCY #*=-
+const char* SC_OPCODE_FREQUENCY_ARY[] =
+{
+    NC_("SC_OPCODE_FREQUENCY", "Returns a frequency distribution as a vertical array."),
+    NC_("SC_OPCODE_FREQUENCY", "data"),
+    NC_("SC_OPCODE_FREQUENCY", "The array of the data."),
+    NC_("SC_OPCODE_FREQUENCY", "classes"),
+    NC_("SC_OPCODE_FREQUENCY", "The array for forming classes.")
+};
+
+// -=*# Resource for function LINEST #*=-
+const char* SC_OPCODE_LINEST_ARY[] =
+{
+    NC_("SC_OPCODE_LINEST", "Calculates parameters of the linear regression as an array."),
+    NC_("SC_OPCODE_LINEST", "data_Y"),
+    NC_("SC_OPCODE_LINEST", "The Y data array."),
+    NC_("SC_OPCODE_LINEST", "data_X"),
+    NC_("SC_OPCODE_LINEST", "The X data array."),
+    NC_("SC_OPCODE_LINEST", "Linear_type"),
+    NC_("SC_OPCODE_LINEST", "If type = 0 the linears will be calculated through the zero point, or else moved linears."),
+    NC_("SC_OPCODE_LINEST", "stats"),
+    NC_("SC_OPCODE_LINEST", "If parameter = 0 then only the regression coefficient will be calculated, otherwise other values as well.")
+};
+
+// -=*# Resource for function LOGEST #*=-
+const char* SC_OPCODE_LOGEST_ARY[] =
+{
+    NC_("SC_OPCODE_LOGEST", "Calculates the parameters of the exponential regression curve as an array."),
+    NC_("SC_OPCODE_LOGEST", "data_Y"),
+    NC_("SC_OPCODE_LOGEST", "The Y data array."),
+    NC_("SC_OPCODE_LOGEST", "data_X"),
+    NC_("SC_OPCODE_LOGEST", "The X data array."),
+    NC_("SC_OPCODE_LOGEST", "Function_type"),
+    NC_("SC_OPCODE_LOGEST", "If type = 0 then the functions will be calculated in the form of y=m^x, or also functions y=b*m^x."),
+    NC_("SC_OPCODE_LOGEST", "stats"),
+    NC_("SC_OPCODE_LOGEST", "If parameter = 0 then only the regression coefficient will be calculated, otherwise other values as well.")
+};
+
+// -=*# Resource for function TREND #*=-
+const char* SC_OPCODE_TREND_ARY[] =
+{
+    NC_("SC_OPCODE_TREND", "Calculates points along a regression line."),
+    NC_("SC_OPCODE_TREND", "data_Y"),
+    NC_("SC_OPCODE_TREND", "The Y data array."),
+    NC_("SC_OPCODE_TREND", "data_X"),
+    NC_("SC_OPCODE_TREND", "The X data array as the basis for the regression."),
+    NC_("SC_OPCODE_TREND", "new data_X"),
+    NC_("SC_OPCODE_TREND", "The array of X data for recalculating the values."),
+    NC_("SC_OPCODE_TREND", "Linear_type"),
+    NC_("SC_OPCODE_TREND", "If type = 0 the linears will be calculated through the zero point, or else moved linears.")
+};
+
+// -=*# Resource for function GROWTH #*=-
+const char* SC_OPCODE_GROWTH_ARY[] =
+{
+    NC_("SC_OPCODE_GROWTH", "Calculates points on the exponential regression function."),
+    NC_("SC_OPCODE_GROWTH", "data_Y"),
+    NC_("SC_OPCODE_GROWTH", "The Y data array."),
+    NC_("SC_OPCODE_GROWTH", "data_X"),
+    NC_("SC_OPCODE_GROWTH", "The X data array as the basis for the regression."),
+    NC_("SC_OPCODE_GROWTH", "new_data_X"),
+    NC_("SC_OPCODE_GROWTH", "The array of X data for recalculating the values."),
+    NC_("SC_OPCODE_GROWTH", "Function_type"),
+    NC_("SC_OPCODE_GROWTH", "If type = 0 then the functions will be calculated in the form of y=m^x, or also functions y=b*m^x.")
+};
+
+// -=*# Resource for function COUNT #*=-
+const char* SC_OPCODE_COUNT_ARY[] =
+{
+    NC_("SC_OPCODE_COUNT", "Counts how many numbers are in the list of arguments."),
+    NC_("SC_OPCODE_COUNT", "value "),
+    NC_("SC_OPCODE_COUNT", "Value 1, value 2, ... are arguments containing different data types but where only numbers are counted.")
+};
+
+// -=*# Resource for function COUNTA #*=-
+const char* SC_OPCODE_COUNT_2_ARY[] =
+{
+    NC_("SC_OPCODE_COUNT_2", "Counts how many values are in the list of arguments."),
+    NC_("SC_OPCODE_COUNT_2", "value "),
+    NC_("SC_OPCODE_COUNT_2", "Value 1, value 2, ... are arguments representing the values to be counted.")
+};
+
+// -=*# Resource for function MAX #*=-
+const char* SC_OPCODE_MAX_ARY[] =
+{
+    NC_("SC_OPCODE_MAX", "Returns the maximum value in a list of arguments."),
+    NC_("SC_OPCODE_MAX", "number "),
+    NC_("SC_OPCODE_MAX", "Number 1, number 2, ... are numerical arguments for which the largest number is to be determined.")
+};
+
+// -=*# Resource for function MAXA #*=-
+const char* SC_OPCODE_MAX_A_ARY[] =
+{
+    NC_("SC_OPCODE_MAX_A", "Returns the maximum value in a list of arguments. Text is evaluated as Zero."),
+    NC_("SC_OPCODE_MAX_A", "value "),
+    NC_("SC_OPCODE_MAX_A", "Value 1, value 2,    are arguments whose largest value is to be determined.")
+};
+
+// -=*# Resource for function MIN #*=-
+const char* SC_OPCODE_MIN_ARY[] =
+{
+    NC_("SC_OPCODE_MIN", "Returns the minimum value in a list of arguments."),
+    NC_("SC_OPCODE_MIN", "number "),
+    NC_("SC_OPCODE_MIN", "Number 1, number 2, ... are numerical arguments for which the smallest number is to be determined.")
+};
+
+// -=*# Resource for function MINA #*=-
+const char* SC_OPCODE_MIN_A_ARY[] =
+{
+    NC_("SC_OPCODE_MIN_A", "Returns the smallest value in a list of arguments. Text is evaluated as zero."),
+    NC_("SC_OPCODE_MIN_A", "value "),
+    NC_("SC_OPCODE_MIN_A", "Value 1; value 2;... are arguments whose smallest number is to be determined.")
+};
+
+// -=*# Resource for function VAR #*=-
+const char* SC_OPCODE_VAR_ARY[] =
+{
+    NC_("SC_OPCODE_VAR", "Calculates the variance based on a sample."),
+    NC_("SC_OPCODE_VAR", "number "),
+    NC_("SC_OPCODE_VAR", "Number 1, number 2, ... are numerical arguments which portray a sample of a population.")
+};
+
+// -=*# Resource for function VAR.S #*=-
+const char* SC_OPCODE_VAR_S_ARY[] =
+{
+    NC_("SC_OPCODE_VAR_S", "Calculates the variance based on a sample."),
+    NC_("SC_OPCODE_VAR_S", "number "),
+    NC_("SC_OPCODE_VAR_S", "Number 1, number 2, ... are numerical arguments which portray a sample of a population.")
+};
+
+// -=*# Resource for function VARA #*=-
+const char* SC_OPCODE_VAR_A_ARY[] =
+{
+    NC_("SC_OPCODE_VAR_A", "Returns the variance based on a sample. Text is evaluated as zero."),
+    NC_("SC_OPCODE_VAR_A", "value "),
+    NC_("SC_OPCODE_VAR_A", "Value 1; value 2; ... are arguments representing a sample taken from a basic total population.")
+};
+
+// -=*# Resource for function VARP #*=-
+const char* SC_OPCODE_VAR_P_ARY[] =
+{
+    NC_("SC_OPCODE_VAR_P", "Calculates variance based on the entire population."),
+    NC_("SC_OPCODE_VAR_P", "number "),
+    NC_("SC_OPCODE_VAR_P", "Number 1, number 2, ... are numerical arguments which represent a population.")
+};
+
+// -=*# Resource for function VAR.P #*=-
+const char* SC_OPCODE_VAR_P_MS_ARY[] =
+{
+    NC_("SC_OPCODE_VAR_P_MS", "Calculates variance based on the entire population."),
+    NC_("SC_OPCODE_VAR_P_MS", "number "),
+    NC_("SC_OPCODE_VAR_P_MS", "Number 1, number 2, ... are numerical arguments which represent a population.")
+};
+
+// -=*# Resource for function VARPA #*=-
+const char* SC_OPCODE_VAR_P_A_ARY[] =
+{
+    NC_("SC_OPCODE_VAR_P_A", "Returns the variance based on the entire population. Text is evaluated as zero."),
+    NC_("SC_OPCODE_VAR_P_A", "value "),
+    NC_("SC_OPCODE_VAR_P_A", "Value 1; value 2;... are arguments representing a population.")
+};
+
+// -=*# Resource for function STDEV #*=-
+const char* SC_OPCODE_ST_DEV_ARY[] =
+{
+    NC_("SC_OPCODE_ST_DEV", "Calculates the standard deviation based on a sample."),
+    NC_("SC_OPCODE_ST_DEV", "number "),
+    NC_("SC_OPCODE_ST_DEV", "Number 1, number 2, ... are numerical arguments which portray a sample of a population.")
+};
+
+// -=*# Resource for function STDEV.S #*=-
+const char* SC_OPCODE_ST_DEV_S_ARY[] =
+{
+    NC_("SC_OPCODE_ST_DEV_S", "Calculates the standard deviation based on a sample."),
+    NC_("SC_OPCODE_ST_DEV_S", "number "),
+    NC_("SC_OPCODE_ST_DEV_S", "Number 1, number 2, ... are numerical arguments which portray a sample of a population.")
+};
+
+// -=*# Resource for function STDEVA #*=-
+const char* SC_OPCODE_ST_DEV_A_ARY[] =
+{
+    NC_("SC_OPCODE_ST_DEV_A", "Returns the standard deviation based on a sample. Text is evaluated as zero."),
+    NC_("SC_OPCODE_ST_DEV_A", "value "),
+    NC_("SC_OPCODE_ST_DEV_A", "Value 1; value 2; ... are arguments representing a sample taken from a basic total population.")
+};
+
+// -=*# Resource for function STDEVP #*=-
+const char* SC_OPCODE_ST_DEV_P_ARY[] =
+{
+    NC_("SC_OPCODE_ST_DEV_P", "Calculates the standard deviation based on the entire population."),
+    NC_("SC_OPCODE_ST_DEV_P", "number "),
+    NC_("SC_OPCODE_ST_DEV_P", "Number 1, number 2, ... are numerical arguments which portray a population.")
+};
+
+// -=*# Resource for function STDEV.P #*=-
+const char* SC_OPCODE_ST_DEV_P_MS_ARY[] =
+{
+    NC_("SC_OPCODE_ST_DEV_P_MS", "Calculates the standard deviation based on the entire population."),
+    NC_("SC_OPCODE_ST_DEV_P_MS", "number "),
+    NC_("SC_OPCODE_ST_DEV_P_MS", "Number 1, number 2, ... are numerical arguments which portray a population.")
+};
+
+// -=*# Resource for function STDEVPA #*=-
+const char* SC_OPCODE_ST_DEV_P_A_ARY[] =
+{
+    NC_("SC_OPCODE_ST_DEV_P_A", "Returns the standard deviation based on the entire population. Text is evaluated as zero."),
+    NC_("SC_OPCODE_ST_DEV_P_A", "value "),
+    NC_("SC_OPCODE_ST_DEV_P_A", "Value 1; value 2;... are arguments corresponding to a population.")
+};
+
+// -=*# Resource for function AVERAGE #*=-
+const char* SC_OPCODE_AVERAGE_ARY[] =
+{
+    NC_("SC_OPCODE_AVERAGE", "Returns the average of a sample."),
+    NC_("SC_OPCODE_AVERAGE", "number "),
+    NC_("SC_OPCODE_AVERAGE", "Number 1, number 2;...are numeric arguments representing a population sample.")
+};
+
+// -=*# Resource for function AVERAGEA #*=-
+const char* SC_OPCODE_AVERAGE_A_ARY[] =
+{
+    NC_("SC_OPCODE_AVERAGE_A", "Returns the average value for a sample. Text is evaluated as zero."),
+    NC_("SC_OPCODE_AVERAGE_A", "value "),
+    NC_("SC_OPCODE_AVERAGE_A", "Value 1; value 2; ... are arguments representing a sample taken from a basic total population.")
+};
+
+// -=*# Resource for function DEVSQ #*=-
+const char* SC_OPCODE_DEV_SQ_ARY[] =
+{
+    NC_("SC_OPCODE_DEV_SQ", "Returns the sum of squares of deviations from the sample mean value"),
+    NC_("SC_OPCODE_DEV_SQ", "number "),
+    NC_("SC_OPCODE_DEV_SQ", "Number 1, number 2, ... are numerical arguments which portray a sample.")
+};
+
+// -=*# Resource for function AVEDEV #*=-
+const char* SC_OPCODE_AVE_DEV_ARY[] =
+{
+    NC_("SC_OPCODE_AVE_DEV", "Returns the average of the absolute deviations of a sample from the mean."),
+    NC_("SC_OPCODE_AVE_DEV", "number "),
+    NC_("SC_OPCODE_AVE_DEV", "Number 1, number 2;...are numerical arguments representing a sample.")
+};
+
+// -=*# Resource for function SKEW #*=-
+const char* SC_OPCODE_SKEW_ARY[] =
+{
+    NC_("SC_OPCODE_SKEW", "Returns the skewness of a distribution."),
+    NC_("SC_OPCODE_SKEW", "number "),
+    NC_("SC_OPCODE_SKEW", "Number 1, number 2, ... are numerical arguments portraying a sample of the distribution.")
+};
+
+// -=*# Resource for function SKEWP #*=-
+const char* SC_OPCODE_SKEWP_ARY[] =
+{
+    NC_("SC_OPCODE_SKEWP", "Returns the skewness of a distribution using the population of a random variable."),
+    NC_("SC_OPCODE_SKEWP", "number "),
+    NC_("SC_OPCODE_SKEWP", "Number 1, number 2, ... are numerical arguments portraying the population.")
+};
+
+// -=*# Resource for function KURT #*=-
+const char* SC_OPCODE_KURT_ARY[] =
+{
+    NC_("SC_OPCODE_KURT", "Returns the kurtosis of a distribution."),
+    NC_("SC_OPCODE_KURT", "number "),
+    NC_("SC_OPCODE_KURT", "Number 1, number 2, ... are numerical arguments, representing a sample of the distribution.")
+};
+
+// -=*# Resource for function GEOMEAN #*=-
+const char* SC_OPCODE_GEO_MEAN_ARY[] =
+{
+    NC_("SC_OPCODE_GEO_MEAN", "Returns the geometric mean of a sample."),
+    NC_("SC_OPCODE_GEO_MEAN", "number "),
+    NC_("SC_OPCODE_GEO_MEAN", "Number 1, number 2, ... are numerical arguments which portray a sample.")
+};
+
+// -=*# Resource for function HARMEAN #*=-
+const char* SC_OPCODE_HAR_MEAN_ARY[] =
+{
+    NC_("SC_OPCODE_HAR_MEAN", "Returns the harmonic mean of a sample."),
+    NC_("SC_OPCODE_HAR_MEAN", "number "),
+    NC_("SC_OPCODE_HAR_MEAN", "Number 1, number 2, ... are numerical arguments which portray a sample.")
+};
+
+// -=*# Resource for function MODE #*=-
+const char* SC_OPCODE_MODAL_VALUE_ARY[] =
+{
+    NC_("SC_OPCODE_MODAL_VALUE", "Returns the most common value in a sample."),
+    NC_("SC_OPCODE_MODAL_VALUE", "number "),
+    NC_("SC_OPCODE_MODAL_VALUE", "Number 1, number 2, ... are numerical arguments which portray a sample.")
+};
+
+// -=*# Resource for function MODE.SNGL #*=-
+const char* SC_OPCODE_MODAL_VALUE_MS_ARY[] =
+{
+    NC_("SC_OPCODE_MODAL_VALUE_MS", "Returns the most common value in a sample."),
+    NC_("SC_OPCODE_MODAL_VALUE_MS", "number "),
+    NC_("SC_OPCODE_MODAL_VALUE_MS", "Number 1, number 2, ... are numerical arguments which portray a sample.")
+};
+
+// -=*# Resource for function MODE.MULT #*=-
+const char* SC_OPCODE_MODAL_VALUE_MULTI_ARY[] =
+{
+    NC_("SC_OPCODE_MODAL_VALUE_MULTI", "Returns the most common value in a sample."),
+    NC_("SC_OPCODE_MODAL_VALUE_MULTI", "number "),
+    NC_("SC_OPCODE_MODAL_VALUE_MULTI", "Number 1, number 2, ... are 1 to 254 numerical arguments which portray a sample.")
+};
+
+// -=*# Resource for function MEDIAN #*=-
+const char* SC_OPCODE_MEDIAN_ARY[] =
+{
+    NC_("SC_OPCODE_MEDIAN", "Returns the median of a given sample."),
+    NC_("SC_OPCODE_MEDIAN", "number "),
+    NC_("SC_OPCODE_MEDIAN", "Number 1, number 2, ... are numerical arguments which portray a sample.")
+};
+
+// -=*# Resource for function PERCENTILE #*=-
+const char* SC_OPCODE_PERCENTILE_ARY[] =
+{
+    NC_("SC_OPCODE_PERCENTILE", "Returns the alpha quantile of a sample."),
+    NC_("SC_OPCODE_PERCENTILE", "data"),
+    NC_("SC_OPCODE_PERCENTILE", "The array of the data in the sample."),
+    NC_("SC_OPCODE_PERCENTILE", "Alpha"),
+    NC_("SC_OPCODE_PERCENTILE", "The percentage rate of the quantile between 0 and 1.")
+};
+
+// -=*# Resource for function PERCENTILE.EXC #*=-
+const char* SC_OPCODE_PERCENTILE_EXC_ARY[] =
+{
+    NC_("SC_OPCODE_PERCENTILE_EXC", "Returns the alpha percentile of a sample."),
+    NC_("SC_OPCODE_PERCENTILE_EXC", "data"),
+    NC_("SC_OPCODE_PERCENTILE_EXC", "The array of the data in the sample."),
+    NC_("SC_OPCODE_PERCENTILE_EXC", "Alpha"),
+    NC_("SC_OPCODE_PERCENTILE_EXC", "The percentile value, range 0...1, exclusive.")
+};
+
+// -=*# Resource for function PERCENTILE.INC #*=-
+const char* SC_OPCODE_PERCENTILE_INC_ARY[] =
+{
+    NC_("SC_OPCODE_PERCENTILE_INC", "Returns the alpha percentile of a sample."),
+    NC_("SC_OPCODE_PERCENTILE_INC", "data"),
+    NC_("SC_OPCODE_PERCENTILE_INC", "The array of the data in the sample."),
+    NC_("SC_OPCODE_PERCENTILE_INC", "Alpha"),
+    NC_("SC_OPCODE_PERCENTILE_INC", "The percentile value, range 0...1, inclusive.")
+};
+
+// -=*# Resource for function QUARTILE #*=-
+const char* SC_OPCODE_QUARTILE_ARY[] =
+{
+    NC_("SC_OPCODE_QUARTILE", "Returns the quartile of a sample."),
+    NC_("SC_OPCODE_QUARTILE", "data"),
+    NC_("SC_OPCODE_QUARTILE", "The array of the data in the sample."),
+    NC_("SC_OPCODE_QUARTILE", "Type"),
+    NC_("SC_OPCODE_QUARTILE", "The type of the quartile (0 = MIN, 1 = 25%, 2 = 50%, 3 = 75%, 4 = MAX).")
+};
+
+// -=*# Resource for function QUARTILE.EXC #*=-
+const char* SC_OPCODE_QUARTILE_EXC_ARY[] =
+{
+    NC_("SC_OPCODE_QUARTILE_EXC", "Returns the quartile of a sample."),
+    NC_("SC_OPCODE_QUARTILE_EXC", "data"),
+    NC_("SC_OPCODE_QUARTILE_EXC", "The array of the data in the sample."),
+    NC_("SC_OPCODE_QUARTILE_EXC", "Type"),
+    NC_("SC_OPCODE_QUARTILE_EXC", "The type of the quartile (1 = 25%, 2 = 50%, 3 = 75%).")
+};
+
+// -=*# Resource for function QUARTILE.INC #*=-
+const char* SC_OPCODE_QUARTILE_INC_ARY[] =
+{
+    NC_("SC_OPCODE_QUARTILE_INC", "Returns the quartile of a sample."),
+    NC_("SC_OPCODE_QUARTILE_INC", "data"),
+    NC_("SC_OPCODE_QUARTILE_INC", "The array of the data in the sample."),
+    NC_("SC_OPCODE_QUARTILE_INC", "Type"),
+    NC_("SC_OPCODE_QUARTILE_INC", "The type of the quartile (0 = MIN, 1 = 25%, 2 = 50%, 3 = 75%, 4 = MAX).")
+};
+
+// -=*# Resource for function LARGE #*=-
+const char* SC_OPCODE_LARGE_ARY[] =
+{
+    NC_("SC_OPCODE_LARGE", "Returns the k-th largest value of a sample."),
+    NC_("SC_OPCODE_LARGE", "data"),
+    NC_("SC_OPCODE_LARGE", "The array of the data in the sample."),
+    NC_("SC_OPCODE_LARGE", "Rank_c"),
+    NC_("SC_OPCODE_LARGE", "The ranking of the value.")
+};
+
+// -=*# Resource for function SMALL #*=-
+const char* SC_OPCODE_SMALL_ARY[] =
+{
+    NC_("SC_OPCODE_SMALL", "Returns the k-th smallest value of a sample."),
+    NC_("SC_OPCODE_SMALL", "data"),
+    NC_("SC_OPCODE_SMALL", "The array of the data in the sample."),
+    NC_("SC_OPCODE_SMALL", "Rank_c"),
+    NC_("SC_OPCODE_SMALL", "The ranking of the value.")
+};
+
+// -=*# Resource for function PERCENTRANK #*=-
+const char* SC_OPCODE_PERCENT_RANK_ARY[] =
+{
+    NC_("SC_OPCODE_PERCENT_RANK", "Returns the percentage rank of a value in a sample."),
+    NC_("SC_OPCODE_PERCENT_RANK", "data"),
+    NC_("SC_OPCODE_PERCENT_RANK", "The array of the data in the sample."),
+    NC_("SC_OPCODE_PERCENT_RANK", "value"),
+    NC_("SC_OPCODE_PERCENT_RANK", "The value for which percentage ranking is to be determined."),
+    NC_("SC_OPCODE_PERCENT_RANK", "significance"),
+    NC_("SC_OPCODE_PERCENT_RANK", "The number of significant digits for the returned percentage: if omitted, a value of 3 is used.")
+};
+
+// -=*# Resource for function PERCENTRANK.EXC #*=-
+const char* SC_OPCODE_PERCENT_RANK_EXC_ARY[] =
+{
+    NC_("SC_OPCODE_PERCENT_RANK_EXC", "Returns the percentage rank (0..1, exclusive) of a value in a sample."),
+    NC_("SC_OPCODE_PERCENT_RANK_EXC", "data"),
+    NC_("SC_OPCODE_PERCENT_RANK_EXC", "The array of the data in the sample."),
+    NC_("SC_OPCODE_PERCENT_RANK_EXC", "value"),
+    NC_("SC_OPCODE_PERCENT_RANK_EXC", "The value for which percentage ranking is to be determined."),
+    NC_("SC_OPCODE_PERCENT_RANK_EXC", "significance"),
+    NC_("SC_OPCODE_PERCENT_RANK_EXC", "The number of significant digits for the returned percentage: if omitted, a value of 3 is used.")
+};
+
+// -=*# Resource for function PERCENTRANK.INC #*=-
+const char* SC_OPCODE_PERCENT_RANK_INC_ARY[] =
+{
+    NC_("SC_OPCODE_PERCENT_RANK_INC", "Returns the percentage rank (0..1, inclusive) of a value in a sample."),
+    NC_("SC_OPCODE_PERCENT_RANK_INC", "data"),
+    NC_("SC_OPCODE_PERCENT_RANK_INC", "The array of the data in the sample."),
+    NC_("SC_OPCODE_PERCENT_RANK_INC", "value"),
+    NC_("SC_OPCODE_PERCENT_RANK_INC", "The value for which percentage ranking is to be determined."),
+    NC_("SC_OPCODE_PERCENT_RANK_INC", "significance"),
+    NC_("SC_OPCODE_PERCENT_RANK_INC", "The number of significant digits for the returned percentage: if omitted, a value of 3 is used.")
+};
+
+// -=*# Resource for function RANK #*=-
+const char* SC_OPCODE_RANK_ARY[] =
+{
+    NC_("SC_OPCODE_RANK", "Returns the ranking of a value in a sample."),
+    NC_("SC_OPCODE_RANK", "value"),
+    NC_("SC_OPCODE_RANK", "The value for which the rank is to be determined."),
+    NC_("SC_OPCODE_RANK", "Data"),
+    NC_("SC_OPCODE_RANK", "The array of the data in the sample."),
+    NC_("SC_OPCODE_RANK", "Type"),
+    NC_("SC_OPCODE_RANK", "Sequence order: 0 or omitted means descending, any other value than 0 means ascending.")
+};
+
+// -=*# Resource for function RANK.EQ #*=-
+const char* SC_OPCODE_RANK_EQ_ARY[] =
+{
+    NC_("SC_OPCODE_RANK_EQ", "Returns the ranking of a value in a sample; if more than one value has the same rank, the top rank of that set of values is returned."),
+    NC_("SC_OPCODE_RANK_EQ", "value"),
+    NC_("SC_OPCODE_RANK_EQ", "The value for which the rank is to be determined."),
+    NC_("SC_OPCODE_RANK_EQ", "Data"),
+    NC_("SC_OPCODE_RANK_EQ", "The array of the data in the sample."),
+    NC_("SC_OPCODE_RANK_EQ", "Type"),
+    NC_("SC_OPCODE_RANK_EQ", "Sequence order: 0 or omitted means descending, any other value than 0 means ascending.")
+};
+
+// -=*# Resource for function RANK.AVG #*=-
+const char* SC_OPCODE_RANK_AVG_ARY[] =
+{
+    NC_("SC_OPCODE_RANK_AVG", "Returns the ranking of a value in a sample; if more than one value has the same rank, the average rank is returned."),
+    NC_("SC_OPCODE_RANK_AVG", "value"),
+    NC_("SC_OPCODE_RANK_AVG", "The value for which the rank is to be determined."),
+    NC_("SC_OPCODE_RANK_AVG", "Data"),
+    NC_("SC_OPCODE_RANK_AVG", "The array of the data in the sample."),
+    NC_("SC_OPCODE_RANK_AVG", "Type"),
+    NC_("SC_OPCODE_RANK_AVG", "Sequence order: 0 or omitted means descending, any other value than 0 means ascending.")
+};
+
+// -=*# Resource for function TRIMMEAN #*=-
+const char* SC_OPCODE_TRIM_MEAN_ARY[] =
+{
+    NC_("SC_OPCODE_TRIM_MEAN", "Returns the mean of a sample without including the marginal values."),
+    NC_("SC_OPCODE_TRIM_MEAN", "data"),
+    NC_("SC_OPCODE_TRIM_MEAN", "The array of the data in the sample."),
+    NC_("SC_OPCODE_TRIM_MEAN", "Alpha"),
+    NC_("SC_OPCODE_TRIM_MEAN", "The percentage of marginal data that is not to be taken into account.")
+};
+
+// -=*# Resource for function PROB #*=-
+const char* SC_OPCODE_PROB_ARY[] =
+{
+    NC_("SC_OPCODE_PROB", "Returns the discrete probability of an interval."),
+    NC_("SC_OPCODE_PROB", "data"),
+    NC_("SC_OPCODE_PROB", "The sample data array."),
+    NC_("SC_OPCODE_PROB", "probability"),
+    NC_("SC_OPCODE_PROB", "The array of the associated probabilities."),
+    NC_("SC_OPCODE_PROB", "Start"),
+    NC_("SC_OPCODE_PROB", "The start of the value interval whose probabilities is to be totalled."),
+    NC_("SC_OPCODE_PROB", "End"),
+    NC_("SC_OPCODE_PROB", "The end of the value interval where the probabilities are to be totalled.")
+};
+
+// -=*# Resource for function B #*=-
+const char* SC_OPCODE_B_ARY[] =
+{
+    NC_("SC_OPCODE_B", "Returns the probability of a trial result using binomial distribution."),
+    NC_("SC_OPCODE_B", "trials"),
+    NC_("SC_OPCODE_B", "The number of trials."),
+    NC_("SC_OPCODE_B", "SP"),
+    NC_("SC_OPCODE_B", "The individual probability of a trial result."),
+    NC_("SC_OPCODE_B", "T_1"),
+    NC_("SC_OPCODE_B", "Lower limit for the number of trials."),
+    NC_("SC_OPCODE_B", "T_2"),
+    NC_("SC_OPCODE_B", "Upper limit for the number of trials.")
+};
+
+// -=*# Resource for function PHI #*=-
+const char* SC_OPCODE_PHI_ARY[] =
+{
+    NC_("SC_OPCODE_PHI", "Values of the distribution function for a standard normal distribution."),
+    NC_("SC_OPCODE_PHI", "number"),
+    NC_("SC_OPCODE_PHI", "The value for which the standard normal distribution is to be calculated.")
+};
+
+// -=*# Resource for function GAUSS #*=-
+const char* SC_OPCODE_GAUSS_ARY[] =
+{
+    NC_("SC_OPCODE_GAUSS", "Returns the integral values of the standard normal cumulative distribution."),
+    NC_("SC_OPCODE_GAUSS", "Number"),
+    NC_("SC_OPCODE_GAUSS", "The value for which the integral value of the standard normal distribution is to be calculated.")
+};
+
+// -=*# Resource for function FISHER #*=-
+const char* SC_OPCODE_FISHER_ARY[] =
+{
+    NC_("SC_OPCODE_FISHER", "Returns the Fisher transformation."),
+    NC_("SC_OPCODE_FISHER", "Number"),
+    NC_("SC_OPCODE_FISHER", "The value to be transformed (-1 < VALUE < 1).")
+};
+
+// -=*# Resource for function FISHERINV #*=-
+const char* SC_OPCODE_FISHER_INV_ARY[] =
+{
+    NC_("SC_OPCODE_FISHER_INV", "Returns the inverse of the Fisher transformation."),
+    NC_("SC_OPCODE_FISHER_INV", "Number"),
+    NC_("SC_OPCODE_FISHER_INV", "The value that is to be transformed back.")
+};
+
+// -=*# Resource for function BINOMDIST #*=-
+const char* SC_OPCODE_BINOM_DIST_ARY[] =
+{
+    NC_("SC_OPCODE_BINOM_DIST", "Values of the binomial distribution."),
+    NC_("SC_OPCODE_BINOM_DIST", "X"),
+    NC_("SC_OPCODE_BINOM_DIST", "The number of successes in a series of trials."),
+    NC_("SC_OPCODE_BINOM_DIST", "trials"),
+    NC_("SC_OPCODE_BINOM_DIST", "The total number of trials."),
+    NC_("SC_OPCODE_BINOM_DIST", "SP"),
+    NC_("SC_OPCODE_BINOM_DIST", "The success probability of a trial."),
+    NC_("SC_OPCODE_BINOM_DIST", "C"),
+    NC_("SC_OPCODE_BINOM_DIST", "Cumulated. C=0 calculates the individual probability, C=1 the cumulated probability.")
+};
+
+// -=*# Resource for function BINOM.DIST #*=-
+const char* SC_OPCODE_BINOM_DIST_MS_ARY[] =
+{
+    NC_("SC_OPCODE_BINOM_DIST_MS", "Values of the binomial distribution."),
+    NC_("SC_OPCODE_BINOM_DIST_MS", "X"),
+    NC_("SC_OPCODE_BINOM_DIST_MS", "The number of successes in a series of trials."),
+    NC_("SC_OPCODE_BINOM_DIST_MS", "trials"),
+    NC_("SC_OPCODE_BINOM_DIST_MS", "The total number of trials."),
+    NC_("SC_OPCODE_BINOM_DIST_MS", "SP"),
+    NC_("SC_OPCODE_BINOM_DIST_MS", "The success probability of a trial."),
+    NC_("SC_OPCODE_BINOM_DIST_MS", "C"),
+    NC_("SC_OPCODE_BINOM_DIST_MS", "Cumulated. C=0 calculates the individual probability, C=1 the cumulated probability.")
+};
+
+// -=*# Resource for function NEGBINOMDIST #*=-
+const char* SC_OPCODE_NEG_BINOM_VERT_ARY[] =
+{
+    NC_("SC_OPCODE_NEG_BINOM_VERT", "Values of the negative binomial distribution."),
+    NC_("SC_OPCODE_NEG_BINOM_VERT", "X"),
+    NC_("SC_OPCODE_NEG_BINOM_VERT", "The number of failures in the trial range."),
+    NC_("SC_OPCODE_NEG_BINOM_VERT", "R"),
+    NC_("SC_OPCODE_NEG_BINOM_VERT", "The number of successes in the trial sequence."),
+    NC_("SC_OPCODE_NEG_BINOM_VERT", "SP"),
+    NC_("SC_OPCODE_NEG_BINOM_VERT", "The success probability of a trial.")
+};
+
+// -=*# Resource for function NEGBINOM.DIST #*=-
+const char* SC_OPCODE_NEG_BINOM_DIST_MS_ARY[] =
+{
+    NC_("SC_OPCODE_NEG_BINOM_DIST_MS", "Values of the negative binomial distribution."),
+    NC_("SC_OPCODE_NEG_BINOM_DIST_MS", "X"),
+    NC_("SC_OPCODE_NEG_BINOM_DIST_MS", "The number of failures in the trial range."),
+    NC_("SC_OPCODE_NEG_BINOM_DIST_MS", "R"),
+    NC_("SC_OPCODE_NEG_BINOM_DIST_MS", "The number of successes in the trial sequence."),
+    NC_("SC_OPCODE_NEG_BINOM_DIST_MS", "SP"),
+    NC_("SC_OPCODE_NEG_BINOM_DIST_MS", "The success probability of a trial."),
+    NC_("SC_OPCODE_NEG_BINOM_DIST_MS", "Cumulative"),
+    NC_("SC_OPCODE_NEG_BINOM_DIST_MS", "0 or FALSE calculates the probability density function. Any other value or TRUE calculates the cumulative distribution function.")
+};
+
+// -=*# Resource for function CRITBINOM #*=-
+const char* SC_OPCODE_CRIT_BINOM_ARY[] =
+{
+    NC_("SC_OPCODE_CRIT_BINOM", "Returns the smallest value for which the cumulative binomial distribution is greater than or equal to a criterion value."),
+    NC_("SC_OPCODE_CRIT_BINOM", "trials"),
+    NC_("SC_OPCODE_CRIT_BINOM", "The total number of trials."),
+    NC_("SC_OPCODE_CRIT_BINOM", "SP"),
+    NC_("SC_OPCODE_CRIT_BINOM", "The success probability of a trial."),
+    NC_("SC_OPCODE_CRIT_BINOM", "alpha"),
+    NC_("SC_OPCODE_CRIT_BINOM", "The border probability that is attained or exceeded.")
+};
+
+// -=*# Resource for function BINOM.INV #*=-
+const char* SC_OPCODE_BINOM_INV_ARY[] =
+{
+    NC_("SC_OPCODE_BINOM_INV", "Returns the smallest value for which the cumulative binomial distribution is greater than or equal to a criterion value."),
+    NC_("SC_OPCODE_BINOM_INV", "trials"),
+    NC_("SC_OPCODE_BINOM_INV", "The total number of trials."),
+    NC_("SC_OPCODE_BINOM_INV", "SP"),
+    NC_("SC_OPCODE_BINOM_INV", "The success probability of a trial."),
+    NC_("SC_OPCODE_BINOM_INV", "alpha"),
+    NC_("SC_OPCODE_BINOM_INV", "The border probability that is attained or exceeded.")
+};
+
+// -=*# Resource for function POISSON #*=-
+const char* SC_OPCODE_POISSON_DIST_ARY[] =
+{
+    NC_("SC_OPCODE_POISSON_DIST", "Returns the Poisson distribution."),
+    NC_("SC_OPCODE_POISSON_DIST", "Number"),
+    NC_("SC_OPCODE_POISSON_DIST", "The value for which the Poisson distribution is to be calculated."),
+    NC_("SC_OPCODE_POISSON_DIST", "mean"),
+    NC_("SC_OPCODE_POISSON_DIST", "Mean. The mean value of the Poisson distribution."),
+    NC_("SC_OPCODE_POISSON_DIST", "Cumulative"),
+    NC_("SC_OPCODE_POISSON_DIST", "0 or FALSE calculates the probability density function. Any other value or TRUE or omitted calculates the cumulative distribution function.")
+};
+
+// -=*# Resource for function POISSON.DIST #*=-
+const char* SC_OPCODE_POISSON_DIST_MS_ARY[] =
+{
+    NC_("SC_OPCODE_POISSON_DIST_MS", "Returns the Poisson distribution."),
+    NC_("SC_OPCODE_POISSON_DIST_MS", "Number"),
+    NC_("SC_OPCODE_POISSON_DIST_MS", "The value for which the Poisson distribution is to be calculated."),
+    NC_("SC_OPCODE_POISSON_DIST_MS", "mean"),
+    NC_("SC_OPCODE_POISSON_DIST_MS", "Mean. The mean value of the Poisson distribution."),
+    NC_("SC_OPCODE_POISSON_DIST_MS", "Cumulative"),
+    NC_("SC_OPCODE_POISSON_DIST_MS", "0 or FALSE calculates the probability density function. Any other value or TRUE or omitted calculates the cumulative distribution function.")
+};
+
+// -=*# Resource for function NORMDIST #*=-
+const char* SC_OPCODE_NORM_DIST_ARY[] =
+{
+    NC_("SC_OPCODE_NORM_DIST", "Values of the normal distribution."),
+    NC_("SC_OPCODE_NORM_DIST", "Number"),
+    NC_("SC_OPCODE_NORM_DIST", "The value for which the normal distribution is to be calculated."),
+    NC_("SC_OPCODE_NORM_DIST", "Mean"),
+    NC_("SC_OPCODE_NORM_DIST", "The mean value. The mean value of the normal distribution."),
+    NC_("SC_OPCODE_NORM_DIST", "STDEV"),
+    NC_("SC_OPCODE_NORM_DIST", "Standard deviation. The standard deviation of the normal distribution."),
+    NC_("SC_OPCODE_NORM_DIST", "C"),
+    NC_("SC_OPCODE_NORM_DIST", "0 or FALSE calculates the probability density function. Any other value or TRUE or omitted calculates the cumulative distribution function.")
+};
+
+// -=*# Resource for function NORM.DIST #*=-
+const char* SC_OPCODE_NORM_DIST_MS_ARY[] =
+{
+    NC_("SC_OPCODE_NORM_DIST_MS", "Values of the normal distribution."),
+    NC_("SC_OPCODE_NORM_DIST_MS", "Number"),
+    NC_("SC_OPCODE_NORM_DIST_MS", "The value for which the normal distribution is to be calculated."),
+    NC_("SC_OPCODE_NORM_DIST_MS", "Mean"),
+    NC_("SC_OPCODE_NORM_DIST_MS", "The mean value. The mean value of the normal distribution."),
+    NC_("SC_OPCODE_NORM_DIST_MS", "STDEV"),
+    NC_("SC_OPCODE_NORM_DIST_MS", "Standard deviation. The standard deviation of the normal distribution."),
+    NC_("SC_OPCODE_NORM_DIST_MS", "C"),
+    NC_("SC_OPCODE_NORM_DIST_MS", "0 or FALSE calculates the probability density function. Any other value or TRUE calculates the cumulative distribution function.")
+};
+
+// -=*# Resource for function NORMINV #*=-
+const char* SC_OPCODE_NORM_INV_ARY[] =
+{
+    NC_("SC_OPCODE_NORM_INV", "Values of the inverse normal distribution."),
+    NC_("SC_OPCODE_NORM_INV", "number"),
+    NC_("SC_OPCODE_NORM_INV", "The probability value for which the inverse normal distribution is to be calculated."),
+    NC_("SC_OPCODE_NORM_INV", "mean"),
+    NC_("SC_OPCODE_NORM_INV", "The mean value. The mean value of the normal distribution."),
+    NC_("SC_OPCODE_NORM_INV", "STDEV"),
+    NC_("SC_OPCODE_NORM_INV", "Standard deviation. The standard deviation of the normal distribution.")
+};
+
+// -=*# Resource for function NORM.INV #*=-
+const char* SC_OPCODE_NORM_INV_MS_ARY[] =
+{
+    NC_("SC_OPCODE_NORM_INV_MS", "Values of the inverse normal distribution."),
+    NC_("SC_OPCODE_NORM_INV_MS", "number"),
+    NC_("SC_OPCODE_NORM_INV_MS", "The probability value for which the inverse normal distribution is to be calculated."),
+    NC_("SC_OPCODE_NORM_INV_MS", "mean"),
+    NC_("SC_OPCODE_NORM_INV_MS", "The mean value. The mean value of the normal distribution."),
+    NC_("SC_OPCODE_NORM_INV_MS", "STDEV"),
+    NC_("SC_OPCODE_NORM_INV_MS", "Standard deviation. The standard deviation of the normal distribution.")
+};
+
+// -=*# Resource for function NORMSDIST #*=-
+const char* SC_OPCODE_STD_NORM_DIST_ARY[] =
+{
+    NC_("SC_OPCODE_STD_NORM_DIST", "The values of the standard normal cumulative distribution."),
+    NC_("SC_OPCODE_STD_NORM_DIST", "Number"),
+    NC_("SC_OPCODE_STD_NORM_DIST", "The value for which the standard normal distribution is to be calculated.")
+};
+
+// -=*# Resource for function NORM.S.DIST #*=-
+const char* SC_OPCODE_STD_NORM_DIST_MS_ARY[] =
+{
+    NC_("SC_OPCODE_STD_NORM_DIST_MS", "The values of the standard normal distribution."),
+    NC_("SC_OPCODE_STD_NORM_DIST_MS", "Number"),
+    NC_("SC_OPCODE_STD_NORM_DIST_MS", "The value for which the standard normal distribution is to be calculated."),
+    NC_("SC_OPCODE_STD_NORM_DIST_MS", "Cumulative"),
+    NC_("SC_OPCODE_STD_NORM_DIST_MS", "0 or FALSE calculates the probability density function. Any other value or TRUE calculates the cumulative distribution function.")
+};
+
+// -=*# Resource for function NORMSINV #*=-
+const char* SC_OPCODE_S_NORM_INV_ARY[] =
+{
+    NC_("SC_OPCODE_S_NORM_INV", "Values of the inverse standard normal distribution."),
+    NC_("SC_OPCODE_S_NORM_INV", "number"),
+    NC_("SC_OPCODE_S_NORM_INV", "The probability value for which the inverse standard normal distribution is to be calculated.")
+};
+
+// -=*# Resource for function NORM.S.INV #*=-
+const char* SC_OPCODE_S_NORM_INV_MS_ARY[] =
+{
+    NC_("SC_OPCODE_S_NORM_INV_MS", "Values of the inverse standard normal distribution."),
+    NC_("SC_OPCODE_S_NORM_INV_MS", "number"),
+    NC_("SC_OPCODE_S_NORM_INV_MS", "The probability value for which the inverse standard normal distribution is to be calculated.")
+};
+
+// -=*# Resource for function LOGNORMDIST #*=-
+const char* SC_OPCODE_LOG_NORM_DIST_ARY[] =
+{
+    NC_("SC_OPCODE_LOG_NORM_DIST", "Values of the log normal distribution."),
+    NC_("SC_OPCODE_LOG_NORM_DIST", "Number"),
+    NC_("SC_OPCODE_LOG_NORM_DIST", "The value for which the log normal distribution is to be calculated."),
+    NC_("SC_OPCODE_LOG_NORM_DIST", "mean"),
+    NC_("SC_OPCODE_LOG_NORM_DIST", "The mean value of the log normal distribution. It is set to 0 if omitted."),
+    NC_("SC_OPCODE_LOG_NORM_DIST", "STDEV"),
+    NC_("SC_OPCODE_LOG_NORM_DIST", "The standard deviation of the log normal distribution. It is set to 1 if omitted."),
+    NC_("SC_OPCODE_LOG_NORM_DIST", "Cumulative"),
+    NC_("SC_OPCODE_LOG_NORM_DIST", "0 or FALSE calculates the probability density function. Any other value or TRUE or omitted calculates the cumulative distribution function.")
+};
+
+// -=*# Resource for function LOGNORM.DIST #*=-
+const char* SC_OPCODE_LOG_NORM_DIST_MS_ARY[] =
+{
+    NC_("SC_OPCODE_LOG_NORM_DIST_MS", "Values of the log normal distribution."),
+    NC_("SC_OPCODE_LOG_NORM_DIST_MS", "Number"),
+    NC_("SC_OPCODE_LOG_NORM_DIST_MS", "The value for which the log normal distribution is to be calculated."),
+    NC_("SC_OPCODE_LOG_NORM_DIST_MS", "mean"),
+    NC_("SC_OPCODE_LOG_NORM_DIST_MS", "The mean value of the log normal distribution."),
+    NC_("SC_OPCODE_LOG_NORM_DIST_MS", "STDEV"),
+    NC_("SC_OPCODE_LOG_NORM_DIST_MS", "The standard deviation of the log normal distribution."),
+    NC_("SC_OPCODE_LOG_NORM_DIST_MS", "Cumulative"),
+    NC_("SC_OPCODE_LOG_NORM_DIST_MS", "0 or FALSE calculates the probability density function. Any other value or TRUE calculates the cumulative distribution function.")
+};
+
+// -=*# Resource for function LOGINV #*=-
+const char* SC_OPCODE_LOG_INV_ARY[] =
+{
+    NC_("SC_OPCODE_LOG_INV", "Values of the inverse of the lognormal distribution."),
+    NC_("SC_OPCODE_LOG_INV", "number"),
+    NC_("SC_OPCODE_LOG_INV", "The probability value for which the inverse log normal distribution is to be calculated."),
+    NC_("SC_OPCODE_LOG_INV", "mean"),
+    NC_("SC_OPCODE_LOG_INV", "Mean value. The mean value of the log normal distribution."),
+    NC_("SC_OPCODE_LOG_INV", "STDEV"),
+    NC_("SC_OPCODE_LOG_INV", "Standard deviation. The standard deviation of the log normal distribution.")
+};
+
+// -=*# Resource for function LOGNORM.INV #*=-
+const char* SC_OPCODE_LOG_INV_MS_ARY[] =
+{
+    NC_("SC_OPCODE_LOG_INV_MS", "Values of the inverse of the lognormal distribution."),
+    NC_("SC_OPCODE_LOG_INV_MS", "number"),
+    NC_("SC_OPCODE_LOG_INV_MS", "The probability value for which the inverse log normal distribution is to be calculated."),
+    NC_("SC_OPCODE_LOG_INV_MS", "mean"),
+    NC_("SC_OPCODE_LOG_INV_MS", "Mean value. The mean value of the log normal distribution."),
+    NC_("SC_OPCODE_LOG_INV_MS", "STDEV"),
+    NC_("SC_OPCODE_LOG_INV_MS", "Standard deviation. The standard deviation of the log normal distribution.")
+};
+
+// -=*# Resource for function EXPONDIST #*=-
+const char* SC_OPCODE_EXP_DIST_ARY[] =
+{
+    NC_("SC_OPCODE_EXP_DIST", "Values of the exponential distribution."),
+    NC_("SC_OPCODE_EXP_DIST", "Number"),
+    NC_("SC_OPCODE_EXP_DIST", "The value to which the exponential distribution is to be calculated."),
+    NC_("SC_OPCODE_EXP_DIST", "lambda"),
+    NC_("SC_OPCODE_EXP_DIST", "The parameters of the exponential distribution."),
+    NC_("SC_OPCODE_EXP_DIST", "C"),
+    NC_("SC_OPCODE_EXP_DIST", "Cumulated. C=0 calculates the density function, C=1 the distribution.")
+};
+
+// -=*# Resource for function EXPON.DIST #*=-
+const char* SC_OPCODE_EXP_DIST_MS_ARY[] =
+{
+    NC_("SC_OPCODE_EXP_DIST_MS", "Values of the exponential distribution."),
+    NC_("SC_OPCODE_EXP_DIST_MS", "Number"),
+    NC_("SC_OPCODE_EXP_DIST_MS", "The value to which the exponential distribution is to be calculated."),
+    NC_("SC_OPCODE_EXP_DIST_MS", "lambda"),
+    NC_("SC_OPCODE_EXP_DIST_MS", "The parameters of the exponential distribution."),
+    NC_("SC_OPCODE_EXP_DIST_MS", "C"),
+    NC_("SC_OPCODE_EXP_DIST_MS", "Cumulated. C=0 calculates the density function, C=1 the distribution.")
+};
+
+// -=*# Resource for function GAMMADIST #*=-
+const char* SC_OPCODE_GAMMA_DIST_ARY[] =
+{
+    NC_("SC_OPCODE_GAMMA_DIST", "Returns the value of the probability density function or the cumulative distribution function for the Gamma distribution."),
+    NC_("SC_OPCODE_GAMMA_DIST", "Number"),
+    NC_("SC_OPCODE_GAMMA_DIST", "The value for which the gamma distribution is to be calculated."),
+    NC_("SC_OPCODE_GAMMA_DIST", "alpha"),
+    NC_("SC_OPCODE_GAMMA_DIST", "The Alpha parameter of the Gamma distribution."),
+    NC_("SC_OPCODE_GAMMA_DIST", "beta"),
+    NC_("SC_OPCODE_GAMMA_DIST", "The Beta parameter of the Gamma distribution."),
+    NC_("SC_OPCODE_GAMMA_DIST", "Cumulative"),
+    NC_("SC_OPCODE_GAMMA_DIST", "0 or FALSE calculates the probability density function. Any other value or TRUE or omitted calculates the cumulative distribution function.")
+};
+
+// -=*# Resource for function GAMMA.DIST #*=-
+const char* SC_OPCODE_GAMMA_DIST_MS_ARY[] =
+{
+    NC_("SC_OPCODE_GAMMA_DIST_MS", "Returns the value of the probability density function or the cumulative distribution function for the Gamma distribution."),
+    NC_("SC_OPCODE_GAMMA_DIST_MS", "Number"),
+    NC_("SC_OPCODE_GAMMA_DIST_MS", "The value for which the gamma distribution is to be calculated."),
+    NC_("SC_OPCODE_GAMMA_DIST_MS", "alpha"),
+    NC_("SC_OPCODE_GAMMA_DIST_MS", "The Alpha parameter of the Gamma distribution."),
+    NC_("SC_OPCODE_GAMMA_DIST_MS", "beta"),
+    NC_("SC_OPCODE_GAMMA_DIST_MS", "The Beta parameter of the Gamma distribution."),
+    NC_("SC_OPCODE_GAMMA_DIST_MS", "Cumulative"),
+    NC_("SC_OPCODE_GAMMA_DIST_MS", "0 or FALSE calculates the probability density function. Any other value or TRUE calculates the cumulative distribution function.")
+};
+
+// -=*# Resource for function GAMMAINV #*=-
+const char* SC_OPCODE_GAMMA_INV_ARY[] =
+{
+    NC_("SC_OPCODE_GAMMA_INV", "Values of the inverse gamma distribution."),
+    NC_("SC_OPCODE_GAMMA_INV", "Number"),
+    NC_("SC_OPCODE_GAMMA_INV", "The probability value for which the inverse gamma distribution is to be calculated."),
+    NC_("SC_OPCODE_GAMMA_INV", "alpha"),
+    NC_("SC_OPCODE_GAMMA_INV", "The Alpha (shape) parameter of the Gamma distribution."),
+    NC_("SC_OPCODE_GAMMA_INV", "beta"),
+    NC_("SC_OPCODE_GAMMA_INV", "The Beta (scale) parameter of the Gamma distribution.")
+};
+
+// -=*# Resource for function GAMMA.INV #*=-
+const char* SC_OPCODE_GAMMA_INV_MS_ARY[] =
+{
+    NC_("SC_OPCODE_GAMMA_INV_MS", "Values of the inverse gamma distribution."),
+    NC_("SC_OPCODE_GAMMA_INV_MS", "Number"),
+    NC_("SC_OPCODE_GAMMA_INV_MS", "The probability value for which the inverse gamma distribution is to be calculated."),
+    NC_("SC_OPCODE_GAMMA_INV_MS", "alpha"),
+    NC_("SC_OPCODE_GAMMA_INV_MS", "The Alpha (shape) parameter of the Gamma distribution."),
+    NC_("SC_OPCODE_GAMMA_INV_MS", "beta"),
+    NC_("SC_OPCODE_GAMMA_INV_MS", "The Beta (scale) parameter of the Gamma distribution.")
+};
+
+// -=*# Resource for function GAMMALN #*=-
+const char* SC_OPCODE_GAMMA_LN_ARY[] =
+{
+    NC_("SC_OPCODE_GAMMA_LN", "Returns the natural logarithm of the gamma function."),
+    NC_("SC_OPCODE_GAMMA_LN", "Number"),
+    NC_("SC_OPCODE_GAMMA_LN", "The value for which the natural logarithm of the gamma function is to be calculated.")
+};
+
+// -=*# Resource for function GAMMALN.PRECISE #*=-
+const char* SC_OPCODE_GAMMA_LN_MS_ARY[] =
+{
+    NC_("SC_OPCODE_GAMMA_LN_MS", "Returns the natural logarithm of the gamma function."),
+    NC_("SC_OPCODE_GAMMA_LN_MS", "Number"),
+    NC_("SC_OPCODE_GAMMA_LN_MS", "The value for which the natural logarithm of the gamma function is to be calculated.")
+};
+
+
+// -=*# Resource for function GAMMA #*=-
+const char* SC_OPCODE_GAMMA_ARY[] =
+{
+    NC_("SC_OPCODE_GAMMA", "Returns the value of the Gamma function."),
+    NC_("SC_OPCODE_GAMMA", "Number"),
+    NC_("SC_OPCODE_GAMMA", "The value for which the Gamma function is to be calculated.")
+};
+
+
+// -=*# Resource for function BETADIST #*=-
+const char* SC_OPCODE_BETA_DIST_ARY[] =
+{
+    NC_("SC_OPCODE_BETA_DIST", "Values of the beta distribution."),
+    NC_("SC_OPCODE_BETA_DIST", "number"),
+    NC_("SC_OPCODE_BETA_DIST", "The value for which the beta distribution is to be calculated."),
+    NC_("SC_OPCODE_BETA_DIST", "alpha"),
+    NC_("SC_OPCODE_BETA_DIST", "The Alpha parameter of the Beta distribution."),
+    NC_("SC_OPCODE_BETA_DIST", "beta"),
+    NC_("SC_OPCODE_BETA_DIST", "The Beta parameter of the Beta distribution."),
+    NC_("SC_OPCODE_BETA_DIST", "Start"),
+    NC_("SC_OPCODE_BETA_DIST", "The starting value for the value interval of the distribution."),
+    NC_("SC_OPCODE_BETA_DIST", "End"),
+    NC_("SC_OPCODE_BETA_DIST", "The final value for the value interval of the distribution."),
+    NC_("SC_OPCODE_BETA_DIST", "Cumulative"),
+    NC_("SC_OPCODE_BETA_DIST", "0 or FALSE for probability density function, any other value or TRUE or omitted for cumulative distribution function.")
+};
+
+// -=*# Resource for function BETAINV #*=-
+const char* SC_OPCODE_BETA_INV_ARY[] =
+{
+    NC_("SC_OPCODE_BETA_INV", "Values of the inverse beta distribution."),
+    NC_("SC_OPCODE_BETA_INV", "number"),
+    NC_("SC_OPCODE_BETA_INV", "The probability value for which the inverse beta distribution is to be calculated."),
+    NC_("SC_OPCODE_BETA_INV", "alpha"),
+    NC_("SC_OPCODE_BETA_INV", "The Alpha parameter of the Beta distribution."),
+    NC_("SC_OPCODE_BETA_INV", "beta"),
+    NC_("SC_OPCODE_BETA_INV", "The Beta parameter of the Beta distribution."),
+    NC_("SC_OPCODE_BETA_INV", "Start"),
+    NC_("SC_OPCODE_BETA_INV", "The starting value for the value interval of the distribution."),
+    NC_("SC_OPCODE_BETA_INV", "End"),
+    NC_("SC_OPCODE_BETA_INV", "The final value for the value interval of the distribution.")
+};
+
+// -=*# Resource for function BETA.DIST #*=-
+const char* SC_OPCODE_BETA_DIST_MS_ARY[] =
+{
+    NC_("SC_OPCODE_BETA_DIST_MS", "Values of the beta distribution."),
+    NC_("SC_OPCODE_BETA_DIST_MS", "number"),
+    NC_("SC_OPCODE_BETA_DIST_MS", "The value for which the beta distribution is to be calculated."),
+    NC_("SC_OPCODE_BETA_DIST_MS", "alpha"),
+    NC_("SC_OPCODE_BETA_DIST_MS", "The Alpha parameter of the Beta distribution."),
+    NC_("SC_OPCODE_BETA_DIST_MS", "beta"),
+    NC_("SC_OPCODE_BETA_DIST_MS", "The Beta parameter of the Beta distribution."),
+    NC_("SC_OPCODE_BETA_DIST_MS", "Cumulative"),
+    NC_("SC_OPCODE_BETA_DIST_MS", "0 or FALSE for probability density function, any other value or TRUE or omitted for cumulative distribution function."),
+    NC_("SC_OPCODE_BETA_DIST_MS", "Start"),
+    NC_("SC_OPCODE_BETA_DIST_MS", "The starting value for the value interval of the distribution."),
+    NC_("SC_OPCODE_BETA_DIST_MS", "End"),
+    NC_("SC_OPCODE_BETA_DIST_MS", "The final value for the value interval of the distribution.")
+};
+
+// -=*# Resource for function BETA.INV #*=-
+const char* SC_OPCODE_BETA_INV_MS_ARY[] =
+{
+    NC_("SC_OPCODE_BETA_INV_MS", "Values of the inverse beta distribution."),
+    NC_("SC_OPCODE_BETA_INV_MS", "number"),
+    NC_("SC_OPCODE_BETA_INV_MS", "The probability value for which the inverse beta distribution is to be calculated."),
+    NC_("SC_OPCODE_BETA_INV_MS", "alpha"),
+    NC_("SC_OPCODE_BETA_INV_MS", "The Alpha parameter of the Beta distribution."),
+    NC_("SC_OPCODE_BETA_INV_MS", "beta"),
+    NC_("SC_OPCODE_BETA_INV_MS", "The Beta parameter of the Beta distribution."),
+    NC_("SC_OPCODE_BETA_INV_MS", "Start"),
+    NC_("SC_OPCODE_BETA_INV_MS", "The starting value for the value interval of the distribution."),
+    NC_("SC_OPCODE_BETA_INV_MS", "End"),
+    NC_("SC_OPCODE_BETA_INV_MS", "The final value for the value interval of the distribution.")
+};
+
+// -=*# Resource for function WEIBULL #*=-
+const char* SC_OPCODE_WEIBULL_ARY[] =
+{
+    NC_("SC_OPCODE_WEIBULL", "Returns the values of the Weibull distribution."),
+    NC_("SC_OPCODE_WEIBULL", "Number"),
+    NC_("SC_OPCODE_WEIBULL", "The value for which the Weibull distribution is to be calculated."),
+    NC_("SC_OPCODE_WEIBULL", "Alpha"),
+    NC_("SC_OPCODE_WEIBULL", "The Alpha parameter of the Weibull distribution."),
+    NC_("SC_OPCODE_WEIBULL", "beta"),
+    NC_("SC_OPCODE_WEIBULL", "The Beta parameter of the Weibull distribution."),
+    NC_("SC_OPCODE_WEIBULL", "C"),
+    NC_("SC_OPCODE_WEIBULL", "Cumulated. C=0 calculates the density function, C=1 the distribution.")
+};
+
+// -=*# Resource for function WEIBULL.DIST #*=-
+const char* SC_OPCODE_WEIBULL_MS_ARY[] =
+{
+    NC_("SC_OPCODE_WEIBULL_MS", "Returns the values of the Weibull distribution."),
+    NC_("SC_OPCODE_WEIBULL_MS", "Number"),
+    NC_("SC_OPCODE_WEIBULL_MS", "The value for which the Weibull distribution is to be calculated."),
+    NC_("SC_OPCODE_WEIBULL_MS", "Alpha"),
+    NC_("SC_OPCODE_WEIBULL_MS", "The Alpha parameter of the Weibull distribution."),
+    NC_("SC_OPCODE_WEIBULL_MS", "beta"),
+    NC_("SC_OPCODE_WEIBULL_MS", "The Beta parameter of the Weibull distribution."),
+    NC_("SC_OPCODE_WEIBULL_MS", "C"),
+    NC_("SC_OPCODE_WEIBULL_MS", "Cumulated. C=0 calculates the density function, C=1 the distribution.")
+};
+
+// -=*# Resource for function HYPGEOMDIST #*=-
+const char* SC_OPCODE_HYP_GEOM_DIST_ARY[] =
+{
+    NC_("SC_OPCODE_HYP_GEOM_DIST", "Values of the hypergeometric distribution."),
+    NC_("SC_OPCODE_HYP_GEOM_DIST", "X"),
+    NC_("SC_OPCODE_HYP_GEOM_DIST", "The number of successes in the sample."),
+    NC_("SC_OPCODE_HYP_GEOM_DIST", "n_sample"),
+    NC_("SC_OPCODE_HYP_GEOM_DIST", "The size of the sample."),
+    NC_("SC_OPCODE_HYP_GEOM_DIST", "successes"),
+    NC_("SC_OPCODE_HYP_GEOM_DIST", "The number of successes in the population."),
+    NC_("SC_OPCODE_HYP_GEOM_DIST", "n_population"),
+    NC_("SC_OPCODE_HYP_GEOM_DIST", "The population size."),
+    NC_("SC_OPCODE_HYP_GEOM_DIST", "Cumulative"),
+    NC_("SC_OPCODE_HYP_GEOM_DIST", "Cumulated. TRUE calculates the cumulative distribution function, FALSE the probability mass function.")
+};
+
+// -=*# Resource for function HYPGEOM.DIST #*=-
+const char* SC_OPCODE_HYP_GEOM_DIST_MS_ARY[] =
+{
+    NC_("SC_OPCODE_HYP_GEOM_DIST_MS", "Values of the hypergeometric distribution."),
+    NC_("SC_OPCODE_HYP_GEOM_DIST_MS", "X"),
+    NC_("SC_OPCODE_HYP_GEOM_DIST_MS", "The number of successes in the sample."),
+    NC_("SC_OPCODE_HYP_GEOM_DIST_MS", "n_sample"),
+    NC_("SC_OPCODE_HYP_GEOM_DIST_MS", "The size of the sample."),
+    NC_("SC_OPCODE_HYP_GEOM_DIST_MS", "successes"),
+    NC_("SC_OPCODE_HYP_GEOM_DIST_MS", "The number of successes in the population."),
+    NC_("SC_OPCODE_HYP_GEOM_DIST_MS", "n_population"),
+    NC_("SC_OPCODE_HYP_GEOM_DIST_MS", "The population size."),
+    NC_("SC_OPCODE_HYP_GEOM_DIST_MS", "Cumulative"),
+    NC_("SC_OPCODE_HYP_GEOM_DIST_MS", "Cumulated. TRUE calculates the cumulative distribution function, FALSE the probability mass function.")
+};
+
+// -=*# Resource for function TDIST #*=-
+const char* SC_OPCODE_T_DIST_ARY[] =
+{
+    NC_("SC_OPCODE_T_DIST", "Returns the t-distribution."),
+    NC_("SC_OPCODE_T_DIST", "Number"),
+    NC_("SC_OPCODE_T_DIST", "The value for which the T distribution is to be calculated."),
+    NC_("SC_OPCODE_T_DIST", "degrees_freedom"),
+    NC_("SC_OPCODE_T_DIST", "The degrees of freedom of the T distribution."),
+    NC_("SC_OPCODE_T_DIST", "mode"),
+    NC_("SC_OPCODE_T_DIST", "Mode = 1 calculates the one-tailed test, 2 = two-tailed distribution.")
+};
+
+// -=*# Resource for function T.DIST.2T #*=-
+const char* SC_OPCODE_T_DIST_2T_ARY[] =
+{
+    NC_("SC_OPCODE_T_DIST_2T", "Returns the two-tailed t-distribution."),
+    NC_("SC_OPCODE_T_DIST_2T", "Number"),
+    NC_("SC_OPCODE_T_DIST_2T", "The value for which the T distribution is to be calculated."),
+    NC_("SC_OPCODE_T_DIST_2T", "degrees_freedom"),
+    NC_("SC_OPCODE_T_DIST_2T", "The degrees of freedom of the T distribution.")
+};
+
+// -=*# Resource for function T.DIST #*=-
+const char* SC_OPCODE_T_DIST_MS_ARY[] =
+{
+    NC_("SC_OPCODE_T_DIST_MS", "Returns the t-distribution."),
+    NC_("SC_OPCODE_T_DIST_MS", "Number"),
+    NC_("SC_OPCODE_T_DIST_MS", "The value for which the T distribution is to be calculated."),
+    NC_("SC_OPCODE_T_DIST_MS", "degrees_freedom"),
+    NC_("SC_OPCODE_T_DIST_MS", "The degrees of freedom of the T distribution."),
+    NC_("SC_OPCODE_T_DIST_MS", "cumulative"),
+    NC_("SC_OPCODE_T_DIST_MS", "True calculates the cumulative distribution function, false the probability density function.")
+};
+
+// -=*# Resource for function T.DIST.RT #*=-
+const char* SC_OPCODE_T_DIST_RT_ARY[] =
+{
+    NC_("SC_OPCODE_T_DIST_RT", "Returns the right-tailed t-distribution."),
+    NC_("SC_OPCODE_T_DIST_RT", "Number"),
+    NC_("SC_OPCODE_T_DIST_RT", "The value for which the T distribution is to be calculated."),
+    NC_("SC_OPCODE_T_DIST_RT", "degrees_freedom"),
+    NC_("SC_OPCODE_T_DIST_RT", "The degrees of freedom of the T distribution.")
+};
+
+// -=*# Resource for function TINV #*=-
+const char* SC_OPCODE_T_INV_ARY[] =
+{
+    NC_("SC_OPCODE_T_INV", "Values of the inverse t-distribution."),
+    NC_("SC_OPCODE_T_INV", "number"),
+    NC_("SC_OPCODE_T_INV", "The probability value for which the inverse T distribution is to be calculated."),
+    NC_("SC_OPCODE_T_INV", "degrees_freedom"),
+    NC_("SC_OPCODE_T_INV", "The degrees of freedom of the T distribution.")
+};
+
+// -=*# Resource for function T.INV #*=-
+const char* SC_OPCODE_T_INV_MS_ARY[] =
+{
+    NC_("SC_OPCODE_T_INV_MS", "Values of the left-tailed inverse t-distribution."),
+    NC_("SC_OPCODE_T_INV_MS", "number"),
+    NC_("SC_OPCODE_T_INV_MS", "The probability value for which the inverse T distribution is to be calculated."),
+    NC_("SC_OPCODE_T_INV_MS", "degrees_freedom"),
+    NC_("SC_OPCODE_T_INV_MS", "The degrees of freedom of the T distribution.")
+};
+
+// -=*# Resource for function T.INV.2T #*=-
+const char* SC_OPCODE_T_INV_2T_ARY[] =
+{
+    NC_("SC_OPCODE_T_INV_2T", "Values of the two-tailed inverse t-distribution."),
+    NC_("SC_OPCODE_T_INV_2T", "number"),
+    NC_("SC_OPCODE_T_INV_2T", "The probability value for which the inverse T distribution is to be calculated."),
+    NC_("SC_OPCODE_T_INV_2T", "degrees_freedom"),
+    NC_("SC_OPCODE_T_INV_2T", "The degrees of freedom of the T distribution.")
+};
+
+// -=*# Resource for function FDIST #*=-
+const char* SC_OPCODE_F_DIST_ARY[] =
+{
+    NC_("SC_OPCODE_F_DIST", "Values of the F probability distribution."),
+    NC_("SC_OPCODE_F_DIST", "Number"),
+    NC_("SC_OPCODE_F_DIST", "The value for which the F distribution is to be calculated."),
+    NC_("SC_OPCODE_F_DIST", "degrees_freedom_1"),
+    NC_("SC_OPCODE_F_DIST", "The degrees of freedom in the numerator of the F distribution."),
+    NC_("SC_OPCODE_F_DIST", "degrees_freedom_2"),
+    NC_("SC_OPCODE_F_DIST", "The degrees of freedom in the denominator of the F distribution.")
+};
+
+// -=*# Resource for function F.DIST #*=-
+const char* SC_OPCODE_F_DIST_LT_ARY[] =
+{
+    NC_("SC_OPCODE_F_DIST_LT", "Values of the left tail F probability distribution."),
+    NC_("SC_OPCODE_F_DIST_LT", "Number"),
+    NC_("SC_OPCODE_F_DIST_LT", "The value for which the F distribution is to be calculated."),
+    NC_("SC_OPCODE_F_DIST_LT", "degrees_freedom_1"),
+    NC_("SC_OPCODE_F_DIST_LT", "The degrees of freedom in the numerator of the F distribution."),
+    NC_("SC_OPCODE_F_DIST_LT", "degrees_freedom_2"),
+    NC_("SC_OPCODE_F_DIST_LT", "The degrees of freedom in the denominator of the F distribution."),
+    NC_("SC_OPCODE_F_DIST_LT", "cumulative"),
+    NC_("SC_OPCODE_F_DIST_LT", "Cumulative distribution function (TRUE) or probability density function (FALSE).")
+};
+
+// -=*# Resource for function F.DIST.RT #*=-
+const char* SC_OPCODE_F_DIST_RT_ARY[] =
+{
+    NC_("SC_OPCODE_F_DIST_RT", "Values of the right tail F probability distribution."),
+    NC_("SC_OPCODE_F_DIST_RT", "Number"),
+    NC_("SC_OPCODE_F_DIST_RT", "The value for which the F distribution is to be calculated."),
+    NC_("SC_OPCODE_F_DIST_RT", "degrees_freedom_1"),
+    NC_("SC_OPCODE_F_DIST_RT", "The degrees of freedom in the numerator of the F distribution."),
+    NC_("SC_OPCODE_F_DIST_RT", "degrees_freedom_2"),
+    NC_("SC_OPCODE_F_DIST_RT", "The degrees of freedom in the denominator of the F distribution.")
+};
+
+// -=*# Resource for function FINV #*=-
+const char* SC_OPCODE_F_INV_ARY[] =
+{
+    NC_("SC_OPCODE_F_INV", "Values of the inverse F distribution."),
+    NC_("SC_OPCODE_F_INV", "number"),
+    NC_("SC_OPCODE_F_INV", "The probability value for which the inverse F distribution is to be calculated."),
+    NC_("SC_OPCODE_F_INV", "degrees_freedom_1"),
+    NC_("SC_OPCODE_F_INV", "The degrees of freedom in the numerator of the F distribution."),
+    NC_("SC_OPCODE_F_INV", "degrees_freedom_2"),
+    NC_("SC_OPCODE_F_INV", "The degrees of freedom in the denominator of the F distribution.")
+};
+
+// -=*# Resource for function F.INV #*=-
+const char* SC_OPCODE_F_INV_LT_ARY[] =
+{
+    NC_("SC_OPCODE_F_INV_LT", "Values of the inverse left tail F distribution."),
+    NC_("SC_OPCODE_F_INV_LT", "number"),
+    NC_("SC_OPCODE_F_INV_LT", "The probability value for which the inverse F distribution is to be calculated."),
+    NC_("SC_OPCODE_F_INV_LT", "degrees_freedom_1"),
+    NC_("SC_OPCODE_F_INV_LT", "The degrees of freedom in the numerator of the F distribution."),
+    NC_("SC_OPCODE_F_INV_LT", "degrees_freedom_2"),
+    NC_("SC_OPCODE_F_INV_LT", "The degrees of freedom in the denominator of the F distribution.")
+};
+
+// -=*# Resource for function F.INV.RT #*=-
+const char* SC_OPCODE_F_INV_RT_ARY[] =
+{
+    NC_("SC_OPCODE_F_INV_RT", "Values of the inverse right tail F distribution."),
+    NC_("SC_OPCODE_F_INV_RT", "number"),
+    NC_("SC_OPCODE_F_INV_RT", "The probability value for which the inverse F distribution is to be calculated."),
+    NC_("SC_OPCODE_F_INV_RT", "degrees_freedom_1"),
+    NC_("SC_OPCODE_F_INV_RT", "The degrees of freedom in the numerator of the F distribution."),
+    NC_("SC_OPCODE_F_INV_RT", "degrees_freedom_2"),
+    NC_("SC_OPCODE_F_INV_RT", "The degrees of freedom in the denominator of the F distribution.")
+};
+
+// -=*# Resource for function CHIDIST #*=-
+const char* SC_OPCODE_CHI_DIST_ARY[] =
+{
+    NC_("SC_OPCODE_CHI_DIST", "Returns the right-tail probability of the chi-square distribution."),
+    NC_("SC_OPCODE_CHI_DIST", "Number"),
+    NC_("SC_OPCODE_CHI_DIST", "The value for which the chi square distribution is to be calculated."),
+    NC_("SC_OPCODE_CHI_DIST", "degrees_freedom"),
+    NC_("SC_OPCODE_CHI_DIST", "The degrees of freedom of the chi square distribution.")
+};
+
+// -=*# Resource for function CHISQ.DIST.RT #*=-
+const char* SC_OPCODE_CHI_DIST_MS_ARY[] =
+{
+    NC_("SC_OPCODE_CHI_DIST_MS", "Returns the right-tail probability of the chi-square distribution."),
+    NC_("SC_OPCODE_CHI_DIST_MS", "Number"),
+    NC_("SC_OPCODE_CHI_DIST_MS", "The value for which the chi square distribution is to be calculated."),
+    NC_("SC_OPCODE_CHI_DIST_MS", "degrees_freedom"),
+    NC_("SC_OPCODE_CHI_DIST_MS", "The degrees of freedom of the chi square distribution.")
+};
+
+
+// -=*# Resource for function CHISQDIST #*=-
+const char* SC_OPCODE_CHISQ_DIST_ARY[] =
+{
+    NC_("SC_OPCODE_CHISQ_DIST", "Returns left-tail probability of the cumulative distribution function or values of the probability density function of the chi-square distribution."),
+    NC_("SC_OPCODE_CHISQ_DIST", "Number"),
+    NC_("SC_OPCODE_CHISQ_DIST", "The value for which the probability density function or cumulative distribution function is to be calculated."),
+    NC_("SC_OPCODE_CHISQ_DIST", "Degrees of Freedom"),
+    NC_("SC_OPCODE_CHISQ_DIST", "The degrees of freedom of the chi-square distribution."),
+    NC_("SC_OPCODE_CHISQ_DIST", "Cumulative"),
+    NC_("SC_OPCODE_CHISQ_DIST", "0 or FALSE calculates the probability density function. Any other value or TRUE or omitted calculates the cumulative distribution function.")
+};
+
+
+// -=*# Resource for function CHISQ.DIST #*=-
+const char* SC_OPCODE_CHISQ_DIST_MS_ARY[] =
+{
+    NC_("SC_OPCODE_CHISQ_DIST_MS", "Returns left-tail probability of the cumulative distribution function or values of the probability density function of the chi-square distribution."),
+    NC_("SC_OPCODE_CHISQ_DIST_MS", "Number"),
+    NC_("SC_OPCODE_CHISQ_DIST_MS", "The value for which the probability density function or cumulative distribution function is to be calculated."),
+    NC_("SC_OPCODE_CHISQ_DIST_MS", "Degrees of Freedom"),
+    NC_("SC_OPCODE_CHISQ_DIST_MS", "The degrees of freedom of the chi-square distribution."),
+    NC_("SC_OPCODE_CHISQ_DIST_MS", "Cumulative"),
+    NC_("SC_OPCODE_CHISQ_DIST_MS", "0 or FALSE calculates the probability density function. Any other value or TRUE calculates the cumulative distribution function.")
+};
+
+
+// -=*# Resource for function CHIINV #*=-
+const char* SC_OPCODE_CHI_INV_ARY[] =
+{
+    NC_("SC_OPCODE_CHI_INV", "Values of the inverse of CHIDIST(x; DegreesOfFreedom)."),
+    NC_("SC_OPCODE_CHI_INV", "number"),
+    NC_("SC_OPCODE_CHI_INV", "The probability value for which the inverse chi square distribution is to be calculated."),
+    NC_("SC_OPCODE_CHI_INV", "degrees_freedom"),
+    NC_("SC_OPCODE_CHI_INV", "The degrees of freedom of the chi square distribution.")
+};
+
+
+// -=*# Resource for function CHISQ.INV.RT #*=-
+const char* SC_OPCODE_CHI_INV_MS_ARY[] =
+{
+    NC_("SC_OPCODE_CHI_INV_MS", "Values of the inverse of CHIDIST(x; DegreesOfFreedom)."),
+    NC_("SC_OPCODE_CHI_INV_MS", "number"),
+    NC_("SC_OPCODE_CHI_INV_MS", "The probability value for which the inverse chi square distribution is to be calculated."),
+    NC_("SC_OPCODE_CHI_INV_MS", "degrees_freedom"),
+    NC_("SC_OPCODE_CHI_INV_MS", "The degrees of freedom of the chi square distribution.")
+};
+
+
+// -=*# Resource for function CHISQINV #*=-
+const char* SC_OPCODE_CHISQ_INV_ARY[] =
+{
+    NC_("SC_OPCODE_CHISQ_INV", "Values of the inverse of CHISQDIST(x;DegreesOfFreedom;TRUE())."),
+    NC_("SC_OPCODE_CHISQ_INV", "Probability"),
+    NC_("SC_OPCODE_CHISQ_INV", "The probability value for which the inverse of the chi square distribution is to be calculated."),
+    NC_("SC_OPCODE_CHISQ_INV", "Degrees of Freedom"),
+    NC_("SC_OPCODE_CHISQ_INV", "The degrees of freedom of the chi square distribution.")
+};
+
+
+// -=*# Resource for function CHISQ.INV #*=-
+const char* SC_OPCODE_CHISQ_INV_MS_ARY[] =
+{
+    NC_("SC_OPCODE_CHISQ_INV_MS", "Values of the inverse of CHISQ.DIST(x;DegreesOfFreedom;TRUE())."),
+    NC_("SC_OPCODE_CHISQ_INV_MS", "Probability"),
+    NC_("SC_OPCODE_CHISQ_INV_MS", "The probability value for which the inverse of the chi square distribution is to be calculated."),
+    NC_("SC_OPCODE_CHISQ_INV_MS", "Degrees of Freedom"),
+    NC_("SC_OPCODE_CHISQ_INV_MS", "The degrees of freedom of the chi square distribution.")
+};
+
+
+// -=*# Resource for function STANDARDIZE #*=-
+const char* SC_OPCODE_STANDARD_ARY[] =
+{
+    NC_("SC_OPCODE_STANDARD", "Converts a random variable to a normalized value."),
+    NC_("SC_OPCODE_STANDARD", "Number"),
+    NC_("SC_OPCODE_STANDARD", "The value to be standardized."),
+    NC_("SC_OPCODE_STANDARD", "mean"),
+    NC_("SC_OPCODE_STANDARD", "The mean value used for moving."),
+    NC_("SC_OPCODE_STANDARD", "STDEV"),
+    NC_("SC_OPCODE_STANDARD", "The standard deviation used for scaling.")
+};
+
+// -=*# Resource for function PERMUT #*=-
+const char* SC_OPCODE_PERMUT_ARY[] =
+{
+    NC_("SC_OPCODE_PERMUT", "Returns the number of permutations for a given number of elements without repetition."),
+    NC_("SC_OPCODE_PERMUT", "Count_1"),
+    NC_("SC_OPCODE_PERMUT", "The total number of elements."),
+    NC_("SC_OPCODE_PERMUT", "Count_2"),
+    NC_("SC_OPCODE_PERMUT", "The selection number taken from the elements.")
+};
+
+// -=*# Resource for function PERMUTATIONA #*=-
+const char* SC_OPCODE_PERMUTATION_A_ARY[] =
+{
+    NC_("SC_OPCODE_PERMUTATION_A", "Returns the number of permutations for a given number of objects (repetition allowed)."),
+    NC_("SC_OPCODE_PERMUTATION_A", "Count_1"),
+    NC_("SC_OPCODE_PERMUTATION_A", "The total number of elements."),
+    NC_("SC_OPCODE_PERMUTATION_A", "Count_2"),
+    NC_("SC_OPCODE_PERMUTATION_A", "The selection number taken from the elements.")
+};
+
+// -=*# Resource for function CONFIDENCE #*=-
+const char* SC_OPCODE_CONFIDENCE_ARY[] =
+{
+    NC_("SC_OPCODE_CONFIDENCE", "Returns a (1-alpha) confidence interval for a normal distribution."),
+    NC_("SC_OPCODE_CONFIDENCE", "alpha"),
+    NC_("SC_OPCODE_CONFIDENCE", "The level of the confidence interval."),
+    NC_("SC_OPCODE_CONFIDENCE", "STDEV"),
+    NC_("SC_OPCODE_CONFIDENCE", "The standard deviation of the population."),
+    NC_("SC_OPCODE_CONFIDENCE", "size"),
+    NC_("SC_OPCODE_CONFIDENCE", "The size of the population.")
+};
+
+// -=*# Resource for function CONFIDENCE.NORM #*=-
+const char* SC_OPCODE_CONFIDENCE_N_ARY[] =
+{
+    NC_("SC_OPCODE_CONFIDENCE_N", "Returns a (1-alpha) confidence interval for a normal distribution."),
+    NC_("SC_OPCODE_CONFIDENCE_N", "alpha"),
+    NC_("SC_OPCODE_CONFIDENCE_N", "The level of the confidence interval."),
+    NC_("SC_OPCODE_CONFIDENCE_N", "STDEV"),
+    NC_("SC_OPCODE_CONFIDENCE_N", "The standard deviation of the population."),
+    NC_("SC_OPCODE_CONFIDENCE_N", "size"),
+    NC_("SC_OPCODE_CONFIDENCE_N", "The size of the population.")
+};
+
+// -=*# Resource for function CONFIDENCE.T #*=-
+const char* SC_OPCODE_CONFIDENCE_T_ARY[] =
+{
+    NC_("SC_OPCODE_CONFIDENCE_T", "Returns a (1-alpha) confidence interval for a Student's t distribution."),
+    NC_("SC_OPCODE_CONFIDENCE_T", "alpha"),
+    NC_("SC_OPCODE_CONFIDENCE_T", "The level of the confidence interval."),
+    NC_("SC_OPCODE_CONFIDENCE_T", "STDEV"),
+    NC_("SC_OPCODE_CONFIDENCE_T", "The standard deviation of the population."),
+    NC_("SC_OPCODE_CONFIDENCE_T", "size"),
+    NC_("SC_OPCODE_CONFIDENCE_T", "The size of the population.")
+};
+
+// -=*# Resource for function ZTEST #*=-
+const char* SC_OPCODE_Z_TEST_ARY[] =
+{
+    NC_("SC_OPCODE_Z_TEST", "Calculates the probability of observing a z-statistic greater than the one computed based on a sample."),
+    NC_("SC_OPCODE_Z_TEST", "data"),
+    NC_("SC_OPCODE_Z_TEST", "The given sample, drawn from a normally distributed population."),
+    NC_("SC_OPCODE_Z_TEST", "mu"),
+    NC_("SC_OPCODE_Z_TEST", "The known mean of the population."),
+    NC_("SC_OPCODE_Z_TEST", "sigma"),
+    NC_("SC_OPCODE_Z_TEST", "The known standard deviation of the population. If omitted, the standard deviation of the given sample is used.")
+};
+
+// -=*# Resource for function Z.TEST #*=-
+const char* SC_OPCODE_Z_TEST_MS_ARY[] =
+{
+    NC_("SC_OPCODE_Z_TEST_MS", "Calculates the probability of observing a z-statistic greater than the one computed based on a sample."),
+    NC_("SC_OPCODE_Z_TEST_MS", "data"),
+    NC_("SC_OPCODE_Z_TEST_MS", "The given sample, drawn from a normally distributed population."),
+    NC_("SC_OPCODE_Z_TEST_MS", "mu"),
+    NC_("SC_OPCODE_Z_TEST_MS", "The known mean of the population."),
+    NC_("SC_OPCODE_Z_TEST_MS", "sigma"),
+    NC_("SC_OPCODE_Z_TEST_MS", "The known standard deviation of the population. If omitted, the standard deviation of the given sample is used.")
+};
+
+// -=*# Resource for function CHITEST #*=-
+const char* SC_OPCODE_CHI_TEST_ARY[] =
+{
+    NC_("SC_OPCODE_CHI_TEST", "Returns the chi square independence test."),
+    NC_("SC_OPCODE_CHI_TEST", "Data_B"),
+    NC_("SC_OPCODE_CHI_TEST", "The observed data array."),
+    NC_("SC_OPCODE_CHI_TEST", "data_E"),
+    NC_("SC_OPCODE_CHI_TEST", "The expected data array.")
+};
+
+// -=*# Resource for function CHISQ.TEST #*=-
+const char* SC_OPCODE_CHI_TEST_MS_ARY[] =
+{
+    NC_("SC_OPCODE_CHI_TEST_MS", "Returns the chi square independence test."),
+    NC_("SC_OPCODE_CHI_TEST_MS", "Data_B"),
+    NC_("SC_OPCODE_CHI_TEST_MS", "The observed data array."),
+    NC_("SC_OPCODE_CHI_TEST_MS", "data_E"),
+    NC_("SC_OPCODE_CHI_TEST_MS", "The expected data array.")
+};
+
+// -=*# Resource for function FTEST #*=-
+const char* SC_OPCODE_F_TEST_ARY[] =
+{
+    NC_("SC_OPCODE_F_TEST", "Calculates the F test."),
+    NC_("SC_OPCODE_F_TEST", "data_1"),
+    NC_("SC_OPCODE_F_TEST", "The first record array."),
+    NC_("SC_OPCODE_F_TEST", "data_2"),
+    NC_("SC_OPCODE_F_TEST", "The second record array.")
+};
+
+// -=*# Resource for function F.TEST #*=-
+const char* SC_OPCODE_F_TEST_MS_ARY[] =
+{
+    NC_("SC_OPCODE_F_TEST_MS", "Calculates the F test."),
+    NC_("SC_OPCODE_F_TEST_MS", "data_1"),
+    NC_("SC_OPCODE_F_TEST_MS", "The first record array."),
+    NC_("SC_OPCODE_F_TEST_MS", "data_2"),
+    NC_("SC_OPCODE_F_TEST_MS", "The second record array.")
+};
+
+// -=*# Resource for function TTEST #*=-
+const char* SC_OPCODE_T_TEST_ARY[] =
+{
+    NC_("SC_OPCODE_T_TEST", "Calculates the T test."),
+    NC_("SC_OPCODE_T_TEST", "data_1"),
+    NC_("SC_OPCODE_T_TEST", "The first record array."),
+    NC_("SC_OPCODE_T_TEST", "data_2"),
+    NC_("SC_OPCODE_T_TEST", "The second record array."),
+    NC_("SC_OPCODE_T_TEST", "mode"),
+    NC_("SC_OPCODE_T_TEST", "Mode specifies the number of distribution tails to return. 1= one-tailed, 2 = two-tailed distribution"),
+    NC_("SC_OPCODE_T_TEST", "Type"),
+    NC_("SC_OPCODE_T_TEST", "The type of the T test.")
+};
+
+// -=*# Resource for function T.TEST #*=-
+const char* SC_OPCODE_T_TEST_MS_ARY[] =
+{
+    NC_("SC_OPCODE_T_TEST_MS", "Calculates the T test."),
+    NC_("SC_OPCODE_T_TEST_MS", "data_1"),
+    NC_("SC_OPCODE_T_TEST_MS", "The first record array."),
+    NC_("SC_OPCODE_T_TEST_MS", "data_2"),
+    NC_("SC_OPCODE_T_TEST_MS", "The second record array."),
+    NC_("SC_OPCODE_T_TEST_MS", "mode"),
+    NC_("SC_OPCODE_T_TEST_MS", "Mode specifies the number of distribution tails to return. 1= one-tailed, 2 = two-tailed distribution"),
+    NC_("SC_OPCODE_T_TEST_MS", "Type"),
+    NC_("SC_OPCODE_T_TEST_MS", "The type of the T test.")
+};
+
+// -=*# Resource for function RSQ #*=-
+const char* SC_OPCODE_RSQ_ARY[] =
+{
+    NC_("SC_OPCODE_RSQ", "Returns the square of the Pearson product moment correlation coefficient."),
+    NC_("SC_OPCODE_RSQ", "data_Y"),
+    NC_("SC_OPCODE_RSQ", "The Y data array."),
+    NC_("SC_OPCODE_RSQ", "data_X"),
+    NC_("SC_OPCODE_RSQ", "The X data array.")
+};
+
+// -=*# Resource for function INTERCEPT #*=-
+const char* SC_OPCODE_INTERCEPT_ARY[] =
+{
+    NC_("SC_OPCODE_INTERCEPT", "Returns the intercept of the linear regression line and the Y axis."),
+    NC_("SC_OPCODE_INTERCEPT", "data_Y"),
+    NC_("SC_OPCODE_INTERCEPT", "The Y data array."),
+    NC_("SC_OPCODE_INTERCEPT", "data_X"),
+    NC_("SC_OPCODE_INTERCEPT", "The X data array.")
+};
+
+// -=*# Resource for function SLOPE #*=-
+const char* SC_OPCODE_SLOPE_ARY[] =
+{
+    NC_("SC_OPCODE_SLOPE", "Returns the slope of the linear regression line."),
+    NC_("SC_OPCODE_SLOPE", "data_Y"),
+    NC_("SC_OPCODE_SLOPE", "The Y data array."),
+    NC_("SC_OPCODE_SLOPE", "data_X"),
+    NC_("SC_OPCODE_SLOPE", "The X data array.")
+};
+
+// -=*# Resource for function STEYX #*=-
+const char* SC_OPCODE_STEYX_ARY[] =
+{
+    NC_("SC_OPCODE_STEYX", "Returns the standard error of the linear regression."),
+    NC_("SC_OPCODE_STEYX", "data_Y"),
+    NC_("SC_OPCODE_STEYX", "The Y data array."),
+    NC_("SC_OPCODE_STEYX", "data_X"),
+    NC_("SC_OPCODE_STEYX", "The X data array.")
+};
+
+// -=*# Resource for function PEARSON #*=-
+const char* SC_OPCODE_PEARSON_ARY[] =
+{
+    NC_("SC_OPCODE_PEARSON", "Returns the Pearson product moment correlation coefficient."),
+    NC_("SC_OPCODE_PEARSON", "Data_1"),
+    NC_("SC_OPCODE_PEARSON", "The first record array."),
+    NC_("SC_OPCODE_PEARSON", "Data_2"),
+    NC_("SC_OPCODE_PEARSON", "The second record array.")
+};
+
+// -=*# Resource for function CORREL #*=-
+const char* SC_OPCODE_CORREL_ARY[] =
+{
+    NC_("SC_OPCODE_CORREL", "Returns the correlation coefficient."),
+    NC_("SC_OPCODE_CORREL", "Data_1"),
+    NC_("SC_OPCODE_CORREL", "The first record array."),
+    NC_("SC_OPCODE_CORREL", "Data_2"),
+    NC_("SC_OPCODE_CORREL", "The second record array.")
+};
+
+// -=*# Resource for function COVAR #*=-
+const char* SC_OPCODE_COVAR_ARY[] =
+{
+    NC_("SC_OPCODE_COVAR", "Calculates the population covariance."),
+    NC_("SC_OPCODE_COVAR", "Data_1"),
+    NC_("SC_OPCODE_COVAR", "The first record array."),
+    NC_("SC_OPCODE_COVAR", "Data_2"),
+    NC_("SC_OPCODE_COVAR", "The second record array.")
+};
+
+// -=*# Resource for function COVARIANCE.P #*=-
+const char* SC_OPCODE_COVARIANCE_P_ARY[] =
+{
+    NC_("SC_OPCODE_COVARIANCE_P", "Calculates the population covariance."),
+    NC_("SC_OPCODE_COVARIANCE_P", "Data_1"),
+    NC_("SC_OPCODE_COVARIANCE_P", "The first record array."),
+    NC_("SC_OPCODE_COVARIANCE_P", "Data_2"),
+    NC_("SC_OPCODE_COVARIANCE_P", "The second record array.")
+};
+
+// -=*# Resource for function COVARIANCE.S #*=-
+const char* SC_OPCODE_COVARIANCE_S_ARY[] =
+{
+    NC_("SC_OPCODE_COVARIANCE_S", "Calculates the sample covariance."),
+    NC_("SC_OPCODE_COVARIANCE_S", "Data_1"),
+    NC_("SC_OPCODE_COVARIANCE_S", "The first record array."),
+    NC_("SC_OPCODE_COVARIANCE_S", "Data_2"),
+    NC_("SC_OPCODE_COVARIANCE_S", "The second record array.")
+};
+
+// -=*# Resource for function FORECAST #*=-
+const char* SC_OPCODE_FORECAST_ARY[] =
+{
+    NC_("SC_OPCODE_FORECAST", "Returns a value along a linear regression"),
+    NC_("SC_OPCODE_FORECAST", "value"),
+    NC_("SC_OPCODE_FORECAST", "The X value for which the Y value on the regression linear is to be calculated."),
+    NC_("SC_OPCODE_FORECAST", "data_Y"),
+    NC_("SC_OPCODE_FORECAST", "The Y data array."),
+    NC_("SC_OPCODE_FORECAST", "data_X"),
+    NC_("SC_OPCODE_FORECAST", "The X data array.")
+};
+
+// -=*# Resource for function FORECAST.ETS #*=-
+const char* SC_OPCODE_FORECAST_ETS_ADD_ARY[] =
+{
+    NC_("SC_OPCODE_FORECAST_ETS_ADD", "Calculates future value(s) using additive Exponential Smoothing algorithm."),
+    NC_("SC_OPCODE_FORECAST_ETS_ADD", "target"),
+    NC_("SC_OPCODE_FORECAST_ETS_ADD", "The date (array) for which you want to predict a value."),
+    NC_("SC_OPCODE_FORECAST_ETS_ADD", "values"),
+    NC_("SC_OPCODE_FORECAST_ETS_ADD", "The data array from which you want to forecast."),
+    NC_("SC_OPCODE_FORECAST_ETS_ADD", "timeline"),
+    NC_("SC_OPCODE_FORECAST_ETS_ADD", "The date or numeric array; a consistent step between values is needed."),
+    NC_("SC_OPCODE_FORECAST_ETS_ADD", "period length"),
+    NC_("SC_OPCODE_FORECAST_ETS_ADD", "Number of Samples in Period (default 1); length of the seasonal pattern."),
+    NC_("SC_OPCODE_FORECAST_ETS_ADD", "data completion"),
+    NC_("SC_OPCODE_FORECAST_ETS_ADD", "Data completion (default 1); 0 treats missing points as zero, 1 interpolates."),
+    NC_("SC_OPCODE_FORECAST_ETS_ADD", "aggregation"),
+    NC_("SC_OPCODE_FORECAST_ETS_ADD", "Aggregation (default 1 = AVERAGE); method to be used to aggregate identical (time) values.")
+};
+
+// -=*# Resource for function FORECAST.ETS.MULT #*=-
+const char* SC_OPCODE_FORECAST_ETS_MUL_ARY[] =
+{
+    NC_("SC_OPCODE_FORECAST_ETS_MUL", "Calculates future value(s) using multiplicative Exponential Smoothing algorithm."),
+    NC_("SC_OPCODE_FORECAST_ETS_MUL", "target"),
+    NC_("SC_OPCODE_FORECAST_ETS_MUL", "The date (array) for which you want to predict a value."),
+    NC_("SC_OPCODE_FORECAST_ETS_MUL", "values"),
+    NC_("SC_OPCODE_FORECAST_ETS_MUL", "The data array from which you want to forecast."),
+    NC_("SC_OPCODE_FORECAST_ETS_MUL", "timeline"),
+    NC_("SC_OPCODE_FORECAST_ETS_MUL", "The date or numeric array; a consistent step between values is needed."),
+    NC_("SC_OPCODE_FORECAST_ETS_MUL", "period length"),
+    NC_("SC_OPCODE_FORECAST_ETS_MUL", "Number of Samples in Period (default 1); length of the seasonal pattern."),
+    NC_("SC_OPCODE_FORECAST_ETS_MUL", "data completion"),
+    NC_("SC_OPCODE_FORECAST_ETS_MUL", "Data completion (default 1); 0 treats missing points as zero, 1 interpolates."),
+    NC_("SC_OPCODE_FORECAST_ETS_MUL", "aggregation"),
+    NC_("SC_OPCODE_FORECAST_ETS_MUL", "Aggregation (default 1 = AVERAGE); method to be used to aggregate identical (time) values.")
+};
+
+// -=*# Resource for function FORECAST.ETS.CONFINT #*=-
+const char* SC_OPCODE_FORECAST_ETS_PIA_ARY[] =
+{
+    NC_("SC_OPCODE_FORECAST_ETS_PIA", "Returns a prediction interval at the specified target value(s) for additive Exponential Smoothing method"),
+    NC_("SC_OPCODE_FORECAST_ETS_PIA", "target"),
+    NC_("SC_OPCODE_FORECAST_ETS_PIA", "The date (array) for which you want to predict a value."),
+    NC_("SC_OPCODE_FORECAST_ETS_PIA", "values"),
+    NC_("SC_OPCODE_FORECAST_ETS_PIA", "The data array from which you want to forecast."),
+    NC_("SC_OPCODE_FORECAST_ETS_PIA", "timeline"),
+    NC_("SC_OPCODE_FORECAST_ETS_PIA", "The date or numeric array; a consistent step between values is needed."),
+    NC_("SC_OPCODE_FORECAST_ETS_PIA", "confidence level"),
+    NC_("SC_OPCODE_FORECAST_ETS_PIA", "Confidence level (default 0.95); value 0 to 1 (exclusive) for 0 to 100% calculated prediction interval."),
+    NC_("SC_OPCODE_FORECAST_ETS_PIA", "period length"),
+    NC_("SC_OPCODE_FORECAST_ETS_PIA", "Number of Samples in Period (default 1); length of the seasonal pattern."),
+    NC_("SC_OPCODE_FORECAST_ETS_PIA", "data completion"),
+    NC_("SC_OPCODE_FORECAST_ETS_PIA", "Data completion (default 1); 0 treats missing points as zero, 1 interpolates."),
+    NC_("SC_OPCODE_FORECAST_ETS_PIA", "aggregation"),
+    NC_("SC_OPCODE_FORECAST_ETS_PIA", "Aggregation (default 1 = AVERAGE); method to be used to aggregate identical (time) values.")
+};
+
+// -=*# Resource for function FORECAST.ETS.PI.MULT #*=-
+const char* SC_OPCODE_FORECAST_ETS_PIM_ARY[] =
+{
+    NC_("SC_OPCODE_FORECAST_ETS_PIM", "Returns a prediction interval at the specified target value(s) for multiplicative Exponential Smoothing method"),
+    NC_("SC_OPCODE_FORECAST_ETS_PIM", "target"),
+    NC_("SC_OPCODE_FORECAST_ETS_PIM", "The date (array) for which you want to predict a value."),
+    NC_("SC_OPCODE_FORECAST_ETS_PIM", "values"),
+    NC_("SC_OPCODE_FORECAST_ETS_PIM", "The data array from which you want to forecast."),
+    NC_("SC_OPCODE_FORECAST_ETS_PIM", "timeline"),
+    NC_("SC_OPCODE_FORECAST_ETS_PIM", "The date or numeric array; a consistent step between values is needed."),
+    NC_("SC_OPCODE_FORECAST_ETS_PIM", "confidence level"),
+    NC_("SC_OPCODE_FORECAST_ETS_PIM", "Confidence level (default 0.95); value 0 to 1 (exclusive) for 0 to 100% calculated prediction interval."),
+    NC_("SC_OPCODE_FORECAST_ETS_PIM", "period length"),
+    NC_("SC_OPCODE_FORECAST_ETS_PIM", "Number of Samples in Period (default 1); length of the seasonal pattern."),
+    NC_("SC_OPCODE_FORECAST_ETS_PIM", "data completion"),
+    NC_("SC_OPCODE_FORECAST_ETS_PIM", "Data completion (default 1); 0 treats missing points as zero, 1 interpolates."),
+    NC_("SC_OPCODE_FORECAST_ETS_PIM", "aggregation"),
+    NC_("SC_OPCODE_FORECAST_ETS_PIM", "Aggregation (default 1 = AVERAGE); method to be used to aggregate identical (time) values.")
+};
+
+// -=*# Resource for function FORECAST.ETS.SEASONALITY #*=-
+const char* SC_OPCODE_FORECAST_ETS_SEA_ARY[] =
+{
+    NC_("SC_OPCODE_FORECAST_ETS_SEA", "Calculates the number of samples in period (season) using additive Exponential Triple Smoothing algorithm."),
+    NC_("SC_OPCODE_FORECAST_ETS_SEA", "values"),
+    NC_("SC_OPCODE_FORECAST_ETS_SEA", "The data array from which you want to forecast."),
+    NC_("SC_OPCODE_FORECAST_ETS_SEA", "timeline"),
+    NC_("SC_OPCODE_FORECAST_ETS_SEA", "The date or numeric array; a consistent step between values is needed."),
+    NC_("SC_OPCODE_FORECAST_ETS_SEA", "data completion"),
+    NC_("SC_OPCODE_FORECAST_ETS_SEA", "Data completion (default 1); 0 treats missing points as zero, 1 interpolates."),
+    NC_("SC_OPCODE_FORECAST_ETS_SEA", "aggregation"),
+    NC_("SC_OPCODE_FORECAST_ETS_SEA", "Aggregation (default 1 = AVERAGE); method to be used to aggregate identical (time) values.")
+};
+
+// -=*# Resource for function FORECAST.ETS.STAT #*=-
+const char* SC_OPCODE_FORECAST_ETS_STA_ARY[] =
+{
+    NC_("SC_OPCODE_FORECAST_ETS_STA", "Returns statistical value(s) using additive Exponential Smoothing algorithm."),
+    NC_("SC_OPCODE_FORECAST_ETS_STA", "values"),
+    NC_("SC_OPCODE_FORECAST_ETS_STA", "The data array from which you want to forecast."),
+    NC_("SC_OPCODE_FORECAST_ETS_STA", "timeline"),
+    NC_("SC_OPCODE_FORECAST_ETS_STA", "The date or numeric array; a consistent step between values is needed."),
+    NC_("SC_OPCODE_FORECAST_ETS_STA", "statistic type"),
+    NC_("SC_OPCODE_FORECAST_ETS_STA", "Value (1-9) or array of values, indicating which statistic will be returned for the calculated forecast"),
+    NC_("SC_OPCODE_FORECAST_ETS_STA", "period length"),
+    NC_("SC_OPCODE_FORECAST_ETS_STA", "Number of Samples in Period (default 1); length of the seasonal pattern."),
+    NC_("SC_OPCODE_FORECAST_ETS_STA", "data completion"),
+    NC_("SC_OPCODE_FORECAST_ETS_STA", "Data completion (default 1); 0 treats missing points as zero, 1 interpolates."),
+    NC_("SC_OPCODE_FORECAST_ETS_STA", "aggregation"),
+    NC_("SC_OPCODE_FORECAST_ETS_STA", "Aggregation (default 1 = AVERAGE); method to be used to aggregate identical (time) values.")
+};
+
+// -=*# Resource for function FORECAST.ETS.STAT.MULT #*=-
+const char* SC_OPCODE_FORECAST_ETS_STM_ARY[] =
+{
+    NC_("SC_OPCODE_FORECAST_ETS_STM", "Returns statistical value(s) using multiplicative Exponential Smoothing algorithm."),
+    NC_("SC_OPCODE_FORECAST_ETS_STM", "values"),
+    NC_("SC_OPCODE_FORECAST_ETS_STM", "The data array from which you want to forecast."),
+    NC_("SC_OPCODE_FORECAST_ETS_STM", "timeline"),
+    NC_("SC_OPCODE_FORECAST_ETS_STM", "The date or numeric array; a consistent step between values is needed."),
+    NC_("SC_OPCODE_FORECAST_ETS_STM", "statistic type"),
+    NC_("SC_OPCODE_FORECAST_ETS_STM", "Value (1-9) or array of values, indicating which statistic will be returned for the calculated forecast"),
+    NC_("SC_OPCODE_FORECAST_ETS_STM", "period length"),
+    NC_("SC_OPCODE_FORECAST_ETS_STM", "Number Of Samples in Period (default 1); length of the seasonal pattern."),
+    NC_("SC_OPCODE_FORECAST_ETS_STM", "data completion"),
+    NC_("SC_OPCODE_FORECAST_ETS_STM", "Data completion (default 1); 0 treats missing points as zero, 1 interpolates."),
+    NC_("SC_OPCODE_FORECAST_ETS_STM", "aggregation"),
+    NC_("SC_OPCODE_FORECAST_ETS_STM", "Aggregation (default 1 = AVERAGE); method to be used to aggregate identical (time) values.")
+};
+
+// -=*# Resource for function FORECAST.LINEAR #*=-
+const char* SC_OPCODE_FORECAST_LIN_ARY[] =
+{
+    NC_("SC_OPCODE_FORECAST_LIN", "Returns a value along a linear regression"),
+    NC_("SC_OPCODE_FORECAST_LIN", "value"),
+    NC_("SC_OPCODE_FORECAST_LIN", "The X value for which the Y value on the regression linear is to be calculated."),
+    NC_("SC_OPCODE_FORECAST_LIN", "data_Y"),
+    NC_("SC_OPCODE_FORECAST_LIN", "The Y data array."),
+    NC_("SC_OPCODE_FORECAST_LIN", "data_X"),
+    NC_("SC_OPCODE_FORECAST_LIN", "The X data array.")
+};
+
+// -=*# Resource for function ADDRESS #*=-
+const char* SC_OPCODE_ADDRESS_ARY[] =
+{
+    NC_("SC_OPCODE_ADDRESS", "Returns the reference to a cell as text."),
+    NC_("SC_OPCODE_ADDRESS", "row"),
+    NC_("SC_OPCODE_ADDRESS", "The row number of the cell."),
+    NC_("SC_OPCODE_ADDRESS", "column"),
+    NC_("SC_OPCODE_ADDRESS", "The column number of the cell."),
+    NC_("SC_OPCODE_ADDRESS", "ABS"),
+    NC_("SC_OPCODE_ADDRESS", "Specifies whether absolute or relative referencing is to be used."),
+    NC_("SC_OPCODE_ADDRESS", "A1"),
+    NC_("SC_OPCODE_ADDRESS", "The reference style: 0 or FALSE means R1C1 style, any other value or omitted means A1 style."),
+    NC_("SC_OPCODE_ADDRESS", "sheet"),
+    NC_("SC_OPCODE_ADDRESS", "The spreadsheet name of the cell reference.")
+};
+
+// -=*# Resource for function AREAS #*=-
+const char* SC_OPCODE_AREAS_ARY[] =
+{
+    NC_("SC_OPCODE_AREAS", "Returns the number of individual ranges that belong to a (multiple) range."),
+    NC_("SC_OPCODE_AREAS", "reference"),
+    NC_("SC_OPCODE_AREAS", "The reference to a (multiple) range.")
+};
+
+// -=*# Resource for function CHOOSE #*=-
+const char* SC_OPCODE_CHOOSE_ARY[] =
+{
+    NC_("SC_OPCODE_CHOOSE", "Selects a value from a list of up to 30 value arguments."),
+    NC_("SC_OPCODE_CHOOSE", "Index"),
+    NC_("SC_OPCODE_CHOOSE", "The index of the value (1..30) selected."),
+    NC_("SC_OPCODE_CHOOSE", "value "),
+    NC_("SC_OPCODE_CHOOSE", "Value 1, value 2,... The list of arguments from which a value is chosen.")
+};
+
+// -=*# Resource for function COLUMNS #*=-
+const char* SC_OPCODE_COLUMN_ARY[] =
+{
+    NC_("SC_OPCODE_COLUMN", "Returns the internal column number of a reference."),
+    NC_("SC_OPCODE_COLUMN", "reference"),
+    NC_("SC_OPCODE_COLUMN", "The reference to a cell or a range.")
+};
+
+// -=*# Resource for function ROW #*=-
+const char* SC_OPCODE_ROW_ARY[] =
+{
+    NC_("SC_OPCODE_ROW", "Defines the internal row number of a reference."),
+    NC_("SC_OPCODE_ROW", "reference"),
+    NC_("SC_OPCODE_ROW", "The reference to a cell or a range.")
+};
+
+// -=*# Resource for function SHEET #*=-
+const char* SC_OPCODE_SHEET_ARY[] =
+{
+    NC_("SC_OPCODE_SHEET", "Returns the internal sheet number of a reference or a string."),
+    NC_("SC_OPCODE_SHEET", "reference"),
+    NC_("SC_OPCODE_SHEET", "The reference to a cell or a range or the character string of a sheet name.")
+};
+
+// -=*# Resource for function COLUMNS #*=-
+const char* SC_OPCODE_COLUMNS_ARY[] =
+{
+    NC_("SC_OPCODE_COLUMNS", "Returns the number of columns in an array or reference."),
+    NC_("SC_OPCODE_COLUMNS", "array"),
+    NC_("SC_OPCODE_COLUMNS", "The array (reference) for which the number of columns is to be determined.")
+};
+
+// -=*# Resource for function ROWS #*=-
+const char* SC_OPCODE_ROWS_ARY[] =
+{
+    NC_("SC_OPCODE_ROWS", "Returns the number of rows in a reference or array."),
+    NC_("SC_OPCODE_ROWS", "array"),
+    NC_("SC_OPCODE_ROWS", "The array (reference) for which the number of rows is to be determined.")
+};
+
+// -=*# Resource for function SHEETS #*=-
+const char* SC_OPCODE_SHEETS_ARY[] =
+{
+    NC_("SC_OPCODE_SHEETS", "Returns the number of sheets of a given reference. If no parameter has been entered, the total number of sheets in the document is returned."),
+    NC_("SC_OPCODE_SHEETS", "reference"),
+    NC_("SC_OPCODE_SHEETS", "The reference to a cell or a range.")
+};
+
+// -=*# Resource for function HLOOKUP #*=-
+const char* SC_OPCODE_H_LOOKUP_ARY[] =
+{
+    NC_("SC_OPCODE_H_LOOKUP", "Horizontal search and reference to the cells located below."),
+    NC_("SC_OPCODE_H_LOOKUP", "search_criteria"),
+    NC_("SC_OPCODE_H_LOOKUP", "The value to be found in the first row."),
+    NC_("SC_OPCODE_H_LOOKUP", "array"),
+    NC_("SC_OPCODE_H_LOOKUP", "The array or the range for the reference."),
+    NC_("SC_OPCODE_H_LOOKUP", "Index"),
+    NC_("SC_OPCODE_H_LOOKUP", "The row index in the array."),
+    NC_("SC_OPCODE_H_LOOKUP", "sorted"),
+    NC_("SC_OPCODE_H_LOOKUP", "If the value is TRUE or not given, the search row of the array must be sorted in ascending order.")
+};
+
+// -=*# Resource for function VLOOKUP #*=-
+const char* SC_OPCODE_V_LOOKUP_ARY[] =
+{
+    NC_("SC_OPCODE_V_LOOKUP", "Vertical search and reference to indicated cells."),
+    NC_("SC_OPCODE_V_LOOKUP", "Search criterion"),
+    NC_("SC_OPCODE_V_LOOKUP", "The value to be found in the first column."),
+    NC_("SC_OPCODE_V_LOOKUP", "array"),
+    NC_("SC_OPCODE_V_LOOKUP", "The array or range for referencing."),
+    NC_("SC_OPCODE_V_LOOKUP", "Index"),
+    NC_("SC_OPCODE_V_LOOKUP", "Column index number in the array."),
+    NC_("SC_OPCODE_V_LOOKUP", "sort order"),
+    NC_("SC_OPCODE_V_LOOKUP", "If the value is TRUE or not given, the search column of the array must be sorted in ascending order.")
+};
+
+// -=*# Resource for function INDEX #*=-
+const char* SC_OPCODE_INDEX_ARY[] =
+{
+    NC_("SC_OPCODE_INDEX", "Returns a reference to a cell from a defined range."),
+    NC_("SC_OPCODE_INDEX", "reference"),
+    NC_("SC_OPCODE_INDEX", "The reference to a (multiple) range."),
+    NC_("SC_OPCODE_INDEX", "row"),
+    NC_("SC_OPCODE_INDEX", "The row in the range."),
+    NC_("SC_OPCODE_INDEX", "column"),
+    NC_("SC_OPCODE_INDEX", "The column in the range."),
+    NC_("SC_OPCODE_INDEX", "range"),
+    NC_("SC_OPCODE_INDEX", "The index of the subrange if referring to a multiple range.")
+};
+
+// -=*# Resource for function INDIRECT #*=-
+const char* SC_OPCODE_INDIRECT_ARY[] =
+{
+    NC_("SC_OPCODE_INDIRECT", "Returns the contents of a cell that is referenced in text form."),
+    NC_("SC_OPCODE_INDIRECT", "ref"),
+    NC_("SC_OPCODE_INDIRECT", "The cell whose contents are to be evaluated is to be referenced in text form (e.g. \"A1\")."),
+    NC_("SC_OPCODE_INDIRECT", "A1"),
+    NC_("SC_OPCODE_INDIRECT", "The reference style: 0 or FALSE means R1C1 style, any other value or omitted means A1 style.")
+};
+
+// -=*# Resource for function LOOKUP #*=-
+const char* SC_OPCODE_LOOKUP_ARY[] =
+{
+    NC_("SC_OPCODE_LOOKUP", "Determines a value in a vector by comparison to values in another vector."),
+    NC_("SC_OPCODE_LOOKUP", "Search criterion"),
+    NC_("SC_OPCODE_LOOKUP", "The value to be used for comparison."),
+    NC_("SC_OPCODE_LOOKUP", "Search vector"),
+    NC_("SC_OPCODE_LOOKUP", "The vector (row or column) in which to search."),
+    NC_("SC_OPCODE_LOOKUP", "result_vector"),
+    NC_("SC_OPCODE_LOOKUP", "The vector (row or range) from which the value is to be determined.")
+};
+
+// -=*# Resource for function MATCH #*=-
+const char* SC_OPCODE_MATCH_ARY[] =
+{
+    NC_("SC_OPCODE_MATCH", "Defines a position in a array after comparing values."),
+    NC_("SC_OPCODE_MATCH", "Search criterion"),
+    NC_("SC_OPCODE_MATCH", "The value to be used for comparison."),
+    NC_("SC_OPCODE_MATCH", "lookup_array"),
+    NC_("SC_OPCODE_MATCH", "The array (range) in which the search is made."),
+    NC_("SC_OPCODE_MATCH", "Type"),
+    NC_("SC_OPCODE_MATCH", "Type can take the value 1, 0 or -1 and determines the criteria are to be used for comparison purposes.")
+};
+
+// -=*# Resource for function OFFSET #*=-
+const char* SC_OPCODE_OFFSET_ARY[] =
+{
+    NC_("SC_OPCODE_OFFSET", "Returns a reference which has been moved in relation to the starting point."),
+    NC_("SC_OPCODE_OFFSET", "reference"),
+    NC_("SC_OPCODE_OFFSET", "The reference (cell) from which to base the movement."),
+    NC_("SC_OPCODE_OFFSET", "rows"),
+    NC_("SC_OPCODE_OFFSET", "The number of rows to be moved either up or down."),
+    NC_("SC_OPCODE_OFFSET", "columns"),
+    NC_("SC_OPCODE_OFFSET", "The number of columns that are to be moved to the left or to the right."),
+    NC_("SC_OPCODE_OFFSET", "height"),
+    NC_("SC_OPCODE_OFFSET", "The number of rows of the moved reference."),
+    NC_("SC_OPCODE_OFFSET", "width"),
+    NC_("SC_OPCODE_OFFSET", "The number of columns in the moved reference.")
+};
+
+// -=*# Resource for function ERRORTYPE #*=-
+const char* SC_OPCODE_ERROR_TYPE_ARY[] =
+{
+    NC_("SC_OPCODE_ERROR_TYPE", "Returns a number corresponding to an error type"),
+    NC_("SC_OPCODE_ERROR_TYPE", "reference"),
+    NC_("SC_OPCODE_ERROR_TYPE", "The reference (cell) in which the error occurred.")
+};
+
+// -=*# Resource for function ERROR.TYPE #*=-
+const char* SC_OPCODE_ERROR_TYPE_ODF_ARY[] =
+{
+    NC_("SC_OPCODE_ERROR_TYPE_ODF", "Returns a number corresponding to one of the error values or #N/A if no error exists"),
+    NC_("SC_OPCODE_ERROR_TYPE_ODF", "expression"),
+    NC_("SC_OPCODE_ERROR_TYPE_ODF", "The error value whose identifying number you want to find. Can be the actual error value or a reference to a cell that you want to test.")
+};
+
+// -=*# Resource for function STYLE #*=-
+const char* SC_OPCODE_STYLE_ARY[] =
+{
+    NC_("SC_OPCODE_STYLE", "Applies a Style to the formula cell."),
+    NC_("SC_OPCODE_STYLE", "Style"),
+    NC_("SC_OPCODE_STYLE", "The name of the Style to be applied."),
+    NC_("SC_OPCODE_STYLE", "Time"),
+    NC_("SC_OPCODE_STYLE", "The time (in seconds) that the Style is to remain valid."),
+    NC_("SC_OPCODE_STYLE", "Style2"),
+    NC_("SC_OPCODE_STYLE", "The Style to be applied after time expires.")
+};
+
+// -=*# Resource for function DDE #*=-
+const char* SC_OPCODE_DDE_ARY[] =
+{
+    NC_("SC_OPCODE_DDE", "Result of a DDE link."),
+    NC_("SC_OPCODE_DDE", "server"),
+    NC_("SC_OPCODE_DDE", "The name of the server application."),
+    NC_("SC_OPCODE_DDE", "File"),
+    NC_("SC_OPCODE_DDE", "The name of the file."),
+    NC_("SC_OPCODE_DDE", "range"),
+    NC_("SC_OPCODE_DDE", "The range from which data is to be taken."),
+    NC_("SC_OPCODE_DDE", "mode"),
+    NC_("SC_OPCODE_DDE", "Defines how data is to be converted to numbers.")
+};
+
+// -=*# Resource for function HYPERLINK #*=-
+const char* SC_OPCODE_HYPERLINK_ARY[] =
+{
+    NC_("SC_OPCODE_HYPERLINK", "Hyperlink."),
+    NC_("SC_OPCODE_HYPERLINK", "URL"),
+    NC_("SC_OPCODE_HYPERLINK", "URL"),
+    NC_("SC_OPCODE_HYPERLINK", "CellText"),
+    NC_("SC_OPCODE_HYPERLINK", "Cell Text")
+};
+
+// -=*# Resource for function GETPIVOTDATA #*=-
+const char* SC_OPCODE_GET_PIVOT_DATA_ARY[] =
+{
+    NC_("SC_OPCODE_GET_PIVOT_DATA", "Extracts value(s) from a pivot table."),
+    NC_("SC_OPCODE_GET_PIVOT_DATA", "Data Field"),
+    NC_("SC_OPCODE_GET_PIVOT_DATA", "The name of the pivot table field to extract."),
+    NC_("SC_OPCODE_GET_PIVOT_DATA", "Pivot Table"),
+    NC_("SC_OPCODE_GET_PIVOT_DATA", "A reference to a cell or range in the pivot table."),
+    NC_("SC_OPCODE_GET_PIVOT_DATA", "Field Name / Item"),
+    NC_("SC_OPCODE_GET_PIVOT_DATA", "Field name/value pair to filter the target data.")
+};
+
+// -=*# Resource for function BAHTTEXT #*=-
+const char* SC_OPCODE_BAHTTEXT_ARY[] =
+{
+    NC_("SC_OPCODE_BAHTTEXT", "Converts a number to text (Baht)."),
+    NC_("SC_OPCODE_BAHTTEXT", "Number"),
+    NC_("SC_OPCODE_BAHTTEXT", "The number to convert.")
+};
+
+// -=*# Resource for function JIS #*=-
+const char* SC_OPCODE_JIS_ARY[] =
+{
+    NC_("SC_OPCODE_JIS", "Converts half-width ASCII and katakana characters to full-width."),
+    NC_("SC_OPCODE_JIS", "text"),
+    NC_("SC_OPCODE_JIS", "The text to convert.")
+};
+
+// -=*# Resource for function ASC #*=-
+const char* SC_OPCODE_ASC_ARY[] =
+{
+    NC_("SC_OPCODE_ASC", "Converts full-width ASCII and katakana characters to half-width."),
+    NC_("SC_OPCODE_ASC", "text"),
+    NC_("SC_OPCODE_ASC", "The text to convert.")
+};
+
+// -=*# Resource for function CODE #*=-
+const char* SC_OPCODE_CODE_ARY[] =
+{
+    NC_("SC_OPCODE_CODE", "Returns a numeric code for the first character in a text string."),
+    NC_("SC_OPCODE_CODE", "text"),
+    NC_("SC_OPCODE_CODE", "This is the text for which the code of the first character is to be found.")
+};
+
+// -=*# Resource for function DOLLAR #*=-
+const char* SC_OPCODE_CURRENCY_ARY[] =
+{
+    NC_("SC_OPCODE_CURRENCY", "Converts a number to text in currency format."),
+    NC_("SC_OPCODE_CURRENCY", "value"),
+    NC_("SC_OPCODE_CURRENCY", "Value is a number, a reference to a cell containing a number or a formula that results in a number."),
+    NC_("SC_OPCODE_CURRENCY", "decimals"),
+    NC_("SC_OPCODE_CURRENCY", "Decimal places. Denotes the number of digits to the right of the decimal point.")
+};
+
+// -=*# Resource for function CHAR #*=-
+const char* SC_OPCODE_CHAR_ARY[] =
+{
+    NC_("SC_OPCODE_CHAR", "Converts a code number into a character or letter."),
+    NC_("SC_OPCODE_CHAR", "number"),
+    NC_("SC_OPCODE_CHAR", "The code value for the character.")
+};
+
+// -=*# Resource for function CLEAN #*=-
+const char* SC_OPCODE_CLEAN_ARY[] =
+{
+    NC_("SC_OPCODE_CLEAN", "Removes all nonprintable characters from text."),
+    NC_("SC_OPCODE_CLEAN", "text"),
+    NC_("SC_OPCODE_CLEAN", "The text from which nonprintable characters are to be removed.")
+};
+
+// -=*# Resource for function CONCATENATE #*=-
+const char* SC_OPCODE_CONCAT_ARY[] =
+{
+    NC_("SC_OPCODE_CONCAT", "Combines several text items into one."),
+    NC_("SC_OPCODE_CONCAT", "text"),
+    NC_("SC_OPCODE_CONCAT", "Text for the concatenation.")
+};
+
+// -=*# Resource for function CONCAT #*=-
+const char* SC_OPCODE_CONCAT_MS_ARY[] =
+{
+    NC_("SC_OPCODE_CONCAT_MS", "Combines several text items into one, accepts cell ranges as arguments."),
+    NC_("SC_OPCODE_CONCAT_MS", "text"),
+    NC_("SC_OPCODE_CONCAT_MS", "Text and/or cell ranges for the concatenation.")
+};
+
+// -=*# Resource for function TEXTJOIN #*=-
+const char* SC_OPCODE_TEXTJOIN_MS_ARY[] =
+{
+    NC_("SC_OPCODE_TEXTJOIN_MS", "Combines several text items into one, accepts cell ranges as arguments. Uses delimiter between items."),
+    NC_("SC_OPCODE_TEXTJOIN_MS", "delimiter"),
+    NC_("SC_OPCODE_TEXTJOIN_MS", "Text string to be used as delimiter."),
+    NC_("SC_OPCODE_TEXTJOIN_MS", "skip empty cells"),
+    NC_("SC_OPCODE_TEXTJOIN_MS", "If TRUE, empty cells will be ignored."),
+    NC_("SC_OPCODE_TEXTJOIN_MS", "text"),
+    NC_("SC_OPCODE_TEXTJOIN_MS", "Text and/or cell ranges for the concatenation.")
+};
+
+// -=*# Resource for function IFS #*=-
+const char* SC_OPCODE_IFS_MS_ARY[] =
+{
+    NC_("SC_OPCODE_IFS_MS", "Checks 1 or more conditions and returns a value corresponding to the first true condition."),
+    NC_("SC_OPCODE_IFS_MS", "test"),
+    NC_("SC_OPCODE_IFS_MS", "Any value or expression which can be either TRUE or FALSE."),
+    NC_("SC_OPCODE_IFS_MS", "result"),
+    NC_("SC_OPCODE_IFS_MS", "The result of the function if test is TRUE.")
+};
+
+// -=*# Resource for function SWITCH #*=-
+const char* SC_OPCODE_SWITCH_MS_ARY[] =
+{
+    NC_("SC_OPCODE_SWITCH_MS", "Checks 1 or more values and returns a result corresponding to the first value equal to the given expression."),
+    NC_("SC_OPCODE_SWITCH_MS", "expression"),
+    NC_("SC_OPCODE_SWITCH_MS", "Value that will be compared against value1-valueN."),
+    NC_("SC_OPCODE_SWITCH_MS", "value"),
+    NC_("SC_OPCODE_SWITCH_MS", "Value that will be compared against expression."),
+    NC_("SC_OPCODE_SWITCH_MS", "result"),
+    NC_("SC_OPCODE_SWITCH_MS", "Value to return when corresponding value argument matches expression.")
+};
+
+const char* SC_OPCODE_MINIFS_MS_ARY[] =
+{
+    NC_("SC_OPCODE_MINIFS_MS", "Returns the minimum value in a range that meet multiple criteria in multiple ranges."),
+    NC_("SC_OPCODE_MINIFS_MS", "min_range"),
+    NC_("SC_OPCODE_MINIFS_MS", "The range from which the minimum will be determined."),
+    NC_("SC_OPCODE_MINIFS_MS", "range"),
+    NC_("SC_OPCODE_MINIFS_MS", "Range 1, range 2,... are the ranges to be evaluated by the criteria given."),
+    NC_("SC_OPCODE_MINIFS_MS", "criteria"),
+    NC_("SC_OPCODE_MINIFS_MS", "Criteria 1, criteria 2,... are the criteria to be applied to the ranges given.")
+};
+
+const char* SC_OPCODE_MAXIFS_MS_ARY[] =
+{
+    NC_("SC_OPCODE_MAXIFS_MS", "Returns the maximum value in a range that meet multiple criteria in multiple ranges."),
+    NC_("SC_OPCODE_MAXIFS_MS", "max_range"),
+    NC_("SC_OPCODE_MAXIFS_MS", "The range from which the maximum will be determined."),
+    NC_("SC_OPCODE_MAXIFS_MS", "range"),
+    NC_("SC_OPCODE_MAXIFS_MS", "Range 1, range 2,... are the ranges to be evaluated by the criteria given."),
+    NC_("SC_OPCODE_MAXIFS_MS", "criteria"),
+    NC_("SC_OPCODE_MAXIFS_MS", "Criteria 1, criteria 2,... are the criteria to be applied to the ranges given.")
+};
+
+// -=*# Resource for function EXACT #*=-
+const char* SC_OPCODE_EXACT_ARY[] =
+{
+    NC_("SC_OPCODE_EXACT", "Specifies whether two texts are identical."),
+    NC_("SC_OPCODE_EXACT", "text_1"),
+    NC_("SC_OPCODE_EXACT", "The first text to be used for comparing texts."),
+    NC_("SC_OPCODE_EXACT", "text_2"),
+    NC_("SC_OPCODE_EXACT", "The second text for comparing texts.")
+};
+
+// -=*# Resource for function FIND #*=-
+const char* SC_OPCODE_FIND_ARY[] =
+{
+    NC_("SC_OPCODE_FIND", "Looks for a string of text within another (case sensitive)"),
+    NC_("SC_OPCODE_FIND", "find_text"),
+    NC_("SC_OPCODE_FIND", "The text to be found."),
+    NC_("SC_OPCODE_FIND", "text"),
+    NC_("SC_OPCODE_FIND", "The text in which a search is to be made."),
+    NC_("SC_OPCODE_FIND", "position"),
+    NC_("SC_OPCODE_FIND", "The position in the text from which the search starts.")
+};
+
+// -=*# Resource for function SEARCH #*=-
+const char* SC_OPCODE_SEARCH_ARY[] =
+{
+    NC_("SC_OPCODE_SEARCH", "Looks for one text value within another (not case-sensitive)."),
+    NC_("SC_OPCODE_SEARCH", "find_text"),
+    NC_("SC_OPCODE_SEARCH", "The text to be found."),
+    NC_("SC_OPCODE_SEARCH", "text"),
+    NC_("SC_OPCODE_SEARCH", "The text in which a search is to be made."),
+    NC_("SC_OPCODE_SEARCH", "position"),
+    NC_("SC_OPCODE_SEARCH", "The position in the text where the search is started.")
+};
+
+// -=*# Resource for function TRIM #*=-
+const char* SC_OPCODE_TRIM_ARY[] =
+{
+    NC_("SC_OPCODE_TRIM", "Removes extra spaces from text."),
+    NC_("SC_OPCODE_TRIM", "text"),
+    NC_("SC_OPCODE_TRIM", "The text in which extra spaces between words are to be deleted.")
+};
+
+// -=*# Resource for function PROPER #*=-
+const char* SC_OPCODE_PROPER_ARY[] =
+{
+    NC_("SC_OPCODE_PROPER", "Capitalizes the first letter in all words."),
+    NC_("SC_OPCODE_PROPER", "text"),
+    NC_("SC_OPCODE_PROPER", "The text in which the beginning of words are to be replaced by capital letters.")
+};
+
+// -=*# Resource for function UPPER #*=-
+const char* SC_OPCODE_UPPER_ARY[] =
+{
+    NC_("SC_OPCODE_UPPER", "Converts text to uppercase."),
+    NC_("SC_OPCODE_UPPER", "text"),
+    NC_("SC_OPCODE_UPPER", "The text in which lower case letters are to be converted to capitals.")
+};
+
+// -=*# Resource for function LOWER #*=-
+const char* SC_OPCODE_LOWER_ARY[] =
+{
+    NC_("SC_OPCODE_LOWER", "Converts text to lowercase."),
+    NC_("SC_OPCODE_LOWER", "text"),
+    NC_("SC_OPCODE_LOWER", "The text in which capitals are converted to lower case letters.")
+};
+
+// -=*# Resource for function VALUE #*=-
+const char* SC_OPCODE_VALUE_ARY[] =
+{
+    NC_("SC_OPCODE_VALUE", "Converts text to a number."),
+    NC_("SC_OPCODE_VALUE", "text"),
+    NC_("SC_OPCODE_VALUE", "The text to be converted to a number.")
+};
+
+// -=*# Resource for function TEXT #*=-
+const char* SC_OPCODE_TEXT_ARY[] =
+{
+    NC_("SC_OPCODE_TEXT", "Converts a number to text according to a given format."),
+    NC_("SC_OPCODE_TEXT", "number"),
+    NC_("SC_OPCODE_TEXT", "The numeric value to be converted."),
+    NC_("SC_OPCODE_TEXT", "Format"),
+    NC_("SC_OPCODE_TEXT", "The text that describes the format.")
+};
+
+// -=*# Resource for function T #*=-
+const char* SC_OPCODE_T_ARY[] =
+{
+    NC_("SC_OPCODE_T", "Returns a value if it is text, otherwise an empty string."),
+    NC_("SC_OPCODE_T", "value"),
+    NC_("SC_OPCODE_T", "The value to be checked and returned if it is text.")
+};
+
+// -=*# Resource for function REPLACE #*=-
+const char* SC_OPCODE_REPLACE_ARY[] =
+{
+    NC_("SC_OPCODE_REPLACE", "Replaces characters within a text string with a different text string."),
+    NC_("SC_OPCODE_REPLACE", "Text"),
+    NC_("SC_OPCODE_REPLACE", "The text in which some characters are to be replaced."),
+    NC_("SC_OPCODE_REPLACE", "position"),
+    NC_("SC_OPCODE_REPLACE", "The character position from which text is to be replaced."),
+    NC_("SC_OPCODE_REPLACE", "length"),
+    NC_("SC_OPCODE_REPLACE", "The number of characters to be replaced."),
+    NC_("SC_OPCODE_REPLACE", "new text"),
+    NC_("SC_OPCODE_REPLACE", "The text to be inserted.")
+};
+
+// -=*# Resource for function FIXED #*=-
+const char* SC_OPCODE_FIXED_ARY[] =
+{
+    NC_("SC_OPCODE_FIXED", "Formats a number with a fixed number of places after the decimal point and thousands separator."),
+    NC_("SC_OPCODE_FIXED", "number"),
+    NC_("SC_OPCODE_FIXED", "The number to be formatted."),
+    NC_("SC_OPCODE_FIXED", "Decimals"),
+    NC_("SC_OPCODE_FIXED", "Decimal places. The number of fixed decimal places that are to be displayed."),
+    NC_("SC_OPCODE_FIXED", "No thousands separators"),
+    NC_("SC_OPCODE_FIXED", "Thousands separator. If 0 or omitted the locale group separator is used else the separator is suppressed.")
+};
+
+// -=*# Resource for function LEN #*=-
+const char* SC_OPCODE_LEN_ARY[] =
+{
+    NC_("SC_OPCODE_LEN", "Calculates length of a text string."),
+    NC_("SC_OPCODE_LEN", "text"),
+    NC_("SC_OPCODE_LEN", "The text in which the length is to be determined.")
+};
+
+// -=*# Resource for function LEFT #*=-
+const char* SC_OPCODE_LEFT_ARY[] =
+{
+    NC_("SC_OPCODE_LEFT", "Returns the first character or characters of a text."),
+    NC_("SC_OPCODE_LEFT", "text"),
+    NC_("SC_OPCODE_LEFT", "The text where the initial partial words are to be determined."),
+    NC_("SC_OPCODE_LEFT", "number"),
+    NC_("SC_OPCODE_LEFT", "The number of characters for the start text.")
+};
+
+// -=*# Resource for function RIGHT #*=-
+const char* SC_OPCODE_RIGHT_ARY[] =
+{
+    NC_("SC_OPCODE_RIGHT", "Returns the last character or characters of a text."),
+    NC_("SC_OPCODE_RIGHT", "text"),
+    NC_("SC_OPCODE_RIGHT", "The text in which the end partial words are to be determined."),
+    NC_("SC_OPCODE_RIGHT", "number"),
+    NC_("SC_OPCODE_RIGHT", "The number of characters for the end text.")
+};
+
+// -=*# Resource for function MID #*=-
+const char* SC_OPCODE_MID_ARY[] =
+{
+    NC_("SC_OPCODE_MID", "Returns a partial text string of a text."),
+    NC_("SC_OPCODE_MID", "text"),
+    NC_("SC_OPCODE_MID", "The text in which partial words are to be determined."),
+    NC_("SC_OPCODE_MID", "start"),
+    NC_("SC_OPCODE_MID", "The position from which the part word is to be determined."),
+    NC_("SC_OPCODE_MID", "number"),
+    NC_("SC_OPCODE_MID", "The number of characters for the text.")
+};
+
+// -=*# Resource for function REPT #*=-
+const char* SC_OPCODE_REPT_ARY[] =
+{
+    NC_("SC_OPCODE_REPT", "Repeats text a given number of times."),
+    NC_("SC_OPCODE_REPT", "text"),
+    NC_("SC_OPCODE_REPT", "The text to be repeated."),
+    NC_("SC_OPCODE_REPT", "number"),
+    NC_("SC_OPCODE_REPT", "The number of times the text is to be repeated.")
+};
+
+// -=*# Resource for function SUBSTITUTE #*=-
+const char* SC_OPCODE_SUBSTITUTE_ARY[] =
+{
+    NC_("SC_OPCODE_SUBSTITUTE", "Substitutes new text for old text in a string."),
+    NC_("SC_OPCODE_SUBSTITUTE", "text"),
+    NC_("SC_OPCODE_SUBSTITUTE", "The text in which partial words are to be replaced."),
+    NC_("SC_OPCODE_SUBSTITUTE", "search_text"),
+    NC_("SC_OPCODE_SUBSTITUTE", "The partial string to be (repeatedly) replaced."),
+    NC_("SC_OPCODE_SUBSTITUTE", "new text"),
+    NC_("SC_OPCODE_SUBSTITUTE", "The text which is to replace the text string."),
+    NC_("SC_OPCODE_SUBSTITUTE", "occurrence"),
+    NC_("SC_OPCODE_SUBSTITUTE", "Which occurrence of the old text is to be replaced.")
+};
+
+// -=*# Resource for function BASE #*=-
+const char* SC_OPCODE_BASE_ARY[] =
+{
+    NC_("SC_OPCODE_BASE", "Converts a positive integer to text from a number system to the base defined."),
+    NC_("SC_OPCODE_BASE", "number"),
+    NC_("SC_OPCODE_BASE", "The number to be converted."),
+    NC_("SC_OPCODE_BASE", "radix"),
+    NC_("SC_OPCODE_BASE", "The base number for conversion must be in the range 2 - 36."),
+    NC_("SC_OPCODE_BASE", "Minimum length"),
+    NC_("SC_OPCODE_BASE", "If the text is shorter than the specified length, zeros are added to the left of the string.")
+};
+
+// -=*# Resource for function DECIMAL #*=-
+const char* SC_OPCODE_DECIMAL_ARY[] =
+{
+    NC_("SC_OPCODE_DECIMAL", "Converts a text of a specified number system to a positive integer in the base given."),
+    NC_("SC_OPCODE_DECIMAL", "text"),
+    NC_("SC_OPCODE_DECIMAL", "The text to be converted."),
+    NC_("SC_OPCODE_DECIMAL", "radix"),
+    NC_("SC_OPCODE_DECIMAL", "The base number for conversion must be in the range 2 - 36.")
+};
+
+// -=*# Resource for function CONVERT_OOO #*=-
+const char* SC_OPCODE_CONVERT_OOO_ARY[] =
+{
+    NC_("SC_OPCODE_CONVERT_OOO", "Converts a value according to a conversion table in the configuration (main.xcd)."),
+    NC_("SC_OPCODE_CONVERT_OOO", "value"),
+    NC_("SC_OPCODE_CONVERT_OOO", "The value to be converted."),
+    NC_("SC_OPCODE_CONVERT_OOO", "text"),
+    NC_("SC_OPCODE_CONVERT_OOO", "Unit from which something is converted, case-sensitive."),
+    NC_("SC_OPCODE_CONVERT_OOO", "text"),
+    NC_("SC_OPCODE_CONVERT_OOO", "Unit into which something is converted, case-sensitive.")
+};
+
+// -=*# Resource for function ROMAN #*=-
+const char* SC_OPCODE_ROMAN_ARY[] =
+{
+    NC_("SC_OPCODE_ROMAN", "Converts a number to a Roman numeral."),
+    NC_("SC_OPCODE_ROMAN", "Number"),
+    NC_("SC_OPCODE_ROMAN", "The number to be converted to a Roman numeral must be in the 0 - 3999 range."),
+    NC_("SC_OPCODE_ROMAN", "Mode"),
+    NC_("SC_OPCODE_ROMAN", "The more this value increases, the more the Roman numeral is simplified. The value must be in the 0 - 4 range.")
+};
+
+// -=*# Resource for function ARABIC #*=-
+const char* SC_OPCODE_ARABIC_ARY[] =
+{
+    NC_("SC_OPCODE_ARABIC", "Calculates the value of a Roman numeral."),
+    NC_("SC_OPCODE_ARABIC", "Text"),
+    NC_("SC_OPCODE_ARABIC", "The text that represents a Roman numeral.")
+};
+
+const char* SC_OPCODE_INFO_ARY[] =
+{
+    NC_("SC_OPCODE_INFO", "Returns information about the environment."),
+    NC_("SC_OPCODE_INFO", "Text"),
+    NC_("SC_OPCODE_INFO", "Can be \"osversion\", \"system\", \"release\", \"numfile\", and \"recalc\".")
+};
+
+const char* SC_OPCODE_UNICODE_ARY[] =
+{
+    NC_("SC_OPCODE_UNICODE", "Returns the numeric code for the first Unicode character in a text string."),
+    NC_("SC_OPCODE_UNICODE", "text"),
+    NC_("SC_OPCODE_UNICODE", "This is the text for which the code of the first character is to be found.")
+};
+
+const char* SC_OPCODE_UNICHAR_ARY[] =
+{
+    NC_("SC_OPCODE_UNICHAR", "Converts a code number into a Unicode character or letter."),
+    NC_("SC_OPCODE_UNICHAR", "number"),
+    NC_("SC_OPCODE_UNICHAR", "The code value for the character.")
+};
+
+const char* SC_OPCODE_EUROCONVERT_ARY[] =
+{
+    NC_("SC_OPCODE_EUROCONVERT", "Converts a value from one to another Euro currency."),
+    NC_("SC_OPCODE_EUROCONVERT", "value"),
+    NC_("SC_OPCODE_EUROCONVERT", "The value to be converted."),
+    NC_("SC_OPCODE_EUROCONVERT", "from_currency"),
+    NC_("SC_OPCODE_EUROCONVERT", "ISO 4217 code of the currency from which is converted, case-sensitive."),
+    NC_("SC_OPCODE_EUROCONVERT", "to_currency"),
+    NC_("SC_OPCODE_EUROCONVERT", "ISO 4217 code of the currency into which is converted, case-sensitive."),
+    NC_("SC_OPCODE_EUROCONVERT", "full_precision"),
+    NC_("SC_OPCODE_EUROCONVERT", "If omitted or 0 or FALSE, the result is rounded to the decimals of to_currency. Else the result is not rounded."),
+    NC_("SC_OPCODE_EUROCONVERT", "triangulation_precision"),
+    /* This description uses almost all available space in the dialog, make sure translations fit in size */
+    NC_("SC_OPCODE_EUROCONVERT", "If given and >=3, the intermediate result of a triangular conversion is rounded to that precision. If omitted, the result is not rounded.")
+};
+
+const char* SC_OPCODE_NUMBERVALUE_ARY[] =
+{
+    NC_("SC_OPCODE_NUMBERVALUE", "Converts text to a number, in a locale-independent way."),
+    NC_("SC_OPCODE_NUMBERVALUE", "text"),
+    NC_("SC_OPCODE_NUMBERVALUE", "The text to be converted to a number."),
+    NC_("SC_OPCODE_NUMBERVALUE", "decimal_separator"),
+    NC_("SC_OPCODE_NUMBERVALUE", "Defines the character used as the decimal separator."),
+    NC_("SC_OPCODE_NUMBERVALUE", "group_separator"),
+    NC_("SC_OPCODE_NUMBERVALUE", "Defines the character(s) used as the group separator.")
+};
+
+
+const char* SC_OPCODE_BITAND_ARY[] =
+{
+    NC_("SC_OPCODE_BITAND", "Bitwise \"AND\" of two integers."),
+    NC_("SC_OPCODE_BITAND", "Number1"),
+    NC_("SC_OPCODE_BITAND", "Positive integer less than 2^48."),
+    NC_("SC_OPCODE_BITAND", "Number2"),
+    NC_("SC_OPCODE_BITAND", "Positive integer less than 2^48.")
+};
+
+const char* SC_OPCODE_BITOR_ARY[] =
+{
+    NC_("SC_OPCODE_BITOR", "Bitwise \"OR\" of two integers."),
+    NC_("SC_OPCODE_BITOR", "Number1"),
+    NC_("SC_OPCODE_BITOR", "Positive integer less than 2^48."),
+    NC_("SC_OPCODE_BITOR", "Number2"),
+    NC_("SC_OPCODE_BITOR", "Positive integer less than 2^48.")
+};
+
+const char* SC_OPCODE_BITXOR_ARY[] =
+{
+    NC_("SC_OPCODE_BITXOR", "Bitwise \"exclusive OR\" of two integers."),
+    NC_("SC_OPCODE_BITXOR", "Number1"),
+    NC_("SC_OPCODE_BITXOR", "Positive integer less than 2^48."),
+    NC_("SC_OPCODE_BITXOR", "Number2"),
+    NC_("SC_OPCODE_BITXOR", "Positive integer less than 2^48.")
+};
+
+const char* SC_OPCODE_BITRSHIFT_ARY[] =
+{
+    NC_("SC_OPCODE_BITRSHIFT", "Bitwise right shift of an integer value."),
+    NC_("SC_OPCODE_BITRSHIFT", "Number"),
+    NC_("SC_OPCODE_BITRSHIFT", "The value to be shifted. Positive integer less than 2^48."),
+    NC_("SC_OPCODE_BITRSHIFT", "Shift"),
+    NC_("SC_OPCODE_BITRSHIFT", "The integer number of bits the value is to be shifted.")
+};
+
+const char* SC_OPCODE_BITLSHIFT_ARY[] =
+{
+    NC_("SC_OPCODE_BITLSHIFT", "Bitwise left shift of an integer value."),
+    NC_("SC_OPCODE_BITLSHIFT", "Number"),
+    NC_("SC_OPCODE_BITLSHIFT", "The value to be shifted. Positive integer less than 2^48."),
+    NC_("SC_OPCODE_BITLSHIFT", "Shift"),
+    NC_("SC_OPCODE_BITLSHIFT", "The integer number of bits the value is to be shifted.")
+};
+
+const char* SC_OPCODE_LENB_ARY[] =
+{
+    NC_("SC_OPCODE_LENB", "Calculates length of a text string, with DBCS"),
+    NC_("SC_OPCODE_LENB", "text"),
+    NC_("SC_OPCODE_LENB", "The text in which the length is to be determined.")
+};
+
+const char* SC_OPCODE_RIGHTB_ARY[] =
+{
+    NC_("SC_OPCODE_RIGHTB", "Returns the last character or characters of a text,with DBCS"),
+    NC_("SC_OPCODE_RIGHTB", "text"),
+    NC_("SC_OPCODE_RIGHTB", "The text in which the end partial words are to be determined."),
+    NC_("SC_OPCODE_RIGHTB", "number"),
+    NC_("SC_OPCODE_RIGHTB", "The number of characters for the end text.")
+};
+
+const char* SC_OPCODE_LEFTB_ARY[] =
+{
+    NC_("SC_OPCODE_LEFTB", "Returns the first character or characters of a text,with DBCS"),
+    NC_("SC_OPCODE_LEFTB", "text"),
+    NC_("SC_OPCODE_LEFTB", "The text where the initial partial words are to be determined."),
+    NC_("SC_OPCODE_LEFTB", "number"),
+    NC_("SC_OPCODE_LEFTB", "The number of characters for the start text.")
+};
+
+const char* SC_OPCODE_MIDB_ARY[] =
+{
+    NC_("SC_OPCODE_MIDB", "Returns a partial text string of a text, with DBCS"),
+    NC_("SC_OPCODE_MIDB", "text"),
+    NC_("SC_OPCODE_MIDB", "The text in which partial words are to be determined."),
+    NC_("SC_OPCODE_MIDB", "start"),
+    NC_("SC_OPCODE_MIDB", "The position from which the part word is to be determined."),
+    NC_("SC_OPCODE_MIDB", "number"),
+    NC_("SC_OPCODE_MIDB", "The number of characters for the text.")
+};
+
+const char* SC_OPCODE_FILTERXML_ARY[] =
+{
+    NC_("SC_OPCODE_FILTERXML", "Apply an XPath expression to an XML document"),
+    NC_("SC_OPCODE_FILTERXML", "XML Document"),
+    NC_("SC_OPCODE_FILTERXML", "String containing a valid XML stream"),
+    NC_("SC_OPCODE_FILTERXML", "XPath expression"),
+    NC_("SC_OPCODE_FILTERXML", "String containing a valid XPath expression")
+};
+
+const char* SC_OPCODE_COLOR_ARY[] =
+{
+    NC_("SC_OPCODE_COLOR", "Returns an implementation defined value representing a RGBA color"),
+    NC_("SC_OPCODE_COLOR", "Red"),
+    NC_("SC_OPCODE_COLOR", "Value of red"),
+    NC_("SC_OPCODE_COLOR", "Green"),
+    NC_("SC_OPCODE_COLOR", "Value of green"),
+    NC_("SC_OPCODE_COLOR", "Blue"),
+    NC_("SC_OPCODE_COLOR", "Value of blue"),
+    NC_("SC_OPCODE_COLOR", "Alpha"),
+    NC_("SC_OPCODE_COLOR", "Value of alpha")
+};
+
+const char* SC_OPCODE_WEBSERVICE_ARY[] =
+{
+    NC_("SC_OPCODE_WEBSERVICE", "Get some webcontent from an URI."),
+    NC_("SC_OPCODE_WEBSERVICE", "URI"),
+    NC_("SC_OPCODE_WEBSERVICE", "URI of the webservice")
+};
+
+const char* SC_OPCODE_ENCODEURL_ARY[] =
+{
+    NC_("SC_OPCODE_ENCODEURL", "Return a URL-encoded string."),
+    NC_("SC_OPCODE_ENCODEURL", "Text"),
+    NC_("SC_OPCODE_ENCODEURL", "A string to be URL-encoded")
+};
+
+const char* SC_OPCODE_ERF_MS_ARY[] =
+{
+    NC_("SC_OPCODE_ERF_MS", "Returns the error function."),
+    NC_("SC_OPCODE_ERF_MS", "Lower Limit"),
+    NC_("SC_OPCODE_ERF_MS", "The lower limit for integration")
+};
+
+const char* SC_OPCODE_ERFC_MS_ARY[] =
+{
+    NC_("SC_OPCODE_ERFC_MS", "Returns the complementary error function."),
+    NC_("SC_OPCODE_ERFC_MS", "Lower Limit"),
+    NC_("SC_OPCODE_ERFC_MS", "The lower limit for integration")
+};
+
+const char* SC_OPCODE_RAWSUBTRACT_ARY[] =
+{
+    NC_("SC_OPCODE_RAWSUBTRACT", "Returns the subtraction of numbers. Like a-b-c but without eliminating small roundoff errors."),
+    NC_("SC_OPCODE_RAWSUBTRACT", "minuend"),
+    NC_("SC_OPCODE_RAWSUBTRACT", "Number from which following arguments are subtracted."),
+    NC_("SC_OPCODE_RAWSUBTRACT", "subtrahend "),
+    NC_("SC_OPCODE_RAWSUBTRACT", "Subtrahend 1, subtrahend 2, ... are numerical arguments subtracted from the minuend.")
+};
+
+// -=*# Resource for function ROUNDSIG #*=-
+const char* SC_OPCODE_ROUNDSIG_ARY[] =
+{
+    NC_("SC_OPCODE_ROUNDSIG", "Rounds a number to predefined significant digits."),
+    NC_("SC_OPCODE_ROUNDSIG", "value"),
+    NC_("SC_OPCODE_ROUNDSIG", "The number to be rounded."),
+    NC_("SC_OPCODE_ROUNDSIG", "digits"),
+    NC_("SC_OPCODE_ROUNDSIG", "The number of significant digits to which value is to be rounded.")
+};
+
+const char* SC_OPCODE_REPLACEB_ARY[] =
+{
+    NC("SC_OPCODE_REPLACEB", "Replaces characters within a text string with a different text string, with DBCS."),
+    NC("SC_OPCODE_REPLACEB", "Text"),
+    NC("SC_OPCODE_REPLACEB", "The text in which some characters are to be replaced."),
+    NC("SC_OPCODE_REPLACEB", "position"),
+    NC("SC_OPCODE_REPLACEB", "The character position from which text is to be replaced."),
+    NC("SC_OPCODE_REPLACEB", "length"),
+    NC("SC_OPCODE_REPLACEB", "The number of characters to be replaced."),
+    NC("SC_OPCODE_REPLACEB", "new text"),
+    NC("SC_OPCODE_REPLACEB", "The text to be inserted.")
+};
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

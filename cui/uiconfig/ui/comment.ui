@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="cui">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="CommentDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Insert Comment</property>
+    <property name="title" translatable="yes" context="comment|CommentDialog">Insert Comment</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -150,7 +150,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Author</property>
+                            <property name="label" translatable="yes" context="comment|label2">Author</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -182,7 +182,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Text</property>
+                        <property name="label" translatable="yes" context="comment|label4">_Text</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">edit:border</property>
                       </object>
@@ -225,7 +225,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Insert</property>
+                            <property name="label" translatable="yes" context="comment|label5">_Insert</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">author</property>
                           </object>
@@ -238,7 +238,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="author">
-                            <property name="label" translatable="yes">Author</property>
+                            <property name="label" translatable="yes" context="comment|author">Author</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -261,7 +261,7 @@
                       <object class="GtkLabel" id="alttitle">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="label" translatable="yes">Edit Comment</property>
+                        <property name="label" translatable="yes" context="comment|alttitle">Edit Comment</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -277,7 +277,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Contents</property>
+                <property name="label" translatable="yes" context="comment|label1">Contents</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

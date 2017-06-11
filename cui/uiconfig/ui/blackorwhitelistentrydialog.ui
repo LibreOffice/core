@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkListStore" id="os-liststore">
     <columns>
@@ -11,7 +11,7 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Any</col>
+        <col id="0" translatable="yes" context="blackorwhitelistentrydialog|os-liststore">Any</col>
         <col id="1">0</col>
       </row>
       <row>
@@ -185,7 +185,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
-                            <property name="label" translatable="yes">Operating system:</property>
+                            <property name="label" translatable="yes" context="blackorwhitelistentrydialog|label4">Operating system:</property>
                             <property name="use_underline">True</property>
                           </object>
                           <packing>
@@ -198,7 +198,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
-                            <property name="label" translatable="yes">Version:</property>
+                            <property name="label" translatable="yes" context="blackorwhitelistentrydialog|label5">Version:</property>
                             <property name="use_underline">True</property>
                           </object>
                           <packing>
@@ -211,7 +211,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
-                            <property name="label" translatable="yes">OpenCL vendor:</property>
+                            <property name="label" translatable="yes" context="blackorwhitelistentrydialog|label6">OpenCL vendor:</property>
                             <property name="use_underline">True</property>
                           </object>
                           <packing>
@@ -224,7 +224,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
-                            <property name="label" translatable="yes">Device:</property>
+                            <property name="label" translatable="yes" context="blackorwhitelistentrydialog|label7">Device:</property>
                             <property name="use_underline">True</property>
                           </object>
                           <packing>
@@ -237,7 +237,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
-                            <property name="label" translatable="yes">Driver version:</property>
+                            <property name="label" translatable="yes" context="blackorwhitelistentrydialog|label8">Driver version:</property>
                             <property name="use_underline">True</property>
                           </object>
                           <packing>
@@ -255,7 +255,7 @@
                       <object class="GtkLabel" id="bledittitle">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="label" translatable="yes">Edit OpenCL Blacklist Entry</property>
+                        <property name="label" translatable="yes" context="blackorwhitelistentrydialog|bledittitle">Edit OpenCL Blacklist Entry</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -266,7 +266,7 @@
                       <object class="GtkLabel" id="bladdtitle">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="label" translatable="yes">Create OpenCL Blacklist Entry</property>
+                        <property name="label" translatable="yes" context="blackorwhitelistentrydialog|bladdtitle">Create OpenCL Blacklist Entry</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -277,7 +277,7 @@
                       <object class="GtkLabel" id="wledittitle">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="label" translatable="yes">Edit OpenCL Whitelist Entry</property>
+                        <property name="label" translatable="yes" context="blackorwhitelistentrydialog|wledittitle">Edit OpenCL Whitelist Entry</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -288,7 +288,7 @@
                       <object class="GtkLabel" id="wladdtitle">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="label" translatable="yes">Create OpenCL Whitelist Entry</property>
+                        <property name="label" translatable="yes" context="blackorwhitelistentrydialog|wladdtitle">Create OpenCL Whitelist Entry</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -303,7 +303,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">OpenCL Information</property>
+                <property name="label" translatable="yes" context="blackorwhitelistentrydialog|label1">OpenCL Information</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

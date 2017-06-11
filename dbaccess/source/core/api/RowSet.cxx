@@ -24,13 +24,13 @@
 
 #include <string.h>
 #include "RowSet.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include "sdbcoretools.hxx"
 #include "SingleSelectQueryComposer.hxx"
 #include "CRowSetColumn.hxx"
 #include "CRowSetDataColumn.hxx"
 #include "RowSetCache.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include "core_resource.hxx"
 #include "tablecontainer.hxx"
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkListStore" id="liststore1">
@@ -10,19 +10,19 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">(Without)</col>
+        <col id="0" translatable="yes" context="effectspage|liststore1">(Without)</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Capitals</col>
+        <col id="0" translatable="yes" context="effectspage|liststore1">Capitals</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Lowercase</col>
+        <col id="0" translatable="yes" context="effectspage|liststore1">Lowercase</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Title</col>
+        <col id="0" translatable="yes" context="effectspage|liststore1">Title</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Small capitals</col>
+        <col id="0" translatable="yes" context="effectspage|liststore1">Small capitals</col>
       </row>
     </data>
   </object>
@@ -33,13 +33,13 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">(Without)</col>
+        <col id="0" translatable="yes" context="effectspage|liststore2">(Without)</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Embossed</col>
+        <col id="0" translatable="yes" context="effectspage|liststore2">Embossed</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Engraved</col>
+        <col id="0" translatable="yes" context="effectspage|liststore2">Engraved</col>
       </row>
     </data>
   </object>
@@ -50,19 +50,19 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">(Without)</col>
+        <col id="0" translatable="yes" context="effectspage|liststore3">(Without)</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Dot</col>
+        <col id="0" translatable="yes" context="effectspage|liststore3">Dot</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Circle</col>
+        <col id="0" translatable="yes" context="effectspage|liststore3">Circle</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Disc</col>
+        <col id="0" translatable="yes" context="effectspage|liststore3">Disc</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Accent</col>
+        <col id="0" translatable="yes" context="effectspage|liststore3">Accent</col>
       </row>
     </data>
   </object>
@@ -75,11 +75,11 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Above text</col>
+        <col id="0" translatable="yes" context="effectspage|liststore4">Above text</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Below text</col>
+        <col id="0" translatable="yes" context="effectspage|liststore4">Below text</col>
         <col id="1">1</col>
       </row>
     </data>
@@ -93,27 +93,27 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">(Without)</col>
+        <col id="0" translatable="yes" context="effectspage|liststore5">(Without)</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Single</col>
+        <col id="0" translatable="yes" context="effectspage|liststore5">Single</col>
         <col id="1">1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Double</col>
+        <col id="0" translatable="yes" context="effectspage|liststore5">Double</col>
         <col id="1">2</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Bold</col>
+        <col id="0" translatable="yes" context="effectspage|liststore5">Bold</col>
         <col id="1">4</col>
       </row>
       <row>
-        <col id="0" translatable="yes">With /</col>
+        <col id="0" translatable="yes" context="effectspage|liststore5">With /</col>
         <col id="1">5</col>
       </row>
       <row>
-        <col id="0" translatable="yes">With X</col>
+        <col id="0" translatable="yes" context="effectspage|liststore5">With X</col>
         <col id="1">6</col>
       </row>
     </data>
@@ -127,71 +127,71 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">(Without)</col>
+        <col id="0" translatable="yes" context="effectspage|liststore6">(Without)</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Single</col>
+        <col id="0" translatable="yes" context="effectspage|liststore6">Single</col>
         <col id="1">1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Double</col>
+        <col id="0" translatable="yes" context="effectspage|liststore6">Double</col>
         <col id="1">2</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Bold</col>
+        <col id="0" translatable="yes" context="effectspage|liststore6">Bold</col>
         <col id="1">12</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Dotted</col>
+        <col id="0" translatable="yes" context="effectspage|liststore6">Dotted</col>
         <col id="1">3</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Dotted (Bold)</col>
+        <col id="0" translatable="yes" context="effectspage|liststore6">Dotted (Bold)</col>
         <col id="1">13</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Dash</col>
+        <col id="0" translatable="yes" context="effectspage|liststore6">Dash</col>
         <col id="1">5</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Dash (Bold)</col>
+        <col id="0" translatable="yes" context="effectspage|liststore6">Dash (Bold)</col>
         <col id="1">14</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Long Dash</col>
+        <col id="0" translatable="yes" context="effectspage|liststore6">Long Dash</col>
         <col id="1">6</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Long Dash (Bold)</col>
+        <col id="0" translatable="yes" context="effectspage|liststore6">Long Dash (Bold)</col>
         <col id="1">15</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Dot Dash</col>
+        <col id="0" translatable="yes" context="effectspage|liststore6">Dot Dash</col>
         <col id="1">7</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Dot Dash (Bold)</col>
+        <col id="0" translatable="yes" context="effectspage|liststore6">Dot Dash (Bold)</col>
         <col id="1">16</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Dot Dot Dash</col>
+        <col id="0" translatable="yes" context="effectspage|liststore6">Dot Dot Dash</col>
         <col id="1">8</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Dot Dot Dash (Bold)</col>
+        <col id="0" translatable="yes" context="effectspage|liststore6">Dot Dot Dash (Bold)</col>
         <col id="1">17</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Wave</col>
+        <col id="0" translatable="yes" context="effectspage|liststore6">Wave</col>
         <col id="1">10</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Wave (Bold)</col>
+        <col id="0" translatable="yes" context="effectspage|liststore6">Wave (Bold)</col>
         <col id="1">18</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Double Wave</col>
+        <col id="0" translatable="yes" context="effectspage|liststore6">Double Wave</col>
         <col id="1">11</col>
       </row>
     </data>
@@ -215,7 +215,7 @@
           <object class="GtkLabel" id="fontcolorft">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Font color:</property>
+            <property name="label" translatable="yes" context="effectspage|fontcolorft">Font color:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">fontcolorlb</property>
             <property name="xalign">0</property>
@@ -229,7 +229,7 @@
           <object class="GtkLabel" id="effectsft">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Effects:</property>
+            <property name="label" translatable="yes" context="effectspage|effectsft">Effects:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">effectslb</property>
             <property name="xalign">0</property>
@@ -243,7 +243,7 @@
           <object class="GtkLabel" id="reliefft">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Relief:</property>
+            <property name="label" translatable="yes" context="effectspage|reliefft">Relief:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">relieflb</property>
             <property name="xalign">0</property>
@@ -257,7 +257,7 @@
           <object class="GtkLabel" id="label46">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Overlining:</property>
+            <property name="label" translatable="yes" context="effectspage|label46">Overlining:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">overlinelb</property>
             <property name="xalign">0</property>
@@ -271,7 +271,7 @@
           <object class="GtkLabel" id="label47">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Strikethrough:</property>
+            <property name="label" translatable="yes" context="effectspage|label47">Strikethrough:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">strikeoutlb</property>
             <property name="xalign">0</property>
@@ -285,7 +285,7 @@
           <object class="GtkLabel" id="label48">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Underlining:</property>
+            <property name="label" translatable="yes" context="effectspage|label48">Underlining:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">underlinelb</property>
             <property name="xalign">0</property>
@@ -299,7 +299,7 @@
           <object class="GtkLabel" id="overlinecolorft">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Overline color:</property>
+            <property name="label" translatable="yes" context="effectspage|overlinecolorft">Overline color:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">overlinecolorlb</property>
             <property name="xalign">0</property>
@@ -313,7 +313,7 @@
           <object class="GtkLabel" id="underlinecolorft">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Underline color:</property>
+            <property name="label" translatable="yes" context="effectspage|underlinecolorft">Underline color:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">underlinecolorlb</property>
             <property name="xalign">0</property>
@@ -410,7 +410,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="outlinecb">
-            <property name="label" translatable="yes">Outline</property>
+            <property name="label" translatable="yes" context="effectspage|outlinecb">Outline</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -425,7 +425,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="blinkingcb">
-            <property name="label" translatable="yes">Blinking</property>
+            <property name="label" translatable="yes" context="effectspage|blinkingcb">Blinking</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -440,7 +440,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="hiddencb">
-            <property name="label" translatable="yes">Hidden</property>
+            <property name="label" translatable="yes" context="effectspage|hiddencb">Hidden</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -455,7 +455,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="individualwordscb">
-            <property name="label" translatable="yes">Individual words</property>
+            <property name="label" translatable="yes" context="effectspage|individualwordscb">Individual words</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -493,7 +493,7 @@
           <object class="GtkLabel" id="positionft">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Position:</property>
+            <property name="label" translatable="yes" context="effectspage|positionft">Position:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">positionlb</property>
             <property name="xalign">0</property>
@@ -507,7 +507,7 @@
           <object class="GtkLabel" id="emphasisft">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Emphasis mark:</property>
+            <property name="label" translatable="yes" context="effectspage|emphasisft">Emphasis mark:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">emphasislb</property>
             <property name="xalign">0</property>
@@ -519,7 +519,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="shadowcb">
-            <property name="label" translatable="yes">Shadow</property>
+            <property name="label" translatable="yes" context="effectspage|shadowcb">Shadow</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -559,7 +559,7 @@
         <child>
           <object class="GtkLabel" id="a11ywarning">
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Accessibility option "Use automatic font color for screen display" is active. Font color attributes are not currently used to display text.</property>
+            <property name="label" translatable="yes" context="effectspage|a11ywarning">Accessibility option "Use automatic font color for screen display" is active. Font color attributes are not currently used to display text.</property>
             <property name="wrap">True</property>
             <property name="max_width_chars">50</property>
             <property name="xalign">0</property>
@@ -608,7 +608,7 @@
             <property name="can_focus">False</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="preview:border-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes">Preview</property>
+                <property name="AtkObject::accessible-name" translatable="yes" context="effectspage|preview-atkobject">Preview</property>
               </object>
             </child>
           </object>

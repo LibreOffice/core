@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkBox" id="PatternTabPage">
@@ -62,7 +62,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="BTN_MODIFY">
-                        <property name="label" translatable="yes">_Modify</property>
+                        <property name="label" translatable="yes" context="patterntabpage|BTN_MODIFY">_Modify</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">True</property>
@@ -89,7 +89,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Pattern</property>
+            <property name="label" translatable="yes" context="patterntabpage|label3">Pattern</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -132,7 +132,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Pattern Editor:</property>
+                        <property name="label" translatable="yes" context="patterntabpage|label4">Pattern Editor:</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -148,7 +148,7 @@
                         <property name="valign">start</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="CTL_PIXEL-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Pattern Editor</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="patterntabpage|CTL_PIXEL-atkobject">Pattern Editor</property>
                           </object>
                         </child>
                       </object>
@@ -176,7 +176,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Foreground Color:</property>
+                        <property name="label" translatable="yes" context="patterntabpage|label5">Foreground Color:</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -214,7 +214,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Background Color:</property>
+                        <property name="label" translatable="yes" context="patterntabpage|label6">Background Color:</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -249,7 +249,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Options</property>
+            <property name="label" translatable="yes" context="patterntabpage|label1">Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -292,7 +292,7 @@
                         <property name="vexpand">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="CTL_PREVIEW-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Example</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="patterntabpage|CTL_PREVIEW-atkobject">Example</property>
                           </object>
                         </child>
                       </object>
@@ -310,7 +310,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Preview</property>
+            <property name="label" translatable="yes" context="patterntabpage|label2">Preview</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

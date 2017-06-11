@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sw">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="SelectAutoTextDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Select AutoText:</property>
+    <property name="title" translatable="yes" context="selectautotextdialog|SelectAutoTextDialog">Select AutoText:</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -98,7 +98,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">AutoText - Group</property>
+                <property name="label" translatable="yes" context="selectautotextdialog|label1">AutoText - Group</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
