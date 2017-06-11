@@ -243,15 +243,11 @@ void CreateValidUpdateDir(const update_info& update_info)
     OUString aInstallDir("$BRAND_BASE_DIR");
     rtl::Bootstrap::expandMacros(aInstallDir);
     OUString aInstallPath = getPathFromURL(aInstallDir);
-    OUString aUpdatedBuildDir("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/update_dir/");
-    rtl::Bootstrap::expandMacros(aUpdatedBuildDir);
-    OUString aWorkdirPath = getPathFromURL(aUpdatedBuildDir);
+    OUString aWorkdirPath = getPathFromURL(Updater::getUpdateDirURL());
 
-    OUString aPatchDirURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/patch/");
-    rtl::Bootstrap::expandMacros(aPatchDirURL);
-    OUString aPatchDir = getPathFromURL(aPatchDirURL);
+    OUString aPatchDir = getPathFromURL(Updater::getPatchDirURL());
 
-    OUString aUpdaterPath = getPathFromURL(aInstallDir + "/program/" + OUString::fromUtf8(pUpdaterName));
+    OUString aUpdaterPath = getPathFromURL(Updater::getExecutableDirURL() + OUString::fromUtf8(pUpdaterName));
 
     OUString aCommand = aUpdaterPath + " " + aPatchDir + " " + aInstallPath + " " + aWorkdirPath + " -1";
 
@@ -266,7 +262,7 @@ void CreateValidUpdateDir(const update_info& update_info)
     }
     else
     {
-        OUString aUpdateInfoURL(aPatchDirURL + "/update.info");
+        OUString aUpdateInfoURL(Updater::getPatchDirURL() + "/update.info");
         OUString aUpdateInfoPath = getPathFromURL(aUpdateInfoURL);
         SvFileStream aUpdateInfoFile(aUpdateInfoPath, StreamMode::WRITE | StreamMode::TRUNC);
         aUpdateInfoFile.WriteCharPtr("[UpdateInfo]\nOldBuildId=");
