@@ -18,9 +18,9 @@
  */
 
 #include "imageprovider.hxx"
-#include "dbu_resource.hrc"
-#include "moduledbu.hxx"
-#include "dbustrings.hrc"
+#include "dbu_pageids.hxx"
+#include "core_resource.hxx"
+#include "stringconstants.hxx"
 #include "bitmaps.hlst"
 
 #include <com/sun/star/graphic/XGraphic.hpp>

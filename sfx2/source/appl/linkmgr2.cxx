@@ -19,6 +19,7 @@
 
 #include <comphelper/string.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <osl/file.hxx>
 #include <sfx2/objsh.hxx>
@@ -41,7 +42,7 @@
 
 #include "fileobj.hxx"
 #include "impldde.hxx"
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/sfxresid.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
