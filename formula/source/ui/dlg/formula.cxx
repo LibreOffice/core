@@ -52,7 +52,7 @@
 #include "structpg.hxx"
 #include "parawin.hxx"
 #include "ModuleHelper.hxx"
-#include "ForResId.hrc"
+#include "strings.hrc"
 #include <com/sun/star/sheet/FormulaToken.hpp>
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
 #include <com/sun/star/sheet/FormulaMapGroup.hpp>
