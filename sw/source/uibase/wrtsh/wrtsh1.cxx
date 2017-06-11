@@ -93,7 +93,7 @@
 
 // -> #111827#
 #include <SwRewriter.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 // <- #111827#
 
 #include <toolkit/helper/vclunohelper.hxx>

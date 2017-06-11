@@ -25,11 +25,11 @@ $(eval $(call gb_Module_add_targets,writerperfect,\
 	Library_wpftimpress \
 	Library_wpftwriter \
 	Library_writerperfect \
+	UIConfig_writerperfect \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,writerperfect,\
-	AllLangResTarget_writerperfect \
-	UIConfig_writerperfect \
+	AllLangMoTarget_wpt \
 ))
 
 $(eval $(call gb_Module_add_check_targets,writerperfect,\

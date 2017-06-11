@@ -22,7 +22,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include "scres.hrc"
+#include "strings.hrc"
 #include "scresid.hxx"
 #include "drawview.hxx"
 #include "drwlayer.hxx"

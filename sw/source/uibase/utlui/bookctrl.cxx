@@ -19,7 +19,7 @@
 
 #include "hintids.hxx"
 #include <swtypes.hxx>
-#include <utlui.hrc>
+#include <strings.hrc>
 
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>

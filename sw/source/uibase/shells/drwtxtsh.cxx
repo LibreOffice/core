@@ -56,7 +56,7 @@
 #include <cmdid.h>
 #include <helpid.h>
 #include <globals.hrc>
-#include <shells.hrc>
+#include <strings.hrc>
 
 #define SwDrawTextShell
 #include <sfx2/msg.hxx>

@@ -523,6 +523,14 @@ End
         UI_ALL_LANG_BUT_EN_US(file); \
     End
 
+#define MO_FILELIST_ALL_LANG(name, file) \
+    File CONCAT3(gid_File_Res_, name, _Lang) \
+        TXT_FILE_BODY; \
+        Styles = (PACKED); \
+        Dir = gid_Dir_Resource; \
+        MO_ALL_LANG_BUT_EN_US(file); \
+    End
+
 #define URE_PRIVATE_LIB(id,name) \
     File id \
         LIB_FILE_BODY; \

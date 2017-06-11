@@ -40,14 +40,11 @@ $(eval $(call gb_Module_add_targets,filter,\
 	Package_docbook \
 	Package_xhtml \
 	Package_xslt \
+	UIConfig_filter \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,filter,\
-	AllLangResTarget_eps \
-	AllLangResTarget_pdffilter \
-	AllLangResTarget_t602filter \
-	AllLangResTarget_xsltdlg \
-	UIConfig_filter \
+	AllLangMoTarget_flt \
 ))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))

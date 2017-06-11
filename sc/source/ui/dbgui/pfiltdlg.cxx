@@ -31,7 +31,8 @@
 #include "queryentry.hxx"
 #include "typedstrdata.hxx"
 
-#include "scres.hrc"
+#include "sc.hrc"
+#include "strings.hrc"
 #include "globstr.hrc"
 
 #include "pfiltdlg.hxx"

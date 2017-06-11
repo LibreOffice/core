@@ -30,9 +30,9 @@
 #include "DrawDocShell.hxx"
 #include "sdpage.hxx"
 #include "glob.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "app.hrc"
-#include "res_bmp.hrc"
+
 #include "strings.hrc"
 #include "DrawViewShell.hxx"
 #include "DrawController.hxx"

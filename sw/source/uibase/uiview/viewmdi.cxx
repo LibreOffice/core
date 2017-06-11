@@ -45,8 +45,8 @@
 #include <wview.hxx>
 
 #include <cmdid.h>
-#include <view.hrc>
-#include <ribbar.hrc>
+#include <strings.hrc>
+#include <strings.hrc>
 #include <helpid.h>
 #include <globals.hrc>
 

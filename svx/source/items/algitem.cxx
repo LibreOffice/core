@@ -18,6 +18,7 @@
  */
 
 #include <svx/svxitems.hrc>
+#include <svx/strings.hrc>
 
 #include <tools/stream.hxx>
 #include <tools/mapunit.hxx>
@@ -224,19 +225,19 @@ bool SvxMarginItem::GetPresentation
         {
             rText = SvxResId(RID_SVXITEMS_MARGIN_LEFT) +
                         GetMetricText( (long)nLeftMargin, eCoreUnit, ePresUnit, pIntl ) +
-                        " " + EditResId::GetString(GetMetricId(ePresUnit)) +
+                        " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         SvxResId(RID_SVXITEMS_MARGIN_TOP) +
                         GetMetricText( (long)nTopMargin, eCoreUnit, ePresUnit, pIntl ) +
-                        " " + EditResId::GetString(GetMetricId(ePresUnit)) +
+                        " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         SvxResId(RID_SVXITEMS_MARGIN_RIGHT) +
                         GetMetricText( (long)nRightMargin, eCoreUnit, ePresUnit, pIntl ) +
-                        " " + EditResId::GetString(GetMetricId(ePresUnit)) +
+                        " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         SvxResId(RID_SVXITEMS_MARGIN_BOTTOM) +
                         GetMetricText( (long)nBottomMargin, eCoreUnit, ePresUnit, pIntl ) +
-                        " " + EditResId::GetString(GetMetricId(ePresUnit));
+                        " " + EditResId(GetMetricId(ePresUnit));
             return true;
         }
         default: ; //prevent warning
