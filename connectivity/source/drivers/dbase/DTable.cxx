@@ -280,6 +280,11 @@ void ODbaseTable::readHeader()
                             break;
                     }
                 }
+                else
+                {
+                    // Default Encoding
+                    m_eEncoding = RTL_TEXTENCODING_IBM_850;
+                }
                 break;
             case dBaseIVMemo:
                 m_pFileStream->SetEndian(SvStreamEndian::LITTLE);
