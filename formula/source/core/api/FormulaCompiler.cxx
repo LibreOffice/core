@@ -28,7 +28,7 @@
 
 #include <svl/zforlist.hxx>
 #include <tools/rcid.h>
-#include <tools/resary.hxx>
+#include <tools/simplerm.hxx>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
 #include <com/sun/star/sheet/FormulaMapGroup.hpp>
 #include <com/sun/star/sheet/FormulaMapGroupSpecialOffset.hpp>
@@ -145,7 +145,7 @@ class OpCodeList
 {
 public:
 
-    OpCodeList( sal_uInt16, const FormulaCompiler::NonConstOpCodeMapPtr&,
+    OpCodeList(bool bLocalized, const std::pair<const char*, int>* pSymbols, const FormulaCompiler::NonConstOpCodeMapPtr&,
             FormulaCompiler::SeparatorType = FormulaCompiler::SeparatorType::SEMICOLON_BASE );
 
 private:
@@ -154,13 +154,15 @@ private:
 
 private:
     FormulaCompiler::SeparatorType meSepType;
-    ResStringArray maStringList;
+    const std::pair<const char*, int>* mpSymbols;
+    bool mbLocalized;
 };
 
-OpCodeList::OpCodeList( sal_uInt16 nRID, const FormulaCompiler::NonConstOpCodeMapPtr& xMap,
-        FormulaCompiler::SeparatorType eSepType )
+OpCodeList::OpCodeList(bool bLocalized, const std::pair<const char*, int>* pSymbols, const FormulaCompiler::NonConstOpCodeMapPtr& xMap,
+        FormulaCompiler::SeparatorType eSepType)
     : meSepType(eSepType)
-    , maStringList(ResId(nRID, *ResourceManager::getResManager()))
+    , mpSymbols(pSymbols)
+    , mbLocalized(bLocalized)
 {
     SvtSysLocale aSysLocale;
     const CharClass* pCharClass = (xMap->isEnglish() ? nullptr : aSysLocale.GetCharClassPtr());
@@ -223,9 +225,19 @@ bool OpCodeList::getOpCodeString( OUString& rStr, sal_uInt16 nOp )
 void OpCodeList::putDefaultOpCode( const FormulaCompiler::NonConstOpCodeMapPtr& xMap, sal_uInt16 nOp,
         const CharClass* pCharClass )
 {
-    sal_uInt32 nIndex = maStringList.FindIndex(nOp);
-    if (nIndex != RESARRAY_INDEX_NOTFOUND)
-        xMap->putOpCode(maStringList.GetString(nIndex), OpCode(nOp), pCharClass);
+    const char* pKey = nullptr;
+    for (const std::pair<const char*, int>* pSymbol = mpSymbols; pSymbol->first; ++pSymbol)
+    {
+        if (nOp == pSymbol->second)
+        {
+            pKey = pSymbol->first;
+            break;
+        }
+    }
+    if (!pKey)
+        return;
+    OUString sKey = !mbLocalized ? OUString::createFromAscii(pKey) : Translate::get(pKey, ResourceManager::getResLocale());
+    xMap->putOpCode(sKey, OpCode(nOp), pCharClass);
 }
 
 // static
@@ -843,8 +855,8 @@ void lcl_fillNativeSymbols( FormulaCompiler::NonConstOpCodeMapPtr& xMap, bool bD
             new FormulaCompiler::OpCodeMap(
                 SC_OPCODE_LAST_OPCODE_ID + 1, true, FormulaGrammar::GRAM_NATIVE_UI));
         OModuleClient aModuleClient;
-        OpCodeList aOpCodeListSymbols(RID_STRLIST_FUNCTION_NAMES_SYMBOLS, aSymbolMap.mxSymbolMap);
-        OpCodeList aOpCodeListNative(RID_STRLIST_FUNCTION_NAMES, aSymbolMap.mxSymbolMap);
+        OpCodeList aOpCodeListSymbols(false, RID_STRLIST_FUNCTION_NAMES_SYMBOLS, aSymbolMap.mxSymbolMap);
+        OpCodeList aOpCodeListNative(true, RID_STRLIST_FUNCTION_NAMES, aSymbolMap.mxSymbolMap);
         // No AddInMap for native core mapping.
     }
 
@@ -931,7 +943,7 @@ void FormulaCompiler::InitSymbolsOOXML() const
 }
 
 
-void FormulaCompiler::loadSymbols( sal_uInt16 nSymbols, FormulaGrammar::Grammar eGrammar,
+void FormulaCompiler::loadSymbols(const std::pair<const char*, int>* pSymbols, FormulaGrammar::Grammar eGrammar,
         NonConstOpCodeMapPtr& rxMap, SeparatorType eSepType) const
 {
     if ( !rxMap.get() )
@@ -939,7 +951,7 @@ void FormulaCompiler::loadSymbols( sal_uInt16 nSymbols, FormulaGrammar::Grammar 
         // not Core
         rxMap.reset( new OpCodeMap( SC_OPCODE_LAST_OPCODE_ID + 1, eGrammar != FormulaGrammar::GRAM_ODFF, eGrammar ));
         OModuleClient aModuleClient;
-        OpCodeList aOpCodeList( nSymbols, rxMap, eSepType);
+        OpCodeList aOpCodeList(false, pSymbols, rxMap, eSepType);
 
         fillFromAddInMap( rxMap, eGrammar);
         // Fill from collection for AddIns not already present.

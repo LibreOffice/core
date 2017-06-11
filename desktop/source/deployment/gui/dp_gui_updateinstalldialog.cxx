@@ -54,9 +54,9 @@
 #include <com/sun/star/task/XInteractionApprove.hpp>
 
 #include "dp_descriptioninfoset.hxx"
-#include "dp_gui.hrc"
+#include "strings.hrc"
 #include "dp_gui_updateinstalldialog.hxx"
-#include "dp_gui_shared.hxx"
+#include "dp_shared.hxx"
 #include "dp_ucb.h"
 #include "dp_misc.h"
 #include "dp_version.hxx"
@@ -204,14 +204,14 @@ UpdateInstallDialog::UpdateInstallDialog(
         m_thread(new Thread(xCtx, *this, aVecUpdateData)),
         m_bError(false),
         m_bNoEntry(true),
-        m_sInstalling(DpGuiResId(RID_DLG_UPDATE_INSTALL_INSTALLING)),
-        m_sFinished(DpGuiResId(RID_DLG_UPDATE_INSTALL_FINISHED)),
-        m_sNoErrors(DpGuiResId(RID_DLG_UPDATE_INSTALL_NO_ERRORS)),
-        m_sErrorDownload(DpGuiResId(RID_DLG_UPDATE_INSTALL_ERROR_DOWNLOAD)),
-        m_sErrorInstallation(DpGuiResId(RID_DLG_UPDATE_INSTALL_ERROR_INSTALLATION)),
-        m_sErrorLicenseDeclined(DpGuiResId(RID_DLG_UPDATE_INSTALL_ERROR_LIC_DECLINED)),
-        m_sNoInstall(DpGuiResId(RID_DLG_UPDATE_INSTALL_EXTENSION_NOINSTALL)),
-        m_sThisErrorOccurred(DpGuiResId(RID_DLG_UPDATE_INSTALL_THIS_ERROR_OCCURRED))
+        m_sInstalling(DpResId(RID_DLG_UPDATE_INSTALL_INSTALLING)),
+        m_sFinished(DpResId(RID_DLG_UPDATE_INSTALL_FINISHED)),
+        m_sNoErrors(DpResId(RID_DLG_UPDATE_INSTALL_NO_ERRORS)),
+        m_sErrorDownload(DpResId(RID_DLG_UPDATE_INSTALL_ERROR_DOWNLOAD)),
+        m_sErrorInstallation(DpResId(RID_DLG_UPDATE_INSTALL_ERROR_INSTALLATION)),
+        m_sErrorLicenseDeclined(DpResId(RID_DLG_UPDATE_INSTALL_ERROR_LIC_DECLINED)),
+        m_sNoInstall(DpResId(RID_DLG_UPDATE_INSTALL_EXTENSION_NOINSTALL)),
+        m_sThisErrorOccurred(DpResId(RID_DLG_UPDATE_INSTALL_THIS_ERROR_OCCURRED))
 {
     get(m_pFt_action, "DOWNLOADING");
     get(m_pStatusbar, "STATUSBAR");

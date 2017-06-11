@@ -68,7 +68,7 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         bool                    m_bVeto;
         bool                    m_bListenForTermination;
         bool                    m_bSystemDialogs;
-        ResMgr*                 m_pResMgr;
+        std::locale*            m_pResLocale;
         sfx2::FileDialogHelper* m_pFileDlg;
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
@@ -113,7 +113,7 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         /// @throws css::uno::Exception
         void init();
 
-        OUString GetResString( int id );
+        static OUString GetResString(const char* id);
         static OUString GetUrlDescription( const OUString& aUrl );
 
         void SetVeto( bool bVeto )  { m_bVeto = bVeto;}

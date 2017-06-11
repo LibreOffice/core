@@ -19,7 +19,7 @@
 
 #include <standard/vclxaccessiblemenuitem.hxx>
 #include <helper/accresmgr.hxx>
-#include <helper/accessiblestrings.hrc>
+#include <strings.hrc>
 #include <toolkit/helper/convert.hxx>
 #include <helper/characterattributeshelper.hxx>
 #include <comphelper/accessiblekeybindinghelper.hxx>
