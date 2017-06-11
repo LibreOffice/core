@@ -1,0 +1,1 @@
+After calling 'make call' the content in workdir/updater/program/datei.txt should say "new".
