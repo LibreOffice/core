@@ -21,7 +21,7 @@
 #include <vcl/msgbox.hxx>
 
 #include "recfloat.hxx"
-#include "dialog.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>

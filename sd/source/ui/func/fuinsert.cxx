@@ -37,7 +37,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <svtools/sores.hxx>
+#include <svtools/strings.hrc>
 #include <svtools/insdlg.hxx>
 #include <sfx2/request.hxx>
 #include <svl/globalnameitem.hxx>
@@ -85,7 +85,7 @@
 #include <vcl/svapp.hxx>
 #include "undo/undoobjects.hxx"
 #include <memory>
-#include "glob.hrc"
+#include "strings.hrc"
 
 #include <config_features.h>
 

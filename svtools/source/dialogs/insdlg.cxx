@@ -18,7 +18,7 @@
  */
 
 #include <svtools/insdlg.hxx>
-#include <svtools/sores.hxx>
+#include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 
 #include <unotools/configmgr.hxx>
@@ -193,7 +193,7 @@ OUString SvPasteObjectHelper::GetSotFormatUIName( SotClipboardFormatId nId )
     struct SotResourcePair
     {
         SotClipboardFormatId   mnSotId;
-        sal_uInt16              mnResId;
+        const char* mpResId;
     };
 
     static const SotResourcePair aSotResourcePairs[] =
@@ -268,16 +268,16 @@ OUString SvPasteObjectHelper::GetSotFormatUIName( SotClipboardFormatId nId )
     };
 
     OUString aUIName;
-    sal_uInt16 nResId = 0;
+    const char* pResId = nullptr;
 
-    for( sal_uInt32 i = 0, nCount = SAL_N_ELEMENTS( aSotResourcePairs ); ( i < nCount ) && !nResId; i++ )
+    for( sal_uInt32 i = 0, nCount = SAL_N_ELEMENTS( aSotResourcePairs ); ( i < nCount ) && !pResId; i++ )
     {
         if( aSotResourcePairs[ i ].mnSotId == nId )
-            nResId = aSotResourcePairs[ i ].mnResId;
+            pResId = aSotResourcePairs[ i ].mpResId;
     }
 
-    if( nResId )
-        aUIName = SvtResId( nResId );
+    if (pResId)
+        aUIName = SvtResId(pResId);
     else
         aUIName = SotExchange::GetFormatName( nId );
 

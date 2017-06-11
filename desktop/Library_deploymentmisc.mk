@@ -33,6 +33,7 @@ $(eval $(call gb_Library_use_libraries,deploymentmisc,\
     tl \
     ucbhelper \
     utl \
+    vcl \
     xmlscript \
     i18nlangtag \
 ))

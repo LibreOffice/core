@@ -30,7 +30,7 @@
 #include <olesh.hxx>
 
 #include <cmdid.h>
-#include <shells.hrc>
+#include <strings.hrc>
 
 #define SwOleShell
 #include <sfx2/msg.hxx>

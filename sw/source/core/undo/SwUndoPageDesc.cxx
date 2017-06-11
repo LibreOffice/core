@@ -25,7 +25,7 @@
 #include <SwUndoPageDesc.hxx>
 #include <SwRewriter.hxx>
 #include <undobj.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <fmtcntnt.hxx>
 #include <fmthdft.hxx>
 

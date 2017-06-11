@@ -31,7 +31,7 @@
 #include <svx/gallery.hxx>
 #include <editeng/brushitem.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <vcl/graph.hxx>
 #include <vcl/settings.hxx>
 
@@ -321,12 +321,6 @@ void BulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
     if ( pFont )
         pActualBullets[nIndex]->aFont = *pFont;
     pActualBullets[nIndex]->bIsCustomized = true;
-
-    OUString aStrFromRES = SvxResId( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION);
-    OUString aReplace = "%LIST_NUM";
-    OUString sNUM = OUString::number( nIndex + 1 );
-    aStrFromRES = aStrFromRES.replaceFirst(aReplace,sNUM);
-    pActualBullets[nIndex]->sDescription = aStrFromRES;
 }
 
 void BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool /*isDefault*/, bool isResetSize)
@@ -393,6 +387,18 @@ NumberingTypeMgr::~NumberingTypeMgr()
 {
 }
 
+static const char* RID_SVXSTR_SINGLENUM_DESCRIPTIONS[] =
+{
+    RID_SVXSTR_SINGLENUM_DESCRIPTION_0,
+    RID_SVXSTR_SINGLENUM_DESCRIPTION_1,
+    RID_SVXSTR_SINGLENUM_DESCRIPTION_2,
+    RID_SVXSTR_SINGLENUM_DESCRIPTION_3,
+    RID_SVXSTR_SINGLENUM_DESCRIPTION_4,
+    RID_SVXSTR_SINGLENUM_DESCRIPTION_5,
+    RID_SVXSTR_SINGLENUM_DESCRIPTION_6,
+    RID_SVXSTR_SINGLENUM_DESCRIPTION_7
+};
+
 class theNumberingTypeMgr : public rtl::Static<NumberingTypeMgr, theNumberingTypeMgr> {};
 
 NumberingTypeMgr& NumberingTypeMgr::GetInstance()
@@ -420,7 +426,7 @@ void NumberingTypeMgr::Init()
             NumberSettings_Impl* pNumEntry = new NumberSettings_Impl;
             pNumEntry->pNumSetting = pNew;
             if ( i < 8 )
-                pNumEntry->sDescription = SvxResId( RID_SVXSTR_SINGLENUM_DESCRIPTIONS + i );
+                pNumEntry->sDescription = SvxResId(RID_SVXSTR_SINGLENUM_DESCRIPTIONS[i]);
             maNumberSettingsArr.push_back(std::shared_ptr<NumberSettings_Impl>(pNumEntry));
         }
     }
@@ -491,12 +497,7 @@ void NumberingTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_
     ApplyNumRule(aTmpRule1,nIndex,mLevel,true);
     ApplyNumRule(aTmpRule2,nIndex,mLevel);
     if (aTmpRule1==aTmpRule2) _pSet->bIsCustomized=false;
-    if (_pSet->bIsCustomized) {
-        OUString aStrFromRES = SvxResId( RID_SVXSTR_NUMBULLET_CUSTOM_NUMBERING_DESCRIPTION);
-        OUString sNUM = OUString::number( nIndex + 1 );
-        aStrFromRES = aStrFromRES.replaceFirst("%LIST_NUM",sNUM);
-        _pSet->sDescription = aStrFromRES;
-    } else {
+    if (!_pSet->bIsCustomized) {
         _pSet->sDescription = GetDescription(nIndex,true);
     }
     ImplStore("standard.syb");
@@ -754,12 +755,7 @@ void OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
     ApplyNumRule(aTmpRule1,nIndex,mLevel,true);
     ApplyNumRule(aTmpRule2,nIndex,mLevel);
     if (aTmpRule1==aTmpRule2) pItemArr->bIsCustomized=false;
-    if (pItemArr->bIsCustomized) {
-        OUString aStrFromRES = SvxResId( RID_SVXSTR_NUMBULLET_CUSTOM_MULTILEVEL_DESCRIPTION);
-        OUString sNUM = OUString::number( nIndex + 1 );
-        aStrFromRES = aStrFromRES.replaceFirst("%LIST_NUM",sNUM);
-        pItemArr->sDescription = aStrFromRES;
-    } else {
+    if (!pItemArr->bIsCustomized) {
         pItemArr->sDescription = GetDescription(nIndex,true);
     }
     ImplStore("standard.syc");

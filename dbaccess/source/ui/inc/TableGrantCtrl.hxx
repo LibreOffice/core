@@ -27,7 +27,7 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XAuthorizable.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 
 class Edit;
 namespace dbaui
@@ -43,7 +43,7 @@ class OTableGrantControl : public ::svt::EditBrowseBox
 
     typedef std::map<OUString, TPrivileges> TTablePrivilegeMap;
 
-    OModuleClient        m_aModuleClient;
+    dbaccess::OModuleClient        m_aModuleClient;
 
     css::uno::Reference< css::container::XNameAccess >    m_xUsers;
     css::uno::Reference< css::container::XNameAccess >    m_xTables;

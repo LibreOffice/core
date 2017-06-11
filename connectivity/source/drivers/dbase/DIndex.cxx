@@ -36,7 +36,7 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 #include "dbase/DResultSet.hxx"
-#include "resource/dbase_res.hrc"
+#include "strings.hrc"
 #include <unotools/sharedunocomponent.hxx>
 
 using namespace ::comphelper;
@@ -475,12 +475,12 @@ bool ODbaseIndex::DropImpl()
     return true;
 }
 
-void ODbaseIndex::impl_killFileAndthrowError_throw(sal_uInt16 _nErrorId,const OUString& _sFile)
+void ODbaseIndex::impl_killFileAndthrowError_throw(const char* pErrorId, const OUString& _sFile)
 {
     closeImpl();
     if(UCBContentHelper::Exists(_sFile))
         UCBContentHelper::Kill(_sFile);
-    m_pTable->getConnection()->throwGenericSQLException(_nErrorId,*this);
+    m_pTable->getConnection()->throwGenericSQLException(pErrorId, *this);
 }
 
 bool ODbaseIndex::CreateImpl()

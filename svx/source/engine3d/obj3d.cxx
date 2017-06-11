@@ -19,7 +19,7 @@
 
 #include <o3tl/numeric.hxx>
 
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include "svdglob.hxx"
 #include <svx/svdview.hxx>
 #include <svx/svdattr.hxx>
