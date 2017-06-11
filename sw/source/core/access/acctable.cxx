@@ -41,7 +41,7 @@
 #include <fesh.hxx>
 #include <accfrmobjslist.hxx>
 #include <accmap.hxx>
-#include <access.hrc>
+#include <strings.hrc>
 #include <acctable.hxx>
 
 #include <layfrm.hxx>

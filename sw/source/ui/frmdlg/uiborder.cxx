@@ -28,6 +28,7 @@
 #include "swtypes.hxx"
 #include "uiborder.hxx"
 #include "frmui.hrc"
+#include "strings.hrc"
 
 SwBorderDlg::SwBorderDlg(vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType) :
     SfxSingleTabDialog(pParent, rSet)

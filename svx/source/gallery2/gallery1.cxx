@@ -32,13 +32,15 @@
 #include <comphelper/string.hxx>
 #include <osl/thread.h>
 #include <tools/vcompat.hxx>
+#include <vcl/lstbox.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/docfile.hxx>
+#include "svx/dialmgr.hxx"
 #include "svx/gallery.hxx"
-#include "gallery.hrc"
+#include "svx/strings.hrc"
 #include "strings.hxx"
 #include "svx/galmisc.hxx"
 #include "svx/galtheme.hxx"
@@ -57,6 +59,61 @@ static bool FileExists( const INetURLObject &rURL, const rtl::OUString &rExt )
     aURL.setExtension( rExt );
     return FileExists( aURL );
 }
+
+const std::pair<sal_uInt16, const char*> aUnlocalized[] =
+{
+    { GALLERY_THEME_HOMEPAGE, RID_GALLERYSTR_THEME_HTMLBUTTONS },
+    { GALLERY_THEME_POWERPOINT, RID_GALLERYSTR_THEME_POWERPOINT },
+    { GALLERY_THEME_USERSOUNDS, RID_GALLERYSTR_THEME_USERSOUNDS },
+    { GALLERY_THEME_DUMMY5, RID_GALLERYSTR_THEME_DUMMY5 },
+    { GALLERY_THEME_RULERS, RID_GALLERYSTR_THEME_RULERS },
+    { GALLERY_THEME_FONTWORK, RID_GALLERYSTR_THEME_FONTWORK },
+    { GALLERY_THEME_FONTWORK_VERTICAL, RID_GALLERYSTR_THEME_FONTWORK_VERTICAL }
+};
+
+const std::pair<sal_uInt16, const char*> aLocalized[] =
+{
+    { RID_GALLERY_THEME_3D, RID_GALLERYSTR_THEME_3D },
+    { RID_GALLERY_THEME_ANIMATIONS, RID_GALLERYSTR_THEME_ANIMATIONS },
+    { RID_GALLERY_THEME_BULLETS, RID_GALLERYSTR_THEME_BULLETS },
+    { RID_GALLERY_THEME_OFFICE, RID_GALLERYSTR_THEME_OFFICE },
+    { RID_GALLERY_THEME_FLAGS, RID_GALLERYSTR_THEME_FLAGS },
+    { RID_GALLERY_THEME_FLOWCHARTS, RID_GALLERYSTR_THEME_FLOWCHARTS },
+    { RID_GALLERY_THEME_EMOTICONS, RID_GALLERYSTR_THEME_EMOTICONS },
+    { RID_GALLERY_THEME_PHOTOS, RID_GALLERYSTR_THEME_PHOTOS },
+    { RID_GALLERY_THEME_BACKGROUNDS, RID_GALLERYSTR_THEME_BACKGROUNDS },
+    { RID_GALLERY_THEME_HOMEPAGE, RID_GALLERYSTR_THEME_HOMEPAGE },
+    { RID_GALLERY_THEME_INTERACTION, RID_GALLERYSTR_THEME_INTERACTION },
+    { RID_GALLERY_THEME_MAPS, RID_GALLERYSTR_THEME_MAPS },
+    { RID_GALLERY_THEME_PEOPLE, RID_GALLERYSTR_THEME_PEOPLE },
+    { RID_GALLERY_THEME_SURFACES, RID_GALLERYSTR_THEME_SURFACES },
+    { RID_GALLERY_THEME_SOUNDS, RID_GALLERYSTR_THEME_SOUNDS },
+    { RID_GALLERY_THEME_SYMBOLS, RID_GALLERYSTR_THEME_SYMBOLS },
+    { RID_GALLERY_THEME_MYTHEME, RID_GALLERYSTR_THEME_MYTHEME },
+
+    { RID_GALLERY_THEME_ARROWS, RID_GALLERYSTR_THEME_ARROWS },
+    { RID_GALLERY_THEME_BALLOONS, RID_GALLERYSTR_THEME_BALLOONS },
+    { RID_GALLERY_THEME_KEYBOARD, RID_GALLERYSTR_THEME_KEYBOARD },
+    { RID_GALLERY_THEME_TIME, RID_GALLERYSTR_THEME_TIME },
+    { RID_GALLERY_THEME_PRESENTATION, RID_GALLERYSTR_THEME_PRESENTATION },
+    { RID_GALLERY_THEME_CALENDAR, RID_GALLERYSTR_THEME_CALENDAR },
+    { RID_GALLERY_THEME_NAVIGATION, RID_GALLERYSTR_THEME_NAVIGATION },
+    { RID_GALLERY_THEME_COMMUNICATION, RID_GALLERYSTR_THEME_COMMUNICATION },
+    { RID_GALLERY_THEME_FINANCES, RID_GALLERYSTR_THEME_FINANCES },
+    { RID_GALLERY_THEME_COMPUTER, RID_GALLERYSTR_THEME_COMPUTER },
+
+    { RID_GALLERY_THEME_CLIMA, RID_GALLERYSTR_THEME_CLIMA },
+    { RID_GALLERY_THEME_EDUCATION, RID_GALLERYSTR_THEME_EDUCATION },
+    { RID_GALLERY_THEME_TROUBLE, RID_GALLERYSTR_THEME_TROUBLE },
+    { RID_GALLERY_THEME_SCREENBEANS, RID_GALLERYSTR_THEME_SCREENBEANS },
+
+    { RID_GALLERY_THEME_COMPUTERS, RID_GALLERYSTR_THEME_COMPUTERS },
+    { RID_GALLERY_THEME_DIAGRAMS, RID_GALLERYSTR_THEME_DIAGRAMS },
+    { RID_GALLERY_THEME_ENVIRONMENT, RID_GALLERYSTR_THEME_ENVIRONMENT },
+    { RID_GALLERY_THEME_FINANCE, RID_GALLERYSTR_THEME_FINANCE },
+    { RID_GALLERY_THEME_TRANSPORT, RID_GALLERYSTR_THEME_TRANSPORT },
+    { RID_GALLERY_THEME_TXTSHAPES, RID_GALLERYSTR_THEME_TXTSHAPES }
+};
 
 GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
                                       const INetURLObject& rBaseURL, const OUString& rName,
@@ -104,15 +161,6 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
     {
         //some of these are supposed to *not* be localized
         //so catch them before looking up the resource
-        const std::pair<sal_uInt16, const char*> aUnlocalized[] =
-        {
-            { GALLERY_THEME_HOMEPAGE, RID_GALLERYSTR_THEME_HTMLBUTTONS },
-            { GALLERY_THEME_POWERPOINT, RID_GALLERYSTR_THEME_POWERPOINT },
-            { GALLERY_THEME_USERSOUNDS, RID_GALLERYSTR_THEME_USERSOUNDS },
-            { GALLERY_THEME_DUMMY5, RID_GALLERYSTR_THEME_DUMMY5 },
-            { GALLERY_THEME_FONTWORK, RID_GALLERYSTR_THEME_FONTWORK },
-            { GALLERY_THEME_FONTWORK_VERTICAL, RID_GALLERYSTR_THEME_FONTWORK_VERTICAL }
-        };
         for (size_t i = 0; i < SAL_N_ELEMENTS(aUnlocalized); ++i)
         {
             if (aUnlocalized[i].first == nId)
@@ -123,11 +171,29 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
         }
         //look up the rest of the ids in string resources
         if (aName.isEmpty())
-            aName = GalResId(RID_GALLERYSTR_THEME_START + (sal_uInt16) nId);
+        {
+            for (size_t i = 0; i < SAL_N_ELEMENTS(aLocalized); ++i)
+            {
+                if (aLocalized[i].first == nId)
+                {
+                    aName = SvxResId(aLocalized[i].second);
+                    break;
+                }
+            }
+        }
     }
 
     if( aName.isEmpty() )
         aName = rName;
+}
+
+void GalleryTheme::InsertAllThemes( ListBox& rListBox )
+{
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aUnlocalized); ++i)
+        rListBox.InsertEntry(OUString::createFromAscii(aUnlocalized[i].second));
+
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aLocalized); ++i)
+        rListBox.InsertEntry(SvxResId(aLocalized[i].second));
 }
 
 INetURLObject GalleryThemeEntry::ImplGetURLIgnoreCase( const INetURLObject& rURL )
@@ -474,13 +540,13 @@ OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
         switch( nThemeId )
         {
             case GALLERY_THEME_3D:
-                aFallback = GalResId(RID_GALLERYSTR_THEME_3D);
+                aFallback = SvxResId(RID_GALLERYSTR_THEME_3D);
                 break;
             case GALLERY_THEME_BULLETS:
-                aFallback = GalResId(RID_GALLERYSTR_THEME_BULLETS);
+                aFallback = SvxResId(RID_GALLERYSTR_THEME_BULLETS);
                 break;
             case GALLERY_THEME_HOMEPAGE:
-                aFallback = GalResId(RID_GALLERYSTR_THEME_HOMEPAGE);
+                aFallback = SvxResId(RID_GALLERYSTR_THEME_HOMEPAGE);
                 break;
             case GALLERY_THEME_POWERPOINT:
                 aFallback = RID_GALLERYSTR_THEME_POWERPOINT;
@@ -492,19 +558,37 @@ OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
                 aFallback = RID_GALLERYSTR_THEME_FONTWORK_VERTICAL;
                 break;
             case GALLERY_THEME_SOUNDS:
-                aFallback = GalResId(RID_GALLERYSTR_THEME_SOUNDS);
+                aFallback = SvxResId(RID_GALLERYSTR_THEME_SOUNDS);
                 break;
-            case RID_GALLERYSTR_THEME_ARROWS:
-            case RID_GALLERYSTR_THEME_COMPUTERS:
-            case RID_GALLERYSTR_THEME_DIAGRAMS:
-            case RID_GALLERYSTR_THEME_EDUCATION:
-            case RID_GALLERYSTR_THEME_ENVIRONMENT:
-            case RID_GALLERYSTR_THEME_FINANCE:
-            case RID_GALLERYSTR_THEME_PEOPLE:
-            case RID_GALLERYSTR_THEME_SYMBOLS:
-            case RID_GALLERYSTR_THEME_TRANSPORT:
-            case RID_GALLERYSTR_THEME_TXTSHAPES:
-                aFallback = GalResId(static_cast<sal_uInt32>(nThemeId));
+            case RID_GALLERY_THEME_ARROWS:
+                aFallback = SvxResId(RID_GALLERYSTR_THEME_ARROWS);
+                break;
+            case RID_GALLERY_THEME_COMPUTERS:
+                aFallback = SvxResId(RID_GALLERYSTR_THEME_COMPUTERS);
+                break;
+            case RID_GALLERY_THEME_DIAGRAMS:
+                aFallback = SvxResId(RID_GALLERYSTR_THEME_DIAGRAMS);
+                break;
+            case RID_GALLERY_THEME_EDUCATION:
+                aFallback = SvxResId(RID_GALLERYSTR_THEME_EDUCATION);
+                break;
+            case RID_GALLERY_THEME_ENVIRONMENT:
+                aFallback = SvxResId(RID_GALLERYSTR_THEME_ENVIRONMENT);
+                break;
+            case RID_GALLERY_THEME_FINANCE:
+                aFallback = SvxResId(RID_GALLERYSTR_THEME_FINANCE);
+                break;
+            case RID_GALLERY_THEME_PEOPLE:
+                aFallback = SvxResId(RID_GALLERYSTR_THEME_PEOPLE);
+                break;
+            case RID_GALLERY_THEME_SYMBOLS:
+                aFallback = SvxResId(RID_GALLERYSTR_THEME_SYMBOLS);
+                break;
+            case RID_GALLERY_THEME_TRANSPORT:
+                aFallback = SvxResId(RID_GALLERYSTR_THEME_TRANSPORT);
+                break;
+            case RID_GALLERY_THEME_TXTSHAPES:
+                aFallback = SvxResId(RID_GALLERYSTR_THEME_TXTSHAPES);
                 break;
             default:
                 break;
@@ -698,7 +782,7 @@ void Gallery::ReleaseTheme( GalleryTheme* pTheme, SfxListener& rListener )
 
 bool GalleryThemeEntry::IsDefault() const
 {
-    return ( nId > 0 ) && ( nId != ( RID_GALLERYSTR_THEME_MYTHEME - RID_GALLERYSTR_THEME_START ) );
+    return nId > 0 && nId != GALLERY_THEME_MYTHEME;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

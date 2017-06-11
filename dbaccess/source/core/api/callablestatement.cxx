@@ -22,7 +22,8 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/property.hxx>
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
+#include "strings.hxx"
 
 using namespace dbaccess;
 using namespace ::com::sun::star::sdbc;

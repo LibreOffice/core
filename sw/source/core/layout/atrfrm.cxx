@@ -71,7 +71,7 @@
 #include <editeng/brushitem.hxx>
 #include <svtools/grfmgr.hxx>
 #include <unomid.h>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <svx/svdundo.hxx>
 #include <sortedobjs.hxx>
 #include <HandleAnchorNodeChg.hxx>

@@ -875,7 +875,7 @@ protected:
     tools::Rectangle ImpDragCalcRect(const SdrDragStat& rDrag) const;
 
     // for GetDragComment
-    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr) const;
+    void ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr) const;
 
     void ImpForcePlusData();
 

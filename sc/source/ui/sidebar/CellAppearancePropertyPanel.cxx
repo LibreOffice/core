@@ -20,7 +20,8 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include "CellAppearancePropertyPanel.hxx"
-#include "scres.hrc"
+#include "sc.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include "scresid.hxx"
 #include <sfx2/bindings.hxx>

@@ -20,7 +20,7 @@
 
 #include "datatyperepository.hxx"
 #include "datatypes.hxx"
-#include "frm_resource.hrc"
+#include "strings.hrc"
 #include "frm_resource.hxx"
 #include "frm_strings.hxx"
 #include "property.hrc"
