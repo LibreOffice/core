@@ -57,7 +57,7 @@
 #include <editeng/cmapitem.hxx>
 
 #include "app.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "sdresid.hxx"
 #include "prlayout.hxx"
 #include "ViewShell.hxx"

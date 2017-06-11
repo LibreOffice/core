@@ -17,11 +17,11 @@ $(eval $(call gb_Module_add_targets,sc,\
 	$(call gb_Helper_optional,DESKTOP,Library_scui) \
 	$(call gb_Helper_optional,OPENCL,Package_opencl) \
 	Package_res_xml \
+	UIConfig_scalc \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,sc,\
-	AllLangResTarget_sc \
-	UIConfig_scalc \
+	AllLangMoTarget_sc \
 ))
 
 ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)

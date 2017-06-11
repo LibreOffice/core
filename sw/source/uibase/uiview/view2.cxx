@@ -106,14 +106,14 @@
 #include <tabsh.hxx>
 #include <listsh.hxx>
 #include <cmdid.h>
-#include <comcore.hrc>
-#include <poolfmt.hrc>
-#include <statstr.hrc>
+#include <strings.hrc>
+#include <strings.hrc>
+#include <strings.hrc>
 #include <swerror.h>
 #include <globals.hrc>
-#include <shells.hrc>
-#include <web.hrc>
-#include <view.hrc>
+#include <strings.hrc>
+#include <strings.hrc>
+#include <strings.hrc>
 #include <app.hrc>
 #include <fmtclds.hxx>
 #include <helpid.h>
@@ -132,7 +132,6 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include "swabstdlg.hxx"
-#include <envelp.hrc>
 #include <fmthdft.hxx>
 #include <svx/ofaitem.hxx>
 #include <unomid.h>
@@ -467,36 +466,36 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             rSh.SetFrameFormat( pFormat );
         }
 
-        sal_uInt32 nResId(0);
+        const char* pResId(nullptr);
         switch( nError )
         {
             case ERRCODE_GRFILTER_OPENERROR:
-                nResId = STR_GRFILTER_OPENERROR;
+                pResId = STR_GRFILTER_OPENERROR;
                 break;
             case ERRCODE_GRFILTER_IOERROR:
-                nResId = STR_GRFILTER_IOERROR;
+                pResId = STR_GRFILTER_IOERROR;
                 break;
             case ERRCODE_GRFILTER_FORMATERROR:
-                nResId = STR_GRFILTER_FORMATERROR;
+                pResId = STR_GRFILTER_FORMATERROR;
                 break;
             case ERRCODE_GRFILTER_VERSIONERROR:
-                nResId = STR_GRFILTER_VERSIONERROR;
+                pResId = STR_GRFILTER_VERSIONERROR;
                 break;
             case ERRCODE_GRFILTER_FILTERERROR:
-                nResId = STR_GRFILTER_FILTERERROR;
+                pResId = STR_GRFILTER_FILTERERROR;
                 break;
             case ERRCODE_GRFILTER_TOOBIG:
-                nResId = STR_GRFILTER_TOOBIG;
+                pResId = STR_GRFILTER_TOOBIG;
                 break;
         }
 
         rSh.EndAction();
         rSh.UnlockPaint();
-        if( nResId )
+        if (pResId)
         {
             if( bShowError )
             {
-                ScopedVclPtrInstance< MessageDialog > aInfoBox( GetWindow(), SwResId( nResId ), VclMessageType::Info);
+                ScopedVclPtrInstance< MessageDialog > aInfoBox( GetWindow(), SwResId(pResId), VclMessageType::Info);
                 aInfoBox->Execute();
             }
             rReq.Ignore();

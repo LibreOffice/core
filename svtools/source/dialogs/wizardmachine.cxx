@@ -23,7 +23,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
 #include <svtools/svtresid.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 
 
 namespace svt

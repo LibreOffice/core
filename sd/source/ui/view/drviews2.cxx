@@ -112,7 +112,7 @@
 #include <svl/whiter.hxx>
 
 #include "app.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "strings.hrc"
 
 #include "framework/FrameworkHelper.hxx"
@@ -1339,14 +1339,12 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             if( !bDone )
             {
-#ifndef UNX
-                const sal_uInt16 nId = STR_TWAIN_NO_SOURCE;
-#else
-                const sal_uInt16 nId = STR_TWAIN_NO_SOURCE_UNX;
-#endif
-
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(nId))->Execute();
+#ifndef UNX
+                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_TWAIN_NO_SOURCE))->Execute();
+#else
+                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_TWAIN_NO_SOURCE_UNX))->Execute();
+#endif
             }
             else
             {
@@ -1802,6 +1800,20 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_SHOW_NEXT_LEVEL:
         {
+            const char* STR_PRESOBJ_MPOUTLINE_ARY[] =
+            {
+                STR_PRESOBJ_MPOUTLINE,
+                STR_PRESOBJ_MPOUTLLAYER2,
+                STR_PRESOBJ_MPOUTLLAYER3,
+                STR_PRESOBJ_MPOUTLLAYER4,
+                STR_PRESOBJ_MPOUTLLAYER5,
+                STR_PRESOBJ_MPOUTLLAYER6,
+                STR_PRESOBJ_MPOUTLLAYER7,
+                STR_PRESOBJ_MPNOTESTITLE,
+                STR_PRESOBJ_MPNOTESTEXT,
+                STR_PRESOBJ_NOTESTEXT
+            };
+
             ESelection aSel;
             // fdo#78151 editing a PRESOBJ_OUTLINE in a master page ?
             ::Outliner* pOL = GetOutlinerForMasterPageOutlineTextObj(aSel);
@@ -1816,7 +1828,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     if (nDepth != sal_uInt16(-1) && nDepth < 8)
                     {
                         sal_uInt16 nNewDepth = nDepth+1;
-                        pOL->Insert(SdResId(STR_PRESOBJ_MPOUTLINE+nNewDepth), EE_PARA_APPEND, nNewDepth);
+                        pOL->Insert(SdResId(STR_PRESOBJ_MPOUTLINE_ARY[nNewDepth]), EE_PARA_APPEND, nNewDepth);
                     }
                 }
             }

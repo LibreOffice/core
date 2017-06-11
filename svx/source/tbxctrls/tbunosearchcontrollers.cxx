@@ -24,7 +24,7 @@
 
 #include <config_features.h>
 
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 
 #include <comphelper/processfactory.hxx>
