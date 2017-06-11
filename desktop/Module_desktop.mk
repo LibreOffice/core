@@ -26,9 +26,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,desktop,\
-    AllLangResTarget_deployment \
-    AllLangResTarget_deploymentgui \
-    AllLangResTarget_dkt \
+    AllLangMoTarget_dkt \
     UIConfig_deployment \
 ))
 

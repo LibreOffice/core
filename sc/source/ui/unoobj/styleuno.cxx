@@ -866,19 +866,19 @@ uno::Any SAL_CALL ScStyleFamilyObj::getPropertyValue( const OUString& sPropertyN
     if ( sPropertyName == "DisplayName" )
     {
         SolarMutexGuard aGuard;
-        sal_uInt32 nResId = 0;
+        const char* pResId = nullptr;
         switch ( eFamily )
         {
             case SfxStyleFamily::Para:
-                nResId = STR_STYLE_FAMILY_CELL; break;
+                pResId = STR_STYLE_FAMILY_CELL; break;
             case SfxStyleFamily::Page:
-                nResId = STR_STYLE_FAMILY_PAGE; break;
+                pResId = STR_STYLE_FAMILY_PAGE; break;
             default:
                 OSL_FAIL( "ScStyleFamilyObj::getPropertyValue(): invalid family" );
         }
-        if ( nResId > 0 )
+        if (pResId)
         {
-            OUString sDisplayName( ScGlobal::GetRscString( static_cast< sal_uInt16 >( nResId ) ) );
+            OUString sDisplayName(ScGlobal::GetRscString(pResId));
             aRet <<= sDisplayName;
         }
     }

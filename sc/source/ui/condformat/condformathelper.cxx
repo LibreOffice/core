@@ -98,10 +98,25 @@ OUString getExpression(sal_Int32 nIndex)
 
 OUString getDateString(sal_Int32 nIndex)
 {
-    sal_Int32 nStringIndex = STR_COND_TODAY + nIndex;
-    if(nStringIndex <= STR_COND_NEXTYEAR)
-        return ScGlobal::GetRscString(nStringIndex);
+    const char* aCondStrs[] =
+    {
+        STR_COND_TODAY,
+        STR_COND_YESTERDAY,
+        STR_COND_TOMORROW,
+        STR_COND_LAST7DAYS,
+        STR_COND_THISWEEK,
+        STR_COND_LASTWEEK,
+        STR_COND_NEXTWEEK,
+        STR_COND_THISMONTH,
+        STR_COND_LASTMONTH,
+        STR_COND_NEXTMONTH,
+        STR_COND_THISYEAR,
+        STR_COND_LASTYEAR,
+        STR_COND_NEXTYEAR
+    };
 
+    if (nIndex >= 0 && static_cast<sal_uInt32>(nIndex) < SAL_N_ELEMENTS(aCondStrs))
+        return ScGlobal::GetRscString(aCondStrs[nIndex]);
     assert(false);
     return OUString();
 }

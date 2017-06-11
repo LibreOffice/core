@@ -150,8 +150,6 @@ org_openoffice_comp_abp_OAddressBookSourcePilot(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    compmodule::OModule::setResourceFilePrefix("abp");
-
     return cppu::acquire(new abp::OABSPilotUno(context));
 }
 

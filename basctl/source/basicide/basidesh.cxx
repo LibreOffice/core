@@ -21,7 +21,8 @@
 
 #include <tools/diagnose_ex.h>
 #include <basic/basmgr.hxx>
-#include <basidesh.hrc>
+#include <svx/svxids.hrc>
+#include "strings.hrc"
 #include "baside2.hxx"
 #include "baside3.hxx"
 #include <basdoc.hxx>

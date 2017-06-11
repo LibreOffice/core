@@ -66,7 +66,7 @@ namespace rptui
         * \param _pIsSectionOn
         * @return sal_True when title was set otherwise FALSE
         */
-        bool setGroupSectionTitle(const css::uno::Reference< css::report::XGroup>& _xGroup,sal_uInt16 _nResId,::std::mem_fun_t< css::uno::Reference< css::report::XSection> , OGroupHelper> _pGetSection, const ::std::mem_fun_t<bool, OGroupHelper>& _pIsSectionOn);
+        bool setGroupSectionTitle(const css::uno::Reference< css::report::XGroup>& _xGroup,const char* pResId,::std::mem_fun_t< css::uno::Reference< css::report::XSection> , OGroupHelper> _pGetSection, const ::std::mem_fun_t<bool, OGroupHelper>& _pIsSectionOn);
 
         /** set the title of the (report/page) header or footer
         *
@@ -76,7 +76,7 @@ namespace rptui
         * \param _pIsSectionOn
         * @return sal_True when title was set otherwise FALSE
         */
-        bool setReportSectionTitle(const css::uno::Reference< css::report::XReportDefinition>& _xReport,sal_uInt16 _nResId,::std::mem_fun_t< css::uno::Reference< css::report::XSection> , OReportHelper> _pGetSection, const ::std::mem_fun_t<bool, OReportHelper>& _pIsSectionOn);
+        bool setReportSectionTitle(const css::uno::Reference< css::report::XReportDefinition>& _xReport,const char* pResId,::std::mem_fun_t< css::uno::Reference< css::report::XSection> , OReportHelper> _pGetSection, const ::std::mem_fun_t<bool, OReportHelper>& _pIsSectionOn);
         void ImplInitSettings();
 
         DECL_LINK(Collapsed, OColorListener&, void);

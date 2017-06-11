@@ -21,7 +21,7 @@
 #define SC_SC_HRC
 
 #include <sfx2/sfx.hrc>
-#include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 
 #include "svx/svxcommands.h"
 #include "helpids.h"
@@ -650,8 +650,6 @@
 #define SID_INSERT_CURRENT_TIME (SC_RESOURCE_START+17)
 #define FID_TAB_TOGGLE_GRID     (SC_RESOURCE_START+18) // toggle sheet grid
 #define WID_SIMPLE_REF          (SC_RESOURCE_START+20)
-#define RID_ERRHDLSC            (SC_RESOURCE_START+23)
-#define RID_FUNCTION_CATEGORIES (SC_RESOURCE_START+62)
 
 #endif
 

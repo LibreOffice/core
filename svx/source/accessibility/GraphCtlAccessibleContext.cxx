@@ -40,8 +40,7 @@
 #include <svx/AccessibleShapeInfo.hxx>
 #include "GraphCtlAccessibleContext.hxx"
 #include <svx/graphctl.hxx>
-#include <svx/dialogs.hrc>
-#include "accessibility.hrc"
+#include <svx/strings.hrc>
 #include <svx/svdpage.hxx>
 #include <svx/unomod.hxx>
 #include <svx/dialmgr.hxx>

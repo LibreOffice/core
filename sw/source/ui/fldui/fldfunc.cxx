@@ -23,6 +23,7 @@
 #include <docsh.hxx>
 #include <swtypes.hxx>
 #include <globals.hrc>
+#include <strings.hrc>
 #include <fldbas.hxx>
 #include <docufld.hxx>
 #include <view.hxx>
@@ -210,6 +211,15 @@ void SwFieldFuncPage::Reset(const SfxItemSet* )
     }
 }
 
+static const char* FMT_MARK_ARY[] =
+{
+    FMT_MARK_TEXT,
+    FMT_MARK_TABLE,
+    FMT_MARK_FRAME,
+    FMT_MARK_GRAFIC,
+    FMT_MARK_OLE
+};
+
 IMPL_LINK_NOARG(SwFieldFuncPage, TypeHdl, ListBox&, void)
 {
     // save old ListBoxPos
@@ -245,7 +255,7 @@ IMPL_LINK_NOARG(SwFieldFuncPage, TypeHdl, ListBox&, void)
         if (nSize)
         {
             if (IsFieldEdit() && nTypeId == TYP_JUMPEDITFLD)
-                m_pFormatLB->SelectEntry(SwResId(FMT_MARK_BEGIN + GetCurField()->GetFormat()));
+                m_pFormatLB->SelectEntry(SwResId(FMT_MARK_ARY[GetCurField()->GetFormat()]));
 
             if (!m_pFormatLB->GetSelectEntryCount())
                 m_pFormatLB->SelectEntryPos(0);

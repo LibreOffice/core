@@ -28,30 +28,30 @@
 namespace xforms
 {
 
-OUString getResource( sal_uInt16 nResourceId )
+OUString getResource(const char* pResourceId)
 {
-    return getResource( nResourceId, OUString(), OUString(), OUString() );
+    return getResource(pResourceId, OUString(), OUString(), OUString());
 }
 
-OUString getResource( sal_uInt16 nResourceId,
-                      const OUString& rInfo1 )
+OUString getResource(const char* pResourceId,
+                     const OUString& rInfo1)
 {
-    return getResource( nResourceId, rInfo1, OUString(), OUString() );
+    return getResource(pResourceId, rInfo1, OUString(), OUString());
 }
 
-OUString getResource( sal_uInt16 nResourceId,
-                      const OUString& rInfo1,
-                      const OUString& rInfo2 )
+OUString getResource(const char* pResourceId,
+                     const OUString& rInfo1,
+                     const OUString& rInfo2)
 {
-    return getResource( nResourceId, rInfo1, rInfo2, OUString() );
+    return getResource(pResourceId, rInfo1, rInfo2, OUString());
 }
 
-OUString getResource( sal_uInt16 nResourceId,
-                      const OUString& rInfo1,
-                      const OUString& rInfo2,
-                      const OUString& rInfo3 )
+OUString getResource(const char* pResourceId,
+                     const OUString& rInfo1,
+                     const OUString& rInfo2,
+                     const OUString& rInfo3)
 {
-    OUString sResource = frm::ResourceManager::loadString( nResourceId );
+    OUString sResource = frm::ResourceManager::loadString(pResourceId);
     OSL_ENSURE( !sResource.isEmpty(), "resource not found?" );
 
     OUString sString( sResource );

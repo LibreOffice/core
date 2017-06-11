@@ -27,7 +27,7 @@
 #include <edtwin.hxx>
 
 #include <cmdid.h>
-#include <docvw.hrc>
+#include <strings.hrc>
 
 #include <unotools/securityoptions.hxx>
 
@@ -111,19 +111,19 @@ void SidebarTextControl::LoseFocus()
 
 void SidebarTextControl::RequestHelp(const HelpEvent &rEvt)
 {
-    sal_uInt16 nResId = 0;
+    const char* pResId = nullptr;
     switch( mrSidebarWin.GetLayoutStatus() )
     {
-        case SwPostItHelper::INSERTED:  nResId = STR_REDLINE_INSERT; break;
-        case SwPostItHelper::DELETED:   nResId = STR_REDLINE_DELETE; break;
-        default: nResId = 0;
+        case SwPostItHelper::INSERTED:  pResId = STR_REDLINE_INSERT; break;
+        case SwPostItHelper::DELETED:   pResId = STR_REDLINE_DELETE; break;
+        default: pResId = nullptr;
     }
 
     SwContentAtPos aContentAtPos( IsAttrAtPos::Redline );
-    if ( nResId &&
+    if ( pResId &&
          mrDocView.GetWrtShell().GetContentAtPos( mrSidebarWin.GetAnchorPos(), aContentAtPos ) )
     {
-        OUString sText = SwResId( nResId ) + ": " +
+        OUString sText = SwResId(pResId) + ": " +
                         aContentAtPos.aFnd.pRedl->GetAuthorString() + " - " +
                         GetAppLangDateTimeString( aContentAtPos.aFnd.pRedl->GetTimeStamp() );
         Help::ShowQuickHelp( this,PixelToLogic(tools::Rectangle(rEvt.GetMousePosPixel(),Size(50,10))),sText);

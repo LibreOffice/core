@@ -20,6 +20,7 @@
 #include "thesdlg.hxx"
 #include "thesdlg_impl.hxx"
 #include "cuires.hrc"
+#include "strings.hrc"
 #include "dialmgr.hxx"
 
 #include <svl/lngmisc.hxx>

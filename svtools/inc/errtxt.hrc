@@ -1,0 +1,158 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_VCL_INC_STRINGS_HRC
+#define INCLUDED_VCL_INC_STRINGS_HRC
+
+#include <svtools/sfxecode.hxx>
+#include <svtools/soerr.hxx>
+
+#define N_(String) (u8##String)
+#define S_MAX   0x7fff
+
+const ErrMsgCode RID_ERRCTX[] =
+{
+    { N_("Error") , ErrCode(ERRCTX_ERROR) },
+    { N_("Warning") , ErrCode(ERRCTX_WARNING) },
+    { N_("$(ERR) loading the template $(ARG1)") , ErrCode(ERRCTX_SFX_LOADTEMPLATE) },
+    { N_("$(ERR) saving the document $(ARG1)"), ErrCode(ERRCTX_SFX_SAVEDOC) },
+    { N_("$(ERR) saving the document $(ARG1)"), ErrCode(ERRCTX_SFX_SAVEASDOC) },
+    { N_("$(ERR) displaying doc. information for document $(ARG1)") , ErrCode(ERRCTX_SFX_DOCINFO) },
+    { N_("$(ERR) writing document $(ARG1) as template") , ErrCode(ERRCTX_SFX_DOCTEMPLATE) },
+    { N_("$(ERR) copying or moving document contents") , ErrCode(ERRCTX_SFX_MOVEORCOPYCONTENTS) },
+    { N_("$(ERR) starting the Document Manager") , ErrCode(ERRCTX_SFX_DOCMANAGER) },
+    { N_("$(ERR) loading document $(ARG1)") , ErrCode(ERRCTX_SFX_OPENDOC) },
+    { N_("$(ERR) creating a new document") , ErrCode(ERRCTX_SFX_NEWDOCDIRECT) },
+    { N_("$(ERR) creating a new document") , ErrCode(ERRCTX_SFX_NEWDOC) },
+    { N_("$(ERR) expanding entry") , ErrCode(ERRCTX_SFX_CREATEOBJSH) },
+    { N_("$(ERR) loading BASIC of document $(ARG1)") , ErrCode(ERRCTX_SFX_LOADBASIC) },
+    { N_("$(ERR) searching for an address"), ErrCode(ERRCTX_SFX_SEARCHADDRESS) },
+    { nullptr, ERRCODE_NONE }
+};
+
+const ErrMsgCode RID_ERRHDL[] =
+{
+    { N_("Abort") , ErrCode(ERRCODE_CLASS_ABORT) },
+    { N_("Nonexistent object") , ErrCode(ERRCODE_CLASS_NOTEXISTS) },
+    { N_("Object already exists") , ErrCode(ERRCODE_CLASS_ALREADYEXISTS) },
+    { N_("Object not accessible") , ErrCode(ERRCODE_CLASS_ACCESS) },
+    { N_("Inadmissible path") , ErrCode(ERRCODE_CLASS_PATH) },
+    { N_("Locking problem") , ErrCode(ERRCODE_CLASS_LOCKING) },
+    { N_("Wrong parameter") , ErrCode(ERRCODE_CLASS_PARAMETER) },
+    { N_("Resource exhausted") , ErrCode(ERRCODE_CLASS_SPACE) },
+    { N_("Action not supported") , ErrCode(ERRCODE_CLASS_NOTSUPPORTED) },
+    { N_("Read Error") , ErrCode(ERRCODE_CLASS_READ) },
+    { N_("Write Error") , ErrCode(ERRCODE_CLASS_WRITE) },
+    { N_("unknown") , ErrCode(ERRCODE_CLASS_UNKNOWN) },
+    { N_("Version Incompatibility") , ErrCode(ERRCODE_CLASS_VERSION) },
+    { N_("General Error") , ErrCode(ERRCODE_CLASS_GENERAL) },
+    { N_("Incorrect format") , ErrCode(ERRCODE_CLASS_FORMAT) },
+    { N_("Error creating object") , ErrCode(ERRCODE_CLASS_CREATE) },
+    { N_("Inadmissible value or data type") , ErrCode(ERRCODE_CLASS_SBX) },
+    { N_("BASIC runtime error") , ErrCode(ERRCODE_CLASS_RUNTIME) },
+    { N_("BASIC syntax error") , ErrCode(ERRCODE_CLASS_COMPILER) },
+    { N_("General Error") , ErrCode(1) },
+    { N_("General input/output error.") , ErrCode(ERRCODE_IO_GENERAL) },
+    { N_("Invalid file name.") , ErrCode(ERRCODE_IO_MISPLACEDCHAR) },
+    { N_("Nonexistent file.") , ErrCode(ERRCODE_IO_NOTEXISTS) },
+    { N_("File already exists.") , ErrCode(ERRCODE_IO_ALREADYEXISTS) },
+    { N_("The object is not a directory.") , ErrCode(ERRCODE_IO_NOTADIRECTORY) },
+    { N_("The object is not a file.") , ErrCode(ERRCODE_IO_NOTAFILE) },
+    { N_("The specified device is invalid.") , ErrCode(ERRCODE_IO_INVALIDDEVICE) },
+    { N_("The object cannot be accessed\ndue to insufficient user rights.") , ErrCode(ERRCODE_IO_ACCESSDENIED) },
+    { N_("Sharing violation while accessing the object.") , ErrCode(ERRCODE_IO_LOCKVIOLATION) },
+    { N_("No more space on device.") , ErrCode(ERRCODE_IO_OUTOFSPACE) },
+    { N_("This operation cannot be run on\nfiles containing wildcards.") , ErrCode(ERRCODE_IO_ISWILDCARD) },
+    { N_("This operation is not supported on this operating system.") , ErrCode(ERRCODE_IO_NOTSUPPORTED) },
+    { N_("There are too many files open.") , ErrCode(ERRCODE_IO_TOOMANYOPENFILES) },
+    { N_("Data could not be read from the file.") , ErrCode(ERRCODE_IO_CANTREAD) },
+    { N_("The file could not be written.") , ErrCode(ERRCODE_IO_CANTWRITE) },
+    { N_("The operation could not be run due to insufficient memory.") , ErrCode(ERRCODE_IO_OUTOFMEMORY) },
+    { N_("The seek operation could not be run.") , ErrCode(ERRCODE_IO_CANTSEEK) },
+    { N_("The tell operation could not be run.") , ErrCode(ERRCODE_IO_CANTTELL) },
+    { N_("Incorrect file version.") , ErrCode(ERRCODE_IO_WRONGVERSION) },
+    { N_("Incorrect file format.") , ErrCode(ERRCODE_IO_WRONGFORMAT) },
+    { N_("The file name contains invalid characters.") , ErrCode(ERRCODE_IO_INVALIDCHAR) },
+    { N_("An unknown I/O error has occurred.") , ErrCode(ERRCODE_IO_UNKNOWN) },
+    { N_("An invalid attempt was made to access the file.") , ErrCode(ERRCODE_IO_INVALIDACCESS) },
+    { N_("The file could not be created.") , ErrCode(ERRCODE_IO_CANTCREATE) },
+    { N_("The operation was started under an invalid parameter.") , ErrCode(ERRCODE_IO_INVALIDPARAMETER) },
+    { N_("The operation on the file was aborted.") , ErrCode(ERRCODE_IO_ABORT) },
+    { N_("Path to the file does not exist.") , ErrCode(ERRCODE_IO_NOTEXISTSPATH) },
+    { N_("An object cannot be copied into itself.") , ErrCode(ERRCODE_IO_RECURSIVE) },
+    { N_("The specified template could not be found.") , ErrCode(ERRCODE_SFX_TEMPLATENOTFOUND) },
+    { N_("The file cannot be used as template.") , ErrCode(ERRCODE_SFX_NOTATEMPLATE) },
+    { N_("This document has already been opened for editing.") , ErrCode(ERRCODE_SFX_ALREADYOPEN) },
+    { N_("The wrong password has been entered.") , ErrCode(ERRCODE_SFX_WRONGPASSWORD) },
+    { N_("Error reading file.") , ErrCode(ERRCODE_SFX_DOLOADFAILED) },
+    { N_("The document was opened as read-only.") , ErrCode(ERRCODE_SFX_DOCUMENTREADONLY) },
+    { N_("General OLE Error.") , ErrCode(ERRCODE_SFX_OLEGENERAL) },
+    { N_("The host name $(ARG1) could not be resolved.") , ErrCode(ERRCODE_INET_NAME_RESOLVE) },
+    { N_("Could not establish Internet connection to $(ARG1).") , ErrCode(ERRCODE_INET_CONNECT) },
+    { N_("Error reading data from the Internet.\nServer error message: $(ARG1).") , ErrCode(ERRCODE_INET_READ) },
+    { N_("Error transferring data to the Internet.\nServer error message: $(ARG1).") , ErrCode(ERRCODE_INET_WRITE) },
+    { N_("General Internet error has occurred.") , ErrCode(ERRCODE_INET_GENERAL) },
+    { N_("The requested Internet data is not available in the cache and cannot be transmitted as the Online mode has not be activated.") , ErrCode(ERRCODE_INET_OFFLINE) },
+    { N_("The contents could not be created.") , ErrCode(ERRCODE_SFX_CANTCREATECONTENT) },
+    { N_("The file name is too long for the target file system.") , ErrCode(ERRCODE_IO_NAMETOOLONG) },
+    { N_("The input syntax is invalid.") , ErrCode(ERRCODE_SFX_INVALIDSYNTAX) },
+    { N_("The input syntax is invalid.") , ErrCode(ERRCODE_SFX_CANTCREATEFOLDER) },
+    { N_("This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME %PRODUCTVERSION file format."), ErrCode(ERRCODE_IO_NOTSTORABLEINBINARYFORMAT) },
+    { N_("The maximum number of documents that can be opened at the same time has been reached. You need to close one or more documents before you can open a new document."), ErrCode(ERRCODE_SFX_NOMOREDOCUMENTSALLOWED) },
+    { N_("Could not create backup copy.") , ErrCode(ERRCODE_SFX_CANTCREATEBACKUP) },
+    { N_("An attempt was made to execute a macro.\nFor security reasons, macro support is disabled."), ErrCode(ERRCODE_SFX_MACROS_SUPPORT_DISABLED) },
+    { N_("This document contains macros.\n\nMacros may contain viruses. Execution of macros is disabled due to the current macro security setting in %PRODUCTNAME - Preferences - %PRODUCTNAME - Security.\n\nTherefore, some functionality may not be available.") , ErrCode(ERRCODE_SFX_DOCUMENT_MACRO_DISABLED_MAC) },
+    { N_("This document contains macros.\n\nMacros may contain viruses. Execution of macros is disabled due to the current macro security setting in Tools - Options - %PRODUCTNAME - Security.\n\nTherefore, some functionality may not be available.") , ErrCode(ERRCODE_SFX_DOCUMENT_MACRO_DISABLED) },
+    { N_("The encrypted document contains unexpected non-encrypted streams.\n\nThis could be the result of document manipulation.\n\nWe recommend that you do not trust the content of the current document.\nExecution of macros is disabled for this document.\n ") , ErrCode(ERRCODE_SFX_INCOMPLETE_ENCRYPTION) },
+    { N_("Invalid data length.") , ErrCode(ERRCODE_IO_INVALIDLENGTH) },
+    { N_("Function not possible: path contains current directory.") , ErrCode(ERRCODE_IO_CURRENTDIR) },
+    { N_("Function not possible: device (drive) not identical.") , ErrCode(ERRCODE_IO_NOTSAMEDEVICE) },
+    { N_("Device (drive) not ready.") , ErrCode(ERRCODE_IO_DEVICENOTREADY) },
+    { N_("Wrong checksum.") , ErrCode(ERRCODE_IO_BADCRC) },
+    { N_("Function not possible: write protected.") , ErrCode(ERRCODE_IO_WRITEPROTECTED) },
+    { N_("The password of a shared spreadsheet cannot be set or changed.\nDeactivate sharing mode first."), ErrCode(ERRCODE_SFX_SHARED_NOPASSWORDCHANGE) },
+    { nullptr, ERRCODE_NONE }
+};
+
+const ErrMsgCode RID_SO_ERROR_HANDLER[] =
+{
+    { N_("General OLE error."),
+      ErrCode(sal_uInt32(ERRCODE_SO_GENERALERROR) & S_MAX) },
+    { N_("False."),
+      ErrCode(sal_uInt32(ERRCODE_SO_FALSE) & S_MAX) },
+    { N_("Data not available at this time."),
+      ErrCode(sal_uInt32(ERRCODE_SO_PENDING) & S_MAX) },
+    { N_("The action cannot be executed in the object's current state."),
+      ErrCode(sal_uInt32(ERRCODE_SO_CANNOT_DOVERB_NOW) & S_MAX) },
+    { N_("The object does not support any actions."),
+      ErrCode(sal_uInt32(ERRCODE_SO_NOVERBS) & S_MAX) },
+    { N_("Object does not support this action."),
+      ErrCode(sal_uInt32(ERRCODE_SO_NOTIMPL) & S_MAX) },
+    { nullptr, ERRCODE_NONE }
+};
+
+const ErrMsgCode RID_SO_ERRCTX[] =
+{
+    { N_("$(ERR) activating object") , ErrCode(ERRCTX_SO_DOVERB) },
+    { nullptr, ERRCODE_NONE }
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

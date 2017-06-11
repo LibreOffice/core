@@ -18,8 +18,9 @@
  */
 
 #include "objectnames.hxx"
+#include "core_resource.hxx"
 
-#include "sdbt_resource.hrc"
+#include "strings.hrc"
 
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -99,7 +100,7 @@ namespace sdbtools
             ::dbtools::DatabaseMetaData aMeta( m_xConnection );
             if ( aMeta.supportsSubqueriesInFrom() )
             {
-                OUString sNeedDistinctNames( SdbtRes( STR_QUERY_AND_TABLE_DISTINCT_NAMES ) );
+                OUString sNeedDistinctNames( DBA_RES( STR_QUERY_AND_TABLE_DISTINCT_NAMES ) );
                 aError.NextException <<= SQLException( sNeedDistinctNames, m_xConnection, OUString(), 0, Any() );
             }
 
@@ -282,7 +283,7 @@ namespace sdbtools
             &&  ( _nCommandType != CommandType::QUERY )
             )
             throw IllegalArgumentException(
-                SdbtRes( STR_INVALID_COMMAND_TYPE ),
+                DBA_RES( STR_INVALID_COMMAND_TYPE ),
                 nullptr,
                 0
             );
@@ -305,7 +306,7 @@ namespace sdbtools
         catch( const Exception& )
         {
             throw IllegalArgumentException(
-                SdbtRes( STR_CONN_WITHOUT_QUERIES_OR_TABLES ),
+                DBA_RES( STR_CONN_WITHOUT_QUERIES_OR_TABLES ),
                 nullptr,
                 0
             );
@@ -368,9 +369,9 @@ namespace sdbtools
         if ( sBaseName.isEmpty() )
         {
             if ( CommandType == CommandType::TABLE )
-                sBaseName = OUString( SdbtRes( STR_BASENAME_TABLE ) );
+                sBaseName = DBA_RES(STR_BASENAME_TABLE);
             else
-                sBaseName = OUString( SdbtRes( STR_BASENAME_QUERY ) );
+                sBaseName = DBA_RES(STR_BASENAME_QUERY);
         }
         else if( CommandType == CommandType::QUERY )
         {

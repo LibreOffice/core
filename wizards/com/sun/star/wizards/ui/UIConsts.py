@@ -17,7 +17,6 @@
 #
 class UIConsts():
 
-    RID_COMMON = 500
     INVISIBLESTEP = 99
     INFOIMAGEURL = "private:graphicrepository/dbaccess/res/exinfo.png"
 

@@ -41,7 +41,7 @@
 #include "STLPropertySet.hxx"
 #include "CustomAnimationPane.hxx"
 #include "CustomAnimationDialog.hxx"
-#include "CustomAnimation.hrc"
+#include "strings.hrc"
 #include "CustomAnimationList.hxx"
 #include "createcustomanimationpanel.hxx"
 #include <vcl/lstbox.hxx>
@@ -72,13 +72,13 @@
 
 #include "EventMultiplexer.hxx"
 
-#include "glob.hrc"
+#include "strings.hrc"
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
 #include "app.hrc"
 
 #include <svx/svdetc.hxx>
-#include <svx/svdstr.hrc>
+#include <svx/strings.hrc>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>

@@ -50,6 +50,7 @@
 #include <svtools/colorcfg.hxx>
 
 #include <svl/whiter.hxx>
+#include <svx/dialogs.hrc>
 #include <svx/selctrl.hxx>
 #include <svx/insctrl.hxx>
 #include <svx/zoomctrl.hxx>
@@ -61,6 +62,7 @@
 #include <vcl/waitobj.hxx>
 #include <svx/svxerr.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/simplerm.hxx>
 
 #include <editeng/unolingu.hxx>
 #include <unotools/lingucfg.hxx>
@@ -86,8 +88,11 @@
 #include "docsh.hxx"
 #include "drwlayer.hxx"
 #include "uiitems.hxx"
+#include "sc.hrc"
+#include "scerrors.hrc"
+#include "scstyles.hrc"
 #include "globstr.hrc"
-#include "scres.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include "cfgids.hxx"
 #include "inputhdl.hxx"
@@ -134,7 +139,7 @@ void ScModule::InitInterface_Impl()
 }
 
 ScModule::ScModule( SfxObjectFactory* pFact ) :
-    SfxModule( ResMgr::CreateResMgr( "sc" ), {pFact} ),
+    SfxModule( Translate::Create("sc", Application::GetSettings().GetUILanguageTag()), {pFact} ),
     aIdleTimer("sc ScModule IdleTimer"),
     aSpellIdle("sc ScModule SpellIdle"),
     mpDragData(new ScDragData),
@@ -175,10 +180,10 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     // Create ErrorHandler - was in Init()
     // Between OfficeApplication::Init and ScGlobal::Init
     SvxErrorHandler::ensure();
-    pErrorHdl    = new SfxErrorHandler( RID_ERRHDLSC,
-                                        ErrCode(ERRCODE_AREA_SC),
-                                        ErrCode(ERRCODE_AREA_APP2-1),
-                                        GetResMgr() );
+    pErrorHdl    = new SfxErrorHandler(RID_ERRHDLSC,
+                                       ErrCode(ERRCODE_AREA_SC),
+                                       ErrCode(ERRCODE_AREA_APP2-1),
+                                       &GetResLocale());
 
     aSpellIdle.SetPriority(TaskPriority::LOWER);
     aSpellIdle.SetInvokeHandler( LINK( this, ScModule, SpellTimerHdl ) );
@@ -2277,12 +2282,12 @@ SfxStyleFamilies* ScModule::CreateStyleFamilies()
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Para,
                                                     ScGlobal::GetRscString(STR_STYLE_FAMILY_CELL),
                                                     Image(BitmapEx(BMP_STYLES_FAMILY_CELL)),
-                                                    ResId(RID_CELLSTYLEFAMILY, *SC_MOD()->GetResMgr())));
+                                                    RID_CELLSTYLEFAMILY, SC_MOD()->GetResLocale()));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Page,
                                                     ScGlobal::GetRscString(STR_STYLE_FAMILY_PAGE),
                                                     Image(BitmapEx(BMP_STYLES_FAMILY_PAGE)),
-                                                    ResId(RID_PAGESTYLEFAMILY, *SC_MOD()->GetResMgr())));
+                                                    RID_PAGESTYLEFAMILY, SC_MOD()->GetResLocale()));
 
     return pStyleFamilies;
 }

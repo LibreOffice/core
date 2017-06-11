@@ -46,10 +46,10 @@
 #include <sfx2/event.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <sfx2/strings.hrc>
 
 #include <toolkit/awt/vclxdevice.hxx>
 
-#include "view.hrc"
 #include "helpid.hrc"
 
 using namespace com::sun::star;

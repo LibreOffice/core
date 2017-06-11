@@ -58,6 +58,8 @@ public:
         const std::vector< css::beans::StringPair >& aSequence,
         const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
+    static OUString GetStandardGroupString();
+
     // XDocumentHandler
     virtual void SAL_CALL startDocument() override;
     virtual void SAL_CALL endDocument() override;

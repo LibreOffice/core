@@ -54,7 +54,7 @@
 #include <unotextbodyhf.hxx>
 #include <fmthdft.hxx>
 #include <fmtpdsc.hxx>
-#include <poolfmt.hrc>
+#include <strings.hrc>
 #include <poolfmt.hxx>
 #include "unoevent.hxx"
 #include <fmtruby.hxx>
@@ -89,7 +89,6 @@
 #include <svx/xbtmpit.hxx>
 
 #include "ccoll.hxx"
-#include "unocore.hrc"
 
 #include <cassert>
 #include <memory>
@@ -108,17 +107,17 @@ namespace
         uno::Reference<beans::XPropertySetInfo> m_xPSInfo;
         SwGetPoolIdFromName m_aPoolId;
         OUString m_sName;
-        sal_uInt32 m_nResId;
+        const char* m_pResId;
         GetCountOrName_t m_fGetCountOrName;
         CreateStyle_t m_fCreateStyle;
         TranslateIndex_t m_fTranslateIndex;
-        StyleFamilyEntry(SfxStyleFamily eFamily, sal_uInt16 nPropMapType, SwGetPoolIdFromName aPoolId, OUString const& sName, sal_uInt32 nResId, GetCountOrName_t const & fGetCountOrName, CreateStyle_t const & fCreateStyle, TranslateIndex_t const & fTranslateIndex)
+        StyleFamilyEntry(SfxStyleFamily eFamily, sal_uInt16 nPropMapType, SwGetPoolIdFromName aPoolId, OUString const& sName, const char* pResId, GetCountOrName_t const & fGetCountOrName, CreateStyle_t const & fCreateStyle, TranslateIndex_t const & fTranslateIndex)
                 : m_eFamily(eFamily)
                 , m_nPropMapType(nPropMapType)
                 , m_xPSInfo(aSwMapProvider.GetPropertySet(nPropMapType)->getPropertySetInfo())
                 , m_aPoolId(aPoolId)
                 , m_sName(sName)
-                , m_nResId(nResId)
+                , m_pResId(pResId)
                 , m_fGetCountOrName(fGetCountOrName)
                 , m_fCreateStyle(fCreateStyle)
                 , m_fTranslateIndex(fTranslateIndex)
@@ -1044,7 +1043,7 @@ uno::Any SAL_CALL XStyleFamily::getPropertyValue( const OUString& sPropertyName 
     if(sPropertyName != "DisplayName")
         throw beans::UnknownPropertyException( "unknown property: " + sPropertyName, static_cast<OWeakObject *>(this) );
     SolarMutexGuard aGuard;
-    return uno::makeAny(SwResId(m_rEntry.m_nResId));
+    return uno::makeAny(SwResId(m_rEntry.m_pResId));
 }
 
 
@@ -1514,6 +1513,24 @@ public:
     };
 };
 
+namespace
+{
+    const char* STR_POOLPAGE_ARY[] =
+    {
+        // Page styles
+        STR_POOLPAGE_STANDARD,
+        STR_POOLPAGE_FIRST,
+        STR_POOLPAGE_LEFT,
+        STR_POOLPAGE_RIGHT,
+        STR_POOLPAGE_JAKET,
+        STR_POOLPAGE_REGISTER,
+        STR_POOLPAGE_HTML,
+        STR_POOLPAGE_FOOTNOTE,
+        STR_POOLPAGE_ENDNOTE,
+        STR_POOLPAGE_LANDSCAPE
+    };
+}
+
 const SwPageDesc* SwStyleBase_Impl::GetOldPageDesc()
 {
     if(!m_pOldPageDesc)
@@ -1524,11 +1541,11 @@ const SwPageDesc* SwStyleBase_Impl::GetOldPageDesc()
 
         if(!m_pOldPageDesc)
         {
-            for(sal_uInt16 i = RC_POOLPAGEDESC_BEGIN; i <= STR_POOLPAGE_LANDSCAPE; ++i)
+            for (size_t i = 0; i < SAL_N_ELEMENTS(STR_POOLPAGE_ARY); ++i)
             {
-                if(SwResId(i) == m_rStyleName)
+                if (SwResId(STR_POOLPAGE_ARY[i]) == m_rStyleName)
                 {
-                    m_pOldPageDesc = m_rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( static_cast<sal_uInt16>(RES_POOLPAGE_BEGIN + i - RC_POOLPAGEDESC_BEGIN));
+                    m_pOldPageDesc = m_rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_BEGIN + i);
                     break;
                 }
             }

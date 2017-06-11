@@ -51,6 +51,7 @@ enum class SvxFrameDirection
     Environment = css::text::WritingMode2::CONTEXT
 };
 
+const char* getFrmDirResId(size_t nIndex);
 
 #endif // INCLUDED_EDITENG_FRMDIR_HXX
 

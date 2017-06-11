@@ -14,7 +14,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
 
-#include <doc.hrc>
+#include <sfx2/strings.hrc>
 #include "bitmaps.hlst"
 
 #include <vcl/builderfactory.hxx>

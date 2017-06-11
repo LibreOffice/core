@@ -67,7 +67,7 @@
 #include "svx/svdpool.hxx"
 #include <tools/gen.hxx>
 #include "svx/dialmgr.hxx"
-#include "svx/dialogs.hrc"
+#include "svx/strings.hrc"
 #include "svx/svdocapt.hxx"
 #include <svx/obj3d.hxx>
 #include <tools/diagnose_ex.h>
@@ -78,7 +78,7 @@
 #include "svx/xflhtit.hxx"
 #include "svx/xlndsit.hxx"
 #include "svdglob.hxx"
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include "svx/unomaster.hxx"
 #include <editeng/outlobj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

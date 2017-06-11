@@ -25,7 +25,8 @@
 
 #include <svx/dialmgr.hxx>
 #include <svx/grfflt.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
+#include <svx/svxids.hrc>
 #include <svx/svxdlg.hxx>
 #include <memory>
 

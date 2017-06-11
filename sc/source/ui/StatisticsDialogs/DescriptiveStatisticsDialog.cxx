@@ -22,14 +22,14 @@
 #include "reffact.hxx"
 #include "docfunc.hxx"
 #include "TableFillingAndNavigationTools.hxx"
-
 #include "DescriptiveStatisticsDialog.hxx"
+#include "strings.hrc"
 
 namespace
 {
 
 struct StatisticCalculation {
-    sal_Int16   aCalculationNameId;
+    const char* aCalculationNameId;
     const char* aFormula;
 };
 
@@ -50,7 +50,7 @@ static const StatisticCalculation lclCalcDefinitions[] =
     { STRID_CALC_MAX,            "=MAX(%RANGE%)"},
     { STRID_CALC_SUM,            "=SUM(%RANGE%)"},
     { STRID_CALC_COUNT,          "=COUNT(%RANGE%)" },
-    { 0,                         nullptr }
+    { nullptr,                   nullptr }
 };
 
 }
@@ -71,7 +71,7 @@ bool ScDescriptiveStatisticsDialog::Close()
     return DoClose( ScDescriptiveStatisticsDialogWrapper::GetChildWindowId() );
 }
 
-sal_Int16 ScDescriptiveStatisticsDialog::GetUndoNameId()
+const char* ScDescriptiveStatisticsDialog::GetUndoNameId()
 {
     return STR_DESCRIPTIVE_STATISTICS_UNDO_NAME;
 }

@@ -46,7 +46,7 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdoedge.hxx>
 #include "svdglob.hxx"
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include <editeng/eeitem.hxx>
 #include "editeng/editstat.hxx"
 #include <editeng/adjustitem.hxx>

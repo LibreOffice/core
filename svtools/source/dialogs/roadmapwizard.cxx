@@ -19,7 +19,7 @@
 
 
 #include <svtools/roadmapwizard.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <roadmap.hxx>
 #include <tools/debug.hxx>

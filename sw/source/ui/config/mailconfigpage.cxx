@@ -33,7 +33,6 @@
 #include <com/sun/star/mail/MailServiceProvider.hpp>
 #include <vcl/msgbox.hxx>
 #include <globals.hrc>
-#include <config.hrc>
 #include <dbui.hrc>
 #include "bitmaps.hlst"
 #include <helpid.h>

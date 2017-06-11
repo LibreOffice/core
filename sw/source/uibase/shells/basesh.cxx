@@ -87,8 +87,8 @@
 #include <swwait.hxx>
 #include <cmdid.h>
 #include <globals.hrc>
-#include <shells.hrc>
-#include <statstr.hrc>
+#include <strings.hrc>
+#include <strings.hrc>
 #include <globals.h>
 #include <unotxdoc.hxx>
 #include <fmtinfmt.hxx>
@@ -103,7 +103,7 @@
 #include <instable.hxx>
 #include <svx/fmshell.hxx>
 #include <SwRewriter.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <unomid.h>
 #include <svx/galleryitem.hxx>
 #include <com/sun/star/gallery/GalleryItemType.hpp>

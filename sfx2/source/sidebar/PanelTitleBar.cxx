@@ -19,9 +19,7 @@
 
 #include <sfx2/sidebar/PanelTitleBar.hxx>
 #include <sfx2/sfxresid.hxx>
-
-#include "Sidebar.hrc"
-
+#include <sfx2/strings.hrc>
 #include <sfx2/sidebar/Paint.hxx>
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/Theme.hxx>

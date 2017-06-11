@@ -5,16 +5,16 @@
 
 #include "writerperfectdllapi.h"
 
-#include <tools/resid.hxx>
+#include <tools/simplerm.hxx>
 
-struct WRITERPERFECT_DLLPUBLIC WPFTResMgr
+struct WRITERPERFECT_DLLPUBLIC WPFTResLocale
 {
-    static ResMgr &GetResMgr();
+    static std::locale& GetResLocale();
 };
 
-inline OUString WpResId(sal_uInt16 nId)
+inline OUString WpResId(const char* pId)
 {
-    return ResId(nId, WPFTResMgr::GetResMgr());
+    return Translate::get(pId, WPFTResLocale::GetResLocale());
 }
 
 #endif

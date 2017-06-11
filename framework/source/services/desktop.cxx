@@ -32,7 +32,7 @@
 #include <general.h>
 #include <properties.h>
 
-#include <classes/resource.hrc>
+#include <strings.hrc>
 #include <classes/fwkresid.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>

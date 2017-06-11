@@ -67,6 +67,4 @@ $(eval $(call gb_CppunitTest_use_rdb,sd_svg_export_tests,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sd_svg_export_tests))
 
-$(call gb_CppunitTest_get_target,sd_svg_export_tests) : $(call gb_AllLangResTarget_get_target,sd)
-
 # vim: set noet sw=4 ts=4:

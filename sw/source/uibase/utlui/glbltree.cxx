@@ -53,8 +53,8 @@
 
 #include <cmdid.h>
 #include <helpid.h>
-#include <utlui.hrc>
-#include <comcore.hrc>
+#include <strings.hrc>
+#include <strings.hrc>
 #include <globals.hrc>
 #include "bitmaps.hlst"
 #include "swabstdlg.hxx"
@@ -134,6 +134,42 @@ void SwGlobalFrameListener_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint&
         bValid = false;
 }
 
+enum GLOBAL_CONTEXT_IDX
+{
+    IDX_STR_UPDATE = 0,
+    IDX_STR_EDIT_CONTENT = 1,
+    IDX_STR_EDIT_INSERT = 2,
+    IDX_STR_INDEX = 3,
+    IDX_STR_FILE = 4,
+    IDX_STR_NEW_FILE = 5,
+    IDX_STR_INSERT_TEXT = 6,
+    IDX_STR_DELETE = 7,
+    IDX_STR_UPDATE_SEL = 8,
+    IDX_STR_UPDATE_INDEX = 9,
+    IDX_STR_UPDATE_LINK = 10,
+    IDX_STR_UPDATE_ALL = 11,
+    IDX_STR_BROKEN_LINK = 12,
+    IDX_STR_EDIT_LINK = 13
+};
+
+static const char* GLOBAL_CONTEXT_ARY[] =
+{
+    STR_UPDATE,
+    STR_EDIT_CONTENT,
+    STR_EDIT_INSERT,
+    STR_INDEX,
+    STR_FILE,
+    STR_NEW_FILE,
+    STR_INSERT_TEXT,
+    STR_DELETE,
+    STR_UPDATE_SEL,
+    STR_UPDATE_INDEX,
+    STR_UPDATE_LINK,
+    STR_UPDATE_ALL,
+    STR_BROKEN_LINK,
+    STR_EDIT_LINK
+};
+
 SwGlobalTree::SwGlobalTree(vcl::Window* pParent, SwNavigationPI* pDialog)
     : SvTreeListBox(pParent)
     , m_xDialog(pDialog)
@@ -153,9 +189,9 @@ SwGlobalTree::SwGlobalTree(vcl::Window* pParent, SwNavigationPI* pDialog)
     m_aUpdateTimer.SetTimeout(GLOBAL_UPDATE_TIMEOUT);
     m_aUpdateTimer.SetInvokeHandler(LINK(this, SwGlobalTree, Timeout));
     m_aUpdateTimer.Start();
-    for(sal_uInt16 i = 0; i < GLOBAL_CONTEXT_COUNT; i++)
+    for (sal_uInt16 i = 0; i < GLOBAL_CONTEXT_COUNT; i++)
     {
-        m_aContextStrings[i] = SwResId(i+ STR_GLOBAL_CONTEXT_FIRST);
+        m_aContextStrings[i] = SwResId(GLOBAL_CONTEXT_ARY[i]);
     }
     SetHelpId(HID_NAVIGATOR_GLOB_TREELIST);
     SelectHdl();
@@ -334,33 +370,33 @@ VclPtr<PopupMenu> SwGlobalTree::CreateContextMenu()
 
         for (sal_uInt16 i = CTX_UPDATE_SEL; i <= CTX_UPDATE_ALL; i++)
         {
-            pSubPop2->InsertItem( i, m_aContextStrings[STR_UPDATE_SEL - STR_GLOBAL_CONTEXT_FIRST - CTX_UPDATE_SEL+ i] );
+            pSubPop2->InsertItem( i, m_aContextStrings[IDX_STR_UPDATE_SEL + i - CTX_UPDATE_SEL] );
             pSubPop2->SetHelpId(i, aHelpForMenu[i]);
         }
         pSubPop2->EnableItem(CTX_UPDATE_SEL, bool(nEnableFlags & MenuEnableFlags::UpdateSel));
 
-        pSubPop1->InsertItem(CTX_INSERT_ANY_INDEX, m_aContextStrings[STR_INDEX  - STR_GLOBAL_CONTEXT_FIRST]);
+        pSubPop1->InsertItem(CTX_INSERT_ANY_INDEX, m_aContextStrings[IDX_STR_INDEX]);
         pSubPop1->SetHelpId(CTX_INSERT_ANY_INDEX, aHelpForMenu[CTX_INSERT_ANY_INDEX]);
-        pSubPop1->InsertItem(CTX_INSERT_FILE, m_aContextStrings[STR_FILE   - STR_GLOBAL_CONTEXT_FIRST]);
+        pSubPop1->InsertItem(CTX_INSERT_FILE, m_aContextStrings[IDX_STR_FILE]);
         pSubPop1->SetHelpId(CTX_INSERT_FILE, aHelpForMenu[CTX_INSERT_FILE]);
-        pSubPop1->InsertItem(CTX_INSERT_NEW_FILE, m_aContextStrings[STR_NEW_FILE   - STR_GLOBAL_CONTEXT_FIRST]);
+        pSubPop1->InsertItem(CTX_INSERT_NEW_FILE, m_aContextStrings[IDX_STR_NEW_FILE]);
         pSubPop1->SetHelpId(CTX_INSERT_NEW_FILE, aHelpForMenu[CTX_INSERT_NEW_FILE]);
-        pSubPop1->InsertItem(CTX_INSERT_TEXT, m_aContextStrings[STR_INSERT_TEXT   - STR_GLOBAL_CONTEXT_FIRST]);
+        pSubPop1->InsertItem(CTX_INSERT_TEXT, m_aContextStrings[IDX_STR_INSERT_TEXT]);
         pSubPop1->SetHelpId(CTX_INSERT_TEXT, aHelpForMenu[CTX_INSERT_TEXT]);
 
-        pPop->InsertItem(CTX_UPDATE, m_aContextStrings[STR_UPDATE - STR_GLOBAL_CONTEXT_FIRST]);
+        pPop->InsertItem(CTX_UPDATE, m_aContextStrings[IDX_STR_UPDATE]);
         pPop->SetHelpId(CTX_UPDATE, aHelpForMenu[CTX_UPDATE]);
-        pPop->InsertItem(CTX_EDIT, m_aContextStrings[STR_EDIT_CONTENT - STR_GLOBAL_CONTEXT_FIRST]);
+        pPop->InsertItem(CTX_EDIT, m_aContextStrings[IDX_STR_EDIT_CONTENT]);
         pPop->SetHelpId(CTX_EDIT, aHelpForMenu[CTX_EDIT]);
         if(nEnableFlags&MenuEnableFlags::EditLink)
         {
-            pPop->InsertItem(CTX_EDIT_LINK, m_aContextStrings[STR_EDIT_LINK - STR_GLOBAL_CONTEXT_FIRST]);
+            pPop->InsertItem(CTX_EDIT_LINK, m_aContextStrings[IDX_STR_EDIT_LINK]);
             pPop->SetHelpId(CTX_EDIT_LINK, aHelpForMenu[CTX_EDIT_LINK]);
         }
-        pPop->InsertItem(CTX_INSERT, m_aContextStrings[STR_EDIT_INSERT - STR_GLOBAL_CONTEXT_FIRST]);
+        pPop->InsertItem(CTX_INSERT, m_aContextStrings[IDX_STR_EDIT_INSERT]);
         pPop->SetHelpId(CTX_INSERT, aHelpForMenu[CTX_INSERT]);
         pPop->InsertSeparator() ;
-        pPop->InsertItem(CTX_DELETE, m_aContextStrings[STR_DELETE - STR_GLOBAL_CONTEXT_FIRST]);
+        pPop->InsertItem(CTX_DELETE, m_aContextStrings[IDX_STR_DELETE]);
         pPop->SetHelpId(CTX_DELETE, aHelpForMenu[CTX_DELETE]);
 
         //disabling if applicable
@@ -389,7 +425,7 @@ void SwGlobalTree::TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox)
         ScopedVclPtrInstance<PopupMenu> pMenu;
         for (sal_uInt16 i = CTX_INSERT_ANY_INDEX; i <= CTX_INSERT_TEXT; ++i)
         {
-            pMenu->InsertItem( i, m_aContextStrings[STR_INDEX  - STR_GLOBAL_CONTEXT_FIRST - CTX_INSERT_ANY_INDEX + i] );
+            pMenu->InsertItem( i, m_aContextStrings[IDX_STR_INDEX + i - CTX_INSERT_ANY_INDEX] );
             pMenu->SetHelpId(i, aHelpForMenu[i] );
         }
         pMenu->EnableItem(CTX_INSERT_ANY_INDEX, bool(nEnableFlags & MenuEnableFlags::InsertIdx ));
@@ -407,7 +443,7 @@ void SwGlobalTree::TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox)
         ScopedVclPtrInstance<PopupMenu> pMenu;
         for (sal_uInt16 i = CTX_UPDATE_SEL; i <= CTX_UPDATE_ALL; i++)
         {
-            pMenu->InsertItem( i, m_aContextStrings[STR_UPDATE_SEL - STR_GLOBAL_CONTEXT_FIRST - CTX_UPDATE_SEL+ i] );
+            pMenu->InsertItem( i, m_aContextStrings[IDX_STR_UPDATE_SEL + i - CTX_UPDATE_SEL] );
             pMenu->SetHelpId(i, aHelpForMenu[i] );
         }
         pMenu->EnableItem(CTX_UPDATE_SEL, bool(nEnableFlags & MenuEnableFlags::UpdateSel));
@@ -470,7 +506,7 @@ void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
                 const SwSection* pSect = pCont->GetSection();
                 OUString sEntry = pSect->GetLinkFileName().getToken(0, sfx2::cTokenSeparator);
                 if(!pSect->IsConnectFlag())
-                    sEntry = m_aContextStrings[STR_BROKEN_LINK - STR_GLOBAL_CONTEXT_FIRST] + sEntry;
+                    sEntry = m_aContextStrings[IDX_STR_BROKEN_LINK] + sEntry;
                 Point aEntryPos = GetEntryPosition( pEntry );
 
                 aEntryPos.X() = GetTabPos( pEntry, pTab );
@@ -660,7 +696,7 @@ void SwGlobalTree::Display(bool bOnlyUpdateUserData)
             {
                 case GLBLDOC_UNKNOWN:
                 {
-                    sEntry = m_aContextStrings[STR_INSERT_TEXT   - STR_GLOBAL_CONTEXT_FIRST];
+                    sEntry = m_aContextStrings[IDX_STR_INSERT_TEXT];
                 }
                 break;
                 case GLBLDOC_TOXBASE:

@@ -45,7 +45,7 @@
 #include "syspath.hxx"
 #include <osl/file.hxx>
 #include <osl/security.hxx>
-#include "doc.hrc"
+#include "sfx2/strings.hrc"
 
 #include <rtl/strbuf.hxx>
 #include <tools/globname.hxx>

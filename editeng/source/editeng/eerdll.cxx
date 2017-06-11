@@ -18,6 +18,7 @@
  */
 
 
+#include <tools/simplerm.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
@@ -192,9 +193,9 @@ uno::Reference< linguistic2::XLanguageGuessing > const & GlobalEditData::GetLang
     return xLanguageGuesser;
 }
 
-EditResId::EditResId(sal_uInt16 nId)
-    : ResId(nId, *EditDLL::GetResMgr())
+OUString EditResId(const char *pId)
 {
+    return Translate::get(pId, EditDLL::GetResLocale());
 }
 
 EditDLL::EditDLL()
@@ -206,13 +207,10 @@ EditDLL::~EditDLL()
 {
 }
 
-static ResMgr* pResMgr=nullptr;
-
-ResMgr* EditDLL::GetResMgr()
+std::locale& EditDLL::GetResLocale()
 {
-    if (!pResMgr)
-        pResMgr = ResMgr::CreateResMgr("editeng", Application::GetSettings().GetUILanguageTag());
-    return pResMgr;
+    static std::locale loc = Translate::Create("editeng", Application::GetSettings().GetUILanguageTag());
+    return loc;
 }
 
 
