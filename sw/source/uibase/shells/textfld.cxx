@@ -59,7 +59,7 @@
 #include <fldmgr.hxx>
 #include <uitool.hxx>
 #include <cmdid.h>
-#include <shells.hrc>
+#include <strings.hrc>
 #include <sfx2/app.hxx>
 #include <svx/dialogs.hrc>
 #include "swabstdlg.hxx"
@@ -80,30 +80,30 @@ static OUString lcl_BuildTitleWithRedline( const SwRangeRedline *pRedline )
 {
     const OUString sTitle(SwResId(STR_REDLINE_COMMENT));
 
-    sal_uInt16 nResId = 0;
+    const char* pResId = nullptr;
     switch( pRedline->GetType() )
     {
         case nsRedlineType_t::REDLINE_INSERT:
-            nResId = STR_REDLINE_INSERTED;
+            pResId = STR_REDLINE_INSERTED;
             break;
         case nsRedlineType_t::REDLINE_DELETE:
-            nResId = STR_REDLINE_DELETED;
+            pResId = STR_REDLINE_DELETED;
             break;
         case nsRedlineType_t::REDLINE_FORMAT:
         case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT:
-            nResId = STR_REDLINE_FORMATED;
+            pResId = STR_REDLINE_FORMATED;
             break;
         case nsRedlineType_t::REDLINE_TABLE:
-            nResId = STR_REDLINE_TABLECHG;
+            pResId = STR_REDLINE_TABLECHG;
             break;
         case nsRedlineType_t::REDLINE_FMTCOLL:
-            nResId = STR_REDLINE_FMTCOLLSET;
+            pResId = STR_REDLINE_FMTCOLLSET;
             break;
         default:
             return sTitle;
     }
 
-    return sTitle + SwResId( nResId );
+    return sTitle + SwResId(pResId);
 }
 
 void SwTextShell::ExecField(SfxRequest &rReq)

@@ -43,7 +43,7 @@
 #include <rtl/uri.hxx>
 
 #include "xmlfilterjar.hxx"
-#include "xmlfilterdialogstrings.hrc"
+#include "strings.hrc"
 #include "xmlfiltersettingsdialog.hxx"
 #include "typedetectionexport.hxx"
 #include "typedetectionimport.hxx"

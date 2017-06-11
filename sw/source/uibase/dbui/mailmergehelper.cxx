@@ -41,6 +41,7 @@
 #include <sfx2/passwd.hxx>
 
 #include <dbui.hrc>
+#include <strings.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -463,7 +464,7 @@ OUString SwAddressPreview::FillData(
                     rConfigItem.GetColumnAssignment(
                                                 rConfigItem.GetCurrentDBData() );
     const OUString* pAssignment = aAssignment.getConstArray();
-    const ResStringArray& rDefHeaders = rConfigItem.GetDefaultAddressHeaders();
+    const std::vector<std::pair<OUString, int>>& rDefHeaders = rConfigItem.GetDefaultAddressHeaders();
     OUString sAddress(rAddress);
     OUString sNotAssigned = "<" + SwResId(STR_NOTASSIGNED) + ">";
 
@@ -473,7 +474,7 @@ OUString SwAddressPreview::FillData(
     OUString sCountryColumn;
     if( bSpecialReplacementForCountry )
     {
-        sCountryColumn = rDefHeaders.GetString(MM_PART_COUNTRY);
+        sCountryColumn = rDefHeaders[MM_PART_COUNTRY].first;
         Sequence< OUString> aSpecialAssignment =
                         rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
         if(aSpecialAssignment.getLength() > MM_PART_COUNTRY && aSpecialAssignment[MM_PART_COUNTRY].getLength())
@@ -492,10 +493,10 @@ OUString SwAddressPreview::FillData(
             //find the appropriate assignment
             OUString sConvertedColumn = aItem.sText;
             for(sal_uInt32 nColumn = 0;
-                    nColumn < rDefHeaders.Count() && nColumn < sal_uInt32(aAssignment.getLength());
+                    nColumn < rDefHeaders.size() && nColumn < sal_uInt32(aAssignment.getLength());
                                                                                 ++nColumn)
             {
-                if (rDefHeaders.GetString(nColumn).equals(aItem.sText) &&
+                if (rDefHeaders[nColumn].first.equals(aItem.sText) &&
                     !pAssignment[nColumn].isEmpty())
                 {
                     sConvertedColumn = pAssignment[nColumn];

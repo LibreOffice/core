@@ -29,6 +29,8 @@
 #include <vcl/mnemonic.hxx>
 #include <dialmgr.hxx>
 #include "cuires.hrc"
+#include "strings.hrc"
+#include "personalization.hrc"
 
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
@@ -58,11 +60,10 @@ SelectPersonaDialog::SelectPersonaDialog( vcl::Window *pParent )
     get( m_vSearchSuggestions[4], "suggestion5" );
     get( m_vSearchSuggestions[5], "suggestion6" );
 
-    ResStringArray aCategoriesArr(ResId(RID_SVXSTR_PERSONA_CATEGORIES, CUI_MGR()));
-    assert(aCategoriesArr.Count() >= CATEGORYCOUNT);
+    assert(SAL_N_ELEMENTS(RID_SVXSTR_PERSONA_CATEGORIES) >= CATEGORYCOUNT);
     for(sal_uInt32 i = 0; i < CATEGORYCOUNT; ++i)
     {
-        m_vSearchSuggestions[i]->SetText( aCategoriesArr.GetString(i) );
+        m_vSearchSuggestions[i]->SetText(CuiResId(RID_SVXSTR_PERSONA_CATEGORIES[i]));
         m_vSearchSuggestions[i]->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
     }
 
@@ -127,7 +128,7 @@ IMPL_LINK( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
     /*
      * English category names should be used for search.
      * These strings should be in sync with the strings of
-     * RID_SVXSTR_PERSONA_CATEGORIES in personalization.src
+     * RID_SVXSTR_PERSONA_CATEGORIES in personalization.hrc
      */
     static const OUStringLiteral vSuggestionCategories[] =
         {"LibreOffice", "Abstract", "Color", "Music", "Nature", "Solid"};

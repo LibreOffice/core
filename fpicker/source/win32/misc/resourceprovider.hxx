@@ -29,18 +29,9 @@
 
 #include <rtl/ustring.hxx>
 
-class CResourceProvider_Impl;
-
-class CResourceProvider
+namespace CResourceProvider
 {
-public:
-    CResourceProvider( );
-    ~CResourceProvider( );
-
-    OUString getResString( sal_Int16 aId );
-
-private:
-    std::unique_ptr<CResourceProvider_Impl> m_pImpl;
+    OUString getResString(sal_Int16 aId);
 };
 
 #endif
