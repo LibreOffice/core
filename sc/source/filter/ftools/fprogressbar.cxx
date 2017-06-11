@@ -41,8 +41,8 @@ ScfProgressBar::ScfProgressBar( SfxObjectShell* pDocShell, const OUString& rText
     Init( pDocShell );
 }
 
-ScfProgressBar::ScfProgressBar( SfxObjectShell* pDocShell, sal_uInt16 nResId ) :
-    maText( ScGlobal::GetRscString( nResId ) )
+ScfProgressBar::ScfProgressBar(SfxObjectShell* pDocShell, const char* pResId)
+    : maText(ScGlobal::GetRscString(pResId))
 {
     Init( pDocShell );
 }
@@ -199,8 +199,8 @@ ScfSimpleProgressBar::ScfSimpleProgressBar( std::size_t nSize, SfxObjectShell* p
     Init( nSize );
 }
 
-ScfSimpleProgressBar::ScfSimpleProgressBar( std::size_t nSize, SfxObjectShell* pDocShell, sal_uInt16 nResId ) :
-    maProgress( pDocShell, nResId )
+ScfSimpleProgressBar::ScfSimpleProgressBar(std::size_t nSize, SfxObjectShell* pDocShell, const char* pResId)
+    : maProgress(pDocShell, pResId)
 {
     Init( nSize );
 }

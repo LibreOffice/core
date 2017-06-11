@@ -45,7 +45,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <docary.hxx>
 #include <poolfmt.hxx>
-#include <poolfmt.hrc>
+#include <strings.hrc>
 #include <pagedesc.hxx>
 #include <fmtcntnt.hxx>
 #include <unomap.hxx>

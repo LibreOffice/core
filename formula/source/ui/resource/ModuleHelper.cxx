@@ -26,6 +26,8 @@
 #include <rtl/instance.hxx>
 #include <rtl/uri.hxx>
 #include <svl/solar.hrc>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 #define ENTER_MOD_METHOD()  \
     ::osl::MutexGuard aGuard(theOModuleMutex::get()); \
@@ -43,33 +45,31 @@ namespace formula
 */
 class OModuleImpl
 {
-    std::unique_ptr<ResMgr> m_pResources;
+    std::unique_ptr<std::locale> m_xResources;
 
 public:
     /// ctor
     OModuleImpl();
 
     /// get the manager for the resources of the module
-    ResMgr* getResManager();
+    const std::locale& getResLocale();
 };
 
 OModuleImpl::OModuleImpl()
 {
 }
 
-
-ResMgr* OModuleImpl::getResManager()
+const std::locale& OModuleImpl::getResLocale()
 {
     // note that this method is not threadsafe, which counts for the whole class !
 
-    if (!m_pResources)
+    if (!m_xResources)
     {
         // create a manager with a fixed prefix
-        m_pResources.reset( ResMgr::CreateResMgr("forui") );
+        m_xResources.reset(new std::locale(Translate::Create("for", Application::GetSettings().GetUILanguageTag())));
     }
-    return m_pResources.get();
+    return *m_xResources;
 }
-
 
 //= OModule
 
@@ -81,12 +81,11 @@ namespace
 sal_Int32       OModule::s_nClients = 0;
 OModuleImpl*    OModule::s_pImpl = nullptr;
 
-ResMgr* OModule::getResManager()
+const std::locale& OModule::getResLocale()
 {
     ENTER_MOD_METHOD();
-    return s_pImpl->getResManager();
+    return s_pImpl->getResLocale();
 }
-
 
 void OModule::registerClient()
 {
@@ -113,6 +112,10 @@ void OModule::ensureImpl()
     s_pImpl = new OModuleImpl();
 }
 
+OUString ModuleRes(const char *pId)
+{
+    return Translate::get(pId, OModule::getResLocale());
+};
 
 }   // namespace formula
 

@@ -22,11 +22,11 @@
 #include "app.hrc"
 #include "drawdoc.hxx"
 #include "framework/FrameworkHelper.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "glob.hxx"
 #include "helpids.h"
 #include "pres.hxx"
-#include "res_bmp.hrc"
+
 #include "sdpage.hxx"
 #include "sdresid.hxx"
 #include "strings.hrc"
@@ -69,7 +69,7 @@ namespace sd { namespace sidebar {
 struct snewfoil_value_info
 {
     const char* msBmpResId;
-    sal_uInt16 mnStrResId;
+    const char* mpStrResId;
     WritingMode meWritingMode;
     AutoLayout maAutoLayout;
 };
@@ -78,7 +78,7 @@ static const snewfoil_value_info notes[] =
 {
     {BMP_FOILN_01, STR_AUTOLAYOUT_NOTES, WritingMode_LR_TB,
      AUTOLAYOUT_NOTES},
-    {"", 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
+    {"", nullptr, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
 static const snewfoil_value_info handout[] =
@@ -95,7 +95,7 @@ static const snewfoil_value_info handout[] =
      AUTOLAYOUT_HANDOUT6},
     {BMP_FOILH_09, STR_AUTOLAYOUT_HANDOUT9, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT9},
-    {"", 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
+    {"", nullptr, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
 static const snewfoil_value_info standard[] =
@@ -118,7 +118,7 @@ static const snewfoil_value_info standard[] =
     {BMP_LAYOUT_VERTICAL01, STR_AL_VERT_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_VTITLE_VCONTENT},
     {BMP_LAYOUT_HEAD02, STR_AL_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_TITLE_VCONTENT},
     {BMP_LAYOUT_HEAD02A, STR_AL_TITLE_VERT_OUTLINE_CLIPART,   WritingMode_TB_RL, AUTOLAYOUT_TITLE_2VTEXT},
-    {"", 0, WritingMode_LR_TB, AUTOLAYOUT_NONE}
+    {"", nullptr, WritingMode_LR_TB, AUTOLAYOUT_NONE}
 };
 
 LayoutMenu::LayoutMenu (
@@ -538,7 +538,7 @@ void LayoutMenu::Fill()
     }
 
     Clear();
-    for (sal_uInt16 i=1; pInfo!=nullptr && pInfo->mnStrResId !=0; i++, pInfo++)
+    for (sal_uInt16 i=1; pInfo!=nullptr && pInfo->mpStrResId != nullptr; i++, pInfo++)
     {
         if ((WritingMode_TB_RL != pInfo->meWritingMode) || bVertical)
         {
@@ -547,7 +547,7 @@ void LayoutMenu::Fill()
             if (bRightToLeft && (WritingMode_TB_RL != pInfo->meWritingMode))
                 aBmp.Mirror (BmpMirrorFlags::Horizontal);
 
-            InsertItem(i, Image(aBmp), SdResId (pInfo->mnStrResId));
+            InsertItem(i, Image(aBmp), SdResId(pInfo->mpStrResId));
             SetItemData (i, new AutoLayout(pInfo->maAutoLayout));
         }
     }

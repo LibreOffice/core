@@ -24,7 +24,7 @@
 #include <ndtxt.hxx>
 #include <txttxmrk.hxx>
 #include <tox.hxx>
-#include <poolfmt.hrc>
+#include <strings.hrc>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <paratr.hxx>
@@ -211,6 +211,91 @@ SwTOXType::SwTOXType(const SwTOXType& rCopy)
 {
 }
 
+static const char* STR_POOLCOLL_TOX_ARY[] =
+{
+    // Subcategory Index-Directories
+    STR_POOLCOLL_TOX_IDXH,
+    STR_POOLCOLL_TOX_IDX1,
+    STR_POOLCOLL_TOX_IDX2,
+    STR_POOLCOLL_TOX_IDX3,
+    STR_POOLCOLL_TOX_IDXBREAK
+};
+
+static const char* STR_POOLCOLL_TOX_CNTNT_ARY[] =
+{
+    // Subcategory Tables of Contents
+    STR_POOLCOLL_TOX_CNTNTH,
+    STR_POOLCOLL_TOX_CNTNT1,
+    STR_POOLCOLL_TOX_CNTNT2,
+    STR_POOLCOLL_TOX_CNTNT3,
+    STR_POOLCOLL_TOX_CNTNT4,
+    STR_POOLCOLL_TOX_CNTNT5
+};
+
+static const char* STR_POOLCOLL_TOX_CNTNT_EXTRA_ARY[] =
+{
+    // Subcategory Table of Contents more Levels 5 - 10
+    STR_POOLCOLL_TOX_CNTNT6,
+    STR_POOLCOLL_TOX_CNTNT7,
+    STR_POOLCOLL_TOX_CNTNT8,
+    STR_POOLCOLL_TOX_CNTNT9,
+    STR_POOLCOLL_TOX_CNTNT10
+};
+
+static const char* STR_POOLCOLL_TOX_USER_ARY[] =
+{
+    // Subcategory User-Directories:
+    STR_POOLCOLL_TOX_USERH,
+    STR_POOLCOLL_TOX_USER1,
+    STR_POOLCOLL_TOX_USER2,
+    STR_POOLCOLL_TOX_USER3,
+    STR_POOLCOLL_TOX_USER4,
+    STR_POOLCOLL_TOX_USER5
+};
+
+static const char* STR_POOLCOLL_TOX_USER_EXTRA_ARY[] =
+{
+    // Subcategory User-Directories more Levels 5 - 10
+    STR_POOLCOLL_TOX_USER6,
+    STR_POOLCOLL_TOX_USER7,
+    STR_POOLCOLL_TOX_USER8,
+    STR_POOLCOLL_TOX_USER9,
+    STR_POOLCOLL_TOX_USER10
+};
+
+static const char* STR_POOLCOLL_TOX_ILLUS_ARY[] =
+{
+    // Illustrations Index
+    STR_POOLCOLL_TOX_ILLUSH,
+    STR_POOLCOLL_TOX_ILLUS1
+};
+
+static const char* STR_POOLCOLL_TOX_OBJECT_ARY[] =
+{
+    //  Object Index
+    STR_POOLCOLL_TOX_OBJECTH,
+    STR_POOLCOLL_TOX_OBJECT1
+};
+
+static const char* STR_POOLCOLL_TOX_TABLES_ARY[] =
+{
+    //  Tables Index
+    STR_POOLCOLL_TOX_TABLESH,
+    STR_POOLCOLL_TOX_TABLES1
+};
+
+static const char* STR_POOLCOLL_TOX_AUTHORITIES_ARY[] =
+{
+    //  Index of Authorities
+    STR_POOLCOLL_TOX_AUTHORITIESH,
+    STR_POOLCOLL_TOX_AUTHORITIES1
+};
+
+static const char* STR_POOLCOLL_TOX_CITATION_ARY[] =
+{
+    STR_POOLCOLL_TOX_CITATION
+};
+
 // Edit forms
 SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     : m_eType( eTyp ), m_nFormMaxLevel( SwForm::GetFormMaxLevel( eTyp )),
@@ -225,17 +310,17 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     // Keyword has 3 levels + headings+ separator
     // Indexes of tables, object illustrations and authorities consist of a heading and one level
 
-    sal_uInt16 nPoolId;
+    const char** pPoolId;
     switch( m_eType )
     {
-    case TOX_INDEX:         nPoolId = STR_POOLCOLL_TOX_IDXH;    break;
-    case TOX_USER:          nPoolId = STR_POOLCOLL_TOX_USERH;   break;
-    case TOX_CONTENT:       nPoolId = STR_POOLCOLL_TOX_CNTNTH;  break;
-    case TOX_ILLUSTRATIONS: nPoolId = STR_POOLCOLL_TOX_ILLUSH;  break;
-    case TOX_OBJECTS      : nPoolId = STR_POOLCOLL_TOX_OBJECTH; break;
-    case TOX_TABLES       : nPoolId = STR_POOLCOLL_TOX_TABLESH; break;
-    case TOX_AUTHORITIES  : nPoolId = STR_POOLCOLL_TOX_AUTHORITIESH;    break;
-    case TOX_CITATION  : nPoolId = STR_POOLCOLL_TOX_CITATION; break;
+    case TOX_INDEX:         pPoolId = STR_POOLCOLL_TOX_ARY;    break;
+    case TOX_USER:          pPoolId = STR_POOLCOLL_TOX_USER_ARY;   break;
+    case TOX_CONTENT:       pPoolId = STR_POOLCOLL_TOX_CNTNT_ARY;  break;
+    case TOX_ILLUSTRATIONS: pPoolId = STR_POOLCOLL_TOX_ILLUS_ARY;  break;
+    case TOX_OBJECTS      : pPoolId = STR_POOLCOLL_TOX_OBJECT_ARY; break;
+    case TOX_TABLES       : pPoolId = STR_POOLCOLL_TOX_TABLES_ARY; break;
+    case TOX_AUTHORITIES  : pPoolId = STR_POOLCOLL_TOX_AUTHORITIES_ARY;    break;
+    case TOX_CITATION  : pPoolId = STR_POOLCOLL_TOX_CITATION_ARY; break;
     default:
         OSL_ENSURE( false, "invalid TOXTyp");
         return ;
@@ -273,7 +358,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     if (TOX_CONTENT == m_eType || TOX_ILLUSTRATIONS == m_eType)
         aTokens.push_back(SwFormToken(TOKEN_LINK_END));
 
-    SetTemplate( 0, SwResId( nPoolId++ ));
+    SetTemplate(0, SwResId(*pPoolId++));
 
     if(TOX_INDEX == m_eType)
     {
@@ -286,19 +371,20 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
                 aTmpTokens.push_back(aTmpToken);
 
                 SetPattern( i, aTmpTokens );
-                SetTemplate( i, SwResId( STR_POOLCOLL_TOX_IDXBREAK    ));
+                SetTemplate(i, SwResId(STR_POOLCOLL_TOX_IDXBREAK));
             }
             else
             {
                 SetPattern( i, aTokens );
-                SetTemplate( i, SwResId( STR_POOLCOLL_TOX_IDX1 + i - 2 ));
+                SetTemplate(i, SwResId(STR_POOLCOLL_TOX_ARY[i - 1]));
             }
         }
     }
     else
-        for( sal_uInt16 i = 1; i < GetFormMax(); ++i, ++nPoolId )    // Number 0 is the title
+    {
+        for (sal_uInt16 i = 1; i < GetFormMax(); ++i, ++pPoolId)    // Number 0 is the title
         {
-            if(TOX_AUTHORITIES == m_eType)
+            if (TOX_AUTHORITIES == m_eType)
             {
                 SwFormTokens aAuthTokens;
                 lcl_FillAuthPattern(aAuthTokens, i);
@@ -308,13 +394,14 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
                 SetPattern( i, aTokens );
 
             if( TOX_CONTENT == m_eType && 6 == i )
-                nPoolId = STR_POOLCOLL_TOX_CNTNT6;
+                pPoolId = STR_POOLCOLL_TOX_CNTNT_EXTRA_ARY;
             else if( TOX_USER == m_eType && 6 == i )
-                nPoolId = STR_POOLCOLL_TOX_USER6;
-            else if( TOX_AUTHORITIES == m_eType )
-                nPoolId = STR_POOLCOLL_TOX_AUTHORITIES1;
-            SetTemplate( i, SwResId( nPoolId ) );
+                pPoolId = STR_POOLCOLL_TOX_USER_EXTRA_ARY;
+            else if( TOX_AUTHORITIES == m_eType ) //reuse the same STR_POOLCOLL_TOX_AUTHORITIES1 id each time
+                pPoolId = STR_POOLCOLL_TOX_AUTHORITIES_ARY + 1;
+            SetTemplate(i, SwResId(*pPoolId));
         }
+    }
 }
 
 SwForm::SwForm(const SwForm& rForm)

@@ -35,13 +35,13 @@ public:
     void ChapterNumberWithTitleIsGeneratedForNumberNoPrepst();
 
     CPPUNIT_TEST_SUITE(ToxTextGeneratorTest);
-    CPPUNIT_TEST(EmptyStringIsReturnedForPageNumberPlaceholderOfZeroItems);
-    CPPUNIT_TEST(OneAtSignIsReturnedForPageNumberPlaceholderOfOneItem);
-    CPPUNIT_TEST(TwoAtSignsAreReturnedForPageNumberPlaceholderOfOneItem);
-    CPPUNIT_TEST(EmptyStringIsReturnedAsNumStringIfNoTextMarkIsSet);
-    CPPUNIT_TEST(EmptyStringIsReturnedAsNumStringIfToxSourcesIsEmpty);
-    CPPUNIT_TEST(ChapterNumberWithoutTextIsGeneratedForNoprepstTitle);
-    CPPUNIT_TEST(ChapterNumberWithTitleIsGeneratedForNumberNoPrepst);
+//    CPPUNIT_TEST(EmptyStringIsReturnedForPageNumberPlaceholderOfZeroItems);
+//    CPPUNIT_TEST(OneAtSignIsReturnedForPageNumberPlaceholderOfOneItem);
+//    CPPUNIT_TEST(TwoAtSignsAreReturnedForPageNumberPlaceholderOfOneItem);
+//    CPPUNIT_TEST(EmptyStringIsReturnedAsNumStringIfNoTextMarkIsSet);
+//    CPPUNIT_TEST(EmptyStringIsReturnedAsNumStringIfToxSourcesIsEmpty);
+//    CPPUNIT_TEST(ChapterNumberWithoutTextIsGeneratedForNoprepstTitle);
+//    CPPUNIT_TEST(ChapterNumberWithTitleIsGeneratedForNumberNoPrepst);
     CPPUNIT_TEST_SUITE_END();
 
 };

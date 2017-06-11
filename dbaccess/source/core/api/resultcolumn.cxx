@@ -26,7 +26,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include "apitools.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/exc_hlp.hxx>

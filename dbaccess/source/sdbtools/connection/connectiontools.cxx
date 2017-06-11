@@ -18,7 +18,6 @@
  */
 
 #include "connectiontools.hxx"
-#include "sdbt_services.hxx"
 #include "tablename.hxx"
 #include "objectnames.hxx"
 #include "datasourcemetadata.hxx"
@@ -29,11 +28,6 @@
 #include <connectivity/statementcomposer.hxx>
 
 #include <algorithm>
-
-extern "C" void SAL_CALL createRegistryInfo_ConnectionTools()
-{
-    ::sdbtools::OAutoRegistration< ::sdbtools::ConnectionTools > aRegistration;
-}
 
 namespace sdbtools
 {

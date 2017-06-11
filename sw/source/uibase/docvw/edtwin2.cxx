@@ -56,8 +56,8 @@
 #include <txttxmrk.hxx>
 #include <uitool.hxx>
 #include <viewopt.hxx>
-#include <docvw.hrc>
-#include <utlui.hrc>
+#include <strings.hrc>
+#include <strings.hrc>
 
 #include <PostItMgr.hxx>
 #include <fmtfld.hxx>
@@ -67,25 +67,25 @@
 
 static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, bool bBalloon )
 {
-    sal_uInt16 nResId = 0;
+    const char* pResId = nullptr;
     switch( rRedl.GetType() )
     {
-    case nsRedlineType_t::REDLINE_INSERT:   nResId = STR_REDLINE_INSERT; break;
-    case nsRedlineType_t::REDLINE_DELETE:   nResId = STR_REDLINE_DELETE; break;
-    case nsRedlineType_t::REDLINE_FORMAT:   nResId = STR_REDLINE_FORMAT; break;
-    case nsRedlineType_t::REDLINE_TABLE:        nResId = STR_REDLINE_TABLE; break;
-    case nsRedlineType_t::REDLINE_FMTCOLL:  nResId = STR_REDLINE_FMTCOLL; break;
-    case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT: nResId = STR_REDLINE_PARAGRAPH_FORMAT; break;
-    case nsRedlineType_t::REDLINE_TABLE_ROW_INSERT: nResId = STR_REDLINE_TABLE_ROW_INSERT; break;
-    case nsRedlineType_t::REDLINE_TABLE_ROW_DELETE: nResId = STR_REDLINE_TABLE_ROW_DELETE; break;
-    case nsRedlineType_t::REDLINE_TABLE_CELL_INSERT: nResId = STR_REDLINE_TABLE_CELL_INSERT; break;
-    case nsRedlineType_t::REDLINE_TABLE_CELL_DELETE: nResId = STR_REDLINE_TABLE_CELL_DELETE; break;
+    case nsRedlineType_t::REDLINE_INSERT:   pResId = STR_REDLINE_INSERT; break;
+    case nsRedlineType_t::REDLINE_DELETE:   pResId = STR_REDLINE_DELETE; break;
+    case nsRedlineType_t::REDLINE_FORMAT:   pResId = STR_REDLINE_FORMAT; break;
+    case nsRedlineType_t::REDLINE_TABLE:    pResId = STR_REDLINE_TABLE; break;
+    case nsRedlineType_t::REDLINE_FMTCOLL:  pResId = STR_REDLINE_FMTCOLL; break;
+    case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT: pResId = STR_REDLINE_PARAGRAPH_FORMAT; break;
+    case nsRedlineType_t::REDLINE_TABLE_ROW_INSERT: pResId = STR_REDLINE_TABLE_ROW_INSERT; break;
+    case nsRedlineType_t::REDLINE_TABLE_ROW_DELETE: pResId = STR_REDLINE_TABLE_ROW_DELETE; break;
+    case nsRedlineType_t::REDLINE_TABLE_CELL_INSERT: pResId = STR_REDLINE_TABLE_CELL_INSERT; break;
+    case nsRedlineType_t::REDLINE_TABLE_CELL_DELETE: pResId = STR_REDLINE_TABLE_CELL_DELETE; break;
     }
 
     OUStringBuffer sBuf;
-    if( nResId )
+    if (pResId)
     {
-        sBuf.append(SwResId(nResId));
+        sBuf.append(SwResId(pResId));
         sBuf.append(": ");
         sBuf.append(rRedl.GetAuthorString());
         sBuf.append(" - ");
@@ -393,37 +393,37 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
         if( bContinue )
         {
             SwTab nTabCols = rSh.WhichMouseTabCol(aPos);
-            sal_uInt16 nTabRes = 0;
+            const char* pTabRes = nullptr;
             switch(nTabCols)
             {
                 case SwTab::COL_HORI:
                 case SwTab::COL_VERT:
-                    nTabRes = STR_TABLE_COL_ADJUST;
+                    pTabRes = STR_TABLE_COL_ADJUST;
                     break;
                 case SwTab::ROW_HORI:
                 case SwTab::ROW_VERT:
-                    nTabRes = STR_TABLE_ROW_ADJUST;
+                    pTabRes = STR_TABLE_ROW_ADJUST;
                     break;
                 // #i32329# Enhanced table selection
                 case SwTab::SEL_HORI:
                 case SwTab::SEL_HORI_RTL:
                 case SwTab::SEL_VERT:
-                    nTabRes = STR_TABLE_SELECT_ALL;
+                    pTabRes = STR_TABLE_SELECT_ALL;
                     break;
                 case SwTab::ROWSEL_HORI:
                 case SwTab::ROWSEL_HORI_RTL:
                 case SwTab::ROWSEL_VERT:
-                    nTabRes = STR_TABLE_SELECT_ROW;
+                    pTabRes = STR_TABLE_SELECT_ROW;
                     break;
                 case SwTab::COLSEL_HORI:
                 case SwTab::COLSEL_VERT:
-                    nTabRes = STR_TABLE_SELECT_COL;
+                    pTabRes = STR_TABLE_SELECT_COL;
                     break;
                 case SwTab::COL_NONE: break; // prevent compiler warning
             }
-            if(nTabRes)
+            if (pTabRes)
             {
-                sText = SwResId(nTabRes);
+                sText = SwResId(pTabRes);
                 Size aTextSize( GetTextWidth(sText), GetTextHeight());
                 tools::Rectangle aRect(rEvt.GetMousePosPixel(), aTextSize);
                 OUString sDisplayText(ClipLongToolTip(sText));

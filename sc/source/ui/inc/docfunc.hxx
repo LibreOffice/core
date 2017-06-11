@@ -72,7 +72,7 @@ public:
     DECL_LINK( NotifyDrawUndo, SdrUndoAction*, void );
 
     // for grouping multiple operations into one with a new name
-    void            EnterListAction( sal_uInt16 nNameResId );
+    void            EnterListAction(const char* pNameResId);
     void            EndListAction();
 
     bool            DetectiveAddPred(const ScAddress& rPos);

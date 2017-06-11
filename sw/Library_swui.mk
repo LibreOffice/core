@@ -90,7 +90,6 @@ $(eval $(call gb_Library_add_exception_objects,swui,\
     sw/source/ui/dialog/ascfldlg \
     sw/source/ui/dialog/docstdlg \
     sw/source/ui/dialog/macassgn \
-    sw/source/ui/dialog/swdialmgr \
     sw/source/ui/dialog/swdlgfact \
     sw/source/ui/dialog/swmessdialog \
     sw/source/ui/dialog/swuiexp \
