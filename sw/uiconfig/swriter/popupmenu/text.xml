@@ -47,6 +47,12 @@
       <menu:menuitem menu:id=".uno:ResetAttributes"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:EditStyle"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Default Style&amp;FamilyName:string=CharacterStyles"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Emphasis&amp;FamilyName:string=CharacterStyles"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Strong Emphasis&amp;FamilyName:string=CharacterStyles"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Quotation&amp;FamilyName:string=CharacterStyles"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Source Text&amp;FamilyName:string=CharacterStyles"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menuseparator/>
