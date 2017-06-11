@@ -89,14 +89,14 @@ namespace dbaui
     struct TaskEntry
     {
         OUString        sUNOCommand;
-        sal_uInt16      nHelpID;
+        const char*     pHelpID;
         OUString        sTitle;
         bool            bHideWhenDisabled;
             // TODO: we should be consistent in the task pane and the menus/toolbars:
             // If an entry is disabled in the latter, it should also be disabled in the former.
             // If an entry is *hidden* in the former, it should also be hidden in the latter.
 
-        TaskEntry( const sal_Char* _pAsciiUNOCommand, sal_uInt16 _nHelpID, sal_uInt16 _nTitleResourceID, bool _bHideWhenDisabled = false );
+        TaskEntry( const sal_Char* _pAsciiUNOCommand, const char* pHelpID, const char* pTitleResourceID, bool _bHideWhenDisabled = false );
     };
     typedef std::vector< TaskEntry >  TaskEntryList;
 
@@ -105,7 +105,7 @@ namespace dbaui
         /// the tasks available in the pane
         TaskEntryList   aTasks;
         /// the resource ID for the title of the pane
-        sal_uInt16          nTitleId;
+        const char*     pTitleId;
     };
 
     class OTasksWindow : public vcl::Window
@@ -139,7 +139,7 @@ namespace dbaui
         }
 
         void Clear();
-        void setHelpText(sal_uInt16 _nId);
+        void setHelpText(const char* pId);
     };
     class OApplicationDetailView : public OSplitterView
                                  , public IClipboardTest

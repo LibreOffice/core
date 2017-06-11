@@ -18,7 +18,7 @@
  */
 
 #include "commonpagesdbp.hxx"
-#include "dbpresid.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include "componentmodule.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

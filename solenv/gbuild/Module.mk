@@ -292,7 +292,7 @@ endif
 endef
 
 define gb_Module_add_target
-$(if $(filter AllLang% Dictionary% UIConfig% Package_registry,$(2)),$(warning target $(2) should be a l10n target))
+$(if $(filter AllLang% Dictionary% Package_registry,$(2)),$(warning target $(2) should be a l10n target))
 $(call gb_Module__read_targetfile,$(1),$(2),target)
 
 $(call gb_Module_get_nonl10n_target,$(1)) : $$(gb_Module_CURRENTTARGET)

@@ -60,7 +60,7 @@
 #include <node2lay.hxx>
 #include <tblrwcl.hxx>
 #include <fmtanchr.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <unochart.hxx>
 #include <calbck.hxx>
 

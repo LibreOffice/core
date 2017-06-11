@@ -21,7 +21,6 @@
 #include "fmprop.hrc"
 #include "fmvwimp.hxx"
 #include "fmpgeimp.hxx"
-#include "svx/fmresids.hrc"
 #include "svx/fmview.hxx"
 #include "svx/fmglob.hxx"
 #include "svx/fmpage.hxx"

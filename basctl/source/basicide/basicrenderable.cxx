@@ -19,7 +19,7 @@
 
 #include "basicrenderable.hxx"
 #include "bastypes.hxx"
-#include "basidesh.hrc"
+#include "strings.hrc"
 
 #include <toolkit/awt/vclxdevice.hxx>
 #include <tools/multisel.hxx>

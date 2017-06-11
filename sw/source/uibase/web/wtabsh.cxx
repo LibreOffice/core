@@ -27,7 +27,7 @@
 #include "globals.hrc"
 #include "uitool.hxx"
 #include "helpid.h"
-#include "shells.hrc"
+#include "strings.hrc"
 #include "table.hrc"
 #include "wrtsh.hxx"
 #include "wtabsh.hxx"
