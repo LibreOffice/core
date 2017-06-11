@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 #include "scdllapi.h"
 
-OUString SC_DLLPUBLIC ScResId(sal_uInt16 nId);
+OUString SC_DLLPUBLIC ScResId(const char* pId);
 
 #endif // SC_SCRESMGR_HXX
 

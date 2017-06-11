@@ -9805,12 +9805,6 @@ module com {
    module resource {
     published exception MissingResourceException: ::com::sun::star::uno::RuntimeException {
     };
-    published interface XResourceBundle;
-    published interface XResourceBundleLoader {
-     interface ::com::sun::star::uno::XInterface;
-     ::com::sun::star::resource::XResourceBundle loadBundle_Default([in] string aBaseName) raises (::com::sun::star::resource::MissingResourceException);
-     ::com::sun::star::resource::XResourceBundle loadBundle([in] string abaseName, [in] ::com::sun::star::lang::Locale aLocale) raises (::com::sun::star::resource::MissingResourceException);
-    };
     published interface XLocale {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::lang::Locale create([in] string aLanguage, [in] string aCountry, [in] string aVariant);
@@ -9831,12 +9825,6 @@ module com {
      string getDisplayName_Default([in] ::com::sun::star::lang::Locale locale);
      string getDisplayName([in] ::com::sun::star::lang::Locale locale, [in] ::com::sun::star::lang::Locale inLocale);
      boolean equals([in] ::com::sun::star::lang::Locale l1, [in] ::com::sun::star::lang::Locale l2);
-    };
-    /** @deprecated */ published interface XResourceBundle {
-     interface ::com::sun::star::container::XNameAccess;
-     [attribute] ::com::sun::star::resource::XResourceBundle Parent;
-     ::com::sun::star::lang::Locale getLocale();
-     any getDirectElement([in] string key);
     };
    };
    module scanner {

@@ -20,46 +20,46 @@
 
 #include "svx/ActionDescriptionProvider.hxx"
 #include "svdglob.hxx"
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 
 OUString ActionDescriptionProvider::createDescription( ActionType eActionType
                         , const OUString& rObjectName )
 {
-    sal_uInt16 nResID=0;
+    const char* pResID = nullptr;
     switch( eActionType )
     {
     case ActionType::Insert:
-        nResID=STR_UndoInsertObj;
+        pResID=STR_UndoInsertObj;
         break;
     case ActionType::Delete:
-        nResID= STR_EditDelete;
+        pResID= STR_EditDelete;
         break;
     case ActionType::Move:
-        nResID= STR_EditMove;
+        pResID= STR_EditMove;
         break;
     case ActionType::Resize:
-        nResID= STR_EditResize;
+        pResID= STR_EditResize;
         break;
     case ActionType::Rotate:
-        nResID= STR_EditRotate;
+        pResID= STR_EditRotate;
         break;
     case ActionType::Format:
-        nResID= STR_EditSetAttributes;
+        pResID= STR_EditSetAttributes;
         break;
     case ActionType::MoveToTop:
-        nResID= STR_EditMovToTop;
+        pResID= STR_EditMovToTop;
         break;
     case ActionType::MoveToBottom:
-        nResID= STR_EditMovToBtm;
+        pResID= STR_EditMovToBtm;
         break;
     case ActionType::PosSize:
-        nResID = STR_EditPosSize;
+        pResID = STR_EditPosSize;
         break;
     }
-    if(!nResID)
+    if (!pResID)
         return OUString();
 
-    OUString aStr(ImpGetResStr(nResID));
+    OUString aStr(ImpGetResStr(pResID));
     return aStr.replaceAll("%1", rObjectName);
 }
 

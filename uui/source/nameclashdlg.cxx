@@ -17,10 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/layout.hxx>
 #include <osl/file.hxx>
+#include <tools/simplerm.hxx>
+#include <vcl/layout.hxx>
 
-#include "ids.hrc"
+#include "strings.hrc"
 #include "nameclashdlg.hxx"
 
 // NameClashDialog ---------------------------------------------------------
@@ -47,7 +48,7 @@ IMPL_LINK( NameClashDialog, ButtonHdl_Impl, Button *, pBtn, void )
 }
 
 
-NameClashDialog::NameClashDialog( vcl::Window* pParent, ResMgr* pResMgr,
+NameClashDialog::NameClashDialog( vcl::Window* pParent, const std::locale& rResLocale,
                                   OUString const & rTargetFolderURL,
                                   OUString const & rClashingName,
                                   OUString const & rProposedNewName,
@@ -69,11 +70,11 @@ NameClashDialog::NameClashDialog( vcl::Window* pParent, ResMgr* pResMgr,
     OUString aInfo;
     if ( bAllowOverwrite )
     {
-        aInfo = ResId(STR_RENAME_OR_REPLACE, *pResMgr).toString();
+        aInfo = Translate::get(STR_RENAME_OR_REPLACE, rResLocale);
     }
     else
     {
-        aInfo = ResId(STR_NAME_CLASH_RENAME_ONLY, *pResMgr).toString();
+        aInfo = Translate::get(STR_NAME_CLASH_RENAME_ONLY, rResLocale);
         m_pBtnOverwrite->Hide();
     }
 
@@ -81,7 +82,7 @@ NameClashDialog::NameClashDialog( vcl::Window* pParent, ResMgr* pResMgr,
     if ( osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( rTargetFolderURL, aPath ) )
         aPath = rTargetFolderURL;
 
-    maSameName = ResId(STR_SAME_NAME_USED, *pResMgr).toString();
+    maSameName = Translate::get(STR_SAME_NAME_USED, rResLocale);
 
     aInfo = aInfo.replaceFirst( "%NAME", rClashingName );
     aInfo = aInfo.replaceFirst( "%FOLDER", aPath );

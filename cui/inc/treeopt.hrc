@@ -1,0 +1,155 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_CUI_INC_TREEOPT_HRC
+#define INCLUDED_CUI_INC_TREEOPT_HRC
+
+#define N_(String) (u8##String)
+
+const std::pair<const char*, sal_uInt16> SID_GENERAL_OPTIONS_RES[] =
+{
+    { N_("%PRODUCTNAME"), 0 },
+    { N_("User Data"),  RID_SFXPAGE_GENERAL },
+    { N_("General"),  OFA_TP_MISC },
+    { N_("Memory"), OFA_TP_MEMORY },
+    { N_("View"), OFA_TP_VIEW  },
+    { N_("Print"), RID_SFXPAGE_PRINTOPTIONS },
+    { N_("Paths"),  RID_SFXPAGE_PATH },
+    { N_("Fonts"), RID_SVX_FONT_SUBSTITUTION  },
+    { N_("Security"), RID_SVXPAGE_INET_SECURITY  },
+    { N_("Personalization"), RID_SVXPAGE_PERSONALIZATION  },
+    { N_("Application Colors"), RID_SVXPAGE_COLORCONFIG  },
+    { N_("Accessibility"), RID_SVXPAGE_ACCESSIBILITYCONFIG  },
+    { N_("Advanced"), RID_SVXPAGE_OPTIONS_JAVA  },
+    { N_("Basic IDE Options"), RID_SVXPAGE_BASICIDE_OPTIONS  },
+    { N_("Online Update"), RID_SVXPAGE_ONLINEUPDATE  },
+    { N_("OpenCL"), RID_SVXPAGE_OPENCL  }
+};
+
+const std::pair<const char*, sal_uInt16> SID_LANGUAGE_OPTIONS_RES[] =
+{
+    { N_("Language Settings"), 0 },
+    { N_("Languages"), OFA_TP_LANGUAGES },
+    { N_("Writing Aids"), RID_SFXPAGE_LINGU },
+    { N_("Searching in Japanese"),  RID_SVXPAGE_JSEARCH_OPTIONS },
+    { N_("Asian Layout"),  RID_SVXPAGE_ASIAN_LAYOUT },
+    { N_("Complex Text Layout"),  RID_SVXPAGE_OPTIONS_CTL }
+};
+
+const std::pair<const char*, sal_uInt16> SID_INET_DLG_RES[] =
+{
+    { N_("Internet"), 0 },
+    { N_("Proxy"),  RID_SVXPAGE_INET_PROXY },
+    { N_("E-mail"),  RID_SVXPAGE_INET_MAIL }
+};
+
+const std::pair<const char*, sal_uInt16> SID_SW_EDITOPTIONS_RES[] =
+{
+    { N_("%PRODUCTNAME Writer"), 0 },
+    { N_("General"),     RID_SW_TP_OPTLOAD_PAGE    },
+    { N_("View"),       RID_SW_TP_CONTENT_OPT   },
+    { N_("Formatting Aids"),        RID_SW_TP_OPTSHDWCRSR     },
+    { N_("Grid"),        RID_SVXPAGE_GRID         },
+    { N_("Basic Fonts (Western)"),RID_SW_TP_STD_FONT        },
+    { N_("Basic Fonts (Asian)"),RID_SW_TP_STD_FONT_CJK        },
+    { N_("Basic Fonts (CTL)"),      RID_SW_TP_STD_FONT_CTL        },
+    { N_("Print"),       RID_SW_TP_OPTPRINT_PAGE   },
+    { N_("Table"),         RID_SW_TP_OPTTABLE_PAGE   },
+    { N_("Changes"),    RID_SW_TP_REDLINE_OPT     },
+    { N_("Comparison"), RID_SW_TP_COMPARISON_OPT  },
+    { N_("Compatibility"), RID_SW_TP_OPTCOMPATIBILITY_PAGE     },
+    { N_("AutoCaption"), RID_SW_TP_OPTCAPTION_PAGE  },
+    { N_("Mail Merge E-mail"), RID_SW_TP_MAILCONFIG }
+};
+
+const std::pair<const char*, sal_uInt16> SID_SW_ONLINEOPTIONS_RES[] =
+{
+    { N_("%PRODUCTNAME Writer/Web"), 0 },
+    { N_("View"),       RID_SW_TP_HTML_CONTENT_OPT      },
+    { N_("Formatting Aids"),        RID_SW_TP_HTML_OPTSHDWCRSR     },
+    { N_("Grid"),        RID_SW_TP_HTML_OPTGRID_PAGE  },
+    { N_("Print"),         RID_SW_TP_HTML_OPTPRINT_PAGE   },
+    { N_("Table"),         RID_SW_TP_HTML_OPTTABLE_PAGE   },
+    { N_("Background"),    RID_SW_TP_BACKGROUND   }
+};
+
+const std::pair<const char*, sal_uInt16> SID_SM_EDITOPTIONS_RES[] =
+{
+    { N_("%PRODUCTNAME Math"), 0 },
+    { N_("Settings"), SID_SM_TP_PRINTOPTIONS },
+};
+
+const std::pair<const char*, sal_uInt16> SID_SC_EDITOPTIONS_RES[] =
+{
+    { N_("%PRODUCTNAME Calc"), 0 },
+    { N_("General"),           SID_SC_TP_LAYOUT            },
+    { N_("Defaults"),          RID_SC_TP_DEFAULTS          },
+    { N_("View"),          SID_SC_TP_CONTENT           },
+    { N_("Calculate"),         SID_SC_TP_CALC              },
+    { N_("Formula"),       SID_SC_TP_FORMULA },
+    { N_("Sort Lists"),        SID_SC_TP_USERLISTS         },
+    { N_("Changes"),       SID_SC_TP_CHANGES           },
+    { N_("Compatibility"), SID_SC_TP_COMPATIBILITY },
+    { N_("Grid"),          SID_SC_TP_GRID              },
+    { N_("Print"),         RID_SC_TP_PRINT             }
+};
+
+const std::pair<const char*, sal_uInt16> SID_SD_EDITOPTIONS_RES[] =
+{
+    { N_("%PRODUCTNAME Impress"),   0                  },
+    { N_("General"),                SID_SI_TP_MISC     },
+    { N_("View"),                   SID_SI_TP_CONTENTS },
+    { N_("Grid"),                   SID_SI_TP_SNAP     },
+    { N_("Print"),                  SID_SI_TP_PRINT    }
+};
+
+const std::pair<const char*, sal_uInt16> SID_SD_GRAPHIC_OPTIONS_RES[] =
+{
+    { N_("%PRODUCTNAME Draw"), 0 },
+    { N_("General"),           SID_SD_TP_MISC               },
+    { N_("View"),          SID_SD_TP_CONTENTS           },
+    { N_("Grid"),          SID_SD_TP_SNAP               },
+    { N_("Print"),             SID_SD_TP_PRINT              }
+};
+
+const std::pair<const char*, sal_uInt16> SID_SCH_EDITOPTIONS_RES[] =
+{
+    { N_("Charts"), 0 },
+    { N_("Default Colors"),        RID_OPTPAGE_CHART_DEFCOLORS  }
+};
+
+const std::pair<const char*, sal_uInt16> SID_FILTER_DLG_RES[] =
+{
+    { N_("Load/Save"), 0 },
+    { N_("General"),  RID_SFXPAGE_SAVE },
+    { N_("VBA Properties"),  SID_OPTFILTER_MSOFFICE },
+    { N_("Microsoft Office"),  RID_OFAPAGE_MSFILTEROPT2 },
+    { N_("HTML Compatibility"), RID_OFAPAGE_HTMLOPT  }
+};
+
+const std::pair<const char*, sal_uInt16> SID_SB_STARBASEOPTIONS_RES[] =
+{
+    { N_("%PRODUCTNAME Base"), 0 },
+    { N_("Connections"), SID_SB_CONNECTIONPOOLING },
+    { N_("Databases"), SID_SB_DBREGISTEROPTIONS }
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

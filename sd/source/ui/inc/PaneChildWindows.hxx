@@ -33,7 +33,7 @@ public:
         sal_uInt16 nId,
         SfxBindings* pBindings,
         SfxChildWinInfo* pInfo,
-        const sal_uInt16 nTitleBarResId);
+        const char* pTitleBarResId);
     virtual ~PaneChildWindow() override;
 };
 

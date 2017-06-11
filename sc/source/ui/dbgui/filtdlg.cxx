@@ -33,6 +33,7 @@
 #include "foptmgr.hxx"
 
 #include "globstr.hrc"
+#include "strings.hrc"
 
 #include "filtdlg.hxx"
 #include <vcl/layout.hxx>
