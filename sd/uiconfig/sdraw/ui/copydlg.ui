@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sd">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -29,7 +29,7 @@
   <object class="GtkDialog" id="DuplicateDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Duplicate</property>
+    <property name="title" translatable="yes" context="copydlg|DuplicateDialog">Duplicate</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -72,7 +72,7 @@
             </child>
             <child>
               <object class="GtkButton" id="default">
-                <property name="label" translatable="yes">_Default</property>
+                <property name="label" translatable="yes" context="copydlg|default">_Default</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -124,7 +124,7 @@
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Number of _copies:</property>
+                    <property name="label" translatable="yes" context="copydlg|label4">Number of _copies:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">copies</property>
                   </object>
@@ -154,11 +154,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes">Values from Selection</property>
+                    <property name="tooltip_text" translatable="yes" context="copydlg|viewdata|tooltip_text">Values from Selection</property>
                     <property name="image">image1</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="viewdata-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Values from Selection</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="copydlg|viewdata-atkobject">Values from Selection</property>
                       </object>
                     </child>
                   </object>
@@ -200,7 +200,7 @@
                           <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_X axis:</property>
+                            <property name="label" translatable="yes" context="copydlg|label5">_X axis:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">x:0.00cm</property>
                             <property name="xalign">0</property>
@@ -214,7 +214,7 @@
                           <object class="GtkLabel" id="label6">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Y axis:</property>
+                            <property name="label" translatable="yes" context="copydlg|label6">_Y axis:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">y:0.00cm</property>
                             <property name="xalign">0</property>
@@ -228,7 +228,7 @@
                           <object class="GtkLabel" id="label7">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Angle:</property>
+                            <property name="label" translatable="yes" context="copydlg|label7">_Angle:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">angle:0degrees</property>
                             <property name="xalign">0</property>
@@ -288,7 +288,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Placement</property>
+                    <property name="label" translatable="yes" context="copydlg|label1">Placement</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -326,7 +326,7 @@
                           <object class="GtkLabel" id="label8">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Width:</property>
+                            <property name="label" translatable="yes" context="copydlg|label8">_Width:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">width:0.00cm</property>
                             <property name="xalign">0</property>
@@ -340,7 +340,7 @@
                           <object class="GtkLabel" id="label9">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Height:</property>
+                            <property name="label" translatable="yes" context="copydlg|label9">_Height:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">height:0.00cm</property>
                             <property name="xalign">0</property>
@@ -386,7 +386,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Enlargement</property>
+                    <property name="label" translatable="yes" context="copydlg|label2">Enlargement</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -424,7 +424,7 @@
                           <object class="GtkLabel" id="label10">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Start:</property>
+                            <property name="label" translatable="yes" context="copydlg|label10">_Start:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">start</property>
                             <property name="xalign">0</property>
@@ -438,7 +438,7 @@
                           <object class="GtkLabel" id="endlabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_End:</property>
+                            <property name="label" translatable="yes" context="copydlg|endlabel">_End:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">end</property>
                             <property name="xalign">0</property>
@@ -478,7 +478,7 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Colors</property>
+                    <property name="label" translatable="yes" context="copydlg|label3">Colors</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

@@ -64,6 +64,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <svx/ucsubset.hxx>
 #include <vcl/svapp.hxx>
@@ -3015,8 +3016,6 @@ static void force_c_locale()
 {
     // force locale (and resource files loaded) to en-US
     OUString aLangISO("en-US");
-    LanguageTag aLocale(aLangISO);
-    ResMgr::SetDefaultLocale(aLocale);
     SvtSysLocaleOptions aLocalOptions;
     aLocalOptions.SetLocaleConfigString(aLangISO);
     aLocalOptions.SetUILocaleConfigString(aLangISO);

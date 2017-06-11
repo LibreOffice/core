@@ -24,7 +24,7 @@
 #include "dsntypes.hxx"
 #include "IItemSetHelper.hxx"
 #include <comphelper/uno3.hxx>
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include <memory>
 
 namespace com { namespace sun { namespace star {
@@ -43,9 +43,9 @@ namespace dbaui
 
     /** implements the user admin dialog
     */
-    class OUserAdminDlg : public SfxTabDialog, public IItemSetHelper, public IDatabaseSettingsDialog,public dbaui::OModuleClient
+    class OUserAdminDlg : public SfxTabDialog, public IItemSetHelper, public IDatabaseSettingsDialog, public dbaccess::OModuleClient
     {
-        OModuleClient m_aModuleClient;
+        dbaccess::OModuleClient m_aModuleClient;
         std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
         SfxItemSet*   m_pItemSet;
         css::uno::Reference< css::sdbc::XConnection>          m_xConnection;

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="svt">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkMessageDialog" id="QueryDeleteDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Confirm Delete</property>
+    <property name="title" translatable="yes" context="querydeletedialog|QueryDeleteDialog">Confirm Delete</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">question</property>
-    <property name="text" translatable="yes">Are you sure you want to delete the selected data?</property>
-    <property name="secondary_text" translatable="yes">Entry: %s</property>
+    <property name="text" translatable="yes" context="querydeletedialog|QueryDeleteDialog">Are you sure you want to delete the selected data?</property>
+    <property name="secondary_text" translatable="yes" context="querydeletedialog|QueryDeleteDialog">Entry: %s</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>
@@ -23,7 +23,7 @@
             <property name="layout_style">center</property>
             <child>
               <object class="GtkButton" id="yes">
-                <property name="label" translatable="yes">_Delete</property>
+                <property name="label" translatable="yes" context="querydeletedialog|yes">_Delete</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -39,7 +39,7 @@
             </child>
             <child>
               <object class="GtkButton" id="all">
-                <property name="label" translatable="yes">Delete _All</property>
+                <property name="label" translatable="yes" context="querydeletedialog|all">Delete _All</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
@@ -54,7 +54,7 @@
             </child>
             <child>
               <object class="GtkButton" id="no">
-                <property name="label" translatable="yes">Do _Not Delete</property>
+                <property name="label" translatable="yes" context="querydeletedialog|no">Do _Not Delete</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

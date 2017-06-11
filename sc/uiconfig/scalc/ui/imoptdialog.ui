@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="ImOptDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Import File</property>
+    <property name="title" translatable="yes" context="imoptdialog|ImOptDialog">Import File</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -94,7 +94,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Character set:</property>
+                        <property name="label" translatable="yes" context="imoptdialog|charsetft">_Character set:</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -107,7 +107,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Field delimiter:</property>
+                        <property name="label" translatable="yes" context="imoptdialog|fieldft">_Field delimiter:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">field</property>
                       </object>
@@ -121,7 +121,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Text delimiter:</property>
+                        <property name="label" translatable="yes" context="imoptdialog|textft">_Text delimiter:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">text</property>
                       </object>
@@ -132,7 +132,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="asshown">
-                        <property name="label" translatable="yes">Save cell content as _shown</property>
+                        <property name="label" translatable="yes" context="imoptdialog|asshown">Save cell content as _shown</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
@@ -148,7 +148,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="formulas">
-                        <property name="label" translatable="yes">Save cell fo_rmulas instead of calculated values</property>
+                        <property name="label" translatable="yes" context="imoptdialog|formulas">Save cell fo_rmulas instead of calculated values</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
@@ -164,7 +164,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="quoteall">
-                        <property name="label" translatable="yes">_Quote all text cells</property>
+                        <property name="label" translatable="yes" context="imoptdialog|quoteall">_Quote all text cells</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
@@ -180,7 +180,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="fixedwidth">
-                        <property name="label" translatable="yes">Fixed column _width</property>
+                        <property name="label" translatable="yes" context="imoptdialog|fixedwidth">Fixed column _width</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
@@ -269,7 +269,7 @@
               <object class="GtkLabel" id="label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Field Options</property>
+                <property name="label" translatable="yes" context="imoptdialog|label">Field Options</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

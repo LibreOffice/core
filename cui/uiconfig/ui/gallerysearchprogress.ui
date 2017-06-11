@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="GallerySearchProgress">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Find</property>
+    <property name="title" translatable="yes" context="gallerysearchprogress|GallerySearchProgress">Find</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -75,7 +75,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">File Type</property>
+                    <property name="label" translatable="yes" context="gallerysearchprogress|label1">File Type</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -112,7 +112,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Directory</property>
+                    <property name="label" translatable="yes" context="gallerysearchprogress|label2">Directory</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

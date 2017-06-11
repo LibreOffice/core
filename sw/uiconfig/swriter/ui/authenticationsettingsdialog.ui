@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
@@ -11,7 +11,7 @@
   <object class="GtkDialog" id="AuthenticationSettingsDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Server Authentication</property>
+    <property name="title" translatable="yes" context="authenticationsettingsdialog|AuthenticationSettingsDialog">Server Authentication</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -85,7 +85,7 @@
             <property name="column_spacing">12</property>
             <child>
               <object class="GtkCheckButton" id="authentication">
-                <property name="label" translatable="yes">The outgoing mail server (SMTP) requires au_thentication</property>
+                <property name="label" translatable="yes" context="authenticationsettingsdialog|authentication">The outgoing mail server (SMTP) requires au_thentication</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -101,7 +101,7 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="separateauthentication:wrap">
-                <property name="label" translatable="yes">The outgoing mail server (SMTP) requires _separate authentication</property>
+                <property name="label" translatable="yes" context="authenticationsettingsdialog|separateauthentication">The outgoing mail server (SMTP) requires _separate authentication</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -124,7 +124,7 @@
                 <property name="can_focus">False</property>
                 <property name="margin_left">24</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Outgoing mail server:</property>
+                <property name="label" translatable="yes" context="authenticationsettingsdialog|label1">Outgoing mail server:</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -151,7 +151,7 @@
                 <property name="can_focus">False</property>
                 <property name="margin_left">24</property>
                 <property name="xalign">1</property>
-                <property name="label" translatable="yes">_User name:</property>
+                <property name="label" translatable="yes" context="authenticationsettingsdialog|username_label">_User name:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">username</property>
               </object>
@@ -180,7 +180,7 @@
                 <property name="can_focus">False</property>
                 <property name="margin_left">24</property>
                 <property name="xalign">1</property>
-                <property name="label" translatable="yes">_Password:</property>
+                <property name="label" translatable="yes" context="authenticationsettingsdialog|outpassword_label">_Password:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">outpassword</property>
               </object>
@@ -191,7 +191,7 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="smtpafterpop:wrap">
-                <property name="label" translatable="yes">The outgoing mail server uses the same authentication as the _incoming mail server</property>
+                <property name="label" translatable="yes" context="authenticationsettingsdialog|smtpafterpop">The outgoing mail server uses the same authentication as the _incoming mail server</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -214,7 +214,7 @@
                 <property name="can_focus">False</property>
                 <property name="margin_left">24</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Incoming mail server:</property>
+                <property name="label" translatable="yes" context="authenticationsettingsdialog|label2">Incoming mail server:</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -241,7 +241,7 @@
                 <property name="can_focus">False</property>
                 <property name="margin_left">24</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Server _name:</property>
+                <property name="label" translatable="yes" context="authenticationsettingsdialog|server_label">Server _name:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">server</property>
               </object>
@@ -268,7 +268,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">1</property>
-                <property name="label" translatable="yes">P_ort:</property>
+                <property name="label" translatable="yes" context="authenticationsettingsdialog|port_label">P_ort:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">port</property>
               </object>
@@ -283,7 +283,7 @@
                 <property name="can_focus">False</property>
                 <property name="margin_left">24</property>
                 <property name="xalign">1</property>
-                <property name="label" translatable="yes">Type:</property>
+                <property name="label" translatable="yes" context="authenticationsettingsdialog|label3">Type:</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -292,7 +292,7 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="pop3">
-                <property name="label" translatable="yes">_POP3</property>
+                <property name="label" translatable="yes" context="authenticationsettingsdialog|pop3">_POP3</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -309,7 +309,7 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="imap">
-                <property name="label" translatable="yes">_IMAP</property>
+                <property name="label" translatable="yes" context="authenticationsettingsdialog|imap">_IMAP</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -357,7 +357,7 @@
                 <property name="can_focus">False</property>
                 <property name="margin_left">24</property>
                 <property name="xalign">1</property>
-                <property name="label" translatable="yes">Us_er name:</property>
+                <property name="label" translatable="yes" context="authenticationsettingsdialog|inusername_label">Us_er name:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">inusername</property>
               </object>
@@ -372,7 +372,7 @@
                 <property name="can_focus">False</property>
                 <property name="margin_left">24</property>
                 <property name="xalign">1</property>
-                <property name="label" translatable="yes">Pass_word:</property>
+                <property name="label" translatable="yes" context="authenticationsettingsdialog|inpassword_label">Pass_word:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">inpassword</property>
               </object>

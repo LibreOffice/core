@@ -37,8 +37,7 @@
 #include "app.hrc"
 #include "createtableobjectbar.hxx"
 #include "registerinterfaces.hxx"
-#include "res_bmp.hrc"
-#include "glob.hrc"
+
 #include "strings.hrc"
 #include "DrawDocShell.hxx"
 #include "ViewShell.hxx"

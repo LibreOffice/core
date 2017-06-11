@@ -47,7 +47,7 @@
 #include <doctxm.hxx>
 #include <docary.hxx>
 #include <mdiexp.hxx>
-#include <statstr.hrc>
+#include <strings.hrc>
 #include <bookmrk.hxx>
 
 using namespace ::com::sun::star;

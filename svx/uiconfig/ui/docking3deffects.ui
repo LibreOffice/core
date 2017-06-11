@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="svx">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -261,7 +261,7 @@
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">3D Effects</property>
+    <property name="title" translatable="yes" context="docking3deffects|Docking3DEffects">3D Effects</property>
     <property name="type_hint">dock</property>
     <child>
       <object class="GtkGrid" id="grid1">
@@ -291,7 +291,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">R_ounded edges</property>
+                        <property name="label" translatable="yes" context="docking3deffects|diagonalft">R_ounded edges</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">diagonal:0%</property>
                       </object>
@@ -305,7 +305,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Scaled depth</property>
+                        <property name="label" translatable="yes" context="docking3deffects|scaleddepthft">_Scaled depth</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">scaleddepth:0%</property>
                       </object>
@@ -319,7 +319,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Rotation angle</property>
+                        <property name="label" translatable="yes" context="docking3deffects|angleft">_Rotation angle</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">angle:0.0°</property>
                       </object>
@@ -333,7 +333,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Depth</property>
+                        <property name="label" translatable="yes" context="docking3deffects|depthft">_Depth</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">depth:0.00cm</property>
                       </object>
@@ -399,7 +399,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Geometry</property>
+                <property name="label" translatable="yes" context="docking3deffects|label1">Geometry</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -441,7 +441,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Horizontal</property>
+                            <property name="label" translatable="yes" context="docking3deffects|label6">_Horizontal</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">hori</property>
                           </object>
@@ -480,7 +480,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Vertical</property>
+                            <property name="label" translatable="yes" context="docking3deffects|label7">_Vertical</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">veri</property>
                           </object>
@@ -515,7 +515,7 @@
               <object class="GtkLabel" id="label10">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Segments</property>
+                <property name="label" translatable="yes" context="docking3deffects|label10">Segments</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -567,7 +567,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="tooltip_text" translatable="yes">Object-Specific</property>
+                                <property name="tooltip_text" translatable="yes" context="docking3deffects|objspecific|tooltip_text">Object-Specific</property>
                                 <property name="valign">center</property>
                                 <property name="image">image8</property>
                               </object>
@@ -581,7 +581,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="tooltip_text" translatable="yes">Flat</property>
+                                <property name="tooltip_text" translatable="yes" context="docking3deffects|flat|tooltip_text">Flat</property>
                                 <property name="valign">center</property>
                                 <property name="image">image9</property>
                               </object>
@@ -595,7 +595,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="tooltip_text" translatable="yes">Spherical</property>
+                                <property name="tooltip_text" translatable="yes" context="docking3deffects|spherical|tooltip_text">Spherical</property>
                                 <property name="valign">center</property>
                                 <property name="image">image10</property>
                               </object>
@@ -609,7 +609,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="tooltip_text" translatable="yes">Invert Normals</property>
+                                <property name="tooltip_text" translatable="yes" context="docking3deffects|invertnormals|tooltip_text">Invert Normals</property>
                                 <property name="valign">center</property>
                                 <property name="image">image11</property>
                               </object>
@@ -623,7 +623,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="tooltip_text" translatable="yes">Double-Sided Illumination</property>
+                                <property name="tooltip_text" translatable="yes" context="docking3deffects|doublesidedillum|tooltip_text">Double-Sided Illumination</property>
                                 <property name="valign">center</property>
                                 <property name="image">image12</property>
                               </object>
@@ -637,7 +637,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="tooltip_text" translatable="yes">Double-Sided</property>
+                                <property name="tooltip_text" translatable="yes" context="docking3deffects|doublesided|tooltip_text">Double-Sided</property>
                                 <property name="valign">center</property>
                                 <property name="image">image13</property>
                               </object>
@@ -663,7 +663,7 @@
                       <object class="GtkLabel" id="label11">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Normals</property>
+                        <property name="label" translatable="yes" context="docking3deffects|label11">Normals</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -695,7 +695,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Convert to 3D</property>
+                            <property name="tooltip_text" translatable="yes" context="docking3deffects|to3d|tooltip_text">Convert to 3D</property>
                             <property name="image">image14</property>
                           </object>
                           <packing>
@@ -708,7 +708,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Convert to Rotation Object</property>
+                            <property name="tooltip_text" translatable="yes" context="docking3deffects|tolathe|tooltip_text">Convert to Rotation Object</property>
                             <property name="image">image15</property>
                           </object>
                           <packing>
@@ -721,7 +721,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Perspective On/Off</property>
+                            <property name="tooltip_text" translatable="yes" context="docking3deffects|perspective|tooltip_text">Perspective On/Off</property>
                             <property name="image">image16</property>
                           </object>
                           <packing>
@@ -760,7 +760,7 @@
                     <property name="vexpand">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="preview-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">3D Preview</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="docking3deffects|preview-atkobject">3D Preview</property>
                       </object>
                     </child>
                   </object>
@@ -780,7 +780,7 @@
                     <property name="vexpand">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="lightpreview-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Color Light Preview</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="docking3deffects|lightpreview-atkobject">Color Light Preview</property>
                       </object>
                     </child>
                   </object>
@@ -826,7 +826,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Mode</property>
+                        <property name="label" translatable="yes" context="docking3deffects|label8">_Mode</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">mode</property>
                       </object>
@@ -840,9 +840,9 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <items>
-                          <item translatable="yes">Flat</item>
-                          <item translatable="yes">Phong</item>
-                          <item translatable="yes">Gouraud</item>
+                          <item translatable="yes" context="docking3deffects|mode">Flat</item>
+                          <item translatable="yes" context="docking3deffects|mode">Phong</item>
+                          <item translatable="yes" context="docking3deffects|mode">Gouraud</item>
                         </items>
                       </object>
                       <packing>
@@ -858,7 +858,7 @@
               <object class="GtkLabel" id="label12">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Shading</property>
+                <property name="label" translatable="yes" context="docking3deffects|label12">Shading</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -895,7 +895,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">S_urface angle</property>
+                        <property name="label" translatable="yes" context="docking3deffects|slantft">S_urface angle</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">slant:0°</property>
                       </object>
@@ -921,7 +921,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">3D Shadowing On/Off</property>
+                        <property name="tooltip_text" translatable="yes" context="docking3deffects|shadow|tooltip_text">3D Shadowing On/Off</property>
                         <property name="image">image17</property>
                       </object>
                       <packing>
@@ -937,7 +937,7 @@
               <object class="GtkLabel" id="label13">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Shadow</property>
+                <property name="label" translatable="yes" context="docking3deffects|label13">Shadow</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -999,7 +999,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Focal length</property>
+                        <property name="label" translatable="yes" context="docking3deffects|label15">_Focal length</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">veri</property>
                       </object>
@@ -1013,7 +1013,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Distance</property>
+                        <property name="label" translatable="yes" context="docking3deffects|label14">_Distance</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">hori</property>
                       </object>
@@ -1030,7 +1030,7 @@
               <object class="GtkLabel" id="label16">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Camera</property>
+                <property name="label" translatable="yes" context="docking3deffects|label16">Camera</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -1065,7 +1065,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Light source</property>
+                        <property name="label" translatable="yes" context="docking3deffects|label17">_Light source</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -1079,7 +1079,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Colors Dialog</property>
+                        <property name="tooltip_text" translatable="yes" context="docking3deffects|colorbutton1|tooltip_text">Colors Dialog</property>
                         <property name="valign">start</property>
                         <property name="image">image19</property>
                       </object>
@@ -1105,7 +1105,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Colors Dialog</property>
+                        <property name="tooltip_text" translatable="yes" context="docking3deffects|colorbutton2|tooltip_text">Colors Dialog</property>
                         <property name="valign">center</property>
                         <property name="image">image18</property>
                       </object>
@@ -1119,7 +1119,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Ambient light</property>
+                        <property name="label" translatable="yes" context="docking3deffects|label18">_Ambient light</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">ambientcolor</property>
                       </object>
@@ -1139,7 +1139,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Light Source 1</property>
+                            <property name="tooltip_text" translatable="yes" context="docking3deffects|light1|tooltip_text">Light Source 1</property>
                             <property name="image">image20</property>
                           </object>
                           <packing>
@@ -1152,7 +1152,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Light Source 2</property>
+                            <property name="tooltip_text" translatable="yes" context="docking3deffects|light2|tooltip_text">Light Source 2</property>
                             <property name="image">image21</property>
                           </object>
                           <packing>
@@ -1165,7 +1165,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Light Source 3</property>
+                            <property name="tooltip_text" translatable="yes" context="docking3deffects|light3|tooltip_text">Light Source 3</property>
                             <property name="image">image22</property>
                           </object>
                           <packing>
@@ -1178,7 +1178,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Light Source 4</property>
+                            <property name="tooltip_text" translatable="yes" context="docking3deffects|light4|tooltip_text">Light Source 4</property>
                             <property name="image">image23</property>
                           </object>
                           <packing>
@@ -1191,7 +1191,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Light Source 5</property>
+                            <property name="tooltip_text" translatable="yes" context="docking3deffects|light5|tooltip_text">Light Source 5</property>
                             <property name="image">image24</property>
                           </object>
                           <packing>
@@ -1204,7 +1204,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Light Source 6</property>
+                            <property name="tooltip_text" translatable="yes" context="docking3deffects|light6|tooltip_text">Light Source 6</property>
                             <property name="image">image25</property>
                           </object>
                           <packing>
@@ -1217,7 +1217,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Light Source 7</property>
+                            <property name="tooltip_text" translatable="yes" context="docking3deffects|light7|tooltip_text">Light Source 7</property>
                             <property name="image">image26</property>
                           </object>
                           <packing>
@@ -1230,7 +1230,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Light Source 8</property>
+                            <property name="tooltip_text" translatable="yes" context="docking3deffects|light8|tooltip_text">Light Source 8</property>
                             <property name="image">image27</property>
                           </object>
                           <packing>
@@ -1367,7 +1367,7 @@
               <object class="GtkLabel" id="label19">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Illumination</property>
+                <property name="label" translatable="yes" context="docking3deffects|label19">Illumination</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -1402,7 +1402,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Type</property>
+                        <property name="label" translatable="yes" context="docking3deffects|label20">_Type</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -1415,7 +1415,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Mode</property>
+                        <property name="label" translatable="yes" context="docking3deffects|label22">_Mode</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -1428,7 +1428,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Projection X</property>
+                        <property name="label" translatable="yes" context="docking3deffects|label23">_Projection X</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -1441,7 +1441,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">P_rojection Y</property>
+                        <property name="label" translatable="yes" context="docking3deffects|label24">P_rojection Y</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -1454,7 +1454,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Filtering</property>
+                        <property name="label" translatable="yes" context="docking3deffects|label25">_Filtering</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -1467,7 +1467,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Black &amp; White</property>
+                        <property name="tooltip_text" translatable="yes" context="docking3deffects|textype|tooltip_text">Black &amp; White</property>
                         <property name="halign">center</property>
                         <property name="image">image28</property>
                       </object>
@@ -1481,7 +1481,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Color</property>
+                        <property name="tooltip_text" translatable="yes" context="docking3deffects|texcolor|tooltip_text">Color</property>
                         <property name="halign">center</property>
                         <property name="image">image29</property>
                       </object>
@@ -1495,7 +1495,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Only Texture</property>
+                        <property name="tooltip_text" translatable="yes" context="docking3deffects|texreplace|tooltip_text">Only Texture</property>
                         <property name="halign">center</property>
                         <property name="image">image30</property>
                       </object>
@@ -1509,7 +1509,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Texture and Shading</property>
+                        <property name="tooltip_text" translatable="yes" context="docking3deffects|texmodulate|tooltip_text">Texture and Shading</property>
                         <property name="halign">center</property>
                         <property name="image">image31</property>
                       </object>
@@ -1523,7 +1523,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Object-Specific</property>
+                        <property name="tooltip_text" translatable="yes" context="docking3deffects|texobjx|tooltip_text">Object-Specific</property>
                         <property name="halign">center</property>
                         <property name="image">image32</property>
                       </object>
@@ -1537,7 +1537,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Parallel</property>
+                        <property name="tooltip_text" translatable="yes" context="docking3deffects|texparallelx|tooltip_text">Parallel</property>
                         <property name="halign">center</property>
                         <property name="image">image33</property>
                       </object>
@@ -1551,7 +1551,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Circular</property>
+                        <property name="tooltip_text" translatable="yes" context="docking3deffects|texcirclex|tooltip_text">Circular</property>
                         <property name="halign">start</property>
                         <property name="hexpand">True</property>
                         <property name="image">image34</property>
@@ -1566,7 +1566,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Object-Specific</property>
+                        <property name="tooltip_text" translatable="yes" context="docking3deffects|texobjy|tooltip_text">Object-Specific</property>
                         <property name="halign">center</property>
                         <property name="image">image35</property>
                       </object>
@@ -1580,7 +1580,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Parallel</property>
+                        <property name="tooltip_text" translatable="yes" context="docking3deffects|texparallely|tooltip_text">Parallel</property>
                         <property name="halign">center</property>
                         <property name="image">image36</property>
                       </object>
@@ -1594,7 +1594,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Circular</property>
+                        <property name="tooltip_text" translatable="yes" context="docking3deffects|texcircley|tooltip_text">Circular</property>
                         <property name="halign">start</property>
                         <property name="image">image37</property>
                       </object>
@@ -1608,7 +1608,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Filtering On/Off</property>
+                        <property name="tooltip_text" translatable="yes" context="docking3deffects|texfilter|tooltip_text">Filtering On/Off</property>
                         <property name="halign">center</property>
                         <property name="image">image38</property>
                       </object>
@@ -1622,7 +1622,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Texture, Shadow and Color</property>
+                        <property name="tooltip_text" translatable="yes" context="docking3deffects|texblend|tooltip_text">Texture, Shadow and Color</property>
                         <property name="halign">start</property>
                         <property name="hexpand">True</property>
                         <property name="image">image42</property>
@@ -1649,7 +1649,7 @@
               <object class="GtkLabel" id="label21">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Textures</property>
+                <property name="label" translatable="yes" context="docking3deffects|label21">Textures</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -1684,7 +1684,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Favorites</property>
+                        <property name="label" translatable="yes" context="docking3deffects|label26">_Favorites</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -1697,7 +1697,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Object color</property>
+                        <property name="label" translatable="yes" context="docking3deffects|label27">_Object color</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">objcolor</property>
                       </object>
@@ -1711,7 +1711,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Illumination color</property>
+                        <property name="label" translatable="yes" context="docking3deffects|label29">_Illumination color</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">illumcolor</property>
                       </object>
@@ -1749,12 +1749,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <items>
-                          <item translatable="yes">User-defined</item>
-                          <item translatable="yes">Metal</item>
-                          <item translatable="yes">Gold</item>
-                          <item translatable="yes">Chrome</item>
-                          <item translatable="yes">Plastic</item>
-                          <item translatable="yes">Wood</item>
+                          <item translatable="yes" context="docking3deffects|favorites">User-defined</item>
+                          <item translatable="yes" context="docking3deffects|favorites">Metal</item>
+                          <item translatable="yes" context="docking3deffects|favorites">Gold</item>
+                          <item translatable="yes" context="docking3deffects|favorites">Chrome</item>
+                          <item translatable="yes" context="docking3deffects|favorites">Plastic</item>
+                          <item translatable="yes" context="docking3deffects|favorites">Wood</item>
                         </items>
                       </object>
                       <packing>
@@ -1768,7 +1768,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Colors Dialog</property>
+                        <property name="tooltip_text" translatable="yes" context="docking3deffects|colorbutton3|tooltip_text">Colors Dialog</property>
                         <property name="image">image39</property>
                       </object>
                       <packing>
@@ -1781,7 +1781,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Colors Dialog</property>
+                        <property name="tooltip_text" translatable="yes" context="docking3deffects|colorbutton4|tooltip_text">Colors Dialog</property>
                         <property name="image">image40</property>
                       </object>
                       <packing>
@@ -1797,7 +1797,7 @@
               <object class="GtkLabel" id="label28">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Material</property>
+                <property name="label" translatable="yes" context="docking3deffects|label28">Material</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -1832,7 +1832,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Color</property>
+                        <property name="label" translatable="yes" context="docking3deffects|label30">_Color</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">speccolor</property>
                       </object>
@@ -1846,7 +1846,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">I_ntensity</property>
+                        <property name="label" translatable="yes" context="docking3deffects|label31">I_ntensity</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">intensity:0%</property>
                       </object>
@@ -1872,7 +1872,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Colors Dialog</property>
+                        <property name="tooltip_text" translatable="yes" context="docking3deffects|colorbutton5|tooltip_text">Colors Dialog</property>
                         <property name="image">image41</property>
                       </object>
                       <packing>
@@ -1900,7 +1900,7 @@
               <object class="GtkLabel" id="label32">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Specular</property>
+                <property name="label" translatable="yes" context="docking3deffects|label32">Specular</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -1922,7 +1922,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Assign</property>
+                <property name="tooltip_text" translatable="yes" context="docking3deffects|assign|tooltip_text">Assign</property>
                 <property name="image">image7</property>
               </object>
               <packing>
@@ -1935,7 +1935,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Update</property>
+                <property name="tooltip_text" translatable="yes" context="docking3deffects|update|tooltip_text">Update</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
                 <property name="image">image6</property>
@@ -1950,7 +1950,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Material</property>
+                <property name="tooltip_text" translatable="yes" context="docking3deffects|material|tooltip_text">Material</property>
                 <property name="image">image5</property>
               </object>
               <packing>
@@ -1963,7 +1963,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Textures</property>
+                <property name="tooltip_text" translatable="yes" context="docking3deffects|texture|tooltip_text">Textures</property>
                 <property name="image">image4</property>
               </object>
               <packing>
@@ -1976,7 +1976,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Illumination</property>
+                <property name="tooltip_text" translatable="yes" context="docking3deffects|light|tooltip_text">Illumination</property>
                 <property name="image">image3</property>
               </object>
               <packing>
@@ -1989,7 +1989,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Shading</property>
+                <property name="tooltip_text" translatable="yes" context="docking3deffects|representation|tooltip_text">Shading</property>
                 <property name="image">image2</property>
               </object>
               <packing>
@@ -2002,7 +2002,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Geometry</property>
+                <property name="tooltip_text" translatable="yes" context="docking3deffects|geometry|tooltip_text">Geometry</property>
                 <property name="image">image1</property>
               </object>
               <packing>

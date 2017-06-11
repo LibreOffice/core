@@ -22,8 +22,6 @@
 
 #include <rtl/ustring.hxx>
 
-class ResMgr;
-
 namespace formula
 {
 
@@ -34,7 +32,7 @@ namespace formula
     {
         friend class OModuleClient;
         static sal_Int32    s_nClients;     /// number of registered clients
-        static ResMgr*  m_pImpl;
+        static std::locale* m_pImpl;
 
     private:
         // no instantiation allowed
@@ -50,7 +48,7 @@ namespace formula
 
     public:
 
-        static ResMgr*  getResManager();
+        static const std::locale&  getResLocale();
     };
 
 

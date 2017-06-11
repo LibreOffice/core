@@ -30,10 +30,10 @@
 
 
 #include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
+#include <svx/strings.hrc>
 #include "svx/tbxctl.hxx"
 #include "tbxform.hxx"
-#include "svx/fmresids.hrc"
 #include "fmhelp.hrc"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
