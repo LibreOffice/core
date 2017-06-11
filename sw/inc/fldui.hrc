@@ -26,50 +26,6 @@
  --------------------------------------------------------------------*/
 
 #define STR_TYPE_BEGIN      RC_FLDDLG_BEGIN
-#define STR_DATEFLD         STR_TYPE_BEGIN
-#define STR_TIMEFLD         (STR_TYPE_BEGIN + 1)
-#define STR_FILENAMEFLD     (STR_TYPE_BEGIN + 2)
-#define STR_DBNAMEFLD       (STR_TYPE_BEGIN + 3)
-#define STR_CHAPTERFLD      (STR_TYPE_BEGIN + 4)
-#define STR_PAGENUMBERFLD   (STR_TYPE_BEGIN + 5)
-#define STR_DOCSTATFLD      (STR_TYPE_BEGIN + 6)
-#define STR_AUTHORFLD       (STR_TYPE_BEGIN + 7)
-#define STR_SETFLD          (STR_TYPE_BEGIN + 8)
-#define STR_GETFLD          (STR_TYPE_BEGIN + 9)
-#define STR_FORMELFLD       (STR_TYPE_BEGIN + 10)
-#define STR_HIDDENTXTFLD    (STR_TYPE_BEGIN + 11)
-#define STR_SETREFFLD       (STR_TYPE_BEGIN + 12)
-#define STR_GETREFFLD       (STR_TYPE_BEGIN + 13)
-#define STR_DDEFLD          (STR_TYPE_BEGIN + 14)
-#define STR_MACROFLD        (STR_TYPE_BEGIN + 15)
-#define STR_INPUTFLD        (STR_TYPE_BEGIN + 16)
-#define STR_HIDDENPARAFLD   (STR_TYPE_BEGIN + 17)
-#define STR_DOCINFOFLD      (STR_TYPE_BEGIN + 18)
-#define STR_DBFLD           (STR_TYPE_BEGIN + 19)
-#define STR_USERFLD         (STR_TYPE_BEGIN + 20)
-#define STR_POSTITFLD       (STR_TYPE_BEGIN + 21)
-#define STR_TEMPLNAMEFLD    (STR_TYPE_BEGIN + 22)
-#define STR_SEQFLD          (STR_TYPE_BEGIN + 23)
-#define STR_DBNEXTSETFLD    (STR_TYPE_BEGIN + 24)
-#define STR_DBNUMSETFLD     (STR_TYPE_BEGIN + 25)
-#define STR_DBSETNUMBERFLD  (STR_TYPE_BEGIN + 26)
-#define STR_CONDTXTFLD      (STR_TYPE_BEGIN + 27)
-#define STR_NEXTPAGEFLD     (STR_TYPE_BEGIN + 28)
-#define STR_PREVPAGEFLD     (STR_TYPE_BEGIN + 29)
-#define STR_EXTUSERFLD      (STR_TYPE_BEGIN + 30)
-
-#define STR_SETINPUTFLD     (STR_TYPE_BEGIN + 33)
-#define STR_USRINPUTFLD     (STR_TYPE_BEGIN + 34)
-#define STR_SETREFPAGEFLD   (STR_TYPE_BEGIN + 35)
-#define STR_GETREFPAGEFLD   (STR_TYPE_BEGIN + 36)
-#define STR_INTERNETFLD     (STR_TYPE_BEGIN + 37)
-#define STR_JUMPEDITFLD     (STR_TYPE_BEGIN + 38)
-#define STR_SCRIPTFLD       (STR_TYPE_BEGIN + 39)
-#define STR_AUTHORITY       (STR_TYPE_BEGIN + 40)
-#define STR_COMBINED_CHARS  (STR_TYPE_BEGIN + 41)
-#define STR_DROPDOWN        (STR_TYPE_BEGIN + 42)
-
-#define STR_CUSTOM          (STR_TYPE_BEGIN + 43)
 #define STR_TYPE_END        (STR_TYPE_BEGIN + 44)
 
 /*--------------------------------------------------------------------
@@ -77,50 +33,21 @@
  --------------------------------------------------------------------*/
 
 #define FLD_DATE_BEGIN      STR_TYPE_END
-#define FLD_DATE_FIX        FLD_DATE_BEGIN
-#define FLD_DATE_STD        (FLD_DATE_BEGIN + 1)
 #define FLD_DATE_END        (FLD_DATE_BEGIN + 2)
 
 #define FLD_TIME_BEGIN      FLD_DATE_END
-#define FLD_TIME_FIX        FLD_TIME_BEGIN
-#define FLD_TIME_STD        (FLD_TIME_BEGIN + 1)
 #define FLD_TIME_END        (FLD_TIME_BEGIN + 2)
 
 #define FLD_STAT_BEGIN      FLD_TIME_END
-#define FLD_STAT_PAGE       FLD_STAT_BEGIN
-#define FLD_STAT_PARA       (FLD_STAT_BEGIN + 1)
-#define FLD_STAT_WORD       (FLD_STAT_BEGIN + 2)
-#define FLD_STAT_CHAR       (FLD_STAT_BEGIN + 3)
-#define FLD_STAT_TABLE      (FLD_STAT_BEGIN + 4)
-#define FLD_STAT_GRF        (FLD_STAT_BEGIN + 5)
-#define FLD_STAT_OBJ        (FLD_STAT_BEGIN + 6)
 #define FLD_STAT_END        (FLD_STAT_BEGIN + 7)
 
 #define FLD_INPUT_BEGIN     FLD_STAT_END
-#define FLD_INPUT_TEXT      FLD_INPUT_BEGIN
 #define FLD_INPUT_END       (FLD_INPUT_BEGIN + 1)
 
 #define FLD_EU_BEGIN        FLD_INPUT_END
-#define FLD_EU_FIRMA        FLD_EU_BEGIN
-#define FLD_EU_VORNAME      (FLD_EU_BEGIN    + 1)
-#define FLD_EU_NAME         (FLD_EU_BEGIN    + 2)
-#define FLD_EU_ABK          (FLD_EU_BEGIN    + 3)
-#define FLD_EU_STRASSE      (FLD_EU_BEGIN    + 4)
-#define FLD_EU_LAND         (FLD_EU_BEGIN    + 5)
-#define FLD_EU_PLZ          (FLD_EU_BEGIN    + 6)
-#define FLD_EU_ORT          (FLD_EU_BEGIN    + 7)
-#define FLD_EU_TITEL        (FLD_EU_BEGIN    + 8)
-#define FLD_EU_POS          (FLD_EU_BEGIN    + 9)
-#define FLD_EU_TELPRIV      (FLD_EU_BEGIN    + 10)
-#define FLD_EU_TELFIRMA     (FLD_EU_BEGIN    + 11)
-#define FLD_EU_FAX          (FLD_EU_BEGIN    + 12)
-#define FLD_EU_EMAIL        (FLD_EU_BEGIN    + 13)
-#define FLD_EU_STATE        (FLD_EU_BEGIN    + 14)
 #define FLD_EU_END          (FLD_EU_BEGIN    + 15)
 
 #define FLD_PAGEREF_BEGIN   FLD_EU_END
-#define FLD_PAGEREF_OFF     FLD_PAGEREF_BEGIN
-#define FLD_PAGEREF_ON      (FLD_PAGEREF_BEGIN+1)
 #define FLD_PAGEREF_END     (FLD_PAGEREF_BEGIN+2)
 
 /*----------------------------------------------------------
@@ -129,124 +56,51 @@
 
 // Numbers
 #define FMT_NUM_BEGIN       (FLD_PAGEREF_END + 1)
-#define FMT_NUM_ABC         FMT_NUM_BEGIN
-#define FMT_NUM_SABC        (FMT_NUM_BEGIN  + 1)
-#define FMT_NUM_ABC_N       (FMT_NUM_BEGIN  + 2)
-#define FMT_NUM_SABC_N      (FMT_NUM_BEGIN  + 3)
-#define FMT_NUM_ROMAN       (FMT_NUM_BEGIN  + 4)
-#define FMT_NUM_SROMAN      (FMT_NUM_BEGIN  + 5)
-#define FMT_NUM_ARABIC      (FMT_NUM_BEGIN  + 6)
-#define FMT_NUM_PAGEDESC    (FMT_NUM_BEGIN  + 7)
-#define FMT_NUM_PAGESPECIAL (FMT_NUM_BEGIN  + 8)
 #define FMT_NUM_END         (FMT_NUM_BEGIN  + 9)
 
 // AuthorFormat
 #define FMT_AUTHOR_BEGIN    FMT_NUM_END
-#define FMT_AUTHOR_NAME     FMT_AUTHOR_BEGIN
-#define FMT_AUTHOR_SCUT     (FMT_AUTHOR_BEGIN + 1)
 #define FMT_AUTHOR_END      (FMT_AUTHOR_BEGIN + 2)
 
 // Set variable
 #define FMT_SETVAR_BEGIN    FMT_AUTHOR_END
-#define FMT_SETVAR_SYS      (FMT_SETVAR_BEGIN + 0)
-#define FMT_SETVAR_TEXT     (FMT_SETVAR_BEGIN + 1)
 #define FMT_SETVAR_END      (FMT_SETVAR_BEGIN + 2)
 
 // Get variable
 #define FMT_GETVAR_BEGIN    FMT_SETVAR_END
-#define FMT_GETVAR_TEXT     (FMT_GETVAR_BEGIN + 0)
-#define FMT_GETVAR_NAME     (FMT_GETVAR_BEGIN + 1)
 #define FMT_GETVAR_END      (FMT_GETVAR_BEGIN + 2)
 
 // Userfield
 #define FMT_USERVAR_BEGIN   FMT_GETVAR_END
-#define FMT_USERVAR_TEXT    (FMT_USERVAR_BEGIN + 0)
-#define FMT_USERVAR_CMD     (FMT_USERVAR_BEGIN + 1)
 #define FMT_USERVAR_END     (FMT_USERVAR_BEGIN + 2)
 
 // Database field
 #define FMT_DBFLD_BEGIN     FMT_USERVAR_END
-#define FMT_DBFLD_DB        (FMT_DBFLD_BEGIN + 0)
-#define FMT_DBFLD_SYS       (FMT_DBFLD_BEGIN + 1)
 #define FMT_DBFLD_END       (FMT_DBFLD_BEGIN + 2)
 
 //FileNameFormat
 // Attention, the last 4 formats do not exist in RTF (loss!)
 #define FMT_FF_BEGIN        FMT_DBFLD_END
-#define FMT_FF_NAME         FMT_FF_BEGIN
-#define FMT_FF_PATHNAME     (FMT_FF_BEGIN   + 1)
-#define FMT_FF_PATH         (FMT_FF_BEGIN   + 2)
-#define FMT_FF_NAME_NOEXT   (FMT_FF_BEGIN   + 3)
-#define FMT_FF_UI_NAME      (FMT_FF_BEGIN   + 4)
-#define FMT_FF_UI_RANGE     (FMT_FF_BEGIN   + 5)
 #define FMT_FF_END          (FMT_FF_BEGIN   + 6)
 
 // Registry-Format
 #define FMT_REG_BEGIN       FMT_FF_END
-#define FMT_REG_AUTHOR      FMT_REG_BEGIN
-#define FMT_REG_TIME        (FMT_REG_BEGIN  + 1)
-#define FMT_REG_DATE        (FMT_REG_BEGIN  + 2)
 #define FMT_REG_END         (FMT_REG_BEGIN  + 3)
 
 // Chapter
 #define FMT_CHAPTER_BEGIN   FMT_REG_END
-#define FMT_CHAPTER_NO      FMT_CHAPTER_BEGIN
-#define FMT_CHAPTER_NAME    (FMT_CHAPTER_BEGIN  + 1)
-#define FMT_CHAPTER_NAMENO  (FMT_CHAPTER_BEGIN  + 2)
-#define FMT_CHAPTER_NO_NOSEPARATOR  (FMT_CHAPTER_BEGIN  + 3)
 #define FMT_CHAPTER_END     (FMT_CHAPTER_BEGIN  + 4)
 
 // DDE-Formats
 #define FMT_DDE_BEGIN       FMT_CHAPTER_END
-#define FMT_DDE_NORMAL      FMT_DDE_BEGIN
-#define FMT_DDE_HOT         (FMT_DDE_BEGIN  + 1)
 #define FMT_DDE_END         (FMT_DDE_BEGIN  + 2)
 
 #define FMT_REF_BEGIN       FMT_DDE_END
-#define FMT_REF_PAGE        FMT_REF_BEGIN
-#define FMT_REF_CHAPTER     (FMT_REF_BEGIN  + 1)
-#define FMT_REF_TEXT        (FMT_REF_BEGIN  + 2)
-#define FMT_REF_UPDOWN      (FMT_REF_BEGIN  + 3)
-#define FMT_REF_PAGE_PGDSC  (FMT_REF_BEGIN  + 4)
-#define FMT_REF_ONLYNUMBER  (FMT_REF_BEGIN  + 5)
-#define FMT_REF_ONLYCAPTION     (FMT_REF_BEGIN  + 6)
-#define FMT_REF_ONLYSEQNO       (FMT_REF_BEGIN  + 7)
-#define FMT_REF_NUMBER          (FMT_REF_BEGIN  + 8)
-#define FMT_REF_NUMBER_NO_CONTEXT (FMT_REF_BEGIN  + 9)
-#define FMT_REF_NUMBER_FULL_CONTEXT (FMT_REF_BEGIN  + 10)
 #define FMT_REF_END             (FMT_REF_BEGIN  + 11)
 
 // Placeholder
 #define FMT_MARK_BEGIN      FMT_REF_END
-#define FMT_MARK_TEXT       FMT_MARK_BEGIN
-#define FMT_MARK_TABLE      (FMT_MARK_BEGIN + 1)
-#define FMT_MARK_FRAME      (FMT_MARK_BEGIN + 2)
-#define FMT_MARK_GRAFIC     (FMT_MARK_BEGIN + 3)
-#define FMT_MARK_OLE        (FMT_MARK_BEGIN + 4)
 #define FMT_MARK_END        (FMT_MARK_BEGIN + 5)
-
-/*--------------------------------------------------------------------
-   Global String-Resources
- --------------------------------------------------------------------*/
-
-#define STR_FLDUI               FMT_MARK_END
-#define STR_EXTRA               (STR_FLDUI + 2)
-
-/*--------------------------------------------------------------------
-    Additional Strings
- --------------------------------------------------------------------*/
-
-#define STR_COND                STR_EXTRA
-#define STR_TEXT                (STR_EXTRA  + 1)
-#define STR_DDE_CMD             (STR_EXTRA  + 2)
-#define STR_INSTEXT             (STR_EXTRA  + 3)
-#define STR_COMBCHRS_FT         (STR_EXTRA  + 4)
-#define STR_PROMPT              (STR_EXTRA  + 5)
-#define STR_MACNAME             (STR_EXTRA  + 6)
-#define STR_OFFSET              (STR_EXTRA  + 8)
-#define STR_VALUE               (STR_EXTRA  + 9)
-
-#define STR_FORMULA             (STR_EXTRA  + 12)
 
 #endif
 

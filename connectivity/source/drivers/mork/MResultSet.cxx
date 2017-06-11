@@ -30,8 +30,7 @@
 #include "MResultSetMetaData.hxx"
 #include "FDatabaseMetaDataResultSet.hxx"
 
-#include "resource/mork_res.hrc"
-#include "resource/common_res.hrc"
+#include "strings.hrc"
 
 using namespace ::comphelper;
 using namespace connectivity;

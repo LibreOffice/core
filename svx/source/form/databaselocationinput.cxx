@@ -21,7 +21,7 @@
 #include "svx/databaselocationinput.hxx"
 #include "svx/dialmgr.hxx"
 
-#include "svx/fmresids.hrc"
+#include "svx/strings.hrc"
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 

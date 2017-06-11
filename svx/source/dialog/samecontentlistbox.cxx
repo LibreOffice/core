@@ -16,22 +16,19 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/samecontentlistbox.hxx>
-#include <tools/resary.hxx>
 #include <vcl/builderfactory.hxx>
+#include "samecontent.hrc"
 
 SameContentListBox::SameContentListBox(vcl::Window* pParent)
     : ListBox( pParent, WB_BORDER | WB_DROPDOWN)
 {
-    ResStringArray aSameContentAry( ResId(RID_SVXSTRARY_SAMECONTENT, DIALOG_MGR()) );
-    sal_uInt32 nCnt = aSameContentAry.Count();
-
-    for ( sal_uInt32 i = 0; i < nCnt; ++i )
+    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_SVXSTRARY_SAMECONTENT); ++i)
     {
-        OUString aStr = aSameContentAry.GetString(i);
-        sal_uInt16 nData = aSameContentAry.GetValue(i);
+        OUString aStr = SvxResId(RID_SVXSTRARY_SAMECONTENT[i].first);
+        sal_uInt16 nData = RID_SVXSTRARY_SAMECONTENT[i].second;
         sal_Int32 nPos = InsertEntry( aStr );
         SetEntryData( nPos, reinterpret_cast<void*>((sal_uLong)nData) );
     }

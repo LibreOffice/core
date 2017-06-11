@@ -25,11 +25,11 @@
 #include <tools/tenccvt.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/string.hxx>
-#include "dbu_misc.hrc"
-#include "dbustrings.hrc"
+#include "strings.hrc"
+#include "stringconstants.hxx"
 #include <sfx2/sfxhtml.hxx>
 #include <osl/diagnose.h>
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
@@ -52,6 +52,7 @@
 #include "QEnumTypes.hxx"
 #include "WCPage.hxx"
 #include <rtl/tencinfo.h>
+#include "core_resource.hxx"
 #include "UITools.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -390,7 +391,7 @@ sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption& rOption )
 
 bool OHTMLReader::CreateTable(HtmlTokenId nToken)
 {
-    OUString aTempName(ModuleRes(STR_TBL_TITLE));
+    OUString aTempName(DBA_RES(STR_TBL_TITLE));
     aTempName = aTempName.getToken(0,' ');
     aTempName = ::dbtools::createUniqueName(m_xTables, aTempName);
 
@@ -429,7 +430,7 @@ bool OHTMLReader::CreateTable(HtmlTokenId nToken)
                 {
                     aColumnName = comphelper::string::strip(aColumnName, ' ' );
                     if (aColumnName.isEmpty() || m_bAppendFirstLine )
-                        aColumnName = ModuleRes(STR_COLUMN_NAME);
+                        aColumnName = DBA_RES(STR_COLUMN_NAME);
                     else if ( !m_sCurrent.isEmpty() )
                         aColumnName = m_sCurrent;
 

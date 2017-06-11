@@ -48,11 +48,10 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/sfx.hrc>
+#include <sfx2/strings.hrc>
 #include "rtl/ustrbuf.hxx"
 
 #include "bitmaps.hlst"
-
-#define STR_NO_WEBBROWSER_FOUND  (RID_SFX_APP_START + 7)
 
 #define PROPERTY_TITLE          "BubbleHeading"
 #define PROPERTY_TEXT           "BubbleText"
@@ -140,7 +139,7 @@ class UpdateCheckUI : public ::cppu::WeakImplHelper
     VclPtr<BubbleWindow> mpBubbleWin;
     VclPtr<SystemWindow> mpIconSysWin;
     VclPtr<MenuBar>     mpIconMBar;
-    ResMgr*             mpSfxResMgr;
+    std::locale         maSfxLocale;
     Idle                maWaitIdle;
     Timer               maTimeoutTimer;
     Link<VclWindowEvent&,void> maWindowEventHdl;
@@ -199,7 +198,7 @@ UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xCont
     , mbBubbleChanged( false )
     , mnIconID( 0 )
 {
-    mpSfxResMgr = ResMgr::CreateResMgr( "sfx" );
+    maSfxLocale = Translate::Create("sfx", Application::GetSettings().GetUILanguageTag());
 
     maBubbleImage = GetBubbleImage( maBubbleImageURL );
 
@@ -221,7 +220,6 @@ UpdateCheckUI::~UpdateCheckUI()
 {
     Application::RemoveEventListener( maApplicationEventHdl );
     RemoveBubbleWindow( true );
-    delete mpSfxResMgr;
 }
 
 OUString SAL_CALL
@@ -549,7 +547,7 @@ IMPL_LINK_NOARG(UpdateCheckUI, ClickHdl, MenuBar::MenuBarButtonCallbackArg&, boo
             mrJob->execute( aEmpty );
         }
         catch(const uno::Exception&) {
-            ScopedVclPtrInstance<MessageDialog>(nullptr, ResId( STR_NO_WEBBROWSER_FOUND, *mpSfxResMgr))->Execute();
+            ScopedVclPtrInstance<MessageDialog>(nullptr, Translate::get(STR_NO_WEBBROWSER_FOUND, maSfxLocale))->Execute();
         }
     }
 

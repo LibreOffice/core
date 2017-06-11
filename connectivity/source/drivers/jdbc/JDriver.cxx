@@ -27,7 +27,7 @@
 #include <connectivity/dbexception.hxx>
 #include <jvmfwk/framework.hxx>
 #include "resource/conn_shared_res.hrc"
-#include "resource/common_res.hrc"
+#include "strings.hrc"
 #include "resource/sharedresources.hxx"
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>

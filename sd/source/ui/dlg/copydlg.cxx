@@ -35,7 +35,7 @@
 #include "View.hxx"
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
-#include "res_bmp.hrc"
+
 
 namespace sd {
 

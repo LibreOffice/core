@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustmentANGLE">
@@ -49,7 +49,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Position _X:</property>
+                        <property name="label" translatable="yes" context="rotationtabpage|FT_POS_X">Position _X:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_POS_X:0.00cm</property>
                       </object>
@@ -63,7 +63,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Position _Y:</property>
+                        <property name="label" translatable="yes" context="rotationtabpage|FT_POS_Y">Position _Y:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_POS_Y:0.00cm</property>
                       </object>
@@ -115,7 +115,7 @@
                       <object class="GtkLabel" id="FT_POSPRESETS">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Default settings:</property>
+                        <property name="label" translatable="yes" context="rotationtabpage|FT_POSPRESETS">_Default settings:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">CTL_RECT</property>
                       </object>
@@ -129,7 +129,7 @@
                       <object class="svxlo-SvxRectCtl" id="CTL_RECT">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Rotation point</property>
+                        <property name="tooltip_text" translatable="yes" context="rotationtabpage|CTL_RECT|tooltip_text">Rotation point</property>
                         <property name="halign">center</property>
                       </object>
                       <packing>
@@ -154,7 +154,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Pivot Point</property>
+            <property name="label" translatable="yes" context="rotationtabpage|label1">Pivot Point</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -196,7 +196,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Angle:</property>
+                        <property name="label" translatable="yes" context="rotationtabpage|FT_ANGLE">_Angle:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">NF_ANGLE</property>
                       </object>
@@ -238,7 +238,7 @@
                       <object class="GtkLabel" id="FT_ANGLEPRESETS">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Default _settings:</property>
+                        <property name="label" translatable="yes" context="rotationtabpage|FT_ANGLEPRESETS">Default _settings:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">CTL_ANGLE</property>
                       </object>
@@ -252,7 +252,7 @@
                       <object class="svxlo-DialControl" id="CTL_ANGLE">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Rotation Angle</property>
+                        <property name="tooltip_text" translatable="yes" context="rotationtabpage|CTL_ANGLE|tooltip_text">Rotation Angle</property>
                         <property name="halign">center</property>
                       </object>
                       <packing>
@@ -277,7 +277,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Rotation Angle</property>
+            <property name="label" translatable="yes" context="rotationtabpage|label2">Rotation Angle</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

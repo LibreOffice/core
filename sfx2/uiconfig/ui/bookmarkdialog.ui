@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sfx">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="BookmarkDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Add to Bookmarks</property>
+    <property name="title" translatable="yes" context="bookmarkdialog|BookmarkDialog">Add to Bookmarks</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -15,7 +15,7 @@
           <object class="GtkLabel" id="alttitle">
             <property name="can_focus">False</property>
             <property name="no_show_all">True</property>
-            <property name="label" translatable="yes">Rename Bookmark</property>
+            <property name="label" translatable="yes" context="bookmarkdialog|alttitle">Rename Bookmark</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -94,7 +94,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Bookmark:</property>
+                <property name="label" translatable="yes" context="bookmarkdialog|label2">Bookmark:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">entry</property>
               </object>

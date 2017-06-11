@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkImage" id="img_paste_transpose">
     <property name="visible">True</property>
@@ -20,7 +20,7 @@
   <object class="GtkDialog" id="PasteSpecial">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Paste Special</property>
+    <property name="title" translatable="yes" context="pastespecial|PasteSpecial">Paste Special</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -95,7 +95,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Values Only</property>
+                <property name="tooltip_text" translatable="yes" context="pastespecial|paste_values_only|tooltip_text">Values Only</property>
                 <property name="image">img_paste_values_only</property>
               </object>
               <packing>
@@ -110,7 +110,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Values &amp; Formats</property>
+                <property name="tooltip_text" translatable="yes" context="pastespecial|paste_values_formats|tooltip_text">Values &amp; Formats</property>
                 <property name="image">img_paste_values_formats</property>
               </object>
               <packing>
@@ -125,7 +125,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Transpose</property>
+                <property name="tooltip_text" translatable="yes" context="pastespecial|paste_transpose|tooltip_text">Transpose</property>
                 <property name="image">img_paste_transpose</property>
               </object>
               <packing>
@@ -169,7 +169,7 @@
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkCheckButton" id="paste_all">
-                            <property name="label" translatable="yes">_Paste all</property>
+                            <property name="label" translatable="yes" context="pastespecial|paste_all">_Paste all</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="has_focus">True</property>
@@ -186,7 +186,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="text">
-                            <property name="label" translatable="yes">Te_xt</property>
+                            <property name="label" translatable="yes" context="pastespecial|text">Te_xt</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -202,7 +202,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="numbers">
-                            <property name="label" translatable="yes">_Numbers</property>
+                            <property name="label" translatable="yes" context="pastespecial|numbers">_Numbers</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -218,7 +218,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="datetime">
-                            <property name="label" translatable="yes">_Date &amp; time</property>
+                            <property name="label" translatable="yes" context="pastespecial|datetime">_Date &amp; time</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -234,7 +234,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="formulas">
-                            <property name="label" translatable="yes">_Formulas</property>
+                            <property name="label" translatable="yes" context="pastespecial|formulas">_Formulas</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -250,7 +250,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="comments">
-                            <property name="label" translatable="yes">_Comments</property>
+                            <property name="label" translatable="yes" context="pastespecial|comments">_Comments</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -266,7 +266,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="formats">
-                            <property name="label" translatable="yes">For_mats</property>
+                            <property name="label" translatable="yes" context="pastespecial|formats">For_mats</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -282,7 +282,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="objects">
-                            <property name="label" translatable="yes">_Objects</property>
+                            <property name="label" translatable="yes" context="pastespecial|objects">_Objects</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -304,7 +304,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Selection</property>
+                    <property name="label" translatable="yes" context="pastespecial|label1">Selection</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -338,7 +338,7 @@
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkRadioButton" id="none">
-                            <property name="label" translatable="yes">Non_e</property>
+                            <property name="label" translatable="yes" context="pastespecial|none">Non_e</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -356,7 +356,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="add">
-                            <property name="label" translatable="yes">_Add</property>
+                            <property name="label" translatable="yes" context="pastespecial|add">_Add</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -374,7 +374,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="subtract">
-                            <property name="label" translatable="yes">_Subtract</property>
+                            <property name="label" translatable="yes" context="pastespecial|subtract">_Subtract</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -392,7 +392,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="multiply">
-                            <property name="label" translatable="yes">Multipl_y</property>
+                            <property name="label" translatable="yes" context="pastespecial|multiply">Multipl_y</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -410,7 +410,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="divide">
-                            <property name="label" translatable="yes">Di_vide</property>
+                            <property name="label" translatable="yes" context="pastespecial|divide">Di_vide</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -434,7 +434,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Operations</property>
+                    <property name="label" translatable="yes" context="pastespecial|label2">Operations</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -468,7 +468,7 @@
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkCheckButton" id="skip_empty">
-                            <property name="label" translatable="yes">S_kip empty cells</property>
+                            <property name="label" translatable="yes" context="pastespecial|skip_empty">S_kip empty cells</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -485,7 +485,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="transpose">
-                            <property name="label" translatable="yes">_Transpose</property>
+                            <property name="label" translatable="yes" context="pastespecial|transpose">_Transpose</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -502,7 +502,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="link">
-                            <property name="label" translatable="yes">_Link</property>
+                            <property name="label" translatable="yes" context="pastespecial|link">_Link</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -525,7 +525,7 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Options</property>
+                    <property name="label" translatable="yes" context="pastespecial|label3">Options</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -559,7 +559,7 @@
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkRadioButton" id="no_shift">
-                            <property name="label" translatable="yes">Don't sh_ift</property>
+                            <property name="label" translatable="yes" context="pastespecial|no_shift">Don't sh_ift</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -577,7 +577,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="move_down">
-                            <property name="label" translatable="yes">Do_wn</property>
+                            <property name="label" translatable="yes" context="pastespecial|move_down">Do_wn</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -595,7 +595,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="move_right">
-                            <property name="label" translatable="yes">_Right</property>
+                            <property name="label" translatable="yes" context="pastespecial|move_right">_Right</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -620,7 +620,7 @@
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Shift Cells</property>
+                    <property name="label" translatable="yes" context="pastespecial|label4">Shift Cells</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="pcr">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="FormLinks">
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Link fields</property>
+    <property name="title" translatable="yes" context="formlinksdialog|FormLinks">Link fields</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -69,7 +69,7 @@
             </child>
             <child>
               <object class="GtkButton" id="suggestButton">
-                <property name="label" translatable="yes">Suggest</property>
+                <property name="label" translatable="yes" context="formlinksdialog|suggestButton">Suggest</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -102,7 +102,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Sub forms can be used to display detailed data about the current record of the master form. To do this, you can specify which columns in the sub form match which columns in the master form.</property>
+                <property name="label" translatable="yes" context="formlinksdialog|explanationLabel">Sub forms can be used to display detailed data about the current record of the master form. To do this, you can specify which columns in the sub form match which columns in the master form.</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">60</property>
               </object>
@@ -122,7 +122,7 @@
                   <object class="GtkLabel" id="detailLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">label</property>
+                    <property name="label" translatable="yes" context="formlinksdialog|detailLabel">label</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -134,7 +134,7 @@
                   <object class="GtkLabel" id="masterLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">label</property>
+                    <property name="label" translatable="yes" context="formlinksdialog|masterLabel">label</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkGrid" id="SmartTagOptionsPage">
@@ -18,7 +18,7 @@
         <property name="row_spacing">6</property>
         <child>
           <object class="GtkCheckButton" id="main">
-            <property name="label" translatable="yes">Label text with smart tags</property>
+            <property name="label" translatable="yes" context="smarttagoptionspage|main">Label text with smart tags</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -58,7 +58,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkButton" id="properties">
-                        <property name="label" translatable="yes">Properties...</property>
+                        <property name="label" translatable="yes" context="smarttagoptionspage|properties">Properties...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -97,7 +97,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Currently Installed Smart Tags</property>
+                <property name="label" translatable="yes" context="smarttagoptionspage|label1">Currently Installed Smart Tags</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

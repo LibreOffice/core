@@ -16,22 +16,19 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/spacinglistbox.hxx>
-#include <tools/resary.hxx>
 #include <vcl/builderfactory.hxx>
+#include "spacing.hrc"
 
 SpacingListBox::SpacingListBox(vcl::Window* pParent)
     : ListBox( pParent, WB_BORDER | WB_DROPDOWN)
 {
-    ResStringArray aSpacingAry( ResId(RID_SVXSTRARY_SPACING, DIALOG_MGR()) );
-    sal_uInt32 nCnt = aSpacingAry.Count();
-
-    for ( sal_uInt32 i = 0; i < nCnt; ++i )
+    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_SVXSTRARY_SPACING); ++i)
     {
-        OUString aStr = aSpacingAry.GetString(i);
-        sal_uInt16 nData = aSpacingAry.GetValue(i);
+        OUString aStr = SvxResId(RID_SVXSTRARY_SPACING[i].first);
+        sal_uInt16 nData = RID_SVXSTRARY_SPACING[i].second;
         sal_Int32 nPos = InsertEntry( aStr );
         SetEntryData( nPos, reinterpret_cast<void*>((sal_uLong)nData) );
     }

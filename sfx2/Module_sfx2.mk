@@ -24,11 +24,11 @@ $(eval $(call gb_Module_add_targets,sfx2,\
     Library_sfx \
     Package_classification \
     Package_emoji \
+    UIConfig_sfx \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,sfx2,\
-    AllLangResTarget_sfx2 \
-    UIConfig_sfx \
+    AllLangMoTarget_sfx2 \
 ))
 
 $(eval $(call gb_Module_add_check_targets,sfx2,\

@@ -35,7 +35,7 @@ gb_UnoApi_get_target = $(INSTROOT)/$(if $(filter udkapi,$(1)),$(LIBO_URE_MISC_FO
 gb_AutoInstall_get_target = $(WORKDIR)/AutoInstall/$(1)
 gb_AllLangHelp_get_target = $(WORKDIR)/AllLangHelp/$(1)
 gb_AllLangPackage_get_target = $(WORKDIR)/AllLangPackage/$(1)
-gb_AllLangResTarget_get_target = $(WORKDIR)/AllLangRes/$(1)
+gb_AllLangMoTarget_get_target = $(WORKDIR)/AllLangMo/$(1)
 gb_AsmObject_get_target = $(WORKDIR)/AsmObject/$(1).o
 gb_CObject_get_target = $(WORKDIR)/CObject/$(1).o
 gb_GenCObject_get_target = $(WORKDIR)/GenCObject/$(1).o
@@ -145,6 +145,7 @@ gb_Pyuno_get_target = $(WORKDIR)/Pyuno/$(1).done
 gb_Rdb_get_target = $(WORKDIR)/Rdb/$(1).rdb
 gb_Rdb_get_target_for_build = $(WORKDIR_FOR_BUILD)/Rdb/$(1).rdb
 gb_ResTarget_get_target = $(WORKDIR)/ResTarget/$(1).res
+gb_MoTarget_get_target = $(WORKDIR)/MoTarget/$(1).mo
 gb_ScpMergeTarget_get_target = $(WORKDIR)/ScpMergeTarget/$(1).ulf
 gb_ScpPreprocessTarget_get_target = $(WORKDIR)/ScpPreprocessTarget/$(1).pre
 gb_ScpTarget_get_external_target = $(WORKDIR)/ScpTarget/$(1).external
@@ -160,8 +161,6 @@ gb_ThesaurusIndexTarget_get_target = $(WORKDIR)/ThesaurusIndexTarget/$(basename 
 gb_UIConfig_get_imagelist_target = $(WORKDIR)/UIConfig/$(1).ilst
 gb_UIConfig_get_target = $(WORKDIR)/UIConfig/$(1).done
 gb_UIImageListTarget_get_target = $(WORKDIR)/UIImageListTarget/$(1).ilst
-gb_UILocalizeTarget_get_target = $(WORKDIR)/UILocalizeTarget/$(1).done
-gb_UILocalizeTarget_get_workdir = $(WORKDIR)/UILocalizeTarget/$(1)
 gb_UIMenubarTarget_get_target = $(WORKDIR)/UIMenubarTarget/$(1).xml
 gb_UITest_get_target = $(WORKDIR)/UITest/$(1)/done
 gb_UnoApiTarget_get_target = $(WORKDIR)/UnoApiTarget/$(1).rdb
@@ -227,7 +226,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	AutoInstall \
 	AllLangHelp \
 	AllLangPackage \
-	AllLangResTarget \
+	AllLangMoTarget \
 	CliAssembly \
 	CliAssemblyTarget \
 	CliConfigTarget \
@@ -287,7 +286,6 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	ExternalProject \
 	UIConfig \
 	UIImageListTarget \
-	UILocalizeTarget \
 	UIMenubarTarget \
 	UITest \
 	UnoApi \

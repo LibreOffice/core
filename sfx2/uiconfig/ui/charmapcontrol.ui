@@ -20,7 +20,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Recent Characters</property>
+            <property name="label" translatable="yes" context="charmapcontrol|label1">Recent Characters</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -219,7 +219,7 @@
         </child>
         <child>
           <object class="GtkButton" id="specialchardlg">
-            <property name="label" translatable="yes">Launch Dialog</property>
+            <property name="label" translatable="yes" context="charmapcontrol|specialchardlg">Launch Dialog</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>

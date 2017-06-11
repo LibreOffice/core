@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sfx">
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkMenu" id="menu">
     <property name="visible">True</property>
@@ -9,7 +9,7 @@
       <object class="GtkMenuItem" id="new">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">New...</property>
+        <property name="label" translatable="yes" context="stylecontextmenu|new">New...</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -17,7 +17,7 @@
       <object class="GtkMenuItem" id="edit">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Modify...</property>
+        <property name="label" translatable="yes" context="stylecontextmenu|edit">Modify...</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -25,7 +25,7 @@
       <object class="GtkMenuItem" id="hide">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Hide</property>
+        <property name="label" translatable="yes" context="stylecontextmenu|hide">Hide</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -33,7 +33,7 @@
       <object class="GtkMenuItem" id="show">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Show</property>
+        <property name="label" translatable="yes" context="stylecontextmenu|show">Show</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -41,7 +41,7 @@
       <object class="GtkMenuItem" id="delete">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Delete...</property>
+        <property name="label" translatable="yes" context="stylecontextmenu|delete">Delete...</property>
         <property name="use_underline">True</property>
       </object>
     </child>

@@ -37,8 +37,6 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-class ResStringArray;
-
 namespace pcr
 {
 
@@ -105,8 +103,11 @@ namespace pcr
             @param _rxControlFactory
                 A control factory. Must not be <NULL/>.
 
-            @param  _rInitialListEntries
-                the initial values of the control
+            @param  pTransIds
+                the initial translation ids for the value of the control
+
+            @param  nElements
+                the count of initial values of the control
 
             @param _bReadOnlyControl
                 determines whether the control should be read-only
@@ -120,7 +121,7 @@ namespace pcr
         static css::uno::Reference< css::inspection::XPropertyControl >
             createListBoxControl(
                 const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory,
-                const ResStringArray& _rInitialListEntries,
+                const char** pTransIds, size_t nElements,
                 bool _bReadOnlyControl,
                 bool _bSorted
             );

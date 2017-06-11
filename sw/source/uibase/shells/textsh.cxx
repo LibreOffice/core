@@ -87,7 +87,7 @@
 #include <modcfg.hxx>
 #include <column.hxx>
 #include <edtwin.hxx>
-#include <shells.hrc>
+#include <strings.hrc>
 #include <swerror.h>
 #include <unochart.hxx>
 
@@ -98,7 +98,7 @@
 #include <vcl/EnumContext.hxx>
 #include <swslots.hxx>
 #include <SwRewriter.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 
 using namespace ::com::sun::star;
 
