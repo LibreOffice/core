@@ -17,17 +17,82 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_MACROMIGRATIONWIZARD_HXX
-#define INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_MACROMIGRATIONWIZARD_HXX
+#include "macromigrationdialog.hxx"
 
-#include <sal/config.h>
+#include <com/sun/star/ucb/AlreadyInitializedException.hpp>
+#include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 
-namespace dbmm {
+#include <svtools/genericunodialog.hxx>
 
-void createRegistryInfo_MacroMigrationDialogService();
+#include "core_resource.hxx"
+#include "strings.hrc"
 
-}
+namespace dbmm
+{
 
-#endif
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::uno::XInterface;
+    using ::com::sun::star::uno::UNO_QUERY;
+    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::com::sun::star::uno::Exception;
+    using ::com::sun::star::uno::RuntimeException;
+    using ::com::sun::star::uno::Any;
+    using ::com::sun::star::uno::XComponentContext;
+    using ::com::sun::star::uno::Sequence;
+    using ::com::sun::star::beans::XPropertySetInfo;
+    using ::com::sun::star::beans::Property;
+    using ::com::sun::star::ucb::AlreadyInitializedException;
+    using ::com::sun::star::sdb::XOfficeDatabaseDocument;
+    using ::com::sun::star::lang::IllegalArgumentException;
+    using ::com::sun::star::frame::XStorable;
+
+    // MacroMigrationDialogService
+    class MacroMigrationDialogService;
+    typedef ::svt::OGenericUnoDialog                                                MacroMigrationDialogService_Base;
+    typedef ::comphelper::OPropertyArrayUsageHelper< MacroMigrationDialogService >  MacroMigrationDialogService_PBase;
+
+    class MacroMigrationDialogService
+                :public MacroMigrationDialogService_Base
+                ,public MacroMigrationDialogService_PBase
+    {
+    public:
+        explicit MacroMigrationDialogService( const Reference< XComponentContext >& _rxContext );
+
+        // XTypeProvider
+        virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+
+        // XServiceInfo
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+        // XInitialization
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+
+        // XPropertySet
+        virtual Reference< XPropertySetInfo >  SAL_CALL getPropertySetInfo() override;
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+
+        // OPropertyArrayUsageHelper
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
+
+        // helper for factories
+        static Reference< XInterface > SAL_CALL Create( const Reference< XComponentContext >& _rxContext );
+        /// @throws RuntimeException
+        static OUString SAL_CALL getImplementationName_static();
+        /// @throws RuntimeException
+        static Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
+
+    protected:
+        virtual ~MacroMigrationDialogService() override;
+
+    protected:
+        virtual VclPtr<Dialog> createDialog( vcl::Window* _pParent ) override;
+
+    private:
+        Reference< XOfficeDatabaseDocument >    m_xDocument;
+    };
+
+} // namespace dbmm
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

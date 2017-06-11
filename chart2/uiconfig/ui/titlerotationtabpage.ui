@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="chart">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkAdjustment" id="adjustmentSpinDegrees">
@@ -55,7 +55,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_top">40</property>
-                    <property name="label" translatable="yes">_Degrees</property>
+                    <property name="label" translatable="yes" context="titlerotationtabpage|degreeL">_Degrees</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -108,7 +108,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="stackedCB">
-                    <property name="label" translatable="yes">Ve_rtically stacked</property>
+                    <property name="label" translatable="yes" context="titlerotationtabpage|stackedCB">Ve_rtically stacked</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -127,7 +127,7 @@
                 <child>
                   <object class="GtkLabel" id="labelABCD">
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">ABCD</property>
+                    <property name="label" translatable="yes" context="titlerotationtabpage|labelABCD">ABCD</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -148,7 +148,7 @@
               <object class="GtkLabel" id="textdirL">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Te_xt direction:</property>
+                <property name="label" translatable="yes" context="titlerotationtabpage|textdirL">Te_xt direction:</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -178,7 +178,7 @@
       <object class="GtkLabel" id="labelTextOrient">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Text Orientation</property>
+        <property name="label" translatable="yes" context="titlerotationtabpage|labelTextOrient">Text Orientation</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>

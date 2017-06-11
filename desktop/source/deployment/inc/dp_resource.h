@@ -20,28 +20,13 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_RESOURCE_H
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_RESOURCE_H
 
-#include <tools/resid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include "dp_misc.h"
 #include "dp_misc_api.hxx"
 
 namespace dp_misc {
 
-
-ResId getResId( sal_uInt16 id );
-
-
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString getResourceString( sal_uInt16 id );
-
-template <typename Unique, sal_uInt16 id>
-struct StaticResourceString :
-        public ::rtl::StaticWithInit< OUString, Unique > {
-    const OUString operator () () { return getResourceString(id); }
-};
-
-
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-const LanguageTag & getOfficeLanguageTag();
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC const LanguageTag & getOfficeLanguageTag();
 
 }
 

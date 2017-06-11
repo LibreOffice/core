@@ -21,7 +21,6 @@
 #include "calc/CDatabaseMetaData.hxx"
 #include "calc/CCatalog.hxx"
 #include "calc/CDriver.hxx"
-#include "resource/calc_res.hrc"
 #include "resource/sharedresources.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -33,6 +32,7 @@
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/processfactory.hxx>
+#include "strings.hrc"
 
 using namespace connectivity::calc;
 using namespace connectivity::file;

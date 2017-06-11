@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="AutoFormatTableDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">AutoFormat</property>
+    <property name="title" translatable="yes" context="autoformattable|AutoFormatTableDialog">AutoFormat</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -92,7 +92,7 @@
             </child>
             <child>
               <object class="GtkButton" id="rename">
-                <property name="label" translatable="yes">Rename</property>
+                <property name="label" translatable="yes" context="autoformattable|rename">Rename</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -184,7 +184,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Format</property>
+                    <property name="label" translatable="yes" context="autoformattable|label1">Format</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -217,7 +217,7 @@
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkCheckButton" id="numformatcb">
-                            <property name="label" translatable="yes">Number format</property>
+                            <property name="label" translatable="yes" context="autoformattable|numformatcb">Number format</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -234,7 +234,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="bordercb">
-                            <property name="label" translatable="yes">Borders</property>
+                            <property name="label" translatable="yes" context="autoformattable|bordercb">Borders</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -251,7 +251,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="fontcb">
-                            <property name="label" translatable="yes">Font</property>
+                            <property name="label" translatable="yes" context="autoformattable|fontcb">Font</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -268,7 +268,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="patterncb">
-                            <property name="label" translatable="yes">Pattern</property>
+                            <property name="label" translatable="yes" context="autoformattable|patterncb">Pattern</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -285,7 +285,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="alignmentcb">
-                            <property name="label" translatable="yes">Alignment</property>
+                            <property name="label" translatable="yes" context="autoformattable|alignmentcb">Alignment</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -311,7 +311,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Formatting</property>
+                    <property name="label" translatable="yes" context="autoformattable|label2">Formatting</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

@@ -26,7 +26,8 @@
 #include <rtl/ustring.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/toolbox.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
+#include <svx/svxids.hrc>
 
 #define TMP_STR_BEGIN   "["
 #define TMP_STR_END     "]"

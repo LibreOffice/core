@@ -37,7 +37,6 @@
 #define SVG_PROP_POSITIONED_CHARACTERS      "UsePositionedCharacters"
 
 
-class ResMgr;
 namespace vcl { class Window; }
 
 
@@ -61,7 +60,7 @@ private:
 
 public:
 
-    ImpSVGDialog( vcl::Window* pParent, /*ResMgr& rResMgr,*/
+    ImpSVGDialog( vcl::Window* pParent,
                   css::uno::Sequence< css::beans::PropertyValue >& rFilterData );
     virtual ~ImpSVGDialog() override;
     virtual void dispose() override;

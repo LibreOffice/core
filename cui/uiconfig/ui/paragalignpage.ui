@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkListStore" id="liststoreLB_LASTLINE">
@@ -12,19 +12,19 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Default</col>
+        <col id="0" translatable="yes" context="paragalignpage|liststoreLB_LASTLINE">Default</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Left</col>
+        <col id="0" translatable="yes" context="paragalignpage|liststoreLB_LASTLINE">Left</col>
         <col id="1">1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Centered</col>
+        <col id="0" translatable="yes" context="paragalignpage|liststoreLB_LASTLINE">Centered</col>
         <col id="1">2</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Justified</col>
+        <col id="0" translatable="yes" context="paragalignpage|liststoreLB_LASTLINE">Justified</col>
         <col id="1">3</col>
       </row>
     </data>
@@ -38,23 +38,23 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Automatic</col>
+        <col id="0" translatable="yes" context="paragalignpage|liststoreLB_VERTALIGN">Automatic</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Base line</col>
+        <col id="0" translatable="yes" context="paragalignpage|liststoreLB_VERTALIGN">Base line</col>
         <col id="1">1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Top</col>
+        <col id="0" translatable="yes" context="paragalignpage|liststoreLB_VERTALIGN">Top</col>
         <col id="1">2</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Middle</col>
+        <col id="0" translatable="yes" context="paragalignpage|liststoreLB_VERTALIGN">Middle</col>
         <col id="1">3</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Bottom</col>
+        <col id="0" translatable="yes" context="paragalignpage|liststoreLB_VERTALIGN">Bottom</col>
         <col id="1">4</col>
       </row>
     </data>
@@ -82,7 +82,7 @@
             <property name="valign">start</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="drawingareaWN_EXAMPLE-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes">Example</property>
+                <property name="AtkObject::accessible-name" translatable="yes" context="paragalignpage|drawingareaWN_EXAMPLE-atkobject">Example</property>
               </object>
             </child>
           </object>
@@ -117,7 +117,7 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="radioBTN_LEFTALIGN">
-                        <property name="label" translatable="yes">_Left</property>
+                        <property name="label" translatable="yes" context="paragalignpage|radioBTN_LEFTALIGN">_Left</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -133,7 +133,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="radioBTN_RIGHTALIGN">
-                        <property name="label" translatable="yes">_Right</property>
+                        <property name="label" translatable="yes" context="paragalignpage|radioBTN_RIGHTALIGN">_Right</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -149,7 +149,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="radioBTN_CENTERALIGN">
-                        <property name="label" translatable="yes">_Center</property>
+                        <property name="label" translatable="yes" context="paragalignpage|radioBTN_CENTERALIGN">_Center</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -166,7 +166,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="radioBTN_JUSTIFYALIGN">
-                        <property name="label" translatable="yes">_Justified</property>
+                        <property name="label" translatable="yes" context="paragalignpage|radioBTN_JUSTIFYALIGN">_Justified</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -182,7 +182,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkCB_EXPAND">
-                        <property name="label" translatable="yes">_Expand single word</property>
+                        <property name="label" translatable="yes" context="paragalignpage|checkCB_EXPAND">_Expand single word</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -199,7 +199,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkCB_SNAP">
-                        <property name="label" translatable="yes">_Snap to text grid (if active)</property>
+                        <property name="label" translatable="yes" context="paragalignpage|checkCB_SNAP">_Snap to text grid (if active)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -230,7 +230,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="margin_left">12</property>
                                 <property name="vexpand">True</property>
-                                <property name="label" translatable="yes">_Last line:</property>
+                                <property name="label" translatable="yes" context="paragalignpage|labelLB_LASTLINE">_Last line:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">comboLB_LASTLINE</property>
                                 <property name="xalign">0</property>
@@ -274,7 +274,7 @@
                         <child>
                           <object class="GtkLabel" id="labelST_RIGHTALIGN_ASIAN">
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Righ_t/Bottom</property>
+                            <property name="label" translatable="yes" context="paragalignpage|labelST_RIGHTALIGN_ASIAN">Righ_t/Bottom</property>
                             <property name="use_underline">True</property>
                           </object>
                           <packing>
@@ -287,7 +287,7 @@
                           <object class="GtkLabel" id="labelST_LEFTALIGN_ASIAN">
                             <property name="can_focus">False</property>
                             <property name="xpad">5</property>
-                            <property name="label" translatable="yes">_Left/Top</property>
+                            <property name="label" translatable="yes" context="paragalignpage|labelST_LEFTALIGN_ASIAN">_Left/Top</property>
                             <property name="use_underline">True</property>
                           </object>
                           <packing>
@@ -310,7 +310,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Options</property>
+                <property name="label" translatable="yes" context="paragalignpage|label1">Options</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -344,7 +344,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_right">12</property>
-                        <property name="label" translatable="yes">_Alignment:</property>
+                        <property name="label" translatable="yes" context="paragalignpage|labelFT_VERTALIGN">_Alignment:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">comboLB_VERTALIGN</property>
                         <property name="xalign">0</property>
@@ -375,7 +375,7 @@
               <object class="GtkLabel" id="labelFL_VERTALIGN">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Text-to-text</property>
+                <property name="label" translatable="yes" context="paragalignpage|labelFL_VERTALIGN">Text-to-text</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -409,7 +409,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_right">12</property>
-                        <property name="label" translatable="yes">_Text direction:</property>
+                        <property name="label" translatable="yes" context="paragalignpage|label2">_Text direction:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">comboLB_TEXTDIRECTION</property>
                         <property name="xalign">0</property>
@@ -441,7 +441,7 @@
               <object class="GtkLabel" id="labelFL_PROPERTIES">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Properties</property>
+                <property name="label" translatable="yes" context="paragalignpage|labelFL_PROPERTIES">Properties</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

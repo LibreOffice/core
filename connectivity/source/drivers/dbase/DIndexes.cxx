@@ -22,7 +22,7 @@
 #include <connectivity/dbexception.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/types.hxx>
-#include "resource/dbase_res.hrc"
+#include "strings.hrc"
 
 using namespace ::comphelper;
 

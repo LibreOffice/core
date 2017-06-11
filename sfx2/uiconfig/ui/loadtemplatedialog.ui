@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="sfx">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="LoadTemplateDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">New</property>
+    <property name="title" translatable="yes" context="loadtemplatedialog|LoadTemplateDialog">New</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -67,7 +67,7 @@
             </child>
             <child>
               <object class="GtkButton" id="fromfile">
-                <property name="label" translatable="yes">From File...</property>
+                <property name="label" translatable="yes" context="loadtemplatedialog|fromfile">From File...</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
@@ -125,7 +125,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Categories</property>
+                    <property name="label" translatable="yes" context="loadtemplatedialog|label1">Categories</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -169,7 +169,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Templates</property>
+                    <property name="label" translatable="yes" context="loadtemplatedialog|label2">Templates</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -192,7 +192,7 @@
                 <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkCheckButton" id="text">
-                    <property name="label" translatable="yes">Te_xt</property>
+                    <property name="label" translatable="yes" context="loadtemplatedialog|text">Te_xt</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
@@ -209,7 +209,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="frame">
-                    <property name="label" translatable="yes">_Frame</property>
+                    <property name="label" translatable="yes" context="loadtemplatedialog|frame">_Frame</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
@@ -226,7 +226,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="pages">
-                    <property name="label" translatable="yes">_Pages</property>
+                    <property name="label" translatable="yes" context="loadtemplatedialog|pages">_Pages</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
@@ -243,7 +243,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="numbering">
-                    <property name="label" translatable="yes">N_umbering</property>
+                    <property name="label" translatable="yes" context="loadtemplatedialog|numbering">N_umbering</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
@@ -260,7 +260,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="overwrite">
-                    <property name="label" translatable="yes">_Overwrite</property>
+                    <property name="label" translatable="yes" context="loadtemplatedialog|overwrite">_Overwrite</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
@@ -290,7 +290,7 @@
               <object class="GtkLabel" id="alttitle">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Load Styles</property>
+                <property name="label" translatable="yes" context="loadtemplatedialog|alttitle">Load Styles</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -328,7 +328,7 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Pre_view</property>
+                    <property name="label" translatable="yes" context="loadtemplatedialog|label3">Pre_view</property>
                     <property name="use_underline">True</property>
                   </object>
                 </child>

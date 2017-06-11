@@ -39,7 +39,7 @@
 #include "frmui.hrc"
 #include "misc.hrc"
 
-#include "view.hrc"
+#include "strings.hrc"
 
 #include <memory>
 

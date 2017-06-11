@@ -18,7 +18,6 @@
  */
 
 #include <tools/resmgr.hxx>
-#include <svl/solar.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -26,16 +25,10 @@
 
 namespace avmedia {
 
-ResMgr* GetResMgr()
+const std::locale& GetResLocale()
 {
-    static ResMgr* pResMgr = nullptr;
-
-    if( !pResMgr )
-    {
-        pResMgr = ResMgr::CreateResMgr("avmedia", Application::GetSettings().GetUILanguageTag());
-    }
-
-    return pResMgr;
+    static std::locale loc = Translate::Create("avmedia", Application::GetSettings().GetUILanguageTag());
+    return loc;
 }
 
 } // namespace avmedia

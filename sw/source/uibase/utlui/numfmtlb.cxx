@@ -36,7 +36,7 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <numfmtlb.hxx>
-#include <utlui.hrc>
+#include <strings.hrc>
 #include "swabstdlg.hxx"
 #include "dialog.hrc"
 #include <unomid.h>

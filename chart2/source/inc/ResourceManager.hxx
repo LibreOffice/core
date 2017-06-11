@@ -20,16 +20,14 @@
 #define INCLUDED_CHART2_SOURCE_INC_RESOURCEMANAGER_HXX
 
 #include "charttoolsdllapi.hxx"
-
-// defined in <tools/resmgr.hxx>
-class ResMgr;
+#include <locale>
 
 namespace chart
 {
 
 namespace ResourceManager
 {
-    ::ResMgr &  getResourceManager();
+    const std::locale&  getResourceLocale();
 }
 
 } //  namespace chart

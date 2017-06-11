@@ -23,7 +23,7 @@
 #include <vcl/graph.hxx>
 #include <sfx2/sfxresid.hxx>
 
-#include <templateview.hrc>
+#include <sfx2/strings.hrc>
 
 using namespace basegfx;
 using namespace basegfx::tools;

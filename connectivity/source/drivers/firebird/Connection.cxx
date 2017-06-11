@@ -43,8 +43,7 @@
 
 #include <connectivity/dbexception.hxx>
 #include <connectivity/sqlparse.hxx>
-#include <resource/common_res.hrc>
-#include <resource/hsqldb_res.hrc>
+#include <strings.hrc>
 #include <resource/sharedresources.hxx>
 
 #include <comphelper/processfactory.hxx>

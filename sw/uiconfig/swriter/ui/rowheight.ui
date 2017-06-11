@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sw">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">0.01</property>
@@ -11,7 +11,7 @@
   <object class="GtkDialog" id="RowHeightDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Row Height</property>
+    <property name="title" translatable="yes" context="rowheight|RowHeightDialog">Row Height</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -108,7 +108,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="fit">
-                        <property name="label" translatable="yes">_Fit to size</property>
+                        <property name="label" translatable="yes" context="rowheight|fit">_Fit to size</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -130,7 +130,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Height</property>
+                <property name="label" translatable="yes" context="rowheight|label1">Height</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

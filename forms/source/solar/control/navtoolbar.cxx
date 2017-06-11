@@ -21,7 +21,7 @@
 #include "navtoolbar.hxx"
 #include "frm_resource.hxx"
 #include "featuredispatcher.hxx"
-#include "frm_resource.hrc"
+#include "strings.hrc"
 #include "commandimageprovider.hxx"
 
 #include <com/sun/star/uno/Any.hxx>
@@ -52,10 +52,10 @@ namespace frm
                 || ( _nFeatureId == LID_RECORD_FILLER );
         }
 
-        OUString getLabelString( sal_uInt16 _nResId )
+        OUString getLabelString(const char* pResId)
         {
             OUString sLabel( " " );
-            sLabel += FRM_RES_STRING( _nResId );
+            sLabel += FRM_RES_STRING(pResId);
             sLabel += " ";
             return sLabel;
         }

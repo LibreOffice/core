@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="ConsolidateDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Consolidate</property>
+    <property name="title" translatable="yes" context="consolidatedialog|ConsolidateDialog">Consolidate</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -88,7 +88,7 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">_Function:</property>
+                <property name="label" translatable="yes" context="consolidatedialog|label1">_Function:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">func</property>
               </object>
@@ -105,7 +105,7 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">_Consolidation ranges:</property>
+                <property name="label" translatable="yes" context="consolidatedialog|label2">_Consolidation ranges:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">consareas:border</property>
               </object>
@@ -122,17 +122,17 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <items>
-                  <item translatable="yes">Sum</item>
-                  <item translatable="yes">Count</item>
-                  <item translatable="yes">Average</item>
-                  <item translatable="yes">Max</item>
-                  <item translatable="yes">Min</item>
-                  <item translatable="yes">Product</item>
-                  <item translatable="yes">Count (numbers only)</item>
-                  <item translatable="yes">StDev (sample)</item>
-                  <item translatable="yes">StDevP (population)</item>
-                  <item translatable="yes">Var (sample)</item>
-                  <item translatable="yes">VarP (population)</item>
+                  <item translatable="yes" context="consolidatedialog|func">Sum</item>
+                  <item translatable="yes" context="consolidatedialog|func">Count</item>
+                  <item translatable="yes" context="consolidatedialog|func">Average</item>
+                  <item translatable="yes" context="consolidatedialog|func">Max</item>
+                  <item translatable="yes" context="consolidatedialog|func">Min</item>
+                  <item translatable="yes" context="consolidatedialog|func">Product</item>
+                  <item translatable="yes" context="consolidatedialog|func">Count (numbers only)</item>
+                  <item translatable="yes" context="consolidatedialog|func">StDev (sample)</item>
+                  <item translatable="yes" context="consolidatedialog|func">StDevP (population)</item>
+                  <item translatable="yes" context="consolidatedialog|func">Var (sample)</item>
+                  <item translatable="yes" context="consolidatedialog|func">VarP (population)</item>
                 </items>
               </object>
               <packing>
@@ -341,7 +341,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">_Source data ranges:</property>
+                <property name="label" translatable="yes" context="consolidatedialog|ftdataarea">_Source data ranges:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">lbdataarea</property>
               </object>
@@ -357,7 +357,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Copy results _to:</property>
+                <property name="label" translatable="yes" context="consolidatedialog|ftdestarea">Copy results _to:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">lbdestarea</property>
               </object>
@@ -414,7 +414,7 @@
                             <property name="row_spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="byrow">
-                                <property name="label" translatable="yes">_Row labels</property>
+                                <property name="label" translatable="yes" context="consolidatedialog|byrow">_Row labels</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -432,7 +432,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="bycol">
-                                <property name="label" translatable="yes">C_olumn labels</property>
+                                <property name="label" translatable="yes" context="consolidatedialog|bycol">C_olumn labels</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -456,7 +456,7 @@
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Consolidate by</property>
+                        <property name="label" translatable="yes" context="consolidatedialog|label3">Consolidate by</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -488,7 +488,7 @@
                         <property name="left_padding">12</property>
                         <child>
                           <object class="GtkCheckButton" id="refs">
-                            <property name="label" translatable="yes">_Link to source data</property>
+                            <property name="label" translatable="yes" context="consolidatedialog|refs">_Link to source data</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -504,7 +504,7 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Options</property>
+                        <property name="label" translatable="yes" context="consolidatedialog|label4">Options</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -523,7 +523,7 @@
               <object class="GtkLabel" id="more_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Options</property>
+                <property name="label" translatable="yes" context="consolidatedialog|more_label">Options</property>
               </object>
             </child>
           </object>

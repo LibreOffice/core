@@ -131,8 +131,8 @@ private:
     DECL_LINK( SyncHdl_Impl, Button*, void);
     DECL_LINK( RemoveAdjacentCellBorderHdl_Impl, Button*, void);
 
-    sal_uInt16              GetPresetImageId( sal_uInt16 nValueSetIdx ) const;
-    sal_uInt16              GetPresetStringId( sal_uInt16 nValueSetIdx ) const;
+    sal_uInt16          GetPresetImageId(sal_uInt16 nValueSetIdx) const;
+    const char*         GetPresetStringId(sal_uInt16 nValueSetIdx) const;
 
     void                FillPresetVS();
     void                FillShadowVS();

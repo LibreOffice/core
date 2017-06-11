@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkMenu" id="menu">
     <property name="visible">True</property>
@@ -9,7 +9,7 @@
       <object class="GtkMenuItem" id="ignoreall">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">I_gnore All</property>
+        <property name="label" translatable="yes" context="spellmenu|ignoreall">I_gnore All</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -17,7 +17,7 @@
       <object class="GtkMenuItem" id="addmenu">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Add to Dictionary</property>
+        <property name="label" translatable="yes" context="spellmenu|addmenu">_Add to Dictionary</property>
         <property name="use_underline">True</property>
         <child type="submenu">
           <object class="GtkMenu">
@@ -31,7 +31,7 @@
       <object class="GtkMenuItem" id="add">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Add to Dictionary</property>
+        <property name="label" translatable="yes" context="spellmenu|add">_Add to Dictionary</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -52,7 +52,7 @@
       <object class="GtkMenuItem" id="correctmenu">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Always correct _to</property>
+        <property name="label" translatable="yes" context="spellmenu|correctmenu">Always correct _to</property>
         <child type="submenu">
           <object class="GtkMenu">
             <property name="visible">True</property>
@@ -78,7 +78,7 @@
       <object class="GtkMenuItem" id="langselection">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Set Language for Selection</property>
+        <property name="label" translatable="yes" context="spellmenu|langselection">Set Language for Selection</property>
         <child type="submenu">
           <object class="GtkMenu">
             <property name="visible">True</property>
@@ -91,7 +91,7 @@
       <object class="GtkMenuItem" id="langpara">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Set Language for Paragraph</property>
+        <property name="label" translatable="yes" context="spellmenu|langpara">Set Language for Paragraph</property>
         <child type="submenu">
           <object class="GtkMenu">
             <property name="visible">True</property>
@@ -110,7 +110,7 @@
       <object class="GtkMenuItem" id="accept">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Accept Change</property>
+        <property name="label" translatable="yes" context="spellmenu|accept">Accept Change</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -118,7 +118,7 @@
       <object class="GtkMenuItem" id="reject">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Reject Change</property>
+        <property name="label" translatable="yes" context="spellmenu|reject">Reject Change</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -126,7 +126,7 @@
       <object class="GtkMenuItem" id="next">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Next Change</property>
+        <property name="label" translatable="yes" context="spellmenu|next">Next Change</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -134,7 +134,7 @@
       <object class="GtkMenuItem" id="prev">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Previous Change</property>
+        <property name="label" translatable="yes" context="spellmenu|prev">Previous Change</property>
         <property name="use_underline">True</property>
       </object>
     </child>

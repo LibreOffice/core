@@ -484,16 +484,9 @@ namespace
 // Check the validity of read entry
 bool lcl_CheckInputEntry(const GenPoEntry& rEntry)
 {
-    const OString sMsgCtxt = rEntry.getMsgCtxt();
-    const sal_Int32 nFirstEndLine = sMsgCtxt.indexOf('\n');
-    const sal_Int32 nLastEndLine = sMsgCtxt.lastIndexOf('\n');
-    const sal_Int32 nLastDot = sMsgCtxt.lastIndexOf('.');
-    const OString sType = sMsgCtxt.copy( nLastDot + 1 );
     return !rEntry.getReference().isEmpty() &&
-            nFirstEndLine > 0 &&
-            nLastDot - nLastEndLine > 1 &&
-            (sType == "text" || sType == "quickhelptext" || sType == "title")&&
-            !rEntry.getMsgId().isEmpty();
+           !rEntry.getMsgCtxt().isEmpty() &&
+           !rEntry.getMsgId().isEmpty();
 }
 
 }

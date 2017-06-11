@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sw">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkListStore" id="liststore1">
     <columns>
@@ -8,38 +8,38 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Untitled 1</col>
+        <col id="0" translatable="yes" context="numberingnamedialog|liststore1">Untitled 1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Untitled 2</col>
+        <col id="0" translatable="yes" context="numberingnamedialog|liststore1">Untitled 2</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Untitled 3</col>
+        <col id="0" translatable="yes" context="numberingnamedialog|liststore1">Untitled 3</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Untitled 4</col>
+        <col id="0" translatable="yes" context="numberingnamedialog|liststore1">Untitled 4</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Untitled 5</col>
+        <col id="0" translatable="yes" context="numberingnamedialog|liststore1">Untitled 5</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Untitled 6</col>
+        <col id="0" translatable="yes" context="numberingnamedialog|liststore1">Untitled 6</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Untitled 7</col>
+        <col id="0" translatable="yes" context="numberingnamedialog|liststore1">Untitled 7</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Untitled 8</col>
+        <col id="0" translatable="yes" context="numberingnamedialog|liststore1">Untitled 8</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Untitled 9</col>
+        <col id="0" translatable="yes" context="numberingnamedialog|liststore1">Untitled 9</col>
       </row>
     </data>
   </object>
   <object class="GtkDialog" id="NumberingNameDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Save As</property>
+    <property name="title" translatable="yes" context="numberingnamedialog|NumberingNameDialog">Save As</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -165,7 +165,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Format</property>
+                <property name="label" translatable="yes" context="numberingnamedialog|label1">Format</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
