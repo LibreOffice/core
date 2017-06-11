@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="dkt">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="LicenseDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Extension Software License Agreement</property>
+    <property name="title" translatable="yes" context="licensedialog|LicenseDialog">Extension Software License Agreement</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -18,7 +18,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="accept">
-                <property name="label" translatable="yes">Accept</property>
+                <property name="label" translatable="yes" context="licensedialog|accept">Accept</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -33,7 +33,7 @@
             </child>
             <child>
               <object class="GtkButton" id="decline">
-                <property name="label" translatable="yes">Decline</property>
+                <property name="label" translatable="yes" context="licensedialog|decline">Decline</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -64,7 +64,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Please follow these steps to proceed with the installation of the extension:</property>
+                <property name="label" translatable="yes" context="licensedialog|head">Please follow these steps to proceed with the installation of the extension:</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -87,7 +87,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">1.</property>
+                    <property name="label" translatable="yes" context="licensedialog|label2">1.</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -102,7 +102,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">2.</property>
+                    <property name="label" translatable="yes" context="licensedialog|label3">2.</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -146,7 +146,7 @@
                     <property name="valign">start</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Read the complete License Agreement. Use the scroll bar or the 'Scroll Down' button in this dialog to view the entire license text.</property>
+                    <property name="label" translatable="yes" context="licensedialog|label4">Read the complete License Agreement. Use the scroll bar or the 'Scroll Down' button in this dialog to view the entire license text.</property>
                     <property name="wrap">True</property>
                     <property name="max_width_chars">55</property>
                   </object>
@@ -164,7 +164,7 @@
                     <property name="valign">start</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Accept the License Agreement for the extension by pressing the 'Accept' button.</property>
+                    <property name="label" translatable="yes" context="licensedialog|label5">Accept the License Agreement for the extension by pressing the 'Accept' button.</property>
                     <property name="wrap">True</property>
                     <property name="max_width_chars">55</property>
                   </object>
@@ -177,7 +177,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="down">
-                    <property name="label" translatable="yes">_Scroll Down</property>
+                    <property name="label" translatable="yes" context="licensedialog|down">_Scroll Down</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>

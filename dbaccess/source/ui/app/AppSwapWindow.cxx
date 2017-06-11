@@ -19,7 +19,7 @@
 
 #include "AppSwapWindow.hxx"
 #include "dbaccess_helpid.hrc"
-#include "dbu_app.hrc"
+#include "strings.hrc"
 #include "AppView.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>

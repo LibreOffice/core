@@ -21,13 +21,13 @@
 #include "UndoEnv.hxx"
 #include "formatnormalizer.hxx"
 #include "conditionupdater.hxx"
-#include "corestrings.hrc"
+#include "strings.hxx"
 #include "rptui_slotid.hrc"
 #include "RptDef.hxx"
-#include "ModuleHelper.hxx"
+#include "core_resource.hxx"
 #include "RptObject.hxx"
 #include "RptPage.hxx"
-#include "RptResId.hrc"
+#include "strings.hrc"
 #include "RptModel.hxx"
 
 #include <com/sun/star/container/XChild.hpp>
@@ -79,12 +79,12 @@ namespace rptui
 }
 
 
-OCommentUndoAction::OCommentUndoAction(SdrModel& _rMod,sal_uInt16 nCommentID)
+OCommentUndoAction::OCommentUndoAction(SdrModel& _rMod,const char* pCommentID)
     :SdrUndoAction(_rMod)
 {
     m_pController = static_cast< OReportModel& >( _rMod ).getController();
-    if ( nCommentID )
-        m_strComment = ModuleRes(nCommentID);
+    if (pCommentID)
+        m_strComment = RptResId(pCommentID);
 }
 OCommentUndoAction::~OCommentUndoAction()
 {
@@ -102,8 +102,8 @@ OUndoContainerAction::OUndoContainerAction(SdrModel& _rMod
                                              ,Action _eAction
                                              ,const uno::Reference< container::XIndexContainer >& rContainer
                                              ,const Reference< XInterface > & xElem
-                                             ,sal_uInt16 _nCommentId)
-                      :OCommentUndoAction(_rMod,_nCommentId)
+                                             ,const char* pCommentId)
+                      :OCommentUndoAction(_rMod, pCommentId)
                       ,m_xElement(xElem)
                       ,m_xContainer(rContainer)
                          ,m_eAction( _eAction )
@@ -246,8 +246,8 @@ OUndoGroupSectionAction::OUndoGroupSectionAction(SdrModel& _rMod
                                                     ,OGroupHelper> _pMemberFunction
                                              ,const uno::Reference< report::XGroup >& _xGroup
                                              ,const Reference< XInterface > & xElem
-                                             ,sal_uInt16 _nCommentId)
-:OUndoContainerAction(_rMod,_eAction,nullptr,xElem,_nCommentId)
+                                             ,const char* pCommentId)
+:OUndoContainerAction(_rMod,_eAction,nullptr,xElem,pCommentId)
 ,m_aGroupHelper(_xGroup)
 ,m_pMemberFunction(_pMemberFunction)
 {
@@ -292,8 +292,8 @@ OUndoReportSectionAction::OUndoReportSectionAction(SdrModel& _rMod
                                                 ,OReportHelper> _pMemberFunction
                                              ,const uno::Reference< report::XReportDefinition >& _xReport
                                              ,const Reference< XInterface > & xElem
-                                             ,sal_uInt16 _nCommentId)
-:OUndoContainerAction(_rMod,_eAction,nullptr,xElem,_nCommentId)
+                                             ,const char* pCommentId)
+:OUndoContainerAction(_rMod,_eAction,nullptr,xElem,pCommentId)
 ,m_aReportHelper(_xReport)
 ,m_pMemberFunction(_pMemberFunction)
 {
@@ -338,7 +338,7 @@ void OUndoReportSectionAction::implReRemove( )
 }
 
 ORptUndoPropertyAction::ORptUndoPropertyAction(SdrModel& rNewMod, const PropertyChangeEvent& evt)
-                     :OCommentUndoAction(rNewMod,0)
+                     :OCommentUndoAction(rNewMod,nullptr)
                      ,m_xObj(evt.Source, UNO_QUERY)
                      ,m_aPropertyName(evt.PropertyName)
                      ,m_aNewValue(evt.NewValue)
@@ -381,7 +381,7 @@ void ORptUndoPropertyAction::setProperty(bool _bOld)
 
 OUString ORptUndoPropertyAction::GetComment() const
 {
-    OUString aStr( ModuleRes(RID_STR_UNDO_PROPERTY) );
+    OUString aStr( RptResId(RID_STR_UNDO_PROPERTY) );
 
     return aStr.replaceFirst("#", m_aPropertyName);
 }

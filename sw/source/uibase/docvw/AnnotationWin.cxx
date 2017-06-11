@@ -22,7 +22,7 @@
 #include <AnnotationMenuButton.hxx>
 #include <PostItMgr.hxx>
 
-#include <annotation.hrc>
+#include <strings.hrc>
 #include <cmdid.h>
 
 #include <vcl/menu.hxx>

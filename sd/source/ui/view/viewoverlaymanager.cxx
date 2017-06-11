@@ -25,8 +25,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include <tools/rcid.h>
-
 #include <vcl/help.hxx>
 #include <vcl/lazydelete.hxx>
 
@@ -39,11 +37,11 @@
 
 #include "view/viewoverlaymanager.hxx"
 
-#include "res_bmp.hrc"
+
 #include "DrawDocShell.hxx"
 #include "DrawViewShell.hxx"
 #include "DrawController.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "strings.hrc"
 #include "bitmaps.hlst"
 #include "sdresid.hxx"
@@ -61,7 +59,7 @@ namespace sd {
 class ImageButtonHdl;
 
 static const sal_uInt16 gButtonSlots[] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
-static const sal_uInt16 gButtonToolTips[] = { STR_INSERT_TABLE, STR_INSERT_CHART, STR_INSERT_PICTURE, STR_INSERT_MOVIE };
+static const char* gButtonToolTips[] = { STR_INSERT_TABLE, STR_INSERT_CHART, STR_INSERT_PICTURE, STR_INSERT_MOVIE };
 
 static const OUStringLiteral aSmallPlaceHolders[] =
 {

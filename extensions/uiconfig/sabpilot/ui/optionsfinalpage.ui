@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="pcr">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="OptionsFinalPage">
     <property name="visible">True</property>
@@ -15,7 +15,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="label" translatable="yes">Which _caption is to be given to your option group?</property>
+        <property name="label" translatable="yes" context="optionsfinalpage|label1">Which _caption is to be given to your option group?</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">nameit</property>
       </object>
@@ -45,7 +45,7 @@
         <property name="valign">end</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
-        <property name="label" translatable="yes">These were all details needed to create the option group.</property>
+        <property name="label" translatable="yes" context="optionsfinalpage|label2">These were all details needed to create the option group.</property>
       </object>
       <packing>
         <property name="expand">True</property>

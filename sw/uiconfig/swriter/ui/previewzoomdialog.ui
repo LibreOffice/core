@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sw">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
@@ -18,7 +18,7 @@
   <object class="GtkDialog" id="PreviewZoomDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Multiple Pages</property>
+    <property name="title" translatable="yes" context="previewzoomdialog|PreviewZoomDialog">Multiple Pages</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -98,7 +98,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">_Rows</property>
+                <property name="label" translatable="yes" context="previewzoomdialog|label1">_Rows</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">rows</property>
               </object>
@@ -114,7 +114,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">_Columns</property>
+                <property name="label" translatable="yes" context="previewzoomdialog|label2">_Columns</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">cols</property>
               </object>

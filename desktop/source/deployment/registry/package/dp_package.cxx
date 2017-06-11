@@ -18,7 +18,7 @@
  */
 
 
-#include "dp_package.hrc"
+#include "strings.hrc"
 #include "dp_package.hxx"
 #include "dp_backend.h"
 #include "dp_ucb.h"
@@ -270,7 +270,7 @@ BackendImpl::BackendImpl(
       m_xBundleTypeInfo( new Package::TypeInfo(
                              "application/vnd.sun.star.package-bundle",
                              "*.oxt;*.uno.pkg",
-                             getResourceString(RID_STR_PACKAGE_BUNDLE)
+                             DpResId(RID_STR_PACKAGE_BUNDLE)
                              ) ),
       m_xLegacyBundleTypeInfo( new Package::TypeInfo(
                                    "application/vnd.sun.star.legacy-package-bundle",
@@ -375,7 +375,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         }
         if (mediaType.isEmpty())
             throw lang::IllegalArgumentException(
-                StrCannotDetectMediaType::get() + url,
+                StrCannotDetectMediaType() + url,
                 static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
     }
 
@@ -410,7 +410,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         }
     }
     throw lang::IllegalArgumentException(
-        StrUnsupportedMediaType::get() + mediaType,
+        StrUnsupportedMediaType() + mediaType,
         static_cast<OWeakObject *>(this),
         static_cast<sal_Int16>(-1) );
 }

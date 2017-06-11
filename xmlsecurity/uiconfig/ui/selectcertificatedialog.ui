@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="xsc">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="SelectCertificateDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Select Certificate</property>
+    <property name="title" translatable="yes" context="selectcertificatedialog|SelectCertificateDialog">Select Certificate</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -89,7 +89,7 @@
                   <object class="GtkLabel" id="issuedto">
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Issued to  </property>
+                    <property name="label" translatable="yes" context="selectcertificatedialog|issuedto">Issued to  </property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -100,7 +100,7 @@
                   <object class="GtkLabel" id="issuedby">
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Issued by</property>
+                    <property name="label" translatable="yes" context="selectcertificatedialog|issuedby">Issued by</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -111,7 +111,7 @@
                   <object class="GtkLabel" id="usage">
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Certificate usage</property>
+                    <property name="label" translatable="yes" context="selectcertificatedialog|usage">Certificate usage</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -122,7 +122,7 @@
                   <object class="GtkLabel" id="expiration">
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Expiration date</property>
+                    <property name="label" translatable="yes" context="selectcertificatedialog|expiration">Expiration date</property>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -133,7 +133,7 @@
                   <object class="GtkLabel" id="type">
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Type</property>
+                    <property name="label" translatable="yes" context="selectcertificatedialog|type">Type</property>
                   </object>
                   <packing>
                     <property name="left_attach">4</property>
@@ -145,42 +145,42 @@
                   <object class="GtkLabel" id="STR_DIGITAL_SIGNATURE">
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Digital signature</property>
+                    <property name="label" translatable="yes" context="selectcertificatedialog|STR_DIGITAL_SIGNATURE">Digital signature</property>
                   </object>
                   <object class="GtkLabel" id="STR_NON_REPUDIATION">
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Non-repudiation</property>
+                    <property name="label" translatable="yes" context="selectcertificatedialog|STR_NON_REPUDIATION">Non-repudiation</property>
                   </object>
                   <object class="GtkLabel" id="STR_KEY_ENCIPHERMENT">
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Key encipherment</property>
+                    <property name="label" translatable="yes" context="selectcertificatedialog|STR_KEY_ENCIPHERMENT">Key encipherment</property>
                   </object>
                   <object class="GtkLabel" id="STR_DATA_ENCIPHERMENT">
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Data encipherment</property>
+                    <property name="label" translatable="yes" context="selectcertificatedialog|STR_DATA_ENCIPHERMENT">Data encipherment</property>
                   </object>
                   <object class="GtkLabel" id="STR_KEY_AGREEMENT">
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Key Agreement</property>
+                    <property name="label" translatable="yes" context="selectcertificatedialog|STR_KEY_AGREEMENT">Key Agreement</property>
                   </object>
                   <object class="GtkLabel" id="STR_KEY_CERT_SIGN">
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Certificate signature verification</property>
+                    <property name="label" translatable="yes" context="selectcertificatedialog|STR_KEY_CERT_SIGN">Certificate signature verification</property>
                   </object>
                   <object class="GtkLabel" id="STR_CRL_SIGN">
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">CRL signature verification</property>
+                    <property name="label" translatable="yes" context="selectcertificatedialog|STR_CRL_SIGN">CRL signature verification</property>
                   </object>
                   <object class="GtkLabel" id="STR_ENCIPHER_ONLY">
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Only for encipherment</property>
+                    <property name="label" translatable="yes" context="selectcertificatedialog|STR_ENCIPHER_ONLY">Only for encipherment</property>
                   </object>
                 </child>
               </object>
@@ -195,7 +195,7 @@
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
                 <property name="ypad">1</property>
-                <property name="label" translatable="yes">Select the certificate you want to use for signing:</property>
+                <property name="label" translatable="yes" context="selectcertificatedialog|label1">Select the certificate you want to use for signing:</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -219,7 +219,7 @@
             </child>
             <child>
               <object class="GtkButton" id="viewcert">
-                <property name="label" translatable="yes">View Certificate...</property>
+                <property name="label" translatable="yes" context="selectcertificatedialog|viewcert">View Certificate...</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -239,7 +239,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Description:</property>
+                    <property name="label" translatable="yes" context="selectcertificatedialog|label2">Description:</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>

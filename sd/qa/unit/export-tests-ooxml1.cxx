@@ -26,7 +26,7 @@
 
 #include <oox/drawingml/drawingmltypes.hxx>
 
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 
 #include <svx/svdoutl.hxx>
 #include <svx/svdotext.hxx>

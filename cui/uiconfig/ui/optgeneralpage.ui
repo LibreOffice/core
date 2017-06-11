@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.19.0 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1583</property>
@@ -28,7 +28,7 @@
             <property name="left_padding">12</property>
             <child>
               <object class="GtkCheckButton" id="exthelp">
-                <property name="label" translatable="yes">_Extended tips</property>
+                <property name="label" translatable="yes" context="optgeneralpage|exthelp">_Extended tips</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -43,7 +43,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Help</property>
+            <property name="label" translatable="yes" context="optgeneralpage|label1">Help</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -74,7 +74,7 @@
                 <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="filedlg">
-                    <property name="label" translatable="yes">_Use %PRODUCTNAME dialogs</property>
+                    <property name="label" translatable="yes" context="optgeneralpage|filedlg">_Use %PRODUCTNAME dialogs</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -108,7 +108,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Open/Save Dialogs</property>
+            <property name="label" translatable="yes" context="optgeneralpage|label2">Open/Save Dialogs</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -134,7 +134,7 @@
             <property name="left_padding">12</property>
             <child>
               <object class="GtkCheckButton" id="printdlg">
-                <property name="label" translatable="yes">Use %PRODUCTNAME _dialogs</property>
+                <property name="label" translatable="yes" context="optgeneralpage|printdlg">Use %PRODUCTNAME _dialogs</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -149,7 +149,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Print Dialogs</property>
+            <property name="label" translatable="yes" context="optgeneralpage|label3">Print Dialogs</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -175,7 +175,7 @@
             <property name="left_padding">12</property>
             <child>
               <object class="GtkCheckButton" id="docstatus">
-                <property name="label" translatable="yes">_Printing sets "document modified" status</property>
+                <property name="label" translatable="yes" context="optgeneralpage|docstatus">_Printing sets "document modified" status</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -190,7 +190,7 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Document Status</property>
+            <property name="label" translatable="yes" context="optgeneralpage|label4">Document Status</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -223,7 +223,7 @@
                   <object class="GtkLabel" id="label6">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Interpret as years between </property>
+                    <property name="label" translatable="yes" context="optgeneralpage|label6">_Interpret as years between </property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">year</property>
                     <property name="xalign">0</property>
@@ -249,7 +249,7 @@
                   <object class="GtkLabel" id="toyear">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">and </property>
+                    <property name="label" translatable="yes" context="optgeneralpage|toyear">and </property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -264,7 +264,7 @@
           <object class="GtkLabel" id="label5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Year (Two Digits)</property>
+            <property name="label" translatable="yes" context="optgeneralpage|label5">Year (Two Digits)</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -290,7 +290,7 @@
             <property name="left_padding">12</property>
             <child>
               <object class="GtkCheckButton" id="collectusageinfo">
-                <property name="label" translatable="yes">Collect usage data and send it to The Document Foundation</property>
+                <property name="label" translatable="yes" context="optgeneralpage|collectusageinfo">Collect usage data and send it to The Document Foundation</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -305,7 +305,7 @@
           <object class="GtkLabel" id="label7">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Help Improve %PRODUCTNAME</property>
+            <property name="label" translatable="yes" context="optgeneralpage|label7">Help Improve %PRODUCTNAME</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

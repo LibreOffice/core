@@ -157,7 +157,4 @@ $(eval $(call gb_Library_use_externals,editeng,\
 	libxml2 \
 ))
 
-# Runtime dependency for unit-tests
-$(eval $(call gb_Library_use_restarget,editeng,editeng))
-
 # vim: set noet sw=4 ts=4:

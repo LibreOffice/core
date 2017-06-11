@@ -28,7 +28,9 @@
 #include <vcl/pngread.hxx>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
-#include <templateview.hrc>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <sfx2/strings.hrc>
 #include "bitmaps.hlst"
 
 #include <officecfg/Office/Common.hxx>

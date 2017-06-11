@@ -27,7 +27,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <sfx2/app.hxx>
 #include <sal/macros.h>
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 #include "shutdownicon.hxx"
 
 #include <com/sun/star/util/XStringWidth.hpp>
@@ -396,11 +396,11 @@ void aqua_init_systray()
             aShortcuts.clear();
 
             pExecute = [[QSMenuExecute alloc] init];
-            pDefMenu = [[NSMenuItem alloc] initWithTitle: getAutoreleasedString( pShutdownIcon->GetResString( STR_QUICKSTART_FILE ) ) action: nullptr keyEquivalent: @""];
-            pDockSubMenu = [[NSMenuItem alloc] initWithTitle: getAutoreleasedString( pShutdownIcon->GetResString( STR_QUICKSTART_FILE ) ) action: nullptr keyEquivalent: @""];
-            NSMenu* pMenu = [[NSMenu alloc] initWithTitle: getAutoreleasedString( pShutdownIcon->GetResString( STR_QUICKSTART_FILE ) )];
+            pDefMenu = [[NSMenuItem alloc] initWithTitle: getAutoreleasedString( ShutdownIcon::GetResString(STR_QUICKSTART_FILE) ) action: nullptr keyEquivalent: @""];
+            pDockSubMenu = [[NSMenuItem alloc] initWithTitle: getAutoreleasedString( ShutdownIcon::GetResString(STR_QUICKSTART_FILE) ) action: nullptr keyEquivalent: @""];
+            NSMenu* pMenu = [[NSMenu alloc] initWithTitle: getAutoreleasedString( ShutdownIcon::GetResString(STR_QUICKSTART_FILE) )];
             [pMenu setAutoenablesItems: NO];
-            NSMenu* pDockMenu = [[NSMenu alloc] initWithTitle: getAutoreleasedString( pShutdownIcon->GetResString( STR_QUICKSTART_FILE ) )];
+            NSMenu* pDockMenu = [[NSMenu alloc] initWithTitle: getAutoreleasedString( ShutdownIcon::GetResString(STR_QUICKSTART_FILE) )];
             [pDockMenu setAutoenablesItems: NO];
 
             // collect the URLs of the entries in the File/New menu
@@ -436,7 +436,7 @@ void aqua_init_systray()
             // insert entry for startcenter
             if( aModuleOptions.IsModuleInstalled( SvtModuleOptions::EModule::STARTMODULE ) )
             {
-                appendMenuItem( pMenu, nil, pShutdownIcon->GetResString( STR_QUICKSTART_STARTCENTER ), MI_STARTMODULE, "n" );
+                appendMenuItem( pMenu, nil, ShutdownIcon::GetResString(STR_QUICKSTART_STARTCENTER), MI_STARTMODULE, "n" );
                 if( [NSApp respondsToSelector: @selector(setDockIconClickHandler:)] )
                     [NSApp performSelector:@selector(setDockIconClickHandler:) withObject: pExecute];
                 else
@@ -466,12 +466,12 @@ void aqua_init_systray()
             // insert the remaining menu entries
 
             // add recent menu
-            appendRecentMenu( pMenu, pDockMenu, pShutdownIcon->GetResString( STR_QUICKSTART_RECENTDOC ) );
+            appendRecentMenu( pMenu, pDockMenu, ShutdownIcon::GetResString(STR_QUICKSTART_RECENTDOC) );
 
-            rtl::OUString aTitle( pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ) );
+            rtl::OUString aTitle( ShutdownIcon::GetResString(STR_QUICKSTART_FROMTEMPLATE) );
             rtl::OUString aKeyEquiv( getShortCut( aTitle ) );
             appendMenuItem( pMenu, pDockMenu, aTitle, MI_TEMPLATE, aKeyEquiv );
-            aTitle = pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN );
+            aTitle = ShutdownIcon::GetResString(STR_QUICKSTART_FILEOPEN);
             aKeyEquiv = getShortCut( aTitle );
             appendMenuItem( pMenu, pDockMenu, aTitle, MI_OPEN, aKeyEquiv );
 

@@ -19,7 +19,6 @@
 
 #include <vcl/event.hxx>
 #include <vcl/imgctrl.hxx>
-#include <tools/rcid.h>
 
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 

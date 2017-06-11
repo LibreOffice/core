@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.19.0 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="MMSelectPage">
     <property name="visible">True</property>
@@ -28,7 +28,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkRadioButton" id="currentdoc">
-                    <property name="label" translatable="yes">Use the current _document</property>
+                    <property name="label" translatable="yes" context="mmselectpage|currentdoc">Use the current _document</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -45,7 +45,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="newdoc">
-                    <property name="label" translatable="yes">Create a ne_w document</property>
+                    <property name="label" translatable="yes" context="mmselectpage|newdoc">Create a ne_w document</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -61,7 +61,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="loaddoc">
-                    <property name="label" translatable="yes">Start from _existing document</property>
+                    <property name="label" translatable="yes" context="mmselectpage|loaddoc">Start from _existing document</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -78,7 +78,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="template">
-                    <property name="label" translatable="yes">Start from a t_emplate</property>
+                    <property name="label" translatable="yes" context="mmselectpage|template">Start from a t_emplate</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -95,7 +95,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="recentdoc">
-                    <property name="label" translatable="yes">Start fro_m a recently saved starting document</property>
+                    <property name="label" translatable="yes" context="mmselectpage|recentdoc">Start fro_m a recently saved starting document</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -122,7 +122,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="browsedoc">
-                    <property name="label" translatable="yes">B_rowse...</property>
+                    <property name="label" translatable="yes" context="mmselectpage|browsedoc">B_rowse...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -137,7 +137,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="browsetemplate">
-                    <property name="label" translatable="yes">B_rowse...</property>
+                    <property name="label" translatable="yes" context="mmselectpage|browsetemplate">B_rowse...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -158,7 +158,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Select Starting Document for the Mail Merge</property>
+            <property name="label" translatable="yes" context="mmselectpage|label1">Select Starting Document for the Mail Merge</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

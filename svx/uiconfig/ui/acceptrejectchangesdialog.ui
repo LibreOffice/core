@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="svx">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="AcceptRejectChangesDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Manage Changes</property>
+    <property name="title" translatable="yes" context="acceptrejectchangesdialog|AcceptRejectChangesDialog">Manage Changes</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -18,7 +18,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="accept">
-                <property name="label" translatable="yes">_Accept</property>
+                <property name="label" translatable="yes" context="acceptrejectchangesdialog|accept">_Accept</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -32,7 +32,7 @@
             </child>
             <child>
               <object class="GtkButton" id="reject">
-                <property name="label" translatable="yes">_Reject</property>
+                <property name="label" translatable="yes" context="acceptrejectchangesdialog|reject">_Reject</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -46,7 +46,7 @@
             </child>
             <child>
               <object class="GtkButton" id="acceptall">
-                <property name="label" translatable="yes">A_ccept All</property>
+                <property name="label" translatable="yes" context="acceptrejectchangesdialog|acceptall">A_ccept All</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -60,7 +60,7 @@
             </child>
             <child>
               <object class="GtkButton" id="rejectall">
-                <property name="label" translatable="yes">R_eject All</property>
+                <property name="label" translatable="yes" context="acceptrejectchangesdialog|rejectall">R_eject All</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -131,14 +131,14 @@
       <object class="GtkMenuItem" id="calcedit">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Edit Comment...</property>
+        <property name="label" translatable="yes" context="acceptrejectchangesdialog|calcedit">Edit Comment...</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="calcsort">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Sorting</property>
+        <property name="label" translatable="yes" context="acceptrejectchangesdialog|calcsort">Sorting</property>
         <property name="use_underline">True</property>
         <child type="submenu">
           <object class="GtkMenu">
@@ -148,7 +148,7 @@
               <object class="GtkRadioMenuItem" id="calcaction">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Action</property>
+                <property name="label" translatable="yes" context="acceptrejectchangesdialog|calcaction">Action</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -156,7 +156,7 @@
               <object class="GtkRadioMenuItem" id="calcposition">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Position</property>
+                <property name="label" translatable="yes" context="acceptrejectchangesdialog|calcposition">Position</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -164,7 +164,7 @@
               <object class="GtkRadioMenuItem" id="calcauthor">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Author</property>
+                <property name="label" translatable="yes" context="acceptrejectchangesdialog|calcauthor">Author</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -172,7 +172,7 @@
               <object class="GtkRadioMenuItem" id="calcdate">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Date</property>
+                <property name="label" translatable="yes" context="acceptrejectchangesdialog|calcdate">Date</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -180,7 +180,7 @@
               <object class="GtkRadioMenuItem" id="calcdesc">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Description</property>
+                <property name="label" translatable="yes" context="acceptrejectchangesdialog|calcdesc">Description</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -196,14 +196,14 @@
       <object class="GtkMenuItem" id="writeredit">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Edit Comment...</property>
+        <property name="label" translatable="yes" context="acceptrejectchangesdialog|writeredit">Edit Comment...</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="writersort">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Sort By</property>
+        <property name="label" translatable="yes" context="acceptrejectchangesdialog|writersort">Sort By</property>
         <property name="use_underline">True</property>
         <child type="submenu">
           <object class="GtkMenu">
@@ -213,7 +213,7 @@
               <object class="GtkRadioMenuItem" id="writeraction">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Action</property>
+                <property name="label" translatable="yes" context="acceptrejectchangesdialog|writeraction">Action</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -221,7 +221,7 @@
               <object class="GtkRadioMenuItem" id="writerauthor">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Author</property>
+                <property name="label" translatable="yes" context="acceptrejectchangesdialog|writerauthor">Author</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -229,7 +229,7 @@
               <object class="GtkRadioMenuItem" id="writerdate">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Date</property>
+                <property name="label" translatable="yes" context="acceptrejectchangesdialog|writerdate">Date</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -237,7 +237,7 @@
               <object class="GtkRadioMenuItem" id="writerdesc">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Comment</property>
+                <property name="label" translatable="yes" context="acceptrejectchangesdialog|writerdesc">Comment</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -245,7 +245,7 @@
               <object class="GtkRadioMenuItem" id="writerposition">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Document Position</property>
+                <property name="label" translatable="yes" context="acceptrejectchangesdialog|writerposition">Document Position</property>
                 <property name="use_underline">True</property>
               </object>
             </child>

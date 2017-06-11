@@ -30,11 +30,12 @@
 #include <sfx2/docfile.hxx>
 #include <svl/cntwall.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <editeng/memberids.hrc>
-#include <editeng/editrids.hrc>
 #include <editeng/eerdll.hxx>
 
 #include <editeng/brushitem.hxx>
@@ -46,7 +47,7 @@
 #include <svx/drawitem.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/htmlmode.hxx>
-#include <svtools/controldims.hrc>
+#include <svtools/controldims.hxx>
 #include <svx/flagsdef.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
@@ -823,8 +824,8 @@ void SvxBackgroundTabPage::RaiseLoadError_Impl()
     SfxErrorContext aContext( ERRCTX_SVX_BACKGROUND,
                               OUString(),
                               this,
-                              RID_SVXERRCTX,
-                              &DIALOG_MGR() );
+                              getRID_SVXERRCTX(),
+                              &SvxResLocale() );
 
     ErrorHandler::HandleError(
         *new StringErrorInfo( ERRCODE_SVX_GRAPHIC_NOTREADABLE,
