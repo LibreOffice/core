@@ -24,7 +24,7 @@ namespace rtl {
   class OUString;
 };
 
-// suche die TokenID zu dem Token
+// search token id belonging to the token
 int GetRTFToken( const rtl::OUString& rSearch );
 
 enum RTF_TOKEN_RANGES {
@@ -43,10 +43,10 @@ enum RTF_TOKEN_RANGES {
     RTF_OBJECTS                     = 0x0D00,
     RTF_NUMBULLETS                  = 0x0E00,
 
-    // !!! kann hinein verodert werden (Border/Background) !!!!
+    // !!! can be OR´ed (Border/Background) !!!!
     RTF_TABLEDEF                    = 0x1000,
 
-    // !!! kann hinein verodert werden (Border/Tab) !!!!
+    // !!! can be OR´ed (Border/Tab) !!!!
     RTF_SWGDEFS                     = 0x4000
 };
 
@@ -1254,12 +1254,6 @@ enum RTF_TOKEN_IDS {
 
 // shapes
     RTF_SHP, RTF_SN, RTF_SV, RTF_SP
-/*
-    RTF_SHPLEFT,
-    RTF_SHPTOP,
-    RTF_SHPBOTTOM,
-    RTF_SHPRIGHT
-*/
 
 };
 
