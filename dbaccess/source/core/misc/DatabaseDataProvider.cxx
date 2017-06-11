@@ -18,7 +18,8 @@
  */
 
 #include "DatabaseDataProvider.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
+#include "strings.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/namedvaluecollection.hxx>

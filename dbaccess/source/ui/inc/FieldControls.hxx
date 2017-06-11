@@ -23,18 +23,18 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
 #include "SqlNameEdit.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 
 namespace dbaui
 {
 
     class OPropColumnEditCtrl : public OSQLNameEdit
     {
-        OModuleClient m_aModuleClient;
+        dbaccess::OModuleClient m_aModuleClient;
         short                m_nPos;
         OUString             m_strHelpText;
     public:
-        OPropColumnEditCtrl(vcl::Window* pParent, OUString& _rAllowedChars, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
+        OPropColumnEditCtrl(vcl::Window* pParent, OUString& _rAllowedChars, const char* pHelpId, short nPosition = -1, WinBits nWinStyle = 0);
 
         virtual bool IsModified() const override { return IsValueChangedFromSaved(); }
 
@@ -44,12 +44,12 @@ namespace dbaui
 
     class OPropEditCtrl :   public Edit
     {
-        OModuleClient m_aModuleClient;
+        dbaccess::OModuleClient m_aModuleClient;
         short                m_nPos;
         OUString             m_strHelpText;
 
     public:
-        OPropEditCtrl(vcl::Window* pParent, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
+        OPropEditCtrl(vcl::Window* pParent, const char* pHelpId, short nPosition = -1, WinBits nWinStyle = 0);
 
         virtual bool IsModified() const override { return IsValueChangedFromSaved(); }
 
@@ -63,7 +63,7 @@ namespace dbaui
         OUString  m_strHelpText;
 
     public:
-        OPropNumericEditCtrl(vcl::Window* pParent, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
+        OPropNumericEditCtrl(vcl::Window* pParent, const char* pHelpId, short nPosition = -1, WinBits nWinStyle = 0);
 
         virtual bool IsModified() const override { return IsValueChangedFromSaved(); }
 
@@ -79,7 +79,7 @@ namespace dbaui
         OUString  m_strHelpText;
 
     public:
-        OPropListBoxCtrl(vcl::Window* pParent, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
+        OPropListBoxCtrl(vcl::Window* pParent, const char* pHelpId, short nPosition = -1, WinBits nWinStyle = 0);
 
         bool IsModified() const { return IsValueChangedFromSaved(); }
 

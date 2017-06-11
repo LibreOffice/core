@@ -19,32 +19,7 @@
 #ifndef INCLUDED_TOOLS_RESARY_HXX
 #define INCLUDED_TOOLS_RESARY_HXX
 
-#include <tools/toolsdllapi.h>
-#include <rtl/ustring.hxx>
-#include <memory>
-
 #define RESARRAY_INDEX_NOTFOUND (0xffffffff)
-
-class ResId;
-
-class SAL_WARN_UNUSED TOOLS_DLLPUBLIC ResStringArray
-{
-    struct Impl;
-    std::unique_ptr<Impl> mpImpl;
-
-    ResStringArray( const ResStringArray& ) = delete;
-    ResStringArray& operator=( const ResStringArray& ) = delete;
-
-public:
-    ResStringArray( const ResId& rResId );
-    ~ResStringArray();
-
-    OUString GetString( sal_uInt32 nIndex ) const;
-    sal_IntPtr GetValue( sal_uInt32 nIndex ) const;
-    sal_uInt32 Count() const;
-    sal_uInt32 FindIndex( sal_IntPtr nValue ) const;
-    sal_uInt32 AddItem( const OUString& rString, sal_IntPtr nValue );
-};
 
 #endif
 

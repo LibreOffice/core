@@ -29,7 +29,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/builderfactory.hxx>
-#include <svtools/controldims.hrc>
+#include <svtools/controldims.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfilt.hxx>
@@ -42,6 +42,7 @@
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <tools/urlobj.hxx>
 #include <dbui.hrc>
+#include <strings.hrc>
 #include <helpid.h>
 #include <unomid.h>
 
@@ -479,10 +480,10 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
     else
     {
         //database has to be created
-        const ResStringArray& rAddressHeader = rConfig.GetDefaultAddressHeaders();
-        const sal_uInt32 nCount = rAddressHeader.Count();
+        const std::vector<std::pair<OUString, int>>& rAddressHeader = rConfig.GetDefaultAddressHeaders();
+        const sal_uInt32 nCount = rAddressHeader.size();
         for(sal_uInt32 nHeader = 0; nHeader < nCount; ++nHeader)
-            m_pCSVData->aDBColumnHeaders.push_back( rAddressHeader.GetString(nHeader));
+            m_pCSVData->aDBColumnHeaders.push_back(rAddressHeader[nHeader].first);
         std::vector<OUString> aNewData;
         OUString sTemp;
         aNewData.insert(aNewData.begin(), nCount, sTemp);

@@ -20,18 +20,20 @@
 #include "CollectionView.hxx"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include "moduledbu.hxx"
-#include "dbu_dlg.hrc"
+#include "core_resource.hxx"
+#include "dbu_dlg.hxx"
+#include "strings.hrc"
 #include <comphelper/processfactory.hxx>
 #include <comphelper/interaction.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include "core_resource.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/msgbox.hxx>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include "bitmaps.hlst"
 #include "UITools.hxx"
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
@@ -179,7 +181,7 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click, Button*, void)
         {
             if ( xNameContainer->hasByName(sName) )
             {
-                ScopedVclPtrInstance< QueryBox > aBox( this, WB_YES_NO, ModuleRes( STR_ALREADYEXISTOVERWRITE ) );
+                ScopedVclPtrInstance< QueryBox > aBox(this, WB_YES_NO, DBA_RES(STR_ALREADYEXISTOVERWRITE));
                 if ( aBox->Execute() != RET_YES )
                     return;
             }

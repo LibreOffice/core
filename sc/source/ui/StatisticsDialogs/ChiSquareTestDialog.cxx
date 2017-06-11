@@ -21,8 +21,8 @@
 #include "reffact.hxx"
 #include "docfunc.hxx"
 #include "TableFillingAndNavigationTools.hxx"
-
 #include "ChiSquareTestDialog.hxx"
+#include "strings.hrc"
 
 ScChiSquareTestDialog::ScChiSquareTestDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
@@ -42,7 +42,7 @@ bool ScChiSquareTestDialog::Close()
     return DoClose(ScChiSquareTestDialogWrapper::GetChildWindowId());
 }
 
-sal_Int16 ScChiSquareTestDialog::GetUndoNameId()
+const char* ScChiSquareTestDialog::GetUndoNameId()
 {
     return STR_CHI_SQUARE_TEST;
 }

@@ -42,10 +42,10 @@
 #include "svtools/treelistentry.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 
+#include "fpicker/fpicker.hrc"
 #include "svtools/helpid.hrc"
-#include <svtools/svtools.hrc>
-#include "OfficeFilePicker.hrc"
-#include "iodlg.hrc"
+#include <svtools/strings.hrc>
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include "asyncfilepicker.hxx"
 #include "iodlgimp.hxx"
@@ -646,26 +646,26 @@ void SvtFileDialog::Init_Impl
     AddControls_Impl( );
 
     // adjust the labels to the mode
-    sal_uInt16 nResId = STR_EXPLORERFILE_OPEN;
-    sal_uInt16 nButtonResId = 0;
+    const char* pResId = STR_EXPLORERFILE_OPEN;
+    const char* pButtonResId = nullptr;
 
     if ( nStyle & PickerFlags::SaveAs )
     {
-        nResId = STR_EXPLORERFILE_SAVE;
-        nButtonResId = STR_EXPLORERFILE_BUTTONSAVE;
+        pResId = STR_EXPLORERFILE_SAVE;
+        pButtonResId = STR_EXPLORERFILE_BUTTONSAVE;
     }
 
     if ( nStyle & PickerFlags::PathDialog )
     {
         pImpl->_pFtFileName->SetText( FpsResId( STR_PATHNAME ) );
-        nResId = STR_PATHSELECT;
-        nButtonResId = STR_BUTTONSELECT;
+        pResId = STR_PATHSELECT;
+        pButtonResId = STR_BUTTONSELECT;
     }
 
-    SetText( FpsResId( nResId ) );
+    SetText( FpsResId( pResId ) );
 
-    if ( nButtonResId )
-        pImpl->_pBtnFileOpen->SetText( FpsResId( nButtonResId ) );
+    if ( pButtonResId )
+        pImpl->_pBtnFileOpen->SetText( FpsResId( pButtonResId ) );
 
     if ( FILEDLG_TYPE_FILEDLG != pImpl->_eDlgType )
     {

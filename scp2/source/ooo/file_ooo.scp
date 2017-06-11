@@ -27,8 +27,6 @@
 
 #include "macros.inc"
 
-STD_RES_FILE( gid_File_Res_Eps, eps )
-
 #if defined WITH_HELP
 File gid_File_Help_Common_Zip
     Dir = FILELIST_DIR;
@@ -177,33 +175,40 @@ UI_FILELIST(vcl, "UIConfig/vcl.filelist")
 UI_FILELIST(writerperfect, "UIConfig/writerperfect.filelist")
 UI_FILELIST(xmlsec, "UIConfig/xmlsec.filelist")
 
-UI_FILELIST_ALL_LANG(basicide, modules/BasicIDE)
-UI_FILELIST_ALL_LANG(cui, cui)
-#ifdef DBCONNECTIVITY
-UI_FILELIST_ALL_LANG(dbaccess, dbaccess)
-UI_FILELIST_ALL_LANG(dbreport, modules/dbreport)
-UI_FILELIST_ALL_LANG(sbibliography, modules/sbibliography)
-UI_FILELIST_ALL_LANG(spropctrlr, modules/spropctrlr)
+MO_FILELIST_ALL_LANG(acc)
+MO_FILELIST_ALL_LANG(avmedia)
+#ifndef DISABLE_SCRIPTING
+MO_FILELIST_ALL_LANG(basctl)
 #endif
-UI_FILELIST_ALL_LANG(desktop, desktop)
-UI_FILELIST_ALL_LANG(editeng, editeng)
-UI_FILELIST_ALL_LANG(filter, filter)
-UI_FILELIST_ALL_LANG(formula, formula)
-UI_FILELIST_ALL_LANG(fps, fps)
-UI_FILELIST_ALL_LANG(sabpilot, modules/sabpilot)
-UI_FILELIST_ALL_LANG(scalc, modules/scalc)
-UI_FILELIST_ALL_LANG(scanner, modules/scanner)
-UI_FILELIST_ALL_LANG(schart, modules/schart)
-UI_FILELIST_ALL_LANG(sdraw, modules/sdraw)
-UI_FILELIST_ALL_LANG(sfx, sfx)
-UI_FILELIST_ALL_LANG(simpress, modules/simpress)
-UI_FILELIST_ALL_LANG(smath, modules/smath)
-UI_FILELIST_ALL_LANG(svt, svt)
-UI_FILELIST_ALL_LANG(svx, svx)
-UI_FILELIST_ALL_LANG(swriter, modules/swriter)
-UI_FILELIST_ALL_LANG(uui, uui)
-UI_FILELIST_ALL_LANG(vcl, vcl)
-UI_FILELIST_ALL_LANG(xmlsec, xmlsec)
+MO_FILELIST_ALL_LANG(chart)
+MO_FILELIST_ALL_LANG(cnr)
+MO_FILELIST_ALL_LANG(cui)
+MO_FILELIST_ALL_LANG(dba)
+MO_FILELIST_ALL_LANG(dkt)
+MO_FILELIST_ALL_LANG(editeng)
+MO_FILELIST_ALL_LANG(flt)
+MO_FILELIST_ALL_LANG(for)
+MO_FILELIST_ALL_LANG(fps)
+MO_FILELIST_ALL_LANG(frm)
+MO_FILELIST_ALL_LANG(fwk)
+MO_FILELIST_ALL_LANG(pcr)
+MO_FILELIST_ALL_LANG(rpt)
+MO_FILELIST_ALL_LANG(sb)
+MO_FILELIST_ALL_LANG(sc)
+MO_FILELIST_ALL_LANG(sca)
+MO_FILELIST_ALL_LANG(scc)
+MO_FILELIST_ALL_LANG(sd)
+MO_FILELIST_ALL_LANG(sfx)
+MO_FILELIST_ALL_LANG(sm)
+MO_FILELIST_ALL_LANG(svl)
+MO_FILELIST_ALL_LANG(svt)
+MO_FILELIST_ALL_LANG(svx)
+MO_FILELIST_ALL_LANG(sw)
+MO_FILELIST_ALL_LANG(uui)
+MO_FILELIST_ALL_LANG(vcl)
+MO_FILELIST_ALL_LANG(wiz)
+MO_FILELIST_ALL_LANG(wpt)
+MO_FILELIST_ALL_LANG(xsc)
 
 #if defined UNX && ! defined MACOSX
 

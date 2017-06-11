@@ -19,9 +19,8 @@
 #include "StartMarker.hxx"
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
-#include "RptResId.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
-#include "ModuleHelper.hxx"
 #include "ColorChanger.hxx"
 #include "ReportDefines.hxx"
 #include "SectionWindow.hxx"

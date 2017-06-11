@@ -74,8 +74,7 @@
 #include "parclass.hxx"
 #include "funcdesc.hxx"
 #include "globstr.hrc"
-#include "scfuncs.hrc"
-#include "scres.hrc"
+#include "strings.hrc"
 #include "scmod.hxx"
 #include "appoptio.hxx"
 #include "editutil.hxx"
@@ -87,7 +86,7 @@ ScAutoFormat*   ScGlobal::pAutoFormat = nullptr;
 LegacyFuncCollection* ScGlobal::pLegacyFuncCollection = nullptr;
 ScUnoAddInCollection* ScGlobal::pAddInCollection = nullptr;
 ScUserList*     ScGlobal::pUserList = nullptr;
-OUString**      ScGlobal::ppRscString = nullptr;
+std::map<const char*, OUString>* ScGlobal::pRscString = nullptr;
 LanguageType    ScGlobal::eLnge = LANGUAGE_SYSTEM;
 css::lang::Locale*     ScGlobal::pLocale = nullptr;
 SvtSysLocale*   ScGlobal::pSysLocale = nullptr;
@@ -313,109 +312,87 @@ void ScGlobal::SetUserList( const ScUserList* pNewList )
     }
 }
 
-const OUString& ScGlobal::GetRscString( sal_uInt16 nIndex )
+const OUString& ScGlobal::GetRscString(const char* pResId)
 {
-    assert( nIndex < SC_GLOBSTR_STR_COUNT);
-    if( !ppRscString[ nIndex ] )
-    {
-        OpCode eOp = ocNone;
-        // Map former globstr.src strings moved to compiler.src
-        switch (nIndex)
-        {
-            case STR_NULL_ERROR:
-                eOp = ocErrNull;
-                break;
-            case STR_DIV_ZERO:
-                eOp = ocErrDivZero;
-                break;
-            case STR_NO_VALUE:
-                eOp = ocErrValue;
-                break;
-            case STR_NOREF_STR:
-                eOp = ocErrRef;
-                break;
-            case STR_NO_NAME_REF:
-                eOp = ocErrName;
-                break;
-            case STR_NUM_ERROR:
-                eOp = ocErrNum;
-                break;
-            case STR_NV_STR:
-                eOp = ocErrNA;
-                break;
-            default:
-                ;   // nothing
-        }
-        if (eOp != ocNone)
-            ppRscString[ nIndex ] = new OUString(ScCompiler::GetNativeSymbol(eOp));
-        else
-            ppRscString[ nIndex ] = new OUString(ScResId(nIndex + RID_GLOBSTR_OFFSET));
-    }
-    return *ppRscString[ nIndex ];
+    if (pRscString->find(pResId) == pRscString->end())
+        (*pRscString)[pResId] = ScResId(pResId);
+    return (*pRscString)[pResId];
 }
 
 OUString ScGlobal::GetErrorString(FormulaError nErr)
 {
-    sal_uInt16 nErrNumber;
+    const char* pErrNumber;
     switch (nErr)
     {
-        case FormulaError::NotAvailable       : nErrNumber = STR_NV_STR; break;
-        case FormulaError::NoRef              : nErrNumber = STR_NO_REF_TABLE; break;
-        case FormulaError::NoName             : nErrNumber = STR_NO_NAME_REF; break;
-        case FormulaError::NoAddin            : nErrNumber = STR_NO_ADDIN; break;
-        case FormulaError::NoMacro            : nErrNumber = STR_NO_MACRO; break;
-        case FormulaError::NoValue            : nErrNumber = STR_NO_VALUE; break;
-        case FormulaError::NoCode             : nErrNumber = STR_NULL_ERROR; break;
-        case FormulaError::DivisionByZero     : nErrNumber = STR_DIV_ZERO; break;
-        case FormulaError::IllegalFPOperation : nErrNumber = STR_NUM_ERROR; break;
-
-        default          : return GetRscString(STR_ERROR_STR) + OUString::number( (int)nErr );
+        case FormulaError::NoRef:
+            pErrNumber = STR_NO_REF_TABLE;
+            break;
+        case FormulaError::NoAddin:
+            pErrNumber = STR_NO_ADDIN;
+            break;
+        case FormulaError::NoMacro:
+            pErrNumber = STR_NO_MACRO;
+            break;
+        case FormulaError::NotAvailable:
+            return ScCompiler::GetNativeSymbol(ocErrNA);
+        case FormulaError::NoName:
+            return ScCompiler::GetNativeSymbol(ocErrName);
+        case FormulaError::NoValue:
+            return ScCompiler::GetNativeSymbol(ocErrValue);
+        case FormulaError::NoCode:
+            return ScCompiler::GetNativeSymbol(ocErrNull);
+        case FormulaError::DivisionByZero:
+            return ScCompiler::GetNativeSymbol(ocErrDivZero);
+        case FormulaError::IllegalFPOperation:
+            return ScCompiler::GetNativeSymbol(ocErrNum);
+        default:
+            return GetRscString(STR_ERROR_STR) + OUString::number( (int)nErr );
     }
-    return GetRscString( nErrNumber );
+    return GetRscString(pErrNumber);
 }
 
 OUString ScGlobal::GetLongErrorString(FormulaError nErr)
 {
-    sal_uInt16 nErrNumber;
+    const char* pErrNumber;
     switch (nErr)
     {
         case FormulaError::NONE:
-            nErrNumber = 0;
+            pErrNumber = nullptr;
             break;
         case FormulaError::IllegalArgument:
-            nErrNumber = STR_LONG_ERR_ILL_ARG;
+            pErrNumber = STR_LONG_ERR_ILL_ARG;
         break;
         case FormulaError::IllegalFPOperation:
-            nErrNumber = STR_LONG_ERR_ILL_FPO;
+            pErrNumber = STR_LONG_ERR_ILL_FPO;
         break;
         case FormulaError::IllegalChar:
-            nErrNumber = STR_LONG_ERR_ILL_CHAR;
+            pErrNumber = STR_LONG_ERR_ILL_CHAR;
         break;
         case FormulaError::IllegalParameter:
-            nErrNumber = STR_LONG_ERR_ILL_PAR;
+            pErrNumber = STR_LONG_ERR_ILL_PAR;
         break;
         case FormulaError::Pair:
         case FormulaError::PairExpected:
-            nErrNumber = STR_LONG_ERR_PAIR;
+            pErrNumber = STR_LONG_ERR_PAIR;
         break;
         case FormulaError::OperatorExpected:
-            nErrNumber = STR_LONG_ERR_OP_EXP;
+            pErrNumber = STR_LONG_ERR_OP_EXP;
         break;
         case FormulaError::VariableExpected:
         case FormulaError::ParameterExpected:
-            nErrNumber = STR_LONG_ERR_VAR_EXP;
+            pErrNumber = STR_LONG_ERR_VAR_EXP;
         break;
         case FormulaError::CodeOverflow:
-            nErrNumber = STR_LONG_ERR_CODE_OVF;
+            pErrNumber = STR_LONG_ERR_CODE_OVF;
         break;
         case FormulaError::StringOverflow:
-            nErrNumber = STR_LONG_ERR_STR_OVF;
+            pErrNumber = STR_LONG_ERR_STR_OVF;
         break;
         case FormulaError::StackOverflow:
-            nErrNumber = STR_LONG_ERR_STACK_OVF;
+            pErrNumber = STR_LONG_ERR_STACK_OVF;
         break;
         case FormulaError::MatrixSize:
-            nErrNumber = STR_LONG_ERR_MATRIX_SIZE;
+            pErrNumber = STR_LONG_ERR_MATRIX_SIZE;
         break;
         case FormulaError::UnknownState:
         case FormulaError::UnknownVariable:
@@ -423,44 +400,43 @@ OUString ScGlobal::GetLongErrorString(FormulaError nErr)
         case FormulaError::UnknownStackVariable:
         case FormulaError::UnknownToken:
         case FormulaError::NoCode:
-            nErrNumber = STR_LONG_ERR_SYNTAX;
+            pErrNumber = STR_LONG_ERR_SYNTAX;
         break;
         case FormulaError::CircularReference:
-            nErrNumber = STR_LONG_ERR_CIRC_REF;
+            pErrNumber = STR_LONG_ERR_CIRC_REF;
         break;
         case FormulaError::NoConvergence:
-            nErrNumber = STR_LONG_ERR_NO_CONV;
+            pErrNumber = STR_LONG_ERR_NO_CONV;
         break;
         case FormulaError::NoRef:
-            nErrNumber = STR_LONG_ERR_NO_REF;
+            pErrNumber = STR_LONG_ERR_NO_REF;
         break;
         case FormulaError::NoName:
-            nErrNumber = STR_LONG_ERR_NO_NAME;
+            pErrNumber = STR_LONG_ERR_NO_NAME;
         break;
         case FormulaError::NoAddin:
-            nErrNumber = STR_LONG_ERR_NO_ADDIN;
+            pErrNumber = STR_LONG_ERR_NO_ADDIN;
         break;
         case FormulaError::NoMacro:
-            nErrNumber = STR_LONG_ERR_NO_MACRO;
+            pErrNumber = STR_LONG_ERR_NO_MACRO;
         break;
         case FormulaError::DivisionByZero:
-            nErrNumber = STR_LONG_ERR_DIV_ZERO;
+            pErrNumber = STR_LONG_ERR_DIV_ZERO;
         break;
         case FormulaError::NestedArray:
-            nErrNumber = STR_ERR_LONG_NESTED_ARRAY;
+            pErrNumber = STR_ERR_LONG_NESTED_ARRAY;
         break;
         case FormulaError::NoValue:
-            nErrNumber = STR_LONG_ERR_NO_VALUE;
+            pErrNumber = STR_LONG_ERR_NO_VALUE;
         break;
         case FormulaError::NotAvailable:
-            nErrNumber = STR_LONG_ERR_NV;
+            pErrNumber = STR_LONG_ERR_NV;
         break;
         default:
-            nErrNumber = STR_ERROR_STR;
+            pErrNumber = STR_ERROR_STR;
         break;
     }
-    OUString aRes( GetRscString( nErrNumber ) );
-    return aRes;
+    return GetRscString(pErrNumber);
 }
 
 SvxBrushItem* ScGlobal::GetButtonBrushItem()
@@ -489,8 +465,7 @@ void ScGlobal::Init()
     pCharClass = pSysLocale->GetCharClassPtr();
     pLocaleData = pSysLocale->GetLocaleDataPtr();
 
-    ppRscString = new OUString *[ SC_GLOBSTR_STR_COUNT ];
-    for( sal_uInt16 nC = 0 ; nC < SC_GLOBSTR_STR_COUNT ; nC++ ) ppRscString[ nC ] = nullptr;
+    pRscString = new std::map<const char*, OUString>();
 
     pEmptyBrushItem = new SvxBrushItem( Color( COL_TRANSPARENT ), ATTR_BACKGROUND );
     pButtonBrushItem = new SvxBrushItem( Color(), ATTR_BACKGROUND );
@@ -580,15 +555,7 @@ void ScGlobal::Clear()
     DELETEZ(pLegacyFuncCollection);
     DELETEZ(pAddInCollection);
     DELETEZ(pUserList);
-
-    if (ppRscString)
-    {
-        for (sal_uInt16 nC = 0; nC < SC_GLOBSTR_STR_COUNT; ++nC)
-            delete ppRscString[nC];
-        delete[] ppRscString;
-        ppRscString = nullptr;
-    }
-
+    DELETEZ(pRscString);
     DELETEZ(pStarCalcFunctionList); // Destroy before ResMgr!
     DELETEZ(pStarCalcFunctionMgr);
     ScParameterClassification::Exit();

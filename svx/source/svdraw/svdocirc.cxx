@@ -27,7 +27,7 @@
 #include <svl/style.hxx>
 
 #include "svdglob.hxx"
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 
 #include <sdr/contact/viewcontactofsdrcircobj.hxx>
 #include <sdr/properties/circleproperties.hxx>
@@ -282,26 +282,26 @@ void SdrCircObj::RecalcXPoly()
 
 OUString SdrCircObj::TakeObjNameSingul() const
 {
-    sal_uInt16 nID=STR_ObjNameSingulCIRC;
+    const char* pID=STR_ObjNameSingulCIRC;
     if (maRect.GetWidth() == maRect.GetHeight() && aGeo.nShearAngle==0)
     {
         switch (meCircleKind) {
-            case OBJ_CIRC: nID=STR_ObjNameSingulCIRC; break;
-            case OBJ_SECT: nID=STR_ObjNameSingulSECT; break;
-            case OBJ_CARC: nID=STR_ObjNameSingulCARC; break;
-            case OBJ_CCUT: nID=STR_ObjNameSingulCCUT; break;
+            case OBJ_CIRC: pID=STR_ObjNameSingulCIRC; break;
+            case OBJ_SECT: pID=STR_ObjNameSingulSECT; break;
+            case OBJ_CARC: pID=STR_ObjNameSingulCARC; break;
+            case OBJ_CCUT: pID=STR_ObjNameSingulCCUT; break;
             default: break;
         }
     } else {
         switch (meCircleKind) {
-            case OBJ_CIRC: nID=STR_ObjNameSingulCIRCE; break;
-            case OBJ_SECT: nID=STR_ObjNameSingulSECTE; break;
-            case OBJ_CARC: nID=STR_ObjNameSingulCARCE; break;
-            case OBJ_CCUT: nID=STR_ObjNameSingulCCUTE; break;
+            case OBJ_CIRC: pID=STR_ObjNameSingulCIRCE; break;
+            case OBJ_SECT: pID=STR_ObjNameSingulSECTE; break;
+            case OBJ_CARC: pID=STR_ObjNameSingulCARCE; break;
+            case OBJ_CCUT: pID=STR_ObjNameSingulCCUTE; break;
             default: break;
         }
     }
-    OUStringBuffer sName(ImpGetResStr(nID));
+    OUStringBuffer sName(ImpGetResStr(pID));
 
     OUString aName(GetName());
     if (!aName.isEmpty())
@@ -316,26 +316,26 @@ OUString SdrCircObj::TakeObjNameSingul() const
 
 OUString SdrCircObj::TakeObjNamePlural() const
 {
-    sal_uInt16 nID=STR_ObjNamePluralCIRC;
+    const char* pID=STR_ObjNamePluralCIRC;
     if (maRect.GetWidth() == maRect.GetHeight() && aGeo.nShearAngle==0)
     {
         switch (meCircleKind) {
-            case OBJ_CIRC: nID=STR_ObjNamePluralCIRC; break;
-            case OBJ_SECT: nID=STR_ObjNamePluralSECT; break;
-            case OBJ_CARC: nID=STR_ObjNamePluralCARC; break;
-            case OBJ_CCUT: nID=STR_ObjNamePluralCCUT; break;
+            case OBJ_CIRC: pID=STR_ObjNamePluralCIRC; break;
+            case OBJ_SECT: pID=STR_ObjNamePluralSECT; break;
+            case OBJ_CARC: pID=STR_ObjNamePluralCARC; break;
+            case OBJ_CCUT: pID=STR_ObjNamePluralCCUT; break;
             default: break;
         }
     } else {
         switch (meCircleKind) {
-            case OBJ_CIRC: nID=STR_ObjNamePluralCIRCE; break;
-            case OBJ_SECT: nID=STR_ObjNamePluralSECTE; break;
-            case OBJ_CARC: nID=STR_ObjNamePluralCARCE; break;
-            case OBJ_CCUT: nID=STR_ObjNamePluralCCUTE; break;
+            case OBJ_CIRC: pID=STR_ObjNamePluralCIRCE; break;
+            case OBJ_SECT: pID=STR_ObjNamePluralSECTE; break;
+            case OBJ_CARC: pID=STR_ObjNamePluralCARCE; break;
+            case OBJ_CCUT: pID=STR_ObjNamePluralCCUTE; break;
             default: break;
         }
     }
-    return ImpGetResStr(nID);
+    return ImpGetResStr(pID);
 }
 
 SdrCircObj* SdrCircObj::Clone() const

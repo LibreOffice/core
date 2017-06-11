@@ -20,22 +20,20 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBMOD_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBMOD_HXX
 
-
-class ResMgr;
 class BibDataManager;
 class BibConfig;
 
 class BibModul
 {
     private:
-        ResMgr*                 pResMgr;
+        std::locale             m_aResLocale;
         static BibConfig*       pBibConfig;
 
     public:
                                 BibModul();
                                 ~BibModul();
 
-        ResMgr*                 GetResMgr(){return pResMgr;}
+        const std::locale&      GetResLocale() { return m_aResLocale; }
         static BibConfig*       GetConfig();
 
         static BibDataManager*  createDataManager();

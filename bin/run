@@ -25,9 +25,9 @@ if uname | grep -i CYGWIN >/dev/null; then
     export URE_BOOTSTRAP=file:///$(cygpath -m "${dir}")/instdir/program/fundamental.ini
     export PATH=${PATH:+$PATH:}"${dir}"/instdir/program
 
-    echo "setting URE_BOOTSTRAP to: ${URE_BOOTSTRAP}"
-    echo "setting search path to: ${PATH}"
-    echo "execing: ${exedir}/$1"
+#    echo "setting URE_BOOTSTRAP to: ${URE_BOOTSTRAP}"
+#    echo "setting search path to: ${PATH}"
+#    echo "execing: ${exedir}/$1"
 
     exec ${LO_TRACE} "${exedir}/$@"
 
@@ -47,9 +47,9 @@ elif [ $(uname) = Darwin ]; then
     export URE_BOOTSTRAP=file://"${dir}"/instdir/$PRODUCTNAME.app/Contents/Resources/fundamentalrc
     export DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH:+$DYLD_LIBRARY_PATH:}"${dir}"/instdir/$PRODUCTNAME.app/Contents/Frameworks
 
-    echo "setting URE_BOOTSTRAP to: ${URE_BOOTSTRAP}"
-    echo "setting search path to: ${DYLD_LIBRARY_PATH}"
-    echo "execing: ${exedir}/$1"
+#    echo "setting URE_BOOTSTRAP to: ${URE_BOOTSTRAP}"
+#    echo "setting search path to: ${DYLD_LIBRARY_PATH}"
+#    echo "execing: ${exedir}/$1"
 
     exec ${LO_TRACE} "${exedir}/$@"
 
@@ -69,9 +69,9 @@ else
     export URE_BOOTSTRAP=file://"${dir}"/instdir/program/fundamentalrc
     export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}"${dir}"/instdir/program
 
-    echo "setting URE_BOOTSTRAP to: ${URE_BOOTSTRAP}"
-    echo "setting search path to: ${LD_LIBRARY_PATH}"
-    echo "execing: ${exedir}/$1"
+#    echo "setting URE_BOOTSTRAP to: ${URE_BOOTSTRAP}"
+#    echo "setting search path to: ${LD_LIBRARY_PATH}"
+#    echo "execing: ${exedir}/$1"
 
     exec ${LO_TRACE} "${exedir}/$@"
 

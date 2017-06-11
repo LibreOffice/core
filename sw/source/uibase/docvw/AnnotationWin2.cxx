@@ -33,10 +33,9 @@
 #include <ShadowOverlayObject.hxx>
 #include <OverlayRanges.hxx>
 
-#include <annotation.hrc>
-#include <docvw.hrc>
+#include <strings.hrc>
 #include <app.hrc>
-#include <access.hrc>
+#include <strings.hrc>
 
 #include <viewopt.hxx>
 #include <cmdid.h>

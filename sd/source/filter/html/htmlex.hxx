@@ -61,7 +61,7 @@ class ButtonSet;
 class HtmlErrorContext : public ErrorContext
 {
 private:
-    sal_uInt16  mnResId;
+    const char* mpResId;
     OUString  maURL1;
     OUString  maURL2;
 
@@ -70,8 +70,8 @@ public:
 
     virtual bool    GetString( ErrCode nErrId, OUString& rCtxStr ) override;
 
-    void            SetContext( sal_uInt16 nResId, const OUString& rURL );
-    void            SetContext( sal_uInt16 nResId, const OUString& rURL1, const OUString& rURL2 );
+    void            SetContext(const char* pResId, const OUString& rURL);
+    void            SetContext(const char* pResId, const OUString& rURL1, const OUString& rURL2);
 };
 
 /// this class exports an Impress Document as a HTML Presentation.

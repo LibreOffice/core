@@ -19,7 +19,6 @@
 
 
 #include "fmprop.hrc"
-#include "svx/fmresids.hrc"
 #include "fmtextcontroldialogs.hxx"
 #include "fmtextcontrolfeature.hxx"
 #include "fmtextcontrolshell.hxx"

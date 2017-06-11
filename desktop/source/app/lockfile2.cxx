@@ -19,8 +19,8 @@
 
 
 #include <vcl/layout.hxx>
-#include "desktopresid.hxx"
-#include "desktop.hrc"
+#include "dp_shared.hxx"
+#include "strings.hrc"
 #include <tools/config.hxx>
 #include "lockfile.hxx"
 
@@ -38,10 +38,10 @@ bool Lockfile_execWarning( Lockfile * that )
     OString aTime  = aConfig.ReadKey( LOCKFILE_TIMEKEY );
 
     // display warning and return response
-    ScopedVclPtrInstance<MessageDialog> aBox(nullptr, DesktopResId(STR_QUERY_USERDATALOCKED),
+    ScopedVclPtrInstance<MessageDialog> aBox(nullptr, DpResId(STR_QUERY_USERDATALOCKED),
                                              VclMessageType::Question, VclButtonsType::YesNo);
     // set box title
-    OUString aTitle = OUString( DesktopResId( STR_TITLE_USERDATALOCKED ));
+    OUString aTitle = DpResId(STR_TITLE_USERDATALOCKED);
     aBox->SetText( aTitle );
     // insert values...
     OUString aMsgText = aBox->get_primary_text();

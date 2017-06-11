@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "glob.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include "view/SlsTheme.hxx"
 #include "controller/SlsProperties.hxx"

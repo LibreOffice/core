@@ -31,10 +31,11 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include "dbustrings.hrc"
+#include "core_resource.hxx"
+#include "stringconstants.hxx"
 #include <svtools/rtftoken.h>
 #include <toolkit/helper/vclunohelper.hxx>
-#include "dbu_misc.hrc"
+#include "strings.hrc"
 #include <vcl/msgbox.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
@@ -42,7 +43,7 @@
 #include <comphelper/string.hxx>
 #include <tools/color.hxx>
 #include "WExtendPages.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include "QEnumTypes.hxx"
 #include "UITools.hxx"
 #include <vcl/svapp.hxx>
@@ -243,7 +244,7 @@ void ORTFReader::NextToken( int nToken )
 
 bool ORTFReader::CreateTable(int nToken)
 {
-    OUString aTableName(ModuleRes(STR_TBL_TITLE));
+    OUString aTableName(DBA_RES(STR_TBL_TITLE));
     aTableName = aTableName.getToken(0,' ');
     aTableName = ::dbtools::createUniqueName(m_xTables, aTableName);
 
@@ -274,7 +275,7 @@ bool ORTFReader::CreateTable(int nToken)
                 {
                     aColumnName = comphelper::string::strip(aColumnName, ' ');
                     if (aColumnName.isEmpty() || m_bAppendFirstLine )
-                        aColumnName = ModuleRes(STR_COLUMN_NAME);
+                        aColumnName = DBA_RES(STR_COLUMN_NAME);
 
                     CreateDefaultColumn(aColumnName);
                     aColumnName.clear();
@@ -305,7 +306,7 @@ bool ORTFReader::CreateTable(int nToken)
         if ( !aColumnName.isEmpty() )
         {
             if ( m_bAppendFirstLine )
-                aColumnName = ModuleRes(STR_COLUMN_NAME);
+                aColumnName = DBA_RES(STR_COLUMN_NAME);
             CreateDefaultColumn(aColumnName);
         }
 

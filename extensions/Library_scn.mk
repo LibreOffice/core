@@ -16,6 +16,11 @@ $(eval $(call gb_Library_use_externals,scn,\
     sane_headers \
 ))
 
+$(eval $(call gb_Library_set_include,scn,\
+    -I$(SRCDIR)/extensions/inc \
+    $$(INCLUDE) \
+))
+
 $(eval $(call gb_Library_set_componentfile,scn,extensions/source/scanner/scn))
 
 $(eval $(call gb_Library_use_sdk_api,scn))

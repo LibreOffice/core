@@ -26,7 +26,7 @@
 */
 
 #include <osl/mutex.hxx>
-#include <tools/resid.hxx>
+#include <tools/simplerm.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -35,12 +35,8 @@
 #include <rtl/string.hxx>
 #include <vector>
 
-class ResMgr;
-
-
 namespace compmodule
 {
-
 
 typedef css::uno::Reference< css::lang::XSingleServiceFactory > (SAL_CALL *FactoryInstantiation)
         (
@@ -64,7 +60,6 @@ typedef css::uno::Reference< css::lang::XSingleServiceFactory > (SAL_CALL *Facto
         static ::osl::Mutex     s_aMutex;       /// access safety
         static sal_Int32        s_nClients;     /// number of registered clients
         static OModuleImpl*     s_pImpl;        /// impl class. lives as long as at least one client for the module is registered
-        static OString   s_sResPrefix;
 
         // auto registration administration
         static  std::vector< OUString >*
@@ -77,11 +72,8 @@ typedef css::uno::Reference< css::lang::XSingleServiceFactory > (SAL_CALL *Facto
             s_pFactoryFunctionPointers;
 
     public:
-        // can be set as long as no resource has been accessed ...
-        static void     setResourceFilePrefix(const OString& _rPrefix);
-
-        /// get the vcl res manager of the module
-        static ResMgr*  getResManager();
+        /// get the resource locale of the module
+        static const std::locale& getResLocale();
 
         /** register a component implementing a service with the given data.
             @param  _rImplementationName
@@ -144,13 +136,11 @@ typedef css::uno::Reference< css::lang::XSingleServiceFactory > (SAL_CALL *Facto
     };
 
 
-    // specialized ResId, using the resource manager provided by the global module
-    class ModuleRes : public ::ResId
+    // specialized ResId, using the resource locale provided by the global module
+    static inline OUString ModuleRes(const char* pId)
     {
-    public:
-        explicit ModuleRes(sal_uInt16 _nId) : ResId(_nId, *OModule::getResManager()) { }
-    };
-
+        return Translate::get(pId, OModule::getResLocale());
+    }
 
     template <class TYPE>
     class OMultiInstanceAutoRegistration

@@ -27,6 +27,7 @@
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #include <cuires.hrc>
+#include <strings.hrc>
 #include "helpid.hrc"
 
 #include "svx/xattr.hxx"
@@ -42,6 +43,7 @@
 #include "svx/dlgutil.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <o3tl/make_unique.hxx>
 #include "cuitabarea.hxx"
 
@@ -240,15 +242,14 @@ void SvxLineDefTabPage::CheckChanges_Impl()
         m_pLbType2->IsValueChangedFromSaved() ||
         m_pMtrDistance->IsValueChangedFromSaved() )
     {
-        ResMgr& rMgr = CUI_MGR();
         Image aWarningBoxImage = WarningBox::GetStandardImage();
         ScopedVclPtrInstance<SvxMessDialog> aMessDlg( GetParentDialog(),
                                                       SvxResId( RID_SVXSTR_LINESTYLE ),
-                                                      OUString( ResId( RID_SVXSTR_ASK_CHANGE_LINESTYLE, rMgr ) ),
+                                                      CuiResId(RID_SVXSTR_ASK_CHANGE_LINESTYLE),
                                                       &aWarningBoxImage );
         DBG_ASSERT(aMessDlg, "Dialog creation failed!");
-        aMessDlg->SetButtonText( SvxMessDialogButton::N1, OUString( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
-        aMessDlg->SetButtonText( SvxMessDialogButton::N2, OUString( ResId( RID_SVXSTR_ADD, rMgr ) ) );
+        aMessDlg->SetButtonText( SvxMessDialogButton::N1, CuiResId(RID_SVXSTR_CHANGE) );
+        aMessDlg->SetButtonText( SvxMessDialogButton::N2, CuiResId(RID_SVXSTR_ADD) );
 
         short nRet = aMessDlg->Execute();
 
@@ -532,9 +533,8 @@ void  SvxLineDefTabPage::SelectTypeHdl_Impl(ListBox* p)
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl, Button*, void)
 {
-    ResMgr& rMgr = CUI_MGR();
-    OUString aNewName( SvxResId( RID_SVXSTR_LINESTYLE ) );
-    OUString aDesc( ResId( RID_SVXSTR_DESC_LINESTYLE, rMgr ) );
+    OUString aNewName(SvxResId(RID_SVXSTR_LINESTYLE));
+    OUString aDesc(CuiResId(RID_SVXSTR_DESC_LINESTYLE));
     OUString aName;
 
     long nCount = pDashList->Count();
@@ -618,8 +618,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl, Button*, void)
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        ResMgr& rMgr = CUI_MGR();
-        OUString aDesc( ResId( RID_SVXSTR_DESC_LINESTYLE, rMgr ) );
+        OUString aDesc(CuiResId(RID_SVXSTR_DESC_LINESTYLE));
         OUString aName( pDashList->GetDash( nPos )->GetName() );
         OUString aOldName = aName;
 

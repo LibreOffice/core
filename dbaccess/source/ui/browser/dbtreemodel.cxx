@@ -18,7 +18,7 @@
  */
 
 #include "dbtreemodel.hxx"
-#include "dbu_resource.hrc"
+#include "dbu_pageids.hxx"
 
 namespace dbaui
 {

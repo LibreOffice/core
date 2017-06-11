@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svids.hrc>
+#include <strings.hrc>
 #include <svdata.hxx>
 #include <brdwin.hxx>
 #include <window.h>
@@ -293,37 +293,37 @@ OUString ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData* pData,
                                               const Point& rPos,
                                               tools::Rectangle& rHelpRect )
 {
-    sal_uInt16 nHelpId = 0;
+    const char* pHelpId = nullptr;
     OUString aHelpStr;
     BorderWindowHitTest nHitTest = ImplHitTest( pData, rPos );
     if ( nHitTest != BorderWindowHitTest::NONE )
     {
         if ( nHitTest & BorderWindowHitTest::Close )
         {
-            nHelpId     = SV_HELPTEXT_CLOSE;
+            pHelpId     = SV_HELPTEXT_CLOSE;
             rHelpRect   = pData->maCloseRect;
         }
         else if ( nHitTest & BorderWindowHitTest::Roll )
         {
             if ( pData->mpBorderWindow->mbRollUp )
-                nHelpId = SV_HELPTEXT_ROLLDOWN;
+                pHelpId = SV_HELPTEXT_ROLLDOWN;
             else
-                nHelpId = SV_HELPTEXT_ROLLUP;
+                pHelpId = SV_HELPTEXT_ROLLUP;
             rHelpRect   = pData->maRollRect;
         }
         else if ( nHitTest & BorderWindowHitTest::Dock )
         {
-            nHelpId     = SV_HELPTEXT_MAXIMIZE;
+            pHelpId     = SV_HELPTEXT_MAXIMIZE;
             rHelpRect   = pData->maDockRect;
         }
         else if ( nHitTest & BorderWindowHitTest::Hide )
         {
-            nHelpId     = SV_HELPTEXT_MINIMIZE;
+            pHelpId     = SV_HELPTEXT_MINIMIZE;
             rHelpRect   = pData->maHideRect;
         }
         else if ( nHitTest & BorderWindowHitTest::Help )
         {
-            nHelpId     = SV_HELPTEXT_HELP;
+            pHelpId     = SV_HELPTEXT_HELP;
             rHelpRect   = pData->maHelpRect;
         }
         else if ( nHitTest & BorderWindowHitTest::Title )
@@ -341,8 +341,8 @@ OUString ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData* pData,
         }
     }
 
-    if( nHelpId && ImplGetResMgr() )
-        aHelpStr = ResId(nHelpId, *ImplGetResMgr());
+    if (pHelpId)
+        aHelpStr = VclResId(pHelpId);
 
     return aHelpStr;
 }

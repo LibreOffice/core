@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbmm_global.hrc"
-#include "dbmm_module.hxx"
 #include "dbmm_types.hxx"
 #include "docinteraction.hxx"
 #include "migrationengine.hxx"
@@ -27,6 +25,8 @@
 #include "migrationlog.hxx"
 #include "progresscapture.hxx"
 #include "progressmixer.hxx"
+#include "core_resource.hxx"
+#include "strings.hrc"
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
@@ -209,8 +209,8 @@ namespace dbmm
         OUString lcl_getSubDocumentDescription( const SubDocument& _rDocument )
         {
             OUString sObjectName(
-                    OUString(MacroMigrationResId(
-                        _rDocument.eType == eForm ? STR_FORM : STR_REPORT)).
+                    DBA_RES(
+                        _rDocument.eType == eForm ? STR_FORM : STR_REPORT).
                 replaceFirst("$name$", _rDocument.sHierarchicalName));
             return sObjectName;
         }
@@ -924,7 +924,7 @@ namespace dbmm
         // initialize global progress
         sal_Int32 nOverallRange( m_aSubDocs.size() );
         OUString sProgressSkeleton(
-            OUString(MacroMigrationResId(STR_OVERALL_PROGRESS)).
+            DBA_RES( STR_OVERALL_PROGRESS).
             replaceFirst("$overall$", OUString::number(nOverallRange)));
 
         m_rProgress.start( nOverallRange );
@@ -1045,7 +1045,7 @@ namespace dbmm
         }
 
         // migrate the libraries
-        ProgressDelegator aDelegator(m_rProgress, sObjectName, MacroMigrationResId(STR_MIGRATING_LIBS));
+        ProgressDelegator aDelegator(m_rProgress, sObjectName, DBA_RES(STR_MIGRATING_LIBS));
         ProgressMixer aProgressMixer( aDelegator );
         aProgressMixer.registerPhase( PHASE_JAVASCRIPT, 1 );
         aProgressMixer.registerPhase( PHASE_BEANSHELL, 1 );
@@ -1779,7 +1779,7 @@ namespace dbmm
     {
         // a human-readable description of the affected library
         OUString sLibraryDescription(
-            OUString(MacroMigrationResId(STR_LIBRARY_TYPE_AND_NAME)).
+            DBA_RES(STR_LIBRARY_TYPE_AND_NAME).
             replaceFirst("$type$",
                 getScriptTypeDisplayName(_eScriptType)).
             replaceFirst("$library$", _rLibraryName));

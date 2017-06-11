@@ -28,10 +28,8 @@
 #include "dbui.hrc"
 #include "globals.hrc"
 #include "fldui.hrc"
-#include "envelp.hrc"
-#include "dochdl.hrc"
+#include "strings.hrc"
 #include <index.hrc>
-#include <../../uibase/dialog/regionsw.hrc>
 
 #include <wordcountdialog.hxx>
 #include "abstract.hxx"

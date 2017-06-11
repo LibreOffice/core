@@ -17,19 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ids.hrc"
+#include <tools/simplerm.hxx>
+#include "strings.hrc"
 #include "trylater.hxx"
 
-TryLaterQueryBox::TryLaterQueryBox( vcl::Window* pParent, ResMgr* pResMgr, const OUString& aMessage ) :
-    MessBox(pParent, 0,
-            ResId(STR_TRYLATER_TITLE, *pResMgr).toString(),
-            aMessage )
+TryLaterQueryBox::TryLaterQueryBox(vcl::Window* pParent, const std::locale& rResLocale, const OUString& aMessage)
+    : MessBox(pParent, 0, Translate::get(STR_TRYLATER_TITLE, rResLocale), aMessage)
 {
     SetImage( QueryBox::GetStandardImage() );
 
-    AddButton(ResId(STR_TRYLATER_RETRYSAVING_BTN, *pResMgr).toString(), RET_YES,
+    AddButton(Translate::get(STR_TRYLATER_RETRYSAVING_BTN, rResLocale), RET_YES,
             ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);
-    AddButton(ResId(STR_TRYLATER_SAVEAS_BTN, *pResMgr).toString(), RET_NO);
+    AddButton(Translate::get(STR_TRYLATER_SAVEAS_BTN, rResLocale), RET_NO);
     AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
 
     SetButtonHelpText( RET_YES, OUString() );

@@ -34,13 +34,13 @@
 #include "docsh.hxx"
 #include "content.hxx"
 #include "scresid.hxx"
-#include "scres.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include "unonames.hxx"
 
 using  namespace ::com::sun::star;
 
-sal_uInt16 const nTypeResIds[SC_LINKTARGETTYPE_COUNT] =
+static const char* aTypeResIds[SC_LINKTARGETTYPE_COUNT] =
 {
     SCSTR_CONTENT_TABLE,        // SC_LINKTARGETTYPE_SHEET
     SCSTR_CONTENT_RANGENAME,    // SC_LINKTARGETTYPE_RANGENAME
@@ -71,7 +71,7 @@ ScLinkTargetTypesObj::ScLinkTargetTypesObj(ScDocShell* pDocSh) :
     pDocShell->GetDocument().AddUnoObject(*this);
 
     for (sal_uInt16 i=0; i<SC_LINKTARGETTYPE_COUNT; i++)
-        aNames[i] = ScResId( nTypeResIds[i] );
+        aNames[i] = ScResId(aTypeResIds[i]);
 }
 
 ScLinkTargetTypesObj::~ScLinkTargetTypesObj()
@@ -136,7 +136,7 @@ ScLinkTargetTypeObj::ScLinkTargetTypeObj(ScDocShell* pDocSh, sal_uInt16 nT) :
     nType( nT )
 {
     pDocShell->GetDocument().AddUnoObject(*this);
-    aName = ScResId( nTypeResIds[nType] );    //! on demand?
+    aName = ScResId(aTypeResIds[nType]);    //! on demand?
 }
 
 ScLinkTargetTypeObj::~ScLinkTargetTypeObj()

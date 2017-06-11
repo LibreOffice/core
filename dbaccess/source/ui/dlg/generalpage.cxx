@@ -17,14 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "core_resource.hxx"
 #include "dsnItem.hxx"
 #include "generalpage.hxx"
 #include <connectivity/dbexception.hxx>
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
+#include "strings.hrc"
 #include "dsitems.hxx"
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include "dbadmin.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfilt.hxx>
 #include <vcl/stdtext.hxx>
@@ -195,12 +197,12 @@ namespace dbaui
 
         if ( eMessage != m_eLastMessage )
         {
-            sal_uInt16 nResId = 0;
+            const char* pResId = nullptr;
             if ( smUnsupportedType == eMessage )
-                nResId = STR_UNSUPPORTED_DATASOURCE_TYPE;
+                pResId = STR_UNSUPPORTED_DATASOURCE_TYPE;
             OUString sMessage;
-            if ( nResId )
-                sMessage = ModuleRes( nResId );
+            if ( pResId )
+                sMessage = DBA_RES(pResId);
 
             m_pSpecialMessage->SetText( sMessage );
             m_eLastMessage = eMessage;
@@ -440,7 +442,7 @@ namespace dbaui
         const OUString sName = m_pCollection->getTypeDisplayName( _sURLPrefix );
         if ( m_pAdminDialog )
         {
-            OUString sMessage = OUString( ModuleRes( STR_PARENTTITLE_GENERAL ) );
+            OUString sMessage = DBA_RES(STR_PARENTTITLE_GENERAL);
             m_pAdminDialog->setTitle( sMessage.replaceAll( "#", sName ) );
         }
     }
@@ -715,7 +717,7 @@ namespace dbaui
             OUString sPath = aFileDlg.GetPath();
             if ( aFileDlg.GetCurrentFilter() != pFilter->GetUIName() || !pFilter->GetWildcard().Matches(sPath) )
             {
-                OUString sMessage(ModuleRes(STR_ERR_USE_CONNECT_TO));
+                OUString sMessage(DBA_RES(STR_ERR_USE_CONNECT_TO));
                 ScopedVclPtrInstance< InfoBox > aError(this, sMessage);
                 aError->Execute();
                 m_pRB_ConnectDatabase->Check();

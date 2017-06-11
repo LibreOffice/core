@@ -36,10 +36,10 @@
 #include <helpid.h>
 #include <cmdid.h>
 #include <misc.hrc>
-#include <shells.hrc>
+#include <strings.hrc>
 
 // -> #111827#
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <swundo.hxx>
 #include <SwRewriter.hxx>
 // <- #111827#
@@ -1093,27 +1093,27 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
 
             pDlg->HideAuthor();
 
-            sal_uInt16 nResId = 0;
+            const char* pResId = nullptr;
             switch( rRedline.GetType() )
             {
                 case nsRedlineType_t::REDLINE_INSERT:
-                    nResId = STR_REDLINE_INSERTED;
+                    pResId = STR_REDLINE_INSERTED;
                     break;
                 case nsRedlineType_t::REDLINE_DELETE:
-                    nResId = STR_REDLINE_DELETED;
+                    pResId = STR_REDLINE_DELETED;
                     break;
                 case nsRedlineType_t::REDLINE_FORMAT:
                 case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT:
-                    nResId = STR_REDLINE_FORMATED;
+                    pResId = STR_REDLINE_FORMATED;
                     break;
                 case nsRedlineType_t::REDLINE_TABLE:
-                    nResId = STR_REDLINE_TABLECHG;
+                    pResId = STR_REDLINE_TABLECHG;
                     break;
                 default:;//prevent warning
             }
             OUString sTitle(SwResId(STR_REDLINE_COMMENT));
-            if( nResId )
-                sTitle += SwResId( nResId );
+            if (pResId)
+                sTitle += SwResId(pResId);
             pDlg->SetText(sTitle);
 
             SwViewShell::SetCareWin(pDlg->GetWindow());

@@ -18,33 +18,30 @@
  */
 
 #include "classes/fwkresid.hxx"
-#include <tools/resmgr.hxx>
+#include <tools/simplerm.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
 #include <rtl/strbuf.hxx>
 
-namespace framework
+namespace
 {
-
-ResMgr* FwkResId::GetResManager()
-{
-    static ResMgr*  pResMgr = nullptr;
-
-    if ( !pResMgr )
+    const std::locale& GetResLocale()
     {
-        SolarMutexGuard aSolarGuard;
-        pResMgr = ResMgr::CreateResMgr("fwe", Application::GetSettings().GetUILanguageTag());
+        static std::locale* pResLocale = nullptr;
+        if (!pResLocale)
+        {
+            SolarMutexGuard aSolarGuard;
+            static std::locale loc(Translate::Create("fwe", Application::GetSettings().GetUILanguageTag()));
+            pResLocale = &loc;
+        }
+        return *pResLocale;
     }
-
-    return pResMgr;
 }
 
-FwkResId::FwkResId( sal_uInt16 nId ) :
-    ResId( nId, *FwkResId::GetResManager() )
+OUString FwkResId(const char* pId)
 {
-}
-
+    return Translate::get(pId, GetResLocale());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

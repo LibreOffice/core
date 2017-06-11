@@ -30,8 +30,7 @@
 #include "sqlbison.hxx"
 #include "MResultSet.hxx"
 
-#include "resource/mork_res.hrc"
-#include "resource/common_res.hrc"
+#include "strings.hrc"
 
 static ::osl::Mutex m_ThreadMutex;
 

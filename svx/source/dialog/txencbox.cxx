@@ -20,8 +20,9 @@
 #include <config_features.h>
 
 #include "svx/txencbox.hxx"
+#include <svx/dialmgr.hxx>
 #include "svx/txenctab.hxx"
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #if HAVE_FEATURE_DBCONNECTIVITY
 #include "svx/dbcharsethelper.hxx"
 #endif
@@ -32,11 +33,11 @@
 #include <rtl/locale.h>
 #include <rtl/strbuf.hxx>
 #include <osl/nlsupport.h>
+#include "txenctab.hrc"
 
 SvxTextEncodingBox::SvxTextEncodingBox( vcl::Window* pParent, WinBits nBits )
     : ListBox( pParent, nBits )
 {
-    m_pEncTable = new SvxTextEncodingTable;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSvxTextEncodingBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
@@ -59,12 +60,6 @@ SvxTextEncodingBox::~SvxTextEncodingBox()
     disposeOnce();
 }
 
-void SvxTextEncodingBox::dispose()
-{
-    delete m_pEncTable;
-    ListBox::dispose();
-}
-
 sal_Int32 SvxTextEncodingBox::EncodingToPos_Impl( rtl_TextEncoding nEnc ) const
 {
     sal_Int32 nCount = GetEntryCount();
@@ -83,11 +78,11 @@ void SvxTextEncodingBox::FillFromTextEncodingTable(
 {
     rtl_TextEncodingInfo aInfo;
     aInfo.StructSize = sizeof(rtl_TextEncodingInfo);
-    sal_uInt32 nCount = m_pEncTable->Count();
+    sal_uInt32 nCount = SAL_N_ELEMENTS(RID_SVXSTR_TEXTENCODING_TABLE);
     for ( sal_uInt32 j=0; j<nCount; j++ )
     {
         bool bInsert = true;
-        rtl_TextEncoding nEnc = rtl_TextEncoding( m_pEncTable->GetValue( j ) );
+        rtl_TextEncoding nEnc = RID_SVXSTR_TEXTENCODING_TABLE[j].second;
         if ( nExcludeInfoFlags )
         {
             if ( !rtl_getTextEncodingInfo( nEnc, &aInfo ) )
@@ -120,7 +115,7 @@ void SvxTextEncodingBox::FillFromTextEncodingTable(
                 }
             }
             if ( bInsert )
-                InsertTextEncoding( nEnc, m_pEncTable->GetString( j ) );
+                InsertTextEncoding(nEnc, SvxResId(RID_SVXSTR_TEXTENCODING_TABLE[j].first));
         }
     }
 }
@@ -201,7 +196,7 @@ void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc,
 
 void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc )
 {
-    const OUString& rEntry = m_pEncTable->GetTextString( nEnc );
+    const OUString& rEntry = SvxTextEncodingTable::GetTextString(nEnc);
     if ( !rEntry.isEmpty() )
         InsertTextEncoding( nEnc, rEntry );
     else

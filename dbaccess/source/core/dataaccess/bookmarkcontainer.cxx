@@ -18,10 +18,10 @@
  */
 
 #include "bookmarkcontainer.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include "apitools.hxx"
 #include "core_resource.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>

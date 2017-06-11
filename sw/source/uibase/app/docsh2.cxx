@@ -105,7 +105,7 @@
 #include <globals.h>
 #include <helpid.h>
 #include <app.hrc>
-#include <poolfmt.hrc>
+#include <strings.hrc>
 #include <globals.hrc>
 #include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
@@ -916,7 +916,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     uno::Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
 
                     std::shared_ptr<const SfxFilter> pFlt;
-                    sal_uInt16 nStrId;
+                    const char* pStrId;
 
                     if( bCreateHtml )
                     {
@@ -924,14 +924,14 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         pFlt = SwIoSystem::GetFilterOfFormat(
                                 "HTML",
                                 SwWebDocShell::Factory().GetFilterContainer() );
-                        nStrId = STR_LOAD_HTML_DOC;
+                        pStrId = STR_LOAD_HTML_DOC;
                     }
                     else
                     {
                         // for Global-documents we now only offer the current one.
                         pFlt = SwGlobalDocShell::Factory().GetFilterContainer()->
                                     GetFilter4Extension( "odm"  );
-                        nStrId = STR_LOAD_GLOBAL_DOC;
+                        pStrId = STR_LOAD_GLOBAL_DOC;
                     }
 
                     if( pFlt )
@@ -1008,7 +1008,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             OSL_FAIL("control access failed");
                         }
 
-                        xFP->setTitle( SwResId( nStrId ));
+                        xFP->setTitle(SwResId(pStrId));
                         SvtPathOptions aPathOpt;
                         xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
                         if( ERRCODE_NONE == aDlgHelper.Execute())

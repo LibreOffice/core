@@ -45,6 +45,9 @@
 #include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
 
+#define WINDOW_SIZE_X   240
+#define WINDOW_SIZE_Y   185
+
 namespace dbp
 {
     using namespace ::com::sun::star::uno;
@@ -215,22 +218,22 @@ namespace dbp
             m_pFormDatasource->SetText(sDataSource);
             m_pFormTable->SetText(sCommand);
 
-            ::svt::WizardTypes::WizardState nCommandTypeResourceId = 0;
+            const char* pCommandTypeResourceId = nullptr;
             switch (nCommandType)
             {
                 case CommandType::TABLE:
-                    nCommandTypeResourceId = RID_STR_TYPE_TABLE;
+                    pCommandTypeResourceId = RID_STR_TYPE_TABLE;
                     break;
 
                 case CommandType::QUERY:
-                    nCommandTypeResourceId = RID_STR_TYPE_QUERY;
+                    pCommandTypeResourceId = RID_STR_TYPE_QUERY;
                     break;
 
                 default:
-                    nCommandTypeResourceId = RID_STR_TYPE_COMMAND;
+                    pCommandTypeResourceId = RID_STR_TYPE_COMMAND;
                     break;
             }
-            m_pFormContentType->SetText(compmodule::ModuleRes(nCommandTypeResourceId));
+            m_pFormContentType->SetText(compmodule::ModuleRes(pCommandTypeResourceId));
         }
 
         OControlWizardPage_Base::initializePage();
