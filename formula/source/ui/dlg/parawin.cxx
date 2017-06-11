@@ -27,7 +27,7 @@
 #include "formula/IFunctionDescription.hxx"
 #include <formula/funcvarargs.h>
 #include "ModuleHelper.hxx"
-#include "ForResId.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 
 namespace formula

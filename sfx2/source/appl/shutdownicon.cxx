@@ -24,7 +24,7 @@
 #include <boost/logic/tribool.hpp>
 #include <config_folders.h>
 #include <shutdownicon.hxx>
-#include <app.hrc>
+#include <sfx2/strings.hrc>
 #include <sfx2/app.hxx>
 #include <osl/mutex.hxx>
 #include <svtools/imagemgr.hxx>
@@ -207,7 +207,7 @@ ShutdownIcon::ShutdownIcon( const css::uno::Reference< XComponentContext > & rxC
     m_bVeto ( false ),
     m_bListenForTermination ( false ),
     m_bSystemDialogs( false ),
-    m_pResMgr( nullptr ),
+    m_pResLocale( nullptr ),
     m_pFileDlg( nullptr ),
     m_xContext( rxContext ),
     m_bInitialized( false )
@@ -302,21 +302,10 @@ void ShutdownIcon::FromTemplate()
     }
 }
 
-
-OUString ShutdownIcon::GetResString( int id )
+OUString ShutdownIcon::GetResString(const char* id)
 {
-    ::SolarMutexGuard aGuard;
-
-    if( ! m_pResMgr )
-        m_pResMgr = SfxResMgr::GetResMgr();
-    ResId aResId( id, *m_pResMgr );
-    aResId.SetRT( RSC_STRING );
-    if (!m_pResMgr->IsAvailable(aResId))
-        return OUString();
-
-    return ResId(id, *m_pResMgr);
+    return SfxResId(id);
 }
-
 
 OUString ShutdownIcon::GetUrlDescription( const OUString& aUrl )
 {
@@ -324,7 +313,6 @@ OUString ShutdownIcon::GetUrlDescription( const OUString& aUrl )
 
     return SvFileInformationManager::GetDescription( INetURLObject( aUrl ) );
 }
-
 
 void ShutdownIcon::StartFileDialog()
 {
@@ -346,7 +334,6 @@ void ShutdownIcon::StartFileDialog()
                 FileDialogFlags::MultiSelection, OUString() );
     m_pFileDlg->StartExecuteModal( LINK( this, ShutdownIcon, DialogClosedHdl_Impl ) );
 }
-
 
 IMPL_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused*/, void )
 {
@@ -557,10 +544,10 @@ void ShutdownIcon::init()
 {
     // access resource system and sfx only protected by solarmutex
     ::SolarMutexGuard aSolarGuard;
-    ResMgr *pResMgr = SfxResMgr::GetResMgr();
+    std::locale *pResLocale = SfxResLocale::GetResLocale();
 
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
-    m_pResMgr = pResMgr;
+    m_pResLocale = pResLocale;
     aGuard.clear();
     css::uno::Reference < XDesktop2 > xDesktop = Desktop::create( m_xContext );
     aGuard.reset();
@@ -717,8 +704,8 @@ OUString ShutdownIcon::getShortcutName()
 
 #ifdef _WIN32
     OUString aShortcutName( "StarOffice 6.0"  );
-    ResMgr* pMgr = SfxResMgr::GetResMgr();
-    if( pMgr )
+    std::locale* pResLocale = SfxResLocale::GetResLocale();
+    if (pResLocale)
     {
         ::SolarMutexGuard aGuard;
         aShortcutName = SfxResId(STR_QUICKSTART_LNKNAME);

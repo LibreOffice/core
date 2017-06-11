@@ -19,9 +19,10 @@
 
 #include "formmetadata.hxx"
 #include "formstrings.hxx"
-#include "formresid.hrc"
+#include "command.hrc"
+#include "strings.hrc"
+#include "stringarrays.hrc"
 #include "propctrlr.hrc"
-#include <tools/resary.hxx>
 #include <comphelper/extract.hxx>
 #include <sal/macros.h>
 #include <algorithm>
@@ -79,7 +80,7 @@ namespace pcr
 
 #define DEF_INFO( ident, uinameres, pos, helpid, flags )       \
     OPropertyInfoImpl( PROPERTY_##ident, PROPERTY_ID_##ident, \
-            PcrRes( RID_STR_##uinameres ).toString(), pos, HID_PROP_##helpid, flags )
+            PcrRes( RID_STR_##uinameres ), pos, HID_PROP_##helpid, flags )
 
 #define DEF_INFO_1( ident, uinameres, pos, helpid, flag1 )   \
     DEF_INFO( ident, uinameres, pos, helpid, PROP_FLAG_##flag1 )
@@ -372,13 +373,11 @@ namespace pcr
         return (pInfo) ? pInfo->sTranslation : OUString();
     }
 
-
     OString OPropertyInfoService::getPropertyHelpId(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->sHelpId : OString();
     }
-
 
     sal_Int16 OPropertyInfoService::getPropertyPos(sal_Int32 _nId) const
     {
@@ -386,112 +385,110 @@ namespace pcr
         return (pInfo) ? pInfo->nPos : 0xFFFF;
     }
 
-
     sal_uInt32 OPropertyInfoService::getPropertyUIFlags(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->nUIFlags : 0;
     }
 
-
     std::vector< OUString > OPropertyInfoService::getPropertyEnumRepresentations(sal_Int32 _nId) const
     {
         OSL_ENSURE( ( ( getPropertyUIFlags( _nId ) & PROP_FLAG_ENUM ) != 0 ) || ( _nId == PROPERTY_ID_TARGET_FRAME ),
             "OPropertyInfoService::getPropertyEnumRepresentations: this is no enum property!" );
 
-        sal_Int16 nStringItemsResId = 0;
+        const char** pStringItemsResId = nullptr;
         switch ( _nId )
         {
             case PROPERTY_ID_IMAGEPOSITION:
-                nStringItemsResId = RID_RSC_ENUM_IMAGE_POSITION;
+                pStringItemsResId = RID_RSC_ENUM_IMAGE_POSITION;
                 break;
             case PROPERTY_ID_BORDER:
-                nStringItemsResId = RID_RSC_ENUM_BORDER_TYPE;
+                pStringItemsResId = RID_RSC_ENUM_BORDER_TYPE;
                 break;
             case PROPERTY_ID_ICONSIZE:
-                nStringItemsResId = RID_RSC_ENUM_ICONSIZE_TYPE;
+                pStringItemsResId = RID_RSC_ENUM_ICONSIZE_TYPE;
                 break;
             case PROPERTY_ID_COMMANDTYPE:
-                nStringItemsResId = RID_RSC_ENUM_COMMAND_TYPE;
+                pStringItemsResId = RID_RSC_ENUM_COMMAND_TYPE;
                 break;
             case PROPERTY_ID_LISTSOURCETYPE:
-                nStringItemsResId = RID_RSC_ENUM_LISTSOURCE_TYPE;
+                pStringItemsResId = RID_RSC_ENUM_LISTSOURCE_TYPE;
                 break;
             case PROPERTY_ID_ALIGN:
-                nStringItemsResId = RID_RSC_ENUM_ALIGNMENT;
+                pStringItemsResId = RID_RSC_ENUM_ALIGNMENT;
                 break;
             case PROPERTY_ID_VERTICAL_ALIGN:
-                nStringItemsResId = RID_RSC_ENUM_VERTICAL_ALIGN;
+                pStringItemsResId = RID_RSC_ENUM_VERTICAL_ALIGN;
                 break;
             case PROPERTY_ID_BUTTONTYPE:
-                nStringItemsResId = RID_RSC_ENUM_BUTTONTYPE;
+                pStringItemsResId = RID_RSC_ENUM_BUTTONTYPE;
                 break;
             case PROPERTY_ID_PUSHBUTTONTYPE:
-                nStringItemsResId = RID_RSC_ENUM_PUSHBUTTONTYPE;
+                pStringItemsResId = RID_RSC_ENUM_PUSHBUTTONTYPE;
                 break;
             case PROPERTY_ID_SUBMIT_METHOD:
-                nStringItemsResId = RID_RSC_ENUM_SUBMIT_METHOD;
+                pStringItemsResId = RID_RSC_ENUM_SUBMIT_METHOD;
                 break;
             case PROPERTY_ID_SUBMIT_ENCODING:
-                nStringItemsResId = RID_RSC_ENUM_SUBMIT_ENCODING;
+                pStringItemsResId = RID_RSC_ENUM_SUBMIT_ENCODING;
                 break;
             case PROPERTY_ID_DATEFORMAT:
-                nStringItemsResId = RID_RSC_ENUM_DATEFORMAT_LIST;
+                pStringItemsResId = RID_RSC_ENUM_DATEFORMAT_LIST;
                 break;
             case PROPERTY_ID_TIMEFORMAT:
-                nStringItemsResId = RID_RSC_ENUM_TIMEFORMAT_LIST;
+                pStringItemsResId = RID_RSC_ENUM_TIMEFORMAT_LIST;
                 break;
             case PROPERTY_ID_DEFAULT_STATE:
             case PROPERTY_ID_STATE:
-                nStringItemsResId = RID_RSC_ENUM_CHECKED;
+                pStringItemsResId = RID_RSC_ENUM_CHECKED;
                 break;
             case PROPERTY_ID_CYCLE:
-                nStringItemsResId = RID_RSC_ENUM_CYCLE;
+                pStringItemsResId = RID_RSC_ENUM_CYCLE;
                 break;
             case PROPERTY_ID_NAVIGATION:
-                nStringItemsResId = RID_RSC_ENUM_NAVIGATION;
+                pStringItemsResId = RID_RSC_ENUM_NAVIGATION;
                 break;
             case PROPERTY_ID_TARGET_FRAME:
-                nStringItemsResId = RID_RSC_ENUM_SUBMIT_TARGET;
+                pStringItemsResId = RID_RSC_ENUM_SUBMIT_TARGET;
                 break;
             case PROPERTY_ID_ORIENTATION:
-                nStringItemsResId = RID_RSC_ENUM_ORIENTATION;
+                pStringItemsResId = RID_RSC_ENUM_ORIENTATION;
                 break;
             case PROPERTY_ID_CELL_EXCHANGE_TYPE:
-                nStringItemsResId = RID_RSC_ENUM_CELL_EXCHANGE_TYPE;
+                pStringItemsResId = RID_RSC_ENUM_CELL_EXCHANGE_TYPE;
                 break;
             case PROPERTY_ID_SHOW_SCROLLBARS:
-                nStringItemsResId = RID_RSC_ENUM_SCROLLBARS;
+                pStringItemsResId = RID_RSC_ENUM_SCROLLBARS;
                 break;
             case PROPERTY_ID_VISUALEFFECT:
-                nStringItemsResId = RID_RSC_ENUM_VISUALEFFECT;
+                pStringItemsResId = RID_RSC_ENUM_VISUALEFFECT;
                 break;
             case PROPERTY_ID_TEXTTYPE:
-                nStringItemsResId = RID_RSC_ENUM_TEXTTYPE;
+                pStringItemsResId = RID_RSC_ENUM_TEXTTYPE;
                 break;
             case PROPERTY_ID_LINEEND_FORMAT:
-                nStringItemsResId = RID_RSC_ENUM_LINEEND_FORMAT;
+                pStringItemsResId = RID_RSC_ENUM_LINEEND_FORMAT;
                 break;
             case PROPERTY_ID_XSD_WHITESPACES:
-                nStringItemsResId = RID_RSC_ENUM_WHITESPACE_HANDLING;
+                pStringItemsResId = RID_RSC_ENUM_WHITESPACE_HANDLING;
                 break;
             case PROPERTY_ID_SELECTION_TYPE:
-                nStringItemsResId = RID_RSC_ENUM_SELECTION_TYPE;
+                pStringItemsResId = RID_RSC_ENUM_SELECTION_TYPE;
                 break;
             case PROPERTY_ID_SCALE_MODE:
-                nStringItemsResId = RID_RSC_ENUM_SCALE_MODE;
+                pStringItemsResId = RID_RSC_ENUM_SCALE_MODE;
                 break;
             case PROPERTY_ID_WRITING_MODE:
-                nStringItemsResId = RID_RSC_ENUM_WRITING_MODE;
+                pStringItemsResId = RID_RSC_ENUM_WRITING_MODE;
                 break;
             case PROPERTY_ID_WHEEL_BEHAVIOR:
-                nStringItemsResId = RID_RSC_ENUM_WHEEL_BEHAVIOR;
+                pStringItemsResId = RID_RSC_ENUM_WHEEL_BEHAVIOR;
                 break;
             case PROPERTY_ID_TEXT_ANCHOR_TYPE:
-                nStringItemsResId = RID_RSC_ENUM_TEXT_ANCHOR_TYPE;
+                pStringItemsResId = RID_RSC_ENUM_TEXT_ANCHOR_TYPE;
                 break;
             case PROPERTY_ID_SHEET_ANCHOR_TYPE:
-                nStringItemsResId = RID_RSC_ENUM_SHEET_ANCHOR_TYPE;
+                pStringItemsResId = RID_RSC_ENUM_SHEET_ANCHOR_TYPE;
                 break;
             default:
                 OSL_FAIL( "OPropertyInfoService::getPropertyEnumRepresentations: unknown enum property!" );
@@ -500,17 +497,16 @@ namespace pcr
 
         std::vector< OUString > aReturn;
 
-        if (nStringItemsResId)
+        if (!pStringItemsResId)
+            return aReturn;
+
+        while (*pStringItemsResId)
         {
-            PcrRes aResId(nStringItemsResId);
-            ResStringArray aResList(aResId);
-            for (sal_uInt32 i = 0; i < aResList.Count(); ++i)
-                aReturn.push_back(aResList.GetString(i));
+            aReturn.push_back(PcrRes(*pStringItemsResId++));
         }
 
         return aReturn;
     }
-
 
     bool OPropertyInfoService::isComposeable( const OUString& _rPropertyName ) const
     {

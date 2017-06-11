@@ -18,7 +18,7 @@
  */
 
 #include "tablespage.hxx"
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
 #include "dsitems.hxx"
 #include "browserids.hxx"
 #include "datasourceconnector.hxx"
@@ -28,7 +28,8 @@
 #include "stringlistitem.hxx"
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
+#include "strings.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/waitobj.hxx>

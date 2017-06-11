@@ -21,7 +21,7 @@
 
 #include "mtrindlg.hxx"
 #include "scresid.hxx"
-#include "scres.hrc"
+#include "strings.hrc"
 
 ScMetricInputDlg::ScMetricInputDlg( vcl::Window*         pParent,
                                     const OString&  sDialogName,

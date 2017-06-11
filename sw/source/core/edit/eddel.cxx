@@ -32,7 +32,7 @@
 #include <SwRewriter.hxx>
 #include <globals.hrc>
 
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <list>
 
 void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )

@@ -3401,7 +3401,7 @@ public:
 
 }
 
-sal_uLong ScDPCollection::ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs)
+const char* ScDPCollection::ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs)
 {
     if (!pDPObj)
         return STR_ERR_DATAPILOTSOURCE;
@@ -3413,9 +3413,9 @@ sal_uLong ScDPCollection::ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>&
         if (!pDesc)
             return STR_ERR_DATAPILOTSOURCE;
 
-        sal_uLong nErrId = pDesc->CheckSourceRange();
-        if (nErrId)
-            return nErrId;
+        const char* pErrId = pDesc->CheckSourceRange();
+        if (pErrId)
+            return pErrId;
 
         if (pDesc->HasRangeName())
         {
@@ -3462,7 +3462,7 @@ sal_uLong ScDPCollection::ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>&
             GetAllTables(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject, rRefs);
         }
     }
-    return 0;
+    return nullptr;
 }
 
 bool ScDPCollection::ReloadGroupsInCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs)

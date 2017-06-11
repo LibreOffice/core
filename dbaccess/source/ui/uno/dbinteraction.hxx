@@ -22,7 +22,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include "apitools.hxx"
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -62,7 +62,7 @@ namespace dbaui
     class BasicInteractionHandler
                 :public BasicInteractionHandler_Base
     {
-        const OModuleClient m_aModuleClient;
+        const dbaccess::OModuleClient m_aModuleClient;
         const css::uno::Reference< css::uno::XComponentContext >
                             m_xContext;
         const bool          m_bFallbackToGeneric;

@@ -26,7 +26,7 @@
 #include "ControllerLockGuard.hxx"
 #include "UndoGuard.hxx"
 #include "ResId.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>

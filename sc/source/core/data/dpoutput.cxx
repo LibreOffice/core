@@ -40,7 +40,7 @@
 #include "stlsheet.hxx"
 #include "scresid.hxx"
 #include "unonames.hxx"
-#include "scres.hrc"
+#include "strings.hrc"
 #include "stringutil.hxx"
 #include "dputil.hxx"
 
@@ -279,9 +279,9 @@ void ScDPOutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL 
 
 }
 
-void lcl_SetStyleById( ScDocument* pDoc, SCTAB nTab,
-                    SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                    sal_uInt16 nStrId )
+void lcl_SetStyleById(ScDocument* pDoc, SCTAB nTab,
+                      SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                      const char* pStrId)
 {
     if ( nCol1 > nCol2 || nRow1 > nRow2 )
     {
@@ -289,7 +289,7 @@ void lcl_SetStyleById( ScDocument* pDoc, SCTAB nTab,
         return;
     }
 
-    OUString aStyleName = ScGlobal::GetRscString( nStrId );
+    OUString aStyleName = ScGlobal::GetRscString(pStrId);
     ScStyleSheetPool* pStlPool = pDoc->GetStyleSheetPool();
     ScStyleSheet* pStyle = static_cast<ScStyleSheet*>( pStlPool->Find( aStyleName, SfxStyleFamily::Para ) );
     if (!pStyle)
@@ -300,9 +300,9 @@ void lcl_SetStyleById( ScDocument* pDoc, SCTAB nTab,
                                                     SFXSTYLEBIT_USERDEF ) );
         pStyle->SetParent( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
         SfxItemSet& rSet = pStyle->GetItemSet();
-        if ( nStrId==STR_PIVOT_STYLE_RESULT || nStrId==STR_PIVOT_STYLE_TITLE )
+        if (strcmp(pStrId, STR_PIVOT_STYLE_RESULT) == 0 || strcmp(pStrId, STR_PIVOT_STYLE_TITLE) == 0)
             rSet.Put( SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT ) );
-        if ( nStrId==STR_PIVOT_STYLE_CATEGORY || nStrId==STR_PIVOT_STYLE_TITLE )
+        if (strcmp(pStrId, STR_PIVOT_STYLE_CATEGORY) == 0 || strcmp(pStrId, STR_PIVOT_STYLE_TITLE) == 0)
             rSet.Put( SvxHorJustifyItem( SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY ) );
     }
 
@@ -1499,21 +1499,21 @@ namespace {
 
 OUString lcl_GetDataFieldName( const OUString& rSourceName, sal_Int16 eFunc )
 {
-    sal_uInt16 nStrId = 0;
+    const char* pStrId = nullptr;
     switch ( eFunc )
     {
-        case sheet::GeneralFunction2::SUM:        nStrId = STR_FUN_TEXT_SUM;      break;
+        case sheet::GeneralFunction2::SUM:        pStrId = STR_FUN_TEXT_SUM;      break;
         case sheet::GeneralFunction2::COUNT:
-        case sheet::GeneralFunction2::COUNTNUMS:  nStrId = STR_FUN_TEXT_COUNT;    break;
-        case sheet::GeneralFunction2::AVERAGE:    nStrId = STR_FUN_TEXT_AVG;      break;
-        case sheet::GeneralFunction2::MEDIAN:     nStrId = STR_FUN_TEXT_MEDIAN;   break;
-        case sheet::GeneralFunction2::MAX:        nStrId = STR_FUN_TEXT_MAX;      break;
-        case sheet::GeneralFunction2::MIN:        nStrId = STR_FUN_TEXT_MIN;      break;
-        case sheet::GeneralFunction2::PRODUCT:    nStrId = STR_FUN_TEXT_PRODUCT;  break;
+        case sheet::GeneralFunction2::COUNTNUMS:  pStrId = STR_FUN_TEXT_COUNT;    break;
+        case sheet::GeneralFunction2::AVERAGE:    pStrId = STR_FUN_TEXT_AVG;      break;
+        case sheet::GeneralFunction2::MEDIAN:     pStrId = STR_FUN_TEXT_MEDIAN;   break;
+        case sheet::GeneralFunction2::MAX:        pStrId = STR_FUN_TEXT_MAX;      break;
+        case sheet::GeneralFunction2::MIN:        pStrId = STR_FUN_TEXT_MIN;      break;
+        case sheet::GeneralFunction2::PRODUCT:    pStrId = STR_FUN_TEXT_PRODUCT;  break;
         case sheet::GeneralFunction2::STDEV:
-        case sheet::GeneralFunction2::STDEVP:     nStrId = STR_FUN_TEXT_STDDEV;   break;
+        case sheet::GeneralFunction2::STDEVP:     pStrId = STR_FUN_TEXT_STDDEV;   break;
         case sheet::GeneralFunction2::VAR:
-        case sheet::GeneralFunction2::VARP:       nStrId = STR_FUN_TEXT_VAR;      break;
+        case sheet::GeneralFunction2::VARP:       pStrId = STR_FUN_TEXT_VAR;      break;
         case sheet::GeneralFunction2::NONE:
         case sheet::GeneralFunction2::AUTO:                                       break;
         default:
@@ -1521,10 +1521,10 @@ OUString lcl_GetDataFieldName( const OUString& rSourceName, sal_Int16 eFunc )
             assert(false);
         }
     }
-    if ( !nStrId )
+    if (!pStrId)
         return OUString();
 
-    OUStringBuffer aRet( ScGlobal::GetRscString( nStrId ) );
+    OUStringBuffer aRet(ScGlobal::GetRscString(pStrId));
     aRet.append(" - ");
     aRet.append(rSourceName);
     return aRet.makeStringAndClear();

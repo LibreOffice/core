@@ -38,7 +38,7 @@
 #include "document.hxx"
 #include "scresid.hxx"
 #include "progress.hxx"
-#include "scres.hrc"
+#include "strings.hrc"
 #include "globstr.hrc"
 
 using namespace ::com::sun::star;

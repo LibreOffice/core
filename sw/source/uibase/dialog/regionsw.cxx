@@ -47,8 +47,7 @@
 #include <shellio.hxx>
 #include <helpid.h>
 #include <cmdid.h>
-#include <regionsw.hrc>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <globals.hrc>
 #include <sfx2/bindings.hxx>
 #include <sfx2/htmlmode.hxx>

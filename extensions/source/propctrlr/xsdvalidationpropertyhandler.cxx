@@ -25,7 +25,7 @@
 #include "formmetadata.hxx"
 #include "xsddatatypes.hxx"
 #include "modulepcr.hxx"
-#include "formresid.hrc"
+#include "strings.hrc"
 #include "propctrlr.hrc"
 #include "newdatatype.hxx"
 #include "xsdvalidationhelper.hxx"

@@ -1,0 +1,44 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SD_INC_ERRHDL_HRC
+#define INCLUDED_SD_INC_ERRHDL_HRC
+
+#define N_(String) (u8##String)
+
+#include "glob.hrc"
+#include "sderror.hxx"
+
+#define ERR_CODE( class, err )  ErrCode(class | (sal_uInt32(err) - ERROR_SD_BASE))
+#define WARN_CODE( class, err ) ErrCode(class | (sal_uInt32(err) - WARN_SD_BASE))
+
+const ErrMsgCode RID_SD_ERRHDL[] =
+{
+    { N_("File format error found at $(ARG1)(row,col)."),
+      ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_ROWCOL ) },
+    { N_("Format error discovered in the file in sub-document $(ARG1) at position $(ARG2)(row,col)."),
+      ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_FILE_ROWCOL ) },
+    { N_("Format error discovered in the file in sub-document $(ARG1) at position $(ARG2)(row,col)."),
+      ERR_CODE ( ERRCODE_CLASS_READ , WARN_FORMAT_FILE_ROWCOL ) },
+    { nullptr, ERRCODE_NONE }
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

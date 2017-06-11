@@ -64,7 +64,6 @@ $(eval $(call gb_InstallModule_add_scpfiles,scp2/ooo,\
     scp2/source/ooo/file_extra_ooo \
     scp2/source/ooo/file_library_ooo \
     scp2/source/ooo/file_ooo \
-    scp2/source/ooo/file_resource_ooo \
     scp2/source/ooo/installation_ooo \
     scp2/source/ooo/module_help_template \
     scp2/source/ooo/module_hidden_ooo \

@@ -22,7 +22,7 @@
 #include "formoperations.hxx"
 #include "frm_strings.hxx"
 #include "frm_resource.hxx"
-#include "frm_resource.hrc"
+#include "strings.hrc"
 #include "services.hxx"
 
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
@@ -771,12 +771,12 @@ namespace frm
 
             default:
             {
-                sal_uInt16 nErrorResourceId = RID_STR_FEATURE_UNKNOWN;
+                const char* pErrorResourceId = RID_STR_FEATURE_UNKNOWN;
                 if ( lcl_requiresArguments( _nFeature ) )
-                    nErrorResourceId = RID_STR_FEATURE_REQUIRES_PARAMETERS;
+                    pErrorResourceId = RID_STR_FEATURE_REQUIRES_PARAMETERS;
                 else if ( !lcl_isExecutableFeature( _nFeature ) )
-                    nErrorResourceId = RID_STR_FEATURE_NOT_EXECUTABLE;
-                throw IllegalArgumentException( FRM_RES_STRING( nErrorResourceId ), *this, 1 );
+                    pErrorResourceId = RID_STR_FEATURE_NOT_EXECUTABLE;
+                throw IllegalArgumentException( FRM_RES_STRING( pErrorResourceId ), *this, 1 );
             }
             }   // switch
         }
@@ -1695,7 +1695,7 @@ namespace frm
 
 
     template < typename FunctObj >
-    void FormOperations::impl_doActionInSQLContext_throw( FunctObj f, sal_uInt16 _nErrorResourceId ) const
+    void FormOperations::impl_doActionInSQLContext_throw( FunctObj f, const char* pErrorResourceId ) const
     {
         try
         {
@@ -1704,12 +1704,11 @@ namespace frm
 #if HAVE_FEATURE_DBCONNECTIVITY
         catch( const SQLException& )
         {
-            if ( !_nErrorResourceId )
-                // no information to prepend
+            if (!pErrorResourceId) // no information to prepend
                 throw;
 
             SQLExceptionInfo aInfo( ::cppu::getCaughtException() );
-            OUString sAdditionalError( FRM_RES_STRING( _nErrorResourceId ) );
+            OUString sAdditionalError( FRM_RES_STRING( pErrorResourceId ) );
             aInfo.prepend( sAdditionalError );
             aInfo.doThrow();
         }
@@ -1717,7 +1716,7 @@ namespace frm
         catch( const RuntimeException& ) { throw; }
         catch( const Exception& )
         {
-            OUString sAdditionalError( FRM_RES_STRING( _nErrorResourceId ) );
+            OUString sAdditionalError( FRM_RES_STRING( pErrorResourceId ) );
             throw WrappedTargetException( sAdditionalError, *const_cast< FormOperations* >( this ), ::cppu::getCaughtException() );
         }
     }

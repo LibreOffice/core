@@ -465,7 +465,7 @@ void ScPivotLayoutDialog::UpdateSourceRange()
                 return;
 
         aSourceSheet.SetSourceRange(aSourceRange);
-        if (aSourceSheet.CheckSourceRange() != 0)
+        if (aSourceSheet.CheckSourceRange() != nullptr)
         {
             mpSourceEdit->SetRefValid(false);
             return;

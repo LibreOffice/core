@@ -134,7 +134,7 @@ namespace connectivity
             /// @throws css::container::ElementExistException
             /// @throws css::uno::RuntimeException
             void SAL_CALL renameImpl( const OUString& newName );
-            void throwInvalidColumnType(const sal_uInt16 _nErrorId,const OUString& _sColumnName);
+            void throwInvalidColumnType(const char* pErrorId, const OUString& _sColumnName);
 
         protected:
             virtual void FileClose() override;

@@ -99,6 +99,7 @@
 #include <helpid.h>
 #include <cmdid.h>
 #include <globals.hrc>
+#include <strings.hrc>
 #include <app.hrc>
 
 #include <cfgid.h>

@@ -57,8 +57,8 @@
 #include "DrawDocShell.hxx"
 #include "DrawViewShell.hxx"
 #include "ViewShell.hxx"
-#include "res_bmp.hrc"
-#include "glob.hrc"
+
+#include "strings.hrc"
 #include "prlayout.hxx"
 #include "prltempl.hrc"
 #include <svx/xfillit.hxx>

@@ -47,7 +47,7 @@
 #include "uiitems.hxx"
 #include "global.hxx"
 #include "scresid.hxx"
-#include "scres.hrc"
+#include "strings.hrc"
 #include "globstr.hrc"
 #include "bitmaps.hlst"
 #include "reffact.hxx"
@@ -2008,37 +2008,36 @@ void ScPosWnd::Modify()
         // determine the action that would be taken for the current input
 
         ScNameInputType eType = lcl_GetInputType( GetText() );      // uses current view
-        sal_uInt16 nStrId = 0;
+        const char* pStrId = nullptr;
         switch ( eType )
         {
             case SC_NAME_INPUT_CELL:
-                nStrId = STR_NAME_INPUT_CELL;
+                pStrId = STR_NAME_INPUT_CELL;
                 break;
             case SC_NAME_INPUT_RANGE:
             case SC_NAME_INPUT_NAMEDRANGE:
-                nStrId = STR_NAME_INPUT_RANGE;      // named range or range reference
+                pStrId = STR_NAME_INPUT_RANGE;      // named range or range reference
                 break;
             case SC_NAME_INPUT_DATABASE:
-                nStrId = STR_NAME_INPUT_DBRANGE;
+                pStrId = STR_NAME_INPUT_DBRANGE;
                 break;
             case SC_NAME_INPUT_ROW:
-                nStrId = STR_NAME_INPUT_ROW;
+                pStrId = STR_NAME_INPUT_ROW;
                 break;
             case SC_NAME_INPUT_SHEET:
-                nStrId = STR_NAME_INPUT_SHEET;
+                pStrId = STR_NAME_INPUT_SHEET;
                 break;
             case SC_NAME_INPUT_DEFINE:
-                nStrId = STR_NAME_INPUT_DEFINE;
+                pStrId = STR_NAME_INPUT_DEFINE;
                 break;
             default:
                 // other cases (error): no tip help
                 break;
         }
 
-        if ( nStrId )
+        if (pStrId)
         {
             // show the help tip at the text cursor position
-
             vcl::Window* pWin = GetSubEdit();
             if (!pWin)
                 pWin = this;
@@ -2049,7 +2048,7 @@ void ScPosWnd::Modify()
             aPos = pWin->OutputToScreenPixel( aPos );
             tools::Rectangle aRect( aPos, aPos );
 
-            OUString aText = ScGlobal::GetRscString( nStrId );
+            OUString aText = ScGlobal::GetRscString(pStrId);
             QuickHelpFlags const nAlign = QuickHelpFlags::Left|QuickHelpFlags::Bottom;
             nTipVisible = Help::ShowPopover(pWin, aRect, aText, nAlign);
         }
@@ -2107,8 +2106,8 @@ void ScPosWnd::DoEnter()
                 ScNameInputType eType = lcl_GetInputType( aText );
                 if ( eType == SC_NAME_INPUT_BAD_NAME || eType == SC_NAME_INPUT_BAD_SELECTION )
                 {
-                    sal_uInt16 nId = ( eType == SC_NAME_INPUT_BAD_NAME ) ? STR_NAME_ERROR_NAME : STR_NAME_ERROR_SELECTION;
-                    pViewSh->ErrorMessage( nId );
+                    const char* pId = (eType == SC_NAME_INPUT_BAD_NAME) ? STR_NAME_ERROR_NAME : STR_NAME_ERROR_SELECTION;
+                    pViewSh->ErrorMessage(pId);
                 }
                 else if ( eType == SC_NAME_INPUT_DEFINE )
                 {

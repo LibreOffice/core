@@ -159,33 +159,31 @@ namespace xforms
 
     sal_Bool OXSDDataType::validate( const OUString& sValue )
     {
-        return ( _validate( sValue ) == 0 );
+        return ( _validate( sValue ) == nullptr );
     }
 
 
   OUString OXSDDataType::explainInvalid( const OUString& sValue )
     {
         // get reason
-        sal_uInt16 nReason = _validate( sValue );
+        const char* pReason = _validate( sValue );
 
         // get resource and return localized string
-        return ( nReason == 0 )
+        return (!pReason)
             ? OUString()
-            : getResource( nReason, sValue,
-                                   _explainInvalid( nReason ) );
+            : getResource( pReason, sValue,
+                                   _explainInvalid( pReason ) );
     }
 
-
-    OUString OXSDDataType::_explainInvalid( sal_uInt16 nReason )
+    OUString OXSDDataType::_explainInvalid(const OString& rReason)
     {
-        if ( RID_STR_XFORMS_PATTERN_DOESNT_MATCH == nReason )
+        if ( RID_STR_XFORMS_PATTERN_DOESNT_MATCH == rReason )
         {
             OSL_ENSURE( !m_sPattern.isEmpty(), "OXSDDataType::_explainInvalid: how can this error occur without a regular expression?" );
             return m_sPattern;
         }
         return OUString();
     }
-
 
     namespace
     {
@@ -215,8 +213,7 @@ namespace xforms
         }
     }
 
-
-    sal_uInt16 OXSDDataType::_validate( const OUString& _rValue )
+    const char* OXSDDataType::_validate( const OUString& _rValue )
     {
         // care for the regular expression
         if ( !m_sPattern.isEmpty() )
@@ -233,7 +230,7 @@ namespace xforms
                 return RID_STR_XFORMS_PATTERN_DOESNT_MATCH;
         }
 
-        return 0;
+        return nullptr;
     }
 
 
@@ -422,66 +419,43 @@ namespace xforms
         return bReturn;
     }
 
-
-    sal_uInt16 OValueLimitedType_Base::_validate( const OUString& rValue )
+    const char* OValueLimitedType_Base::_validate( const OUString& rValue )
     {
-        sal_uInt16 nReason = OXSDDataType::_validate( rValue );
-        if( nReason == 0 )
+        const char* pReason = OXSDDataType::_validate( rValue );
+        if (!pReason)
         {
 
             // convert value and check format
             double f;
             if( ! _getValue( rValue, f ) )
-                nReason = RID_STR_XFORMS_VALUE_IS_NOT_A;
+                pReason = RID_STR_XFORMS_VALUE_IS_NOT_A;
 
             // check range
             else if( ( m_aMaxInclusive.hasValue() ) && f > m_fCachedMaxInclusive )
-                nReason = RID_STR_XFORMS_VALUE_MAX_INCL;
+                pReason = RID_STR_XFORMS_VALUE_MAX_INCL;
             else if( ( m_aMaxExclusive.hasValue() ) && f >= m_fCachedMaxExclusive )
-                nReason = RID_STR_XFORMS_VALUE_MAX_EXCL;
+                pReason = RID_STR_XFORMS_VALUE_MAX_EXCL;
             else if( ( m_aMinInclusive.hasValue() ) && f < m_fCachedMinInclusive )
-                nReason = RID_STR_XFORMS_VALUE_MIN_INCL;
+                pReason = RID_STR_XFORMS_VALUE_MIN_INCL;
             else if( ( m_aMinExclusive.hasValue() ) && f <= m_fCachedMinExclusive )
-                nReason = RID_STR_XFORMS_VALUE_MIN_EXCL;
+                pReason = RID_STR_XFORMS_VALUE_MIN_EXCL;
         }
-        return nReason;
+        return pReason;
     }
 
-
-    OUString OValueLimitedType_Base::_explainInvalid( sal_uInt16 nReason )
+    OUString OValueLimitedType_Base::_explainInvalid(const OString& rReason)
     {
         OUStringBuffer sInfo;
-        switch( nReason )
-        {
-        case 0:
-            // nothing to do!
-            break;
-
-        case RID_STR_XFORMS_VALUE_IS_NOT_A:
+        if (rReason == RID_STR_XFORMS_VALUE_IS_NOT_A)
             sInfo.append( getName() );
-            break;
-
-        case RID_STR_XFORMS_VALUE_MAX_INCL:
+        else if (rReason == RID_STR_XFORMS_VALUE_MAX_INCL)
             sInfo.append( typedValueAsHumanReadableString( m_aMaxInclusive ) );
-            break;
-
-        case RID_STR_XFORMS_VALUE_MAX_EXCL:
+        else if (rReason == RID_STR_XFORMS_VALUE_MAX_EXCL)
             sInfo.append( typedValueAsHumanReadableString( m_aMaxExclusive ) );
-            break;
-
-        case RID_STR_XFORMS_VALUE_MIN_INCL:
+        else if (rReason == RID_STR_XFORMS_VALUE_MIN_INCL)
             sInfo.append( typedValueAsHumanReadableString( m_aMinInclusive ) );
-            break;
-
-        case RID_STR_XFORMS_VALUE_MIN_EXCL:
+        else if (rReason == RID_STR_XFORMS_VALUE_MIN_EXCL)
             sInfo.append( typedValueAsHumanReadableString( m_aMinExclusive ) );
-            break;
-
-        default:
-            OSL_FAIL( "OValueLimitedType::_explainInvalid: unknown reason!" );
-            break;
-        }
-
         return sInfo.makeStringAndClear();
     }
 
@@ -538,12 +512,12 @@ namespace xforms
     }
 
 
-    sal_uInt16 OStringType::_validate( const OUString& rValue )
+    const char* OStringType::_validate( const OUString& rValue )
     {
         // check regexp, whitespace etc. in parent class
-        sal_uInt16 nReason = OStringType_Base::_validate( rValue );
+        const char* pReason = OStringType_Base::_validate( rValue );
 
-        if( nReason == 0 )
+        if (!pReason)
         {
             // check string constraints
             sal_Int32 nLength = rValue.getLength();
@@ -551,48 +525,41 @@ namespace xforms
             if ( m_aLength >>= nLimit )
             {
                 if ( nLimit != nLength )
-                    nReason = RID_STR_XFORMS_VALUE_LENGTH;
+                    pReason = RID_STR_XFORMS_VALUE_LENGTH;
             }
             else
             {
                 if ( ( m_aMaxLength >>= nLimit ) && ( nLength > nLimit ) )
-                    nReason = RID_STR_XFORMS_VALUE_MAX_LENGTH;
+                    pReason = RID_STR_XFORMS_VALUE_MAX_LENGTH;
                 else if ( ( m_aMinLength >>= nLimit ) && ( nLength < nLimit ) )
-                    nReason = RID_STR_XFORMS_VALUE_MIN_LENGTH;
+                    pReason = RID_STR_XFORMS_VALUE_MIN_LENGTH;
             }
         }
-        return nReason;
+        return pReason;
     }
 
-
-    OUString OStringType::_explainInvalid( sal_uInt16 nReason )
+    OUString OStringType::_explainInvalid(const OString& rReason)
     {
         sal_Int32 nValue = 0;
         OUStringBuffer sInfo;
-        switch( nReason )
+        if (rReason == RID_STR_XFORMS_VALUE_LENGTH)
         {
-        case 0:
-            // nothing to do!
-            break;
-
-        case RID_STR_XFORMS_VALUE_LENGTH:
             if( m_aLength >>= nValue )
                 sInfo.append( nValue );
-            break;
-
-        case RID_STR_XFORMS_VALUE_MAX_LENGTH:
+        }
+        else if (rReason == RID_STR_XFORMS_VALUE_MAX_LENGTH)
+        {
             if( m_aMaxLength >>= nValue )
                 sInfo.append( nValue );
-            break;
-
-        case RID_STR_XFORMS_VALUE_MIN_LENGTH:
+        }
+        else if (rReason == RID_STR_XFORMS_VALUE_MIN_LENGTH)
+        {
             if( m_aMinLength >>= nValue )
                 sInfo.append( nValue );
-            break;
-
-        default:
-            sInfo.append( OStringType_Base::_explainInvalid( nReason ) );
-            break;
+        }
+        else if (!rReason.isEmpty())
+        {
+            sInfo.append(OStringType_Base::_explainInvalid(rReason));
         }
         return sInfo.makeStringAndClear();
     }
@@ -612,20 +579,19 @@ namespace xforms
         OBooleanType_Base::initializeClone( _rCloneSource );
     }
 
-    sal_uInt16 OBooleanType::_validate( const OUString& sValue )
+    const char* OBooleanType::_validate( const OUString& sValue )
     {
-        sal_uInt16 nInvalidityReason = OBooleanType_Base::_validate( sValue );
-        if ( nInvalidityReason )
-            return nInvalidityReason;
+        const char* pInvalidityReason = OBooleanType_Base::_validate( sValue );
+        if ( pInvalidityReason )
+            return pInvalidityReason;
 
         bool bValid = sValue == "0" || sValue == "1" || sValue == "true" || sValue == "false";
-        return bValid ? 0 : RID_STR_XFORMS_INVALID_VALUE;
+        return bValid ? nullptr : RID_STR_XFORMS_INVALID_VALUE;
     }
 
-
-    OUString OBooleanType::_explainInvalid( sal_uInt16 nReason )
+    OUString OBooleanType::_explainInvalid(const OString& rReason)
     {
-        return ( nReason == 0 ) ? OUString() : getName();
+        return rReason.isEmpty() ? OUString() : getName();
     }
 
     ODecimalType::ODecimalType( const OUString& _rName, sal_Int16 _nTypeClass )
@@ -655,12 +621,12 @@ namespace xforms
 
     // validate decimals and return code for which facets failed
     // to be used by: ODecimalType::validate and ODecimalType::explainInvalid
-    sal_uInt16 ODecimalType::_validate( const OUString& rValue )
+    const char* ODecimalType::_validate( const OUString& rValue )
     {
-        sal_Int16 nReason = ODecimalType_Base::_validate( rValue );
+        const char* pReason = ODecimalType_Base::_validate( rValue );
 
         // check digits (if no other cause is available so far)
-        if( nReason == 0 )
+        if (!pReason)
         {
             sal_Int32 nLength = rValue.getLength();
             sal_Int32 n = 0;
@@ -679,39 +645,35 @@ namespace xforms
 
             sal_Int32 nValue = 0;
             if( ( m_aTotalDigits >>= nValue ) &&  nTotalDigits > nValue )
-                nReason = RID_STR_XFORMS_VALUE_TOTAL_DIGITS;
+                pReason = RID_STR_XFORMS_VALUE_TOTAL_DIGITS;
             else if( ( m_aFractionDigits >>= nValue ) &&
                      ( nFractionDigits > nValue ) )
-                nReason = RID_STR_XFORMS_VALUE_FRACTION_DIGITS;
+                pReason = RID_STR_XFORMS_VALUE_FRACTION_DIGITS;
         }
 
-        return nReason;
+        return pReason;
     }
 
-
-    OUString ODecimalType::_explainInvalid( sal_uInt16 nReason )
+    OUString ODecimalType::_explainInvalid(const OString& rReason)
     {
         sal_Int32 nValue = 0;
         OUStringBuffer sInfo;
-        switch( nReason )
+        if (rReason == RID_STR_XFORMS_VALUE_TOTAL_DIGITS)
         {
-        case RID_STR_XFORMS_VALUE_TOTAL_DIGITS:
             if( m_aTotalDigits >>= nValue )
                 sInfo.append( nValue );
-            break;
-
-        case RID_STR_XFORMS_VALUE_FRACTION_DIGITS:
+        }
+        else if (rReason == RID_STR_XFORMS_VALUE_FRACTION_DIGITS)
+        {
             if( m_aFractionDigits >>= nValue )
                 sInfo.append( nValue );
-            break;
-
-        default:
-            sInfo.append( ODecimalType_Base::_explainInvalid( nReason ) );
-            break;
+        }
+        else
+        {
+            sInfo.append(ODecimalType_Base::_explainInvalid(rReason));
         }
         return sInfo.makeStringAndClear();
     }
-
 
     OUString ODecimalType::typedValueAsHumanReadableString( const Any& _rValue ) const
     {
@@ -751,7 +713,7 @@ namespace xforms
     DEFAULT_IMPLEMNENT_SUBTYPE( ODateType, DATE )
 
 
-    sal_uInt16 ODateType::_validate( const OUString& _rValue )
+    const char* ODateType::_validate( const OUString& _rValue )
     {
         return ODateType_Base::_validate( _rValue );
     }
@@ -793,7 +755,7 @@ namespace xforms
     DEFAULT_IMPLEMNENT_SUBTYPE( OTimeType, TIME )
 
 
-    sal_uInt16 OTimeType::_validate( const OUString& _rValue )
+    const char* OTimeType::_validate( const OUString& _rValue )
     {
         return OTimeType_Base::_validate( _rValue );
     }
@@ -841,12 +803,10 @@ namespace xforms
 
     DEFAULT_IMPLEMNENT_SUBTYPE( ODateTimeType, DATETIME )
 
-
-    sal_uInt16 ODateTimeType::_validate( const OUString& _rValue )
+    const char* ODateTimeType::_validate( const OUString& _rValue )
     {
         return ODateTimeType_Base::_validate( _rValue );
     }
-
 
     namespace
     {

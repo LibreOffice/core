@@ -44,7 +44,7 @@
 #include <comphelper/accessiblewrapper.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include <vcl/svapp.hxx>
 #include <algorithm>
 

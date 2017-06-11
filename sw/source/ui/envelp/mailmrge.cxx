@@ -37,7 +37,6 @@
 #include <swmodule.hxx>
 #include <modcfg.hxx>
 #include <mailmergehelper.hxx>
-#include <envelp.hrc>
 #include <mailmrge.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>

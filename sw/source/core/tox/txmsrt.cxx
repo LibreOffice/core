@@ -40,7 +40,7 @@
 #include <authfld.hxx>
 #include <toxwrap.hxx>
 
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <numrule.hxx>
 #include <reffld.hxx>
 
@@ -517,12 +517,12 @@ TextAndReading SwTOXPara::GetText_Impl() const
                 return TextAndReading(pFly->GetName(), OUString());
 
             OSL_ENSURE( false, "Graphic/object without name" );
-            sal_uInt16 nId = SwTOXElement::Ole == eType
+            const char* pId = SwTOXElement::Ole == eType
                             ? STR_OBJECT_DEFNAME
                             : SwTOXElement::Graphic == eType
                                 ? STR_GRAPHIC_DEFNAME
                                 : STR_FRAME_DEFNAME;
-            return TextAndReading(SwResId( nId ), OUString());
+            return TextAndReading(SwResId(pId), OUString());
         }
         break;
     default: break;

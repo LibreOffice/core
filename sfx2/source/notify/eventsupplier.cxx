@@ -41,7 +41,7 @@
 #include <sfx2/sfxresid.hxx>
 
 #include <sfx2/sfxsids.hrc>
-#include "sfxlocal.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/frame.hxx>

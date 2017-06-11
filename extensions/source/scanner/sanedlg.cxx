@@ -20,8 +20,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <tools/config.hxx>
+#include <tools/simplerm.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
 #include <sanedlg.hxx>
 #include <grid.hxx>
@@ -316,10 +319,10 @@ void SaneDlg::dispose()
 
 namespace {
 
-ResId SaneResId( sal_uInt32 nID )
+OUString SaneResId(const char *pID)
 {
-    static ResMgr* pResMgr = ResMgr::CreateResMgr( "scn" );
-    return ResId( nID, *pResMgr );
+    static std::locale loc = Translate::Create("pcr", Application::GetSettings().GetUILanguageTag());
+    return Translate::get(pID, loc);
 }
 
 }

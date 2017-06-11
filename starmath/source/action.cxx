@@ -20,7 +20,7 @@
 #include "action.hxx"
 #include "smdll.hxx"
 #include "document.hxx"
-#include "starmath.hrc"
+#include "strings.hrc"
 #include "strings.hxx"
 
 SmFormatAction::SmFormatAction(SmDocShell *pDocSh,

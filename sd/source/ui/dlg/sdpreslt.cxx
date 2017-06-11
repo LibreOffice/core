@@ -22,7 +22,7 @@
 #include <vcl/msgbox.hxx>
 
 #include "strings.hrc"
-#include "res_bmp.hrc"
+
 #include "bitmaps.hlst"
 #include "sdpreslt.hxx"
 #include "sdattr.hxx"

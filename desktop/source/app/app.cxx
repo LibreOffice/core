@@ -30,7 +30,8 @@
 #endif
 
 #include "app.hxx"
-#include "desktop.hrc"
+#include "dp_shared.hxx"
+#include "strings.hrc"
 #include "cmdlineargs.hxx"
 #include "cmdlinehelp.hxx"
 #include "dispatchwatcher.hxx"
@@ -361,31 +362,11 @@ ResMgr* Desktop::GetDesktopResManager()
 namespace {
 
 
-// Get a message string securely. There is a fallback string if the resource
-// is not available.
-
-OUString GetMsgString(
-    sal_uInt16 nId, const OUString& aFallbackMsg,
-    bool bAlwaysUseFallbackMsg = false )
-{
-    if ( !bAlwaysUseFallbackMsg )
-    {
-        ResMgr* resMgr = Desktop::GetDesktopResManager();
-        if ( resMgr )
-            return ResId(nId, *resMgr);
-    }
-    return aFallbackMsg;
-}
-
-OUString MakeStartupErrorMessage(
-    OUString const & aErrorMessage, bool bAlwaysUseFallbackMsg = false )
+OUString MakeStartupErrorMessage(OUString const & aErrorMessage)
 {
     OUStringBuffer    aDiagnosticMessage( 100 );
 
-    aDiagnosticMessage.append(
-        GetMsgString(
-            STR_BOOTSTRAP_ERR_CANNOT_START, "The program cannot be started.",
-            bAlwaysUseFallbackMsg ) );
+    aDiagnosticMessage.append(DpResId(STR_BOOTSTRAP_ERR_CANNOT_START));
 
     aDiagnosticMessage.append( "\n" );
 
@@ -398,20 +379,13 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
 {
     OUStringBuffer aDiagnosticMessage( 200 );
 
-    ResMgr* pResMgr = Desktop::GetDesktopResManager();
-    if ( pResMgr )
-        aDiagnosticMessage.append( ResId(STR_BOOTSTRAP_ERR_CFG_DATAACCESS, *pResMgr) );
-    else
-        aDiagnosticMessage.append( "The program cannot be started." );
+    aDiagnosticMessage.append(DpResId(STR_BOOTSTRAP_ERR_CFG_DATAACCESS));
 
     if ( !aInternalErrMsg.isEmpty() )
     {
-        aDiagnosticMessage.append( "\n\n" );
-        if ( pResMgr )
-            aDiagnosticMessage.append( ResId(STR_INTERNAL_ERRMSG, *pResMgr) );
-        else
-            aDiagnosticMessage.append( "The following internal error has occurred:\n\n" );
-        aDiagnosticMessage.append( aInternalErrMsg );
+        aDiagnosticMessage.append("\n\n");
+        aDiagnosticMessage.append(DpResId(STR_INTERNAL_ERRMSG));
+        aDiagnosticMessage.append(aInternalErrMsg);
     }
 
     return aDiagnosticMessage.makeStringAndClear();
@@ -731,8 +705,7 @@ OUString    Desktop::CreateErrorMsgString(
         /// the shared installation directory could not be located
         case ::utl::Bootstrap::MISSING_INSTALL_DIRECTORY:
         {
-            aMsg = GetMsgString( STR_BOOTSTRAP_ERR_PATH_INVALID,
-                        "The installation path is not available." );
+            aMsg = DpResId(STR_BOOTSTRAP_ERR_PATH_INVALID);
             bFileInfo = false;
         }
         break;
@@ -740,8 +713,7 @@ OUString    Desktop::CreateErrorMsgString(
         /// the bootstrap INI file could not be found or read
         case ::utl::Bootstrap::MISSING_BOOTSTRAP_FILE:
         {
-            aMsg = GetMsgString( STR_BOOTSTRAP_ERR_FILE_MISSING,
-                        "The configuration file \"$1\" is missing." );
+            aMsg = DpResId(STR_BOOTSTRAP_ERR_FILE_MISSING);
         }
         break;
 
@@ -750,40 +722,35 @@ OUString    Desktop::CreateErrorMsgString(
          case ::utl::Bootstrap::MISSING_BOOTSTRAP_FILE_ENTRY:
          case ::utl::Bootstrap::INVALID_BOOTSTRAP_FILE_ENTRY:
         {
-            aMsg = GetMsgString( STR_BOOTSTRAP_ERR_FILE_CORRUPT,
-                        "The configuration file \"$1\" is corrupt." );
+            aMsg = DpResId(STR_BOOTSTRAP_ERR_FILE_CORRUPT);
         }
         break;
 
         /// the version locator INI file could not be found or read
         case ::utl::Bootstrap::MISSING_VERSION_FILE:
         {
-            aMsg = GetMsgString( STR_BOOTSTRAP_ERR_FILE_MISSING,
-                        "The configuration file \"$1\" is missing." );
+            aMsg = DpResId(STR_BOOTSTRAP_ERR_FILE_MISSING);
         }
         break;
 
         /// the version locator INI has no entry for this version
-         case ::utl::Bootstrap::MISSING_VERSION_FILE_ENTRY:
+        case ::utl::Bootstrap::MISSING_VERSION_FILE_ENTRY:
         {
-            aMsg = GetMsgString( STR_BOOTSTRAP_ERR_NO_SUPPORT,
-                        "The main configuration file \"$1\" does not support the current version." );
+            aMsg = DpResId(STR_BOOTSTRAP_ERR_NO_SUPPORT);
         }
         break;
 
         /// the user installation directory does not exist
-           case ::utl::Bootstrap::MISSING_USER_DIRECTORY:
+        case ::utl::Bootstrap::MISSING_USER_DIRECTORY:
         {
-            aMsg = GetMsgString( STR_BOOTSTRAP_ERR_DIR_MISSING,
-                        "The configuration directory \"$1\" is missing." );
+            aMsg = DpResId(STR_BOOTSTRAP_ERR_DIR_MISSING);
         }
         break;
 
         /// some bootstrap data was invalid in unexpected ways
         case ::utl::Bootstrap::INVALID_BOOTSTRAP_DATA:
         {
-            aMsg = GetMsgString( STR_BOOTSTRAP_ERR_INTERNAL,
-                        "An internal failure occurred." );
+            aMsg = DpResId(STR_BOOTSTRAP_ERR_INTERNAL);
             bFileInfo = false;
         }
         break;
@@ -892,10 +859,7 @@ void Desktop::HandleBootstrapErrors(
         // Currently we are not able to display a message box with a service manager due to this limitations inside VCL.
 
         // When UNO is not properly initialized, all kinds of things can fail
-        // and cause the process to crash (e.g., a call to GetMsgString may
-        // crash when somewhere deep within that call Any::operator <= is used
-        // with a PropertyValue, and no binary UNO type description for
-        // PropertyValue is available).  To give the user a hint even if
+        // and cause the process to crash. To give the user a hint even if
         // generating and displaying a message box below crashes, print a
         // hard-coded message on stderr first:
         std::cerr
@@ -915,13 +879,7 @@ void Desktop::HandleBootstrapErrors(
         OUString            aMessage;
         OUStringBuffer        aDiagnosticMessage( 100 );
 
-        OUString aErrorMsg;
-
-        if ( aBootstrapError == BE_UNO_SERVICEMANAGER )
-            aErrorMsg = "The service manager is not available.";
-        else
-            aErrorMsg = GetMsgString( STR_BOOTSTRAP_ERR_NO_CFG_SERVICE,
-                            "The configuration service is not available." );
+        OUString aErrorMsg = DpResId(STR_BOOTSTRAP_ERR_NO_CFG_SERVICE);
 
         aDiagnosticMessage.append( aErrorMsg );
         aDiagnosticMessage.append( "\n" );
@@ -935,15 +893,10 @@ void Desktop::HandleBootstrapErrors(
         // Due to the fact the we haven't a backup applicat.rdb file anymore it is not possible to
         // repair the installation with the setup executable besides the office executable. Now
         // we have to ask the user to start the setup on CD/installation directory manually!!
-        OUString aStartSetupManually( GetMsgString(
-            STR_ASK_START_SETUP_MANUALLY,
-            "Start setup application to repair the installation from CD, or the folder containing the installation packages.",
-            aBootstrapError == BE_UNO_SERVICEMANAGER ) );
+        OUString aStartSetupManually(DpResId(STR_ASK_START_SETUP_MANUALLY));
 
-        aDiagnosticMessage.append( aStartSetupManually );
-        aMessage = MakeStartupErrorMessage(
-            aDiagnosticMessage.makeStringAndClear(),
-            aBootstrapError == BE_UNO_SERVICEMANAGER );
+        aDiagnosticMessage.append(aStartSetupManually);
+        aMessage = MakeStartupErrorMessage(aDiagnosticMessage.makeStringAndClear());
 
         FatalError( aMessage);
     }
@@ -957,11 +910,7 @@ void Desktop::HandleBootstrapErrors(
         // enter safe mode, too
         sfx2::SafeMode::putFlag();
 
-        OUString msg(
-            GetMsgString(
-            STR_CONFIG_ERR_ACCESS_GENERAL,
-            ("A general error occurred while accessing your central"
-            " configuration. SafeMode is initiated.")));
+        OUString msg(DpResId(STR_CONFIG_ERR_ACCESS_GENERAL));
         if (!aErrorMessage.isEmpty()) {
             msg += "\n(\"" + aErrorMessage + "\")";
         }
@@ -972,8 +921,7 @@ void Desktop::HandleBootstrapErrors(
         OUString aMessage;
         OUStringBuffer aDiagnosticMessage( 100 );
         OUString aErrorMsg;
-        aErrorMsg = GetMsgString( STR_BOOTSTRAP_ERR_USERINSTALL_FAILED,
-            "User installation could not be completed" );
+        aErrorMsg = DpResId(STR_BOOTSTRAP_ERR_USERINSTALL_FAILED);
         aDiagnosticMessage.append( aErrorMsg );
         aMessage = MakeStartupErrorMessage( aDiagnosticMessage.makeStringAndClear() );
         FatalError(aMessage);
@@ -983,10 +931,9 @@ void Desktop::HandleBootstrapErrors(
         OUString aMessage;
         OUStringBuffer aDiagnosticMessage( 100 );
         OUString aErrorMsg;
-        aErrorMsg = GetMsgString(
+        aErrorMsg = DpResId(
             //@@@ FIXME: should use an own resource string => #i36213#
-            STR_BOOTSTRAP_ERR_LANGUAGE_MISSING,
-            "Language could not be determined." );
+            STR_BOOTSTRAP_ERR_LANGUAGE_MISSING);
         aDiagnosticMessage.append( aErrorMsg );
         aMessage = MakeStartupErrorMessage(
             aDiagnosticMessage.makeStringAndClear() );
@@ -1004,13 +951,9 @@ void Desktop::HandleBootstrapErrors(
         utl::Bootstrap::locateUserInstallation( aUserInstallationURL );
 
         if ( aBootstrapError == BE_USERINSTALL_NOTENOUGHDISKSPACE )
-            aErrorMsg = GetMsgString(
-                STR_BOOSTRAP_ERR_NOTENOUGHDISKSPACE,
-                "User installation could not be completed due to insufficient free disk space." );
+            aErrorMsg = DpResId(STR_BOOSTRAP_ERR_NOTENOUGHDISKSPACE);
         else
-            aErrorMsg = GetMsgString(
-                STR_BOOSTRAP_ERR_NOACCESSRIGHTS,
-                "User installation could not be processed due to missing access rights." );
+            aErrorMsg = DpResId(STR_BOOSTRAP_ERR_NOACCESSRIGHTS);
 
         osl::File::getSystemPathFromFileURL( aUserInstallationURL, aUserInstallationPath );
 
@@ -1158,8 +1101,7 @@ void restartOnMac(bool passArguments) {
     RequestHandler::Disable();
 #if HAVE_FEATURE_MACOSX_SANDBOX
     (void) passArguments; // avoid warnings
-    ResMgr *resMgr = Desktop::GetDesktopResManager();
-    OUString aMessage = ResId(STR_LO_MUST_BE_RESTARTED, *resMgr);
+    OUString aMessage = DpResId(STR_LO_MUST_BE_RESTARTED);
 
     MessageDialog aRestartBox(NULL, aMessage);
     aRestartBox.Execute();
@@ -2274,12 +2216,8 @@ void Desktop::OpenClients()
         {
             aRequest.aPrintList.clear();
             aRequest.aPrintToList.clear();
-            ResMgr* pDtResMgr = GetDesktopResManager();
-            if( pDtResMgr )
-            {
-                ScopedVclPtrInstance< MessageDialog > aBox(nullptr, ResId(STR_ERR_PRINTDISABLED, *pDtResMgr));
-                aBox->Execute();
-            }
+            ScopedVclPtrInstance< MessageDialog > aBox(nullptr, DpResId(STR_ERR_PRINTDISABLED));
+            aBox->Execute();
         }
 
         // Process request
