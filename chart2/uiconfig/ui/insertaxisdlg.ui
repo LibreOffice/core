@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="chart">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="InsertAxisDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Axes</property>
+    <property name="title" translatable="yes" context="insertaxisdlg|InsertAxisDialog">Axes</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox3">
@@ -101,7 +101,7 @@
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkCheckButton" id="primaryX">
-                            <property name="label" translatable="yes">_X axis</property>
+                            <property name="label" translatable="yes" context="insertaxisdlg|primaryX">_X axis</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -117,7 +117,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="primaryY">
-                            <property name="label" translatable="yes">_Y axis</property>
+                            <property name="label" translatable="yes" context="insertaxisdlg|primaryY">_Y axis</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -133,7 +133,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="primaryZ">
-                            <property name="label" translatable="yes">_Z axis</property>
+                            <property name="label" translatable="yes" context="insertaxisdlg|primaryZ">_Z axis</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -156,7 +156,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Axes</property>
+                    <property name="label" translatable="yes" context="insertaxisdlg|label1">Axes</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -191,7 +191,7 @@
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkCheckButton" id="secondaryX">
-                            <property name="label" translatable="yes">X _axis</property>
+                            <property name="label" translatable="yes" context="insertaxisdlg|secondaryX">X _axis</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -207,7 +207,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="secondaryY">
-                            <property name="label" translatable="yes">Y ax_is</property>
+                            <property name="label" translatable="yes" context="insertaxisdlg|secondaryY">Y ax_is</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -223,7 +223,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="secondaryZ">
-                            <property name="label" translatable="yes">Z axi_s</property>
+                            <property name="label" translatable="yes" context="insertaxisdlg|secondaryZ">Z axi_s</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -246,7 +246,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">Secondary Axes</property>
+                    <property name="label" translatable="yes" context="insertaxisdlg|label2">Secondary Axes</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

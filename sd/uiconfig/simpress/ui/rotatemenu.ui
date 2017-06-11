@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sd">
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkMenu" id="menu">
     <property name="visible">True</property>
@@ -9,7 +9,7 @@
       <object class="GtkMenuItem" id="90">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Quarter Spin</property>
+        <property name="label" translatable="yes" context="rotatemenu|90">Quarter Spin</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -17,7 +17,7 @@
       <object class="GtkMenuItem" id="180">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Half Spin</property>
+        <property name="label" translatable="yes" context="rotatemenu|180">Half Spin</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -25,7 +25,7 @@
       <object class="GtkMenuItem" id="360">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Full Spin</property>
+        <property name="label" translatable="yes" context="rotatemenu|360">Full Spin</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -33,7 +33,7 @@
       <object class="GtkMenuItem" id="720">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Two Spins</property>
+        <property name="label" translatable="yes" context="rotatemenu|720">Two Spins</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -47,7 +47,7 @@
       <object class="GtkMenuItem" id="clockwise">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Clockwise</property>
+        <property name="label" translatable="yes" context="rotatemenu|clockwise">Clockwise</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -55,7 +55,7 @@
       <object class="GtkMenuItem" id="counterclock">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Counter-clockwise</property>
+        <property name="label" translatable="yes" context="rotatemenu|counterclock">Counter-clockwise</property>
         <property name="use_underline">True</property>
       </object>
     </child>

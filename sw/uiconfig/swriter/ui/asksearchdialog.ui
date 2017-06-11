@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkMessageDialog" id="AskSearchDialog">
     <property name="can_focus">False</property>
@@ -9,7 +9,7 @@
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">question</property>
-    <property name="text" translatable="yes">To proceed with this action, you must first turn off the "undo" function. Do you want to turn off the "undo" function?</property>
+    <property name="text" translatable="yes" context="asksearchdialog|AskSearchDialog">To proceed with this action, you must first turn off the "undo" function. Do you want to turn off the "undo" function?</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>

@@ -18,6 +18,7 @@
  */
 
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <dialmgr.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>

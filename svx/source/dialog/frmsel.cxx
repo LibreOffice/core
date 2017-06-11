@@ -30,7 +30,7 @@
 #include <vcl/settings.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include "bitmaps.hlst"
 
 #include <tools/rcid.h>

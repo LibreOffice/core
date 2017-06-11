@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sfx">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="SafeModeQueryDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Enter Safe Mode</property>
+    <property name="title" translatable="yes" context="safemodequerydialog|SafeModeQueryDialog">Enter Safe Mode</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -36,7 +36,7 @@
             </child>
             <child>
               <object class="GtkButton" id="restart">
-                <property name="label" translatable="yes">_Restart</property>
+                <property name="label" translatable="yes" context="safemodequerydialog|restart">_Restart</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -60,7 +60,7 @@
           <object class="GtkLabel" id="label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Are you sure you want to restart %PRODUCTNAME and enter safe mode?</property>
+            <property name="label" translatable="yes" context="safemodequerydialog|label">Are you sure you want to restart %PRODUCTNAME and enter safe mode?</property>
             <property name="wrap">True</property>
             <property name="max_width_chars">80</property>
             <property name="lines">2</property>

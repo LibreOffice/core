@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sw">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkGrid" id="OptCompatPage">
@@ -53,21 +53,21 @@
                     <property name="entry_text_column">0</property>
                     <property name="id_column">1</property>
                     <items>
-                      <item translatable="yes">Use printer metrics for document formatting</item>
-                      <item translatable="yes">Add spacing between paragraphs and tables (in current document)</item>
-                      <item translatable="yes">Add paragraph and table spacing at tops of pages (in current document)</item>
-                      <item translatable="yes">Use OpenOffice.org 1.1 tabstop formatting</item>
-                      <item translatable="yes">Do not add leading (extra space) between lines of text</item>
-                      <item translatable="yes">Use OpenOffice.org 1.1 line spacing</item>
-                      <item translatable="yes">Add paragraph and table spacing at bottom of table cells</item>
-                      <item translatable="yes">Use OpenOffice.org 1.1 object positioning</item>
-                      <item translatable="yes">Use OpenOffice.org 1.1 text wrapping around objects</item>
-                      <item translatable="yes">Consider wrapping style when positioning objects</item>
-                      <item translatable="yes">Expand word space on lines with manual line breaks in justified paragraphs</item>
-                      <item translatable="yes">Protect form</item>
-                      <item translatable="yes">MS Word-compatible trailing blanks</item>
-                      <item translatable="yes">Use LibreOffice 4.3 anchoring paint order (in current document)</item>
-                      <item translatable="yes">&lt;User settings&gt;</item>
+                      <item translatable="yes" context="optcompatpage|format">Use printer metrics for document formatting</item>
+                      <item translatable="yes" context="optcompatpage|format">Add spacing between paragraphs and tables (in current document)</item>
+                      <item translatable="yes" context="optcompatpage|format">Add paragraph and table spacing at tops of pages (in current document)</item>
+                      <item translatable="yes" context="optcompatpage|format">Use OpenOffice.org 1.1 tabstop formatting</item>
+                      <item translatable="yes" context="optcompatpage|format">Do not add leading (extra space) between lines of text</item>
+                      <item translatable="yes" context="optcompatpage|format">Use OpenOffice.org 1.1 line spacing</item>
+                      <item translatable="yes" context="optcompatpage|format">Add paragraph and table spacing at bottom of table cells</item>
+                      <item translatable="yes" context="optcompatpage|format">Use OpenOffice.org 1.1 object positioning</item>
+                      <item translatable="yes" context="optcompatpage|format">Use OpenOffice.org 1.1 text wrapping around objects</item>
+                      <item translatable="yes" context="optcompatpage|format">Consider wrapping style when positioning objects</item>
+                      <item translatable="yes" context="optcompatpage|format">Expand word space on lines with manual line breaks in justified paragraphs</item>
+                      <item translatable="yes" context="optcompatpage|format">Protect form</item>
+                      <item translatable="yes" context="optcompatpage|format">MS Word-compatible trailing blanks</item>
+                      <item translatable="yes" context="optcompatpage|format">Use LibreOffice 4.3 anchoring paint order (in current document)</item>
+                      <item translatable="yes" context="optcompatpage|format">&lt;User settings&gt;</item>
                     </items>
                   </object>
                   <packing>
@@ -79,7 +79,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="default">
-                    <property name="label" translatable="yes">Use as _Default</property>
+                    <property name="label" translatable="yes" context="optcompatpage|default">Use as _Default</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -101,7 +101,7 @@
           <object class="GtkLabel" id="label11">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Compatibility options for %DOCNAME</property>
+            <property name="label" translatable="yes" context="optcompatpage|label11">Compatibility options for %DOCNAME</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

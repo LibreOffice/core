@@ -331,14 +331,14 @@ SwFrameFormat* SwMailMergeLayoutPage::InsertAddressFrame(
         const OUString rExcludeCountry = rConfigItem.GetExcludeCountry();
         bool bSpecialReplacementForCountry = (!bIncludeCountry || !rExcludeCountry.isEmpty());
 
-        const ResStringArray& rHeaders = rConfigItem.GetDefaultAddressHeaders();
+        const std::vector<std::pair<OUString, int>>& rHeaders = rConfigItem.GetDefaultAddressHeaders();
         Sequence< OUString> aAssignment =
                         rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
         const OUString* pAssignment = aAssignment.getConstArray();
         const OUString sCountryColumn(
             (aAssignment.getLength() > MM_PART_COUNTRY && !aAssignment[MM_PART_COUNTRY].isEmpty())
             ? aAssignment[MM_PART_COUNTRY]
-            : rHeaders.GetString(MM_PART_COUNTRY));
+            : rHeaders[MM_PART_COUNTRY].first);
 
         OUString sHideParagraphsExpression;
         SwAddressIterator aIter(aBlocks[0]);
@@ -349,11 +349,11 @@ SwFrameFormat* SwMailMergeLayoutPage::InsertAddressFrame(
             {
                 OUString sConvertedColumn = aItem.sText;
                 for(sal_uInt32 nColumn = 0;
-                        nColumn < rHeaders.Count() &&
+                        nColumn < rHeaders.size() &&
                         nColumn < static_cast<sal_uInt32>(aAssignment.getLength());
                                                                                     ++nColumn)
                 {
-                    if (rHeaders.GetString(nColumn).equals(aItem.sText) &&
+                    if (rHeaders[nColumn].first.equals(aItem.sText) &&
                         !pAssignment[nColumn].isEmpty())
                     {
                         sConvertedColumn = pAssignment[nColumn];
@@ -557,7 +557,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                         aFieldMgr.InsertField( aData );
                     }
                     //now the text has to be inserted
-                    const ResStringArray& rHeaders = rConfigItem.GetDefaultAddressHeaders();
+                    const std::vector<std::pair<OUString, int>>& rHeaders = rConfigItem.GetDefaultAddressHeaders();
                     Sequence< OUString> aAssignment =
                                     rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
                     const OUString* pAssignment = aAssignment.getConstArray();
@@ -569,11 +569,11 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                         {
                             OUString sConvertedColumn = aItem.sText;
                             for(sal_uInt32 nColumn = 0;
-                                    nColumn < rHeaders.Count() &&
+                                    nColumn < rHeaders.size() &&
                                     nColumn < static_cast<sal_uInt32>(aAssignment.getLength());
                                                                                                 ++nColumn)
                             {
-                                if (rHeaders.GetString(nColumn).equals(aItem.sText) &&
+                                if (rHeaders[nColumn].first.equals(aItem.sText) &&
                                     !pAssignment[nColumn].isEmpty())
                                 {
                                     sConvertedColumn = pAssignment[nColumn];

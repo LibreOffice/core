@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="cui">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkBox" id="AcorExceptPage">
@@ -47,7 +47,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="autoabbrev">
-                    <property name="label" translatable="yes">_AutoInclude</property>
+                    <property name="label" translatable="yes" context="acorexceptpage|autoabbrev">_AutoInclude</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -80,7 +80,7 @@
                         <property name="use_stock">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="newabbrev-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes">New abbreviations</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|newabbrev-atkobject">New abbreviations</property>
                           </object>
                         </child>
                       </object>
@@ -92,7 +92,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="replace">
-                        <property name="label" translatable="yes">_Replace</property>
+                        <property name="label" translatable="yes" context="acorexceptpage|replace">_Replace</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="no_show_all">True</property>
@@ -116,7 +116,7 @@
                         <property name="use_stock">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="delabbrev-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes">Delete abbreviations</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|delabbrev-atkobject">Delete abbreviations</property>
                           </object>
                         </child>
                       </object>
@@ -164,7 +164,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Abbreviations (no Subsequent Capital)</property>
+            <property name="label" translatable="yes" context="acorexceptpage|label1">Abbreviations (no Subsequent Capital)</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -217,7 +217,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="autodouble">
-                    <property name="label" translatable="yes">A_utoInclude</property>
+                    <property name="label" translatable="yes" context="acorexceptpage|autodouble">A_utoInclude</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -250,7 +250,7 @@
                         <property name="use_stock">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="newdouble-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes">New words with two initial capitals</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|newdouble-atkobject">New words with two initial capitals</property>
                           </object>
                         </child>
                       </object>
@@ -262,7 +262,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="replace1">
-                        <property name="label" translatable="yes">_Replace</property>
+                        <property name="label" translatable="yes" context="acorexceptpage|replace1">_Replace</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="no_show_all">True</property>
@@ -286,7 +286,7 @@
                         <property name="use_stock">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="deldouble-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes">Delete words with two initial capitals</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|deldouble-atkobject">Delete words with two initial capitals</property>
                           </object>
                         </child>
                       </object>
@@ -334,7 +334,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Words With TWo INitial CApitals</property>
+            <property name="label" translatable="yes" context="acorexceptpage|label2">Words With TWo INitial CApitals</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

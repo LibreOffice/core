@@ -1,0 +1,35 @@
+#!/usr/bin/python
+
+import polib
+import binascii
+import getopt
+import sys
+import os.path
+from subprocess import check_output
+
+try:
+    myopts, args = getopt.getopt(sys.argv[1:], "i:o:")
+except getopt.GetoptError as e:
+    print(" Syntax: uiex -i FileIn -o FileOut")
+    print(" FileIn:   Source files (*.ui)")
+    print(" FileOut:  Destination file (*.*)")
+    sys.exit(2)
+
+for o, a in myopts:
+    if o == '-i':
+        ifile = a
+    elif o == '-o':
+        ofile = a
+
+with open(ofile, "a") as output:
+    input = check_output(["xgettext", "--add-comments", "--no-wrap", ifile, "-o", "-"])
+    po = polib.pofile(input)
+    if len(po) != 0:
+        print >> output, ""
+        for entry in po:
+            keyid = entry.msgctxt + '|' + entry.msgid
+            print >> output, '#. ' + polib.genKeyId(keyid)
+            location = entry.occurrences[0][0]
+            location = os.path.basename(location)
+            entry.occurrences[0] = location, entry.occurrences[0][1]
+            print >> output, entry

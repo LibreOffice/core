@@ -21,8 +21,10 @@
 
 #include <set>
 
+#include "core_resource.hxx"
 #include "indexdialog.hxx"
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include "dbaccess_helpid.hrc"
 #include "indexfieldscontrol.hxx"
@@ -366,7 +368,7 @@ namespace dbaui
 
         // get a new unique name for the new index
         OUString sNewIndexName;
-        const OUString sNewIndexNameBase(ModuleRes(STR_LOGICAL_INDEX_NAME));
+        const OUString sNewIndexNameBase(DBA_RES(STR_LOGICAL_INDEX_NAME));
         sal_Int32 i;
 
         for ( i = 1; i < 0x7FFFFFFF; ++i )
@@ -411,7 +413,7 @@ namespace dbaui
             // let the user confirm the drop
             if (_bConfirm)
             {
-                OUString sConfirm(ModuleRes(STR_CONFIRM_DROP_INDEX));
+                OUString sConfirm(DBA_RES(STR_CONFIRM_DROP_INDEX));
                 sConfirm = sConfirm.replaceFirst("$name$", m_pIndexList->GetEntryText(pSelected));
                 ScopedVclPtrInstance< MessageDialog > aConfirm(this, sConfirm, VclMessageType::Question, VclButtonsType::YesNo);
                 if (RET_YES != aConfirm->Execute())
@@ -615,7 +617,7 @@ namespace dbaui
         Indexes::const_iterator aSameName = m_pIndexes->find(sNewName);
         if ((aSameName != aPosition) && (m_pIndexes->end() != aSameName))
         {
-            OUString sError(ModuleRes(STR_INDEX_NAME_ALREADY_USED));
+            OUString sError(DBA_RES(STR_INDEX_NAME_ALREADY_USED));
             sError = sError.replaceFirst("$name$", sNewName);
             ScopedVclPtrInstance< MessageDialog > aError(this, sError);
             aError->Execute();
@@ -678,7 +680,7 @@ namespace dbaui
         // need at least one field
         if (0 == _rPos->aFields.size())
         {
-            ScopedVclPtrInstance< MessageDialog > aError(this, ModuleRes(STR_NEED_INDEX_FIELDS));
+            ScopedVclPtrInstance< MessageDialog > aError(this, DBA_RES(STR_NEED_INDEX_FIELDS));
             aError->Execute();
             m_pFields->GrabFocus();
             return false;
@@ -694,7 +696,7 @@ namespace dbaui
             if (aExistentFields.end() != aExistentFields.find(aFieldCheck->sFieldName))
             {
                 // a column is specified twice ... won't work anyway, so prevent this here and now
-                OUString sMessage(ModuleRes(STR_INDEXDESIGN_DOUBLE_COLUMN_NAME));
+                OUString sMessage(DBA_RES(STR_INDEXDESIGN_DOUBLE_COLUMN_NAME));
                 sMessage = sMessage.replaceFirst("$name$", aFieldCheck->sFieldName);
                 ScopedVclPtrInstance< MessageDialog > aError(this, sMessage);
                 aError->Execute();

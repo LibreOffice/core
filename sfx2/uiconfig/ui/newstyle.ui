@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sfx">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="CreateStyleDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Create Style</property>
+    <property name="title" translatable="yes" context="newstyle|CreateStyleDialog">Create Style</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox3">
@@ -105,7 +105,7 @@
                     </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="stylename-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Style Name</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="newstyle|stylename-atkobject">Style Name</property>
                       </object>
                     </child>
                   </object>
@@ -116,7 +116,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Style Name</property>
+                <property name="label" translatable="yes" context="newstyle|label1">Style Name</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -68,7 +68,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_User-defined:</property>
+                        <property name="label" translatable="yes" context="borderpage|userdefft">_User-defined:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">framesel</property>
                       </object>
@@ -82,7 +82,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Pr_esets:</property>
+                        <property name="label" translatable="yes" context="borderpage|label14">Pr_esets:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">presets</property>
                       </object>
@@ -107,7 +107,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Adjacent Cells:</property>
+                        <property name="label" translatable="yes" context="borderpage|rmadjcellbordersft">_Adjacent Cells:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">rmadjcellborders</property>
                       </object>
@@ -118,7 +118,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="rmadjcellborders">
-                        <property name="label" translatable="yes">Remove border</property>
+                        <property name="label" translatable="yes" context="borderpage|rmadjcellborders">Remove border</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -138,7 +138,7 @@
               <object class="GtkLabel" id="label8">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Line Arrangement</property>
+                <property name="label" translatable="yes" context="borderpage|label8">Line Arrangement</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -172,7 +172,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">St_yle:</property>
+                        <property name="label" translatable="yes" context="borderpage|label15">St_yle:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">linestylelb</property>
                       </object>
@@ -186,7 +186,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Width:</property>
+                        <property name="label" translatable="yes" context="borderpage|label16">_Width:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">linewidthmf:0.00pt</property>
                       </object>
@@ -200,7 +200,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Color:</property>
+                        <property name="label" translatable="yes" context="borderpage|label17">_Color:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">linecolorlb</property>
                       </object>
@@ -250,7 +250,7 @@
               <object class="GtkLabel" id="label9">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Line</property>
+                <property name="label" translatable="yes" context="borderpage|label9">Line</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -337,7 +337,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Left:</property>
+                        <property name="label" translatable="yes" context="borderpage|leftft">_Left:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">leftmf:0.00mm</property>
                       </object>
@@ -351,7 +351,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Right:</property>
+                        <property name="label" translatable="yes" context="borderpage|rightft">Right:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">rightmf:0.00mm</property>
                       </object>
@@ -365,7 +365,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Top:</property>
+                        <property name="label" translatable="yes" context="borderpage|topft">_Top:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">topmf:0.00mm</property>
                       </object>
@@ -379,7 +379,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Bottom:</property>
+                        <property name="label" translatable="yes" context="borderpage|bottomft">_Bottom:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">bottommf:0.00mm</property>
                       </object>
@@ -390,7 +390,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="sync">
-                        <property name="label" translatable="yes">Synchronize</property>
+                        <property name="label" translatable="yes" context="borderpage|sync">Synchronize</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -411,7 +411,7 @@
               <object class="GtkLabel" id="label10">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Spacing to Contents</property>
+                <property name="label" translatable="yes" context="borderpage|label10">Spacing to Contents</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -454,7 +454,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Position:</property>
+                    <property name="label" translatable="yes" context="borderpage|label22">_Position:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">shadows</property>
                   </object>
@@ -468,7 +468,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Distan_ce:</property>
+                    <property name="label" translatable="yes" context="borderpage|distanceft">Distan_ce:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">distancemf:0.00mm</property>
                   </object>
@@ -482,7 +482,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">C_olor:</property>
+                    <property name="label" translatable="yes" context="borderpage|shadowcolorft">C_olor:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">shadowcolorlb</property>
                   </object>
@@ -534,7 +534,7 @@
           <object class="GtkLabel" id="label11">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Shadow Style</property>
+            <property name="label" translatable="yes" context="borderpage|label11">Shadow Style</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -567,7 +567,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="mergewithnext">
-                    <property name="label" translatable="yes">_Merge with next paragraph</property>
+                    <property name="label" translatable="yes" context="borderpage|mergewithnext">_Merge with next paragraph</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
@@ -582,7 +582,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="mergeadjacent">
-                    <property name="label" translatable="yes">_Merge adjacent line styles</property>
+                    <property name="label" translatable="yes" context="borderpage|mergeadjacent">_Merge adjacent line styles</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
@@ -603,7 +603,7 @@
           <object class="GtkLabel" id="label12">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Properties</property>
+            <property name="label" translatable="yes" context="borderpage|label12">Properties</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

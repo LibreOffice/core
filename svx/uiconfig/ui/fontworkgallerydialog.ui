@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="svx">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="FontworkGalleryDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Fontwork Gallery</property>
+    <property name="title" translatable="yes" context="fontworkgallerydialog|FontworkGalleryDialog">Fontwork Gallery</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -84,7 +84,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Select a Fontwork style:</property>
+                <property name="label" translatable="yes" context="fontworkgallerydialog|label1">Select a Fontwork style:</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>

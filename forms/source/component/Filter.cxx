@@ -19,7 +19,7 @@
 
 #include "Filter.hxx"
 #include "FormComponent.hxx"
-#include "frm_resource.hrc"
+#include "strings.hrc"
 #include "frm_resource.hxx"
 #include "property.hrc"
 #include "property.hxx"
