@@ -30,7 +30,7 @@
 #include "AccessibleEditObject.hxx"
 #include "userdat.hxx"
 #include "scresid.hxx"
-#include "scres.hrc"
+#include "strings.hrc"
 #include "strings.hxx"
 #include "table.hxx"
 #include "markdata.hxx"

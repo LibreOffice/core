@@ -22,6 +22,7 @@
 #include <mmconfigitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <dbui.hrc>
+#include <strings.hrc>
 #include "bitmaps.hlst"
 #include <swtypes.hxx>
 

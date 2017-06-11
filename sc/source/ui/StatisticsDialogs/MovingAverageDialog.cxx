@@ -22,8 +22,8 @@
 #include "reffact.hxx"
 #include "docfunc.hxx"
 #include "TableFillingAndNavigationTools.hxx"
-
 #include "MovingAverageDialog.hxx"
+#include "strings.hrc"
 
 ScMovingAverageDialog::ScMovingAverageDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
@@ -51,7 +51,7 @@ bool ScMovingAverageDialog::Close()
     return DoClose( ScMovingAverageDialogWrapper::GetChildWindowId() );
 }
 
-sal_Int16 ScMovingAverageDialog::GetUndoNameId()
+const char* ScMovingAverageDialog::GetUndoNameId()
 {
     return STR_MOVING_AVERAGE_UNDO_NAME;
 }

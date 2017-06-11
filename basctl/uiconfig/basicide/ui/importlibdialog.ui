@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="basctl">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="ImportLibDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Import Libraries</property>
+    <property name="title" translatable="yes" context="importlibdialog|ImportLibDialog">Import Libraries</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -95,7 +95,7 @@
                         <property name="row_spacing">6</property>
                         <child>
                           <object class="GtkCheckButton" id="ref">
-                            <property name="label" translatable="yes">Insert as reference (read-only)</property>
+                            <property name="label" translatable="yes" context="importlibdialog|ref">Insert as reference (read-only)</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -110,7 +110,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="replace">
-                            <property name="label" translatable="yes">Replace existing libraries</property>
+                            <property name="label" translatable="yes" context="importlibdialog|replace">Replace existing libraries</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -131,7 +131,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Options</property>
+                    <property name="label" translatable="yes" context="importlibdialog|label1">Options</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

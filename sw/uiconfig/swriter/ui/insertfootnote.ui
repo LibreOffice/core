@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
@@ -15,7 +15,7 @@
   <object class="GtkDialog" id="InsertFootnoteDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Insert Footnote/Endnote</property>
+    <property name="title" translatable="yes" context="insertfootnote|InsertFootnoteDialog">Insert Footnote/Endnote</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -140,7 +140,7 @@
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkRadioButton" id="automatic">
-                            <property name="label" translatable="yes">Automatic</property>
+                            <property name="label" translatable="yes" context="insertfootnote|automatic">Automatic</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -158,7 +158,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="character">
-                            <property name="label" translatable="yes">Character</property>
+                            <property name="label" translatable="yes" context="insertfootnote|character">Character</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -190,7 +190,7 @@
                             </accessibility>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="characterentry-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes">Character</property>
+                                <property name="AtkObject::accessible-name" translatable="yes" context="insertfootnote|characterentry-atkobject">Character</property>
                               </object>
                             </child>
                           </object>
@@ -201,7 +201,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="choosecharacter">
-                            <property name="label" translatable="yes">Choose…</property>
+                            <property name="label" translatable="yes" context="insertfootnote|choosecharacter">Choose…</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -221,7 +221,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Numbering</property>
+                    <property name="label" translatable="yes" context="insertfootnote|label1">Numbering</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -254,7 +254,7 @@
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkRadioButton" id="footnote">
-                            <property name="label" translatable="yes">Footnote</property>
+                            <property name="label" translatable="yes" context="insertfootnote|footnote">Footnote</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -272,7 +272,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="endnote">
-                            <property name="label" translatable="yes">Endnote</property>
+                            <property name="label" translatable="yes" context="insertfootnote|endnote">Endnote</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -295,7 +295,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Type</property>
+                    <property name="label" translatable="yes" context="insertfootnote|label2">Type</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

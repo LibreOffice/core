@@ -1,0 +1,40 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_VCL_INC_STRINGS_HRC
+#define INCLUDED_VCL_INC_STRINGS_HRC
+
+#define NC_(Context, String) (Context "\004" u8##String)
+
+#define STR_EXPLORERFILE_OPEN                       NC_("STR_EXPLORERFILE_OPEN", "Open")
+#define STR_EXPLORERFILE_SAVE                       NC_("STR_EXPLORERFILE_SAVE", "Save as")
+#define STR_EXPLORERFILE_BUTTONSAVE                 NC_("STR_EXPLORERFILE_BUTTONSAVE", "~Save")
+#define STR_PATHNAME                                NC_("STR_PATHNAME", "~Path:")
+#define STR_PATHSELECT                              NC_("STR_PATHSELECT", "Select path")
+#define STR_BUTTONSELECT                            NC_("STR_BUTTONSELECT", "~Select")
+#define STR_PREVIEW                                 NC_("STR_PREVIEW", "File Preview")
+#define STR_DEFAULT_DIRECTORY                       NC_("STR_DEFAULT_DIRECTORY", "My Documents")
+#define STR_PLACES_TITLE                            NC_("STR_PLACES_TITLE", "Places")
+#define RID_FILEOPEN_NOTEXISTENTFILE                NC_("RID_FILEOPEN_NOTEXISTENTFILE", "The file $name$ does not exist.\nMake sure you have entered the correct file name.")
+#define STR_SVT_NEW_FOLDER                          NC_("STR_SVT_NEW_FOLDER", "Folder")
+#define STR_SVT_NOREMOVABLEDEVICE                   NC_("STR_SVT_NOREMOVABLEDEVICE", "No removable storage device detected.\nMake sure it is plugged in properly and try again.")
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

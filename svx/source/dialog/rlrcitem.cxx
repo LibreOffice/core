@@ -20,7 +20,8 @@
 #include <svl/rectitem.hxx>
 
 
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
+#include <svx/svxids.hrc>
 
 #include <svx/ruler.hxx>
 #include <editeng/lrspitem.hxx>

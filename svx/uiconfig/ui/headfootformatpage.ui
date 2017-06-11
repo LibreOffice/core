@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="svx">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkAdjustment" id="adjustment1">
@@ -55,7 +55,7 @@
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkCheckButton" id="checkHeaderOn">
-                        <property name="label" translatable="yes">Hea_der on</property>
+                        <property name="label" translatable="yes" context="headfootformatpage|checkHeaderOn">Hea_der on</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
@@ -72,7 +72,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkFooterOn">
-                        <property name="label" translatable="yes">_Footer on</property>
+                        <property name="label" translatable="yes" context="headfootformatpage|checkFooterOn">_Footer on</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
@@ -110,7 +110,7 @@
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkCheckButton" id="checkSameLR">
-                            <property name="label" translatable="yes">Same _content on left and right pages</property>
+                            <property name="label" translatable="yes" context="headfootformatpage|checkSameLR">Same _content on left and right pages</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -128,7 +128,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="checkSameFP">
-                            <property name="label" translatable="yes">Same content on first page</property>
+                            <property name="label" translatable="yes" context="headfootformatpage|checkSameFP">Same content on first page</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -149,7 +149,7 @@
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Left margin:</property>
+                            <property name="label" translatable="yes" context="headfootformatpage|labelLeftMarg">_Left margin:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">spinMargLeft:0.00cm</property>
                           </object>
@@ -183,7 +183,7 @@
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">R_ight margin:</property>
+                            <property name="label" translatable="yes" context="headfootformatpage|labelRightMarg">R_ight margin:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">spinMargRight:0.00cm</property>
                           </object>
@@ -217,7 +217,7 @@
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Spacing:</property>
+                            <property name="label" translatable="yes" context="headfootformatpage|labelSpacing">_Spacing:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">spinSpacing:0.00cm</property>
                           </object>
@@ -247,7 +247,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="checkDynSpacing">
-                            <property name="label" translatable="yes">Use d_ynamic spacing</property>
+                            <property name="label" translatable="yes" context="headfootformatpage|checkDynSpacing">Use d_ynamic spacing</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="hexpand">True</property>
@@ -268,7 +268,7 @@
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Height:</property>
+                            <property name="label" translatable="yes" context="headfootformatpage|labelHeight">_Height:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">spinHeight:0.00cm</property>
                             <property name="ellipsize">end</property>
@@ -299,7 +299,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="checkAutofit">
-                            <property name="label" translatable="yes">_AutoFit height</property>
+                            <property name="label" translatable="yes" context="headfootformatpage|checkAutofit">_AutoFit height</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -323,7 +323,7 @@
                             <property name="layout_style">start</property>
                             <child>
                               <object class="GtkButton" id="buttonMore">
-                                <property name="label" translatable="yes">More...</property>
+                                <property name="label" translatable="yes" context="headfootformatpage|buttonMore">More...</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -336,7 +336,7 @@
                             </child>
                             <child>
                               <object class="GtkButton" id="buttonEdit">
-                                <property name="label" translatable="yes">_Edit...</property>
+                                <property name="label" translatable="yes" context="headfootformatpage|buttonEdit">_Edit...</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_underline">True</property>
@@ -380,7 +380,7 @@
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Header</property>
+                <property name="label" translatable="yes" context="headfootformatpage|labelHeaderFormat">Header</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -396,7 +396,7 @@
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Footer</property>
+                <property name="label" translatable="yes" context="headfootformatpage|labelFooterFormat">Footer</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="CondFormatManager">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Manage Conditional Formatting</property>
+    <property name="title" translatable="yes" context="condformatmanager|CondFormatManager">Manage Conditional Formatting</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -59,7 +59,7 @@
                         <property name="layout_style">start</property>
                         <child>
                           <object class="GtkButton" id="add">
-                            <property name="label" translatable="yes">Add</property>
+                            <property name="label" translatable="yes" context="condformatmanager|add">Add</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -73,7 +73,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="edit">
-                            <property name="label" translatable="yes">Edit...</property>
+                            <property name="label" translatable="yes" context="condformatmanager|edit">Edit...</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -87,7 +87,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="remove">
-                            <property name="label" translatable="yes">Remove</property>
+                            <property name="label" translatable="yes" context="condformatmanager|remove">Remove</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -114,7 +114,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Conditional Formats</property>
+                <property name="label" translatable="yes" context="condformatmanager|label1">Conditional Formats</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

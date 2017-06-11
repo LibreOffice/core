@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svids.hrc>
+#include <strings.hrc>
 #include <bitmaps.hlst>
 #include <svdata.hxx>
 #include <brdwin.hxx>
@@ -394,11 +394,7 @@ Image InfoBox::GetStandardImage()
 
 OUString InfoBox::GetStandardText()
 {
-    ResMgr* pResMgr = ImplGetResMgr();
-    if( pResMgr )
-        return ResId(SV_MSGBOX_INFO, *pResMgr);
-
-    return Application::GetDisplayName();
+    return VclResId(SV_MSGBOX_INFO);
 }
 
 WarningBox::WarningBox( vcl::Window* pParent, WinBits nStyle,
@@ -414,9 +410,7 @@ WarningBox::WarningBox( vcl::Window* pParent, WinBits nStyle,
 
 void WarningBox::SetDefaultCheckBoxText()
 {
-    ResMgr* pResMgr = ImplGetResMgr();
-    if( pResMgr )
-        maCheckBoxText = ResId(SV_STDTEXT_DONTWARNAGAIN, *pResMgr);
+    maCheckBoxText = VclResId(SV_STDTEXT_DONTWARNAGAIN);
 }
 
 Image WarningBox::GetStandardImage()
@@ -427,11 +421,7 @@ Image WarningBox::GetStandardImage()
 
 OUString WarningBox::GetStandardText()
 {
-    ResMgr* pResMgr = ImplGetResMgr();
-    if( pResMgr )
-        return ResId(SV_MSGBOX_WARNING, *pResMgr);
-
-    return Application::GetDisplayName();
+    return VclResId(SV_MSGBOX_WARNING);
 }
 
 ErrorBox::ErrorBox( vcl::Window* pParent, const OUString& rMessage ) :
@@ -472,11 +462,7 @@ Image ErrorBox::GetStandardImage()
 
 OUString ErrorBox::GetStandardText()
 {
-    ResMgr* pResMgr = ImplGetResMgr();
-    if( pResMgr )
-        return ResId(SV_MSGBOX_ERROR, *pResMgr);
-
-    return Application::GetDisplayName();
+    return VclResId(SV_MSGBOX_ERROR);
 }
 
 QueryBox::QueryBox( vcl::Window* pParent, WinBits nStyle, const OUString& rMessage ) :
@@ -491,9 +477,7 @@ QueryBox::QueryBox( vcl::Window* pParent, WinBits nStyle, const OUString& rMessa
 
 void QueryBox::SetDefaultCheckBoxText()
 {
-    ResMgr* pResMgr = ImplGetResMgr();
-    if( pResMgr )
-        maCheckBoxText = ResId(SV_STDTEXT_DONTASKAGAIN, *pResMgr);
+    maCheckBoxText = VclResId(SV_STDTEXT_DONTASKAGAIN);
 }
 
 Image QueryBox::GetStandardImage()
@@ -504,11 +488,7 @@ Image QueryBox::GetStandardImage()
 
 OUString QueryBox::GetStandardText()
 {
-    ResMgr* pResMgr = ImplGetResMgr();
-    if( pResMgr )
-        return ResId(SV_MSGBOX_QUERY, *pResMgr);
-
-    return Application::GetDisplayName();
+    return VclResId(SV_MSGBOX_QUERY);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -69,7 +69,7 @@
 
 #include <cmdid.h>
 #include <globals.hrc>
-#include <utlui.hrc>
+#include <strings.hrc>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <charfmt.hxx>
