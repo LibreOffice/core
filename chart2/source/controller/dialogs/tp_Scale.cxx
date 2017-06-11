@@ -20,7 +20,7 @@
 #include "tp_Scale.hxx"
 
 #include "ResId.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "chartview/ChartSfxItemIds.hxx"
 #include "AxisHelper.hxx"
 
@@ -31,7 +31,7 @@
 #include <svl/intitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/zformat.hxx>
-#include <svtools/controldims.hrc>
+#include <svtools/controldims.hxx>
 
 #include <com/sun/star/chart2/AxisType.hpp>
 
@@ -430,7 +430,7 @@ DeactivateRC ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
         nStepFmt = 0;
 
     Control* pControl = nullptr;
-    sal_uInt16 nErrStrId = 0;
+    const char* pErrStrId = nullptr;
     double fDummy;
 
     fMax = m_pFmtFldMax->GetValue();
@@ -452,7 +452,7 @@ DeactivateRC ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
              || ( !m_pCbxAutoMax->IsChecked() && fMax <= 0.0 ) ) )
     {
         pControl = m_pFmtFldMin;
-        nErrStrId = STR_BAD_LOGARITHM;
+        pErrStrId = STR_BAD_LOGARITHM;
     }
     // check for entries that cannot be parsed for the current number format
     else if ( m_pFmtFldMin->IsModified()
@@ -460,38 +460,38 @@ DeactivateRC ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
               && !pNumFormatter->IsNumberFormat( m_pFmtFldMin->GetText(), nMinMaxOriginFmt, fDummy))
     {
         pControl = m_pFmtFldMin;
-        nErrStrId = STR_INVALID_NUMBER;
+        pErrStrId = STR_INVALID_NUMBER;
     }
     else if ( m_pFmtFldMax->IsModified()
               && !m_pCbxAutoMax->IsChecked()
               && !pNumFormatter->IsNumberFormat( m_pFmtFldMax->GetText(), nMinMaxOriginFmt, fDummy))
     {
         pControl = m_pFmtFldMax;
-        nErrStrId = STR_INVALID_NUMBER;
+        pErrStrId = STR_INVALID_NUMBER;
     }
     else if ( !bDateAxis && m_pFmtFldStepMain->IsModified()
               && !m_pCbxAutoStepMain->IsChecked()
               && !pNumFormatter->IsNumberFormat( m_pFmtFldStepMain->GetText(), nStepFmt, fDummy))
     {
         pControl = m_pFmtFldStepMain;
-        nErrStrId = STR_INVALID_NUMBER;
+        pErrStrId = STR_INVALID_NUMBER;
     }
     else if (m_pFmtFldOrigin->IsModified() && !m_pCbxAutoOrigin->IsChecked() &&
              !pNumFormatter->IsNumberFormat( m_pFmtFldOrigin->GetText(), nMinMaxOriginFmt, fDummy))
     {
         pControl = m_pFmtFldOrigin;
-        nErrStrId = STR_INVALID_NUMBER;
+        pErrStrId = STR_INVALID_NUMBER;
     }
     else if (!m_pCbxAutoStepMain->IsChecked() && fStepMain <= 0.0)
     {
         pControl = m_pFmtFldStepMain;
-        nErrStrId = STR_STEP_GT_ZERO;
+        pErrStrId = STR_STEP_GT_ZERO;
     }
     else if (!m_pCbxAutoMax->IsChecked() && !m_pCbxAutoMin->IsChecked() &&
              fMin >= fMax)
     {
         pControl = m_pFmtFldMin;
-        nErrStrId = STR_MIN_GREATER_MAX;
+        pErrStrId = STR_MIN_GREATER_MAX;
     }
     else if( bDateAxis )
     {
@@ -500,15 +500,15 @@ DeactivateRC ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
             if( m_nHelpTimeUnit > m_nMainTimeUnit )
             {
                 pControl = m_pLB_MainTimeUnit;
-                nErrStrId = STR_INVALID_INTERVALS;
+                pErrStrId = STR_INVALID_INTERVALS;
             }
             else if( m_nHelpTimeUnit == m_nMainTimeUnit && nStepHelp > fStepMain )
             {
                 pControl = m_pLB_MainTimeUnit;
-                nErrStrId = STR_INVALID_INTERVALS;
+                pErrStrId = STR_INVALID_INTERVALS;
             }
         }
-        if( !nErrStrId && !m_pCbx_AutoTimeResolution->IsChecked() )
+        if( !pErrStrId && !m_pCbx_AutoTimeResolution->IsChecked() )
         {
             if( (!m_pCbxAutoStepMain->IsChecked() && m_nTimeResolution > m_nMainTimeUnit )
                 ||
@@ -516,12 +516,12 @@ DeactivateRC ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
                 )
             {
                 pControl = m_pLB_TimeResolution;
-                nErrStrId = STR_INVALID_TIME_UNIT;
+                pErrStrId = STR_INVALID_TIME_UNIT;
             }
         }
     }
 
-    if( ShowWarning( nErrStrId, pControl ) )
+    if( ShowWarning( pErrStrId, pControl ) )
         return DeactivateRC::KeepPage;
 
     if( pItemSet )
@@ -609,12 +609,12 @@ void ScaleTabPage::ShowAxisOrigin( bool bShowOrigin )
         m_bShowAxisOrigin = true;
 }
 
-bool ScaleTabPage::ShowWarning( sal_uInt16 nResIdMessage, Control* pControl /* = NULL */ )
+bool ScaleTabPage::ShowWarning(const char* pResIdMessage, Control* pControl /* = NULL */ )
 {
-    if( nResIdMessage == 0 )
+    if (pResIdMessage == nullptr)
         return false;
 
-    ScopedVclPtrInstance<WarningBox>(this, WinBits( WB_OK ), SchResId(nResIdMessage))->Execute();
+    ScopedVclPtrInstance<WarningBox>(this, WinBits( WB_OK ), SchResId(pResIdMessage))->Execute();
     if( pControl )
     {
         pControl->GrabFocus();

@@ -69,7 +69,7 @@
 #include "appdata.hxx"
 #include "workwin.hxx"
 #include "helper.hxx"
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/sfxresid.hxx>
 #include "shutdownicon.hxx"
 

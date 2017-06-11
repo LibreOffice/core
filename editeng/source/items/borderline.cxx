@@ -637,7 +637,7 @@ OUString SvxBorderLine::GetValueString(MapUnit eSrcUnit,
                                        const IntlWrapper* pIntl,
                                        bool bMetricStr) const
 {
-    static const sal_uInt16 aStyleIds[] =
+    static const char* aStyleIds[] =
     {
         RID_SOLID,
         RID_DOTTED,
@@ -662,12 +662,12 @@ OUString SvxBorderLine::GetValueString(MapUnit eSrcUnit,
 
     if ( (int)m_nStyle < int(SAL_N_ELEMENTS(aStyleIds)) )
     {
-        sal_uInt16 nResId = aStyleIds[(int)m_nStyle];
-        aStr += EditResId::GetString(nResId);
+        const char* pResId = aStyleIds[(int)m_nStyle];
+        aStr += EditResId(pResId);
     }
     else
     {
-        OUString sMetric = EditResId::GetString(GetMetricId( eDestUnit ));
+        OUString sMetric = EditResId(GetMetricId( eDestUnit ));
         aStr += GetMetricText( (long)GetInWidth(), eSrcUnit, eDestUnit, pIntl );
         if ( bMetricStr )
             aStr += sMetric;

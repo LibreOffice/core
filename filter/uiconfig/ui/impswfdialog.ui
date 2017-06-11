@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="flt">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustmentquality">
     <property name="lower">1</property>
@@ -11,7 +11,7 @@
   <object class="GtkDialog" id="ImpSWFDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Flash (SWF) Options</property>
+    <property name="title" translatable="yes" context="impswfdialog|ImpSWFDialog">Flash (SWF) Options</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -92,7 +92,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">1: min. quality
+                    <property name="label" translatable="yes" context="impswfdialog|label1">1: min. quality
 100: max. quality</property>
                     <property name="use_underline">True</property>
                     <property name="justify">fill</property>
@@ -133,7 +133,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="exportall">
-                <property name="label" translatable="yes">Export _all slides (uncheck to export current slide)</property>
+                <property name="label" translatable="yes" context="impswfdialog|exportall">Export _all slides (uncheck to export current slide)</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -155,7 +155,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="exportmultiplefiles">
-                    <property name="label" translatable="yes">Export as _multiple files</property>
+                    <property name="label" translatable="yes" context="impswfdialog|exportmultiplefiles">Export as _multiple files</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -178,7 +178,7 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="exportbackgrounds">
-                        <property name="label" translatable="yes">Export _backgrounds</property>
+                        <property name="label" translatable="yes" context="impswfdialog|exportbackgrounds">Export _backgrounds</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -195,7 +195,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="exportbackgroundobjects">
-                        <property name="label" translatable="yes">Export back_ground objects</property>
+                        <property name="label" translatable="yes" context="impswfdialog|exportbackgroundobjects">Export back_ground objects</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -212,7 +212,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="exportslidecontents">
-                        <property name="label" translatable="yes">Export _slide contents</property>
+                        <property name="label" translatable="yes" context="impswfdialog|exportslidecontents">Export _slide contents</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -245,7 +245,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="exportsound">
-                <property name="label" translatable="yes">Export _Verilogix Slide Annotations</property>
+                <property name="label" translatable="yes" context="impswfdialog|exportsound">Export _Verilogix Slide Annotations</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -262,7 +262,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="exportoleasjpeg">
-                <property name="label" translatable="yes">Export OLE objects as _JPEG images</property>
+                <property name="label" translatable="yes" context="impswfdialog|exportoleasjpeg">Export OLE objects as _JPEG images</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>

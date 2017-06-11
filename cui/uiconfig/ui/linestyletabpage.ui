@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="cui">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkAdjustment" id="adjustmentDIST">
@@ -31,11 +31,11 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Dots</col>
+        <col id="0" translatable="yes" context="linestyletabpage|liststoreTYPE">Dots</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Dash</col>
+        <col id="0" translatable="yes" context="linestyletabpage|liststoreTYPE">Dash</col>
         <col id="1">0</col>
       </row>
     </data>
@@ -89,7 +89,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Line _style:</property>
+                            <property name="label" translatable="yes" context="linestyletabpage|FT_LINESTYLE">Line _style:</property>
                             <property name="use_underline">True</property>
                           </object>
                           <packing>
@@ -127,7 +127,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Type:</property>
+                            <property name="label" translatable="yes" context="linestyletabpage|FT_TYPE">_Type:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">LB_TYPE_1</property>
                           </object>
@@ -143,7 +143,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Number:</property>
+                            <property name="label" translatable="yes" context="linestyletabpage|FT_NUMBER">_Number:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">NUM_FLD_1</property>
                           </object>
@@ -159,7 +159,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Length:</property>
+                            <property name="label" translatable="yes" context="linestyletabpage|FT_LENGTH">_Length:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">MTR_FLD_LENGTH_1:0.00cm</property>
                           </object>
@@ -175,7 +175,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Spacing:</property>
+                            <property name="label" translatable="yes" context="linestyletabpage|FT_DISTANCE">_Spacing:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">MTR_FLD_DISTANCE:0.00cm</property>
                           </object>
@@ -188,7 +188,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="CBX_SYNCHRONIZE">
-                            <property name="label" translatable="yes">_Fit to line width</property>
+                            <property name="label" translatable="yes" context="linestyletabpage|CBX_SYNCHRONIZE">_Fit to line width</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">False</property>
@@ -351,7 +351,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="BTN_MODIFY">
-                        <property name="label" translatable="yes">_Modify</property>
+                        <property name="label" translatable="yes" context="linestyletabpage|BTN_MODIFY">_Modify</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">True</property>
@@ -389,7 +389,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
-                            <property name="tooltip_text" translatable="yes">Load Line Styles</property>
+                            <property name="tooltip_text" translatable="yes" context="linestyletabpage|BTN_LOAD|tooltip_text">Load Line Styles</property>
                             <property name="halign">center</property>
                             <property name="hexpand">True</property>
                             <property name="image">image1</property>
@@ -407,7 +407,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
-                            <property name="tooltip_text" translatable="yes">Save Line Styles</property>
+                            <property name="tooltip_text" translatable="yes" context="linestyletabpage|BTN_SAVE|tooltip_text">Save Line Styles</property>
                             <property name="halign">center</property>
                             <property name="hexpand">True</property>
                             <property name="image">image2</property>
@@ -462,7 +462,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Properties</property>
+        <property name="label" translatable="yes" context="linestyletabpage|label1">Properties</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>

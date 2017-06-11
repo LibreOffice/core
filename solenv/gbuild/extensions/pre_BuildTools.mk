@@ -24,12 +24,9 @@ gb_BUILD_TOOLS = \
 		javamaker \
 		makedepend \
 		propex \
-		rsc \
 		saxparser \
 		svidl \
-		transex3 \
 		treex \
-		uiex \
 		ulfex \
 		unoidl-check \
 		unoidl-write \

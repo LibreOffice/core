@@ -14,10 +14,8 @@ $(eval $(call gb_Module_add_targets_for_build,l10ntools,\
     Executable_idxdict \
     Executable_ulfex \
     Executable_cfgex \
-    Executable_uiex \
     Executable_xrmex \
     Executable_localize \
-    Executable_transex3 \
     Executable_pocheck \
     Executable_propex \
     Executable_treex \

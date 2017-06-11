@@ -26,7 +26,7 @@
 #include <svtools/svtresid.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/stdtext.hxx>
-#include <filectrl.hrc>
+#include <svtools/strings.hrc>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

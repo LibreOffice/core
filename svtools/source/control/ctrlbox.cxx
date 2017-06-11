@@ -33,7 +33,7 @@
 
 #include <svtools/sampletext.hxx>
 #include <svtools/svtresid.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <svtools/ctrlbox.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/borderhelper.hxx>

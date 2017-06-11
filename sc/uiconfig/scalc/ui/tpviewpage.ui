@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.0 on Thu Jan  9 10:47:53 2014 -->
-<interface>
+<interface domain="sc">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkBox" id="TpViewPage">
@@ -34,7 +34,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="formula">
-                        <property name="label" translatable="yes">_Formulas</property>
+                        <property name="label" translatable="yes" context="tpviewpage|formula">_Formulas</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -51,7 +51,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="nil">
-                        <property name="label" translatable="yes">Zero val_ues</property>
+                        <property name="label" translatable="yes" context="tpviewpage|nil">Zero val_ues</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -68,7 +68,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="annot">
-                        <property name="label" translatable="yes">_Comment indicator</property>
+                        <property name="label" translatable="yes" context="tpviewpage|annot">_Comment indicator</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -85,7 +85,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="value">
-                        <property name="label" translatable="yes">Value h_ighlighting</property>
+                        <property name="label" translatable="yes" context="tpviewpage|value">Value h_ighlighting</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -102,7 +102,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="anchor">
-                        <property name="label" translatable="yes">_Anchor</property>
+                        <property name="label" translatable="yes" context="tpviewpage|anchor">_Anchor</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -119,7 +119,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="clipmark">
-                        <property name="label" translatable="yes">Te_xt overflow</property>
+                        <property name="label" translatable="yes" context="tpviewpage|clipmark">Te_xt overflow</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -136,7 +136,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="rangefind">
-                        <property name="label" translatable="yes">_Show references in color</property>
+                        <property name="label" translatable="yes" context="tpviewpage|rangefind">_Show references in color</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -159,7 +159,7 @@
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Display</property>
+                <property name="label" translatable="yes" context="tpviewpage|label4">Display</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -195,7 +195,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="rowcolheader">
-                        <property name="label" translatable="yes">Colu_mn/row headers</property>
+                        <property name="label" translatable="yes" context="tpviewpage|rowcolheader">Colu_mn/row headers</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -212,7 +212,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="hscroll">
-                        <property name="label" translatable="yes">Hori_zontal scroll bar</property>
+                        <property name="label" translatable="yes" context="tpviewpage|hscroll">Hori_zontal scroll bar</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -229,7 +229,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="vscroll">
-                        <property name="label" translatable="yes">_Vertical scroll bar</property>
+                        <property name="label" translatable="yes" context="tpviewpage|vscroll">_Vertical scroll bar</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -246,7 +246,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="tblreg">
-                        <property name="label" translatable="yes">Sh_eet tabs</property>
+                        <property name="label" translatable="yes" context="tpviewpage|tblreg">Sh_eet tabs</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -263,7 +263,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="outline">
-                        <property name="label" translatable="yes">_Outline symbols</property>
+                        <property name="label" translatable="yes" context="tpviewpage|outline">_Outline symbols</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -286,7 +286,7 @@
               <object class="GtkLabel" id="label5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Window</property>
+                <property name="label" translatable="yes" context="tpviewpage|label5">Window</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -362,7 +362,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Grid lines:</property>
+                            <property name="label" translatable="yes" context="tpviewpage|grid_label">_Grid lines:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">grid</property>
                           </object>
@@ -379,7 +379,7 @@
                             <property name="can_focus">False</property>
                             <property name="margin_left">12</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Color:</property>
+                            <property name="label" translatable="yes" context="tpviewpage|color_label">_Color:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">color</property>
                           </object>
@@ -396,9 +396,9 @@
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <items>
-                              <item translatable="yes">Show</item>
-                              <item translatable="yes">Show on colored cells</item>
-                              <item translatable="yes">Hide</item>
+                              <item translatable="yes" context="tpviewpage|grid">Show</item>
+                              <item translatable="yes" context="tpviewpage|grid">Show on colored cells</item>
+                              <item translatable="yes" context="tpviewpage|grid">Hide</item>
                             </items>
                           </object>
                           <packing>
@@ -418,7 +418,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="break">
-                        <property name="label" translatable="yes">_Page breaks</property>
+                        <property name="label" translatable="yes" context="tpviewpage|break">_Page breaks</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -435,7 +435,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="guideline">
-                        <property name="label" translatable="yes">Helplines _while moving</property>
+                        <property name="label" translatable="yes" context="tpviewpage|guideline">Helplines _while moving</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -458,7 +458,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Visual Aids</property>
+                <property name="label" translatable="yes" context="tpviewpage|label1">Visual Aids</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -497,7 +497,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Ob_jects/Images:</property>
+                        <property name="label" translatable="yes" context="tpviewpage|objgrf_label">Ob_jects/Images:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">objgrf</property>
                       </object>
@@ -513,7 +513,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Cha_rts:</property>
+                        <property name="label" translatable="yes" context="tpviewpage|diagram_label">Cha_rts:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">diagram</property>
                       </object>
@@ -529,7 +529,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Drawing objects:</property>
+                        <property name="label" translatable="yes" context="tpviewpage|draw_label">_Drawing objects:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">draw</property>
                       </object>
@@ -545,8 +545,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <items>
-                          <item translatable="yes">Show</item>
-                          <item translatable="yes">Hide</item>
+                          <item translatable="yes" context="tpviewpage|objgrf">Show</item>
+                          <item translatable="yes" context="tpviewpage|objgrf">Hide</item>
                         </items>
                       </object>
                       <packing>
@@ -561,8 +561,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <items>
-                          <item translatable="yes">Show</item>
-                          <item translatable="yes">Hide</item>
+                          <item translatable="yes" context="tpviewpage|diagram">Show</item>
+                          <item translatable="yes" context="tpviewpage|diagram">Hide</item>
                         </items>
                       </object>
                       <packing>
@@ -577,8 +577,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <items>
-                          <item translatable="yes">Show</item>
-                          <item translatable="yes">Hide</item>
+                          <item translatable="yes" context="tpviewpage|draw">Show</item>
+                          <item translatable="yes" context="tpviewpage|draw">Hide</item>
                         </items>
                       </object>
                       <packing>
@@ -596,7 +596,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Objects</property>
+                <property name="label" translatable="yes" context="tpviewpage|label2">Objects</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -626,7 +626,7 @@
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkCheckButton" id="synczoom">
-                    <property name="label" translatable="yes">S_ynchronize sheets</property>
+                    <property name="label" translatable="yes" context="tpviewpage|synczoom">S_ynchronize sheets</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -641,7 +641,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Zoom</property>
+                <property name="label" translatable="yes" context="tpviewpage|label3">Zoom</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

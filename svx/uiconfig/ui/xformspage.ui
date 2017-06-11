@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="svx">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkBox" id="XFormsPage">
@@ -23,7 +23,7 @@
             <property name="can_focus">False</property>
             <property name="valign">start</property>
             <property name="action_name">TBI_ITEM_ADD</property>
-            <property name="label" translatable="yes">Add Item</property>
+            <property name="label" translatable="yes" context="xformspage|TBI_ITEM_ADD">Add Item</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -37,7 +37,7 @@
             <property name="can_focus">False</property>
             <property name="valign">start</property>
             <property name="action_name">TBI_ITEM_ADD_ELEMENT</property>
-            <property name="label" translatable="yes">Add Element</property>
+            <property name="label" translatable="yes" context="xformspage|TBI_ITEM_ADD_ELEMENT">Add Element</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -51,7 +51,7 @@
             <property name="can_focus">False</property>
             <property name="valign">start</property>
             <property name="action_name">TBI_ITEM_ADD_ATTRIBUTE</property>
-            <property name="label" translatable="yes">Add Attribute</property>
+            <property name="label" translatable="yes" context="xformspage|TBI_ITEM_ADD_ATTRIBUTE">Add Attribute</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -65,7 +65,7 @@
             <property name="can_focus">False</property>
             <property name="valign">start</property>
             <property name="action_name">TBI_ITEM_EDIT</property>
-            <property name="label" translatable="yes">Edit</property>
+            <property name="label" translatable="yes" context="xformspage|TBI_ITEM_EDIT">Edit</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -79,7 +79,7 @@
             <property name="can_focus">False</property>
             <property name="valign">start</property>
             <property name="action_name">TBI_ITEM_REMOVE</property>
-            <property name="label" translatable="yes">Delete</property>
+            <property name="label" translatable="yes" context="xformspage|TBI_ITEM_REMOVE">Delete</property>
           </object>
           <packing>
             <property name="expand">False</property>

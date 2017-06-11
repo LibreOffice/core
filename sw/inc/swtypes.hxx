@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_SWTYPES_HXX
 #define INCLUDED_SW_INC_SWTYPES_HXX
 #include <rtl/ustring.hxx>
-#include <tools/resid.hxx>
 #include <tools/solar.h>
 #include <tools/mapunit.hxx>
 #include <SwGetPoolIdFromName.hxx>
@@ -48,7 +47,6 @@ namespace utl{
 }
 
 class Size;
-class ResMgr;
 class SwPathFinder;
 class Graphic;
 class OutputDevice;
@@ -132,13 +130,8 @@ const short lOutlineMinTextDistance = 216; // 0.15 inch = 0.38 cm
 // fields before INIT_FLDTYPES.
 #define INIT_SEQ_FLDTYPES   4
 
-extern ResMgr* pSwResMgr;
-// defined in sw/source/uibase/app/swmodule.cxx for the sw library and in
-// sw/source/ui/dialog/swdialmgr.cxx for the swui library
-inline OUString SwResId(sal_uInt16 nId)
-{
-    return ResId(nId, *pSwResMgr);
-}
+// defined in sw/source/uibase/app/swmodule.cxx
+SW_DLLPUBLIC OUString SwResId(const char* pId);
 
 css::uno::Reference< css::linguistic2::XSpellChecker1 > GetSpellChecker();
 css::uno::Reference< css::linguistic2::XHyphenator >    GetHyphenator();

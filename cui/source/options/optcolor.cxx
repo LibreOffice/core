@@ -39,6 +39,7 @@
 #include <dialmgr.hxx>
 #include "optcolor.hxx"
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <svx/dlgutil.hxx>
 
 using namespace ::com::sun::star;
@@ -283,7 +284,6 @@ private:
 // ctor for default groups
 // rParent: parent window (ColorConfigWindow_Impl)
 // eGroup: which group is this?
-// rResMgr: resource manager
 ColorConfigWindow_Impl::Chapter::Chapter(FixedText* pText, bool bShow)
     : m_pText(pText)
 {

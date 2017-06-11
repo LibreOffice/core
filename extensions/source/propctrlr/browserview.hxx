@@ -22,7 +22,6 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <vcl/window.hxx>
-#include <tools/resid.hxx>
 #include <com/sun/star/awt/Size.hpp>
 
 

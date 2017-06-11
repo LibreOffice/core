@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="pcr">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkGrid" id="SelectTablePage">
     <property name="visible">True</property>
@@ -13,7 +13,7 @@
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
         <property name="yalign">0</property>
-        <property name="label" translatable="yes">The external data source you have chosen contains more than one address book.
+        <property name="label" translatable="yes" context="selecttablepage|label2">The external data source you have chosen contains more than one address book.
 Please select the one you mainly want to work with:</property>
         <property name="wrap">True</property>
         <property name="max_width_chars">90</property>

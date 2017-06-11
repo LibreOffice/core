@@ -39,7 +39,7 @@
 #include <swmodule.hxx>
 #include <fldmgr.hxx>
 #include <fldbas.hxx>
-#include <utlui.hrc>
+#include <strings.hrc>
 #include <swcont.hxx>
 #include <svl/cjkoptions.hxx>
 #include <ndtxt.hxx>

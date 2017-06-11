@@ -18,17 +18,18 @@
  */
 
 #include "WTypeSelect.hxx"
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include "bitmaps.hlst"
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include "FieldDescriptions.hxx"
 #include "WCopyTable.hxx"
 #include "dbaccess_helpid.hrc"
-#include "dbu_misc.hrc"
+#include "strings.hrc"
 #include <tools/stream.hxx>
 #include <svtools/svparser.hxx>
 #include "UITools.hxx"
+#include "core_resource.hxx"
 #include "sqlmessage.hxx"
 #include "FieldControls.hxx"
 #include <vcl/layout.hxx>
@@ -138,7 +139,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
 
                 if ( bDoubleName )
                 {
-                    OUString strMessage = ModuleRes(STR_TABLEDESIGN_DUPLICATE_NAME);
+                    OUString strMessage = DBA_RES(STR_TABLEDESIGN_DUPLICATE_NAME);
                     strMessage = strMessage.replaceFirst("$column$", sNewName);
                     pWiz->showError(strMessage);
                     pCurFieldDescr->SetName(sName);
@@ -274,7 +275,7 @@ void OWizTypeSelect::dispose()
 
 OUString OWizTypeSelect::GetTitle() const
 {
-    return ModuleRes(STR_WIZ_TYPE_SELECT_TITEL);
+    return DBA_RES(STR_WIZ_TYPE_SELECT_TITEL);
 }
 
 IMPL_LINK_NOARG( OWizTypeSelect, ColumnSelectHdl, ListBox&, void )

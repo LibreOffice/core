@@ -35,9 +35,7 @@
 
 #include <svx/svxids.hrc>
 #include "tbxform.hxx"
-#include <tools/resid.hxx>
 
-#include "svx/fmresids.hrc"
 #include <svx/dialmgr.hxx>
 #include "tabwin.hxx"
 #include "fmexpl.hxx"

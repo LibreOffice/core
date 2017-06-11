@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="OptAppearancePage">
     <property name="visible">True</property>
@@ -32,7 +32,7 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Scheme:</property>
+                    <property name="label" translatable="yes" context="optappearancepage|label3">_Scheme:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">colorschemelb</property>
                   </object>
@@ -85,7 +85,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Color Scheme</property>
+            <property name="label" translatable="yes" context="optappearancepage|label1">Color Scheme</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -130,7 +130,7 @@
                         <property name="width_request">250</property>
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="label" translatable="yes">User interface elements</property>
+                        <property name="label" translatable="yes" context="optappearancepage|uielements">User interface elements</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -142,7 +142,7 @@
                         <property name="width_request">150</property>
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="label" translatable="yes">Color setting</property>
+                        <property name="label" translatable="yes" context="optappearancepage|colorsetting">Color setting</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -154,7 +154,7 @@
                         <property name="width_request">100</property>
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="label" translatable="yes">Preview</property>
+                        <property name="label" translatable="yes" context="optappearancepage|preview">Preview</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -165,7 +165,7 @@
                       <object class="GtkLabel" id="on">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="label" translatable="yes">On</property>
+                        <property name="label" translatable="yes" context="optappearancepage|on">On</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -198,7 +198,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Custom Colors</property>
+            <property name="label" translatable="yes" context="optappearancepage|label2">Custom Colors</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
