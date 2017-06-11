@@ -19,7 +19,9 @@
 
 #include <config_features.h>
 #include "ConnectionPage.hxx"
-#include "dbu_dlg.hrc"
+#include "core_resource.hxx"
+#include "dbu_dlg.hxx"
+#include "strings.hrc"
 #include "dsmeta.hxx"
 #if HAVE_FEATURE_JAVA
 #include <jvmaccess/virtualmachine.hxx>
@@ -38,11 +40,11 @@
 #include <comphelper/types.hxx>
 #include <vcl/stdtext.hxx>
 #include "sqlmessage.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include "odbcconfig.hxx"
 #include "dsselect.hxx"
 #include <svl/filenotation.hxx>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -138,49 +140,49 @@ namespace dbaui
         switch( eType )
         {
             case  ::dbaccess::DST_DBASE:
-                m_pFT_Connection->SetText(OUString(ModuleRes(STR_DBASE_PATH_OR_FILE)));
+                m_pFT_Connection->SetText(DBA_RES(STR_DBASE_PATH_OR_FILE));
                 m_pConnectionURL->SetHelpId(HID_DSADMIN_DBASE_PATH);
                 break;
             case  ::dbaccess::DST_FLAT:
-                m_pFT_Connection->SetText(OUString(ModuleRes(STR_FLAT_PATH_OR_FILE)));
+                m_pFT_Connection->SetText(DBA_RES(STR_FLAT_PATH_OR_FILE));
                 m_pConnectionURL->SetHelpId(HID_DSADMIN_FLAT_PATH);
                 break;
             case  ::dbaccess::DST_CALC:
-                m_pFT_Connection->SetText(OUString(ModuleRes(STR_CALC_PATH_OR_FILE)));
+                m_pFT_Connection->SetText(DBA_RES(STR_CALC_PATH_OR_FILE));
                 m_pConnectionURL->SetHelpId(HID_DSADMIN_CALC_PATH);
                 break;
             case  ::dbaccess::DST_ADO:
-                m_pFT_Connection->SetText(OUString(ModuleRes(STR_COMMONURL)));
+                m_pFT_Connection->SetText(DBA_RES(STR_COMMONURL));
                 break;
             case  ::dbaccess::DST_MSACCESS:
             case  ::dbaccess::DST_MSACCESS_2007:
-                m_pFT_Connection->SetText(OUString(ModuleRes(STR_MSACCESS_MDB_FILE)));
+                m_pFT_Connection->SetText(DBA_RES(STR_MSACCESS_MDB_FILE));
                 m_pConnectionURL->SetHelpId(HID_DSADMIN_MSACCESS_MDB_FILE);
                 break;
             case  ::dbaccess::DST_MYSQL_NATIVE:
             case  ::dbaccess::DST_MYSQL_JDBC:
-                m_pFT_Connection->SetText(OUString(ModuleRes(STR_MYSQL_DATABASE_NAME)));
+                m_pFT_Connection->SetText(DBA_RES(STR_MYSQL_DATABASE_NAME));
                 m_pConnectionURL->SetHelpId( HID_DSADMIN_MYSQL_DATABASE );
                 break;
             case  ::dbaccess::DST_ORACLE_JDBC:
-                m_pFT_Connection->SetText(OUString(ModuleRes(STR_ORACLE_DATABASE_NAME)));
+                m_pFT_Connection->SetText(DBA_RES(STR_ORACLE_DATABASE_NAME));
                 m_pConnectionURL->SetHelpId(HID_DSADMIN_ORACLE_DATABASE);
                 break;
             case  ::dbaccess::DST_MYSQL_ODBC:
             case  ::dbaccess::DST_ODBC:
-                m_pFT_Connection->SetText(OUString(ModuleRes(STR_NAME_OF_ODBC_DATASOURCE)));
+                m_pFT_Connection->SetText(DBA_RES(STR_NAME_OF_ODBC_DATASOURCE));
                 m_pConnectionURL->SetHelpId( eType ==  ::dbaccess::DST_MYSQL_ODBC ? HID_DSADMIN_MYSQL_ODBC_DATASOURCE : HID_DSADMIN_ODBC_DATASOURCE);
                 break;
             case  ::dbaccess::DST_LDAP:
-                m_pFT_Connection->SetText(OUString(ModuleRes(STR_HOSTNAME)));
+                m_pFT_Connection->SetText(DBA_RES(STR_HOSTNAME));
                 m_pConnectionURL->SetHelpId( HID_DSADMIN_LDAP_HOSTNAME );
                 break;
             case  ::dbaccess::DST_MOZILLA:
-                m_pFT_Connection->SetText(OUString(ModuleRes(STR_MOZILLA_PROFILE_NAME)));
+                m_pFT_Connection->SetText(DBA_RES(STR_MOZILLA_PROFILE_NAME));
                 m_pConnectionURL->SetHelpId( HID_DSADMIN_MOZILLA_PROFILE_NAME );
                 break;
             case  ::dbaccess::DST_THUNDERBIRD:
-                m_pFT_Connection->SetText(OUString(ModuleRes(STR_THUNDERBIRD_PROFILE_NAME)));
+                m_pFT_Connection->SetText(DBA_RES(STR_THUNDERBIRD_PROFILE_NAME));
                 m_pConnectionURL->SetHelpId( HID_DSADMIN_THUNDERBIRD_PROFILE_NAME );
                 break;
             case  ::dbaccess::DST_OUTLOOK:
@@ -190,7 +192,7 @@ namespace dbaui
             case  ::dbaccess::DST_EVOLUTION_LDAP:
             case  ::dbaccess::DST_KAB:
             case  ::dbaccess::DST_MACAB:
-                m_pFT_Connection->SetText(OUString(ModuleRes(STR_NO_ADDITIONAL_SETTINGS)));
+                m_pFT_Connection->SetText(DBA_RES(STR_NO_ADDITIONAL_SETTINGS));
                 {
                     OUString sText = m_pFT_Connection->GetText();
                     sText = sText.replaceAll("%test",m_pTestConnection->GetText());
@@ -202,7 +204,7 @@ namespace dbaui
                 break;
             case  ::dbaccess::DST_JDBC:
             default:
-                m_pFT_Connection->SetText(OUString(ModuleRes(STR_COMMONURL)));
+                m_pFT_Connection->SetText(DBA_RES(STR_COMMONURL));
                 break;
         }
 
@@ -302,9 +304,9 @@ namespace dbaui
         }
 #endif
 
-        const sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
+        const char* pMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         const OSQLMessageBox::MessageType mt = bSuccess ? OSQLMessageBox::Info : OSQLMessageBox::Error;
-        ScopedVclPtrInstance< OSQLMessageBox > aMsg( this, OUString( ModuleRes( nMessage ) ), OUString(), WB_OK | WB_DEF_OK, mt );
+        ScopedVclPtrInstance< OSQLMessageBox > aMsg( this, DBA_RES(pMessage), OUString(), WB_OK | WB_DEF_OK, mt );
         aMsg->Execute();
     }
     bool OConnectionTabPage::checkTestConnection()

@@ -79,7 +79,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/implbase.hxx>
-#include "resource/common_res.hrc"
+#include "strings.hrc"
 #include "resource/sharedresources.hxx"
 #include <connectivity/OSubComponent.hxx>
 

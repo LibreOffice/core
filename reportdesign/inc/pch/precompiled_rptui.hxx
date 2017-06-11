@@ -180,7 +180,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/window.hxx>
-#include <ModuleHelper.hxx>
 #include <RptDef.hxx>
 #include <RptModel.hxx>
 #include <RptObject.hxx>

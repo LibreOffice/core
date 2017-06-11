@@ -21,11 +21,11 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/fileurl.hxx>
-#include <tools/resid.hxx>
+#include <tools/simplerm.hxx>
 #include <vcl/layout.hxx>
 #include <osl/file.hxx>
 
-#include "xmlfilterdialogstrings.hrc"
+#include "strings.hrc"
 #include "xmlfiltertabdialog.hxx"
 #include "xmlfiltertabpagebasic.hxx"
 #include "xmlfiltertabpagexslt.hxx"
@@ -36,11 +36,11 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 
-XMLFilterTabDialog::XMLFilterTabDialog(vcl::Window *pParent, ResMgr& rResMgr,
+XMLFilterTabDialog::XMLFilterTabDialog(vcl::Window *pParent, const std::locale& rResLocale,
     const Reference< XComponentContext >& rxContext, const filter_info_impl* pInfo)
     : TabDialog(pParent, "XSLTFilterDialog","filter/ui/xsltfilterdialog.ui")
     , mxContext(rxContext)
-    , mrResMgr(rResMgr)
+    , mrResLocale(rResLocale)
 {
     get(m_pOKBtn, "ok");
     get(m_pTabCtrl, "tabcontrol");
@@ -94,7 +94,7 @@ bool XMLFilterTabDialog::onOk()
     mpBasicPage->FillInfo( mpNewInfo );
 
     sal_uInt16 nErrorPage = 0;
-    sal_uInt16 nErrorId = 0;
+    const char* pErrorId = nullptr;
     vcl::Window* pFocusWindow = nullptr;
     OUString aReplace1;
     OUString aReplace2;
@@ -117,7 +117,7 @@ bool XMLFilterTabDialog::onOk()
                     if( xFilterContainer->hasByName( mpNewInfo->maFilterName ) )
                     {
                         nErrorPage = m_nBasicPageId;
-                        nErrorId = STR_ERROR_FILTER_NAME_EXISTS;
+                        pErrorId = STR_ERROR_FILTER_NAME_EXISTS;
                         pFocusWindow = (mpBasicPage->m_pEDFilterName);
                         aReplace1 = mpNewInfo->maFilterName;
                     }
@@ -153,7 +153,7 @@ bool XMLFilterTabDialog::onOk()
                     sal_Int32 nFilter;
 
                     Sequence< PropertyValue > aValues;
-                    for( nFilter = 0; (nFilter < nCount) && (nErrorId == 0); nFilter++, pFilterName++ )
+                    for( nFilter = 0; (nFilter < nCount) && (pErrorId == nullptr); nFilter++, pFilterName++ )
                     {
                         Any aAny( xFilterContainer->getByName( *pFilterName ) );
                         if( !(aAny >>= aValues) )
@@ -163,7 +163,7 @@ bool XMLFilterTabDialog::onOk()
                         PropertyValue* pValues = aValues.getArray();
                         sal_Int32 nValue;
 
-                        for( nValue = 0; (nValue < nValueCount) && (nErrorId == 0); nValue++, pValues++ )
+                        for( nValue = 0; (nValue < nValueCount) && (pErrorId == nullptr); nValue++, pValues++ )
                         {
                             if ( pValues->Name == "UIName" )
                             {
@@ -172,7 +172,7 @@ bool XMLFilterTabDialog::onOk()
                                 if( aInterfaceName == mpNewInfo->maInterfaceName )
                                 {
                                     nErrorPage = m_nBasicPageId;
-                                    nErrorId = STR_ERROR_TYPE_NAME_EXISTS;
+                                    pErrorId = STR_ERROR_TYPE_NAME_EXISTS;
                                     pFocusWindow = (mpBasicPage->m_pEDInterfaceName);
                                     aReplace1 = mpNewInfo->maInterfaceName;
                                     aReplace2 = *pFilterName;
@@ -189,7 +189,7 @@ bool XMLFilterTabDialog::onOk()
         }
     }
 
-    if( 0 == nErrorId )
+    if (!pErrorId)
     {
         // 4. see if the export xslt is valid
         if( (mpNewInfo->maExportXSLT != mpOldInfo->maExportXSLT) && comphelper::isFileUrl( mpNewInfo->maExportXSLT ) )
@@ -198,14 +198,14 @@ bool XMLFilterTabDialog::onOk()
             osl::File::RC aRC = aFile.open( osl_File_OpenFlag_Read );
             if( aRC != osl::File::E_None )
             {
-                nErrorId = STR_ERROR_EXPORT_XSLT_NOT_FOUND;
+                pErrorId = STR_ERROR_EXPORT_XSLT_NOT_FOUND;
                 nErrorPage = m_nXSLTPageId;
                 pFocusWindow = (mpXSLTPage->m_pEDExportXSLT);
             }
         }
     }
 
-    if( 0 == nErrorId )
+    if (!pErrorId)
     {
         // 5. see if the import xslt is valid
         if( (mpNewInfo->maImportXSLT != mpOldInfo->maImportXSLT) && comphelper::isFileUrl( mpNewInfo->maImportXSLT ) )
@@ -214,7 +214,7 @@ bool XMLFilterTabDialog::onOk()
             osl::File::RC aRC = aFile.open( osl_File_OpenFlag_Read );
             if( aRC != osl::File::E_None )
             {
-                nErrorId = STR_ERROR_IMPORT_XSLT_NOT_FOUND;
+                pErrorId = STR_ERROR_IMPORT_XSLT_NOT_FOUND;
                 nErrorPage = m_nXSLTPageId;
                 pFocusWindow = (mpXSLTPage->m_pEDImportTemplate);
             }
@@ -224,12 +224,12 @@ bool XMLFilterTabDialog::onOk()
     // see if we have at least an import or an export xslt
     if((mpNewInfo->maImportXSLT.isEmpty()) && (mpNewInfo->maExportXSLT.isEmpty()) )
     {
-        nErrorId = STR_ERROR_EXPORT_XSLT_NOT_FOUND;
+        pErrorId = STR_ERROR_EXPORT_XSLT_NOT_FOUND;
         nErrorPage = m_nXSLTPageId;
         pFocusWindow = (mpXSLTPage->m_pEDExportXSLT);
     }
 
-    if( 0 == nErrorId )
+    if (!pErrorId)
     {
         // 6. see if the import template is valid
         if( (mpNewInfo->maImportTemplate != mpOldInfo->maImportTemplate) && comphelper::isFileUrl( mpNewInfo->maImportTemplate ) )
@@ -238,20 +238,19 @@ bool XMLFilterTabDialog::onOk()
             osl::File::RC aRC = aFile.open( osl_File_OpenFlag_Read );
             if( aRC != osl::File::E_None )
             {
-                nErrorId = STR_ERROR_IMPORT_TEMPLATE_NOT_FOUND;
+                pErrorId = STR_ERROR_IMPORT_TEMPLATE_NOT_FOUND;
                 nErrorPage = m_nXSLTPageId;
                 pFocusWindow = (mpXSLTPage->m_pEDImportTemplate);
             }
         }
     }
 
-    if( 0 != nErrorId )
+    if (pErrorId)
     {
         m_pTabCtrl->SetCurPageId(nErrorPage);
         ActivatePageHdl(nullptr, m_pTabCtrl);
 
-        ResId aResId( nErrorId, mrResMgr );
-        OUString aMessage( aResId );
+        OUString aMessage(Translate::get(pErrorId, mrResLocale));
 
         if( aReplace2.getLength() )
         {

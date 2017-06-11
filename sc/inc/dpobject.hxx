@@ -363,7 +363,7 @@ public:
     ScDPCollection(const ScDPCollection& r);
     ~ScDPCollection();
 
-    sal_uLong ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
+    const char* ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
     bool ReloadGroupsInCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
     SC_DLLPUBLIC bool GetReferenceGroups(const ScDPObject& rDPObj, const ScDPDimensionSaveData** pGroups) const;
 

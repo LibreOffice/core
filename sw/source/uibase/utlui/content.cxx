@@ -57,9 +57,9 @@
 #include <unotxvw.hxx>
 #include <cmdid.h>
 #include <helpid.h>
-#include <utlui.hrc>
+#include <strings.hrc>
 #include <misc.hrc>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
@@ -215,12 +215,44 @@ SwTOXBaseContent::~SwTOXBaseContent()
 {
 }
 
+static const char* STR_CONTENT_TYPE_ARY[] =
+{
+    STR_CONTENT_TYPE_OUTLINE,
+    STR_CONTENT_TYPE_TABLE,
+    STR_CONTENT_TYPE_FRAME,
+    STR_CONTENT_TYPE_GRAPHIC,
+    STR_CONTENT_TYPE_OLE,
+    STR_CONTENT_TYPE_BOOKMARK,
+    STR_CONTENT_TYPE_REGION,
+    STR_CONTENT_TYPE_URLFIELD,
+    STR_CONTENT_TYPE_REFERENCE,
+    STR_CONTENT_TYPE_INDEX,
+    STR_CONTENT_TYPE_POSTIT,
+    STR_CONTENT_TYPE_DRAWOBJECT
+};
+
+static const char* STR_CONTENT_TYPE_SINGLE_ARY[] =
+{
+    STR_CONTENT_TYPE_SINGLE_OUTLINE,
+    STR_CONTENT_TYPE_SINGLE_TABLE,
+    STR_CONTENT_TYPE_SINGLE_FRAME,
+    STR_CONTENT_TYPE_SINGLE_GRAPHIC,
+    STR_CONTENT_TYPE_SINGLE_OLE,
+    STR_CONTENT_TYPE_SINGLE_BOOKMARK,
+    STR_CONTENT_TYPE_SINGLE_REGION,
+    STR_CONTENT_TYPE_SINGLE_URLFIELD,
+    STR_CONTENT_TYPE_SINGLE_REFERENCE,
+    STR_CONTENT_TYPE_SINGLE_INDEX,
+    STR_CONTENT_TYPE_SINGLE_POSTIT,
+    STR_CONTENT_TYPE_SINGLE_DRAWOBJECT
+};
+
 SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 nLevel) :
     SwTypeNumber(CTYPE_CTT),
     pWrtShell(pShell),
     pMember(nullptr),
-    sContentTypeName(SwResId(STR_CONTENT_TYPE_FIRST + (int)nType)),
-    sSingleContentTypeName(SwResId(STR_CONTENT_TYPE_SINGLE_FIRST + (int)nType)),
+    sContentTypeName(SwResId(STR_CONTENT_TYPE_ARY[(int)nType])),
+    sSingleContentTypeName(SwResId(STR_CONTENT_TYPE_SINGLE_ARY[(int)nType])),
     nMemberCount(0),
     nContentType(nType),
     nOutlineLevel(nLevel),
@@ -767,6 +799,38 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
 
 }
 
+enum STR_CONTEXT_IDX
+{
+    IDX_STR_OUTLINE_LEVEL = 0,
+    IDX_STR_DRAGMODE = 1,
+    IDX_STR_HYPERLINK = 2,
+    IDX_STR_LINK_REGION = 3,
+    IDX_STR_COPY_REGION = 4,
+    IDX_STR_DISPLAY = 5,
+    IDX_STR_ACTIVE_VIEW = 6,
+    IDX_STR_HIDDEN = 7,
+    IDX_STR_ACTIVE = 8,
+    IDX_STR_INACTIVE = 9,
+    IDX_STR_EDIT_ENTRY = 10,
+    IDX_STR_DELETE_ENTRY = 11
+};
+
+static const char* STR_CONTEXT_ARY[] =
+{
+    STR_OUTLINE_LEVEL,
+    STR_DRAGMODE,
+    STR_HYPERLINK,
+    STR_LINK_REGION,
+    STR_COPY_REGION,
+    STR_DISPLAY,
+    STR_ACTIVE_VIEW,
+    STR_HIDDEN,
+    STR_ACTIVE,
+    STR_INACTIVE,
+    STR_EDIT_ENTRY,
+    STR_DELETE_ENTRY
+};
+
 SwContentTree::SwContentTree(vcl::Window* pParent, SwNavigationPI* pDialog)
     : SvTreeListBox(pParent)
     , m_xDialog(pDialog)
@@ -810,7 +874,7 @@ SwContentTree::SwContentTree(vcl::Window* pParent, SwNavigationPI* pDialog)
     }
     for (int i = 0; i < CONTEXT_COUNT; ++i)
     {
-        m_aContextStrings[i] = SwResId(i+STR_CONTEXT_FIRST);
+        m_aContextStrings[i] = SwResId(STR_CONTEXT_ARY[i]);
     }
     m_nActiveBlock = m_pConfig->GetActiveBlock();
     m_aUpdTimer.SetInvokeHandler(LINK(this, SwContentTree, TimerUpdate));
@@ -1110,7 +1174,7 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
     for(int i=0; i < 3; ++i)
     {
         pSubPop2->InsertItem(i + 201, m_aContextStrings[
-                STR_HYPERLINK - STR_CONTEXT_FIRST + i], MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK);
+                IDX_STR_HYPERLINK + i], MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK);
     }
     pSubPop2->CheckItem(201 + static_cast<int>(GetParentWindow()->GetRegionDropMode()));
     // Insert the list of the open files
@@ -1123,7 +1187,7 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
         if(pView == pActiveView)
         {
             sInsert += "(";
-            sInsert += m_aContextStrings[ STR_ACTIVE - STR_CONTEXT_FIRST];
+            sInsert += m_aContextStrings[IDX_STR_ACTIVE];
             sInsert += ")";
         }
         pSubPop3->InsertItem(nId, sInsert, MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK);
@@ -1132,12 +1196,12 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
         pView = SwModule::GetNextView(pView);
         nId++;
     }
-    pSubPop3->InsertItem(nId++, m_aContextStrings[STR_ACTIVE_VIEW - STR_CONTEXT_FIRST], MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK);
+    pSubPop3->InsertItem(nId++, m_aContextStrings[IDX_STR_ACTIVE_VIEW], MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK);
     if(m_pHiddenShell)
     {
         OUString sHiddenEntry = m_pHiddenShell->GetView().GetDocShell()->GetTitle();
         sHiddenEntry += " ( ";
-        sHiddenEntry += m_aContextStrings[ STR_HIDDEN - STR_CONTEXT_FIRST];
+        sHiddenEntry += m_aContextStrings[IDX_STR_HIDDEN];
         sHiddenEntry += " )";
         pSubPop3->InsertItem(nId, sHiddenEntry, MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK);
     }
@@ -1147,9 +1211,9 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
     else if (State::HIDDEN == m_eState)
         pSubPop3->CheckItem( nId );
 
-    pPop->InsertItem( 1, m_aContextStrings[STR_OUTLINE_LEVEL - STR_CONTEXT_FIRST]);
-    pPop->InsertItem(2, m_aContextStrings[STR_DRAGMODE - STR_CONTEXT_FIRST]);
-    pPop->InsertItem(3, m_aContextStrings[STR_DISPLAY - STR_CONTEXT_FIRST]);
+    pPop->InsertItem( 1, m_aContextStrings[IDX_STR_OUTLINE_LEVEL]);
+    pPop->InsertItem(2, m_aContextStrings[IDX_STR_DRAGMODE]);
+    pPop->InsertItem(3, m_aContextStrings[IDX_STR_DISPLAY]);
     // Now edit
     SvTreeListEntry* pEntry = nullptr;
     // Edit only if the shown content is coming from the current view.
@@ -1185,38 +1249,38 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
 
                 const SwTOXBase* pBase = static_cast<SwTOXBaseContent*>(pEntry->GetUserData())->GetTOXBase();
                 if(!pBase->IsTOXBaseInReadonly())
-                    pSubPop4->InsertItem(403, m_aContextStrings[STR_EDIT_ENTRY - STR_CONTEXT_FIRST]);
+                    pSubPop4->InsertItem(403, m_aContextStrings[IDX_STR_EDIT_ENTRY]);
                 pSubPop4->InsertItem(405, m_sReadonlyIdx);
 
                 pSubPop4->CheckItem( 405, SwEditShell::IsTOXBaseReadonly(*pBase));
-                pSubPop4->InsertItem(501, m_aContextStrings[STR_DELETE_ENTRY - STR_CONTEXT_FIRST]);
+                pSubPop4->InsertItem(501, m_aContextStrings[IDX_STR_DELETE_ENTRY]);
             }
             else if(ContentTypeId::TABLE == nContentType && !bReadonly)
             {
                 bSubPop4 = true;
-                pSubPop4->InsertItem(403, m_aContextStrings[STR_EDIT_ENTRY - STR_CONTEXT_FIRST]);
+                pSubPop4->InsertItem(403, m_aContextStrings[IDX_STR_EDIT_ENTRY]);
                 pSubPop4->InsertItem(404, m_sUnprotTable);
                 bool bFull = false;
                 OUString sTableName = static_cast<SwContent*>(pEntry->GetUserData())->GetName();
                 bool bProt = m_pActiveShell->HasTableAnyProtection( &sTableName, &bFull );
                 pSubPop4->EnableItem(403, !bFull );
                 pSubPop4->EnableItem(404, bProt );
-                pSubPop4->InsertItem(501, m_aContextStrings[STR_DELETE_ENTRY - STR_CONTEXT_FIRST]);
+                pSubPop4->InsertItem(501, m_aContextStrings[IDX_STR_DELETE_ENTRY]);
             }
             else if(bEditable || bDeletable)
             {
 
                 if(bEditable && bDeletable)
                 {
-                    pSubPop4->InsertItem(403, m_aContextStrings[STR_EDIT_ENTRY - STR_CONTEXT_FIRST]);
-                    pSubPop4->InsertItem(501, m_aContextStrings[STR_DELETE_ENTRY - STR_CONTEXT_FIRST]);
+                    pSubPop4->InsertItem(403, m_aContextStrings[IDX_STR_EDIT_ENTRY]);
+                    pSubPop4->InsertItem(501, m_aContextStrings[IDX_STR_DELETE_ENTRY]);
                     bSubPop4 = true;
                 }
                 else if(bEditable)
-                    pPop->InsertItem(403, m_aContextStrings[STR_EDIT_ENTRY - STR_CONTEXT_FIRST]);
+                    pPop->InsertItem(403, m_aContextStrings[IDX_STR_EDIT_ENTRY]);
                 else if(bDeletable)
                 {
-                    pSubPop4->InsertItem(501, m_aContextStrings[STR_DELETE_ENTRY - STR_CONTEXT_FIRST]);
+                    pSubPop4->InsertItem(501, m_aContextStrings[IDX_STR_DELETE_ENTRY]);
                 }
             }
             //Rename object

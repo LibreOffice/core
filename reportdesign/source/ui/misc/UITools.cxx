@@ -100,11 +100,11 @@
 #include "dlgpage.hxx"
 #include <vcl/msgbox.hxx>
 #include "rptui_slotid.hrc"
-#include "uistrings.hrc"
+#include "strings.hxx"
+#include "core_resource.hxx"
 #include "RptObject.hxx"
-#include "ModuleHelper.hxx"
 #include "RptDef.hxx"
-#include "RptResId.hrc"
+#include "strings.hrc"
 #include "ReportDefinition.hxx"
 #include "RptModel.hxx"
 
@@ -163,14 +163,14 @@ void adjustSectionName(const uno::Reference< report::XGroup >& _xGroup,sal_Int32
     OSL_ENSURE(_xGroup.is(),"Group is NULL -> GPF");
     if ( _xGroup->getHeaderOn() && _xGroup->getHeader()->getName().isEmpty() )
     {
-        OUString sName = ModuleRes(RID_STR_GROUPHEADER);
+        OUString sName = RptResId(RID_STR_GROUPHEADER);
         sName += OUString::number(_nPos);
         _xGroup->getHeader()->setName(sName);
     }
 
     if ( _xGroup->getFooterOn() && _xGroup->getFooter()->getName().isEmpty() )
     {
-        OUString sName = ModuleRes(RID_STR_GROUPFOOTER);
+        OUString sName = RptResId(RID_STR_GROUPFOOTER);
         sName += OUString::number(_nPos);
         _xGroup->getFooter()->setName(sName);
     }

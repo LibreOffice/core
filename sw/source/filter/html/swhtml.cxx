@@ -110,7 +110,7 @@
 
 #include <sfx2/viewfrm.hxx>
 
-#include <statstr.hrc>
+#include <strings.hrc>
 #include <swerror.h>
 #include <css1atr.hxx>
 

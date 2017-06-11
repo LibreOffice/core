@@ -1,0 +1,124 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SCADDINS_INC_PRICING_HRC
+#define INCLUDED_SCADDINS_INC_PRICING_HRC
+
+#define N_(String) (u8##String)
+
+// function and parameter description
+const char* PRICING_FUNCDESC_OptBarrier[] =
+{
+    N_("Pricing of a barrier option"),
+    N_("spot"),
+    N_("Price/value of the underlying asset"),
+    N_("vol"),
+    N_("Annual volatility of the underlying asset"),
+    N_("r"),
+    N_("Interest rate (continuously compounded)"),
+    N_("rf"),
+    N_("Foreign interest rate (continuously compounded)"),
+    N_("T"),
+    N_("Time to maturity of the option in years"),
+    N_("strike"),
+    N_("Strike level of the option"),
+    N_("barrier_low"),
+    N_("Lower barrier (set to 0 for no lower barrier)"),
+    N_("barrier_up"),
+    N_("Upper barrier (set to 0 for no upper barrier)"),
+    N_("rebate"),
+    N_("Amount of money paid at maturity if barrier was hit"),
+    N_("put/call"),
+    N_("String to define if the option is a (p)ut or a (c)all"),
+    N_("knock in/out"),
+    N_("String to define if the option is of type knock-(i)n or knock-(o)ut"),
+    N_("barrier_type"),
+    N_("String to define whether the barrier is observed (c)ontinuously or only at the (e)nd/maturity"),
+    N_("greek"),
+    N_("Optional parameter, if left out then the function simply returns the option price; if set, the function returns price sensitivities (Greeks) to one of the input parameters; possible values are (d)elta, (g)amma, (t)heta, v(e)ga, v(o)lga, v(a)nna, (r)ho, rho(f)")
+};
+
+const char* PRICING_FUNCDESC_OptTouch[] =
+{
+    N_("Pricing of a touch/no-touch option"),
+    N_("spot"),
+    N_("Price/value of the underlying asset"),
+    N_("vol"),
+    N_("Annual volatility of the underlying asset"),
+    N_("r"),
+    N_("Interest rate (continuously compounded)"),
+    N_("rf"),
+    N_("Foreign interest rate (continuously compounded)"),
+    N_("T"),
+    N_("Time to maturity of the option in years"),
+    N_("barrier_low"),
+    N_("Lower barrier (set to 0 for no lower barrier)"),
+    N_("barrier_up"),
+    N_("Upper barrier (set to 0 for no upper barrier)"),
+    N_("foreign/domestic"),
+    N_("String to define if the option pays one unit of (d)omestic currency (cash or nothing) or (f)oreign currency (asset or nothing)"),
+    N_("knock in/out"),
+    N_("String to define if the option is of type knock-(i)n (touch) or knock-(o)ut (no-touch)"),
+    N_("barrier_type"),
+    N_("String to define whether the barrier is observed (c)ontinuously or only at the (e)nd/maturity"),
+    N_("greek"),
+    N_("Optional parameter, if left out then the function simply returns the option price; if set, the function returns price sensitivities (Greeks) to one of the input parameters; possible values are (d)elta, (g)amma, (t)heta, v(e)ga, v(o)lga, v(a)nna, (r)ho, rho(f)")
+};
+
+const char* PRICING_FUNCDESC_OptProbHit[] =
+{
+    N_("Probability that an asset hits a barrier assuming it follows dS/S = mu dt + vol dW"),
+    N_("spot"),
+    N_("Price/value S of the underlying asset"),
+    N_("vol"),
+    N_("Annual volatility of the underlying asset"),
+    N_("drift"),
+    N_("Parameter mu in dS/S = mu dt + vol dW"),
+    N_("T"),
+    N_("Time to maturity"),
+    N_("barrier_low"),
+    N_("Lower barrier (set to 0 for no lower barrier)"),
+    N_("barrier_up"),
+    N_("Upper barrier (set to 0 for no upper barrier)")
+};
+
+const char* PRICING_FUNCDESC_OptProbInMoney[] =
+{
+    N_("Probability that an asset will at maturity end up between two barrier levels, assuming it follows dS/S = mu dt + vol dW (if the last two optional parameters (strike, put/call) are specified, the probability of S_T in [strike, upper barrier] for a call and S_T in [lower barrier, strike] for a put will be returned)"),
+    N_("spot"),
+    N_("Price/value of the asset"),
+    N_("vol"),
+    N_("Annual volatility of the asset"),
+    N_("drift"),
+    N_("Parameter mu from dS/S = mu dt + vol dW"),
+    N_("T"),
+    N_("Time to maturity in years"),
+    N_("barrier_low"),
+    N_("Lower barrier (set to 0 for no lower barrier)"),
+    N_("barrier_up"),
+    N_("Upper barrier (set to 0 for no upper barrier)"),
+    N_("put/call"),
+    N_("Optional (p)ut/(c)all indicator"),
+    N_("strike"),
+    N_("Optional strike level")
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

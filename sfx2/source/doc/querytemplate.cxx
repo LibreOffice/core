@@ -20,7 +20,7 @@
 
 #include "querytemplate.hxx"
 #include <sfx2/sfxresid.hxx>
-#include "doc.hrc"
+#include "sfx2/strings.hrc"
 #include "helpid.hrc"
 #include <vcl/svapp.hxx>
 

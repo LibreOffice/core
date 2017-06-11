@@ -30,7 +30,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/sequence.hxx>
-#include "dbu_qry.hrc"
+#include "strings.hrc"
 
 namespace dbaui
 {

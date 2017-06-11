@@ -60,8 +60,4 @@ $(eval $(call gb_CppunitTest_use_components,cppcanvas_emfplus,\
 
 $(eval $(call gb_CppunitTest_use_configuration,cppcanvas_emfplus))
 
-$(call gb_CppunitTest_get_target,cppcanvas_emfplus): \
-    $(call gb_AllLangResTarget_get_target,ofa) \
-    $(call gb_AllLangResTarget_get_target,sd)
-
 # vim: set noet sw=4 ts=4:

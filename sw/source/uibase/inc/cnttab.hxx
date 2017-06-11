@@ -30,7 +30,6 @@
 #include "tox.hxx"
 #include <toxmgr.hxx>
 #include <svx/checklbx.hxx>
-#include <tools/resary.hxx>
 #include <svtools/treelistbox.hxx>
 #include <vcl/menubtn.hxx>
 #include <svx/langbox.hxx>
@@ -62,18 +61,6 @@ struct CurTOXType
     CurTOXType () : eType (TOX_INDEX), nIndex (0) {};
 
     CurTOXType (TOXTypes t) : eType (t), nIndex (0) {};
-};
-
-class SwOLENames
-{
-    ResStringArray aNamesAry;
-public:
-    SwOLENames(const ResId& rResId)
-        : aNamesAry(rResId)
-    {
-    }
-
-    ResStringArray& GetNames() { return aNamesAry;}
 };
 
 #endif

@@ -22,33 +22,9 @@
 
 #include "rcid.hrc"
 
-// Dialoge ******************************************************************
-
-#define STR_QUERY_SPELL_CONTINUE (RC_DIALOG_BEGIN + 11)
-#define STR_SPELLING_COMPLETED  (RC_DIALOG_BEGIN + 12)
-
-// Strings ******************************************************************
-
-#define STR_CLOSELINKMSG        (RC_DIALOG_BEGIN +  3)
-
-// Bereiche *****************************************************************
-
-#define RC_REGIONSW_BEGIN       (RC_DIALOG_BEGIN + 60)
-//      RC_REGIONSW_END         (RC_DIALOG_BEGIN + 79)
-
-#define RC_MACASSGN_END         (RC_DIALOG_BEGIN + 89)
-//      RC_MACASSGN_END         (RC_DIALOG_BEGIN + 89)
-
 #define RC_DLG_ADDR             (RC_DIALOG_BEGIN + 90)
 #define RC_SWDLG_BACKGROUND     (RC_DIALOG_BEGIN + 91)
 #define RC_DLG_SWNUMFMTDLG      (RC_DIALOG_BEGIN + 92)
-// Ueberlaufpruefung ********************************************************
-
-#define DIALOG_ACT_END  RC_MACASSGN_END
-
-#if DIALOG_ACT_END > RC_DIALOG_END
-#error Resource-Ueberlauf in #file, #line
-#endif
 
 #endif
 

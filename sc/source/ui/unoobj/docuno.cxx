@@ -47,7 +47,6 @@
 #include <vcl/waitobj.hxx>
 #include <unotools/charclass.hxx>
 #include <tools/multisel.hxx>
-#include <tools/resary.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/saveopt.hxx>
 
@@ -122,7 +121,7 @@
 #include "transobj.hxx"
 #include "chgtrack.hxx"
 
-#include "scres.hrc"
+#include "strings.hrc"
 
 using namespace com::sun::star;
 

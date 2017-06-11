@@ -60,7 +60,7 @@
 #include <IGrammarContact.hxx>
 #include <comphelper/flagguard.hxx>
 #include <globals.hrc>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <IDocumentLayoutAccess.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>

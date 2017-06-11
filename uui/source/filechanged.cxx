@@ -17,22 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ids.hrc"
+#include "strings.hrc"
+#include <tools/simplerm.hxx>
 #include "filechanged.hxx"
 
-FileChangedQueryBox::FileChangedQueryBox( vcl::Window* pParent, ResMgr* pResMgr ) :
+FileChangedQueryBox::FileChangedQueryBox( vcl::Window* pParent, const std::locale& rLocale ) :
     MessBox(pParent, 0,
-            ResId(STR_FILECHANGED_TITLE, *pResMgr).toString(),
+            Translate::get(STR_FILECHANGED_TITLE, rLocale),
             OUString() )
 {
     SetImage( QueryBox::GetStandardImage() );
 
-    AddButton(ResId(STR_FILECHANGED_SAVEANYWAY_BTN, *pResMgr).toString(), RET_YES,
+    AddButton(Translate::get(STR_FILECHANGED_SAVEANYWAY_BTN, rLocale), RET_YES,
             ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);
     AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
 
     SetButtonHelpText( RET_YES, OUString() );
-    SetMessText(ResId(STR_FILECHANGED_MSG, *pResMgr).toString());
+    SetMessText(Translate::get(STR_FILECHANGED_MSG, rLocale));
 }
 
 FileChangedQueryBox::~FileChangedQueryBox()

@@ -1,0 +1,161 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the N_("License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_BASIC_INC_STRINGS_HRC
+#define INCLUDED_BASIC_INC_STRINGS_HRC
+
+#define N_(String) (u8##String)
+
+std::pair<const char*, ErrCode> RID_BASIC_START[] =
+{
+    { N_("Syntax error. "), ErrCode(sal_uInt32(ERRCODE_BASIC_SYNTAX) & ERRCODE_RES_MASK) },
+    { N_("Return without Gosub. "), ErrCode(sal_uInt32(ERRCODE_BASIC_NO_GOSUB) & ERRCODE_RES_MASK) },
+    { N_("Incorrect entry; please retry. "), ErrCode(sal_uInt32(ERRCODE_BASIC_REDO_FROM_START) & ERRCODE_RES_MASK) },
+    { N_("Invalid procedure call. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_ARGUMENT) & ERRCODE_RES_MASK) },
+    { N_("Overflow. "), ErrCode(sal_uInt32(ERRCODE_BASIC_MATH_OVERFLOW) & ERRCODE_RES_MASK) },
+    { N_("Not enough memory. "), ErrCode(sal_uInt32(ERRCODE_BASIC_NO_MEMORY) & ERRCODE_RES_MASK) },
+    { N_("Array already dimensioned. "), ErrCode(sal_uInt32(ERRCODE_BASIC_ALREADY_DIM) & ERRCODE_RES_MASK) },
+    { N_("Index out of defined range. "), ErrCode(sal_uInt32(ERRCODE_BASIC_OUT_OF_RANGE) & ERRCODE_RES_MASK) },
+    { N_("Duplicate definition. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DUPLICATE_DEF) & ERRCODE_RES_MASK) },
+    { N_("Division by zero. "), ErrCode(sal_uInt32(ERRCODE_BASIC_ZERODIV) & ERRCODE_RES_MASK) },
+    { N_("Variable not defined. "), ErrCode(sal_uInt32(ERRCODE_BASIC_VAR_UNDEFINED) & ERRCODE_RES_MASK) },
+    { N_("Data type mismatch. "), ErrCode(sal_uInt32(ERRCODE_BASIC_CONVERSION) & ERRCODE_RES_MASK) },
+    { N_("Invalid parameter. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_PARAMETER) & ERRCODE_RES_MASK) },
+    { N_("Process interrupted by user. "), ErrCode(sal_uInt32(ERRCODE_BASIC_USER_ABORT) & ERRCODE_RES_MASK) },
+    { N_("Resume without error. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_RESUME) & ERRCODE_RES_MASK) },
+    { N_("Not enough stack memory. "), ErrCode(sal_uInt32(ERRCODE_BASIC_STACK_OVERFLOW) & ERRCODE_RES_MASK) },
+    { N_("Sub-procedure or function procedure not defined. "), ErrCode(sal_uInt32(ERRCODE_BASIC_PROC_UNDEFINED) & ERRCODE_RES_MASK) },
+    { N_("Error loading DLL file. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_DLL_LOAD) & ERRCODE_RES_MASK) },
+    { N_("Wrong DLL call convention. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_DLL_CALL) & ERRCODE_RES_MASK) },
+    { N_("Internal error $(ARG1). "), ErrCode(sal_uInt32(ERRCODE_BASIC_INTERNAL_ERROR) & ERRCODE_RES_MASK) },
+    { N_("Invalid file name or file number. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_CHANNEL) & ERRCODE_RES_MASK) },
+    { N_("File not found. "), ErrCode(sal_uInt32(ERRCODE_BASIC_FILE_NOT_FOUND) & ERRCODE_RES_MASK) },
+    { N_("Incorrect file mode. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_FILE_MODE) & ERRCODE_RES_MASK) },
+    { N_("File already open. "), ErrCode(sal_uInt32(ERRCODE_BASIC_FILE_ALREADY_OPEN) & ERRCODE_RES_MASK) },
+    { N_("Device I/O error. "), ErrCode(sal_uInt32(ERRCODE_BASIC_IO_ERROR) & ERRCODE_RES_MASK) },
+    { N_("File already exists. "), ErrCode(sal_uInt32(ERRCODE_BASIC_FILE_EXISTS) & ERRCODE_RES_MASK) },
+    { N_("Incorrect record length. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_RECORD_LENGTH) & ERRCODE_RES_MASK) },
+    { N_("Disk or hard drive full. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DISK_FULL) & ERRCODE_RES_MASK) },
+    { N_("Reading exceeds EOF. "), ErrCode(sal_uInt32(ERRCODE_BASIC_READ_PAST_EOF) & ERRCODE_RES_MASK) },
+    { N_("Incorrect record number. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_RECORD_NUMBER) & ERRCODE_RES_MASK) },
+    { N_("Too many files. "), ErrCode(sal_uInt32(ERRCODE_BASIC_TOO_MANY_FILES) & ERRCODE_RES_MASK) },
+    { N_("Device not available. "), ErrCode(sal_uInt32(ERRCODE_BASIC_NO_DEVICE) & ERRCODE_RES_MASK) },
+    { N_("Access denied. "), ErrCode(sal_uInt32(ERRCODE_BASIC_ACCESS_DENIED) & ERRCODE_RES_MASK) },
+    { N_("Disk not ready. "), ErrCode(sal_uInt32(ERRCODE_BASIC_NOT_READY) & ERRCODE_RES_MASK) },
+    { N_("Not implemented. "), ErrCode(sal_uInt32(ERRCODE_BASIC_NOT_IMPLEMENTED) & ERRCODE_RES_MASK) },
+    { N_("Renaming on different drives impossible. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DIFFERENT_DRIVE) & ERRCODE_RES_MASK) },
+    { N_("Path/File access error. "), ErrCode(sal_uInt32(ERRCODE_BASIC_ACCESS_ERROR) & ERRCODE_RES_MASK) },
+    { N_("Path not found. "), ErrCode(sal_uInt32(ERRCODE_BASIC_PATH_NOT_FOUND) & ERRCODE_RES_MASK) },
+    { N_("Object variable not set. "), ErrCode(sal_uInt32(ERRCODE_BASIC_NO_OBJECT) & ERRCODE_RES_MASK) },
+    { N_("Invalid string pattern. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_PATTERN) & ERRCODE_RES_MASK) },
+    { N_("Use of zero not permitted. "), ErrCode(sal_uInt32(ERRCODE_BASIC_IS_NULL) & ERRCODE_RES_MASK) },
+    { N_("DDE Error. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DDE_ERROR) & ERRCODE_RES_MASK) },
+    { N_("Awaiting response to DDE connection. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DDE_WAITINGACK) & ERRCODE_RES_MASK) },
+    { N_("No DDE channels available. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DDE_OUTOFCHANNELS) & ERRCODE_RES_MASK) },
+    { N_("No application responded to DDE connect initiation. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DDE_NO_RESPONSE) & ERRCODE_RES_MASK) },
+    { N_("Too many applications responded to DDE connect initiation. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DDE_MULT_RESPONSES) & ERRCODE_RES_MASK) },
+    { N_("DDE channel locked. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DDE_CHANNEL_LOCKED) & ERRCODE_RES_MASK) },
+    { N_("External application cannot execute DDE operation. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DDE_NOTPROCESSED) & ERRCODE_RES_MASK) },
+    { N_("Timeout while waiting for DDE response. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DDE_TIMEOUT) & ERRCODE_RES_MASK) },
+    { N_("User pressed ESCAPE during DDE operation. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DDE_USER_INTERRUPT) & ERRCODE_RES_MASK) },
+    { N_("External application busy. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DDE_BUSY) & ERRCODE_RES_MASK) },
+    { N_("DDE operation without data. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DDE_NO_DATA) & ERRCODE_RES_MASK) },
+    { N_("Data are in wrong format. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DDE_WRONG_DATA_FORMAT) & ERRCODE_RES_MASK) },
+    { N_("External application has been terminated. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DDE_PARTNER_QUIT) & ERRCODE_RES_MASK) },
+    { N_("DDE connection interrupted or modified. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DDE_CONV_CLOSED) & ERRCODE_RES_MASK) },
+    { N_("DDE method invoked with no channel open. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DDE_NO_CHANNEL) & ERRCODE_RES_MASK) },
+    { N_("Invalid DDE link format. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DDE_INVALID_LINK) & ERRCODE_RES_MASK) },
+    { N_("DDE message has been lost. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DDE_QUEUE_OVERFLOW) & ERRCODE_RES_MASK) },
+    { N_("Paste link already performed. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DDE_LINK_ALREADY_EST) & ERRCODE_RES_MASK) },
+    { N_("Link mode cannot be set due to invalid link topic. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DDE_LINK_INV_TOPIC) & ERRCODE_RES_MASK) },
+    { N_("DDE requires the DDEML.DLL file. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DDE_DLL_NOT_FOUND) & ERRCODE_RES_MASK) },
+    { N_("Module cannot be loaded; invalid format. "), ErrCode(sal_uInt32(ERRCODE_BASIC_CANNOT_LOAD) & ERRCODE_RES_MASK) },
+    { N_("Invalid object index. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_INDEX) & ERRCODE_RES_MASK) },
+    { N_("Object is not available. "), ErrCode(sal_uInt32(ERRCODE_BASIC_NO_ACTIVE_OBJECT) & ERRCODE_RES_MASK) },
+    { N_("Incorrect property value. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_PROP_VALUE) & ERRCODE_RES_MASK) },
+    { N_("This property is read-only. "), ErrCode(sal_uInt32(ERRCODE_BASIC_PROP_READONLY) & ERRCODE_RES_MASK) },
+    { N_("This property is write only. "), ErrCode(sal_uInt32(ERRCODE_BASIC_PROP_WRITEONLY) & ERRCODE_RES_MASK) },
+    { N_("Invalid object reference. "), ErrCode(sal_uInt32(ERRCODE_BASIC_INVALID_OBJECT) & ERRCODE_RES_MASK) },
+    { N_("Property or method not found: $(ARG1). "), ErrCode(sal_uInt32(ERRCODE_BASIC_NO_METHOD) & ERRCODE_RES_MASK) },
+    { N_("Object required. "), ErrCode(sal_uInt32(ERRCODE_BASIC_NEEDS_OBJECT) & ERRCODE_RES_MASK) },
+    { N_("Invalid use of an object. "), ErrCode(sal_uInt32(ERRCODE_BASIC_INVALID_USAGE_OBJECT) & ERRCODE_RES_MASK) },
+    { N_("OLE Automation is not supported by this object. "), ErrCode(sal_uInt32(ERRCODE_BASIC_NO_OLE) & ERRCODE_RES_MASK) },
+    { N_("This property or method is not supported by the object. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_METHOD) & ERRCODE_RES_MASK) },
+    { N_("OLE Automation Error. "), ErrCode(sal_uInt32(ERRCODE_BASIC_OLE_ERROR) & ERRCODE_RES_MASK) },
+    { N_("This action is not supported by given object. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_ACTION) & ERRCODE_RES_MASK) },
+    { N_("Named arguments are not supported by given object. "), ErrCode(sal_uInt32(ERRCODE_BASIC_NO_NAMED_ARGS) & ERRCODE_RES_MASK) },
+    { N_("The current locale setting is not supported by the given object. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_LOCALE) & ERRCODE_RES_MASK) },
+    { N_("Named argument not found. "), ErrCode(sal_uInt32(ERRCODE_BASIC_NAMED_NOT_FOUND) & ERRCODE_RES_MASK) },
+    { N_("Argument is not optional. "), ErrCode(sal_uInt32(ERRCODE_BASIC_NOT_OPTIONAL) & ERRCODE_RES_MASK) },
+    { N_("Invalid number of arguments. "), ErrCode(sal_uInt32(ERRCODE_BASIC_WRONG_ARGS) & ERRCODE_RES_MASK) },
+    { N_("Object is not a list. "), ErrCode(sal_uInt32(ERRCODE_BASIC_NOT_A_COLL) & ERRCODE_RES_MASK) },
+    { N_("Invalid ordinal number. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_ORDINAL) & ERRCODE_RES_MASK) },
+    { N_("Specified DLL function not found. "), ErrCode(sal_uInt32(ERRCODE_BASIC_DLLPROC_NOT_FOUND) & ERRCODE_RES_MASK) },
+    { N_("Invalid clipboard format. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_CLIPBD_FORMAT) & ERRCODE_RES_MASK) },
+    { N_("Object does not have this property. "), ErrCode(sal_uInt32(ERRCODE_BASIC_PROPERTY_NOT_FOUND) & ERRCODE_RES_MASK) },
+    { N_("Object does not have this method. "), ErrCode(sal_uInt32(ERRCODE_BASIC_METHOD_NOT_FOUND) & ERRCODE_RES_MASK) },
+    { N_("Required argument lacking. "), ErrCode(sal_uInt32(ERRCODE_BASIC_ARG_MISSING) & ERRCODE_RES_MASK) },
+    { N_("Invalid number of arguments. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_NUMBER_OF_ARGS) & ERRCODE_RES_MASK) },
+    { N_("Error executing a method. "), ErrCode(sal_uInt32(ERRCODE_BASIC_METHOD_FAILED) & ERRCODE_RES_MASK) },
+    { N_("Unable to set property. "), ErrCode(sal_uInt32(ERRCODE_BASIC_SETPROP_FAILED) & ERRCODE_RES_MASK) },
+    { N_("Unable to determine property. "), ErrCode(sal_uInt32(ERRCODE_BASIC_GETPROP_FAILED) & ERRCODE_RES_MASK) },
+     // Compiler errors. These are not runtime errors.
+    { N_("Unexpected symbol: $(ARG1). "), ErrCode(sal_uInt32(ERRCODE_BASIC_UNEXPECTED) & ERRCODE_RES_MASK) },
+    { N_("Expected: $(ARG1). "), ErrCode(sal_uInt32(ERRCODE_BASIC_EXPECTED) & ERRCODE_RES_MASK) },
+    { N_("Symbol expected. "), ErrCode(sal_uInt32(ERRCODE_BASIC_SYMBOL_EXPECTED) & ERRCODE_RES_MASK) },
+    { N_("Variable expected. "), ErrCode(sal_uInt32(ERRCODE_BASIC_VAR_EXPECTED) & ERRCODE_RES_MASK) },
+    { N_("Label expected. "), ErrCode(sal_uInt32(ERRCODE_BASIC_LABEL_EXPECTED) & ERRCODE_RES_MASK) },
+    { N_("Value cannot be applied. "), ErrCode(sal_uInt32(ERRCODE_BASIC_LVALUE_EXPECTED) & ERRCODE_RES_MASK) },
+    { N_("Variable $(ARG1) already defined. "), ErrCode(sal_uInt32(ERRCODE_BASIC_VAR_DEFINED) & ERRCODE_RES_MASK) },
+    { N_("Sub procedure or function procedure $(ARG1) already defined. "), ErrCode(sal_uInt32(ERRCODE_BASIC_PROC_DEFINED) & ERRCODE_RES_MASK) },
+    { N_("Label $(ARG1) already defined. "), ErrCode(sal_uInt32(ERRCODE_BASIC_LABEL_DEFINED) & ERRCODE_RES_MASK) },
+    { N_("Variable $(ARG1) not found. "), ErrCode(sal_uInt32(ERRCODE_BASIC_UNDEF_VAR) & ERRCODE_RES_MASK) },
+    { N_("Array or procedure $(ARG1) not found. "), ErrCode(sal_uInt32(ERRCODE_BASIC_UNDEF_ARRAY) & ERRCODE_RES_MASK) },
+    { N_("Procedure $(ARG1) not found. "), ErrCode(sal_uInt32(ERRCODE_BASIC_UNDEF_PROC) & ERRCODE_RES_MASK) },
+    { N_("Label $(ARG1) undefined. "), ErrCode(sal_uInt32(ERRCODE_BASIC_UNDEF_LABEL) & ERRCODE_RES_MASK) },
+    { N_("Unknown data type $(ARG1). "), ErrCode(sal_uInt32(ERRCODE_BASIC_UNDEF_TYPE) & ERRCODE_RES_MASK) },
+    { N_("Exit $(ARG1) expected. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_EXIT) & ERRCODE_RES_MASK) },
+    { N_("Statement block still open: $(ARG1) missing. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_BLOCK) & ERRCODE_RES_MASK) },
+    { N_("Parentheses do not match. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_BRACKETS) & ERRCODE_RES_MASK) },
+    { N_("Symbol $(ARG1) already defined differently. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_DECLARATION) & ERRCODE_RES_MASK) },
+    { N_("Parameters do not correspond to procedure. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_PARAMETERS) & ERRCODE_RES_MASK) },
+    { N_("Invalid character in number. "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_CHAR_IN_NUMBER) & ERRCODE_RES_MASK) },
+    { N_("Array must be dimensioned. "), ErrCode(sal_uInt32(ERRCODE_BASIC_MUST_HAVE_DIMS) & ERRCODE_RES_MASK) },
+    { N_("Else/Endif without If. "), ErrCode(sal_uInt32(ERRCODE_BASIC_NO_IF) & ERRCODE_RES_MASK) },
+    { N_("$(ARG1) not allowed within a procedure. "), ErrCode(sal_uInt32(ERRCODE_BASIC_NOT_IN_SUBR) & ERRCODE_RES_MASK) },
+    { N_("$(ARG1) not allowed outside a procedure. "), ErrCode(sal_uInt32(ERRCODE_BASIC_NOT_IN_MAIN) & ERRCODE_RES_MASK) },
+    { N_("Dimension specifications do not match. "), ErrCode(sal_uInt32(ERRCODE_BASIC_WRONG_DIMS) & ERRCODE_RES_MASK) },
+    { N_("Unknown option: $(ARG1). "), ErrCode(sal_uInt32(ERRCODE_BASIC_BAD_OPTION) & ERRCODE_RES_MASK) },
+    { N_("Constant $(ARG1) redefined. "), ErrCode(sal_uInt32(ERRCODE_BASIC_CONSTANT_REDECLARED) & ERRCODE_RES_MASK) },
+    { N_("Program too large. "), ErrCode(sal_uInt32(ERRCODE_BASIC_PROG_TOO_LARGE) & ERRCODE_RES_MASK) },
+    { N_("Strings or arrays not permitted. "), ErrCode(sal_uInt32(ERRCODE_BASIC_NO_STRINGS_ARRAYS) & ERRCODE_RES_MASK) },
+    { N_("An exception occurred $(ARG1). "), ErrCode(sal_uInt32(ERRCODE_BASIC_EXCEPTION) & ERRCODE_RES_MASK) },
+    { N_("This array is fixed or temporarily locked. "), ErrCode(sal_uInt32(ERRCODE_BASIC_ARRAY_FIX) & ERRCODE_RES_MASK) },
+    { N_("Out of string space. "), ErrCode(sal_uInt32(ERRCODE_BASIC_STRING_OVERFLOW) & ERRCODE_RES_MASK) },
+    { N_("Expression Too Complex. "), ErrCode(sal_uInt32(ERRCODE_BASIC_EXPR_TOO_COMPLEX) & ERRCODE_RES_MASK) },
+    { N_("Can't perform requested operation. "), ErrCode(sal_uInt32(ERRCODE_BASIC_OPER_NOT_PERFORM) & ERRCODE_RES_MASK) },
+    { N_("Too many DLL application clients. "), ErrCode(sal_uInt32(ERRCODE_BASIC_TOO_MANY_DLL) & ERRCODE_RES_MASK) },
+    { N_("For loop not initialized. "), ErrCode(sal_uInt32(ERRCODE_BASIC_LOOP_NOT_INIT) & ERRCODE_RES_MASK) },
+    { N_("$(ARG1) "), ErrCode(sal_uInt32(ERRCODE_BASIC_COMPAT) & ERRCODE_RES_MASK) },
+    { nullptr, ERRCODE_NONE }
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

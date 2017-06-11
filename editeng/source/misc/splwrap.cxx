@@ -362,8 +362,8 @@ bool SvxSpellWrapper::SpellNext( )
         // a BODY_area done, ask for the other BODY_area
         WAIT_OFF();
 
-        sal_uInt16 nResId = bReverse ? RID_SVXSTR_QUERY_BW_CONTINUE : RID_SVXSTR_QUERY_CONTINUE;
-        ScopedVclPtrInstance< MessageDialog > aBox(pWin, EditResId(nResId), VclMessageType::Question, VclButtonsType::YesNo);
+        const char* pResId = bReverse ? RID_SVXSTR_QUERY_BW_CONTINUE : RID_SVXSTR_QUERY_CONTINUE;
+        ScopedVclPtrInstance< MessageDialog > aBox(pWin, EditResId(pResId), VclMessageType::Question, VclButtonsType::YesNo);
         if ( aBox->Execute() != RET_YES )
         {
             // sacrifice the other area if necessary ask for special area

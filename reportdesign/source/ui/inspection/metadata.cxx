@@ -19,9 +19,10 @@
 #include "metadata.hxx"
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
 #include <comphelper/extract.hxx>
+#include "core_resource.hxx"
 #include "helpids.hrc"
-#include "RptResId.hrc"
-#include "uistrings.hrc"
+#include "strings.hrc"
+#include "strings.hxx"
 
 #include <functional>
 #include <algorithm>
@@ -79,7 +80,7 @@ namespace rptui
 
 #define DEF_INFO( ident, uinameres, helpid, flags )   \
     OPropertyInfoImpl( PROPERTY_##ident, PROPERTY_ID_##ident, \
-            OUString( ModuleRes( RID_STR_##uinameres ) ), HID_RPT_PROP_##helpid, flags )
+                       RptResId( RID_STR_##uinameres ), HID_RPT_PROP_##helpid, flags )
 
 #define DEF_INFO_1( ident, uinameres, helpid, flag1 ) \
     DEF_INFO( ident, uinameres, helpid, PropUIFlags::flag1 )
@@ -94,9 +95,6 @@ namespace rptui
     {
         if ( s_pPropertyInfos )
             return s_pPropertyInfos;
-
-        OModuleClient aResourceAccess;
-        // this ensures that we have our resource file loaded
 
         static OPropertyInfoImpl aPropertyInfos[] =
         {

@@ -53,7 +53,7 @@
 #include <fldbas.hxx>
 #include <swwait.hxx>
 #include <GetMetricVal.hxx>
-#include <statstr.hrc>
+#include <strings.hrc>
 #include <hints.hxx>
 #include <SwUndoPageDesc.hxx>
 #include <pagedeschint.hxx>

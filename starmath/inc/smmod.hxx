@@ -20,13 +20,10 @@
 #ifndef INCLUDED_STARMATH_INC_SMMOD_HXX
 #define INCLUDED_STARMATH_INC_SMMOD_HXX
 
-#include <tools/resary.hxx>
 #include <svl/lstner.hxx>
 #include <svtools/colorcfg.hxx>
 
 #include <sfx2/module.hxx>
-
-#include "starmath.hrc"
 
 #include <unotools/options.hxx>
 #include <memory>
@@ -51,26 +48,17 @@ class SvtSysLocale;
 class VirtualDevice;
 
 
-OUString SmResId(sal_uInt16 nId);
+OUString SmResId(const char* pId);
 
 class SmLocalizedSymbolData
 {
-    ResStringArray      aUiSymbolNamesAry;
-    ResStringArray      aExportSymbolNamesAry;
-    ResStringArray      aUiSymbolSetNamesAry;
-    ResStringArray      aExportSymbolSetNamesAry;
-
 public:
     SmLocalizedSymbolData();
     ~SmLocalizedSymbolData();
 
-    const ResStringArray& GetUiSymbolNamesArray() const     { return aUiSymbolNamesAry; }
-    const ResStringArray& GetExportSymbolNamesArray() const { return aExportSymbolNamesAry; }
     static const OUString GetUiSymbolName( const OUString &rExportName );
     static const OUString GetExportSymbolName( const OUString &rUiName );
 
-    const ResStringArray& GetUiSymbolSetNamesArray() const     { return aUiSymbolSetNamesAry; }
-    const ResStringArray& GetExportSymbolSetNamesArray() const { return aExportSymbolSetNamesAry; }
     static const OUString GetUiSymbolSetName( const OUString &rExportName );
     static const OUString GetExportSymbolSetName( const OUString &rUiName );
 };

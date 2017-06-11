@@ -20,6 +20,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svl/languageoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <tools/simplerm.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/status.hxx>
@@ -49,9 +50,10 @@
 #include "DrawDocShell.hxx"
 #include "drawdoc.hxx"
 #include "app.hrc"
-#include "glob.hrc"
 #include "strings.hrc"
-#include "res_bmp.hrc"
+#include "strings.hrc"
+
+#include "errhdl.hrc"
 #include "cfgids.hxx"
 
 
@@ -67,7 +69,7 @@ void SdModule::InitInterface_Impl()
 
 // Ctor
 SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
-:   SfxModule( ResMgr::CreateResMgr("sd"), {pFact1, pFact2} ),
+:   SfxModule( Translate::Create("sd", Application::GetSettings().GetUILanguageTag()), {pFact1, pFact2} ),
     pTransferClip(nullptr),
     pTransferDrag(nullptr),
     pTransferSelection(nullptr),
@@ -84,10 +86,7 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     pSearchItem->SetAppFlag(SvxSearchApp::DRAW);
     StartListening( *SfxGetpApp() );
     SvxErrorHandler::ensure();
-    mpErrorHdl = new SfxErrorHandler( RID_SD_ERRHDL,
-                                         ErrCode(ERRCODE_AREA_SD),
-                                         ErrCode(ERRCODE_AREA_SD_END),
-                                         GetResMgr() );
+    mpErrorHdl = new SfxErrorHandler(RID_SD_ERRHDL, ErrCode(ERRCODE_AREA_SD), ErrCode(ERRCODE_AREA_SD_END), &GetResLocale());
 
     // Create a new ref device and (by calling SetReferenceDevice())
     // set its resolution to 600 DPI.  This leads to a visually better
@@ -95,6 +94,11 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     mpVirtualRefDevice.reset(VclPtr<VirtualDevice>::Create());
     mpVirtualRefDevice->SetMapMode( MapUnit::Map100thMM );
     mpVirtualRefDevice->SetReferenceDevice ( VirtualDevice::RefDevMode::Dpi600 );
+}
+
+OUString SdResId(const char* pId)
+{
+    return Translate::get(pId, SD_MOD()->GetResLocale());
 }
 
 // Dtor

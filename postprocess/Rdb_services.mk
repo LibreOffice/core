@@ -297,7 +297,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	extensions/source/abpilot/abp \
 	extensions/source/config/ldap/ldapbe2 \
 	extensions/source/logging/log \
-	extensions/source/resource/res \
 	extensions/source/scanner/scn \
 	extensions/source/update/feed/updatefeed \
 	xmlhelp/util/ucpchelp1 \

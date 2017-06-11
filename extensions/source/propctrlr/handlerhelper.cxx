@@ -18,8 +18,8 @@
  */
 
 #include "handlerhelper.hxx"
-#include "propresid.hrc"
-#include "formresid.hrc"
+#include "strings.hrc"
+#include "yesno.hrc"
 #include <comphelper/extract.hxx>
 #include "modulepcr.hxx"
 #include "enumrepresentation.hxx"
@@ -35,7 +35,6 @@
 #include <com/sun/star/inspection/XStringListControl.hpp>
 #include <com/sun/star/inspection/XNumericControl.hpp>
 #include <tools/diagnose_ex.h>
-#include <tools/resary.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <algorithm>
@@ -72,8 +71,7 @@ namespace pcr
         // special handling for booleans (this will become a list)
         if ( _rProperty.Type.getTypeClass() == TypeClass_BOOLEAN )
         {
-            ResStringArray aListEntries(PcrRes(RID_RSC_ENUM_YESNO));
-            _out_rDescriptor.Control = createListBoxControl(_rxControlFactory, aListEntries, bReadOnlyControl, false);
+            _out_rDescriptor.Control = createListBoxControl(_rxControlFactory, RID_RSC_ENUM_YESNO, SAL_N_ELEMENTS(RID_RSC_ENUM_YESNO), bReadOnlyControl, false);
             return;
         }
 
@@ -147,11 +145,11 @@ namespace pcr
     }
 
     Reference< XPropertyControl > PropertyHandlerHelper::createListBoxControl( const Reference< XPropertyControlFactory >& _rxControlFactory,
-                const ResStringArray& _rInitialListEntries, bool _bReadOnlyControl, bool _bSorted )
+                const char** pTransIds, size_t nElements, bool _bReadOnlyControl, bool _bSorted )
     {
         std::vector<OUString> aInitialListEntries;
-        for (sal_uInt32 i = 0; i < _rInitialListEntries.Count(); ++i)
-            aInitialListEntries.push_back(_rInitialListEntries.GetString(i));
+        for (size_t i = 0; i < nElements; ++i)
+            aInitialListEntries.push_back(PcrRes(pTransIds[i]));
         return lcl_implCreateListLikeControl(_rxControlFactory, aInitialListEntries, _bReadOnlyControl, _bSorted, true);
     }
 

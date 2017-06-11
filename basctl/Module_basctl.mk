@@ -26,10 +26,7 @@ $(eval $(call gb_Module_add_targets,basctl,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,basctl,\
-	AllLangResTarget_basctl \
-))
-
-$(eval $(call gb_Module_add_l10n_targets,basctl,\
+	AllLangMoTarget_basctl \
 	UIConfig_basicide \
 ))
 

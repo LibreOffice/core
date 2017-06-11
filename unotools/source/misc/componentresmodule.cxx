@@ -19,6 +19,7 @@
 
 #include <unotools/componentresmodule.hxx>
 #include <tools/resmgr.hxx>
+#include <tools/simplerm.hxx>
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
 
@@ -35,17 +36,22 @@ namespace utl
     {
     private:
         ResMgr*         m_pResources;
-        bool            m_bInitialized;
-        OString  m_sResFilePrefix;
+        std::locale     m_aLocale;
+        bool            m_bMgrInitialized;
+        bool            m_bLocaleInitialized;
+        OString         m_sResFilePrefix;
+        LanguageTag     m_aLanguage;
 
         OComponentResModuleImpl(const OComponentResModuleImpl&) = delete;
         OComponentResModuleImpl& operator=(const OComponentResModuleImpl&) = delete;
 
     public:
-        explicit OComponentResModuleImpl( const OString& _rResFilePrefix )
+        explicit OComponentResModuleImpl(const OString& _rResFilePrefix, const LanguageTag& rLanguage)
             :m_pResources( nullptr )
-            ,m_bInitialized( false )
+            ,m_bMgrInitialized( false )
+            ,m_bLocaleInitialized( false )
             ,m_sResFilePrefix( _rResFilePrefix )
+            ,m_aLanguage( rLanguage )
         {
         }
 
@@ -61,18 +67,20 @@ namespace utl
         /** retrieves our resource manager
         */
         ResMgr* getResManager();
+        const std::locale& getResLocale();
     };
 
     void OComponentResModuleImpl::freeResManager()
     {
         delete m_pResources;
         m_pResources = nullptr;
-        m_bInitialized = false;
+        m_bMgrInitialized = false;
+        m_bLocaleInitialized = false;
     }
 
     ResMgr* OComponentResModuleImpl::getResManager()
     {
-        if ( !m_pResources && !m_bInitialized )
+        if ( !m_pResources && !m_bMgrInitialized )
         {
             // create a manager with a fixed prefix
             OString aMgrName = m_sResFilePrefix;
@@ -83,16 +91,25 @@ namespace utl
                 .append(aMgrName)
                 .append(")!").getStr() );
 
-            m_bInitialized = true;
+            m_bMgrInitialized = true;
         }
         return m_pResources;
     }
 
-    //= OComponentResourceModule
+    const std::locale& OComponentResModuleImpl::getResLocale()
+    {
+        if (!m_bLocaleInitialized)
+        {
+            m_aLocale = Translate::Create(m_sResFilePrefix.getStr(), m_aLanguage);
+            m_bLocaleInitialized = true;
+        }
+        return m_aLocale;
+    }
 
-    OComponentResourceModule::OComponentResourceModule( const OString& _rResFilePrefix )
+    //= OComponentResourceModule
+    OComponentResourceModule::OComponentResourceModule(const OString& _rResFilePrefix, const LanguageTag& rLanguage)
         :BaseClass()
-        ,m_pImpl( new OComponentResModuleImpl( _rResFilePrefix ) )
+        ,m_pImpl( new OComponentResModuleImpl( _rResFilePrefix, rLanguage ) )
     {
     }
 
@@ -104,6 +121,12 @@ namespace utl
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_pImpl->getResManager();
+    }
+
+    const std::locale& OComponentResourceModule::getResLocale()
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        return m_pImpl->getResLocale();
     }
 
     void OComponentResourceModule::onLastClient()

@@ -73,7 +73,7 @@
 
 #include <app.hrc>
 #include <dialog.hrc>
-#include <shells.hrc>
+#include <strings.hrc>
 #include <cmdid.h>
 #include <globals.hrc>
 #include <helpid.h>

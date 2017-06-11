@@ -102,7 +102,7 @@
 #include <docstat.hxx>
 #include <modcfg.hxx>
 #include <ndtxt.hxx>
-#include <utlui.hrc>
+#include <strings.hrc>
 #include "bitmaps.hlst"
 #include <swcont.hxx>
 #include <unodefaults.hxx>

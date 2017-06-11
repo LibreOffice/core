@@ -32,7 +32,7 @@
 #include "linenum.hxx"
 #include "uitool.hxx"
 #include <fmtline.hxx>
-#include "poolfmt.hrc"
+#include "strings.hrc"
 
 #include <IDocumentStylePoolAccess.hxx>
 

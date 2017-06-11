@@ -29,7 +29,6 @@
 #include <svl/lstner.hxx>
 #include <vcl/dockwin.hxx>
 #include <svx/svdmark.hxx>
-#include "ModuleHelper.hxx"
 
 namespace rptui
 {
@@ -44,7 +43,6 @@ class OObjectBase;
 class PropBrw : public DockingWindow , public SfxListener, public SfxBroadcaster
 {
 private:
-    OModuleClient       m_aModuleClient;
     css::uno::Reference< css::uno::XComponentContext >
                         m_xInspectorContext;
     css::uno::Reference< css::uno::XComponentContext >

@@ -45,6 +45,7 @@
 #include <svtools/ctrlbox.hxx>
 #include <helpid.h>
 #include <globals.hrc>
+#include <strings.hrc>
 #include <misc.hrc>
 #include <paratr.hxx>
 

@@ -32,6 +32,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/colorbox.hxx>
+#include <svx/strarray.hxx>
 #include <svx/gallery.hxx>
 #include <svl/urihelper.hxx>
 #include <editeng/brushitem.hxx>
@@ -62,7 +63,6 @@
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
-#include <tools/resary.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -70,6 +70,7 @@
 #include "sfx2/opengrf.hxx"
 
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <sfx2/request.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/stritem.hxx>
@@ -1177,12 +1178,11 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(vcl::Window* pParent,
     eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
 
     // Fill ListBox with predefined / translated numbering types.
-    ResStringArray aNames(ResId(RID_SVXSTRARY_NUMBERINGTYPE, DIALOG_MGR()));
-    sal_uInt32 nCount = aNames.Count();
+    sal_uInt32 nCount = SvxNumberingTypeTable::Count();
     for (sal_uInt32 i = 0; i < nCount; ++i)
     {
-        sal_Int32 nPos = m_pFmtLB->InsertEntry( aNames.GetString(i));
-        m_pFmtLB->SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_uIntPtr>(aNames.GetValue(i))));
+        sal_Int32 nPos = m_pFmtLB->InsertEntry(SvxNumberingTypeTable::GetString(i));
+        m_pFmtLB->SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_uIntPtr>(SvxNumberingTypeTable::GetValue(i))));
     }
 
     // Get advanced numbering types from the component.

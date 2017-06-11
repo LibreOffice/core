@@ -34,7 +34,7 @@
 #include <rtl/instance.hxx>
 #include <svtools/svtresid.hxx>
 #include <tools/wintypes.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include "bitmaps.hlst"
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>

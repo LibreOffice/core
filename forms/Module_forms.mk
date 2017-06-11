@@ -14,7 +14,7 @@ $(eval $(call gb_Module_add_targets,forms,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,forms,\
-    AllLangResTarget_frm \
+    AllLangMoTarget_frm \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,forms,\

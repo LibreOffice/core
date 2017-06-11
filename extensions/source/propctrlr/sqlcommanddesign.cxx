@@ -19,7 +19,8 @@
 
 #include "sqlcommanddesign.hxx"
 #include "formstrings.hxx"
-#include "formresid.hrc"
+#include "command.hrc"
+#include "strings.hrc"
 #include "modulepcr.hxx"
 #include "unourl.hxx"
 
@@ -37,7 +38,6 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 
-#include <tools/resary.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 
@@ -261,10 +261,8 @@ namespace pcr
             Reference< XTitle> xTitle(xQueryDesign,UNO_QUERY);
             if ( xTitle.is() )
             {
-                PcrRes aResId(RID_RSC_ENUM_COMMAND_TYPE);
-                ResStringArray aResList(aResId);
-                OUString sDisplayName = aResList.GetString(CommandType::COMMAND);
-                xTitle->setTitle( sDisplayName );
+                OUString sDisplayName = PcrRes(RID_RSC_ENUM_COMMAND_TYPE[CommandType::COMMAND]);
+                xTitle->setTitle(sDisplayName);
             }
         }
         catch( const Exception& )

@@ -17,24 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ids.hrc"
+#include "strings.hrc"
 #include "lockfailed.hxx"
-
+#include <tools/simplerm.hxx>
 #include <vcl/button.hxx>
 
-LockFailedQueryBox::LockFailedQueryBox( vcl::Window* pParent, ResMgr* pResMgr ) :
-    MessBox(pParent, 0,
-            ResId(STR_LOCKFAILED_TITLE, *pResMgr).toString(),
-            OUString() )
+LockFailedQueryBox::LockFailedQueryBox(vcl::Window* pParent, const std::locale& rResLocale)
+    : MessBox(pParent, 0, Translate::get(STR_LOCKFAILED_TITLE, rResLocale), OUString())
 {
     SetImage( ErrorBox::GetStandardImage() );
 
-    AddButton(ResId(STR_LOCKFAILED_OPENREADONLY_BTN, *pResMgr).toString(), RET_OK,
+    AddButton(Translate::get(STR_LOCKFAILED_OPENREADONLY_BTN, rResLocale), RET_OK,
         ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);
 
     AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
 
-    SetMessText(ResId(STR_LOCKFAILED_MSG, *pResMgr ).toString());
+    SetMessText(Translate::get(STR_LOCKFAILED_MSG, rResLocale));
 }
 
 LockFailedQueryBox::~LockFailedQueryBox()

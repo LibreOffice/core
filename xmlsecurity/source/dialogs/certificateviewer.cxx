@@ -29,8 +29,9 @@
 #include <unotools/datetime.hxx>
 #include <svtools/treelistentry.hxx>
 
-#include "dialogs.hrc"
+#include "strings.hrc"
 #include "resourcemanager.hxx"
+#include "svtools/controldims.hxx"
 #include "bitmaps.hlst"
 
 #include <vcl/settings.hxx>

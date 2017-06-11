@@ -25,7 +25,7 @@
 #include <sfx2/request.hxx>
 #include <editeng/numitem.hxx>
 #include "sdresid.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "strings.hxx"
 
 #include <editeng/editdata.hxx>

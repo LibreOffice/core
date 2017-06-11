@@ -23,7 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/image.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/popupmenuwindow.hxx>

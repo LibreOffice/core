@@ -21,7 +21,7 @@
 #include <vcl/abstdlg.hxx>
 
 #include "svdata.hxx"
-#include <svids.hrc>
+#include <strings.hrc>
 
 VclContainer::VclContainer(vcl::Window *pParent, WinBits nStyle)
     : Window(WindowType::CONTAINER)

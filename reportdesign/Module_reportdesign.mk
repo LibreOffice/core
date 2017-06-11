@@ -16,8 +16,7 @@ $(eval $(call gb_Module_add_targets,reportdesign,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,reportdesign,\
-    AllLangResTarget_rpt \
-    AllLangResTarget_rptui \
+    AllLangMoTarget_rpt \
     UIConfig_dbreport \
 ))
 

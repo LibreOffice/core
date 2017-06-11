@@ -28,7 +28,7 @@
 #include "macros.hxx"
 #include "ControllerLockGuard.hxx"
 #include "AccessibleTextHelper.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "chartview/DrawModelWrapper.hxx"
 
 #include <svx/svdotext.hxx>

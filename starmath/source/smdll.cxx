@@ -36,6 +36,7 @@
 #include <ElementsDockingWindow.hxx>
 
 #include <starmath.hrc>
+#include <strings.hrc>
 
 #include <svx/xmlsecctrl.hxx>
 #include <o3tl/make_unique.hxx>

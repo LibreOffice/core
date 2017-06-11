@@ -26,21 +26,20 @@
 #include "ReportController.hxx"
 #include "UITools.hxx"
 #include "RptDef.hxx"
-#include "RptResId.hrc"
+#include "strings.hrc"
 #include "SectionView.hxx"
 #include "ReportSection.hxx"
-#include "uistrings.hrc"
+#include "strings.hxx"
 #include "rptui_slotid.hrc"
 #include "dlgedclip.hxx"
 #include "ColorChanger.hxx"
 #include "RptObject.hxx"
-#include "ModuleHelper.hxx"
 #include "EndMarker.hxx"
 #include <svx/svdpagv.hxx>
 #include <svx/unoshape.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-
+#include "core_resource.hxx"
 #include "helpids.hrc"
 #include <svx/svdundo.hxx>
 #include <toolkit/helper/convert.hxx>
@@ -1234,7 +1233,7 @@ void OViewsWindow::EndDragObj_removeInvisibleObjects()
 
 void OViewsWindow::EndDragObj(bool _bControlKeyPressed, const OSectionView* _pSection, const Point& _aPnt)
 {
-    const OUString sUndoAction = ModuleRes(RID_STR_UNDO_CHANGEPOSITION);
+    const OUString sUndoAction = RptResId(RID_STR_UNDO_CHANGEPOSITION);
     const UndoContext aUndoContext( getView()->getReportView()->getController().getUndoManager(), sUndoAction );
 
     Point aNewPos = _aPnt;

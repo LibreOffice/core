@@ -19,6 +19,7 @@
 
 #include "FieldControls.hxx"
 #include "SqlNameEdit.hxx"
+#include "core_resource.hxx"
 
 #include <vcl/settings.hxx>
 
@@ -38,20 +39,20 @@ void lcl_setSpecialReadOnly( bool _bReadOnly, vcl::Window* _pWin )
 
 OPropColumnEditCtrl::OPropColumnEditCtrl(vcl::Window* pParent,
                                                 rtl::OUString& _rAllowedChars,
-                                                sal_uInt16 nHelpId,
+                                                const char* pHelpId,
                                                 short nPosition,
                                                 WinBits nWinStyle)
     :OSQLNameEdit(pParent, nWinStyle, _rAllowedChars)
     ,m_nPos(nPosition)
 {
-    m_strHelpText = ModuleRes(nHelpId);
+    m_strHelpText = DBA_RES(pHelpId);
 }
 
-OPropEditCtrl::OPropEditCtrl(vcl::Window* pParent, sal_uInt16 nHelpId, short nPosition, WinBits nWinStyle)
+OPropEditCtrl::OPropEditCtrl(vcl::Window* pParent, const char* pHelpId, short nPosition, WinBits nWinStyle)
     :Edit(pParent, nWinStyle)
     ,m_nPos(nPosition)
 {
-    m_strHelpText = ModuleRes(nHelpId);
+    m_strHelpText = DBA_RES(pHelpId);
 }
 
 void
@@ -62,18 +63,18 @@ OPropNumericEditCtrl::SetSpecialReadOnly(bool _bReadOnly)
 }
 
 
-OPropNumericEditCtrl::OPropNumericEditCtrl(vcl::Window* pParent, sal_uInt16 nHelpId, short nPosition, WinBits nWinStyle)
+OPropNumericEditCtrl::OPropNumericEditCtrl(vcl::Window* pParent, const char* pHelpId, short nPosition, WinBits nWinStyle)
     :NumericField(pParent, nWinStyle)
     ,m_nPos(nPosition)
 {
-    m_strHelpText = ModuleRes(nHelpId);
+    m_strHelpText = DBA_RES(pHelpId);
 }
 
-OPropListBoxCtrl::OPropListBoxCtrl(vcl::Window* pParent, sal_uInt16 nHelpId, short nPosition, WinBits nWinStyle)
+OPropListBoxCtrl::OPropListBoxCtrl(vcl::Window* pParent, const char* pHelpId, short nPosition, WinBits nWinStyle)
     :ListBox(pParent, nWinStyle)
     ,m_nPos(nPosition)
 {
-    m_strHelpText = ModuleRes(nHelpId);
+    m_strHelpText = DBA_RES(pHelpId);
 }
 
 } // end namespace dbaui

@@ -19,7 +19,7 @@
 
 #include "printdlg.hxx"
 #include "svdata.hxx"
-#include "svids.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 
 #include <vcl/print.hxx>
@@ -1465,6 +1465,9 @@ void PrintDialog::updateNupFromPages()
 
     updateNup();
 }
+
+#define SV_PRINT_PRT_NUP_ORIENTATION_PORTRAIT           1
+#define SV_PRINT_PRT_NUP_ORIENTATION_LANDSCAPE          2
 
 void PrintDialog::updateNup()
 {

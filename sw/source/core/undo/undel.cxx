@@ -41,7 +41,7 @@
 #include <sfx2/app.hxx>
 #include <fldbas.hxx>
 #include <fmtfld.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <undo.hrc>
 #include <vector>
 

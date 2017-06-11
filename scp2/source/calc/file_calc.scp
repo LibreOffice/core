@@ -25,14 +25,6 @@ File gid_File_Share_Registry_Calc_Xcd
     Name = "calc.xcd";
 End
 
-STD_RES_FILE( gid_File_Res_Analysis, analysis)
-
-STD_RES_FILE( gid_File_Res_Date, date)
-
-STD_RES_FILE( gid_File_Res_Pricing, pricing)
-
-STD_RES_FILE( gid_File_Res_Sc, sc )
-
 #if defined WITH_HELP
 File gid_File_Help_Scalc_Zip
     Dir = FILELIST_DIR;
@@ -41,8 +33,3 @@ File gid_File_Help_Scalc_Zip
 End
 #endif
 
-#if defined(WITH_LPSOLVER)
-
-STD_RES_FILE( gid_File_Res_Solver, solver)
-
-#endif

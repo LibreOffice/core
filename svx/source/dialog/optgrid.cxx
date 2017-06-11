@@ -24,7 +24,7 @@
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
 #include "svx/optgrid.hxx"
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include "svx/dlgutil.hxx"
 
 // local functions

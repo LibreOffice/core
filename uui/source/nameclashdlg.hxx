@@ -42,7 +42,7 @@ class NameClashDialog : public ModalDialog
     DECL_LINK( ButtonHdl_Impl, Button *, void );
 
 public:
-    NameClashDialog( vcl::Window* pParent, ResMgr* pResMgr,
+    NameClashDialog( vcl::Window* pParent, const std::locale& rLocale,
                      OUString const & rTargetFolderURL,
                      OUString const & rClashingName,
                      OUString const & rProposedNewName,

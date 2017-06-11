@@ -19,7 +19,7 @@
 
 #include "textundo.hxx"
 #include "textund2.hxx"
-#include "textundo.hrc"
+#include "strings.hrc"
 
 #include <vcl/texteng.hxx>
 #include <vcl/textview.hxx>
@@ -28,7 +28,6 @@
 #include <textdat2.hxx>
 #include <svdata.hxx>
 #include <tools/resid.hxx>
-
 
 namespace
 {
@@ -185,7 +184,7 @@ void TextUndoDelPara::Redo()
 
 OUString TextUndoDelPara::GetComment () const
 {
-    return ResId(STR_TEXTUNDO_DELPARA, *ImplGetResMgr());
+    return VclResId(STR_TEXTUNDO_DELPARA);
 }
 
 TextUndoConnectParas::TextUndoConnectParas( TextEngine* pTextEngine, sal_uInt32 nPara, sal_Int32 nPos )
@@ -213,7 +212,7 @@ void TextUndoConnectParas::Redo()
 
 OUString TextUndoConnectParas::GetComment () const
 {
-    return ResId(STR_TEXTUNDO_CONNECTPARAS, *ImplGetResMgr());
+    return VclResId(STR_TEXTUNDO_CONNECTPARAS);
 }
 
 TextUndoSplitPara::TextUndoSplitPara( TextEngine* pTextEngine, sal_uInt32 nPara, sal_Int32 nPos )
@@ -241,7 +240,7 @@ void TextUndoSplitPara::Redo()
 
 OUString TextUndoSplitPara::GetComment () const
 {
-    return ResId(STR_TEXTUNDO_SPLITPARA, *ImplGetResMgr());
+    return VclResId(STR_TEXTUNDO_SPLITPARA);
 }
 
 TextUndoInsertChars::TextUndoInsertChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const OUString& rStr )
@@ -290,7 +289,7 @@ OUString TextUndoInsertChars::GetComment () const
     // multiple lines?
     OUString sText(maText);
     Shorten(sText);
-    return OUString(ResId(STR_TEXTUNDO_INSERTCHARS, *ImplGetResMgr())).replaceAll("$1", sText);
+    return VclResId(STR_TEXTUNDO_INSERTCHARS).replaceAll("$1", sText);
 }
 
 TextUndoRemoveChars::TextUndoRemoveChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const OUString& rStr )
@@ -320,7 +319,7 @@ OUString TextUndoRemoveChars::GetComment () const
     // multiple lines?
     OUString sText(maText);
     Shorten(sText);
-    return OUString(ResId(STR_TEXTUNDO_REMOVECHARS, *ImplGetResMgr())).replaceAll("$1", sText);
+    return VclResId(STR_TEXTUNDO_REMOVECHARS).replaceAll("$1", sText);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

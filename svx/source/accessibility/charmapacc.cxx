@@ -29,7 +29,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <osl/interlck.h>
 #include <svx/dialmgr.hxx>
-#include "accessibility.hrc"
+#include <svx/strings.hrc>
 #include <comphelper/types.hxx>
 
 namespace svx

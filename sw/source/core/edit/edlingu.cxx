@@ -26,7 +26,7 @@
 
 #include <unoflatpara.hxx>
 
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <hintids.hxx>
 #include <linguistic/lngprops.hxx>
 #include <vcl/msgbox.hxx>
@@ -49,7 +49,7 @@
 #include <viscrs.hxx>
 #include <SwGrammarMarkUp.hxx>
 #include <mdiexp.hxx>
-#include <statstr.hrc>
+#include <strings.hrc>
 #include <cntfrm.hxx>
 #include <splargs.hxx>
 #include <redline.hxx>

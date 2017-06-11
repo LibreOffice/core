@@ -18,7 +18,7 @@
  */
 
 
-#include "abpresid.hrc"
+#include "strings.hrc"
 #include "abptypes.hxx"
 #include "componentmodule.hxx"
 #include "datasourcehandling.hxx"

@@ -18,9 +18,9 @@
  */
 #include "FixedText.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include "corestrings.hrc"
+#include "strings.hxx"
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include "core_resource.hxx"
 #include "Tools.hxx"
 #include <tools/color.hxx>
@@ -47,7 +47,7 @@ OFixedText::OFixedText(uno::Reference< uno::XComponentContext > const & _xContex
 ,FixedTextPropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,lcl_getFixedTextOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 {
-    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDTEXT);
+    m_aProps.aComponent.m_sName  = RptResId(RID_STR_FIXEDTEXT);
     m_aProps.aComponent.m_nBorder = 0; // no border
 }
 
@@ -58,7 +58,7 @@ OFixedText::OFixedText(uno::Reference< uno::XComponentContext > const & _xContex
 ,FixedTextPropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,lcl_getFixedTextOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 {
-    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDTEXT);
+    m_aProps.aComponent.m_sName  = RptResId(RID_STR_FIXEDTEXT);
     m_aProps.aComponent.m_nBorder = 0; // no border
     m_aProps.aComponent.m_xFactory = _xFactory;
     osl_atomic_increment( &m_refCount );

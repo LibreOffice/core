@@ -1414,7 +1414,7 @@ void ScTabView::MakeDrawLayer()
     }
 }
 
-void ScTabView::ErrorMessage( sal_uInt16 nGlobStrId )
+void ScTabView::ErrorMessage(const char* pGlobStrId)
 {
     if ( SC_MOD()->IsInExecuteDrop() )
     {
@@ -1428,15 +1428,15 @@ void ScTabView::ErrorMessage( sal_uInt16 nGlobStrId )
     ScWaitCursorOff aWaitOff( pParent );
     bool bFocus = pParent && pParent->HasFocus();
 
-    if(nGlobStrId==STR_PROTECTIONERR)
+    if (pGlobStrId && strcmp(pGlobStrId, STR_PROTECTIONERR) == 0)
     {
-        if(aViewData.GetDocShell()->IsReadOnly())
+        if (aViewData.GetDocShell()->IsReadOnly())
         {
-            nGlobStrId=STR_READONLYERR;
+            pGlobStrId = STR_READONLYERR;
         }
     }
 
-    ScopedVclPtrInstance< InfoBox > aBox( pParent, ScGlobal::GetRscString( nGlobStrId ) );
+    ScopedVclPtrInstance<InfoBox> aBox(pParent, ScGlobal::GetRscString(pGlobStrId));
     aBox->Execute();
     if (bFocus)
         pParent->GrabFocus();

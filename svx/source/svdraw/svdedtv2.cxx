@@ -28,7 +28,7 @@
 #include "svx/svditer.hxx"
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include "svdglob.hxx"
 #include "svdfmtf.hxx"
 #include <svx/svdetc.hxx>
@@ -39,7 +39,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/svdoashp.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <memory>
@@ -1936,26 +1936,26 @@ void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea)
     if (AreObjectsMarked()) {
         bool bMrkChg = false;
         const size_t nMarkCount=GetMarkedObjectCount();
-        sal_uInt16 nDscrID=0;
+        const char* pDscrID = nullptr;
         if(bLineToArea)
         {
             if(nMarkCount == 1)
-                nDscrID = STR_EditConvToContour;
+                pDscrID = STR_EditConvToContour;
             else
-                nDscrID = STR_EditConvToContours;
+                pDscrID = STR_EditConvToContours;
 
-            BegUndo(ImpGetResStr(nDscrID), GetDescriptionOfMarkedObjects());
+            BegUndo(ImpGetResStr(pDscrID), GetDescriptionOfMarkedObjects());
         }
         else
         {
             if (bPath) {
-                if (nMarkCount==1) nDscrID=STR_EditConvToCurve;
-                else nDscrID=STR_EditConvToCurves;
-                BegUndo(ImpGetResStr(nDscrID),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::ConvertToPath);
+                if (nMarkCount==1) pDscrID=STR_EditConvToCurve;
+                else pDscrID=STR_EditConvToCurves;
+                BegUndo(ImpGetResStr(pDscrID),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::ConvertToPath);
             } else {
-                if (nMarkCount==1) nDscrID=STR_EditConvToPoly;
-                else nDscrID=STR_EditConvToPolys;
-                BegUndo(ImpGetResStr(nDscrID),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::ConvertToPoly);
+                if (nMarkCount==1) pDscrID=STR_EditConvToPoly;
+                else pDscrID=STR_EditConvToPolys;
+                BegUndo(ImpGetResStr(pDscrID),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::ConvertToPoly);
             }
         }
         for (size_t nm=nMarkCount; nm>0;) {

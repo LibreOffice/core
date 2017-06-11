@@ -17,31 +17,36 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/resmgr.hxx>
+#include <tools/simplerm.hxx>
 #include <svtools/svtresid.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-static ResMgr* pMgr=nullptr;
+static std::locale* pResLocale=nullptr;
 
 namespace
 {
-    ResMgr* getResMgr(const LanguageTag& aLocale)
+    std::locale* getResLocale(const LanguageTag& aLocale)
     {
-        if (!pMgr)
-            pMgr = ResMgr::CreateResMgr("svt", aLocale );
-        return pMgr;
+        if (!pResLocale)
+            pResLocale = new std::locale(Translate::Create("svt", aLocale));
+        return pResLocale;
     }
 }
 
-ResMgr* SvtResMgr::GetResMgr()
+std::locale* SvtResLocale::GetResLocale()
 {
-    return getResMgr(Application::GetSettings().GetUILanguageTag());
+    return getResLocale(Application::GetSettings().GetUILanguageTag());
 }
 
-void SvtResMgr::DeleteResMgr()
+void SvtResLocale::DeleteResLocale()
 {
-    DELETEZ( pMgr );
+    DELETEZ(pResLocale);
+}
+
+OUString SvtResId(const char* pId)
+{
+    return Translate::get(pId, *SvtResLocale::GetResLocale());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -43,14 +43,14 @@ PaneChildWindow::PaneChildWindow (
     sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo,
-    const sal_uInt16 nTitleBarResId)
+    const char* pTitleBarResId)
     : SfxChildWindow (pParentWindow, nId)
 {
     SetWindow( VclPtr<PaneDockingWindow>::Create(
         pBindings,
         this,
         pParentWindow,
-        SdResId(nTitleBarResId)));
+        SdResId(pTitleBarResId)));
     SetAlignment(SfxChildAlignment::LEFT);
     static_cast<SfxDockingWindow*>(GetWindow())->Initialize(pInfo);
     SetHideNotDelete(true);

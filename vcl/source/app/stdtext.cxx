@@ -20,14 +20,13 @@
 #include <vcl/layout.hxx>
 #include <vcl/stdtext.hxx>
 
-#include <svids.hrc>
+#include <strings.hrc>
 #include <svdata.hxx>
 
 void ShowServiceNotAvailableError(vcl::Window* pParent,
     const OUString& rServiceName, bool bError)
 {
-    OUString aText  = OUString(VclResId(SV_STDTEXT_SERVICENOTAVAILABLE)).
-        replaceAll("%s", rServiceName);
+    OUString aText = VclResId(SV_STDTEXT_SERVICENOTAVAILABLE).replaceAll("%s", rServiceName);
     ScopedVclPtrInstance< MessageDialog > aBox( pParent, aText, bError ? VclMessageType::Error : VclMessageType::Warning );
     aBox->Execute();
 }

@@ -18,7 +18,8 @@
  */
 
 #include "databaseobjectview.hxx"
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
+#include "strings.hxx"
 #include "asyncmodaldialog.hxx"
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>

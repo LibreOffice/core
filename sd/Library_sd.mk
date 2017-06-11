@@ -573,7 +573,4 @@ endif # ENABLE_SDREMOTE_BLUETOOTH=TRUE
 
 endif # ENABLE_SDREMOTE=TRUE
 
-# Runtime dependency for unit-tests
-$(eval $(call gb_Library_use_restarget,sd,sd))
-
 # vim: set noet sw=4 ts=4:

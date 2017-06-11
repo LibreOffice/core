@@ -46,6 +46,7 @@
 #include <cmdid.h>
 #include <swerror.h>
 #include <misc.hrc>
+#include <strings.hrc>
 
 #define SwWebGlosDocShell
 #define SwGlosDocShell

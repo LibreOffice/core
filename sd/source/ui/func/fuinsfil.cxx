@@ -51,7 +51,7 @@
 #include "View.hxx"
 #include "strings.hrc"
 #include "stlpool.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "sdpage.hxx"
 #include "strmname.h"
 #include "ViewShellBase.hxx"

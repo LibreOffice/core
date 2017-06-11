@@ -82,9 +82,9 @@
 #include <redlndlg.hxx>
 #include "fldmgr.hxx"
 #include <globals.hrc>
-#include <shells.hrc>
+#include <strings.hrc>
 #include <app.hrc>
-#include <web.hrc>
+#include <strings.hrc>
 #include "paratr.hxx"
 #include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>
@@ -112,7 +112,7 @@
 #include <svx/nbdtmgfact.hxx>
 #include <svx/nbdtmg.hxx>
 #include <SwRewriter.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <svx/svdmodel.hxx>
 #include <svx/drawitem.hxx>
 #include <numrule.hxx>

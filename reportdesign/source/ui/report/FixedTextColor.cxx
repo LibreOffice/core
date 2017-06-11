@@ -28,7 +28,7 @@
 #include <ViewsWindow.hxx>
 #include <ReportSection.hxx>
 #include <ReportController.hxx>
-#include <uistrings.hrc>
+#include <strings.hxx>
 #include <reportformula.hxx>
 #include <toolkit/helper/property.hxx>
 

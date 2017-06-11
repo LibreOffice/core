@@ -33,7 +33,7 @@
 #include <svx/fmmodel.hxx>
 #include <svx/fmview.hxx>
 #include <svx/fmpage.hxx>
-#include "gallery.hrc"
+#include "svx/strings.hrc"
 #include "svx/galmisc.hxx"
 #include "galobj.hxx"
 #include <vcl/svapp.hxx>

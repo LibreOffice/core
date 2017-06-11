@@ -43,7 +43,7 @@ $(eval $(call gb_Module_add_targets,wizards,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,wizards,\
-	AllLangResTarget_dbw \
+	AllLangMoTarget_wiz \
 ))
 
 ifeq ($(ENABLE_JAVA),TRUE)

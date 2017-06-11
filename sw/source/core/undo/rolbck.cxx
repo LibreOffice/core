@@ -53,7 +53,7 @@
 #include <UndoCore.hxx>
 #include <IMark.hxx>
 #include <charfmt.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <undo.hrc>
 #include <bookmrk.hxx>
 #include <memory>

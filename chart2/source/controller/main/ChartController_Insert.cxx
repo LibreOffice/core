@@ -40,7 +40,7 @@
 #include "ControllerLockGuard.hxx"
 #include "UndoGuard.hxx"
 #include "ResId.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "ReferenceSizeProvider.hxx"
 #include "ObjectIdentifier.hxx"
 #include "RegressionCurveHelper.hxx"

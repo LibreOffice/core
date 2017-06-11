@@ -255,7 +255,7 @@ public:
     void            DoAutoStyle( const ScRange& rRange, const OUString& rStyle );
 
     static vcl::Window*  GetActiveDialogParent();
-    void            ErrorMessage( sal_uInt16 nGlobStrId );
+    void            ErrorMessage(const char* pGlobStrId);
     bool            IsEditable() const;
 
     bool            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab );

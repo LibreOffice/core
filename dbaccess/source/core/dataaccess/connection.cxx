@@ -22,9 +22,9 @@
 #include <iterator>
 
 #include "connection.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include "datasource.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include "core_resource.hxx"
 #include "statement.hxx"
 #include "preparedstatement.hxx"

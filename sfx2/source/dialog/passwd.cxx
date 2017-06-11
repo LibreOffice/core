@@ -25,7 +25,7 @@
 #include "sfxtypes.hxx"
 #include <sfx2/sfxresid.hxx>
 
-#include "dialog.hrc"
+#include "sfx2/strings.hrc"
 
 
 IMPL_LINK( SfxPasswordDialog, EditModifyHdl, Edit&, rEdit, void )

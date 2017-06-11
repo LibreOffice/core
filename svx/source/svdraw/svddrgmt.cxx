@@ -32,11 +32,11 @@
 #include <svx/svdmark.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include "svdglob.hxx"
 #include <svx/svddrgv.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/sdgcpitm.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -551,7 +551,7 @@ void SdrDragMethod::createSdrDragEntries_GlueDrag()
     }
 }
 
-void SdrDragMethod::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr) const
+void SdrDragMethod::ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr) const
 {
     ImpTakeDescriptionOptions nOpt=ImpTakeDescriptionOptions::NONE;
     if (IsDraggingPoints()) {
@@ -559,7 +559,7 @@ void SdrDragMethod::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr
     } else if (IsDraggingGluePoints()) {
         nOpt=ImpTakeDescriptionOptions::GLUEPOINTS;
     }
-    getSdrDragView().ImpTakeDescriptionStr(nStrCacheID,rStr,nOpt);
+    getSdrDragView().ImpTakeDescriptionStr(pStrCacheID,rStr,nOpt);
 }
 
 SdrObject* SdrDragMethod::GetDragObj() const

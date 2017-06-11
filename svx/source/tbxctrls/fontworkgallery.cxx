@@ -38,7 +38,7 @@
 #include <svx/fmmodel.hxx>
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>

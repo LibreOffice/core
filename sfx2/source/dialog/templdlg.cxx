@@ -51,7 +51,7 @@
 #include <sfx2/sfxresid.hxx>
 
 #include <sfx2/sfx.hrc>
-#include "dialog.hrc"
+#include "sfx2/strings.hrc"
 #include "arrdecl.hxx"
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfac.hxx>

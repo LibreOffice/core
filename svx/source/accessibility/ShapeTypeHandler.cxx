@@ -29,7 +29,7 @@
 #include <svx/svdoashp.hxx>
 #include "svx/unoapi.hxx"
 
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -197,10 +197,9 @@ long ShapeTypeHandler::GetSlotId (const uno::Reference<drawing::XShape>& rxShape
 }
 
 /// get the accessible base name for an object
-OUString
-    ShapeTypeHandler::CreateAccessibleBaseName (const uno::Reference<drawing::XShape>& rxShape)
+OUString ShapeTypeHandler::CreateAccessibleBaseName (const uno::Reference<drawing::XShape>& rxShape)
 {
-    sal_Int32 nResourceId;
+    const char* pResourceId;
     OUString sName;
 
     switch (ShapeTypeHandler::Instance().GetTypeId (rxShape))
@@ -209,74 +208,74 @@ OUString
       // AccessibleShape::CreateAccessibleBaseName.  See issue 11190 for details.
       // Id can be removed from SvxShapeTypes.hxx as well.
         case DRAWING_3D_CUBE:
-            nResourceId = STR_ObjNameSingulCube3d;
+            pResourceId = STR_ObjNameSingulCube3d;
             break;
         case DRAWING_3D_EXTRUDE:
-            nResourceId = STR_ObjNameSingulExtrude3d;
+            pResourceId = STR_ObjNameSingulExtrude3d;
             break;
         case DRAWING_3D_LATHE:
-            nResourceId = STR_ObjNameSingulLathe3d;
+            pResourceId = STR_ObjNameSingulLathe3d;
             break;
         case DRAWING_3D_SCENE:
-            nResourceId = STR_ObjNameSingulScene3d;
+            pResourceId = STR_ObjNameSingulScene3d;
             break;
         case DRAWING_3D_SPHERE:
-            nResourceId = STR_ObjNameSingulSphere3d;
+            pResourceId = STR_ObjNameSingulSphere3d;
             break;
         case DRAWING_CAPTION:
-            nResourceId = STR_ObjNameSingulCAPTION;
+            pResourceId = STR_ObjNameSingulCAPTION;
             break;
         case DRAWING_CLOSED_BEZIER:
-            nResourceId = STR_ObjNameSingulPATHFILL;
+            pResourceId = STR_ObjNameSingulPATHFILL;
             break;
         case DRAWING_CLOSED_FREEHAND:
-            nResourceId = STR_ObjNameSingulFREEFILL;
+            pResourceId = STR_ObjNameSingulFREEFILL;
             break;
         case DRAWING_CONNECTOR:
-            nResourceId = STR_ObjNameSingulEDGE;
+            pResourceId = STR_ObjNameSingulEDGE;
             break;
         case DRAWING_CONTROL:
-            nResourceId = STR_ObjNameSingulUno;
+            pResourceId = STR_ObjNameSingulUno;
             break;
         case DRAWING_ELLIPSE:
-            nResourceId = STR_ObjNameSingulCIRCE;
+            pResourceId = STR_ObjNameSingulCIRCE;
             break;
         case DRAWING_GROUP:
-            nResourceId = STR_ObjNameSingulGRUP;
+            pResourceId = STR_ObjNameSingulGRUP;
             break;
         case DRAWING_LINE:
-            nResourceId = STR_ObjNameSingulLINE;
+            pResourceId = STR_ObjNameSingulLINE;
             break;
         case DRAWING_MEASURE:
-            nResourceId = STR_ObjNameSingulMEASURE;
+            pResourceId = STR_ObjNameSingulMEASURE;
             break;
         case DRAWING_OPEN_BEZIER:
-            nResourceId = STR_ObjNameSingulPATHLINE;
+            pResourceId = STR_ObjNameSingulPATHLINE;
             break;
         case DRAWING_OPEN_FREEHAND:
-            nResourceId = STR_ObjNameSingulFREELINE;
+            pResourceId = STR_ObjNameSingulFREELINE;
             break;
         case DRAWING_PAGE:
-            nResourceId = STR_ObjNameSingulPAGE;
+            pResourceId = STR_ObjNameSingulPAGE;
             break;
         case DRAWING_POLY_LINE:
-            nResourceId = STR_ObjNameSingulPLIN;
+            pResourceId = STR_ObjNameSingulPLIN;
             break;
         case DRAWING_POLY_LINE_PATH:
-            nResourceId = STR_ObjNameSingulPLIN;
+            pResourceId = STR_ObjNameSingulPLIN;
             break;
         case DRAWING_POLY_POLYGON:
-            nResourceId = STR_ObjNameSingulPOLY;
+            pResourceId = STR_ObjNameSingulPOLY;
             break;
         case DRAWING_POLY_POLYGON_PATH:
-            nResourceId = STR_ObjNameSingulPOLY;
+            pResourceId = STR_ObjNameSingulPOLY;
             break;
         case DRAWING_RECTANGLE:
-            nResourceId = STR_ObjNameSingulRECT;
+            pResourceId = STR_ObjNameSingulRECT;
             break;
         case DRAWING_CUSTOM:
             {
-                nResourceId = STR_ObjNameSingulCUSTOMSHAPE;
+                pResourceId = STR_ObjNameSingulCUSTOMSHAPE;
 
                 SvxShape* pShape = SvxShape::getImplementation( rxShape );
                 if (pShape)
@@ -290,10 +289,10 @@ OUString
                             if(pCustomShape)
                             {
                                 if (pCustomShape->IsTextPath())
-                                    nResourceId = STR_ObjNameSingulFONTWORK;
+                                    pResourceId = STR_ObjNameSingulFONTWORK;
                                 else
                                 {
-                                    nResourceId = -1;
+                                    pResourceId = nullptr;
                                     sName = pCustomShape->GetCustomShapeName();
                                 }
                             }
@@ -303,10 +302,10 @@ OUString
                 break;
             }
         case DRAWING_TEXT:
-            nResourceId = STR_ObjNameSingulTEXT;
+            pResourceId = STR_ObjNameSingulTEXT;
             break;
         default:
-            nResourceId = -1;
+            pResourceId = nullptr;
             sName = "UnknownAccessibleShape";
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (rxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
@@ -314,10 +313,10 @@ OUString
             break;
     }
 
-    if (nResourceId != -1)
+    if (pResourceId)
     {
         SolarMutexGuard aGuard;
-        sName = SvxResId((unsigned short)nResourceId);
+        sName = SvxResId(pResourceId);
     }
 
     return sName;

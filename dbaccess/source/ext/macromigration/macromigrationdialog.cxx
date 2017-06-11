@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbmm_global.hrc"
-#include "dbmm_module.hxx"
 #include "docinteraction.hxx"
-#include "macromigration.hrc"
+#include "core_resource.hxx"
+#include "strings.hrc"
 #include "macromigrationdialog.hxx"
 #include "macromigrationpages.hxx"
 #include "migrationengine.hxx"
@@ -56,6 +55,10 @@ namespace dbmm
 #define STATE_SUMMARY           3
 
 #define PATH_DEFAULT            1
+
+// height and width of tab pages
+#define TAB_PAGE_WIDTH  280
+#define TAB_PAGE_HEIGHT 185
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
@@ -125,10 +128,10 @@ namespace dbmm
         : MacroMigrationDialog_Base(_pParent)
         , m_pData( new MacroMigrationDialog_Data( _rContext, _rxDocument ) )
     {
-        OUString sTitlePrepare( MacroMigrationResId( STR_STATE_CLOSE_SUB_DOCS ) );
-        OUString sTitleStoreAs( MacroMigrationResId( STR_STATE_BACKUP_DBDOC ) );
-        OUString sTitleMigrate( MacroMigrationResId( STR_STATE_MIGRATE ) );
-        OUString sTitleSummary( MacroMigrationResId( STR_STATE_SUMMARY ) );
+        OUString sTitlePrepare( DBA_RES( STR_STATE_CLOSE_SUB_DOCS ) );
+        OUString sTitleStoreAs( DBA_RES( STR_STATE_BACKUP_DBDOC ) );
+        OUString sTitleMigrate( DBA_RES( STR_STATE_MIGRATE ) );
+        OUString sTitleSummary( DBA_RES( STR_STATE_SUMMARY ) );
 
         describeState( STATE_CLOSE_SUB_DOCS,    sTitlePrepare, &PreparationPage::Create   );
         describeState( STATE_BACKUP_DBDOC,      sTitleStoreAs, &SaveDBDocPage::Create     );
@@ -382,7 +385,7 @@ namespace dbmm
             // check that the backup location isn't the same as the document itself
             if ( lcl_equalURLs_nothrow( m_pData->aContext, sBackupLocation, m_pData->xDocumentModel->getURL() ) )
             {
-                ScopedVclPtrInstance< MessageDialog > aErrorBox( const_cast< MacroMigrationDialog* >( this ), MacroMigrationResId( STR_INVALID_BACKUP_LOCATION ) );
+                ScopedVclPtrInstance< MessageDialog > aErrorBox( const_cast< MacroMigrationDialog* >( this ), DBA_RES( STR_INVALID_BACKUP_LOCATION ) );
                 aErrorBox->Execute();
                 rBackupPage.grabLocationFocus();
                 return false;

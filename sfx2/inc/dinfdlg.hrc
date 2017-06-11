@@ -1,0 +1,79 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SFX2_INC_DINFDLG_HRC
+#define INCLUDED_SFX2_INC_DINFDLG_HRC
+
+#define N_(String) (u8##String)
+
+const char* SFX_CB_PROPERTY_STRINGARRAY[] =
+{
+    N_("Checked by"),
+    N_("Client"),
+    N_("Date completed"),
+    N_("Department"),
+    N_("Destinations"),
+    N_("Disposition"),
+    N_("Division"),
+    N_("Document number"),
+    N_("Editor"),
+    N_("E-Mail"),
+    N_("Forward to"),
+    N_("Group"),
+    N_("Info"),
+    N_("Language"),
+    N_("Mailstop"),
+    N_("Matter"),
+    N_("Office"),
+    N_("Owner"),
+    N_("Project"),
+    N_("Publisher"),
+    N_("Purpose"),
+    N_("Received from"),
+    N_("Recorded by"),
+    N_("Recorded date"),
+    N_("Reference"),
+    N_("Source"),
+    N_("Status"),
+    N_("Telephone number"),
+    N_("Typist"),
+    N_("URL")
+};
+
+#define CUSTOM_TYPE_UNKNOWN     0
+#define CUSTOM_TYPE_TEXT        1
+#define CUSTOM_TYPE_NUMBER      2
+#define CUSTOM_TYPE_DATE        3
+#define CUSTOM_TYPE_BOOLEAN     4
+#define CUSTOM_TYPE_DURATION    5
+#define CUSTOM_TYPE_DATETIME    6
+
+const std::pair<const char*, int> SFX_LB_PROPERTY_STRINGARRAY[] =
+{
+    { N_("Text")        , CUSTOM_TYPE_TEXT },
+    { N_("DateTime")    , CUSTOM_TYPE_DATETIME },
+    { N_("Date")        , CUSTOM_TYPE_DATE },
+    { N_("Duration")    , CUSTOM_TYPE_DURATION },
+    { N_("Number")      , CUSTOM_TYPE_NUMBER },
+    { N_("Yes or no")   , CUSTOM_TYPE_BOOLEAN }
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

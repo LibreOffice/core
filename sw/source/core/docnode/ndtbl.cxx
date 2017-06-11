@@ -81,7 +81,7 @@
 #include <section.hxx>
 #include <frmtool.hxx>
 #include <node2lay.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include "docsh.hxx"
 #include <unochart.hxx>
 #include <node.hxx>
@@ -3914,8 +3914,7 @@ OUString SwDoc::GetUniqueTableName() const
         return newName;
     }
 
-    ResId aId( STR_TABLE_DEFNAME, *pSwResMgr );
-    const OUString aName( aId );
+    const OUString aName(SwResId(STR_TABLE_DEFNAME));
 
     const size_t nFlagSize = ( mpTableFrameFormatTable->size() / 8 ) + 2;
 

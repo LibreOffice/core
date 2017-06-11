@@ -22,7 +22,7 @@
 
 #include <svtools/genericunodialog.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 
 namespace dbaui
 {
@@ -32,7 +32,7 @@ class OSQLMessageDialog
         :public OSQLMessageDialogBase
         ,public ::comphelper::OPropertyArrayUsageHelper< OSQLMessageDialog >
 {
-    OModuleClient        m_aModuleClient;
+    dbaccess::OModuleClient m_aModuleClient;
 protected:
     // <properties>
     css::uno::Any        m_aException;

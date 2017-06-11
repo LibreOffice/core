@@ -22,7 +22,7 @@
 #include <swtypes.hxx>
 #include <cmdid.h>
 #include <hintids.hxx>
-#include "poolfmt.hrc"
+#include "strings.hrc"
 #include "poolfmt.hxx"
 #include <fmtcol.hxx>
 #include <unomap.hxx>
@@ -1270,6 +1270,20 @@ sal_Bool SwXNumberingRules::hasElements()
     return true;
 }
 
+static const char* STR_POOLCOLL_HEADLINE_ARY[]
+{
+    STR_POOLCOLL_HEADLINE1,
+    STR_POOLCOLL_HEADLINE2,
+    STR_POOLCOLL_HEADLINE3,
+    STR_POOLCOLL_HEADLINE4,
+    STR_POOLCOLL_HEADLINE5,
+    STR_POOLCOLL_HEADLINE6,
+    STR_POOLCOLL_HEADLINE7,
+    STR_POOLCOLL_HEADLINE8,
+    STR_POOLCOLL_HEADLINE9,
+    STR_POOLCOLL_HEADLINE10
+};
+
 uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
                 const SwNumRule& rNumRule, sal_Int32 nIndex) const
 {
@@ -1294,7 +1308,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
     if (pDocShell) // -> Chapter Numbering
     {
         // template name
-        OUString sValue(SwResId(STR_POOLCOLL_HEADLINE1 + nIndex));
+        OUString sValue(SwResId(STR_POOLCOLL_HEADLINE_ARY[nIndex]));
         const SwTextFormatColls* pColls = pDocShell->GetDoc()->GetTextFormatColls();
         const size_t nCount = pColls->size();
         for(size_t i = 0; i < nCount; ++i)

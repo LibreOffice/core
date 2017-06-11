@@ -146,7 +146,7 @@ protected:
     void createSdrDragEntries_GlueDrag();
 
     // old call forwarders to the SdrDragView
-    void               ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr) const;
+    void               ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr) const;
     SdrHdl*            GetDragHdl() const              { return getSdrDragView().mpDragHdl; }
     SdrHdlKind         GetDragHdlKind() const          { return getSdrDragView().meDragHdl; }
     SdrDragStat&       DragStat()                      { return getSdrDragView().maDragStat; }

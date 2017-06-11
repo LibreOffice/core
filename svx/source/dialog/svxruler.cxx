@@ -28,10 +28,12 @@
 #include <svl/rectitem.hxx>
 #include <svl/hint.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
+#include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/ruler.hxx>
 #include <svx/rulritem.hxx>
+#include <editeng/editids.hrc>
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/protitem.hxx>
@@ -3368,6 +3370,14 @@ IMPL_LINK( SvxRuler, TabMenuSelect, Menu *, pMenu, bool )
     return false;
 }
 
+static const char* RID_SVXSTR_RULER_TAB[] =
+{
+    RID_SVXSTR_RULER_TAB_LEFT,
+    RID_SVXSTR_RULER_TAB_RIGHT,
+    RID_SVXSTR_RULER_TAB_CENTER,
+    RID_SVXSTR_RULER_TAB_DECIMAL
+};
+
 void SvxRuler::Command( const CommandEvent& rCommandEvent )
 {
     /* Mouse context menu for switching the unit of measurement */
@@ -3395,7 +3405,7 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
                 nStyle |= static_cast<sal_uInt16>(bHorz ? WB_HORZ : WB_VERT);
                 DrawTab(*pDev, aFillColor, aPt, nStyle);
                 aMenu->InsertItem(i + 1,
-                                 SvxResId(RID_SVXSTR_RULER_START + i),
+                                 SvxResId(RID_SVXSTR_RULER_TAB[i]),
                                  Image(BitmapEx(pDev->GetBitmap(Point(), aSz), Color(COL_WHITE))));
                 aMenu->CheckItem(i + 1, i == mpTabs[mxRulerImpl->nIdx + TAB_GAP].nStyle);
                 pDev->SetOutputSize(aSz); // delete device

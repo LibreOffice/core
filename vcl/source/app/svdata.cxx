@@ -22,8 +22,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <rtl/process.h>
-#include <tools/resary.hxx>
 #include <tools/gen.hxx>
+#include <tools/simplerm.hxx>
 #include <uno/current_context.hxx>
 
 #include <vcl/button.hxx>
@@ -46,12 +46,14 @@
 #include "window.h"
 #include "salimestatus.hxx"
 #include "salsys.hxx"
-#include "svids.hrc"
+#include "strings.hrc"
+#include "units.hrc"
 
 #include "com/sun/star/accessibility/MSAAService.hpp"
 
 #include "officecfg/Office/Common.hxx"
 
+#include <config_folders.h>
 #include <config_features.h>
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLContext.hxx>
@@ -159,36 +161,20 @@ vcl::Window *ImplGetDefaultContextWindow()
     return pSVData->mpDefaultWin;
 }
 
-ResMgr* ImplGetResMgr()
+const std::locale& ImplGetResLocale()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if ( !pSVData->mpResMgr )
+    if (!pSVData->mbResLocaleSet)
     {
-        LanguageTag aLocale( Application::GetSettings().GetUILanguageTag());
-        pSVData->mpResMgr = ResMgr::SearchCreateResMgr( "vcl", aLocale );
-
-        static bool bMessageOnce = false;
-        if( !pSVData->mpResMgr && ! bMessageOnce )
-        {
-            bMessageOnce = true;
-            const char pMsg[] =
-                "Missing vcl resource. This indicates that files vital to localization are missing. "
-                "You might have a corrupt installation.";
-            SAL_WARN("vcl", "" << pMsg);
-            ScopedVclPtrInstance< MessageDialog > aBox( nullptr, pMsg );
-            aBox->Execute();
-        }
+        pSVData->maResLocale = Translate::Create("vcl", Application::GetSettings().GetUILanguageTag());
+        pSVData->mbResLocaleSet = true;
     }
-    return pSVData->mpResMgr;
+    return pSVData->maResLocale;
 }
 
-ResId VclResId( sal_Int32 nId )
+OUString VclResId(const char* pId)
 {
-    ResMgr* pMgr = ImplGetResMgr();
-    if( ! pMgr )
-        throw std::bad_alloc();
-
-    return ResId( nId, *pMgr );
+    return Translate::get(pId, ImplGetResLocale());
 }
 
 FieldUnitStringList* ImplGetFieldUnits()
@@ -196,18 +182,13 @@ FieldUnitStringList* ImplGetFieldUnits()
     ImplSVData* pSVData = ImplGetSVData();
     if( ! pSVData->maCtrlData.mpFieldUnitStrings )
     {
-        ResMgr* pResMgr = ImplGetResMgr();
-        if( pResMgr )
+        sal_uInt32 nUnits = SAL_N_ELEMENTS(SV_FUNIT_STRINGS);
+        pSVData->maCtrlData.mpFieldUnitStrings = new FieldUnitStringList;
+        pSVData->maCtrlData.mpFieldUnitStrings->reserve( nUnits );
+        for (sal_uInt32 i = 0; i < nUnits; i++)
         {
-            ResStringArray aUnits( ResId (SV_FUNIT_STRINGS, *pResMgr) );
-            sal_uInt32 nUnits = aUnits.Count();
-            pSVData->maCtrlData.mpFieldUnitStrings = new FieldUnitStringList;
-            pSVData->maCtrlData.mpFieldUnitStrings->reserve( nUnits );
-            for( sal_uInt32 i = 0; i < nUnits; i++ )
-            {
-                std::pair< OUString, FieldUnit > aElement( aUnits.GetString(i), static_cast<FieldUnit>(aUnits.GetValue(i)) );
-                pSVData->maCtrlData.mpFieldUnitStrings->push_back( aElement );
-            }
+            std::pair<OUString, FieldUnit> aElement(VclResId(SV_FUNIT_STRINGS[i].first), SV_FUNIT_STRINGS[i].second);
+            pSVData->maCtrlData.mpFieldUnitStrings->push_back( aElement );
         }
     }
     return pSVData->maCtrlData.mpFieldUnitStrings;

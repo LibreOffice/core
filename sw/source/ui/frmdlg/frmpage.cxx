@@ -62,6 +62,7 @@
 #include <sal/macros.h>
 
 #include <frmui.hrc>
+#include <strings.hrc>
 #include <sfx2/filedlghelper.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
@@ -814,7 +815,7 @@ void SwFramePage::setOptimalFrameWidth()
     for (std::vector<SvxSwFramePosString::StringId>::const_iterator aI = aFrames.begin(), aEnd = aFrames.end();
         aI != aEnd; ++aI)
     {
-        m_pHorizontalDLB->InsertEntry(m_aFramePosString.GetString(*aI));
+        m_pHorizontalDLB->InsertEntry(SvxSwFramePosString::GetString(*aI));
     }
 
     Size aBiggest(m_pHorizontalDLB->GetOptimalSize());
@@ -855,7 +856,7 @@ void SwFramePage::setOptimalRelWidth()
     for (std::vector<SvxSwFramePosString::StringId>::const_iterator aI = aRels.begin(), aEnd = aRels.end();
         aI != aEnd; ++aI)
     {
-        m_pHoriRelationLB->InsertEntry(m_aFramePosString.GetString(*aI));
+        m_pHoriRelationLB->InsertEntry(SvxSwFramePosString::GetString(*aI));
     }
 
     Size aBiggest(m_pHoriRelationLB->GetOptimalSize());
@@ -956,9 +957,9 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
         else
         {
             if ( m_bNew )
-                SetText( SwResId(STR_OLE_INSERT));
+                SetText(SwResId(STR_FRMUI_OLE_INSERT));
             else
-                SetText( SwResId(STR_OLE_EDIT));
+                SetText(SwResId(STR_FRMUI_OLE_EDIT));
         }
     }
     else
@@ -974,8 +975,8 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
 
     const SwFormatFrameSize& rFrameSize = static_cast<const SwFormatFrameSize&>(rSet->Get(RES_FRM_SIZE));
 
-    m_pRelWidthRelationLB->InsertEntry(m_aFramePosString.GetString(SwFPos::FRAME));
-    m_pRelWidthRelationLB->InsertEntry(m_aFramePosString.GetString(SwFPos::REL_PG_FRAME));
+    m_pRelWidthRelationLB->InsertEntry(SvxSwFramePosString::GetString(SwFPos::FRAME));
+    m_pRelWidthRelationLB->InsertEntry(SvxSwFramePosString::GetString(SwFPos::REL_PG_FRAME));
     if (rFrameSize.GetWidthPercent() != SwFormatFrameSize::SYNCED && rFrameSize.GetWidthPercent() != 0)
     {
         //calculate the rerference value from the with and relative width values
@@ -987,8 +988,8 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
     else
         m_pRelWidthRelationLB->Disable();
 
-    m_pRelHeightRelationLB->InsertEntry(m_aFramePosString.GetString(SwFPos::FRAME));
-    m_pRelHeightRelationLB->InsertEntry(m_aFramePosString.GetString(SwFPos::REL_PG_FRAME));
+    m_pRelHeightRelationLB->InsertEntry(SvxSwFramePosString::GetString(SwFPos::FRAME));
+    m_pRelHeightRelationLB->InsertEntry(SvxSwFramePosString::GetString(SwFPos::REL_PG_FRAME));
     if (rFrameSize.GetHeightPercent() != SwFormatFrameSize::SYNCED && rFrameSize.GetHeightPercent() != 0)
     {
         //calculate the rerference value from the with and relative width values
@@ -1425,7 +1426,7 @@ sal_Int32 SwFramePage::FillPosLB(const FrameMap* _pMap,
                                                      m_bIsVerticalFrame,
                                                      m_bIsVerticalL2R,
                                                      m_bIsInRightToLeft);
-            OUString sEntry(m_aFramePosString.GetString(eStrId));
+            OUString sEntry(SvxSwFramePosString::GetString(eStrId));
             if (_rLB.GetEntryPos(sEntry) == LISTBOX_ENTRY_NOTFOUND)
             {
                 // don't insert entries when frames are character bound
@@ -1490,7 +1491,7 @@ void SwFramePage::FillRelLB( const FrameMap* _pMap,
                                                                 m_bIsVerticalFrame,
                                                                 m_bIsVerticalL2R,
                                                                 m_bIsInRightToLeft);
-                            const OUString sEntry = m_aFramePosString.GetString(sStrId1);
+                            const OUString sEntry = SvxSwFramePosString::GetString(sStrId1);
                             sal_Int32 nPos = _rLB.InsertEntry(sEntry);
                             _rLB.SetEntryData(nPos, &rCharMap);
                             if (_pMap[nMapPos].nAlign == _nAlign)
@@ -1553,7 +1554,7 @@ void SwFramePage::FillRelLB( const FrameMap* _pMap,
                                                                 m_bIsVerticalFrame,
                                                                 m_bIsVerticalL2R,
                                                                 m_bIsInRightToLeft);
-                            const OUString sEntry = m_aFramePosString.GetString(eStrId1);
+                            const OUString sEntry = SvxSwFramePosString::GetString(eStrId1);
                             sal_Int32 nPos = _rLB.InsertEntry(sEntry);
                             _rLB.SetEntryData(nPos, &rMap);
                             if (sSelEntry.isEmpty() && rMap.nRelation == _nRel)
@@ -1690,7 +1691,7 @@ sal_Int32 SwFramePage::GetMapPos( const FrameMap *pMap, ListBox &rAlignLB )
             {
                 SvxSwFramePosString::StringId eResId = pMap[i].eStrId;
 
-                OUString sEntry = m_aFramePosString.GetString(eResId);
+                OUString sEntry = SvxSwFramePosString::GetString(eResId);
                 sEntry = MnemonicGenerator::EraseAllMnemonicChars( sEntry );
 
                 if (sEntry == sSelEntry)

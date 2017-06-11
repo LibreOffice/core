@@ -28,6 +28,7 @@
 #include <dialmgr.hxx>
 
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>

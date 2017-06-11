@@ -19,7 +19,7 @@
 
 #include "InternalData.hxx"
 #include "ResId.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>

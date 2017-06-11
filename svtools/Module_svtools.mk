@@ -24,7 +24,7 @@ $(eval $(call gb_Module_add_targets,svtools,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,svtools,\
-    AllLangResTarget_svt \
+    AllLangMoTarget_svt \
     UIConfig_svt \
 ))
 

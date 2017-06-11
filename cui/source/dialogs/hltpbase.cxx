@@ -32,6 +32,7 @@
 #include "macroass.hxx"
 #include <svx/svxdlg.hxx>
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <bitmaps.hlst>
 #include <vcl/builderfactory.hxx>
 

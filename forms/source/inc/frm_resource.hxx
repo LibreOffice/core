@@ -30,34 +30,12 @@ namespace frm
 #define FRM_RES_STRING(id) ResourceManager::loadString(id)
 
     // handling resources within the FormLayer library
-    class ResourceManager
+    namespace ResourceManager
     {
-        static SimpleResMgr*    m_pImpl;
-    private:
-        // no instantiation allowed
-        ResourceManager() = delete;
-        ~ResourceManager() { }
-
-        // we'll instantiate one static member of the following class, which, in its dtor,
-        // ensures that m_pImpl will be deleted
-        class EnsureDelete
-        {
-        public:
-            EnsureDelete() { }
-            ~EnsureDelete();
-        };
-        friend class EnsureDelete;
-
-    protected:
-        static void ensureImplExists();
-
-    public:
-        /** loads the string with the specified resource id from the FormLayer resource file
+        /** loads the string with the specified resource id from the FormLayer mo file
         */
-        static OUString loadString(sal_uInt16 _nResId);
+        OUString loadString(const char* pResId);
     };
-
-
 }
 
 

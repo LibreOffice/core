@@ -22,8 +22,8 @@
 #include "reffact.hxx"
 #include "docfunc.hxx"
 #include "TableFillingAndNavigationTools.hxx"
-
 #include "ZTestDialog.hxx"
+#include "strings.hrc"
 
 ScZTestDialog::ScZTestDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
@@ -43,7 +43,7 @@ bool ScZTestDialog::Close()
     return DoClose( ScZTestDialogWrapper::GetChildWindowId() );
 }
 
-sal_Int16 ScZTestDialog::GetUndoNameId()
+const char* ScZTestDialog::GetUndoNameId()
 {
     return STR_ZTEST_UNDO_NAME;
 }

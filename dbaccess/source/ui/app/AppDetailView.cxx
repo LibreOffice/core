@@ -20,7 +20,7 @@
 #include "AppDetailView.hxx"
 #include <osl/diagnose.h>
 #include "dbaccess_helpid.hrc"
-#include "dbu_app.hrc"
+#include "strings.hrc"
 #include "AppView.hxx"
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
@@ -29,6 +29,7 @@
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/util/URL.hpp>
+#include "core_resource.hxx"
 #include "listviewitems.hxx"
 #include <vcl/image.hxx>
 #include <vcl/mnemonic.hxx>
@@ -38,7 +39,7 @@
 #include <vcl/svapp.hxx>
 #include "callbacks.hxx"
 #include <dbaccess/IController.hxx>
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include "svtools/treelistentry.hxx"
 #include "svtools/viewdataentry.hxx"
 #include <algorithm>
@@ -62,10 +63,10 @@ using ::com::sun::star::sdb::application::NamedDatabaseObject;
 
 #define SPACEBETWEENENTRIES     4
 
-TaskEntry::TaskEntry( const sal_Char* _pAsciiUNOCommand, sal_uInt16 _nHelpID, sal_uInt16 _nTitleResourceID, bool _bHideWhenDisabled )
+TaskEntry::TaskEntry( const sal_Char* _pAsciiUNOCommand, const char* _pHelpID, const char* pTitleResourceID, bool _bHideWhenDisabled )
     :sUNOCommand( OUString::createFromAscii( _pAsciiUNOCommand ) )
-    ,nHelpID( _nHelpID )
-    ,sTitle( ModuleRes( _nTitleResourceID ) )
+    ,pHelpID( _pHelpID )
+    ,sTitle( DBA_RES(pTitleResourceID) )
     ,bHideWhenDisabled( _bHideWhenDisabled )
 {
 }
@@ -295,10 +296,10 @@ bool OCreationList::setCurrentEntryInvalidate( SvTreeListEntry* _pEntry )
 
 void OCreationList::updateHelpText()
 {
-    sal_uInt16 nHelpTextId = 0;
+    const char* pHelpTextId = nullptr;
     if ( GetCurEntry() )
-        nHelpTextId = static_cast< TaskEntry* >( GetCurEntry()->GetUserData() )->nHelpID;
-    m_rTaskWindow.setHelpText( nHelpTextId );
+        pHelpTextId = static_cast< TaskEntry* >( GetCurEntry()->GetUserData() )->pHelpID;
+    m_rTaskWindow.setHelpText(pHelpTextId);
 }
 
 void OCreationList::onSelected( SvTreeListEntry* _pEntry ) const
@@ -351,7 +352,7 @@ OTasksWindow::OTasksWindow(vcl::Window* _pParent,OApplicationDetailView* _pDetai
     m_aCreation->SetSelectHdl(LINK(this, OTasksWindow, OnEntrySelectHdl));
     m_aHelpText->SetHelpId(HID_APP_HELP_TEXT);
     m_aDescription->SetHelpId(HID_APP_DESCRIPTION_TEXT);
-    m_aDescription->SetText(ModuleRes(STR_DESCRIPTION));
+    m_aDescription->SetText(DBA_RES(STR_DESCRIPTION));
 
     Image aFolderImage = ImageProvider::getFolderImage( css::sdb::application::DatabaseObject::FORM );
     m_aCreation->SetDefaultCollapsedEntryBmp( aFolderImage );
@@ -414,11 +415,11 @@ void OTasksWindow::ImplInitSettings()
     m_aDescription->SetControlFont(aFont);
 }
 
-void OTasksWindow::setHelpText(sal_uInt16 _nId)
+void OTasksWindow::setHelpText(const char* pId)
 {
-    if ( _nId )
+    if (pId)
     {
-        OUString sText = ModuleRes(_nId);
+        OUString sText = DBA_RES(pId);
         m_aHelpText->SetText(sText);
     }
     else
@@ -432,7 +433,7 @@ IMPL_LINK_NOARG(OTasksWindow, OnEntrySelectHdl, SvTreeListBox*, void)
 {
     SvTreeListEntry* pEntry = m_aCreation->GetHdlEntry();
     if ( pEntry )
-        m_aHelpText->SetText( ModuleRes( static_cast< TaskEntry* >( pEntry->GetUserData() )->nHelpID ) );
+        m_aHelpText->SetText(DBA_RES(static_cast<TaskEntry*>(pEntry->GetUserData())->pHelpID));
 }
 
 void OTasksWindow::Resize()
@@ -522,8 +523,8 @@ void OTasksWindow::Clear()
 
 OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,PreviewMode _ePreviewMode) : OSplitterView(&_rParent )
     ,m_aHorzSplitter(VclPtr<Splitter>::Create(this))
-    ,m_aTasks(VclPtr<dbaui::OTitleWindow>::Create(this,STR_TASKS,WB_BORDER | WB_DIALOGCONTROL) )
-    ,m_aContainer(VclPtr<dbaui::OTitleWindow>::Create(this,0,WB_BORDER | WB_DIALOGCONTROL) )
+    ,m_aTasks(VclPtr<dbaui::OTitleWindow>::Create(this, STR_TASKS, WB_BORDER | WB_DIALOGCONTROL))
+    ,m_aContainer(VclPtr<dbaui::OTitleWindow>::Create(this, nullptr, WB_BORDER | WB_DIALOGCONTROL))
     ,m_rBorderWin(_rParent)
 {
     ImplInitSettings();
@@ -636,7 +637,7 @@ void OApplicationDetailView::impl_createPage( ElementType _eType, const Referenc
     bool bEnabled = !rData.aTasks.empty()
                 && getBorderWin().getView()->getCommandController().isCommandEnabled( rData.aTasks[0].sUNOCommand );
     getTasksWindow().Enable( bEnabled );
-    m_aContainer->setTitle( rData.nTitleId );
+    m_aContainer->setTitle(rData.pTitleId);
 
     // let our helper create the object list
     if ( _eType == E_TABLE )
@@ -672,26 +673,26 @@ void OApplicationDetailView::impl_fillTaskPaneData( ElementType _eType, TaskPane
         rList.push_back( TaskEntry( ".uno:DBNewTable", RID_STR_TABLES_HELP_TEXT_DESIGN, RID_STR_NEW_TABLE ) );
         rList.push_back( TaskEntry( ".uno:DBNewTableAutoPilot", RID_STR_TABLES_HELP_TEXT_WIZARD, RID_STR_NEW_TABLE_AUTO ) );
         rList.push_back( TaskEntry( ".uno:DBNewView", RID_STR_VIEWS_HELP_TEXT_DESIGN, RID_STR_NEW_VIEW, true ) );
-        _rData.nTitleId = RID_STR_TABLES_CONTAINER;
+        _rData.pTitleId = RID_STR_TABLES_CONTAINER;
         break;
 
     case E_FORM:
         rList.push_back( TaskEntry( ".uno:DBNewForm", RID_STR_FORMS_HELP_TEXT, RID_STR_NEW_FORM ) );
         rList.push_back( TaskEntry( ".uno:DBNewFormAutoPilot", RID_STR_FORMS_HELP_TEXT_WIZARD, RID_STR_NEW_FORM_AUTO ) );
-        _rData.nTitleId = RID_STR_FORMS_CONTAINER;
+        _rData.pTitleId = RID_STR_FORMS_CONTAINER;
         break;
 
     case E_REPORT:
         rList.push_back( TaskEntry( ".uno:DBNewReport", RID_STR_REPORT_HELP_TEXT, RID_STR_NEW_REPORT, true ) );
         rList.push_back( TaskEntry( ".uno:DBNewReportAutoPilot", RID_STR_REPORTS_HELP_TEXT_WIZARD, RID_STR_NEW_REPORT_AUTO ) );
-        _rData.nTitleId = RID_STR_REPORTS_CONTAINER;
+        _rData.pTitleId = RID_STR_REPORTS_CONTAINER;
         break;
 
     case E_QUERY:
         rList.push_back( TaskEntry( ".uno:DBNewQuery", RID_STR_QUERIES_HELP_TEXT, RID_STR_NEW_QUERY ) );
         rList.push_back( TaskEntry( ".uno:DBNewQueryAutoPilot", RID_STR_QUERIES_HELP_TEXT_WIZARD, RID_STR_NEW_QUERY_AUTO ) );
         rList.push_back( TaskEntry( ".uno:DBNewQuerySql", RID_STR_QUERIES_HELP_TEXT_SQL, RID_STR_NEW_QUERY_SQL ) );
-        _rData.nTitleId = RID_STR_QUERIES_CONTAINER;
+        _rData.pTitleId = RID_STR_QUERIES_CONTAINER;
         break;
 
     default:

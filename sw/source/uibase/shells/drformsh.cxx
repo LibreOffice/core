@@ -40,7 +40,7 @@
 #include "cmdid.h"
 #include "globals.hrc"
 #include "helpid.h"
-#include "shells.hrc"
+#include "strings.hrc"
 #include "drwbassh.hxx"
 #include "drformsh.hxx"
 #include <svl/urihelper.hxx>

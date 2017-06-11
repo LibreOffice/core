@@ -26,7 +26,8 @@
 #include "viewdata.hxx"
 #include "document.hxx"
 #include "scresid.hxx"
-#include "scres.hrc"
+#include "sc.hrc"
+#include "strings.hrc"
 
 #include "subtdlg.hxx"
 #include "tpsubt.hxx"

@@ -19,7 +19,7 @@
 
 #include "UserAdmin.hxx"
 #include "UITools.hxx"
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
 #include <comphelper/types.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
@@ -32,9 +32,12 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbcx/XUser.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
+#include "strings.hrc"
+#include "strings.hxx"
+#include "core_resource.hxx"
 #include "dbadmin.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include <vcl/layout.hxx>
 #include <sfx2/passwd.hxx>
 
@@ -100,7 +103,7 @@ IMPL_LINK_NOARG(OPasswordDialog, OKHdl_Impl, Button*, void)
         EndDialog( RET_OK );
     else
     {
-        OUString aErrorMsg( ModuleRes( STR_ERROR_PASSWORDS_NOT_IDENTICAL));
+        OUString aErrorMsg( DBA_RES( STR_ERROR_PASSWORDS_NOT_IDENTICAL));
         ScopedVclPtrInstance< MessageDialog > aErrorBox(this, aErrorMsg);
         aErrorBox->Execute();
         m_pEDPassword->SetText( OUString() );
@@ -256,7 +259,7 @@ IMPL_LINK( OUserAdmin, UserHdl, Button *, pButton, void )
                 Reference<XDrop> xDrop(m_xUsers,UNO_QUERY);
                 if(xDrop.is())
                 {
-                    ScopedVclPtrInstance< MessageDialog > aQry(this, ModuleRes(STR_QUERY_USERADMIN_DELETE_USER), VclMessageType::Question, VclButtonsType::YesNo);
+                    ScopedVclPtrInstance< MessageDialog > aQry(this, DBA_RES(STR_QUERY_USERADMIN_DELETE_USER), VclMessageType::Question, VclButtonsType::YesNo);
                     if(aQry->Execute() == RET_YES)
                         xDrop->dropByName(GetUser());
                 }

@@ -112,17 +112,17 @@
 #include <svx/zoom_def.hxx>
 #include <svx/dialogs.hrc>
 
+#include "core_resource.hxx"
 #include "DesignView.hxx"
-#include "ModuleHelper.hxx"
 #include "RptObject.hxx"
 #include "RptUndo.hxx"
-#include "uistrings.hrc"
+#include "strings.hxx"
 #include "RptDef.hxx"
 #include "ReportSection.hxx"
 #include "SectionView.hxx"
 #include "UndoActions.hxx"
 #include "dlgpage.hxx"
-#include "RptResId.hrc"
+#include "strings.hrc"
 
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
@@ -407,7 +407,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_REPORTHEADERFOOTER:
             {
                 aReturn.bEnabled = isEditable();
-                OUString sText = ModuleRes((m_xReportDefinition.is() && m_xReportDefinition->getReportHeaderOn()) ? RID_STR_REPORTHEADERFOOTER_DELETE : RID_STR_REPORTHEADERFOOTER_INSERT);
+                OUString sText = RptResId((m_xReportDefinition.is() && m_xReportDefinition->getReportHeaderOn()) ? RID_STR_REPORTHEADERFOOTER_DELETE : RID_STR_REPORTHEADERFOOTER_INSERT);
                 aReturn.sTitle = sText;
             }
             break;
@@ -416,7 +416,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_PAGEHEADERFOOTER:
             {
                 aReturn.bEnabled = isEditable();
-                OUString sText = ModuleRes((m_xReportDefinition.is() && m_xReportDefinition->getPageHeaderOn()) ? RID_STR_PAGEHEADERFOOTER_DELETE : RID_STR_PAGEHEADERFOOTER_INSERT);
+                OUString sText = RptResId((m_xReportDefinition.is() && m_xReportDefinition->getPageHeaderOn()) ? RID_STR_PAGEHEADERFOOTER_DELETE : RID_STR_PAGEHEADERFOOTER_INSERT);
                 aReturn.sTitle = sText;
             }
             break;
@@ -569,7 +569,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
                     aReturn.bEnabled = !pSectionWindow->getReportSection().isUiActive();
             }
             {
-                OUString sText = ModuleRes(RID_STR_DELETE);
+                OUString sText = RptResId(RID_STR_DELETE);
                 aReturn.sTitle = sText;
             }
             break;
@@ -1153,7 +1153,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 {
                     uno::Reference< report::XFunctions> xFunctions(xFunction->getParent(),uno::UNO_QUERY_THROW);
                     sal_Int32 nIndex = getPositionInIndexAccess(xFunctions.get(),xFunction);
-                    const OUString sUndoAction = ModuleRes(RID_STR_UNDO_REMOVE_FUNCTION);
+                    const OUString sUndoAction = RptResId(RID_STR_UNDO_REMOVE_FUNCTION);
                     UndoContext aUndoContext( getUndoManager(), sUndoAction );
                     xFunctions->removeByIndex(nIndex);
                     select(uno::makeAny(xFunctions->getParent()));
@@ -1436,7 +1436,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 ::std::vector< uno::Reference< uno::XInterface > > aControlsFormats;
                 lcl_getReportControlFormat( aArgs, getDesignView(), xWindow, aControlsFormats );
 
-                const OUString sUndoAction(ModuleRes(RID_STR_UNDO_CHANGEFONT));
+                const OUString sUndoAction(RptResId(RID_STR_UNDO_CHANGEFONT));
                 UndoContext aUndoContext( getUndoManager(), sUndoAction );
 
                 ::std::vector< uno::Reference< uno::XInterface > >::const_iterator aIter = aControlsFormats.begin();
@@ -1513,7 +1513,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
 
                 if ( !aControlsFormats.empty() )
                 {
-                    const OUString sUndoAction( ModuleRes( RID_STR_UNDO_CHANGEFONT ) );
+                    const OUString sUndoAction( RptResId( RID_STR_UNDO_CHANGEFONT ) );
                     UndoContext aUndoContext( getUndoManager(), sUndoAction );
 
                     ::std::vector< uno::Reference< uno::XInterface > >::const_iterator aIter = aControlsFormats.begin();
@@ -2450,7 +2450,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                 else
                 {
                     uno::Reference< beans::XPropertySet> xProp(getUsedStyle(m_xReportDefinition),uno::UNO_QUERY_THROW);
-                    const OUString sUndoAction(ModuleRes(RID_STR_UNDO_CHANGEPAGE));
+                    const OUString sUndoAction(RptResId(RID_STR_UNDO_CHANGEPAGE));
                     UndoContext aUndoContext( getUndoManager(), sUndoAction );
                     const SfxPoolItem* pItem = nullptr;
                     if ( SfxItemState::SET == pSet->GetItemState( RPTUI_ID_SIZE,true,&pItem))
@@ -2575,17 +2575,17 @@ void OReportController::Notify(SfxBroadcaster & /* _rBc */, SfxHint const & _rHi
     }
 }
 
-void OReportController::executeMethodWithUndo(sal_uInt16 _nUndoStrId,const ::std::mem_fun_t<void,ODesignView>& _pMemfun)
+void OReportController::executeMethodWithUndo(const char* pUndoStrId,const ::std::mem_fun_t<void,ODesignView>& _pMemfun)
 {
-    const OUString sUndoAction = ModuleRes(_nUndoStrId);
+    const OUString sUndoAction = RptResId(pUndoStrId);
     UndoContext aUndoContext( getUndoManager(), sUndoAction );
     _pMemfun( getDesignView() );
     InvalidateFeature( SID_UNDO );
 }
 
-void OReportController::alignControlsWithUndo(sal_uInt16 _nUndoStrId, ControlModification _nControlModification, bool _bAlignAtSection)
+void OReportController::alignControlsWithUndo(const char* pUndoStrId, ControlModification _nControlModification, bool _bAlignAtSection)
 {
-    const OUString sUndoAction = ModuleRes(_nUndoStrId);
+    const OUString sUndoAction = RptResId(pUndoStrId);
     UndoContext aUndoContext( getUndoManager(), sUndoAction );
     getDesignView()->alignMarkedObjects(_nControlModification,_bAlignAtSection);
     InvalidateFeature( SID_UNDO );
@@ -2659,11 +2659,11 @@ void OReportController::shrinkSectionTop(const uno::Reference<report::XSection>&
     _xSection->setHeight(nNewSectionHeight);
 }
 
-void OReportController::shrinkSection(sal_uInt16 _nUndoStrId, const uno::Reference<report::XSection>& _xSection, sal_Int32 _nSid)
+void OReportController::shrinkSection(const char* pUndoStrId, const uno::Reference<report::XSection>& _xSection, sal_Int32 _nSid)
 {
     if ( _xSection.is() )
     {
-        const OUString sUndoAction = ModuleRes(_nUndoStrId);
+        const OUString sUndoAction = RptResId(pUndoStrId);
         UndoContext aUndoContext( getUndoManager(), sUndoAction );
 
         if (_nSid == SID_SECTION_SHRINK)
@@ -2835,7 +2835,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
     uno::Reference<frame::XModel> xModel;
     if ( m_xReportDefinition.is() )
     {
-        sal_uInt16 nErrorId = RID_ERR_NO_COMMAND;
+        const char* pErrorId = RID_ERR_NO_COMMAND;
         bool bEnabled = !m_xReportDefinition->getCommand().isEmpty();
         if ( bEnabled )
         {
@@ -2848,20 +2848,20 @@ uno::Reference<frame::XModel> OReportController::executeReport()
                 bEnabled = pPage->GetObjCount() != 0;
             }
             if ( !bEnabled )
-                nErrorId = RID_ERR_NO_OBJECTS;
+                pErrorId = RID_ERR_NO_OBJECTS;
         }
 
         dbtools::SQLExceptionInfo aInfo;
         if ( !bEnabled )
         {
             sdb::SQLContext aFirstMessage;
-            OUString sInfo = ModuleRes( nErrorId );
+            OUString sInfo = RptResId( pErrorId );
             aFirstMessage.Message = sInfo;
             aInfo = aFirstMessage;
             if ( isEditable() )
             {
                 sal_uInt16 nCommand = 0;
-                if ( nErrorId == RID_ERR_NO_COMMAND )
+                if (!strcmp(pErrorId, RID_ERR_NO_COMMAND))
                 {
                     if ( !m_bShowProperties )
                         executeUnChecked(SID_SHOW_PROPERTYBROWSER,uno::Sequence< beans::PropertyValue>());
@@ -2904,7 +2904,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
 
                 // our first message says: we caught an exception
                 sdb::SQLContext aFirstMessage;
-                OUString sInfo(ModuleRes(RID_STR_CAUGHT_FOREIGN_EXCEPTION));
+                OUString sInfo(RptResId(RID_STR_CAUGHT_FOREIGN_EXCEPTION));
                 sInfo = sInfo.replaceAll("$type$", aCaughtException.getValueTypeName());
                 aFirstMessage.Message = sInfo;
 
@@ -2930,7 +2930,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
             }
             if (aInfo.isValid())
             {
-                const OUString suSQLContext = ModuleRes( RID_STR_COULD_NOT_CREATE_REPORT );
+                const OUString suSQLContext = RptResId( RID_STR_COULD_NOT_CREATE_REPORT );
                 aInfo.prepend(suSQLContext);
             }
             m_bInGeneratePreview = false;
@@ -2986,7 +2986,7 @@ uno::Reference< sdbc::XRowSet > const & OReportController::getRowSet()
 
 void OReportController::insertGraphic()
 {
-    const OUString sTitle(ModuleRes(RID_STR_IMPORT_GRAPHIC));
+    const OUString sTitle(RptResId(RID_STR_IMPORT_GRAPHIC));
     // build some arguments for the upcoming dialog
     try
     {
@@ -3083,7 +3083,7 @@ void SAL_CALL OReportController::removeSelectionChangeListener( const Reference<
 void OReportController::createNewFunction(const uno::Any& _aValue)
 {
     uno::Reference< container::XIndexContainer> xFunctions(_aValue,uno::UNO_QUERY_THROW);
-    const OUString sNewName = ModuleRes(RID_STR_FUNCTION);
+    const OUString sNewName = RptResId(RID_STR_FUNCTION);
     uno::Reference< report::XFunction> xFunction(report::Function::create(m_xContext));
     xFunction->setName(sNewName);
     // the call below will also create an undo action -> listener
@@ -3218,7 +3218,7 @@ void OReportController::createDateTime(const Sequence< PropertyValue >& _aArgs)
 {
     getDesignView()->unmarkAllObjects();
 
-    const OUString sUndoAction(ModuleRes(RID_STR_UNDO_INSERT_CONTROL));
+    const OUString sUndoAction(RptResId(RID_STR_UNDO_INSERT_CONTROL));
     UndoContext aUndoContext( getUndoManager(), sUndoAction );
 
     SequenceAsHashMap aMap(_aArgs);
@@ -3246,7 +3246,7 @@ void OReportController::createPageNumber(const Sequence< PropertyValue >& _aArgs
 {
     getDesignView()->unmarkAllObjects();
 
-    const OUString sUndoAction(ModuleRes(RID_STR_UNDO_INSERT_CONTROL));
+    const OUString sUndoAction(RptResId(RID_STR_UNDO_INSERT_CONTROL));
     UndoContext aUndoContext( getUndoManager(), sUndoAction );
 
     if ( !m_xReportDefinition->getPageHeaderOn() )
@@ -3258,12 +3258,12 @@ void OReportController::createPageNumber(const Sequence< PropertyValue >& _aArgs
     SequenceAsHashMap aMap(_aArgs);
     bool bStateOfPage = aMap.getUnpackedValueOrDefault(PROPERTY_STATE, false);
 
-    OUString sFunction( ModuleRes(STR_RPT_PN_PAGE) );
+    OUString sFunction( RptResId(STR_RPT_PN_PAGE) );
     sFunction = sFunction.replaceFirst("#PAGENUMBER#", "PageNumber()");
 
     if ( bStateOfPage )
     {
-        sFunction += ModuleRes(STR_RPT_PN_PAGE_OF);
+        sFunction += RptResId(STR_RPT_PN_PAGE_OF);
         sFunction = sFunction.replaceFirst("#PAGECOUNT#", "PageCount()");
     }
 
@@ -3289,7 +3289,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
     }
 
     uno::Reference<report::XSection> xCurrentSection = getDesignView()->getCurrentSection();
-    UndoContext aUndoContext( getUndoManager(), OUString( ModuleRes( RID_STR_UNDO_INSERT_CONTROL ) ) );
+    UndoContext aUndoContext(getUndoManager(), RptResId(RID_STR_UNDO_INSERT_CONTROL));
 
     try
     {
@@ -3743,7 +3743,7 @@ void OReportController::switchReportSection(const sal_Int16 _nId)
         std::unique_ptr< UndoContext > pUndoContext;
         if ( SID_REPORTHEADERFOOTER == _nId )
         {
-            const OUString sUndoAction(ModuleRes(bSwitchOn ? RID_STR_UNDO_ADD_REPORTHEADERFOOTER : RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER));
+            const OUString sUndoAction(RptResId(bSwitchOn ? RID_STR_UNDO_ADD_REPORTHEADERFOOTER : RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER));
             pUndoContext.reset( new UndoContext( getUndoManager(), sUndoAction ) );
 
             addUndoAction(new OReportSectionUndo(*(m_aReportModel),SID_REPORTHEADER_WITHOUT_UNDO
@@ -3790,7 +3790,7 @@ void OReportController::switchPageSection(const sal_Int16 _nId)
         std::unique_ptr< UndoContext > pUndoContext;
         if ( SID_PAGEHEADERFOOTER == _nId )
         {
-            const OUString sUndoAction(ModuleRes(bSwitchOn ? RID_STR_UNDO_ADD_REPORTHEADERFOOTER : RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER));
+            const OUString sUndoAction(RptResId(bSwitchOn ? RID_STR_UNDO_ADD_REPORTHEADERFOOTER : RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER));
             pUndoContext.reset( new UndoContext( getUndoManager(), sUndoAction ) );
 
             addUndoAction(new OReportSectionUndo(*m_aReportModel
@@ -4128,14 +4128,14 @@ bool OReportController::isFormatCommandEnabled(sal_uInt16 _nCommand,const uno::R
     return bRet;
 }
 
-bool OReportController::impl_setPropertyAtControls_throw(const sal_uInt16 _nUndoResId,const OUString& _sProperty,const uno::Any& _aValue,const Sequence< PropertyValue >& _aArgs)
+bool OReportController::impl_setPropertyAtControls_throw(const char* pUndoResId,const OUString& _sProperty,const uno::Any& _aValue,const Sequence< PropertyValue >& _aArgs)
 {
     ::std::vector< uno::Reference< uno::XInterface > > aSelection;
     uno::Reference< awt::XWindow> xWindow;
     lcl_getReportControlFormat( _aArgs, getDesignView(), xWindow, aSelection );
     ::std::vector< uno::Reference< uno::XInterface > >::const_iterator aIter = aSelection.begin();
 
-    const OUString sUndoAction = ModuleRes( _nUndoResId );
+    const OUString sUndoAction = RptResId( pUndoResId );
     UndoContext aUndoContext( getUndoManager(), sUndoAction );
 
     for(;  aIter != aSelection.end();++aIter)

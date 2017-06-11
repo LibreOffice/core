@@ -66,7 +66,7 @@ private:
 
     template<class RNG>
 
-    void GenerateNumbers(RNG& randomGenerator, const sal_Int16 aDistributionStringId, const boost::optional<sal_Int8> aDecimalPlaces);
+    void GenerateNumbers(RNG& randomGenerator, const char* pDistributionStringId, const boost::optional<sal_Int8> aDecimalPlaces);
 
     void SelectGeneratorAndGenerateNumbers();
 
