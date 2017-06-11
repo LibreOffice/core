@@ -1,0 +1,58 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_FRAMEWORK_INC_STRINGS_HRC
+#define INCLUDED_FRAMEWORK_INC_STRINGS_HRC
+
+#define N_(String) (u8##String)
+
+#define STR_MENU_HEADFOOTALL                        N_("All" )
+#define STR_UPDATEDOC                               N_("~Update" )
+#define STR_CLOSEDOC_ANDRETURN                      N_("~Close & Return to " )
+#define STR_TOOLBAR_VISIBLE_BUTTONS                 N_("Visible ~Buttons")
+#define STR_TOOLBAR_CUSTOMIZE_TOOLBAR               N_("~Customize Toolbar...")
+#define STR_TOOLBAR_DOCK_TOOLBAR                    N_("~Dock Toolbar" )
+#define STR_TOOLBAR_DOCK_ALL_TOOLBARS               N_("Dock ~All Toolbars" )
+#define STR_TOOLBAR_LOCK_TOOLBAR                    N_("~Lock Toolbar Position" )
+#define STR_TOOLBAR_CLOSE_TOOLBAR                   N_("Close ~Toolbar" )
+#define STR_SAVECOPYDOC                             N_("Save Copy ~as..." )
+#define STR_NODOCUMENT                              N_("No Documents")
+#define STR_CLEAR_RECENT_FILES                      N_("Clear List")
+#define STR_CLEAR_RECENT_FILES_HELP                 N_("Clears the list with the most recently opened files. This action can not be undone.")
+#define STR_REMOTE_TITLE                            N_(" (Remote)")
+#define STR_SAFEMODE_TITLE                          N_(" (Safe Mode)")
+#define STR_TOOLBAR_TITLE_ADDON                     N_("Add-On %num%")
+#define STR_FULL_DISC_RETRY_BUTTON                  N_("Retry" )
+#define STR_FULL_DISC_MSG                           N_("%PRODUCTNAME could not save important internal information due to insufficient free disk space at the following location:\n%PATH\n\nYou will not be able to continue working with %PRODUCTNAME without allocating more free disk space at that location.\n\nPress the 'Retry' button after you have allocated more free disk space to retry saving the data.\n\n" )
+#define STR_RESTORE_TOOLBARS                        N_("~Reset" )
+#define STR_CORRUPT_UICFG_SHARE                     N_("An error occurred while loading the user interface configuration data. The application will be terminated now.\nPlease try to reinstall the application." )
+#define STR_CORRUPT_UICFG_USER                      N_("An error occurred while loading the user interface configuration data. The application will be terminated now.\nPlease try to remove your user profile for the application." )
+#define STR_CORRUPT_UICFG_GENERAL                   N_("An error occurred while loading the user interface configuration data. The application will be terminated now.\nPlease try to remove your user profile for the application first or try to reinstall the application." )
+#define STR_UNTITLED_DOCUMENT                       N_("Untitled" )
+// To translators: for displaying 'Multiple Languages' in the language statusbar control
+#define STR_LANGSTATUS_MULTIPLE_LANGUAGES           N_("Multiple Languages" )
+#define STR_LANGSTATUS_NONE                         N_("None (Do not check spelling)" )
+#define STR_RESET_TO_DEFAULT_LANGUAGE               N_("Reset to Default Language" )
+#define STR_LANGSTATUS_MORE                         N_("More..." )
+#define STR_SET_LANGUAGE_FOR_PARAGRAPH              N_("Set Language for Paragraph" )
+#define STR_LANGSTATUS_HINT                         N_("Text Language. Right-click to set character or paragraph language" )
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

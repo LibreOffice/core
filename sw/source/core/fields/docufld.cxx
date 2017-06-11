@@ -83,7 +83,7 @@
 #include <docsh.hxx>
 #include <unofldmid.h>
 #include <swunohelper.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>

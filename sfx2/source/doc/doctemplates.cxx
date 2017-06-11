@@ -22,7 +22,6 @@
 #include <tools/urlobj.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/resary.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <unotools/pathoptions.hxx>
@@ -81,7 +80,8 @@
 #include "doctemplateslocal.hxx"
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfile.hxx>
-#include "doc.hrc"
+#include "sfx2/strings.hrc"
+#include "doctempl.hrc"
 
 #include <memory>
 #include <vector>
@@ -483,21 +483,33 @@ void SfxDocTplService_Impl::getDefaultLocale()
     }
 }
 
+const char* TEMPLATE_SHORT_NAMES_ARY[] =
+{
+    "standard",
+    "officorr",
+    "offimisc",
+    "personal",
+    "forms",
+    "finance",
+    "educate",
+    "layout",
+    "presnt",
+    "misc",
+    "labels",
+    "styles"
+};
 
 void SfxDocTplService_Impl::readFolderList()
 {
     SolarMutexGuard aGuard;
 
-    ResStringArray aShortNames(ResId(TEMPLATE_SHORT_NAMES_ARY, *SfxResMgr::GetResMgr()));
-    ResStringArray aLongNames(ResId(TEMPLATE_LONG_NAMES_ARY, *SfxResMgr::GetResMgr()));
+    size_t nCount = std::min(SAL_N_ELEMENTS(TEMPLATE_SHORT_NAMES_ARY), SAL_N_ELEMENTS(TEMPLATE_LONG_NAMES_ARY));
 
-    sal_uInt16 nCount = (sal_uInt16)( std::min( aShortNames.Count(), aLongNames.Count() ) );
-
-    for ( sal_uInt16 i=0; i<nCount; i++ )
+    for (size_t i = 0; i < nCount; ++i)
     {
         NamePair_Impl* pPair = new NamePair_Impl;
-        pPair->maShortName  = aShortNames.GetString( i );
-        pPair->maLongName   = aLongNames.GetString( i );
+        pPair->maShortName  = OUString::createFromAscii(TEMPLATE_SHORT_NAMES_ARY[i]);
+        pPair->maLongName   = SfxResId(TEMPLATE_LONG_NAMES_ARY[i]);
 
         maNames.push_back( pPair );
     }
@@ -2794,6 +2806,11 @@ com_sun_star_comp_sfx2_DocumentTemplates_get_implementation(
     css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SfxDocTplService(context));
+}
+
+OUString DocTemplLocaleHelper::GetStandardGroupString()
+{
+    return SfxResId(TEMPLATE_LONG_NAMES_ARY[0]);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

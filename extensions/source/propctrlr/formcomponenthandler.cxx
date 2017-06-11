@@ -26,7 +26,9 @@
 #include "formcomponenthandler.hxx"
 #include "formlinkdialog.hxx"
 #include "formmetadata.hxx"
-#include "formresid.hrc"
+#include "strings.hrc"
+#include "showhide.hrc"
+#include "yesno.hrc"
 #include "formstrings.hxx"
 #include "handlerhelper.hxx"
 #include "listselectiondlg.hxx"
@@ -95,7 +97,6 @@
 #include <svx/svxids.hrc>
 #include <vcl/unohelp.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/resary.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/wrkwin.hxx>
@@ -537,9 +538,8 @@ namespace pcr
             OUString sControlValue;
             OSL_VERIFY( _rControlValue >>= sControlValue );
 
-            ResStringArray aListEntries(PcrRes(RID_RSC_ENUM_SHOWHIDE));
-            OSL_ENSURE( aListEntries.Count() == 2, "FormComponentPropertyHandler::convertToPropertyValue: broken resource for Show/Hide!" );
-            bool bShow = ( aListEntries.Count() < 2 ) || ( sControlValue == aListEntries.GetString(1) );
+            assert(SAL_N_ELEMENTS(RID_RSC_ENUM_SHOWHIDE) == 2 && "FormComponentPropertyHandler::convertToPropertyValue: broken resource for Show/Hide!");
+            bool bShow = sControlValue == PcrRes(RID_RSC_ENUM_SHOWHIDE[1]);
 
             aPropertyValue <<= bShow;
         }
@@ -641,16 +641,11 @@ namespace pcr
         case PROPERTY_ID_SHOW_RECORDACTIONS:
         case PROPERTY_ID_SHOW_FILTERSORT:
         {
-            ResStringArray aListEntries(PcrRes(RID_RSC_ENUM_SHOWHIDE));
-            OSL_ENSURE( aListEntries.Count() == 2, "FormComponentPropertyHandler::convertToControlValue: broken resource for Show/Hide!" );
-
-            if (aListEntries.Count() == 2)
-            {
-                OUString sControlValue =     ::comphelper::getBOOL( _rPropertyValue )
-                                                ?   aListEntries.GetString(1)
-                                                :   aListEntries.GetString(0);
-                aControlValue <<= sControlValue;
-            }
+            assert(SAL_N_ELEMENTS(RID_RSC_ENUM_SHOWHIDE) == 2 && "FormComponentPropertyHandler::convertToPropertyValue: broken resource for Show/Hide!");
+            OUString sControlValue =     ::comphelper::getBOOL(_rPropertyValue)
+                                            ? PcrRes(RID_RSC_ENUM_SHOWHIDE[1])
+                                            : PcrRes(RID_RSC_ENUM_SHOWHIDE[0]);
+            aControlValue <<= sControlValue;
         }
         break;
 
@@ -757,20 +752,20 @@ namespace pcr
 
                 // font style
                 ::FontWeight  eWeight = vcl::unohelper::ConvertFontWeight( aFont.Weight );
-                sal_uInt16 nStyleResID = RID_STR_FONTSTYLE_REGULAR;
+                const char* pStyleResID = RID_STR_FONTSTYLE_REGULAR;
                 if ( aFont.Slant == FontSlant_ITALIC )
                 {
                     if ( eWeight > WEIGHT_NORMAL )
-                        nStyleResID = RID_STR_FONTSTYLE_BOLD_ITALIC;
+                        pStyleResID = RID_STR_FONTSTYLE_BOLD_ITALIC;
                     else
-                        nStyleResID = RID_STR_FONTSTYLE_ITALIC;
+                        pStyleResID = RID_STR_FONTSTYLE_ITALIC;
                 }
                 else
                 {
                     if ( eWeight > WEIGHT_NORMAL )
-                        nStyleResID = RID_STR_FONTSTYLE_BOLD;
+                        pStyleResID = RID_STR_FONTSTYLE_BOLD;
                 }
-                displayName.append(PcrRes(nStyleResID));
+                displayName.append(PcrRes(pStyleResID));
 
                 // font size
                 if ( aFont.Height )
@@ -1202,21 +1197,19 @@ namespace pcr
         if ( eType == TypeClass_SEQUENCE )
             nControlType = PropertyControlType::StringListField;
 
-
         // boolean values
         if ( eType == TypeClass_BOOLEAN )
         {
-            sal_uInt16 nResId = RID_RSC_ENUM_YESNO;
             if  (   ( nPropId == PROPERTY_ID_SHOW_POSITION )
                 ||  ( nPropId == PROPERTY_ID_SHOW_NAVIGATION )
                 ||  ( nPropId == PROPERTY_ID_SHOW_RECORDACTIONS )
                 ||  ( nPropId == PROPERTY_ID_SHOW_FILTERSORT )
                 )
-                nResId = RID_RSC_ENUM_SHOWHIDE;
-
-            PcrRes aRes(nResId);
-            ResStringArray aListEntries(aRes);
-            aDescriptor.Control = PropertyHandlerHelper::createListBoxControl(_rxControlFactory, aListEntries, false, false);
+            {
+                aDescriptor.Control = PropertyHandlerHelper::createListBoxControl(_rxControlFactory, RID_RSC_ENUM_SHOWHIDE, SAL_N_ELEMENTS(RID_RSC_ENUM_SHOWHIDE), false, false);
+            }
+            else
+                aDescriptor.Control = PropertyHandlerHelper::createListBoxControl(_rxControlFactory, RID_RSC_ENUM_YESNO, SAL_N_ELEMENTS(RID_RSC_ENUM_YESNO), false, false);
             bNeedDefaultStringIfVoidAllowed = true;
         }
 
@@ -2394,7 +2387,7 @@ namespace pcr
             INetURLObject aParser( sDataSourceName );
             if ( aParser.GetProtocol() != INetProtocol::NotValid )
                 sDataSourceName = aParser.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
-            OUString sInfo(PcrRes(RID_STR_UNABLETOCONNECT).toString().replaceAll("$name$", sDataSourceName));
+            OUString sInfo(PcrRes(RID_STR_UNABLETOCONNECT).replaceAll("$name$", sDataSourceName));
             SQLContext aContext;
             aContext.Message = sInfo;
             aContext.NextException = aError.get();

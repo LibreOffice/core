@@ -628,8 +628,8 @@ void Package::processPackage_impl(
                 ProgressLevel progress(
                     xCmdEnv,
                     (doRegisterPackage
-                     ? PackageRegistryBackend::StrRegisteringPackage::get()
-                     : PackageRegistryBackend::StrRevokingPackage::get())
+                     ? PackageRegistryBackend::StrRegisteringPackage()
+                     : PackageRegistryBackend::StrRevokingPackage())
                     + displayName );
                 processPackage_( guard,
                                  doRegisterPackage,
@@ -642,8 +642,8 @@ void Package::processPackage_impl(
             Any e(cppu::getCaughtException());
             throw deployment::DeploymentException(
                 ((doRegisterPackage
-                  ? getResourceString(RID_STR_ERROR_WHILE_REGISTERING)
-                  : getResourceString(RID_STR_ERROR_WHILE_REVOKING))
+                  ? DpResId(RID_STR_ERROR_WHILE_REGISTERING)
+                  : DpResId(RID_STR_ERROR_WHILE_REVOKING))
                  + getDisplayName()),
                 static_cast< OWeakObject * >(this), e);
         }
@@ -666,8 +666,8 @@ void Package::processPackage_impl(
             Any exc( ::cppu::getCaughtException() );
             throw deployment::DeploymentException(
                 (doRegisterPackage
-                 ? getResourceString(RID_STR_ERROR_WHILE_REGISTERING)
-                 : getResourceString(RID_STR_ERROR_WHILE_REVOKING))
+                 ? DpResId(RID_STR_ERROR_WHILE_REGISTERING)
+                 : DpResId(RID_STR_ERROR_WHILE_REVOKING))
                 + getDisplayName(), static_cast<OWeakObject *>(this), exc );
         }
     }

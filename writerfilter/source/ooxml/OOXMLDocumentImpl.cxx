@@ -36,7 +36,8 @@
 #include <tools/resmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 #include <comphelper/sequence.hxx>
 #include <unotools/mediadescriptor.hxx>
 
@@ -459,8 +460,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
                     // We want to care about the progress if we know the estimated paragraph count and we have given a status indicator as well.
                     // Set the end position only here, so later it's enough to check if that is non-zero in incrementProgress().
                     mnProgressEndPos = nValue;
-                    static ResMgr* pResMgr = ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag());
-                    OUString aDocLoad(ResId(RID_SVXSTR_DOC_LOAD, *pResMgr));
+                    OUString aDocLoad(SvxResId(RID_SVXSTR_DOC_LOAD));
                     mxStatusIndicator->start(aDocLoad, mnProgressEndPos);
                     mnPercentSize = mnProgressEndPos / 100;
                 }

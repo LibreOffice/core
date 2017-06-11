@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.0 on Fri Jan 17 11:22:49 2014 -->
-<interface>
+<interface domain="sc">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="PivotFieldDialog">

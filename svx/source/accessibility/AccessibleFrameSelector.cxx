@@ -35,7 +35,8 @@
 #include <svx/dialmgr.hxx>
 #include "editeng/unolingu.hxx"
 
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
+#include "frmsel.hrc"
 
 namespace svx {
 namespace a11y {
@@ -58,8 +59,6 @@ AccFrameSelector::AccFrameSelector( FrameSelector& rFrameSel, FrameBorderType eB
     meBorder( eBorder ),
     maFocusListeners( maFocusMutex ),
     maPropertyListeners( maPropertyMutex ),
-    maNames( ResId(RID_SVXSTR_FRMSEL_TEXTS, DIALOG_MGR()) ),
-    maDescriptions( ResId(RID_SVXSTR_FRMSEL_DESCRIPTIONS, DIALOG_MGR()) ),
     mnClientId( 0 )
 {
     if ( mpFrameSel )
@@ -154,14 +153,14 @@ OUString AccFrameSelector::getAccessibleDescription(  )
 {
     SolarMutexGuard aGuard;
     IsValid();
-    return maDescriptions.GetString((sal_uInt32)meBorder);
+    return SvxResId(RID_SVXSTR_FRMSEL_DESCRIPTIONS[(sal_uInt32)meBorder].first);
 }
 
 OUString AccFrameSelector::getAccessibleName(  )
 {
     SolarMutexGuard aGuard;
     IsValid();
-    return maNames.GetString((sal_uInt32)meBorder);
+    return SvxResId(RID_SVXSTR_FRMSEL_TEXTS[(sal_uInt32)meBorder].first);
 }
 
 Reference< XAccessibleRelationSet > AccFrameSelector::getAccessibleRelationSet(  )

@@ -34,6 +34,7 @@
 #include <poolfmt.hxx>
 
 #include <chrdlg.hrc>
+#include <strings.hrc>
 #include <SwStyleNameMapper.hxx>
 
 void SwBreakDlg::Apply()

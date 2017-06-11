@@ -29,7 +29,8 @@
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
+#include <svx/svxids.hrc>
 
 #define DELAY_TIMEOUT           100
 

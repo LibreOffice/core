@@ -1,0 +1,92 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+#ifndef INCLUDED_VCL_INC_STRINGS_HRC
+#define INCLUDED_VCL_INC_STRINGS_HRC
+
+#define N_(String) (u8##String)
+
+const char* RID_UI_SYMBOLSET_NAMES[] =
+{
+    N_("Greek"),
+    N_("Special")
+};
+
+const char* RID_UI_SYMBOL_NAMES[] =
+{
+    N_("alpha"),
+    N_("ALPHA"),
+    N_("beta"),
+    N_("BETA"),
+    N_("gamma"),
+    N_("GAMMA"),
+    N_("delta"),
+    N_("DELTA"),
+    N_("epsilon"),
+    N_("EPSILON"),
+    N_("zeta"),
+    N_("ZETA"),
+    N_("eta"),
+    N_("ETA"),
+    N_("theta"),
+    N_("THETA"),
+    N_("iota"),
+    N_("IOTA"),
+    N_("kappa"),
+    N_("KAPPA"),
+    N_("lambda"),
+    N_("LAMBDA"),
+    N_("mu"),
+    N_("MU"),
+    N_("nu"),
+    N_("NU"),
+    N_("xi"),
+    N_("XI"),
+    N_("omicron"),
+    N_("OMICRON"),
+    N_("pi"),
+    N_("PI"),
+    N_("rho"),
+    N_("RHO"),
+    N_("sigma"),
+    N_("SIGMA"),
+    N_("tau"),
+    N_("TAU"),
+    N_("upsilon"),
+    N_("UPSILON"),
+    N_("phi"),
+    N_("PHI"),
+    N_("chi"),
+    N_("CHI"),
+    N_("psi"),
+    N_("PSI"),
+    N_("omega"),
+    N_("OMEGA"),
+    N_("varepsilon"),
+    N_("vartheta"),
+    N_("varpi"),
+    N_("varrho"),
+    N_("varsigma"),
+    N_("varphi"),
+    N_("element"),
+    N_("noelement"),
+    N_("strictlylessthan"),
+    N_("strictlygreaterthan"),
+    N_("notequal"),
+    N_("identical"),
+    N_("tendto"),
+    N_("infinite"),
+    N_("angle"),
+    N_("perthousand"),
+    N_("and"),
+    N_("or")
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

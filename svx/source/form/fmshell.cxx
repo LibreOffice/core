@@ -55,7 +55,6 @@
 
 #include <svx/svxids.hrc>
 
-#include "svx/fmresids.hrc"
 #include "fmexch.hxx"
 #include <svx/fmglob.hxx>
 #include <svl/eitem.hxx>
@@ -77,7 +76,7 @@
 #include "formtoolbars.hxx"
 
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 
 #include "svx/sdrobjectfilter.hxx"
 

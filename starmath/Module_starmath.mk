@@ -16,7 +16,7 @@ $(eval $(call gb_Module_add_targets,starmath,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,starmath,\
-    AllLangResTarget_sm \
+    AllLangMoTarget_sm \
     UIConfig_smath \
 ))
 

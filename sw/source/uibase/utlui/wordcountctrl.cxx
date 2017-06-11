@@ -8,7 +8,7 @@
  */
 
 #include <swtypes.hxx>
-#include <utlui.hrc>
+#include <strings.hrc>
 #include "wordcountctrl.hxx"
 #include <svl/stritem.hxx>
 

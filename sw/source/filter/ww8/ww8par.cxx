@@ -85,7 +85,7 @@
 #include <viewopt.hxx>
 #include <shellres.hxx>
 #include <mdiexp.hxx>
-#include <statstr.hrc>
+#include <strings.hrc>
 #include <swerror.h>
 #include <swtable.hxx>
 #include <fchrfmt.hxx>

@@ -52,7 +52,7 @@
 #include <svtools/svmedit.hxx>
 
 #include "bibresid.hxx"
-#include "bib.hrc"
+#include "strings.hrc"
 #include "bibcont.hxx"
 #include "bibbeam.hxx"
 #include "bibmod.hxx"

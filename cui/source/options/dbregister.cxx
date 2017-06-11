@@ -25,6 +25,7 @@
 #include <svtools/editbrowsebox.hxx>
 #include "svtools/treelistentry.hxx"
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <bitmaps.hlst>
 #include <vcl/field.hxx>
 #include <vcl/layout.hxx>
@@ -442,6 +443,5 @@ IMPL_LINK( DbRegistrationOptionsPage, NameValidator, const OUString&, _rName, bo
 }
 
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

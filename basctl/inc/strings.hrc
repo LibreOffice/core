@@ -1,0 +1,122 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef BASCTL_INC_BASIDESH_HRC
+#define BASCTL_INC_BASIDESH_HRC
+
+#define N_(String) (u8##String)
+
+#define RID_STR_FILTER_ALLFILES             N_("<All>")
+#define RID_STR_NOMODULE                    N_("< No Module >")
+#define RID_STR_WRONGPASSWORD               N_("Incorrect Password")
+#define RID_STR_NOLIBINSTORAGE              N_("The file does not contain any BASIC libraries")
+#define RID_STR_BADSBXNAME                  N_("Invalid Name")
+#define RID_STR_LIBNAMETOLONG               N_("A library name can have up to 30 characters.")
+#define RID_STR_ERRORCHOOSEMACRO            N_("Macros from other documents are not accessible.")
+#define RID_STR_LIBISREADONLY               N_("This library is read-only.")
+#define RID_STR_REPLACELIB                  N_("'XX' cannot be replaced.")
+#define RID_STR_IMPORTNOTPOSSIBLE           N_("'XX' cannot be added.")
+#define RID_STR_NOIMPORT                    N_("'XX' was not added.")
+#define RID_STR_ENTERPASSWORD               N_("Enter password for 'XX'")
+#define RID_STR_SBXNAMEALLREADYUSED         N_("Name already exists")
+#define RID_STR_SIGNED                      N_("(Signed)")
+#define RID_STR_SBXNAMEALLREADYUSED2        N_("Object with same name already exists")
+#define RID_STR_CANNOTRUNMACRO              N_("For security reasons, you cannot run this macro.\n\nFor more information, check the security settings.")
+#define RID_STR_SEARCHNOTFOUND              N_("Search key not found")
+#define RID_STR_SEARCHFROMSTART             N_("Search to last module complete. Continue at first module?")
+#define RID_STR_SEARCHREPLACES              N_("Search key replaced XX times")
+#define RID_STR_COULDNTREAD                 N_("The file could not be read")
+#define RID_STR_COULDNTWRITE                N_("The file could not be saved")
+#define RID_STR_CANNOTCHANGENAMESTDLIB      N_("The name of the default library cannot be changed.")
+#define RID_STR_GENERATESOURCE              N_("Generating source")
+#define RID_STR_FILENAME                    N_("File name:")
+#define RID_STR_APPENDLIBS                  N_("Import Libraries")
+#define RID_STR_QUERYDELMACRO               N_("Do you want to delete the macro XX?")
+#define RID_STR_QUERYDELDIALOG              N_("Do you want to delete the XX dialog?")
+#define RID_STR_QUERYDELLIB                 N_("Do you want to delete the XX library?")
+#define RID_STR_QUERYDELLIBREF              N_("Do you want to delete the reference to the XX library?")
+#define RID_STR_QUERYDELMODULE              N_("Do you want to delete the XX module?")
+#define RID_STR_BASIC                       N_("BASIC")
+// Abbreviation for 'line'
+#define RID_STR_LINE                        N_("Ln")
+// Abbreviation for 'column'
+#define RID_STR_COLUMN                      N_("Col")
+#define RID_STR_CANNOTCLOSE                 N_("The window cannot be closed while BASIC is running.")
+#define RID_STR_REPLACESTDLIB               N_("The default library cannot be replaced.")
+#define RID_STR_REFNOTPOSSIBLE              N_("Reference to 'XX' not possible.")
+#define RID_STR_WATCHNAME                   N_("Watch")
+#define RID_STR_WATCHVARIABLE               N_("Variable")
+#define RID_STR_WATCHVALUE                  N_("Value")
+#define RID_STR_WATCHTYPE                   N_("Type")
+#define RID_STR_STACKNAME                   N_("Call Stack")
+#define RID_STR_STDDIALOGNAME               N_("Dialog")
+#define RID_STR_NEWLIB                      N_("New Library")
+#define RID_STR_NEWMOD                      N_("New Module")
+#define RID_STR_NEWDLG                      N_("New Dialog")
+#define RID_STR_ALL                         N_("All")
+#define RID_STR_PAGE                        N_("Page")
+#define RID_STR_WILLSTOPPRG                 N_("You will have to restart the program after this edit.\nContinue?")
+#define RID_STR_SEARCHALLMODULES            N_("Do you want to replace the text in all active modules?")
+#define RID_STR_REMOVEWATCH                 N_("Watch:")
+#define RID_STR_STACK                       N_("Calls: ")
+#define RID_STR_USERMACROS                  N_("My Macros")
+#define RID_STR_USERDIALOGS                 N_("My Dialogs")
+#define RID_STR_USERMACROSDIALOGS           N_("My Macros & Dialogs")
+#define RID_STR_SHAREMACROS                 N_("%PRODUCTNAME Macros")
+#define RID_STR_SHAREDIALOGS                N_("%PRODUCTNAME Dialogs")
+#define RID_STR_SHAREMACROSDIALOGS          N_("%PRODUCTNAME Macros & Dialogs")
+#define RID_STR_REMOVEWATCHTIP              N_("Remove Watch")
+#define RID_STR_QUERYREPLACEMACRO           N_("Do you want to overwrite the XX macro?")
+#define RID_STR_TRANSLATION_NOTLOCALIZED    N_("<Not localized>")
+#define RID_STR_TRANSLATION_DEFAULT         N_("[Default Language]")
+#define RID_STR_DOCUMENT_OBJECTS            N_("Document Objects")
+#define RID_STR_USERFORMS                   N_("Forms")
+#define RID_STR_NORMAL_MODULES              N_("Modules")
+#define RID_STR_CLASS_MODULES               N_("Class Modules")
+#define RID_STR_DLGIMP_CLASH_RENAME         N_("Rename")
+#define RID_STR_DLGIMP_CLASH_REPLACE        N_("Replace")
+#define RID_STR_DLGIMP_CLASH_TITLE          N_("Dialog Import - Name already used")
+#define RID_STR_DLGIMP_CLASH_TEXT           N_("The library already contains a dialog with the name:\n\n$(ARG1)\n\nRename dialog to keep current dialog or replace existing dialog.\n ")
+#define RID_STR_DLGIMP_MISMATCH_ADD         N_("Add")
+#define RID_STR_DLGIMP_MISMATCH_OMIT        N_("Omit")
+#define RID_STR_DLGIMP_MISMATCH_TITLE       N_("Dialog Import - Language Mismatch")
+#define RID_STR_DLGIMP_MISMATCH_TEXT        N_("The dialog to be imported supports other languages than the target library.\n\nAdd these languages to the library to keep additional language resources provided by the dialog or omit them to stay with the current library languages.\n\nNote: For languages not supported by the dialog the resources of the dialog's default language will be used.\n ")
+#define RID_STR_PRINTDLG_RANGE              N_("Print range")
+#define RID_STR_PRINTDLG_ALLPAGES           N_("All ~Pages")
+#define RID_STR_PRINTDLG_PAGES              N_("Pa~ges")
+#define RID_STR_BTNDEL                      N_("~Delete")
+#define RID_STR_BTNNEW                      N_("~New")
+#define RID_STR_CHOOSE                      N_("Choose")
+#define RID_STR_RUN                         N_("Run")
+#define RID_STR_RECORD                      N_("~Save")
+#define RID_BASICIDE_OBJCAT                 N_("Object Catalog")
+#define RID_STR_TLB_MACROS                  N_("Objects Tree")
+// Property Browser Headline ----------------------------------------------------------------
+#define RID_STR_BRWTITLE_PROPERTIES         N_("Properties: ")
+#define RID_STR_BRWTITLE_NO_PROPERTIES      N_("No Control marked")
+#define RID_STR_BRWTITLE_MULTISELECT        N_("Multiselection")
+#define RID_STR_DEF_LANG                    N_("[Default Language]")
+#define RID_STR_CREATE_LANG                 N_("<Press 'Add' to create language resources>")
+#define RID_STR_EXPORTPACKAGE               N_("Export library as extension")
+#define RID_STR_EXPORTBASIC                 N_("Export as BASIC library")
+#define RID_STR_PACKAGE_BUNDLE              N_("Extension")
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

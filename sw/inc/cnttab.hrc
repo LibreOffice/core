@@ -1,0 +1,44 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SW_INC_CNTTAB_HRC
+#define INCLUDED_SW_INC_CNTTAB_HRC
+
+#define N_(String) (u8##String)
+
+const std::pair<const char*, int> RES_SRCTYPES[] =
+{
+    /* ids from tox.hxx
+    SwTOOElements::Math        = 0x01,
+    SwTOOElements::Chart       = 0x02,
+    TOO_IMAGE       = 0x04,
+    SwTOOElements::Calc        = 0x08,
+    SwTOOElements::DrawImpress= 0x10,
+    SwTOOElements::Other       = 0x80
+    */
+    { N_("%PRODUCTNAME Math") ,  1},
+    { N_("%PRODUCTNAME Chart") , 2},
+    { N_("%PRODUCTNAME Calc") ,  8},
+    { N_("%PRODUCTNAME Draw/%PRODUCTNAME Impress") ,    16},
+    { N_("Other OLE Objects"),   128},
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

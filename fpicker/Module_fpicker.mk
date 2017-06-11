@@ -15,7 +15,7 @@ $(eval $(call gb_Module_add_targets,fpicker,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,fpicker,\
-	AllLangResTarget_fps_office \
+	AllLangMoTarget_fps \
 	UIConfig_fps \
 ))
 

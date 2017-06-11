@@ -19,12 +19,12 @@
 
 #include "datefunc.hxx"
 #include "datefunc.hrc"
+#include "strings.hrc"
 #include <com/sun/star/util/Date.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/rcid.h>
-#include <tools/resmgr.hxx>
+#include <tools/simplerm.hxx>
 #include <algorithm>
 #include "deffuncname.hxx"
 
@@ -63,8 +63,8 @@ const ScaFuncDataBase pFuncDataArr[] =
 
 ScaFuncData::ScaFuncData(const ScaFuncDataBase& rBaseData) :
     aIntName( OUString::createFromAscii( rBaseData.pIntName ) ),
-    nUINameID( rBaseData.nUINameID ),
-    nDescrID( rBaseData.nDescrID ),
+    pUINameID( rBaseData.pUINameID ),
+    pDescrID( rBaseData.pDescrID ),
     nParamCount( rBaseData.nParamCount ),
     eCat( rBaseData.eCat ),
     bDouble( rBaseData.bDouble ),
@@ -129,7 +129,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL date_component_getFactory(
 //  "normal" service implementation
 ScaDateAddIn::ScaDateAddIn() :
     pDefLocales( nullptr ),
-    pResMgr( nullptr ),
     pFuncDataList( nullptr )
 {
 }
@@ -157,20 +156,9 @@ const lang::Locale& ScaDateAddIn::GetLocale( sal_uInt32 nIndex )
     return (nIndex < sizeof( pLang )) ? pDefLocales[ nIndex ] : aFuncLoc;
 }
 
-ResMgr& ScaDateAddIn::GetResMgr()
-{
-    if( !pResMgr )
-    {
-        InitData();     // try to get resource manager
-        if( !pResMgr )
-            throw uno::RuntimeException();
-    }
-    return *pResMgr;
-}
-
 void ScaDateAddIn::InitData()
 {
-    pResMgr.reset(ResMgr::CreateResMgr("date", LanguageTag(aFuncLoc)));
+    aResLocale = Translate::Create("sca", LanguageTag(aFuncLoc));
     pFuncDataList.reset();
 
     pFuncDataList.reset(new ScaFuncDataList);
@@ -182,10 +170,9 @@ void ScaDateAddIn::InitData()
     }
 }
 
-OUString ScaDateAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex )
+OUString ScaDateAddIn::GetFuncDescrStr(const char** pResId, sal_uInt16 nStrIndex)
 {
-    ResStringArray aArr(ScaResId(nResId, GetResMgr()));
-    return aArr.GetString(nStrIndex - 1);
+    return ScaResId(pResId[nStrIndex - 1]);
 }
 
 OUString ScaDateAddIn::getImplementationName_Static()
@@ -252,7 +239,7 @@ OUString SAL_CALL ScaDateAddIn::getDisplayFunctionName( const OUString& aProgram
                                 FindScaFuncData( aProgrammaticName ) );
     if( fDataIt != pFuncDataList->end() )
     {
-        aRet = ScaResId(fDataIt->GetUINameID(), GetResMgr());
+        aRet = ScaResId(fDataIt->GetUINameID());
         if( fDataIt->IsDouble() )
             aRet += "_ADD";
     }
@@ -768,6 +755,11 @@ OUString SAL_CALL ScaDateAddIn::getRot13( const OUString& aSrcString )
         aBuffer[nIndex] = cChar;
     }
     return aBuffer.makeStringAndClear();
+}
+
+OUString ScaDateAddIn::ScaResId(const char* pId)
+{
+    return Translate::get(pId, aResLocale);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
