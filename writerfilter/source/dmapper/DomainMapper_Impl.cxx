@@ -67,6 +67,7 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
+#include <com/sun/star/awt/CharSet.hpp>
 
 #include <oox/mathml/import.hxx>
 #include <rtl/uri.hxx>
@@ -2938,7 +2939,7 @@ if(!bFilled)
 //            {OUString("SKIPIF"),"",                                 FIELD_SKIPIF       },
 //            {OUString("STYLEREF"),"",                               FIELD_STYLEREF     },
             {OUString("SUBJECT"),       "DocInfo.Subject",          FIELD_SUBJECT      },
-//            {OUString("SYMBOL"),"",                                FIELD_SYMBOL       },
+            {OUString("SYMBOL"),"",                                FIELD_SYMBOL       },
             {OUString("TEMPLATE"),      "TemplateName",             FIELD_TEMPLATE},
             {OUString("TIME"),          "DateTime",                 FIELD_TIME         },
             {OUString("TITLE"),         "DocInfo.Title",            FIELD_TITLE        },
@@ -3734,6 +3735,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 case FIELD_TC:
                 case FIELD_EQ:
                 case FIELD_INCLUDEPICTURE:
+                case FIELD_SYMBOL:
                         bCreateField = false;
                         break;
                 case FIELD_FORMCHECKBOX :
@@ -4240,7 +4242,45 @@ void DomainMapper_Impl::CloseFieldCommand()
                         }
                     }
                     break;
-                    case FIELD_SYMBOL       : break;
+                    case FIELD_SYMBOL:
+                    {
+                        uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
+                        OUString sSymbol( sal_Unicode( sFirstParam.startsWithIgnoreAsciiCase("0x") ?  sFirstParam.copy(2).toUInt32(16) : sFirstParam.toUInt32() ) );
+                        OUString sFont;
+                        bool bHasFont = lcl_FindInCommand( pContext->GetCommand(), 'f', sFont);
+                        if ( bHasFont )
+                        {
+                            sFont = sFont.trim();
+                            if (sFont.startsWith("\""))
+                                sFont = sFont.copy(1);
+                            if (sFont.endsWith("\""))
+                                sFont = sFont.copy(0,sFont.getLength()-1);
+                        }
+
+
+
+                        if (xTextAppend.is())
+                        {
+                            uno::Reference< text::XTextCursor > xCrsr = xTextAppend->getText()->createTextCursor();
+                            uno::Reference< text::XText > xText = xTextAppend->getText();
+                            if(xCrsr.is() && xText.is())
+                            {
+                                xCrsr->gotoEnd(false);
+                                xText->insertString(xCrsr, sSymbol, true);
+                                uno::Reference< beans::XPropertySet > xProp( xCrsr, uno::UNO_QUERY );
+                                xProp->setPropertyValue(getPropertyName(PROP_CHAR_FONT_CHAR_SET), uno::makeAny(awt::CharSet::SYMBOL));
+                                if(bHasFont)
+                                {
+                                    uno::Any    aVal = uno::makeAny( sFont );
+                                    xProp->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME), aVal);
+                                    xProp->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME_ASIAN), aVal);
+                                    xProp->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME_COMPLEX), aVal);
+
+                                }
+                            }
+                        }
+                    }
+                    break;
                     case FIELD_TEMPLATE: break;
                     case FIELD_TIME         :
                     {

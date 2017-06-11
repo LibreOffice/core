@@ -688,6 +688,11 @@ DECLARE_OOXMLEXPORT_TEST(testOO39845, "ooo39845-7.odt")
         assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink[1]", "anchor", "Figure4|graphic");
 }
 
+DECLARE_OOXMLEXPORT_TEST( testTdf85161, "tdf85161.docx" )
+{
+    CPPUNIT_ASSERT_EQUAL(OUString("Symbol"), getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(OUString(u'\x5e'),getParagraph(1)->getString());
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
