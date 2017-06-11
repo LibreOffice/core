@@ -97,25 +97,22 @@ namespace slideshow
             }
         }
 
-
         ViewAppletShape::~ViewAppletShape()
         {
             try
             {
                 endApplet();
             }
-            catch (uno::Exception &)
+            catch (const uno::Exception &e)
             {
-                SAL_WARN( "slideshow", comphelper::anyToString( cppu::getCaughtException() ) );
+                SAL_WARN("slideshow", "" << e.Message);
             }
         }
-
 
         const ViewLayerSharedPtr& ViewAppletShape::getViewLayer() const
         {
             return mpViewLayer;
         }
-
 
         void ViewAppletShape::startApplet( const ::basegfx::B2DRectangle& rBounds )
         {
