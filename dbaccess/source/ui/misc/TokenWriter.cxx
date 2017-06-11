@@ -24,7 +24,8 @@
 #include <osl/diagnose.h>
 #include "RtfReader.hxx"
 #include "HtmlReader.hxx"
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
+#include "strings.hxx"
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>

@@ -20,8 +20,6 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_CONDFORMAT_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_CONDFORMAT_HXX
 
-#include "ModuleHelper.hxx"
-
 #include <com/sun/star/report/XReportControlModel.hpp>
 
 #include <vcl/dialog.hxx>
@@ -69,7 +67,6 @@ namespace rptui
     {
         typedef ::std::vector< VclPtr<Condition> >  Conditions;
 
-        OModuleClient             m_aModuleClient;
         VclPtr<vcl::Window>       m_pConditionPlayground;
         Conditions                m_aConditions;
         VclPtr<VclScrolledWindow> m_pScrollWindow;

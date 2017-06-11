@@ -38,7 +38,8 @@
 #include <svtools/sampletext.hxx>
 
 #include <svx/fntctrl.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
+#include <svx/strings.hrc>
 #include <svx/sdasitm.hxx>
 
 // Item set includes

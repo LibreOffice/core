@@ -2844,7 +2844,7 @@ void ScCellShell::ExecuteDataPilotDialog()
     }
     else            // create new table
     {
-        sal_uLong nSrcErrorId = 0;
+        const char* pSrcErrorId = nullptr;
 
         //  select database range or data
         pTabViewShell->GetDBData( true, SC_DB_OLD );
@@ -2921,8 +2921,8 @@ void ScCellShell::ExecuteDataPilotDialog()
                 OUString aName = pTypeDlg->GetSelectedNamedRange();
                 ScSheetSourceDesc aShtDesc(pDoc);
                 aShtDesc.SetRangeName(aName);
-                nSrcErrorId = aShtDesc.CheckSourceRange();
-                if (!nSrcErrorId)
+                pSrcErrorId = aShtDesc.CheckSourceRange();
+                if (!pSrcErrorId)
                 {
                     pNewDPObject.reset(new ScDPObject(pDoc));
                     pNewDPObject->SetSheetDesc(aShtDesc);
@@ -2963,8 +2963,8 @@ void ScCellShell::ExecuteDataPilotDialog()
                     {
                         ScSheetSourceDesc aShtDesc(pDoc);
                         aShtDesc.SetSourceRange(aRange);
-                        nSrcErrorId = aShtDesc.CheckSourceRange();
-                        if (!nSrcErrorId)
+                        pSrcErrorId = aShtDesc.CheckSourceRange();
+                        if (!pSrcErrorId)
                         {
                             pNewDPObject.reset(new ScDPObject(pDoc));
                             pNewDPObject->SetSheetDesc( aShtDesc );
@@ -2980,10 +2980,10 @@ void ScCellShell::ExecuteDataPilotDialog()
             }
         }
 
-        if (nSrcErrorId)
+        if (pSrcErrorId)
         {
             // Error occurred during data creation.  Launch an error and bail out.
-            ScopedVclPtrInstance< InfoBox > aBox(pTabViewShell->GetDialogParent(), ScGlobal::GetRscString(nSrcErrorId));
+            ScopedVclPtrInstance< InfoBox > aBox(pTabViewShell->GetDialogParent(), ScGlobal::GetRscString(pSrcErrorId));
             aBox->Execute();
             return;
         }

@@ -30,7 +30,8 @@
 #include <svx/dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 
-#include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
+#include <svx/strings.hrc>
 #include "bitmaps.hlst"
 #include <svx/fontwork.hxx>
 #include <editeng/outlobj.hxx>

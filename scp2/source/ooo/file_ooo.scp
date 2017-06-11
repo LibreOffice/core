@@ -27,8 +27,6 @@
 
 #include "macros.inc"
 
-STD_RES_FILE( gid_File_Res_Eps, eps )
-
 #if defined WITH_HELP
 File gid_File_Help_Common_Zip
     Dir = FILELIST_DIR;
@@ -204,6 +202,42 @@ UI_FILELIST_ALL_LANG(swriter, modules/swriter)
 UI_FILELIST_ALL_LANG(uui, uui)
 UI_FILELIST_ALL_LANG(vcl, vcl)
 UI_FILELIST_ALL_LANG(xmlsec, xmlsec)
+
+MO_FILELIST_ALL_LANG(acc, acc)
+MO_FILELIST_ALL_LANG(avmedia, avmedia)
+#ifndef DISABLE_SCRIPTING
+MO_FILELIST_ALL_LANG(basctl, basctl)
+#endif
+MO_FILELIST_ALL_LANG(chart, chart)
+MO_FILELIST_ALL_LANG(cnr, cn)
+MO_FILELIST_ALL_LANG(cui, cui)
+MO_FILELIST_ALL_LANG(dba, db)
+MO_FILELIST_ALL_LANG(dbw, dbw)
+MO_FILELIST_ALL_LANG(dkt, dkt)
+MO_FILELIST_ALL_LANG(editeng, editeng)
+MO_FILELIST_ALL_LANG(flt, flt)
+MO_FILELIST_ALL_LANG(for, for)
+MO_FILELIST_ALL_LANG(fps, fps)
+MO_FILELIST_ALL_LANG(frm, frm)
+MO_FILELIST_ALL_LANG(fwk, fwk)
+MO_FILELIST_ALL_LANG(pcr, pcr)
+MO_FILELIST_ALL_LANG(rpt, rpt)
+MO_FILELIST_ALL_LANG(sb, sb)
+MO_FILELIST_ALL_LANG(sc, sc)
+MO_FILELIST_ALL_LANG(sca, sca)
+MO_FILELIST_ALL_LANG(scc, scc)
+MO_FILELIST_ALL_LANG(sd, sd)
+MO_FILELIST_ALL_LANG(sfx, sfx)
+MO_FILELIST_ALL_LANG(sm, sm)
+MO_FILELIST_ALL_LANG(svl, svl)
+MO_FILELIST_ALL_LANG(svt, svt)
+MO_FILELIST_ALL_LANG(svx, svx)
+MO_FILELIST_ALL_LANG(sw, sw)
+MO_FILELIST_ALL_LANG(uui, uui)
+MO_FILELIST_ALL_LANG(vcl, vcl)
+MO_FILELIST_ALL_LANG(wiz, wiz)
+MO_FILELIST_ALL_LANG(wpt, wpt)
+MO_FILELIST_ALL_LANG(xsc, xsc)
 
 #if defined UNX && ! defined MACOSX
 

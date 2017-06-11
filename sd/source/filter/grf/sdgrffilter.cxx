@@ -124,42 +124,42 @@ SdGRFFilter::~SdGRFFilter()
 
 void SdGRFFilter::HandleGraphicFilterError( ErrCode nFilterError, sal_uLong nStreamError )
 {
-    sal_uInt16 nId;
+    const char* pId;
 
     switch( nFilterError )
     {
         case ERRCODE_GRFILTER_OPENERROR:
-            nId = STR_IMPORT_GRFILTER_OPENERROR;
+            pId = STR_IMPORT_GRFILTER_OPENERROR;
             break;
         case ERRCODE_GRFILTER_IOERROR:
-            nId = STR_IMPORT_GRFILTER_IOERROR;
+            pId = STR_IMPORT_GRFILTER_IOERROR;
             break;
         case ERRCODE_GRFILTER_FORMATERROR:
-            nId = STR_IMPORT_GRFILTER_FORMATERROR;
+            pId = STR_IMPORT_GRFILTER_FORMATERROR;
             break;
         case ERRCODE_GRFILTER_VERSIONERROR:
-            nId = STR_IMPORT_GRFILTER_VERSIONERROR;
+            pId = STR_IMPORT_GRFILTER_VERSIONERROR;
             break;
         case ERRCODE_GRFILTER_TOOBIG:
-            nId = STR_IMPORT_GRFILTER_TOOBIG;
+            pId = STR_IMPORT_GRFILTER_TOOBIG;
             break;
         case 0 :
-            nId = 0;
+            pId = nullptr;
             break;
 
         default:
         case ERRCODE_GRFILTER_FILTERERROR:
-            nId = STR_IMPORT_GRFILTER_FILTERERROR;
+            pId = STR_IMPORT_GRFILTER_FILTERERROR;
             break;
     }
 
     if( ERRCODE_NONE != nStreamError )
         ErrorHandler::HandleError( nStreamError );
-    else if( STR_IMPORT_GRFILTER_IOERROR == nId )
+    else if (pId && strcmp(pId, STR_IMPORT_GRFILTER_IOERROR) == 0)
         ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
     else
     {
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, SdResId(nId));
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, SdResId(pId));
         aErrorBox->Execute();
     }
 }

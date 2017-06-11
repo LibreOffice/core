@@ -30,6 +30,7 @@
 #include <memory>
 #include "analysishelper.hxx"
 #include "analysis.hrc"
+#include "strings.hrc"
 #include "deffuncname.hxx"
 
 using namespace                 ::com::sun::star;
@@ -1375,8 +1376,8 @@ double GetCoupnum( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
 
 FuncData::FuncData(const FuncDataBase& r) :
     aIntName( OUString::createFromAscii( r.pIntName ) ),
-    nUINameID( r.nUINameID ),
-    nDescrID( r.nDescrID ),
+    pUINameID( r.pUINameID ),
+    pDescrID( r.pDescrID ),
     bDouble( r.bDouble ),
     bWithOpt( r.bWithOpt ),
     nParam( r.nNumOfParams ),
@@ -1409,10 +1410,6 @@ void InitFuncDataList(FuncDataList& rList)
 {
     for(const auto & rFuncData : pFuncDatas)
         rList.push_back(FuncData(rFuncData));
-}
-
-AnalysisResId::AnalysisResId( sal_uInt16 nId, ResMgr& rResMgr ) : ResId( nId, rResMgr )
-{
 }
 
 SortedIndividualInt32List::SortedIndividualInt32List()

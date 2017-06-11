@@ -56,7 +56,7 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 
-#include "doc.hrc"
+#include "sfx2/strings.hrc"
 #include "bitmaps.hlst"
 
 const char TM_SETTING_MANAGER[] = "TemplateManager";

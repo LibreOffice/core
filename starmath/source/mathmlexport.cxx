@@ -68,6 +68,7 @@
 #include "mathmlexport.hxx"
 #include "register.hxx"
 #include <starmath.hrc>
+#include <strings.hrc>
 #include <unomodel.hxx>
 #include <document.hxx>
 #include <utility.hxx>

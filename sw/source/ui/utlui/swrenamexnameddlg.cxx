@@ -20,8 +20,7 @@
 #include <swtypes.hxx>
 #include <globals.hrc>
 
-#include <utlui.hrc>
-#include <../../uibase/utlui/unotools.hrc>
+#include <strings.hrc>
 #include <unoprnms.hxx>
 #include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>

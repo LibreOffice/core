@@ -28,8 +28,8 @@
 #include <tools/diagnose_ex.h>
 #include <svx/unoshape.hxx>
 
-#include "corestrings.hrc"
-#include "core_resource.hrc"
+#include "strings.hxx"
+#include "strings.hrc"
 #include "core_resource.hxx"
 #include "Tools.hxx"
 #include "RptObject.hxx"
@@ -59,7 +59,7 @@ OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext)
 ,m_nZOrder(0)
 ,m_bOpaque(false)
 {
-    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_SHAPE);
+    m_aProps.aComponent.m_sName  = RptResId(RID_STR_SHAPE);
 }
 
 OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext
@@ -73,7 +73,7 @@ OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext
 ,m_bOpaque(false)
 ,m_sServiceName(_sServiceName)
 {
-    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_SHAPE);
+    m_aProps.aComponent.m_sName  = RptResId(RID_STR_SHAPE);
     m_aProps.aComponent.m_xFactory = _xFactory;
     osl_atomic_increment( &m_refCount );
     {
