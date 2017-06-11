@@ -17,11 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "core_resource.hxx"
 #include "linkeddocuments.hxx"
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 #include <unotools/confignode.hxx>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include <comphelper/classids.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -36,11 +37,12 @@
 #include <comphelper/types.hxx>
 #include <vcl/msgbox.hxx>
 #include <ucbhelper/content.hxx>
-#include "dbu_misc.hrc"
+#include "strings.hrc"
+#include "strings.hxx"
 #include <svl/filenotation.hxx>
 #include "browserids.hxx"
 #include <sfx2/new.hxx>
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include <sfx2/app.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbuno.hxx>
@@ -319,7 +321,7 @@ namespace dbaui
             xRet = impl_open( _rLinkName, _xDefinition, _eOpenMode, _rAdditionalArgs );
             if ( !xRet.is() )
             {
-                OUString sMessage = ModuleRes(STR_COULDNOTOPEN_LINKEDDOC);
+                OUString sMessage = DBA_RES(STR_COULDNOTOPEN_LINKEDDOC);
                 sMessage = sMessage.replaceFirst("$file$",_rLinkName);
 
                 css::sdbc::SQLException aSQLException;
@@ -336,11 +338,11 @@ namespace dbaui
             aInfo = dbtools::SQLExceptionInfo(aSQLException);
 
             // more like a hack, insert an empty message
-            OUString sText( ModuleRes( RID_STR_EXTENSION_NOT_PRESENT ) );
+            OUString sText( DBA_RES( RID_STR_EXTENSION_NOT_PRESENT ) );
             sText = sText.replaceFirst("$file$",_rLinkName);
             aInfo.prepend(sText);
 
-            OUString sMessage = ModuleRes(STR_COULDNOTOPEN_LINKEDDOC);
+            OUString sMessage = DBA_RES(STR_COULDNOTOPEN_LINKEDDOC);
             sMessage = sMessage.replaceFirst("$file$",_rLinkName);
             aInfo.prepend(sMessage);
         }
@@ -358,7 +360,7 @@ namespace dbaui
                 // more like a hack, insert an empty message
                 aInfo.prepend(" \n");
 
-                OUString sMessage = ModuleRes(STR_COULDNOTOPEN_LINKEDDOC);
+                OUString sMessage = DBA_RES(STR_COULDNOTOPEN_LINKEDDOC);
                 sMessage = sMessage.replaceFirst("$file$",_rLinkName);
                 aInfo.prepend(sMessage);
             }

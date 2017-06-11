@@ -36,12 +36,13 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/fmview.hxx>
 #include <svx/unomodel.hxx>
 #include "codec.hxx"
-#include "gallery.hrc"
+#include "svx/strings.hrc"
 #include "svx/gallery1.hxx"
 #include "svx/galtheme.hxx"
 #include "svx/galmisc.hxx"
@@ -52,19 +53,6 @@
 #include <memory>
 
 using namespace ::com::sun::star;
-
-ResMgr* GetGalleryResMgr()
-{
-    static ResMgr* pGalleryResMgr = nullptr;
-
-    if( !pGalleryResMgr )
-    {
-        pGalleryResMgr = ResMgr::CreateResMgr(
-            "gal", Application::GetSettings().GetUILanguageTag() );
-    }
-
-    return pGalleryResMgr;
-}
 
 BitmapEx GalleryResGetBitmapEx(const OUString &rId)
 {
@@ -371,7 +359,7 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
 
             if( mpFilter )
             {
-                aProgressText = GalResId(RID_SVXSTR_GALLERY_FILTER);
+                aProgressText = SvxResId(RID_SVXSTR_GALLERY_FILTER);
 //              mpFilter->SetUpdatePercentHdl( LINK( this, GalleryProgress, Update ) );     // sj: progress wasn't working up from SO7 at all
 //                                                                                          // so I am removing this. The gallery progress should
 //                                                                                          // be changed to use the XStatusIndicator instead of XProgressMonitor

@@ -29,9 +29,7 @@ namespace dbaui
 
     // OCharsetDisplay
     typedef ::dbtools::OCharsetMap OCharsetDisplay_Base;
-    class OCharsetDisplay
-            :protected OCharsetDisplay_Base
-            ,protected SvxTextEncodingTable
+    class OCharsetDisplay : protected OCharsetDisplay_Base
     {
     protected:
         OUString m_aSystemDisplayName;

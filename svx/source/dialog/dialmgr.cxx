@@ -17,19 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/resmgr.hxx>
+#include <tools/simplerm.hxx>
 #include <svx/dialmgr.hxx>
-#include <svl/solar.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-static ResMgr* pResMgr=nullptr;
-
-ResMgr* DialogsResMgr::GetResMgr()
+const std::locale& SvxResLocale()
 {
-    if (!pResMgr)
-        pResMgr = ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag());
-    return pResMgr;
+    static std::locale loc = Translate::Create("svx", Application::GetSettings().GetUILanguageTag());
+    return loc;
+}
+
+OUString SvxResId(const char* pId)
+{
+    return Translate::get(pId, SvxResLocale());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -81,7 +81,4 @@ $(eval $(call gb_Library_add_exception_objects,fwe,\
     framework/source/services/dispatchhelper \
 ))
 
-# Runtime dependency for unit-tests
-$(eval $(call gb_Library_use_restarget,fwe,fwe))
-
 # vim: set noet sw=4 ts=4:

@@ -22,7 +22,7 @@ include $(SRCDIR)/sw/ooxmlexport_setup.mk
 $(eval $(call gb_Module_Module,sw))
 
 $(eval $(call gb_Module_add_targets,sw,\
-        CustomTarget_generated \
+	CustomTarget_generated \
 	Library_msword \
 	Library_sw \
 	Library_swd \
@@ -30,7 +30,7 @@ $(eval $(call gb_Module_add_targets,sw,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,sw,\
-    AllLangResTarget_sw \
+    AllLangMoTarget_sw \
 	UIConfig_sglobal \
 	UIConfig_sweb \
 	UIConfig_swform \

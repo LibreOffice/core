@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <tools/simplerm.hxx>
 #include <vcl/layout.hxx>
-
-#include "ids.hrc"
+#include "strings.hrc"
 #include "masterpassworddlg.hxx"
 
 // MasterPasswordDialog---------------------------------------------------
@@ -35,17 +35,17 @@ MasterPasswordDialog::MasterPasswordDialog
 (
     vcl::Window*                                pParent,
     css::task::PasswordRequestMode              aDialogMode,
-    ResMgr*                                     pResMgr
+    const std::locale&                          rLocale
 )
     : ModalDialog(pParent, "MasterPasswordDialog", "uui/ui/masterpassworddlg.ui")
     , nDialogMode(aDialogMode)
-    , pResourceMgr(pResMgr)
+    , rResLocale(rLocale)
 {
     get(m_pEDMasterPassword, "password");
     get(m_pOKBtn, "ok");
     if( nDialogMode == css::task::PasswordRequestMode_PASSWORD_REENTER )
     {
-        OUString aErrorMsg( ResId( STR_ERROR_MASTERPASSWORD_WRONG, *pResourceMgr ));
+        OUString aErrorMsg(Translate::get(STR_ERROR_MASTERPASSWORD_WRONG, rResLocale));
         ScopedVclPtrInstance< MessageDialog > aErrorBox(pParent, aErrorMsg);
         aErrorBox->Execute();
     }

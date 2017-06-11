@@ -491,9 +491,9 @@ static const ::sal_Int32 GROUP_IMAGETEMPLATE   =   3;
 static const ::sal_Int32 GROUP_CHECKBOXES      =   4;
 
 
-static void setLabelToControl(CResourceProvider& rResourceProvider, TFileDialogCustomize iCustom, sal_uInt16 nControlId)
+static void setLabelToControl(TFileDialogCustomize iCustom, sal_uInt16 nControlId)
 {
-    OUString aLabel = rResourceProvider.getResString(nControlId);
+    OUString aLabel = CResourceProvider::getResString(nControlId);
     aLabel = SOfficeToWindowsLabel(aLabel);
     iCustom->SetControlLabel(nControlId, reinterpret_cast<PCWSTR>(aLabel.getStr()) );
 }
@@ -577,42 +577,42 @@ void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_I
     {
         nControlId = css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION;
         iCustom->AddCheckButton (nControlId, L"Auto Extension", true);
-        setLabelToControl(m_ResProvider, iCustom, nControlId);
+        setLabelToControl(iCustom, nControlId);
     }
 
     if ((nFeatures & FEATURE_PASSWORD) == FEATURE_PASSWORD)
     {
         nControlId = css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PASSWORD;
         iCustom->AddCheckButton (nControlId, L"Password", false);
-        setLabelToControl(m_ResProvider, iCustom, nControlId);
+        setLabelToControl(iCustom, nControlId);
     }
 
     if ((nFeatures & FEATURE_READONLY) == FEATURE_READONLY)
     {
         nControlId = css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_READONLY;
         iCustom->AddCheckButton (nControlId, L"Readonly", false);
-        setLabelToControl(m_ResProvider, iCustom, nControlId);
+        setLabelToControl(iCustom, nControlId);
     }
 
     if ((nFeatures & FEATURE_FILTEROPTIONS) == FEATURE_FILTEROPTIONS)
     {
         nControlId = css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS;
         iCustom->AddCheckButton (nControlId, L"Filter Options", false);
-        setLabelToControl(m_ResProvider, iCustom, nControlId);
+        setLabelToControl(iCustom, nControlId);
     }
 
     if ((nFeatures & FEATURE_LINK) == FEATURE_LINK)
     {
         nControlId = css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK;
         iCustom->AddCheckButton (nControlId, L"Link", false);
-        setLabelToControl(m_ResProvider, iCustom, nControlId);
+        setLabelToControl(iCustom, nControlId);
     }
 
     if ((nFeatures & FEATURE_SELECTION) == FEATURE_SELECTION)
     {
         nControlId = css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION;
         iCustom->AddCheckButton (nControlId, L"Selection", false);
-        setLabelToControl(m_ResProvider, iCustom, nControlId);
+        setLabelToControl(iCustom, nControlId);
     }
 
     /* can be ignored ... new COM dialog supports preview native now  !
