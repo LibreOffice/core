@@ -64,18 +64,6 @@ struct CurTOXType
     CurTOXType (TOXTypes t) : eType (t), nIndex (0) {};
 };
 
-class SwOLENames
-{
-    ResStringArray aNamesAry;
-public:
-    SwOLENames(const ResId& rResId)
-        : aNamesAry(rResId)
-    {
-    }
-
-    ResStringArray& GetNames() { return aNamesAry;}
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

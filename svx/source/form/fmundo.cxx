@@ -27,7 +27,7 @@
 #include "svx/svditer.hxx"
 #include "fmobj.hxx"
 #include "fmprop.hrc"
-#include "svx/fmresids.hrc"
+#include "svx/strings.hrc"
 #include "svx/fmglob.hxx"
 #include "svx/dialmgr.hxx"
 #include "svx/fmmodel.hxx"

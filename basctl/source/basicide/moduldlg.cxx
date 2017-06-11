@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include "basidesh.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 
 #include "moduldlg.hxx"
@@ -944,7 +944,7 @@ void LibDialog::dispose()
 
 void LibDialog::SetStorageName( const OUString& rName )
 {
-    OUString aName = OUString(IDEResId(RID_STR_FILENAME)) + rName;
+    OUString aName = IDEResId(RID_STR_FILENAME) + rName;
     m_pStorageFrame->set_label(aName);
 }
 

@@ -67,7 +67,7 @@
 #include <helpid.h>
 #include <cmdid.h>
 #include <globals.hrc>
-#include <view.hrc>
+#include <strings.hrc>
 
 #define SwPagePreview
 #include <sfx2/msg.hxx>
