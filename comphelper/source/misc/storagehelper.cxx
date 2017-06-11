@@ -286,7 +286,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromInputStr
             const OUString& aFormat,
             const uno::Reference < io::XInputStream >& xStream,
             const uno::Reference< uno::XComponentContext >& rxContext,
-            bool bRepairStorage, bool bUseBufferedStream )
+            bool bRepairStorage )
 {
     uno::Sequence< beans::PropertyValue > aProps( 1 );
     sal_Int32 nPos = 0;
@@ -298,14 +298,6 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromInputStr
         aProps.realloc(nPos+1);
         aProps[nPos].Name = "RepairPackage";
         aProps[nPos].Value <<= bRepairStorage;
-        ++nPos;
-    }
-
-    if (bUseBufferedStream)
-    {
-        aProps.realloc(nPos+1);
-        aProps[nPos].Name = "UseBufferedStream";
-        aProps[nPos].Value <<= bUseBufferedStream;
         ++nPos;
     }
 
@@ -325,7 +317,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
             const uno::Reference < io::XStream >& xStream,
             sal_Int32 nStorageMode,
             const uno::Reference< uno::XComponentContext >& rxContext,
-            bool bRepairStorage, bool bUseBufferedStream )
+            bool bRepairStorage )
 {
     uno::Sequence< beans::PropertyValue > aProps( 1 );
     sal_Int32 nPos = 0;
@@ -337,14 +329,6 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
         aProps.realloc(nPos+1);
         aProps[nPos].Name = "RepairPackage";
         aProps[nPos].Value <<= bRepairStorage;
-        ++nPos;
-    }
-
-    if (bUseBufferedStream)
-    {
-        aProps.realloc(nPos+1);
-        aProps[nPos].Name = "UseBufferedStream";
-        aProps[nPos].Value <<= bUseBufferedStream;
         ++nPos;
     }
 

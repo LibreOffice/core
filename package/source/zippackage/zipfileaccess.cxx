@@ -183,8 +183,6 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
     uno::Reference< io::XSeekable > xSeekable;
     uno::Sequence<beans::NamedValue> aArgs;
 
-    bool bUseBufferedStream = false;
-
     auto openInputStream = [&]()
     {
         ::ucbhelper::Content aContent(
@@ -222,8 +220,6 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
 
             if (rArg.Name == "URL")
                 rArg.Value >>= aParamURL;
-            else if (rArg.Name == "UseBufferedStream")
-                rArg.Value >>= bUseBufferedStream;
         }
 
         if (aParamURL.isEmpty())
@@ -251,8 +247,6 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
                 m_xContentStream,
                 m_xContext,
                 true );
-
-    m_pZipFile->setUseBufferedStream(bUseBufferedStream);
 }
 
 // XNameAccess

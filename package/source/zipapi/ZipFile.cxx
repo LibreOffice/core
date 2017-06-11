@@ -81,7 +81,6 @@ ZipFile::ZipFile( const rtl::Reference<SotMutexHolder>& aMutexHolder,
 , xStream(xInput)
 , m_xContext ( rxContext )
 , bRecoveryMode( false )
-, mbUseBufferedStream(false)
 {
     if (bInitialise)
     {
@@ -103,7 +102,6 @@ ZipFile::ZipFile( const rtl::Reference<SotMutexHolder>& aMutexHolder,
 , xStream(xInput)
 , m_xContext ( rxContext )
 , bRecoveryMode( bForceRecovery )
-, mbUseBufferedStream(false)
 {
     if (bInitialise)
     {
@@ -122,11 +120,6 @@ ZipFile::ZipFile( const rtl::Reference<SotMutexHolder>& aMutexHolder,
 ZipFile::~ZipFile()
 {
     aEntries.clear();
-}
-
-void ZipFile::setUseBufferedStream( bool b )
-{
-    mbUseBufferedStream = b;
 }
 
 void ZipFile::setInputStream ( const uno::Reference < XInputStream >& xNewStream )
@@ -622,9 +615,6 @@ uno::Reference< XInputStream > ZipFile::createStreamForZipEntry(
 
     uno::Reference<io::XInputStream> xSrcStream = new XUnbufferedStream(
         m_xContext, aMutexHolder, rEntry, xStream, rData, nStreamMode, bIsEncrypted, aMediaType, bRecoveryMode);
-
-    if (!mbUseBufferedStream)
-        return xSrcStream;
 
     uno::Reference<io::XInputStream> xBufStream;
     static const sal_Int32 nThreadingThreshold = 10000;

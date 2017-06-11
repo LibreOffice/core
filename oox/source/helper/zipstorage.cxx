@@ -58,7 +58,7 @@ ZipStorage::ZipStorage( const Reference< XComponentContext >& rxContext, const R
             implementation of relations handling.
          */
         mxStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
-            ZIP_STORAGE_FORMAT_STRING, rxInStream, rxContext, false, true);
+            ZIP_STORAGE_FORMAT_STRING, rxInStream, rxContext, false);
     }
     catch (Exception const& e)
     {
@@ -76,7 +76,7 @@ ZipStorage::ZipStorage( const Reference< XComponentContext >& rxContext, const R
     {
         const sal_Int32 nOpenMode = ElementModes::READWRITE | ElementModes::TRUNCATE;
         mxStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream(
-            OFOPXML_STORAGE_FORMAT_STRING, rxStream, nOpenMode, rxContext, true, true);
+            OFOPXML_STORAGE_FORMAT_STRING, rxStream, nOpenMode, rxContext, true);
     }
     catch (Exception const& e)
     {
