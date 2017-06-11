@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="SortDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Sort</property>
+    <property name="title" translatable="yes" context="sortdialog|SortDialog">Sort</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -97,7 +97,7 @@
               <object class="GtkLabel" id="criteria">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Sort Criteria</property>
+                <property name="label" translatable="yes" context="sortdialog|criteria">Sort Criteria</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -110,7 +110,7 @@
               <object class="GtkLabel" id="options">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Options</property>
+                <property name="label" translatable="yes" context="sortdialog|options">Options</property>
               </object>
               <packing>
                 <property name="position">1</property>

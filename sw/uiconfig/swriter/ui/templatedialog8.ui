@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="TemplateDialog8">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Page Style</property>
+    <property name="title" translatable="yes" context="templatedialog8|TemplateDialog8">Page Style</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -113,7 +113,7 @@
               <object class="GtkLabel" id="organizer">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Organizer</property>
+                <property name="label" translatable="yes" context="templatedialog8|organizer">Organizer</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -126,7 +126,7 @@
               <object class="GtkLabel" id="page">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Page</property>
+                <property name="label" translatable="yes" context="templatedialog8|page">Page</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -140,7 +140,7 @@
               <object class="GtkLabel" id="area">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Area</property>
+                <property name="label" translatable="yes" context="templatedialog8|area">Area</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -154,7 +154,7 @@
               <object class="GtkLabel" id="transparence">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Transparency</property>
+                <property name="label" translatable="yes" context="templatedialog8|transparence">Transparency</property>
               </object>
               <packing>
                 <property name="position">3</property>
@@ -168,7 +168,7 @@
               <object class="GtkLabel" id="header">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Header</property>
+                <property name="label" translatable="yes" context="templatedialog8|header">Header</property>
               </object>
               <packing>
                 <property name="position">4</property>
@@ -182,7 +182,7 @@
               <object class="GtkLabel" id="footer">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Footer</property>
+                <property name="label" translatable="yes" context="templatedialog8|footer">Footer</property>
               </object>
               <packing>
                 <property name="position">5</property>
@@ -196,7 +196,7 @@
               <object class="GtkLabel" id="borders">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Borders</property>
+                <property name="label" translatable="yes" context="templatedialog8|borders">Borders</property>
               </object>
               <packing>
                 <property name="position">6</property>
@@ -210,7 +210,7 @@
               <object class="GtkLabel" id="columns">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Columns</property>
+                <property name="label" translatable="yes" context="templatedialog8|columns">Columns</property>
               </object>
               <packing>
                 <property name="position">7</property>
@@ -224,7 +224,7 @@
               <object class="GtkLabel" id="footnotes">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Footnote</property>
+                <property name="label" translatable="yes" context="templatedialog8|footnotes">Footnote</property>
               </object>
               <packing>
                 <property name="position">8</property>
@@ -238,7 +238,7 @@
               <object class="GtkLabel" id="textgrid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Text Grid</property>
+                <property name="label" translatable="yes" context="templatedialog8|textgrid">Text Grid</property>
               </object>
               <packing>
                 <property name="position">9</property>

@@ -23,7 +23,7 @@
 #include "view/SlsTheme.hxx"
 #include "sdpage.hxx"
 #include "sdresid.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 
 #include <vcl/settings.hxx>
 #include <vcl/help.hxx>

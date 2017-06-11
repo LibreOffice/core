@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="CalloutDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Position and Size</property>
+    <property name="title" translatable="yes" context="calloutdialog|CalloutDialog">Position and Size</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -97,7 +97,7 @@
               <object class="GtkLabel" id="RID_SVXPAGE_POSITION_SIZE">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Position and Size</property>
+                <property name="label" translatable="yes" context="calloutdialog|RID_SVXPAGE_POSITION_SIZE">Position and Size</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -110,7 +110,7 @@
               <object class="GtkLabel" id="RID_SVXPAGE_SWPOSSIZE">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Position and Size</property>
+                <property name="label" translatable="yes" context="calloutdialog|RID_SVXPAGE_SWPOSSIZE">Position and Size</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -124,7 +124,7 @@
               <object class="GtkLabel" id="RID_SVXPAGE_CAPTION">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Callout</property>
+                <property name="label" translatable="yes" context="calloutdialog|RID_SVXPAGE_CAPTION">Callout</property>
               </object>
               <packing>
                 <property name="position">2</property>

@@ -28,7 +28,7 @@
 #include <sfx2/viewfrm.hxx>
 
 #include "app.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "strings.hxx"
 #include "fudraw.hxx"
 #include "View.hxx"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.0 on Wed Jan 29 10:50:29 2014 -->
-<interface>
+<interface domain="cui">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkGrid" id="AcorReplacePage">
@@ -35,7 +35,7 @@
         </child>
         <child>
           <object class="GtkButton" id="replace">
-            <property name="label" translatable="yes">_Replace</property>
+            <property name="label" translatable="yes" context="acorreplacepage|replace">_Replace</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="no_show_all">True</property>
@@ -118,7 +118,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Repla_ce</property>
+        <property name="label" translatable="yes" context="acorreplacepage|label1">Repla_ce</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">origtext</property>
       </object>
@@ -138,7 +138,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">_With:</property>
+            <property name="label" translatable="yes" context="acorreplacepage|label2">_With:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">newtext</property>
           </object>
@@ -151,7 +151,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="textonly">
-            <property name="label" translatable="yes">_Text only</property>
+            <property name="label" translatable="yes" context="acorreplacepage|textonly">_Text only</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>

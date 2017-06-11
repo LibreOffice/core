@@ -18,7 +18,7 @@
  */
 
 #include <vcl/errinf.hxx>
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <sot/storage.hxx>

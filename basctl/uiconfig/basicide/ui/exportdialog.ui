@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="basctl">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="ExportDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Export Basic library</property>
+    <property name="title" translatable="yes" context="exportdialog|ExportDialog">Export Basic library</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -80,7 +80,7 @@
             <property name="row_spacing">6</property>
             <child>
               <object class="GtkRadioButton" id="extension">
-                <property name="label" translatable="yes">Export as _extension</property>
+                <property name="label" translatable="yes" context="exportdialog|extension">Export as _extension</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -97,7 +97,7 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="basic">
-                <property name="label" translatable="yes">Export as BASIC library</property>
+                <property name="label" translatable="yes" context="exportdialog|basic">Export as BASIC library</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>

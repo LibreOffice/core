@@ -32,7 +32,6 @@
 
 #include "AccObject.hxx"
 #include "AccEventListener.hxx"
-#include "AccResource.hxx"
 
 #if defined __clang__
 #pragma clang diagnostic push

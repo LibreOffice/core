@@ -22,8 +22,6 @@
 #include <vcl/metaact.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/imagerepository.hxx>
-#include <tools/rcid.h>
-#include <tools/resid.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/fract.hxx>
 #include <unotools/ucbstreamhelper.hxx>

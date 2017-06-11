@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -26,7 +26,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">1</property>
-            <property name="label" translatable="yes">Hori_zontal pitch:</property>
+            <property name="label" translatable="yes" context="labelformatpage|label1">Hori_zontal pitch:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">hori:0.00cm</property>
           </object>
@@ -40,7 +40,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Vertical pitch:</property>
+            <property name="label" translatable="yes" context="labelformatpage|label2">_Vertical pitch:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">vert:0.00cm</property>
           </object>
@@ -54,7 +54,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Width:</property>
+            <property name="label" translatable="yes" context="labelformatpage|label3">_Width:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">width:0.00cm</property>
           </object>
@@ -68,7 +68,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Height:</property>
+            <property name="label" translatable="yes" context="labelformatpage|label4">_Height:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">height:0.00cm</property>
           </object>
@@ -82,7 +82,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Left margin:</property>
+            <property name="label" translatable="yes" context="labelformatpage|label5">_Left margin:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">left:0.00cm</property>
           </object>
@@ -96,7 +96,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Top margin:</property>
+            <property name="label" translatable="yes" context="labelformatpage|label6">_Top margin:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">top:0.00cm</property>
           </object>
@@ -110,7 +110,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Columns:</property>
+            <property name="label" translatable="yes" context="labelformatpage|label7">_Columns:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">cols</property>
           </object>
@@ -124,7 +124,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">1</property>
-            <property name="label" translatable="yes">R_ows:</property>
+            <property name="label" translatable="yes" context="labelformatpage|label8">R_ows:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">rows</property>
           </object>
@@ -138,7 +138,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">1</property>
-            <property name="label" translatable="yes">P_age width:</property>
+            <property name="label" translatable="yes" context="labelformatpage|label9">P_age width:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">pagewidth:0.00cm</property>
           </object>
@@ -152,7 +152,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">1</property>
-            <property name="label" translatable="yes">Pa_ge height:</property>
+            <property name="label" translatable="yes" context="labelformatpage|label10">Pa_ge height:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">pageheight:0.00cm</property>
           </object>
@@ -163,7 +163,7 @@
         </child>
         <child>
           <object class="GtkButton" id="save">
-            <property name="label" translatable="yes">_Save...</property>
+            <property name="label" translatable="yes" context="labelformatpage|save">_Save...</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>

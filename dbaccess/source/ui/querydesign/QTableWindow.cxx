@@ -19,7 +19,7 @@
 
 #include "QTableWindow.hxx"
 #include "QueryTableView.hxx"
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include <osl/diagnose.h>
 #include "dbaccess_helpid.hrc"
 #include "QueryDesignView.hxx"
@@ -27,7 +27,8 @@
 #include "querycontroller.hxx"
 #include <vcl/image.hxx>
 #include "TableWindowListBox.hxx"
-#include "dbu_qry.hrc"
+#include "strings.hrc"
+#include "strings.hxx"
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>

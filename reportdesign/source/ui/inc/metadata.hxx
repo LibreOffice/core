@@ -19,11 +19,10 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_METADATA_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_METADATA_HXX
 
-#include "ModuleHelper.hxx"
-
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
 #include <o3tl/typed_flags_set.hxx>
+#include <vector>
 
     //= UI flags (for all browseable properties)
 enum class PropUIFlags {
@@ -47,7 +46,6 @@ namespace rptui
     //= OPropertyInfoService
 
     class OPropertyInfoService
-        :public OModuleClient
     {
         OPropertyInfoService(const OPropertyInfoService&) = delete;
         void operator =(const OPropertyInfoService&) = delete;

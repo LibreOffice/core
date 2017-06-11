@@ -700,7 +700,7 @@ static bool lcl_HFPresentation
                 nTmp = rLRItem.GetRight();
                 nRightMargin = nTmp < 0 ? 0 : sal_uInt16(nTmp);
 
-                aText = EditResId::GetString(RID_SVXITEMS_LRSPACE_LEFT);
+                aText = EditResId(RID_SVXITEMS_LRSPACE_LEFT);
                 if ( 100 != nPropLeftMargin )
                 {
                     aText = aText + unicode::formatPercent(nPropLeftMargin,
@@ -710,12 +710,12 @@ static bool lcl_HFPresentation
                 {
                     aText += GetMetricText( (long)nLeftMargin,
                                            eCoreMetric, ePresentationMetric, pIntl );
-                    aText += " " + EditResId::GetString(GetMetricId(ePresentationMetric));
+                    aText += " " + EditResId(GetMetricId(ePresentationMetric));
                 }
                 aText += cpDelim;
 
                 // We don't have a nPropFirstLineOfst
-                aText += EditResId::GetString(RID_SVXITEMS_LRSPACE_RIGHT);
+                aText += EditResId(RID_SVXITEMS_LRSPACE_RIGHT);
                 if ( 100 != nPropRightMargin )
                 {
                     aText = aText + unicode::formatPercent(nPropLeftMargin,
@@ -725,7 +725,7 @@ static bool lcl_HFPresentation
                 {
                     aText += GetMetricText( (long)nRightMargin,
                                             eCoreMetric, ePresentationMetric, pIntl );
-                    aText += " " + EditResId::GetString(GetMetricId(ePresentationMetric));
+                    aText += " " + EditResId(GetMetricId(ePresentationMetric));
                 }
             }
             break;

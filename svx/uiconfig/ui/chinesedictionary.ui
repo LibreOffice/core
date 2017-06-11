@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="svx">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="ChineseDictionaryDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Edit Dictionary</property>
+    <property name="title" translatable="yes" context="chinesedictionary|ChineseDictionaryDialog">Edit Dictionary</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -84,7 +84,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkRadioButton" id="tradtosimple">
-                    <property name="label" translatable="yes">_Traditional Chinese to simplified Chinese</property>
+                    <property name="label" translatable="yes" context="chinesedictionary|tradtosimple">_Traditional Chinese to simplified Chinese</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -101,7 +101,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="simpletotrad">
-                    <property name="label" translatable="yes">_Simplified Chinese to traditional Chinese</property>
+                    <property name="label" translatable="yes" context="chinesedictionary|simpletotrad">_Simplified Chinese to traditional Chinese</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -117,7 +117,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="reverse">
-                    <property name="label" translatable="yes">Reverse mapping</property>
+                    <property name="label" translatable="yes" context="chinesedictionary|reverse">Reverse mapping</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -148,7 +148,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Term</property>
+                    <property name="label" translatable="yes" context="chinesedictionary|termft">Term</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -172,7 +172,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Mapping</property>
+                    <property name="label" translatable="yes" context="chinesedictionary|mappingft">Mapping</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -196,7 +196,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Property</property>
+                    <property name="label" translatable="yes" context="chinesedictionary|propertyft">Property</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -209,21 +209,21 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <items>
-                      <item translatable="yes">Other</item>
-                      <item translatable="yes">Foreign</item>
-                      <item translatable="yes">First name</item>
-                      <item translatable="yes">Last name</item>
-                      <item translatable="yes">Title</item>
-                      <item translatable="yes">Status</item>
-                      <item translatable="yes">Place name</item>
-                      <item translatable="yes">Business</item>
-                      <item translatable="yes">Adjective</item>
-                      <item translatable="yes">Idiom</item>
-                      <item translatable="yes">Abbreviation</item>
-                      <item translatable="yes">Numerical</item>
-                      <item translatable="yes">Noun</item>
-                      <item translatable="yes">Verb</item>
-                      <item translatable="yes">Brand name</item>
+                      <item translatable="yes" context="chinesedictionary|property">Other</item>
+                      <item translatable="yes" context="chinesedictionary|property">Foreign</item>
+                      <item translatable="yes" context="chinesedictionary|property">First name</item>
+                      <item translatable="yes" context="chinesedictionary|property">Last name</item>
+                      <item translatable="yes" context="chinesedictionary|property">Title</item>
+                      <item translatable="yes" context="chinesedictionary|property">Status</item>
+                      <item translatable="yes" context="chinesedictionary|property">Place name</item>
+                      <item translatable="yes" context="chinesedictionary|property">Business</item>
+                      <item translatable="yes" context="chinesedictionary|property">Adjective</item>
+                      <item translatable="yes" context="chinesedictionary|property">Idiom</item>
+                      <item translatable="yes" context="chinesedictionary|property">Abbreviation</item>
+                      <item translatable="yes" context="chinesedictionary|property">Numerical</item>
+                      <item translatable="yes" context="chinesedictionary|property">Noun</item>
+                      <item translatable="yes" context="chinesedictionary|property">Verb</item>
+                      <item translatable="yes" context="chinesedictionary|property">Brand name</item>
                     </items>
                   </object>
                   <packing>
@@ -254,7 +254,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="modify">
-                        <property name="label" translatable="yes">_Modify</property>
+                        <property name="label" translatable="yes" context="chinesedictionary|modify">_Modify</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>

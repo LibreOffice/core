@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="dba">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="SpecialSettingsPage">
     <property name="visible">True</property>
@@ -15,7 +15,7 @@
         <property name="row_spacing">6</property>
         <child>
           <object class="GtkCheckButton" id="usesql92">
-            <property name="label" translatable="yes">Use SQL92 naming constraints</property>
+            <property name="label" translatable="yes" context="specialsettingspage|usesql92">Use SQL92 naming constraints</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="no_show_all">True</property>
@@ -32,7 +32,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="append">
-            <property name="label" translatable="yes">Append the table alias name on SELECT statements</property>
+            <property name="label" translatable="yes" context="specialsettingspage|append">Append the table alias name on SELECT statements</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="no_show_all">True</property>
@@ -49,7 +49,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="useas">
-            <property name="label" translatable="yes">Use keyword AS before table alias names</property>
+            <property name="label" translatable="yes" context="specialsettingspage|useas">Use keyword AS before table alias names</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="no_show_all">True</property>
@@ -66,7 +66,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="useoj">
-            <property name="label" translatable="yes">Use Outer Join syntax '{oj }'</property>
+            <property name="label" translatable="yes" context="specialsettingspage|useoj">Use Outer Join syntax '{oj }'</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="no_show_all">True</property>
@@ -83,7 +83,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="ignoreprivs">
-            <property name="label" translatable="yes">Ignore the privileges from the database driver</property>
+            <property name="label" translatable="yes" context="specialsettingspage|ignoreprivs">Ignore the privileges from the database driver</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="no_show_all">True</property>
@@ -100,7 +100,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="replaceparams">
-            <property name="label" translatable="yes">Replace named parameters with '?'</property>
+            <property name="label" translatable="yes" context="specialsettingspage|replaceparams">Replace named parameters with '?'</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="no_show_all">True</property>
@@ -117,7 +117,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="displayver">
-            <property name="label" translatable="yes">Display version columns (when available)</property>
+            <property name="label" translatable="yes" context="specialsettingspage|displayver">Display version columns (when available)</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="no_show_all">True</property>
@@ -134,7 +134,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="usecatalogname">
-            <property name="label" translatable="yes">Use catalog name in SELECT statements</property>
+            <property name="label" translatable="yes" context="specialsettingspage|usecatalogname">Use catalog name in SELECT statements</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="no_show_all">True</property>
@@ -151,7 +151,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="useschemaname">
-            <property name="label" translatable="yes">Use schema name in SELECT statements</property>
+            <property name="label" translatable="yes" context="specialsettingspage|useschemaname">Use schema name in SELECT statements</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="no_show_all">True</property>
@@ -168,7 +168,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="createindex">
-            <property name="label" translatable="yes">Create index with ASC or DESC statement</property>
+            <property name="label" translatable="yes" context="specialsettingspage|createindex">Create index with ASC or DESC statement</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="no_show_all">True</property>
@@ -185,7 +185,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="eol">
-            <property name="label" translatable="yes">End text lines with CR+LF</property>
+            <property name="label" translatable="yes" context="specialsettingspage|eol">End text lines with CR+LF</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="no_show_all">True</property>
@@ -202,7 +202,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="ignorecurrency">
-            <property name="label" translatable="yes">Ignore currency field information</property>
+            <property name="label" translatable="yes" context="specialsettingspage|ignorecurrency">Ignore currency field information</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="no_show_all">True</property>
@@ -219,7 +219,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="inputchecks">
-            <property name="label" translatable="yes">Form data input checks for required fields</property>
+            <property name="label" translatable="yes" context="specialsettingspage|inputchecks">Form data input checks for required fields</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="no_show_all">True</property>
@@ -236,7 +236,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="useodbcliterals">
-            <property name="label" translatable="yes">Use ODBC conformant date/time literals</property>
+            <property name="label" translatable="yes" context="specialsettingspage|useodbcliterals">Use ODBC conformant date/time literals</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="no_show_all">True</property>
@@ -253,7 +253,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="primarykeys">
-            <property name="label" translatable="yes">Supports primary keys</property>
+            <property name="label" translatable="yes" context="specialsettingspage|primarykeys">Supports primary keys</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="no_show_all">True</property>
@@ -270,7 +270,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="resulttype">
-            <property name="label" translatable="yes">Respect the result set type from the database driver</property>
+            <property name="label" translatable="yes" context="specialsettingspage|resulttype">Respect the result set type from the database driver</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="no_show_all">True</property>
@@ -296,7 +296,7 @@
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
                 <property name="xalign">1</property>
-                <property name="label" translatable="yes">Comparison of Boolean values:</property>
+                <property name="label" translatable="yes" context="specialsettingspage|comparisonft">Comparison of Boolean values:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">comparison</property>
               </object>
@@ -312,10 +312,10 @@
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
                 <items>
-                  <item translatable="yes">Default</item>
-                  <item translatable="yes">SQL</item>
-                  <item translatable="yes">Mixed</item>
-                  <item translatable="yes">MS Access</item>
+                  <item translatable="yes" context="specialsettingspage|comparison">Default</item>
+                  <item translatable="yes" context="specialsettingspage|comparison">SQL</item>
+                  <item translatable="yes" context="specialsettingspage|comparison">Mixed</item>
+                  <item translatable="yes" context="specialsettingspage|comparison">MS Access</item>
                 </items>
               </object>
               <packing>
@@ -330,7 +330,7 @@
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
                 <property name="xalign">1</property>
-                <property name="label" translatable="yes">Rows to scan column types:</property>
+                <property name="label" translatable="yes" context="specialsettingspage|rowsft">Rows to scan column types:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">rows</property>
               </object>

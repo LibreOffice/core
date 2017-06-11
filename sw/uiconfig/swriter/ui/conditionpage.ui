@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sw">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkGrid" id="ConditionPage">
@@ -36,7 +36,7 @@
                 <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkCheckButton" id="condstyle">
-                    <property name="label" translatable="yes">_Conditional Style</property>
+                    <property name="label" translatable="yes" context="conditionpage|condstyle">_Conditional Style</property>
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
@@ -60,7 +60,7 @@
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Conte_xt</property>
+                    <property name="label" translatable="yes" context="conditionpage|contextft">Conte_xt</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -75,7 +75,7 @@
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Applied Styles</property>
+                    <property name="label" translatable="yes" context="conditionpage|usedft">Applied Styles</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -89,7 +89,7 @@
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Paragraph Styles</property>
+                    <property name="label" translatable="yes" context="conditionpage|styleft">_Paragraph Styles</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -196,34 +196,34 @@
                         <property name="entry_text_column">0</property>
                         <property name="id_column">1</property>
                         <items>
-                          <item translatable="yes">Table Header</item>
-                          <item translatable="yes">Table</item>
-                          <item translatable="yes">Frame</item>
-                          <item translatable="yes">Section</item>
-                          <item translatable="yes">Footnote</item>
-                          <item translatable="yes">Endnote</item>
-                          <item translatable="yes">Header</item>
-                          <item translatable="yes">Footer</item>
-                          <item translatable="yes"> 1st Outline Level</item>
-                          <item translatable="yes"> 2nd Outline Level</item>
-                          <item translatable="yes"> 3rd Outline Level</item>
-                          <item translatable="yes"> 4th Outline Level</item>
-                          <item translatable="yes"> 5th Outline Level</item>
-                          <item translatable="yes"> 6th Outline Level</item>
-                          <item translatable="yes"> 7th Outline Level</item>
-                          <item translatable="yes"> 8th Outline Level</item>
-                          <item translatable="yes"> 9th Outline Level</item>
-                          <item translatable="yes">10th Outline Level</item>
-                          <item translatable="yes"> 1st Numbering Level</item>
-                          <item translatable="yes"> 2nd Numbering Level</item>
-                          <item translatable="yes"> 3rd Numbering Level</item>
-                          <item translatable="yes"> 4th Numbering Level</item>
-                          <item translatable="yes"> 5th Numbering Level</item>
-                          <item translatable="yes"> 6th Numbering Level</item>
-                          <item translatable="yes"> 7th Numbering Level</item>
-                          <item translatable="yes"> 8th Numbering Level</item>
-                          <item translatable="yes"> 9th Numbering Level</item>
-                          <item translatable="yes">10th Numbering Level</item>
+                          <item translatable="yes" context="conditionpage|filter">Table Header</item>
+                          <item translatable="yes" context="conditionpage|filter">Table</item>
+                          <item translatable="yes" context="conditionpage|filter">Frame</item>
+                          <item translatable="yes" context="conditionpage|filter">Section</item>
+                          <item translatable="yes" context="conditionpage|filter">Footnote</item>
+                          <item translatable="yes" context="conditionpage|filter">Endnote</item>
+                          <item translatable="yes" context="conditionpage|filter">Header</item>
+                          <item translatable="yes" context="conditionpage|filter">Footer</item>
+                          <item translatable="yes" context="conditionpage|filter"> 1st Outline Level</item>
+                          <item translatable="yes" context="conditionpage|filter"> 2nd Outline Level</item>
+                          <item translatable="yes" context="conditionpage|filter"> 3rd Outline Level</item>
+                          <item translatable="yes" context="conditionpage|filter"> 4th Outline Level</item>
+                          <item translatable="yes" context="conditionpage|filter"> 5th Outline Level</item>
+                          <item translatable="yes" context="conditionpage|filter"> 6th Outline Level</item>
+                          <item translatable="yes" context="conditionpage|filter"> 7th Outline Level</item>
+                          <item translatable="yes" context="conditionpage|filter"> 8th Outline Level</item>
+                          <item translatable="yes" context="conditionpage|filter"> 9th Outline Level</item>
+                          <item translatable="yes" context="conditionpage|filter">10th Outline Level</item>
+                          <item translatable="yes" context="conditionpage|filter"> 1st Numbering Level</item>
+                          <item translatable="yes" context="conditionpage|filter"> 2nd Numbering Level</item>
+                          <item translatable="yes" context="conditionpage|filter"> 3rd Numbering Level</item>
+                          <item translatable="yes" context="conditionpage|filter"> 4th Numbering Level</item>
+                          <item translatable="yes" context="conditionpage|filter"> 5th Numbering Level</item>
+                          <item translatable="yes" context="conditionpage|filter"> 6th Numbering Level</item>
+                          <item translatable="yes" context="conditionpage|filter"> 7th Numbering Level</item>
+                          <item translatable="yes" context="conditionpage|filter"> 8th Numbering Level</item>
+                          <item translatable="yes" context="conditionpage|filter"> 9th Numbering Level</item>
+                          <item translatable="yes" context="conditionpage|filter">10th Numbering Level</item>
                         </items>
                       </object>
                       <packing>
@@ -248,7 +248,7 @@
           <object class="GtkLabel" id="label11">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Options</property>
+            <property name="label" translatable="yes" context="conditionpage|label11">Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

@@ -33,7 +33,7 @@
 #include "workwin.hxx"
 #include <sfx2/dockwin.hxx>
 #include <sfx2/app.hxx>
-#include "dialog.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/viewfrm.hxx>

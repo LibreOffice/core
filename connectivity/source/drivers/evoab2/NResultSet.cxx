@@ -22,7 +22,7 @@
 #include "NConnection.hxx"
 #include "NResultSet.hxx"
 #include "propertyids.hxx"
-#include "resource/evoab2_res.hrc"
+#include "strings.hrc"
 #include "TSortIndex.hxx"
 #include <algorithm>
 

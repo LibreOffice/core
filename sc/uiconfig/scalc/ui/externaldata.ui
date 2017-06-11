@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -13,7 +13,7 @@
   <object class="GtkDialog" id="ExternalDataDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">External Data</property>
+    <property name="title" translatable="yes" context="externaldata|ExternalDataDialog">External Data</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -115,7 +115,7 @@
                               <object class="svtlo-SvtURLBox" id="url">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="tooltip_text" translatable="yes">Enter the URL of the source document in the local file system or Internet here.</property>
+                                <property name="tooltip_text" translatable="yes" context="externaldata|url|tooltip_text">Enter the URL of the source document in the local file system or Internet here.</property>
                                 <property name="hexpand">True</property>
                                 <property name="has_entry">True</property>
                                 <property name="max_width_chars">48</property>
@@ -133,7 +133,7 @@
                             </child>
                             <child>
                               <object class="GtkButton" id="browse">
-                                <property name="label" translatable="yes">_Browse...</property>
+                                <property name="label" translatable="yes" context="externaldata|browse">_Browse...</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -160,7 +160,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">URL of _External Data Source</property>
+                    <property name="label" translatable="yes" context="externaldata|label1">URL of _External Data Source</property>
                     <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -230,7 +230,7 @@
                             <property name="spacing">12</property>
                             <child>
                               <object class="GtkCheckButton" id="reload">
-                                <property name="label" translatable="yes">_Update every:</property>
+                                <property name="label" translatable="yes" context="externaldata|reload">_Update every:</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -272,7 +272,7 @@
                                   <object class="GtkLabel" id="secondsft">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">_seconds</property>
+                                    <property name="label" translatable="yes" context="externaldata|secondsft">_seconds</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
@@ -304,7 +304,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0.47999998927116394</property>
-                    <property name="label" translatable="yes">_Available Tables/Ranges</property>
+                    <property name="label" translatable="yes" context="externaldata|label2">_Available Tables/Ranges</property>
                     <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>

@@ -1587,8 +1587,8 @@ void ScDBDocFunc::RefreshPivotTables(ScDPObject* pDPObj, bool bApi)
         return;
 
     std::set<ScDPObject*> aRefs;
-    sal_uLong nErrId = pDPs->ReloadCache(pDPObj, aRefs);
-    if (nErrId)
+    const char* pErrId = pDPs->ReloadCache(pDPObj, aRefs);
+    if (pErrId)
         return;
 
     std::set<ScDPObject*>::iterator it = aRefs.begin(), itEnd = aRefs.end();

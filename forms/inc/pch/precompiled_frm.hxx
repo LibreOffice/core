@@ -229,7 +229,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/functional.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/signaturestate.hxx>
@@ -257,7 +256,6 @@
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/ref.hxx>
-#include <tools/resid.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/time.hxx>

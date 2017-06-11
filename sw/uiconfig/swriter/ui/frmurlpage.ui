@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sw">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkBox" id="FrameURLPage">
     <property name="visible">True</property>
@@ -63,7 +63,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_URL:</property>
+                    <property name="label" translatable="yes" context="frmurlpage|url_label">_URL:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">url</property>
                   </object>
@@ -79,7 +79,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Name:</property>
+                    <property name="label" translatable="yes" context="frmurlpage|name_label">_Name:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">name</property>
                   </object>
@@ -95,7 +95,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Frame:</property>
+                    <property name="label" translatable="yes" context="frmurlpage|frame_label">_Frame:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">frame</property>
                   </object>
@@ -113,7 +113,7 @@
                     <property name="layout_style">start</property>
                     <child>
                       <object class="GtkButton" id="search">
-                        <property name="label" translatable="yes">_Browse...</property>
+                        <property name="label" translatable="yes" context="frmurlpage|search">_Browse...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -168,7 +168,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Link to</property>
+            <property name="label" translatable="yes" context="frmurlpage|label1">Link to</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -207,7 +207,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="server">
-                    <property name="label" translatable="yes">_Server-side image map</property>
+                    <property name="label" translatable="yes" context="frmurlpage|server">_Server-side image map</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -225,7 +225,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="client">
-                    <property name="label" translatable="yes">_Client-side image map</property>
+                    <property name="label" translatable="yes" context="frmurlpage|client">_Client-side image map</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -249,7 +249,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Image Map</property>
+            <property name="label" translatable="yes" context="frmurlpage|label2">Image Map</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

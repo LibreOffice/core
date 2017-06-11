@@ -20,12 +20,13 @@
 #include "TableFieldDescWin.hxx"
 #include <osl/diagnose.h>
 #include "FieldDescriptions.hxx"
-#include "dbu_tbl.hrc"
+#include "strings.hrc"
 #include "TableDesignHelpBar.hxx"
 #include <vcl/fixed.hxx>
 #include <vcl/settings.hxx>
 #include "dbaccess_helpid.hrc"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
+#include "core_resource.hxx"
 
 #define STANDARD_MARGIN                  6
 #define DETAILS_HEADER_HEIGHT           25
@@ -50,7 +51,7 @@ OTableFieldDescWin::OTableFieldDescWin( vcl::Window* pParent)
 {
     // Header
     m_pHeader = VclPtr<FixedText>::Create( this, WB_CENTER );
-    m_pHeader->SetText( OUString(ModuleRes(STR_TAB_PROPERTIES)) );
+    m_pHeader->SetText(DBA_RES(STR_TAB_PROPERTIES));
     m_pHeader->Show();
 
     // HelpBar

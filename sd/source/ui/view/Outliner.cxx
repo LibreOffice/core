@@ -53,7 +53,6 @@
 #include <tools/diagnose_ex.h>
 
 #include "strings.hrc"
-#include "sdstring.hrc"
 #include <editeng/outliner.hxx>
 #include "sdpage.hxx"
 #include "sdmod.hxx"
@@ -1228,15 +1227,15 @@ bool SdOutliner::ShowWrapArroundDialog()
     // The question text depends on the search direction.
     bool bImpress = mpDrawDocument && mpDrawDocument->GetDocumentType() == DocumentType::Impress;
 
-    sal_uInt16 nStringId;
+    const char* pStringId;
     if (mbDirectionIsForward)
-        nStringId = bImpress ? STR_SAR_WRAP_FORWARD : STR_SAR_WRAP_FORWARD_DRAW;
+        pStringId = bImpress ? STR_SAR_WRAP_FORWARD : STR_SAR_WRAP_FORWARD_DRAW;
     else
-        nStringId = bImpress ? STR_SAR_WRAP_BACKWARD : STR_SAR_WRAP_BACKWARD_DRAW;
+        pStringId = bImpress ? STR_SAR_WRAP_BACKWARD : STR_SAR_WRAP_BACKWARD_DRAW;
 
     // Pop up question box that asks the user whether to wrap around.
     // The dialog is made modal with respect to the whole application.
-    ScopedVclPtrInstance<QueryBox> aQuestionBox(nullptr, WB_YES_NO | WB_DEF_YES, SdResId(nStringId));
+    ScopedVclPtrInstance<QueryBox> aQuestionBox(nullptr, WB_YES_NO | WB_DEF_YES, SdResId(pStringId));
     aQuestionBox->SetImage(QueryBox::GetStandardImage());
     sal_uInt16 nBoxResult = ShowModalMessageBox(*aQuestionBox.get());
 

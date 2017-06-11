@@ -11,6 +11,7 @@
 $(eval $(call gb_Library_Library,evoab))
 
 $(eval $(call gb_Library_set_include,evoab,\
+	-I$(SRCDIR)/connectivity/inc \
 	-I$(SRCDIR)/connectivity/source/inc \
 	$$(INCLUDE) \
 	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \

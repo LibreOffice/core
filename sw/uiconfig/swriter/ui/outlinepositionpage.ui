@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -21,13 +21,13 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Left</col>
+        <col id="0" translatable="yes" context="outlinepositionpage|liststore1">Left</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Centered</col>
+        <col id="0" translatable="yes" context="outlinepositionpage|liststore1">Centered</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Right</col>
+        <col id="0" translatable="yes" context="outlinepositionpage|liststore1">Right</col>
       </row>
     </data>
   </object>
@@ -38,13 +38,13 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Tab stop</col>
+        <col id="0" translatable="yes" context="outlinepositionpage|liststore2">Tab stop</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Space</col>
+        <col id="0" translatable="yes" context="outlinepositionpage|liststore2">Space</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Nothing</col>
+        <col id="0" translatable="yes" context="outlinepositionpage|liststore2">Nothing</col>
       </row>
     </data>
   </object>
@@ -86,7 +86,7 @@
           <object class="GtkLabel" id="1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Level</property>
+            <property name="label" translatable="yes" context="outlinepositionpage|1">Level</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -134,7 +134,7 @@
                       <object class="GtkLabel" id="numalign">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Numbering alignment:</property>
+                        <property name="label" translatable="yes" context="outlinepositionpage|numalign">Numbering alignment:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">numalignlb</property>
                         <property name="xalign">1</property>
@@ -159,7 +159,7 @@
                       <object class="GtkLabel" id="numdist">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Minimum space between
+                        <property name="label" translatable="yes" context="outlinepositionpage|numdist">Minimum space between
 numbering and text:</property>
                         <property name="use_underline">True</property>
                         <property name="justify">right</property>
@@ -188,7 +188,7 @@ numbering and text:</property>
                       <object class="GtkLabel" id="numberingwidth">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Width of numbering:</property>
+                        <property name="label" translatable="yes" context="outlinepositionpage|numberingwidth">Width of numbering:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">numberingwidthmf:0.00cm</property>
                         <property name="xalign">1</property>
@@ -213,7 +213,7 @@ numbering and text:</property>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="relative">
-                        <property name="label" translatable="yes">Relative</property>
+                        <property name="label" translatable="yes" context="outlinepositionpage|relative">Relative</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -230,7 +230,7 @@ numbering and text:</property>
                       <object class="GtkLabel" id="indent">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Indent:</property>
+                        <property name="label" translatable="yes" context="outlinepositionpage|indent">Indent:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">indentmf:0.00cm</property>
                         <property name="xalign">1</property>
@@ -257,7 +257,7 @@ numbering and text:</property>
                       <object class="GtkLabel" id="indentat">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Indent at:</property>
+                        <property name="label" translatable="yes" context="outlinepositionpage|indentat">Indent at:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">indentatmf:0.00cm</property>
                         <property name="xalign">1</property>
@@ -283,7 +283,7 @@ numbering and text:</property>
                       <object class="GtkLabel" id="num2align">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Numbering alignment:</property>
+                        <property name="label" translatable="yes" context="outlinepositionpage|num2align">Numbering alignment:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">num2alignlb</property>
                         <property name="xalign">1</property>
@@ -307,7 +307,7 @@ numbering and text:</property>
                       <object class="GtkLabel" id="alignedat">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Aligned at:</property>
+                        <property name="label" translatable="yes" context="outlinepositionpage|alignedat">Aligned at:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">alignedatmf:0.00cm</property>
                         <property name="xalign">1</property>
@@ -333,7 +333,7 @@ numbering and text:</property>
                       <object class="GtkLabel" id="at">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Tab stop at:</property>
+                        <property name="label" translatable="yes" context="outlinepositionpage|at">Tab stop at:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">atmf:0.00cm</property>
                         <property name="xalign">1</property>
@@ -371,7 +371,7 @@ numbering and text:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="label" translatable="yes">Numbering followed by:</property>
+                        <property name="label" translatable="yes" context="outlinepositionpage|numfollowedby">Numbering followed by:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">numfollowedbylb</property>
                         <property name="xalign">1</property>
@@ -392,7 +392,7 @@ numbering and text:</property>
               <object class="GtkLabel" id="label10">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Position and Spacing</property>
+                <property name="label" translatable="yes" context="outlinepositionpage|label10">Position and Spacing</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -414,7 +414,7 @@ numbering and text:</property>
             <property name="column_spacing">12</property>
             <child>
               <object class="GtkButton" id="standard">
-                <property name="label" translatable="yes">Default</property>
+                <property name="label" translatable="yes" context="outlinepositionpage|standard">Default</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

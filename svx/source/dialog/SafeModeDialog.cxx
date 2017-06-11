@@ -21,7 +21,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <unotools/configmgr.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>

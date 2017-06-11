@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkGrid" id="DbRegisterPage">
@@ -59,7 +59,7 @@
                     <property name="layout_style">end</property>
                     <child>
                       <object class="GtkButton" id="new">
-                        <property name="label" translatable="yes">_New...</property>
+                        <property name="label" translatable="yes" context="dbregisterpage|new">_New...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -73,7 +73,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="delete">
-                        <property name="label" translatable="yes">_Delete</property>
+                        <property name="label" translatable="yes" context="dbregisterpage|delete">_Delete</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -87,7 +87,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="edit">
-                        <property name="label" translatable="yes">_Edit...</property>
+                        <property name="label" translatable="yes" context="dbregisterpage|edit">_Edit...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -114,7 +114,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Registered Databases</property>
+            <property name="label" translatable="yes" context="dbregisterpage|label1">Registered Databases</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="cui">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkFrame" id="PickOutlinePage">
     <property name="visible">True</property>
@@ -31,7 +31,7 @@
       <object class="GtkLabel" id="label25">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Selection</property>
+        <property name="label" translatable="yes" context="pickoutlinepage|label25">Selection</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>

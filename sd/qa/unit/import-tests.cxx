@@ -24,7 +24,7 @@
 #include <editeng/numitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/postitem.hxx>
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 
 #include <sfx2/sfxsids.hrc>
 #include <svx/svdotext.hxx>

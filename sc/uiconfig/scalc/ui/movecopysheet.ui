@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="MoveCopySheetDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Move/Copy Sheet</property>
+    <property name="title" translatable="yes" context="movecopysheet|MoveCopySheetDialog">Move/Copy Sheet</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -87,7 +87,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkRadioButton" id="move">
-                        <property name="label" translatable="yes">_Move</property>
+                        <property name="label" translatable="yes" context="movecopysheet|move">_Move</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -106,7 +106,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="copy">
-                        <property name="label" translatable="yes">C_opy</property>
+                        <property name="label" translatable="yes" context="movecopysheet|copy">C_opy</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -131,7 +131,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xpad">1</property>
-                <property name="label" translatable="yes">Action</property>
+                <property name="label" translatable="yes" context="movecopysheet|label1">Action</property>
                 <property name="justify">center</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
@@ -181,7 +181,7 @@
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
-                            <property name="label" translatable="yes">To _document</property>
+                            <property name="label" translatable="yes" context="movecopysheet|toDocumentLabel">To _document</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">toDocument</property>
                           </object>
@@ -196,8 +196,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <items>
-                              <item translatable="yes">(current document)</item>
-                              <item translatable="yes">- new document -</item>
+                              <item translatable="yes" context="movecopysheet|toDocument">(current document)</item>
+                              <item translatable="yes" context="movecopysheet|toDocument">- new document -</item>
                             </items>
                           </object>
                           <packing>
@@ -226,7 +226,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Insert before</property>
+                            <property name="label" translatable="yes" context="movecopysheet|insertBeforeLabel">_Insert before</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">insertBefore:before</property>
                           </object>
@@ -276,7 +276,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Location</property>
+                <property name="label" translatable="yes" context="movecopysheet|label2">Location</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -345,7 +345,7 @@
                             <property name="valign">start</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
-                            <property name="label" translatable="yes">This name is already used.</property>
+                            <property name="label" translatable="yes" context="movecopysheet|warnunused">This name is already used.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -360,7 +360,7 @@
                             <property name="valign">start</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
-                            <property name="label" translatable="yes">Name is empty.</property>
+                            <property name="label" translatable="yes" context="movecopysheet|warnempty">Name is empty.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -375,7 +375,7 @@
                             <property name="valign">start</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
-                            <property name="label" translatable="yes">Name contains one or more invalid characters.</property>
+                            <property name="label" translatable="yes" context="movecopysheet|warninvalid">Name contains one or more invalid characters.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -400,7 +400,7 @@
                 <property name="can_focus">False</property>
                 <property name="margin_top">5</property>
                 <property name="xpad">2</property>
-                <property name="label" translatable="yes">New _name</property>
+                <property name="label" translatable="yes" context="movecopysheet|newNameLabel">New _name</property>
                 <property name="use_underline">True</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>

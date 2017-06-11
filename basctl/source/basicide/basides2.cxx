@@ -23,7 +23,7 @@
 
 #include <com/sun/star/frame/XTitle.hpp>
 
-#include <basidesh.hrc>
+#include <strings.hrc>
 #include <baside2.hxx>
 #include <basdoc.hxx>
 #include <vcl/xtextedt.hxx>
@@ -108,7 +108,7 @@ void Shell::SetMDITitle()
     DocumentSignature aCurSignature( m_aCurDocument );
     if ( aCurSignature.getScriptingSignatureState() == SignatureState::OK )
     {
-        aTitle += " " + OUString(IDEResId(RID_STR_SIGNED)) + " ";
+        aTitle += " " + IDEResId(RID_STR_SIGNED) + " ";
     }
 
     SfxViewFrame* pViewFrame = GetViewFrame();

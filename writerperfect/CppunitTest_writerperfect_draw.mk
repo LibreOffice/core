@@ -34,7 +34,4 @@ $(eval $(call gb_CppunitTest_add_exception_objects,writerperfect_draw,\
 	writerperfect/qa/unit/WpftDrawFilterTest \
 ))
 
-$(call gb_CppunitTest_get_target,writerperfect_draw): \
-    $(call gb_AllLangResTarget_get_target,sd)
-
 # vim: set noet sw=4 ts=4:

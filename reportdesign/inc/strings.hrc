@@ -1,0 +1,189 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_REPORTDESIGN_INC_STRINGS_HRC
+#define INCLUDED_REPORTDESIGN_INC_STRINGS_HRC
+
+#define NC_(Context, String) (Context "\004" u8##String)
+
+#define RID_STR_PROPPAGE_DEFAULT                NC_("RID_STR_PROPPAGE_DEFAULT", "General")
+#define RID_STR_PROPPAGE_DATA                   NC_("RID_STR_PROPPAGE_DATA", "Data")
+#define RID_STR_FORCENEWPAGE                    NC_("RID_STR_FORCENEWPAGE", "Force New Page")
+#define RID_STR_NEWROWORCOL                     NC_("RID_STR_NEWROWORCOL", "New Row Or Column")
+#define RID_STR_KEEPTOGETHER                    NC_("RID_STR_KEEPTOGETHER", "Keep Together")
+#define RID_STR_CANGROW                         NC_("RID_STR_CANGROW", "Can Grow")
+#define RID_STR_CANSHRINK                       NC_("RID_STR_CANSHRINK", "Can Shrink")
+#define RID_STR_REPEATSECTION                   NC_("RID_STR_REPEATSECTION", "Repeat Section")
+#define RID_STR_PRINTREPEATEDVALUES             NC_("RID_STR_PRINTREPEATEDVALUES", "Print repeated values")
+#define RID_STR_CONDITIONALPRINTEXPRESSION      NC_("RID_STR_CONDITIONALPRINTEXPRESSION", "Conditional Print Expression")
+#define RID_STR_STARTNEWCOLUMN                  NC_("RID_STR_STARTNEWCOLUMN", "Start new column")
+#define RID_STR_STARTNEWPAGE                    NC_("RID_STR_STARTNEWPAGE", "Start new page")
+#define RID_STR_RESETPAGENUMBER                 NC_("RID_STR_RESETPAGENUMBER", "Reset page number")
+#define RID_STR_CHARTTYPE                       NC_("RID_STR_CHARTTYPE", "Chart type")
+#define RID_STR_PRINTWHENGROUPCHANGE            NC_("RID_STR_PRINTWHENGROUPCHANGE", "Print repeated value on group change")
+#define RID_STR_VISIBLE                         NC_("RID_STR_VISIBLE", "Visible")
+#define RID_STR_GROUPKEEPTOGETHER               NC_("RID_STR_GROUPKEEPTOGETHER", "Group keep together")
+#define RID_STR_PAGEHEADEROPTION                NC_("RID_STR_PAGEHEADEROPTION", "Page header")
+#define RID_STR_PAGEFOOTEROPTION                NC_("RID_STR_PAGEFOOTEROPTION", "Page footer")
+#define RID_STR_DEEPTRAVERSING                  NC_("RID_STR_DEEPTRAVERSING", "Deep traversing")
+#define RID_STR_PREEVALUATED                    NC_("RID_STR_PREEVALUATED", "Pre evaluation")
+#define RID_STR_POSITIONX                       NC_("RID_STR_POSITIONX", "Position X")
+#define RID_STR_POSITIONY                       NC_("RID_STR_POSITIONY", "Position Y")
+#define RID_STR_WIDTH                           NC_("RID_STR_WIDTH", "Width")
+#define RID_STR_HEIGHT                          NC_("RID_STR_HEIGHT", "Height")
+#define RID_STR_INITIALFORMULA                  NC_("RID_STR_INITIALFORMULA", "Initial value")
+#define RID_STR_PRESERVEIRI                     NC_("RID_STR_PRESERVEIRI", "Preserve as Link")
+#define RID_STR_FORMULA                         NC_("RID_STR_FORMULA", "Formula")
+#define RID_STR_DATAFIELD                       NC_("RID_STR_DATAFIELD", "Data field")
+#define RID_STR_FONT                            NC_("RID_STR_FONT", "Font")
+#define RID_STR_BACKCOLOR                       NC_("RID_STR_BACKCOLOR", "Background color")
+#define RID_STR_BACKTRANSPARENT                 NC_("RID_STR_BACKTRANSPARENT", "Background Transparent")
+#define RID_STR_CONTROLBACKGROUNDTRANSPARENT    NC_("RID_STR_CONTROLBACKGROUNDTRANSPARENT", "Background Transparent")
+#define RID_STR_OVERLAP_OTHER_CONTROL           NC_("RID_STR_OVERLAP_OTHER_CONTROL", "This operation is not allowed. The control overlaps with another one.")
+#define RID_STR_ILLEGAL_POSITION                NC_("RID_STR_ILLEGAL_POSITION", "This position can not be set. It is invalid.")
+#define RID_STR_SCOPE_GROUP                     NC_("RID_STR_SCOPE_GROUP", "Group: %1")
+#define RID_STR_FORMULALIST                     NC_("RID_STR_FORMULALIST", "Function")
+#define RID_STR_SCOPE                           NC_("RID_STR_SCOPE", "Scope")
+#define RID_STR_TYPE                            NC_("RID_STR_TYPE", "Data Field Type")
+#define RID_STR_MASTERFIELDS                    NC_("RID_STR_MASTERFIELDS", "Link master fields")
+#define RID_STR_DETAILFIELDS                    NC_("RID_STR_DETAILFIELDS", "Link slave fields")
+#define RID_STR_EXPLANATION                     ("Charts can be used to display detailed data about the current record of the report. To do this, you can specify which columns in the chart match which columns in the report.")
+#define RID_STR_DETAILLABEL                     NC_("RID_STR_DETAILLABEL", "Chart")
+#define RID_STR_MASTERLABEL                     NC_("RID_STR_MASTERLABEL", "Report")
+#define RID_STR_PREVIEW_COUNT                   NC_("RID_STR_PREVIEW_COUNT", "Preview Row(s)")
+#define RID_STR_AREA                            NC_("RID_STR_AREA", "Area")
+#define RID_STR_MIMETYPE                        NC_("RID_STR_MIMETYPE", "Report Output Format")
+#define RID_STR_VERTICALALIGN                   NC_("RID_STR_VERTICALALIGN", "Vert. Alignment")
+#define RID_STR_PARAADJUST                      NC_("RID_STR_PARAADJUST", "Horz. Alignment")
+#define RID_STR_F_COUNTER                       NC_("RID_STR_F_COUNTER", "Counter")
+#define RID_STR_F_ACCUMULATION                  NC_("RID_STR_F_ACCUMULATION", "Accumulation")
+#define RID_STR_F_MINIMUM                       NC_("RID_STR_F_MINIMUM", "Minimum")
+#define RID_STR_F_MAXIMUM                       NC_("RID_STR_F_MAXIMUM", "Maximum")
+
+#define RID_STR_BRWTITLE_PROPERTIES             NC_("RID_STR_BRWTITLE_PROPERTIES", "Properties: ")
+#define RID_STR_BRWTITLE_NO_PROPERTIES          NC_("RID_STR_BRWTITLE_NO_PROPERTIES", "No Control marked")
+#define RID_STR_BRWTITLE_MULTISELECT            NC_("RID_STR_BRWTITLE_MULTISELECT", "Multiselection")
+#define RID_STR_PROPTITLE_IMAGECONTROL          NC_("RID_STR_PROPTITLE_IMAGECONTROL", "Image Control")
+#define RID_STR_PROPTITLE_FIXEDTEXT             NC_("RID_STR_PROPTITLE_FIXEDTEXT", "Label field")
+#define RID_STR_PROPTITLE_FIXEDLINE             NC_("RID_STR_PROPTITLE_FIXEDLINE", "Line")
+#define RID_STR_PROPTITLE_FORMATTED             NC_("RID_STR_PROPTITLE_FORMATTED", "Formatted Field")
+#define RID_STR_PROPTITLE_SHAPE                 NC_("RID_STR_PROPTITLE_SHAPE", "Shape")
+#define RID_STR_PROPTITLE_REPORT                NC_("RID_STR_PROPTITLE_REPORT", "Report")
+#define RID_STR_PROPTITLE_SECTION               NC_("RID_STR_PROPTITLE_SECTION", "Section")
+#define RID_STR_PROPTITLE_FUNCTION              NC_("RID_STR_PROPTITLE_FUNCTION", "Function")
+#define RID_STR_PROPTITLE_GROUP                 NC_("RID_STR_PROPTITLE_GROUP", "Group")
+#define RID_STR_UNDO_CHANGEPOSITION             NC_("RID_STR_UNDO_CHANGEPOSITION", "Change Object")
+#define RID_STR_UNDO_MOVE_GROUP                 NC_("RID_STR_UNDO_MOVE_GROUP", "Move Group(s)")
+#define RID_STR_UNDO_CONDITIONAL_FORMATTING     NC_("RID_STR_UNDO_CONDITIONAL_FORMATTING", "Conditional Formatting")
+#define RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER  NC_("RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER", "Remove report header / report footer")
+#define RID_STR_UNDO_ADD_REPORTHEADERFOOTER     NC_("RID_STR_UNDO_ADD_REPORTHEADERFOOTER", "Add report header / report footer")
+// The # character is used for replacing
+#define RID_STR_UNDO_PROPERTY                   NC_("RID_STR_UNDO_PROPERTY", "Change property '#'")
+#define RID_STR_UNDO_ADD_GROUP_HEADER           NC_("RID_STR_UNDO_ADD_GROUP_HEADER", "Add group header ")
+#define RID_STR_UNDO_REMOVE_GROUP_HEADER        NC_("RID_STR_UNDO_REMOVE_GROUP_HEADER", "Remove group header ")
+#define RID_STR_UNDO_ADD_GROUP_FOOTER           NC_("RID_STR_UNDO_ADD_GROUP_FOOTER", "Add group footer ")
+#define RID_STR_UNDO_REMOVE_GROUP_FOOTER        NC_("RID_STR_UNDO_REMOVE_GROUP_FOOTER", "Remove group footer ")
+#define RID_STR_UNDO_ADDFUNCTION                NC_("RID_STR_UNDO_ADDFUNCTION", "Add function")
+#define STR_RPT_LABEL                           NC_("STR_RPT_LABEL", "~Report name")
+#define RID_STR_UNDO_REMOVE_GROUP               NC_("RID_STR_UNDO_REMOVE_GROUP", "Delete Group")
+#define RID_STR_UNDO_APPEND_GROUP               NC_("RID_STR_UNDO_APPEND_GROUP", "Add Group")
+#define RID_STR_UNDO_REMOVE_SELECTION           NC_("RID_STR_UNDO_REMOVE_SELECTION", "Delete Selection")
+#define RID_STR_UNDO_REMOVE_FUNCTION            NC_("RID_STR_UNDO_REMOVE_FUNCTION", "Delete Function")
+#define RID_STR_UNDO_CHANGE_SIZE                NC_("RID_STR_UNDO_CHANGE_SIZE", "Change Size")
+#define RID_STR_UNDO_PASTE                      NC_("RID_STR_UNDO_PASTE", "Paste")
+#define RID_STR_UNDO_INSERT_CONTROL             NC_("RID_STR_UNDO_INSERT_CONTROL", "Insert Control")
+#define RID_STR_UNDO_DELETE_CONTROL             NC_("RID_STR_UNDO_DELETE_CONTROL", "Delete Control")
+// Please try to avoid spaces in the name. It is used as a programmatic one.
+#define RID_STR_GROUPHEADER                     NC_("RID_STR_GROUPHEADER", "GroupHeader")
+// Please try to avoid spaces in the name. It is used as a programmatic one.
+#define RID_STR_GROUPFOOTER                     NC_("RID_STR_GROUPFOOTER", "GroupFooter")
+#define RID_STR_FIELDSELECTION                  NC_("RID_STR_FIELDSELECTION", "Add field:")
+#define RID_STR_FILTER                          NC_("RID_STR_FILTER", "Filter")
+#define RID_STR_UNDO_ALIGNMENT                  NC_("RID_STR_UNDO_ALIGNMENT", "Change Alignment")
+// # will be replaced with a name.
+#define RID_STR_HEADER                          NC_("RID_STR_HEADER", "# Header")
+// # will be replaced with a name.";
+#define RID_STR_FOOTER                          NC_("RID_STR_FOOTER", "# Footer")
+#define RID_STR_IMPORT_GRAPHIC                  NC_("RID_STR_IMPORT_GRAPHIC", "Insert graphics")
+#define RID_STR_DELETE                          NC_("RID_STR_DELETE", "Delete")
+#define RID_STR_FUNCTION                        NC_("RID_STR_FUNCTION", "Function")
+#define RID_STR_COULD_NOT_CREATE_REPORT         NC_("RID_STR_COULD_NOT_CREATE_REPORT", "An error occurred while creating the report.")
+#define RID_STR_CAUGHT_FOREIGN_EXCEPTION        NC_("RID_STR_CAUGHT_FOREIGN_EXCEPTION", "An exception of type $type$ was caught.")
+#define RID_STR_UNDO_CHANGEFONT                 NC_("RID_STR_UNDO_CHANGEFONT", "Change font")
+#define RID_STR_UNDO_CHANGEPAGE                 NC_("RID_STR_UNDO_CHANGEPAGE", "Change page attributes")
+#define RID_STR_PAGEHEADERFOOTER_INSERT         NC_("RID_STR_PAGEHEADERFOOTER_INSERT", "Insert Page Header/Footer")
+#define RID_STR_PAGEHEADERFOOTER_DELETE         NC_("RID_STR_PAGEHEADERFOOTER_DELETE", "Delete Page Header/Footer")
+#define RID_STR_REPORTHEADERFOOTER_INSERT       NC_("RID_STR_REPORTHEADERFOOTER_INSERT", "Insert Report Header/Footer")
+#define RID_STR_REPORTHEADERFOOTER_DELETE       NC_("RID_STR_REPORTHEADERFOOTER_DELETE", "Delete Report Header/Footer")
+#define RID_ERR_NO_COMMAND                      NC_("RID_ERR_NO_COMMAND", "The report can not be executed unless it is bound to content.")
+#define RID_ERR_NO_OBJECTS                      NC_("RID_ERR_NO_OBJECTS", "The report can not be executed unless at least one object has been inserted.")
+#define RID_STR_UNDO_SHRINK                     NC_("RID_STR_UNDO_SHRINK", "Shrink Section")
+#define RID_STR_DETAIL                          NC_("RID_STR_DETAIL", "Detail")
+#define RID_STR_PAGE_HEADER                     NC_("RID_STR_PAGE_HEADER", "Page Header")
+#define RID_STR_PAGE_FOOTER                     NC_("RID_STR_PAGE_FOOTER", "Page Footer")
+#define RID_STR_REPORT_HEADER                   NC_("RID_STR_REPORT_HEADER", "Report Header")
+#define RID_STR_REPORT_FOOTER                   NC_("RID_STR_REPORT_FOOTER", "Report Footer")
+
+#define STR_NUMBERED_CONDITION                  NC_("STR_NUMBERED_CONDITION", "Condition $number$")
+
+#define STR_RPT_EXPRESSION                      NC_("STR_RPT_EXPRESSION", "Field/Expression")
+#define STR_RPT_PREFIXCHARS                     NC_("STR_RPT_PREFIXCHARS", "Prefix Characters")
+#define STR_RPT_YEAR                            NC_("STR_RPT_YEAR", "Year")
+#define STR_RPT_QUARTER                         NC_("STR_RPT_QUARTER", "Quarter")
+#define STR_RPT_MONTH                           NC_("STR_RPT_MONTH", "Month")
+#define STR_RPT_WEEK                            NC_("STR_RPT_WEEK", "Week")
+#define STR_RPT_DAY                             NC_("STR_RPT_DAY", "Day")
+#define STR_RPT_HOUR                            NC_("STR_RPT_HOUR", "Hour")
+#define STR_RPT_MINUTE                          NC_("STR_RPT_MINUTE", "Minute")
+#define STR_RPT_INTERVAL                        NC_("STR_RPT_INTERVAL", "Interval")
+#define STR_RPT_HELP_FIELD                      NC_("STR_RPT_HELP_FIELD", "Select a field or type an expression to sort or group on.")
+#define STR_RPT_HELP_HEADER                     NC_("STR_RPT_HELP_HEADER", "Display a header for this group?")
+#define STR_RPT_HELP_FOOTER                     NC_("STR_RPT_HELP_FOOTER", "Display a footer for this group?")
+#define STR_RPT_HELP_GROUPON                    NC_("STR_RPT_HELP_GROUPON", "Select the value or range of values that starts a new group.")
+#define STR_RPT_HELP_INTERVAL                   NC_("STR_RPT_HELP_INTERVAL", "Interval or number of characters to group on.")
+#define STR_RPT_HELP_KEEP                       NC_("STR_RPT_HELP_KEEP", "Keep group together on one page?")
+#define STR_RPT_HELP_SORT                       NC_("STR_RPT_HELP_SORT", "Select ascending or descending sort order. Ascending means from A to Z or 0 to 9")
+
+// The space after the word is no error. #PAGENUMBER# is a replacement and & must not be translated as well as "
+#define STR_RPT_PN_PAGE                 NC_("STR_RPT_PN_PAGE", "\"Page \" & #PAGENUMBER#")
+// The space before and after the word is no error. #PAGECOUNT# is a replacement and & must not be translated  as well as "
+#define STR_RPT_PN_PAGE_OF                  NC_("STR_RPT_PN_PAGE_OF", " & \" of \" & #PAGECOUNT#")
+
+#define RID_STR_FUNCTIONS                   NC_("RID_STR_FUNCTIONS", "Functions")
+#define RID_STR_GROUPS                      NC_("RID_STR_GROUPS", "Groups")
+
+#define RID_STR_DETAIL                      NC_("RID_STR_DETAIL", "Detail")
+#define RID_STR_PAGE_HEADER                 NC_("RID_STR_PAGE_HEADER", "Page Header")
+#define RID_STR_PAGE_FOOTER                 NC_("RID_STR_PAGE_FOOTER", "Page Footer")
+#define RID_STR_GROUP_HEADER                NC_("RID_STR_GROUP_HEADER", "Group Header")
+#define RID_STR_GROUP_FOOTER                NC_("RID_STR_GROUP_FOOTER", "Group Footer")
+#define RID_STR_REPORT_HEADER               NC_("RID_STR_REPORT_HEADER", "Report Header")
+#define RID_STR_REPORT_FOOTER               NC_("RID_STR_REPORT_FOOTER", "Report Footer")
+#define RID_STR_ERROR_WRONG_ARGUMENT        NC_("RID_STR_ERROR_WRONG_ARGUMENT", "You tried to set an illegal argument. Please have a look at '#1' for valid arguments.")
+#define RID_STR_ARGUMENT_IS_NULL            NC_("RID_STR_ARGUMENT_IS_NULL", "The element is invalid.")
+#define RID_STR_FIXEDTEXT                   NC_("RID_STR_FIXEDTEXT", "Label field")
+#define RID_STR_FORMATTEDFIELD              NC_("RID_STR_FORMATTEDFIELD", "Formatted field")
+#define RID_STR_IMAGECONTROL                NC_("RID_STR_IMAGECONTROL", "Image control")
+#define RID_STR_REPORT                      NC_("RID_STR_REPORT", "Report")
+#define RID_STR_SHAPE                       NC_("RID_STR_SHAPE", "Shape")
+#define RID_STR_FIXEDLINE                   NC_("RID_STR_FIXEDLINE", "Fixed line")
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

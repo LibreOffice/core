@@ -37,8 +37,9 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
+#include <svx/strings.hrc>
 #include <editeng/brushitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/sdgcpitm.hxx>
@@ -65,7 +66,7 @@ using namespace ::com::sun::star::lang;
 #define SYMBOL_TO_FIELD_OFFSET      4
 #define ITEMVALUE(ItemSet,Id,Cast)  static_cast<const Cast&>((ItemSet).Get(Id)).GetValue()
 #define TOOLBOX_NAME                "colorbar"
-
+#define RID_SVXSTR_UNDO_GRAFCROP    RID_SVXSTR_GRAFCROP
 
 class ImplGrafMetricField : public MetricField
 {

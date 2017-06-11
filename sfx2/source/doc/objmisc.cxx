@@ -102,10 +102,10 @@
 #include <sfx2/module.hxx>
 #include <sfx2/docfac.hxx>
 #include "helper.hxx"
-#include "doc.hrc"
+#include "sfx2/strings.hrc"
 #include "workwin.hxx"
 #include "helpid.hrc"
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/sfxdlg.hxx>
 #include "appbaslib.hxx"
 #include <openflag.hxx>

@@ -17,12 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbmm_module.hxx"
-#include "dbmm_global.hrc"
+#include "core_resource.hxx"
 #include "migrationerror.hxx"
 #include "migrationlog.hxx"
+#include "strings.hrc"
 
 #include <comphelper/anytostring.hxx>
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 
 #include <vector>
@@ -340,13 +341,13 @@ namespace dbmm
             }
         }
 
-        void lcl_describeErrors( OUStringBuffer& _rBuffer, const ErrorLog& _rErrors, const sal_uInt16 _nHeadingResId )
+        void lcl_describeErrors( OUStringBuffer& _rBuffer, const ErrorLog& _rErrors, const char* pHeadingResId )
         {
             _rBuffer.append( "=== " );
-            _rBuffer.append     ( OUString( MacroMigrationResId( _nHeadingResId ) ) );
+            _rBuffer.append( DBA_RES(pHeadingResId) );
             _rBuffer.append( " ===\n" );
 
-            OUString sException( MacroMigrationResId( STR_EXCEPTION ) );
+            OUString sException( DBA_RES( STR_EXCEPTION ) );
 
             for (   ErrorLog::const_iterator error = _rErrors.begin();
                     error != _rErrors.end();
@@ -386,10 +387,10 @@ namespace dbmm
 
         if ( !m_pData->sBackupLocation.isEmpty() )
         {
-            OUString sBackedUp( MacroMigrationResId( STR_SAVED_COPY_TO ) );
+            OUString sBackedUp( DBA_RES( STR_SAVED_COPY_TO ) );
             sBackedUp = sBackedUp.replaceAll( "$location$", m_pData->sBackupLocation );
 
-            aBuffer.append( "=== " + OUString( MacroMigrationResId( STR_DATABASE_DOCUMENT ) )
+            aBuffer.append( "=== " + DBA_RES( STR_DATABASE_DOCUMENT )
                     + " ===\n" + sBackedUp + "\n\n");
         }
 
@@ -400,7 +401,7 @@ namespace dbmm
         }
         else
         {
-            OUString sMovedLibTemplate( MacroMigrationResId( STR_MOVED_LIBRARY ) );
+            OUString sMovedLibTemplate( DBA_RES( STR_MOVED_LIBRARY ) );
 
             for (   DocumentLogs::const_iterator doc = m_pData->aDocumentLogs.begin();
                     doc != m_pData->aDocumentLogs.end();
@@ -412,7 +413,7 @@ namespace dbmm
                 if ( rDoc.aMovedLibraries.empty() )
                     continue;
 
-                OUString sDocTitle( MacroMigrationResId( rDoc.eType == eForm ? STR_FORM : STR_REPORT ) );
+                OUString sDocTitle( DBA_RES( rDoc.eType == eForm ? STR_FORM : STR_REPORT ) );
                 sDocTitle = sDocTitle.replaceAll( "$name$", rDoc.sName );
 
                 aBuffer.append( "=== " + sDocTitle + " ===\n" );

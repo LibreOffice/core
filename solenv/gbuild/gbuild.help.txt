@@ -65,7 +65,7 @@ AVAILABLE TARGETS
                         CppunitTest_sw_macros_test)
        <target>.clean   clean gbuild target
        <class>_<target> for all targets and for the following classes:
-           o AllLangResTarget
+           o AllLangMoTarget
            o AllLangZip
            o CliLibrary
            o CliNativeLibrary

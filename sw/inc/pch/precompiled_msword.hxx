@@ -491,8 +491,6 @@
 #include <paratr.hxx>
 #include <poolfmt.hxx>
 #include <reffld.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
-#include <rsc/rscsfx.hxx>
 #include <sax/fastattribs.hxx>
 #include <sax/fshelper.hxx>
 #include <sax/saxdllapi.h>
@@ -648,7 +646,6 @@
 #include <tools/mempool.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
-#include <tools/resid.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>

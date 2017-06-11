@@ -3778,7 +3778,6 @@ endef
 # FIXME: the library target should be for build too
 define gb_Executable__register_gengal
 $(call gb_Executable_add_runtime_dependencies,gengal,\
-	$(call gb_AllLangResTarget_get_target,ofa) \
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
 	$(call gb_Package_get_target_for_build,postprocess_images) \
 	$(call gb_Package_get_target_for_build,postprocess_registry) \
@@ -3811,7 +3810,7 @@ endef
 
 define gb_Executable__register_localize
 $(call gb_Executable_add_runtime_dependencies,localize,\
-	$(foreach exec,cfgex helpex propex transex3 treex uiex ulfex xrmex,\
+	$(foreach exec,cfgex helpex propex treex ulfex xrmex,\
 		$(call gb_Executable_get_runtime_dependencies,$(exec)) \
 	) \
 )

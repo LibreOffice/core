@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="dba">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkBox" id="DBWizSpreadsheetPage">
@@ -71,7 +71,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="browse">
-                        <property name="label" translatable="yes">Browse</property>
+                        <property name="label" translatable="yes" context="dbwizspreadsheetpage|browse">Browse</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -87,7 +87,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="create">
-                        <property name="label" translatable="yes">Create New</property>
+                        <property name="label" translatable="yes" context="dbwizspreadsheetpage|create">Create New</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -145,7 +145,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="passwordrequired">
-        <property name="label" translatable="yes">_Password required</property>
+        <property name="label" translatable="yes" context="dbwizspreadsheetpage|passwordrequired">_Password required</property>
         <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>

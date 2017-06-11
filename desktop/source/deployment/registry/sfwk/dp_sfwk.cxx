@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include "dp_services.hxx"
-#include "dp_sfwk.hrc"
+#include "strings.hrc"
 #include "dp_backend.h"
 #include "dp_ucb.h"
 #include "dp_parceldesc.hxx"
@@ -208,7 +208,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         }
         if (mediaType.isEmpty())
             throw lang::IllegalArgumentException(
-                StrCannotDetectMediaType::get() + url,
+                StrCannotDetectMediaType() + url,
                 static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
     }
 
@@ -251,7 +251,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                     }
                 }
 
-                OUString sfwkLibType = getResourceString( RID_STR_SFWK_LIB );
+                OUString sfwkLibType = DpResId( RID_STR_SFWK_LIB );
                 // replace %MACRONAME placeholder with language name
                 OUString MACRONAME( "%MACROLANG" );
                 sal_Int32 startOfReplace = sfwkLibType.indexOf( MACRONAME );
@@ -266,7 +266,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         }
     }
     throw lang::IllegalArgumentException(
-        StrUnsupportedMediaType::get() + mediaType,
+        StrUnsupportedMediaType() + mediaType,
         static_cast<OWeakObject *>(this),
         static_cast<sal_Int16>(-1) );
 }

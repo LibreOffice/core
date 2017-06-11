@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="TemplateDialog1">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Character Style</property>
+    <property name="title" translatable="yes" context="templatedialog1|TemplateDialog1">Character Style</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -94,7 +94,7 @@
             </child>
             <child>
               <object class="GtkButton" id="standard">
-                <property name="label" translatable="yes">_Standard</property>
+                <property name="label" translatable="yes" context="templatedialog1|standard">_Standard</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -127,7 +127,7 @@
               <object class="GtkLabel" id="organizer">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Organizer</property>
+                <property name="label" translatable="yes" context="templatedialog1|organizer">Organizer</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -140,7 +140,7 @@
               <object class="GtkLabel" id="font">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Font</property>
+                <property name="label" translatable="yes" context="templatedialog1|font">Font</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -154,7 +154,7 @@
               <object class="GtkLabel" id="fonteffect">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Font Effects</property>
+                <property name="label" translatable="yes" context="templatedialog1|fonteffect">Font Effects</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -168,7 +168,7 @@
               <object class="GtkLabel" id="position">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Position</property>
+                <property name="label" translatable="yes" context="templatedialog1|position">Position</property>
               </object>
               <packing>
                 <property name="position">3</property>
@@ -182,7 +182,7 @@
               <object class="GtkLabel" id="asianlayout">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Asian Layout</property>
+                <property name="label" translatable="yes" context="templatedialog1|asianlayout">Asian Layout</property>
               </object>
               <packing>
                 <property name="position">4</property>
@@ -196,7 +196,7 @@
               <object class="GtkLabel" id="background">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Highlighting</property>
+                <property name="label" translatable="yes" context="templatedialog1|background">Highlighting</property>
               </object>
               <packing>
                 <property name="position">5</property>
@@ -210,7 +210,7 @@
               <object class="GtkLabel" id="borders">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Borders</property>
+                <property name="label" translatable="yes" context="templatedialog1|borders">Borders</property>
               </object>
               <packing>
                 <property name="position">6</property>

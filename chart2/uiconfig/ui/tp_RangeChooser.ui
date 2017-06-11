@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="chart">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkImage" id="imageIB_RANGE">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="tooltip_text" translatable="yes">Select data range</property>
+    <property name="tooltip_text" translatable="yes" context="tp_RangeChooser|imageIB_RANGE|tooltip_text">Select data range</property>
     <property name="pixbuf">chart2/res/selectrange.png</property>
   </object>
   <object class="GtkBox" id="tp_RangeChooser">
@@ -25,7 +25,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Choose a Data Range</property>
+            <property name="label" translatable="yes" context="tp_RangeChooser|FT_CAPTION_FOR_WIZARD">Choose a Data Range</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -47,7 +47,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">_Data range:</property>
+                <property name="label" translatable="yes" context="tp_RangeChooser|FT_RANGE">_Data range:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">ED_RANGE</property>
               </object>
@@ -76,7 +76,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Select data range</property>
+                <property name="tooltip_text" translatable="yes" context="tp_RangeChooser|IB_RANGE|tooltip_text">Select data range</property>
                 <property name="image">imageIB_RANGE</property>
               </object>
               <packing>
@@ -94,7 +94,7 @@
         </child>
         <child>
           <object class="GtkRadioButton" id="RB_DATAROWS">
-            <property name="label" translatable="yes">Data series in _rows</property>
+            <property name="label" translatable="yes" context="tp_RangeChooser|RB_DATAROWS">Data series in _rows</property>
             <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -113,7 +113,7 @@
         </child>
         <child>
           <object class="GtkRadioButton" id="RB_DATACOLS">
-            <property name="label" translatable="yes">Data series in _columns</property>
+            <property name="label" translatable="yes" context="tp_RangeChooser|RB_DATACOLS">Data series in _columns</property>
             <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -132,7 +132,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="CB_FIRST_ROW_ASLABELS">
-            <property name="label" translatable="yes">_First row as label</property>
+            <property name="label" translatable="yes" context="tp_RangeChooser|CB_FIRST_ROW_ASLABELS">_First row as label</property>
             <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -149,7 +149,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="CB_FIRST_COLUMN_ASLABELS">
-            <property name="label" translatable="yes">F_irst column as label</property>
+            <property name="label" translatable="yes" context="tp_RangeChooser|CB_FIRST_COLUMN_ASLABELS">F_irst column as label</property>
             <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -177,7 +177,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="CB_TIME_BASED">
-            <property name="label" translatable="yes">Time based charting</property>
+            <property name="label" translatable="yes" context="tp_RangeChooser|CB_TIME_BASED">Time based charting</property>
             <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -232,7 +232,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xpad">4</property>
-                <property name="label" translatable="yes">Start Table Index</property>
+                <property name="label" translatable="yes" context="tp_RangeChooser|label1">Start Table Index</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">ED_TIME_BASED_START</property>
               </object>
@@ -248,7 +248,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xpad">8</property>
-                <property name="label" translatable="yes">End Table Index</property>
+                <property name="label" translatable="yes" context="tp_RangeChooser|label2">End Table Index</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">ED_TIME_BASED_END</property>
               </object>
@@ -269,7 +269,7 @@
         <child>
           <object class="GtkLabel" id="STR_PAGE_DATA_RANGE">
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Data Range</property>
+            <property name="label" translatable="yes" context="tp_RangeChooser|STR_PAGE_DATA_RANGE">Data Range</property>
           </object>
           <packing>
             <property name="expand">False</property>

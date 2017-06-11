@@ -22,7 +22,7 @@
 #include "ViewShellBase.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include "sdresid.hxx"
-#include "res_bmp.hrc"
+
 #include <sfx2/dispatch.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/taskpanelist.hxx>

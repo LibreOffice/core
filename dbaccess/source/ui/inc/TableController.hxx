@@ -20,7 +20,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLECONTROLLER_HXX
 
 #include "singledoccontroller.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/io/XObjectOutputStream.hpp>
@@ -38,7 +38,7 @@ namespace dbaui
     class OTableController : public OTableController_BASE
     {
     private:
-        OModuleClient                                   m_aModuleClient;
+        dbaccess::OModuleClient m_aModuleClient;
         std::vector< std::shared_ptr<OTableRow> > m_vRowList;
         OTypeInfoMap                                    m_aTypeInfo;
         std::vector<OTypeInfoMap::iterator>           m_aTypeInfoIndex;

@@ -34,19 +34,20 @@
 #include <editeng/brushitem.hxx>
 #include "helpid.hrc"
 #include "svx/gallery.hxx"
+#include "svx/svxids.hrc"
 #include "galobj.hxx"
 #include "svx/gallery1.hxx"
 #include "svx/galtheme.hxx"
 #include "svx/galctrl.hxx"
 #include "svx/galmisc.hxx"
 #include "galbrws2.hxx"
-#include "gallery.hrc"
+#include "svx/strings.hrc"
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include "GalleryControl.hxx"
 #include "bitmaps.hlst"
 
@@ -402,12 +403,12 @@ GalleryBrowser2::GalleryBrowser2( vcl::Window* pParent, Gallery* pGallery ) :
     maViewBox->InsertItem( TBX_ID_ICON, aDummyImage );
     maViewBox->SetItemBits( TBX_ID_ICON, ToolBoxItemBits::RADIOCHECK | ToolBoxItemBits::AUTOCHECK );
     maViewBox->SetHelpId( TBX_ID_ICON, HID_GALLERY_ICONVIEW );
-    maViewBox->SetQuickHelpText( TBX_ID_ICON, GalResId(RID_SVXSTR_GALLERY_ICONVIEW) );
+    maViewBox->SetQuickHelpText( TBX_ID_ICON, SvxResId(RID_SVXSTR_GALLERY_ICONVIEW) );
 
     maViewBox->InsertItem( TBX_ID_LIST, aDummyImage );
     maViewBox->SetItemBits( TBX_ID_LIST, ToolBoxItemBits::RADIOCHECK | ToolBoxItemBits::AUTOCHECK );
     maViewBox->SetHelpId( TBX_ID_LIST, HID_GALLERY_LISTVIEW );
-    maViewBox->SetQuickHelpText( TBX_ID_LIST, GalResId(RID_SVXSTR_GALLERY_LISTVIEW) );
+    maViewBox->SetQuickHelpText( TBX_ID_LIST, SvxResId(RID_SVXSTR_GALLERY_LISTVIEW) );
 
     MiscHdl( nullptr );
     maViewBox->SetSelectHdl( LINK( this, GalleryBrowser2, SelectTbxHdl ) );

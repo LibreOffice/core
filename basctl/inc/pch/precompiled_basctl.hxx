@@ -383,8 +383,6 @@
 #include <o3tl/enumarray.hxx>
 #include <o3tl/make_unique.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
-#include <rsc/rscsfx.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
@@ -545,8 +543,6 @@
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
-#include <tools/resary.hxx>
-#include <tools/resid.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>

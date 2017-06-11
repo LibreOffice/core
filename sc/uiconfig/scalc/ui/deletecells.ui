@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="DeleteCellsDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Delete Cells</property>
+    <property name="title" translatable="yes" context="deletecells|DeleteCellsDialog">Delete Cells</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -90,7 +90,7 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="up">
-                        <property name="label" translatable="yes">Shift cells _up</property>
+                        <property name="label" translatable="yes" context="deletecells|up">Shift cells _up</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -108,7 +108,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="left">
-                        <property name="label" translatable="yes">Shift cells _left</property>
+                        <property name="label" translatable="yes" context="deletecells|left">Shift cells _left</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -125,7 +125,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="rows">
-                        <property name="label" translatable="yes">Delete entire _row(s)</property>
+                        <property name="label" translatable="yes" context="deletecells|rows">Delete entire _row(s)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -142,7 +142,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="cols">
-                        <property name="label" translatable="yes">Delete entire _column(s)</property>
+                        <property name="label" translatable="yes" context="deletecells|cols">Delete entire _column(s)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -165,7 +165,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Selection</property>
+                <property name="label" translatable="yes" context="deletecells|label1">Selection</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

@@ -36,7 +36,7 @@
 #include <svx/camera3d.hxx>
 
 #include "app.hrc"
-#include "res_bmp.hrc"
+
 #include "View.hxx"
 #include "Window.hxx"
 #include "ViewShell.hxx"

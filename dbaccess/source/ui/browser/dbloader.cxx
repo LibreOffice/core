@@ -18,7 +18,8 @@
  */
 
 #include "dbu_reghelper.hxx"
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
+#include "strings.hxx"
 #include "uiservices.hxx"
 #include "UITools.hxx"
 

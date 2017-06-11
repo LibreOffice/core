@@ -713,7 +713,4 @@ $(eval $(call gb_SdiTarget_set_include,sc/sdi/scslots,\
     $$(INCLUDE) \
 ))
 
-# Runtime dependency for unit-tests
-$(eval $(call gb_Library_use_restarget,sc,sc))
-
 # vim: set noet sw=4 ts=4:

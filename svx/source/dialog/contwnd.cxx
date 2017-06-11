@@ -18,7 +18,7 @@
  */
 
 #include <svx/xoutbmp.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <contwnd.hxx>
 #include <svx/svdpage.hxx>

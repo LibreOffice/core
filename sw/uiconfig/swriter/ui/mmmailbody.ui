@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="MailBodyDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">E-Mail Message</property>
+    <property name="title" translatable="yes" context="mmmailbody|MailBodyDialog">E-Mail Message</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -88,7 +88,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Write your message here</property>
+                    <property name="label" translatable="yes" context="mmmailbody|bodyft">Write your message here</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">bodymle:border</property>
                   </object>
@@ -129,7 +129,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="greeting">
-                    <property name="label" translatable="yes">This e-mail should contain a salutation</property>
+                    <property name="label" translatable="yes" context="mmmailbody|greeting">This e-mail should contain a salutation</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -161,7 +161,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">General salutation</property>
+                            <property name="label" translatable="yes" context="mmmailbody|generalft">General salutation</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">general</property>
                           </object>
@@ -216,7 +216,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">Address list field indicating a female recipient</property>
+                                        <property name="label" translatable="yes" context="mmmailbody|femalefi">Address list field indicating a female recipient</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -230,7 +230,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">_Female</property>
+                                        <property name="label" translatable="yes" context="mmmailbody|femaleft">_Female</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">female</property>
                                       </object>
@@ -246,7 +246,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">_Male</property>
+                                        <property name="label" translatable="yes" context="mmmailbody|maleft">_Male</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">male</property>
                                       </object>
@@ -262,7 +262,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">Field name</property>
+                                        <property name="label" translatable="yes" context="mmmailbody|femalecolft">Field name</property>
                                         <property name="use_underline">True</property>
                                       </object>
                                       <packing>
@@ -277,7 +277,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">Field value</property>
+                                        <property name="label" translatable="yes" context="mmmailbody|femalefieldft">Field value</property>
                                         <property name="use_underline">True</property>
                                       </object>
                                       <packing>
@@ -289,7 +289,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkButton" id="newfemale">
-                                        <property name="label" translatable="yes">_New...</property>
+                                        <property name="label" translatable="yes" context="mmmailbody|newfemale">_New...</property>
                                         <property name="use_action_appearance">False</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
@@ -306,7 +306,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkButton" id="newmale">
-                                        <property name="label" translatable="yes">N_ew...</property>
+                                        <property name="label" translatable="yes" context="mmmailbody|newmale">N_ew...</property>
                                         <property name="use_action_appearance">False</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
@@ -401,7 +401,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="personalized">
-                                <property name="label" translatable="yes">Insert personalized salutation</property>
+                                <property name="label" translatable="yes" context="mmmailbody|personalized">Insert personalized salutation</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>

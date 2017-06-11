@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sd">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="InsertLayerDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Insert Layer</property>
+    <property name="title" translatable="yes" context="insertlayer|InsertLayerDialog">Insert Layer</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox4">
@@ -103,7 +103,7 @@
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Name</property>
+                    <property name="label" translatable="yes" context="insertlayer|label4">_Name</property>
                     <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -143,7 +143,7 @@
                   <object class="GtkLabel" id="label5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Title</property>
+                    <property name="label" translatable="yes" context="insertlayer|label5">_Title</property>
                     <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -194,7 +194,7 @@
                   <object class="GtkLabel" id="description">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Description</property>
+                    <property name="label" translatable="yes" context="insertlayer|description">_Description</property>
                     <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -210,7 +210,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="visible">
-                <property name="label" translatable="yes">_Visible</property>
+                <property name="label" translatable="yes" context="insertlayer|visible">_Visible</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -226,7 +226,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="printable">
-                <property name="label" translatable="yes">_Printable</property>
+                <property name="label" translatable="yes" context="insertlayer|printable">_Printable</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -242,7 +242,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="locked">
-                <property name="label" translatable="yes">_Locked</property>
+                <property name="label" translatable="yes" context="insertlayer|locked">_Locked</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>

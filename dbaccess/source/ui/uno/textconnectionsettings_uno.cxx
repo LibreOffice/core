@@ -20,10 +20,10 @@
 #include "textconnectionsettings.hxx"
 #include "uiservices.hxx"
 #include "dbu_reghelper.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include "apitools.hxx"
 #include "unoadmin.hxx"
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include "propertystorage.hxx"
 
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -63,7 +63,7 @@ namespace dbaui
             ,public OTextConnectionSettingsDialog_PBASE
             ,public ::cppu::WeakImplHelper< css::sdb::XTextConnectionSettings >
     {
-        OModuleClient   m_aModuleClient;
+        dbaccess::OModuleClient m_aModuleClient;
         PropertyValues  m_aPropertyValues;
 
     protected:

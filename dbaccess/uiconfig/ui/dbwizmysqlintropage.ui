@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="dba">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="DBWizMysqlIntroPage">
     <property name="visible">True</property>
@@ -35,7 +35,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">You can connect to a MySQL database using either ODBC or JDBC.
+                    <property name="label" translatable="yes" context="dbwizmysqlintropage|label2">You can connect to a MySQL database using either ODBC or JDBC.
 Please contact your system administrator if you are unsure about the following settings.</property>
                     <property name="wrap">True</property>
                     <property name="max_width_chars">100</property>
@@ -66,7 +66,7 @@ Please contact your system administrator if you are unsure about the following s
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkRadioButton" id="odbc">
-                                <property name="label" translatable="yes">Connect using ODBC (Open Database Connectivity)</property>
+                                <property name="label" translatable="yes" context="dbwizmysqlintropage|odbc">Connect using ODBC (Open Database Connectivity)</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -82,7 +82,7 @@ Please contact your system administrator if you are unsure about the following s
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="jdbc">
-                                <property name="label" translatable="yes">Connect using JDBC (Java Database Connectivity)</property>
+                                <property name="label" translatable="yes" context="dbwizmysqlintropage|jdbc">Connect using JDBC (Java Database Connectivity)</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -100,7 +100,7 @@ Please contact your system administrator if you are unsure about the following s
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="directly">
-                                <property name="label" translatable="yes">Connect directly</property>
+                                <property name="label" translatable="yes" context="dbwizmysqlintropage|directly">Connect directly</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -122,7 +122,7 @@ Please contact your system administrator if you are unsure about the following s
                       <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">How do you want to connect to your MySQL database?</property>
+                        <property name="label" translatable="yes" context="dbwizmysqlintropage|label1">How do you want to connect to your MySQL database?</property>
                       </object>
                     </child>
                   </object>
@@ -140,7 +140,7 @@ Please contact your system administrator if you are unsure about the following s
           <object class="GtkLabel" id="header">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Set Up a Connection to a MySQL Database</property>
+            <property name="label" translatable="yes" context="dbwizmysqlintropage|header">Set Up a Connection to a MySQL Database</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

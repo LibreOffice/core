@@ -26,7 +26,6 @@
 #include <svtools/svmedit.hxx>
 
 namespace vcl { class Window; }
-class ResMgr;
 class filter_info_impl;
 
 class XMLFilterTabPageBasic : public TabPage

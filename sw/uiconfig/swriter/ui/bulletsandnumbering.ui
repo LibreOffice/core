@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="BulletsAndNumberingDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Bullets and Numbering</property>
+    <property name="title" translatable="yes" context="bulletsandnumbering|BulletsAndNumberingDialog">Bullets and Numbering</property>
     <property name="resizable">False</property>
     <property name="window_position">mouse</property>
     <property name="type_hint">dialog</property>
@@ -36,7 +36,7 @@
             </child>
             <child>
               <object class="GtkButton" id="user">
-                <property name="label" translatable="yes">_Remove</property>
+                <property name="label" translatable="yes" context="bulletsandnumbering|user">_Remove</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -79,7 +79,7 @@
             </child>
             <child>
               <object class="GtkButton" id="reset">
-                <property name="label" translatable="yes">Reset</property>
+                <property name="label" translatable="yes" context="bulletsandnumbering|reset">Reset</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -111,7 +111,7 @@
               <object class="GtkLabel" id="bullets">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Bullets</property>
+                <property name="label" translatable="yes" context="bulletsandnumbering|bullets">Bullets</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -124,7 +124,7 @@
               <object class="GtkLabel" id="singlenum">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Numbering</property>
+                <property name="label" translatable="yes" context="bulletsandnumbering|singlenum">Numbering</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -138,7 +138,7 @@
               <object class="GtkLabel" id="outlinenum">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Outline</property>
+                <property name="label" translatable="yes" context="bulletsandnumbering|outlinenum">Outline</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -152,7 +152,7 @@
               <object class="GtkLabel" id="graphics">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Image</property>
+                <property name="label" translatable="yes" context="bulletsandnumbering|graphics">Image</property>
               </object>
               <packing>
                 <property name="position">3</property>
@@ -166,7 +166,7 @@
               <object class="GtkLabel" id="position">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Position</property>
+                <property name="label" translatable="yes" context="bulletsandnumbering|position">Position</property>
               </object>
               <packing>
                 <property name="position">4</property>
@@ -180,7 +180,7 @@
               <object class="GtkLabel" id="customize">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Customize</property>
+                <property name="label" translatable="yes" context="bulletsandnumbering|customize">Customize</property>
               </object>
               <packing>
                 <property name="position">5</property>

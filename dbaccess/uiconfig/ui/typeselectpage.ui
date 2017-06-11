@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="dba">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="TypeSelect">
@@ -68,7 +68,7 @@
               <object class="GtkLabel" id="columns">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Column Information</property>
+                <property name="label" translatable="yes" context="typeselectpage|columns">Column Information</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -107,7 +107,7 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Lines (ma_x.):</property>
+                        <property name="label" translatable="yes" context="typeselectpage|autolabel">Lines (ma_x.):</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">auto</property>
                       </object>
@@ -118,7 +118,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="autobutton">
-                        <property name="label" translatable="yes">_Auto</property>
+                        <property name="label" translatable="yes" context="typeselectpage|autobutton">_Auto</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -150,7 +150,7 @@
               <object class="GtkLabel" id="autotype">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Automatic Type Recognition</property>
+                <property name="label" translatable="yes" context="typeselectpage|autotype">Automatic Type Recognition</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

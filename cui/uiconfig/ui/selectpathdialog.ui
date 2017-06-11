@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="SelectPathDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Select Paths</property>
+    <property name="title" translatable="yes" context="selectpathdialog|SelectPathDialog">Select Paths</property>
     <property name="resizable">False</property>
     <property name="type_hint">normal</property>
     <child internal-child="vbox">
@@ -103,7 +103,7 @@
                         <property name="layout_style">start</property>
                         <child>
                           <object class="GtkButton" id="add">
-                            <property name="label" translatable="yes">_Add...</property>
+                            <property name="label" translatable="yes" context="selectpathdialog|add">_Add...</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -165,7 +165,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Paths</property>
+                <property name="label" translatable="yes" context="selectpathdialog|label1">Paths</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

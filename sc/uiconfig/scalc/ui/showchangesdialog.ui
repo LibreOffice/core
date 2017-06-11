@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="ShowChangesDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Show Changes</property>
+    <property name="title" translatable="yes" context="showchangesdialog|ShowChangesDialog">Show Changes</property>
     <property name="resizable">False</property>
     <property name="type_hint">normal</property>
     <child internal-child="vbox">
@@ -83,7 +83,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="showchanges">
-                    <property name="label" translatable="yes">_Show changes in spreadsheet</property>
+                    <property name="label" translatable="yes" context="showchangesdialog|showchanges">_Show changes in spreadsheet</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -115,7 +115,7 @@
                             <property name="row_spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="showaccepted">
-                                <property name="label" translatable="yes">Show _accepted changes</property>
+                                <property name="label" translatable="yes" context="showchangesdialog|showaccepted">Show _accepted changes</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -130,7 +130,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="showrejected">
-                                <property name="label" translatable="yes">Show _rejected changes</property>
+                                <property name="label" translatable="yes" context="showchangesdialog|showrejected">Show _rejected changes</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -165,7 +165,7 @@
                       <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Filter Settings</property>
+                        <property name="label" translatable="yes" context="showchangesdialog|label1">Filter Settings</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>

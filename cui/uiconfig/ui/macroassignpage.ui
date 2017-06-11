@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.0 on Thu Jan 23 10:25:37 2014 -->
-<interface>
+<interface domain="cui">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkGrid" id="MacroAssignPage">
@@ -54,7 +54,7 @@
                       <object class="GtkLabel" id="eventft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Event</property>
+                        <property name="label" translatable="yes" context="macroassignpage|eventft">Event</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -67,7 +67,7 @@
                       <object class="GtkLabel" id="assignft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Assigned Action</property>
+                        <property name="label" translatable="yes" context="macroassignpage|assignft">Assigned Action</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -92,7 +92,7 @@
           <object class="GtkLabel" id="libraryft1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Assignments</property>
+            <property name="label" translatable="yes" context="macroassignpage|libraryft1">Assignments</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -127,7 +127,7 @@
                 <property name="layout_style">start</property>
                 <child>
                   <object class="GtkButton" id="assign">
-                    <property name="label" translatable="yes">M_acro...</property>
+                    <property name="label" translatable="yes" context="macroassignpage|assign">M_acro...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -141,7 +141,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="component">
-                    <property name="label" translatable="yes">Com_ponent...</property>
+                    <property name="label" translatable="yes" context="macroassignpage|component">Com_ponent...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -155,7 +155,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="delete">
-                    <property name="label" translatable="yes">Remove</property>
+                    <property name="label" translatable="yes" context="macroassignpage|delete">Remove</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -213,7 +213,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Assign</property>
+            <property name="label" translatable="yes" context="macroassignpage|label1">Assign</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
