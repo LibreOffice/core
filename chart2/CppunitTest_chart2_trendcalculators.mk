@@ -127,7 +127,4 @@ $(eval $(call gb_CppunitTest_use_components,chart2_trendcalculators,\
 
 $(eval $(call gb_CppunitTest_use_configuration,chart2_trendcalculators))
 
-$(call gb_CppunitTest_get_target,chart2_trendcalculators): \
-    $(call gb_AllLangResTarget_get_target,sd)
-
 # vim: set noet sw=4 ts=4:

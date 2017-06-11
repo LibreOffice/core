@@ -40,6 +40,7 @@
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "globstr.hrc"
+#include "strings.hrc"
 #include "tabvwsh.hxx"
 #include "prevwsh.hxx"
 #include "AccessibleEditObject.hxx"

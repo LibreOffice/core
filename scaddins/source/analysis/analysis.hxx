@@ -40,8 +40,6 @@
 namespace sca { namespace analysis {
     class ConvertDataList;
 } }
-class ResMgr;
-
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL AnalysisAddIn_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
 
@@ -59,14 +57,12 @@ private:
     sca::analysis::FuncDataList* pFD;
     std::unique_ptr<double[]>   pFactDoubles;
     sca::analysis::ConvertDataList* pCDL;
-    ResMgr*                     pResMgr;
+    std::locale                 aResLocale;
 
     sca::analysis::ScaAnyConverter aAnyConv;
 
     /// @throws css::uno::RuntimeException
-    ResMgr&                     GetResMgr();
-    /// @throws css::uno::RuntimeException
-    OUString                    GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex );
+    OUString                    GetFuncDescrStr(const char** pResId, sal_uInt16 nStrIndex);
     void                        InitDefLocales();
     inline const css::lang::Locale& GetLocale( sal_uInt32 nInd );
     void                        InitData();
@@ -82,6 +78,9 @@ private:
 public:
     explicit                    AnalysisAddIn(
                                     const css::uno::Reference< css::uno::XComponentContext >& xContext );
+
+    OUString AnalysisResId(const char* pId);
+
     virtual                     ~AnalysisAddIn() override;
 
     /// @throws css::uno::RuntimeException

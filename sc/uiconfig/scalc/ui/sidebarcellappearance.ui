@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkGrid" id="CellAppearancePropertyPanel">
@@ -23,7 +23,7 @@
               <object class="GtkLabel" id="cellbackgroundlabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Background:</property>
+                <property name="label" translatable="yes" context="sidebarcellappearance|cellbackgroundlabel">_Background:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">cellbackgroundcolor</property>
                 <property name="xalign">0</property>
@@ -39,7 +39,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Select the background color of the selected cells.</property>
+                <property name="tooltip_text" translatable="yes" context="sidebarcellappearance|cellbackgroundcolor|tooltip_text">Select the background color of the selected cells.</property>
                 <child>
                   <object class="GtkMenuToolButton" id="cellbackground">
                     <property name="use_action_appearance">False</property>
@@ -47,7 +47,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Select the background color of the selected cells.</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebarcellappearance|cellbackground|tooltip_text">Select the background color of the selected cells.</property>
                     <property name="halign">start</property>
                     <property name="action_name">.uno:BackgroundColor</property>
                     <property name="use_underline">True</property>
@@ -88,7 +88,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Specify the borders of the selected cells.</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebarcellappearance|bordertype|tooltip_text">Specify the borders of the selected cells.</property>
                     <property name="halign">start</property>
                     <property name="action_name">.uno:SetBorderStyle</property>
                     <property name="label" translatable="no">toolbutton1</property>
@@ -123,7 +123,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
-                        <property name="tooltip_text" translatable="yes">Select the line style of the borders.</property>
+                        <property name="tooltip_text" translatable="yes" context="sidebarcellappearance|linestyle|tooltip_text">Select the line style of the borders.</property>
                         <property name="halign">end</property>
                         <property name="action_name">.uno:LineStyle</property>
                         <property name="label" translatable="no">toolbutton2</property>
@@ -136,7 +136,7 @@
                     </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="borderlinestyle-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Border Line Style</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarcellappearance|borderlinestyle-atkobject">Border Line Style</property>
                       </object>
                     </child>
                   </object>
@@ -151,7 +151,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Select the line color of the borders.</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebarcellappearance|borderlinecolor|tooltip_text">Select the line color of the borders.</property>
                     <child>
                       <object class="GtkMenuToolButton" id="linecolor">
                         <property name="use_action_appearance">False</property>
@@ -159,7 +159,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
-                        <property name="tooltip_text" translatable="yes">Select the line color of the borders.</property>
+                        <property name="tooltip_text" translatable="yes" context="sidebarcellappearance|linecolor|tooltip_text">Select the line color of the borders.</property>
                         <property name="halign">end</property>
                         <property name="hexpand">True</property>
                         <property name="action_name">.uno:FrameLineColor</property>
@@ -172,7 +172,7 @@
                     </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="borderlinecolor-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Border Line Color</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebarcellappearance|borderlinecolor-atkobject">Border Line Color</property>
                       </object>
                     </child>
                   </object>

@@ -26,6 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/slider.hxx>
+#include <svx/strings.hrc>
 #include <svx/svdograf.hxx>
 #include <svx/sdgcpitm.hxx>
 #include <svx/dialmgr.hxx>
@@ -34,8 +35,6 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-
-#include "compressgraphicdialog.hrc"
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sfx">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkFrame" id="SecurityInfoPage">
     <property name="visible">True</property>
@@ -28,7 +28,7 @@
             <property name="column_spacing">12</property>
             <child>
               <object class="GtkCheckButton" id="readonly">
-                <property name="label" translatable="yes">_Open file read-only</property>
+                <property name="label" translatable="yes" context="securityinfopage|readonly">_Open file read-only</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -47,7 +47,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="recordchanges">
-                <property name="label" translatable="yes">Record _changes</property>
+                <property name="label" translatable="yes" context="securityinfopage|recordchanges">Record _changes</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -70,7 +70,7 @@
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkButton" id="protect">
-                    <property name="label" translatable="yes">Protect...</property>
+                    <property name="label" translatable="yes" context="securityinfopage|protect">Protect...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -84,7 +84,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="unprotect">
-                    <property name="label" translatable="yes">_Unprotect...</property>
+                    <property name="label" translatable="yes" context="securityinfopage|unprotect">_Unprotect...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -116,7 +116,7 @@
       <object class="GtkLabel" id="label47">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">File Sharing Options</property>
+        <property name="label" translatable="yes" context="securityinfopage|label47">File Sharing Options</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>

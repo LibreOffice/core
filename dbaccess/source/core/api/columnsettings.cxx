@@ -18,7 +18,8 @@
  */
 
 #include "columnsettings.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
+#include "strings.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 

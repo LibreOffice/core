@@ -26,7 +26,7 @@
 #include <o3tl/make_unique.hxx>
 #include <vcl/settings.hxx>
 #include "parse.hxx"
-#include "starmath.hrc"
+#include "strings.hrc"
 #include "smdll.hxx"
 #include "smmod.hxx"
 #include "cfgitem.hxx"
@@ -2221,28 +2221,28 @@ void SmParser::AddError(SmParseError Type, SmNode *pNode)
     pErrDesc->m_pNode = pNode;
     pErrDesc->m_aText = SmResId(RID_ERR_IDENT);
 
-    sal_uInt16  nRID;
+    const char* pRID;
     switch (Type)
     {
-        case SmParseError::UnexpectedChar:     nRID = RID_ERR_UNEXPECTEDCHARACTER; break;
-        case SmParseError::UnexpectedToken:    nRID = RID_ERR_UNEXPECTEDTOKEN;     break;
-        case SmParseError::PoundExpected:      nRID = RID_ERR_POUNDEXPECTED;       break;
-        case SmParseError::ColorExpected:      nRID = RID_ERR_COLOREXPECTED;       break;
-        case SmParseError::LgroupExpected:     nRID = RID_ERR_LGROUPEXPECTED;      break;
-        case SmParseError::RgroupExpected:     nRID = RID_ERR_RGROUPEXPECTED;      break;
-        case SmParseError::LbraceExpected:     nRID = RID_ERR_LBRACEEXPECTED;      break;
-        case SmParseError::RbraceExpected:     nRID = RID_ERR_RBRACEEXPECTED;      break;
-        case SmParseError::ParentMismatch:     nRID = RID_ERR_PARENTMISMATCH;      break;
-        case SmParseError::RightExpected:      nRID = RID_ERR_RIGHTEXPECTED;       break;
-        case SmParseError::FontExpected:       nRID = RID_ERR_FONTEXPECTED;        break;
-        case SmParseError::SizeExpected:       nRID = RID_ERR_SIZEEXPECTED;        break;
-        case SmParseError::DoubleAlign:        nRID = RID_ERR_DOUBLEALIGN;         break;
-        case SmParseError::DoubleSubsupscript: nRID = RID_ERR_DOUBLESUBSUPSCRIPT;  break;
+        case SmParseError::UnexpectedChar:     pRID = RID_ERR_UNEXPECTEDCHARACTER; break;
+        case SmParseError::UnexpectedToken:    pRID = RID_ERR_UNEXPECTEDTOKEN;     break;
+        case SmParseError::PoundExpected:      pRID = RID_ERR_POUNDEXPECTED;       break;
+        case SmParseError::ColorExpected:      pRID = RID_ERR_COLOREXPECTED;       break;
+        case SmParseError::LgroupExpected:     pRID = RID_ERR_LGROUPEXPECTED;      break;
+        case SmParseError::RgroupExpected:     pRID = RID_ERR_RGROUPEXPECTED;      break;
+        case SmParseError::LbraceExpected:     pRID = RID_ERR_LBRACEEXPECTED;      break;
+        case SmParseError::RbraceExpected:     pRID = RID_ERR_RBRACEEXPECTED;      break;
+        case SmParseError::ParentMismatch:     pRID = RID_ERR_PARENTMISMATCH;      break;
+        case SmParseError::RightExpected:      pRID = RID_ERR_RIGHTEXPECTED;       break;
+        case SmParseError::FontExpected:       pRID = RID_ERR_FONTEXPECTED;        break;
+        case SmParseError::SizeExpected:       pRID = RID_ERR_SIZEEXPECTED;        break;
+        case SmParseError::DoubleAlign:        pRID = RID_ERR_DOUBLEALIGN;         break;
+        case SmParseError::DoubleSubsupscript: pRID = RID_ERR_DOUBLESUBSUPSCRIPT;  break;
         default:
             assert(false);
             return;
     }
-    pErrDesc->m_aText += SmResId(nRID);
+    pErrDesc->m_aText += SmResId(pRID);
 
     m_aErrDescList.push_back(std::move(pErrDesc));
 }

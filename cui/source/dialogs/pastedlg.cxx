@@ -31,7 +31,8 @@
 #include <vcl/msgbox.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include <svtools/sores.hxx>
+#include <svtools/strings.hrc>
+#include <svtools/svtresid.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -176,10 +177,8 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
 
         if( aTypeName.isEmpty() && aSourceName.isEmpty() )
         {
-            std::unique_ptr<ResMgr> pMgr(ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILanguageTag() ));
             // global resource from svtools (former so3 resource)
-            if( pMgr )
-                aSourceName = OUString( ResId( STR_UNKNOWN_SOURCE, *pMgr ) );
+            aSourceName = SvtResId(STR_UNKNOWN_SOURCE);
         }
     }
 

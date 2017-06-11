@@ -71,7 +71,7 @@
 
 #include <memory>
 
-#include "access.hrc"
+#include "strings.hrc"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

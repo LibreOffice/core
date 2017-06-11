@@ -32,7 +32,7 @@ class SfxTemplateControllerItem;
 #include <svtools/treelistbox.hxx>
 #include <svl/eitem.hxx>
 
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 
 #include <sfx2/childwin.hxx>
 #include <sfx2/styfitem.hxx>

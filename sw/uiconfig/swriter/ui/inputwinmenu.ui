@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkMenu" id="menu">
     <property name="visible">True</property>
@@ -9,7 +9,7 @@
       <object class="GtkMenuItem" id="sum">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Sum</property>
+        <property name="label" translatable="yes" context="inputwinmenu|sum">Sum</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -17,7 +17,7 @@
       <object class="GtkMenuItem" id="round">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Round</property>
+        <property name="label" translatable="yes" context="inputwinmenu|round">Round</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -25,7 +25,7 @@
       <object class="GtkMenuItem" id="phd">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Percent</property>
+        <property name="label" translatable="yes" context="inputwinmenu|phd">Percent</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -33,7 +33,7 @@
       <object class="GtkMenuItem" id="sqrt">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Square Root</property>
+        <property name="label" translatable="yes" context="inputwinmenu|sqrt">Square Root</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -41,7 +41,7 @@
       <object class="GtkMenuItem" id="pow">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Power</property>
+        <property name="label" translatable="yes" context="inputwinmenu|pow">Power</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -49,7 +49,7 @@
       <object class="GtkMenuItem" id="operators">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Operators</property>
+        <property name="label" translatable="yes" context="inputwinmenu|operators">Operators</property>
         <property name="use_underline">True</property>
         <child type="submenu">
           <object class="GtkMenu">
@@ -59,7 +59,7 @@
               <object class="GtkMenuItem" id="|">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">List Separator</property>
+                <property name="label" translatable="yes" context="inputwinmenu||">List Separator</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -67,7 +67,7 @@
               <object class="GtkMenuItem" id="eq">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Equal</property>
+                <property name="label" translatable="yes" context="inputwinmenu|eq">Equal</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -75,7 +75,7 @@
               <object class="GtkMenuItem" id="neq">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Not Equal</property>
+                <property name="label" translatable="yes" context="inputwinmenu|neq">Not Equal</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -83,7 +83,7 @@
               <object class="GtkMenuItem" id="leq">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Less Than or Equal</property>
+                <property name="label" translatable="yes" context="inputwinmenu|leq">Less Than or Equal</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -91,7 +91,7 @@
               <object class="GtkMenuItem" id="geq">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Greater Than or Equal</property>
+                <property name="label" translatable="yes" context="inputwinmenu|geq">Greater Than or Equal</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -99,7 +99,7 @@
               <object class="GtkMenuItem" id="l">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Less</property>
+                <property name="label" translatable="yes" context="inputwinmenu|l">Less</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -107,7 +107,7 @@
               <object class="GtkMenuItem" id="g">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Greater</property>
+                <property name="label" translatable="yes" context="inputwinmenu|g">Greater</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -121,7 +121,7 @@
               <object class="GtkMenuItem" id="or">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Boolean Or</property>
+                <property name="label" translatable="yes" context="inputwinmenu|or">Boolean Or</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -129,7 +129,7 @@
               <object class="GtkMenuItem" id="xor">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Boolean Xor</property>
+                <property name="label" translatable="yes" context="inputwinmenu|xor">Boolean Xor</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -137,7 +137,7 @@
               <object class="GtkMenuItem" id="and">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Boolean And</property>
+                <property name="label" translatable="yes" context="inputwinmenu|and">Boolean And</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -145,7 +145,7 @@
               <object class="GtkMenuItem" id="not">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Boolean Not</property>
+                <property name="label" translatable="yes" context="inputwinmenu|not">Boolean Not</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -157,7 +157,7 @@
       <object class="GtkMenuItem" id="statistics">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Statistical Functions</property>
+        <property name="label" translatable="yes" context="inputwinmenu|statistics">Statistical Functions</property>
         <property name="use_underline">True</property>
         <child type="submenu">
           <object class="GtkMenu">
@@ -167,7 +167,7 @@
               <object class="GtkMenuItem" id="mean">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Mean</property>
+                <property name="label" translatable="yes" context="inputwinmenu|mean">Mean</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -175,7 +175,7 @@
               <object class="GtkMenuItem" id="min">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Minimum</property>
+                <property name="label" translatable="yes" context="inputwinmenu|min">Minimum</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -183,7 +183,7 @@
               <object class="GtkMenuItem" id="max">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Maximum</property>
+                <property name="label" translatable="yes" context="inputwinmenu|max">Maximum</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -195,7 +195,7 @@
       <object class="GtkMenuItem" id="functions">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Functions</property>
+        <property name="label" translatable="yes" context="inputwinmenu|functions">Functions</property>
         <property name="use_underline">True</property>
         <child type="submenu">
           <object class="GtkMenu">
@@ -205,7 +205,7 @@
               <object class="GtkMenuItem" id="sin">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Sine</property>
+                <property name="label" translatable="yes" context="inputwinmenu|sin">Sine</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -213,7 +213,7 @@
               <object class="GtkMenuItem" id="cos">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Cosine</property>
+                <property name="label" translatable="yes" context="inputwinmenu|cos">Cosine</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -221,7 +221,7 @@
               <object class="GtkMenuItem" id="tag">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Tangent</property>
+                <property name="label" translatable="yes" context="inputwinmenu|tag">Tangent</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -229,7 +229,7 @@
               <object class="GtkMenuItem" id="asin">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Arcsine</property>
+                <property name="label" translatable="yes" context="inputwinmenu|asin">Arcsine</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -237,7 +237,7 @@
               <object class="GtkMenuItem" id="acos">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Arccosine</property>
+                <property name="label" translatable="yes" context="inputwinmenu|acos">Arccosine</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -245,7 +245,7 @@
               <object class="GtkMenuItem" id="atan">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Arctangent</property>
+                <property name="label" translatable="yes" context="inputwinmenu|atan">Arctangent</property>
                 <property name="use_underline">True</property>
               </object>
             </child>

@@ -23,7 +23,7 @@
 #include "LegendHelper.hxx"
 #include "ChartModel.hxx"
 
-#include <svtools/controldims.hrc>
+#include <svtools/controldims.hxx>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 

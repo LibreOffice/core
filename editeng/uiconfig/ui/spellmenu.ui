@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="editeng">
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkMenu" id="menu">
     <property name="visible">True</property>
@@ -9,14 +9,14 @@
       <object class="GtkMenuItem" id="ignore">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">I_gnore All</property>
+        <property name="label" translatable="yes" context="spellmenu|ignore">I_gnore All</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="insert">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Add to Dictionary</property>
+        <property name="label" translatable="yes" context="spellmenu|insert">_Add to Dictionary</property>
         <property name="use_underline">True</property>
         <child type="submenu">
           <object class="GtkMenu">
@@ -30,7 +30,7 @@
       <object class="GtkMenuItem" id="add">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Add to Dictionary</property>
+        <property name="label" translatable="yes" context="spellmenu|add">_Add to Dictionary</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -38,7 +38,7 @@
       <object class="GtkMenuItem" id="check">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Spellcheck...</property>
+        <property name="label" translatable="yes" context="spellmenu|check">_Spellcheck...</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -52,7 +52,7 @@
       <object class="GtkMenuItem" id="autocorrect">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">AutoCorrect _To</property>
+        <property name="label" translatable="yes" context="spellmenu|autocorrect">AutoCorrect _To</property>
         <property name="use_underline">True</property>
         <child type="submenu">
           <object class="GtkMenu">
@@ -66,7 +66,7 @@
       <object class="GtkMenuItem" id="autocorrectdlg">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Auto_Correct Options...</property>
+        <property name="label" translatable="yes" context="spellmenu|autocorrectdlg">Auto_Correct Options...</property>
         <property name="use_underline">True</property>
       </object>
     </child>

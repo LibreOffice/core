@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="dba">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="Parameters">
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Parameter Input</property>
+    <property name="title" translatable="yes" context="parametersdialog|Parameters">Parameter Input</property>
     <property name="type_hint">dialog</property>
     <property name="gravity">north</property>
     <child internal-child="vbox">
@@ -119,7 +119,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">_Value:</property>
+                        <property name="label" translatable="yes" context="parametersdialog|label2">_Value:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">paramEntry</property>
                       </object>
@@ -150,7 +150,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="next">
-                            <property name="label" translatable="yes">_Next</property>
+                            <property name="label" translatable="yes" context="parametersdialog|next">_Next</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -178,7 +178,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Parameters</property>
+                <property name="label" translatable="yes" context="parametersdialog|label1">_Parameters</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">allParamTreeview</property>
                 <attributes>

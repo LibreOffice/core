@@ -27,7 +27,7 @@
 #include "fmobj.hxx"
 #include "formcontrolfactory.hxx"
 #include "svx/svditer.hxx"
-#include "svx/fmresids.hrc"
+#include "svx/strings.hrc"
 #include "treevisitor.hxx"
 
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -39,7 +39,6 @@
 #include <svx/fmglob.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/fmmodel.hxx>
-#include <tools/resid.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/stdtext.hxx>
 #include <svx/dialmgr.hxx>

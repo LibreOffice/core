@@ -19,7 +19,6 @@
 
 #include <memory>
 #include <vcl/toolbox.hxx>
-#include <tools/rcid.h>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/viewoptions.hxx>
 #include <com/sun/star/frame/XController.hpp>

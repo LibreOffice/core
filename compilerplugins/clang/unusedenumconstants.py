@@ -136,7 +136,6 @@ def is_ignore(srcLoc):
          "include/svtools/htmltokn.h",
          "include/sfx2/sidebar/Theme.hxx", # ThemeItem
          "sc/source/ui/docshell/impex.cxx", # SylkVersion
-         "include/rsc/rsc-vcl-shared-types.hxx", # KeyFuncType
          "include/i18nutil/paper.hxx", # Paper
          "cppcanvas/source/mtfrenderer/emfplus.cxx", # EmfPlusCombineMode
          "cppcanvas/source/mtfrenderer/emfpbrush.hxx", # EmfPlusHatchStyle

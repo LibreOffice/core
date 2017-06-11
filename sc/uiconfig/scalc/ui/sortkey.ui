@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sc">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkFrame" id="SortKeyFrame">
     <property name="visible">True</property>
@@ -35,7 +35,7 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="up">
-                <property name="label" translatable="yes">_Ascending</property>
+                <property name="label" translatable="yes" context="sortkey|up">_Ascending</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -54,7 +54,7 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="down">
-                <property name="label" translatable="yes">_Descending</property>
+                <property name="label" translatable="yes" context="sortkey|down">_Descending</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -78,7 +78,7 @@
       <object class="GtkLabel" id="sortft">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Sort Key </property>
+        <property name="label" translatable="yes" context="sortkey|sortft">Sort Key </property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>

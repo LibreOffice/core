@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="ParagraphPropertiesDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Paragraph</property>
+    <property name="title" translatable="yes" context="paradialog|ParagraphPropertiesDialog">Paragraph</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -97,7 +97,7 @@
               <object class="GtkLabel" id="labelTP_PARA_STD">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Indents &amp; Spacing</property>
+                <property name="label" translatable="yes" context="paradialog|labelTP_PARA_STD">Indents &amp; Spacing</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -111,7 +111,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0.4699999988079071</property>
-                <property name="label" translatable="yes">Alignment</property>
+                <property name="label" translatable="yes" context="paradialog|labelTP_PARA_ALIGN">Alignment</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -126,7 +126,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0.46000000834465027</property>
-                <property name="label" translatable="yes">Text Flow</property>
+                <property name="label" translatable="yes" context="paradialog|textflow">Text Flow</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -140,7 +140,7 @@
               <object class="GtkLabel" id="labelTP_PARA_ASIAN">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Asian Typography</property>
+                <property name="label" translatable="yes" context="paradialog|labelTP_PARA_ASIAN">Asian Typography</property>
               </object>
               <packing>
                 <property name="position">3</property>
@@ -154,7 +154,7 @@
               <object class="GtkLabel" id="labelTP_NUMPARA">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Outline &amp; Numbering</property>
+                <property name="label" translatable="yes" context="paradialog|labelTP_NUMPARA">Outline &amp; Numbering</property>
               </object>
               <packing>
                 <property name="position">4</property>
@@ -168,7 +168,7 @@
               <object class="GtkLabel" id="labelTP_TABULATOR">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Tabs</property>
+                <property name="label" translatable="yes" context="paradialog|labelTP_TABULATOR">Tabs</property>
               </object>
               <packing>
                 <property name="position">5</property>
@@ -182,7 +182,7 @@
               <object class="GtkLabel" id="labelTP_DROPCAPS">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Drop Caps</property>
+                <property name="label" translatable="yes" context="paradialog|labelTP_DROPCAPS">Drop Caps</property>
               </object>
               <packing>
                 <property name="position">6</property>
@@ -196,7 +196,7 @@
               <object class="GtkLabel" id="labelTP_BORDER">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Borders</property>
+                <property name="label" translatable="yes" context="paradialog|labelTP_BORDER">Borders</property>
               </object>
               <packing>
                 <property name="position">7</property>
@@ -210,7 +210,7 @@
               <object class="GtkLabel" id="area">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Area</property>
+                <property name="label" translatable="yes" context="paradialog|area">Area</property>
               </object>
               <packing>
                 <property name="position">8</property>
@@ -224,7 +224,7 @@
               <object class="GtkLabel" id="transparence">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Transparency</property>
+                <property name="label" translatable="yes" context="paradialog|transparence">Transparency</property>
               </object>
               <packing>
                 <property name="position">9</property>

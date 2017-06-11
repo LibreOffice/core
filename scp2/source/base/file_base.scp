@@ -18,19 +18,6 @@
 
 #include "macros.inc"
 
-STD_RES_FILE( gid_File_Res_Abp, abp)
-
-STD_RES_FILE( gid_File_Res_Dbp, dbp)
-
-STD_RES_FILE( gid_File_Res_Dbu, dbu)
-
-STD_RES_FILE( gid_File_Res_Cnr, cnr)
-STD_RES_FILE( gid_File_Res_Sdberr, sdberr)
-
-STD_RES_FILE( gid_File_Res_Rpt, rpt)
-
-STD_RES_FILE( gid_File_Res_Rptui, rptui)
-
 #if defined WITH_HELP
 File gid_File_Help_Sdatabase_Zip
     Dir = FILELIST_DIR;

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="svx">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkMessageDialog" id="LinkWarnDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Confirm Linked Graphic</property>
+    <property name="title" translatable="yes" context="linkwarndialog|LinkWarnDialog">Confirm Linked Graphic</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">question</property>
-    <property name="text" translatable="yes">The file %FILENAME will not be stored along with your document, but only referenced as a link.</property>
-    <property name="secondary_text" translatable="yes">This is dangerous if you move and/or rename the files. Do you want to embed the graphic instead?</property>
+    <property name="text" translatable="yes" context="linkwarndialog|LinkWarnDialog">The file %FILENAME will not be stored along with your document, but only referenced as a link.</property>
+    <property name="secondary_text" translatable="yes" context="linkwarndialog|LinkWarnDialog">This is dangerous if you move and/or rename the files. Do you want to embed the graphic instead?</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>
@@ -24,7 +24,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="ok">
-                <property name="label" translatable="yes">_Keep Link</property>
+                <property name="label" translatable="yes" context="linkwarndialog|ok">_Keep Link</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -40,7 +40,7 @@
             </child>
             <child>
               <object class="GtkButton" id="cancel">
-                <property name="label" translatable="yes">_Embed Graphic</property>
+                <property name="label" translatable="yes" context="linkwarndialog|cancel">_Embed Graphic</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -66,7 +66,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="ask">
-            <property name="label" translatable="yes">_Ask when linking a graphic</property>
+            <property name="label" translatable="yes" context="linkwarndialog|ask">_Ask when linking a graphic</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="uui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkMessageDialog" id="SSLWarnDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Security Warning: </property>
+    <property name="title" translatable="yes" context="sslwarndialog|SSLWarnDialog">Security Warning: </property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
@@ -21,7 +21,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="ok">
-                <property name="label" translatable="yes">Continue</property>
+                <property name="label" translatable="yes" context="sslwarndialog|ok">Continue</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -35,7 +35,7 @@
             </child>
             <child>
               <object class="GtkButton" id="cancel">
-                <property name="label" translatable="yes">Cancel Connection</property>
+                <property name="label" translatable="yes" context="sslwarndialog|cancel">Cancel Connection</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -49,7 +49,7 @@
             </child>
             <child>
               <object class="GtkButton" id="view">
-                <property name="label" translatable="yes">View Certificate</property>
+                <property name="label" translatable="yes" context="sslwarndialog|view">View Certificate</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

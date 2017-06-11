@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sm">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">10</property>
@@ -36,7 +36,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="title">
-                    <property name="label" translatable="yes">_Title row</property>
+                    <property name="label" translatable="yes" context="smathsettings|title">_Title row</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -52,7 +52,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="text">
-                    <property name="label" translatable="yes">_Formula text</property>
+                    <property name="label" translatable="yes" context="smathsettings|text">_Formula text</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -68,7 +68,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="frame">
-                    <property name="label" translatable="yes">B_order</property>
+                    <property name="label" translatable="yes" context="smathsettings|frame">B_order</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -90,7 +90,7 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Print Options</property>
+            <property name="label" translatable="yes" context="smathsettings|label4">Print Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -124,7 +124,7 @@
                 <property name="homogeneous">True</property>
                 <child>
                   <object class="GtkRadioButton" id="sizenormal">
-                    <property name="label" translatable="yes">O_riginal size</property>
+                    <property name="label" translatable="yes" context="smathsettings|sizenormal">O_riginal size</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -142,7 +142,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="sizescaled">
-                    <property name="label" translatable="yes">Fit to _page</property>
+                    <property name="label" translatable="yes" context="smathsettings|sizescaled">Fit to _page</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -164,7 +164,7 @@
                     <property name="spacing">12</property>
                     <child>
                       <object class="GtkRadioButton" id="sizezoomed">
-                        <property name="label" translatable="yes">_Scaling:</property>
+                        <property name="label" translatable="yes" context="smathsettings|sizezoomed">_Scaling:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -207,7 +207,7 @@
           <object class="GtkLabel" id="label5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Print Format</property>
+            <property name="label" translatable="yes" context="smathsettings|label5">Print Format</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -240,7 +240,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="norightspaces">
-                    <property name="label" translatable="yes">Ig_nore ~~ and ' at the end of the line</property>
+                    <property name="label" translatable="yes" context="smathsettings|norightspaces">Ig_nore ~~ and ' at the end of the line</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -256,7 +256,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="saveonlyusedsymbols">
-                    <property name="label" translatable="yes">Embed only used symbols (smaller file size)</property>
+                    <property name="label" translatable="yes" context="smathsettings|saveonlyusedsymbols">Embed only used symbols (smaller file size)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -272,7 +272,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="autoclosebrackets">
-                    <property name="label" translatable="yes">Auto close brackets, parentheses and braces</property>
+                    <property name="label" translatable="yes" context="smathsettings|autoclosebrackets">Auto close brackets, parentheses and braces</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -294,7 +294,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Miscellaneous Options</property>
+            <property name="label" translatable="yes" context="smathsettings|label1">Miscellaneous Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

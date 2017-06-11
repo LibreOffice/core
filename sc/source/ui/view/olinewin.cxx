@@ -25,7 +25,7 @@
 #include "olinetab.hxx"
 #include "document.hxx"
 #include "dbfunc.hxx"
-#include "scres.hrc"
+#include "strings.hrc"
 #include "scresid.hxx"
 #include "bitmaps.hlst"
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sd">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="HeaderFooterTab">
@@ -37,7 +37,7 @@
                     <property name="spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="header_cb">
-                        <property name="label" translatable="yes">Heade_r</property>
+                        <property name="label" translatable="yes" context="headerfootertab|header_cb">Heade_r</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -64,7 +64,7 @@
                           <object class="GtkLabel" id="header_label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Header _text:</property>
+                            <property name="label" translatable="yes" context="headerfootertab|header_label">Header _text:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">header_text</property>
                           </object>
@@ -98,7 +98,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="datetime_cb">
-                        <property name="label" translatable="yes">_Date and time</property>
+                        <property name="label" translatable="yes" context="headerfootertab|datetime_cb">_Date and time</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -129,7 +129,7 @@
                             <property name="spacing">12</property>
                             <child>
                               <object class="GtkRadioButton" id="rb_fixed">
-                                <property name="label" translatable="yes">Fi_xed</property>
+                                <property name="label" translatable="yes" context="headerfootertab|rb_fixed">Fi_xed</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -177,7 +177,7 @@
                             <property name="row_spacing">6</property>
                             <child>
                               <object class="GtkRadioButton" id="rb_auto">
-                                <property name="label" translatable="yes">_Variable</property>
+                                <property name="label" translatable="yes" context="headerfootertab|rb_auto">_Variable</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -220,7 +220,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">start</property>
-                                        <property name="label" translatable="yes">_Language:</property>
+                                        <property name="label" translatable="yes" context="headerfootertab|language_label">_Language:</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">language_list</property>
                                       </object>
@@ -244,7 +244,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">start</property>
-                                        <property name="label" translatable="yes">_Format:</property>
+                                        <property name="label" translatable="yes" context="headerfootertab|language_label1">_Format:</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">datetime_format_list</property>
                                       </object>
@@ -289,7 +289,7 @@
                         <property name="spacing">12</property>
                         <child>
                           <object class="GtkCheckButton" id="footer_cb">
-                            <property name="label" translatable="yes">_Footer</property>
+                            <property name="label" translatable="yes" context="headerfootertab|footer_cb">_Footer</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -316,7 +316,7 @@
                               <object class="GtkLabel" id="footer_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">F_ooter text:</property>
+                                <property name="label" translatable="yes" context="headerfootertab|footer_label">F_ooter text:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">footer_text</property>
                               </object>
@@ -357,7 +357,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="slide_number">
-                        <property name="label" translatable="yes">_Slide number</property>
+                        <property name="label" translatable="yes" context="headerfootertab|slide_number">_Slide number</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -379,7 +379,7 @@
               <object class="GtkLabel" id="include_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Include on Slide</property>
+                <property name="label" translatable="yes" context="headerfootertab|include_label">Include on Slide</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -394,7 +394,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="not_on_title">
-            <property name="label" translatable="yes">Do _not show on the first slide</property>
+            <property name="label" translatable="yes" context="headerfootertab|not_on_title">Do _not show on the first slide</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -413,7 +413,7 @@
             <property name="can_focus">False</property>
             <property name="no_show_all">True</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">_Page Number</property>
+            <property name="label" translatable="yes" context="headerfootertab|replacement_a">_Page Number</property>
             <property name="use_underline">True</property>
           </object>
           <packing>
@@ -427,7 +427,7 @@
             <property name="can_focus">False</property>
             <property name="no_show_all">True</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Include on page</property>
+            <property name="label" translatable="yes" context="headerfootertab|replacement_b">Include on page</property>
           </object>
           <packing>
             <property name="expand">False</property>

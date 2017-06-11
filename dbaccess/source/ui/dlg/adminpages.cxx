@@ -18,15 +18,17 @@
  */
 
 #include "adminpages.hxx"
+#include "core_resource.hxx"
 #include "dbadmin.hxx"
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
+#include "strings.hrc"
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include "dsitems.hxx"
 #include "dsselect.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include "odbcconfig.hxx"
 #include "optionalboolitem.hxx"
 #include "sqlmessage.hxx"
@@ -126,7 +128,7 @@ namespace dbaui
         if (!aEnumeration.isLoaded())
         {
             // show an error message
-            OUString sError( ModuleRes( STR_COULD_NOT_LOAD_ODBC_LIB ) );
+            OUString sError(DBA_RES(STR_COULD_NOT_LOAD_ODBC_LIB));
             sError = sError.replaceFirst("#lib#", aEnumeration.getLibraryName());
             ScopedVclPtrInstance< MessageDialog > aDialog(this, sError);
             aDialog->Execute();
@@ -252,15 +254,15 @@ namespace dbaui
             {
                 OSQLMessageBox::MessageType eImage = OSQLMessageBox::Info;
                 OUString aMessage,sTitle;
-                sTitle = ModuleRes(STR_CONNECTION_TEST);
+                sTitle = DBA_RES(STR_CONNECTION_TEST);
                 if ( bSuccess )
                 {
-                    aMessage = ModuleRes(STR_CONNECTION_SUCCESS);
+                    aMessage = DBA_RES(STR_CONNECTION_SUCCESS);
                 }
                 else
                 {
                     eImage = OSQLMessageBox::Error;
-                    aMessage = ModuleRes(STR_CONNECTION_NO_SUCCESS);
+                    aMessage = DBA_RES(STR_CONNECTION_NO_SUCCESS);
                 }
                 ScopedVclPtrInstance< OSQLMessageBox > aMsg( this, sTitle, aMessage, WB_OK, eImage );
                 aMsg->Execute();

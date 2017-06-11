@@ -83,8 +83,17 @@ void handleCommand(
     const OString& rInPath, const OString& rOutPath,
     const OString& rExecutable)
 {
-    OStringBuffer buf(OString(getenv("WORKDIR_FOR_BUILD")));
-    buf.append("/LinkTarget/Executable/");
+    OStringBuffer buf;
+    if (rExecutable == "uiex" || rExecutable == "hrcex")
+    {
+        buf.append(OString(getenv("SRC_ROOT")));
+        buf.append("/solenv/bin/");
+    }
+    else
+    {
+        buf.append(OString(getenv("WORKDIR_FOR_BUILD")));
+        buf.append("/LinkTarget/Executable/");
+    }
     buf.append(rExecutable);
     buf.append(" -i ");
     buf.append(rInPath);
@@ -143,9 +152,22 @@ void InitPoFile(
     aPoOutPut.close();
 }
 
-bool handleFile(
-    const OString& rProject, const OUString& rUrl,
-    const OString& rPotDir, bool bInitPoFile )
+bool fileExists(const OString& fileName)
+{
+    FILE *f = fopen(fileName.getStr(), "r");
+
+    if (f != nullptr)
+    {
+        fclose(f);
+        return true;
+    }
+
+    return false;
+}
+
+OString gDestRoot;
+
+bool handleFile(const OString& rProject, const OUString& rUrl, const OString& rPotDir)
 {
     struct Command {
         OUStringLiteral extension;
@@ -153,8 +175,7 @@ bool handleFile(
         bool positive;
     };
     static Command const commands[] = {
-        { OUStringLiteral(".src"), "transex3", false },
-        { OUStringLiteral(".hrc"), "transex3", true },
+        { OUStringLiteral(".hrc"), "hrcex", false },
         { OUStringLiteral(".ulf"), "ulfex", false },
         { OUStringLiteral(".xcu"), "cfgex", false },
         { OUStringLiteral(".xrm"), "xrmex", false },
@@ -182,13 +203,35 @@ bool handleFile(
                     }
                     sInPath = OUStringToOString( sInPathTmp, RTL_TEXTENCODING_UTF8 );
                 }
-                OString sOutPath = rPotDir.concat(".pot");
+                OString sOutPath;
+                if (commands[i].executable == "uiex" || commands[i].executable == "hrcex")
+                    sOutPath = gDestRoot + "/" + rProject + "/messages.pot";
+                else
+                    sOutPath = rPotDir.concat(".pot");
 
-                if ( bInitPoFile )
-                {
+                if (!fileExists(sOutPath))
                     InitPoFile(rProject, sInPath, rPotDir, sOutPath);
-                }
                 handleCommand(sInPath, sOutPath, commands[i].executable);
+
+                {
+                    //Delete pot file if it contain only the header
+                    PoIfstream aPOStream(sOutPath);
+                    PoEntry aPO;
+                    aPOStream.readEntry( aPO );
+                    bool bDel = aPOStream.eof();
+                    aPOStream.close();
+                    if (bDel)
+                    {
+                        if ( system(OString("rm " + sOutPath).getStr()) != 0 )
+                        {
+                            cerr
+                                << "Error: Cannot remove entryless pot file: "
+                                << sOutPath << "\n";
+                                throw false; //TODO
+                        }
+                    }
+                }
+
                 return true;
             }
             break;
@@ -206,40 +249,13 @@ void handleFilesOfDir(
 
     typedef std::vector<OUString>::const_iterator citer_t;
 
-    bool bFirstLocFile = true; ///< First file in directory which needs localization
-
     for( citer_t aIt = aFiles.begin(); aIt != aFiles.end(); ++aIt )
-    {
-        if (handleFile( rProject, *aIt, rPotDir, bFirstLocFile))
-        {
-            bFirstLocFile = false;
-        }
-    }
-
-    if( !bFirstLocFile )
-    {
-        //Delete pot file if it contain only the header
-        OString sPotFile = rPotDir.concat(".pot");
-        PoIfstream aPOStream( sPotFile );
-        PoEntry aPO;
-        aPOStream.readEntry( aPO );
-        bool bDel = aPOStream.eof();
-        aPOStream.close();
-        if( bDel )
-        {
-            if ( system(OString("rm " + sPotFile).getStr()) != 0 )
-            {
-                cerr
-                    << "Error: Cannot remove entryless pot file: "
-                    << sPotFile << "\n";
-                    throw false; //TODO
-            }
-        }
-    }
+        handleFile(rProject, *aIt, rPotDir);
 }
 
 bool includeProject(const OString& rProject) {
     static const char *projects[] = {
+        "include",
         "accessibility",
         "avmedia",
         "basctl",
@@ -373,9 +389,19 @@ void handleDirectory(
         }
     }
 
+    OString aPotDir(rPotDir);
     if( !aFileNames.empty() )
     {
-        handleFilesOfDir( aFileNames, rProject, rPotDir );
+        OString aProject(rProject);
+        if (aProject == "include" && nLevel > 1)
+        {
+            aProject = aPotDir.copy(aPotDir.lastIndexOf('/') + 1);
+            aPotDir = aPotDir.copy(0, aPotDir.lastIndexOf("include")) + aProject + "/messages";
+        }
+        if (aProject != "include")
+        {
+            handleFilesOfDir(aFileNames, aProject, aPotDir);
+        }
     }
 
     if (dir.close() != osl::FileBase::E_None) {
@@ -386,7 +412,7 @@ void handleDirectory(
     //Remove empty pot directory
     OUString sPoPath =
         OStringToOUString(
-            rPotDir.copy(0,rPotDir.lastIndexOf('/')), RTL_TEXTENCODING_UTF8);
+            aPotDir.copy(0,aPotDir.lastIndexOf('/')), RTL_TEXTENCODING_UTF8);
     OUString sPoUrl;
     if (osl::FileBase::getFileURLFromSystemPath(sPoPath, sPoUrl)
         != osl::FileBase::E_None)
@@ -427,7 +453,8 @@ void handleProjects(char * sSourceRoot, char const * sDestRoot)
             << "\n";
         throw false; //TODO
     }
-    handleDirectory(rootUrl, 0, OString(), OString(sDestRoot));
+    gDestRoot = OString(sDestRoot);
+    handleDirectory(rootUrl, 0, OString(), gDestRoot);
 }
 }
 

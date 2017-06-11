@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -50,7 +50,7 @@
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
                         <property name="yalign">0.4699999988079071</property>
-                        <property name="label" translatable="yes">Line _distance:</property>
+                        <property name="label" translatable="yes" context="dimensionlinestabpage|FT_LINE_DIST">Line _distance:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_LINE_DIST:0.00mm</property>
                       </object>
@@ -64,7 +64,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Guide _overhang:</property>
+                        <property name="label" translatable="yes" context="dimensionlinestabpage|FT_HELPLINE_OVERHANG">Guide _overhang:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_HELPLINE_OVERHANG:0.00mm</property>
                       </object>
@@ -78,7 +78,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Guide distance:</property>
+                        <property name="label" translatable="yes" context="dimensionlinestabpage|FT_HELPLINE_DIST">_Guide distance:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_HELPLINE_DIST:0.00mm</property>
                       </object>
@@ -92,7 +92,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Left guide:</property>
+                        <property name="label" translatable="yes" context="dimensionlinestabpage|FT_HELPLINE1_LEN">_Left guide:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_HELPLINE1_LEN:0.00mm</property>
                       </object>
@@ -106,7 +106,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Right guide:</property>
+                        <property name="label" translatable="yes" context="dimensionlinestabpage|FT_HELPLINE2_LEN">_Right guide:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_HELPLINE2_LEN:0.00mm</property>
                       </object>
@@ -120,7 +120,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Decimal _places:</property>
+                        <property name="label" translatable="yes" context="dimensionlinestabpage|FT_DECIMALPLACES">Decimal _places:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_DECIMALPLACES:0</property>
                       </object>
@@ -131,7 +131,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="TSB_BELOW_REF_EDGE">
-                        <property name="label" translatable="yes">Measure _below object</property>
+                        <property name="label" translatable="yes" context="dimensionlinestabpage|TSB_BELOW_REF_EDGE">Measure _below object</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -233,7 +233,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Line</property>
+                <property name="label" translatable="yes" context="dimensionlinestabpage|label1">Line</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -269,7 +269,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Text position</property>
+                        <property name="label" translatable="yes" context="dimensionlinestabpage|FT_POSITION">_Text position</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -304,7 +304,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="TSB_AUTOPOSV">
-                                <property name="label" translatable="yes">_AutoVertical</property>
+                                <property name="label" translatable="yes" context="dimensionlinestabpage|TSB_AUTOPOSV">_AutoVertical</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="receives_default">False</property>
@@ -321,7 +321,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="TSB_AUTOPOSH">
-                                <property name="label" translatable="yes">A_utoHorizontal</property>
+                                <property name="label" translatable="yes" context="dimensionlinestabpage|TSB_AUTOPOSH">A_utoHorizontal</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="receives_default">False</property>
@@ -347,7 +347,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="TSB_PARALLEL">
-                        <property name="label" translatable="yes">_Parallel to line</property>
+                        <property name="label" translatable="yes" context="dimensionlinestabpage|TSB_PARALLEL">_Parallel to line</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -364,7 +364,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="TSB_SHOW_UNIT">
-                        <property name="label" translatable="yes">Show _measurement units</property>
+                        <property name="label" translatable="yes" context="dimensionlinestabpage|TSB_SHOW_UNIT">Show _measurement units</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -401,7 +401,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Legend</property>
+                <property name="label" translatable="yes" context="dimensionlinestabpage|label2">Legend</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -424,7 +424,7 @@
     <child>
       <object class="GtkLabel" id="STR_MEASURE_AUTOMATIC">
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Automatic</property>
+        <property name="label" translatable="yes" context="dimensionlinestabpage|STR_MEASURE_AUTOMATIC">Automatic</property>
       </object>
       <packing>
         <property name="expand">False</property>

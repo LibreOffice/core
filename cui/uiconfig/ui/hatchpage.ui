@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkAdjustment" id="adjustment1">
@@ -78,7 +78,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="modify">
-                        <property name="label" translatable="yes">_Modify</property>
+                        <property name="label" translatable="yes" context="hatchpage|modify">_Modify</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -105,7 +105,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Hatch</property>
+            <property name="label" translatable="yes" context="hatchpage|label2">Hatch</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -145,7 +145,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Spacing:</property>
+                    <property name="label" translatable="yes" context="hatchpage|distanceft">_Spacing:</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -172,7 +172,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">A_ngle:</property>
+                    <property name="label" translatable="yes" context="hatchpage|angleft">A_ngle:</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -226,7 +226,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Line type:</property>
+                    <property name="label" translatable="yes" context="hatchpage|linetypeft">_Line type:</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -240,9 +240,9 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <items>
-                      <item translatable="yes">Single</item>
-                      <item translatable="yes">Crossed</item>
-                      <item translatable="yes">Triple</item>
+                      <item translatable="yes" context="hatchpage|linetypelb">Single</item>
+                      <item translatable="yes" context="hatchpage|linetypelb">Crossed</item>
+                      <item translatable="yes" context="hatchpage|linetypelb">Triple</item>
                     </items>
                   </object>
                   <packing>
@@ -256,7 +256,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Line _color:</property>
+                    <property name="label" translatable="yes" context="hatchpage|linecolorft">Line _color:</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -278,7 +278,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="backgroundcolor">
-                    <property name="label" translatable="yes">Background Color</property>
+                    <property name="label" translatable="yes" context="hatchpage|backgroundcolor">Background Color</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -310,7 +310,7 @@
           <object class="GtkLabel" id="propfl">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Options</property>
+            <property name="label" translatable="yes" context="hatchpage|propfl">Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -354,7 +354,7 @@
                         <property name="vexpand">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="previewctl-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes">Example</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="hatchpage|previewctl-atkobject">Example</property>
                           </object>
                         </child>
                       </object>
@@ -372,7 +372,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Preview</property>
+            <property name="label" translatable="yes" context="hatchpage|label1">Preview</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

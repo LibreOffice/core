@@ -23,7 +23,7 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <svl/flagitem.hxx>
-#include <svl/style.hrc>
+#include <svl/style.hxx>
 
 class SFX2_DLLPUBLIC SfxTemplateItem: public SfxFlagItem
 {

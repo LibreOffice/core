@@ -119,13 +119,11 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/svtdllapi.h>
 #include <tools/color.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
-#include <tools/resid.hxx>
 #include <tools/solar.h>
 #include <tools/toolsdllapi.h>
 #include <tools/wintypes.hxx>

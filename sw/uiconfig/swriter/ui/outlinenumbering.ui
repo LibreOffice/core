@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="OutlineNumberingDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Chapter Numbering</property>
+    <property name="title" translatable="yes" context="outlinenumbering|OutlineNumberingDialog">Chapter Numbering</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
@@ -36,7 +36,7 @@
             </child>
             <child>
               <object class="GtkButton" id="user">
-                <property name="label" translatable="yes">_Format</property>
+                <property name="label" translatable="yes" context="outlinenumbering|user">_Format</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -112,7 +112,7 @@
               <object class="GtkLabel" id="numbering">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Numbering</property>
+                <property name="label" translatable="yes" context="outlinenumbering|numbering">Numbering</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -125,7 +125,7 @@
               <object class="GtkLabel" id="position">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Position</property>
+                <property name="label" translatable="yes" context="outlinenumbering|position">Position</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -156,7 +156,7 @@
       <object class="GtkMenuItem" id="form1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Untitled 1</property>
+        <property name="label" translatable="yes" context="outlinenumbering|form1">Untitled 1</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -164,7 +164,7 @@
       <object class="GtkMenuItem" id="form2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Untitled 2</property>
+        <property name="label" translatable="yes" context="outlinenumbering|form2">Untitled 2</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -172,7 +172,7 @@
       <object class="GtkMenuItem" id="form3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Untitled 3</property>
+        <property name="label" translatable="yes" context="outlinenumbering|form3">Untitled 3</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -180,7 +180,7 @@
       <object class="GtkMenuItem" id="form4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Untitled 4</property>
+        <property name="label" translatable="yes" context="outlinenumbering|form4">Untitled 4</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -188,7 +188,7 @@
       <object class="GtkMenuItem" id="form5">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Untitled 5</property>
+        <property name="label" translatable="yes" context="outlinenumbering|form5">Untitled 5</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -196,7 +196,7 @@
       <object class="GtkMenuItem" id="form6">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Untitled 6</property>
+        <property name="label" translatable="yes" context="outlinenumbering|form6">Untitled 6</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -204,7 +204,7 @@
       <object class="GtkMenuItem" id="form7">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Untitled 7</property>
+        <property name="label" translatable="yes" context="outlinenumbering|form7">Untitled 7</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -212,7 +212,7 @@
       <object class="GtkMenuItem" id="form8">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Untitled 8</property>
+        <property name="label" translatable="yes" context="outlinenumbering|form8">Untitled 8</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -220,7 +220,7 @@
       <object class="GtkMenuItem" id="form9">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Untitled 9</property>
+        <property name="label" translatable="yes" context="outlinenumbering|form9">Untitled 9</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -234,7 +234,7 @@
       <object class="GtkMenuItem" id="saveas">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Save _As...</property>
+        <property name="label" translatable="yes" context="outlinenumbering|saveas">Save _As...</property>
         <property name="use_underline">True</property>
       </object>
     </child>

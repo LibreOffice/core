@@ -18,7 +18,7 @@
  */
 
 #include <resultset.hxx>
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include "apitools.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>

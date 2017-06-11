@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.0 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkImage" id="image1">
@@ -16,7 +16,7 @@
   <object class="GtkDialog" id="AssignStylesDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Assign Styles</property>
+    <property name="title" translatable="yes" context="assignstylesdialog|AssignStylesDialog">Assign Styles</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -121,7 +121,7 @@
                                 <property name="image">image1</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="left-atkobject">
-                                    <property name="AtkObject::accessible-name" translatable="yes">Left</property>
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="assignstylesdialog|left-atkobject">Left</property>
                                   </object>
                                 </child>
                               </object>
@@ -139,7 +139,7 @@
                                 <property name="image">image2</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="right-atkobject">
-                                    <property name="AtkObject::accessible-name" translatable="yes">Right</property>
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="assignstylesdialog|right-atkobject">Right</property>
                                   </object>
                                 </child>
                               </object>
@@ -187,7 +187,7 @@
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Not applied</property>
+                        <property name="label" translatable="yes" context="assignstylesdialog|notapplied">Not applied</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -204,7 +204,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Styles</property>
+                <property name="label" translatable="yes" context="assignstylesdialog|label3">Styles</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

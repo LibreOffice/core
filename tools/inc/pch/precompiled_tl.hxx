@@ -75,7 +75,6 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
-#include <tools/resid.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/toolsdllapi.h>

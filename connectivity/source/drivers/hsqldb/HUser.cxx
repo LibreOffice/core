@@ -25,7 +25,7 @@
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
 #include "TConnection.hxx"
-#include "resource/hsqldb_res.hrc"
+#include "strings.hrc"
 
 using namespace connectivity;
 using namespace connectivity::hsqldb;

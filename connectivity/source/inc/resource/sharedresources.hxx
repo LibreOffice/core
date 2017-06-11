@@ -41,20 +41,20 @@ namespace connectivity
         ~SharedResources();
 
         /** loads a string from the shared resource file
-            @param  _nResId
+            @param  pResId
                 the resource ID of the string
             @return
                 the string from the resource file
         */
         OUString
             getResourceString(
-                ResourceId _nResId
+                const char* pResId
             ) const;
 
         /** loads a string from the shared resource file, and replaces
             a given ASCII pattern with a given string
 
-            @param  _nResId
+            @param  pResId
                 the resource ID of the string to load
             @param  _pAsciiPatternToReplace
                 the ASCII string which is to search in the string. Must not be <NULL/>.
@@ -66,7 +66,7 @@ namespace connectivity
         */
         OUString
             getResourceStringWithSubstitution(
-                ResourceId _nResId,
+                const char* pResId,
                 const sal_Char* _pAsciiPatternToReplace,
                 const OUString& _rStringToSubstitute
             ) const;
@@ -74,7 +74,7 @@ namespace connectivity
         /** loads a string from the shared resource file, and replaces
             a given ASCII pattern with a given string
 
-            @param  _nResId
+            @param  pResId
                 the resource ID of the string to load
             @param  _pAsciiPatternToReplace1
                 the ASCII string (1) which is to search in the string. Must not be <NULL/>.
@@ -90,7 +90,7 @@ namespace connectivity
         */
         OUString
             getResourceStringWithSubstitution(
-                ResourceId _nResId,
+                const char* pResId,
                 const sal_Char* _pAsciiPatternToReplace1,
                 const OUString& _rStringToSubstitute1,
                 const sal_Char* _pAsciiPatternToReplace2,
@@ -100,7 +100,7 @@ namespace connectivity
         /** loads a string from the shared resource file, and replaces
             a given ASCII pattern with a given string
 
-            @param  _nResId
+            @param  pResId
                 the resource ID of the string to load
             @param  _pAsciiPatternToReplace1
                 the ASCII string (1) which is to search in the string. Must not be <NULL/>.
@@ -120,7 +120,7 @@ namespace connectivity
         */
         OUString
             getResourceStringWithSubstitution(
-                ResourceId _nResId,
+                const char* pResId,
                 const sal_Char* _pAsciiPatternToReplace1,
                 const OUString& _rStringToSubstitute1,
                 const sal_Char* _pAsciiPatternToReplace2,
@@ -131,7 +131,7 @@ namespace connectivity
 
         /** loads a string from the shared resource file, and replaces a given ASCII pattern with a given string
 
-            @param  _nResId
+            @param  pResId
                 the resource ID of the string to load
             @param  _aStringToSubstitutes
                 A list of substitutions.
@@ -139,7 +139,7 @@ namespace connectivity
             @return
                 the string from the resource file, with applied string substitution
         */
-        OUString getResourceStringWithSubstitution( ResourceId _nResId,
+        OUString getResourceStringWithSubstitution( const char* pResId,
                     const std::list< std::pair<const sal_Char* , OUString > >& _rStringToSubstitutes) const;
     };
 

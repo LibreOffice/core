@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sc">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkGrid" id="CellProtectionPage">
     <property name="visible">True</property>
@@ -32,7 +32,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="checkProtected">
-                    <property name="label" translatable="yes">_Protected</property>
+                    <property name="label" translatable="yes" context="cellprotectionpage|checkProtected">_Protected</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -52,7 +52,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="checkHideFormula">
-                    <property name="label" translatable="yes">Hide _formula</property>
+                    <property name="label" translatable="yes" context="cellprotectionpage|checkHideFormula">Hide _formula</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -71,7 +71,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="checkHideAll">
-                    <property name="label" translatable="yes">Hide _all</property>
+                    <property name="label" translatable="yes" context="cellprotectionpage|checkHideAll">Hide _all</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -96,7 +96,7 @@
                     <property name="halign">end</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Cell protection is only effective after the current sheet has been protected.
+                    <property name="label" translatable="yes" context="cellprotectionpage|label1">Cell protection is only effective after the current sheet has been protected.
 
 Select 'Protect Sheet' from the 'Tools' menu.</property>
                     <property name="wrap">True</property>
@@ -117,7 +117,7 @@ Select 'Protect Sheet' from the 'Tools' menu.</property>
           <object class="GtkLabel" id="LabelProtection">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Protection</property>
+            <property name="label" translatable="yes" context="cellprotectionpage|LabelProtection">Protection</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -151,7 +151,7 @@ Select 'Protect Sheet' from the 'Tools' menu.</property>
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="checkHidePrinting">
-                    <property name="label" translatable="yes">Hide _when printing</property>
+                    <property name="label" translatable="yes" context="cellprotectionpage|checkHidePrinting">Hide _when printing</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -174,7 +174,7 @@ Select 'Protect Sheet' from the 'Tools' menu.</property>
                     <property name="halign">end</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">The cells selected will be omitted when printing.</property>
+                    <property name="label" translatable="yes" context="cellprotectionpage|label4">The cells selected will be omitted when printing.</property>
                     <property name="wrap">True</property>
                     <property name="width_chars">52</property>
                   </object>
@@ -193,7 +193,7 @@ Select 'Protect Sheet' from the 'Tools' menu.</property>
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Print</property>
+            <property name="label" translatable="yes" context="cellprotectionpage|label3">Print</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

@@ -23,7 +23,6 @@
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
-#include <rsc/rsc-vcl-shared-types.hxx>
 #include <vcl/event.hxx>
 
 #include "tilebuffer.hxx"

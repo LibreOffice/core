@@ -34,7 +34,7 @@
 #include "colorformat.hxx"
 
 #include "globstr.hrc"
-#include "scres.hrc"
+#include "strings.hrc"
 
 #include <set>
 

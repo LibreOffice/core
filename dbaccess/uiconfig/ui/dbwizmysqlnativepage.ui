@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="dba">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="DBWizMysqlNativePage">
     <property name="visible">True</property>
@@ -38,7 +38,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Please enter the required information to connect to a MySQL database.</property>
+                    <property name="label" translatable="yes" context="dbwizmysqlnativepage|helptext">Please enter the required information to connect to a MySQL database.</property>
                     <property name="wrap">True</property>
                     <property name="max_width_chars">100</property>
                   </object>
@@ -73,7 +73,7 @@
           <object class="GtkLabel" id="header">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Set Up a Connection to a MySQL Database</property>
+            <property name="label" translatable="yes" context="dbwizmysqlnativepage|header">Set Up a Connection to a MySQL Database</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

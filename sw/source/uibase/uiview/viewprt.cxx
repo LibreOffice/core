@@ -57,7 +57,7 @@
 #include <IDocumentDeviceAccess.hxx>
 
 #include <globals.hrc>
-#include <view.hrc>
+#include <strings.hrc>
 #include <app.hrc>
 #include <swwrtshitem.hxx>
 #include "swabstdlg.hxx"
@@ -177,8 +177,8 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             else
             {
                 ScopedVclPtrInstance< MessageDialog > aInfoBox(&GetEditWin(), SwResId(STR_ERR_NO_FAX), VclMessageType::Info);
-                sal_uInt16 nResNo = bWeb ? STR_WEBOPTIONS : STR_TEXTOPTIONS;
-                aInfoBox->set_primary_text(aInfoBox->get_primary_text().replaceFirst("%1", SwResId(nResNo)));
+                const char* pResId = bWeb ? STR_WEBOPTIONS : STR_TEXTOPTIONS;
+                aInfoBox->set_primary_text(aInfoBox->get_primary_text().replaceFirst("%1", SwResId(pResId)));
                 aInfoBox->Execute();
                 SfxUInt16Item aDefPage(SID_SW_EDITOPTIONS, TP_OPTPRINT_PAGE);
                 GetViewFrame()->GetDispatcher()->ExecuteList(SID_SW_EDITOPTIONS,

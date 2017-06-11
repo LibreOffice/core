@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="pcr">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkGrid" id="DataSourcePage">
@@ -14,7 +14,7 @@
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
         <property name="yalign">0</property>
-        <property name="label" translatable="yes">That was all the information necessary to integrate your address data into %PRODUCTNAME.
+        <property name="label" translatable="yes" context="datasourcepage|label2">That was all the information necessary to integrate your address data into %PRODUCTNAME.
 
 Now, just enter the name under which you want to register the data source in %PRODUCTNAME.</property>
         <property name="wrap">True</property>
@@ -35,7 +35,7 @@ Now, just enter the name under which you want to register the data source in %PR
         <property name="row_spacing">6</property>
         <child>
           <object class="GtkCheckButton" id="embed">
-            <property name="label" translatable="yes">Embed this address book definition into the current document.</property>
+            <property name="label" translatable="yes" context="datasourcepage|embed">Embed this address book definition into the current document.</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -58,7 +58,7 @@ Now, just enter the name under which you want to register the data source in %PR
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Location</property>
+                <property name="label" translatable="yes" context="datasourcepage|locationft">Location</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">location</property>
               </object>
@@ -71,7 +71,7 @@ Now, just enter the name under which you want to register the data source in %PR
             </child>
             <child>
               <object class="GtkButton" id="browse">
-                <property name="label" translatable="yes">Browse...</property>
+                <property name="label" translatable="yes" context="datasourcepage|browse">Browse...</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -113,7 +113,7 @@ Now, just enter the name under which you want to register the data source in %PR
         </child>
         <child>
           <object class="GtkCheckButton" id="available">
-            <property name="label" translatable="yes">Make this address book available to all modules in %PRODUCTNAME.</property>
+            <property name="label" translatable="yes" context="datasourcepage|available">Make this address book available to all modules in %PRODUCTNAME.</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -150,7 +150,7 @@ Now, just enter the name under which you want to register the data source in %PR
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Address book name</property>
+                        <property name="label" translatable="yes" context="datasourcepage|nameft">Address book name</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">location</property>
                       </object>
@@ -188,7 +188,7 @@ Now, just enter the name under which you want to register the data source in %PR
                     <property name="no_show_all">True</property>
                     <property name="xalign">0</property>
                     <property name="yalign">0</property>
-                    <property name="label" translatable="yes">Another data source already has this name. As data sources have to have globally unique names, you need to choose another one.</property>
+                    <property name="label" translatable="yes" context="datasourcepage|warning">Another data source already has this name. As data sources have to have globally unique names, you need to choose another one.</property>
                     <property name="wrap">True</property>
                     <property name="max_width_chars">90</property>
                   </object>

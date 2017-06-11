@@ -19,7 +19,7 @@
 
 #include <classes/fwkresid.hxx>
 #include <services.h>
-#include <classes/resource.hrc>
+#include <strings.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/status.hxx>

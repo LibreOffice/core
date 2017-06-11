@@ -24,7 +24,7 @@
 class FileChangedQueryBox : public MessBox
 {
 public:
-    FileChangedQueryBox( vcl::Window* pParent, ResMgr* pResMgr );
+    FileChangedQueryBox( vcl::Window* pParent, const std::locale& pResLocale );
     virtual ~FileChangedQueryBox() override;
 };
 

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="JavaClassPath">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Class Path</property>
+    <property name="title" translatable="yes" context="javaclasspathdialog|JavaClassPath">Class Path</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -90,7 +90,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">A_ssigned folders and archives</property>
+                    <property name="label" translatable="yes" context="javaclasspathdialog|label1">A_ssigned folders and archives</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">paths:border</property>
                   </object>
@@ -141,7 +141,7 @@
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkButton" id="archive">
-                    <property name="label" translatable="yes">_Add Archive...</property>
+                    <property name="label" translatable="yes" context="javaclasspathdialog|archive">_Add Archive...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -155,7 +155,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="folder">
-                    <property name="label" translatable="yes">Add _Folder</property>
+                    <property name="label" translatable="yes" context="javaclasspathdialog|folder">Add _Folder</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -169,7 +169,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="remove">
-                    <property name="label" translatable="yes">_Remove</property>
+                    <property name="label" translatable="yes" context="javaclasspathdialog|remove">_Remove</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>

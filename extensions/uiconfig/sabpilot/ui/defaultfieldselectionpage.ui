@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
+<interface domain="pcr">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="DefaultFieldSelectionPage">
     <property name="visible">True</property>
@@ -15,7 +15,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="label" translatable="yes">Should one option field be selected as a default?</property>
+        <property name="label" translatable="yes" context="defaultfieldselectionpage|label1">Should one option field be selected as a default?</property>
         <property name="wrap">True</property>
       </object>
       <packing>
@@ -31,7 +31,7 @@
         <property name="spacing">12</property>
         <child>
           <object class="GtkRadioButton" id="defaultselectionyes">
-            <property name="label" translatable="yes">_Yes, the following:</property>
+            <property name="label" translatable="yes" context="defaultfieldselectionpage|defaultselectionyes">_Yes, the following:</property>
             <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -73,7 +73,7 @@
     </child>
     <child>
       <object class="GtkRadioButton" id="defaultselectionno">
-        <property name="label" translatable="yes">No, one particular field is not going to be selected.</property>
+        <property name="label" translatable="yes" context="defaultfieldselectionpage|defaultselectionno">No, one particular field is not going to be selected.</property>
         <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>

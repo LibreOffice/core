@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sd">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">-5000000</property>
@@ -32,7 +32,7 @@
   <object class="GtkDialog" id="SnapObjectDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">New Snap Object</property>
+    <property name="title" translatable="yes" context="dlgsnap|SnapObjectDialog">New Snap Object</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -167,7 +167,7 @@
                           <object class="GtkLabel" id="xlabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_X:</property>
+                            <property name="label" translatable="yes" context="dlgsnap|xlabel">_X:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">x:0.00cm</property>
                           </object>
@@ -180,7 +180,7 @@
                           <object class="GtkLabel" id="ylabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Y:</property>
+                            <property name="label" translatable="yes" context="dlgsnap|ylabel">_Y:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">y:0.00cm</property>
                           </object>
@@ -197,7 +197,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Position</property>
+                    <property name="label" translatable="yes" context="dlgsnap|label1">Position</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -230,7 +230,7 @@
                         <property name="spacing">12</property>
                         <child>
                           <object class="GtkRadioButton" id="point">
-                            <property name="label" translatable="yes">_Point</property>
+                            <property name="label" translatable="yes" context="dlgsnap|point">_Point</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -249,7 +249,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="vert">
-                            <property name="label" translatable="yes">_Vertical</property>
+                            <property name="label" translatable="yes" context="dlgsnap|vert">_Vertical</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -267,7 +267,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="horz">
-                            <property name="label" translatable="yes">Hori_zontal</property>
+                            <property name="label" translatable="yes" context="dlgsnap|horz">Hori_zontal</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -291,7 +291,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Type</property>
+                    <property name="label" translatable="yes" context="dlgsnap|label2">Type</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

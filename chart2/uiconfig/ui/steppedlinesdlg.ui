@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="chart">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-local-resource-path /home/eric/Documents/computers/libreoffice/core/icon-themes/galaxy/chart2 -->
   <object class="GtkDialog" id="SteppedLinesDialog">
@@ -122,7 +122,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="step_start_rb">
-                        <property name="label" translatable="yes">_Start with horizontal line</property>
+                        <property name="label" translatable="yes" context="steppedlinesdlg|step_start_rb">_Start with horizontal line</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -139,7 +139,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="step_center_x_rb">
-                        <property name="label" translatable="yes">Step at the _horizontal mean</property>
+                        <property name="label" translatable="yes" context="steppedlinesdlg|step_center_x_rb">Step at the _horizontal mean</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -156,7 +156,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="step_end_rb">
-                        <property name="label" translatable="yes">_End with horizontal line</property>
+                        <property name="label" translatable="yes" context="steppedlinesdlg|step_end_rb">_End with horizontal line</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -173,7 +173,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="step_center_y_rb">
-                        <property name="label" translatable="yes">Step to the _vertical mean</property>
+                        <property name="label" translatable="yes" context="steppedlinesdlg|step_center_y_rb">Step to the _vertical mean</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -207,7 +207,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Type of Stepping</property>
+                <property name="label" translatable="yes" context="steppedlinesdlg|label2">Type of Stepping</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

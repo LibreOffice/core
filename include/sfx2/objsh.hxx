@@ -41,7 +41,7 @@
 #include <vcl/bitmap.hxx>
 #include <sot/formats.hxx>
 #include <sot/object.hxx>
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 
 #include <sfx2/XmlIdRegistry.hxx>
 #include <sfx2/shell.hxx>

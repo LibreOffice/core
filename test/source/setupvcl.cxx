@@ -65,7 +65,6 @@ void test::setUpVcl() {
     else
         locale = "en-US";
 
-    ResMgr::SetDefaultLocale(LanguageTag(locale));
     SvtSysLocaleOptions localOptions;
     localOptions.SetLocaleConfigString(locale);
     localOptions.SetUILocaleConfigString(locale);

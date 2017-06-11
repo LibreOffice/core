@@ -14,7 +14,7 @@
 #include <vcl/toolbox.hxx>
 
 #include "strings.hrc"
-#include "res_bmp.hrc"
+
 #include "bitmaps.hlst"
 #include "sdresid.hxx"
 
@@ -71,7 +71,7 @@ struct snewfoil_value_info
 {
     sal_uInt16 mnId;
     const char* msBmpResId;
-    sal_uInt16 mnStrResId;
+    const char* mpStrResId;
     const char* msUnoCommand;
 };
 
@@ -93,7 +93,7 @@ static const snewfoil_value_info editmodes[] =
         BMP_DISPLAYMODE_SLIDE_SORTER,
         STR_SLIDE_SORTER_MODE,
         ".uno:DiaMode" },
-    {0, "", 0, "" }
+    {0, "", nullptr, "" }
 };
 
 static const snewfoil_value_info mastermodes[] =
@@ -110,7 +110,7 @@ static const snewfoil_value_info mastermodes[] =
         BMP_DISPLAYMODE_HANDOUT_MASTER,
         STR_HANDOUT_MASTER_MODE,
         ".uno:HandoutMode" },
-    {0, "", 0, "" }
+    {0, "", nullptr, "" }
 };
 
 
@@ -119,7 +119,7 @@ static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info* pIn
     Size aLayoutItemSize;
     for( ; pInfo->mnId; pInfo++ )
     {
-        OUString aText( SdResId( pInfo->mnStrResId ) );
+        OUString aText(SdResId(pInfo->mpStrResId));
         BitmapEx aBmp(OUString::createFromAscii(pInfo->msBmpResId));
 
         pValue->InsertItem(pInfo->mnId, Image(aBmp), aText);

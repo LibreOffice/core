@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="chart">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkBox" id="tp_AxisPositions">
@@ -36,7 +36,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Cross other axis at</property>
+                        <property name="label" translatable="yes" context="tp_AxisPositions|FT_CROSSES_OTHER_AXIS_AT">_Cross other axis at</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">LB_CROSSES_OTHER_AXIS_AT</property>
                       </object>
@@ -54,10 +54,10 @@
                         <property name="entry_text_column">0</property>
                         <property name="id_column">1</property>
                         <items>
-                          <item translatable="yes">Start</item>
-                          <item translatable="yes">End</item>
-                          <item translatable="yes">Value</item>
-                          <item translatable="yes">Category</item>
+                          <item translatable="yes" context="tp_AxisPositions|LB_CROSSES_OTHER_AXIS_AT">Start</item>
+                          <item translatable="yes" context="tp_AxisPositions|LB_CROSSES_OTHER_AXIS_AT">End</item>
+                          <item translatable="yes" context="tp_AxisPositions|LB_CROSSES_OTHER_AXIS_AT">Value</item>
+                          <item translatable="yes" context="tp_AxisPositions|LB_CROSSES_OTHER_AXIS_AT">Category</item>
                         </items>
                       </object>
                       <packing>
@@ -104,7 +104,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="CB_AXIS_BETWEEN_CATEGORIES">
-                    <property name="label" translatable="yes">Axis _between categories</property>
+                    <property name="label" translatable="yes" context="tp_AxisPositions|CB_AXIS_BETWEEN_CATEGORIES">Axis _between categories</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
@@ -126,7 +126,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Axis Line</property>
+            <property name="label" translatable="yes" context="tp_AxisPositions|TXT_AXIS_LINE">Axis Line</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -167,7 +167,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Place labels</property>
+                        <property name="label" translatable="yes" context="tp_AxisPositions|FT_PLACE_LABELS">_Place labels</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">LB_PLACE_LABELS</property>
                       </object>
@@ -184,10 +184,10 @@
                         <property name="entry_text_column">0</property>
                         <property name="id_column">1</property>
                         <items>
-                          <item translatable="yes">Near axis</item>
-                          <item translatable="yes">Near axis (other side)</item>
-                          <item translatable="yes">Outside start</item>
-                          <item translatable="yes">Outside end</item>
+                          <item translatable="yes" context="tp_AxisPositions|LB_PLACE_LABELS">Near axis</item>
+                          <item translatable="yes" context="tp_AxisPositions|LB_PLACE_LABELS">Near axis (other side)</item>
+                          <item translatable="yes" context="tp_AxisPositions|LB_PLACE_LABELS">Outside start</item>
+                          <item translatable="yes" context="tp_AxisPositions|LB_PLACE_LABELS">Outside end</item>
                         </items>
                       </object>
                       <packing>
@@ -212,7 +212,7 @@
                       <object class="GtkLabel" id="FT_AXIS_LABEL_DISTANCE">
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Distance</property>
+                        <property name="label" translatable="yes" context="tp_AxisPositions|FT_AXIS_LABEL_DISTANCE">_Distance</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">EDT_AXIS_LABEL_DISTANCE</property>
                       </object>
@@ -249,7 +249,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Labels</property>
+            <property name="label" translatable="yes" context="tp_AxisPositions|TXT_FL_LABELS">Labels</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -291,7 +291,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Major:</property>
+                        <property name="label" translatable="yes" context="tp_AxisPositions|FT_MAJOR">Major:</property>
                         <accessibility>
                           <relation type="label-for" target="CB_TICKS_INNER"/>
                           <relation type="label-for" target="CB_TICKS_OUTER"/>
@@ -309,7 +309,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Minor:</property>
+                        <property name="label" translatable="yes" context="tp_AxisPositions|FT_MINOR">Minor:</property>
                         <accessibility>
                           <relation type="label-for" target="CB_MINOR_INNER"/>
                           <relation type="label-for" target="CB_MINOR_OUTER"/>
@@ -324,7 +324,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="CB_TICKS_INNER">
-                        <property name="label" translatable="yes">_Inner</property>
+                        <property name="label" translatable="yes" context="tp_AxisPositions|CB_TICKS_INNER">_Inner</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -344,7 +344,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="CB_TICKS_OUTER">
-                        <property name="label" translatable="yes">_Outer</property>
+                        <property name="label" translatable="yes" context="tp_AxisPositions|CB_TICKS_OUTER">_Outer</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -364,7 +364,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="CB_MINOR_INNER">
-                        <property name="label" translatable="yes">I_nner</property>
+                        <property name="label" translatable="yes" context="tp_AxisPositions|CB_MINOR_INNER">I_nner</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -384,7 +384,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="CB_MINOR_OUTER">
-                        <property name="label" translatable="yes">O_uter</property>
+                        <property name="label" translatable="yes" context="tp_AxisPositions|CB_MINOR_OUTER">O_uter</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -419,7 +419,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Place _marks</property>
+                        <property name="label" translatable="yes" context="tp_AxisPositions|FT_PLACE_TICKS">Place _marks</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">LB_PLACE_TICKS</property>
                       </object>
@@ -436,9 +436,9 @@
                         <property name="entry_text_column">0</property>
                         <property name="id_column">1</property>
                         <items>
-                          <item translatable="yes">At labels</item>
-                          <item translatable="yes">At axis</item>
-                          <item translatable="yes">At axis and labels</item>
+                          <item translatable="yes" context="tp_AxisPositions|LB_PLACE_TICKS">At labels</item>
+                          <item translatable="yes" context="tp_AxisPositions|LB_PLACE_TICKS">At axis</item>
+                          <item translatable="yes" context="tp_AxisPositions|LB_PLACE_TICKS">At axis and labels</item>
                         </items>
                       </object>
                       <packing>
@@ -463,7 +463,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Interval Marks</property>
+            <property name="label" translatable="yes" context="tp_AxisPositions|TXT_FL_TICKS">Interval Marks</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -495,7 +495,7 @@
                 <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="CB_MAJOR_GRID">
-                    <property name="label" translatable="yes">Show major _grid</property>
+                    <property name="label" translatable="yes" context="tp_AxisPositions|CB_MAJOR_GRID">Show major _grid</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -513,7 +513,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="CB_MINOR_GRID">
-                    <property name="label" translatable="yes">_Show minor grid</property>
+                    <property name="label" translatable="yes" context="tp_AxisPositions|CB_MINOR_GRID">_Show minor grid</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -530,7 +530,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="PB_MAJOR_GRID">
-                    <property name="label" translatable="yes">Mo_re...</property>
+                    <property name="label" translatable="yes" context="tp_AxisPositions|PB_MAJOR_GRID">Mo_re...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
@@ -545,7 +545,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="PB_MINOR_GRID">
-                    <property name="label" translatable="yes">Mor_e...</property>
+                    <property name="label" translatable="yes" context="tp_AxisPositions|PB_MINOR_GRID">Mor_e...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
@@ -568,7 +568,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Grids</property>
+            <property name="label" translatable="yes" context="tp_AxisPositions|label2">Grids</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

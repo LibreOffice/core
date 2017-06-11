@@ -18,7 +18,10 @@
  */
 
 #include "TableCopyHelper.hxx"
-#include "dbustrings.hrc"
+#include "core_resource.hxx"
+#include "stringconstants.hxx"
+#include "strings.hrc"
+#include "strings.hxx"
 #include "sqlmessage.hxx"
 #include <vcl/msgbox.hxx>
 #include "WCopyTable.hxx"
@@ -35,7 +38,7 @@
 #include "TokenWriter.hxx"
 #include "UITools.hxx"
 #include <dbaccess/dataview.hxx>
-#include "dbu_resource.hrc"
+#include "dbu_pageids.hxx"
 #include <unotools/ucbhelper.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
@@ -204,7 +207,7 @@ void OTableCopyHelper::pasteTable( SotClipboardFormatId _nFormatId
             aTrans.bHtml            = SotClipboardFormatId::HTML == _nFormatId;
             aTrans.sDefaultTableName = GetTableNameForAppend();
             if ( !bOk || !copyTagTable(aTrans,false,_xConnection) )
-                m_pController->showError(SQLException(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE), *m_pController, "S1000", 0, Any()));
+                m_pController->showError(SQLException(DBA_RES(STR_NO_TABLE_FORMAT_INSIDE), *m_pController, "S1000", 0, Any()));
         }
         catch(const SQLException&)
         {
@@ -216,7 +219,7 @@ void OTableCopyHelper::pasteTable( SotClipboardFormatId _nFormatId
         }
     }
     else
-        m_pController->showError(SQLException(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE), *m_pController, "S1000", 0, Any()));
+        m_pController->showError(SQLException(DBA_RES(STR_NO_TABLE_FORMAT_INSIDE), *m_pController, "S1000", 0, Any()));
 }
 
 void OTableCopyHelper::pasteTable( const TransferableDataHelper& _rTransData
@@ -313,7 +316,7 @@ void OTableCopyHelper::asyncCopyTagTable(  DropDescriptor& _rDesc
     else if ( !_rDesc.bError )
         pasteTable(_rDesc.aDroppedData,i_rDestDataSource,_xConnection);
     else
-        m_pController->showError(SQLException(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE), *m_pController, "S1000", 0, Any()));
+        m_pController->showError(SQLException(DBA_RES(STR_NO_TABLE_FORMAT_INSIDE), *m_pController, "S1000", 0, Any()));
 }
 
 }   // namespace dbaui

@@ -1,0 +1,144 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SCADDINS_INC_STRINGS_HRC
+#define INCLUDED_SCADDINS_INC_STRINGS_HRC
+
+#define NC_(Context, String) (Context "\004" u8##String)
+
+// function names as accessible from cells
+#define PRICING_FUNCNAME_OptBarrier                     NC_("PRICING_FUNCNAME_OptBarrier", "OPT_BARRIER")
+#define PRICING_FUNCNAME_OptTouch                       NC_("PRICING_FUNCNAME_OptTouch", "OPT_TOUCH")
+#define PRICING_FUNCNAME_OptProbHit                     NC_("PRICING_FUNCNAME_OptProbHit", "OPT_PROB_HIT")
+#define PRICING_FUNCNAME_OptProbInMoney                 NC_("PRICING_FUNCNAME_OptProbInMoney", "OPT_PROB_INMONEY")
+
+#define DATE_FUNCNAME_DiffWeeks                         NC_("DATE_FUNCNAME_DiffWeeks", "WEEKS")
+#define DATE_FUNCNAME_DiffMonths                        NC_("DATE_FUNCNAME_DiffMonths", "MONTHS")
+#define DATE_FUNCNAME_DiffYears                         NC_("DATE_FUNCNAME_DiffYears", "YEARS")
+#define DATE_FUNCNAME_IsLeapYear                        NC_("DATE_FUNCNAME_IsLeapYear", "ISLEAPYEAR")
+#define DATE_FUNCNAME_DaysInMonth                       NC_("DATE_FUNCNAME_DaysInMonth", "DAYSINMONTH")
+#define DATE_FUNCNAME_DaysInYear                        NC_("DATE_FUNCNAME_DaysInYear", "DAYSINYEAR")
+#define DATE_FUNCNAME_WeeksInYear                       NC_("DATE_FUNCNAME_WeeksInYear", "WEEKSINYEAR")
+#define DATE_FUNCNAME_Rot13                             NC_("DATE_FUNCNAME_Rot13", "ROT13")
+
+#define ANALYSIS_FUNCNAME_Workday                       NC_("ANALYSIS_FUNCNAME_Workday", "WORKDAY")
+#define ANALYSIS_FUNCNAME_Yearfrac                      NC_("ANALYSIS_FUNCNAME_Yearfrac", "YEARFRAC")
+#define ANALYSIS_FUNCNAME_Edate                         NC_("ANALYSIS_FUNCNAME_Edate", "EDATE")
+#define ANALYSIS_FUNCNAME_Weeknum                       NC_("ANALYSIS_FUNCNAME_Weeknum", "WEEKNUM")
+#define ANALYSIS_FUNCNAME_Eomonth                       NC_("ANALYSIS_FUNCNAME_Eomonth", "EOMONTH")
+#define ANALYSIS_FUNCNAME_Networkdays                   NC_("ANALYSIS_FUNCNAME_Networkdays", "NETWORKDAYS")
+#define ANALYSIS_FUNCNAME_Amordegrc                     NC_("ANALYSIS_FUNCNAME_Amordegrc", "AMORDEGRC")
+#define ANALYSIS_FUNCNAME_Amorlinc                      NC_("ANALYSIS_FUNCNAME_Amorlinc", "AMORLINC")
+#define ANALYSIS_FUNCNAME_Accrint                       NC_("ANALYSIS_FUNCNAME_Accrint", "ACCRINT")
+#define ANALYSIS_FUNCNAME_Accrintm                      NC_("ANALYSIS_FUNCNAME_Accrintm", "ACCRINTM")
+#define ANALYSIS_FUNCNAME_Received                      NC_("ANALYSIS_FUNCNAME_Received", "RECEIVED")
+#define ANALYSIS_FUNCNAME_Disc                          NC_("ANALYSIS_FUNCNAME_Disc", "DISC")
+#define ANALYSIS_FUNCNAME_Duration                      NC_("ANALYSIS_FUNCNAME_Duration", "DURATION")
+#define ANALYSIS_FUNCNAME_Effect                        NC_("ANALYSIS_FUNCNAME_Effect", "EFFECT")
+#define ANALYSIS_FUNCNAME_Cumprinc                      NC_("ANALYSIS_FUNCNAME_Cumprinc", "CUMPRINC")
+#define ANALYSIS_FUNCNAME_Cumipmt                       NC_("ANALYSIS_FUNCNAME_Cumipmt", "CUMIPMT")
+#define ANALYSIS_FUNCNAME_Price                         NC_("ANALYSIS_FUNCNAME_Price", "PRICE")
+#define ANALYSIS_FUNCNAME_Pricedisc                     NC_("ANALYSIS_FUNCNAME_Pricedisc", "PRICEDISC")
+#define ANALYSIS_FUNCNAME_Pricemat                      NC_("ANALYSIS_FUNCNAME_Pricemat", "PRICEMAT")
+#define ANALYSIS_FUNCNAME_Mduration                     NC_("ANALYSIS_FUNCNAME_Mduration", "MDURATION")
+#define ANALYSIS_FUNCNAME_Nominal                       NC_("ANALYSIS_FUNCNAME_Nominal", "NOMINAL")
+#define ANALYSIS_FUNCNAME_Dollarfr                      NC_("ANALYSIS_FUNCNAME_Dollarfr", "DOLLARFR")
+#define ANALYSIS_FUNCNAME_Dollarde                      NC_("ANALYSIS_FUNCNAME_Dollarde", "DOLLARDE")
+#define ANALYSIS_FUNCNAME_Yield                         NC_("ANALYSIS_FUNCNAME_Yield", "YIELD")
+#define ANALYSIS_FUNCNAME_Yielddisc                     NC_("ANALYSIS_FUNCNAME_Yielddisc", "YIELDDISC")
+#define ANALYSIS_FUNCNAME_Yieldmat                      NC_("ANALYSIS_FUNCNAME_Yieldmat", "YIELDMAT")
+#define ANALYSIS_FUNCNAME_Tbilleq                       NC_("ANALYSIS_FUNCNAME_Tbilleq", "TBILLEQ")
+#define ANALYSIS_FUNCNAME_Tbillprice                    NC_("ANALYSIS_FUNCNAME_Tbillprice", "TBILLPRICE")
+#define ANALYSIS_FUNCNAME_Tbillyield                    NC_("ANALYSIS_FUNCNAME_Tbillyield", "TBILLYIELD")
+#define ANALYSIS_FUNCNAME_Oddfprice                     NC_("ANALYSIS_FUNCNAME_Oddfprice", "ODDFPRICE")
+#define ANALYSIS_FUNCNAME_Oddfyield                     NC_("ANALYSIS_FUNCNAME_Oddfyield", "ODDFYIELD")
+#define ANALYSIS_FUNCNAME_Oddlprice                     NC_("ANALYSIS_FUNCNAME_Oddlprice", "ODDLPRICE")
+#define ANALYSIS_FUNCNAME_Oddlyield                     NC_("ANALYSIS_FUNCNAME_Oddlyield", "ODDLYIELD")
+#define ANALYSIS_FUNCNAME_Xirr                          NC_("ANALYSIS_FUNCNAME_Xirr", "XIRR")
+#define ANALYSIS_FUNCNAME_Xnpv                          NC_("ANALYSIS_FUNCNAME_Xnpv", "XNPV")
+#define ANALYSIS_FUNCNAME_Intrate                       NC_("ANALYSIS_FUNCNAME_Intrate", "INTRATE")
+#define ANALYSIS_FUNCNAME_Coupncd                       NC_("ANALYSIS_FUNCNAME_Coupncd", "COUPNCD")
+#define ANALYSIS_FUNCNAME_Coupdays                      NC_("ANALYSIS_FUNCNAME_Coupdays", "COUPDAYS")
+#define ANALYSIS_FUNCNAME_Coupdaysnc                    NC_("ANALYSIS_FUNCNAME_Coupdaysnc", "COUPDAYSNC")
+#define ANALYSIS_FUNCNAME_Coupdaybs                     NC_("ANALYSIS_FUNCNAME_Coupdaybs", "COUPDAYBS")
+#define ANALYSIS_FUNCNAME_Couppcd                       NC_("ANALYSIS_FUNCNAME_Couppcd", "COUPPCD")
+#define ANALYSIS_FUNCNAME_Coupnum                       NC_("ANALYSIS_FUNCNAME_Coupnum", "COUPNUM")
+#define ANALYSIS_FUNCNAME_Fvschedule                    NC_("ANALYSIS_FUNCNAME_Fvschedule", "FVSCHEDULE")
+#define ANALYSIS_FUNCNAME_Iseven                        NC_("ANALYSIS_FUNCNAME_Iseven", "ISEVEN")
+#define ANALYSIS_FUNCNAME_Isodd                         NC_("ANALYSIS_FUNCNAME_Isodd", "ISODD")
+#define ANALYSIS_FUNCNAME_Gcd                           NC_("ANALYSIS_FUNCNAME_Gcd", "GCD")
+#define ANALYSIS_FUNCNAME_Lcm                           NC_("ANALYSIS_FUNCNAME_Lcm", "LCM")
+#define ANALYSIS_FUNCNAME_Multinomial                   NC_("ANALYSIS_FUNCNAME_Multinomial", "MULTINOMIAL")
+#define ANALYSIS_FUNCNAME_Seriessum                     NC_("ANALYSIS_FUNCNAME_Seriessum", "SERIESSUM")
+#define ANALYSIS_FUNCNAME_Quotient                      NC_("ANALYSIS_FUNCNAME_Quotient", "QUOTIENT")
+#define ANALYSIS_FUNCNAME_Mround                        NC_("ANALYSIS_FUNCNAME_Mround", "MROUND")
+#define ANALYSIS_FUNCNAME_Sqrtpi                        NC_("ANALYSIS_FUNCNAME_Sqrtpi", "SQRTPI")
+#define ANALYSIS_FUNCNAME_Randbetween                   NC_("ANALYSIS_FUNCNAME_Randbetween", "RANDBETWEEN")
+#define ANALYSIS_FUNCNAME_Besseli                       NC_("ANALYSIS_FUNCNAME_Besseli", "BESSELI")
+#define ANALYSIS_FUNCNAME_Besselj                       NC_("ANALYSIS_FUNCNAME_Besselj", "BESSELJ")
+#define ANALYSIS_FUNCNAME_Besselk                       NC_("ANALYSIS_FUNCNAME_Besselk", "BESSELK")
+#define ANALYSIS_FUNCNAME_Bessely                       NC_("ANALYSIS_FUNCNAME_Bessely", "BESSELY")
+#define ANALYSIS_FUNCNAME_Bin2Dec                       NC_("ANALYSIS_FUNCNAME_Bin2Dec", "BIN2DEC")
+#define ANALYSIS_FUNCNAME_Bin2Hex                       NC_("ANALYSIS_FUNCNAME_Bin2Hex", "BIN2HEX")
+#define ANALYSIS_FUNCNAME_Bin2Oct                       NC_("ANALYSIS_FUNCNAME_Bin2Oct", "BIN2OCT")
+#define ANALYSIS_FUNCNAME_Delta                         NC_("ANALYSIS_FUNCNAME_Delta", "DELTA")
+#define ANALYSIS_FUNCNAME_Dec2Bin                       NC_("ANALYSIS_FUNCNAME_Dec2Bin", "DEC2BIN")
+#define ANALYSIS_FUNCNAME_Dec2Hex                       NC_("ANALYSIS_FUNCNAME_Dec2Hex", "DEC2HEX")
+#define ANALYSIS_FUNCNAME_Dec2Oct                       NC_("ANALYSIS_FUNCNAME_Dec2Oct", "DEC2OCT")
+#define ANALYSIS_FUNCNAME_Erf                           NC_("ANALYSIS_FUNCNAME_Erf", "ERF")
+#define ANALYSIS_FUNCNAME_Erfc                          NC_("ANALYSIS_FUNCNAME_Erfc", "ERFC")
+#define ANALYSIS_FUNCNAME_Gestep                        NC_("ANALYSIS_FUNCNAME_Gestep", "GESTEP")
+#define ANALYSIS_FUNCNAME_Hex2Bin                       NC_("ANALYSIS_FUNCNAME_Hex2Bin", "HEX2BIN")
+#define ANALYSIS_FUNCNAME_Hex2Dec                       NC_("ANALYSIS_FUNCNAME_Hex2Dec", "HEX2DEC")
+#define ANALYSIS_FUNCNAME_Hex2Oct                       NC_("ANALYSIS_FUNCNAME_Hex2Oct", "HEX2OCT")
+#define ANALYSIS_FUNCNAME_Imabs                         NC_("ANALYSIS_FUNCNAME_Imabs", "IMABS")
+#define ANALYSIS_FUNCNAME_Imaginary                     NC_("ANALYSIS_FUNCNAME_Imaginary", "IMAGINARY")
+#define ANALYSIS_FUNCNAME_Impower                       NC_("ANALYSIS_FUNCNAME_Impower", "IMPOWER")
+#define ANALYSIS_FUNCNAME_Imargument                    NC_("ANALYSIS_FUNCNAME_Imargument", "IMARGUMENT")
+#define ANALYSIS_FUNCNAME_Imcos                         NC_("ANALYSIS_FUNCNAME_Imcos", "IMCOS")
+#define ANALYSIS_FUNCNAME_Imdiv                         NC_("ANALYSIS_FUNCNAME_Imdiv", "IMDIV")
+#define ANALYSIS_FUNCNAME_Imexp                         NC_("ANALYSIS_FUNCNAME_Imexp", "IMEXP")
+#define ANALYSIS_FUNCNAME_Imconjugate                   NC_("ANALYSIS_FUNCNAME_Imconjugate", "IMCONJUGATE")
+#define ANALYSIS_FUNCNAME_Imln                          NC_("ANALYSIS_FUNCNAME_Imln", "IMLN")
+#define ANALYSIS_FUNCNAME_Imlog10                       NC_("ANALYSIS_FUNCNAME_Imlog10", "IMLOG10")
+#define ANALYSIS_FUNCNAME_Imlog2                        NC_("ANALYSIS_FUNCNAME_Imlog2", "IMLOG2")
+#define ANALYSIS_FUNCNAME_Improduct                     NC_("ANALYSIS_FUNCNAME_Improduct", "IMPRODUCT")
+#define ANALYSIS_FUNCNAME_Imreal                        NC_("ANALYSIS_FUNCNAME_Imreal", "IMREAL")
+#define ANALYSIS_FUNCNAME_Imsin                         NC_("ANALYSIS_FUNCNAME_Imsin", "IMSIN")
+#define ANALYSIS_FUNCNAME_Imsub                         NC_("ANALYSIS_FUNCNAME_Imsub", "IMSUB")
+#define ANALYSIS_FUNCNAME_Imsum                         NC_("ANALYSIS_FUNCNAME_Imsum", "IMSUM")
+#define ANALYSIS_FUNCNAME_Imsqrt                        NC_("ANALYSIS_FUNCNAME_Imsqrt", "IMSQRT")
+#define ANALYSIS_FUNCNAME_Imtan                         NC_("ANALYSIS_FUNCNAME_Imtan", "IMTAN")
+#define ANALYSIS_FUNCNAME_Imsec                         NC_("ANALYSIS_FUNCNAME_Imsec", "IMSEC")
+#define ANALYSIS_FUNCNAME_Imcsc                         NC_("ANALYSIS_FUNCNAME_Imcsc", "IMCSC")
+#define ANALYSIS_FUNCNAME_Imcot                         NC_("ANALYSIS_FUNCNAME_Imcot", "IMCOT")
+#define ANALYSIS_FUNCNAME_Imsinh                        NC_("ANALYSIS_FUNCNAME_Imsinh", "IMSINH")
+#define ANALYSIS_FUNCNAME_Imcosh                        NC_("ANALYSIS_FUNCNAME_Imcosh", "IMCOSH")
+#define ANALYSIS_FUNCNAME_Imsech                        NC_("ANALYSIS_FUNCNAME_Imsech", "IMSECH")
+#define ANALYSIS_FUNCNAME_Imcsch                        NC_("ANALYSIS_FUNCNAME_Imcsch", "IMCSCH")
+#define ANALYSIS_FUNCNAME_Complex                       NC_("ANALYSIS_FUNCNAME_Complex", "COMPLEX")
+#define ANALYSIS_FUNCNAME_Oct2Bin                       NC_("ANALYSIS_FUNCNAME_Oct2Bin", "OCT2BIN")
+#define ANALYSIS_FUNCNAME_Oct2Dec                       NC_("ANALYSIS_FUNCNAME_Oct2Dec", "OCT2DEC")
+#define ANALYSIS_FUNCNAME_Oct2Hex                       NC_("ANALYSIS_FUNCNAME_Oct2Hex", "OCT2HEX")
+#define ANALYSIS_FUNCNAME_Convert                       NC_("ANALYSIS_FUNCNAME_Convert", "CONVERT")
+#define ANALYSIS_FUNCNAME_Factdouble                    NC_("ANALYSIS_FUNCNAME_Factdouble", "FACTDOUBLE")
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

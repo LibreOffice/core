@@ -24,7 +24,7 @@
 #include <svx/xoutbmp.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/graphichelper.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 
 #include <vcl/layout.hxx>
 

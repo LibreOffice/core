@@ -31,7 +31,7 @@
 #include "TConnection.hxx"
 #include <connectivity/dbexception.hxx>
 #include "resource/sharedresources.hxx"
-#include "resource/macab_res.hrc"
+#include "strings.hrc"
 
 using namespace connectivity::macab;
 using namespace cppu;

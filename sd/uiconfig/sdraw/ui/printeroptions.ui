@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sd">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="box">
     <property name="visible">True</property>
@@ -29,7 +29,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="printname">
-                    <property name="label" translatable="yes">Page name</property>
+                    <property name="label" translatable="yes" context="printeroptions|printname">Page name</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -45,7 +45,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="printdatetime">
-                    <property name="label" translatable="yes">Date and time</property>
+                    <property name="label" translatable="yes" context="printeroptions|printdatetime">Date and time</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -67,7 +67,7 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Contents</property>
+            <property name="label" translatable="yes" context="printeroptions|label4">Contents</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -100,7 +100,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkRadioButton" id="originalcolors">
-                    <property name="label" translatable="yes">Original size</property>
+                    <property name="label" translatable="yes" context="printeroptions|originalcolors">Original size</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -118,7 +118,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="grayscale">
-                    <property name="label" translatable="yes">Grayscale</property>
+                    <property name="label" translatable="yes" context="printeroptions|grayscale">Grayscale</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -136,7 +136,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="blackandwhite">
-                    <property name="label" translatable="yes">Black &amp; white</property>
+                    <property name="label" translatable="yes" context="printeroptions|blackandwhite">Black &amp; white</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -160,7 +160,7 @@
           <object class="GtkLabel" id="label5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Color</property>
+            <property name="label" translatable="yes" context="printeroptions|label5">Color</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -193,7 +193,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkRadioButton" id="originalsize">
-                    <property name="label" translatable="yes">Original size</property>
+                    <property name="label" translatable="yes" context="printeroptions|originalsize">Original size</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -211,7 +211,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="fittoprintable">
-                    <property name="label" translatable="yes">Fit to printable page</property>
+                    <property name="label" translatable="yes" context="printeroptions|fittoprintable">Fit to printable page</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -229,7 +229,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="distributeonmultiple">
-                    <property name="label" translatable="yes">Distribute on multiple sheets of paper</property>
+                    <property name="label" translatable="yes" context="printeroptions|distributeonmultiple">Distribute on multiple sheets of paper</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -247,7 +247,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="tilesheet">
-                    <property name="label" translatable="yes">Tile sheet of paper with repeated pages</property>
+                    <property name="label" translatable="yes" context="printeroptions|tilesheet">Tile sheet of paper with repeated pages</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -271,7 +271,7 @@
           <object class="GtkLabel" id="label6">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Size</property>
+            <property name="label" translatable="yes" context="printeroptions|label6">Size</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

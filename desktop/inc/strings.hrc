@@ -1,0 +1,197 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_VCL_INC_STRINGS_HRC
+#define INCLUDED_VCL_INC_STRINGS_HRC
+
+#define NC_(Context, String) (Context "\004" u8##String)
+
+#define RID_STR_COPYING_PACKAGE                             NC_("RID_STR_COPYING_PACKAGE", "Copying: ")
+#define RID_STR_ERROR_WHILE_ADDING                          NC_("RID_STR_ERROR_WHILE_ADDING", "Error while adding: ")
+#define RID_STR_ERROR_WHILE_REMOVING                        NC_("RID_STR_ERROR_WHILE_REMOVING", "Error while removing: ")
+#define RID_STR_PACKAGE_ALREADY_ADDED                       NC_("RID_STR_PACKAGE_ALREADY_ADDED", "Extension has already been added: ")
+#define RID_STR_NO_SUCH_PACKAGE                             NC_("RID_STR_NO_SUCH_PACKAGE", "There is no such extension deployed: ")
+#define RID_STR_SYNCHRONIZING_REPOSITORY                    NC_("RID_STR_SYNCHRONIZING_REPOSITORY", "Synchronizing repository for %NAME extensions")
+
+#define RID_STR_REGISTERING_PACKAGE                         NC_("RID_STR_REGISTERING_PACKAGE", "Enabling: ")
+#define RID_STR_REVOKING_PACKAGE                            NC_("RID_STR_REVOKING_PACKAGE", "Disabling: ")
+#define RID_STR_CANNOT_DETECT_MEDIA_TYPE                    NC_("RID_STR_CANNOT_DETECT_MEDIA_TYPE", "Cannot detect media-type: ")
+#define RID_STR_UNSUPPORTED_MEDIA_TYPE                      NC_("RID_STR_UNSUPPORTED_MEDIA_TYPE", "This media-type is not supported: ")
+#define RID_STR_ERROR_WHILE_REGISTERING                     NC_("RID_STR_ERROR_WHILE_REGISTERING", "An error occurred while enabling: ")
+#define RID_STR_ERROR_WHILE_REVOKING                        NC_("RID_STR_ERROR_WHILE_REVOKING", "An error occurred while disabling: ")
+
+#define RID_STR_CONF_SCHEMA                                 NC_("RID_STR_CONF_SCHEMA", "Configuration Schema")
+#define RID_STR_CONF_DATA                                   NC_("RID_STR_CONF_DATA", "Configuration Data")
+
+#define RID_STR_BASIC_LIB                                   NC_("RID_STR_BASIC_LIB", "%PRODUCTNAME Basic Library")
+#define RID_STR_DIALOG_LIB                                  NC_("RID_STR_DIALOG_LIB", "Dialog Library")
+#define RID_STR_CANNOT_DETERMINE_LIBNAME                    NC_("RID_STR_CANNOT_DETERMINE_LIBNAME", "The library name could not be determined.")
+
+#define RID_STR_PACKAGE_BUNDLE                              NC_("RID_STR_PACKAGE_BUNDLE", "Extension")
+
+#define RID_STR_DYN_COMPONENT                               NC_("RID_STR_DYN_COMPONENT", "UNO Dynamic Library Component")
+#define RID_STR_JAVA_COMPONENT                              NC_("RID_STR_JAVA_COMPONENT", "UNO Java Component")
+#define RID_STR_PYTHON_COMPONENT                            NC_("RID_STR_PYTHON_COMPONENT", "UNO Python Component")
+#define RID_STR_COMPONENTS                                  NC_("RID_STR_COMPONENTS", "UNO Components")
+#define RID_STR_RDB_TYPELIB                                 NC_("RID_STR_RDB_TYPELIB", "UNO RDB Type Library")
+#define RID_STR_JAVA_TYPELIB                                NC_("RID_STR_JAVA_TYPELIB", "UNO Java Type Library")
+
+#define RID_STR_SFWK_LIB                                    NC_("RID_STR_SFWK_LIB", "%MACROLANG Library")
+
+#define RID_STR_HELP                                        NC_("RID_STR_HELP", "Help")
+#define RID_STR_HELPPROCESSING_GENERAL_ERROR                NC_("RID_STR_HELPPROCESSING_GENERAL_ERROR", "The extension cannot be installed because:\n")
+#define RID_STR_HELPPROCESSING_XMLPARSING_ERROR             NC_("RID_STR_HELPPROCESSING_XMLPARSING_ERROR", "The extension will not be installed because an error occurred in the Help files:\n")
+
+#define RID_STR_ADD_PACKAGES                                NC_("RID_STR_ADD_PACKAGES", "Add Extension(s)")
+#define RID_CTX_ITEM_REMOVE                                 NC_("RID_CTX_ITEM_REMOVE", "~Remove")
+#define RID_CTX_ITEM_ENABLE                                 NC_("RID_CTX_ITEM_ENABLE", "~Enable")
+#define RID_CTX_ITEM_DISABLE                                NC_("RID_CTX_ITEM_DISABLE", "~Disable")
+#define RID_CTX_ITEM_CHECK_UPDATE                           NC_("RID_CTX_ITEM_CHECK_UPDATE", "~Update...")
+#define RID_STR_ADDING_PACKAGES                             NC_("RID_STR_ADDING_PACKAGES", "Adding %EXTENSION_NAME")
+#define RID_STR_REMOVING_PACKAGES                           NC_("RID_STR_REMOVING_PACKAGES", "Removing %EXTENSION_NAME")
+#define RID_STR_ENABLING_PACKAGES                           NC_("RID_STR_ENABLING_PACKAGES", "Enabling %EXTENSION_NAME")
+#define RID_STR_DISABLING_PACKAGES                          NC_("RID_STR_DISABLING_PACKAGES", "Disabling %EXTENSION_NAME")
+#define RID_STR_ACCEPT_LICENSE                              NC_("RID_STR_ACCEPT_LICENSE", "Accept license for %EXTENSION_NAME")
+#define RID_STR_ERROR_UNKNOWN_STATUS                        NC_("RID_STR_ERROR_UNKNOWN_STATUS", "Error: The status of this extension is unknown")
+#define RID_STR_CLOSE_BTN                                   NC_("RID_STR_CLOSE_BTN", "Close")
+#define RID_STR_EXIT_BTN                                    NC_("RID_STR_EXIT_BTN", "Quit")
+#define RID_STR_NO_ADMIN_PRIVILEGE                          NC_("RID_STR_NO_ADMIN_PRIVILEGE", "%PRODUCTNAME has been updated to a new version. " \
+                                                               "Some shared %PRODUCTNAME extensions are not compatible with this version and need to be updated before %PRODUCTNAME can be started.\n\n" \
+                                                               "Updating of shared extension requires administrator privileges. Contact your system administrator to update the following shared extensions:")
+#define RID_STR_ERROR_MISSING_DEPENDENCIES                  NC_("RID_STR_ERROR_MISSING_DEPENDENCIES", "The extension cannot be enabled as the following system dependencies are not fulfilled:")
+#define RID_STR_ERROR_MISSING_LICENSE                       NC_("RID_STR_ERROR_MISSING_LICENSE", "This extension is disabled because you haven't accepted the license yet.\n")
+#define RID_STR_SHOW_LICENSE_CMD                            NC_("RID_STR_SHOW_LICENSE_CMD", "Show license")
+#define RID_STR_WARNING_INSTALL_EXTENSION                   NC_("RID_STR_WARNING_INSTALL_EXTENSION", "You are about to install the extension '%NAME'.\n" \
+                                                               "Click 'OK' to proceed with the installation.\n" \
+                                                               "Click 'Cancel' to stop the installation.")
+#define RID_STR_WARNING_INSTALL_EXTENSION_DISABLED          NC_("RID_STR_WARNING_INSTALL_EXTENSION_DISABLED", "Extension installation is currently disabled. " \
+                                                               "Please consult your system administrator for more information.")
+#define RID_STR_WARNING_REMOVE_EXTENSION_DISABLED           NC_("RID_STR_WARNING_REMOVE_EXTENSION_DISABLED", "Extension removal is currently disabled. " \
+                                                               "Please consult your system administrator for more information.")
+#define RID_STR_WARNING_REMOVE_EXTENSION                    NC_("RID_STR_WARNING_REMOVE_EXTENSION", "You are about to remove the extension '%NAME'.\n" \
+                                                               "Click 'OK' to remove the extension.\n" \
+                                                               "Click 'Cancel' to stop removing the extension.")
+#define RID_STR_WARNING_REMOVE_SHARED_EXTENSION             NC_("RID_STR_WARNING_REMOVE_SHARED_EXTENSION", "Make sure that no further users are working with the same " \
+                                                               "%PRODUCTNAME, when changing shared extensions in a multi user environment.\n" \
+                                                               "Click 'OK' to remove the extension.\n" \
+                                                               "Click 'Cancel' to stop removing the extension.")
+#define RID_STR_WARNING_ENABLE_SHARED_EXTENSION             NC_("RID_STR_WARNING_ENABLE_SHARED_EXTENSION", "Make sure that no further users are working with the same " \
+                                                               "%PRODUCTNAME, when changing shared extensions in a multi user environment.\n" \
+                                                               "Click 'OK' to enable the extension.\n" \
+                                                               "Click 'Cancel' to stop enabling the extension.")
+#define RID_STR_WARNING_DISABLE_SHARED_EXTENSION            NC_("RID_STR_WARNING_DISABLE_SHARED_EXTENSION", "Make sure that no further users are working with the same " \
+                                                               "%PRODUCTNAME, when changing shared extensions in a multi user environment.\n" \
+                                                               "Click 'OK' to disable the extension.\n" \
+                                                               "Click 'Cancel' to stop disabling the extension.")
+#define RID_STR_UNSUPPORTED_PLATFORM                        NC_("RID_STR_UNSUPPORTED_PLATFORM", "The extension '%Name' does not work on this computer.")
+
+#define RID_DLG_UPDATE_INSTALL_INSTALLING                   NC_("RID_DLG_UPDATE_INSTALL_INSTALLING", "Installing extensions...")
+#define RID_DLG_UPDATE_INSTALL_FINISHED                     NC_("RID_DLG_UPDATE_INSTALL_FINISHED", "Installation finished")
+#define RID_DLG_UPDATE_INSTALL_NO_ERRORS                    NC_("RID_DLG_UPDATE_INSTALL_NO_ERRORS", "No errors.")
+#define RID_DLG_UPDATE_INSTALL_ERROR_DOWNLOAD               NC_("RID_DLG_UPDATE_INSTALL_ERROR_DOWNLOAD", "Error while downloading extension %NAME. ")
+#define RID_DLG_UPDATE_INSTALL_THIS_ERROR_OCCURRED          NC_("RID_DLG_UPDATE_INSTALL_THIS_ERROR_OCCURRED", "The error message is: ")
+#define RID_DLG_UPDATE_INSTALL_ERROR_INSTALLATION           NC_("RID_DLG_UPDATE_INSTALL_ERROR_INSTALLATION", "Error while installing extension %NAME. ")
+#define RID_DLG_UPDATE_INSTALL_ERROR_LIC_DECLINED           NC_("RID_DLG_UPDATE_INSTALL_ERROR_LIC_DECLINED", "The license agreement for extension %NAME was refused. ")
+#define RID_DLG_UPDATE_INSTALL_EXTENSION_NOINSTALL          NC_("RID_DLG_UPDATE_INSTALL_EXTENSION_NOINSTALL", "The extension will not be installed.")
+
+#define RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN                 NC_("RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN", "Unknown")
+#define RID_DEPLOYMENT_DEPENDENCIES_OOO_MIN                 NC_("RID_DEPLOYMENT_DEPENDENCIES_OOO_MIN", "Extension requires at least OpenOffice.org reference version %VERSION")
+#define RID_DEPLOYMENT_DEPENDENCIES_OOO_MAX                 NC_("RID_DEPLOYMENT_DEPENDENCIES_OOO_MAX", "Extension does not support OpenOffice.org reference versions greater than %VERSION")
+#define RID_DEPLOYMENT_DEPENDENCIES_LO_MIN                  NC_("RID_DEPLOYMENT_DEPENDENCIES_LO_MIN", "Extension requires at least %PRODUCTNAME version %VERSION")
+
+#define RID_STR_WARNING_VERSION_LESS                        NC_("RID_STR_WARNING_VERSION_LESS", "You are about to install version $NEW of the extension '$NAME'.\n" \
+                                                               "The newer version $DEPLOYED is already installed.\n"\
+                                                               "Click 'OK' to replace the installed extension.\n"\
+                                                               "Click 'Cancel' to stop the installation.")
+#define RID_STR_WARNINGBOX_VERSION_LESS_DIFFERENT_NAMES     NC_("RID_STR_WARNINGBOX_VERSION_LESS_DIFFERENT_NAMES", "You are about to install version $NEW of the extension '$NAME'.\n" \
+                                                               "The newer version $DEPLOYED, named '$OLDNAME', is already installed.\n" \
+                                                               "Click 'OK' to replace the installed extension.\n" \
+                                                               "Click 'Cancel' to stop the installation.")
+#define RID_STR_WARNING_VERSION_EQUAL                       NC_("RID_STR_WARNING_VERSION_EQUAL", "You are about to install version $NEW of the extension '$NAME'.\n" \
+                                                               "That version is already installed.\n" \
+                                                               "Click 'OK' to replace the installed extension.\n" \
+                                                               "Click 'Cancel' to stop the installation.")
+#define RID_STR_WARNINGBOX_VERSION_EQUAL_DIFFERENT_NAMES    NC_("RID_STR_WARNINGBOX_VERSION_EQUAL_DIFFERENT_NAMES", "You are about to install version $NEW of the extension '$NAME'.\n" \
+                                                               "That version, named '$OLDNAME', is already installed.\n" \
+                                                               "Click 'OK' to replace the installed extension.\n" \
+                                                               "Click 'Cancel' to stop the installation.")
+#define RID_STR_WARNING_VERSION_GREATER                     NC_("RID_STR_WARNING_VERSION_GREATER", "You are about to install version $NEW of the extension '$NAME'.\n" \
+                                                               "The older version $DEPLOYED is already installed.\n" \
+                                                               "Click 'OK' to replace the installed extension.\n" \
+                                                               "Click 'Cancel' to stop the installation.")
+#define RID_STR_WARNINGBOX_VERSION_GREATER_DIFFERENT_NAMES  NC_("RID_STR_WARNINGBOX_VERSION_GREATER_DIFFERENT_NAMES", "You are about to install version $NEW of the extension '$NAME'.\n" \
+                                                               "The older version $DEPLOYED, named '$OLDNAME', is already installed.\n" \
+                                                               "Click 'OK' to replace the installed extension.\n" \
+                                                               "Click 'Cancel' to stop the installation.")
+
+#define RID_DLG_UPDATE_NONE                                 NC_("RID_DLG_UPDATE_NONE", "No new updates are available.")
+#define RID_DLG_UPDATE_NOINSTALLABLE                        NC_("RID_DLG_UPDATE_NOINSTALLABLE", "No installable updates are available. To see ignored or disabled updates, mark the check box 'Show all updates'.")
+#define RID_DLG_UPDATE_FAILURE                              NC_("RID_DLG_UPDATE_FAILURE", "An error occurred:")
+#define RID_DLG_UPDATE_UNKNOWNERROR                         NC_("RID_DLG_UPDATE_UNKNOWNERROR", "Unknown error.")
+#define RID_DLG_UPDATE_NODESCRIPTION                        NC_("RID_DLG_UPDATE_NODESCRIPTION", "No more details are available for this update.")
+#define RID_DLG_UPDATE_NOINSTALL                            NC_("RID_DLG_UPDATE_NOINSTALL", "The extension cannot be updated because:")
+#define RID_DLG_UPDATE_NODEPENDENCY                         NC_("RID_DLG_UPDATE_NODEPENDENCY", "Required %PRODUCTNAME version doesn't match:")
+#define RID_DLG_UPDATE_NODEPENDENCY_CUR_VER                 NC_("RID_DLG_UPDATE_NODEPENDENCY_CUR_VER", "You have %PRODUCTNAME %VERSION")
+#define RID_DLG_UPDATE_BROWSERBASED                         NC_("RID_DLG_UPDATE_BROWSERBASED", "browser based update")
+#define RID_DLG_UPDATE_VERSION                              NC_("RID_DLG_UPDATE_VERSION", "Version")
+#define RID_DLG_UPDATE_IGNORE                               NC_("RID_DLG_UPDATE_IGNORE", "Ignore this Update")
+#define RID_DLG_UPDATE_IGNORE_ALL                           NC_("RID_DLG_UPDATE_IGNORE_ALL", "Ignore all Updates")
+#define RID_DLG_UPDATE_ENABLE                               NC_("RID_DLG_UPDATE_ENABLE", "Enable Updates")
+#define RID_DLG_UPDATE_IGNORED_UPDATE                       NC_("RID_DLG_UPDATE_IGNORED_UPDATE", "This update will be ignored.\n")
+
+#define STR_BOOTSTRAP_ERR_CANNOT_START                      NC_("STR_BOOTSTRAP_ERR_CANNOT_START", "The application cannot be started. ")
+#define STR_BOOTSTRAP_ERR_DIR_MISSING                       NC_("STR_BOOTSTRAP_ERR_DIR_MISSING", "The configuration directory \"$1\" could not be found.")
+#define STR_BOOTSTRAP_ERR_PATH_INVALID                      NC_("STR_BOOTSTRAP_ERR_PATH_INVALID", "The installation path is invalid.")
+#define STR_BOOTSTRAP_ERR_INTERNAL                          NC_("STR_BOOTSTRAP_ERR_INTERNAL", "An internal error occurred.")
+#define STR_BOOTSTRAP_ERR_FILE_CORRUPT                      NC_("STR_BOOTSTRAP_ERR_FILE_CORRUPT", "The configuration file \"$1\" is corrupt.")
+#define STR_BOOTSTRAP_ERR_FILE_MISSING                      NC_("STR_BOOTSTRAP_ERR_FILE_MISSING", "The configuration file \"$1\" was not found.")
+#define STR_BOOTSTRAP_ERR_NO_SUPPORT                        NC_("STR_BOOTSTRAP_ERR_NO_SUPPORT", "The configuration file \"$1\" does not support the current version.")
+#define STR_BOOTSTRAP_ERR_LANGUAGE_MISSING                  NC_("STR_BOOTSTRAP_ERR_LANGUAGE_MISSING", "The user interface language cannot be determined.")
+#define STR_BOOTSTRAP_ERR_USERINSTALL_FAILED                NC_("STR_BOOTSTRAP_ERR_USERINSTALL_FAILED", "User installation could not be completed. ")
+#define STR_BOOTSTRAP_ERR_NO_CFG_SERVICE                    NC_("STR_BOOTSTRAP_ERR_NO_CFG_SERVICE", "The configuration service is not available.")
+#define STR_ASK_START_SETUP_MANUALLY                        NC_("STR_ASK_START_SETUP_MANUALLY", "Start the setup application to repair the installation from the CD or the folder containing the installation packages.")
+#define STR_CONFIG_ERR_ACCESS_GENERAL                       NC_("STR_CONFIG_ERR_ACCESS_GENERAL", "A general error occurred while accessing your central configuration. ")
+#define STR_BOOTSTRAP_ERR_CFG_DATAACCESS                    NC_("STR_BOOTSTRAP_ERR_CFG_DATAACCESS", "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator." )
+#define STR_INTERNAL_ERRMSG                                 NC_("STR_INTERNAL_ERRMSG", "The following internal error has occurred: " )
+#define STR_LO_MUST_BE_RESTARTED                            NC_("STR_LO_MUST_BE_RESTARTED", "%PRODUCTNAME must unfortunately be manually restarted once after installation or update." )
+#define STR_QUERY_USERDATALOCKED                            NC_("STR_QUERY_USERDATALOCKED", "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?")
+#define STR_TITLE_USERDATALOCKED                            NC_("STR_TITLE_USERDATALOCKED", "%PRODUCTNAME %PRODUCTVERSION")
+#define STR_ERR_PRINTDISABLED                               NC_("STR_ERR_PRINTDISABLED", "Printing is disabled. No documents can be printed.")
+#define STR_BOOTSTRAP_ERR_NO_PATHSET_SERVICE                NC_("STR_BOOTSTRAP_ERR_NO_PATHSET_SERVICE", "The path manager is not available.\n")
+#define STR_BOOSTRAP_ERR_NOTENOUGHDISKSPACE                 NC_("STR_BOOSTRAP_ERR_NOTENOUGHDISKSPACE", "%PRODUCTNAME user installation could not be completed due to insufficient free disk space. Please free more disc space at the following location and restart %PRODUCTNAME:\n\n")
+#define STR_BOOSTRAP_ERR_NOACCESSRIGHTS                     NC_("STR_BOOSTRAP_ERR_NOACCESSRIGHTS", "%PRODUCTNAME user installation could not be processed due to missing access rights. Please make sure that you have sufficient access rights for the following location and restart %PRODUCTNAME:\n\n")
+
+#define RID_STR_UNOPKG_ACCEPT_LIC_1                         NC_("RID_STR_UNOPKG_ACCEPT_LIC_1", "Extension Software License Agreement of $NAME:")
+#define RID_STR_UNOPKG_ACCEPT_LIC_2                         NC_("RID_STR_UNOPKG_ACCEPT_LIC_2", "Read the complete License Agreement displayed above. " \
+                                                               "Accept the License Agreement by typing \"yes\" on the console " \
+                                                               "then press the Return key. Type \"no\" to decline and to abort the " \
+                                                               "extension setup.")
+#define RID_STR_UNOPKG_ACCEPT_LIC_3                         NC_("RID_STR_UNOPKG_ACCEPT_LIC_3", "[Enter \"yes\" or \"no\"]:")
+#define RID_STR_UNOPKG_ACCEPT_LIC_4                         NC_("RID_STR_UNOPKG_ACCEPT_LIC_4", "Your input was not correct. Please enter \"yes\" or \"no\":")
+#define RID_STR_UNOPKG_ACCEPT_LIC_YES                       NC_("RID_STR_UNOPKG_ACCEPT_LIC_YES", "YES")
+#define RID_STR_UNOPKG_ACCEPT_LIC_Y                         NC_("RID_STR_UNOPKG_ACCEPT_LIC_Y", "Y")
+#define RID_STR_UNOPKG_ACCEPT_LIC_NO                        NC_("RID_STR_UNOPKG_ACCEPT_LIC_NO", "NO")
+#define RID_STR_UNOPKG_ACCEPT_LIC_N                         NC_("RID_STR_UNOPKG_ACCEPT_LIC_N", "N")
+#define RID_STR_CONCURRENTINSTANCE                          NC_("RID_STR_CONCURRENTINSTANCE", "unopkg cannot be started. The lock file indicates it is already running. " \
+                                                               "If this does not apply, delete the lock file at:")
+#define RID_STR_UNOPKG_ERROR                                NC_("RID_STR_UNOPKG_ERROR", "ERROR: ")
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

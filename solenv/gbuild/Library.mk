@@ -217,7 +217,6 @@ $(eval $(foreach method,\
 	use_package \
 	use_packages \
 	use_unpacked \
-	use_restarget \
 	add_sdi_headers \
 	set_precompiled_header \
 	export_objects_list \

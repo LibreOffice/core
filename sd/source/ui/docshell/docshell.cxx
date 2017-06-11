@@ -58,8 +58,8 @@
 #include "View.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
-#include "glob.hrc"
-#include "res_bmp.hrc"
+#include "strings.hrc"
+
 #include "fupoor.hxx"
 #include "fusearch.hxx"
 #include "ViewShell.hxx"

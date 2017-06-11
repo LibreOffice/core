@@ -117,7 +117,6 @@
 #include <node.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <rect.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dllapi.h>
@@ -145,7 +144,6 @@
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
-#include <tools/resid.hxx>
 #include <tools/solar.h>
 #include <tools/toolsdllapi.h>
 #include <tools/wintypes.hxx>

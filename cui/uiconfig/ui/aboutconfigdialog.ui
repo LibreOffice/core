@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="AboutConfig">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Expert Configuration</property>
+    <property name="title" translatable="yes" context="aboutconfigdialog|AboutConfig">Expert Configuration</property>
     <property name="type_hint">normal</property>
     <property name="skip_taskbar_hint">True</property>
     <child internal-child="vbox">
@@ -45,7 +45,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="searchButton">
-                        <property name="label" translatable="yes">_Search</property>
+                        <property name="label" translatable="yes" context="aboutconfigdialog|searchButton">_Search</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="can_default">True</property>
@@ -78,7 +78,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="yalign">0.49000000953674316</property>
-                        <property name="label" translatable="yes">Preference Name</property>
+                        <property name="label" translatable="yes" context="aboutconfigdialog|preference">Preference Name</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -93,7 +93,7 @@
                         <property name="can_focus">False</property>
                         <property name="xalign">0.51999998092651367</property>
                         <property name="yalign">0.50999999046325684</property>
-                        <property name="label" translatable="yes">Property</property>
+                        <property name="label" translatable="yes" context="aboutconfigdialog|property">Property</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -106,7 +106,7 @@
                       <object class="GtkLabel" id="type">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Type</property>
+                        <property name="label" translatable="yes" context="aboutconfigdialog|type">Type</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -119,7 +119,7 @@
                       <object class="GtkLabel" id="value">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Value</property>
+                        <property name="label" translatable="yes" context="aboutconfigdialog|value">Value</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -166,7 +166,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="edit">
-                <property name="label" translatable="yes">Edit</property>
+                <property name="label" translatable="yes" context="aboutconfigdialog|edit">Edit</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -179,7 +179,7 @@
             </child>
             <child>
               <object class="GtkButton" id="reset">
-                <property name="label" translatable="yes">Reset</property>
+                <property name="label" translatable="yes" context="aboutconfigdialog|reset">Reset</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

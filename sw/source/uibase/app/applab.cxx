@@ -66,9 +66,8 @@
 #include <poolfmt.hxx>
 
 #include <app.hrc>
-#include <poolfmt.hrc>
+#include <strings.hrc>
 #include "swabstdlg.hxx"
-#include "envelp.hrc"
 #include <misc.hrc>
 
 #include <IDocumentDeviceAccess.hxx>

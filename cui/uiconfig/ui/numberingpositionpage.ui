@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">19.989999999999998</property>
@@ -20,13 +20,13 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Left</col>
+        <col id="0" translatable="yes" context="numberingpositionpage|liststore1">Left</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Centered</col>
+        <col id="0" translatable="yes" context="numberingpositionpage|liststore1">Centered</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Right</col>
+        <col id="0" translatable="yes" context="numberingpositionpage|liststore1">Right</col>
       </row>
     </data>
   </object>
@@ -37,13 +37,13 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Tab stop</col>
+        <col id="0" translatable="yes" context="numberingpositionpage|liststore2">Tab stop</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Space</col>
+        <col id="0" translatable="yes" context="numberingpositionpage|liststore2">Space</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Nothing</col>
+        <col id="0" translatable="yes" context="numberingpositionpage|liststore2">Nothing</col>
       </row>
     </data>
   </object>
@@ -85,7 +85,7 @@
           <object class="GtkLabel" id="1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Level</property>
+            <property name="label" translatable="yes" context="numberingpositionpage|1">Level</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -136,7 +136,7 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">Numbering followed by:</property>
+                        <property name="label" translatable="yes" context="numberingpositionpage|numfollowedby">Numbering followed by:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">numfollowedbylb</property>
                       </object>
@@ -150,7 +150,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">N_umbering alignment:</property>
+                        <property name="label" translatable="yes" context="numberingpositionpage|num2align">N_umbering alignment:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">num2alignlb</property>
                       </object>
@@ -164,7 +164,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">Aligned at:</property>
+                        <property name="label" translatable="yes" context="numberingpositionpage|alignedat">Aligned at:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">alignedatmf:0.00cm</property>
                       </object>
@@ -178,7 +178,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">Indent at:</property>
+                        <property name="label" translatable="yes" context="numberingpositionpage|indentat">Indent at:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">indentatmf:0.00cm</property>
                       </object>
@@ -214,7 +214,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">Tab stop at:</property>
+                        <property name="label" translatable="yes" context="numberingpositionpage|at">Tab stop at:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">atmf:0.00cm</property>
                       </object>
@@ -263,7 +263,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">Indent:</property>
+                        <property name="label" translatable="yes" context="numberingpositionpage|indent">Indent:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">indentmf:0.00cm</property>
                       </object>
@@ -287,7 +287,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="relative">
-                        <property name="label" translatable="yes">Relati_ve</property>
+                        <property name="label" translatable="yes" context="numberingpositionpage|relative">Relati_ve</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -307,7 +307,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">Width of numbering:</property>
+                        <property name="label" translatable="yes" context="numberingpositionpage|numberingwidth">Width of numbering:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">numberingwidthmf:0.00cm</property>
                       </object>
@@ -347,7 +347,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">Minimum space between
+                        <property name="label" translatable="yes" context="numberingpositionpage|numdist">Minimum space between
 numbering and text:</property>
                         <property name="use_underline">True</property>
                         <property name="justify">right</property>
@@ -363,7 +363,7 @@ numbering and text:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">N_umbering alignment:</property>
+                        <property name="label" translatable="yes" context="numberingpositionpage|numalign">N_umbering alignment:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">numalignlb</property>
                       </object>
@@ -391,7 +391,7 @@ numbering and text:</property>
               <object class="GtkLabel" id="label10">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Position and Spacing</property>
+                <property name="label" translatable="yes" context="numberingpositionpage|label10">Position and Spacing</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -413,7 +413,7 @@ numbering and text:</property>
             <property name="column_spacing">12</property>
             <child>
               <object class="GtkButton" id="standard">
-                <property name="label" translatable="yes">Default</property>
+                <property name="label" translatable="yes" context="numberingpositionpage|standard">Default</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

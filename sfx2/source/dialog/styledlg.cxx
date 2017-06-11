@@ -26,7 +26,7 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/sfxuno.hxx>
 
-#include "dialog.hrc"
+#include "sfx2/strings.hrc"
 
 // class SfxStyleDialog --------------------------------------------------
 

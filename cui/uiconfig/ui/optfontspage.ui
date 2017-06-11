@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkImage" id="image1">
@@ -56,7 +56,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Font:</property>
+                        <property name="label" translatable="yes" context="optfontspage|label2">_Font:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">font1</property>
                       </object>
@@ -70,7 +70,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Re_place with:</property>
+                        <property name="label" translatable="yes" context="optfontspage|label3">Re_place with:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">font2</property>
                       </object>
@@ -107,7 +107,7 @@
                       <object class="GtkLabel" id="always">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="label" translatable="yes">Always</property>
+                        <property name="label" translatable="yes" context="optfontspage|always">Always</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -118,7 +118,7 @@
                       <object class="GtkLabel" id="screenonly">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="label" translatable="yes">Screen only</property>
+                        <property name="label" translatable="yes" context="optfontspage|screenonly">Screen only</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -129,7 +129,7 @@
                       <object class="GtkLabel" id="font">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="label" translatable="yes">Font</property>
+                        <property name="label" translatable="yes" context="optfontspage|font">Font</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -140,7 +140,7 @@
                       <object class="GtkLabel" id="replacewith">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="label" translatable="yes">Replace with</property>
+                        <property name="label" translatable="yes" context="optfontspage|replacewith">Replace with</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -202,7 +202,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="usetable">
-                    <property name="label" translatable="yes">_Apply replacement table</property>
+                    <property name="label" translatable="yes" context="optfontspage|usetable">_Apply replacement table</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -224,7 +224,7 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Replacement Table</property>
+            <property name="label" translatable="yes" context="optfontspage|label4">Replacement Table</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -263,7 +263,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Fon_ts:</property>
+                    <property name="label" translatable="yes" context="optfontspage|label8">Fon_ts:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">fontname</property>
                   </object>
@@ -278,7 +278,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Size:</property>
+                    <property name="label" translatable="yes" context="optfontspage|label9">_Size:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">fontheight</property>
                   </object>
@@ -292,7 +292,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <items>
-                      <item translatable="yes">Automatic</item>
+                      <item translatable="yes" context="optfontspage|fontname">Automatic</item>
                     </items>
                   </object>
                   <packing>
@@ -302,7 +302,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="nonpropfontonly">
-                    <property name="label" translatable="yes">_Non-proportional fonts only</property>
+                    <property name="label" translatable="yes" context="optfontspage|nonpropfontonly">_Non-proportional fonts only</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -338,7 +338,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Font Settings for HTML, Basic and SQL Sources</property>
+            <property name="label" translatable="yes" context="optfontspage|label1">Font Settings for HTML, Basic and SQL Sources</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

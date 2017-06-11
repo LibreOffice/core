@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="chart">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkListStore" id="liststoreSCHEME">
     <columns>
@@ -10,15 +10,15 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Simple</col>
+        <col id="0" translatable="yes" context="tp_3D_SceneAppearance|liststoreSCHEME">Simple</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Realistic</col>
+        <col id="0" translatable="yes" context="tp_3D_SceneAppearance|liststoreSCHEME">Realistic</col>
         <col id="1">1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Custom</col>
+        <col id="0" translatable="yes" context="tp_3D_SceneAppearance|liststoreSCHEME">Custom</col>
         <col id="1">2</col>
       </row>
     </data>
@@ -39,7 +39,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Sche_me</property>
+            <property name="label" translatable="yes" context="tp_3D_SceneAppearance|FT_SCHEME">Sche_me</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">LB_SCHEME</property>
           </object>
@@ -87,7 +87,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="CB_SHADING">
-            <property name="label" translatable="yes">_Shading</property>
+            <property name="label" translatable="yes" context="tp_3D_SceneAppearance|CB_SHADING">_Shading</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="receives_default">False</property>
@@ -103,7 +103,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="CB_OBJECTLINES">
-            <property name="label" translatable="yes">_Object borders</property>
+            <property name="label" translatable="yes" context="tp_3D_SceneAppearance|CB_OBJECTLINES">_Object borders</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="receives_default">False</property>
@@ -119,7 +119,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="CB_ROUNDEDEDGE">
-            <property name="label" translatable="yes">_Rounded edges</property>
+            <property name="label" translatable="yes" context="tp_3D_SceneAppearance|CB_ROUNDEDEDGE">_Rounded edges</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="receives_default">False</property>

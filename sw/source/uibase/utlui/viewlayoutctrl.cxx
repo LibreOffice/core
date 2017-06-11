@@ -23,7 +23,7 @@
 #include <vcl/image.hxx>
 #include <svl/eitem.hxx>
 #include <svx/viewlayoutitem.hxx>
-#include <utlui.hrc>
+#include <strings.hrc>
 #include "bitmaps.hlst"
 #include <swtypes.hxx>
 

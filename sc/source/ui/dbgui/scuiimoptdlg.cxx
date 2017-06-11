@@ -22,7 +22,7 @@
 #include "scuiimoptdlg.hxx"
 #include "tabvwsh.hxx"
 #include "scresid.hxx"
-#include "scres.hrc"
+#include "strings.hrc"
 #include "strings.hxx"
 #include <comphelper/string.hxx>
 #include <officecfg/Office/Calc.hxx>

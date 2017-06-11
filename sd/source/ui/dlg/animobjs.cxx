@@ -35,7 +35,7 @@
 #include "View.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
-#include "res_bmp.hrc"
+
 #include "ViewShell.hxx"
 
 #include <vcl/svapp.hxx>

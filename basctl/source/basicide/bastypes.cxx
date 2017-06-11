@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "basidesh.hrc"
+#include "strings.hrc"
 #include "helpid.hrc"
 
 #include "baside2.hxx"
@@ -707,13 +707,12 @@ LibInfo::Item::Item (
 LibInfo::Item::~Item ()
 { }
 
-bool QueryDel( const OUString& rName, const ResId& rId, vcl::Window* pParent )
+bool QueryDel(const OUString& rName, const OUString &rStr, vcl::Window* pParent)
 {
-    OUString aQuery(rId);
     OUStringBuffer aNameBuf( rName );
     aNameBuf.append('\'');
     aNameBuf.insert(0, '\'');
-    aQuery = aQuery.replaceAll("XX", aNameBuf.makeStringAndClear());
+    OUString aQuery = rStr.replaceAll("XX", aNameBuf.makeStringAndClear());
     ScopedVclPtrInstance< MessageDialog > aQueryBox(pParent, aQuery, VclMessageType::Question, VclButtonsType::YesNo);
     return ( aQueryBox->Execute() == RET_YES );
 }

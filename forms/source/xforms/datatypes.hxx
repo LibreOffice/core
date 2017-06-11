@@ -118,8 +118,8 @@ namespace xforms
         virtual void            initializeClone( const OXSDDataType& _rCloneSource );
 
         // helper method for validate and explainInvalid
-        virtual sal_uInt16  _validate( const OUString& value );
-        virtual OUString _explainInvalid( sal_uInt16 nReason );
+        virtual const char* _validate( const OUString& value );
+        virtual OUString _explainInvalid( const OString& rReason );
 
         // helper method for checking properties values which are to be set
         virtual bool        checkPropertySanity( sal_Int32 _nHandle, const css::uno::Any& _rNewValue, OUString& _rErrorMessage );
@@ -177,8 +177,8 @@ namespace xforms
 
         // OXSDDataType overridables
         virtual bool            _getValue( const OUString& value, double& fValue );
-        virtual sal_uInt16      _validate( const OUString& value ) override;
-        virtual OUString _explainInvalid( sal_uInt16 nReason ) override;
+        virtual const char*     _validate( const OUString& value ) override;
+        virtual OUString _explainInvalid( const OString& rReason ) override;
 
         // own overridables
         /** translate a given value into a human-readable string
@@ -249,8 +249,8 @@ namespace xforms
         DECLARE_DEFAULT_CLONING( OBooleanType )
 
         // OXSDDataType overridables
-        virtual sal_uInt16      _validate( const OUString& value ) override;
-        virtual OUString _explainInvalid( sal_uInt16 nReason ) override;
+        virtual const char* _validate( const OUString& value ) override;
+        virtual OUString _explainInvalid( const OString& rReason ) override;
     };
 
     class OStringType;
@@ -272,8 +272,8 @@ namespace xforms
         void       initializeTypedClone( const OStringType& _rCloneSource );
 
         // OXSDDataType overridables
-        virtual sal_uInt16      _validate( const OUString& value ) override;
-        virtual OUString _explainInvalid( sal_uInt16 nReason ) override;
+        virtual const char*     _validate( const OUString& value ) override;
+        virtual OUString _explainInvalid( const OString& rReason ) override;
         virtual bool            checkPropertySanity( sal_Int32 _nHandle, const css::uno::Any& _rNewValue, OUString& _rErrorMessage ) override;
         virtual void            registerProperties() override;
     };
@@ -294,8 +294,8 @@ namespace xforms
         void       initializeTypedClone( const ODecimalType& _rCloneSource );
 
         // OXSDDataType overridables
-        virtual sal_uInt16      _validate( const OUString& value ) override;
-        virtual OUString _explainInvalid( sal_uInt16 nReason ) override;
+        virtual const char*     _validate( const OUString& value ) override;
+        virtual OUString _explainInvalid( const OString& rReason ) override;
         virtual void            registerProperties() override;
 
         // OValueLimitedType overridables
@@ -321,7 +321,7 @@ namespace xforms
         DECLARE_DEFAULT_CLONING( classname )                    \
                                                                 \
         /* OXSDDataType overridables */                         \
-        virtual sal_uInt16          _validate( const OUString& value ) override;  \
+        virtual const char*         _validate( const OUString& value ) override;  \
         virtual bool                _getValue( const OUString& value, double& fValue ) override;  \
                                                                 \
         /* OValueLimitedType overridables */                    \

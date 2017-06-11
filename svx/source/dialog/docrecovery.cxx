@@ -22,7 +22,7 @@
 #include <sal/macros.h>
 
 #include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include "bitmaps.hlst"
 #include "docrecovery.hxx"
 
@@ -801,16 +801,16 @@ void RecovDocListEntry::Paint(const Point& aPos, SvTreeListBox& aDevice, vcl::Re
     }
 }
 
-RecovDocList::RecovDocList(SvSimpleTableContainer& rParent, ResMgr &rResMgr)
+RecovDocList::RecovDocList(SvSimpleTableContainer& rParent)
     : SvSimpleTable      ( rParent )
     , m_aGreenCheckImg    (BitmapEx(RID_SVXBMP_GREENCHECK))
     , m_aYellowCheckImg   (BitmapEx(RID_SVXBMP_YELLOWCHECK))
     , m_aRedCrossImg      (BitmapEx(RID_SVXBMP_REDCROSS))
-    , m_aSuccessRecovStr  ( ResId(RID_SVXSTR_SUCCESSRECOV, rResMgr ) )
-    , m_aOrigDocRecovStr  ( ResId(RID_SVXSTR_ORIGDOCRECOV, rResMgr ) )
-    , m_aRecovFailedStr   ( ResId(RID_SVXSTR_RECOVFAILED, rResMgr ) )
-    , m_aRecovInProgrStr  ( ResId(RID_SVXSTR_RECOVINPROGR, rResMgr ) )
-    , m_aNotRecovYetStr   ( ResId(RID_SVXSTR_NOTRECOVYET, rResMgr ) )
+    , m_aSuccessRecovStr  (SvxResId(RID_SVXSTR_SUCCESSRECOV))
+    , m_aOrigDocRecovStr  (SvxResId(RID_SVXSTR_ORIGDOCRECOV))
+    , m_aRecovFailedStr   (SvxResId(RID_SVXSTR_RECOVFAILED))
+    , m_aRecovInProgrStr  (SvxResId(RID_SVXSTR_RECOVINPROGR))
+    , m_aNotRecovYetStr   (SvxResId(RID_SVXSTR_NOTRECOVYET))
 {
 }
 
@@ -828,9 +828,9 @@ void RecovDocList::InitEntry(SvTreeListEntry* pEntry,
 }
 
 
-short impl_askUserForWizardCancel(vcl::Window* pParent, sal_Int16 nRes)
+short impl_askUserForWizardCancel(vcl::Window* pParent, const char* pRes)
 {
-    ScopedVclPtrInstance< MessageDialog > aQuery(pParent, SvxResId(nRes), VclMessageType::Question, VclButtonsType::YesNo);
+    ScopedVclPtrInstance< MessageDialog > aQuery(pParent, SvxResId(pRes), VclMessageType::Question, VclButtonsType::YesNo);
     if (aQuery->Execute() == RET_YES)
         return DLG_RET_OK;
     else
@@ -857,7 +857,7 @@ RecoveryDialog::RecoveryDialog(vcl::Window* pParent, RecoveryCore* pCore)
     SvSimpleTableContainer* pFileListLBContainer = get<SvSimpleTableContainer>("filelist");
     Size aSize(LogicToPixel(Size(RECOV_CONTROLWIDTH, 68), MapUnit::MapAppFont));
     pFileListLBContainer->set_height_request(aSize.Height());
-    m_pFileListLB = VclPtr<RecovDocList>::Create(*pFileListLBContainer, DIALOG_MGR());
+    m_pFileListLB = VclPtr<RecovDocList>::Create(*pFileListLBContainer);
 
     static long nTabs[] = { 2, 0, 40*RECOV_CONTROLWIDTH/100 };
     m_pFileListLB->SetTabs( &nTabs[0] );

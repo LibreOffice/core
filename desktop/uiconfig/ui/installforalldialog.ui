@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="dkt">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkMessageDialog" id="InstallForAllDialog">
     <property name="can_focus">False</property>
@@ -9,8 +9,8 @@
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">question</property>
-    <property name="text" translatable="yes">For whom do you want to install the extension?</property>
-    <property name="secondary_text" translatable="yes">Make sure that no further users are working with the same %PRODUCTNAME, when installing an extension for all users in a multi user environment.</property>
+    <property name="text" translatable="yes" context="installforalldialog|InstallForAllDialog">For whom do you want to install the extension?</property>
+    <property name="secondary_text" translatable="yes" context="installforalldialog|InstallForAllDialog">Make sure that no further users are working with the same %PRODUCTNAME, when installing an extension for all users in a multi user environment.</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>
@@ -22,7 +22,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="no">
-                <property name="label" translatable="yes">_For all users</property>
+                <property name="label" translatable="yes" context="installforalldialog|no">_For all users</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -36,7 +36,7 @@
             </child>
             <child>
               <object class="GtkButton" id="yes">
-                <property name="label" translatable="yes">_Only for me</property>
+                <property name="label" translatable="yes" context="installforalldialog|yes">_Only for me</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>

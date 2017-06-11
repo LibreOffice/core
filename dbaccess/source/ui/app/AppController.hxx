@@ -26,7 +26,7 @@
 #include "dsntypes.hxx"
 #include <dbaccess/genericcontroller.hxx>
 #include "linkeddocuments.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include "TableCopyHelper.hxx"
 
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
@@ -94,7 +94,7 @@ namespace dbaui
         css::uno::Reference< css::sdbc::XDatabaseMetaData >
                                 m_xMetaData;
 
-        OModuleClient           m_aModuleClient;
+        dbaccess::OModuleClient m_aModuleClient;
         TransferableDataHelper  m_aSystemClipboard;     // content of the clipboard
         css::uno::Reference< css::beans::XPropertySet >
                                 m_xDataSource;
