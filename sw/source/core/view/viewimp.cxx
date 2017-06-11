@@ -33,7 +33,7 @@
 #include <accmap.hxx>
 
 #include <pagepreviewlayout.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <svx/svdundo.hxx>
 #include <comphelper/lok.hxx>
 #include <IDocumentLayoutAccess.hxx>

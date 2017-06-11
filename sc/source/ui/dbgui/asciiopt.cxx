@@ -19,7 +19,6 @@
 
 #include "global.hxx"
 #include "asciiopt.hxx"
-#include "asciiopt.hrc"
 #include <comphelper/string.hxx>
 #include <osl/thread.h>
 

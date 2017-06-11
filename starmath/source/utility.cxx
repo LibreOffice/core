@@ -19,7 +19,7 @@
 
 #include <vcl/builderfactory.hxx>
 
-#include "starmath.hrc"
+#include "strings.hrc"
 
 #include "utility.hxx"
 #include "dialog.hxx"

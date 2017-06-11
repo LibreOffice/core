@@ -19,9 +19,9 @@
 
 #include "svx/postattr.hxx"
 #include <editeng/itemtype.hxx>
+#include <svx/strings.hrc>
 #include <svx/svxitems.hrc>
 #include <svx/dialmgr.hxx>
-
 
 SfxPoolItem* SvxPostItAuthorItem::CreateDefault() { return new SvxPostItAuthorItem(0); }
 SfxPoolItem* SvxPostItDateItem::CreateDefault() { return new SvxPostItDateItem(0); }

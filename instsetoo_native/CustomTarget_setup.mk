@@ -51,6 +51,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 		&& echo 'BRAND_BASE_DIR=$${ORIGIN}/..' \
 		&& echo 'BRAND_INI_DIR=$${ORIGIN}' \
 		&& echo 'BRAND_SHARE_SUBDIR=$(LIBO_SHARE_FOLDER)' \
+		&& echo 'BRAND_SHARE_RESOURCE_SUBDIR=$(LIBO_SHARE_RESOURCE_FOLDER)' \
 		&& echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/$(LIBO_SHARE_FOLDER)/registry res:$${BRAND_BASE_DIR}/$(LIBO_SHARE_FOLDER)/registry $(if $(ENABLE_DCONF),dconf:* )$(if $(filter WNT,$(OS)),winreg:LOCAL_MACHINE )bundledext:$${$${BRAND_BASE_DIR}/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,louno):BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini sharedext:$${$${BRAND_BASE_DIR}/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,louno):SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini userext:$${$${BRAND_BASE_DIR}/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,louno):UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini $(if $(filter WNT,$(OS)),winreg:CURRENT_USER )user:!$${$$BRAND_BASE_DIR/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,bootstrap):UserInstallation}/user/registrymodifications.xcu' \
 		&& echo 'LO_JAVA_DIR=$${BRAND_BASE_DIR}/$(LIBO_SHARE_JAVA_FOLDER)' \
 		&& echo 'LO_LIB_DIR=$${BRAND_BASE_DIR}/$(LIBO_LIB_FOLDER)' \
