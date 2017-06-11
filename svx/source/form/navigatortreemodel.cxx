@@ -31,7 +31,7 @@
 #include "fmundo.hxx"
 #include "fmhelp.hrc"
 #include "fmexpl.hxx"
-#include "svx/fmresids.hrc"
+#include "svx/strings.hrc"
 #include "fmshimp.hxx"
 #include "fmobj.hxx"
 #include <sfx2/objsh.hxx>

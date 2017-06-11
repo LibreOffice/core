@@ -34,7 +34,7 @@ class LocaleDataWrapper;
 
 namespace XmlSec
 {
-    ResMgr*         GetResMgr();
+    const std::locale& GetResLocale();
 
     const LocaleDataWrapper&    GetLocaleData();
     DateTime        GetDateTime( const css::util::DateTime& _rDT );
@@ -51,9 +51,9 @@ namespace XmlSec
     OUString        GetHexString( const css::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep, sal_uInt16 _nLineBreak = 0xFFFF );
 }
 
-inline OUString XsResId(sal_uInt16 nId)
+inline OUString XsResId(const char* pId)
 {
-    return ResId(nId, *XmlSec::GetResMgr());
+    return Translate::get(pId, XmlSec::GetResLocale());
 }
 
 #endif

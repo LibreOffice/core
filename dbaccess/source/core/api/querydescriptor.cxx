@@ -21,7 +21,7 @@
 
 #include "querydescriptor.hxx"
 #include "apitools.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>

@@ -26,8 +26,9 @@
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include "dbu_tbl.hrc"
-#include "dbustrings.hrc"
+#include "strings.hrc"
+#include "strings.hxx"
+#include "stringconstants.hxx"
 #include "browserids.hxx"
 #include "dbaccess_helpid.hrc"
 #include <comphelper/types.hxx>
@@ -107,17 +108,17 @@ void OTableEditorCtrl::Init()
     SetReadOnly( bRead );
 
     // Insert the columns
-    InsertDataColumn( FIELD_NAME, ModuleRes(STR_TAB_FIELD_COLUMN_NAME), FIELDNAME_WIDTH );
+    InsertDataColumn( FIELD_NAME, DBA_RES(STR_TAB_FIELD_COLUMN_NAME), FIELDNAME_WIDTH );
 
-    InsertDataColumn( FIELD_TYPE, ModuleRes(STR_TAB_FIELD_COLUMN_DATATYPE), FIELDTYPE_WIDTH );
+    InsertDataColumn( FIELD_TYPE, DBA_RES(STR_TAB_FIELD_COLUMN_DATATYPE), FIELDTYPE_WIDTH );
 
     ::dbaccess::ODsnTypeCollection aDsnTypes(GetView()->getController().getORB());
     bool bShowColumnDescription = aDsnTypes.supportsColumnDescription(::comphelper::getString(GetView()->getController().getDataSource()->getPropertyValue(PROPERTY_URL)));
-    InsertDataColumn( HELP_TEXT, ModuleRes(STR_TAB_HELP_TEXT), bShowColumnDescription ? FIELDTYPE_WIDTH : FIELDDESCR_WIDTH );
+    InsertDataColumn( HELP_TEXT, DBA_RES(STR_TAB_HELP_TEXT), bShowColumnDescription ? FIELDTYPE_WIDTH : FIELDDESCR_WIDTH );
 
     if ( bShowColumnDescription )
     {
-        InsertDataColumn( COLUMN_DESCRIPTION, ModuleRes(STR_COLUMN_DESCRIPTION), FIELDTYPE_WIDTH );
+        InsertDataColumn( COLUMN_DESCRIPTION, DBA_RES(STR_COLUMN_DESCRIPTION), FIELDTYPE_WIDTH );
     }
 
     InitCellController();
@@ -638,11 +639,11 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
     OUString sActionDescription;
     switch ( nColId )
     {
-    case FIELD_NAME:    sActionDescription = ModuleRes( STR_CHANGE_COLUMN_NAME ); break;
-    case FIELD_TYPE:    sActionDescription = ModuleRes( STR_CHANGE_COLUMN_TYPE ); break;
+    case FIELD_NAME:    sActionDescription = DBA_RES( STR_CHANGE_COLUMN_NAME ); break;
+    case FIELD_TYPE:    sActionDescription = DBA_RES( STR_CHANGE_COLUMN_TYPE ); break;
     case HELP_TEXT:
-    case COLUMN_DESCRIPTION:   sActionDescription = ModuleRes( STR_CHANGE_COLUMN_DESCRIPTION ); break;
-    default:            sActionDescription = ModuleRes( STR_CHANGE_COLUMN_ATTRIBUTE ); break;
+    case COLUMN_DESCRIPTION:   sActionDescription = DBA_RES( STR_CHANGE_COLUMN_DESCRIPTION ); break;
+    default:            sActionDescription = DBA_RES( STR_CHANGE_COLUMN_ATTRIBUTE ); break;
     }
 
     GetUndoManager().EnterListAction( sActionDescription, OUString(), 0, ViewShellId(-1) );
@@ -954,7 +955,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const css::uno
         case FIELD_PROPERTY_AUTOINC:
             {
                 sValue = ::comphelper::getString(_rNewData);
-                pFieldDescr->SetAutoIncrement(sValue == ModuleRes(STR_VALUE_YES));
+                pFieldDescr->SetAutoIncrement(sValue == DBA_RES(STR_VALUE_YES));
             }
             break;
         case FIELD_PROPERTY_SCALE:
@@ -991,8 +992,8 @@ Any OTableEditorCtrl::GetCellData( long nRow, sal_uInt16 nColId )
         nRow = GetCurRow();
     SetDataPtr( nRow );
 
-    static const OUString strYes(ModuleRes(STR_VALUE_YES));
-    static const OUString strNo(ModuleRes(STR_VALUE_NO));
+    static const OUString strYes(DBA_RES(STR_VALUE_YES));
+    static const OUString strNo(DBA_RES(STR_VALUE_NO));
     OUString sValue;
     // Read out the fields
     switch( nColId )

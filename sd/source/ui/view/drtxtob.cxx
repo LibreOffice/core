@@ -52,8 +52,8 @@
 #include <sfx2/objface.hxx>
 
 #include "app.hrc"
-#include "glob.hrc"
-#include "res_bmp.hrc"
+#include "strings.hrc"
+
 
 #include "drawdoc.hxx"
 #include "DrawViewShell.hxx"

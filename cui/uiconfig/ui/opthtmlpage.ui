@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkAdjustment" id="adjustsize1">
@@ -87,7 +87,7 @@
                       <object class="GtkLabel" id="size7FT">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Size _7:</property>
+                        <property name="label" translatable="yes" context="opthtmlpage|size7FT">Size _7:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">size7</property>
                       </object>
@@ -116,7 +116,7 @@
                       <object class="GtkLabel" id="size6FT">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Size _6:</property>
+                        <property name="label" translatable="yes" context="opthtmlpage|size6FT">Size _6:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">size6</property>
                       </object>
@@ -145,7 +145,7 @@
                       <object class="GtkLabel" id="size5FT">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Size _5:</property>
+                        <property name="label" translatable="yes" context="opthtmlpage|size5FT">Size _5:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">size5</property>
                       </object>
@@ -174,7 +174,7 @@
                       <object class="GtkLabel" id="size4FT">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Size _4:</property>
+                        <property name="label" translatable="yes" context="opthtmlpage|size4FT">Size _4:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">size4</property>
                       </object>
@@ -203,7 +203,7 @@
                       <object class="GtkLabel" id="size3FT">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Size _3:</property>
+                        <property name="label" translatable="yes" context="opthtmlpage|size3FT">Size _3:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">size3</property>
                       </object>
@@ -232,7 +232,7 @@
                       <object class="GtkLabel" id="size2FT">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Size _2:</property>
+                        <property name="label" translatable="yes" context="opthtmlpage|size2FT">Size _2:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">size2</property>
                       </object>
@@ -261,7 +261,7 @@
                       <object class="GtkLabel" id="size1FT">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Size _1:</property>
+                        <property name="label" translatable="yes" context="opthtmlpage|size1FT">Size _1:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">size1</property>
                       </object>
@@ -294,7 +294,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Font Sizes</property>
+                <property name="label" translatable="yes" context="opthtmlpage|label1">Font Sizes</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -344,7 +344,7 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="ignorefontnames">
-                        <property name="label" translatable="yes">Ignore _font settings</property>
+                        <property name="label" translatable="yes" context="opthtmlpage|ignorefontnames">Ignore _font settings</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -362,7 +362,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="unknowntag">
-                        <property name="label" translatable="yes">_Import unknown HTML tags as fields</property>
+                        <property name="label" translatable="yes" context="opthtmlpage|unknowntag">_Import unknown HTML tags as fields</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -380,7 +380,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="numbersenglishus">
-                        <property name="label" translatable="yes">_Use '%ENGLISHUSLOCALE' locale for numbers</property>
+                        <property name="label" translatable="yes" context="opthtmlpage|numbersenglishus">_Use '%ENGLISHUSLOCALE' locale for numbers</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -404,7 +404,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Import</property>
+                <property name="label" translatable="yes" context="opthtmlpage|label2">Import</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -451,7 +451,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Character _set:</property>
+                            <property name="label" translatable="yes" context="opthtmlpage|charsetFT">Character _set:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">charset</property>
                           </object>
@@ -486,7 +486,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="savegrflocal">
-                        <property name="label" translatable="yes">_Copy local images to Internet</property>
+                        <property name="label" translatable="yes" context="opthtmlpage|savegrflocal">_Copy local images to Internet</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -504,7 +504,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="printextension">
-                        <property name="label" translatable="yes">_Print layout</property>
+                        <property name="label" translatable="yes" context="opthtmlpage|printextension">_Print layout</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -522,7 +522,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="starbasicwarning">
-                        <property name="label" translatable="yes">Display _warning</property>
+                        <property name="label" translatable="yes" context="opthtmlpage|starbasicwarning">Display _warning</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -541,7 +541,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="starbasic">
-                        <property name="label" translatable="yes">LibreOffice _Basic</property>
+                        <property name="label" translatable="yes" context="opthtmlpage|starbasic">LibreOffice _Basic</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -565,7 +565,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Export</property>
+                <property name="label" translatable="yes" context="opthtmlpage|label3">Export</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

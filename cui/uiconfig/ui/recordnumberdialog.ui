@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="cui">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="RecordNumberDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Record Number</property>
+    <property name="title" translatable="yes" context="recordnumberdialog|RecordNumberDialog">Record Number</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -22,7 +22,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">go to record</property>
+                <property name="label" translatable="yes" context="recordnumberdialog|label2">go to record</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">entry-nospin</property>
               </object>

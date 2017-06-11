@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="dba">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="TablesJoinDialog">
@@ -79,7 +79,7 @@
             <property name="row_spacing">6</property>
             <child>
               <object class="GtkRadioButton" id="tables">
-                <property name="label" translatable="yes">Tables</property>
+                <property name="label" translatable="yes" context="tablesjoindialog|tables">Tables</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -96,7 +96,7 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="queries">
-                <property name="label" translatable="yes">Queries</property>
+                <property name="label" translatable="yes" context="tablesjoindialog|queries">Queries</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -129,7 +129,7 @@
               <object class="GtkLabel" id="title">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Add Tables</property>
+                <property name="label" translatable="yes" context="tablesjoindialog|title">Add Tables</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -140,7 +140,7 @@
               <object class="GtkLabel" id="alttitle">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Add Table or Query</property>
+                <property name="label" translatable="yes" context="tablesjoindialog|alttitle">Add Table or Query</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>

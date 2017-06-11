@@ -37,7 +37,6 @@
 #include <sfx2/toolbarids.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/toolbox.hxx>
-#include <tools/rcid.h>
 #include <tools/diagnose_ex.h>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svl/itempool.hxx>

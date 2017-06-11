@@ -257,9 +257,8 @@ gb_Package_MODULE_$(1) += $(2)
 
 endef
 
-# TODO: this should be extended to handle auto-installation.
-define gb_Helper_register_resources
-gb_AllLangResTarget_REGISTERED += $(1)
+define gb_Helper_register_mos
+gb_AllLangMoTarget_REGISTERED += $(1)
 
 endef
 

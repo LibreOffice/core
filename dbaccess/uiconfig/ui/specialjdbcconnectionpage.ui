@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="dba">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="SpecialJDBCConnectionPage">
     <property name="visible">True</property>
@@ -16,7 +16,7 @@
         <property name="can_focus">False</property>
         <property name="halign">start</property>
         <property name="margin_bottom">6</property>
-        <property name="label" translatable="yes">Set up connection to a MySQL database using JDBC</property>
+        <property name="label" translatable="yes" context="specialjdbcconnectionpage|header">Set up connection to a MySQL database using JDBC</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
@@ -32,7 +32,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Please enter the required information to connect to a MySQL database using JDBC. Note that a JDBC driver class must be installed on your system and registered with %PRODUCTNAME. Please contact your system administrator if you are unsure about the following settings. </property>
+        <property name="label" translatable="yes" context="specialjdbcconnectionpage|helpLabel">Please enter the required information to connect to a MySQL database using JDBC. Note that a JDBC driver class must be installed on your system and registered with %PRODUCTNAME. Please contact your system administrator if you are unsure about the following settings. </property>
         <property name="wrap">True</property>
         <property name="max_width_chars">80</property>
       </object>
@@ -55,7 +55,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Database name:</property>
+            <property name="label" translatable="yes" context="specialjdbcconnectionpage|dbNameLabel">_Database name:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">dbNameEntry</property>
           </object>
@@ -69,7 +69,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Server:</property>
+            <property name="label" translatable="yes" context="specialjdbcconnectionpage|hostNameLabel">_Server:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">hostNameEntry</property>
           </object>
@@ -83,7 +83,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">1</property>
-            <property name="label" translatable="yes">_Port number:</property>
+            <property name="label" translatable="yes" context="specialjdbcconnectionpage|portNumLabel">_Port number:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">portNumEntry</property>
           </object>
@@ -136,7 +136,7 @@
               <object class="GtkLabel" id="portNumDefLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Default: 3306</property>
+                <property name="label" translatable="yes" context="specialjdbcconnectionpage|portNumDefLabel">Default: 3306</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -170,7 +170,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">MySQL JDBC d_river class:</property>
+            <property name="label" translatable="yes" context="specialjdbcconnectionpage|jdbcDriverLabel">MySQL JDBC d_river class:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">jdbcDriverEntry</property>
           </object>
@@ -192,7 +192,7 @@
         </child>
         <child>
           <object class="GtkButton" id="testDriverButton">
-            <property name="label" translatable="yes">_Test Class</property>
+            <property name="label" translatable="yes" context="specialjdbcconnectionpage|testDriverButton">_Test Class</property>
             <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>

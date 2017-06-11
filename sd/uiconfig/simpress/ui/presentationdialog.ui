@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sd">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="PresentationDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Slide Show Settings</property>
+    <property name="title" translatable="yes" context="presentationdialog|PresentationDialog">Slide Show Settings</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -46,7 +46,7 @@
                             <property name="column_spacing">12</property>
                             <child>
                               <object class="GtkRadioButton" id="from">
-                                <property name="label" translatable="yes">_From:</property>
+                                <property name="label" translatable="yes" context="presentationdialog|from">_From:</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -73,7 +73,7 @@
                                 </accessibility>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="from_cb-atkobject">
-                                    <property name="AtkObject::accessible-name" translatable="yes">Starting slide</property>
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="presentationdialog|from_cb-atkobject">Starting slide</property>
                                   </object>
                                 </child>
                               </object>
@@ -90,7 +90,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="allslides">
-                            <property name="label" translatable="yes">All _slides</property>
+                            <property name="label" translatable="yes" context="presentationdialog|allslides">All _slides</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -107,7 +107,7 @@
                         </child>
                         <child>
                           <object class="GtkRadioButton" id="customslideshow">
-                            <property name="label" translatable="yes">_Custom slide show:</property>
+                            <property name="label" translatable="yes" context="presentationdialog|customslideshow">_Custom slide show:</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -147,7 +147,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Range</property>
+                    <property name="label" translatable="yes" context="presentationdialog|label1">Range</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -202,7 +202,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">P_resentation display:</property>
+                                <property name="label" translatable="yes" context="presentationdialog|presdisplay_label">P_resentation display:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">presdisplay_cb</property>
                               </object>
@@ -223,7 +223,7 @@
                             <child>
                               <object class="GtkLabel" id="externalmonitor_str">
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Display %1 (external)</property>
+                                <property name="label" translatable="yes" context="presentationdialog|externalmonitor_str">Display %1 (external)</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -233,7 +233,7 @@
                             <child>
                               <object class="GtkLabel" id="monitor_str">
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Display %1</property>
+                                <property name="label" translatable="yes" context="presentationdialog|monitor_str">Display %1</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -243,7 +243,7 @@
                             <child>
                               <object class="GtkLabel" id="allmonitors_str">
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">All displays</property>
+                                <property name="label" translatable="yes" context="presentationdialog|allmonitors_str">All displays</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -253,7 +253,7 @@
                             <child>
                               <object class="GtkLabel" id="external_str">
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Auto External (Display %1)</property>
+                                <property name="label" translatable="yes" context="presentationdialog|external_str">Auto External (Display %1)</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -274,7 +274,7 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Multiple Displays</property>
+                    <property name="label" translatable="yes" context="presentationdialog|label3">Multiple Displays</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -314,7 +314,7 @@
                             <property name="row_spacing">6</property>
                             <child>
                               <object class="GtkRadioButton" id="default">
-                                <property name="label" translatable="yes">F_ull screen</property>
+                                <property name="label" translatable="yes" context="presentationdialog|default">F_ull screen</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -331,7 +331,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="window">
-                                <property name="label" translatable="yes">In a _window</property>
+                                <property name="label" translatable="yes" context="presentationdialog|window">In a _window</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -347,7 +347,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="auto">
-                                <property name="label" translatable="yes">_Loop and repeat after:</property>
+                                <property name="label" translatable="yes" context="presentationdialog|auto">_Loop and repeat after:</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -366,7 +366,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="showlogo">
-                                <property name="label" translatable="yes">Show _logo</property>
+                                <property name="label" translatable="yes" context="presentationdialog|showlogo">Show _logo</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -385,14 +385,14 @@
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">True</property>
-                                <property name="tooltip_text" translatable="yes">Duration of pause</property>
+                                <property name="tooltip_text" translatable="yes" context="presentationdialog|pauseduration|tooltip_text">Duration of pause</property>
                                 <property name="margin_left">12</property>
                                 <accessibility>
                                   <relation type="labelled-by" target="auto"/>
                                 </accessibility>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="pauseduration:hh:mm-atkobject">
-                                    <property name="AtkObject::accessible-name" translatable="yes">Pause Duration</property>
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="presentationdialog|pauseduration-atkobject">Pause Duration</property>
                                   </object>
                                 </child>
                               </object>
@@ -409,7 +409,7 @@
                       <object class="GtkLabel" id="label2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Presentation Mode</property>
+                        <property name="label" translatable="yes" context="presentationdialog|label2">Presentation Mode</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -444,7 +444,7 @@
                             <property name="row_spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="manualslides">
-                                <property name="label" translatable="yes">Change slides _manually</property>
+                                <property name="label" translatable="yes" context="presentationdialog|manualslides">Change slides _manually</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -459,7 +459,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="pointervisible">
-                                <property name="label" translatable="yes">Mouse pointer _visible</property>
+                                <property name="label" translatable="yes" context="presentationdialog|pointervisible">Mouse pointer _visible</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -474,7 +474,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="pointeraspen">
-                                <property name="label" translatable="yes">Mouse pointer as _pen</property>
+                                <property name="label" translatable="yes" context="presentationdialog|pointeraspen">Mouse pointer as _pen</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -489,7 +489,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="animationsallowed">
-                                <property name="label" translatable="yes">_Animations allowed</property>
+                                <property name="label" translatable="yes" context="presentationdialog|animationsallowed">_Animations allowed</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -504,7 +504,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="changeslidesbyclick">
-                                <property name="label" translatable="yes">Change slides by clic_king on background</property>
+                                <property name="label" translatable="yes" context="presentationdialog|changeslidesbyclick">Change slides by clic_king on background</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -519,7 +519,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="alwaysontop">
-                                <property name="label" translatable="yes">Presentation always _on top</property>
+                                <property name="label" translatable="yes" context="presentationdialog|alwaysontop">Presentation always _on top</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -540,7 +540,7 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Options</property>
+                        <property name="label" translatable="yes" context="presentationdialog|label4">Options</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>

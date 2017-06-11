@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sw">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="MMCreatingDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Mail Merge</property>
+    <property name="title" translatable="yes" context="mmcreatingdialog|MMCreatingDialog">Mail Merge</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -49,7 +49,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">1</property>
-                <property name="label" translatable="yes">Status:</property>
+                <property name="label" translatable="yes" context="mmcreatingdialog|label1">Status:</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -63,7 +63,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">1</property>
-                <property name="label" translatable="yes">Progress:</property>
+                <property name="label" translatable="yes" context="mmcreatingdialog|label2">Progress:</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -77,7 +77,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Creating documents...</property>
+                <property name="label" translatable="yes" context="mmcreatingdialog|label3">Creating documents...</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -91,7 +91,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">%X of %Y</property>
+                <property name="label" translatable="yes" context="mmcreatingdialog|progress">%X of %Y</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>

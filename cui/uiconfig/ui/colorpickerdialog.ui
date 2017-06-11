@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -23,7 +23,7 @@
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Pick a Color</property>
+    <property name="title" translatable="yes" context="colorpickerdialog|ColorPicker">Pick a Color</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
@@ -241,7 +241,7 @@
                             <property name="column_spacing">12</property>
                             <child>
                               <object class="GtkRadioButton" id="redRadiobutton">
-                                <property name="label" translatable="yes">_Red:</property>
+                                <property name="label" translatable="yes" context="colorpickerdialog|redRadiobutton">_Red:</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -259,7 +259,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="greenRadiobutton">
-                                <property name="label" translatable="yes">_Green:</property>
+                                <property name="label" translatable="yes" context="colorpickerdialog|greenRadiobutton">_Green:</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -276,7 +276,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="blueRadiobutton">
-                                <property name="label" translatable="yes">_Blue:</property>
+                                <property name="label" translatable="yes" context="colorpickerdialog|blueRadiobutton">_Blue:</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -332,7 +332,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Hex _#:</property>
+                                <property name="label" translatable="yes" context="colorpickerdialog|label2">Hex _#:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">hexEntry</property>
                               </object>
@@ -360,7 +360,7 @@
                       <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">RGB</property>
+                        <property name="label" translatable="yes" context="colorpickerdialog|label1">RGB</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -399,7 +399,7 @@
                             <property name="column_spacing">12</property>
                             <child>
                               <object class="GtkRadioButton" id="hueRadiobutton">
-                                <property name="label" translatable="yes">H_ue:</property>
+                                <property name="label" translatable="yes" context="colorpickerdialog|hueRadiobutton">H_ue:</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -417,7 +417,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="satRadiobutton">
-                                <property name="label" translatable="yes">_Saturation:</property>
+                                <property name="label" translatable="yes" context="colorpickerdialog|satRadiobutton">_Saturation:</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -434,7 +434,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="brightRadiobutton">
-                                <property name="label" translatable="yes">Bright_ness:</property>
+                                <property name="label" translatable="yes" context="colorpickerdialog|brightRadiobutton">Bright_ness:</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -493,7 +493,7 @@
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">HSB</property>
+                        <property name="label" translatable="yes" context="colorpickerdialog|label3">HSB</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -534,7 +534,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">_Cyan:</property>
+                                <property name="label" translatable="yes" context="colorpickerdialog|label5">_Cyan:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">cyanSpinbutton:%</property>
                               </object>
@@ -549,7 +549,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">_Magenta:</property>
+                                <property name="label" translatable="yes" context="colorpickerdialog|label6">_Magenta:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">magSpinbutton:%</property>
                               </object>
@@ -564,7 +564,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">_Yellow:</property>
+                                <property name="label" translatable="yes" context="colorpickerdialog|label7">_Yellow:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">yellowSpinbutton:%</property>
                               </object>
@@ -579,7 +579,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">_Key:</property>
+                                <property name="label" translatable="yes" context="colorpickerdialog|label8">_Key:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">keySpinbutton:%</property>
                               </object>
@@ -644,7 +644,7 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">CMYK</property>
+                        <property name="label" translatable="yes" context="colorpickerdialog|label4">CMYK</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>

@@ -35,7 +35,7 @@
 #include <helpid.h>
 #include <cmdid.h>
 #include <misc.hrc>
-#include <shells.hrc>
+#include <strings.hrc>
 
 #include <vector>
 #include <redlndlg.hxx>

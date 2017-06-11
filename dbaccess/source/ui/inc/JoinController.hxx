@@ -21,7 +21,7 @@
 
 #include "singledoccontroller.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include "JoinTableView.hxx"
 #include "JoinDesignView.hxx"
 #include "TableConnectionData.hxx"
@@ -43,7 +43,7 @@ namespace dbaui
 
     class OJoinController : public OJoinController_BASE
     {
-        OModuleClient                    m_aModuleClient;
+        dbaccess::OModuleClient                    m_aModuleClient;
     protected:
         TTableConnectionData m_vTableConnectionData;
         TTableWindowData     m_vTableData;

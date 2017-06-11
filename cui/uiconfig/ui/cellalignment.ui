@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustmentIndent">
@@ -21,31 +21,31 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Default</col>
+        <col id="0" translatable="yes" context="cellalignment|liststoreHorzAlign">Default</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Left</col>
+        <col id="0" translatable="yes" context="cellalignment|liststoreHorzAlign">Left</col>
         <col id="1">1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Center</col>
+        <col id="0" translatable="yes" context="cellalignment|liststoreHorzAlign">Center</col>
         <col id="1">2</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Right</col>
+        <col id="0" translatable="yes" context="cellalignment|liststoreHorzAlign">Right</col>
         <col id="1">3</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Justified</col>
+        <col id="0" translatable="yes" context="cellalignment|liststoreHorzAlign">Justified</col>
         <col id="1">4</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Filled</col>
+        <col id="0" translatable="yes" context="cellalignment|liststoreHorzAlign">Filled</col>
         <col id="1">5</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Distributed</col>
+        <col id="0" translatable="yes" context="cellalignment|liststoreHorzAlign">Distributed</col>
         <col id="1">6</col>
       </row>
     </data>
@@ -59,27 +59,27 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Default</col>
+        <col id="0" translatable="yes" context="cellalignment|liststoreVertAlign">Default</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Top</col>
+        <col id="0" translatable="yes" context="cellalignment|liststoreVertAlign">Top</col>
         <col id="1">1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Middle</col>
+        <col id="0" translatable="yes" context="cellalignment|liststoreVertAlign">Middle</col>
         <col id="1">2</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Bottom</col>
+        <col id="0" translatable="yes" context="cellalignment|liststoreVertAlign">Bottom</col>
         <col id="1">3</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Justified</col>
+        <col id="0" translatable="yes" context="cellalignment|liststoreVertAlign">Justified</col>
         <col id="1">4</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Distributed</col>
+        <col id="0" translatable="yes" context="cellalignment|liststoreVertAlign">Distributed</col>
         <col id="1">5</col>
       </row>
     </data>
@@ -120,7 +120,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Degrees:</property>
+                        <property name="label" translatable="yes" context="cellalignment|labelDegrees">_Degrees:</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -133,7 +133,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Reference edge:</property>
+                        <property name="label" translatable="yes" context="cellalignment|labelRefEdge">_Reference edge:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">references</property>
                       </object>
@@ -193,7 +193,7 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="checkVertStack">
-                        <property name="label" translatable="yes">Vertically s_tacked</property>
+                        <property name="label" translatable="yes" context="cellalignment|checkVertStack">Vertically s_tacked</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -209,7 +209,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkAsianMode">
-                        <property name="label" translatable="yes">Asian layout _mode</property>
+                        <property name="label" translatable="yes" context="cellalignment|checkAsianMode">Asian layout _mode</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -238,7 +238,7 @@
           <object class="GtkLabel" id="labelTextOrient">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Text Orientation</property>
+            <property name="label" translatable="yes" context="cellalignment|labelTextOrient">Text Orientation</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -272,7 +272,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="checkWrapTextAuto">
-                    <property name="label" translatable="yes">_Wrap text automatically</property>
+                    <property name="label" translatable="yes" context="cellalignment|checkWrapTextAuto">_Wrap text automatically</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -289,7 +289,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="checkShrinkFitCellSize">
-                    <property name="label" translatable="yes">_Shrink to fit cell size</property>
+                    <property name="label" translatable="yes" context="cellalignment|checkShrinkFitCellSize">_Shrink to fit cell size</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -305,7 +305,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="checkHyphActive">
-                    <property name="label" translatable="yes">Hyphenation _active</property>
+                    <property name="label" translatable="yes" context="cellalignment|checkHyphActive">Hyphenation _active</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -331,7 +331,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Te_xt direction:</property>
+                        <property name="label" translatable="yes" context="cellalignment|LabelTxtDir">Te_xt direction:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">comboTextDirBox</property>
                       </object>
@@ -366,7 +366,7 @@
           <object class="GtkLabel" id="labelProperties">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Properties</property>
+            <property name="label" translatable="yes" context="cellalignment|labelProperties">Properties</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -415,7 +415,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Hori_zontal</property>
+                    <property name="label" translatable="yes" context="cellalignment|labelHorzAlign">Hori_zontal</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">comboboxHorzAlign</property>
                   </object>
@@ -429,7 +429,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Vertical</property>
+                    <property name="label" translatable="yes" context="cellalignment|labelVertAlign">_Vertical</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">comboboxVertAlign</property>
                   </object>
@@ -443,7 +443,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">I_ndent</property>
+                    <property name="label" translatable="yes" context="cellalignment|labelIndent">I_ndent</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">spinIndentFrom:0.00pt</property>
                   </object>
@@ -484,7 +484,7 @@
           <object class="GtkLabel" id="LabelTextAlig">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Text Alignment</property>
+            <property name="label" translatable="yes" context="cellalignment|LabelTextAlig">Text Alignment</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -504,7 +504,7 @@
         <child>
           <object class="GtkLabel" id="labelSTR_BOTTOMLOCK">
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Text Extension From Lower Cell Border</property>
+            <property name="label" translatable="yes" context="cellalignment|labelSTR_BOTTOMLOCK">Text Extension From Lower Cell Border</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -515,7 +515,7 @@
         <child>
           <object class="GtkLabel" id="labelSTR_TOPLOCK">
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Text Extension From Upper Cell Border</property>
+            <property name="label" translatable="yes" context="cellalignment|labelSTR_TOPLOCK">Text Extension From Upper Cell Border</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -526,7 +526,7 @@
         <child>
           <object class="GtkLabel" id="labelSTR_CELLLOCK">
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Text Extension Inside Cell</property>
+            <property name="label" translatable="yes" context="cellalignment|labelSTR_CELLLOCK">Text Extension Inside Cell</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -537,7 +537,7 @@
         <child>
           <object class="GtkLabel" id="labelABCD">
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">ABCD</property>
+            <property name="label" translatable="yes" context="cellalignment|labelABCD">ABCD</property>
           </object>
           <packing>
             <property name="expand">False</property>
