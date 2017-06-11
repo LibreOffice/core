@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="cui">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkBox" id="OptChartColorsPage">
@@ -39,7 +39,7 @@
           <object class="GtkLabel" id="label20">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Chart Colors</property>
+            <property name="label" translatable="yes" context="optchartcolorspage|label20">Chart Colors</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -125,7 +125,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="default">
-                        <property name="label" translatable="yes">_Default</property>
+                        <property name="label" translatable="yes" context="optchartcolorspage|default">_Default</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -153,7 +153,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Color Table</property>
+            <property name="label" translatable="yes" context="optchartcolorspage|label1">Color Table</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

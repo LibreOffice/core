@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="TablePreviewDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Mail Merge Recipients</property>
+    <property name="title" translatable="yes" context="tablepreviewdialog|TablePreviewDialog">Mail Merge Recipients</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -48,7 +48,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">The list below shows the contents of: %1</property>
+            <property name="label" translatable="yes" context="tablepreviewdialog|description">The list below shows the contents of: %1</property>
           </object>
           <packing>
             <property name="expand">False</property>

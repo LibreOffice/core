@@ -36,7 +36,7 @@
 #include "swmodule.hxx"
 #include "swundo.hxx"
 #include <SwRewriter.hxx>
-#include "comcore.hrc"
+#include "strings.hrc"
 
 using namespace ::com::sun::star;
 

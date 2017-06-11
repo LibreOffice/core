@@ -26,9 +26,12 @@
 #include <com/sun/star/task/XInteractionRetry.hpp>
 
 #include <vcl/errinf.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
+#include <svx/svxerr.hxx>
 #include <svx/dialogs.hrc>
+#include <tools/simplerm.hxx>
 
+#include "ids.hxx"
 #include "ids.hrc"
 #include "getcontinuations.hxx"
 
@@ -152,9 +155,9 @@ UUIInteractionHelper::handleErrorHandlerRequest(
     {
         enum Source { SOURCE_DEFAULT, SOURCE_SVX, SOURCE_UUI };
         static char const * const aManager[3] = { "svt", "svx", "uui" };
-        static sal_uInt16 const aId[3]
-            = { RID_ERRHDL,
-                RID_SVXERRCODE,
+        static const ErrMsgCode* const aId[3]
+            = { getRID_ERRHDL(),
+                getRID_SVXERRCODE(),
                 RID_UUI_ERRHDL };
         ErrCode nErrorId = nErrorCode.IgnoreWarning();
         Source eSource = nErrorId < ErrCode(ERRCODE_AREA_SVX) ?
@@ -164,13 +167,9 @@ UUIInteractionHelper::handleErrorHandlerRequest(
             SOURCE_SVX :
             SOURCE_UUI;
 
-        SolarMutexGuard aGuard;
-        std::unique_ptr< ResMgr > xManager;
-        xManager.reset(ResMgr::CreateResMgr(aManager[eSource]));
-        if (!xManager.get())
-            return;
-        ResId aResId(aId[eSource], *xManager.get());
-        if (!ErrorResource(aResId).getString(nErrorCode, aMessage))
+        std::locale aResLocale = Translate::Create(aManager[eSource], Application::GetSettings().GetUILanguageTag());
+        ErrorResource aErrorResource(aId[eSource], aResLocale);
+        if (!aErrorResource.getString(nErrorCode, aMessage))
             return;
     }
 

@@ -33,8 +33,7 @@
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
 
-#include <svx/dialogs.hrc>
-#include "accessibility.hrc"
+#include <svx/strings.hrc>
 #include <svx/dlgctrl.hxx>
 #include <svx/dialmgr.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
@@ -57,8 +56,8 @@ namespace
 {
     struct ChildIndexToPointData
     {
-        short       nResIdName;
-        short       nResIdDescr;
+        const char* pResIdName;
+        const char* pResIdDescr;
         RectPoint  ePoint;
     };
 }
@@ -226,8 +225,8 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChil
         if( !xChild.is() )
         {
             const ChildIndexToPointData*    p = IndexToPoint( nIndex );
-            OUString aName(SvxResId(p->nResIdName));
-            OUString aDescr(SvxResId(p->nResIdDescr));
+            OUString aName(SvxResId(p->pResIdName));
+            OUString aDescr(SvxResId(p->pResIdDescr));
 
             tools::Rectangle       aFocusRect( mpRepr->CalculateFocusRectangle( p->ePoint ) );
 

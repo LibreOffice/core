@@ -36,8 +36,8 @@
 #include <hints.hxx>
 #include <fntcache.hxx>
 
-#include <statstr.hrc>
-#include <comcore.hrc>
+#include <strings.hrc>
+#include <strings.hrc>
 
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>

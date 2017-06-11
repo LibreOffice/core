@@ -35,7 +35,9 @@
 
 #include <vector>
 #include <globals.hrc>
+#include <strings.hrc>
 #include <dbui.hrc>
+#include "mmaddressblockpage.hrc"
 #include <helpid.h>
 
 using namespace svt;
@@ -518,12 +520,10 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
         pEntry->SetUserData(reinterpret_cast<void*>((sal_Int32)USER_DATA_PUNCTUATION) );
         pEntry = m_pAddressElementsLB->InsertEntry(SwResId(ST_TEXT));
         pEntry->SetUserData(reinterpret_cast<void*>((sal_Int32)USER_DATA_TEXT)       );
-        ResStringArray aSalutArr(ResId(RA_SALUTATION, *pSwResMgr));
-        for(sal_uInt32 i = 0; i < aSalutArr.Count(); ++i)
-            m_aSalutations.push_back(aSalutArr.GetString(i));
-        ResStringArray aPunctArr(ResId(RA_PUNCTUATION, *pSwResMgr));
-        for(sal_uInt32 i = 0; i < aPunctArr.Count(); ++i)
-            m_aPunctuations.push_back(aPunctArr.GetString(i));
+        for (size_t i = 0; i < SAL_N_ELEMENTS(RA_SALUTATION); ++i)
+            m_aSalutations.push_back(SwResId(RA_SALUTATION[i]));
+        for (size_t i = 0; i < SAL_N_ELEMENTS(RA_PUNCTUATION); ++i)
+            m_aPunctuations.push_back(SwResId(RA_PUNCTUATION[i]));
         m_pDragED->SetText("            ");
         SetText(SwResId(eType == GREETING_MALE ? ST_TITLE_MALE : ST_TITLE_FEMALE));
         m_pAddressElementsFT->SetText(SwResId(ST_SALUTATIONELEMENTS));
@@ -548,10 +548,10 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
         m_pUpIB->SetHelpId( HID_MM_ADDBLOCK_MOVEBUTTONS );
     }
 
-    const ResStringArray& rHeaders = m_rConfigItem.GetDefaultAddressHeaders();
-    for(sal_uInt32 i = 0; i < rHeaders.Count(); ++i)
+    const std::vector<std::pair<OUString, int>>& rHeaders = m_rConfigItem.GetDefaultAddressHeaders();
+    for (size_t i = 0; i < rHeaders.size(); ++i)
     {
-        SvTreeListEntry* pEntry = m_pAddressElementsLB->InsertEntry(rHeaders.GetString( i ));
+        SvTreeListEntry* pEntry = m_pAddressElementsLB->InsertEntry(rHeaders[i].first);
         pEntry->SetUserData(reinterpret_cast<void*>((sal_IntPtr)i));
     }
     m_pOK->SetClickHdl(LINK(this, SwCustomizeAddressBlockDialog, OKHdl_Impl));
@@ -878,7 +878,7 @@ void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
     long nHBHeight = m_aHeaderHB->CalcWindowSizePixel().Height();
 
     //get the name of the default headers
-    const ResStringArray& rHeaders = rConfigItem.GetDefaultAddressHeaders();
+    const std::vector<std::pair<OUString, int>>& rHeaders = rConfigItem.GetDefaultAddressHeaders();
     //get the actual data
     uno::Reference< XColumnsSupplier > xColsSupp( rConfigItem.GetResultSet(), uno::UNO_QUERY);
     //get the name of the actual columns
@@ -898,9 +898,9 @@ void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
     //fill the controls
     long nControlWidth = aOutputSize.Width() / 3;
     long nControlHeight = -1;
-    for(sal_uInt32 i = 0; i < rHeaders.Count(); ++i)
+    for (size_t i = 0; i < rHeaders.size(); ++i)
     {
-        const OUString rHeader = rHeaders.GetString( i );
+        const OUString rHeader = rHeaders[i].first;
         VclPtr<FixedText> pNewText = VclPtr<FixedText>::Create(m_aWindow.get(), WB_VCENTER);
         pNewText->SetText("<" + rHeader + ">");
         VclPtr<ListBox> pNewLB = VclPtr<ListBox>::Create(m_aWindow.get(), WB_DROPDOWN | WB_VCENTER | WB_TABSTOP);
@@ -967,7 +967,7 @@ void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
         pNewPreview->Show();
         pNewPreview->SetPosPixel(Point(2 * nControlWidth + 6, nMove));
     }
-    m_aVScroll->SetRange(Range(0, rHeaders.Count()));
+    m_aVScroll->SetRange(Range(0, rHeaders.size()));
     m_aVScroll->SetPageSize((aOutputSize.Height() - nHBHeight - m_nLBStartTopPos)/ m_nYOffset);
     m_aVScroll->EnableDrag();
     m_aVScroll->SetVisibleSize(m_aVScroll->GetPageSize());
@@ -1223,7 +1223,7 @@ void SwAssignFieldsDialog::dispose()
 uno::Sequence< OUString > SwAssignFieldsDialog::CreateAssignments()
 {
     uno::Sequence< OUString > aAssignments(
-            m_rConfigItem.GetDefaultAddressHeaders().Count());
+            m_rConfigItem.GetDefaultAddressHeaders().size());
     OUString* pAssignments = aAssignments.getArray();
     sal_Int32 nIndex = 0;
     for(auto aLBIter = m_pFieldsControl->m_aMatches.begin();

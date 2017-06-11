@@ -27,7 +27,8 @@
 #include <vcl/settings.hxx>
 #include "navipi.hxx"
 #include "scresid.hxx"
-#include "scres.hrc"
+#include "sc.hrc"
+#include "strings.hrc"
 #include "globstr.hrc"
 
 // class ScScenarioWindow ------------------------------------------------

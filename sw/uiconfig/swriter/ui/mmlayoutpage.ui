@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">999.99000000000001</property>
@@ -71,7 +71,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">_From top</property>
+                                        <property name="label" translatable="yes" context="mmlayoutpage|label6">_From top</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">top:0.00cm</property>
                                       </object>
@@ -86,7 +86,7 @@
                                       <object class="GtkSpinButton" id="top:0.00cm">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="text" translatable="yes">2.00</property>
+                                        <property name="text" translatable="yes" context="mmlayoutpage|top">2.00</property>
                                         <property name="adjustment">adjustment1</property>
                                         <property name="digits">2</property>
                                         <property name="value">2</property>
@@ -113,7 +113,7 @@
                                     <property name="row_spacing">6</property>
                                     <child>
                                       <object class="GtkCheckButton" id="align">
-                                        <property name="label" translatable="yes">Align to text body</property>
+                                        <property name="label" translatable="yes" context="mmlayoutpage|align">Align to text body</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
@@ -160,7 +160,7 @@
                                                 <property name="can_focus">False</property>
                                                 <property name="margin_left">12</property>
                                                 <property name="xalign">0</property>
-                                                <property name="label" translatable="yes">From _left</property>
+                                                <property name="label" translatable="yes" context="mmlayoutpage|leftft">From _left</property>
                                                 <property name="use_underline">True</property>
                                                 <property name="mnemonic_widget">left:0.00cm</property>
                                               </object>
@@ -202,7 +202,7 @@
                           <object class="GtkLabel" id="label2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Address Block Position</property>
+                            <property name="label" translatable="yes" context="mmlayoutpage|label2">Address Block Position</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -239,7 +239,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Move</property>
+                                    <property name="label" translatable="yes" context="mmlayoutpage|label4">Move</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">up</property>
                                   </object>
@@ -255,7 +255,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Move</property>
+                                    <property name="label" translatable="yes" context="mmlayoutpage|label5">Move</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">down</property>
                                   </object>
@@ -268,7 +268,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="up">
-                                    <property name="label" translatable="yes">_Up</property>
+                                    <property name="label" translatable="yes" context="mmlayoutpage|up">_Up</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
@@ -283,7 +283,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="down">
-                                    <property name="label" translatable="yes">_Down</property>
+                                    <property name="label" translatable="yes" context="mmlayoutpage|down">_Down</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
@@ -304,7 +304,7 @@
                           <object class="GtkLabel" id="label3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Salutation Position</property>
+                            <property name="label" translatable="yes" context="mmlayoutpage|label3">Salutation Position</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -344,7 +344,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Zoom</property>
+                            <property name="label" translatable="yes" context="mmlayoutpage|label7">_Zoom</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">zoom</property>
                           </object>
@@ -360,7 +360,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <items>
-                              <item translatable="yes">Entire page</item>
+                              <item translatable="yes" context="mmlayoutpage|zoom">Entire page</item>
                             </items>
                           </object>
                           <packing>
@@ -412,7 +412,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Adjust Layout of Address Block and Salutation</property>
+            <property name="label" translatable="yes" context="mmlayoutpage|label1">Adjust Layout of Address Block and Salutation</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

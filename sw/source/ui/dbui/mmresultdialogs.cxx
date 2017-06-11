@@ -69,7 +69,7 @@
 #include <helpid.h>
 #include <doc.hxx>
 #include <sfx2/app.hxx>
-#include <statstr.hrc>
+#include <strings.hrc>
 #include <unomid.h>
 #include <comphelper/string.hxx>
 
@@ -458,8 +458,8 @@ void SwMMResultEmailDialog::FillInEmailSettings()
 
         m_pMailToLB->SelectEntryPos(0);
         // then select the right one - may not be available
-        const ResStringArray& rHeaders = xConfigItem->GetDefaultAddressHeaders();
-        OUString sEMailColumn = rHeaders.GetString( MM_PART_E_MAIL );
+        const std::vector<std::pair<OUString, int>>& rHeaders = xConfigItem->GetDefaultAddressHeaders();
+        OUString sEMailColumn = rHeaders[MM_PART_E_MAIL].first;
         Sequence< OUString> aAssignment = xConfigItem->GetColumnAssignment(xConfigItem->GetCurrentDBData());
         if (aAssignment.getLength() > MM_PART_E_MAIL && !aAssignment[MM_PART_E_MAIL].isEmpty())
             sEMailColumn = aAssignment[MM_PART_E_MAIL];

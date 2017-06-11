@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sw">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="PrintMonitorDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Print monitor</property>
+    <property name="title" translatable="yes" context="printmonitordialog|PrintMonitorDialog">Print monitor</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -49,7 +49,7 @@
               <object class="GtkLabel" id="alttitle">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Save-Monitor</property>
+                <property name="label" translatable="yes" context="printmonitordialog|alttitle">Save-Monitor</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -72,7 +72,7 @@
               <object class="GtkLabel" id="printing">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">is being prepared for printing on</property>
+                <property name="label" translatable="yes" context="printmonitordialog|printing">is being prepared for printing on</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -84,7 +84,7 @@
               <object class="GtkLabel" id="saving">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">is being saved to</property>
+                <property name="label" translatable="yes" context="printmonitordialog|saving">is being saved to</property>
               </object>
               <packing>
                 <property name="expand">False</property>
