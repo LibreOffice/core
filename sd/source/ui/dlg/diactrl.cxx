@@ -26,7 +26,7 @@
 
 #include "sdresid.hxx"
 #include "app.hrc"
-#include "res_bmp.hrc"
+
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>

@@ -108,7 +108,6 @@
 #include <tools/contnr.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
-#include <tools/resid.hxx>
 #include <tools/solar.h>
 #include <tools/toolsdllapi.h>
 #include <typelib/typedescription.h>

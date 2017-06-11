@@ -34,7 +34,6 @@
 #include <com/sun/star/graphic/Primitive2DTools.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <tools/rcid.h>
 #include <unotools/configmgr.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <framework/menuconfiguration.hxx>
@@ -59,9 +58,9 @@
 #include <sfx2/dispatch.hxx>
 #include "workwin.hxx"
 #include <sfx2/fcontnr.hxx>
-#include "sfxlocal.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/sfx.hrc>
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/templdlg.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/msgpool.hxx>

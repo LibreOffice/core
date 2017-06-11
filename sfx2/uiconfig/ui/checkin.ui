@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sfx">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="CheckinDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Check-In</property>
+    <property name="title" translatable="yes" context="checkin|CheckinDialog">Check-In</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
@@ -81,7 +81,7 @@
             <property name="row_spacing">6</property>
             <child>
               <object class="GtkCheckButton" id="MajorVersion">
-                <property name="label" translatable="yes">New major version</property>
+                <property name="label" translatable="yes" context="checkin|MajorVersion">New major version</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -111,7 +111,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Version comment:</property>
+                <property name="label" translatable="yes" context="checkin|label2">Version comment:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">VersionComment:border</property>
               </object>

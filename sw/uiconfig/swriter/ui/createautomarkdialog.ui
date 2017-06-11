@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="CreateAutomarkDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Edit Concordance File</property>
+    <property name="title" translatable="yes" context="createautomarkdialog|CreateAutomarkDialog">Edit Concordance File</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -98,7 +98,7 @@
                           <object class="GtkLabel" id="searchterm">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Search term</property>
+                            <property name="label" translatable="yes" context="createautomarkdialog|searchterm">Search term</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -110,7 +110,7 @@
                           <object class="GtkLabel" id="alternative">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Alternative entry</property>
+                            <property name="label" translatable="yes" context="createautomarkdialog|alternative">Alternative entry</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -122,7 +122,7 @@
                           <object class="GtkLabel" id="key1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">1st key</property>
+                            <property name="label" translatable="yes" context="createautomarkdialog|key1">1st key</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -134,7 +134,7 @@
                           <object class="GtkLabel" id="key2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">2nd key</property>
+                            <property name="label" translatable="yes" context="createautomarkdialog|key2">2nd key</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -146,7 +146,7 @@
                           <object class="GtkLabel" id="comment">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Comment</property>
+                            <property name="label" translatable="yes" context="createautomarkdialog|comment">Comment</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -158,7 +158,7 @@
                           <object class="GtkLabel" id="casesensitive">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Match case</property>
+                            <property name="label" translatable="yes" context="createautomarkdialog|casesensitive">Match case</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -170,7 +170,7 @@
                           <object class="GtkLabel" id="wordonly">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Word only</property>
+                            <property name="label" translatable="yes" context="createautomarkdialog|wordonly">Word only</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -182,7 +182,7 @@
                           <object class="GtkLabel" id="yes">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Yes</property>
+                            <property name="label" translatable="yes" context="createautomarkdialog|yes">Yes</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -194,7 +194,7 @@
                           <object class="GtkLabel" id="no">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">No</property>
+                            <property name="label" translatable="yes" context="createautomarkdialog|no">No</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -220,7 +220,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Entries</property>
+                <property name="label" translatable="yes" context="createautomarkdialog|label1">Entries</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

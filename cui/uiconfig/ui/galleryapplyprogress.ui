@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="GalleryApplyProgress">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Apply</property>
+    <property name="title" translatable="yes" context="galleryapplyprogress|GalleryApplyProgress">Apply</property>
     <property name="type_hint">normal</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -70,7 +70,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">File</property>
+                    <property name="label" translatable="yes" context="galleryapplyprogress|label2">File</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

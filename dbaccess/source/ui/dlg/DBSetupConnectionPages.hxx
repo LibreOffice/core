@@ -133,10 +133,10 @@ namespace dbaui
         OGeneralSpecialJDBCConnectionPageSetup(   vcl::Window* pParent
                                         , const SfxItemSet& _rCoreAttrs
                                         , sal_uInt16 _nPortId
-                                        , sal_uInt16 _nDefaultPortResId
-                                        , sal_uInt16 _nHelpTextResId
-                                        , sal_uInt16 _nHeaderTextResId
-                                        , sal_uInt16 _nDriverClassId );
+                                        , const char* pDefaultPortResId
+                                        , const char* pHelpTextResId
+                                        , const char* pHeaderTextResId
+                                        , const char* pDriverClassId );
         virtual ~OGeneralSpecialJDBCConnectionPageSetup() override;
         virtual void dispose() override;
     static VclPtr<OGenericAdministrationPage> CreateMySQLJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );

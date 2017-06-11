@@ -22,7 +22,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/vclptr.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
+#include <vcl/vclenum.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 namespace tools { class Rectangle; }

@@ -31,7 +31,6 @@
 #include <vcl/FilterConfigItem.hxx>
 
 
-class ResMgr;
 namespace vcl { class Window; }
 
 

@@ -29,7 +29,7 @@
 #include <unotools/saveopt.hxx>
 #include <unotools/misccfg.hxx>
 
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/app.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/unoctitm.hxx>
@@ -44,7 +44,7 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/docfile.hxx>
 #include "sfxtypes.hxx"
-#include "sfxlocal.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/fcontnr.hxx>
 #include "nochaos.hxx"
 #include <sfx2/doctempl.hxx>
@@ -102,8 +102,8 @@ void SfxApplication::Deinitialize()
 
     // free administration managers
     DELETEZ(pImpl->pAppDispat);
-    SfxResMgr::DeleteResMgr();
-    SvtResMgr::DeleteResMgr();
+    SfxResLocale::DeleteResLocale();
+    SvtResLocale::DeleteResLocale();
 
     // from here no SvObjects have to exists
     DELETEZ(pImpl->pMatcher);
@@ -121,11 +121,6 @@ void SfxApplication::Deinitialize()
     //ReleaseArgs could be used instead!
     pImpl->pPool = nullptr;
     NoChaos::ReleaseItemPool();
-
-#if HAVE_FEATURE_SCRIPTING
-    DELETEZ(pImpl->pBasicResMgr);
-#endif
-    DELETEZ(pImpl->pSvtResMgr);
 
 #if HAVE_FEATURE_SCRIPTING
     delete pImpl->m_pSbxErrorHdl;

@@ -31,7 +31,7 @@
 #include <connectivity/FValue.hxx>
 #include <connectivity/dbexception.hxx>
 #include "resource/conn_shared_res.hrc"
-#include "resource/common_res.hrc"
+#include "strings.hrc"
 #include "resource/sharedresources.hxx"
 #include "java/LocalRef.hxx"
 #include "strings.hxx"

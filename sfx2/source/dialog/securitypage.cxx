@@ -38,7 +38,7 @@
 #include <svl/intitem.hxx>
 #include <svl/PasswordHelper.hxx>
 
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 
 
 using namespace ::com::sun::star;

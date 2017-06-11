@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="box">
     <property name="visible">True</property>
@@ -22,7 +22,7 @@
             <property name="left_padding">12</property>
             <child>
               <object class="GtkCheckButton" id="suppressemptypages">
-                <property name="label" translatable="yes">Suppress output of empty pages</property>
+                <property name="label" translatable="yes" context="printeroptions|suppressemptypages">Suppress output of empty pages</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -37,7 +37,7 @@
           <object class="GtkLabel" id="label6">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Pages</property>
+            <property name="label" translatable="yes" context="printeroptions|label6">Pages</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

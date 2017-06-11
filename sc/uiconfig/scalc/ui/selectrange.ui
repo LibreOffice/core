@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sc">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="SelectRangeDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Select Database Range</property>
+    <property name="title" translatable="yes" context="selectrange|SelectRangeDialog">Select Database Range</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="SelectRange">
@@ -104,7 +104,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Ranges</property>
+                <property name="label" translatable="yes" context="selectrange|label1">Ranges</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
