@@ -19,10 +19,12 @@
 
 #include "browserids.hxx"
 #include "commontypes.hxx"
+#include "core_resource.hxx"
 #include <dbaccess/dataview.hxx>
-#include "dbu_misc.hrc"
-#include "dbustrings.hrc"
-#include "moduledbu.hxx"
+#include "strings.hrc"
+#include "strings.hxx"
+#include "stringconstants.hxx"
+#include "core_resource.hxx"
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
@@ -124,7 +126,7 @@ namespace dbaui
         ::boost::optional< bool >       m_aDocScriptSupport;
 
     public:
-        OModuleClient                   m_aModuleClient;
+        dbaccess::OModuleClient         m_aModuleClient;
         ::dbtools::SQLExceptionInfo     m_aCurrentError;
 
         ::comphelper::OInterfaceContainerHelper2
@@ -307,7 +309,7 @@ namespace dbaui
         bool bReConnect = true;
         if ( _bUI )
         {
-            ScopedVclPtrInstance< MessageDialog > aQuery(getView(), ModuleRes(STR_QUERY_CONNECTION_LOST), VclMessageType::Question, VclButtonsType::YesNo);
+            ScopedVclPtrInstance< MessageDialog > aQuery(getView(), DBA_RES(STR_QUERY_CONNECTION_LOST), VclMessageType::Question, VclButtonsType::YesNo);
             bReConnect = ( RET_YES == aQuery->Execute() );
         }
 
@@ -448,7 +450,7 @@ namespace dbaui
     }
     void DBSubComponentController::connectionLostMessage() const
     {
-        OUString aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
+        OUString aMessage(DBA_RES(RID_STR_CONNECTION_LOST));
         Reference< XWindow > xWindow = getTopMostContainerWindow();
         vcl::Window* pWin = nullptr;
         if ( xWindow.is() )

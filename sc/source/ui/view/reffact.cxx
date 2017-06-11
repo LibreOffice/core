@@ -29,6 +29,7 @@
 #include "acredlin.hxx"
 #include "simpref.hxx"
 #include "scmod.hxx"
+#include "scres.hrc"
 #include "validate.hxx"
 
 SFX_IMPL_MODELESSDIALOG_WITHID(ScNameDlgWrapper, FID_DEFINE_NAME )

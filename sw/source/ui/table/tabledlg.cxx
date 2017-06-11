@@ -37,7 +37,7 @@
 #include <fmtrowsplt.hxx>
 #include <sfx2/htmlmode.hxx>
 
-#include "access.hrc"
+#include "strings.hrc"
 
 #include <docsh.hxx>
 #include <wrtsh.hxx>

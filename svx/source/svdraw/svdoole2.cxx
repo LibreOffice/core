@@ -69,7 +69,7 @@
 #include <svx/charthelper.hxx>
 #include <svx/svdmodel.hxx>
 #include "svdglob.hxx"
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include <svx/svdetc.hxx>
 #include <svx/svdview.hxx>
 #include "unomlstr.hxx"

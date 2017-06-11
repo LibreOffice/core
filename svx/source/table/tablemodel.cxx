@@ -38,7 +38,7 @@
 #include "tableundo.hxx"
 #include "svx/svdotable.hxx"
 #include "svx/svdmodel.hxx"
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include "svdglob.hxx"
 
 using namespace ::osl;

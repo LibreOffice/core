@@ -18,6 +18,7 @@
  */
 
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <dialmgr.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
@@ -804,17 +805,16 @@ void SvxMeasurePage::ChangeAttrHdl_Impl( void* p )
 void SvxMeasurePage::FillUnitLB()
 {
     // fill ListBox with metrics
-    SvxStringArray aMetricArr(ResId(RID_SVXSTR_FIELDUNIT_TABLE, DIALOG_MGR()));
 
-    sal_IntPtr nUnit = FUNIT_NONE;
+    FieldUnit nUnit = FUNIT_NONE;
     OUString aStrMetric( m_pFtAutomatic->GetText());
     sal_Int32 nPos = m_pLbUnit->InsertEntry( aStrMetric );
     m_pLbUnit->SetEntryData( nPos, reinterpret_cast<void*>(nUnit) );
 
-    for( sal_uInt32 i = 0; i < aMetricArr.Count(); ++i )
+    for( sal_uInt32 i = 0; i < SvxFieldUnitTable::Count(); ++i )
     {
-        aStrMetric = aMetricArr.GetStringByPos( i );
-        nUnit = aMetricArr.GetValue( i );
+        aStrMetric = SvxFieldUnitTable::GetString(i);
+        nUnit = SvxFieldUnitTable::GetValue(i);
         nPos = m_pLbUnit->InsertEntry( aStrMetric );
         m_pLbUnit->SetEntryData( nPos, reinterpret_cast<void*>(nUnit) );
     }

@@ -12,7 +12,7 @@ $(eval $(call gb_Module_Module,basic))
 ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)
 
 $(eval $(call gb_Module_add_l10n_targets,basic,\
-	AllLangResTarget_sb \
+       AllLangMoTarget_sb \
 ))
 
 $(eval $(call gb_Module_add_check_targets,basic,\

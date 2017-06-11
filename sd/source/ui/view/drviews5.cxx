@@ -37,8 +37,8 @@
 #include "LayerTabBar.hxx"
 
 #include "strings.hrc"
-#include "res_bmp.hrc"
-#include "glob.hrc"
+
+#include "strings.hrc"
 #include "app.hrc"
 #include "helpids.h"
 #include "optsitem.hxx"
