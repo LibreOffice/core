@@ -17,30 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <osl/diagnose.h>
+#include "core_resource.hxx"
 #include "dbmm_types.hxx"
-
-#include "dbmm_global.hrc"
-#include "dbmm_module.hxx"
+#include "strings.hrc"
 
 namespace dbmm
 {
-
     // helper
     OUString getScriptTypeDisplayName( const ScriptType _eType )
     {
-        sal_uInt16 nResId( 0 );
+        const char *pResId = nullptr;
 
         switch ( _eType )
         {
-        case eBasic:        nResId = STR_OOO_BASIC;     break;
-        case eBeanShell:    nResId = STR_BEAN_SHELL;    break;
-        case eJavaScript:   nResId = STR_JAVA_SCRIPT;   break;
-        case ePython:       nResId = STR_PYTHON;        break;
-        case eJava:         nResId = STR_JAVA;          break;
-        case eDialog:       nResId = STR_DIALOG;        break;
+            case eBasic:        pResId = STR_OOO_BASIC;     break;
+            case eBeanShell:    pResId = STR_BEAN_SHELL;    break;
+            case eJavaScript:   pResId = STR_JAVA_SCRIPT;   break;
+            case ePython:       pResId = STR_PYTHON;        break;
+            case eJava:         pResId = STR_JAVA;          break;
+            case eDialog:       pResId = STR_DIALOG;        break;
         }
-        OSL_ENSURE( nResId != 0, "getScriptTypeDisplayName: illegal script type!" );
-        return nResId ? OUString( MacroMigrationResId( nResId ) ) : OUString();
+        OSL_ENSURE( pResId != nullptr, "getScriptTypeDisplayName: illegal script type!" );
+
+        return pResId ? DBA_RES(pResId) : OUString();
     }
 
 } // namespace dbmm

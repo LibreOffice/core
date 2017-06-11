@@ -21,6 +21,7 @@
 #include "swtypes.hxx"
 #include "hintids.hxx"
 #include "globals.hrc"
+#include "strings.hrc"
 #include "helpid.h"
 #include <sfx2/objsh.hxx>
 #include <sfx2/htmlmode.hxx>

@@ -23,19 +23,14 @@
 #include <rtl/textenc.h>
 #include <svx/svxdllapi.h>
 
-class SvxTextEncodingTable;
-
 class SVX_DLLPUBLIC SvxTextEncodingBox : public ListBox
 {
 private:
-    const SvxTextEncodingTable*     m_pEncTable;
-
     SVX_DLLPRIVATE sal_Int32                EncodingToPos_Impl( rtl_TextEncoding nEnc ) const;
 
 public:
     SvxTextEncodingBox( vcl::Window* pParent, WinBits nBits );
     virtual ~SvxTextEncodingBox() override;
-    virtual void dispose() override;
 
     /** Fill with all known encodings but exclude those matching one or more
         given flags as defined in rtl/tencinfo.h

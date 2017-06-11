@@ -19,7 +19,7 @@
 
 #include <UndoBookmark.hxx>
 
-#include <comcore.hrc>
+#include <strings.hrc>
 #include "doc.hxx"
 #include "docary.hxx"
 #include "swundo.hxx"

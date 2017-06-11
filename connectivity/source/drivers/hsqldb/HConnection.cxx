@@ -41,7 +41,7 @@
 #include <tools/diagnose_ex.h>
 
 #include "resource/sharedresources.hxx"
-#include "resource/hsqldb_res.hrc"
+#include "strings.hrc"
 
 using ::com::sun::star::util::XFlushListener;
 using ::com::sun::star::lang::EventObject;

@@ -18,7 +18,7 @@
  */
 #include "FormatCondition.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include "corestrings.hrc"
+#include "strings.hxx"
 #include <tools/color.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/property.hxx>

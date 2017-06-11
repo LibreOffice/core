@@ -25,8 +25,6 @@
 #include "formula/IFunctionDescription.hxx"
 
 #include "funcpage.hxx"
-#include "formdlgs.hrc"
-#include "ForResId.hrc"
 #include "ModuleHelper.hxx"
 #include <unotools/syslocale.hxx>
 #include <unotools/charclass.hxx>

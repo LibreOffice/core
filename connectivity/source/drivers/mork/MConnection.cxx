@@ -16,8 +16,7 @@
 
 #include <connectivity/dbexception.hxx>
 
-#include "resource/mork_res.hrc"
-#include "resource/common_res.hrc"
+#include "strings.hrc"
 
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 
@@ -354,7 +353,6 @@ void OConnection::disposing()
     m_xCatalog.clear();
 }
 
-
 Reference< XTablesSupplier > SAL_CALL OConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -368,10 +366,9 @@ Reference< XTablesSupplier > SAL_CALL OConnection::createCatalog()
     return xTab;
 }
 
-
 void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Reference< XInterface >& _rxContext )
 {
-    if ( _rError.getResId() != 0 )
+    if (_rError.getResId() != nullptr)
     {
         OSL_ENSURE( ( _rError.getErrorCondition() == 0 ),
             "OConnection::throwSQLException: unsupported error code combination!" );
@@ -405,12 +402,11 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
     throwGenericSQLException( STR_UNSPECIFIED_ERROR, _rxContext );
 }
 
-
-void OConnection::throwSQLException( const sal_uInt16 _nErrorResourceId, const Reference< XInterface >& _rxContext )
+void OConnection::throwSQLException( const char* pErrorResourceId, const Reference< XInterface >& _rxContext )
 {
     ErrorDescriptor aError;
-    aError.setResId( _nErrorResourceId );
-    throwSQLException( aError, _rxContext );
+    aError.setResId(pErrorResourceId);
+    throwSQLException(aError, _rxContext);
 }
 
 } } // namespace connectivity::mork

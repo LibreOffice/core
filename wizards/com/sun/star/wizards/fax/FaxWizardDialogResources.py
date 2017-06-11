@@ -18,158 +18,97 @@
 
 class FaxWizardDialogResources(object):
 
-    RID_FAXWIZARDDIALOG_START = 3200
-    RID_FAXWIZARDCOMMUNICATION_START = 3270
-    RID_FAXWIZARDGREETING_START = 3280
-    RID_FAXWIZARDSALUTATION_START = 3290
-    RID_FAXWIZARDROADMAP_START = 3300
-    RID_RID_COMMON_START = 500
+    def __init__(self):
+        import imp, os
+        imp.load_source('strings', os.path.join(os.path.dirname(__file__), '../common/strings.hrc'))
+        import strings
 
-    def __init__(self, oWizardResource):
-
-        self.resFaxWizardDialog_title = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 1)
-        self.resoptBusinessFax_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 3)
-        self.resoptPrivateFax_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 4)
-        self.reschkUseLogo_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 5)
-        self.reschkUseSubject_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 6)
-        self.reschkUseSalutation_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 7)
-        self.reschkUseGreeting_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 8)
-        self.reschkUseFooter_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 9)
-        self.resoptSenderPlaceholder_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 10)
-        self.resoptSenderDefine_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 11)
-        self.restxtTemplateName_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 12)
-        self.resoptCreateFax_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 13)
-        self.resoptMakeChanges_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 14)
-        self.reslblBusinessStyle_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 15)
-        self.reslblPrivateStyle_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 16)
-        self.reslblIntroduction_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 17)
-        self.reslblSenderAddress_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 18)
-        self.reslblSenderName_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 19)
-        self.reslblSenderStreet_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 20)
-        self.reslblPostCodeCity_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 21)
-        self.reslblFooter_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 22)
-        self.reslblFinalExplanation1_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 23)
-        self.reslblFinalExplanation2_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 24)
-        self.reslblTemplateName_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 25)
-        self.reslblTemplatePath_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 26)
-        self.reslblProceed_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 27)
-        self.reslblTitle1_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 28)
-        self.reslblTitle3_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 29)
-        self.reslblTitle4_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 30)
-        self.reslblTitle5_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 31)
-        self.reslblTitle6_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 32)
-        self.reschkFooterNextPages_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 33)
-        self.reschkFooterPageNumbers_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 34)
-        self.reschkUseDate_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 35)
-        self.reschkUseCommunicationType_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 36)
-        self.resLabel1_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 37)
-        self.resoptReceiverPlaceholder_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 38)
-        self.resoptReceiverDatabase_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 39)
-        self.resLabel2_value = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 40)
+        self.resFaxWizardDialog_title = strings.RID_FAXWIZARDDIALOG_START_1
+        self.resoptBusinessFax_value = strings.RID_FAXWIZARDDIALOG_START_3
+        self.resoptPrivateFax_value = strings.RID_FAXWIZARDDIALOG_START_4
+        self.reschkUseLogo_value = strings.RID_FAXWIZARDDIALOG_START_5
+        self.reschkUseSubject_value = strings.RID_FAXWIZARDDIALOG_START_6
+        self.reschkUseSalutation_value = strings.RID_FAXWIZARDDIALOG_START_7
+        self.reschkUseGreeting_value = strings.RID_FAXWIZARDDIALOG_START_8
+        self.reschkUseFooter_value = strings.RID_FAXWIZARDDIALOG_START_9
+        self.resoptSenderPlaceholder_value = strings.RID_FAXWIZARDDIALOG_START_10
+        self.resoptSenderDefine_value = strings.RID_FAXWIZARDDIALOG_START_11
+        self.restxtTemplateName_value = strings.RID_FAXWIZARDDIALOG_START_12
+        self.resoptCreateFax_value = strings.RID_FAXWIZARDDIALOG_START_13
+        self.resoptMakeChanges_value = strings.RID_FAXWIZARDDIALOG_START_14
+        self.reslblBusinessStyle_value = strings.RID_FAXWIZARDDIALOG_START_15
+        self.reslblPrivateStyle_value = strings.RID_FAXWIZARDDIALOG_START_16
+        self.reslblIntroduction_value = strings.RID_FAXWIZARDDIALOG_START_17
+        self.reslblSenderAddress_value = strings.RID_FAXWIZARDDIALOG_START_18
+        self.reslblSenderName_value = strings.RID_FAXWIZARDDIALOG_START_19
+        self.reslblSenderStreet_value = strings.RID_FAXWIZARDDIALOG_START_20
+        self.reslblPostCodeCity_value = strings.RID_FAXWIZARDDIALOG_START_21
+        self.reslblFooter_value = strings.RID_FAXWIZARDDIALOG_START_22
+        self.reslblFinalExplanation1_value = strings.RID_FAXWIZARDDIALOG_START_23
+        self.reslblFinalExplanation2_value = strings.RID_FAXWIZARDDIALOG_START_24
+        self.reslblTemplateName_value = strings.RID_FAXWIZARDDIALOG_START_25
+        self.reslblTemplatePath_value = strings.RID_FAXWIZARDDIALOG_START_26
+        self.reslblProceed_value = strings.RID_FAXWIZARDDIALOG_START_27
+        self.reslblTitle1_value = strings.RID_FAXWIZARDDIALOG_START_28
+        self.reslblTitle3_value = strings.RID_FAXWIZARDDIALOG_START_29
+        self.reslblTitle4_value = strings.RID_FAXWIZARDDIALOG_START_30
+        self.reslblTitle5_value = strings.RID_FAXWIZARDDIALOG_START_31
+        self.reslblTitle6_value = strings.RID_FAXWIZARDDIALOG_START_32
+        self.reschkFooterNextPages_value = strings.RID_FAXWIZARDDIALOG_START_33
+        self.reschkFooterPageNumbers_value = strings.RID_FAXWIZARDDIALOG_START_34
+        self.reschkUseDate_value = strings.RID_FAXWIZARDDIALOG_START_35
+        self.reschkUseCommunicationType_value = strings.RID_FAXWIZARDDIALOG_START_36
+        self.resLabel1_value = strings.RID_FAXWIZARDDIALOG_START_37
+        self.resoptReceiverPlaceholder_value = strings.RID_FAXWIZARDDIALOG_START_38
+        self.resoptReceiverDatabase_value = strings.RID_FAXWIZARDDIALOG_START_39
+        self.resLabel2_value = strings.RID_FAXWIZARDDIALOG_START_40
 
         #Create a Dictionary for the constants values.
         self.dictConstants = {
-        "#to#" : oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 41),
-        "#from#" : oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 42),
-        "#faxconst#" : oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 43),
-        "#telconst#" : oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 44),
-        "#emailconst#" : oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 45),
-        "#consist1#" : oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 46),
-        "#consist2#" : oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 47),
-        "#consist3#" : oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 48)}
+        "#to#" : strings.RID_FAXWIZARDDIALOG_START_41,
+        "#from#" : strings.RID_FAXWIZARDDIALOG_START_42,
+        "#faxconst#" : strings.RID_FAXWIZARDDIALOG_START_43,
+        "#telconst#" : strings.RID_FAXWIZARDDIALOG_START_44,
+        "#emailconst#" : strings.RID_FAXWIZARDDIALOG_START_45,
+        "#consist1#" : strings.RID_FAXWIZARDDIALOG_START_46,
+        "#consist2#" : strings.RID_FAXWIZARDDIALOG_START_47,
+        "#consist3#" : strings.RID_FAXWIZARDDIALOG_START_48}
 
         #Create a dictionary for localising the private template
         self.dictPrivateTemplate = {
-        "Bottle" : oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 49),
-        "Fax" : oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 56),
-        "Lines" : oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 50),
-        "Marine" : oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 51)}
+        "Bottle" : strings.RID_FAXWIZARDDIALOG_START_49,
+        "Fax" : strings.RID_FAXWIZARDDIALOG_START_56,
+        "Lines" : strings.RID_FAXWIZARDDIALOG_START_50,
+        "Marine" : strings.RID_FAXWIZARDDIALOG_START_51}
 
         #Create a dictionary for localising the business template
         self.dictBusinessTemplate = {
-        "Classic Fax" : oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 52),
-        "Classic Fax from Private" : oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 53),
-        "Modern Fax" : oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 54),
-        "Modern Fax from Private" : oWizardResource.getResText(
-            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 55)}
+        "Classic Fax" : strings.RID_FAXWIZARDDIALOG_START_52,
+        "Classic Fax from Private" : strings.RID_FAXWIZARDDIALOG_START_53,
+        "Modern Fax" : strings.RID_FAXWIZARDDIALOG_START_54,
+        "Modern Fax from Private" : strings.RID_FAXWIZARDDIALOG_START_55}
 
         #Common Resources
-        self.resOverwriteWarning = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_RID_COMMON_START + 19)
-        self.resTemplateDescription = oWizardResource.getResText(
-            FaxWizardDialogResources.RID_RID_COMMON_START + 20)
+        self.resOverwriteWarning = strings.RID_COMMON_START_19
+        self.resTemplateDescription = strings.RID_COMMON_START_20
 
         self.RoadmapLabels = []
-        self.RoadmapLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDROADMAP_START + 1))
-        self.RoadmapLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDROADMAP_START + 2))
-        self.RoadmapLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDROADMAP_START + 3))
-        self.RoadmapLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDROADMAP_START + 4))
-        self.RoadmapLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDROADMAP_START + 5))
+        self.RoadmapLabels.append(strings.RID_FAXWIZARDROADMAP_START_1)
+        self.RoadmapLabels.append(strings.RID_FAXWIZARDROADMAP_START_2)
+        self.RoadmapLabels.append(strings.RID_FAXWIZARDROADMAP_START_3)
+        self.RoadmapLabels.append(strings.RID_FAXWIZARDROADMAP_START_4)
+        self.RoadmapLabels.append(strings.RID_FAXWIZARDROADMAP_START_5)
         self.SalutationLabels = []
-        self.SalutationLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDSALUTATION_START + 1))
-        self.SalutationLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDSALUTATION_START + 2))
-        self.SalutationLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDSALUTATION_START + 3))
-        self.SalutationLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDSALUTATION_START + 4))
+        self.SalutationLabels.append(strings.RID_FAXWIZARDSALUTATION_START_1)
+        self.SalutationLabels.append(strings.RID_FAXWIZARDSALUTATION_START_2)
+        self.SalutationLabels.append(strings.RID_FAXWIZARDSALUTATION_START_3)
+        self.SalutationLabels.append(strings.RID_FAXWIZARDSALUTATION_START_4)
         self.GreetingLabels = []
-        self.GreetingLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDGREETING_START + 1))
-        self.GreetingLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDGREETING_START + 2))
-        self.GreetingLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDGREETING_START + 3))
-        self.GreetingLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDGREETING_START + 4))
+        self.GreetingLabels.append(strings.RID_FAXWIZARDGREETING_START_1)
+        self.GreetingLabels.append(strings.RID_FAXWIZARDGREETING_START_2)
+        self.GreetingLabels.append(strings.RID_FAXWIZARDGREETING_START_3)
+        self.GreetingLabels.append(strings.RID_FAXWIZARDGREETING_START_4)
         self.CommunicationLabels = []
-        self.CommunicationLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDCOMMUNICATION_START + 1))
-        self.CommunicationLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDCOMMUNICATION_START + 2))
-        self.CommunicationLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDCOMMUNICATION_START + 3))
+        self.CommunicationLabels.append(strings.RID_FAXWIZARDCOMMUNICATION_START_1)
+        self.CommunicationLabels.append(strings.RID_FAXWIZARDCOMMUNICATION_START_2)
+        self.CommunicationLabels.append(strings.RID_FAXWIZARDCOMMUNICATION_START_3)

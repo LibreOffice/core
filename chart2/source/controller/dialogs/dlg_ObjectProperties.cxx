@@ -20,7 +20,7 @@
 #include <svl/zforlist.hxx>
 #include "dlg_ObjectProperties.hxx"
 #include "ResourceIds.hrc"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "tp_AxisLabel.hxx"
 #include "tp_DataLabel.hxx"
 #include "tp_LegendPosition.hxx"

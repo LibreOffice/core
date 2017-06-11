@@ -24,6 +24,7 @@
 
 #include <svx/colorbox.hxx>
 #include "svx/dialogs.hrc"
+#include "svx/strings.hrc"
 #include <svx/dialmgr.hxx>
 #include <rtl/math.hxx>
 #include <svtools/colrdlg.hxx>

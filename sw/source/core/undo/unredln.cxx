@@ -27,7 +27,7 @@
 #include <ndtxt.hxx>
 #include <UndoCore.hxx>
 #include <UndoDelete.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <rolbck.hxx>
 #include <redline.hxx>
 #include <docary.hxx>

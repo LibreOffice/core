@@ -21,10 +21,12 @@
 #include "TokenWriter.hxx"
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#include "dbu_misc.hrc"
+#include "core_resource.hxx"
+#include "strings.hrc"
+#include "strings.hxx"
 #include "sqlmessage.hxx"
 #include <vcl/msgbox.hxx>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <functional>
 
@@ -61,7 +63,7 @@ void ORowSetImportExport::initialize()
 
     m_xTargetResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xTargetResultSetUpdate,UNO_QUERY)->getMetaData();
     if(!m_xTargetResultSetMetaData.is() || !xColumnLocate.is() || !m_xResultSetMetaData.is() )
-        throw SQLException(ModuleRes(STR_UNEXPECTED_ERROR),*this,"S1000",0,Any());
+        throw SQLException(DBA_RES(STR_UNEXPECTED_ERROR),*this,"S1000",0,Any());
 
     sal_Int32 nCount = m_xTargetResultSetMetaData->getColumnCount();
     m_aColumnMapping.reserve(nCount);
@@ -239,7 +241,7 @@ bool ORowSetImportExport::insertNewRow()
     {
         if(!m_bAlreadyAsked)
         {
-            OUString sAskIfContinue = ModuleRes(STR_ERROR_OCCURRED_WHILE_COPYING);
+            OUString sAskIfContinue = DBA_RES(STR_ERROR_OCCURRED_WHILE_COPYING);
             ScopedVclPtrInstance< OSQLWarningBox > aDlg( m_pParent, sAskIfContinue, WB_YES_NO | WB_DEF_YES );
             if(aDlg->Execute() == RET_YES)
                 m_bAlreadyAsked = true;

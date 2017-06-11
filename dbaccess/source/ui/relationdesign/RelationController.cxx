@@ -25,11 +25,13 @@
 #include "dbu_reghelper.hxx"
 #include "uiservices.hxx"
 #include <sfx2/sfxsids.hrc>
-#include "dbu_rel.hrc"
+#include "strings.hrc"
+#include "strings.hxx"
 #include <vcl/svapp.hxx>
 #include "browserids.hxx"
 #include <comphelper/types.hxx>
-#include "dbustrings.hrc"
+#include "core_resource.hxx"
+#include "stringconstants.hxx"
 #include <connectivity/dbtools.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
@@ -158,7 +160,7 @@ void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue
                 OSL_ENSURE(isEditable(),"Slot ID_BROWSER_SAVEDOC should not be enabled!");
                 if(!::dbaui::checkDataSourceAvailable(::comphelper::getString(getDataSource()->getPropertyValue(PROPERTY_NAME)), getORB()))
                 {
-                    OUString aMessage(ModuleRes(STR_DATASOURCE_DELETED));
+                    OUString aMessage(DBA_RES(STR_DATASOURCE_DELETED));
                     ScopedVclPtrInstance<OSQLWarningBox>(getView(), aMessage)->Execute();
                 }
                 else
@@ -202,9 +204,9 @@ void ORelationController::impl_initialize()
         setEditable(false);
         m_bRelationsPossible    = false;
         {
-            OUString sTitle(ModuleRes(STR_RELATIONDESIGN));
+            OUString sTitle(DBA_RES(STR_RELATIONDESIGN));
             sTitle = sTitle.copy(3);
-            ScopedVclPtrInstance< OSQLMessageBox > aDlg(nullptr,sTitle,ModuleRes(STR_RELATIONDESIGN_NOT_AVAILABLE));
+            ScopedVclPtrInstance< OSQLMessageBox > aDlg(nullptr,sTitle,DBA_RES(STR_RELATIONDESIGN_NOT_AVAILABLE));
             aDlg->Execute();
         }
         disconnect();

@@ -21,7 +21,7 @@
 #include "RptObject.hxx"
 #include "ReportController.hxx"
 #include <cppuhelper/component_context.hxx>
-#include <RptResId.hrc>
+#include <strings.hrc>
 #include "rptui_slotid.hrc"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -47,9 +47,10 @@
 #include <comphelper/types.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
+#include "core_resource.hxx"
 #include "SectionView.hxx"
 #include "ReportSection.hxx"
-#include "uistrings.hrc"
+#include "strings.hxx"
 #include "DesignView.hxx"
 #include "ViewsWindow.hxx"
 #include "UITools.hxx"
@@ -332,52 +333,52 @@ OUString PropBrw::GetHeadlineName( const uno::Sequence< Reference<uno::XInterfac
     OUString aName;
     if ( !_aObjects.getLength() )
     {
-        aName = ModuleRes(RID_STR_BRWTITLE_NO_PROPERTIES);
+        aName = RptResId(RID_STR_BRWTITLE_NO_PROPERTIES);
     }
     else if ( _aObjects.getLength() == 1 )    // single selection
     {
-        aName = ModuleRes(RID_STR_BRWTITLE_PROPERTIES);
+        aName = RptResId(RID_STR_BRWTITLE_PROPERTIES);
 
         uno::Reference< container::XNameContainer > xNameCont(_aObjects[0],uno::UNO_QUERY);
         Reference< lang::XServiceInfo > xServiceInfo( xNameCont->getByName("ReportComponent"), UNO_QUERY );
         if ( xServiceInfo.is() )
         {
-            sal_uInt16 nResId = 0;
+            const char* pResId = nullptr;
             if ( xServiceInfo->supportsService( SERVICE_FIXEDTEXT ) )
             {
-                nResId = RID_STR_PROPTITLE_FIXEDTEXT;
+                pResId = RID_STR_PROPTITLE_FIXEDTEXT;
             }
             else if ( xServiceInfo->supportsService( SERVICE_IMAGECONTROL ) )
             {
-                nResId = RID_STR_PROPTITLE_IMAGECONTROL;
+                pResId = RID_STR_PROPTITLE_IMAGECONTROL;
             }
             else if ( xServiceInfo->supportsService( SERVICE_FORMATTEDFIELD ) )
             {
-                nResId = RID_STR_PROPTITLE_FORMATTED;
+                pResId = RID_STR_PROPTITLE_FORMATTED;
             }
             else if ( xServiceInfo->supportsService( SERVICE_SHAPE ) )
             {
-                nResId = RID_STR_PROPTITLE_SHAPE;
+                pResId = RID_STR_PROPTITLE_SHAPE;
             }
             else if ( xServiceInfo->supportsService( SERVICE_REPORTDEFINITION ) )
             {
-                nResId = RID_STR_PROPTITLE_REPORT;
+                pResId = RID_STR_PROPTITLE_REPORT;
             }
             else if ( xServiceInfo->supportsService( SERVICE_SECTION ) )
             {
-                nResId = RID_STR_PROPTITLE_SECTION;
+                pResId = RID_STR_PROPTITLE_SECTION;
             }
             else if ( xServiceInfo->supportsService( SERVICE_FUNCTION ) )
             {
-                nResId = RID_STR_PROPTITLE_FUNCTION;
+                pResId = RID_STR_PROPTITLE_FUNCTION;
             }
             else if ( xServiceInfo->supportsService( SERVICE_GROUP ) )
             {
-                nResId = RID_STR_PROPTITLE_GROUP;
+                pResId = RID_STR_PROPTITLE_GROUP;
             }
             else if ( xServiceInfo->supportsService( SERVICE_FIXEDLINE ) )
             {
-                nResId = RID_STR_PROPTITLE_FIXEDLINE;
+                pResId = RID_STR_PROPTITLE_FIXEDLINE;
             }
             else
             {
@@ -386,16 +387,16 @@ OUString PropBrw::GetHeadlineName( const uno::Sequence< Reference<uno::XInterfac
                 return aName;
             }
 
-            if (nResId)
+            if (pResId)
             {
-                aName += ModuleRes(nResId);
+                aName += RptResId(pResId);
             }
         }
     }
     else    // multiselection
     {
-        aName = ModuleRes(RID_STR_BRWTITLE_PROPERTIES);
-        aName += ModuleRes(RID_STR_BRWTITLE_MULTISELECT);
+        aName = RptResId(RID_STR_BRWTITLE_PROPERTIES);
+        aName += RptResId(RID_STR_BRWTITLE_MULTISELECT);
     }
 
     return aName;

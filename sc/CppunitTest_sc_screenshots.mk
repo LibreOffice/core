@@ -62,6 +62,4 @@ $(eval $(call gb_CppunitTest_use_uiconfigs,sc_screenshots,\
 	modules/scalc \
 ))
 
-$(call gb_CppunitTest_get_target,sc_screenshots) : $(call gb_AllLangResTarget_get_target,sc)
-
 # vim: set noet sw=4 ts=4:

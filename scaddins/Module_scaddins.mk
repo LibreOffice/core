@@ -27,9 +27,7 @@ $(eval $(call gb_Module_add_targets,scaddins,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,scaddins,\
-    AllLangResTarget_analysis \
-    AllLangResTarget_date \
-    AllLangResTarget_pricing \
+    AllLangMoTarget_sca \
 ))
 
 # vim: set noet sw=4 ts=4:

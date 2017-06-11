@@ -25,13 +25,15 @@
 #include <iderdll2.hxx>
 #include <iderid.hxx>
 #include <basidesh.hxx>
-#include <basidesh.hrc>
+#include <strings.hrc>
 #include <basdoc.hxx>
 #include <basicmod.hxx>
 
 #include <svl/srchitem.hxx>
+#include <svx/svxids.hrc>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <tools/simplerm.hxx>
 #include <vcl/settings.hxx>
 #include <o3tl/make_unique.hxx>
 
@@ -103,10 +105,10 @@ ExtraData* GetExtraData()
     return nullptr;
 }
 
-
-IDEResId::IDEResId( sal_uInt16 nId ):
-    ResId(nId, *SfxApplication::GetModule(SfxToolsModule::Basic)->GetResMgr())
-{ }
+OUString IDEResId(const char *pId)
+{
+    return Translate::get(pId, SfxApplication::GetModule(SfxToolsModule::Basic)->GetResLocale());
+}
 
 namespace
 {
@@ -116,10 +118,9 @@ Dll::Dll () :
 {
     SfxObjectFactory& rFactory = DocShell::Factory();
 
-    ResMgr* pMgr = ResMgr::CreateResMgr(
-        "basctl", Application::GetSettings().GetUILanguageTag());
+    std::locale loc = Translate::Create("basctl", Application::GetSettings().GetUILanguageTag());
 
-    auto pModule = o3tl::make_unique<Module>( pMgr, &rFactory );
+    auto pModule = o3tl::make_unique<Module>(loc, &rFactory);
     SfxModule* pMod = pModule.get();
     SfxApplication::SetModule(SfxToolsModule::Basic, std::move(pModule));
 

@@ -17,25 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include "templwin.hxx"
+#include "templwin.hrc"
 
-// class SvtDocInfoTable_Impl --------------------------------------------
-SvtDocInfoTable_Impl::SvtDocInfoTable_Impl()
-    : ResStringArray(ResId(STRARY_SVT_DOCINFO, *SvtResMgr::GetResMgr()))
-
+namespace SvtDocInfoTable_Impl
 {
-}
+    OUString GetString(int nId)
+    {
+        for (size_t i = 0; i < SAL_N_ELEMENTS(STRARY_SVT_DOCINFO); ++i)
+        {
+            if (STRARY_SVT_DOCINFO[i].second == nId)
+                return SvtResId(STRARY_SVT_DOCINFO[i].first);
+        }
 
-OUString SvtDocInfoTable_Impl::GetString( long nId ) const
-{
-    sal_uInt32 nPos( FindIndex( nId ) );
-
-    if ( RESARRAY_INDEX_NOTFOUND != nPos )
-        return ResStringArray::GetString( nPos );
-
-    return OUString();
+        return OUString();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

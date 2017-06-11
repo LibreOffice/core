@@ -58,6 +58,7 @@
 #include <doc.hxx>
 #include <cmdid.h>
 #include <app.hrc>
+#include <strings.hrc>
 #include "helpid.h"
 #include <IDocumentLayoutAccess.hxx>
 

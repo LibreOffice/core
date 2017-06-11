@@ -18,21 +18,22 @@
  */
 
 #include "passworddlg.hxx"
-#include "ids.hrc"
+#include "strings.hrc"
 
+#include <tools/simplerm.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
 
 using namespace ::com::sun::star;
 
 PasswordDialog::PasswordDialog(vcl::Window* _pParent,
-    task::PasswordRequestMode nDlgMode, ResMgr * pResMgr,
+    task::PasswordRequestMode nDlgMode, const std::locale& rLocale,
     const OUString& aDocURL, bool bOpenToModify, bool bIsSimplePasswordRequest)
     : ModalDialog(_pParent, "PasswordDialog", "uui/ui/password.ui")
     , nMinLen(1)
-    , aPasswdMismatch(ResId(STR_PASSWORD_MISMATCH, *pResMgr))
+    , aPasswdMismatch(Translate::get(STR_PASSWORD_MISMATCH, rLocale))
     , nDialogMode(nDlgMode)
-    , pResourceMgr(pResMgr)
+    , rResLocale(rLocale)
 {
     get(m_pFTPassword, "newpassFT");
     get(m_pEDPassword, "newpassEntry");
@@ -42,15 +43,15 @@ PasswordDialog::PasswordDialog(vcl::Window* _pParent,
 
     if( nDialogMode == task::PasswordRequestMode_PASSWORD_REENTER )
     {
-        const sal_uInt16 nOpenToModifyErrStrId = bOpenToModify ? STR_ERROR_PASSWORD_TO_MODIFY_WRONG : STR_ERROR_PASSWORD_TO_OPEN_WRONG;
-        const sal_uInt16 nErrStrId = bIsSimplePasswordRequest ? STR_ERROR_SIMPLE_PASSWORD_WRONG : nOpenToModifyErrStrId;
-        OUString aErrorMsg(ResId(nErrStrId, *pResourceMgr).toString());
+        const char* pOpenToModifyErrStrId = bOpenToModify ? STR_ERROR_PASSWORD_TO_MODIFY_WRONG : STR_ERROR_PASSWORD_TO_OPEN_WRONG;
+        const char* pErrStrId = bIsSimplePasswordRequest ? STR_ERROR_SIMPLE_PASSWORD_WRONG : pOpenToModifyErrStrId;
+        OUString aErrorMsg(Translate::get(pErrStrId, rResLocale));
         ScopedVclPtrInstance< MessageDialog > aErrorBox(GetParent(), aErrorMsg);
         aErrorBox->Execute();
     }
 
     // default settings for enter password or reenter passwd...
-    OUString aTitle(ResId(STR_TITLE_ENTER_PASSWORD, *pResourceMgr).toString());
+    OUString aTitle(Translate::get(STR_TITLE_ENTER_PASSWORD, rResLocale));
     m_pFTConfirmPassword->Hide();
     m_pEDConfirmPassword->Hide();
     m_pFTConfirmPassword->Enable( false );
@@ -59,9 +60,9 @@ PasswordDialog::PasswordDialog(vcl::Window* _pParent,
     // settings for create password
     if (nDialogMode == task::PasswordRequestMode_PASSWORD_CREATE)
     {
-        aTitle = ResId(STR_TITLE_CREATE_PASSWORD, *pResourceMgr).toString();
+        aTitle = Translate::get(STR_TITLE_CREATE_PASSWORD, rResLocale);
 
-        m_pFTConfirmPassword->SetText(ResId(STR_CONFIRM_SIMPLE_PASSWORD, *pResourceMgr).toString());
+        m_pFTConfirmPassword->SetText(Translate::get(STR_CONFIRM_SIMPLE_PASSWORD, rResLocale));
 
         m_pFTConfirmPassword->Show();
         m_pEDConfirmPassword->Show();
@@ -71,8 +72,8 @@ PasswordDialog::PasswordDialog(vcl::Window* _pParent,
 
     SetText( aTitle );
 
-    sal_uInt16 nStrId = bOpenToModify ? STR_ENTER_PASSWORD_TO_MODIFY : STR_ENTER_PASSWORD_TO_OPEN;
-    OUString aMessage(ResId(nStrId, *pResourceMgr).toString());
+    const char* pStrId = bOpenToModify ? STR_ENTER_PASSWORD_TO_MODIFY : STR_ENTER_PASSWORD_TO_OPEN;
+    OUString aMessage(Translate::get(pStrId, rResLocale));
     INetURLObject url(aDocURL);
     aMessage += url.HasError()
         ? aDocURL : url.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
@@ -81,7 +82,7 @@ PasswordDialog::PasswordDialog(vcl::Window* _pParent,
     if (bIsSimplePasswordRequest)
     {
         DBG_ASSERT( aDocURL.isEmpty(), "A simple password request should not have a document URL! Use document password request instead." );
-        m_pFTPassword->SetText(ResId(STR_ENTER_SIMPLE_PASSWORD, *pResourceMgr).toString());
+        m_pFTPassword->SetText(Translate::get(STR_ENTER_SIMPLE_PASSWORD, rResLocale));
     }
 
     m_pOKBtn->SetClickHdl( LINK( this, PasswordDialog, OKHdl_Impl ) );

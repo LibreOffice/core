@@ -39,6 +39,8 @@
 #include <svl/itempool.hxx>
 #include <sfx2/docfile.hxx>
 #include <avmedia/mediawindow.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/svxids.hrc>
 #include <svx/svdograf.hxx>
 #include <svx/fmpage.hxx>
 #include "codec.hxx"
@@ -52,7 +54,6 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include "galobj.hxx"
 #include <svx/gallery1.hxx>
-#include "galtheme.hrc"
 #include <vcl/lstbox.hxx>
 #include "gallerydrawmodel.hxx"
 #include <memory>
@@ -1520,11 +1521,5 @@ const tools::SvRef<SotStorage>& GalleryTheme::GetSvDrawStorage() const
 }
 
 const OUString& GalleryTheme::GetName() const { return pThm->GetThemeName(); }
-
-void GalleryTheme::InsertAllThemes( ListBox& rListBox )
-{
-    for( sal_uInt16 i = RID_GALLERYSTR_THEME_FIRST; i <= RID_GALLERYSTR_THEME_LAST; i++ )
-        rListBox.InsertEntry(GalResId(i));
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

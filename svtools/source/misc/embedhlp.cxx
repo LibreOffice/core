@@ -20,7 +20,7 @@
 
 #include <svtools/embedhlp.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include "bitmaps.hlst"
 #include <svtools/svtresid.hxx>
 

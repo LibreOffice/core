@@ -37,7 +37,8 @@
 #include <svx/unoshprp.hxx>
 #include <editeng/editeng.hxx>
 #include "svx/globl3d.hxx"
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
+#include "strings.hxx"
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
 
@@ -1038,58 +1039,416 @@ bool SvxFieldUnitToMeasureUnit( const FieldUnit eVcl, short& eApi ) throw()
     return true;
 }
 
-bool SvxUnoGetResourceRanges( const short nWhich, int& nApiResIds, int& nIntResIds, int& nCount ) throw()
+static const char* RID_SVXSTR_BMP_DEF[] =
+{
+    RID_SVXSTR_BMP0_DEF,
+    RID_SVXSTR_BMP1_DEF,
+    RID_SVXSTR_BMP2_DEF,
+    RID_SVXSTR_BMP3_DEF,
+    RID_SVXSTR_BMP4_DEF,
+    RID_SVXSTR_BMP5_DEF,
+    RID_SVXSTR_BMP6_DEF,
+    RID_SVXSTR_BMP7_DEF,
+    RID_SVXSTR_BMP8_DEF,
+    RID_SVXSTR_BMP9_DEF,
+    RID_SVXSTR_BMP10_DEF,
+    RID_SVXSTR_BMP11_DEF,
+    RID_SVXSTR_BMP12_DEF,
+    RID_SVXSTR_BMP13_DEF,
+    RID_SVXSTR_BMP14_DEF,
+    RID_SVXSTR_BMP15_DEF,
+    RID_SVXSTR_BMP16_DEF,
+    RID_SVXSTR_BMP17_DEF,
+    RID_SVXSTR_BMP18_DEF,
+    RID_SVXSTR_BMP19_DEF,
+    RID_SVXSTR_BMP20_DEF,
+    RID_SVXSTR_BMP21_DEF
+};
+
+static const char* RID_SVXSTR_BMP[] =
+{
+    RID_SVXSTR_BMP0,
+    RID_SVXSTR_BMP1,
+    RID_SVXSTR_BMP2,
+    RID_SVXSTR_BMP3,
+    RID_SVXSTR_BMP4,
+    RID_SVXSTR_BMP5,
+    RID_SVXSTR_BMP6,
+    RID_SVXSTR_BMP7,
+    RID_SVXSTR_BMP8,
+    RID_SVXSTR_BMP9,
+    RID_SVXSTR_BMP10,
+    RID_SVXSTR_BMP11,
+    RID_SVXSTR_BMP12,
+    RID_SVXSTR_BMP13,
+    RID_SVXSTR_BMP14,
+    RID_SVXSTR_BMP15,
+    RID_SVXSTR_BMP16,
+    RID_SVXSTR_BMP17,
+    RID_SVXSTR_BMP18,
+    RID_SVXSTR_BMP19,
+    RID_SVXSTR_BMP20,
+    RID_SVXSTR_BMP21
+};
+
+static const char* RID_SVXSTR_DASH_DEF[] =
+{
+    RID_SVXSTR_DASH0_DEF,
+    RID_SVXSTR_DASH1_DEF,
+    RID_SVXSTR_DASH2_DEF,
+    RID_SVXSTR_DASH3_DEF,
+    RID_SVXSTR_DASH4_DEF,
+    RID_SVXSTR_DASH5_DEF,
+    RID_SVXSTR_DASH6_DEF,
+    RID_SVXSTR_DASH7_DEF,
+    RID_SVXSTR_DASH8_DEF,
+    RID_SVXSTR_DASH9_DEF,
+    RID_SVXSTR_DASH10_DEF,
+    RID_SVXSTR_DASH11_DEF,
+    RID_SVXSTR_DASH12_DEF
+};
+
+static const char* RID_SVXSTR_DASH[] =
+{
+    RID_SVXSTR_DASH0,
+    RID_SVXSTR_DASH1,
+    RID_SVXSTR_DASH2,
+    RID_SVXSTR_DASH3,
+    RID_SVXSTR_DASH4,
+    RID_SVXSTR_DASH5,
+    RID_SVXSTR_DASH6,
+    RID_SVXSTR_DASH7,
+    RID_SVXSTR_DASH8,
+    RID_SVXSTR_DASH9,
+    RID_SVXSTR_DASH10,
+    RID_SVXSTR_DASH11,
+    RID_SVXSTR_DASH12
+};
+
+static const char* RID_SVXSTR_LEND_DEF[] =
+{
+    RID_SVXSTR_LEND0_DEF,
+    RID_SVXSTR_LEND1_DEF,
+    RID_SVXSTR_LEND2_DEF,
+    RID_SVXSTR_LEND3_DEF,
+    RID_SVXSTR_LEND4_DEF,
+    RID_SVXSTR_LEND5_DEF,
+    RID_SVXSTR_LEND6_DEF,
+    RID_SVXSTR_LEND7_DEF,
+    RID_SVXSTR_LEND8_DEF,
+    RID_SVXSTR_LEND9_DEF,
+    RID_SVXSTR_LEND10_DEF,
+    RID_SVXSTR_LEND11_DEF,
+    RID_SVXSTR_LEND12_DEF,
+    RID_SVXSTR_LEND13_DEF,
+    RID_SVXSTR_LEND14_DEF,
+    RID_SVXSTR_LEND15_DEF,
+    RID_SVXSTR_LEND16_DEF,
+    RID_SVXSTR_LEND17_DEF,
+    RID_SVXSTR_LEND18_DEF,
+    RID_SVXSTR_LEND19_DEF,
+    RID_SVXSTR_LEND20_DEF
+};
+
+static const char* RID_SVXSTR_LEND[] =
+{
+    RID_SVXSTR_LEND0,
+    RID_SVXSTR_LEND1,
+    RID_SVXSTR_LEND2,
+    RID_SVXSTR_LEND3,
+    RID_SVXSTR_LEND4,
+    RID_SVXSTR_LEND5,
+    RID_SVXSTR_LEND6,
+    RID_SVXSTR_LEND7,
+    RID_SVXSTR_LEND8,
+    RID_SVXSTR_LEND9,
+    RID_SVXSTR_LEND10,
+    RID_SVXSTR_LEND11,
+    RID_SVXSTR_LEND12,
+    RID_SVXSTR_LEND13,
+    RID_SVXSTR_LEND14,
+    RID_SVXSTR_LEND15,
+    RID_SVXSTR_LEND16,
+    RID_SVXSTR_LEND17,
+    RID_SVXSTR_LEND18,
+    RID_SVXSTR_LEND19,
+    RID_SVXSTR_LEND20
+};
+
+static const char* RID_SVXSTR_GRDT_DEF[] =
+{
+    RID_SVXSTR_GRDT0_DEF,
+    RID_SVXSTR_GRDT1_DEF,
+    RID_SVXSTR_GRDT2_DEF,
+    RID_SVXSTR_GRDT3_DEF,
+    RID_SVXSTR_GRDT4_DEF,
+    RID_SVXSTR_GRDT5_DEF,
+    RID_SVXSTR_GRDT6_DEF,
+    RID_SVXSTR_GRDT7_DEF,
+    RID_SVXSTR_GRDT8_DEF,
+    RID_SVXSTR_GRDT9_DEF,
+    RID_SVXSTR_GRDT10_DEF,
+    RID_SVXSTR_GRDT11_DEF,
+    RID_SVXSTR_GRDT12_DEF,
+    RID_SVXSTR_GRDT13_DEF,
+    RID_SVXSTR_GRDT14_DEF,
+    RID_SVXSTR_GRDT15_DEF,
+    RID_SVXSTR_GRDT16_DEF,
+    RID_SVXSTR_GRDT17_DEF,
+    RID_SVXSTR_GRDT18_DEF,
+    RID_SVXSTR_GRDT19_DEF,
+    RID_SVXSTR_GRDT20_DEF,
+    RID_SVXSTR_GRDT21_DEF,
+    RID_SVXSTR_GRDT22_DEF,
+    RID_SVXSTR_GRDT23_DEF,
+    RID_SVXSTR_GRDT24_DEF,
+    RID_SVXSTR_GRDT25_DEF,
+    RID_SVXSTR_GRDT26_DEF,
+    RID_SVXSTR_GRDT27_DEF,
+    RID_SVXSTR_GRDT28_DEF,
+    RID_SVXSTR_GRDT29_DEF,
+    RID_SVXSTR_GRDT30_DEF,
+    RID_SVXSTR_GRDT31_DEF,
+    RID_SVXSTR_GRDT32_DEF,
+    RID_SVXSTR_GRDT33_DEF,
+    RID_SVXSTR_GRDT34_DEF,
+    RID_SVXSTR_GRDT35_DEF,
+    RID_SVXSTR_GRDT36_DEF,
+    RID_SVXSTR_GRDT37_DEF,
+    RID_SVXSTR_GRDT38_DEF,
+    RID_SVXSTR_GRDT39_DEF,
+    RID_SVXSTR_GRDT40_DEF,
+    RID_SVXSTR_GRDT41_DEF,
+    RID_SVXSTR_GRDT42_DEF,
+    RID_SVXSTR_GRDT43_DEF,
+    RID_SVXSTR_GRDT44_DEF,
+    RID_SVXSTR_GRDT45_DEF,
+    RID_SVXSTR_GRDT46_DEF,
+    RID_SVXSTR_GRDT47_DEF,
+    RID_SVXSTR_GRDT48_DEF,
+    RID_SVXSTR_GRDT49_DEF,
+    RID_SVXSTR_GRDT50_DEF,
+    RID_SVXSTR_GRDT51_DEF,
+    RID_SVXSTR_GRDT52_DEF,
+    RID_SVXSTR_GRDT53_DEF,
+    RID_SVXSTR_GRDT54_DEF,
+    RID_SVXSTR_GRDT55_DEF,
+    RID_SVXSTR_GRDT56_DEF,
+    RID_SVXSTR_GRDT57_DEF,
+    RID_SVXSTR_GRDT58_DEF,
+    RID_SVXSTR_GRDT59_DEF,
+    RID_SVXSTR_GRDT60_DEF,
+    RID_SVXSTR_GRDT61_DEF,
+    RID_SVXSTR_GRDT62_DEF,
+    RID_SVXSTR_GRDT63_DEF,
+    RID_SVXSTR_GRDT64_DEF,
+    RID_SVXSTR_GRDT65_DEF,
+    RID_SVXSTR_GRDT66_DEF,
+    RID_SVXSTR_GRDT67_DEF,
+    RID_SVXSTR_GRDT68_DEF,
+    RID_SVXSTR_GRDT69_DEF,
+    RID_SVXSTR_GRDT70_DEF,
+    RID_SVXSTR_GRDT71_DEF,
+    RID_SVXSTR_GRDT72_DEF,
+    RID_SVXSTR_GRDT73_DEF,
+    RID_SVXSTR_GRDT74_DEF,
+    RID_SVXSTR_GRDT75_DEF,
+    RID_SVXSTR_GRDT76_DEF,
+    RID_SVXSTR_GRDT77_DEF,
+    RID_SVXSTR_GRDT78_DEF,
+    RID_SVXSTR_GRDT79_DEF,
+    RID_SVXSTR_GRDT80_DEF,
+    RID_SVXSTR_GRDT81_DEF,
+    RID_SVXSTR_GRDT82_DEF,
+    RID_SVXSTR_GRDT83_DEF,
+    RID_SVXSTR_GRDT84_DEF,
+    RID_SVXSTR_GRDT85_DEF,
+    RID_SVXSTR_GRDT86_DEF,
+    RID_SVXSTR_GRDT87_DEF
+};
+
+static const char* RID_SVXSTR_GRDT[] =
+{
+    RID_SVXSTR_GRDT0,
+    RID_SVXSTR_GRDT1,
+    RID_SVXSTR_GRDT2,
+    RID_SVXSTR_GRDT3,
+    RID_SVXSTR_GRDT4,
+    RID_SVXSTR_GRDT5,
+    RID_SVXSTR_GRDT6,
+    RID_SVXSTR_GRDT7,
+    RID_SVXSTR_GRDT8,
+    RID_SVXSTR_GRDT9,
+    RID_SVXSTR_GRDT10,
+    RID_SVXSTR_GRDT11,
+    RID_SVXSTR_GRDT12,
+    RID_SVXSTR_GRDT13,
+    RID_SVXSTR_GRDT14,
+    RID_SVXSTR_GRDT15,
+    RID_SVXSTR_GRDT16,
+    RID_SVXSTR_GRDT17,
+    RID_SVXSTR_GRDT18,
+    RID_SVXSTR_GRDT19,
+    RID_SVXSTR_GRDT20,
+    RID_SVXSTR_GRDT21,
+    RID_SVXSTR_GRDT22,
+    RID_SVXSTR_GRDT23,
+    RID_SVXSTR_GRDT24,
+    RID_SVXSTR_GRDT25,
+    RID_SVXSTR_GRDT26,
+    RID_SVXSTR_GRDT27,
+    RID_SVXSTR_GRDT28,
+    RID_SVXSTR_GRDT29,
+    RID_SVXSTR_GRDT30,
+    RID_SVXSTR_GRDT31,
+    RID_SVXSTR_GRDT32,
+    RID_SVXSTR_GRDT33,
+    RID_SVXSTR_GRDT34,
+    RID_SVXSTR_GRDT35,
+    RID_SVXSTR_GRDT36,
+    RID_SVXSTR_GRDT37,
+    RID_SVXSTR_GRDT38,
+    RID_SVXSTR_GRDT39,
+    RID_SVXSTR_GRDT40,
+    RID_SVXSTR_GRDT41,
+    RID_SVXSTR_GRDT42,
+    RID_SVXSTR_GRDT43,
+    RID_SVXSTR_GRDT44,
+    RID_SVXSTR_GRDT45,
+    RID_SVXSTR_GRDT46,
+    RID_SVXSTR_GRDT47,
+    RID_SVXSTR_GRDT48,
+    RID_SVXSTR_GRDT49,
+    RID_SVXSTR_GRDT50,
+    RID_SVXSTR_GRDT51,
+    RID_SVXSTR_GRDT52,
+    RID_SVXSTR_GRDT53,
+    RID_SVXSTR_GRDT54,
+    RID_SVXSTR_GRDT55,
+    RID_SVXSTR_GRDT56,
+    RID_SVXSTR_GRDT57,
+    RID_SVXSTR_GRDT58,
+    RID_SVXSTR_GRDT59,
+    RID_SVXSTR_GRDT60,
+    RID_SVXSTR_GRDT61,
+    RID_SVXSTR_GRDT62,
+    RID_SVXSTR_GRDT63,
+    RID_SVXSTR_GRDT64,
+    RID_SVXSTR_GRDT65,
+    RID_SVXSTR_GRDT66,
+    RID_SVXSTR_GRDT67,
+    RID_SVXSTR_GRDT68,
+    RID_SVXSTR_GRDT69,
+    RID_SVXSTR_GRDT70,
+    RID_SVXSTR_GRDT71,
+    RID_SVXSTR_GRDT72,
+    RID_SVXSTR_GRDT73,
+    RID_SVXSTR_GRDT74,
+    RID_SVXSTR_GRDT75,
+    RID_SVXSTR_GRDT76,
+    RID_SVXSTR_GRDT77,
+    RID_SVXSTR_GRDT78,
+    RID_SVXSTR_GRDT79,
+    RID_SVXSTR_GRDT80,
+    RID_SVXSTR_GRDT81,
+    RID_SVXSTR_GRDT82,
+    RID_SVXSTR_GRDT83,
+    RID_SVXSTR_GRDT84,
+    RID_SVXSTR_GRDT85,
+    RID_SVXSTR_GRDT86,
+    RID_SVXSTR_GRDT87
+};
+
+static const char* RID_SVXSTR_HATCHS_DEF[] =
+{
+    RID_SVXSTR_HATCH0_DEF,
+    RID_SVXSTR_HATCH1_DEF,
+    RID_SVXSTR_HATCH2_DEF,
+    RID_SVXSTR_HATCH3_DEF,
+    RID_SVXSTR_HATCH4_DEF,
+    RID_SVXSTR_HATCH5_DEF,
+    RID_SVXSTR_HATCH6_DEF,
+    RID_SVXSTR_HATCH7_DEF,
+    RID_SVXSTR_HATCH8_DEF,
+    RID_SVXSTR_HATCH9_DEF,
+    RID_SVXSTR_HATCH10_DEF
+};
+
+static const char* RID_SVXSTR_HATCHS[] =
+{
+    RID_SVXSTR_HATCH0,
+    RID_SVXSTR_HATCH1,
+    RID_SVXSTR_HATCH2,
+    RID_SVXSTR_HATCH3,
+    RID_SVXSTR_HATCH4,
+    RID_SVXSTR_HATCH5,
+    RID_SVXSTR_HATCH6,
+    RID_SVXSTR_HATCH7,
+    RID_SVXSTR_HATCH8,
+    RID_SVXSTR_HATCH9,
+    RID_SVXSTR_HATCH10
+};
+
+static const char* RID_SVXSTR_TRASNGR_DEF[] =
+{
+    RID_SVXSTR_TRASNGR0_DEF
+};
+
+static const char* RID_SVXSTR_TRASNGR[] =
+{
+    RID_SVXSTR_TRASNGR0
+};
+
+bool SvxUnoGetResourceRanges( const short nWhich, const char**& pApiResIds, const char**& pIntResIds, int& nCount ) throw()
 {
     switch( nWhich )
     {
     case XATTR_FILLBITMAP:
-        nApiResIds = RID_SVXSTR_BMP_DEF_START;
-        nIntResIds = RID_SVXSTR_BMP_START;
-        nCount = RID_SVXSTR_BMP_DEF_END - RID_SVXSTR_BMP_DEF_START + 1;
+        pApiResIds = RID_SVXSTR_BMP_DEF;
+        pIntResIds = RID_SVXSTR_BMP;
+        nCount = SAL_N_ELEMENTS(RID_SVXSTR_BMP_DEF);
         break;
-
     case XATTR_LINEDASH:
-        nApiResIds = RID_SVXSTR_DASH_DEF_START;
-        nIntResIds = RID_SVXSTR_DASH_START;
-        nCount = RID_SVXSTR_DASH_DEF_END - RID_SVXSTR_DASH_DEF_START + 1;
+        pApiResIds = RID_SVXSTR_DASH_DEF;
+        pIntResIds = RID_SVXSTR_DASH;
+        nCount = SAL_N_ELEMENTS(RID_SVXSTR_DASH_DEF);
         break;
 
     case XATTR_LINESTART:
     case XATTR_LINEEND:
-        nApiResIds = RID_SVXSTR_LEND_DEF_START;
-        nIntResIds = RID_SVXSTR_LEND_START;
-        nCount = RID_SVXSTR_LEND_DEF_END - RID_SVXSTR_LEND_DEF_START + 1;
+        pApiResIds = RID_SVXSTR_LEND_DEF;
+        pIntResIds = RID_SVXSTR_LEND;
+        nCount = SAL_N_ELEMENTS(RID_SVXSTR_LEND_DEF);
         break;
 
     case XATTR_FILLGRADIENT:
-        nApiResIds = RID_SVXSTR_GRDT_DEF_START;
-        nIntResIds = RID_SVXSTR_GRDT_START;
-        nCount = RID_SVXSTR_GRDT_DEF_END - RID_SVXSTR_GRDT_DEF_START + 1;
+        pApiResIds = RID_SVXSTR_GRDT_DEF;
+        pIntResIds = RID_SVXSTR_GRDT;
+        nCount = SAL_N_ELEMENTS(RID_SVXSTR_GRDT_DEF);
         break;
 
     case XATTR_FILLHATCH:
-        nApiResIds = RID_SVXSTR_HATCH_DEF_START;
-        nIntResIds = RID_SVXSTR_HATCH_START;
-        nCount = RID_SVXSTR_HATCH_DEF_END - RID_SVXSTR_HATCH_DEF_START + 1;
+        pApiResIds = RID_SVXSTR_HATCHS_DEF;
+        pIntResIds = RID_SVXSTR_HATCHS;
+        nCount = SAL_N_ELEMENTS(RID_SVXSTR_HATCHS_DEF);
         break;
 
     case XATTR_FILLFLOATTRANSPARENCE:
-        nApiResIds = RID_SVXSTR_TRASNGR_DEF_START;
-        nIntResIds = RID_SVXSTR_TRASNGR_START;
-        nCount = RID_SVXSTR_TRASNGR_DEF_END - RID_SVXSTR_TRASNGR_DEF_START + 1;
+        pApiResIds = RID_SVXSTR_TRASNGR_DEF;
+        pIntResIds = RID_SVXSTR_TRASNGR;
+        nCount = SAL_N_ELEMENTS(RID_SVXSTR_TRASNGR_DEF);
         break;
 
     default:
         return false;
     }
-
     return true;
 }
 
 /// @throws std::exception
-bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount, OUString& rString )
+bool SvxUnoConvertResourceString(const char **pSourceResIds, const char** pDestResIds, int nCount, OUString& rString, bool bToApi)
 {
-    // first, calculate the search string length without an optional number behind the name
+    // first, calculate the search string length without an optional number after the name
     sal_Int32 nLength = rString.getLength();
     while( nLength > 0 )
     {
@@ -1115,21 +1474,17 @@ bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount
 
     const OUString aShortString( rString.copy( 0, nLength ) );
 
-    int i;
-    for( i = 0; i < nCount; i++ )
+    for (int i = 0; i < nCount; ++i)
     {
-        sal_uInt16 nResId = (sal_uInt16)(nSourceResIds + i);
-        const OUString aCompare(SvxResId(nResId));
+        const OUString aCompare = bToApi ? SvxResId(pSourceResIds[i]) : OUString::createFromAscii(pSourceResIds[i]);
         if( aShortString == aCompare )
         {
-            sal_uInt16 nNewResId = (sal_uInt16)(nDestResIds + i);
-            rString = rString.replaceAt( 0, aShortString.getLength(), SvxResId( nNewResId ) );
+            rString = rString.replaceAt( 0, aShortString.getLength(), bToApi ? OUString::createFromAscii(pDestResIds[i]) : SvxResId(pDestResIds[i]) );
             return true;
         }
         else if( rString == aCompare )
         {
-            sal_uInt16 nNewResId = (sal_uInt16)(nDestResIds + i);
-            rString = SvxResId(nNewResId);
+            rString = bToApi ? OUString::createFromAscii(pDestResIds[i]) : SvxResId(pDestResIds[i]);
             return true;
         }
     }
@@ -1149,7 +1504,7 @@ bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount
 //   the possibility to define it wrong
 // - change the compare to also work when a shorter name is in front of a longer one
 
-static const sal_uInt16 SvxUnoColorNameDefResId[] =
+static const char* SvxUnoColorNameDefResId[] =
 {
     RID_SVXSTR_COLOR_BLUEGREY_DEF,
     RID_SVXSTR_COLOR_BLACK_DEF,
@@ -1193,7 +1548,7 @@ static const sal_uInt16 SvxUnoColorNameDefResId[] =
     RID_SVXSTR_COLOR_TANGO_ALUMINIUM_DEF
 };
 
-static const sal_uInt16 SvxUnoColorNameResId[] =
+static const char* SvxUnoColorNameResId[] =
 {
     RID_SVXSTR_COLOR_BLUEGREY,
     RID_SVXSTR_COLOR_BLACK,
@@ -1238,7 +1593,7 @@ static const sal_uInt16 SvxUnoColorNameResId[] =
 };
 
 /// @throws std::exception
-bool SvxUnoConvertResourceString( const sal_uInt16* pSourceResIds, const sal_uInt16* pDestResIds, int nCount, OUString& rString )
+bool SvxUnoConvertResourceStringBuiltIn(const char** pSourceResIds, const char** pDestResIds, int nCount, OUString& rString, bool bToApi)
 {
     //We replace e.g. "Gray 10%" with the translation of Gray, but we shouldn't
     //replace "Red Hat 1" with the translation of Red :-)
@@ -1254,10 +1609,10 @@ bool SvxUnoConvertResourceString( const sal_uInt16* pSourceResIds, const sal_uIn
 
     for(int i = 0; i < nCount; ++i )
     {
-        OUString aStrDefName = SvxResId( pSourceResIds[i] );
+        OUString aStrDefName = bToApi ? SvxResId(pSourceResIds[i]) : OUString::createFromAscii(pSourceResIds[i]);
         if( sStr == aStrDefName )
         {
-            OUString aReplace = SvxResId( pDestResIds[i] );
+            OUString aReplace = bToApi ? OUString::createFromAscii(pDestResIds[i]) : SvxResId(pDestResIds[i]);
             rString = rString.replaceAt( 0, aStrDefName.getLength(), aReplace );
             return true;
         }
@@ -1275,20 +1630,20 @@ OUString SvxUnogetApiNameForItem(const sal_Int16 nWhich, const OUString& rIntern
 
     if( nWhich == XATTR_LINECOLOR )
     {
-        if( SvxUnoConvertResourceString( SvxUnoColorNameResId, SvxUnoColorNameDefResId, SAL_N_ELEMENTS( SvxUnoColorNameResId ), aNew ) )
+        if (SvxUnoConvertResourceStringBuiltIn(SvxUnoColorNameResId, SvxUnoColorNameDefResId, SAL_N_ELEMENTS(SvxUnoColorNameResId), aNew, true))
         {
             return aNew;
         }
     }
     else
     {
-        int nApiResIds;
-        int nIntResIds;
+        const char** pApiResIds;
+        const char** pIntResIds;
         int nCount;
 
-        if( SvxUnoGetResourceRanges( nWhich, nApiResIds, nIntResIds, nCount ) )
+        if( SvxUnoGetResourceRanges(nWhich, pApiResIds, pIntResIds, nCount))
         {
-            if(SvxUnoConvertResourceString( nIntResIds, nApiResIds, nCount, aNew ) )
+            if (SvxUnoConvertResourceString(pIntResIds, pApiResIds, nCount, aNew, true))
             {
                 return aNew;
             }
@@ -1308,20 +1663,20 @@ OUString SvxUnogetInternalNameForItem(const sal_Int16 nWhich, const OUString& rA
 
     if( nWhich == XATTR_LINECOLOR )
     {
-        if( SvxUnoConvertResourceString( SvxUnoColorNameDefResId, SvxUnoColorNameResId, SAL_N_ELEMENTS( SvxUnoColorNameResId ), aNew ) )
+        if (SvxUnoConvertResourceStringBuiltIn(SvxUnoColorNameDefResId, SvxUnoColorNameResId, SAL_N_ELEMENTS(SvxUnoColorNameResId), aNew, false))
         {
             return aNew;
         }
     }
     else
     {
-        int nApiResIds;
-        int nIntResIds;
+        const char** pApiResIds;
+        const char** pIntResIds;
         int nCount;
 
-        if( SvxUnoGetResourceRanges( nWhich, nApiResIds, nIntResIds, nCount ) )
+        if (SvxUnoGetResourceRanges(nWhich, pApiResIds, pIntResIds, nCount))
         {
-            if(SvxUnoConvertResourceString( nApiResIds, nIntResIds, nCount, aNew ) )
+            if (SvxUnoConvertResourceString(pApiResIds, pIntResIds, nCount, aNew, false))
             {
                 return aNew;
             }

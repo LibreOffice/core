@@ -45,6 +45,7 @@
 #include <basic/basmgr.hxx>
 #include <tools/urlobj.hxx>
 #include "cuires.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include <sfx2/app.hxx>
 #include <sfx2/minfitem.hxx>

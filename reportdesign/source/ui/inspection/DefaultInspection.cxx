@@ -19,8 +19,8 @@
 #include "DefaultInspection.hxx"
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <RptResId.hrc>
-#include "ModuleHelper.hxx"
+#include <strings.hrc>
+#include "core_resource.hxx"
 #include "helpids.hrc"
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -201,7 +201,7 @@ namespace rptui
         const struct
         {
             const sal_Char* programmaticName;
-            sal_uInt16          uiNameResId;
+            const char* uiNameResId;
             OString    helpId;
         } aCategories[] = {
             { "General",    RID_STR_PROPPAGE_DEFAULT,   HID_RPT_PROPDLG_TAB_GENERAL },
@@ -214,7 +214,7 @@ namespace rptui
         for ( size_t i=0; i<nCategories; ++i, ++pReturn )
         {
             pReturn->ProgrammaticName = OUString::createFromAscii( aCategories[i].programmaticName );
-            pReturn->UIName = ModuleRes( aCategories[i].uiNameResId );
+            pReturn->UIName = RptResId( aCategories[i].uiNameResId );
             pReturn->HelpURL = HelpIdUrl::getHelpURL( aCategories[i].helpId );
         }
 

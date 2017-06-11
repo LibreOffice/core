@@ -9,16 +9,12 @@
 
 $(eval $(call gb_Module_Module,extensions))
 
-$(eval $(call gb_Module_add_targets,extensions,\
-	Library_res \
-))
-
 $(eval $(call gb_Module_add_l10n_targets,extensions,\
-	AllLangResTarget_abp \
-	AllLangResTarget_scn \
-	AllLangResTarget_upd \
+	AllLangMoTarget_pcr \
 	UIConfig_sabpilot \
+	UIConfig_sbibliography \
 	UIConfig_scanner \
+	UIConfig_spropctrlr \
 ))
 
 ifneq ($(filter-out IOS ANDROID,$(OS)),)
@@ -35,13 +31,6 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	Library_bib \
 	Library_dbp \
 	Library_pcr \
-))
-$(eval $(call gb_Module_add_l10n_targets,extensions,\
-	AllLangResTarget_bib \
-	AllLangResTarget_dbp \
-	AllLangResTarget_pcr \
-	UIConfig_sbibliography \
-	UIConfig_spropctrlr \
 ))
 endif
 

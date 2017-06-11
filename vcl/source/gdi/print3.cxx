@@ -32,7 +32,7 @@
 #include "svdata.hxx"
 #include "salinst.hxx"
 #include "salprn.hxx"
-#include "svids.hrc"
+#include "strings.hrc"
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>

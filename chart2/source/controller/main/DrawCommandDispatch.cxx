@@ -29,6 +29,7 @@
 #include <svl/itempool.hxx>
 #include <editeng/adjustitem.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/gallery.hxx>
@@ -74,13 +75,13 @@ bool DrawCommandDispatch::isFeatureSupported( const OUString& rCommandURL )
     return parseCommandURL( rCommandURL, &nFeatureId, &aBaseCommand, &aCustomShapeType );
 }
 
-::basegfx::B2DPolyPolygon getPolygon( sal_uInt16 nResId, SdrModel& rModel )
+::basegfx::B2DPolyPolygon getPolygon(const char* pResId, SdrModel& rModel)
 {
     ::basegfx::B2DPolyPolygon aReturn;
     XLineEndListRef pLineEndList = rModel.GetLineEndList();
     if ( pLineEndList.is() )
     {
-        OUString aName( SvxResId( nResId ) );
+        OUString aName(SvxResId(pResId));
         long nCount = pLineEndList->Count();
         for ( long nIndex = 0; nIndex < nCount; ++nIndex )
         {

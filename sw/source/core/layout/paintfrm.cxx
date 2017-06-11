@@ -30,7 +30,7 @@
 #include <calbck.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtclds.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <swmodule.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
@@ -78,7 +78,6 @@
 
 #include <svtools/borderhelper.hxx>
 
-#include "pagefrm.hrc"
 #include "bitmaps.hlst"
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>

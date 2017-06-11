@@ -45,7 +45,7 @@
 #include <swmodule.hxx>
 
 #include <cmdid.h>
-#include <utlui.hrc>
+#include <strings.hrc>
 #include <index.hrc>
 #include <globals.hrc>
 #include <SwStyleNameMapper.hxx>

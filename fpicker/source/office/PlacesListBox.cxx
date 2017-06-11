@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <iodlg.hrc>
+#include <strings.hrc>
 #include <PlacesListBox.hxx>
 #include <svtools/PlaceEditDialog.hxx>
 

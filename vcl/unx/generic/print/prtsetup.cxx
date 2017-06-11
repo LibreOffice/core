@@ -19,7 +19,7 @@
 
 #include "prtsetup.hxx"
 #include "svdata.hxx"
-#include "svids.hrc"
+#include "strings.hrc"
 
 #include "osl/thread.h"
 

@@ -21,7 +21,7 @@
 #include <vcl/msgbox.hxx>
 
 #include "conflictsdlg.hxx"
-#include "scres.hrc"
+#include "strings.hrc"
 #include "scresid.hxx"
 #include "viewdata.hxx"
 #include "dbfunc.hxx"

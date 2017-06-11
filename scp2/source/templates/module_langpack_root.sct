@@ -28,17 +28,6 @@ Module gid_Module_Langpack_Basis_<LANGUAGE_>
     Styles =(HIDDEN_ROOT, LANGUAGEMODULE);
 End
 
-Module gid_Module_Langpack_Resource_<LANGUAGE_>
-    ParentID = gid_Module_Langpack_Root_<LANGUAGE_>;
-    Sortkey = "100";
-    Language = "<LANGUAGE>";
-    Assigns = gid_Module_Langpack_Resource_Template;
-    Name = "gid_Module_Langpack_Resource_<LANGUAGE_>";
-    Description = "gid_Module_Langpack_Resource_<LANGUAGE_>";
-    PackageInfo = "packinfo_office_lang.txt";
-    Styles =(HIDDEN_ROOT, LANGUAGEMODULE);
-End
-
 Module gid_Module_Langpack_Fonts_<LANGUAGE_>
     ParentID = gid_Module_Langpack_Root_<LANGUAGE_>;
     Sortkey = "300";
