@@ -20,9 +20,9 @@
 #include "Condition.hxx"
 #include "UITools.hxx"
 #include "CondFormat.hxx"
-#include "RptResId.hrc"
+#include "core_resource.hxx"
+#include "strings.hrc"
 #include "ReportController.hxx"
-#include "ModuleHelper.hxx"
 #include "ColorChanger.hxx"
 #include "helpids.hrc"
 #include "reportformula.hxx"
@@ -445,7 +445,7 @@ void Condition::fillFormatCondition(const uno::Reference< report::XFormatConditi
 void Condition::setConditionIndex( size_t _nCondIndex, size_t _nCondCount )
 {
     m_nCondIndex = _nCondIndex;
-    OUString sHeader( ModuleRes( STR_NUMBERED_CONDITION ) );
+    OUString sHeader( RptResId( STR_NUMBERED_CONDITION ) );
     sHeader = sHeader.replaceFirst( "$number$", OUString::number( _nCondIndex + 1) );
     m_pHeader->SetText( sHeader );
 

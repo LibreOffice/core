@@ -162,11 +162,7 @@ class SystemDialog(object):
             return None
 
     @classmethod
-    def showErrorBox(self, xMSF, ResName, ResPrefix,
-            ResID, AddTag=None, AddString=None):
-        from .Resource import Resource
-        oResource = Resource(xMSF, ResPrefix)
-        sErrorMessage = oResource.getResText(ResID)
+    def showErrorBox(self, xMSF, sErrorMessage, AddTag=None, AddString=None):
         sErrorMessage = sErrorMessage.replace("%PRODUCTNAME", "LibreOffice" )
         sErrorMessage = sErrorMessage.replace(str(13), "<BR>")
         if AddTag and AddString:

@@ -17,51 +17,79 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVXITEMS_HRC
-#define INCLUDED_SVX_SVXITEMS_HRC
+#ifndef INCLUDED_SVX_INC_SVX_ITEMS_HRC
+#define INCLUDED_SVX_INC_SVX_ITEMS_HRC
 
-#include <svl/solar.hrc>
+#include <utility>
 
-// enum SvxCellOrientation
-#define RID_SVXITEMS_ORI_STANDARD           (RID_SVXITEMS_START + 410)
-#define RID_SVXITEMS_ORI_TOPBOTTOM          (RID_SVXITEMS_START + 411)
-#define RID_SVXITEMS_ORI_BOTTOMTOP          (RID_SVXITEMS_START + 412)
-#define RID_SVXITEMS_ORI_STACKED            (RID_SVXITEMS_START + 413)
+#include "svx/svxitems.hrc"
+#include "svx/svxids.hrc"
+#include <editeng/editids.hrc>
 
-// Complete-texts -----------------------------------------------------------
+#define N_(String) (u8##String)
 
-#define RID_SVXITEMS_MARGIN_LEFT            (RID_SVXITEMS_START + 480)
-#define RID_SVXITEMS_MARGIN_TOP             (RID_SVXITEMS_START + 481)
-#define RID_SVXITEMS_MARGIN_RIGHT           (RID_SVXITEMS_START + 482)
-#define RID_SVXITEMS_MARGIN_BOTTOM          (RID_SVXITEMS_START + 483)
-#define RID_SVXITEMS_PAGE_COMPLETE          (RID_SVXITEMS_START + 498)
-#define RID_SVXITEMS_PAGE_NUM_BEGIN         (RID_SVXITEMS_START + 499)
-#define RID_SVXITEMS_PAGE_NUM_CHR_UPPER     (RID_SVXITEMS_START + 499)
-#define RID_SVXITEMS_PAGE_NUM_CHR_LOWER     (RID_SVXITEMS_START + 500)
-#define RID_SVXITEMS_PAGE_NUM_ROM_UPPER     (RID_SVXITEMS_START + 501)
-#define RID_SVXITEMS_PAGE_NUM_ROM_LOWER     (RID_SVXITEMS_START + 502)
-#define RID_SVXITEMS_PAGE_NUM_ARABIC        (RID_SVXITEMS_START + 503)
-#define RID_SVXITEMS_PAGE_NUM_NONE          (RID_SVXITEMS_START + 504)
-#define RID_SVXITEMS_PAGE_LAND_TRUE         (RID_SVXITEMS_START + 505)
-#define RID_SVXITEMS_PAGE_LAND_FALSE        (RID_SVXITEMS_START + 506)
-#define RID_SVXITEMS_PAGE_USAGE_LEFT        (RID_SVXITEMS_START + 507)
-#define RID_SVXITEMS_PAGE_USAGE_RIGHT       (RID_SVXITEMS_START + 508)
-#define RID_SVXITEMS_PAGE_USAGE_ALL         (RID_SVXITEMS_START + 509)
-#define RID_SVXITEMS_PAGE_USAGE_MIRROR      (RID_SVXITEMS_START + 510)
-#define RID_SVXITEMS_AUTHOR_COMPLETE        (RID_SVXITEMS_START + 521)
-#define RID_SVXITEMS_DATE_COMPLETE          (RID_SVXITEMS_START + 522)
-#define RID_SVXITEMS_TEXT_COMPLETE          (RID_SVXITEMS_START + 523)
-
-#define RID_SVXITEMS_BRUSH_CHAR             (RID_SVXITEMS_START + 527)
-#define RID_ATTR_NAMES                      (RID_SVXITEMS_START + 528)
-
-// Overflow check --------------------------------------------------------
-
-// Resource-Id's
-#define ACT_RID_SVXITEMS_END    RID_ATTR_NAMES
-#if ACT_RID_SVXITEMS_END > RID_SVXITEMS_END
-#error Resource overflow in #line, #file
-#endif
+const std::pair<const char*, sal_uInt16> RID_ATTR_NAMES[] =
+{
+    { N_("Scale")           ,           SID_ATTR_ZOOM },
+    { N_("Brush")           ,           SID_ATTR_BRUSH },
+    { N_("Tab stops")               ,   SID_ATTR_TABSTOP },
+    { N_("Character")               ,   SID_ATTR_CHAR },
+    { N_("Font")            ,           SID_ATTR_CHAR_FONT },
+    { N_("Font posture")        ,       SID_ATTR_CHAR_POSTURE },
+    { N_("Font weight")             ,   SID_ATTR_CHAR_WEIGHT },
+    { N_("Shadowed")            ,       SID_ATTR_CHAR_SHADOWED },
+    { N_("Individual words")        ,   SID_ATTR_CHAR_WORDLINEMODE },
+    { N_("Outline")         ,           SID_ATTR_CHAR_CONTOUR },
+    { N_("Strikethrough")           ,   SID_ATTR_CHAR_STRIKEOUT },
+    { N_("Underline")           ,       SID_ATTR_CHAR_UNDERLINE },
+    { N_("Font size")               ,   SID_ATTR_CHAR_FONTHEIGHT },
+    { N_("Rel. Font size")      ,       SID_ATTR_CHAR_PROPSIZE },
+    { N_("Font color")          ,       SID_ATTR_CHAR_COLOR },
+    { N_("Kerning")     ,               SID_ATTR_CHAR_KERNING },
+    { N_("Effects")     ,               SID_ATTR_CHAR_CASEMAP },
+    { N_("Language"),                   SID_ATTR_CHAR_LANGUAGE },
+    { N_("Position")        ,           SID_ATTR_CHAR_ESCAPEMENT },
+    { N_("Character blinking")    ,     SID_ATTR_CHAR_AUTOKERN },
+    { N_("Character set color")       , SID_ATTR_CHAR_CHARSETCOLOR },
+    { N_("Overline")      ,             SID_ATTR_CHAR_OVERLINE },
+    { N_("Paragraph")       ,           SID_ATTR_PARA },
+    { N_("Alignment")       ,           SID_ATTR_PARA_ADJUST },
+    { N_("Line spacing")        ,       SID_ATTR_PARA_LINESPACE },
+    { N_("Page Break")      ,           SID_ATTR_PARA_PAGEBREAK },
+    { N_("Hyphenation")     ,           SID_ATTR_PARA_HYPHENZONE },
+    { N_("Do not split paragraph"),     SID_ATTR_PARA_SPLIT },
+    { N_("Orphans")     ,               SID_ATTR_PARA_ORPHANS },
+    { N_("Widows")      ,               SID_ATTR_PARA_WIDOWS },
+    { N_("Paragraph spacing")     ,     SID_ATTR_PARA_ULSPACE },
+    { N_("Paragraph indent")      ,     SID_ATTR_PARA_LRSPACE },
+    { N_("Indent")      ,               SID_ATTR_LRSPACE },
+    { N_("Spacing")     ,               SID_ATTR_ULSPACE },
+    { N_("Page")        ,               SID_ATTR_PAGE },
+    { N_("Page Style")      ,           SID_ATTR_PARA_MODEL },
+    { N_("Keep with next paragraph"),   SID_ATTR_PARA_KEEP },
+    { N_("Blinking")        ,           SID_ATTR_FLASH },
+    { N_("Register-true")       ,       SID_ATTR_PARA_REGISTER },
+    { N_("Character background")    ,   SID_ATTR_BRUSH_CHAR },
+    { N_("Asian font")      ,           SID_ATTR_CHAR_CJK_FONT },
+    { N_("Size of Asian font")      ,   SID_ATTR_CHAR_CJK_FONTHEIGHT },
+    { N_("Language of Asian font"),     SID_ATTR_CHAR_CJK_LANGUAGE },
+    { N_("Posture of Asian font")   ,   SID_ATTR_CHAR_CJK_POSTURE },
+    { N_("Weight of Asian font")    ,   SID_ATTR_CHAR_CJK_WEIGHT },
+    { N_("CTL")     ,                   SID_ATTR_CHAR_CTL_FONT },
+    { N_("Size of complex scripts") ,   SID_ATTR_CHAR_CTL_FONTHEIGHT },
+    { N_("Language of complex scripts"),SID_ATTR_CHAR_CTL_LANGUAGE },
+    { N_("Posture of complex scripts"), SID_ATTR_CHAR_CTL_POSTURE },
+    { N_("Weight of complex scripts"),  SID_ATTR_CHAR_CTL_WEIGHT },
+    { N_("Double-lined")        ,       SID_ATTR_CHAR_TWO_LINES },
+    { N_("Emphasis mark")       ,       SID_ATTR_CHAR_EMPHASISMARK },
+    { N_("Text spacing")        ,       SID_ATTR_PARA_SCRIPTSPACE },
+    { N_("Hanging punctuation")     ,   SID_ATTR_PARA_HANGPUNCTUATION },
+    { N_("Forbidden characters")    ,   SID_ATTR_PARA_FORBIDDEN_RULES },
+    { N_("Rotation")        ,           SID_ATTR_CHAR_ROTATED },
+    { N_("Character scaling")       ,   SID_ATTR_CHAR_SCALEWIDTH },
+    { N_("Relief")      ,               SID_ATTR_CHAR_RELIEF },
+    { N_("Vertical text alignment") ,   SID_PARA_VERTALIGN }
+};
 
 #endif
 
