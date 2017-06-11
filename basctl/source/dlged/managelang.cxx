@@ -24,8 +24,8 @@
 #include "localizationmgr.hxx"
 #include "managelang.hxx"
 
-#include "dlgresid.hrc"
 #include "helpid.hrc"
+#include "strings.hrc"
 
 #include <com/sun/star/i18n/Boundary.hpp>
 #include <com/sun/star/i18n/WordType.hpp>

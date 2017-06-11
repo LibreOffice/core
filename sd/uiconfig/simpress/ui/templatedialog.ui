@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sd">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="TemplateDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Graphic Styles</property>
+    <property name="title" translatable="yes" context="templatedialog|TemplateDialog">Graphic Styles</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -77,7 +77,7 @@
             </child>
             <child>
               <object class="GtkButton" id="standard">
-                <property name="label" translatable="yes">_Standard</property>
+                <property name="label" translatable="yes" context="templatedialog|standard">_Standard</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -110,7 +110,7 @@
               <object class="GtkLabel" id="organizer">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Organizer</property>
+                <property name="label" translatable="yes" context="templatedialog|organizer">Organizer</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -123,7 +123,7 @@
               <object class="GtkLabel" id="line">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Line</property>
+                <property name="label" translatable="yes" context="templatedialog|line">Line</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -137,7 +137,7 @@
               <object class="GtkLabel" id="area">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Area</property>
+                <property name="label" translatable="yes" context="templatedialog|area">Area</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -151,7 +151,7 @@
               <object class="GtkLabel" id="shadowing">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Shadowing</property>
+                <property name="label" translatable="yes" context="templatedialog|shadowing">Shadowing</property>
               </object>
               <packing>
                 <property name="position">3</property>
@@ -165,7 +165,7 @@
               <object class="GtkLabel" id="transparency">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Transparency</property>
+                <property name="label" translatable="yes" context="templatedialog|transparency">Transparency</property>
               </object>
               <packing>
                 <property name="position">4</property>
@@ -179,7 +179,7 @@
               <object class="GtkLabel" id="font">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Font</property>
+                <property name="label" translatable="yes" context="templatedialog|font">Font</property>
               </object>
               <packing>
                 <property name="position">5</property>
@@ -193,7 +193,7 @@
               <object class="GtkLabel" id="fonteffect">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Font Effects</property>
+                <property name="label" translatable="yes" context="templatedialog|fonteffect">Font Effects</property>
               </object>
               <packing>
                 <property name="position">6</property>
@@ -207,7 +207,7 @@
               <object class="GtkLabel" id="indents">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Indents &amp; Spacing</property>
+                <property name="label" translatable="yes" context="templatedialog|indents">Indents &amp; Spacing</property>
               </object>
               <packing>
                 <property name="position">7</property>
@@ -221,7 +221,7 @@
               <object class="GtkLabel" id="text">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Text</property>
+                <property name="label" translatable="yes" context="templatedialog|text">Text</property>
               </object>
               <packing>
                 <property name="position">8</property>
@@ -235,7 +235,7 @@
               <object class="GtkLabel" id="animation">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Text Animation</property>
+                <property name="label" translatable="yes" context="templatedialog|animation">Text Animation</property>
               </object>
               <packing>
                 <property name="position">9</property>
@@ -249,7 +249,7 @@
               <object class="GtkLabel" id="dimensioning">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Dimensioning</property>
+                <property name="label" translatable="yes" context="templatedialog|dimensioning">Dimensioning</property>
               </object>
               <packing>
                 <property name="position">10</property>
@@ -263,7 +263,7 @@
               <object class="GtkLabel" id="connector">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Connector</property>
+                <property name="label" translatable="yes" context="templatedialog|connector">Connector</property>
               </object>
               <packing>
                 <property name="position">11</property>
@@ -277,7 +277,7 @@
               <object class="GtkLabel" id="alignment">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Alignment</property>
+                <property name="label" translatable="yes" context="templatedialog|alignment">Alignment</property>
               </object>
               <packing>
                 <property name="position">12</property>
@@ -291,7 +291,7 @@
               <object class="GtkLabel" id="asiantypo">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Asian Typography</property>
+                <property name="label" translatable="yes" context="templatedialog|asiantypo">Asian Typography</property>
               </object>
               <packing>
                 <property name="position">13</property>
@@ -305,7 +305,7 @@
               <object class="GtkLabel" id="tabs">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Tabs</property>
+                <property name="label" translatable="yes" context="templatedialog|tabs">Tabs</property>
               </object>
               <packing>
                 <property name="position">14</property>

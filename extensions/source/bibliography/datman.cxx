@@ -69,7 +69,7 @@
 #include "bibconfig.hxx"
 #include "bibbeam.hxx"
 #include "general.hxx"
-#include "bib.hrc"
+#include "strings.hrc"
 #include "bibliography.hrc"
 #include <connectivity/dbtools.hxx>
 #include <memory>

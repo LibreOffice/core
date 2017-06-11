@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="FormatSectionDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Options</property>
+    <property name="title" translatable="yes" context="formatsectiondialog|FormatSectionDialog">Options</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -98,7 +98,7 @@
               <object class="GtkLabel" id="columns">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Columns</property>
+                <property name="label" translatable="yes" context="formatsectiondialog|columns">Columns</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -111,7 +111,7 @@
               <object class="GtkLabel" id="indents">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Indents</property>
+                <property name="label" translatable="yes" context="formatsectiondialog|indents">Indents</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -125,7 +125,7 @@
               <object class="GtkLabel" id="background">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Background</property>
+                <property name="label" translatable="yes" context="formatsectiondialog|background">Background</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -139,7 +139,7 @@
               <object class="GtkLabel" id="notes">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Footnotes/Endnotes</property>
+                <property name="label" translatable="yes" context="formatsectiondialog|notes">Footnotes/Endnotes</property>
               </object>
               <packing>
                 <property name="position">3</property>

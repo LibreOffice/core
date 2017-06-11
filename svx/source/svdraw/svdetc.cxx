@@ -21,12 +21,12 @@
 
 #include "editeng/forbiddencharacterstable.hxx"
 #include "officecfg/Office/Common.hxx"
-#include <tools/resmgr.hxx>
+#include <svx/dialmgr.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdtrans.hxx>
 #include "svdglob.hxx"
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include "svx/svdviter.hxx"
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
@@ -71,8 +71,7 @@ using namespace ::com::sun::star;
 SdrGlobalData::SdrGlobalData() :
     pSysLocale(nullptr),
     pLocaleData(nullptr),
-    pDefaults(nullptr),
-    pResMgr(nullptr)
+    pDefaults(nullptr)
 {
     if (!utl::ConfigManager::IsAvoidConfig())
     {
@@ -380,29 +379,16 @@ std::vector<Link<SdrObjUserDataCreatorParams, SdrObjUserData*>>& ImpGetUserMakeO
     return rGlobalData.aUserMakeObjUserDataHdl;
 }
 
-ResMgr* ImpGetResMgr()
+OUString ImpGetResStr(const char* pResID)
 {
-    SdrGlobalData& rGlobalData = GetSdrGlobalData();
-
-    if(!rGlobalData.pResMgr)
-    {
-        rGlobalData.pResMgr =
-            ResMgr::CreateResMgr( "svx", Application::GetSettings().GetUILanguageTag() );
-    }
-
-    return rGlobalData.pResMgr;
-}
-
-OUString ImpGetResStr(sal_uInt16 nResID)
-{
-    return ResId(nResID, *ImpGetResMgr());
+    return SvxResId(pResID);
 }
 
 namespace sdr
 {
-    OUString GetResourceString(sal_uInt16 nResID)
+    OUString GetResourceString(const char* pResID)
     {
-        return ImpGetResStr(nResID);
+        return ImpGetResStr(pResID);
     }
 }
 

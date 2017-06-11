@@ -20,6 +20,7 @@
 #include "uiitems.hxx"
 #include "reffact.hxx"
 #include "docfunc.hxx"
+#include "strings.hrc"
 
 #include <random>
 
@@ -279,10 +280,10 @@ void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
 }
 
 template<class RNG>
-void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG& randomGenerator, const sal_Int16 aDistributionStringId, boost::optional<sal_Int8> aDecimalPlaces)
+void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG& randomGenerator, const char* pDistributionStringId, boost::optional<sal_Int8> aDecimalPlaces)
 {
     OUString aUndo = ScResId(STR_UNDO_DISTRIBUTION_TEMPLATE);
-    OUString aDistributionName = ScResId(aDistributionStringId);
+    OUString aDistributionName = ScResId(pDistributionStringId);
     aUndo = aUndo.replaceAll("$(DISTRIBUTION)",  aDistributionName);
 
     ScDocShell* pDocShell = mpViewData->GetDocShell();

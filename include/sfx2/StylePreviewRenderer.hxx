@@ -12,7 +12,6 @@
 
 #include <sfx2/dllapi.h>
 #include <vcl/outdev.hxx>
-#include <rsc/rscsfx.hxx>
 #include <svl/style.hxx>
 #include <sfx2/objsh.hxx>
 

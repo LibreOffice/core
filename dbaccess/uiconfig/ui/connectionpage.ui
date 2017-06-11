@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="dba">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="ConnectionPage">
@@ -38,7 +38,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Path to the dBASE files:</property>
+                    <property name="label" translatable="yes" context="connectionpage|browseurllabel">Path to the dBASE files:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">browseurl</property>
                   </object>
@@ -61,7 +61,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="create">
-                    <property name="label" translatable="yes">_Create New</property>
+                    <property name="label" translatable="yes" context="connectionpage|create">_Create New</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -75,7 +75,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="browse">
-                    <property name="label" translatable="yes">_Browse…</property>
+                    <property name="label" translatable="yes" context="connectionpage|browse">_Browse…</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -95,7 +95,7 @@
           <object class="GtkLabel" id="generalLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">General</property>
+            <property name="label" translatable="yes" context="connectionpage|generalLabel">General</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -137,7 +137,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">_User name:</property>
+                    <property name="label" translatable="yes" context="connectionpage|userNameLabel">_User name:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">userNameEntry</property>
                   </object>
@@ -159,7 +159,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="passCheckbutton">
-                    <property name="label" translatable="yes">Password required</property>
+                    <property name="label" translatable="yes" context="connectionpage|passCheckbutton">Password required</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -183,7 +183,7 @@
           <object class="GtkLabel" id="userlabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">User Authentication</property>
+            <property name="label" translatable="yes" context="connectionpage|userlabel">User Authentication</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -224,7 +224,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">_JDBC driver class:</property>
+                    <property name="label" translatable="yes" context="connectionpage|javaDriverLabel">_JDBC driver class:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">driverEntry</property>
                   </object>
@@ -249,7 +249,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="driverButton">
-                    <property name="label" translatable="yes">Test Class</property>
+                    <property name="label" translatable="yes" context="connectionpage|driverButton">Test Class</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -269,7 +269,7 @@
           <object class="GtkLabel" id="JDBCLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">JDBC Properties</property>
+            <property name="label" translatable="yes" context="connectionpage|JDBCLabel">JDBC Properties</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -284,7 +284,7 @@
     </child>
     <child>
       <object class="GtkButton" id="connectionButton">
-        <property name="label" translatable="yes">Test Connection</property>
+        <property name="label" translatable="yes" context="connectionpage|connectionButton">Test Connection</property>
         <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="AssignComponent">
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Assign Component</property>
+    <property name="title" translatable="yes" context="assigncomponentdialog|AssignComponent">Assign Component</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -88,7 +88,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Component method name:</property>
+                <property name="label" translatable="yes" context="assigncomponentdialog|label1">Component method name:</property>
               </object>
               <packing>
                 <property name="expand">False</property>

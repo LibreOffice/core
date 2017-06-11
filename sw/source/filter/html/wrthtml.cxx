@@ -69,7 +69,7 @@
 #include <htmlnum.hxx>
 #include <htmlfly.hxx>
 #include <swmodule.hxx>
-#include <statstr.hrc>
+#include <strings.hrc>
 #include <swerror.h>
 #include <rtl/strbuf.hxx>
 #include <IDocumentSettingAccess.hxx>

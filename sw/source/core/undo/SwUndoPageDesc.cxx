@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/resid.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <swundo.hxx>
@@ -25,7 +24,7 @@
 #include <SwUndoPageDesc.hxx>
 #include <SwRewriter.hxx>
 #include <undobj.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <fmtcntnt.hxx>
 #include <fmthdft.hxx>
 

@@ -227,7 +227,7 @@ public:
      * @param nY vertical position in document coordinates
      * @param nCount number of clicks: 1 for single click, 2 for double click
      * @param nButtons: which mouse buttons: 1 for left, 2 for middle, 4 right
-     * @param nModifier: which keyboard modifier: (see include/rsc/rsc-vcl-shared-types.hxx for possible values)
+     * @param nModifier: which keyboard modifier: (see include/vcl/vclenum.hxx for possible values)
      */
     void postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
     {

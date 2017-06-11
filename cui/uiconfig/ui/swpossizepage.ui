@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -72,7 +72,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Width:</property>
+                            <property name="label" translatable="yes" context="swpossizepage|widthft">_Width:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">width:0.00cm</property>
                           </object>
@@ -110,7 +110,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">H_eight:</property>
+                            <property name="label" translatable="yes" context="swpossizepage|heightft">H_eight:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">height:0.00cm</property>
                           </object>
@@ -127,7 +127,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="ratio">
-                        <property name="label" translatable="yes">_Keep ratio</property>
+                        <property name="label" translatable="yes" context="swpossizepage|ratio">_Keep ratio</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -148,7 +148,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Size</property>
+                <property name="label" translatable="yes" context="swpossizepage|label2">Size</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -204,7 +204,7 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="topage">
-                        <property name="label" translatable="yes">To _page</property>
+                        <property name="label" translatable="yes" context="swpossizepage|topage">To _page</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -221,7 +221,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="topara">
-                        <property name="label" translatable="yes">To paragrap_h</property>
+                        <property name="label" translatable="yes" context="swpossizepage|topara">To paragrap_h</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -237,7 +237,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="tochar">
-                        <property name="label" translatable="yes">To cha_racter</property>
+                        <property name="label" translatable="yes" context="swpossizepage|tochar">To cha_racter</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -253,7 +253,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="aschar">
-                        <property name="label" translatable="yes">_As character</property>
+                        <property name="label" translatable="yes" context="swpossizepage|aschar">_As character</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -269,7 +269,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="toframe">
-                        <property name="label" translatable="yes">To _frame</property>
+                        <property name="label" translatable="yes" context="swpossizepage|toframe">To _frame</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -291,7 +291,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Anchor</property>
+                <property name="label" translatable="yes" context="swpossizepage|label1">Anchor</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -332,7 +332,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Hori_zontal:</property>
+                    <property name="label" translatable="yes" context="swpossizepage|horiposft">Hori_zontal:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">horipos</property>
                   </object>
@@ -346,7 +346,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">b_y:</property>
+                    <property name="label" translatable="yes" context="swpossizepage|horibyft">b_y:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">byhori:0.00cm</property>
                   </object>
@@ -360,7 +360,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_by:</property>
+                    <property name="label" translatable="yes" context="swpossizepage|vertbyft">_by:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">byvert:0.00cm</property>
                   </object>
@@ -374,7 +374,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_to:</property>
+                    <property name="label" translatable="yes" context="swpossizepage|horitoft">_to:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">horianchor</property>
                   </object>
@@ -421,7 +421,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Vertical:</property>
+                    <property name="label" translatable="yes" context="swpossizepage|vertposft">_Vertical:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">vertpos</property>
                   </object>
@@ -458,7 +458,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">t_o:</property>
+                    <property name="label" translatable="yes" context="swpossizepage|verttoft">t_o:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">vertanchor</property>
                   </object>
@@ -479,7 +479,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="mirror">
-                    <property name="label" translatable="yes">_Mirror on even pages</property>
+                    <property name="label" translatable="yes" context="swpossizepage|mirror">_Mirror on even pages</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -496,7 +496,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="followtextflow">
-                    <property name="label" translatable="yes">Follow te_xt flow</property>
+                    <property name="label" translatable="yes" context="swpossizepage|followtextflow">Follow te_xt flow</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -519,7 +519,7 @@
           <object class="GtkLabel" id="label11">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Position</property>
+            <property name="label" translatable="yes" context="swpossizepage|label11">Position</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -550,7 +550,7 @@
                 <property name="column_spacing">18</property>
                 <child>
                   <object class="GtkCheckButton" id="pos">
-                    <property name="label" translatable="yes">Positio_n</property>
+                    <property name="label" translatable="yes" context="swpossizepage|pos">Positio_n</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -566,7 +566,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="size">
-                    <property name="label" translatable="yes">_Size</property>
+                    <property name="label" translatable="yes" context="swpossizepage|size">_Size</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -588,7 +588,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Protect</property>
+            <property name="label" translatable="yes" context="swpossizepage|label3">Protect</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

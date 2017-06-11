@@ -41,14 +41,13 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <comphelper/processfactory.hxx>
-#include <tools/resid.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fract.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 
-#include "svx/fmresids.hrc"
+#include "svx/strings.hrc"
 
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>

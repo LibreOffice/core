@@ -38,18 +38,10 @@
 #define FILE_PICKER_FILE_TYPE         504
 #define FILE_PICKER_OVERWRITE         505
 
-class CResourceProvider_Impl;
-
 class CResourceProvider
 {
 public:
-    CResourceProvider( );
-    ~CResourceProvider( );
-
     NSString* getResString( sal_Int32 aId );
-
-private:
-    std::unique_ptr<CResourceProvider_Impl> m_pImpl;
 };
 
 #endif

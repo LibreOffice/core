@@ -1,0 +1,148 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef CONNECTIVITY_STRINGS_HRC
+#define CONNECTIVITY_STRINGS_HRC
+
+#define NC_(Context, String) (Context "\004" u8##String)
+
+// = the mozab driver's resource strings
+#define STR_ERR_EXECUTING_QUERY                 NC_("STR_ERR_EXECUTING_QUERY", "An error occurred while executing the query.")
+#define STR_QUERY_AT_LEAST_ONE_TABLES           NC_("STR_QUERY_AT_LEAST_ONE_TABLES", "The query can not be executed. It needs at least one table.")
+#define STR_NO_COUNT_SUPPORT                    NC_("STR_NO_COUNT_SUPPORT", "The driver does not support the 'COUNT' function.")
+#define STR_STMT_TYPE_NOT_SUPPORTED             NC_("STR_STMT_TYPE_NOT_SUPPORTED", "This statement type not supported by this database driver.")
+#define STR_UNSPECIFIED_ERROR                   NC_("STR_UNSPECIFIED_ERROR", "An unknown error occurred.")
+#define STR_ERROR_REFRESH_ROW                   NC_("STR_ERROR_REFRESH_ROW", "An error occurred while refreshing the current row.")
+#define STR_ERROR_GET_ROW                       NC_("STR_ERROR_GET_ROW", "An error occurred while getting the current row.")
+#define STR_QUERY_INVALID_IS_NULL_COLUMN        NC_("STR_QUERY_INVALID_IS_NULL_COLUMN", "The query can not be executed. The 'IS NULL' can only be used with a column name.")
+#define STR_ILLEGAL_MOVEMENT                    NC_("STR_ILLEGAL_MOVEMENT", "Illegal cursor movement occurred.")
+#define STR_COMMIT_ROW                          NC_("STR_COMMIT_ROW", "Please commit row '$position$' before update rows or insert new rows.")
+// = common strings
+#define STR_NO_CONNECTION_GIVEN                 NC_("STR_NO_CONNECTION_GIVEN", "It doesn't exist a connection to the database.")
+#define STR_WRONG_PARAM_INDEX                   NC_("STR_WRONG_PARAM_INDEX", "You tried to set a parameter at position '$pos$' but there is/are only '$count$' parameter(s) allowed. One reason may be that the property \"ParameterNameSubstitution\" is not set to TRUE in the data source.")
+#define STR_NO_INPUTSTREAM                      NC_("STR_NO_INPUTSTREAM", "The input stream was not set.")
+#define STR_NO_ELEMENT_NAME                     NC_("STR_NO_ELEMENT_NAME", "There is no element named '$name$'.")
+#define STR_INVALID_BOOKMARK                    NC_("STR_INVALID_BOOKMARK", "Invalid bookmark value")
+#define STR_PRIVILEGE_NOT_GRANTED               NC_("STR_PRIVILEGE_NOT_GRANTED", "Privilege not granted: Only table privileges can be granted.")
+#define STR_PRIVILEGE_NOT_REVOKED               NC_("STR_PRIVILEGE_NOT_REVOKED", "Privilege not revoked: Only table privileges can be revoked.")
+#define STR_ERRORMSG_SEQUENCE                   NC_("STR_ERRORMSG_SEQUENCE", "Function sequence error.")
+#define STR_INVALID_INDEX                       NC_("STR_INVALID_INDEX", "Invalid descriptor index.")
+#define STR_UNSUPPORTED_FUNCTION                NC_("STR_UNSUPPORTED_FUNCTION", "The driver does not support the function '$functionname$'.")
+#define STR_UNSUPPORTED_FEATURE                 NC_("STR_UNSUPPORTED_FEATURE", "The driver does not support the functionality for '$featurename$'. It is not implemented.")
+#define STR_FORMULA_WRONG                       NC_("STR_FORMULA_WRONG", "The formula for TypeInfoSettings is wrong!")
+#define STR_STRING_LENGTH_EXCEEDED              NC_("STR_STRING_LENGTH_EXCEEDED", "The string '$string$' exceeds the maximum length of $maxlen$ characters when converted to the target character set '$charset$'.")
+#define STR_CANNOT_CONVERT_STRING               NC_("STR_CANNOT_CONVERT_STRING", "The string '$string$' cannot be converted using the encoding '$charset$'.")
+#define STR_URI_SYNTAX_ERROR                    NC_("STR_URI_SYNTAX_ERROR", "The connection URL is invalid.")
+#define STR_QUERY_TOO_COMPLEX                   NC_("STR_QUERY_TOO_COMPLEX", "The query can not be executed. It is too complex.")
+#define STR_OPERATOR_TOO_COMPLEX                NC_("STR_OPERATOR_TOO_COMPLEX", "The query can not be executed. The operator is too complex.")
+#define STR_QUERY_INVALID_LIKE_COLUMN           NC_("STR_QUERY_INVALID_LIKE_COLUMN", "The query can not be executed. You cannot use 'LIKE' with columns of this type.")
+#define STR_QUERY_INVALID_LIKE_STRING           NC_("STR_QUERY_INVALID_LIKE_STRING", "The query can not be executed. 'LIKE' can be used with a string argument only.")
+#define STR_QUERY_NOT_LIKE_TOO_COMPLEX          NC_("STR_QUERY_NOT_LIKE_TOO_COMPLEX", "The query can not be executed. The 'NOT LIKE' condition is too complex.")
+#define STR_QUERY_LIKE_WILDCARD                 NC_("STR_QUERY_LIKE_WILDCARD", "The query can not be executed. The 'LIKE' condition contains wildcard in the middle.")
+#define STR_QUERY_LIKE_WILDCARD_MANY            NC_("STR_QUERY_LIKE_WILDCARD_MANY", "The query can not be executed. The 'LIKE' condition contains too many wildcards.")
+#define STR_INVALID_COLUMNNAME                  NC_("STR_INVALID_COLUMNNAME", "The column name '$columnname$' is not valid.")
+#define STR_INVALID_COLUMN_SELECTION            NC_("STR_INVALID_COLUMN_SELECTION", "The statement contains an invalid selection of columns.")
+#define STR_COLUMN_NOT_UPDATEABLE               NC_("STR_COLUMN_NOT_UPDATEABLE", "The column at position '$position$' could not be updated.")
+#define STR_COULD_NOT_LOAD_FILE                 NC_("STR_COULD_NOT_LOAD_FILE", "The file $filename$ could not be loaded.")
+#define STR_LOAD_FILE_ERROR_MESSAGE             NC_("STR_LOAD_FILE_ERROR_MESSAGE", "The attempt to load the file resulted in the following error message ($exception_type$):\n\n$error_message$")
+// = the ado driver's resource strings
+#define STR_TYPE_NOT_CONVERT                    NC_("STR_TYPE_NOT_CONVERT", "The type could not be converted.")
+#define STR_INVALID_COLUMN_DESCRIPTOR_ERROR     NC_("STR_INVALID_COLUMN_DESCRIPTOR_ERROR", "Could not append column: invalid column descriptor.")
+#define STR_INVALID_GROUP_DESCRIPTOR_ERROR      NC_("STR_INVALID_GROUP_DESCRIPTOR_ERROR", "Could not create group: invalid object descriptor.")
+#define STR_INVALID_INDEX_DESCRIPTOR_ERROR      NC_("STR_INVALID_INDEX_DESCRIPTOR_ERROR", "Could not create index: invalid object descriptor.")
+#define STR_INVALID_KEY_DESCRIPTOR_ERROR        NC_("STR_INVALID_KEY_DESCRIPTOR_ERROR", "Could not create key: invalid object descriptor.")
+#define STR_INVALID_TABLE_DESCRIPTOR_ERROR      NC_("STR_INVALID_TABLE_DESCRIPTOR_ERROR", "Could not create table: invalid object descriptor.")
+#define STR_INVALID_USER_DESCRIPTOR_ERROR       NC_("STR_INVALID_USER_DESCRIPTOR_ERROR", "Could not create user: invalid object descriptor.")
+#define STR_INVALID_VIEW_DESCRIPTOR_ERROR       NC_("STR_INVALID_VIEW_DESCRIPTOR_ERROR", "Could not create view: invalid object descriptor.")
+#define STR_VIEW_NO_COMMAND_ERROR               NC_("STR_VIEW_NO_COMMAND_ERROR", "Could not create view: no command object.")
+#define STR_NO_CONNECTION                       NC_("STR_NO_CONNECTION", "The connection could not be created. May be the necessary data provider is not installed.")
+// dbase
+#define STR_COULD_NOT_DELETE_INDEX              NC_("STR_COULD_NOT_DELETE_INDEX", "The index could not be deleted. An unknown error while accessing the file system occurred.")
+#define STR_ONL_ONE_COLUMN_PER_INDEX            NC_("STR_ONL_ONE_COLUMN_PER_INDEX", "The index could not be created. Only one column per index is allowed.")
+#define STR_COULD_NOT_CREATE_INDEX_NOT_UNIQUE   NC_("STR_COULD_NOT_CREATE_INDEX_NOT_UNIQUE", "The index could not be created. The values are not unique.")
+#define STR_COULD_NOT_CREATE_INDEX              NC_("STR_COULD_NOT_CREATE_INDEX", "The index could not be created. An unknown error appeared.")
+#define STR_COULD_NOT_CREATE_INDEX_NAME         NC_("STR_COULD_NOT_CREATE_INDEX_NAME", "The index could not be created. The file '$filename$' is used by an other index.")
+#define STR_COULD_NOT_CREATE_INDEX_KEYSIZE      NC_("STR_COULD_NOT_CREATE_INDEX_KEYSIZE", "The index could not be created. The size of the chosen column is too big.")
+#define STR_SQL_NAME_ERROR                      NC_("STR_SQL_NAME_ERROR", "The name '$name$' doesn't match SQL naming constraints.")
+#define STR_COULD_NOT_DELETE_FILE               NC_("STR_COULD_NOT_DELETE_FILE", "The file $filename$ could not be deleted.")
+#define STR_INVALID_COLUMN_TYPE                 NC_("STR_INVALID_COLUMN_TYPE", "Invalid column type for column '$columnname$'.")
+#define STR_INVALID_COLUMN_PRECISION            NC_("STR_INVALID_COLUMN_PRECISION", "Invalid precision for column '$columnname$'.")
+#define STR_INVALID_PRECISION_SCALE             NC_("STR_INVALID_PRECISION_SCALE", "Precision is less than scale for column '$columnname$'.")
+#define STR_INVALID_COLUMN_NAME_LENGTH          NC_("STR_INVALID_COLUMN_NAME_LENGTH", "Invalid column name length for column '$columnname$'.")
+#define STR_DUPLICATE_VALUE_IN_COLUMN           NC_("STR_DUPLICATE_VALUE_IN_COLUMN", "Duplicate value found in column '$columnname$'.")
+#define STR_INVALID_COLUMN_DECIMAL_VALUE        NC_("STR_INVALID_COLUMN_DECIMAL_VALUE", "The '$columnname$' column has been defined as a \"Decimal\" type, the max. length is $precision$ characters (with $scale$ decimal places).\n\nThe specified value \"$value$ is longer than the number of digits allowed.")
+#define STR_COLUMN_NOT_ALTERABLE                NC_("STR_COLUMN_NOT_ALTERABLE", "The column '$columnname$' could not be altered. May be the file system is write protected.")
+#define STR_INVALID_COLUMN_VALUE                NC_("STR_INVALID_COLUMN_VALUE", "The column '$columnname$' could not be updated. The value is invalid for that column.")
+#define STR_COLUMN_NOT_ADDABLE                  NC_("STR_COLUMN_NOT_ADDABLE", "The column '$columnname$' could not be added. May be the file system is write protected.")
+#define STR_COLUMN_NOT_DROP                     NC_("STR_COLUMN_NOT_DROP", "The column at position '$position$' could not be dropped. May be the file system is write protected.")
+#define STR_TABLE_NOT_DROP                      NC_("STR_TABLE_NOT_DROP", "The table '$tablename$' could not be dropped. May be the file system is write protected.")
+#define STR_COULD_NOT_ALTER_TABLE               NC_("STR_COULD_NOT_ALTER_TABLE", "The table could not be altered.")
+#define STR_INVALID_DBASE_FILE                  NC_("STR_INVALID_DBASE_FILE", "The file '$filename$' is an invalid (or unrecognized) dBase file.")
+// Evoab2
+#define STR_CANNOT_OPEN_BOOK                    NC_("STR_CANNOT_OPEN_BOOK", "Cannot open Evolution address book.")
+#define STR_SORT_BY_COL_ONLY                    NC_("STR_SORT_BY_COL_ONLY", "Can only sort by table columns.")
+// File
+#define STR_QUERY_COMPLEX_COUNT                 NC_("STR_QUERY_COMPLEX_COUNT", "The query can not be executed. It is too complex. Only \"COUNT(*)\" is supported.")
+#define STR_QUERY_INVALID_BETWEEN               NC_("STR_QUERY_INVALID_BETWEEN", "The query can not be executed. The 'BETWEEN' arguments are not correct.")
+#define STR_QUERY_FUNCTION_NOT_SUPPORTED        NC_("STR_QUERY_FUNCTION_NOT_SUPPORTED", "The query can not be executed. The function is not supported.")
+#define STR_TABLE_READONLY                      NC_("STR_TABLE_READONLY", "The table can not be changed. It is read only.")
+#define STR_DELETE_ROW                          NC_("STR_DELETE_ROW", "The row could not be deleted. The option \"Display inactive records\" is set.")
+#define STR_ROW_ALREADY_DELETED                 NC_("STR_ROW_ALREADY_DELETED", "The row could not be deleted. It is already deleted.")
+#define STR_QUERY_MORE_TABLES                   NC_("STR_QUERY_MORE_TABLES", "The query can not be executed. It contains more than one table.")
+#define STR_QUERY_NO_TABLE                      NC_("STR_QUERY_NO_TABLE", "The query can not be executed. It contains no valid table.")
+#define STR_QUERY_NO_COLUMN                     NC_("STR_QUERY_NO_COLUMN", "The query can not be executed. It contains no valid columns.")
+#define STR_INVALID_PARA_COUNT                  NC_("STR_INVALID_PARA_COUNT", "The count of the given parameter values doesn't match the parameters.")
+#define STR_NO_VALID_FILE_URL                   NC_("STR_NO_VALID_FILE_URL", "The URL '$URL$' is not valid. A connection can not be created.")
+#define STR_NO_CLASSNAME                        NC_("STR_NO_CLASSNAME", "The driver class '$classname$' could not be loaded.")
+#define STR_NO_JAVA                             NC_("STR_NO_JAVA", "No Java installation could be found. Please check your installation.")
+#define STR_NO_RESULTSET                        NC_("STR_NO_RESULTSET", "The execution of the query doesn't return a valid result set.")
+#define STR_NO_ROWCOUNT                         NC_("STR_NO_ROWCOUNT", "The execution of the update statement doesn't effect any rows.")
+#define STR_NO_CLASSNAME_PATH                   NC_("STR_NO_CLASSNAME_PATH", "The additional driver class path is '$classpath$'.")
+#define STR_UNKNOWN_PARA_TYPE                   NC_("STR_UNKNOWN_PARA_TYPE", "The type of parameter at position '$position$' is unknown.")
+#define STR_UNKNOWN_COLUMN_TYPE                 NC_("STR_UNKNOWN_COLUMN_TYPE", "The type of column at position '$position$' is unknown.")
+// KAB
+#define STR_NO_KDE_INST                         NC_("STR_NO_KDE_INST", "No suitable KDE installation was found.")
+#define STR_KDE_VERSION_TOO_OLD                 NC_("STR_KDE_VERSION_TOO_OLD", "KDE version $major$.$minor$ or higher is required to access the KDE Address Book.")
+#define STR_KDE_VERSION_TOO_NEW                 NC_("STR_KDE_VERSION_TOO_NEW", "The found KDE version is too new. Only KDE up to version $major$.$minor$ is known to work with this product.\n")
+#define STR_KDE_VERSION_TOO_NEW_WORK_AROUND     NC_("STR_KDE_VERSION_TOO_NEW_WORK_AROUND", "If you are sure that your KDE version works, you might execute the following Basic macro to disable this version check:\n\n")
+#define STR_PARA_ONLY_PREPARED                  NC_("STR_PARA_ONLY_PREPARED", "Parameters can appear only in prepared statements.")
+// MACAB
+#define STR_NO_TABLE                            NC_("STR_NO_TABLE", "No such table!")
+#define STR_NO_MAC_OS_FOUND                     NC_("STR_NO_MAC_OS_FOUND", "No suitable Mac OS installation was found.")
+// hsqldb
+#define STR_NO_STORAGE                          NC_("STR_NO_STORAGE", "The connection can not be established. No storage or URL was given.")
+#define STR_INVALID_FILE_URL                    NC_("STR_INVALID_FILE_URL", "The given URL contains no valid local file system path. Please check the location of your database file.")
+#define STR_NO_TABLE_CONTAINER                  NC_("STR_NO_TABLE_CONTAINER", "An error occurred while obtaining the connection's table container.")
+#define STR_NO_TABLENAME                        NC_("STR_NO_TABLENAME", "There is no table named '$tablename$'.")
+#define STR_NO_DOCUMENTUI                       NC_("STR_NO_DOCUMENTUI", "The provided DocumentUI is not allowed to be NULL.")
+#define STR_ERROR_NEW_VERSION                   NC_("STR_ERROR_NEW_VERSION", "The connection could not be established. The database was created by a newer version of %PRODUCTNAME.")
+
+#define STR_ROW_SET_OPERATION_VETOED            NC_("STR_ROW_SET_OPERATION_VETOED", "The record operation has been vetoed.")
+#define STR_PARSER_CYCLIC_SUB_QUERIES           NC_("STR_PARSER_CYCLIC_SUB_QUERIES", "The statement contains a cyclic reference to one or more sub queries.")
+#define STR_DB_OBJECT_NAME_WITH_SLASHES         NC_("STR_DB_OBJECT_NAME_WITH_SLASHES", "The name must not contain any slashes ('/').")
+#define STR_DB_INVALID_SQL_NAME                 NC_("STR_DB_INVALID_SQL_NAME", "$1$ is no SQL conform identifier.")
+#define STR_DB_QUERY_NAME_WITH_QUOTES           NC_("STR_DB_QUERY_NAME_WITH_QUOTES", "Query names must not contain quote characters.")
+#define STR_DB_OBJECT_NAME_IS_USED              NC_("STR_DB_OBJECT_NAME_IS_USED", "The name '$1$' is already in use in the database.")
+#define STR_DB_NOT_CONNECTED                    NC_("STR_DB_NOT_CONNECTED", "No connection to the database exists.")
+#define STR_AB_ADDRESSBOOK_NOT_FOUND            NC_("STR_AB_ADDRESSBOOK_NOT_FOUND", "No $1$ exists.")
+#define STR_DATA_CANNOT_SELECT_UNFILTERED       NC_("STR_DATA_CANNOT_SELECT_UNFILTERED", "Unable to display the complete table content. Please apply a filter.")
+
+#endif // CONNECTIVITY_RESOURCE_MOZAB_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
