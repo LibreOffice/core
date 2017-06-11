@@ -63,7 +63,7 @@
 #include <sfx2/viewfrm.hxx>
 #include "appdata.hxx"
 #include "openflag.hxx"
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/module.hxx>
 #include <sfx2/event.hxx>
 #include "imestatuswindow.hxx"
@@ -343,9 +343,9 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
         pFrame->GetViewShell()->SetCurrentDocument();
 }
 
-ResMgr* SfxApplication::GetSfxResManager()
+std::locale* SfxApplication::GetSfxResLocale()
 {
-    return SfxResMgr::GetResMgr();
+    return SfxResLocale::GetResLocale();
 }
 
 void SfxApplication::SetProgress_Impl

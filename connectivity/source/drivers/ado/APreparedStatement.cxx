@@ -30,7 +30,7 @@
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
-#include "resource/ado_res.hrc"
+#include "strings.hrc"
 
 #include <limits>
 

@@ -18,20 +18,17 @@
  */
 
 #include "ResourceManager.hxx"
-
-#include <tools/resmgr.hxx>
+#include <tools/simplerm.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 namespace chart
 {
 
-ResMgr & ResourceManager::getResourceManager()
+const std::locale& ResourceManager::getResourceLocale()
 {
-    // not threadsafe
-    static ResMgr * pResourceManager = nullptr;
-    if( ! pResourceManager )
-        pResourceManager = ResMgr::CreateResMgr("chartcontroller");
-    OSL_ASSERT( pResourceManager );
-    return *pResourceManager;
+    static std::locale loc = Translate::Create("chart", Application::GetSettings().GetUILanguageTag());
+    return loc;
 }
 
 } //  namespace chart

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "core_resource.hxx"
 #include "FieldDescControl.hxx"
 #include "FieldControls.hxx"
 #include <tools/diagnose_ex.h>
@@ -50,8 +51,7 @@
 #include <comphelper/numbers.hxx>
 #include <comphelper/string.hxx>
 #include "UITools.hxx"
-#include "dbu_control.hrc"
-#include "dbu_tbl.hrc"
+#include "strings.hrc"
 #include <osl/diagnose.h>
 
 using namespace dbaui;
@@ -124,8 +124,8 @@ OFieldDescControl::OFieldDescControl( vcl::Window* pParent, OTableDesignHelpBar*
     ,m_pHorzScroll( nullptr )
     ,m_pPreviousType()
     ,m_nPos(-1)
-    ,aYes(ModuleRes(STR_VALUE_YES))
-    ,aNo(ModuleRes(STR_VALUE_NO))
+    ,aYes(DBA_RES(STR_VALUE_YES))
+    ,aNo(DBA_RES(STR_VALUE_NO))
     ,m_nOldVThumb( 0 )
     ,m_nOldHThumb( 0 )
     ,m_nWidth(50)
@@ -232,7 +232,7 @@ OUString OFieldDescControl::BoolStringUI(const OUString& rPersistentString) cons
     if (rPersistentString == "1")
         return aYes;
 
-    return ModuleRes(STR_VALUE_NONE);
+    return DBA_RES(STR_VALUE_NONE);
 }
 
 void OFieldDescControl::Init()
@@ -581,7 +581,7 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox&, rListBox, void )
 
         if(pRequired->GetSelectEntryPos() == 0) // Yes
         {
-            pBoolDefault->RemoveEntry(OUString(ModuleRes(STR_VALUE_NONE)));
+            pBoolDefault->RemoveEntry(DBA_RES(STR_VALUE_NONE));
             if (sDef != aYes && sDef != aNo)
                 pBoolDefault->SelectEntryPos(1);  // No as a default
             else
@@ -589,7 +589,7 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox&, rListBox, void )
         }
         else if(pBoolDefault->GetEntryCount() < 3)
         {
-            pBoolDefault->InsertEntry(OUString(ModuleRes(STR_VALUE_NONE)));
+            pBoolDefault->InsertEntry(DBA_RES(STR_VALUE_NONE));
             pBoolDefault->SelectEntry(sDef);
         }
     }
@@ -869,7 +869,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             InitializeControl(pFormatSample,HID_TAB_ENT_FORMAT_SAMPLE,false);
 
             pFormat = VclPtr<PushButton>::Create(this, WB_TABSTOP);
-            pFormat->SetText(ModuleRes(STR_BUTTON_FORMAT));
+            pFormat->SetText(DBA_RES(STR_BUTTON_FORMAT));
             const sal_Int32 nControlHeight = GetMaxControlHeight();
             pFormat->SetSizePixel(Size(nControlHeight, nControlHeight));
             pFormat->SetClickHdl( LINK( this, OFieldDescControl, FormatClickHdl ) );
@@ -887,7 +887,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pBoolDefaultText = CreateText(STR_DEFAULT_VALUE);
         pBoolDefault = VclPtr<OPropListBoxCtrl>::Create( this, STR_HELP_BOOL_DEFAULT, FIELD_PROPERTY_BOOL_DEFAULT, WB_DROPDOWN );
         pBoolDefault->SetDropDownLineCount(3);
-        pBoolDefault->InsertEntry(OUString(ModuleRes(STR_VALUE_NONE)));
+        pBoolDefault->InsertEntry(DBA_RES(STR_VALUE_NONE));
         pBoolDefault->InsertEntry(aYes);
         pBoolDefault->InsertEntry(aNo);
 
@@ -907,17 +907,17 @@ void OFieldDescControl::InitializeControl(Control* _pControl,const OString& _sHe
     _pControl->EnableClipSiblings();
 }
 
-VclPtr<FixedText> OFieldDescControl::CreateText(sal_uInt16 _nTextRes)
+VclPtr<FixedText> OFieldDescControl::CreateText(const char* pTextRes)
 {
     VclPtrInstance<FixedText> pFixedText( this );
-    pFixedText->SetText( ModuleRes(_nTextRes) );
+    pFixedText->SetText(DBA_RES(pTextRes));
     pFixedText->EnableClipSiblings();
     return pFixedText;
 }
 
-VclPtr<OPropNumericEditCtrl> OFieldDescControl::CreateNumericControl(sal_uInt16 _nHelpStr,short _nProperty,const OString& _sHelpId)
+VclPtr<OPropNumericEditCtrl> OFieldDescControl::CreateNumericControl(const char* pHelpId, short _nProperty, const OString& _sHelpId)
 {
-    VclPtrInstance<OPropNumericEditCtrl> pControl( this, _nHelpStr, _nProperty, WB_BORDER );
+    VclPtrInstance<OPropNumericEditCtrl> pControl(this, pHelpId, _nProperty, WB_BORDER);
     pControl->SetDecimalDigits(0);
     pControl->SetMin(0);
     pControl->SetMax(0x7FFFFFFF);   // Should be changed outside, if needed
@@ -1296,7 +1296,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         {
             pFieldDescr->SetIsNullable(ColumnValue::NO_NULLS); // The type says so
 
-            pBoolDefault->RemoveEntry(OUString(ModuleRes(STR_VALUE_NONE)));
+            pBoolDefault->RemoveEntry(DBA_RES(STR_VALUE_NONE));
             if ( sDef != aYes && sDef != aNo )
                 pBoolDefault->SelectEntryPos(1);  // No as a default
             else
@@ -1306,7 +1306,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         }
         else if(pBoolDefault->GetEntryCount() < 3)
         {
-            pBoolDefault->InsertEntry(OUString(ModuleRes(STR_VALUE_NONE)));
+            pBoolDefault->InsertEntry(DBA_RES(STR_VALUE_NONE));
             pBoolDefault->SelectEntry(sDef);
         }
         else
@@ -1413,7 +1413,7 @@ IMPL_LINK(OFieldDescControl, OnControlFocusGot, Control&, rControl, void )
     }
 
     if (&rControl == pFormat)
-        strHelpText = ModuleRes(STR_HELP_FORMAT_BUTTON);
+        strHelpText = DBA_RES(STR_HELP_FORMAT_BUTTON);
 
     if (!strHelpText.isEmpty() && (pHelp != nullptr))
         pHelp->SetHelpText(strHelpText);
