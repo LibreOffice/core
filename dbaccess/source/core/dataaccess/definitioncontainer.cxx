@@ -18,10 +18,10 @@
  */
 
 #include "definitioncontainer.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include "apitools.hxx"
 #include "core_resource.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

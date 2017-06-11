@@ -44,7 +44,7 @@
 #include <expfld.hxx>
 #include <shellres.hxx>
 #include <calc.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <docary.hxx>
 #include <authfld.hxx>
 #include <calbck.hxx>

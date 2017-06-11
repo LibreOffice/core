@@ -22,29 +22,29 @@
 #include "reffact.hxx"
 #include "docfunc.hxx"
 #include "TableFillingAndNavigationTools.hxx"
-
 #include "AnalysisOfVarianceDialog.hxx"
+#include "strings.hrc"
 
 namespace
 {
 
 struct StatisticCalculation {
-    sal_Int16   aLabelId;
+    const char* aLabelId;
     const char* aFormula;
     const char* aResultRangeName;
 };
 
 static StatisticCalculation lclBasicStatistics[] =
 {
-    { STR_ANOVA_LABEL_GROUPS, nullptr,                nullptr          },
+    { STR_ANOVA_LABEL_GROUPS, nullptr,             nullptr       },
     { STRID_CALC_COUNT,       "=COUNT(%RANGE%)",   "COUNT_RANGE" },
     { STRID_CALC_SUM,         "=SUM(%RANGE%)",     "SUM_RANGE"   },
     { STRID_CALC_MEAN,        "=AVERAGE(%RANGE%)", "MEAN_RANGE"  },
     { STRID_CALC_VARIANCE,    "=VAR(%RANGE%)",     "VAR_RANGE"   },
-    { 0,                      nullptr,                nullptr          }
+    { nullptr,                nullptr,             nullptr       }
 };
 
-static sal_Int16 lclAnovaLabels[] =
+static const char* lclAnovaLabels[] =
 {
     STR_ANOVA_LABEL_SOURCE_OF_VARIATION,
     STR_ANOVA_LABEL_SS,
@@ -53,7 +53,7 @@ static sal_Int16 lclAnovaLabels[] =
     STR_ANOVA_LABEL_F,
     STR_ANOVA_LABEL_P_VALUE,
     STR_ANOVA_LABEL_F_CRITICAL,
-    0
+    nullptr
 };
 
 static const char strWildcardRange[] = "%RANGE%";
@@ -133,7 +133,7 @@ bool ScAnalysisOfVarianceDialog::Close()
     return DoClose( ScAnalysisOfVarianceDialogWrapper::GetChildWindowId() );
 }
 
-sal_Int16 ScAnalysisOfVarianceDialog::GetUndoNameId()
+const char* ScAnalysisOfVarianceDialog::GetUndoNameId()
 {
     return STR_ANALYSIS_OF_VARIANCE_UNDO_NAME;
 }
@@ -181,8 +181,8 @@ void ScAnalysisOfVarianceDialog::RowColumn(ScRangeList& rRangeList, AddressWalke
     }
     else
     {
-        sal_Int16 aLabelId = (aGroupedBy == BY_COLUMN) ? STR_COLUMN_LABEL_TEMPLATE : STR_ROW_LABEL_TEMPLATE;
-        OUString aLabelTemplate(ScResId(aLabelId));
+        const char* pLabelId = (aGroupedBy == BY_COLUMN) ? STR_COLUMN_LABEL_TEMPLATE : STR_ROW_LABEL_TEMPLATE;
+        OUString aLabelTemplate(ScResId(pLabelId));
 
         for (size_t i = 0; i < rRangeList.size(); i++)
         {
@@ -210,7 +210,7 @@ void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, 
     output.newLine();
 
     // Write labels
-    for(sal_Int32 i = 0; lclBasicStatistics[i].aLabelId != 0; i++)
+    for(sal_Int32 i = 0; lclBasicStatistics[i].aLabelId; i++)
     {
         output.writeString(ScResId(lclBasicStatistics[i].aLabelId));
         output.nextColumn();
@@ -224,7 +224,7 @@ void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, 
     output.push();
 
     // Write values
-    for(sal_Int32 i = 0; lclBasicStatistics[i].aLabelId != 0; i++)
+    for(sal_Int32 i = 0; lclBasicStatistics[i].aLabelId; i++)
     {
         output.resetRow();
         ScRange aResultRange;
@@ -242,7 +242,7 @@ void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, 
 
     // Write ANOVA labels
     output.resetColumn();
-    for(sal_Int32 i = 0; lclAnovaLabels[i] != 0; i++)
+    for(sal_Int32 i = 0; lclAnovaLabels[i]; i++)
     {
         output.writeString(ScResId(lclAnovaLabels[i]));
         output.nextColumn();
@@ -358,7 +358,7 @@ void ScAnalysisOfVarianceDialog::AnovaTwoFactor(AddressWalkerWriter& output, For
     output.newLine();
 
     // Write labels
-    for(sal_Int32 i = 0; lclBasicStatistics[i].aLabelId != 0; i++)
+    for(sal_Int32 i = 0; lclBasicStatistics[i].aLabelId; i++)
     {
         output.writeString(ScResId(lclBasicStatistics[i].aLabelId));
         output.nextColumn();
@@ -373,7 +373,7 @@ void ScAnalysisOfVarianceDialog::AnovaTwoFactor(AddressWalkerWriter& output, For
 
     // Write ColumnX values
     output.push();
-    for(sal_Int32 i = 0; lclBasicStatistics[i].aLabelId != 0; i++)
+    for(sal_Int32 i = 0; lclBasicStatistics[i].aLabelId; i++)
     {
         output.resetRow();
         ScRange aResultRange;
@@ -390,7 +390,7 @@ void ScAnalysisOfVarianceDialog::AnovaTwoFactor(AddressWalkerWriter& output, For
 
     // Write RowX values
     output.push();
-    for(sal_Int32 i = 0; lclBasicStatistics[i].aLabelId != 0; i++)
+    for(sal_Int32 i = 0; lclBasicStatistics[i].aLabelId; i++)
     {
         output.resetRow();
         ScRange aResultRange;
@@ -407,7 +407,7 @@ void ScAnalysisOfVarianceDialog::AnovaTwoFactor(AddressWalkerWriter& output, For
     output.newLine();
 
     // Write ANOVA labels
-    for(sal_Int32 i = 0; lclAnovaLabels[i] != 0; i++)
+    for(sal_Int32 i = 0; lclAnovaLabels[i]; i++)
     {
         output.writeString(ScResId(lclAnovaLabels[i]));
         output.nextColumn();

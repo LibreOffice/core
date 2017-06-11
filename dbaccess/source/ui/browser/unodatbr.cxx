@@ -18,14 +18,15 @@
  */
 
 #include "browserids.hxx"
+#include "core_resource.hxx"
 #include "dbaccess_helpid.hrc"
 #include "dbexchange.hxx"
 #include "dbtreelistbox.hxx"
 #include "dbtreemodel.hxx"
 #include "dbtreeview.hxx"
-#include "dbu_brw.hrc"
 #include "dbu_reghelper.hxx"
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
+#include "strings.hrc"
 #include "dlgsave.hxx"
 #include "uiservices.hxx"
 #include "HtmlReader.hxx"
@@ -1778,10 +1779,10 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                     switch (nCommandType)
                     {
                         case CommandType::TABLE:
-                            sTitle = OUString(ModuleRes(STR_TBL_TITLE)); break;
+                            sTitle = DBA_RES(STR_TBL_TITLE); break;
                         case CommandType::QUERY:
                         case CommandType::COMMAND:
-                            sTitle = OUString(ModuleRes(STR_QRY_TITLE)); break;
+                            sTitle = DBA_RES(STR_QRY_TITLE); break;
                         default:
                             SAL_WARN("dbaccess.ui", "SbaTableQueryBrowser::GetState: unknown command type!");
                     }
@@ -2028,9 +2029,9 @@ void SbaTableQueryBrowser::implAddDatasource(const OUString& _rDbName, Image& _r
     SolarMutexGuard aGuard;
     // initialize the names/images if necessary
     if (_rQueryName.isEmpty())
-        _rQueryName = OUString(ModuleRes(RID_STR_QUERIES_CONTAINER));
+        _rQueryName = DBA_RES(RID_STR_QUERIES_CONTAINER);
     if (_rTableName.isEmpty())
-        _rTableName = OUString(ModuleRes(RID_STR_TABLES_CONTAINER));
+        _rTableName = DBA_RES(RID_STR_TABLES_CONTAINER);
 
     ImageProvider aImageProvider;
     if (!_rQueryImage)
@@ -2204,8 +2205,8 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvTreeListEntry*, _pParent, bool)
                     if (aWarnings.isValid() && sal_False)
                     {
                         SQLContext aContext;
-                        aContext.Message = String(ModuleRes(STR_OPENTABLES_WARNINGS));
-                        aContext.Details = String(ModuleRes(STR_OPENTABLES_WARNINGS_DETAILS));
+                        aContext.Message = DBA_RES(STR_OPENTABLES_WARNINGS);
+                        aContext.Details = DBA_RES(STR_OPENTABLES_WARNINGS_DETAILS);
                         aContext.NextException = aWarnings.get();
                         aWarnings = aContext;
                         showError(aWarnings);
@@ -2615,7 +2616,7 @@ bool SbaTableQueryBrowser::implSelect( SvTreeListEntry* _pEntry )
                     }
                     break;
             }
-            OUString sStatus(ModuleRes( CommandType::TABLE == nCommandType ? STR_LOADING_TABLE : STR_LOADING_QUERY ));
+            OUString sStatus(DBA_RES(CommandType::TABLE == nCommandType ? STR_LOADING_TABLE : STR_LOADING_QUERY));
             sStatus = sStatus.replaceFirst("$name$", aName);
             BrowserViewStatusDisplay aShowStatus(static_cast<UnoDataBrowserView*>(getView()), sStatus);
 
@@ -3318,12 +3319,12 @@ bool SbaTableQueryBrowser::ensureConnection( SvTreeListEntry* _pDSEntry, void* p
         if ( !_rConnection.is() && pTreeListData )
         {
             // show the "connecting to ..." status
-            OUString sConnecting(ModuleRes(STR_CONNECTING_DATASOURCE));
+            OUString sConnecting(DBA_RES(STR_CONNECTING_DATASOURCE));
             sConnecting = sConnecting.replaceFirst("$name$", aDSName);
             BrowserViewStatusDisplay aShowStatus(static_cast<UnoDataBrowserView*>(getView()), sConnecting);
 
             // build a string showing context information in case of error
-            OUString sConnectingContext( ModuleRes( STR_COULDNOTCONNECT_DATASOURCE ) );
+            OUString sConnectingContext(DBA_RES(STR_COULDNOTCONNECT_DATASOURCE));
             sConnectingContext = sConnectingContext.replaceFirst("$name$", aDSName);
 
             // connect
@@ -3360,9 +3361,9 @@ IMPL_LINK( SbaTableQueryBrowser, OnTreeEntryCompare, const SvSortData&, _rSortDa
         const OUString sLeft = m_pTreeView->getListBox().GetEntryText(const_cast<SvTreeListEntry*>(pLHS));
 
         EntryType eLeft = etTableContainer;
-        if (OUString(ModuleRes(RID_STR_TABLES_CONTAINER)) == sLeft)
+        if (DBA_RES(RID_STR_TABLES_CONTAINER) == sLeft)
             eLeft = etTableContainer;
-        else if (OUString(ModuleRes(RID_STR_QUERIES_CONTAINER)) == sLeft)
+        else if (DBA_RES(RID_STR_QUERIES_CONTAINER) == sLeft)
             eLeft = etQueryContainer;
 
         if ( eLeft == eRight )

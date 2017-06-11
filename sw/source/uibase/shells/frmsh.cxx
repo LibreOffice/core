@@ -73,7 +73,7 @@
 #include <cmdid.h>
 #include <cfgitems.hxx>
 #include <globals.hrc>
-#include <shells.hrc>
+#include <strings.hrc>
 #include "swabstdlg.hxx"
 #include "misc.hrc"
 
@@ -771,16 +771,16 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                             {
                                 case SID_OBJECT_ALIGN_UP     :
                                 case FN_FRAME_ALIGN_VERT_TOP:
-                                    sNewLabel = SwResId(STR_TOP_BASE);
+                                    sNewLabel = SwResId(STR_FRMUI_TOP_BASE);
                                     break;
                                 case SID_OBJECT_ALIGN_MIDDLE :
                                 case FN_FRAME_ALIGN_VERT_CENTER:
-                                    sNewLabel = SwResId(STR_CENTER_BASE);
+                                    sNewLabel = SwResId(STR_FRMUI_CENTER_BASE);
                                     break;
                                 case SID_OBJECT_ALIGN_DOWN :
                                 case FN_FRAME_ALIGN_VERT_BOTTOM:
                                     if(!bHtmlMode)
-                                        sNewLabel = SwResId(STR_BOTTOM_BASE);
+                                        sNewLabel = SwResId(STR_FRMUI_BOTTOM_BASE);
                                     else
                                         rSet.DisableItem( nWhich );
                                 break;

@@ -25,7 +25,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,xmlsecurity,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,xmlsecurity,\
-	AllLangResTarget_xsec \
+	AllLangMoTarget_xsc \
 	UIConfig_xmlsec \
 ))
 

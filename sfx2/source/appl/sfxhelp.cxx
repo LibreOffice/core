@@ -60,7 +60,7 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/sfxresid.hxx>
 #include "helper.hxx"
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/sfxuno.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/frame.hxx>

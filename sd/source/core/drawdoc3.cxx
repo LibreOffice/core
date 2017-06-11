@@ -42,7 +42,7 @@
 #include <sot/formats.hxx>
 #include <xmloff/autolayout.hxx>
 
-#include "glob.hrc"
+#include "strings.hrc"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "stlpool.hxx"

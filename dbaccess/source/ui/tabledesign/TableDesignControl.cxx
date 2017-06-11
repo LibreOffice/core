@@ -18,7 +18,7 @@
  */
 
 #include "TableDesignControl.hxx"
-#include "dbu_tbl.hrc"
+#include "strings.hrc"
 #include "TableDesignView.hxx"
 #include "TableController.hxx"
 #include "browserids.hxx"

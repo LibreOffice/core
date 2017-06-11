@@ -113,7 +113,7 @@
 #include "appopen.hxx"
 #include "objshimp.hxx"
 #include "sfxtypes.hxx"
-#include "doc.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/module.hxx>
 #include <sfx2/dispatch.hxx>
@@ -126,8 +126,6 @@
 #include "appbaslib.hxx"
 #include "appdata.hxx"
 #include <objstor.hxx>
-
-#include "app.hrc"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
@@ -2864,32 +2862,32 @@ HiddenInformation SfxObjectShell::GetHiddenInformationState( HiddenInformation n
 sal_Int16 SfxObjectShell::QueryHiddenInformation( HiddenWarningFact eFact, vcl::Window* pParent )
 {
     sal_Int16 nRet = RET_YES;
-    sal_uInt16 nResId = sal_uInt16();
+    const char* pResId = nullptr;
     SvtSecurityOptions::EOption eOption = SvtSecurityOptions::EOption();
 
     switch ( eFact )
     {
         case HiddenWarningFact::WhenSaving :
         {
-            nResId = STR_HIDDENINFO_CONTINUE_SAVING;
+            pResId = STR_HIDDENINFO_CONTINUE_SAVING;
             eOption = SvtSecurityOptions::EOption::DocWarnSaveOrSend;
             break;
         }
         case HiddenWarningFact::WhenPrinting :
         {
-            nResId = STR_HIDDENINFO_CONTINUE_PRINTING;
+            pResId = STR_HIDDENINFO_CONTINUE_PRINTING;
             eOption = SvtSecurityOptions::EOption::DocWarnPrint;
             break;
         }
         case HiddenWarningFact::WhenSigning :
         {
-            nResId = STR_HIDDENINFO_CONTINUE_SIGNING;
+            pResId = STR_HIDDENINFO_CONTINUE_SIGNING;
             eOption = SvtSecurityOptions::EOption::DocWarnSigning;
             break;
         }
         case HiddenWarningFact::WhenCreatingPDF :
         {
-            nResId = STR_HIDDENINFO_CONTINUE_CREATEPDF;
+            pResId = STR_HIDDENINFO_CONTINUE_CREATEPDF;
             eOption = SvtSecurityOptions::EOption::DocWarnCreatePdf;
             break;
         }
@@ -2928,7 +2926,7 @@ sal_Int16 SfxObjectShell::QueryHiddenInformation( HiddenWarningFact eFact, vcl::
         if ( bWarning )
         {
             sMessage += "\n";
-            sMessage += SfxResId(nResId);
+            sMessage += SfxResId(pResId);
             ScopedVclPtrInstance< WarningBox > aWBox(pParent, WB_YES_NO | WB_DEF_NO, sMessage);
             nRet = aWBox->Execute();
         }

@@ -18,7 +18,7 @@
  */
 
 #include "DExport.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
@@ -33,8 +33,10 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include "dbustrings.hrc"
-#include "dbu_misc.hrc"
+#include "core_resource.hxx"
+#include "stringconstants.hxx"
+#include "strings.hrc"
+#include "strings.hxx"
 #include <connectivity/dbconversion.hxx>
 #include <osl/thread.h>
 #include <sfx2/sfxhtml.hxx>
@@ -746,7 +748,7 @@ void ODatabaseExport::showErrorDialog(const css::sdbc::SQLException& e)
     {
         OUString aMsg = e.Message
                       + "\n"
-                      + OUString(ModuleRes( STR_QRY_CONTINUE ));
+                      + DBA_RES( STR_QRY_CONTINUE );
         ScopedVclPtrInstance< OSQLWarningBox > aBox( nullptr, aMsg, WB_YES_NO | WB_DEF_NO );
 
         if (aBox->Execute() == RET_YES)

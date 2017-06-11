@@ -34,14 +34,13 @@
 #include "DrawViewShell.hxx"
 #include "DrawController.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <svtools/controldims.hrc>
+#include <svtools/controldims.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/gallery.hxx>
 #include <svx/drawitem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/resary.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include "app.hrc"
 #include <editeng/paperinf.hxx>
@@ -61,7 +60,7 @@
 #include <svx/dlgutil.hxx>
 #include <algorithm>
 #include "EventMultiplexer.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include <vcl/salbtype.hxx>
 
 using namespace ::com::sun::star;

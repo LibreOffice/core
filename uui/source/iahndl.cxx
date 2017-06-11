@@ -61,7 +61,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <osl/conditn.hxx>
-#include <tools/rcid.h>
+#include <tools/simplerm.hxx>
 #include <vcl/errinf.hxx>
 #include <osl/thread.hxx>
 #include <tools/diagnose_ex.h>
@@ -76,7 +76,9 @@
 #include <typelib/typedescription.hxx>
 #include <unotools/confignode.hxx>
 
+#include "ids.hxx"
 #include "ids.hrc"
+#include "strings.hrc"
 
 #include "getcontinuations.hxx"
 #include "secmacrowarnings.hxx"
@@ -1005,11 +1007,8 @@ NameClashResolveDialogResult executeSimpleNameClashResolveDialog( vcl::Window *p
                                                                   OUString & rProposedNewName,
                                                                   bool bAllowOverwrite )
 {
-    std::unique_ptr< ResMgr > xManager( ResMgr::CreateResMgr( "uui" ) );
-    if ( !xManager.get() )
-        return ABORT;
-
-    ScopedVclPtrInstance<NameClashDialog> aDialog(pParent, xManager.get(), rTargetFolderURL,
+    std::locale aResLocale = Translate::Create("uui", Application::GetSettings().GetUILanguageTag());
+    ScopedVclPtrInstance<NameClashDialog> aDialog(pParent, aResLocale, rTargetFolderURL,
                                                   rClashingName, rProposedNewName, bAllowOverwrite);
 
     NameClashResolveDialogResult eResult = (NameClashResolveDialogResult) aDialog->Execute();
@@ -1110,12 +1109,10 @@ UUIInteractionHelper::handleGenericErrorRequest(
             OUString aErrorString;
             ErrorHandler::GetErrorString( nErrorCode, aErrorString );
 
-            std::unique_ptr< ResMgr > xManager(
-                ResMgr::CreateResMgr( "uui" ) );
+            std::locale aResLocale = Translate::Create("uui", Application::GetSettings().GetUILanguageTag());
             OUString aTitle( utl::ConfigManager::getProductName() );
 
-            OUString aErrTitle = ResId( STR_WARNING_INCOMPLETE_ENCRYPTION_TITLE,
-                *xManager.get() ).toString();
+            OUString aErrTitle = Translate::get(STR_WARNING_INCOMPLETE_ENCRYPTION_TITLE, aResLocale);
 
             if ( !aTitle.isEmpty() && !aErrTitle.isEmpty() )
                 aTitle += " - " ;
@@ -1206,13 +1203,8 @@ UUIInteractionHelper::handleBrokenPackageRequest(
 
     OUString aMessage;
     {
-        SolarMutexGuard aGuard;
-        std::unique_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
-        if (!xManager.get())
-            return;
-
-        ResId aResId( RID_UUI_ERRHDL, *xManager.get() );
-        if ( !ErrorResource(aResId).getString(nErrorCode, aMessage) )
+        ErrorResource aErrorResource(RID_UUI_ERRHDL, Translate::Create("uui", Application::GetSettings().GetUILanguageTag()));
+        if (!aErrorResource.getString(nErrorCode, aMessage))
             return;
     }
 
@@ -1266,19 +1258,18 @@ UUIInteractionHelper::handleBrokenPackageRequest(
     }
 }
 
-
 // ErrorResource Implementation
-
-
-bool
-ErrorResource::getString(ErrCode nErrorCode, OUString &rString)
-    const
+bool ErrorResource::getString(ErrCode nErrorCode, OUString &rString) const
 {
-    sal_uInt32 nIdx = m_aStringArray.FindIndex(nErrorCode.GetRest());
-    if (nIdx == RESARRAY_INDEX_NOTFOUND)
-        return false;
-    rString = m_aStringArray.GetString(nIdx);
-    return true;
+    for (const std::pair<const char*, ErrCode>* pStringArray = m_pStringArray; pStringArray->first != nullptr; ++pStringArray)
+    {
+        if (ErrCode(nErrorCode.GetRest()) == pStringArray->second)
+        {
+            rString = Translate::get(pStringArray->first, m_rResLocale);
+            return true;
+        }
+    }
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

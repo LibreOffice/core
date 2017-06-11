@@ -17,8 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/resmgr.hxx>
+#include <tools/simplerm.hxx>
 #include <svl/urihelper.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/util/XLocalizedAliases.hpp>
 #include <com/sun/star/lang/XLocalizable.hpp>
@@ -60,21 +62,20 @@ void CloseBibModul(HdlBibModul ppBibModul)
     }
 }
 
-OUString BibResId(sal_uInt16 nId)
+OUString BibResId(const char* pId)
 {
-    return ResId(nId, *pBibModul->GetResMgr());
+    return Translate::get(pId, pBibModul->GetResLocale());
 }
 
 BibConfig* BibModul::pBibConfig = nullptr;
 
 BibModul::BibModul()
+    : m_aResLocale(Translate::Create("pcr", Application::GetSettings().GetUILanguageTag()))
 {
-    pResMgr = ResMgr::CreateResMgr( "bib" );
 }
 
 BibModul::~BibModul()
 {
-    delete pResMgr;
     if (pBibConfig && pBibConfig->IsModified())
         pBibConfig->Commit();
     delete pBibConfig;

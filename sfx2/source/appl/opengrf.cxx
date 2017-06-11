@@ -44,7 +44,7 @@
 #include <sfx2/docfile.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/opengrf.hxx>
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/sfxresid.hxx>
 
 
@@ -55,7 +55,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::cppu;
 
 
-sal_uInt16  SvxOpenGrfErr2ResId( ErrCode err )
+const char* SvxOpenGrfErr2ResId( ErrCode err )
 {
     if (err == ERRCODE_GRFILTER_OPENERROR)
         return RID_SVXSTR_GRFILTER_OPENERROR;

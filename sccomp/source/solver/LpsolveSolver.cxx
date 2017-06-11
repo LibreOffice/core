@@ -53,7 +53,7 @@
 #undef LANGUAGE_NONE
 
 #include "SolverComponent.hxx"
-#include "solver.hrc"
+#include "strings.hrc"
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/table/CellAddress.hpp>

@@ -22,16 +22,7 @@
 
 #include "rcid.hrc"
 
-#define STR_ILLEGAL_PAGENUM     (RC_CHRDLG_BEGIN +  1)
-#define STR_TEXTCOLL_HEADER     (RC_CHRDLG_BEGIN +  2)
-
 #define DLG_SWDROPCAPS          (RC_CHRDLG_BEGIN + 11)
-
-#define CHRDLG_ACT_END  DLG_SWDROPCAPS
-
-#if CHRDLG_ACT_END > RC_CHRDLG_END
-#error Resource-Id overflow in #file, #line
-#endif
 
 #endif
 

@@ -32,8 +32,7 @@
 #include "labfmt.hxx"
 #include "uitool.hxx"
 
-#include "../../uibase/envelp/label.hrc"
-#include "labfmt.hrc"
+#include "strings.hrc"
 #include <unomid.h>
 
 using namespace utl;
@@ -503,7 +502,7 @@ void SwLabFormatPage::FillItem(SwLabItem& rItem)
 {
     if (bModified)
     {
-        rItem.m_aMake = rItem.m_aType = SwResId(STR_CUSTOM);
+        rItem.m_aMake = rItem.m_aType = SwResId(STR_CUSTOM_LABEL);
 
         SwLabRec& rRec = *GetParentSwLabDlg()->Recs()[0];
         rItem.m_lHDist  = rRec.lHDist  = static_cast< long >(GETFLDVAL(*m_pHDistField ));
