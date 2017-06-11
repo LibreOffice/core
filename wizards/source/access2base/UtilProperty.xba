@@ -217,8 +217,10 @@ Dim cstLF As String
 			Case &lt; vbArray					&apos;	Scalar
 				sResult = sResult &amp; sName &amp; &quot; = &quot; &amp; Utils._CStr(vValue, False) &amp; cstLF
 			Case Else						&apos;	Vector or matrix
+				If uBound(vValue, 1) &lt; 0 Then
+					sResult = sResult &amp; sName &amp; &quot; = (0)&quot; &amp; cstLF
 				&apos;	1-dimension but vector of vectors must also be considered
-				If VarType(vValue(0)) &gt;= vbArray Then
+				ElseIf VarType(vValue(0)) &gt;= vbArray Then
 					sResult = sResult &amp; sName &amp; &quot; = (&quot; &amp; UBound(vValue) + 1 &amp; &quot;,&quot; &amp; UBound(vValue(0)) + 1 &amp; &quot;)&quot; &amp; cstLF
 					For j = 0 To UBound(vValue)
 						sResult = sResult &amp; Utils._CStr(vValue(j), False) &amp; cstLF
@@ -263,19 +265,24 @@ Const cstEqualArray = &quot; = (&quot;, cstEqual = &quot; = &quot;
 				If InStr(vString(i), cstEqualArray) = lPosition + Len(sName) Then	&apos;	Start array processing
 					lSearch = lPosition + Len(sName) + Len(cstEqualArray) - 1
 					sDim = Utils._RegexSearch(vString(i), &quot;\([0-9]+\)&quot;, lSearch)	&apos;	e.g. (10)
-					If sDim &lt;&gt; &quot;&quot; Then
+					If sDim = &quot;(0)&quot; Then		&apos;	Empty array
+						iRows = -1
+						vValue = Array()
+						_SetPropertyValue(vResult, sName, vValue)
+					ElseIf sDim &lt;&gt; &quot;&quot; Then		&apos;	Vector with content
 						iCols = CInt(Mid(sDim, 2, Len(sDim) - 2))
 						iRows = 0
 						ReDim vValue(0 To iCols - 1)
-					Else
+						iArray = 0
+					Else						&apos;	Matrix with content
 						lSearch = lPosition + Len(sName) + Len(cstEqualArray) - 1
 						sDim = Utils._RegexSearch(vString(i), &quot;\([0-9]+,&quot;, lSearch)	&apos;	e.g. (10,
 						iRows = CInt(Mid(sDim, 2, Len(sDim) - 2))
 						sDim = Utils._RegexSearch(vString(i), &quot;,[0-9]+\)&quot;, lSearch)	&apos;	e.g. ,20)
 						iCols = CInt(Mid(sDim, 2, Len(sDim) - 2))
 						ReDim vValue(0 To iRows - 1)
+						iArray = 0
 					End If
-					iArray = 0
 				ElseIf InStr(vString(i), cstEqual) = lPosition + Len(sName) Then
 					vValue = Utils._CVar(Mid(vString(i), Len(sName) + Len(cstEqual) + 1))
 					_SetPropertyValue(vResult, sName, vValue)
