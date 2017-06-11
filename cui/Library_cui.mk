@@ -210,7 +210,4 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/uno/services \
 ))
 
-# Runtime dependency for unit-tests
-$(eval $(call gb_Library_use_restarget,cui,cui))
-
 # vim: set noet sw=4 ts=4:

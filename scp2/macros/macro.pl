@@ -51,6 +51,7 @@ write_DIR_ISOLANGUAGE_ALL_LANG_LPROJ();
 write_EXTRA_ALL_LANG();
 write_EXTRA_ALL_LANG_BUT_EN_US();
 write_UI_ALL_LANG_BUT_EN_US();
+write_MO_ALL_LANG_BUT_EN_US();
 write_EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG();
 write_RESFILE_ALL_LANG();
 write_README_ALL_LANG();
@@ -177,6 +178,21 @@ sub write_UI_ALL_LANG_BUT_EN_US
             $first = 0;
             print OUTFILE
                 "\\\n\tName ($lang) = STRING(CONCAT2(name,/ui/res/$lang.zip))";
+        }
+    }
+    print OUTFILE "\n\n";
+}
+
+sub write_MO_ALL_LANG_BUT_EN_US
+{
+    print OUTFILE "#define MO_ALL_LANG_BUT_EN_US(name) ";
+    my $first = 1;
+    foreach $lang (@completelangiso) {
+        if ($lang ne "en-US") {
+            print OUTFILE "; " unless $first;
+            $first = 0;
+            print OUTFILE
+                "\\\n\tName ($lang) = STRING(CONCAT3($lang/LC_MESSAGES/,name,.mo))";
         }
     }
     print OUTFILE "\n\n";
