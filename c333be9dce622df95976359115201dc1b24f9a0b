@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a3905b3_ceffbaa8",
+        "filename": "dtrans/source/win32/ftransl/ftransl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-12T20:39:08Z",
+      "side": 1,
+      "message": "oh, and remove that byte order mark or whatever that is",
+      "revId": "c333be9dce622df95976359115201dc1b24f9a0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_0e09c2dd",
         "filename": "dtrans/source/win32/ftransl/ftransl.cxx",
         "patchSetId": 1
