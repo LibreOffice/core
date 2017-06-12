@@ -61,6 +61,27 @@ namespace drawing = com::sun::star::drawing;
 void GraphicHelper::GetPreferredExtension( OUString& rExtension, const Graphic& rGraphic )
 {
     OUString aExtension = "png";
+    const VectorGraphicDataPtr& aVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
+
+    if (aVectorGraphicDataPtr.get() && aVectorGraphicDataPtr->getVectorGraphicDataArrayLength())
+    {
+        switch (aVectorGraphicDataPtr->getVectorGraphicDataType())
+        {
+        case VectorGraphicDataType::Wmf:
+            aExtension = "wmf";
+            break;
+        case VectorGraphicDataType::Emf:
+            aExtension = "emf";
+            break;
+        default: // case VectorGraphicDataType::Svg:
+            aExtension = "svg";
+            break;
+        }
+
+        rExtension = aExtension;
+        return;
+    }
+
     switch( rGraphic.GetLink().GetType() )
     {
         case GfxLinkType::NativeGif:

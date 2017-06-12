@@ -394,8 +394,7 @@ String STR_ObjNamePluralCUSTOMSHAPE
     Text [ en-US ] =  "Shapes";
 };
 
-// Svg support
-
+// Vector Data support
 String STR_ObjNameSingulGRAFSVG
 {
     Text [ en-US ] = "SVG" ;
@@ -403,6 +402,22 @@ String STR_ObjNameSingulGRAFSVG
 String STR_ObjNamePluralGRAFSVG
 {
     Text [ en-US ] = "SVGs" ;
+};
+String STR_ObjNameSingulGRAFWMF
+{
+    Text [ en-US ] = "WMF" ;
+};
+String STR_ObjNamePluralGRAFWMF
+{
+    Text [ en-US ] = "WMFs" ;
+};
+String STR_ObjNameSingulGRAFEMF
+{
+    Text [ en-US ] = "EMF" ;
+};
+String STR_ObjNamePluralGRAFEMF
+{
+    Text [ en-US ] = "EMFs" ;
 };
 
 String STR_ObjNameSingulOLE2

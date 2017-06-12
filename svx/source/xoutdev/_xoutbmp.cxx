@@ -151,26 +151,32 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
         const VectorGraphicDataPtr& aVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
 
         if(aVectorGraphicDataPtr.get()
-            && aVectorGraphicDataPtr->getVectorGraphicDataArrayLength()
-            && rFilterName.equalsIgnoreAsciiCase("svg"))
+            && aVectorGraphicDataPtr->getVectorGraphicDataArrayLength())
         {
-            if(!(nFlags & XOutFlags::DontAddExtension))
+            const bool bIsSvg(rFilterName.equalsIgnoreAsciiCase("svg") && VectorGraphicDataType::Svg == aVectorGraphicDataPtr->getVectorGraphicDataType());
+            const bool bIsWmf(rFilterName.equalsIgnoreAsciiCase("wmf") && VectorGraphicDataType::Wmf == aVectorGraphicDataPtr->getVectorGraphicDataType());
+            const bool bIsEmf(rFilterName.equalsIgnoreAsciiCase("emf") && VectorGraphicDataType::Emf == aVectorGraphicDataPtr->getVectorGraphicDataType());
+
+            if (bIsSvg || bIsWmf || bIsEmf)
             {
-                aURL.setExtension(rFilterName);
-            }
-
-            rFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-            SfxMedium aMedium(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE|StreamMode::SHARE_DENYNONE|StreamMode::TRUNC);
-            SvStream* pOStm = aMedium.GetOutStream();
-
-            if(pOStm)
-            {
-                pOStm->WriteBytes(aVectorGraphicDataPtr->getVectorGraphicDataArray().getConstArray(), aVectorGraphicDataPtr->getVectorGraphicDataArrayLength());
-                aMedium.Commit();
-
-                if(!aMedium.GetError())
+                if (!(nFlags & XOutFlags::DontAddExtension))
                 {
-                    nErr = ERRCODE_NONE;
+                    aURL.setExtension(rFilterName);
+                }
+
+                rFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+                SfxMedium aMedium(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE | StreamMode::SHARE_DENYNONE | StreamMode::TRUNC);
+                SvStream* pOStm = aMedium.GetOutStream();
+
+                if (pOStm)
+                {
+                    pOStm->WriteBytes(aVectorGraphicDataPtr->getVectorGraphicDataArray().getConstArray(), aVectorGraphicDataPtr->getVectorGraphicDataArrayLength());
+                    aMedium.Commit();
+
+                    if (!aMedium.GetError())
+                    {
+                        nErr = ERRCODE_NONE;
+                    }
                 }
             }
         }
