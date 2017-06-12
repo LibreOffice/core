@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_ba9b8d71",
+        "filename": "solenv/bin/modules/installer/scriptitems.pm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1608,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-12T10:22:14Z",
+      "side": 0,
+      "message": "another erroneous correction of \"iff\"",
+      "revId": "32119d28ef2fb0bc6a401128edc3b863cce0d06b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
