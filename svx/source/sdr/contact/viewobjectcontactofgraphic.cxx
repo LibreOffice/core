@@ -302,6 +302,8 @@ namespace sdr
 
         ViewObjectContactOfGraphic::~ViewObjectContactOfGraphic()
         {
+            // explicitly call this to avoid it double-freeing itself
+            forgetAsynchGraphicLoadingEvent(mpAsynchLoadEvent.get());
         }
     } // end of namespace contact
 } // end of namespace sdr
