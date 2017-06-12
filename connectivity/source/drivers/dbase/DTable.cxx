@@ -769,17 +769,9 @@ Any SAL_CALL ODbaseTable::queryInterface( const Type & rType )
 
 Sequence< sal_Int8 > ODbaseTable::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = nullptr;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    static ::cppu::OImplementationId implId;
+
+    return implId.getImplementationId();
 }
 
 // css::lang::XUnoTunnel

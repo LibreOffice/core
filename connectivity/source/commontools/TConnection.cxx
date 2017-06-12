@@ -65,17 +65,9 @@ sal_Int64 SAL_CALL OMetaConnection::getSomething( const css::uno::Sequence< sal_
 
 Sequence< sal_Int8 > OMetaConnection::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = nullptr;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    static ::cppu::OImplementationId implId;
+
+    return implId.getImplementationId();
 }
 
 ::dbtools::OPropertyMap& OMetaConnection::getPropMap()

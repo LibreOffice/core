@@ -476,17 +476,9 @@ sal_Int64 SAL_CALL ODBTableDecorator::getSomething( const Sequence< sal_Int8 >& 
 
 Sequence< sal_Int8 > ODBTableDecorator::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = nullptr;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    static ::cppu::OImplementationId implId;
+
+    return implId.getImplementationId();
 }
 
 void ODBTableDecorator::fillPrivileges() const

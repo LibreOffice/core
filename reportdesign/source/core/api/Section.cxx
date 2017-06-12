@@ -592,17 +592,9 @@ OSection* OSection::getImplementation( const uno::Reference< uno::XInterface >& 
 
 uno::Sequence< sal_Int8 > OSection::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = nullptr;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    static ::cppu::OImplementationId implId;
+
+    return implId.getImplementationId();
 }
 
 void OSection::notifyElementAdded(const uno::Reference< drawing::XShape >& xShape )
