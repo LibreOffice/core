@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_ceba5a0a",
+        "filename": "xmloff/source/core/xmlimp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1992,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2017-06-12T19:47:07Z",
+      "side": 1,
+      "message": "Wow this method looks hyper-slow and inefficient \u003d) hopefully it\u0027s used only for debugging ... \u003d)",
+      "revId": "2bf529d5d580641729fc376baffb91a6175ae302",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
