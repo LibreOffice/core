@@ -210,14 +210,6 @@ namespace
                 return OUString();
                 #endif
             }
-            else if ( rDesktopEnvironment.equalsIgnoreAsciiCase("tde") )
-            {
-                #if ENABLE_TDE
-                return OUString("com.sun.star.ui.dialogs.TDEFilePicker");
-                #else
-                return OUString();
-                #endif
-            }
             #if defined(_WIN32)
             return OUString("com.sun.star.ui.dialogs.SystemFilePicker");
             #elif defined MACOSX

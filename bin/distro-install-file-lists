@@ -216,15 +216,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
 
     cd $FILELISTSDIR
 
-    # tde subpackage
-    test -f $DESTDIR/gid_Module_Optional_Tde && cp $DESTDIR/gid_Module_Optional_Tde tde_list.txt || :
-    mv_file_between_flists tde_list.txt common_list.txt $INSTALLDIR/program/tdefilepicker
-    mv_file_between_flists tde_list.txt common_list.txt $INSTALLDIR/program/fps_tdelo.so
-    mv_file_between_flists tde_list.txt common_list.txt $INSTALLDIR/program/libvclplug_tdel..so
-    mv_file_between_flists tde_list.txt common_list.txt $INSTALLDIR/program/libtdeab1l..so
-    mv_file_between_flists tde_list.txt common_list.txt $INSTALLDIR/program/libtdeabdrv1l..so
-    add_used_directories tde_list.txt common_list.txt
-
     # create kde4 subpackage
     test -f $DESTDIR/gid_Module_Optional_Kde && cp $DESTDIR/gid_Module_Optional_Kde kde4_list.txt || :
     mv_file_between_flists kde4_list.txt common_list.txt $INSTALLDIR/program/libvclplug_kde4l..so
@@ -404,7 +395,6 @@ else
     create_package_directory gid_Module_Brand_Prg_Base              pkg/libreoffice-base
     create_package_directory gid_Module_Pyuno                       pkg/python-uno
     create_package_directory gid_Module_Optional_Gnome              pkg/libreoffice-gnome
-    create_package_directory gid_Module_Optional_Tde                pkg/libreoffice-tde
 
     create_package_directory gid_Module_Root_Files_2                pkg/libreoffice-common
     create_package_directory gid_Module_Root_Files_3                pkg/libreoffice-common
@@ -476,7 +466,7 @@ else
       fi &&
       ( cd pkg/libreoffice-common/$d
         find -maxdepth 1 \
-           -regex '\./\(.*\.so.*\|.*\.bin\|pagein\|tdefilepicker\|msfontextract\|.*\.rdb\|javaldx\|uri-encode\)' \
+           -regex '\./\(.*\.so.*\|.*\.bin\|pagein\|msfontextract\|.*\.rdb\|javaldx\|uri-encode\)' \
            -exec mv {} $DESTDIR/pkg/libreoffice-core/$d \;
       ); \
     done
