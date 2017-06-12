@@ -347,7 +347,7 @@ bool ORTFImportExport::Write()
     ODatabaseImportExport::Write();
     m_pStream->WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RTF );
     m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ANSI ).WriteCharPtr( SAL_NEWLINE_STRING );
-    rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252;
+    rtl_TextEncoding eDestEnc = osl_getThreadTextEncoding();
 
     bool bBold          = ( css::awt::FontWeight::BOLD     == m_aFont.Weight );
     bool bItalic        = ( css::awt::FontSlant_ITALIC     == m_aFont.Slant );
