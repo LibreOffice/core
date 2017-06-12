@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_3a45dd16",
+        "filename": "sw/source/filter/ww8/rtfsdrexport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-06-12T08:10:26Z",
+      "side": 1,
+      "message": "The code just a few lines above indent at \u0027(\u0027, i.e.\n\n                  lcl_AppendSP(m_rAttrOutput.RunText(), \"gtextFont\",\n -                         msfilter::rtfutil::OutString(pFontFamily-\u003eGetFamilyName(), m_rExport.m_eCurrentEncoding));\n +                             msfilter::rtfutil::OutString(pFontFamily-\u003eGetFamilyName(), m_rExport.m_eCurrentEncoding));",
+      "revId": "32be7482792e9389174f0a32e900d52f0fcd781e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_5a4c6942",
+        "filename": "sw/source/filter/ww8/rtfsdrexport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-06-12T08:10:26Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "32be7482792e9389174f0a32e900d52f0fcd781e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
