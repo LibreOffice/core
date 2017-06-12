@@ -225,12 +225,12 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
     rtl::Reference < comphelper::AttributeList > maAttrList;
     rtl::Reference < comphelper::AttributeList > maNamespaceAttrList;
     css::uno::Reference< css::xml::sax::XFastDocumentHandler > mxFastDocumentHandler;
-    css::uno::Reference< css::xml::sax::XFastTokenHandler > mxTokenHandler;
-    std::unordered_map< sal_Int32, OUString > maNamespaceMap;
-    const OUString getNameFromToken( sal_Int32 nToken );
-    const OUString getNamespacePrefixFromToken( sal_Int32 nToken );
+    static css::uno::Reference< css::xml::sax::XFastTokenHandler > xTokenHandler;
+    static std::unordered_map< sal_Int32, std::pair< OUString, OUString > > aNamespaceMap;
+    static bool bIsNSMapsInitialized;
+
+    static void initializeNamespaceMaps();
     void registerNamespaces();
-    void registerNSHelper(sal_Int32 nToken, sal_Int32 nPrefix, sal_Int32 nNamespace );
     std::unique_ptr<SvXMLNamespaceMap> processNSAttributes(
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
     void Characters(const OUString& aChars);
@@ -374,6 +374,10 @@ public:
 
     // get import helper for events
     XMLEventImportHelper& GetEventImport();
+
+    static const OUString getNameFromToken( sal_Int32 nToken );
+    static const OUString getNamespacePrefixFromToken( sal_Int32 nToken );
+    static const OUString getNamespaceURIFromToken( sal_Int32 nToken );
 
     SvXMLNamespaceMap& GetNamespaceMap() { return *mpNamespaceMap; }
     const SvXMLNamespaceMap& GetNamespaceMap() const { return *mpNamespaceMap; }
