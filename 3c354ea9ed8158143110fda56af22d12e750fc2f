@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_da1219b4",
+        "filename": "salhelper/source/simplereferenceobject.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-06-12T11:39:02Z",
+      "side": 1,
+      "message": "why do you still insist on such random changes, unrelated to the change\u0027s goal as stated in the commit message?",
+      "revId": "3c354ea9ed8158143110fda56af22d12e750fc2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
