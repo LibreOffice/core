@@ -128,17 +128,9 @@ sdbcx::OCollection* OHSQLTable::createIndexes(const TStringVector& _rNames)
 
 Sequence< sal_Int8 > OHSQLTable::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = nullptr;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    static ::cppu::OImplementationId implId;
+
+    return implId.getImplementationId();
 }
 
 // css::lang::XUnoTunnel

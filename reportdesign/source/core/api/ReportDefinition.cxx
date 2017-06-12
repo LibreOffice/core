@@ -2008,17 +2008,9 @@ uno::Sequence< sal_Int8 > SAL_CALL OReportDefinition::getImplementationId(  )
 
 uno::Sequence< sal_Int8 > OReportDefinition::getUnoTunnelImplementationId()
 {
-    static ::cppu::OImplementationId * pId = nullptr;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    static ::cppu::OImplementationId implId;
+
+    return implId.getImplementationId();
 }
 
 uno::Reference< uno::XComponentContext > OReportDefinition::getContext()
