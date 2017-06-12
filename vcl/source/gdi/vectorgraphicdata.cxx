@@ -106,6 +106,25 @@ size_t estimateSize(
     return nRet;
 }
 
+bool VectorGraphicData::operator==(const VectorGraphicData& rCandidate) const
+{
+    if (getVectorGraphicDataType() == rCandidate.getVectorGraphicDataType())
+    {
+        if (getVectorGraphicDataArrayLength() == rCandidate.getVectorGraphicDataArrayLength())
+        {
+            if (0 == memcmp(
+                getVectorGraphicDataArray().getConstArray(),
+                rCandidate.getVectorGraphicDataArray().getConstArray(),
+                getVectorGraphicDataArrayLength()))
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 void VectorGraphicData::ensureReplacement()
 {
     ensureSequenceAndRange();
@@ -128,12 +147,13 @@ void VectorGraphicData::ensureSequenceAndRange()
 
         if(myInputStream.is())
         {
-            // create SVG interpreter
+            // create Vector Graphic Data interpreter
             try
             {
                 uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
 
-                if (VectorGraphicDataType::Emf == getVectorGraphicDataType())
+                if (VectorGraphicDataType::Emf == getVectorGraphicDataType()
+                    || VectorGraphicDataType::Wmf == getVectorGraphicDataType())
                 {
                     const uno::Reference< graphic::XEmfParser > xEmfParser = graphic::EmfTools::create(xContext);
 
