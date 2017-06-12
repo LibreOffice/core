@@ -31,6 +31,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 
+#include <vcl/svapp.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <vcl/wmf.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -128,10 +129,22 @@ namespace emfio
 
                         if (pStream && ConvertWMFToGDIMetaFile(*pStream, aMtf, nullptr, nullptr))
                         {
+
+                            Size aSize(aMtf.GetPrefSize());
+
+                            if (aMtf.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
+                            {
+                                aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, MapUnit::Map100thMM);
+                            }
+                            else
+                            {
+                                aSize = OutputDevice::LogicToLogic(aSize, aMtf.GetPrefMapMode(), MapMode(MapUnit::Map100thMM));
+                            }
+
                             const basegfx::B2DHomMatrix aMetafileTransform(
-                                basegfx::tools::createScaleTranslateB2DHomMatrix(
-                                    5000.0, 5000.0,
-                                    1000.0, 1000.0));
+                                basegfx::tools::createScaleB2DHomMatrix(
+                                    aSize.Width(),
+                                    aSize.Height()));
 
                             aRetval.push_back(
                                 new drawinglayer::primitive2d::MetafilePrimitive2D(
