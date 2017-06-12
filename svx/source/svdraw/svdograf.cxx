@@ -741,7 +741,24 @@ OUString SdrGrafObj::TakeObjNameSingul() const
 
     if(rVectorGraphicDataPtr.get())
     {
-        sName.append(ImpGetResStr(STR_ObjNameSingulGRAFSVG));
+        switch (rVectorGraphicDataPtr->getVectorGraphicDataType())
+        {
+        case VectorGraphicDataType::Wmf:
+        {
+            sName.append(ImpGetResStr(STR_ObjNameSingulGRAFWMF));
+            break;
+        }
+        case VectorGraphicDataType::Emf:
+        {
+            sName.append(ImpGetResStr(STR_ObjNameSingulGRAFEMF));
+            break;
+        }
+        default: // case VectorGraphicDataType::Svg:
+        {
+            sName.append(ImpGetResStr(STR_ObjNameSingulGRAFSVG));
+            break;
+        }
+        }
     }
     else
     {
@@ -794,7 +811,24 @@ OUString SdrGrafObj::TakeObjNamePlural() const
 
     if(rVectorGraphicDataPtr.get())
     {
-        sName.append(ImpGetResStr(STR_ObjNamePluralGRAFSVG));
+        switch (rVectorGraphicDataPtr->getVectorGraphicDataType())
+        {
+        case VectorGraphicDataType::Wmf:
+        {
+            sName.append(ImpGetResStr(STR_ObjNamePluralGRAFWMF));
+            break;
+        }
+        case VectorGraphicDataType::Emf:
+        {
+            sName.append(ImpGetResStr(STR_ObjNamePluralGRAFEMF));
+            break;
+        }
+        default: // case VectorGraphicDataType::Svg:
+        {
+            sName.append(ImpGetResStr(STR_ObjNamePluralGRAFSVG));
+            break;
+        }
+        }
     }
     else
     {
