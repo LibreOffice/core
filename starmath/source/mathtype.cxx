@@ -590,7 +590,7 @@ bool MathType::Parse(SotStorage *pStor)
 
     //sigh, theres no point! MathType (in some bizarre subvarient) pads
     //the end of the formula with ENDs (0)'s
-    sal_uLong nEnd = pS->Tell();
+    auto nEnd = pS->Tell();
     SAL_WARN_IF(nEnd == pS->Seek(STREAM_SEEK_TO_END), "starmath", "Possibly unfully parsed formula");
 #endif
     return bRet;
@@ -2164,7 +2164,7 @@ void MathType::HandleRoot(SmNode *pNode,int nLevel)
 }
 
 sal_uInt8 MathType::HandleCScript(SmNode *pNode,SmNode *pContent,int nLevel,
-    sal_uLong *pPos,bool bTest)
+    sal_uInt64 *pPos,bool bTest)
 {
     sal_uInt8 nVariation2=0xff;
 
@@ -2352,7 +2352,7 @@ void MathType::HandleBrace(SmNode *pNode,int nLevel)
     pS->WriteUChar( TMPL ); //Template
     bIsReInterpBrace=false;
     sal_uInt8 nBSpec=0x10;
-    sal_uLong nLoc = pS->Tell();
+    auto nLoc = pS->Tell();
     if (pLeft)
     {
         switch (pLeft->GetToken().eType)
@@ -2410,7 +2410,7 @@ void MathType::HandleBrace(SmNode *pNode,int nLevel)
         HandleNodes(pLeft,nLevel+1);
     if (bIsReInterpBrace)
     {
-        sal_uLong nLoc2 = pS->Tell();
+        auto nLoc2 = pS->Tell();
         pS->Seek(nLoc);
         pS->WriteUChar( 0x2D );
         pS->Seek(nLoc2);
@@ -2458,7 +2458,7 @@ void MathType::HandleOperator(SmNode *pNode,int nLevel)
     if (HandleLim(pNode,nLevel))
         return;
 
-    sal_uLong nPos;
+    sal_uInt64 nPos;
     sal_uInt8 nVariation;
 
     switch (pNode->GetToken().eType)
@@ -2480,7 +2480,7 @@ void MathType::HandleOperator(SmNode *pNode,int nLevel)
     sal_uInt8 nOldVariation=nVariation;
     sal_uInt8 nIntVariation=nVariation;
 
-    sal_uLong nPos2=0;
+    sal_uInt64 nPos2=0;
     if (nVariation != 0xff)
     {
         nPos2 = pS->Tell();
@@ -3226,7 +3226,7 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
     {
         if ((nInsertion != 0) && nullptr != (pTemp = pNode->GetSubNode(0)))
         {
-            sal_uLong nPos = pS->Tell();
+            auto nPos = pS->Tell();
             nInsertion--;
             pS->Seek(nInsertion);
             switch(pTemp->GetToken().eType)

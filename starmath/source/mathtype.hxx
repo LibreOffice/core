@@ -134,7 +134,7 @@ private:
     void HandleRoot(SmNode *pNode,int nLevel);
     void HandleSubSupScript(SmNode *pNode,int nLevel);
     sal_uInt8 HandleCScript(SmNode *pNode,SmNode *pContent,int nLevel,
-        sal_uLong *pPos=nullptr,bool bTest=true);
+        sal_uInt64 *pPos=nullptr,bool bTest=true);
     void HandleFractions(SmNode *pNode,int nLevel);
     void HandleBrace(SmNode *pNode,int nLevel);
     void HandleVerticalBrace(SmNode *pNode,int nLevel);
@@ -152,7 +152,7 @@ private:
     sal_uInt8 nHAlign;
 
     int nPendingAttributes;
-    sal_uLong nInsertion;
+    sal_uInt64 nInsertion;
 
     std::vector<sal_Int16> aSizeTable;
     sal_Int16 nLSize;
