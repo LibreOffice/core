@@ -12139,9 +12139,9 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
                 getReferenceDevice()->SetMapMode( rNewState.m_aMapMode );
                 m_aCurrentPDFState.m_aMapMode = rNewState.m_aMapMode;
 
+                aLine.append("q ");
                 if ( rNewState.m_aClipRegion.count() )
                 {
-                    aLine.append( "q " );
                     m_aPages.back().appendPolyPolygon( rNewState.m_aClipRegion, aLine );
                     aLine.append( "W* n\n" );
                 }
