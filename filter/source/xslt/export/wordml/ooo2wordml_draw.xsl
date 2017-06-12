@@ -95,7 +95,7 @@
 									</xsl:variable>
 									<xsl:choose>
 										<xsl:when test="$min-height - $pic-height &lt; 0.001">
-											<!-- If control goes here, it much like that this text-box is used for containt graphic caption only -->
+											<!-- If control goes here, it much like that this text-box is used for contain graphic caption only -->
 											<xsl:value-of select="$pic-height - 0.1"/>
 										</xsl:when>
 										<xsl:otherwise>
