@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_7af5a5c9",
+        "filename": "odk/examples/DevelopersGuide/GUI/UnoDialogSample.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-12T09:26:41Z",
+      "side": 0,
+      "message": "i find this comment really pointless",
+      "revId": "89214e05e0c2f92fbe68e6c4f4a9035a94cff282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
