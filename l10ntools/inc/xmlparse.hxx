@@ -203,7 +203,6 @@ private:
     OString m_sElementName;
     std::unique_ptr<XMLAttributeList> m_pAttributes;
     OString m_sId;
-    OString m_sOldRef;
     OString m_sLanguageId;
     int m_nPos;
 
@@ -239,9 +238,6 @@ public:
     void SetId              ( OString const & sTheId )      { m_sId = sTheId; }
     void SetLanguageId      ( OString const & sLangId )     { m_sLanguageId = sLangId; }
     void SetPos             ( int nPos )                    { m_nPos = nPos; }
-    void SetOldRef          ( OString const & sOldRef )     { m_sOldRef = sOldRef; }
-
-    const OString& GetOldref() const       { return m_sOldRef;      }
 };
 
 /** Holds character data

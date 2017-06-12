@@ -40,7 +40,6 @@ using namespace osl;
 
 #define XML_LANG    "xml-lang"
 #define ID          "id"
-#define OLDREF      "oldref"
 
 
 // class XMLChildNode
@@ -447,7 +446,7 @@ void XMLFile::SearchL10NElements( XMLChildNode *pCur, int nPos )
                 bool bInsert = true;
                 XMLElement *pElement = static_cast<XMLElement*>(pCur);
                 const OString sName(pElement->GetName().toAsciiLowerCase());
-                OString sLanguage, sTmpStrVal, sOldref;
+                OString sLanguage, sTmpStrVal;
                 if ( pElement->GetAttributeList())
                 {
                     for ( size_t j = 0 , cnt = pElement->GetAttributeList()->size(); j < cnt && bInsert; ++j )
@@ -465,14 +464,9 @@ void XMLFile::SearchL10NElements( XMLChildNode *pCur, int nPos )
                         {
                             sLanguage=(*pElement->GetAttributeList())[ j ]->GetValue();
                         }
-                        if (sTmpStr == OLDREF) // Get the "oldref" Attribute
-                        {
-                            sOldref=(*pElement->GetAttributeList())[ j ]->GetValue();
-                        }
                     }
                     pElement->SetLanguageId( sLanguage );
                     pElement->SetId( sTmpStrVal );
-                    pElement->SetOldRef( sOldref );
                     pElement->SetPos( nPos );
                 }
 
@@ -556,7 +550,6 @@ XMLElement::XMLElement(
     : XMLParentNode( pParent )
     , m_sElementName( rName )
     , m_sId(OString())
-    , m_sOldRef(OString())
     , m_sLanguageId(OString())
     , m_nPos(0)
 {
@@ -566,7 +559,6 @@ XMLElement::XMLElement(const XMLElement& rObj)
     : XMLParentNode( rObj )
     , m_sElementName( rObj.m_sElementName )
     , m_sId( rObj.m_sId )
-    , m_sOldRef( rObj.m_sOldRef )
     , m_sLanguageId( rObj.m_sLanguageId )
     , m_nPos( rObj.m_nPos )
 {
@@ -585,7 +577,6 @@ XMLElement& XMLElement::operator=(const XMLElement& rObj)
         XMLParentNode::operator=(rObj);
         m_sElementName = rObj.m_sElementName;
         m_sId = rObj.m_sId;
-        m_sOldRef = rObj.m_sOldRef;
         m_sLanguageId = rObj.m_sLanguageId;
         m_nPos = rObj.m_nPos;
 
