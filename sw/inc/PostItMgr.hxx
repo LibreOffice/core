@@ -105,26 +105,26 @@ struct FieldShadowState
 class SwNoteProps: public utl::ConfigItem
 {
     private:
-        bool bIsShowAnchor;
+        bool m_bIsShowAnchor;
 
         virtual void ImplCommit() override;
 
     public:
         SwNoteProps()
             : ConfigItem("Office.Writer/Notes")
-            , bIsShowAnchor(false)
+            , m_bIsShowAnchor(false)
         {
             const css::uno::Sequence< OUString >& rNames = GetPropertyNames();
             css::uno::Sequence< css::uno::Any > aValues = GetProperties(rNames);
             const css::uno::Any* pValues = aValues.getConstArray();
             SAL_WARN_IF(aValues.getLength() != rNames.getLength(), "sw", "GetProperties failed");
             if (aValues.getLength())
-                    pValues[0]>>=bIsShowAnchor;
+                    pValues[0]>>=m_bIsShowAnchor;
         }
 
         bool IsShowAnchor()
         {
-            return bIsShowAnchor;
+            return m_bIsShowAnchor;
         }
         static css::uno::Sequence< OUString >& GetPropertyNames()
         {
