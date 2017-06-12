@@ -1774,18 +1774,19 @@ bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
 
 void SdrTableObj::EndTextEdit(SdrOutliner& rOutl)
 {
+
+    if (GetModel() && GetModel()->IsUndoEnabled() && !mpImpl->maUndos.empty())
+    {
+        // These actions should be on the undo stack after text edit.
+        for (std::unique_ptr<SdrUndoAction>& pAction : mpImpl->maUndos)
+            GetModel()->AddUndo(pAction.release());
+        mpImpl->maUndos.clear();
+
+        GetModel()->AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*this));
+    }
+
     if(rOutl.IsModified())
     {
-        if( GetModel() && GetModel()->IsUndoEnabled() )
-        {
-            // These actions should be on the undo stack after text edit.
-            for (std::unique_ptr<SdrUndoAction>& pAction : mpImpl->maUndos)
-                GetModel()->AddUndo(pAction.release());
-            mpImpl->maUndos.clear();
-
-            GetModel()->AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*this) );
-        }
-
         OutlinerParaObject* pNewText = nullptr;
         Paragraph* p1stPara = rOutl.GetParagraph( 0 );
         sal_Int32 nParaAnz = rOutl.GetParagraphCount();
