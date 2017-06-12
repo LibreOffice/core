@@ -70,8 +70,8 @@ void SvXMLImportContext::Characters( const OUString& )
 void SAL_CALL SvXMLImportContext::startFastElement(sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
     mrImport.isFastContext = false;
-    startUnknownElement( mrImport.getNamespacePrefixFromToken( nElement ),
-                         mrImport.getNameFromToken( nElement ), Attribs );
+    startUnknownElement( SvXMLImport::getNamespacePrefixFromToken( nElement ),
+                         SvXMLImport::getNameFromToken( nElement ), Attribs );
 }
 
 void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & rPrefix, const OUString & rLocalName,
@@ -103,8 +103,8 @@ void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & rPrefix, 
             const OUString& rAttrValue = OUString(pAttribList->getFastAttributeValue(i),
                                             pAttribList->AttributeValueLength(i), RTL_TEXTENCODING_UTF8);
             sal_Int32 nToken = rAttrTokenList[ i ];
-            const OUString& rAttrNamespacePrefix = mrImport.getNamespacePrefixFromToken( nToken );
-            OUString sAttrName = mrImport.getNameFromToken( nToken );
+            const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken( nToken );
+            OUString sAttrName = SvXMLImport::getNameFromToken( nToken );
             if ( !rAttrNamespacePrefix.isEmpty() )
                 sAttrName = rAttrNamespacePrefix + ":" + sAttrName;
 
@@ -131,8 +131,8 @@ void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & rPrefix, 
 void SAL_CALL SvXMLImportContext::endFastElement(sal_Int32 nElement)
 {
     mrImport.isFastContext = false;
-    endUnknownElement( mrImport.getNamespacePrefixFromToken( nElement ),
-                       mrImport.getNameFromToken( nElement ) );
+    endUnknownElement( SvXMLImport::getNamespacePrefixFromToken( nElement ),
+                       SvXMLImport::getNameFromToken( nElement ) );
 }
 
 void SAL_CALL SvXMLImportContext::endUnknownElement (const OUString & rPrefix, const OUString & rLocalName)
