@@ -1654,7 +1654,7 @@ void SwHTMLParser::InsertInput()
                 aMacroTable.Insert( HTML_ET_ONCLICK_ITEM, *pMacro );
                 aMacroTable.Erase( HTML_ET_ONCLICK );
             }
-            // evaluating SIZE shouldn't be neccessary here?
+            // evaluating SIZE shouldn't be necessary here?
             bMinWidth = bMinHeight = true;
         }
         break;

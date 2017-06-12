@@ -620,7 +620,7 @@ published service Content
                 <tr>
                     <td>DocumentHeader</td>
                     <td>sequence&lt; DocumentHeaderField &gt; </td>
-                    <td>contains a sequence of documemt header fields (i.e. header
+                    <td>contains a sequence of document header fields (i.e. header
                         fields of a MIME-message, or the document info of an
                         office document ). For some standard header fields there
                         are predefined separate properties, like &quot;MessageTo&quot;.
