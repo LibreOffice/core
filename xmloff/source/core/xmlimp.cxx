@@ -75,6 +75,10 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::xmloff::token;
 
+css::uno::Reference< css::xml::sax::XFastTokenHandler > SvXMLImport::xTokenHandler( new FastTokenHandler() );
+std::unordered_map< sal_Int32, std::pair< OUString, OUString > > SvXMLImport::aNamespaceMap;
+bool SvXMLImport::bIsNSMapsInitialized = false;
+
 class SvXMLImportEventListener : public cppu::WeakImplHelper< css::lang::XEventListener >
 {
 private:
@@ -382,7 +386,6 @@ SvXMLImport::SvXMLImport(
     isFastContext( false ),
     maNamespaceHandler( new SvXMLImportFastNamespaceHandler() ),
     mxFastDocumentHandler( nullptr ),
-    mxTokenHandler( new FastTokenHandler() ),
     mbIsFormsSupported( true ),
     mbIsTableShapeSupported( false ),
     mbIsGraphicLoadOnDemandSupported( true )
@@ -391,7 +394,12 @@ SvXMLImport::SvXMLImport(
     InitCtor_();
     mxParser = xml::sax::FastParser::create( xContext );
     setNamespaceHandler( maNamespaceHandler.get() );
-    setTokenHandler( mxTokenHandler  );
+    setTokenHandler( xTokenHandler  );
+    if ( !bIsNSMapsInitialized )
+    {
+        initializeNamespaceMaps();
+        bIsNSMapsInitialized = true;
+    }
     registerNamespaces();
 }
 
@@ -1981,7 +1989,7 @@ bool SvXMLImport::embeddedFontAlreadyProcessed( const OUString& url )
 
 const OUString SvXMLImport::getNameFromToken( sal_Int32 nToken )
 {
-    uno::Sequence< sal_Int8 > aSeq = mxTokenHandler->getUTF8Identifier( nToken & TOKEN_MASK );
+    uno::Sequence< sal_Int8 > aSeq = xTokenHandler->getUTF8Identifier( nToken & TOKEN_MASK );
     return OUString( reinterpret_cast< const char* >(
                     aSeq.getConstArray() ), aSeq.getLength(), RTL_TEXTENCODING_UTF8 );
 }
@@ -1989,83 +1997,116 @@ const OUString SvXMLImport::getNameFromToken( sal_Int32 nToken )
 const OUString SvXMLImport::getNamespacePrefixFromToken( sal_Int32 nToken )
 {
     sal_Int32 nNamespaceToken = ( nToken & NMSP_MASK ) >> NMSP_SHIFT;
-    auto aIter( maNamespaceMap.find( nNamespaceToken ) );
-    if( aIter != maNamespaceMap.end() )
-        return (*aIter).second;
+    auto aIter( aNamespaceMap.find( nNamespaceToken ) );
+    if( aIter != aNamespaceMap.end() )
+        return (*aIter).second.first;
     else
         return OUString();
 }
 
-void SvXMLImport::registerNamespaces()
+const OUString SvXMLImport::getNamespaceURIFromToken( sal_Int32 nToken )
 {
-    registerNSHelper( XML_NAMESPACE_OFFICE + 1, XML_NP_OFFICE, XML_N_OFFICE );
-    registerNSHelper( XML_NAMESPACE_OFFICE + 1, XML_NP_OFFICE, XML_N_OFFICE_OLD );
-    registerNSHelper( XML_NAMESPACE_STYLE + 1, XML_NP_STYLE, XML_N_STYLE );
-    registerNSHelper( XML_NAMESPACE_STYLE + 1, XML_NP_STYLE, XML_N_STYLE_OLD );
-    registerNSHelper( XML_NAMESPACE_TEXT + 1, XML_NP_TEXT, XML_N_TEXT );
-    registerNSHelper( XML_NAMESPACE_TEXT + 1, XML_NP_TEXT, XML_N_TEXT_OLD );
-    registerNSHelper( XML_NAMESPACE_TABLE + 1, XML_NP_TABLE, XML_N_TABLE );
-    registerNSHelper( XML_NAMESPACE_TABLE + 1, XML_NP_TABLE, XML_N_TABLE_OLD );
-    registerNSHelper( XML_NAMESPACE_DRAW + 1, XML_NP_DRAW, XML_N_DRAW );
-    registerNSHelper( XML_NAMESPACE_DRAW + 1, XML_NP_DRAW, XML_N_DRAW_OLD );
-    registerNSHelper( XML_NAMESPACE_FO + 1, XML_NP_FO, XML_N_FO );
-    registerNSHelper( XML_NAMESPACE_FO + 1, XML_NP_FO, XML_N_FO_OLD );
-    registerNSHelper( XML_NAMESPACE_FO + 1, XML_NP_FO, XML_N_FO_COMPAT );
-    registerNSHelper( XML_NAMESPACE_XLINK + 1, XML_NP_XLINK, XML_N_XLINK );
-    registerNSHelper( XML_NAMESPACE_XLINK + 1, XML_NP_XLINK, XML_N_XLINK_OLD );
-    registerNSHelper( XML_NAMESPACE_DC + 1, XML_NP_DC, XML_N_DC );
-    registerNSHelper( XML_NAMESPACE_META + 1, XML_NP_META, XML_N_META );
-    registerNSHelper( XML_NAMESPACE_META + 1, XML_NP_META, XML_N_META_OLD );
-    registerNSHelper( XML_NAMESPACE_NUMBER + 1, XML_NP_NUMBER, XML_N_NUMBER );
-    registerNSHelper( XML_NAMESPACE_NUMBER + 1, XML_NP_NUMBER, XML_N_NUMBER_OLD );
-    registerNSHelper( XML_NAMESPACE_PRESENTATION + 1, XML_NP_PRESENTATION, XML_N_PRESENTATION );
-    registerNSHelper( XML_NAMESPACE_PRESENTATION + 1, XML_NP_PRESENTATION, XML_N_PRESENTATION_OLD );
-    registerNSHelper( XML_NAMESPACE_SVG + 1, XML_NP_SVG, XML_N_SVG );
-    registerNSHelper( XML_NAMESPACE_SVG + 1, XML_NP_SVG, XML_N_SVG_COMPAT );
-    registerNSHelper( XML_NAMESPACE_CHART + 1, XML_NP_CHART, XML_N_CHART );
-    registerNSHelper( XML_NAMESPACE_CHART + 1, XML_NP_CHART, XML_N_CHART_OLD );
-    registerNSHelper( XML_NAMESPACE_DR3D + 1, XML_NP_DR3D, XML_N_DR3D );
-    registerNSHelper( XML_NAMESPACE_MATH + 1, XML_NP_MATH, XML_N_MATH );
-    registerNSHelper( XML_NAMESPACE_FORM + 1, XML_NP_FORM, XML_N_FORM );
-    registerNSHelper( XML_NAMESPACE_SCRIPT + 1, XML_NP_SCRIPT, XML_N_SCRIPT );
-    registerNSHelper( XML_NAMESPACE_BLOCKLIST + 1, XML_NP_BLOCK_LIST, XML_N_BLOCK_LIST );
-    registerNSHelper( XML_NAMESPACE_CONFIG + 1, XML_NP_CONFIG, XML_N_CONFIG );
-    registerNSHelper( XML_NAMESPACE_OOO + 1, XML_NP_OOO, XML_N_OOO );
-    registerNSHelper( XML_NAMESPACE_OOOW + 1, XML_NP_OOOW, XML_N_OOOW );
-    registerNSHelper( XML_NAMESPACE_OOOC + 1, XML_NP_OOOC, XML_N_OOOC );
-    registerNSHelper( XML_NAMESPACE_DOM + 1, XML_NP_DOM, XML_N_DOM );
-    registerNSHelper( XML_NAMESPACE_DB + 1, XML_NP_DB, XML_N_DB );
-    registerNSHelper( XML_NAMESPACE_DB + 1, XML_NP_DB, XML_N_DB_OASIS );
-    registerNSHelper( XML_NAMESPACE_DLG + 1, XML_NP_DLG, XML_N_DLG );
-    registerNSHelper( XML_NAMESPACE_XFORMS + 1, XML_NP_XFORMS_1_0, XML_N_XFORMS_1_0 );
-    registerNSHelper( XML_NAMESPACE_XSD + 1, XML_NP_XSD, XML_N_XSD );
-    registerNSHelper( XML_NAMESPACE_XSI + 1, XML_NP_XSI, XML_N_XSI );
-    registerNSHelper( XML_NAMESPACE_SMIL + 1, XML_NP_SMIL, XML_N_SMIL );
-    registerNSHelper( XML_NAMESPACE_SMIL + 1, XML_NP_SMIL, XML_N_SMIL_OLD );
-    registerNSHelper( XML_NAMESPACE_SMIL + 1, XML_NP_SMIL, XML_N_SMIL_COMPAT );
-    registerNSHelper( XML_NAMESPACE_ANIMATION + 1, XML_NP_ANIMATION, XML_N_ANIMATION );
-    registerNSHelper( XML_NAMESPACE_REPORT + 1, XML_NP_RPT, XML_N_RPT );
-    registerNSHelper( XML_NAMESPACE_REPORT + 1, XML_NP_RPT, XML_N_RPT_OASIS );
-    registerNSHelper( XML_NAMESPACE_OF + 1, XML_NP_OF, XML_N_OF );
-    registerNSHelper( XML_NAMESPACE_XHTML + 1, XML_NP_XHTML, XML_N_XHTML );
-    registerNSHelper( XML_NAMESPACE_GRDDL + 1, XML_NP_GRDDL, XML_N_GRDDL );
-    registerNSHelper( XML_NAMESPACE_OFFICE_EXT + 1, XML_NP_OFFICE_EXT, XML_N_OFFICE_EXT );
-    registerNSHelper( XML_NAMESPACE_TABLE_EXT + 1, XML_NP_TABLE_EXT, XML_N_TABLE_EXT );
-    registerNSHelper( XML_NAMESPACE_CHART_EXT + 1, XML_NP_CHART_EXT, XML_N_CHART_EXT );
-    registerNSHelper( XML_NAMESPACE_DRAW_EXT + 1, XML_NP_DRAW_EXT, XML_N_DRAW_EXT );
-    registerNSHelper( XML_NAMESPACE_CALC_EXT + 1, XML_NP_CALC_EXT, XML_N_CALC_EXT );
-    registerNSHelper( XML_NAMESPACE_LO_EXT + 1, XML_NP_LO_EXT, XML_N_LO_EXT );
-    registerNSHelper( XML_NAMESPACE_CSS3TEXT + 1, XML_NP_CSS3TEXT, XML_N_CSS3TEXT );
-    registerNSHelper( XML_NAMESPACE_FIELD + 1, XML_NP_FIELD, XML_N_FIELD );
-    registerNSHelper( XML_NAMESPACE_FORMX + 1, XML_NP_FORMX, XML_N_FORMX );
+    sal_Int32 nNamespaceToken = ( nToken & NMSP_MASK ) >> NMSP_SHIFT;
+    auto aIter( aNamespaceMap.find( nNamespaceToken ) );
+    if( aIter != aNamespaceMap.end() )
+        return (*aIter).second.second;
+    else
+        return OUString();
 }
 
-void SvXMLImport::registerNSHelper(sal_Int32 nToken, sal_Int32 nPrefix, sal_Int32 nNamespace )
+void SvXMLImport::initializeNamespaceMaps()
 {
-    if ( nToken > 0 )
+    auto mapTokenToNamespace = [&]( sal_Int32 nToken, sal_Int32 nPrefix, sal_Int32 nNamespace )
     {
-        maNamespaceMap[ nToken ] = GetXMLToken( static_cast<XMLTokenEnum>( nPrefix ) );
-        registerNamespace( GetXMLToken( static_cast<XMLTokenEnum>( nNamespace ) ), nToken << NMSP_SHIFT );
+        if ( nToken >= 0 )
+        {
+            aNamespaceMap[ nToken + 1 ] = std::make_pair( GetXMLToken( static_cast<XMLTokenEnum>( nPrefix ) ),
+                                                      GetXMLToken( static_cast<XMLTokenEnum>( nNamespace ) ) );
+        }
+    };
+
+    mapTokenToNamespace( XML_NAMESPACE_OFFICE,           XML_NP_OFFICE,        XML_N_OFFICE           );
+    mapTokenToNamespace( XML_OLD_NAMESPACE_OFFICE,       XML_NP_OFFICE,        XML_N_OFFICE_OLD       );
+    mapTokenToNamespace( XML_NAMESPACE_OFFICE_OOO,       XML_NP_OFFICE,        XML_N_OFFICE_OOO       );
+    mapTokenToNamespace( XML_NAMESPACE_STYLE,            XML_NP_STYLE,         XML_N_STYLE            );
+    mapTokenToNamespace( XML_OLD_NAMESPACE_STYLE,        XML_NP_STYLE,         XML_N_STYLE_OLD        );
+    mapTokenToNamespace( XML_NAMESPACE_STYLE_OOO,        XML_NP_STYLE,         XML_N_STYLE_OOO        );
+    mapTokenToNamespace( XML_NAMESPACE_TEXT,             XML_NP_TEXT,          XML_N_TEXT             );
+    mapTokenToNamespace( XML_OLD_NAMESPACE_TEXT,         XML_NP_TEXT,          XML_N_TEXT_OLD         );
+    mapTokenToNamespace( XML_NAMESPACE_TEXT_OOO,         XML_NP_TEXT,          XML_N_TEXT_OOO         );
+    mapTokenToNamespace( XML_NAMESPACE_TABLE,            XML_NP_TABLE,         XML_N_TABLE            );
+    mapTokenToNamespace( XML_OLD_NAMESPACE_TABLE,        XML_NP_TABLE,         XML_N_TABLE_OLD        );
+    mapTokenToNamespace( XML_NAMESPACE_TABLE_OOO,        XML_NP_TABLE,         XML_N_TABLE_OOO        );
+    mapTokenToNamespace( XML_NAMESPACE_DRAW,             XML_NP_DRAW,          XML_N_DRAW             );
+    mapTokenToNamespace( XML_OLD_NAMESPACE_DRAW,         XML_NP_DRAW,          XML_N_DRAW_OLD         );
+    mapTokenToNamespace( XML_NAMESPACE_DRAW_OOO,         XML_NP_DRAW,          XML_N_DRAW_OOO         );
+    mapTokenToNamespace( XML_NAMESPACE_FO,               XML_NP_FO,            XML_N_FO               );
+    mapTokenToNamespace( XML_OLD_NAMESPACE_FO,           XML_NP_FO,            XML_N_FO_OLD           );
+    mapTokenToNamespace( XML_NAMESPACE_FO_COMPAT,        XML_NP_FO,            XML_N_FO_COMPAT        );
+    mapTokenToNamespace( XML_NAMESPACE_XLINK,            XML_NP_XLINK,         XML_N_XLINK            );
+    mapTokenToNamespace( XML_OLD_NAMESPACE_XLINK,        XML_NP_XLINK,         XML_N_XLINK_OLD        );
+    mapTokenToNamespace( XML_NAMESPACE_DC,               XML_NP_DC,            XML_N_DC               );
+    mapTokenToNamespace( XML_NAMESPACE_META,             XML_NP_META,          XML_N_META             );
+    mapTokenToNamespace( XML_OLD_NAMESPACE_META,         XML_NP_META,          XML_N_META_OLD         );
+    mapTokenToNamespace( XML_NAMESPACE_META_OOO,         XML_NP_META,          XML_N_META_OOO         );
+    mapTokenToNamespace( XML_NAMESPACE_NUMBER,           XML_NP_NUMBER,        XML_N_NUMBER           );
+    mapTokenToNamespace( XML_OLD_NAMESPACE_NUMBER,       XML_NP_NUMBER,        XML_N_NUMBER_OLD       );
+    mapTokenToNamespace( XML_NAMESPACE_NUMBER_OOO,       XML_NP_NUMBER,        XML_N_NUMBER_OOO       );
+    mapTokenToNamespace( XML_NAMESPACE_PRESENTATION,     XML_NP_PRESENTATION,  XML_N_PRESENTATION     );
+    mapTokenToNamespace( XML_OLD_NAMESPACE_PRESENTATION, XML_NP_PRESENTATION,  XML_N_PRESENTATION_OLD );
+    mapTokenToNamespace( XML_NAMESPACE_PRESENTATION_OOO, XML_NP_PRESENTATION,  XML_N_PRESENTATION_OOO );
+    mapTokenToNamespace( XML_NAMESPACE_SVG,              XML_NP_SVG,           XML_N_SVG              );
+    mapTokenToNamespace( XML_NAMESPACE_SVG_COMPAT,       XML_NP_SVG,           XML_N_SVG_COMPAT       );
+    mapTokenToNamespace( XML_NAMESPACE_CHART,            XML_NP_CHART,         XML_N_CHART            );
+    mapTokenToNamespace( XML_OLD_NAMESPACE_CHART,        XML_NP_CHART,         XML_N_CHART_OLD        );
+    mapTokenToNamespace( XML_NAMESPACE_CHART_OOO,        XML_NP_CHART,         XML_N_CHART_OOO        );
+    mapTokenToNamespace( XML_NAMESPACE_DR3D,             XML_NP_DR3D,          XML_N_DR3D             );
+    mapTokenToNamespace( XML_NAMESPACE_DR3D_OOO,         XML_NP_DR3D,          XML_N_DR3D_OOO         );
+    mapTokenToNamespace( XML_NAMESPACE_MATH,             XML_NP_MATH,          XML_N_MATH             );
+    mapTokenToNamespace( XML_NAMESPACE_VERSIONS_LIST,    XML_NP_VERSIONS_LIST, XML_N_VERSIONS_LIST    );
+    mapTokenToNamespace( XML_NAMESPACE_FORM,             XML_NP_FORM,          XML_N_FORM             );
+    mapTokenToNamespace( XML_NAMESPACE_FORM_OOO,         XML_NP_FORM,          XML_N_FORM_OOO         );
+    mapTokenToNamespace( XML_NAMESPACE_SCRIPT,           XML_NP_SCRIPT,        XML_N_SCRIPT           );
+    mapTokenToNamespace( XML_NAMESPACE_SCRIPT_OOO,       XML_NP_SCRIPT,        XML_N_SCRIPT_OOO       );
+    mapTokenToNamespace( XML_NAMESPACE_BLOCKLIST,        XML_NP_BLOCK_LIST,    XML_N_BLOCK_LIST       );
+    mapTokenToNamespace( XML_NAMESPACE_CONFIG,           XML_NP_CONFIG,        XML_N_CONFIG           );
+    mapTokenToNamespace( XML_NAMESPACE_CONFIG_OOO,       XML_NP_CONFIG,        XML_N_CONFIG_OOO       );
+    mapTokenToNamespace( XML_NAMESPACE_OOO,              XML_NP_OOO,           XML_N_OOO              );
+    mapTokenToNamespace( XML_NAMESPACE_OOOW,             XML_NP_OOOW,          XML_N_OOOW             );
+    mapTokenToNamespace( XML_NAMESPACE_OOOC,             XML_NP_OOOC,          XML_N_OOOC             );
+    mapTokenToNamespace( XML_NAMESPACE_DOM,              XML_NP_DOM,           XML_N_DOM              );
+    mapTokenToNamespace( XML_NAMESPACE_DB,               XML_NP_DB,            XML_N_DB               );
+    mapTokenToNamespace( XML_NAMESPACE_DB_OASIS,         XML_NP_DB,            XML_N_DB_OASIS         );
+    mapTokenToNamespace( XML_NAMESPACE_DLG,              XML_NP_DLG,           XML_N_DLG              );
+    mapTokenToNamespace( XML_NAMESPACE_XFORMS,           XML_NP_XFORMS_1_0,    XML_N_XFORMS_1_0       );
+    mapTokenToNamespace( XML_NAMESPACE_XSD,              XML_NP_XSD,           XML_N_XSD              );
+    mapTokenToNamespace( XML_NAMESPACE_XSI,              XML_NP_XSI,           XML_N_XSI              );
+    mapTokenToNamespace( XML_NAMESPACE_SMIL,             XML_NP_SMIL,          XML_N_SMIL             );
+    mapTokenToNamespace( XML_OLD_NAMESPACE_SMIL,         XML_NP_SMIL,          XML_N_SMIL_OLD         );
+    mapTokenToNamespace( XML_NAMESPACE_SMIL_COMPAT,      XML_NP_SMIL,          XML_N_SMIL_COMPAT      );
+    mapTokenToNamespace( XML_NAMESPACE_ANIMATION,        XML_NP_ANIMATION,     XML_N_ANIMATION        );
+    mapTokenToNamespace( XML_NAMESPACE_REPORT,           XML_NP_RPT,           XML_N_RPT              );
+    mapTokenToNamespace( XML_NAMESPACE_REPORT_OASIS,     XML_NP_RPT,           XML_N_RPT_OASIS        );
+    mapTokenToNamespace( XML_NAMESPACE_OF,               XML_NP_OF,            XML_N_OF               );
+    mapTokenToNamespace( XML_NAMESPACE_XHTML,            XML_NP_XHTML,         XML_N_XHTML            );
+    mapTokenToNamespace( XML_NAMESPACE_GRDDL,            XML_NP_GRDDL,         XML_N_GRDDL            );
+    mapTokenToNamespace( XML_NAMESPACE_OFFICE_EXT,       XML_NP_OFFICE_EXT,    XML_N_OFFICE_EXT       );
+    mapTokenToNamespace( XML_NAMESPACE_TABLE_EXT,        XML_NP_TABLE_EXT,     XML_N_TABLE_EXT        );
+    mapTokenToNamespace( XML_NAMESPACE_CHART_EXT,        XML_NP_CHART_EXT,     XML_N_CHART_EXT        );
+    mapTokenToNamespace( XML_NAMESPACE_DRAW_EXT,         XML_NP_DRAW_EXT,      XML_N_DRAW_EXT         );
+    mapTokenToNamespace( XML_NAMESPACE_CALC_EXT,         XML_NP_CALC_EXT,      XML_N_CALC_EXT         );
+    mapTokenToNamespace( XML_NAMESPACE_LO_EXT,           XML_NP_LO_EXT,        XML_N_LO_EXT           );
+    mapTokenToNamespace( XML_NAMESPACE_CSS3TEXT,         XML_NP_CSS3TEXT,      XML_N_CSS3TEXT         );
+    mapTokenToNamespace( XML_NAMESPACE_FIELD,            XML_NP_FIELD,         XML_N_FIELD            );
+    mapTokenToNamespace( XML_NAMESPACE_FORMX,            XML_NP_FORMX,         XML_N_FORMX            );
+}
+
+void SvXMLImport::registerNamespaces()
+{
+    for( auto const &aNamespaceEntry : aNamespaceMap )
+    {
+        // aNamespaceMap = { Token : ( NamespacePrefix, NamespaceURI ) }
+        registerNamespace( aNamespaceEntry.second.second, aNamespaceEntry.first << NMSP_SHIFT );
     }
 }
 
@@ -2102,8 +2143,8 @@ OUString SvXMLImportFastNamespaceHandler::getNamespaceURI( const OUString&/* rNa
 
 SvXMLLegacyToFastDocHandler::SvXMLLegacyToFastDocHandler( const rtl::Reference< SvXMLImport > & rImport )
 :   mrImport( rImport ),
-    mxFastAttributes( new sax_fastparser::FastAttributeList( mrImport->mxTokenHandler.get(),
-        dynamic_cast< sax_fastparser::FastTokenHandlerBase *>( mrImport->mxTokenHandler.get() ) ) )
+    mxFastAttributes( new sax_fastparser::FastAttributeList( SvXMLImport::xTokenHandler.get(),
+        dynamic_cast< sax_fastparser::FastTokenHandlerBase *>( SvXMLImport::xTokenHandler.get() ) ) )
 {
 }
 
@@ -2130,7 +2171,7 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
     sal_uInt16 nPrefix = mrImport->mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
     Sequence< sal_Int8 > aLocalNameSeq( reinterpret_cast<sal_Int8 const *>(
                                     OUStringToOString( aLocalName, RTL_TEXTENCODING_UTF8 ).getStr()), aLocalName.getLength() );
-    sal_Int32 mnElement = NAMESPACE_TOKEN( nPrefix ) | mrImport->mxTokenHandler->getTokenFromUTF8( aLocalNameSeq );
+    sal_Int32 mnElement = NAMESPACE_TOKEN( nPrefix ) | SvXMLImport::xTokenHandler->getTokenFromUTF8( aLocalNameSeq );
     mxFastAttributes->clear();
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -2144,7 +2185,7 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
         {
             Sequence< sal_Int8 > aAttrSeq( reinterpret_cast<sal_Int8 const *>(
                                     OUStringToOString( aLocalAttrName, RTL_TEXTENCODING_UTF8 ).getStr()), aLocalAttrName.getLength() );
-            sal_Int32 nAttr = NAMESPACE_TOKEN( nAttrPrefix ) | mrImport->mxTokenHandler->getTokenFromUTF8( aAttrSeq ) ;
+            sal_Int32 nAttr = NAMESPACE_TOKEN( nAttrPrefix ) | SvXMLImport::xTokenHandler->getTokenFromUTF8( aAttrSeq ) ;
             mxFastAttributes->add( nAttr, OUStringToOString( rAttrValue, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
@@ -2157,7 +2198,7 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::endElement( const OUString& rName )
     sal_uInt16 nPrefix = mrImport->mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
     Sequence< sal_Int8 > aLocalNameSeq( reinterpret_cast<sal_Int8 const *>(
                                     OUStringToOString( aLocalName, RTL_TEXTENCODING_UTF8 ).getStr()), aLocalName.getLength() );
-    sal_Int32 mnElement = NAMESPACE_TOKEN( nPrefix ) | mrImport->mxTokenHandler->getTokenFromUTF8( aLocalNameSeq );
+    sal_Int32 mnElement = NAMESPACE_TOKEN( nPrefix ) | SvXMLImport::xTokenHandler->getTokenFromUTF8( aLocalNameSeq );
     mrImport->endFastElement( mnElement );
 }
 
