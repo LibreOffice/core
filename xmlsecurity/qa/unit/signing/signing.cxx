@@ -492,7 +492,8 @@ void SigningTest::test96097Calc()
     // Save a copy
     utl::TempFile aTempFileSaveCopy;
     aTempFileSaveCopy.EnableKillingFile();
-    uno::Sequence<beans::PropertyValue> descSaveACopy( comphelper::InitPropertySequence({
+    uno::Sequence<beans::PropertyValue> descSaveACopy(comphelper::InitPropertySequence(
+    {
         { "SaveACopy", uno::Any(true) },
         { "FilterName", uno::Any(OUString("calc8")) }
     }));
@@ -503,7 +504,8 @@ void SigningTest::test96097Calc()
         // Save As
         utl::TempFile aTempFileSaveAs;
         aTempFileSaveAs.EnableKillingFile();
-        uno::Sequence<beans::PropertyValue> descSaveAs( comphelper::InitPropertySequence({
+        uno::Sequence<beans::PropertyValue> descSaveAs(comphelper::InitPropertySequence(
+        {
             { "FilterName", uno::Any(OUString("calc8")) }
         }));
         xDocStorable->storeAsURL(aTempFileSaveAs.GetURL(), descSaveAs);
@@ -539,7 +541,8 @@ void SigningTest::test96097Doc()
     // Save a copy
     utl::TempFile aTempFileSaveCopy;
     aTempFileSaveCopy.EnableKillingFile();
-    uno::Sequence<beans::PropertyValue> descSaveACopy( comphelper::InitPropertySequence({
+    uno::Sequence<beans::PropertyValue> descSaveACopy(comphelper::InitPropertySequence(
+    {
         { "SaveACopy", uno::Any(true) },
         { "FilterName", uno::Any(OUString("writer8")) }
     }));
@@ -550,7 +553,8 @@ void SigningTest::test96097Doc()
         // Save As
         utl::TempFile aTempFileSaveAs;
         aTempFileSaveAs.EnableKillingFile();
-        uno::Sequence<beans::PropertyValue> descSaveAs( comphelper::InitPropertySequence({
+        uno::Sequence<beans::PropertyValue> descSaveAs(comphelper::InitPropertySequence(
+        {
             { "FilterName", uno::Any(OUString("writer8")) }
         }));
         xDocStorable->storeAsURL(aTempFileSaveAs.GetURL(), descSaveAs);

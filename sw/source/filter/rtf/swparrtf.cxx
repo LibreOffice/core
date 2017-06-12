@@ -80,11 +80,12 @@ sal_uLong SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rP
         SwXTextRange::CreateXTextRange(rDoc, *rPam.GetPoint(), nullptr);
 
     uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
-            { "InputStream", uno::Any(uno::Reference<io::XStream>(new utl::OStreamWrapper(*pStrm))) },
-            { "InsertMode", uno::Any(true) },
-            { "TextInsertModeRange", uno::Any(xInsertTextRange) }
-        }));
+    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+    {
+        { "InputStream", uno::Any(uno::Reference<io::XStream>(new utl::OStreamWrapper(*pStrm))) },
+        { "InsertMode", uno::Any(true) },
+        { "TextInsertModeRange", uno::Any(xInsertTextRange) }
+    }));
     sal_uLong ret(0);
     try
     {
@@ -171,9 +172,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportRTF(SvStream& rStream)
     xImporter->setTargetDocument(xDstDoc);
 
     uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
-            { "InputStream", uno::Any(uno::Reference<io::XStream>(new utl::OStreamWrapper(rStream))) }
-        }));
+    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+    {
+        { "InputStream", uno::Any(uno::Reference<io::XStream>(new utl::OStreamWrapper(rStream))) }
+    }));
     bool bRet = true;
     try
     {
