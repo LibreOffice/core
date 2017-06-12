@@ -719,7 +719,7 @@ darwin*) # Mac OS X or iOS
     test_freetype=no
     test_fontconfig=no
     test_dbus=no
-    if test "$host_cpu" = "armv7" -o "$host_cpu" = "arm64"; then
+    if test "$host_cpu" = "arm"; then
         _os=iOS
         test_gtk=no
         test_cups=no
@@ -1373,7 +1373,7 @@ AC_ARG_ENABLE(ccache,
 AC_ARG_ENABLE(64-bit,
     AS_HELP_STRING([--enable-64-bit],
         [Build a 64-bit LibreOffice on platforms where the normal build is 32-bit.
-         At the moment meaningful only for Windows.]), ,)
+         At the moment meaningful only for iOS and Windows.]), ,)
 
 libo_FUZZ_ARG_ENABLE(online-update,
     AS_HELP_STRING([--enable-online-update],
@@ -1443,6 +1443,11 @@ AC_ARG_WITH(product-name,
 AC_ARG_WITH(package-version,
     AS_HELP_STRING([--with-package-version='3.1.4.5'],
         [Define the package version. Default is AC_PACKAGE_VERSION. Use only if you distribute an own build for macOS.]),
+,)
+
+AC_ARG_ENABLE(ios-simulator,
+    AS_HELP_STRING([--enable-ios-simulator],
+        [Build for the iOS Simulator, not iOS device.]),
 ,)
 
 libo_FUZZ_ARG_ENABLE(readonly-installset,
@@ -1572,7 +1577,7 @@ AC_ARG_WITH(galleries,
 AC_ARG_WITH(theme,
     AS_HELP_STRING([--with-theme="theme1 theme2..."],
         [Choose which themes to include. By default those themes with an '*' are included.
-         Possible choices: *breeze, *breeze_dark, crystal, *galaxy, *hicontrast, oxygen, *sifr, *sifr_dark, *tango, *tango_testing.]),
+         Possible choices: *breeze, *breeze_dark, crystal, *galaxy, *hicontrast, oxygen, *sifr, *tango, *tango_testing.]),
 ,)
 
 libo_FUZZ_ARG_WITH(helppack-integration,
@@ -2951,24 +2956,19 @@ dnl Check iOS SDK and compiler
 dnl ===================================================================
 
 if test $_os = iOS; then
-    if test "$host_cpu" = "arm64"; then
+
+    if test "$enable_64_bit" = "" -o "$enable_64_bit" = "no"; then
+        :
+    else
         BITNESS_OVERRIDE=64
     fi
 
     AC_MSG_CHECKING([what iOS SDK to use])
 
-    if test "$build_cpu" = "i386"; then
+    if test "$enable_ios_simulator" = yes; then
         platform=iPhoneSimulator
-        XCODE_ARCHS=i386
-        versionmin=-mios-simulator-version-min=9.3
-    elif test "$build_cpu" = "x86_64"; then
-        platform=iPhoneSimulator
-        XCODE_ARCHS=x86_64
-        versionmin=-mios-simulator-version-min=9.3
     else
         platform=iPhoneOS
-        XCODE_ARCHS=$host_cpu
-        versionmin=-miphoneos-version-min=9.3
     fi
 
     xcode_developer=`xcode-select -print-path`
@@ -2990,6 +2990,24 @@ if test $_os = iOS; then
     AC_MSG_RESULT($sysroot)
 
     XCODEBUILD_SDK=`echo $platform | tr A-Z a-z`$ios_sdk
+
+    if test "$enable_ios_simulator" = yes; then
+        if test "$BITNESS_OVERRIDE" = 64; then
+            XCODE_ARCHS=x86_64
+            versionmin=-mios-simulator-version-min=9.3
+        else
+            XCODE_ARCHS=i386
+            versionmin=-mios-simulator-version-min=9.3
+        fi
+    else
+        platform=iPhoneOS
+        if test "$BITNESS_OVERRIDE" = 64; then
+            XCODE_ARCHS=arm64
+        else
+            XCODE_ARCHS=armv7
+        fi
+        versionmin=-miphoneos-version-min=9.3
+    fi
 
     # LTO is not really recommended for iOS builds,
     # the link time will be astronomical
@@ -4569,6 +4587,10 @@ dnl Check for syslog header
 dnl ===================================================================
 AC_CHECK_HEADER(syslog.h, AC_DEFINE(HAVE_SYSLOG_H))
 
+# placeholder for future crash reporter feature
+ENABLE_CRASHDUMP=""
+AC_SUBST(ENABLE_CRASHDUMP)
+
 dnl Set the ENABLE_WERROR variable. (Activate --enable-werror)
 dnl ===================================================================
 AC_MSG_CHECKING([whether to turn warnings to errors])
@@ -5626,32 +5648,12 @@ dnl ===================================================================
 
 if test "$_os" != "WINNT"; then
 
-if test "$_os" == "iOS"; then
-if test "$host_cpu" == "armv7"; then
-  ac_cv_sizeof_long=4
-  ac_cv_sizeof_short=2
-  ac_cv_sizeof_int=4
-  ac_cv_sizeof_long_long=8
-  ac_cv_sizeof_double=8
-  ac_cv_sizeof_voidp=4
-else
-  ac_cv_sizeof_long=8
-  ac_cv_sizeof_short=2
-  ac_cv_sizeof_int=4
-  ac_cv_sizeof_long_long=8
-  ac_cv_sizeof_double=8
-  ac_cv_sizeof_voidp=8
-fi
-AC_MSG_CHECKING([iOS setting sizes long, short, int, long long, double, voidp])
-
-else
     AC_CHECK_SIZEOF(long)
     AC_CHECK_SIZEOF(short)
     AC_CHECK_SIZEOF(int)
     AC_CHECK_SIZEOF(long long)
     AC_CHECK_SIZEOF(double)
     AC_CHECK_SIZEOF(void*)
-fi
 
     SAL_TYPES_SIZEOFSHORT=$ac_cv_sizeof_short
     SAL_TYPES_SIZEOFINT=$ac_cv_sizeof_int
@@ -8714,7 +8716,7 @@ AC_SUBST(SYSTEM_BOOST)
 dnl ===================================================================
 dnl Check for system mdds
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([mdds], [MDDS], [mdds-1.2 >= 1.2.3], ["-I${WORKDIR}/UnpackedTarball/mdds/include"])
+libo_CHECK_SYSTEM_MODULE([mdds], [MDDS], [mdds-1.2 >= 1.2.0], ["-I${WORKDIR}/UnpackedTarball/mdds/include"])
 
 dnl ===================================================================
 dnl Check for system glm
@@ -8794,7 +8796,7 @@ if test $_os != iOS -a $_os != Android -a "$enable_fuzzers" != "yes"; then
     AC_DEFINE(HAVE_FEATURE_NSS)
     ENABLE_NSS="TRUE"
     AC_DEFINE(ENABLE_NSS)
-elif test $_os != iOS ; then
+else
     with_tls=openssl
 fi
 AC_SUBST(ENABLE_NSS)
@@ -8820,9 +8822,6 @@ if test -n "$with_tls"; then
     nss)
         AC_DEFINE(USE_TLS_NSS)
         TLS=NSS
-        ;;
-    no)
-        AC_MSG_WARN([Skipping TLS/SSL])
         ;;
     *)
         AC_MSG_ERROR([unsupported implementation $with_tls. Supported are:
@@ -11063,7 +11062,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([which themes to include])
 # if none given use default subset of available themes
 if test "x$with_theme" = "x" -o "x$with_theme" = "xyes"; then
-    with_theme="breeze breeze_dark galaxy hicontrast sifr sifr_dark tango"
+    with_theme="breeze breeze_dark galaxy hicontrast sifr tango"
     test -z "$ENABLE_RELEASE_BUILD" && with_theme="$with_theme tango_testing"
 fi
 
@@ -11071,7 +11070,7 @@ WITH_THEMES=""
 if test "x$with_theme" != "xno"; then
     for theme in $with_theme; do
         case $theme in
-        breeze|breeze_dark|crystal|elementary|galaxy|hicontrast|oxygen|sifr|sifr_dark|tango|tango_testing) real_theme="$theme" ;;
+        breeze|breeze_dark|crystal|elementary|galaxy|hicontrast|oxygen|sifr|tango|tango_testing) real_theme="$theme" ;;
         default) real_theme=galaxy ;;
         *) AC_MSG_ERROR([Unknown value for --with-theme: $theme]) ;;
         esac
@@ -12243,7 +12242,7 @@ AC_LANG_POP([C++])
 LIBS=$save_LIBS
 CXXFLAGS=$save_CXXFLAGS
 AC_MSG_RESULT([$broken])
-if test "$broken" = yes -a "$_os" != "iOS"; then
+if test "$broken" = yes; then
     AC_MSG_ERROR([working support for static initializer_list needed])
 fi
 

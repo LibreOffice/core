@@ -43,10 +43,10 @@ ANDROID)
     oslibs="$oslibs $WORKDIR/UnpackedTarball/cairo/src/.libs/libcairo.a"
     # Only liblo-bootstrap.a ends up here:
     oslibs="$oslibs $WORKDIR/LinkTarget/Library/lib*.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/openssl/*.a"
     ;;
 IOS)
     oslibs="$WORKDIR/UnpackedTarball/icu/source/stubdata/*.a"
-    osssl=""
     ;;
 *)
     oslibs=
@@ -76,7 +76,6 @@ echo $INSTDIR/$LIBO_LIB_FOLDER/lib*.a \
      $WORKDIR/UnpackedTarball/liborcus/src/*/.libs/*.a \
      $WORKDIR/UnpackedTarball/libvisio/src/lib/.libs/*.a \
      $WORKDIR/UnpackedTarball/libwp?/src/lib/.libs/*.a \
-     $osssl \
      $WORKDIR/UnpackedTarball/raptor/src/.libs/*.a \
      $WORKDIR/UnpackedTarball/rasqal/src/.libs/*.a \
      $WORKDIR/UnpackedTarball/redland/src/.libs/*.a \
