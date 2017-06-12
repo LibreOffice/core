@@ -41,6 +41,7 @@ $(eval $(call gb_Library_use_libraries,emfio,\
     sax \
     vcl \
     svt \
+    utl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,emfio,\
