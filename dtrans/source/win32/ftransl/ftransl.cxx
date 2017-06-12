@@ -147,6 +147,8 @@ static const std::vector< FormatEntry > g_TranslTable {
         FormatEntry("application/x-openoffice-xfa;windows_formatname=\"XFA (XOutDev FillAttr)\"", "XFA (XOutDev FillAttr)", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     // SotClipboardFormatId::EDITENGINE
         FormatEntry("application/x-openoffice-editengine;windows_formatname=\"EditEngineFormat\"", "EditEngineFormat", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+    // SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT
+        FormatEntry("application/vnd.oasis.opendocument.text-flat-xml", "EditEngine ODF", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     // SotClipboardFormatId::INTERNALLINK_STATE
         FormatEntry("application/x-openoffice-internallink-state;windows_formatname=\"StatusInfo of SvxInternalLink\"", "StatusInfo of SvxInternalLink", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     // SotClipboardFormatId::SOLK
