@@ -1327,6 +1327,7 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage( vcl::Window* pParent,
     get(m_pFillMarginRB, "fillmargin");
     get(m_pFillIndentRB, "fillindent");
     get(m_pFillTabRB, "filltab");
+    get(m_pFillTabAndSpaceRB, "filltabandspace");
     get(m_pFillSpaceRB, "fillspace");
 
     get(m_pCursorProtFrame, "crsrprotframe");
@@ -1346,6 +1347,7 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage( vcl::Window* pParent,
     m_pFillMarginRB->Check( FILL_MARGIN == eMode );
     m_pFillTabRB->Check( FILL_TAB == eMode );
     m_pFillSpaceRB->Check( FILL_SPACE == eMode );
+    m_pFillTabAndSpaceRB->Check( FILL_TAB_SPACE == eMode );
 
     if(SfxItemState::SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem )
         && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON)
@@ -1361,6 +1363,7 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage( vcl::Window* pParent,
         m_pFillIndentRB->Hide();
         m_pFillTabRB->Hide();
         m_pFillSpaceRB->Hide();
+        m_pFillTabAndSpaceRB->Hide();
 
         m_pCursorProtFrame->Hide();
         m_pCursorInProtCB->Hide();
@@ -1389,6 +1392,7 @@ void SwShdwCursorOptionsTabPage::dispose()
     m_pFillIndentRB.clear();
     m_pFillTabRB.clear();
     m_pFillSpaceRB.clear();
+    m_pFillTabAndSpaceRB.clear();
     m_pCursorProtFrame.clear();
     m_pCursorInProtCB.clear();
     m_pMathBaselineAlignmentCB.clear();
@@ -1419,6 +1423,8 @@ bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
         eMode = FILL_MARGIN;
     else if( m_pFillTabRB->IsChecked() )
         eMode = FILL_TAB;
+    else if ( m_pFillTabAndSpaceRB->IsChecked() )
+        eMode = FILL_TAB_SPACE;
     else
         eMode = FILL_SPACE;
     aOpt.SetMode( eMode );
@@ -1482,6 +1488,7 @@ void SwShdwCursorOptionsTabPage::Reset( const SfxItemSet* rSet )
     m_pFillMarginRB->Check( FILL_MARGIN == eMode );
     m_pFillTabRB->Check( FILL_TAB == eMode );
     m_pFillSpaceRB->Check( FILL_SPACE == eMode );
+    m_pFillTabAndSpaceRB->Check( FILL_TAB_SPACE == eMode );
 
     if (m_pWrtShell) {
        m_pMathBaselineAlignmentCB->Check( m_pWrtShell->GetDoc()->getIDocumentSettingAccess().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT ) );

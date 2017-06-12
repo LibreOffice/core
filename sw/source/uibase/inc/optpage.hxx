@@ -251,6 +251,7 @@ class SwShdwCursorOptionsTabPage : public SfxTabPage
     VclPtr<RadioButton> m_pFillMarginRB;
     VclPtr<RadioButton> m_pFillIndentRB;
     VclPtr<RadioButton> m_pFillTabRB;
+    VclPtr<RadioButton> m_pFillTabAndSpaceRB;
     VclPtr<RadioButton> m_pFillSpaceRB;
 
     VclPtr<VclFrame> m_pCursorProtFrame;

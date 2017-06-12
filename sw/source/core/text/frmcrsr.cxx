@@ -538,6 +538,7 @@ struct SwFillData
     SwFillCursorPos &Fill() const { return *pCMS->m_pFill; }
     void SetTab( sal_uInt16 nNew ) { pCMS->m_pFill->nTabCnt = nNew; }
     void SetSpace( sal_uInt16 nNew ) { pCMS->m_pFill->nSpaceCnt = nNew; }
+    void SetSpaceOnly( sal_uInt16 nNew ) { pCMS->m_pFill->nSpaceOnlyCnt = nNew; }
     void SetOrient( const sal_Int16 eNew ){ pCMS->m_pFill->eOrient = eNew; }
 };
 
@@ -1470,6 +1471,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                     SwDrawTextInfo aDrawInf( pSh, *pOut, nullptr, aTmp, 0, 2 );
                     nSpace = pFnt->GetTextSize_( aDrawInf ).Width()/2;
                 }
+
                 if( rFill.X() >= nRight )
                 {
                     if( FILL_INDENT != rFill.Mode() && ( rFill.bEmpty ||
@@ -1508,6 +1510,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                     SwTwips nLeftTab;
                     SwTwips nRightTab = nLeft;
                     sal_uInt16 nSpaceCnt = 0;
+                    sal_uInt16 nSpaceOnlyCnt = 0;
                     sal_uInt16 nTabCnt = 0;
                     sal_uInt16 nIdx = 0;
                     do
@@ -1550,8 +1553,10 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                             nRightTab = nRight;
                     }
                     while( rFill.X() > nRightTab );
+
                     --nTabCnt;
-                    if( FILL_TAB != rFill.Mode() )
+
+                    if( FILL_TAB_SPACE == rFill.Mode() )
                     {
                         if( nSpace > 0 )
                         {
@@ -1602,6 +1607,16 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                             }
                         }
                     }
+                    else if( FILL_SPACE == rFill.Mode() )
+                    {
+                        SwTwips nLeftSpace = nLeft;
+                        while( nLeftSpace < rFill.X() )
+                        {
+                            nLeftSpace += nSpace;
+                            ++nSpaceOnlyCnt;
+                        }
+                        rRect.Left( nLeftSpace );
+                    }
                     else
                     {
                         if( rFill.X() - nLeftTab < nRightTab - rFill.X() )
@@ -1624,6 +1639,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                     }
                     rFill.SetTab( nTabCnt );
                     rFill.SetSpace( nSpaceCnt );
+                    rFill.SetSpaceOnly( nSpaceOnlyCnt );
                     if( bFill )
                     {
                         if( std::abs( rFill.X() - nCenter ) <=
@@ -1632,6 +1648,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                             rFill.SetOrient( text::HoriOrientation::CENTER );
                             rFill.SetTab( 0 );
                             rFill.SetSpace( 0 );
+                            rFill.SetSpaceOnly( 0 );
                             rRect.Left( nCenter );
                         }
                         if( !rFill.bEmpty )

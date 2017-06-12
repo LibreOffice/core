@@ -1950,13 +1950,21 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
                 break;
 
             case FILL_TAB:
+            case FILL_TAB_SPACE:
             case FILL_SPACE:
                 {
                     OUStringBuffer sInsert;
-                    if (aFPos.nTabCnt)
-                        comphelper::string::padToLength(sInsert, aFPos.nTabCnt, '\t');
-                    if (aFPos.nSpaceCnt)
-                        comphelper::string::padToLength(sInsert, sInsert.getLength() + aFPos.nSpaceCnt, ' ');
+                    if (aFPos.eMode == FILL_SPACE)
+                    {
+                        comphelper::string::padToLength(sInsert, sInsert.getLength() + aFPos.nSpaceOnlyCnt, ' ');
+                    }
+                    else
+                    {
+                        if (aFPos.nTabCnt)
+                            comphelper::string::padToLength(sInsert, aFPos.nTabCnt, '\t');
+                        if (aFPos.nSpaceCnt)
+                            comphelper::string::padToLength(sInsert, sInsert.getLength() + aFPos.nSpaceCnt, ' ');
+                    }
                     if (!sInsert.isEmpty())
                         GetDoc()->getIDocumentContentOperations().InsertString( *m_pCurrentCursor, sInsert.makeStringAndClear());
                 }
