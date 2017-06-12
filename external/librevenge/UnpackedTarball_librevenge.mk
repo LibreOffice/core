@@ -25,6 +25,7 @@ ifneq ($(OS),MACOSX)
 ifneq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_patches,librevenge, \
     external/librevenge/librevenge-bundled-soname.patch.0 \
+    external/librevenge/librevenge-iOS.patch.0 \
 ))
 endif
 endif
