@@ -2236,9 +2236,8 @@ void SdrObjEditView::TakeFormatPaintBrush( std::shared_ptr< SfxItemSet >& rForma
         if( pObj && (pObj->GetObjInventor() == SdrInventor::Default ) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
         {
             auto pTable = static_cast<const sdr::table::SdrTableObj*>(pObj);
-            if (pTable->getActiveCell().is()) {
-                SfxItemSet const & rSet = pTable->GetActiveCellItemSet();
-                rFormatSet->Put(rSet);
+            if (mxSelectionController.is() && pTable->getActiveCell().is()) {
+                mxSelectionController->GetAttributes(*rFormatSet, false);
             }
         }
     }
@@ -2385,8 +2384,8 @@ void SdrObjEditView::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoChar
     if( pObj && (pObj->GetObjInventor() == SdrInventor::Default) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
     {
         auto pTable = static_cast<sdr::table::SdrTableObj*>(pObj);
-        if (pTable->getActiveCell().is()) {
-            pTable->SetMergedItemSetAndBroadcastOnActiveCell(rFormatSet, false/*bClearAllItems*/);
+        if (pTable->getActiveCell().is() && mxSelectionController.is()){
+            mxSelectionController->SetAttributes(rFormatSet, false);
         }
     }
 }
