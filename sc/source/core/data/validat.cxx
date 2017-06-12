@@ -556,7 +556,7 @@ class ScStringTokenIterator
 {
 public:
     explicit             ScStringTokenIterator( ScTokenArray& rTokArr ) :
-                                    mrTokArr( rTokArr ), mbSkipEmpty( true ), mbOk( true ) {}
+        maIter( rTokArr ), mbSkipEmpty( true ), mbOk( true ) {}
 
     /** Returns the string of the first string token or NULL on error or empty token array. */
     rtl_uString* First();
@@ -568,14 +568,14 @@ public:
 
 private:
     svl::SharedString maCurString; /// Current string.
-    ScTokenArray&               mrTokArr;       /// The token array for iteration.
+    FormulaTokenArrayPlainIterator maIter;
     bool                        mbSkipEmpty;    /// Ignore empty strings.
     bool                        mbOk;           /// true = correct token or end of token array.
 };
 
 rtl_uString* ScStringTokenIterator::First()
 {
-    mrTokArr.Reset();
+    maIter.Reset();
     mbOk = true;
     return Next();
 }
@@ -586,9 +586,9 @@ rtl_uString* ScStringTokenIterator::Next()
         return nullptr;
 
     // seek to next non-separator token
-    const FormulaToken* pToken = mrTokArr.NextNoSpaces();
+    const FormulaToken* pToken = maIter.NextNoSpaces();
     while( pToken && (pToken->GetOpCode() == ocSep) )
-        pToken = mrTokArr.NextNoSpaces();
+        pToken = maIter.NextNoSpaces();
 
     mbOk = !pToken || (pToken->GetType() == formula::svString);
 
@@ -679,9 +679,9 @@ bool ScValidationData::GetSelectionFromFormula(
     ScRange aRange;
 
     ScTokenArray* pArr = const_cast<ScTokenArray*>(&rTokArr);
-    pArr->Reset();
+    formula::FormulaTokenArrayPlainIterator aIter(*pArr);
     formula::FormulaToken* t = nullptr;
-    if (pArr->GetLen() == 1 && (t = pArr->GetNextReferenceOrName()) != nullptr)
+    if (pArr->GetLen() == 1 && (t = aIter.GetNextReferenceOrName()) != nullptr)
     {
         OpCode eOpCode = t->GetOpCode();
         if (eOpCode == ocDBArea || eOpCode == ocTableRef)
