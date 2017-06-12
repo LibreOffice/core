@@ -14,6 +14,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,hyphen,$(HYPHEN_TARBALL)))
 $(eval $(call gb_UnpackedTarball_add_patches,hyphen,\
 	external/hyphen/hyphen-build.patch \
 	external/hyphen/hyphen-fdo48017-wfopen.patch \
+	external/hyphen/hyphen-iOS.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
