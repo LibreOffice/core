@@ -53,7 +53,7 @@ oslSignalAction callSignalHandler(oslSignalInfo* pInfo)
     oslSignalHandlerImpl* pHandler = SignalList;
     oslSignalAction Action = osl_Signal_ActCallNextHdl;
 
-    while (pHandler != nullptr)
+    while (pHandler)
     {
         if ((Action = pHandler->Handler(pHandler->pData, pInfo))
                 != osl_Signal_ActCallNextHdl)
@@ -68,17 +68,15 @@ oslSignalAction callSignalHandler(oslSignalInfo* pInfo)
 oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction handler, void* pData)
 {
     OSL_ASSERT(handler != nullptr);
-    if (handler == nullptr)
-    {
+    if (!handler)
         return nullptr;
-    }
 
-    if (! bInitSignal)
+    if (!bInitSignal)
         bInitSignal = initSignal();
 
     oslSignalHandlerImpl* pHandler = static_cast<oslSignalHandlerImpl*>(calloc(1, sizeof(oslSignalHandlerImpl)));
 
-    if (pHandler != nullptr)
+    if (pHandler)
     {
         pHandler->Handler = handler;
         pHandler->pData   = pData;
@@ -100,7 +98,7 @@ sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler handler)
 {
     OSL_ASSERT(handler != nullptr);
 
-    if (! bInitSignal)
+    if (!bInitSignal)
         bInitSignal = initSignal();
 
     osl_acquireMutex(SignalListMutex);
@@ -108,7 +106,7 @@ sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler handler)
     oslSignalHandlerImpl* pHandler = SignalList;
     oslSignalHandlerImpl* pPrevious = nullptr;
 
-    while (pHandler != nullptr)
+    while (pHandler)
     {
         if (pHandler == handler)
         {
@@ -119,7 +117,7 @@ sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler handler)
 
             osl_releaseMutex(SignalListMutex);
 
-            if (SignalList == nullptr)
+            if (!SignalList)
                 bInitSignal = deInitSignal();
 
             free(pHandler);
@@ -138,15 +136,15 @@ sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler handler)
 
 oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 userSignal, void* userData)
 {
-    if (! bInitSignal)
+    if (!bInitSignal)
         bInitSignal = initSignal();
 
     osl_acquireMutex(SignalListMutex);
 
     oslSignalInfo info;
-    info.Signal     = osl_Signal_User;
+    info.Signal = osl_Signal_User;
     info.UserSignal = userSignal;
-    info.UserData   = userData;
+    info.UserData = userData;
 
     oslSignalAction action = callSignalHandler(&info);
 
