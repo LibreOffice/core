@@ -484,7 +484,7 @@ namespace frm
 
     void OListBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
-        BEGIN_DESCRIBE_PROPERTIES( 9, OBoundControlModel )
+        BEGIN_DESCRIBE_PROPERTIES( 10, OBoundControlModel )
             DECL_PROP1(TABINDEX,            sal_Int16,                      BOUND);
             DECL_PROP2(BOUNDCOLUMN,         sal_Int16,                      BOUND, MAYBEVOID);
             DECL_PROP1(LISTSOURCETYPE,      ListSourceType,                 BOUND);
@@ -494,6 +494,7 @@ namespace frm
             DECL_PROP2(SELECT_VALUE,        Any,                            BOUND, TRANSIENT);
             DECL_PROP1(DEFAULT_SELECT_SEQ,  Sequence<sal_Int16>,            BOUND);
             DECL_PROP1(STRINGITEMLIST,      Sequence< OUString >,    BOUND);
+            DECL_PROP1(TYPEDITEMLIST,       Sequence< Any >,    BOUND);
         END_DESCRIBE_PROPERTIES();
     }
 
