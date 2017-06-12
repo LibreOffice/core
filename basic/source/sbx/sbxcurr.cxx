@@ -32,10 +32,6 @@ static OUString ImpCurrencyToString( sal_Int64 rVal )
     sal_Int64 absVal = isNeg ? -rVal : rVal;
 
     sal_Unicode cDecimalSep = '.';
-#ifdef MAYBEFUTURE
-    sal_Unicode cThousandSep = ',';
-    ImpGetIntntlSep( cDecimalSep, cThousandSep );
-#endif
 
     OUString aAbsStr = OUString::number( absVal );
     OUStringBuffer aBuf;
@@ -51,13 +47,6 @@ static OUString ImpCurrencyToString( sal_Int64 rVal )
     if ( !bLessThanOne )
     {
         nCapacity = initialLen + 1;
-#ifdef MAYBEFUTURE
-        if ( initialLen > 5 )
-        {
-            sal_Int32 nThouSeparators = ( initialLen - 5 ) / 3;
-            nCapacity += nThouSeparators;
-        }
-#endif
     }
 
     if ( isNeg )
@@ -74,10 +63,6 @@ static OUString ImpCurrencyToString( sal_Int64 rVal )
     {
         if ( nDigitCount == 4 )
             aBuf[nInsertIndex--] = cDecimalSep;
-#ifdef MAYBEFUTURE
-        if ( nDigitCount > 4 && ! ( ( nDigitCount - 4  ) % 3) )
-            aBuf[nInsertIndex--] = cThousandSep;
-#endif
         if ( nDigitCount < initialLen )
             aBuf[nInsertIndex--] = aAbsStr[ charCpyIndex-- ];
         else
@@ -109,45 +94,6 @@ static sal_Int64 ImpStringToCurrency( const OUString &rStr )
 
     sal_Unicode cDeciPnt = '.';
     sal_Unicode c1000Sep = ',';
-
-#ifdef MAYBEFUTURE
-    sal_Unicode cLocaleDeciPnt, cLocale1000Sep;
-    ImpGetIntntlSep( cLocaleDeciPnt, cLocale1000Sep );
-
-        // score each set of separators (Locale and Basic) on total number of matches
-        // if one set has more matches use that set
-        // if tied use the set with the only or rightmost decimal separator match
-        // currency is fixed pt system: usually expect the decimal pt, 1000sep may occur
-    sal_Int32 LocaleScore = 0;
-    sal_Int32 LocaleLastDeci = -1;
-    sal_Int32 LOBasicScore = 0;
-    sal_Int32 LOBasicLastDeci = -1;
-
-    for( int idx=0; idx<rStr.getLength(); idx++ )
-    {
-        if ( *(p+idx) == cLocaleDeciPnt )
-        {
-            LocaleScore++;
-            LocaleLastDeci = idx;
-        }
-        if ( *(p+idx) == cLocale1000Sep )
-            LocaleScore++;
-
-        if ( *(p+idx) == cDeciPnt )
-        {
-            LOBasicScore++;
-            LOBasicLastDeci = idx;
-        }
-        if ( *(p+idx) == c1000Sep )
-            LOBasicScore++;
-    }
-    if ( ( LocaleScore > LOBasicScore )
-       ||( LocaleScore = LOBasicScore && LocaleLastDeci > LOBasicLastDeci ) )
-    {
-        cDeciPnt = cLocaleDeciPnt;
-        c1000Sep = cLocale1000Sep;
-    }
-#endif
 
     // lets use the existing string number conversions
     // there is a performance impact here ( multiple string copies )
