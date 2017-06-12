@@ -21,4 +21,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,libabw, \
 endif
 endif
 
+$(eval $(call gb_UnpackedTarball_add_patches,libabw, \
+    external/libabw/iOS.patch.0 \
+))
+
 # vim: set noet sw=4 ts=4:
