@@ -145,17 +145,9 @@ namespace
 
     Sequence< sal_Int8 > OToolBoxWindowItem::getUnoTunnelImplementationId()
     {
-        static ::cppu::OImplementationId * pId = nullptr;
-        if (! pId)
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if (! pId)
-            {
-                static ::cppu::OImplementationId aId;
-                pId = &aId;
-            }
-        }
-        return pId->getImplementationId();
+        static ::cppu::OImplementationId implId;
+
+        return implId.getImplementationId();
     }
 
     sal_Int64 SAL_CALL OToolBoxWindowItem::getSomething( const Sequence< sal_Int8 >& _rId )

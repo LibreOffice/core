@@ -63,13 +63,11 @@ namespace comphelper
         return m_pImpl->m_nForeignControlledStates;
     }
 
-    namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
-
-
     const Sequence< sal_Int8 > OAccessibleImplementationAccess::getUnoTunnelImplementationId()
     {
-        ::cppu::OImplementationId &rID = lcl_ImplId::get();
-        return rID.getImplementationId();
+        static cppu::OImplementationId implID;
+
+        return implID.getImplementationId();
     }
 
 

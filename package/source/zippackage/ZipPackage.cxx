@@ -63,7 +63,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/random.h>
-#include <rtl/instance.hxx>
 #include <osl/time.h>
 #include <osl/diagnose.h>
 #include "com/sun/star/io/XAsyncOutputMonitor.hpp"
@@ -1631,12 +1630,11 @@ uno::Reference < XSingleServiceFactory > ZipPackage::createServiceFactory( uno::
                                            static_getSupportedServiceNames() );
 }
 
-namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
-
 Sequence< sal_Int8 > ZipPackage::getUnoTunnelImplementationId()
 {
-    ::cppu::OImplementationId &rId = lcl_ImplId::get();
-    return rId.getImplementationId();
+    static ::cppu::OImplementationId implId;
+
+    return implId.getImplementationId();
 }
 
 sal_Int64 SAL_CALL ZipPackage::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
