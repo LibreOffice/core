@@ -131,8 +131,8 @@ void createStr(const OUString& rStr, char** pArgs, size_t i)
 
 char** createCommandLine()
 {
-    OUString aLibExecDirURL( "$BRAND_BASE_DIR/" );
-    rtl::Bootstrap::expandMacros(aLibExecDirURL);
+    OUString aInstallDir( "$BRAND_BASE_DIR/" );
+    rtl::Bootstrap::expandMacros(aInstallDir);
 
     size_t nArgs = 8;
     char** pArgs = new char*[nArgs];
@@ -149,7 +149,7 @@ char** createCommandLine()
     }
     {
         // the actual update directory
-        OUString aInstallPath = getPathFromURL(aLibExecDirURL);
+        OUString aInstallPath = getPathFromURL(aInstallDir);
         Updater::log("Install Dir: " + aInstallPath);
         createStr(aInstallPath, pArgs, 2);
     }
