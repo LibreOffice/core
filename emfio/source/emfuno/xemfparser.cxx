@@ -31,6 +31,11 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <vcl/wmf.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
+
 //#include <com/sun/star/xml/sax/XParser.hpp>
 //#include <com/sun/star/xml/sax/Parser.hpp>
 //#include <com/sun/star/xml/sax/InputSource.hpp>
@@ -114,12 +119,36 @@ namespace emfio
 
                 if (bTestCode)
                 {
-                    // for test, just create some graphic data
-                    const basegfx::B2DRange aRange(1000, 1000, 5000, 5000);
-                    const basegfx::BColor aColor(1.0, 0.0, 0.0);
-                    const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+                    static bool bUseOldFilterEmbedded(true);
 
-                    aRetval.push_back(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aOutline), aColor));
+                    if (bUseOldFilterEmbedded)
+                    {
+                        GDIMetaFile aMtf;
+                        std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream(xEmfStream));
+
+                        if (pStream && ConvertWMFToGDIMetaFile(*pStream, aMtf, nullptr, nullptr))
+                        {
+                            const basegfx::B2DHomMatrix aMetafileTransform(
+                                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                    5000.0, 5000.0,
+                                    1000.0, 1000.0));
+
+                            aRetval.push_back(
+                                new drawinglayer::primitive2d::MetafilePrimitive2D(
+                                    aMetafileTransform,
+                                    aMtf));
+                        }
+                    }
+
+                    if(aRetval.empty())
+                    {
+                        // for test, just create some graphic data that will get visualized
+                        const basegfx::B2DRange aRange(1000, 1000, 5000, 5000);
+                        const basegfx::BColor aColor(1.0, 0.0, 0.0);
+                        const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+
+                        aRetval.push_back(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aOutline), aColor));
+                    }
                 }
                 else
                 {
