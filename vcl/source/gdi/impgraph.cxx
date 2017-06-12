@@ -284,20 +284,13 @@ bool ImpGraphic::operator==( const ImpGraphic& rImpGraphic ) const
                 {
                     if(maVectorGraphicData == rImpGraphic.maVectorGraphicData)
                     {
+                        // equal instances
                         bRet = true;
                     }
                     else if(rImpGraphic.maVectorGraphicData)
                     {
-                        if(maVectorGraphicData->getVectorGraphicDataArrayLength() == rImpGraphic.maVectorGraphicData->getVectorGraphicDataArrayLength())
-                        {
-                            if(0 == memcmp(
-                                maVectorGraphicData->getVectorGraphicDataArray().getConstArray(),
-                                rImpGraphic.maVectorGraphicData->getVectorGraphicDataArray().getConstArray(),
-                                maVectorGraphicData->getVectorGraphicDataArrayLength()))
-                            {
-                                bRet = true;
-                            }
-                        }
+                        // equal content
+                        bRet = (*maVectorGraphicData) == (*rImpGraphic.maVectorGraphicData);
                     }
                 }
                 else if (maPdfData.hasElements())
@@ -1513,12 +1506,14 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
             // try to stream in Svg defining data (length, byte array and evtl. path)
             // See below (operator<<) for more information
             const sal_uInt32 nSvgMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16) | (sal_uInt32('g') << 8) | sal_uInt32('0'));
+            const sal_uInt32 nWmfMagic((sal_uInt32('w') << 24) | (sal_uInt32('m') << 16) | (sal_uInt32('f') << 8) | sal_uInt32('0'));
+            const sal_uInt32 nEmfMagic((sal_uInt32('e') << 24) | (sal_uInt32('m') << 16) | (sal_uInt32('f') << 8) | sal_uInt32('0'));
             sal_uInt32 nMagic;
             rIStm.Seek(nStmPos1);
             rIStm.ResetError();
             rIStm.ReadUInt32( nMagic );
 
-            if (nSvgMagic == nMagic)
+            if (nSvgMagic == nMagic || nWmfMagic == nMagic || nEmfMagic == nMagic)
             {
                 sal_uInt32 nVectorGraphicDataArrayLength(0);
                 rIStm.ReadUInt32(nVectorGraphicDataArrayLength);
@@ -1532,7 +1527,18 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
 
                     if (!rIStm.GetError())
                     {
-                        VectorGraphicDataPtr aVectorGraphicDataPtr(new VectorGraphicData(aNewData, aPath, VectorGraphicDataType::Svg));
+                        VectorGraphicDataType aDataType(VectorGraphicDataType::Svg);
+
+                        if (nWmfMagic == nMagic)
+                        {
+                            aDataType = VectorGraphicDataType::Wmf;
+                        }
+                        else if (nEmfMagic == nMagic)
+                        {
+                            aDataType = VectorGraphicDataType::Emf;
+                        }
+
+                        VectorGraphicDataPtr aVectorGraphicDataPtr(new VectorGraphicData(aNewData, aPath, aDataType));
                         rImpGraphic = aVectorGraphicDataPtr;
                     }
                 }
@@ -1606,13 +1612,32 @@ void WriteImpGraphic(SvStream& rOStm, const ImpGraphic& rImpGraphic)
             {
                 if(rImpGraphic.getVectorGraphicData().get())
                 {
-                    // stream out Svg defining data (length, byte array and evtl. path)
+                    // stream out Vector GHraphic defining data (length, byte array and evtl. path)
                     // this is used e.g. in swapping out graphic data and in transporting it over UNO API
                     // as sequence of bytes, but AFAIK not written anywhere to any kind of file, so it should be
                     // no problem to extend it; only used at runtime
-                    const sal_uInt32 nSvgMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16) | (sal_uInt32('g') << 8) | sal_uInt32('0'));
+                    switch (rImpGraphic.getVectorGraphicData()->getVectorGraphicDataType())
+                    {
+                        case VectorGraphicDataType::Wmf:
+                        {
+                            const sal_uInt32 nWmfMagic((sal_uInt32('w') << 24) | (sal_uInt32('m') << 16) | (sal_uInt32('f') << 8) | sal_uInt32('0'));
+                            rOStm.WriteUInt32(nWmfMagic);
+                            break;
+                        }
+                        case VectorGraphicDataType::Emf:
+                        {
+                            const sal_uInt32 nEmfMagic((sal_uInt32('e') << 24) | (sal_uInt32('m') << 16) | (sal_uInt32('f') << 8) | sal_uInt32('0'));
+                            rOStm.WriteUInt32(nEmfMagic);
+                            break;
+                        }
+                        default: // case VectorGraphicDataType::Svg:
+                        {
+                            const sal_uInt32 nSvgMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16) | (sal_uInt32('g') << 8) | sal_uInt32('0'));
+                            rOStm.WriteUInt32(nSvgMagic);
+                            break;
+                        }
+                    }
 
-                    rOStm.WriteUInt32( nSvgMagic );
                     rOStm.WriteUInt32( rImpGraphic.getVectorGraphicData()->getVectorGraphicDataArrayLength() );
                     rOStm.WriteBytes(rImpGraphic.getVectorGraphicData()->getVectorGraphicDataArray().getConstArray(),
                         rImpGraphic.getVectorGraphicData()->getVectorGraphicDataArrayLength());

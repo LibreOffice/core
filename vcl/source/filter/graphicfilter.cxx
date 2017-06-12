@@ -1766,8 +1766,8 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_WMF ) ||
                 aFilterName.equalsIgnoreAsciiCase( IMP_EMF ) )
         {
-            static bool bCheckEmf = false;
-            if (bCheckEmf)
+            static bool bCheckEmfWmf = true;
+            if (bCheckEmfWmf)
             {
                 if (rGraphic.IsDummyContext())
                     rGraphic.SetDummyContext(false);
@@ -1782,14 +1782,20 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
 
                 if (!rIStream.GetError())
                 {
-                    VectorGraphicDataPtr aVectorGraphicDataPtr(new VectorGraphicData(aNewData, rPath, VectorGraphicDataType::Emf));
+                    const bool bIsWmf(aFilterName.equalsIgnoreAsciiCase(IMP_WMF));
+                    const VectorGraphicDataType aDataType(bIsWmf ? VectorGraphicDataType::Wmf : VectorGraphicDataType::Emf);
+                    VectorGraphicDataPtr aVectorGraphicDataPtr(
+                        new VectorGraphicData(
+                            aNewData,
+                            rPath,
+                            aDataType));
                     rGraphic = Graphic(aVectorGraphicDataPtr);
                     bOkay = true;
                 }
 
                 if (bOkay)
                 {
-                    eLinkType = GfxLinkType::NativeSvg;
+                    eLinkType = GfxLinkType::NativeWmf;
                 }
                 else
                 {
@@ -2114,21 +2120,69 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
             }
             else if ( aFilterName.equalsIgnoreAsciiCase( EXP_WMF ) )
             {
-                // #i119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
-                if ( !ConvertGDIMetaFileToWMF( aGraphic.GetGDIMetaFile(), rOStm, &aConfigItem ) )
-                    nStatus = ERRCODE_GRFILTER_FORMATERROR;
+                bool bDone(false);
 
-                if( rOStm.GetError() )
-                    nStatus = ERRCODE_GRFILTER_IOERROR;
+                // do we have a native Vector Graphic Data RenderGraphic, whose data can be written directly?
+                const VectorGraphicDataPtr& aVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
+
+                if (aVectorGraphicDataPtr.get()
+                    && aVectorGraphicDataPtr->getVectorGraphicDataArrayLength()
+                    && VectorGraphicDataType::Wmf == aVectorGraphicDataPtr->getVectorGraphicDataType())
+                {
+                    rOStm.WriteBytes(aVectorGraphicDataPtr->getVectorGraphicDataArray().getConstArray(), aVectorGraphicDataPtr->getVectorGraphicDataArrayLength());
+
+                    if (rOStm.GetError())
+                    {
+                        nStatus = ERRCODE_GRFILTER_IOERROR;
+                    }
+                    else
+                    {
+                        bDone = true;
+                    }
+                }
+
+                if (!bDone)
+                {
+                    // #i119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
+                    if (!ConvertGDIMetaFileToWMF(aGraphic.GetGDIMetaFile(), rOStm, &aConfigItem))
+                        nStatus = ERRCODE_GRFILTER_FORMATERROR;
+
+                    if (rOStm.GetError())
+                        nStatus = ERRCODE_GRFILTER_IOERROR;
+                }
             }
             else if ( aFilterName.equalsIgnoreAsciiCase( EXP_EMF ) )
             {
-                // #i119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
-                if ( !ConvertGDIMetaFileToEMF(aGraphic.GetGDIMetaFile(), rOStm))
-                    nStatus = ERRCODE_GRFILTER_FORMATERROR;
+                bool bDone(false);
 
-                if( rOStm.GetError() )
-                    nStatus = ERRCODE_GRFILTER_IOERROR;
+                // do we have a native Vector Graphic Data RenderGraphic, whose data can be written directly?
+                const VectorGraphicDataPtr& aVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
+
+                if (aVectorGraphicDataPtr.get()
+                    && aVectorGraphicDataPtr->getVectorGraphicDataArrayLength()
+                    && VectorGraphicDataType::Emf == aVectorGraphicDataPtr->getVectorGraphicDataType())
+                {
+                    rOStm.WriteBytes(aVectorGraphicDataPtr->getVectorGraphicDataArray().getConstArray(), aVectorGraphicDataPtr->getVectorGraphicDataArrayLength());
+
+                    if (rOStm.GetError())
+                    {
+                        nStatus = ERRCODE_GRFILTER_IOERROR;
+                    }
+                    else
+                    {
+                        bDone = true;
+                    }
+                }
+
+                if (!bDone)
+                {
+                    // #i119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
+                    if (!ConvertGDIMetaFileToEMF(aGraphic.GetGDIMetaFile(), rOStm))
+                        nStatus = ERRCODE_GRFILTER_FORMATERROR;
+
+                    if (rOStm.GetError())
+                        nStatus = ERRCODE_GRFILTER_IOERROR;
+                }
             }
             else if( aFilterName.equalsIgnoreAsciiCase( EXP_JPEG ) )
             {
@@ -2199,7 +2253,9 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                 // do we have a native Vector Graphic Data RenderGraphic, whose data can be written directly?
                 const VectorGraphicDataPtr& aVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
 
-                if (aVectorGraphicDataPtr.get() && aVectorGraphicDataPtr->getVectorGraphicDataArrayLength())
+                if (aVectorGraphicDataPtr.get()
+                    && aVectorGraphicDataPtr->getVectorGraphicDataArrayLength()
+                    && VectorGraphicDataType::Svg == aVectorGraphicDataPtr->getVectorGraphicDataType())
                 {
                     rOStm.WriteBytes(aVectorGraphicDataPtr->getVectorGraphicDataArray().getConstArray(), aVectorGraphicDataPtr->getVectorGraphicDataArrayLength());
 

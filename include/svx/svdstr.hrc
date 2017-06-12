@@ -159,8 +159,12 @@
 // Svg support
 #define STR_ObjNameSingulGRAFSVG            (STR_ObjNameBegin + 147)
 #define STR_ObjNamePluralGRAFSVG            (STR_ObjNameBegin + 148)
+#define STR_ObjNameSingulGRAFWMF            (STR_ObjNameBegin + 149)
+#define STR_ObjNamePluralGRAFWMF            (STR_ObjNameBegin + 150)
+#define STR_ObjNameSingulGRAFEMF            (STR_ObjNameBegin + 151)
+#define STR_ObjNamePluralGRAFEMF            (STR_ObjNameBegin + 152)
 
-#define STR_ObjNameEnd                      (STR_ObjNamePluralGRAFSVG)
+#define STR_ObjNameEnd                      (STR_ObjNamePluralGRAFEMF)
 
 #define STR_EditBegin                (STR_ObjNameEnd+1)
 #define STR_EditWithCopy             (STR_EditBegin  +  0)

@@ -74,10 +74,13 @@ public:
     VectorGraphicData(
         const VectorGraphicDataArray& rVectorGraphicDataArray,
         const OUString& rPath,
-        VectorGraphicDataType eVectorDataType); // = VectorGraphicDataType::Svg);
+        VectorGraphicDataType eVectorDataType);
     VectorGraphicData(
         const OUString& rPath,
         VectorGraphicDataType eVectorDataType);
+
+    /// compare op
+    bool operator==(const VectorGraphicData& rCandidate) const;
 
     /// data read
     const VectorGraphicDataArray& getVectorGraphicDataArray() const { return maVectorGraphicDataArray; }
