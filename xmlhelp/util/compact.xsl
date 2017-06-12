@@ -41,8 +41,6 @@
     <xsl:template match="image/@height"/>
     <xsl:template match="link/@name"/>
     <xsl:template match="paragraph/@id"/>
-    <xsl:template match="paragraph/@l10n"/>
-    <xsl:template match="paragraph/@oldref"/>
     <xsl:template match="table/@id"/>
     <xsl:template match="title/@id"/>
     <xsl:template match="topic/@id"/>

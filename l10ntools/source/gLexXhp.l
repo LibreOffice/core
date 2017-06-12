@@ -82,11 +82,6 @@ IDENT [\.a-zA-Z0-9_-]+
 
 
 
-"oldref="{SP}\"{SP}{IDENT}{SP}\" {
-    LOCptr->setRef(yytext);
-}
-
-
 "<title "     |
 "<bookmark "  |
 "<paragraph " {

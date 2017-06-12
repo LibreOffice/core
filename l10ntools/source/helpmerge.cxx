@@ -126,7 +126,7 @@ bool HelpParser::CreatePO(
 
             common::writePoEntry(
                 "Helpex", aPoOutput, sHelpFile, rGsi1,
-                posm->first, pXMLElement->GetOldref(), OString(), data);
+                posm->first, OString(), OString(), data);
 
             pXMLElement=nullptr;
         }
@@ -202,8 +202,6 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
     XMLElement*   pXMLElement = nullptr;
     MergeEntrys   *pEntrys    = nullptr;
 
-    OString sLId;
-
     pEntrys = nullptr;
 
     if( !sCur.equalsIgnoreAsciiCase("en-US") ){
@@ -214,9 +212,6 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
         }
         if( pXMLElement != nullptr )
         {
-            sLId    = pXMLElement->GetOldref();
-            pResData->sId     =  sLId;
-
             OString sNewText;
             OString sNewdata;
             OString sSourceText(
@@ -264,8 +259,7 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
             {
                 SAL_WARN(
                     "l10ntools",
-                    "Can't find GID=" << pResData->sGId << " LID="
-                        << pResData->sId << " TYP=" << pResData->sResTyp);
+                    "Can't find GID=" << pResData->sGId << " TYP=" << pResData->sResTyp);
             }
             pXMLElement->ChangeLanguageTag(sCur);
         }
