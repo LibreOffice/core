@@ -4983,7 +4983,7 @@ ScPatternAttr* ScDocument::CreateSelectionPattern( const ScMarkData& rMark, bool
     OSL_ENSURE( aState.pItemSet, "SelectionPattern Null" );
     if (aState.pItemSet)
     {
-        ScPatternAttr* pPattern = new ScPatternAttr( aState.pItemSet );
+        ScPatternAttr* pPattern = new ScPatternAttr( aState.pItemSet.release() );
         if (aState.mbValidPatternId)
             pPattern->SetKey(aState.mnPatternId);
 

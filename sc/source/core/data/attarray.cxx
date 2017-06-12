@@ -19,6 +19,7 @@
 
 #include "attarray.hxx"
 #include "scitems.hxx"
+#include <o3tl/make_unique.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lineitem.hxx>
@@ -1017,7 +1018,7 @@ void ScAttrArray::MergePatternArea( SCROW nStartRow, SCROW nEndRow,
                 else
                 {
                     // first pattern - copied from parent
-                    rState.pItemSet = new SfxItemSet( *rThisSet.GetPool(), rThisSet.GetRanges() );
+                    rState.pItemSet = o3tl::make_unique<SfxItemSet>( *rThisSet.GetPool(), rThisSet.GetRanges() );
                     rState.pItemSet->Set( rThisSet, bDeep );
                     rState.mnPatternId = pPattern->GetKey();
                 }

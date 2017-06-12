@@ -23,6 +23,9 @@
 #include "global.hxx"
 #include "attrib.hxx"
 #include <algorithm>
+#include <memory>
+
+#include <svl/itemset.hxx>
 
 class ScDocument;
 class ScEditDataArray;
@@ -61,14 +64,14 @@ struct ScLineFlags
 
 struct ScMergePatternState
 {
-    SfxItemSet* pItemSet;           ///< allocated in MergePatternArea, used for resulting ScPatternAttr
+    std::unique_ptr<SfxItemSet> pItemSet;
     const ScPatternAttr* pOld1;     ///< existing objects, temporary
     const ScPatternAttr* pOld2;
 
     bool mbValidPatternId;
     sal_uInt64 mnPatternId;
 
-    ScMergePatternState() : pItemSet(nullptr), pOld1(nullptr), pOld2(nullptr),
+    ScMergePatternState() : pOld1(nullptr), pOld2(nullptr),
                         mbValidPatternId(true), mnPatternId(0) {}
 };
 
