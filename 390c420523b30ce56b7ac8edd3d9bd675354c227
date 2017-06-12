@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_ae1eee60",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2221,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-06-12T16:59:16Z",
+      "side": 1,
+      "message": "pParent is a parent of NotebookbarTabControl, we want to place button on the right side of NotebookbarTabControl so we should use size of NotebookbarTabControl.\n\nuse: this-\u003eGetSizePixel() to get size of a NotebookbarTabControl.",
+      "revId": "390c420523b30ce56b7ac8edd3d9bd675354c227",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_2e211ea0",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2226,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-06-12T16:59:16Z",
+      "side": 1,
+      "message": "you defined width as 30, you probably wanted to do -30 not -3.\n\nUse define or const to have human readable label for that value and avoid mistake.\n\nAs we can resize window and notebookbartabcontrol will have different size, we have to place button each time it happens.\nPlease try to set position in the ImplPlaceTabs function. Also second reason is that in the constructor notebookbartabcontrol probably will not have desired size yet - like here first you created button first and after that you set size.\n\nIf that won\u0027t work you will have to override Resize method.",
+      "revId": "390c420523b30ce56b7ac8edd3d9bd675354c227",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_4e24aaae",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2228,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-06-12T16:59:16Z",
+      "side": 1,
+      "message": "You also should set the icon for a button, use aBitmap defined upper.",
+      "revId": "390c420523b30ce56b7ac8edd3d9bd675354c227",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
