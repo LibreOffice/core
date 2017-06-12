@@ -1045,7 +1045,7 @@ void SwWW8ImplReader::MakeTagString( OUString& rStr, const OUString& rOrg )
             case 21:
                 rStr = rStr.replaceAt( nI, 1, "}" );
                 break;
-            case '\\':                      // Tag \{|} with \ 
+            case '\\':                      // Tag \{|} with \ ...
             case '{':
             case '|':
             case '}':
