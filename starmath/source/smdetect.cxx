@@ -96,7 +96,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
         aBuffer[nBufferSize] = 0;
         pInStrm->Seek( STREAM_SEEK_TO_BEGIN );
         pInStrm->StartReadingUnicodeText( RTL_TEXTENCODING_DONTKNOW ); // avoid BOM marker
-        sal_uLong nBytesRead = pInStrm->ReadBytes( aBuffer, nBufferSize );
+        auto nBytesRead = pInStrm->ReadBytes( aBuffer, nBufferSize );
         if (nBytesRead >= 6)
         {
             bool bIsMathType = false;
