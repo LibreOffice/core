@@ -27,7 +27,8 @@
 enum SwFillMode
 {
     FILL_TAB,       ///< default, fill with tabs
-    FILL_SPACE,     ///< fill with spaces and tabs
+    FILL_TAB_SPACE, ///< fill with spaces and tabs
+    FILL_SPACE,     ///< fill with spaces
     FILL_MARGIN,    ///< only align left, center, right
     FILL_INDENT     ///< by left paragraph indention
 };
@@ -38,11 +39,12 @@ struct SwFillCursorPos
     sal_uInt16 nParaCnt;        ///< number of paragraphs to insert
     sal_uInt16 nTabCnt;         ///< number of tabs respectively size of indentation
     sal_uInt16 nSpaceCnt;       ///< number of spaces to insert
+    sal_uInt16 nSpaceOnlyCnt;   ///< number of spaces to insert ("only spaces, no tabs" mode)
     sal_uInt16 nColumnCnt;      ///< number of necessary column breaks
     sal_Int16  eOrient;      ///< paragraph alignment
     SwFillMode eMode;       ///< desired fill-up rule
     SwFillCursorPos( SwFillMode eMd ) :
-        nParaCnt( 0 ), nTabCnt( 0 ), nSpaceCnt( 0 ), nColumnCnt( 0 ),
+        nParaCnt( 0 ), nTabCnt( 0 ), nSpaceCnt( 0 ), nSpaceOnlyCnt(0), nColumnCnt( 0 ),
         eOrient( css::text::HoriOrientation::NONE ), eMode( eMd )
     {}
 };
