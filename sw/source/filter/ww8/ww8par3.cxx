@@ -1074,7 +1074,7 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
         }
     }
 
-    // if neccessary: Append Bullet Font to NumFormat
+    // if necessary: Append Bullet Font to NumFormat
 
     if( SVX_NUM_CHAR_SPECIAL == aNumFormat.GetNumberingType() )
     {
@@ -1253,7 +1253,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             break;
 
         // 1.2.2 compare ItemPools and CHPx Settings of different Levels
-        //       and create Style(s) if neccessary
+        //       and create Style(s) if necessary
 
         for (sal_uInt16 nLevel = 0; nLevel < nLvlCount; ++nLevel)
         {
@@ -1344,7 +1344,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 if( !pParentNumRule )
                     break;
                 // create name-prefix for NumRule-Name
-                // and (if neccessary) for Style-Name
+                // and (if necessary) for Style-Name
                 const OUString sPrefix("WW8NumSt" + OUString::number( nLfo + 1 ));
                 // Now assign pNumRule its actual value!!!
                 // (it contained the parent NumRule up to this point)
@@ -1413,7 +1413,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                         else
                             aLFOLVL.bStartAt = false;
 
-                        // 2.2.2.2 load dedicated LVL if neccessary
+                        // 2.2.2.2 load dedicated LVL if necessary
 
                         SwNumFormat aNumFormat(
                             rLFOInfo.pNumRule->Get(aLFOLVL.nLevel));

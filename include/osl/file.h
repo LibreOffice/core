@@ -88,7 +88,7 @@ typedef enum {
     osl_File_E_NOENT,           /*!< no such file or directory                                   */
     osl_File_E_SRCH,            /*!< no process matches the PID                                  */
     osl_File_E_INTR,            /*!< function call was interrupted                               */
-    osl_File_E_IO,              /*!< I/O error occured                                           */
+    osl_File_E_IO,              /*!< I/O error occurred                                          */
     osl_File_E_NXIO,            /*!< no such device or address                                   */
     osl_File_E_2BIG,            /*!< argument list too long                                      */
     osl_File_E_NOEXEC,          /*!< invalid executable file format                              */

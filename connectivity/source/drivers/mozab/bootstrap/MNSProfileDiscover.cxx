@@ -64,7 +64,7 @@ namespace connectivity
             LoadXPToolkitProfiles(MozillaProductType_Mozilla);
 
             //load firefox profiles to m_ProductProfileList
-            //firefox profile does not containt address book, but maybe others need them
+            //firefox profile does not contain address book, but maybe others need them
             LoadXPToolkitProfiles(MozillaProductType_Firefox);
         }
         //Thunderbird and firefox profiles are saved in profiles.ini
