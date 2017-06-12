@@ -67,7 +67,6 @@ oslSignalAction callSignalHandler(oslSignalInfo* pInfo)
 
 oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction handler, void* pData)
 {
-    OSL_ASSERT(handler != nullptr);
     if (!handler)
         return nullptr;
 
@@ -96,8 +95,6 @@ oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction handler,
 
 sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler handler)
 {
-    OSL_ASSERT(handler != nullptr);
-
     if (!bInitSignal)
         bInitSignal = initSignal();
 
