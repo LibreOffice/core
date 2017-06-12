@@ -84,20 +84,22 @@ public:
 
 IMPL_LINK_NOARG(ExecuteWrapper, ExecuteActionHdl, Timer*, void)
 {
-    Idle aIdle;
     {
-        mFunc();
-        aIdle.SetDebugName("UI Test Idle Handler2");
-        aIdle.SetPriority(TaskPriority::LOWEST);
-        aIdle.SetInvokeHandler(mHandler);
-        aIdle.Start();
-    }
+        Idle aIdle;
+        {
+            mFunc();
+            aIdle.SetDebugName("UI Test Idle Handler2");
+            aIdle.SetPriority(TaskPriority::LOWEST);
+            aIdle.SetInvokeHandler(mHandler);
+            aIdle.Start();
+        }
 
-    Scheduler::ProcessEventsToSignal(mbSignal);
-    std::unique_lock<std::mutex> lock(mMutex);
-    while (!mbSignal)
-    {
-        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+        Scheduler::ProcessEventsToSignal(mbSignal);
+        std::unique_lock<std::mutex> lock(mMutex);
+        while (!mbSignal)
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(5));
+        }
     }
     delete this;
 }
