@@ -13,7 +13,7 @@ The updater executable should not depend on any other dynamic library in the Lib
 
 == Update procedure ==
 
-The updater executable is run two times. In a first run, the current installation is copied to a "update" directory and the update is applied in this "update" directory. During the next run, a replacement request is executed. The replacement request removes the old installation directoy and replaces it with the content of the "update" directory.
+The updater executable is run two times. In a first run, the current installation is copied to a "update" directory and the update is applied in this "update" directory. During the next run, a replacement request is executed. The replacement request removes the old installation directory and replaces it with the content of the "update" directory.
 
 === User profile in the installation directory ===
 
