@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_dad3f936",
+        "filename": "sw/source/filter/ww8/ww8par5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2457,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-12T09:48:23Z",
+      "side": 0,
+      "message": "here Bereich means section",
+      "revId": "69594d539795cfc267bc6880319c6558dcabf119",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
