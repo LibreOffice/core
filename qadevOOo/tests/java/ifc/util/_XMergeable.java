@@ -60,6 +60,6 @@ public class _XMergeable extends MultiMethodTest {
         oObj.merge(!isMerged);
         tRes.tested("merge()", isMerged != oObj.getIsMerged());
     }
-} // finisch class _XMergeable
+} // finish class _XMergeable
 
 
