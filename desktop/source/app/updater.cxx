@@ -209,12 +209,9 @@ struct update_info
 
 void update()
 {
-    OUString aLibExecDirURL( "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER );
-    rtl::Bootstrap::expandMacros(aLibExecDirURL);
-
     utl::TempFile aTempDir(nullptr, true);
     OUString aTempDirURL = aTempDir.GetURL();
-    CopyUpdaterToTempDir(aLibExecDirURL, aTempDirURL);
+    CopyUpdaterToTempDir(Updater::getExecutableDirURL(), aTempDirURL);
 
     OUString aTempDirPath = getPathFromURL(aTempDirURL);
     OString aPath = OUStringToOString(aTempDirPath + "/" + OUString::fromUtf8(pUpdaterName), RTL_TEXTENCODING_UTF8);
