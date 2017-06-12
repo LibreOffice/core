@@ -360,7 +360,6 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                 if( lcl_GetSortParam( pData, aSortParam ) )
                 {
-                    SfxItemSet  aArgSet( GetPool(), SCITEM_SORTDATA, SCITEM_SORTDATA );
                     SCCOL nCol  = GetViewData()->GetCurX();
                     SCCOL nTab  = GetViewData()->GetTabNo();
                     ScDocument* pDoc    = GetViewData()->GetDocument();
@@ -386,8 +385,6 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     for ( sal_uInt16 i=1; i<aSortParam.GetSortKeyCount(); i++ )
                         aSortParam.maKeyState[i].bDoSort = false;
-
-                    aArgSet.Put( ScSortItem( SCITEM_SORTDATA, GetViewData(), &aSortParam ) );
 
                     pTabViewShell->UISort( aSortParam );        // subtotal when needed new
 
