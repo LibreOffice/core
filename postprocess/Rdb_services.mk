@@ -221,9 +221,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(ENABLE_OPENGL_TRANSITIONS), \
 		slideshow/source/engine/opengl/ogltrans \
 	) \
-	$(if $(ENABLE_TDE), \
-		shell/source/backends/kdebe/tdebe1 \
-	) \
 	$(if $(ENABLE_JAVA), \
 		xmerge/source/bridge/XMergeBridge \
 		scripting/java/ScriptFramework \
@@ -262,9 +259,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	connectivity/source/drivers/mysql/mysql \
 	$(if $(filter MACOSX,$(OS)), \
 		connectivity/source/drivers/macab/macab1 \
-	) \
-	$(if $(ENABLE_TDEAB), \
-		connectivity/source/drivers/kab/tdeab1 \
 	) \
 	$(if $(ENABLE_JAVA), \
 		connectivity/source/drivers/hsqldb/hsqldb \

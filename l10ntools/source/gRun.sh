@@ -165,8 +165,6 @@ ${MYCMD} --files scp2/source/python/module_python_librelogo.ulf
 
 ${MYCMD} --files scp2/source/quickstart/module_quickstart.ulf
 
-${MYCMD} --files scp2/source/tde/module_tde.ulf
-
 ${MYCMD} --files scp2/source/winexplorerext/module_winexplorerext.ulf
 
 ${MYCMD} --base scp2/source/writer --files folderitem_writer.ulf module_writer.ulf registryitem_writer.ulf
@@ -536,8 +534,6 @@ ${MYCMD} --files connectivity/registry/mysql/org/openoffice/Office/DataAccess/Dr
 ${MYCMD} --files connectivity/registry/odbc/org/openoffice/Office/DataAccess/Drivers.xcu
 
 ${MYCMD} --files connectivity/registry/postgresql/org/openoffice/Office/DataAccess/Drivers.xcu
-
-${MYCMD} --files connectivity/registry/tdeab/org/openoffice/Office/DataAccess/Drivers.xcu
 
 ${MYCMD} --files dictionaries/af_ZA/dictionaries.xcu
 

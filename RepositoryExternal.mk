@@ -2975,28 +2975,6 @@ endef
 endif # ENABLE_KDE4
 
 
-ifeq ($(ENABLE_TDE),TRUE)
-
-define gb_LinkTarget__use_tde
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(TDE_LIBS) \
-)
-
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-	$(TDE_CFLAGS) \
-)
-endef
-
-else # ! ENABLE_TDE
-
-define gb_LinkTarget__use_tde
-
-endef
-
-endif # ENABLE_TDE
-
-
 # PYTHON
 # extra python_headers external because pyuno wrapper must not link python
 ifneq ($(SYSTEM_PYTHON),)

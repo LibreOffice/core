@@ -258,17 +258,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,graphicfilter, \
 	graphicfilter \
 ))
 
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,tde, \
-	$(if $(ENABLE_TDE),tdebe1) \
-	$(if $(USING_X11), \
-		$(if $(ENABLE_TDE),vclplug_tde) \
-	) \
-))
-
-$(eval $(call gb_Helper_register_executables_for_install,OOO,tde, \
-       $(if $(ENABLE_TDE),tdefilepicker) \
-))
-
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,impress, \
 	animcore \
 	PresenterScreen \
@@ -423,8 +412,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	svxcore \
 	sw \
 	syssh \
-	$(if $(ENABLE_TDEAB),tdeab1) \
-	$(if $(ENABLE_TDEAB),tdeabdrv1) \
 	textconversiondlgs \
 	textfd \
 	tk \

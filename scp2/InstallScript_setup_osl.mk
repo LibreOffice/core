@@ -41,9 +41,6 @@ $(eval $(call gb_InstallScript_use_modules,setup_osl,\
 	$(if $(filter TRUE,$(ENABLE_ONLINE_UPDATE)),\
 		scp2/onlineupdate \
 	) \
-	$(if $(filter TRUE,$(ENABLE_TDE)),\
-		scp2/tde \
-	) \
 ))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

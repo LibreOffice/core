@@ -42,9 +42,6 @@ $(eval $(call gb_Module_add_targets,scp2,\
 	$(if $(filter TRUE,$(ENABLE_KDE4)),\
 		InstallModule_kde \
 	) \
-	$(if $(filter TRUE,$(ENABLE_TDE)),\
-		InstallModule_tde \
-	) \
 ))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

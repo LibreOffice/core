@@ -640,7 +640,6 @@ solaris*)
     test_gtk=yes
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
-    test_tde=yes
     test_freetype=yes
     _os=SunOS
 
@@ -668,7 +667,6 @@ linux-gnu*|k*bsd*-gnu*)
     test_gtk=yes
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
-    test_tde=yes
     test_kde4=yes
     if test "$enable_fuzzers" != yes; then
         test_freetype=yes
@@ -750,7 +748,6 @@ freebsd*)
     test_gtk=yes
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
-    test_tde=yes
     test_kde4=yes
     test_freetype=yes
     AC_MSG_CHECKING([the FreeBSD operating system release])
@@ -779,7 +776,6 @@ freebsd*)
     test_gtk=yes
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
-    test_tde=no
     test_kde4=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread -lpthread"
@@ -795,7 +791,6 @@ aix*)
 
 openbsd*)
     test_gtk=yes
-    test_tde=yes
     test_freetype=yes
     PTHREAD_CFLAGS="-D_THREAD_SAFE"
     PTHREAD_LIBS="-pthread"
@@ -806,7 +801,6 @@ dragonfly*)
     test_gtk=yes
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
-    test_tde=yes
     test_kde4=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread"
@@ -830,7 +824,6 @@ linux-android*)
     test_fontconfig=no
     test_freetype=no
     test_gtk=no
-    test_tde=no
     test_kde4=no
     test_randr=no
     test_xrender=no
@@ -1262,21 +1255,6 @@ libo_FUZZ_ARG_ENABLE(gio,
     AS_HELP_STRING([--disable-gio],
         [Determines whether to use the GIO support.]),
 ,test "${enable_gio+set}" = set || enable_gio=yes)
-
-AC_ARG_ENABLE(tde,
-    AS_HELP_STRING([--enable-tde],
-        [Determines whether to use TQt/TDE vclplug on platforms where TQt and
-         TDE are available.]),
-,)
-
-AC_ARG_ENABLE(tdeab,
-    AS_HELP_STRING([--disable-tdeab],
-        [Disable the TDE address book support.]),
-,
-    if test "$enable_tde" = "yes"; then
-        enable_tdeab=yes
-    fi
-)
 
 AC_ARG_ENABLE(kde4,
     AS_HELP_STRING([--enable-kde4],
@@ -4619,7 +4597,6 @@ if test "$USING_X11" != TRUE; then
     test_gtk=no
     build_gstreamer_1_0=no
     build_gstreamer_0_10=no
-    test_tde=no
     test_kde4=no
     enable_cairo_canvas=no
 fi
@@ -9787,14 +9764,6 @@ if test "x$enable_gtk" = "xyes"; then
 fi
 AC_SUBST(ENABLE_GTK)
 
-ENABLE_TDE=""
-if test "x$enable_tde" = "xyes"; then
-    ENABLE_TDE="TRUE"
-    AC_DEFINE(ENABLE_TDE)
-    R="$R tde"
-fi
-AC_SUBST(ENABLE_TDE)
-
 ENABLE_KDE4=""
 if test "x$enable_kde4" = "xyes"; then
     ENABLE_KDE4="TRUE"
@@ -10585,7 +10554,7 @@ AC_SUBST(ENABLE_SCRIPTING_JAVASCRIPT)
 AC_SUBST(SYSTEM_RHINO)
 AC_SUBST(RHINO_JAR)
 
-# This is only used in KDE3/KDE4/TDE checks to determine if /usr/lib64
+# This is only used in KDE3/KDE4 checks to determine if /usr/lib64
 # paths should be added to library search path. So lets put all 64-bit
 # platforms there.
 supports_multilib=
@@ -10598,135 +10567,6 @@ x86_64 | powerpc64 | powerpc64le | s390x | aarch64 | mips64 | mips64el)
 *)
     ;;
 esac
-
-dnl ===================================================================
-dnl Check whether the TQt and TDE libraries are available.
-dnl ===================================================================
-
-TDE_CFLAGS=""
-TDE_LIBS=""
-if test "$_os" != "OpenBSD"; then
-    TDE_MOC="moc"
-fi
-if test "$test_tde" = "yes" -a "$ENABLE_TDE" = "TRUE"; then
-    dnl Search paths for TQt and TDE
-    if test -z "$supports_multilib"; then
-        tqt_incdirs="$QTINC /usr/local/tqt3/include /usr/include/tqt3 /usr/include /usr/X11R6/include/X11/tqt3 /usr/X11R6/include/tqt3 /usr/lib/tqt3/include /usr/lib/tqt3/include /usr/share/tqt3/include /usr/local/include/X11/tqt3 $x_includes"
-        tqt_libdirs="$QTLIB /usr/local/tqt3/lib /usr/lib/tqt3 /usr/lib /usr/X11R6/lib/X11/tqt3 /usr/X11R6/lib/tqt3 /usr/lib/tqt3/lib /usr/lib/tqt3/lib /usr/share/tqt3/lib /usr/local/lib/tqt3 $x_libraries"
-    else
-        tqt_incdirs="$QTINC /usr/local/tqt3/include /usr/include/tqt3 /usr/include /usr/X11R6/include/X11/tqt3 /usr/X11R6/include/tqt3 /usr/lib64/tqt3/include /usr/lib64/tqt3/include /usr/share/tqt3/include /usr/lib/tqt3/include /usr/lib/tqt3/include /usr/local/include/X11/tqt3 $x_includes"
-        tqt_libdirs="$QTLIB /usr/local/tqt3/lib64 /usr/lib64/tqt3 /usr/lib64 /usr/X11R6/lib64/X11/tqt3 /usr/X11R6/lib64/tqt3 /usr/lib64/tqt3/lib64 /usr/lib64/tqt3/lib64 /usr/share/tqt3/lib64 /usr/local/tqt3/lib /usr/lib/tqt3 /usr/lib /usr/X11R6/lib/X11/tqt3 /usr/X11R6/lib/tqt3 /usr/lib/tqt3/lib /usr/lib/tqt3/lib /usr/share/tqt3/lib /usr/local/lib/tqt3 $x_libraries"
-    fi
-    if test -n "$TQTDIR"; then
-        tqt_incdirs="$TQTDIR/include $tqt_incdirs"
-        if test -z "$supports_multilib"; then
-            tqt_libdirs="$TQTDIR/lib $tqt_libdirs"
-        else
-            tqt_libdirs="$TQTDIR/lib64 $TQTDIR/lib $tqt_libdirs"
-        fi
-    fi
-    if test -z "$supports_multilib"; then
-        tde_incdirs="/usr/lib/trinity/include /usr/local/trinity/include /usr/local/include /usr/trinity/include /usr/include/trinity /opt/trinity/include /opt/trinity/include $x_includes"
-        tde_libdirs="/usr/lib/trinity/lib /usr/local/trinity/lib /usr/trinity/lib /usr/lib/trinity /usr/lib/trinity /usr/X11R6/lib /usr/local/lib /opt/trinity/lib /opt/trinity/lib /usr/X11R6/trinity/lib /usr/lib $x_libraries"
-    else
-        tde_incdirs="/usr/lib64/trinity/include /usr/lib/trinity/include /usr/local/trinity/include /usr/local/include /usr/trinity/include /usr/include/trinity /opt/trinity/include /opt/trinity/include $x_includes"
-        tde_libdirs="/usr/lib64/trinity/lib64 /usr/local/trinity/lib64 /usr/trinity/lib64 /usr/lib64/trinity /usr/lib64/trinity /usr/X11R6/lib64 /usr/local/lib64 /opt/trinity/lib64 /opt/trinity/lib64 /usr/X11R6/trinity/lib64 /usr/lib/trinity/lib /usr/local/trinity/lib /usr/trinity/lib /usr/lib/trinity /usr/lib/trinity /usr/lib /usr/X11R6/lib /usr/local/lib /opt/trinity/lib /opt/trinity/lib /usr/X11R6/trinity/lib /usr/lib64 $x_libraries"
-    fi
-    if test -n "$TDEDIR"; then
-        tde_incdirs="$TDEDIR/include $tde_incdirs"
-        if test -z "$supports_multilib"; then
-            tde_libdirs="$TDEDIR/lib $tde_libdirs"
-        else
-            tde_libdirs="$TDEDIR/lib64 $TDEDIR/lib $tde_libdirs"
-        fi
-    fi
-
-    dnl What to test
-    tqt_test_include="ntqstyle.h"
-    tde_test_include="kapp.h"
-
-    if test "$_os" != "OpenBSD"; then
-        tqt_test_library="libtqt-mt.so"
-        tde_test_library="libDCOP.so"
-    else
-        tqt_test_library="libtqt-mt.so*"
-        tde_test_library="libDCOP.so*"
-    fi
-
-    dnl Check for TQt headers
-    AC_MSG_CHECKING([for TQt headers])
-    tqt_incdir="no"
-    for tde_check in $tqt_incdirs; do
-        if test -r "$tde_check/$tqt_test_include"; then
-            tqt_incdir="$tde_check"
-            break
-        fi
-    done
-    AC_MSG_RESULT([$tqt_incdir])
-    if test "x$tqt_incdir" = "xno"; then
-        AC_MSG_ERROR([TQt headers not found.  Please specify the root of
-your TQt installation by exporting TQTDIR before running "configure".])
-    fi
-
-    dnl Check for TQt libraries
-    AC_MSG_CHECKING([for TQt libraries])
-    tqt_libdir="no"
-    for tqt_check in $tqt_libdirs; do
-        if test -r "`ls $tqt_check/$tqt_test_library 2>/dev/null | head -1`"; then
-            tqt_libdir="$tqt_check"
-            break
-        fi
-    done
-    AC_MSG_RESULT([$tqt_libdir])
-    if test "x$tqt_libdir" = "xno"; then
-        AC_MSG_ERROR([TQt libraries not found.  Please specify the root of
-your TQt installation by exporting TQTDIR before running "configure".])
-    fi
-
-    dnl Check for Meta Object Compiler
-    AC_PATH_PROG( MOC, moc, no, [`dirname $tqt_libdir`/bin:$TQTDIR/bin:$PATH] )
-    if test "$MOC" = "no"; then
-        AC_MSG_ERROR([TQt Meta Object Compiler not found.  Please specify
-the root of your TQt installation by exporting TQTDIR before running "configure".])
-    fi
-
-    dnl Check for TDE headers
-    AC_MSG_CHECKING([for TDE headers])
-    tde_incdir="no"
-    for tde_check in $tde_incdirs; do
-        if test -r "$tde_check/$tde_test_include"; then
-            tde_incdir="$tde_check"
-            break
-        fi
-    done
-    AC_MSG_RESULT([$tde_incdir])
-    if test "x$tde_incdir" = "xno"; then
-        AC_MSG_ERROR([TDE headers not found.  Please specify the root of
-your TDE installation by exporting TDEDIR before running "configure".])
-    fi
-
-    dnl Check for TDE libraries
-    AC_MSG_CHECKING([for TDE libraries])
-    tde_libdir="no"
-    for tde_check in $tde_libdirs; do
-        if test -r "`ls $tde_check/$tde_test_library 2>/dev/null | head -1`"; then
-            tde_libdir="$tde_check"
-            break
-        fi
-    done
-    AC_MSG_RESULT([$tde_libdir])
-    if test "x$tde_libdir" = "xno"; then
-        AC_MSG_ERROR([TDE libraries not found.  Please specify the root of
-your TDE installation by exporting TDEDIR before running "configure".])
-    fi
-
-    dnl Set the variables
-    TDE_CFLAGS="-I$tqt_incdir -I$tde_incdir -I/usr/include/tqt -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
-    TDE_LIBS="-L$tde_libdir -L$tqt_libdir -ltdeio -ltdeui -ltdecore -ltqt -ltqt-mt"
-fi
-AC_SUBST(TDE_CFLAGS)
-AC_SUBST(TDE_LIBS)
-AC_SUBST(TDE_MOC)
 
 dnl ===================================================================
 dnl KDE4 Integration
@@ -11028,34 +10868,6 @@ fi
 AC_SUBST(ENABLE_EVOAB2)
 AC_SUBST(GOBJECT_CFLAGS)
 AC_SUBST(GOBJECT_LIBS)
-
-dnl ===================================================================
-dnl Test whether to include TDE AB support
-dnl ===================================================================
-AC_MSG_CHECKING([whether to enable TDE address book support])
-if test "$enable_tdeab" = "yes" -a "$enable_tde" = "yes"; then
-    AC_MSG_RESULT([yes])
-    AC_LANG_PUSH([C++])
-    save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS $TDE_CFLAGS"
-    AC_MSG_CHECKING([whether TDE is at least R14.0])
-       AC_RUN_IFELSE([AC_LANG_SOURCE([[
-#include <tdeversion.h>
-
-int main(int argc, char **argv) {
-       if (TDE_VERSION_MAJOR >= 14) return 0;
-       else return 1;
-}
-       ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([TDE version too old or too recent, please use another version of TDE or disable TDE address book support])],
-       [AC_MSG_ERROR([TDE support not tested with cross compilation])])
-    CXXFLAGS=$save_CXXFLAGS
-    AC_LANG_POP([C++])
-    ENABLE_TDEAB=TRUE
-else
-    AC_MSG_RESULT([no])
-    ENABLE_TDEAB=
-fi
-AC_SUBST(ENABLE_TDEAB)
 
 dnl ===================================================================
 dnl Test which themes to include

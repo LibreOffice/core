@@ -36,12 +36,6 @@ $(eval $(call gb_Module_add_targets,shell,\
 ))
 endif
 
-ifeq ($(ENABLE_TDE),TRUE)
-$(eval $(call gb_Module_add_targets,shell,\
-	Library_tdebe \
-))
-endif
-
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_Module_add_targets,shell,\
