@@ -600,6 +600,13 @@ void FormulaTokenArray::DelRPN()
     nRPN = nIndex = 0;
 }
 
+FormulaToken* FormulaTokenArray::FirstToken() const
+{
+    if (!pCode || nLen == 0)
+        return nullptr;
+    return pCode[0];
+}
+
 FormulaToken* FormulaTokenArray::PeekPrev( sal_uInt16 & nIdx )
 {
     if (0 < nIdx && nIdx <= nLen)
@@ -645,6 +652,13 @@ FormulaToken* FormulaTokenArray::PeekPrevNoSpaces()
     }
     else
         return nullptr;
+}
+
+FormulaToken* FormulaTokenArray::FirstRPNToken() const
+{
+    if (!pRPN || nRPN == 0)
+        return nullptr;
+    return pRPN[0];
 }
 
 bool FormulaTokenArray::HasReferences() const

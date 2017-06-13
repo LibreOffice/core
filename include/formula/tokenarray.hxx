@@ -206,6 +206,7 @@ public:
     void Clear();
     void DelRPN();
     FormulaToken* First() { nIndex = 0; return Next(); }
+    FormulaToken* FirstToken() const;
     FormulaToken* Next();
     FormulaToken* NextNoSpaces();
     FormulaToken* GetNextName();
@@ -219,6 +220,7 @@ public:
     FormulaToken* PeekPrevNoSpaces();    /// Only after Reset/First/Next/Last/Prev!
     FormulaToken* PeekNextNoSpaces();    /// Only after Reset/First/Next/Last/Prev!
     FormulaToken* FirstRPN() { nIndex = 0; return NextRPN(); }
+    FormulaToken* FirstRPNToken() const;
     FormulaToken* NextRPN();
     FormulaToken* LastRPN() { nIndex = nRPN; return PrevRPN(); }
     FormulaToken* PrevRPN();
