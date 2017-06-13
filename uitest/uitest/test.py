@@ -8,6 +8,7 @@
 import time
 import threading
 from uitest.config import DEFAULT_SLEEP
+from uitest.config import MAX_WAIT
 from uitest.uihelper.common import get_state_as_dict
 
 from com.sun.star.uno import RuntimeException
@@ -57,7 +58,7 @@ class UITest(object):
         with EventListener(self._xContext, "OnLoad") as event:
             component = desktop.loadComponentFromURL(url, "_default", 0, tuple())
             time_ = 0
-            while time_ < 30:
+            while time_ < MAX_WAIT:
                 if event.executed:
                     frames = self.get_frames()
                     if len(frames) == 1:
@@ -71,7 +72,7 @@ class UITest(object):
         with EventListener(self._xContext, "DialogExecute") as event:
             self._xUITest.executeDialog(command)
             time_ = 0
-            while time_ < 30:
+            while time_ < MAX_WAIT:
                 if event.executed:
                     time.sleep(DEFAULT_SLEEP)
                     return
@@ -84,7 +85,7 @@ class UITest(object):
         with EventListener(self._xContext, "ModelessDialogVisible") as event:
             self._xUITest.executeCommand(command)
             time_ = 0
-            while time_ < 30:
+            while time_ < MAX_WAIT:
                 if event.executed:
                     time.sleep(DEFAULT_SLEEP)
                     return
@@ -100,7 +101,7 @@ class UITest(object):
         with EventListener(self._xContext, event_name) as event:
             ui_object.executeAction(action, parameters)
             time_ = 0
-            while time_ < 30:
+            while time_ < MAX_WAIT:
                 if event.executed:
                     time.sleep(DEFAULT_SLEEP)
                     return
@@ -132,7 +133,7 @@ class UITest(object):
         with EventListener(self._xContext, "OnNew") as event:
             xBtn.executeAction("CLICK", tuple())
             time_ = 0
-            while time_ < 30:
+            while time_ < MAX_WAIT:
                 if event.executed:
                     frames = self.get_frames()
                     self.get_desktop().setActiveFrame(frames[0])
@@ -149,7 +150,7 @@ class UITest(object):
         with EventListener(self._xContext, "DialogClosed" ) as event:
             button.executeAction("CLICK", tuple())
             time_ = 0
-            while time_ < 30:
+            while time_ < MAX_WAIT:
                 if event.executed:
                     time.sleep(DEFAULT_SLEEP)
                     return
@@ -161,7 +162,7 @@ class UITest(object):
         with EventListener(self._xContext, ["DialogExecute", "OnViewClosed"] ) as event:
             self._xUITest.executeDialog(".uno:CloseDoc")
             time_ = 0
-            while time_ < 30:
+            while time_ < MAX_WAIT:
                 if event.hasExecuted("DialogExecute"):
                     xCloseDlg = self._xUITest.getTopFocusWindow()
                     xNoBtn = xCloseDlg.getChild("discard")
@@ -178,7 +179,7 @@ class UITest(object):
         with EventListener(self._xContext, ["DialogExecute", "ModelessDialogExecute"]) as event:
             thread.start()
             time_ = 0
-            while time_ < 30:
+            while time_ < MAX_WAIT:
                 if event.executed:
                     xDlg = self._xUITest.getTopFocusWindow()
                     xUIElement = xDlg.getChild(dialog_element)

@@ -9,4 +9,6 @@ use_sleep = False
 
 DEFAULT_SLEEP = 0.1
 
+MAX_WAIT = 30
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
