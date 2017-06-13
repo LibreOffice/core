@@ -263,8 +263,7 @@ namespace sdr
                     // The ItemSet for merge is constructed on demand, so it's enough here to
                     // just delete it and set to 0L.
                     // mpItemSet->ClearItem();
-                    delete mpItemSet;
-                    mpItemSet = nullptr;
+                    mpItemSet.reset();
                 }
             }
         }

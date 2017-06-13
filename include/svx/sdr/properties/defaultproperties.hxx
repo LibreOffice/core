@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SVX_SDR_PROPERTIES_DEFAULTPROPERTIES_HXX
 #define INCLUDED_SVX_SDR_PROPERTIES_DEFAULTPROPERTIES_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <svx/sdr/properties/properties.hxx>
 #include <svx/svxdllapi.h>
 
@@ -33,7 +37,7 @@ namespace sdr
         {
         protected:
             // the to be used ItemSet
-            SfxItemSet*                                     mpItemSet;
+            std::unique_ptr<SfxItemSet> mpItemSet;
 
             // create a new itemset
             virtual SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& rPool) override;

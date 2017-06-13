@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <sdr/properties/attributeproperties.hxx>
 #include <sdr/properties/itemsettools.hxx>
 #include <tools/debug.hxx>
@@ -253,7 +257,6 @@ namespace sdr
                     // because this functionality is used by UNDO only. Thus
                     // objects and ItemSets would be moved back to their original
                     // pool before usage.
-                    SfxItemSet* pOldSet = mpItemSet;
                     SfxStyleSheet* pStySheet = GetStyleSheet();
 
                     if(pStySheet)
@@ -261,8 +264,9 @@ namespace sdr
                         ImpRemoveStyleSheet();
                     }
 
-                    mpItemSet = mpItemSet->Clone(false, pDestPool);
-                    SdrModel::MigrateItemSet(pOldSet, mpItemSet, pNewModel);
+                    auto pOldSet = std::move(mpItemSet);
+                    mpItemSet.reset(pOldSet->Clone(false, pDestPool));
+                    SdrModel::MigrateItemSet(pOldSet.get(), mpItemSet.get(), pNewModel);
 
                     // set stylesheet (if used)
                     if(pStySheet)
@@ -297,8 +301,6 @@ namespace sdr
                             ImpAddStyleSheet(pNewStyleSheet, true);
                         }
                     }
-
-                    delete pOldSet;
                 }
             }
         }
@@ -451,12 +453,9 @@ namespace sdr
                                 {
                                     ImpRemoveStyleSheet();
                                 }
-
-                                delete mpItemSet;
-                                mpItemSet = nullptr;
                             }
 
-                            mpItemSet = pNewSet;
+                            mpItemSet.reset(pNewSet);
                         }
                     }
                 }
@@ -503,8 +502,7 @@ namespace sdr
                 }
 
                 // replace itemsets
-                delete mpItemSet;
-                mpItemSet = pDestItemSet;
+                mpItemSet.reset(pDestItemSet);
 
                 // set necessary changes like in RemoveStyleSheet()
                 GetSdrObject().SetBoundRectDirty();

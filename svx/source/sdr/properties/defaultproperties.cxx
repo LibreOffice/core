@@ -53,7 +53,7 @@ namespace sdr
         {
             if(rProps.mpItemSet)
             {
-                mpItemSet = rProps.mpItemSet->Clone();
+                mpItemSet.reset(rProps.mpItemSet->Clone());
 
                 // do not keep parent info, this may be changed by later constructors.
                 // This class just copies the ItemSet, ignore parent.
@@ -69,20 +69,13 @@ namespace sdr
             return *(new DefaultProperties(*this, rObj));
         }
 
-        DefaultProperties::~DefaultProperties()
-        {
-            if(mpItemSet)
-            {
-                delete mpItemSet;
-                mpItemSet = nullptr;
-            }
-        }
+        DefaultProperties::~DefaultProperties() {}
 
         const SfxItemSet& DefaultProperties::GetObjectItemSet() const
         {
             if(!mpItemSet)
             {
-                const_cast<DefaultProperties*>(this)->mpItemSet = const_cast<DefaultProperties*>(this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool());
+                const_cast<DefaultProperties*>(this)->mpItemSet.reset(const_cast<DefaultProperties*>(this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool()));
                 const_cast<DefaultProperties*>(this)->ForceDefaultAttributes();
             }
 
