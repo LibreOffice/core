@@ -1690,14 +1690,19 @@ public:
 
 void ScInterpreter::ScSumProduct()
 {
-    sal_uInt8 nParamCount = GetByte();
+    short nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 1, 30 ) )
         return;
 
+    // XXX NOTE: Excel returns #VALUE! for reference list and 0 (why?) for
+    // array of references. We calculate the proper individual arrays if sizes
+    // match.
+
+    size_t nInRefList = 0;
     ScMatrixRef pMatLast;
     ScMatrixRef pMat;
 
-    pMatLast = GetMatrix();
+    pMatLast = GetMatrix( --nParamCount, nInRefList);
     if (!pMatLast)
     {
         PushIllegalParameter();
@@ -1709,9 +1714,9 @@ void ScInterpreter::ScSumProduct()
     std::vector<double> aResArray;
     pMatLast->GetDoubleArray(aResArray);
 
-    for (sal_uInt16 i = 1; i < nParamCount; ++i)
+    while (nParamCount--)
     {
-        pMat = GetMatrix();
+        pMat = GetMatrix( nParamCount, nInRefList);
         if (!pMat)
         {
             PushIllegalParameter();
