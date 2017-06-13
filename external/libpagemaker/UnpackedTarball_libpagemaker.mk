@@ -21,4 +21,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,libpagemaker, \
 endif
 endif
 
+$(eval $(call gb_UnpackedTarball_add_patches,libpagemaker, \
+    external/libpagemaker/iOS.patch.0 \
+))
+
 # vim: set noet sw=4 ts=4:
