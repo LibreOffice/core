@@ -761,6 +761,7 @@
           <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menuitem menu:id="vnd.sun.star.script:Tools.Misc.FixTableProperties?language=Basic&amp;location=application" menu:label="Fix Table Properties"/>
       <menu:menuitem menu:id=".uno:OpenXMLFilterSettings"/>
       <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog"/>
       <menu:menuitem menu:id=".uno:ConfigureDialog"/>
