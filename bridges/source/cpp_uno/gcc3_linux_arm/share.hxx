@@ -18,12 +18,20 @@
  */
 #ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_ARM_SHARE_HXX
 #define INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_ARM_SHARE_HXX
-#include "uno/mapping.h"
+#include "sal/config.h"
 
 #include <typeinfo>
 #include <exception>
 #include <cstddef>
 #include <unwind.h>
+
+#include <cxxabi.h>
+#ifndef _GLIBCXX_CDTOR_CALLABI // new in GCC 4.7 cxxabi.h
+#define _GLIBCXX_CDTOR_CALLABI
+#endif
+
+#include "config_cxxabi.h"
+#include "uno/mapping.h"
 
 namespace CPPU_CURRENT_NAMESPACE
 {
@@ -70,9 +78,16 @@ namespace CPPU_CURRENT_NAMESPACE
     __cxa_exception *propagatingExceptions;
 #endif
     };
-    extern "C" __cxa_eh_globals *__cxa_get_globals () throw();
+}
 
+#if !HAVE_CXXABI_H_CXA_GET_GLOBALS
+namespace __cxxabiv1 {
+    extern "C" __cxa_eh_globals * __cxa_get_globals() throw();
+}
+#endif
 
+namespace CPPU_CURRENT_NAMESPACE
+{
     void raiseException(
         uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
     void fillUnoException(
