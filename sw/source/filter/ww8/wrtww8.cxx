@@ -2649,7 +2649,8 @@ void MSWordExportBase::WriteText()
     {
         SwNode& rNd = m_pCurPam->GetNode();
 
-        if ( rNd.IsTextNode() )
+        // no section breaks exported for Endnotes
+        if ( rNd.IsTextNode() && m_nTextTyp != TXT_EDN )
             SectionBreaksAndFrames( *rNd.GetTextNode() );
 
         // output the various types of nodes
