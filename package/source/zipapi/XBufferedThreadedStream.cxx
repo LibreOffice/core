@@ -90,12 +90,11 @@ void XBufferedThreadedStream::produce()
         aGuard.lock();
         maPendingBuffers.push( pProducedBuffer );
         maBufferConsumeResume.notify_one();
-        maBufferProduceResume.wait( aGuard, [&]{return canProduce(); } );
 
-        if( mbTerminateThread )
-            break;
+        if (!mbTerminateThread)
+            maBufferProduceResume.wait( aGuard, [&]{return canProduce(); } );
 
-    } while( hasBytes() );
+    } while( !mbTerminateThread && hasBytes() );
 }
 
 /**
@@ -134,6 +133,7 @@ const Buffer& XBufferedThreadedStream::getNextBlock()
 
 void XBufferedThreadedStream::setTerminateThread()
 {
+    std::unique_lock<std::mutex> aGuard( maBufferProtector );
     mbTerminateThread = true;
     maBufferProduceResume.notify_one();
     maBufferConsumeResume.notify_one();
