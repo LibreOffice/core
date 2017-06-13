@@ -1421,7 +1421,7 @@ class CopyByCloneHandler
             ScTokenArray* pCode = rSrcCell.GetCode();
             if (pCode && pCode->GetLen() == 1)
             {
-                const formula::FormulaToken* p = pCode->First();
+                const formula::FormulaToken* p = pCode->FirstToken();
                 if (p->GetOpCode() == ocTrue || p->GetOpCode() == ocFalse)
                     // This is a boolean formula.
                     bForceFormula = true;
