@@ -369,6 +369,10 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
         if (!bHeaderIsOn)
             xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_ON, uno::makeAny(true));
 
+        // backup header height
+        sal_Int32 nOldValue;
+        xPageStyle->getPropertyValue(UNO_NAME_HEADER_HEIGHT) >>= nOldValue;
+
         // If the header already contains a document header field, no need to do anything.
         uno::Reference<text::XText> xHeaderText;
         xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT) >>= xHeaderText;
@@ -519,6 +523,11 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
             xNamed->setName(sWatermark);
             xLockable->removeActionLock();
         }
+
+        // tdf#108494 the header height was switched to height of a watermark
+        // and shape was moved to the lower part of a page
+        xPageStyle->setPropertyValue(UNO_NAME_HEADER_HEIGHT, uno::makeAny((sal_Int32)11));
+        xPageStyle->setPropertyValue(UNO_NAME_HEADER_HEIGHT, uno::makeAny(nOldValue));
     }
 }
 
