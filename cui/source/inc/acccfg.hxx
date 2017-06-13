@@ -42,6 +42,7 @@
 #include <svtools/treelistbox.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <i18nutil/searchopt.hxx>
 #include "cfgutil.hxx"
 
 class SfxMacroInfoItem;
@@ -121,6 +122,10 @@ private:
     VclPtr<SfxConfigGroupListBox>          m_pGroupLBox;
     VclPtr<SfxConfigFunctionListBox>       m_pFunctionBox;
     VclPtr<SvTreeListBox>                  m_pKeyBox;
+    /*search feature start*/
+    VclPtr<Edit> m_pSearchEdit;
+    //VclPtr<PushButton> m_pSearchBtn;
+    /*search feature end*/
     VclPtr<PushButton>                     m_pLoadButton;
     VclPtr<PushButton>                     m_pSaveButton;
     VclPtr<PushButton>                     m_pResetButton;
@@ -142,9 +147,15 @@ private:
     OUString m_sModuleShortName;
     OUString m_sModuleUIName;
 
+     //for search
+    i18nutil::SearchOptions2 m_options;
+    SvTreeListEntries m_pFunctionBoxEntries;
+
     DECL_LINK(ChangeHdl, Button *, void);
     DECL_LINK(RemoveHdl, Button *, void);
     DECL_LINK(SelectHdl, SvTreeListBox*, void );
+    //DECL_LINK(SearchBtnHdl, Button *, void);
+    DECL_LINK(SearchModifyHdl, Edit&, void);
     DECL_LINK(Save, Button *, void);
     DECL_LINK(Load, Button *, void);
     DECL_LINK(Default, Button *, void);
@@ -154,6 +165,7 @@ private:
     DECL_LINK(SaveHdl, sfx2::FileDialogHelper *, void);
 
     OUString                    GetLabel4Command(const OUString& rCommand);
+    SvTreeListEntry*            applySearchFilter(OUString& rSearchTerm, SvTreeListBox* rListBox);
     void                        InitAccCfg();
     sal_uLong                   MapKeyCodeToPos( const vcl::KeyCode &rCode ) const;
     void                        StartFileDialog( WinBits nBits, const OUString& rTitle );
