@@ -425,8 +425,7 @@ void PDFSigningTest::testTokenize()
         // Just make sure the tokenizer finishes without an error, don't look at the signature.
         CPPUNIT_ASSERT(aDocument.Read(aStream));
 
-        OUString aNoPages("tdf107149.pdf");
-        if (aNoPages == rName)
+        if (OUString(rName) == "tdf107149.pdf")
             // This failed, page list was empty.
             CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aDocument.GetPages().size());
     }

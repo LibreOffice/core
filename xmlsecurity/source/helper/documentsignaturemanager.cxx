@@ -162,12 +162,11 @@ bool DocumentSignatureManager::isXML(const OUString& rURI)
         //Files can only be encrypted if they are in the manifest.xml.
         //That is, the current file cannot be encrypted, otherwise bPropsAvailable
         //would be true.
-        OUString aXMLExt("XML");
         sal_Int32 nSep = rURI.lastIndexOf('.');
-        if (nSep != (-1))
+        if (nSep != -1)
         {
             OUString aExt = rURI.copy(nSep+1);
-            if (aExt.equalsIgnoreAsciiCase(aXMLExt))
+            if (aExt.equalsIgnoreAsciiCase("XML"))
                 bIsXML = true;
         }
     }
