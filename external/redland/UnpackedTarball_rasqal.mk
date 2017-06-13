@@ -27,6 +27,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,rasqal,\
 	external/redland/rasqal/rpath.patch \
 	external/redland/rasqal/clang-cl.patch \
 	external/redland/rasqal/libtool.patch \
+	external/redland/rasqal/iOS.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:

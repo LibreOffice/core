@@ -28,6 +28,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,redland,\
 	external/redland/redland/rpath.patch \
 	external/redland/redland/clang-cl.patch \
 	external/redland/redland/libtool.patch \
+	external/redland/redland/iOS.patch.0 \
+	external/redland/redland/iOS-libltdl.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:

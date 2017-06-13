@@ -27,6 +27,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,raptor,\
 	external/redland/raptor/xml2-config.patch \
 	external/redland/raptor/0001-Calcualte-max-nspace-declarations-correctly-for-XML-.patch.1 \
 	external/redland/raptor/libtool.patch \
+	external/redland/raptor/iOS.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
