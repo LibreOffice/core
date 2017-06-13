@@ -310,7 +310,7 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
         if ( pFormula1->GetLen() == 1 )
         {
             // Single (constant number)?
-            FormulaToken* pToken = pFormula1->First();
+            FormulaToken* pToken = pFormula1->FirstToken();
             if ( pToken->GetOpCode() == ocPush )
             {
                 if ( pToken->GetType() == svDouble )
@@ -334,7 +334,7 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
         if ( pFormula2->GetLen() == 1 )
         {
             // Single (constant number)?
-            FormulaToken* pToken = pFormula2->First();
+            FormulaToken* pToken = pFormula2->FirstToken();
             if ( pToken->GetOpCode() == ocPush )
             {
                 if ( pToken->GetType() == svDouble )
@@ -398,7 +398,7 @@ void ScConditionEntry::Compile( const OUString& rExpr1, const OUString& rExpr2,
                 if ( pFormula1->GetLen() == 1 )
                 {
                     // Single (constant number)?
-                    FormulaToken* pToken = pFormula1->First();
+                    FormulaToken* pToken = pFormula1->FirstToken();
                     if ( pToken->GetOpCode() == ocPush )
                     {
                         if ( pToken->GetType() == svDouble )
@@ -436,7 +436,7 @@ void ScConditionEntry::Compile( const OUString& rExpr1, const OUString& rExpr2,
                 if ( pFormula2->GetLen() == 1 )
                 {
                     // Sigle (constant number)?
-                    FormulaToken* pToken = pFormula2->First();
+                    FormulaToken* pToken = pFormula2->FirstToken();
                     if ( pToken->GetOpCode() == ocPush )
                     {
                         if ( pToken->GetType() == svDouble )
