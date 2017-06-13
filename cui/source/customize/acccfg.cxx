@@ -60,6 +60,11 @@
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
+// include search util
+#include <com/sun/star/util/SearchFlags.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
+#include <unotools/textsearch.hxx>
+
 // include other projects
 #include <comphelper/processfactory.hxx>
 #include <svtools/acceleratorexecute.hxx>
@@ -757,6 +762,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( vcl::Window* pParent, const 
     aSize = LogicToPixel(Size(80, 91), MapUnit::MapAppFont);
     m_pKeyBox->set_width_request(aSize.Width());
     m_pKeyBox->set_height_request(aSize.Height());
+    get(m_pSearchEdit, "searchEntry");
 
     aFilterAllStr = SfxResId( STR_SFX_FILTERNAME_ALL );
 
@@ -767,6 +773,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( vcl::Window* pParent, const 
     m_pGroupLBox->SetSelectHdl  ( LINK( this, SfxAcceleratorConfigPage, SelectHdl ));
     m_pFunctionBox->SetSelectHdl( LINK( this, SfxAcceleratorConfigPage, SelectHdl ));
     m_pKeyBox->SetSelectHdl     ( LINK( this, SfxAcceleratorConfigPage, SelectHdl ));
+    m_pSearchEdit->SetModifyHdl ( LINK( this, SfxAcceleratorConfigPage, ModifyHdl ));
     m_pLoadButton->SetClickHdl  ( LINK( this, SfxAcceleratorConfigPage, Load      ));
     m_pSaveButton->SetClickHdl  ( LINK( this, SfxAcceleratorConfigPage, Save      ));
     m_pResetButton->SetClickHdl ( LINK( this, SfxAcceleratorConfigPage, Default   ));
@@ -794,6 +801,11 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( vcl::Window* pParent, const 
     nNewTab = nNewTab + 5; // additional space
     m_pEntriesBox->SetTab( 1, nNewTab );
 
+    //Initialize search util
+    m_options.AlgorithmType2 = util::SearchAlgorithms2::ABSOLUTE;
+    m_options.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
+    m_options.searchFlag |= (util::SearchFlags::REG_NOT_BEGINOFLINE |
+                                        util::SearchFlags::REG_NOT_ENDOFLINE);
     // initialize GroupBox
     m_pGroupLBox->SetFunctionListBox(m_pFunctionBox);
 
@@ -839,6 +851,7 @@ void SfxAcceleratorConfigPage::dispose()
     m_pGroupLBox.clear();
     m_pFunctionBox.clear();
     m_pKeyBox.clear();
+    m_pSearchEdit.clear();
     m_pLoadButton.clear();
     m_pSaveButton.clear();
     m_pResetButton.clear();
@@ -1039,6 +1052,11 @@ void SfxAcceleratorConfigPage::ResetConfig()
     m_pEntriesBox->Clear();
 }
 
+IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ModifyHdl, Edit&, void)
+{
+    m_pGroupLBox->GetSelectHdl().Call( m_pGroupLBox );
+}
+
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Load, Button*, void)
 {
     // ask for filename, where we should load the new config data from
@@ -1117,6 +1135,13 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, SvTreeListBox*, pListBox, void )
     else if ( pListBox == m_pGroupLBox )
     {
         m_pGroupLBox->GroupSelected();
+
+        // Apply the search filter to the functions list
+        OUString aSearchTerm( m_pSearchEdit->GetText() );
+        SvTreeListEntry* aMatchFound = applySearchFilter(aSearchTerm, m_pFunctionBox);
+        if (aMatchFound)
+            m_pFunctionBox->Select(aMatchFound);
+
         if ( !m_pFunctionBox->FirstSelected() )
             m_pChangeButton->Enable( false );
     }
@@ -1502,6 +1527,45 @@ OUString SfxAcceleratorConfigPage::GetLabel4Command(const OUString& sCommand)
     }
 
     return sCommand;
+}
+
+/*
+ * Remove entries which doesn't contain the search term
+ */
+SvTreeListEntry* SfxAcceleratorConfigPage::applySearchFilter(OUString& rSearchTerm, SvTreeListBox* rListBox)
+{
+    if ( rSearchTerm.isEmpty() || !rListBox )
+    {
+        return nullptr;
+    }
+
+    SvTreeListEntry* pFirstMatch = nullptr;
+    SvTreeListEntry* pEntry = rListBox->First();
+
+    m_options.searchString = rSearchTerm;
+    utl::TextSearch textSearch( m_options );
+
+    while(pEntry)
+    {
+        OUString aStr = rListBox->GetEntryText(pEntry);
+        SvTreeListEntry* pNextEntry = rListBox->Next(pEntry);
+        sal_Int32 aStartPos = 0;
+        sal_Int32 aEndPos = aStr.getLength();
+
+        if (!textSearch.SearchForward( aStr, &aStartPos, &aEndPos ))
+        {
+            rListBox->Select(pEntry);
+            rListBox->RemoveSelection();
+        }
+        else if (!pFirstMatch)
+        {
+            pFirstMatch = pEntry;
+        }
+
+        pEntry = pNextEntry;
+    }
+
+    return pFirstMatch;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
