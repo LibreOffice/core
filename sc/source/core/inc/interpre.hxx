@@ -360,6 +360,7 @@ void PopExternalDoubleRef(ScMatrixRef& rMat);
 void GetExternalDoubleRef(sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& aData, ScExternalRefCache::TokenArrayRef& rArray);
 bool PopDoubleRefOrSingleRef( ScAddress& rAdr );
 void PopDoubleRefPushMatrix();
+void PopRefListPushMatrixOrRef();
 // If MatrixFormula: convert svDoubleRef to svMatrix, create JumpMatrix.
 // Else convert area reference parameters marked as ForceArray to array.
 // Returns true if JumpMatrix created.

@@ -1354,6 +1354,66 @@ void ScInterpreter::PopDoubleRefPushMatrix()
         SetError( FormulaError::NoRef );
 }
 
+void ScInterpreter::PopRefListPushMatrixOrRef()
+{
+    if ( GetStackType() == svRefList )
+    {
+        FormulaConstTokenRef xTok = pStack[sp-1];
+        const std::vector<ScComplexRefData>* pv = xTok->GetRefList();
+        if (pv)
+        {
+            const size_t nEntries = pv->size();
+            if (nEntries == 1)
+            {
+                --sp;
+                PushTempTokenWithoutError( new ScDoubleRefToken( (*pv)[0] ));
+            }
+            else if (bMatrixFormula)
+            {
+                // Only single cells can be stuffed into a column vector.
+                // XXX NOTE: Excel doesn't do this but returns #VALUE! instead.
+                // Though there's no compelling reason not to..
+                for (const auto & rRef : *pv)
+                {
+                    if (rRef.Ref1 != rRef.Ref2)
+                        return;
+                }
+                ScMatrixRef xMat = GetNewMat( 1, nEntries, true);   // init empty
+                if (!xMat)
+                    return;
+                for (size_t i=0; i < nEntries; ++i)
+                {
+                    SCCOL nCol; SCROW nRow; SCTAB nTab;
+                    SingleRefToVars( (*pv)[i].Ref1, nCol, nRow, nTab);
+                    if (nGlobalError == FormulaError::NONE)
+                    {
+                        ScAddress aAdr( nCol, nRow, nTab);
+                        ScRefCellValue aCell( *pDok, aAdr);
+                        if (aCell.hasError())
+                            xMat->PutError( aCell.mpFormula->GetErrCode(), 0, i);
+                        else if (aCell.hasEmptyValue())
+                            xMat->PutEmpty( 0, i);
+                        else if (aCell.hasString())
+                            xMat->PutString( mrStrPool.intern( aCell.getString( pDok)), 0, i);
+                        else
+                            xMat->PutDouble( aCell.getValue(), 0, i);
+                    }
+                    else
+                    {
+                        xMat->PutError( nGlobalError, 0, i);
+                        nGlobalError = FormulaError::NONE;
+                    }
+                }
+                --sp;
+                PushMatrix( xMat);
+            }
+        }
+        // else: keep token on stack, something will handle the error
+    }
+    else
+        SetError( FormulaError::NoRef );
+}
+
 void ScInterpreter::ConvertMatrixJumpConditionToMatrix()
 {
     StackVar eStackType = GetStackType();
@@ -4487,6 +4547,14 @@ StackVar ScInterpreter::Interpret()
         pCur = pStack[ sp-1 ];
         if( pCur->GetOpCode() == ocPush )
         {
+            // An svRefList can be resolved if it a) contains just one
+            // reference, or b) in array context contains an array of single
+            // cell references.
+            if (pCur->GetType() == svRefList)
+            {
+                PopRefListPushMatrixOrRef();
+                pCur = pStack[ sp-1 ];
+            }
             switch( pCur->GetType() )
             {
                 case svEmptyCell:
