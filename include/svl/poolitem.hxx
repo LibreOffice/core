@@ -272,7 +272,7 @@ class SVL_DLLPUBLIC SfxSetItem: public SfxPoolItem
     SfxSetItem & operator=( const SfxSetItem& ) = delete;
 
 public:
-                            SfxSetItem( sal_uInt16 nWhich, SfxItemSet *pSet );
+                            SfxSetItem( sal_uInt16 nWhich, std::unique_ptr<SfxItemSet> &&pSet );
                             SfxSetItem( sal_uInt16 nWhich, const SfxItemSet &rSet );
                             SfxSetItem( const SfxSetItem&, SfxItemPool *pPool = nullptr );
                             virtual ~SfxSetItem() override;

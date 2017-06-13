@@ -20,6 +20,7 @@
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
+#include <o3tl/make_unique.hxx>
 #include <vcl/bitmapex.hxx>
 #include <tools/stream.hxx>
 #include <math.h>
@@ -3258,7 +3259,7 @@ SfxPoolItem* SvxScriptTypeItem::Clone( SfxItemPool * ) const
 *************************************************************************/
 
 SvxScriptSetItem::SvxScriptSetItem( sal_uInt16 nSlotId, SfxItemPool& rPool )
-    : SfxSetItem( nSlotId, new SfxItemSet( rPool,
+    : SfxSetItem( nSlotId, o3tl::make_unique<SfxItemSet>( rPool,
                         SID_ATTR_CHAR_FONT, SID_ATTR_CHAR_FONT ))
 {
     sal_uInt16 nLatin, nAsian, nComplex;

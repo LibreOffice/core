@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/make_unique.hxx>
 #include <sot/formats.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
@@ -28,7 +31,7 @@
 #include <svx/xdef.hxx>
 #include "svx/xexch.hxx"
 #include <memory>
-
+#include <utility>
 
 XFillExchangeData::XFillExchangeData( const XFillAttrSetItem& rXFillAttrSetItem ) :
     pXFillAttrSetItem( static_cast<XFillAttrSetItem*>( rXFillAttrSetItem.Clone( rXFillAttrSetItem.GetItemSet().GetPool() ) ) ),
@@ -83,7 +86,7 @@ SvStream& ReadXFillExchangeData( SvStream& rIStm, XFillExchangeData& rData )
 {
     DBG_ASSERT( rData.pPool, "XFillExchangeData has no pool" );
 
-    SfxItemSet*     pSet = new SfxItemSet ( *rData.pPool, XATTR_FILL_FIRST, XATTR_FILL_LAST );
+    auto pSet = o3tl::make_unique<SfxItemSet>( *rData.pPool, XATTR_FILL_FIRST, XATTR_FILL_LAST );
     sal_uInt32      nItemCount = 0;
     sal_uInt16          nWhich, nItemVersion;
 
@@ -109,7 +112,7 @@ SvStream& ReadXFillExchangeData( SvStream& rIStm, XFillExchangeData& rData )
         }
     }
 
-    rData.pXFillAttrSetItem.reset( new XFillAttrSetItem( pSet ) );
+    rData.pXFillAttrSetItem.reset( new XFillAttrSetItem( std::move(pSet) ) );
     rData.pPool = rData.pXFillAttrSetItem->GetItemSet().GetPool();
 
     return rIStm;

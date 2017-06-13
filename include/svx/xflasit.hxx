@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SVX_XFLASIT_HXX
 #define INCLUDED_SVX_XFLASIT_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
 
@@ -27,7 +31,7 @@
 class SVX_DLLPUBLIC XFillAttrSetItem : public SfxSetItem
 {
 public:
-                            XFillAttrSetItem(SfxItemSet* pItemSet );
+                            XFillAttrSetItem(std::unique_ptr<SfxItemSet>&& pItemSet );
                             XFillAttrSetItem(SfxItemPool* pItemPool);
                             XFillAttrSetItem(const XFillAttrSetItem& rAttr);
                             XFillAttrSetItem(const XFillAttrSetItem& rAttr,

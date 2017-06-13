@@ -18,8 +18,10 @@
  */
 
 #include <memory>
+#include <utility>
 #include "scitems.hxx"
 #include <editeng/adjustitem.hxx>
+#include <o3tl/make_unique.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lineitem.hxx>
@@ -66,16 +68,16 @@
 using sc::HMMToTwips;
 using sc::TwipsToHMM;
 
-ScPatternAttr::ScPatternAttr( SfxItemSet* pItemSet, const OUString& rStyleName )
-    :   SfxSetItem  ( ATTR_PATTERN, pItemSet ),
+ScPatternAttr::ScPatternAttr( std::unique_ptr<SfxItemSet>&& pItemSet, const OUString& rStyleName )
+    :   SfxSetItem  ( ATTR_PATTERN, std::move(pItemSet) ),
         pName       ( new OUString( rStyleName ) ),
         pStyle      ( nullptr ),
         mnKey(0)
 {
 }
 
-ScPatternAttr::ScPatternAttr( SfxItemSet* pItemSet )
-    :   SfxSetItem  ( ATTR_PATTERN, pItemSet ),
+ScPatternAttr::ScPatternAttr( std::unique_ptr<SfxItemSet>&& pItemSet )
+    :   SfxSetItem  ( ATTR_PATTERN, std::move(pItemSet) ),
         pName       ( nullptr ),
         pStyle      ( nullptr ),
         mnKey(0)
@@ -83,7 +85,7 @@ ScPatternAttr::ScPatternAttr( SfxItemSet* pItemSet )
 }
 
 ScPatternAttr::ScPatternAttr( SfxItemPool* pItemPool )
-    :   SfxSetItem  ( ATTR_PATTERN, new SfxItemSet( *pItemPool, ATTR_PATTERN_START, ATTR_PATTERN_END ) ),
+    :   SfxSetItem  ( ATTR_PATTERN, o3tl::make_unique<SfxItemSet>( *pItemPool, ATTR_PATTERN_START, ATTR_PATTERN_END ) ),
         pName       ( nullptr ),
         pStyle      ( nullptr ),
         mnKey(0)
@@ -105,7 +107,7 @@ ScPatternAttr::~ScPatternAttr()
 
 SfxPoolItem* ScPatternAttr::Clone( SfxItemPool *pPool ) const
 {
-    ScPatternAttr* pPattern = new ScPatternAttr( GetItemSet().Clone(true, pPool) );
+    ScPatternAttr* pPattern = new ScPatternAttr( std::unique_ptr<SfxItemSet>(GetItemSet().Clone(true, pPool)) );
 
     pPattern->pStyle = pStyle;
     pPattern->pName.reset( pName ? new OUString(*pName) : nullptr );
@@ -158,11 +160,11 @@ SfxPoolItem* ScPatternAttr::Create( SvStream& rStream, sal_uInt16 /* nVersion */
     else
         pStr = new OUString( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
 
-    SfxItemSet *pNewSet = new SfxItemSet( *GetItemSet().GetPool(),
+    auto pNewSet = o3tl::make_unique<SfxItemSet>( *GetItemSet().GetPool(),
                                        ATTR_PATTERN_START, ATTR_PATTERN_END );
     pNewSet->Load( rStream );
 
-    ScPatternAttr* pPattern = new ScPatternAttr( pNewSet );
+    ScPatternAttr* pPattern = new ScPatternAttr( std::move(pNewSet) );
 
     pPattern->pName.reset( pStr );
 

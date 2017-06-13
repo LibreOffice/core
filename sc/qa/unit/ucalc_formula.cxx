@@ -33,6 +33,7 @@
 #include "docoptio.hxx"
 
 #include <formula/vectortoken.hxx>
+#include <o3tl/make_unique.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <svl/broadcast.hxx>
 
@@ -3424,7 +3425,7 @@ void Test::testFormulaRefUpdateValidity()
     SfxUInt32Item aItem(ATTR_VALIDDATA, nIndex);
 
     ScPatternAttr aNewAttrs(
-        new SfxItemSet(*m_pDoc->GetPool(), ATTR_PATTERN_START, ATTR_PATTERN_END));
+        o3tl::make_unique<SfxItemSet>(*m_pDoc->GetPool(), ATTR_PATTERN_START, ATTR_PATTERN_END));
     aNewAttrs.GetItemSet().Put(aItem);
 
     m_pDoc->ApplyPattern(0, 1, 0, aNewAttrs);

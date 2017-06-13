@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <rtl/ustring.hxx>
 #include <svl/itemset.hxx>
 #include <svl/poolitem.hxx>
@@ -29,11 +33,11 @@ SfxSetItem::SfxSetItem( sal_uInt16 which, const SfxItemSet &rSet) :
 }
 
 
-SfxSetItem::SfxSetItem( sal_uInt16 which, SfxItemSet *pS) :
+SfxSetItem::SfxSetItem( sal_uInt16 which, std::unique_ptr<SfxItemSet> &&pS) :
     SfxPoolItem(which),
-    pSet(pS)
+    pSet(std::move(pS))
 {
-    DBG_ASSERT(pS, "SfxSetItem without set constructed" );
+    DBG_ASSERT(pSet, "SfxSetItem without set constructed" );
 }
 
 

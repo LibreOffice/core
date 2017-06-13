@@ -104,6 +104,7 @@
 #include <limits>
 #include <map>
 #include <memory>
+#include <utility>
 
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -4983,7 +4984,7 @@ ScPatternAttr* ScDocument::CreateSelectionPattern( const ScMarkData& rMark, bool
     OSL_ENSURE( aState.pItemSet, "SelectionPattern Null" );
     if (aState.pItemSet)
     {
-        ScPatternAttr* pPattern = new ScPatternAttr( aState.pItemSet.release() );
+        ScPatternAttr* pPattern = new ScPatternAttr( std::move(aState.pItemSet) );
         if (aState.mbValidPatternId)
             pPattern->SetKey(aState.mnPatternId);
 

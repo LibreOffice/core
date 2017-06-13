@@ -871,8 +871,8 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
         return;
     }
 
-    ScPatternAttr aOldAttrs( new SfxItemSet(*pOldSet) );
-    ScPatternAttr aNewAttrs( new SfxItemSet(*pDialogSet) );
+    ScPatternAttr aOldAttrs( o3tl::make_unique<SfxItemSet>(*pOldSet) );
+    ScPatternAttr aNewAttrs( o3tl::make_unique<SfxItemSet>(*pDialogSet) );
     aNewAttrs.DeleteUnchanged( &aOldAttrs );
 
     if ( pDialogSet->GetItemState( ATTR_VALUE_FORMAT ) == SfxItemState::SET )
@@ -980,7 +980,7 @@ void ScViewFunc::ApplyAttr( const SfxPoolItem& rAttrItem )
         return;
     }
 
-    ScPatternAttr aNewAttrs( new SfxItemSet( *GetViewData().GetDocument()->GetPool(),
+    ScPatternAttr aNewAttrs( o3tl::make_unique<SfxItemSet>( *GetViewData().GetDocument()->GetPool(),
                                             ATTR_PATTERN_START, ATTR_PATTERN_END ) );
 
     aNewAttrs.GetItemSet().Put( rAttrItem );

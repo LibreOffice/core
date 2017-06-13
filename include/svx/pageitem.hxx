@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SVX_PAGEITEM_HXX
 #define INCLUDED_SVX_PAGEITEM_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
 #include <editeng/svxenum.hxx>
@@ -99,7 +103,7 @@ class SVX_DLLPUBLIC SvxSetItem: public SfxSetItem
 public:
     SvxSetItem( const sal_uInt16 nId, const SfxItemSet& rSet );
     SvxSetItem( const SvxSetItem& rItem );
-    SvxSetItem( const sal_uInt16 nId, SfxItemSet* pSet );
+    SvxSetItem( const sal_uInt16 nId, std::unique_ptr<SfxItemSet>&& pSet );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 

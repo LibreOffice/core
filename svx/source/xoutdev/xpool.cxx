@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/make_unique.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xattr.hxx>
 #include <svx/xpool.hxx>
@@ -106,10 +109,12 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster, bool bLoadRefCounts)
     rPoolDefaults[XATTR_FORMTXTSHDWTRANSP  -XATTR_START] = new XFormTextShadowTranspItem;
 
     // create SetItems
-    SfxItemSet* pSet=new SfxItemSet(*_pMaster, XATTR_LINE_FIRST, XATTR_LINE_LAST);
-    rPoolDefaults[XATTRSET_LINE - XATTR_START] = new XLineAttrSetItem(pSet);
-    pSet=new SfxItemSet(*_pMaster, XATTR_FILL_FIRST, XATTR_FILL_LAST);
-    rPoolDefaults[XATTRSET_FILL - XATTR_START] = new XFillAttrSetItem(pSet);
+    rPoolDefaults[XATTRSET_LINE - XATTR_START] = new XLineAttrSetItem(
+        o3tl::make_unique<SfxItemSet>(
+            *_pMaster, XATTR_LINE_FIRST, XATTR_LINE_LAST));
+    rPoolDefaults[XATTRSET_FILL - XATTR_START] = new XFillAttrSetItem(
+        o3tl::make_unique<SfxItemSet>(
+            *_pMaster, XATTR_FILL_FIRST, XATTR_FILL_LAST));
 
     // create ItemInfos
     for(sal_uInt16 i(GetFirstWhich()); i <= GetLastWhich(); i++)

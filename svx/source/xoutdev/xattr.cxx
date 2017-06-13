@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -29,6 +33,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <o3tl/any.hxx>
+#include <o3tl/make_unique.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/memberids.hrc>
 #include <tools/stream.hxx>
@@ -3467,14 +3472,14 @@ SfxPoolItem* XFormTextHideFormItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) c
 
 
 /// a line attribute set item
-XLineAttrSetItem::XLineAttrSetItem( SfxItemSet* pItemSet ) :
-    SfxSetItem( XATTRSET_LINE, pItemSet)
+XLineAttrSetItem::XLineAttrSetItem( std::unique_ptr<SfxItemSet>&& pItemSet ) :
+    SfxSetItem( XATTRSET_LINE, std::move(pItemSet))
 {
 }
 
 XLineAttrSetItem::XLineAttrSetItem( SfxItemPool* pItemPool ) :
     SfxSetItem( XATTRSET_LINE,
-        new SfxItemSet( *pItemPool, XATTR_LINE_FIRST, XATTR_LINE_LAST))
+        o3tl::make_unique<SfxItemSet>( *pItemPool, XATTR_LINE_FIRST, XATTR_LINE_LAST))
 {
 }
 
@@ -3497,21 +3502,21 @@ SfxPoolItem* XLineAttrSetItem::Clone( SfxItemPool* pPool ) const
 /// create a set item out of a stream
 SfxPoolItem* XLineAttrSetItem::Create( SvStream& rStream, sal_uInt16 /*nVersion*/) const
 {
-    SfxItemSet *pSet2 = new SfxItemSet( *GetItemSet().GetPool(),
+    auto pSet2 = o3tl::make_unique<SfxItemSet>( *GetItemSet().GetPool(),
                                     XATTR_LINE_FIRST, XATTR_LINE_LAST);
     pSet2->Load( rStream );
-    return new XLineAttrSetItem( pSet2 );
+    return new XLineAttrSetItem( std::move(pSet2) );
 }
 
 /// fill attribute set item
-XFillAttrSetItem::XFillAttrSetItem( SfxItemSet* pItemSet ) :
-    SfxSetItem( XATTRSET_FILL, pItemSet)
+XFillAttrSetItem::XFillAttrSetItem( std::unique_ptr<SfxItemSet>&& pItemSet ) :
+    SfxSetItem( XATTRSET_FILL, std::move(pItemSet))
 {
 }
 
 XFillAttrSetItem::XFillAttrSetItem( SfxItemPool* pItemPool ) :
     SfxSetItem( XATTRSET_FILL,
-        new SfxItemSet( *pItemPool, XATTR_FILL_FIRST, XATTR_FILL_LAST))
+        o3tl::make_unique<SfxItemSet>( *pItemPool, XATTR_FILL_FIRST, XATTR_FILL_LAST))
 {
 }
 
@@ -3534,10 +3539,10 @@ SfxPoolItem* XFillAttrSetItem::Clone( SfxItemPool* pPool ) const
 /// create a set item out of a stream
 SfxPoolItem* XFillAttrSetItem::Create( SvStream& rStream, sal_uInt16 /*nVersion*/) const
 {
-    SfxItemSet *pSet2 = new SfxItemSet( *GetItemSet().GetPool(),
+    auto pSet2 = o3tl::make_unique<SfxItemSet>( *GetItemSet().GetPool(),
                                     XATTR_FILL_FIRST, XATTR_FILL_LAST);
     pSet2->Load( rStream );
-    return new XFillAttrSetItem( pSet2 );
+    return new XFillAttrSetItem( std::move(pSet2) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
