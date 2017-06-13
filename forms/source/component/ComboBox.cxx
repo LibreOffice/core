@@ -303,7 +303,7 @@ void OComboBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) co
         DECL_BOOL_PROP1(EMPTY_IS_NULL,                              BOUND);
         DECL_PROP1(DEFAULT_TEXT,        OUString,            BOUND);
         DECL_PROP1(STRINGITEMLIST,      Sequence< OUString >,BOUND);
-        DECL_PROP1(TYPEDITEMLIST,       Sequence< Any >,        BOUND);
+        DECL_PROP1(TYPEDITEMLIST,       Sequence< Any >,        OPTIONAL);
     END_DESCRIBE_PROPERTIES();
 }
 
