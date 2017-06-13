@@ -25,4 +25,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,libwpg, \
 endif
 endif
 
+$(eval $(call gb_UnpackedTarball_add_patches,libwpg, \
+    external/libwpg/iOS.patch.0 \
+))
+
 # vim: set noet sw=4 ts=4:
