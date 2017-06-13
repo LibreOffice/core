@@ -57,12 +57,12 @@ namespace connectivity
         private:
             // sources: https://www.clicketyclick.dk/databases/xbase/format/dbf.html (dBASE III and 5)
             // http://www.dbase.com/KnowledgeBase/int/db7_file_fmt.htm (dBASE 7) which is similar at least for this part
-            struct DBFHeader {                       /* Header struct */
-                                DBFType     m_type;                      // dBase/xBase type, see DBFType
+            struct DBFHeader {
+                                DBFType     m_type;                      // dBASE/xBASE type, see DBFType
                                 sal_uInt8   m_dateElems[3];              // Date of last change (YYMMDD)
                                 sal_uInt32  m_nbRecords;                 // Number of records
                                 sal_uInt16  m_headerLength;
-                                sal_uInt16  m_recordLength;              // lenght of 1 record
+                                sal_uInt16  m_recordLength;              // length of 1 record
                                 sal_uInt8   m_reserved1[2];              // should be filled with 0
                                 sal_uInt8   m_incompTransact;            // Incomplete transaction (dBASE IV):
                                                                          // 00h Transaction ended (or rolled back)
