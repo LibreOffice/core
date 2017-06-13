@@ -33,4 +33,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,libwps, \
 endif
 endif
 
+$(eval $(call gb_UnpackedTarball_add_patches,libwps, \
+    external/libwps/iOS.patch.0 \
+))
+
 # vim: set noet sw=4 ts=4:
