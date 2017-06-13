@@ -25,10 +25,14 @@ public:
         }
         auto const t1 = expr->getTypeAsWritten();
         auto const t2 = compat::getSubExprAsWritten(expr)->getType();
-        if ((t1.getCanonicalType().getTypePtr()
-             != t2.getCanonicalType().getTypePtr())
-            || !(loplugin::TypeCheck(t1).Class("OUString").Namespace("rtl")
-                 .GlobalNamespace()))
+        if (t1.getCanonicalType().getTypePtr()
+            != t2.getCanonicalType().getTypePtr())
+        {
+            return true;
+        }
+        auto tc = loplugin::TypeCheck(t1);
+        if (!(tc.Class("OUString").Namespace("rtl").GlobalNamespace()
+              || tc.Class("unique_ptr").StdNamespace()))
         {
             return true;
         }
@@ -47,7 +51,7 @@ private:
     }
 };
 
-static loplugin::Plugin::Registration<Visitor> reg("stringcopy");
+static loplugin::Plugin::Registration<Visitor> reg("redundantcopy");
 
 }
 
