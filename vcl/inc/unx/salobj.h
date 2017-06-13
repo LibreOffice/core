@@ -76,6 +76,8 @@ public:
     virtual void                    Show( bool bVisible ) override;
     virtual void                    GrabFocus() override;
 
+    virtual void                    SetLeaveEnterBackgrounds(const css::uno::Sequence<css::uno::Any>& rLeaveArgs, const css::uno::Sequence<css::uno::Any>& rEnterArgs) override;
+
     virtual const SystemEnvData*    GetSystemData() const override;
 };
 

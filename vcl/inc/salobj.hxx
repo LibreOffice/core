@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_INC_SALOBJ_HXX
 
 #include <vcl/dllapi.h>
-
+#include <com/sun/star/uno/Sequence.hxx>
 #include "salwtype.hxx"
 
 struct SystemEnvData;
@@ -47,6 +47,8 @@ public:
     virtual void                    GrabFocus() {}
 
     virtual void                    SetForwardKey( bool /* bEnable */ ) {}
+
+    virtual void                    SetLeaveEnterBackgrounds(const css::uno::Sequence<css::uno::Any>& /*rLeaveArgs*/, const css::uno::Sequence<css::uno::Any>& /*rEnterArgs*/) {}
 
     virtual const SystemEnvData*    GetSystemData() const = 0;
 
