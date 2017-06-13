@@ -26,4 +26,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,libfreehand, \
 endif
 endif
 
+$(eval $(call gb_UnpackedTarball_add_patches,libfreehand, \
+    external/libfreehand/iOS.patch.0 \
+))
+
 # vim: set noet sw=4 ts=4:
