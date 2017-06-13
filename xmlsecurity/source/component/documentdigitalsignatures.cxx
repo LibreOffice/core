@@ -400,8 +400,7 @@ void DocumentDigitalSignatures::manageTrustedSources(  )
 
     Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv;
 
-    DocumentSignatureMode eMode{};
-    DocumentSignatureManager aSignatureManager(mxCtx, eMode);
+    DocumentSignatureManager aSignatureManager(mxCtx, {});
     if (aSignatureManager.init())
         xSecEnv = aSignatureManager.getSecurityEnvironment();
 
@@ -412,8 +411,7 @@ void DocumentDigitalSignatures::manageTrustedSources(  )
 void DocumentDigitalSignatures::showCertificate(
     const Reference< css::security::XCertificate >& Certificate )
 {
-    DocumentSignatureMode eMode{};
-    DocumentSignatureManager aSignatureManager(mxCtx, eMode);
+    DocumentSignatureManager aSignatureManager(mxCtx, {});
 
     bool bInit = aSignatureManager.init();
 
@@ -454,8 +452,7 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertif
 {
     std::vector< Reference< css::xml::crypto::XXMLSecurityContext > > xSecContexts;
 
-    DocumentSignatureMode eMode{};
-    DocumentSignatureManager aSignatureManager(mxCtx, eMode);
+    DocumentSignatureManager aSignatureManager(mxCtx, {});
     if (aSignatureManager.init()) {
         xSecContexts.push_back(aSignatureManager.getSecurityContext());
         xSecContexts.push_back(aSignatureManager.getGpgSecurityContext());

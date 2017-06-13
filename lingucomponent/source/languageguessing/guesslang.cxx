@@ -194,9 +194,8 @@ void LangGuess_Impl::SetFingerPrintsDB(
 {
     //! text encoding for file name / path needs to be in the same encoding the OS uses
     OString path = OUStringToOString( filePath, osl_getThreadTextEncoding() );
-    OString conf_file_name( DEFAULT_CONF_FILE_NAME );
     OString conf_file_path(path);
-    conf_file_path += conf_file_name;
+    conf_file_path += DEFAULT_CONF_FILE_NAME;
 
     m_aGuesser.SetDBPath(conf_file_path.getStr(), path.getStr());
 }
