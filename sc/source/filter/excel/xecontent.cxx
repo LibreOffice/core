@@ -958,7 +958,7 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
         // the token array for that
         std::unique_ptr<ScTokenArray> pTokenArray(mrFormatEntry.CreateFlatCopiedTokenArray(0));
         if(pTokenArray->GetLen())
-            aText = XclXmlUtils::ToOString(pTokenArray->First()->GetString().getString());
+            aText = XclXmlUtils::ToOString(pTokenArray->FirstToken()->GetString().getString());
     }
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
