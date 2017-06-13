@@ -118,6 +118,7 @@
 #include <docsh.hxx>
 #include <docary.hxx>
 #include <fmtclbl.hxx>
+#include <fmthdft.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
@@ -5495,25 +5496,43 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectio
                 // DocxExport::WriteMainText(), don't duplicate that here.
                 SwNodeIndex aCurrentNode(m_rExport.m_pCurPam->GetNode());
                 SwNodeIndex aLastNode(m_rExport.m_pDoc->GetNodes().GetEndOfContent(), -1);
+                bool bEmit = aCurrentNode != aLastNode;
 
-                // Need to still emit an empty section at the end of the
-                // document in case balanced columns are wanted, since the last
-                // section in Word is always balanced.
-                sal_uInt16 nColumns = 1;
-                bool bBalance = false;
-                if (const SwSectionFormat* pFormat = pSectionInfo->pSectionFormat)
+                if (!bEmit)
                 {
-                    if (pFormat != reinterpret_cast<SwSectionFormat*>(sal_IntPtr(-1)))
+                    // Need to still emit an empty section at the end of the
+                    // document in case balanced columns are wanted, since the last
+                    // section in Word is always balanced.
+                    sal_uInt16 nColumns = 1;
+                    bool bBalance = false;
+                    if (const SwSectionFormat* pFormat = pSectionInfo->pSectionFormat)
                     {
-                        nColumns = pFormat->GetCol().GetNumCols();
-                        const SwFormatNoBalancedColumns& rNoBalanced = pFormat->GetBalancedColumns();
-                        bBalance = !rNoBalanced.GetValue();
+                        if (pFormat != reinterpret_cast<SwSectionFormat*>(sal_IntPtr(-1)))
+                        {
+                            nColumns = pFormat->GetCol().GetNumCols();
+                            const SwFormatNoBalancedColumns& rNoBalanced = pFormat->GetBalancedColumns();
+                            bBalance = !rNoBalanced.GetValue();
+                        }
+                    }
+                    bEmit = (nColumns > 1 && bBalance);
+                }
+
+                if (!bEmit)
+                {
+                    // Also need to emit if the page desc contains a header or
+                    // footer, otherwise we go with the properties of the
+                    // section (and not the page style), which never has
+                    // headers/footers.
+                    if (const SwPageDesc* pPageDesc = pSectionInfo->pPageDesc)
+                    {
+                        const auto& rMaster = pPageDesc->GetMaster();
+                        bEmit = rMaster.GetHeader().IsActive() || rMaster.GetFooter().IsActive();
                     }
                 }
 
                 // don't add section properties if this will be the first
                 // paragraph in the document
-                if ( !m_bParagraphOpened && !m_bIsFirstParagraph && (aCurrentNode != aLastNode || (nColumns > 1 && bBalance)))
+                if ( !m_bParagraphOpened && !m_bIsFirstParagraph && bEmit )
                 {
                     // Create a dummy paragraph if needed
                     m_pSerializer->startElementNS( XML_w, XML_p, FSEND );
