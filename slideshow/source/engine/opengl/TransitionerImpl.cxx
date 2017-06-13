@@ -367,6 +367,26 @@ void OGLTransitionerImpl::setSlides( const uno::Reference< rendering::XBitmap >&
     SAL_INFO("slideshow.opengl", "leaving bitmap area: " << maSlideSize.Width << "x" << maSlideSize.Height);
     maSlideSize = mxEnteringBitmap->getSize();
     SAL_INFO("slideshow.opengl", "entering bitmap area: " << maSlideSize.Width << "x" << maSlideSize.Height);
+
+    //to avoid annoying flashing under X entering and leaving slides with opengl effects set the leaving
+    //bitmap as the background pixmap of the opengl child window and the entering bitmap as the background
+    //pixmap of the non-opengl parent window. If any expose events occur around the start and end of
+    //the transition then those windows are default filled by X with the desired start/end image so there's
+    //no visible flash
+    if (SystemChildWindow* pChildWindow = mpContext->getChildWindow())
+    {
+        css::uno::Reference<css::beans::XFastPropertySet> xEnteringFastPropertySet(mxEnteringBitmap, css::uno::UNO_QUERY);
+        css::uno::Reference<css::beans::XFastPropertySet> xLeavingFastPropertySet(mxLeavingBitmap, css::uno::UNO_QUERY);
+        css::uno::Sequence<css::uno::Any> aEnteringBitmap;
+        css::uno::Sequence<css::uno::Any> aLeavingBitmap;
+        if (xEnteringFastPropertySet.get() && xLeavingFastPropertySet.get())
+        {
+            xEnteringFastPropertySet->getFastPropertyValue(1) >>= aEnteringBitmap;
+            xLeavingFastPropertySet->getFastPropertyValue(1) >>= aLeavingBitmap;
+        }
+        if (aEnteringBitmap.getLength() == 3 && aLeavingBitmap.getLength() == 3)
+            pChildWindow->SetLeaveEnterBackgrounds(aLeavingBitmap, aEnteringBitmap);
+    }
 }
 
 
