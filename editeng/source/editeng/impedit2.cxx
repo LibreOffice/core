@@ -113,7 +113,6 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     pEditEngine         = pEE;
     pRefDev             = nullptr;
     pVirtDev            = nullptr;
-    pEmptyItemSet       = nullptr;
     pActiveView         = nullptr;
     pSpellInfo          = nullptr;
     pConvInfo           = nullptr;
@@ -194,7 +193,6 @@ ImpEditEngine::~ImpEditEngine()
     SetUpdateMode( false );
 
     Dispose();
-    delete pEmptyItemSet;
     // it's only legal to delete the pUndoManager if it was created by
     // ImpEditEngine; if it was set by SetUndoManager() it must be cleared
     // before destroying the ImpEditEngine!
@@ -701,7 +699,7 @@ const SfxItemSet& ImpEditEngine::GetEmptyItemSet()
 {
     if ( !pEmptyItemSet )
     {
-        pEmptyItemSet = new SfxItemSet( aEditDoc.GetItemPool(), EE_ITEMS_START, EE_ITEMS_END );
+        pEmptyItemSet = o3tl::make_unique<SfxItemSet>( aEditDoc.GetItemPool(), EE_ITEMS_START, EE_ITEMS_END );
         for ( sal_uInt16 nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++)
         {
             pEmptyItemSet->ClearItem( nWhich );

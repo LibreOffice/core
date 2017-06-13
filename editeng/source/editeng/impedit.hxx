@@ -427,7 +427,7 @@ private:
     svtools::ColorConfig maColorConfig;
     mutable SvtCTLOptions*  pCTLOptions;
 
-    SfxItemSet*         pEmptyItemSet;
+    std::unique_ptr<SfxItemSet> pEmptyItemSet;
     EditUndoManager*    pUndoManager;
     ESelection*         pUndoMarkSelection;
 
