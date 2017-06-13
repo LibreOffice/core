@@ -2479,7 +2479,7 @@ bool lcl_FindInCommand(
         //find next '\' or end of string
         sal_Int32 nEndIndex = rCommand.indexOf( '\\', nIndex + 1);
         if( nEndIndex < 0 )
-            nEndIndex = rCommand.getLength() - 1;
+            nEndIndex = rCommand.getLength() ;
         if( nEndIndex - nIndex > 3 )
             rValue = rCommand.copy( nIndex + 3, nEndIndex - nIndex - 3);
     }
@@ -3400,7 +3400,7 @@ void DomainMapper_Impl::handleToc
 //                  \b Uses a bookmark to specify area of document from which to build table of contents
     if( lcl_FindInCommand( pContext->GetCommand(), 'b', sValue ))
     {
-        aBookmarkName = sValue;
+        aBookmarkName = sValue.trim().replaceAll("\"","");
     }
     if( lcl_FindInCommand( pContext->GetCommand(), 'c', sValue ))
 //                  \c Builds a table of figures of the given label
