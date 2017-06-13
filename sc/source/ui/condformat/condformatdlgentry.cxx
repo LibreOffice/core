@@ -326,7 +326,7 @@ IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, Edit&, rEdit, void)
     }
 
     // Recognized col/row name or string token, warn the user
-    formula::FormulaToken* token = ta->First();
+    formula::FormulaToken* token = ta->FirstToken();
     formula::StackVar t = token->GetType();
     OpCode op = token->GetOpCode();
     if( ( op == ocColRowName ) ||
