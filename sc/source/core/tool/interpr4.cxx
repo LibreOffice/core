@@ -1251,7 +1251,7 @@ void ScInterpreter::PopExternalDoubleRef(ScMatrixRef& rMat)
     // For now, we only support single range data for external
     // references, which means the array should only contain a
     // single matrix token.
-    formula::FormulaToken* p = pArray->First();
+    formula::FormulaToken* p = pArray->FirstToken();
     if (!p || p->GetType() != svMatrix)
         SetError( FormulaError::IllegalParameter);
     else
@@ -1532,7 +1532,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                         GetExternalDoubleRef(nFileId, aTabName, rRef, pArray);
                         if (nGlobalError != FormulaError::NONE || !pArray)
                             break;
-                        formula::FormulaToken* pTemp = pArray->First();
+                        formula::FormulaToken* pTemp = pArray->FirstToken();
                         if (!pTemp)
                             break;
 
