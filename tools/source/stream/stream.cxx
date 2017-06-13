@@ -734,8 +734,7 @@ void SvStream::StartWritingUnicodeText()
     // BOM, Byte Order Mark, U+FEFF, see
     // http://www.unicode.org/faq/utf_bom.html#BOM
     // Upon read: 0xfeff(-257) => no swap; 0xfffe(-2) => swap
-    sal_uInt16 v = 0xfeff;
-    writeNumberWithoutSwap(v); // write native format
+    writeNumberWithoutSwap(sal_uInt16(0xfeff)); // write native format
 }
 
 void SvStream::StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet )

@@ -63,6 +63,10 @@ public:
         // TODO taking local reference to variable
         if (fn == SRCDIR "/sc/source/filter/excel/xechart.cxx")
              return;
+        // macros managing to generate to a valid warning
+        if (fn == SRCDIR "/solenv/bin/concat-deps.c")
+             return;
+
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
 
         for (auto const & varDecl : maVarDeclSet)
@@ -272,7 +276,7 @@ bool OnceVar::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     return true;
 }
 
-loplugin::Plugin::Registration< OnceVar > X("oncevar", false);
+loplugin::Plugin::Registration< OnceVar > X("oncevar", true);
 
 }
 

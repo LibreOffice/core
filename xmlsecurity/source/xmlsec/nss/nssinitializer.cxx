@@ -186,7 +186,6 @@ OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponen
         mozilla::MozillaProductType_Thunderbird,
         mozilla::MozillaProductType_Firefox,
         mozilla::MozillaProductType_Mozilla };
-    int nProduct = SAL_N_ELEMENTS(productTypes);
 
     uno::Reference<uno::XInterface> xInstance = rxContext->getServiceManager()->createInstanceWithContext("com.sun.star.mozilla.MozillaBootstrap", rxContext);
     OSL_ENSURE( xInstance.is(), "failed to create instance" );
@@ -196,7 +195,7 @@ OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponen
 
     if (xMozillaBootstrap.is())
     {
-        for (int i=0; i<nProduct; ++i)
+        for (int i=0; i<int(SAL_N_ELEMENTS(productTypes)); ++i)
         {
             OUString profile = xMozillaBootstrap->getDefaultProfile(productTypes[i]);
 

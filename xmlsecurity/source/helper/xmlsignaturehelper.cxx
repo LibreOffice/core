@@ -201,8 +201,7 @@ void XMLSignatureHelper::ExportSignature(
 
 void XMLSignatureHelper::ExportOOXMLSignature(const uno::Reference<embed::XStorage>& xRootStorage, const uno::Reference<embed::XStorage>& xSignatureStorage, const SignatureInformation& rInformation, int nSignatureIndex)
 {
-    sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
-    uno::Reference<io::XOutputStream> xOutputStream(xSignatureStorage->openStreamElement("sig" + OUString::number(nSignatureIndex) + ".xml", nOpenMode), uno::UNO_QUERY);
+    uno::Reference<io::XOutputStream> xOutputStream(xSignatureStorage->openStreamElement("sig" + OUString::number(nSignatureIndex) + ".xml", embed::ElementModes::READWRITE), uno::UNO_QUERY);
 
     if (rInformation.aSignatureBytes.hasElements())
         // This is a signature roundtrip, just write back the signature as-is.
@@ -504,8 +503,7 @@ void XMLSignatureHelper::ExportSignatureRelations(const css::uno::Reference<css:
 
 void XMLSignatureHelper::ExportSignatureContentTypes(const css::uno::Reference<css::embed::XStorage>& xStorage, int nSignatureCount)
 {
-    sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
-    uno::Reference<io::XStream> xStream(xStorage->openStreamElement("[Content_Types].xml", nOpenMode), uno::UNO_QUERY);
+    uno::Reference<io::XStream> xStream(xStorage->openStreamElement("[Content_Types].xml", embed::ElementModes::READWRITE), uno::UNO_QUERY);
     uno::Reference<io::XInputStream> xInputStream = xStream->getInputStream();
     uno::Sequence< uno::Sequence<beans::StringPair> > aContentTypeInfo = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xInputStream, mxCtx);
     if (aContentTypeInfo.getLength() < 2)
@@ -554,8 +552,7 @@ void XMLSignatureHelper::ExportSignatureContentTypes(const css::uno::Reference<c
 }
 bool XMLSignatureHelper::CreateAndWriteOOXMLSignature(const uno::Reference<embed::XStorage>& xRootStorage, const uno::Reference<embed::XStorage>& xSignatureStorage, int nSignatureIndex)
 {
-    sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
-    uno::Reference<io::XOutputStream> xOutputStream(xSignatureStorage->openStreamElement("sig" + OUString::number(nSignatureIndex) + ".xml", nOpenMode), uno::UNO_QUERY);
+    uno::Reference<io::XOutputStream> xOutputStream(xSignatureStorage->openStreamElement("sig" + OUString::number(nSignatureIndex) + ".xml", embed::ElementModes::READWRITE), uno::UNO_QUERY);
     uno::Reference<xml::sax::XWriter> xSaxWriter = xml::sax::Writer::create(mxCtx);
     xSaxWriter->setOutputStream(xOutputStream);
     xSaxWriter->startDocument();
