@@ -249,6 +249,9 @@ X11SalObject::~X11SalObject()
     rObjects.remove( this );
 
     GetGenericData()->ErrorTrapPush();
+    const SystemEnvData* pEnv   = mpParent->GetSystemData();
+    ::Window aObjectParent      = (::Window)pEnv->aWindow;
+    XSetWindowBackgroundPixmap(static_cast<Display*>(maSystemChildData.pDisplay), aObjectParent, None);
     if ( maSecondary )
         XDestroyWindow( static_cast<Display*>(maSystemChildData.pDisplay), maSecondary );
     if ( maPrimary )
@@ -472,6 +475,42 @@ bool X11SalObject::Dispatch( XEvent* pEvent )
         }
     }
     return false;
+}
+
+void X11SalObject::SetLeaveEnterBackgrounds(const css::uno::Sequence<css::uno::Any>& rLeaveArgs, const css::uno::Sequence<css::uno::Any>& rEnterArgs)
+{
+    SalDisplay* pSalDisp        = vcl_sal::getSalDisplay(GetGenericData());
+    const SystemEnvData* pEnv   = mpParent->GetSystemData();
+    Display* pDisp              = pSalDisp->GetDisplay();
+    ::Window aObjectParent      = (::Window)pEnv->aWindow;
+
+    bool bFreePixmap = false;
+    Pixmap aPixmap = None;
+    if (rEnterArgs.getLength() == 3)
+    {
+        rEnterArgs[0] >>= bFreePixmap;
+        long pixmapHandle = None;
+        rEnterArgs[1] >>= pixmapHandle;
+        aPixmap = pixmapHandle;
+    }
+
+    XSetWindowBackgroundPixmap(pDisp, aObjectParent, aPixmap);
+    if (bFreePixmap)
+        XFreePixmap(pDisp, aPixmap);
+
+    bFreePixmap = false;
+    aPixmap = None;
+    if (rLeaveArgs.getLength() == 3)
+    {
+        rLeaveArgs[0] >>= bFreePixmap;
+        long pixmapHandle = None;
+        rLeaveArgs[1] >>= pixmapHandle;
+        aPixmap = pixmapHandle;
+    }
+
+    XSetWindowBackgroundPixmap(pDisp, maSecondary, aPixmap);
+    if (bFreePixmap)
+        XFreePixmap(pDisp, aPixmap);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

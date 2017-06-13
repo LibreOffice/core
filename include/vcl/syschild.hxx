@@ -49,6 +49,12 @@ public:
     //  however, this might not always be required
     void                    EnableEraseBackground( bool bEnable );
     void                    SetForwardKey( bool bEnable );
+    //To avoid annoying flashing under X entering and leaving slides with opengl effects set the leaving
+    //bitmap as the background pixmap of the opengl child window and the entering bitmap as the background
+    //pixmap of the non-opengl parent window. If any expose events occur around the start and end of
+    //the transition then those windows are default filled by X with the desired start/end image so there's
+    //no visible flash
+    void                    SetLeaveEnterBackgrounds(const css::uno::Sequence<css::uno::Any>& rLeaveArgs, const css::uno::Sequence<css::uno::Any>& rEnterArgs);
     // return the platform specific handle/id of this window;
     sal_IntPtr              GetParentWindowHandle();
 };
