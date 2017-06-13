@@ -569,10 +569,11 @@ static void cpp_call(
     }
     catch (...)
     {
-//        __asm__ __volatile__ ("sub sp, sp, #2048\n");
-
         // fill uno exception
-        fillUnoException( CPPU_CURRENT_NAMESPACE::__cxa_get_globals()->caughtExceptions, *ppUnoExc, pThis->getBridge()->getCpp2Uno() );
+        fillUnoException(
+          reinterpret_cast< CPPU_CURRENT_NAMESPACE::__cxa_eh_globals * >(
+                    __cxxabiv1::__cxa_get_globals())->caughtExceptions,
+                    *ppUnoExc, pThis->getBridge()->getCpp2Uno());
 
         // temporary params
         for ( ; nTempIndices--; )
