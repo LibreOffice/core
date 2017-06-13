@@ -46,6 +46,30 @@
       "revId": "a42ae8ead3d67ae82d8366a4fd26804d666c5714",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_6e8a46c1",
+        "filename": "sw/source/core/edit/edfcol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-06-13T11:50:19Z",
+      "side": 1,
+      "message": "This line is necessary to force small header height",
+      "parentUuid": "5a3905b3_0e646247",
+      "range": {
+        "startLine": 515,
+        "startChar": 8,
+        "endLine": 515,
+        "endChar": 90
+      },
+      "revId": "a42ae8ead3d67ae82d8366a4fd26804d666c5714",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
