@@ -1126,7 +1126,7 @@ formula::FormulaToken* getSingleRefToken(ScDocument& rDoc, const ScAddress& rPos
         return nullptr;
     }
 
-    formula::FormulaToken* pToken = pTokens->First();
+    formula::FormulaToken* pToken = pTokens->FirstToken();
     if (!pToken || pToken->GetType() != formula::svSingleRef)
     {
         cerr << "Not a single reference token." << endl;
