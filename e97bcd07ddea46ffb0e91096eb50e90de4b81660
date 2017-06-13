@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_cea97a7d",
+        "filename": "sw/source/filter/ww8/rtfsdrexport.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-06-13T07:37:21Z",
+      "side": 1,
+      "message": "Would it make sense to move this to include/filter/msfilter/rtfutil.hxx, and then use this constant also in writerfilter/source/rtftok/rtfsdrimport.cxx?",
+      "revId": "e97bcd07ddea46ffb0e91096eb50e90de4b81660",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_8e9f724f",
+        "filename": "sw/source/filter/ww8/rtfsdrexport.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-06-13T07:37:21Z",
+      "side": 1,
+      "message": "One more space please to match the indentation style above. :-)",
+      "revId": "e97bcd07ddea46ffb0e91096eb50e90de4b81660",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_aeaeee82",
+        "filename": "sw/source/filter/ww8/rtfsdrexport.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-06-13T07:37:21Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "e97bcd07ddea46ffb0e91096eb50e90de4b81660",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
