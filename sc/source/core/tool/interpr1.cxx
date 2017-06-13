@@ -7830,7 +7830,7 @@ void ScInterpreter::ScIndirect()
                     if (pArr->GetCodeLen() != 1)
                         break;
 
-                    ScTokenRef xTok( pArr->FirstRPN());
+                    ScTokenRef xTok( pArr->FirstRPNToken());
                     if (!xTok)
                         break;
 
