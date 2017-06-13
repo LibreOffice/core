@@ -40,6 +40,7 @@
 #include <svtools/treelistbox.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <i18nutil/searchopt.hxx>
 #include "cfgutil.hxx"
 
 class SfxMacroInfoItem;
@@ -109,47 +110,53 @@ private:
     const SfxMacroInfoItem*         m_pMacroInfoItem;
     sfx2::FileDialogHelper*         m_pFileDlg;
 
-    VclPtr<SfxAccCfgTabListBox_Impl>       m_pEntriesBox;
-    VclPtr<RadioButton>                    m_pOfficeButton;
-    VclPtr<RadioButton>                    m_pModuleButton;
-    VclPtr<PushButton>                     m_pChangeButton;
-    VclPtr<PushButton>                     m_pRemoveButton;
-    VclPtr<SfxConfigGroupListBox>          m_pGroupLBox;
-    VclPtr<SfxConfigFunctionListBox>       m_pFunctionBox;
-    VclPtr<SvTreeListBox>                  m_pKeyBox;
-    VclPtr<PushButton>                     m_pLoadButton;
-    VclPtr<PushButton>                     m_pSaveButton;
-    VclPtr<PushButton>                     m_pResetButton;
-    OUString                        aLoadAccelConfigStr;
-    OUString                        aSaveAccelConfigStr;
-    OUString                        aFilterAllStr;
-    OUString                        aFilterCfgStr;
-    SfxStylesInfo_Impl              m_aStylesInfo;
-    bool                        m_bStylesInfoInitialized;
+    VclPtr<SfxAccCfgTabListBox_Impl>    m_pEntriesBox;
+    VclPtr<RadioButton>                 m_pOfficeButton;
+    VclPtr<RadioButton>                 m_pModuleButton;
+    VclPtr<PushButton>                  m_pChangeButton;
+    VclPtr<PushButton>                  m_pRemoveButton;
+    VclPtr<SfxConfigGroupListBox>       m_pGroupLBox;
+    VclPtr<SfxConfigFunctionListBox>    m_pFunctionBox;
+    VclPtr<SvTreeListBox>               m_pKeyBox;
+    VclPtr<Edit>                        m_pSearchEdit;
+    VclPtr<PushButton>                  m_pLoadButton;
+    VclPtr<PushButton>                  m_pSaveButton;
+    VclPtr<PushButton>                  m_pResetButton;
+    OUString                            aLoadAccelConfigStr;
+    OUString                            aSaveAccelConfigStr;
+    OUString                            aFilterAllStr;
+    OUString                            aFilterCfgStr;
+    SfxStylesInfo_Impl                  m_aStylesInfo;
+    bool                                m_bStylesInfoInitialized;
 
-    css::uno::Reference< css::uno::XComponentContext >     m_xContext;
-    css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xGlobal;
-    css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xModule;
-    css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xAct;
-    css::uno::Reference< css::container::XNameAccess > m_xUICmdDescription;
-    css::uno::Reference< css::frame::XFrame > m_xFrame;
+    css::uno::Reference< css::uno::XComponentContext >          m_xContext;
+    css::uno::Reference< css::ui::XAcceleratorConfiguration >   m_xGlobal;
+    css::uno::Reference< css::ui::XAcceleratorConfiguration >   m_xModule;
+    css::uno::Reference< css::ui::XAcceleratorConfiguration >   m_xAct;
+    css::uno::Reference< css::container::XNameAccess >          m_xUICmdDescription;
+    css::uno::Reference< css::frame::XFrame >                   m_xFrame;
 
     OUString m_sModuleLongName;
     OUString m_sModuleShortName;
     OUString m_sModuleUIName;
 
-    DECL_LINK(ChangeHdl, Button *, void);
-    DECL_LINK(RemoveHdl, Button *, void);
-    DECL_LINK(SelectHdl, SvTreeListBox*, void );
-    DECL_LINK(Save, Button *, void);
-    DECL_LINK(Load, Button *, void);
-    DECL_LINK(Default, Button *, void);
-    DECL_LINK(RadioHdl, Button *, void);
+    // For search
+    i18nutil::SearchOptions2 m_options;
+
+    DECL_LINK(ChangeHdl,            Button *,       void);
+    DECL_LINK(RemoveHdl,            Button *,       void);
+    DECL_LINK(SelectHdl,            SvTreeListBox*, void);
+    DECL_LINK(SearchUpdateHdl,      Edit&,          void);
+    DECL_LINK(Save,                 Button *,       void);
+    DECL_LINK(Load,                 Button *,       void);
+    DECL_LINK(Default,              Button *,       void);
+    DECL_LINK(RadioHdl,             Button *,       void);
 
     DECL_LINK(LoadHdl, sfx2::FileDialogHelper *, void);
     DECL_LINK(SaveHdl, sfx2::FileDialogHelper *, void);
 
     OUString                    GetLabel4Command(const OUString& rCommand);
+    SvTreeListEntry*            applySearchFilter(OUString& rSearchTerm, SvTreeListBox* rListBox);
     void                        InitAccCfg();
     sal_uLong                   MapKeyCodeToPos( const vcl::KeyCode &rCode ) const;
     void                        StartFileDialog( WinBits nBits, const OUString& rTitle );
