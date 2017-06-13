@@ -2067,7 +2067,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                     }
                     if(SwTOXElement::Bookmark & pTOX->GetCreateType())
                     {
-                        sStr += "\\b ";
+                        sStr += "\\b \"";
                         OUString bName = pTOX->GetBookmarkName();
                         sStr += bName;
                         sStr += sEntryEnd;
