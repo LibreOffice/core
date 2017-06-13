@@ -17,11 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <memory>
 #include <set>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
+#include <o3tl/make_unique.hxx>
 #include <svl/style.hxx>
 
 #include <comphelper/sequence.hxx>
@@ -48,7 +51,7 @@
 using namespace ::com::sun::star;
 using namespace ::cppu;
 
-typedef std::vector< SfxItemSet* > ItemPoolVector;
+typedef std::vector<std::unique_ptr<SfxItemSet>> ItemPoolVector;
 
 class SvxUnoMarkerTable : public WeakImplHelper< container::XNameContainer, lang::XServiceInfo >,
                           public SfxListener
@@ -109,14 +112,6 @@ SvxUnoMarkerTable::~SvxUnoMarkerTable() throw()
 
 void SvxUnoMarkerTable::dispose()
 {
-    ItemPoolVector::iterator aIter = maItemSetVector.begin();
-    const ItemPoolVector::iterator aEnd = maItemSetVector.end();
-
-    while( aIter != aEnd )
-    {
-        delete (*aIter++);
-    }
-
     maItemSetVector.clear();
 }
 
@@ -147,8 +142,9 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getSupportedServiceNames( 
 
 void SAL_CALL SvxUnoMarkerTable::ImplInsertByName( const OUString& aName, const uno::Any& aElement )
 {
-    SfxItemSet* pInSet = new SfxItemSet( *mpModelPool, XATTR_LINESTART, XATTR_LINEEND );
-    maItemSetVector.push_back( pInSet );
+    maItemSetVector.push_back(
+        o3tl::make_unique<SfxItemSet>( *mpModelPool, XATTR_LINESTART, XATTR_LINEEND ));
+    auto pInSet = maItemSetVector.back().get();
 
     XLineEndItem aEndMarker(XATTR_LINEEND);
     aEndMarker.SetName( aName );
@@ -198,7 +194,6 @@ void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& aApiName )
         const NameOrIndex *pItem = static_cast<const NameOrIndex *>(&((*aIter)->Get( XATTR_LINEEND ) ));
         if( pItem->GetName() == aName )
         {
-            delete (*aIter);
             maItemSetVector.erase( aIter );
             return;
         }
