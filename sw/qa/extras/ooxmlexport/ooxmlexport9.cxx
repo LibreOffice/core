@@ -581,6 +581,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107684, "tdf107684.odt")
         assertXPath(pXmlDoc, "//w:style[@w:styleId='Heading1']/w:pPr/w:outlineLvl", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf107618, "tdf107618.doc")
+{
+    // This was false, header was lost on export.
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, "HeaderIsOn"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
