@@ -20,6 +20,10 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_CUIHYPERDLG_HXX
 #define INCLUDED_CUI_SOURCE_INC_CUIHYPERDLG_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <svx/hlnkitem.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>
@@ -62,7 +66,7 @@ class SvxHpLinkDlg : public IconChoiceDialog
 private:
     SvxHlinkCtrl        maCtrl;         ///< Controller
     SfxBindings*        mpBindings;
-    SfxItemSet*         mpItemSet;
+    std::unique_ptr<SfxItemSet> mpItemSet;
 
     bool            mbGrabFocus : 1;
     bool            mbReadOnly  : 1;

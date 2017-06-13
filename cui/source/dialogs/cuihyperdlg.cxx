@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/make_unique.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/viewoptions.hxx>
 #include "cuihyperdlg.hxx"
@@ -115,13 +118,13 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
     GetCancelButton().SetText ( CuiResId(RID_SVXSTR_HYPDLG_CLOSEBUT) );
 
     // create itemset for tabpages
-    mpItemSet = new SfxItemSet( SfxGetpApp()->GetPool(), SID_HYPERLINK_GETLINK,
+    mpItemSet = o3tl::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(), SID_HYPERLINK_GETLINK,
                                SID_HYPERLINK_SETLINK );
 
     SvxHyperlinkItem aItem(SID_HYPERLINK_GETLINK);
     mpItemSet->Put(aItem);
 
-    SetInputSet (mpItemSet);
+    SetInputSet (mpItemSet.get());
 
     //loop through the pages and get their max bounds and lock that down
     ShowPage(RID_SVXPAGE_HYPERLINK_NEWDOCUMENT);
@@ -165,8 +168,7 @@ void SvxHpLinkDlg::dispose()
     SvtViewOptions aViewOpt( EViewType::TabDialog, OUString::number(SID_HYPERLINK_DIALOG) );
     aViewOpt.Delete();
 
-    delete mpItemSet;
-    mpItemSet = nullptr;
+    mpItemSet.reset();
 
     maCtrl.dispose();
 
