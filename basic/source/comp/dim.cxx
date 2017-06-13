@@ -775,12 +775,11 @@ void SbiParser::DefEnum( bool bPrivate )
 
                 if( !bPrivate )
                 {
-                    SbiOpcode eOp = SbiOpcode::GLOBAL_;
                     aGen.BackChain( nGblChain );
                     nGblChain = 0;
                     bGblDefs = bNewGblDefs = true;
                     aGen.Gen(
-                        eOp, pElem->GetId(),
+                        SbiOpcode::GLOBAL_, pElem->GetId(),
                         sal::static_int_cast< sal_uInt16 >( pElem->GetType() ) );
 
                     aVar.Gen();

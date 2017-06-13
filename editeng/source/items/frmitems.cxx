@@ -3503,12 +3503,10 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 sLink = maStrLink;
             else if (xGraphicObject)
             {
-                OUString sPrefix(
-                    UNO_NAME_GRAPHOBJ_URLPREFIX);
                 OUString sId(OStringToOUString(
                     xGraphicObject->GetUniqueID(),
                     RTL_TEXTENCODING_ASCII_US));
-                sLink = sPrefix + sId;
+                sLink = UNO_NAME_GRAPHOBJ_URLPREFIX + sId;
             }
             rVal <<= sLink;
         }

@@ -187,7 +187,6 @@ void NBOTypeMgrBase::ImplLoad(const OUString& filename)
         if (nVersion==DEFAULT_NUMBERING_CACHE_FORMAT_VERSION) //first version
         {
             xIStm->ReadInt32( nNumIndex );
-            sal_uInt16 nLevel = 0x1;
             while (nNumIndex>=0 && nNumIndex<DEFAULT_NUM_VALUSET_COUNT) {
                 SvxNumRule aNum(*xIStm);
                 //bullet color in font properties is not stored correctly. Need set tranparency bits manually
@@ -203,7 +202,7 @@ void NBOTypeMgrBase::ImplLoad(const OUString& filename)
                         aNum.SetLevel(i, aFmt);
                     }
                 }
-                RelplaceNumRule(aNum,nNumIndex,nLevel);
+                RelplaceNumRule(aNum,nNumIndex,0x1/*nLevel*/);
                 xIStm->ReadInt32( nNumIndex );
             }
         }
@@ -230,9 +229,8 @@ void NBOTypeMgrBase::ImplStore(const OUString& filename)
                     SvxNumRuleFlags::CHAR_TEXT_DISTANCE | SvxNumRuleFlags::SYMBOL_ALIGNMENT,
                     10, false,
                     SvxNumRuleType::NUMBERING, SvxNumberFormat::LABEL_ALIGNMENT);
-                sal_uInt16 nLevel = 0x1;
                 xOStm->WriteInt32( nItem );
-                ApplyNumRule(aDefNumRule,nItem,nLevel,false,true);
+                ApplyNumRule(aDefNumRule,nItem,0x1/*nLevel*/,false,true);
                 aDefNumRule.Store(*xOStm);
             }
         }
@@ -675,7 +673,7 @@ void OutlineTypeMgr::Init()
 
 sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*mLevel*/,sal_uInt16 nFromIndex)
 {
-    sal_uInt16 nLength = sizeof(pOutlineSettingsArrs)/sizeof(OutlineSettings_Impl*);
+    sal_uInt16 const nLength = sizeof(pOutlineSettingsArrs)/sizeof(OutlineSettings_Impl*);
     for(sal_uInt16 iDex = nFromIndex; iDex < nLength; iDex++)
     {
         bool bNotMatch = false;
@@ -749,7 +747,7 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
 
 void OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
 {
-    sal_uInt16 nLength = sizeof(pOutlineSettingsArrs)/sizeof(OutlineSettings_Impl*);
+    sal_uInt16 const nLength = sizeof(pOutlineSettingsArrs)/sizeof(OutlineSettings_Impl*);
     if ( nIndex >= nLength )
         return;
 

@@ -448,7 +448,7 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, So
 
             // extra bits are used to tell the client to prefer external
             // reference link.
-            OUString aExtraBits("calc:extref");
+            OUString const aExtraBits("calc:extref");
 
             WriteUnicodeOrByteString( rStrm, aAppName, true );
             WriteUnicodeOrByteString( rStrm, aDocName, true );
@@ -1708,8 +1708,8 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
     SylkVersion eVersion = SylkVersion::OTHER;
 
     // US-English separators for StringToDouble
-    sal_Unicode cDecSep = '.';
-    sal_Unicode cGrpSep = ',';
+    sal_Unicode const cDecSep = '.';
+    sal_Unicode const cGrpSep = ',';
 
     SCCOL nStartCol = aRange.aStart.Col();
     SCROW nStartRow = aRange.aStart.Row();
@@ -2161,7 +2161,7 @@ bool ScImportExport::RTF2Doc( SvStream& rStrm, const OUString& rBaseURL )
     bool bOk = StartPaste();
     if (bOk)
     {
-        InsertDeleteFlags nFlags = InsertDeleteFlags::ALL & ~InsertDeleteFlags::STYLES;
+        InsertDeleteFlags const nFlags = InsertDeleteFlags::ALL & ~InsertDeleteFlags::STYLES;
         pDoc->DeleteAreaTab( aRange, nFlags );
         pImp->WriteToDocument();
         EndPaste();
@@ -2186,7 +2186,7 @@ bool ScImportExport::HTML2Doc( SvStream& rStrm, const OUString& rBaseURL )
         if (pDocSh)
             pDocSh->MakeDrawLayer();
 
-        InsertDeleteFlags nFlags = InsertDeleteFlags::ALL & ~InsertDeleteFlags::STYLES;
+        InsertDeleteFlags const nFlags = InsertDeleteFlags::ALL & ~InsertDeleteFlags::STYLES;
         pDoc->DeleteAreaTab( aRange, nFlags );
 
         if (pExtOptions)

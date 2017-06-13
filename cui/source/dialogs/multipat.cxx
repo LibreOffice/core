@@ -288,12 +288,11 @@ OUString SvxMultiPathDialog::GetPath() const
 OUString SvxPathSelectDialog::GetPath() const
 {
     OUString sNewPath;
-    sal_Unicode cDelim = SVT_SEARCHPATH_DELIMITER;
 
     for ( sal_Int32 i = 0; i < m_pPathLB->GetEntryCount(); ++i )
     {
         if ( !sNewPath.isEmpty() )
-            sNewPath += OUStringLiteral1(cDelim);
+            sNewPath += OUStringLiteral1(SVT_SEARCHPATH_DELIMITER);
         sNewPath += *static_cast<OUString*>(m_pPathLB->GetEntryData(i));
     }
 
@@ -335,14 +334,12 @@ void SvxMultiPathDialog::SetPath( const OUString& rPath )
 
 void SvxPathSelectDialog::SetPath(const OUString& rPath)
 {
-    sal_Unicode cDelim = SVT_SEARCHPATH_DELIMITER;
-
     if ( !rPath.isEmpty() )
     {
         sal_Int32 nIndex = 0;
         do
         {
-            const OUString sPath = rPath.getToken( 0, cDelim, nIndex );
+            const OUString sPath = rPath.getToken( 0, SVT_SEARCHPATH_DELIMITER, nIndex );
             OUString sSystemPath;
             bool bIsSystemPath =
                 osl::FileBase::getSystemPathFromFileURL(sPath, sSystemPath) == osl::FileBase::E_None;

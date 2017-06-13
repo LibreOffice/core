@@ -410,7 +410,6 @@ void ImplObjectHierarchy::createDataSeriesTree(
 
     try
     {
-        sal_Int32 nDiagramIndex = 0;
         sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
         Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
             xCooSysCnt->getCoordinateSystems());
@@ -430,7 +429,7 @@ void ImplObjectHierarchy::createDataSeriesTree(
                 {
                     OUString aSeriesParticle(
                         ObjectIdentifier::createParticleForSeries(
-                            nDiagramIndex, nCooSysIdx, nCTIdx, nSeriesIdx ));
+                            0, nCooSysIdx, nCTIdx, nSeriesIdx ));
                     ObjectIdentifier aSeriesOID(
                         ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForParticle( aSeriesParticle ) ) );
                     rOutDiagramSubContainer.push_back( aSeriesOID );

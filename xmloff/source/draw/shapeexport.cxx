@@ -240,9 +240,8 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
                     uno::Sequence< beans::PropertyValue > aPropValues( 2 );
                     aPropValues[ 0 ].Name = "CustomShape";
                     aPropValues[ 0 ].Value <<= xShape;
-                    bool bForceGroupWithText = true;
                     aPropValues[ 1 ].Name = "ForceGroupWithText";
-                    aPropValues[ 1 ].Value <<= bForceGroupWithText;
+                    aPropValues[ 1 ].Value <<= true;
                     aArgument[ 0 ] <<= aPropValues;
                     uno::Reference< uno::XInterface > xInterface(
                         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aEngine, aArgument, xContext) );

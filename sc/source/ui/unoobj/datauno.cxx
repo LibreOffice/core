@@ -2348,10 +2348,9 @@ void ScUnnamedDatabaseRangesObj::setByTable( const table::CellRangeAddress& aRan
             throw lang::IndexOutOfBoundsException();
 
         ScDBDocFunc aFunc(*pDocShell);
-        OUString aString(STR_DB_LOCAL_NONAME);
         ScRange aUnnamedRange( (SCCOL)aRange.StartColumn, (SCROW)aRange.StartRow, aRange.Sheet,
                             (SCCOL)aRange.EndColumn,   (SCROW)aRange.EndRow,   aRange.Sheet );
-        bDone = aFunc.AddDBRange( aString, aUnnamedRange );
+        bDone = aFunc.AddDBRange( STR_DB_LOCAL_NONAME, aUnnamedRange );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified

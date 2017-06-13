@@ -2136,11 +2136,9 @@ void ScHTMLTable::DataOn( const HtmlImportInfo& rInfo )
                 {
                     // Pick up the number format associated with this class (if
                     // any).
-                    OUString aElem("td");
                     OUString aClass = itr->GetString();
-                    OUString aProp("mso-number-format");
                     const ScHTMLStyles& rStyles = mpParser->GetStyles();
-                    const OUString& rVal = rStyles.getPropertyValue(aElem, aClass, aProp);
+                    const OUString& rVal = rStyles.getPropertyValue("td", aClass, "mso-number-format");
                     if (!rVal.isEmpty())
                     {
                         OUString aNumFmt = decodeNumberFormat(rVal);

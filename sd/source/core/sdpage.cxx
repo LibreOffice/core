@@ -1943,11 +1943,8 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
                         /**********************************************************
                         * presentation template: adjust test height
                         **********************************************************/
-                        sal_uInt16 nIndexTitle = 0;
-                        sal_uInt16 nIndexOutline = 0;
-                        sal_uInt16 nIndexNotes = 0;
 
-                        if (pObj == GetPresObj(PRESOBJ_TITLE, nIndexTitle))
+                        if (pObj == GetPresObj(PRESOBJ_TITLE, 0))
                         {
                             SfxStyleSheet* pTitleSheet = GetStyleSheetForPresObj(PRESOBJ_TITLE);
 
@@ -1979,7 +1976,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
                                 pTitleSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
                             }
                         }
-                        else if (pObj == GetPresObj(PRESOBJ_OUTLINE, nIndexOutline))
+                        else if (pObj == GetPresObj(PRESOBJ_OUTLINE, 0))
                         {
                             OUString aName(GetLayoutName());
                             aName += " ";
@@ -2040,7 +2037,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
                                 }
                             }
                         }
-                        else if (pObj == GetPresObj(PRESOBJ_NOTES, nIndexNotes))
+                        else if (pObj == GetPresObj(PRESOBJ_NOTES, 0))
                         {
                             SfxStyleSheet* pNotesSheet = GetStyleSheetForPresObj(PRESOBJ_NOTES);
 
@@ -2556,8 +2553,7 @@ void SdPage::SetLayoutName(const OUString& aName)
 
     if( mbMaster )
     {
-        OUString aSep(SD_LT_SEPARATOR);
-        sal_Int32 nPos = maLayoutName.indexOf(aSep);
+        sal_Int32 nPos = maLayoutName.indexOf(SD_LT_SEPARATOR);
         if (nPos != -1)
             FmFormPage::SetName(maLayoutName.copy(0, nPos));
     }

@@ -1751,8 +1751,7 @@ void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
     sc::SingleColumnSpanSet::SpansType aRanges;
     aRangeSet.getSpans(aRanges);
 
-    bool bCopyNotes = true;
-    CopyToClipHandler aFunc(*this, rDestCol, nullptr, bCopyNotes);
+    CopyToClipHandler aFunc(*this, rDestCol, nullptr, true/*bCopyNotes*/);
     sc::CellStoreType::const_iterator itPos = maCells.begin();
     sc::SingleColumnSpanSet::SpansType::const_iterator it = aRanges.begin(), itEnd = aRanges.end();
     for (; it != itEnd; ++it)

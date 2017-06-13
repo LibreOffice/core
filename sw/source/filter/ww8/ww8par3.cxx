@@ -2415,8 +2415,7 @@ bool WW8FormulaListBox::Import(const uno::Reference <
         xPropSet->setPropertyValue("HelpText", aTmp );
     }
 
-    bool bDropDown(true);
-    xPropSet->setPropertyValue("Dropdown", css::uno::makeAny(bDropDown));
+    xPropSet->setPropertyValue("Dropdown", css::uno::makeAny(true));
 
     if (!maListEntries.empty())
     {

@@ -1104,8 +1104,7 @@ sal_Bool SAL_CALL PasswordContainer::changeMasterPassword( const uno::Reference<
         if ( bCanChangePassword )
         {
             // ask for the new password, but do not set it
-            PasswordRequestMode aRMode = PasswordRequestMode_PASSWORD_CREATE;
-            OUString aPass = RequestPasswordFromUser( aRMode, xTmpHandler );
+            OUString aPass = RequestPasswordFromUser( PasswordRequestMode_PASSWORD_CREATE, xTmpHandler );
 
             if ( !aPass.isEmpty() )
             {

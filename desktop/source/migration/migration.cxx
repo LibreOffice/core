@@ -165,7 +165,7 @@ OUString mapModuleShortNameToIdentifier(const OUString& sShortName)
 
 bool MigrationImpl::alreadyMigrated()
 {
-    OUString MIGRATION_STAMP_NAME("/MIGRATED4");
+    OUString const MIGRATION_STAMP_NAME("/MIGRATED4");
     OUString aStr = m_aInfo.userdata + MIGRATION_STAMP_NAME;
     File aFile(aStr);
     // create migration stamp, and/or check its existence
@@ -392,8 +392,7 @@ migrations_vr MigrationImpl::readMigrationSteps(const OUString& rMigrationName)
 
     // get migration description from org.openoffice.Setup/Migration
     // and build vector of migration steps
-    OUString aMigrationSteps( "MigrationSteps" );
-    uno::Reference< XNameAccess > theNameAccess(xMigrationData->getByName(aMigrationSteps), uno::UNO_QUERY_THROW);
+    uno::Reference< XNameAccess > theNameAccess(xMigrationData->getByName("MigrationSteps"), uno::UNO_QUERY_THROW);
     uno::Sequence< OUString > seqMigrations = theNameAccess->getElementNames();
     uno::Reference< XNameAccess > tmpAccess;
     uno::Sequence< OUString > tmpSeq;

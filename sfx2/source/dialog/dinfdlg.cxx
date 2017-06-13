@@ -897,11 +897,10 @@ void SfxDocumentPage::ImplUpdateSignatures()
                 s = m_aMultiSignedStr;
             else if ( aInfos.getLength() == 1 )
             {
-                OUString aCN_Id("CN");
                 const security::DocumentSignatureInformation& rInfo = aInfos[ 0 ];
                 s = GetDateTimeString( rInfo.SignatureDate, rInfo.SignatureTime );
                 s += ", ";
-                s += GetContentPart( rInfo.Signer->getSubjectName(), aCN_Id );
+                s += GetContentPart( rInfo.Signer->getSubjectName(), "CN" );
             }
             m_pSignedValFt->SetText( s );
         }

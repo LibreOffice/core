@@ -773,9 +773,9 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                             if ( deltaXInLogic)
                             {
 #ifndef IOS
-                                bool isMultiplyByLineSize = true;
+                                bool const isMultiplyByLineSize = true;
 #else
-                                bool isMultiplyByLineSize = false;
+                                bool const isMultiplyByLineSize = false;
 #endif
                                 lcl_HandleScrollHelper( pHScrl, deltaXInLogic, isMultiplyByLineSize );
                                 bRet = true;
@@ -804,9 +804,9 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                             if ( deltaYInLogic )
                             {
 #ifndef IOS
-                                bool isMultiplyByLineSize = true;
+                                bool const isMultiplyByLineSize = true;
 #else
-                                bool isMultiplyByLineSize = false;
+                                bool const isMultiplyByLineSize = false;
 #endif
                                 lcl_HandleScrollHelper( pVScrl, deltaYInLogic, isMultiplyByLineSize );
 

@@ -404,7 +404,6 @@ UUIInteractionHelper::handleRequest_impl(
         script::ModuleSizeExceededRequest aModSizeException;
         if (aAnyRequest >>= aModSizeException )
         {
-            ErrCode nErrorCode = ERRCODE_UUI_IO_MODULESIZEEXCEEDED;
             std::vector< OUString > aArguments;
             uno::Sequence< OUString > sModules
                 = aModSizeException.Names;
@@ -421,7 +420,7 @@ UUIInteractionHelper::handleRequest_impl(
                 aArguments.push_back( aName );
             }
             handleErrorHandlerRequest( task::InteractionClassification_WARNING,
-                                       nErrorCode,
+                                       ERRCODE_UUI_IO_MODULESIZEEXCEEDED,
                                        aArguments,
                                        rRequest->getContinuations(),
                                        bObtainErrorStringOnly,
@@ -455,7 +454,6 @@ UUIInteractionHelper::handleRequest_impl(
         ucb::UnsupportedNameClashException aUORequest;
         if (aAnyRequest >>= aUORequest)
         {
-            ErrCode nErrorCode = ERRCODE_UUI_IO_UNSUPPORTEDOVERWRITE;
             std::vector< OUString > aArguments;
 
             uno::Reference< task::XInteractionApprove > xApprove;
@@ -466,7 +464,7 @@ UUIInteractionHelper::handleRequest_impl(
             if ( xApprove.is() && xDisapprove.is() )
             {
                 handleErrorHandlerRequest( task::InteractionClassification_QUERY,
-                                           nErrorCode,
+                                           ERRCODE_UUI_IO_UNSUPPORTEDOVERWRITE,
                                            aArguments,
                                            rRequest->getContinuations(),
                                            bObtainErrorStringOnly,
@@ -676,12 +674,11 @@ UUIInteractionHelper::handleRequest_impl(
         ucb::InteractiveLockingNotLockedException aLNLException;
         if (aAnyRequest >>= aLNLException)
         {
-            ErrCode nErrorCode = ERRCODE_UUI_LOCKING_NOT_LOCKED;
             std::vector< OUString > aArguments;
             aArguments.push_back( aLNLException.Url );
 
             handleErrorHandlerRequest( aLNLException.Classification,
-                                       nErrorCode,
+                                       ERRCODE_UUI_LOCKING_NOT_LOCKED,
                                        aArguments,
                                        rRequest->getContinuations(),
                                        bObtainErrorStringOnly,
@@ -693,12 +690,11 @@ UUIInteractionHelper::handleRequest_impl(
         ucb::InteractiveLockingLockExpiredException aLLEException;
         if (aAnyRequest >>= aLLEException)
         {
-            ErrCode nErrorCode = ERRCODE_UUI_LOCKING_LOCK_EXPIRED;
             std::vector< OUString > aArguments;
             aArguments.push_back( aLLEException.Url );
 
             handleErrorHandlerRequest( aLLEException.Classification,
-                                       nErrorCode,
+                                       ERRCODE_UUI_LOCKING_LOCK_EXPIRED,
                                        aArguments,
                                        rRequest->getContinuations(),
                                        bObtainErrorStringOnly,
@@ -748,12 +744,11 @@ UUIInteractionHelper::handleRequest_impl(
         loader::CannotActivateFactoryException aCannotActivateFactoryException;
         if (aAnyRequest >>= aCannotActivateFactoryException)
         {
-            ErrCode nErrorCode = ERRCODE_UUI_CANNOT_ACTIVATE_FACTORY;
             std::vector< OUString > aArguments;
             aArguments.push_back( aCannotActivateFactoryException.Message );
 
             handleErrorHandlerRequest( task::InteractionClassification_ERROR,
-                                       nErrorCode,
+                                       ERRCODE_UUI_CANNOT_ACTIVATE_FACTORY,
                                        aArguments,
                                        rRequest->getContinuations(),
                                        bObtainErrorStringOnly,

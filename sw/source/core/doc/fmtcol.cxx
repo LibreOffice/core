@@ -276,7 +276,7 @@ void SwTextFormatColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
             bContinue = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
     }
 
-    for( int nC = 0, nArrLen = SAL_N_ELEMENTS(aFontSizeArr); nC < nArrLen; ++nC )
+    for( int nC = 0; nC < int(SAL_N_ELEMENTS(aFontSizeArr)); ++nC )
     {
         const SvxFontHeightItem *pFSize = aFontSizeArr[ nC ], *pOldFSize;
         if( pFSize && SfxItemState::SET == GetItemState(

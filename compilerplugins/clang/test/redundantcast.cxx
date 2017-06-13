@@ -286,8 +286,8 @@ void testFunctionalCast() {
 }
 
 void testCStyleCast() {
-    Enum1 e = (Enum1)Enum1::X; // expected-error {{redundant cstyle cast from 'Enum1' to 'Enum1' [loplugin:redundantcast]}}
-    (void)e;
+    Enum1 e = (Enum1)Enum1::X; // expected-error {{redundant cstyle cast from 'Enum1' to 'Enum1' [loplugin:redundantcast]}} expected-error {{var used only once, should be inlined or declared const [loplugin:oncevar]}}
+    (void)e; // expected-note {{used here [loplugin:oncevar]}}
 }
 
 int main() {

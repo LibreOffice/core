@@ -177,8 +177,7 @@ SdPage* DefaultPageObjectProvider::operator () (SdDrawDocument* pContainerDocume
     SdPage* pLocalMasterPage = nullptr;
     if (pContainerDocument != nullptr)
     {
-        sal_Int32 nIndex (0);
-        SdPage* pLocalSlide = pContainerDocument->GetSdPage((sal_uInt16)nIndex, PageKind::Standard);
+        SdPage* pLocalSlide = pContainerDocument->GetSdPage(0, PageKind::Standard);
         if (pLocalSlide!=nullptr && pLocalSlide->TRG_HasMasterPage())
             pLocalMasterPage = dynamic_cast<SdPage*>(&pLocalSlide->TRG_GetMasterPage());
     }

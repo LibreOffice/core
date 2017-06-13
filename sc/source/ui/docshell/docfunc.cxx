@@ -3497,11 +3497,9 @@ bool ScDocFunc::SetWidthOrHeight(
         return false;
     }
 
-    bool bSuccess = false;
     SCCOLROW nStart = rRanges[0].mnStart;
     SCCOLROW nEnd = rRanges[0].mnEnd;
 
-    bool bFormula = false;
     if ( eMode == SC_SIZE_OPTIMAL )
     {
         //! Option "Show formulas" - but where to get them from?
@@ -3598,7 +3596,7 @@ bool ScDocFunc::SetWidthOrHeight(
 
                     if ( eMode==SC_SIZE_OPTIMAL || eMode==SC_SIZE_VISOPT )
                         nThisSize = nSizeTwips +
-                                    lcl_GetOptimalColWidth( rDocShell, nCol, nTab, bFormula );
+                                    lcl_GetOptimalColWidth( rDocShell, nCol, nTab, false/*bFormula*/ );
                     if ( nThisSize )
                         rDoc.SetColWidth( nCol, nTab, nThisSize );
 
@@ -3642,7 +3640,7 @@ bool ScDocFunc::SetWidthOrHeight(
     rDocShell.PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PaintPartFlags::All);
     aModificator.SetDocumentModified();
 
-    return bSuccess;
+    return false;
 }
 
 bool ScDocFunc::InsertPageBreak( bool bColumn, const ScAddress& rPos,
@@ -4044,7 +4042,6 @@ bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
 {
     ScDocShellModificator aModificator( rDocShell );
 
-    bool bSuccess = false;
     ScDocument& rDoc = rDocShell.GetDocument();
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -4141,7 +4138,7 @@ bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
     else if (!bApi)
         rDocShell.ErrorMessage(aTester.GetMessageId());
 
-    return bSuccess;
+    return false;
 }
 
 bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
@@ -4614,9 +4611,7 @@ bool ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
 bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark,
                             FillDir eDir, sal_uLong nCount, bool bApi )
 {
-    double      fStep = 1.0;
-    double      fMax = MAXDOUBLE;
-    return FillAuto( rRange, pTabMark, eDir, FILL_AUTO, FILL_DAY, nCount, fStep, fMax, true/*bRecord*/, bApi );
+    return FillAuto( rRange, pTabMark, eDir, FILL_AUTO, FILL_DAY, nCount, 1.0/*fStep*/, MAXDOUBLE/*fMax*/, true/*bRecord*/, bApi );
 }
 
 bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir eDir, FillCmd eCmd, FillDateCmd  eDateCmd, sal_uLong nCount, double fStep, double fMax,  bool bRecord, bool bApi )

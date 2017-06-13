@@ -74,8 +74,7 @@ void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< wor
             xProps->setPropertyValue("ParaIsNumberingRestart", uno::makeAny( isNumberingRestart ) );
             if( isNumberingRestart )
             {
-                sal_Int16 nStartValue = 1;
-                xProps->setPropertyValue("NumberingStartValue", uno::makeAny( nStartValue ) );
+                xProps->setPropertyValue("NumberingStartValue", uno::makeAny( sal_Int16(1) ) );
             }
             isFirstElement = false;
         }

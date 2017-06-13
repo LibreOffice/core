@@ -228,12 +228,10 @@ XMLFontEncodingPropHdl::~XMLFontEncodingPropHdl()
 
 bool XMLFontEncodingPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    bool bRet = true;
-
     if( IsXMLToken( rStrImpValue, XML_X_SYMBOL ) )
         rValue <<= (sal_Int16) RTL_TEXTENCODING_SYMBOL;
 
-    return bRet;
+    return true;
 }
 
 bool XMLFontEncodingPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const

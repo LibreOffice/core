@@ -1329,11 +1329,9 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
                                     rFlags &= ~(CONV_FROM_STAR_BATS|CONV_FROM_STAR_MATH);
                                     OUString sFontName;
                                     rProp.maValue >>= sFontName;
-                                    OUString sStarBats( "StarBats"  );
-                                    OUString sStarMath( "StarMath"  );
-                                    if( sFontName.equalsIgnoreAsciiCase( sStarBats  ) )
+                                    if( sFontName.equalsIgnoreAsciiCase( "StarBats"  ) )
                                         rFlags |= CONV_FROM_STAR_BATS;
-                                    else if( sFontName.equalsIgnoreAsciiCase( sStarMath ) )
+                                    else if( sFontName.equalsIgnoreAsciiCase( "StarMath" ) )
                                         rFlags |= CONV_FROM_STAR_MATH;
                                     break;
                                 }
@@ -1660,9 +1658,8 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 // TODO: property missing
                 if (xPropSetInfo->hasPropertyByName(s_ParaIsNumberingRestart))
                 {
-                    bool bTmp = true;
                     xPropSet->setPropertyValue(s_ParaIsNumberingRestart,
-                                               makeAny(bTmp) );
+                                               makeAny(true) );
                 }
                 pListBlock->ResetRestartNumbering();
             }
@@ -2177,7 +2174,6 @@ void XMLTextImportHelper::SetRuby(
     Reference<XPropertySet> xPropSet(rCursor, UNO_QUERY);
 
     OUString sRubyText("RubyText");
-    OUString sRubyCharStyleName("RubyCharStyleName");
 
     // if we have one Ruby property, we assume all of them are present
     if (xPropSet.is() &&
@@ -2208,7 +2204,7 @@ void XMLTextImportHelper::SetRuby(
             if( (!sDisplayName.isEmpty()) &&
                 m_xImpl->m_xTextStyles->hasByName( sDisplayName ))
             {
-                xPropSet->setPropertyValue(sRubyCharStyleName, makeAny(sDisplayName));
+                xPropSet->setPropertyValue("RubyCharStyleName", makeAny(sDisplayName));
             }
         }
     }

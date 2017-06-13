@@ -26,7 +26,6 @@
 IMPL_LINK_NOARG(SvxPasswordDialog, ButtonHdl, Button*, void)
 {
     bool bOK = true;
-    short nRet = RET_OK;
 
     if ( m_pNewPasswdED->GetText() != m_pRepeatPasswdED->GetText() )
     {
@@ -46,7 +45,7 @@ IMPL_LINK_NOARG(SvxPasswordDialog, ButtonHdl, Button*, void)
     }
 
     if ( bOK )
-        EndDialog( nRet );
+        EndDialog( RET_OK );
 }
 
 

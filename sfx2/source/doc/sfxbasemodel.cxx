@@ -3429,14 +3429,12 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
         if ( xConfigStorage.is() )
         {
             OUString aMediaTypeProp( "MediaType" );
-            OUString aUIConfigMediaType(
-                    "application/vnd.sun.xml.ui.configuration"  );
             OUString aMediaType;
             Reference< beans::XPropertySet > xPropSet( xConfigStorage, UNO_QUERY );
             Any a = xPropSet->getPropertyValue( aMediaTypeProp );
             if ( !( a >>= aMediaType ) ||  aMediaType.isEmpty())
             {
-                xPropSet->setPropertyValue( aMediaTypeProp, Any(aUIConfigMediaType) );
+                xPropSet->setPropertyValue( aMediaTypeProp, Any(OUString("application/vnd.sun.xml.ui.configuration")) );
             }
         }
         else
@@ -3451,10 +3449,9 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
         {
             // Import old UI configuration from OOo 1.x
             Reference< embed::XStorage > xOOo1ConfigStorage;
-            OUString         aOOo1UIConfigFolderName( "Configurations" );
 
             // Try to open with READ
-            xOOo1ConfigStorage = getDocumentSubStorage( aOOo1UIConfigFolderName, embed::ElementModes::READ );
+            xOOo1ConfigStorage = getDocumentSubStorage( "Configurations", embed::ElementModes::READ );
             if ( xOOo1ConfigStorage.is() )
             {
                 Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
@@ -3466,12 +3463,10 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
                 {
                     SfxObjectShell* pObjShell = SfxBaseModel::GetObjectShell();
 
-                    OUString aNum( "private:resource/toolbar/custom_OOo1x_" );
-                    OUString aTitle( "Toolbar " );
                     for ( size_t i = 0; i < rToolbars.size(); i++ )
                     {
-                        OUString aCustomTbxName = aNum + OUString::number( i + 1 );
-                        OUString aCustomTbxTitle = aTitle + OUString::number( i + 1 );
+                        OUString aCustomTbxName = "private:resource/toolbar/custom_OOo1x_" + OUString::number( i + 1 );
+                        OUString aCustomTbxTitle = "Toolbar " + OUString::number( i + 1 );
 
                         Reference< container::XIndexContainer > xToolbar = rToolbars[i];
                         ConvertSlotsToCommands( pObjShell, xToolbar );
@@ -3483,9 +3478,7 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
                             {
                                 try
                                 {
-                                    OUString aPropName( "UIName" );
-                                    Any           aAny( aCustomTbxTitle );
-                                    xPropSet->setPropertyValue( aPropName, aAny );
+                                    xPropSet->setPropertyValue( "UIName", Any( aCustomTbxTitle ) );
                                 }
                                 catch ( beans::UnknownPropertyException& )
                                 {

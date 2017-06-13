@@ -1917,8 +1917,7 @@ const NameToId constNameToIdMapping[] =
 
 boost::optional<sal_Int32> lclGetElementIdForName(const OUString& rName)
 {
-    sal_Int32 aLength = sizeof (constNameToIdMapping) / sizeof(NameToId);
-    for (sal_Int32 i=0; i < aLength; ++i)
+    for (sal_Int32 i=0; i < sal_Int32(SAL_N_ELEMENTS(constNameToIdMapping)); ++i)
     {
         if (rName == constNameToIdMapping[i].maName)
         {
@@ -6819,13 +6818,11 @@ void DocxAttributeOutput::WritePostitFields()
 
 bool DocxAttributeOutput::DropdownField( const SwField* pField )
 {
-    bool bExpand = false;
-
     ww::eField eType = ww::eFORMDROPDOWN;
     OUString sCmd = FieldString( eType  );
     GetExport( ).OutputField( pField, eType, sCmd );
 
-    return bExpand;
+    return false;
 }
 
 bool DocxAttributeOutput::PlaceholderField( const SwField* pField )

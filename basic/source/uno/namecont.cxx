@@ -1036,11 +1036,10 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                                           aCheckFileName, aXlbExtension, mxSFI );
 
                     // Check if module1.xba exists
-                    OUString aXbaExtension("xba");
                     aCheckFileName = "Module1";
                     checkAndCopyFileImpl( aUserBasicStandardInetObj,
                                           aPrevUserBasicStandardInetObj,
-                                          aCheckFileName, aXbaExtension, mxSFI );
+                                          aCheckFileName, "xba", mxSFI );
                 }
                 else
                 {
@@ -1102,8 +1101,8 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
 
                 OUString aUserSearchStr("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE");
                 OUString aSharedSearchStr("vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE");
-                OUString aBundledSearchStr("vnd.sun.star.expand:$BUNDLED_EXTENSIONS");
-                OUString aInstSearchStr("$(INST)");
+                OUString const aBundledSearchStr("vnd.sun.star.expand:$BUNDLED_EXTENSIONS");
+                OUString const aInstSearchStr("$(INST)");
 
                 Sequence< OUString > aNames = pPrevCont->getElementNames();
                 const OUString* pNames = aNames.getConstArray();
@@ -1413,8 +1412,6 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                                                                     embed::ElementModes::READWRITE );
                 //    throw uno::RuntimeException(); // TODO: method must either return the stream or throw an exception
 
-                OUString aMime( "text/xml" );
-
                 uno::Reference< beans::XPropertySet > xProps( xElementStream, uno::UNO_QUERY );
                 SAL_WARN_IF(
                     !xProps.is(), "basic",
@@ -1423,7 +1420,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
 
                 if ( xProps.is() )
                 {
-                    xProps->setPropertyValue("MediaType", uno::Any( aMime ) );
+                    xProps->setPropertyValue("MediaType", uno::Any( OUString( "text/xml" ) ) );
 
                     // #87671 Allow encryption
                     xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::Any( true ) );
@@ -1561,8 +1558,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
 
             if ( xProps.is() )
             {
-                OUString aMime("text/xml");
-                xProps->setPropertyValue("MediaType", uno::Any( aMime ) );
+                xProps->setPropertyValue("MediaType", uno::Any( OUString("text/xml") ) );
 
                 // #87671 Allow encryption
                 xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::Any( true ) );
@@ -2076,8 +2072,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         {
             xInfoStream = xTargetLibrariesStor->openStreamElement( aStreamName, embed::ElementModes::READWRITE );
             uno::Reference< beans::XPropertySet > xProps( xInfoStream, uno::UNO_QUERY_THROW );
-            OUString aMime( "text/xml" );
-            xProps->setPropertyValue("MediaType", uno::Any( aMime ) );
+            xProps->setPropertyValue("MediaType", uno::Any( OUString( "text/xml" ) ) );
 
             // #87671 Allow encryption
             xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::Any( true ) );
@@ -2224,7 +2219,7 @@ Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
 
     OUString aUserSearchStr("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE");
     OUString aSharedSearchStr("vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE");
-    OUString aBundledSearchStr("vnd.sun.star.expand:$BUNDLED_EXTENSIONS");
+    OUString const aBundledSearchStr("vnd.sun.star.expand:$BUNDLED_EXTENSIONS");
     if( StorageURL.indexOf( aUserSearchStr ) != -1 )
     {
         pNewLib->mbExtension = true;

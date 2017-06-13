@@ -246,8 +246,7 @@ IMPL_LINK( SwOutlineTabDialog, FormHdl, Button *, pBtn, void )
     OString sHelpId(pFormMenu->GetHelpId(pFormMenu->GetItemId("form1")));
     for (sal_Int32 i = 2; i <= 9; ++i)
     {
-        OString sForm("form");
-        pFormMenu->SetHelpId(pFormMenu->GetItemId(sForm + OString::number(i)), sHelpId);
+        pFormMenu->SetHelpId(pFormMenu->GetItemId("form" + OString::number(i)), sHelpId);
     }
 
     pFormMenu->SetSelectHdl(LINK(this, SwOutlineTabDialog, MenuSelectHdl));

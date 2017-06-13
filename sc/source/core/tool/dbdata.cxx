@@ -1236,9 +1236,8 @@ ScDBData* ScDBCollection::AnonDBs::getByRange(const ScRange& rRange)
     if (!pData)
     {
         // Insert a new db data.  They all have identical names.
-        OUString aName(STR_DB_GLOBAL_NONAME);
         ::std::unique_ptr<ScDBData> pNew(new ScDBData(
-            aName, rRange.aStart.Tab(), rRange.aStart.Col(), rRange.aStart.Row(),
+            STR_DB_GLOBAL_NONAME, rRange.aStart.Tab(), rRange.aStart.Col(), rRange.aStart.Row(),
             rRange.aEnd.Col(), rRange.aEnd.Row(), true, false, false));
         pData = pNew.get();
         m_DBs.push_back(std::move(pNew));

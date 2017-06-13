@@ -1448,13 +1448,12 @@ void BibDataManager::SetMeAsUidListener()
         Sequence< OUString > aFields(xFields->getElementNames());
         const OUString* pFields = aFields.getConstArray();
         sal_Int32 nCount=aFields.getLength();
-        OUString StrUID(STR_UID);
         OUString theFieldName;
         for( sal_Int32 i=0; i<nCount; i++ )
         {
             const OUString& rName = pFields[i];
 
-            if (rName.equalsIgnoreAsciiCase(StrUID))
+            if (rName.equalsIgnoreAsciiCase(STR_UID))
             {
                 theFieldName=pFields[i];
                 break;
@@ -1491,13 +1490,12 @@ void BibDataManager::RemoveMeAsUidListener()
         Sequence< OUString > aFields(xFields->getElementNames());
         const OUString* pFields = aFields.getConstArray();
         sal_Int32 nCount=aFields.getLength();
-        OUString StrUID(STR_UID);
         OUString theFieldName;
         for( sal_Int32 i=0; i<nCount; i++ )
         {
             const OUString& rName = pFields[i];
 
-            if (rName.equalsIgnoreAsciiCase(StrUID))
+            if (rName.equalsIgnoreAsciiCase(STR_UID))
             {
                 theFieldName=pFields[i];
                 break;

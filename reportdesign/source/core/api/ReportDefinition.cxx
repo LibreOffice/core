@@ -1398,13 +1398,10 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     }
     if ( aImage.hasValue() )
     {
-        OUString sObject1("report");
-        OUString sPng("image/png");
-
         uno::Sequence<sal_Int8> aSeq;
         aImage >>= aSeq;
         uno::Reference<io::XInputStream> xStream = new ::comphelper::SequenceInputStream( aSeq );
-        m_pImpl->m_pObjectContainer->InsertGraphicStreamDirectly(xStream,sObject1,sPng);
+        m_pImpl->m_pObjectContainer->InsertGraphicStreamDirectly(xStream, "report", "image/png");
     }
 
     if ( !bErr )
@@ -1508,9 +1505,7 @@ bool OReportDefinition::WriteThroughComponent(
             xSeek->seek(0);
         }
 
-        OUString aPropName("MediaType");
-        OUString aMime("text/xml");
-        xStreamProp->setPropertyValue( aPropName, uno::Any(aMime) );
+        xStreamProp->setPropertyValue( "MediaType", uno::Any(OUString("text/xml")) );
 
         // encrypt all streams
         xStreamProp->setPropertyValue( "UseCommonStoragePasswordEncryption",
@@ -1707,9 +1702,8 @@ embed::VisualRepresentation SAL_CALL OReportDefinition::getPreferredVisualRepres
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     embed::VisualRepresentation aResult;
-    OUString sImageName("report");
     OUString sMimeType;
-    uno::Reference<io::XInputStream> xStream = m_pImpl->m_pObjectContainer->GetGraphicStream(sImageName,&sMimeType);
+    uno::Reference<io::XInputStream> xStream = m_pImpl->m_pObjectContainer->GetGraphicStream("report", &sMimeType);
     if ( xStream.is() )
     {
         uno::Sequence<sal_Int8> aSeq;

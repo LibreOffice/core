@@ -1725,7 +1725,6 @@ void UCBStorage_Impl::ReadContent()
     aProps[1] = "IsFolder";
     aProps[2] = "MediaType";
     aProps[3] = "Size";
-    ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
     try
     {
@@ -1733,7 +1732,7 @@ void UCBStorage_Impl::ReadContent()
         if ( !m_pContent )
             return;
 
-        Reference< XResultSet > xResultSet = m_pContent->createCursor( aProps, eInclude );
+        Reference< XResultSet > xResultSet = m_pContent->createCursor( aProps, ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS );
         Reference< XRow > xRow( xResultSet, UNO_QUERY );
         if ( xResultSet.is() )
         {

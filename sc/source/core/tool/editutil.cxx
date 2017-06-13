@@ -153,11 +153,10 @@ void ScEditUtil::RemoveCharAttribs( EditTextObject& rEditText, const ScPatternAt
         { ATTR_FONT_WEIGHT, EE_CHAR_WEIGHT },
         { ATTR_FONT_COLOR,  EE_CHAR_COLOR }
     };
-    sal_uInt16 nMapCount = SAL_N_ELEMENTS(AttrTypeMap);
 
     const SfxItemSet& rSet = rAttr.GetItemSet();
     const SfxPoolItem* pItem;
-    for (sal_uInt16 i = 0; i < nMapCount; ++i)
+    for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(AttrTypeMap); ++i)
     {
         if ( rSet.GetItemState(AttrTypeMap[i].nAttrType, false, &pItem) == SfxItemState::SET )
             rEditText.RemoveCharAttribs(AttrTypeMap[i].nCharType);

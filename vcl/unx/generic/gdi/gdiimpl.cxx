@@ -363,7 +363,7 @@ GC X11SalGraphicsImpl::GetInvert50GC()
         values.function             = GXinvert;
         values.line_width           = 1;
         values.line_style           = LineSolid;
-        unsigned long nValueMask =
+        unsigned long const nValueMask =
                                   GCGraphicsExposures
                                   | GCForeground
                                   | GCBackground

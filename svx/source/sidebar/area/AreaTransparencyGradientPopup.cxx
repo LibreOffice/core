@@ -135,8 +135,7 @@ void AreaTransparencyGradientPopup::ExecuteValueModify(sal_uInt8 nStartCol, sal_
 
     mrAreaPropertyPanel.SetGradient(aTmpGradient);
 
-    bool bEnable = true;
-    XFillFloatTransparenceItem aGradientItem(aTmpGradient, bEnable );
+    XFillFloatTransparenceItem aGradientItem(aTmpGradient, true );
 
     mrAreaPropertyPanel.setFillFloatTransparence(aGradientItem);
 }

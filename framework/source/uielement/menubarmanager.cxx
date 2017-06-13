@@ -597,12 +597,11 @@ void MenuBarManager::CheckAndAddMenuExtension( Menu* pMenu )
         sal_uInt16 nNewItemId( 0 );
         sal_uInt16 nInsertPos( MENU_APPEND );
         sal_uInt16 nBeforePos( MENU_APPEND );
-        OUString aCommandBefore( ".uno:About" );
         for ( sal_uInt16 n = 0; n < pMenu->GetItemCount(); n++ )
         {
             sal_uInt16 nItemId = pMenu->GetItemId( n );
             nNewItemId = std::max( nItemId, nNewItemId );
-            if ( pMenu->GetItemCommand( nItemId ) == aCommandBefore )
+            if ( pMenu->GetItemCommand( nItemId ) == ".uno:About" )
                 nBeforePos = n;
         }
         ++nNewItemId;
@@ -1180,8 +1179,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                     VclPtr<PopupMenu> pSubMenu = AddonMenuManager::CreateAddonMenu(rFrame);
                     if ( pSubMenu && ( pSubMenu->GetItemCount() > 0 ))
                     {
-                        sal_uInt16 nCount = 0;
-                        if ( pPopup->GetItemType( nCount-1 ) != MenuItemType::SEPARATOR )
+                        if ( pPopup->GetItemType( pSubMenu->GetItemCount() - 1 ) != MenuItemType::SEPARATOR )
                             pPopup->InsertSeparator();
 
                         pPopup->InsertItem( ITEMID_ADDONLIST, OUString() );

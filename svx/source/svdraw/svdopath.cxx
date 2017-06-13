@@ -289,7 +289,6 @@ XPolygon ImpPathCreateUser::GetFormPoly() const
 
 void ImpPathCreateUser::CalcBezier(const Point& rP1, const Point& rP2, const Point& rDir, bool bMouseDown)
 {
-    bool bRet = true;
     aBezStart=rP1;
     aBezCtrl1=rP1+rDir;
     aBezCtrl2=rP2;
@@ -298,7 +297,7 @@ void ImpPathCreateUser::CalcBezier(const Point& rP1, const Point& rP2, const Poi
     // Also copy the end point when no end point is set yet
     if (!bMouseDown || (0L == aBezEnd.X() && 0L == aBezEnd.Y())) aBezEnd=rP2;
 
-    bBezier=bRet;
+    bBezier=true;
 }
 
 XPolygon ImpPathCreateUser::GetBezierPoly() const

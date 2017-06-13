@@ -228,14 +228,13 @@ static const ApiPaperSize spPaperSizeTable[] =
 
 sal_Int32 PaperSizeConv::getMSPaperSizeIndex( const css::awt::Size& rSize )
 {
-    sal_Int32 nElems = SAL_N_ELEMENTS( spPaperSizeTable );
     // Need to find the best match for current size
     sal_Int32 nDeltaWidth = 0;
     sal_Int32 nDeltaHeight = 0;
 
     sal_Int32 nPaperSizeIndex = 0; // Undefined
     const ApiPaperSize* pItem = spPaperSizeTable;
-    const ApiPaperSize* pEnd =  spPaperSizeTable + nElems;
+    const ApiPaperSize* pEnd =  spPaperSizeTable + SAL_N_ELEMENTS( spPaperSizeTable );
     for ( ; pItem != pEnd; ++pItem )
     {
         sal_Int32 nCurDeltaHeight = std::abs( pItem->mnHeight - rSize.Height );
@@ -263,8 +262,7 @@ sal_Int32 PaperSizeConv::getMSPaperSizeIndex( const css::awt::Size& rSize )
 
 const ApiPaperSize& PaperSizeConv::getApiSizeForMSPaperSizeIndex( sal_Int32 nMSOPaperIndex )
 {
-    sal_Int32 nElems = SAL_N_ELEMENTS( spPaperSizeTable );
-    if ( nMSOPaperIndex  < 0 || nMSOPaperIndex > nElems - 1 )
+    if ( nMSOPaperIndex  < 0 || nMSOPaperIndex > sal_Int32(SAL_N_ELEMENTS( spPaperSizeTable )) - 1 )
         return spPaperSizeTable[ 0 ];
     return spPaperSizeTable[ nMSOPaperIndex ];
 }

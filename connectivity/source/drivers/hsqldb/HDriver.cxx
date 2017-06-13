@@ -128,9 +128,8 @@ namespace connectivity
     {
         if ( !m_xDriver.is() )
         {
-            OUString sURL("jdbc:hsqldb:db");
             Reference<XDriverManager2> xDriverAccess = DriverManager::create( m_xContext );
-            m_xDriver = xDriverAccess->getDriverByURL(sURL);
+            m_xDriver = xDriverAccess->getDriverByURL("jdbc:hsqldb:db");
         }
 
         return m_xDriver;

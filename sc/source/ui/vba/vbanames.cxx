@@ -103,10 +103,8 @@ ScVbaNames::Add( const css::uno::Any& Name ,
     {
         if ( ScRangeData::IsNameValid( sName , getScDocument() )  != ScRangeData::NAME_VALID )
         {
-            OUString sResult ;
-            sal_Int32 nToken = 0;
             sal_Int32 nIndex = 0;
-            sResult = sName.getToken( nToken , '!' , nIndex );
+            OUString sResult = sName.getToken( 0 , '!' , nIndex );
             if ( -1 == nIndex )
                 sResult = sName;
             else
@@ -200,7 +198,6 @@ ScVbaNames::Add( const css::uno::Any& Name ,
         uno::Any aAny2;
         if ( mxNames.is() )
         {
-            sal_Int32 nUnoType = 0;
             table::CellAddress aCellAddr( aAddr.Sheet , aAddr.StartColumn , aAddr.StartRow );
             if ( mxNames->hasByName( sName ) )
                 mxNames->removeByName(sName);
@@ -215,7 +212,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
                     sTmp += ",";
                 sTmp = sTmp + "'" + xRange->getWorksheet()->getName() + "'." + sRangeAdd;
             }
-            mxNames->addNewByName( sName , sTmp , aCellAddr , nUnoType);
+            mxNames->addNewByName( sName, sTmp, aCellAddr, 0/*nUnoType*/);
             return Item( uno::makeAny( sName ), uno::Any() );
         }
     }

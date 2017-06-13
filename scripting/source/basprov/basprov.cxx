@@ -158,9 +158,8 @@ namespace basprov
                 OSL_VERIFY( aFileItem.getFileStatus( aFileStatus ) == osl::FileBase::E_None );
                 OUString aCanonicalFileURL( aFileStatus.getFileURL() );
 
-                OUString aSearchURL1( "share/basic"  );
-                OUString aSearchURL2( "share/uno_packages"  );
-                if( aCanonicalFileURL.indexOf( aSearchURL1 ) != -1 || aCanonicalFileURL.indexOf( aSearchURL2 ) != -1 )
+                if( aCanonicalFileURL.indexOf( "share/basic" ) != -1
+                    || aCanonicalFileURL.indexOf( "share/uno_packages" ) != -1 )
                     bIsShared = true;
             }
         }

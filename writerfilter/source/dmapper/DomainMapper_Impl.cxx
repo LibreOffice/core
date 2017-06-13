@@ -786,7 +786,7 @@ void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& rFramePr
             PROP_BOTTOM_BORDER_DISTANCE
         };
 
-        sal_uInt32 nBorderPropertyCount = sizeof( aBorderProperties ) / sizeof(PropertyIds);
+        sal_uInt32 const nBorderPropertyCount = sizeof( aBorderProperties ) / sizeof(PropertyIds);
 
         for( sal_uInt32 nProperty = 0; nProperty < nBorderPropertyCount; ++nProperty)
         {
@@ -1163,7 +1163,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                     {
                         // Workaround to make sure char props of the field are not lost.
                         // Not relevant for editeng-based comments.
-                        OUString sMarker("X");
+                        OUString const sMarker("X");
                         xCursor = xTextAppend->getText()->createTextCursor();
                         if (xCursor.is())
                             xCursor->gotoEnd(false);
@@ -2959,12 +2959,9 @@ if(!bFilled)
 //            {OUString(), "", "", FIELD_},
 
         };
-        size_t nConversions = SAL_N_ELEMENTS(aFields);
-        for( size_t nConversion = 0; nConversion < nConversions; ++nConversion)
+        for( size_t nConversion = 0; nConversion < SAL_N_ELEMENTS(aFields); ++nConversion)
         {
-            aFieldConversionMap.insert( FieldConversionMap_t::value_type(
-                aFields[nConversion].sWordCommand,
-                aFields[nConversion] ));
+            aFieldConversionMap.insert( { aFields[nConversion].sWordCommand, aFields[nConversion] });
         }
 
         bFilled = true;
@@ -2983,17 +2980,16 @@ const FieldConversionMap_t & lcl_GetEnhancedFieldConversion()
     {
         static const FieldConversion aEnhancedFields[] =
         {
-            {OUString("FORMCHECKBOX"),     "FormFieldmark",                           FIELD_FORMCHECKBOX},
-            {OUString("FORMDROPDOWN"),     "FormFieldmark",                           FIELD_FORMDROPDOWN},
+            {OUString("FORMCHECKBOX"), "FormFieldmark",                           FIELD_FORMCHECKBOX},
+            {OUString("FORMDROPDOWN"), "FormFieldmark",                           FIELD_FORMDROPDOWN},
             {OUString("FORMTEXT"),     "Fieldmark", FIELD_FORMTEXT},
         };
 
-        size_t nConversions = SAL_N_ELEMENTS(aEnhancedFields);
-        for( size_t nConversion = 0; nConversion < nConversions; ++nConversion)
+        for( size_t nConversion = 0; nConversion < SAL_N_ELEMENTS(aEnhancedFields); ++nConversion)
         {
-            aEnhancedFieldConversionMap.insert( FieldConversionMap_t::value_type(
+            aEnhancedFieldConversionMap.insert( {
                 aEnhancedFields[nConversion].sWordCommand,
-                aEnhancedFields[nConversion] ));
+                aEnhancedFields[nConversion] });
         }
     }
     return aEnhancedFieldConversionMap;
@@ -3089,10 +3085,9 @@ void DomainMapper_Impl::handleFieldFormula
 
     // we don't copy the = symbol from the command
     OUString formula = command.copy(1);
-    sal_Int32 standardFormat = 0;
 
     xFieldProperties->setPropertyValue(getPropertyName(PROP_CONTENT), uno::makeAny(formula));
-    xFieldProperties->setPropertyValue(getPropertyName(PROP_NUMBER_FORMAT), uno::makeAny(standardFormat));
+    xFieldProperties->setPropertyValue(getPropertyName(PROP_NUMBER_FORMAT), uno::makeAny(sal_Int32(0)));
     xFieldProperties->setPropertyValue("IsShowFormula", uno::makeAny(false));
 }
 
@@ -3589,7 +3584,7 @@ void DomainMapper_Impl::handleToc
     pContext->SetTOC( xTOC );
     m_bParaHadField = false;
 
-    OUString sMarker("Y");
+    OUString const sMarker("Y");
     //insert index
     uno::Reference< text::XTextContent > xToInsert( xTOC, uno::UNO_QUERY );
     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
@@ -3879,8 +3874,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         msfilter::util::EquationResult aResult(msfilter::util::ParseCombinedChars(aCommand));
                         if (!aResult.sType.isEmpty() && m_xTextFactory.is())
                         {
-                            OUString sServiceName("com.sun.star.text.TextField.");
-                            xFieldInterface = m_xTextFactory->createInstance(sServiceName + aResult.sType);
+                            xFieldInterface = m_xTextFactory->createInstance("com.sun.star.text.TextField." + aResult.sType);
                             xFieldProperties =
                                 uno::Reference< beans::XPropertySet >( xFieldInterface,
                                     uno::UNO_QUERY_THROW);
@@ -4941,8 +4935,7 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference< Properties
         if (eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
         {
             uno::Reference<beans::XPropertySet> xEmbeddedProps(m_xEmbedded, uno::UNO_QUERY);
-            text::TextContentAnchorType eAnchorType = text::TextContentAnchorType_AT_CHARACTER;
-            xEmbeddedProps->setPropertyValue("AnchorType", uno::makeAny(eAnchorType));
+            xEmbeddedProps->setPropertyValue("AnchorType", uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
             uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
             xEmbeddedProps->setPropertyValue("HoriOrient", xShapeProps->getPropertyValue("HoriOrient"));
             xEmbeddedProps->setPropertyValue("HoriOrientPosition", xShapeProps->getPropertyValue("HoriOrientPosition"));

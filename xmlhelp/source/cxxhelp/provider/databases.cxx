@@ -761,9 +761,8 @@ KeywordInfo* Databases::getKeyword( const OUString& Database,
                     helpdatafileproxy::Hdf* pHdf = getHelpDataFile( Database,Language );
                     if( pHdf != nullptr )
                     {
-                        bool bOptimizeForPerformance = true;
                         pHdf->releaseHashMap();
-                        pHdf->createHashMap( bOptimizeForPerformance );
+                        pHdf->createHashMap( true/*bOptimizeForPerformance*/ );
                     }
 
                     while( aHdf.getNextKeyAndValue( aKey, aValue ) )
@@ -1797,8 +1796,6 @@ OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary
                 else
                     aLang = "en";
 
-                OUString aMod("help");
-
                 OUString aZipDir = aLangURL;
                 if( !bIsWriteAccess )
                 {
@@ -1820,8 +1817,8 @@ OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary
                     }
                 }
 
-        HelpIndexer aIndexer(aLang, aMod, aLangURL, aZipDir);
-        aIndexer.indexDocuments();
+                HelpIndexer aIndexer(aLang, "help", aLangURL, aZipDir);
+                aIndexer.indexDocuments();
 
                 if( bIsWriteAccess )
                     aIndexFolder = implGetFileFromPackage( ".idxl", xPackage );

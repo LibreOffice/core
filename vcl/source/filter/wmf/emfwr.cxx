@@ -415,10 +415,9 @@ void EMFWriter::ImplCheckLineAttr()
     if( mbLineChanged && ImplPrepareHandleSelect( mnLineHandle, LINE_SELECT ) )
     {
         sal_uInt32 nStyle = maVDev->IsLineColor() ? 0 : 5;
-        sal_uInt32 nWidth = 0, nHeight = 0;
 
         ImplBeginRecord( WIN_EMR_CREATEPEN );
-        m_rStm.WriteUInt32( mnLineHandle ).WriteUInt32( nStyle ).WriteUInt32( nWidth ).WriteUInt32( nHeight );
+        m_rStm.WriteUInt32( mnLineHandle ).WriteUInt32( nStyle ).WriteUInt32( 0/*nWidth*/ ).WriteUInt32( 0/*nHeight*/ );
         ImplWriteColor( maVDev->GetLineColor() );
         ImplEndRecord();
 
@@ -433,12 +432,11 @@ void EMFWriter::ImplCheckFillAttr()
     if( mbFillChanged && ImplPrepareHandleSelect( mnFillHandle, FILL_SELECT ) )
     {
         sal_uInt32 nStyle = maVDev->IsFillColor() ? 0 : 1;
-        sal_uInt32 nPatternStyle = 0;
 
         ImplBeginRecord( WIN_EMR_CREATEBRUSHINDIRECT );
         m_rStm.WriteUInt32( mnFillHandle ).WriteUInt32( nStyle );
         ImplWriteColor( maVDev->GetFillColor() );
-        m_rStm.WriteUInt32( nPatternStyle );
+        m_rStm.WriteUInt32( 0/*nPatternStyle*/ );
         ImplEndRecord();
 
         ImplBeginRecord( WIN_EMR_SELECTOBJECT );

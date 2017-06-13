@@ -2068,12 +2068,11 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
                 const SvxShadowItem* pSI = static_cast<const SvxShadowItem*>(pShadItem);
 
                 const sal_uInt16 nCstScale = 635;        // unit scale between AOO and MS Word
-                const sal_uInt32 nShadowType = 131074;    // shadow type of ms word. need to set the default value.
+                const sal_uInt32 nShadowType = 131074;   // shadow type of ms word. need to set the default value.
 
                 sal_uInt32  nColor = (sal_uInt32)(pSI->GetColor().GetColor()) ;
                 sal_Int32 nOffX = pSI->GetWidth() * nCstScale;
                 sal_Int32 nOffY = pSI->GetWidth() * nCstScale;
-                sal_uInt32  nShadow = nShadowType;
 
                 SvxShadowLocation eLocation = pSI->GetLocation();
                 if( (eLocation!=SvxShadowLocation::NONE) && (pSI->GetWidth()!=0) )
@@ -2102,10 +2101,10 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
                         break;
                     }
 
-                    rPropOpt.AddOpt( DFF_Prop_shadowColor,    wwUtility::RGBToBGR((nColor)));
+                    rPropOpt.AddOpt( DFF_Prop_shadowColor,      wwUtility::RGBToBGR(nColor));
                     rPropOpt.AddOpt( DFF_Prop_shadowOffsetX,    nOffX );
                     rPropOpt.AddOpt( DFF_Prop_shadowOffsetY,    nOffY );
-                    rPropOpt.AddOpt( DFF_Prop_fshadowObscured,  nShadow );
+                    rPropOpt.AddOpt( DFF_Prop_fshadowObscured,  nShadowType );
                 }
             }
         }

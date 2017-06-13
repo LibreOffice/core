@@ -3119,7 +3119,6 @@ void FmXFormShell::CreateExternalView()
     bool bAlreadyExistent = m_xExternalViewController.is();
     Reference< css::frame::XFrame> xExternalViewFrame;
     OUString sFrameName("_beamer");
-    sal_Int32 nSearchFlags = css::frame::FrameSearchFlag::CHILDREN | css::frame::FrameSearchFlag::CREATE;
 
     Reference< runtime::XFormController > xCurrentNavController( getNavController());
         // the creation of the "partwindow" may cause a deactivate of the document which will result in our nav controller to be set to NULL
@@ -3161,7 +3160,8 @@ void FmXFormShell::CreateExternalView()
         Reference< css::frame::XDispatchProvider> xProv(m_xAttachedFrame, UNO_QUERY);
         Reference< css::frame::XDispatch> xDisp;
         if (xProv.is())
-            xDisp = xProv->queryDispatch(aWantToDispatch, sFrameName, nSearchFlags);
+            xDisp = xProv->queryDispatch(aWantToDispatch, sFrameName,
+                                         css::frame::FrameSearchFlag::CHILDREN | css::frame::FrameSearchFlag::CREATE);
         if (xDisp.is())
         {
             xDisp->dispatch(aWantToDispatch, Sequence< PropertyValue>());
@@ -3423,8 +3423,7 @@ void FmXFormShell::CreateExternalView()
 
                 // content type
                 pListBoxDescription->Name = FM_PROP_LISTSOURCETYPE;
-                 ListSourceType eType = ListSourceType_VALUELIST;
-                 pListBoxDescription->Value <<= eType;
+                pListBoxDescription->Value <<= ListSourceType_VALUELIST;
                 ++pListBoxDescription;
 
                 // list source

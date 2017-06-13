@@ -191,7 +191,6 @@ sal_Bool VCLXAccessibleCheckBox::doAccessibleAction ( sal_Int32 nIndex )
     VCLXCheckBox* pVCLXCheckBox = static_cast< VCLXCheckBox* >( GetVCLXWindow() );
     if ( pCheckBox && pVCLXCheckBox )
     {
-        sal_Int32 nValueMin = (sal_Int32) 0;
         sal_Int32 nValueMax = (sal_Int32) 1;
 
         if ( pCheckBox->IsTriStateEnabled() )
@@ -202,7 +201,7 @@ sal_Bool VCLXAccessibleCheckBox::doAccessibleAction ( sal_Int32 nIndex )
         ++nValue;
 
         if ( nValue > nValueMax )
-            nValue = nValueMin;
+            nValue = 0;
 
         pVCLXCheckBox->setState( (sal_Int16) nValue );
     }

@@ -1078,8 +1078,6 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
     OSL_ENSURE( pExpr, "no expression" );
 
     OUString aName, aStyleName;
-    FontFamily eFamily = FAMILY_DONTKNOW;
-    FontPitch ePitch = PITCH_DONTKNOW;
     rtl_TextEncoding eEnc = rParser.GetDfltEncoding();
     const FontList *pFList = rParser.GetFontList();
     bool bFirst = true;
@@ -1131,7 +1129,7 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
 
     if( !aName.isEmpty() && !rParser.IsIgnoreFontFamily() )
     {
-        SvxFontItem aFont( eFamily, aName, aStyleName, ePitch,
+        SvxFontItem aFont( FAMILY_DONTKNOW, aName, aStyleName, PITCH_DONTKNOW,
                             eEnc, aItemIds.nFont );
         if( rParser.IsSetWesternProps() )
             rItemSet.Put( aFont );

@@ -91,13 +91,12 @@ namespace dlgprov
         OUString aDlgName = aInetObj.GetBase();
         aInetObj.removeSegment();
         OUString aDlgLocation = aInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-        bool bReadOnly = true;
         css::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
         OUString aComment;
 
         Sequence<Any> aArgs( 6 );
         aArgs[0] <<= aDlgLocation;
-        aArgs[1] <<= bReadOnly;
+        aArgs[1] <<= true; // bReadOnly
         aArgs[2] <<= aLocale;
         aArgs[3] <<= aDlgName;
         aArgs[4] <<= aComment;
@@ -242,9 +241,7 @@ namespace dlgprov
             throw RuntimeException("No information to create dialog" );
         Reference< resource::XStringResourceManager > xStringResourceManager = getStringResourceFromDialogLibrary( m_BasicInfo->mxDlgLib );
 
-        OUString aURL("" );
-        Any aDialogSourceURL;
-        aDialogSourceURL <<= aURL;
+        Any aDialogSourceURL((OUString()));
         Reference< XControlModel > xCtrlModel( createDialogModel( m_BasicInfo->mxInput, xStringResourceManager, aDialogSourceURL ), UNO_QUERY_THROW );
         return xCtrlModel;
     }

@@ -162,11 +162,11 @@ void WW8AttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &r
     for ( int i = 0; i < WW8ListManager::nMaxLevel; ++i )
         SwWW8Writer::WriteShort( *m_rWW8Export.pTableStrm, 0xFFF );
 
-    sal_uInt8 nFlags = 0, nDummy = 0;
+    sal_uInt8 nFlags = 0;
     if ( rRule.IsContinusNum() )
         nFlags |= 0x1;
 
-    m_rWW8Export.pTableStrm->WriteUChar( nFlags ).WriteUChar( nDummy );
+    m_rWW8Export.pTableStrm->WriteUChar( nFlags ).WriteUChar( 0/*nDummy*/ );
 }
 
 void MSWordExportBase::NumberingDefinitions()

@@ -54,8 +54,7 @@ void E3dView::ConvertMarkedToPolyObj()
             auto pScene = dynamic_cast< const E3dScene* >(pObj);
             if (pScene)
             {
-                bool bBezier = false;
-                pNewObj = pScene->ConvertToPolyObj(bBezier, false/*bLineToArea*/);
+                pNewObj = pScene->ConvertToPolyObj(false/*bBezier*/, false/*bLineToArea*/);
                 if (pNewObj)
                 {
                     BegUndo(SvxResId(RID_SVX_3D_UNDO_EXTRUDE));

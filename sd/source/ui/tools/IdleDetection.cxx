@@ -53,11 +53,9 @@ IdleState IdleDetection::CheckSlideShowRunning()
 {
     IdleState eResult (IdleState::Idle);
 
-    bool bIsSlideShowShowing = false;
-
     // Iterate over all view frames.
     for (SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
-         pViewFrame!=nullptr && !bIsSlideShowShowing;
+         pViewFrame!=nullptr;
          pViewFrame = SfxViewFrame::GetNext(*pViewFrame))
     {
         // Ignore the current frame when it does not exist, is not valid, or

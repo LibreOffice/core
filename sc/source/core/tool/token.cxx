@@ -5003,7 +5003,6 @@ OUString ScTokenArray::CreateString( sc::TokenStringContext& rCxt, const ScAddre
     {
         const FormulaToken* pToken = *p;
         OpCode eOp = pToken->GetOpCode();
-        bool bCheckType = true;
         if (eOp == ocSpaces)
         {
             // TODO : Handle intersection operator '!!'.
@@ -5014,8 +5013,7 @@ OUString ScTokenArray::CreateString( sc::TokenStringContext& rCxt, const ScAddre
         if (eOp < rCxt.mxOpCodeMap->getSymbolCount())
             aBuf.append(rCxt.mxOpCodeMap->getSymbol(eOp));
 
-        if (bCheckType)
-            appendTokenByType(rCxt, aBuf, *pToken, rPos, IsFromRangeName());
+        appendTokenByType(rCxt, aBuf, *pToken, rPos, IsFromRangeName());
     }
 
     return aBuf.makeStringAndClear();

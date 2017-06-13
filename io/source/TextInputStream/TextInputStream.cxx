@@ -170,8 +170,7 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
     OUString aRetStr;
     if( !mbEncodingInitialized )
     {
-        OUString aUtf8Str("utf8");
-        setEncoding( aUtf8Str );
+        setEncoding( "utf8" );
     }
     if( !mbEncodingInitialized )
         return aRetStr;
@@ -278,8 +277,7 @@ sal_Int32 OTextInputStream::implReadNext()
 
     try
     {
-        sal_Int32 nBytesToRead = READ_BYTE_COUNT;
-        sal_Int32 nRead = mxStream->readSomeBytes( mSeqSource, nBytesToRead );
+        sal_Int32 nRead = mxStream->readSomeBytes( mSeqSource, READ_BYTE_COUNT );
         sal_Int32 nTotalRead = nRead;
         if( nRead == 0 )
             mbReachedEOF = true;

@@ -76,8 +76,7 @@ css::uno::Reference< css:: beans::XPropertySetInfo > SAL_CALL
 
 OUString SAL_CALL ORoadmapEntry::getImplementationName(  )
 {
-    OUString aStr("com.sun.star.comp.toolkit.RoadmapItem");
-    return aStr;
+    return OUString("com.sun.star.comp.toolkit.RoadmapItem");
 }
 
 sal_Bool SAL_CALL ORoadmapEntry::supportsService( const OUString& ServiceName )

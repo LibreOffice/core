@@ -219,8 +219,7 @@ void XMLPageExport::exportDefaultStyle()
     Reference < lang::XMultiServiceFactory > xFactory (GetExport().GetModel(), UNO_QUERY);
     if (xFactory.is())
     {
-        OUString sTextDefaults ( "com.sun.star.text.Defaults" );
-        Reference < XPropertySet > xPropSet (xFactory->createInstance ( sTextDefaults ), UNO_QUERY);
+        Reference < XPropertySet > xPropSet (xFactory->createInstance ( "com.sun.star.text.Defaults" ), UNO_QUERY);
         if (xPropSet.is())
         {
             // <style:default-style ...>

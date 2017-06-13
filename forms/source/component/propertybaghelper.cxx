@@ -114,7 +114,7 @@ namespace frm
         // search a free handle in <math>F_1009</math>
         if ( nHandle == -1 )
         {
-            sal_Int32 nPrime = 1009;
+            sal_Int32 const nPrime = 1009;
             sal_Int32 nFactor = 11;
             sal_Int32 nNum = nFactor;
             while ( nNum != 1 )

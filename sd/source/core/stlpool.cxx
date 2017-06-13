@@ -796,10 +796,9 @@ void SdStyleSheetPool::CopyLayoutSheets(const OUString& rLayoutName, SdStyleShee
 void SdStyleSheetPool::CreateLayoutSheetNames(const OUString& rLayoutName, std::vector<OUString> &aNameList)
 {
     OUString aPrefix(rLayoutName + SD_LT_SEPARATOR);
-    OUString aName(STR_LAYOUT_OUTLINE);
 
     for (sal_Int32 nLevel = 1; nLevel < 10; nLevel++)
-        aNameList.push_back( aPrefix + aName + " " + OUString::number( nLevel ) );
+        aNameList.push_back( aPrefix + STR_LAYOUT_OUTLINE " " + OUString::number( nLevel ) );
 
     aNameList.push_back(aPrefix + STR_LAYOUT_TITLE);
     aNameList.push_back(aPrefix + STR_LAYOUT_SUBTITLE);

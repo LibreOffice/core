@@ -276,8 +276,7 @@ void ColorConfig_Impl::ImplCommit()
              nIndex++;
         }
     }
-    OUString sNode("ColorSchemes");
-    SetSetProperties(sNode, aPropValues);
+    SetSetProperties("ColorSchemes", aPropValues);
 
     CommitCurrentSchemeName();
 }

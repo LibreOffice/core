@@ -1005,8 +1005,6 @@ namespace cppcanvas
                         pStrikeoutCharWidths[ i ] += pStrikeoutCharWidths[ i-1 ];
                     }
 
-                    sal_Int32 nStartPos = 0;
-
                     pStrikeoutTextAction =
                         TextActionFactory::createTextAction(
                             rStartPoint,
@@ -1015,7 +1013,7 @@ namespace cppcanvas
                             aShadowOffset,
                             aShadowColor,
                             aStrikeoutText,
-                            nStartPos,
+                            0/*nStartPos*/,
                             aStrikeoutText.getLength(),
                             pStrikeoutCharWidths,
                             rParms.mrVDev,

@@ -73,11 +73,11 @@ OGLTransitionImpl::~OGLTransitionImpl()
 void OGLTransitionImpl::uploadModelViewProjectionMatrices()
 {
     double EyePos(10.0);
-    double RealF(1.0);
-    double RealN(-1.0);
-    double RealL(-1.0);
+    double const RealF(1.0);
+    double const RealN(-1.0);
+    double const RealL(-1.0);
     double RealR(1.0);
-    double RealB(-1.0);
+    double const RealB(-1.0);
     double RealT(1.0);
     double ClipN(EyePos+5.0*RealN);
     double ClipF(EyePos+15.0*RealF);
@@ -1737,11 +1737,11 @@ void VortexTransition::prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32
     CHECK_GL_ERROR();
 
     double EyePos(10.0);
-    double RealF(1.0);
-    double RealN(-1.0);
-    double RealL(-2.0);
+    double const RealF(1.0);
+    double const RealN(-1.0);
+    double const RealL(-2.0);
     double RealR(2.0);
-    double RealB(-2.0);
+    double const RealB(-2.0);
     double RealT(2.0);
     double ClipN(EyePos+5.0*RealN);
     double ClipF(EyePos+15.0*RealF);
@@ -2135,11 +2135,11 @@ void HoneycombTransition::prepareTransition( sal_Int32 glLeavingSlideTex, sal_In
     CHECK_GL_ERROR();
 
     double EyePos(10.0);
-    double RealF(1.0);
-    double RealN(-1.0);
-    double RealL(-4.0);
+    double const RealF(1.0);
+    double const RealN(-1.0);
+    double const RealL(-4.0);
     double RealR(4.0);
-    double RealB(-4.0);
+    double const RealB(-4.0);
     double RealT(4.0);
     double ClipN(EyePos+5.0*RealN);
     double ClipF(EyePos+15.0*RealF);

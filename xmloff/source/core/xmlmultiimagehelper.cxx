@@ -26,8 +26,6 @@ namespace
 {
     sal_uInt32 getQualityIndex(const OUString& rString)
     {
-        sal_uInt32 nRetval(0);
-
         // pixel formats first
         if(rString.endsWith(".bmp"))
         {
@@ -68,7 +66,7 @@ namespace
             return 1040;
         }
 
-        return nRetval;
+        return 0;
     }
 }
 

@@ -189,9 +189,9 @@ void XMLIndexTOCContext::StartElement(
 
                 // preliminaries
 #ifndef DBG_UTIL
-                OUString sMarker(" ");
+                OUString const sMarker(" ");
 #else
-                OUString sMarker("Y");
+                OUString const sMarker("Y");
 #endif
                 rtl::Reference<XMLTextImportHelper> rImport =
                     GetImport().GetTextImport();

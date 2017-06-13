@@ -1594,13 +1594,12 @@ static void ImplPaintCheckBackground(vcl::RenderContext& rRenderContext, vcl::Wi
     if (rRenderContext.IsNativeControlSupported(ControlType::Toolbar, ControlPart::Button))
     {
         ImplControlValue    aControlValue;
-        tools::Rectangle           aCtrlRegion( i_rRect );
-        ControlState        nState = ControlState::PRESSED | ControlState::ENABLED;
-
         aControlValue.setTristateVal(ButtonValue::On);
 
         bNativeOk = rRenderContext.DrawNativeControl(ControlType::Toolbar, ControlPart::Button,
-                                                     aCtrlRegion, nState, aControlValue,
+                                                     i_rRect,
+                                                     ControlState::PRESSED | ControlState::ENABLED,
+                                                     aControlValue,
                                                      OUString());
     }
 
@@ -2795,7 +2794,6 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
     tools::Rectangle aRect( rRect );
     aRect.SetPos( pW->OutputToScreenPixel( aRect.TopLeft() ) );
 
-    WinBits nStyle = WB_BORDER;
     if (bRealExecute)
         nPopupModeFlags |= FloatWinPopupFlags::NewLevel;
     nPopupModeFlags |= FloatWinPopupFlags::NoKeyClose | FloatWinPopupFlags::AllMouseButtonClose;
@@ -2845,7 +2843,7 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
         }
     }
 
-    VclPtrInstance<MenuFloatingWindow> pWin( this, pW, nStyle | WB_SYSTEMWINDOW );
+    VclPtrInstance<MenuFloatingWindow> pWin( this, pW, WB_BORDER | WB_SYSTEMWINDOW );
     if( pSVData->maNWFData.mbFlatMenu )
         pWin->SetBorderStyle( WindowBorderStyle::NOBORDER );
     else

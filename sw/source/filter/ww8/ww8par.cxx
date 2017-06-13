@@ -1918,8 +1918,7 @@ void SwWW8ImplReader::ImportDop()
             {
                 if (xInfo->hasPropertyByName("ApplyFormDesignMode"))
                 {
-                    bool bValue = false;
-                    xDocProps->setPropertyValue("ApplyFormDesignMode", css::uno::makeAny(bValue));
+                    xDocProps->setPropertyValue("ApplyFormDesignMode", css::uno::makeAny(false));
                 }
             }
         }
@@ -4883,8 +4882,6 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
 
 sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 {
-    sal_uLong nErrRet = 0;
-
     m_rDoc.SetDocumentType( SwDoc::DOCTYPE_MSWORD );
     if (m_bNewDoc && m_pStg && !pGloss)
     {
@@ -5390,7 +5387,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 
     UpdatePageDescs(m_rDoc, nPageDescOffset);
 
-    return nErrRet;
+    return 0;
 }
 
 sal_uLong SwWW8ImplReader::SetSubStreams(tools::SvRef<SotStorageStream> &rTableStream,

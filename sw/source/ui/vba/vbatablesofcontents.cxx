@@ -114,8 +114,7 @@ SwVbaTablesOfContents::Add( const uno::Reference< word::XRange >& Range, const u
     uno::Reference< text::XDocumentIndex > xDocumentIndex( xDocMSF->createInstance("com.sun.star.text.ContentIndex"), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySet > xTocProps( xDocumentIndex, uno::UNO_QUERY_THROW );
-    bool isProtected = false;
-    xTocProps->setPropertyValue("IsProtected", uno::makeAny( isProtected ) );
+    xTocProps->setPropertyValue("IsProtected", uno::makeAny( false ) );
 
     uno::Reference< word::XTableOfContents > xToc( new SwVbaTableOfContents( this, mxContext, mxTextDocument, xDocumentIndex ) );
 
@@ -129,8 +128,7 @@ SwVbaTablesOfContents::Add( const uno::Reference< word::XRange >& Range, const u
         UseFields >>= bUseFields;
     xToc->setUseFields( bUseFields );
 
-    bool bUseOutlineLevels = true;
-    xToc->setUseOutlineLevels( bUseOutlineLevels );
+    xToc->setUseOutlineLevels( true );
 
     SwVbaRange* pVbaRange = dynamic_cast<SwVbaRange*>( Range.get() );
     if( !pVbaRange )

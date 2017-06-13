@@ -272,7 +272,7 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, AddChartColor, Button*, void)
 {
     if( pColorConfig )
     {
-        ColorData black = RGB_COLORDATA( 0x00, 0x00, 0x00 );
+        ColorData const black = RGB_COLORDATA( 0x00, 0x00, 0x00 );
 
         pColorConfig->GetColorList().append (XColorEntry ( black, pColorConfig->GetColorList().getDefaultName(pColorConfig->GetColorList().size())));
 

@@ -317,7 +317,6 @@ void ScFunctionWin::DoEnter()
                 aArgStr = aFirstArgStr;
                 if ( nArgs != VAR_ARGS && nArgs != PAIRED_VAR_ARGS )
                 {   // no VarArgs or Fix plus VarArgs, but not VarArgs only
-                    OUString aArgSep("; ");
                     sal_uInt16 nFix;
                     if (nArgs >= PAIRED_VAR_ARGS)
                         nFix = nArgs - PAIRED_VAR_ARGS + 2;
@@ -328,7 +327,7 @@ void ScFunctionWin::DoEnter()
                     for ( sal_uInt16 nArg = 1;
                             nArg < nFix && !pDesc->pDefArgFlags[nArg].bOptional; nArg++ )
                     {
-                        aArgStr += aArgSep;
+                        aArgStr += "; ";
                         OUString sTmp = pDesc->maDefArgNames[nArg];
                         sTmp = comphelper::string::strip(sTmp, ' ');
                         sTmp = sTmp.replaceAll(" ", "_");

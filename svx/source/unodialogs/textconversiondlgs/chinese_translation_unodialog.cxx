@@ -198,7 +198,6 @@ uno::Any SAL_CALL ChineseTranslation_UnoDialog::getPropertyValue( const OUString
     uno::Any aRet;
 
     bool bDirectionToSimplified = true;
-    bool bUseCharacterVariants = false;
     bool bTranslateCommonTerms = false;
 
     {
@@ -214,7 +213,7 @@ uno::Any SAL_CALL ChineseTranslation_UnoDialog::getPropertyValue( const OUString
     }
     else if( rPropertyName == "IsUseCharacterVariants" )
     {
-        aRet <<= bUseCharacterVariants;
+        aRet <<= false;
     }
     else if( rPropertyName == "IsTranslateCommonTerms" )
     {

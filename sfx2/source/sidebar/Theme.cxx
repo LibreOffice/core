@@ -551,7 +551,8 @@ css::uno::Sequence<css::beans::Property> SAL_CALL Theme::getProperties()
 {
     ::std::vector<beans::Property> aProperties;
 
-    for (sal_Int32 nItem(Begin_),nEnd(End_); nItem!=nEnd; ++nItem)
+    sal_Int32 const nEnd(End_);
+    for (sal_Int32 nItem(Begin_); nItem!=nEnd; ++nItem)
     {
         const ThemeItem eItem (static_cast<ThemeItem>(nItem));
         const PropertyType eType (GetPropertyType(eItem));

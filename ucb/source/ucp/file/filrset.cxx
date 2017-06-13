@@ -190,10 +190,8 @@ void XResultSet_impl::isFinalChanged()
     aEv.PropertyName = "IsRowCountFinal";
     aEv.Further = false;
     aEv.PropertyHandle = -1;
-    bool fval = false;
-    bool tval = true;
-    aEv.OldValue <<= fval;
-    aEv.NewValue <<= tval;
+    aEv.OldValue <<= false;
+    aEv.NewValue <<= true;
     for( const auto& r : seq )
     {
         uno::Reference< beans::XPropertyChangeListener > listener(
@@ -609,12 +607,10 @@ XResultSet_impl::getMetaData()
     {
         if ( m_sProperty.getConstArray()[ n ].Name == "Title" )
         {
-            // @@@ #82177# - Determine correct value!
-            bool bCaseSensitiveChildren = false;
-
             std::vector< ::ucbhelper::ResultSetColumnData >
                                     aColumnData( m_sProperty.getLength() );
-            aColumnData[ n ].isCaseSensitive = bCaseSensitiveChildren;
+            // @@@ #82177# - Determine correct value!
+            aColumnData[ n ].isCaseSensitive = false;
 
             ::ucbhelper::ResultSetMetaData* p =
                 new ::ucbhelper::ResultSetMetaData(

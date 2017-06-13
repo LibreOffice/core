@@ -1093,7 +1093,6 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
     uno::Reference< ui::XUIElement >                       xUIElement;
 
     sal_uInt32 nCount = m_pAddonOptions->GetAddonsToolBarCount();
-    OUString aElementType( "toolbar" );
 
     uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
     aPropSeq[0].Name = "Frame";
@@ -1152,7 +1151,7 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
                 else
                 {
                     // Create new UI element and try to read its state data
-                    UIElement aNewToolbar( aAddonToolBarName, aElementType, xUIElement );
+                    UIElement aNewToolbar( aAddonToolBarName, "toolbar", xUIElement );
                     aNewToolbar.m_bFloating = true;
                     implts_readWindowStateData( aAddonToolBarName, aNewToolbar );
                     implts_setElementData( aNewToolbar, xDockWindow );
@@ -3801,12 +3800,11 @@ void SAL_CALL ToolbarLayoutManager::elementInserted( const ui::ConfigurationEven
     uno::Reference< ui::XUIElementSettings > xElementSettings( aUIElement.m_xUIElement, uno::UNO_QUERY );
     if ( xElementSettings.is() )
     {
-        OUString aConfigSourcePropName( "ConfigurationSource" );
         uno::Reference< beans::XPropertySet > xPropSet( xElementSettings, uno::UNO_QUERY );
         if ( xPropSet.is() )
         {
             if ( rEvent.Source == uno::Reference< uno::XInterface >( m_xDocCfgMgr, uno::UNO_QUERY ))
-                xPropSet->setPropertyValue( aConfigSourcePropName, makeAny( m_xDocCfgMgr ));
+                xPropSet->setPropertyValue( "ConfigurationSource", makeAny( m_xDocCfgMgr ));
         }
         xElementSettings->updateSettings();
     }
@@ -3911,12 +3909,11 @@ void SAL_CALL ToolbarLayoutManager::elementReplaced( const ui::ConfigurationEven
     uno::Reference< ui::XUIElementSettings > xElementSettings( aUIElement.m_xUIElement, uno::UNO_QUERY );
     if ( xElementSettings.is() )
     {
-        OUString                       aConfigSourcePropName( "ConfigurationSource" );
         uno::Reference< uno::XInterface >     xElementCfgMgr;
         uno::Reference< beans::XPropertySet > xPropSet( xElementSettings, uno::UNO_QUERY );
 
         if ( xPropSet.is() )
-            xPropSet->getPropertyValue( aConfigSourcePropName ) >>= xElementCfgMgr;
+            xPropSet->getPropertyValue( "ConfigurationSource" ) >>= xElementCfgMgr;
 
         if ( !xElementCfgMgr.is() )
             return;

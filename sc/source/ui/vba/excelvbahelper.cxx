@@ -194,7 +194,6 @@ implnCut( const uno::Reference< frame::XModel>& xModel )
 void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, InsertDeleteFlags nFlags, ScPasteFunc nFunction, bool bSkipEmpty, bool bTranspose)
 {
     PasteCellsWarningReseter resetWarningBox;
-    InsCellCmd eMoveMode = INS_NONE;
 
     ScTabViewShell* pTabViewShell = getBestViewShell( xModel );
     if ( pTabViewShell )
@@ -209,7 +208,7 @@ void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, InsertDele
                 pDoc = pOwnClip->GetDocument();
             pTabViewShell->PasteFromClip( nFlags, pDoc,
                 nFunction, bSkipEmpty, bTranspose, false,
-                eMoveMode, InsertDeleteFlags::NONE, true );
+                INS_NONE, InsertDeleteFlags::NONE, true );
             pTabViewShell->CellContentChanged();
         }
     }

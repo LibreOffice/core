@@ -1687,7 +1687,6 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_uInt16
         if (pMap == aVAsCharHtmlMap || pMap == aVAsCharMap)
         {
             OUString sOldEntry(rLB.GetSelectEntry());
-            sal_uInt16 nRelCount = SAL_N_ELEMENTS(aAsCharRelationMap);
             SvxSwFramePosString::StringId eStrId = pMap[nMapPos].eStrId;
 
             for (std::size_t _nMapPos = 0; _nMapPos < nMapCount; _nMapPos++)
@@ -1695,7 +1694,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_uInt16
                 if (pMap[_nMapPos].eStrId == eStrId)
                 {
                     nLBRelations = pMap[_nMapPos].nLBRelations;
-                    for (sal_uInt16 nRelPos = 0; nRelPos < nRelCount; nRelPos++)
+                    for (sal_uInt16 nRelPos = 0; nRelPos < SAL_N_ELEMENTS(aAsCharRelationMap); nRelPos++)
                     {
                         if (nLBRelations & aAsCharRelationMap[nRelPos].nLBRelation)
                         {
@@ -1734,8 +1733,6 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_uInt16
         }
         else
         {
-            sal_uInt16 nRelCount = SAL_N_ELEMENTS(aRelationMap);
-
             // #i22341# - special handling for map <aVCharMap>,
             // because its ambiguous in its <eStrId>/<eMirrorStrId>.
             if ( pMap == aVCharMap )
@@ -1755,7 +1752,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_uInt16
             {
                 if (nLBRelations & (LB)nBit)
                 {
-                    for (sal_uInt16 nRelPos = 0; nRelPos < nRelCount; nRelPos++)
+                    for (sal_uInt16 nRelPos = 0; nRelPos < SAL_N_ELEMENTS(aRelationMap); nRelPos++)
                     {
                         if (aRelationMap[nRelPos].nLBRelation == (LB)nBit)
                         {

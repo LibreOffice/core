@@ -497,9 +497,7 @@ static int create_dir_with_callback(
     oslDirectoryCreationCallbackFunc aDirectoryCreationCallbackFunc,
     void* pData)
 {
-    int mode = S_IRWXU | S_IRWXG | S_IRWXO;
-
-    if (osl::mkdir(directory_path, mode) == 0)
+    if (osl::mkdir(directory_path, S_IRWXU | S_IRWXG | S_IRWXO) == 0)
     {
         if (aDirectoryCreationCallbackFunc)
         {

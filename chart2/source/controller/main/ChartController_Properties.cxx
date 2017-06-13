@@ -423,8 +423,7 @@ OUString lcl_getGridCIDForCommand( const OString& rDispatchCommand, const uno::R
         nDimensionIndex=2; bMainGrid=false;
     }
 
-    bool bMainAxis = true;
-    uno::Reference< XAxis > xAxis( AxisHelper::getAxis( nDimensionIndex, bMainAxis, xDiagram ) );
+    uno::Reference< XAxis > xAxis( AxisHelper::getAxis( nDimensionIndex, true/*bMainAxis*/, xDiagram ) );
 
     sal_Int32   nSubGridIndex= bMainGrid ? (-1) : 0;
     OUString aCID( ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel, nSubGridIndex ) );
@@ -780,7 +779,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
             pSymbolShapeProperties = new SfxItemSet( aSymbolItemConverter.CreateEmptyItemSet() );
             aSymbolItemConverter.FillItemSet( *pSymbolShapeProperties );
 
-            sal_Int32   nStandardSymbol=0;//@todo get from somewhere
+            sal_Int32 const nStandardSymbol=0;//@todo get from somewhere
             Graphic*    pAutoSymbolGraphic = new Graphic( aViewElementListProvider.GetSymbolGraphic( nStandardSymbol, pSymbolShapeProperties ) );
             // note: the dialog takes the ownership of pSymbolShapeProperties and pAutoSymbolGraphic
             aDlg->setSymbolInformation( pSymbolShapeProperties, pAutoSymbolGraphic );

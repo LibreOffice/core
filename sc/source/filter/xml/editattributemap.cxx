@@ -67,8 +67,7 @@ ScXMLEditAttributeMap::Entry const aEntries[] = {
 
 ScXMLEditAttributeMap::ScXMLEditAttributeMap()
 {
-    size_t n = SAL_N_ELEMENTS(aEntries);
-    for (size_t i = 0; i < n; ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aEntries); ++i)
     {
         maAPIEntries.insert(
             StrToEntriesType::value_type(

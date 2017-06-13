@@ -590,10 +590,9 @@ void SbiStream::ExpandFile()
         if( nCur < nExpandOnWriteTo )
         {
             sal_uInt64 nDiff = nExpandOnWriteTo - nCur;
-            char c = 0;
             while( nDiff-- )
             {
-                pStrm->WriteChar( c );
+                pStrm->WriteChar( 0 );
             }
         }
         else

@@ -1586,9 +1586,8 @@ void XclExpSheetProtectOptions::WriteBody( XclExpStream& rStrm )
     sal_uInt16 nBytes = 0x0867;
     rStrm << nBytes;
 
-    unsigned char nZero = 0x00;
     for (int i = 0; i < 9; ++i)
-        rStrm << nZero;
+        rStrm << 0;
 
     nBytes = 0x0200;
     rStrm << nBytes;
@@ -1612,7 +1611,7 @@ XclExpSheetEnhancedProtection::XclExpSheetEnhancedProtection( const XclExpRoot& 
 
 void XclExpSheetEnhancedProtection::WriteBody( XclExpStream& rStrm )
 {
-    sal_uInt16 nRecordType = 0x0868;
+    sal_uInt16 const nRecordType = 0x0868;
     rStrm << nRecordType;                   // frtHeader rt
     rStrm.WriteZeroBytesToRecord(10);       // frtHeader unused
     rStrm << EXC_ISFPROTECTION;             // isf
@@ -1809,8 +1808,7 @@ void XclExpWriteAccess::WriteBody( XclExpStream& rStrm )
         0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
         0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
 
-    std::size_t nDataSize = sizeof(aData);
-    for (std::size_t i = 0; i < nDataSize; ++i)
+    for (std::size_t i = 0; i < sizeof(aData); ++i)
         rStrm << aData[i];
 }
 

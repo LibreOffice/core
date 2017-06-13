@@ -446,7 +446,6 @@ VCoordinateSystem* addCooSysToList( std::vector< VCoordinateSystem* >& rVCooSysL
 void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
               ChartModel& rChartModel )
 {
-    sal_Int32 nDiagramIndex = 0;//todo if more than one diagram is supported
     uno::Reference< XDiagram > xDiagram( rChartModel.getFirstDiagram() );
     if( !xDiagram.is())
         return;
@@ -580,7 +579,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
 
                 pSeries->setMissingValueTreatment( nMissingValueTreatment );
 
-                OUString aSeriesParticle( ObjectIdentifier::createParticleForSeries( nDiagramIndex, nCS, nT, nS ) );
+                OUString aSeriesParticle( ObjectIdentifier::createParticleForSeries( 0, nCS, nT, nS ) );
                 pSeries->setParticle(aSeriesParticle);
 
                 OUString aRole( ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( xChartType ) );
@@ -2366,18 +2365,15 @@ std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
     sal_Int32 nYDistance = static_cast< sal_Int32 >( rPageSize.Height * fPercentage );
     if ( eType == TitleHelper::MAIN_TITLE )
     {
-        sal_Int32 nYOffset = 135;  // 1/100 mm
-        nYDistance += nYOffset;
+        nYDistance += 135; // 1/100 mm
     }
     else if ( eType == TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION )
     {
-        sal_Int32 nYOffset = 420;  // 1/100 mm
-        nYDistance = nYOffset;
+        nYDistance = 420; // 1/100 mm
     }
     else if ( eType == TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION )
     {
-        sal_Int32 nXOffset = 450;  // 1/100 mm
-        nXDistance = nXOffset;
+        nXDistance = 450; // 1/100 mm
     }
 
     uno::Reference< XTitle > xTitle( TitleHelper::getTitle( eType, rModel ) );

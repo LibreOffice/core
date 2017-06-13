@@ -247,10 +247,9 @@ SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, vcl::Window& rWindow, SfxInter
         aLoadArgs = aArgs.getPropertyValues();
 
         // load the doc into that frame
-        OUString sLoaderURL( "private:object" );
         Reference< XComponentLoader > xLoader( xFrame, UNO_QUERY_THROW );
         xLoader->loadComponentFromURL(
-            sLoaderURL,
+            "private:object",
             "_self",
             0,
             aLoadArgs

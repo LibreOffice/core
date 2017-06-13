@@ -1298,7 +1298,6 @@ IMPL_LINK_NOARG(FormulaDlg_Impl, FormulaHdl, Edit&, void)
     OUString    aString=pMEdit->GetText();
 
     Selection   aSel  = pMEdit->GetSelection();
-    sal_Int32   nTest = 0;
 
     if(aString.isEmpty()) //in case everything was cleared
     {
@@ -1308,7 +1307,7 @@ IMPL_LINK_NOARG(FormulaDlg_Impl, FormulaHdl, Edit&, void)
         aSel .Max() = 1;
         pMEdit->SetSelection(aSel);
     }
-    else if(aString[nTest]!='=') //in case it's replaced;
+    else if(aString[0]!='=') //in case it's replaced;
     {
         aString = "=" + aString;
         pMEdit->SetText(aString);

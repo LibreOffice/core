@@ -167,7 +167,7 @@ void SFTreeListBox::Init( const OUString& language  )
     Sequence< Reference< browse::XBrowseNode > > children;
 
     OUString userStr("user");
-    OUString shareStr("share");
+    OUString const shareStr("share");
 
     try
     {

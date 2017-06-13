@@ -186,8 +186,7 @@ namespace fileaccess {
 
     OUString getTitle( const OUString& aPath )
     {
-        sal_Unicode slash = '/';
-        sal_Int32 lastIndex = aPath.lastIndexOf( slash );
+        sal_Int32 lastIndex = aPath.lastIndexOf( '/' );
         return aPath.copy( lastIndex + 1 );
     }
 

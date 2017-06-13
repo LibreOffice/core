@@ -74,11 +74,6 @@ void UnoControlBase::ImplSetPropertyValues( const css::uno::Sequence< OUString >
         if ( !bUpdateThis )
             ImplLockPropertyChangeNotifications( aPropertyNames, false );
     }
-    else
-    {
-        int dummy = 0;
-        (void)dummy;
-    }
 }
 
 void UnoControlBase::ImplSetPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue, bool bUpdateThis )

@@ -55,8 +55,7 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
     {
         case SID_NAVIGATOR_INIT:
         {
-            sal_uInt16 nId = SID_NAVIGATOR;
-            SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
+            SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( SID_NAVIGATOR );
             if( pWindow )
             {
                 SdNavigatorWin* pNavWin = static_cast<SdNavigatorWin*>( pWindow->GetContextWindow( SD_MOD() ) );
@@ -154,7 +153,6 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
 {
     NavState nState = NavState::NONE;
     sal_uInt16 nCurrentPage = 0;
-    sal_uInt16 nFirstPage = 0;
     sal_uInt16 nLastPage;
     OUString aPageName;
 
@@ -169,7 +167,7 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
 
 
     // first page / previous page
-    if( nCurrentPage == nFirstPage )
+    if( nCurrentPage == 0 )
     {
         nState |= NavState::BtnFirstDisabled | NavState::BtnPrevDisabled;
     }

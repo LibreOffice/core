@@ -586,14 +586,13 @@ bool DrawDocShell::SaveAs( SfxMedium& rMedium )
     if( GetCreateMode() == SfxObjectCreateMode::STANDARD )
         SfxObjectShell::SetVisArea( ::tools::Rectangle() );
 
-    sal_uInt32  nVBWarning = ERRCODE_NONE;
-    bool    bRet = SfxObjectShell::SaveAs( rMedium );
+    bool bRet = SfxObjectShell::SaveAs( rMedium );
 
     if( bRet )
         bRet = SdXMLFilter( rMedium, *this, SDXMLMODE_Normal, SotStorage::GetVersion( rMedium.GetStorage() ) ).Export();
 
     if( GetError() == ERRCODE_NONE )
-        SetError(nVBWarning);
+        SetError(ERRCODE_NONE);
 
     return bRet;
 }

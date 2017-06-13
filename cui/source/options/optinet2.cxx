@@ -197,11 +197,9 @@ SvxProxyTabPage::SvxProxyTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
             configuration::theDefaultProvider::get(
                 comphelper::getProcessComponentContext() ) );
 
-    OUString aConfigRoot( "org.openoffice.Inet/Settings" );
-
     beans::NamedValue aProperty;
     aProperty.Name  = "nodepath";
-    aProperty.Value <<= aConfigRoot;
+    aProperty.Value <<= OUString( "org.openoffice.Inet/Settings" );
 
     Sequence< Any > aArgumentList( 1 );
     aArgumentList[0] <<= aProperty;

@@ -1070,7 +1070,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         {
             SvxFont aFont;
             pEditEngine->SeekCursor( aPaM.GetNode(), aPaM.GetIndex()+1, aFont );
-            InputContextFlags nContextFlags = InputContextFlags::Text|InputContextFlags::ExtText;
+            InputContextFlags const nContextFlags = InputContextFlags::Text | InputContextFlags::ExtText;
             GetWindow()->SetInputContext( InputContext( aFont, nContextFlags ) );
         }
     }

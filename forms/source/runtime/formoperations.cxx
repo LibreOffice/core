@@ -1184,7 +1184,7 @@ namespace frm
                 FormFeature::SaveRecordChanges,
                 FormFeature::UndoRecordChanges
             };
-            size_t nFeatureCount = SAL_N_ELEMENTS( pModifyDependentFeatures );
+            size_t const nFeatureCount = SAL_N_ELEMENTS( pModifyDependentFeatures );
             s_aModifyDependentFeatures = Sequence< sal_Int16 >( pModifyDependentFeatures, nFeatureCount );
         }
 
