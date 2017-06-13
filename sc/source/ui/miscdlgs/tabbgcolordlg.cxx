@@ -78,8 +78,6 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
     const SfxPoolItem* pItem = nullptr;
     XColorListRef pColorList;
 
-    sal_uInt16 nSelectedItem = 0;
-
     OSL_ENSURE( pDocSh, "DocShell not found!" );
 
     if ( pDocSh && ( nullptr != ( pItem = pDocSh->GetItem(SID_COLOR_TABLE) ) ) )
@@ -110,7 +108,7 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
     m_pTabBgColorSet->set_width_request(aSize.Width()+8);
     m_pTabBgColorSet->set_height_request(aSize.Height()+8);
 
-    m_pTabBgColorSet->SelectItem(nSelectedItem);
+    m_pTabBgColorSet->SelectItem(0);
 }
 
 ///    Handler, called when color selection is changed

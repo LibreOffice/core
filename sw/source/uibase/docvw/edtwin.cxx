@@ -673,7 +673,7 @@ void SwEditWin::JustifyAreaTimer()
 #else
     const long coMinLen = 50;
 #endif
-    long nTimeout = 800,
+    long const nTimeout = 800,
          nDiff = std::max(
          std::max( m_aMovePos.Y() - rVisArea.Bottom(), rVisArea.Top() - m_aMovePos.Y() ),
          std::max( m_aMovePos.X() - rVisArea.Right(),  rVisArea.Left() - m_aMovePos.X()));
@@ -5282,8 +5282,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         aEvent.ExecutePosition.X = aPixPos.X();
                         aEvent.ExecutePosition.Y = aPixPos.Y();
                         VclPtr<Menu> pMenu;
-                        OUString sMenuName("private:resource/ReadonlyContextMenu");
-                        if (GetView().TryContextMenuInterception(aROPopup.GetMenu(), sMenuName, pMenu, aEvent))
+                        if (GetView().TryContextMenuInterception(aROPopup.GetMenu(), "private:resource/ReadonlyContextMenu", pMenu, aEvent))
                         {
                             if ( pMenu )
                             {
@@ -5752,7 +5751,6 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
         m_rView.NoRotate();
         bool bUnLockView = !rSh.IsViewLocked();
         rSh.LockView( true );
-        sal_uInt8 nFlag = 0;
 
         if ( rSh.IsSelFrameMode() )
         {
@@ -5761,7 +5759,7 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
             m_rView.AttrChangedNotify(&rSh);
         }
 
-        bool bSelObj = rSh.SelectObj( aDocPos, nFlag );
+        bool bSelObj = rSh.SelectObj( aDocPos, 0/*nFlag*/ );
         if( bUnLockView )
             rSh.LockView( false );
 

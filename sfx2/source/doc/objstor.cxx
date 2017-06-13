@@ -3044,14 +3044,13 @@ uno::Reference< embed::XStorage > SfxObjectShell::GetStorage()
 
 bool SfxObjectShell::SaveChildren( bool bObjectsOnly )
 {
-    bool bResult = true;
     if ( pImpl->mpObjectContainer )
     {
         bool bOasis = ( SotStorage::GetVersion( GetStorage() ) > SOFFICE_FILEFORMAT_60 );
         GetEmbeddedObjectContainer().StoreChildren(bOasis,bObjectsOnly);
     }
 
-    return bResult;
+    return true;
 }
 
 bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
@@ -3120,12 +3119,10 @@ bool SfxObjectShell::SwitchChildrenPersistance( const uno::Reference< embed::XSt
         return false;
     }
 
-    bool bResult = true;
-
     if ( pImpl->mpObjectContainer )
         pImpl->mpObjectContainer->SetPersistentEntries(xStorage,bForceNonModified);
 
-    return bResult;
+    return true;
 }
 
 // Never call this method directly, always use the DoSaveCompleted call

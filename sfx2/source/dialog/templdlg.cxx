@@ -787,10 +787,7 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
 
     LoadedFamilies();
 
-    sal_uInt16 nStart = SID_STYLE_FAMILY1;
-    sal_uInt16 nEnd = SID_STYLE_FAMILY4;
-
-    for ( i = nStart; i <= nEnd; i++ )
+    for ( i = SID_STYLE_FAMILY1; i <= SID_STYLE_FAMILY4; i++ )
         pBindings->Update(i);
 }
 
@@ -1763,8 +1760,7 @@ sal_Int32 SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter( SfxObjectShell* 
 
     ::comphelper::SequenceAsHashMap aFactoryProps(
         xModuleManager->getByName( getModuleIdentifier( xModuleManager, i_pObjSh ) ) );
-    sal_Int32 nDefault = -1;
-    sal_Int32 nFilter = aFactoryProps.getUnpackedValueOrDefault( "ooSetupFactoryStyleFilter", nDefault );
+    sal_Int32 nFilter = aFactoryProps.getUnpackedValueOrDefault( "ooSetupFactoryStyleFilter", sal_Int32(-1) );
 
     m_bWantHierarchical =
         (nFilter & SFXSTYLEBIT_HIERARCHY) != 0;

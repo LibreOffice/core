@@ -296,7 +296,6 @@ void Color::ApplyTintOrShade(sal_Int16 n100thPercent)
 
 SvStream& WriteColor( SvStream& rOStream, const Color& rColor )
 {
-    sal_uInt16 nColorName   = COL_NAME_USER;
     sal_uInt16 nRed         = rColor.GetRed();
     sal_uInt16 nGreen       = rColor.GetGreen();
     sal_uInt16 nBlue        = rColor.GetBlue();
@@ -304,7 +303,7 @@ SvStream& WriteColor( SvStream& rOStream, const Color& rColor )
     nGreen  = (nGreen<<8) + nGreen;
     nBlue   = (nBlue<<8) + nBlue;
 
-    rOStream.WriteUInt16( nColorName );
+    rOStream.WriteUInt16( COL_NAME_USER );
     rOStream.WriteUInt16( nRed );
     rOStream.WriteUInt16( nGreen );
     rOStream.WriteUInt16( nBlue );

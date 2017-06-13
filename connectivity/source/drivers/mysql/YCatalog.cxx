@@ -74,11 +74,9 @@ void OMySQLCatalog::refreshViews()
     // let's simply assume the server is new enough to support views. Current drivers
     // as of this writing might not return the proper information in getTableTypes, so
     // don't rely on it.
-    bool bSupportsViews = true;
 
     TStringVector aVector;
-    if ( bSupportsViews )
-        refreshObjects(aTypes,aVector);
+    refreshObjects(aTypes,aVector);
 
     if ( m_pViews )
         m_pViews->reFill(aVector);

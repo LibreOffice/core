@@ -1559,13 +1559,11 @@ void SwDocTest::testClientModify()
     CPPUNIT_ASSERT_EQUAL(aClient1.GetRegisteredIn(), static_cast<SwModify*>(nullptr));
     CPPUNIT_ASSERT_EQUAL(aClient2.GetRegisteredIn(), static_cast<SwModify*>(nullptr));
     {
-        int nCount = 0;
         SwIterator<TestClient,SwModify> aIter(aMod);
         for(TestClient* pClient = aIter.First(); pClient ; pClient = aIter.Next())
         {
             CPPUNIT_ASSERT(false);
         }
-        CPPUNIT_ASSERT_EQUAL(nCount,0);
     }
     aMod.ModifyBroadcast(nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL(aClient1.m_nModifyCount,2);

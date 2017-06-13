@@ -211,7 +211,7 @@ void Test::testPivotTable()
     };
 
     size_t nFieldCount = SAL_N_ELEMENTS(aFields);
-    size_t nDataCount = SAL_N_ELEMENTS(aData);
+    size_t const nDataCount = SAL_N_ELEMENTS(aData);
 
     ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
     SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
@@ -392,7 +392,7 @@ void Test::testPivotTableLabels()
     };
 
     size_t nFieldCount = SAL_N_ELEMENTS(aFields);
-    size_t nDataCount = SAL_N_ELEMENTS(aData);
+    size_t const nDataCount = SAL_N_ELEMENTS(aData);
 
     ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
     SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
@@ -448,7 +448,7 @@ void Test::testPivotTableDateLabels()
     };
 
     size_t nFieldCount = SAL_N_ELEMENTS(aFields);
-    size_t nDataCount = SAL_N_ELEMENTS(aData);
+    size_t const nDataCount = SAL_N_ELEMENTS(aData);
 
     ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
     SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
@@ -531,7 +531,7 @@ void Test::testPivotTableFilters()
     };
 
     size_t nFieldCount = SAL_N_ELEMENTS(aFields);
-    size_t nDataCount = SAL_N_ELEMENTS(aData);
+    size_t const nDataCount = SAL_N_ELEMENTS(aData);
 
     ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
     SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
@@ -680,7 +680,7 @@ void Test::testPivotTableNamedSource()
     };
 
     size_t nFieldCount = SAL_N_ELEMENTS(aFields);
-    size_t nDataCount = SAL_N_ELEMENTS(aData);
+    size_t const nDataCount = SAL_N_ELEMENTS(aData);
 
     // Insert the raw data.
     ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
@@ -1593,8 +1593,7 @@ void Test::testPivotTableTextNumber()
     };
 
     // Insert raw data such that the first column values are entered as text.
-    size_t nRowCount = SAL_N_ELEMENTS(aData);
-    for (size_t nRow = 0; nRow < nRowCount; ++nRow)
+    for (size_t nRow = 0; nRow < SAL_N_ELEMENTS(aData); ++nRow)
     {
         ScSetStringParam aParam;
         aParam.mbDetectNumberFormat = false;
@@ -1773,7 +1772,7 @@ void Test::testPivotTableNumStability()
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
 
-    size_t nRowCount = SAL_N_ELEMENTS(aData);
+    size_t const nRowCount = SAL_N_ELEMENTS(aData);
     ScAddress aPos(1,1,0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, nRowCount);
 
@@ -2352,7 +2351,7 @@ void Test::testPivotTableRepeatItemLabels()
     };
 
     size_t nFieldCount = SAL_N_ELEMENTS(aFields);
-    size_t nDataCount = SAL_N_ELEMENTS(aData);
+    size_t const nDataCount = SAL_N_ELEMENTS(aData);
 
     ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
     SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
@@ -2424,7 +2423,7 @@ void Test::testPivotTableDPCollection()
     };
 
     size_t nFieldCount = SAL_N_ELEMENTS(aFields);
-    size_t nDataCount = SAL_N_ELEMENTS(aData);
+    size_t const nDataCount = SAL_N_ELEMENTS(aData);
 
     ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
     SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();

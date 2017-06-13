@@ -180,7 +180,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
             {
                 // Don't search for parents, siblings and self at children!
                 // These things are supported by this instance himself.
-                sal_Int32 nChildSearchFlags = FrameSearchFlag::SELF | FrameSearchFlag::CHILDREN;
+                sal_Int32 const nChildSearchFlags = FrameSearchFlag::SELF | FrameSearchFlag::CHILDREN;
                 // Step over all items of container and ask children for frames.
                 sal_uInt32 nCount = m_pFrameContainer->getCount();
                 for ( sal_uInt32 nIndex=0; nIndex<nCount; ++nIndex )

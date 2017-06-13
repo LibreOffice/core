@@ -361,7 +361,7 @@ void ScMenuFloatingWindow::drawMenuItem(vcl::RenderContext& rRenderContext, size
     getMenuItemPosSize(nPos, aPos, aSize);
 
     DecorationView aDecoView(&rRenderContext);
-    long nXOffset = 5;
+    long const nXOffset = 5;
     long nYOffset = (aSize.Height() - maLabelFont.GetFontHeight())/2;
     rRenderContext. DrawCtrlText(Point(aPos.X()+nXOffset, aPos.Y() + nYOffset), maMenuItems[nPos].maText, 0,
                                  maMenuItems[nPos].maText.getLength(),

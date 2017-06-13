@@ -214,12 +214,11 @@ void EmbeddedObjectContainer::CloseEmbeddedObjects()
 
 OUString EmbeddedObjectContainer::CreateUniqueObjectName()
 {
-    OUString aPersistName("Object ");
     OUString aStr;
     sal_Int32 i=1;
     do
     {
-        aStr = aPersistName + OUString::number( i++ );
+        aStr = "Object " + OUString::number( i++ );
     }
     while( HasEmbeddedObject( aStr ) );
     // TODO/LATER: should we consider deleted objects?

@@ -488,8 +488,7 @@ OUString SubstitutePathVariables::impl_substituteVariable( const OUString& rText
             // variable in text but unknown!
             if ( bSubstRequired )
             {
-                OUString aMsg( "Unknown variable found!" );
-                throw NoSuchElementException( aMsg, static_cast<cppu::OWeakObject *>(this) );
+                throw NoSuchElementException( "Unknown variable found!", static_cast<cppu::OWeakObject *>(this) );
             }
             else
                 aResult = aWorkText;
@@ -600,8 +599,7 @@ OUString const & SubstitutePathVariables::impl_getSubstituteVariableValue( const
     }
     else
     {
-        OUString aExceptionText("Unknown variable!");
-        throw NoSuchElementException(aExceptionText, static_cast<cppu::OWeakObject *>(this));
+        throw NoSuchElementException("Unknown variable!", static_cast<cppu::OWeakObject *>(this));
     }
 }
 

@@ -203,8 +203,7 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
 
                                     if ( xInfo->hasPropertyByName( sPropButtonType ) )
                                     {
-                                        form::FormButtonType eButtonType = form::FormButtonType_URL;
-                                        xPropSet->setPropertyValue( sPropButtonType, uno::Any(eButtonType) );
+                                        xPropSet->setPropertyValue( sPropButtonType, uno::Any(form::FormButtonType_URL) );
                                     }
 
                                     //! Undo ???
@@ -657,8 +656,7 @@ void ScDrawShell::ExecFormatPaintbrush( SfxRequest& rReq )
         ScDrawView* pDrawView = pViewData->GetScDrawView();
         if ( pDrawView && pDrawView->AreObjectsMarked() )
         {
-            bool bOnlyHardAttr = true;
-            SfxItemSet* pItemSet = new SfxItemSet( pDrawView->GetAttrFromMarked(bOnlyHardAttr) );
+            SfxItemSet* pItemSet = new SfxItemSet( pDrawView->GetAttrFromMarked(true/*bOnlyHardAttr*/) );
             pView->SetDrawBrushSet( pItemSet, bLock );
         }
     }

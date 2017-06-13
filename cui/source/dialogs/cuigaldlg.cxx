@@ -807,14 +807,10 @@ VclPtr<SfxTabPage> TPGalleryThemeProperties::Create( vcl::Window* pParent, const
 
 OUString TPGalleryThemeProperties::addExtension( const OUString& _rDisplayText, const OUString& _rExtension )
 {
-    OUString sAllFilter( "(*.*)" );
-    OUString sOpenBracket( " (" );
-    OUString sCloseBracket( ")" );
     OUString sRet = _rDisplayText;
-
-    if ( sRet.indexOf( sAllFilter ) == -1 )
+    if ( sRet.indexOf( "(*.*)" ) == -1 )
     {
-        sRet += sOpenBracket + _rExtension + sCloseBracket;
+        sRet += " (" + _rExtension + ")";
     }
     return sRet;
 }

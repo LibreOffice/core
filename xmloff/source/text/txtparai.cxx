@@ -2101,8 +2101,7 @@ XMLParaContext::~XMLParaContext()
                             TextContentAnchorType eAnchorType =
                                             TextContentAnchorType_AT_PARAGRAPH;
                             {
-                                OUString sAnchorType( "AnchorType"  );
-                                Any aAny = xPropSet->getPropertyValue( sAnchorType );
+                                Any aAny = xPropSet->getPropertyValue( "AnchorType" );
                                 aAny >>= eAnchorType;
                             }
                             if ( TextContentAnchorType_AT_CHARACTER == eAnchorType )
@@ -2130,8 +2129,7 @@ XMLParaContext::~XMLParaContext()
                         Reference < XPropertySet > xPropSet( xShape, UNO_QUERY );
                         TextContentAnchorType eAnchorType = TextContentAnchorType_AT_PARAGRAPH;
                         {
-                            OUString sAnchorType( "AnchorType"  );
-                            Any aAny = xPropSet->getPropertyValue( sAnchorType );
+                            Any aAny = xPropSet->getPropertyValue( "AnchorType" );
                             aAny >>= eAnchorType;
                         }
                         if ( TextContentAnchorType_AT_CHARACTER == eAnchorType )

@@ -205,7 +205,6 @@ Sequence< frame::DispatchInformation > SAL_CALL SfxAppDispatchProvider::getConfi
     SfxSlotPool& rAppSlotPool = SfxGetpApp()->GetAppSlotPool_Impl();
 
     const SfxSlotMode nMode( SfxSlotMode::TOOLBOXCONFIG|SfxSlotMode::ACCELCONFIG|SfxSlotMode::MENUCONFIG );
-    OUString aCmdPrefix( ".uno:" );
 
     // Select group ( group 0 is internal )
     for (sal_uInt16 i=0; i< rAppSlotPool.GetGroupCount(); ++i)
@@ -222,9 +221,7 @@ Sequence< frame::DispatchInformation > SAL_CALL SfxAppDispatchProvider::getConfi
                     if ( pSfxSlot->GetMode() & nMode )
                     {
                         frame::DispatchInformation aCmdInfo;
-                        OUStringBuffer aBuf( aCmdPrefix );
-                        aBuf.appendAscii( pSfxSlot->GetUnoName() );
-                        aCmdInfo.Command = aBuf.makeStringAndClear();
+                        aCmdInfo.Command = ".uno:" + OUString::createFromAscii(pSfxSlot->GetUnoName());
                         aCmdInfo.GroupId = nCommandGroup;
                         aCmdList.push_back( aCmdInfo );
                     }

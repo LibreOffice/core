@@ -526,8 +526,7 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             AtkObject *pChild = getObjFromAny( aEvent.NewValue );
             if( pChild )
             {
-                AtkStateType eExpandedState = ATK_STATE_EXPANDED;
-                atk_object_notify_state_change( pChild, eExpandedState, true );
+                atk_object_notify_state_change( pChild, ATK_STATE_EXPANDED, true );
                 g_object_unref( pChild );
             }
             break;
@@ -538,8 +537,7 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             AtkObject *pChild = getObjFromAny( aEvent.NewValue );
             if( pChild )
             {
-                AtkStateType eExpandedState = ATK_STATE_EXPANDED;
-                atk_object_notify_state_change( pChild, eExpandedState, false );
+                atk_object_notify_state_change( pChild, ATK_STATE_EXPANDED, false );
                 g_object_unref( pChild );
             }
             break;

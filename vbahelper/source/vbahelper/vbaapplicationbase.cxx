@@ -205,8 +205,7 @@ VbaApplicationBase::getDisplayStatusBar()
 
     if( xProps.is() ){
         uno::Reference< frame::XLayoutManager > xLayoutManager( xProps->getPropertyValue( "LayoutManager"), uno::UNO_QUERY_THROW );
-        OUString url( "private:resource/statusbar/statusbar" );
-        if( xLayoutManager.is() && xLayoutManager->isElementVisible( url ) ){
+        if( xLayoutManager.is() && xLayoutManager->isElementVisible( "private:resource/statusbar/statusbar" ) ){
             return true;
         }
     }

@@ -289,8 +289,6 @@ void DicList::SearchForDictionaries(
     const OUString *pDirCnt = aDirCnt.getConstArray();
     sal_Int32 nEntries = aDirCnt.getLength();
 
-    OUString aDCN("dcn");
-    OUString aDCP("dcp");
     for (sal_Int32 i = 0;  i < nEntries;  ++i)
     {
         OUString     aURL( pDirCnt[i] );
@@ -303,9 +301,9 @@ void DicList::SearchForDictionaries(
             sal_Int32 nPos  = aURL.indexOf('.');
             OUString aExt( aURL.copy(nPos + 1).toAsciiLowerCase() );
 
-            if (aDCN.equals(aExt))       // negativ
+            if ("dcn" == aExt)       // negativ
                 bNeg = true;
-            else if (aDCP.equals(aExt))  // positiv
+            else if ("dcp" == aExt)  // positiv
                 bNeg = false;
             else
                 continue;          // andere Files
@@ -350,7 +348,6 @@ sal_Int32 DicList::GetDicPos(const uno::Reference< XDictionary > &xDic)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    sal_Int32 nPos = -1;
     DictionaryVec_t& rDicList = GetOrCreateDicList();
     size_t n = rDicList.size();
     for (size_t i = 0;  i < n;  i++)
@@ -358,7 +355,7 @@ sal_Int32 DicList::GetDicPos(const uno::Reference< XDictionary > &xDic)
         if ( rDicList[i] == xDic )
             return i;
     }
-    return nPos;
+    return -1;
 }
 
 /// @throws Exception
@@ -613,9 +610,8 @@ void DicList::CreateDicList()
 
     // create IgnoreAllList dictionary with empty URL (non persistent)
     // and add it to list
-    OUString aDicName( "IgnoreAllList" );
     uno::Reference< XDictionary > xIgnAll(
-            createDictionary( aDicName, LinguLanguageToLocale( LANGUAGE_NONE ),
+            createDictionary( "IgnoreAllList", LinguLanguageToLocale( LANGUAGE_NONE ),
                               DictionaryType_POSITIVE, OUString() ) );
     if (xIgnAll.is())
     {

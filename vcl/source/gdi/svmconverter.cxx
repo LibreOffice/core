@@ -304,9 +304,7 @@ bool ImplWriteUnicodeComment( SvStream& rOStm, const OUString& rString )
     if ( nStringLen )
     {
         sal_uInt32  nSize = ( nStringLen << 1 ) + 4;
-        sal_uInt16  nType = GDI_UNICODE_COMMENT;
-
-        rOStm.WriteUInt16( nType ).WriteUInt32( nSize );
+        rOStm.WriteUInt16( GDI_UNICODE_COMMENT ).WriteUInt32( nSize );
         write_uInt16s_FromOUString(rOStm, rString);
     }
     return nStringLen != 0;

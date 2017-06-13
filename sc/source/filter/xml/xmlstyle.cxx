@@ -685,10 +685,9 @@ void ScXMLAutoStylePoolP::exportStyleContent(
     SvXMLAutoStylePoolP::exportStyleContent( rHandler, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap );
     if (nFamily == XML_STYLE_FAMILY_TABLE_CELL)
     {
-        bool bNotFound = true;
         ::std::vector< XMLPropertyState >::const_iterator i(rProperties.begin());
         ::std::vector< XMLPropertyState >::const_iterator endi(rProperties.end());
-        for(; i != endi && bNotFound; ++i)
+        for(; i != endi; ++i)
         {
             if (i->mnIndex != -1)
             {
@@ -1347,8 +1346,7 @@ bool XmlScPropHdl_HoriJustifySource::importXML(
     }
     else if (IsXMLToken(rStrImpValue, XML_VALUE_TYPE))
     {
-        table::CellHoriJustify nValue(table::CellHoriJustify_STANDARD);
-        rValue <<= nValue;
+        rValue <<= table::CellHoriJustify_STANDARD;
         bRetval = true;
     }
 
@@ -1408,8 +1406,7 @@ bool XmlScPropHdl_HoriJustifyRepeat::importXML(
     }
     else if (IsXMLToken(rStrImpValue, XML_TRUE))
     {
-        table::CellHoriJustify nValue = table::CellHoriJustify_REPEAT;
-        rValue <<= nValue;
+        rValue <<= table::CellHoriJustify_REPEAT;
         bRetval = true;
     }
 

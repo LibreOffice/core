@@ -126,7 +126,6 @@ namespace cmis
             const char* /*password*/ )
     {
         OUString instructions = "PIN:";
-        OUString url_oustr( "" );
         const css::uno::Reference<
             css::ucb::XCommandEnvironment> xEnv = getXEnv( );
 
@@ -139,7 +138,7 @@ namespace cmis
             {
                 rtl::Reference< ucbhelper::AuthenticationFallbackRequest > xRequest
                     = new ucbhelper::AuthenticationFallbackRequest (
-                            instructions, url_oustr );
+                            instructions, "" );
 
                 xIH->handle( xRequest.get() );
 

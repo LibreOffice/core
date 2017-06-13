@@ -126,9 +126,8 @@ void TextCharacterSpacingControl::Initialize()
     {
         MapUnit eUnit = GetCoreMetric();
         MapUnit eOrgUnit = eUnit;
-        MapUnit ePntUnit(MapUnit::MapPoint);
         long nBig = maEditKerning->Normalize(nKerning);
-        nKerning = LogicToLogic(nBig, eOrgUnit, ePntUnit);
+        nKerning = LogicToLogic(nBig, eOrgUnit, MapUnit::MapPoint);
         maEditKerning->SetValue(nKerning);
     }
     else if(SfxItemState::DISABLED == eState)

@@ -606,55 +606,51 @@ namespace svgio
                         // initially despite I found various examples of Svg files out there
                         // which have no correct values for this clipping. It's correct
                         // due to the Svg spec.
-                        bool bDoCorrectCanvasClipping(true);
 
-                        if(bDoCorrectCanvasClipping)
+                        // different from Svg we have the possibility with primitives to get
+                        // a correct bounding box for the geometry. Get it for evtl. taking action
+                        const basegfx::B2DRange aContentRange(
+                            aSequence.getB2DRange(
+                                drawinglayer::geometry::ViewInformation2D()));
+
+                        if(aSvgCanvasRange.isInside(aContentRange))
                         {
-                            // different from Svg we have the possibility with primitives to get
-                            // a correct bounding box for the geometry. Get it for evtl. taking action
-                            const basegfx::B2DRange aContentRange(
-                                aSequence.getB2DRange(
-                                    drawinglayer::geometry::ViewInformation2D()));
+                            // no clip needed, but an invisible HiddenGeometryPrimitive2D
+                            // to allow getting the full Svg range using the primitive mechanisms.
+                            // This is needed since e.g. an SdrObject using this as graphic will
+                            // create a mapping transformation to exactly map the content to its
+                            // real life size
+                            const drawinglayer::primitive2d::Primitive2DReference xLine(
+                                new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                                    basegfx::tools::createPolygonFromRect(
+                                        aSvgCanvasRange),
+                                    basegfx::BColor(0.0, 0.0, 0.0)));
+                            const drawinglayer::primitive2d::Primitive2DReference xHidden(
+                                new drawinglayer::primitive2d::HiddenGeometryPrimitive2D(
+                                    drawinglayer::primitive2d::Primitive2DContainer { xLine }));
 
-                            if(aSvgCanvasRange.isInside(aContentRange))
-                            {
-                                // no clip needed, but an invisible HiddenGeometryPrimitive2D
-                                // to allow getting the full Svg range using the primitive mechanisms.
-                                // This is needed since e.g. an SdrObject using this as graphic will
-                                // create a mapping transformation to exactly map the content to its
-                                // real life size
-                                const drawinglayer::primitive2d::Primitive2DReference xLine(
-                                    new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                            aSequence.push_back(xHidden);
+                        }
+                        else if(aSvgCanvasRange.overlaps(aContentRange))
+                        {
+                            // Clip is necessary. This will make Svg images evtl. smaller
+                            // than wanted from Svg (the free space which may be around it is
+                            // conform to the Svg spec), but avoids an expensive and unnecessary
+                            // clip. Keep the full Svg range here to get the correct mappings
+                            // to objects using this. Optimizations can be done in the processors
+                            const drawinglayer::primitive2d::Primitive2DReference xMask(
+                                new drawinglayer::primitive2d::MaskPrimitive2D(
+                                    basegfx::B2DPolyPolygon(
                                         basegfx::tools::createPolygonFromRect(
-                                            aSvgCanvasRange),
-                                        basegfx::BColor(0.0, 0.0, 0.0)));
-                                const drawinglayer::primitive2d::Primitive2DReference xHidden(
-                                    new drawinglayer::primitive2d::HiddenGeometryPrimitive2D(
-                                        drawinglayer::primitive2d::Primitive2DContainer { xLine }));
+                                            aSvgCanvasRange)),
+                                    aSequence));
 
-                                aSequence.push_back(xHidden);
-                            }
-                            else if(aSvgCanvasRange.overlaps(aContentRange))
-                            {
-                                // Clip is necessary. This will make Svg images evtl. smaller
-                                // than wanted from Svg (the free space which may be around it is
-                                // conform to the Svg spec), but avoids an expensive and unnecessary
-                                // clip. Keep the full Svg range here to get the correct mappings
-                                // to objects using this. Optimizations can be done in the processors
-                                const drawinglayer::primitive2d::Primitive2DReference xMask(
-                                    new drawinglayer::primitive2d::MaskPrimitive2D(
-                                        basegfx::B2DPolyPolygon(
-                                            basegfx::tools::createPolygonFromRect(
-                                                aSvgCanvasRange)),
-                                        aSequence));
-
-                                aSequence = drawinglayer::primitive2d::Primitive2DContainer { xMask };
-                            }
-                            else
-                            {
-                                // not inside, no overlap. Empty Svg
-                                aSequence.clear();
-                            }
+                            aSequence = drawinglayer::primitive2d::Primitive2DContainer { xMask };
+                        }
+                        else
+                        {
+                            // not inside, no overlap. Empty Svg
+                            aSequence.clear();
                         }
 
                         if(!aSequence.empty())

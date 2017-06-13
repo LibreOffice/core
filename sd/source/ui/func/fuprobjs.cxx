@@ -114,9 +114,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
 
     if( bUnique )
     {
-        OUString aStyleName = aLayoutName;
-        aStyleName += SD_LT_SEPARATOR ;
-        sal_uInt16 nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
+        OUString aStyleName = aLayoutName + SD_LT_SEPARATOR;
         PresentationObjects ePO;
 
         if( bPage )
@@ -140,17 +138,21 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
             SfxStyleSheetBase& rStyleSheet = *pStyleSheet;
 
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh, mpViewShell->GetActiveWindow(), nDlgId, rStyleSheet, ePO, pStyleSheetPool ) : nullptr);
-            if( pDlg && (pDlg->Execute() == RET_OK) )
+            if (pFact)
             {
-                const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-                // Undo-Action
-                StyleSheetUndoAction* pAction = new StyleSheetUndoAction
-                                                (mpDoc, static_cast<SfxStyleSheet*>(pStyleSheet),                                                    pOutSet);
-                mpDocSh->GetUndoManager()->AddUndoAction(pAction);
+                ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSdPresLayoutTemplateDlg( mpDocSh, mpViewShell->GetActiveWindow(),
+                                                                    TAB_PRES_LAYOUT_TEMPLATE, rStyleSheet, ePO, pStyleSheetPool ));
+                if( pDlg->Execute() == RET_OK )
+                {
+                    const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+                    // Undo-Action
+                    StyleSheetUndoAction* pAction = new StyleSheetUndoAction
+                                                    (mpDoc, static_cast<SfxStyleSheet*>(pStyleSheet),                                                    pOutSet);
+                    mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
-                pStyleSheet->GetItemSet().Put( *pOutSet );
-                static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxHint( SfxHintId::DataChanged ) );
+                    pStyleSheet->GetItemSet().Put( *pOutSet );
+                    static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxHint( SfxHintId::DataChanged ) );
+                }
             }
         }
     }

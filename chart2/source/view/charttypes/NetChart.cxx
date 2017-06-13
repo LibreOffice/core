@@ -359,7 +359,7 @@ void NetChart::createShapes()
     //update/create information for current group
     double fLogicZ        = 1.0;//as defined
 
-    sal_Int32 nStartIndex = 0; // inclusive       ;..todo get somehow from x scale
+    sal_Int32 const nStartIndex = 0; // inclusive       ;..todo get somehow from x scale
     sal_Int32 nEndIndex = VSeriesPlotter::getPointCount();
     if(nEndIndex<=0)
         nEndIndex=1;

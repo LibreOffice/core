@@ -688,8 +688,8 @@ void DesktopLOKTest::testHiddenRowHeaders()
 
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
 
-    long nX = 0;
-    long nY = 0;
+    long const nX = 0;
+    long const nY = 0;
     long nWidth = 0;
     long nHeight = 0;
     pDocument->m_pDocumentClass->getDocumentSize(pDocument, &nWidth, &nHeight);
@@ -881,8 +881,8 @@ void DesktopLOKTest::testSheetSelections()
     // Values in twips
     int row5 = 1150;
     int col1 = 1100;
-    int col2 = 2200;
-    int col3 = 3300;
+    int const col2 = 2200;
+    int const col3 = 3300;
     int col4 = 4400;
     int col5 = 5500;
 
@@ -932,7 +932,7 @@ void DesktopLOKTest::testSheetSelections()
     /*
      * Check if clicking inside the selection deselects the whole selection
      */
-    int row10 = 2400;
+    int const row10 = 2400;
     // Select starting from row5, col1 to row10, col5
     pDocument->pClass->postMouseEvent(pDocument,
                                       LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
@@ -1845,8 +1845,7 @@ void DesktopLOKTest::testGetFontSubset()
         rtl_UriEncodeKeepEscapes,
         RTL_TEXTENCODING_UTF8
     );
-    OUString aUnoFontSubset(".uno:FontSubset&name=");
-    OString aCommand = OUStringToOString(aUnoFontSubset + aFontName, RTL_TEXTENCODING_UTF8);
+    OString aCommand = OUStringToOString(".uno:FontSubset&name=" + aFontName, RTL_TEXTENCODING_UTF8);
     boost::property_tree::ptree aTree;
     char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, aCommand.getStr());
     std::stringstream aStream(pJSON);

@@ -358,7 +358,6 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
 
 bool SwLayoutFrame::FillSelection( SwSelectionList& rList, const SwRect& rRect ) const
 {
-    bool bRet = false;
     if( rRect.IsOver(PaintArea()) )
     {
         const SwFrame* pFrame = Lower();
@@ -368,7 +367,7 @@ bool SwLayoutFrame::FillSelection( SwSelectionList& rList, const SwRect& rRect )
             pFrame = pFrame->GetNext();
         }
     }
-    return bRet;
+    return false;
 }
 
 bool SwPageFrame::FillSelection( SwSelectionList& rList, const SwRect& rRect ) const

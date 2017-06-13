@@ -527,10 +527,6 @@ void ControllerCommandDispatch::updateCommandAvailability()
 
     // read-only
     bool bIsWritable = bModelStateIsValid && (! m_apModelState->bIsReadOnly);
-    // paste is available
-    // @todo: determine correctly
-    bool bHasSuitableClipboardContent = true;
-
     bool bShapeContext = m_xChartController.is() && m_xChartController->isShapeContext();
 
     bool bEnableDataTableDialog = false;
@@ -553,7 +549,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
     // edit commands
     m_aCommandAvailability[ ".uno:Cut" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bIsDeleteableObjectSelected;
     m_aCommandAvailability[ ".uno:Copy" ] = bControllerStateIsValid && m_apControllerState->bHasSelectedObject;
-    m_aCommandAvailability[ ".uno:Paste" ] = bIsWritable && bHasSuitableClipboardContent;
+    m_aCommandAvailability[ ".uno:Paste" ] = bIsWritable;
 
     // toolbar commands
     m_aCommandAvailability[ ".uno:ToggleGridHorizontal" ] = bIsWritable;

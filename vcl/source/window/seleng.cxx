@@ -335,8 +335,7 @@ void SelectionEngine::Reset()
     aWTimer.Stop();
     if ( nFlags & SelectionEngineFlags::IN_SEL )
         pWin->ReleaseMouse();
-    SelectionEngineFlags nMask = (SelectionEngineFlags::HAS_ANCH | SelectionEngineFlags::IN_SEL);
-    nFlags &= ~nMask;
+    nFlags &= ~SelectionEngineFlags(SelectionEngineFlags::HAS_ANCH | SelectionEngineFlags::IN_SEL);
     nLockedMods = 0;
 }
 

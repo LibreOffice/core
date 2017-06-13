@@ -1596,8 +1596,7 @@ void ButtonElement::endElement()
     sal_Bool bChecked = false;
     if (getBoolAttr( &bChecked, "checked", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ) && bChecked)
     {
-        sal_Int16 nVal = 1;
-        ctx.getControlModel()->setPropertyValue( "State" , makeAny( nVal ) );
+        ctx.getControlModel()->setPropertyValue( "State" , makeAny( sal_Int16(1) ) );
     }
 
     ctx.importEvents( _events );

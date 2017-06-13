@@ -154,7 +154,8 @@ const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
         {
             if( !aGreyPalette16.GetEntryCount() )
             {
-                sal_uInt8 cGrey = 0, cGreyInc = 17;
+                sal_uInt8 cGrey = 0;
+                sal_uInt8 const cGreyInc = 17;
 
                 aGreyPalette16.SetEntryCount( 16 );
 

@@ -367,8 +367,6 @@ MotionPathTag::~MotionPathTag()
 
 void MotionPathTag::updatePathAttributes()
 {
-    OUString aEmpty( "?" );
-
     ::basegfx::B2DPolygon aCandidate;
     if( mxPolyPoly.count() )
     {
@@ -383,7 +381,7 @@ void MotionPathTag::updatePathAttributes()
         aEndArrow.append(::basegfx::B2DPoint(0.0, 30.0));
         aEndArrow.append(::basegfx::B2DPoint(20.0, 30.0));
         aEndArrow.setClosed(true);
-        mpPathObj->SetMergedItem(XLineEndItem(aEmpty,::basegfx::B2DPolyPolygon(aEndArrow)));
+        mpPathObj->SetMergedItem(XLineEndItem("?",::basegfx::B2DPolyPolygon(aEndArrow)));
         mpPathObj->SetMergedItem(XLineEndWidthItem(400));
         mpPathObj->SetMergedItem(XLineEndCenterItem(true));
     }

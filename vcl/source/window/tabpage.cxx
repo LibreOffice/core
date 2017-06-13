@@ -134,7 +134,6 @@ void TabPage::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle&
         const ImplControlValue aControlValue;
 
         ControlState nState = ControlState::ENABLED;
-        ControlPart part = ControlPart::Entire;
         if ( !IsEnabled() )
             nState &= ~ControlState::ENABLED;
         if ( HasFocus() )
@@ -142,7 +141,7 @@ void TabPage::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle&
         // pass the whole window region to NWF as the tab body might be a gradient or bitmap
         // that has to be scaled properly, clipping makes sure that we do not paint too much
         tools::Rectangle aCtrlRegion( Point(), GetOutputSizePixel() );
-        rRenderContext.DrawNativeControl( ControlType::TabBody, part, aCtrlRegion, nState,
+        rRenderContext.DrawNativeControl( ControlType::TabBody, ControlPart::Entire, aCtrlRegion, nState,
                 aControlValue, OUString() );
     }
 }

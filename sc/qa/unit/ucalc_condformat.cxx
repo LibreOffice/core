@@ -70,8 +70,7 @@ void Test::testCopyPasteSkipEmptyConditionalFormatting()
     m_pDoc->CopyToDocument(aDestRange, InsertDeleteFlags::CONTENTS, false, *pUndoDoc, &aMark);
 
     // Paste clipboard content onto A1:A5 but skip empty cells.
-    bool bSkipEmpty = true;
-    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::CONTENTS, pUndoDoc, &aClipDoc, true, false, false, bSkipEmpty);
+    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::CONTENTS, pUndoDoc, &aClipDoc, true, false, false, true/*bSkipEmpty*/);
 
     ScConditionalFormatList* pList = m_pDoc->GetCondFormList(0);
     CPPUNIT_ASSERT_EQUAL(size_t(2), pList->size());

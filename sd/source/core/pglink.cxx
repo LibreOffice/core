@@ -91,8 +91,6 @@ SdPageLink::~SdPageLink()
             std::vector<OUString> aBookmarkList;
             aBookmarkList.push_back(aBookmarkName);
             sal_uInt16 nInsertPos = pPage->GetPageNum();
-            bool bLink = true;
-            bool bReplace = true;
             bool bNoDialogs = false;
             bool bCopy = false;
 
@@ -103,7 +101,7 @@ SdPageLink::~SdPageLink()
                 bCopy = true;
             }
 
-            pDoc->InsertBookmarkAsPage(aBookmarkList, nullptr, bLink, bReplace,
+            pDoc->InsertBookmarkAsPage(aBookmarkList, nullptr, true/*bLink*/, true/*bReplace*/,
                                        nInsertPos, bNoDialogs, nullptr, bCopy, true, true);
 
             if (!SdDrawDocument::s_pDocLockedInsertingLinks)

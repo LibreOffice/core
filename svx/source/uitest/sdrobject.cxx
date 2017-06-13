@@ -95,8 +95,7 @@ void SdrUIObject::execute(const OUString& rAction,
             throw css::uno::RuntimeException("missing parameter FRAC_Y");
         double nFracY = itrFracY->second.toDouble();
         Fraction aFracY(nFracY);
-        bool bRelative = true;
-        pObj->Resize(aPos, aFracX, aFracY, bRelative);
+        pObj->Resize(aPos, aFracX, aFracY, true/*bRelative*/);
     }
     else if (rAction == "CROP")
     {
@@ -156,8 +155,7 @@ void SdrUIObject::execute(const OUString& rAction,
     else if (rAction == "SHEAR")
     {
         Point aPos;
-        double nAngle = 0;
-        pObj->Shear(aPos, nAngle, 0, false);
+        pObj->Shear(aPos, 0.0/*nAngle*/, 0, false);
     }
 }
 

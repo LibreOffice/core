@@ -1742,13 +1742,12 @@ Reference< XUIConfigurationManager2 > const & ODatabaseDocument::getUIConfigurat
         xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, ElementModes::READWRITE );
         if ( xConfigStorage.is() )
         {
-            OUString aUIConfigMediaType( "application/vnd.sun.xml.ui.configuration" );
             OUString aMediaType;
             Reference< XPropertySet > xPropSet( xConfigStorage, UNO_QUERY );
             Any a = xPropSet->getPropertyValue( INFO_MEDIATYPE );
             if ( !( a >>= aMediaType ) ||  aMediaType.isEmpty() )
             {
-                a <<= aUIConfigMediaType;
+                a <<= OUString("application/vnd.sun.xml.ui.configuration");
                 xPropSet->setPropertyValue( INFO_MEDIATYPE, a );
             }
         }

@@ -428,8 +428,7 @@ void ScXMLDatabaseRangeContext::EndElement()
 
     if (meRangeType == ScDBCollection::SheetAnonymous)
     {
-        OUString aName(STR_DB_LOCAL_NONAME);
-        ::std::unique_ptr<ScDBData> pData(ConvertToDBData(aName));
+        ::std::unique_ptr<ScDBData> pData(ConvertToDBData(STR_DB_LOCAL_NONAME));
 
         if (pData.get())
         {
@@ -443,8 +442,7 @@ void ScXMLDatabaseRangeContext::EndElement()
     }
     else if (meRangeType == ScDBCollection::GlobalAnonymous)
     {
-        OUString aName(STR_DB_GLOBAL_NONAME);
-        ::std::unique_ptr<ScDBData> pData(ConvertToDBData(aName));
+        ::std::unique_ptr<ScDBData> pData(ConvertToDBData(STR_DB_GLOBAL_NONAME));
 
         if (pData.get())
         {

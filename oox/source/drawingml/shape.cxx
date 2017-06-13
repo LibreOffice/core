@@ -1197,9 +1197,6 @@ Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase& rFilterBase )
         Reference < io::XStream > xStream( new utl::OStreamWrapper( aTempStream ) );
         Reference < io::XOutputStream > xOutputStream( xStream->getOutputStream() );
 
-        // Rendering format
-        OUString sFormat( "SVM" );
-
         // Size of the rendering
         awt::Size aActualSize = mxShape->getSize();
         Size aResolution( Application::GetDefaultDevice()->LogicToPixel( Size( 100, 100 ), MapUnit::MapCM ) );
@@ -1221,7 +1218,7 @@ Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase& rFilterBase )
         aDescriptor[ 0 ].Name = "OutputStream";
         aDescriptor[ 0 ].Value <<= xOutputStream;
         aDescriptor[ 1 ].Name = "FilterName";
-        aDescriptor[ 1 ].Value <<= sFormat;
+        aDescriptor[ 1 ].Value <<= OUString("SVM"); // Rendering format
         aDescriptor[ 2 ].Name = "FilterData";
         aDescriptor[ 2 ].Value <<= aFilterData;
 

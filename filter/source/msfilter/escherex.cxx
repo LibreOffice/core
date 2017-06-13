@@ -1755,17 +1755,13 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const css::uno::Refe
     css::uno::Any aAny( rXShape->queryInterface(
         cppu::UnoType<css::beans::XPropertySet>::get()));
 
-    OUString sPolyPolygonBezier ( "PolyPolygonBezier" );
-    OUString sPolyPolygon       ( "PolyPolygon" );
-    OUString sPolygon           ( "Polygon" );
-
     if ( aAny >>= aXPropSet )
     {
-        bool bHasProperty = EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sPolyPolygonBezier, true );
+        bool bHasProperty = EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "PolyPolygonBezier", true );
         if ( !bHasProperty )
-            bHasProperty = EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sPolyPolygon, true );
+            bHasProperty = EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "PolyPolygon", true );
         if ( !bHasProperty )
-            bHasProperty = EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sPolygon, true );
+            bHasProperty = EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "Polygon", true );
         if ( bHasProperty )
             aRetPolyPoly = GetPolyPolygon( aAny );
     }
@@ -2231,8 +2227,8 @@ bool EscherPropertyContainer::CreateConnectorProperties(
                                 rGeoRect.Width = -rGeoRect.Width;
                             }
                         }
-                        sal_uInt32 nAdjustValue1, nAdjustValue2, nAdjustValue3;
-                        nAdjustValue1 = nAdjustValue2 = nAdjustValue3 = 0x2a30;
+                        sal_uInt32 nAdjustValue1, nAdjustValue2;
+                        nAdjustValue1 = nAdjustValue2 = 0x2a30;
 
                         if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "EdgeStartConnection" ) )
                             aAny >>= aShapeA;

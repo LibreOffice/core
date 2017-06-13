@@ -1086,7 +1086,7 @@ void ScInputHandler::ShowTip( const OUString& rText )
         aPos = pTipVisibleParent->OutputToScreenPixel( aPos );
         tools::Rectangle aRect( aPos, aPos );
 
-        QuickHelpFlags nAlign = QuickHelpFlags::Left|QuickHelpFlags::Bottom;
+        QuickHelpFlags const nAlign = QuickHelpFlags::Left|QuickHelpFlags::Bottom;
         nTipVisible = Help::ShowPopover(pTipVisibleParent, aRect, rText, nAlign);
         pTipVisibleParent->AddEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleParentListener ) );
     }
@@ -1110,7 +1110,7 @@ void ScInputHandler::ShowTipBelow( const OUString& rText )
         }
         aPos = pTipVisibleSecParent->OutputToScreenPixel( aPos );
         tools::Rectangle aRect( aPos, aPos );
-        QuickHelpFlags nAlign = QuickHelpFlags::Left | QuickHelpFlags::Top | QuickHelpFlags::NoEvadePointer;
+        QuickHelpFlags const nAlign = QuickHelpFlags::Left | QuickHelpFlags::Top | QuickHelpFlags::NoEvadePointer;
         nTipVisibleSec = Help::ShowPopover(pTipVisibleSecParent, aRect, rText, nAlign);
         pTipVisibleSecParent->AddEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleSecParentListener ) );
     }

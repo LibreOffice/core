@@ -419,8 +419,7 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
 
     if( DoParametersFollow( pParser, eCurExpr, eTok ) )
     {
-        bool bStandaloneExpression = false;
-        pPar = SbiExprList::ParseParameters( pParser, bStandaloneExpression );
+        pPar = SbiExprList::ParseParameters( pParser, false/*bStandaloneExpression*/ );
         bError = bError || !pPar->IsValid();
         eTok = pParser->Peek();
 
@@ -605,8 +604,7 @@ SbiExprNode* SbiExpression::Unary()
         case TYPEOF:
         {
             pParser->Next();
-            bool bUsedForTypeOf = true;
-            SbiExprNode* pObjNode = Operand( bUsedForTypeOf );
+            SbiExprNode* pObjNode = Operand( true/*bUsedForTypeOf*/ );
             pParser->TestToken( IS );
             OUString aDummy;
             SbiSymDef* pTypeDef = new SbiSymDef( aDummy );

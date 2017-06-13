@@ -695,8 +695,7 @@ Any SAL_CALL ODatabaseMetaDataResultSet::getWarnings(  )
 
 sal_Int32 ODatabaseMetaDataResultSet::getFetchSize()
 {
-    sal_Int32 nValue=1;
-    return nValue;
+    return 1;
 }
 
 OUString ODatabaseMetaDataResultSet::getCursorName()

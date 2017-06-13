@@ -426,9 +426,8 @@ void SwXMLExport::SetBodyAttributes()
     if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() &&
         pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->GetPageCount() > 1 )
     {
-        bool bValue = true;
         OUStringBuffer sBuffer;
-        ::sax::Converter::convertBool(sBuffer, bValue);
+        ::sax::Converter::convertBool(sBuffer, true);
         AddAttribute(XML_NAMESPACE_TEXT, XML_USE_SOFT_PAGE_BREAKS,
             sBuffer.makeStringAndClear());
     }

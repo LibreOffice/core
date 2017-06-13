@@ -67,7 +67,7 @@ void Test::tearDown()
 
 void Test::testCopyPaste()
 {
-    OUString sInput("a * b + c");
+    OUString const sInput("a * b + c");
     std::unique_ptr<SmNode> xTree(SmParser().Parse(sInput));
     xTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
@@ -90,7 +90,7 @@ void Test::testCopyPaste()
 
 void Test::testCopySelectPaste()
 {
-    OUString sInput("a * b + c");
+    OUString const sInput("a * b + c");
     std::unique_ptr<SmNode> xTree(SmParser().Parse(sInput));
     xTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
@@ -117,7 +117,7 @@ void Test::testCopySelectPaste()
 
 void Test::testCutPaste()
 {
-    OUString sInput("a * b + c");
+    OUString const sInput("a * b + c");
     std::unique_ptr<SmNode> xTree(SmParser().Parse(sInput));
     xTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
@@ -140,7 +140,7 @@ void Test::testCutPaste()
 
 void Test::testCutSelectPaste()
 {
-    OUString sInput("a * b + c");
+    OUString const sInput("a * b + c");
     std::unique_ptr<SmNode> xTree(SmParser().Parse(sInput));
     xTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 

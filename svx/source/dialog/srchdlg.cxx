@@ -519,8 +519,7 @@ void SvxSearchDialog::Construct_Impl()
             if(xDirectAccess.is())
             {
                 OUString sTemp;
-                OUString sProperty( "ComponentSearchGroupLabel");
-                uno::Any aRet = xDirectAccess->getByName(sProperty);
+                uno::Any aRet = xDirectAccess->getByName("ComponentSearchGroupLabel");
                 aRet >>= sTemp;
                 m_pComponentFrame->get_label_widget()->SetText(sTemp);
                 aRet = xDirectAccess->getByName("ComponentSearchCommandLabel1");

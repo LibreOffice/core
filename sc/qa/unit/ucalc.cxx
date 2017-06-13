@@ -1035,7 +1035,7 @@ void Test::testValueIterator()
 
     {
         const double aChecks[] = { 1.0, 2.0, 3.0 };
-        size_t nCheckLen = SAL_N_ELEMENTS(aChecks);
+        size_t const nCheckLen = SAL_N_ELEMENTS(aChecks);
         ScValueIterator aIter(m_pDoc, ScRange(1,2,0,3,2,0));
         bool bHas = false;
         size_t nCheckPos = 0;
@@ -1072,7 +1072,7 @@ void Test::testHorizontalAttrIterator()
 
     {
         const int aChecks[][3] = { {1, 3, 1}, {1, 2, 2}, {4, 4, 2}, {2, 3, 3}, {1, 4, 4} };
-        size_t nCheckLen = SAL_N_ELEMENTS(aChecks);
+        const size_t nCheckLen = SAL_N_ELEMENTS(aChecks);
 
         ScHorizontalAttrIterator aIter(m_pDoc, 0, 0, 0, 5, 5);
         SCCOL nCol1, nCol2;
@@ -3014,7 +3014,7 @@ void Test::testToggleRefFlag()
 
 void Test::testAutofilter()
 {
-    OUString aDBName("NONAME");
+    OUString const aDBName("NONAME");
 
     m_pDoc->InsertTab( 0, "Test" );
 
@@ -3295,15 +3295,15 @@ void Test::testCopyPaste()
 
     // add notes to A1:C1
     ScAddress aAdrA1 (0, 0, 0); // empty cell content
-    OUString aHelloA1("Hello world in A1");
+    OUString const aHelloA1("Hello world in A1");
     ScPostIt* pNoteA1 = m_pDoc->GetOrCreateNote(aAdrA1);
     pNoteA1->SetText(aAdrA1, aHelloA1);
     ScAddress aAdrB1 (1, 0, 0); // formula cell content
-    OUString aHelloB1("Hello world in B1");
+    OUString const aHelloB1("Hello world in B1");
     ScPostIt* pNoteB1 = m_pDoc->GetOrCreateNote(aAdrB1);
     pNoteB1->SetText(aAdrB1, aHelloB1);
     ScAddress aAdrC1 (2, 0, 0); // string cell content
-    OUString aHelloC1("Hello world in C1");
+    OUString const aHelloC1("Hello world in C1");
     ScPostIt* pNoteC1 = m_pDoc->GetOrCreateNote(aAdrC1);
     pNoteC1->SetText(aAdrC1, aHelloC1);
 
@@ -3478,15 +3478,15 @@ void Test::testCopyPasteTranspose()
 
     // add notes to A1:C1
     ScAddress aAdrA1 (0, 0, 0); // numerical cell content
-    OUString aHelloA1("Hello world in A1");
+    OUString const aHelloA1("Hello world in A1");
     ScPostIt* pNoteA1 = m_pDoc->GetOrCreateNote(aAdrA1);
     pNoteA1->SetText(aAdrA1, aHelloA1);
     ScAddress aAdrB1 (1, 0, 0); // formula cell content
-    OUString aHelloB1("Hello world in B1");
+    OUString const aHelloB1("Hello world in B1");
     ScPostIt* pNoteB1 = m_pDoc->GetOrCreateNote(aAdrB1);
     pNoteB1->SetText(aAdrB1, aHelloB1);
     ScAddress aAdrC1 (2, 0, 0); // string cell content
-    OUString aHelloC1("Hello world in C1");
+    OUString const aHelloC1("Hello world in C1");
     ScPostIt* pNoteC1 = m_pDoc->GetOrCreateNote(aAdrC1);
     pNoteC1->SetText(aAdrC1, aHelloC1);
 
@@ -3716,8 +3716,7 @@ void Test::testCopyPasteSkipEmpty()
     m_pDoc->CopyToDocument(aDestRange, InsertDeleteFlags::ALL, false, *pUndoDoc, &aMark);
 
     // Paste clipboard content onto A1:A5 but skip empty cells.
-    bool bSkipEmpty = true;
-    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::ALL, pUndoDoc, &aClipDoc, true, false, false, bSkipEmpty);
+    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::ALL, pUndoDoc, &aClipDoc, true, false, false, true/*bSkipEmpty*/);
 
     // Create redo document.
     ScDocument* pRedoDoc = new ScDocument(SCDOCMODE_UNDO);
@@ -4062,15 +4061,15 @@ void Test::testMoveBlock()
 
     // add notes to A1:C1
     ScAddress aAddrA1 (0, 0, 0);
-    OUString aHelloA1("Hello world in A1");
+    OUString const aHelloA1("Hello world in A1");
     ScPostIt* pNoteA1 = m_pDoc->GetOrCreateNote(aAddrA1);
     pNoteA1->SetText(aAddrA1, aHelloA1);
     ScAddress aAddrB1 (1, 0, 0);
-    OUString aHelloB1("Hello world in B1");
+    OUString const aHelloB1("Hello world in B1");
     ScPostIt* pNoteB1 = m_pDoc->GetOrCreateNote(aAddrB1);
     pNoteB1->SetText(aAddrB1, aHelloB1);
     ScAddress aAddrC1 (2, 0, 0);
-    OUString aHelloC1("Hello world in C1");
+    OUString const aHelloC1("Hello world in C1");
     ScPostIt* pNoteC1 = m_pDoc->GetOrCreateNote(aAddrC1);
     pNoteC1->SetText(aAddrC1, aHelloC1);
     ScAddress aAddrD1 (3, 0, 0);
@@ -4079,9 +4078,8 @@ void Test::testMoveBlock()
     //CPPUNIT_ASSERT_MESSAGE("Note content in B1 before move block", m_pDoc->GetNote(aAddrB1)->GetText() == aHelloB1);
 
     // move notes to B1:D1
-    bool bCut = true;
     ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
-    bool bMoveDone = rDocFunc.MoveBlock(ScRange(0, 0 ,0 ,2 ,0 ,0), ScAddress(1, 0, 0), bCut, false, false, false);
+    bool bMoveDone = rDocFunc.MoveBlock(ScRange(0, 0 ,0 ,2 ,0 ,0), ScAddress(1, 0, 0), true/*bCut*/, false, false, false);
 
     CPPUNIT_ASSERT_MESSAGE("Cells not moved", bMoveDone);
 
@@ -4217,10 +4215,9 @@ void Test::testCopyPasteRepeatOneFormula()
     m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
 
     // Paste it to C2:C10.
-    InsertDeleteFlags nFlags = InsertDeleteFlags::CONTENTS;
     ScRange aDestRange(2,1,0,2,9,0);
     aMark.SetMarkArea(aDestRange);
-    m_pDoc->CopyFromClip(aDestRange, aMark, nFlags, nullptr, &aClipDoc);
+    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &aClipDoc);
 
     // Make sure C1:C10 are grouped.
     const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(aPos);
@@ -4848,16 +4845,16 @@ void Test::testCopyPasteFormulas()
 
 void Test::testCopyPasteFormulasExternalDoc()
 {
-    OUString aDocName("file:///source.fake");
+    OUString const aDocName("file:///source.fake");
     SfxMedium* pMedium = new SfxMedium(aDocName, StreamMode::STD_READWRITE);
     getDocShell().DoInitNew(pMedium);
     m_pDoc = &getDocShell().GetDocument();
 
     ScDocShellRef xExtDocSh = new ScDocShell;
     xExtDocSh->SetIsInUcalc();
-    OUString aExtDocName("file:///extdata.fake");
-    OUString aExtSh1Name("ExtSheet1");
-    OUString aExtSh2Name("ExtSheet2");
+    OUString const aExtDocName("file:///extdata.fake");
+    OUString const aExtSh1Name("ExtSheet1");
+    OUString const aExtSh2Name("ExtSheet2");
     SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
     xExtDocSh->DoInitNew(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
@@ -4884,11 +4881,10 @@ void Test::testCopyPasteFormulasExternalDoc()
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
 
-    InsertDeleteFlags nFlags = InsertDeleteFlags::ALL;
     aRange = ScRange(1,1,1,1,6,1);
     ScMarkData aMarkData2;
     aMarkData2.SetMarkArea(aRange);
-    rExtDoc.CopyFromClip(aRange, aMarkData2, nFlags, nullptr, &aClipDoc);
+    rExtDoc.CopyFromClip(aRange, aMarkData2, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
 
     OUString aFormula;
     rExtDoc.GetFormula(1,1,1, aFormula);
@@ -4912,7 +4908,7 @@ void Test::testCopyPasteFormulasExternalDoc()
 
 void Test::testCopyPasteReferencesExternalDoc()
 {
-    OUString aDocName("file:///source.fake");
+    OUString const aDocName("file:///source.fake");
     SfxMedium* pMedium = new SfxMedium(aDocName, StreamMode::STD_READWRITE);
     getDocShell().DoInitNew(pMedium);
     m_pDoc = &getDocShell().GetDocument();
@@ -4920,7 +4916,7 @@ void Test::testCopyPasteReferencesExternalDoc()
     ScDocShellRef xExtDocSh = new ScDocShell;
     xExtDocSh->SetIsInUcalc();
     OUString aExtDocName("file:///extdata.fake");
-    OUString aExtSh1Name("ExtSheet1");
+    OUString const aExtSh1Name("ExtSheet1");
     SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
     xExtDocSh->DoInitNew(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
@@ -4940,11 +4936,10 @@ void Test::testCopyPasteReferencesExternalDoc()
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
 
-    InsertDeleteFlags nFlags = InsertDeleteFlags::ALL;
     aRange = ScRange(0,0,0,0,3,0);
     ScMarkData aMarkData2;
     aMarkData2.SetMarkArea(aRange);
-    rExtDoc.CopyFromClip(aRange, aMarkData2, nFlags, nullptr, &aClipDoc);
+    rExtDoc.CopyFromClip(aRange, aMarkData2, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
 
     OUString aFormula;
     rExtDoc.GetFormula(0,3,0, aFormula);
@@ -5213,8 +5208,8 @@ void Test::testNoteDeleteRow()
     // We need a drawing layer in order to create caption objects.
     m_pDoc->InitDrawLayer(&getDocShell());
 
-    OUString aHello("Hello");
-    OUString aJimBob("Jim Bob");
+    OUString const aHello("Hello");
+    OUString const aJimBob("Jim Bob");
     ScAddress aPos(1, 1, 0);
     ScPostIt* pNote = m_pDoc->GetOrCreateNote(aPos);
     pNote->SetText(aPos, aHello);
@@ -5363,9 +5358,9 @@ void Test::testNoteLifeCycle()
     ScAddress aMovePos(1,2,0);
     ScPostIt* pOrigNote = m_pDoc->GetNote(aOrigPos);
     const SdrCaptionObj* pOrigCaption = pOrigNote->GetOrCreateCaption(aOrigPos);
-    bool bCut = true;       // like Drag&Drop
+    bool const bCut = true;       // like Drag&Drop
     bool bRecord = true;    // record Undo
-    bool bPaint = false;    // don't care about
+    bool const bPaint = false;    // don't care about
     bool bApi = true;       // API to prevent dialogs
     ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
     bool bMoveDone = rDocFunc.MoveBlock(ScRange(aOrigPos, aOrigPos), aMovePos, bCut, bRecord, bPaint, bApi);
@@ -5711,8 +5706,7 @@ void Test::testCellTextWidth()
     m_pDoc->SetString(0, 0, 0, "Only one cell");
     pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, MAXROW));
     CPPUNIT_ASSERT_MESSAGE("Column should have a cell.", pIter->hasCell());
-    SCROW nTestRow = 0;
-    CPPUNIT_ASSERT_EQUAL(nTestRow, pIter->getPos());
+    CPPUNIT_ASSERT_EQUAL(SCROW(0), pIter->getPos());
 
     // Setting a text width here should commit it to the column.
     sal_uInt16 nTestVal = 432;
@@ -5731,8 +5725,7 @@ void Test::testCellTextWidth()
         // Full range.
         pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, MAXROW));
         SCROW aRows[] = { 0, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14, 15, 16, 17, 18 };
-        size_t n = SAL_N_ELEMENTS(aRows);
-        for (size_t i = 0; i < n; ++i, pIter->next())
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aRows); ++i, pIter->next())
         {
             CPPUNIT_ASSERT_MESSAGE("Cell expected, but not there.", pIter->hasCell());
             CPPUNIT_ASSERT_EQUAL(aRows[i], pIter->getPos());
@@ -5746,8 +5739,7 @@ void Test::testCellTextWidth()
         aStart.SetRow(6);
         pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aStart, 16));
         SCROW aRows[] = { 6, 10, 11, 12, 13, 14, 15, 16 };
-        size_t n = SAL_N_ELEMENTS(aRows);
-        for (size_t i = 0; i < n; ++i, pIter->next())
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aRows); ++i, pIter->next())
         {
             CPPUNIT_ASSERT_MESSAGE("Cell expected, but not there.", pIter->hasCell());
             CPPUNIT_ASSERT_EQUAL(aRows[i], pIter->getPos());
@@ -5762,8 +5754,7 @@ void Test::testCellTextWidth()
         // Full range again.
         pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, MAXROW));
         SCROW aRows[] = { 0, 2, 18 };
-        size_t n = SAL_N_ELEMENTS(aRows);
-        for (size_t i = 0; i < n; ++i, pIter->next())
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aRows); ++i, pIter->next())
         {
             CPPUNIT_ASSERT_MESSAGE("Cell expected, but not there.", pIter->hasCell());
             CPPUNIT_ASSERT_EQUAL(aRows[i], pIter->getPos());
@@ -5778,8 +5769,7 @@ void Test::testCellTextWidth()
         // Full range again.
         pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, MAXROW));
         SCROW aRows[] = { 0, 17 };
-        size_t n = SAL_N_ELEMENTS(aRows);
-        for (size_t i = 0; i < n; ++i, pIter->next())
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aRows); ++i, pIter->next())
         {
             CPPUNIT_ASSERT_MESSAGE("Cell expected, but not there.", pIter->hasCell());
             CPPUNIT_ASSERT_EQUAL(aRows[i], pIter->getPos());

@@ -816,9 +816,8 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
         case SID_ZOOM_IN:
         case SID_ZOOM_OUT:
         {
-            SvxZoomType eType = SvxZoomType::PERCENT;
             const SwViewOption* pVOpt = GetViewShell()->GetViewOptions();
-            SetZoom(eType,
+            SetZoom(SvxZoomType::PERCENT,
                     lcl_GetNextZoomStep(pVOpt->GetZoom(), SID_ZOOM_IN == rReq.GetSlot()));
         }
         break;
@@ -973,7 +972,6 @@ MOVEPAGE:
 void  SwPagePreview::GetState( SfxItemSet& rSet )
 {
     SfxWhichIter aIter(rSet);
-    sal_uInt8 nRow = 1;
     sal_uInt16 nWhich = aIter.FirstWhich();
     OSL_ENSURE(nWhich, "empty set");
     SwPagePreviewLayout* pPagePreviewLay = GetViewShell()->PagePreviewLayout();
@@ -1069,7 +1067,7 @@ void  SwPagePreview::GetState( SfxItemSet& rSet )
         break;
 
         case FN_SHOW_TWO_PAGES:
-            if( 2 == m_pViewWin->GetCol() && nRow == m_pViewWin->GetRow() )
+            if( 2 == m_pViewWin->GetCol() && 1 == m_pViewWin->GetRow() )
                 rSet.DisableItem( nWhich );
             break;
 

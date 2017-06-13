@@ -203,8 +203,7 @@ void Standard2007Engine::writeEncryptionInfo(const OUString& password, BinaryXOu
     rStream.writeUnicodeArray(lclCspName);
     rStream.WriteUInt16(0);
 
-    sal_uInt32 encryptionVerifierSize = static_cast<sal_uInt32>(sizeof(msfilter::EncryptionVerifierAES));
-    rStream.writeMemory(&mInfo.verifier, encryptionVerifierSize);
+    rStream.writeMemory(&mInfo.verifier, sizeof(msfilter::EncryptionVerifierAES));
 }
 
 void Standard2007Engine::encrypt(BinaryXInputStream& aInputStream,

@@ -252,8 +252,8 @@ DataSourceTabPage::DataSourceTabPage(
     m_pBTN_DOWN->SetControlFont( aSymbolFont );
 
     // set button text
-    sal_Unicode cBlackUpPointingTriangle( 0x25b2 );
-    sal_Unicode cBlackDownPointingTriangle( 0x25bc );
+    sal_Unicode const cBlackUpPointingTriangle( 0x25b2 );
+    sal_Unicode const cBlackDownPointingTriangle( 0x25bc );
     m_pBTN_UP->SetText( OUString( cBlackUpPointingTriangle ));
     m_pBTN_DOWN->SetText( OUString( cBlackDownPointingTriangle ));
 

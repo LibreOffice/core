@@ -445,8 +445,7 @@ void Decompression::fillArray()
     m_iArrayOfM[0] = 7;
     for (int i=1; i < 16; i++)
     {
-        double dR = 2.0;
-        m_iArrayOfM[i]  = m_iArrayOfM[i - 1]+ (sal_uInt32)pow(dR, i-1);//2
+        m_iArrayOfM[i]  = m_iArrayOfM[i - 1]+ (sal_uInt32)pow(2.0, i-1);//2
     }
 }
 

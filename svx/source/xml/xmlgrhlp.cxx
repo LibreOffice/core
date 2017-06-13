@@ -440,9 +440,8 @@ SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const OUSt
         aRet.xStream = aRet.xStorage->openStreamElement( rPictureStreamName, nMode );
         if( aRet.xStream.is() && ( SvXMLGraphicHelperMode::Write == meCreateMode ) )
         {
-            OUString aPropName( "UseCommonStoragePasswordEncryption" );
             uno::Reference < beans::XPropertySet > xProps( aRet.xStream, uno::UNO_QUERY );
-            xProps->setPropertyValue( aPropName, uno::makeAny( true) );
+            xProps->setPropertyValue( "UseCommonStoragePasswordEncryption", uno::makeAny( true) );
         }
     }
 
@@ -478,7 +477,8 @@ OUString SvXMLGraphicHelper::ImplGetGraphicMimeType( const OUString& rFileName )
         const OString aExt(OUStringToOString(rFileName.copy(rFileName.getLength() - 3),
             RTL_TEXTENCODING_ASCII_US));
 
-        for( long i = 0, nCount = SAL_N_ELEMENTS(aMapper); ( i < nCount ) && aMimeType.isEmpty(); ++i )
+        long const nCount = SAL_N_ELEMENTS(aMapper);
+        for( long i = 0; ( i < nCount ) && aMimeType.isEmpty(); ++i )
             if( aExt == aMapper[ i ].pExt )
                 aMimeType = OUString( aMapper[ i ].pMimeType, strlen( aMapper[ i ].pMimeType ), RTL_TEXTENCODING_ASCII_US );
     }
@@ -647,9 +647,8 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
             if( aObj.GetType() != GraphicType::NONE )
             {
                 maGrfObjs.push_back( aObj );
-                OUString aBaseURL(  XML_GRAPHICOBJECT_URL_BASE  );
 
-                rURLPair.second = aBaseURL;
+                rURLPair.second = XML_GRAPHICOBJECT_URL_BASE;
                 rURLPair.second += OStringToOUString(aObj.GetUniqueID(),
                     RTL_TEXTENCODING_ASCII_US);
             }

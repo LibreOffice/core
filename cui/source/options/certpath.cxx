@@ -66,11 +66,10 @@ CertPathDialog::CertPathDialog(vcl::Window* pParent)
             "thunderbird",
             "firefox",
             "mozilla" };
-        sal_Int32 nProduct = SAL_N_ELEMENTS(productTypes);
 
         uno::Reference<mozilla::XMozillaBootstrap> xMozillaBootstrap = mozilla::MozillaBootstrap::create( comphelper::getProcessComponentContext() );
 
-        for (sal_Int32 i = 0; i < nProduct; ++i)
+        for (sal_Int32 i = 0; i < sal_Int32(SAL_N_ELEMENTS(productTypes)); ++i)
         {
             OUString profile = xMozillaBootstrap->getDefaultProfile(productTypes[i]);
 

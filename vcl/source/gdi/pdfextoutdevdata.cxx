@@ -809,8 +809,6 @@ void PDFExtOutDevData::EndGroup( const Graphic&     rGraphic,
 // Avoids expensive de-compression and re-compression of large images.
 bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic ) const
 {
-    bool bReduceResolution = false;
-
     assert(rGraphic.IsLink() &&
            (rGraphic.GetLink().GetType() == GfxLinkType::NativeJpg ||
             rGraphic.GetLink().GetType() == GfxLinkType::NativePng ||
@@ -830,7 +828,7 @@ bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic ) const
                                rGraphic.GetLink().GetDataSize();
 
     if ( GetIsLosslessCompression() )
-        return !bReduceResolution && !GetIsReduceImageResolution();
+        return !GetIsReduceImageResolution();
     else
     {
         static const struct {

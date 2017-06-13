@@ -118,9 +118,8 @@ namespace
     }
 
     // #112245# helper to evtl. split filled polygons to maximum metafile point count
-    bool fillPolyPolygonNeededToBeSplit(basegfx::B2DPolyPolygon& rPolyPolygon)
+    void fillPolyPolygonNeededToBeSplit(basegfx::B2DPolyPolygon& rPolyPolygon)
     {
-        bool bRetval(false);
         const sal_uInt32 nPolyCount(rPolyPolygon.count());
 
         if(nPolyCount)
@@ -204,8 +203,6 @@ namespace
                 rPolyPolygon = aSplitted;
             }
         }
-
-        return bRetval;
     }
 
     /** Filter input polypolygon for effectively empty sub-fills
@@ -1365,80 +1362,69 @@ namespace drawinglayer
                     const primitive2d::PolyPolygonGraphicPrimitive2D& rBitmapCandidate = static_cast< const primitive2d::PolyPolygonGraphicPrimitive2D& >(rCandidate);
                     basegfx::B2DPolyPolygon aLocalPolyPolygon(rBitmapCandidate.getB2DPolyPolygon());
 
-                    if(fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon))
+                    fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon);
+
+                    SvtGraphicFill* pSvtGraphicFill = nullptr;
+
+                    if(!mnSvtGraphicFillCount && aLocalPolyPolygon.count())
                     {
-                        // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
-                        // per polygon. If there are more use the splitted polygon and call recursively
-                        rtl::Reference< primitive2d::PolyPolygonGraphicPrimitive2D > xSplitted(new primitive2d::PolyPolygonGraphicPrimitive2D(
-                            aLocalPolyPolygon,
-                            rBitmapCandidate.getFillGraphic()));
+                        // #121194# Changed implementation and checked usages fo convert to metafile,
+                        // presentation start (uses SvtGraphicFill) and printing.
 
-                        processBasePrimitive2D(*xSplitted.get());
+                        // calculate transformation. Get real object size, all values in FillGraphicAttribute
+                        // are relative to the unified object
+                        aLocalPolyPolygon.transform(maCurrentTransformation);
+                        const basegfx::B2DVector aOutlineSize(aLocalPolyPolygon.getB2DRange().getRange());
+
+                        // the scaling needs scale from pixel to logic coordinate system
+                        const attribute::FillGraphicAttribute& rFillGraphicAttribute = rBitmapCandidate.getFillGraphic();
+                        const Size aBmpSizePixel(rFillGraphicAttribute.getGraphic().GetSizePixel());
+
+                        // setup transformation like in impgrfll. Multiply with aOutlineSize
+                        // to get from unit coordinates in rFillGraphicAttribute.getGraphicRange()
+                        // to object coordinates with object's top left being at (0,0). Divide
+                        // by pixel size so that scale from pixel to logic will work in SvtGraphicFill.
+                        const basegfx::B2DVector aTransformScale(
+                            rFillGraphicAttribute.getGraphicRange().getRange() /
+                            basegfx::B2DVector(
+                                std::max(1.0, double(aBmpSizePixel.Width())),
+                                std::max(1.0, double(aBmpSizePixel.Height()))) *
+                            aOutlineSize);
+                        const basegfx::B2DPoint aTransformPosition(
+                            rFillGraphicAttribute.getGraphicRange().getMinimum() * aOutlineSize);
+
+                        // setup transformation like in impgrfll
+                        SvtGraphicFill::Transform aTransform;
+
+                        // scale values are divided by bitmap pixel sizes
+                        aTransform.matrix[0] = aTransformScale.getX();
+                        aTransform.matrix[4] = aTransformScale.getY();
+
+                        // translates are absolute
+                        aTransform.matrix[2] = aTransformPosition.getX();
+                        aTransform.matrix[5] = aTransformPosition.getY();
+
+                        pSvtGraphicFill = new SvtGraphicFill(
+                            getFillPolyPolygon(aLocalPolyPolygon),
+                            Color(),
+                            0.0,
+                            SvtGraphicFill::fillEvenOdd,
+                            SvtGraphicFill::fillTexture,
+                            aTransform,
+                            rFillGraphicAttribute.getTiling(),
+                            SvtGraphicFill::hatchSingle,
+                            Color(),
+                            SvtGraphicFill::GradientType::Linear,
+                            Color(),
+                            Color(),
+                            0,
+                            rFillGraphicAttribute.getGraphic());
                     }
-                    else
-                    {
-                        SvtGraphicFill* pSvtGraphicFill = nullptr;
 
-                        if(!mnSvtGraphicFillCount && aLocalPolyPolygon.count())
-                        {
-                            // #121194# Changed implementation and checked usages fo convert to metafile,
-                            // presentation start (uses SvtGraphicFill) and printing.
-
-                            // calculate transformation. Get real object size, all values in FillGraphicAttribute
-                            // are relative to the unified object
-                            aLocalPolyPolygon.transform(maCurrentTransformation);
-                            const basegfx::B2DVector aOutlineSize(aLocalPolyPolygon.getB2DRange().getRange());
-
-                            // the scaling needs scale from pixel to logic coordinate system
-                            const attribute::FillGraphicAttribute& rFillGraphicAttribute = rBitmapCandidate.getFillGraphic();
-                            const Size aBmpSizePixel(rFillGraphicAttribute.getGraphic().GetSizePixel());
-
-                            // setup transformation like in impgrfll. Multiply with aOutlineSize
-                            // to get from unit coordinates in rFillGraphicAttribute.getGraphicRange()
-                            // to object coordinates with object's top left being at (0,0). Divide
-                            // by pixel size so that scale from pixel to logic will work in SvtGraphicFill.
-                            const basegfx::B2DVector aTransformScale(
-                                rFillGraphicAttribute.getGraphicRange().getRange() /
-                                basegfx::B2DVector(
-                                    std::max(1.0, double(aBmpSizePixel.Width())),
-                                    std::max(1.0, double(aBmpSizePixel.Height()))) *
-                                aOutlineSize);
-                            const basegfx::B2DPoint aTransformPosition(
-                                rFillGraphicAttribute.getGraphicRange().getMinimum() * aOutlineSize);
-
-                            // setup transformation like in impgrfll
-                            SvtGraphicFill::Transform aTransform;
-
-                            // scale values are divided by bitmap pixel sizes
-                            aTransform.matrix[0] = aTransformScale.getX();
-                            aTransform.matrix[4] = aTransformScale.getY();
-
-                            // translates are absolute
-                            aTransform.matrix[2] = aTransformPosition.getX();
-                            aTransform.matrix[5] = aTransformPosition.getY();
-
-                            pSvtGraphicFill = new SvtGraphicFill(
-                                getFillPolyPolygon(aLocalPolyPolygon),
-                                Color(),
-                                0.0,
-                                SvtGraphicFill::fillEvenOdd,
-                                SvtGraphicFill::fillTexture,
-                                aTransform,
-                                rFillGraphicAttribute.getTiling(),
-                                SvtGraphicFill::hatchSingle,
-                                Color(),
-                                SvtGraphicFill::GradientType::Linear,
-                                Color(),
-                                Color(),
-                                0,
-                                rFillGraphicAttribute.getGraphic());
-                        }
-
-                        // Do use decomposition; encapsulate with SvtGraphicFill
-                        impStartSvtGraphicFill(pSvtGraphicFill);
-                        process(rCandidate);
-                        impEndSvtGraphicFill(pSvtGraphicFill);
-                    }
+                    // Do use decomposition; encapsulate with SvtGraphicFill
+                    impStartSvtGraphicFill(pSvtGraphicFill);
+                    process(rCandidate);
+                    impEndSvtGraphicFill(pSvtGraphicFill);
 
                     break;
                 }
@@ -1460,8 +1446,7 @@ namespace drawinglayer
 
                     // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
                     // per polygon. Split polygon until there are less than that
-                    while(fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon))
-                        ;
+                    fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon);
 
                     if(rFillHatchAttribute.isFillBackground())
                     {
@@ -1597,8 +1582,7 @@ namespace drawinglayer
 
                         // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
                         // per polygon. Split polygon until there are less than that
-                        while(fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon))
-                            ;
+                        fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon);
 
                         // for support of MetaCommentActions of the form XGRAD_SEQ_BEGIN, XGRAD_SEQ_END
                         // it is safest to use the VCL OutputDevice::DrawGradient method which creates those.
@@ -1672,8 +1656,7 @@ namespace drawinglayer
 
                     // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
                     // per polygon. Split polygon until there are less than that
-                    while(fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon))
-                        ;
+                    fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon);
 
                     const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rPolygonCandidate.getBColor()));
                     aLocalPolyPolygon.transform(maCurrentTransformation);
@@ -1850,8 +1833,7 @@ namespace drawinglayer
 
                                 // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
                                 // per polygon. Split polygon until there are less than that
-                                while(fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon))
-                                    ;
+                                fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon);
 
                                 // now transform
                                 aLocalPolyPolygon.transform(maCurrentTransformation);

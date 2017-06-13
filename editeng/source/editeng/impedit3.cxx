@@ -1687,15 +1687,12 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion )
         SvxAdjust eJustification = GetJustification( nPara );
         long nMaxLineWidth = !IsVertical() ? aPaperSize.Width() : aPaperSize.Height();
         nMaxLineWidth -= GetXValue( rLRItem.GetRight() );
-        long nTextXOffset = 0;
         if ( nMaxLineWidth < 0 )
             nMaxLineWidth = 1;
         if ( eJustification ==  SvxAdjust::Center )
             nStartX = nMaxLineWidth / 2;
         else if ( eJustification ==  SvxAdjust::Right )
             nStartX = nMaxLineWidth;
-
-        nStartX = nStartX + nTextXOffset;
     }
 
     pTmpLine->SetStartPosX( nStartX );

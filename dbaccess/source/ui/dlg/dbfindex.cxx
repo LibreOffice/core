@@ -297,8 +297,8 @@ void ODbaseIndexDialog::Init()
 
     Sequence< OUString> aFolderContent( ::utl::LocalFileHelper::GetFolderContents(m_aDSN,bFolder));
 
-    OUString aIndexExt("ndx");
-    OUString aTableExt("dbf");
+    OUString const aIndexExt("ndx");
+    OUString const aTableExt("dbf");
 
     std::vector< OUString > aUsedIndexes;
 

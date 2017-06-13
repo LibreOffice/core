@@ -433,8 +433,7 @@ SvNumberFormatter* SbiInstance::PrepareNumberFormatter( sal_uInt32 &rnStdDateIdx
     pNumberFormater->PutandConvertEntry( aStr, nCheckPos, nType,
         rnStdDateIdx, LANGUAGE_ENGLISH_US, eLangType );
     nCheckPos = 0;
-    OUString aStrHHMMSS(" HH:MM:SS");
-    aDateStr += aStrHHMMSS;
+    aDateStr += " HH:MM:SS";
     aStr = aDateStr;
     pNumberFormater->PutandConvertEntry( aStr, nCheckPos, nType,
         rnStdDateTimeIdx, LANGUAGE_ENGLISH_US, eLangType );
@@ -486,8 +485,7 @@ void SbiInstance::ErrorVB( sal_Int32 nVBNumber, const OUString& rMsg )
         aErrorMsg = rMsg;
         SbiRuntime::translateErrorToVba( n, aErrorMsg );
 
-        bool bVBATranslationAlreadyDone = true;
-        pRun->Error( ERRCODE_BASIC_COMPAT, bVBATranslationAlreadyDone );
+        pRun->Error( ERRCODE_BASIC_COMPAT, true/*bVBATranslationAlreadyDone*/ );
     }
 }
 

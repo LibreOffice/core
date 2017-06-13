@@ -111,10 +111,9 @@ void lcl_getProperties(
         ::chart::tPropertyNameValueMap aTextValueMap;
         ::chart::PropertyMapper::getValueMap( aTextValueMap, ::chart::PropertyMapper::getPropertyNameMapForCharacterProperties(), xLegendProp );
 
-        drawing::TextHorizontalAdjust eHorizAdjust( drawing::TextHorizontalAdjust_LEFT );
         aTextValueMap[ "TextAutoGrowHeight" ] <<= true;
         aTextValueMap[ "TextAutoGrowWidth" ] <<= true;
-        aTextValueMap[ "TextHorizontalAdjust" ] <<= eHorizAdjust;
+        aTextValueMap[ "TextHorizontalAdjust" ] <<= drawing::TextHorizontalAdjust_LEFT;
         aTextValueMap[ "TextMaximumFrameWidth" ] <<= rReferenceSize.Width; //needs to be overwritten by actual available space in the legend
 
         // recalculate font size

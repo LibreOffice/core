@@ -133,11 +133,10 @@ void CandleStickChart::createShapes()
     }
 
     //(@todo maybe different iteration for breaks in axis ?)
-    sal_Int32 nStartIndex = 0;
     sal_Int32 nEndIndex = VSeriesPlotter::getPointCount();
     double fLogicZ = 1.5;//as defined
     //iterate through all x values per indices
-    for( sal_Int32 nIndex = nStartIndex; nIndex < nEndIndex; nIndex++ )
+    for( sal_Int32 nIndex = 0; nIndex < nEndIndex; nIndex++ )
     {
         std::vector< std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
         const std::vector< std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();

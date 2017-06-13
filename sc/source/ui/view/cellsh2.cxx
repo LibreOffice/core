@@ -1103,8 +1103,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                 {
                     //  SBA wants a sal_Bool-item, enabled
 
-                    bool bEnable = true;
-                    rSet.Put(SfxBoolItem(nWhich, bEnable));
+                    rSet.Put(SfxBoolItem(nWhich, true));
                 }
                 break;
 

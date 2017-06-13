@@ -192,12 +192,10 @@ uno::Reference< word::XTabStop > SAL_CALL SwVbaTabStops::Add( float Position, co
         }
     }
 
-    sal_Char cDecimal = '.'; // default value
-
     style::TabStop aTab;
     aTab.Position = nPosition;
     aTab.Alignment = nAlign;
-    aTab.DecimalChar = cDecimal;
+    aTab.DecimalChar = '.'; // default value
     aTab.FillChar = cLeader;
 
     uno::Sequence< style::TabStop > aOldTabs = lcl_getTabStops( mxParaProps );

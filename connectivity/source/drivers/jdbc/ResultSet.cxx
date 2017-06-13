@@ -165,7 +165,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::getBoolean( sal_Int32 columnIndex )
 sal_Int8 SAL_CALL java_sql_ResultSet::getByte( sal_Int32 columnIndex )
 {
     static jmethodID mID(nullptr);
-    jbyte (JNIEnv::*pCallMethod)( jobject obj, jmethodID methodID, ... ) = &JNIEnv::CallByteMethod;
+    jbyte (JNIEnv::* const pCallMethod)( jobject obj, jmethodID methodID, ... ) = &JNIEnv::CallByteMethod;
     return callMethodWithIntArg<jbyte>(pCallMethod,"getByte","(I)B",mID,columnIndex);
 }
 
@@ -200,7 +200,7 @@ css::util::Date SAL_CALL java_sql_ResultSet::getDate( sal_Int32 columnIndex )
 double SAL_CALL java_sql_ResultSet::getDouble( sal_Int32 columnIndex )
 {
     static jmethodID mID(nullptr);
-    jdouble (JNIEnv::*pCallMethod)( jobject obj, jmethodID methodID, ... ) = &JNIEnv::CallDoubleMethod;
+    jdouble (JNIEnv::* const pCallMethod)( jobject obj, jmethodID methodID, ... ) = &JNIEnv::CallDoubleMethod;
     return callMethodWithIntArg<double>(pCallMethod,"getDouble","(I)D",mID,columnIndex);
 }
 
@@ -208,7 +208,7 @@ double SAL_CALL java_sql_ResultSet::getDouble( sal_Int32 columnIndex )
 float SAL_CALL java_sql_ResultSet::getFloat( sal_Int32 columnIndex )
 {
     static jmethodID mID(nullptr);
-    jfloat (JNIEnv::*pCallMethod)( jobject obj, jmethodID methodID, ... ) = &JNIEnv::CallFloatMethod;
+    jfloat (JNIEnv::* const pCallMethod)( jobject obj, jmethodID methodID, ... ) = &JNIEnv::CallFloatMethod;
     return callMethodWithIntArg<jfloat>(pCallMethod,"getFloat","(I)F",mID,columnIndex);
 }
 
@@ -230,7 +230,7 @@ sal_Int32 SAL_CALL java_sql_ResultSet::getRow(  )
 sal_Int64 SAL_CALL java_sql_ResultSet::getLong( sal_Int32 columnIndex )
 {
     static jmethodID mID(nullptr);
-    jlong (JNIEnv::*pCallMethod)( jobject obj, jmethodID methodID, ... ) = &JNIEnv::CallLongMethod;
+    jlong (JNIEnv::* const pCallMethod)( jobject obj, jmethodID methodID, ... ) = &JNIEnv::CallLongMethod;
     return callMethodWithIntArg<jlong>(pCallMethod,"getLong","(I)J",mID,columnIndex);
 }
 
@@ -349,7 +349,7 @@ Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Referen
 sal_Int16 SAL_CALL java_sql_ResultSet::getShort( sal_Int32 columnIndex )
 {
     static jmethodID mID(nullptr);
-    jshort (JNIEnv::*pCallMethod)( jobject obj, jmethodID methodID, ... ) = &JNIEnv::CallShortMethod;
+    jshort (JNIEnv::* const pCallMethod)( jobject obj, jmethodID methodID, ... ) = &JNIEnv::CallShortMethod;
     return callMethodWithIntArg<jshort>(pCallMethod,"getShort","(I)S",mID,columnIndex);
 }
 

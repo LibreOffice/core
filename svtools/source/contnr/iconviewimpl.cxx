@@ -469,8 +469,6 @@ bool IconViewImpl::KeyInput( const KeyEvent& rKEvt )
     if( !pCursor )
         return false;
 
-    bool bKeyUsed = true;
-
     sal_uInt16  aCode = rKeyCode.GetCode();
 
     bool    bShift = rKeyCode.IsShift();
@@ -657,7 +655,7 @@ bool IconViewImpl::KeyInput( const KeyEvent& rKEvt )
     if(!bHandled)
         return SvImpLBox::KeyInput( rKEvt );
 
-    return bKeyUsed;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

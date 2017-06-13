@@ -716,7 +716,6 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
 
                 if (ppTitlePos && !maTitles.empty() && !maRowHeaders.empty())
                 {
-                    OUString aDelim( " / " );
                     for (SCSIZE nPos=0; nPos<nDataCount; nPos++)
                     {
                         SCSIZE nTPos = ppTitlePos[nArrY][nPos];
@@ -726,9 +725,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                                 bDo = false;                                    // empty
                         if ( bDo && nTPos < nNeeded )
                         {
-                            aString =  maRowHeaders[nArrY];
-                            aString += aDelim;
-                            aString += maTitles[nPos];
+                            aString = maRowHeaders[nArrY] + " / " + maTitles[nPos];
                             pDestDoc->SetString( nCol-1, nRow+nArrY+nTPos, nTab, aString );
                         }
                     }

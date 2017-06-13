@@ -736,10 +736,10 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
 
                         aOldValuesKey += "/";
 
-                        OUString aHandleKey("/Handle");
-                        OUString aValueKey("/Value");
-                        OUString aStateKey("/State");
-                        OUString aAttrKey("/Attributes");
+                        OUString const aHandleKey("/Handle");
+                        OUString const aValueKey("/Value");
+                        OUString const aStateKey("/State");
+                        OUString const aAttrKey("/Attributes");
 
                         for ( sal_Int32 n = 0; n < nCount; ++n )
                         {
@@ -763,32 +763,28 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                             aKey += makeHierarchalNameSegment( rPropName );
 
                             // ... handle
-                            OUString aNewKey1 = aKey;
-                            aNewKey1 += aHandleKey;
+                            OUString aNewKey1 = aKey + aHandleKey;
                             Any aAny =
                                 xRootHierNameAccess->getByHierarchicalName(
                                     aNewKey1 );
                             xNewPropNameReplace->replaceByName( "Handle", aAny );
 
                             // ... value
-                            aNewKey1 = aKey;
-                            aNewKey1 += aValueKey;
+                            aNewKey1 = aKey + aValueKey;
                             aAny =
                                 xRootHierNameAccess->getByHierarchicalName(
                                     aNewKey1 );
                             xNewPropNameReplace->replaceByName( "Value", aAny );
 
                             // ... state
-                            aNewKey1 = aKey;
-                            aNewKey1 += aStateKey;
+                            aNewKey1 = aKey + aStateKey;
                             aAny =
                                 xRootHierNameAccess->getByHierarchicalName(
                                     aNewKey1 );
                             xNewPropNameReplace->replaceByName( "State", aAny );
 
                             // ... attributes
-                            aNewKey1 = aKey;
-                            aNewKey1 += aAttrKey;
+                            aNewKey1 = aKey + aAttrKey;
                             aAny =
                                 xRootHierNameAccess->getByHierarchicalName(
                                     aNewKey1 );

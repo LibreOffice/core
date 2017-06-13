@@ -1002,9 +1002,8 @@ void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, boo
         ControlPart nPart = ( bVertical ? ControlPart::SeparatorVert : ControlPart::SeparatorHorz );
         bool nativeSupported = pWin->IsNativeControlSupported( ControlType::Fixedline, nPart );
         ImplControlValue    aValue;
-        ControlState        nState = ControlState::NONE;
         tools::Rectangle aRect(rStart,rStop);
-        if(nativeSupported && pWin->DrawNativeControl(ControlType::Fixedline,nPart,aRect,nState,aValue,OUString()))
+        if(nativeSupported && pWin->DrawNativeControl(ControlType::Fixedline,nPart,aRect,ControlState::NONE,aValue,OUString()))
             return;
     }
 

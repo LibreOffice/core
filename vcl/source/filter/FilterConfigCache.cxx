@@ -151,13 +151,13 @@ Reference< XInterface > openConfig(const char* sPackage)
 
 void FilterConfigCache::ImplInit()
 {
-    OUString STYPE                ( "Type"                );
-    OUString SUINAME              ( "UIName"              );
-    OUString SFLAGS               ( "Flags"               );
-    OUString SMEDIATYPE           ( "MediaType"           );
-    OUString SEXTENSIONS          ( "Extensions"          );
-    OUString SFORMATNAME          ( "FormatName"          );
-    OUString SREALFILTERNAME      ( "RealFilterName"      );
+    OUString const STYPE                ( "Type"                );
+    OUString const SUINAME              ( "UIName"              );
+    OUString const SFLAGS               ( "Flags"               );
+    OUString const SMEDIATYPE           ( "MediaType"           );
+    OUString const SEXTENSIONS          ( "Extensions"          );
+    OUString const SFORMATNAME          ( "FormatName"          );
+    OUString const SREALFILTERNAME      ( "RealFilterName"      );
 
     // get access to config
     Reference< XNameAccess > xTypeAccess  ( openConfig("types"  ), UNO_QUERY );

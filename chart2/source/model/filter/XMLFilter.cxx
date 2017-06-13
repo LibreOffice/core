@@ -593,9 +593,8 @@ sal_Int32 XMLFilter::impl_Export(
             comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) );
 
         SvtSaveOptions aSaveOpt;
-        OUString sUsePrettyPrinting( "UsePrettyPrinting" );
         bool bUsePrettyPrinting( aSaveOpt.IsPrettyPrinting() );
-        xInfoSet->setPropertyValue( sUsePrettyPrinting, uno::Any( bUsePrettyPrinting ) );
+        xInfoSet->setPropertyValue( "UsePrettyPrinting", uno::Any( bUsePrettyPrinting ) );
         if( ! bOasis )
             xInfoSet->setPropertyValue( "ExportTableNumberList", uno::Any( true ));
 
@@ -663,8 +662,6 @@ sal_Int32 XMLFilter::impl_ExportStream(
     const Reference< lang::XMultiServiceFactory >& xServiceFactory,
     const Sequence< uno::Any > & rFilterProperties )
 {
-    sal_Int32 nWarning = 0;
-
     try
     {
         if( !xServiceFactory.is() )
@@ -723,7 +720,7 @@ sal_Int32 XMLFilter::impl_ExportStream(
     {
         ASSERT_EXCEPTION( rEx );
     }
-    return nWarning;
+    return 0;
 }
 
 void XMLFilter::isOasisFormat(const Sequence< beans::PropertyValue >& _rMediaDescriptor, bool & rOutOASIS )

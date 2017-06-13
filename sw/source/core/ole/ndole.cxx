@@ -491,7 +491,6 @@ bool SwOLENode::IsInGlobalDocSection() const
 
 bool SwOLENode::IsOLEObjectDeleted() const
 {
-    bool bRet = false;
     if( aOLEObj.xOLERef.is() )
     {
         SfxObjectShell* p = GetDoc()->GetPersist();
@@ -500,7 +499,7 @@ bool SwOLENode::IsOLEObjectDeleted() const
             return !p->GetEmbeddedObjectContainer().HasEmbeddedObject( aOLEObj.aName );
         }
     }
-    return bRet;
+    return false;
 }
 
 void SwOLENode::GetNewReplacement()

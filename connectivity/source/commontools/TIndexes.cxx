@@ -138,7 +138,6 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const OUString& _rForName, const
         ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
         OUStringBuffer aSql( "CREATE " );
         OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
-        OUString aDot( "." );
 
         if(comphelper::getBOOL(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISUNIQUE))))
             aSql.append("UNIQUE ");
@@ -192,7 +191,7 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const OUString& _rForName, const
 
             xColumns->getByIndex(0) >>= xColProp;
 
-            aSql.append(aDot);
+            aSql.append(".");
             aSql.append(::dbtools::quoteName( aQuote,comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME)))));
         }
 

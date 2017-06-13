@@ -189,8 +189,7 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
 
     aCircleSet.Put( XLineColorItem( OUString(), Color( ScDetectiveFunc::GetErrorColor() ) ) );
     aCircleSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
-    sal_uInt16 nWidth = 55;     // 54 = 1 Pixel
-    aCircleSet.Put( XLineWidthItem( nWidth ) );
+    aCircleSet.Put( XLineWidthItem( 55 ) ); // 54 = 1 Pixel
 }
 
 ScCommentData::ScCommentData( ScDocument& rDoc, SdrModel* pModel ) :

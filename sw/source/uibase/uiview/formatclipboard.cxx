@@ -368,8 +368,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
         {
             if( pDrawView->AreObjectsMarked() )
             {
-                bool bOnlyHardAttr = true;
-                pItemSet_TextAttr = new SfxItemSet( pDrawView->GetAttrFromMarked(bOnlyHardAttr) );
+                pItemSet_TextAttr = new SfxItemSet( pDrawView->GetAttrFromMarked(true/*bOnlyHardAttr*/) );
                 //remove attributes defining the type/data of custom shapes
                 pItemSet_TextAttr->ClearItem(SDRATTR_CUSTOMSHAPE_ENGINE);
                 pItemSet_TextAttr->ClearItem(SDRATTR_CUSTOMSHAPE_DATA);
@@ -542,8 +541,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
             SdrView* pDrawView = rWrtShell.GetDrawView();
             if(pDrawView)
             {
-                bool bReplaceAll = true;
-                pDrawView->SetAttrToMarked(*m_pItemSet_TextAttr, bReplaceAll);
+                pDrawView->SetAttrToMarked(*m_pItemSet_TextAttr, true/*bReplaceAll*/);
             }
         }
         else

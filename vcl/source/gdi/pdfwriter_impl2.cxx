@@ -188,13 +188,12 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                         aMask = aBitmapEx.GetMask();
                 }
                 Graphic         aGraphic( aBitmapEx.GetBitmap() );
-                sal_Int32       nColorMode = 0;
 
                 Sequence< PropertyValue > aFilterData( 2 );
                 aFilterData[ 0 ].Name = "Quality";
                 aFilterData[ 0 ].Value <<= sal_Int32(i_rContext.m_nJPEGQuality);
                 aFilterData[ 1 ].Name = "ColorMode";
-                aFilterData[ 1 ].Value <<= nColorMode;
+                aFilterData[ 1 ].Value <<= sal_Int32(0);
 
                 try
                 {
@@ -204,12 +203,11 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                     uno::Reference< graphic::XGraphicProvider > xGraphicProvider( graphic::GraphicProvider::create(xContext) );
                     uno::Reference< graphic::XGraphic > xGraphic( aGraphic.GetXGraphic() );
                     uno::Reference < io::XOutputStream > xOut( xStream->getOutputStream() );
-                    OUString aMimeType("image/jpeg");
                     uno::Sequence< beans::PropertyValue > aOutMediaProperties( 3 );
                     aOutMediaProperties[0].Name = "OutputStream";
                     aOutMediaProperties[0].Value <<= xOut;
                     aOutMediaProperties[1].Name = "MimeType";
-                    aOutMediaProperties[1].Value <<= aMimeType;
+                    aOutMediaProperties[1].Value <<= OUString("image/jpeg");
                     aOutMediaProperties[2].Name = "FilterData";
                     aOutMediaProperties[2].Value <<= aFilterData;
                     xGraphicProvider->storeGraphic( xGraphic, aOutMediaProperties );

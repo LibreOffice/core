@@ -364,12 +364,11 @@ OString PPDDecompressStream::ReadLine()
 
 static osl::FileBase::RC resolveLink( const OUString& i_rURL, OUString& o_rResolvedURL, OUString& o_rBaseName, osl::FileStatus::Type& o_rType)
 {
-    int nLinkLevel = 10;
     salhelper::LinkResolver aResolver(osl_FileStatus_Mask_FileName |
                                       osl_FileStatus_Mask_Type |
                                       osl_FileStatus_Mask_FileURL);
 
-    osl::FileBase::RC aRet = aResolver.fetchFileStatus(i_rURL, nLinkLevel);
+    osl::FileBase::RC aRet = aResolver.fetchFileStatus(i_rURL, 10/*nLinkLevel*/);
 
     if (aRet  == osl::FileBase::E_None)
     {

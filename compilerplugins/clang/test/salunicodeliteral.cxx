@@ -32,8 +32,8 @@ void test() {
     f(sal_Unicode(120)); // expected-error {{in LIBO_INTERNAL_ONLY code, replace literal cast to 'sal_Unicode' (aka 'char16_t') with a u'...' char16_t character literal [loplugin:salunicodeliteral]}}
     f(sal_Unicode(TEST1));
     f(TEST2); // expected-error {{in LIBO_INTERNAL_ONLY code, replace literal cast to 'sal_Unicode' (aka 'char16_t') with a u'...' char16_t character literal [loplugin:salunicodeliteral]}}
-    char c = 'x';
-    f(sal_Unicode(c));
+    char c = 'x'; // expected-error {{var used only once, should be inlined or declared const [loplugin:oncevar]}}
+    f(sal_Unicode(c)); // expected-note {{used here [loplugin:oncevar]}}
     f(char16_t('x'));
 }
 

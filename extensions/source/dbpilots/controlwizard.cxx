@@ -155,11 +155,10 @@ namespace dbp
         const OUString* pItems = _rItems.getConstArray();
         const OUString* pEnd = pItems + _rItems.getLength();
         ::svt::WizardTypes::WizardState nPos;
-        sal_Int32 nIndex = 0;
         for (;pItems < pEnd; ++pItems)
         {
             nPos = _rList.InsertEntry(*pItems);
-            _rList.SetEntryData(nPos, reinterpret_cast<void*>(nIndex));
+            _rList.SetEntryData(nPos, reinterpret_cast<void*>(0));
         }
     }
 
@@ -637,9 +636,8 @@ namespace dbp
         // the only thing we have at the moment is the label
         try
         {
-            OUString sLabelPropertyName("Label");
             Reference< XPropertySetInfo > xInfo = m_aContext.xObjectModel->getPropertySetInfo();
-            if (xInfo.is() && xInfo->hasPropertyByName(sLabelPropertyName))
+            if (xInfo.is() && xInfo->hasPropertyByName("Label"))
             {
                 OUString sControlLabel(_pSettings->sControlLabel);
                 m_aContext.xObjectModel->setPropertyValue(

@@ -714,9 +714,8 @@ void Test::testSharedFormulasRefUpdateExternal()
     // Launch an external document shell.
     ScDocShellRef xExtDocSh = new ScDocShell;
     xExtDocSh->SetIsInUcalc();
-    OUString aExtDocName("file:///extdata.fake");
 
-    SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
+    SfxMedium* pMed = new SfxMedium("file:///extdata.fake", StreamMode::STD_READWRITE);
     xExtDocSh->DoInitNew(pMed);
     ScDocument& rExtDoc = xExtDocSh->GetDocument();
 
@@ -792,7 +791,7 @@ void Test::testSharedFormulasInsertRow()
         {
             // B1:B2 and B4:B5 should point to $A$5.
             SCROW pRows[] = { 0, 1, 3, 4 };
-            for (size_t i = 0, n = SAL_N_ELEMENTS(pRows); i < n; ++i)
+            for (size_t i = 0; i < SAL_N_ELEMENTS(pRows); ++i)
             {
                 ScAddress aPos(1, pRows[i], 0);
                 ASSERT_FORMULA_EQUAL(*pDoc, aPos, "$A$5", "Wrong formula!");

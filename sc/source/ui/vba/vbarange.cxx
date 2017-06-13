@@ -1266,7 +1266,7 @@ inline table::CellRangeAddress lclGetRangeAddress( const uno::Reference< RangeTy
 void lclClearRange( const uno::Reference< table::XCellRange >& rxCellRange )
 {
     using namespace ::com::sun::star::sheet::CellFlags;
-    sal_Int32 nFlags = VALUE | DATETIME | STRING | ANNOTATION | FORMULA | HARDATTR | STYLES | EDITATTR | FORMATTED;
+    sal_Int32 const nFlags = VALUE | DATETIME | STRING | ANNOTATION | FORMULA | HARDATTR | STYLES | EDITATTR | FORMATTED;
     uno::Reference< sheet::XSheetOperation > xSheetOperation( rxCellRange, uno::UNO_QUERY_THROW );
     xSheetOperation->clearContents( nFlags );
 }
@@ -1586,7 +1586,7 @@ void SAL_CALL
 ScVbaRange::Clear()
 {
     using namespace ::com::sun::star::sheet::CellFlags;
-    sal_Int32 nFlags = VALUE | DATETIME | STRING | FORMULA | HARDATTR | EDITATTR | FORMATTED;
+    sal_Int32 const nFlags = VALUE | DATETIME | STRING | FORMULA | HARDATTR | EDITATTR | FORMATTED;
     ClearContents( nFlags, true );
 }
 
@@ -1628,7 +1628,7 @@ void SAL_CALL
 ScVbaRange::ClearContents()
 {
     using namespace ::com::sun::star::sheet::CellFlags;
-    sal_Int32 nFlags = VALUE | DATETIME | STRING | FORMULA;
+    sal_Int32 const nFlags = VALUE | DATETIME | STRING | FORMULA;
     ClearContents( nFlags, true );
 }
 
@@ -1637,7 +1637,7 @@ ScVbaRange::ClearFormats()
 {
     // FIXME: need to check if we need to combine FORMATTED
     using namespace ::com::sun::star::sheet::CellFlags;
-    sal_Int32 nFlags = HARDATTR | FORMATTED | EDITATTR;
+    sal_Int32 const nFlags = HARDATTR | FORMATTED | EDITATTR;
     ClearContents( nFlags, false );
 }
 
@@ -2079,8 +2079,8 @@ ScVbaRange::Address(  const uno::Any& RowAbsolute, const uno::Any& ColumnAbsolut
     RangeHelper thisRange( mxRange );
     table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
     ScRange aRange( static_cast< SCCOL >( thisAddress.StartColumn ), static_cast< SCROW >( thisAddress.StartRow ), static_cast< SCTAB >( thisAddress.Sheet ), static_cast< SCCOL >( thisAddress.EndColumn ), static_cast< SCROW >( thisAddress.EndRow ), static_cast< SCTAB >( thisAddress.Sheet ) );
-    ScRefFlags ROW_ABS = ( ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS );
-    ScRefFlags COL_ABS = ( ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS );
+    ScRefFlags const ROW_ABS = ( ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS );
+    ScRefFlags const COL_ABS = ( ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS );
 
     if ( RowAbsolute.hasValue() )
     {
@@ -5105,10 +5105,9 @@ ScVbaRange::AutoFill(  const uno::Reference< excel::XRange >& Destination, const
                 break;
         }
     }
-    double fEndValue =  MAXDOUBLE;
     ScDocShell* pDocSh = getDocShellFromRange( mxRange );
     pDocSh->GetDocFunc().FillAuto( aSourceRange, nullptr, eDir, eCmd, eDateCmd,
-                                   nCount, fStep, fEndValue, true, true );
+                                   nCount, fStep, MAXDOUBLE/*fEndValue*/, true, true );
 }
 sal_Bool SAL_CALL
 ScVbaRange::GoalSeek( const uno::Any& Goal, const uno::Reference< excel::XRange >& ChangingCell )

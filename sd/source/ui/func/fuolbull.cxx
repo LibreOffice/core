@@ -335,8 +335,7 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
             if(bOutliner)
             {
                 SfxStyleSheetBasePool* pSSPool = mpView->GetDocSh()->GetStyleSheetPool();
-                OUString aStyleName(STR_LAYOUT_OUTLINE " 1");
-                SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SD_STYLE_FAMILY_PSEUDO);
+                SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( STR_LAYOUT_OUTLINE " 1", SD_STYLE_FAMILY_PSEUDO);
                 if( pFirstStyleSheet )
                     pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, false, reinterpret_cast<const SfxPoolItem**>(&pItem));
             }

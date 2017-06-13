@@ -268,7 +268,7 @@ namespace pcr
             // for Issue 69452
             if (AllSettings::GetLayoutRTL())
             {
-                sal_Unicode cRTL_mark = 0x200F;
+                sal_Unicode const cRTL_mark = 0x200F;
                 aText.append( OUString(cRTL_mark) );
             }
 
@@ -284,7 +284,7 @@ namespace pcr
         // for Issue 69452
         if (AllSettings::GetLayoutRTL())
         {
-            sal_Unicode cRTL_mark = 0x200F;
+            sal_Unicode const cRTL_mark = 0x200F;
             sDisplayName = comphelper::string::stripEnd(sDisplayName, cRTL_mark);
         }
 

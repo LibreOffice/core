@@ -490,8 +490,7 @@ bool HelpCompiler::compile()
     {
         if (fileName.compare(0, 6, "/text/") == 0)
         {
-            int len = strlen("/text/");
-            actMod = fileName.substr(len);
+            actMod = fileName.substr(strlen("/text/"));
             actMod = actMod.substr(0, actMod.find('/'));
         }
     }

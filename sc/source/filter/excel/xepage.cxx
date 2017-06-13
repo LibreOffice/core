@@ -310,7 +310,7 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
     set<SCROW> aRowBreaks;
     rDoc.GetAllRowBreaks(aRowBreaks, nScTab, false, true);
 
-    SCROW nMaxRow = numeric_limits<sal_uInt16>::max();
+    SCROW const nMaxRow = numeric_limits<sal_uInt16>::max();
     for (set<SCROW>::const_iterator itr = aRowBreaks.begin(), itrEnd = aRowBreaks.end(); itr != itrEnd; ++itr)
     {
         SCROW nRow = *itr;

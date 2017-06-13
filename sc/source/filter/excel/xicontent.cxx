@@ -680,8 +680,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
 
     if( !mxScCondFmt.get() )
     {
-        sal_uLong nKey = 0;
-        mxScCondFmt.reset( new ScConditionalFormat( nKey, &GetDocRef() ) );
+        mxScCondFmt.reset( new ScConditionalFormat( 0/*nKey*/, &GetDocRef() ) );
         if(maRanges.size() > 1)
             maRanges.Join(*maRanges[0], true);
         mxScCondFmt->SetRange(maRanges);
@@ -1082,9 +1081,8 @@ void XclImpWebQueryBuffer::ReadWqtables( XclImpStream& rStrm )
 void XclImpWebQueryBuffer::Apply()
 {
     ScDocument& rDoc = GetDoc();
-    OUString aFilterName( EXC_WEBQRY_FILTER );
     for( XclImpWebQueryList::iterator itQuery = maWQList.begin(); itQuery != maWQList.end(); ++itQuery )
-        itQuery->Apply( rDoc, aFilterName );
+        itQuery->Apply( rDoc, EXC_WEBQRY_FILTER );
 }
 
 // Decryption =================================================================

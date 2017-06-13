@@ -168,7 +168,7 @@ namespace abp
                 DBG_ASSERT( 0 == SAL_N_ELEMENTS( pMappingProgrammatics ) % 2,
                     "fieldmapping::defaultMapping: invalid programmatic map!" );
                 // number of pairs
-                sal_Int32 nIntersectedProgrammatics = SAL_N_ELEMENTS( pMappingProgrammatics ) / 2;
+                sal_Int32 const nIntersectedProgrammatics = SAL_N_ELEMENTS( pMappingProgrammatics ) / 2;
 
                 const sal_Char** pProgrammatic = pMappingProgrammatics;
                 OUString sAddressProgrammatic;

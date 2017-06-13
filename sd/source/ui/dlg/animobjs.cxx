@@ -289,7 +289,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, Button *, p, void )
         bDisableCtrls = true;
         m_pBtnStop->Enable();
         m_pBtnStop->Update();
-        OUString aStr("Animator:"); // here we should think about something smart
+        OUString const aStr("Animator:"); // here we should think about something smart
         pProgress = new SfxProgress( nullptr, aStr, nFullTime );
     }
 

@@ -144,7 +144,7 @@ void Test::editMarker()
     }
 
     {
-        OUString sTargetText("a under b under c");
+        OUString const sTargetText("a under b under c");
         ESelection aSelection;
 
         m_pEditWindow->SelNextMark();
