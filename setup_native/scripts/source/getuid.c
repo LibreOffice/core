@@ -24,6 +24,8 @@
 #include <unistd.h>
 #include <dlfcn.h>
 
+#define UNUSED(x) (void)(x)
+
 #ifdef _cplusplus
 extern "C" {
 #endif
@@ -112,6 +114,7 @@ int fstatat64(int fildes, const char *path, struct stat64  *buf, int flag)
 
 uid_t getuid  (void) {return 0;}
 uid_t geteuid (void) {return 0;}
+int setgid  (gid_t p) { UNUSED(p); return 0; }
 
 /* This is to fool tar */
 #ifdef X86_64
