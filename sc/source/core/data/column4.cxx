@@ -775,14 +775,14 @@ void ScColumn::GetUnprotectedCells(SCROW nStartRow, SCROW nEndRow,
     SCROW nTmpStartRow = nStartRow, nTmpEndRow = nEndRow;
     const ScPatternAttr* pPattern = pAttrArray->GetPatternRange(nTmpStartRow, nTmpEndRow, nStartRow);
     bool bProtection = static_cast<const ScProtectionAttr&>(pPattern->GetItem(ATTR_PROTECTION)).GetProtection();
-    if(!bProtection)
+    if(!bProtection && !(nTmpStartRow<nStartRow) && !(nTmpEndRow>nEndRow))
         rRangeList.Join(ScRange( nCol, nTmpStartRow, nTab, nCol, nTmpEndRow, nTab));
     while (nEndRow > nTmpEndRow)
     {
         nStartRow = nTmpEndRow + 1;
         pPattern = pAttrArray->GetPatternRange(nTmpStartRow, nTmpEndRow, nStartRow);
         bool bTmpProtection = static_cast<const ScProtectionAttr&>(pPattern->GetItem(ATTR_PROTECTION)).GetProtection();
-        if (!bTmpProtection)
+        if (!bTmpProtection && !(nTmpStartRow<nStartRow) && !(nTmpEndRow>nEndRow))
             rRangeList.Join(ScRange( nCol, nTmpStartRow, nTab, nCol, nTmpEndRow, nTab));
     }
 }

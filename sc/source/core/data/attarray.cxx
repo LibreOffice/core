@@ -210,6 +210,13 @@ bool ScAttrArray::Concat(SCSIZE nPos)
     return bRet;
 }
 
+/*
+ * nCount is the number of runs of different attribute combinations;
+ * no attribute in a column => nCount==1, one attribute somewhere => nCount == 3
+ * (ie. one run with no attribute + one attribute + another run with no attribute)
+ * so a range of identical attributes is only one entry in ScAttrArray.
+ */
+
 bool ScAttrArray::Search( SCROW nRow, SCSIZE& nIndex ) const
 {
     long nHi = static_cast<long>(nCount) - 1;
@@ -256,6 +263,11 @@ const ScPatternAttr* ScAttrArray::GetPattern( SCROW nRow ) const
         return nullptr;
 }
 
+/*
+ * GetPatternRange() returns if you search for attributes of one row
+ * is the range from start row to end row where that attribute combination
+ * (ScPatternAttr) is applied
+ */
 const ScPatternAttr* ScAttrArray::GetPatternRange( SCROW& rStartRow,
         SCROW& rEndRow, SCROW nRow ) const
 {
