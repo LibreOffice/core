@@ -19,7 +19,7 @@
 
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
-
+#include <o3tl/make_unique.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
@@ -88,6 +88,7 @@
 #include <scopetools.hxx>
 
 #include <memory>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -117,8 +118,8 @@ SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
 {
     if ( !pPrinter && bCreateIfNotExist )
     {
-        SfxItemSet* pSet =
-            new SfxItemSet( *xPoolHelper->GetDocPool(),
+        auto pSet =
+            o3tl::make_unique<SfxItemSet>( *xPoolHelper->GetDocPool(),
                             SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
                             SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
                             SID_PRINT_SELECTEDSHEET,    SID_PRINT_SELECTEDSHEET,
@@ -134,7 +135,7 @@ SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
         pSet->Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, static_cast<int>(nFlags) ) );
         pSet->Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, aMisc.IsNotFoundWarning() ) );
 
-        pPrinter = VclPtr<SfxPrinter>::Create( pSet );
+        pPrinter = VclPtr<SfxPrinter>::Create( std::move(pSet) );
         pPrinter->SetMapMode( MapUnit::Map100thMM );
         UpdateDrawPrinter();
         pPrinter->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );

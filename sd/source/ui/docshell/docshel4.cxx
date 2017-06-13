@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <utility>
 
 #include "DrawDocShell.hxx"
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
@@ -98,7 +99,7 @@ SfxPrinter* DrawDocShell::GetPrinter(bool bCreate)
     if (bCreate && !mpPrinter)
     {
         // create ItemSet with special pool area
-        SfxItemSet* pSet = new SfxItemSet( GetPool(),
+        auto pSet = o3tl::make_unique<SfxItemSet>( GetPool(),
                             SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
                             SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
                             ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT,
@@ -115,7 +116,7 @@ SfxPrinter* DrawDocShell::GetPrinter(bool bCreate)
         pSet->Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, aPrintItem.GetOptionsPrint().IsWarningPrinter() ) );
         pSet->Put( aFlagItem );
 
-        mpPrinter = VclPtr<SfxPrinter>::Create(pSet);
+        mpPrinter = VclPtr<SfxPrinter>::Create(std::move(pSet));
         mbOwnPrinter = true;
 
         // set output quality

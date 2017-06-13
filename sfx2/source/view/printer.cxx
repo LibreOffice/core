@@ -22,6 +22,8 @@
 #include <vcl/msgbox.hxx>
 #include <unotools/printwarningoptions.hxx>
 #include <svtools/printoptions.hxx>
+
+#include <utility>
 #include <vector>
 
 #include <sfx2/printer.hxx>
@@ -59,7 +61,7 @@ struct SfxPrintOptDlg_Impl
 
 // class SfxPrinter ------------------------------------------------------
 
-VclPtr<SfxPrinter> SfxPrinter::Create( SvStream& rStream, SfxItemSet* pOptions )
+VclPtr<SfxPrinter> SfxPrinter::Create( SvStream& rStream, std::unique_ptr<SfxItemSet>&& pOptions )
 
 /*  [Description]
 
@@ -78,7 +80,7 @@ VclPtr<SfxPrinter> SfxPrinter::Create( SvStream& rStream, SfxItemSet* pOptions )
     ReadJobSetup( rStream, aFileJobSetup );
 
     // Get printers
-    VclPtr<SfxPrinter> pPrinter = VclPtr<SfxPrinter>::Create( pOptions, aFileJobSetup );
+    VclPtr<SfxPrinter> pPrinter = VclPtr<SfxPrinter>::Create( std::move(pOptions), aFileJobSetup );
     return pPrinter;
 }
 
@@ -95,13 +97,13 @@ void SfxPrinter::Store( SvStream& rStream ) const
 }
 
 
-SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions ) :
+SfxPrinter::SfxPrinter( std::unique_ptr<SfxItemSet>&& pTheOptions ) :
 
 /*  [Description]
 
     This constructor creates a default printer.
 */
-    pOptions( pTheOptions ),
+    pOptions( std::move(pTheOptions) ),
     pImpl( new SfxPrinter_Impl ),
     bKnown( true )
 {
@@ -109,10 +111,10 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions ) :
 }
 
 
-SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
+SfxPrinter::SfxPrinter( std::unique_ptr<SfxItemSet>&& pTheOptions,
                         const JobSetup& rTheOrigJobSetup ) :
     Printer( rTheOrigJobSetup.GetPrinterName() ),
-    pOptions( pTheOptions ),
+    pOptions( std::move(pTheOptions) ),
     pImpl( new SfxPrinter_Impl )
 {
     assert(pOptions);
@@ -123,10 +125,10 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
 }
 
 
-SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
+SfxPrinter::SfxPrinter( std::unique_ptr<SfxItemSet>&& pTheOptions,
                         const OUString& rPrinterName ) :
     Printer( rPrinterName ),
-    pOptions( pTheOptions ),
+    pOptions( std::move(pTheOptions) ),
     pImpl( new SfxPrinter_Impl ),
     bKnown( GetName() == rPrinterName )
 {
@@ -157,7 +159,7 @@ VclPtr<SfxPrinter> SfxPrinter::Clone() const
 {
     if ( IsDefPrinter() )
     {
-        VclPtr<SfxPrinter> pNewPrinter = VclPtr<SfxPrinter>::Create( GetOptions().Clone() );
+        VclPtr<SfxPrinter> pNewPrinter = VclPtr<SfxPrinter>::Create( std::unique_ptr<SfxItemSet>(GetOptions().Clone()) );
         pNewPrinter->SetJobSetup( GetJobSetup() );
         pNewPrinter->SetPrinterProps( this );
         pNewPrinter->SetMapMode( GetMapMode() );
@@ -179,7 +181,7 @@ SfxPrinter::~SfxPrinter()
 
 void SfxPrinter::dispose()
 {
-    delete pOptions;
+    pOptions.reset();
     pImpl.reset();
     Printer::dispose();
 }

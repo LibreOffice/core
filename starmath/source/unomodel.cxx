@@ -19,7 +19,10 @@
 
 #include <sal/config.h>
 
+#include <utility>
+
 #include <o3tl/any.hxx>
+#include <o3tl/make_unique.hxx>
 #include <osl/mutex.hxx>
 #include <sfx2/printer.hxx>
 #include <vcl/svapp.hxx>
@@ -591,7 +594,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                         {
                             if ( !sPrinterName.isEmpty() )
                             {
-                                VclPtrInstance<SfxPrinter> pNewPrinter( pPrinter->GetOptions().Clone(), sPrinterName );
+                                VclPtrInstance<SfxPrinter> pNewPrinter( std::unique_ptr<SfxItemSet>(pPrinter->GetOptions().Clone()), sPrinterName );
                                 if (pNewPrinter->IsKnown())
                                     pDocSh->SetPrinter ( pNewPrinter );
                                 else
@@ -624,10 +627,10 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                         SID_AUTO_CLOSE_BRACKETS,    SID_AUTO_CLOSE_BRACKETS,
                         0
                     };
-                    SfxItemSet *pItemSet = new SfxItemSet( SmDocShell::GetPool(), nRange );
+                    auto pItemSet = o3tl::make_unique<SfxItemSet>( SmDocShell::GetPool(), nRange );
                     SmModule *pp = SM_MOD();
                     pp->GetConfig()->ConfigToItemSet(*pItemSet);
-                    VclPtr<SfxPrinter> pPrinter = SfxPrinter::Create ( aStream, pItemSet );
+                    VclPtr<SfxPrinter> pPrinter = SfxPrinter::Create ( aStream, std::move(pItemSet) );
 
                     pDocSh->SetPrinter( pPrinter );
                 }

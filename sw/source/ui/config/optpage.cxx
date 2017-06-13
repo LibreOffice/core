@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <optpage.hxx>
 #include <doc.hxx>
 #include <hintids.hxx>
@@ -49,6 +53,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/svxenum.hxx>
+#include <o3tl/make_unique.hxx>
 #include <sal/macros.h>
 #include <sfx2/dialoghelper.hxx>
 #include <sfx2/request.hxx>
@@ -806,11 +811,11 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
     }
     else
     {
-        SfxItemSet* pPrinterSet = new SfxItemSet( *rSet->GetPool(),
+        auto pPrinterSet = o3tl::make_unique<SfxItemSet>( *rSet->GetPool(),
                     SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                     SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                     0 );
-        m_pPrt = VclPtr<SfxPrinter>::Create(pPrinterSet);
+        m_pPrt = VclPtr<SfxPrinter>::Create(std::move(pPrinterSet));
     }
     delete m_pFontList;
     m_pFontList = new FontList( m_pPrt );

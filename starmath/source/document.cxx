@@ -24,6 +24,7 @@
 #include <comphelper/accessibletexthelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/eventcfg.hxx>
@@ -94,6 +95,7 @@
 #include "accessibility.hxx"
 #include "cfgitem.hxx"
 #include <memory>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -558,7 +560,7 @@ Printer* SmDocShell::GetPrt()
     }
     else if (!mpPrinter)
     {
-        SfxItemSet* pOptions = new SfxItemSet(GetPool(),
+        auto pOptions = o3tl::make_unique<SfxItemSet>(GetPool(),
                                               SID_PRINTSIZE,       SID_PRINTSIZE,
                                               SID_PRINTZOOM,       SID_PRINTZOOM,
                                               SID_PRINTTITLE,      SID_PRINTTITLE,
@@ -570,7 +572,7 @@ Printer* SmDocShell::GetPrt()
                                               0);
         SmModule *pp = SM_MOD();
         pp->GetConfig()->ConfigToItemSet(*pOptions);
-        mpPrinter = VclPtr<SfxPrinter>::Create(pOptions);
+        mpPrinter = VclPtr<SfxPrinter>::Create(std::move(pOptions));
         mpPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
     }
     return mpPrinter;

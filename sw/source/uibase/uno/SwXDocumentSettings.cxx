@@ -19,7 +19,10 @@
 
 #include <sal/config.h>
 
+#include <utility>
+
 #include <o3tl/any.hxx>
+#include <o3tl/make_unique.hxx>
 #include <osl/mutex.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 #include <SwXDocumentSettings.hxx>
@@ -388,7 +391,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     SfxPrinter* pPrinter = mpDoc->getIDocumentDeviceAccess().getPrinter( true );
                     if ( pPrinter->GetName() != sPrinterName )
                     {
-                        VclPtrInstance<SfxPrinter> pNewPrinter( pPrinter->GetOptions().Clone(), sPrinterName );
+                        VclPtrInstance<SfxPrinter> pNewPrinter( std::unique_ptr<SfxItemSet>(pPrinter->GetOptions().Clone()), sPrinterName );
                         assert (! pNewPrinter->isDisposed() );
                         if( pNewPrinter->IsKnown() )
                         {
@@ -425,8 +428,8 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                         SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                         0
                     };
-                    SfxItemSet *pItemSet = new SfxItemSet( mpDoc->GetAttrPool(), nRange );
-                    VclPtr<SfxPrinter> pPrinter = SfxPrinter::Create ( aStream, pItemSet );
+                    auto pItemSet = o3tl::make_unique<SfxItemSet>( mpDoc->GetAttrPool(), nRange );
+                    VclPtr<SfxPrinter> pPrinter = SfxPrinter::Create ( aStream, std::move(pItemSet) );
                     assert (! pPrinter->isDisposed() );
                     // set printer only once; in _postSetValues
                     mpPrinter.disposeAndClear();

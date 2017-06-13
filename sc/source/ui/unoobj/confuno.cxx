@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <config_features.h>
 
 #include "confuno.hxx"
@@ -33,6 +37,7 @@
 #include <com/sun/star/document/LinkUpdateModes.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <formula/grammar.hxx>
+#include <o3tl/make_unique.hxx>
 #include <sfx2/printer.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -207,7 +212,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                     {
                         if (pPrinter->GetName() != sPrinterName)
                         {
-                            VclPtrInstance<SfxPrinter> pNewPrinter( pPrinter->GetOptions().Clone(), sPrinterName );
+                            VclPtrInstance<SfxPrinter> pNewPrinter( std::unique_ptr<SfxItemSet>(pPrinter->GetOptions().Clone()), sPrinterName );
                             if (pNewPrinter->IsKnown())
                                 pDocShell->SetPrinter( pNewPrinter, SfxPrinterChangeFlags::PRINTER );
                             else
@@ -232,13 +237,13 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 {
                     SvMemoryStream aStream (aSequence.getArray(), nSize, StreamMode::READ );
                     aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-                    SfxItemSet* pSet = new SfxItemSet( *rDoc.GetPool(),
+                    auto pSet = o3tl::make_unique<SfxItemSet>( *rDoc.GetPool(),
                             SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                             SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
                             SID_PRINT_SELECTEDSHEET,   SID_PRINT_SELECTEDSHEET,
                             SID_SCPRINTOPTIONS,        SID_SCPRINTOPTIONS,
                             nullptr );
-                    pDocShell->SetPrinter( SfxPrinter::Create( aStream, pSet ) );
+                    pDocShell->SetPrinter( SfxPrinter::Create( aStream, std::move(pSet) ) );
                 }
             }
         }

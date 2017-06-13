@@ -20,6 +20,7 @@
 #include <DocumentDeviceManager.hxx>
 
 #include <memory>
+#include <utility>
 
 #include <IDocumentDeviceAccess.hxx>
 #include <doc.hxx>
@@ -27,6 +28,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <o3tl/make_unique.hxx>
 #include <sfx2/printer.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/outdev.hxx>
@@ -204,13 +206,13 @@ void DocumentDeviceManager::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
     if( !mpPrt )
     {
         //The ItemSet is deleted by Sfx!
-        SfxItemSet *pSet = new SfxItemSet( m_rDoc.GetAttrPool(),
+        auto pSet = o3tl::make_unique<SfxItemSet>( m_rDoc.GetAttrPool(),
                         FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
                         SID_HTML_MODE,  SID_HTML_MODE,
                         SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                         SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                         0 );
-        VclPtr<SfxPrinter> p = VclPtr<SfxPrinter>::Create( pSet, rJobSetup );
+        VclPtr<SfxPrinter> p = VclPtr<SfxPrinter>::Create( std::move(pSet), rJobSetup );
         if ( bCheckPageDescs )
             setPrinter( p, true, true );
         else
@@ -288,14 +290,14 @@ SfxPrinter& DocumentDeviceManager::CreatePrinter_() const
 
     // We create a default SfxPrinter.
     // The ItemSet is deleted by Sfx!
-    SfxItemSet *pSet = new SfxItemSet( m_rDoc.GetAttrPool(),
+    auto pSet = o3tl::make_unique<SfxItemSet>( m_rDoc.GetAttrPool(),
                     FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
                     SID_HTML_MODE,  SID_HTML_MODE,
                     SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                     SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                     0 );
 
-    VclPtr<SfxPrinter> pNewPrt = VclPtr<SfxPrinter>::Create( pSet );
+    VclPtr<SfxPrinter> pNewPrt = VclPtr<SfxPrinter>::Create( std::move(pSet) );
     const_cast<DocumentDeviceManager*>(this)->setPrinter( pNewPrt, true, true );
     return *mpPrt.get();
 }

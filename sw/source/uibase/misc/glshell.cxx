@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/frame/XTitle.hpp>
-
+#include <o3tl/make_unique.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/printer.hxx>
@@ -53,6 +53,7 @@
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 #include <memory>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -239,12 +240,12 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
         {
             // we create a default SfxPrinter.
             // ItemSet is deleted by Sfx!
-            SfxItemSet *pSet = new SfxItemSet( xDocSh->GetDoc()->GetAttrPool(),
+            auto pSet = o3tl::make_unique<SfxItemSet>( xDocSh->GetDoc()->GetAttrPool(),
                         FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
                         SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                         SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                         0 );
-            VclPtr<SfxPrinter> pPrinter = VclPtr<SfxPrinter>::Create( pSet );
+            VclPtr<SfxPrinter> pPrinter = VclPtr<SfxPrinter>::Create( std::move(pSet) );
 
             // and append it to the document.
             xDocSh->GetDoc()->getIDocumentDeviceAccess().setPrinter( pPrinter, true, true );

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/make_unique.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/objface.hxx>
@@ -59,7 +62,7 @@ DocShell::~DocShell()
 SfxPrinter* DocShell::GetPrinter( bool bCreate )
 {
     if ( !pPrinter && bCreate )
-        pPrinter.disposeAndReset(VclPtr<SfxPrinter>::Create(new SfxItemSet(
+        pPrinter.disposeAndReset(VclPtr<SfxPrinter>::Create(o3tl::make_unique<SfxItemSet>(
             GetPool(), SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN
         )));
 

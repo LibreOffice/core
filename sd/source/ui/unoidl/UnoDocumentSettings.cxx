@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+#include <utility>
 #include <vector>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -29,6 +33,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertysethelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <o3tl/make_unique.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/xtable.hxx>
 #include <osl/mutex.hxx>
@@ -722,7 +727,7 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
                             SfxPrinter *pTempPrinter = pDocSh->GetPrinter( true );
                             if (pTempPrinter)
                             {
-                                VclPtr<SfxPrinter> pNewPrinter = VclPtr<SfxPrinter>::Create( pTempPrinter->GetOptions().Clone(), aPrinterName );
+                                VclPtr<SfxPrinter> pNewPrinter = VclPtr<SfxPrinter>::Create( std::unique_ptr<SfxItemSet>(pTempPrinter->GetOptions().Clone()), aPrinterName );
                                 pDocSh->SetPrinter( pNewPrinter );
                             }
                         }
@@ -740,22 +745,22 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
                         {
                             SvMemoryStream aStream (aSequence.getArray(), nSize, StreamMode::READ );
                             aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-                            SfxItemSet* pItemSet;
+                            std::unique_ptr<SfxItemSet> pItemSet;
 
                             if( pPrinter )
                             {
-                                pItemSet = pPrinter->GetOptions().Clone();
+                                pItemSet.reset(pPrinter->GetOptions().Clone());
                             }
                             else
                             {
-                                pItemSet = new SfxItemSet(pDoc->GetPool(),
+                                pItemSet = o3tl::make_unique<SfxItemSet>(pDoc->GetPool(),
                                             SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
                                             SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
                                             ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT,
                                             0 );
                             }
 
-                            pPrinter = SfxPrinter::Create ( aStream, pItemSet );
+                            pPrinter = SfxPrinter::Create ( aStream, std::move(pItemSet) );
 
                             MapMode aMM (pPrinter->GetMapMode());
                             aMM.SetMapUnit(MapUnit::Map100thMM);

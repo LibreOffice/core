@@ -35,17 +35,17 @@ struct SfxPrinter_Impl;
 class SFX2_DLLPUBLIC SfxPrinter : public Printer
 {
 private:
-    SfxItemSet*             pOptions;
+    std::unique_ptr<SfxItemSet> pOptions;
     std::unique_ptr< SfxPrinter_Impl >  pImpl;
     bool                    bKnown;
 
     SAL_DLLPRIVATE void operator =(SfxPrinter &) = delete;
 
 public:
-                            SfxPrinter( SfxItemSet *pTheOptions );
-                            SfxPrinter( SfxItemSet *pTheOptions,
+                            SfxPrinter( std::unique_ptr<SfxItemSet> &&pTheOptions );
+                            SfxPrinter( std::unique_ptr<SfxItemSet> &&pTheOptions,
                                         const OUString &rPrinterName );
-                            SfxPrinter( SfxItemSet *pTheOptions,
+                            SfxPrinter( std::unique_ptr<SfxItemSet> &&pTheOptions,
                                         const JobSetup &rTheOrigJobSetup );
                             SfxPrinter( const SfxPrinter &rPrinter );
                             virtual ~SfxPrinter() override;
@@ -53,7 +53,7 @@ public:
 
     VclPtr<SfxPrinter>      Clone() const;
 
-    static VclPtr<SfxPrinter> Create( SvStream &rStream, SfxItemSet *pOptions );
+    static VclPtr<SfxPrinter> Create( SvStream &rStream, std::unique_ptr<SfxItemSet> &&pOptions );
     void                    Store( SvStream &rStream ) const;
 
     const SfxItemSet&       GetOptions() const { return *pOptions; }

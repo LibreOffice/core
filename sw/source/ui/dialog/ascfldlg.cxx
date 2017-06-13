@@ -17,7 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <hintids.hxx>
+#include <o3tl/make_unique.hxx>
 #include <rtl/textenc.h>
 #include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -177,11 +182,11 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
             VclPtr<SfxPrinter> pPrt = pDoc ? pDoc->getIDocumentDeviceAccess().getPrinter(false) : nullptr;
             if( !pPrt )
             {
-                SfxItemSet* pSet = new SfxItemSet( rDocSh.GetPool(),
+                auto pSet = o3tl::make_unique<SfxItemSet>( rDocSh.GetPool(),
                             SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                             SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                             0 );
-                pPrt = VclPtr<SfxPrinter>::Create( pSet );
+                pPrt = VclPtr<SfxPrinter>::Create( std::move(pSet) );
                 bDelPrinter = true;
             }
 
