@@ -200,38 +200,71 @@ void ODbaseTable::readHeader()
     m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
 
     sal_uInt8 nType=0;
-    (*m_pFileStream).ReadUChar( nType );
+    m_pFileStream->ReadUChar( nType );
     if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
         throwInvalidDbaseFormat();
 
-    m_pFileStream->ReadBytes(m_aHeader.db_aedat, 3);
-    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
-        throwInvalidDbaseFormat();
-    (*m_pFileStream).ReadUInt32( m_aHeader.db_anz );
-    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
-        throwInvalidDbaseFormat();
-    (*m_pFileStream).ReadUInt16( m_aHeader.db_kopf );
-    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
-        throwInvalidDbaseFormat();
-    (*m_pFileStream).ReadUInt16( m_aHeader.db_slng );
-    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
-        throwInvalidDbaseFormat();
-    if (m_aHeader.db_slng == 0)
-        throwInvalidDbaseFormat();
-    m_pFileStream->ReadBytes(m_aHeader.db_frei, 20);
+    m_pFileStream->ReadBytes(m_aHeader.m_dateElems, 3);
     if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
         throwInvalidDbaseFormat();
 
-    if ( ( ( m_aHeader.db_kopf - 1 ) / 32 - 1 ) <= 0 ) // number of fields
+    m_pFileStream->ReadUInt32( m_aHeader.m_nbRecords);
+    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
+        throwInvalidDbaseFormat();
+
+    m_pFileStream->ReadUInt16( m_aHeader.m_headerLength);
+    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
+        throwInvalidDbaseFormat();
+
+    m_pFileStream->ReadUInt16( m_aHeader.m_recordLength);
+    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
+        throwInvalidDbaseFormat();
+    if (m_aHeader.m_recordLength == 0)
+        throwInvalidDbaseFormat();
+
+    m_pFileStream->ReadBytes(m_aHeader.m_reserved1, 2);
+    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
+        throwInvalidDbaseFormat();
+
+    m_pFileStream->ReadUChar(m_aHeader.m_incompTransact);
+    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
+        throwInvalidDbaseFormat();
+
+    m_pFileStream->ReadUChar(m_aHeader.m_encryptionFlag);
+    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
+        throwInvalidDbaseFormat();
+
+    m_pFileStream->ReadBytes(m_aHeader.m_freeRecordThread, 4);
+    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
+        throwInvalidDbaseFormat();
+
+    m_pFileStream->ReadBytes(m_aHeader.m_multiUserdBASE, 8);
+    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
+        throwInvalidDbaseFormat();
+
+    m_pFileStream->ReadUChar(m_aHeader.m_MDXFlag);
+    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
+        throwInvalidDbaseFormat();
+
+    m_pFileStream->ReadUChar(m_aHeader.m_languageDriver);
+    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
+        throwInvalidDbaseFormat();
+
+    m_pFileStream->ReadBytes(m_aHeader.m_reserved2, 2);
+    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
+        throwInvalidDbaseFormat();
+
+
+    if ( ( ( m_aHeader.m_headerLength - 1 ) / 32 - 1 ) <= 0 ) // number of fields
     {
-        // no dbase file
+        // no dBASE file
         throwInvalidDbaseFormat();
     }
     else
     {
         // Consistency check of the header:
-        m_aHeader.db_typ = (DBFType)nType;
-        switch (m_aHeader.db_typ)
+        m_aHeader.m_type = (DBFType)nType;
+        switch (m_aHeader.m_type)
         {
             case dBaseIII:
             case dBaseIV:
@@ -244,10 +277,9 @@ void ODbaseTable::readHeader()
             case dBaseIIIMemo:
             case FoxProMemo:
                 m_pFileStream->SetEndian(SvStreamEndian::LITTLE);
-                if ( m_aHeader.db_frei[17] != 0x00
-                    && !m_aHeader.db_frei[18] && !m_aHeader.db_frei[19] && getConnection()->isTextEncodingDefaulted() )
+                if ( m_aHeader.m_languageDriver != 0x00 && getConnection()->isTextEncodingDefaulted() )
                 {
-                    switch(m_aHeader.db_frei[17])
+                    switch(m_aHeader.m_languageDriver)
                     {
                         case 0x01: m_eEncoding = RTL_TEXTENCODING_IBM_437; break;       // DOS USA  code page 437
                         case 0x02: m_eEncoding = RTL_TEXTENCODING_IBM_850; break;       // DOS Multilingual code page 850
@@ -315,7 +347,7 @@ void ODbaseTable::fillColumns()
     m_aScales.clear();
 
     // Number of fields:
-    const sal_Int32 nFieldCount = (m_aHeader.db_kopf - 1) / 32 - 1;
+    const sal_Int32 nFieldCount = (m_aHeader.m_headerLength - 1) / 32 - 1;
     OSL_ENSURE(nFieldCount,"No columns in table!");
 
     m_aColumns->get().reserve(nFieldCount);
@@ -325,7 +357,7 @@ void ODbaseTable::fillColumns()
 
     OUString aTypeName;
     const bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
-    const bool bFoxPro = m_aHeader.db_typ == VisualFoxPro || m_aHeader.db_typ == VisualFoxProAuto || m_aHeader.db_typ == FoxProMemo;
+    const bool bFoxPro = m_aHeader.m_type == VisualFoxPro || m_aHeader.m_type == VisualFoxProAuto || m_aHeader.m_type == FoxProMemo;
 
     sal_Int32 i = 0;
     for (; i < nFieldCount; i++)
@@ -424,7 +456,7 @@ void ODbaseTable::fillColumns()
             break;
         case '0':
         case 'B':
-            if ( m_aHeader.db_typ == VisualFoxPro || m_aHeader.db_typ == VisualFoxProAuto )
+            if ( m_aHeader.m_type == VisualFoxPro || m_aHeader.m_type == VisualFoxProAuto )
             {
                 aTypeName = "DOUBLE";
                 eType = DataType::DOUBLE;
@@ -468,7 +500,7 @@ ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables, ODbaseConnection* _pConne
 {
     // initialize the header
     memset(&m_aHeader, 0, sizeof(m_aHeader));
-    m_aHeader.db_typ = dBaseIII;
+    m_aHeader.m_type = dBaseIII;
     m_eEncoding = getConnection()->getTextEncoding();
 }
 
@@ -493,10 +525,10 @@ ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables, ODbaseConnection* _pConne
 void ODbaseTable::construct()
 {
     // initialize the header
-    m_aHeader.db_typ    = dBaseIII;
-    m_aHeader.db_anz    = 0;
-    m_aHeader.db_kopf   = 0;
-    m_aHeader.db_slng   = 0;
+    m_aHeader.m_type = dBaseIII;
+    m_aHeader.m_nbRecords = 0;
+    m_aHeader.m_headerLength = 0;
+    m_aHeader.m_recordLength = 0;
     m_aMemoHeader.db_size = 0;
 
     OUString sFileName(getEntry(m_pConnection, m_Name));
@@ -525,7 +557,7 @@ void ODbaseTable::construct()
         // Create Memo-Filename (.DBT):
         // nyi: Ugly for Unix and Mac!
 
-            if ( m_aHeader.db_typ == FoxProMemo || VisualFoxPro == m_aHeader.db_typ || VisualFoxProAuto == m_aHeader.db_typ ) // foxpro uses another extension
+            if ( m_aHeader.m_type == FoxProMemo || m_aHeader.m_type == VisualFoxPro || m_aHeader.m_type == VisualFoxProAuto) // foxpro uses another extension
                 aURL.SetExtension("fpt");
             else
                 aURL.SetExtension("dbt");
@@ -547,11 +579,11 @@ void ODbaseTable::construct()
         m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
         // seems to be empty or someone wrote bullshit into the dbase file
         // try and recover if m_aHeader.db_slng is sane
-        if (m_aHeader.db_anz == 0 && m_aHeader.db_slng)
+        if (m_aHeader.m_nbRecords == 0 && m_aHeader.m_recordLength)
         {
-            std::size_t nRecords = (nFileSize-m_aHeader.db_kopf)/m_aHeader.db_slng;
+            std::size_t nRecords = (nFileSize-m_aHeader.m_headerLength)/m_aHeader.m_recordLength;
             if (nRecords > 0)
-                m_aHeader.db_anz = nRecords;
+                m_aHeader.m_nbRecords = nRecords;
         }
 
         // Buffersize dependent on the file size
@@ -584,7 +616,7 @@ bool ODbaseTable::ReadMemoHeader()
     m_pMemoStream->Seek(0L);
 
     (*m_pMemoStream).ReadUInt32( m_aMemoHeader.db_next );
-    switch (m_aHeader.db_typ)
+    switch (m_aHeader.m_type)
     {
         case dBaseIIIMemo:  // dBase III: fixed block size
         case dBaseIVMemo:
@@ -1134,10 +1166,10 @@ bool ODbaseTable::CreateImpl()
             }
             return false;
         }
-        m_aHeader.db_typ = dBaseIIIMemo;
+        m_aHeader.m_type = dBaseIIIMemo;
     }
     else
-        m_aHeader.db_typ = dBaseIII;
+        m_aHeader.m_type = dBaseIII;
 
     return true;
 }
@@ -1500,14 +1532,14 @@ bool ODbaseTable::InsertRow(OValueRefVector& rRow, const Reference<XIndexAccess>
     if (!AllocBuffer())
         return false;
 
-    memset(m_pBuffer, 0, m_aHeader.db_slng);
+    memset(m_pBuffer, 0, m_aHeader.m_recordLength);
     m_pBuffer[0] = ' ';
 
     // Copy new row completely:
     // ... and add at the end as new Record:
     std::size_t nTempPos = m_nFilePos;
 
-    m_nFilePos = (std::size_t)m_aHeader.db_anz + 1;
+    m_nFilePos = (std::size_t)m_aHeader.m_nbRecords + 1;
     bool bInsertRow = UpdateBuffer( rRow, nullptr, _xCols, true );
     if ( bInsertRow )
     {
@@ -1534,12 +1566,12 @@ bool ODbaseTable::InsertRow(OValueRefVector& rRow, const Reference<XIndexAccess>
             (*m_pFileStream).WriteChar( (char)DBF_EOL ); // write EOL
             // raise number of datasets in the header:
             m_pFileStream->Seek( 4L );
-            (*m_pFileStream).WriteUInt32( m_aHeader.db_anz + 1 );
+            (*m_pFileStream).WriteUInt32( m_aHeader.m_nbRecords + 1 );
 
             m_pFileStream->Flush();
 
             // raise number if successfully
-            m_aHeader.db_anz++;
+            m_aHeader.m_nbRecords++;
             *rRow.get()[0] = m_nFilePos;                                // set bookmark
             m_nFilePos = nTempPos;
         }
@@ -1558,9 +1590,9 @@ bool ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow, const 
         return false;
 
     // position on desired record:
-    std::size_t nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
+    std::size_t nPos = m_aHeader.m_headerLength + (long)(m_nFilePos-1) * m_aHeader.m_recordLength;
     m_pFileStream->Seek(nPos);
-    m_pFileStream->ReadBytes(m_pBuffer, m_aHeader.db_slng);
+    m_pFileStream->ReadBytes(m_pBuffer, m_aHeader.m_recordLength);
 
     std::size_t nMemoFileSize( 0 );
     if (HasMemoFields() && m_pMemoStream)
@@ -1585,7 +1617,7 @@ bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
 {
     // Set the Delete-Flag (be it set or not):
     // Position on desired record:
-    std::size_t nFilePos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
+    std::size_t nFilePos = m_aHeader.m_headerLength + (long)(m_nFilePos-1) * m_aHeader.m_recordLength;
     m_pFileStream->Seek(nFilePos);
 
     OValueRefRow aRow = new OValueRefVector(_rCols.get().size());
@@ -2529,7 +2561,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
 
     sal_Int32 nCurPos;
     OValueRefVector::Vector::const_iterator aIter;
-    for(sal_uInt32 nRowPos = 0; nRowPos < m_aHeader.db_anz;++nRowPos)
+    for(sal_uInt32 nRowPos = 0; nRowPos < m_aHeader.m_nbRecords;++nRowPos)
     {
         bool bOk = seekRow( IResultSetHelper::BOOKMARK, nRowPos+1, nCurPos );
         if ( bOk )
@@ -2580,7 +2612,7 @@ void ODbaseTable::throwInvalidDbaseFormat()
 
 void ODbaseTable::refreshHeader()
 {
-    if ( m_aHeader.db_anz == 0 )
+    if ( m_aHeader.m_nbRecords == 0 )
         readHeader();
 }
 
@@ -2589,7 +2621,7 @@ bool ODbaseTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 
     // prepare positioning:
     OSL_ENSURE(m_pFileStream,"ODbaseTable::seekRow: FileStream is NULL!");
 
-    sal_uInt32  nNumberOfRecords = m_aHeader.db_anz;
+    sal_uInt32  nNumberOfRecords = m_aHeader.m_nbRecords;
     sal_uInt32 nTempPos = m_nFilePos;
     m_nFilePos = nCurPos;
 
@@ -2625,10 +2657,10 @@ bool ODbaseTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 
         goto Error;
     else
     {
-        std::size_t nEntryLen = m_aHeader.db_slng;
+        std::size_t nEntryLen = m_aHeader.m_recordLength;
 
         OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: ungueltige Record-Position");
-        std::size_t nPos = m_aHeader.db_kopf + (std::size_t)(m_nFilePos-1) * nEntryLen;
+        std::size_t nPos = m_aHeader.m_headerLength + (std::size_t)(m_nFilePos-1) * nEntryLen;
 
         m_pFileStream->Seek(nPos);
         if (m_pFileStream->GetError() != ERRCODE_NONE)
@@ -2748,7 +2780,7 @@ bool ODbaseTable::ReadMemo(std::size_t nBlockNo, ORowSetValue& aVariable)
 
 bool ODbaseTable::AllocBuffer()
 {
-    sal_uInt16 nSize = m_aHeader.db_slng;
+    sal_uInt16 nSize = m_aHeader.m_recordLength;
     SAL_WARN_IF(nSize == 0, "connectivity.drivers", "Size too small");
 
     if (m_nBufferSize != nSize)
@@ -2772,14 +2804,14 @@ bool ODbaseTable::WriteBuffer()
     OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: ungueltige Record-Position");
 
     // position on desired record:
-    std::size_t nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
+    std::size_t nPos = m_aHeader.m_headerLength + (long)(m_nFilePos-1) * m_aHeader.m_recordLength;
     m_pFileStream->Seek(nPos);
-    return m_pFileStream->WriteBytes(m_pBuffer, m_aHeader.db_slng) > 0;
+    return m_pFileStream->WriteBytes(m_pBuffer, m_aHeader.m_recordLength) > 0;
 }
 
 sal_Int32 ODbaseTable::getCurrentLastPos() const
 {
-    return m_aHeader.db_anz;
+    return m_aHeader.m_nbRecords;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

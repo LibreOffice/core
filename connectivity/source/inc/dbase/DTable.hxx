@@ -55,14 +55,25 @@ namespace connectivity
                             };
 
         private:
+            // sources: https://www.clicketyclick.dk/databases/xbase/format/dbf.html (dBASE III and 5)
+            // http://www.dbase.com/KnowledgeBase/int/db7_file_fmt.htm (dBASE 7) which is similar at least for this part
             struct DBFHeader {                       /* Header struct */
-                                DBFType      db_typ;                        /* File type                    */
-                                sal_uInt8    db_aedat[3];                   /* Date of last change          */
-                                                                            /* YY MM DD                     */
-                                sal_uInt32  db_anz;                         /* Data set count               */
-                                sal_uInt16  db_kopf;                        /* Header length                */
-                                sal_uInt16  db_slng;                        /* Data set length              */
-                                sal_uInt8   db_frei[20];                    /* Reserved                     */
+                                DBFType     m_type;                      // dBase/xBase type, see DBFType
+                                sal_uInt8   m_dateElems[3];              // Date of last change (YYMMDD)
+                                sal_uInt32  m_nbRecords;                 // Number of records
+                                sal_uInt16  m_headerLength;
+                                sal_uInt16  m_recordLength;              // lenght of 1 record
+                                sal_uInt8   m_reserved1[2];              // should be filled with 0
+                                sal_uInt8   m_incompTransact;            // Incomplete transaction (dBASE IV):
+                                                                         // 00h Transaction ended (or rolled back)
+                                                                         // 01h Transaction started
+                                sal_uInt8   m_encryptionFlag;            // dBASE IV: 00h not encrypted, 01h data encrypted
+                                sal_uInt8   m_freeRecordThread[4];       // reserved for LAN only
+                                sal_uInt8   m_multiUserdBASE[8];         // reserved for multi-user dBASE (dBASE III+)
+                                sal_uInt8   m_MDXFlag;                   // dBASE IV 0x01 if a production .MDX file exists for this table
+                                                                         //          0x00 if no .MDX file exists
+                                sal_uInt8   m_languageDriver;            // codepage (from Foxpro)
+                                sal_uInt8   m_reserved2[2];              // should be filled with 0
                             };
             struct DBFColumn {                       /* Column descriptors */
                                 sal_uInt8    db_fnm[11];                     /* Field name                  */
@@ -103,7 +114,7 @@ namespace connectivity
             void copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos);
             bool CreateFile(const INetURLObject& aFile, bool& bCreateMemo);
             bool CreateMemoFile(const INetURLObject& aFile);
-            bool HasMemoFields() const { return m_aHeader.db_typ > dBaseIV;}
+            bool HasMemoFields() const { return m_aHeader.m_type > dBaseIV;}
             bool ReadMemoHeader();
             bool ReadMemo(std::size_t nBlockNo, ORowSetValue& aVariable);
 
