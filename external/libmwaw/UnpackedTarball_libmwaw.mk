@@ -40,4 +40,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,libmwaw,\
 	external/libmwaw/libmwaw-fix-compare-assert.patch.1 \
 ))
 
+$(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
+    external/libmwaw/iOS.patch.0 \
+))
+
 # vim: set noet sw=4 ts=4:
