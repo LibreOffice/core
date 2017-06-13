@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_6e0de63d",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2215,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-06-13T13:47:05Z",
+      "side": 1,
+      "message": "this should be global value if you want to use it in other methods",
+      "revId": "d13a037e3165444fbabc4327c5c40b06b5d81dee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_b14c9371",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2230,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-06-13T13:47:05Z",
+      "side": 1,
+      "message": "I said in my previous comments, this-\u003eGetSizePixel() will return you (0,0) in the constructor... that means:\nPoint(aRect.Right() - nRightOff, aRect.Top()) \u003d Point(-20, 0)\n\nchange it to manually (30,0) and you will see this button.\n\nSet size in the constructor, update the position in the ImplPlaceTabs method. There you will have ready nWidth variable to use.",
+      "revId": "d13a037e3165444fbabc4327c5c40b06b5d81dee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
