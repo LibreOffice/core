@@ -551,7 +551,7 @@ void generateFunctionParameterMap(std::ostream& o,
                                  rtl::Reference< TypeManager > const & manager,
                                  OUString const & name,
                                  ::codemaker::GeneratedTypeSet & generated,
-                                 bool bFirst)
+                                 bool& bFirst)
 {
     if ( name == "com.sun.star.uno.XInterface" ||
          name == "com.sun.star.lang.XLocalizable" ||
