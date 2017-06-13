@@ -70,9 +70,16 @@ namespace CPPU_CURRENT_NAMESPACE
     __cxa_exception *propagatingExceptions;
 #endif
     };
-    extern "C" __cxa_eh_globals *__cxa_get_globals () throw();
+}
 
+#if !HAVE_CXXABI_H_CXA_GET_GLOBALS
+namespace __cxxabiv1 {
+    extern "C" __cxa_eh_globals * __cxa_get_globals() throw();
+}
+#endif
 
+namespace CPPU_CURRENT_NAMESPACE
+{
     void raiseException(
         uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
     void fillUnoException(
