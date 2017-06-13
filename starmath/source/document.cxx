@@ -748,7 +748,7 @@ bool SmDocShell::Load( SfxMedium& rMedium )
             // is this a fabulous math package ?
             Reference<css::frame::XModel> xModel(GetModel());
             SmXMLImportWrapper aEquation(xModel);
-            sal_uLong nError = aEquation.Import(rMedium);
+            auto nError = aEquation.Import(rMedium);
             bRet = 0 == nError;
             SetError(nError);
         }
