@@ -967,7 +967,7 @@ void XclExpExtName::WriteAddData( XclExpStream& rStrm )
         if (mpArray->GetLen() != 1)
             break;
 
-        const formula::FormulaToken* p = mpArray->First();
+        const formula::FormulaToken* p = mpArray->FirstToken();
         if (!p->IsExternalRef())
             break;
 
