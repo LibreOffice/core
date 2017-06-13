@@ -402,7 +402,7 @@ void Test::testAutocorrect()
     // consider field contents as text for auto quotes
     {
         OUString sInput("T\x01");
-        sal_Unicode cNextChar('"');
+        sal_Unicode const cNextChar('"');
         const sal_Unicode EXPECTED[] = { 'T', 0x01, 0x0201d };
         OUString sExpected(EXPECTED, SAL_N_ELEMENTS(EXPECTED));
 

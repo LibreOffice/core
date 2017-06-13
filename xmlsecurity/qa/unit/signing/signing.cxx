@@ -353,8 +353,7 @@ void SigningTest::testOOXMLRemoveAll()
     CPPUNIT_ASSERT(!xNameAccess->hasByName("_xmlsignatures"));
 
     // And that content types no longer contains signature types.
-    sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
-    uno::Reference<io::XStream> xStream(xStorage->openStreamElement("[Content_Types].xml", nOpenMode), uno::UNO_QUERY);
+    uno::Reference<io::XStream> xStream(xStorage->openStreamElement("[Content_Types].xml", embed::ElementModes::READWRITE), uno::UNO_QUERY);
     uno::Reference<io::XInputStream> xInputStream = xStream->getInputStream();
     uno::Sequence< uno::Sequence<beans::StringPair> > aContentTypeInfo = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xInputStream, mxComponentContext);
     uno::Sequence<beans::StringPair>& rOverrides = aContentTypeInfo[1];

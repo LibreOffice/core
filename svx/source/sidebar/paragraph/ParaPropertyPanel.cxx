@@ -173,8 +173,8 @@ void ParaPropertyPanel::initial()
 IMPL_LINK_NOARG( ParaPropertyPanel, ModifyIndentHdl_Impl, Edit&, void)
 {
     SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
-    aMargin.SetTextLeft( (long)GetCoreValue( *mpLeftIndent, m_eLRSpaceUnit ) );
-    aMargin.SetRight( (long)GetCoreValue( *mpRightIndent, m_eLRSpaceUnit ) );
+    aMargin.SetTextLeft( GetCoreValue( *mpLeftIndent, m_eLRSpaceUnit ) );
+    aMargin.SetRight( GetCoreValue( *mpRightIndent, m_eLRSpaceUnit ) );
     aMargin.SetTextFirstLineOfst( (short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
 
     GetBindings()->GetDispatcher()->ExecuteList(

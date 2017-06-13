@@ -139,13 +139,12 @@ bool DocumentSignatureHelper::isODFPre_1_2(const OUString & sVersion)
 
 bool DocumentSignatureHelper::isOOo3_2_Signature(const SignatureInformation & sigInfo)
 {
-    OUString sManifestURI("META-INF/manifest.xml");
     bool bOOo3_2 = false;
     typedef ::std::vector< SignatureReferenceInformation >::const_iterator CIT;
     for (CIT i = sigInfo.vSignatureReferenceInfors.begin();
         i < sigInfo.vSignatureReferenceInfors.end(); ++i)
     {
-        if (i->ouURI.equals(sManifestURI))
+        if (i->ouURI == "META-INF/manifest.xml")
         {
             bOOo3_2 = true;
             break;
@@ -223,14 +222,13 @@ DocumentSignatureHelper::CreateElementList(
                     xSubStore.clear();
 
                     // Object folders...
-                    OUString aMatchStr( "Object " );
                     Reference < css::container::XNameAccess > xElements( rxStore, UNO_QUERY );
                     Sequence< OUString > aElementNames = xElements->getElementNames();
                     sal_Int32 nElements = aElementNames.getLength();
                     const OUString* pNames = aElementNames.getConstArray();
                     for ( sal_Int32 n = 0; n < nElements; n++ )
                     {
-                        if ( ( pNames[n].match( aMatchStr ) ) && rxStore->isStorageElement( pNames[n] ) )
+                        if ( ( pNames[n].match( "Object " ) ) && rxStore->isStorageElement( pNames[n] ) )
                         {
                             Reference < css::embed::XStorage > xTmpSubStore = rxStore->openStorageElement( pNames[n], css::embed::ElementModes::READ );
                             ImplFillElementList(aElements, xTmpSubStore, pNames[n]+aSep, true, mode);
@@ -305,8 +303,7 @@ void DocumentSignatureHelper::AppendContentTypes(const uno::Reference<embed::XSt
         // ODF
         return;
 
-    sal_Int32 nOpenMode = embed::ElementModes::READ;
-    uno::Reference<io::XInputStream> xRelStream(xStorage->openStreamElement("[Content_Types].xml", nOpenMode), uno::UNO_QUERY);
+    uno::Reference<io::XInputStream> xRelStream(xStorage->openStreamElement("[Content_Types].xml", embed::ElementModes::READ), uno::UNO_QUERY);
     uno::Sequence< uno::Sequence<beans::StringPair> > aContentTypeInfo = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xRelStream, comphelper::getProcessComponentContext());
     if (aContentTypeInfo.getLength() < 2)
     {
@@ -362,8 +359,7 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
     {
         try
         {
-            OUString aSIGStoreName(  "META-INF"  );
-            aHelper.xSignatureStorage = rxStore->openStorageElement( aSIGStoreName, nSubStorageOpenMode );
+            aHelper.xSignatureStorage = rxStore->openStorageElement( "META-INF", nSubStorageOpenMode );
             if ( aHelper.xSignatureStorage.is() )
             {
                 OUString aSIGStreamName;

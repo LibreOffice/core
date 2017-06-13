@@ -11,12 +11,12 @@
 
 /*int foo() { return 1; }*/
 
-void call_value(int);                   // expected-error {{extern prototype in main file without definition [loplugin:externandnotdefined]}}
-void call_const_ref(int const &);       // expected-error {{extern prototype in main file without definition [loplugin:externandnotdefined]}}
-void call_ref(int &);                   // expected-error {{extern prototype in main file without definition [loplugin:externandnotdefined]}}
-void call_value(OUString);              // expected-error {{extern prototype in main file without definition [loplugin:externandnotdefined]}}
-void call_const_ref(OUString const &);  // expected-error {{extern prototype in main file without definition [loplugin:externandnotdefined]}}
-void call_ref(OUString &);              // expected-error {{extern prototype in main file without definition [loplugin:externandnotdefined]}}
+void call_value(int);
+void call_const_ref(int const &);
+void call_ref(int &);
+void call_value(OUString);
+void call_const_ref(OUString const &);
+void call_ref(OUString &);
 
 int main() {
 /* TODO
