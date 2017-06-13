@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/make_unique.hxx>
 #include <svx/sdr/properties/defaultproperties.hxx>
 #include <sdr/properties/itemsettools.hxx>
 #include <svl/itemset.hxx>
@@ -35,10 +38,10 @@ namespace sdr
 {
     namespace properties
     {
-        SfxItemSet* DefaultProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        std::unique_ptr<SfxItemSet> DefaultProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             // Basic implementation; Basic object has NO attributes
-            return new SfxItemSet(rPool);
+            return o3tl::make_unique<SfxItemSet>(rPool);
         }
 
         DefaultProperties::DefaultProperties(SdrObject& rObj)
@@ -75,7 +78,7 @@ namespace sdr
         {
             if(!mpItemSet)
             {
-                const_cast<DefaultProperties*>(this)->mpItemSet.reset(const_cast<DefaultProperties*>(this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool()));
+                const_cast<DefaultProperties*>(this)->mpItemSet = const_cast<DefaultProperties*>(this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool());
                 const_cast<DefaultProperties*>(this)->ForceDefaultAttributes();
             }
 

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/make_unique.hxx>
 #include <sdr/properties/pageproperties.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svdobj.hxx>
@@ -29,10 +32,10 @@ namespace sdr
     namespace properties
     {
         // create a new itemset
-        SfxItemSet* PageProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        std::unique_ptr<SfxItemSet> PageProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             // override to legally return a valid ItemSet
-            return new SfxItemSet(rPool);
+            return o3tl::make_unique<SfxItemSet>(rPool);
         }
 
         PageProperties::PageProperties(SdrObject& rObj)
@@ -60,7 +63,7 @@ namespace sdr
         {
             if(!mpEmptyItemSet)
             {
-                const_cast<PageProperties*>(this)->mpEmptyItemSet.reset(const_cast<PageProperties*>(this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool()));
+                const_cast<PageProperties*>(this)->mpEmptyItemSet = const_cast<PageProperties*>(this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool());
             }
 
             DBG_ASSERT(mpEmptyItemSet, "Could not create an SfxItemSet(!)");

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/make_unique.hxx>
 #include <sdr/properties/customshapeproperties.hxx>
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
@@ -59,9 +62,9 @@ namespace sdr
             }
         }
 
-        SfxItemSet* CustomShapeProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        std::unique_ptr<SfxItemSet> CustomShapeProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return new SfxItemSet(rPool,
+            return o3tl::make_unique<SfxItemSet>(rPool,
 
                 // ranges from SdrAttrObj
                 SDRATTR_START, SDRATTR_SHADOW_LAST,

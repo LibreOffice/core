@@ -22,7 +22,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-
+#include <o3tl/make_unique.hxx>
 #include <vcl/canvastools.hxx>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -86,7 +86,7 @@ class TableProperties : public TextProperties
 {
 protected:
     // create a new itemset
-    SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
+    std::unique_ptr<SfxItemSet> CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 
 public:
     // basic constructor
@@ -125,9 +125,9 @@ void TableProperties::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNe
 }
 
 // create a new itemset
-SfxItemSet* TableProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+std::unique_ptr<SfxItemSet> TableProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
 {
-    return new SfxItemSet(rPool,
+    return o3tl::make_unique<SfxItemSet>(rPool,
 
         // range from SdrAttrObj
         SDRATTR_START, SDRATTR_SHADOW_LAST,

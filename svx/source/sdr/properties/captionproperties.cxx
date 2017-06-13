@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/make_unique.hxx>
 #include <sdr/properties/captionproperties.hxx>
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
@@ -30,9 +33,9 @@ namespace sdr
     namespace properties
     {
         // create a new itemset
-        SfxItemSet* CaptionProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        std::unique_ptr<SfxItemSet> CaptionProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return new SfxItemSet(rPool,
+            return o3tl::make_unique<SfxItemSet>(rPool,
 
                 // range from SdrAttrObj
                 SDRATTR_START, SDRATTR_SHADOW_LAST,

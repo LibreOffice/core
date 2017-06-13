@@ -29,6 +29,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/make_unique.hxx>
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
 
@@ -150,7 +151,7 @@ namespace sdr
         {
         protected:
             // create a new itemset
-            SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
+            std::unique_ptr<SfxItemSet> CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 
             const svx::ITextProvider& getTextProvider() const override;
 
@@ -177,9 +178,9 @@ namespace sdr
         };
 
         // create a new itemset
-        SfxItemSet* CellProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        std::unique_ptr<SfxItemSet> CellProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return new SfxItemSet(rPool,
+            return o3tl::make_unique<SfxItemSet>(rPool,
 
                 // range from SdrAttrObj
                 SDRATTR_START, SDRATTR_SHADOW_LAST,

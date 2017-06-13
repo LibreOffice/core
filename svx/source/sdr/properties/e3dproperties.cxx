@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/make_unique.hxx>
 #include <sdr/properties/e3dproperties.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svddef.hxx>
@@ -28,9 +31,9 @@ namespace sdr
     namespace properties
     {
         // create a new itemset
-        SfxItemSet* E3dProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        std::unique_ptr<SfxItemSet> E3dProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return new SfxItemSet(rPool,
+            return o3tl::make_unique<SfxItemSet>(rPool,
 
                 // ranges from SdrAttrObj
                 SDRATTR_START, SDRATTR_SHADOW_LAST,

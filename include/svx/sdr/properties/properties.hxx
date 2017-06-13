@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SVX_SDR_PROPERTIES_PROPERTIES_HXX
 #define INCLUDED_SVX_SDR_PROPERTIES_PROPERTIES_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
 
@@ -53,7 +57,7 @@ namespace sdr
         protected:
 
             // create a new object specific itemset with object specific ranges.
-            virtual SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& pPool) = 0;
+            virtual std::unique_ptr<SfxItemSet> CreateObjectSpecificItemSet(SfxItemPool& pPool) = 0;
 
             // internal access to SdrObject
             const SdrObject& GetSdrObject() const;

@@ -31,7 +31,7 @@ namespace sdr
         {
         protected:
             // create a new object specific itemset with object specific ranges.
-            virtual SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& pPool) override;
+            virtual std::unique_ptr<SfxItemSet> CreateObjectSpecificItemSet(SfxItemPool& pPool) override;
 
             // Do the ItemChange, may do special handling
             virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;

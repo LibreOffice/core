@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/make_unique.hxx>
 #include <sdr/properties/emptyproperties.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svddef.hxx>
@@ -30,11 +33,11 @@ namespace sdr
     namespace properties
     {
         // create a new itemset
-        SfxItemSet* EmptyProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        std::unique_ptr<SfxItemSet> EmptyProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             // Basic implementation; Basic object has NO attributes
             assert(!"EmptyProperties::CreateObjectSpecificItemSet() should never be called");
-            return new SfxItemSet(rPool);
+            return o3tl::make_unique<SfxItemSet>(rPool);
         }
 
         EmptyProperties::EmptyProperties(SdrObject& rObj)
@@ -52,7 +55,7 @@ namespace sdr
         {
             if(!mpEmptyItemSet)
             {
-                const_cast<EmptyProperties*>(this)->mpEmptyItemSet.reset(const_cast<EmptyProperties*>(this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool()));
+                const_cast<EmptyProperties*>(this)->mpEmptyItemSet = const_cast<EmptyProperties*>(this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool());
             }
 
             assert(mpEmptyItemSet);

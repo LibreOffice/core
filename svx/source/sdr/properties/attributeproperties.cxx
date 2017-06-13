@@ -21,6 +21,7 @@
 
 #include <utility>
 
+#include <o3tl/make_unique.hxx>
 #include <sdr/properties/attributeproperties.hxx>
 #include <sdr/properties/itemsettools.hxx>
 #include <tools/debug.hxx>
@@ -112,9 +113,9 @@ namespace sdr
         }
 
         // create a new itemset
-        SfxItemSet* AttributeProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        std::unique_ptr<SfxItemSet> AttributeProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return new SfxItemSet(rPool,
+            return o3tl::make_unique<SfxItemSet>(rPool,
 
                 // ranges from SdrAttrObj
                 SDRATTR_START, SDRATTR_SHADOW_LAST,
@@ -419,7 +420,7 @@ namespace sdr
                                 pItemSet = pItemSet->GetParent();
                             }
 
-                            SfxItemSet* pNewSet = CreateObjectSpecificItemSet(pNewModel->GetItemPool());
+                            auto pNewSet = CreateObjectSpecificItemSet(pNewModel->GetItemPool());
 
                             std::vector<const SfxItemSet*>::reverse_iterator riter;
                             for (riter = aSetList.rbegin(); riter != aSetList.rend(); ++riter)
@@ -455,7 +456,7 @@ namespace sdr
                                 }
                             }
 
-                            mpItemSet.reset(pNewSet);
+                            mpItemSet = std::move(pNewSet);
                         }
                     }
                 }

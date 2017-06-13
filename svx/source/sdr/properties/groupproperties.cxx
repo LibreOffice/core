@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/make_unique.hxx>
 #include <sdr/properties/groupproperties.hxx>
 #include <svl/itemset.hxx>
 #include <svl/whiter.hxx>
@@ -32,12 +35,12 @@ namespace sdr
     namespace properties
     {
         // create a new itemset
-        SfxItemSet* GroupProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        std::unique_ptr<SfxItemSet> GroupProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             // Groups have in principle no ItemSet. To support methods like
             // GetMergedItemSet() the local one is used. Thus, all items in the pool
             // may be used and a pool itemset is created.
-            return new SfxItemSet(rPool);
+            return o3tl::make_unique<SfxItemSet>(rPool);
         }
 
         GroupProperties::GroupProperties(SdrObject& rObj)
