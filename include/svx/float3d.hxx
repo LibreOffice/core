@@ -183,7 +183,7 @@ private:
     FieldUnit           eFUnit;
 
     // ItemSet used to remember set 2d attributes
-    SfxItemSet*         mpRemember2DAttributes;
+    std::unique_ptr<SfxItemSet> mpRemember2DAttributes;
 
     DECL_LINK( ClickViewTypeHdl, Button*, void );
     DECL_LINK( ClickUpdateHdl, Button*, void );

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/make_unique.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -335,8 +338,6 @@ void Svx3DWin::dispose()
     DELETEZ( pConvertTo3DItem );
     DELETEZ( pConvertTo3DLatheItem );
 
-    delete mpRemember2DAttributes;
-
     mpImpl.reset();
 
     m_pBtnGeo.clear();
@@ -466,7 +467,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     if(mpRemember2DAttributes)
         mpRemember2DAttributes->ClearItem();
     else
-        mpRemember2DAttributes = new SfxItemSet(*rAttrs.GetPool(),
+        mpRemember2DAttributes = o3tl::make_unique<SfxItemSet>(*rAttrs.GetPool(),
             SDRATTR_START, SDRATTR_SHADOW_LAST,
             SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
             0, 0);
@@ -2804,8 +2805,7 @@ void Svx3DWin::UpdatePreview()
 // document is to be reloaded, destroy remembered ItemSet
 void Svx3DWin::DocumentReload()
 {
-    delete mpRemember2DAttributes;
-    mpRemember2DAttributes = nullptr;
+    mpRemember2DAttributes.reset();
 }
 
 void Svx3DWin::InitColorLB()
