@@ -56,15 +56,16 @@ class WriterInsertBreakDialog(UITestCase):
         self.ui_test.create_doc_in_start_center("writer")
 
         for i in range(9):
-            xDialog = self.launch_dialog_and_select_option("pagerb")
+            with self.subTest(i=i):
+                xDialog = self.launch_dialog_and_select_option("pagerb")
 
-            xStyleList = xDialog.getChild("stylelb")
-            xStyleList.executeAction("SELECT", mkPropertyValues({"POS": str(i)}))
+                xStyleList = xDialog.getChild("stylelb")
+                xStyleList.executeAction("SELECT", mkPropertyValues({"POS": str(i)}))
 
-            xOkBtn = xDialog.getChild("ok")
-            xOkBtn.executeAction("CLICK", tuple())
+                xOkBtn = xDialog.getChild("ok")
+                xOkBtn.executeAction("CLICK", tuple())
 
-            self.getPages(i + 2)
+                self.getPages(i + 2)
 
         self.ui_test.close_doc()
 
