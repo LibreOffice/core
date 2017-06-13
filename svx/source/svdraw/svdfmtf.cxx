@@ -19,6 +19,7 @@
 
 #include "svdfmtf.hxx"
 #include <editeng/editdata.hxx>
+#include <o3tl/make_unique.hxx>
 #include <math.h>
 #include <svx/xpoly.hxx>
 #include <vcl/svapp.hxx>
@@ -109,17 +110,10 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(
     mpVD->SetLineColor();
     mpVD->SetFillColor();
     maOldLineColor.SetRed( mpVD->GetLineColor().GetRed() + 1 );
-    mpLineAttr = new SfxItemSet(rModel.GetItemPool(), XATTR_LINE_FIRST, XATTR_LINE_LAST, 0, 0);
-    mpFillAttr = new SfxItemSet(rModel.GetItemPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0, 0);
-    mpTextAttr = new SfxItemSet(rModel.GetItemPool(), EE_ITEMS_START, EE_ITEMS_END, 0, 0);
+    mpLineAttr = o3tl::make_unique<SfxItemSet>(rModel.GetItemPool(), XATTR_LINE_FIRST, XATTR_LINE_LAST, 0, 0);
+    mpFillAttr = o3tl::make_unique<SfxItemSet>(rModel.GetItemPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0, 0);
+    mpTextAttr = o3tl::make_unique<SfxItemSet>(rModel.GetItemPool(), EE_ITEMS_START, EE_ITEMS_END, 0, 0);
     checkClip();
-}
-
-ImpSdrGDIMetaFileImport::~ImpSdrGDIMetaFileImport()
-{
-    delete mpLineAttr;
-    delete mpFillAttr;
-    delete mpTextAttr;
 }
 
 void ImpSdrGDIMetaFileImport::DoLoopActions(GDIMetaFile& rMtf, SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport)

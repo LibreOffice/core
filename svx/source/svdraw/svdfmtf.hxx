@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SVX_SOURCE_SVDRAW_SVDFMTF_HXX
 #define INCLUDED_SVX_SOURCE_SVDRAW_SVDFMTF_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <tools/contnr.hxx>
 #include <tools/fract.hxx>
 #include <vcl/metaact.hxx>
@@ -46,9 +50,9 @@ protected:
     ScopedVclPtr<VirtualDevice> mpVD;
     tools::Rectangle                   maScaleRect;
     size_t                      mnMapScalingOfs; // from here on, not edited with MapScaling
-    SfxItemSet*                 mpLineAttr;
-    SfxItemSet*                 mpFillAttr;
-    SfxItemSet*                 mpTextAttr;
+    std::unique_ptr<SfxItemSet> mpLineAttr;
+    std::unique_ptr<SfxItemSet> mpFillAttr;
+    std::unique_ptr<SfxItemSet> mpTextAttr;
     SdrModel*                   mpModel;
     SdrLayerID                  mnLayer;
     Color                       maOldLineColor;
@@ -159,7 +163,6 @@ public:
         SdrModel& rModel,
         SdrLayerID nLay,
         const tools::Rectangle& rRect);
-    ~ImpSdrGDIMetaFileImport();
 
     size_t DoImport(
         const GDIMetaFile& rMtf,
