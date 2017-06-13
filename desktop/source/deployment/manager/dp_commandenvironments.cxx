@@ -150,7 +150,6 @@ void TmpRepositoryCommandEnv::handle(
     deployment::InstallException instExc;
 
     bool approve = false;
-    bool abort = false;
 
     if ((request >>= verExc)
         || (request >>= licExc)
@@ -159,7 +158,7 @@ void TmpRepositoryCommandEnv::handle(
         approve = true;
     }
 
-    handle_(approve, abort, xRequest);
+    handle_(approve, false/*abort*/, xRequest);
 }
 
 
@@ -181,7 +180,6 @@ void LicenseCommandEnv::handle(
     deployment::LicenseException licExc;
 
     bool approve = false;
-    bool abort = false;
 
     if (request >>= licExc)
     {
@@ -197,7 +195,7 @@ void LicenseCommandEnv::handle(
         }
     }
 
-    handle_(approve, abort, xRequest);
+    handle_(approve, false/*abort*/, xRequest);
 }
 
 
@@ -216,13 +214,12 @@ void NoLicenseCommandEnv::handle(
     deployment::LicenseException licExc;
 
     bool approve = false;
-    bool abort = false;
 
     if (request >>= licExc)
     {
         approve = true;
     }
-    handle_(approve, abort, xRequest);
+    handle_(approve, false/*abort*/, xRequest);
 }
 
 SilentCheckPrerequisitesCommandEnv::SilentCheckPrerequisitesCommandEnv()

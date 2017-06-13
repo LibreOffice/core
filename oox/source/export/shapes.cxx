@@ -970,9 +970,8 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV );
         if( nAdjustmentValuesIndex != -1 )
         {
-            sal_Int32 nAdjustmentsWhichNeedsToBeConverted = 0;
             WritePresetShape( sPresetShape, eShapeType, bPredefinedHandlesUsed,
-                              nAdjustmentsWhichNeedsToBeConverted, aGeometrySeq[ nAdjustmentValuesIndex ] );
+                              0/*nAdjustmentsWhichNeedsToBeConverted*/, aGeometrySeq[ nAdjustmentValuesIndex ] );
         }
         else
             WritePresetShape( sPresetShape );

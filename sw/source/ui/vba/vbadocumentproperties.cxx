@@ -867,10 +867,9 @@ public:
 
     void addProp( const OUString& Name, const uno::Any& Value )
     {
-        sal_Int16 attributes = 128;
         uno::Reference< beans::XPropertyContainer > xContainer( mxUserDefinedProp, uno::UNO_QUERY_THROW );
         // TODO fixme, perform the necessary Type Value conversions
-        xContainer->addProperty( Name, attributes, Value );
+        xContainer->addProperty( Name, sal_Int16(128), Value );
     }
 
 };

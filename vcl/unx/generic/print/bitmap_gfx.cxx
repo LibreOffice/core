@@ -530,7 +530,6 @@ PrinterGfx::writePS2ImageHeader (const tools::Rectangle& rArea, psp::ImageType n
         case psp::ImageType::MonochromeImage: nDictType = 3; break;
         default: break;
     }
-    sal_Int32 nCompressType = 1;
 
     nChar += psp::getValueOf (rArea.GetWidth(),  pImage + nChar);
     nChar += psp::appendStr  (" ",               pImage + nChar);
@@ -538,7 +537,7 @@ PrinterGfx::writePS2ImageHeader (const tools::Rectangle& rArea, psp::ImageType n
     nChar += psp::appendStr  (" ",               pImage + nChar);
     nChar += psp::getValueOf (nDictType,         pImage + nChar);
     nChar += psp::appendStr  (" ",               pImage + nChar);
-    nChar += psp::getValueOf (nCompressType,     pImage + nChar);
+    nChar += psp::getValueOf (sal_Int32(1),      pImage + nChar); // nCompressType
     nChar += psp::appendStr  (" psp_imagedict image\n", pImage + nChar);
 
     WritePS (mpPageBody, pImage, nChar);

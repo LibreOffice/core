@@ -298,10 +298,10 @@ void PivotChartTest::testRoundtrip()
     Reference<chart2::XChartDocument> xChartDoc;
 
     std::vector<double> aReference1 { 10162.033139, 16614.523063, 27944.146101 };
-    OUString aExpectedLabel1("Exp.");
+    OUString const aExpectedLabel1("Exp.");
 
     std::vector<double> aReference2 { 101879.458079, 178636.929704, 314626.484864 };
-    OUString aExpectedLabel2("Rev.");
+    OUString const aExpectedLabel2("Rev.");
 
     load("/chart2/qa/extras/data/ods/", "PivotChartRoundTrip.ods");
 
@@ -384,7 +384,7 @@ void PivotChartTest::testChangePivotTable()
     // Check first data series
     {
         std::vector<double> aReference { 10162.033139, 16614.523063, 27944.146101 };
-        OUString aExpectedLabel("Exp.");
+        OUString const aExpectedLabel("Exp.");
 
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 0)->getData();
         lclCheckSequence(aReference, xSequence, 1E-4);
@@ -395,7 +395,7 @@ void PivotChartTest::testChangePivotTable()
     // Check second data series
     {
         std::vector<double> aReference { 101879.458079, 178636.929704, 314626.484864 };
-        OUString aExpectedLabel("Rev.");
+        OUString const aExpectedLabel("Rev.");
 
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 1)->getData();
         lclCheckSequence(aReference, xSequence, 1E-4);
@@ -420,7 +420,7 @@ void PivotChartTest::testChangePivotTable()
     // Check the first data series
     {
         std::vector<double> aReference { 2855.559, 1780.326, 2208.713, 2130.064, 1187.371 };
-        OUString aExpectedLabel("Big");
+        OUString const aExpectedLabel("Big");
 
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 0)->getData();
         lclCheckSequence(aReference, xSequence, 1E-3);
@@ -431,7 +431,7 @@ void PivotChartTest::testChangePivotTable()
     // Check the second data series
     {
         std::vector<double> aReference { 4098.908, 2527.286, 4299.716, 2362.225, 3326.389 };
-        OUString aExpectedLabel("Medium");
+        OUString const aExpectedLabel("Medium");
 
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 1)->getData();
         lclCheckSequence(aReference, xSequence, 1E-3);
@@ -442,7 +442,7 @@ void PivotChartTest::testChangePivotTable()
     // Check the third data series
     {
         std::vector<double> aReference { 4926.303, 5684.060, 4201.398, 7290.795, 5841.591 };
-        OUString aExpectedLabel("Small");
+        OUString const aExpectedLabel("Small");
 
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 2)->getData();
         lclCheckSequence(aReference, xSequence, 1E-3);
@@ -525,13 +525,12 @@ void PivotChartTest::testPivotChartWithOneColumnField()
 
     uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 
-    sal_Int32 nSheetIndex = 0;
     OUString sPivotTableName("DataPilotTable");
 
     table::CellRangeAddress sCellRangeAdress = lclCreateTestData(xSheetDoc);
 
     uno::Reference<sheet::XDataPilotTables> xDataPilotTables;
-    xDataPilotTables = lclGetDataPilotTables(nSheetIndex, xSheetDoc);
+    xDataPilotTables = lclGetDataPilotTables(0, xSheetDoc);
 
     uno::Reference<sheet::XDataPilotDescriptor> xDataPilotDescriptor;
     xDataPilotDescriptor = xDataPilotTables->createDataPilotDescriptor();
@@ -571,7 +570,7 @@ void PivotChartTest::testPivotChartWithOneColumnField()
     // Check data series 1
     {
         std::vector<double> aReference { 1738.0 };
-        OUString aExpectedLabel("DE");
+        OUString const aExpectedLabel("DE");
 
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 0)->getData();
         lclCheckSequence(aReference, xSequence, 1E-4);
@@ -582,7 +581,7 @@ void PivotChartTest::testPivotChartWithOneColumnField()
     // Check data series 2
     {
         std::vector<double> aReference { 2003.0 };
-        OUString aExpectedLabel("EN");
+        OUString const aExpectedLabel("EN");
 
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 1)->getData();
         lclCheckSequence(aReference, xSequence, 1E-4);
@@ -592,7 +591,7 @@ void PivotChartTest::testPivotChartWithOneColumnField()
     // Check data series 3
     {
         std::vector<double> aReference { 1936.0 };
-        OUString aExpectedLabel("FR");
+        OUString const aExpectedLabel("FR");
 
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 2)->getData();
         lclCheckSequence(aReference, xSequence, 1E-4);
@@ -613,13 +612,12 @@ void PivotChartTest::testPivotChartWithOneRowField()
 
     uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 
-    sal_Int32 nSheetIndex = 0;
     OUString sPivotTableName("DataPilotTable");
 
     table::CellRangeAddress sCellRangeAdress = lclCreateTestData(xSheetDoc);
 
     uno::Reference<sheet::XDataPilotTables> xDataPilotTables;
-    xDataPilotTables = lclGetDataPilotTables(nSheetIndex, xSheetDoc);
+    xDataPilotTables = lclGetDataPilotTables(0, xSheetDoc);
 
     uno::Reference<sheet::XDataPilotDescriptor> xDataPilotDescriptor;
     xDataPilotDescriptor = xDataPilotTables->createDataPilotDescriptor();
@@ -659,7 +657,7 @@ void PivotChartTest::testPivotChartWithOneRowField()
     // Check data series 1
     {
         std::vector<double> aReference { 1738.0, 2003.0, 1936.0 };
-        OUString aExpectedLabel("Total");
+        OUString const aExpectedLabel("Total");
 
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 0)->getData();
         lclCheckSequence(aReference, xSequence, 1E-4);
@@ -677,13 +675,12 @@ void PivotChartTest::testPivotTableDataProvider_PivotTableFields()
 
     uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 
-    sal_Int32 nSheetIndex = 0;
     OUString sPivotTableName("DataPilotTable");
 
     table::CellRangeAddress sCellRangeAdress = lclCreateTestData(xSheetDoc);
 
     uno::Reference<sheet::XDataPilotTables> xDataPilotTables;
-    xDataPilotTables = lclGetDataPilotTables(nSheetIndex, xSheetDoc);
+    xDataPilotTables = lclGetDataPilotTables(0, xSheetDoc);
 
     uno::Reference<sheet::XDataPilotDescriptor> xDataPilotDescriptor;
     xDataPilotDescriptor = xDataPilotTables->createDataPilotDescriptor();
@@ -788,13 +785,12 @@ void PivotChartTest::testPivotChartRowFieldInOutlineMode()
 
     uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 
-    sal_Int32 nSheetIndex = 0;
     OUString sPivotTableName("DataPilotTable");
 
     table::CellRangeAddress sCellRangeAdress = lclCreateTestData(xSheetDoc);
 
     uno::Reference<sheet::XDataPilotTables> xDataPilotTables;
-    xDataPilotTables = lclGetDataPilotTables(nSheetIndex, xSheetDoc);
+    xDataPilotTables = lclGetDataPilotTables(0, xSheetDoc);
 
     uno::Reference<sheet::XDataPilotDescriptor> xDataPilotDescriptor;
     xDataPilotDescriptor = xDataPilotTables->createDataPilotDescriptor();
@@ -837,7 +833,7 @@ void PivotChartTest::testPivotChartRowFieldInOutlineMode()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getNumberOfDataSeries(xChartDoc));
     {
         std::vector<double> aReference { 1116.0, 622.0, 298.0, 562.0, 1143.0, 1168.0, 768.0 };
-        OUString aExpectedLabel("Total");
+        OUString const aExpectedLabel("Total");
 
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 0)->getData();
         lclCheckSequence(aReference, xSequence, 1E-4);
@@ -870,7 +866,7 @@ void PivotChartTest::testPivotChartRowFieldInOutlineMode()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getNumberOfDataSeries(xChartDoc));
     {
         std::vector<double> aReference { 1116.0, 622.0, 298.0, 562.0, 1143.0, 1168.0, 768.0 };
-        OUString aExpectedLabel("Total");
+        OUString const aExpectedLabel("Total");
 
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 0)->getData();
         lclCheckSequence(aReference, xSequence, 1E-4);
@@ -900,7 +896,7 @@ void PivotChartTest::testPivotChartRowFieldInOutlineMode()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getNumberOfDataSeries(xChartDoc));
     {
         std::vector<double> aReference { 1116.0, 622.0, 298.0, 562.0, 1143.0, 1168.0, 768.0 };
-        OUString aExpectedLabel("Total");
+        OUString const aExpectedLabel("Total");
 
         xSequence = getDataSequenceFromDocByRole(xChartDoc, "values-y", 0)->getData();
         lclCheckSequence(aReference, xSequence, 1E-4);

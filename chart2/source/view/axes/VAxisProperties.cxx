@@ -42,7 +42,7 @@ AxisLabelAlignment::AxisLabelAlignment() :
 
 sal_Int32 lcl_calcTickLengthForDepth(sal_Int32 nDepth,sal_Int32 nTickmarkStyle)
 {
-    sal_Int32 nWidth = AXIS2D_TICKLENGTH; //@maybefuturetodo this length could be offered by the model
+    sal_Int32 const nWidth = AXIS2D_TICKLENGTH; //@maybefuturetodo this length could be offered by the model
     double fPercent = 1.0;
     switch(nDepth)
     {
@@ -145,9 +145,8 @@ TickmarkProperties AxisProperties::makeTickmarkPropertiesForComplexCategories(
 TickmarkProperties AxisProperties::getBiggestTickmarkProperties()
 {
     TickmarkProperties aTickmarkProperties;
-    sal_Int32 nDepth = 0;
     sal_Int32 nTickmarkStyle = 3;//inner and outer tickmarks
-    aTickmarkProperties.Length = lcl_calcTickLengthForDepth( nDepth,nTickmarkStyle );
+    aTickmarkProperties.Length = lcl_calcTickLengthForDepth( 0/*nDepth*/,nTickmarkStyle );
     aTickmarkProperties.RelativePos = static_cast<sal_Int32>( lcl_getTickOffset( aTickmarkProperties.Length, nTickmarkStyle ) );
     return aTickmarkProperties;
 }

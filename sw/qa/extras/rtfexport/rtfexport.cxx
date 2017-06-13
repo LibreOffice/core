@@ -244,14 +244,14 @@ DECLARE_RTFEXPORT_TEST(testMathLim, "math-lim.rtf")
 DECLARE_RTFEXPORT_TEST(testMathMatrix, "math-matrix.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
-    OUString aExpected("left [matrix {1 # 2 ## 3 # 4} right ]");
+    OUString const aExpected("left [matrix {1 # 2 ## 3 # 4} right ]");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
 DECLARE_RTFEXPORT_TEST(testMathBox, "math-mbox.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
-    OUString aExpected("a");
+    OUString const aExpected("a");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 

@@ -1073,9 +1073,8 @@ OUString LwpDrawTextBox::RegisterStyle()
     // the pFont need to be deleted myself?
     rtl::Reference<XFFont> pFont = new XFFont();
 
-    rtl_TextEncoding aEncoding =  RTL_TEXTENCODING_MS_1252;
     OUString aFontName = OUString(reinterpret_cast<char*>(m_aTextRec.tmpTextFaceName),
-        strlen(reinterpret_cast<char*>(m_aTextRec.tmpTextFaceName)), aEncoding);
+        strlen(reinterpret_cast<char*>(m_aTextRec.tmpTextFaceName)), RTL_TEXTENCODING_MS_1252);
     pFont->SetFontName(aFontName);
 
     SetFontStyle(pFont, &m_aTextRec);
@@ -1278,9 +1277,8 @@ OUString LwpDrawTextArt::RegisterStyle()
     // the pFont need to be deleted myself?
     rtl::Reference<XFFont> pFont = new XFFont();
 
-    rtl_TextEncoding aEncoding =  RTL_TEXTENCODING_MS_1252;
     OUString aFontName = OUString(reinterpret_cast<char*>(m_aTextArtRec.tmpTextFaceName),
-        strlen(reinterpret_cast<char*>(m_aTextArtRec.tmpTextFaceName)), aEncoding);
+        strlen(reinterpret_cast<char*>(m_aTextArtRec.tmpTextFaceName)), RTL_TEXTENCODING_MS_1252);
     pFont->SetFontName(aFontName);
 
     LwpDrawTextBox::SetFontStyle(pFont, &m_aTextArtRec);

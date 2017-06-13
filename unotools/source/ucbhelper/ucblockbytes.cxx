@@ -194,8 +194,7 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
             OUString aUrl;
             if (evt.NewValue >>= aUrl)
             {
-                OUString aBad ("private:");
-                if (!aUrl.startsWith(aBad))
+                if (!aUrl.startsWith("private:"))
                 {
                     // URL changed (Redirection).
                     m_xLockBytes->SetRealURL_Impl( aUrl );

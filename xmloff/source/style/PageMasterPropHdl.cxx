@@ -283,13 +283,12 @@ bool XMLPMPropHdl_Print::importXML(
         Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    sal_Unicode cToken  = ' ';
     sal_Int32   nTokenIndex = 0;
     bool        bFound  = false;
 
     do
     {
-        bFound = (sAttrValue == rStrImpValue.getToken( 0, cToken, nTokenIndex ));
+        bFound = (sAttrValue == rStrImpValue.getToken( 0, ' ', nTokenIndex ));
     }
     while ( (nTokenIndex >= 0) && !bFound );
 

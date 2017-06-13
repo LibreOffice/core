@@ -186,12 +186,11 @@ sal_Int16 SvFilterOptionsDialog::execute()
 {
     sal_Int16 nRet = ui::dialogs::ExecutableDialogResults::CANCEL;
 
-    OUString aFilterNameStr( "FilterName" );
     OUString aInternalFilterName;
     sal_Int32 j, nCount = maMediaDescriptor.getLength();
     for ( j = 0; j < nCount; j++ )
     {
-        if ( maMediaDescriptor[ j ].Name.equals( aFilterNameStr ) )
+        if ( maMediaDescriptor[ j ].Name == "FilterName" )
         {
             OUString aStr;
             maMediaDescriptor[ j ].Value >>= aStr;

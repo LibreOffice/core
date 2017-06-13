@@ -1142,12 +1142,12 @@ static void ImplPaintCheckBackground(vcl::RenderContext& rRenderContext, vcl::Wi
     if (rRenderContext.IsNativeControlSupported(ControlType::Toolbar, ControlPart::Button))
     {
         ImplControlValue aControlValue;
-        ControlState nState = ControlState::PRESSED | ControlState::ENABLED;
-
         aControlValue.setTristateVal(ButtonValue::On);
 
         bNativeOk = rRenderContext.DrawNativeControl(ControlType::Toolbar, ControlPart::Button,
-                                                     i_rRect, nState, aControlValue, OUString());
+                                                     i_rRect,
+                                                     ControlState::PRESSED | ControlState::ENABLED,
+                                                     aControlValue, OUString());
     }
 
     if (!bNativeOk)
@@ -1160,8 +1160,6 @@ static void ImplPaintCheckBackground(vcl::RenderContext& rRenderContext, vcl::Wi
 
 void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry* pThisOnly, bool bHighlighted)
 {
-    sal_uInt16 nBorder = 0; long nStartY = 0; // from Menu implementations, needed when we support native menu background & scrollable menu
-
     long nFontHeight = GetTextHeight();
 
     long nCheckHeight = 0, nRadioHeight = 0, nMaxCheckWidth = 0;
@@ -1178,8 +1176,6 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
     for (const auto& pEntry : mpImpl->maEntryVector)
     {
         Point aPos(aTopLeft);
-        aPos.Y() += nBorder;
-        aPos.Y() += nStartY;
 
         if ((pEntry == nullptr) && !pThisOnly)
         {

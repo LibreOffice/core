@@ -2260,20 +2260,17 @@ RTLFUNC(DateDiff)
         }
         case INTERVAL_H:
         {
-            double dFactor = 24.0;
-            dRet = RoundImpl( dFactor * (dDate2 - dDate1) );
+            dRet = RoundImpl( 24.0 * (dDate2 - dDate1) );
             break;
         }
         case INTERVAL_N:
         {
-            double dFactor =1440.0;
-            dRet = RoundImpl( dFactor * (dDate2 - dDate1) );
+            dRet = RoundImpl( 1440.0 * (dDate2 - dDate1) );
             break;
         }
         case INTERVAL_S:
         {
-            double dFactor = 86400.0;
-            dRet = RoundImpl( dFactor * (dDate2 - dDate1) );
+            dRet = RoundImpl( 86400.0 * (dDate2 - dDate1) );
             break;
         }
     }
@@ -3174,7 +3171,7 @@ RTLFUNC(Rate)
     if ( nArgCount >= 6 )
     {
         if( rPar.Get(6)->GetType() != SbxEMPTY )
-            type = rPar.Get(6)->GetDouble();
+            guess = rPar.Get(6)->GetDouble();
     }
 
     Sequence< Any > aParams( 6 );

@@ -745,7 +745,7 @@ DECLARE_OOXMLEXPORT_TEST(testN793998, "n793998.docx")
     sal_Int32 nTextPortion = parseDump("/root/page/body/txt/Text[1]", "nWidth").toInt32(); // Width of the first (text) portion
     sal_Int32 nTabPortion = parseDump("/root/page/body/txt/Text[2]", "nWidth").toInt32(); // Width of the second (tab) portion
     sal_Int32 nParagraph = parseDump("/root/page/body/txt/infos/bounds", "width").toInt32(); // Width of the paragraph
-    sal_Int32 nRightMargin = 3000;
+    sal_Int32 const nRightMargin = 3000;
     // The problem was that the tab portion didn't ignore the right margin, so text + tab width wasn't larger than body (paragraph - right margin) width.
     CPPUNIT_ASSERT(nTextPortion + nTabPortion > nParagraph - nRightMargin);
 }

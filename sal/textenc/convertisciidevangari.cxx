@@ -234,7 +234,7 @@ sal_Size UnicodeToIsciiDevanagari::convert(sal_Unicode const* pSrcBuf, sal_Size 
     char* pDestBuf, sal_Size nDestBytes, sal_uInt32 nFlags,
     sal_uInt32 * pInfo, sal_Size* pSrcCvtChars)
 {
-    size_t entries = SAL_N_ELEMENTS(unicodeToISCIIEncoding);
+    size_t const entries = SAL_N_ELEMENTS(unicodeToISCIIEncoding);
     BmpUnicodeToSingleByteRange const * ranges = unicodeToISCIIEncoding;
 
     sal_Unicode cHighSurrogate = m_cHighSurrogate;

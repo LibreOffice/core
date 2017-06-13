@@ -885,10 +885,8 @@ void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
 
 void SfxTemplateManagerDlg::OnTemplateImportCategory(const OUString& sCategory)
 {
-    sal_Int16 nDialogType =
-        css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
-
-    sfx2::FileDialogHelper aFileDlg(nDialogType, FileDialogFlags::MultiSelection);
+    sfx2::FileDialogHelper aFileDlg(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+                                    FileDialogFlags::MultiSelection);
 
     // add "All" filter
     aFileDlg.AddFilter( SfxResId(STR_SFX_FILTERNAME_ALL),
@@ -1069,7 +1067,6 @@ void SfxTemplateManagerDlg::OnTemplateExport()
 
 void SfxTemplateManagerDlg::OnTemplateLink ()
 {
-    OUString sNode("TemplateRepositoryURL");
     OUString sNodePath("/org.openoffice.Office.Common/Help/StartCenter");
     try
     {
@@ -1086,7 +1083,7 @@ void SfxTemplateManagerDlg::OnTemplateLink ()
         {
             OUString sURL;
             //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
-            Any value( xNameAccess->getByName(sNode) );
+            Any value( xNameAccess->getByName("TemplateRepositoryURL") );
             sURL = value.get<OUString> ();
             localizeWebserviceURI(sURL);
 

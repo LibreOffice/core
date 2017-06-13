@@ -373,7 +373,6 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
 
 sal_Int8 NavigatorTree::AcceptDrop( const AcceptDropEvent& _rEvt )
 {
-    sal_Int8 nDropOption = DND_ACTION_NONE;
     ::Point aDropPos = _rEvt.maPosPixel;
     if (_rEvt.mbLeaving)
     {
@@ -421,7 +420,7 @@ sal_Int8 NavigatorTree::AcceptDrop( const AcceptDropEvent& _rEvt )
             m_aDropActionTimer.Stop();
     }
 
-    return nDropOption;
+    return DND_ACTION_NONE;
 }
 
 sal_Int8 NavigatorTree::ExecuteDrop( const ExecuteDropEvent& /*_rEvt*/ )

@@ -283,8 +283,7 @@ uno::Reference< XTitle > TitleHelper::createTitle(
                             || (!bIsVertical && eTitleType == TitleHelper::SECONDARY_Y_AXIS_TITLE)
                             || (bIsVertical && eTitleType == TitleHelper::SECONDARY_X_AXIS_TITLE) )
                         {
-                            double fNewAngleDegree = 90.0;
-                            xTitleProps->setPropertyValue( "TextRotation", uno::Any( fNewAngleDegree ));
+                            xTitleProps->setPropertyValue( "TextRotation", uno::Any( 90.0 ));
                         }
                     }
                 }

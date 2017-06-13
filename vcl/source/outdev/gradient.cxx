@@ -359,8 +359,7 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
     }
 
     // calculate step count
-    bool    bMtf = false;
-    long    nStepCount  = GetGradientSteps( rGradient, aRect, bMtf );
+    long    nStepCount  = GetGradientSteps( rGradient, aRect, false/*bMtf*/ );
 
     // minimal three steps and maximal as max color steps
     long   nAbsRedSteps   = std::abs( nEndRed   - nStartRed );
@@ -480,9 +479,7 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
     if ( UsePolyPolygonForComplexGradient() )
         xPolyPoly.reset(new tools::PolyPolygon( 2 ));
 
-    bool bMtf = false;
-    bool bComplex = true;
-    long nStepCount = GetGradientSteps( rGradient, rRect, bMtf, bComplex );
+    long nStepCount = GetGradientSteps( rGradient, rRect, false/*bMtf*/, true/*bComplex*/ );
 
     // at least three steps and at most the number of colour differences
     long nSteps = std::max( nStepCount, 2L );
@@ -712,8 +709,7 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
         }
     }
 
-    bool    bMtf = true;
-    long    nStepCount  = GetGradientSteps( rGradient, aRect, bMtf );
+    long    nStepCount  = GetGradientSteps( rGradient, aRect, true/*bMtf*/ );
 
     // minimal three steps and maximal as max color steps
     long   nAbsRedSteps   = std::abs( nEndRed   - nStartRed );

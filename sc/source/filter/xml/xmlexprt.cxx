@@ -1978,14 +1978,13 @@ void ScXMLExport::ExportStyles_( bool bUsed )
                 if (xCellStyles.is())
                 {
                     sal_Int32 nCount(xCellStyles->getCount());
-                    OUString sNumberFormat(SC_UNONAME_NUMFMT);
                     for (sal_Int32 i = 0; i < nCount; ++i)
                     {
                         uno::Reference <beans::XPropertySet> xCellProperties(xCellStyles->getByIndex(i), uno::UNO_QUERY);
                         if (xCellProperties.is())
                         {
                             sal_Int32 nNumberFormat = 0;
-                            if (xCellProperties->getPropertyValue(sNumberFormat) >>= nNumberFormat)
+                            if (xCellProperties->getPropertyValue(SC_UNONAME_NUMFMT) >>= nNumberFormat)
                                 addDataStyle(nNumberFormat);
                         }
                     }
@@ -2011,9 +2010,6 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
 
     //! pass xCellRanges instead
     uno::Reference<sheet::XSheetCellRanges> xCellRanges( xProperties, uno::UNO_QUERY );
-
-    OUString SC_SCELLPREFIX(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX);
-    OUString SC_NUMBERFORMAT(SC_UNONAME_NUMFMT);
 
     OUString sStyleName;
     sal_Int32 nNumberFormat(-1);
@@ -2072,7 +2068,7 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
     if (nCount == 1) // this is the CellStyle and should be removed if alone
         aPropStates.clear();
     if (nNumberFormat == -1)
-        xProperties->getPropertyValue(SC_NUMBERFORMAT) >>= nNumberFormat;
+        xProperties->getPropertyValue(SC_UNONAME_NUMFMT) >>= nNumberFormat;
     if (!sStyleName.isEmpty())
     {
         if (!aPropStates.empty())
@@ -2114,7 +2110,7 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
                         delete pTemp;
                 }
                 else
-                    nIndex = pCellStyles->GetIndexOfStyleName(sName, SC_SCELLPREFIX, bIsAutoStyle);
+                    nIndex = pCellStyles->GetIndexOfStyleName(sName, XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX, bIsAutoStyle);
 
                 uno::Sequence<table::CellRangeAddress> aAddresses(xCellRanges->getRangeAddresses());
                 table::CellRangeAddress* pAddresses(aAddresses.getArray());
@@ -2162,8 +2158,6 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
 void ScXMLExport::AddStyleFromColumn(const uno::Reference<beans::XPropertySet>& xColumnProperties,
                                      const OUString* pOldName, sal_Int32& rIndex, bool& rIsVisible)
 {
-    OUString SC_SCOLUMNPREFIX(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX);
-
     std::vector<XMLPropertyState> aPropStates(xColumnStylesExportPropertySetMapper->Filter(xColumnProperties));
     if(!aPropStates.empty())
     {
@@ -2199,7 +2193,7 @@ void ScXMLExport::AddStyleFromColumn(const uno::Reference<beans::XPropertySet>& 
                 rIndex = pColumnStyles->AddStyleName(pTemp);
             }
             else
-                rIndex = pColumnStyles->GetIndexOfStyleName(sName, SC_SCOLUMNPREFIX);
+                rIndex = pColumnStyles->GetIndexOfStyleName(sName, XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX);
         }
     }
 }
@@ -2207,8 +2201,6 @@ void ScXMLExport::AddStyleFromColumn(const uno::Reference<beans::XPropertySet>& 
 void ScXMLExport::AddStyleFromRow(const uno::Reference<beans::XPropertySet>& xRowProperties,
                                   const OUString* pOldName, sal_Int32& rIndex)
 {
-    OUString SC_SROWPREFIX(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX);
-
     std::vector<XMLPropertyState> aPropStates(xRowStylesExportPropertySetMapper->Filter(xRowProperties));
     if(!aPropStates.empty())
     {
@@ -2232,7 +2224,7 @@ void ScXMLExport::AddStyleFromRow(const uno::Reference<beans::XPropertySet>& xRo
                 rIndex = pRowStyles->AddStyleName(pTemp);
             }
             else
-                rIndex = pRowStyles->GetIndexOfStyleName(sName, SC_SROWPREFIX);
+                rIndex = pRowStyles->GetIndexOfStyleName(sName, XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX);
         }
     }
 }
@@ -3382,8 +3374,6 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
     uno::Reference < beans::XPropertySet > xShapeProps ( xShape, uno::UNO_QUERY );
     bool bIsChart( false );
     OUString sPropCLSID ("CLSID");
-    OUString sPropModel ("Model");
-    OUString sPersistName ("PersistName");
     if (xShapeProps.is())
     {
         sal_Int32 nZOrder = 0;
@@ -3404,7 +3394,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                     if ( pDoc )
                     {
                         OUString aChartName;
-                        xShapeProps->getPropertyValue( sPersistName ) >>= aChartName;
+                        xShapeProps->getPropertyValue( "PersistName" ) >>= aChartName;
                         ScChartListenerCollection* pCollection = pDoc->GetChartListenerCollection();
                         if (pCollection)
                         {
@@ -3431,7 +3421,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                     if ( sRanges.isEmpty() )
                     {
                         uno::Reference< frame::XModel > xChartModel;
-                        if( ( xShapeProps->getPropertyValue( sPropModel ) >>= xChartModel ) &&
+                        if( ( xShapeProps->getPropertyValue( "Model" ) >>= xChartModel ) &&
                             xChartModel.is())
                         {
                             uno::Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY );

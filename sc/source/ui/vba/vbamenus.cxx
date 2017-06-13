@@ -93,8 +93,9 @@ ScVbaMenus::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ )
 
 uno::Reference< excel::XMenu > SAL_CALL ScVbaMenus::Add( const OUString& Caption, const css::uno::Any& Before, const css::uno::Any& Restore )
 {
-    sal_Int32 nType = office::MsoControlType::msoControlPopup;
-    uno::Reference< XCommandBarControl > xCommandBarControl = m_xCommandBarControls->Add( uno::makeAny( nType ), uno::Any(), uno::Any(), Before, Restore );
+    uno::Reference< XCommandBarControl > xCommandBarControl = m_xCommandBarControls->Add(
+            uno::makeAny( office::MsoControlType::msoControlPopup ),
+            uno::Any(), uno::Any(), Before, Restore );
     xCommandBarControl->setCaption( Caption );
     return uno::Reference< excel::XMenu >( new ScVbaMenu( this, mxContext, xCommandBarControl ) );
 }

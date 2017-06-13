@@ -1968,7 +1968,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                               uno::makeAny( sRangeRep ), beans::PropertyState_DIRECT_VALUE ));
 
     //Sequence Mapping
-    bool bSequencesReordered = true;//todo detect this above or detect this sequence mapping cheaper ...
+    bool const bSequencesReordered = true;//todo detect this above or detect this sequence mapping cheaper ...
     if( bSequencesReordered && bRowSourceDetected )
     {
         bool bDifferentIndexes = false;

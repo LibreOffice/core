@@ -228,8 +228,8 @@ void SvxLineWidthToolBoxControl::StateChanged(
 
                 // Core-Unit handed over to MetricField
                 // Should not happen in CreateItemWin ()!
-                MapUnit eUnit = MapUnit::Map100thMM; // CD!!! GetCoreMetric();
-                pFld->SetCoreUnit( eUnit );
+                // CD!!! GetCoreMetric();
+                pFld->SetCoreUnit( MapUnit::Map100thMM );
 
                 pFld->Update( static_cast<const XLineWidthItem*>(pState) );
             }

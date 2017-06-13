@@ -316,11 +316,10 @@ const OUString SmFontFormatList::GetNewFontFormatId() const
 {
     // returns first unused FormatId
 
-    OUString aPrefix("Id");
     sal_Int32 nCnt = GetCount();
     for (sal_Int32 i = 1;  i <= nCnt + 1;  ++i)
     {
-        OUString aTmpId =  aPrefix + OUString::number(i);
+        OUString aTmpId = "Id" + OUString::number(i);
         if (!GetFontFormat(aTmpId))
             return aTmpId;
     }

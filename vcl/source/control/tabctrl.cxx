@@ -649,8 +649,7 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
 
         if ( pOldPage && pOldPage->HasChildPathFocus() )
         {
-            sal_uInt16  n = 0;
-            vcl::Window* pFirstChild = pPage->ImplGetDlgWindow( n, GetDlgWindowType::First );
+            vcl::Window* pFirstChild = pPage->ImplGetDlgWindow( 0, GetDlgWindowType::First );
             if ( pFirstChild )
                 pFirstChild->ImplControlFocus( GetFocusFlags::Init );
             else

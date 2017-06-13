@@ -1516,11 +1516,10 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
 
     try
     {
-        ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
         Sequence< NumberedSortingInfo >     aSortingInfo(1);
         aSortingInfo.getArray()->ColumnIndex = 1;
         aSortingInfo.getArray()->Ascending = true;
-        xResultSet = rContent.createSortedCursor( aProps, aSortingInfo, m_rCompareFactory, eInclude );
+        xResultSet = rContent.createSortedCursor( aProps, aSortingInfo, m_rCompareFactory, INCLUDE_DOCUMENTS_ONLY );
     }
     catch ( Exception& ) {}
 
@@ -1547,11 +1546,10 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
 
     try
     {
-        ResultSetInclude eInclude = INCLUDE_FOLDERS_ONLY;
         Sequence< NumberedSortingInfo >     aSortingInfo(1);
         aSortingInfo.getArray()->ColumnIndex = 1;
         aSortingInfo.getArray()->Ascending = true;
-        xResultSet = rTemplRoot.createSortedCursor( aProps, aSortingInfo, m_rCompareFactory, eInclude );
+        xResultSet = rTemplRoot.createSortedCursor( aProps, aSortingInfo, m_rCompareFactory, INCLUDE_FOLDERS_ONLY );
     }
     catch ( Exception& ) {}
 

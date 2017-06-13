@@ -219,13 +219,12 @@ ScVbaShapes::createShape( const OUString& service )
 uno::Any
 ScVbaShapes::AddRectangle(sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, const uno::Any& rRange)
 {
-    OUString sCreateShapeName( "com.sun.star.drawing.RectangleShape" );
     sal_Int32 nXPos = Millimeter::getInHundredthsOfOneMillimeter( startX );
     sal_Int32 nYPos = Millimeter::getInHundredthsOfOneMillimeter( startY );
     sal_Int32 nWidth = Millimeter::getInHundredthsOfOneMillimeter( nLineWidth );
     sal_Int32 nHeight = Millimeter::getInHundredthsOfOneMillimeter( nLineHeight );
 
-    uno::Reference< drawing::XShape > xShape( createShape( sCreateShapeName ), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XShape > xShape( createShape( "com.sun.star.drawing.RectangleShape" ), uno::UNO_QUERY_THROW );
     m_xShapes->add( xShape );
 
     OUString sName(createName( "Rectangle" ));
@@ -251,13 +250,12 @@ ScVbaShapes::AddRectangle(sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWid
 uno::Any
 ScVbaShapes::AddEllipse(sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, const uno::Any& rRange)
 {
-    OUString sCreateShapeName( "com.sun.star.drawing.EllipseShape" );
     sal_Int32 nXPos = Millimeter::getInHundredthsOfOneMillimeter( startX );
     sal_Int32 nYPos = Millimeter::getInHundredthsOfOneMillimeter( startY );
     sal_Int32 nWidth = Millimeter::getInHundredthsOfOneMillimeter( nLineWidth );
     sal_Int32 nHeight = Millimeter::getInHundredthsOfOneMillimeter( nLineHeight );
 
-    uno::Reference< drawing::XShape > xShape( createShape( sCreateShapeName ), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XShape > xShape( createShape( "com.sun.star.drawing.EllipseShape" ), uno::UNO_QUERY_THROW );
     m_xShapes->add( xShape );
 
     awt::Point aMovePositionIfRange( 0, 0 );
@@ -356,13 +354,12 @@ ScVbaShapes::AddTextbox( sal_Int32 /*_nOrientation*/, sal_Int32 _nLeft, sal_Int3
 uno::Any
 ScVbaShapes::AddTextboxInWriter( sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight )
 {
-    OUString sCreateShapeName( "com.sun.star.drawing.TextShape" );
     sal_Int32 nXPos = Millimeter::getInHundredthsOfOneMillimeter( _nLeft );
     sal_Int32 nYPos = Millimeter::getInHundredthsOfOneMillimeter( _nTop );
     sal_Int32 nWidth = Millimeter::getInHundredthsOfOneMillimeter( _nWidth );
     sal_Int32 nHeight = Millimeter::getInHundredthsOfOneMillimeter( _nHeight );
 
-    uno::Reference< drawing::XShape > xShape( createShape( sCreateShapeName ), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XShape > xShape( createShape( "com.sun.star.drawing.TextShape" ), uno::UNO_QUERY_THROW );
     m_xShapes->add( xShape );
 
     setDefaultShapeProperties(xShape);
@@ -386,13 +383,10 @@ ScVbaShapes::AddTextboxInWriter( sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _n
     xShapeProps->setPropertyValue( "VertOrientPosition", uno::makeAny( nYPos ) );
 
     // set to visible
-    drawing::LineStyle aLineStyle = drawing::LineStyle_SOLID;
-    xShapeProps->setPropertyValue( "LineStyle", uno::makeAny( aLineStyle ) );
+    xShapeProps->setPropertyValue( "LineStyle", uno::makeAny( drawing::LineStyle_SOLID ) );
     // set to font
-    sal_Int16 nLayerId = 1;
-    OUString sLayerName("Heaven");
-    xShapeProps->setPropertyValue( "LayerID", uno::makeAny( nLayerId ) );
-    xShapeProps->setPropertyValue( "LayerName", uno::makeAny( sLayerName ) );
+    xShapeProps->setPropertyValue( "LayerID", uno::makeAny( sal_Int16(1) ) );
+    xShapeProps->setPropertyValue( "LayerName", uno::makeAny( OUString("Heaven") ) );
 
 
     ScVbaShape *pScVbaShape = new ScVbaShape( getParent(), mxContext, xShape, m_xShapes, m_xModel, ScVbaShape::getType( xShape ) );

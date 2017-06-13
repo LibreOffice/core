@@ -1457,8 +1457,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
             Any aValue;
             Locale aLocale = LanguageTag::convertToLocale( eSelectLang, false);
             aValue <<= aLocale;
-            OUString aPropName( "DefaultLocale" );
-            pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
+            pLangConfig->aLinguConfig.SetProperty( "DefaultLocale", aValue );
             if (xLinguProp.is())
                 xLinguProp->setDefaultLocale( aLocale );
         }
@@ -1477,8 +1476,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
             Any aValue;
             Locale aLocale = LanguageTag::convertToLocale( eSelectLang, false);
             aValue <<= aLocale;
-            OUString aPropName( "DefaultLocale_CJK" );
-            pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
+            pLangConfig->aLinguConfig.SetProperty( "DefaultLocale_CJK", aValue );
             if (xLinguProp.is())
                 xLinguProp->setDefaultLocale_CJK( aLocale );
         }
@@ -1497,8 +1495,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
             Any aValue;
             Locale aLocale = LanguageTag::convertToLocale( eSelectLang, false);
             aValue <<= aLocale;
-            OUString aPropName( "DefaultLocale_CTL" );
-            pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
+            pLangConfig->aLinguConfig.SetProperty( "DefaultLocale_CTL", aValue );
             if (xLinguProp.is())
                 xLinguProp->setDefaultLocale_CTL( aLocale );
         }

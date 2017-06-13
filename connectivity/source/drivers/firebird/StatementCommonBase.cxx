@@ -302,9 +302,8 @@ sal_Bool OStatementCommonBase::convertFastPropertyValue(
     (void) rOldValue;
     (void) nHandle;
     (void) rValue;
-    bool bConverted = false;
     // here we have to try to convert
-    return bConverted;
+    return false;
 }
 
 void OStatementCommonBase::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)

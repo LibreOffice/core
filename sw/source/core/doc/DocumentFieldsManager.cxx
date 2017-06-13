@@ -937,8 +937,7 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
                         if (aPam.Start()->nNode.GetNode().StartOfSectionNode()->IsSectionNode())
                         {
                             // This would be the last section, so set its condition to false, and avoid hiding it.
-                            OUString aCond("0");
-                            pSect->SetCondition(aCond);
+                            pSect->SetCondition("0");
                             bHide = false;
                         }
                     }

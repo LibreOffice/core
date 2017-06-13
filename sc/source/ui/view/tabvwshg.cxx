@@ -82,8 +82,7 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
         xPropSet->setPropertyValue("TargetFrame", uno::Any(rTarget) );
     }
 
-    form::FormButtonType eButtonType = form::FormButtonType_URL;
-    xPropSet->setPropertyValue("ButtonType", uno::Any(eButtonType) );
+    xPropSet->setPropertyValue("ButtonType", uno::Any(form::FormButtonType_URL) );
 
         if ( ::avmedia::MediaWindow::isMediaURL( rURL, ""/*TODO?*/ ) )
     {

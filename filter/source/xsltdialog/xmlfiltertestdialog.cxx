@@ -414,11 +414,10 @@ void XMLFilterTestDialog::onExportBrowse()
 
             Reference< XDesktop2 > xLoader = Desktop::create( mxContext );
             Reference< XInteractionHandler2 > xInter = InteractionHandler::createWithParent(mxContext, nullptr);
-            OUString aFrame( "_default" );
             Sequence< PropertyValue > aArguments(1);
             aArguments[0].Name = "InteractionHandler";
             aArguments[0].Value <<= xInter;
-            Reference< XComponent > xComp( xLoader->loadComponentFromURL( m_sExportRecentFile, aFrame, 0, aArguments ) );
+            Reference< XComponent > xComp( xLoader->loadComponentFromURL( m_sExportRecentFile, "_default", 0, aArguments ) );
             if( xComp.is() )
             {
                 doExport( xComp );
@@ -592,14 +591,13 @@ void XMLFilterTestDialog::import( const OUString& rURL )
         Reference< XDesktop2 > xLoader = Desktop::create( mxContext );
         Reference< XInteractionHandler2 > xInter = InteractionHandler::createWithParent(mxContext, nullptr);
 
-        OUString aFrame( "_default" );
         Sequence< PropertyValue > aArguments(2);
         aArguments[0].Name = "FilterName";
         aArguments[0].Value <<= m_pFilterInfo->maFilterName;
         aArguments[1].Name = "InteractionHandler";
         aArguments[1].Value <<= xInter;
 
-        xLoader->loadComponentFromURL( rURL, aFrame, 0, aArguments );
+        xLoader->loadComponentFromURL( rURL, "_default", 0, aArguments );
 
         if( m_pCBXDisplaySource->IsChecked() )
         {

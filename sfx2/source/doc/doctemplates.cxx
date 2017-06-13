@@ -1522,8 +1522,7 @@ bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
 
         try
         {
-            ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
-            xResultSet = aGroup.createCursor( aProps, eInclude );
+            xResultSet = aGroup.createCursor( aProps, INCLUDE_DOCUMENTS_ONLY );
 
             if ( xResultSet.is() )
             {
@@ -1633,8 +1632,7 @@ bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
     {
         uno::Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps { TARGET_URL };
-        ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
-        xResultSet = aGroup.createCursor( aProps, eInclude );
+        xResultSet = aGroup.createCursor( aProps, INCLUDE_DOCUMENTS_ONLY );
 
         if ( xResultSet.is() )
         {
@@ -2328,8 +2326,7 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
     try
     {
         aContent = Content(rOwnURL, maCmdEnv, comphelper::getProcessComponentContext());
-        ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
-        xResultSet = aContent.createCursor( aProps, eInclude );
+        xResultSet = aContent.createCursor( aProps, INCLUDE_DOCUMENTS_ONLY );
     }
     catch (ContentCreationException&)
     {
@@ -2439,8 +2436,7 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
         // that should happen quietly
         uno::Reference< XCommandEnvironment > aQuietEnv;
         aContent = Content( rOwnURL, aQuietEnv, comphelper::getProcessComponentContext() );
-        ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
-        xResultSet = aContent.createCursor( aProps, eInclude );
+        xResultSet = aContent.createCursor( aProps, INCLUDE_DOCUMENTS_ONLY );
     }
     catch ( Exception& ) {}
 
@@ -2500,8 +2496,7 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
 
     try
     {
-        ResultSetInclude eInclude = INCLUDE_FOLDERS_ONLY;
-        xResultSet = rContent.createCursor( aProps, eInclude );
+        xResultSet = rContent.createCursor( aProps, INCLUDE_FOLDERS_ONLY );
     }
     catch ( Exception& ) {}
 

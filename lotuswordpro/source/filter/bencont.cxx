@@ -72,8 +72,6 @@ const char gsBenMagicBytes[] = BEN_MAGIC_BYTES;
 */
 sal_uLong BenOpenContainer(LwpSvStream * pStream, LtcBenContainer ** ppContainer)
 {
-    BenError Err;
-
     *ppContainer = nullptr;
 
     if (nullptr == pStream)
@@ -82,7 +80,7 @@ sal_uLong BenOpenContainer(LwpSvStream * pStream, LtcBenContainer ** ppContainer
     }
 
     LtcBenContainer * pContainer = new LtcBenContainer(pStream);
-    if ((Err = pContainer->Open()) != BenErr_OK) // delete two inputs
+    if (pContainer->Open() != BenErr_OK) // delete two inputs
     {
         delete pContainer;
         return BenErr_InvalidTOC;

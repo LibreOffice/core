@@ -344,8 +344,7 @@ void OpenGLProgram::ApplyMatrix(float fWidth, float fHeight, float fPixelOffset)
     mfLastHeight = fHeight;
     mfLastPixelOffset = fPixelOffset;
 
-    OString sProjectionMatrix("mvp");
-    GLuint nUniform = GetUniformLocation(sProjectionMatrix);
+    GLuint nUniform = GetUniformLocation("mvp");
 
     glm::mat4 aMVP = glm::ortho(0.0f, fWidth, fHeight, 0.0f, 0.0f, 1.0f);
 

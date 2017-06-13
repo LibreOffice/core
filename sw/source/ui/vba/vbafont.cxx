@@ -67,9 +67,7 @@ class UnderLineMapper
 private:
     UnderLineMapper()
     {
-        sal_Int32 nLen = SAL_N_ELEMENTS( UnderLineTable );
-
-        for ( sal_Int32 index=0; index<nLen; ++index )
+        for ( sal_Int32 index=0; index<sal_Int32(SAL_N_ELEMENTS( UnderLineTable )); ++index )
         {
             MSO2OOO[ UnderLineTable[ index ].nMSOConst ] = UnderLineTable[ index ].nOOOConst;
             OOO2MSO[ UnderLineTable[ index ].nOOOConst ] = UnderLineTable[ index ].nMSOConst;

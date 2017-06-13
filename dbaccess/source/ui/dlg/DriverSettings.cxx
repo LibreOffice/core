@@ -53,20 +53,6 @@ void ODriversSettings::getSupportedIndirectSettings( const OUString& _sURLPrefix
 
     ::connectivity::DriversConfig aDriverConfig(_xContext);
     const ::comphelper::NamedValueCollection& aProperties = aDriverConfig.getProperties(_sURLPrefix);
-#if OSL_DEBUG_LEVEL > 0
-    {
-        Sequence< NamedValue > aNamedValues;
-        aProperties >>= aNamedValues;
-        for (   const NamedValue* loop = aNamedValues.getConstArray();
-                loop != aNamedValues.getConstArray() + aNamedValues.getLength();
-                ++loop
-            )
-        {
-            int dummy = 0;
-            (void)dummy;
-        }
-    }
-#endif
     typedef std::pair<sal_uInt16, OUString> TProperties;
     TProperties aProps[] = { TProperties(DSID_SHOWDELETEDROWS,OUString("ShowDeleted"))
                             ,TProperties(DSID_CHARSET,OUString("CharSet"))

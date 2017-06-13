@@ -1228,7 +1228,6 @@ void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
     {
         Size aFontSize = GetTextSize_( rInf );
         const OUString oldStr = rInf.GetText();
-        OUString aStr("  ");
 
         sal_Int32 nOldIdx = rInf.GetIdx();
         sal_Int32 nOldLen = rInf.GetLen();
@@ -1260,7 +1259,7 @@ void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
         }
 
         rInf.SetWidth( sal_uInt16(aFontSize.Width() + nSpace) );
-        rInf.SetText( aStr );
+        rInf.SetText( "  " );
         rInf.SetIdx( 0 );
         rInf.SetLen( 2 );
         SetUnderline( nOldUnder );
@@ -1339,10 +1338,9 @@ void SwSubFont::DrawStretchText_( SwDrawTextInfo &rInf )
     if( pUnderFnt && nOldUnder != LINESTYLE_NONE )
     {
         const OUString oldStr = rInf.GetText();
-        OUString aStr("  ");
         sal_Int32 nOldIdx = rInf.GetIdx();
         sal_Int32 nOldLen = rInf.GetLen();
-        rInf.SetText( aStr );
+        rInf.SetText( "  " );
         rInf.SetIdx( 0 );
         rInf.SetLen( 2 );
         SetUnderline( nOldUnder );

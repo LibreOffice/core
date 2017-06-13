@@ -132,11 +132,10 @@ bool isGridVisible(const css::uno::Reference<css::frame::XModel>& xModel, GridTy
         sal_Int32 nDimensionIndex = 0;
         if (eType == GridType::HOR_MAJOR || eType == GridType::HOR_MINOR)
             nDimensionIndex = 1;
-        sal_Int32 nCooSysIndex = 0;
 
         bool bMajor = (eType == GridType::HOR_MAJOR || eType == GridType::VERT_MAJOR);
 
-        bool bHasGrid = AxisHelper::isGridShown(nDimensionIndex, nCooSysIndex, bMajor, xDiagram);
+        bool bHasGrid = AxisHelper::isGridShown(nDimensionIndex, 0, bMajor, xDiagram);
         return bHasGrid;
     }
     return false;

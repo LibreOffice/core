@@ -445,8 +445,7 @@ SmNodeList::iterator SmCursor::TakeSelectedNodesFromList(SmNodeList *pLineList,
                 sal_uInt16 eFontDesc = pText->GetFontDesc();
                 //If we need make segment 1
                 if(len1 > 0) {
-                    int start1 = 0;
-                    OUString str = aText.copy(start1, len1);
+                    OUString str = aText.copy(0, len1);
                     pText->ChangeText(str);
                     ++it;
                 } else {//Remove it if not needed

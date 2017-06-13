@@ -2399,8 +2399,7 @@ void SAL_CALL ODbaseTable::renameImpl( const OUString& newName )
     renameFile(m_pConnection,m_Name,newName,m_pConnection->getExtension());
     if ( HasMemoFields() )
     {  // delete the memo fields
-        OUString sExt("dbt");
-        renameFile(m_pConnection,m_Name,newName,sExt);
+        renameFile(m_pConnection,m_Name,newName,"dbt");
     }
 }
 

@@ -294,7 +294,7 @@ void FileStream::createTempFile(const OString& sPath)
 
     if (osl_createTempFile(sTmpPath.pData, &m_file, &sTmpName.pData) == osl_File_E_None) {
 #ifdef SAL_UNX
-        sal_uInt64 uAttr = osl_File_Attribute_OwnWrite |
+        sal_uInt64 const uAttr = osl_File_Attribute_OwnWrite |
                            osl_File_Attribute_OwnRead |
                            osl_File_Attribute_GrpWrite |
                            osl_File_Attribute_GrpRead |

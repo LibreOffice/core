@@ -801,8 +801,7 @@ bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
 
 bool ScAutoFormatData::Save(SvStream& rStream, sal_uInt16 fileVersion)
 {
-    sal_uInt16 nVal = AUTOFORMAT_DATA_ID;
-    rStream.WriteUInt16( nVal );
+    rStream.WriteUInt16( AUTOFORMAT_DATA_ID );
     // --- from 680/dr25 on: store strings as UTF-8
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, aName, RTL_TEXTENCODING_UTF8);
 
@@ -1021,7 +1020,6 @@ void ScAutoFormat::Load()
             if( nVal == AUTOFORMAT_ID_358 ||
                     (AUTOFORMAT_ID_504 <= nVal && nVal <= AUTOFORMAT_ID) )
             {
-                sal_uInt16 nFileVers = SOFFICE_FILEFORMAT_40;
                 sal_uInt8 nChrSet, nCnt;
                 long nPos = rStream.Tell();
                 rStream.ReadUChar( nCnt ).ReadUChar( nChrSet );
@@ -1031,7 +1029,7 @@ void ScAutoFormat::Load()
                     rStream.Seek( nPos + nCnt );
                 }
                 rStream.SetStreamCharSet( GetSOLoadTextEncoding( nChrSet ) );
-                rStream.SetVersion( nFileVers );
+                rStream.SetVersion( SOFFICE_FILEFORMAT_40 );
             }
 
             if( nVal == AUTOFORMAT_ID_358 || nVal == AUTOFORMAT_ID_X ||
@@ -1073,8 +1071,7 @@ bool ScAutoFormat::Save()
         rStream.SetVersion( fileVersion );
 
         // Attention: A common header has to be saved
-        sal_uInt16 nVal = AUTOFORMAT_ID;
-        rStream.WriteUInt16( nVal )
+        rStream.WriteUInt16( AUTOFORMAT_ID )
                .WriteUChar( 2 )         // Number of chars of the header including this
                .WriteUChar( ::GetSOStoreTextEncoding(
                     osl_getThreadTextEncoding() ) );

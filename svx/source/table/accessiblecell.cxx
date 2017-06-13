@@ -395,20 +395,18 @@ void SAL_CALL AccessibleCell::grabFocus()
 sal_Int32 SAL_CALL AccessibleCell::getForeground()
 {
     ThrowIfDisposed ();
-    sal_Int32 nColor (0x0ffffffL);
 
     // todo
-    return nColor;
+    return sal_Int32(0x0ffffffL);
 }
 
 
 sal_Int32 SAL_CALL AccessibleCell::getBackground()
 {
     ThrowIfDisposed ();
-    sal_Int32 nColor (0L);
 
     // todo
-    return nColor;
+    return 0;
 }
 
 

@@ -888,7 +888,6 @@ DBusHandlerResult ProfileMessageFunction
 (DBusConnection *pConnection, DBusMessage *pMessage, void *user_data)
 {
     SAL_INFO("sdremote.bluetooth", "ProfileMessageFunction||" << dbus_message_get_interface(pMessage) << "||" <<  dbus_message_get_member(pMessage));
-    DBusHandlerResult aRet = DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 
     if (OString(dbus_message_get_interface(pMessage)).equals("org.bluez.Profile1"))
     {
@@ -953,7 +952,7 @@ DBusHandlerResult ProfileMessageFunction
         }
     }
     SAL_WARN("sdremote.bluetooth", "Couldn't handle message correctly.");
-    return aRet;
+    return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 
 }
 

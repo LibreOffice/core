@@ -117,9 +117,8 @@ void FilterConfigItem::ImpInitTree( const OUString& rSubTree )
 
         // creation arguments: commit mode
         PropertyValue aModeArgument;
-        bool bAsynchron = true;
         aModeArgument.Name = "lazywrite";
-        aModeArgument.Value <<= bAsynchron;
+        aModeArgument.Value <<= true;
 
         Sequence< Any > aArguments( 2 );
         aArguments[ 0 ] <<= aPathArgument;

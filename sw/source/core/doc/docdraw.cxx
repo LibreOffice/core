@@ -321,7 +321,6 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
         SdrObject *pMyObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
         if( !pMyObj->GetUpGroup() )
         {
-            OUString sDrwFormatNm("DrawObject");
             for ( size_t i = 0; i < nMarkCount; ++i )
             {
                 SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
@@ -341,7 +340,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                     for ( size_t i2 = 0; i2 < pLst->GetObjCount(); ++i2 )
                     {
                         SdrObject* pSubObj = pLst->GetObj( i2 );
-                        SwDrawFrameFormat *pFormat = MakeDrawFrameFormat( sDrwFormatNm,
+                        SwDrawFrameFormat *pFormat = MakeDrawFrameFormat( "DrawObject",
                                                             GetDfltFrameFormat() );
                         pFormat->SetFormatAttr( aAnch );
                         // #i36010# - set layout direction of the position

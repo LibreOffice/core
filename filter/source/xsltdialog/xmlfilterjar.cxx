@@ -165,8 +165,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
 
             // get root zip folder
             Reference< XInterface > xRootFolder;
-            OUString szRootFolder("/");
-            xIfc->getByHierarchicalName( szRootFolder ) >>= xRootFolder;
+            xIfc->getByHierarchicalName( "/" ) >>= xRootFolder;
 
             // export filters files
             XMLFilterVector::const_iterator aIter( rFilters.begin() );
@@ -214,8 +213,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
             }
 
             Reference< XInputStream > XIS(  new utl::OSeekableInputStreamWrapper( new SvFileStream(aTempFileURL, StreamMode::READ ), true ) );
-            OUString szTypeDetection( "TypeDetection.xcu" );
-            addFile_( xRootFolder, xFactory,  XIS, szTypeDetection );
+            addFile_( xRootFolder, xFactory,  XIS, "TypeDetection.xcu" );
 
             Reference< XChangesBatch > xBatch( xIfc, UNO_QUERY );
             if( xBatch.is() )
@@ -259,8 +257,7 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
         {
             // get root zip folder
             Reference< XInterface > xRootFolder;
-            OUString szRootFolder("/");
-            xIfc->getByHierarchicalName( szRootFolder ) >>= xRootFolder;
+            xIfc->getByHierarchicalName( "/" ) >>= xRootFolder;
 
             OUString szTypeDetection("TypeDetection.xcu");
             if( xIfc->hasByHierarchicalName( szTypeDetection ) )

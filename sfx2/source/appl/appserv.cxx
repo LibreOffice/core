@@ -791,7 +791,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     css::uno::Sequence<OUString> aUserToolbars;
                     std::vector<OUString> aBackupList;
                     OUString aSidebarMode;
-                    bool bCorrectMode = true;
 
                     OUStringBuffer aPath = OUStringBuffer( "org.openoffice.Office.UI.ToolbarMode/Applications/" );
                     aPath.append( lcl_getAppName( eApp ) );
@@ -828,103 +827,100 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                         }
                     }
 
-                    if ( bCorrectMode )
+                    // Backup visible toolbar list and hide all toolbars
+                    Sequence<Reference<XUIElement>> aUIElements = xLayoutManager->getElements();
+                    for ( sal_Int32 i = 0; i < aUIElements.getLength(); i++ )
                     {
-                        // Backup visible toolbar list and hide all toolbars
-                        Sequence<Reference<XUIElement>> aUIElements = xLayoutManager->getElements();
-                        for ( sal_Int32 i = 0; i < aUIElements.getLength(); i++ )
+                        Reference< XUIElement > xUIElement( aUIElements[i] );
+                        Reference< XPropertySet > xPropertySet( aUIElements[i], UNO_QUERY );
+                        if ( xPropertySet.is() && xUIElement.is() )
                         {
-                            Reference< XUIElement > xUIElement( aUIElements[i] );
-                            Reference< XPropertySet > xPropertySet( aUIElements[i], UNO_QUERY );
-                            if ( xPropertySet.is() && xUIElement.is() )
+                            try
                             {
-                                try
-                                {
-                                    OUString aResName;
-                                    sal_Int16 nType( -1 );
-                                    xPropertySet->getPropertyValue( "Type" ) >>= nType;
-                                    xPropertySet->getPropertyValue( "ResourceURL" ) >>= aResName;
+                                OUString aResName;
+                                sal_Int16 nType( -1 );
+                                xPropertySet->getPropertyValue( "Type" ) >>= nType;
+                                xPropertySet->getPropertyValue( "ResourceURL" ) >>= aResName;
 
-                                    if (( nType == css::ui::UIElementType::TOOLBAR ) &&
-                                        !aResName.isEmpty() )
+                                if (( nType == css::ui::UIElementType::TOOLBAR ) &&
+                                    !aResName.isEmpty() )
+                                {
+                                    if ( xLayoutManager->isElementVisible( aResName ) )
                                     {
-                                        if ( xLayoutManager->isElementVisible( aResName ) )
-                                        {
-                                            aBackupList.push_back( aResName );
-                                        }
-                                        xLayoutManager->hideElement( aResName );
+                                        aBackupList.push_back( aResName );
                                     }
-                                }
-                                catch ( const Exception& )
-                                {
+                                    xLayoutManager->hideElement( aResName );
                                 }
                             }
-                        }
-
-                        // Show toolbars
-                        for ( OUString& rName : aMandatoryToolbars )
-                        {
-                            xLayoutManager->createElement( rName );
-                            xLayoutManager->showElement( rName );
-                        }
-
-                        for ( OUString& rName : aUserToolbars )
-                        {
-                            xLayoutManager->createElement( rName );
-                            xLayoutManager->showElement( rName );
-                        }
-
-                        // Sidebar
-                        pViewFrame->ShowChildWindow( SID_SIDEBAR );
-
-                        sfx2::sidebar::SidebarController* pSidebar =
-                                sfx2::sidebar::SidebarController::GetSidebarControllerForFrame( xFrame );
-                        if ( pSidebar )
-                        {
-                            if ( aSidebarMode.compareTo( "Arrow" ) == 0 )
+                            catch ( const Exception& )
                             {
-                                pSidebar->FadeOut();
-                            }
-                            else if ( aSidebarMode.compareTo( "Tabs" ) == 0 )
-                            {
-                                pSidebar->FadeIn();
-                                pSidebar->RequestOpenDeck();
-                                pSidebar->RequestCloseDeck();
-                            }
-                            else if ( aSidebarMode.compareTo( "Opened" ) == 0 )
-                            {
-                                pSidebar->FadeIn();
-                                pSidebar->RequestOpenDeck();
                             }
                         }
+                    }
 
-                        // Show/Hide the Notebookbar
-                        const SfxPoolItem* pItem;
-                        pViewFrame->GetDispatcher()->QueryState( SID_NOTEBOOKBAR, pItem );
+                    // Show toolbars
+                    for ( OUString& rName : aMandatoryToolbars )
+                    {
+                        xLayoutManager->createElement( rName );
+                        xLayoutManager->showElement( rName );
+                    }
 
-                        // Save settings
-                        if ( pViewFrame == SfxViewFrame::Current() )
+                    for ( OUString& rName : aUserToolbars )
+                    {
+                        xLayoutManager->createElement( rName );
+                        xLayoutManager->showElement( rName );
+                    }
+
+                    // Sidebar
+                    pViewFrame->ShowChildWindow( SID_SIDEBAR );
+
+                    sfx2::sidebar::SidebarController* pSidebar =
+                            sfx2::sidebar::SidebarController::GetSidebarControllerForFrame( xFrame );
+                    if ( pSidebar )
+                    {
+                        if ( aSidebarMode.compareTo( "Arrow" ) == 0 )
                         {
-                            css::uno::Sequence<OUString> aBackup( aBackupList.size() );
-                            for ( size_t i = 0; i < aBackupList.size(); ++i )
-                                aBackup[i] = aBackupList[i];
-
-                            for ( sal_Int32 nReadIndex = 0; nReadIndex < nCount; ++nReadIndex )
-                            {
-                                const utl::OConfigurationNode aModeNode( aModesNode.openNode( aModeNodeNames[nReadIndex] ) );
-                                if ( !aModeNode.isValid() )
-                                    continue;
-
-                                OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( "CommandArg" ) );
-
-                                if ( aCommandArg.compareTo( aCurrentMode ) == 0 )
-                                {
-                                    aModeNode.setNodeValue( "UserToolbars", makeAny( aBackup ) );
-                                    break;
-                                }
-                            }
-                            aModesNode.commit();
+                            pSidebar->FadeOut();
                         }
+                        else if ( aSidebarMode.compareTo( "Tabs" ) == 0 )
+                        {
+                            pSidebar->FadeIn();
+                            pSidebar->RequestOpenDeck();
+                            pSidebar->RequestCloseDeck();
+                        }
+                        else if ( aSidebarMode.compareTo( "Opened" ) == 0 )
+                        {
+                            pSidebar->FadeIn();
+                            pSidebar->RequestOpenDeck();
+                        }
+                    }
+
+                    // Show/Hide the Notebookbar
+                    const SfxPoolItem* pItem;
+                    pViewFrame->GetDispatcher()->QueryState( SID_NOTEBOOKBAR, pItem );
+
+                    // Save settings
+                    if ( pViewFrame == SfxViewFrame::Current() )
+                    {
+                        css::uno::Sequence<OUString> aBackup( aBackupList.size() );
+                        for ( size_t i = 0; i < aBackupList.size(); ++i )
+                            aBackup[i] = aBackupList[i];
+
+                        for ( sal_Int32 nReadIndex = 0; nReadIndex < nCount; ++nReadIndex )
+                        {
+                            const utl::OConfigurationNode aModeNode( aModesNode.openNode( aModeNodeNames[nReadIndex] ) );
+                            if ( !aModeNode.isValid() )
+                                continue;
+
+                            OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( "CommandArg" ) );
+
+                            if ( aCommandArg.compareTo( aCurrentMode ) == 0 )
+                            {
+                                aModeNode.setNodeValue( "UserToolbars", makeAny( aBackup ) );
+                                break;
+                            }
+                        }
+                        aModesNode.commit();
                     }
                 }
 
@@ -963,8 +959,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                 if ( xLayoutManager.is() )
                 {
-                    OUString aToolbarResName( "private:resource/toolbar/" );
-                    OUStringBuffer aBuf( aToolbarResName );
+                    OUStringBuffer aBuf( "private:resource/toolbar/" );
                     aBuf.append( pToolbarName->GetValue() );
 
                     // Evaluate Parameter

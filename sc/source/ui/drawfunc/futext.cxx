@@ -341,7 +341,6 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 
 bool FuText::MouseMove(const MouseEvent& rMEvt)
 {
-    bool bReturn = false;
     pViewShell->SetActivePointer(pView->GetPreferredPointer(
                     pWindow->PixelToLogic(rMEvt.GetPosPixel()), pWindow ));
 
@@ -371,15 +370,13 @@ bool FuText::MouseMove(const MouseEvent& rMEvt)
         pView->MovAction(aPnt);
     }
 
-    return bReturn;
+    return false;
 }
 
 bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
-
-    bool bReturn = false;
 
     if (aDragTimer.IsActive() )
     {
@@ -487,7 +484,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
         }
     }
 
-    return bReturn;
+    return false;
 }
 
 // switch mouse-pointer
@@ -528,9 +525,8 @@ void FuText::Activate()
 //  if (!pTextObj)
     {
         // no text object in EditMode, therefore set CreateMode
-        sal_uInt16 nObj = OBJ_TEXT;
 
-        pView->SetCurrentObj(nObj);
+        pView->SetCurrentObj(OBJ_TEXT);
 
         pView->SetCreateMode();
     }

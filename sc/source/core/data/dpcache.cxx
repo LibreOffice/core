@@ -768,8 +768,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
 
             bool bRealWildOrRegExp = (rParam.eSearchType != utl::SearchParam::SearchType::Normal &&
                     ((rEntry.eOp == SC_EQUAL) || (rEntry.eOp == SC_NOT_EQUAL)));
-            bool bTestWildOrRegExp = false;
-            if (bRealWildOrRegExp || bTestWildOrRegExp)
+            if (bRealWildOrRegExp)
             {
                 sal_Int32 nStart = 0;
                 sal_Int32 nEnd   = aCellStr.getLength();

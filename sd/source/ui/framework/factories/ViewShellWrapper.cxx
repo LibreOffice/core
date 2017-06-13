@@ -118,8 +118,6 @@ sal_Bool SAL_CALL ViewShellWrapper::select( const css::uno::Any& aSelection )
     if (!mpSlideSorterViewShell)
         return false;
 
-    bool bOk = true;
-
     ::sd::slidesorter::controller::SlideSorterController& rSlideSorterController
         = mpSlideSorterViewShell->GetSlideSorter().GetController();
     ::sd::slidesorter::controller::PageSelector& rSelector (rSlideSorterController.GetPageSelector());
@@ -146,7 +144,7 @@ sal_Bool SAL_CALL ViewShellWrapper::select( const css::uno::Any& aSelection )
         }
     }
 
-    return bOk;
+    return true;
 }
 
 uno::Any SAL_CALL ViewShellWrapper::getSelection()

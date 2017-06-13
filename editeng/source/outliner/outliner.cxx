@@ -2097,7 +2097,7 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
     {
         ESelection aEmptySel(0,0,0,0);
         //EditTextObject *pTObj = pEditEngine->CreateTextObject(aEmptySel);
-        bool bLastParaInterrupted = true; // Last Para was interrupted since everything overflew
+        bool const bLastParaInterrupted = true; // Last Para was interrupted since everything overflew
         return new NonOverflowingText(aEmptySel, bLastParaInterrupted);
     } else { // Get the lines that of the overflowing para fit in the box
 

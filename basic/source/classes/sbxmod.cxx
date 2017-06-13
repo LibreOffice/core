@@ -2000,7 +2000,7 @@ bool SbMethod::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         if (nFlag & 0x8000)
         {
             sal_uInt16 nMult = nFlag & 0x7FFF;
-            sal_Int16 nMax = std::numeric_limits<sal_Int16>::max();
+            sal_Int16 const nMax = std::numeric_limits<sal_Int16>::max();
             nStart = nMult * nMax + nTempStart;
         }
         else
@@ -2560,12 +2560,11 @@ void SbUserFormModule::Unload()
     SAL_INFO("basic", "** Unload() ");
 
     sal_Int8 nCancel = 0;
-    sal_Int8 nCloseMode = ::ooo::vba::VbQueryClose::vbFormCode;
 
     Sequence< Any > aParams;
     aParams.realloc(2);
     aParams[0] <<= nCancel;
-    aParams[1] <<= nCloseMode;
+    aParams[1] <<= sal_Int8(::ooo::vba::VbQueryClose::vbFormCode);
 
     triggerMethod( "Userform_QueryClose", aParams);
 
@@ -2610,8 +2609,7 @@ void SbUserFormModule::InitObject()
 {
     try
     {
-        OUString aHook("VBAGlobals");
-        SbUnoObject* pGlobs = static_cast<SbUnoObject*>(GetParent()->Find( aHook, SbxClassType::DontCare ));
+        SbUnoObject* pGlobs = static_cast<SbUnoObject*>(GetParent()->Find( "VBAGlobals", SbxClassType::DontCare ));
         if ( m_xModel.is() && pGlobs )
         {
             // broadcast INITIALIZE_USERFORM script event before the dialog is created

@@ -125,11 +125,10 @@ void ScDocument::GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rNames) const
 
 void ScDocument::SetAllRangeNames(const std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap)
 {
-    OUString aGlobalStr(STR_GLOBAL_RANGE_NAME);
     auto itr = rRangeMap.begin(), itrEnd = rRangeMap.end();
     for (; itr!=itrEnd; ++itr)
     {
-        if (itr->first == aGlobalStr)
+        if (itr->first == STR_GLOBAL_RANGE_NAME)
         {
             delete pRangeName;
             const ScRangeName *const pName = itr->second.get();

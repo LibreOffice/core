@@ -232,12 +232,10 @@ public:
     {
         if ( m_bRestoreSettings )
         {
-            OUString aLoadReadonlyString( "LoadReadonly" );
-
             try
             {
                 if ( m_bReadOnlySupported )
-                    m_xDocumentSettings->setPropertyValue( aLoadReadonlyString, uno::makeAny( m_bPreserveReadOnly ) );
+                    m_xDocumentSettings->setPropertyValue( "LoadReadonly", uno::makeAny( m_bPreserveReadOnly ) );
             }
             catch( const uno::Exception& )
             {

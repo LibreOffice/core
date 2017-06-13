@@ -352,13 +352,12 @@ static Sequence< OUString > createExtensionsSequence( const OUString& rExtension
 OUString XMLFilterSettingsDialog::createUniqueFilterName( const OUString& rFilterName )
 {
     OUString aFilterName( rFilterName );
-    OUString aSpace(" ");
 
     sal_Int32 nId = 2;
 
     while( mxFilterContainer->hasByName( aFilterName ) )
     {
-        aFilterName = rFilterName + aSpace + OUString::number( nId++ );
+        aFilterName = rFilterName + " " + OUString::number( nId++ );
     }
 
     return aFilterName;
@@ -369,13 +368,12 @@ OUString XMLFilterSettingsDialog::createUniqueFilterName( const OUString& rFilte
 OUString XMLFilterSettingsDialog::createUniqueTypeName( const OUString& rTypeName )
 {
     OUString aTypeName( rTypeName );
-    OUString aSpace(" ");
 
     sal_Int32 nId = 2;
 
     while( mxFilterContainer->hasByName( aTypeName ) )
     {
-        aTypeName = rTypeName + aSpace + OUString::number( nId++ );
+        aTypeName = rTypeName + " " + OUString::number( nId++ );
     }
 
     return aTypeName;
@@ -804,9 +802,8 @@ void XMLFilterSettingsDialog::onDelete()
     {
         filter_info_impl* pInfo = static_cast<filter_info_impl*>(pEntry->GetUserData());
 
-        OUString aPlaceHolder( "%s" );
         OUString aMessage(XsltResId(STR_WARN_DELETE));
-        aMessage = aMessage.replaceFirst( aPlaceHolder, pInfo->maFilterName );
+        aMessage = aMessage.replaceFirst( "%s", pInfo->maFilterName );
 
         ScopedVclPtrInstance< WarningBox > aWarnBox(this, (WinBits)(WB_YES_NO | WB_DEF_YES), aMessage );
         if( aWarnBox->Execute() == RET_YES )

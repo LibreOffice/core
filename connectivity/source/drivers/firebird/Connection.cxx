@@ -246,8 +246,7 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
             // set UTF8 as default character set
             const char sCharset[] = "UTF8";
             dpbBuffer.push_back(isc_dpb_set_db_charset);
-            int nCharsetLength = sizeof(sCharset) - 1;
-            dpbBuffer.push_back(nCharsetLength);
+            dpbBuffer.push_back(sizeof(sCharset) - 1);
             dpbBuffer.append(sCharset);
 
             // Do any more dpbBuffer additions here

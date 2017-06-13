@@ -65,7 +65,6 @@ XMLSectionFootnoteConfigImport::~XMLSectionFootnoteConfigImport()
 void XMLSectionFootnoteConfigImport::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
-    bool bEnd = true;   // we're inside the element, so this is true
     bool bNumOwn = false;
     bool bNumRestart = false;
     bool bEndnote = false;
@@ -166,7 +165,7 @@ void XMLSectionFootnoteConfigImport::StartElement(
 
     nIndex = rMapper->FindEntryIndex( bEndnote ?
         CTF_SECTION_ENDNOTE_END : CTF_SECTION_FOOTNOTE_END );
-    XMLPropertyState aEndState( nIndex, css::uno::Any(bEnd) );
+    XMLPropertyState aEndState( nIndex, css::uno::Any(true) ); // we're inside the element, so this is true
     rProperties.push_back( aEndState );
 }
 

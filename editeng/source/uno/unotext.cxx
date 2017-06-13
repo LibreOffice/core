@@ -653,13 +653,11 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertySimpleEntry* pM
     case WID_PORTIONTYPE:
         if ( rSet.GetItemState( EE_FEATURE_FIELD, false ) == SfxItemState::SET )
         {
-            OUString aType("TextField");
-            rAny <<= aType;
+            rAny <<= OUString("TextField");
         }
         else
         {
-            OUString aType("Text");
-            rAny <<= aType;
+            rAny <<= OUString("Text");
         }
         break;
 

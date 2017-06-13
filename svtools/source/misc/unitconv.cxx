@@ -292,8 +292,7 @@ long CalcToPoint( long nIn, MapUnit eUnit, sal_uInt16 nFactor )
     // ggf. aufrunden
     if ( MapUnit::MapTwip != eUnit )
     {
-        long nMod = 10;
-        long nTmp = nRet % nMod;
+        long nTmp = nRet % 10;
 
         if ( nTmp >= 4 )
             nRet += 10 - nTmp;

@@ -175,10 +175,9 @@ void DrawViewWrapper::SetMarkHandles(SfxViewShell* pOtherShell)
 
 SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
 {
-    SdrSearchOptions nOptions = SdrSearchOptions::DEEP | SdrSearchOptions::TESTMARKABLE;
-
-    SdrPageView* pSdrPageView = this->GetPageView();
-    SdrObject* pRet = this->SdrView::PickObj(rPnt, lcl_getHitTolerance( this->GetFirstOutputDevice() ), pSdrPageView, nOptions);
+    SdrPageView* pSdrPageView = GetPageView();
+    SdrObject* pRet = SdrView::PickObj(rPnt, lcl_getHitTolerance( GetFirstOutputDevice() ), pSdrPageView,
+                                       SdrSearchOptions::DEEP | SdrSearchOptions::TESTMARKABLE);
 
     if( pRet )
     {

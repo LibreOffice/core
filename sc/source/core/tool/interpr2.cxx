@@ -3337,7 +3337,6 @@ void ScInterpreter::ScEuroConvert()
             double fToRate;
             int    nFromDec;
             int    nToDec;
-            OUString aEur( "EUR");
             if ( lclConvertMoney( aFromUnit, fFromRate, nFromDec )
                 && lclConvertMoney( aToUnit, fToRate, nToDec ) )
             {
@@ -3346,7 +3345,7 @@ void ScInterpreter::ScEuroConvert()
                     fRes = fVal;
                 else
                 {
-                    if ( aFromUnit.equalsIgnoreAsciiCase( aEur ) )
+                    if ( aFromUnit.equalsIgnoreAsciiCase( "EUR" ) )
                        fRes = fVal * fToRate;
                     else
                     {

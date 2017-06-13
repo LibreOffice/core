@@ -259,9 +259,10 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
         throw uno::RuntimeException( e.Message, e.Context );
     }
 
-    sal_Int32 nMax = 2;
 #ifdef DEBUG
-    nMax = 3;
+    sal_Int32 const nMax = 3;
+#else
+    sal_Int32 const nMax = 2;
 #endif
 
     for ( sal_Int32 i = 0; i < xAllPackages.getLength(); ++i )

@@ -593,7 +593,6 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
     rIndent=0;
     if (pSet==nullptr) return false;
     const SfxPoolItem* pItem=nullptr;
-    bool bRet = false;
     switch (nWhich) {
         case XATTR_LINEDASH         :
         case XATTR_LINEWIDTH        :
@@ -845,7 +844,7 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
             }
         } break;
     } // switch
-    return bRet;
+    return false;
 }
 
 sal_uInt16 ImpSortWhich(sal_uInt16 nWhich)

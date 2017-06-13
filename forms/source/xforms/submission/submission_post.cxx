@@ -53,7 +53,6 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const css::uno::Reference<
         ucbhelper::Content aContent(m_aURLObj.GetMainURL(INetURLObject::DecodeMechanism::NONE), aEnvironment, comphelper::getProcessComponentContext());
 
         // use post command
-        OUString aCommandName("post");
         PostCommandArgument2 aPostArgument;
         aPostArgument.Source = apSerialization->getInputStream();
         css::uno::Reference< XActiveDataSink > aSink(new ucbhelper::ActiveDataSink);
@@ -62,7 +61,7 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const css::uno::Reference<
         aPostArgument.Referer.clear();
         Any aCommandArgument;
         aCommandArgument <<= aPostArgument;
-        aContent.executeCommand( aCommandName, aCommandArgument);
+        aContent.executeCommand( "post", aCommandArgument);
 
         try {
             m_aResultStream = aSink->getInputStream();

@@ -59,9 +59,8 @@ void ScDataProvidersTest::testCSVImport()
 {
     m_pDoc->InsertTab(0, "foo");
     bool success;
-    OUString aCSVFile("dataprovider.");
     OUString aCSVPath;
-    createCSVPath( aCSVFile, aCSVPath );
+    createCSVPath( "dataprovider.", aCSVPath );
     OUString aDBName = "TEST";
     sc::ExternalDataMapper aExternalDataMapper (&getDocShell(), aCSVPath, aDBName, 0, 0, 0, 5, 5, success);
     aExternalDataMapper.StartImport();

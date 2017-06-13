@@ -128,12 +128,11 @@ sal_Int8 LayerTabBar::AcceptDrop( const AcceptDropEvent& rEvt )
 
     if( !pDrViewSh->GetDocSh()->IsReadOnly() )
     {
-        sal_uInt16    nPageId = SDRPAGE_NOTFOUND;
         Point         aPos( PixelToLogic( rEvt.maPosPixel ) );
         SdrLayerID    nLayerId = pDrViewSh->GetView()->GetDoc().GetLayerAdmin().GetLayerID(
             GetPageText( GetPageId( aPos ) ) );
 
-        nRet = pDrViewSh->AcceptDrop( rEvt, *this, nullptr, nPageId, nLayerId );
+        nRet = pDrViewSh->AcceptDrop( rEvt, *this, nullptr, SDRPAGE_NOTFOUND, nLayerId );
 
         SwitchPage( aPos );
     }
@@ -146,10 +145,9 @@ sal_Int8 LayerTabBar::AcceptDrop( const AcceptDropEvent& rEvt )
  */
 sal_Int8 LayerTabBar::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    sal_uInt16      nPageId = SDRPAGE_NOTFOUND;
     SdrLayerID      nLayerId = pDrViewSh->GetView()->GetDoc().GetLayerAdmin().GetLayerID(
         GetPageText( GetPageId( PixelToLogic( rEvt.maPosPixel ) ) ) );
-    sal_Int8        nRet = pDrViewSh->ExecuteDrop( rEvt, *this, nullptr, nPageId, nLayerId );
+    sal_Int8        nRet = pDrViewSh->ExecuteDrop( rEvt, *this, nullptr, SDRPAGE_NOTFOUND, nLayerId );
 
     EndSwitchPage();
 

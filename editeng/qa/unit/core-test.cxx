@@ -332,8 +332,8 @@ void Test::testAutocorrect()
 
     {
         OUString sInput("TEst-TEst");
-        sal_Unicode cNextChar(' ');
-        OUString sExpected("Test-Test ");
+        sal_Unicode const cNextChar(' ');
+        OUString const sExpected("Test-Test ");
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
         aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
@@ -343,8 +343,8 @@ void Test::testAutocorrect()
 
     {
         OUString sInput("TEst/TEst");
-        sal_Unicode cNextChar(' ');
-        OUString sExpected("Test/Test ");
+        sal_Unicode const cNextChar(' ');
+        OUString const sExpected("Test/Test ");
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
         aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
@@ -355,8 +355,8 @@ void Test::testAutocorrect()
     {
         // test auto-bolding with '*'
         OUString sInput("*foo");
-        sal_Unicode cNextChar('*');
-        OUString sExpected("foo");
+        sal_Unicode const cNextChar('*');
+        OUString const sExpected("foo");
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
         aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
@@ -366,8 +366,8 @@ void Test::testAutocorrect()
 
     {
         OUString sInput("Test. test");
-        sal_Unicode cNextChar(' ');
-        OUString sExpected("Test. Test ");
+        sal_Unicode const cNextChar(' ');
+        OUString const sExpected("Test. Test ");
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
         aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
@@ -377,8 +377,8 @@ void Test::testAutocorrect()
 
     {
         OUString sInput("Test. \x01 test");
-        sal_Unicode cNextChar(' ');
-        OUString sExpected("Test. \x01 test ");
+        sal_Unicode const cNextChar(' ');
+        OUString const sExpected("Test. \x01 test ");
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
         aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
@@ -754,8 +754,7 @@ void Test::testBoldItalicCopyPaste()
     std::vector<editeng::Section> aAttrs1;
     pEditText1->GetAllSections( aAttrs1 );
     // There should be 3 sections - woBold - wBold - woBold (w - with, wo - without)
-    size_t nSecCountCheck1 = 3;
-    CPPUNIT_ASSERT_EQUAL( nSecCountCheck1, aAttrs1.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(3), aAttrs1.size() );
 
     const editeng::Section* pSecAttr = &aAttrs1[0];
     CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
@@ -787,8 +786,7 @@ void Test::testBoldItalicCopyPaste()
     std::vector<editeng::Section> aAttrs2;
     pEditText2->GetAllSections( aAttrs2 );
     // There should be 5 sections - woBold&woItalic - wBold&woItalic - wBold&wItalic - woBold&wItalic - woBold&woItalic (w - with, wo - without)
-    size_t nSecCountCheck2 = 5;
-    CPPUNIT_ASSERT_EQUAL( nSecCountCheck2, aAttrs2.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(5), aAttrs2.size() );
 
     pSecAttr = &aAttrs2[0];
     CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
@@ -839,8 +837,7 @@ void Test::testBoldItalicCopyPaste()
     pEditText3->GetAllSections( aAttrs3 );
     // There should be 9 sections - woBold&woItalic - wBold&woItalic - wBold&wItalic - woBold&wItalic - woBold&woItalic - wBold&woItalic
     // - wBold&wItalic - woBold&wItalic - woBold&woItalic(w - with, wo - without)
-    size_t nSecCountCheck3 = 9;
-    CPPUNIT_ASSERT_EQUAL( nSecCountCheck3, aAttrs3.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(9), aAttrs3.size() );
 
     pSecAttr = &aAttrs3[0];
     CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
@@ -955,8 +952,7 @@ void Test::testUnderlineCopyPaste()
     pEditText1->GetAllSections( aAttrs1 );
 
     // There should be 3 sections - woUnderline - wUnderline - woUnderline (w - with, wo - without)
-    size_t nSecCountCheck1 = 3;
-    CPPUNIT_ASSERT_EQUAL( nSecCountCheck1, aAttrs1.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(3), aAttrs1.size() );
 
     const editeng::Section* pSecAttr = &aAttrs1[0];
     CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
@@ -993,8 +989,7 @@ void Test::testUnderlineCopyPaste()
     pEditText2->GetAllSections( aAttrs2 );
 
     // There should be 4 sections - woUnderline - wUnderline - woUnderline - wUnderline (w - with, wo - without)
-    size_t nSecCountCheck2 = 4;
-    CPPUNIT_ASSERT_EQUAL( nSecCountCheck2, aAttrs2.size() );
+    CPPUNIT_ASSERT_EQUAL( size_t(4), aAttrs2.size() );
 
     pSecAttr = &aAttrs2[0];
     CPPUNIT_ASSERT_EQUAL( 0, (int)pSecAttr->mnParagraph );
@@ -1081,8 +1076,7 @@ void Test::testSectionAttributes()
         aEngine.Clear();
         aEngine.SetText("one\n\ntwo\n\nthree");
         sal_Int32 nParaCount = aEngine.GetParagraphCount();
-        sal_Int32 nCheck = 5;
-        CPPUNIT_ASSERT_EQUAL(nCheck, nParaCount);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), nParaCount);
 
         // Apply boldness to paragraphs 1, 3, 5 only. Leave 2 and 4 unformatted.
         pSet.reset(new SfxItemSet(aEngine.GetEmptyItemSet()));
@@ -1096,8 +1090,7 @@ void Test::testSectionAttributes()
         CPPUNIT_ASSERT_MESSAGE("Failed to create text object.", pEditText.get());
         std::vector<editeng::Section> aAttrs;
         pEditText->GetAllSections(aAttrs);
-        size_t nSecCountCheck = 5;
-        CPPUNIT_ASSERT_EQUAL(nSecCountCheck, aAttrs.size());
+        CPPUNIT_ASSERT_EQUAL(size_t(5), aAttrs.size());
 
         // 1st, 3rd and 5th sections should correspond with 1st, 3rd and 5th paragraphs.
         const editeng::Section* pSecAttr = &aAttrs[0];

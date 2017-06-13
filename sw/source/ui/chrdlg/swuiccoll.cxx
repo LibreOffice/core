@@ -159,7 +159,6 @@ VclPtr<SfxTabPage> SwCondCollPage::Create(vcl::Window *pParent, const SfxItemSet
 
 bool SwCondCollPage::FillItemSet(SfxItemSet *rSet)
 {
-    bool bModified = true;
     SwCondCollItem aCondItem;
     for (size_t i = 0; i < m_aStrArr.size(); ++i)
     {
@@ -167,7 +166,7 @@ bool SwCondCollPage::FillItemSet(SfxItemSet *rSet)
         aCondItem.SetStyle( &sEntry, i);
     }
     rSet->Put(aCondItem);
-    return bModified;
+    return true;
 }
 
 void SwCondCollPage::Reset(const SfxItemSet *)

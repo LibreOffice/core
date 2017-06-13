@@ -166,9 +166,9 @@ ORowSet::ORowSet( const Reference< css::uno::XComponentContext >& _rxContext )
     m_pMySelf = this;
     m_aActiveConnection <<= m_xActiveConnection;
 
-    sal_Int32 nRBT  = PropertyAttribute::READONLY   | PropertyAttribute::BOUND      | PropertyAttribute::TRANSIENT;
-    sal_Int32 nRT   = PropertyAttribute::READONLY   | PropertyAttribute::TRANSIENT;
-    sal_Int32 nBT   = PropertyAttribute::BOUND      | PropertyAttribute::TRANSIENT;
+    sal_Int32 const nRBT = PropertyAttribute::READONLY   | PropertyAttribute::BOUND      | PropertyAttribute::TRANSIENT;
+    sal_Int32 const nRT  = PropertyAttribute::READONLY   | PropertyAttribute::TRANSIENT;
+    sal_Int32 const nBT  = PropertyAttribute::BOUND      | PropertyAttribute::TRANSIENT;
 
     m_aPrematureParamValues->get().resize( 0 );
 
@@ -2850,7 +2850,7 @@ ORowSetClone::ORowSetClone( const Reference<XComponentContext>& _rContext, ORowS
     m_pColumns = new ORowSetDataColumns(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),
                                         aColumns,*this,m_aMutex,aNames);
 
-    sal_Int32 nRT   = PropertyAttribute::READONLY   | PropertyAttribute::TRANSIENT;
+    sal_Int32 const nRT = PropertyAttribute::READONLY   | PropertyAttribute::TRANSIENT;
 
     // sdb.RowSet Properties
     registerMayBeVoidProperty(PROPERTY_ACTIVE_CONNECTION,PROPERTY_ID_ACTIVE_CONNECTION, PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   &rParent.m_aActiveConnection,   cppu::UnoType<XConnection>::get());

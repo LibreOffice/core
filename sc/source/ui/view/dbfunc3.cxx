@@ -992,8 +992,7 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
                     {
                         ScDPSaveDimension* pOldDimension = aData.GetDimensionByName( aBaseDimName );
                         pSaveDimension->SetOrientation( pOldDimension->GetOrientation() );
-                        long nPosition = 0;     //! before (immediate) base
-                        aData.SetPosition( pSaveDimension, nPosition );
+                        aData.SetPosition( pSaveDimension, 0 ); //! before (immediate) base
                     }
                 }
             }
@@ -1179,8 +1178,7 @@ void ScDBFunc::GroupDataPilot()
     {
         ScDPSaveDimension* pOldDimension = aData.GetDimensionByName( aDimName );
         pSaveDimension->SetOrientation( pOldDimension->GetOrientation() );
-        long nPosition = 0;     //! before (immediate) base
-        aData.SetPosition( pSaveDimension, nPosition );
+        aData.SetPosition( pSaveDimension, 0 ); //! before (immediate) base
     }
 
     // apply changes

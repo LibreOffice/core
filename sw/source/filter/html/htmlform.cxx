@@ -609,8 +609,7 @@ static void lcl_html_setFixedFontProperty(
     aTmp <<= (sal_Int16) aFixedFont.GetPitch();
     rPropSet->setPropertyValue("FontPitch", aTmp );
 
-    float fVal(10.);
-    aTmp <<= fVal;
+    aTmp <<= float(10.0);
     rPropSet->setPropertyValue("FontHeight", aTmp );
 }
 

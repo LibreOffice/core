@@ -1143,8 +1143,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
             }
             else
             {
-                OUString aStr( "invalid" );
-                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_ATTRIBUTENAME, aStr );
+                mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_ATTRIBUTENAME, "invalid" );
             }
         }
 

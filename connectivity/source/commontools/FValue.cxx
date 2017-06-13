@@ -2208,7 +2208,6 @@ void ORowSetValue::fill(sal_Int32 _nPos,
 
 void ORowSetValue::impl_fill( const sal_Int32 _nType, bool _bNullable, const detail::IValueSource& _rValueSource )
 {
-    bool bReadData = true;
     switch(_nType)
     {
     case DataType::CHAR:
@@ -2288,7 +2287,7 @@ void ORowSetValue::impl_fill( const sal_Int32 _nType, bool _bNullable, const det
         (*this) = _rValueSource.getObject();
         break;
     }
-    if ( bReadData && _bNullable && _rValueSource.wasNull() )
+    if ( _bNullable && _rValueSource.wasNull() )
         setNull();
     setTypeKind(_nType);
 }

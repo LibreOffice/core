@@ -66,9 +66,8 @@ bool SAL_CALL LotusWordProImportFilter::importImpl( const Sequence< css::beans::
          return false;
 
     // An XML import service: what we push sax messages to..
-    OUString sXMLImportService ( "com.sun.star.comp.Writer.XMLImporter" );
-
-    uno::Reference< XDocumentHandler > xInternalHandler( mxContext->getServiceManager()->createInstanceWithContext( sXMLImportService, mxContext ), UNO_QUERY );
+    uno::Reference< XDocumentHandler > xInternalHandler(
+        mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.comp.Writer.XMLImporter", mxContext ), UNO_QUERY );
     uno::Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
     if (xImporter.is())
         xImporter->setTargetDocument(mxDoc);

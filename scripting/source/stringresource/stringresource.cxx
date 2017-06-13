@@ -345,8 +345,7 @@ void StringResourceImpl::implSetCurrentLocale( const Locale& locale,
 
 void StringResourceImpl::setCurrentLocale( const Locale& locale, sal_Bool FindClosestMatch )
 {
-    bool bUseDefaultIfNoMatch = false;
-    implSetCurrentLocale( locale, FindClosestMatch, bUseDefaultIfNoMatch );
+    implSetCurrentLocale( locale, FindClosestMatch, false/*bUseDefaultIfNoMatch*/ );
 }
 
 void StringResourceImpl::setDefaultLocale( const Locale& locale )
@@ -528,8 +527,7 @@ void StringResourceImpl::removeLocale( const Locale& locale )
                 }
                 if( m_pCurrentLocaleItem == pRemoveItem )
                 {
-                    bool FindClosestMatch = false;
-                    setCurrentLocale( pFallbackItem->m_locale, FindClosestMatch );
+                    setCurrentLocale( pFallbackItem->m_locale, false/*FindClosestMatch*/ );
                 }
                 if( m_pDefaultLocaleItem == pRemoveItem )
                 {
@@ -632,8 +630,7 @@ LocaleItem* StringResourceImpl::getItemForLocale
 
     if( pRetItem == nullptr && bException )
     {
-        OUString errorMsg("StringResourceImpl: Invalid locale");
-        throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
+        throw IllegalArgumentException( "StringResourceImpl: Invalid locale", Reference< XInterface >(), 0 );
     }
     return pRetItem;
 }
@@ -777,9 +774,7 @@ void StringResourcePersistenceImpl::implInitializeCommonParameters
 
     implScanLocales();
 
-    bool FindClosestMatch = true;
-    bool bUseDefaultIfNoMatch = true;
-    implSetCurrentLocale( aCurrentLocale, FindClosestMatch, bUseDefaultIfNoMatch );
+    implSetCurrentLocale( aCurrentLocale, true/*FindClosestMatch*/, true/*bUseDefaultIfNoMatch*/ );
 }
 
 
@@ -902,9 +897,7 @@ void StringResourcePersistenceImpl::storeToStorage( const Reference< XStorage >&
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
-    bool bUsedForStore = false;
-    bool bStoreAll = true;
-    implStoreAtStorage( NameBase, Comment, Storage, bUsedForStore, bStoreAll );
+    implStoreAtStorage( NameBase, Comment, Storage, false/*bUsedForStore*/, true/*bStoreAll*/ );
 }
 
 void StringResourcePersistenceImpl::implStoreAtStorage
@@ -954,13 +947,12 @@ void StringResourcePersistenceImpl::implStoreAtStorage
                     Storage->openStreamElement( aStreamName, ElementModes::READWRITE );
 
             OUString aPropName("MediaType");
-            OUString aMime("text/plain");
 
             uno::Reference< beans::XPropertySet > xProps( xElementStream, uno::UNO_QUERY );
             OSL_ENSURE( xProps.is(), "The StorageStream must implement XPropertySet interface!" );
             if ( xProps.is() )
             {
-                xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
+                xProps->setPropertyValue( aPropName, uno::makeAny( OUString("text/plain") ) );
 
                 aPropName = "UseCommonStoragePasswordEncryption";
                 xProps->setPropertyValue( aPropName, uno::makeAny( true ) );
@@ -1025,14 +1017,11 @@ void StringResourcePersistenceImpl::storeToURL( const OUString& URL,
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
-    bool bUsedForStore = false;
-    bool bStoreAll = true;
-
     Reference< ucb::XSimpleFileAccess3 > xFileAccess = ucb::SimpleFileAccess::create(m_xContext);
     if( xFileAccess.is() && Handler.is() )
         xFileAccess->setInteractionHandler( Handler );
 
-    implStoreAtLocation( URL, NameBase, Comment, xFileAccess, bUsedForStore, bStoreAll );
+    implStoreAtLocation( URL, NameBase, Comment, xFileAccess, false/*bUsedForStore*/, true/*bStoreAll*/ );
 }
 
 void StringResourcePersistenceImpl::implKillRemovedLocaleFiles
@@ -1310,10 +1299,9 @@ Sequence< sal_Int8 > StringResourcePersistenceImpl::exportBinary(  )
     }
 
     // Write header
-    sal_Int16 nVersion = 0;
     sal_Int16 nLocaleCount16 = (sal_Int16)nLocaleCount;
     sal_Int16 iDefault16 = (sal_Int16)iDefault;
-    aOut.writeInt16( nVersion );
+    aOut.writeInt16( 0 ); // nVersion
     aOut.writeInt16( nLocaleCount16 );
     aOut.writeInt16( iDefault16 );
 
@@ -2323,13 +2311,12 @@ void StringResourceWithStorageImpl::store()
     ::osl::MutexGuard aGuard( getMutex() );
     implCheckReadOnly( "StringResourceWithStorageImpl::store(): Read only" );
 
-    bool bUsedForStore = true;
     bool bStoreAll = m_bStorageChanged;
     m_bStorageChanged = false;
     if( !m_bModified && !bStoreAll )
         return;
 
-    implStoreAtStorage( m_aNameBase, m_aComment, m_xStorage, bUsedForStore, bStoreAll );
+    implStoreAtStorage( m_aNameBase, m_aComment, m_xStorage, true/*bUsedForStore*/, bStoreAll );
     m_bModified = false;
 }
 
@@ -2512,16 +2499,14 @@ void StringResourceWithLocationImpl::initialize( const Sequence< Any >& aArgumen
 
     if( !bOk )
     {
-        OUString errorMsg("XInitialization::initialize: invalid URL");
-        throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
+        throw IllegalArgumentException( "XInitialization::initialize: invalid URL", Reference< XInterface >(), 0 );
     }
 
 
     bOk = (aArguments[5] >>= m_xInteractionHandler);
     if( !bOk )
     {
-        OUString errorMsg("StringResourceWithStorageImpl::initialize: invalid type");
-        throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 5 );
+        throw IllegalArgumentException( "StringResourceWithStorageImpl::initialize: invalid type", Reference< XInterface >(), 5 );
     }
 
     implInitializeCommonParameters( aArguments );
@@ -2629,7 +2614,6 @@ void StringResourceWithLocationImpl::store()
     ::osl::MutexGuard aGuard( getMutex() );
     implCheckReadOnly( "StringResourceWithLocationImpl::store(): Read only" );
 
-    bool bUsedForStore = true;
     bool bStoreAll = m_bLocationChanged;
     m_bLocationChanged = false;
     if( !m_bModified && !bStoreAll )
@@ -2637,7 +2621,7 @@ void StringResourceWithLocationImpl::store()
 
     Reference< ucb::XSimpleFileAccess3 > xFileAccess = getFileAccess();
     implStoreAtLocation( m_aLocation, m_aNameBase, m_aComment,
-        xFileAccess, bUsedForStore, bStoreAll );
+        xFileAccess, true/*bUsedForStore*/, bStoreAll );
     m_bModified = false;
 }
 
@@ -2694,11 +2678,8 @@ void StringResourceWithLocationImpl::setURL( const OUString& URL )
     implLoadAllLocales();
 
     // Delete files at old location
-    bool bUsedForStore = false;
-    bool bStoreAll = false;
-    bool bKillAll = true;
     implStoreAtLocation( m_aLocation, m_aNameBase, m_aComment,
-        getFileAccess(), bUsedForStore, bStoreAll, bKillAll );
+        getFileAccess(), false/*bUsedForStore*/, false/*bStoreAll*/, true/*bKillAll*/ );
 
     m_aLocation = URL;
     m_bLocationChanged = true;

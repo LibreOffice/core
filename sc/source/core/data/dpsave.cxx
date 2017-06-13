@@ -1091,8 +1091,6 @@ void ScDPSaveData::SetDrillDown(bool bSet)
 
 static void lcl_ResetOrient( const uno::Reference<sheet::XDimensionsSupplier>& xSource )
 {
-    sheet::DataPilotFieldOrientation eOrient = sheet::DataPilotFieldOrientation_HIDDEN;
-
     uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
     uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
     long nIntCount = xIntDims->getCount();
@@ -1102,7 +1100,7 @@ static void lcl_ResetOrient( const uno::Reference<sheet::XDimensionsSupplier>& x
         uno::Reference<beans::XPropertySet> xDimProp( xIntDim, uno::UNO_QUERY );
         if (xDimProp.is())
         {
-            xDimProp->setPropertyValue( SC_UNO_DP_ORIENTATION, uno::Any(eOrient) );
+            xDimProp->setPropertyValue( SC_UNO_DP_ORIENTATION, uno::Any(sheet::DataPilotFieldOrientation_HIDDEN) );
         }
     }
 }

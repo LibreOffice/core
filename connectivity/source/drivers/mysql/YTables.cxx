@@ -67,7 +67,7 @@ sdbcx::ObjectType OTables::createObject(const OUString& _rName)
         Reference< XRow > xRow(xResult,UNO_QUERY);
         if ( xResult->next() ) // there can be only one table with this name
         {
-            sal_Int32 nPrivileges = Privilege::DROP         |
+            sal_Int32 const nPrivileges = Privilege::DROP         |
                                     Privilege::REFERENCE    |
                                     Privilege::ALTER        |
                                     Privilege::CREATE       |

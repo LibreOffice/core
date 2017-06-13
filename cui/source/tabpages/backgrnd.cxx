@@ -578,8 +578,7 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
 
     // get and evaluate Input-BrushItem
     const SvxBrushItem* pBgdAttr = nullptr;
-    sal_uInt16 nSlot = SID_VIEW_FLD_PIC;
-    sal_uInt16 nWhich = GetWhich( nSlot );
+    sal_uInt16 nWhich = GetWhich( SID_VIEW_FLD_PIC );
     std::unique_ptr<SvxBrushItem> pTemp;
 
     if ( rSet.GetItemState( nWhich, false ) >= SfxItemState::DEFAULT )

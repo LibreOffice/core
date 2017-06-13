@@ -201,7 +201,7 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
 
             //xxxxx rTickInfo.updateUnscaledValue( xInverseRadiusScaling );
             double fLogicRadius = rTickInfo.getUnscaledTickValue();
-            double fLogicZ      = 1.0;//as defined
+            double const fLogicZ = 1.0;//as defined
 
             drawing::PointSequenceSequence aPoints(1);
             VPolarGrid::createLinePointSequence_ForAngleAxis( aPoints, rAngleTickInfos

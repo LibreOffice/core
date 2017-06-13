@@ -148,14 +148,12 @@ void XSpreadsheets2::testImportOverExistingNamedRange()
 */
     importSheetToCopy();
 
-    OUString aNamedRangeString("initial1");
-
     uno::Reference< container::XNameAccess > xDestNamedRangesNameAccess(getNamedRanges(xDestDoc), UNO_QUERY_THROW);
-    uno::Any aNr = xDestNamedRangesNameAccess->getByName(aNamedRangeString);
+    uno::Any aNr = xDestNamedRangesNameAccess->getByName("initial1");
     uno::Reference< sheet::XNamedRange > xDestNamedRange(aNr, UNO_QUERY_THROW);
     OUString aNrDestContent = xDestNamedRange->getContent();
 
-    OUString aExpectedContent("$Sheet1.$B$1");
+    OUString const aExpectedContent("$Sheet1.$B$1");
 
     std::cout << "testImportSheet : initial1 aNrDestContent " << aNrDestContent << std::endl;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong address for initial1", aNrDestContent, aExpectedContent);
@@ -203,7 +201,7 @@ void XSpreadsheets2::testImportNamedRangeRedefinedInSource()
     uno::Any aRedefinedInSheetNr = xDestNamedRangesNameAccess->getByName(aRedefinedInSheetNamedRangeString);
     uno::Reference< sheet::XNamedRange > xDestRedefinedInSheetNamedRange(aRedefinedInSheetNr, UNO_QUERY_THROW);
     OUString aRedefinedInSheetNrDestContent = xDestRedefinedInSheetNamedRange->getContent();
-    OUString aRedefinedInSheetExpectedContent("$Sheet1.$B$2");
+    OUString const aRedefinedInSheetExpectedContent("$Sheet1.$B$2");
     std::cout << "testImportSheet : initial2 content " << aRedefinedInSheetNrDestContent << std::endl;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong address for Redefined InSheet named range", aRedefinedInSheetNrDestContent, aRedefinedInSheetExpectedContent);
 }
@@ -263,17 +261,15 @@ void XSpreadsheets2::testImportCellStyle()
 
     uno::Reference< style::XStyleFamiliesSupplier > xFamiliesSupplier (xDestDoc, UNO_QUERY_THROW);
     uno::Reference< container::XNameAccess > xFamiliesNameAccess (xFamiliesSupplier->getStyleFamilies(), UNO_QUERY_THROW);
-    OUString aCellFamilyName("CellStyles");
-    uno::Any aCellStylesFamily = xFamiliesNameAccess->getByName(aCellFamilyName);
+    uno::Any aCellStylesFamily = xFamiliesNameAccess->getByName("CellStyles");
     uno::Reference< container::XNameContainer > xCellStylesFamilyNameAccess (aCellStylesFamily, UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT_MESSAGE("New cell style not present", xCellStylesFamilyNameAccess->hasByName(aDestStyleName));
 
     uno::Any aCellStyle = xCellStylesFamilyNameAccess->getByName(aDestStyleName);
     uno::Reference< beans::XPropertySet > xCellStyleProp (aCellStyle, UNO_QUERY_THROW);
-    OUString aProperty("VertJustify");
     sal_Int32 aVertJustify = 0;
-    CPPUNIT_ASSERT(xCellStyleProp->getPropertyValue(aProperty) >>= aVertJustify);
+    CPPUNIT_ASSERT(xCellStyleProp->getPropertyValue("VertJustify") >>= aVertJustify);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("New style: VertJustify not set", table::CellVertJustify_CENTER, (table::CellVertJustify)aVertJustify);
 }
@@ -296,8 +292,7 @@ uno::Reference< sheet::XSpreadsheetDocument> XSpreadsheets2::getDoc(const OUStri
 uno::Reference< sheet::XNamedRanges> XSpreadsheets2::getNamedRanges(uno::Reference< sheet::XSpreadsheetDocument> const & xDoc)
 {
     uno::Reference< beans::XPropertySet > xPropSet (xDoc, UNO_QUERY_THROW);
-    OUString NamedRangesPropertyString("NamedRanges");
-    uno::Reference< sheet::XNamedRanges > xNamedRanges(xPropSet->getPropertyValue(NamedRangesPropertyString), UNO_QUERY_THROW);
+    uno::Reference< sheet::XNamedRanges > xNamedRanges(xPropSet->getPropertyValue("NamedRanges"), UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xNamedRanges.is());
 
     return xNamedRanges;
@@ -331,9 +326,7 @@ void XSpreadsheets2::importSheetToCopy()
 
 bool XSpreadsheets2::isExternalReference(const OUString& aDestContent, const OUString& aSrcContent )
 {
-    OUString aStart("'file://");
-
-    CPPUNIT_ASSERT(aDestContent.startsWith(aStart));
+    CPPUNIT_ASSERT(aDestContent.startsWith("'file://"));
 
     return  (aDestContent.endsWithIgnoreAsciiCase(aSrcContent) // same cell address
             && aDestContent.indexOf(aSrcFileName)>0); // contains source file name

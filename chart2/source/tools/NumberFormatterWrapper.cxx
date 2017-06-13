@@ -70,8 +70,7 @@ NumberFormatterWrapper::~NumberFormatterWrapper()
 
 Date NumberFormatterWrapper::getNullDate() const
 {
-    sal_uInt16 nYear = 1899,nDay = 30,nMonth = 12;
-    Date aRet(nDay,nMonth,nYear);
+    Date aRet(30,12,1899);
 
     util::Date aUtilDate;
     if( m_aNullDate.hasValue() && (m_aNullDate >>= aUtilDate) )

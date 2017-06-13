@@ -139,7 +139,7 @@ static OString decodeString( const sal_Char* pEncChars, int nLen)
 void PersistentMap::open()
 {
     // open the existing file
-    sal_uInt32 nOpenFlags = osl_File_OpenFlag_Read | osl_File_OpenFlag_Write;
+    sal_uInt32 const nOpenFlags = osl_File_OpenFlag_Read | osl_File_OpenFlag_Write;
 
     const osl::File::RC rcOpen = m_MapFile.open( nOpenFlags);
     m_bIsOpen = (rcOpen == osl::File::E_None);

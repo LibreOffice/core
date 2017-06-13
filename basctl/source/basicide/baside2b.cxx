@@ -1596,7 +1596,7 @@ WatchWindow::WatchWindow (Layout* pParent)
 
     long nVarTabWidth = 220;
     long nValueTabWidth = 100;
-    long nTypeTabWidth = 1250;
+    long const nTypeTabWidth = 1250;
     aHeaderBar->InsertItem( ITEM_ID_VARIABLE, IDEResId(RID_STR_WATCHVARIABLE), nVarTabWidth );
     aHeaderBar->InsertItem( ITEM_ID_VALUE, IDEResId(RID_STR_WATCHVALUE), nValueTabWidth );
     aHeaderBar->InsertItem( ITEM_ID_TYPE, IDEResId(RID_STR_WATCHTYPE), nTypeTabWidth );

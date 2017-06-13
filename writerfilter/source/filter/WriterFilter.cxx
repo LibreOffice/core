@@ -169,8 +169,10 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& aDesc
         if (!xInputStream.is())
             return false;
 
-        writerfilter::dmapper::SourceDocumentType eType = writerfilter::dmapper::SourceDocumentType::OOXML;
-        writerfilter::Stream::Pointer_t pStream(writerfilter::dmapper::DomainMapperFactory::createMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, eType, aMediaDesc));
+        writerfilter::Stream::Pointer_t pStream(
+            writerfilter::dmapper::DomainMapperFactory::createMapper(
+                m_xContext, xInputStream, m_xDstDoc, bRepairStorage,
+                writerfilter::dmapper::SourceDocumentType::OOXML, aMediaDesc));
         //create the tokenizer and domain mapper
         writerfilter::ooxml::OOXMLStream::Pointer_t pDocStream = writerfilter::ooxml::OOXMLDocumentFactory::createStream(m_xContext, xInputStream, bRepairStorage);
         uno::Reference<task::XStatusIndicator> xStatusIndicator = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STATUSINDICATOR(), uno::Reference<task::XStatusIndicator>());

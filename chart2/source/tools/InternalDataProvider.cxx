@@ -902,8 +902,7 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
         sal_Int32 nLevelCount = lcl_getInnerLevelCount( aCategories );
         if( nLevelCount == 1 )
         {
-            sal_Int32 nL=0;
-            aResult = this->getDataByRangeRepresentation( lcl_aCategoriesLevelRangeNamePrefix + OUString::number( nL ) );
+            aResult = this->getDataByRangeRepresentation( lcl_aCategoriesLevelRangeNamePrefix + OUString::number( 0 ) );
         }
         else
         {

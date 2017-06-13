@@ -42,7 +42,6 @@ sal_Size rtl_textenc_convertSingleByteToBmpUnicode(
     sal_Unicode * destBufPtr = destBuf;
     sal_Unicode * destBufEnd = destBuf + destChars;
     for (; converted < srcBytes; ++converted) {
-        bool undefined = true;
         sal_Char b = *srcBuf++;
         sal_Unicode c = map[static_cast< sal_uInt8 >(b)];
         if (c == 0xFFFF) {
@@ -55,7 +54,7 @@ sal_Size rtl_textenc_convertSingleByteToBmpUnicode(
         continue;
     bad_input:
         switch (sal::detail::textenc::handleBadInputTextToUnicodeConversion(
-                    undefined, false, b, flags, &destBufPtr, destBufEnd,
+                    true/*undefined*/, false, b, flags, &destBufPtr, destBufEnd,
                     &infoFlags))
         {
         case sal::detail::textenc::BAD_INPUT_STOP:

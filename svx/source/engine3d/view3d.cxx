@@ -977,10 +977,7 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
             }
 
             // Set default rotation
-            {
-                double XRotateDefault = 20;
-                aRotate.rotate(DEG2RAD(XRotateDefault), 0.0, 0.0);
-            }
+            aRotate.rotate(DEG2RAD(20.0), 0.0, 0.0);
 
             if(!aRotate.isIdentity())
             {

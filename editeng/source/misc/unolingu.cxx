@@ -104,8 +104,7 @@ void ThesDummy_Impl::GetCfgLocales()
     if (!pLocaleSeq)
     {
         SvtLinguConfig aCfg;
-        OUString  aNode("ServiceManager/ThesaurusList");
-        Sequence < OUString > aNodeNames( aCfg.GetNodeNames( aNode ) );
+        Sequence < OUString > aNodeNames( aCfg.GetNodeNames( "ServiceManager/ThesaurusList" ) );
         const OUString *pNodeNames = aNodeNames.getConstArray();
         sal_Int32 nLen = aNodeNames.getLength();
         pLocaleSeq.reset( new Sequence< lang::Locale >( nLen ) );
