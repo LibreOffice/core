@@ -219,7 +219,6 @@ public:
     FormulaToken* PeekNext();
     FormulaToken* PeekPrevNoSpaces();    /// Only after Reset/First/Next/Last/Prev!
     FormulaToken* PeekNextNoSpaces();    /// Only after Reset/First/Next/Last/Prev!
-    FormulaToken* FirstRPN() { nIndex = 0; return NextRPN(); }
     FormulaToken* FirstRPNToken() const;
     FormulaToken* NextRPN();
     FormulaToken* LastRPN() { nIndex = nRPN; return PrevRPN(); }
