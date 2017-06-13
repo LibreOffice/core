@@ -13,6 +13,7 @@
 #include <dpsave.hxx>
 #include <dputil.hxx>
 #include <document.hxx>
+#include <generalfunction.hxx>
 
 #include <oox/export/utils.hxx>
 
@@ -413,6 +414,47 @@ struct DataField
     DataField( long nPos, const ScDPSaveDimension* pDim ) : mnPos(nPos), mpDim(pDim) {}
 };
 
+/** Returns a OOXML subtotal function name string. See ECMA-376-1:2016 18.18.43 */
+OString GetSubtotalFuncName(ScGeneralFunction eFunc)
+{
+    switch (eFunc)
+    {
+        case ScGeneralFunction::SUM:       return "sum";
+        case ScGeneralFunction::COUNT:     return "count";
+        case ScGeneralFunction::AVERAGE:   return "avg";
+        case ScGeneralFunction::MAX:       return "max";
+        case ScGeneralFunction::MIN:       return "min";
+        case ScGeneralFunction::PRODUCT:   return "product";
+        case ScGeneralFunction::COUNTNUMS: return "countA";
+        case ScGeneralFunction::STDEV:     return "stdDev";
+        case ScGeneralFunction::STDEVP:    return "stdDevP";
+        case ScGeneralFunction::VAR:       return "var";
+        case ScGeneralFunction::VARP:      return "varP";
+        default:;
+    }
+    return "default";
+}
+
+sal_Int32 GetSubtotalAttrToken(ScGeneralFunction eFunc)
+{
+    switch (eFunc)
+    {
+        case ScGeneralFunction::SUM:       return XML_sumSubtotal;
+        case ScGeneralFunction::COUNT:     return XML_countSubtotal;
+        case ScGeneralFunction::AVERAGE:   return XML_avgSubtotal;
+        case ScGeneralFunction::MAX:       return XML_maxSubtotal;
+        case ScGeneralFunction::MIN:       return XML_minSubtotal;
+        case ScGeneralFunction::PRODUCT:   return XML_productSubtotal;
+        case ScGeneralFunction::COUNTNUMS: return XML_countASubtotal;
+        case ScGeneralFunction::STDEV:     return XML_stdDevSubtotal;
+        case ScGeneralFunction::STDEVP:    return XML_stdDevPSubtotal;
+        case ScGeneralFunction::VAR:       return XML_varSubtotal;
+        case ScGeneralFunction::VARP:      return XML_varPSubtotal;
+        default:;
+    }
+    return XML_defaultSubtotal;
+}
+
 }
 
 void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDPObject& rDPObj, sal_Int32 nCacheId )
@@ -554,8 +596,9 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         XML_count, OString::number(static_cast<long>(aCachedDims.size())).getStr(),
         FSEND);
 
-    for (const ScDPSaveDimension* pDim : aCachedDims)
+    for (size_t i = 0; i < nFieldCount; ++i)
     {
+        const ScDPSaveDimension* pDim = aCachedDims[i];
         if (!pDim)
         {
             pPivotStrm->singleElement(XML_pivotField,
@@ -585,13 +628,63 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             continue;
         }
 
-        pPivotStrm->startElement(XML_pivotField,
-            XML_axis, toOOXMLAxisType(eOrient),
-            XML_showAll, BS(false),
+        // Dump field items.
+        css::uno::Sequence<OUString> aMemberNames;
+        {
+            // We need to get the members in actual order, getting which requires non-const reference here
+            auto& dpo = const_cast<ScDPObject&>(rDPObj);
+            dpo.GetMemberNames(i, aMemberNames);
+        }
+
+        const ScDPCache::ScDPItemDataVec& rCacheFieldItems = rCache.GetDimMemberValues(i);
+        std::vector<size_t> aMemberSequence;
+        for (const OUString& sMemberName : aMemberNames)
+        {
+            auto it = std::find_if(rCacheFieldItems.begin(), rCacheFieldItems.end(),
+                [&sMemberName](const ScDPItemData& arg) -> bool { return arg.GetString() == sMemberName; });
+            if (it != rCacheFieldItems.end())
+            {
+                aMemberSequence.push_back(it - rCacheFieldItems.begin());
+            }
+        }
+
+        auto pAttList = sax_fastparser::FastSerializerHelper::createAttrList();
+        pAttList->add(XML_axis, toOOXMLAxisType(eOrient));
+        pAttList->add(XML_showAll, BS(false));
+
+        long nSubTotalCount = pDim->GetSubTotalsCount();
+        std::vector<OString> aSubtotalSequence;
+        for (long nSubTotal = 0; nSubTotal < nSubTotalCount; ++nSubTotal)
+        {
+            ScGeneralFunction eFunc = pDim->GetSubTotalFunc(nSubTotal);
+            aSubtotalSequence.push_back(GetSubtotalFuncName(eFunc));
+            sal_Int32 nAttToken = GetSubtotalAttrToken(eFunc);
+            if (!pAttList->hasAttribute(nAttToken))
+                pAttList->add(nAttToken, BS(true));
+        }
+
+        sax_fastparser::XFastAttributeListRef xAttributeList(pAttList);
+        pPivotStrm->startElement(XML_pivotField, xAttributeList);
+
+        pPivotStrm->startElement(XML_items,
+            XML_count, OString::number(static_cast<long>(aMemberSequence.size() + aSubtotalSequence.size())),
             FSEND);
 
-        // TODO : Dump field items.
+        for (size_t nMember : aMemberSequence)
+        {
+            pPivotStrm->singleElement(XML_item,
+                XML_x, OString::number(static_cast<long>(nMember)),
+                FSEND);
+        }
 
+        for (const OString& sSubtotal : aSubtotalSequence)
+        {
+            pPivotStrm->singleElement(XML_item,
+                XML_t, sSubtotal,
+                FSEND);
+        }
+
+        pPivotStrm->endElement(XML_items);
         pPivotStrm->endElement(XML_pivotField);
     }
 
