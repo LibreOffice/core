@@ -494,7 +494,7 @@ namespace frm
             DECL_PROP2(SELECT_VALUE,        Any,                            BOUND, TRANSIENT);
             DECL_PROP1(DEFAULT_SELECT_SEQ,  Sequence<sal_Int16>,            BOUND);
             DECL_PROP1(STRINGITEMLIST,      Sequence< OUString >,    BOUND);
-            DECL_PROP1(TYPEDITEMLIST,       Sequence< Any >,    BOUND);
+            DECL_PROP1(TYPEDITEMLIST,       Sequence< Any >,    OPTIONAL);
         END_DESCRIBE_PROPERTIES();
     }
 
