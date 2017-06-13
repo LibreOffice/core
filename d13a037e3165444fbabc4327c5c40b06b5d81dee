@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_9164f7e5",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2215,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2017-06-13T14:14:33Z",
+      "side": 1,
+      "message": "Done but is this necessary or can we completely get rid of it?",
+      "parentUuid": "5a3905b3_6e0de63d",
+      "revId": "d13a037e3165444fbabc4327c5c40b06b5d81dee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_b14c9371",
         "filename": "vcl/source/control/tabctrl.cxx",
         "patchSetId": 8
@@ -30,6 +48,24 @@
       "writtenOn": "2017-06-13T13:47:05Z",
       "side": 1,
       "message": "I said in my previous comments, this-\u003eGetSizePixel() will return you (0,0) in the constructor... that means:\nPoint(aRect.Right() - nRightOff, aRect.Top()) \u003d Point(-20, 0)\n\nchange it to manually (30,0) and you will see this button.\n\nSet size in the constructor, update the position in the ImplPlaceTabs method. There you will have ready nWidth variable to use.",
+      "revId": "d13a037e3165444fbabc4327c5c40b06b5d81dee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_d1b59f31",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2230,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2017-06-13T14:14:33Z",
+      "side": 1,
+      "message": "I was trying to offset the position from the right hence the subtraction. My thinking was \"this should be subtracted so it does not appear off screen, -20 means it will be 20 pixels inside the right\". I will try your solution to fix this.\n\nWhat size should it be set to? Doesn\u0027t it have to be relative to the tab headers since the appearance can be different among different environments (I tested on KDE and GTK modes and this is the case, GTK has taller tab headers and the button became smaller). How can I set this?",
+      "parentUuid": "5a3905b3_b14c9371",
       "revId": "d13a037e3165444fbabc4327c5c40b06b5d81dee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
