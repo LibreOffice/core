@@ -43,15 +43,6 @@ namespace sdr
         {
         }
 
-        EmptyProperties::~EmptyProperties()
-        {
-            if(mpEmptyItemSet)
-            {
-                delete mpEmptyItemSet;
-                mpEmptyItemSet = nullptr;
-            }
-        }
-
         BaseProperties& EmptyProperties::Clone(SdrObject& rObj) const
         {
             return *(new EmptyProperties(rObj));
@@ -61,7 +52,7 @@ namespace sdr
         {
             if(!mpEmptyItemSet)
             {
-                const_cast<EmptyProperties*>(this)->mpEmptyItemSet = const_cast<EmptyProperties*>(this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool());
+                const_cast<EmptyProperties*>(this)->mpEmptyItemSet.reset(const_cast<EmptyProperties*>(this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool()));
             }
 
             assert(mpEmptyItemSet);

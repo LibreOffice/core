@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SVX_SDR_PROPERTIES_EMPTYPROPERTIES_HXX
 #define INCLUDED_SVX_SDR_PROPERTIES_EMPTYPROPERTIES_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <svx/sdr/properties/properties.hxx>
 
 
@@ -31,7 +35,7 @@ namespace sdr
         {
         protected:
             // the to be used ItemSet
-            SfxItemSet*                                     mpEmptyItemSet;
+            std::unique_ptr<SfxItemSet> mpEmptyItemSet;
 
             // create a new itemset
             virtual SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
@@ -51,9 +55,6 @@ namespace sdr
         public:
             // basic constructor
             explicit EmptyProperties(SdrObject& rObj);
-
-            // destructor
-            virtual ~EmptyProperties() override;
 
             // Clone() operator, normally just calls the local copy constructor
             virtual BaseProperties& Clone(SdrObject& rObj) const override;
