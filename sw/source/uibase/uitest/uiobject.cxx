@@ -53,6 +53,9 @@ StringMap SwEditWinUIObject::get_state()
     aMap["EndPara"] = OUString::boolean(rWrtShell.IsEndPara());
     aMap["StartDoc"] = OUString::boolean(rWrtShell.IsStartOfDoc());
     aMap["EndDoc"] = OUString::boolean(rWrtShell.IsEndOfDoc());
+    Size pageSize = mxEditWin->GetView().GetDocSz();
+    aMap["DocWidth"] = OUString::number(pageSize.getWidth());
+    aMap["DocHeight"] = OUString::number(pageSize.getHeight());
 
     return aMap;
 }

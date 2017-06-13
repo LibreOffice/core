@@ -12,9 +12,25 @@ from com.sun.star.drawing.HatchStyle import SINGLE
 from com.sun.star.drawing.BitmapMode import REPEAT
 from com.sun.star.drawing.RectanglePoint import MIDDLE_MIDDLE
 
-class WriterBackgrounds(UITestCase):
+from libreoffice.uno.propertyvalue import mkPropertyValues
+from uitest.uihelper.common import get_state_as_dict
 
-    def checkDefaultBackground(self, btn):
+class WriterPageDialog(UITestCase):
+
+    def launch_dialog_and_select_tab(self, tab):
+        self.ui_test.execute_dialog_through_command(".uno:PageDialog")
+
+        xDialog = self.xUITest.getTopFocusWindow()
+        tabcontrol = xDialog.getChild("tabcontrol")
+        select_pos(tabcontrol, str(tab))
+
+        return xDialog
+
+    def click_button(self, dialog, button):
+        xButton = dialog.getChild(button)
+        xButton.executeAction("CLICK", tuple())
+
+    def check_default_area(self, btn):
         document = self.ui_test.get_component()
         if btn == 'btnnone':            
             self.assertEqual(
@@ -108,40 +124,61 @@ class WriterBackgrounds(UITestCase):
                 document.StyleFamilies.PageStyles.Standard.FillBitmapName, '5 Percent')
 
 
-    def test_background_dialog(self):
+    def dtest_area_tab(self):
 
         self.ui_test.create_doc_in_start_center("writer")
 
         buttons = ['btnbitmap', 'btncolor', 'btngradient', 'btnhatch', 'btnpattern']
         for index, button in enumerate(buttons):
-            self.ui_test.execute_dialog_through_command(".uno:PageStyleName")
 
-            xPageStyleDlg = self.xUITest.getTopFocusWindow()
-            tabcontrol = xPageStyleDlg.getChild("tabcontrol")
-            select_pos(tabcontrol, "2")
+            xDialog = self.launch_dialog_and_select_tab(2)
 
-            xBtn = xPageStyleDlg.getChild(button)
-            xBtn.executeAction("CLICK", tuple())
+            self.click_button(xDialog, button)
 
-            xOkBtn = xPageStyleDlg.getChild("ok")
-            xOkBtn.executeAction("CLICK", tuple())
+            self.click_button(xDialog, 'ok')
 
-            self.checkDefaultBackground(button)
+            self.check_default_area(button)
         
-            self.ui_test.execute_dialog_through_command(".uno:PageStyleName")
+            xDialog = self.launch_dialog_and_select_tab(2)
 
-            xPageStyleDlg = self.xUITest.getTopFocusWindow()
-            tabcontrol = xPageStyleDlg.getChild("tabcontrol")
-            select_pos(tabcontrol, "2")
+            self.click_button(xDialog, 'btnnone')
 
-            xBtn = xPageStyleDlg.getChild('btnnone')
-            xBtn.executeAction("CLICK", tuple())
+            self.click_button(xDialog, 'ok')
 
-            xOkBtn = xPageStyleDlg.getChild("ok")
-            xOkBtn.executeAction("CLICK", tuple())
-
-            self.checkDefaultBackground('btnnone')
+            self.check_default_area('btnnone')
             
         self.ui_test.close_doc()
+
+    def test_page_tab(self):
+
+        dict_size = { 0:(9255,9255), 1:(10474,10474), 2:(12232,12232), 3:(16838,16838), 4:(9822,9822),
+            5:(11268,11268), 6:(14173,14173), 7:(12399,12399), 8:(12399,12399), 9:(12399,12399),
+            10:(15840,15840), 11:(9907,9907), 12:(11438,11438), 13:(14570,14570), 14:(11494,11494),
+            15:(9964,9964), 16:(10247,10247), 17:(10247,10247), 18:(9397,9397), 19:(9510,9510),
+            20:(9510,9510), 21:(10871,10871), 22:(12983,12983), 23:(8889,8889), 24:(9069,9069),
+            25:(9069,9069), 26:(9249,9249), 27:(9519,9519)}
+
+        self.ui_test.create_doc_in_start_center("writer")
+
+        for i in range(28):
+
+            xDialog = self.launch_dialog_and_select_tab(1)
+
+            xFormatList = xDialog.getChild("comboPageFormat")
+            select_pos(xFormatList, str(i))
+
+            self.click_button(xDialog, 'ok')
+
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
+
+            state = get_state_as_dict(xWriterEdit)
+            print(dict_size[i])
+            self.assertEqual(dict_size[i][0], int(state['DocWidth']))
+            self.assertEqual(dict_size[i][1], int(state['DocWidth']))
+            document = self.ui_test.get_component()
+
+        self.ui_test.close_doc()
+
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
