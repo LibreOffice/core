@@ -622,7 +622,7 @@ OUString INetContentTypes::GetPresentation(INetContentType eTypeID,
 INetContentType INetContentTypes::GetContentType4Extension(OUString const & rExtension)
 {
     MediaTypeEntry const * pEntry = seekEntry(rExtension, aStaticExtensionMap,
-                                              sizeof aStaticExtensionMap / sizeof (MediaTypeEntry));
+                                              SAL_N_ELEMENTS(aStaticExtensionMap));
     if (pEntry)
         return pEntry->m_eTypeID;
     INetContentType eTypeID = Registration::GetContentType4Extension(rExtension);

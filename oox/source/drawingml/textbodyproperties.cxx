@@ -62,8 +62,8 @@ void TextBodyProperties::pushVertSimulation()
 void TextBodyProperties::pushRotationAdjustments()
 {
     sal_Int32 nOff      = 0;
-    sal_Int32 aProps[]  = { PROP_TextLeftDistance, PROP_TextUpperDistance, PROP_TextRightDistance, PROP_TextLowerDistance };
-    sal_Int32 n         = ( sal_Int32 )( sizeof( aProps ) / sizeof( sal_Int32 ) );
+    static sal_Int32 const aProps[] { PROP_TextLeftDistance, PROP_TextUpperDistance, PROP_TextRightDistance, PROP_TextLowerDistance };
+    sal_Int32 n         = SAL_N_ELEMENTS( aProps );
 
     switch( moRotation.get(0) )
     {

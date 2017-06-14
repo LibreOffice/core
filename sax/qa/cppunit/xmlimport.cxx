@@ -383,7 +383,7 @@ void XMLImportTest::parse()
                             "multiplens.xml", "multiplepfx.xml",
                             "nstoattributes.xml", "nestedns.xml", "testthreading.xml"};
 
-    for (sal_uInt16 i = 0; i < sizeof( fileNames ) / sizeof( OUString ); i++)
+    for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS( fileNames ); i++)
     {
         InputSource source;
         source.sSystemId    = "internal";
@@ -412,7 +412,7 @@ void XMLImportTest::testMissingNamespaceDeclaration()
     args[0] <<= OUString("IgnoreMissingNSDecl");
     xInit->initialize( args );
 
-    for (sal_uInt16 i = 0; i < sizeof( fileNames ) / sizeof( OUString ); i++)
+    for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS( fileNames ); i++)
     {
         try
         {
