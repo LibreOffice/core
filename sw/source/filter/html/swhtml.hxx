@@ -201,7 +201,7 @@ class HTMLAttrContext
     OUString    aClass;          // context class
 
     HTMLAttrContext_SaveDoc *pSaveDocContext;
-    SfxItemSet *pFrameItemSet;
+    std::unique_ptr<SfxItemSet> pFrameItemSet;
 
     HtmlTokenId nToken;         // the token of the context
 
@@ -233,7 +233,6 @@ public:
                       bool bDfltColl=false ) :
         aClass( rClass ),
         pSaveDocContext( nullptr ),
-        pFrameItemSet( nullptr ),
         nToken( nTokn ),
         nTextFormatColl( nPoolId ),
         nLeftMargin( 0 ),
@@ -255,7 +254,6 @@ public:
 
     explicit HTMLAttrContext( HtmlTokenId nTokn ) :
         pSaveDocContext( nullptr ),
-        pFrameItemSet( nullptr ),
         nToken( nTokn ),
         nTextFormatColl( 0 ),
         nLeftMargin( 0 ),
@@ -275,7 +273,7 @@ public:
         bRestartListing( false )
     {}
 
-    ~HTMLAttrContext() { ClearSaveDocContext(); delete pFrameItemSet; }
+    ~HTMLAttrContext() { ClearSaveDocContext(); }
 
     HtmlTokenId GetToken() const { return nToken; }
 
@@ -307,7 +305,7 @@ public:
     bool HasSaveDocContext() const { return pSaveDocContext!=nullptr; }
     HTMLAttrContext_SaveDoc *GetSaveDocContext( bool bCreate=false );
 
-    const SfxItemSet *GetFrameItemSet() const { return pFrameItemSet; }
+    const SfxItemSet *GetFrameItemSet() const { return pFrameItemSet.get(); }
     SfxItemSet *GetFrameItemSet( SwDoc *pCreateDoc );
 
     void SetFinishPREListingXMP( bool bSet ) { bFinishPREListingXMP = bSet; }

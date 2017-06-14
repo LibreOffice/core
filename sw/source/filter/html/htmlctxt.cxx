@@ -18,6 +18,7 @@
  */
 
 #include "hintids.hxx"
+#include <o3tl/make_unique.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -702,9 +703,9 @@ void SwHTMLParser::SplitPREListingXMP( HTMLAttrContext *pCntxt )
 SfxItemSet *HTMLAttrContext::GetFrameItemSet( SwDoc *pCreateDoc )
 {
     if( !pFrameItemSet && pCreateDoc )
-        pFrameItemSet = new SfxItemSet( pCreateDoc->GetAttrPool(),
+        pFrameItemSet = o3tl::make_unique<SfxItemSet>( pCreateDoc->GetAttrPool(),
                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
-    return pFrameItemSet;
+    return pFrameItemSet.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
