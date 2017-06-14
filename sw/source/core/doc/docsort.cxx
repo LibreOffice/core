@@ -747,7 +747,6 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
 FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const FndBox_& rBox) :
     pDoc(pDocPtr),
     rBoxRef(rBox),
-    pArr(nullptr),
     nRow(0),
     nCol(0)
 { // If the array is symmetric
@@ -760,9 +759,8 @@ FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const FndBox_& rBox) :
 
         // Create linear array
         size_t nCount = static_cast<size_t>(nRows) * nCols;
-        pArr = new const FndBox_*[nCount];
-        FndBox_** ppTmp = const_cast<FndBox_**>(pArr);
-        memset(ppTmp, 0, sizeof(const FndBox_*) * nCount);
+        pArr = o3tl::make_unique<FndBox_ const *[]>(nCount);
+        memset(pArr.get(), 0, sizeof(const FndBox_*) * nCount);
 
         FillFlat( rBoxRef );
     }
@@ -770,8 +768,6 @@ FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const FndBox_& rBox) :
 
 FlatFndBox::~FlatFndBox()
 {
-    FndBox_** ppTmp = const_cast<FndBox_**>(pArr);
-    delete [] ppTmp;
 }
 
 /// All Lines of a Box need to have same number of Boxes
@@ -890,7 +886,7 @@ void FlatFndBox::FillFlat(const FndBox_& rBox, bool bLastBox)
             {
                 // save it
                 sal_uInt16 nOff = nRow * nCols + nCol;
-                *(pArr + nOff) = pBox;
+                pArr[nOff] = pBox;
 
                 // Save the Formula/Format/Value values
                 const SwFrameFormat* pFormat = pBox->GetBox()->GetFrameFormat();
@@ -931,7 +927,7 @@ void FlatFndBox::FillFlat(const FndBox_& rBox, bool bLastBox)
 const FndBox_* FlatFndBox::GetBox(sal_uInt16 n_Col, sal_uInt16 n_Row) const
 {
     sal_uInt16 nOff = n_Row * nCols + n_Col;
-    const FndBox_* pTmp = *(pArr + nOff);
+    const FndBox_* pTmp = pArr[nOff];
 
     OSL_ENSURE(n_Col < nCols && n_Row < nRows && pTmp, "invalid array access");
     return pTmp;
