@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_6497c790",
+        "filename": "dbaccess/source/ui/misc/TokenWriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-14T10:12:13Z",
+      "side": 1,
+      "message": "This probably doesn\u0027t work. The encoding corresponds with the SvRTFParser default encoding (see svtools/source/svrtf/parrtf.cxx) which also is RTL_TEXTENCODING_MS_1252, and if using another encoding we\u0027ll likely have to tell in RTF which encoding is used, or write some Unicode instead which also needs special handling.",
+      "revId": "afb354274dbc845268d25a0634c45eef15e34610",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
