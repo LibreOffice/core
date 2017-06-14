@@ -116,7 +116,7 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
                                   sal_Int32 nFileFormat,
                                   bool bTemplate = false ) const override;
 
-    virtual sal_uLong   GetMiscStatus() const override;
+    virtual sal_uIntPtr GetMiscStatus() const override;
     virtual void        OnDocumentPrinterChanged( Printer * ) override;
     virtual bool        InitNew( const css::uno::Reference< css::embed::XStorage >& xStorage ) override;
     virtual bool        Load( SfxMedium& rMedium ) override;
