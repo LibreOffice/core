@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_4439eb40",
+        "filename": "sc/source/filter/excel/exctools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-14T14:48:11Z",
+      "side": 0,
+      "message": "That\u0027s not a typo, that\u0027s a German comment meaning \"instead of nUser\"",
+      "revId": "b70fa47aec65fe95da94fc17640dda27650e9677",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
