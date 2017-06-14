@@ -255,7 +255,7 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
         aNumberingProperties.push_back(lcl_makePropVal(PROP_NUMBERING_TYPE, nNumberFormat));
     }
 
-    if( m_nJC >= 0 && m_nJC <= sal::static_int_cast<sal_Int32>(sizeof(aWWToUnoAdjust) / sizeof(sal_Int16)) )
+    if( m_nJC >= 0 && m_nJC <= sal::static_int_cast<sal_Int32>(SAL_N_ELEMENTS(aWWToUnoAdjust)) )
         aNumberingProperties.push_back(lcl_makePropVal(PROP_ADJUST, aWWToUnoAdjust[m_nJC]));
 
     if( !isOutlineNumbering())

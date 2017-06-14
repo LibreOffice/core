@@ -877,7 +877,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetTextProgNameArray()
 {
     if (!s_pTextProgNameArray)
         s_pTextProgNameArray = lcl_NewProgNameArray(TextProgNameTable,
-            sizeof ( TextProgNameTable ) / sizeof ( SwTableEntry ) );
+            SAL_N_ELEMENTS ( TextProgNameTable ) );
     return *s_pTextProgNameArray;
 }
 
@@ -885,7 +885,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetListsProgNameArray()
 {
     if (!s_pListsProgNameArray)
         s_pListsProgNameArray = lcl_NewProgNameArray( ListsProgNameTable,
-            sizeof ( ListsProgNameTable ) / sizeof ( SwTableEntry ) );
+            SAL_N_ELEMENTS ( ListsProgNameTable ) );
     return *s_pListsProgNameArray;
 }
 
@@ -893,7 +893,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetExtraProgNameArray()
 {
     if (!s_pExtraProgNameArray)
         s_pExtraProgNameArray = lcl_NewProgNameArray( ExtraProgNameTable,
-            sizeof ( ExtraProgNameTable ) / sizeof ( SwTableEntry ) );
+            SAL_N_ELEMENTS ( ExtraProgNameTable ) );
     return *s_pExtraProgNameArray;
 }
 
@@ -901,7 +901,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetRegisterProgNameArray()
 {
     if (!s_pRegisterProgNameArray)
         s_pRegisterProgNameArray = lcl_NewProgNameArray( RegisterProgNameTable,
-            sizeof ( RegisterProgNameTable ) / sizeof ( SwTableEntry ) );
+            SAL_N_ELEMENTS ( RegisterProgNameTable ) );
     return *s_pRegisterProgNameArray;
 }
 
@@ -909,7 +909,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetDocProgNameArray()
 {
     if (!s_pDocProgNameArray)
         s_pDocProgNameArray = lcl_NewProgNameArray( DocProgNameTable,
-            sizeof ( DocProgNameTable ) / sizeof ( SwTableEntry ) );
+            SAL_N_ELEMENTS ( DocProgNameTable ) );
     return *s_pDocProgNameArray;
 }
 
@@ -917,7 +917,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetHTMLProgNameArray()
 {
     if (!s_pHTMLProgNameArray)
         s_pHTMLProgNameArray = lcl_NewProgNameArray( HTMLProgNameTable,
-            sizeof ( HTMLProgNameTable ) / sizeof ( SwTableEntry ) );
+            SAL_N_ELEMENTS ( HTMLProgNameTable ) );
     return *s_pHTMLProgNameArray;
 }
 
@@ -925,7 +925,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetFrameFormatProgNameArray()
 {
     if (!s_pFrameFormatProgNameArray)
         s_pFrameFormatProgNameArray = lcl_NewProgNameArray( FrameFormatProgNameTable,
-            sizeof ( FrameFormatProgNameTable ) / sizeof ( SwTableEntry ) );
+            SAL_N_ELEMENTS ( FrameFormatProgNameTable ) );
     return *s_pFrameFormatProgNameArray;
 }
 
@@ -933,7 +933,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetChrFormatProgNameArray()
 {
     if (!s_pChrFormatProgNameArray)
         s_pChrFormatProgNameArray = lcl_NewProgNameArray( ChrFormatProgNameTable,
-            sizeof ( ChrFormatProgNameTable ) / sizeof ( SwTableEntry ) );
+            SAL_N_ELEMENTS ( ChrFormatProgNameTable ) );
     return *s_pChrFormatProgNameArray;
 }
 
@@ -941,7 +941,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetHTMLChrFormatProgNameArray()
 {
     if (!s_pHTMLChrFormatProgNameArray)
         s_pHTMLChrFormatProgNameArray = lcl_NewProgNameArray( HTMLChrFormatProgNameTable,
-            sizeof ( HTMLChrFormatProgNameTable ) / sizeof ( SwTableEntry ) );
+            SAL_N_ELEMENTS ( HTMLChrFormatProgNameTable ) );
     return *s_pHTMLChrFormatProgNameArray;
 }
 
@@ -949,7 +949,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetPageDescProgNameArray()
 {
     if (!s_pPageDescProgNameArray)
         s_pPageDescProgNameArray = lcl_NewProgNameArray( PageDescProgNameTable,
-            sizeof ( PageDescProgNameTable ) / sizeof ( SwTableEntry ) );
+            SAL_N_ELEMENTS ( PageDescProgNameTable ) );
     return *s_pPageDescProgNameArray;
 }
 
@@ -957,7 +957,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetNumRuleProgNameArray()
 {
     if (!s_pNumRuleProgNameArray)
         s_pNumRuleProgNameArray = lcl_NewProgNameArray( NumRuleProgNameTable,
-            sizeof ( NumRuleProgNameTable ) / sizeof ( SwTableEntry ) );
+            SAL_N_ELEMENTS ( NumRuleProgNameTable ) );
     return *s_pNumRuleProgNameArray;
 }
 
@@ -965,7 +965,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetTableStyleProgNameArray()
 {
     if (!s_pTableStyleProgNameArray)
         s_pTableStyleProgNameArray = lcl_NewProgNameArray( TableStyleProgNameTable,
-            sizeof ( TableStyleProgNameTable ) / sizeof ( SwTableEntry ) );
+            SAL_N_ELEMENTS ( TableStyleProgNameTable ) );
     return *s_pTableStyleProgNameArray;
 }
 

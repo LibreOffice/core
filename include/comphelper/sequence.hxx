@@ -283,10 +283,10 @@ namespace comphelper
         truncated. There's currently no measure to prevent or detect
         precision loss, overflow or truncation.
      */
-    template < typename DstType, typename SrcType >
-    inline css::uno::Sequence< DstType > containerToSequence( const SrcType& i_Container )
+    template < typename DstElementType, typename SrcType >
+    inline css::uno::Sequence< DstElementType > containerToSequence( const SrcType& i_Container )
     {
-        css::uno::Sequence< DstType > result( i_Container.size() );
+        css::uno::Sequence< DstElementType > result( i_Container.size() );
         ::std::copy( i_Container.begin(), i_Container.end(), result.getArray() );
         return result;
     }
@@ -297,6 +297,15 @@ namespace comphelper
     {
         css::uno::Sequence< typename SrcType::value_type > result( i_Container.size() );
         ::std::copy( i_Container.begin(), i_Container.end(), result.getArray() );
+        return result;
+    }
+
+    // handle arrays
+    template<typename SrcElementType, std::size_t SrcSize>
+    inline css::uno::Sequence< SrcElementType > containerToSequence( SrcElementType const (&i_Array)[ SrcSize ] )
+    {
+        css::uno::Sequence< SrcElementType > result( SrcSize );
+        ::std::copy( std::begin(i_Array), std::end(i_Array), result.getArray() );
         return result;
     }
 

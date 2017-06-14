@@ -35,7 +35,6 @@
 #include "com/sun/star/ucb/XContentProvider.hpp"
 
 #define EXPAND_PROTOCOL "vnd.sun.star.expand"
-#define ARLEN(x) sizeof (x) / sizeof *(x)
 
 
 using namespace ::com::sun::star;
@@ -120,11 +119,10 @@ OUString SAL_CALL implName()
 
 uno::Sequence< OUString > SAL_CALL supportedServices()
 {
-    OUString names [] = {
+    return uno::Sequence< OUString > {
         OUString("com.sun.star.ucb.ExpandContentProvider"),
         OUString("com.sun.star.ucb.ContentProvider")
     };
-    return uno::Sequence< OUString >( names, ARLEN(names) );
 }
 
 // XServiceInfo

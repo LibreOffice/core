@@ -55,7 +55,7 @@ css::beans::Property* ImplGetProperties( sal_uInt16& rElementCount )
                 css::beans::Property( "Horizontal", PROPERTY_Horizontal, cppu::UnoType<bool>::get(), 0 )
             };
             pProperties = aPropTable;
-            nElements = sizeof( aPropTable ) / sizeof( css::beans::Property );
+            nElements = SAL_N_ELEMENTS( aPropTable );
         }
     }
     rElementCount = nElements;

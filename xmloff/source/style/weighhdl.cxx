@@ -89,7 +89,7 @@ bool XMLFontWeightPropHdl::importXML( const OUString& rStrImpValue, Any& rValue,
     if( bRet )
     {
         bRet = false;
-        static int nCount = sizeof(aFontWeightMap)/sizeof(FontWeightMapper);
+        int const nCount = SAL_N_ELEMENTS(aFontWeightMap);
         for (int i = 0; i < (nCount-1); ++i)
         {
             if( (nWeight >= aFontWeightMap[i].nValue) && (nWeight <= aFontWeightMap[i+1].nValue) )
@@ -131,12 +131,11 @@ bool XMLFontWeightPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
     if( bRet )
     {
         sal_uInt16 nWeight = 0;
-        static int nCount = sizeof(aFontWeightMap)/sizeof(FontWeightMapper);
-        for( int i=0; i<nCount; i++ )
+        for( auto const & pair : aFontWeightMap )
         {
-            if( fValue <= aFontWeightMap[i].fWeight )
+            if( fValue <= pair.fWeight )
             {
-                 nWeight = aFontWeightMap[i].nValue;
+                 nWeight = pair.nValue;
                  break;
             }
         }

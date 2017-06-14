@@ -147,17 +147,6 @@ using namespace nsHdFtFlags;
 #include <comphelper/storagehelper.hxx>
 #include <sfx2/DocumentMetadataAccess.hxx>
 
-//#define VT_EMPTY            0
-//#define VT_I4               3
-//#define VT_LPSTR            30
-//#define VT_LPWSTR           31
-//#define VT_BLOB             65
-//#define VT_TYPEMASK         0xFFF
-/** Expands to a pointer after the last element of a STATIC data array (like STL end()). */
-//#define STATIC_TABLE_END( array )   ((array)+STATIC_TABLE_SIZE(array))
-/** Expands to the size of a STATIC data array. */
-//#define STATIC_TABLE_SIZE( array )  (sizeof(array)/sizeof(*(array)))
-
 SwMacroInfo* GetMacroInfo( SdrObject* pObj, bool bCreate )             // static
 {
     if ( pObj )

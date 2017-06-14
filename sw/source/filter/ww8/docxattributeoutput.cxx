@@ -43,6 +43,7 @@
 #include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/flagguard.hxx>
+#include <comphelper/sequence.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/export/utils.hxx>
@@ -882,12 +883,7 @@ void DocxAttributeOutput::InitCollectedParagraphProperties()
 
     // postpone the output so that we can later [in EndParagraphProperties()]
     // prepend the properties before the run
-    sal_Int32 len = sizeof ( aOrder ) / sizeof( sal_Int32 );
-    uno::Sequence< sal_Int32 > aSeqOrder( len );
-    for ( sal_Int32 i = 0; i < len; i++ )
-        aSeqOrder[i] = aOrder[i];
-
-    m_pSerializer->mark(Tag_InitCollectedParagraphProperties, aSeqOrder);
+    m_pSerializer->mark(Tag_InitCollectedParagraphProperties, comphelper::containerToSequence(aOrder));
 }
 
 void DocxAttributeOutput::WriteCollectedParagraphProperties()
@@ -1810,12 +1806,7 @@ void DocxAttributeOutput::InitCollectedRunProperties()
 
     // postpone the output so that we can later [in EndParagraphProperties()]
     // prepend the properties before the run
-    sal_Int32 len = sizeof ( aOrder ) / sizeof( sal_Int32 );
-    uno::Sequence< sal_Int32 > aSeqOrder( len );
-    for ( sal_Int32 i = 0; i < len; i++ )
-        aSeqOrder[i] = aOrder[i];
-
-    m_pSerializer->mark(Tag_InitCollectedRunProperties, aSeqOrder);
+    m_pSerializer->mark(Tag_InitCollectedRunProperties, comphelper::containerToSequence(aOrder));
 }
 
 namespace
@@ -1917,12 +1908,11 @@ const NameToId constNameToIdMapping[] =
 
 boost::optional<sal_Int32> lclGetElementIdForName(const OUString& rName)
 {
-    sal_Int32 aLength = sizeof (constNameToIdMapping) / sizeof(NameToId);
-    for (sal_Int32 i=0; i < aLength; ++i)
+    for (auto const & i : constNameToIdMapping)
     {
-        if (rName == constNameToIdMapping[i].maName)
+        if (rName == i.maName)
         {
-            return constNameToIdMapping[i].maId;
+            return i.maId;
         }
     }
     return boost::optional<sal_Int32>();
@@ -3272,12 +3262,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
 
     // postpone the output so that we can later []
     // prepend the properties before the run
-    sal_Int32 len = sizeof ( aOrder ) / sizeof( sal_Int32 );
-    uno::Sequence< sal_Int32 > aSeqOrder( len );
-    for ( sal_Int32 i = 0; i < len; i++ )
-        aSeqOrder[i] = aOrder[i];
-
-    m_pSerializer->mark(Tag_TableDefinition, aSeqOrder);
+    m_pSerializer->mark(Tag_TableDefinition, comphelper::containerToSequence(aOrder));
 
     long nPageSize = 0;
     const char* widthType = "dxa";
@@ -5611,12 +5596,7 @@ void DocxAttributeOutput::StartSection()
 
     // postpone the output so that we can later [in EndParagraphProperties()]
     // prepend the properties before the run
-    sal_Int32 len = sizeof ( aOrder ) / sizeof( sal_Int32 );
-    uno::Sequence< sal_Int32 > aSeqOrder( len );
-    for ( sal_Int32 i = 0; i < len; i++ )
-        aSeqOrder[i] = aOrder[i];
-
-    m_pSerializer->mark(Tag_StartSection, aSeqOrder);
+    m_pSerializer->mark(Tag_StartSection, comphelper::containerToSequence(aOrder));
     m_bHadSectPr = true;
 }
 
