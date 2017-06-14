@@ -32,7 +32,7 @@ interface XGraphicProvider2 : XGraphicProvider
 
         @see XGraphicProvider::queryGraphic
 
-        @since LibreOffice 5.5
+        @since LibreOffice 6.0
     */
     sequence< XGraphic > queryGraphics([in] sequence< com::sun::star::beans::PropertyValues> MediaPropertiesSeq)
         raises( com::sun::star::io::IOException,
