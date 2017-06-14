@@ -987,7 +987,7 @@ void createFromCodePoints::test() {
         sal_Int32(0),
         rtl::OUString(static_cast< sal_uInt32 const * >(nullptr), 0).getLength());
     static sal_uInt32 const cp[] = { 0, 0xD800, 0xFFFF, 0x10000, 0x10FFFF };
-    rtl::OUString s(cp, sizeof cp / sizeof (sal_uInt32));
+    rtl::OUString s(cp, SAL_N_ELEMENTS(cp));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(7), s.getLength());
     CPPUNIT_ASSERT_EQUAL(u'\0', s[0]);
     CPPUNIT_ASSERT_EQUAL(u'\xD800', s[1]);
@@ -1010,7 +1010,7 @@ public:
 void iterateCodePoints::testNotWellFormed() {
     static sal_Unicode const utf16[] =
         { 0xD800, 0xDC00, 0x0041, 0xDBFF, 0xDFFF, 0xDDEF, 0xD9AB };
-    rtl::OUString s(utf16, sizeof utf16 / sizeof (sal_Unicode));
+    rtl::OUString s(utf16, SAL_N_ELEMENTS(utf16));
     sal_Int32 i = 0;
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x10000), s.iterateCodePoints(&i));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), i);

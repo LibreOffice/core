@@ -285,33 +285,6 @@ sal_uInt16 BulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLe
 
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
     sal_Unicode cChar = aFmt.GetBulletChar();
-    //const vcl::Font* pFont = aFmt.GetBulletFont();
-    //sal_uInt16 nLength = 0;
-    /*if( AllSettings::GetLayoutRTL() )
-    {
-        nLength = sizeof(aDynamicRTLBulletTypes)/sizeof(sal_Unicode);
-        for(sal_uInt16 i = 0; i < nLength; i++)
-        {
-            if ( cChar == aDynamicRTLBulletTypes[i] ||
-                (cChar == 9830 && 57356 == aDynamicRTLBulletTypes[i]) ||
-                (cChar == 9632 && 57354 == aDynamicRTLBulletTypes[i]) )
-            {
-                return i+1;
-            }
-        }
-    } else
-    {
-        nLength = sizeof(aDynamicBulletTypes)/sizeof(sal_Unicode);
-        for(sal_uInt16 i = 0; i < nLength; i++)
-        {
-            if ( cChar == aDynamicBulletTypes[i] ||
-                (cChar == 9830 && 57356 == aDynamicBulletTypes[i]) ||
-                (cChar == 9632 && 57354 == aDynamicBulletTypes[i]) )
-            {
-                return i+1;
-            }
-        }
-    }*/
     for(sal_uInt16 i = nFromIndex; i < DEFAULT_BULLET_TYPES; i++)
     {
         if ( (cChar == pActualBullets[i]->cBulletChar||
@@ -341,24 +314,6 @@ void BulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
     sal_Unicode cChar = aFmt.GetBulletChar();
     const vcl::Font* pFont = aFmt.GetBulletFont();
-    //sal_uInt16 nLength = 0;
-    /*if( AllSettings::GetLayoutRTL() )
-    {
-        nLength = sizeof(aDynamicRTLBulletTypes)/sizeof(sal_Unicode);
-
-        if ( nIndex >= nLength )
-            return sal_False;
-
-        aDynamicRTLBulletTypes[nIndex] = cChar;
-    } else
-    {
-        nLength = sizeof(aDynamicBulletTypes)/sizeof(sal_Unicode);
-
-        if ( nIndex >= nLength )
-            return sal_False;
-
-        aDynamicBulletTypes[nIndex] = cChar;
-    }*/
     if ( nIndex >= DEFAULT_BULLET_TYPES )
         return;
 
@@ -675,7 +630,7 @@ void OutlineTypeMgr::Init()
 
 sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*mLevel*/,sal_uInt16 nFromIndex)
 {
-    sal_uInt16 nLength = sizeof(pOutlineSettingsArrs)/sizeof(OutlineSettings_Impl*);
+    sal_uInt16 nLength = SAL_N_ELEMENTS(pOutlineSettingsArrs);
     for(sal_uInt16 iDex = nFromIndex; iDex < nLength; iDex++)
     {
         bool bNotMatch = false;
@@ -749,7 +704,7 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
 
 void OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
 {
-    sal_uInt16 nLength = sizeof(pOutlineSettingsArrs)/sizeof(OutlineSettings_Impl*);
+    sal_uInt16 nLength = SAL_N_ELEMENTS(pOutlineSettingsArrs);
     if ( nIndex >= nLength )
         return;
 
@@ -925,8 +880,7 @@ void OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
 OUString OutlineTypeMgr::GetDescription(sal_uInt16 nIndex, bool isDefault)
 {
     OUString sRet;
-    sal_uInt16 nLength = 0;
-    nLength = sizeof(pOutlineSettingsArrs)/sizeof(OutlineSettings_Impl*);
+    sal_uInt16 nLength = SAL_N_ELEMENTS(pOutlineSettingsArrs);
 
     if ( nIndex >= nLength )
         return sRet;
@@ -946,8 +900,7 @@ bool OutlineTypeMgr::IsCustomized(sal_uInt16 nIndex)
 {
     bool bRet = false;
 
-    sal_uInt16 nLength = 0;
-    nLength = sizeof(pOutlineSettingsArrs)/sizeof(OutlineSettings_Impl*);
+    sal_uInt16 nLength = SAL_N_ELEMENTS(pOutlineSettingsArrs);
 
     if ( nIndex >= nLength )
         return bRet;

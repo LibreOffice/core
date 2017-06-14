@@ -8580,7 +8580,6 @@ static const UBlockScript scriptList[] = {
     {UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B, UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT},
     {UBLOCK_CJK_STROKES, UBLOCK_CJK_STROKES}
 };
-#define scriptListCount sizeof (scriptList) / sizeof (UBlockScript)
 bool SAL_CALL lcl_getScriptClass(sal_uInt32 currentChar)
 {
     // for the locale of ja-JP, character U+0x005c and U+0x20ac should be ScriptType::Asian
@@ -8590,10 +8589,10 @@ bool SAL_CALL lcl_getScriptClass(sal_uInt32 currentChar)
     sal_uInt16 i;
     static bool bRet = false;
     UBlockCode block = ublock_getCode(currentChar);
-    for ( i = 0; i < scriptListCount; i++) {
+    for ( i = 0; i < SAL_N_ELEMENTS(scriptList); i++) {
         if (block <= scriptList[i].to) break;
     }
-    bRet = (i < scriptListCount && block >= scriptList[i].from);
+    bRet = (i < SAL_N_ELEMENTS(scriptList) && block >= scriptList[i].from);
     return bRet;
 }
 bool IsDBCS(sal_Unicode ch)

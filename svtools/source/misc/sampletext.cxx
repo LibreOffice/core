@@ -175,7 +175,7 @@ OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
             // start just above the PUA used by most symbol fonts
             sal_uInt32 cNewChar = 0xFF00;
 
-            const int nMaxCount = sizeof(aText)/sizeof(*aText) - 1;
+            const int nMaxCount = SAL_N_ELEMENTS(aText) - 1;
             int nSkip = xFontCharMap->GetCharCount() / nMaxCount;
             if( nSkip > 10 )
                 nSkip = 10;

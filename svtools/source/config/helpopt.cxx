@@ -58,7 +58,7 @@ class SvtHelpOptions_Impl : public utl::ConfigItem
     OUString        aSystem;
     OUString        sHelpStyleSheet;
 
-    static Sequence< OUString > GetPropertyNames();
+    static Sequence< OUString > const & GetPropertyNames();
 
     virtual void    ImplCommit() final override;
 
@@ -82,9 +82,9 @@ public:
     static ::osl::Mutex & getInitMutex();
 };
 
-Sequence< OUString > SvtHelpOptions_Impl::GetPropertyNames()
+Sequence< OUString > const & SvtHelpOptions_Impl::GetPropertyNames()
 {
-    static const char* aPropNames[] =
+    static Sequence<OUString> const aNames
     {
         "ExtendedTip",
         "Tip",
@@ -92,12 +92,6 @@ Sequence< OUString > SvtHelpOptions_Impl::GetPropertyNames()
         "System",
         "HelpStyleSheet"
     };
-
-    const int nCount = sizeof( aPropNames ) / sizeof( const char* );
-    Sequence< OUString > aNames( nCount );
-    OUString* pNames = aNames.getArray();
-    for ( int i = 0; i < nCount; i++ )
-        pNames[i] = OUString::createFromAscii( aPropNames[i] );
 
     return aNames;
 }

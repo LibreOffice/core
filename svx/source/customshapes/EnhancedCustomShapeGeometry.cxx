@@ -4657,15 +4657,15 @@ static const SvxMSDffHandle mso_sptEllipseRibbonHandle[] =
 
 static const mso_CustomShape msosptEllipseRibbon =
 {
-    const_cast<SvxMSDffVertPair*>(mso_sptEllipseRibbonVert), sizeof( mso_sptEllipseRibbonVert ) / sizeof( SvxMSDffVertPair ),
+    const_cast<SvxMSDffVertPair*>(mso_sptEllipseRibbonVert), SAL_N_ELEMENTS( mso_sptEllipseRibbonVert ),
     const_cast<sal_uInt16*>(mso_sptEllipseRibbonSegm), sizeof( mso_sptEllipseRibbonSegm ) >> 1,
-    const_cast<SvxMSDffCalculationData*>(mso_sptEllipseRibbonCalc), sizeof( mso_sptEllipseRibbonCalc ) / sizeof( SvxMSDffCalculationData ),
+    const_cast<SvxMSDffCalculationData*>(mso_sptEllipseRibbonCalc), SAL_N_ELEMENTS( mso_sptEllipseRibbonCalc ),
     const_cast<sal_Int32*>(mso_sptEllipseRibbonDefault),
-    const_cast<SvxMSDffTextRectangles*>(mso_sptEllipseRibbonTextRect), sizeof( mso_sptEllipseRibbonTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    const_cast<SvxMSDffTextRectangles*>(mso_sptEllipseRibbonTextRect), SAL_N_ELEMENTS( mso_sptEllipseRibbonTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     nullptr, 0,
-    const_cast<SvxMSDffHandle*>(mso_sptEllipseRibbonHandle), sizeof( mso_sptEllipseRibbonHandle ) / sizeof( SvxMSDffHandle )
+    const_cast<SvxMSDffHandle*>(mso_sptEllipseRibbonHandle), SAL_N_ELEMENTS( mso_sptEllipseRibbonHandle )
 };
 
 //msosptEllipseRibbon2
@@ -4797,15 +4797,15 @@ static const SvxMSDffHandle mso_sptEllipseRibbon2Handle[] =
 
 static const mso_CustomShape msosptEllipseRibbon2 =
 {
-    const_cast<SvxMSDffVertPair*>(mso_sptEllipseRibbon2Vert), sizeof( mso_sptEllipseRibbon2Vert ) / sizeof( SvxMSDffVertPair ),
+    const_cast<SvxMSDffVertPair*>(mso_sptEllipseRibbon2Vert), SAL_N_ELEMENTS( mso_sptEllipseRibbon2Vert ),
     const_cast<sal_uInt16*>(mso_sptEllipseRibbon2Segm), sizeof( mso_sptEllipseRibbon2Segm ) >> 1,
-    const_cast<SvxMSDffCalculationData*>(mso_sptEllipseRibbon2Calc), sizeof( mso_sptEllipseRibbon2Calc ) / sizeof( SvxMSDffCalculationData ),
+    const_cast<SvxMSDffCalculationData*>(mso_sptEllipseRibbon2Calc), SAL_N_ELEMENTS( mso_sptEllipseRibbon2Calc ),
     const_cast<sal_Int32*>(mso_sptEllipseRibbon2Default),
-    const_cast<SvxMSDffTextRectangles*>(mso_sptEllipseRibbon2TextRect), sizeof( mso_sptEllipseRibbon2TextRect ) / sizeof( SvxMSDffTextRectangles ),
+    const_cast<SvxMSDffTextRectangles*>(mso_sptEllipseRibbon2TextRect), SAL_N_ELEMENTS( mso_sptEllipseRibbon2TextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     nullptr, 0,
-    const_cast<SvxMSDffHandle*>(mso_sptEllipseRibbon2Handle), sizeof( mso_sptEllipseRibbon2Handle ) / sizeof( SvxMSDffHandle )
+    const_cast<SvxMSDffHandle*>(mso_sptEllipseRibbon2Handle), SAL_N_ELEMENTS( mso_sptEllipseRibbon2Handle )
 };
 // End
 static const SvxMSDffVertPair mso_sptVerticalScrollVert[] = // adjustment1 : 0 - 5400
@@ -6488,15 +6488,15 @@ static const SvxMSDffHandle mso_sptTextRingInsideHandle[] =
 };
 static const mso_CustomShape msoTextRingInside =
 {
-    const_cast<SvxMSDffVertPair*>(mso_sptTextRingInsideVert), sizeof( mso_sptTextRingInsideVert ) / sizeof( SvxMSDffVertPair ),
+    const_cast<SvxMSDffVertPair*>(mso_sptTextRingInsideVert), SAL_N_ELEMENTS( mso_sptTextRingInsideVert ),
     const_cast<sal_uInt16*>(mso_sptTextRingInsideSegm), sizeof( mso_sptTextRingInsideSegm ) >> 1,
-    const_cast<SvxMSDffCalculationData*>(mso_sptTextRingInsideCalc), sizeof( mso_sptTextRingInsideCalc ) / sizeof( SvxMSDffCalculationData ),
+    const_cast<SvxMSDffCalculationData*>(mso_sptTextRingInsideCalc), SAL_N_ELEMENTS( mso_sptTextRingInsideCalc ),
     const_cast<sal_Int32*>(mso_sptDefault13500),
-    const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    const_cast<SvxMSDffTextRectangles*>(mso_sptFontWorkTextRect), SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     nullptr, 0,
-    const_cast<SvxMSDffHandle*>(mso_sptTextRingInsideHandle), sizeof( mso_sptTextRingInsideHandle ) / sizeof( SvxMSDffHandle )
+    const_cast<SvxMSDffHandle*>(mso_sptTextRingInsideHandle), SAL_N_ELEMENTS( mso_sptTextRingInsideHandle )
 };
 //mso_sptTextRingOutside
 //path = U 10800 ?f0 21600 ?f2 180 539 N U 10800 ?f1 21600 ?f2 180 539 N
@@ -8334,15 +8334,15 @@ static const sal_Int32 mso_sptTearDropDefault[] =
 
 static const mso_CustomShape msoTearDrop =
 {
-    const_cast<SvxMSDffVertPair*>(mso_sptTearDropVert), sizeof( mso_sptTearDropVert ) / sizeof( SvxMSDffVertPair ),
+    const_cast<SvxMSDffVertPair*>(mso_sptTearDropVert), SAL_N_ELEMENTS( mso_sptTearDropVert ),
     const_cast<sal_uInt16*>(mso_sptTearDropSegm), sizeof( mso_sptTearDropSegm ) >> 1,
-    const_cast<SvxMSDffCalculationData*>(mso_sptTearDropCalc), sizeof(mso_sptTearDropCalc)/sizeof(SvxMSDffCalculationData),
+    const_cast<SvxMSDffCalculationData*>(mso_sptTearDropCalc), SAL_N_ELEMENTS(mso_sptTearDropCalc),
     const_cast<sal_Int32*>(mso_sptTearDropDefault),
-    const_cast<SvxMSDffTextRectangles*>(mso_sptTearDropTextRect), sizeof( mso_sptTearDropTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    const_cast<SvxMSDffTextRectangles*>(mso_sptTearDropTextRect), SAL_N_ELEMENTS( mso_sptTearDropTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
     nullptr, 0,
-    const_cast<SvxMSDffHandle*>(mso_sptTearDropHandle), sizeof(mso_sptTearDropHandle)/sizeof(SvxMSDffHandle)        // handles
+    const_cast<SvxMSDffHandle*>(mso_sptTearDropHandle), SAL_N_ELEMENTS(mso_sptTearDropHandle)        // handles
 };
 
 

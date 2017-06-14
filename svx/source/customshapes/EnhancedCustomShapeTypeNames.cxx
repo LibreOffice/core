@@ -281,7 +281,7 @@ MSO_SPT EnhancedCustomShapeTypeNames::Get( const OUString& rShapeType )
         {
             TypeNameHashMap* pH = new TypeNameHashMap;
             const NameTypeTable* pPtr = pNameTypeTableArray;
-            const NameTypeTable* pEnd = pPtr + ( sizeof( pNameTypeTableArray ) / sizeof( NameTypeTable ) );
+            const NameTypeTable* pEnd = pPtr + SAL_N_ELEMENTS( pNameTypeTableArray );
             for ( ; pPtr < pEnd; pPtr++ )
                 (*pH)[ pPtr->pS ] = pPtr->pE;
             pHashMap = pH;
@@ -536,7 +536,7 @@ OUString EnhancedCustomShapeTypeNames::GetAccName( const OUString& rShapeType )
         {
             TypeACCNameHashMap* pH = new TypeACCNameHashMap;
             const ACCNameTypeTable* pPtr = pACCNameTypeTableArray;
-            const ACCNameTypeTable* pEnd = pPtr + ( sizeof( pACCNameTypeTableArray ) / sizeof( ACCNameTypeTable ) );
+            const ACCNameTypeTable* pEnd = pPtr + SAL_N_ELEMENTS( pACCNameTypeTableArray );
             for ( ; pPtr < pEnd; pPtr++ )
                 (*pH)[ pPtr->pS ] = pPtr->pE;
             pACCHashMap = pH;

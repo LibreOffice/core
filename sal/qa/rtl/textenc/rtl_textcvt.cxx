@@ -2678,7 +2678,7 @@ void Test::testSRCBUFFERTOSMALL() {
     CPPUNIT_ASSERT_EQUAL(
         sal_Size(0),
         rtl_convertTextToUnicode(
-            cv, cx, &src, 1, dst, sizeof dst / sizeof (sal_Unicode),
+            cv, cx, &src, 1, dst, SAL_N_ELEMENTS(dst),
             (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
              RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
              RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR),

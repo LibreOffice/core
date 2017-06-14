@@ -1276,7 +1276,7 @@ OUString SvxUnogetApiNameForItem(const sal_Int16 nWhich, const OUString& rIntern
 
     if( nWhich == XATTR_LINECOLOR )
     {
-        if( SvxUnoConvertResourceString( SvxUnoColorNameResId, SvxUnoColorNameDefResId, sizeof( SvxUnoColorNameResId ) / sizeof( sal_uInt16 ), aNew ) )
+        if( SvxUnoConvertResourceString( SvxUnoColorNameResId, SvxUnoColorNameDefResId, SAL_N_ELEMENTS( SvxUnoColorNameResId ), aNew ) )
         {
             return aNew;
         }
@@ -1309,7 +1309,7 @@ OUString SvxUnogetInternalNameForItem(const sal_Int16 nWhich, const OUString& rA
 
     if( nWhich == XATTR_LINECOLOR )
     {
-        if( SvxUnoConvertResourceString( SvxUnoColorNameDefResId, SvxUnoColorNameResId, sizeof( SvxUnoColorNameResId ) / sizeof( sal_uInt16 ), aNew ) )
+        if( SvxUnoConvertResourceString( SvxUnoColorNameDefResId, SvxUnoColorNameResId, SAL_N_ELEMENTS( SvxUnoColorNameResId ), aNew ) )
         {
             return aNew;
         }
