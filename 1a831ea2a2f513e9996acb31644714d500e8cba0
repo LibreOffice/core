@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_e49bb7c7",
+        "filename": "sc/source/core/data/column4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-14T09:47:47Z",
+      "side": 1,
+      "message": "No, this completely excludes non-protected cells if the not protected range starts anywhere before nStartRow or ends anywhere behind nEndRow. What you want instead is to limit the range to nStartRow and nEndRow and include those cells.",
+      "revId": "1a831ea2a2f513e9996acb31644714d500e8cba0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
