@@ -416,26 +416,23 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     }
 
     // Create mapping between internal enum (SvtPathOptions::Paths) and property handle
-    sal_Int32 nCount = sizeof( aPropNames ) / sizeof( PropertyStruct );
-    sal_Int32 i;
-    for ( i = 0; i < nCount; i++ )
+    for ( auto const & p : aPropNames )
     {
         NameToHandleMap::const_iterator pIter =
-            aTempHashMap.find( OUString::createFromAscii( aPropNames[i].pPropName ));
+            aTempHashMap.find( OUString::createFromAscii( p.pPropName ));
 
         if ( pIter != aTempHashMap.end() )
         {
             sal_Int32 nHandle   = pIter->second;
-            sal_Int32 nEnum     = aPropNames[i].ePath;
+            sal_Int32 nEnum     = p.ePath;
             m_aMapEnumToPropHandle.insert( EnumToHandleMap::value_type( nEnum, nHandle ));
         }
     }
 
     // Create hash map for path variables that need a system path as a return value!
-    nCount = sizeof( aVarNameAttribute ) / sizeof( VarNameAttribute );
-    for ( i = 0; i < nCount; i++ )
+    for ( auto const & i : aVarNameAttribute )
     {
-        m_aSystemPathVarNames.insert( OUString::createFromAscii( aVarNameAttribute[i].pVarName ) );
+        m_aSystemPathVarNames.insert( OUString::createFromAscii( i.pVarName ) );
     }
 }
 

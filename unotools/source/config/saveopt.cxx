@@ -375,7 +375,7 @@ Sequence< OUString > GetPropertyNames()
         "ODF/UseBlowfishInODF12"
     };
 
-    const int nCount = sizeof( aPropNames ) / sizeof( const char* );
+    const int nCount = SAL_N_ELEMENTS( aPropNames );
     Sequence< OUString > aNames( nCount );
     OUString* pNames = aNames.getArray();
     for ( int i = 0; i < nCount; i++ )

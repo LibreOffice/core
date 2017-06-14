@@ -64,11 +64,11 @@ ImplFontCharMap::ImplFontCharMap( const CmapResult& rCR )
 ImplFontCharMapRef const & ImplFontCharMap::getDefaultMap( bool bSymbols )
 {
     const sal_UCS4* pRangeCodes = aDefaultUnicodeRanges;
-    int nCodesCount = sizeof(aDefaultUnicodeRanges) / sizeof(*pRangeCodes);
+    int nCodesCount = SAL_N_ELEMENTS(aDefaultUnicodeRanges);
     if( bSymbols )
     {
         pRangeCodes = aDefaultSymbolRanges;
-        nCodesCount = sizeof(aDefaultSymbolRanges) / sizeof(*pRangeCodes);
+        nCodesCount = SAL_N_ELEMENTS(aDefaultSymbolRanges);
     }
 
     CmapResult aDefaultCR( bSymbols, pRangeCodes, nCodesCount/2 );

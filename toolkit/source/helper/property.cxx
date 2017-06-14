@@ -285,7 +285,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_3     ( "InactiveSelectionTextColor",         INACTIVE_SEL_TEXT_COLOR,        sal_Int32,  BOUND, MAYBEDEFAULT, MAYBEVOID ),
     };
             pPropertyInfos = aImplPropertyInfos;
-            nElements = sizeof( aImplPropertyInfos ) / sizeof( ImplPropertyInfo );
+            nElements = SAL_N_ELEMENTS( aImplPropertyInfos );
         }
     }
     rElementCount = nElements;

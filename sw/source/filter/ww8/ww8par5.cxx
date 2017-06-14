@@ -837,8 +837,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         &SwWW8ImplReader::Read_F_Shape,             // 95
         nullptr                                           // eMax - Dummy empty method
     };
-    OSL_ENSURE( ( sizeof( aWW8FieldTab ) / sizeof( *aWW8FieldTab ) == eMax+1 ),
-            "FeldFunc-Tabelle stimmt nicht" );
+    OSL_ENSURE( SAL_N_ELEMENTS( aWW8FieldTab ) == eMax+1, "FeldFunc-Tabelle stimmt nicht" );
 
     WW8PLCFx_FLD* pF = m_pPlcxMan->GetField();
     OSL_ENSURE(pF, "WW8PLCFx_FLD - Pointer nicht da");

@@ -1241,7 +1241,7 @@ DECLARE_WW8EXPORT_TEST(testCommentExport, "comment-export.odt")
 
     OUString sNames[6];
 
-    const int nNumberOfTextPortions = sizeof(aTextPortions) / (sizeof(TextPortionInfo));
+    const int nNumberOfTextPortions = SAL_N_ELEMENTS(aTextPortions);
 
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
 

@@ -1501,7 +1501,7 @@ bool CffSubsetterContext::initialCffRead()
 const char* CffSubsetterContext::getString( int nStringID)
 {
     // get a standard string if possible
-    const static int nStdStrings = sizeof(pStringIds)/sizeof(*pStringIds);
+    const static int nStdStrings = SAL_N_ELEMENTS(pStringIds);
     if( (nStringID >= 0) && (nStringID < nStdStrings))
         return pStringIds[ nStringID];
 

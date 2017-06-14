@@ -178,7 +178,7 @@ CalcOp* FindOperator( const OUString& rSrch )
 
     return static_cast<CalcOp*>(bsearch( static_cast<void*>(&aSrch),
                               static_cast<void const *>(aOpTable),
-                              sizeof( aOpTable ) / sizeof( CalcOp ),
+                              SAL_N_ELEMENTS( aOpTable ),
                               sizeof( CalcOp ),
                               OperatorCompare ));
 }

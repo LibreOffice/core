@@ -426,59 +426,48 @@ static void lcl_ConvertFromNumbers(OUString& rBlock, const ResStringArray& rHead
 
 const Sequence<OUString>& SwMailMergeConfigItem_Impl::GetPropertyNames()
 {
-    static Sequence<OUString> aNames;
-    if(!aNames.getLength())
-    {
-        static const char* aPropNames[] =
-        {
-            "OutputToLetter",           // 0
-            "IncludeCountry",           // 1
-            "ExcludeCountry",           // 2
-            "AddressBlockSettings",     // 3
-            "IsAddressBlock",          // 4
-            "IsGreetingLine",           // 5
-            "IsIndividualGreetingLine", // 6
-            "FemaleGreetingLines",      // 7
-            "MaleGreetingLines",        // 8
-            "NeutralGreetingLines",     // 9
-            "CurrentFemaleGreeting",    // 10
-            "CurrentMaleGreeting",      // 11
-            "CurrentNeutralGreeting",   // 12
-            "FemaleGenderValue",        // 13
-            "MailDisplayName",          // 14
-            "MailAddress",              // 15
-            "IsMailReplyTo",            // 16
-            "MailReplyTo",              // 17
-            "MailServer",               // 18
-            "MailPort",                 // 19
-            "IsSecureConnection",       // 20
-            "IsAuthentication",         // 21
-            "MailUserName",             // 22
-            "MailPassword",             // 23
-            "DataSource/DataSourceName",// 24
-            "DataSource/DataTableName", // 25
-            "DataSource/DataCommandType",// 26
-            "Filter",                   // 27
-            "SavedDocuments",           // 28
-            "EMailSupported",            // 29
-            "IsEMailGreetingLine",              //30
-            "IsEMailIndividualGreetingLine",     //31
-            "IsSMPTAfterPOP",                    //32
-            "InServerName",                      //33
-            "InServerPort",                      //34
-            "InServerIsPOP",                     //35
-            "InServerUserName",                  //36
-            "InServerPassword",                   //37
-            "IsHideEmptyParagraphs",             //38
-            "CurrentAddressBlock"               //39
-
-        };
-        const int nCount = sizeof(aPropNames)/sizeof(const char*);
-        aNames.realloc(nCount);
-        OUString* pNames = aNames.getArray();
-        for(int i = 0; i < nCount; i++)
-            pNames[i] = OUString::createFromAscii(aPropNames[i]);
-    }
+    static Sequence<OUString> aNames {
+        "OutputToLetter",            // 0
+        "IncludeCountry",            // 1
+        "ExcludeCountry",            // 2
+        "AddressBlockSettings",      // 3
+        "IsAddressBlock",            // 4
+        "IsGreetingLine",            // 5
+        "IsIndividualGreetingLine",  // 6
+        "FemaleGreetingLines",       // 7
+        "MaleGreetingLines",         // 8
+        "NeutralGreetingLines",      // 9
+        "CurrentFemaleGreeting",     // 10
+        "CurrentMaleGreeting",       // 11
+        "CurrentNeutralGreeting",    // 12
+        "FemaleGenderValue",         // 13
+        "MailDisplayName",           // 14
+        "MailAddress",               // 15
+        "IsMailReplyTo",             // 16
+        "MailReplyTo",               // 17
+        "MailServer",                // 18
+        "MailPort",                  // 19
+        "IsSecureConnection",        // 20
+        "IsAuthentication",          // 21
+        "MailUserName",              // 22
+        "MailPassword",              // 23
+        "DataSource/DataSourceName", // 24
+        "DataSource/DataTableName",  // 25
+        "DataSource/DataCommandType",// 26
+        "Filter",                    // 27
+        "SavedDocuments",            // 28
+        "EMailSupported",            // 29
+        "IsEMailGreetingLine",               //30
+        "IsEMailIndividualGreetingLine",     //31
+        "IsSMPTAfterPOP",                    //32
+        "InServerName",                      //33
+        "InServerPort",                      //34
+        "InServerIsPOP",                     //35
+        "InServerUserName",                  //36
+        "InServerPassword",                  //37
+        "IsHideEmptyParagraphs",             //38
+        "CurrentAddressBlock"                //39
+    };
     return aNames;
 }
 

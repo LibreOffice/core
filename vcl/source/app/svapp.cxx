@@ -135,7 +135,7 @@ namespace
             static ReservedKeys aKeys
             (
                 &ImplReservedKeys[0],
-                sizeof(ImplReservedKeys) / sizeof(ImplReservedKey)
+                SAL_N_ELEMENTS(ImplReservedKeys)
             );
             return &aKeys;
         }
