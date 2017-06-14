@@ -1435,9 +1435,9 @@ bool FormulaTokenArray::NeedsPodfRewrite( const MissingConventionODF & rConv )
 
 bool FormulaTokenArray::NeedsOoxmlRewrite()
 {
-    for ( FormulaToken *pCur = First(); pCur; pCur = Next() )
+    for ( int i = 0; i < nLen; ++i )
     {
-        if ( MissingConventionOOXML::isRewriteNeeded( pCur->GetOpCode()))
+        if ( MissingConventionOOXML::isRewriteNeeded( pCode[i]->GetOpCode()))
             return true;
     }
     return false;
