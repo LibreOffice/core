@@ -34,7 +34,7 @@ import com.sun.star.util.XSearchDescriptor;
  * </ul> <p>
  *
  * The requipment for the tested object is that it
- * <b>must containt</b> string 'xTextDoc'. Only
+ * <b>must contain</b> string 'xTextDoc'. Only
  * in that case this interface is tested correctly. <p>
  *
  * Test is <b> NOT </b> multithread compliant. <p>

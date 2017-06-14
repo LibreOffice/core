@@ -374,7 +374,7 @@ bool wwSectionManager::SetCols(SwFrameFormat &rFormat, const wwSection &rSection
 
 void wwSectionManager::SetLeftRight(wwSection &rSection)
 {
-    // 3. LR-Raender
+    // 3. LR-Margin
     sal_uInt32 nWWLe = MSRoundTweak(rSection.maSep.dxaLeft);
     sal_uInt32 nWWRi = MSRoundTweak(rSection.maSep.dxaRight);
     sal_uInt32 nWWGu = rSection.maSep.dzaGutter;

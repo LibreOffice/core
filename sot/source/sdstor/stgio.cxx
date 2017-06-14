@@ -311,7 +311,7 @@ FatError Validator::ValidateDirectoryEntries()
     if ( !rIo.m_pTOC )
         return FatError::InMemoryError;
 
-    // Normale DirEntries
+    // Normal DirEntries
     FatError nErr = MarkAll( rIo.m_pTOC->GetRoot() );
     if( nErr != FatError::Ok )
         return nErr;
