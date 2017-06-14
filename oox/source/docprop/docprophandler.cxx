@@ -276,6 +276,10 @@ void SAL_CALL OOXMLDocPropHandler::endDocument()
     InitNew();
 }
 
+void OOXMLDocPropHandler::processingInstruction( const OUString& /*rTarget*/, const OUString& /*rData*/ )
+{
+}
+
 void SAL_CALL OOXMLDocPropHandler::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& )
 {
 }

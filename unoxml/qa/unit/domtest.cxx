@@ -163,6 +163,10 @@ struct DocumentHandler
     {
     }
 
+    virtual void SAL_CALL processingInstruction( const OUString& /*rTarget*/, const OUString& /*rData*/ ) override
+    {
+    }
+
     virtual void SAL_CALL setDocumentLocator( const uno::Reference< xml::sax::XLocator >& ) override
     {
     }

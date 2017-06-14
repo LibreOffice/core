@@ -1,4 +1,5 @@
 <?xml version="1.0" ?>
+<?pi-target pi-data?>
 <Elements>
     <Book xmlns:lib="http://www.library.com/">
         <lib:Title>Sherlock Holmes - I</lib:Title>
@@ -13,6 +14,7 @@
     <Electronics xmlns="http://doesntexist.com/electronics/">
         <item>
             <Name>Apple iPhone 6s</Name>
+            <?pi-target-only?>
             <Price>$324</Price>
         </item>
         <item xmlns="http://doesntexist.com/dailyuse/">

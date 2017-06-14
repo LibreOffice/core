@@ -174,6 +174,10 @@ void SAL_CALL OOXMLFastDocumentHandler::endDocument()
 {
 }
 
+void SAL_CALL OOXMLFastDocumentHandler::processingInstruction( const OUString& /*rTarget*/, const OUString& /*rData*/ )
+{
+}
+
 void SAL_CALL OOXMLFastDocumentHandler::setDocumentLocator
 (const uno::Reference< xml::sax::XLocator > & /*xLocator*/)
 {

@@ -47,6 +47,7 @@ public:
     // css::xml::sax::XFastDocumentHandler:
     virtual void SAL_CALL startDocument() override;
     virtual void SAL_CALL endDocument() override;
+    virtual void SAL_CALL processingInstruction( const OUString& rTarget, const OUString& rData ) override;
     virtual void SAL_CALL setDocumentLocator
     (const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override;
 
