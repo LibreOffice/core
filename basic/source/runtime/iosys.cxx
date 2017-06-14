@@ -459,7 +459,7 @@ void    UCBStream::SetSize( sal_uInt64 nSize )
 }
 
 
-SbError SbiStream::Open
+ErrCode SbiStream::Open
 ( short nCh, const OString& rName, StreamMode nStrmMode, SbiStreamFlags nFlags, short nL )
 {
     nMode   = nFlags;
@@ -526,7 +526,7 @@ SbError SbiStream::Open
     return nError;
 }
 
-SbError SbiStream::Close()
+ErrCode SbiStream::Close()
 {
     if( pStrm )
     {
@@ -537,7 +537,7 @@ SbError SbiStream::Close()
     return nError;
 }
 
-SbError SbiStream::Read(OString& rBuf, sal_uInt16 n, bool bForceReadingPerByte)
+ErrCode SbiStream::Read(OString& rBuf, sal_uInt16 n, bool bForceReadingPerByte)
 {
     nExpandOnWriteTo = 0;
     if( !bForceReadingPerByte && IsText() )
@@ -569,7 +569,7 @@ SbError SbiStream::Read(OString& rBuf, sal_uInt16 n, bool bForceReadingPerByte)
     return nError;
 }
 
-SbError SbiStream::Read( char& ch )
+ErrCode SbiStream::Read( char& ch )
 {
     nExpandOnWriteTo = 0;
     if (aLine.isEmpty())
@@ -614,7 +614,7 @@ namespace
     }
 }
 
-SbError SbiStream::Write( const OString& rBuf )
+ErrCode SbiStream::Write( const OString& rBuf )
 {
     ExpandFile();
     if( IsAppend() )
@@ -666,9 +666,9 @@ SbiIoSystem::~SbiIoSystem()
     Shutdown();
 }
 
-SbError SbiIoSystem::GetError()
+ErrCode SbiIoSystem::GetError()
 {
-    SbError n = nError; nError = 0;
+    ErrCode n = nError; nError = 0;
     return n;
 }
 
@@ -723,7 +723,7 @@ void SbiIoSystem::Shutdown()
     {
         if( pChan[ i ] )
         {
-            SbError n = pChan[ i ]->Close();
+            ErrCode n = pChan[ i ]->Close();
             delete pChan[ i ];
             pChan[ i ] = nullptr;
             if( n && !nError )
@@ -821,7 +821,7 @@ void SbiIoSystem::CloseAll()
     {
         if( pChan[ i ] )
         {
-            SbError n = pChan[ i ]->Close();
+            ErrCode n = pChan[ i ]->Close();
             delete pChan[ i ];
             pChan[ i ] = nullptr;
             if( n && !nError )

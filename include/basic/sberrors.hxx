@@ -22,10 +22,6 @@
 
 #include <basic/sbxdef.hxx>
 
-#ifndef __RSC
-typedef ErrCode SbError;
-#endif
-
 // Mapping to SbxError
 #define ERRCODE_BASIC_SYNTAX                ERRCODE_SBX_SYNTAX                  // unspecified syntax error
 #define ERRCODE_BASIC_BAD_ARGUMENT          ERRCODE_SBX_NOTIMP                  // Invalid procedure call

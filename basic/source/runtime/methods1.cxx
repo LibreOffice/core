@@ -333,7 +333,7 @@ RTLFUNC(CDbl)  // JSM
         {
             // #41690
             OUString aScanStr = pSbxVariable->GetOUString();
-            SbError Error = SbxValue::ScanNumIntnl( aScanStr, nVal );
+            ErrCode Error = SbxValue::ScanNumIntnl( aScanStr, nVal );
             if( Error != ERRCODE_SBX_OK )
             {
                 StarBASIC::Error( Error );
@@ -402,7 +402,7 @@ RTLFUNC(CSng)  // JSM
             // #41690
             double dVal = 0.0;
             OUString aScanStr = pSbxVariable->GetOUString();
-            SbError Error = SbxValue::ScanNumIntnl( aScanStr, dVal, /*bSingle=*/true );
+            ErrCode Error = SbxValue::ScanNumIntnl( aScanStr, dVal, /*bSingle=*/true );
             if( SbxBase::GetError() == ERRCODE_SBX_OK && Error != ERRCODE_SBX_OK )
             {
                 StarBASIC::Error( Error );
@@ -2283,7 +2283,7 @@ RTLFUNC(DateDiff)
 double implGetDateOfFirstDayInFirstWeek
     ( sal_Int16 nYear, sal_Int16& nFirstDay, sal_Int16& nFirstWeek, bool* pbError = nullptr )
 {
-    SbError nError = ERRCODE_NONE;
+    ErrCode nError = ERRCODE_NONE;
     if( nFirstDay < 0 || nFirstDay > 7 )
         nError = ERRCODE_BASIC_BAD_ARGUMENT;
 
@@ -3256,7 +3256,7 @@ RTLFUNC(Input)
     }
 
     OString aByteBuffer;
-    SbError err = pSbStrm->Read( aByteBuffer, nByteCount, true );
+    ErrCode err = pSbStrm->Read( aByteBuffer, nByteCount, true );
     if( !err )
         err = pIosys->GetError();
 

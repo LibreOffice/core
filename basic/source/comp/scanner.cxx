@@ -68,7 +68,7 @@ void SbiScanner::UnlockColumn()
         nColLock--;
 }
 
-void SbiScanner::GenError( SbError code )
+void SbiScanner::GenError( ErrCode code )
 {
     if( GetSbData()->bBlockCompilerError )
     {

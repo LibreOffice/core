@@ -460,12 +460,12 @@ void setBasicWatchMode( bool bOn )
     bWatchMode = bOn;
 }
 
-void SbiInstance::Error( SbError n )
+void SbiInstance::Error( ErrCode n )
 {
     Error( n, OUString() );
 }
 
-void SbiInstance::Error( SbError n, const OUString& rMsg )
+void SbiInstance::Error( ErrCode n, const OUString& rMsg )
 {
     if( !bWatchMode )
     {
@@ -478,7 +478,7 @@ void SbiInstance::ErrorVB( sal_Int32 nVBNumber, const OUString& rMsg )
 {
     if( !bWatchMode )
     {
-        SbError n = StarBASIC::GetSfxFromVBError( static_cast< sal_uInt16 >( nVBNumber ) );
+        ErrCode n = StarBASIC::GetSfxFromVBError( static_cast< sal_uInt16 >( nVBNumber ) );
         if ( !n )
         {
             n = nVBNumber; // force orig number, probably should have a specific table of vb ( localized ) errors
@@ -493,7 +493,7 @@ void SbiInstance::ErrorVB( sal_Int32 nVBNumber, const OUString& rMsg )
 
 void SbiInstance::setErrorVB( sal_Int32 nVBNumber )
 {
-    SbError n = StarBASIC::GetSfxFromVBError( static_cast< sal_uInt16 >( nVBNumber ) );
+    ErrCode n = StarBASIC::GetSfxFromVBError( static_cast< sal_uInt16 >( nVBNumber ) );
     if( !n )
     {
         n = nVBNumber; // force orig number, probably should have a specific table of vb ( localized ) errors
@@ -505,12 +505,12 @@ void SbiInstance::setErrorVB( sal_Int32 nVBNumber )
 }
 
 
-void SbiInstance::FatalError( SbError n )
+void SbiInstance::FatalError( ErrCode n )
 {
     pRun->FatalError( n );
 }
 
-void SbiInstance::FatalError( SbError _errCode, const OUString& _details )
+void SbiInstance::FatalError( ErrCode _errCode, const OUString& _details )
 {
     pRun->FatalError( _errCode, _details );
 }
@@ -774,11 +774,11 @@ bool SbiRuntime::Step()
             StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
         }
 
-        SbError nSbError = SbxBase::GetError();
-        Error( ERRCODE_TOERROR(nSbError) );
+        ErrCode nErrCode = SbxBase::GetError();
+        Error( ERRCODE_TOERROR(nErrCode) );
 
         // from 13.2.1997, new error handling:
-        // ATTENTION: nError can be set already even if !nSbError
+        // ATTENTION: nError can be set already even if !nErrCode
         // since nError can now also be set from other RT-instances
 
         if( nError )
@@ -790,7 +790,7 @@ bool SbiRuntime::Step()
         // (especially not after compiler errors at the runtime)
         if( nError && bRun )
         {
-            SbError err = nError;
+            ErrCode err = nError;
             ClearExprStack();
             nError = ERRCODE_NONE;
             pInst->nErr = err;
@@ -873,7 +873,7 @@ bool SbiRuntime::Step()
     return bRun;
 }
 
-void SbiRuntime::Error( SbError n, bool bVBATranslationAlreadyDone )
+void SbiRuntime::Error( ErrCode n, bool bVBATranslationAlreadyDone )
 {
     if( n )
     {
@@ -894,7 +894,7 @@ void SbiRuntime::Error( SbError n, bool bVBATranslationAlreadyDone )
     }
 }
 
-void SbiRuntime::Error( SbError _errCode, const OUString& _details )
+void SbiRuntime::Error( ErrCode _errCode, const OUString& _details )
 {
     if ( _errCode )
     {
@@ -912,19 +912,19 @@ void SbiRuntime::Error( SbError _errCode, const OUString& _details )
     }
 }
 
-void SbiRuntime::FatalError( SbError n )
+void SbiRuntime::FatalError( ErrCode n )
 {
     StepSTDERROR();
     Error( n );
 }
 
-void SbiRuntime::FatalError( SbError _errCode, const OUString& _details )
+void SbiRuntime::FatalError( ErrCode _errCode, const OUString& _details )
 {
     StepSTDERROR();
     Error( _errCode, _details );
 }
 
-sal_Int32 SbiRuntime::translateErrorToVba( SbError nError, OUString& rMsg )
+sal_Int32 SbiRuntime::translateErrorToVba( ErrCode nError, OUString& rMsg )
 {
     // If a message is defined use that ( in preference to
     // the defined one for the error ) NB #TODO
@@ -935,7 +935,7 @@ sal_Int32 SbiRuntime::translateErrorToVba( SbError nError, OUString& rMsg )
     {
         // TEST, has to be vb here always
 #ifdef DBG_UTIL
-        SbError nTmp = StarBASIC::GetSfxFromVBError( (sal_uInt16)nError );
+        ErrCode nTmp = StarBASIC::GetSfxFromVBError( (sal_uInt16)nError );
         SAL_WARN_IF( nTmp == 0, "basic", "No VB error!" );
 #endif
 
@@ -1247,7 +1247,7 @@ void SbiRuntime::DllCall
 
     SbxVariable* pRes = new SbxVariable( eResType );
     SbiDllMgr* pDllMgr = pInst->GetDllMgr();
-    SbError nErr = pDllMgr->Call( aFuncName, aDLLName, pArgs, *pRes, bCDecl );
+    ErrCode nErr = pDllMgr->Call( aFuncName, aDLLName, pArgs, *pRes, bCDecl );
     if( nErr )
     {
         Error( nErr );
@@ -2406,7 +2406,7 @@ void SbiRuntime::StepINPUT()
     OUStringBuffer sin;
     OUString s;
     char ch = 0;
-    SbError err;
+    ErrCode err;
     // Skip whitespace
     while( ( err = pIosys->GetError() ) == ERRCODE_NONE )
     {
@@ -2737,7 +2737,7 @@ void SbiRuntime::StepERROR()
 {
     SbxVariableRef refCode = PopVar();
     sal_uInt16 n = refCode->GetUShort();
-    SbError error = StarBASIC::GetSfxFromVBError( n );
+    ErrCode error = StarBASIC::GetSfxFromVBError( n );
     if ( bVBAEnabled )
     {
         pInst->Error( error );
@@ -3120,7 +3120,7 @@ void SbiRuntime::StepRESUME( sal_uInt32 nOp1 )
 // close channel (+channel, 0=all)
 void SbiRuntime::StepCLOSE( sal_uInt32 nOp1 )
 {
-    SbError err;
+    ErrCode err;
     if( !nOp1 )
         pIosys->Shutdown();
     else
@@ -3299,7 +3299,7 @@ void SbiRuntime::StepBASED( sal_uInt32 nOp1 )
 // 0x8000 - Argv is reserved
 
 SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2,
-                                      SbError nNotFound, bool bLocal, bool bStatic )
+                                      ErrCode nNotFound, bool bLocal, bool bStatic )
 {
     bool bIsVBAInterOp = SbiRuntime::isVBAEnabled();
     if( bIsVBAInterOp )
@@ -3932,7 +3932,7 @@ void SbiRuntime::StepRTL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 }
 
 void SbiRuntime::StepFIND_Impl( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2,
-                                SbError nNotFound, bool bStatic )
+                                ErrCode nNotFound, bool bStatic )
 {
     if( !refLocals.is() )
     {
