@@ -246,7 +246,8 @@ struct LOKDocViewPrivateImpl
 
     ~LOKDocViewPrivateImpl()
     {
-        g_source_remove(m_nTimeoutId);
+        if (m_nTimeoutId)
+            g_source_remove(m_nTimeoutId);
     }
 };
 
@@ -2615,6 +2616,12 @@ static void lok_doc_view_destroy (GtkWidget* widget)
 {
     LOKDocView* pDocView = LOK_DOC_VIEW (widget);
     LOKDocViewPrivate& priv = getPrivate(pDocView);
+
+    if (priv->m_nTimeoutId)
+    {
+        g_source_remove(priv->m_nTimeoutId);
+        priv->m_nTimeoutId = 0;
+    }
 
     // Ignore notifications sent to this view on shutdown.
     std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
