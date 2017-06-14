@@ -511,7 +511,7 @@ WindowType ImplGetComponentType( const OUString& rServiceName )
     if( !bSorted )
     {
         qsort(  static_cast<void*>(aComponentInfos),
-                sizeof( aComponentInfos ) / sizeof( ComponentInfo ),
+                SAL_N_ELEMENTS( aComponentInfos ),
                 sizeof( ComponentInfo ),
                 ComponentInfoCompare );
         bSorted = true;
@@ -527,7 +527,7 @@ WindowType ImplGetComponentType( const OUString& rServiceName )
 
     ComponentInfo* pInf = static_cast<ComponentInfo*>(bsearch( &aSearch,
                         static_cast<void*>(aComponentInfos),
-                        sizeof( aComponentInfos ) / sizeof( ComponentInfo ),
+                        SAL_N_ELEMENTS( aComponentInfos ),
                         sizeof( ComponentInfo ),
                         ComponentInfoCompare ));
 

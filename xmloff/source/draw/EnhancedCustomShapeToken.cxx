@@ -141,7 +141,7 @@ static const TokenTable pTokenTableArray[] =
     { "Origin",                             EAS_Origin },
     { "Color",                              EAS_Color },
     { "Switched",                           EAS_Switched },
-     { "Polar",                             EAS_Polar },
+    { "Polar",                              EAS_Polar },
     { "RangeXMinimum",                      EAS_RangeXMinimum },
     { "RangeXMaximum",                      EAS_RangeXMaximum },
     { "RangeYMinimum",                      EAS_RangeYMinimum },
@@ -175,10 +175,8 @@ EnhancedCustomShapeTokenEnum EASGet( const OUString& rShapeType )
         if ( !pHashMap )
         {
             TypeNameHashMap* pH = new TypeNameHashMap;
-            const TokenTable* pPtr = pTokenTableArray;
-            const TokenTable* pEnd = pPtr + ( sizeof( pTokenTableArray ) / sizeof( TokenTable ) );
-            for ( ; pPtr < pEnd; pPtr++ )
-                (*pH)[ pPtr->pS ] = pPtr->pE;
+            for (auto const & pair : pTokenTableArray)
+                (*pH)[pair.pS] = pair.pE;
             pHashMap = pH;
         }
     }

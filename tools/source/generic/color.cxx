@@ -259,7 +259,7 @@ SvStream& ReadColor( SvStream& rIStream, Color& rColor )
             COL_BLACK                           // COL_FIELDTEXT
         };
 
-        if ( nColorName < (sizeof( aColAry )/sizeof(ColorData)) )
+        if ( nColorName < SAL_N_ELEMENTS( aColAry ) )
             rColor.mnColor = aColAry[nColorName];
         else
             rColor.mnColor = COL_BLACK;
