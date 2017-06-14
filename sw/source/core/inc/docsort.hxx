@@ -140,7 +140,7 @@ private:
 
     SwDoc*              pDoc;
     const FndBox_&      rBoxRef;
-    const FndBox_**     pArr;
+    std::unique_ptr<FndBox_ const *[]> pArr;
     std::vector<std::unique_ptr<SfxItemSet>> ppItemSets;
 
     sal_uInt16          nRows;
