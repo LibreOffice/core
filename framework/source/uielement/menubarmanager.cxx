@@ -1180,8 +1180,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                     VclPtr<PopupMenu> pSubMenu = AddonMenuManager::CreateAddonMenu(rFrame);
                     if ( pSubMenu && ( pSubMenu->GetItemCount() > 0 ))
                     {
-                        sal_uInt16 nCount = 0;
-                        if ( pPopup->GetItemType( nCount-1 ) != MenuItemType::SEPARATOR )
+                        if ( pPopup->GetItemType( pPopup->GetItemCount() - 1 ) != MenuItemType::SEPARATOR )
                             pPopup->InsertSeparator();
 
                         pPopup->InsertItem( ITEMID_ADDONLIST, OUString() );
