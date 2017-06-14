@@ -33,6 +33,12 @@
 #include <orcus/pstring.hpp>
 #include <comphelper/hash.hxx>
 
+#include <com/sun/star/container/XNameAccess.hpp>
+
+#include <officecfg/Setup.hxx>
+
+#include <set>
+
 namespace {
 
 class error_updater : public std::exception
@@ -626,6 +632,7 @@ void update_checker()
         std::string response_body = download_content(aURL, false, aHash);
         if (!response_body.empty())
         {
+
             update_info aUpdateInfo = parse_response(response_body);
             if (aUpdateInfo.aUpdateFile.aURL.isEmpty())
             {
@@ -636,11 +643,17 @@ void update_checker()
             }
             else
             {
+                css::uno::Sequence<OUString> aInstalledLanguages(officecfg::Setup::Office::InstalledLocales::get()->getElementNames());
+                std::set<OUString> aInstalledLanguageSet(std::begin(aInstalledLanguages), std::end(aInstalledLanguages));
                 download_file(aUpdateInfo.aUpdateFile.aURL, aUpdateInfo.aUpdateFile.nSize, aUpdateInfo.aUpdateFile.aHash, "update.mar");
                 for (auto& lang_update : aUpdateInfo.aLanguageFiles)
                 {
-                    OUString aFileName = "update_" + lang_update.aLangCode + ".mar";
-                    download_file(lang_update.aUpdateFile.aURL, lang_update.aUpdateFile.nSize, lang_update.aUpdateFile.aHash, aFileName);
+                    // only download the language packs for installed languages
+                    if (aInstalledLanguageSet.find(lang_update.aLangCode) != aInstalledLanguageSet.end())
+                    {
+                        OUString aFileName = "update_" + lang_update.aLangCode + ".mar";
+                        download_file(lang_update.aUpdateFile.aURL, lang_update.aUpdateFile.nSize, lang_update.aUpdateFile.aHash, aFileName);
+                    }
                 }
                 CreateValidUpdateDir(aUpdateInfo);
             }
