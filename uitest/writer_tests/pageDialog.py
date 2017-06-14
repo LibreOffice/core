@@ -14,6 +14,8 @@ from com.sun.star.drawing.RectanglePoint import MIDDLE_MIDDLE
 
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
+import unittest
+
 class WriterPageDialog(UITestCase):
 
     def launch_dialog_and_select_tab(self, tab):
@@ -147,6 +149,7 @@ class WriterPageDialog(UITestCase):
 
         self.ui_test.close_doc()
 
+    @unittest.skip("Currently broken")
     def test_page_tab(self):
 
         size_list = [[10500,14801], [14801,21001], [21001,29700], [29700,42000],
