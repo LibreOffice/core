@@ -57,23 +57,28 @@ namespace connectivity
         private:
             // sources: https://www.clicketyclick.dk/databases/xbase/format/dbf.html (dBASE III and 5)
             // http://www.dbase.com/KnowledgeBase/int/db7_file_fmt.htm (dBASE 7) which is similar at least for this part
-            struct DBFHeader {
-                                DBFType     type;                      // dBASE/xBASE type, see DBFType
-                                sal_uInt8   dateElems[3];              // Date of last change (YYMMDD)
-                                sal_uInt32  nbRecords;                 // Number of records
-                                sal_uInt16  headerLength;
-                                sal_uInt16  recordLength;              // length of 1 record
-                                sal_uInt8   reserved1[2];              // should be filled with 0
-                                sal_uInt8   incompTransact;            // Incomplete transaction (dBASE IV):
-                                                                         // 00h Transaction ended (or rolled back)
-                                                                         // 01h Transaction started
-                                sal_uInt8   encryptionFlag;            // dBASE IV: 00h not encrypted, 01h data encrypted
-                                sal_uInt8   freeRecordThread[4];       // reserved for LAN only
-                                sal_uInt8   multiUserdBASE[8];         // reserved for multi-user dBASE (dBASE III+)
-                                sal_uInt8   MDXFlag;                   // dBASE IV 0x01 if a production .MDX file exists for this table
-                                                                         //          0x00 if no .MDX file exists
-                                sal_uInt8   languageDriver;            // codepage (from Foxpro)
-                                sal_uInt8   reserved2[2];              // should be filled with 0
+            struct DBFHeader {                                                                   //   address/pos in trailer
+                                DBFType     type;                      // dBASE/xBASE type, see DBFType 00h
+                                sal_uInt8   dateElems[3];              // Date of last change (YYMMDD)  01h
+                                sal_uInt32  nbRecords;                 // Number of records             04h
+                                sal_uInt16  headerLength;              //                               08h
+                                sal_uInt16  recordLength;              // Length of 1 record            10h
+                                sal_uInt8   trailer[20];
+                                // this last field contains these data:
+                                // - reserved:2 bytes:should be filled with 0                           12h/0
+                                // - incomplete transaction:1 byte:dBASE IV                             14h/2
+                                                 // 00h Transaction ended (or rolled back)
+                                                 // 01h Transaction started
+                                // - encryptionFlag:1 byte: dBASE IV                                    15h/3
+                                                 // 00h not encrypted
+                                                 // 01h for encrypted
+                                // - freeRecordThread:4 bytes:reserved for LAN only                     16h/4
+                                // - multiUserdBASE:8 bytes:reserved for multi-user dBASE (dBASE III+)  20h/8
+                                // - MDXFlag:1 byte:dBASE IV                                            28h/16
+                                                 // 0x01 if a production .MDX file exists for this table
+                                                 // 0x00 if no .MDX file exists
+                                // - languageDriver:1 byte:codepage (from Foxpro)                       29h/17
+                                // - reserved:2 bytes: should be filled with 0                          30h/18
                             };
             struct DBFColumn {                       /* Column descriptors */
                                 sal_uInt8    db_fnm[11];                     /* Field name                  */
