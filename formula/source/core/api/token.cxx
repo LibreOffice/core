@@ -1473,7 +1473,8 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
     // At least ScRecalcMode::ALWAYS needs to be set.
     pNewArr->AddRecalcMode( GetRecalcMode());
 
-    for ( FormulaToken *pCur = First(); pCur; pCur = Next() )
+    FormulaTokenArrayPlainIterator aIter(*this);
+    for ( FormulaToken *pCur = aIter.First(); pCur; pCur = aIter.Next() )
     {
         bool bAdd = true;
         // Don't write the expression of the new inserted ADDRESS() parameter.
@@ -1503,10 +1504,10 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
                         pCur->GetDouble() == 0.0)
                 {
                     // No other expression, between separators.
-                    FormulaToken* p = PeekPrevNoSpaces();
+                    FormulaToken* p = aIter.PeekPrevNoSpaces();
                     if (p && p->GetOpCode() == ocSep)
                     {
-                        p = PeekNextNoSpaces();
+                        p = aIter.PeekNextNoSpaces();
                         if (p && p->GetOpCode() == ocSep)
                             bAdd = false;
                     }
@@ -1518,7 +1519,7 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
             case ocOpen:
                 {
                     ++nFn;      // all following operations on _that_ function
-                    pCtx[ nFn ].mpFunc = PeekPrevNoSpaces();
+                    pCtx[ nFn ].mpFunc = aIter.PeekPrevNoSpaces();
                     pCtx[ nFn ].mnCurArg = 0;
                     OpCode eOp;
                     if (rConv.isPODF() && pCtx[ nFn ].mpFunc && pCtx[ nFn ].mpFunc->GetOpCode() == ocAddress)
