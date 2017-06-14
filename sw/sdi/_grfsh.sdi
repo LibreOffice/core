@@ -101,7 +101,7 @@ interface BaseTextGraphic
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
-    SID_INSERT_GRAPHIC // zeigt auf FN_FORMAT_GRAFIC_DLG
+    SID_INSERT_GRAPHIC // points to FN_FORMAT_GRAFIC_DLG
     [
         ExecMethod = Execute ;
         StateMethod = GetAttrState ;
