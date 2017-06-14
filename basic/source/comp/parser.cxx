@@ -438,7 +438,7 @@ bool SbiParser::Parse()
                 if( nSbxErr )
                 {
                     SbxBase::ResetError();
-                    Error( (SbError)nSbxErr );
+                    Error( (ErrCode)nSbxErr );
                 }
             }
         }

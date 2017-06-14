@@ -27,7 +27,7 @@
 #define DDE_FIRSTERR    0x4000
 #define DDE_LASTERR     0x4011
 
-static const SbError nDdeErrMap[] =
+static const ErrCode nDdeErrMap[] =
 {
     /* DMLERR_ADVACKTIMEOUT       */  0x4000, ERRCODE_BASIC_DDE_TIMEOUT,
     /* DMLERR_BUSY                */  0x4001, ERRCODE_BASIC_DDE_BUSY,
@@ -49,7 +49,7 @@ static const SbError nDdeErrMap[] =
     /* DMLERR_UNFOUND_QUEUE_ID    */  0x4011, ERRCODE_BASIC_DDE_NO_CHANNEL
 };
 
-SbError SbiDdeControl::GetLastErr( DdeConnection* pConv )
+ErrCode SbiDdeControl::GetLastErr( DdeConnection* pConv )
 {
     if( !pConv )
     {
@@ -98,10 +98,10 @@ size_t SbiDdeControl::GetFreeChannel()
     return nChannel+1;
 }
 
-SbError SbiDdeControl::Initiate( const OUString& rService, const OUString& rTopic,
+ErrCode SbiDdeControl::Initiate( const OUString& rService, const OUString& rTopic,
                                  size_t& rnHandle )
 {
-    SbError nErr;
+    ErrCode nErr;
     DdeConnection* pConv = new DdeConnection( rService, rTopic );
     nErr = GetLastErr( pConv );
     if( nErr )
@@ -118,7 +118,7 @@ SbError SbiDdeControl::Initiate( const OUString& rService, const OUString& rTopi
     return ERRCODE_NONE;
 }
 
-SbError SbiDdeControl::Terminate( size_t nChannel )
+ErrCode SbiDdeControl::Terminate( size_t nChannel )
 {
     if (!nChannel || nChannel > aConvList.size())
     {
@@ -136,7 +136,7 @@ SbError SbiDdeControl::Terminate( size_t nChannel )
     return ERRCODE_NONE;
 }
 
-SbError SbiDdeControl::TerminateAll()
+ErrCode SbiDdeControl::TerminateAll()
 {
     for (DdeConnection* conv : aConvList)
     {
@@ -151,7 +151,7 @@ SbError SbiDdeControl::TerminateAll()
     return ERRCODE_NONE;
 }
 
-SbError SbiDdeControl::Request( size_t nChannel, const OUString& rItem, OUString& rResult )
+ErrCode SbiDdeControl::Request( size_t nChannel, const OUString& rItem, OUString& rResult )
 {
     if (!nChannel || nChannel > aConvList.size())
     {
@@ -172,7 +172,7 @@ SbError SbiDdeControl::Request( size_t nChannel, const OUString& rItem, OUString
     return GetLastErr( pConv );
 }
 
-SbError SbiDdeControl::Execute( size_t nChannel, const OUString& rCommand )
+ErrCode SbiDdeControl::Execute( size_t nChannel, const OUString& rCommand )
 {
     if (!nChannel || nChannel > aConvList.size())
     {
@@ -190,7 +190,7 @@ SbError SbiDdeControl::Execute( size_t nChannel, const OUString& rCommand )
     return GetLastErr( pConv );
 }
 
-SbError SbiDdeControl::Poke( size_t nChannel, const OUString& rItem, const OUString& rData )
+ErrCode SbiDdeControl::Poke( size_t nChannel, const OUString& rItem, const OUString& rData )
 {
     if (!nChannel || nChannel > aConvList.size())
     {
