@@ -3165,7 +3165,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                             // Levels count from 1
                             // Level 0 is reserved for CAPTION
 
-                            // Remove pagenumber and if neccessary the tab in front of it:
+                            // Remove pagenumber and if necessary the tab in front of it:
                             FormTokenType eType;
                             // -> #i21237#
                             SwFormTokens aPattern = aForm.GetPattern(nLevel);

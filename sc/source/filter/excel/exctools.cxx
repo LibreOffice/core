@@ -187,7 +187,7 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR )
     rIn.Ignore( 1 );                // Hide
     nName = rIn.ReaduInt8();
     nComment = rIn.ReaduInt8();
-    rIn.Ignore( 1 );       // statt nUser!
+    rIn.Ignore( 1 );       // instead of nUser!
 
     if( nName )
         aName = rIn.ReadUniString( nName );
