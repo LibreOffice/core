@@ -246,7 +246,8 @@ struct LOKDocViewPrivateImpl
 
     ~LOKDocViewPrivateImpl()
     {
-        g_source_remove(m_nTimeoutId);
+        if (m_nTimeoutId)
+            g_source_remove(m_nTimeoutId);
     }
 };
 
