@@ -774,7 +774,7 @@ bool ImplSdPPTImport::Import()
                 if ( SeekToAktPage( &aPageHd ) )
                 {
                     auto nEndRecPos = SanitizeEndPos(rStCtrl, aPageHd.GetRecEndFilePos());
-                    while( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nEndRecPos ) )
+                    while( ( rStCtrl.GetError() == ERRCODE_NONE ) && ( rStCtrl.Tell() < nEndRecPos ) )
                     {
                         DffRecordHeader aHd;
                         ReadDffRecordHeader( rStCtrl, aHd );
@@ -796,7 +796,7 @@ bool ImplSdPPTImport::Import()
                                         {
                                             sal_uInt32 nObjCount = 0;
                                             auto nListEndRecPos = SanitizeEndPos(rStCtrl, aEscherObjListHd.GetRecEndFilePos());
-                                            while( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nListEndRecPos ) )
+                                            while( ( rStCtrl.GetError() == ERRCODE_NONE ) && ( rStCtrl.Tell() < nListEndRecPos ) )
                                             {
                                                 DffRecordHeader aHd2;
                                                 ReadDffRecordHeader( rStCtrl, aHd2 );
@@ -830,7 +830,7 @@ bool ImplSdPPTImport::Import()
                                 if ( SeekToContentOfProgTag( 10, rStCtrl, aPageHd, aProgTagHd ) )
                                 {
                                     auto nTagEndRecPos = SanitizeEndPos(rStCtrl, aProgTagHd.GetRecEndFilePos());
-                                    while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nTagEndRecPos ) )
+                                    while ( ( rStCtrl.GetError() == ERRCODE_NONE ) && ( rStCtrl.Tell() < nTagEndRecPos ) )
                                     {
                                         DffRecordHeader aProgTagContentHd;
                                         ReadDffRecordHeader( rStCtrl, aProgTagContentHd );
@@ -940,7 +940,7 @@ bool ImplSdPPTImport::Import()
 
                     aPageHd.SeekToContent( rStCtrl );
                     auto nEndRecPos = SanitizeEndPos(rStCtrl, aPageHd.GetRecEndFilePos());
-                    while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nEndRecPos ) )
+                    while ( ( rStCtrl.GetError() == ERRCODE_NONE ) && ( rStCtrl.Tell() < nEndRecPos ) )
                     {
                         DffRecordHeader aHd;
                         ReadDffRecordHeader( rStCtrl, aHd );
@@ -952,7 +952,7 @@ bool ImplSdPPTImport::Import()
                                 if ( SeekToContentOfProgTag( 10, rStCtrl, aPageHd, aProgTagHd ) )
                                 {
                                     auto nHdEndRecPos = SanitizeEndPos(rStCtrl, aProgTagHd.GetRecEndFilePos());
-                                    while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nHdEndRecPos ) )
+                                    while ( ( rStCtrl.GetError() == ERRCODE_NONE ) && ( rStCtrl.Tell() < nHdEndRecPos ) )
                                     {
                                         DffRecordHeader aProgTagContentHd;
                                         ReadDffRecordHeader( rStCtrl, aProgTagContentHd );
@@ -1534,7 +1534,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
             bool bSSSlideInfoAtom = false;
             while ( true )
             {
-                while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nPageRecEnd ) )
+                while ( ( rStCtrl.GetError() == ERRCODE_NONE ) && ( rStCtrl.Tell() < nPageRecEnd ) )
                 {
                     DffRecordHeader aHd;
                     ReadDffRecordHeader( rStCtrl, aHd );
@@ -2706,7 +2706,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     if (!aHd.SeekToEndOfRecord(rSt))
                         break;
                 }
-                while( ( rSt.GetError() == 0 ) && ( rSt.Tell() < nClientDataLen ) );
+                while( ( rSt.GetError() == ERRCODE_NONE ) && ( rSt.Tell() < nClientDataLen ) );
 
                 if ( bInhabitanceChecked || bAnimationInfoFound )
                     break;

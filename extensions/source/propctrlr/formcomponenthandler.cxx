@@ -2785,7 +2785,7 @@ namespace pcr
         }
 
         _rClearBeforeDialog.clear();
-        bool bSuccess = ( 0 == aFileDlg.Execute() );
+        bool bSuccess = ( ERRCODE_NONE == aFileDlg.Execute() );
         if ( bSuccess )
         {
             if ( bHandleNonLink && xController.is() )
@@ -2825,7 +2825,7 @@ namespace pcr
             aFileDlg.SetDisplayDirectory( sURL );
 
         _rClearBeforeDialog.clear();
-        bool bSuccess = ( 0 == aFileDlg.Execute() );
+        bool bSuccess = ( ERRCODE_NONE == aFileDlg.Execute() );
         if ( bSuccess )
             _out_rNewValue <<= aFileDlg.GetPath();
         return bSuccess;
@@ -2888,7 +2888,7 @@ namespace pcr
         }
 
         _rClearBeforeDialog.clear();
-        bool bSuccess = ( 0 == aFileDlg.Execute() );
+        bool bSuccess = ( ERRCODE_NONE == aFileDlg.Execute() );
         if ( bSuccess )
             _out_rNewValue <<= aFileDlg.GetPath();
         return bSuccess;

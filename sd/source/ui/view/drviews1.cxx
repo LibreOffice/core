@@ -730,7 +730,7 @@ ErrCode DrawViewShell::DoVerb(long nVerb)
         }
     }
 
-    return 0;
+    return ERRCODE_NONE;
 }
 
 /**

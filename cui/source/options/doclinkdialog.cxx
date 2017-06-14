@@ -178,7 +178,7 @@ namespace svx
             aFileDlg.SetDisplayDirectory( aTransformer.get( OFileNotation::N_URL ) );
         }
 
-        if (0 != aFileDlg.Execute())
+        if (ERRCODE_NONE != aFileDlg.Execute())
             return;
 
         if (m_pName->GetText().isEmpty())

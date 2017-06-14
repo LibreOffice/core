@@ -1515,7 +1515,7 @@ void SdPublishingDlg::Load()
     {
         SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ );
 
-        bool bOk = pIStm && ( pIStm->GetError() == 0);
+        bool bOk = pIStm && ( pIStm->GetError() == ERRCODE_NONE);
 
         delete pIStm;
 
@@ -1583,7 +1583,7 @@ bool SdPublishingDlg::Save()
     aMedium.Close();
     aMedium.Commit();
 
-    return( aMedium.GetError() == 0 );
+    return( aMedium.GetError() == ERRCODE_NONE );
 }
 
 std::vector<OString> SdPublishingDlg::getAllPageUIXMLDescriptions() const

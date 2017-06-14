@@ -548,7 +548,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                             GetDispatcher()->Execute( SID_OPENDOC, SfxCallMode::ASYNCHRON, aSet );
                             return;
                         }
-                        nErr = 0;
+                        nErr = ERRCODE_NONE;
                     }
 
                     // Keep the read-only UI

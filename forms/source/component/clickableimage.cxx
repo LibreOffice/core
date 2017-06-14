@@ -684,7 +684,7 @@ namespace frm
             m_bDownloading = false;
             return;
         }
-        if (m_pMedium->GetErrorCode()==0)
+        if (m_pMedium->GetErrorCode()==ERRCODE_NONE)
         {
             SvStream* pStream = m_pMedium->GetInStream();
 

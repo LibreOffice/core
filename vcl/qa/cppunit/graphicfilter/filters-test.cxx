@@ -57,7 +57,7 @@ bool VclFiltersTest::load(const OUString &,
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
-    return mGraphicFilter.ImportGraphic(aGraphic, rURL, aFileStream) == 0;
+    return mGraphicFilter.ImportGraphic(aGraphic, rURL, aFileStream) == ERRCODE_NONE;
 }
 
 void VclFiltersTest::testScaling()

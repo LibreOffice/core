@@ -287,7 +287,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
                 sal::static_int_cast< sal_uIntPtr >(
                 xFilterTunnel->getSomething( SmXMLImport::getUnoTunnelId() )));
         if ( pFilter && pFilter->GetSuccess() )
-            nError = 0;
+            nError = ERRCODE_NONE;
     }
     catch( xml::sax::SAXParseException& r )
     {

@@ -755,7 +755,7 @@ bool SmDocShell::Load( SfxMedium& rMedium )
             Reference<css::frame::XModel> xModel(GetModel());
             SmXMLImportWrapper aEquation(xModel);
             sal_uLong nError = aEquation.Import(rMedium);
-            bRet = 0 == nError;
+            bRet = ERRCODE_NONE == nError;
             SetError( nError, OSL_LOG_PREFIX );
         }
     }

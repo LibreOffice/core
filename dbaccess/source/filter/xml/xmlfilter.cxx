@@ -131,7 +131,7 @@ sal_Int32 ReadThroughComponent(
     }
 
     // success!
-    return 0;
+    return ERRCODE_NONE;
 }
 
 
@@ -163,12 +163,12 @@ sal_Int32 ReadThroughComponent(
 
                 // do we even have an alternative name?
                 if ( nullptr == pCompatibilityStreamName )
-                    return 0;
+                    return ERRCODE_NONE;
 
                 // if so, does the stream exist?
                 sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
                 if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
-                    return 0;
+                    return ERRCODE_NONE;
             }
 
             // get input stream
@@ -342,7 +342,7 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,this
                                     );
 
-        if ( nRet == 0 )
+        if ( nRet == ERRCODE_NONE )
             nRet = ReadThroughComponent( xStorage
                                     ,xModel
                                     ,"content.xml"
@@ -351,7 +351,7 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,this
                                     );
 
-        bRet = nRet == 0;
+        bRet = nRet == ERRCODE_NONE;
 
         if ( bRet )
         {

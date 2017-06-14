@@ -3806,7 +3806,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                     if (nSkip <= aHd.nRecLen)
                     {
                         rSt.SeekRel(nSkip);
-                        if (0 == rSt.GetError())
+                        if (ERRCODE_NONE == rSt.GetError())
                             bGrfRead = GetBLIPDirect( rSt, aGraf, &aVisArea );
                     }
                 }
@@ -4877,7 +4877,7 @@ Rectangle SvxMSDffManager::GetGlobalChildAnchor( const DffRecordHeader& rHd, SvS
         return aChildAnchor;
 
     bool bIsClientRectRead = false;
-    while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < rHd.GetRecEndFilePos() ) )
+    while ( ( rSt.GetError() == ERRCODE_NONE ) && ( rSt.Tell() < rHd.GetRecEndFilePos() ) )
     {
         DffRecordHeader aShapeHd;
         if (!ReadDffRecordHeader(rSt, aShapeHd))
@@ -5889,7 +5889,7 @@ void SvxMSDffManager::GetCtrlData( sal_uInt32 nOffsDgg_ )
             nPos += DFF_COMMON_RECORD_HEADER_SIZE + nLength;
             ++nDrawingContainerId;
         }
-        while( ( rStCtrl.GetError() == 0 ) && ( nPos < nMaxStrPos ) && bOk );
+        while( ( rStCtrl.GetError() == ERRCODE_NONE ) && ( nPos < nMaxStrPos ) && bOk );
     }
 }
 
@@ -5946,7 +5946,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
                 rSt.ReadUInt32( nBLIPLen );
                 rSt.SeekRel( nSkipBLIPPos );
                 rSt.ReadUInt32( nBLIPPos );
-                bOk = rSt.GetError() == 0;
+                bOk = rSt.GetError() == ERRCODE_NONE;
 
                 nLength -= nSkipBLIPLen+ 4 + nSkipBLIPPos + 4;
             }
