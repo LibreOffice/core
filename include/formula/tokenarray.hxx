@@ -412,12 +412,12 @@ class FORMULA_DLLPUBLIC FormulaTokenArrayPlainIterator
     friend class FormulaCompiler;
 
 private:
-    const FormulaTokenArray& mrFTA;
+    const FormulaTokenArray* mpFTA;
     sal_uInt16 mnIndex;                 // Current step index
 
 public:
     FormulaTokenArrayPlainIterator( const FormulaTokenArray& rFTA ) :
-        mrFTA( rFTA ),
+        mpFTA( &rFTA ),
         mnIndex( 0 )
     {
     }
@@ -464,7 +464,7 @@ public:
 
     FormulaToken* LastRPN()
     {
-        mnIndex = mrFTA.nRPN;
+        mnIndex = mpFTA->nRPN;
         return PrevRPN();
     }
 
