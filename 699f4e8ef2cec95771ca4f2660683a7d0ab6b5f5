@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_8764b5e5",
+        "filename": "sw/source/core/txtnode/thints.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2761,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-14T21:01:22Z",
+      "side": 1,
+      "message": "please use std::shared_ptr, we don\u0027t use boost any more wherever the baseline compilers support the std::equivalent_feature",
+      "revId": "699f4e8ef2cec95771ca4f2660683a7d0ab6b5f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_a76371db",
+        "filename": "sw/source/core/txtnode/thints.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2762,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-14T21:01:22Z",
+      "side": 1,
+      "message": "/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_gcc_release_64/sw/source/core/txtnode/thints.cxx:2761:71: error: ‘const class SwTextAttr’ has no member named ‘GetAutoFmt’\n\nit\u0027s named \"GetAutoFormat\"",
+      "revId": "699f4e8ef2cec95771ca4f2660683a7d0ab6b5f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_c75ebd11",
+        "filename": "sw/source/core/txtnode/thints.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2786,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-14T21:01:22Z",
+      "side": 1,
+      "message": "continue will skip over the \"if (iter1.IsAtEnd())\" check",
+      "revId": "699f4e8ef2cec95771ca4f2660683a7d0ab6b5f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_e79bb9c7",
+        "filename": "sw/source/core/txtnode/thints.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2789,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-14T21:01:22Z",
+      "side": 1,
+      "message": "continue will skip over the \"if (iter1.IsAtEnd())\" check",
+      "revId": "699f4e8ef2cec95771ca4f2660683a7d0ab6b5f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_079fe5b4",
+        "filename": "sw/source/core/txtnode/thints.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2791,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-14T21:01:22Z",
+      "side": 1,
+      "message": "i don\u0027t think we need the first 2 comparison with pRSIDItem - if one of them is true, then the pItem1-\u003eWhich() !\u003d pItem2-\u003eWhich() is also true",
+      "revId": "699f4e8ef2cec95771ca4f2660683a7d0ab6b5f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
