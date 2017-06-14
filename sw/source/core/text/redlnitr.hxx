@@ -62,7 +62,7 @@ class SwRedlineItr
     std::deque<SwTextAttr *> m_Hints;
     const SwDoc& rDoc;
     SwAttrHandler& rAttrHandler;
-    SfxItemSet *pSet;
+    std::unique_ptr<SfxItemSet> pSet;
     SwExtend *pExt;
     sal_uLong nNdIdx;
     sal_Int32 nFirst;

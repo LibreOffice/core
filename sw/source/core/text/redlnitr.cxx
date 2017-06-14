@@ -18,6 +18,7 @@
  */
 
 #include "hintids.hxx"
+#include <o3tl/make_unique.hxx>
 #include <svl/whiter.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <swmodule.hxx>
@@ -165,7 +166,7 @@ SwRedlineItr::SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt,
                             SwAttrHandler& rAH, sal_Int32 nRed, bool bShw,
                             const std::vector<ExtTextInputAttr> *pArr,
                             sal_Int32 nExtStart )
-    : rDoc( *rTextNd.GetDoc() ), rAttrHandler( rAH ), pSet( nullptr ),
+    : rDoc( *rTextNd.GetDoc() ), rAttrHandler( rAH ),
       nNdIdx( rTextNd.GetIndex() ), nFirst( nRed ),
       nAct( COMPLETE_STRING ), bOn( false ), bShow( bShw )
 {
@@ -179,7 +180,6 @@ SwRedlineItr::SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt,
 SwRedlineItr::~SwRedlineItr()
 {
     Clear( nullptr );
-    delete pSet;
     delete pExt;
 }
 
@@ -236,7 +236,7 @@ short SwRedlineItr::Seek_(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
                     {
                         SwAttrPool& rPool =
                             const_cast<SwDoc&>(rDoc).GetAttrPool();
-                        pSet = new SfxItemSet(rPool, RES_CHRATR_BEGIN, RES_CHRATR_END-1);
+                        pSet = o3tl::make_unique<SfxItemSet>(rPool, RES_CHRATR_BEGIN, RES_CHRATR_END-1);
                     }
 
                     if( 1 < pRed->GetStackCount() )
