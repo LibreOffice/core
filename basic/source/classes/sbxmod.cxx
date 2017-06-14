@@ -1064,7 +1064,7 @@ void SbModule::Run( SbMethod* pMeth )
 
         // Launcher problem
         // i80726 The Find below will generate an error in Testtool so we reset it unless there was one before already
-        bool bWasError = SbxBase::GetError() != 0;
+        bool bWasError = SbxBase::GetError() != ERRCODE_NONE;
         SbxVariable* pMSOMacroRuntimeLibVar = Find( "Launcher", SbxClassType::Object );
         if ( !bWasError && (SbxBase::GetError() == ERRCODE_SBX_PROC_UNDEFINED) )
             SbxBase::ResetError();

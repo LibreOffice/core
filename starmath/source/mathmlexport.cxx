@@ -463,7 +463,7 @@ sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
     }
 
     bSuccess=true;
-    return 0;
+    return ERRCODE_NONE;
 }
 
 void SmXMLExport::ExportContent_()

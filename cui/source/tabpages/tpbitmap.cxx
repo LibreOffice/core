@@ -796,7 +796,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, Button*, void)
                         bDifferent = false;
 
                 if( bDifferent ) {
-                    nError = 0;
+                    nError = ERRCODE_NONE;
                     break;
                 }
 

@@ -115,7 +115,7 @@ SbError SbiDdeControl::Initiate( const OUString& rService, const OUString& rTopi
         aConvList[nChannel-1] = pConv;
         rnHandle = nChannel;
     }
-    return 0;
+    return ERRCODE_NONE;
 }
 
 SbError SbiDdeControl::Terminate( size_t nChannel )
@@ -133,7 +133,7 @@ SbError SbiDdeControl::Terminate( size_t nChannel )
     delete pConv;
     aConvList[nChannel-1] = DDE_FREECHANNEL;
 
-    return 0;
+    return ERRCODE_NONE;
 }
 
 SbError SbiDdeControl::TerminateAll()
@@ -148,7 +148,7 @@ SbError SbiDdeControl::TerminateAll()
 
     aConvList.clear();
 
-    return 0;
+    return ERRCODE_NONE;
 }
 
 SbError SbiDdeControl::Request( size_t nChannel, const OUString& rItem, OUString& rResult )

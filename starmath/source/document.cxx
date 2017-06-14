@@ -749,7 +749,7 @@ bool SmDocShell::Load( SfxMedium& rMedium )
             Reference<css::frame::XModel> xModel(GetModel());
             SmXMLImportWrapper aEquation(xModel);
             auto nError = aEquation.Import(rMedium);
-            bRet = 0 == nError;
+            bRet = ERRCODE_NONE == nError;
             SetError(nError);
         }
     }

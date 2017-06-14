@@ -321,7 +321,7 @@ sal_uLong SwHTMLWriter::WriteStream()
 
     m_nFootNote = m_nEndNote = 0;
 
-    m_nWarn = 0;
+    m_nWarn = ERRCODE_NONE;
     GetNumInfo().Clear();
     m_pNextNumRuleInfo = nullptr;
 

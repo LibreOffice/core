@@ -5485,7 +5485,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     rSt.ReadUInt16( m_wIdent );
     rSt.ReadUInt16( m_nFib );
     rSt.ReadUInt16( m_nProduct );
-    if( 0 != rSt.GetError() )
+    if( ERRCODE_NONE != rSt.GetError() )
     {
         sal_Int16 nFibMin;
         sal_Int16 nFibMax;
@@ -5782,7 +5782,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
         rSt.ReadUInt32( m_lcbSttbttmbd );
     }
 
-    if( 0 == rSt.GetError() )
+    if( ERRCODE_NONE == rSt.GetError() )
     {
         // set bit flag
         m_fDot        =   aBits1 & 0x01       ;
@@ -5837,7 +5837,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
             rSt.ReadInt32( m_lcbPlcftxbxBkd );
             rSt.ReadInt32( m_fcPlcfHdrtxbxBkd );
             rSt.ReadInt32( m_lcbPlcfHdrtxbxBkd );
-            if( 0 != rSt.GetError() )
+            if( ERRCODE_NONE != rSt.GetError() )
             {
                 m_nFibError = ERR_SWG_READ_ERROR;
             }
@@ -5876,7 +5876,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
                 rSt.ReadUInt32(m_lcbFactoidData);
             }
 
-            if( 0 != rSt.GetError() )
+            if( ERRCODE_NONE != rSt.GetError() )
                 m_nFibError = ERR_SWG_READ_ERROR;
 
             rSt.Seek( 0x5bc );          // Actual nFib introduced in Word 2003
@@ -6628,7 +6628,7 @@ WW8_STD* WW8Style::Read1STDFixed(sal_uInt16& rSkip)
         while( false ); // trick: the block above will passed through exactly one time
                     //   and can be left early with a "break"
 
-        if( (0 != rSt.GetError()) || !nRead )
+        if( (ERRCODE_NONE != rSt.GetError()) || !nRead )
             DELETEZ( pStd );        // report error with NULL
 
         rSkip = cbStd - cbSTDBaseInFile;

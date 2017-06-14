@@ -376,7 +376,7 @@ bool SbiScanner::NextSym()
         aSym = p; bNumber = true;
 
         // For bad characters, scan and parse errors generate only one error.
-        SbError nError = 0;
+        ErrCode nError = ERRCODE_NONE;
         if (bScanError)
         {
             --pLine;

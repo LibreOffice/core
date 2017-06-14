@@ -491,7 +491,7 @@ sal_uLong SwASCIIParser::ReadChars()
         rtl_destroyTextToUnicodeContext( hConverter, hContext );
         rtl_destroyTextToUnicodeConverter( hConverter );
     }
-    return 0;
+    return ERRCODE_NONE;
 }
 
 void SwASCIIParser::InsertText( const OUString& rStr )

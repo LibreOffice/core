@@ -722,7 +722,7 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
 
             if( bError )
             {
-                mnError = mpPrinter ? ImplSalPrinterErrorCodeToVCL(mpPrinter->GetErrorCode()) : 0;
+                mnError = mpPrinter ? ImplSalPrinterErrorCodeToVCL(mpPrinter->GetErrorCode()) : ERRCODE_NONE;
                 if ( !mnError )
                     mnError = PRINTER_GENERALERROR;
                 i_xController->setJobState( mnError == PRINTER_ABORT

@@ -324,7 +324,7 @@ sal_uInt32 ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum /*eCl
     GetDocHandler()->endDocument();
 
     bSuccess = true;
-    return 0;
+    return ERRCODE_NONE;
 }
 
 

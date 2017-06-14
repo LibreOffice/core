@@ -482,7 +482,7 @@ void Printer::ImplInitData()
     mbDevOutput         = false;
     meOutDevType        = OUTDEV_PRINTER;
     mbDefPrinter        = false;
-    mnError             = 0;
+    mnError             = ERRCODE_NONE;
     mnCurPage           = 0;
     mnCurPrintPage      = 0;
     mnPageQueueSize     = 0;
