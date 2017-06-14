@@ -65,8 +65,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
             break;
         }
 
-        pArray->Reset();
-        const FormulaToken* p = pArray->Next();
+        const FormulaToken* p = pArray->FirstToken();
         if (!p)
         {
             bFailure = true;
