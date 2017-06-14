@@ -58,7 +58,7 @@ const char* getTokenName( sal_Int32 nTokenId )
         return nullptr;
 
     const xmltoken* pCurr=wordlist;
-    const xmltoken* pEnd=wordlist+sizeof(wordlist)/sizeof(*wordlist);
+    const xmltoken* pEnd=wordlist+SAL_N_ELEMENTS(wordlist);
     while( pCurr != pEnd )
     {
         if(pCurr->nToken == nTokenId)

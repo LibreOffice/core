@@ -47,7 +47,7 @@ char const* const* GnuInfo::getJavaExePaths(int * size)
         "gij-4.1",
         "bin/gij-4.1"
     };
-    *size = sizeof (ar) / sizeof (char*);
+    *size = SAL_N_ELEMENTS (ar);
     return ar;
 }
 
@@ -82,7 +82,7 @@ char const* const* GnuInfo::getRuntimePaths(int * size)
         "/libgcj.so.7",
         "/libgcj.so.6"
     };
-    *size = sizeof(ar) / sizeof (char*);
+    *size = SAL_N_ELEMENTS(ar);
     return ar;
 }
 

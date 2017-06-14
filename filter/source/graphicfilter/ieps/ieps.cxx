@@ -232,7 +232,7 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     oslFileHandle pErr = nullptr;
         oslProcessError eErr = runProcessWithPathSearch(
             "pstoedit" EXESUFFIX,
-            args, sizeof(args)/sizeof(rtl_uString *),
+            args, SAL_N_ELEMENTS(args),
             &aProcess, &pIn, &pOut, &pErr);
 
     if (eErr!=osl_Process_E_None)
@@ -360,7 +360,7 @@ static bool RenderAsBMPThroughConvert(const sal_uInt8* pBuf, sal_uInt32 nBytesRe
     return RenderAsBMPThroughHelper(pBuf, nBytesRead, rGraphic,
         ("convert" EXESUFFIX),
         args,
-        sizeof(args)/sizeof(rtl_uString *));
+        SAL_N_ELEMENTS(args));
 }
 
 static bool RenderAsBMPThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
@@ -390,7 +390,7 @@ static bool RenderAsBMPThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
         "gs" EXESUFFIX,
 #endif
         args,
-        sizeof(args)/sizeof(rtl_uString *));
+        SAL_N_ELEMENTS(args));
 }
 
 static bool RenderAsBMP(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &rGraphic)

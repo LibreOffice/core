@@ -991,7 +991,7 @@ static void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
 
     if ( strcmp(sName, "zoom-in-symbolic") == 0)
     {
-        for ( unsigned int i = 0; i < sizeof( fZooms ) / sizeof( fZooms[0] ); i++ )
+        for ( unsigned int i = 0; i < SAL_N_ELEMENTS( fZooms ); i++ )
         {
             if ( fCurrentZoom < fZooms[i] )
             {
@@ -1006,7 +1006,7 @@ static void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
     }
     else if ( strcmp(sName, "zoom-out-symbolic") == 0)
     {
-        for ( unsigned int i = 0; i < sizeof( fZooms ) / sizeof( fZooms[0] ); i++ )
+        for ( unsigned int i = 0; i < SAL_N_ELEMENTS( fZooms ); i++ )
         {
             if ( fCurrentZoom > fZooms[i] )
             {

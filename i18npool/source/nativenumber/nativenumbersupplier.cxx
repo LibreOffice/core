@@ -841,13 +841,11 @@ struct HebrewNumberChar {
     { 0x05d0, 1 }
 };
 
-static sal_Int16 nbOfHebrewNumberChar = sizeof(HebrewNumberCharArray)/sizeof(HebrewNumberChar);
-
-static sal_Unicode thousand[] = {0x05d0, 0x05dc, 0x05e3, 0x0};
-static sal_Unicode thousands[] = {0x05d0, 0x05dc, 0x05e4, 0x05d9, 0x0};
-static sal_Unicode thousands_last[] = {0x05d0, 0x05dc, 0x05e4, 0x05d9, 0x05dd, 0x0};
-static sal_Unicode geresh = 0x05f3;
-static sal_Unicode gershayim = 0x05f4;
+static const sal_Unicode thousand[] = {0x05d0, 0x05dc, 0x05e3, 0x0};
+static const sal_Unicode thousands[] = {0x05d0, 0x05dc, 0x05e4, 0x05d9, 0x0};
+static const sal_Unicode thousands_last[] = {0x05d0, 0x05dc, 0x05e4, 0x05d9, 0x05dd, 0x0};
+static const sal_Unicode geresh = 0x05f3;
+static const sal_Unicode gershayim = 0x05f4;
 
 void makeHebrewNumber(sal_Int64 value, OUStringBuffer& output, bool isLast, bool useGeresh)
 {
@@ -861,7 +859,7 @@ void makeHebrewNumber(sal_Int64 value, OUStringBuffer& output, bool isLast, bool
         output.append(value == 1000 ? thousand : isLast ? thousands_last : thousands);
     } else {
         sal_Int16 nbOfChar = 0;
-        for (sal_Int32 j = 0; num > 0 && j < nbOfHebrewNumberChar; j++) {
+        for (sal_Int32 j = 0; num > 0 && j < sal_Int32(SAL_N_ELEMENTS(HebrewNumberCharArray)); j++) {
             if (num - HebrewNumberCharArray[j].value >= 0) {
                 nbOfChar++;
                 if (num == 15 || num == 16) // substitution for 15 and 16
@@ -952,8 +950,6 @@ struct CyrillicNumberChar {
     { 0x0430, 1 }
 };
 
-static sal_Int16 nbOfCyrillicNumberChar = sizeof(CyrillicNumberCharArray)/sizeof(CyrillicNumberChar);
-
 void makeCyrillicNumber(sal_Int64 value, OUStringBuffer& output, bool addTitlo)
 {
     sal_Int16 num = sal::static_int_cast<sal_Int16>(value % 1000);
@@ -967,7 +963,7 @@ void makeCyrillicNumber(sal_Int64 value, OUStringBuffer& output, bool addTitlo)
             addTitlo = false;
     }
 
-    for (sal_Int32 j = 0; num > 0 && j < nbOfCyrillicNumberChar; j++) {
+    for (sal_Int32 j = 0; num > 0 && j < sal_Int32(SAL_N_ELEMENTS(CyrillicNumberCharArray)); j++) {
         if (num < 20 && num > 10) {
             num -= 10;
             makeCyrillicNumber(num, output, false);

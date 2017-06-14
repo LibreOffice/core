@@ -591,7 +591,7 @@ bool WriterThread::iteration() {
         OUString("bloaters") };
 
     test_.setKey(path_, name_, css::uno::Any(options[index_]));
-    index_ = (index_ + 1) % (sizeof options / sizeof (OUString));
+    index_ = (index_ + 1) % SAL_N_ELEMENTS(options);
     return true;
 }
 
@@ -614,7 +614,7 @@ void Test::testThreads()
         { OUString("/org.openoffice.System"),
           OUString("L10N/Locale") }
     };
-    std::size_t const numReaders = sizeof list / sizeof (Entry);
+    std::size_t const numReaders = SAL_N_ELEMENTS(list);
     std::size_t const numWriters = numReaders - 2;
     ReaderThread * readers[numReaders];
     WriterThread * writers[numWriters];

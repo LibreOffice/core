@@ -201,7 +201,7 @@ Statics & getStatics()
                     PropertyDef( statics.TYPE , tString )
                 };
             ist.pProps = createPropertyArrayHelper(
-                tableDef, sizeof(tableDef)/sizeof(PropertyDef), READONLY );
+                tableDef, SAL_N_ELEMENTS(tableDef), READONLY );
 
             statics.refl.tableDescriptor.implName =
                 "org.openoffice.comp.pq.sdbcx.TableDescriptor";
@@ -240,7 +240,7 @@ Statics & getStatics()
                     PropertyDefEx( statics.TYPE_NAME , tString ,READONLY)
                 };
             statics.refl.column.pProps = createPropertyArrayHelper(
-                columnDef, sizeof(columnDef)/sizeof(PropertyDefEx) );
+                columnDef, SAL_N_ELEMENTS(columnDef) );
 
             statics.refl.columnDescriptor.implName =
                 "org.openoffice.comp.pq.sdbcx.ColumnDescriptor";
@@ -282,7 +282,7 @@ Statics & getStatics()
                     PropertyDef( statics.UPDATE_RULE, tInt )
                 };
             statics.refl.key.pProps = createPropertyArrayHelper(
-                keyDef, sizeof(keyDef)/sizeof(PropertyDef), READONLY );
+                keyDef, SAL_N_ELEMENTS(keyDef), READONLY );
 
 
             // Key properties
@@ -324,7 +324,7 @@ Statics & getStatics()
                     PropertyDef( statics.TYPE_NAME , tString )
                 };
             statics.refl.keycolumn.pProps = createPropertyArrayHelper(
-                keycolumnDef, sizeof(keycolumnDef)/sizeof(PropertyDef), READONLY );
+                keycolumnDef, SAL_N_ELEMENTS(keycolumnDef), READONLY );
 
             // KeyColumn props set
             statics.refl.keycolumnDescriptor.implName =
@@ -353,7 +353,7 @@ Statics & getStatics()
                     PropertyDef( statics.SCHEMA_NAME , tString )
                 };
             statics.refl.view.pProps = createPropertyArrayHelper(
-                viewDef, sizeof(viewDef)/sizeof(PropertyDef), READONLY );
+                viewDef, SAL_N_ELEMENTS(viewDef), READONLY );
 
             // view props set
             statics.refl.viewDescriptor.implName = "org.openoffice.comp.pq.sdbcx.ViewDescriptor";
@@ -370,7 +370,7 @@ Statics & getStatics()
                     PropertyDef( statics.NAME , tString )
                 };
             statics.refl.user.pProps = createPropertyArrayHelper(
-                userDefRO, sizeof(userDefRO)/sizeof(PropertyDef), READONLY );
+                userDefRO, SAL_N_ELEMENTS(userDefRO), READONLY );
 
             // user props set
             statics.refl.userDescriptor.implName =
@@ -400,7 +400,7 @@ Statics & getStatics()
                     PropertyDef( statics.PRIVATE_COLUMN_INDEXES, tStringSequence )
                 };
             statics.refl.index.pProps = createPropertyArrayHelper(
-                indexDef, sizeof(indexDef)/sizeof(PropertyDef), READONLY );
+                indexDef, SAL_N_ELEMENTS(indexDef), READONLY );
 
             // index props set
             statics.refl.indexDescriptor.implName =
@@ -432,7 +432,7 @@ Statics & getStatics()
                     PropertyDef( statics.TYPE_NAME , tString )
                 };
             statics.refl.indexColumn.pProps = createPropertyArrayHelper(
-                indexColumnDef, sizeof(indexColumnDef)/sizeof(PropertyDef), READONLY );
+                indexColumnDef, SAL_N_ELEMENTS(indexColumnDef), READONLY );
 
             // indexColumn props set
             statics.refl.indexColumnDescriptor.implName =

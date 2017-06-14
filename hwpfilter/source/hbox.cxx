@@ -480,7 +480,7 @@ static hchar olHanglJaso(int num, int type)
 
     if (type == OL_HANGL_JASO)
     {
-        num = num % (14 + (sizeof(jung) / sizeof(char)));
+        num = num % (14 + SAL_N_ELEMENTS(jung));
 
         if (num < 14)
             hh = (han_init[num] << 8) | 'A';
@@ -493,7 +493,7 @@ static hchar olHanglJaso(int num, int type)
             hh = (han_init[num] << 8) | 'a';
         else
         {
-            int j = (num / 14) % (sizeof(jung2) / sizeof(char));
+            int j = (num / 14) % SAL_N_ELEMENTS(jung2);
 
             num = num % 14;
             hh = (han_init[num] << 8) | (jung2[j] << 5) | 1;

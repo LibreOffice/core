@@ -1217,21 +1217,21 @@ void addJavaInfosDirScan(
 #else // MACOSX
     OUString excMessage = "[Java framework] sunjavaplugin: "
                           "Error in function addJavaInfosDirScan in util.cxx.";
-    int cJavaNames= sizeof(g_arJavaNames) / sizeof(char*);
+    int cJavaNames= SAL_N_ELEMENTS(g_arJavaNames);
     std::unique_ptr<OUString[]> sarJavaNames(new OUString[cJavaNames]);
     OUString *arNames = sarJavaNames.get();
     for(int i= 0; i < cJavaNames; i++)
         arNames[i] = OUString(g_arJavaNames[i], strlen(g_arJavaNames[i]),
                               RTL_TEXTENCODING_UTF8);
 
-    int cSearchPaths= sizeof(g_arSearchPaths) / sizeof(char*);
+    int cSearchPaths= SAL_N_ELEMENTS(g_arSearchPaths);
     std::unique_ptr<OUString[]> sarPathNames(new OUString[cSearchPaths]);
     OUString *arPaths = sarPathNames.get();
     for(int c = 0; c < cSearchPaths; c++)
         arPaths[c] = OUString(g_arSearchPaths[c], strlen(g_arSearchPaths[c]),
                                RTL_TEXTENCODING_UTF8);
 
-    int cCollectDirs = sizeof(g_arCollectDirs) / sizeof(char*);
+    int cCollectDirs = SAL_N_ELEMENTS(g_arCollectDirs);
     std::unique_ptr<OUString[]> sarCollectDirs(new OUString[cCollectDirs]);
     OUString *arCollectDirs = sarCollectDirs.get();
     for(int d = 0; d < cCollectDirs; d++)

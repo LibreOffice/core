@@ -32,8 +32,6 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include "dp_misc_api.hxx"
 
-#define ARLEN(x) (sizeof (x) / sizeof *(x))
-
 namespace dp_misc {
 
 const sal_Char CR = 0x0d;

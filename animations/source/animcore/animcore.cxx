@@ -423,7 +423,7 @@ AnimationNode::AnimationNode( sal_Int16 nNodeType )
     mnIterateType( css::presentation::ShapeAnimationSubType::AS_WHOLE ),
     mfIterateInterval(0.0)
 {
-    assert((sal_uInt32)nNodeType < sizeof(mpTypes)/sizeof(Sequence<Type>*));
+    assert(nNodeType < int(SAL_N_ELEMENTS(mpTypes)));
 }
 
 AnimationNode::AnimationNode( const AnimationNode& rNode )

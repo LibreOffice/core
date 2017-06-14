@@ -87,7 +87,7 @@ sal_Int16 SAL_CALL checkScriptType(sal_Unicode c)
         sal_Int16 script;
     } UBlock2Script;
 
-    static UBlock2Script scriptList[] = {
+    static const UBlock2Script scriptList[] = {
         {UBLOCK_HANGUL_JAMO, UBLOCK_HANGUL_JAMO, SCRIPT_HANGUL},
         {UBLOCK_CJK_RADICALS_SUPPLEMENT, UBLOCK_BOPOMOFO, SCRIPT_HANJA},
         {UBLOCK_HANGUL_COMPATIBILITY_JAMO, UBLOCK_HANGUL_COMPATIBILITY_JAMO, SCRIPT_HANGUL},
@@ -98,14 +98,12 @@ sal_Int16 SAL_CALL checkScriptType(sal_Unicode c)
         {UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS, UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS, SCRIPT_HANJA},
     };
 
-#define scriptListCount sizeof (scriptList) / sizeof (UBlock2Script)
-
     UBlockCode block=ublock_getCode((sal_uInt32) c);
     sal_uInt16 i;
-    for ( i = 0; i < scriptListCount; i++) {
+    for ( i = 0; i < SAL_N_ELEMENTS(scriptList); i++) {
         if (block <= scriptList[i].to) break;
     }
-    return (i < scriptListCount && block >= scriptList[i].from) ? scriptList[i].script : SCRIPT_OTHERS;
+    return (i < SAL_N_ELEMENTS(scriptList) && block >= scriptList[i].from) ? scriptList[i].script : SCRIPT_OTHERS;
 }
 
 #ifdef DISABLE_DYNLOADING
