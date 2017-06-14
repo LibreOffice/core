@@ -335,7 +335,8 @@ void Test::test_Uri() {
             { "http://a/b/c", "d", "http://a/b/d" },
             { "http://a/b/c/", "d", "http://a/b/c/d" },
             { "http://a/b/c//", "d", "http://a/b/c//d" } };
-    for (std::size_t i = 0; i < sizeof aRelToAbsTest / sizeof (RelToAbsTest); ++i)
+
+    for (std::size_t i = 0; i < SAL_N_ELEMENTS(aRelToAbsTest); ++i)
     {
         rtl::OUString aAbs;
         bool bMalformed = false;

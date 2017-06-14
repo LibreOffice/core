@@ -925,7 +925,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
             // these Slots are forbidden in other views for this document
             if( mpDocSh )
             {
-                mpDocSh->SetSlotFilter( true, sizeof( pAllowed ) / sizeof( sal_uInt16 ), pAllowed );
+                mpDocSh->SetSlotFilter( true, SAL_N_ELEMENTS( pAllowed ), pAllowed );
                 mpDocSh->ApplySlotFilter();
             }
 
@@ -2453,7 +2453,7 @@ void SAL_CALL SlideshowImpl::activate()
                 if( pDispatcher )
                 {
                     // filter all forbidden slots
-                    pDispatcher->SetSlotFilter( SfxSlotFilterState::ENABLED, sizeof(pAllowed) / sizeof(sal_uInt16), pAllowed );
+                    pDispatcher->SetSlotFilter( SfxSlotFilterState::ENABLED, SAL_N_ELEMENTS(pAllowed), pAllowed );
                 }
 
                 if( getBindings() )

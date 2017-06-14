@@ -105,7 +105,7 @@ SfxFormalArgument const aFormalArgs[] = {
     { reinterpret_cast<SfxType*>(&aSfxBoolItem_Impl), "SaveACopy", SID_SAVEACOPYITEM },
 };
 
-static sal_uInt16 nMediaArgsCount = sizeof(aFormalArgs) / sizeof (SfxFormalArgument);
+static sal_uInt16 nMediaArgsCount = SAL_N_ELEMENTS(aFormalArgs);
 
 static char const sTemplateRegionName[] = "TemplateRegionName";
 static char const sTemplateName[] = "TemplateName";

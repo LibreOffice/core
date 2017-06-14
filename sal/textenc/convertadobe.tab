@@ -281,7 +281,7 @@ adobeDingbatsEncodingConverterData = {
       0x27A8, 0x27A9, 0x27AA, 0x27AB, 0x27AC, 0x27AD, 0x27AE, 0x27AF,
       0xFFFF, 0x27B1, 0x27B2, 0x27B3, 0x27B4, 0x27B5, 0x27B6, 0x27B7, // 0xF0
       0x27B8, 0x27B9, 0x27BA, 0x27BB, 0x27BC, 0x27BD, 0x27BE, 0xFFFF },
-    (sizeof(unicodeToAdobeDingbatsEncoding) / sizeof(*unicodeToAdobeDingbatsEncoding)),
+    SAL_N_ELEMENTS(unicodeToAdobeDingbatsEncoding),
     unicodeToAdobeDingbatsEncoding };
 
 ImplTextEncodingData const adobeStandardEncodingData

@@ -326,7 +326,7 @@ sal_uInt16 ImplGetReplaceChar( sal_Unicode c )
     const ImplReplaceCharData*  pCharData;
 
     nLow = 0;
-    nHigh = (sizeof( aImplRepCharTab )/sizeof( ImplReplaceCharData ))-1;
+    nHigh = SAL_N_ELEMENTS( aImplRepCharTab ) - 1;
     do
     {
         nMid = (nLow+nHigh)/2;
@@ -418,7 +418,7 @@ const sal_uInt16* ImplGetReplaceString( sal_Unicode c )
     const ImplReplaceCharStrData*   pCharData;
 
     nLow = 0;
-    nHigh = (sizeof( aImplRepCharStrTab )/sizeof( ImplReplaceCharStrData ))-1;
+    nHigh = SAL_N_ELEMENTS( aImplRepCharStrTab ) - 1;
     do
     {
         nMid = (nLow+nHigh)/2;
