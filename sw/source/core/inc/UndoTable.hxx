@@ -287,7 +287,7 @@ class SwUndoTableCpyTable : public SwUndo
 
     //b6341295: When redlining is active, PrepareRedline has to create the
     //redlining attributes for the new and the old table cell content
-    static SwUndo* PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
+    static std::unique_ptr<SwUndo> PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
                 const SwPosition& rPos, bool& rJoin, bool bRedo );
 
 public:
