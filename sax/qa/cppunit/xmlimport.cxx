@@ -191,8 +191,9 @@ void SAL_CALL TestDocumentHandler::ignorableWhitespace( const OUString& aWhitesp
 }
 
 
-void SAL_CALL TestDocumentHandler::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ )
+void SAL_CALL TestDocumentHandler::processingInstruction( const OUString& aTarget, const OUString& aData )
 {
+    m_aStr = m_aStr + aTarget + aData;
 }
 
 

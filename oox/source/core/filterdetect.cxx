@@ -72,6 +72,10 @@ void SAL_CALL FilterDetectDocHandler::endDocument()
 {
 }
 
+void SAL_CALL FilterDetectDocHandler::processingInstruction( const OUString& /*rTarget*/, const OUString& /*rData*/ )
+{
+}
+
 void SAL_CALL FilterDetectDocHandler::setDocumentLocator( const Reference<XLocator>& /*xLocator*/ )
 {
 }

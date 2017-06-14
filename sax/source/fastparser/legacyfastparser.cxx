@@ -142,6 +142,7 @@ public:
     // XFastDocumentHandler
     virtual void SAL_CALL startDocument() override;
     virtual void SAL_CALL endDocument() override;
+    virtual void SAL_CALL processingInstruction( const OUString& rTarget, const OUString& rData ) override;
     virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& xLocator ) override;
 
     // XFastContextHandler
@@ -193,6 +194,12 @@ void SAL_CALL CallbackDocumentHandler::endDocument()
 {
     if ( m_xDocumentHandler.is() )
         m_xDocumentHandler->endDocument();
+}
+
+void SAL_CALL CallbackDocumentHandler::processingInstruction( const OUString& rTarget, const OUString& rData )
+{
+    if ( m_xDocumentHandler.is() )
+        m_xDocumentHandler->processingInstruction( rTarget, rData );
 }
 
 void SAL_CALL CallbackDocumentHandler::setDocumentLocator( const Reference< XLocator >& xLocator )
