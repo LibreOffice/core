@@ -20,6 +20,10 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_TREEOPT_HXX
 #define INCLUDED_CUI_SOURCE_INC_TREEOPT_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <tools/resary.hxx>
 #include <vcl/fixed.hxx>
 
@@ -148,7 +152,7 @@ private:
 
     static LastPageSaver*   pLastPageSaver;
 
-    SfxItemSet*     CreateItemSet( sal_uInt16 nId );
+    std::unique_ptr<SfxItemSet> CreateItemSet( sal_uInt16 nId );
     static void     ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
     void            InitTreeAndHandler();
     void            Initialize( const css::uno::Reference< css::frame::XFrame >& _xFrame );

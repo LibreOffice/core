@@ -452,7 +452,7 @@ public:
     void                        SetDisableFlags( SfxDisableFlags nFlags );
     SfxDisableFlags             GetDisableFlags() const;
 
-    virtual SfxItemSet*         CreateItemSet( sal_uInt16 nId );
+    virtual std::unique_ptr<SfxItemSet> CreateItemSet( sal_uInt16 nId );
     virtual void                ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
 
     /** Set the name of the sidebar context that is broadcast on calls

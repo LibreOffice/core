@@ -221,7 +221,7 @@ public:
     SwFieldUpdateFlags GetFieldUpdateFlags() const;
 
     // Virtual methods for options dialog.
-    virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId ) override;
+    virtual std::unique_ptr<SfxItemSet> CreateItemSet( sal_uInt16 nId ) override;
     virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet ) override;
     virtual VclPtr<SfxTabPage> CreateTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet ) override;
     virtual SfxStyleFamilies* CreateStyleFamilies() override;

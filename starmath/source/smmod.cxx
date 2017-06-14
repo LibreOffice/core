@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/make_unique.hxx>
 #include <sfx2/objface.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/sfx.hrc>
@@ -239,12 +242,12 @@ void SmModule::GetState(SfxItemSet &rSet)
         }
 }
 
-SfxItemSet*  SmModule::CreateItemSet( sal_uInt16 nId )
+std::unique_ptr<SfxItemSet> SmModule::CreateItemSet( sal_uInt16 nId )
 {
-    SfxItemSet*  pRet = nullptr;
+    std::unique_ptr<SfxItemSet> pRet;
     if(nId == SID_SM_EDITOPTIONS)
     {
-        pRet = new SfxItemSet(GetPool(),
+        pRet = o3tl::make_unique<SfxItemSet>(GetPool(),
                              //TP_SMPRINT
                              SID_PRINTSIZE,         SID_PRINTSIZE,
                              SID_PRINTZOOM,         SID_PRINTZOOM,

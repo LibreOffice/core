@@ -74,6 +74,7 @@
 #include <editeng/optitems.hxx>
 #include <editeng/unolingu.hxx>
 #include <linguistic/misc.hxx>
+#include <o3tl/make_unique.hxx>
 #include <officecfg/Office/OptionsDialog.hxx>
 #include <osl/module.hxx>
 #include <osl/process.h>
@@ -465,8 +466,8 @@ struct OptionsPageInfo
 
 struct OptionsGroupInfo
 {
-    SfxItemSet*         m_pInItemSet;
-    SfxItemSet*         m_pOutItemSet;
+    std::unique_ptr<SfxItemSet> m_pInItemSet;
+    std::unique_ptr<SfxItemSet> m_pOutItemSet;
     SfxShell*           m_pShell;       // used to create the page
     SfxModule*          m_pModule;      // used to create the ItemSet
     sal_uInt16          m_nDialogId;    // Id of the former dialog
@@ -475,10 +476,9 @@ struct OptionsGroupInfo
     VclPtr<ExtensionsTabPage>  m_pExtPage;
 
     OptionsGroupInfo( SfxShell* pSh, SfxModule* pMod, sal_uInt16 nId ) :
-        m_pInItemSet( nullptr ), m_pOutItemSet( nullptr ), m_pShell( pSh ),
+        m_pShell( pSh ),
         m_pModule( pMod ), m_nDialogId( nId ), m_bLoadError( false ),
         m_sPageURL( OUString() ), m_pExtPage( nullptr ) {}
-    ~OptionsGroupInfo() { delete m_pInItemSet; delete m_pOutItemSet; }
 };
 
 #define INI_LIST() \
@@ -648,7 +648,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, BackHdl_Impl, Button*, void)
         {
             OptionsGroupInfo* pGroupInfo =
                 static_cast<OptionsGroupInfo*>(pTreeLB->GetParent( pCurrentPageEntry )->GetUserData());
-            pPageInfo->m_pPage->Reset( pGroupInfo->m_pInItemSet );
+            pPageInfo->m_pPage->Reset( pGroupInfo->m_pInItemSet.get() );
         }
         else if ( pPageInfo->m_pExtPage )
             pPageInfo->m_pExtPage->ResetPage();
@@ -668,7 +668,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl, Button*, void)
             if ( RID_SVXPAGE_COLOR != pPageInfo->m_nPageId
                 && pPageInfo->m_pPage->HasExchangeSupport() )
             {
-                DeactivateRC nLeave = pPageInfo->m_pPage->DeactivatePage(pGroupInfo->m_pOutItemSet);
+                DeactivateRC nLeave = pPageInfo->m_pPage->DeactivatePage(pGroupInfo->m_pOutItemSet.get());
                 if ( nLeave == DeactivateRC::KeepPage )
                 {
                     // the page mustn't be left
@@ -690,7 +690,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl, Button*, void)
             {
                 OptionsGroupInfo* pGroupInfo =
                     static_cast<OptionsGroupInfo*>(pTreeLB->GetParent(pEntry)->GetUserData());
-                pPageInfo->m_pPage->FillItemSet(pGroupInfo->m_pOutItemSet);
+                pPageInfo->m_pPage->FillItemSet(pGroupInfo->m_pOutItemSet.get());
             }
 
             if ( pPageInfo->m_pExtPage )
@@ -936,7 +936,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
         OptionsGroupInfo* pGroupInfo = static_cast<OptionsGroupInfo*>(pTreeLB->GetParent(pCurrentPageEntry)->GetUserData());
         DeactivateRC nLeave = DeactivateRC::LeavePage;
         if ( RID_SVXPAGE_COLOR != pOptPageInfo->m_nPageId && pOptPageInfo->m_pPage->HasExchangeSupport() )
-           nLeave = pOptPageInfo->m_pPage->DeactivatePage( pGroupInfo->m_pOutItemSet );
+           nLeave = pOptPageInfo->m_pPage->DeactivatePage( pGroupInfo->m_pOutItemSet.get() );
 
         if ( nLeave == DeactivateRC::KeepPage )
         {
@@ -1008,7 +1008,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
                     ? pGroupInfo->m_pShell->CreateItemSet( pGroupInfo->m_nDialogId )
                     : CreateItemSet( pGroupInfo->m_nDialogId );
             if(!pGroupInfo->m_pOutItemSet)
-                pGroupInfo->m_pOutItemSet = new SfxItemSet(
+                pGroupInfo->m_pOutItemSet = o3tl::make_unique<SfxItemSet>(
                     *pGroupInfo->m_pInItemSet->GetPool(),
                     pGroupInfo->m_pInItemSet->GetRanges());
         }
@@ -1023,7 +1023,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
         {
             SvtViewOptions aTabPageOpt( EViewType::TabPage, OUString::number( pPageInfo->m_nPageId) );
             pPageInfo->m_pPage->SetUserData( GetViewOptUserItem( aTabPageOpt ) );
-            pPageInfo->m_pPage->Reset( pGroupInfo->m_pInItemSet );
+            pPageInfo->m_pPage->Reset( pGroupInfo->m_pInItemSet.get() );
         }
     }
     else if ( 0 == pPageInfo->m_nPageId && !pPageInfo->m_pExtPage )
@@ -1114,15 +1114,15 @@ OfaPageResource::OfaPageResource() :
 {
 }
 
-SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
+std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
 {
     Reference< XLinguProperties >  xProp( LinguMgr::GetLinguPropertySet() );
-    SfxItemSet* pRet = nullptr;
+    std::unique_ptr<SfxItemSet> pRet;
     switch(nId)
     {
         case SID_GENERAL_OPTIONS:
         {
-            pRet = new SfxItemSet(
+            pRet = o3tl::make_unique<SfxItemSet>(
                 SfxGetpApp()->GetPool(),
                 SID_ATTR_METRIC, SID_ATTR_SPELL,
                 SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK,
@@ -1163,7 +1163,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
         break;
         case SID_LANGUAGE_OPTIONS :
         {
-            pRet = new SfxItemSet(SfxGetpApp()->GetPool(),
+            pRet = o3tl::make_unique<SfxItemSet>(SfxGetpApp()->GetPool(),
                     SID_ATTR_LANGUAGE, SID_AUTOSPELL_CHECK,
                     SID_ATTR_CHAR_CJK_LANGUAGE, SID_ATTR_CHAR_CTL_LANGUAGE,
                     SID_OPT_LOCALE_CHANGED, SID_OPT_LOCALE_CHANGED,
@@ -1232,7 +1232,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
         }
         break;
         case SID_INET_DLG :
-                pRet = new SfxItemSet( SfxGetpApp()->GetPool(),
+                pRet = o3tl::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(),
                                 SID_BASIC_ENABLED, SID_BASIC_ENABLED,
                 //SID_OPTIONS_START - ..END
                                 SID_SAVEREL_INET, SID_SAVEREL_FSYS,
@@ -1242,7 +1242,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                 SfxGetpApp()->GetOptions(*pRet);
         break;
         case SID_FILTER_DLG:
-            pRet = new SfxItemSet( SfxGetpApp()->GetPool(),
+            pRet = o3tl::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(),
             SID_ATTR_DOCINFO, SID_ATTR_AUTOSAVEMINUTE,
             SID_SAVEREL_INET, SID_SAVEREL_FSYS,
             SID_ATTR_PRETTYPRINTING, SID_ATTR_PRETTYPRINTING,
@@ -1252,7 +1252,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             break;
 
         case SID_SB_STARBASEOPTIONS:
-            pRet = new SfxItemSet( SfxGetpApp()->GetPool(),
+            pRet = o3tl::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(),
             SID_SB_POOLING_ENABLED, SID_SB_DB_REGISTER,
             0 );
             ::offapp::ConnectionPoolConfig::GetOptions(*pRet);
@@ -1262,7 +1262,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
         case SID_SCH_EDITOPTIONS:
         {
             SvxChartOptions aChartOpt;
-            pRet = new SfxItemSet( SfxGetpApp()->GetPool(), SID_SCH_EDITOPTIONS, SID_SCH_EDITOPTIONS );
+            pRet = o3tl::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(), SID_SCH_EDITOPTIONS, SID_SCH_EDITOPTIONS );
             pRet->Put( SvxChartColorTableItem( SID_SCH_EDITOPTIONS, aChartOpt.GetDefaultColors() ) );
             break;
         }

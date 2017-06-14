@@ -19,6 +19,7 @@
 
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
+#include <o3tl/make_unique.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/styfitem.hxx>
 #include <svl/inethist.hxx>
@@ -409,7 +410,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
 /**
  * virtual methods for option dialog
  */
-SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
+std::unique_ptr<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
 {
     ::sd::FrameView* pFrameView = nullptr;
     ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
@@ -440,7 +441,7 @@ SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
     SfxItemPool& rPool = GetPool();
     rPool.SetDefaultMetric( MapUnit::Map100thMM );
 
-    SfxItemSet*  pRet = new SfxItemSet( rPool,
+    auto pRet = o3tl::make_unique<SfxItemSet>( rPool,
                         SID_ATTR_METRIC, SID_ATTR_METRIC,
                         SID_ATTR_DEFTABSTOP, SID_ATTR_DEFTABSTOP,
 

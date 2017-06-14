@@ -22,7 +22,7 @@
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
-
+#include <o3tl/make_unique.hxx>
 #include "scitems.hxx"
 #include <sfx2/app.hxx>
 #include <editeng/eeitem.hxx>
@@ -1925,12 +1925,12 @@ IMPL_LINK_NOARG(ScModule, SpellTimerHdl, Timer *, void)
 /**
  * Virtual methods for the OptionsDialog
  */
-SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
+std::unique_ptr<SfxItemSet> ScModule::CreateItemSet( sal_uInt16 nId )
 {
-    SfxItemSet*  pRet = nullptr;
+    std::unique_ptr<SfxItemSet> pRet;
     if(SID_SC_EDITOPTIONS == nId)
     {
-        pRet = new SfxItemSet( GetPool(),
+        pRet = o3tl::make_unique<SfxItemSet>( GetPool(),
                             // TP_CALC:
                             SID_SCDOCOPTIONS,       SID_SCDOCOPTIONS,
                             // TP_VIEW:

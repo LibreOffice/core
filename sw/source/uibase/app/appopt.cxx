@@ -23,6 +23,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <hintids.hxx>
+#include <o3tl/make_unique.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/request.hxx>
@@ -72,7 +73,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
+std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
 {
     bool bTextDialog = (nId == SID_SW_EDITOPTIONS);
 
@@ -96,7 +97,7 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
         }
 
     // Options/Edit
-    SfxItemSet* pRet = new SfxItemSet (GetPool(),   FN_PARAM_DOCDISP,       FN_PARAM_ELEM,
+    auto pRet = o3tl::make_unique<SfxItemSet>(GetPool(),   FN_PARAM_DOCDISP,       FN_PARAM_ELEM,
                                     SID_PRINTPREVIEW,       SID_PRINTPREVIEW,
                                     SID_ATTR_GRID_OPTIONS,  SID_ATTR_GRID_OPTIONS,
                                     FN_PARAM_PRINTER,       FN_PARAM_STDFONTS,
