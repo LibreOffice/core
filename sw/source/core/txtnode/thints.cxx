@@ -2758,25 +2758,37 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
                     // in the RSID, which should have no effect on text layout
                     if (RES_TXTATR_AUTOFMT == p1->Which())
                     {
-                        SfxItemSet set1(*p1->GetAutoFormat().GetStyleHandle());
-                        SfxItemSet set2(*p2->GetAutoFormat().GetStyleHandle());
-
-                        set1.ClearItem(RES_CHRATR_RSID);
-                        set2.ClearItem(RES_CHRATR_RSID);
+                        boost::shared_ptr<SfxItemSet> const pSet1(p1->GetAutoFmt().GetStyleHandle());
+                        boost::shared_ptr<SfxItemSet> const pSet2(p2->GetAutoFmt().GetStyleHandle());
+                        auto nCount1 = pSet1->Count();
+                        auto nCount2 = pSet2->Count();
+                        const SfxPoolItem* pRSIDItem1 = nullptr;
+                        if(pSet1->HasItem(RES_CHRATR_RSID, &pRSIDItem1, false))
+                            --nCount1;
+                        const SfxPoolItem* pRSIDItem2 = nullptr;
+                        if(pSet2->HasItem(RES_CHRATR_RSID, &pRSIDItem2, false))
+                            --nCount2;
 
                         // sadly SfxItemSet::operator== does not seem to work?
-                        SfxItemIter iter1(set1);
-                        SfxItemIter iter2(set2);
-                        if (set1.Count() == set2.Count())
+                        if (nCount1 == nCount2)
                         {
+                            SfxItemIter iter1(*pSet1);
+                            SfxItemIter iter2(*pSet2);
                             for (SfxPoolItem const* pItem1 = iter1.FirstItem(),
                                                   * pItem2 = iter2.FirstItem();
                                  pItem1 && pItem2;
                                  pItem1 = iter1.NextItem(),
                                  pItem2 = iter2.NextItem())
                             {
-                                if (pItem1 != pItem2 ||
-                                    pItem1->Which() != pItem2->Which() ||
+                                if (pItem1 == pRSIDItem1 && pItem2 == pRSIDItem2)
+                                    continue;
+                                if(IsInvalidItem(pItem1) && IsInvalidItem(pItem2))
+                                    continue;
+                                if ( pItem1 == pRSIDItem1 ||
+                                     pItem2 == pRSIDItem2 ||
+                                     IsInvalidItem(pItem1) ||
+                                     IsInvalidItem(pItem2) ||
+                                     pItem1->Which() != pItem2->Which() ||
                                     *pItem1 != *pItem2)
                                 {
                                     eMerge = DIFFER;
