@@ -2491,7 +2491,6 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
         rFilter = pFileData->maFilterName;      // don't overwrite stored filter with guessed filter
     else
         ScDocumentLoader::GetFilterName(aFile, rFilter, aOptions, true, false);
-    ScDocumentLoader::GetFilterName(aFile, rFilter, aOptions, true, false);
     std::shared_ptr<const SfxFilter> pFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName(rFilter);
 
     if (pFileData->maRelativeName.isEmpty())
@@ -2606,7 +2605,7 @@ bool ScExternalRefManager::isFileLoadable(const OUString& rFile) const
         return true;    // for http and others, Exists doesn't work, but the URL can still be opened
 }
 
-void ScExternalRefManager::maybeLinkExternalFile(sal_uInt16 nFileId)
+void ScExternalRefManager::maybeLinkExternalFile( sal_uInt16 nFileId, bool bDeferFilterDetection )
 {
     if (maLinkedDocs.count(nFileId))
         // file already linked, or the link has been broken.
@@ -2626,7 +2625,9 @@ void ScExternalRefManager::maybeLinkExternalFile(sal_uInt16 nFileId)
     }
     // If a filter was already set (for example, loading the cached table),
     // don't call GetFilterName which has to access the source file.
-    if (aFilter.isEmpty())
+    // If filter detection is deferred, the next successfull loadSrcDocument()
+    // will update SrcFileData filter name.
+    if (aFilter.isEmpty() && !bDeferFilterDetection)
         ScDocumentLoader::GetFilterName(*pFileName, aFilter, aOptions, true, false);
     sfx2::LinkManager* pLinkMgr = mpDoc->GetLinkManager();
     if (!pLinkMgr)
@@ -2636,8 +2637,8 @@ void ScExternalRefManager::maybeLinkExternalFile(sal_uInt16 nFileId)
     }
     ScExternalRefLink* pLink = new ScExternalRefLink(mpDoc, nFileId, aFilter);
     OSL_ENSURE(pFileName, "ScExternalRefManager::maybeLinkExternalFile: file name pointer is NULL");
-    OUString aTmp = aFilter;
-    pLinkMgr->InsertFileLink(*pLink, OBJECT_CLIENT_FILE, *pFileName, &aTmp);
+    pLinkMgr->InsertFileLink(*pLink, OBJECT_CLIENT_FILE, *pFileName,
+            (aFilter.isEmpty() && bDeferFilterDetection ? nullptr : &aFilter));
 
     pLink->SetDoReferesh(false);
     pLink->Update();
@@ -2655,7 +2656,7 @@ void ScExternalRefManager::addFilesToLinkManager()
             "sc.ui", "ScExternalRefManager::addFilesToLinkManager: files overflow");
     const sal_uInt16 nSize = static_cast<sal_uInt16>( std::min<size_t>( maSrcFiles.size(), SAL_MAX_UINT16));
     for (sal_uInt16 nFileId = 0; nFileId < nSize; ++nFileId)
-        maybeLinkExternalFile( nFileId);
+        maybeLinkExternalFile( nFileId, true);
 }
 
 void ScExternalRefManager::SrcFileData::maybeCreateRealFileName(const OUString& rOwnDocName)
