@@ -222,35 +222,7 @@ void ODbaseTable::readHeader()
     if (m_aHeader.recordLength == 0)
         throwInvalidDbaseFormat();
 
-    m_pFileStream->ReadBytes(m_aHeader.reserved1, 2);
-    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
-        throwInvalidDbaseFormat();
-
-    m_pFileStream->ReadUChar(m_aHeader.incompTransact);
-    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
-        throwInvalidDbaseFormat();
-
-    m_pFileStream->ReadUChar(m_aHeader.encryptionFlag);
-    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
-        throwInvalidDbaseFormat();
-
-    m_pFileStream->ReadBytes(m_aHeader.freeRecordThread, 4);
-    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
-        throwInvalidDbaseFormat();
-
-    m_pFileStream->ReadBytes(m_aHeader.multiUserdBASE, 8);
-    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
-        throwInvalidDbaseFormat();
-
-    m_pFileStream->ReadUChar(m_aHeader.MDXFlag);
-    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
-        throwInvalidDbaseFormat();
-
-    m_pFileStream->ReadUChar(m_aHeader.languageDriver);
-    if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
-        throwInvalidDbaseFormat();
-
-    m_pFileStream->ReadBytes(m_aHeader.reserved2, 2);
+    m_pFileStream->ReadBytes(m_aHeader.trailer, 20);
     if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
         throwInvalidDbaseFormat();
 
@@ -277,9 +249,10 @@ void ODbaseTable::readHeader()
             case dBaseIIIMemo:
             case FoxProMemo:
                 m_pFileStream->SetEndian(SvStreamEndian::LITTLE);
-                if ( m_aHeader.languageDriver != 0x00 && getConnection()->isTextEncodingDefaulted() )
+                // trailer[17] corresponds to language code, see DBFHeader def in connectivity/source/inc/dbase/DTable.hxx
+                if ( m_aHeader.trailer[17] != 0x00 && getConnection()->isTextEncodingDefaulted() )
                 {
-                    switch(m_aHeader.languageDriver)
+                    switch(m_aHeader.trailer[17])
                     {
                         case 0x01: m_eEncoding = RTL_TEXTENCODING_IBM_437; break;       // DOS USA  code page 437
                         case 0x02: m_eEncoding = RTL_TEXTENCODING_IBM_850; break;       // DOS Multilingual code page 850
