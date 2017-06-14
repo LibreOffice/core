@@ -2768,7 +2768,6 @@ void SwEditWin::MoveCursor( SwWrtShell &rSh, const Point& rDocPos,
 void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
-    const SwField *pCursorField = rSh.CursorInsideInputField() ? rSh.GetCurField( true ) : nullptr;
 
     // We have to check if a context menu is shown and we have an UI
     // active inplace client. In that case we have to ignore the mouse
@@ -3633,40 +3632,29 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     rSh.GCAttr();
                     rSh.ClearGCAttr();
                 }
-
+/*
                 SwContentAtPos aFieldAtPos(IsAttrAtPos::Field);
-                bool bEditableFieldClicked = false;
 
                 // Are we clicking on a field?
                 if (rSh.GetContentAtPos(aDocPos, aFieldAtPos))
                 {
-                    bool bEditableField = (aFieldAtPos.pFndTextAttr != nullptr
-                        && aFieldAtPos.pFndTextAttr->Which() == RES_TXTATR_INPUTFIELD);
-
-                    if (!bEditableField)
+                    rSh.CallSetCursor(&aDocPos, bOnlyText);
+                    // Unfortunately the cursor may be on field
+                    // position or on position after field depending on which
+                    // half of the field was clicked on.
+                    SwTextAttr const*const pTextField(aFieldAtPos.pFndTextAttr);
+                    if (rSh.GetCurrentShellCursor().GetPoint()->nContent
+                            .GetIndex() != pTextField->GetStart())
                     {
-                        rSh.CallSetCursor(&aDocPos, bOnlyText);
-                        // Unfortunately the cursor may be on field
-                        // position or on position after field depending on which
-                        // half of the field was clicked on.
-                        SwTextAttr const*const pTextField(aFieldAtPos.pFndTextAttr);
-                        if (rSh.GetCurrentShellCursor().GetPoint()->nContent
-                                .GetIndex() != pTextField->GetStart())
-                        {
-                            assert(rSh.GetCurrentShellCursor().GetPoint()->nContent
-                                    .GetIndex() == (pTextField->GetStart() + 1));
-                            rSh.Left( CRSR_SKIP_CHARS, false, 1, false );
-                        }
-                        // don't go into the !bOverSelect block below - it moves
-                        // the cursor
-                        break;
+                        assert(rSh.GetCurrentShellCursor().GetPoint()->nContent
+                                .GetIndex() == (pTextField->GetStart() + 1));
+                        rSh.Left( CRSR_SKIP_CHARS, false, 1, false );
                     }
-                    else
-                    {
-                        bEditableFieldClicked = true;
-                    }
+                    // don't go into the !bOverSelect block below - it moves
+                    // the cursor
+                    break;
                 }
-
+*/
                 bool bOverSelect = rSh.TestCurrPam( aDocPos );
                 bool bOverURLGrf = false;
                 if( !bOverSelect )
@@ -3691,44 +3679,11 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         bCallBase = false;
                     }
                 }
-                if ( !bOverSelect && bEditableFieldClicked && (!pCursorField ||
-                     pCursorField != aFieldAtPos.pFndTextAttr->GetFormatField().GetField()))
-                {
-                    // select content of Input Field, but exclude CH_TXT_ATR_INPUTFIELDSTART
-                    // and CH_TXT_ATR_INPUTFIELDEND
-                    rSh.SttSelect();
-                    rSh.SelectText( aFieldAtPos.pFndTextAttr->GetStart() + 1,
-                                 *(aFieldAtPos.pFndTextAttr->End()) - 1 );
-                }
                 // don't reset here any longer so that, in case through MouseMove
                 // with pressed Ctrl key a multiple-selection should happen,
                 // the previous selection is not released in Drag.
                 break;
             }
-        }
-    }
-    else if ( MOUSE_RIGHT == rMEvt.GetButtons() && !rMEvt.GetModifier()
-        && static_cast< sal_uInt8 >(rMEvt.GetClicks() % 4) == 1
-        && !rSh.TestCurrPam( aDocPos ) )
-    {
-        SwContentAtPos aFieldAtPos(IsAttrAtPos::Field);
-
-        // Are we clicking on a field?
-        if (g_bValidCursorPos
-            && rSh.GetContentAtPos(aDocPos, aFieldAtPos)
-            && aFieldAtPos.pFndTextAttr != nullptr
-            && aFieldAtPos.pFndTextAttr->Which() == RES_TXTATR_INPUTFIELD
-            && (!pCursorField || pCursorField != aFieldAtPos.pFndTextAttr->GetFormatField().GetField()))
-        {
-            // Move the cursor
-            MoveCursor( rSh, aDocPos, rSh.IsObjSelectable( aDocPos ), m_bWasShdwCursor );
-            bCallBase = false;
-
-            // select content of Input Field, but exclude CH_TXT_ATR_INPUTFIELDSTART
-            // and CH_TXT_ATR_INPUTFIELDEND
-            rSh.SttSelect();
-            rSh.SelectText( aFieldAtPos.pFndTextAttr->GetStart() + 1,
-                         *(aFieldAtPos.pFndTextAttr->End()) - 1 );
         }
     }
 
@@ -4619,30 +4574,11 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     bAddMode = true;
                                     rSh.EnterAddMode();
                                 }
-                                if ( aContentAtPos.pFndTextAttr != nullptr
-                                     && aContentAtPos.pFndTextAttr->Which() == RES_TXTATR_INPUTFIELD )
-                                {
-                                    if (!rSh.IsInSelect())
-                                    {
-                                        // create only temporary move context because otherwise
-                                        // the query to the content form doesn't work!!!
-                                        SwMvContext aMvContext( &rSh );
-                                        const Point aDocPos( PixelToLogic( m_aStartPos ) );
-                                        g_bValidCursorPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPos, false));
-                                    }
-                                    else
-                                    {
-                                        g_bValidCursorPos = true;
-                                    }
-                                }
-                                else
-                                {
-                                    rSh.ClickToField( *aContentAtPos.aFnd.pField );
-                                    // a bit of a mystery what this is good for?
-                                    // in this case we assume it's valid since we
-                                    // just selected a field
-                                    g_bValidCursorPos = true;
-                                }
+                                rSh.ClickToField( *aContentAtPos.aFnd.pField );
+                                // a bit of a mystery what this is good for?
+                                // in this case we assume it's valid since we
+                                // just selected a field
+                                g_bValidCursorPos = true;
                                 if (bAddMode)
                                 {
                                     rSh.LeaveAddMode();

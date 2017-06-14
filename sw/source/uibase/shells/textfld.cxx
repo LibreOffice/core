@@ -191,17 +191,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                             bAddSetExpressionFields ) )
                 {
                     rSh.ClearMark();
-                    if ( dynamic_cast<SwInputField*>(rSh.GetCurField( true )) != nullptr )
-                    {
-                        rSh.SttSelect();
-                        rSh.SelectText(
-                            SwCursorShell::StartOfInputFieldAtPos( *(rSh.GetCursor()->Start()) ) + 1,
-                            SwCursorShell::EndOfInputFieldAtPos( *(rSh.GetCursor()->Start()) ) - 1 );
-                    }
-                    else
-                    {
-                        rSh.StartInputFieldDlg( rSh.GetCurField( true ), false );
-                    }
+                    rSh.StartInputFieldDlg( rSh.GetCurField( true ), false );
                     bRet = true;
                 }
 

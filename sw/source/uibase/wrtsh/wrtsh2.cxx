@@ -385,13 +385,7 @@ void SwWrtShell::ClickToField( const SwField& rField )
         break;
 
     case SwFieldIds::Input:
-        {
-            const SwInputField* pInputField = dynamic_cast<const SwInputField*>(&rField);
-            if ( pInputField == nullptr )
-            {
-                StartInputFieldDlg( const_cast<SwField*>(&rField), false );
-            }
-        }
+        StartInputFieldDlg(const_cast<SwField*>(&rField), false);
         break;
 
     case SwFieldIds::SetExp:
