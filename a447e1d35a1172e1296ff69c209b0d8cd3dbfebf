@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_044e0396",
+        "filename": "comphelper/source/misc/profilezone.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-14T19:03:26Z",
+      "side": 1,
+      "message": "maybe mention the units?",
+      "revId": "a447e1d35a1172e1296ff69c209b0d8cd3dbfebf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_845af34e",
+        "filename": "include/comphelper/profilezone.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-14T19:03:26Z",
+      "side": 1,
+      "message": "can be private?",
+      "revId": "a447e1d35a1172e1296ff69c209b0d8cd3dbfebf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_a459af5c",
+        "filename": "include/comphelper/profilezone.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-14T19:03:26Z",
+      "side": 1,
+      "message": "mutex seems unnecessary - these things are declared on the stack, so can only be accessed from a single thread",
+      "revId": "a447e1d35a1172e1296ff69c209b0d8cd3dbfebf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
