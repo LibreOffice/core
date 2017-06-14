@@ -77,7 +77,7 @@ struct EventList
     bool mbIsAttributesEmpty;
 };
 
-enum CallbackType { INVALID, START_ELEMENT, END_ELEMENT, CHARACTERS, DONE, EXCEPTION };
+enum CallbackType { INVALID, START_ELEMENT, END_ELEMENT, CHARACTERS, PROCESSING_INSTRUCTION, DONE, EXCEPTION };
 
 struct Event
 {
@@ -193,6 +193,7 @@ struct Entity : public ParserData
     void startElement( Event *pEvent );
     void characters( const OUString& sChars );
     void endElement();
+    void processingInstruction( const OUString& rTarget, const OUString& rData );
     EventList* getEventList();
     Event& getEvent( CallbackType aType );
 };
@@ -236,6 +237,7 @@ public:
         int numNamespaces, const xmlChar** namespaces, int numAttributes, const xmlChar **attributes );
     void callbackEndElement();
     void callbackCharacters( const xmlChar* s, int nLen );
+    void callbackProcessingInstruction( const xmlChar *target, const xmlChar *data );
 #if 0
     bool callbackExternalEntityRef( XML_Parser parser, const xmlChar *openEntityNames, const xmlChar *base, const xmlChar *systemId, const xmlChar *publicId);
     void callbackEntityDecl(const xmlChar *entityName, int is_parameter_entity,
@@ -324,6 +326,12 @@ static void call_callbackCharacters( void *userData , const xmlChar *s , int nLe
 {
     FastSaxParserImpl* pFastParser = static_cast<FastSaxParserImpl*>( userData );
     pFastParser->callbackCharacters( s, nLen );
+}
+
+static void call_callbackProcessingInstruction( void *userData, const xmlChar *target, const xmlChar *data )
+{
+    FastSaxParserImpl* pFastParser = static_cast<FastSaxParserImpl*>( userData );
+    pFastParser->callbackProcessingInstruction( target, data );
 }
 
 #if 0
@@ -527,6 +535,18 @@ void Entity::endElement()
         saveException( ::cppu::getCaughtException() );
     }
     maContextStack.pop();
+}
+
+void Entity::processingInstruction( const OUString& rTarget, const OUString& rData )
+{
+    if( mxDocumentHandler.is() ) try
+    {
+        mxDocumentHandler->processingInstruction( rTarget, rData );
+    }
+    catch (const Exception&)
+    {
+        saveException( ::cppu::getCaughtException() );
+    }
 }
 
 EventList* Entity::getEventList()
@@ -976,6 +996,10 @@ bool FastSaxParserImpl::consume(EventList *pEventList)
             case CHARACTERS:
                 rEntity.characters( (*aEventIt).msChars );
                 break;
+            case PROCESSING_INSTRUCTION:
+                rEntity.processingInstruction(
+                    (*aEventIt).msNamespace, (*aEventIt).msElementName ); // ( target, data )
+                break;
             case DONE:
                 return false;
             case EXCEPTION:
@@ -1014,6 +1038,7 @@ void FastSaxParserImpl::parse()
     callbacks.startElementNs = call_callbackStartElement;
     callbacks.endElementNs = call_callbackEndElement;
     callbacks.characters = call_callbackCharacters;
+    callbacks.processingInstruction = call_callbackProcessingInstruction;
     callbacks.initialized = XML_SAX2_MAGIC;
 #if 0
     XML_SetEntityDeclHandler(entity.mpParser, call_callbackEntityDecl);
@@ -1257,6 +1282,25 @@ void FastSaxParserImpl::sendPendingCharacters()
         produce();
     else
         rEntity.characters( rEvent.msChars );
+}
+
+void FastSaxParserImpl::callbackProcessingInstruction( const xmlChar *target, const xmlChar *data )
+{
+    Entity& rEntity = getEntity();
+    Event& rEvent = rEntity.getEvent( PROCESSING_INSTRUCTION );
+
+    // This event is very rare, so no need to waste extra space for this
+    // Using namespace and element strings to be target and data in that order.
+    rEvent.msNamespace = OUString( XML_CAST( target ), strlen( XML_CAST( target ) ), RTL_TEXTENCODING_UTF8 );
+    if ( data != nullptr )
+        rEvent.msElementName = OUString( XML_CAST( data ), strlen( XML_CAST( data ) ), RTL_TEXTENCODING_UTF8 );
+    else
+        rEvent.msElementName.clear();
+
+    if (rEntity.mbEnableThreads)
+        produce();
+    else
+        rEntity.processingInstruction( rEvent.msNamespace, rEvent.msElementName );
 }
 
 #if 0

@@ -72,6 +72,8 @@ public:
     {}
     void SAL_CALL endDocument() override
     {}
+    void SAL_CALL processingInstruction( const OUString& /*rTarget*/, const OUString& /*rData*/ ) override
+    {}
     void SAL_CALL setDocumentLocator( const Reference< XLocator >& /*xLocator*/ ) override
     {}
     void SAL_CALL startFastElement( sal_Int32 /*Element*/, const Reference< XFastAttributeList >& /*Attribs*/ ) override
