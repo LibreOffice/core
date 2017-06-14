@@ -119,7 +119,6 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
     writerfilter/source/dmapper/util \
     writerfilter/source/filter/RtfFilter \
     writerfilter/source/filter/WriterFilter \
-    writerfilter/source/filter/WriterFilterDetection \
     writerfilter/source/ooxml/Handler \
     writerfilter/source/ooxml/OOXMLBinaryObjectReference \
     writerfilter/source/ooxml/OOXMLDocumentImpl \
