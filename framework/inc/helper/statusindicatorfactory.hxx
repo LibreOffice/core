@@ -105,11 +105,11 @@ struct IndicatorInfo
             m_xIndicator.clear();
         }
 
-        /** @short  Used to locate an info struct inside a stl structure ...
+        /** @short  Used to locate an info struct inside a stl structure...
 
             @descr  The indicator object itself is used as key. Its values
-                    are not interesting then. Because mor then one child
-                    indicator can use the same values ...
+                    are not interesting then. Because more then one child
+                    indicator can use the same values...
          */
         bool operator==(const css::uno::Reference< css::task::XStatusIndicator >& xIndicator)
         {
