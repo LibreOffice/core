@@ -41,8 +41,6 @@ module com { module sun { module star { module xml { module crypto {
  *
  * <p>With the help of signature context, the signer or verifier specifies the
  * key from the KeyInfo in the signature template.</p>
- *
- * Owner: Andrew Fan
  */
 interface XXMLSignatureTemplate : XXMLSecurityTemplate
 {
