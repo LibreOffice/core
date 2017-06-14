@@ -694,11 +694,11 @@ SyntaxHighlighter::SyntaxHighlighter(HighlighterLanguage language):
     {
         case HighlighterLanguage::Basic:
             m_tokenizer->setKeyWords( strListBasicKeyWords,
-                                            sizeof( strListBasicKeyWords ) / sizeof( char* ));
+                                      SAL_N_ELEMENTS( strListBasicKeyWords ));
             break;
         case HighlighterLanguage::SQL:
             m_tokenizer->setKeyWords( strListSqlKeyWords,
-                                            sizeof( strListSqlKeyWords ) / sizeof( char* ));
+                                      SAL_N_ELEMENTS( strListSqlKeyWords ));
             break;
         default:
             assert(false); // this cannot happen

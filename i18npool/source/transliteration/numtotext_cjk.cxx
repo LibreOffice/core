@@ -60,7 +60,7 @@ TRANSLITERATION_NUMTOTEXT( KanjiShortModern_ja_JP, NATNUM7)
 NumToText##name::NumToText##name() \
 { \
         table = _table;\
-        tableSize = sizeof(_table) / sizeof(sal_Unicode); \
+        tableSize = SAL_N_ELEMENTS(_table); \
         recycleSymbol = recycle; \
         transliterationName = "NumToText"#name; \
         implementationName = "com.sun.star.i18n.Transliteration.NumToText"#name; \

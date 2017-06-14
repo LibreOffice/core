@@ -44,7 +44,7 @@ char const* const* OtherInfo::getJavaExePaths(int * size)
         "jre/bin/java"
 #endif
     };
-        *size = sizeof (ar) / sizeof (char*);
+        *size = SAL_N_ELEMENTS (ar);
     return ar;
 }
 
@@ -72,7 +72,7 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
 #endif
 
     };
-    *size = sizeof(ar) / sizeof (char*);
+    *size = SAL_N_ELEMENTS(ar);
     return ar;
 }
 
@@ -94,7 +94,7 @@ char const* const* OtherInfo::getLibraryPaths(int* size)
         "/lib/" JFW_PLUGIN_ARCH
     };
 
-    *size = sizeof(ar) / sizeof (char*);
+    *size = SAL_N_ELEMENTS(ar);
     return ar;
 #else
     *size = 0;

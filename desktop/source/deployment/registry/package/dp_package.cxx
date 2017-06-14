@@ -1511,10 +1511,8 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
     if (title.endsWithIgnoreAsciiCase("skip_registration") )
         skip_registration = true;
 
-    OUString ar [] = { OUString("Title"), OUString("IsFolder") };
-    Reference<sdbc::XResultSet> xResultSet(
-        ucbContent.createCursor(
-            Sequence<OUString>( ar, ARLEN(ar) ) ) );
+    Sequence<OUString> ar { OUString("Title"), OUString("IsFolder") };
+    Reference<sdbc::XResultSet> xResultSet( ucbContent.createCursor( ar ) );
     while (xResultSet->next())
     {
         checkAborted( abortChannel );

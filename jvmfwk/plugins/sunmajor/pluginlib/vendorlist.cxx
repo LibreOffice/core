@@ -54,7 +54,7 @@ END_VENDOR_MAP()
 
 bool isVendorSupported(const OUString& sVendor)
 {
-    const size_t count = sizeof(gVendorMap) / sizeof (VendorSupportMapEntry) - 1;
+    const size_t count = SAL_N_ELEMENTS(gVendorMap) - 1;
     for ( size_t pos = 0; pos < count; ++pos )
     {
         if (sVendor.equalsAscii(gVendorMap[pos].sVendorName))

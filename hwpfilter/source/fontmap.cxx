@@ -24,6 +24,7 @@
 #include <string.h>
 #endif
 
+#include <sal/types.h>
 #include <fontmap.hxx>
 
 struct FontEntry
@@ -145,16 +146,14 @@ const char* const RepFontTab[] =
 
 int getRepFamilyName(const char* orig, char *buf, double &ratio)
 {
-    int i;
-    int size = sizeof(FontMapTab)/sizeof(FontEntry);
-    for( i = 0 ; i < size ; i++)
+    for( int i = 0 ; i < int(SAL_N_ELEMENTS(FontMapTab)); i++)
     {
         if( !strcmp(orig, FontMapTab[i].familyname) ){
                 ratio = FontMapTab[i].ratio;
             return strlen( strcpy(buf,RepFontTab[FontMapTab[i].key]) );
           }
     }
-     ratio = FontMapTab[0].ratio;
+    ratio = FontMapTab[0].ratio;
     return strlen( strcpy(buf, RepFontTab[0] ) );
 }
 

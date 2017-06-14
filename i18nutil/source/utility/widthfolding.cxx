@@ -220,9 +220,7 @@ oneToOneMapping& widthfolding::getfull2halfTableForASC()
     //
     //  See the following page for detail:
     // http://wiki.openoffice.org/wiki/Calc/Features/JIS_and_ASC_functions
-    int i, j;
-    int n = sizeof(full2halfASCException) / sizeof(UnicodePairWithFlag);
-    for( i = 0; i < n; i++ )
+    for( int i = 0; i < int(SAL_N_ELEMENTS(full2halfASCException)); i++ )
     {
         const int high = (full2halfASCException[i].first >> 8) & 0xFF;
         const int low  = (full2halfASCException[i].first)      & 0xFF;
@@ -231,7 +229,7 @@ oneToOneMapping& widthfolding::getfull2halfTableForASC()
         {
             table.mpIndex[high] = new UnicodePairWithFlag*[256];
 
-            for( j = 0; j < 256; j++ )
+            for( int j = 0; j < 256; j++ )
                 table.mpIndex[high][j] = nullptr;
         }
         table.mpIndex[high][low] = &full2halfASCException[i];
@@ -255,7 +253,7 @@ oneToOneMapping& widthfolding::gethalf2fullTableForJIS()
     //  See the following page for detail:
     // http://wiki.openoffice.org/wiki/Calc/Features/JIS_and_ASC_functions
     int i, j;
-    int n = sizeof(half2fullJISException) / sizeof(UnicodePairWithFlag);
+    int n = SAL_N_ELEMENTS(half2fullJISException);
     for( i = 0; i < n; i++ )
     {
         const int high = (half2fullJISException[i].first >> 8) & 0xFF;
