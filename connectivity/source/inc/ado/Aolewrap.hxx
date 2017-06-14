@@ -98,7 +98,7 @@ namespace connectivity
             {
             }
 
-            operator T*() const { return static_cast<T*>(pInterface); }
+            operator T*() const { return pInterface; }
             void setWithOutAddRef(T* _pInterface)
             {
                 pInterface = _pInterface;
