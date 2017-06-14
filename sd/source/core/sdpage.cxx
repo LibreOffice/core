@@ -185,8 +185,6 @@ SdPage::~SdPage()
 
     clearChildNodes(mxAnimationNode);
 
-    delete mpItems;
-
     Clear();
 }
 

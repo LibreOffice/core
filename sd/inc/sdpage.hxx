@@ -134,7 +134,7 @@ protected:
 
     virtual css::uno::Reference< css::uno::XInterface > createUnoPage() override;
 
-    SfxItemSet* mpItems;
+    std::unique_ptr<SfxItemSet> mpItems;
 
     SfxItemSet* getOrCreateItems();
 

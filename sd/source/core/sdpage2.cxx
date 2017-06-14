@@ -19,7 +19,7 @@
 
 #include <vector>
 #include <libxml/xmlwriter.h>
-
+#include <o3tl/make_unique.hxx>
 #include <sfx2/docfile.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/outliner.hxx>
@@ -479,9 +479,9 @@ SfxStyleSheet* SdPage::GetTextStyleSheetForObject( SdrObject* pObj ) const
 SfxItemSet* SdPage::getOrCreateItems()
 {
     if( mpItems == nullptr )
-        mpItems = new SfxItemSet( pModel->GetItemPool(), SDRATTR_XMLATTRIBUTES, SDRATTR_XMLATTRIBUTES );
+        mpItems = o3tl::make_unique<SfxItemSet>( pModel->GetItemPool(), SDRATTR_XMLATTRIBUTES, SDRATTR_XMLATTRIBUTES );
 
-    return mpItems;
+    return mpItems.get();
 }
 
 bool SdPage::setAlienAttributes( const css::uno::Any& rAttributes )
