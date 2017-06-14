@@ -14,7 +14,7 @@ from com.sun.star.drawing.RectanglePoint import MIDDLE_MIDDLE
 
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
-import unittest
+from uitest.uihelper.common import get_state_as_dict
 
 class WriterPageDialog(UITestCase):
 
@@ -149,34 +149,27 @@ class WriterPageDialog(UITestCase):
 
         self.ui_test.close_doc()
 
-    @unittest.skip("Currently broken")
     def test_page_tab(self):
 
-        size_list = [[10500,14801], [14801,21001], [21001,29700], [29700,42000],
-            [12501,17600], [17600,25000], [25000,35301], [21590,27940],
-            [21590,35560], [21590,33020], [27940,43180], [12801,18200],
-            [18200,25700], [25700,36400], [18399,26000], [13000,18399],
-            [14000,20301], [14000,20301], [11000,21999], [11400,16200],
-            [11400,22901], [16200,22901], [22901,32401], [9208,16510],
-            [9843,19050], [9843,22543], [10478,24130], [11430,26353]]
+        lPaperFormat = ["A6", "A5", "A4", "A3", "B6 (ISO)", "B5 (ISO)", "B4 (ISO)", "Letter",
+            "Legal", "Long Bond", "Tabloid", "B6 (JIS)", "B5 (JIS)", "B4 (JIS)", "16 Kai",
+            "32 Kai", "Big 32 Kai", "User", "DL Envelope", "C6 Envelope", "C6/5 Envelope",
+            "C5 Envelope", "C4 Envelope", "#6¾ Envelope", "#7¾ (Monarch) Envelope",
+            "#9 Envelope", "#10 Envelope", "#11 Envelope", "#12 Envelope", "Japanese Postcard"]
 
         self.ui_test.create_doc_in_start_center("writer")
 
-        for i in range(28):
+        for i in range(30):
             with self.subTest(i=i):
                 xDialog = self.launch_dialog_and_select_tab(1)
 
                 xFormatList = xDialog.getChild("comboPageFormat")
                 select_pos(xFormatList, str(i))
 
+                self.assertEqual(
+                    get_state_as_dict(xFormatList)["SelectEntryText"], lPaperFormat[i])
+
                 self.click_button(xDialog, 'ok')
-
-                document = self.ui_test.get_component()
-
-                self.assertEqual(
-                    document.StyleFamilies.PageStyles.Standard.Width, size_list[i][0])
-                self.assertEqual(
-                    document.StyleFamilies.PageStyles.Standard.Height, size_list[i][1])
 
         self.ui_test.close_doc()
 
