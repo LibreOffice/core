@@ -799,9 +799,11 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
         }
     }
     if ( !bCont )
-    {   // we're done with it, throw away jump matrix, keep result
+    {   // We're done with it, throw away jump matrix, keep result.
+        // For an intermediate result of Reference use the array of references,
+        // else (also for a final result of Reference) use the matrix.
         formula::ParamClass eReturnType = ScParameterClassification::GetParameterType( pCur, SAL_MAX_UINT16);
-        if (eReturnType == ParamClass::Reference)
+        if (eReturnType == ParamClass::Reference && aCode.PeekNextOperator())
         {
             FormulaTokenRef xRef = new ScRefListToken(true);
             *(xRef->GetRefList()) = pJumpMatrix->GetRefList();
