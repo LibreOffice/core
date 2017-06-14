@@ -112,6 +112,17 @@ namespace frm
         */
         void        setNewStringItemList( const css::uno::Any& _rValue, ControlModelLock& _rInstanceLock );
 
+        /** helper for implementing setFastPropertyValueNoBroadcast
+
+            <p>Will internally call stringItemListChanged after the new item list
+            has been set.</p>
+
+            @precond
+                not to be called when we have an external list source
+            @see hasExternalListSource
+        */
+        void        setNewTypedItemList( const css::uno::Any& _rValue, ControlModelLock& _rInstanceLock );
+
         /** announces that the list of entries has changed.
 
             <p>Derived classes have to override this. Most probably, they'll set the new

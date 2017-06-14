@@ -387,6 +387,15 @@ namespace frm
         resetNoBroadcast();
         break;
 
+        case PROPERTY_ID_TYPEDITEMLIST:
+        {
+            ControlModelLock aLock( *this );
+            setNewTypedItemList( _rValue, aLock );
+            // Same TODO as above.
+        }
+        resetNoBroadcast();
+        break;
+
         default:
             OBoundControlModel::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
         }
@@ -437,6 +446,12 @@ namespace frm
 
         case PROPERTY_ID_STRINGITEMLIST:
             bModified = convertNewListSourceProperty( _rConvertedValue, _rOldValue, _rValue );
+            break;
+
+        case PROPERTY_ID_TYPEDITEMLIST :
+            if (hasExternalListSource())
+                throw IllegalArgumentException();
+            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, getTypedItemList());
             break;
 
         default:
@@ -511,7 +526,16 @@ namespace frm
             // <----- SYNCHRONIZED
             return;
         }
-        // XXX NOTE: PROPERTY_TYPEDITEMLIST not handled, used only with external list source.
+        else if ( i_rEvent.PropertyName == PROPERTY_TYPEDITEMLIST )
+        {
+            ControlModelLock aLock( *this );
+            // SYNCHRONIZED ----->
+            // our aggregate internally changed its TypedItemList property - reflect this in our "overridden"
+            // version of the property
+            setNewTypedItemList( i_rEvent.NewValue, aLock );
+            // <----- SYNCHRONIZED
+            return;
+        }
         OBoundControlModel::_propertyChanged( i_rEvent );
     }
 

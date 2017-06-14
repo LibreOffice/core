@@ -320,6 +320,20 @@ namespace frm
     }
 
 
+    void OEntryListHelper::setNewTypedItemList( const css::uno::Any& _rValue, ControlModelLock& _rInstanceLock )
+    {
+        OSL_PRECOND( !hasExternalListSource(), "OEntryListHelper::setNewTypedItemList: this should never have survived convertNewListSourceProperty!" );
+        if (!(_rValue >>= m_aTypedItems ))
+        {
+            OSL_VERIFY(false);
+            if (m_aTypedItems.getLength())
+                m_aTypedItems = Sequence<Any>();    // doesn't match anymore
+        }
+        // Sets both properties, assuming that TypedItemList belongs to StringItemList.
+        stringItemListChanged( _rInstanceLock );
+    }
+
+
 }   // namespace frm
 
 

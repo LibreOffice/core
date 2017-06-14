@@ -251,10 +251,13 @@ void OComboBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const 
         }
         break;
 
-        // XXX NOTE: PROPERTY_ID_TYPEDITEMLIST not handled here because only
-        // set for external sources in which case not even
-        // setNewStringItemList() for PROPERTY_ID_STRINGITEMLIST above should
-        // had been called ...
+        case PROPERTY_ID_TYPEDITEMLIST:
+        {
+            ControlModelLock aLock( *this );
+            setNewTypedItemList( _rValue, aLock );
+            // Same FIXME as above.
+        }
+        break;
 
         default:
             OBoundControlModel::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
@@ -285,6 +288,12 @@ sal_Bool OComboBoxModel::convertFastPropertyValue(
 
         case PROPERTY_ID_STRINGITEMLIST:
             bModified = convertNewListSourceProperty( _rConvertedValue, _rOldValue, _rValue );
+            break;
+
+        case PROPERTY_ID_TYPEDITEMLIST :
+            if (hasExternalListSource())
+                throw IllegalArgumentException();
+            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, getTypedItemList());
             break;
 
         default:
