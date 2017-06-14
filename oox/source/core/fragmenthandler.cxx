@@ -59,6 +59,10 @@ void FragmentHandler::endDocument()
 {
 }
 
+void FragmentHandler::processingInstruction( const OUString& /*rTarget*/, const OUString& /*rData*/ )
+{
+}
+
 void FragmentHandler::setDocumentLocator( const Reference< XLocator >& rxLocator )
 {
     implSetLocator( rxLocator );

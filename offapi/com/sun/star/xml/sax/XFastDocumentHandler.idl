@@ -50,6 +50,12 @@ interface XFastDocumentHandler: XFastContextHandler
             raises( com::sun::star::xml::sax::SAXException );
 
 
+    /** receives notification of a processing instruction.
+     */
+    void processingInstruction( [in] string aTarget, [in] string aData )
+            raises( com::sun::star::xml::sax::SAXException );
+
+
     /** receives an object for locating the origin of SAX document events.
      */
     void setDocumentLocator( [in] com::sun::star::xml::sax::XLocator xLocator )
