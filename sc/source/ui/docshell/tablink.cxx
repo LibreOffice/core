@@ -266,7 +266,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
             /*  #i71497# check if external document is loaded successfully,
                 otherwise we may find the empty default sheet "Sheet1" in
                 rSrcDoc, even if the document does not exist. */
-            if( pMed->GetError() == 0 )
+            if( pMed->GetError() == ERRCODE_NONE )
             {
                 // no sheet name -> use first sheet
                 if ( !aTabName.isEmpty() && !bAutoTab )

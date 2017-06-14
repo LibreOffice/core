@@ -397,7 +397,7 @@ public:
     bool eof() const { return m_isEof; }
 
     /// stream is broken
-    bool bad() const { return GetError() != 0; }
+    bool bad() const { return GetError() != ERRCODE_NONE; }
 
     /** Get state
 

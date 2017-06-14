@@ -1027,7 +1027,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
         if( meType == GraphicType::Bitmap || meType == GraphicType::GdiMetafile )
         {
             ReadImpGraphic( rIStm, *this );
-            bRet = ( rIStm.GetError() == 0UL );
+            bRet = rIStm.GetError() == ERRCODE_NONE;
         }
         else if( sal::static_int_cast<sal_uLong>(meType) >= SYS_WINMETAFILE
                  && sal::static_int_cast<sal_uLong>(meType) <= SYS_MACMETAFILE )
@@ -1050,7 +1050,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
             if( nType && GraphicConverter::Import( rIStm, aSysGraphic, nCvtType ) == ERRCODE_NONE )
             {
                 *this = ImpGraphic( aSysGraphic.GetGDIMetaFile() );
-                bRet = ( rIStm.GetError() == 0UL );
+                bRet = rIStm.GetError() == ERRCODE_NONE;
             }
             else
                 meType = GraphicType::Default;

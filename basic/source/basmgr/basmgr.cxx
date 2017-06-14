@@ -1542,7 +1542,7 @@ bool BasicManager::HasMacro( OUString const& i_fullyQualifiedName ) const
 ErrCode BasicManager::ExecuteMacro( OUString const& i_fullyQualifiedName, SbxArray* i_arguments, SbxValue* i_retValue )
 {
     SbMethod* pMethod = lcl_queryMacro( this, i_fullyQualifiedName );
-    ErrCode nError = 0;
+    ErrCode nError = ERRCODE_NONE;
     if ( pMethod )
     {
         if ( i_arguments )

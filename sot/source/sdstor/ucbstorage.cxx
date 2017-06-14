@@ -639,7 +639,7 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const OUString& rName, StreamMode 
     , m_pContent( nullptr )
     , m_pStream( nullptr )
     , m_nRepresentMode( RepresentMode::NONE )
-    , m_nError( 0 )
+    , m_nError( ERRCODE_NONE )
     , m_nMode( nMode )
     , m_bSourceRead( !( nMode & StreamMode::TRUNC ) )
     , m_bModified( false )
@@ -1009,7 +1009,7 @@ void UCBStorageStream_Impl::SetError( ErrCode nErr )
 
 void  UCBStorageStream_Impl::ResetError()
 {
-    m_nError = 0;
+    m_nError = ERRCODE_NONE;
     SvStream::ResetError();
     if ( m_pAntiImpl )
         m_pAntiImpl->ResetError();
@@ -1470,7 +1470,7 @@ UCBStorage_Impl::UCBStorage_Impl( const ::ucbhelper::Content& rContent, const OU
     , m_pTempFile( nullptr )
     , m_pSource( nullptr )
     //, m_pStream( NULL )
-    , m_nError( 0 )
+    , m_nError( ERRCODE_NONE )
     , m_nMode( nMode )
     , m_bCommited( false )
     , m_bDirect( bDirect )
@@ -1502,7 +1502,7 @@ UCBStorage_Impl::UCBStorage_Impl( const OUString& rName, StreamMode nMode, UCBSt
     , m_pTempFile( nullptr )
     , m_pSource( nullptr )
     //, m_pStream( NULL )
-    , m_nError( 0 )
+    , m_nError( ERRCODE_NONE )
     , m_nMode( nMode )
     , m_bCommited( false )
     , m_bDirect( bDirect )
@@ -1553,7 +1553,7 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, bool 
     , m_pContent( nullptr )
     , m_pTempFile( new ::utl::TempFile )
     , m_pSource( &rStream )
-    , m_nError( 0 )
+    , m_nError( ERRCODE_NONE )
     , m_bCommited( false )
     , m_bDirect( bDirect )
     , m_bIsRoot( true )

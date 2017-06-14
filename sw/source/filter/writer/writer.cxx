@@ -340,7 +340,7 @@ bool Writer::CopyLocalFileToINet( OUString& rFileNm )
     aSrcFile.Close();
     aDstFile.Commit();
 
-    bRet = 0 == aDstFile.GetError();
+    bRet = ERRCODE_NONE == aDstFile.GetError();
 
     if( bRet )
     {

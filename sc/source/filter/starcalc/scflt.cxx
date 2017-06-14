@@ -411,7 +411,7 @@ Sc10FontCollection::Sc10FontCollection(SvStream& rStream)
     {
         sal_uInt16 nAnz(0);
         rStream.ReadUInt16( nAnz );
-        for (sal_uInt16 i=0; (i < nAnz) && (nError == 0); i++)
+        for (sal_uInt16 i=0; (i < nAnz) && (nError == ERRCODE_NONE); i++)
         {
             nError = insert_new<Sc10FontData>( this, rStream);
         }
@@ -452,7 +452,7 @@ Sc10NameCollection::Sc10NameCollection(SvStream& rStream) :
     {
         sal_uInt16 nAnz;
         rStream.ReadUInt16( nAnz );
-        for (sal_uInt16 i=0; (i < nAnz) && (nError == 0); i++)
+        for (sal_uInt16 i=0; (i < nAnz) && (nError == ERRCODE_NONE); i++)
         {
             nError = insert_new<Sc10NameData>( this, rStream);
         }
@@ -502,7 +502,7 @@ Sc10PatternCollection::Sc10PatternCollection(SvStream& rStream)
     {
         sal_uInt16 nAnz;
         rStream.ReadUInt16( nAnz );
-        for (sal_uInt16 i=0; (i < nAnz) && (nError == 0); i++)
+        for (sal_uInt16 i=0; (i < nAnz) && (nError == ERRCODE_NONE); i++)
         {
             nError = insert_new<Sc10PatternData>( this, rStream);
         }
@@ -562,7 +562,7 @@ Sc10DataBaseCollection::Sc10DataBaseCollection(SvStream& rStream)
         lcl_ReadFixedString( rStream, ActName, sizeof(ActName));
         sal_uInt16 nAnz;
         rStream.ReadUInt16( nAnz );
-        for (sal_uInt16 i=0; (i < nAnz) && (nError == 0); i++)
+        for (sal_uInt16 i=0; (i < nAnz) && (nError == ERRCODE_NONE); i++)
         {
             nError = insert_new<Sc10DataBaseData>( this, rStream);
         }
@@ -992,7 +992,7 @@ void Sc10Import::LoadFileHeader()
     lcl_ReadFileHeader(rStream, FileHeader);
 
     nError = rStream.GetError();
-    if ( nError == 0 )
+    if ( nError == ERRCODE_NONE )
     {
         sal_Char Sc10CopyRight[32];
         strcpy(Sc10CopyRight, "Blaise-Tabelle");
@@ -1385,7 +1385,7 @@ void Sc10Import::LoadTables()
 
     sal_Int16 nTabCount;
     rStream.ReadInt16( nTabCount );
-    for (sal_Int16 Tab = 0; (Tab < nTabCount) && (nError == 0); Tab++)
+    for (sal_Int16 Tab = 0; (Tab < nTabCount) && (nError == ERRCODE_NONE); Tab++)
     {
         Sc10PageFormat   PageFormat;
         sal_Int16            DataBaseIndex;
@@ -1460,7 +1460,7 @@ void Sc10Import::LoadTables()
         rStream.ReadUChar( Visible );
 
         nError = rStream.GetError();
-        if (nError != 0) return;
+        if (nError != ERRCODE_NONE) return;
 
         if (TabNo == 0)
             pDoc->RenameTab(static_cast<SCTAB> (TabNo), SC10TOSTRING( TabName ));
@@ -1582,14 +1582,14 @@ void Sc10Import::LoadTables()
             nError = errUnknownID;
             return;
         }
-        for (SCCOL Col = 0; (Col <= SC10MAXCOL) && (nError == 0); Col++)
+        for (SCCOL Col = 0; (Col <= SC10MAXCOL) && (nError == ERRCODE_NONE); Col++)
         {
             rStream.ReadUInt16( Count );
             nError = rStream.GetError();
-            if ((Count != 0) && (nError == 0))
+            if ((Count != 0) && (nError == ERRCODE_NONE))
                 LoadCol(Col, static_cast<SCTAB> (TabNo));
         }
-        OSL_ENSURE( nError == 0, "Stream" );
+        OSL_ENSURE( nError == ERRCODE_NONE, "Stream" );
     }
     pPrgrsBar->Progress();
 
@@ -1606,12 +1606,12 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
     rStream.ReadUInt16( CellCount );
     SCROW nScCount = static_cast< SCROW >( CellCount );
     if (nScCount > MAXROW) nError = errUnknownFormat;
-    for (sal_uInt16 i = 0; (i < CellCount) && (nError == 0); i++)
+    for (sal_uInt16 i = 0; (i < CellCount) && (nError == ERRCODE_NONE); i++)
     {
         rStream.ReadUChar( CellType );
         rStream.ReadUInt16( Row );
         nError = rStream.GetError();
-        if (nError == 0)
+        if (nError == ERRCODE_NONE)
         {
             switch (CellType)
             {
@@ -1696,16 +1696,16 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     Sc10ColAttr aFlag;
     Sc10ColAttr aPattern;
 
-    if (nError == 0) LoadAttr(aFont);
-    if (nError == 0) LoadAttr(aAttr);
-    if (nError == 0) LoadAttr(aJustify);
-    if (nError == 0) LoadAttr(aFrame);
-    if (nError == 0) LoadAttr(aRaster);
-    if (nError == 0) LoadAttr(aValue);
-    if (nError == 0) LoadAttr(aColor);
-    if (nError == 0) LoadAttr(aFrameColor);
-    if (nError == 0) LoadAttr(aFlag);
-    if (nError == 0) LoadAttr(aPattern);
+    if (nError == ERRCODE_NONE) LoadAttr(aFont);
+    if (nError == ERRCODE_NONE) LoadAttr(aAttr);
+    if (nError == ERRCODE_NONE) LoadAttr(aJustify);
+    if (nError == ERRCODE_NONE) LoadAttr(aFrame);
+    if (nError == ERRCODE_NONE) LoadAttr(aRaster);
+    if (nError == ERRCODE_NONE) LoadAttr(aValue);
+    if (nError == ERRCODE_NONE) LoadAttr(aColor);
+    if (nError == ERRCODE_NONE) LoadAttr(aFrameColor);
+    if (nError == ERRCODE_NONE) LoadAttr(aFlag);
+    if (nError == ERRCODE_NONE) LoadAttr(aPattern);
 
     if (nError)
         return;
@@ -2309,12 +2309,12 @@ void Sc10Import::LoadObjects()
         sal_Char Reserved[32];
         rStream.ReadBytes(Reserved, sizeof(Reserved));
         nError = rStream.GetError();
-        if ((nAnz > 0) && (nError == 0))
+        if ((nAnz > 0) && (nError == ERRCODE_NONE))
         {
             sal_uInt8 ObjectType;
             Sc10GraphHeader GraphHeader;
             bool IsOleObject = false; // TODO: this is only a band-aid
-            for (sal_uInt16 i = 0; (i < nAnz) && (nError == 0) && !rStream.IsEof() && !IsOleObject; i++)
+            for (sal_uInt16 i = 0; (i < nAnz) && (nError == ERRCODE_NONE) && !rStream.IsEof() && !IsOleObject; i++)
             {
                 rStream.ReadUChar( ObjectType );
                 lcl_ReadGraphHeader(rStream, GraphHeader);

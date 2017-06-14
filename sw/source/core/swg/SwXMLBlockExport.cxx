@@ -73,7 +73,7 @@ sal_uInt32 SwXMLBlockListExport::exportDoc(enum XMLTokenEnum )
         }
     }
     GetDocHandler()->endDocument();
-    return 0;
+    return ERRCODE_NONE;
 }
 
 SwXMLTextBlockExport::SwXMLTextBlockExport(

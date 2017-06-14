@@ -189,7 +189,7 @@ sal_uLong SwASCWriter::WriteStream()
     if( bShowProgress )
         ::EndProgress( pDoc->GetDocShell() );
 
-    return 0;
+    return ERRCODE_NONE;
 }
 
 void GetASCWriter( const OUString& rFltNm, const OUString& /*rBaseURL*/, WriterRef& xRet )

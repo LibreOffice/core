@@ -780,7 +780,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
     if(bHtml && !bDocModified && pDocShell->HasName())
     {
         SvStream* pStream = pMedium->GetInStream();
-        if(pStream && 0 == pStream->GetError() )
+        if(pStream && ERRCODE_NONE == pStream->GetError() )
         {
             rtl_TextEncoding eHeaderEnc =
                 SfxHTMLParser::GetEncodingByHttpHeader(

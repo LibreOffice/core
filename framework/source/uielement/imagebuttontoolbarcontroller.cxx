@@ -123,7 +123,7 @@ void ImageButtonToolbarController::executeControlCommand( const css::frame::Cont
 bool ImageButtonToolbarController::ReadImageFromURL( bool bBigImage, const OUString& aImageURL, Image& aImage )
 {
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aImageURL, StreamMode::STD_READ ));
-    if ( pStream && ( pStream->GetErrorCode() == 0 ))
+    if ( pStream && ( pStream->GetErrorCode() == ERRCODE_NONE ))
     {
         // Use graphic class to also support more graphic formats (bmp,png,...)
         Graphic aGraphic;

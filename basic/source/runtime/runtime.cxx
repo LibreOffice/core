@@ -585,7 +585,7 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
     nCol2     = 0;
     nExprLvl  = 0;
     nArgc     = 0;
-    nError    = 0;
+    nError    = ERRCODE_NONE;
     nForLvl   = 0;
     nOps      = 0;
     refExprStk = new SbxArray;
@@ -792,7 +792,7 @@ bool SbiRuntime::Step()
         {
             SbError err = nError;
             ClearExprStack();
-            nError = 0;
+            nError = ERRCODE_NONE;
             pInst->nErr = err;
             pInst->nErl = nLine;
             pErrCode    = pCode;
@@ -2408,7 +2408,7 @@ void SbiRuntime::StepINPUT()
     char ch = 0;
     SbError err;
     // Skip whitespace
-    while( ( err = pIosys->GetError() ) == 0 )
+    while( ( err = pIosys->GetError() ) == ERRCODE_NONE )
     {
         ch = pIosys->Read();
         if( ch != ' ' && ch != '\t' && ch != '\n' )
@@ -2424,7 +2424,7 @@ void SbiRuntime::StepINPUT()
         {
             ch = pIosys->Read();
         }
-        while( ( err = pIosys->GetError() ) == 0 )
+        while( ( err = pIosys->GetError() ) == ERRCODE_NONE )
         {
             if( ch == sep )
             {
@@ -2444,7 +2444,7 @@ void SbiRuntime::StepINPUT()
         // skip whitespace
         if( ch == ' ' || ch == '\t' )
         {
-            while( ( err = pIosys->GetError() ) == 0 )
+            while( ( err = pIosys->GetError() ) == ERRCODE_NONE )
             {
                 if( ch != ' ' && ch != '\t' && ch != '\n' )
                 {
@@ -2588,18 +2588,18 @@ void SbiRuntime::StepSTDERROR()
 {
     pError = nullptr; bError = true;
     pInst->aErrorMsg.clear();
-    pInst->nErr = 0;
+    pInst->nErr = ERRCODE_NONE;
     pInst->nErl = 0;
-    nError = 0;
+    nError = ERRCODE_NONE;
     SbxErrObject::getUnoErrObject()->Clear();
 }
 
 void SbiRuntime::StepNOERROR()
 {
     pInst->aErrorMsg.clear();
-    pInst->nErr = 0;
+    pInst->nErr = ERRCODE_NONE;
     pInst->nErl = 0;
-    nError = 0;
+    nError = ERRCODE_NONE;
     SbxErrObject::getUnoErrObject()->Clear();
     bError = false;
 }
@@ -3081,9 +3081,9 @@ void SbiRuntime::StepERRHDL( sal_uInt32 nOp1 )
     pError = pCode;
     pCode = p;
     pInst->aErrorMsg.clear();
-    pInst->nErr = 0;
+    pInst->nErr = ERRCODE_NONE;
     pInst->nErl = 0;
-    nError = 0;
+    nError = ERRCODE_NONE;
     SbxErrObject::getUnoErrObject()->Clear();
 }
 
@@ -3111,9 +3111,9 @@ void SbiRuntime::StepRESUME( sal_uInt32 nOp1 )
     if( nOp1 > 1 )
         StepJUMP( nOp1 );
     pInst->aErrorMsg.clear();
-    pInst->nErr = 0;
+    pInst->nErr = ERRCODE_NONE;
     pInst->nErl = 0;
-    nError = 0;
+    nError = ERRCODE_NONE;
     bInError = false;
 }
 
