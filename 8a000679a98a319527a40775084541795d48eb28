@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_313c23e2",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_arm/uno2cpp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-06-14T07:43:30Z",
+      "side": 1,
+      "message": "Why changing caughtExceptions to propagatingExceptions here? The x86_64 commit didn\u0027t do that.",
+      "revId": "8a000679a98a319527a40775084541795d48eb28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
