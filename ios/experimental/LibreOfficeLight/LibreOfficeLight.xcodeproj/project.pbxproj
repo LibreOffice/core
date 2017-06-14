@@ -19,8 +19,6 @@
 		397E08FE1E597BD8001374E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397E08FD1E597BD8001374E0 /* AppDelegate.swift */; };
 		397E09031E597BD8001374E0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 397E09011E597BD8001374E0 /* Main.storyboard */; };
 		397E09081E597BD8001374E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 397E09071E597BD8001374E0 /* Assets.xcassets */; };
-		397E09161E597BD8001374E0 /* LibreOfficeLightTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397E09151E597BD8001374E0 /* LibreOfficeLightTests.swift */; };
-		397E09211E597BD8001374E0 /* LibreOfficeLightUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397E09201E597BD8001374E0 /* LibreOfficeLightUITests.swift */; };
 		3992D85A1E5B762A00BEA987 /* DocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3992D8591E5B762A00BEA987 /* DocumentController.swift */; };
 		3992D85D1E5B764A00BEA987 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3992D85B1E5B764A00BEA987 /* SideMenu.swift */; };
 		399648471E5B87DC00E73E83 /* ViewProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399648461E5B87DC00E73E83 /* ViewProperties.swift */; };
@@ -32,23 +30,6 @@
 		39B091CD1E5F0BB800682A59 /* udkapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 39B08B9B1E5F0BB600682A59 /* udkapi.rdb */; };
 		39B091CE1E5F0BB800682A59 /* unorc in Resources */ = {isa = PBXBuildFile; fileRef = 39B08B9C1E5F0BB600682A59 /* unorc */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		397E09121E597BD8001374E0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 397E08F21E597BD8001374E0 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 397E08F91E597BD8001374E0;
-			remoteInfo = LibreOfficeLight;
-		};
-		397E091D1E597BD8001374E0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 397E08F21E597BD8001374E0 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 397E08F91E597BD8001374E0;
-			remoteInfo = LibreOfficeLight;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		39022C171EDC142F00100066 /* lokit.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = lokit.mm; sourceTree = "<group>"; };
@@ -66,12 +47,6 @@
 		397E08FD1E597BD8001374E0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = LibreOfficeLight/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
 		397E09021E597BD8001374E0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
 		397E09071E597BD8001374E0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = LibreOfficeLight/Assets.xcassets; sourceTree = SOURCE_ROOT; };
-		397E09111E597BD8001374E0 /* LibreOfficeLightTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LibreOfficeLightTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		397E09151E597BD8001374E0 /* LibreOfficeLightTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LibreOfficeLightTests.swift; path = LibreOfficeLightTests/LibreOfficeLightTests.swift; sourceTree = SOURCE_ROOT; };
-		397E09171E597BD8001374E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = LibreOfficeLightTests/Info.plist; sourceTree = SOURCE_ROOT; };
-		397E091C1E597BD8001374E0 /* LibreOfficeLightUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LibreOfficeLightUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		397E09201E597BD8001374E0 /* LibreOfficeLightUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LibreOfficeLightUITests.swift; path = LibreOfficeLightUITests/LibreOfficeLightUITests.swift; sourceTree = SOURCE_ROOT; };
-		397E09221E597BD8001374E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = LibreOfficeLightUITests/Info.plist; sourceTree = SOURCE_ROOT; };
 		3992D8591E5B762A00BEA987 /* DocumentController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DocumentController.swift; path = LibreOfficeLight/DocumentController.swift; sourceTree = SOURCE_ROOT; };
 		3992D85B1E5B764A00BEA987 /* SideMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SideMenu.swift; path = LibreOfficeLight/SideMenu.swift; sourceTree = SOURCE_ROOT; };
 		399648461E5B87DC00E73E83 /* ViewProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewProperties.swift; path = LibreOfficeLight/ViewProperties.swift; sourceTree = SOURCE_ROOT; };
@@ -88,20 +63,6 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		397E08F71E597BD8001374E0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		397E090E1E597BD8001374E0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		397E09191E597BD8001374E0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -138,8 +99,6 @@
 				39B084E41E5F0B5200682A59 /* Resources */,
 				3911D89F1E5993600050D6BC /* Support files */,
 				397E08FC1E597BD8001374E0 /* LibreOfficeLight */,
-				397E09141E597BD8001374E0 /* LibreOfficeLightTests */,
-				397E091F1E597BD8001374E0 /* LibreOfficeLightUITests */,
 				397E08FB1E597BD8001374E0 /* Products */,
 				3972753A1E77D9F7006ACDCC /* Frameworks */,
 			);
@@ -149,8 +108,6 @@
 			isa = PBXGroup;
 			children = (
 				397E08FA1E597BD8001374E0 /* LibreOfficeLight.app */,
-				397E09111E597BD8001374E0 /* LibreOfficeLightTests.xctest */,
-				397E091C1E597BD8001374E0 /* LibreOfficeLightUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -169,24 +126,6 @@
 				397868D81E59A3EA007F9248 /* LaunchScreen.xib */,
 			);
 			path = LibreOfficeLight;
-			sourceTree = SOURCE_ROOT;
-		};
-		397E09141E597BD8001374E0 /* LibreOfficeLightTests */ = {
-			isa = PBXGroup;
-			children = (
-				397E09151E597BD8001374E0 /* LibreOfficeLightTests.swift */,
-				397E09171E597BD8001374E0 /* Info.plist */,
-			);
-			path = LibreOfficeLightTests;
-			sourceTree = SOURCE_ROOT;
-		};
-		397E091F1E597BD8001374E0 /* LibreOfficeLightUITests */ = {
-			isa = PBXGroup;
-			children = (
-				397E09201E597BD8001374E0 /* LibreOfficeLightUITests.swift */,
-				397E09221E597BD8001374E0 /* Info.plist */,
-			);
-			path = LibreOfficeLightUITests;
 			sourceTree = SOURCE_ROOT;
 		};
 		39B084E41E5F0B5200682A59 /* Resources */ = {
@@ -227,42 +166,6 @@
 			productReference = 397E08FA1E597BD8001374E0 /* LibreOfficeLight.app */;
 			productType = "com.apple.product-type.application";
 		};
-		397E09101E597BD8001374E0 /* LibreOfficeLightTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 397E09281E597BD8001374E0 /* Build configuration list for PBXNativeTarget "LibreOfficeLightTests" */;
-			buildPhases = (
-				397E090D1E597BD8001374E0 /* Sources */,
-				397E090E1E597BD8001374E0 /* Frameworks */,
-				397E090F1E597BD8001374E0 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				397E09131E597BD8001374E0 /* PBXTargetDependency */,
-			);
-			name = LibreOfficeLightTests;
-			productName = LibreOfficeLightTests;
-			productReference = 397E09111E597BD8001374E0 /* LibreOfficeLightTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		397E091B1E597BD8001374E0 /* LibreOfficeLightUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 397E092B1E597BD8001374E0 /* Build configuration list for PBXNativeTarget "LibreOfficeLightUITests" */;
-			buildPhases = (
-				397E09181E597BD8001374E0 /* Sources */,
-				397E09191E597BD8001374E0 /* Frameworks */,
-				397E091A1E597BD8001374E0 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				397E091E1E597BD8001374E0 /* PBXTargetDependency */,
-			);
-			name = LibreOfficeLightUITests;
-			productName = LibreOfficeLightUITests;
-			productReference = 397E091C1E597BD8001374E0 /* LibreOfficeLightUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -279,6 +182,9 @@
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 0;
+							};
 							com.apple.Push = {
 								enabled = 0;
 							};
@@ -286,16 +192,6 @@
 								enabled = 1;
 							};
 						};
-					};
-					397E09101E597BD8001374E0 = {
-						CreatedOnToolsVersion = 8.2;
-						ProvisioningStyle = Automatic;
-						TestTargetID = 397E08F91E597BD8001374E0;
-					};
-					397E091B1E597BD8001374E0 = {
-						CreatedOnToolsVersion = 8.2;
-						ProvisioningStyle = Automatic;
-						TestTargetID = 397E08F91E597BD8001374E0;
 					};
 				};
 			};
@@ -312,8 +208,6 @@
 			projectRoot = "";
 			targets = (
 				397E08F91E597BD8001374E0 /* LibreOfficeLight */,
-				397E09101E597BD8001374E0 /* LibreOfficeLightTests */,
-				397E091B1E597BD8001374E0 /* LibreOfficeLightUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -342,20 +236,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		397E090F1E597BD8001374E0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		397E091A1E597BD8001374E0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -372,36 +252,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		397E090D1E597BD8001374E0 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				397E09161E597BD8001374E0 /* LibreOfficeLightTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		397E09181E597BD8001374E0 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				397E09211E597BD8001374E0 /* LibreOfficeLightUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		397E09131E597BD8001374E0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 397E08F91E597BD8001374E0 /* LibreOfficeLight */;
-			targetProxy = 397E09121E597BD8001374E0 /* PBXContainerItemProxy */;
-		};
-		397E091E1E597BD8001374E0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 397E08F91E597BD8001374E0 /* LibreOfficeLight */;
-			targetProxy = 397E091D1E597BD8001374E0 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		39022C221EDC303200100066 /* InfoPlist.strings */ = {
@@ -650,64 +501,6 @@
 			};
 			name = Release;
 		};
-		397E09291E597BD8001374E0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39B084E21E5F0A9600682A59 /* lo.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				INFOPLIST_FILE = LibreOfficeLightTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jani.Editors.LibreOfficeLight.LibreOfficeLightTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LibreOfficeLight.app/LibreOfficeLight";
-			};
-			name = Debug;
-		};
-		397E092A1E597BD8001374E0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39B084E21E5F0A9600682A59 /* lo.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				INFOPLIST_FILE = LibreOfficeLightTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jani.Editors.LibreOfficeLight.LibreOfficeLightTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LibreOfficeLight.app/LibreOfficeLight";
-			};
-			name = Release;
-		};
-		397E092C1E597BD8001374E0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39B084E21E5F0A9600682A59 /* lo.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				INFOPLIST_FILE = LibreOfficeLightUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jani.Editors.LibreOfficeLight.LibreOfficeLightUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-				TEST_TARGET_NAME = LibreOfficeLight;
-			};
-			name = Debug;
-		};
-		397E092D1E597BD8001374E0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39B084E21E5F0A9600682A59 /* lo.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				INFOPLIST_FILE = LibreOfficeLightUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jani.Editors.LibreOfficeLight.LibreOfficeLightUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-				TEST_TARGET_NAME = LibreOfficeLight;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -725,24 +518,6 @@
 			buildConfigurations = (
 				397E09261E597BD8001374E0 /* Debug */,
 				397E09271E597BD8001374E0 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		397E09281E597BD8001374E0 /* Build configuration list for PBXNativeTarget "LibreOfficeLightTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				397E09291E597BD8001374E0 /* Debug */,
-				397E092A1E597BD8001374E0 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		397E092B1E597BD8001374E0 /* Build configuration list for PBXNativeTarget "LibreOfficeLightUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				397E092C1E597BD8001374E0 /* Debug */,
-				397E092D1E597BD8001374E0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
