@@ -20,6 +20,7 @@
 #include <unoport.hxx>
 
 #include <cmdid.h>
+#include <o3tl/make_unique.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/interfacecontainer.h>
@@ -218,7 +219,7 @@ void SwXTextPortion::GetPropertyValue(
         uno::Any &rVal,
         const SfxItemPropertySimpleEntry& rEntry,
         SwUnoCursor *pUnoCursor,
-        SfxItemSet *&pSet )
+        std::unique_ptr<SfxItemSet> &pSet )
 {
     OSL_ENSURE( pUnoCursor, "UNO cursor missing" );
     if (!pUnoCursor)
@@ -360,7 +361,7 @@ void SwXTextPortion::GetPropertyValue(
                 {
                     if(!pSet)
                     {
-                        pSet = new SfxItemSet(pUnoCursor->GetDoc()->GetAttrPool(),
+                        pSet = o3tl::make_unique<SfxItemSet>(pUnoCursor->GetDoc()->GetAttrPool(),
                             RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
                             RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
                             RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
@@ -383,7 +384,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXTextPortion::GetPropertyValues_Impl(
     SwUnoCursor& rUnoCursor = GetCursor();
 
     {
-        SfxItemSet *pSet = nullptr;
+        std::unique_ptr<SfxItemSet> pSet;
         // get starting point for the look-up, either the provided one or else
         // from the beginning of the map
         const SfxItemPropertyMap& rMap = m_pPropSet->getPropertyMap();
@@ -397,7 +398,6 @@ uno::Sequence< uno::Any > SAL_CALL SwXTextPortion::GetPropertyValues_Impl(
             else
                 throw beans::UnknownPropertyException( "Unknown property: " + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         }
-        delete pSet;
     }
     return aValues;
 }
@@ -589,7 +589,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
         sal_Int32 nProps = rPropertyNames.getLength();
         const OUString *pProp = rPropertyNames.getConstArray();
 
-        SfxItemSet *pSet = nullptr;
+        std::unique_ptr<SfxItemSet> pSet;
 
         const SfxItemPropertyMap& rPropMap = m_pPropSet->getPropertyMap();
 
@@ -657,7 +657,6 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
                 aResult.Result = beans::TolerantPropertySetResultType::WRAPPED_TARGET;
             }
         }
-        delete pSet;
     }
     catch (const uno::RuntimeException&)
     {
