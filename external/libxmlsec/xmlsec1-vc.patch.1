@@ -24,19 +24,6 @@ index 8156caa7..ef1909ce 100644
  
  !if "$(UNICODE)" == "1"
  CFLAGS 			= $(CFLAGS) /D "UNICODE" /D "_UNICODE"
-@@ -363,7 +367,11 @@ LIBS 			=
- !if "$(DEBUG)" == "1"
- LDFLAGS 		= $(LDFLAGS) /DEBUG
- !else
--LDFLAGS 		= $(LDFLAGS)
-+!if "$(_NMAKE_VER)" >= "10.00.30319.01"
-+LDFLAGS = $(LDFLAGS)
-+!else
-+LDFLAGS = $(LDFLAGS) /OPT:NOWIN98
-+!endif
- !endif
- 
- SOLIBS 			= $(LIBS) libxml2.lib 
 -- 
 2.12.0
 
