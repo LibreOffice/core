@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_8473d3e6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-14T18:44:46Z",
+      "side": 1,
+      "message": "commit message should start with [API CHANGE] because you are changing XFastParser, just so it gets picked up in release notes",
+      "revId": "9dce44b13064b622bc069ad348eb18ef3c0d7361",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
