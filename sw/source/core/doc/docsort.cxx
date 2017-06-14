@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <o3tl/make_unique.hxx>
 #include <rtl/math.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -47,6 +48,7 @@
 #include <unochart.hxx>
 
 #include <set>
+#include <utility>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
@@ -746,7 +748,6 @@ FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const FndBox_& rBox) :
     pDoc(pDocPtr),
     rBoxRef(rBox),
     pArr(nullptr),
-    ppItemSets(nullptr),
     nRow(0),
     nCol(0)
 { // If the array is symmetric
@@ -771,7 +772,6 @@ FlatFndBox::~FlatFndBox()
 {
     FndBox_** ppTmp = const_cast<FndBox_**>(pArr);
     delete [] ppTmp;
-    delete [] ppItemSets;
 }
 
 /// All Lines of a Box need to have same number of Boxes
@@ -898,17 +898,16 @@ void FlatFndBox::FillFlat(const FndBox_& rBox, bool bLastBox)
                     SfxItemState::SET == pFormat->GetItemState( RES_BOXATR_FORMULA ) ||
                     SfxItemState::SET == pFormat->GetItemState( RES_BOXATR_VALUE ) )
                 {
-                    SfxItemSet* pSet = new SfxItemSet( pDoc->GetAttrPool(),
+                    auto pSet = o3tl::make_unique<SfxItemSet>( pDoc->GetAttrPool(),
                                     RES_BOXATR_FORMAT, RES_BOXATR_VALUE,
                                     RES_VERT_ORIENT, RES_VERT_ORIENT, 0 );
                     pSet->Put( pFormat->GetAttrSet() );
-                    if( !ppItemSets )
+                    if( ppItemSets.empty() )
                     {
                         size_t nCount = static_cast<size_t>(nRows) * nCols;
-                        ppItemSets = new SfxItemSet*[nCount];
-                        memset(ppItemSets, 0, sizeof(SfxItemSet*) * nCount);
+                        ppItemSets.resize(nCount);
                     }
-                    *(ppItemSets + nOff ) = pSet;
+                    ppItemSets[nOff] = std::move(pSet);
                 }
 
                 bModRow = true;
@@ -940,9 +939,9 @@ const FndBox_* FlatFndBox::GetBox(sal_uInt16 n_Col, sal_uInt16 n_Row) const
 
 const SfxItemSet* FlatFndBox::GetItemSet(sal_uInt16 n_Col, sal_uInt16 n_Row) const
 {
-    OSL_ENSURE( !ppItemSets || ( n_Col < nCols && n_Row < nRows), "invalid array access");
+    OSL_ENSURE( ppItemSets.empty() || ( n_Col < nCols && n_Row < nRows), "invalid array access");
 
-    return ppItemSets ? *(ppItemSets + (n_Row * nCols + n_Col )) : nullptr;
+    return !ppItemSets.empty() ? ppItemSets[n_Row * nCols + n_Col].get() : nullptr;
 }
 
 sal_uInt16 SwMovedBoxes::GetPos(const SwTableBox* pTableBox) const

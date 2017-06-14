@@ -21,6 +21,8 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCSORT_HXX
 
 #include <ndindex.hxx>
+
+#include <memory>
 #include <vector>
 
 class SwDoc;
@@ -139,7 +141,7 @@ private:
     SwDoc*              pDoc;
     const FndBox_&      rBoxRef;
     const FndBox_**     pArr;
-    SfxItemSet**        ppItemSets;
+    std::vector<std::unique_ptr<SfxItemSet>> ppItemSets;
 
     sal_uInt16          nRows;
     sal_uInt16          nCols;
@@ -149,7 +151,7 @@ private:
     bool            bSym;
 };
 
-inline bool FlatFndBox::HasItemSets() const { return nullptr != ppItemSets; }
+inline bool FlatFndBox::HasItemSets() const { return !ppItemSets.empty(); }
 
 #endif
 
