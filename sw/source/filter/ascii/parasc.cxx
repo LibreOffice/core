@@ -18,6 +18,8 @@
  */
 
 #include <memory>
+
+#include <o3tl/make_unique.hxx>
 #include <tools/stream.hxx>
 #include <hintids.hxx>
 #include <rtl/tencinfo.h>
@@ -53,7 +55,7 @@ class SwASCIIParser
     SvStream& rInput;
     sal_Char* pArr;
     const SwAsciiOptions& rOpt;
-    SfxItemSet* pItemSet;
+    std::unique_ptr<SfxItemSet> pItemSet;
     long nFileSize;
     SvtScriptType nScript;
     bool bNewDoc;
@@ -99,7 +101,7 @@ SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCursor, SvStream& rIn,
     pPam = new SwPaM( *rCursor.GetPoint() );
     pArr = new sal_Char [ ASC_BUFFLEN + 2 ];
 
-    pItemSet = new SfxItemSet( pDoc->GetAttrPool(),
+    pItemSet = o3tl::make_unique<SfxItemSet>( pDoc->GetAttrPool(),
                 RES_CHRATR_FONT,        RES_CHRATR_LANGUAGE,
                 RES_CHRATR_CJK_FONT,    RES_CHRATR_CJK_LANGUAGE,
                 RES_CHRATR_CTL_FONT,    RES_CHRATR_CTL_LANGUAGE,
@@ -134,7 +136,6 @@ SwASCIIParser::~SwASCIIParser()
 {
     delete pPam;
     delete [] pArr;
-    delete pItemSet;
 }
 
 // Calling the parser
@@ -240,8 +241,7 @@ sal_uLong SwASCIIParser::CallParser()
                 pDoc->getIDocumentContentOperations().InsertItemSet( *pInsPam, *pItemSet );
             }
         }
-        delete pItemSet;
-        pItemSet = nullptr;
+        pItemSet.reset();
     }
 
     delete pInsPam;
