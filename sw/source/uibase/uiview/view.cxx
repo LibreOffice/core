@@ -583,12 +583,12 @@ void SwView::CheckReadonlyState()
         static bool bFirst = true;
         if ( bFirst )
         {
-            qsort( static_cast<void*>(aROIds), sizeof(aROIds)/sizeof(sal_uInt16), sizeof(sal_uInt16), lcl_CmpIds );
+            qsort( static_cast<void*>(aROIds), SAL_N_ELEMENTS(aROIds), sizeof(sal_uInt16), lcl_CmpIds );
             bFirst = false;
         }
         if ( SfxItemState::DISABLED == eStateRO )
         {
-            rDis.SetSlotFilter( SfxSlotFilterState::ENABLED_READONLY, sizeof(aROIds)/sizeof(sal_uInt16), aROIds );
+            rDis.SetSlotFilter( SfxSlotFilterState::ENABLED_READONLY, SAL_N_ELEMENTS(aROIds), aROIds );
             bChgd = true;
         }
     }
@@ -600,11 +600,11 @@ void SwView::CheckReadonlyState()
             static bool bAllProtFirst = true;
             if ( bAllProtFirst )
             {
-                qsort( static_cast<void*>(aAllProtIds), sizeof(aAllProtIds)/sizeof(sal_uInt16), sizeof(sal_uInt16), lcl_CmpIds );
+                qsort( static_cast<void*>(aAllProtIds), SAL_N_ELEMENTS(aAllProtIds), sizeof(sal_uInt16), lcl_CmpIds );
                 bAllProtFirst = false;
             }
             rDis.SetSlotFilter( SfxSlotFilterState::ENABLED_READONLY,
-                                sizeof(aAllProtIds)/sizeof(sal_uInt16),
+                                SAL_N_ELEMENTS(aAllProtIds),
                                 aAllProtIds );
             bChgd = true;
         }

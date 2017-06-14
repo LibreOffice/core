@@ -786,7 +786,7 @@ void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& rFramePr
             PROP_BOTTOM_BORDER_DISTANCE
         };
 
-        sal_uInt32 nBorderPropertyCount = sizeof( aBorderProperties ) / sizeof(PropertyIds);
+        sal_uInt32 const nBorderPropertyCount = SAL_N_ELEMENTS( aBorderProperties );
 
         for( sal_uInt32 nProperty = 0; nProperty < nBorderPropertyCount; ++nProperty)
         {
