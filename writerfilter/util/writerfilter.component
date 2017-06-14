@@ -24,10 +24,6 @@
     <service name="com.sun.star.document.ExportFilter"/>
     <service name="com.sun.star.document.ImportFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.WriterFilterDetector"
-        constructor="com_sun_star_comp_Writer_WriterFilterDetector_get_implementation">
-    <service name="com.sun.star.document.ExtendedTypeDetection"/>
-  </implementation>
   <implementation name="com.sun.star.comp.Writer.RtfFilter"
         constructor="com_sun_star_comp_Writer_RtfFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
