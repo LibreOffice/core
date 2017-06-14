@@ -83,18 +83,22 @@ struct SignalAction
     bool siginfo; // Handler's type is Handler2
 } Signals[] =
 {
-    { SIGHUP,    ACT_HIDE, SIG_DFL, false }, /* hangup */
+    { SIGHUP,    ACT_HIDE,   SIG_DFL, false }, /* hangup */
     { SIGINT,    ACT_EXIT,   SIG_DFL, false }, /* interrupt (rubout) */
-    { SIGQUIT,   ACT_EXIT,  SIG_DFL, false }, /* quit (ASCII FS) */
-    { SIGILL,    ACT_SYSTEM,  SIG_DFL, false }, /* illegal instruction (not reset when caught) */
+    { SIGQUIT,   ACT_EXIT,   SIG_DFL, false }, /* quit (ASCII FS) */
+    { SIGILL,    ACT_SYSTEM, SIG_DFL, false }, /* illegal instruction (not reset when caught) */
 /* changed from ACT_ABOUT to ACT_SYSTEM to try and get collector to run*/
     { SIGTRAP,   ACT_ABORT,  SIG_DFL, false }, /* trace trap (not reset when caught) */
 #if ( SIGIOT != SIGABRT )
     { SIGIOT,    ACT_ABORT,  SIG_DFL, false }, /* IOT instruction */
 #endif
+#if defined(FORCE_DEFAULT_SIGNAL)
+    { SIGABRT,   ACT_SYSTEM, SIG_DFL, false }, /* used by abort, replace SIGIOT in the future */
+#else
     { SIGABRT,   ACT_ABORT,  SIG_DFL, false }, /* used by abort, replace SIGIOT in the future */
+#endif
 #ifdef SIGEMT
-    { SIGEMT,    ACT_SYSTEM,  SIG_DFL, false }, /* EMT instruction */
+    { SIGEMT,    ACT_SYSTEM, SIG_DFL, false }, /* EMT instruction */
 /* changed from ACT_ABORT to ACT_SYSTEM to remove handler*/
 /* SIGEMT may also be used by the profiler - so it is probably not a good
 plan to have the new handler use this signal*/
@@ -102,12 +106,20 @@ plan to have the new handler use this signal*/
     { SIGFPE,    ACT_ABORT,  SIG_DFL, false }, /* floating point exception */
     { SIGKILL,   ACT_SYSTEM, SIG_DFL, false }, /* kill (cannot be caught or ignored) */
     { SIGBUS,    ACT_ABORT,  SIG_DFL, false }, /* bus error */
+#if defined(FORCE_DEFAULT_SIGNAL)
+    { SIGSEGV,   ACT_SYSTEM, SIG_DFL, false }, /* segmentation violation */
+#else
     { SIGSEGV,   ACT_ABORT,  SIG_DFL, false }, /* segmentation violation */
+#endif
 #ifdef SIGSYS
     { SIGSYS,    ACT_ABORT,  SIG_DFL, false }, /* bad argument to system call */
 #endif
     { SIGPIPE,   ACT_HIDE,   SIG_DFL, false }, /* write on a pipe with no one to read it */
+#if defined(FORCE_DEFAULT_SIGNAL)
+    { SIGALRM,   ACT_SYSTEM, SIG_DFL, false }, /* alarm clock */
+#else
     { SIGALRM,   ACT_EXIT,   SIG_DFL, false }, /* alarm clock */
+#endif
     { SIGTERM,   ACT_EXIT,   SIG_DFL, false }, /* software termination signal from kill */
     { SIGUSR1,   ACT_SYSTEM, SIG_DFL, false }, /* user defined signal 1 */
     { SIGUSR2,   ACT_SYSTEM, SIG_DFL, false }, /* user defined signal 2 */
@@ -126,7 +138,7 @@ plan to have the new handler use this signal*/
     { SIGTTIN,   ACT_SYSTEM, SIG_DFL, false }, /* background tty read attempted */
     { SIGTTOU,   ACT_SYSTEM, SIG_DFL, false }, /* background tty write attempted */
     { SIGVTALRM, ACT_EXIT,   SIG_DFL, false }, /* virtual timer expired */
-    { SIGPROF,   ACT_SYSTEM,   SIG_DFL, false }, /* profiling timer expired */
+    { SIGPROF,   ACT_SYSTEM, SIG_DFL, false }, /* profiling timer expired */
 /*Change from ACT_EXIT to ACT_SYSTEM for SIGPROF is so that profiling signals do
 not get taken by the new handler - the new handler does not pass on context
 information which causes 'collect' to crash. This is a way of avoiding
