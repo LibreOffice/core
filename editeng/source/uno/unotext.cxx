@@ -1958,12 +1958,7 @@ void SAL_CALL SvxUnoTextBase::setString( const OUString& aString )
 uno::Reference< container::XEnumeration > SAL_CALL SvxUnoTextBase::createEnumeration()
 {
     SolarMutexGuard aGuard;
-
-    ESelection aSelection;
-    ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
-    SetSelection( aSelection );
-
-    uno::Reference< container::XEnumeration > xEnum( static_cast<container::XEnumeration*>(new SvxUnoTextContentEnumeration( *this )) );
+    uno::Reference< container::XEnumeration > xEnum( static_cast<container::XEnumeration*>( new SvxUnoTextContentEnumeration( *this, maSelection ) ) );
     return xEnum;
 }
 
