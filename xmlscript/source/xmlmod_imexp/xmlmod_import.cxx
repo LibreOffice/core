@@ -97,8 +97,6 @@ void ModuleImport::startDocument(
     Reference< xml::input::XNamespaceMapping > const & xNamespaceMapping )
 {
     XMLNS_SCRIPT_UID = xNamespaceMapping->getUidByUri( XMLNS_SCRIPT_URI );
-    XMLNS_LIBRARY_UID = xNamespaceMapping->getUidByUri( XMLNS_LIBRARY_URI );
-    XMLNS_XLINK_UID = xNamespaceMapping->getUidByUri( XMLNS_XLINK_URI );
 }
 
 void ModuleImport::endDocument()

@@ -45,9 +45,7 @@ class XMLValueImportHelper final
 
     bool bStringType;       /// is this a string (or a float) type?
     bool bFormatOK;         /// have we read a style:data-style-name attr.?
-    bool bTypeOK;           /// have we read a value-type attribute?
     bool bStringValueOK;    /// have we read a string-value attr.?
-    bool bFloatValueOK;     /// have we read any of the float attr.s?
     bool bFormulaOK;        /// have we read the formula attribute?
 
     const bool bSetType;    /// should PrepareField set the SetExp subtype?
@@ -118,7 +116,6 @@ private:
     bool bDisplayFormula;           /// display formula?(rather than value)
     bool bDisplayNone;              /// hide field?
 
-    bool bNameOK;                   /// sName was set
     bool bFormulaOK;                /// sFormula was set
     bool bDescriptionOK;            /// sDescription was set
     bool bHelpOK;                   /// sHelp was set

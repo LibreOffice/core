@@ -88,7 +88,6 @@ XMLVarFieldImportContext::XMLVarFieldImportContext(
         aValueHelper(rImport, rHlp, bType, bStyle, bValue, false),
         bDisplayFormula(false),
         bDisplayNone(false),
-        bNameOK(false),
         bFormulaOK(false),
         bDescriptionOK(false),
         bHelpOK(false),
@@ -113,7 +112,6 @@ void XMLVarFieldImportContext::ProcessAttribute(
         {
         case XML_TOK_TEXTFIELD_NAME:
             sName = sAttrValue;
-            bNameOK = true;
             bValid = true;      // we assume: field with name is valid!
             break;
         case XML_TOK_TEXTFIELD_DESCRIPTION:
@@ -1104,9 +1102,7 @@ XMLValueImportHelper::XMLValueImportHelper(
 
         bStringType(false),
         bFormatOK(false),
-        bTypeOK(false),
         bStringValueOK(false),
-        bFloatValueOK(false),
         bFormulaOK(false),
 
         bSetType(bType),
@@ -1129,8 +1125,6 @@ void XMLValueImportHelper::ProcessAttribute(
                 eValueType, sAttrValue, aValueTypeMap);
 
             if (bRet) {
-                bTypeOK = true;
-
                 switch (eValueType)
                 {
                     case XML_VALUE_TYPE_STRING:
@@ -1147,7 +1141,6 @@ void XMLValueImportHelper::ProcessAttribute(
 
                     default:
                         OSL_FAIL("unknown value type");
-                        bTypeOK = false;
                 }
             }
             break;
@@ -1158,7 +1151,6 @@ void XMLValueImportHelper::ProcessAttribute(
             double fTmp;
             bool const bRet = ::sax::Converter::convertDouble(fTmp,sAttrValue);
             if (bRet) {
-                bFloatValueOK = true;
                 fValue = fTmp;
             }
             break;
@@ -1170,7 +1162,6 @@ void XMLValueImportHelper::ProcessAttribute(
             bool const bRet =
                 ::sax::Converter::convertDuration(fTmp, sAttrValue);
             if (bRet) {
-                bFloatValueOK = true;
                 fValue = fTmp;
             }
             break;
@@ -1182,7 +1173,6 @@ void XMLValueImportHelper::ProcessAttribute(
             bool bRet = rImport.GetMM100UnitConverter().
                 convertDateTime(fTmp,sAttrValue);
             if (bRet) {
-                bFloatValueOK = true;
                 fValue = fTmp;
             }
             break;
@@ -1193,7 +1183,6 @@ void XMLValueImportHelper::ProcessAttribute(
             bool bTmp(false);
             bool bRet = ::sax::Converter::convertBool(bTmp, sAttrValue);
             if (bRet) {
-                bFloatValueOK = true;
                 fValue = (bTmp ? 1.0 : 0.0);
             }
             else
@@ -1201,7 +1190,6 @@ void XMLValueImportHelper::ProcessAttribute(
                 double fTmp;
                 bRet = ::sax::Converter::convertDouble(fTmp, sAttrValue);
                 if (bRet) {
-                    bFloatValueOK = true;
                     fValue = fTmp;
                 }
             }

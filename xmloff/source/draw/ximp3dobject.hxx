@@ -57,8 +57,6 @@ class SdXML3DCubeObjectShapeContext : public SdXML3DObjectContext
 {
     ::basegfx::B3DVector    maMinEdge;
     ::basegfx::B3DVector    maMaxEdge;
-    bool                    mbMinEdgeUsed;
-    bool                    mbMaxEdgeUsed;
 
 public:
 
@@ -77,8 +75,6 @@ class SdXML3DSphereObjectShapeContext : public SdXML3DObjectContext
 {
     ::basegfx::B3DVector    maCenter;
     ::basegfx::B3DVector    maSphereSize;
-    bool                    mbCenterUsed;
-    bool                    mbSizeUsed;
 
 public:
 

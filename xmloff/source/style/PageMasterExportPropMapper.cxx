@@ -64,10 +64,6 @@ static void lcl_AddState(::std::vector< XMLPropertyState >& rPropState, sal_Int3
 struct XMLPropertyStateBuffer
 {
     XMLPropertyState*       pPMMarginAll;
-    XMLPropertyState*       pPMMarginTop;
-    XMLPropertyState*       pPMMarginBottom;
-    XMLPropertyState*       pPMMarginLeft;
-    XMLPropertyState*       pPMMarginRight;
 
     XMLPropertyState*       pPMBorderAll;
     XMLPropertyState*       pPMBorderTop;
@@ -93,10 +89,6 @@ struct XMLPropertyStateBuffer
 
 XMLPropertyStateBuffer::XMLPropertyStateBuffer()
     :   pPMMarginAll( nullptr )
-    ,   pPMMarginTop( nullptr )
-    ,   pPMMarginBottom( nullptr )
-    ,   pPMMarginLeft( nullptr )
-    ,   pPMMarginRight( nullptr )
     ,
         pPMBorderAll( nullptr ),
         pPMBorderTop( nullptr ),
@@ -352,10 +344,6 @@ void XMLPageMasterExportPropMapper::ContextFilter(
         switch( nSimpleId )
         {
             case CTF_PM_MARGINALL:          pBuffer->pPMMarginAll           = pProp;    break;
-            case CTF_PM_MARGINTOP:          pBuffer->pPMMarginTop           = pProp;    break;
-            case CTF_PM_MARGINBOTTOM:       pBuffer->pPMMarginBottom        = pProp;    break;
-            case CTF_PM_MARGINLEFT:         pBuffer->pPMMarginLeft          = pProp;    break;
-            case CTF_PM_MARGINRIGHT:        pBuffer->pPMMarginRight         = pProp;    break;
             case CTF_PM_BORDERALL:          pBuffer->pPMBorderAll           = pProp;    break;
             case CTF_PM_BORDERTOP:          pBuffer->pPMBorderTop           = pProp;    break;
             case CTF_PM_BORDERBOTTOM:       pBuffer->pPMBorderBottom        = pProp;    break;
