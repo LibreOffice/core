@@ -22,6 +22,8 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
+#include <com/sun/star/document/XUndoManager.hpp>
+#include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -336,6 +338,11 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
     SfxClassificationHelper aHelper(pDocShell->getDocProperties());
 
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
+
+    uno::Reference<document::XUndoManager> xUndoManager;
+    uno::Reference<document::XUndoManagerSupplier> xSuppUndo(xModel, uno::UNO_QUERY_THROW);
+    xUndoManager.set(xSuppUndo->getUndoManager(), uno::UNO_QUERY_THROW);
+
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
@@ -440,6 +447,7 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
 
             // Create and insert the shape.
             uno::Reference<drawing::XShape> xShape(xMultiServiceFactory->createInstance(aShapeServiceName), uno::UNO_QUERY);
+
             basegfx::B2DHomMatrix aTransformation;
             aTransformation.identity();
             aTransformation.scale(nWidth, nHeight);
@@ -458,6 +466,9 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
             xPropertySet->setPropertyValue(UNO_NAME_ANCHOR_TYPE, uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
             uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY);
             xHeaderText->insertTextContent(xHeaderText->getEnd(), xTextContent, false);
+
+            if (xUndoManager.is())
+                xUndoManager->enterHiddenUndoContext();
 
             // The remaining properties have to be set after the shape is inserted: do that in one batch to avoid flickering.
             uno::Reference<document::XActionLockable> xLockable(xShape, uno::UNO_QUERY);
@@ -504,6 +515,9 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
             uno::Reference<container::XNamed> xNamed(xShape, uno::UNO_QUERY);
             xNamed->setName(sWatermark);
             xLockable->removeActionLock();
+
+            if (xUndoManager.is())
+                xUndoManager->leaveUndoContext();
         }
     }
 }
