@@ -1516,7 +1516,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
         SalKeyEvent aEvent;
-        aEvent.mnTime           = mpFrame->mnLastEventTime;
         aEvent.mnCode           = nKeyCode | ImplGetModifierMask( nMod );
         aEvent.mnCharCode       = aChar;
         aEvent.mnRepeat         = FALSE;

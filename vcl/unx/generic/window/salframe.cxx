@@ -3157,7 +3157,6 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
         }
 
         aModEvt.mnCode = nModCode;
-        aModEvt.mnTime = pEvent->time;
 
         int nRet = CallCallback( SalEvent::KeyModChange, &aModEvt );
 
@@ -3279,7 +3278,6 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
     {
         aKeyEvt.mnCode     = nKeyCode | nModCode;
         aKeyEvt.mnRepeat   = 0;
-        aKeyEvt.mnTime     = pEvent->time;
         aKeyEvt.mnCharCode = pString[ 0 ];
 
         if( KeyRelease == pEvent->type )

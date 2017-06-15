@@ -75,7 +75,6 @@ struct FastPrintFontInfo
     FontWeight                     m_eWeight;
     FontPitch                      m_ePitch;
     rtl_TextEncoding               m_aEncoding;
-    bool                           m_bSubsettable;
 
     FastPrintFontInfo()
         : m_nID(0)
@@ -85,7 +84,6 @@ struct FastPrintFontInfo
         , m_eWeight(WEIGHT_DONTKNOW)
         , m_ePitch(PITCH_DONTKNOW)
         , m_aEncoding(RTL_TEXTENCODING_DONTKNOW)
-        , m_bSubsettable(false)
     {}
 };
 
@@ -93,15 +91,11 @@ struct PrintFontInfo : public FastPrintFontInfo
 {
     int                                     m_nAscend;
     int                                     m_nDescend;
-    int                                     m_nLeading;
-    int                                     m_nWidth;
 
     PrintFontInfo() :
             FastPrintFontInfo(),
             m_nAscend( 0 ),
-            m_nDescend( 0 ),
-            m_nLeading( 0 ),
-            m_nWidth( 0 )
+            m_nDescend( 0 )
     {}
 };
 
@@ -149,7 +143,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         int               m_nDirectory;       // atom containing system dependent path
         OString           m_aFontFile;        // relative to directory
         int               m_nCollectionEntry; // 0 for regular fonts, 0 to ... for fonts stemming from collections
-        unsigned int      m_nTypeFlags;       // copyright bits and PS-OpenType flag
 
         explicit PrintFont();
     };

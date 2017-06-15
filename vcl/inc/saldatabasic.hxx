@@ -40,7 +40,6 @@ class VCL_PLUGIN_PUBLIC SalData
 public:
     SalInstance*                  m_pInstance; // pointer to instance
 #ifndef IOS
-    oslModule                     m_pPlugin;   // plugin library handle
     psp::PrinterInfoManager*      m_pPIManager;
 #endif
 
