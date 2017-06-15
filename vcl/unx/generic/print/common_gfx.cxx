@@ -55,7 +55,6 @@ GraphicsStatus::GraphicsStatus() :
 void
 PrinterGfx::Init (PrinterJob &rPrinterJob)
 {
-    mpPageHeader = rPrinterJob.GetCurrentPageHeader ();
     mpPageBody   = rPrinterJob.GetCurrentPageBody ();
     mnDepth      = rPrinterJob.GetDepth ();
     mnPSLevel    = rPrinterJob.GetPostscriptLevel ();
@@ -70,7 +69,6 @@ PrinterGfx::Init (PrinterJob &rPrinterJob)
 void
 PrinterGfx::Init (const JobData& rData)
 {
-    mpPageHeader    = nullptr;
     mpPageBody      = nullptr;
     mnDepth         = rData.m_nColorDepth;
     mnPSLevel       = rData.m_nPSLevel ? rData.m_nPSLevel : (rData.m_pParser ? rData.m_pParser->getLanguageLevel() : 2 );
@@ -92,7 +90,6 @@ PrinterGfx::PrinterGfx()
     , mnPSLevel(0)
     , mbColor(false)
     , mbUploadPS42Fonts(false)
-    , mpPageHeader(nullptr)
     , mpPageBody(nullptr)
     , mnFontID(0)
     , mnTextAngle(0)
@@ -116,7 +113,6 @@ PrinterGfx::~PrinterGfx()
 void
 PrinterGfx::Clear()
 {
-    mpPageHeader                    = nullptr;
     mpPageBody                      = nullptr;
     mnFontID                        = 0;
     maVirtualStatus                 = GraphicsStatus();

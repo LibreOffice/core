@@ -221,7 +221,6 @@ SelectionManager::SelectionManager() :
         m_nLastDropAction( 0 ),
         m_nLastX( 0 ),
         m_nLastY( 0 ),
-        m_nDropTimestamp( 0 ),
         m_bDropWaitingForCompletion( false ),
         m_aDropWindow( None ),
         m_aDropProxy( None ),
@@ -241,21 +240,18 @@ SelectionManager::SelectionManager() :
         m_bDropSent( false ),
         m_nDropTimeout( 0 ),
         m_bWaitingForPrimaryConversion( false ),
-        m_nDragTimestamp( None ),
         m_aMoveCursor( None ),
         m_aCopyCursor( None ),
         m_aLinkCursor( None ),
         m_aNoneCursor( None ),
         m_aCurrentCursor( None ),
         m_nCurrentProtocolVersion( nXdndProtocolRevision ),
-        m_nCLIPBOARDAtom( None ),
         m_nTARGETSAtom( None ),
         m_nTIMESTAMPAtom( None ),
         m_nTEXTAtom( None ),
         m_nINCRAtom( None ),
         m_nCOMPOUNDAtom( None ),
         m_nMULTIPLEAtom( None ),
-        m_nUTF16Atom( None ),
         m_nImageBmpAtom( None ),
         m_nXdndAware( None ),
         m_nXdndEnter( None ),
@@ -271,7 +267,6 @@ SelectionManager::SelectionManager() :
         m_nXdndActionMove( None ),
         m_nXdndActionLink( None ),
         m_nXdndActionAsk( None ),
-        m_nXdndActionPrivate( None ),
         m_bShutDown( false )
 {
     memset(&m_aDropEnterEvent, 0, sizeof(m_aDropEnterEvent));
@@ -361,9 +356,6 @@ void SelectionManager::initialize( const Sequence< Any >& arguments )
 #ifdef SYNCHRONIZE
             XSynchronize( m_pDisplay, True );
 #endif
-            // clipboard selection
-            m_nCLIPBOARDAtom    = getAtom( "CLIPBOARD" );
-
             // special targets
             m_nTARGETSAtom      = getAtom( "TARGETS" );
             m_nTIMESTAMPAtom    = getAtom( "TIMESTAMP" );
@@ -371,7 +363,6 @@ void SelectionManager::initialize( const Sequence< Any >& arguments )
             m_nINCRAtom         = getAtom( "INCR" );
             m_nCOMPOUNDAtom     = getAtom( "COMPOUND_TEXT" );
             m_nMULTIPLEAtom     = getAtom( "MULTIPLE" );
-            m_nUTF16Atom        = getAtom( "ISO10646-1" );
             m_nImageBmpAtom     = getAtom( "image/bmp" );
 
             // Atoms for Xdnd protocol
@@ -389,7 +380,6 @@ void SelectionManager::initialize( const Sequence< Any >& arguments )
             m_nXdndActionMove   = getAtom( "XdndActionMove" );
             m_nXdndActionLink   = getAtom( "XdndActionLink" );
             m_nXdndActionAsk    = getAtom( "XdndActionAsk" );
-            m_nXdndActionPrivate= getAtom( "XdndActionPrivate" );
 
             // initialize map with member none
             m_aAtomToString[ 0 ]= "None";
@@ -2143,8 +2133,6 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
         {
             bHandled = true;
             m_nDropTime = m_nCurrentProtocolVersion > 0 ? rMessage.data.l[3] : CurrentTime;
-            if( ! m_bDropEnterSent )
-                m_nDropTimestamp = m_nDropTime;
 
             ::Window aChild;
             XTranslateCoordinates( m_pDisplay,
@@ -2623,7 +2611,6 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
         int root_x  = rMessage.type == MotionNotify ? rMessage.xmotion.x_root : rMessage.xcrossing.x_root;
         int root_y  = rMessage.type == MotionNotify ? rMessage.xmotion.y_root : rMessage.xcrossing.y_root;
         ::Window root = rMessage.type == MotionNotify ? rMessage.xmotion.root : rMessage.xcrossing.root;
-        m_nDragTimestamp = rMessage.type == MotionNotify ? rMessage.xmotion.time : rMessage.xcrossing.time;
 
         aGuard.clear();
         if( rMessage.type == MotionNotify )
@@ -3830,7 +3817,6 @@ void SelectionManager::registerHandler( Atom selection, SelectionAdaptor& rAdapt
 
     Selection* pNewSelection    = new Selection();
     pNewSelection->m_pAdaptor   = &rAdaptor;
-    pNewSelection->m_aAtom      = selection;
     m_aSelections[ selection ]  = pNewSelection;
 }
 

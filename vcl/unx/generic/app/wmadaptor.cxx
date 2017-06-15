@@ -1261,7 +1261,6 @@ void GnomeWMAdaptor::setGnomeWMState( X11SalFrame* pFrame ) const
 void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eType, int nDecorationFlags, X11SalFrame* pReferenceFrame ) const
 {
     pFrame->meWindowType        = eType;
-    pFrame->mnDecorationFlags   = nDecorationFlags;
 
     if( ! pFrame->mbFullScreen )
     {

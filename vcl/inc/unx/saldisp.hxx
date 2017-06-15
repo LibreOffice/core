@@ -260,8 +260,6 @@ protected:
     SalXLib        *pXLib_;
     SalI18N_KeyboardExtension   *mpKbdExtension;
 
-    AttributeProvider           *mpFactory;
-
     Display        *pDisp_;             // X Display
 
     SalX11Screen                 m_nXDefaultScreen;
@@ -279,7 +277,6 @@ protected:
     // Keyboard
     bool            bNumLockFromXS_;    // Num Lock handled by X Server
     int             nNumLockIndex_;     // modifier index in modmap
-    int             nNumLockMask_;      // keyevent state mask for
     KeySym          nShiftKeySym_;      // first shift modifier
     KeySym          nCtrlKeySym_;       // first control modifier
     KeySym          nMod1KeySym_;       // first mod1 modifier

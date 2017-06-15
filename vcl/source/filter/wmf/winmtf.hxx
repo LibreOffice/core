@@ -109,15 +109,11 @@ struct LOGFONTW
     sal_Int32       lfHeight;
     sal_Int32       lfWidth;
     sal_Int32       lfEscapement;
-    sal_Int32       lfOrientation;
     sal_Int32       lfWeight;
     sal_uInt8       lfItalic;
     sal_uInt8       lfUnderline;
     sal_uInt8       lfStrikeOut;
     sal_uInt8       lfCharSet;
-    sal_uInt8       lfOutPrecision;
-    sal_uInt8       lfClipPrecision;
-    sal_uInt8       lfQuality;
     sal_uInt8       lfPitchAndFamily;
     OUString        alfFaceName;
 };
@@ -692,7 +688,6 @@ private:
     sal_uInt32      nEMFSize;
 
     sal_uInt32      nSkipActions;
-    sal_uInt32      nCurrentAction;
 
     WMF_EXTERNALHEADER* pExternalHeader;
 

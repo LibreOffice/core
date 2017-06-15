@@ -43,7 +43,6 @@ private:
     sal_Int32           mnFontID;
     bool                mbVertical;
     OString             maBaseName;
-    rtl_TextEncoding    mnBaseEncoding;
 
     typedef std::unordered_map< sal_GlyphId, sal_uInt8 > glyph_map_t;
     typedef std::list< glyph_map_t > glyph_list_t;
