@@ -31,8 +31,8 @@ public:
     bool isGraphic() const;
 
     OStringBuffer m_aBuffer;
-    const SwFlyFrameFormat* m_pFlyFrameFormat;
-    const SwGrfNode* m_pGrfNode;
+    const SwFlyFrameFormat* m_pFlyFrameFormat = nullptr;
+    const SwGrfNode* m_pGrfNode = nullptr;
 };
 
 /// Wrapper around OStringBuffers, so less hexdump of graphics have to be kept in memory during RTF export.
