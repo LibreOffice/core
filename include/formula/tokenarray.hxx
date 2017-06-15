@@ -413,12 +413,14 @@ class FORMULA_DLLPUBLIC FormulaTokenArrayPlainIterator
 
 private:
     const FormulaTokenArray* mpFTA;
-    sal_uInt16 mnIndex;                 // Current step index
+    sal_uInt16 _nIndex;
+    sal_uInt16 *mpIndex;                 // Current step index
 
 public:
     FormulaTokenArrayPlainIterator( const FormulaTokenArray& rFTA ) :
         mpFTA( &rFTA ),
-        mnIndex( 0 )
+        _nIndex( 0 ), // Wow - if we re-use the version in the TokenArray - bang !
+        mpIndex( &_nIndex ) //const_cast<sal_uInt16 *>( &mpFTA->nIndex ) )
     {
     }
 
@@ -426,23 +428,23 @@ public:
 
     void Reset()
     {
-        mnIndex = 0;
+        *mpIndex = 0;
     }
 
     sal_uInt16 GetIndex() const
     {
-        return mnIndex;
+        return *mpIndex;
     }
 
     FormulaToken* First()
     {
-        mnIndex = 0;
+        *mpIndex = 0;
         return Next();
     }
 
     void Jump(sal_uInt16 nIndex)
     {
-        mnIndex = nIndex;
+        *mpIndex = nIndex;
     }
 
     FormulaToken* Next();
@@ -458,7 +460,7 @@ public:
 
     FormulaToken* FirstRPN()
     {
-        mnIndex = 0;
+        *mpIndex = 0;
         return NextRPN();
     }
 
@@ -466,7 +468,7 @@ public:
 
     FormulaToken* LastRPN()
     {
-        mnIndex = mpFTA->nRPN;
+        *mpIndex = mpFTA->nRPN;
         return PrevRPN();
     }
 
