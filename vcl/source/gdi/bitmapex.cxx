@@ -96,9 +96,20 @@ BitmapEx::BitmapEx( const OUString& rIconName )
 
 void BitmapEx::loadFromIconTheme( const OUString& rIconName )
 {
-    OUString aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
+    bool bSuccess;
+    OUString aIconTheme;
 
-    if (!ImageTree::get().loadImage(rIconName, aIconTheme, *this, true))
+    try
+    {
+        aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
+        bSuccess = ImageTree::get().loadImage(rIconName, aIconTheme, *this, true);
+    }
+    catch (...)
+    {
+        bSuccess = false;
+    }
+
+    if (!bSuccess)
     {
 #ifdef DBG_UTIL
         OStringBuffer aErrorStr(
