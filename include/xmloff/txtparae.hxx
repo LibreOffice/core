@@ -32,6 +32,7 @@
 #include <xmloff/XMLTextListAutoStylePool.hxx>
 #include <memory>
 #include <vector>
+#include <editeng/editdata.hxx>
 
 class XMLTextListsHelper;
 class SvXMLExport;
@@ -268,7 +269,9 @@ protected:
     void exportText(
         const css::uno::Reference <
             css::text::XText > & rText,
-        bool bAutoStyles, bool bProgress, bool bExportParagraph, TextPNS eExtensionNS = TextPNS::ODF );
+        bool bAutoStyles, bool bProgress, bool bExportParagraph,
+        TextPNS eExtensionNS = TextPNS::ODF,
+        const ESelection& rSel = ESelection(0,0,0,0) );
 
     void exportText(
         const css::uno::Reference< css::text::XText > & rText,
@@ -283,13 +286,14 @@ protected:
         bool bExportParagraph = true,
         const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet = nullptr,
         bool bExportLevels = true,
-        TextPNS eExtensionNS = TextPNS::ODF);
+        TextPNS eExtensionNS = TextPNS::ODF, const ESelection& rSel = ESelection(0,0,0,0) );
     void exportParagraph(
         const css::uno::Reference< css::text::XTextContent > & rTextContent,
         bool bAutoStyles, bool bProgress,
         bool bExportParagraph,
         MultiPropertySetHelper& rPropSetHelper,
-        TextPNS eExtensionNS);
+        TextPNS eExtensionNS,
+        const ESelection& rSel );
 
     virtual void exportTable(
         const css::uno::Reference< css::text::XTextContent > & rTextContent,
@@ -527,9 +531,9 @@ public:
     void exportText(
         const css::uno::Reference< css::text::XText > & rText,
         bool bIsProgress = false,
-        bool bExportParagraph = true, TextPNS eExtensionNS = TextPNS::ODF)
+        bool bExportParagraph = true, TextPNS eExtensionNS = TextPNS::ODF, const ESelection& rSel = ESelection(0,0,0,0) )
     {
-        exportText( rText, false, bIsProgress, bExportParagraph, eExtensionNS );
+        exportText( rText, false, bIsProgress, bExportParagraph, eExtensionNS, rSel );
     }
 
     void exportText(

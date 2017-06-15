@@ -114,6 +114,7 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
+#include <editeng/editdata.hxx>
 
 using namespace ::std;
 using namespace ::com::sun::star;
@@ -1635,7 +1636,8 @@ void XMLTextParagraphExport::exportText(
         bool bAutoStyles,
         bool bIsProgress,
         bool bExportParagraph,
-        TextPNS eExtensionNS)
+        TextPNS eExtensionNS,
+        const ESelection& rSel )
 {
     if( bAutoStyles )
         GetExport().GetShapeExport(); // make sure the graphics styles family
@@ -1732,7 +1734,8 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
         bool bIsProgress,
         bool bExportParagraph,
         const Reference < XPropertySet > *pRangePropSet,
-        bool bExportLevels, TextPNS eExtensionNS )
+        bool bExportLevels, TextPNS eExtensionNS,
+        const ESelection& rSel )
 {
     SAL_WARN_IF( !rContEnum.is(), "xmloff", "No enumeration to export!" );
     bool bHasMoreElements = rContEnum->hasMoreElements();
@@ -1816,7 +1819,7 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
             }
             else
                 exportParagraph( xTxtCntnt, bAutoStyles, bIsProgress,
-                                 bExportParagraph, aPropSetHelper, eExtensionNS );
+                                 bExportParagraph, aPropSetHelper, eExtensionNS, rSel );
             bHasContent = true;
         }
         else if( xServiceInfo->supportsService( sTableService ) )
@@ -1892,7 +1895,8 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
 void XMLTextParagraphExport::exportParagraph(
         const Reference < XTextContent > & rTextContent,
         bool bAutoStyles, bool bIsProgress, bool bExportParagraph,
-        MultiPropertySetHelper& rPropSetHelper, TextPNS eExtensionNS)
+        MultiPropertySetHelper& rPropSetHelper,
+        TextPNS eExtensionNS, const ESelection& rSel )
 {
     sal_Int16 nOutlineLevel = -1;
 

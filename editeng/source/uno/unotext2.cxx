@@ -249,11 +249,11 @@ void SAL_CALL SvxUnoTextContent::removeEventListener( const uno::Reference< lang
 
 // XEnumerationAccess
 
-uno::Reference< container::XEnumeration > SAL_CALL SvxUnoTextContent::createEnumeration(  )
+uno::Reference< container::XEnumeration > SAL_CALL SvxUnoTextContent::createEnumeration()
 {
     SolarMutexGuard aGuard;
 
-    return new SvxUnoTextRangeEnumeration( mrParentText, mnParagraph );
+    return new SvxUnoTextRangeEnumeration( mrParentText, mnParagraph,  ESelection( mnParagraph,0, mnParagraph, GetEditSource()->GetTextForwarder()->GetTextLen( mnParagraph )) );
 }
 
 // XElementAccess ( container::XEnumerationAccess )
@@ -358,11 +358,12 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextContent::getSupportedServiceNames()
 //  class SvxUnoTextRangeEnumeration
 
 
-SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rText, sal_Int32 nPara ) throw()
+SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rText, sal_Int32 nPara, const ESelection& rSel ) throw()
 :   mxParentText(  const_cast<SvxUnoTextBase*>(&rText) ),
     mrParentText( rText ),
     mnParagraph( nPara ),
-    mnNextPortion( 0 )
+    mnNextPortion( 0 ),
+    mnSel( rSel )
 {
     mpEditSource = rText.GetEditSource() ? rText.GetEditSource()->Clone() : nullptr;
 
