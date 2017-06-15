@@ -1280,7 +1280,8 @@ bool FormulaCompiler::GetToken()
                 nWasColRowName++;
             if ( bAutoCorrect && !pStack )
                 CreateStringFromToken( aCorrectedFormula, mpToken.get() );
-            mpToken = pArr->Next();
+//            mpToken = pArr->Next();
+            mpToken = maArrIterator.Next();
         }
         if ( bAutoCorrect && !pStack && mpToken )
             CreateStringFromToken( aCorrectedSymbol, mpToken.get() );
@@ -1536,6 +1537,7 @@ void FormulaCompiler::Factor()
                             pArr->pCode[nSepPos+1]->GetDouble() != 1.0 &&
                             pArr->pCode[nSepPos+2]->GetOpCode() == ocClose &&
                             pArr->RemoveToken( nSepPos, 2) == 2)
+// FIXME: mmeeks ...
                     {
                         // Remove the ocPush/svDouble just removed also from
                         // the compiler local RPN array.
@@ -1793,8 +1795,8 @@ void FormulaCompiler::IntersectionLine()
     RangeLine();
     while (mpToken->GetOpCode() == ocIntersect || mpToken->GetOpCode() == ocSpaces)
     {
-        sal_uInt16 nCodeIndex = pArr->nIndex - 1;
-//        sal_uInt16 nCodeIndex = maArrIterator.GetIndex()->nIndex - 1;
+//        sal_uInt16 nCodeIndex = pArr->nIndex - 1;
+        sal_uInt16 nCodeIndex = maArrIterator.GetIndex() - 1;
         FormulaToken** pCode1 = pCode - 1;
         FormulaTokenRef p = mpToken;
         NextToken();
@@ -2005,7 +2007,8 @@ bool FormulaCompiler::CompileTokenArray()
                 aCorrectedFormula = "=";
         }
         pArr->ClearRecalcMode();
-        pArr->Reset();
+//        pArr->Reset();
+        maArrIterator.Reset();
         eLastOp = ocOpen;
         pc = 0;
         NextToken();
@@ -2061,6 +2064,7 @@ void FormulaCompiler::PopTokenArray()
             delete pArr;
         pArr = p->pArr;
         maArrIterator = FormulaTokenArrayPlainIterator(*pArr, false);
+//        maArrIterator.Jump(p->nIndex); -> meeks - fixme ? ...
         mpLastToken = p->mpLastToken;
         delete p;
     }
@@ -2108,9 +2112,13 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
 
     if ( pArr->IsRecalcModeForced() )
         rBuffer.append( '=');
-    const FormulaToken* t = pArr->First();
+
+//    const FormulaToken* t = pArr->First();
+    const FormulaToken* t = maArrIterator.First();
+    // FIXME: mmeeks - how does that iteration work !? ...
     while( t )
         t = CreateStringFromToken( rBuffer, t, true );
+
 
     if (pSaveArr != pArr)
     {
@@ -2139,9 +2147,11 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
     {
         // AND, OR infix?
         if ( bAllowArrAdvance )
-            t = pArr->Next();
+            t = maArrIterator.Next();
+//          t = pArr->Next();
         else
-            t = pArr->PeekNext();
+//            t = pArr->PeekNext();
+            t = maArrIterator.PeekNext();
         bNext = false;
         bSpaces = ( !t || t->GetOpCode() != ocOpen );
     }
@@ -2153,11 +2163,13 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
         bool bIntersectionOp = mxSymbols->isODFF();
         if (bIntersectionOp)
         {
-            const FormulaToken* p = pArr->PeekPrevNoSpaces();
+//            const FormulaToken* p = pArr->PeekPrevNoSpaces();
+            const FormulaToken* p = maArrIterator.PeekPrevNoSpaces();
             bIntersectionOp = (p && p->GetOpCode() == ocColRowName);
             if (bIntersectionOp)
             {
-                p = pArr->PeekNextNoSpaces();
+//                p = pArr->PeekNextNoSpaces();
+                p = maArrIterator.PeekNextNoSpaces();
                 bIntersectionOp = (p && p->GetOpCode() == ocColRowName);
             }
         }
@@ -2233,7 +2245,8 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
                         int nLevel = 0;
                         do
                         {
-                            t = pArr->Next();
+                            t = maArrIterator.Next();
+//                            t = pArr->Next();
                             if (!t)
                                 break;
 
@@ -2303,7 +2316,8 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
     if ( bAllowArrAdvance )
     {
         if( bNext )
-            t = pArr->Next();
+            t = maArrIterator.Next();
+//            t = pArr->Next();
         return t;
     }
     return pTokenP;
