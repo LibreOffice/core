@@ -37,6 +37,9 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 
+#include <wmfreader.hxx>
+#include <emfreader.hxx>
+
 //#include <com/sun/star/xml/sax/XParser.hpp>
 //#include <com/sun/star/xml/sax/Parser.hpp>
 //#include <com/sun/star/xml/sax/InputSource.hpp>
@@ -116,7 +119,7 @@ namespace emfio
 
             if (xEmfStream.is())
             {
-                static bool bTestCode(true);
+                static bool bTestCode(false);
 
                 if (bTestCode)
                 {
@@ -168,59 +171,55 @@ namespace emfio
                     // new parser here
                     bool bBla = true;
 
+                    // rouch check - import and conv to primitive
+                    GDIMetaFile aMtf;
+                    std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream(xEmfStream));
+                    sal_uInt32 nMetaType(0);
+                    sal_uInt32 nOrgPos = pStream->Tell();
+
+                    SvStreamEndian nOrigNumberFormat = pStream->GetEndian();
+                    pStream->SetEndian(SvStreamEndian::LITTLE);
+
+                    pStream->Seek(0x28);
+                    pStream->ReadUInt32(nMetaType);
+                    pStream->Seek(nOrgPos);
+
+                    if (nMetaType == 0x464d4520)
+                    {
+                        emfio::EmfReader(*pStream, aMtf, nullptr).ReadEnhWMF();
+                    }
+                    else
+                    {
+                        emfio::WmfReader(*pStream, aMtf, nullptr).ReadWMF();
+                    }
+
+                    pStream->SetEndian(nOrigNumberFormat);
+                    Size aSize(aMtf.GetPrefSize());
+
+                    if (aMtf.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
+                    {
+                        aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, MapUnit::Map100thMM);
+                    }
+                    else
+                    {
+                        aSize = OutputDevice::LogicToLogic(aSize, aMtf.GetPrefMapMode(), MapMode(MapUnit::Map100thMM));
+                    }
+
+                    const basegfx::B2DHomMatrix aMetafileTransform(
+                        basegfx::tools::createScaleB2DHomMatrix(
+                            aSize.Width(),
+                            aSize.Height()));
+
+                    // force to use decomposition directly to get rid of the metafile
+                    const css::uno::Sequence< css::beans::PropertyValue > aViewParameters;
+                    drawinglayer::primitive2d::MetafilePrimitive2D aMetafilePrimitive2D(
+                        aMetafileTransform,
+                        aMtf);
+                    aRetval.append(aMetafilePrimitive2D.getDecomposition(aViewParameters));
 
 
 
-                    //                // local document handler
-                    //                SvgDocHdl* pSvgDocHdl = new SvgDocHdl(aAbsolutePath);
-                    //                uno::Reference< xml::sax::XDocumentHandler > xSvgDocHdl(pSvgDocHdl);
-                    //
-                    //                try
-                    //                {
-                    //                    // prepare ParserInputSrouce
-                    //                    xml::sax::InputSource myInputSource;
-                    //                    myInputSource.aInputStream = xEmfStream;
-                    //
-                    //                    // get parser
-                    //                    uno::Reference< xml::sax::XParser > xParser(
-                    //                        xml::sax::Parser::create(context_));
-                    //                    // fdo#60471 need to enable internal entities because
-                    //                    // certain ... popular proprietary products write SVG files
-                    //                    // that use entities to define XML namespaces.
-                    //                    uno::Reference<lang::XInitialization> const xInit(xParser,
-                    //                            uno::UNO_QUERY_THROW);
-                    //                    uno::Sequence<uno::Any> args(1);
-                    //                    args[0] <<= OUString("DoSmeplease");
-                    //                    xInit->initialize(args);
-                    //
-                    //                    // connect parser and filter
-                    //                    xParser->setDocumentHandler(xSvgDocHdl);
-                    //
-                    //                    // finally, parse the stream to a hierarchy of
-                    //                    // SVGGraphicPrimitive2D which will be embedded to the
-                    //                    // primitive sequence. Their decompositions will in the
-                    //                    // end create local low-level primitives, thus SVG will
-                    //                    // be processable from all our processors
-                    //                    xParser->parseStream(myInputSource);
-                    //                }
-                    //                catch(const uno::Exception& e)
-                    //                {
-                    //                    SAL_WARN( "svg", "Parse error! : " << e.Message);
-                    //                }
-                    //
-                    //                // decompose to primitives
-                    //                const SvgNodeVector& rResults = pSvgDocHdl->getSvgDocument().getSvgNodeVector();
-                    //                const sal_uInt32 nCount(rResults.size());
-                    //
-                    //                for(sal_uInt32 a(0); a < nCount; a++)
-                    //                {
-                    //                    SvgNode* pCandidate = rResults[a];
-                    //
-                    //                    if(Display_none != pCandidate->getDisplay())
-                    //                    {
-                    //                        pCandidate->decomposeSvgNode(aRetval, false);
-                    //                    }
-                    //                }
+
                 }
             }
             else
