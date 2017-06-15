@@ -1755,7 +1755,6 @@ void Window::ImplNewInputContext()
     const vcl::Font&        rFont = rInputContext.GetFont();
     const OUString&         rFontName = rFont.GetFamilyName();
     LogicalFontInstance*    pFontInstance = nullptr;
-    aNewContext.mpFont = nullptr;
     if (!rFontName.isEmpty())
     {
         OutputDevice *pFocusWinOutDev = pFocusWin->GetOutDev();
@@ -1771,8 +1770,6 @@ void Window::ImplNewInputContext()
         }
         pFontInstance = pFocusWin->mpFontCache->GetFontInstance( pFocusWin->mpFontCollection,
                          rFont, aSize, static_cast<float>(aSize.Height()) );
-        if ( pFontInstance )
-            aNewContext.mpFont = &pFontInstance->maFontSelData;
     }
     aNewContext.meLanguage  = rFont.GetLanguage();
     aNewContext.mnOptions   = rInputContext.GetOptions();

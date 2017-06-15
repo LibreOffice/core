@@ -107,7 +107,6 @@ PrintFontManager::PrintFont::PrintFont()
 ,   m_nYMax(0)
 ,   m_nDirectory(0)
 ,   m_nCollectionEntry(0)
-,   m_nTypeFlags(TYPEFLAG_INVALID)
 {
 }
 
@@ -689,9 +688,6 @@ bool PrintFontManager::analyzeSfntFile( PrintFont* pFont ) const
         pFont->m_nXMax = aInfo.xMax;
         pFont->m_nYMax = aInfo.yMax;
 
-        // get type flags
-        pFont->m_nTypeFlags = (unsigned int)aInfo.typeFlags;
-
         CloseTTFont( pTTFont );
         bSuccess = true;
     }
@@ -794,8 +790,6 @@ void PrintFontManager::fillPrintFontInfo(PrintFont* pFont, FastPrintFontInfo& rI
     rInfo.m_ePitch          = pFont->m_ePitch;
     rInfo.m_aEncoding       = pFont->m_aEncoding;
 
-    rInfo.m_bSubsettable    = true;
-
     rInfo.m_aAliases.clear();
     for (auto const& aAlias : pFont->m_aAliases)
         rInfo.m_aAliases.push_back(aAlias);
@@ -812,8 +806,6 @@ void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo
 
     rInfo.m_nAscend         = pFont->m_nAscend;
     rInfo.m_nDescend        = pFont->m_nDescend;
-    rInfo.m_nLeading        = pFont->m_nLeading;
-    rInfo.m_nWidth          = pFont->m_aGlobalMetricX.width < pFont->m_aGlobalMetricY.width ? pFont->m_aGlobalMetricY.width : pFont->m_aGlobalMetricX.width;
 }
 
 bool PrintFontManager::getFontInfo( fontID nFontID, PrintFontInfo& rInfo ) const

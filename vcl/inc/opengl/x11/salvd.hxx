@@ -30,7 +30,6 @@ class X11OpenGLSalVirtualDevice : public SalVirtualDevice
     SalX11Screen      mnXScreen;
     int               mnWidth;
     int               mnHeight;
-    sal_uInt16        mnDepth;
 
 public:
     X11OpenGLSalVirtualDevice( SalGraphics *pGraphics,

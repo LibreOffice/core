@@ -248,7 +248,6 @@ X11SalData::X11SalData( SalGenericDataType t, SalInstance *pInstance )
     : SalGenericData( t, pInstance )
 {
     pXLib_          = nullptr;
-    m_pPlugin       = nullptr;
 
     m_aOrigXIOErrorHandler = XSetIOErrorHandler ( XIOErrorHdl );
     PushXErrorLevel( !!getenv( "SAL_IGNOREXERRORS" ) );

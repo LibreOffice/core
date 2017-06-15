@@ -31,18 +31,7 @@ typedef struct _FcPattern   FcPattern;
 class FontConfigFontOptions
 {
 public:
-    FontEmbeddedBitmap meEmbeddedBitmap; // whether the embedded bitmaps should be used
-    FontAntiAlias      meAntiAlias;      // whether the font should be antialiased
-    FontAutoHint       meAutoHint;       // whether the font should be autohinted
-    FontHinting        meHinting;        // whether the font should be hinted
-    FontHintStyle      meHintStyle;      // type of font hinting to be used
-
                         FontConfigFontOptions(FcPattern* pPattern) :
-                            meEmbeddedBitmap(EMBEDDEDBITMAP_DONTKNOW),
-                            meAntiAlias(ANTIALIAS_DONTKNOW),
-                            meAutoHint(FontAutoHint::DontKnow),
-                            meHinting(FontHinting::DontKnow),
-                            meHintStyle(FontHintStyle::Slight),
                             mpPattern(pPattern) {}
                         ~FontConfigFontOptions();
 

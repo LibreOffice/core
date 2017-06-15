@@ -24,7 +24,6 @@ private:
     bool mbIsIntel;
     bool mbIsOldSwrast;
     bool mbIsLlvmpipe;
-    bool mbHasTextureFromPixmap;
 
     OString maVendor;
     OString maRenderer;

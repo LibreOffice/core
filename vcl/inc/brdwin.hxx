@@ -89,7 +89,6 @@ private:
     long                    mnMinHeight;
     long                    mnMaxWidth;
     long                    mnMaxHeight;
-    long                    mnRollHeight;
     long                    mnOrgMenuHeight;
     BorderWindowTitleType   mnTitleType;
     WindowBorderStyle       mnBorderStyle;
@@ -205,7 +204,6 @@ struct ImplBorderFrameData
     DrawButtonFlags          mnHideState;
     DrawButtonFlags          mnHelpState;
     BorderWindowTitleType    mnTitleType;
-    bool                     mbFloatWindow;
     bool                     mbDragFull;
     bool                     mbTitleClipped;
 };

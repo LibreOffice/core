@@ -59,7 +59,6 @@ X11OpenGLSalVirtualDevice::X11OpenGLSalVirtualDevice( SalGraphics* pGraphics,
     assert( pData == nullptr ); (void)pData;
 
     mpDisplay  = vcl_sal::getSalDisplay(GetGenericData());
-    mnDepth    = nBitCount;
     mnXScreen  = pGraphics ? static_cast<X11SalGraphics*>(pGraphics)->GetScreenNumber() :
                              vcl_sal::getSalDisplay(GetGenericData())->GetDefaultXScreen();
     mnWidth    = nDX;

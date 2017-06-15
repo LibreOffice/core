@@ -115,12 +115,6 @@ void DebugEventInjector::InjectMenuEvent()
 
 static void InitKeyEvent( SalKeyEvent &rKeyEvent )
 {
-    double nRand = getRandom();
-    if (nRand < 0.001)
-        rKeyEvent.mnTime = getRandom() * SAL_MAX_UINT64;
-    else
-        rKeyEvent.mnTime = tools::Time::GetSystemTicks();
-
     if (getRandom() < 0.01)
         rKeyEvent.mnRepeat = getRandom() * 20;
     else
