@@ -4725,7 +4725,8 @@ bool ScCompiler::HandleRange()
                 pNew = new ScTokenArray();
                 pNew->AddOpCode( ocClose );
                 PushTokenArray( pNew, true );
-                pNew->Reset();
+                maArrIterator.Reset();
+//                pNew->Reset();
             }
             pNew = pRangeData->GetCode()->Clone();
             pNew->SetFromRangeName( true );
@@ -4743,13 +4744,15 @@ bool ScCompiler::HandleRange()
                 SetRelNameReference();
                 MoveRelWrap(pRangeData->GetMaxCol(), pRangeData->GetMaxRow());
             }
-            pNew->Reset();
+            maArrIterator.Reset();
+//            pNew->Reset();
             if ( bAddPair )
             {
                 pNew = new ScTokenArray();
                 pNew->AddOpCode( ocOpen );
                 PushTokenArray( pNew, true );
-                pNew->Reset();
+                maArrIterator.Reset();
+//                pNew->Reset();
             }
             return GetToken();
         }
@@ -4761,7 +4764,8 @@ bool ScCompiler::HandleRange()
         pNew = new ScTokenArray;
         pNew->Add( new FormulaErrorToken( FormulaError::NoName));
         PushTokenArray( pNew, true );
-        pNew->Reset();
+        maArrIterator.Reset();
+//        pNew->Reset();
         return GetToken();
     }
     return true;
@@ -4803,7 +4807,8 @@ bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
                 SetRelNameReference();
                 MoveRelWrap(MAXCOL, MAXROW);
             }
-            pNew->Reset();
+//            pNew->Reset();
+            maArrIterator.Reset();
             return GetToken();
         }
         default:
@@ -5443,7 +5448,8 @@ bool ScCompiler::HandleColRowName()
                 }
             }
             PushTokenArray( pNew, true );
-            pNew->Reset();
+//            pNew->Reset();
+            maArrIterator.Reset();
             return GetToken();
         }
     }
@@ -5468,7 +5474,8 @@ bool ScCompiler::HandleDbData()
         ScTokenArray* pNew = new ScTokenArray();
         pNew->AddDoubleReference( aRefData );
         PushTokenArray( pNew, true );
-        pNew->Reset();
+//        pNew->Reset();
+        maArrIterator.Reset();
         return GetToken();
     }
     return true;
@@ -5785,7 +5792,8 @@ bool ScCompiler::HandleTableRef()
                 SetError( FormulaError::Pair);
         }
         PushTokenArray( pNew, true );
-        pNew->Reset();
+//        pNew->Reset();
+        maArrIterator.Reset();
         return GetToken();
     }
     return true;
