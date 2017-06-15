@@ -271,11 +271,30 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
                 bPotentiallyReadFrom = true;
             break;
         }
-        else if (isa<ReturnStmt>(parent) || isa<CXXConstructExpr>(parent)
-                 || isa<ConditionalOperator>(parent) || isa<SwitchStmt>(parent) || isa<ArraySubscriptExpr>(parent)
-                 || isa<DeclStmt>(parent) || isa<WhileStmt>(parent) || isa<CXXNewExpr>(parent)
-                 || isa<ForStmt>(parent) || isa<InitListExpr>(parent)
-                 || isa<BinaryOperator>(parent) || isa<CXXDependentScopeMemberExpr>(parent)
+        else if (auto binaryOp = dyn_cast<BinaryOperator>(parent))
+        {
+            BinaryOperator::Opcode op = binaryOp->getOpcode();
+            // If the child is on the LHS and it is an assignment, we are obviously not reading from it,
+            // so walk up the tree.
+            if (binaryOp->getLHS() == child && op == BO_Assign) {
+                child = parent;
+                parent = parentStmt(parent);
+            } else {
+                bPotentiallyReadFrom = true;
+                break;
+            }
+        }
+        else if (isa<ReturnStmt>(parent)
+                 || isa<CXXConstructExpr>(parent)
+                 || isa<ConditionalOperator>(parent)
+                 || isa<SwitchStmt>(parent)
+                 || isa<ArraySubscriptExpr>(parent)
+                 || isa<DeclStmt>(parent)
+                 || isa<WhileStmt>(parent)
+                 || isa<CXXNewExpr>(parent)
+                 || isa<ForStmt>(parent)
+                 || isa<InitListExpr>(parent)
+                 || isa<CXXDependentScopeMemberExpr>(parent)
                  || isa<UnresolvedMemberExpr>(parent)
                  || isa<MaterializeTemporaryExpr>(parent))  //???
         {
@@ -283,9 +302,13 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
             break;
         }
         else if (isa<CXXDeleteExpr>(parent)
-                  || isa<UnaryExprOrTypeTraitExpr>(parent)
-                 || isa<CXXUnresolvedConstructExpr>(parent) || isa<CompoundStmt>(parent)
-                 || isa<CXXTypeidExpr>(parent) || isa<DefaultStmt>(parent))
+                 || isa<UnaryExprOrTypeTraitExpr>(parent)
+                 || isa<CXXUnresolvedConstructExpr>(parent)
+                 || isa<CompoundStmt>(parent)
+                 || isa<LabelStmt>(parent)
+                 || isa<CXXForRangeStmt>(parent)
+                 || isa<CXXTypeidExpr>(parent)
+                 || isa<DefaultStmt>(parent))
         {
             break;
         }
@@ -305,7 +328,9 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
         parent->dump();
     }
     if (bPotentiallyReadFrom)
+    {
         readFromSet.insert(fieldInfo);
+    }
     return true;
 }
 

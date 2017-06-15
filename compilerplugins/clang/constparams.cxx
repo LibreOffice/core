@@ -194,8 +194,7 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt)
             return checkIfCanBeConst(parent);
         }
         return true;
-    } else if (isa<BinaryOperator>(parent)) {
-        const BinaryOperator* binaryOp = dyn_cast<BinaryOperator>(parent);
+    } else if (auto binaryOp = dyn_cast<BinaryOperator>(parent)) {
         BinaryOperator::Opcode op = binaryOp->getOpcode();
         // TODO could do better, but would require tracking the LHS
         if (binaryOp->getRHS() == stmt && op == BO_Assign) {
