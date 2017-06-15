@@ -53,7 +53,6 @@ void Slider::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnThumbPos          = 0;
     mnLineSize          = 1;
     mnPageSize          = 1;
-    mnDelta             = 0;
     mnStateFlags        = 0;
     meScrollType        = ScrollType::DontKnow;
     mbCalcSize          = true;
@@ -489,11 +488,9 @@ long Slider::ImplSlide( long nNewPos, bool bCallEndSlide )
     long nDelta = mnThumbPos-nOldPos;
     if ( nDelta )
     {
-        mnDelta = nDelta;
         Slide();
         if ( bCallEndSlide )
             EndSlide();
-        mnDelta = 0;
     }
     return nDelta;
 }
@@ -697,9 +694,7 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
         // on cancel, reset the previous Thumb position
         if ( rTEvt.IsTrackingCanceled() )
         {
-            long nOldPos = mnThumbPos;
             SetThumbPos( mnStartPos );
-            mnDelta = mnThumbPos-nOldPos;
             Slide();
         }
 
@@ -711,15 +706,11 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
 
             if ( !mbFullDrag && (mnStartPos != mnThumbPos) )
             {
-                mnDelta = mnThumbPos-mnStartPos;
                 Slide();
-                mnDelta = 0;
             }
         }
 
-        mnDelta = mnThumbPos-mnStartPos;
         EndSlide();
-        mnDelta = 0;
         meScrollType = ScrollType::DontKnow;
     }
     else
@@ -752,9 +743,7 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
                     ImplUpdateLinkedField();
                     if ( mbFullDrag && (nOldPos != mnThumbPos) )
                     {
-                        mnDelta = mnThumbPos-nOldPos;
                         Slide();
-                        mnDelta = 0;
                     }
                 }
             }

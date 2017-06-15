@@ -1100,7 +1100,6 @@ namespace { struct Cache : public rtl::Static<ImpFilterLibCache, Cache> {}; }
 GraphicFilter::GraphicFilter( bool bConfig )
     : pErrorEx(nullptr)
     , bUseConfig(bConfig)
-    , nExpGraphHint(0)
 {
     ImplInit();
 }
@@ -1159,7 +1158,6 @@ void GraphicFilter::ImplInit()
 
 sal_uLong GraphicFilter::ImplSetError( sal_uLong nError, const SvStream* pStm )
 {
-    pErrorEx->nFilterError = nError;
     pErrorEx->nStreamError = pStm ? pStm->GetError() : ERRCODE_NONE;
     return nError;
 }
@@ -1978,7 +1976,6 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
     sal_uInt16 nFormatCount = GetExportFormatCount();
 
     ResetLastError();
-    nExpGraphHint = 0;
 
     if( nFormat == GRFILTER_FORMAT_DONTKNOW )
     {
@@ -2108,7 +2105,6 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                 bool bExportedGrayJPEG = false;
                 if( !ExportJPEG( rOStm, aGraphic, pFilterData, &bExportedGrayJPEG ) )
                     nStatus = ERRCODE_GRFILTER_FORMATERROR;
-                nExpGraphHint = bExportedGrayJPEG ? GRFILTER_OUTHINT_GREY : 0;
 
                 if( rOStm.GetError() )
                     nStatus = ERRCODE_GRFILTER_IOERROR;
@@ -2279,7 +2275,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
 
 void GraphicFilter::ResetLastError()
 {
-    pErrorEx->nFilterError = pErrorEx->nStreamError = 0UL;
+    pErrorEx->nStreamError = 0UL;
 }
 
 const Link<ConvertData&,bool> GraphicFilter::GetFilterCallback() const

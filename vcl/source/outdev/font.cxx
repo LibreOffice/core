@@ -271,7 +271,6 @@ bool OutputDevice::GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities
 SystemFontData OutputDevice::GetSysFontData(int nFallbacklevel) const
 {
     SystemFontData aSysFontData;
-    aSysFontData.nSize = sizeof(aSysFontData);
 
     if (!mpGraphics)
         (void) AcquireGraphics();

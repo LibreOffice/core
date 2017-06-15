@@ -661,7 +661,6 @@ ImplDockingWindowWrapper::ImplDockingWindowWrapper( const vcl::Window *pWindow )
     , mbDockCanceled(false)
     , mbDocking(false)
     , mbLastFloatMode(false)
-    , mbStartFloat(false)
     , mbRollUp(false)
     , mbDockBtn(false)
     , mbHideBtn(false)
@@ -692,7 +691,6 @@ bool ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
     maMouseStart    = maMouseOff;
     mbDocking       = true;
     mbLastFloatMode = IsFloatingMode();
-    mbStartFloat    = mbLastFloatMode;
 
     // calculate FloatingBorder
     VclPtr<FloatingWindow> pWin;

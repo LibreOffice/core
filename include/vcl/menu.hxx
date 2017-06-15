@@ -459,7 +459,6 @@ public:
     struct MenuBarButtonCallbackArg
     {
         sal_uInt16 nId;    // Id of the button
-        bool bHighlight;   // highlight on/off
         VclPtr<MenuBar> pMenuBar; // menubar the button belongs to
     };
     // add an arbitrary button to the menubar (will appear next to closer)

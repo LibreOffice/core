@@ -1138,7 +1138,6 @@ void ToolBox::EndSelection()
     mnCurPos        = ITEM_NOTFOUND;
     mnCurItemId     = 0;
     mnDownItemId    = 0;
-    mnMouseClicks   = 0;
     mnMouseModifier = 0;
 }
 
@@ -1179,7 +1178,6 @@ void ToolBox::SetItemDown( sal_uInt16 nItemId, bool bDown )
 
         mnCurItemId     = 0;
         mnDownItemId    = 0;
-        mnMouseClicks   = 0;
         mnMouseModifier = 0;
     }
 }

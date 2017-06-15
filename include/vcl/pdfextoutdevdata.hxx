@@ -84,10 +84,8 @@ class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
     bool                        mbExportBookmarks;
     bool                        mbExportHiddenSlides;
     bool                        mbExportNDests; //i56629
-    sal_Int32                   mnFormsFormat;
     sal_Int32                   mnPage;
     sal_Int32                   mnCompressionQuality;
-    sal_Int32                   mnMaxImageResolution;
     css::lang::Locale           maDocLocale;
 
     PageSyncData*               mpPageSyncData;
@@ -120,8 +118,6 @@ public:
     bool    GetIsExportFormFields() const { return mbExportFormFields;}
     void        SetIsExportFormFields( const bool bExportFormFields );
 
-    void        SetFormsFormat( const sal_Int32 nFormsFormat );
-
     bool    GetIsExportBookmarks() const { return mbExportBookmarks;}
     void        SetIsExportBookmarks( const bool bExportBookmarks );
 
@@ -139,8 +135,6 @@ public:
     void        SetIsLosslessCompression( const bool bLosslessCompression );
 
     void        SetCompressionQuality( const sal_Int32 nQuality );
-
-    void        SetMaxImageResolution( const sal_Int32 nQuality );
 
     bool        GetIsReduceImageResolution() const { return mbReduceImageResolution;}
     void        SetIsReduceImageResolution( const bool bReduceImageResolution );

@@ -591,8 +591,6 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
     mpPrinterOptions->ReadFromConfig( mbPrintFile );
 
     maJobName               = i_rJobName;
-    mnCurPage               = 1;
-    mnCurPrintPage          = 1;
     mbPrinting              = true;
     if( GetCapabilities( PrinterCapType::UsePullModel ) )
     {
@@ -615,8 +613,6 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
             if ( !mnError )
                 mnError = PRINTER_GENERALERROR;
             pSVData->mpDefInst->DestroyPrinter( mpPrinter );
-            mnCurPage           = 0;
-            mnCurPrintPage      = 0;
             mbPrinting          = false;
             mpPrinter = nullptr;
             mbJobActive = false;
@@ -709,8 +705,6 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
                     if ( mpPrinter )
                     {
                         maJobName               = i_rJobName;
-                        mnCurPage               = 1;
-                        mnCurPrintPage          = 1;
                         mbPrinting              = true;
                     }
                     else
@@ -730,8 +724,6 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
                                             : css::view::PrintableState_JOB_FAILED );
                 if( mpPrinter )
                     pSVData->mpDefInst->DestroyPrinter( mpPrinter );
-                mnCurPage           = 0;
-                mnCurPrintPage      = 0;
                 mbPrinting          = false;
                 mpPrinter = nullptr;
 

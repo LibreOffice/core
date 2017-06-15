@@ -89,7 +89,6 @@ private:
                         mbInsertMode:1,
                         mbClickedInSelection:1,
                         mbIsSubEdit:1,
-                        mbInMBDown:1,
                         mbActivePopup:1;
     Link<Edit&,void>    maModifyHdl;
     Link<Edit&,void>    maUpdateDataHdl;

@@ -1130,7 +1130,6 @@ void ToolBox::ImplInitToolBoxData()
     mnVisLines        = 1;
     mnFloatLines      = 0;
     mnDockLines       = 0;
-    mnMouseClicks     = 0;
     mnMouseModifier   = 0;
     mbDrag            = false;
     mbSelection       = false;
@@ -1145,7 +1144,6 @@ void ToolBox::ImplInitToolBoxData()
     mbLastFloatMode   = false;
     mbCustomize       = false;
     mbDragging        = false;
-    mbIsShift         = false;
     mbIsKeyEvent = false;
     mbChangingHighlight = false;
     mbImagesMirrored  = false;
@@ -2433,7 +2431,6 @@ IMPL_LINK_NOARG(ToolBox, ImplDropdownLongClickHdl, Timer *, void)
             mnCurPos         = ITEM_NOTFOUND;
             mnCurItemId      = 0;
             mnDownItemId     = 0;
-            mnMouseClicks    = 0;
             mnMouseModifier  = 0;
             mnHighItemId     = 0;
         }
@@ -3155,10 +3152,7 @@ bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
         // set mouse data if in selection mode, as then
         // the MouseButtonDown handler cannot be called
         if ( mbSelection )
-        {
-            mnMouseClicks    = rMEvt.GetClicks();
             mnMouseModifier  = rMEvt.GetModifier();
-        }
 
         Deactivate();
 
@@ -3230,7 +3224,6 @@ bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
         mnCurPos         = ITEM_NOTFOUND;
         mnCurItemId      = 0;
         mnDownItemId     = 0;
-        mnMouseClicks    = 0;
         mnMouseModifier  = 0;
         return true;
     }
@@ -3501,7 +3494,6 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             mnCurPos         = i;
             mnCurItemId      = it->mnId;
             mnDownItemId     = mnCurItemId;
-            mnMouseClicks    = rMEvt.GetClicks();
             mnMouseModifier  = rMEvt.GetModifier();
             if ( it->mnBits & ToolBoxItemBits::REPEAT )
                 nTrackFlags |= StartTrackingFlags::ButtonRepeat;
@@ -3551,7 +3543,6 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                             mnCurPos         = ITEM_NOTFOUND;
                             mnCurItemId      = 0;
                             mnDownItemId     = 0;
-                            mnMouseClicks    = 0;
                             mnMouseModifier  = 0;
                             mnHighItemId     = 0;
                         }
@@ -4665,7 +4656,6 @@ bool ToolBox::ImplOpenItem( vcl::KeyCode aKeyCode )
         mnCurPos = GetItemPos( mnCurItemId );
         mnLastFocusItemId = mnCurItemId; // save item id for possible later focus restore
         mnMouseModifier = aKeyCode.GetModifier();
-        mbIsShift = true;
         mbIsKeyEvent = true;
         Activate();
 
@@ -4673,7 +4663,6 @@ bool ToolBox::ImplOpenItem( vcl::KeyCode aKeyCode )
         mpData->maDropdownClickHdl.Call( this );
 
         mbIsKeyEvent = false;
-        mbIsShift = false;
         mnMouseModifier = 0;
     }
     else
