@@ -200,4 +200,30 @@ class WriterPageDialog(UITestCase):
 
         self.ui_test.close_doc()
 
+    def test_text_direction(self):
+
+        lTextDirection = ['Left-to-right (horizontal)', 'Right-to-left (horizontal)',
+            'Right-to-left (vertical)', 'Left-to-right (vertical)']
+
+        self.ui_test.create_doc_in_start_center("writer")
+
+        document = self.ui_test.get_component()
+
+        for i in range(4):
+            with self.subTest(i=i):
+                xDialog = self.launch_dialog_and_select_tab(1)
+
+                xTextDirectionList = xDialog.getChild("comboTextFlowBox")
+                select_pos(xTextDirectionList, str(i))
+
+                self.assertEqual(
+                    get_state_as_dict(xTextDirectionList)["SelectEntryText"], lTextDirection[i])
+
+                self.click_button(xDialog, 'ok')
+
+                self.assertEqual(
+                    document.StyleFamilies.PageStyles.Standard.WritingMode, i)
+
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
