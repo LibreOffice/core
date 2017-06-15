@@ -68,6 +68,7 @@ $(eval $(call gb_CppunitTest_use_components,editeng_core,\
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
     unoxml/source/service/unoxml \
+	sax/source/expatwrap/expwrap \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,editeng_core))
