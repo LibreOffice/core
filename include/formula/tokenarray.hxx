@@ -417,10 +417,10 @@ private:
     sal_uInt16 *mpIndex;                 // Current step index
 
 public:
-    FormulaTokenArrayPlainIterator( const FormulaTokenArray& rFTA ) :
+    FormulaTokenArrayPlainIterator( const FormulaTokenArray& rFTA, bool bInternal = true ) :
         mpFTA( &rFTA ),
         _nIndex( 0 ), // Wow - if we re-use the version in the TokenArray - bang !
-        mpIndex( &_nIndex ) //const_cast<sal_uInt16 *>( &mpFTA->nIndex ) )
+        mpIndex( bInternal ? &_nIndex : const_cast<sal_uInt16 *>( &mpFTA->nIndex ) )
     {
     }
 

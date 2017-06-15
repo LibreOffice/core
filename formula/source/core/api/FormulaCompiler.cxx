@@ -700,7 +700,7 @@ FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr )
         :
         nCurrentFactorParam(0),
         pArr( &rArr ),
-        maArrIterator( rArr ),
+        maArrIterator( rArr, false ),
         pCode( nullptr ),
         pStack( nullptr ),
         eLastOp( ocPush ),
@@ -2055,7 +2055,7 @@ void FormulaCompiler::PopTokenArray()
         if( p->bTemp )
             delete pArr;
         pArr = p->pArr;
-        maArrIterator = FormulaTokenArrayPlainIterator(*pArr);
+        maArrIterator = FormulaTokenArrayPlainIterator(*pArr, false);
         mpLastToken = p->mpLastToken;
         delete p;
     }
@@ -2083,7 +2083,7 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
         if (pArr->NeedsPodfRewrite( aConv))
         {
             pArr = pArr->RewriteMissing( aConv );
-            maArrIterator = FormulaTokenArrayPlainIterator(*pArr);
+            maArrIterator = FormulaTokenArrayPlainIterator(*pArr, false);
         }
     }
     else if ( FormulaGrammar::isOOXML( meGrammar ) )
@@ -2093,7 +2093,7 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
         if (pArr->NeedsOoxmlRewrite())
         {
             pArr = pArr->RewriteMissing( aConv );
-            maArrIterator = FormulaTokenArrayPlainIterator(*pArr);
+            maArrIterator = FormulaTokenArrayPlainIterator(*pArr, false);
         }
     }
 
@@ -2111,7 +2111,7 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
     {
         delete pArr;
         pArr = pSaveArr;
-        maArrIterator = FormulaTokenArrayPlainIterator(*pArr);
+        maArrIterator = FormulaTokenArrayPlainIterator(*pArr, false);
     }
 }
 
@@ -2628,7 +2628,7 @@ void FormulaCompiler::PushTokenArray( FormulaTokenArray* pa, bool bTemp )
     p->bTemp      = bTemp;
     pStack        = p;
     pArr          = pa;
-    maArrIterator = FormulaTokenArrayPlainIterator(*pArr);
+    maArrIterator = FormulaTokenArrayPlainIterator(*pArr, false);
 }
 
 void FormulaTokenArrayPlainIterator::assertSanity( FormulaTokenArray *pArr )

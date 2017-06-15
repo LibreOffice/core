@@ -4361,7 +4361,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
 
     ScTokenArray aArr;
     pArr = &aArr;
-    maArrIterator = FormulaTokenArrayPlainIterator(*pArr);
+    maArrIterator = FormulaTokenArrayPlainIterator(*pArr, false);
     aFormula = comphelper::string::strip(rFormula, ' ');
 
     nSrcPos = 0;
@@ -4646,7 +4646,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
     ScTokenArray* pNew = new ScTokenArray( aArr );
     pNew->GenHash();
     pArr = pNew;
-    maArrIterator = FormulaTokenArrayPlainIterator(*pArr);
+    maArrIterator = FormulaTokenArrayPlainIterator(*pArr, false);
     maArrIterator.assertSanity(pArr);
 
     if (!maExternalFiles.empty())
@@ -4678,7 +4678,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula, const OUStrin
             // remember pArr, in case a subsequent CompileTokenArray() is executed.
             ScTokenArray* pNew = new ScTokenArray( aTokenArray );
             pArr = pNew;
-            maArrIterator = FormulaTokenArrayPlainIterator(*pArr);
+            maArrIterator = FormulaTokenArrayPlainIterator(*pArr, false);
             return pNew;
         }
     }
