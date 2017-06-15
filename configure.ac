@@ -382,11 +382,11 @@ if test -n "$with_android_ndk"; then
     case $ANDROID_NDK_VERSION in
     r9*|r10*)
         ;;
-    11.1.*|12.1.*|13.1.*|14.1.*)
+    11.1.*|12.1.*|13.1.*|14.1.*|15.0*)
         ;;
     *)
-        AC_MSG_WARN([Untested android NDK version $ANDROID_NDK_VERSION, only versions r9* til 14.1.* have been used successfully. Proceed at your own risk.])
-        add_warning "Untested android NDK version $ANDROID_NDK_VERSION, only versions r9* til 14.1.* have been used successfully. Proceed at your own risk."
+        AC_MSG_WARN([Untested android NDK version $ANDROID_NDK_VERSION, only versions r9* til 15.0.* have been used successfully. Proceed at your own risk.])
+        add_warning "Untested android NDK version $ANDROID_NDK_VERSION, only versions r9* til 15.0.* have been used successfully. Proceed at your own risk."
         ;;
     esac
 
