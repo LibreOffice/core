@@ -37,6 +37,7 @@
 #include <xmloff/xmlstyle.hxx>
 #include "editsource.hxx"
 #include "editxml.hxx"
+#include <editdoc.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/unotext.hxx>
 #include <editeng/unoprnms.hxx>
@@ -148,6 +149,11 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
     };
     static SvxItemPropertySet aSvxXMLTextImportComponentPropertySet( SvxXMLTextImportComponentPropertyMap, EditEngine::GetGlobalItemPool() );
 
+    //get the initial para count before paste
+    sal_uInt32 initialParaCount = rEditEngine.GetEditDoc().Count();
+    //insert para break before inserting the copied text
+    rEditEngine.InsertParaBreak( rEditEngine.CreateSelection( rSel ).Max() );
+
     uno::Reference<text::XText > xParent;
     SvxUnoText* pUnoText = new SvxUnoText( &aEditSource, &aSvxXMLTextImportComponentPropertySet, xParent );
     pUnoText->SetSelection( rSel );
@@ -206,6 +212,13 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
             xParser->parseStream( aParserInput );
         }
         while(false);
+
+        //remove the extra para breaks
+        EditDoc& pDoc = rEditEngine.GetEditDoc();
+        rEditEngine.ConnectParagraphs( pDoc.GetObject( initialParaCount + rSel.nEndPara - 1 ),
+            pDoc.GetObject( initialParaCount + rSel.nEndPara ), true );
+        rEditEngine.ConnectParagraphs( pDoc.GetObject( pDoc.Count() - initialParaCount + rSel.nEndPara - 1),
+            pDoc.GetObject( pDoc.Count() - initialParaCount + rSel.nEndPara ), true );
     }
     catch( const uno::Exception& )
     {
