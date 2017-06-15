@@ -772,7 +772,7 @@ private:
      */
     ScDocument& cacheNewDocShell( sal_uInt16 nFileId, SrcShell& rSrcShell );
 
-    void maybeLinkExternalFile(sal_uInt16 nFileId);
+    void maybeLinkExternalFile( sal_uInt16 nFileId, bool bDeferFilterDetection = false );
 
     /**
      * Try to create a "real" file name from the relative path.  The original
