@@ -30,7 +30,6 @@ $(call gb_ExternalProject_get_state_target,jpeg-turbo,configure) :
 			--with-pic \
 			--enable-static \
 			--disable-shared \
-			--with-jpeg8 \
 			--without-java \
 			--without-turbojpeg \
 			$(if $(NASM),,--without-simd) \
