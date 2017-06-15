@@ -423,32 +423,11 @@ public:
 
     void assertSanity( FormulaTokenArray *pArr );
 
-    void Reset()
-    {
-        *mpIndex = 0;
-    }
-
-    sal_uInt16 GetIndex() const
-    {
-        return *mpIndex;
-    }
-
-    FormulaToken* First()
-    {
-        *mpIndex = 0;
-        return Next();
-    }
-
-    void Jump(sal_uInt16 nIndex)
-    {
-        *mpIndex = nIndex;
-    }
-
-    void BackOne()
-    {
-        if (*mpIndex > 0)
-            (*mpIndex)--;
-    }
+    void Reset();
+    sal_uInt16 GetIndex() const;
+    FormulaToken* First();
+    void Jump(sal_uInt16 nIndex);
+    void BackOne();
 
     FormulaToken* Next();
     FormulaToken* NextNoSpaces();
@@ -461,19 +440,10 @@ public:
     FormulaToken* PeekPrevNoSpaces() const;    /// Only after Reset/First/Next/Last/Prev!
     FormulaToken* PeekNextNoSpaces() const;    /// Only after Reset/First/Next/Last/Prev!
 
-    FormulaToken* FirstRPN()
-    {
-        *mpIndex = 0;
-        return NextRPN();
-    }
-
+    FormulaToken* FirstRPN();
     FormulaToken* NextRPN();
 
-    FormulaToken* LastRPN()
-    {
-        *mpIndex = mpFTA->nRPN;
-        return PrevRPN();
-    }
+    FormulaToken* LastRPN();
 
     FormulaToken* PrevRPN();
 

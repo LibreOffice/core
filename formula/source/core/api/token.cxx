@@ -2097,6 +2097,48 @@ FormulaTokenArrayPlainIterator::FormulaTokenArrayPlainIterator( const FormulaTok
 {
 }
 
+// were in-lined.
+
+    void FormulaTokenArrayPlainIterator::Reset()
+    {
+        *mpIndex = 0;
+    }
+
+    sal_uInt16 FormulaTokenArrayPlainIterator::GetIndex() const
+    {
+        return *mpIndex;
+    }
+
+    FormulaToken* FormulaTokenArrayPlainIterator::First()
+    {
+        *mpIndex = 0;
+        return Next();
+    }
+
+    void FormulaTokenArrayPlainIterator::Jump(sal_uInt16 nIndex)
+    {
+        *mpIndex = nIndex;
+    }
+
+    void FormulaTokenArrayPlainIterator::BackOne()
+    {
+        if (*mpIndex > 0)
+            (*mpIndex)--;
+    }
+
+    FormulaToken* FormulaTokenArrayPlainIterator::FirstRPN()
+    {
+        *mpIndex = 0;
+        return NextRPN();
+    }
+
+    FormulaToken* FormulaTokenArrayPlainIterator::LastRPN()
+    {
+        *mpIndex = mpFTA->nRPN;
+        return PrevRPN();
+    }
+
+
 } // formula
 
 
