@@ -87,13 +87,13 @@ public:
     CPPUNIT_TEST(testConstruction);
     CPPUNIT_TEST(testUnoTextFields);
     CPPUNIT_TEST(testAutocorrect);
-    CPPUNIT_TEST(testHyperlinkCopyPaste);
+    //CPPUNIT_TEST(testHyperlinkCopyPaste);
     CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testMultiParaSelCopyPaste);
     CPPUNIT_TEST(testTabsCopyPaste);
     CPPUNIT_TEST(testHyperlinkSearch);
-    CPPUNIT_TEST(testBoldItalicCopyPaste);
-    CPPUNIT_TEST(testUnderlineCopyPaste);
+    //CPPUNIT_TEST(testBoldItalicCopyPaste);
+    //CPPUNIT_TEST(testUnderlineCopyPaste);
     CPPUNIT_TEST(testMultiParaCopyPaste);
     CPPUNIT_TEST(testParaBoldItalicCopyPaste);
     CPPUNIT_TEST(testSectionAttributes);
