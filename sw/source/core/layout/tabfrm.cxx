@@ -915,7 +915,22 @@ static bool lcl_FindSectionsInRow( const SwRowFrame& rRow )
             else
             {
                 // #i26945# - search only for sections
-                bRet = pTmpFrame->IsSctFrame();
+                if (pTmpFrame->IsSctFrame())
+                {
+                    bRet = true;
+
+                    if (!rRow.IsInSct())
+                    {
+                        // This row is not in a section.
+                        if (const SwFrame* pSectionLower = pTmpFrame->GetLower())
+                        {
+                            if (!pSectionLower->IsColumnFrame())
+                                // Section has a single column only, try to
+                                // split that.
+                                bRet = false;
+                        }
+                    }
+                }
             }
 
             if ( bRet )
