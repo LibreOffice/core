@@ -9,11 +9,7 @@
 #include "rtfstringbuffer.hxx"
 #include "rtfattributeoutput.hxx"
 
-RtfStringBufferValue::RtfStringBufferValue()
-    : m_pFlyFrameFormat(nullptr),
-      m_pGrfNode(nullptr)
-{
-}
+RtfStringBufferValue::RtfStringBufferValue() = default;
 
 RtfStringBufferValue::RtfStringBufferValue(const SwFlyFrameFormat* pFlyFrameFormat, const SwGrfNode* pGrfNode)
     : m_pFlyFrameFormat(pFlyFrameFormat),
