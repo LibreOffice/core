@@ -69,13 +69,9 @@ struct SystemEnvData
     void*               pWidget;        // the corresponding widget
     void*               pVisual;        // the visual in use
     int                 nScreen;        // the current screen of the window
-    int                 nDepth;         // depth of said visual
-    long                aColormap;      // the colormap being used
-    void*               pAppContext;    // the application context in use
     // note: this is a "long" in Xlib *but* in the protocol it's only 32-bit
     // however, the GTK3 vclplug wants to store pointers in here!
     sal_IntPtr          aShellWindow;   // the window of the frame's shell
-    void*               pShellWidget;   // the frame's shell widget
     const char*         pToolkit;       // the toolkit in use (gtk2 vs gtk3)
 #endif
 
@@ -95,11 +91,7 @@ struct SystemEnvData
         , pWidget(nullptr)
         , pVisual(nullptr)
         , nScreen(0)
-        , nDepth(0)
-        , aColormap(0)
-        , pAppContext(nullptr)
         , aShellWindow(0)
-        , pShellWidget(nullptr)
         , pToolkit(nullptr)
 #endif
     {
@@ -146,12 +138,7 @@ struct SystemGraphicsData
 #elif defined( IOS )
     CGContextRef    rCGContext;     // CoreGraphics graphic context
 #elif defined( UNX )
-    void*           pDisplay;       // the relevant display connection
     long            hDrawable;      // a drawable
-    void*           pVisual;        // the visual in use
-    int         nScreen;        // the current screen of the drawable
-    int             nDepth;         // depth of said visual
-    long            aColormap;      // the colormap being used
     void*           pXRenderFormat;  // render format for drawable
 #endif
     SystemGraphicsData()
@@ -166,12 +153,7 @@ struct SystemGraphicsData
 #elif defined( IOS )
         , rCGContext( NULL )
 #elif defined( UNX )
-        , pDisplay( nullptr )
         , hDrawable( 0 )
-        , pVisual( nullptr )
-        , nScreen( 0 )
-        , nDepth( 0 )
-        , aColormap( 0 )
         , pXRenderFormat( nullptr )
 #endif
     { }
@@ -179,7 +161,6 @@ struct SystemGraphicsData
 
 struct SystemWindowData
 {
-    unsigned long   nSize;          // size in bytes of this structure
 #if defined(_WIN32)                  // meaningless on Windows
 #elif defined( MACOSX )
     bool            bOpenGL;        // create a OpenGL providing NSView
@@ -205,7 +186,6 @@ struct SystemGlyphData
 
 struct SystemFontData
 {
-    unsigned long   nSize;          // size in bytes of this structure
 #if defined( UNX )
     void*           nFontId;        // native font id
     int             nFontFlags;     // native font flags
@@ -216,15 +196,15 @@ struct SystemFontData
     bool            bVerticalCharacterType;      // Is the font using vertical character type
 
     SystemFontData()
-        : nSize( sizeof( SystemFontData ) )
+        :
 #if defined( UNX )
-        , nFontId( nullptr )
-        , nFontFlags( 0 )
+        nFontId( nullptr ),
+        nFontFlags( 0 ),
 #endif
-        , bFakeBold( false )
-        , bFakeItalic( false )
-        , bAntialias( true )
-        , bVerticalCharacterType( false )
+        bFakeBold( false ),
+        bFakeItalic( false ),
+        bAntialias( true ),
+        bVerticalCharacterType( false )
     {
     }
 };
@@ -235,7 +215,6 @@ typedef std::vector<SystemGlyphData> SystemGlyphDataVector;
 
 struct SystemTextLayoutData
 {
-    unsigned long         nSize;         // size in bytes of this structure
     SystemGlyphDataVector rGlyphData;    // glyph data
     int                   orientation;   // Text orientation
 };

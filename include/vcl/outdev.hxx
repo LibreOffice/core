@@ -379,7 +379,6 @@ private:
     Color                           maTextColor;
     Color                           maTextLineColor;
     Color                           maOverlineColor;
-    TextAlign                       meTextAlign;
     RasterOp                        meRasterOp;
     Wallpaper                       maBackground;
     std::unique_ptr<AllSettings>    mxSettings;

@@ -44,10 +44,6 @@ using namespace ::comphelper;
 namespace
 {
 
-#define FORMAT_NUMERIC       1
-#define FORMAT_METRIC        2
-#define FORMAT_CURRENCY      3
-
 sal_Int64 ImplPower10( sal_uInt16 n )
 {
     sal_uInt16  i;
@@ -494,7 +490,6 @@ void NumericFormatter::ImplInit()
         // a "large" value substantially smaller than SAL_MAX_INT64, to avoid
         // overflow in computations using this "dummy" value
     mnDecimalDigits     = 2;
-    mnType              = FORMAT_NUMERIC;
     mbThousandSep       = true;
     mbShowTrailingZeros = true;
     mbWrapOnLimits      = false;
@@ -1328,7 +1323,6 @@ inline void MetricFormatter::ImplInit()
 {
     mnBaseValue = 0;
     meUnit = MetricField::GetDefaultUnit();
-    mnType = FORMAT_METRIC;
 }
 
 MetricFormatter::MetricFormatter()
@@ -1826,7 +1820,6 @@ bool CurrencyFormatter::ImplCurrencyReformat( const OUString& rStr, OUString& rO
 
 CurrencyFormatter::CurrencyFormatter()
 {
-    mnType = FORMAT_CURRENCY;
 }
 
 CurrencyFormatter::~CurrencyFormatter()

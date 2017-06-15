@@ -413,7 +413,7 @@ public:
     virtual ToolbarValue* clone() const override;
     tools::Rectangle           maGripRect;
     bool                mbIsTopDockingArea; // indicates that this is the top aligned dockingarea
-                                            // adjacent to the menubar
+                                            // adjacent to the menubar, only used on Windows
 };
 
 /*  MenubarValue:
@@ -460,8 +460,8 @@ public:
     virtual ~PushButtonValue() override;
     virtual PushButtonValue* clone() const override;
 
-    bool            mbBevelButton:1;
-    bool            mbSingleLine:1;
+    bool            mbBevelButton:1; // only used on OSX
+    bool            mbSingleLine:1;  // only used on OSX
 };
 
 

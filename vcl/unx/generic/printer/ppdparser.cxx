@@ -596,7 +596,6 @@ PPDParser::PPDParser( const OUString& rFile ) :
         m_pInputSlots( nullptr ),
         m_pDefaultResolution( nullptr ),
         m_pResolutions( nullptr ),
-        m_pDefaultDuplexType( nullptr ),
         m_pDuplexTypes( nullptr ),
         m_pFontList( nullptr ),
         m_pTranslator( new PPDTranslator() )
@@ -744,8 +743,6 @@ PPDParser::PPDParser( const OUString& rFile ) :
     SAL_INFO_IF(!m_pDefaultInputSlot, "vcl.unx.print", "no DefaultInputSlot in " << m_aFile);
 
     m_pDuplexTypes = getKey( OUString( "Duplex" ) );
-    if( m_pDuplexTypes )
-        m_pDefaultDuplexType = m_pDuplexTypes->getDefaultValue();
 
     m_pFontList = getKey( OUString( "Font" ) );
     if (m_pFontList == nullptr) {
@@ -1200,15 +1197,6 @@ void PPDParser::parseOpenUI(const OString& rLine, const OString& rPPDGroup)
     pKey->m_bUIOption = true;
     m_pTranslator->insertKey( pKey->getKey(), aTranslation );
 
-    sal_Int32 nIndex = 0;
-    OString aValue = WhitespaceToSpace( rLine.getToken( 1, ':', nIndex ) );
-    if( aValue.equalsIgnoreAsciiCase("boolean"))
-        pKey->m_eUIType = PPDKey::Boolean;
-    else if (aValue.equalsIgnoreAsciiCase("pickmany"))
-        pKey->m_eUIType = PPDKey::PickMany;
-    else
-        pKey->m_eUIType = PPDKey::PickOne;
-
     pKey->m_aGroup = OStringToOUString(rPPDGroup, RTL_TEXTENCODING_MS_1252);
 }
 
@@ -1479,7 +1467,6 @@ PPDKey::PPDKey( const OUString& rKey ) :
         m_pDefaultValue( nullptr ),
         m_bQueryValue( false ),
         m_bUIOption( false ),
-        m_eUIType( PickOne ),
         m_nOrderDependency( 100 ),
         m_eSetupType( SetupType::AnySetup )
 {

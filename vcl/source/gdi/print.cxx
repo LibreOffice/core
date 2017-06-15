@@ -483,8 +483,6 @@ void Printer::ImplInitData()
     meOutDevType        = OUTDEV_PRINTER;
     mbDefPrinter        = false;
     mnError             = ERRCODE_NONE;
-    mnCurPage           = 0;
-    mnCurPrintPage      = 0;
     mnPageQueueSize     = 0;
     mnCopyCount         = 1;
     mbCollateCopy       = false;
@@ -1642,10 +1640,7 @@ bool Printer::EndJob()
     {
         ReleaseGraphics();
 
-        mnCurPage = 0;
-
         mbPrinting      = false;
-        mnCurPrintPage  = 0;
         maJobName.clear();
 
         mbDevOutput = false;
@@ -1678,11 +1673,7 @@ void Printer::ImplStartPage()
 
         // PrintJob not aborted ???
         if ( IsJobActive() )
-        {
             mbInPrintPage = true;
-            mnCurPage++;
-            mnCurPrintPage++;
-        }
     }
 }
 

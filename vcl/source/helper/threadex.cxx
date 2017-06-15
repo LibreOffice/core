@@ -25,7 +25,6 @@ using namespace vcl;
 SolarThreadExecutor::SolarThreadExecutor()
     :m_aStart()
     ,m_aFinish()
-    ,m_nReturn( 0 )
     ,m_bTimeout( false )
 {
 }
@@ -39,7 +38,7 @@ IMPL_LINK_NOARG(SolarThreadExecutor, worker, void*, void)
     if ( !m_bTimeout )
     {
         m_aStart.set();
-        m_nReturn = doIt();
+        doIt();
         m_aFinish.set();
     }
 }
@@ -49,7 +48,7 @@ void SolarThreadExecutor::execute()
     if( ::osl::Thread::getCurrentIdentifier() == Application::GetMainThreadIdentifier() )
     {
         m_aStart.set();
-        m_nReturn = doIt();
+        doIt();
         m_aFinish.set();
     }
     else

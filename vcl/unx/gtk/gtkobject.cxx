@@ -54,15 +54,11 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
         SalDisplay* pDisp = vcl_sal::getSalDisplay(GetGenericData());
         m_aSystemData.pDisplay      = pDisp->GetDisplay();
         m_aSystemData.pVisual       = pDisp->GetVisual(pParent->getXScreenNumber()).GetVisual();
-        m_aSystemData.nDepth        = pDisp->GetVisual(pParent->getXScreenNumber()).GetDepth();
-        m_aSystemData.aColormap     = pDisp->GetColormap(pParent->getXScreenNumber()).GetXColormap();
         m_aSystemData.aWindow       = GDK_WINDOW_XWINDOW(widget_get_window(m_pSocket));
         m_aSystemData.aShellWindow  = GDK_WINDOW_XWINDOW(widget_get_window(GTK_WIDGET(pParent->getWindow())));
         m_aSystemData.pSalFrame     = nullptr;
         m_aSystemData.pWidget       = m_pSocket;
         m_aSystemData.nScreen       = pParent->getXScreenNumber().getXScreen();
-        m_aSystemData.pAppContext   = nullptr;
-        m_aSystemData.pShellWidget  = GTK_WIDGET(pParent->getWindow());
         m_aSystemData.pToolkit      = "gtk2";
 
         g_signal_connect( G_OBJECT(m_pSocket), "button-press-event", G_CALLBACK(signalButton), this );

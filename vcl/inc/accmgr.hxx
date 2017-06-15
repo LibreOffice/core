@@ -48,7 +48,7 @@ public:
     void                EndSequence();
     void                FlushAccel() { EndSequence(); }
 
-    bool                IsAccelKey( const vcl::KeyCode& rKeyCode, sal_uInt16 nRepeat );
+    bool                IsAccelKey( const vcl::KeyCode& rKeyCode );
 };
 
 #endif // INCLUDED_VCL_INC_ACCMGR_HXX

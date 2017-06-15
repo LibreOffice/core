@@ -999,15 +999,11 @@ void GtkSalFrame::InitCommon()
     GtkSalDisplay* pDisp = GetGtkSalData()->GetGtkDisplay();
     m_aSystemData.pDisplay      = pDisp->GetDisplay();
     m_aSystemData.pVisual       = pDisp->GetVisual( m_nXScreen ).GetVisual();
-    m_aSystemData.nDepth        = pDisp->GetVisual( m_nXScreen ).GetDepth();
-    m_aSystemData.aColormap     = pDisp->GetColormap( m_nXScreen ).GetXColormap();
     m_aSystemData.aWindow       = widget_get_xid(m_pWindow);
     m_aSystemData.aShellWindow  = m_aSystemData.aWindow;
     m_aSystemData.pSalFrame     = this;
     m_aSystemData.pWidget       = m_pWindow;
     m_aSystemData.nScreen       = m_nXScreen.getXScreen();
-    m_aSystemData.pAppContext   = nullptr;
-    m_aSystemData.pShellWidget  = m_aSystemData.pWidget;
     m_aSystemData.pToolkit      = "gtk2";
 
     m_bGraphics = false;

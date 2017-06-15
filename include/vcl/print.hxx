@@ -194,8 +194,6 @@ private:
     Point                       maPageOffset;
     Size                        maPaperSize;
     sal_uLong                   mnError;
-    sal_uInt16                  mnCurPage;
-    sal_uInt16                  mnCurPrintPage;
     sal_uInt16                  mnPageQueueSize;
     sal_uInt16                  mnCopyCount;
     bool                        mbDefPrinter;

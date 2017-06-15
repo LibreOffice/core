@@ -297,7 +297,6 @@ void SpinField::ImplInitSpinFieldData()
     mbLowerIn       = false;
     mbInitialUp     = false;
     mbInitialDown   = false;
-    mbNoSelect      = false;
     mbInDropDown    = false;
 }
 
@@ -379,7 +378,6 @@ void SpinField::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if (!HasFocus() && (!mpEdit || !mpEdit->HasFocus()))
     {
-        mbNoSelect = true;
         GrabFocus();
     }
 

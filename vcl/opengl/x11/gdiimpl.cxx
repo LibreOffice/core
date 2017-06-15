@@ -248,7 +248,6 @@ SystemWindowData X11OpenGLContext::generateWinData(vcl::Window* pParent, bool /*
     OpenGLZone aZone;
 
     SystemWindowData aWinData;
-    aWinData.nSize = sizeof(aWinData);
     aWinData.pVisual = nullptr;
 
     const SystemEnvData* sysData(pParent->GetSystemData());

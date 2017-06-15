@@ -509,10 +509,8 @@ PDFExtOutDevData::PDFExtOutDevData( const OutputDevice& rOutDev ) :
     mbExportBookmarks       ( false ),
     mbExportHiddenSlides    ( false ),
     mbExportNDests          ( false ),
-    mnFormsFormat           ( 0 ),
     mnPage                  ( -1 ),
     mnCompressionQuality    ( 90 ),
-    mnMaxImageResolution    ( 300 ),
     mpPageSyncData          ( nullptr ),
     mpGlobalSyncData        ( new GlobalSyncData() )
 {
@@ -546,10 +544,6 @@ void PDFExtOutDevData::SetCompressionQuality( const sal_Int32 nQuality )
 {
     mnCompressionQuality = nQuality;
 }
-void PDFExtOutDevData::SetMaxImageResolution( const sal_Int32 nMaxImageResolution )
-{
-    mnMaxImageResolution = nMaxImageResolution;
-}
 void PDFExtOutDevData::SetIsReduceImageResolution( const bool bReduceImageResolution )
 {
     mbReduceImageResolution = bReduceImageResolution;
@@ -573,10 +567,6 @@ void PDFExtOutDevData::SetIsExportTransitionEffects( const bool bTransitionEffec
 void PDFExtOutDevData::SetIsExportFormFields( const bool bExportFomtFields )
 {
     mbExportFormFields = bExportFomtFields;
-}
-void PDFExtOutDevData::SetFormsFormat( const sal_Int32 nFormsFormat )
-{
-    mnFormsFormat = nFormsFormat;
 }
 void PDFExtOutDevData::SetIsExportBookmarks( const bool bExportBookmarks )
 {

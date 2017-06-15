@@ -35,7 +35,6 @@ namespace vcl
     {
         osl::Condition          m_aStart;
         osl::Condition          m_aFinish;
-        long                    m_nReturn;
         bool                    m_bTimeout;
 
         DECL_DLLPRIVATE_LINK( worker, void*, void );
@@ -44,7 +43,7 @@ namespace vcl
         SolarThreadExecutor();
         virtual ~SolarThreadExecutor();
 
-        virtual long doIt() = 0;
+        virtual void doIt() = 0;
         void execute();
     };
 
@@ -71,7 +70,7 @@ private:
     explicit GenericSolarThreadExecutor( FuncT const& func )
         : m_exc(), m_func(func), m_result() {}
 
-    virtual long doIt() override
+    virtual void doIt() override
     {
         try {
             m_result.reset( m_func() );
@@ -80,7 +79,6 @@ private:
             // only UNO exceptions can be dispatched:
             m_exc = ::cppu::getCaughtException();
         }
-        return 0;
     }
 
     css::uno::Any m_exc;
@@ -101,7 +99,7 @@ private:
     explicit GenericSolarThreadExecutor( FuncT const& func )
         : m_exc(), m_func(func) {}
 
-    virtual long doIt() override
+    virtual void doIt() override
     {
         try {
             m_func();
@@ -110,7 +108,6 @@ private:
             // only UNO exceptions can be dispatched:
             m_exc = ::cppu::getCaughtException();
         }
-        return 0;
     }
 
     css::uno::Any m_exc;

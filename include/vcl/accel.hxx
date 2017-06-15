@@ -40,7 +40,6 @@ private:
     // Will be set by AcceleratorManager
     vcl::KeyCode            maCurKeyCode;
     sal_uInt16              mnCurId;
-    sal_uInt16              mnCurRepeat;
     bool*                   mpDel;
 
     SAL_DLLPRIVATE  void    ImplInit();

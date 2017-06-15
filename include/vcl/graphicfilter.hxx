@@ -144,7 +144,6 @@ class VCL_DLLPUBLIC GraphicDescriptor final
     sal_uInt16          nBitsPerPixel;
     sal_uInt16          nPlanes;
     GraphicFileFormat   nFormat;
-    bool                bCompressed;
     bool                bOwnStream;
 
     void                ImpConstruct();
@@ -221,10 +220,9 @@ public:
 /** Information about errors during the GraphicFilter operation. */
 struct FilterErrorEx
 {
-    sal_uLong   nFilterError;
     sal_uLong   nStreamError;
 
-            FilterErrorEx() : nFilterError( 0UL ), nStreamError( 0UL ) {}
+    FilterErrorEx() : nStreamError( 0UL ) {}
 };
 
 /** Class to import and export graphic formats. */
@@ -320,7 +318,6 @@ private:
 
     FilterErrorEx*      pErrorEx;
     bool                bUseConfig;
-    long                nExpGraphHint;
 };
 
 #endif // INCLUDED_VCL_GRAPHICFILTER_HXX

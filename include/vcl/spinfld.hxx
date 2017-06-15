@@ -93,7 +93,6 @@ private:
                     mbSpin:1,
                     mbInitialUp:1,
                     mbInitialDown:1,
-                    mbNoSelect:1,
                     mbUpperIn:1,
                     mbLowerIn:1,
                     mbInDropDown:1;

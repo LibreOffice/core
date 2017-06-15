@@ -66,7 +66,6 @@ SystemWindow::ImplData::ImplData()
 SystemWindow::SystemWindow(WindowType nType)
     : Window(nType)
     , mbRollUp(false)
-    , mbRollFunc(false)
     , mbDockBtn(false)
     , mbHideBtn(false)
     , mbSysChild(false)
@@ -371,7 +370,6 @@ void SystemWindow::RollUp()
     if ( !mbRollUp )
     {
         maOrgSize = GetOutputSizePixel();
-        mbRollFunc = true;
         Size aSize = maRollUpOutSize;
         if ( !aSize.Width() )
             aSize.Width() = GetOutputSizePixel().Width();
@@ -380,7 +378,6 @@ void SystemWindow::RollUp()
             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetRollUp( true, aSize );
         else
             SetOutputSizePixel( aSize );
-        mbRollFunc = false;
     }
 }
 

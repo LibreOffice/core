@@ -325,7 +325,6 @@ TEIMEInfos::TEIMEInfos( const TextPaM& rPos, const OUString& rOldTextAfterStartP
 {
     aPos = rPos;
     nLen = 0;
-    bCursor = true;
     pAttribs = nullptr;
     bWasCursorOverwrite = false;
 }

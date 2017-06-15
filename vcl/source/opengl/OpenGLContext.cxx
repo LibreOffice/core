@@ -429,7 +429,6 @@ SystemWindowData OpenGLContext::generateWinData(vcl::Window* /*pParent*/, bool /
 {
     SystemWindowData aWinData;
     memset(&aWinData, 0, sizeof(aWinData));
-    aWinData.nSize = sizeof(aWinData);
     return aWinData;
 }
 

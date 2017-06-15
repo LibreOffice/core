@@ -98,7 +98,6 @@ void GraphicDescriptor::ImpConstruct()
     nFormat = GraphicFileFormat::NOT;
     nBitsPerPixel = 0;
     nPlanes = 0;
-    bCompressed = false;
 }
 
 bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
@@ -149,7 +148,7 @@ bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
 
             // Compression
             rStm.ReadUInt32( nTemp32 );
-            bCompressed = ( ( nCompression = nTemp32 ) > 0 );
+            nCompression = nTemp32;
 
             // logical width
             rStm.SeekRel( 4 );
@@ -461,7 +460,6 @@ bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm, bool bExtendedInfo )
 
             // compression
             rStm.ReadUChar( cByte );
-            bCompressed = ( cByte > 0 );
 
             bRet = (cByte==0 || cByte ==1);
             if (bRet)
@@ -549,7 +547,6 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
                 // Planes always 1;
                 // compression always
                 nPlanes = 1;
-                bCompressed = true;
 
                 sal_uInt32  nLen32 = 0;
                 nTemp32 = 0;
@@ -718,8 +715,7 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
                             if ( nTemp16 == 259 )
                             {
                                 rStm.SeekRel( 6 );
-                                rStm.ReadUInt16( nTemp16 );
-                                bCompressed = ( nTemp16 > 1 );
+                                rStm.ReadUInt16( nTemp16 ); // compression
                                 rStm.SeekRel( 2 );
                             }
                             else

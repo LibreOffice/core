@@ -60,7 +60,6 @@ private:
     long            mnLineSize;
     long            mnPageSize;
     long            mnDelta;
-    sal_uInt16      mnDragDraw;
     sal_uInt16      mnStateFlags;
     ScrollType      meScrollType;
     bool            mbCalcSize;

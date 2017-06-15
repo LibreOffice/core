@@ -155,10 +155,6 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     pObjData->aWindow       = pObject->maSecondary;
     pObjData->pWidget       = nullptr;
     pObjData->pVisual       = pVisual;
-    pObjData->nDepth        = nDepth;
-    pObjData->aColormap     = aVisID == pSalDisp->GetVisual( nXScreen ).GetVisualId() ?
-                              pSalDisp->GetColormap( nXScreen ).GetXColormap() : None;
-    pObjData->pAppContext   = nullptr;
 
     XSync(pDisp, False);
     if( GetGenericData()->ErrorTrapPop( false ) )
@@ -227,11 +223,7 @@ X11SalObject::X11SalObject()
     maSystemChildData.pSalFrame = nullptr;
     maSystemChildData.pWidget       = nullptr;
     maSystemChildData.pVisual       = nullptr;
-    maSystemChildData.nDepth        = 0;
-    maSystemChildData.aColormap = 0;
-    maSystemChildData.pAppContext   = nullptr;
     maSystemChildData.aShellWindow  = 0;
-    maSystemChildData.pShellWidget  = nullptr;
 
     std::list< SalObject* >& rObjects = vcl_sal::getSalDisplay(GetGenericData())->getSalObjects();
     rObjects.push_back( this );

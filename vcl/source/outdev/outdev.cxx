@@ -93,7 +93,6 @@ OutputDevice::OutputDevice() :
     mbOutputClipped                 = false;
     maTextColor                     = Color( COL_BLACK );
     maOverlineColor                 = Color( COL_TRANSPARENT );
-    meTextAlign                     = maFont.GetAlignment();
     meRasterOp                      = RasterOp::OverPaint;
     mnAntialiasing                  = AntialiasingFlags::NONE;
     meTextLanguage                  = LANGUAGE_SYSTEM;  // TODO: get default from configuration?

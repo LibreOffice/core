@@ -95,7 +95,7 @@ void ImplAccelManager::EndSequence()
     mpSequenceList = nullptr;
 }
 
-bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode, sal_uInt16 nRepeat )
+bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode )
 {
     Accelerator* pAccel;
 
@@ -147,7 +147,6 @@ bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode, sal_uInt16 nRep
                     bool bDel = false;
                     pAccel->maCurKeyCode    = rKeyCode;
                     pAccel->mnCurId         = pEntry->mnId;
-                    pAccel->mnCurRepeat     = nRepeat;
                     pAccel->mpDel           = &bDel;
                     pAccel->Select();
 
@@ -156,7 +155,6 @@ bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode, sal_uInt16 nRep
                     {
                         pAccel->maCurKeyCode    = vcl::KeyCode();
                         pAccel->mnCurId         = 0;
-                        pAccel->mnCurRepeat     = 0;
                         pAccel->mpDel           = nullptr;
                     }
 
@@ -217,7 +215,6 @@ bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode, sal_uInt16 nRep
                     bool bDel = false;
                     pAccel->maCurKeyCode    = rKeyCode;
                     pAccel->mnCurId         = pEntry->mnId;
-                    pAccel->mnCurRepeat     = nRepeat;
                     pAccel->mpDel           = &bDel;
                     pAccel->Select();
 
@@ -226,7 +223,6 @@ bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode, sal_uInt16 nRep
                     {
                         pAccel->maCurKeyCode    = vcl::KeyCode();
                         pAccel->mnCurId         = 0;
-                        pAccel->mnCurRepeat     = 0;
                         pAccel->mpDel           = nullptr;
                     }
 

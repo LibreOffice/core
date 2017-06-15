@@ -284,7 +284,6 @@ void Edit::ImplInitEditData()
     mbClickedInSelection    = false;
     mbActivePopup           = false;
     mbIsSubEdit             = false;
-    mbInMBDown              = false;
     mpDDInfo                = nullptr;
     mpIMEInfos              = nullptr;
     mcEchoChar              = 0;
@@ -1357,9 +1356,7 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
             StartTracking( StartTrackingFlags::ScrollRepeat );
     }
 
-    mbInMBDown = true;  // then do not select all in GetFocus
     GrabFocus();
-    mbInMBDown = false;
 }
 
 void Edit::MouseButtonUp( const MouseEvent& rMEvt )

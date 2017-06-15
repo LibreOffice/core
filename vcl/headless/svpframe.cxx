@@ -61,7 +61,6 @@ SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
     // Nothing
 #else
     m_aSystemChildData.pSalFrame    = this;
-    m_aSystemChildData.nDepth       = 24;
 #endif
 
     if( m_pParent )

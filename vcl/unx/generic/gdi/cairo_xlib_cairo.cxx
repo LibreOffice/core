@@ -65,10 +65,7 @@ namespace cairo
     {}
 
     X11SysData::X11SysData( const SystemGraphicsData& pSysDat ) :
-        pDisplay(pSysDat.pDisplay),
         hDrawable(pSysDat.hDrawable),
-        pVisual(pSysDat.pVisual),
-        nScreen(pSysDat.nScreen),
         pRenderFormat(pSysDat.pXRenderFormat)
     {}
 

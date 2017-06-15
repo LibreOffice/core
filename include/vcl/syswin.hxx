@@ -157,7 +157,6 @@ private:
     Size            maRollUpOutSize;
     Size            maMinOutSize;
     bool            mbRollUp;
-    bool            mbRollFunc;
     bool            mbDockBtn;
     bool            mbHideBtn;
     bool            mbSysChild;
