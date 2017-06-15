@@ -769,21 +769,34 @@ void ScColumn::GetNotesInRange(SCROW nStartRow, SCROW nEndRow,
     std::for_each(it, ++itEnd, NoteEntryCollector(rNotes, nTab, nCol, nStartRow, nEndRow));
 }
 
-void ScColumn::GetUnprotectedCells(SCROW nStartRow, SCROW nEndRow,
-        ScRangeList& rRangeList ) const
+void ScColumn::GetUnprotectedCells( SCROW nStartRow, SCROW nEndRow, ScRangeList& rRangeList ) const
 {
     SCROW nTmpStartRow = nStartRow, nTmpEndRow = nEndRow;
     const ScPatternAttr* pPattern = pAttrArray->GetPatternRange(nTmpStartRow, nTmpEndRow, nStartRow);
     bool bProtection = static_cast<const ScProtectionAttr&>(pPattern->GetItem(ATTR_PROTECTION)).GetProtection();
-    if(!bProtection)
-        rRangeList.Join(ScRange( nCol, nTmpStartRow, nTab, nCol, nTmpEndRow, nTab));
+    if (!bProtection)
+    {
+        // Limit the span to the range in question.
+        if (nTmpStartRow < nStartRow)
+            nTmpStartRow = nStartRow;
+        if (nTmpEndRow > nEndRow)
+            nTmpEndRow = nEndRow;
+        rRangeList.Join( ScRange( nCol, nTmpStartRow, nTab, nCol, nTmpEndRow, nTab));
+    }
     while (nEndRow > nTmpEndRow)
     {
         nStartRow = nTmpEndRow + 1;
         pPattern = pAttrArray->GetPatternRange(nTmpStartRow, nTmpEndRow, nStartRow);
         bool bTmpProtection = static_cast<const ScProtectionAttr&>(pPattern->GetItem(ATTR_PROTECTION)).GetProtection();
         if (!bTmpProtection)
-            rRangeList.Join(ScRange( nCol, nTmpStartRow, nTab, nCol, nTmpEndRow, nTab));
+        {
+            // Limit the span to the range in question.
+            // Only end row needs to be checked as we enter here only for spans
+            // below the original nStartRow.
+            if (nTmpEndRow > nEndRow)
+                nTmpEndRow = nEndRow;
+            rRangeList.Join( ScRange( nCol, nTmpStartRow, nTab, nCol, nTmpEndRow, nTab));
+        }
     }
 }
 
