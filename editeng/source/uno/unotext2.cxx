@@ -40,13 +40,49 @@ using namespace ::com::sun::star;
 // SvxUnoTextContentEnumeration
 
 
-SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase& _rText ) throw()
-: mrText( _rText )
+SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase& _rText, const ESelection rSel ) throw()
+: mrText( _rText ),
+  maSelection( rSel )
 {
     mxParentText = const_cast<SvxUnoTextBase*>(&_rText);
     if( mrText.GetEditSource() )
         mpEditSource.reset( mrText.GetEditSource()->Clone() );
     mnNextParagraph = 0;
+    mpContents.clear();
+    for(sal_Int32 currentPara = 0; currentPara < mrText.GetEditSource()->GetTextForwarder()->GetParagraphCount(); currentPara++)
+    {
+        if(currentPara>=maSelection.nStartPara && currentPara<=maSelection.nEndPara)
+        {
+            const SvxUnoTextRangeBaseList& rRanges( mpEditSource->getRanges() );
+            SvxUnoTextContent* pContent = nullptr;
+            sal_Int32 nStartPos = 0;
+            sal_Int32 nEndPos = mrText.GetEditSource()->GetTextForwarder()->GetTextLen( currentPara );
+            if(currentPara == maSelection.nStartPara)
+                nStartPos = nStartPos>maSelection.nStartPos ? nStartPos : maSelection.nStartPos;
+            if(currentPara == maSelection.nEndPara)
+                nEndPos = nEndPos<maSelection.nEndPos ? nEndPos : maSelection.nEndPos;
+            ESelection aCurrentParaSel = ESelection( currentPara, nStartPos, currentPara, nEndPos);
+            for( auto aIter = rRanges.begin(); (aIter != rRanges.end()) && (pContent == nullptr); ++aIter )
+            {
+                SvxUnoTextContent* pIterContent = dynamic_cast< SvxUnoTextContent* >( (*aIter ) );
+                if( pIterContent && (pIterContent->mnParagraph == currentPara) )
+                {
+                    ESelection aIterSel = pIterContent->GetSelection();
+                    if(aIterSel.IsEqual( aCurrentParaSel ) )
+                    {
+                        pContent = pIterContent;
+                        mpContents.push_back(pContent);
+                    }
+                }
+            }
+            if(pContent == nullptr)
+            {
+                pContent = new SvxUnoTextContent( mrText, currentPara );
+                pContent->SetSelection( aCurrentParaSel );
+                mpContents.push_back(pContent);
+            }
+        }
+    }
 }
 
 SvxUnoTextContentEnumeration::~SvxUnoTextContentEnumeration() throw()
@@ -57,8 +93,8 @@ SvxUnoTextContentEnumeration::~SvxUnoTextContentEnumeration() throw()
 sal_Bool SAL_CALL SvxUnoTextContentEnumeration::hasMoreElements()
 {
     SolarMutexGuard aGuard;
-    if( mpEditSource && mpEditSource->GetTextForwarder() )
-        return mnNextParagraph < mpEditSource->GetTextForwarder()->GetParagraphCount();
+    if( mpEditSource && !mpContents.empty())
+        return (unsigned)mnNextParagraph < mpContents.size();
     else
         return false;
 }
@@ -70,23 +106,8 @@ uno::Any SvxUnoTextContentEnumeration::nextElement()
     if(!hasMoreElements())
         throw container::NoSuchElementException();
 
-    SvxUnoTextContent* pContent = nullptr;
-
-    const SvxUnoTextRangeBaseList& rRanges( mpEditSource->getRanges() );
-    SvxUnoTextRangeBaseList::const_iterator aIter;
-    for( aIter = rRanges.begin(); (aIter != rRanges.end()) && (pContent == nullptr); ++aIter )
-    {
-        SvxUnoTextContent* pIterContent = dynamic_cast< SvxUnoTextContent* >( (*aIter ) );
-        if( pIterContent && (pIterContent->mnParagraph == mnNextParagraph) )
-            pContent = pIterContent;
-    }
-
-    if( pContent == nullptr )
-     pContent = new SvxUnoTextContent( mrText, mnNextParagraph );
-
+    uno::Reference< text::XTextContent > xRef( mpContents.at(mnNextParagraph).get() );
     mnNextParagraph++;
-
-    uno::Reference< text::XTextContent > xRef( pContent );
     return uno::makeAny( xRef );
 }
 
@@ -102,8 +123,6 @@ SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextBase& rText, sal_Int32 nPa
 ,   mbDisposing( false )
 {
     mxParentText = const_cast<SvxUnoTextBase*>(&rText);
-    if( GetEditSource() && GetEditSource()->GetTextForwarder() )
-        SetSelection( ESelection( mnParagraph,0, mnParagraph, GetEditSource()->GetTextForwarder()->GetTextLen( mnParagraph ) ) );
 }
 
 SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextContent& rContent ) throw()
@@ -249,11 +268,11 @@ void SAL_CALL SvxUnoTextContent::removeEventListener( const uno::Reference< lang
 
 // XEnumerationAccess
 
-uno::Reference< container::XEnumeration > SAL_CALL SvxUnoTextContent::createEnumeration(  )
+uno::Reference< container::XEnumeration > SAL_CALL SvxUnoTextContent::createEnumeration()
 {
     SolarMutexGuard aGuard;
 
-    return new SvxUnoTextRangeEnumeration( mrParentText, mnParagraph );
+    return new SvxUnoTextRangeEnumeration( mrParentText, mnParagraph,  maSelection );
 }
 
 // XElementAccess ( container::XEnumerationAccess )
@@ -358,29 +377,54 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextContent::getSupportedServiceNames()
 //  class SvxUnoTextRangeEnumeration
 
 
-SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rText, sal_Int32 nPara ) throw()
+SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rText, sal_Int32 nPara, const ESelection rSel ) throw()
 :   mxParentText(  const_cast<SvxUnoTextBase*>(&rText) ),
     mrParentText( rText ),
     mnParagraph( nPara ),
-    mnNextPortion( 0 )
+    mnNextPortion( 0 ),
+    mnSel( rSel )
 {
     mpEditSource = rText.GetEditSource() ? rText.GetEditSource()->Clone() : nullptr;
 
-    if( mpEditSource && mpEditSource->GetTextForwarder() )
+    if( mpEditSource && mpEditSource->GetTextForwarder() && (mnParagraph == mnSel.nStartPara && mnParagraph == mnSel.nEndPara) )
     {
-        mpPortions = new std::vector<sal_Int32>;
-        mpEditSource->GetTextForwarder()->GetPortions( nPara, *mpPortions );
+        std::vector<sal_Int32> aPortions;
+        mpEditSource->GetTextForwarder()->GetPortions( nPara, aPortions );
+        mpPortions.clear();
+        for(size_t aPortionIndex = 0; aPortionIndex < aPortions.size(); aPortionIndex++)
+        {
+            sal_uInt16 nStartPos = 0;
+            if ( aPortionIndex > 0 )
+                nStartPos = aPortions.at(aPortionIndex-1);
+            sal_uInt16 nEndPos = aPortions.at(aPortionIndex);
+            nStartPos = nStartPos>mnSel.nStartPos ? nStartPos : mnSel.nStartPos;
+            nEndPos = nEndPos<mnSel.nEndPos ? nEndPos : mnSel.nEndPos;
+            ESelection aSel( mnParagraph, nStartPos, mnParagraph, nEndPos );
+            const SvxUnoTextRangeBaseList& rRanges( mpEditSource->getRanges() );
+            SvxUnoTextRange* pRange = nullptr;
+            for( auto aIter = rRanges.begin(); (aIter != rRanges.end()) && (pRange == nullptr); ++aIter )
+            {
+                SvxUnoTextRange* pIterRange = dynamic_cast< SvxUnoTextRange* >( (*aIter ) );
+                if( pIterRange && pIterRange->mbPortion && (aSel.IsEqual( pIterRange->maSelection ) ) )
+                    pRange = pIterRange;
+            }
+            if( pRange == nullptr )
+            {
+                pRange = new SvxUnoTextRange( mrParentText, true );
+                pRange->SetSelection(aSel);
+            }
+            mpPortions.push_back(pRange);
+        }
     }
     else
     {
-        mpPortions = nullptr;
+        mpPortions.clear();
     }
 }
 
 SvxUnoTextRangeEnumeration::~SvxUnoTextRangeEnumeration() throw()
 {
     delete mpEditSource;
-    delete mpPortions;
 }
 
 // container::XEnumeration
@@ -389,46 +433,18 @@ sal_Bool SAL_CALL SvxUnoTextRangeEnumeration::hasMoreElements()
 {
     SolarMutexGuard aGuard;
 
-    return mpPortions && mnNextPortion < mpPortions->size();
+    return !mpPortions.empty() && mnNextPortion < mpPortions.size();
 }
 
 uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
 {
     SolarMutexGuard aGuard;
 
-    if( mpPortions == nullptr || mnNextPortion >= mpPortions->size() )
+    if( mpPortions.empty() || mnNextPortion >= mpPortions.size() )
         throw container::NoSuchElementException();
 
-    sal_uInt16 nStartPos = 0;
-    if (mnNextPortion > 0)
-        nStartPos = mpPortions->at(mnNextPortion-1);
-    sal_uInt16 nEndPos = mpPortions->at(mnNextPortion);
-    ESelection aSel( mnParagraph, nStartPos, mnParagraph, nEndPos );
-
-    uno::Reference< text::XTextRange > xRange;
-
-    const SvxUnoTextRangeBaseList& rRanges( mpEditSource->getRanges() );
-
-    SvxUnoTextRange* pRange = nullptr;
-
-    SvxUnoTextRangeBaseList::const_iterator aIter;
-    for( aIter = rRanges.begin(); (aIter != rRanges.end()) && (pRange == nullptr); ++aIter )
-    {
-        SvxUnoTextRange* pIterRange = dynamic_cast< SvxUnoTextRange* >( (*aIter ) );
-        if( pIterRange && pIterRange->mbPortion && (aSel.IsEqual( pIterRange->maSelection ) ) )
-            pRange = pIterRange;
-    }
-
-    if( pRange == nullptr )
-    {
-        pRange = new SvxUnoTextRange( mrParentText, true );
-        pRange->SetSelection(aSel);
-    }
-
-    xRange = pRange;
-
+    uno::Reference< text::XTextRange > xRange = (mpPortions.at(mnNextPortion)).get();
     mnNextPortion++;
-
     return uno::makeAny( xRange );
 }
 
