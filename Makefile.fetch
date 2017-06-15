@@ -83,6 +83,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,ETONYEK,ETONYEK_TARBALL) \
 		$(call fetch_Optional,EXPAT,EXPAT_TARBALL) \
 		$(call fetch_Optional,FIREBIRD,FIREBIRD_TARBALL) \
+		$(call fetch_Optional,GRAPHITE,GRAPHITE_TARBALL) \
 		$(call fetch_Optional,HARFBUZZ,HARFBUZZ_TARBALL) \
 		$(call fetch_Optional,LIBEOT,LIBEOT_TARBALL) \
 		$(call fetch_Optional,LIBLANGTAG,LANGTAGREG_TARBALL) \
@@ -123,7 +124,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,MORE_FONTS,$(FONT_SOURCECODE_TARBALL)) \
 		$(call fetch_Optional,FONTCONFIG,$(FONTCONFIG_TARBALL)) \
 		$(call fetch_Optional,FREETYPE,$(FREETYPE_TARBALL)) \
-		$(call fetch_Optional,GRAPHITE,$(GRAPHITE_TARBALL)) \
 		$(GOOGLE_DOCS_EXTENSION_PACK) \
 		$(call fetch_Optional,HSQLDB,$(HSQLDB_TARBALL)) \
 		$(call fetch_Optional,HUNSPELL,$(HUNSPELL_TARBALL)) \
