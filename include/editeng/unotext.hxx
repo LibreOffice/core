@@ -514,9 +514,10 @@ private:
     std::unique_ptr<SvxEditSource>          mpEditSource;
     sal_Int32               mnNextParagraph;
     const SvxUnoTextBase&   mrText;
+    const ESelection        maSelection;
 
 public:
-    SvxUnoTextContentEnumeration( const SvxUnoTextBase& _rText ) throw();
+    SvxUnoTextContentEnumeration( const SvxUnoTextBase& _rText, const ESelection rSel ) throw();
     virtual ~SvxUnoTextContentEnumeration() throw() override;
 
     // css::container::XEnumeration
@@ -536,6 +537,7 @@ private:
     css::uno::Reference< css::text::XText > mxParentText;
     sal_Int32               mnParagraph;
     const SvxUnoTextBase&   mrParentText;
+    const ESelection        maSelection;
 
     // for xComponent
     ::osl::Mutex maDisposeContainerMutex;
@@ -547,7 +549,7 @@ protected:
     using SvxUnoTextRangeBase::getPropertyValue;
 
 public:
-    SvxUnoTextContent( const SvxUnoTextBase& rText, sal_Int32 nPara ) throw();
+    SvxUnoTextContent( const SvxUnoTextBase& rText, sal_Int32 nPara, const ESelection rSel ) throw();
     SvxUnoTextContent( const SvxUnoTextContent& rContent ) throw();
     virtual ~SvxUnoTextContent() throw() override;
 
@@ -606,11 +608,12 @@ private:
     css::uno::Reference< css::text::XText > mxParentText;
     const SvxUnoTextBase&    mrParentText;
     sal_Int32                mnParagraph;
-    std::vector<sal_Int32>*  mpPortions;
+    std::vector<SvxUnoTextRange*>*  mpPortions;
     sal_uInt16               mnNextPortion;
+    const ESelection         mnSel;
 
 public:
-    SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rText, sal_Int32 nPara ) throw();
+    SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rText, sal_Int32 nPara, const ESelection rSel ) throw();
     virtual ~SvxUnoTextRangeEnumeration() throw() override;
 
     // css::container::XEnumeration

@@ -1959,11 +1959,11 @@ uno::Reference< container::XEnumeration > SAL_CALL SvxUnoTextBase::createEnumera
 {
     SolarMutexGuard aGuard;
 
-    ESelection aSelection;
-    ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
-    SetSelection( aSelection );
-
-    uno::Reference< container::XEnumeration > xEnum( static_cast<container::XEnumeration*>(new SvxUnoTextContentEnumeration( *this )) );
+    //ESelection aSelection;
+    //::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
+    //SetSelection( aSelection );
+    //SAL_WARN("varundhall SvxUnoBase", aSelection.nStartPos);
+    uno::Reference< container::XEnumeration > xEnum( static_cast<container::XEnumeration*>(new SvxUnoTextContentEnumeration( *this , maSelection)) );
     return xEnum;
 }
 
