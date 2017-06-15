@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_223bef9d",
+        "filename": "sw/source/filter/xml/xmlfmt.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-15T13:42:53Z",
+      "side": 1,
+      "message": "Just a late nitpick: as it is a pointer, naming it pCommands would be appropriate.",
+      "revId": "a5b4cb3f836c991d0647f55e1ef4920ce6115eac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_e2bac709",
+        "filename": "sw/source/filter/xml/xmlfmt.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-15T13:42:53Z",
+      "side": 1,
+      "message": "Late nitpick: these variable declarations should go into the \u0027for\u0027 init statement.",
+      "revId": "a5b4cb3f836c991d0647f55e1ef4920ce6115eac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
