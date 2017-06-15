@@ -3527,7 +3527,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
         SotExchange::GetFormatDataFlavor( SotClipboardFormatId::EDITENGINE, aFlavor );
         if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
         {
-            if ( ODF_XML_Env == nullptr )
+            if ( ODF_XML_Env != nullptr )
             {
                 try
                 {
