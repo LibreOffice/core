@@ -139,7 +139,6 @@ public:
         double                      m_nPageHeight;          // in inch/72
         PDFWriter::Orientation      m_eOrientation;
         sal_Int32                   m_nPageObject;
-        sal_Int32                   m_nPageIndex;
         std::vector<sal_Int32>      m_aStreamObjects;
         sal_Int32                   m_nStreamLengthObject;
         sal_uInt64                  m_nBeginStreamPos;
@@ -148,7 +147,6 @@ public:
         PDFWriter::PageTransition   m_eTransition;
         sal_uInt32                  m_nTransTime;
         sal_uInt32                  m_nDuration;
-        bool                        m_bHasWidgets;
 
         PDFPage( PDFWriterImpl* pWriter, double nPageWidth, double nPageHeight, PDFWriter::Orientation eOrientation );
         ~PDFPage();

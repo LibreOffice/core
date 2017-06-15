@@ -27,9 +27,8 @@ class VCLPLUG_GEN_PUBLIC SalI18N_KeyboardExtension
 {
 private:
 
-    bool            mbUseExtension;
+    bool                mbUseExtension;
     sal_uInt32          mnDefaultGroup;
-    sal_uInt32          mnGroup;
     int                 mnEventBase;
     int                 mnErrorBase;
     Display*            mpDisplay;
