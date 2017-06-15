@@ -43,6 +43,7 @@
 #include <editeng/unoprnms.hxx>
 #include <editeng/unoipset.hxx>
 #include <cassert>
+#include <editeng/unomodel.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::document;
@@ -134,6 +135,7 @@ SvxXMLXTextImportComponent::SvxXMLXTextImportComponent(
     mxText( xText )
 {
     GetTextImport()->SetCursor( mxText->createTextCursor() );
+    SvXMLImport::setTargetDocument(new SvxSimpleUnoModel);
 }
 
 void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& rSel )
