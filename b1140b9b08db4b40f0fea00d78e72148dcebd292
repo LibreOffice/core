@@ -16,6 +16,24 @@
       "revId": "b1140b9b08db4b40f0fea00d78e72148dcebd292",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_627257af",
+        "filename": "writerfilter/source/rtftok/rtfdocumentimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-15T12:52:17Z",
+      "side": 0,
+      "message": "sure, np, I can fix that",
+      "parentUuid": "5a3905b3_22784f8f",
+      "revId": "b1140b9b08db4b40f0fea00d78e72148dcebd292",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
