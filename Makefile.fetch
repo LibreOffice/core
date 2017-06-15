@@ -76,6 +76,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 	$(foreach item, \
 		$(call fetch_Optional,CDR,CDR_TARBALL) \
 		$(call fetch_Optional,EXPAT,EXPAT_TARBALL) \
+		$(call fetch_Optional,GRAPHITE,GRAPHITE_TARBALL) \
 		$(call fetch_Optional,MSPUB,MSPUB_TARBALL) \
 		$(call fetch_Optional,MWAW,MWAW_TARBALL) \
 		$(call fetch_Optional,VISIO,VISIO_TARBALL) \
@@ -110,7 +111,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,MORE_FONTS,$(FONT_SOURCECODE_TARBALL)) \
 		$(call fetch_Optional,FONTCONFIG,$(FONTCONFIG_TARBALL)) \
 		$(call fetch_Optional,FREETYPE,$(FREETYPE_TARBALL)) \
-		$(call fetch_Optional,GRAPHITE,$(GRAPHITE_TARBALL)) \
 		$(GOOGLE_DOCS_EXTENSION_PACK) \
 		$(call fetch_Optional,GLIBC,$(GLIBC_TARBALL)) \
 		$(call fetch_Optional,HSQLDB,$(HSQLDB_TARBALL)) \
