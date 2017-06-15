@@ -1159,7 +1159,6 @@ class XMLScriptImportContext : public XMLTextFieldImportContext
     OUString sScriptType;
 
     bool bContentOK;
-    bool bScriptTypeOK;
 
 public:
 
