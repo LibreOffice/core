@@ -124,9 +124,6 @@ enum class SbxNameType {          // Type of the questioned name of a variable
     ShortTypes,     // Name%(A%,B$)
 };
 
-// from 1996/3/20: New error messages
-typedef sal_uIntPtr SbxError;           // Preserve old type
-
 #endif
 
 
