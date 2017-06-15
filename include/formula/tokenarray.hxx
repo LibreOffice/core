@@ -421,7 +421,7 @@ private:
 public:
     FormulaTokenArrayPlainIterator( const FormulaTokenArray& rFTA, bool bInternal = true );
 
-    void assertSanity( FormulaTokenArray *pArr );
+    void assertSanity() const;
 
     void Reset();
     sal_uInt16 GetIndex() const;

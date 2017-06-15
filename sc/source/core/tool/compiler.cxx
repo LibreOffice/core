@@ -4647,7 +4647,6 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
     pNew->GenHash();
     pArr = pNew;
     maArrIterator = FormulaTokenArrayPlainIterator(*pArr, false);
-    maArrIterator.assertSanity(pArr);
 
     if (!maExternalFiles.empty())
     {

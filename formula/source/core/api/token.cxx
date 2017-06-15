@@ -1723,6 +1723,7 @@ void FormulaTokenIterator::Reset()
 
 FormulaToken* FormulaTokenArrayPlainIterator::GetNextName()
 {
+    assertSanity();
     if( mpFTA->pCode )
     {
         while ( *mpIndex < mpFTA->nLen )
@@ -1802,6 +1803,7 @@ bool FormulaTokenIterator::IsEndOfPath() const
 
 FormulaToken* FormulaTokenArrayPlainIterator::GetNextReference()
 {
+        assertSanity();
     while( *mpIndex < mpFTA->nLen )
     {
         FormulaToken* t = mpFTA->pCode[ (*mpIndex)++ ];
@@ -1825,6 +1827,7 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextReference()
 
 FormulaToken* FormulaTokenArrayPlainIterator::GetNextColRowName()
 {
+        assertSanity();
     while( *mpIndex < mpFTA->nLen )
     {
         FormulaToken* t = mpFTA->pCode[ (*mpIndex)++ ];
@@ -1840,6 +1843,7 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextColRowName()
 
 FormulaToken* FormulaTokenArrayPlainIterator::GetNextReferenceRPN()
 {
+        assertSanity();
     while( *mpIndex < mpFTA->nRPN )
     {
         FormulaToken* t = mpFTA->pRPN[ (*mpIndex)++ ];
@@ -1863,6 +1867,7 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextReferenceRPN()
 
 FormulaToken* FormulaTokenArrayPlainIterator::GetNextReferenceOrName()
 {
+        assertSanity();
     if( mpFTA->pCode )
     {
         while ( *mpIndex < mpFTA->nLen )
@@ -1891,6 +1896,7 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextReferenceOrName()
 
 FormulaToken* FormulaTokenArrayPlainIterator::Next()
 {
+        assertSanity();
     if( mpFTA->pCode && *mpIndex < mpFTA->nLen )
     {
         FormulaToken *token = mpFTA->pCode[ (*mpIndex)++ ];
@@ -1903,6 +1909,7 @@ FormulaToken* FormulaTokenArrayPlainIterator::Next()
 
 FormulaToken* FormulaTokenArrayPlainIterator::NextNoSpaces()
 {
+        assertSanity();
     if( mpFTA->pCode )
     {
         while( (*mpIndex < mpFTA->nLen) && (mpFTA->pCode[ *mpIndex ]->GetOpCode() == ocSpaces) )
@@ -1920,6 +1927,7 @@ FormulaToken* FormulaTokenArrayPlainIterator::NextNoSpaces()
 
 FormulaToken* FormulaTokenArrayPlainIterator::NextRPN()
 {
+        assertSanity();
     if( mpFTA->pRPN && *mpIndex < mpFTA->nRPN )
     {
         FormulaToken *token = mpFTA->pRPN[ (*mpIndex)++ ];
@@ -1932,6 +1940,7 @@ FormulaToken* FormulaTokenArrayPlainIterator::NextRPN()
 
 FormulaToken* FormulaTokenArrayPlainIterator::PrevRPN()
 {
+        assertSanity();
     if( mpFTA->pRPN && *mpIndex )
     {
         FormulaToken *token = mpFTA->pRPN[ --(*mpIndex) ];
@@ -1944,6 +1953,7 @@ FormulaToken* FormulaTokenArrayPlainIterator::PrevRPN()
 
 FormulaToken* FormulaTokenArrayPlainIterator::PeekNext()
 {
+        assertSanity();
     if( mpFTA->pCode && *mpIndex < mpFTA->nLen )
         return mpFTA->pCode[ *mpIndex ];
     else
@@ -1952,6 +1962,7 @@ FormulaToken* FormulaTokenArrayPlainIterator::PeekNext()
 
 FormulaToken* FormulaTokenArrayPlainIterator::PeekNextNoSpaces() const
 {
+        assertSanity();
     if( mpFTA->pCode && *mpIndex < mpFTA->nLen )
     {
         sal_uInt16 j = *mpIndex;
@@ -1968,6 +1979,7 @@ FormulaToken* FormulaTokenArrayPlainIterator::PeekNextNoSpaces() const
 
 FormulaToken* FormulaTokenArrayPlainIterator::PeekPrevNoSpaces() const
 {
+        assertSanity();
     if( mpFTA->pCode && *mpIndex > 1 )
     {
         sal_uInt16 j = *mpIndex - 2;
@@ -1984,6 +1996,7 @@ FormulaToken* FormulaTokenArrayPlainIterator::PeekPrevNoSpaces() const
 
 void FormulaTokenArrayPlainIterator::AfterRemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount )
 {
+        assertSanity();
     const sal_uInt16 nStop = std::min( static_cast<sal_uInt16>(nOffset + nCount), mpFTA->nLen);
 
     if (*mpIndex >= nOffset)
@@ -2134,17 +2147,20 @@ FormulaTokenArrayPlainIterator::FormulaTokenArrayPlainIterator( const FormulaTok
 
     void FormulaTokenArrayPlainIterator::Reset()
     {
+        assertSanity();
         *mpIndex = 0;
         _nIndex = *mpIndex;
     }
 
     sal_uInt16 FormulaTokenArrayPlainIterator::GetIndex() const
     {
+        assertSanity();
         return *mpIndex;
     }
 
     FormulaToken* FormulaTokenArrayPlainIterator::First()
     {
+        assertSanity();
         *mpIndex = 0;
         _nIndex = *mpIndex;
         return Next();
@@ -2152,12 +2168,14 @@ FormulaTokenArrayPlainIterator::FormulaTokenArrayPlainIterator( const FormulaTok
 
     void FormulaTokenArrayPlainIterator::Jump(sal_uInt16 nIndex)
     {
+        assertSanity();
         *mpIndex = nIndex;
         _nIndex = *mpIndex;
     }
 
     void FormulaTokenArrayPlainIterator::BackOne()
     {
+        assertSanity();
         if (*mpIndex > 0)
             (*mpIndex)--;
         _nIndex = *mpIndex;
@@ -2165,6 +2183,7 @@ FormulaTokenArrayPlainIterator::FormulaTokenArrayPlainIterator( const FormulaTok
 
     FormulaToken* FormulaTokenArrayPlainIterator::FirstRPN()
     {
+        assertSanity();
         *mpIndex = 0;
         _nIndex = *mpIndex;
         return NextRPN();
@@ -2172,11 +2191,16 @@ FormulaTokenArrayPlainIterator::FormulaTokenArrayPlainIterator( const FormulaTok
 
     FormulaToken* FormulaTokenArrayPlainIterator::LastRPN()
     {
+        assertSanity();
         *mpIndex = mpFTA->nRPN;
         _nIndex = *mpIndex;
         return PrevRPN();
     }
 
+    void FormulaTokenArrayPlainIterator::assertSanity() const
+    {
+        assert (*mpIndex == _nIndex);
+    }
 
 } // formula
 

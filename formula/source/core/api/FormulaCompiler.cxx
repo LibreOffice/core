@@ -1269,7 +1269,6 @@ bool FormulaCompiler::GetToken()
              nWasColRowName = 1;
         else
              nWasColRowName = 0;
-        maArrIterator.assertSanity(pArr);
         mpToken = maArrIterator.Next();
         while( mpToken && mpToken->GetOpCode() == ocSpaces )
         {
@@ -2652,11 +2651,6 @@ void FormulaCompiler::PushTokenArray( FormulaTokenArray* pa, bool bTemp )
     pStack        = p;
     pArr          = pa;
     maArrIterator = FormulaTokenArrayPlainIterator(*pArr, false);
-}
-
-void FormulaTokenArrayPlainIterator::assertSanity( FormulaTokenArray *pArr )
-{
-    assert (mpFTA == pArr);
 }
 
 } // namespace formula
