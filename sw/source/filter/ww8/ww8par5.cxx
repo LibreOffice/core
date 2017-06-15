@@ -508,7 +508,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
 {
     sal_uInt16 nRet = 0;
     WW8PLCFx_FLD* pF = m_pPlcxMan->GetField();
-    OSL_ENSURE(pF, "WW8PLCFx_FLD - Pointer nicht da");
+    OSL_ENSURE(pF, "WW8PLCFx_FLD - Pointer not available");
     WW8_CP nCP = 0;
     if (!pF || !pF->EndPosIsFieldEnd(nCP))
         return nRet;
@@ -837,10 +837,10 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         &SwWW8ImplReader::Read_F_Shape,             // 95
         nullptr                                           // eMax - Dummy empty method
     };
-    OSL_ENSURE( SAL_N_ELEMENTS( aWW8FieldTab ) == eMax+1, "FeldFunc-Tabelle stimmt nicht" );
+    OSL_ENSURE( SAL_N_ELEMENTS( aWW8FieldTab ) == eMax+1, "FeldFunc-Table not right" );
 
     WW8PLCFx_FLD* pF = m_pPlcxMan->GetField();
-    OSL_ENSURE(pF, "WW8PLCFx_FLD - Pointer nicht da");
+    OSL_ENSURE(pF, "WW8PLCFx_FLD - Pointer not available");
 
     if (!pF || !pF->StartPosIsFieldStart())
         return 0;
@@ -1912,7 +1912,7 @@ eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, OUString& rStr )
     return eF_ResT::OK;
 }
 
-// "EINBETTEN"
+// "EMBED"
 eF_ResT SwWW8ImplReader::Read_F_Embedd( WW8FieldDesc*, OUString& rStr )
 {
     OUString sHost;
@@ -2208,7 +2208,7 @@ bool ConvertMacroSymbol( const OUString& rName, OUString& rReference )
     return bConverted;
 }
 
-// "MACROSCHALTFL"ACHE"
+// "MACROBUTTON"
 eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
 {
     OUString aName;
@@ -2419,7 +2419,7 @@ OUString wwSectionNamer::UniqueName()
     return mrDoc.GetUniqueSectionName(&aName);
 }
 
-// "EINFUEGENTEXT"
+// "INCLUDETEXT"
 eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* /*pF*/, OUString& rStr )
 {
     OUString aPara;
@@ -2943,10 +2943,10 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
         {
             SwTOIOptions eOptions = SwTOIOptions::SameEntry | SwTOIOptions::CaseSensitive;
 
-            // SwTOXElement::OutlineLevel setzen wir genau dann, wenn
-            // die Parameter \o in 1 bis 9 liegen
-            // oder der Parameter \f existiert
-            // oder GARKEINE Switches Parameter angegeben sind.
+            // We set SwTOXElement::OutlineLevel only if
+            // the parameter \o is within 1 to 9
+            // or the parameter \f exists
+            // or NO switch parameter are given at all.
             WW8ReadFieldParams aReadParam( rStr );
             for (;;)
             {
@@ -3490,7 +3490,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
                 break;
             case 'h':
             case 'm':
-                OSL_ENSURE( false, "Auswertung fehlt noch - Daten unbekannt" );
+                OSL_ENSURE( false, "Analysis still missing - unknown data" );
                 SAL_FALLTHROUGH;
             case 's':   //worthless fake anchor option
                 bOptions = true;
