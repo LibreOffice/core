@@ -711,8 +711,6 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     {
         if ( (embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY & nMisc)
              || bLinkingChart
-            // TODO/LATER: ResizeOnPrinterChange
-             //|| SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xObj->GetMiscStatus()
              // --> OD #i117189# - refine condition for non-resizable objects
              // non-resizable objects need to be set the size back by this method
              || ( bNoTextFramePrtAreaChanged && nMisc & embed::EmbedMisc::EMBED_NEVERRESIZE ) )

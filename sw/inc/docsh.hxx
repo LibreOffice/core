@@ -180,7 +180,6 @@ public:
     virtual Printer  *GetDocumentPrinter() override;
     virtual OutputDevice* GetDocumentRefDev() override;
     virtual void      OnDocumentPrinterChanged( Printer * pNewPrinter ) override;
-    virtual sal_uLong     GetMiscStatus() const override;
 
     virtual void            PrepareReload() override;
     virtual void            SetModified( bool = true ) override;
