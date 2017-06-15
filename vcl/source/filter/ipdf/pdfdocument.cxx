@@ -125,7 +125,6 @@ public:
 XRefEntry::XRefEntry()
     : m_eType(XRefEntryType::NOT_COMPRESSED),
       m_nOffset(0),
-      m_nGenerationNumber(0),
       m_bDirty(false)
 {
 }
@@ -308,7 +307,6 @@ bool PDFDocument::WritePageObject(PDFObjectElement& rFirstPage, sal_Int32 nAnnot
         sal_uInt32 nAnnotsId = pAnnotsObject->GetObjectValue();
         m_aXRef[nAnnotsId].m_eType = XRefEntryType::NOT_COMPRESSED;
         m_aXRef[nAnnotsId].m_nOffset = m_aEditBuffer.Tell();
-        m_aXRef[nAnnotsId].m_nGenerationNumber = 0;
         m_aXRef[nAnnotsId].m_bDirty = true;
         m_aEditBuffer.WriteUInt32AsString(nAnnotsId);
         m_aEditBuffer.WriteCharPtr(" 0 obj\n[");
@@ -431,7 +429,6 @@ bool PDFDocument::WriteCatalogObject(sal_Int32 nAnnotId, PDFReferenceElement*& p
         sal_uInt32 nAcroFormId = pAcroFormObject->GetObjectValue();
         m_aXRef[nAcroFormId].m_eType = XRefEntryType::NOT_COMPRESSED;
         m_aXRef[nAcroFormId].m_nOffset = m_aEditBuffer.Tell();
-        m_aXRef[nAcroFormId].m_nGenerationNumber = 0;
         m_aXRef[nAcroFormId].m_bDirty = true;
         m_aEditBuffer.WriteUInt32AsString(nAcroFormId);
         m_aEditBuffer.WriteCharPtr(" 0 obj\n");
@@ -1629,7 +1626,6 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
                         break;
                     }
                     aEntry.m_nOffset = nStreamOffset;
-                    aEntry.m_nGenerationNumber = nGenerationNumber;
                     m_aXRef[nIndex] = aEntry;
                 }
             }
@@ -1703,7 +1699,6 @@ void PDFDocument::ReadXRef(SvStream& rStream)
             {
                 XRefEntry aEntry;
                 aEntry.m_nOffset = aOffset.GetValue();
-                aEntry.m_nGenerationNumber = aGenerationNumber.GetValue();
                 // Initially only the first entry is dirty.
                 if (nIndex == 0)
                     aEntry.m_bDirty = true;
@@ -3025,7 +3020,6 @@ bool PDFArrayElement::Read(SvStream& rStream)
         SAL_WARN("vcl.filter", "PDFArrayElement::Read: unexpected character: " << ch);
         return false;
     }
-    m_nOffset = rStream.Tell();
 
     SAL_INFO("vcl.filter", "PDFArrayElement::Read: '['");
 

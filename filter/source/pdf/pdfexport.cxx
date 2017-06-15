@@ -802,13 +802,11 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 pPDFExtOutDevData->SetIsExportNotes( mbExportNotes );
                 pPDFExtOutDevData->SetIsExportTaggedPDF( mbUseTaggedPDF );
                 pPDFExtOutDevData->SetIsExportTransitionEffects( mbUseTransitionEffects );
-                pPDFExtOutDevData->SetFormsFormat( mnFormsFormat );
                 pPDFExtOutDevData->SetIsExportFormFields( mbExportFormFields );
                 pPDFExtOutDevData->SetIsExportBookmarks( mbExportBookmarks );
                 pPDFExtOutDevData->SetIsExportHiddenSlides( mbExportHiddenSlides );
                 pPDFExtOutDevData->SetIsLosslessCompression( mbUseLosslessCompression );
                 pPDFExtOutDevData->SetCompressionQuality( mnQuality );
-                pPDFExtOutDevData->SetMaxImageResolution( mnMaxImageResolution );
                 pPDFExtOutDevData->SetIsReduceImageResolution( mbReduceImageResolution );
                 pPDFExtOutDevData->SetIsExportNamedDestinations( mbExportBmkToDest );
 

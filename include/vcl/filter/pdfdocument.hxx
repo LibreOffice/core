@@ -114,8 +114,6 @@ public:
 /// Array object: a list.
 class VCL_DLLPUBLIC PDFArrayElement : public PDFElement
 {
-    /// Location after the '[' token.
-    sal_uInt64 m_nOffset = 0;
     std::vector<PDFElement*> m_aElements;
     /// The object that contains this array.
     PDFObjectElement* m_pObject;
@@ -244,11 +242,6 @@ struct XRefEntry
      * stored.
      */
     sal_uInt64 m_nOffset;
-    /**
-     * Non-compressed: The generation number of the object.
-     * Compressed: The index of this object within the object stream.
-     */
-    sal_uInt64 m_nGenerationNumber;
     /// Are changed as part of an incremental update?.
     bool m_bDirty;
 

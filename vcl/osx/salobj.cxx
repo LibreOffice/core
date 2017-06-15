@@ -288,7 +288,6 @@ SystemWindowData AquaOpenGLContext::generateWinData(vcl::Window* /*pParent*/, bo
     SystemWindowData aWinData;
     aWinData.bOpenGL = true;
     aWinData.bLegacy = bRequestLegacyContext;
-    aWinData.nSize = sizeof(aWinData);
     return aWinData;
 }
 

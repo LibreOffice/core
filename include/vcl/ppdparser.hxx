@@ -73,12 +73,10 @@ class VCL_DLLPUBLIC PPDKey
     OUString            m_aGroup;
 
 public:
-    enum UIType { PickOne, PickMany, Boolean };
     enum class SetupType { ExitServer, Prolog, DocumentSetup, PageSetup, JCLSetup, AnySetup };
 private:
 
     bool                m_bUIOption;
-    UIType              m_eUIType;
     int                 m_nOrderDependency;
     SetupType           m_eSetupType;
 
@@ -169,7 +167,6 @@ private:
     const PPDValue*                             m_pDefaultResolution;
     const PPDKey*                               m_pResolutions;
     // duplex commands
-    const PPDValue*                             m_pDefaultDuplexType;
     const PPDKey*                               m_pDuplexTypes;
 
     // fonts

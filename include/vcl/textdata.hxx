@@ -130,7 +130,6 @@ struct TEIMEInfos
     std::unique_ptr<ExtTextInputAttr[]> pAttribs;
     TextPaM     aPos;
     sal_Int32   nLen;
-    bool        bCursor;
     bool        bWasCursorOverwrite;
 
     TEIMEInfos(const TextPaM& rPos, const OUString& rOldTextAfterStartPos);

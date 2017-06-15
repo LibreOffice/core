@@ -905,7 +905,6 @@ void TextView::Command( const CommandEvent& rCEvt )
                 if ( pData->GetTextAttr() )
                 {
                     mpImpl->mpTextEngine->mpIMEInfos->CopyAttribs( pData->GetTextAttr(), pData->GetText().getLength() );
-                    mpImpl->mpTextEngine->mpIMEInfos->bCursor = pData->IsCursorVisible();
                 }
                 else
                 {

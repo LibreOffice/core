@@ -101,7 +101,6 @@ private:
     bool            mbDockCanceled:1,
                     mbDocking:1,
                     mbLastFloatMode:1,
-                    mbStartFloat:1,
                     mbRollUp:1,
                     mbDockBtn:1,
                     mbHideBtn:1,

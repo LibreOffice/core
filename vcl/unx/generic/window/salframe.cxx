@@ -987,11 +987,7 @@ const SystemEnvData* X11SalFrame::GetSystemData() const
     pFrame->maSystemChildData.pWidget       = nullptr;
     pFrame->maSystemChildData.pVisual       = GetDisplay()->GetVisual( m_nXScreen ).GetVisual();
     pFrame->maSystemChildData.nScreen       = m_nXScreen.getXScreen();
-    pFrame->maSystemChildData.nDepth        = GetDisplay()->GetVisual( m_nXScreen ).GetDepth();
-    pFrame->maSystemChildData.aColormap     = GetDisplay()->GetColormap( m_nXScreen ).GetXColormap();
-    pFrame->maSystemChildData.pAppContext   = nullptr;
     pFrame->maSystemChildData.aShellWindow  = pFrame->GetShellWindow();
-    pFrame->maSystemChildData.pShellWidget  = nullptr;
     return &maSystemChildData;
 }
 
