@@ -1205,11 +1205,6 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case RES_SHADOW:
         {
             rSh.StartAllAction();
-            SfxItemSet   aSet( rSh.GetAttrPool(),
-                                RES_SHADOW, RES_SHADOW,
-                                RES_BACKGROUND, RES_BACKGROUND, 0 );
-
-            aSet.Put(*pItem);
             // Tabele cell(s) selected?
             if ( rSh.IsTableMode() )
             {
