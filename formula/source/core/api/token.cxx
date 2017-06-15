@@ -2080,6 +2080,12 @@ bool FormulaUnknownToken::operator==( const FormulaToken& r ) const
     return FormulaToken::operator==( r );
 }
 
+FormulaTokenArrayPlainIterator::FormulaTokenArrayPlainIterator( const FormulaTokenArray& rFTA, bool bInternal ) :
+    mpFTA( &rFTA ),
+    _nIndex( 0 ),
+    mpIndex( bInternal ? &_nIndex : const_cast<sal_uInt16 *>( &mpFTA->nIndex ) )
+{
+}
 
 } // formula
 

@@ -417,12 +417,7 @@ private:
     sal_uInt16 *mpIndex;                 // Current step index
 
 public:
-    FormulaTokenArrayPlainIterator( const FormulaTokenArray& rFTA, bool bInternal = true ) :
-        mpFTA( &rFTA ),
-        _nIndex( 0 ), // Wow - if we re-use the version in the TokenArray - bang !
-        mpIndex( bInternal ? &_nIndex : const_cast<sal_uInt16 *>( &mpFTA->nIndex ) )
-    {
-    }
+    FormulaTokenArrayPlainIterator( const FormulaTokenArray& rFTA, bool bInternal = true );
 
     void assertSanity( FormulaTokenArray *pArr );
 
@@ -445,6 +440,12 @@ public:
     void Jump(sal_uInt16 nIndex)
     {
         *mpIndex = nIndex;
+    }
+
+    void BackOne()
+    {
+        if (*mpIndex > 0)
+            (*mpIndex)--;
     }
 
     FormulaToken* Next();
