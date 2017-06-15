@@ -379,6 +379,15 @@ class RubyNode(TreeNode):
         return self._dup(RubyNode, self.ruby)
 
 
+class MetaFieldNode(MetaNode):
+    def __init__(self, xmlid):
+        super().__init__(xmlid)
+        self.nodetype = "MetadataField"
+
+    def dup(self):
+        return self._dup(MetaFieldNode, self.xmlid)
+
+
 class Inserter():
 
     def __init__(self, xDoc):
@@ -464,6 +473,28 @@ class Inserter():
         xCursor.RubyText = rubytext
 
 
+    def insertmeta(self, xCursor, xmlid):
+        xContent = self.makemeta()
+        xContent.attach(xCursor)
+        xContent.MetadataReference = xmlid
+        return xContent
+
+    def makemeta(self):
+        xMeta = self.xDoc.createInstance("com.sun.star.text.InContentMetadata")
+        return xMeta
+
+    def insertmetafield(self, xCursor, xmlid):
+        xContent = self.makemetafield()
+        xContent.attach(xCursor)
+        xContent.MetadataReference = xmlid
+        return xContent
+
+    def makemetafield(self):
+        xMeta = self.xDoc.createInstance(
+                                "com.sun.star.text.textfield.MetadataField")
+        return xMeta
+
+
 class TreeInserter(Inserter):
 
     def __init__(self, xDoc):
@@ -540,6 +571,16 @@ class TreeInserter(Inserter):
                 self.insertchildren(node.createenumeration())
                 xParaCursor = self.mkcursor(xRange)
                 self.insertruby(xParaCursor, node.ruby)
+            elif type_ == "InContentMetadata":
+                xRange = xCursor.getStart()
+                self.insertchildren(node.createenumeration())
+                xParaCursor = self.mkcursor(xRange)
+                self.insertmeta(xParaCursor, node.xmlid)
+            elif type_ == "MetadataField":
+                xRange = xCursor.getStart()
+                self.insertchildren(node.createenumeration())
+                xParaCursor = self.mkcursor(xRange)
+                self.insertmetafield(xParaCursor, node.xmlid)
             elif type_ == "SoftPageBreak":
                 raise RuntimeError("sorry, cannot test SoftPageBreak")
             else:
@@ -656,6 +697,14 @@ class EnumConverter():
                     node = self._stack.pop()
                     assert (isinstance(node, RubyNode), 
                         "stack error: Ruby expected; is: {}".format(str(node)))
+            elif type_ == "InContentMetadata":
+                xMeta = xPortion.InContentMetadata
+                xmlid = xMeta.MetadataReference
+                node = MetaNode(xmlid)
+                self._stack.append(node)
+                xEnumChildren = xMeta.createEnumeration()
+                node2 = self.convertchildren(xEnumChildren)
+                assert (node2 is node), "stack error: meta"
             elif type_ == "SoftPageBreak":
                 node = SoftPageBreakNode()
             else:
@@ -825,21 +874,21 @@ class TextPortionEnumerationTest(unittest.TestCase):
         root.appendchild(txtf)
         self.dotest(root)
 
-    ## FIXME this is converted to a text portion: ControlCharacter is obsolete
-    # def test_control_char(self):
-        # root = TreeNode()
-        # cchr = ControlCharacterNode(HARD_HYPHEN)
-        # root.appendchild(cchr)
-        # self.dotest(root)
+    @unittest.skip("FIXME this is converted to a text portion: ControlCharacter is obsolete")
+    def test_control_char(self):
+        root = TreeNode()
+        cchr = ControlCharacterNode(HARD_HYPHEN)
+        root.appendchild(cchr)
+        self.dotest(root)
 
-    ## FIXME: insert a soft page break: not done
-    # def test_soft_page_break(self):
-        # root = TreeNode()
-        # spbk =SoftPageBreakNode()
-        # text = TextNode("abc")
-        # root.appendchild(spbk)
-        # root.appendchild(text)
-        # self.dotest(root)
+    @unittest.skip("FIXME: insert a soft page break: not done")
+    def test_soft_page_break(self):
+        root = TreeNode()
+        spbk =SoftPageBreakNode()
+        text = TextNode("abc")
+        root.appendchild(spbk)
+        root.appendchild(text)
+        self.dotest(root)
 
     def test_footnote(self):
         name = self.mkname("ftn")
@@ -977,6 +1026,143 @@ class TextPortionEnumerationTest(unittest.TestCase):
         root = TreeNode()
         ruby = RubyNode(name)
         root.appendchild(ruby)
+        self.dotest(root)
+
+    def test_meta(self):
+        id = StringPair("content.xml", self.mkname("id"))
+        root = TreeNode()
+        meta = MetaNode(id)
+        text = TextNode("abc")
+        root.appendchild(TextNode("123"))
+        meta.appendchild(text)
+        root.appendchild(meta)
+        self.dotest(root)
+
+    def test_meta_empty(self):
+        id = StringPair("content.xml", self.mkname("id"))
+        root = TreeNode()
+        meta = MetaNode(id)
+        root.appendchild(meta)
+        self.dotest(root)
+
+    def test_meta_field(self):
+        id = StringPair("content.xml", self.mkname("id"))
+        root = TreeNode()
+        meta = MetaFieldNode(id)
+        text = TextNode("abc")
+        root.appendchild(TextNode("123"))
+        meta.appendchild(text)
+        root.appendchild(meta)
+        self.dotest(root)
+
+    def test_meta_field_empty(self):
+        id = StringPair("content.xml", self.mkname("id"))
+        root = TreeNode()
+        meta = MetaFieldNode(id)
+        root.appendchild(meta)
+        self.dotest(root)
+
+    def test_bookmark1(self):
+        name1 = self.mkname("mark")
+        name2 = self.mkname("mark")
+        name3 = self.mkname("mark")
+        root = TreeNode()
+        root.appendchild(BookmarkStartNode(name1))
+        root.appendchild(BookmarkNode(name2))
+        root.appendchild(BookmarkStartNode(name3))
+        root.appendchild(TextNode("abc"))
+        root.appendchild(BookmarkEndNode(name1))
+        root.appendchild(TextNode("de"))
+        root.appendchild(BookmarkEndNode(name3))
+        self.dotest(root)
+
+    def test_bookmark2(self):
+        name1 = self.mkname("mark")
+        name2 = self.mkname("mark")
+        name3 = self.mkname("mark")
+        root = TreeNode()
+        root.appendchild(BookmarkStartNode(name1))
+        root.appendchild(TextNode("abc"))
+        root.appendchild(BookmarkNode(name2))
+        root.appendchild(BookmarkStartNode(name3))
+        root.appendchild(BookmarkEndNode(name1))
+        root.appendchild(TextNode("de"))
+        root.appendchild(BookmarkEndNode(name3))
+        self.dotest(root)
+
+    def test_refmark2(self):
+        name1 = self.mkname("refmark")
+        root = TreeNode()
+        root.appendchild(ReferenceMarkStartNode(name1))
+        root.appendchild(TextNode("abc"))
+        # BUG: #i102541# (this is actually not unoportenum's fault)
+        root.appendchild(ReferenceMarkEndNode(name1))
+        root.appendchild(TextNode("de"))
+        self.dotest(root)
+
+    def test_refmark3(self):
+        # BUG: #i107672# (non-deterministic; depends on pointer ordering)
+        name1 = self.mkname("refmark")
+        name2 = self.mkname("refmark")
+        name3 = self.mkname("refmark")
+        name4 = self.mkname("refmark")
+        name5 = self.mkname("refmark")
+        name6 = self.mkname("refmark")
+        name7 = self.mkname("refmark")
+        root = TreeNode()
+        root.appendchild(ReferenceMarkStartNode(name1))
+        root.appendchild(ReferenceMarkStartNode(name2))
+        root.appendchild(ReferenceMarkStartNode(name3))
+        root.appendchild(ReferenceMarkStartNode(name4))
+        root.appendchild(ReferenceMarkStartNode(name5))
+        root.appendchild(ReferenceMarkStartNode(name6))
+        root.appendchild(ReferenceMarkStartNode(name7))
+        root.appendchild(TextNode("abc"))
+        root.appendchild(ReferenceMarkEndNode(name7))
+        root.appendchild(ReferenceMarkEndNode(name6))
+        root.appendchild(ReferenceMarkEndNode(name5))
+        root.appendchild(ReferenceMarkEndNode(name4))
+        root.appendchild(ReferenceMarkEndNode(name3))
+        root.appendchild(ReferenceMarkEndNode(name2))
+        root.appendchild(ReferenceMarkEndNode(name1))
+        root.appendchild(TextNode("de"))
+        self.dotest(root)
+
+    def test_toxmark2(self):
+        name1 = self.mkname("toxmark")
+        root = TreeNode()
+        root.appendchild(DocumentIndexMarkStartNode(name1))
+        root.appendchild(TextNode("abc"))
+        root.appendchild(DocumentIndexMarkEndNode(name1))
+        root.appendchild(TextNode("de"))
+        self.dotest(root)
+
+    def test_toxmark3(self):
+        # BUG: #i107672# (non-deterministic; depends on pointer ordering)
+        name1 = self.mkname("toxmark")
+        name2 = self.mkname("toxmark")
+        name3 = self.mkname("toxmark")
+        name4 = self.mkname("toxmark")
+        name5 = self.mkname("toxmark")
+        name6 = self.mkname("toxmark")
+        name7 = self.mkname("toxmark")
+        root = TreeNode()
+        root.appendchild(DocumentIndexMarkStartNode(name1))
+        root.appendchild(DocumentIndexMarkStartNode(name2))
+        root.appendchild(DocumentIndexMarkStartNode(name3))
+        root.appendchild(DocumentIndexMarkStartNode(name4))
+        root.appendchild(DocumentIndexMarkStartNode(name5))
+        root.appendchild(DocumentIndexMarkStartNode(name6))
+        root.appendchild(DocumentIndexMarkStartNode(name7))
+        root.appendchild(TextNode("abc"))
+        root.appendchild(DocumentIndexMarkEndNode(name7))
+        root.appendchild(DocumentIndexMarkEndNode(name6))
+        root.appendchild(DocumentIndexMarkEndNode(name5))
+        root.appendchild(DocumentIndexMarkEndNode(name4))
+        root.appendchild(DocumentIndexMarkEndNode(name3))
+        root.appendchild(DocumentIndexMarkEndNode(name2))
+        root.appendchild(DocumentIndexMarkEndNode(name1))
+        root.appendchild(TextNode("de"))
         self.dotest(root)
 
     def dotest(self, intree, insert=True):
