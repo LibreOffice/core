@@ -124,7 +124,6 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
     mpViewShell(nullptr),
     mpFontList(nullptr),
     meDocType(eDocumentType),
-    mpFilterSIDs(nullptr),
     mbSdDataObj(bDataObject),
     mbOwnPrinter(false),
     mbNewDocument( true )
@@ -140,7 +139,6 @@ DrawDocShell::DrawDocShell( SfxModelFlags nModelCreationFlags, bool bDataObject,
     mpViewShell(nullptr),
     mpFontList(nullptr),
     meDocType(eDocumentType),
-    mpFilterSIDs(nullptr),
     mbSdDataObj(bDataObject),
     mbOwnPrinter(false),
     mbNewDocument( true )
@@ -158,7 +156,6 @@ DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
     mpViewShell(nullptr),
     mpFontList(nullptr),
     meDocType(eDocumentType),
-    mpFilterSIDs(nullptr),
     mbSdDataObj(bDataObject),
     mbOwnPrinter(false),
     mbNewDocument( true )
@@ -405,8 +402,8 @@ void DrawDocShell::ApplySlotFilter() const
         {
             SfxDispatcher* pDispatcher = pTestViewShell->GetViewFrame()->GetDispatcher();
 
-            if( mpFilterSIDs )
-                pDispatcher->SetSlotFilter( mbFilterEnable ? SfxSlotFilterState::ENABLED : SfxSlotFilterState::DISABLED, mnFilterCount, mpFilterSIDs );
+            if( !mpFilterSIDs.empty() )
+                pDispatcher->SetSlotFilter( mbFilterEnable ? SfxSlotFilterState::ENABLED : SfxSlotFilterState::DISABLED, mpFilterSIDs );
             else
                 pDispatcher->SetSlotFilter();
 
