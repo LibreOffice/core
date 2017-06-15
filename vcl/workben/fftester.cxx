@@ -476,6 +476,20 @@ try_again:
                 SvFileStream aFileStream(out, StreamMode::READ);
                 ret = (int) (*pfnImport)(aFileStream);
             }
+            else if (strcmp(argv[2], "qpw") == 0)
+            {
+                static FFilterCall pfnImport(nullptr);
+                if (!pfnImport)
+                {
+                    osl::Module aLibrary;
+                    aLibrary.loadRelative(&thisModule, "libscfiltlo.so", SAL_LOADMODULE_LAZY);
+                    pfnImport = reinterpret_cast<FFilterCall>(
+                        aLibrary.getFunctionSymbol("TestImportQPW"));
+                    aLibrary.release();
+                }
+                SvFileStream aFileStream(out, StreamMode::READ);
+                ret = (int) (*pfnImport)(aFileStream);
+            }
 
 #endif
         }
