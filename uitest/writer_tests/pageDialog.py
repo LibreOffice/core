@@ -5,7 +5,7 @@
 #
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_pos, get_state_as_dict
 from com.sun.star.uno import RuntimeException
 from com.sun.star.awt.GradientStyle import LINEAR
 from com.sun.star.drawing.HatchStyle import SINGLE
@@ -13,8 +13,6 @@ from com.sun.star.drawing.BitmapMode import REPEAT
 from com.sun.star.drawing.RectanglePoint import MIDDLE_MIDDLE
 
 from libreoffice.uno.propertyvalue import mkPropertyValues
-
-from uitest.uihelper.common import get_state_as_dict
 
 class WriterPageDialog(UITestCase):
 
@@ -149,7 +147,7 @@ class WriterPageDialog(UITestCase):
 
         self.ui_test.close_doc()
 
-    def test_page_tab(self):
+    def test_paper_format(self):
 
         lPaperFormat = ["A6", "A5", "A4", "A3", "B6 (ISO)", "B5 (ISO)", "B4 (ISO)", "Letter",
             "Legal", "Long Bond", "Tabloid", "B6 (JIS)", "B5 (JIS)", "B4 (JIS)", "16 Kai",
@@ -170,6 +168,35 @@ class WriterPageDialog(UITestCase):
                     get_state_as_dict(xFormatList)["SelectEntryText"], lPaperFormat[i])
 
                 self.click_button(xDialog, 'ok')
+
+        self.ui_test.close_doc()
+
+    def test_orientation(self):
+
+        self.ui_test.create_doc_in_start_center("writer")
+
+        document = self.ui_test.get_component()
+
+        self.assertEqual(
+            document.StyleFamilies.PageStyles.Standard.IsLandscape, False)
+
+        xDialog = self.launch_dialog_and_select_tab(1)
+
+        self.click_button(xDialog, 'radiobuttonLandscape')
+
+        self.click_button(xDialog, 'ok')
+
+        self.assertEqual(
+            document.StyleFamilies.PageStyles.Standard.IsLandscape, True)
+
+        xDialog = self.launch_dialog_and_select_tab(1)
+
+        self.click_button(xDialog, 'radiobuttonPortrait')
+
+        self.click_button(xDialog, 'ok')
+
+        self.assertEqual(
+            document.StyleFamilies.PageStyles.Standard.IsLandscape, False)
 
         self.ui_test.close_doc()
 
