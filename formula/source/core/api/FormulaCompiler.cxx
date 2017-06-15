@@ -700,6 +700,7 @@ FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr )
         :
         nCurrentFactorParam(0),
         pArr( &rArr ),
+        maArrIterator( rArr ),
         pCode( nullptr ),
         pStack( nullptr ),
         eLastOp( ocPush ),
@@ -715,10 +716,13 @@ FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr )
 {
 }
 
+FormulaTokenArray FormulaCompiler::smDummyTokenArray;
+
 FormulaCompiler::FormulaCompiler()
         :
         nCurrentFactorParam(0),
         pArr( nullptr ),
+        maArrIterator( smDummyTokenArray ),
         pCode( nullptr ),
         pStack( nullptr ),
         eLastOp( ocPush ),
@@ -1260,11 +1264,11 @@ bool FormulaCompiler::GetToken()
     {
         FormulaTokenRef pSpacesToken;
         short nWasColRowName;
-        if ( pArr->nIndex > 0 && pArr->pCode[ pArr->nIndex-1 ]->GetOpCode() == ocColRowName )
+        if ( maArrIterator.mnIndex > 0 && pArr->pCode[ maArrIterator.mnIndex-1 ]->GetOpCode() == ocColRowName )
              nWasColRowName = 1;
         else
              nWasColRowName = 0;
-        mpToken = pArr->Next();
+        mpToken = maArrIterator.Next();
         while( mpToken && mpToken->GetOpCode() == ocSpaces )
         {
             // For significant whitespace remember last ocSpaces token. Usually
@@ -1274,7 +1278,7 @@ bool FormulaCompiler::GetToken()
                 nWasColRowName++;
             if ( bAutoCorrect && !pStack )
                 CreateStringFromToken( aCorrectedFormula, mpToken.get() );
-            mpToken = pArr->Next();
+            mpToken = maArrIterator.Next();
         }
         if ( bAutoCorrect && !pStack && mpToken )
             CreateStringFromToken( aCorrectedSymbol, mpToken.get() );
@@ -1296,7 +1300,7 @@ bool FormulaCompiler::GetToken()
             if ( nWasColRowName >= 2 && mpToken->GetOpCode() == ocColRowName )
             {   // convert an ocSpaces to ocIntersect in RPN
                 mpLastToken = mpToken = new FormulaByteToken( ocIntersect );
-                pArr->nIndex--;     // we advanced to the second ocColRowName, step back
+                maArrIterator.mnIndex--;     // we advanced to the second ocColRowName, step back
             }
             else if (pSpacesToken && FormulaGrammar::isExcelSyntax( meGrammar) &&
                     mpLastToken && mpToken &&
@@ -1306,7 +1310,7 @@ bool FormulaCompiler::GetToken()
                 // Let IntersectionLine() <- Factor() decide how to treat this,
                 // once the actual arguments are determined in RPN.
                 mpLastToken = mpToken = pSpacesToken;
-                pArr->nIndex--;     // step back from next non-spaces token
+                maArrIterator.mnIndex--;     // step back from next non-spaces token
                 return true;
             }
         }
@@ -1494,7 +1498,7 @@ void FormulaCompiler::Factor()
                 else
                     SetError( FormulaError::PairExpected);
                 sal_uInt8 nSepCount = 0;
-                const sal_uInt16 nSepPos = pArr->nIndex - 1;    // separator position, if any
+                const sal_uInt16 nSepPos = maArrIterator.mnIndex - 1;    // separator position, if any
                 if( !bNoParam )
                 {
                     nSepCount++;
@@ -1521,12 +1525,13 @@ void FormulaCompiler::Factor()
                     // Current index is nSepPos+3 if expression stops, or
                     // nSepPos+4 if expression continues after the call because
                     // we just called NextToken() to move away from it.
-                    if (pc >= 2 && (pArr->nIndex == nSepPos + 3 || pArr->nIndex == nSepPos + 4) &&
+                    if (pc >= 2 && (maArrIterator.mnIndex == nSepPos + 3 || maArrIterator.mnIndex == nSepPos + 4) &&
                             pArr->pCode[nSepPos+1]->GetType() == svDouble &&
                             pArr->pCode[nSepPos+1]->GetDouble() != 1.0 &&
                             pArr->pCode[nSepPos+2]->GetOpCode() == ocClose &&
                             pArr->RemoveToken( nSepPos, 2) == 2)
                     {
+                        maArrIterator.AfterRemoveToken( nSepPos, 2);
                         // Remove the ocPush/svDouble just removed also from
                         // the compiler local RPN array.
                         --pCode; --pc;
@@ -1783,7 +1788,7 @@ void FormulaCompiler::IntersectionLine()
     RangeLine();
     while (mpToken->GetOpCode() == ocIntersect || mpToken->GetOpCode() == ocSpaces)
     {
-        sal_uInt16 nCodeIndex = pArr->nIndex - 1;
+        sal_uInt16 nCodeIndex = maArrIterator.mnIndex - 1;
         FormulaToken** pCode1 = pCode - 1;
         FormulaTokenRef p = mpToken;
         NextToken();
@@ -1984,6 +1989,7 @@ bool FormulaCompiler::CompileTokenArray()
             aCorrectedSymbol.clear();
         }
         pArr->DelRPN();
+        maArrIterator.Reset();
         pStack = nullptr;
         FormulaToken* pData[ FORMULA_MAXTOKENS ];
         pCode = pData;
@@ -1994,7 +2000,7 @@ bool FormulaCompiler::CompileTokenArray()
                 aCorrectedFormula = "=";
         }
         pArr->ClearRecalcMode();
-        pArr->Reset();
+        maArrIterator.Reset();
         eLastOp = ocOpen;
         pc = 0;
         NextToken();
@@ -2021,6 +2027,7 @@ bool FormulaCompiler::CompileTokenArray()
         if (pArr->GetCodeError() != FormulaError::NONE && mbStopOnError)
         {
             pArr->DelRPN();
+            maArrIterator.Reset();
             pArr->SetHyperLink( false);
         }
 
@@ -2049,6 +2056,8 @@ void FormulaCompiler::PopTokenArray()
         if( p->bTemp )
             delete pArr;
         pArr = p->pArr;
+        maArrIterator = FormulaTokenArrayPlainIterator(*pArr);
+        maArrIterator.Jump(p->nIndex);
         mpLastToken = p->mpLastToken;
         delete p;
     }
@@ -2068,20 +2077,27 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
         return;
 
     FormulaTokenArray* pSaveArr = pArr;
+    int nSaveIndex = maArrIterator.GetIndex();
     bool bODFF = FormulaGrammar::isODFF( meGrammar);
     if (bODFF || FormulaGrammar::isPODF( meGrammar) )
     {
         // Scan token array for missing args and re-write if present.
         MissingConventionODF aConv( bODFF);
         if (pArr->NeedsPodfRewrite( aConv))
+        {
             pArr = pArr->RewriteMissing( aConv );
+            maArrIterator = FormulaTokenArrayPlainIterator( *pArr );
+        }
     }
     else if ( FormulaGrammar::isOOXML( meGrammar ) )
     {
         // Scan token array for missing args and rewrite if present.
         MissingConventionOOXML aConv;
         if (pArr->NeedsOoxmlRewrite())
+        {
             pArr = pArr->RewriteMissing( aConv );
+            maArrIterator = FormulaTokenArrayPlainIterator( *pArr );
+        }
     }
 
     // At least one character per token, plus some are references, some are
@@ -2090,7 +2106,7 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
 
     if ( pArr->IsRecalcModeForced() )
         rBuffer.append( '=');
-    const FormulaToken* t = pArr->First();
+    const FormulaToken* t = maArrIterator.First();
     while( t )
         t = CreateStringFromToken( rBuffer, t, true );
 
@@ -2098,6 +2114,8 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
     {
         delete pArr;
         pArr = pSaveArr;
+        maArrIterator = FormulaTokenArrayPlainIterator( *pArr );
+        maArrIterator.Jump(nSaveIndex);
     }
 }
 
@@ -2120,9 +2138,9 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
     {
         // AND, OR infix?
         if ( bAllowArrAdvance )
-            t = pArr->Next();
+            t = maArrIterator.Next();
         else
-            t = pArr->PeekNext();
+            t = maArrIterator.PeekNext();
         bNext = false;
         bSpaces = ( !t || t->GetOpCode() != ocOpen );
     }
@@ -2134,11 +2152,11 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
         bool bIntersectionOp = mxSymbols->isODFF();
         if (bIntersectionOp)
         {
-            const FormulaToken* p = pArr->PeekPrevNoSpaces();
+            const FormulaToken* p = maArrIterator.PeekPrevNoSpaces();
             bIntersectionOp = (p && p->GetOpCode() == ocColRowName);
             if (bIntersectionOp)
             {
-                p = pArr->PeekNextNoSpaces();
+                p = maArrIterator.PeekNextNoSpaces();
                 bIntersectionOp = (p && p->GetOpCode() == ocColRowName);
             }
         }
@@ -2208,13 +2226,13 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
                 {
                     // Suppress all TableRef related tokens, the resulting
                     // range was written by CreateStringFromIndex().
-                    const FormulaToken* const p = pArr->PeekNext();
+                    const FormulaToken* const p = maArrIterator.PeekNext();
                     if (p && p->GetOpCode() == ocTableRefOpen)
                     {
                         int nLevel = 0;
                         do
                         {
-                            t = pArr->Next();
+                            t = maArrIterator.Next();
                             if (!t)
                                 break;
 
@@ -2284,7 +2302,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
     if ( bAllowArrAdvance )
     {
         if( bNext )
-            t = pArr->Next();
+            t = maArrIterator.Next();
         return t;
     }
     return pTokenP;
@@ -2457,10 +2475,10 @@ OpCode FormulaCompiler::NextToken()
         {
             // Fake an intersection op as last op for the next round, but at
             // least roughly check if it could make sense at all.
-            FormulaToken* pPrev = pArr->PeekPrevNoSpaces();
+            FormulaToken* pPrev = maArrIterator.PeekPrevNoSpaces();
             if (pPrev && isPotentialRangeType( pPrev, false, false))
             {
-                FormulaToken* pNext = pArr->PeekNextNoSpaces();
+                FormulaToken* pNext = maArrIterator.PeekNextNoSpaces();
                 if (pNext && isPotentialRangeType( pNext, false, true))
                     eLastOp = ocIntersect;
                 else
@@ -2610,10 +2628,12 @@ void FormulaCompiler::PushTokenArray( FormulaTokenArray* pa, bool bTemp )
     FormulaArrayStack* p = new FormulaArrayStack;
     p->pNext      = pStack;
     p->pArr       = pArr;
+    p->nIndex     = maArrIterator.GetIndex();
     p->mpLastToken = mpLastToken;
     p->bTemp      = bTemp;
     pStack        = p;
     pArr          = pa;
+    maArrIterator = FormulaTokenArrayPlainIterator( *pArr );
 }
 
 } // namespace formula

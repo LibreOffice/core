@@ -29,6 +29,7 @@
 #include <formula/grammar.hxx>
 #include <formula/opcode.hxx>
 #include <formula/token.hxx>
+#include <formula/tokenarray.hxx>
 #include <formula/types.hxx>
 #include <formula/paramclass.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -53,12 +54,12 @@ enum class FormulaError : sal_uInt16;
 
 namespace formula
 {
-    class FormulaTokenArray;
 
 struct FormulaArrayStack
 {
     FormulaArrayStack*  pNext;
     FormulaTokenArray*  pArr;
+    sal_uInt16          nIndex;
     FormulaTokenRef     mpLastToken;
     bool bTemp;
 };
@@ -331,6 +332,7 @@ protected:
     FormulaTokenRef     pCurrentFactorToken;    // current factor token (of Factor() method)
     sal_uInt16          nCurrentFactorParam;    // current factor token's parameter, 1-based
     FormulaTokenArray*  pArr;
+    FormulaTokenArrayPlainIterator maArrIterator;
     FormulaTokenRef     mpLastToken;            // last token
 
     FormulaToken**      pCode;
@@ -416,6 +418,8 @@ private:
     mutable NonConstOpCodeMapPtr  mxSymbolsEnglish;   // English symbols
     mutable NonConstOpCodeMapPtr  mxSymbolsEnglishXL; // English Excel symbols (for VBA formula parsing)
     mutable NonConstOpCodeMapPtr  mxSymbolsOOXML;     // Excel OOXML symbols
+
+    static FormulaTokenArray smDummyTokenArray;
 };
 
 } // formula

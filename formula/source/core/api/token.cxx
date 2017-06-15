@@ -456,134 +456,6 @@ bool FormulaTokenArray::Fill(
     }
     return bError;
 }
-FormulaToken* FormulaTokenArray::GetNextReference()
-{
-    while( nIndex < nLen )
-    {
-        FormulaToken* t = pCode[ nIndex++ ];
-        switch( t->GetType() )
-        {
-            case svSingleRef:
-            case svDoubleRef:
-            case svExternalSingleRef:
-            case svExternalDoubleRef:
-                return t;
-            default:
-            {
-                // added to avoid warnings
-            }
-        }
-    }
-    return nullptr;
-}
-
-FormulaToken* FormulaTokenArray::GetNextColRowName()
-{
-    while( nIndex < nLen )
-    {
-        FormulaToken* t = pCode[ nIndex++ ];
-        if ( t->GetOpCode() == ocColRowName )
-            return t;
-    }
-    return nullptr;
-}
-
-FormulaToken* FormulaTokenArray::GetNextReferenceRPN()
-{
-    while( nIndex < nRPN )
-    {
-        FormulaToken* t = pRPN[ nIndex++ ];
-        switch( t->GetType() )
-        {
-            case svSingleRef:
-            case svDoubleRef:
-            case svExternalSingleRef:
-            case svExternalDoubleRef:
-                return t;
-            default:
-            {
-                // added to avoid warnings
-            }
-        }
-    }
-    return nullptr;
-}
-
-FormulaToken* FormulaTokenArray::GetNextReferenceOrName()
-{
-    if( pCode )
-    {
-        while ( nIndex < nLen )
-        {
-            FormulaToken* t = pCode[ nIndex++ ];
-            switch( t->GetType() )
-            {
-                case svSingleRef:
-                case svDoubleRef:
-                case svIndex:
-                case svExternalSingleRef:
-                case svExternalDoubleRef:
-                case svExternalName:
-                    return t;
-                default:
-                {
-                    // added to avoid warnings
-                }
-             }
-         }
-     }
-    return nullptr;
-}
-
-FormulaToken* FormulaTokenArray::GetNextName()
-{
-    if( pCode )
-    {
-        while ( nIndex < nLen )
-        {
-            FormulaToken* t = pCode[ nIndex++ ];
-            if( t->GetType() == svIndex )
-                return t;
-        }
-    } // if( pCode )
-    return nullptr;
-}
-
-FormulaToken* FormulaTokenArray::Next()
-{
-    if( pCode && nIndex < nLen )
-        return pCode[ nIndex++ ];
-    else
-        return nullptr;
-}
-
-FormulaToken* FormulaTokenArray::NextNoSpaces()
-{
-    if( pCode )
-    {
-        while( (nIndex < nLen) && (pCode[ nIndex ]->GetOpCode() == ocSpaces) )
-            ++nIndex;
-        if( nIndex < nLen )
-            return pCode[ nIndex++ ];
-    }
-    return nullptr;
-}
-
-FormulaToken* FormulaTokenArray::NextRPN()
-{
-    if( pRPN && nIndex < nRPN )
-        return pRPN[ nIndex++ ];
-    else
-        return nullptr;
-}
-
-FormulaToken* FormulaTokenArray::PrevRPN()
-{
-    if( pRPN && nIndex )
-        return pRPN[ --nIndex ];
-    else
-        return nullptr;
-}
 
 void FormulaTokenArray::DelRPN()
 {
@@ -597,7 +469,7 @@ void FormulaTokenArray::DelRPN()
         delete [] pRPN;
     }
     pRPN = nullptr;
-    nRPN = nIndex = 0;
+    nRPN = 0;
 }
 
 FormulaToken* FormulaTokenArray::FirstToken() const
@@ -612,46 +484,6 @@ FormulaToken* FormulaTokenArray::PeekPrev( sal_uInt16 & nIdx )
     if (0 < nIdx && nIdx <= nLen)
         return pCode[--nIdx];
     return nullptr;
-}
-
-FormulaToken* FormulaTokenArray::PeekNext()
-{
-    if( pCode && nIndex < nLen )
-        return pCode[ nIndex ];
-    else
-        return nullptr;
-}
-
-FormulaToken* FormulaTokenArray::PeekNextNoSpaces()
-{
-    if( pCode && nIndex < nLen )
-    {
-        sal_uInt16 j = nIndex;
-        while ( j < nLen && pCode[j]->GetOpCode() == ocSpaces )
-            j++;
-        if ( j < nLen )
-            return pCode[ j ];
-        else
-            return nullptr;
-    }
-    else
-        return nullptr;
-}
-
-FormulaToken* FormulaTokenArray::PeekPrevNoSpaces()
-{
-    if( pCode && nIndex > 1 )
-    {
-        sal_uInt16 j = nIndex - 2;
-        while ( pCode[j]->GetOpCode() == ocSpaces && j > 0 )
-            j--;
-        if ( j > 0 || pCode[j]->GetOpCode() != ocSpaces )
-            return pCode[ j ];
-        else
-            return nullptr;
-    }
-    else
-        return nullptr;
 }
 
 FormulaToken* FormulaTokenArray::FirstRPNToken() const
@@ -737,7 +569,6 @@ FormulaTokenArray::FormulaTokenArray() :
     pRPN(nullptr),
     nLen(0),
     nRPN(0),
-    nIndex(0),
     nError(FormulaError::NONE),
     nMode(ScRecalcMode::NORMAL),
     bHyperLink(false),
@@ -761,7 +592,6 @@ void FormulaTokenArray::Assign( const FormulaTokenArray& r )
 {
     nLen   = r.nLen;
     nRPN   = r.nRPN;
-    nIndex = r.nIndex;
     nError = r.nError;
     nMode  = r.nMode;
     bHyperLink = r.bHyperLink;
@@ -828,7 +658,7 @@ void FormulaTokenArray::Clear()
     }
     pCode = nullptr; pRPN = nullptr;
     nError = FormulaError::NONE;
-    nLen = nIndex = nRPN = 0;
+    nLen = nRPN = 0;
     bHyperLink = false;
     mbFromRangeName = false;
     mbShareable = true;
@@ -924,13 +754,6 @@ sal_uInt16 FormulaTokenArray::RemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount
         }
         nLen -= nCount;
 
-        if (nIndex >= nOffset)
-        {
-            if (nIndex < nStop)
-                nIndex = nOffset + 1;
-            else
-                nIndex -= nStop - nOffset;
-        }
         return nCount;
     }
     else
