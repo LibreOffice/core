@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_a7ab711c",
+        "filename": "sw/source/filter/ww8/ww8par5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2211,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-15T11:39:33Z",
+      "side": 1,
+      "message": "i think these are word field codes, i\u0027ll look them up in the ooxml spec, this one is apparently \"MACROBUTTON\"",
+      "revId": "32feac7492ea85a45a2c39f922517148957364d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
