@@ -44,7 +44,6 @@ protected:
     // whether it is necessary is another question
     OUString m_aControlTag;
 
-    bool bIsDialog;
     OUString m_sLibraryAndCodeName;
     std::unique_ptr< ov::AbstractGeometryAttributes > mpGeometryHelper;
     css::uno::Reference< css::beans::XPropertySet > m_xProps;

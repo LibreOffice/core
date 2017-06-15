@@ -644,9 +644,8 @@ InteractionSupplyAuthentication::getRememberAccountModes(
 
 // virtual
 void SAL_CALL InteractionSupplyAuthentication::setRememberAccount(
-                                    ucb::RememberAuthentication Remember )
+                                    ucb::RememberAuthentication )
 {
-    m_eRememberAccountMode = Remember;
 }
 
 

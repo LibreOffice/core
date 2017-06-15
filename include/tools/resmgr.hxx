@@ -73,11 +73,9 @@ struct ImpRCStack
     RCFlags         Flags;      ///< resource status
     void *          aResHandle; ///< Resource-Identifier from InternalResMgr
     const Resource* pResObj;    ///< pointer to Resource object
-    sal_uInt32      nId;        ///< ResId used for error message
-    ResMgr*         pResMgr;    ///< ResMgr for Resource pResObj
 
     void            Clear();
-    void            Init( ResMgr * pMgr, const Resource * pObj, sal_uInt32 nId );
+    void            Init( const Resource * pObj, sal_uInt32 nId );
 };
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC ResMgr

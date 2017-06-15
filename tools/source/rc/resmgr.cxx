@@ -725,15 +725,13 @@ static void RscException_Impl()
     }
 }
 
-void ImpRCStack::Init( ResMgr* pMgr, const Resource* pObj, sal_uInt32 Id )
+void ImpRCStack::Init( const Resource* pObj, sal_uInt32 Id )
 {
     pResource       = nullptr;
     pClassRes       = nullptr;
     Flags           = RCFlags::NONE;
     aResHandle      = nullptr;
     pResObj         = pObj;
-    nId             = Id & ~RSC_DONTRELEASE; //TLX: Besser Init aendern
-    pResMgr         = pMgr;
     if ( !(Id & RSC_DONTRELEASE) )
         Flags      |= RCFlags::AUTORELEASE;
 }
@@ -745,8 +743,6 @@ void ImpRCStack::Clear()
     Flags           = RCFlags::NONE;
     aResHandle      = nullptr;
     pResObj         = nullptr;
-    nId             = 0;
-    pResMgr         = nullptr;
 }
 
 static RSHEADER_TYPE* LocalResource( const ImpRCStack* pStack,
@@ -966,7 +962,7 @@ bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
 
     incStack();
     pTop = &aStack[nCurStack];
-    pTop->Init( pMgr, pResObj, nId |
+    pTop->Init( pResObj, nId |
                 (rId.IsAutoRelease() ? 0 : RSC_DONTRELEASE) );
 
     if ( pClassRes )

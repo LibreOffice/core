@@ -316,7 +316,6 @@ class UCBHELPER_DLLPUBLIC InteractionSupplyAuthentication :
     OUString m_aAccount;
     css::ucb::RememberAuthentication m_eRememberPasswordMode;
     css::ucb::RememberAuthentication m_eDefaultRememberPasswordMode;
-    css::ucb::RememberAuthentication m_eRememberAccountMode;
     css::ucb::RememberAuthentication m_eDefaultRememberAccountMode;
     bool m_bCanSetRealm    : 1;
     bool m_bCanSetUserName : 1;
@@ -481,7 +480,6 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
   m_aRememberAccountModes( rRememberAccountModes ),
   m_eRememberPasswordMode( eDefaultRememberPasswordMode ),
   m_eDefaultRememberPasswordMode( eDefaultRememberPasswordMode ),
-  m_eRememberAccountMode( eDefaultRememberAccountMode ),
   m_eDefaultRememberAccountMode( eDefaultRememberAccountMode ),
   m_bCanSetRealm( bCanSetRealm ),
   m_bCanSetUserName( bCanSetUserName ),
