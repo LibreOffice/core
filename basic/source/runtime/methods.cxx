@@ -2635,7 +2635,7 @@ RTLFUNC(IsDate)
         }
         else if( eType == SbxSTRING )
         {
-            SbxError nPrevError = SbxBase::GetError();
+            ErrCode nPrevError = SbxBase::GetError();
             SbxBase::ResetError();
 
             // force conversion of the parameter to SbxDATE

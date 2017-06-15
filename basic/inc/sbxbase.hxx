@@ -34,7 +34,7 @@ class SbxBasicFormater;
 // AppData structure for SBX:
 struct SbxAppData
 {
-    SbxError            eSbxError;  // Error code
+    ErrCode             eErrCode;  // Error code
     std::vector<std::unique_ptr<SbxFactory>>
                         m_Factories;
 

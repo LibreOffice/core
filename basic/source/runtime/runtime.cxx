@@ -1606,7 +1606,7 @@ inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRe
     if (  aAny.getValueType().getTypeClass() == TypeClass_STRUCT )
     {
         refVar->SetType( SbxOBJECT );
-        SbxError eOldErr = SbxBase::GetError();
+        ErrCode eOldErr = SbxBase::GetError();
         // There are some circumstances when calling GetObject
         // will trigger an error, we need to squash those here.
         // Alternatively it is possible that the same scenario
