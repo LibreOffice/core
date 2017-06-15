@@ -4418,14 +4418,18 @@ void SwHTMLParser::EndDefListItem( HtmlTokenId nToken )
     }
 }
 
+/**
+ *
+ * @param bNoSurroundOnly   The paragraph contains at least one frame
+ *                          without wrapping.
+ * @param bSurroundOnly     The paragraph contains at least one frame
+ *                          with wrapping, but none without wrapping.
+ *
+ *                          Otherwise the paragraph contains any frame.
+ */
 bool SwHTMLParser::HasCurrentParaFlys( bool bNoSurroundOnly,
                                        bool bSurroundOnly ) const
 {
-    // bNoSurroundOnly:     Der Absatz enthaelt mindestens einen Rahmen
-    //                      ohne Umlauf
-    // bSurroundOnly:       Der Absatz enthaelt mindestens einen Rahmen
-    //                      mit Umlauf aber keinen ohne Umlauf
-    // sonst:               Der Absatz enthaelt irgendeinen Rahmen
     SwNodeIndex& rNodeIdx = m_pPam->GetPoint()->nNode;
 
     const SwFrameFormats& rFrameFormatTable = *m_xDoc->GetSpzFrameFormats();
@@ -4435,12 +4439,12 @@ bool SwHTMLParser::HasCurrentParaFlys( bool bNoSurroundOnly,
     {
         const SwFrameFormat *const pFormat = rFrameFormatTable[i];
         SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
-        // Ein Rahmen wurde gefunden, wenn
-        // - er absatzgebunden ist, und
-        // - im aktuellen Absatz verankert ist, und
-        //   - jeder absatzgebunene Rahmen zaehlt, oder
-        //   - (nur Rahmen oder umlauf zaehlen und ) der Rahmen keinen
-        //     Umlauf besitzt
+        // A frame was found, when
+        // - it is paragraph-bound, and
+        // - is anchored in current paragraph, and
+        //  - every paragraph-bound frame counts, or
+        //  - (only frames or wrappings counting and) the frames don't have
+        //    a wrapping
         SwPosition const*const pAPos = pAnchor->GetContentAnchor();
         if (pAPos &&
             ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
@@ -4454,10 +4458,9 @@ bool SwHTMLParser::HasCurrentParaFlys( bool bNoSurroundOnly,
             }
             else
             {
-                // Wenn Rahmen mit Umlauf gesucht sind,
-                // auch keine mit Durchlauf beachten. Dabei handelt es
-                // sich (noch) um HIDDEN-Controls, und denen weicht man
-                // besser auch nicht aus.
+                // When looking for frames with wrapping, also regard
+                // ones without flow. In this case it's (still) HIDDEN-Controls,
+                // and you also don't want to avoid them.
                 css::text::WrapTextMode eSurround = pFormat->GetSurround().GetSurround();
                 if( bNoSurroundOnly )
                 {
@@ -4477,8 +4480,8 @@ bool SwHTMLParser::HasCurrentParaFlys( bool bNoSurroundOnly,
                     else if( css::text::WrapTextMode_THROUGH!=eSurround )
                     {
                         bFound = true;
-                        // weitersuchen: Es koennten ja noch welche ohne
-                        // Umlauf kommen ...
+                        // Continue searching: It's possible that some without
+                        // wrapping will follow...
                     }
                 }
             }
@@ -4488,7 +4491,7 @@ bool SwHTMLParser::HasCurrentParaFlys( bool bNoSurroundOnly,
     return bFound;
 }
 
-// die speziellen Methoden zum Einfuegen von Objecten
+// the special methods for inserting of objects
 
 const SwFormatColl *SwHTMLParser::GetCurrFormatColl() const
 {
@@ -4498,16 +4501,16 @@ const SwFormatColl *SwHTMLParser::GetCurrFormatColl() const
 
 void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
 {
-    SwTextFormatColl *pCollToSet = nullptr;   // die zu setzende Vorlage
-    SfxItemSet *pItemSet = nullptr;       // der Set fuer harte Attrs
+    SwTextFormatColl *pCollToSet = nullptr; // the style to set
+    SfxItemSet *pItemSet = nullptr;         // set of hard attributes
     sal_uInt16 nTopColl = pContext ? pContext->GetTextFormatColl() : 0;
     const OUString& rTopClass = pContext ? pContext->GetClass() : aEmptyOUStr;
     sal_uInt16 nDfltColl = RES_POOLCOLL_TEXT;
 
-    bool bInPRE=false;                          // etwas Kontext Info
+    bool bInPRE=false;                          // some context info
 
-    sal_uInt16 nLeftMargin = 0, nRightMargin = 0;   // die Einzuege und
-    short nFirstLineIndent = 0;                 // Abstaende
+    sal_uInt16 nLeftMargin = 0, nRightMargin = 0;   // the margins and
+    short nFirstLineIndent = 0;                     // indentations
 
     for( auto i = m_nContextStAttrMin; i < m_aContexts.size(); ++i )
     {
@@ -4516,9 +4519,8 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
         sal_uInt16 nColl = pCntxt->GetTextFormatColl();
         if( nColl )
         {
-            // Es gibt eine Vorlage, die zu setzen ist. Dann
-            // muss zunaechst einmal entschieden werden,
-            // ob die Vorlage auch gesetzt werden kann
+            // There is a style to set. Then at first we must decide,
+            // if the style can be set.
             bool bSetThis = true;
             switch( nColl )
             {
@@ -4526,14 +4528,14 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
                 bInPRE = true;
                 break;
             case RES_POOLCOLL_TEXT:
-                // <TD><P CLASS=xxx> muss TD.xxx werden
+                // <TD><P CLASS=xxx> must become TD.xxx
                 if( nDfltColl==RES_POOLCOLL_TABLE ||
                     nDfltColl==RES_POOLCOLL_TABLE_HDLN )
                     nColl = nDfltColl;
                 break;
             case RES_POOLCOLL_HTML_HR:
-                // <HR> auch in <PRE> als Vorlage setzen, sonst kann man sie
-                // nicht mehr exportieren
+                // also <HR> in <PRE> set as style, otherwise it can't
+                // be exported anymore
                 break;
             default:
                 if( bInPRE )
@@ -4546,14 +4548,12 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
 
             if( bSetThis )
             {
-                // wenn jetzt eine andere Vorlage gesetzt werden soll als
-                // bisher, muss die bishere Vorlage durch harte Attributierung
-                // ersetzt werden
+                // If now a different style should be set as previously, the
+                // previous style must be replaced by hard attribution.
 
                 if( pCollToSet )
                 {
-                    // die Attribute, die bisherige Vorlage setzt
-                    // hart einfuegen
+                    // insert the attributes hard, which previous style sets
                     if( !pItemSet )
                         pItemSet = new SfxItemSet( pCollToSet->GetAttrSet() );
                     else
@@ -4564,9 +4564,8 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
                         aItemSet.Set( rCollSet );
                         pItemSet->Put( aItemSet );
                     }
-                    // aber die Attribute, die aktuelle Vorlage setzt
-                    // entfernen, weil sie sonst spaeter ueberschrieben
-                    // werden
+                    // but remove the attributes, which the current style sets,
+                    // because otherwise they will be overwritten later
                     pItemSet->Differentiate( pNewColl->GetAttrSet() );
                 }
 
@@ -4574,7 +4573,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
             }
             else
             {
-                // hart Attributieren
+                // hard attribution
                 if( !pItemSet )
                     pItemSet = new SfxItemSet( pNewColl->GetAttrSet() );
                 else
@@ -4589,13 +4588,13 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
         }
         else
         {
-            // vielliecht gibt es ja eine Default-Vorlage?
+            // Maybe a default style exists?
             nColl = pCntxt->GetDfltTextFormatColl();
             if( nColl )
                 nDfltColl = nColl;
         }
 
-        // ggf. neue Absatz-Einzuege holen
+        // if applicable fetch new paragraph indents
         if( pCntxt->IsLRSpaceChanged() )
         {
             sal_uInt16 nLeft=0, nRight=0;
@@ -4606,11 +4605,11 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
         }
     }
 
-    // wenn im aktuellen Kontext eine neue Vorlage gesetzt werden soll,
-    // muessen deren Absatz-Abstaende noch in den Kontext eingetragen werden
+    // If in current context a new style should be set,
+    // its paragraph margins must be insert in the context.
     if( pContext && nTopColl )
     {
-        // <TD><P CLASS=xxx> muss TD.xxx werden
+        // <TD><P CLASS=xxx> must become TD.xxx
         if( nTopColl==RES_POOLCOLL_TEXT &&
             (nDfltColl==RES_POOLCOLL_TABLE ||
              nDfltColl==RES_POOLCOLL_TABLE_HDLN) )
@@ -4629,8 +4628,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
             sal_Int32 nRight = pLRItem->GetRight();
             nFirstLineIndent = pLRItem->GetTextFirstLineOfst();
 
-            // In Definitions-Listen enthalten die Abstaende auch die der
-            // vorhergehenden Level
+            // Definitions lists holding the margins, also from the previous levels
             if( RES_POOLCOLL_HTML_DD == nTopColl )
             {
                 const SvxLRSpaceItem& rDTLRSpace = m_pCSS1Parser
@@ -4645,7 +4643,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
                 nRight = 0;
             }
 
-            // die Absatz-Abstaende addieren sich
+            // the paragraph margins add up
             nLeftMargin = nLeftMargin + static_cast< sal_uInt16 >(nLeft);
             nRightMargin = nRightMargin + static_cast< sal_uInt16 >(nRight);
 
@@ -4660,7 +4658,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
         }
     }
 
-    // wenn gar keine Vorlage im Kontext gesetzt ist, Textkoerper nehmen
+    // If no style is set in the context use the text body.
     if( !pCollToSet )
     {
         pCollToSet = m_pCSS1Parser->GetTextCollFromPool( nDfltColl );
@@ -4673,7 +4671,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
             nFirstLineIndent = rLRItem.GetTextFirstLineOfst();
     }
 
-    // bisherige harte Attributierung des Absatzes entfernen
+    // remove previous hard attribution of paragraph
     if( !m_aParaAttrs.empty() )
     {
         for( auto pParaAttr : m_aParaAttrs )
@@ -4682,10 +4680,10 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
         m_aParaAttrs.clear();
     }
 
-    // Die Vorlage setzen
+    // set the style
     m_xDoc->SetTextFormatColl( *m_pPam, pCollToSet );
 
-    // ggf. noch den Absatz-Einzug korrigieren
+    // if applicable correct the paragraph indent
     const SvxLRSpaceItem& rLRItem = pCollToSet->GetLRSpace();
     bool bSetLRSpace;
 
@@ -4710,7 +4708,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
         }
     }
 
-    // und nun noch die Attribute setzen
+    // and now set the attributes
     if( pItemSet )
     {
         InsertParaAttrs( *pItemSet );
@@ -4751,9 +4749,9 @@ void SwHTMLParser::NewCharFormat( HtmlTokenId nToken )
     // create a new context
     HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken );
 
-    // die Vorlage setzen und im Kontext merken
+    // set the style and save it in the context
     SwCharFormat* pCFormat = m_pCSS1Parser->GetChrFormat( nToken, aClass );
-    OSL_ENSURE( pCFormat, "keine Zeichenvorlage zu Token gefunden" );
+    OSL_ENSURE( pCFormat, "No character format found for token" );
 
     // parse styles (regarding class see also NewPara)
     if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
@@ -4770,9 +4768,8 @@ void SwHTMLParser::NewCharFormat( HtmlTokenId nToken )
         }
     }
 
-    // Zeichen-Vorlagen werden in einem eigenen Stack gehalten und
-    // koennen nie durch Styles eingefuegt werden. Das Attribut ist deshalb
-    // auch gar nicht im CSS1-Which-Range enthalten
+    // Character formats are stored in its own stack and can never be insert
+    // by styles. Therefore the attribute doesn't exists in CSS1-Which-Range.
     if( pCFormat )
         InsertAttr( &m_aAttrTab.pCharFormats, SwFormatCharFormat( pCFormat ), pCntxt );
 
