@@ -611,6 +611,8 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
             pDoc, aFormulaPos, aTokenArr, formula::FormulaGrammar::GRAM_API,
             (sal_uInt8)(mbArray ? MM_FORMULA : MM_NONE) );
         pFormula = pDoc->SetFormulaCell(aFormulaPos, pFormula);
+        if (mbArray && pFormula)
+            pFormula->SetMatColsRows(1,1);  // the cell dimensions (only one cell)
 
         //  call GetMatrix before GetErrCode because GetMatrix always recalculates
         //  if there is no matrix result
