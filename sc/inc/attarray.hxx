@@ -122,7 +122,14 @@ public:
     bool    Concat(SCSIZE nPos);
 
     const ScPatternAttr* GetPattern( SCROW nRow ) const;
+
+    /** Returns if you search for attributes at nRow the range from rStartRow
+        to rEndRow where that attribute combination (ScPatternAttr) is applied.
+        The next ScPatternAttr different from this one starts at rEndRow+1
+        (if that is <= MAXCOL).
+     */
     const ScPatternAttr* GetPatternRange( SCROW& rStartRow, SCROW& rEndRow, SCROW nRow ) const;
+
     void    MergePatternArea( SCROW nStartRow, SCROW nEndRow, ScMergePatternState& rState, bool bDeep ) const;
 
     void    MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner, ScLineFlags& rFlags,
