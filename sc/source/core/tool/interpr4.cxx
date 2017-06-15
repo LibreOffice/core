@@ -1296,7 +1296,8 @@ void ScInterpreter::GetExternalDoubleRef(
         return;
     }
 
-    formula::FormulaToken* pToken = pArray->First();
+    formula::FormulaTokenArrayPlainIterator aIter(*pArray);
+    formula::FormulaToken* pToken = aIter.First();
     if (pToken->GetType() == svError)
     {
         SetError( pToken->GetError());
@@ -1308,7 +1309,7 @@ void ScInterpreter::GetExternalDoubleRef(
         return;
     }
 
-    if (pArray->Next())
+    if (aIter.Next())
     {
         // Can't handle more than one matrix per parameter.
         SetError( FormulaError::IllegalArgument);

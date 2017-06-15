@@ -22,6 +22,7 @@
 
 #include <climits>
 #include <memory>
+#include <ostream>
 #include <type_traits>
 #include <unordered_set>
 #include <unordered_map>
@@ -123,7 +124,6 @@ protected:
     FormulaToken**  pRPN;                   // RPN array
     sal_uInt16      nLen;                   // Length of token array
     sal_uInt16      nRPN;                   // Length of RPN array
-    sal_uInt16      nIndex;                 // Current step index
     FormulaError    nError;                 // Error code
     ScRecalcMode    nMode;                  // Flags to indicate when to recalc this code
     bool            bHyperLink      :1;     // If HYPERLINK() occurs in the formula.
@@ -161,9 +161,7 @@ protected:
     /** Remove a sequence of tokens from pCode array, and pRPN array if the
         tokens are referenced there.
 
-        This' nLen and nRPN are adapted, as is nIndex if it points behind
-        nOffset. If nIndex points into the to be removed range
-        (nOffset < nIndex < nOffset+nCount) it is set to nOffset+1.
+        nLen and nRPN are adapted.
 
         @param  nOffset
                 Start offset into pCode.
@@ -205,24 +203,10 @@ public:
 
     void Clear();
     void DelRPN();
-    FormulaToken* First() { nIndex = 0; return Next(); }
     FormulaToken* FirstToken() const;
-    FormulaToken* Next();
-    FormulaToken* NextNoSpaces();
-    FormulaToken* GetNextName();
-    FormulaToken* GetNextReference();
-    FormulaToken* GetNextReferenceRPN();
-    FormulaToken* GetNextReferenceOrName();
-    FormulaToken* GetNextColRowName();
     /// Peek at nIdx-1 if not out of bounds, decrements nIdx if successful. Returns NULL if not.
     FormulaToken* PeekPrev( sal_uInt16 & nIdx );
-    FormulaToken* PeekNext();
-    FormulaToken* PeekPrevNoSpaces();    /// Only after Reset/First/Next/Last/Prev!
-    FormulaToken* PeekNextNoSpaces();    /// Only after Reset/First/Next/Last/Prev!
     FormulaToken* FirstRPNToken() const;
-    FormulaToken* NextRPN();
-    FormulaToken* LastRPN() { nIndex = nRPN; return PrevRPN(); }
-    FormulaToken* PrevRPN();
 
     bool HasReferences() const;
 
@@ -246,7 +230,6 @@ public:
     FormulaToken** GetCode()  const  { return pRPN; }
     sal_uInt16     GetLen() const     { return nLen; }
     sal_uInt16     GetCodeLen() const { return nRPN; }
-    void           Reset()            { nIndex = 0; }
     FormulaError   GetCodeError() const      { return nError; }
     void      SetCodeError( FormulaError n )  { nError = n; }
     void      SetHyperLink( bool bVal ) { bHyperLink = bVal; }
@@ -406,6 +389,22 @@ public:
 private:
     const FormulaToken* GetNonEndOfPathToken( short nIdx ) const;
 };
+
+// For use in SAL_INFO, SAL_WARN etc
+
+template<typename charT, typename traits>
+inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT, traits> & stream, const FormulaTokenArray& point)
+{
+    stream <<
+        static_cast<const void*>(&point) <<
+        ":{nLen=" << point.GetLen() <<
+        ",nRPN=" << point.GetCodeLen() <<
+        ",pCode=" << static_cast<void*>(point.GetArray()) <<
+        ",pRPN=" << static_cast<void*>(point.GetCode()) <<
+        "}";
+
+    return stream;
+}
 
 class FORMULA_DLLPUBLIC FormulaTokenArrayPlainIterator
 {
