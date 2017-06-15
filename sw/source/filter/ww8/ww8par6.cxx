@@ -2404,7 +2404,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
         //remove fltanchors, otherwise they will be closed inside the
         //frame, which makes no sense, restore them after the frame is
         //closed
-        m_xSFlyPara->pOldAnchorStck = m_pAnchorStck;
+        m_xSFlyPara->xOldAnchorStck.reset(m_pAnchorStck);
         m_pAnchorStck = new SwWW8FltAnchorStack(&m_rDoc, m_nFieldFlags);
 
         if (m_xSFlyPara->pFlyFormat)
@@ -2554,7 +2554,7 @@ void SwWW8ImplReader::StopApo()
             m_xSFlyPara->pFlyFormat->SetFormatAttr(SvxBrushItem(aBg, RES_BACKGROUND));
 
         DeleteAnchorStack();
-        m_pAnchorStck = m_xSFlyPara->pOldAnchorStck;
+        m_pAnchorStck = m_xSFlyPara->xOldAnchorStck.release();
 
         // When inserting a graphic into the fly frame using the auto
         // function, the extension of the SW-fly has to be set

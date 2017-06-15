@@ -83,7 +83,7 @@ struct WW8SwFlyPara
                   const sal_Int32 nIniFlyDy );
 
     void BoxUpWidth( long nWidth );
-    SwWW8FltAnchorStack *pOldAnchorStck;
+    std::unique_ptr<SwWW8FltAnchorStack> xOldAnchorStck;
 };
 
 class WW8RStyle: public WW8Style
