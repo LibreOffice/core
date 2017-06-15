@@ -139,7 +139,7 @@ bool sw_frmitems_parseXMLBorder( const OUString& rValue,
         }
         else
         {
-            // missformed
+            // misformed
             return false;
         }
     }
