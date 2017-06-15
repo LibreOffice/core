@@ -1268,9 +1268,9 @@ bool FormulaCompiler::GetToken()
              nWasColRowName = 1;
         else
              nWasColRowName = 0;
-        mpToken = pArr->Next();
-//        maArrIterator.assertSanity(pArr);
-//        mpToken = maArrIterator.Next();
+//        mpToken = pArr->Next();
+        maArrIterator.assertSanity(pArr);
+        mpToken = maArrIterator.Next();
         while( mpToken && mpToken->GetOpCode() == ocSpaces )
         {
             // For significant whitespace remember last ocSpaces token. Usually
