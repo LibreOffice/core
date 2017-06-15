@@ -83,6 +83,11 @@ void ScInterpreter::ScFilterXML()
 
             }
         }
+        if (!nMatCols || !nMatRows)
+        {
+            PushNoValue();
+            return;
+        }
 
         OUString aXPathExpression = GetString().getString();
         OUString aString = GetString().getString();
@@ -124,6 +129,7 @@ void ScInterpreter::ScFilterXML()
         switch(pXPathObj->type)
         {
             case XPATH_UNDEFINED:
+                PushNoValue();
                 break;
             case XPATH_NODESET:
                 {
