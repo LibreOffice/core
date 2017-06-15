@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SD_SOURCE_UI_UNOIDL_UNOPBACK_HXX
 #define INCLUDED_SD_SOURCE_UI_UNOIDL_UNOPBACK_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -44,7 +48,7 @@ class SdUnoPageBackground : public ::cppu::WeakImplHelper<
 {
 protected:
     const SvxItemPropertySet*  mpPropSet;
-    SfxItemSet*         mpSet;
+    std::unique_ptr<SfxItemSet> mpSet;
     SdrModel*           mpDoc;
 
     const SfxItemPropertySimpleEntry* getPropertyMapEntry( const OUString& rPropertyName ) const throw();

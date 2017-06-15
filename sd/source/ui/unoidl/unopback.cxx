@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/drawing/BitmapMode.hpp>
+#include <o3tl/make_unique.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itemset.hxx>
@@ -54,13 +55,12 @@ SdUnoPageBackground::SdUnoPageBackground(
     SdDrawDocument* pDoc /* = NULL */,
     const SfxItemSet* pSet /* = NULL */) throw()
 :   mpPropSet(ImplGetPageBackgroundPropertySet()),
-    mpSet(nullptr),
     mpDoc(pDoc)
 {
     if( pDoc )
     {
         StartListening( *pDoc );
-        mpSet = new SfxItemSet( pDoc->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST );
+        mpSet = o3tl::make_unique<SfxItemSet>( pDoc->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST );
 
         if( pSet )
             mpSet->Put(*pSet);
@@ -73,8 +73,6 @@ SdUnoPageBackground::~SdUnoPageBackground() throw()
 
     if( mpDoc )
         EndListening( *mpDoc );
-
-    delete mpSet;
 }
 
 void SdUnoPageBackground::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -87,8 +85,7 @@ void SdUnoPageBackground::Notify( SfxBroadcaster&, const SfxHint& rHint )
         // will also die
         if( pSdrHint->GetKind() == SdrHintKind::ModelCleared )
         {
-            delete mpSet;
-            mpSet = nullptr;
+            mpSet.reset();
             mpDoc = nullptr;
         }
     }
@@ -104,7 +101,7 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
         StartListening( *pDoc );
         mpDoc = pDoc;
 
-        mpSet = new SfxItemSet( *rSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST );
+        mpSet = o3tl::make_unique<SfxItemSet>( *rSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST );
 
         if( mpPropSet->AreThereOwnUsrAnys() )
         {
