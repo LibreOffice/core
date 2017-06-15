@@ -455,11 +455,11 @@ bool XFillBitmapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
     {
         if(xBmp.is())
         {
-            maGraphicObject = Graphic(VCLUnoHelper::GetBitmap(xBmp));
+            maGraphicObject.SetGraphic(VCLUnoHelper::GetBitmap(xBmp));
         }
         else if(xGraphic.is())
         {
-            maGraphicObject = Graphic(xGraphic);
+            maGraphicObject.SetGraphic(xGraphic);
         }
     }
 
