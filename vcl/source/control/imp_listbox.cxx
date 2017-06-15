@@ -469,7 +469,6 @@ ImplListBoxWindow::ImplListBoxWindow( vcl::Window* pParent, WinBits nWinStyle ) 
     mnSelectModifier    = 0;
     mnUserDrawEntry     = LISTBOX_ENTRY_NOTFOUND;
     mbTrack             = false;
-    mbImgsDiffSz        = false;
     mbTravelSelect      = false;
     mbTrackingSelect    = false;
     mbSelectionChanged  = false;
@@ -576,7 +575,6 @@ void ImplListBoxWindow::Clear()
     mnMaxImgHeight  = 0;
     mnTop           = 0;
     mnLeft          = 0;
-    mbImgsDiffSz    = false;
     ImplClearLayoutData();
 
     mnCurrentPos = LISTBOX_ENTRY_NOTFOUND;
@@ -651,11 +649,6 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
         Size aImgSz = rEntry.maImage.GetSizePixel();
         aMetrics.nImgWidth  = (sal_uInt16) CalcZoom( aImgSz.Width() );
         aMetrics.nImgHeight = (sal_uInt16) CalcZoom( aImgSz.Height() );
-
-        if( mnMaxImgWidth && ( aMetrics.nImgWidth != mnMaxImgWidth ) )
-            mbImgsDiffSz = true;
-        else if ( mnMaxImgHeight && ( aMetrics.nImgHeight != mnMaxImgHeight ) )
-            mbImgsDiffSz = true;
 
         if( aMetrics.nImgWidth > mnMaxImgWidth )
             mnMaxImgWidth = aMetrics.nImgWidth;
@@ -2569,7 +2562,6 @@ ImplWin::ImplWin( vcl::Window* pParent, WinBits nWinStyle ) :
 
     ImplGetWindowImpl()->mbUseNativeFocus = ImplGetSVData()->maNWFData.mbNoFocusRects;
 
-    mbInUserDraw = false;
     mbUserDrawEnabled = false;
     mbEdgeBlending = false;
     mnItemPos = LISTBOX_ENTRY_NOTFOUND;
@@ -2720,10 +2712,8 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
 
     if ( IsUserDrawEnabled() )
     {
-        mbInUserDraw = true;
         UserDrawEvent aUDEvt(this, &rRenderContext, maFocusRect, mnItemPos, 0);
         maUserDrawHdl.Call( &aUDEvt );
-        mbInUserDraw = false;
     }
     else
     {
@@ -2884,19 +2874,14 @@ void ImplWin::ShowFocus(const tools::Rectangle& rRect)
 }
 
 ImplBtn::ImplBtn( vcl::Window* pParent, WinBits nWinStyle ) :
-    PushButton(  pParent, nWinStyle ),
-    mbDown  ( false )
+    PushButton(  pParent, nWinStyle )
 {
 }
 
 void ImplBtn::MouseButtonDown( const MouseEvent& )
 {
-    //PushButton::MouseButtonDown( rMEvt );
     if( IsEnabled() )
-    {
         maMBDownHdl.Call(this);
-        mbDown = true;
-    }
 }
 
 ImplListBoxFloatingWindow::ImplListBoxFloatingWindow( vcl::Window* pParent ) :

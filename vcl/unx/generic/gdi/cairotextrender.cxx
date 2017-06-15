@@ -403,8 +403,6 @@ void CairoTextRender::GetDevFontList( PhysicalFontCollection* pFontCollection )
 
     // register platform specific font substitutions if available
     SalGenericInstance::RegisterFontSubstitutors( pFontCollection );
-
-    ImplGetSVData()->maGDIData.mbNativeFontConfig = true;
 }
 
 void FontConfigFontOptions::cairo_font_options_substitute(FcPattern* pPattern)

@@ -1160,7 +1160,6 @@ FontConfigFontOptions* PrintFontManager::getFontOptions(const FastPrintFontInfo&
     addtopattern(pPattern, rInfo.m_eItalic, rInfo.m_eWeight, rInfo.m_eWidth, rInfo.m_ePitch);
     FcPatternAddDouble(pPattern, FC_PIXEL_SIZE, nSize);
 
-    FcBool embitmap = true, antialias = true, autohint = true, hinting = true;
     int hintstyle = FC_HINT_FULL;
 
     FcConfigSubstitute(pConfig, pPattern, FcMatchPattern);
@@ -1172,35 +1171,10 @@ FontConfigFontOptions* PrintFontManager::getFontOptions(const FastPrintFontInfo&
     FcPattern* pResult = FcFontSetMatch( pConfig, &pFontSet, 1, pPattern, &eResult );
     if( pResult )
     {
-        FcResult eEmbeddedBitmap = FcPatternGetBool(pResult,
-            FC_EMBEDDED_BITMAP, 0, &embitmap);
-        FcResult eAntialias = FcPatternGetBool(pResult,
-            FC_ANTIALIAS, 0, &antialias);
-        FcResult eAutoHint = FcPatternGetBool(pResult,
-            FC_AUTOHINT, 0, &autohint);
-        FcResult eHinting = FcPatternGetBool(pResult,
-            FC_HINTING, 0, &hinting);
         (void) FcPatternGetInteger(pResult,
             FC_HINT_STYLE, 0, &hintstyle);
 
         pOptions = new FontConfigFontOptions(pResult);
-
-        if( eEmbeddedBitmap == FcResultMatch )
-            pOptions->meEmbeddedBitmap = embitmap ? EMBEDDEDBITMAP_TRUE : EMBEDDEDBITMAP_FALSE;
-        if( eAntialias == FcResultMatch )
-            pOptions->meAntiAlias = antialias ? ANTIALIAS_TRUE : ANTIALIAS_FALSE;
-        if( eAutoHint == FcResultMatch )
-            pOptions->meAutoHint = autohint ? FontAutoHint::Yes : FontAutoHint::No;
-        if( eHinting == FcResultMatch )
-            pOptions->meHinting = hinting ? FontHinting::Yes : FontHinting::No;
-        switch (hintstyle)
-        {
-            case FC_HINT_NONE:   pOptions->meHintStyle = FontHintStyle::NONE; break;
-            case FC_HINT_SLIGHT: pOptions->meHintStyle = FontHintStyle::Slight; break;
-            case FC_HINT_MEDIUM: pOptions->meHintStyle = FontHintStyle::Medium; break;
-            default: // fall through
-            case FC_HINT_FULL:   pOptions->meHintStyle = FontHintStyle::Full; break;
-        }
     }
 
     // cleanup

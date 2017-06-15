@@ -73,8 +73,6 @@ OpenGLContext::OpenGLContext():
         pSVData->maGDIData.mpLastContext->mpNextContext = this;
         mpPrevContext = pSVData->maGDIData.mpLastContext;
     }
-    else
-        pSVData->maGDIData.mpFirstContext = this;
     pSVData->maGDIData.mpLastContext = this;
 
     // FIXME: better hope we call 'makeCurrent' soon to preserve
@@ -93,8 +91,6 @@ OpenGLContext::~OpenGLContext()
     ImplSVData* pSVData = ImplGetSVData();
     if( mpPrevContext )
         mpPrevContext->mpNextContext = mpNextContext;
-    else
-        pSVData->maGDIData.mpFirstContext = mpNextContext;
     if( mpNextContext )
         mpNextContext->mpPrevContext = mpPrevContext;
     else
@@ -544,8 +540,6 @@ void OpenGLContext::registerAsCurrent()
     {
         if( mpPrevContext )
             mpPrevContext->mpNextContext = mpNextContext;
-        else
-            pSVData->maGDIData.mpFirstContext = mpNextContext;
         mpNextContext->mpPrevContext = mpPrevContext;
 
         mpPrevContext = pSVData->maGDIData.mpLastContext;
