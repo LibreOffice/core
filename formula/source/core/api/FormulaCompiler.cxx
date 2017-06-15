@@ -2064,7 +2064,7 @@ void FormulaCompiler::PopTokenArray()
             delete pArr;
         pArr = p->pArr;
         maArrIterator = FormulaTokenArrayPlainIterator(*pArr, false);
-//        maArrIterator.Jump(p->nIndex); -> meeks - fixme ? ...
+        maArrIterator.Jump(p->nIndex);
         mpLastToken = p->mpLastToken;
         delete p;
     }
@@ -2643,6 +2643,7 @@ void FormulaCompiler::PushTokenArray( FormulaTokenArray* pa, bool bTemp )
     FormulaArrayStack* p = new FormulaArrayStack;
     p->pNext      = pStack;
     p->pArr       = pArr;
+    p->nIndex     = maArrIterator.GetIndex();
     p->mpLastToken = mpLastToken;
     p->bTemp      = bTemp;
     pStack        = p;
