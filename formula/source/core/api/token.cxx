@@ -1729,9 +1729,13 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextName()
         {
             FormulaToken* t = mpFTA->pCode[ (*mpIndex)++ ];
             if( t->GetType() == svIndex )
+            {
+                _nIndex = *mpIndex;
                 return t;
+            }
         }
     } // if( pCode )
+    _nIndex = *mpIndex;
     return nullptr;
 }
 
@@ -1807,6 +1811,7 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextReference()
             case svDoubleRef:
             case svExternalSingleRef:
             case svExternalDoubleRef:
+                _nIndex = *mpIndex;
                 return t;
             default:
             {
@@ -1814,6 +1819,7 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextReference()
             }
         }
     }
+    _nIndex = *mpIndex;
     return nullptr;
 }
 
@@ -1823,8 +1829,12 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextColRowName()
     {
         FormulaToken* t = mpFTA->pCode[ (*mpIndex)++ ];
         if ( t->GetOpCode() == ocColRowName )
+        {
+            _nIndex = *mpIndex;
             return t;
+        }
     }
+    _nIndex = *mpIndex;
     return nullptr;
 }
 
@@ -1839,6 +1849,7 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextReferenceRPN()
             case svDoubleRef:
             case svExternalSingleRef:
             case svExternalDoubleRef:
+                _nIndex = *mpIndex;
                 return t;
             default:
             {
@@ -1846,6 +1857,7 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextReferenceRPN()
             }
         }
     }
+    _nIndex = *mpIndex;
     return nullptr;
 }
 
@@ -1864,6 +1876,7 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextReferenceOrName()
                 case svExternalSingleRef:
                 case svExternalDoubleRef:
                 case svExternalName:
+                    _nIndex = *mpIndex;
                     return t;
                 default:
                 {
@@ -1872,13 +1885,18 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextReferenceOrName()
              }
          }
      }
+    _nIndex = *mpIndex;
     return nullptr;
 }
 
 FormulaToken* FormulaTokenArrayPlainIterator::Next()
 {
     if( mpFTA->pCode && *mpIndex < mpFTA->nLen )
-        return mpFTA->pCode[ (*mpIndex)++ ];
+    {
+        FormulaToken *token = mpFTA->pCode[ (*mpIndex)++ ];
+        _nIndex = *mpIndex;
+        return token;
+    }
     else
         return nullptr;
 }
@@ -1890,15 +1908,24 @@ FormulaToken* FormulaTokenArrayPlainIterator::NextNoSpaces()
         while( (*mpIndex < mpFTA->nLen) && (mpFTA->pCode[ *mpIndex ]->GetOpCode() == ocSpaces) )
             ++(*mpIndex);
         if( *mpIndex < mpFTA->nLen )
-            return mpFTA->pCode[ (*mpIndex)++ ];
+        {
+            FormulaToken *token = mpFTA->pCode[ (*mpIndex)++ ];
+            _nIndex = *mpIndex;
+            return token;
+        }
     }
+    _nIndex = *mpIndex;
     return nullptr;
 }
 
 FormulaToken* FormulaTokenArrayPlainIterator::NextRPN()
 {
     if( mpFTA->pRPN && *mpIndex < mpFTA->nRPN )
-        return mpFTA->pRPN[ (*mpIndex)++ ];
+    {
+        FormulaToken *token = mpFTA->pRPN[ (*mpIndex)++ ];
+        _nIndex = *mpIndex;
+        return token;
+    }
     else
         return nullptr;
 }
@@ -1906,7 +1933,11 @@ FormulaToken* FormulaTokenArrayPlainIterator::NextRPN()
 FormulaToken* FormulaTokenArrayPlainIterator::PrevRPN()
 {
     if( mpFTA->pRPN && *mpIndex )
-        return mpFTA->pRPN[ --(*mpIndex) ];
+    {
+        FormulaToken *token = mpFTA->pRPN[ --(*mpIndex) ];
+        _nIndex = *mpIndex;
+        return token;
+    }
     else
         return nullptr;
 }
@@ -1962,6 +1993,7 @@ void FormulaTokenArrayPlainIterator::AfterRemoveToken( sal_uInt16 nOffset, sal_u
         else
             *mpIndex -= nStop - nOffset;
     }
+    _nIndex = *mpIndex;
 }
 
 // real implementations of virtual functions
@@ -2095,6 +2127,7 @@ FormulaTokenArrayPlainIterator::FormulaTokenArrayPlainIterator( const FormulaTok
     _nIndex( 0 ),
     mpIndex( bInternal ? &_nIndex : const_cast<sal_uInt16 *>( &mpFTA->nIndex ) )
 {
+    _nIndex = *mpIndex;
 }
 
 // were in-lined.
@@ -2102,6 +2135,7 @@ FormulaTokenArrayPlainIterator::FormulaTokenArrayPlainIterator( const FormulaTok
     void FormulaTokenArrayPlainIterator::Reset()
     {
         *mpIndex = 0;
+        _nIndex = *mpIndex;
     }
 
     sal_uInt16 FormulaTokenArrayPlainIterator::GetIndex() const
@@ -2112,29 +2146,34 @@ FormulaTokenArrayPlainIterator::FormulaTokenArrayPlainIterator( const FormulaTok
     FormulaToken* FormulaTokenArrayPlainIterator::First()
     {
         *mpIndex = 0;
+        _nIndex = *mpIndex;
         return Next();
     }
 
     void FormulaTokenArrayPlainIterator::Jump(sal_uInt16 nIndex)
     {
         *mpIndex = nIndex;
+        _nIndex = *mpIndex;
     }
 
     void FormulaTokenArrayPlainIterator::BackOne()
     {
         if (*mpIndex > 0)
             (*mpIndex)--;
+        _nIndex = *mpIndex;
     }
 
     FormulaToken* FormulaTokenArrayPlainIterator::FirstRPN()
     {
         *mpIndex = 0;
+        _nIndex = *mpIndex;
         return NextRPN();
     }
 
     FormulaToken* FormulaTokenArrayPlainIterator::LastRPN()
     {
         *mpIndex = mpFTA->nRPN;
+        _nIndex = *mpIndex;
         return PrevRPN();
     }
 
