@@ -1816,9 +1816,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         long nDist2 = ((bUseVertical ? rRect.Height() : rRect.Width()) - lWidth) /2;
                         ::lcl_FillSvxColumn(rCol, lWidth, aColItem, nDist2);
 
-                        SfxItemSet aFrameSet(GetPool(), RES_LR_SPACE, RES_LR_SPACE);
-                        rSh.GetFlyFrameAttr( aFrameSet );
-
                         if(bUseVertical)
                         {
                             aColItem.SetLeft(rRect.Top()- rPageRect.Top());
