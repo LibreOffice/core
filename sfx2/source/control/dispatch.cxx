@@ -139,8 +139,8 @@ struct SfxDispatcher_Impl
 
     SfxSlotFilterState   nFilterEnabling; // 1==filter enabled slots,
                                           // 2==ReadOnlyDoc overturned
-    sal_uInt16           nFilterCount;  // Number of SIDs in pFilterSIDs
-    const sal_uInt16*    pFilterSIDs;   // sorted Array of SIDs
+    o3tl::array_view<sal_uInt16>
+                         pFilterSIDs;   // sorted Array of SIDs
     SfxDisableFlags      nDisableFlags;
     bool                 bFlushed;
     std::deque< std::deque<SfxToDo_Impl> > aToDoCopyStack;
@@ -422,8 +422,6 @@ void SfxDispatcher::Construct_Impl()
     xImp->bModal = false;
     xImp->pInCallAliveFlag = nullptr;
     xImp->nFilterEnabling = SfxSlotFilterState::DISABLED;
-    xImp->nFilterCount = 0;
-    xImp->pFilterSIDs = nullptr;
     xImp->nDisableFlags = SfxDisableFlags::NONE;
 
     xImp->pParent = nullptr;
@@ -1637,19 +1635,15 @@ void SfxDispatcher::FlushImpl()
         pDisp->SetSlotFilter();
 */
 void SfxDispatcher::SetSlotFilter(SfxSlotFilterState nEnable,
-        sal_uInt16 nCount, const sal_uInt16* pSIDs)
+        o3tl::array_view<sal_uInt16> pSIDs)
 {
 #ifdef DBG_UTIL
     // Check Array
-    for ( sal_uInt16 n = 1; n < nCount; ++n )
+    for ( size_t n = 1; n < pSIDs.size(); ++n )
         DBG_ASSERT( pSIDs[n] > pSIDs[n-1], "SetSlotFilter: SIDs not sorted" );
 #endif
 
-    if ( xImp->pFilterSIDs )
-        xImp->pFilterSIDs = nullptr;
-
     xImp->nFilterEnabling = nEnable;
-    xImp->nFilterCount = nCount;
     xImp->pFilterSIDs = pSIDs;
 
     GetBindings()->InvalidateAll(true);
@@ -1671,12 +1665,12 @@ extern "C" int SAL_CALL SfxCompareSIDs_Impl(const void* pSmaller, const void* pB
 SfxSlotFilterState SfxDispatcher::IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) const
 {
     // no filter?
-    if ( 0 == xImp->nFilterCount )
+    if ( xImp->pFilterSIDs.empty() )
         // => all SIDs allowed
         return SfxSlotFilterState::ENABLED;
 
     // search
-    bool bFound = nullptr != bsearch( &nSID, xImp->pFilterSIDs, xImp->nFilterCount,
+    bool bFound = nullptr != bsearch( &nSID, xImp->pFilterSIDs.data(), xImp->pFilterSIDs.size(),
                                 sizeof(sal_uInt16), SfxCompareSIDs_Impl );
 
     // even if ReadOnlyDoc
