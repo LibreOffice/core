@@ -797,7 +797,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 // and the UserCall is stored in this list. This is because
                 // at the following mpDrawView->SetAttributes( *pSet, sal_True )
                 // they get lost and have to be restored.
-                std::vector<std::pair<SfxItemSet*,SdrObjUserCall*> > aAttrList;
+                std::vector<std::pair<std::unique_ptr<SfxItemSet>,SdrObjUserCall*> > aAttrList;
                 SdPage* pPresPage = static_cast<SdPage*>( mpDrawView->GetSdrPageView()->GetPage() );
 
                 for ( size_t i = 0; i < nCount; ++i )
@@ -806,9 +806,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                     if( pPresPage->IsPresObj( pObj ) )
                     {
-                        SfxItemSet* pNewSet = new SfxItemSet( GetDoc()->GetPool(), SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT, 0 );
+                        auto pNewSet = o3tl::make_unique<SfxItemSet>( GetDoc()->GetPool(), SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT, 0 );
                         pNewSet->Put(pObj->GetMergedItemSet());
-                        aAttrList.push_back(std::make_pair(pNewSet, pObj->GetUserCall()));
+                        aAttrList.push_back(std::make_pair(std::move(pNewSet), pObj->GetUserCall()));
                     }
                 }
 
@@ -848,9 +848,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                     if( pPresPage->IsPresObj( pObj ) )
                     {
-                        std::pair<SfxItemSet*,SdrObjUserCall*> &rAttr = aAttrList[j++];
+                        std::pair<std::unique_ptr<SfxItemSet>,SdrObjUserCall*> &rAttr = aAttrList[j++];
 
-                        std::unique_ptr<SfxItemSet> pNewSet(rAttr.first);
+                        std::unique_ptr<SfxItemSet> & pNewSet(rAttr.first);
                         SdrObjUserCall* pUserCall = rAttr.second;
 
                         if ( pNewSet && pNewSet->GetItemState( SDRATTR_TEXT_MINFRAMEHEIGHT ) == SfxItemState::SET )
