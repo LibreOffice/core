@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_6778a9c5",
+        "filename": "comphelper/source/misc/profilezone.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-06-15T11:43:05Z",
+      "side": 1,
+      "message": "I\u0027ve made sure that it\u0027s only read/written when g_aMutex is locked instead.",
+      "parentUuid": "5a3905b3_e7bc996e",
+      "revId": "0213eaddb49735c93318921777aa6fcd81234056",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_c78f9dca",
         "filename": "comphelper/source/misc/profilezone.cxx",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2017-06-15T11:13:42Z",
       "side": 1,
       "message": "static?",
+      "revId": "0213eaddb49735c93318921777aa6fcd81234056",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_c7a6bd52",
+        "filename": "comphelper/source/misc/profilezone.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-06-15T11:43:05Z",
+      "side": 1,
+      "message": "Indeed, I had that locally, but failed to commit it.",
+      "parentUuid": "5a3905b3_c78f9dca",
       "revId": "0213eaddb49735c93318921777aa6fcd81234056",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_8773d5e6",
+        "filename": "comphelper/source/misc/profilezone.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-06-15T11:43:05Z",
+      "side": 1,
+      "message": "I\u0027ve removed the atomics, they are just an overhead when we have a single mutex guarding these statics in this file.",
+      "parentUuid": "5a3905b3_07c0c5df",
+      "revId": "0213eaddb49735c93318921777aa6fcd81234056",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_a79451e2",
         "filename": "comphelper/source/misc/profilezone.cxx",
         "patchSetId": 4
@@ -64,6 +118,24 @@
       "writtenOn": "2017-06-15T11:13:42Z",
       "side": 1,
       "message": "shouldn\u0027t these guards rather be inside addRecording, since it seems that is the method that needs protection?",
+      "revId": "0213eaddb49735c93318921777aa6fcd81234056",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_a7829192",
+        "filename": "comphelper/source/misc/profilezone.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-06-15T11:43:05Z",
+      "side": 1,
+      "message": "Indeed, moved the guard there and also added it to the other relevant functions.",
+      "parentUuid": "5a3905b3_a79451e2",
       "revId": "0213eaddb49735c93318921777aa6fcd81234056",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
