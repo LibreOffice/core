@@ -1394,7 +1394,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
     char* ODF_XML_Env = getenv ("ODF_TEXT_FLAT_XML_ENV");
 
-    if(!bReturn && !bLink && CHECK_FORMAT_TRANS(SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT) && ODF_XML_Env != nullptr)
+    if(!bReturn && !bLink && CHECK_FORMAT_TRANS(SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT) && ODF_XML_Env == nullptr)
     {
         ::tools::SvRef<SotStorageStream> xStm;
         if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT, xStm ) )
