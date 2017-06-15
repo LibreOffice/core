@@ -25,6 +25,7 @@
 
 #include <cassert>
 #include <deque>
+#include <stdexcept>
 #include <vector>
 #include <functional>
 #include <algorithm>
