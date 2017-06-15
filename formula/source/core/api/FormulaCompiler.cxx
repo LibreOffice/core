@@ -700,6 +700,7 @@ FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr )
         :
         nCurrentFactorParam(0),
         pArr( &rArr ),
+        maArrIterator( rArr ),
         pCode( nullptr ),
         pStack( nullptr ),
         eLastOp( ocPush ),
@@ -715,10 +716,13 @@ FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr )
 {
 }
 
+FormulaTokenArray FormulaCompiler::smDummyTokenArray;
+
 FormulaCompiler::FormulaCompiler()
         :
         nCurrentFactorParam(0),
         pArr( nullptr ),
+        maArrIterator( smDummyTokenArray ),
         pCode( nullptr ),
         pStack( nullptr ),
         eLastOp( ocPush ),
@@ -1265,6 +1269,8 @@ bool FormulaCompiler::GetToken()
         else
              nWasColRowName = 0;
         mpToken = pArr->Next();
+//        maArrIterator.assertSanity(pArr);
+//        mpToken = maArrIterator.Next();
         while( mpToken && mpToken->GetOpCode() == ocSpaces )
         {
             // For significant whitespace remember last ocSpaces token. Usually
@@ -2049,6 +2055,7 @@ void FormulaCompiler::PopTokenArray()
         if( p->bTemp )
             delete pArr;
         pArr = p->pArr;
+        maArrIterator = FormulaTokenArrayPlainIterator(*pArr);
         mpLastToken = p->mpLastToken;
         delete p;
     }
@@ -2074,14 +2081,20 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
         // Scan token array for missing args and re-write if present.
         MissingConventionODF aConv( bODFF);
         if (pArr->NeedsPodfRewrite( aConv))
+        {
             pArr = pArr->RewriteMissing( aConv );
+            maArrIterator = FormulaTokenArrayPlainIterator(*pArr);
+        }
     }
     else if ( FormulaGrammar::isOOXML( meGrammar ) )
     {
         // Scan token array for missing args and rewrite if present.
         MissingConventionOOXML aConv;
         if (pArr->NeedsOoxmlRewrite())
+        {
             pArr = pArr->RewriteMissing( aConv );
+            maArrIterator = FormulaTokenArrayPlainIterator(*pArr);
+        }
     }
 
     // At least one character per token, plus some are references, some are
@@ -2098,6 +2111,7 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
     {
         delete pArr;
         pArr = pSaveArr;
+        maArrIterator = FormulaTokenArrayPlainIterator(*pArr);
     }
 }
 
@@ -2614,6 +2628,12 @@ void FormulaCompiler::PushTokenArray( FormulaTokenArray* pa, bool bTemp )
     p->bTemp      = bTemp;
     pStack        = p;
     pArr          = pa;
+    maArrIterator = FormulaTokenArrayPlainIterator(*pArr);
+}
+
+void FormulaTokenArrayPlainIterator::assertSanity( FormulaTokenArray *pArr )
+{
+    assert (mpFTA == pArr);
 }
 
 } // namespace formula

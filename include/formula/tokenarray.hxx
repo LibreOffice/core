@@ -422,6 +422,8 @@ public:
     {
     }
 
+    void assertSanity( FormulaTokenArray *pArr );
+
     void Reset()
     {
         mnIndex = 0;
