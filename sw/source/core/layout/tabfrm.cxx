@@ -5100,6 +5100,16 @@ long SwCellFrame::GetLayoutRowSpan() const
     return  nRet;
 }
 
+void SwCellFrame::dumpAsXmlAttributes(xmlTextWriterPtr pWriter) const
+{
+    SwFrame::dumpAsXmlAttributes(pWriter);
+    if (SwCellFrame* pFollow = GetFollowCell())
+        xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("follow"), "%" SAL_PRIuUINT32, pFollow->GetFrameId());
+
+    if (SwCellFrame* pPrevious = GetPreviousCell())
+        xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("precede"), "%" SAL_PRIuUINT32, pPrevious->GetFrameId());
+}
+
 // #i103961#
 void SwCellFrame::Cut()
 {
