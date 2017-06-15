@@ -37,7 +37,6 @@ class OOXMLDocumentImpl : public OOXMLDocument
     OOXMLStream::Pointer_t mpStream;
     css::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
     sal_Int32 mnXNoteId;
-    Id mXNoteType;
 
     css::uno::Reference<css::frame::XModel> mxModel;
     css::uno::Reference<css::drawing::XDrawPage> mxDrawPage;

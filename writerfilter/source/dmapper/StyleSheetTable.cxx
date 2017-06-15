@@ -82,9 +82,8 @@ StyleSheetEntry::~StyleSheetEntry()
 {
 }
 
-TableStyleSheetEntry::TableStyleSheetEntry( StyleSheetEntry& rEntry, StyleSheetTable* pStyles ):
-    StyleSheetEntry( ),
-    m_pStyleSheet( pStyles )
+TableStyleSheetEntry::TableStyleSheetEntry( StyleSheetEntry& rEntry ):
+    StyleSheetEntry( )
 {
 
     bIsDefaultStyle = rEntry.bIsDefaultStyle;
@@ -97,14 +96,10 @@ TableStyleSheetEntry::TableStyleSheetEntry( StyleSheetEntry& rEntry, StyleSheetT
     sStyleName1 = rEntry.sStyleName1;
     sStyleIdentifierI = rEntry.sStyleIdentifierI;
     sStyleIdentifierD = rEntry.sStyleIdentifierD;
-
-    m_nColBandSize = 1;
-    m_nRowBandSize = 1;
 }
 
 TableStyleSheetEntry::~TableStyleSheetEntry( )
 {
-    m_pStyleSheet = nullptr;
 }
 
 void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, const PropertyMapPtr& pProps )
@@ -464,7 +459,7 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
             if ( nType == STYLE_TYPE_TABLE )
             {
                 StyleSheetEntryPtr pEntry = m_pImpl->m_pCurrentEntry;
-                std::shared_ptr<TableStyleSheetEntry> pTableEntry( new TableStyleSheetEntry( *pEntry.get( ), this ) );
+                std::shared_ptr<TableStyleSheetEntry> pTableEntry( new TableStyleSheetEntry( *pEntry.get( ) ) );
                 m_pImpl->m_pCurrentEntry = pTableEntry;
             }
             else
@@ -506,12 +501,8 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
             }
         break;
         case NS_ooxml::LN_CT_TblWidth_w:
-            if (StyleSheetPropertyMap* pMap = dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() ))
-                pMap->SetCT_TblWidth_w( nIntValue );
         break;
         case NS_ooxml::LN_CT_TblWidth_type:
-            if (StyleSheetPropertyMap* pMap = dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() ))
-                pMap->SetCT_TblWidth_type( nIntValue );
         break;
         case NS_ooxml::LN_CT_LatentStyles_defQFormat:
             m_pImpl->AppendLatentStyleProperty("defQFormat", val);
@@ -718,8 +709,6 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 uno::makeAny( ConversionHelper::convertTableJustification( nIntValue )));
         break;
         case NS_ooxml::LN_CT_TrPrBase_jc:     //table alignment - row properties!
-            if (StyleSheetPropertyMap* pMap = dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() ))
-                pMap->SetCT_TrPrBase_jc(nIntValue);
         break;
         case NS_ooxml::LN_CT_TblPrBase_tblBorders: //table borders, might be defined in table style
         {
@@ -735,17 +724,6 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         break;
         case NS_ooxml::LN_CT_TblPrBase_tblStyleRowBandSize:
         case NS_ooxml::LN_CT_TblPrBase_tblStyleColBandSize:
-        {
-            StyleSheetEntry* pEntry = m_pImpl->m_pCurrentEntry.get( );
-            TableStyleSheetEntry *pTEntry = static_cast<TableStyleSheetEntry*>( pEntry );
-            if ( pTEntry )
-            {
-                if ( nSprmId == NS_ooxml::LN_CT_TblPrBase_tblStyleRowBandSize )
-                    pTEntry->m_nRowBandSize = nIntValue;
-                else
-                    pTEntry->m_nColBandSize = nIntValue;
-            }
-        }
         break;
         case NS_ooxml::LN_CT_TblPrBase_tblCellMar:
             //no cell margins in styles

@@ -124,14 +124,9 @@ class TableStyleSheetEntry :
 private:
     typedef std::map<TblStyleType, PropertyMapPtr> TblStylePrs;
 
-    StyleSheetTable* m_pStyleSheet;
     TblStylePrs m_aStyles;
 
 public:
-
-    short m_nColBandSize;
-    short m_nRowBandSize;
-
     // Adds a new tblStylePr to the table style entry. This method
     // fixes some possible properties conflicts, like borders ones.
     void AddTblStylePr( TblStyleType nType, const PropertyMapPtr& pProps );
@@ -143,7 +138,7 @@ public:
     // @param mask      mask describing which properties to return
     PropertyMapPtr GetProperties( sal_Int32 nMask);
 
-    TableStyleSheetEntry( StyleSheetEntry& aEntry, StyleSheetTable* pStyles );
+    TableStyleSheetEntry( StyleSheetEntry& aEntry );
     virtual ~TableStyleSheetEntry( ) override;
 
 protected:
