@@ -46,7 +46,6 @@ private:
     sal_uInt16 nMBDownPos;
     sal_uInt16 nScrollerHeight;
     sal_uInt16 nFirstEntry;
-    sal_uInt16 nBorder;
     sal_uInt16 nPosInParent;
 
     bool bInExecute : 1;

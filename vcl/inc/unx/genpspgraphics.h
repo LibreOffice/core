@@ -46,14 +46,11 @@ class VCL_DLLPUBLIC GenPspGraphics : public SalGraphics
     psp::PrinterGfx*        m_pPrinterGfx;
 
     FreetypeFont*           m_pFreetypeFont[ MAX_FALLBACK ];
-    bool                    m_bFontVertical;
-    SalInfoPrinter*         m_pInfoPrinter;
 public:
                             GenPspGraphics();
     virtual                ~GenPspGraphics() override;
 
-    void                    Init( psp::JobData* pJob, psp::PrinterGfx* pGfx,
-                                  SalInfoPrinter* pInfoPrinter );
+    void                    Init( psp::JobData* pJob, psp::PrinterGfx* pGfx );
 
     // helper methods
     static const void *     DoGetEmbedFontData(psp::fontID aFont, long* pDataLen);

@@ -380,7 +380,6 @@ FreetypeFont::FreetypeFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI
     mbFaceOk( false ),
     mbArtItalic( false ),
     mbArtBold( false ),
-    mbUseGamma( false ),
     mpHbFont( nullptr )
 {
     // TODO: move update of mpFontInstance into FontEntry class when
@@ -432,20 +431,6 @@ FreetypeFont::FreetypeFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI
 
     mbArtItalic = (rFSD.GetItalic() != ITALIC_NONE && pFI->GetFontAttributes().GetItalic() == ITALIC_NONE);
     mbArtBold = (rFSD.GetWeight() > WEIGHT_MEDIUM && pFI->GetFontAttributes().GetWeight() <= WEIGHT_MEDIUM);
-    if( mbArtBold )
-    {
-        //static const int TT_CODEPAGE_RANGE_874  = (1L << 16); // Thai
-        //static const int TT_CODEPAGE_RANGE_932  = (1L << 17); // JIS/Japan
-        //static const int TT_CODEPAGE_RANGE_936  = (1L << 18); // Chinese: Simplified
-        //static const int TT_CODEPAGE_RANGE_949  = (1L << 19); // Korean Wansung
-        //static const int TT_CODEPAGE_RANGE_950  = (1L << 20); // Chinese: Traditional
-        //static const int TT_CODEPAGE_RANGE_1361 = (1L << 21); // Korean Johab
-        static const int TT_CODEPAGE_RANGES1_CJKT = 0x3F0000; // all of the above
-        const TT_OS2* pOs2 = static_cast<const TT_OS2*>(FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 ));
-        if ((pOs2) && (pOs2->ulCodePageRange1 & TT_CODEPAGE_RANGES1_CJKT )
-        && rFSD.mnHeight < 20)
-        mbUseGamma = true;
-    }
 
     if( ((mnCos != 0) && (mnSin != 0)) || (mnPrioEmbedded <= 0) )
         mnLoadFlags |= FT_LOAD_NO_BITMAP;

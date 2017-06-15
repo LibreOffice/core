@@ -264,7 +264,6 @@ public:
     WinBits             mnStyle;
     WinBits             mnPrevStyle;
     WinBits             mnExtendedStyle;
-    WinBits             mnPrevExtendedStyle;
     WindowType          mnType;
     ControlPart         mnNativeBackground;
     sal_uInt16          mnWaitCount;
@@ -309,7 +308,6 @@ public:
                         mbNoPtrVisible:1,
                         mbPaintFrame:1,
                         mbInPaint:1,
-                        mbMouseMove:1,
                         mbMouseButtonDown:1,
                         mbMouseButtonUp:1,
                         mbKeyInput:1,

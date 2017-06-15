@@ -51,7 +51,6 @@ GlyphSet::GlyphSet (sal_Int32 nFontID, bool bVertical)
     PrintFontManager &rMgr = PrintFontManager::get();
     maBaseName          = OUStringToOString (rMgr.getPSName(mnFontID),
                                            RTL_TEXTENCODING_ASCII_US);
-    mnBaseEncoding      = rMgr.getFontEncoding(mnFontID);
 }
 
 GlyphSet::~GlyphSet ()
