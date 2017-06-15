@@ -249,11 +249,11 @@ void SAL_CALL SvxUnoTextContent::removeEventListener( const uno::Reference< lang
 
 // XEnumerationAccess
 
-uno::Reference< container::XEnumeration > SAL_CALL SvxUnoTextContent::createEnumeration(  )
+uno::Reference< container::XEnumeration > SAL_CALL SvxUnoTextContent::createEnumeration()
 {
     SolarMutexGuard aGuard;
 
-    return new SvxUnoTextRangeEnumeration( mrParentText, mnParagraph );
+    return new SvxUnoTextRangeEnumeration( mrParentText, mnParagraph,  maSelection );
 }
 
 // XElementAccess ( container::XEnumerationAccess )
@@ -358,11 +358,12 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextContent::getSupportedServiceNames()
 //  class SvxUnoTextRangeEnumeration
 
 
-SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rText, sal_Int32 nPara ) throw()
+SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rText, sal_Int32 nPara, const ESelection& rSel ) throw()
 :   mxParentText(  const_cast<SvxUnoTextBase*>(&rText) ),
     mrParentText( rText ),
     mnParagraph( nPara ),
-    mnNextPortion( 0 )
+    mnNextPortion( 0 ),
+    mnSel( rSel )
 {
     mpEditSource = rText.GetEditSource() ? rText.GetEditSource()->Clone() : nullptr;
 
@@ -403,6 +404,10 @@ uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
     if (mnNextPortion > 0)
         nStartPos = mpPortions->at(mnNextPortion-1);
     sal_uInt16 nEndPos = mpPortions->at(mnNextPortion);
+
+    nStartPos = nStartPos>mnSel.nStartPos ? nStartPos : mnSel.nStartPos;
+    nEndPos = nEndPos<mnSel.nEndPos ? nEndPos : mnSel.nEndPos;
+
     ESelection aSel( mnParagraph, nStartPos, mnParagraph, nEndPos );
 
     uno::Reference< text::XTextRange > xRange;

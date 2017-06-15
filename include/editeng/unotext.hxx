@@ -608,9 +608,10 @@ private:
     sal_Int32                mnParagraph;
     std::vector<sal_Int32>*  mpPortions;
     sal_uInt16               mnNextPortion;
+    const ESelection&        mnSel;
 
 public:
-    SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rText, sal_Int32 nPara ) throw();
+    SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rText, sal_Int32 nPara, const ESelection& rSel ) throw();
     virtual ~SvxUnoTextRangeEnumeration() throw() override;
 
     // css::container::XEnumeration

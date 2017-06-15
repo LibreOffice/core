@@ -1250,7 +1250,7 @@ void SvXMLExport::addChaffWhenEncryptedStorage()
     }
 }
 
-sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
+sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass)
 {
     bool bOwnGraphicResolver = false;
     bool bOwnEmbeddedResolver = false;
