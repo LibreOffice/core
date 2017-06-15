@@ -198,7 +198,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bStartedTOC(false),
         m_bStartIndex(false),
         m_bStartBibliography(false),
-        m_bTOCPageRef(false),
         m_bStartGenericField(false),
         m_bTextInserted(false),
         m_pLastSectionContext( ),
@@ -3718,7 +3717,6 @@ void DomainMapper_Impl::CloseFieldCommand()
                 }
                 if (m_bStartTOC && (aIt->second.eFieldId == FIELD_PAGEREF) )
                 {
-                    m_bTOCPageRef = true;
                     bCreateField = false;
                 }
 
@@ -5006,7 +5004,7 @@ void DomainMapper_Impl::SetPageMarginTwip( PageMarElement eElement, sal_Int32 nV
         case PAGE_MAR_LEFT   : m_aPageMargins.left    = nValue; break;
         case PAGE_MAR_HEADER : m_aPageMargins.header  = nValue; break;
         case PAGE_MAR_FOOTER : m_aPageMargins.footer  = nValue; break;
-        case PAGE_MAR_GUTTER : m_aPageMargins.gutter  = nValue; break;
+        case PAGE_MAR_GUTTER : break;
     }
 }
 
@@ -5018,7 +5016,6 @@ PageMar::PageMar()
     // This is strange, the RTF spec says it's 1800, but it's clearly 1440 in Word
     // OOXML seems not to specify a default value
     right = left = ConversionHelper::convertTwipToMM100( sal_Int32(1440));
-    gutter = 0;
 }
 
 
@@ -5141,9 +5138,7 @@ void DomainMapper_Impl::SetCurrentRedlineId( sal_Int32 sId )
     {
         // This should be an assert, but somebody had the smart idea to reuse this function also for comments and whatnot,
         // and in some cases the id is actually not handled, which may be in fact a bug.
-        if( m_currentRedline.get())
-            m_currentRedline->m_nId = sId;
-        else
+        if( !m_currentRedline.get())
             SAL_INFO("writerfilter.dmapper", "no current redline");
     }
 }

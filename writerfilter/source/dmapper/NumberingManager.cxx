@@ -101,10 +101,8 @@ void ListLevel::SetValue( Id nId, sal_Int32 nValue )
             m_nNFC = nValue;
         break;
         case NS_ooxml::LN_CT_Lvl_isLgl:
-            m_nFLegal = nValue;
         break;
         case NS_ooxml::LN_CT_Lvl_legacy:
-            m_nFPrevSpace = nValue;
         break;
         case NS_ooxml::LN_CT_Lvl_suff:
             m_nXChFollow = nValue;
@@ -388,8 +386,7 @@ void NumPicBullet::SetShape(uno::Reference<drawing::XShape> const& xShape)
 //--------------------------------------- AbstractListDef implementation
 
 AbstractListDef::AbstractListDef( ) :
-    m_nTmpl( -1 )
-    ,m_nId( -1 )
+    m_nId( -1 )
 {
 }
 
@@ -397,12 +394,11 @@ AbstractListDef::~AbstractListDef( )
 {
 }
 
-void AbstractListDef::SetValue( sal_uInt32 nSprmId, sal_Int32 nValue )
+void AbstractListDef::SetValue( sal_uInt32 nSprmId )
 {
     switch( nSprmId )
     {
         case NS_ooxml::LN_CT_AbstractNum_tmpl:
-            m_nTmpl = nValue;
         break;
         default:
             OSL_FAIL( "this line should never be reached");
@@ -739,7 +735,7 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
             m_pCurrentDefinition->SetId( nIntValue );
         break;
         case NS_ooxml::LN_CT_AbstractNum_tmpl:
-            m_pCurrentDefinition->SetValue( nName, nIntValue );
+            AbstractListDef::SetValue( nName );
         break;
         case NS_ooxml::LN_CT_NumLvl_ilvl:
         {
@@ -927,7 +923,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             case NS_ooxml::LN_CT_AbstractNum_multiLevelType:
             break;
             case NS_ooxml::LN_CT_AbstractNum_tmpl:
-                m_pCurrentDefinition->SetValue( nSprmId, nIntValue );
+                AbstractListDef::SetValue( nSprmId );
             break;
             case NS_ooxml::LN_CT_AbstractNum_lvl:
             {

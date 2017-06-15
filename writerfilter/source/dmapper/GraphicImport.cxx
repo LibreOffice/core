@@ -158,13 +158,11 @@ struct GraphicBorderLine
 {
     sal_Int32   nLineWidth;
     sal_Int32   nLineColor;
-    sal_Int32   nLineDistance;
     bool        bHasShadow;
 
     GraphicBorderLine() :
         nLineWidth(0)
         ,nLineColor(0)
-        ,nLineDistance(0)
         ,bHasShadow(false)
         {}
 
@@ -525,7 +523,6 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
             //graphic borders don't support different line types
         break;
         case NS_ooxml::LN_CT_Border_space:
-            m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineDistance = nIntValue;
         break;
         case NS_ooxml::LN_CT_Border_shadow:
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].bHasShadow = nIntValue != 0;

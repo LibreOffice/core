@@ -62,11 +62,11 @@ void FontTable::lcl_attribute(Id Name, Value & val)
     {
         case NS_ooxml::LN_CT_Pitch_val:
             if (static_cast<Id>(nIntValue) == NS_ooxml::LN_Value_ST_Pitch_fixed)
-                m_pImpl->pCurrentEntry->nPitchRequest = awt::FontPitch::FIXED;
+                ;
             else if (static_cast<Id>(nIntValue) == NS_ooxml::LN_Value_ST_Pitch_variable)
-                m_pImpl->pCurrentEntry->nPitchRequest = awt::FontPitch::VARIABLE;
+                ;
             else if (static_cast<Id>(nIntValue) == NS_ooxml::LN_Value_ST_Pitch_default)
-                m_pImpl->pCurrentEntry->nPitchRequest = awt::FontPitch::DONTKNOW;
+                ;
             else
                 SAL_WARN("writerfilter.dmapper", "FontTable::lcl_attribute: unhandled NS_ooxml::CT_Pitch_val: " << nIntValue);
             break;

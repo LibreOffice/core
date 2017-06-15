@@ -58,8 +58,6 @@ class OLEHandler : public LoggedProperties
     /// The stream URL right after the import of the raw data.
     OUString     m_aURL;
 
-    sal_Int32                   m_nDxaOrig;
-    sal_Int32                   m_nDyaOrig;
     css::text::WrapTextMode     m_nWrapMode;
 
     css::uno::Reference<css::drawing::XShape> m_xShape;

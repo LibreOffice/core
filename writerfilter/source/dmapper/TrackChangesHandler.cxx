@@ -35,7 +35,6 @@ TrackChangesHandler::~TrackChangesHandler()
 
 void TrackChangesHandler::lcl_attribute(Id rName, Value & rVal)
 {
-    sal_Int32 nIntValue = rVal.getInt();
     OUString sStringValue = rVal.getString();
     (void)rName;
     switch( rName )
@@ -51,9 +50,6 @@ void TrackChangesHandler::lcl_attribute(Id rName, Value & rVal)
         }
         break;
         case NS_ooxml::LN_CT_Markup_id:
-        {
-            m_pRedlineParams->m_nId = nIntValue;
-        }
         break;
         default:
             OSL_FAIL( "unknown attribute");
