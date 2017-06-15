@@ -937,7 +937,7 @@ const SfxItemSet* FlatFndBox::GetItemSet(sal_uInt16 n_Col, sal_uInt16 n_Row) con
 {
     OSL_ENSURE( ppItemSets.empty() || ( n_Col < nCols && n_Row < nRows), "invalid array access");
 
-    return !ppItemSets.empty() ? ppItemSets[n_Row * nCols + n_Col].get() : nullptr;
+    return !ppItemSets.empty() ? ppItemSets[unsigned(n_Row * nCols) + n_Col].get() : nullptr;
 }
 
 sal_uInt16 SwMovedBoxes::GetPos(const SwTableBox* pTableBox) const
