@@ -2239,7 +2239,8 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
                 {
                     // Suppress all TableRef related tokens, the resulting
                     // range was written by CreateStringFromIndex().
-                    const FormulaToken* const p = pArr->PeekNext();
+//                    const FormulaToken* const p = pArr->PeekNext();
+                    const FormulaToken* const p = maArrIterator.PeekNext();
                     if (p && p->GetOpCode() == ocTableRefOpen)
                     {
                         int nLevel = 0;
@@ -2490,10 +2491,12 @@ OpCode FormulaCompiler::NextToken()
         {
             // Fake an intersection op as last op for the next round, but at
             // least roughly check if it could make sense at all.
-            FormulaToken* pPrev = pArr->PeekPrevNoSpaces();
+//            FormulaToken* pPrev = pArr->PeekPrevNoSpaces();
+            FormulaToken* pPrev = maArrIterator.PeekPrevNoSpaces();
             if (pPrev && isPotentialRangeType( pPrev, false, false))
             {
-                FormulaToken* pNext = pArr->PeekNextNoSpaces();
+//                FormulaToken* pNext = pArr->PeekNextNoSpaces();
+                FormulaToken* pNext = maArrIterator.PeekPrevNoSpaces();
                 if (pNext && isPotentialRangeType( pNext, false, true))
                     eLastOp = ocIntersect;
                 else

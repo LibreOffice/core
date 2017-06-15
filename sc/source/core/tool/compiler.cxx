@@ -4711,8 +4711,10 @@ bool ScCompiler::HandleRange()
             // or if not directly between ocSep/parenthesis,
             // e.g. SUM(...;(...;...)) no, SUM(...;(...)*3) yes,
             // in short: if it isn't a self-contained expression.
-            FormulaToken* p1 = pArr->PeekPrevNoSpaces();
-            FormulaToken* p2 = pArr->PeekNextNoSpaces();
+//            FormulaToken* p1 = pArr->PeekPrevNoSpaces();
+//            FormulaToken* p2 = pArr->PeekNextNoSpaces();
+            FormulaToken* p1 = maArrIterator.PeekPrevNoSpaces();
+            FormulaToken* p2 = maArrIterator.PeekNextNoSpaces();
             OpCode eOp1 = (p1 ? p1->GetOpCode() : ocSep);
             OpCode eOp2 = (p2 ? p2->GetOpCode() : ocSep);
             bool bBorder1 = (eOp1 == ocSep || eOp1 == ocOpen);
@@ -4795,7 +4797,8 @@ bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
 
             ScTokenArray* pNew = xNew->Clone();
             PushTokenArray( pNew, true);
-            if (pNew->GetNextReference() != nullptr)
+//            if (pNew->GetNextReference() != nullptr)
+            if (FormulaTokenArrayPlainIterator(*pNew).GetNextReference() != nullptr)
             {
                 SetRelNameReference();
                 MoveRelWrap(MAXCOL, MAXROW);
@@ -4812,8 +4815,10 @@ bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
 
 void ScCompiler::AdjustSheetLocalNameRelReferences( SCTAB nDelta )
 {
-    pArr->Reset();
-    for (formula::FormulaToken* t = pArr->GetNextReference(); t; t = pArr->GetNextReference())
+//    pArr->Reset();
+//    for (formula::FormulaToken* t = pArr->GetNextReference(); t; t = pArr->GetNextReference())
+    maArrIterator.Reset();
+    for (formula::FormulaToken* t = maArrIterator.GetNextReference(); t; t = maArrIterator.GetNextReference())
     {
         ScSingleRefData& rRef1 = *t->GetSingleRef();
         if (rRef1.IsTabRel())
@@ -4831,9 +4836,12 @@ void ScCompiler::AdjustSheetLocalNameRelReferences( SCTAB nDelta )
 
 void ScCompiler::SetRelNameReference()
 {
-    pArr->Reset();
-    for( formula::FormulaToken* t = pArr->GetNextReference(); t;
-                  t = pArr->GetNextReference() )
+//    pArr->Reset();
+//    for( formula::FormulaToken* t = pArr->GetNextReference(); t;
+//                  t = pArr->GetNextReference() )
+    maArrIterator.Reset();
+    for( formula::FormulaToken* t = maArrIterator.GetNextReference(); t;
+                  t = maArrIterator.GetNextReference() )
     {
         ScSingleRefData& rRef1 = *t->GetSingleRef();
         if ( rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel() )
@@ -4851,9 +4859,12 @@ void ScCompiler::SetRelNameReference()
 // don't call for other token arrays!
 void ScCompiler::MoveRelWrap( SCCOL nMaxCol, SCROW nMaxRow )
 {
-    pArr->Reset();
-    for( formula::FormulaToken* t = pArr->GetNextReference(); t;
-                  t = pArr->GetNextReference() )
+//    pArr->Reset();
+//    for( formula::FormulaToken* t = pArr->GetNextReference(); t;
+//                  t = pArr->GetNextReference() )
+    maArrIterator.Reset();
+    for( formula::FormulaToken* t = maArrIterator.GetNextReference(); t;
+                  t = maArrIterator.GetNextReference() )
     {
         if ( t->GetType() == svSingleRef || t->GetType() == svExternalSingleRef )
             ScRefUpdate::MoveRelWrap( pDoc, aPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( *t->GetSingleRef() ).Ref() );
@@ -4867,9 +4878,12 @@ void ScCompiler::MoveRelWrap( SCCOL nMaxCol, SCROW nMaxRow )
 void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddress& rPos,
                               SCCOL nMaxCol, SCROW nMaxRow )
 {
-    rArr.Reset();
-    for( formula::FormulaToken* t = rArr.GetNextReference(); t;
-                  t = rArr.GetNextReference() )
+//    rArr.Reset();
+//    for( formula::FormulaToken* t = rArr.GetNextReference(); t;
+//                  t = rArr.GetNextReference() )
+    formula::FormulaTokenArrayPlainIterator aIter(rArr);
+    for( formula::FormulaToken* t = aIter.GetNextReference(); t;
+                  t = aIter.GetNextReference() )
     {
         if ( t->GetType() == svSingleRef || t->GetType() == svExternalSingleRef )
             ScRefUpdate::MoveRelWrap( pDoc, rPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( *t->GetSingleRef() ).Ref() );
@@ -5035,7 +5049,8 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
                               GetSetupTabNames(), aRef, true, (pArr && pArr->IsFromRangeName()));
         }
     }
-    else if (pArr && (p = pArr->PeekPrevNoSpaces()) && p->GetOpCode() == ocTableRefOpen)
+//    else if (pArr && (p = pArr->PeekPrevNoSpaces()) && p->GetOpCode() == ocTableRefOpen)
+    else if (pArr && (p = maArrIterator.PeekPrevNoSpaces()) && p->GetOpCode() == ocTableRefOpen)
     {
         OUString aStr;
         ScAddress aAbs = rRef.toAbs(aPos);
@@ -5355,8 +5370,10 @@ bool ScCompiler::HandleColRowName()
             bFound = true;
         else
         {
-            FormulaToken* p1 = pArr->PeekPrevNoSpaces();
-            FormulaToken* p2 = pArr->PeekNextNoSpaces();
+//            FormulaToken* p1 = pArr->PeekPrevNoSpaces();
+//            FormulaToken* p2 = pArr->PeekNextNoSpaces();
+            FormulaToken* p1 = maArrIterator.PeekPrevNoSpaces();
+            FormulaToken* p2 = maArrIterator.PeekNextNoSpaces();
             // begin/end of a formula => single
             OpCode eOp1 = p1 ? p1->GetOpCode() : ocAdd;
             OpCode eOp2 = p2 ? p2->GetOpCode() : ocAdd;
@@ -5459,7 +5476,8 @@ bool ScCompiler::HandleDbData()
 
 bool ScCompiler::GetTokenIfOpCode( OpCode eOp )
 {
-    const formula::FormulaToken* p = pArr->PeekNextNoSpaces();
+//    const formula::FormulaToken* p = pArr->PeekNextNoSpaces();
+   const formula::FormulaToken* p = maArrIterator.PeekNextNoSpaces();
     if (p && p->GetOpCode() == eOp)
         return GetToken();
     return false;
@@ -5594,7 +5612,8 @@ bool ScCompiler::HandleTableRef()
             } eState = sOpen;
             do
             {
-                const formula::FormulaToken* p = pArr->PeekNextNoSpaces();
+//                const formula::FormulaToken* p = pArr->PeekNextNoSpaces();
+                const formula::FormulaToken* p = maArrIterator.PeekNextNoSpaces();
                 if (!p)
                     eState = sStop;
                 else

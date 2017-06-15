@@ -456,6 +456,9 @@ bool FormulaTokenArray::Fill(
     }
     return bError;
 }
+
+#if 0
+
 FormulaToken* FormulaTokenArray::GetNextReference()
 {
     while( nIndex < nLen )
@@ -477,7 +480,8 @@ FormulaToken* FormulaTokenArray::GetNextReference()
     return nullptr;
 }
 
-FormulaToken* FormulaTokenArray::GetNextColRowName()
+FormulaToken* FormulaTokenArray::GetNextColRowName(
+)
 {
     while( nIndex < nLen )
     {
@@ -585,6 +589,8 @@ FormulaToken* FormulaTokenArray::PrevRPN()
         return nullptr;
 }
 
+#endif
+
 void FormulaTokenArray::DelRPN()
 {
     if( nRPN )
@@ -613,6 +619,8 @@ FormulaToken* FormulaTokenArray::PeekPrev( sal_uInt16 & nIdx )
         return pCode[--nIdx];
     return nullptr;
 }
+
+#if 0
 
 FormulaToken* FormulaTokenArray::PeekNext()
 {
@@ -653,6 +661,7 @@ FormulaToken* FormulaTokenArray::PeekPrevNoSpaces()
     else
         return nullptr;
 }
+#endif
 
 FormulaToken* FormulaTokenArray::FirstRPNToken() const
 {
@@ -660,6 +669,7 @@ FormulaToken* FormulaTokenArray::FirstRPNToken() const
         return nullptr;
     return pRPN[0];
 }
+
 
 bool FormulaTokenArray::HasReferences() const
 {

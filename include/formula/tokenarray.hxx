@@ -205,8 +205,12 @@ public:
 
     void Clear();
     void DelRPN();
-    FormulaToken* First() { nIndex = 0; return Next(); }
     FormulaToken* FirstToken() const;
+    FormulaToken* FirstRPNToken() const;
+    /// Peek at nIdx-1 if not out of bounds, decrements nIdx if successful. Returns NULL if not.
+    FormulaToken* PeekPrev( sal_uInt16 & nIdx );
+#if 0
+    FormulaToken* First() { nIndex = 0; return Next(); }
     FormulaToken* Next();
     FormulaToken* NextNoSpaces();
     FormulaToken* GetNextName();
@@ -214,15 +218,13 @@ public:
     FormulaToken* GetNextReferenceRPN();
     FormulaToken* GetNextReferenceOrName();
     FormulaToken* GetNextColRowName();
-    /// Peek at nIdx-1 if not out of bounds, decrements nIdx if successful. Returns NULL if not.
-    FormulaToken* PeekPrev( sal_uInt16 & nIdx );
     FormulaToken* PeekNext();
     FormulaToken* PeekPrevNoSpaces();    /// Only after Reset/First/Next/Last/Prev!
     FormulaToken* PeekNextNoSpaces();    /// Only after Reset/First/Next/Last/Prev!
-    FormulaToken* FirstRPNToken() const;
     FormulaToken* NextRPN();
     FormulaToken* LastRPN() { nIndex = nRPN; return PrevRPN(); }
     FormulaToken* PrevRPN();
+#endif
 
     bool HasReferences() const;
 
