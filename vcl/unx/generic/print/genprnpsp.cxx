@@ -524,7 +524,7 @@ SalGraphics* PspSalInfoPrinter::AcquireGraphics()
     if( ! m_pGraphics )
     {
         m_pGraphics = GetGenericInstance()->CreatePrintGraphics();
-        m_pGraphics->Init(&m_aJobData, &m_aPrinterGfx, this);
+        m_pGraphics->Init(&m_aJobData, &m_aPrinterGfx);
         pRet = m_pGraphics;
     }
     return pRet;
@@ -943,7 +943,7 @@ SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, bool )
 
     JobData::constructFromStreamBuffer( pJobSetup->GetDriverData(), pJobSetup->GetDriverDataLen(), m_aJobData );
     m_pGraphics = GetGenericInstance()->CreatePrintGraphics();
-    m_pGraphics->Init(&m_aJobData, &m_aPrinterGfx, m_pInfoPrinter);
+    m_pGraphics->Init(&m_aJobData, &m_aPrinterGfx);
 
     if( m_nCopies > 1 )
     {

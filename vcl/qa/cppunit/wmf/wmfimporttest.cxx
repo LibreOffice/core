@@ -253,15 +253,11 @@ void WmfTest::testTdf99402()
     logfontw.lfHeight = 0;
     logfontw.lfWidth = 0;
     logfontw.lfEscapement = 0;
-    logfontw.lfOrientation = 0;
     logfontw.lfWeight = 0;
     logfontw.lfItalic = 0;
     logfontw.lfUnderline = 0;
     logfontw.lfStrikeOut = 0;
     logfontw.lfCharSet = OEM_CHARSET;
-    logfontw.lfOutPrecision = 0; // OUT_DEFAULT_PRECIS
-    logfontw.lfClipPrecision = 0; // CLIP_DEFAULT_PRECIS
-    logfontw.lfQuality = 0; // DEFAULT_QUALITY
     logfontw.lfPitchAndFamily = FF_ROMAN | DEFAULT_PITCH;
     logfontw.alfFaceName = "Symbol";
 
