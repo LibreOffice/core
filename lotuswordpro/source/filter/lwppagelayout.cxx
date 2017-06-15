@@ -495,7 +495,13 @@ LwpHeaderLayout* LwpPageLayout::GetHeaderLayout()
     {
         if (xLay->GetLayoutType() == LWP_HEADER_LAYOUT)
             return dynamic_cast<LwpHeaderLayout*>(xLay.get());
-        xLay.set(dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
+        rtl::Reference<LwpVirtualLayout> xNext(dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
+        if (xNext == xLay)
+        {
+            SAL_WARN("lwp", "loop in layout");
+            break;
+        }
+        xLay = xNext;
     }
     return nullptr;
 }
@@ -507,7 +513,13 @@ LwpFooterLayout* LwpPageLayout::GetFooterLayout()
     {
         if (xLay->GetLayoutType() == LWP_FOOTER_LAYOUT)
             return dynamic_cast<LwpFooterLayout*>(xLay.get());
-        xLay.set(dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
+        rtl::Reference<LwpVirtualLayout> xNext(dynamic_cast<LwpVirtualLayout*>(xLay->GetNext().obj().get()));
+        if (xNext == xLay)
+        {
+            SAL_WARN("lwp", "loop in layout");
+            break;
+        }
+        xLay = xNext;
     }
     return nullptr;
 }
