@@ -45,7 +45,6 @@ PreeditStartCallback ( XIC, XPointer client_data, XPointer )
     if ( pPreeditData->eState == PreeditStatus::ActivationRequired )
     {
         pPreeditData->eState = PreeditStatus::Active;
-        pPreeditData->aText.nCursorPos = 0;
         pPreeditData->aText.nLength    = 0;
     }
 

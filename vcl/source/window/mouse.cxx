@@ -406,8 +406,7 @@ void Window::ImplGrabFocusToDocument( GetFocusFlags nFlags )
 void Window::MouseMove( const MouseEvent& rMEvt )
 {
     NotifyEvent aNEvt( MouseNotifyEvent::MOUSEMOVE, this, &rMEvt );
-    if (!EventNotify(aNEvt))
-        mpWindowImpl->mbMouseMove = true;
+    EventNotify(aNEvt);
 }
 
 void Window::MouseButtonDown( const MouseEvent& rMEvt )

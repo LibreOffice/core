@@ -243,20 +243,16 @@ SalPrinterBmp::GetPixelIdx (sal_uInt32 nRow, sal_uInt32 nColumn) const
 
 GenPspGraphics::GenPspGraphics()
     : m_pJobData( nullptr ),
-      m_pPrinterGfx( nullptr ),
-      m_bFontVertical( false ),
-      m_pInfoPrinter( nullptr )
+      m_pPrinterGfx( nullptr )
 {
     for(FreetypeFont* & rp : m_pFreetypeFont)
         rp = nullptr;
 }
 
-void GenPspGraphics::Init(psp::JobData* pJob, psp::PrinterGfx* pGfx,
-                           SalInfoPrinter* pInfoPrinter)
+void GenPspGraphics::Init(psp::JobData* pJob, psp::PrinterGfx* pGfx)
 {
     m_pJobData = pJob;
     m_pPrinterGfx = pGfx;
-    m_pInfoPrinter = pInfoPrinter;
     SetLayout( SalLayoutFlags::NONE );
 }
 
@@ -651,7 +647,6 @@ void GenPspGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLevel )
     }
 
     // also set the serverside font for layouting
-    m_bFontVertical = pEntry->mbVertical;
     if( pEntry->mpFontData )
     {
         // requesting a font provided by builtin rasterizer

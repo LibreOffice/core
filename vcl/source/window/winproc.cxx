@@ -680,7 +680,6 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
                     // if the MouseMove handler changes the help window's visibility
                     // the HelpRequest handler should not be called anymore
                     vcl::Window* pOldHelpTextWin = pSVData->maHelpData.mpHelpWin;
-                    pChild->ImplGetWindowImpl()->mbMouseMove = false;
                     pChild->MouseMove( aMEvt );
                     if ( pOldHelpTextWin != pSVData->maHelpData.mpHelpWin )
                         bCallHelpRequest = false;

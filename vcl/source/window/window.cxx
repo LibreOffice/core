@@ -643,7 +643,6 @@ WindowImpl::WindowImpl( WindowType nType )
     mnStyle                             = 0;                         // style (init in ImplInitWindow)
     mnPrevStyle                         = 0;                         // prevstyle (set in SetStyle)
     mnExtendedStyle                     = 0;                         // extended style (init in ImplInitWindow)
-    mnPrevExtendedStyle                 = 0;                         // prevstyle (set in SetExtendedStyle)
     mnType                              = nType;                     // type
     mnGetFocusFlags                     = GetFocusFlags::NONE;       // Flags fuer GetFocus()-Aufruf
     mnWaitCount                         = 0;                         // Wait-Count (>1 == Warte-MousePointer)
@@ -690,7 +689,6 @@ WindowImpl::WindowImpl( WindowType nType )
     mbInInitShow                        = false;                     // true: we are in InitShow
     mbChildPtrOverwrite                 = false;                     // true: PointerStyle overwrites Child-Pointer
     mbNoPtrVisible                      = false;                     // true: ShowPointer( false ) called
-    mbMouseMove                         = false;                     // true: BaseMouseMove called
     mbPaintFrame                        = false;                     // true: Paint is visible, but not painted
     mbInPaint                           = false;                     // true: Inside PaintHdl
     mbMouseButtonDown                   = false;                     // true: BaseMouseButtonDown called
@@ -2001,7 +1999,6 @@ void Window::SetExtendedStyle( WinBits nExtendedStyle )
 
             pWindow->ImplGetFrame()->SetExtendedFrameStyle( nExt );
         }
-        mpWindowImpl->mnPrevExtendedStyle = mpWindowImpl->mnExtendedStyle;
         mpWindowImpl->mnExtendedStyle = nExtendedStyle;
         CompatStateChanged( StateChangedType::ExtendedStyle );
     }
