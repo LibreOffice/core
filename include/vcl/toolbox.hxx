@@ -132,7 +132,6 @@ private:
     ImplToolItems::size_type mnVisLines; // number of visible lines (for scrolling)
     ImplToolItems::size_type mnFloatLines; // number of lines during floating mode
     ImplToolItems::size_type mnDockLines;
-    sal_uInt16          mnMouseClicks;
     sal_uInt16          mnMouseModifier;
     bool                mbDrag:1,
                         mbSelection:1,
@@ -147,7 +146,6 @@ private:
                         mbLastFloatMode:1,
                         mbCustomize:1,
                         mbDragging:1,
-                        mbIsShift:1,
                         mbIsKeyEvent:1,
                         mbChangingHighlight:1,
                         mbImagesMirrored:1;

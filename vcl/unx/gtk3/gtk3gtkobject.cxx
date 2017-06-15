@@ -53,12 +53,9 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
         m_aSystemData.pSalFrame     = nullptr;
         m_aSystemData.pWidget       = m_pSocket;
         m_aSystemData.nScreen       = pParent->getXScreenNumber().getXScreen();
-        m_aSystemData.pAppContext   = nullptr;
-        m_aSystemData.pShellWidget  = GTK_WIDGET(pParent->getWindow());
         m_aSystemData.pToolkit      = "gtk3";
         GdkScreen* pScreen = gtk_window_get_screen(GTK_WINDOW(pParent->getWindow()));
         GdkVisual* pVisual = gdk_screen_get_system_visual(pScreen);
-        m_aSystemData.nDepth = gdk_visual_get_depth(pVisual);
 
 #if defined(GDK_WINDOWING_X11)
         GdkDisplay *pDisplay = GtkSalFrame::getGdkDisplay();

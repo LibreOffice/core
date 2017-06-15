@@ -124,7 +124,6 @@ static void ImplAccelEntryInsert( ImplAccelList* pList, ImplAccelEntry* pEntry )
 void Accelerator::ImplInit()
 {
     mnCurId             = 0;
-    mnCurRepeat         = 0;
     mpDel               = nullptr;
 }
 
@@ -295,7 +294,6 @@ Accelerator& Accelerator::operator=( const Accelerator& rAccel )
     // assign new data
     maCurKeyCode    = vcl::KeyCode();
     mnCurId         = 0;
-    mnCurRepeat     = 0;
 
     // delete and copy tables
     ImplDeleteData();

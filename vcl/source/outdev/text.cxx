@@ -2335,7 +2335,6 @@ SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, c
     }
 
     SystemTextLayoutData aSysLayoutData;
-    aSysLayoutData.nSize = sizeof(aSysLayoutData);
     aSysLayoutData.rGlyphData.reserve( 256 );
     aSysLayoutData.orientation = 0;
 

@@ -420,10 +420,6 @@ public:
         , m_nLeftPadding(0)
         , m_nRightPadding(0)
         , m_nTopPadding(0)
-        , m_fXAlign(0.0)
-        , m_fXScale(1.0)
-        , m_fYAlign(0.0)
-        , m_fYScale(1.0)
     {
     }
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
@@ -435,10 +431,6 @@ private:
     sal_Int32 m_nLeftPadding;
     sal_Int32 m_nRightPadding;
     sal_Int32 m_nTopPadding;
-    float m_fXAlign;
-    float m_fXScale;
-    float m_fYAlign;
-    float m_fYScale;
 };
 
 class VCL_DLLPUBLIC VclExpander : public VclBin

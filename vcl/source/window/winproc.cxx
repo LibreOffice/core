@@ -961,7 +961,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
         // test for accel
         if ( pSVData->maAppData.mpAccelMgr )
         {
-            if ( pSVData->maAppData.mpAccelMgr->IsAccelKey( aKeyCode, nRepeat ) )
+            if ( pSVData->maAppData.mpAccelMgr->IsAccelKey( aKeyCode ) )
                 return true;
         }
     }

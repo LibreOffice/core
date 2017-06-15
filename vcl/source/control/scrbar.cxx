@@ -82,7 +82,6 @@ void ScrollBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnLineSize          = 1;
     mnPageSize          = 1;
     mnDelta             = 0;
-    mnDragDraw          = 0;
     mnStateFlags        = 0;
     meScrollType        = ScrollType::DontKnow;
     mbCalcSize          = true;
@@ -879,7 +878,6 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 nTrackFlags     = StartTrackingFlags::ButtonRepeat;
                 meScrollType    = ScrollType::LineUp;
-                mnDragDraw      = SCRBAR_DRAW_BTN1;
             }
         }
         else if ( HitTestNativeScrollbar( bHorizontal? (IsRTLEnabled()? ControlPart::ButtonLeft: ControlPart::ButtonRight): ControlPart::ButtonDown,
@@ -891,7 +889,6 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 nTrackFlags     = StartTrackingFlags::ButtonRepeat;
                 meScrollType    = ScrollType::LineDown;
-                mnDragDraw      = SCRBAR_DRAW_BTN2;
             }
         }
         else
@@ -919,7 +916,6 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
                 {
                     nTrackFlags     = StartTrackingFlags::NONE;
                     meScrollType    = ScrollType::Drag;
-                    mnDragDraw      = SCRBAR_DRAW_THUMB;
 
                     // calculate mouse offset
                     if (bWarp && (!bThumbHit || !bPrimaryWarping))
@@ -955,12 +951,10 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
                     maPage1Rect.IsInside( rMousePos ) )
                 {
                     meScrollType    = ScrollType::PageUp;
-                    mnDragDraw      = SCRBAR_DRAW_PAGE1;
                 }
                 else
                 {
                     meScrollType    = ScrollType::PageDown;
-                    mnDragDraw      = SCRBAR_DRAW_PAGE2;
                 }
             }
         }
@@ -993,7 +987,6 @@ void ScrollBar::Tracking( const TrackingEvent& rTEvt )
                           SCRBAR_STATE_THUMB_DOWN);
         if ( nOldStateFlags != mnStateFlags )
             Invalidate();
-        mnDragDraw = 0;
 
         // Restore the old ThumbPosition when canceled
         if ( rTEvt.IsTrackingCanceled() )

@@ -490,12 +490,7 @@ SystemGraphicsData X11SalGraphics::GetGraphicsData() const
     SystemGraphicsData aRes;
 
     aRes.nSize = sizeof(aRes);
-    aRes.pDisplay  = GetXDisplay();
     aRes.hDrawable = hDrawable_;
-    aRes.pVisual   = GetVisual().visual;
-    aRes.nScreen   = m_nXScreen.getXScreen();
-    aRes.nDepth    = GetBitCount();
-    aRes.aColormap = GetColormap().GetXColormap();
     aRes.pXRenderFormat = m_pXRenderFormat;
     return aRes;
 }
