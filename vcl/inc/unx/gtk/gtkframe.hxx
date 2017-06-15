@@ -293,7 +293,6 @@ class GtkSalFrame : public SalFrame
                                    guint keyval,
                                    guint16 hardware_keycode,
                                    guint8 group,
-                                   guint32 time,
                                    sal_Unicode aOrigCode,
                                    bool bDown,
                                    bool bSendRelease

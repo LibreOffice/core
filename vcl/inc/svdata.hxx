@@ -179,7 +179,6 @@ struct ImplSVGDIData
     VclPtr<OutputDevice>    mpLastPrnGraphics;              // Last OutputDevice with a InfoPrinter Graphics
     VclPtr<VirtualDevice>   mpFirstVirDev;                  // First VirtualDevice
     VclPtr<VirtualDevice>   mpLastVirDev;                   // Last VirtualDevice
-    OpenGLContext*          mpFirstContext = nullptr;       // First OpenGLContext
     OpenGLContext*          mpLastContext = nullptr;        // Last OpenGLContext
     VclPtr<Printer>         mpFirstPrinter;                 // First Printer
     VclPtr<Printer>         mpLastPrinter;                  // Last Printer
@@ -191,7 +190,6 @@ struct ImplSVGDIData
     long                    mnAppFontX = 0;                 // AppFont X-Numenator for 40/tel Width
     long                    mnAppFontY = 0;                 // AppFont Y-Numenator for 80/tel Height
     bool                    mbFontSubChanged = false;       // true: FontSubstitution was changed between Begin/End
-    bool                    mbNativeFontConfig = false;     // true: do not override UI font
 };
 
 struct ImplSVWinData
@@ -285,9 +283,6 @@ struct ImplSVNWFData
     bool                    mbProgressNeedsErase = false;   // set true for platforms that should draw the
                                                             // window background before drawing the native
                                                             // progress bar
-    bool                    mbCheckBoxNeedsErase = false;   // set true for platforms that should draw the
-                                                            // window background before drawing the native
-                                                            // checkbox
     bool                    mbCanDrawWidgetAnySize = false; // set to true currently on gtk
 
     /// entire drop down listbox resembles a button, no textarea/button parts (as currently on Windows)

@@ -105,7 +105,6 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
                     pCloseModule = nullptr;
                 }
 #endif
-                GetSalData()->m_pPlugin = aMod;
             }
             else
                 osl_unloadModule( aMod );
@@ -317,7 +316,6 @@ const OUString& SalGetDesktopEnvironment()
 
 SalData::SalData() :
     m_pInstance(nullptr),
-    m_pPlugin(nullptr),
     m_pPIManager(nullptr)
 {
 }

@@ -3420,7 +3420,6 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
         else
             aKeyEvt.mnCode = 0;
 
-        aKeyEvt.mnTime      = GetMessageTime();
         aKeyEvt.mnCode     |= nModCode;
         aKeyEvt.mnCharCode  = ImplGetCharCode( pFrame, wParam );
         aKeyEvt.mnRepeat    = nRepeat;
@@ -3442,7 +3441,6 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
 
          SalKeyEvent aKeyEvt;
          aKeyEvt.mnCode     = nModCode; // Or should it be 0? - as this is always a character returned
-         aKeyEvt.mnTime     = GetMessageTime();
          aKeyEvt.mnRepeat   = 0;
 
         if( wParam >= Uni_SupplementaryPlanesStart )
@@ -3473,7 +3471,6 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
         {
             SalKeyModEvent aModEvt;
             aModEvt.mbDown = false; // auto-accelerator feature not supported here.
-            aModEvt.mnTime = GetMessageTime();
             aModEvt.mnCode = nModCode;
             aModEvt.mnModKeyCode = ModKeyFlags::NONE;   // no command events will be sent if this member is 0
 
@@ -3577,7 +3574,6 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                 else
                     nEvent = SalEvent::KeyInput;
 
-                aKeyEvt.mnTime      = GetMessageTime();
                 aKeyEvt.mnCode     |= nModCode;
                 aKeyEvt.mnRepeat    = nRepeat;
 
@@ -3648,7 +3644,6 @@ long ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg,
                 else
                     nEvent = SalEvent::KeyInput;
 
-                aKeyEvt.mnTime      = GetMessageTime();
                 aKeyEvt.mnCode     |= nModCode;
                 aKeyEvt.mnRepeat    = nRepeat;
                 long nRet = pFrame->CallCallback( nEvent, &aKeyEvt );
@@ -3681,7 +3676,6 @@ long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
 
     // assemble KeyEvent
     SalKeyEvent aKeyEvt;
-    aKeyEvt.mnTime      = GetMessageTime();
     if ( (cKeyCode >= 48) && (cKeyCode <= 57) )
         aKeyEvt.mnCode = KEY_0+(cKeyCode-48);
     else if ( (cKeyCode >= 65) && (cKeyCode <= 90) )
@@ -4835,7 +4829,6 @@ static int ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
                 return 1;
 
             SalKeyEvent aKeyEvt;
-            aKeyEvt.mnTime      = GetMessageTime();
             aKeyEvt.mnCode      = KEY_MENU;
             aKeyEvt.mnCharCode  = 0;
             aKeyEvt.mnRepeat    = 0;
@@ -4866,7 +4859,6 @@ static int ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
                     nModCode |= KEY_MOD2;
 
                     SalKeyEvent aKeyEvt;
-                    aKeyEvt.mnTime      = GetMessageTime();
                     if ( (cKeyCode >= 48) && (cKeyCode <= 57) )
                         aKeyEvt.mnCode = KEY_0+(cKeyCode-48);
                     else

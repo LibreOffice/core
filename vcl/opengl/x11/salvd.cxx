@@ -34,7 +34,7 @@ void X11SalGraphics::Init( X11OpenGLSalVirtualDevice *pDevice )
 
 X11OpenGLSalVirtualDevice::X11OpenGLSalVirtualDevice( SalGraphics* pGraphics,
                                                       long &nDX, long &nDY,
-                                                      DeviceFormat eFormat,
+                                                      DeviceFormat /*eFormat*/,
                                                       const SystemGraphicsData *pData,
                                                       X11SalGraphics* pNewGraphics) :
     mpGraphics(pNewGraphics),
@@ -43,23 +43,10 @@ X11OpenGLSalVirtualDevice::X11OpenGLSalVirtualDevice( SalGraphics* pGraphics,
 {
     assert(mpGraphics);
 
-    sal_uInt16 nBitCount;
-    switch (eFormat)
-    {
-        case DeviceFormat::BITMASK:
-            nBitCount = 1;
-            break;
-        default:
-            nBitCount = pGraphics->GetBitCount();
-            break;
-
-    }
-
     // TODO Check where a VirtualDevice is created from SystemGraphicsData
     assert( pData == nullptr ); (void)pData;
 
     mpDisplay  = vcl_sal::getSalDisplay(GetGenericData());
-    mnDepth    = nBitCount;
     mnXScreen  = pGraphics ? static_cast<X11SalGraphics*>(pGraphics)->GetScreenNumber() :
                              vcl_sal::getSalDisplay(GetGenericData())->GetDefaultXScreen();
     mnWidth    = nDX;
