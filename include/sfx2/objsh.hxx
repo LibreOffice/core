@@ -92,10 +92,6 @@ enum class SfxEventHintId;
 #define ASPECT_ICON         4
 #define ASPECT_DOCPRINT     8
 
-// must be the same as in OLE2
-#define SVOBJ_MISCSTATUS_NOTRESIZEABLE          512
-#define SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE  2048
-
 namespace sfx2
 {
     class SvLinkSource;
@@ -626,7 +622,6 @@ public:
     virtual void      SetVisArea( const tools::Rectangle & rVisArea );
     const tools::Rectangle & GetVisArea() const;
     void              SetVisAreaSize( const Size & rVisSize );
-    virtual sal_uIntPtr GetMiscStatus() const;
 
     MapUnit         GetMapUnit() const;
     void            SetMapUnit( MapUnit nMUnit );

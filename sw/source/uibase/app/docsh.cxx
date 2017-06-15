@@ -902,11 +902,6 @@ void SwDocShell::OnDocumentPrinterChanged( Printer * pNewPrinter )
         GetDoc()->getIDocumentDeviceAccess().setPrinter( nullptr, true, true );
 }
 
-sal_uLong SwDocShell::GetMiscStatus() const
-{
-    return SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE;
-}
-
 // #i20883# Digital Signatures and Encryption
 HiddenInformation SwDocShell::GetHiddenInformationState( HiddenInformation nStates )
 {
