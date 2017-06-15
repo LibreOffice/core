@@ -744,6 +744,73 @@ DECLARE_ODFEXPORT_TEST(testFdo43807, "fdo43807.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("User Defined Drop Caps"),getProperty<OUString>(xSet,"DropCapCharStyleName"));
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf103091, "tdf103091.fodt")
+{
+    // check that all conditional paragraph style conditions are imported
+    uno::Reference<container::XNameAccess> xParaStyles(getStyles("ParagraphStyles"));
+    uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getByName(
+            "Conditional"), uno::UNO_QUERY);
+    auto conditions(getProperty<uno::Sequence<beans::NamedValue>>(xStyle1, "ParaStyleConditions"));
+
+    CPPUNIT_ASSERT_EQUAL(28, conditions.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("TableHeader"), conditions[0].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Addressee")), conditions[0].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("Table"), conditions[1].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Bibliography 1")), conditions[1].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame"), conditions[2].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Bibliography Heading")), conditions[2].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("Section"), conditions[3].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Caption")), conditions[3].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("Footnote"), conditions[4].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Salutation")), conditions[4].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("Endnote"), conditions[5].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Contents 1")), conditions[5].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), conditions[6].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Contents 2")), conditions[6].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("Footer"), conditions[7].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Contents 3")), conditions[7].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("OutlineLevel1"), conditions[8].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Contents 4")), conditions[8].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("OutlineLevel2"), conditions[9].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Contents 5")), conditions[9].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("OutlineLevel3"), conditions[10].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Contents 6")), conditions[10].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("OutlineLevel4"), conditions[11].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Contents 7")), conditions[11].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("OutlineLevel5"), conditions[12].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Contents 8")), conditions[12].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("OutlineLevel6"), conditions[13].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Contents 9")), conditions[13].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("OutlineLevel7"), conditions[14].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Contents 10")), conditions[14].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("OutlineLevel8"), conditions[15].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Contents Heading")), conditions[15].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("OutlineLevel9"), conditions[16].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Standard")), conditions[16].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("OutlineLevel10"), conditions[17].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Drawing")), conditions[17].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("NumberingLevel1"), conditions[18].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Endnote")), conditions[18].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("NumberingLevel2"), conditions[19].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("First line indent")), conditions[19].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("NumberingLevel3"), conditions[20].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Footer")), conditions[20].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("NumberingLevel4"), conditions[21].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Footer left")), conditions[21].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("NumberingLevel5"), conditions[22].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Footer right")), conditions[22].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("NumberingLevel6"), conditions[23].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Footnote")), conditions[23].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("NumberingLevel7"), conditions[24].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Frame contents")), conditions[24].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("NumberingLevel8"), conditions[25].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Hanging indent")), conditions[25].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("NumberingLevel9"), conditions[26].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Header")), conditions[26].Value);
+    CPPUNIT_ASSERT_EQUAL(OUString("NumberingLevel10"), conditions[27].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Header left")), conditions[27].Value);
+}
+
 DECLARE_ODFEXPORT_TEST(testTextframeTransparentShadow, "textframe-transparent-shadow.odt")
 {
     uno::Reference<drawing::XShape> xPicture = getShape(1);
