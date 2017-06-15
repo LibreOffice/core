@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_071605a7",
+        "filename": "offapi/com/sun/star/xml/sax/XFastDocumentHandler.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-06-15T09:26:21Z",
+      "side": 1,
+      "message": "please add\n\n  @since LibreOffice 6.0",
+      "revId": "420cecf55878a2d652a61540ddc37a7faaf4cc46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
