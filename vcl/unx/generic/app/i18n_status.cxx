@@ -81,7 +81,6 @@ class XIMStatusWindow : public StatusWindow
 
     // for delayed showing
     bool                    m_bDelayedShow;
-    I18NStatus::ShowReason  m_eDelayedReason;
     ImplSVEvent *           m_nDelayedEvent;
     // for toggling
     bool                    m_bOn;
@@ -113,7 +112,6 @@ XIMStatusWindow::XIMStatusWindow( bool bOn ) :
         m_pLastParent( nullptr ),
         m_bAnchoredAtRight( false ),
         m_bDelayedShow( false ),
-        m_eDelayedReason( I18NStatus::contextmap ),
         m_nDelayedEvent( nullptr ),
         m_bOn( bOn )
 {
@@ -276,13 +274,12 @@ IMPL_LINK_NOARG(XIMStatusWindow, DelayedShowHdl, void*, void)
     }
 }
 
-void XIMStatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )
+void XIMStatusWindow::show( bool bShow, I18NStatus::ShowReason )
 {
     if( bShow && m_aStatusText->GetText().isEmpty() )
         bShow = false;
 
     m_bDelayedShow = bShow;
-    m_eDelayedReason = eReason;
     if( ! m_nDelayedEvent )
         m_nDelayedEvent = Application::PostUserEvent( LINK( this, XIMStatusWindow, DelayedShowHdl ), nullptr, true );
 }

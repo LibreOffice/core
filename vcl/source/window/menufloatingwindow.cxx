@@ -38,7 +38,6 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, vcl::Window* pParent, WinBit
     nMBDownPos          = ITEMPOS_INVALID;
     nPosInParent        = ITEMPOS_INVALID;
     nScrollerHeight     = 0;
-    nBorder             = EXTRASPACEY;
     nFirstEntry         = 0;
     bScrollUp           = false;
     bScrollDown         = false;

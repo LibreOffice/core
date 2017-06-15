@@ -420,7 +420,6 @@ tools::Rectangle DockingManager::GetPosSizePixel( const vcl::Window *pWindow )
 class ImplPopupFloatWin : public FloatingWindow
 {
 private:
-    ImplDockingWindowWrapper*   mpDockingWin;
     bool                        mbMoving;
     bool                        mbTrackingEnabled;
     Point                       maDelta;
@@ -428,9 +427,8 @@ private:
     void                        ImplSetBorder();
 
 public:
-    ImplPopupFloatWin( vcl::Window* pParent, ImplDockingWindowWrapper* pDockingWin, bool bHasGrip );
+    ImplPopupFloatWin( vcl::Window* pParent, bool bHasGrip );
     virtual ~ImplPopupFloatWin() override;
-    virtual void dispose() override;
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
     virtual void        Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
@@ -448,12 +446,11 @@ public:
     bool                hasGrip() const { return mbHasGrip; }
 };
 
-ImplPopupFloatWin::ImplPopupFloatWin( vcl::Window* pParent, ImplDockingWindowWrapper* pDockingWin, bool bHasGrip ) :
+ImplPopupFloatWin::ImplPopupFloatWin( vcl::Window* pParent, bool bHasGrip ) :
     FloatingWindow( pParent, WB_NOBORDER | WB_SYSTEMWINDOW | WB_NOSHADOW )
 {
     mpWindowImpl->mbToolbarFloatingWindow = true;   // indicate window type, required for accessibility
                                                     // which should not see this window as a toplevel window
-    mpDockingWin = pDockingWin;
     mbMoving = false;
     mbTrackingEnabled = false;
     mbHasGrip = bHasGrip;
@@ -464,12 +461,6 @@ ImplPopupFloatWin::ImplPopupFloatWin( vcl::Window* pParent, ImplDockingWindowWra
 ImplPopupFloatWin::~ImplPopupFloatWin()
 {
     disposeOnce();
-}
-
-void ImplPopupFloatWin::dispose()
-{
-    mpDockingWin = nullptr;
-    FloatingWindow::dispose();
 }
 
 css::uno::Reference< css::accessibility::XAccessible > ImplPopupFloatWin::CreateAccessible()
@@ -967,7 +958,7 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
     if ( bUseStdPopup )
         pWin = VclPtr<FloatingWindow>::Create( mpParent, WB_STDPOPUP );
     else
-        pWin = VclPtr<ImplPopupFloatWin>::Create( mpParent, this, bAllowTearOff );
+        pWin = VclPtr<ImplPopupFloatWin>::Create( mpParent, bAllowTearOff );
     pWin->SetPopupModeEndHdl( LINK( this, ImplDockingWindowWrapper, PopupModeEnd ) );
     pWin->SetText( GetWindow()->GetText() );
 

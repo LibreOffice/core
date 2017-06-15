@@ -182,7 +182,6 @@ namespace x11 {
 
             State                       m_eState;
             SelectionAdaptor*           m_pAdaptor;
-            Atom                        m_aAtom;
             ::osl::Condition            m_aDataArrived;
             css::uno::Sequence< sal_Int8 > m_aData;
             css::uno::Sequence< css::datatransfer::DataFlavor >
@@ -206,7 +205,6 @@ namespace x11 {
 
             Selection() : m_eState( Inactive ),
                           m_pAdaptor( nullptr ),
-                          m_aAtom( None ),
                           m_aRequestedType( None ),
                           m_nLastTimestamp( 0 ),
                           m_bHaveUTF16( false ),
@@ -273,7 +271,6 @@ namespace x11 {
         css::uno::Reference< css::datatransfer::XTransferable >
                                     m_xDropTransferable;
         int                         m_nLastX, m_nLastY;
-        Time                        m_nDropTimestamp;
         // set to true when calling drop()
         // if another XdndEnter is received this shows that
         // someone forgot to call dropComplete - we should reset
@@ -308,7 +305,6 @@ namespace x11 {
         bool                        m_bDropSent;
         time_t                      m_nDropTimeout;
         bool                        m_bWaitingForPrimaryConversion;
-        Time                        m_nDragTimestamp;
 
         // drag cursors
         Cursor                      m_aMoveCursor;
@@ -324,14 +320,12 @@ namespace x11 {
                                     m_aDropTargets;
 
         // some special atoms that are needed often
-        Atom                        m_nCLIPBOARDAtom;
         Atom                        m_nTARGETSAtom;
         Atom                        m_nTIMESTAMPAtom;
         Atom                        m_nTEXTAtom;
         Atom                        m_nINCRAtom;
         Atom                        m_nCOMPOUNDAtom;
         Atom                        m_nMULTIPLEAtom;
-        Atom                        m_nUTF16Atom;
         Atom                        m_nImageBmpAtom;
         Atom                        m_nXdndAware;
         Atom                        m_nXdndEnter;
@@ -347,7 +341,6 @@ namespace x11 {
         Atom                        m_nXdndActionMove;
         Atom                        m_nXdndActionLink;
         Atom                        m_nXdndActionAsk;
-        Atom                        m_nXdndActionPrivate;
 
         // caching for atoms
         std::unordered_map< Atom, OUString >

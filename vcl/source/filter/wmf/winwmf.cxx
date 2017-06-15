@@ -912,6 +912,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             sal_Int16 lfWeight = 0;
 
             LOGFONTW aLogFont;
+            unsigned char nTmp;
             aFontSize = ReadYXExt();
             pWMF->ReadInt16( lfEscapement );
             pWMF->ReadInt16( lfOrientation );
@@ -920,16 +921,15 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             pWMF->ReadUChar( aLogFont.lfUnderline );
             pWMF->ReadUChar( aLogFont.lfStrikeOut );
             pWMF->ReadUChar( aLogFont.lfCharSet );
-            pWMF->ReadUChar( aLogFont.lfOutPrecision );
-            pWMF->ReadUChar( aLogFont.lfClipPrecision );
-            pWMF->ReadUChar( aLogFont.lfQuality );
+            pWMF->ReadUChar( nTmp ); // lfOutPrecision
+            pWMF->ReadUChar( nTmp ); // lfClipPrecision
+            pWMF->ReadUChar( nTmp ); // lfQuality
             pWMF->ReadUChar( aLogFont.lfPitchAndFamily );
             size_t nRet = pWMF->ReadBytes( lfFaceName, LF_FACESIZE );
             lfFaceName[nRet] = 0;
             aLogFont.lfWidth = aFontSize.Width();
             aLogFont.lfHeight = aFontSize.Height();
             aLogFont.lfEscapement = lfEscapement;
-            aLogFont.lfOrientation = lfOrientation;
             aLogFont.lfWeight = lfWeight;
 
             rtl_TextEncoding eCharSet;
@@ -1330,7 +1330,6 @@ void WMFReader::ReadWMF()
     sal_uLong   nPos, nPercent, nLastPercent;
 
     nSkipActions = 0;
-    nCurrentAction = 0;
 
     pEMFStream.reset();
     nEMFRecCount    = 0;
@@ -1355,7 +1354,6 @@ void WMFReader::ReadWMF()
            bool bEMFAvailable = false;
             while( true )
             {
-                nCurrentAction++;
                 nPercent = ( nPos - nStartPos ) * 100 / ( nEndPos - nStartPos );
 
                 if( nLastPercent + 4 <= nPercent )
@@ -1829,7 +1827,6 @@ WMFReader::WMFReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile,
     , nEMFRec(0)
     , nEMFSize(0)
     , nSkipActions(0)
-    , nCurrentAction(0)
     , pExternalHeader(pExtHeader)
 {}
 
