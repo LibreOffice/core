@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_22784f8f",
+        "filename": "writerfilter/source/rtftok/rtfdocumentimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-06-15T12:51:16Z",
+      "side": 0,
+      "message": "Actually the root cause here is that I broke this in 42922c40362f414ee06e65636f61798ef28cdcde, see how the m_bFormField read was lost in that commit. A simple if block inside the new case one should be added back, and then this field will be read again. Should I fix that or easier for you if you do it, so we don\u0027t conflict?",
+      "revId": "b1140b9b08db4b40f0fea00d78e72148dcebd292",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
