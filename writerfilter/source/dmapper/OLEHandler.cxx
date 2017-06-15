@@ -55,8 +55,6 @@ using namespace ::com::sun::star;
 
 OLEHandler::OLEHandler(DomainMapper& rDomainMapper) :
 LoggedProperties("OLEHandler"),
-m_nDxaOrig(0),
-m_nDyaOrig(0),
     m_nWrapMode(text::WrapTextMode_THROUGHT),
     m_rDomainMapper(rDomainMapper)
 {
@@ -96,10 +94,8 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
             rVal.getAny() >>= m_xInputStream;
         break;
         case NS_ooxml::LN_CT_Object_dxaOrig:
-            m_nDxaOrig = rVal.getInt();
         break;
         case NS_ooxml::LN_CT_Object_dyaOrig:
-            m_nDyaOrig = rVal.getInt();
         break;
         case NS_ooxml::LN_shape:
         {

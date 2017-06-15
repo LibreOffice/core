@@ -44,8 +44,6 @@ class ListLevel : public PropertyMap
     sal_Int32                                     m_nIStartAt;       //LN_CT_Lvl_start
     sal_Int32                                     m_nNFC;            //LN_CT_Lvl_numFmt
     sal_Int32                                     m_nJC;             //LN_JC
-    sal_Int32                                     m_nFLegal;         //LN_FLEGAL
-    sal_Int32                                     m_nFPrevSpace;     //LN_FPREVSPACE
     sal_Int16                                     m_nXChFollow;      //LN_IXCHFOLLOW
     OUString                               m_sBulletChar;
     OUString                               m_sGraphicURL;
@@ -63,8 +61,6 @@ public:
         m_nIStartAt(-1)
         ,m_nNFC(-1)
         ,m_nJC(-1)
-        ,m_nFLegal(-1)
-        ,m_nFPrevSpace(-1)
         ,m_nXChFollow(SvxNumberFormat::LISTTAB)
         ,m_nTabstop( 0 )
         ,m_outline(false)
@@ -121,8 +117,6 @@ private:
 class AbstractListDef
 {
 private:
-    sal_Int32                            m_nTmpl;
-
     // The ID member reflects either the abstractNumId or the numId
     // depending on the use of the class
     sal_Int32                            m_nId;
@@ -145,7 +139,7 @@ public:
 
     // Setters using during the import
     void SetId( sal_Int32 nId ) { m_nId = nId; };
-    void SetValue( sal_uInt32 nSprmId, sal_Int32 nValue );
+    static void SetValue( sal_uInt32 nSprmId );
 
     // Accessors
     sal_Int32             GetId( ) { return m_nId; };

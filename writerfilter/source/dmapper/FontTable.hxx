@@ -35,10 +35,8 @@ struct FontEntry
     typedef std::shared_ptr<FontEntry> Pointer_t;
 
     OUString        sFontName;
-    sal_Int16       nPitchRequest;
     sal_Int32       nTextEncoding;
     FontEntry() :
-        nPitchRequest( 0 ),
         nTextEncoding( RTL_TEXTENCODING_DONTKNOW )
         {}
 };

@@ -47,10 +47,7 @@ struct SettingsTable_Impl
     OUString     m_sListSeparatorForFields; //2.15.1.56 listSeparator (List Separator for Field Code Evaluation)
 
     int                 m_nDefaultTabStop;
-    int                 m_nHyphenationZone;
 
-    bool                m_bNoPunctuationKerning;
-    bool                m_doNotIncludeSubdocsInStats; // Do Not Include Content in Text Boxes, Footnotes, and Endnotes in Document Statistics)
     bool                m_bRecordChanges;
     bool                m_bLinkStyles;
     sal_Int16           m_nZoomFactor;
@@ -75,9 +72,6 @@ struct SettingsTable_Impl
 
     SettingsTable_Impl() :
       m_nDefaultTabStop( 720 ) //default is 1/2 in
-    , m_nHyphenationZone(0)
-    , m_bNoPunctuationKerning(false)
-    , m_doNotIncludeSubdocsInStats(false)
     , m_bRecordChanges(false)
     , m_bLinkStyles(false)
     , m_nZoomFactor(0)
@@ -206,13 +200,11 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     m_pImpl->m_bEvenAndOddHeaders = nIntValue;
     break;
     case NS_ooxml::LN_CT_Settings_noPunctuationKerning: //  92526;
-    m_pImpl->m_bNoPunctuationKerning = nIntValue != 0;
     break;
     case NS_ooxml::LN_CT_Settings_characterSpacingControl: //  92527;
     m_pImpl->m_sCharacterSpacing = sStringValue; // doNotCompress, compressPunctuation, compressPunctuationAndJapaneseKana
     break;
     case NS_ooxml::LN_CT_Settings_doNotIncludeSubdocsInStats: //  92554; // Do Not Include Content in Text Boxes, Footnotes, and Endnotes in Document Statistics)
-    m_pImpl->m_doNotIncludeSubdocsInStats = nIntValue != 0;
     break;
     case NS_ooxml::LN_CT_Settings_decimalSymbol: //  92562;
     m_pImpl->m_sDecimalSymbol = sStringValue;
@@ -223,7 +215,6 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Settings_rsids: //  92549; revision save Ids - probably not necessary
     break;
     case NS_ooxml::LN_CT_Settings_hyphenationZone: // 92508;
-    m_pImpl->m_nHyphenationZone = nIntValue;
     break;
     case NS_ooxml::LN_CT_Compat_useFELayout: // 92422;
     // useFELayout (Do Not Bypass East Asian/Complex Script Layout Code - support of old versions of Word - ignored)

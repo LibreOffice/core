@@ -275,7 +275,6 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
       m_nCurrentEncoding(-1),
       m_nDefaultFontIndex(-1),
       m_nCurrentStyleIndex(0),
-      m_bFormField(false),
       m_bMathNor(false),
       m_bIgnoreNextContSectBreak(false),
       m_nResetBreakOnSectBreak(RTF_invalid),
@@ -2246,8 +2245,6 @@ RTFError RTFDocumentImpl::popState()
             auto pDValue = std::make_shared<RTFValue>(OStringToOUString(aDefaultText, aState.nCurrentEncoding));
             m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFTextInput_default, pDValue);
         }
-
-        m_bFormField = false;
     }
     break;
     case Destination::CREATIONTIME:

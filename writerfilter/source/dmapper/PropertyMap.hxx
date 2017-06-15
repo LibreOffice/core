@@ -81,7 +81,6 @@ struct RedlineParams
 {
     OUString  m_sAuthor;
     OUString  m_sDate;
-    sal_Int32 m_nId;
     sal_Int32 m_nToken;
 
     // This can hold properties of runs that had formatted 'track changes' properties
@@ -211,7 +210,6 @@ private:
 
     bool                                            m_bSeparatorLineIsOn;
     bool                                            m_bEvenlySpaced;
-    bool                                            m_bIsLandscape;
 
     bool                                            m_bPageNoRestart;
     sal_Int32                                       m_nPageNumber;
@@ -326,7 +324,6 @@ public:
     void SetTitlePage( bool bSet )           { m_bTitlePage = bSet; }
     void SetSeparatorLine( bool bSet )       { m_bSeparatorLineIsOn = bSet; }
     void SetEvenlySpaced( bool bSet )        { m_bEvenlySpaced = bSet; }
-    void SetLandscape( bool bSet )           { m_bIsLandscape = bSet; }
     void SetPageNumber( sal_Int32 nSet )     { m_nPageNumber = nSet; }
     void SetPageNumberType( sal_Int32 nSet ) { m_nPageNumberType = nSet; }
     void SetBreakType( sal_Int32 nSet )      { m_nBreakType = nSet; }
@@ -475,12 +472,6 @@ class StyleSheetPropertyMap
     , public ParagraphProperties
 {
 private:
-    sal_Int32 mnCT_TrPrBase_jc;
-    sal_Int32 mnCT_TblWidth_w;
-    sal_Int32 mnCT_TblWidth_type;
-    bool      mbCT_TrPrBase_jcSet;
-    bool      mbCT_TblWidth_wSet;
-    bool      mbCT_TblWidth_typeSet;
     sal_Int32 mnListId;
     sal_Int16 mnListLevel;
     sal_Int16 mnOutlineLevel;
@@ -488,24 +479,6 @@ private:
 
 public:
     explicit StyleSheetPropertyMap();
-
-    void SetCT_TrPrBase_jc( sal_Int32 nSet )
-    {
-        mnCT_TrPrBase_jc = nSet;
-        mbCT_TrPrBase_jcSet = true;
-    }
-
-    void SetCT_TblWidth_w( sal_Int32 nSet )
-    {
-        mnCT_TblWidth_w = nSet;
-        mbCT_TblWidth_wSet = true;
-    }
-
-    void SetCT_TblWidth_type( sal_Int32 nSet )
-    {
-        mnCT_TblWidth_type = nSet;
-        mbCT_TblWidth_typeSet = true;
-    }
 
     sal_Int32 GetListId() const          { return mnListId; }
     void      SetListId( sal_Int32 nId ) { mnListId = nId; }

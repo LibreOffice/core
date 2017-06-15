@@ -616,7 +616,6 @@ private:
 
     RTFReferenceTable::Entries_t m_aStyleTableEntries;
     int m_nCurrentStyleIndex;
-    bool m_bFormField;
     /// For the INCLUDEPICTURE field's argument.
     OUString m_aPicturePath;
     // Unicode characters are collected here so we don't have to send them one by one.

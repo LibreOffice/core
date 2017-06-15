@@ -83,7 +83,6 @@ struct PageMar
     sal_Int32 left;
     sal_Int32 header;
     sal_Int32 footer;
-    sal_Int32 gutter;
     public:
         PageMar();
 };
@@ -286,17 +285,13 @@ struct RubyInfo
 
 struct LineNumberSettings
 {
-    bool        bIsOn;
     sal_Int32   nDistance;
     sal_Int32   nInterval;
     bool        bRestartAtEachPage;
-    sal_Int32   nStartValue;
     LineNumberSettings() :
-        bIsOn(false)
-        ,nDistance(0)
+         nDistance(0)
         ,nInterval(0)
         ,bRestartAtEachPage(true)
-        ,nStartValue(1)
     {}
 
 };
@@ -372,7 +367,6 @@ private:
     bool                                                                            m_bStartedTOC;
     bool                                                                            m_bStartIndex;
     bool                                                                            m_bStartBibliography;
-    bool                                                                            m_bTOCPageRef;
     bool                                                                            m_bStartGenericField;
     bool                                                                            m_bTextInserted;
     LineNumberSettings                                                              m_aLineNumberSettings;

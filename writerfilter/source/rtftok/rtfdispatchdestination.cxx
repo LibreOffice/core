@@ -104,10 +104,6 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
 
             Strm().Seek(nPos);
 
-            // Form data should be handled only for form fields if any
-            if (aBuf.toString().indexOf(OString("FORM")) != -1)
-                m_bFormField = true;
-
             singleChar(cFieldStart);
             m_aStates.top().eDestination = Destination::FIELDINSTRUCTION;
         }
