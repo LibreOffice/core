@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_e7bc996e",
+        "filename": "comphelper/source/misc/profilezone.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-15T11:13:42Z",
+      "side": 1,
+      "message": "this should probably be either volatile or atomic",
+      "revId": "0213eaddb49735c93318921777aa6fcd81234056",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_c78f9dca",
+        "filename": "comphelper/source/misc/profilezone.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-15T11:13:42Z",
+      "side": 1,
+      "message": "static?",
+      "revId": "0213eaddb49735c93318921777aa6fcd81234056",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_07c0c5df",
+        "filename": "comphelper/source/misc/profilezone.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-15T11:13:42Z",
+      "side": 1,
+      "message": "mutexguard here? atomics are not much help when your state is spread across more than one of them :-)",
+      "revId": "0213eaddb49735c93318921777aa6fcd81234056",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_a79451e2",
+        "filename": "comphelper/source/misc/profilezone.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-15T11:13:42Z",
+      "side": 1,
+      "message": "shouldn\u0027t these guards rather be inside addRecording, since it seems that is the method that needs protection?",
+      "revId": "0213eaddb49735c93318921777aa6fcd81234056",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
