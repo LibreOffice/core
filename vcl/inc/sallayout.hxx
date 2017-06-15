@@ -201,7 +201,6 @@ private:
 protected:
     int             mnMinCharPos;
     int             mnEndCharPos;
-    SalLayoutFlags  mnLayoutFlags;
 
     int             mnUnitsPerPixel;
     int             mnOrientation;

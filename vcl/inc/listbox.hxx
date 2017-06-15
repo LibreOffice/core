@@ -200,7 +200,6 @@ private:
     bool mbMulti : 1;            ///< MultiListBox
     bool mbStackMode : 1;        ///< StackSelection
     bool mbSimpleMode : 1;       ///< SimpleMode for MultiListBox
-    bool mbImgsDiffSz : 1;       ///< Images have different sizes
     bool mbTravelSelect : 1;     ///< TravelSelect
     bool mbTrackingSelect : 1;   ///< Selected at a MouseMove
     bool mbSelectionChanged : 1; ///< Do not call Select() too often ...
@@ -518,7 +517,6 @@ private:
     Link<UserDrawEvent*, void> maUserDrawHdl;
 
     bool            mbUserDrawEnabled : 1;
-    bool            mbInUserDraw : 1;
     bool            mbEdgeBlending : 1;
 
     void ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout = false);
@@ -563,7 +561,6 @@ public:
 class ImplBtn : public PushButton
 {
 private:
-    bool            mbDown;
     Link<void*,void> maMBDownHdl;
 
 public:
