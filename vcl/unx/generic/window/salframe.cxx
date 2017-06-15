@@ -837,8 +837,6 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
     hCursor_                    = None;
     nCaptured_                  = 0;
 
-    nKeyCode_                   = 0;
-    nKeyState_                  = 0;
     mbSendExtKeyModChange       = false;
     mnExtKeyMod                 = ModKeyFlags::NONE;
 
@@ -868,7 +866,6 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
     maAlwaysOnTopRaiseTimer.SetDebugName( "vcl::X11SalFrame maAlwaysOnTopRaiseTimer" );
 
     meWindowType                = WMWindowType::Normal;
-    mnDecorationFlags           = WMAdaptor::decoration_All;
     mbMaximizedVert             = false;
     mbMaximizedHorz             = false;
     mbShaded                    = false;
@@ -3911,8 +3908,6 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
         switch( pEvent->type )
         {
             case KeyPress:
-                nKeyCode_   = pEvent->xkey.keycode;
-                nKeyState_  = pEvent->xkey.state;
                 nRet        = HandleKeyEvent( &pEvent->xkey );
                 break;
 

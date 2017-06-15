@@ -182,7 +182,6 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         maClientData.aText.pCharStyle       =
             static_cast<XIMFeedback*>(malloc(PREEDIT_BUFSZ * sizeof(XIMFeedback)));
         maClientData.aText.nSize            = PREEDIT_BUFSZ;
-        maClientData.aText.nCursorPos       = 0;
         maClientData.aText.nLength          = 0;
 
         // Status attributes

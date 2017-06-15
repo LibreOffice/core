@@ -162,29 +162,6 @@ static const char* pDictEscs[] = {
     "nFDArray",             "nFDSelect",        "sFontName"
 };
 
-static const char* pType1Ops[] = {
-    nullptr,               "2hstem",           nullptr,               "2vstem",
-    "1vmoveto",         "Arlineto",         "1hlineto",         "1vlineto",
-    "Crrcurveto",       "0closepath",       "Lcallsubr",        "0return",
-    "xT1ESC",           "2hsbw",            "0endchar",         nullptr,
-    nullptr,               nullptr,               nullptr,               nullptr,
-    nullptr,               "2rmoveto",         "1hmoveto",         nullptr,
-    nullptr,               nullptr,               nullptr,               nullptr,
-    nullptr,               nullptr,               "4vhcurveto",       "4hvcurveto"
-};
-
-static const char* pT1EscOps[] = {
-    "0dotsection",      "6vstem3",          "6hstem3",          nullptr,
-    nullptr,               nullptr,               "5seac",            "4sbw",
-    nullptr,               "1abs",             "2add",             "2sub",
-    "2div",             nullptr,               nullptr,               nullptr,
-    "Gcallothersubr",   "1pop",             nullptr,               nullptr,
-    nullptr,               nullptr,               nullptr,               nullptr,
-    nullptr,               nullptr,               nullptr,               nullptr,
-    nullptr,               nullptr,               nullptr,               nullptr,
-    nullptr,               "2setcurrentpoint"
-};
-
 struct TYPE1OP
 {
     enum OPS
@@ -202,30 +179,6 @@ struct TYPE1OP
         SBW=7,          ABS=9,              ADD=10,     SUB=11,
         DIV=12,         CALLOTHERSUBR=16,   POP=17,     SETCURRENTPOINT=33
     };
-};
-
-static const char* pType2Ops[] = {
-    nullptr,           "hhstem",       nullptr,           "vvstem",
-    "mvmoveto",     "Arlineto",     "Ehlineto",     "Evlineto",
-    "Crrcurveto",   nullptr,           "Lcallsubr",    "Xreturn",
-    "xT2ESC",       nullptr,           "eendchar",     nullptr,
-    nullptr,           nullptr,           "Hhstemhm",     "Khintmask",
-    "Kcntrmask",    "Mrmoveto",     "mhmoveto",     "Vvstemhm",
-    ".rcurveline",  ".rlinecurve",  ".vvcurveto",   ".hhcurveto",
-    ".shortint",    "Gcallgsubr",   ".vhcurveto",   ".hvcurveto"
-};
-
-static const char* pT2EscOps[] = {
-    nullptr,       nullptr,       nullptr,       "2and",
-    "2or",      "1not",     nullptr,       nullptr,
-    nullptr,       "1abs",     "2add",     "2sub",
-    "2div",     nullptr,       "1neg",     "2eq",
-    nullptr,       nullptr,       "1drop",    nullptr,
-    "1put",     "1get",     "4ifelse",  "0random",
-    "2mul",     nullptr,       "1sqrt",    "1dup",
-    "2exch",    "Iindex",   "Rroll",    nullptr,
-    nullptr,       nullptr,       "7hflex",   "Fflex",
-    "9hflex1",  "fflex1"
 };
 
 struct TYPE2OP
@@ -257,13 +210,10 @@ struct CffGlobal
     explicit CffGlobal();
 
     int     mnNameIdxBase;
-    int     mnNameIdxCount;
     int     mnStringIdxBase;
-    int     mnStringIdxCount;
     bool    mbCIDFont;
     int     mnCharStrBase;
     int     mnCharStrCount;
-    int     mnEncodingBase;
     int     mnCharsetBase;
     int     mnGlobalSubrBase;
     int     mnGlobalSubrCount;
@@ -277,7 +227,6 @@ struct CffGlobal
 
     int     mnFontNameSID;
     int     mnFullNameSID;
-    int     mnFamilyNameSID;
 };
 
 struct CffLocal
@@ -326,8 +275,6 @@ public:
                 const sal_GlyphId* pGlyphIds, const U8* pEncoding,
                 GlyphWidth* pGlyphWidths, int nGlyphCount, FontSubsetInfo& );
 
-    // used by charstring converter
-    void    setCharStringType( int);
 protected:
     int     convert2Type1Ops( CffLocal*, const U8* pType2Ops, int nType2Len, U8* pType1Ops);
 private:
@@ -352,9 +299,6 @@ private:
     void    seekIndexEnd( int nIndexBase);
 
 private:
-    const char**    mpCharStringOps;
-    const char**    mpCharStringEscs;
-
     CffLocal    maCffLocal[256];
     CffLocal*   mpCffLocal;
 
@@ -415,8 +359,6 @@ CffSubsetterContext::CffSubsetterContext( const U8* pBasePtr, int nBaseLen)
     , mbNeedClose(false)
     , mbIgnoreHints(false)
     , mnCntrMask(0)
-    , mpCharStringOps(nullptr)
-    , mpCharStringEscs(nullptr)
     , mnStackIdx(0)
     , mnValStack{}
     , mnTransVals{}
@@ -484,15 +426,6 @@ void CffSubsetterContext::addHints( bool bVerticalHints)
     mnStackIdx = 0;
 }
 
-void CffSubsetterContext::setCharStringType( int nVal)
-{
-    switch( nVal) {
-        case 1: mpCharStringOps=pType1Ops; mpCharStringEscs=pT1EscOps; break;
-        case 2: mpCharStringOps=pType2Ops; mpCharStringEscs=pT2EscOps; break;
-        default: fprintf( stderr, "Unknown CharstringType=%d\n",nVal); break;
-    }
-}
-
 void CffSubsetterContext::readDictOp()
 {
     const U8 c = *mpReadPtr;
@@ -529,7 +462,7 @@ void CffSubsetterContext::readDictOp()
             case  10: mpCffLocal->maStemStdHW = nVal; break;    // "StdHW"
             case  11: mpCffLocal->maStemStdVW = nVal; break;    // "StdVW"
             case  15: mnCharsetBase = nInt; break;              // "charset"
-            case  16: mnEncodingBase = nInt; break;             // "nEncoding"
+            case  16: break;                                    // "nEncoding"
             case  17: mnCharStrBase = nInt; break;              // "nCharStrings"
             case  19: mpCffLocal->mnLocalSubrOffs = nInt; break;// "nSubrs"
             case  20: setDefaultWidth( nVal ); break;           // "defaultWidthX"
@@ -580,7 +513,7 @@ void CffSubsetterContext::readDictOp()
             nInt = popInt();
             switch( nOpId ) {
             case   2: mnFullNameSID = nInt; break;      // "FullName"
-            case   3: mnFamilyNameSID = nInt; break;    // "FamilyName"
+            case   3: break;    // "FamilyName"
             case 938: mnFontNameSID = nInt; break;      // "FontName"
             default: break; // TODO: handle more string dictops?
             }
@@ -599,7 +532,6 @@ void CffSubsetterContext::readDictOp()
             } break;
         case 't':   // CharstringType
             nInt = popInt();
-            setCharStringType( nInt );
             break;
         }
     } else if( (c >= 32) || (c == 28) ) {
@@ -1370,13 +1302,10 @@ CffLocal::CffLocal()
 
 CffGlobal::CffGlobal()
 :   mnNameIdxBase( 0)
-,   mnNameIdxCount( 0)
 ,   mnStringIdxBase( 0)
-,   mnStringIdxCount( 0)
 ,   mbCIDFont( false)
 ,   mnCharStrBase( 0)
 ,   mnCharStrCount( 0)
-,   mnEncodingBase( 0)
 ,   mnCharsetBase( 0)
 ,   mnGlobalSubrBase( 0)
 ,   mnGlobalSubrCount( 0)
@@ -1386,7 +1315,6 @@ CffGlobal::CffGlobal()
 ,   mnFDAryCount( 1)
 ,   mnFontNameSID( 0)
 ,   mnFullNameSID( 0)
-,   mnFamilyNameSID( 0)
 {
 }
 
@@ -1405,7 +1333,6 @@ bool CffSubsetterContext::initialCffRead()
     // prepare access to the NameIndex
     mnNameIdxBase = nHeaderSize;
     mpReadPtr = mpBasePtr + nHeaderSize;
-    mnNameIdxCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
     seekIndexEnd( mnNameIdxBase);
 
     // get the TopDict index
@@ -1422,7 +1349,6 @@ bool CffSubsetterContext::initialCffRead()
 
     // prepare access to the String index
     mnStringIdxBase =  getReadOfs();
-    mnStringIdxCount = (mpReadPtr[0]<<8) + mpReadPtr[1];
     seekIndexEnd( mnStringIdxBase);
 
     // prepare access to the GlobalSubr index

@@ -86,8 +86,6 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public NativeWindowHandl
     X11SalGraphics  *pGraphics_;            // current frame graphics
     X11SalGraphics  *pFreeGraphics_;        // first free frame graphics
 
-    sal_uInt16      nKeyCode_;          // last key code
-    sal_uInt16      nKeyState_;         // last key state
     bool            mbSendExtKeyModChange;
     ModKeyFlags     mnExtKeyMod;
 
@@ -114,7 +112,6 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public NativeWindowHandl
 
     // data for WMAdaptor
     WMWindowType    meWindowType;
-    int             mnDecorationFlags;
     bool            mbMaximizedVert;
     bool            mbMaximizedHorz;
     bool            mbShaded;

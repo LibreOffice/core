@@ -170,7 +170,6 @@ private:
     bool        mbColor;
     bool        mbUploadPS42Fonts;
 
-    osl::File*      mpPageHeader;
     osl::File*      mpPageBody;
 
     /* text/font related data, for a type1 font it has to be checked

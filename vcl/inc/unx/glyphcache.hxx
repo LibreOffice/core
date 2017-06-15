@@ -190,7 +190,6 @@ private:
     bool                    mbFaceOk;
     bool                    mbArtItalic;
     bool                    mbArtBold;
-    bool                    mbUseGamma;
 
     hb_font_t*              mpHbFont;
 };

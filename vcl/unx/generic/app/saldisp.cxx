@@ -277,14 +277,12 @@ bool SalDisplay::BestVisual( Display     *pDisplay,
 SalDisplay::SalDisplay( Display *display ) :
         pXLib_( nullptr ),
         mpKbdExtension( nullptr ),
-        mpFactory( nullptr ),
         pDisp_( display ),
         m_nXDefaultScreen( 0 ),
         nMaxRequestSize_( 0 ),
         meServerVendor( vendor_unknown ),
         bNumLockFromXS_( false ),
         nNumLockIndex_( 0 ),
-        nNumLockMask_( 0 ),
         nShiftKeySym_( 0 ),
         nCtrlKeySym_( 0 ),
         nMod1KeySym_( 0 ),
@@ -580,7 +578,6 @@ void SalDisplay::Init()
     for( Cursor & aCsr : aPointerCache_ )
         aCsr = None;
 
-    mpFactory           = nullptr;
     m_bXinerama         = false;
 
     int nDisplayScreens = ScreenCount( pDisp_ );
@@ -805,7 +802,6 @@ void SalDisplay::ModifierMapping()
             {
                 bNumLockFromXS_ = False;
                 nNumLockIndex_  = i;
-                nNumLockMask_   = 1<<i;
                 break;
             }
         }

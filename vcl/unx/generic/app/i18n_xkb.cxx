@@ -28,7 +28,6 @@
 SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
     : mbUseExtension(true)
     , mnDefaultGroup(0)
-    , mnGroup(0)
     , mnEventBase(0)
     , mnErrorBase(0)
     , mpDisplay(pDisplay)
@@ -78,7 +77,6 @@ SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
     {
         XkbStateRec aStateRecord;
         XkbGetState( mpDisplay, XkbUseCoreKbd, &aStateRecord );
-        mnGroup = aStateRecord.group;
     }
 }
 
@@ -96,8 +94,6 @@ SalI18N_KeyboardExtension::Dispatch( XEvent* pEvent )
     switch ( nXKBType )
     {
         case XkbStateNotify:
-
-            mnGroup = reinterpret_cast<XkbStateNotifyEvent*>(pEvent)->group;
             break;
 
         default:

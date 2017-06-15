@@ -1120,7 +1120,6 @@ sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link<Me
     } while( it != m_aAddButtons.end() && nId < 128 );
     SAL_WARN_IF( nId >= 128, "vcl", "too many addbuttons in menubar" );
     AddButtonEntry& rNewEntry = m_aAddButtons[nId];
-    rNewEntry.m_nId = nId;
     rNewEntry.m_aSelectLink = i_rLink;
     aCloseBtn->InsertItem(nId, i_rImage, ToolBoxItemBits::NONE, 0);
     aCloseBtn->calcMinSize();

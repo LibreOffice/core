@@ -63,11 +63,8 @@ class MenuBarWindow : public vcl::Window, public MenuWindow
 private:
     struct AddButtonEntry
     {
-        sal_uInt16    m_nId;
         Link<MenuBar::MenuBarButtonCallbackArg&,bool>  m_aSelectLink;
         Link<MenuBar::MenuBarButtonCallbackArg&,bool>  m_aHighlightLink;
-
-        AddButtonEntry() : m_nId( 0 ) {}
     };
 
     VclPtr<Menu>           pMenu;

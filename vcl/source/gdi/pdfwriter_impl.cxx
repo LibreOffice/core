@@ -1133,13 +1133,11 @@ PDFWriterImpl::PDFPage::PDFPage( PDFWriterImpl* pWriter, double nPageWidth, doub
         m_nPageHeight( nPageHeight ),
         m_eOrientation( eOrientation ),
         m_nPageObject( 0 ),  // invalid object number
-        m_nPageIndex( -1 ), // invalid index
         m_nStreamLengthObject( 0 ),
         m_nBeginStreamPos( 0 ),
         m_eTransition( PDFWriter::PageTransition::Regular ),
         m_nTransTime( 0 ),
-        m_nDuration( 0 ),
-        m_bHasWidgets( false )
+        m_nDuration( 0 )
 {
     // object ref must be only ever updated in emit()
     m_nPageObject = m_pWriter->createObject();
@@ -2263,7 +2261,6 @@ void PDFWriterImpl::newPage( double nPageWidth, double nPageHeight, PDFWriter::O
     endPage();
     m_nCurrentPage = m_aPages.size();
     m_aPages.push_back( PDFPage(this, nPageWidth, nPageHeight, eOrientation ) );
-    m_aPages.back().m_nPageIndex = m_nCurrentPage;
     m_aPages.back().beginStream();
 
     // setup global graphics state
@@ -13665,9 +13662,6 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
 
     // insert widget to page's annotation list
     m_aPages[ nPageNr ].m_aAnnotations.push_back( rNewWidget.m_nObject );
-
-    // mark page as having widgets
-    m_aPages[ nPageNr ].m_bHasWidgets = true;
 
     return nNewWidget;
 }

@@ -1088,7 +1088,6 @@ void GtkSalFrame::InitCommon()
     m_bFullscreen       = false;
     m_bSpanMonitorsWhenFullscreen = false;
     m_nState            = GDK_WINDOW_STATE_WITHDRAWN;
-    m_nVisibility       = GDK_VISIBILITY_FULLY_OBSCURED;
     m_pIMHandler        = nullptr;
     m_pRegion           = nullptr;
     m_pDropTarget       = nullptr;
@@ -3283,10 +3282,8 @@ gboolean GtkSalFrame::signalWindowState( GtkWidget*, GdkEvent* pEvent, gpointer 
     return false;
 }
 
-gboolean GtkSalFrame::signalVisibility( GtkWidget*, GdkEventVisibility* pEvent, gpointer frame )
+gboolean GtkSalFrame::signalVisibility( GtkWidget*, GdkEventVisibility* /*pEvent*/, gpointer /*frame*/ )
 {
-    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    pThis->m_nVisibility = pEvent->state;
     return true;
 }
 

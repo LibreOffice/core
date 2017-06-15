@@ -190,7 +190,6 @@ class GtkSalFrame : public SalFrame
     bool                            m_bGraphics;
     ModKeyFlags                     m_nKeyModifiers;
     GdkCursor                      *m_pCurrentCursor;
-    GdkVisibilityState              m_nVisibility;
     PointerStyle                    m_ePointerStyle;
     ScreenSaverInhibitor            m_ScreenSaverInhibitor;
     int                             m_nWorkArea;

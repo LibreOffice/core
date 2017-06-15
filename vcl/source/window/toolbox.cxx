@@ -93,7 +93,6 @@ private:
     Accelerator     maAccel;
     sal_uInt16      mnLineMode;
     ToolBox::ImplToolItems::size_type mnStartLines;
-    bool            mbShowDragRect;
 
     ImplTBDragMgr(const ImplTBDragMgr&) = delete;
     ImplTBDragMgr& operator=(const ImplTBDragMgr&) = delete;
@@ -1036,7 +1035,6 @@ ImplTBDragMgr::ImplTBDragMgr()
     : mpDragBox(nullptr)
     , mnLineMode(0)
     , mnStartLines(0)
-    , mbShowDragRect(false)
 {
     maAccel.InsertItem( KEY_RETURN, vcl::KeyCode( KEY_RETURN ) );
     maAccel.InsertItem( KEY_ESCAPE, vcl::KeyCode( KEY_ESCAPE ) );
@@ -1060,7 +1058,6 @@ void ImplTBDragMgr::StartDragging( ToolBox* pToolBox,
     maMouseOff.Y() = rRect.Top() - rPos.Y();
     maRect = rRect;
     maStartRect = rRect;
-    mbShowDragRect = true;
     pToolBox->ShowTracking( maRect );
 }
 
@@ -1080,7 +1077,6 @@ void ImplTBDragMgr::EndDragging( bool bOK )
     if (mpDragBox->IsMouseCaptured())
         mpDragBox->ReleaseMouse();
     mpDragBox->mbDragging = false;
-    mbShowDragRect = false;
     Application::RemoveAccel( &maAccel );
 
     if ( !bOK )

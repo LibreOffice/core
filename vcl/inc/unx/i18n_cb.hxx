@@ -50,13 +50,11 @@ struct preedit_text_t
 {
     sal_Unicode   *pUnicodeBuffer;
     XIMFeedback   *pCharStyle;
-    unsigned int   nCursorPos;
     unsigned int   nLength;
     unsigned int   nSize;
     preedit_text_t()
         : pUnicodeBuffer(nullptr)
         , pCharStyle(nullptr)
-        , nCursorPos(0)
         , nLength(0)
         , nSize(0)
     {

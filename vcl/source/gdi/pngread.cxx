@@ -125,7 +125,6 @@ private:
     bool                mbStatus : 1;
     bool                mbIDATStarted : 1;  // true if IDAT seen
     bool                mbIDAT : 1;         // true if finished with enough IDAT chunks
-    bool                mbGamma : 1;        // true if Gamma Correction available
     bool                mbpHYs : 1;         // true if physical size of pixel available
     bool                mbIgnoreGammaChunk : 1;
 
@@ -204,7 +203,6 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mbStatus( true ),
     mbIDATStarted( false ),
     mbIDAT( false ),
-    mbGamma             ( false ),
     mbpHYs              ( false ),
     mbIgnoreGammaChunk  ( false ),
 #if OSL_DEBUG_LEVEL > 0
@@ -829,8 +827,6 @@ void PNGReaderImpl::ImplGetGamma()
 
     if ( fInvGamma != 1.0 )
     {
-        mbGamma = true;
-
         if ( mpColorTable == mpDefaultColorTable )
             mpColorTable = new sal_uInt8[ 256 ];
 

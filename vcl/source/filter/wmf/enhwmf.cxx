@@ -1523,18 +1523,20 @@ bool EnhWMFReader::ReadEnhWMF()
                     if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                     {
                         LOGFONTW aLogFont;
+                        sal_Int32 nTmp;
+                        unsigned char nTmp2;
                         pWMF->ReadInt32( aLogFont.lfHeight )
                              .ReadInt32( aLogFont.lfWidth )
                              .ReadInt32( aLogFont.lfEscapement )
-                             .ReadInt32( aLogFont.lfOrientation )
+                             .ReadInt32( nTmp ) // lfOrientation
                              .ReadInt32( aLogFont.lfWeight )
                              .ReadUChar( aLogFont.lfItalic )
                              .ReadUChar( aLogFont.lfUnderline )
                              .ReadUChar( aLogFont.lfStrikeOut )
                              .ReadUChar( aLogFont.lfCharSet )
-                             .ReadUChar( aLogFont.lfOutPrecision )
-                             .ReadUChar( aLogFont.lfClipPrecision )
-                             .ReadUChar( aLogFont.lfQuality )
+                             .ReadUChar( nTmp2 ) // lfOutPrecision
+                             .ReadUChar( nTmp2 ) // lfClipPrecision
+                             .ReadUChar( nTmp2 ) // lfQuality
                              .ReadUChar( aLogFont.lfPitchAndFamily );
 
                         sal_Unicode lfFaceName[LF_FACESIZE+1];
