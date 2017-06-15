@@ -406,7 +406,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 const SfxStringItem* pStringItem = rReq.GetArg<SfxStringItem>(SID_CONFIG);
 
                 SfxItemSet aSet(
-                    GetPool(), SID_CONFIG, SID_CONFIG );
+                    GetPool(), svl::Items<SID_CONFIG, SID_CONFIG>{} );
 
                 if ( pStringItem )
                 {
@@ -1597,7 +1597,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             if ( pFact )
             {
-                SfxItemSet aSet(GetPool(), SID_AUTO_CORRECT_DLG, SID_AUTO_CORRECT_DLG);
+                SfxItemSet aSet(GetPool(), svl::Items<SID_AUTO_CORRECT_DLG, SID_AUTO_CORRECT_DLG>{});
                 const SfxPoolItem* pItem=nullptr;
                 const SfxItemSet* pSet = rReq.GetArgs();
                 SfxItemPool* pSetPool = pSet ? pSet->GetPool() : nullptr;

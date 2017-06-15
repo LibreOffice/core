@@ -1860,7 +1860,7 @@ void ContentNode::dumpAsXml(struct _xmlTextWriter* pWriter) const
 
 ContentAttribs::ContentAttribs( SfxItemPool& rPool )
 : pStyle(nullptr)
-, aAttribSet( rPool, EE_PARA_START, EE_CHAR_END )
+, aAttribSet( rPool, svl::Items<EE_PARA_START, EE_CHAR_END>{} )
 {
 }
 
@@ -2105,7 +2105,7 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, S
 
 void EditDoc::CreateDefFont( bool bUseStyles )
 {
-    SfxItemSet aTmpSet( GetItemPool(), EE_PARA_START, EE_CHAR_END );
+    SfxItemSet aTmpSet( GetItemPool(), svl::Items<EE_PARA_START, EE_CHAR_END>{} );
     CreateFont( aDefFont, aTmpSet );
     aDefFont.SetVertical( IsVertical() );
     aDefFont.SetOrientation( IsVertical() ? (IsTopToBottom() ? 2700 : 900) : 0 );

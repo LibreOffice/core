@@ -699,7 +699,7 @@ const SfxItemSet& ImpEditEngine::GetEmptyItemSet()
 {
     if ( !pEmptyItemSet )
     {
-        pEmptyItemSet = o3tl::make_unique<SfxItemSet>( aEditDoc.GetItemPool(), EE_ITEMS_START, EE_ITEMS_END );
+        pEmptyItemSet = o3tl::make_unique<SfxItemSet>( aEditDoc.GetItemPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{} );
         for ( sal_uInt16 nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++)
         {
             pEmptyItemSet->ClearItem( nWhich );
