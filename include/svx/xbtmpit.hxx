@@ -41,6 +41,8 @@ class SVX_DLLPUBLIC XFillBitmapItem : public NameOrIndex
 private:
     GraphicObject   maGraphicObject;
 
+    GraphicObject makeGraphicObject(SvStream& rIn, sal_uInt16 nVer) const;
+
 public:
             static SfxPoolItem* CreateDefault();
             XFillBitmapItem() : NameOrIndex(XATTR_FILLBITMAP, -1 ) {}

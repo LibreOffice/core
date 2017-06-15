@@ -214,8 +214,7 @@ bool isHistorical8x8(const BitmapEx& rBitmapEx, BitmapColor& o_rBack, BitmapColo
     return bRet;
 }
 
-XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
-:   NameOrIndex(XATTR_FILLBITMAP, rIn)
+GraphicObject XFillBitmapItem::makeGraphicObject(SvStream& rIn, sal_uInt16 nVer) const
 {
     if (!IsIndex())
     {
@@ -225,7 +224,7 @@ XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
             Bitmap aBmp;
 
             ReadDIB(aBmp, rIn, true);
-            maGraphicObject = Graphic(aBmp);
+            return Graphic(aBmp);
         }
         else if(1 == nVer)
         {
@@ -239,7 +238,7 @@ XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
                 Bitmap aBmp;
 
                 ReadDIB(aBmp, rIn, true);
-                maGraphicObject = Graphic(aBmp);
+                return Graphic(aBmp);
             }
             else if(XBitmapType::N8x8 == (XBitmapType)iTmp)
             {
@@ -258,7 +257,7 @@ XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
 
                 const Bitmap aBitmap(createHistorical8x8FromArray(aArray, aColorPix, aColorBack));
 
-                maGraphicObject = Graphic(aBitmap);
+                return Graphic(aBitmap);
             }
         }
         else if(2 == nVer)
@@ -266,14 +265,21 @@ XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
             BitmapEx aBmpEx;
 
             ReadDIBBitmapEx(aBmpEx, rIn);
-            maGraphicObject = Graphic(aBmpEx);
+            return Graphic(aBmpEx);
         }
     }
+    return GraphicObject();
+}
+
+XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
+    : NameOrIndex(XATTR_FILLBITMAP, rIn)
+    , maGraphicObject(makeGraphicObject(rIn, nVer))
+{
 }
 
 XFillBitmapItem::XFillBitmapItem(const GraphicObject& rGraphicObject)
-:   NameOrIndex( XATTR_FILLBITMAP, -1),
-    maGraphicObject(rGraphicObject)
+    : NameOrIndex(XATTR_FILLBITMAP, -1)
+    , maGraphicObject(rGraphicObject)
 {
 }
 
