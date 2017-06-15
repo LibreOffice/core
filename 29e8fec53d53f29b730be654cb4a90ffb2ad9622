@@ -16,6 +16,24 @@
       "revId": "29e8fec53d53f29b730be654cb4a90ffb2ad9622",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_e7181987",
+        "filename": "comphelper/source/misc/profilezone.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-06-15T12:05:38Z",
+      "side": 1,
+      "message": "https://stackoverflow.com/questions/12613428/stl-vector-moving-all-elements-of-a-vector\n\nsuggests this is fine; I think it\u0027s actually more readable to use std::move() here, since the intention is to move elements in one direction only, while std::swap() would move elements in both directions. (But of course no difference in practice, since aRecording is empty.)",
+      "parentUuid": "5a3905b3_e731f90c",
+      "revId": "29e8fec53d53f29b730be654cb4a90ffb2ad9622",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
