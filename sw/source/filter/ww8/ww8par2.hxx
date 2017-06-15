@@ -67,7 +67,7 @@ struct WW8SwFlyPara
 
                 // part 2: changes found during reading
     long nNewNetWidth;
-    SwPosition* pMainTextPos;   // to return to main text after apo
+    std::unique_ptr<SwPosition> xMainTextPos;   // to return to main text after apo
     sal_uInt16 nLineSpace;          // line space in tw for graf apos
     bool bAutoWidth;
     bool bToggelPos;

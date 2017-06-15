@@ -2399,7 +2399,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
         }
 
         // remember Pos in body text
-        m_xSFlyPara->pMainTextPos = new SwPosition( *m_pPaM->GetPoint() );
+        m_xSFlyPara->xMainTextPos.reset(new SwPosition(*m_pPaM->GetPoint()));
 
         //remove fltanchors, otherwise they will be closed inside the
         //frame, which makes no sense, restore them after the frame is
@@ -2488,9 +2488,9 @@ void SwWW8ImplReader::StopApo()
     }
     else
     {
-        if (!m_xSFlyPara->pMainTextPos)
+        if (!m_xSFlyPara->xMainTextPos)
         {
-            OSL_ENSURE( m_xSFlyPara->pMainTextPos, "StopApo: pMainTextPos is 0" );
+            OSL_ENSURE(m_xSFlyPara->xMainTextPos.get(), "StopApo: xMainTextPos is nullptr");
             return;
         }
 
@@ -2511,7 +2511,7 @@ void SwWW8ImplReader::StopApo()
         SwNodeIndex aPref(m_pPaM->GetPoint()->nNode, -1);
 
         SwTwips nNewWidth =
-            MoveOutsideFly(m_xSFlyPara->pFlyFormat, *m_xSFlyPara->pMainTextPos);
+            MoveOutsideFly(m_xSFlyPara->pFlyFormat, *m_xSFlyPara->xMainTextPos);
         if (nNewWidth)
             m_xSFlyPara->BoxUpWidth(nNewWidth);
 
@@ -2584,7 +2584,7 @@ void SwWW8ImplReader::StopApo()
 
             aFlySet.ClearItem(RES_FRM_SIZE);
 
-            CalculateFlySize(aFlySet, m_xSFlyPara->pMainTextPos->nNode,
+            CalculateFlySize(aFlySet, m_xSFlyPara->xMainTextPos->nNode,
                 m_xSFlyPara->nWidth);
 
             nNewWidth = ItemGet<SwFormatFrameSize>(aFlySet, RES_FRM_SIZE).GetWidth();
@@ -2595,8 +2595,7 @@ void SwWW8ImplReader::StopApo()
             m_xSFlyPara->pFlyFormat->SetFormatAttr(aSize);
         }
 
-        delete m_xSFlyPara->pMainTextPos;
-        m_xSFlyPara->pMainTextPos = nullptr;
+        m_xSFlyPara->xMainTextPos.reset();
 // To create the SwFrames when inserting into an existing document, fltshell.cxx
 // will call pFlyFrame->MakeFrames() when setting the FltAnchor attribute
 
