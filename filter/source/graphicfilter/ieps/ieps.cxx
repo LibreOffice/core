@@ -666,10 +666,10 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                             bool bIsValid = true;
                             sal_uInt8 nDat = 0;
                             char nByte;
-                            for ( long y = 0; bIsValid && ( y < nHeight ); y++ )
+                            for (long y = 0; bIsValid && y < nHeight; ++y)
                             {
                                 int nBitsLeft = 0;
-                                for ( long x = 0; x < nWidth; x++ )
+                                for (long x = 0; bIsValid && x < nWidth; ++x)
                                 {
                                     if ( --nBitsLeft < 0 )
                                     {
@@ -720,7 +720,7 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                                     }
                                 }
                             }
-                            if ( bIsValid )
+                            if (bIsValid)
                             {
                                 ScopedVclPtrInstance<VirtualDevice> pVDev;
                                 GDIMetaFile     aMtf;
