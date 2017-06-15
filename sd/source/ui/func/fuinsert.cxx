@@ -524,10 +524,6 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
         {
             if (xObj.is())
             {
-                //TODO/LATER: needs status for RESIZEONPRINTERCHANGE
-                //if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xObj->getStatus( nAspect ) )
-                //    aIPObj->OnDocumentPrinterChanged( mpDocSh->GetPrinter(sal_False) );
-
                 bool bInsertNewObject = true;
 
                 Size aSize;

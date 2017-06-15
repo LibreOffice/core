@@ -70,13 +70,11 @@ struct TransferableObjectDescriptor
     sal_uInt16          mnViewAspect;
     Point               maDragStartPos;
     Size                maSize;
-    sal_uInt32          mnOle2Misc;
     OUString            maTypeName;
     OUString            maDisplayName;
 
     TransferableObjectDescriptor()
         : mnViewAspect(css::embed::Aspects::MSOLE_CONTENT)
-        , mnOle2Misc(0)
     {}
 
     SVT_DLLPUBLIC friend SvStream&  WriteTransferableObjectDescriptor( SvStream& rOStm, const TransferableObjectDescriptor& rObjDesc );

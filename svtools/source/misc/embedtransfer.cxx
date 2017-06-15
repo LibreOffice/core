@@ -215,9 +215,6 @@ void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObject
     // so for internal transport something different should be found
     rDesc.mnViewAspect = sal::static_int_cast<sal_uInt16>( nAspect );
 
-    //TODO/LATER: status needs to become sal_Int64
-    rDesc.mnOle2Misc = sal::static_int_cast<sal_Int32>(xObj->getStatus( rDesc.mnViewAspect ));
-
     Size aSize;
     MapMode aMapMode( MapUnit::Map100thMM );
     if ( nAspect == embed::Aspects::MSOLE_ICON )

@@ -1887,8 +1887,6 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 // TODO/LATER: ViewAspect needs to be sal_Int64
                 aDesc.mnViewAspect = sal::static_int_cast< sal_uInt16 >( embed::Aspects::MSOLE_CONTENT );
 
-                //TODO/LATER: status needs to become sal_Int64
-                aDesc.mnOle2Misc = m_pData->m_pObjectShell->GetMiscStatus();
                 Size aSize = m_pData->m_pObjectShell->GetVisArea().GetSize();
 
                 MapUnit aMapUnit = m_pData->m_pObjectShell->GetMapUnit();
