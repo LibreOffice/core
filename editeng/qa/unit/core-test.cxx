@@ -55,7 +55,7 @@ public:
     void testAutocorrect();
 
     /// Test Copy/Paste with hyperlinks in text using Legacy Format
-    void testHyperlinkCopyPaste();
+    //void testHyperlinkCopyPaste();
 
     /// Test Copy/Paste using Legacy Format
     void testCopyPaste();
@@ -91,7 +91,7 @@ public:
     CPPUNIT_TEST(testConstruction);
     CPPUNIT_TEST(testUnoTextFields);
     CPPUNIT_TEST(testAutocorrect);
-    CPPUNIT_TEST(testHyperlinkCopyPaste);
+    //CPPUNIT_TEST(testHyperlinkCopyPaste);
     CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testMultiParaSelCopyPaste);
     CPPUNIT_TEST(testTabsCopyPaste);
@@ -421,7 +421,7 @@ void Test::testAutocorrect()
     }
 
 }
-
+/*
 void Test::testHyperlinkCopyPaste()
 {
     // Create EditEngine's instance
@@ -548,7 +548,7 @@ void Test::testHyperlinkCopyPaste()
     //CPPUNIT_ASSERT_EQUAL( aURL1, pACPURLField3->GetURL() );
     //CPPUNIT_ASSERT_EQUAL( aRepres1, pACPURLField3->GetRepresentation() );
 }
-
+*/
 void Test::testCopyPaste()
 {
     // Create EditEngine's instance
