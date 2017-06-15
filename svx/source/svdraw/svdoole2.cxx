@@ -999,22 +999,6 @@ void SdrOle2Obj::Connect_Impl()
                     << comphelper::anyToString( cppu::getCaughtException() ) );
         }
     }
-
-    //TODO/LATER: wait for definition of MiscStatus RESIZEONPRINTERCHANGE
-    //if ( xObjRef.is() && (*ppObjRef)->GetMiscStatus() & SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE )
-    {
-        //TODO/LATER: needs a new handling for OnPrinterChanged
-        /*
-        if (pModel && pModel->GetRefDevice() &&
-            pModel->GetRefDevice()->GetOutDevType() == OUTDEV_PRINTER)
-        {
-            // no RefDevice or RefDevice is not a printer
-            bool bModified = (*ppObjRef)->IsModified();
-            Printer* pPrinter = (Printer*) pModel->GetRefDevice();
-            (*ppObjRef)->OnDocumentPrinterChanged( pPrinter );
-            (*ppObjRef)->SetModified( bModified );
-        }*/
-    }
 }
 
 void SdrOle2Obj::ObjectLoaded()
@@ -1851,33 +1835,6 @@ void SdrOle2Obj::GetObjRef_Impl()
                 if(!bWasChanged && pModel && pModel->IsChanged())
                 {
                     pModel->SetChanged( false );
-                }
-            }
-
-            sal_Int64 nMiscStatus = mpImpl->mxObjRef->getStatus( GetAspect() );
-            (void)nMiscStatus;
-            //TODO/LATER: wait until ResizeOnPrinterChange is defined
-            //if ( nMiscStatus & SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE )
-            {
-                if (pModel && pModel->GetRefDevice() &&
-                    pModel->GetRefDevice()->GetOutDevType() == OUTDEV_PRINTER)
-                {
-                    if (!mpImpl->mbInDestruction)
-                    {
-                        //TODO/LATER: printerchange notification
-                        /*
-                        // prevent SetModified (don't want no update here)
-                        bool bWasEnabled = (*ppObjRef)->IsEnableSetModified();
-                        if ( bWasEnabled )
-                            (*ppObjRef)->EnableSetModified( false );
-
-                        // no RefDevice or RefDevice is not a printer
-                        Printer* pPrinter = (Printer*) pModel->GetRefDevice();
-                        (*ppObjRef)->OnDocumentPrinterChanged( pPrinter );
-
-                        // reset state
-                        (*ppObjRef)->EnableSetModified( bWasEnabled );*/
-                    }
                 }
             }
         }

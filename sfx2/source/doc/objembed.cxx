@@ -136,12 +136,6 @@ void SfxObjectShell::SetVisAreaSize( const Size & rVisSize )
 }
 
 
-sal_uIntPtr SfxObjectShell::GetMiscStatus() const
-{
-    return 0;
-}
-
-
 MapUnit SfxObjectShell::GetMapUnit() const
 {
     return pImpl->m_nMapUnit;
@@ -161,7 +155,6 @@ void SfxObjectShell::FillTransferableObjectDescriptor( TransferableObjectDescrip
     FillClass( &rDesc.maClassName, &nClipFormat, &aAppName, &rDesc.maTypeName, &aShortName, SOFFICE_FILEFORMAT_CURRENT );
 
     rDesc.mnViewAspect = ASPECT_CONTENT;
-    rDesc.mnOle2Misc = GetMiscStatus();
     rDesc.maSize = OutputDevice::LogicToLogic( GetVisArea().GetSize(), GetMapUnit(), MapUnit::Map100thMM );
     rDesc.maDragStartPos = Point();
     rDesc.maDisplayName.clear();

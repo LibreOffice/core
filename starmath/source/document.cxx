@@ -1295,12 +1295,6 @@ void SmDocShell::FillClass(SvGlobalName* pClassName,
     }
 }
 
-sal_uLong SmDocShell::GetMiscStatus() const
-{
-    return SfxObjectShell::GetMiscStatus() | SVOBJ_MISCSTATUS_NOTRESIZEABLE
-                                             | SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE;
-}
-
 void SmDocShell::SetModified(bool bModified)
 {
     if( IsEnableSetModified() )
