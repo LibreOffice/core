@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_DRAWDOCSHELL_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_DRAWDOCSHELL_HXX
 
+#include <o3tl/array_view.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/objsh.hxx>
 
@@ -152,7 +153,7 @@ public:
      */
     bool                    CheckPageName(vcl::Window* pWin, OUString& rName );
 
-    void                    SetSlotFilter(bool bEnable = false, sal_uInt16 nCount = 0, const sal_uInt16* pSIDs = nullptr) { mbFilterEnable = bEnable; mnFilterCount = nCount; mpFilterSIDs = pSIDs; }
+    void                    SetSlotFilter(bool bEnable = false, o3tl::array_view<sal_uInt16> pSIDs = o3tl::array_view<sal_uInt16>()) { mbFilterEnable = bEnable; mpFilterSIDs = pSIDs; }
     void                    ApplySlotFilter() const;
 
     SfxStyleFamily          GetStyleFamily() const { return mnStyleFamily; }
@@ -218,8 +219,8 @@ protected:
     rtl::Reference<FuPoor> mxDocShellFunction;
     DocumentType            meDocType;
     SfxStyleFamily          mnStyleFamily;
-    const sal_uInt16*       mpFilterSIDs;
-    sal_uInt16              mnFilterCount;
+    o3tl::array_view<sal_uInt16>
+                            mpFilterSIDs;
     bool                    mbFilterEnable;
     bool                    mbSdDataObj;
     bool                    mbInDestruction;

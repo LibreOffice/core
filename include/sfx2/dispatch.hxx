@@ -29,6 +29,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/menu.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <o3tl/array_view.hxx>
 
 #include <initializer_list>
 
@@ -159,7 +160,7 @@ public:
     void                Lock( bool bLock );
     bool                IsLocked() const;
     void                SetSlotFilter( SfxSlotFilterState nEnable = SfxSlotFilterState::DISABLED,
-                                       sal_uInt16 nCount = 0, const sal_uInt16 *pSIDs = nullptr );
+                                       o3tl::array_view<sal_uInt16> pSIDs = o3tl::array_view<sal_uInt16>());
 
     void                HideUI( bool bHide = true );
     ToolbarId           GetObjectBarId( sal_uInt16 nPos ) const;
