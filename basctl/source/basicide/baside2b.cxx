@@ -1889,7 +1889,7 @@ void StackWindow::UpdateCalls()
 
     if (StarBASIC::IsRunning())
     {
-        SbxError eOld = SbxBase::GetError();
+        ErrCode eOld = SbxBase::GetError();
         aTreeListBox->SetSelectionMode( SelectionMode::Single );
 
         sal_Int32 nScope = 0;
@@ -2382,7 +2382,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
 {
     SbMethod* pCurMethod = StarBASIC::GetActiveMethod();
 
-    SbxError eOld = SbxBase::GetError();
+    ErrCode eOld = SbxBase::GetError();
     setBasicWatchMode( true );
 
     SvTreeListEntry* pEntry = First();

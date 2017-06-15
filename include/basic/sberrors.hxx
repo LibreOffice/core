@@ -22,7 +22,7 @@
 
 #include <basic/sbxdef.hxx>
 
-// Mapping to SbxError
+// Mapping to ErrCode
 #define ERRCODE_BASIC_SYNTAX                ERRCODE_SBX_SYNTAX                  // unspecified syntax error
 #define ERRCODE_BASIC_BAD_ARGUMENT          ERRCODE_SBX_NOTIMP                  // Invalid procedure call
 #define ERRCODE_BASIC_MATH_OVERFLOW         ERRCODE_SBX_OVERFLOW                // Overflow
