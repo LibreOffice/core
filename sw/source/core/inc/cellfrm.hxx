@@ -60,6 +60,7 @@ public:
     const SwCellFrame& FindStartEndOfRowSpanCell( bool bStart ) const;
     long GetLayoutRowSpan() const;
 
+    void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
     DECL_FIXEDMEMPOOL_NEWDEL(SwCellFrame)
 };
 
