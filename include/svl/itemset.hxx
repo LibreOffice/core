@@ -19,9 +19,18 @@
 #ifndef INCLUDED_SVL_ITEMSET_HXX
 #define INCLUDED_SVL_ITEMSET_HXX
 
-#include <svl/svldllapi.h>
+#include <sal/config.h>
 
+#include <cassert>
+#include <cstddef>
+#include <initializer_list>
+#include <memory>
+#include <type_traits>
+
+#if 1 //TODO: WIP
 #include <cstdarg>
+#endif
+#include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
 
 class SfxItemPool;
@@ -29,6 +38,48 @@ class SfxPoolItem;
 class SvStream;
 
 typedef SfxPoolItem const** SfxItemArray;
+
+namespace svl {
+
+namespace detail {
+
+constexpr bool validRange(sal_uInt16 wid1, sal_uInt16 wid2)
+{ return wid1 != 0 && wid1 <= wid2; }
+
+constexpr bool validGap(sal_uInt16, sal_uInt16)
+{ return true; } //TODO: wid2 > wid1 && wid2 - wid1 > 1
+
+template<sal_uInt16 WID1, sal_uInt16 WID2> constexpr bool validRanges()
+{ return validRange(WID1, WID2); }
+
+template<sal_uInt16 WID1, sal_uInt16 WID2, sal_uInt16 WID3, sal_uInt16... WIDs>
+constexpr bool validRanges() {
+    return validRange(WID1, WID2) && validGap(WID2, WID3)
+        && validRanges<WID3, WIDs...>();
+}
+
+// The calculations in rangeSize and rangesSize cannot overflow, assuming
+// std::size_t is no smaller than sal_uInt16:
+
+constexpr std::size_t rangeSize(sal_uInt16 wid1, sal_uInt16 wid2) {
+#if HAVE_CXX14_CONSTEXPR
+    assert(validRange(wid1, wid2));
+#endif
+    return wid2 - wid1 + 1;
+}
+
+template<sal_uInt16 WID1, sal_uInt16 WID2> constexpr std::size_t rangesSize()
+{ return rangeSize(WID1, WID2); }
+
+template<sal_uInt16 WID1, sal_uInt16 WID2, sal_uInt16 WID3, sal_uInt16... WIDs>
+constexpr std::size_t rangesSize()
+{ return rangeSize(WID1, WID2) + rangesSize<WID3, WIDs...>(); }
+
+}
+
+template<sal_uInt16... WIDs> struct Items {};
+
+}
 
 class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
 {
@@ -45,8 +96,14 @@ friend class SfxAllItemSet;
 
 private:
     SVL_DLLPRIVATE void                     InitRanges_Impl(const sal_uInt16 *nWhichPairTable);
+#if 1 //TODO: WIP
     SVL_DLLPRIVATE void                     InitRanges_Impl(va_list pWhich, sal_uInt16 n1, sal_uInt16 n2, sal_uInt16 n3);
     SVL_DLLPRIVATE void                     InitRanges_Impl(sal_uInt16 nWh1, sal_uInt16 nWh2);
+#endif
+
+    SfxItemSet(
+        SfxItemPool & pool, std::initializer_list<sal_uInt16> wids,
+        std::size_t items);
 
 public:
     SfxItemArray                GetItems_Impl() const { return m_pItems; }
@@ -61,13 +118,31 @@ protected:
     void                        PutDirect(const SfxPoolItem &rItem);
 
 public:
+    struct Pair { sal_uInt16 wid1, wid2; };
+
                                 SfxItemSet( const SfxItemSet& );
 
                                 SfxItemSet( SfxItemPool&);
+#if 1 //TODO: WIP
                                 SfxItemSet( SfxItemPool&, sal_uInt16 nWhich1, sal_uInt16 nWhich2 );
                                 SfxItemSet( SfxItemPool&, int nWh1, int nWh2, int nNull, ... );
+#endif
+    template<sal_uInt16... WIDs> SfxItemSet(
+        typename std::enable_if<svl::detail::validRanges<WIDs...>(), SfxItemPool &>::type pool,
+        svl::Items<WIDs...>):
+        SfxItemSet(pool, {WIDs...}, svl::detail::rangesSize<WIDs...>()) {}
+                                SfxItemSet( SfxItemPool&, std::initializer_list<Pair> wids );
                                 SfxItemSet( SfxItemPool&, const sal_uInt16* nWhichPairTable );
     virtual                     ~SfxItemSet();
+
+    template<sal_uInt16... WIDs> static
+    typename std::enable_if<
+        svl::detail::validRanges<WIDs...>(), std::unique_ptr<SfxItemSet>>::type
+    create(SfxItemPool & pool) {
+        return std::unique_ptr<SfxItemSet>(
+            new SfxItemSet(
+                pool, {WIDs...}, svl::detail::rangesSize<WIDs...>()));
+    }
 
     virtual SfxItemSet *        Clone(bool bItems = true, SfxItemPool *pToPool = nullptr) const;
 
