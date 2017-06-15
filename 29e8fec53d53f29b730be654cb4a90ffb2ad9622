@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_e731f90c",
+        "filename": "comphelper/source/misc/profilezone.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-15T11:56:32Z",
+      "side": 1,
+      "message": "is this legal? I mean, it probably works, in the sense that it results in an empty g_aRecording vector, but is the state of a moved object guaranteed to be \"empty\" ? I thought that the only thing a moved object could do would be to call it\u0027s destructor?\nPerhaps a std::swap is a better idea?\nFeel free to ignore me if this makes no sense :-)",
+      "revId": "29e8fec53d53f29b730be654cb4a90ffb2ad9622",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
