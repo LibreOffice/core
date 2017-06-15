@@ -100,7 +100,6 @@ struct SalMouseEvent
 // KEYINPUT and KEYUP
 struct SalKeyEvent
 {
-    sal_uInt64      mnTime;         // Time in ms, when event is created
     sal_uInt16      mnCode;         // SV-KeyCode (KEY_xxx | KEY_SHIFT | KEY_MOD1 | KEY_MOD2)
     sal_uInt16      mnCharCode;     // SV-CharCode
     sal_uInt16      mnRepeat;       // Repeat-Count (KeyInputs-1)
@@ -121,7 +120,6 @@ struct SalMenuEvent
 struct SalKeyModEvent
 {
     bool            mbDown;         // Whether the change occurred on a key down event
-    sal_uInt64      mnTime;         // Time in ms, when event is created
     sal_uInt16      mnCode;         // SV-Modifiercode (KEY_SHIFT|KEY_MOD1|KEY_MOD2)
     ModKeyFlags     mnModKeyCode;   // extended Modifier (MODKEY_LEFT,MODKEY_RIGHT,MODKEY_PRESS,MODKEY_RELEASE)
 };
@@ -241,7 +239,6 @@ struct SalFrameState
 
 struct SalInputContext
 {
-    FontSelectPattern*     mpFont;
     LanguageType           meLanguage;
     InputContextFlags      mnOptions;
 };

@@ -109,7 +109,6 @@ X11OpenGLDeviceInfo::X11OpenGLDeviceInfo():
     mbIsIntel(false),
     mbIsOldSwrast(false),
     mbIsLlvmpipe(false),
-    mbHasTextureFromPixmap(false),
     mnGLMajorVersion(0),
     mnMajorVersion(0),
     mnMinorVersion(0),
@@ -205,9 +204,6 @@ void X11OpenGLDeviceInfo::GetData()
                 stringToFill = &textureFromPixmap;
         }
     }
-
-    if (textureFromPixmap != "TRUE")
-        mbHasTextureFromPixmap = true;
 
     // only useful for Linux kernel version check for FGLRX driver.
     // assumes X client == X server, which is sad.

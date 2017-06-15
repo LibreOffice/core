@@ -366,7 +366,6 @@ void GtkSalFrame::doKeyCallback( guint state,
                                  guint keyval,
                                  guint16 hardware_keycode,
                                  guint8 group,
-                                 guint32 time,
                                  sal_Unicode aOrigCode,
                                  bool bDown,
                                  bool bSendRelease
@@ -374,7 +373,6 @@ void GtkSalFrame::doKeyCallback( guint state,
 {
     SalKeyEvent aEvent;
 
-    aEvent.mnTime           = time;
     aEvent.mnCharCode       = aOrigCode;
     aEvent.mnRepeat         = 0;
 
@@ -3140,7 +3138,6 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
 
         SalKeyModEvent aModEvt;
         aModEvt.mbDown = pEvent->type == GDK_KEY_PRESS;
-        aModEvt.mnTime = pEvent->time;
         aModEvt.mnCode = nModCode;
 
         if( pEvent->type == GDK_KEY_RELEASE )
@@ -3164,7 +3161,6 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
                               pEvent->keyval,
                               pEvent->hardware_keycode,
                               pEvent->group,
-                              pEvent->time,
                               sal_Unicode(gdk_keyval_to_unicode( pEvent->keyval )),
                               (pEvent->type == GDK_KEY_PRESS),
                               false );
@@ -3587,7 +3583,7 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* pContext, gchar* pTex
 
             if( checkSingleKeyCommitHack( rKP.keyval, aOrigCode ) )
             {
-                pThis->m_pFrame->doKeyCallback( rKP.state, rKP.keyval, rKP.hardware_keycode, rKP.group, rKP.time, aOrigCode, true, true );
+                pThis->m_pFrame->doKeyCallback( rKP.state, rKP.keyval, rKP.hardware_keycode, rKP.group, aOrigCode, true, true );
                 bSingleCommit = true;
             }
         }

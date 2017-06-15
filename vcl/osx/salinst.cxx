@@ -335,7 +335,6 @@ SalInstance* CreateSalInstance()
     ImplGetSVData()->maNWFData.mbNoActiveTabTextRaise = true;
     ImplGetSVData()->maNWFData.mbCenteredTabs = true;
     ImplGetSVData()->maNWFData.mbProgressNeedsErase = true;
-    ImplGetSVData()->maNWFData.mbCheckBoxNeedsErase = true;
     ImplGetSVData()->maNWFData.mnStatusBarLowerRightOffset = 10;
 
     return pInst;

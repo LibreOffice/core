@@ -103,9 +103,6 @@ typedef struct {
     sal_uInt32 *offs;             /* array of nGlyphs offsets */
 } GlyphOffsets;
 
-/* private tags */
-static const sal_uInt32 TTFontClassTag = 0x74746663;  /* 'ttfc' */
-
 static const sal_uInt32 T_true = 0x74727565;        /* 'true' */
 static const sal_uInt32 T_ttcf = 0x74746366;        /* 'ttcf' */
 static const sal_uInt32 T_otto = 0x4f54544f;        /* 'OTTO' */
@@ -1350,7 +1347,6 @@ static void GetKern(TrueTypeFont *ttf)
 
     if (GetUInt16(table, 0) == 0) {                                /* Traditional Microsoft style table with sal_uInt16 version and nTables fields */
         ttf->nkern = GetUInt16(table, 2);
-        ttf->kerntype = KT_MICROSOFT;
         ptr = table + 4;
 
         const sal_uInt32 remaining_table_size = nTableSize-4;
@@ -1382,7 +1378,6 @@ static void GetKern(TrueTypeFont *ttf)
 
     if (GetUInt32(table, 0) == 0x00010000) {                       /* MacOS style kern tables: fixed32 version and sal_uInt32 nTables fields */
         ttf->nkern = GetUInt32(table, 4);
-        ttf->kerntype = KT_APPLE_NEW;
         ptr = table + 8;
 
         const sal_uInt32 remaining_table_size = nTableSize-8;
@@ -1413,7 +1408,6 @@ static void GetKern(TrueTypeFont *ttf)
     }
 
   badtable:
-    ttf->kerntype = KT_NONE;
     ttf->kerntables = nullptr;
 }
 
@@ -1439,12 +1433,10 @@ static void allocTrueTypeFont( TrueTypeFont** ttf )
     *ttf = static_cast<TrueTypeFont*>(calloc(1,sizeof(TrueTypeFont)));
     if( *ttf != nullptr )
     {
-        (*ttf)->tag = 0;
         (*ttf)->fname = nullptr;
         (*ttf)->fsize = -1;
         (*ttf)->ptr = nullptr;
         (*ttf)->nglyphs = 0xFFFFFFFF;
-        (*ttf)->pGSubstitution = nullptr;
     }
 }
 
@@ -1552,9 +1544,6 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
         CloseTTFont(t);
         return SF_TTFORMAT;
     }
-
-    /* magic number */
-    t->tag = TTFontClassTag;
 
     t->ntables = GetUInt16(t->ptr + tdoffset, 4);
     if( t->ntables >= 128 )
@@ -2460,13 +2449,6 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
             if( info->winDescent > 5*UPEm )
                 info->winDescent = XUnits(UPEm, GetInt16(table, 76));
         }
-        if (ttf->cmapType == CMAP_MS_Unicode) {
-            info->rangeFlag = 1;
-            info->ur1 = GetUInt32(table, 42);
-            info->ur2 = GetUInt32(table, 46);
-            info->ur3 = GetUInt32(table, 50);
-            info->ur4 = GetUInt32(table, 54);
-        }
         memcpy(info->panose, table + 32, 10);
         info->typeFlags = GetUInt16( table, 8 );
         if( getTable(ttf, O_CFF) )
@@ -2494,10 +2476,6 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
     }
 
     table = getTable(ttf, O_vhea);
-    if (table) {
-        info->vascent  = XUnits(UPEm, GetInt16(table, 4));
-        info->vdescent = XUnits(UPEm, GetInt16(table, 6));
-    }
 }
 
 GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID)

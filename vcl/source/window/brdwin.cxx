@@ -1294,7 +1294,6 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
     pData->mnHeight         = nHeight;
 
     pData->mnTitleType      = pBorderWindow->mnTitleType;
-    pData->mbFloatWindow    = pBorderWindow->mbFloatWindow;
 
     if ( !(pBorderWindow->GetStyle() & (WB_MOVEABLE | WB_POPUP)) || (pData->mnTitleType == BorderWindowTitleType::NONE) )
         pData->mnBorderSize = 0;
@@ -1628,7 +1627,6 @@ void ImplBorderWindow::ImplInit( vcl::Window* pParent,
     mnMinHeight     = 0;
     mnMaxWidth      = SHRT_MAX;
     mnMaxHeight     = SHRT_MAX;
-    mnRollHeight    = 0;
     mnOrgMenuHeight = 0;
     mbRollUp        = false;
     mbMenuHide      = false;
@@ -1951,7 +1949,6 @@ void ImplBorderWindow::SetBorderStyle( WindowBorderStyle nStyle )
 void ImplBorderWindow::SetRollUp( bool bRollUp, const Size& rSize )
 {
     mbRollUp = bRollUp;
-    mnRollHeight = rSize.Height();
     UpdateView( false, rSize );
 }
 

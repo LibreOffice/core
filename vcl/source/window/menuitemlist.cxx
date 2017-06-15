@@ -69,8 +69,6 @@ MenuItemData* MenuItemList::Insert(
 
     SalItemParams aSalMIData;
     aSalMIData.nId = nId;
-    aSalMIData.eType = eType;
-    aSalMIData.nBits = nBits;
     aSalMIData.pMenu = pMenu;
     aSalMIData.aText = rStr;
 
@@ -101,8 +99,6 @@ void MenuItemList::InsertSeparator(const OString &rIdent, size_t nPos)
 
     SalItemParams aSalMIData;
     aSalMIData.nId = 0;
-    aSalMIData.eType = MenuItemType::SEPARATOR;
-    aSalMIData.nBits = MenuItemBits::NONE;
     aSalMIData.pMenu = nullptr;
     aSalMIData.aText.clear();
     aSalMIData.aImage = Image();

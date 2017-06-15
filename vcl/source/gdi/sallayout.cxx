@@ -542,7 +542,6 @@ bool ImplLayoutArgs::GetNextRun( int* nMinRunPos, int* nEndRunPos, bool* bRTL )
 SalLayout::SalLayout()
 :   mnMinCharPos( -1 ),
     mnEndCharPos( -1 ),
-    mnLayoutFlags( SalLayoutFlags::NONE ),
     mnUnitsPerPixel( 1 ),
     mnOrientation( 0 ),
     maDrawOffset( 0, 0 )
@@ -555,7 +554,6 @@ void SalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
     mnMinCharPos  = rArgs.mnMinCharPos;
     mnEndCharPos  = rArgs.mnEndCharPos;
-    mnLayoutFlags = rArgs.mnFlags;
     mnOrientation = rArgs.mnOrientation;
 }
 
