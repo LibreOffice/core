@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_FORMATCLIPBOARD_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_FORMATCLIPBOARD_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <wrtsh.hxx>
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
@@ -31,7 +35,6 @@ class SwFormatClipboard
 {
 public:
     SwFormatClipboard();
-    ~SwFormatClipboard();
 
     /**
      * Test if the object contains text or paragraph attribute
@@ -69,13 +72,13 @@ private:
     SelectionType m_nSelectionType;
 
     /** automatic/named character attribute set */
-    SfxItemSet* m_pItemSet_TextAttr;
+    std::unique_ptr<SfxItemSet> m_pItemSet_TextAttr;
     /** automatic/named paragraph attribute set
      * (it can be character attribute applied to the paragraph) */
-    SfxItemSet* m_pItemSet_ParAttr;
+    std::unique_ptr<SfxItemSet> m_pItemSet_ParAttr;
 
     /** table attribute set */
-    SfxItemSet* m_pTableItemSet;
+    std::unique_ptr<SfxItemSet> m_pTableItemSet;
 
     /** name of the character format (if it exist) */
     OUString m_aCharStyle;

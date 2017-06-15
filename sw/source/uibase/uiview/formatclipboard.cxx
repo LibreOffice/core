@@ -18,8 +18,11 @@
  */
 
 #include <memory>
+#include <utility>
+
 #include "formatclipboard.hxx"
 
+#include <o3tl/make_unique.hxx>
 #include <svx/svxids.hrc>
 #include <cmdid.h>
 #include <charfmt.hxx>
@@ -59,12 +62,12 @@ RES_PARATR_BEGIN, RES_PARATR_END -1, \
 RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END -1, \
 FORMAT_PAINTBRUSH_FRAME_IDS
 
-SfxItemSet* lcl_CreateEmptyItemSet( SelectionType nSelectionType, SfxItemPool& rPool, bool bNoParagraphFormats = false )
+std::unique_ptr<SfxItemSet> lcl_CreateEmptyItemSet( SelectionType nSelectionType, SfxItemPool& rPool, bool bNoParagraphFormats = false )
 {
-    SfxItemSet* pItemSet = nullptr;
+    std::unique_ptr<SfxItemSet> pItemSet;
     if( nSelectionType & (SelectionType::Frame | SelectionType::Ole | SelectionType::Graphic) )
     {
-        pItemSet = new SfxItemSet(rPool,
+        pItemSet = o3tl::make_unique<SfxItemSet>(rPool,
                         FORMAT_PAINTBRUSH_FRAME_IDS
                         0);
     }
@@ -75,11 +78,11 @@ SfxItemSet* lcl_CreateEmptyItemSet( SelectionType nSelectionType, SfxItemPool& r
     else if( nSelectionType & SelectionType::Text )
     {
         if( bNoParagraphFormats )
-            pItemSet = new SfxItemSet(rPool,
+            pItemSet = o3tl::make_unique<SfxItemSet>(rPool,
                     RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
                     0);
         else
-            pItemSet = new SfxItemSet(rPool,
+            pItemSet = o3tl::make_unique<SfxItemSet>(rPool,
                     RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
                     FORMAT_PAINTBRUSH_PARAGRAPH_IDS
                     0);
@@ -225,17 +228,8 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
 
 SwFormatClipboard::SwFormatClipboard()
         : m_nSelectionType(SelectionType::NONE)
-        , m_pItemSet_TextAttr(nullptr)
-        , m_pItemSet_ParAttr(nullptr)
-        , m_pTableItemSet(nullptr)
         , m_bPersistentCopy(false)
 {
-}
-SwFormatClipboard::~SwFormatClipboard()
-{
-    delete m_pItemSet_TextAttr;
-    delete m_pItemSet_ParAttr;
-    delete m_pTableItemSet;
 }
 
 bool SwFormatClipboard::HasContent() const
@@ -281,8 +275,8 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
     m_bPersistentCopy = bPersistentCopy;
 
     SelectionType nSelectionType = rWrtShell.GetSelectionType();
-    SfxItemSet* pItemSet_TextAttr = lcl_CreateEmptyItemSet( nSelectionType, rPool, true );
-    SfxItemSet* pItemSet_ParAttr = lcl_CreateEmptyItemSet( nSelectionType, rPool );
+    auto pItemSet_TextAttr = lcl_CreateEmptyItemSet( nSelectionType, rPool, true );
+    auto pItemSet_ParAttr = lcl_CreateEmptyItemSet( nSelectionType, rPool );
 
     rWrtShell.StartAction();
     rWrtShell.Push();
@@ -369,7 +363,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
             if( pDrawView->AreObjectsMarked() )
             {
                 bool bOnlyHardAttr = true;
-                pItemSet_TextAttr = new SfxItemSet( pDrawView->GetAttrFromMarked(bOnlyHardAttr) );
+                pItemSet_TextAttr = o3tl::make_unique<SfxItemSet>( pDrawView->GetAttrFromMarked(bOnlyHardAttr) );
                 //remove attributes defining the type/data of custom shapes
                 pItemSet_TextAttr->ClearItem(SDRATTR_CUSTOMSHAPE_ENGINE);
                 pItemSet_TextAttr->ClearItem(SDRATTR_CUSTOMSHAPE_DATA);
@@ -381,7 +375,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
 
     if( nSelectionType & SelectionType::TableCell )//only copy table attributes if really cells are selected (not only text in tables)
     {
-        m_pTableItemSet = new SfxItemSet(rPool,
+        m_pTableItemSet = o3tl::make_unique<SfxItemSet>(rPool,
                         SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_SHADOW, //SID_ATTR_BORDER_OUTER is inbetween
                         RES_BACKGROUND,         RES_SHADOW, //RES_BOX is inbetween
                         SID_ATTR_BRUSH_ROW,     SID_ATTR_BRUSH_TABLE,
@@ -399,8 +393,8 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
     }
 
     m_nSelectionType = nSelectionType;
-    m_pItemSet_TextAttr = pItemSet_TextAttr;
-    m_pItemSet_ParAttr = pItemSet_ParAttr;
+    m_pItemSet_TextAttr = std::move(pItemSet_TextAttr);
+    m_pItemSet_ParAttr = std::move(pItemSet_ParAttr);
 
     if( nSelectionType & SelectionType::Text )
     {
@@ -584,14 +578,11 @@ void SwFormatClipboard::Erase()
 {
     m_nSelectionType = SelectionType::NONE;
 
-    delete m_pItemSet_TextAttr;
-    m_pItemSet_TextAttr = nullptr;
+    m_pItemSet_TextAttr.reset();
 
-    delete m_pItemSet_ParAttr;
-    m_pItemSet_ParAttr = nullptr;
+    m_pItemSet_ParAttr.reset();
 
-    delete m_pTableItemSet;
-    m_pTableItemSet = nullptr;
+    m_pTableItemSet.reset();
 
     if( !m_aCharStyle.isEmpty() )
         m_aCharStyle.clear();
