@@ -58,10 +58,6 @@ namespace ftp {
         XInteractionDisapproveImpl();
 
         virtual void SAL_CALL select() override;
-
-    private:
-
-        bool          m_bSelected;
     };
 
 

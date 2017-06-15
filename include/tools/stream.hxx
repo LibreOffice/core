@@ -574,7 +574,9 @@ class TOOLS_DLLPUBLIC SvFileStream : public SvStream
 private:
     StreamData*     pInstanceData;
     OUString        aFilename;
+#if defined(_WIN32)
     sal_uInt16      nLockCounter;
+#endif
     bool            bIsOpen;
 
     SvFileStream (const SvFileStream&) = delete;

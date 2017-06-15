@@ -272,7 +272,6 @@ static sal_uInt32 GetSvError( oslFileError nErrno )
 SvFileStream::SvFileStream( const OUString& rFileName, StreamMode nOpenMode )
 {
     bIsOpen             = false;
-    nLockCounter        = 0;
     m_isWritable        = false;
     pInstanceData       = new StreamData;
 
@@ -290,7 +289,6 @@ SvFileStream::SvFileStream( const OUString& rFileName, StreamMode nOpenMode )
 SvFileStream::SvFileStream()
 {
     bIsOpen             = false;
-    nLockCounter        = 0;
     m_isWritable        = false;
     pInstanceData       = new StreamData;
     SetBufferSize( 1024 );

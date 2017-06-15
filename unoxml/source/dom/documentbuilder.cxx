@@ -180,7 +180,6 @@ namespace DOM
 
     // context struct passed to IO functions
     typedef struct context {
-        CDocumentBuilder *pBuilder;
         Reference< XInputStream > rInputStream;
         bool close;
         bool freeOnClose;
@@ -247,7 +246,6 @@ namespace DOM
         // when IO is actually performed through the callbacks. The close function must
         // free the memory which is indicated by the freeOnClose field in the context struct
         context_t *c = new context_t;
-        c->pBuilder = builder;
         c->rInputStream = src.aInputStream;
         c->close = true;
         c->freeOnClose = true;
@@ -316,7 +314,6 @@ namespace DOM
         // IO context struct.  Must outlive pContext, as destroying that via
         // xmlFreeParserCtxt may still access this context_t
         context_t c;
-        c.pBuilder = this;
         c.rInputStream = is;
         // we did not open the stream, thus we do not close it.
         c.close = false;

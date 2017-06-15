@@ -48,13 +48,11 @@ void SAL_CALL XInteractionApproveImpl::select()
 // XInteractionDisapproveImpl
 
 XInteractionDisapproveImpl::XInteractionDisapproveImpl()
-    : m_bSelected(false)
 {
 }
 
 void SAL_CALL XInteractionDisapproveImpl::select()
 {
-    m_bSelected = true;
 }
 
 // XInteractionRequestImpl

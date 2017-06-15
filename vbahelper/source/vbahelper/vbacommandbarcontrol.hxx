@@ -40,7 +40,6 @@ protected:
     css::uno::Sequence< css::beans::PropertyValue >     m_aPropertyValues;
 
     sal_Int32           m_nPosition;
-    bool                m_bTemporary;
 
 private:
     /// @throws css::uno::RuntimeException
@@ -80,7 +79,7 @@ class ScVbaCommandBarPopup : public CommandBarPopup_BASE
 {
 public:
     /// @throws css::uno::RuntimeException
-    ScVbaCommandBarPopup( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, const VbaCommandBarHelperRef& pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition, bool bTemporary );
+    ScVbaCommandBarPopup( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, const VbaCommandBarHelperRef& pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition );
 
     virtual sal_Int32 SAL_CALL getType() override
     {
@@ -96,7 +95,7 @@ class ScVbaCommandBarButton : public CommandBarButton_BASE
 {
 public:
     /// @throws css::uno::RuntimeException
-    ScVbaCommandBarButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, const VbaCommandBarHelperRef& pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition, bool bTemporary );
+    ScVbaCommandBarButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, const VbaCommandBarHelperRef& pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition );
 
     virtual sal_Int32 SAL_CALL getType() override
     {
