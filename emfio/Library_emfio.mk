@@ -25,6 +25,10 @@ $(eval $(call gb_Library_set_include,emfio,\
     -I$(SRCDIR)/emfio/inc \
 ))
 
+$(eval $(call gb_Library_use_custom_headers,emfio,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_external,emfio,boost_headers))
 
 $(eval $(call gb_Library_set_precompiled_header,emfio,$(SRCDIR)/emfio/inc/pch/precompiled_emfio))
@@ -37,6 +41,7 @@ $(eval $(call gb_Library_use_libraries,emfio,\
     cppu \
     cppuhelper \
     sal \
+    comphelper \
     tl \
     sax \
     vcl \
@@ -47,6 +52,9 @@ $(eval $(call gb_Library_use_libraries,emfio,\
 $(eval $(call gb_Library_add_exception_objects,emfio,\
     emfio/source/emfuno/emfuno \
     emfio/source/emfuno/xemfparser \
+    emfio/source/reader/mtftools \
+    emfio/source/reader/wmfreader \
+    emfio/source/reader/emfreader \
 ))
 
 # vim: set noet sw=4 ts=4:
