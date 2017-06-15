@@ -631,7 +631,7 @@ void PdfExportTest::testTdf99680()
     // and ensure their amount is equal
     size_t nSaveCount = std::count(pStart, pEnd, 'q');
     size_t nRestoreCount = std::count(pStart, pEnd, 'Q');
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Save/restore graphic state operators count mistmatch!", nSaveCount, nRestoreCount);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Save/restore graphic state operators count mismatch!", nSaveCount, nRestoreCount);
 }
 
 void PdfExportTest::testTdf99680_2()
@@ -670,7 +670,7 @@ void PdfExportTest::testTdf99680_2()
         // and ensure their amount is equal
         size_t nSaveCount = std::count(pStart, pEnd, 'q');
         size_t nRestoreCount = std::count(pStart, pEnd, 'Q');
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Save/restore graphic state operators count mistmatch!", nSaveCount, nRestoreCount);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Save/restore graphic state operators count mismatch!", nSaveCount, nRestoreCount);
     }
 }
 

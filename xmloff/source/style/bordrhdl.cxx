@@ -216,7 +216,7 @@ bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, co
         }
         else
         {
-            // missformed
+            // misformed
             return false;
         }
     }

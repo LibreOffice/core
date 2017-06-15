@@ -462,7 +462,7 @@ sal_Int32 SAL_CALL
 FileProvider::getFileProviderLocality( const OUString& BaseURL )
 {
     // If the base URL is a 'file' URL, return 10 (very 'local'), otherwise
-    // return -1 (missmatch).  What is missing is a fast comparison to ASCII,
+    // return -1 (mismatch).  What is missing is a fast comparison to ASCII,
     // ignoring case:
     return BaseURL.getLength() >= 5
            && (BaseURL[0] == 'F' || BaseURL[0] == 'f')
