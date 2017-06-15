@@ -103,9 +103,7 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
     uno::Reference< drawing::XShapes >& rShapes)
 :   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
     maMinEdge(-2500.0, -2500.0, -2500.0),
-    maMaxEdge(2500.0, 2500.0, 2500.0),
-    mbMinEdgeUsed(false),
-    mbMaxEdgeUsed(false)
+    maMaxEdge(2500.0, 2500.0, 2500.0)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -124,10 +122,7 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
                 SvXMLUnitConverter::convertB3DVector(aNewVec, sValue);
 
                 if(aNewVec != maMinEdge)
-                {
                     maMinEdge = aNewVec;
-                    mbMinEdgeUsed = true;
-                }
                 break;
             }
             case XML_TOK_3DCUBEOBJ_MAXEDGE:
@@ -136,10 +131,7 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
                 SvXMLUnitConverter::convertB3DVector(aNewVec, sValue);
 
                 if(aNewVec != maMaxEdge)
-                {
                     maMaxEdge = aNewVec;
-                    mbMaxEdgeUsed = true;
-                }
                 break;
             }
         }
@@ -193,9 +185,7 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
     uno::Reference< drawing::XShapes >& rShapes)
 :   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
     maCenter(0.0, 0.0, 0.0),
-    maSphereSize(5000.0, 5000.0, 5000.0),
-    mbCenterUsed(false),
-    mbSizeUsed(false)
+    maSphereSize(5000.0, 5000.0, 5000.0)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -214,10 +204,7 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
                 SvXMLUnitConverter::convertB3DVector(aNewVec, sValue);
 
                 if(aNewVec != maCenter)
-                {
                     maCenter = aNewVec;
-                    mbCenterUsed = true;
-                }
                 break;
             }
             case XML_TOK_3DSPHEREOBJ_SIZE:
@@ -226,10 +213,7 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
                 SvXMLUnitConverter::convertB3DVector(aNewVec, sValue);
 
                 if(aNewVec != maSphereSize)
-                {
                     maSphereSize = aNewVec;
-                    mbSizeUsed = true;
-                }
                 break;
             }
         }

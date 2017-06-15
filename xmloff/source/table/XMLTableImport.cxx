@@ -60,7 +60,6 @@ namespace {
 struct ColumnInfo
 {
     OUString msStyleName;
-    bool mbVisibility;
     OUString msDefaultCellStyleName;
 };
 
@@ -403,10 +402,6 @@ SvXMLImportContext * XMLTableImportContext::ImportColumn( sal_uInt16 nPrefix, co
                 else if( IsXMLToken( aLocalName, XML_DEFAULT_CELL_STYLE_NAME ) )
                 {
                     xInfo->msDefaultCellStyleName = sValue;
-                }
-                else if( IsXMLToken( aLocalName, XML_VISIBILITY ) )
-                {
-                    xInfo->mbVisibility = IsXMLToken( sValue, XML_VISIBLE );
                 }
             }
             else if ( (XML_NAMESPACE_XML == nPrefix2) &&

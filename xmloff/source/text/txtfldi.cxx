@@ -3503,7 +3503,6 @@ XMLScriptImportContext::XMLScriptImportContext(
     const OUString& sLocalName)
 :   XMLTextFieldImportContext(rImport, rHlp, "Script", nPrfx, sLocalName)
 ,   bContentOK(false)
-,   bScriptTypeOK(false)
 {
 }
 
@@ -3520,7 +3519,6 @@ void XMLScriptImportContext::ProcessAttribute(
 
         case XML_TOK_TEXTFIELD_LANGUAGE:
             sScriptType = sAttrValue;
-            bScriptTypeOK = true;
             break;
 
         default:
