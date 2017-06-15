@@ -175,7 +175,6 @@ namespace chelp {
         Databases* m_pDatabases;
 
         bool m_bHelpDataFileRead;
-        bool m_bStart;
         bool m_bUseDB;
 
         OUString  m_aURL;

@@ -119,8 +119,6 @@ OUString const & URLParameter::get_id()
                                                          get_language() );
         if( inf )
             m_aId = inf->get_id();
-
-        m_bStart = true;
     }
 
     return m_aId;
@@ -180,7 +178,6 @@ OUString const & URLParameter::get_program()
 void URLParameter::init()
 {
     m_bHelpDataFileRead = false;
-    m_bStart = false;
     m_bUseDB = true;
     m_nHitCount = 100;                // The default maximum hitcount
 }

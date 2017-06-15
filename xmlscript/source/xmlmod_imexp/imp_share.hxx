@@ -50,16 +50,11 @@ struct ModuleImport
     ModuleDescriptor& mrModuleDesc;
 
     sal_Int32 XMLNS_SCRIPT_UID;
-private:
-    sal_Int32 XMLNS_LIBRARY_UID;
-    sal_Int32 XMLNS_XLINK_UID;
 
 public:
     explicit ModuleImport(ModuleDescriptor& rModuleDesc)
         : mrModuleDesc(rModuleDesc)
         , XMLNS_SCRIPT_UID(0)
-        , XMLNS_LIBRARY_UID(0)
-        , XMLNS_XLINK_UID(0)
     {
     }
 

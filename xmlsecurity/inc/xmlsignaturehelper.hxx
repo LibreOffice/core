@@ -51,24 +51,20 @@ namespace embed {
 
 struct XMLSignatureCreationResult
 {
-    sal_Int32 nSecurityId;
     css::xml::crypto::SecurityOperationStatus nSignatureCreationResult;
 
-    XMLSignatureCreationResult( sal_Int32 nId, css::xml::crypto::SecurityOperationStatus nResult )
+    XMLSignatureCreationResult( css::xml::crypto::SecurityOperationStatus nResult )
     {
-        nSecurityId = nId;
         nSignatureCreationResult = nResult;
     }
 };
 
 struct XMLSignatureVerifyResult
 {
-    sal_Int32 nSecurityId;
     css::xml::crypto::SecurityOperationStatus nSignatureVerifyResult;
 
-    XMLSignatureVerifyResult( sal_Int32 nId, css::xml::crypto::SecurityOperationStatus nResult )
+    XMLSignatureVerifyResult( css::xml::crypto::SecurityOperationStatus nResult )
     {
-        nSecurityId = nId;
         nSignatureVerifyResult = nResult;
     }
 };
