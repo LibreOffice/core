@@ -85,7 +85,6 @@ namespace dmapper{
 
 struct
 {
-    sal_Int32 code;
     sal_Int32 h;
     bool      orient;
     sal_Int32 w;
@@ -567,7 +566,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
 
         case NS_ooxml::LN_CT_PageSz_code:
-            CT_PageSz.code = nIntValue;
             break;
         case NS_ooxml::LN_CT_PageSz_h:
             {
@@ -895,7 +893,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                         pSectionContext->SetLnnMod( nIntValue );
                 break;
                 case NS_ooxml::LN_CT_LineNumber_start:
-                    aSettings.nStartValue = nIntValue; // todo: has to be set at (each) first paragraph
                     OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
                     if( pSectionContext )
                         pSectionContext->SetLnnMin( nIntValue );
@@ -1947,7 +1944,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     {
         resolveSprmProps(*this, rSprm);
         LineNumberSettings aSettings = m_pImpl->GetLineNumberSettings();
-        aSettings.bIsOn = true;
         m_pImpl->SetLineNumberSettings( aSettings );
         //apply settings at XLineNumberingProperties
         try
@@ -1986,7 +1982,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     }
     break;
     case NS_ooxml::LN_EG_SectPrContents_pgSz:
-        CT_PageSz.code = 0;
         {
             PaperInfo aLetter(PAPER_LETTER);
             CT_PageSz.w = aLetter.getWidth();
@@ -2000,7 +1995,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             pSectionContext->Insert( PROP_HEIGHT, uno::makeAny( CT_PageSz.h ) );
             pSectionContext->Insert( PROP_IS_LANDSCAPE, uno::makeAny( CT_PageSz.orient ));
             pSectionContext->Insert( PROP_WIDTH, uno::makeAny( CT_PageSz.w ) );
-            pSectionContext->SetLandscape( CT_PageSz.orient );
         }
         break;
 

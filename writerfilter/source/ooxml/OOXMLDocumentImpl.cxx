@@ -55,7 +55,6 @@ OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t const & pStream, con
     : mpStream(pStream)
     , mxStatusIndicator(xStatusIndicator)
     , mnXNoteId(0)
-    , mXNoteType(0)
     , mxThemeDom(nullptr)
     , mbIsSubstream(false)
     , mbSkipImages(bSkipImages)
@@ -251,9 +250,8 @@ sal_Int32 OOXMLDocumentImpl::getXNoteId() const
     return mnXNoteId;
 }
 
-void OOXMLDocumentImpl::setXNoteType(Id nId)
+void OOXMLDocumentImpl::setXNoteType(Id /*nId*/)
 {
-    mXNoteType = nId;
 }
 
 const OUString & OOXMLDocumentImpl::getTarget() const
