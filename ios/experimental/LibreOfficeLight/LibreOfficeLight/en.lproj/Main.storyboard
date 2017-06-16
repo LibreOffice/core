@@ -348,7 +348,7 @@
             <objects>
                 <tableViewController autoresizesArchivedViewToFullSize="NO" title="Document Actions" automaticallyAdjustsScrollViewInsets="NO" modalTransitionStyle="crossDissolve" modalPresentationStyle="overCurrentContext" clearsSelectionOnViewWillAppear="NO" id="IER-X5-Ax8" customClass="DocumentActions" customModule="LibreOfficeLight" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="30" sectionHeaderHeight="28" sectionFooterHeight="28" id="RqF-IL-YJc">
-                        <rect key="frame" x="0.0" y="0.0" width="134" height="210"/>
+                        <rect key="frame" x="0.0" y="0.0" width="134" height="270"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
@@ -361,14 +361,12 @@
                                             <rect key="frame" x="0.0" y="0.0" width="134" height="29.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mCx-kB-iUI">
+                                                <button opaque="NO" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mCx-kB-iUI">
                                                     <rect key="frame" x="8" y="0.0" width="118" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" title="New"/>
                                                     <connections>
-                                                        <segue destination="99b-cf-b84" kind="popoverPresentation" identifier="showNew" popoverAnchorView="mCx-kB-iUI" id="NIs-pA-xdK">
-                                                            <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                                        </segue>
+                                                        <action selector="actionMenuSelect:" destination="IER-X5-Ax8" eventType="touchUpInside" id="0gI-or-ji1"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -381,104 +379,145 @@
                                             <rect key="frame" x="0.0" y="0.0" width="134" height="29.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="myk-zs-md7">
-                                                    <rect key="frame" x="8" y="-1" width="118" height="30"/>
+                                                <button opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="myk-zs-md7">
+                                                    <rect key="frame" x="8" y="2" width="118" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="actionOpen"/>
                                                     <state key="normal" title="Open..."/>
                                                     <connections>
-                                                        <action selector="doOpen:" destination="IER-X5-Ax8" eventType="touchUpInside" id="Nk2-o7-3r9"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="mPa-wa-TDO">
-                                        <rect key="frame" x="0.0" y="60" width="134" height="30"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mPa-wa-TDO" id="jhW-pd-Qkl">
-                                            <rect key="frame" x="0.0" y="0.0" width="134" height="29.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iva-rO-9V3">
-                                                    <rect key="frame" x="8" y="-1" width="118" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal" title="Delete..."/>
-                                                    <connections>
-                                                        <action selector="doDelete:" destination="IER-X5-Ax8" eventType="touchUpInside" id="WhW-7L-FOo"/>
+                                                        <action selector="actionMenuSelect:" destination="IER-X5-Ax8" eventType="touchUpInside" id="0gI-or-ji2"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="XW7-H5-0ob">
-                                        <rect key="frame" x="0.0" y="90" width="134" height="30"/>
+                                        <rect key="frame" x="0.0" y="60" width="134" height="30"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XW7-H5-0ob" id="lJN-OL-mO8">
                                             <rect key="frame" x="0.0" y="0.0" width="134" height="29.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b90-ja-Wm0">
-                                                    <rect key="frame" x="8" y="-1" width="118" height="30"/>
+                                                <button opaque="NO" tag="3" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b90-ja-Wm0">
+                                                    <rect key="frame" x="8" y="-2" width="118" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="actionSave"/>
                                                     <state key="normal" title="Save"/>
                                                     <connections>
-                                                        <action selector="doSave:" destination="IER-X5-Ax8" eventType="touchUpInside" id="7Uc-hy-ogX"/>
+                                                        <action selector="actionMenuSelect:" destination="IER-X5-Ax8" eventType="touchUpInside" id="0gI-or-ji3"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="fqs-uC-KiW">
-                                        <rect key="frame" x="0.0" y="120" width="134" height="30"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="AN7-6j-wO7">
+                                        <rect key="frame" x="0.0" y="90" width="134" height="30"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fqs-uC-KiW" id="nT7-Ly-JW5">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AN7-6j-wO7" id="kl1-nQ-aIu">
                                             <rect key="frame" x="0.0" y="0.0" width="134" height="29.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ioJ-xc-RrS">
-                                                    <rect key="frame" x="8" y="-1" width="118" height="30"/>
+                                                <button opaque="NO" tag="4" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6vH-aM-aYe">
+                                                    <rect key="frame" x="8" y="-2" width="118" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="actionSaveAs"/>
                                                     <state key="normal" title="Save as..."/>
                                                     <connections>
-                                                        <segue destination="99b-cf-b84" kind="popoverPresentation" identifier="showSaveAs" popoverAnchorView="ioJ-xc-RrS" id="etF-bX-EXf">
-                                                            <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                                        </segue>
+                                                        <action selector="actionMenuSelect:" destination="IER-X5-Ax8" eventType="touchUpInside" id="0gI-or-ji4"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="GmK-gj-GYu">
-                                        <rect key="frame" x="0.0" y="150" width="134" height="30"/>
+                                        <rect key="frame" x="0.0" y="120" width="134" height="30"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="GmK-gj-GYu" id="3OK-Zz-mqN">
                                             <rect key="frame" x="0.0" y="0.0" width="134" height="29.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="apE-3B-lUt">
+                                                <button opaque="NO" tag="5" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="apE-3B-lUt">
                                                     <rect key="frame" x="8" y="-1" width="118" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal" title="PDF"/>
+                                                    <state key="normal" title="Save as PDF"/>
                                                     <connections>
-                                                        <action selector="doPDF:" destination="IER-X5-Ax8" eventType="touchUpInside" id="ATe-5t-jab"/>
+                                                        <action selector="actionMenuSelect:" destination="IER-X5-Ax8" eventType="touchUpInside" id="0gI-or-ji5"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="1ly-sz-g0x">
-                                        <rect key="frame" x="0.0" y="180" width="134" height="30"/>
+                                        <rect key="frame" x="0.0" y="150" width="134" height="30"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1ly-sz-g0x" id="wVi-tX-eKD">
                                             <rect key="frame" x="0.0" y="0.0" width="134" height="29.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="516-b0-K4N" userLabel="Button Print">
+                                                <button opaque="NO" tag="6" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="516-b0-K4N" userLabel="Button Print">
                                                     <rect key="frame" x="8" y="-1" width="118" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="actionPrint"/>
                                                     <state key="normal" title="Print..."/>
                                                     <connections>
-                                                        <action selector="doPrint:" destination="IER-X5-Ax8" eventType="touchUpInside" id="07n-Ba-Tp9"/>
+                                                        <action selector="actionMenuSelect:" destination="IER-X5-Ax8" eventType="touchUpInside" id="0gI-or-ji6"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="fqs-uC-KiW">
+                                        <rect key="frame" x="0.0" y="180" width="134" height="30"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fqs-uC-KiW" id="nT7-Ly-JW5">
+                                            <rect key="frame" x="0.0" y="0.0" width="134" height="29.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" tag="7" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ioJ-xc-RrS">
+                                                    <rect key="frame" x="8" y="-1" width="118" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="actionCopyTOiPad"/>
+                                                    <state key="normal" title="copy to iPad..."/>
+                                                    <connections>
+                                                        <action selector="actionMenuSelect:" destination="IER-X5-Ax8" eventType="touchUpInside" id="0gI-or-ji7"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="mPa-wa-TDO">
+                                        <rect key="frame" x="0.0" y="210" width="134" height="30"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mPa-wa-TDO" id="jhW-pd-Qkl">
+                                            <rect key="frame" x="0.0" y="0.0" width="134" height="29.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" tag="8" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iva-rO-9V3">
+                                                    <rect key="frame" x="8" y="-1" width="118" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="actionDeleteFROMiPad"/>
+                                                    <state key="normal" title="Delete on iPad"/>
+                                                    <connections>
+                                                        <action selector="actionMenuSelect:" destination="IER-X5-Ax8" eventType="touchUpInside" id="0gI-or-ji8"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Hhp-Vn-cil">
+                                        <rect key="frame" x="0.0" y="240" width="134" height="30"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Hhp-Vn-cil" id="HqE-XS-WoF">
+                                            <rect key="frame" x="0.0" y="0.0" width="134" height="29.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" tag="9" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="27a-gO-mBQ">
+                                                    <rect key="frame" x="8" y="-1" width="118" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="actionMoveFROMiPad"/>
+                                                    <state key="normal" title="move from iPad..."/>
+                                                    <connections>
+                                                        <action selector="actionMenuSelect:" destination="IER-X5-Ax8" eventType="touchUpInside" id="0gI-or-ji9"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -493,20 +532,22 @@
                         </connections>
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <value key="contentSizeForViewInPopover" type="size" width="200" height="230"/>
+                    <value key="contentSizeForViewInPopover" type="size" width="134" height="210"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="134" height="210"/>
+                    <size key="freeformSize" width="134" height="270"/>
                     <connections>
-                        <outlet property="buttonDelete" destination="Iva-rO-9V3" id="i8x-8H-YoE"/>
-                        <outlet property="buttonNew" destination="mCx-kB-iUI" id="70b-Qo-y3M"/>
-                        <outlet property="buttonOpen" destination="myk-zs-md7" id="XLW-EG-UgD"/>
-                        <outlet property="buttonPDF" destination="apE-3B-lUt" id="j3U-Dx-UxJ"/>
-                        <outlet property="buttonPrint" destination="516-b0-K4N" id="WL3-KB-jS1"/>
-                        <outlet property="buttonSave" destination="b90-ja-Wm0" id="GPH-29-EFu"/>
-                        <outlet property="buttonSaveAs" destination="ioJ-xc-RrS" id="Ndn-1D-CcB"/>
+                        <outlet property="buttonCopyTOiPad" destination="ioJ-xc-RrS" id="GgZ-Km-3hu"/>
+                        <outlet property="buttonDeleteFROMiPad" destination="Iva-rO-9V3" id="taN-OB-BO4"/>
+                        <outlet property="buttonMoveFROMiPad" destination="27a-gO-mBQ" id="FPK-vv-xTH"/>
+                        <outlet property="buttonNew" destination="mCx-kB-iUI" id="Bxx-gc-1KK"/>
+                        <outlet property="buttonOpen" destination="myk-zs-md7" id="CST-dF-vGl"/>
+                        <outlet property="buttonPrint" destination="516-b0-K4N" id="kok-Tt-Y8w"/>
+                        <outlet property="buttonSave" destination="b90-ja-Wm0" id="tlk-Ku-xp6"/>
+                        <outlet property="buttonSaveAs" destination="6vH-aM-aYe" id="BMc-YI-Ssc"/>
+                        <outlet property="buttonSaveAsPDF" destination="apE-3B-lUt" id="r3J-xa-Syi"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D6j-Ov-CSK" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -518,7 +559,4 @@
         <image name="document" width="20" height="20"/>
         <image name="menu" width="22" height="22"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="etF-bX-EXf"/>
-    </inferredMetricsTieBreakers>
 </document>

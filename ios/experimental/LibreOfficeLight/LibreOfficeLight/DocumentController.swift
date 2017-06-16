@@ -9,15 +9,18 @@ import UIKit
 
 
 
-class DocumentController: UIViewController, DocumentActionsControlDelegate, UIDocumentMenuDelegate
+class DocumentController: UIViewController, MenuDelegate, UIDocumentPickerDelegate
 {
-    func documentMenu(_: UIDocumentMenuViewController, didPickDocumentPicker: UIDocumentPickerViewController)
+    public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL)
     {
     }
 
-    func documentMenuWasCancelled(_: UIDocumentMenuViewController)
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController)
     {
     }
+
+
+
 
     // Show sidemenu (part of documentcontroller)
     @IBAction func doMenu(_ sender: UIBarButtonItem)
@@ -72,86 +75,44 @@ class DocumentController: UIViewController, DocumentActionsControlDelegate, UIDo
 
 
 
-    func actionNew(_ name : String)
+
+    func actionMenuSelected(_ tag : Int)
     {
-        // JIX Close active documents if any
-        // Start new (with default name
+        switch tag
+        {
+            case 1: // New
+                print("menu New to be done")
 
-        // Only interact with DocumentBrowser
+            case 2: // Open...
+                let openMenu = UIDocumentPickerViewController(documentTypes: ["public.content"], in: .open)
+                openMenu.delegate = self
+                self.present(openMenu, animated: true, completion: nil)
+                print("menu Open... to be done")
 
-    }
+            case 3: // Save
+                print("menu Save to be done")
 
+            case 4: // Save as...
+                print("menu Save as... to be done")
 
+            case 5: // Save as PDF...
+                print("menu Save as PDF... to be done")
 
-    func actionOpen()
-    {
-        let importMenu = UIDocumentMenuViewController(documentTypes: [], in: .import)
-//        let importMenu = UIDocumentMenuViewController(documentTypes: ["com.jani.Editors.docx",
-//                                                                      "com.jani.Editors.doc",
-//                                                                      "com.jani.Editors.xlsx",
-//                                                                      "com.jani.Editors.xls",
-//                                                                      "com.jani.Editors.pptx",
-//                                                                      "com.jani.Editors.ppt",
-//                                                                      "com.jani.Editors.pdf",
-//                                                                      "com.jani.Editors.odt",
-//                                                                      "com.jani.Editors.ods",
-//                                                                      "com.jani.Editors.odp"], in: .import)
-        importMenu.delegate = self
-        self.present(importMenu, animated: true, completion: nil)
+            case 6: // Print...
+                print("menu Print... to be done")
 
-        // JIX Close active documents if any
-        // Present FileManager
-//        performSegue(withIdentifier: "showFileManager", sender: self)
+            case 7: // Copy TO iPad
+                print("menu Copy TO iPad to be done")
 
-        // start DocumentBrowser with new document
-    }
+            case 8: // Delete FROM iPad
+                print("menu Delete FROM iPad to be done")
 
+            case 9: // Move FROM iPad
+                print("menu Move FROM iPad to be done")
 
-
-    // Called when returning from filemanager
-    @IBAction func returned(segue: UIStoryboardSegue)
-    {
-        // JIX actually open document
-        print("I returned")
-    }
-
-
-
-
-    func actionDelete()
-    {
-        // JIX Close active documents if any
-        // Delete document
-    }
-
-
-
-    func actionSave()
-    {
-        // call save in DocumentBrowser
-
-    }
-
-
-
-    func actionSaveAs(_ name : String)
-    {
-        // call saveas in DocumentBrowser
-
-    }
-
-
-
-    func actionPDF()
-    {
-        // call savePDF in documentBrowser
-    }
-
-
-
-    func actionPrint()
-    {
-        // call print in DocumentBrowser
+            default: // should not happen
+                print("unknown menu" + String(tag))
+        }
     }
 
 
@@ -161,9 +122,9 @@ class DocumentController: UIViewController, DocumentActionsControlDelegate, UIDo
         super.viewDidLoad()
         // Do any additional setup after loading the view.
 
-//        let path = Bundle.main.path(forResource: "Info", ofType: "plist")
-//        let dict = NSDictionary(contentsOfFile: path!)
-//        let tableData = dict!.object(forKey: "CFBundleDocumentTypes")
+        // let path = Bundle.main.path(forResource: "Info", ofType: "plist")
+        // let dict = NSDictionary(contentsOfFile: path!)
+        // let tableData = dict!.object(forKey: "CFBundleDocumentTypes")
     }
 
 
@@ -178,15 +139,9 @@ class DocumentController: UIViewController, DocumentActionsControlDelegate, UIDo
 
 
 // Protocol for action popover callback
-protocol DocumentActionsControlDelegate
+protocol MenuDelegate
 {
-    func actionNew(_ name : String)
-    func actionOpen()
-    func actionDelete()
-    func actionSave()
-    func actionSaveAs(_ name : String)
-    func actionPDF()
-    func actionPrint()
+    func actionMenuSelected(_ tag : Int)
 }
 
 
@@ -194,78 +149,38 @@ protocol DocumentActionsControlDelegate
 class DocumentActions: UITableViewController
 {
     // Pointer to callback class
-    var delegate  : DocumentActionsControlDelegate?
+    var delegate  : MenuDelegate?
     var isDocActive : Bool = false
 
     // Calling class might enable/disable each button
     @IBOutlet weak var buttonNew: UIButton!
     @IBOutlet weak var buttonOpen: UIButton!
-    @IBOutlet weak var buttonDelete: UIButton!
     @IBOutlet weak var buttonSave: UIButton!
     @IBOutlet weak var buttonSaveAs: UIButton!
-    @IBOutlet weak var buttonPDF: UIButton!
+    @IBOutlet weak var buttonSaveAsPDF: UIButton!
     @IBOutlet weak var buttonPrint: UIButton!
+    @IBOutlet weak var buttonCopyTOiPad: UIButton!
+    @IBOutlet weak var buttonDeleteFROMiPad: UIButton!
+    @IBOutlet weak var buttonMoveFROMiPad: UIButton!
+
 
 
     // Actions
-    @IBAction func doOpen(_ sender: UIButton)
+    @IBAction func actionMenuSelect(_ sender: UIButton)
     {
-        delegate?.actionOpen()
         dismiss(animated: false)
+        delegate?.actionMenuSelected(sender.tag)
     }
-
-
-
-    @IBAction func doDelete(_ sender: UIButton)
-    {
-        delegate?.actionDelete()
-        dismiss(animated: false)
-    }
-
-
-
-    @IBAction func doSave(_ sender: UIButton)
-    {
-        delegate?.actionSave()
-        dismiss(animated: false)
-    }
-
-
-
-    @IBAction func doPDF(_ sender: UIButton)
-    {
-        delegate?.actionPDF()
-        dismiss(animated: false)
-    }
-
-
-
-    @IBAction func doPrint(_ sender: UIButton)
-    {
-        delegate?.actionPrint()
-        dismiss(animated: false)
-    }
-
 
 
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        buttonDelete.isEnabled = isDocActive
+        buttonDeleteFROMiPad.isEnabled = isDocActive
         buttonSave.isEnabled = isDocActive
         buttonSaveAs.isEnabled = isDocActive
-        buttonPDF.isEnabled = isDocActive
+        buttonSaveAsPDF.isEnabled = isDocActive
         buttonPrint.isEnabled = isDocActive
-    }
-
-
-
-    // Last stop before displaying popover
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
-    {
-//        let vc = segue.destination as! setNameAction
-//        vc.delegateDoc = self.delegate
-//        vc.protocolActionToPerform = (segue.identifier == "showNew") ? 2 : 3
     }
 }
 
