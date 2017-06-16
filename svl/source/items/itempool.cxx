@@ -257,7 +257,6 @@ SfxItemPool::SfxItemPool
         SetSecondaryPool( rPool.pImpl->mpSecondary->Clone() );
 }
 
-
 void SfxItemPool::SetDefaults( std::vector<SfxPoolItem*>* pDefaults )
 {
     DBG_ASSERT( pDefaults, "first we ask for it, and then we don't give back..." );
@@ -280,6 +279,10 @@ void SfxItemPool::SetDefaults( std::vector<SfxPoolItem*>* pDefaults )
     }
 }
 
+void SfxItemPool::ClearDefaults()
+{
+    pImpl->mpStaticDefaults = nullptr;
+}
 
 /**
  * Frees the static Defaults of the corresponding SfxItemPool instance

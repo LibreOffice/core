@@ -106,7 +106,8 @@ public:
     const SfxPoolItem*              GetPoolDefaultItem( sal_uInt16 nWhich ) const;
     void                            ResetPoolDefaultItem( sal_uInt16 nWhich );
 
-    void                            SetDefaults( std::vector<SfxPoolItem*>* pDefaults );
+    void                            SetDefaults(std::vector<SfxPoolItem*>* pDefaults);
+    void                            ClearDefaults();
     void                            ReleaseDefaults( bool bDelete = false );
     static void                     ReleaseDefaults( std::vector<SfxPoolItem*> *pDefaults, bool bDelete = false );
 

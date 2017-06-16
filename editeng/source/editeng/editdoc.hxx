@@ -24,6 +24,7 @@
 
 #include "editattr.hxx"
 #include "edtspell.hxx"
+#include "eerdll2.hxx"
 #include <editeng/svxfont.hxx>
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
@@ -832,18 +833,16 @@ inline EditCharAttrib* GetAttrib(CharAttribList::AttribsType& rAttribs, sal_Int3
 
 void CheckOrderedList(const CharAttribList::AttribsType& rAttribs, bool bStart);
 
-
-// class EditEngineItemPool
-
 class EditEngineItemPool : public SfxItemPool
 {
+private:
+    std::shared_ptr<DefItems> m_xDefItems;
 public:
-                        EditEngineItemPool( bool bPersistenRefCounts );
+    EditEngineItemPool(bool bPersistenRefCounts);
 protected:
-                        virtual ~EditEngineItemPool() override;
+    virtual ~EditEngineItemPool() override;
 public:
-
-    virtual SvStream&   Store( SvStream& rStream ) const override;
+    virtual SvStream&   Store(SvStream& rStream) const override;
 };
 
 #endif // INCLUDED_EDITENG_SOURCE_EDITENG_EDITDOC_HXX
