@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_3d2152a0",
+        "filename": "sw/source/core/edit/edfcol.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-06-16T07:34:34Z",
+      "side": 1,
+      "message": "This works, but you don\u0027t have the ability to say \"insert watermark\" on the undo stack this way. See GetIDocumentUndoRedo().StartUndo() in other Writer code on how the internal API allows you to do that.",
+      "revId": "3115b56086e742989fc7df43f2e43b106ec92a81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
