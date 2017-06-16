@@ -25,6 +25,9 @@
 #include <vcl/settings.hxx>
 #include <com/sun/star/linguistic2/LanguageGuessing.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
+#include <com/sun/star/frame/Desktop.hpp>
+#include <comphelper/unique_disposing_ptr.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <svl/solar.hrc>
@@ -76,12 +79,21 @@ using namespace ::com::sun::star;
 
 namespace
 {
-    class theEditDLL : public rtl::Static<EditDLL, theEditDLL> {};
+    //Holds a EditDLL and release it on exit, or dispose of the
+    //default XComponent, whichever comes first
+    class EditDLLInstance : public comphelper::unique_disposing_solar_mutex_reset_ptr<EditDLL>
+    {
+    public:
+        EditDLLInstance() : comphelper::unique_disposing_solar_mutex_reset_ptr<EditDLL>(uno::Reference<lang::XComponent>(frame::Desktop::create(comphelper::getProcessComponentContext()), uno::UNO_QUERY_THROW), new EditDLL, true)
+        {
+        }
+    };
 }
 
 EditDLL& EditDLL::Get()
 {
-    return theEditDLL::get();
+    static EditDLLInstance theEditDLLInstance;
+    return *theEditDLLInstance.get();
 }
 
 GlobalEditData::GlobalEditData() :
