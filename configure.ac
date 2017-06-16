@@ -3780,12 +3780,14 @@ dnl ===================================================================
 if test "$GCC" = "yes" -a -z "$COM_IS_CLANG"; then
     AC_MSG_CHECKING([the GCC version])
     _gcc_version=`$CC -dumpversion`
+    gcc_full_version=$(printf '%s' "$_gcc_version" | \
+        $AWK -F. '{ print $1*10000+$2*100+$3 }')
     GCC_VERSION=`echo $_gcc_version | $AWK -F. '{ print \$1*100+\$2 }'`
 
-    AC_MSG_RESULT([gcc $_gcc_version])
+    AC_MSG_RESULT([gcc $_gcc_version ($gcc_full_version)])
 
-    if test "$GCC_VERSION" -lt 0407; then
-        AC_MSG_ERROR([GCC $_gcc_version is too old, must be at least GCC 4.7.0])
+    if test "$gcc_full_version" -lt 40801; then
+        AC_MSG_ERROR([GCC $_gcc_version is too old, must be at least GCC 4.8.1])
     fi
 else
     # Explicitly force GCC_VERSION to be empty, even for Clang, to check incorrect uses.
