@@ -40,19 +40,25 @@ namespace editeng
     };
 }
 
+class DefItems
+{
+public:
+    DefItems();
+    std::vector<SfxPoolItem*>* getDefaults() { return ppDefItems; }
+    ~DefItems();
+private:
+    std::vector<SfxPoolItem*>* ppDefItems;
+};
+
 class GlobalEditData
 {
 private:
     css::uno::Reference< css::linguistic2::XLanguageGuessing >  xLanguageGuesser;
-    std::vector<SfxPoolItem*>*   ppDefItems;
-
+    std::weak_ptr<DefItems> m_xDefItems;
     rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharsTable;
 
 public:
-                    GlobalEditData();
-                    ~GlobalEditData();
-
-    std::vector<SfxPoolItem*>*   GetDefItems();
+    std::shared_ptr<DefItems> GetDefItems();
 
     rtl::Reference<SvxForbiddenCharactersTable> const & GetForbiddenCharsTable();
     void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> const & xForbiddenChars ) { xForbiddenCharsTable = xForbiddenChars; }
