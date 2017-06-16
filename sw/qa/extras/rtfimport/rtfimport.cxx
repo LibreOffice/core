@@ -2775,6 +2775,16 @@ DECLARE_RTFIMPORT_TEST(testTdf107116, "tdf107116.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(convertTwipToMm100(120)), getProperty<sal_Int32>(getParagraph(2), "TopBorderDistance"));
 }
 
+DECLARE_RTFIMPORT_TEST(testWatermark, "watermark.rtf")
+{
+    Size aExpectedSize(14965, 7482);
+    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    awt::Size aActualSize(xShape->getSize());
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(aExpectedSize.Width()), aActualSize.Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(aExpectedSize.Height()), aActualSize.Height);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
