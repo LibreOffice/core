@@ -26,24 +26,27 @@ namespace emfio
 {
     class EmfReader : public MtfTools
     {
-        bool        bRecordPath;
-        sal_Int32   nRecordCount;
-        bool        bEMFPlus;
+    private:
+        sal_Int32   mnRecordCount;
+
+        bool        mbRecordPath : 1;
+        bool        mbEMFPlus : 1;
 
         bool        ReadHeader();
         // reads and converts the rectangle
         static tools::Rectangle ReadRectangle(sal_Int32, sal_Int32, sal_Int32, sal_Int32);
 
     public:
-        EmfReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile, FilterConfigItem* pConfigItem = nullptr);
+        EmfReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile);
         ~EmfReader();
 
         bool ReadEnhWMF();
+
     private:
         template <class T> void ReadAndDrawPolyPolygon();
         template <class T> void ReadAndDrawPolyLine();
         template <class T> tools::Polygon ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints);
-        template <class T, class Drawer> void ReadAndDrawPolygon(Drawer drawer, const bool skipFirst);
+        template <class T> tools::Polygon ReadPolygonWithSkip(const bool skipFirst);
 
         tools::Rectangle ReadRectangle();
         void ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC);

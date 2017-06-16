@@ -145,14 +145,14 @@ namespace emfio
     inline Point WmfReader::ReadPoint()
     {
         short nX = 0, nY = 0;
-        pWMF->ReadInt16( nX ).ReadInt16( nY );
+        mpWMF->ReadInt16( nX ).ReadInt16( nY );
         return Point( nX, nY );
     }
 
     inline Point WmfReader::ReadYX()
     {
         short nX = 0, nY = 0;
-        pWMF->ReadInt16( nY ).ReadInt16( nX );
+        mpWMF->ReadInt16( nY ).ReadInt16( nX );
         return Point( nX, nY );
     }
 
@@ -169,7 +169,7 @@ namespace emfio
     Size WmfReader::ReadYXExt()
     {
         short nW=0, nH=0;
-        pWMF->ReadInt16( nH ).ReadInt16( nW );
+        mpWMF->ReadInt16( nH ).ReadInt16( nW );
         return Size( nW, nH );
     }
 
@@ -179,15 +179,15 @@ namespace emfio
         {
             case W_META_SETBKCOLOR:
             {
-                pOut->SetBkColor( ReadColor() );
+                SetBkColor( ReadColor() );
             }
             break;
 
             case W_META_SETBKMODE:
             {
                 sal_uInt16 nDat = 0;
-                pWMF->ReadUInt16( nDat );
-                pOut->SetBkMode( static_cast<BkMode>(nDat) );
+                mpWMF->ReadUInt16( nDat );
+                SetBkMode( static_cast<BkMode>(nDat) );
             }
             break;
 
@@ -195,57 +195,57 @@ namespace emfio
             case W_META_SETMAPMODE:
             {
                 sal_Int16 nMapMode = 0;
-                pWMF->ReadInt16( nMapMode );
-                pOut->SetMapMode( nMapMode );
+                mpWMF->ReadInt16( nMapMode );
+                SetMapMode( nMapMode );
             }
             break;
 
             case W_META_SETROP2:
             {
                 sal_uInt16 nROP2 = 0;
-                pWMF->ReadUInt16( nROP2 );
-                pOut->SetRasterOp( (WMFRasterOp)nROP2 );
+                mpWMF->ReadUInt16( nROP2 );
+                SetRasterOp( (WMFRasterOp)nROP2 );
             }
             break;
 
             case W_META_SETTEXTCOLOR:
             {
-                pOut->SetTextColor( ReadColor() );
+                SetTextColor( ReadColor() );
             }
             break;
 
             case W_META_SETWINDOWORG:
             {
-                pOut->SetWinOrg( ReadYX() );
+                SetWinOrg( ReadYX() );
             }
             break;
 
             case W_META_SETWINDOWEXT:
             {
                 short nWidth = 0, nHeight = 0;
-                pWMF->ReadInt16( nHeight ).ReadInt16( nWidth );
-                pOut->SetWinExt( Size( nWidth, nHeight ) );
+                mpWMF->ReadInt16( nHeight ).ReadInt16( nWidth );
+                SetWinExt( Size( nWidth, nHeight ) );
             }
             break;
 
             case W_META_OFFSETWINDOWORG:
             {
                 short nXAdd = 0, nYAdd = 0;
-                pWMF->ReadInt16( nYAdd ).ReadInt16( nXAdd );
-                pOut->SetWinOrgOffset( nXAdd, nYAdd );
+                mpWMF->ReadInt16( nYAdd ).ReadInt16( nXAdd );
+                SetWinOrgOffset( nXAdd, nYAdd );
             }
             break;
 
             case W_META_SCALEWINDOWEXT:
             {
                 short nXNum = 0, nXDenom = 0, nYNum = 0, nYDenom = 0;
-                pWMF->ReadInt16( nYDenom ).ReadInt16( nYNum ).ReadInt16( nXDenom ).ReadInt16( nXNum );
+                mpWMF->ReadInt16( nYDenom ).ReadInt16( nYNum ).ReadInt16( nXDenom ).ReadInt16( nXNum );
                 if (!nYDenom || !nXDenom)
                 {
-                    pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                    mpWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
                     break;
                 }
-                pOut->ScaleWinExt( (double)nXNum / nXDenom, (double)nYNum / nYDenom );
+                ScaleWinExt( (double)nXNum / nXDenom, (double)nYNum / nYDenom );
             }
             break;
 
@@ -256,58 +256,58 @@ namespace emfio
             case W_META_OFFSETVIEWPORTORG:
             {
                 short nXAdd = 0, nYAdd = 0;
-                pWMF->ReadInt16( nYAdd ).ReadInt16( nXAdd );
-                pOut->SetDevOrgOffset( nXAdd, nYAdd );
+                mpWMF->ReadInt16( nYAdd ).ReadInt16( nXAdd );
+                SetDevOrgOffset( nXAdd, nYAdd );
             }
             break;
 
             case W_META_SCALEVIEWPORTEXT:
             {
                 short nXNum = 0, nXDenom = 0, nYNum = 0, nYDenom = 0;
-                pWMF->ReadInt16( nYDenom ).ReadInt16( nYNum ).ReadInt16( nXDenom ).ReadInt16( nXNum );
+                mpWMF->ReadInt16( nYDenom ).ReadInt16( nYNum ).ReadInt16( nXDenom ).ReadInt16( nXNum );
                 if (!nYDenom || !nXDenom)
                 {
-                    pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                    mpWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
                     break;
                 }
-                pOut->ScaleDevExt( (double)nXNum / nXDenom, (double)nYNum / nYDenom );
+                ScaleDevExt( (double)nXNum / nXDenom, (double)nYNum / nYDenom );
             }
             break;
 
             case W_META_LINETO:
             {
-                pOut->LineTo( ReadYX() );
+                LineTo( ReadYX() );
             }
             break;
 
             case W_META_MOVETO:
             {
-                pOut->MoveTo( ReadYX() );
+                MoveTo( ReadYX() );
             }
             break;
 
             case W_META_INTERSECTCLIPRECT:
             {
-                pOut->IntersectClipRect( ReadRectangle() );
+                IntersectClipRect( ReadRectangle() );
             }
             break;
 
             case W_META_RECTANGLE:
             {
-                pOut->DrawRect( ReadRectangle() );
+                DrawRect( ReadRectangle() );
             }
             break;
 
             case W_META_ROUNDRECT:
             {
                 Size aSize( ReadYXExt() );
-                pOut->DrawRoundRect( ReadRectangle(), Size( aSize.Width() / 2, aSize.Height() / 2 ) );
+                DrawRoundRect( ReadRectangle(), Size( aSize.Width() / 2, aSize.Height() / 2 ) );
             }
             break;
 
             case W_META_ELLIPSE:
             {
-                pOut->DrawEllipse( ReadRectangle() );
+                DrawEllipse( ReadRectangle() );
             }
             break;
 
@@ -317,7 +317,7 @@ namespace emfio
                 Point aStart( ReadYX() );
                 tools::Rectangle aRect( ReadRectangle() );
                 aRect.Justify();
-                pOut->DrawArc( aRect, aStart, aEnd );
+                DrawArc( aRect, aStart, aEnd );
             }
             break;
 
@@ -331,9 +331,9 @@ namespace emfio
                 // #i73608# OutputDevice deviates from WMF
                 // semantics. start==end means full ellipse here.
                 if( aStart == aEnd )
-                    pOut->DrawEllipse( aRect );
+                    DrawEllipse( aRect );
                 else
-                    pOut->DrawPie( aRect, aStart, aEnd );
+                    DrawPie( aRect, aStart, aEnd );
             }
             break;
 
@@ -343,7 +343,7 @@ namespace emfio
                 Point aStart( ReadYX() );
                 tools::Rectangle aRect( ReadRectangle() );
                 aRect.Justify();
-                pOut->DrawChord( aRect, aStart, aEnd );
+                DrawChord( aRect, aStart, aEnd );
             }
             break;
 
@@ -352,27 +352,27 @@ namespace emfio
                 bool bRecordOk = true;
 
                 sal_uInt16 nPoints(0);
-                pWMF->ReadUInt16(nPoints);
+                mpWMF->ReadUInt16(nPoints);
 
-                if (nPoints > pWMF->remainingSize() / (2 * sizeof(sal_uInt16)))
+                if (nPoints > mpWMF->remainingSize() / (2 * sizeof(sal_uInt16)))
                 {
                     bRecordOk = false;
                 }
                 else
                 {
                     tools::Polygon aPoly(nPoints);
-                    for (sal_uInt16 i(0); i < nPoints && pWMF->good(); ++i)
+                    for (sal_uInt16 i(0); i < nPoints && mpWMF->good(); ++i)
                         aPoly[ i ] = ReadPoint();
-                    pOut->DrawPolygon(aPoly, false/*bRecordPath*/);
+                    DrawPolygon(aPoly, false/*bRecordPath*/);
                 }
 
                 SAL_WARN_IF(!bRecordOk, "vcl.wmf", "polygon record has more points than we can handle");
 
-                bRecordOk &= pWMF->good();
+                bRecordOk &= mpWMF->good();
 
                 if (!bRecordOk)
                 {
-                    pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                    mpWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
                     break;
                 }
             }
@@ -382,11 +382,11 @@ namespace emfio
             {
                 sal_uInt16 nPolyCount(0);
                 // Number of polygons:
-                pWMF->ReadUInt16( nPolyCount );
-                if (nPolyCount && pWMF->good())
+                mpWMF->ReadUInt16( nPolyCount );
+                if (nPolyCount && mpWMF->good())
                 {
                     bool bRecordOk = true;
-                    if (nPolyCount > pWMF->remainingSize() / sizeof(sal_uInt16))
+                    if (nPolyCount > mpWMF->remainingSize() / sizeof(sal_uInt16))
                     {
                         break;
                     }
@@ -396,9 +396,9 @@ namespace emfio
                     sal_uInt16* pnPoints = xPolygonPointCounts.get();
                     tools::PolyPolygon aPolyPoly(nPolyCount, nPolyCount);
                     sal_uInt16 nPoints = 0;
-                    for (sal_uInt16 a = 0; a < nPolyCount && pWMF->good(); ++a)
+                    for (sal_uInt16 a = 0; a < nPolyCount && mpWMF->good(); ++a)
                     {
-                        pWMF->ReadUInt16( pnPoints[a] );
+                        mpWMF->ReadUInt16( pnPoints[a] );
 
                         if (pnPoints[a] > SAL_MAX_UINT16 - nPoints)
                         {
@@ -411,20 +411,20 @@ namespace emfio
 
                     SAL_WARN_IF(!bRecordOk, "vcl.wmf", "polypolygon record has more polygons than we can handle");
 
-                    bRecordOk &= pWMF->good();
+                    bRecordOk &= mpWMF->good();
 
                     if (!bRecordOk)
                     {
-                        pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                        mpWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
                         break;
                     }
 
                     // Polygon points are:
-                    for (sal_uInt16 a = 0; a < nPolyCount && pWMF->good(); ++a)
+                    for (sal_uInt16 a = 0; a < nPolyCount && mpWMF->good(); ++a)
                     {
                         const sal_uInt16 nPointCount(pnPoints[a]);
 
-                        if (nPointCount > pWMF->remainingSize() / (2 * sizeof(sal_uInt16)))
+                        if (nPointCount > mpWMF->remainingSize() / (2 * sizeof(sal_uInt16)))
                         {
                             bRecordOk = false;
                             break;
@@ -433,7 +433,7 @@ namespace emfio
                         std::unique_ptr<Point[]> xPolygonPoints(new Point[nPointCount]);
                         Point* pPtAry = xPolygonPoints.get();
 
-                        for(sal_uInt16 b(0); b < nPointCount && pWMF->good(); ++b)
+                        for(sal_uInt16 b(0); b < nPointCount && mpWMF->good(); ++b)
                         {
                             pPtAry[b] = ReadPoint();
                         }
@@ -441,15 +441,15 @@ namespace emfio
                         aPolyPoly.Insert( tools::Polygon(nPointCount, pPtAry) );
                     }
 
-                    bRecordOk &= pWMF->good();
+                    bRecordOk &= mpWMF->good();
 
                     if (!bRecordOk)
                     {
-                        pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                        mpWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
                         break;
                     }
 
-                    pOut->DrawPolyPolygon( aPolyPoly );
+                    DrawPolyPolygon( aPolyPoly );
                 }
             }
             break;
@@ -459,27 +459,27 @@ namespace emfio
                 bool bRecordOk = true;
 
                 sal_uInt16 nPoints(0);
-                pWMF->ReadUInt16(nPoints);
+                mpWMF->ReadUInt16(nPoints);
 
-                if (nPoints > pWMF->remainingSize() / (2 * sizeof(sal_uInt16)))
+                if (nPoints > mpWMF->remainingSize() / (2 * sizeof(sal_uInt16)))
                 {
                     bRecordOk = false;
                 }
                 else
                 {
                     tools::Polygon aPoly(nPoints);
-                    for (sal_uInt16 i(0); i < nPoints && pWMF->good(); ++i)
+                    for (sal_uInt16 i(0); i < nPoints && mpWMF->good(); ++i)
                         aPoly[ i ] = ReadPoint();
-                    pOut->DrawPolyLine( aPoly );
+                    DrawPolyLine( aPoly );
                 }
 
                 SAL_WARN_IF(!bRecordOk, "vcl.wmf", "polyline record has more points than we can handle");
 
-                bRecordOk &= pWMF->good();
+                bRecordOk &= mpWMF->good();
 
                 if (!bRecordOk)
                 {
-                    pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                    mpWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
                     break;
                 }
             }
@@ -487,59 +487,59 @@ namespace emfio
 
             case W_META_SAVEDC:
             {
-                pOut->Push();
+                Push();
             }
             break;
 
             case W_META_RESTOREDC:
             {
-                pOut->Pop();
+                Pop();
             }
             break;
 
             case W_META_SETPIXEL:
             {
                 const Color aColor = ReadColor();
-                pOut->DrawPixel( ReadYX(), aColor );
+                DrawPixel( ReadYX(), aColor );
             }
             break;
 
             case W_META_OFFSETCLIPRGN:
             {
-                pOut->MoveClipRegion( ReadYXExt() );
+                MoveClipRegion( ReadYXExt() );
             }
             break;
 
             case W_META_TEXTOUT:
             {
                 sal_uInt16 nLength = 0;
-                pWMF->ReadUInt16( nLength );
+                mpWMF->ReadUInt16( nLength );
                 if ( nLength )
                 {
                     std::unique_ptr<char[]> pChar(new char[ ( nLength + 1 ) &~ 1 ]);
-                    pWMF->ReadBytes(pChar.get(), (nLength + 1) &~ 1);
-                    OUString aText( pChar.get(), nLength, pOut->GetCharSet() );
+                    mpWMF->ReadBytes(pChar.get(), (nLength + 1) &~ 1);
+                    OUString aText( pChar.get(), nLength, GetCharSet() );
                     pChar.reset();
                     Point aPosition( ReadYX() );
-                    pOut->DrawText( aPosition, aText );
+                    DrawText( aPosition, aText );
                 }
             }
             break;
 
             case W_META_EXTTEXTOUT:
             {
-                pWMF->SeekRel(-6);
-                sal_Int32 nRecordPos = pWMF->Tell(), nRecordSize = 0;
-                pWMF->ReadInt32( nRecordSize );
-                pWMF->SeekRel(2);
+                mpWMF->SeekRel(-6);
+                sal_Int32 nRecordPos = mpWMF->Tell(), nRecordSize = 0;
+                mpWMF->ReadInt32( nRecordSize );
+                mpWMF->SeekRel(2);
                 Point aPosition = ReadYX();
                 sal_uInt16 nLen = 0, nOptions = 0;
-                pWMF->ReadUInt16( nLen ).ReadUInt16( nOptions );
+                mpWMF->ReadUInt16( nLen ).ReadUInt16( nOptions );
 
                 ComplexTextLayoutFlags nTextLayoutMode = ComplexTextLayoutFlags::Default;
                 if ( nOptions & ETO_RTLREADING )
                     nTextLayoutMode = ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft;
-                pOut->SetTextLayoutMode( nTextLayoutMode );
+                SetTextLayoutMode( nTextLayoutMode );
                 SAL_WARN_IF( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) != 0, "vcl.wmf", "SJ: ETO_PDY || ETO_GLYPH_INDEX in WMF" );
 
                 // output only makes sense if the text contains characters
@@ -555,7 +555,7 @@ namespace emfio
                         aRect = tools::Rectangle( aPt1, aPt2 );
                     }
 
-                    auto nRemainingSize = pWMF->remainingSize();
+                    auto nRemainingSize = mpWMF->remainingSize();
                     if (nRemainingSize < static_cast<sal_uInt32>(nOriginalBlockLen))
                     {
                         SAL_WARN("vcl.wmf", "exttextout record claimed more data than the stream can provide");
@@ -563,15 +563,15 @@ namespace emfio
                     }
 
                     std::unique_ptr<char[]> pChar(new char[nOriginalBlockLen]);
-                    pWMF->ReadBytes(pChar.get(), nOriginalBlockLen);
-                    OUString aText(pChar.get(), nOriginalTextLen, pOut->GetCharSet()); // after this conversion the text may contain
+                    mpWMF->ReadBytes(pChar.get(), nOriginalBlockLen);
+                    OUString aText(pChar.get(), nOriginalTextLen, GetCharSet()); // after this conversion the text may contain
                     sal_Int32 nNewTextLen = aText.getLength();                         // less character (japanese version), so the
                                                                                        // dxAry will not fit
                     if ( nNewTextLen )
                     {
                         std::unique_ptr<long[]> pDXAry, pDYAry;
                         sal_uInt32  nMaxStreamPos = nRecordPos + ( nRecordSize << 1 );
-                        sal_Int32   nDxArySize =  nMaxStreamPos - pWMF->Tell();
+                        sal_Int32   nDxArySize =  nMaxStreamPos - mpWMF->Tell();
                         sal_Int32   nDxAryEntries = nDxArySize >> 1;
                         bool        bUseDXAry = false;
 
@@ -585,13 +585,13 @@ namespace emfio
                             }
                             for (i = 0; i < nNewTextLen; i++ )
                             {
-                                if ( pWMF->Tell() >= nMaxStreamPos )
+                                if ( mpWMF->Tell() >= nMaxStreamPos )
                                     break;
                                 sal_Int32 nDxCount = 1;
                                 if ( nNewTextLen != nOriginalTextLen )
                                 {
                                     sal_Unicode cUniChar = aText[i];
-                                    OString aTmp(&cUniChar, 1, pOut->GetCharSet());
+                                    OString aTmp(&cUniChar, 1, GetCharSet());
                                     if ( aTmp.getLength() > 1 )
                                     {
                                         nDxCount = aTmp.getLength();
@@ -601,17 +601,17 @@ namespace emfio
                                 sal_Int16 nDx = 0, nDy = 0;
                                 while ( nDxCount-- )
                                 {
-                                    if ( ( pWMF->Tell() + 2 ) > nMaxStreamPos )
+                                    if ( ( mpWMF->Tell() + 2 ) > nMaxStreamPos )
                                         break;
                                     sal_Int16 nDxTmp = 0;
-                                    pWMF->ReadInt16(nDxTmp);
+                                    mpWMF->ReadInt16(nDxTmp);
                                     nDx += nDxTmp;
                                     if ( nOptions & ETO_PDY )
                                     {
-                                        if ( ( pWMF->Tell() + 2 ) > nMaxStreamPos )
+                                        if ( ( mpWMF->Tell() + 2 ) > nMaxStreamPos )
                                             break;
                                         sal_Int16 nDyTmp = 0;
-                                        pWMF->ReadInt16(nDyTmp);
+                                        mpWMF->ReadInt16(nDyTmp);
                                         nDy += nDyTmp;
                                     }
                                 }
@@ -626,9 +626,9 @@ namespace emfio
                                 bUseDXAry = true;
                         }
                         if ( pDXAry && bUseDXAry )
-                            pOut->DrawText( aPosition, aText, pDXAry.get(), pDYAry.get() );
+                            DrawText( aPosition, aText, pDXAry.get(), pDYAry.get() );
                         else
-                            pOut->DrawText( aPosition, aText );
+                            DrawText( aPosition, aText );
                     }
                 }
             }
@@ -637,16 +637,16 @@ namespace emfio
             case W_META_SELECTOBJECT:
             {
                 sal_Int16   nObjIndex = 0;
-                pWMF->ReadInt16( nObjIndex );
-                pOut->SelectObject( nObjIndex );
+                mpWMF->ReadInt16( nObjIndex );
+                SelectObject( nObjIndex );
             }
             break;
 
             case W_META_SETTEXTALIGN:
             {
                 sal_uInt16  nAlign = 0;
-                pWMF->ReadUInt16( nAlign );
-                pOut->SetTextAlign( nAlign );
+                mpWMF->ReadUInt16( nAlign );
+                SetTextAlign( nAlign );
             }
             break;
 
@@ -670,15 +670,15 @@ namespace emfio
                 sal_uInt16  nSx = 0, nSy = 0, nSxe = 0, nSye = 0, nDontKnow = 0, nWidth = 0, nHeight = 0, nBytesPerScan = 0;
                 sal_uInt8   nPlanes, nBitCount;
 
-                pWMF->ReadInt32( nWinROP )
+                mpWMF->ReadInt32( nWinROP )
                      .ReadUInt16( nSy ).ReadUInt16( nSx ).ReadUInt16( nSye ).ReadUInt16( nSxe );
                 Point aPoint( ReadYX() );
-                pWMF->ReadUInt16( nDontKnow ).ReadUInt16( nWidth ).ReadUInt16( nHeight ).ReadUInt16( nBytesPerScan ).ReadUChar( nPlanes ).ReadUChar( nBitCount );
+                mpWMF->ReadUInt16( nDontKnow ).ReadUInt16( nWidth ).ReadUInt16( nHeight ).ReadUInt16( nBytesPerScan ).ReadUChar( nPlanes ).ReadUChar( nBitCount );
 
                 bool bOk = nWidth && nHeight && nPlanes == 1 && nBitCount == 1;
                 if (bOk)
                 {
-                    bOk = nBytesPerScan <= pWMF->remainingSize() / nHeight;
+                    bOk = nBytesPerScan <= mpWMF->remainingSize() / nHeight;
                 }
                 if (bOk)
                 {
@@ -686,13 +686,13 @@ namespace emfio
                     Bitmap::ScopedWriteAccess pAcc(aBmp);
                     if ( pAcc )
                     {
-                        for (sal_uInt16 y = 0; y < nHeight && pWMF->good(); ++y)
+                        for (sal_uInt16 y = 0; y < nHeight && mpWMF->good(); ++y)
                         {
                             sal_uInt16 x = 0;
                             for (sal_uInt16 scan = 0; scan < nBytesPerScan; scan++ )
                             {
                                 sal_Int8 nEightPixels = 0;
-                                pWMF->ReadSChar( nEightPixels );
+                                mpWMF->ReadSChar( nEightPixels );
                                 for (sal_Int8 i = 7; i >= 0; i-- )
                                 {
                                     if ( x < nWidth )
@@ -712,7 +712,7 @@ namespace emfio
                             aBmp.Crop( aCropRect );
                         }
                         tools::Rectangle aDestRect( aPoint, Size( nSxe, nSye ) );
-                        aBmpSaveList.emplace_back(new BSaveStruct(aBmp, aDestRect, nWinROP));
+                        maBmpSaveList.emplace_back(new BSaveStruct(aBmp, aDestRect, nWinROP));
                     }
                 }
             }
@@ -727,32 +727,32 @@ namespace emfio
                 sal_uInt16  nSx = 0, nSy = 0, nSxe = 0, nSye = 0, nUsage = 0;
                 Bitmap      aBmp;
 
-                pWMF->ReadInt32( nWinROP );
+                mpWMF->ReadInt32( nWinROP );
 
                 if( nFunc == W_META_STRETCHDIB )
-                    pWMF->ReadUInt16( nUsage );
+                    mpWMF->ReadUInt16( nUsage );
 
                 // nSye and nSxe is the number of pixels that has to been used
                 // If they are set to zero, it is as indicator not to scale the bitmap later
 
                 if( nFunc == W_META_STRETCHDIB || nFunc == W_META_STRETCHBLT || nFunc == W_META_DIBSTRETCHBLT )
-                    pWMF->ReadUInt16( nSye ).ReadUInt16( nSxe );
+                    mpWMF->ReadUInt16( nSye ).ReadUInt16( nSxe );
 
                 // nSy and nx is the offset of the first pixel
-                pWMF->ReadUInt16( nSy ).ReadUInt16( nSx );
+                mpWMF->ReadUInt16( nSy ).ReadUInt16( nSx );
 
                 if( nFunc == W_META_STRETCHDIB || nFunc == W_META_DIBBITBLT || nFunc == W_META_DIBSTRETCHBLT )
                 {
                     if ( nWinROP == PATCOPY )
-                        pWMF->ReadUInt16( nUsage );    // i don't know anything of this parameter, so its called nUsage
-                                            // pOut->DrawRect( Rectangle( ReadYX(), aDestSize ), false );
+                        mpWMF->ReadUInt16( nUsage );    // i don't know anything of this parameter, so its called nUsage
+                                            // DrawRect( Rectangle( ReadYX(), aDestSize ), false );
 
                     Size aDestSize( ReadYXExt() );
                     if ( aDestSize.Width() && aDestSize.Height() )  // #92623# do not try to read buggy bitmaps
                     {
                         tools::Rectangle aDestRect( ReadYX(), aDestSize );
                         if ( nWinROP != PATCOPY )
-                            ReadDIB(aBmp, *pWMF, false);
+                            ReadDIB(aBmp, *mpWMF, false);
 
                         // test if it is sensible to crop
                         if ( nSye && nSxe &&
@@ -762,7 +762,7 @@ namespace emfio
                             tools::Rectangle aCropRect( Point( nSx, nSy ), Size( nSxe, nSye ) );
                             aBmp.Crop( aCropRect );
                         }
-                        aBmpSaveList.emplace_back(new BSaveStruct(aBmp, aDestRect, nWinROP));
+                        maBmpSaveList.emplace_back(new BSaveStruct(aBmp, aDestRect, nWinROP));
                     }
                 }
             }
@@ -774,9 +774,9 @@ namespace emfio
                 sal_uInt32  nRed = 0, nGreen = 0, nBlue = 0, nCount = 1;
                 sal_uInt16  nFunction = 0;
 
-                pWMF->ReadUInt16( nFunction ).ReadUInt16( nFunction );
+                mpWMF->ReadUInt16( nFunction ).ReadUInt16( nFunction );
 
-                ReadDIB(aBmp, *pWMF, false);
+                ReadDIB(aBmp, *mpWMF, false);
                 Bitmap::ScopedReadAccess pBmp(aBmp);
                 if ( pBmp )
                 {
@@ -797,33 +797,33 @@ namespace emfio
                     pBmp.reset();
                 }
                 Color aColor( (sal_uInt8)( nRed / nCount ), (sal_uInt8)( nGreen / nCount ), (sal_uInt8)( nBlue / nCount ) );
-                pOut->CreateObject(o3tl::make_unique<WinMtfFillStyle>( aColor, false ));
+                CreateObject(o3tl::make_unique<WinMtfFillStyle>( aColor, false ));
             }
             break;
 
             case W_META_DELETEOBJECT:
             {
                 sal_Int16 nIndex = 0;
-                pWMF->ReadInt16( nIndex );
-                pOut->DeleteObject( nIndex );
+                mpWMF->ReadInt16( nIndex );
+                DeleteObject( nIndex );
             }
             break;
 
             case W_META_CREATEPALETTE:
             {
-                pOut->CreateObject();
+                CreateObject();
             }
             break;
 
             case W_META_CREATEBRUSH:
             {
-                pOut->CreateObject(o3tl::make_unique<WinMtfFillStyle>( Color( COL_WHITE ), false ));
+                CreateObject(o3tl::make_unique<WinMtfFillStyle>( Color( COL_WHITE ), false ));
             }
             break;
 
             case W_META_CREATEPATTERNBRUSH:
             {
-                pOut->CreateObject(o3tl::make_unique<WinMtfFillStyle>( Color( COL_WHITE ), false ));
+                CreateObject(o3tl::make_unique<WinMtfFillStyle>( Color( COL_WHITE ), false ));
             }
             break;
 
@@ -834,9 +834,9 @@ namespace emfio
                 sal_uInt16 nWidth = 0;
                 sal_uInt16 nHeight = 0;
 
-                pWMF->ReadUInt16(nStyle);
-                pWMF->ReadUInt16(nWidth);
-                pWMF->ReadUInt16(nHeight);
+                mpWMF->ReadUInt16(nStyle);
+                mpWMF->ReadUInt16(nWidth);
+                mpWMF->ReadUInt16(nHeight);
 
                 if (nWidth > 0)
                     aLineInfo.SetWidth(nWidth);
@@ -900,15 +900,15 @@ namespace emfio
                     default :
                         aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::NONE );
                 }
-                pOut->CreateObject(o3tl::make_unique<WinMtfLineStyle>( ReadColor(), aLineInfo, bTransparent ));
+                CreateObject(o3tl::make_unique<WinMtfLineStyle>( ReadColor(), aLineInfo, bTransparent ));
             }
             break;
 
             case W_META_CREATEBRUSHINDIRECT:
             {
                 sal_uInt16  nStyle = 0;
-                pWMF->ReadUInt16( nStyle );
-                pOut->CreateObject(o3tl::make_unique<WinMtfFillStyle>( ReadColor(), ( nStyle == BS_HOLLOW ) ));
+                mpWMF->ReadUInt16( nStyle );
+                CreateObject(o3tl::make_unique<WinMtfFillStyle>( ReadColor(), ( nStyle == BS_HOLLOW ) ));
             }
             break;
 
@@ -922,18 +922,18 @@ namespace emfio
 
                 LOGFONTW aLogFont;
                 aFontSize = ReadYXExt();
-                pWMF->ReadInt16( lfEscapement );
-                pWMF->ReadInt16( lfOrientation );
-                pWMF->ReadInt16( lfWeight );
-                pWMF->ReadUChar( aLogFont.lfItalic );
-                pWMF->ReadUChar( aLogFont.lfUnderline );
-                pWMF->ReadUChar( aLogFont.lfStrikeOut );
-                pWMF->ReadUChar( aLogFont.lfCharSet );
-                pWMF->ReadUChar( aLogFont.lfOutPrecision );
-                pWMF->ReadUChar( aLogFont.lfClipPrecision );
-                pWMF->ReadUChar( aLogFont.lfQuality );
-                pWMF->ReadUChar( aLogFont.lfPitchAndFamily );
-                size_t nRet = pWMF->ReadBytes( lfFaceName, LF_FACESIZE );
+                mpWMF->ReadInt16( lfEscapement );
+                mpWMF->ReadInt16( lfOrientation );
+                mpWMF->ReadInt16( lfWeight );
+                mpWMF->ReadUChar( aLogFont.lfItalic );
+                mpWMF->ReadUChar( aLogFont.lfUnderline );
+                mpWMF->ReadUChar( aLogFont.lfStrikeOut );
+                mpWMF->ReadUChar( aLogFont.lfCharSet );
+                mpWMF->ReadUChar( aLogFont.lfOutPrecision );
+                mpWMF->ReadUChar( aLogFont.lfClipPrecision );
+                mpWMF->ReadUChar( aLogFont.lfQuality );
+                mpWMF->ReadUChar( aLogFont.lfPitchAndFamily );
+                size_t nRet = mpWMF->ReadBytes( lfFaceName, LF_FACESIZE );
                 lfFaceName[nRet] = 0;
                 aLogFont.lfWidth = aFontSize.Width();
                 aLogFont.lfHeight = aFontSize.Height();
@@ -952,31 +952,31 @@ namespace emfio
                     eCharSet = RTL_TEXTENCODING_MS_1252;
                 aLogFont.alfFaceName = OUString( lfFaceName, strlen(lfFaceName), eCharSet );
 
-                pOut->CreateObject(o3tl::make_unique<WinMtfFontStyle>( aLogFont ));
+                CreateObject(o3tl::make_unique<WinMtfFontStyle>( aLogFont ));
             }
             break;
 
             case W_META_CREATEBITMAPINDIRECT:
             {
-                pOut->CreateObject();
+                CreateObject();
             }
             break;
 
             case W_META_CREATEBITMAP:
             {
-                pOut->CreateObject();
+                CreateObject();
             }
             break;
 
             case W_META_CREATEREGION:
             {
-                pOut->CreateObject();
+                CreateObject();
             }
             break;
 
             case W_META_EXCLUDECLIPRECT :
             {
-                pOut->ExcludeClipRect( ReadRectangle() );
+                ExcludeClipRect( ReadRectangle() );
             }
             break;
 
@@ -984,60 +984,60 @@ namespace emfio
             {
                 sal_uInt32 nROP = 0;
                 WMFRasterOp nOldROP = WMFRasterOp::NONE;
-                pWMF->ReadUInt32( nROP );
+                mpWMF->ReadUInt32( nROP );
                 Size aSize = ReadYXExt();
-                nOldROP = pOut->SetRasterOp( (WMFRasterOp)nROP );
-                pOut->DrawRect( tools::Rectangle( ReadYX(), aSize ), false );
-                pOut->SetRasterOp( nOldROP );
+                nOldROP = SetRasterOp( (WMFRasterOp)nROP );
+                DrawRect( tools::Rectangle( ReadYX(), aSize ), false );
+                SetRasterOp( nOldROP );
             }
             break;
 
             case W_META_SELECTCLIPREGION:
             {
                 sal_Int16 nObjIndex = 0;
-                pWMF->ReadInt16( nObjIndex );
+                mpWMF->ReadInt16( nObjIndex );
                 if ( !nObjIndex )
                 {
                     tools::PolyPolygon aEmptyPolyPoly;
-                    pOut->SetClipPath( aEmptyPolyPoly, RGN_COPY, true );
+                    SetClipPath( aEmptyPolyPoly, RGN_COPY, true );
                 }
             }
             break;
 
             case W_META_ESCAPE :
             {
-                // nRecSize has been checked previously to be greater than 3
-                sal_uInt64 nMetaRecSize = static_cast< sal_uInt64 >( nRecSize - 2 ) * 2;
-                sal_uInt64 nMetaRecEndPos = pWMF->Tell() + nMetaRecSize;
+                // mnRecSize has been checked previously to be greater than 3
+                sal_uInt64 nMetaRecSize = static_cast< sal_uInt64 >(mnRecSize - 2 ) * 2;
+                sal_uInt64 nMetaRecEndPos = mpWMF->Tell() + nMetaRecSize;
 
-                // taking care that nRecSize does not exceed the maximal stream position
-                if ( nMetaRecEndPos > nEndPos )
+                // taking care that mnRecSize does not exceed the maximal stream position
+                if ( nMetaRecEndPos > mnEndPos )
                 {
-                    pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                    mpWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
                     break;
                 }
-                if ( nRecSize >= 4 )    // minimal escape length
+                if (mnRecSize >= 4 )    // minimal escape length
                 {
                     sal_uInt16  nMode = 0, nLen = 0;
-                    pWMF->ReadUInt16( nMode )
+                    mpWMF->ReadUInt16( nMode )
                          .ReadUInt16( nLen );
                     if ( ( nMode == W_MFCOMMENT ) && ( nLen >= 4 ) )
                     {
                         sal_uInt32 nNewMagic = 0; // we have to read int32 for
-                        pWMF->ReadUInt32( nNewMagic );   // META_ESCAPE_ENHANCED_METAFILE CommentIdentifier
+                        mpWMF->ReadUInt32( nNewMagic );   // META_ESCAPE_ENHANCED_METAFILE CommentIdentifier
 
                         if( nNewMagic == 0x2c2a4f4f &&  nLen >= 14 )
                         {
                             sal_uInt16 nMagic2 = 0;
-                            pWMF->ReadUInt16( nMagic2 );
+                            mpWMF->ReadUInt16( nMagic2 );
                             if( nMagic2 == 0x0a ) // 2nd half of magic
                             {                     // continue with private escape
                                 sal_uInt32 nCheck = 0, nEsc = 0;
-                                pWMF->ReadUInt32( nCheck )
+                                mpWMF->ReadUInt32( nCheck )
                                      .ReadUInt32( nEsc );
 
                                 sal_uInt32 nEscLen = nLen - 14;
-                                if ( nEscLen <= ( nRecSize * 2 ) )
+                                if ( nEscLen <= (mnRecSize * 2 ) )
                                 {
     #ifdef OSL_BIGENDIAN
                                     sal_uInt32 nTmp = OSL_SWAPDWORD( nEsc );
@@ -1047,15 +1047,15 @@ namespace emfio
     #endif
                                     std::unique_ptr<sal_Int8[]> pData;
 
-                                    if ( ( static_cast< sal_uInt64 >( nEscLen ) + pWMF->Tell() ) > nMetaRecEndPos )
+                                    if ( ( static_cast< sal_uInt64 >( nEscLen ) + mpWMF->Tell() ) > nMetaRecEndPos )
                                     {
-                                        pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                                        mpWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
                                         break;
                                     }
                                     if ( nEscLen > 0 )
                                     {
                                         pData.reset(new sal_Int8[ nEscLen ]);
-                                        pWMF->ReadBytes(pData.get(), nEscLen);
+                                        mpWMF->ReadBytes(pData.get(), nEscLen);
                                         nCheckSum = rtl_crc32( nCheckSum, pData.get(), nEscLen );
                                     }
                                     if ( nCheck == nCheckSum )
@@ -1065,7 +1065,7 @@ namespace emfio
                                             case PRIVATE_ESCAPE_UNICODE :
                                             {
                                                 // we will use text instead of polygons only if we have the correct font
-                                                if ( Application::GetDefaultDevice()->IsFontAvailable( pOut->GetFont().GetFamilyName() ) )
+                                                if ( Application::GetDefaultDevice()->IsFontAvailable( GetFont().GetFamilyName() ) )
                                                 {
                                                     Point  aPt;
                                                     OUString aString;
@@ -1096,8 +1096,8 @@ namespace emfio
                                                             aMemoryStream.ReadInt32( val);
                                                             pDXAry[ i ] = val;
                                                         }
-                                                        aMemoryStream.ReadUInt32( nSkipActions );
-                                                        pOut->DrawText( aPt, aString, pDXAry.get() );
+                                                        aMemoryStream.ReadUInt32(mnSkipActions);
+                                                        DrawText( aPt, aString, pDXAry.get() );
                                                     }
                                                 }
                                             }
@@ -1107,58 +1107,58 @@ namespace emfio
                                 }
                             }
                         }
-                        else if ( (nNewMagic == static_cast< sal_uInt32 >(0x43464D57)) && (nLen >= 34) && ( (sal_Int32)(nLen + 10) <= (sal_Int32)(nRecSize * 2) ))
+                        else if ( (nNewMagic == static_cast< sal_uInt32 >(0x43464D57)) && (nLen >= 34) && ( (sal_Int32)(nLen + 10) <= (sal_Int32)(mnRecSize * 2) ))
                         {
                             sal_uInt32 nComType = 0, nVersion = 0, nFlags = 0, nComRecCount = 0,
                                        nCurRecSize = 0, nRemainingSize = 0, nEMFTotalSize = 0;
                             sal_uInt16 nCheck = 0;
 
-                            pWMF->ReadUInt32( nComType ).ReadUInt32( nVersion ).ReadUInt16( nCheck ).ReadUInt32( nFlags )
+                            mpWMF->ReadUInt32( nComType ).ReadUInt32( nVersion ).ReadUInt16( nCheck ).ReadUInt32( nFlags )
                                  .ReadUInt32( nComRecCount ).ReadUInt32( nCurRecSize )
                                  .ReadUInt32( nRemainingSize ).ReadUInt32( nEMFTotalSize ); // the nRemainingSize is not mentioned in MSDN documentation
                                                                       // but it seems to be required to read in data produced by OLE
 
                             if( nComType == 0x01 && nVersion == 0x10000 && nComRecCount )
                             {
-                                if( !nEMFRec )
+                                if( !mnEMFRec)
                                 {   // first EMF comment
-                                    nEMFRecCount    = nComRecCount;
-                                    nEMFSize        = nEMFTotalSize;
-                                    if (nEMFSize > pWMF->remainingSize())
+                                    mnEMFRecCount = nComRecCount;
+                                    mnEMFSize = nEMFTotalSize;
+                                    if (mnEMFSize > mpWMF->remainingSize())
                                     {
                                         SAL_WARN("vcl.wmf", "emf size claims to be larger than remaining data");
-                                        pEMFStream.reset();
+                                        mpEMFStream.reset();
                                     }
                                     else
-                                        pEMFStream = o3tl::make_unique<SvMemoryStream>(nEMFSize, 0);
+                                        mpEMFStream = o3tl::make_unique<SvMemoryStream>(mnEMFSize, 0);
                                 }
-                                else if( ( nEMFRecCount != nComRecCount ) || ( nEMFSize != nEMFTotalSize ) ) // add additional checks here
+                                else if( (mnEMFRecCount != nComRecCount ) || (mnEMFSize != nEMFTotalSize ) ) // add additional checks here
                                 {
                                     // total records should be the same as in previous comments
-                                    nEMFRecCount = 0xFFFFFFFF;
-                                    pEMFStream.reset();
+                                    mnEMFRecCount = 0xFFFFFFFF;
+                                    mpEMFStream.reset();
                                 }
-                                nEMFRec++;
+                                mnEMFRec++;
 
-                                if (pEMFStream && nCurRecSize + 34 > nLen)
+                                if (mpEMFStream && nCurRecSize + 34 > nLen)
                                 {
-                                    nEMFRecCount = 0xFFFFFFFF;
-                                    pEMFStream.reset();
+                                    mnEMFRecCount = 0xFFFFFFFF;
+                                    mpEMFStream.reset();
                                 }
 
-                                if (pEMFStream && nCurRecSize > pWMF->remainingSize())
+                                if (mpEMFStream && nCurRecSize > mpWMF->remainingSize())
                                 {
                                     SAL_WARN("vcl.wmf", "emf record size claims to be larger than remaining data");
-                                    nEMFRecCount = 0xFFFFFFFF;
-                                    pEMFStream.reset();
+                                    mnEMFRecCount = 0xFFFFFFFF;
+                                    mpEMFStream.reset();
                                 }
 
-                                if (pEMFStream)
+                                if (mpEMFStream)
                                 {
                                     std::vector<sal_Int8> aBuf(nCurRecSize);
-                                    sal_uInt32 nCount = pWMF->ReadBytes(aBuf.data(), nCurRecSize);
+                                    sal_uInt32 nCount = mpWMF->ReadBytes(aBuf.data(), nCurRecSize);
                                     if( nCount == nCurRecSize )
-                                        pEMFStream->WriteBytes(aBuf.data(), nCount);
+                                        mpEMFStream->WriteBytes(aBuf.data(), nCount);
                                 }
                             }
                         }
@@ -1200,12 +1200,12 @@ namespace emfio
 
     bool WmfReader::ReadHeader()
     {
-        sal_uInt64 const nStrmPos = pWMF->Tell();
+        sal_uInt64 const nStrmPos = mpWMF->Tell();
 
         sal_uInt32 nPlaceableMetaKey(0);
         // if available read the METAFILEHEADER
-        pWMF->ReadUInt32( nPlaceableMetaKey );
-        if (!pWMF->good())
+        mpWMF->ReadUInt32( nPlaceableMetaKey );
+        if (!mpWMF->good())
             return false;
 
         tools::Rectangle aPlaceableBound;
@@ -1220,201 +1220,173 @@ namespace emfio
             sal_Int16 nVal;
 
             // Skip reserved bytes
-            pWMF->SeekRel(2);
+            mpWMF->SeekRel(2);
 
             // BoundRect
-            pWMF->ReadInt16( nVal );
+            mpWMF->ReadInt16( nVal );
             aPlaceableBound.Left() = nVal;
-            pWMF->ReadInt16( nVal );
+            mpWMF->ReadInt16( nVal );
             aPlaceableBound.Top() = nVal;
-            pWMF->ReadInt16( nVal );
+            mpWMF->ReadInt16( nVal );
             aPlaceableBound.Right() = nVal;
-            pWMF->ReadInt16( nVal );
+            mpWMF->ReadInt16( nVal );
             aPlaceableBound.Bottom() = nVal;
 
             // inch
-            pWMF->ReadUInt16( nUnitsPerInch );
+            mpWMF->ReadUInt16( mnUnitsPerInch );
 
             // reserved
-            pWMF->SeekRel( 4 );
+            mpWMF->SeekRel( 4 );
 
             // Skip and don't check the checksum
-            pWMF->SeekRel( 2 );
+            mpWMF->SeekRel( 2 );
         }
         else
         {
-            nUnitsPerInch = 96;
+            mnUnitsPerInch = 96;
 
 
-            if (   pExternalHeader != nullptr
-                && pExternalHeader->xExt > 0
-                && pExternalHeader->yExt > 0
-                && (pExternalHeader->mapMode == MM_ISOTROPIC || pExternalHeader->mapMode == MM_ANISOTROPIC))
+            mpWMF->Seek( nStrmPos + 18 );    // set the streampos to the start of the metaactions
+            GetPlaceableBound( aPlaceableBound, mpWMF );
+
+            // The image size is not known so normalize the calculated bounds so that the
+            // resulting image is not too big
+            const double fMaxWidth = static_cast<double>(aMaxWidth);
+            if (aPlaceableBound.GetWidth() > aMaxWidth)
             {
-                // #n417818#: If we have an external header then overwrite the bounds!
-                tools::Rectangle aExtRect(0, 0,
-                              (double) pExternalHeader->xExt * 567 * nUnitsPerInch / 1440000,
-                              (double) pExternalHeader->yExt * 567 * nUnitsPerInch / 1440000);
-                aPlaceableBound = aExtRect;
+                double fRatio = aPlaceableBound.GetWidth() / fMaxWidth;
 
-                SAL_INFO("vcl.wmf", "External header size "
-                           " t: " << aPlaceableBound.Left()  << " l: " << aPlaceableBound.Top()
-                        << " b: " << aPlaceableBound.Right() << " r: " << aPlaceableBound.Bottom());
+                aPlaceableBound = tools::Rectangle(
+                                    aPlaceableBound.Left()   / fRatio,
+                                    aPlaceableBound.Top()    / fRatio,
+                                    aPlaceableBound.Right()  / fRatio,
+                                    aPlaceableBound.Bottom() / fRatio);
 
-                pOut->SetMapMode( pExternalHeader->mapMode );
-            }
-            else
-            {
-                pWMF->Seek( nStrmPos + 18 );    // set the streampos to the start of the metaactions
-                GetPlaceableBound( aPlaceableBound, pWMF );
-
-                // The image size is not known so normalize the calculated bounds so that the
-                // resulting image is not too big
-                const double fMaxWidth = static_cast<double>(aMaxWidth);
-                if (aPlaceableBound.GetWidth() > aMaxWidth)
-                {
-                    double fRatio = aPlaceableBound.GetWidth() / fMaxWidth;
-
-                    aPlaceableBound = tools::Rectangle(
-                                        aPlaceableBound.Left()   / fRatio,
-                                        aPlaceableBound.Top()    / fRatio,
-                                        aPlaceableBound.Right()  / fRatio,
-                                        aPlaceableBound.Bottom() / fRatio);
-
-                    SAL_INFO("vcl.wmf", "Placeable bounds "
-                           " t: " << aPlaceableBound.Left()  << " l: " << aPlaceableBound.Top()
-                        << " b: " << aPlaceableBound.Right() << " r: " << aPlaceableBound.Bottom());
-                }
+                SAL_INFO("vcl.wmf", "Placeable bounds "
+                        " t: " << aPlaceableBound.Left()  << " l: " << aPlaceableBound.Top()
+                    << " b: " << aPlaceableBound.Right() << " r: " << aPlaceableBound.Bottom());
             }
 
-            pWMF->Seek( nStrmPos );
+            mpWMF->Seek( nStrmPos );
         }
 
-        pOut->SetWinOrg( aPlaceableBound.TopLeft() );
+        SetWinOrg( aPlaceableBound.TopLeft() );
         Size aWMFSize( labs( aPlaceableBound.GetWidth() ), labs( aPlaceableBound.GetHeight() ) );
-        pOut->SetWinExt( aWMFSize );
+        SetWinExt( aWMFSize );
 
         SAL_INFO("vcl.wmf", "WMF size  w: " << aWMFSize.Width()    << " h: " << aWMFSize.Height());
 
         Size aDevExt( 10000, 10000 );
         if( ( labs( aWMFSize.Width() ) > 1 ) && ( labs( aWMFSize.Height() ) > 1 ) )
         {
-            const Fraction  aFrac( 1, nUnitsPerInch );
+            const Fraction  aFrac( 1, mnUnitsPerInch);
             MapMode         aWMFMap( MapUnit::MapInch, Point(), aFrac, aFrac );
             Size            aSize100( OutputDevice::LogicToLogic( aWMFSize, aWMFMap, MapUnit::Map100thMM ) );
             aDevExt = Size( labs( aSize100.Width() ), labs( aSize100.Height() ) );
         }
-        pOut->SetDevExt( aDevExt );
+        SetDevExt( aDevExt );
 
         SAL_INFO("vcl.wmf", "Dev size  w: " << aDevExt.Width()    << " h: " << aDevExt.Height());
 
         // read the METAHEADER
         sal_uInt32 nMetaKey(0);
-        pWMF->ReadUInt32( nMetaKey ); // type and headersize
-        if (!pWMF->good())
+        mpWMF->ReadUInt32( nMetaKey ); // type and headersize
+        if (!mpWMF->good())
             return false;
         if (nMetaKey != 0x00090001)
         {
             sal_uInt16 aNextWord(0);
-            pWMF->ReadUInt16( aNextWord );
+            mpWMF->ReadUInt16( aNextWord );
             if (nMetaKey != 0x10000 || aNextWord != 0x09)
             {
-                pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                mpWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
                 return false;
             }
         }
 
-        pWMF->SeekRel( 2 ); // Version (of Windows)
-        pWMF->SeekRel( 4 ); // Size (of file in words)
-        pWMF->SeekRel( 2 ); // NoObjects (maximum number of simultaneous objects)
-        pWMF->SeekRel( 4 ); // MaxRecord (size of largest record in words)
-        pWMF->SeekRel( 2 ); // NoParameters (Unused
+        mpWMF->SeekRel( 2 ); // Version (of Windows)
+        mpWMF->SeekRel( 4 ); // Size (of file in words)
+        mpWMF->SeekRel( 2 ); // NoObjects (maximum number of simultaneous objects)
+        mpWMF->SeekRel( 4 ); // MaxRecord (size of largest record in words)
+        mpWMF->SeekRel( 2 ); // NoParameters (Unused
 
-        return pWMF->good();
+        return mpWMF->good();
     }
 
     void WmfReader::ReadWMF()
     {
         sal_uInt16  nFunction;
-        sal_uLong   nPos, nPercent, nLastPercent;
+        sal_uLong   nPos;
 
-        nSkipActions = 0;
-        nCurrentAction = 0;
+        mnSkipActions = 0;
+        mnCurrentAction = 0;
 
-        pEMFStream.reset();
-        nEMFRecCount    = 0;
-        nEMFRec         = 0;
-        nEMFSize        = 0;
+        mpEMFStream.reset();
+        mnEMFRecCount = 0;
+        mnEMFRec = 0;
+        mnEMFSize = 0;
 
-        pOut->SetMapMode( MM_ANISOTROPIC );
-        pOut->SetWinOrg( Point() );
-        pOut->SetWinExt( Size( 1, 1 ) );
-        pOut->SetDevExt( Size( 10000, 10000 ) );
+        SetMapMode( MM_ANISOTROPIC );
+        SetWinOrg( Point() );
+        SetWinExt( Size( 1, 1 ) );
+        SetDevExt( Size( 10000, 10000 ) );
 
-        nEndPos=pWMF->Seek( STREAM_SEEK_TO_END );
-        pWMF->Seek( nStartPos );
-        Callback( (sal_uInt16) ( nLastPercent = 0 ) );
+        mnEndPos=mpWMF->Seek( STREAM_SEEK_TO_END );
+        mpWMF->Seek( mnStartPos );
 
         if ( ReadHeader( ) )
         {
-            nPos = pWMF->Tell();
+            nPos = mpWMF->Tell();
 
-            if( nEndPos - nStartPos )
+            if( mnEndPos - mnStartPos )
             {
                bool bEMFAvailable = false;
                 while( true )
                 {
-                    nCurrentAction++;
-                    nPercent = ( nPos - nStartPos ) * 100 / ( nEndPos - nStartPos );
+                    mnCurrentAction++;
+                    mpWMF->ReadUInt32(mnRecSize).ReadUInt16( nFunction );
 
-                    if( nLastPercent + 4 <= nPercent )
-                    {
-                        Callback( (sal_uInt16) nPercent );
-                        nLastPercent = nPercent;
-                    }
-                    pWMF->ReadUInt32( nRecSize ).ReadUInt16( nFunction );
-
-                    if(  pWMF->GetError()
-                      || ( nRecSize < 3 )
-                      || (  nRecSize  == 3
+                    if(  mpWMF->GetError()
+                      || (mnRecSize < 3 )
+                      || (mnRecSize == 3
                          && nFunction == 0
                          )
-                      || pWMF->IsEof()
+                      || mpWMF->IsEof()
                       )
                     {
-                        if( pWMF->IsEof() )
-                            pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                        if( mpWMF->IsEof() )
+                            mpWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
 
                         break;
                     }
                     if ( !bEMFAvailable )
                     {
-                        if(   !aBmpSaveList.empty()
+                        if(   !maBmpSaveList.empty()
                           && ( nFunction != W_META_STRETCHDIB    )
                           && ( nFunction != W_META_DIBBITBLT     )
                           && ( nFunction != W_META_DIBSTRETCHBLT )
                           )
                         {
-                            pOut->ResolveBitmapActions( aBmpSaveList );
+                            ResolveBitmapActions( maBmpSaveList );
                         }
 
-                        if ( !nSkipActions )
+                        if ( !mnSkipActions)
                             ReadRecordParams( nFunction );
                         else
-                            nSkipActions--;
+                            mnSkipActions--;
 
-                        if( pEMFStream && nEMFRecCount == nEMFRec )
+                        if(mpEMFStream && mnEMFRecCount == mnEMFRec)
                         {
                             GDIMetaFile aMeta;
-                            pEMFStream->Seek( 0 );
-                            std::unique_ptr<EmfReader> pEMFReader(o3tl::make_unique<EmfReader>( *pEMFStream, aMeta ));
+                            mpEMFStream->Seek( 0 );
+                            std::unique_ptr<EmfReader> pEMFReader(o3tl::make_unique<EmfReader>( *mpEMFStream, aMeta ));
                             bEMFAvailable = pEMFReader->ReadEnhWMF();
                             pEMFReader.reset(); // destroy first!!!
 
                             if( bEMFAvailable )
                             {
-                                pOut->AddFromGDIMetaFile( aMeta );
-                                pOut->SetrclFrame( tools::Rectangle( Point(0, 0), aMeta.GetPrefSize()));
+                                AddFromGDIMetaFile( aMeta );
+                                SetrclFrame( tools::Rectangle( Point(0, 0), aMeta.GetPrefSize()));
 
                                 // the stream needs to be set to the wmf end position,
                                 // otherwise the GfxLink that is created will be incorrect
@@ -1426,29 +1398,31 @@ namespace emfio
                             {
                                 // something went wrong
                                 // continue with WMF, don't try this again
-                                pEMFStream.reset();
+                                mpEMFStream.reset();
                             }
                         }
                     }
-                    const sal_uInt32 nAvailableBytes = nEndPos - nPos;
+
+                    const sal_uInt32 nAvailableBytes = mnEndPos - nPos;
                     const sal_uInt32 nMaxPossibleRecordSize = nAvailableBytes/2;
-                    if (nRecSize <= nMaxPossibleRecordSize)
+
+                    if (mnRecSize <= nMaxPossibleRecordSize)
                     {
-                        nPos += nRecSize * 2;
-                        pWMF->Seek(nPos);
+                        nPos += mnRecSize * 2;
+                        mpWMF->Seek(nPos);
                     }
                     else
-                        pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                        mpWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
                 }
             }
             else
-                pWMF->SetError( SVSTREAM_GENERALERROR );
+                mpWMF->SetError( SVSTREAM_GENERALERROR );
 
-            if( !pWMF->GetError() && !aBmpSaveList.empty() )
-                pOut->ResolveBitmapActions( aBmpSaveList );
+            if( !mpWMF->GetError() && !maBmpSaveList.empty() )
+                ResolveBitmapActions( maBmpSaveList );
         }
-        if ( pWMF->GetError() )
-            pWMF->Seek( nStartPos );
+        if ( mpWMF->GetError() )
+            mpWMF->Seek( mnStartPos );
     }
 
     void WmfReader::GetPlaceableBound( tools::Rectangle& rPlaceableBound, SvStream* pStm )
@@ -1749,7 +1723,7 @@ namespace emfio
                         {
                             if ( nWinROP == PATCOPY )
                                 pStm->ReadUInt16( nUsage );    // i don't know anything of this parameter, so its called nUsage
-                                                    // pOut->DrawRect( Rectangle( ReadYX(), aDestSize ), false );
+                                                    // DrawRect( Rectangle( ReadYX(), aDestSize ), false );
 
                             Size aDestSize( ReadYXExt() );
                             if ( aDestSize.Width() && aDestSize.Height() )  // #92623# do not try to read buggy bitmaps
@@ -1829,18 +1803,18 @@ namespace emfio
         }
     }
 
-    WmfReader::WmfReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile,
-                         FilterConfigItem* pConfigItem, WMF_EXTERNALHEADER* pExtHeader)
-        : MtfTools(rGDIMetaFile, rStreamWMF, pConfigItem)
-        , nUnitsPerInch(96)
-        , nRecSize(0)
-        , nEMFRecCount(0)
-        , nEMFRec(0)
-        , nEMFSize(0)
-        , nSkipActions(0)
-        , nCurrentAction(0)
-        , pExternalHeader(pExtHeader)
-    {}
+    WmfReader::WmfReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile)
+        : MtfTools(rGDIMetaFile, rStreamWMF)
+        , mnUnitsPerInch(96)
+        , mnRecSize(0)
+        , mpEMFStream()
+        , mnEMFRecCount(0)
+        , mnEMFRec(0)
+        , mnEMFSize(0)
+        , mnSkipActions(0)
+        , mnCurrentAction(0)
+    {
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

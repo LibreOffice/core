@@ -307,50 +307,15 @@ namespace emfio
         aFont.SetFontSize(aFontSize);
     };
 
-    MtfTools::MtfTools( GDIMetaFile& rGDIMetaFile, SvStream& rStreamWMF, FilterConfigItem* pConfigItem )
-        : pOut( o3tl::make_unique<MtfToolsWriter>(rGDIMetaFile) )
-        , pWMF( &rStreamWMF )
-        , nEndPos( 0 )
-        , pFilterConfigItem( pConfigItem )
-    {
-        SvLockBytes *pLB = pWMF->GetLockBytes();
-        if ( pLB )
-            pLB->SetSynchronMode();
-
-        nStartPos = pWMF->Tell();
-
-        pOut->SetDevOrg( Point() );
-        if ( pFilterConfigItem )
-        {
-            xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
-            if ( xStatusIndicator.is() )
-            {
-                OUString aMsg;
-                xStatusIndicator->start( aMsg, 100 );
-            }
-        }
-    }
-
-    MtfTools::~MtfTools()
-    {
-        if ( xStatusIndicator.is() )
-            xStatusIndicator->end();
-    }
-
-    void MtfTools::Callback( sal_uInt16 nPercent )
-    {
-        if ( xStatusIndicator.is() )
-            xStatusIndicator->setValue( nPercent );
-    }
-
     Color MtfTools::ReadColor()
     {
         sal_uInt32 nColor;
-        pWMF->ReadUInt32( nColor );
+
+        mpWMF->ReadUInt32( nColor );
         return Color( (sal_uInt8)nColor, (sal_uInt8)( nColor >> 8 ), (sal_uInt8)( nColor >> 16 ) );
     };
 
-    Point MtfToolsWriter::ImplScale(const Point& rPoint) // Hack to set varying defaults for incompletely defined files.
+    Point MtfTools::ImplScale(const Point& rPoint) // Hack to set varying defaults for incompletely defined files.
     {
         if (!mbIsMapDevSet)
             return Point(rPoint.X() * UNDOCUMENTED_WIN_RCL_RELATION - mrclFrame.Left(),
@@ -359,7 +324,7 @@ namespace emfio
             return rPoint;
     }
 
-    Point MtfToolsWriter::ImplMap( const Point& rPt )
+    Point MtfTools::ImplMap( const Point& rPt )
     {
         if ( mnWinExtX && mnWinExtY )
         {
@@ -445,7 +410,7 @@ namespace emfio
             return Point();
     };
 
-    Size MtfToolsWriter::ImplMap(const Size& rSz, bool bDoWorldTransform)
+    Size MtfTools::ImplMap(const Size& rSz, bool bDoWorldTransform)
     {
         if ( mnWinExtX && mnWinExtY )
         {
@@ -523,12 +488,12 @@ namespace emfio
             return Size();
     }
 
-    tools::Rectangle MtfToolsWriter::ImplMap( const tools::Rectangle& rRect )
+    tools::Rectangle MtfTools::ImplMap( const tools::Rectangle& rRect )
     {
         return tools::Rectangle( ImplMap( rRect.TopLeft() ), ImplMap( rRect.GetSize() ) );
     }
 
-    void MtfToolsWriter::ImplMap( vcl::Font& rFont )
+    void MtfTools::ImplMap( vcl::Font& rFont )
     {
         // !!! HACK: we now always set the width to zero because the OS width is interpreted differently;
         // must later be made portable in SV (KA 1996-02-08)
@@ -543,7 +508,7 @@ namespace emfio
             rFont.SetOrientation( 3600 - rFont.GetOrientation() );
     }
 
-    tools::Polygon& MtfToolsWriter::ImplMap( tools::Polygon& rPolygon )
+    tools::Polygon& MtfTools::ImplMap( tools::Polygon& rPolygon )
     {
         sal_uInt16 nPoints = rPolygon.GetSize();
         for ( sal_uInt16 i = 0; i < nPoints; i++ )
@@ -553,7 +518,7 @@ namespace emfio
         return rPolygon;
     }
 
-    void MtfToolsWriter::ImplScale( tools::Polygon& rPolygon )
+    void MtfTools::ImplScale( tools::Polygon& rPolygon )
     {
         sal_uInt16 nPoints = rPolygon.GetSize();
         for ( sal_uInt16 i = 0; i < nPoints; i++ )
@@ -562,7 +527,7 @@ namespace emfio
         }
     }
 
-    tools::PolyPolygon& MtfToolsWriter::ImplScale( tools::PolyPolygon& rPolyPolygon )
+    tools::PolyPolygon& MtfTools::ImplScale( tools::PolyPolygon& rPolyPolygon )
     {
         sal_uInt16 nPolys = rPolyPolygon.Count();
         for (sal_uInt16 i = 0; i < nPolys; ++i)
@@ -572,14 +537,14 @@ namespace emfio
         return rPolyPolygon;
     }
 
-    tools::PolyPolygon& MtfToolsWriter::ImplMap( tools::PolyPolygon& rPolyPolygon )
+    tools::PolyPolygon& MtfTools::ImplMap( tools::PolyPolygon& rPolyPolygon )
     {
         sal_uInt16 nPolys = rPolyPolygon.Count();
         for ( sal_uInt16 i = 0; i < nPolys; ImplMap( rPolyPolygon[ i++ ] ) ) ;
         return rPolyPolygon;
     }
 
-    void MtfToolsWriter::SelectObject( sal_Int32 nIndex )
+    void MtfTools::SelectObject( sal_Int32 nIndex )
     {
         if ( nIndex & ENHMETA_STOCK_OBJECT )
         {
@@ -642,8 +607,8 @@ namespace emfio
 
             GDIObj *pGDIObj = nullptr;
 
-            if ( (sal_uInt32)nIndex < vGDIObj.size() )
-                pGDIObj = vGDIObj[ nIndex ].get();
+            if ( (sal_uInt32)nIndex < mvGDIObj.size() )
+                pGDIObj = mvGDIObj[ nIndex ].get();
 
             if ( pGDIObj )
             {
@@ -665,37 +630,37 @@ namespace emfio
         }
     }
 
-    void MtfToolsWriter::SetTextLayoutMode( ComplexTextLayoutFlags nTextLayoutMode )
+    void MtfTools::SetTextLayoutMode( ComplexTextLayoutFlags nTextLayoutMode )
     {
         mnTextLayoutMode = nTextLayoutMode;
     }
 
-    void MtfToolsWriter::SetBkMode( BkMode nMode )
+    void MtfTools::SetBkMode( BkMode nMode )
     {
         mnBkMode = nMode;
     }
 
-    void MtfToolsWriter::SetBkColor( const Color& rColor )
+    void MtfTools::SetBkColor( const Color& rColor )
     {
         maBkColor = rColor;
     }
 
-    void MtfToolsWriter::SetTextColor( const Color& rColor )
+    void MtfTools::SetTextColor( const Color& rColor )
     {
         maTextColor = rColor;
     }
 
-    void MtfToolsWriter::SetTextAlign( sal_uInt32 nAlign )
+    void MtfTools::SetTextAlign( sal_uInt32 nAlign )
     {
         mnTextAlign = nAlign;
     }
 
-    void MtfToolsWriter::ImplResizeObjectArry( sal_uInt32 nNewEntrys )
+    void MtfTools::ImplResizeObjectArry( sal_uInt32 nNewEntrys )
     {
-        vGDIObj.resize(nNewEntrys);
+        mvGDIObj.resize(nNewEntrys);
     }
 
-    void MtfToolsWriter::ImplDrawClippedPolyPolygon( const tools::PolyPolygon& rPolyPoly )
+    void MtfTools::ImplDrawClippedPolyPolygon( const tools::PolyPolygon& rPolyPoly )
     {
         if ( rPolyPoly.Count() )
         {
@@ -724,7 +689,7 @@ namespace emfio
         }
     }
 
-    void MtfToolsWriter::CreateObject( std::unique_ptr<GDIObj> pObject )
+    void MtfTools::CreateObject( std::unique_ptr<GDIObj> pObject )
     {
         if ( pObject )
         {
@@ -745,18 +710,18 @@ namespace emfio
             }
         }
         std::vector<std::unique_ptr<GDIObj>>::size_type nIndex;
-        for ( nIndex = 0; nIndex < vGDIObj.size(); nIndex++ )
+        for ( nIndex = 0; nIndex < mvGDIObj.size(); nIndex++ )
         {
-            if ( !vGDIObj[ nIndex ] )
+            if ( !mvGDIObj[ nIndex ] )
                 break;
         }
-        if ( nIndex == vGDIObj.size() )
-            ImplResizeObjectArry( vGDIObj.size() + 16 );
+        if ( nIndex == mvGDIObj.size() )
+            ImplResizeObjectArry( mvGDIObj.size() + 16 );
 
-        vGDIObj[ nIndex ] = std::move(pObject);
+        mvGDIObj[ nIndex ] = std::move(pObject);
     }
 
-    void MtfToolsWriter::CreateObjectIndexed( sal_Int32 nIndex, std::unique_ptr<GDIObj> pObject )
+    void MtfTools::CreateObjectIndexed( sal_Int32 nIndex, std::unique_ptr<GDIObj> pObject )
     {
         if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
         {
@@ -786,47 +751,52 @@ namespace emfio
                     }
                 }
             }
-            if ( (sal_uInt32)nIndex >= vGDIObj.size() )
+            if ( (sal_uInt32)nIndex >= mvGDIObj.size() )
                 ImplResizeObjectArry( nIndex + 16 );
 
-            vGDIObj[ nIndex ] = std::move(pObject);
+            mvGDIObj[ nIndex ] = std::move(pObject);
         }
     }
 
-    void MtfToolsWriter::DeleteObject( sal_Int32 nIndex )
+    void MtfTools::CreateObject()
+    {
+        CreateObject(o3tl::make_unique<GDIObj>());
+    }
+
+    void MtfTools::DeleteObject( sal_Int32 nIndex )
     {
         if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
         {
-            if ( (sal_uInt32)nIndex < vGDIObj.size() )
+            if ( (sal_uInt32)nIndex < mvGDIObj.size() )
             {
-                vGDIObj[ nIndex ].reset();
+                mvGDIObj[ nIndex ].reset();
             }
         }
     }
 
-    void MtfToolsWriter::IntersectClipRect( const tools::Rectangle& rRect )
+    void MtfTools::IntersectClipRect( const tools::Rectangle& rRect )
     {
         mbClipNeedsUpdate=true;
         if ((rRect.Left()-rRect.Right()==0) && (rRect.Top()-rRect.Bottom()==0))
         {
             return; // empty rectangles cause trouble
         }
-        aClipPath.intersectClipRect( ImplMap( rRect ) );
+        maClipPath.intersectClipRect( ImplMap( rRect ) );
     }
 
-    void MtfToolsWriter::ExcludeClipRect( const tools::Rectangle& rRect )
+    void MtfTools::ExcludeClipRect( const tools::Rectangle& rRect )
     {
         mbClipNeedsUpdate=true;
-        aClipPath.excludeClipRect( ImplMap( rRect ) );
+        maClipPath.excludeClipRect( ImplMap( rRect ) );
     }
 
-    void MtfToolsWriter::MoveClipRegion( const Size& rSize )
+    void MtfTools::MoveClipRegion( const Size& rSize )
     {
         mbClipNeedsUpdate=true;
-        aClipPath.moveClipRegion( ImplMap( rSize ) );
+        maClipPath.moveClipRegion( ImplMap( rSize ) );
     }
 
-    void MtfToolsWriter::SetClipPath( const tools::PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode, bool bIsMapped )
+    void MtfTools::SetClipPath( const tools::PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode, bool bIsMapped )
     {
         mbClipNeedsUpdate = true;
         tools::PolyPolygon aPolyPolygon(rPolyPolygon);
@@ -838,49 +808,81 @@ namespace emfio
             else
                 aPolyPolygon = ImplMap(aPolyPolygon);
         }
-        aClipPath.setClipPath(aPolyPolygon, nClippingMode);
+        maClipPath.setClipPath(aPolyPolygon, nClippingMode);
     }
 
-    void MtfToolsWriter::SetDefaultClipPath()
+    void MtfTools::SetDefaultClipPath()
     {
         mbClipNeedsUpdate = true;
-        aClipPath.setDefaultClipPath();
+        maClipPath.setDefaultClipPath();
     }
 
-    MtfToolsWriter::MtfToolsWriter( GDIMetaFile& rGDIMetaFile ) :
-        mnLatestTextAlign   ( 0 ),
-        mnTextAlign         ( TA_LEFT | TA_TOP | TA_NOUPDATECP ),
-        maLatestBkColor     ( 0x12345678 ),
-        maBkColor           ( COL_WHITE ),
-        mnLatestTextLayoutMode( ComplexTextLayoutFlags::Default ),
-        mnTextLayoutMode    ( ComplexTextLayoutFlags::Default ),
-        mnLatestBkMode      ( BkMode::NONE ),
-        mnBkMode            ( BkMode::OPAQUE ),
-        meLatestRasterOp    ( RasterOp::Invert ),
-        meRasterOp          ( RasterOp::OverPaint ),
-        maActPos            ( Point() ),
-        mbNopMode           ( false ),
-        mbFillStyleSelected ( false ),
-        mbClipNeedsUpdate   ( true ),
-        mbComplexClip       ( false ),
-        mnGfxMode           ( GM_COMPATIBLE ),
-        mnMapMode           ( MM_TEXT ),
-        mnDevOrgX           ( 0 ),
-        mnDevOrgY           ( 0 ),
-        mnDevWidth          ( 1 ),
-        mnDevHeight         ( 1 ),
-        mnWinOrgX           ( 0 ),
-        mnWinOrgY           ( 0 ),
-        mnWinExtX           ( 1 ),
-        mnWinExtY           ( 1 ),
-        mnPixX              ( 100 ),
-        mnPixY              ( 100 ),
-        mnMillX             ( 1 ),
-        mnMillY             ( 1 ),
-        mpGDIMetaFile       ( &rGDIMetaFile )
+    MtfTools::MtfTools( GDIMetaFile& rGDIMetaFile, SvStream& rStreamWMF)
+    :   maPathObj(),
+        maClipPath(),
+        maLatestLineStyle(),
+        maLineStyle(),
+        maNopLineStyle(),
+        maLatestFillStyle(),
+        maFillStyle(),
+        maNopFillStyle(),
+        maLatestFont(),
+        maFont(),
+        mnLatestTextAlign(90),
+        mnTextAlign(TA_LEFT | TA_TOP | TA_NOUPDATECP),
+        maLatestTextColor(),
+        maTextColor(),
+        maLatestBkColor(0x12345678),
+        maBkColor(COL_WHITE),
+        mnLatestTextLayoutMode(ComplexTextLayoutFlags::Default),
+        mnTextLayoutMode(ComplexTextLayoutFlags::Default),
+        mnLatestBkMode(BkMode::NONE),
+        mnBkMode(BkMode::OPAQUE),
+        meLatestRasterOp(RasterOp::Invert),
+        meRasterOp(RasterOp::OverPaint),
+        mvGDIObj(),
+        maActPos(),
+        mnRop(),
+        mvSaveStack(),
+        mnGfxMode(GM_COMPATIBLE),
+        mnMapMode(MM_TEXT),
+        maXForm(),
+        mnDevOrgX(0),
+        mnDevOrgY(0),
+        mnDevWidth(1),
+        mnDevHeight(1),
+        mnWinOrgX(0),
+        mnWinOrgY(0),
+        mnWinExtX(1),
+        mnWinExtY(1),
+        mnPixX(100),
+        mnPixY(100),
+        mnMillX(1),
+        mnMillY(1),
+        mrclFrame(),
+        mrclBounds(),
+        mpGDIMetaFile(&rGDIMetaFile),
+        mpWMF(&rStreamWMF),
+        mnStartPos(0),
+        mnEndPos(0),
+        maBmpSaveList(),
+        mbNopMode(false),
+        mbFillStyleSelected(false),
+        mbClipNeedsUpdate(true),
+        mbComplexClip(false),
+        mbIsMapWinSet(false),
+        mbIsMapDevSet(false)
     {
-        mbIsMapWinSet = false;
-        mbIsMapDevSet = false;
+        SvLockBytes *pLB = mpWMF->GetLockBytes();
+
+        if (pLB)
+        {
+            pLB->SetSynchronMode();
+        }
+
+        mnStartPos = mpWMF->Tell();
+        SetDevOrg(Point());
+
         mpGDIMetaFile->AddAction( new MetaPushAction( PushFlags::CLIPREGION ) ); // The original clipregion has to be on top
                                                                                  // of the stack so it can always be restored
                                                                                  // this is necessary to be able to support
@@ -898,7 +900,7 @@ namespace emfio
         mpGDIMetaFile->AddAction( new MetaRasterOpAction( RasterOp::OverPaint ) );
     }
 
-    MtfToolsWriter::~MtfToolsWriter()
+    MtfTools::~MtfTools()
     {
         mpGDIMetaFile->AddAction( new MetaPopAction() );
         mpGDIMetaFile->SetPrefMapMode( MapUnit::Map100thMM );
@@ -908,7 +910,7 @@ namespace emfio
             mpGDIMetaFile->SetPrefSize( mrclFrame.GetSize() );
     }
 
-    void MtfToolsWriter::UpdateClipRegion()
+    void MtfTools::UpdateClipRegion()
     {
         if ( mbClipNeedsUpdate )
         {
@@ -919,9 +921,9 @@ namespace emfio
             mpGDIMetaFile->AddAction( new MetaPushAction( PushFlags::CLIPREGION ) );
 
             // skip for 'no clipping at all' case
-            if( !aClipPath.isEmpty() )
+            if( !maClipPath.isEmpty() )
             {
-                const basegfx::B2DPolyPolygon& rClipPoly( aClipPath.getClipPath() );
+                const basegfx::B2DPolyPolygon& rClipPoly( maClipPath.getClipPath() );
 
                 mbComplexClip = rClipPoly.count() > 1
                     || !basegfx::tools::isRectangle(rClipPoly);
@@ -960,7 +962,7 @@ namespace emfio
         }
     }
 
-    void MtfToolsWriter::ImplSetNonPersistentLineColorTransparenz()
+    void MtfTools::ImplSetNonPersistentLineColorTransparenz()
     {
         Color aColor(  COL_TRANSPARENT);
         WinMtfLineStyle aTransparentLine( aColor, true );
@@ -971,7 +973,7 @@ namespace emfio
         }
     }
 
-    void MtfToolsWriter::UpdateLineStyle()
+    void MtfTools::UpdateLineStyle()
     {
         if (!( maLatestLineStyle == maLineStyle ) )
         {
@@ -980,7 +982,7 @@ namespace emfio
         }
     }
 
-    void MtfToolsWriter::UpdateFillStyle()
+    void MtfTools::UpdateFillStyle()
     {
         if ( !mbFillStyleSelected )     // SJ: #i57205# taking care of bkcolor if no brush is selected
             maFillStyle = WinMtfFillStyle( maBkColor, mnBkMode == BkMode::Transparent );
@@ -992,7 +994,7 @@ namespace emfio
         }
     }
 
-    WMFRasterOp MtfToolsWriter::SetRasterOp( WMFRasterOp nRasterOp )
+    WMFRasterOp MtfTools::SetRasterOp( WMFRasterOp nRasterOp )
     {
         WMFRasterOp nRetROP = mnRop;
         if ( nRasterOp != mnRop )
@@ -1001,8 +1003,8 @@ namespace emfio
 
             if ( mbNopMode && ( nRasterOp != WMFRasterOp::Nop ) )
             {   // changing modes from WMFRasterOp::Nop so set pen and brush
-                maFillStyle = m_NopFillStyle;
-                maLineStyle = m_NopLineStyle;
+                maFillStyle = maNopFillStyle;
+                maLineStyle = maNopLineStyle;
                 mbNopMode = false;
             }
             switch( nRasterOp )
@@ -1020,8 +1022,8 @@ namespace emfio
                     meRasterOp = RasterOp::OverPaint;
                     if( !mbNopMode )
                     {
-                        m_NopFillStyle = maFillStyle;
-                        m_NopLineStyle = maLineStyle;
+                        maNopFillStyle = maFillStyle;
+                        maNopLineStyle = maLineStyle;
                         maFillStyle = WinMtfFillStyle( Color( COL_TRANSPARENT ), true );
                         maLineStyle = WinMtfLineStyle( Color( COL_TRANSPARENT ), true );
                         mbNopMode = true;
@@ -1039,9 +1041,9 @@ namespace emfio
         return nRetROP;
     };
 
-    void MtfToolsWriter::StrokeAndFillPath( bool bStroke, bool bFill )
+    void MtfTools::StrokeAndFillPath( bool bStroke, bool bFill )
     {
-        if ( aPathObj.Count() )
+        if ( maPathObj.Count() )
         {
             UpdateClipRegion();
             UpdateLineStyle();
@@ -1053,49 +1055,49 @@ namespace emfio
                     mpGDIMetaFile->AddAction( new MetaPushAction( PushFlags::LINECOLOR ) );
                     mpGDIMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
                 }
-                if ( aPathObj.Count() == 1 )
-                    mpGDIMetaFile->AddAction( new MetaPolygonAction( aPathObj.GetObject( 0 ) ) );
+                if ( maPathObj.Count() == 1 )
+                    mpGDIMetaFile->AddAction( new MetaPolygonAction( maPathObj.GetObject( 0 ) ) );
                 else
-                    mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( aPathObj ) );
+                    mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( maPathObj ) );
 
                 if ( !bStroke )
                     mpGDIMetaFile->AddAction( new MetaPopAction() );
             }
             else
             {
-                sal_uInt16 i, nCount = aPathObj.Count();
+                sal_uInt16 i, nCount = maPathObj.Count();
                 for ( i = 0; i < nCount; i++ )
-                    mpGDIMetaFile->AddAction( new MetaPolyLineAction( aPathObj[ i ], maLineStyle.aLineInfo ) );
+                    mpGDIMetaFile->AddAction( new MetaPolyLineAction( maPathObj[ i ], maLineStyle.aLineInfo ) );
             }
             ClearPath();
         }
     }
 
-    void MtfToolsWriter::DrawPixel( const Point& rSource, const Color& rColor )
+    void MtfTools::DrawPixel( const Point& rSource, const Color& rColor )
     {
         mpGDIMetaFile->AddAction( new MetaPixelAction( ImplMap( rSource), rColor ) );
     }
 
-    void MtfToolsWriter::MoveTo( const Point& rPoint, bool bRecordPath )
+    void MtfTools::MoveTo( const Point& rPoint, bool bRecordPath )
     {
         Point aDest( ImplMap( rPoint ) );
         if ( bRecordPath )
         {
             // fdo#57353 create new subpath for subsequent moves
-            if ( aPathObj.Count() )
-                if ( aPathObj[ aPathObj.Count() - 1 ].GetSize() )
-                    aPathObj.Insert( tools::Polygon() );
-            aPathObj.AddPoint( aDest );
+            if ( maPathObj.Count() )
+                if ( maPathObj[ maPathObj.Count() - 1 ].GetSize() )
+                    maPathObj.Insert( tools::Polygon() );
+            maPathObj.AddPoint( aDest );
         }
         maActPos = aDest;
     }
 
-    void MtfToolsWriter::LineTo( const Point& rPoint, bool bRecordPath )
+    void MtfTools::LineTo( const Point& rPoint, bool bRecordPath )
     {
         UpdateClipRegion();
         Point aDest( ImplMap( rPoint ) );
         if ( bRecordPath )
-            aPathObj.AddPoint( aDest );
+            maPathObj.AddPoint( aDest );
         else
         {
             UpdateLineStyle();
@@ -1104,7 +1106,7 @@ namespace emfio
         maActPos = aDest;
     }
 
-    void MtfToolsWriter::DrawRect( const tools::Rectangle& rRect, bool bEdge )
+    void MtfTools::DrawRect( const tools::Rectangle& rRect, bool bEdge )
     {
         UpdateClipRegion();
         UpdateFillStyle();
@@ -1114,7 +1116,7 @@ namespace emfio
             tools::Polygon aPoly( ImplMap( rRect ) );
             tools::PolyPolygon aPolyPolyRect( aPoly );
             tools::PolyPolygon aDest;
-            tools::PolyPolygon(aClipPath.getClipPath()).GetIntersection( aPolyPolyRect, aDest );
+            tools::PolyPolygon(maClipPath.getClipPath()).GetIntersection( aPolyPolyRect, aDest );
             ImplDrawClippedPolyPolygon( aDest );
         }
         else
@@ -1142,7 +1144,7 @@ namespace emfio
         }
     }
 
-    void MtfToolsWriter::DrawRoundRect( const tools::Rectangle& rRect, const Size& rSize )
+    void MtfTools::DrawRoundRect( const tools::Rectangle& rRect, const Size& rSize )
     {
         UpdateClipRegion();
         UpdateLineStyle();
@@ -1150,7 +1152,7 @@ namespace emfio
         mpGDIMetaFile->AddAction( new MetaRoundRectAction( ImplMap( rRect ), labs( ImplMap( rSize ).Width() ), labs( ImplMap( rSize ).Height() ) ) );
     }
 
-    void MtfToolsWriter::DrawEllipse( const tools::Rectangle& rRect )
+    void MtfTools::DrawEllipse( const tools::Rectangle& rRect )
     {
         UpdateClipRegion();
         UpdateFillStyle();
@@ -1172,7 +1174,7 @@ namespace emfio
         }
     }
 
-    void MtfToolsWriter::DrawArc( const tools::Rectangle& rRect, const Point& rStart, const Point& rEnd, bool bTo )
+    void MtfTools::DrawArc( const tools::Rectangle& rRect, const Point& rStart, const Point& rEnd, bool bTo )
     {
         UpdateClipRegion();
         UpdateLineStyle();
@@ -1201,7 +1203,7 @@ namespace emfio
             maActPos = aEnd;
     }
 
-    void MtfToolsWriter::DrawPie( const tools::Rectangle& rRect, const Point& rStart, const Point& rEnd )
+    void MtfTools::DrawPie( const tools::Rectangle& rRect, const Point& rStart, const Point& rEnd )
     {
         UpdateClipRegion();
         UpdateFillStyle();
@@ -1224,7 +1226,7 @@ namespace emfio
         }
     }
 
-    void MtfToolsWriter::DrawChord( const tools::Rectangle& rRect, const Point& rStart, const Point& rEnd )
+    void MtfTools::DrawChord( const tools::Rectangle& rRect, const Point& rStart, const Point& rEnd )
     {
         UpdateClipRegion();
         UpdateFillStyle();
@@ -1247,12 +1249,12 @@ namespace emfio
         }
     }
 
-    void MtfToolsWriter::DrawPolygon( tools::Polygon& rPolygon, bool bRecordPath )
+    void MtfTools::DrawPolygon( tools::Polygon& rPolygon, bool bRecordPath )
     {
         UpdateClipRegion();
         ImplMap( rPolygon );
         if ( bRecordPath )
-            aPathObj.AddPolygon( rPolygon );
+            maPathObj.AddPolygon( rPolygon );
         else
         {
             UpdateFillStyle();
@@ -1261,7 +1263,7 @@ namespace emfio
             {
                 tools::PolyPolygon aPolyPoly( rPolygon );
                 tools::PolyPolygon aDest;
-                tools::PolyPolygon(aClipPath.getClipPath()).GetIntersection( aPolyPoly, aDest );
+                tools::PolyPolygon(maClipPath.getClipPath()).GetIntersection( aPolyPoly, aDest );
                 ImplDrawClippedPolyPolygon( aDest );
             }
             else
@@ -1319,14 +1321,14 @@ namespace emfio
         }
     }
 
-    void MtfToolsWriter::DrawPolyPolygon( tools::PolyPolygon& rPolyPolygon, bool bRecordPath )
+    void MtfTools::DrawPolyPolygon( tools::PolyPolygon& rPolyPolygon, bool bRecordPath )
     {
         UpdateClipRegion();
 
         ImplMap( rPolyPolygon );
 
         if ( bRecordPath )
-            aPathObj.AddPolyPolygon( rPolyPolygon );
+            maPathObj.AddPolyPolygon( rPolyPolygon );
         else
         {
             UpdateFillStyle();
@@ -1334,7 +1336,7 @@ namespace emfio
             if ( mbComplexClip )
             {
                 tools::PolyPolygon aDest;
-                tools::PolyPolygon(aClipPath.getClipPath()).GetIntersection( rPolyPolygon, aDest );
+                tools::PolyPolygon(maClipPath.getClipPath()).GetIntersection( rPolyPolygon, aDest );
                 ImplDrawClippedPolyPolygon( aDest );
             }
             else
@@ -1352,7 +1354,7 @@ namespace emfio
         }
     }
 
-    void MtfToolsWriter::DrawPolyLine( tools::Polygon& rPolygon, bool bTo, bool bRecordPath )
+    void MtfTools::DrawPolyLine( tools::Polygon& rPolygon, bool bTo, bool bRecordPath )
     {
         UpdateClipRegion();
 
@@ -1366,7 +1368,7 @@ namespace emfio
                 maActPos = rPolygon[ rPolygon.GetSize() - 1 ];
             }
             if ( bRecordPath )
-                aPathObj.AddPolyLine( rPolygon );
+                maPathObj.AddPolyLine( rPolygon );
             else
             {
                 UpdateLineStyle();
@@ -1375,7 +1377,7 @@ namespace emfio
         }
     }
 
-    void MtfToolsWriter::DrawPolyBezier( tools::Polygon& rPolygon, bool bTo, bool bRecordPath )
+    void MtfTools::DrawPolyBezier( tools::Polygon& rPolygon, bool bTo, bool bRecordPath )
     {
         sal_uInt16 nPoints = rPolygon.GetSize();
         if ( ( nPoints >= 4 ) && ( ( ( nPoints - 4 ) % 3 ) == 0 ) )
@@ -1396,7 +1398,7 @@ namespace emfio
                 rPolygon.SetFlags( i++, PolyFlags::Control );
             }
             if ( bRecordPath )
-                aPathObj.AddPolyLine( rPolygon );
+                maPathObj.AddPolyLine( rPolygon );
             else
             {
                 UpdateLineStyle();
@@ -1405,7 +1407,7 @@ namespace emfio
         }
     }
 
-    void MtfToolsWriter::DrawText( Point& rPosition, OUString& rText, long* pDXArry, long* pDYArry, bool bRecordPath, sal_Int32 nGfxMode )
+    void MtfTools::DrawText( Point& rPosition, OUString& rText, long* pDXArry, long* pDYArry, bool bRecordPath, sal_Int32 nGfxMode )
     {
         UpdateClipRegion();
         rPosition = ImplMap( rPosition );
@@ -1599,7 +1601,7 @@ namespace emfio
         SetGfxMode( nOldGfxMode );
     }
 
-    void MtfToolsWriter::ImplDrawBitmap( const Point& rPos, const Size& rSize, const BitmapEx& rBitmap )
+    void MtfTools::ImplDrawBitmap( const Point& rPos, const Size& rSize, const BitmapEx& rBitmap )
     {
         BitmapEx aBmpEx( rBitmap );
         if ( mbComplexClip )
@@ -1617,7 +1619,7 @@ namespace emfio
             pVDev->SetMapMode( aMapMode );
             pVDev->SetOutputSizePixel( aSizePixel );
             pVDev->SetFillColor( Color( COL_BLACK ) );
-            const tools::PolyPolygon aClip( aClipPath.getClipPath() );
+            const tools::PolyPolygon aClip( maClipPath.getClipPath() );
             pVDev->DrawPolyPolygon( aClip );
             const Point aEmptyPoint;
 
@@ -1691,7 +1693,7 @@ namespace emfio
             mpGDIMetaFile->AddAction( new MetaBmpScaleAction( rPos, rSize, aBmpEx.GetBitmap() ) );
     }
 
-    void MtfToolsWriter::ResolveBitmapActions( std::vector<std::unique_ptr<BSaveStruct>>& rSaveList )
+    void MtfTools::ResolveBitmapActions( std::vector<std::unique_ptr<BSaveStruct>>& rSaveList )
     {
         UpdateClipRegion();
 
@@ -1931,19 +1933,19 @@ namespace emfio
         rSaveList.clear();
     }
 
-    void MtfToolsWriter::SetDevOrg( const Point& rPoint )
+    void MtfTools::SetDevOrg( const Point& rPoint )
     {
         mnDevOrgX = rPoint.X();
         mnDevOrgY = rPoint.Y();
     }
 
-    void MtfToolsWriter::SetDevOrgOffset( sal_Int32 nXAdd, sal_Int32 nYAdd )
+    void MtfTools::SetDevOrgOffset( sal_Int32 nXAdd, sal_Int32 nYAdd )
     {
         mnDevOrgX += nXAdd;
         mnDevOrgY += nYAdd;
     }
 
-    void MtfToolsWriter::SetDevExt( const Size& rSize ,bool regular)
+    void MtfTools::SetDevExt( const Size& rSize ,bool regular)
     {
         if ( rSize.Width() && rSize.Height() )
         {
@@ -1963,13 +1965,13 @@ namespace emfio
         }
     }
 
-    void MtfToolsWriter::ScaleDevExt( double fX, double fY )
+    void MtfTools::ScaleDevExt( double fX, double fY )
     {
         mnDevWidth = FRound( mnDevWidth * fX );
         mnDevHeight = FRound( mnDevHeight * fY );
     }
 
-    void MtfToolsWriter::SetWinOrg( const Point& rPoint , bool bIsEMF)
+    void MtfTools::SetWinOrg( const Point& rPoint , bool bIsEMF)
     {
         mnWinOrgX = rPoint.X();
         mnWinOrgY = rPoint.Y();
@@ -1980,13 +1982,13 @@ namespace emfio
         mbIsMapWinSet=true;
     }
 
-    void MtfToolsWriter::SetWinOrgOffset( sal_Int32 nXAdd, sal_Int32 nYAdd )
+    void MtfTools::SetWinOrgOffset( sal_Int32 nXAdd, sal_Int32 nYAdd )
     {
         mnWinOrgX += nXAdd;
         mnWinOrgY += nYAdd;
     }
 
-    void MtfToolsWriter::SetDevByWin() //mnWinExt...-stuff has to be assigned before.
+    void MtfTools::SetDevByWin() //mnWinExt...-stuff has to be assigned before.
     {
         if (!mbIsMapDevSet)
         {
@@ -2000,7 +2002,7 @@ namespace emfio
         }
     }
 
-    void MtfToolsWriter::SetWinExt(const Size& rSize, bool bIsEMF)
+    void MtfTools::SetWinExt(const Size& rSize, bool bIsEMF)
     {
         if (rSize.Width() && rSize.Height())
         {
@@ -2021,35 +2023,35 @@ namespace emfio
         }
     }
 
-    void MtfToolsWriter::ScaleWinExt( double fX, double fY )
+    void MtfTools::ScaleWinExt( double fX, double fY )
     {
         mnWinExtX = FRound( mnWinExtX * fX );
         mnWinExtY = FRound( mnWinExtY * fY );
     }
 
-    void MtfToolsWriter::SetrclBounds( const tools::Rectangle& rRect )
+    void MtfTools::SetrclBounds( const tools::Rectangle& rRect )
     {
         mrclBounds = rRect;
     }
 
-    void MtfToolsWriter::SetrclFrame( const tools::Rectangle& rRect )
+    void MtfTools::SetrclFrame( const tools::Rectangle& rRect )
     {
         mrclFrame = rRect;
     }
 
-    void MtfToolsWriter::SetRefPix( const Size& rSize )
+    void MtfTools::SetRefPix( const Size& rSize )
     {
         mnPixX = rSize.Width();
         mnPixY = rSize.Height();
     }
 
-    void MtfToolsWriter::SetRefMill( const Size& rSize )
+    void MtfTools::SetRefMill( const Size& rSize )
     {
         mnMillX = rSize.Width();
         mnMillY = rSize.Height();
     }
 
-    void MtfToolsWriter::SetMapMode( sal_uInt32 nMapMode )
+    void MtfTools::SetMapMode( sal_uInt32 nMapMode )
     {
         mnMapMode = nMapMode;
         if ( nMapMode == MM_TEXT && !mbIsMapWinSet )
@@ -2064,7 +2066,7 @@ namespace emfio
         }
     }
 
-    void MtfToolsWriter::SetWorldTransform( const XForm& rXForm )
+    void MtfTools::SetWorldTransform( const XForm& rXForm )
     {
         maXForm.eM11 = rXForm.eM11;
         maXForm.eM12 = rXForm.eM12;
@@ -2074,7 +2076,7 @@ namespace emfio
         maXForm.eDy = rXForm.eDy;
     }
 
-    void MtfToolsWriter::ModifyWorldTransform( const XForm& rXForm, sal_uInt32 nMode )
+    void MtfTools::ModifyWorldTransform( const XForm& rXForm, sal_uInt32 nMode )
     {
         switch( nMode )
         {
@@ -2152,7 +2154,7 @@ namespace emfio
         }
     }
 
-    void MtfToolsWriter::Push()                       // !! to be able to access the original ClipRegion it
+    void MtfTools::Push()                       // !! to be able to access the original ClipRegion it
     {                                               // is not allowed to use the MetaPushAction()
         UpdateClipRegion();                         // (the original clip region is on top of the stack) (SJ)
         std::shared_ptr<SaveStruct> pSave( new SaveStruct );
@@ -2183,19 +2185,19 @@ namespace emfio
         pSave->nDevWidth = mnDevWidth;
         pSave->nDevHeight = mnDevHeight;
 
-        pSave->aPathObj = aPathObj;
-        pSave->aClipPath = aClipPath;
+        pSave->maPathObj = maPathObj;
+        pSave->maClipPath = maClipPath;
 
-        vSaveStack.push_back( pSave );
+        mvSaveStack.push_back( pSave );
     }
 
-    void MtfToolsWriter::Pop()
+    void MtfTools::Pop()
     {
         // Get the latest data from the stack
-        if( !vSaveStack.empty() )
+        if( !mvSaveStack.empty() )
         {
             // Backup the current data on the stack
-            std::shared_ptr<SaveStruct> pSave( vSaveStack.back() );
+            std::shared_ptr<SaveStruct> pSave( mvSaveStack.back() );
 
             maLineStyle = pSave->aLineStyle;
             maFillStyle = pSave->aFillStyle;
@@ -2223,24 +2225,24 @@ namespace emfio
             mnDevWidth = pSave->nDevWidth;
             mnDevHeight = pSave->nDevHeight;
 
-            aPathObj = pSave->aPathObj;
-            if ( ! ( aClipPath == pSave->aClipPath ) )
+            maPathObj = pSave->maPathObj;
+            if ( ! ( maClipPath == pSave->maClipPath ) )
             {
-                aClipPath = pSave->aClipPath;
+                maClipPath = pSave->maClipPath;
                 mbClipNeedsUpdate = true;
             }
             if ( meLatestRasterOp != meRasterOp )
                 mpGDIMetaFile->AddAction( new MetaRasterOpAction( meRasterOp ) );
-            vSaveStack.pop_back();
+            mvSaveStack.pop_back();
         }
     }
 
-    void MtfToolsWriter::AddFromGDIMetaFile( GDIMetaFile& rGDIMetaFile )
+    void MtfTools::AddFromGDIMetaFile( GDIMetaFile& rGDIMetaFile )
     {
        rGDIMetaFile.Play( *mpGDIMetaFile );
     }
 
-    void MtfToolsWriter::PassEMFPlusHeaderInfo()
+    void MtfTools::PassEMFPlusHeaderInfo()
     {
         EMFP_DEBUG(printf ("\t\t\tadd EMF_PLUS header info\n"));
 
@@ -2273,7 +2275,7 @@ namespace emfio
         mpGDIMetaFile->UseCanvas( true );
     }
 
-    void MtfToolsWriter::PassEMFPlus( void* pBuffer, sal_uInt32 nLength )
+    void MtfTools::PassEMFPlus( void* pBuffer, sal_uInt32 nLength )
     {
         EMFP_DEBUG(printf ("\t\t\tadd EMF_PLUS comment length %04x\n",(unsigned int) nLength));
         mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS", 0, static_cast<const sal_uInt8*>(pBuffer), nLength ) );
