@@ -116,7 +116,6 @@ class FORMULA_DLLPUBLIC FormulaTokenArray
 {
     friend class FormulaTokenIterator;
     friend class FormulaTokenArrayPlainIterator;
-    friend class FormulaMissingContext;
 
 protected:
     FormulaToken**  pCode;                  // Token code array
