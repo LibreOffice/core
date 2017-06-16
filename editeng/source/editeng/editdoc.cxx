@@ -3075,12 +3075,13 @@ EditEngineItemPool::EditEngineItemPool( bool bPersistenRefCounts )
     SetVersionMap( 5, 3994, 4037, aV5Map );
     SetVersionMap( 6, 3994, 4038, aV6Map );
 
-    std::vector<SfxPoolItem*>* ppDefItems = EditDLL::Get().GetGlobalData()->GetDefItems();
-    SetDefaults( ppDefItems );
+    m_xDefItems = EditDLL::Get().GetGlobalData()->GetDefItems();
+    SetDefaults(m_xDefItems->getDefaults());
 }
 
 EditEngineItemPool::~EditEngineItemPool()
 {
+    ClearDefaults();
 }
 
 SvStream& EditEngineItemPool::Store( SvStream& rStream ) const
