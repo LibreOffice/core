@@ -134,7 +134,6 @@ namespace emfio
         sal_uInt8       lfPitchAndFamily;
         OUString        alfFaceName;
     };
-    struct WMF_EXTERNALHEADER;
 }
 
 #define TA_NOUPDATECP           0x0000
@@ -423,8 +422,8 @@ namespace emfio
         RasterOp            eRasterOp;
 
         Point               aActPos;
-        WinMtfPathObj       aPathObj;
-        WinMtfClipPath      aClipPath;
+        WinMtfPathObj       maPathObj;
+        WinMtfClipPath      maClipPath;
         XForm               aXForm;
 
         bool                bFillStyleSelected;
@@ -432,9 +431,9 @@ namespace emfio
 
     struct BSaveStruct
     {
-        BitmapEx        aBmpEx;
-        tools::Rectangle       aOutRect;
-        sal_uInt32      nWinRop;
+        BitmapEx            aBmpEx;
+        tools::Rectangle    aOutRect;
+        sal_uInt32          nWinRop;
 
         BSaveStruct(const Bitmap& rBmp, const tools::Rectangle& rOutRect, sal_uInt32 nRop)
             : aBmpEx(rBmp)
@@ -449,17 +448,19 @@ namespace emfio
         {}
     };
 
-    class MtfToolsWriter final
+    class MtfTools
     {
-        WinMtfPathObj       aPathObj;
-        WinMtfClipPath      aClipPath;
+    protected:
+        WinMtfPathObj       maPathObj;
+        WinMtfClipPath      maClipPath;
 
         WinMtfLineStyle     maLatestLineStyle;
         WinMtfLineStyle     maLineStyle;
-        WinMtfLineStyle     m_NopLineStyle;
+        WinMtfLineStyle     maNopLineStyle;
         WinMtfFillStyle     maLatestFillStyle;
         WinMtfFillStyle     maFillStyle;
-        WinMtfFillStyle     m_NopFillStyle;
+        WinMtfFillStyle     maNopFillStyle;
+
         vcl::Font           maLatestFont;
         vcl::Font           maFont;
         sal_uInt32          mnLatestTextAlign;
@@ -475,35 +476,44 @@ namespace emfio
         RasterOp            meLatestRasterOp;
         RasterOp            meRasterOp;
 
-        std::vector< std::unique_ptr<GDIObj> > vGDIObj;
-
+        std::vector< std::unique_ptr<GDIObj> > mvGDIObj;
         Point               maActPos;
-
         WMFRasterOp         mnRop;
-        bool            mbNopMode;
-        bool            mbFillStyleSelected;
-        bool            mbClipNeedsUpdate;
-        bool            mbComplexClip;
-
-        std::vector< std::shared_ptr<SaveStruct> > vSaveStack;
+        std::vector< std::shared_ptr<SaveStruct> > mvSaveStack;
 
         sal_uInt32          mnGfxMode;
         sal_uInt32          mnMapMode;
 
         XForm               maXForm;
-        sal_Int32           mnDevOrgX, mnDevOrgY;
-        sal_Int32           mnDevWidth, mnDevHeight;
-        sal_Int32           mnWinOrgX, mnWinOrgY;       // aktuel window origin
-        sal_Int32           mnWinExtX, mnWinExtY;       // aktuel window extend
-        bool            mbIsMapWinSet;
-        bool            mbIsMapDevSet;
+        sal_Int32           mnDevOrgX;
+        sal_Int32           mnDevOrgY;
+        sal_Int32           mnDevWidth;
+        sal_Int32           mnDevHeight;
+        sal_Int32           mnWinOrgX;
+        sal_Int32           mnWinOrgY;
+        sal_Int32           mnWinExtX;
+        sal_Int32           mnWinExtY;
 
-        sal_Int32           mnPixX, mnPixY;             // Reference Device in pixel
-        sal_Int32           mnMillX, mnMillY;           // Reference Device in Mill
-        tools::Rectangle           mrclFrame;                  // rectangle in logical units 1/100th mm
-        tools::Rectangle           mrclBounds;
+        sal_Int32           mnPixX;            // Reference Device in pixel
+        sal_Int32           mnPixY;            // Reference Device in pixel
+        sal_Int32           mnMillX;           // Reference Device in Mill
+        sal_Int32           mnMillY;           // Reference Device in Mill
+        tools::Rectangle    mrclFrame;
+        tools::Rectangle    mrclBounds;
 
         GDIMetaFile*        mpGDIMetaFile;
+
+        SvStream*           mpWMF;               // the WMF/EMF file to be read
+        sal_uInt32          mnStartPos;
+        sal_uInt32          mnEndPos;
+        std::vector<std::unique_ptr<BSaveStruct>>    maBmpSaveList;
+
+        bool                mbNopMode : 1;
+        bool                mbFillStyleSelected : 1;
+        bool                mbClipNeedsUpdate : 1;
+        bool                mbComplexClip : 1;
+        bool                mbIsMapWinSet : 1;
+        bool                mbIsMapDevSet : 1;
 
         void                UpdateLineStyle();
         void                UpdateFillStyle();
@@ -511,7 +521,7 @@ namespace emfio
         Point               ImplMap(const Point& rPt);
         Point               ImplScale(const Point& rPt);
         Size                ImplMap(const Size& rSize, bool bDoWorldTransform = true);
-        tools::Rectangle           ImplMap(const tools::Rectangle& rRectangle);
+        tools::Rectangle    ImplMap(const tools::Rectangle& rRectangle);
         void                ImplMap(vcl::Font& rFont);
         tools::Polygon&     ImplMap(tools::Polygon& rPolygon);
         tools::PolyPolygon& ImplMap(tools::PolyPolygon& rPolyPolygon);
@@ -559,11 +569,7 @@ namespace emfio
 
         void                CreateObject(std::unique_ptr<GDIObj> pObject);
         void                CreateObjectIndexed(sal_Int32 nIndex, std::unique_ptr<GDIObj> pObject);
-
-        void                CreateObject()
-        {
-            CreateObject(o3tl::make_unique<GDIObj>());
-        }
+        void                CreateObject();
 
         void                DeleteObject(sal_Int32 nIndex);
         void                SelectObject(sal_Int32 nIndex);
@@ -571,9 +577,9 @@ namespace emfio
         const vcl::Font&    GetFont() const { return maFont; }
         void                SetTextLayoutMode(ComplexTextLayoutFlags nLayoutMode);
 
-        void                ClearPath() { aPathObj.Init(); };
-        void                ClosePath() { aPathObj.ClosePath(); };
-        const tools::PolyPolygon& GetPathObj() { return aPathObj; };
+        void                ClearPath() { maPathObj.Init(); };
+        void                ClosePath() { maPathObj.ClosePath(); };
+        const tools::PolyPolygon& GetPathObj() { return maPathObj; };
 
         void                MoveTo(const Point& rPoint, bool bRecordPath = false);
         void                LineTo(const Point& rPoint, bool bRecordPath = false);
@@ -631,33 +637,9 @@ namespace emfio
         void                PassEMFPlus(void* pBuffer, sal_uInt32 nLength);
         void                PassEMFPlusHeaderInfo();
 
-        explicit            MtfToolsWriter(GDIMetaFile& rGDIMetaFile);
-        ~MtfToolsWriter();
-    };
-
-    class MtfTools
-    {
-    protected:
-        std::unique_ptr<MtfToolsWriter> pOut;
-        SvStream*               pWMF;               // the WMF/EMF file to be read
-
-        sal_uInt32              nStartPos, nEndPos;
-        std::vector<std::unique_ptr<BSaveStruct>>    aBmpSaveList;
-
-        FilterConfigItem*   pFilterConfigItem;
-
-        css::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
-
-        // assures aSampledBrush is the actual brush of the GDIMetaFile
-
         Color               ReadColor();
-        void                Callback(sal_uInt16 nPercent);
 
-        MtfTools(
-            GDIMetaFile& rGDIMetaFile,
-            SvStream& rStreamWMF,
-            FilterConfigItem* pConfigItem
-        );
+        explicit            MtfTools(GDIMetaFile& rGDIMetaFile, SvStream& rStreamWMF);
         ~MtfTools();
     };
 }
