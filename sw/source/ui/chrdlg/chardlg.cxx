@@ -169,7 +169,9 @@ SwCharURLPage::SwCharURLPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
     ::FillCharStyleListBox(*m_pVisitedLB, pView->GetDocShell());
     ::FillCharStyleListBox(*m_pNotVisitedLB, pView->GetDocShell());
     m_pVisitedLB->SelectEntryPos(m_pVisitedLB->GetEntryPos(reinterpret_cast<void*>(RES_POOLCHR_INET_VISIT)));
+    m_pVisitedLB->SaveValue();
     m_pNotVisitedLB->SelectEntryPos(m_pNotVisitedLB->GetEntryPos(reinterpret_cast<void*>(RES_POOLCHR_INET_NORMAL)));
+    m_pNotVisitedLB->SaveValue();
 
     std::unique_ptr<TargetList> pList( new TargetList );
     const SfxFrame& rFrame = pView->GetViewFrame()->GetFrame();
