@@ -150,8 +150,8 @@ namespace sax_fastparser {
                 case '&':   writeBytes( "&amp;", 5 );    break;
                 case '\'':  writeBytes( "&apos;", 6 );   break;
                 case '"':   writeBytes( "&quot;", 6 );   break;
-#if 0
                 case '\t':
+#if 0
                             // Seems OOXML prefers the _xHHHH_ escape over the
                             // entity in *some* cases, apparently in attribute
                             // values but not in element data.
@@ -163,13 +163,11 @@ namespace sax_fastparser {
                                 writeBytes( bufXescape, kXescapeLen);
                             }
                             else
+#endif
                             {
-                                // We did never write this, but literal tab
-                                // instead. Should we?
                                 writeBytes( "&#9;", 4 );
                             }
                 break;
-#endif
                 case '\n':
 #if 0
                             if (mbXescape)
