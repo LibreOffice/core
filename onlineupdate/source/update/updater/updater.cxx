@@ -2553,13 +2553,104 @@ ReadMARChannelIDs(const NS_tchar *path, MARChannelStringTable *results)
 #endif
 
 static int
-GetUpdateFileName(NS_tchar *fileName, int maxChars)
+GetUpdateFileNames(std::vector<tstring> fileNames)
 {
+    NS_tchar fileName[MAXPATHLEN];
     // TODO: moggi: needs adaption for LibreOffice
     // We would like to store the name inside of an ini file
-    NS_tsnprintf(fileName, maxChars,
+    NS_tsnprintf(fileName, MAXPATHLEN,
                  NS_T("%s/update.mar"), gPatchDirPath);
+    fileNames.push_back(fileName);
+
+    // add the language packs
     return OK;
+}
+
+static int
+CheckSignature(tstring& fileName)
+{
+    int rv = gArchiveReader.Open(fileName.c_str());
+
+#ifdef VERIFY_MAR_SIGNATURE
+    if (rv == OK)
+    {
+#ifdef _WIN32
+        HKEY baseKey = nullptr;
+        wchar_t valueName[] = L"Image Path";
+        wchar_t rasenh[] = L"rsaenh.dll";
+        bool reset = false;
+        if (RegOpenKeyExW(HKEY_LOCAL_MACHINE,
+                          L"SOFTWARE\\Microsoft\\Cryptography\\Defaults\\Provider\\Microsoft Enhanced Cryptographic Provider v1.0",
+                          0, KEY_READ | KEY_WRITE,
+                          &baseKey) == ERROR_SUCCESS)
+        {
+            wchar_t path[MAX_PATH + 1];
+            DWORD size = sizeof(path);
+            DWORD type;
+            if (RegQueryValueExW(baseKey, valueName, 0, &type,
+                                 (LPBYTE)path, &size) == ERROR_SUCCESS)
+            {
+                if (type == REG_SZ && wcscmp(path, rasenh) == 0)
+                {
+                    wchar_t rasenhFullPath[] = L"%SystemRoot%\\System32\\rsaenh.dll";
+                    if (RegSetValueExW(baseKey, valueName, 0, REG_SZ,
+                                       (const BYTE*)rasenhFullPath,
+                                       sizeof(rasenhFullPath)) == ERROR_SUCCESS)
+                    {
+                        reset = true;
+                    }
+                }
+            }
+        }
+#endif
+        rv = gArchiveReader.VerifySignature();
+#ifdef _WIN32
+        if (baseKey)
+        {
+            if (reset)
+            {
+                RegSetValueExW(baseKey, valueName, 0, REG_SZ,
+                               (const BYTE*)rasenh,
+                               sizeof(rasenh));
+            }
+            RegCloseKey(baseKey);
+        }
+#endif
+    }
+
+    if (rv == OK)
+    {
+        if (rv == OK)
+        {
+            NS_tchar updateSettingsPath[MAX_TEXT_LEN];
+
+            // TODO: moggi: needs adaption for LibreOffice
+            // These paths need to be adapted for us.
+            NS_tsnprintf(updateSettingsPath,
+                         sizeof(updateSettingsPath) / sizeof(updateSettingsPath[0]),
+#ifdef MACOSX
+                         NS_T("%s/Contents/Resources/update-settings.ini"),
+#else
+                         NS_T("%s/update-settings.ini"),
+#endif
+                         gWorkingDirPath);
+            MARChannelStringTable MARStrings;
+            if (ReadMARChannelIDs(updateSettingsPath, &MARStrings) != OK)
+            {
+                // If we can't read from update-settings.ini then we shouldn't impose
+                // a MAR restriction.  Some installations won't even include this file.
+                MARStrings.MARChannelID[0] = '\0';
+            }
+
+            rv = gArchiveReader.VerifyProductInformation(MARStrings.MARChannelID,
+                    LIBO_VERSION_DOTTED);
+        }
+    }
+#endif
+
+    gArchiveReader.Close();
+
+    return rv;
 }
 
 static void
@@ -2573,113 +2664,32 @@ UpdateThreadFunc(void * /*param*/)
     }
     else
     {
-        NS_tchar dataFile[MAXPATHLEN];
-        rv = GetUpdateFileName(dataFile, sizeof(dataFile)/sizeof(dataFile[0]));
-        if (rv == OK)
+        std::vector<tstring> fileNames;
+        GetUpdateFileNames(fileNames);
+
+        for (auto& fileName: fileNames)
         {
-            rv = gArchiveReader.Open(dataFile);
-        }
-
-#ifdef VERIFY_MAR_SIGNATURE
-        if (rv == OK)
-        {
-#ifdef _WIN32
-            HKEY baseKey = nullptr;
-            wchar_t valueName[] = L"Image Path";
-            wchar_t rasenh[] = L"rsaenh.dll";
-            bool reset = false;
-            if (RegOpenKeyExW(HKEY_LOCAL_MACHINE,
-                              L"SOFTWARE\\Microsoft\\Cryptography\\Defaults\\Provider\\Microsoft Enhanced Cryptographic Provider v1.0",
-                              0, KEY_READ | KEY_WRITE,
-                              &baseKey) == ERROR_SUCCESS)
+            rv = CheckSignature(fileName);
+            if (rv != OK)
             {
-                wchar_t path[MAX_PATH + 1];
-                DWORD size = sizeof(path);
-                DWORD type;
-                if (RegQueryValueExW(baseKey, valueName, 0, &type,
-                                     (LPBYTE)path, &size) == ERROR_SUCCESS)
-                {
-                    if (type == REG_SZ && wcscmp(path, rasenh) == 0)
-                    {
-                        wchar_t rasenhFullPath[] = L"%SystemRoot%\\System32\\rsaenh.dll";
-                        if (RegSetValueExW(baseKey, valueName, 0, REG_SZ,
-                                           (const BYTE*)rasenhFullPath,
-                                           sizeof(rasenhFullPath)) == ERROR_SUCCESS)
-                        {
-                            reset = true;
-                        }
-                    }
-                }
-            }
-#endif
-            rv = gArchiveReader.VerifySignature();
-#ifdef _WIN32
-            if (baseKey)
-            {
-                if (reset)
-                {
-                    RegSetValueExW(baseKey, valueName, 0, REG_SZ,
-                                   (const BYTE*)rasenh,
-                                   sizeof(rasenh));
-                }
-                RegCloseKey(baseKey);
-            }
-#endif
-        }
-
-        if (rv == OK)
-        {
-            if (rv == OK)
-            {
-                NS_tchar updateSettingsPath[MAX_TEXT_LEN];
-
-                // TODO: moggi: needs adaption for LibreOffice
-                // These paths need to be adapted for us.
-                NS_tsnprintf(updateSettingsPath,
-                             sizeof(updateSettingsPath) / sizeof(updateSettingsPath[0]),
-#ifdef MACOSX
-                             NS_T("%s/Contents/Resources/update-settings.ini"),
-#else
-                             NS_T("%s/update-settings.ini"),
-#endif
-                             gWorkingDirPath);
-                MARChannelStringTable MARStrings;
-                if (ReadMARChannelIDs(updateSettingsPath, &MARStrings) != OK)
-                {
-                    // If we can't read from update-settings.ini then we shouldn't impose
-                    // a MAR restriction.  Some installations won't even include this file.
-                    MARStrings.MARChannelID[0] = '\0';
-                }
-
-                rv = gArchiveReader.VerifyProductInformation(MARStrings.MARChannelID,
-                        LIBO_VERSION_DOTTED);
+                LOG(("Could not verify the signature of " LOG_S, fileName.c_str()));
+                break;
             }
         }
-#endif
 
         if (rv == OK && sStagedUpdate)
         {
-#ifdef TEST_UPDATER
-            // The MOZ_TEST_SKIP_UPDATE_STAGE environment variable prevents copying
-            // the files in dist/bin in the test updater when staging an update since
-            // this can cause tests to timeout.
-            if (EnvHasValue("MOZ_TEST_SKIP_UPDATE_STAGE"))
-            {
-                rv = OK;
-            }
-            else
-            {
-                rv = CopyInstallDirToDestDir();
-            }
-#else
             rv = CopyInstallDirToDestDir();
-#endif
         }
 
         if (rv == OK)
         {
-            rv = DoUpdate();
-            gArchiveReader.Close();
+            for (auto& fileName: fileNames)
+            {
+                gArchiveReader.Open(fileName.c_str());
+                rv = DoUpdate();
+                gArchiveReader.Close();
+            }
             NS_tchar updatingDir[MAXPATHLEN];
             NS_tsnprintf(updatingDir, sizeof(updatingDir)/sizeof(updatingDir[0]),
                          NS_T("%s/updating"), gWorkingDirPath);
