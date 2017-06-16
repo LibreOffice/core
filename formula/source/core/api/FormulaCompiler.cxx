@@ -1264,7 +1264,7 @@ bool FormulaCompiler::GetToken()
     {
         FormulaTokenRef pSpacesToken;
         short nWasColRowName;
-        if ( maArrIterator.mnIndex > 0 && pArr->pCode[ maArrIterator.mnIndex-1 ]->GetOpCode() == ocColRowName )
+        if ( pArr->OpCodeBefore( maArrIterator.GetIndex() ) == ocColRowName )
              nWasColRowName = 1;
         else
              nWasColRowName = 0;
@@ -1526,9 +1526,9 @@ void FormulaCompiler::Factor()
                     // nSepPos+4 if expression continues after the call because
                     // we just called NextToken() to move away from it.
                     if (pc >= 2 && (maArrIterator.mnIndex == nSepPos + 3 || maArrIterator.mnIndex == nSepPos + 4) &&
-                            pArr->pCode[nSepPos+1]->GetType() == svDouble &&
-                            pArr->pCode[nSepPos+1]->GetDouble() != 1.0 &&
-                            pArr->pCode[nSepPos+2]->GetOpCode() == ocClose &&
+                            pArr->TokenAt(nSepPos+1)->GetType() == svDouble &&
+                            pArr->TokenAt(nSepPos+1)->GetDouble() != 1.0 &&
+                            pArr->TokenAt(nSepPos+2)->GetOpCode() == ocClose &&
                             pArr->RemoveToken( nSepPos, 2) == 2)
                     {
                         maArrIterator.AfterRemoveToken( nSepPos, 2);
@@ -2014,11 +2014,7 @@ bool FormulaCompiler::CompileTokenArray()
         while( pStack )
             PopTokenArray();
         if( pc )
-        {
-            pArr->pRPN = new FormulaToken*[ pc ];
-            pArr->nRPN = pc;
-            memcpy( pArr->pRPN, pData, pc * sizeof( FormulaToken* ) );
-        }
+            pArr->CreateNewRPNArrayFromData( pData, pc );
 
         // once an error, always an error
         if( pArr->GetCodeError() == FormulaError::NONE && nErrorBeforePop != FormulaError::NONE )
