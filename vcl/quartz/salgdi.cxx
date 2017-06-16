@@ -26,7 +26,6 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <osl/file.hxx>
-#include <osl/mutex.hxx>
 #include <osl/process.h>
 #include <rtl/bootstrap.h>
 #include <rtl/strbuf.hxx>

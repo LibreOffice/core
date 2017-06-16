@@ -21,7 +21,6 @@
 #include "basmodnode.hxx"
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #include <comphelper/sequence.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbstar.hxx>

@@ -21,7 +21,6 @@
 #define INCLUDED_SHELL_SOURCE_CMDMAIL_CMDMAILSUPPL_HXX
 
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

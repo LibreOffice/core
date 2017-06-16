@@ -19,7 +19,6 @@
 
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <o3tl/make_unique.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svdpool.hxx>

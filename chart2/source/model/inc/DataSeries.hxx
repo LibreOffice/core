@@ -35,7 +35,6 @@
 // helper classes
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
-#include <osl/mutex.hxx>
 
 // STL
 #include <vector>

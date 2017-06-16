@@ -50,8 +50,6 @@
 #include <unotools/streamwrap.hxx>
 #include <tools/zcodec.hxx>
 
-#include <osl/mutex.hxx>
-
 #include "svgfilter.hxx"
 #include "svgwriter.hxx"
 

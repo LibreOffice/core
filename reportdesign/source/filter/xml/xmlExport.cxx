@@ -53,7 +53,6 @@
 #include <com/sun/star/report/XFixedLine.hpp>
 #include "RptDef.hxx"
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <sal/macros.h>
 
 #include <iterator>

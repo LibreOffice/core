@@ -18,7 +18,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 
 namespace comphelper
 {

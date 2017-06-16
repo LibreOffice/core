@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/mutex.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/factory.hxx>
@@ -33,7 +32,6 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::script;
 using namespace cppu;
-using namespace osl;
 using namespace std;
 
 

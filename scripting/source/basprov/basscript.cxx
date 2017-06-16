@@ -18,7 +18,6 @@
  */
 
 #include "basscript.hxx"
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>

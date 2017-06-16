@@ -37,7 +37,6 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svl/stritem.hxx>
 #include <editeng/fontitem.hxx>

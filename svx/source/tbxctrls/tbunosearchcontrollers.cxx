@@ -51,7 +51,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/instance.hxx>
 #include <svx/srchdlg.hxx>

@@ -26,7 +26,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <sal/log.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 class SfxPoolItem;

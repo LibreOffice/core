@@ -19,14 +19,12 @@
 
 #include <string.h>
 
-#include <osl/mutex.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/attrlist.hxx>
 #include <comphelper/servicehelper.hxx>
 #include "MutableAttrList.hxx"
 
 
-using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;

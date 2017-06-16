@@ -30,7 +30,6 @@
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 

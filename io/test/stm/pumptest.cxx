@@ -35,7 +35,6 @@
 #include <uno/mapping.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/factory.hxx>
-#include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <list>
 

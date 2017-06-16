@@ -31,7 +31,6 @@
 #include <sot/storage.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#include <osl/mutex.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 

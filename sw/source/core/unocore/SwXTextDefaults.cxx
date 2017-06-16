@@ -19,7 +19,6 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <SwXTextDefaults.hxx>

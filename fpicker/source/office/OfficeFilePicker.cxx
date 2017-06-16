@@ -41,7 +41,6 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include "osl/mutex.hxx"
 #include <vcl/svapp.hxx>
 
 using namespace     ::com::sun::star::container;

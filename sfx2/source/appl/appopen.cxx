@@ -66,9 +66,6 @@
 #include <comphelper/docpasswordhelper.hxx>
 #include <vcl/svapp.hxx>
 
-#include <osl/mutex.hxx>
-
-
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>

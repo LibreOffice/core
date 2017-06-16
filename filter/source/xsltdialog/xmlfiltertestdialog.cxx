@@ -38,7 +38,6 @@
 
 #include <comphelper/oslfile2streamwrap.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <osl/file.hxx>
 #include <unotools/tempfile.hxx>

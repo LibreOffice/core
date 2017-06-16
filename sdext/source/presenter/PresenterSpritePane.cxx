@@ -21,7 +21,6 @@
 #include "PresenterGeometryHelper.hxx"
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
-#include <osl/mutex.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

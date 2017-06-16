@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_SLIDECHANGEBASE_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_SLIDECHANGEBASE_HXX
 
-#include <osl/mutex.hxx>
-
 #include "unoview.hxx"
 #include "vieweventhandler.hxx"
 #include "numberanimation.hxx"

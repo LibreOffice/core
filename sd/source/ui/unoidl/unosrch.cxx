@@ -22,7 +22,6 @@
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 
 #include <svx/unoshape.hxx>
 #include <svx/svdpool.hxx>

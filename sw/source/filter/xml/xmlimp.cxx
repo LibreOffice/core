@@ -65,7 +65,6 @@
 #include <tools/diagnose_ex.h>
 
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <unotxdoc.hxx>
 
 #include <xmloff/xmlmetai.hxx>

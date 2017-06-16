@@ -23,8 +23,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/DrawViewMode.hpp>
 
-#include <osl/mutex.hxx>
-
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>

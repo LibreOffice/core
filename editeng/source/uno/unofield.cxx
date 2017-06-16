@@ -22,7 +22,6 @@
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>

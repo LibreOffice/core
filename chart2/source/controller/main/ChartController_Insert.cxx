@@ -59,7 +59,6 @@
 #include <vcl/msgbox.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

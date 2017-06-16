@@ -26,7 +26,6 @@
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svtools/svparser.hxx>
-#include <osl/mutex.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/container/XChild.hpp>

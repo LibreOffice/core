@@ -24,7 +24,6 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/grfmgr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

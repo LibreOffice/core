@@ -18,7 +18,6 @@
  */
 
 
-#include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <cppuhelper/factory.hxx>
 #include <pppoptimizerdialog.hxx>

@@ -23,7 +23,6 @@
 #include <boost/optional.hpp>
 #include <unotools/unotoolsdllapi.h>
 #include <sal/types.h>
-#include <osl/mutex.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <rtl/ustring.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include "dlgedclip.hxx"
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>

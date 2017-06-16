@@ -28,7 +28,6 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <tools/fldunit.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/sequence.hxx>

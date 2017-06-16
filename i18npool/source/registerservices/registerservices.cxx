@@ -26,7 +26,6 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/weak.hxx>
-#include <osl/mutex.hxx>
 
 #include <servicename.hxx>
 

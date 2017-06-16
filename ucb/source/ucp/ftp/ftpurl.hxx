@@ -31,7 +31,6 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 
 #include <rtl/ustring.hxx>
-#include <osl/mutex.hxx>
 #include <osl/file.h>
 #include <vector>
 

@@ -33,7 +33,6 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
-#include <osl/mutex.hxx>
 #include <svx/fmview.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <sfx2/lokhelper.hxx>

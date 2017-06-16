@@ -21,7 +21,6 @@
 #include <shellio.hxx>
 #include <swdll.hxx>
 #include <unoprnms.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>

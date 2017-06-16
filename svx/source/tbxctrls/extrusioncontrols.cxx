@@ -20,8 +20,6 @@
 
 #include <string>
 
-#include <osl/mutex.hxx>
-
 #include <svtools/toolbarmenu.hxx>
 #include <svx/colorwindow.hxx>
 #include <vcl/toolbox.hxx>

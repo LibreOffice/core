@@ -23,7 +23,6 @@
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemprop.hxx>
@@ -59,7 +58,6 @@
 
 //-
 
-using namespace ::osl;
 using namespace ::com::sun::star;
 
 //-

@@ -21,7 +21,6 @@
 #include <config_features.h>
 
 #include <osl/file.hxx>
-#include <osl/mutex.hxx>
 
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>

@@ -31,10 +31,8 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include "cppuhelper/unourl.hxx"
-#include <osl/mutex.hxx>
 
 using namespace cppu;
-using namespace osl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::connection;

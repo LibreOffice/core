@@ -38,7 +38,6 @@
 #include "filefmt.hxx"
 #include "sb.hrc"
 #include <basrid.hxx>
-#include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>

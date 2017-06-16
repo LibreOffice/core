@@ -50,7 +50,6 @@
 #include "xmlHelper.hxx"
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <osl/mutex.hxx>
 #include <svtools/sfxecode.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>

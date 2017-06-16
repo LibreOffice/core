@@ -119,7 +119,6 @@
 #include <SwRewriter.hxx>
 #include <globals.hrc>
 #include <app.hrc>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <swserv.hxx>
 #include <calbck.hxx>

@@ -28,7 +28,6 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <rtl/ustring.hxx>
 #include <unotools/configitem.hxx>
-#include <osl/mutex.hxx>
 #include <unotools/options.hxx>
 #include <i18nlangtag/lang.h>
 #include <vector>

@@ -43,7 +43,6 @@
 #include "slideshow.hxx"
 
 #include <svx/fmshell.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/EnumContext.hxx>
 #include <svx/sidebar/ContextChangeEventMultiplexer.hxx>

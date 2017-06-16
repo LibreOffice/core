@@ -12,7 +12,6 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
 #include <vector>

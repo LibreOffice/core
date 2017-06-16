@@ -49,7 +49,6 @@
 #include <svx/unoshape.hxx>
 #include <com/sun/star/style/XStyle.hpp>
 #include <svx/svdorect.hxx>
-#include <osl/mutex.hxx>
 #include <svl/style.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 #include <comphelper/extract.hxx>
@@ -76,7 +75,6 @@
 using ::com::sun::star::animations::XAnimationNode;
 using ::com::sun::star::animations::XAnimationNodeSupplier;
 
-using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

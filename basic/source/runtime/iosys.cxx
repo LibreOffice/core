@@ -25,7 +25,6 @@
 #include <vcl/svapp.hxx>
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
-#include <osl/mutex.hxx>
 
 #include "runtime.hxx"
 

@@ -21,7 +21,6 @@
 #include <uielement/progressbarwrapper.hxx>
 
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 
 using namespace cppu;
 using namespace com::sun::star::uno;

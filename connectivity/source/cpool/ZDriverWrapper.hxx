@@ -22,7 +22,6 @@
 
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <com/sun/star/uno/XAggregation.hpp>
 

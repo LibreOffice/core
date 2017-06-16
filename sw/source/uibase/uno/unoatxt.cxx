@@ -22,7 +22,6 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <svtools/unoevent.hxx>

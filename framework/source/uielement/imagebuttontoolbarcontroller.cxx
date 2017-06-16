@@ -25,7 +25,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <osl/mutex.hxx>
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>

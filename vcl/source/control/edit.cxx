@@ -33,8 +33,6 @@
 #include <svids.hrc>
 #include <controldata.hxx>
 
-#include <osl/mutex.hxx>
-
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>

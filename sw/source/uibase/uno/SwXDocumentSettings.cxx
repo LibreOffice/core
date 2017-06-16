@@ -23,7 +23,6 @@
 
 #include <o3tl/any.hxx>
 #include <o3tl/make_unique.hxx>
-#include <osl/mutex.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 #include <SwXDocumentSettings.hxx>
 #include <comphelper/MasterPropertySetInfo.hxx>

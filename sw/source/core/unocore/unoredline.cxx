@@ -24,7 +24,6 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/servicehelper.hxx>
 

@@ -26,7 +26,6 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/processfactory.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include "dlelstnr.hxx"
 #include <proofreadingiterator.hxx>

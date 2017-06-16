@@ -32,7 +32,6 @@
 #include "strings.hxx"
 
 #include <svx/svdpagv.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 namespace sd {

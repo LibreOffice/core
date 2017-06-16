@@ -21,7 +21,6 @@
 #define INCLUDED_UCBHELPER_FD_INPUTSTREAM_HXX
 
 #include <rtl/ustring.hxx>
-#include <osl/mutex.hxx>
 #include <osl/file.h>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>

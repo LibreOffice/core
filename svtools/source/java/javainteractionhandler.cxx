@@ -30,7 +30,6 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <tools/rcid.h>
 #include <jvmfwk/framework.hxx>
 

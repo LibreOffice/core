@@ -28,7 +28,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <o3tl/any.hxx>
 #include <o3tl/make_unique.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <cppuhelper/implbase.hxx>

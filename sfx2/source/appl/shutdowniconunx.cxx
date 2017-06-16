@@ -25,7 +25,6 @@
 
 #include <gtk/gtk.h>
 #include <glib.h>
-#include <osl/mutex.hxx>
 #include <osl/module.hxx>
 #include <tools/resmgr.hxx>
 #include <sfx2/app.hxx>

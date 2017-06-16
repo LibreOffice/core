@@ -34,7 +34,6 @@
 #include <osl/pipe.hxx>
 #include <osl/security.hxx>
 #include <osl/thread.hxx>
-#include <osl/mutex.hxx>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/bridge/BridgeFactory.hpp>

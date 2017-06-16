@@ -22,7 +22,6 @@
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <editeng/UnoForbiddenCharsTable.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/unolingu.hxx>
 

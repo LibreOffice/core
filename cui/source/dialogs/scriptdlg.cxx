@@ -25,7 +25,6 @@
 #include <vcl/layout.hxx>
 #include <vcl/builderfactory.hxx>
 #include <o3tl/make_unique.hxx>
-#include <osl/mutex.hxx>
 
 #include <cuires.hrc>
 #include <bitmaps.hlst>

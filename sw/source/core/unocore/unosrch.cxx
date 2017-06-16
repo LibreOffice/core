@@ -26,7 +26,6 @@
 
 #include <i18nutil/searchopt.hxx>
 #include <o3tl/any.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>

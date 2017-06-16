@@ -30,7 +30,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
 #include <svl/itemset.hxx>

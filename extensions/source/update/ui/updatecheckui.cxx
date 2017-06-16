@@ -35,8 +35,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <osl/mutex.hxx>
-
 #include <vcl/window.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/timer.hxx>

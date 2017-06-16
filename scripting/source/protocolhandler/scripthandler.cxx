@@ -19,8 +19,6 @@
 
 #include "scripthandler.hxx"
 
-#include <osl/mutex.hxx>
-
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XController.hpp>

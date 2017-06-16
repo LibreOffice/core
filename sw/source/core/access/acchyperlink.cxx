@@ -23,7 +23,6 @@
 #include <com/sun/star/document/XLinkTargetSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <swurl.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <ndtxt.hxx>
 #include <txtinet.hxx>

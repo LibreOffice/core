@@ -56,7 +56,6 @@
 #include "xmlimp.hxx"
 #include "xmltbli.hxx"
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include "ndtxt.hxx"
 
 #include <vector>

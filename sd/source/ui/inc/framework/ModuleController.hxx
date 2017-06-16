@@ -22,7 +22,6 @@
 
 #include "MutexOwner.hxx"
 
-#include <osl/mutex.hxx>
 #include <com/sun/star/drawing/framework/XModuleController.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

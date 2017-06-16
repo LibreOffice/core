@@ -36,7 +36,6 @@
 #include <sal/log.hxx>
 
 #include <basic/basrdll.hxx>
-#include <osl/mutex.hxx>
 #include "sbobjmod.hxx"
 #include <basic/vbahelper.hxx>
 #include <cppuhelper/implbase.hxx>

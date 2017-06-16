@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_MODEL_MAIN_DATAPOINT_HXX
 #define INCLUDED_CHART2_SOURCE_MODEL_MAIN_DATAPOINT_HXX
 
-#include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <comphelper/uno3.hxx>

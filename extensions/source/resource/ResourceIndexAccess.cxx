@@ -13,7 +13,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
 #include <tools/rcid.h>
 #include <tools/resary.hxx>
 #include <tools/resmgr.hxx>

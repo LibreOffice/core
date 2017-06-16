@@ -23,7 +23,6 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include "java/tools.hxx"
 #include "java/sql/SQLException.hxx"
-#include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include "java/LocalRef.hxx"
 #include "resource/conn_shared_res.hrc"

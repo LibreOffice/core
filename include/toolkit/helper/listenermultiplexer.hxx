@@ -44,7 +44,6 @@
 #include <com/sun/star/util/VetoException.hpp>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/interfacecontainer2.hxx>
-#include <osl/mutex.hxx>
 #include <toolkit/helper/mutexhelper.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <com/sun/star/awt/grid/XGridSelectionListener.hpp>

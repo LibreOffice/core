@@ -21,7 +21,6 @@
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_CORE_RESOURCE_HXX
 
 #include <rtl/ustring.hxx>
-#include <osl/mutex.hxx>
 
 class ResMgr;
 

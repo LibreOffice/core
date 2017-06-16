@@ -58,7 +58,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/xmlmetai.hxx>
-#include <osl/mutex.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/servicehelper.hxx>
 

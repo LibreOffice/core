@@ -27,7 +27,6 @@
 #include <editeng/unoedhlp.hxx>
 #include <svl/lstner.hxx>
 #include <rtl/ref.hxx>
-#include <osl/mutex.hxx>
 #include <svl/hint.hxx>
 #include <svl/style.hxx>
 #include <svx/svdmodel.hxx>
@@ -50,9 +49,6 @@
 #include <svx/svdotable.hxx>
 #include "../table/cell.hxx"
 #include <svx/sdrpaintwindow.hxx>
-
-using namespace ::osl;
-
 
 
 // SvxTextEditSourceImpl

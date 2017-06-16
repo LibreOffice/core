@@ -38,7 +38,6 @@
 #include <comphelper/storagehelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <rtl/digest.h>
 #include <rtl/strbuf.hxx>

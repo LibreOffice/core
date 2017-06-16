@@ -24,7 +24,6 @@
 #include <basic/sbxobj.hxx>
 #include <basic/sbmod.hxx>
 #include <rtl/ustring.hxx>
-#include <osl/mutex.hxx>
 #include <tools/link.hxx>
 
 #include <basic/sbdef.hxx>

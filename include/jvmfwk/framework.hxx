@@ -30,7 +30,6 @@
 #include <jvmfwk/jvmfwkdllapi.hxx>
 #include <rtl/byteseq.hxx>
 #include <rtl/ustring.hxx>
-#include <osl/mutex.h>
 #include "jni.h"
 
 /** @file

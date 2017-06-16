@@ -20,7 +20,6 @@
 #ifndef INCLUDED_UUI_SOURCE_IAHNDL_HXX
 #define INCLUDED_UUI_SOURCE_IAHNDL_HXX
 
-#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>

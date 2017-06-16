@@ -15,7 +15,6 @@
 #include <com/sun/star/rendering/XColorSpace.hpp>
 #include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/canvastools.hxx>

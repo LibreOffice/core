@@ -23,7 +23,6 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/bitmapex.hxx>
 #include <sfx2/dllapi.h>
 

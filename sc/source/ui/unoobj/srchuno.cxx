@@ -20,7 +20,6 @@
 #include "scitems.hxx"
 #include <svl/srchitem.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

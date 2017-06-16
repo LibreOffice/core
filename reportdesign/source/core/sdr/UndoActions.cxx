@@ -41,7 +41,6 @@
 #include <vcl/svapp.hxx>
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <svx/unoshape.hxx>
-#include <osl/mutex.hxx>
 
 namespace rptui
 {

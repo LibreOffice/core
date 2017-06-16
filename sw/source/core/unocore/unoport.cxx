@@ -21,7 +21,6 @@
 
 #include <cmdid.h>
 #include <o3tl/make_unique.hxx>
-#include <osl/mutex.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <vcl/svapp.hxx>
