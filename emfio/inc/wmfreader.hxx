@@ -25,61 +25,29 @@
 
 namespace emfio
 {
-    struct WMF_EXTERNALHEADER
-    {
-        sal_uInt16 xExt;
-        sal_uInt16 yExt;
-
-        /** One of the following values:
-        <ul>
-        <li>MM_TEXT</li>
-        <li>MM_LOMETRIC</li>
-        <li>MM_HIMETRIC</li>
-        <li>MM_LOENGLISH</li>
-        <li>MM_HIENGLISH</li>
-        <li>MM_TWIPS</li>
-        <li>MM_ISOTROPIC</li>
-        <li>MM_ANISOTROPIC</li>
-        </ul>
-        If this value is 0, then no external mapmode has been defined,
-        the internal one should then be used.
-        */
-        sal_uInt16 mapMode;
-
-        WMF_EXTERNALHEADER() :
-            xExt(0),
-            yExt(0),
-            mapMode(0)
-        {
-        }
-    };
-
     class WmfReader : public MtfTools
     {
     private:
-
-        sal_uInt16      nUnitsPerInch;
-        sal_uInt32      nRecSize;
+        sal_uInt16      mnUnitsPerInch;
+        sal_uInt32      mnRecSize;
 
         // embedded EMF data
-        std::unique_ptr<SvMemoryStream> pEMFStream;
+        std::unique_ptr<SvMemoryStream> mpEMFStream;
 
         // total number of comment records containing EMF data
-        sal_uInt32      nEMFRecCount;
+        sal_uInt32      mnEMFRecCount;
 
         // number of EMF records read
-        sal_uInt32      nEMFRec;
+        sal_uInt32      mnEMFRec;
 
         // total size of embedded EMF data
-        sal_uInt32      nEMFSize;
+        sal_uInt32      mnEMFSize;
 
-        sal_uInt32      nSkipActions;
-        sal_uInt32      nCurrentAction;
-
-        WMF_EXTERNALHEADER* pExternalHeader;
+        sal_uInt32      mnSkipActions;
+        sal_uInt32      mnCurrentAction;
 
         // reads header of the WMF-Datei
-        bool        ReadHeader();
+        bool            ReadHeader();
 
         // reads parameters of the record with the functionnumber nFunction.
         void            ReadRecordParams(sal_uInt16 nFunction);
@@ -91,10 +59,7 @@ namespace emfio
         void            GetPlaceableBound(tools::Rectangle& rSize, SvStream* pStrm);
 
     public:
-
-        WmfReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile,
-            FilterConfigItem* pConfigItem,
-            WMF_EXTERNALHEADER* pExtHeader = nullptr);
+        WmfReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile);
 
         // read WMF file from stream and fill the GDIMetaFile
         void ReadWMF();
