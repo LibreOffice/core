@@ -114,9 +114,6 @@ typedef std::unordered_set<OpCode, std::hash<std::underlying_type<OpCode>::type>
 
 class FORMULA_DLLPUBLIC FormulaTokenArray
 {
-    friend class FormulaTokenIterator;
-    friend class FormulaTokenArrayPlainIterator;
-
 protected:
     FormulaToken**  pCode;                  // Token code array
     FormulaToken**  pRPN;                   // RPN array
@@ -431,8 +428,6 @@ inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT,
 
 class FORMULA_DLLPUBLIC FormulaTokenArrayPlainIterator
 {
-    friend class FormulaCompiler;
-
 private:
     const FormulaTokenArray* mpFTA;
     sal_uInt16 mnIndex;                 // Current step index
@@ -465,6 +460,12 @@ public:
         mnIndex = nIndex;
     }
 
+    void StepBack()
+    {
+        assert(mnIndex > 0);
+        mnIndex--;
+    }
+
     FormulaToken* Next();
     FormulaToken* NextNoSpaces();
     FormulaToken* GetNextName();
@@ -486,7 +487,7 @@ public:
 
     FormulaToken* LastRPN()
     {
-        mnIndex = mpFTA->nRPN;
+        mnIndex = mpFTA->GetCodeLen();
         return PrevRPN();
     }
 
