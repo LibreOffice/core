@@ -1124,7 +1124,7 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                     if( pRecord )
                     {
                         SfxItemSet aFlySet( m_rDoc.GetAttrPool(),
-                            RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
+                            svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{} );
 
                         tools::Rectangle aInnerDist(   pRecord->nDxTextLeft,
                                                 pRecord->nDyTextTop,
@@ -2533,7 +2533,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     // when in a header or footer word appears to treat all elements as wrap through
 
     // Umfluss-Modus ermitteln
-    SfxItemSet aFlySet(m_rDoc.GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1);
+    SfxItemSet aFlySet(m_rDoc.GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{});
     css::text::WrapTextMode eSurround = css::text::WrapTextMode_PARALLEL;
     bool bContour = false;
     switch (pF->nwr)
@@ -2849,7 +2849,7 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
         {
             // use ww8-default border distance
             SfxItemSet aItemSet(m_pDrawModel->GetItemPool(),
-                SDRATTR_TEXT_LEFTDIST, SDRATTR_TEXT_LOWERDIST);
+                svl::Items<SDRATTR_TEXT_LEFTDIST, SDRATTR_TEXT_LOWERDIST>{});
             aItemSet.Put( makeSdrTextLeftDistItem( pRecord->nDxTextLeft ) );
             aItemSet.Put( makeSdrTextRightDistItem( pRecord->nDxTextRight  ) );
             aItemSet.Put( makeSdrTextUpperDistItem( pRecord->nDyTextTop    ) );
@@ -2998,7 +2998,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
 
     rFlySet.Put(SwFormatFrameSize(ATT_FIX_SIZE, nWidthTw, nHeightTw));
 
-    SfxItemSet aGrSet(m_rDoc.GetAttrPool(), RES_GRFATR_BEGIN, RES_GRFATR_END-1);
+    SfxItemSet aGrSet(m_rDoc.GetAttrPool(), svl::Items<RES_GRFATR_BEGIN, RES_GRFATR_END-1>{});
 
     if (pRecord)
     {

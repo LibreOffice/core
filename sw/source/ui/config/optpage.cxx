@@ -812,9 +812,8 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
     else
     {
         auto pPrinterSet = o3tl::make_unique<SfxItemSet>( *rSet->GetPool(),
-                    SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                    SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
-                    0 );
+                    svl::Items<SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
+                    SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC>{} );
         m_pPrt = VclPtr<SfxPrinter>::Create(std::move(pPrinterSet));
     }
     delete m_pFontList;

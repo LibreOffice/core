@@ -636,7 +636,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
 
             case SID_HYPERLINK_GETLINK:
                 {
-                    SfxItemSet aSet(GetPool(), RES_TXTATR_INETFMT, RES_TXTATR_INETFMT);
+                    SfxItemSet aSet(GetPool(), svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
                     rSh.GetCurAttr( aSet );
 
                     SvxHyperlinkItem aHLinkItem;
@@ -899,10 +899,9 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
     }
 
     SwWrtShell &rSh = GetShell();
-    SfxItemSet aSet( GetPool(), RES_CHRATR_FONT, RES_CHRATR_FONT,
+    SfxItemSet aSet( GetPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT,
                                 RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT,
-                                RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT,
-                                0 );
+                                RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT>{} );
     rSh.GetCurAttr( aSet );
     SvtScriptType nScript = rSh.GetScriptType();
 
@@ -999,9 +998,9 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             aNewFontItem.SetPitch(   aNewFont.GetPitch());
             aNewFontItem.SetCharSet( aNewFont.GetCharSet() );
 
-            SfxItemSet aRestoreSet( GetPool(), RES_CHRATR_FONT, RES_CHRATR_FONT,
+            SfxItemSet aRestoreSet( GetPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT,
                                                RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT,
-                                               RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT, 0 );
+                                               RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT>{} );
 
             nScript = g_pBreakIt->GetAllScriptsOfText( aChars );
             if( SvtScriptType::LATIN & nScript )

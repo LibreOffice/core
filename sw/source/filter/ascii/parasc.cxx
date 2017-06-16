@@ -102,10 +102,9 @@ SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCursor, SvStream& rIn,
     pArr = new sal_Char [ ASC_BUFFLEN + 2 ];
 
     pItemSet = o3tl::make_unique<SfxItemSet>( pDoc->GetAttrPool(),
-                RES_CHRATR_FONT,        RES_CHRATR_LANGUAGE,
+                svl::Items<RES_CHRATR_FONT,        RES_CHRATR_LANGUAGE,
                 RES_CHRATR_CJK_FONT,    RES_CHRATR_CJK_LANGUAGE,
-                RES_CHRATR_CTL_FONT,    RES_CHRATR_CTL_LANGUAGE,
-                0 );
+                RES_CHRATR_CTL_FONT,    RES_CHRATR_CTL_LANGUAGE>{} );
 
     // set defaults from the options
     if( rOpt.GetLanguage() )

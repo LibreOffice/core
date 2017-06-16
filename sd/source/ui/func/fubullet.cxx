@@ -252,7 +252,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
                empty string). */
             pOV->InsertText( "" );
 
-            SfxItemSet aOldSet( mpDoc->GetPool(), EE_CHAR_FONTINFO, EE_CHAR_FONTINFO, 0 );
+            SfxItemSet aOldSet( mpDoc->GetPool(), svl::Items<EE_CHAR_FONTINFO, EE_CHAR_FONTINFO>{} );
             aOldSet.Put( pOV->GetAttribs() );
 
             ::svl::IUndoManager& rUndoMgr =  pOL->GetUndoManager();

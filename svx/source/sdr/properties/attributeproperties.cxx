@@ -118,12 +118,9 @@ namespace sdr
             return o3tl::make_unique<SfxItemSet>(rPool,
 
                 // ranges from SdrAttrObj
-                SDRATTR_START, SDRATTR_SHADOW_LAST,
+                svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
                 SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
-
-                // end
-                0, 0);
+                SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION>{});
         }
 
         AttributeProperties::AttributeProperties(SdrObject& rObj)

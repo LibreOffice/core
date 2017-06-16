@@ -1124,14 +1124,13 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
         {
             pRet = o3tl::make_unique<SfxItemSet>(
                 SfxGetpApp()->GetPool(),
-                SID_ATTR_METRIC, SID_ATTR_SPELL,
+                svl::Items<SID_ATTR_METRIC, SID_ATTR_SPELL,
                 SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK,
                 SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER,
                 SID_ATTR_YEAR2000, SID_ATTR_YEAR2000,
-                SID_HTML_MODE, SID_HTML_MODE,
-                0 );
+                SID_HTML_MODE, SID_HTML_MODE>{} );
 
-            SfxItemSet aOptSet( SfxGetpApp()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER );
+            SfxItemSet aOptSet( SfxGetpApp()->GetPool(), svl::Items<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER>{} );
             SfxGetpApp()->GetOptions(aOptSet);
             pRet->Put(aOptSet);
 
@@ -1164,11 +1163,10 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
         case SID_LANGUAGE_OPTIONS :
         {
             pRet = o3tl::make_unique<SfxItemSet>(SfxGetpApp()->GetPool(),
-                    SID_ATTR_LANGUAGE, SID_AUTOSPELL_CHECK,
+                    svl::Items<SID_ATTR_LANGUAGE, SID_AUTOSPELL_CHECK,
                     SID_ATTR_CHAR_CJK_LANGUAGE, SID_ATTR_CHAR_CTL_LANGUAGE,
                     SID_OPT_LOCALE_CHANGED, SID_OPT_LOCALE_CHANGED,
-                    SID_SET_DOCUMENT_LANGUAGE, SID_SET_DOCUMENT_LANGUAGE,
-                    0 );
+                    SID_SET_DOCUMENT_LANGUAGE, SID_SET_DOCUMENT_LANGUAGE>{} );
 
             // for linguistic
 
@@ -1233,28 +1231,25 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
         break;
         case SID_INET_DLG :
                 pRet = o3tl::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(),
-                                SID_BASIC_ENABLED, SID_BASIC_ENABLED,
+                                svl::Items<SID_BASIC_ENABLED, SID_BASIC_ENABLED,
                 //SID_OPTIONS_START - ..END
                                 SID_SAVEREL_INET, SID_SAVEREL_FSYS,
                                 SID_INET_NOPROXY, SID_INET_FTP_PROXY_PORT,
-                                SID_SECURE_URL, SID_SECURE_URL,
-                                0L );
+                                SID_SECURE_URL, SID_SECURE_URL>{} );
                 SfxGetpApp()->GetOptions(*pRet);
         break;
         case SID_FILTER_DLG:
             pRet = o3tl::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(),
-            SID_ATTR_DOCINFO, SID_ATTR_AUTOSAVEMINUTE,
+            svl::Items<SID_ATTR_DOCINFO, SID_ATTR_AUTOSAVEMINUTE,
             SID_SAVEREL_INET, SID_SAVEREL_FSYS,
             SID_ATTR_PRETTYPRINTING, SID_ATTR_PRETTYPRINTING,
-            SID_ATTR_WARNALIENFORMAT, SID_ATTR_WARNALIENFORMAT,
-            0 );
+            SID_ATTR_WARNALIENFORMAT, SID_ATTR_WARNALIENFORMAT>{} );
             SfxGetpApp()->GetOptions(*pRet);
             break;
 
         case SID_SB_STARBASEOPTIONS:
             pRet = o3tl::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(),
-            SID_SB_POOLING_ENABLED, SID_SB_DB_REGISTER,
-            0 );
+            svl::Items<SID_SB_POOLING_ENABLED, SID_SB_DB_REGISTER>{} );
             ::offapp::ConnectionPoolConfig::GetOptions(*pRet);
             svx::DbRegisteredNamesConfig::GetOptions(*pRet);
             break;
@@ -1262,7 +1257,7 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
         case SID_SCH_EDITOPTIONS:
         {
             SvxChartOptions aChartOpt;
-            pRet = o3tl::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(), SID_SCH_EDITOPTIONS, SID_SCH_EDITOPTIONS );
+            pRet = o3tl::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(), svl::Items<SID_SCH_EDITOPTIONS, SID_SCH_EDITOPTIONS>{} );
             pRet->Put( SvxChartColorTableItem( SID_SCH_EDITOPTIONS, aChartOpt.GetDefaultColors() ) );
             break;
         }
@@ -1278,7 +1273,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
         {
             utl::MiscCfg    aMisc;
             const SfxPoolItem* pItem = nullptr;
-            SfxItemSet aOptSet(SfxGetpApp()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER );
+            SfxItemSet aOptSet(SfxGetpApp()->GetPool(), svl::Items<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER>{} );
             aOptSet.Put(rSet);
             if(aOptSet.Count())
                 SfxGetpApp()->SetOptions( aOptSet );

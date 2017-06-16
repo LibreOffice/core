@@ -60,7 +60,7 @@ SdUnoPageBackground::SdUnoPageBackground(
     if( pDoc )
     {
         StartListening( *pDoc );
-        mpSet = o3tl::make_unique<SfxItemSet>( pDoc->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST );
+        mpSet = o3tl::make_unique<SfxItemSet>( pDoc->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{} );
 
         if( pSet )
             mpSet->Put(*pSet);
@@ -101,7 +101,7 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
         StartListening( *pDoc );
         mpDoc = pDoc;
 
-        mpSet = o3tl::make_unique<SfxItemSet>( *rSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST );
+        mpSet = o3tl::make_unique<SfxItemSet>( *rSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{} );
 
         if( mpPropSet->AreThereOwnUsrAnys() )
         {
@@ -228,7 +228,7 @@ void SAL_CALL SdUnoPageBackground::setPropertyValue( const OUString& aPropertyNa
             }
 
             SfxItemPool& rPool = *mpSet->GetPool();
-            SfxItemSet aSet( rPool, pEntry->nWID, pEntry->nWID);
+            SfxItemSet aSet( rPool, {{pEntry->nWID, pEntry->nWID}});
             aSet.Put( *mpSet );
 
             if( !aSet.Count() )
@@ -290,7 +290,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& Propert
             else
             {
                 SfxItemPool& rPool = *mpSet->GetPool();
-                SfxItemSet aSet( rPool, pEntry->nWID, pEntry->nWID);
+                SfxItemSet aSet( rPool, {{pEntry->nWID, pEntry->nWID}});
                 aSet.Put( *mpSet );
 
                 if( !aSet.Count() )
@@ -418,7 +418,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aProp
         else
         {
             SfxItemPool& rPool = *mpSet->GetPool();
-            SfxItemSet aSet( rPool, pEntry->nWID, pEntry->nWID);
+            SfxItemSet aSet( rPool, {{pEntry->nWID, pEntry->nWID}});
             aSet.Put( rPool.GetDefaultItem( pEntry->nWID ) );
 
             aAny = SvxItemPropertySet_getPropertyValue( pEntry, aSet );

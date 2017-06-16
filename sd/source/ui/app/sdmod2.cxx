@@ -442,7 +442,7 @@ std::unique_ptr<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
     rPool.SetDefaultMetric( MapUnit::Map100thMM );
 
     auto pRet = o3tl::make_unique<SfxItemSet>( rPool,
-                        SID_ATTR_METRIC, SID_ATTR_METRIC,
+                        svl::Items<SID_ATTR_METRIC, SID_ATTR_METRIC,
                         SID_ATTR_DEFTABSTOP, SID_ATTR_DEFTABSTOP,
 
                         ATTR_OPTIONS_LAYOUT, ATTR_OPTIONS_LAYOUT,
@@ -455,8 +455,7 @@ std::unique_ptr<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
 
                         ATTR_OPTIONS_PRINT, ATTR_OPTIONS_PRINT,
 
-                        SID_ATTR_GRID_OPTIONS, SID_ATTR_GRID_OPTIONS,
-                        0 );
+                        SID_ATTR_GRID_OPTIONS, SID_ATTR_GRID_OPTIONS>{} );
 
     // TP_OPTIONS_LAYOUT:
     pRet->Put( SdOptionsLayoutItem( pOptions, pFrameView ) );
@@ -628,10 +627,9 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     }
 
     SfxItemSet aPrintSet( GetPool(),
-                    SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
+                    svl::Items<SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
                     SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
-                    ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT,
-                    0 );
+                    ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT>{} );
 
     // Print
     const SdOptionsPrintItem* pPrintItem = nullptr;

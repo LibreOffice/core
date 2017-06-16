@@ -60,7 +60,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
 {
     PresentationSettings& rPresentationSettings = mpDoc->getPresentationSettings();
 
-    SfxItemSet      aDlgSet( mpDoc->GetPool(), ATTR_PRESENT_START, ATTR_PRESENT_END );
+    SfxItemSet      aDlgSet( mpDoc->GetPool(), svl::Items<ATTR_PRESENT_START, ATTR_PRESENT_END>{} );
     std::vector<OUString> aPageNameList(mpDoc->GetSdPageCount( PageKind::Standard ));
     const OUString& rPresPage = rPresentationSettings.maPresPage;
     OUString        aFirstPage;

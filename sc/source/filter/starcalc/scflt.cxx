@@ -760,12 +760,11 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
             pSet->Put( aHeaderItem );
 
             SfxItemSet aSetItemItemSet( *pDoc->GetPool(),
-                                  ATTR_BACKGROUND, ATTR_BACKGROUND,
+                                  svl::Items<ATTR_BACKGROUND, ATTR_BACKGROUND,
                                   ATTR_BORDER, ATTR_SHADOW,
                                   ATTR_PAGE_SIZE, ATTR_PAGE_SIZE,
                                   ATTR_LRSPACE, ATTR_ULSPACE,
-                                  ATTR_PAGE_ON, ATTR_PAGE_SHARED,
-                                  0 );
+                                  ATTR_PAGE_ON, ATTR_PAGE_SHARED>{} );
             nColor = pHeadFootLine->BackColor;
             Color aBColor( nColor.Red, nColor.Green, nColor.Blue );
             nColor = pHeadFootLine->RasterColor;

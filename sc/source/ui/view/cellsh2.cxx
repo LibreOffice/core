@@ -478,7 +478,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     if( lcl_GetSortParam( pData, aSortParam ) )
                     {
                         ScDocument* pDoc = GetViewData()->GetDocument();
-                        SfxItemSet  aArgSet( GetPool(), SCITEM_SORTDATA, SCITEM_SORTDATA );
+                        SfxItemSet  aArgSet( GetPool(), svl::Items<SCITEM_SORTDATA, SCITEM_SORTDATA>{} );
 
                         pDBData->GetSortParam( aSortParam );
                         bool bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, pData->GetTabNo() );

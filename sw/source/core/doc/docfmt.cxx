@@ -110,16 +110,16 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
 
         // remove unused attribute RES_LR_SPACE
         // add list attributes
-        SfxItemSet aSavedAttrsSet(pDoc->GetAttrPool(), RES_PAGEDESC, RES_BREAK,
+        SfxItemSet aSavedAttrsSet(pDoc->GetAttrPool(), svl::Items<RES_PAGEDESC, RES_BREAK,
                                   RES_PARATR_NUMRULE, RES_PARATR_NUMRULE,
                                   RES_PARATR_LIST_BEGIN,
-                                  RES_PARATR_LIST_END - 1, 0);
+                                  RES_PARATR_LIST_END - 1>{});
         const SfxItemSet* pAttrSetOfNode = pNode->GetpSwAttrSet();
 
         std::vector<sal_uInt16> aClearWhichIds;
         // restoring all paragraph list attributes
         {
-            SfxItemSet aListAttrSet( pDoc->GetAttrPool(), RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1 );
+            SfxItemSet aListAttrSet( pDoc->GetAttrPool(), svl::Items<RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1>{} );
             aListAttrSet.Set(*pAttrSetOfNode);
             if ( aListAttrSet.Count() )
             {
@@ -425,7 +425,7 @@ bool SwDoc::UpdateRsid( const SwPaM &rRg, const sal_Int32 nLen )
     const sal_Int32 nStart(rRg.GetPoint()->nContent.GetIndex() - nLen);
     SvxRsidItem aRsid( mnRsid, RES_CHRATR_RSID );
 
-    SfxItemSet aSet(GetAttrPool(), RES_CHRATR_RSID, RES_CHRATR_RSID);
+    SfxItemSet aSet(GetAttrPool(), svl::Items<RES_CHRATR_RSID, RES_CHRATR_RSID>{});
     aSet.Put(aRsid);
     bool const bRet(pTextNode->SetAttr(aSet, nStart,
         rRg.GetPoint()->nContent.GetIndex()));
@@ -462,7 +462,7 @@ bool SwDoc::UpdateParRsid( SwTextNode *pTextNode, sal_uInt32 nVal )
 /// If Undo is enabled, the old values is added to the Undo history.
 void SwDoc::SetAttr( const SfxPoolItem& rAttr, SwFormat& rFormat )
 {
-    SfxItemSet aSet( GetAttrPool(), rAttr.Which(), rAttr.Which() );
+    SfxItemSet aSet( GetAttrPool(), {{rAttr.Which(), rAttr.Which()}} );
     aSet.Put( rAttr );
     SetAttr( aSet, rFormat );
 }
@@ -540,7 +540,7 @@ static bool lcl_SetNewDefTabStops( SwTwips nOldWidth, SwTwips nNewWidth,
 /// If Undo is enabled, the old value is added to the Undo history.
 void SwDoc::SetDefault( const SfxPoolItem& rAttr )
 {
-    SfxItemSet aSet( GetAttrPool(), rAttr.Which(), rAttr.Which() );
+    SfxItemSet aSet( GetAttrPool(), {{rAttr.Which(), rAttr.Which()}} );
     aSet.Put( rAttr );
     SetDefault( aSet );
 }

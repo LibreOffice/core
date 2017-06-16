@@ -405,7 +405,7 @@ namespace SwLangHelper
     ///     RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_LANGUAGE,
     LanguageType GetLanguage( SwWrtShell &rSh, sal_uInt16 nLangWhichId )
     {
-        SfxItemSet aSet( rSh.GetAttrPool(), nLangWhichId, nLangWhichId );
+        SfxItemSet aSet( rSh.GetAttrPool(), {{nLangWhichId, nLangWhichId}} );
         rSh.GetCurAttr( aSet );
 
         return GetLanguage(aSet,nLangWhichId);

@@ -468,9 +468,8 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         mpRemember2DAttributes->ClearItem();
     else
         mpRemember2DAttributes = o3tl::make_unique<SfxItemSet>(*rAttrs.GetPool(),
-            SDRATTR_START, SDRATTR_SHADOW_LAST,
-            SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
-            0, 0);
+            svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
+            SDRATTR_3D_FIRST, SDRATTR_3D_LAST>{});
 
     SfxWhichIter aIter(*mpRemember2DAttributes);
     sal_uInt16 nWhich(aIter.FirstWhich());
@@ -2793,7 +2792,7 @@ void Svx3DWin::UpdatePreview()
         pModel = new FmFormModel();
 
     // Get Itemset
-    SfxItemSet aSet( pModel->GetItemPool(), SDRATTR_START, SDRATTR_END);
+    SfxItemSet aSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{});
 
     // Get Attributes and set the preview
     GetAttr( aSet );

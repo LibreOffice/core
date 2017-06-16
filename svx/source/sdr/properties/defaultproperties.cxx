@@ -96,7 +96,7 @@ namespace sdr
                 ItemChange(nWhichID, &rItem);
                 PostItemChange(nWhichID);
 
-                SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), nWhichID, nWhichID);
+                SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), {{nWhichID, nWhichID}});
                 aSet.Put(rItem);
                 ItemSetChanged(aSet);
             }
@@ -121,7 +121,7 @@ namespace sdr
 
                 if(nWhich)
                 {
-                    SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), nWhich, nWhich, 0, 0);
+                    SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), {{nWhich, nWhich}});
                     ItemSetChanged(aSet);
                 }
             }
@@ -142,7 +142,7 @@ namespace sdr
             const SfxPoolItem *pPoolItem;
             std::vector< sal_uInt16 > aPostItemChangeList;
             bool bDidChange(false);
-            SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), SDRATTR_START, EE_ITEMS_END);
+            SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), svl::Items<SDRATTR_START, EE_ITEMS_END>{});
 
             // give a hint to STL_Vector
             aPostItemChangeList.reserve(rSet.Count());

@@ -108,7 +108,7 @@ bool SwMacroAssignDlg::INetFormatDlg( vcl::Window* pParent, SwWrtShell& rSh,
                                     SvxMacroItem*& rpINetItem )
 {
     bool bRet = false;
-    SfxItemSet aSet( rSh.GetAttrPool(), RES_FRMMACRO, RES_FRMMACRO, SID_EVENTCONFIG, SID_EVENTCONFIG, 0 );
+    SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_FRMMACRO, RES_FRMMACRO, SID_EVENTCONFIG, SID_EVENTCONFIG>{} );
     SvxMacroItem aItem( RES_FRMMACRO );
     if( !rpINetItem )
         rpINetItem = new SvxMacroItem( RES_FRMMACRO );

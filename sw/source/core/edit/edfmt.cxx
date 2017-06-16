@@ -42,8 +42,8 @@ SwCharFormat& SwEditShell::GetCharFormat(sal_uInt16 nFormat) const
 SwCharFormat* SwEditShell::GetCurCharFormat() const
 {
     SwCharFormat *pFormat = nullptr;
-    SfxItemSet aSet( GetDoc()->GetAttrPool(), RES_TXTATR_CHARFMT,
-                                                RES_TXTATR_CHARFMT );
+    SfxItemSet aSet( GetDoc()->GetAttrPool(), svl::Items<RES_TXTATR_CHARFMT,
+                                                RES_TXTATR_CHARFMT>{} );
     const SfxPoolItem* pItem;
     if( GetCurAttr( aSet ) && SfxItemState::SET ==
         aSet.GetItemState( RES_TXTATR_CHARFMT, false, &pItem ) )

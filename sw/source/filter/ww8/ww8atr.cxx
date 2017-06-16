@@ -782,10 +782,9 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
             {
                 const SwFrameFormat &rFrameFormat = m_pParentFrame->GetFrameFormat();
 
-                SfxItemSet aSet(m_pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
+                SfxItemSet aSet(m_pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN,
                     RES_FRMATR_END-1,
-                    XATTR_FILL_FIRST, XATTR_FILL_LAST,
-                    0);
+                    XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
                 aSet.Set(rFrameFormat.GetAttrSet());
 
                 // Fly as character becomes a paragraph bound
@@ -3064,8 +3063,8 @@ void WW8Export::WriteFootnoteBegin( const SwFormatFootnote& rFootnote, ww::bytes
         {
             ww::bytes* pOld = pO;
             pO = &aOutArr;
-            SfxItemSet aSet( m_pDoc->GetAttrPool(), RES_CHRATR_FONT,
-                                                  RES_CHRATR_FONT );
+            SfxItemSet aSet( m_pDoc->GetAttrPool(), svl::Items<RES_CHRATR_FONT,
+                                                  RES_CHRATR_FONT>{} );
 
             pCFormat = pInfo->GetCharFormat( *m_pDoc );
             aSet.Set( pCFormat->GetAttrSet() );

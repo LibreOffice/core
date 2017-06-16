@@ -632,8 +632,8 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
         // Copy the TableBoxAttributes - Formula/Format/Value
         if( pCpyBox )
         {
-            SfxItemSet aBoxAttrSet( pCpyDoc->GetAttrPool(), RES_BOXATR_FORMAT,
-                                                            RES_BOXATR_VALUE );
+            SfxItemSet aBoxAttrSet( pCpyDoc->GetAttrPool(), svl::Items<RES_BOXATR_FORMAT,
+                                                            RES_BOXATR_VALUE>{} );
             aBoxAttrSet.Put( pCpyBox->GetFrameFormat()->GetAttrSet() );
             if( aBoxAttrSet.Count() )
             {

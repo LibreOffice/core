@@ -1041,8 +1041,8 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
         bool bEdit = TAG_TEXTAREA == eTag || TYPE_FILE == eType ||
                      TYPE_TEXT == eType;
 
-        SfxItemSet aItemSet( rHTMLWrt.pDoc->GetAttrPool(), RES_CHRATR_BEGIN,
-                             RES_CHRATR_END );
+        SfxItemSet aItemSet( rHTMLWrt.pDoc->GetAttrPool(), svl::Items<RES_CHRATR_BEGIN,
+                             RES_CHRATR_END>{} );
         if( xPropSetInfo->hasPropertyByName( "BackgroundColor" ) )
         {
             aTmp = xPropSet->getPropertyValue( "BackgroundColor" );

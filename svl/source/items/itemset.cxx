@@ -20,8 +20,10 @@
 
 #include <string.h>
 
+#include <algorithm>
 #include <cassert>
-#include <cstdarg>
+#include <cstddef>
+
 #include <libxml/xmlwriter.h>
 
 #include <sal/log.hxx>
@@ -40,50 +42,6 @@ static const sal_uInt16 nInitCount = 10; // Single USHORTs => 5 pairs without '0
 
 namespace
 {
-
-/**
- * Creates a sal_uInt16-ranges-array in 'rpRanges' using 'nWh1' and 'nWh2' as
- * first range, 'nNull' as terminator or start of 2nd range and 'pArgs' as
- * remainder.
- *
- * It returns the number of sal_uInt16s which are contained in the described
- * set of sal_uInt16s.
- */
-sal_uInt16 InitializeRanges_Impl( sal_uInt16 *&rpRanges, va_list pArgs,
-                               sal_uInt16 nWh1, sal_uInt16 nWh2, sal_uInt16 nNull )
-{
-    sal_uInt16 nSize = 0, nIns = 0;
-    std::vector<sal_uInt16> aNumArr;
-    aNumArr.push_back( nWh1 );
-    aNumArr.push_back( nWh2 );
-    DBG_ASSERT( nWh1 <= nWh2, "Invalid range" );
-    nSize += nWh2 - nWh1 + 1;
-    aNumArr.push_back( nNull );
-    bool bEndOfRange = false;
-    while ( 0 !=
-            ( nIns =
-              sal::static_int_cast< sal_uInt16 >(
-                  va_arg( pArgs, int ) ) ) )
-    {
-        bEndOfRange = !bEndOfRange;
-        if ( bEndOfRange )
-        {
-            const sal_uInt16 nPrev(*aNumArr.rbegin());
-            DBG_ASSERT( nPrev <= nIns, "Invalid range" );
-            nSize += nIns - nPrev + 1;
-        }
-        aNumArr.push_back( nIns );
-    }
-
-    assert( bEndOfRange ); // odd number of WhichIds
-
-    // Now all ranges are present
-    rpRanges = new sal_uInt16[ aNumArr.size() + 1 ];
-    std::copy( aNumArr.begin(), aNumArr.end(), rpRanges);
-    *(rpRanges + aNumArr.size()) = 0;
-
-    return nSize;
-}
 
 /**
  * Determines the number of sal_uInt16s in a 0-terminated array of pairs of
@@ -143,52 +101,6 @@ SfxItemSet::SfxItemSet(SfxItemPool& rPool)
     m_pItems = new const SfxPoolItem*[nSize]{};
 }
 
-SfxItemSet::SfxItemSet(SfxItemPool& rPool, sal_uInt16 nWhich1, sal_uInt16 nWhich2)
-    : m_pPool( &rPool )
-    , m_pParent(nullptr)
-    , m_nCount(0)
-{
-    assert(nWhich1 <= nWhich2);
-
-    InitRanges_Impl(nWhich1, nWhich2);
-}
-
-void SfxItemSet::InitRanges_Impl(sal_uInt16 nWh1, sal_uInt16 nWh2)
-{
-    m_pWhichRanges = new sal_uInt16[3]{nWh1, nWh2, 0};
-    const sal_uInt16 nRg = nWh2 - nWh1 + 1;
-    m_pItems = new const SfxPoolItem*[nRg]{};
-}
-
-void SfxItemSet::InitRanges_Impl(va_list pArgs, sal_uInt16 nWh1, sal_uInt16 nWh2, sal_uInt16 nNull)
-{
-    sal_uInt16 nSize = InitializeRanges_Impl(m_pWhichRanges, pArgs, nWh1, nWh2, nNull);
-    m_pItems = new const SfxPoolItem*[nSize]{};
-}
-
-SfxItemSet::SfxItemSet(SfxItemPool& rPool, int nWh1, int nWh2, int nNull, ...)
-    : m_pPool( &rPool )
-    , m_pParent(nullptr)
-    , m_pWhichRanges(nullptr)
-    , m_nCount(0)
-{
-    assert(nWh1 <= nWh2);
-
-    if(!nNull)
-        InitRanges_Impl(
-            sal::static_int_cast< sal_uInt16 >(nWh1),
-            sal::static_int_cast< sal_uInt16 >(nWh2));
-    else {
-        va_list pArgs;
-        va_start( pArgs, nNull );
-        InitRanges_Impl(
-            pArgs, sal::static_int_cast< sal_uInt16 >(nWh1),
-            sal::static_int_cast< sal_uInt16 >(nWh2),
-            sal::static_int_cast< sal_uInt16 >(nNull));
-        va_end(pArgs);
-    }
-}
-
 void SfxItemSet::InitRanges_Impl(const sal_uInt16 *pWhichPairTable)
 {
     sal_uInt16 nCnt = 0;
@@ -204,6 +116,52 @@ void SfxItemSet::InitRanges_Impl(const sal_uInt16 *pWhichPairTable)
     std::ptrdiff_t cnt = pPtr - pWhichPairTable +1;
     m_pWhichRanges = new sal_uInt16[ cnt ];
     memcpy( m_pWhichRanges, pWhichPairTable, sizeof( sal_uInt16 ) * cnt );
+}
+
+SfxItemSet::SfxItemSet(
+    SfxItemPool & pool, std::initializer_list<sal_uInt16> wids,
+    std::size_t items):
+    m_pPool(&pool), m_pParent(nullptr),
+    m_pItems(new SfxPoolItem const *[items]{}),
+    m_pWhichRanges(new sal_uInt16[wids.size() + 1]),
+        // cannot overflow, assuming std::size_t is no smaller than sal_uInt16,
+        // as wids.size() must be substantially smaller than
+        // std::numeric_limits<sal_uInt16>::max() by construction in
+        // SfxItemSet::create
+    m_nCount(0)
+{
+    assert(wids.size() != 0);
+    assert(wids.size() % 2 == 0);
+    std::copy(wids.begin(), wids.end(), m_pWhichRanges);
+    m_pWhichRanges[wids.size()] = 0;
+}
+
+SfxItemSet::SfxItemSet(
+    SfxItemPool & pool, std::initializer_list<Pair> wids):
+    m_pPool(&pool), m_pParent(nullptr),
+    m_pWhichRanges(new sal_uInt16[2 * wids.size() + 1]), //TODO: overflow
+    m_nCount(0)
+{
+    assert(wids.size() != 0);
+    std::size_t i = 0;
+    std::size_t size = 0;
+#if !defined NDEBUG
+    sal_uInt16 prev = 0;
+#endif
+    for (auto const & p: wids) {
+        assert(svl::detail::validRange(p.wid1, p.wid2));
+        assert(prev == 0 || svl::detail::validGap(prev, p.wid1));
+        m_pWhichRanges[i++] = p.wid1;
+        m_pWhichRanges[i++] = p.wid2;
+        size += svl::detail::rangeSize(p.wid1, p.wid2);
+            // cannot overflow, assuming std::size_t is no smaller than
+            // sal_uInt16
+#if !defined NDEBUG
+        prev = p.wid2;
+#endif
+    }
+    m_pWhichRanges[i] = 0;
+    m_pItems = new SfxPoolItem const *[size]{};
 }
 
 SfxItemSet::SfxItemSet( SfxItemPool& rPool, const sal_uInt16* pWhichPairTable )

@@ -115,7 +115,7 @@ const XParaPortion& XParaPortionList::operator [](size_t i) const
 
 ContentInfo::ContentInfo( SfxItemPool& rPool ) :
     eFamily(SfxStyleFamily::Para),
-    aParaAttribs(rPool, EE_PARA_START, EE_CHAR_END)
+    aParaAttribs(rPool, svl::Items<EE_PARA_START, EE_CHAR_END>{})
 {
 }
 
@@ -124,7 +124,7 @@ ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse 
     maText(rCopyFrom.maText),
     aStyle(rCopyFrom.aStyle),
     eFamily(rCopyFrom.eFamily),
-    aParaAttribs(rPoolToUse, EE_PARA_START, EE_CHAR_END)
+    aParaAttribs(rPoolToUse, svl::Items<EE_PARA_START, EE_CHAR_END>{})
 {
     // this should ensure that the Items end up in the correct Pool!
     aParaAttribs.Set( rCopyFrom.GetParaAttribs() );
