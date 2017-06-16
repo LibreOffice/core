@@ -3781,7 +3781,7 @@ if test "$GCC" = "yes" -a -z "$COM_IS_CLANG"; then
     AC_MSG_CHECKING([the GCC version])
     _gcc_version=`$CC -dumpversion`
     gcc_full_version=$(printf '%s' "$_gcc_version" | \
-        $AWK -F. '{ print $1*10000+$2*100+$3 }')
+        $AWK -F. '{ print $1*10000+$2*100+(NF<3?1:$3) }')
     GCC_VERSION=`echo $_gcc_version | $AWK -F. '{ print \$1*100+\$2 }'`
 
     AC_MSG_RESULT([gcc $_gcc_version ($gcc_full_version)])
