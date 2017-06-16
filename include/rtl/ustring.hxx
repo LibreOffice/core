@@ -523,7 +523,7 @@ public:
       @exception std::bad_alloc is thrown if an out-of-memory condition occurs
     */
     OUString & operator+=( const OUString & str )
-#if defined LIBO_INTERNAL_ONLY && HAVE_CXX11_REF_QUALIFIER
+#if defined LIBO_INTERNAL_ONLY
         &
 #endif
     {
@@ -536,7 +536,7 @@ public:
         rtl_uString_release(pNewData);
         return *this;
     }
-#if defined LIBO_INTERNAL_ONLY && HAVE_CXX11_REF_QUALIFIER
+#if defined LIBO_INTERNAL_ONLY
     void operator+=(OUString const &) && = delete;
 #endif
 
@@ -549,7 +549,7 @@ public:
     template<typename T>
     typename libreoffice_internal::ConstCharArrayDetector<T, OUString &>::Type
     operator +=(T & literal)
-#if defined LIBO_INTERNAL_ONLY && HAVE_CXX11_REF_QUALIFIER
+#if defined LIBO_INTERNAL_ONLY
         &
 #endif
     {
@@ -561,7 +561,7 @@ public:
             libreoffice_internal::ConstCharArrayDetector<T>::length);
         return *this;
     }
-#if defined LIBO_INTERNAL_ONLY && HAVE_CXX11_REF_QUALIFIER
+#if defined LIBO_INTERNAL_ONLY
     template<typename T>
     typename libreoffice_internal::ConstCharArrayDetector<T, OUString &>::Type
     operator +=(T &) && = delete;
@@ -572,36 +572,24 @@ public:
     template<typename T>
     typename
         libreoffice_internal::ConstCharArrayDetector<T, OUString &>::TypeUtf16
-    operator +=(T & literal)
-#if HAVE_CXX11_REF_QUALIFIER
-        &
-#endif
-    {
+    operator +=(T & literal) & {
         rtl_uString_newConcatUtf16L(
             &pData, pData,
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
             libreoffice_internal::ConstCharArrayDetector<T>::length);
         return *this;
     }
-#if HAVE_CXX11_REF_QUALIFIER
     template<typename T>
     typename
         libreoffice_internal::ConstCharArrayDetector<T, OUString &>::TypeUtf16
     operator +=(T &) && = delete;
-#endif
 
     /** @overload @since LibreOffice 5.4 */
-    OUString & operator +=(OUStringLiteral const & literal)
-#if HAVE_CXX11_REF_QUALIFIER
-        &
-#endif
-    {
+    OUString & operator +=(OUStringLiteral const & literal) & {
         rtl_uString_newConcatAsciiL(&pData, pData, literal.data, literal.size);
         return *this;
     }
-#if HAVE_CXX11_REF_QUALIFIER
     void operator +=(OUStringLiteral const &) && = delete;
-#endif
 #endif
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
@@ -610,11 +598,7 @@ public:
      @internal
     */
     template< typename T1, typename T2 >
-    OUString& operator+=( const OUStringConcat< T1, T2 >& c )
-#if HAVE_CXX11_REF_QUALIFIER
-        &
-#endif
-    {
+    OUString& operator+=( const OUStringConcat< T1, T2 >& c ) & {
         sal_Int32 l = c.length();
         if( l == 0 )
             return *this;
@@ -625,10 +609,8 @@ public:
         pData->length = l;
         return *this;
     }
-#if HAVE_CXX11_REF_QUALIFIER
     template<typename T1, typename T2> void operator +=(
         OUStringConcat<T1, T2> const &) && = delete;
-#endif
 #endif
 
     /**

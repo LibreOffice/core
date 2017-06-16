@@ -6228,8 +6228,8 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 AC_LANG_POP([C++])
 CXXFLAGS=$save_CXXFLAGS
 AC_MSG_RESULT([$cxx11_ref_qualifier])
-if test "$cxx11_ref_qualifier" = yes; then
-    AC_DEFINE([HAVE_CXX11_REF_QUALIFIER])
+if test "$cxx11_ref_qualifier" = no; then
+    AC_MSG_ERROR([Your $CXX does not support C++11 ref-qualifiers. This is no longer supported.])
 fi
 
 dnl _Pragma support (may require C++11)
