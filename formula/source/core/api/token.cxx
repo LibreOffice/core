@@ -479,7 +479,7 @@ FormulaToken* FormulaTokenArray::FirstToken() const
     return pCode[0];
 }
 
-FormulaToken* FormulaTokenArray::PeekPrev( sal_uInt16 & nIdx )
+FormulaToken* FormulaTokenArray::PeekPrev( sal_uInt16 & nIdx ) const
 {
     if (0 < nIdx && nIdx <= nLen)
         return pCode[--nIdx];

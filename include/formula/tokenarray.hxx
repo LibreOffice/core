@@ -114,7 +114,6 @@ typedef std::unordered_set<OpCode, std::hash<std::underlying_type<OpCode>::type>
 
 class FORMULA_DLLPUBLIC FormulaTokenArray
 {
-    friend class FormulaCompiler;
     friend class FormulaTokenIterator;
     friend class FormulaTokenArrayPlainIterator;
     friend class FormulaMissingContext;
@@ -145,7 +144,6 @@ public:
         CODE_AND_RPN    ///< replacement in pCode and pRPN
     };
 
-protected:
     /** Also used by the compiler. The token MUST had been allocated with new!
         @param  nOffset
                 Absolute offset in pCode of the token to be replaced.
@@ -182,7 +180,6 @@ protected:
     void            SetMaskedRecalcMode( ScRecalcMode nBits )
                                 { nMode = GetCombinedBitsRecalcMode() | nBits; }
 
-public:
     FormulaTokenArray();
     /// Assignment with references to FormulaToken entries (not copied!)
     FormulaTokenArray( const FormulaTokenArray& );
@@ -204,8 +201,27 @@ public:
     void Clear();
     void DelRPN();
     FormulaToken* FirstToken() const;
+
+    /// Return pCode[nIdx], or nullptr if nIdx is out of bounds
+    FormulaToken* TokenAt( sal_uInt16 nIdx) const
+    {
+        if (nIdx >= nLen)
+            return nullptr;
+        return pCode[nIdx];
+    }
+
     /// Peek at nIdx-1 if not out of bounds, decrements nIdx if successful. Returns NULL if not.
-    FormulaToken* PeekPrev( sal_uInt16 & nIdx );
+    FormulaToken* PeekPrev( sal_uInt16 & nIdx ) const;
+
+    /// Return the opcode at pCode[nIdx-1], ocNone if nIdx-1 is out of bounds
+    OpCode OpCodeBefore( sal_uInt16 nIdx) const
+    {
+        if (nIdx == 0 || nIdx > nLen)
+            return ocNone;
+
+        return pCode[nIdx-1]->GetOpCode();
+    }
+
     FormulaToken* FirstRPNToken() const;
 
     bool HasReferences() const;
@@ -225,6 +241,14 @@ public:
      *         opcode tokens, false otherwise.
      */
     bool HasOpCodes( const unordered_opcode_set& rOpCodes ) const;
+
+    /// Assign pRPN to point to a newly created array filled with the data from pData
+    void CreateNewRPNArrayFromData( FormulaToken** pData, sal_uInt16 nSize )
+    {
+        pRPN = new FormulaToken*[ nSize ];
+        nRPN = nSize;
+        memcpy( pRPN, pData, nSize * sizeof( FormulaToken* ) );
+    }
 
     FormulaToken** GetArray() const  { return pCode; }
     FormulaToken** GetCode()  const  { return pRPN; }
