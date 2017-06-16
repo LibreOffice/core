@@ -2854,6 +2854,16 @@ DECLARE_RTFIMPORT_TEST(testTdf106950, "tdf106950.rtf")
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, "ParaAdjust")));
 }
 
+DECLARE_RTFIMPORT_TEST(testWatermark, "watermark.rtf")
+{
+    Size aExpectedSize(14965, 7482);
+    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    awt::Size aActualSize(xShape->getSize());
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(aExpectedSize.Width()), aActualSize.Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(aExpectedSize.Height()), aActualSize.Height);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
