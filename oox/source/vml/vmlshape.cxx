@@ -1163,7 +1163,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
                 // set the replacement graphic
                 if( !aGraphicPath.isEmpty() )
                 {
-                    WMF_EXTERNALHEADER aExtHeader;
+                    WmfExternal aExtHeader;
                     aExtHeader.mapMode = 8;
                     aExtHeader.xExt = rShapeRect.Width;
                     aExtHeader.yExt = rShapeRect.Height;

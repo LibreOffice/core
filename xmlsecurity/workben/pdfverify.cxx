@@ -37,7 +37,7 @@ void generatePreview(const OString& rPdfPath, const OString& rPngPath)
     OUString aInURL;
     osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(rPdfPath), aInURL);
     SvFileStream aInStream(aInURL, StreamMode::READ);
-    WMF_EXTERNALHEADER* pExtHeader = nullptr;
+    WmfExternal* pExtHeader = nullptr;
     if (rFilter.ImportGraphic(aGraphic, OUString(), aInStream, GRFILTER_FORMAT_DONTKNOW, nullptr, GraphicFilterImportFlags::NONE, pExtHeader) != ERRCODE_NONE)
         return;
 

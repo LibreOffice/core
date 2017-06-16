@@ -17,23 +17,39 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_WMF_HXX
-#define INCLUDED_VCL_WMF_HXX
+#ifndef INCLUDED_VCL_WMFEXTERNAL_HXX
+#define INCLUDED_VCL_WMFEXTERNAL_HXX
 
 #include <vcl/dllapi.h>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
-class FilterConfigItem;
-class GDIMetaFile;
-class SvStream;
-struct WmfExternal;
+struct VCL_DLLPUBLIC WmfExternal
+{
+    sal_uInt16 xExt;
+    sal_uInt16 yExt;
 
-VCL_DLLPUBLIC bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF );
+    /** One of the following values:
+        <ul>
+            <li>MM_TEXT</li>
+            <li>MM_LOMETRIC</li>
+            <li>MM_HIMETRIC</li>
+            <li>MM_LOENGLISH</li>
+            <li>MM_HIENGLISH</li>
+            <li>MM_TWIPS</li>
+            <li>MM_ISOTROPIC</li>
+            <li>MM_ANISOTROPIC</li>
+        </ul>
+        If this value is 0, then no external mapmode has been defined,
+        the internal one should then be used.
+     */
+    sal_uInt16 mapMode;
 
-VCL_DLLPUBLIC bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream, FilterConfigItem* pConfigItem, bool bPlaceable = true );
-
-bool ConvertGDIMetaFileToEMF(const GDIMetaFile & rMTF, SvStream & rTargetStream);
-
-VCL_DLLPUBLIC bool WriteWindowMetafileBits( SvStream& rStream, const GDIMetaFile& rMTF );
+    WmfExternal();
+    css::uno::Sequence< css::beans::PropertyValue > getSequence() const;
+    bool setSequence(const css::uno::Sequence< css::beans::PropertyValue >& rSequence);
+};
 
 #endif
 

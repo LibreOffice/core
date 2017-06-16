@@ -1288,7 +1288,7 @@ OUString Shape::finalizeServiceName( XmlFilterBase& rFilter, const OUString& rSe
             if( !aGraphicPath.isEmpty() )
             {
                 // Transfer shape's width and height to graphicsfilter (can be used by WMF/EMF)
-                WMF_EXTERNALHEADER aExtHeader;
+                WmfExternal aExtHeader;
                 aExtHeader.mapMode = 8; // MM_ANISOTROPIC
                 aExtHeader.xExt = rShapeRect.Width;
                 aExtHeader.yExt = rShapeRect.Height;
