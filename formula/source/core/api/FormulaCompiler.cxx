@@ -1300,7 +1300,7 @@ bool FormulaCompiler::GetToken()
             if ( nWasColRowName >= 2 && mpToken->GetOpCode() == ocColRowName )
             {   // convert an ocSpaces to ocIntersect in RPN
                 mpLastToken = mpToken = new FormulaByteToken( ocIntersect );
-                maArrIterator.mnIndex--;     // we advanced to the second ocColRowName, step back
+                maArrIterator.StepBack();     // we advanced to the second ocColRowName, step back
             }
             else if (pSpacesToken && FormulaGrammar::isExcelSyntax( meGrammar) &&
                     mpLastToken && mpToken &&
@@ -1310,7 +1310,7 @@ bool FormulaCompiler::GetToken()
                 // Let IntersectionLine() <- Factor() decide how to treat this,
                 // once the actual arguments are determined in RPN.
                 mpLastToken = mpToken = pSpacesToken;
-                maArrIterator.mnIndex--;     // step back from next non-spaces token
+                maArrIterator.StepBack();     // step back from next non-spaces token
                 return true;
             }
         }
@@ -1498,7 +1498,7 @@ void FormulaCompiler::Factor()
                 else
                     SetError( FormulaError::PairExpected);
                 sal_uInt8 nSepCount = 0;
-                const sal_uInt16 nSepPos = maArrIterator.mnIndex - 1;    // separator position, if any
+                const sal_uInt16 nSepPos = maArrIterator.GetIndex() - 1;    // separator position, if any
                 if( !bNoParam )
                 {
                     nSepCount++;
@@ -1525,7 +1525,7 @@ void FormulaCompiler::Factor()
                     // Current index is nSepPos+3 if expression stops, or
                     // nSepPos+4 if expression continues after the call because
                     // we just called NextToken() to move away from it.
-                    if (pc >= 2 && (maArrIterator.mnIndex == nSepPos + 3 || maArrIterator.mnIndex == nSepPos + 4) &&
+                    if (pc >= 2 && (maArrIterator.GetIndex() == nSepPos + 3 || maArrIterator.GetIndex() == nSepPos + 4) &&
                             pArr->TokenAt(nSepPos+1)->GetType() == svDouble &&
                             pArr->TokenAt(nSepPos+1)->GetDouble() != 1.0 &&
                             pArr->TokenAt(nSepPos+2)->GetOpCode() == ocClose &&
@@ -1788,7 +1788,7 @@ void FormulaCompiler::IntersectionLine()
     RangeLine();
     while (mpToken->GetOpCode() == ocIntersect || mpToken->GetOpCode() == ocSpaces)
     {
-        sal_uInt16 nCodeIndex = maArrIterator.mnIndex - 1;
+        sal_uInt16 nCodeIndex = maArrIterator.GetIndex() - 1;
         FormulaToken** pCode1 = pCode - 1;
         FormulaTokenRef p = mpToken;
         NextToken();

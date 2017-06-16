@@ -1536,15 +1536,15 @@ void FormulaTokenIterator::Reset()
 
 FormulaToken* FormulaTokenArrayPlainIterator::GetNextName()
 {
-    if( mpFTA->pCode )
+    if( mpFTA->GetArray() )
     {
-        while ( mnIndex < mpFTA->nLen )
+        while ( mnIndex < mpFTA->GetLen() )
         {
-            FormulaToken* t = mpFTA->pCode[ mnIndex++ ];
+            FormulaToken* t = mpFTA->GetArray()[ mnIndex++ ];
             if( t->GetType() == svIndex )
                 return t;
         }
-    } // if( pCode )
+    }
     return nullptr;
 }
 
@@ -1595,9 +1595,9 @@ const FormulaToken* FormulaTokenIterator::GetNonEndOfPathToken( short nIdx ) con
 {
     FormulaTokenIterator::Item cur = maStack.back();
 
-    if (nIdx < cur.pArr->nRPN && nIdx < cur.nStop)
+    if (nIdx < cur.pArr->GetCodeLen() && nIdx < cur.nStop)
     {
-        const FormulaToken* t = cur.pArr->pRPN[ nIdx ];
+        const FormulaToken* t = cur.pArr->GetCode()[ nIdx ];
         // such an OpCode ends an IF() or CHOOSE() path
         return (t->GetOpCode() == ocSep || t->GetOpCode() == ocClose) ? nullptr : t;
     }
@@ -1611,9 +1611,9 @@ bool FormulaTokenIterator::IsEndOfPath() const
 
 FormulaToken* FormulaTokenArrayPlainIterator::GetNextReference()
 {
-    while( mnIndex < mpFTA->nLen )
+    while( mnIndex < mpFTA->GetLen() )
     {
-        FormulaToken* t = mpFTA->pCode[ mnIndex++ ];
+        FormulaToken* t = mpFTA->GetArray()[ mnIndex++ ];
         switch( t->GetType() )
         {
             case svSingleRef:
@@ -1632,9 +1632,9 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextReference()
 
 FormulaToken* FormulaTokenArrayPlainIterator::GetNextColRowName()
 {
-    while( mnIndex < mpFTA->nLen )
+    while( mnIndex < mpFTA->GetLen() )
     {
-        FormulaToken* t = mpFTA->pCode[ mnIndex++ ];
+        FormulaToken* t = mpFTA->GetArray()[ mnIndex++ ];
         if ( t->GetOpCode() == ocColRowName )
             return t;
     }
@@ -1643,9 +1643,9 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextColRowName()
 
 FormulaToken* FormulaTokenArrayPlainIterator::GetNextReferenceRPN()
 {
-    while( mnIndex < mpFTA->nRPN )
+    while( mnIndex < mpFTA->GetCodeLen() )
     {
-        FormulaToken* t = mpFTA->pRPN[ mnIndex++ ];
+        FormulaToken* t = mpFTA->GetCode()[ mnIndex++ ];
         switch( t->GetType() )
         {
             case svSingleRef:
@@ -1664,11 +1664,11 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextReferenceRPN()
 
 FormulaToken* FormulaTokenArrayPlainIterator::GetNextReferenceOrName()
 {
-    if( mpFTA->pCode )
+    if( mpFTA->GetArray() )
     {
-        while ( mnIndex < mpFTA->nLen )
+        while ( mnIndex < mpFTA->GetLen() )
         {
-            FormulaToken* t = mpFTA->pCode[ mnIndex++ ];
+            FormulaToken* t = mpFTA->GetArray()[ mnIndex++ ];
             switch( t->GetType() )
             {
                 case svSingleRef:
@@ -1690,57 +1690,57 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextReferenceOrName()
 
 FormulaToken* FormulaTokenArrayPlainIterator::Next()
 {
-    if( mpFTA->pCode && mnIndex < mpFTA->nLen )
-        return mpFTA->pCode[ mnIndex++ ];
+    if( mpFTA->GetArray() && mnIndex < mpFTA->GetLen() )
+        return mpFTA->GetArray()[ mnIndex++ ];
     else
         return nullptr;
 }
 
 FormulaToken* FormulaTokenArrayPlainIterator::NextNoSpaces()
 {
-    if( mpFTA->pCode )
+    if( mpFTA->GetArray() )
     {
-        while( (mnIndex < mpFTA->nLen) && (mpFTA->pCode[ mnIndex ]->GetOpCode() == ocSpaces) )
+        while( (mnIndex < mpFTA->GetLen()) && (mpFTA->GetArray()[ mnIndex ]->GetOpCode() == ocSpaces) )
             ++mnIndex;
-        if( mnIndex < mpFTA->nLen )
-            return mpFTA->pCode[ mnIndex++ ];
+        if( mnIndex < mpFTA->GetLen() )
+            return mpFTA->GetArray()[ mnIndex++ ];
     }
     return nullptr;
 }
 
 FormulaToken* FormulaTokenArrayPlainIterator::NextRPN()
 {
-    if( mpFTA->pRPN && mnIndex < mpFTA->nRPN )
-        return mpFTA->pRPN[ mnIndex++ ];
+    if( mpFTA->GetCode() && mnIndex < mpFTA->GetCodeLen() )
+        return mpFTA->GetCode()[ mnIndex++ ];
     else
         return nullptr;
 }
 
 FormulaToken* FormulaTokenArrayPlainIterator::PrevRPN()
 {
-    if( mpFTA->pRPN && mnIndex )
-        return mpFTA->pRPN[ --mnIndex ];
+    if( mpFTA->GetCode() && mnIndex )
+        return mpFTA->GetCode()[ --mnIndex ];
     else
         return nullptr;
 }
 
 FormulaToken* FormulaTokenArrayPlainIterator::PeekNext()
 {
-    if( mpFTA->pCode && mnIndex < mpFTA->nLen )
-        return mpFTA->pCode[ mnIndex ];
+    if( mpFTA->GetArray() && mnIndex < mpFTA->GetLen() )
+        return mpFTA->GetArray()[ mnIndex ];
     else
         return nullptr;
 }
 
 FormulaToken* FormulaTokenArrayPlainIterator::PeekNextNoSpaces() const
 {
-    if( mpFTA->pCode && mnIndex < mpFTA->nLen )
+    if( mpFTA->GetArray() && mnIndex < mpFTA->GetLen() )
     {
         sal_uInt16 j = mnIndex;
-        while ( j < mpFTA->nLen && mpFTA->pCode[j]->GetOpCode() == ocSpaces )
+        while ( j < mpFTA->GetLen() && mpFTA->GetArray()[j]->GetOpCode() == ocSpaces )
             j++;
-        if ( j < mpFTA->nLen )
-            return mpFTA->pCode[ j ];
+        if ( j < mpFTA->GetLen() )
+            return mpFTA->GetArray()[ j ];
         else
             return nullptr;
     }
@@ -1750,13 +1750,13 @@ FormulaToken* FormulaTokenArrayPlainIterator::PeekNextNoSpaces() const
 
 FormulaToken* FormulaTokenArrayPlainIterator::PeekPrevNoSpaces() const
 {
-    if( mpFTA->pCode && mnIndex > 1 )
+    if( mpFTA->GetArray() && mnIndex > 1 )
     {
         sal_uInt16 j = mnIndex - 2;
-        while ( mpFTA->pCode[j]->GetOpCode() == ocSpaces && j > 0 )
+        while ( mpFTA->GetArray()[j]->GetOpCode() == ocSpaces && j > 0 )
             j--;
-        if ( j > 0 || mpFTA->pCode[j]->GetOpCode() != ocSpaces )
-            return mpFTA->pCode[ j ];
+        if ( j > 0 || mpFTA->GetArray()[j]->GetOpCode() != ocSpaces )
+            return mpFTA->GetArray()[ j ];
         else
             return nullptr;
     }
@@ -1766,7 +1766,7 @@ FormulaToken* FormulaTokenArrayPlainIterator::PeekPrevNoSpaces() const
 
 void FormulaTokenArrayPlainIterator::AfterRemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount )
 {
-    const sal_uInt16 nStop = std::min( static_cast<sal_uInt16>(nOffset + nCount), mpFTA->nLen);
+    const sal_uInt16 nStop = std::min( static_cast<sal_uInt16>(nOffset + nCount), mpFTA->GetLen());
 
     if (mnIndex >= nOffset)
     {
