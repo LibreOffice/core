@@ -39,7 +39,7 @@ $(eval $(call gb_Module_add_targets,canvas,\
 ))
 endif
 
-ifneq ($(ENABLE_DIRECTX),)
+ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,canvas,\
 	Library_directx9canvas \
 	Library_gdipluscanvas \

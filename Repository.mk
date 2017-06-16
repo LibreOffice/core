@@ -336,7 +336,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
 	$(if $(USING_X11),desktop_detector) \
 	$(call gb_Helper_optional,SCRIPTING,dlgprov) \
-	$(if $(ENABLE_DIRECTX),directx9canvas) \
+	$(if $(filter WNT,$(OS)),directx9canvas) \
 	$(if $(ENABLE_OPENGL_CANVAS),oglcanvas) \
 	drawinglayer \
 	editeng \
@@ -357,7 +357,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	fwk \
 	fwl \
 	fwm \
-	$(if $(ENABLE_DIRECTX),gdipluscanvas) \
+	$(if $(filter WNT,$(OS)),gdipluscanvas) \
 	guesslang \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),helplinker) \
 	i18npool \
@@ -569,7 +569,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	$(if $(ENABLE_VLC),avmediavlc) \
 	$(if $(ENABLE_GSTREAMER_1_0),avmediagst) \
 	$(if $(ENABLE_GSTREAMER_0_10),avmediagst_0_10) \
-	$(if $(ENABLE_DIRECTX),avmediawin) \
+	$(if $(filter WNT,$(OS)),avmediawin) \
 	cached1 \
 	collator_data \
 	comphelper \

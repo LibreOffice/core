@@ -191,7 +191,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(ENABLE_CAIRO_CANVAS), \
 		canvas/source/cairo/cairocanvas \
 	) \
-	$(if $(ENABLE_DIRECTX), \
+	$(if $(filter WNT,$(OS)), \
 		canvas/source/directx/directx9canvas \
 		canvas/source/directx/gdipluscanvas \
 	) \

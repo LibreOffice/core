@@ -1116,13 +1116,6 @@ libo_FUZZ_ARG_ENABLE(evolution2,
          enabled.])
 )
 
-libo_FUZZ_ARG_ENABLE(directx,
-    AS_HELP_STRING([--disable-directx],
-        [Remove DirectX implementation for the new XCanvas interface.
-         The DirectX support requires more stuff installed on Windows to
-         compile. (DirectX SDK, GDI+ libs)])
-)
-
 AC_ARG_ENABLE(avahi,
     AS_HELP_STRING([--enable-avahi],
         [Determines whether to use Avahi to advertise Impress to remote controls.])
@@ -3631,21 +3624,6 @@ PathFormat "$MSPDB_PATH"
 MSPDB_PATH="$formatted_path"
 AC_SUBST(MSVC_CXX)
 AC_SUBST(SHOWINCLUDES_PREFIX)
-
-if test "$_os" = "WINNT"; then
-    AC_MSG_CHECKING([whether to use DirectX])
-    if test "$enable_directx" = "yes" -o "$enable_directx" = ""; then
-        ENABLE_DIRECTX="TRUE"
-        AC_MSG_RESULT([yes])
-    else
-        ENABLE_DIRECTX=""
-        AC_MSG_RESULT([no])
-    fi
-else
-    ENABLE_DIRECTX=""
-fi
-
-AC_SUBST(ENABLE_DIRECTX)
 
 #
 # unowinreg.dll
