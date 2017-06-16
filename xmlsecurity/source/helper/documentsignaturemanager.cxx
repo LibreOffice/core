@@ -243,7 +243,11 @@ SignatureStreamHelper DocumentSignatureManager::ImplOpenSignatureStream(sal_Int3
     return aHelper;
 }
 
-bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>& xCert, const OUString& rDescription, sal_Int32& nSecurityId, bool bAdESCompliant)
+bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>& xCert,
+                                   const uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext,
+                                   const OUString& rDescription,
+                                   sal_Int32& nSecurityId,
+                                   bool bAdESCompliant)
 {
     if (!xCert.is())
     {
@@ -274,7 +278,7 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
         return true;
     }
 
-    maSignatureHelper.StartMission(mxSecurityContext);
+    maSignatureHelper.StartMission(xSecurityContext);
 
     nSecurityId = maSignatureHelper.GetNewSecurityId();
 
@@ -293,10 +297,7 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
 
     maSignatureHelper.SetX509Certificate(nSecurityId, xCert->getIssuerName(), aCertSerial, aStrBuffer.makeStringAndClear(), aCertDigest);
 
-#if 0
-    // TODO: so this currently uses an NSS security environment,
-    // think how to do that more generically
-    uno::Sequence< uno::Reference< security::XCertificate > > aCertPath = getSecurityEnvironment()->buildCertificatePath(xCert);
+    uno::Sequence< uno::Reference< security::XCertificate > > aCertPath = xSecurityContext->getSecurityEnvironment()->buildCertificatePath(xCert);
     const uno::Reference< security::XCertificate >* pCertPath = aCertPath.getConstArray();
     sal_Int32 nCnt = aCertPath.getLength();
 
@@ -305,7 +306,7 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
         sax::Converter::encodeBase64(aStrBuffer, pCertPath[i]->getEncoded());
         maSignatureHelper.AddEncapsulatedX509Certificate(aStrBuffer.makeStringAndClear());
     }
-#endif
+
 
     std::vector< OUString > aElements = DocumentSignatureHelper::CreateElementList(mxStore, meSignatureMode, DocumentSignatureAlgorithm::OOo3_2);
     DocumentSignatureHelper::AppendContentTypes(mxStore, aElements);
@@ -525,5 +526,16 @@ uno::Reference<xml::crypto::XSecurityEnvironment> DocumentSignatureManager::getG
 {
     return mxGpgSecurityContext.is() ? mxGpgSecurityContext->getSecurityEnvironment() : uno::Reference<xml::crypto::XSecurityEnvironment>();
 }
+
+uno::Reference<xml::crypto::XXMLSecurityContext> DocumentSignatureManager::getSecurityContext()
+{
+    return mxSecurityContext;
+}
+
+uno::Reference<xml::crypto::XXMLSecurityContext> DocumentSignatureManager::getGpgSecurityContext()
+{
+    return mxGpgSecurityContext;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

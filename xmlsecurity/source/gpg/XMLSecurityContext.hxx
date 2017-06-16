@@ -26,7 +26,8 @@
 
 #include <vector>
 
-class XMLSecurityContextGpg : public cppu::WeakImplHelper< css::xml::crypto::XXMLSecurityContext >
+class XMLSecurityContextGpg : public cppu::WeakImplHelper< css::xml::crypto::XXMLSecurityContext,
+                                                           css::lang::XServiceInfo>
 {
 private:
     std::vector< css::uno::Reference< css::xml::crypto::XSecurityEnvironment > > m_vSecurityEnvironments;
@@ -50,6 +51,13 @@ public:
     virtual sal_Int32 SAL_CALL getDefaultSecurityEnvironmentIndex() override;
 
     virtual void SAL_CALL setDefaultSecurityEnvironmentIndex( sal_Int32 nDefaultEnvIndex ) override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override ;
+
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override ;
+
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override ;
 } ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_GPG_XMLSECURITYCONTEXT_HXX

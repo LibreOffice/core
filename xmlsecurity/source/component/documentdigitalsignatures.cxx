@@ -452,16 +452,16 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
 
 Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificate(OUString& rDescription)
 {
-    std::vector< Reference< css::xml::crypto::XSecurityEnvironment > > xSecEnvs;
+    std::vector< Reference< css::xml::crypto::XXMLSecurityContext > > xSecContexts;
 
     DocumentSignatureMode eMode{};
     DocumentSignatureManager aSignatureManager(mxCtx, eMode);
     if (aSignatureManager.init()) {
-        xSecEnvs.push_back(aSignatureManager.getSecurityEnvironment());
-        xSecEnvs.push_back(aSignatureManager.getGpgSecurityEnvironment());
+        xSecContexts.push_back(aSignatureManager.getSecurityContext());
+        xSecContexts.push_back(aSignatureManager.getGpgSecurityContext());
     }
 
-    ScopedVclPtrInstance< CertificateChooser > aChooser(nullptr, mxCtx, xSecEnvs);
+    ScopedVclPtrInstance< CertificateChooser > aChooser(nullptr, mxCtx, xSecContexts);
 
     if (aChooser->Execute() != RET_OK)
         return Reference< css::security::XCertificate >(nullptr);
