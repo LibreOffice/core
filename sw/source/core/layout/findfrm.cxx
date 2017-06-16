@@ -1252,17 +1252,14 @@ void SwFrame::InvalidateNextPrtArea()
     }
 }
 
-/// @returns true if the frame _directly_ sits in a section with columns
-///     but not if it sits in a table which itself sits in a section with columns.
-static bool lcl_IsInColSct( const SwFrame *pUp )
+/// @returns true if the frame _directly_ sits in a section
+///     but not if it sits in a table which itself sits in a section.
+static bool lcl_IsInSectionDirectly( const SwFrame *pUp )
 {
-    bool bRet = false;
     while( pUp )
     {
-        if( pUp->IsColumnFrame() )
-            bRet = true;
-        else if( pUp->IsSctFrame() )
-            return bRet;
+        if( pUp->IsSctFrame() )
+            return true;
         else if( pUp->IsTabFrame() )
             return false;
         pUp = pUp->GetUpper();
@@ -1289,7 +1286,7 @@ bool SwFrame::IsMoveable( const SwLayoutFrame* _pLayoutFrame ) const
 
     if ( _pLayoutFrame && IsFlowFrame() )
     {
-        if ( _pLayoutFrame->IsInSct() && lcl_IsInColSct( _pLayoutFrame ) )
+        if ( _pLayoutFrame->IsInSct() && lcl_IsInSectionDirectly( _pLayoutFrame ) )
         {
             bRetVal = true;
         }
