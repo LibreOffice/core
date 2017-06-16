@@ -1147,6 +1147,14 @@ callback (gpointer pData)
     LOKDocView* pDocView = LOK_DOC_VIEW (pCallback->m_pDocView);
     LOKDocViewPrivate& priv = getPrivate(pDocView);
 
+    //callback registered before the widget was destroyed.
+    //Use existance of lokThreadPool as flag it was torn down
+    if (!priv->lokThreadPool)
+    {
+        delete pCallback;
+        return G_SOURCE_REMOVE;
+    }
+
     switch (pCallback->m_nType)
     {
     case LOK_CALLBACK_INVALIDATE_TILES:
@@ -2626,6 +2634,13 @@ static void lok_doc_view_destroy (GtkWidget* widget)
         priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
         priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, nullptr, nullptr);
     }
+
+    if (priv->lokThreadPool)
+    {
+        g_thread_pool_free(priv->lokThreadPool, true, true);
+        priv->lokThreadPool = nullptr;
+    }
+
     aGuard.unlock();
 
     if (priv->m_pDocument)
