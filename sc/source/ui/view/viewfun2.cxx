@@ -633,7 +633,8 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
             if ( !pDoc->IsBlockEmpty( nTab, nCol, nStartRow, nCol, nSumEndRow ) )
             {
                 ScRangeList aRangeList;
-                const ScRange aRange( nCol, nStartRow, nTab, nCol, nSumEndRow, nTab );
+                // Include the originally selected start row.
+                const ScRange aRange( nCol, rRange.aStart.Row(), nTab, nCol, nSumEndRow, nTab );
                 if ( lcl_GetAutoSumForColumnRange( pDoc, aRangeList, aRange ) )
                 {
                     const OUString aFormula = GetAutoSumFormula(
@@ -667,7 +668,8 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
             if ( !pDoc->IsBlockEmpty( nTab, nStartCol, nRow, nSumEndCol, nRow ) )
             {
                 ScRangeList aRangeList;
-                const ScRange aRange( nStartCol, nRow, nTab, nSumEndCol, nRow, nTab );
+                // Include the originally selected start column.
+                const ScRange aRange( rRange.aStart.Col(), nRow, nTab, nSumEndCol, nRow, nTab );
                 if ( lcl_GetAutoSumForRowRange( pDoc, aRangeList, aRange ) )
                 {
                     const OUString aFormula = GetAutoSumFormula( aRangeList, bSubTotal, ScAddress(nInsCol, nRow, nTab) );
@@ -678,7 +680,7 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
     }
 
     // set new mark range and cursor position
-    const ScRange aMarkRange( nStartCol, nStartRow, nTab, nMarkEndCol, nMarkEndRow, nTab );
+    const ScRange aMarkRange( rRange.aStart.Col(), rRange.aStart.Row(), nTab, nMarkEndCol, nMarkEndRow, nTab );
     MarkRange( aMarkRange, false, bContinue );
     if ( bSetCursor )
     {
