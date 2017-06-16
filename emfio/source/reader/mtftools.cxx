@@ -311,7 +311,7 @@ namespace emfio
     {
         sal_uInt32 nColor;
 
-        mpWMF->ReadUInt32( nColor );
+        mpInputStream->ReadUInt32( nColor );
         return Color( (sal_uInt8)nColor, (sal_uInt8)( nColor >> 8 ), (sal_uInt8)( nColor >> 16 ) );
     };
 
@@ -862,7 +862,7 @@ namespace emfio
         mrclFrame(),
         mrclBounds(),
         mpGDIMetaFile(&rGDIMetaFile),
-        mpWMF(&rStreamWMF),
+        mpInputStream(&rStreamWMF),
         mnStartPos(0),
         mnEndPos(0),
         maBmpSaveList(),
@@ -873,14 +873,14 @@ namespace emfio
         mbIsMapWinSet(false),
         mbIsMapDevSet(false)
     {
-        SvLockBytes *pLB = mpWMF->GetLockBytes();
+        SvLockBytes *pLB = mpInputStream->GetLockBytes();
 
         if (pLB)
         {
             pLB->SetSynchronMode();
         }
 
-        mnStartPos = mpWMF->Tell();
+        mnStartPos = mpInputStream->Tell();
         SetDevOrg(Point());
 
         mpGDIMetaFile->AddAction( new MetaPushAction( PushFlags::CLIPREGION ) ); // The original clipregion has to be on top
