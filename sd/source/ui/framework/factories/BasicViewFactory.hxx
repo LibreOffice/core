@@ -29,7 +29,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/compbase.hxx>
-#include <osl/mutex.hxx>
 
 #include <vcl/vclptr.hxx>
 #include <memory>

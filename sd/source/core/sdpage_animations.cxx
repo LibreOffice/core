@@ -21,7 +21,6 @@
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <comphelper/processfactory.hxx>
-#include <osl/mutex.hxx>
 #include <editeng/outliner.hxx>
 #include "CustomAnimationCloner.hxx"
 #include "drawdoc.hxx"

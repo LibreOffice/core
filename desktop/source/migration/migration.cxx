@@ -38,7 +38,6 @@
 #include <i18nlangtag/lang.h>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
-#include <osl/mutex.hxx>
 #include <osl/security.hxx>
 #include <unotools/configmgr.hxx>
 
@@ -605,7 +604,6 @@ strings_vr MigrationImpl::applyPatterns(const strings_v& vSet, const strings_v& 
 
 strings_vr MigrationImpl::getAllFiles(const OUString& baseURL) const
 {
-    using namespace osl;
     strings_vr vrResult(new strings_v);
 
     // get sub dirs

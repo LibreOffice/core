@@ -16,7 +16,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <osl/mutex.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/processfactory.hxx>
 

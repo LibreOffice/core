@@ -20,7 +20,6 @@
 #ifndef INCLUDED_CANVAS_VCLWRAPPER_HXX
 #define INCLUDED_CANVAS_VCLWRAPPER_HXX
 
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 namespace canvas

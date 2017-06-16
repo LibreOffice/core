@@ -21,7 +21,6 @@
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/svdpage.hxx>
 #include <comphelper/extract.hxx>

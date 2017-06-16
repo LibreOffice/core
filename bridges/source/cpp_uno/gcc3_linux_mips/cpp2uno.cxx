@@ -37,7 +37,6 @@ using namespace com::sun::star::uno;
 #ifdef BRDEBUG
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <osl/mutex.hxx>
 using namespace ::std;
 using namespace ::osl;
 using namespace ::rtl;

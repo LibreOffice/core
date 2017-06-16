@@ -25,7 +25,6 @@
 #include <vector>
 
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 namespace xmloff

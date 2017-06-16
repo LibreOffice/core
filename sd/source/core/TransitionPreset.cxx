@@ -25,7 +25,6 @@
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/getexpandeduri.hxx>

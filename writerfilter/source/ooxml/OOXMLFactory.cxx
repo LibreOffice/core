@@ -18,7 +18,6 @@
  */
 
 #include <rtl/instance.hxx>
-#include <osl/mutex.hxx>
 #include <sax/fastattribs.hxx>
 #include "OOXMLFactory.hxx"
 #include "OOXMLFastHelper.hxx"

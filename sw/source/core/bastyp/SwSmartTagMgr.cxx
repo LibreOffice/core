@@ -20,7 +20,6 @@
 #include "SwSmartTagMgr.hxx"
 
 #include <docsh.hxx>
-#include <osl/mutex.hxx>
 #include <swmodule.hxx>
 #include <vcl/svapp.hxx>
 

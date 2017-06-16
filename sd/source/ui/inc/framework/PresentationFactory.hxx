@@ -28,7 +28,6 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <osl/mutex.hxx>
 #include <cppuhelper/compbase.hxx>
 
 #include <memory>

@@ -29,7 +29,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <svx/frmsel.hxx>

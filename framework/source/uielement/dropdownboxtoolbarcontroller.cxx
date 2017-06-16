@@ -23,7 +23,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <svtools/toolboxcontroller.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/toolbox.hxx>

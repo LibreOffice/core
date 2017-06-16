@@ -55,7 +55,6 @@
 #include <redline.hxx>
 #include <calbck.hxx>
 #include <docufld.hxx>
-#include <osl/mutex.hxx>
 #include <txtfld.hxx>
 #include <txtannotationfld.hxx>
 #include <vcl/svapp.hxx>

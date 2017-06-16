@@ -57,7 +57,6 @@
 
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
 
 namespace chart

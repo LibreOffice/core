@@ -22,8 +22,6 @@
 #include <tools/config.hxx>
 #include <svl/stritem.hxx>
 
-#include <osl/mutex.hxx>
-
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>

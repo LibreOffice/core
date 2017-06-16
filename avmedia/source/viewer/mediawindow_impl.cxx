@@ -31,7 +31,6 @@
 #include <cmath>
 
 #include <comphelper/processfactory.hxx>
-#include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/securityoptions.hxx>
 #include <vcl/svapp.hxx>

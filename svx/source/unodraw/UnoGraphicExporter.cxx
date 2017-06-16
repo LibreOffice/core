@@ -18,7 +18,6 @@
  */
 
 #include <vector>
-#include <osl/mutex.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -71,7 +70,6 @@
 #define MAX_EXT_PIX         2048
 
 using namespace ::comphelper;
-using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

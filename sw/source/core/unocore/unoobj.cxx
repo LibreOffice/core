@@ -91,7 +91,6 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <unoframe.hxx>
 #include <fmthdft.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/syslocale.hxx>
 #include <fmtflcnt.hxx>

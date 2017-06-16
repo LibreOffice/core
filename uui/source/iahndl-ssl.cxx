@@ -29,7 +29,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <comphelper/sequence.hxx>
-#include <osl/mutex.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>

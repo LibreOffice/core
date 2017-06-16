@@ -30,7 +30,6 @@
 
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
 using namespace ::com::sun::star;

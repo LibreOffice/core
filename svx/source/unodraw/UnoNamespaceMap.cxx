@@ -27,12 +27,10 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/mutex.hxx>
 #include <svl/itempool.hxx>
 #include "svx/unoapi.hxx"
 #include "editeng/xmlcnitm.hxx"
 
-using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

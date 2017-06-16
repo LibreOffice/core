@@ -39,7 +39,6 @@
 #include "Window.hxx"
 #include "drawview.hxx"
 #include "zoomlist.hxx"
-#include <osl/mutex.hxx>
 #include <tools/helpers.hxx>
 #include <vcl/svapp.hxx>
 

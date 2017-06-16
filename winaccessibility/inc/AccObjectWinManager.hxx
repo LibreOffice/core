@@ -23,7 +23,6 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <map>
 #include <windows.h>
-#include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include "ResIDGenerator.hxx"
 

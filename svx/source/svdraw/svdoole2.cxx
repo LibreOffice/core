@@ -64,7 +64,6 @@
 
 #include <svl/solar.hrc>
 #include <svl/urihelper.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <svx/charthelper.hxx>

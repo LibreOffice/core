@@ -22,7 +22,6 @@
 #include <svx/SvxShapeTypes.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
 #include <com/sun/star/drawing/XShapeDescriptor.hpp>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/dialmgr.hxx>
 

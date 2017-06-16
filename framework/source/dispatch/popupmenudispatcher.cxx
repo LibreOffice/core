@@ -37,7 +37,6 @@
 #include <com/sun/star/ui/XUIElement.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <ucbhelper/content.hxx>
 #include <vcl/svapp.hxx>

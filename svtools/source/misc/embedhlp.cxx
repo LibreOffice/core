@@ -51,7 +51,6 @@
 #include <com/sun/star/chart2/XDefaultSizeTransmitter.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <memory>
 
 using namespace com::sun::star;

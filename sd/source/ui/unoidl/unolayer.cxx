@@ -21,7 +21,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include "unolayer.hxx"
-#include <osl/mutex.hxx>
 
 #include <comphelper/extract.hxx>
 #include <svx/svdpagv.hxx>

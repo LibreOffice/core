@@ -28,7 +28,6 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace css;

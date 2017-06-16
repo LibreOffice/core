@@ -33,7 +33,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <osl/file.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>

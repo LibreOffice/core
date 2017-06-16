@@ -61,7 +61,6 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/outdev.hxx>
-#include <osl/mutex.hxx>
 
 #include <memory>
 

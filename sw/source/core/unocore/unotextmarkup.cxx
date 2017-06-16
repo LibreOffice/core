@@ -19,7 +19,6 @@
 
 #include <unotextmarkup.hxx>
 
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>

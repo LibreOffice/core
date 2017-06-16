@@ -35,8 +35,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
-#include <osl/mutex.hxx>
-
 #include <map>
 #include <memory>
 

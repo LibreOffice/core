@@ -26,7 +26,6 @@
 
 #include <osl/thread.h>
 #include <comphelper/solarmutex.hxx>
-#include <osl/mutex.hxx>
 
 namespace {
 

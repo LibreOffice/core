@@ -27,7 +27,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 
 #include <svx/graphctl.hxx>
 #include "GraphCtlAccessibleContext.hxx"

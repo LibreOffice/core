@@ -27,7 +27,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <tools/stream.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/processfactory.hxx>

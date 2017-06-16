@@ -18,7 +18,6 @@
  */
 
 #include <svx/svdobj.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include "unomlstr.hxx"

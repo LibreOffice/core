@@ -39,7 +39,6 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <memory>
 
 namespace chart

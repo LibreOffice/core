@@ -46,7 +46,6 @@
 #include <drawdoc.hxx>
 #include "accessibility.hrc"
 #include "sdresid.hxx"
-#include <osl/mutex.hxx>
 
 #include <memory>
 

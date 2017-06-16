@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/weak.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/vclptr.hxx>
 

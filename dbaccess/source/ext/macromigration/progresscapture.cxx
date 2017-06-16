@@ -21,7 +21,6 @@
 #include "migrationprogress.hxx"
 
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 
 namespace dbmm
 {

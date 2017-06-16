@@ -34,7 +34,6 @@
 #include "dlgcont.hxx"
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
-#include <osl/mutex.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -58,7 +57,6 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::xml::sax;
 using namespace com::sun::star;
 using namespace cppu;
-using namespace osl;
 
 using com::sun::star::uno::Reference;
 

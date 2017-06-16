@@ -41,7 +41,6 @@
 
 #include <vcl/timer.hxx>
 #include <svtools/transfer.hxx>
-#include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <svtools/cliplistener.hxx>

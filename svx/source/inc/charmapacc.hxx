@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_CHARMAPACC_HXX
 #define INCLUDED_SVX_SOURCE_INC_CHARMAPACC_HXX
 
-#include <osl/mutex.hxx>
 #include <vcl/image.hxx>
 #include <comphelper/accessibleselectionhelper.hxx>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>

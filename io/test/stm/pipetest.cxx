@@ -31,7 +31,6 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <osl/conditn.hxx>
-#include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 
 #include <string.h>

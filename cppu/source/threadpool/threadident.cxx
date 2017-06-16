@@ -19,7 +19,6 @@
 
 #include <list>
 
-#include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 #include <osl/diagnose.h>
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/PosSize.hpp>

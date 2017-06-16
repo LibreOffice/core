@@ -37,7 +37,6 @@
 #include <swtblfmt.hxx>
 #include <tblsel.hxx>
 #include <cellatr.hxx>
-#include <osl/mutex.hxx>
 
 #include <unochart.hxx>
 

@@ -36,7 +36,6 @@
 #include "dbu_uno.hrc"
 #include "paramdialog.hxx"
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include "CollectionView.hxx"
 #include "UITools.hxx"
 #include <comphelper/processfactory.hxx>

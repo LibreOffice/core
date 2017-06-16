@@ -18,7 +18,6 @@
  */
 
 
-#include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
@@ -62,7 +61,6 @@ using namespace ::com::sun::star::reflection;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::cppu;
-using namespace ::osl;
 
 
 void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Reference< frame::XModel >& xModel )

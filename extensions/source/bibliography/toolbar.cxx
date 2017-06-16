@@ -38,7 +38,6 @@
 #include "bitmaps.hlst"
 
 #include "bibtools.hxx"
-#include <osl/mutex.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

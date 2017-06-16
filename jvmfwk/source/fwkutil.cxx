@@ -30,7 +30,6 @@
 
 #include <string>
 #include <string.h>
-#include "osl/mutex.hxx"
 #include "osl/module.hxx"
 #include "osl/thread.hxx"
 #include "rtl/ustring.hxx"

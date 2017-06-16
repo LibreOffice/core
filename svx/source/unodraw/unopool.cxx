@@ -23,7 +23,6 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include "svx/unopool.hxx"
 #include <svx/svdmodel.hxx>

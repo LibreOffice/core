@@ -26,7 +26,6 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <osl/mutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 

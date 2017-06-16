@@ -43,7 +43,6 @@
 #include <vcl/msgbox.hxx>
 #include "dbaccess_helpid.hrc"
 #include "UITools.hxx"
-#include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <svtools/imgdef.hxx>
 #include "svtools/treelistentry.hxx"

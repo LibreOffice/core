@@ -21,7 +21,6 @@
 
 #include <svx/SmartTagMgr.hxx>
 
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/smarttags/XSmartTagRecognizer.hpp>
 #include <com/sun/star/smarttags/XRangeBasedSmartTagRecognizer.hpp>

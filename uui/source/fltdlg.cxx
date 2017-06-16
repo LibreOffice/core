@@ -27,7 +27,6 @@
 
 #include <vcl/button.hxx>
 #include <osl/file.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 namespace uui

@@ -45,7 +45,6 @@
 #include <com/sun/star/container/XContainer.hpp>
 
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>

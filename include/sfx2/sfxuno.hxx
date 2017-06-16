@@ -35,7 +35,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
 

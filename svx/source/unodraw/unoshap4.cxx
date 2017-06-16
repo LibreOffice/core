@@ -32,7 +32,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/objsh.hxx>
@@ -56,7 +55,6 @@
 #include <svtools/embedhlp.hxx>
 
 
-using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -20,7 +20,6 @@
 #include "basmodnode.hxx"
 #include "basmethnode.hxx"
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>

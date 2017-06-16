@@ -21,7 +21,6 @@
 #define INCLUDED_UCB_SOURCE_UCP_FTP_FTPCONTENTPROVIDER_HXX
 
 #include <vector>
-#include <osl/mutex.hxx>
 #include <ucbhelper/proxydecider.hxx>
 #include <ucbhelper/providerhelper.hxx>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>

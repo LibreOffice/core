@@ -30,7 +30,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/profilezone.hxx>
 #include <comphelper/sequence.hxx>

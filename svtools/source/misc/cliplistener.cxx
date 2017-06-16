@@ -22,7 +22,6 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
-#include <osl/mutex.hxx>
 
 #include <svtools/cliplistener.hxx>
 #include <svtools/transfer.hxx>

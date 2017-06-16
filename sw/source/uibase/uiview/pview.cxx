@@ -76,7 +76,6 @@
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include <osl/mutex.hxx>
 
 #include <memory>
 

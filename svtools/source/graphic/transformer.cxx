@@ -18,7 +18,6 @@
  */
 
 
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/image.hxx>
 #include <vcl/metaact.hxx>

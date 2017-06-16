@@ -33,7 +33,6 @@
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
 
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <libxml/xmlwriter.h>
 

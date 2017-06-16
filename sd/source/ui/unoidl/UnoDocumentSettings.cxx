@@ -36,7 +36,6 @@
 #include <o3tl/make_unique.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/xtable.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include "drawdoc.hxx"
@@ -55,7 +54,6 @@
 #include <svx/unoapi.hxx>
 
 using namespace ::comphelper;
-using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

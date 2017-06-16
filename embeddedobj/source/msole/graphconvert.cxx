@@ -27,7 +27,6 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <osl/mutex.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>

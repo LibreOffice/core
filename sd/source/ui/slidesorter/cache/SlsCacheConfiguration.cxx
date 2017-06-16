@@ -18,7 +18,6 @@
  */
 
 #include "SlsCacheConfiguration.hxx"
-#include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <vcl/svapp.hxx>
 

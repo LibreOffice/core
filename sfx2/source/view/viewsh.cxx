@@ -40,7 +40,6 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <osl/file.hxx>
-#include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/pathoptions.hxx>

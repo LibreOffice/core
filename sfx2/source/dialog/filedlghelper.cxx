@@ -54,7 +54,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <osl/file.hxx>
-#include <osl/mutex.hxx>
 #include <osl/security.hxx>
 #include <osl/thread.hxx>
 #include <vcl/cvtgrf.hxx>

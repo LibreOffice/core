@@ -27,7 +27,6 @@
 #include <sfx2/docfac.hxx>
 
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
 
 

@@ -30,7 +30,6 @@
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <osl/mutex.hxx>
 
 #include <memory>
 #include <thread>

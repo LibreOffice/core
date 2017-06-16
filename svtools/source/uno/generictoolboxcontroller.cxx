@@ -26,7 +26,6 @@
 #include <com/sun/star/frame/status/ItemStatus.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace css::awt;

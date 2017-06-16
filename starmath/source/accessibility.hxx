@@ -28,7 +28,6 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/implbase.hxx>
 #include <svl/SfxBroadcaster.hxx>

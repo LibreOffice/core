@@ -29,8 +29,6 @@
 #include <osl/test/uniquepipename.hxx>
 #include <osl/thread.hxx>
 
-#include <osl/mutex.hxx>
-
 #include <osl/pipe.hxx>
 #include <osl/time.h>
 

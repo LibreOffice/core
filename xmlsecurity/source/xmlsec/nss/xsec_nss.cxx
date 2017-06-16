@@ -20,7 +20,6 @@
 
 #include <sal/config.h>
 
-#include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>

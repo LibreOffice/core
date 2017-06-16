@@ -24,7 +24,6 @@
 #include "docsh.hxx"
 #include "globdoc.hxx"
 #include "wdocsh.hxx"
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;

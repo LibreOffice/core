@@ -20,8 +20,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 
-#include <osl/mutex.hxx>
-
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>

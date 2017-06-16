@@ -36,7 +36,6 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <dbtree.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/treelistentry.hxx>

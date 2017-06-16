@@ -30,7 +30,6 @@
 #include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>

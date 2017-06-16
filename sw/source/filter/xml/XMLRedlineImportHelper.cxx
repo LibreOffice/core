@@ -35,7 +35,6 @@
 #include <o3tl/any.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

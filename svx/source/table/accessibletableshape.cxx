@@ -23,7 +23,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 #include <comphelper/accessiblewrapper.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <AccessibleTableShape.hxx>

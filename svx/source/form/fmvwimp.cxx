@@ -82,7 +82,6 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
-#include <osl/mutex.hxx>
 #include <connectivity/dbtools.hxx>
 
 #include <algorithm>

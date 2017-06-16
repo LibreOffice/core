@@ -25,7 +25,6 @@
 #include "macros.hxx"
 
 #include <com/sun/star/frame/CommandGroup.hpp>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/adjustitem.hxx>

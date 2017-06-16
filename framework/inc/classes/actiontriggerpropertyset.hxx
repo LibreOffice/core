@@ -23,7 +23,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/weak.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/awt/XBitmap.hpp>

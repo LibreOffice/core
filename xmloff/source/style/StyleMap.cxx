@@ -19,12 +19,10 @@
 
 #include <string.h>
 
-#include <osl/mutex.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include "StyleMap.hxx"
 
-using namespace osl;
 using namespace css::uno;
 using namespace css::lang;
 

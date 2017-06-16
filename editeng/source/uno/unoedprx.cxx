@@ -26,7 +26,6 @@
 #include <memory>
 #include <vector>
 #include <algorithm>
-#include <osl/mutex.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 

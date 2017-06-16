@@ -35,7 +35,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/processfactory.hxx>
 

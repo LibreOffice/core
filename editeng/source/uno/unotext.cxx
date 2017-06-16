@@ -23,7 +23,6 @@
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/TextRangeSelection.hpp>
 
-#include <osl/mutex.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 #include <svl/intitem.hxx>

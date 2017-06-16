@@ -26,7 +26,6 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <svx/unopage.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::cppu;

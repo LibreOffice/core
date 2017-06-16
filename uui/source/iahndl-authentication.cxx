@@ -34,7 +34,6 @@
 
 #include <osl/diagnose.h>
 #include <rtl/digest.h>
-#include <osl/mutex.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/msgbox.hxx>
