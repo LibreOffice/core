@@ -57,8 +57,6 @@
 
 #include <sot/exchange.hxx>
 
-#include <osl/mutex.hxx>
-
 #include <algorithm>
 #include <cstddef>
 

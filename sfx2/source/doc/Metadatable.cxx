@@ -21,7 +21,6 @@
 #include <sfx2/Metadatable.hxx>
 #include <sfx2/XmlIdRegistry.hxx>
 
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <comphelper/random.hxx>

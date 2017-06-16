@@ -25,7 +25,6 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <sfx2/viewsh.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>

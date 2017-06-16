@@ -19,7 +19,6 @@
 
 #include <svx/svxids.hrc>
 #include <hintids.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/hint.hxx>
 #include <svtools/ctrltool.hxx>

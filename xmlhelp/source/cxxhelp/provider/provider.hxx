@@ -22,7 +22,6 @@
 
 #include <memory>
 #include <rtl/ustring.hxx>
-#include <osl/mutex.hxx>
 #include <ucbhelper/providerhelper.hxx>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XContainer.hpp>

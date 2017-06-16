@@ -22,7 +22,6 @@
 #include <vcl/svapp.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <osl/mutex.hxx>
 #include <sfx2/app.hxx>
 #include <cuires.hrc>
 #include <svx/fmsrccfg.hxx>

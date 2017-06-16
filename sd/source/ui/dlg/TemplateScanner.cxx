@@ -23,7 +23,6 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/string.hxx>
 
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <sfx2/doctempl.hxx>

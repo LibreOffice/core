@@ -35,7 +35,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <algorithm>
 #include <list>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/unoevent.hxx>
 #include <svtools/unoimap.hxx>

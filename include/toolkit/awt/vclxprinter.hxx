@@ -28,7 +28,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <cppuhelper/weak.hxx>
-#include <osl/mutex.hxx>
 
 #include <toolkit/helper/mutexandbroadcasthelper.hxx>
 #include <cppuhelper/propshlp.hxx>

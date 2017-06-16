@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_MODEL_MAIN_GRIDPROPERTIES_HXX
 #define INCLUDED_CHART2_SOURCE_MODEL_MAIN_GRIDPROPERTIES_HXX
 
-#include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>

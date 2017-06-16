@@ -73,7 +73,6 @@
 #include <svx/svddrgmt.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/msgbox.hxx>
 #include <rtl/math.hxx>
 #include <svtools/acceleratorexecute.hxx>

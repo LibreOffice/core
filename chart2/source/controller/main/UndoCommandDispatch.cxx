@@ -25,7 +25,6 @@
 #include <com/sun/star/document/UndoFailedException.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 

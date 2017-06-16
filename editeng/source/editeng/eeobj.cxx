@@ -30,7 +30,6 @@
 #include <editeng/editeng.hxx>
 #include <svl/itempool.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <osl/mutex.hxx>
 
 using namespace ::com::sun::star;
 

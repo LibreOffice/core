@@ -21,7 +21,6 @@
 
 #include <basegfx/tools/canvastools.hxx>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/canvastools.hxx>

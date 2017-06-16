@@ -21,7 +21,6 @@
 #include <stdlib.h>
 #include <osl/file.h>
 #include <vector>
-#include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <osl/module.h>
 #include <rtl/ref.hxx>

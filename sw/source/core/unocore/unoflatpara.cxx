@@ -23,7 +23,6 @@
 #include <unocrsrhelper.hxx>
 #include <unoflatpara.hxx>
 
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

@@ -34,7 +34,6 @@
 
 #include <basic/sberrors.hxx>
 #include <comphelper/processfactory.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>

@@ -63,7 +63,6 @@
 #include <osl/conditn.hxx>
 #include <tools/rcid.h>
 #include <vcl/errinf.hxx>
-#include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/documentconstants.hxx>

@@ -39,7 +39,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <osl/mutex.hxx>
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #include <com/sun/star/ui/XContextMenuInterception.hpp>
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>

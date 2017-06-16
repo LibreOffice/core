@@ -34,7 +34,6 @@
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/file.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/fltcall.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/wmf.hxx>

@@ -20,7 +20,6 @@
 #include <tools/debug.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/stream.hxx>
-#include <osl/mutex.hxx>
 #include <ucbhelper/content.hxx>
 
 #include <cppuhelper/factory.hxx>
@@ -46,7 +45,6 @@
 
 using namespace std;
 using namespace utl;
-using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;

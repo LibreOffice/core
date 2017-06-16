@@ -32,7 +32,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <svtools/toolboxcontroller.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <tools/urlobj.hxx>

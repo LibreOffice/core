@@ -19,7 +19,6 @@
 #ifndef INCLUDED_XMLSCRIPT_SOURCE_INC_XML_IMPORT_HXX
 #define INCLUDED_XMLSCRIPT_SOURCE_INC_XML_IMPORT_HXX
 
-#include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>

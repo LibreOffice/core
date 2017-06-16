@@ -30,7 +30,6 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/weakagg.hxx>
-#include <osl/mutex.hxx>
 
 #include <toolkit/helper/mutexandbroadcasthelper.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>

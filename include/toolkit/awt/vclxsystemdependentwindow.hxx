@@ -24,7 +24,6 @@
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <cppuhelper/weak.hxx>
-#include <osl/mutex.hxx>
 
 #include <toolkit/awt/vclxwindow.hxx>
 

@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_SHAPEMANAGERIMPL_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_SHAPEMANAGERIMPL_HXX
 
-#include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <com/sun/star/presentation/XShapeEventListener.hpp>
 

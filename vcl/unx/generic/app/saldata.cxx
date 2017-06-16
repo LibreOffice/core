@@ -40,7 +40,6 @@
 #endif
 
 #include <osl/process.h>
-#include <osl/mutex.hxx>
 
 #include "unx/saldisp.hxx"
 #include "unx/saldata.hxx"

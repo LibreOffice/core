@@ -25,8 +25,6 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <osl/mutex.hxx>
-
 class AccObjectManagerAgent;
 
 /**

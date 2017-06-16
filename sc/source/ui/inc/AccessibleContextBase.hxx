@@ -32,7 +32,6 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
 #include <svl/lstner.hxx>

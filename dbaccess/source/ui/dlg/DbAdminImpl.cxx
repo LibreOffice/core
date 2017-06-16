@@ -66,7 +66,6 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/waitobj.hxx>
-#include <osl/mutex.hxx>
 
 #include <algorithm>
 #include <iterator>

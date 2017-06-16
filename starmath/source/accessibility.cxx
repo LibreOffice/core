@@ -45,7 +45,6 @@
 #include <vcl/settings.hxx>
 
 #include <tools/gen.hxx>
-#include <osl/mutex.hxx>
 #include <svl/itemset.hxx>
 
 #include <editeng/editobj.hxx>

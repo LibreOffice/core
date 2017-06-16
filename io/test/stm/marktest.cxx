@@ -29,7 +29,6 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <osl/conditn.hxx>
-#include <osl/mutex.hxx>
 
 using namespace ::osl;
 using namespace ::cppu;

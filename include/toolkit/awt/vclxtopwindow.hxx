@@ -24,7 +24,6 @@
 #include <com/sun/star/awt/XTopWindow2.hpp>
 #include <com/sun/star/awt/XMenuBar.hpp>
 #include <cppuhelper/weak.hxx>
-#include <osl/mutex.hxx>
 
 #include <cppuhelper/implbase1.hxx>
 

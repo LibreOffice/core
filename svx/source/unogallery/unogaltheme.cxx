@@ -28,7 +28,6 @@
 #include <svx/svdpage.hxx>
 #include <svx/unopage.hxx>
 #include <svl/itempool.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>

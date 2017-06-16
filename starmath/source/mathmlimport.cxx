@@ -61,7 +61,6 @@ one go*/
 #include <xmloff/attrlist.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlmetai.hxx>
-#include <osl/mutex.hxx>
 
 #include <memory>
 

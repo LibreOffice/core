@@ -71,7 +71,6 @@
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustring.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 namespace sd { namespace slidesorter { namespace controller {

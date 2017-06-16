@@ -30,7 +30,6 @@
 #include <com/sun/star/drawing/CanvasFeature.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
-#include <osl/mutex.hxx>
 
 using namespace css;
 using namespace css::uno;

@@ -23,7 +23,6 @@
 
 #include <unotools/confignode.hxx>
 
-#include <osl/mutex.hxx>
 #include <unordered_map>
 #include <vector>
 

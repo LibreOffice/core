@@ -134,7 +134,6 @@
 #include <pagedesc.hxx>
 #include <svtools/ruler.hxx>
 #include "formatclipboard.hxx"
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <docstat.hxx>
 #include <wordcountdialog.hxx>

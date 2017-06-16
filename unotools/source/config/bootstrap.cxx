@@ -28,7 +28,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/file.hxx>
-#include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 
 #include <rtl/bootstrap.hxx>

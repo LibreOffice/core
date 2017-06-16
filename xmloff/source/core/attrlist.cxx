@@ -20,7 +20,6 @@
 
 #include <string.h>
 #include <vector>
-#include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <xmloff/xmltoken.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -29,7 +28,6 @@
 #include <xmloff/attrlist.hxx>
 
 
-using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 

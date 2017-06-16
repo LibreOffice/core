@@ -21,7 +21,6 @@
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_RECENTLYUSEDMASTERPAGES_HXX
 
 #include "tools/SdGlobalResourceContainer.hxx"
-#include <osl/mutex.hxx>
 #include <tools/link.hxx>
 #include <vcl/image.hxx>
 #include <vector>

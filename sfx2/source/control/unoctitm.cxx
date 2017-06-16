@@ -45,7 +45,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <osl/mutex.hxx>
 #include <uno/current_context.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/uitest/logger.hxx>

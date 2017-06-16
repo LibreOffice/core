@@ -28,7 +28,6 @@
 #include "svx/obj3d.hxx"
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 

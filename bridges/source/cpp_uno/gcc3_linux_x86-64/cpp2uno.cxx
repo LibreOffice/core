@@ -23,7 +23,6 @@
 
 #include <rtl/alloc.h>
 #include <sal/log.hxx>
-#include <osl/mutex.hxx>
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -41,7 +40,6 @@
 #include "rtti.hxx"
 #include "share.hxx"
 
-using namespace ::osl;
 using namespace ::com::sun::star::uno;
 
 // Perform the UNO call

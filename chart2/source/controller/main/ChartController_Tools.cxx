@@ -60,7 +60,6 @@
 #include <svx/svdmodel.hxx>
 #include <unotools/streamwrap.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <editeng/outliner.hxx>

@@ -30,7 +30,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <rtl/uri.hxx>
-#include <osl/mutex.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>

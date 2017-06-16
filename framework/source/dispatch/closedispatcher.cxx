@@ -38,7 +38,6 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
-#include <osl/mutex.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/processfactory.hxx>
 

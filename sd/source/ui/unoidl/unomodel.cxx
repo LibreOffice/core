@@ -32,7 +32,6 @@
 
 #include <com/sun/star/embed/Aspects.hpp>
 
-#include <osl/mutex.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -121,7 +120,6 @@
 
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 
-using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::sd;

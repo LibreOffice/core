@@ -21,7 +21,6 @@
 #define INCLUDED_SVTOOLS_JAVAINTERACTIONHANDLER_HXX
 
 #include <svtools/svtdllapi.h>
-#include <osl/mutex.hxx>
 #include <sal/types.h>
 
 #include <com/sun/star/task/XInteractionRequest.hpp>

@@ -69,7 +69,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <ucbhelper/simpleinteractionrequest.hxx>
-#include <osl/mutex.hxx>
 
 using namespace com::sun::star;
 using ::com::sun::star::beans::PropertyValue;

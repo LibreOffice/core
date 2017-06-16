@@ -18,7 +18,6 @@
  */
 
 
-#include <osl/mutex.hxx>
 #include <cppuhelper/weak.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -55,7 +54,6 @@ BibSplitWindow::BibSplitWindow( vcl::Window* pParent, WinBits nStyle ) : SplitWi
 {
 }
 
-using namespace osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 

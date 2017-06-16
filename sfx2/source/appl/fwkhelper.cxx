@@ -23,7 +23,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <framework/sfxhelperfunctions.hxx>
 
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include "fwkhelper.hxx"

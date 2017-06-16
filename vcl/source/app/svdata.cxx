@@ -21,7 +21,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/process.h>
 #include <tools/resary.hxx>
 #include <tools/gen.hxx>

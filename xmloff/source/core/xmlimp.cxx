@@ -23,7 +23,6 @@
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <tools/urlobj.hxx>
-#include <osl/mutex.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -66,7 +65,6 @@
 
 using ::com::sun::star::beans::XPropertySetInfo;
 
-using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;

@@ -42,7 +42,6 @@
 #include <rtl/uri.hxx>
 #include <rtl/strbuf.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <CustomAnimationPreset.hxx>
 

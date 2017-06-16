@@ -37,7 +37,6 @@
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <comphelper/string.hxx>
-#include <osl/mutex.hxx>
 #include "unx/gtk/gtkinst.hxx"
 
 #include <vcl/svapp.hxx>

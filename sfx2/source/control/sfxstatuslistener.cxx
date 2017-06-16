@@ -27,7 +27,6 @@
 #include <svl/visitem.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/processfactory.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>

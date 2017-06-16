@@ -20,7 +20,6 @@
 
 #include "chinese_translation_unodialog.hxx"
 #include "chinese_translationdialog.hxx"
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/msgbox.hxx>

@@ -28,7 +28,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <rtl/uri.hxx>
-#include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/svapp.hxx>

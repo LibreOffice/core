@@ -29,7 +29,6 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <osl/mutex.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/style.hxx>
 #include <svx/svdpool.hxx>

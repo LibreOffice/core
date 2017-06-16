@@ -18,7 +18,6 @@
  */
 
 #include <classes/imagewrapper.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>

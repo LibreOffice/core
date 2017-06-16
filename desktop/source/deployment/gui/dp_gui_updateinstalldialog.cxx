@@ -28,7 +28,6 @@
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>

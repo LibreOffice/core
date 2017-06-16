@@ -28,7 +28,6 @@
 #include "xmlparse.hxx"
 #include <fstream>
 #include <iostream>
-#include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 #include <osl/process.h>
 #include <rtl/strbuf.hxx>

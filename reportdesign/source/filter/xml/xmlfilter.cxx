@@ -54,7 +54,6 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <osl/mutex.hxx>
 #include <svtools/sfxecode.hxx>
 #include "xmlEnums.hxx"
 #include "xmlStyleImport.hxx"
