@@ -3244,6 +3244,13 @@ namespace drawinglayer
             return aRetval;
         }
 
+        // from MetafileAccessor
+        bool MetafilePrimitive2D::accessMetafile(GDIMetaFile& rTargetMetafile) const
+        {
+            rTargetMetafile = maMetaFile;
+            return true;
+        }
+
         // provide unique ID
         ImplPrimitive2DIDBlock(MetafilePrimitive2D, PRIMITIVE2D_ID_METAFILEPRIMITIVE2D)
 

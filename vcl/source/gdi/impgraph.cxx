@@ -39,6 +39,7 @@
 #include <vcl/dibtools.hxx>
 #include <memory>
 #include <o3tl/make_unique.hxx>
+#include <vcl/gdimetafiletools.hxx>
 
 #define GRAPHIC_MTFTOBMP_MAXEXT     2048
 #define GRAPHIC_STREAMBUFSIZE       8192UL
@@ -584,6 +585,32 @@ const BitmapEx& ImpGraphic::ImplGetBitmapExRef() const
 
 const GDIMetaFile& ImpGraphic::ImplGetGDIMetaFile() const
 {
+    if (!maMetaFile.GetActionSize()
+        && maVectorGraphicData.get()
+        && (VectorGraphicDataType::Emf == maVectorGraphicData->getVectorGraphicDataType()
+            || VectorGraphicDataType::Wmf == maVectorGraphicData->getVectorGraphicDataType()))
+    {
+        // If we have a Emf/Wmf VectorGraphic object, we
+        // need a way to get the Metafile data out of the primitive
+        // representation. Use a strict virtual hook (MetafileAccessor)
+        // to access the MetafilePrimitive2D directly. Also see comments in
+        // XEmfParser about this.
+        const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > > aSequence(maVectorGraphicData->getPrimitive2DSequence());
+
+        if (1 == aSequence.size())
+        {
+            // try to cast to MetafileAccessor implementation
+            const css::uno::Reference< css::graphic::XPrimitive2D > xReference(aSequence[0]);
+            const MetafileAccessor* pMetafileAccessor = dynamic_cast< const MetafileAccessor* >(xReference.get());
+
+            if (pMetafileAccessor)
+            {
+                // it is a MetafileAccessor implementation, get Metafile
+                pMetafileAccessor->accessMetafile(const_cast< ImpGraphic* >(this)->maMetaFile);
+            }
+        }
+    }
+
     if (GraphicType::Bitmap == meType && !maMetaFile.GetActionSize())
     {
         // #i119735#

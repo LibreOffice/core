@@ -233,7 +233,7 @@ awt::Size GraphicHelper::convertHmmToAppFont( const awt::Size& rHmm ) const
 // Graphics and graphic objects  ----------------------------------------------
 
 Reference< XGraphic > GraphicHelper::importGraphic( const Reference< XInputStream >& rxInStrm,
-        const WMF_EXTERNALHEADER* pExtHeader ) const
+        const WmfExternal* pExtHeader ) const
 {
     Reference< XGraphic > xGraphic;
     if( rxInStrm.is() && mxGraphicProvider.is() ) try
@@ -330,7 +330,7 @@ void GraphicHelper::importEmbeddedGraphics(const std::vector<OUString>& rStreamN
     }
 }
 
-Reference< XGraphic > GraphicHelper::importEmbeddedGraphic( const OUString& rStreamName, const WMF_EXTERNALHEADER* pExtHeader ) const
+Reference< XGraphic > GraphicHelper::importEmbeddedGraphic( const OUString& rStreamName, const WmfExternal* pExtHeader ) const
 {
     Reference< XGraphic > xGraphic;
     OSL_ENSURE( !rStreamName.isEmpty(), "GraphicHelper::importEmbeddedGraphic - empty stream name" );
@@ -366,7 +366,7 @@ OUString GraphicHelper::createGraphicObject( const Reference< XGraphic >& rxGrap
 }
 
 OUString GraphicHelper::importGraphicObject( const Reference< XInputStream >& rxInStrm,
-        const WMF_EXTERNALHEADER* pExtHeader ) const
+        const WmfExternal* pExtHeader ) const
 {
     return createGraphicObject( importGraphic( rxInStrm, pExtHeader ) );
 }

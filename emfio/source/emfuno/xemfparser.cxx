@@ -33,7 +33,6 @@
 
 #include <vcl/svapp.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <vcl/wmf.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 
@@ -69,7 +68,8 @@ namespace emfio
             // XEmfParser
             virtual uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > SAL_CALL getDecomposition(
                 const uno::Reference< ::io::XInputStream >& xEmfStream,
-                const OUString& aAbsolutePath) override;
+                const OUString& aAbsolutePath,
+                const uno::Sequence< ::beans::PropertyValue >& rProperties) override;
 
             // XServiceInfo
             virtual OUString SAL_CALL getImplementationName() override;
@@ -113,114 +113,85 @@ namespace emfio
 
         uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > XEmfParser::getDecomposition(
             const uno::Reference< ::io::XInputStream >& xEmfStream,
-            const OUString& aAbsolutePath )
+            const OUString& aAbsolutePath,
+            const uno::Sequence< ::beans::PropertyValue >& rProperties)
         {
             drawinglayer::primitive2d::Primitive2DContainer aRetval;
 
             if (xEmfStream.is())
             {
-                static bool bTestCode(false);
+                WmfExternal aExternalHeader;
+                const bool bExternalHeaderUsed(aExternalHeader.setSequence(rProperties));
 
-                if (bTestCode)
+                // rough check - import and conv to primitive
+                GDIMetaFile aMtf;
+                std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream(xEmfStream));
+                sal_uInt32 nMetaType(0);
+                sal_uInt32 nOrgPos = pStream->Tell();
+
+                SvStreamEndian nOrigNumberFormat = pStream->GetEndian();
+                pStream->SetEndian(SvStreamEndian::LITTLE);
+
+                pStream->Seek(0x28);
+                pStream->ReadUInt32(nMetaType);
+                pStream->Seek(nOrgPos);
+
+                if (nMetaType == 0x464d4520)
                 {
-                    static bool bUseOldFilterEmbedded(true);
-
-                    if (bUseOldFilterEmbedded)
-                    {
-                        GDIMetaFile aMtf;
-                        std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream(xEmfStream));
-
-                        if (pStream && ConvertWMFToGDIMetaFile(*pStream, aMtf, nullptr, nullptr))
-                        {
-
-                            Size aSize(aMtf.GetPrefSize());
-
-                            if (aMtf.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
-                            {
-                                aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, MapUnit::Map100thMM);
-                            }
-                            else
-                            {
-                                aSize = OutputDevice::LogicToLogic(aSize, aMtf.GetPrefMapMode(), MapMode(MapUnit::Map100thMM));
-                            }
-
-                            const basegfx::B2DHomMatrix aMetafileTransform(
-                                basegfx::tools::createScaleB2DHomMatrix(
-                                    aSize.Width(),
-                                    aSize.Height()));
-
-                            aRetval.push_back(
-                                new drawinglayer::primitive2d::MetafilePrimitive2D(
-                                    aMetafileTransform,
-                                    aMtf));
-                        }
-                    }
-
-                    if(aRetval.empty())
-                    {
-                        // for test, just create some graphic data that will get visualized
-                        const basegfx::B2DRange aRange(1000, 1000, 5000, 5000);
-                        const basegfx::BColor aColor(1.0, 0.0, 0.0);
-                        const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
-
-                        aRetval.push_back(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aOutline), aColor));
-                    }
+                    emfio::EmfReader(*pStream, aMtf).ReadEnhWMF();
                 }
                 else
                 {
-                    // new parser here
-                    bool bBla = true;
-
-                    // rouch check - import and conv to primitive
-                    GDIMetaFile aMtf;
-                    std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream(xEmfStream));
-                    sal_uInt32 nMetaType(0);
-                    sal_uInt32 nOrgPos = pStream->Tell();
-
-                    SvStreamEndian nOrigNumberFormat = pStream->GetEndian();
-                    pStream->SetEndian(SvStreamEndian::LITTLE);
-
-                    pStream->Seek(0x28);
-                    pStream->ReadUInt32(nMetaType);
-                    pStream->Seek(nOrgPos);
-
-                    if (nMetaType == 0x464d4520)
-                    {
-                        emfio::EmfReader(*pStream, aMtf).ReadEnhWMF();
-                    }
-                    else
-                    {
-                        emfio::WmfReader(*pStream, aMtf).ReadWMF();
-                    }
-
-                    pStream->SetEndian(nOrigNumberFormat);
-                    Size aSize(aMtf.GetPrefSize());
-
-                    if (aMtf.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
-                    {
-                        aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, MapUnit::Map100thMM);
-                    }
-                    else
-                    {
-                        aSize = OutputDevice::LogicToLogic(aSize, aMtf.GetPrefMapMode(), MapMode(MapUnit::Map100thMM));
-                    }
-
-                    const basegfx::B2DHomMatrix aMetafileTransform(
-                        basegfx::tools::createScaleB2DHomMatrix(
-                            aSize.Width(),
-                            aSize.Height()));
-
-                    // force to use decomposition directly to get rid of the metafile
-                    const css::uno::Sequence< css::beans::PropertyValue > aViewParameters;
-                    drawinglayer::primitive2d::MetafilePrimitive2D aMetafilePrimitive2D(
-                        aMetafileTransform,
-                        aMtf);
-                    aRetval.append(aMetafilePrimitive2D.getDecomposition(aViewParameters));
-
-
-
-
+                    emfio::WmfReader(*pStream, aMtf, bExternalHeaderUsed ? &aExternalHeader : nullptr).ReadWMF();
                 }
+
+                pStream->SetEndian(nOrigNumberFormat);
+                Size aSize(aMtf.GetPrefSize());
+
+                if (aMtf.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
+                {
+                    aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, MapUnit::Map100thMM);
+                }
+                else
+                {
+                    aSize = OutputDevice::LogicToLogic(aSize, aMtf.GetPrefMapMode(), MapMode(MapUnit::Map100thMM));
+                }
+
+                // use size
+                const basegfx::B2DHomMatrix aMetafileTransform(
+                    basegfx::tools::createScaleB2DHomMatrix(
+                        aSize.Width(),
+                        aSize.Height()));
+
+                // ...and create a single MetafilePrimitive2D containing the Metafile.
+                // CAUTION: Currently, ReadWindowMetafile uses the local VectorGraphicData
+                // and a MetafileAccessor hook at the MetafilePrimitive2D inside of
+                // ImpGraphic::ImplGetGDIMetaFile to get the Metafile. Thus, the first
+                // and only primitive in this case *has to be* a MetafilePrimitive2D.
+                aRetval.push_back(
+                    new drawinglayer::primitive2d::MetafilePrimitive2D(
+                        aMetafileTransform,
+                        aMtf));
+
+                // // force to use decomposition directly to get rid of the metafile
+                // const css::uno::Sequence< css::beans::PropertyValue > aViewParameters;
+                // drawinglayer::primitive2d::MetafilePrimitive2D aMetafilePrimitive2D(
+                //     aMetafileTransform,
+                //     aMtf);
+                // aRetval.append(aMetafilePrimitive2D.getDecomposition(aViewParameters));
+
+                // if (aRetval.empty())
+                // {
+                //     // for test, just create some graphic data that will get visualized
+                //     const basegfx::B2DRange aRange(1000, 1000, 5000, 5000);
+                //     const basegfx::BColor aColor(1.0, 0.0, 0.0);
+                //     const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+                //
+                //     aRetval.push_back(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aOutline), aColor));
+                // }
+
+
+
             }
             else
             {

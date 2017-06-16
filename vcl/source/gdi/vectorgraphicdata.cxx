@@ -125,6 +125,16 @@ bool VectorGraphicData::operator==(const VectorGraphicData& rCandidate) const
     return false;
 }
 
+void VectorGraphicData::setWmfExternalHeader(const WmfExternal& aExtHeader)
+{
+    if (!mpExternalHeader)
+    {
+        mpExternalHeader = new WmfExternal;
+    }
+
+    *mpExternalHeader = aExtHeader;
+}
+
 void VectorGraphicData::ensureReplacement()
 {
     ensureSequenceAndRange();
@@ -156,8 +166,14 @@ void VectorGraphicData::ensureSequenceAndRange()
                     || VectorGraphicDataType::Wmf == getVectorGraphicDataType())
                 {
                     const uno::Reference< graphic::XEmfParser > xEmfParser = graphic::EmfTools::create(xContext);
+                    uno::Sequence< ::beans::PropertyValue > aSequence;
 
-                    maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(myInputStream, maPath));
+                    if (mpExternalHeader)
+                    {
+                        aSequence = mpExternalHeader->getSequence();
+                    }
+
+                    maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(myInputStream, maPath, aSequence));
                 }
                 else
                 {
@@ -222,7 +238,8 @@ VectorGraphicData::VectorGraphicData(
     maSequence(),
     maReplacement(),
     mNestedBitmapSize(0),
-    meVectorGraphicDataType(eVectorDataType)
+    meVectorGraphicDataType(eVectorDataType),
+    mpExternalHeader(nullptr)
 {
 }
 
@@ -235,7 +252,8 @@ VectorGraphicData::VectorGraphicData(
     maSequence(),
     maReplacement(),
     mNestedBitmapSize(0),
-    meVectorGraphicDataType(eVectorDataType)
+    meVectorGraphicDataType(eVectorDataType),
+    mpExternalHeader(nullptr)
 {
     SvFileStream rIStm(rPath, StreamMode::STD_READ);
     if(rIStm.GetError())
@@ -251,6 +269,14 @@ VectorGraphicData::VectorGraphicData(
             maVectorGraphicDataArray = VectorGraphicDataArray();
         }
     }
+}
+
+VectorGraphicData::~VectorGraphicData()
+{
+    if (mpExternalHeader)
+    {
+        delete mpExternalHeader;
+    };
 }
 
 const basegfx::B2DRange& VectorGraphicData::getRange() const

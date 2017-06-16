@@ -412,11 +412,11 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
             ::Graphic aVCLGraphic;
 
             // Define APM Header if goal height and width are defined
-            WMF_EXTERNALHEADER aExtHeader;
+            WmfExternal aExtHeader;
             aExtHeader.xExt = nExtWidth;
             aExtHeader.yExt = nExtHeight;
             aExtHeader.mapMode = nExtMapMode;
-            WMF_EXTERNALHEADER *pExtHeader = nullptr;
+            WmfExternal *pExtHeader = nullptr;
             if ( nExtMapMode > 0 )
                 pExtHeader = &aExtHeader;
 

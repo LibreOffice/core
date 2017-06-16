@@ -33,7 +33,7 @@
 #include <sal/types.h>
 #include <com/sun/star/graphic/XGraphicProvider2.hpp>
 
-struct WMF_EXTERNALHEADER;
+struct WmfExternal;
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Point; }
@@ -113,7 +113,7 @@ public:
     css::uno::Reference< css::graphic::XGraphic >
                         importGraphic(
                             const css::uno::Reference< css::io::XInputStream >& rxInStrm,
-                            const WMF_EXTERNALHEADER* pExtHeader = nullptr ) const;
+                            const WmfExternal* pExtHeader = nullptr ) const;
 
     /** Imports graphics from the passed input streams. */
     std::vector< css::uno::Reference<css::graphic::XGraphic> >
@@ -127,7 +127,7 @@ public:
     css::uno::Reference< css::graphic::XGraphic >
                         importEmbeddedGraphic(
                             const OUString& rStreamName,
-                            const WMF_EXTERNALHEADER* pExtHeader = nullptr ) const;
+                            const WmfExternal* pExtHeader = nullptr ) const;
 
     /** Imports graphics from the storage with the passed stream names. */
     void importEmbeddedGraphics(const std::vector<OUString>& rStreamNames) const;
@@ -141,7 +141,7 @@ public:
         @return  The URL of the created and internally cached graphic object. */
     OUString     importGraphicObject(
                             const css::uno::Reference< css::io::XInputStream >& rxInStrm,
-                            const WMF_EXTERNALHEADER* pExtHeader ) const;
+                            const WmfExternal* pExtHeader ) const;
 
     /** Creates a persistent graphic object from the passed binary memory block.
         @return  The URL of the created and internally cached graphic object. */

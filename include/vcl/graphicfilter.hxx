@@ -33,7 +33,7 @@
 
 class FilterConfigCache;
 class SvStream;
-struct WMF_EXTERNALHEADER;
+struct WmfExternal;
 struct ConvertData;
 
 #define ERRCODE_GRFILTER_OPENERROR    ErrCode(ERRCODE_AREA_VCL | ERRCODE_CLASS_GENERAL | 1)
@@ -279,7 +279,7 @@ public:
                                    SvStream& rStream,
                                    sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
                                    sal_uInt16 * pDeterminedFormat = nullptr, GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE,
-                                   WMF_EXTERNALHEADER *pExtHeader = nullptr );
+                                   WmfExternal *pExtHeader = nullptr );
 
     /// Imports multiple graphics.
     ///
@@ -291,7 +291,7 @@ public:
                                    sal_uInt16 nFormat,
                                    sal_uInt16 * pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
                                    css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
-                                   WMF_EXTERNALHEADER *pExtHeader = nullptr );
+                                   WmfExternal *pExtHeader = nullptr );
 
     const FilterErrorEx&    GetLastError() const { return *pErrorEx;}
     void                    ResetLastError();
