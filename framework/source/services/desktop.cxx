@@ -349,7 +349,7 @@ sal_Bool SAL_CALL Desktop::terminate()
 
         // we need a copy here as the notifyTermination call might cause a removeTerminateListener call
         std::vector< css::uno::Reference<css::frame::XTerminateListener> > xComponentDllListeners = m_xComponentDllListeners;
-        for (auto& xListener : xComponentDllListeners)
+        for (auto aI = xComponentDllListeners.rbegin(); aI != xComponentDllListeners.rend(); ++aI)
         {
             xListener->notifyTermination(aEvent);
         }
@@ -1116,9 +1116,9 @@ void SAL_CALL Desktop::disposing()
 
     // we need a copy because the disposing might call the removeEventListener method
     std::vector< css::uno::Reference<css::frame::XTerminateListener> > xComponentDllListeners = m_xComponentDllListeners;
-    for (auto& xListener: xComponentDllListeners)
+    for (auto aI = xComponentDllListeners.rbegin(); aI != xComponentDllListeners.rend(); ++aI)
     {
-        xListener->disposing(aEvent);
+        (*aI)->disposing(aEvent);
     }
     xComponentDllListeners.clear();
     m_xComponentDllListeners.clear();
