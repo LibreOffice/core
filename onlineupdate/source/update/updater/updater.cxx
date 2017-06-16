@@ -2553,7 +2553,7 @@ ReadMARChannelIDs(const NS_tchar *path, MARChannelStringTable *results)
 #endif
 
 static int
-GetUpdateFileNames(std::vector<tstring> fileNames)
+GetUpdateFileNames(std::vector<tstring>& fileNames)
 {
     NS_tchar fileName[MAXPATHLEN];
     NS_tsnprintf(fileName, MAXPATHLEN,
@@ -2572,7 +2572,8 @@ GetUpdateFileNames(std::vector<tstring> fileNames)
     while ((entry = NS_treaddir(dir)) != nullptr)
     {
         if (NS_tstrcmp(entry->d_name, NS_T(".")) &&
-                NS_tstrcmp(entry->d_name, NS_T("..")))
+                NS_tstrcmp(entry->d_name, NS_T("..")) &&
+                NS_tstrcmp(entry->d_name, NS_T("update.mar")))
         {
             if (NS_tstrncmp(entry->d_name, NS_T("update"), 6) == 0)
             {
