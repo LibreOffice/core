@@ -20,18 +20,12 @@
 #ifndef INCLUDED_EMFIO_INC_MTFTOOLS_HXX
 #define INCLUDED_EMFIO_INC_MTFTOOLS_HXX
 
-#include <memory>
-#include <sal/config.h>
-
-//#include <vcl/graph.hxx>
 #include <basegfx/tools/b2dclipstate.hxx>
 #include <tools/poly.hxx>
 #include <vcl/font.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-//#include <vcl/bitmapaccess.hxx>
 #include <vcl/lineinfo.hxx>
-//#include <vcl/fltcall.hxx>
 #include <o3tl/make_unique.hxx>
 #include <vcl/outdevstate.hxx>
 #include <vcl/FilterConfigItem.hxx>
@@ -239,15 +233,11 @@ namespace emfio
 #define BS_DIBPATTERN8X8        8
 #define BS_MONOPATTERN          9
 
-
-#define RDH_RECTANGLES  1
-
+#define RDH_RECTANGLES          1
 #define W_MFCOMMENT             15
-
 #define PRIVATE_ESCAPE_UNICODE  2
 
 //Scalar constants
-
 #define UNDOCUMENTED_WIN_RCL_RELATION 32
 #define MS_FIXPOINT_BITCOUNT_28_4 4
 #define HUNDREDTH_MILLIMETERS_PER_MILLIINCH 2.54
@@ -503,7 +493,7 @@ namespace emfio
 
         GDIMetaFile*        mpGDIMetaFile;
 
-        SvStream*           mpWMF;               // the WMF/EMF file to be read
+        SvStream*           mpInputStream;               // the WMF/EMF file to be read
         sal_uInt32          mnStartPos;
         sal_uInt32          mnEndPos;
         std::vector<std::unique_ptr<BSaveStruct>>    maBmpSaveList;
