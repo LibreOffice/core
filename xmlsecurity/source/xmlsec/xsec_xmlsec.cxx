@@ -26,7 +26,7 @@
 #include "xmlsec/xmlelementwrapper_xmlsecimpl.hxx"
 #include "xmlsec/xmldocumentwrapper_xmlsecimpl.hxx"
 #include "xsec_xmlsec.hxx"
-#include "xmlsignature_gpgimpl.hxx"
+#include "gpg/xmlsignature_gpgimpl.hxx"
 
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
