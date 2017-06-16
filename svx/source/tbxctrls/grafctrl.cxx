@@ -91,11 +91,8 @@ ImplGrafMetricField::ImplGrafMetricField( vcl::Window* pParent, const OUString& 
     maCommand( rCmd ),
     mxFrame( rFrame )
 {
-    Size aSize( GetTextWidth( "-100 %" ), GetTextHeight() );
-
-    aSize.Width() += 20;
-    aSize.Height() += 6;
-    SetSizePixel( aSize );
+    Size aSize(CalcMinimumSizeForText("-100 %"));
+    SetSizePixel(aSize);
 
     if ( maCommand == ".uno:GrafGamma" )
     {
