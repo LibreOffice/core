@@ -203,7 +203,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
     if( eMapUnit == MapUnit::Map100thMM )
         nMemberId &= (~CONVERT_TWIPS);
     uno::Any aVal;
-    SfxItemSet aSet( mrItemPool, pMap->nWID, pMap->nWID);
+    SfxItemSet aSet( mrItemPool, {{pMap->nWID, pMap->nWID}});
 
     if( (pMap->nWID < OWN_ATTR_VALUE_START) || (pMap->nWID > OWN_ATTR_VALUE_END ) )
     {

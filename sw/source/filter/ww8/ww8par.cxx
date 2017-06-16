@@ -1485,7 +1485,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetFormatAttr(const SwPosition& rPos,
             if (pNd->IsTextNode())
             {
                 const sal_Int32 nPos = rPos.nContent.GetIndex();
-                SfxItemSet aSet(pDoc->GetAttrPool(), nWhich, nWhich);
+                SfxItemSet aSet(pDoc->GetAttrPool(), {{nWhich, nWhich}});
                 if (pNd->GetTextNode()->GetAttr(aSet, nPos, nPos))
                     pItem = aSet.GetItem(nWhich);
             }

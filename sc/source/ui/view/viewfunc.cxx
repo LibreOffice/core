@@ -981,7 +981,7 @@ void ScViewFunc::ApplyAttr( const SfxPoolItem& rAttrItem )
     }
 
     ScPatternAttr aNewAttrs( o3tl::make_unique<SfxItemSet>( *GetViewData().GetDocument()->GetPool(),
-                                            ATTR_PATTERN_START, ATTR_PATTERN_END ) );
+                                            svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} ) );
 
     aNewAttrs.GetItemSet().Put( rAttrItem );
     //  if justify is set (with Buttons), always indentation 0

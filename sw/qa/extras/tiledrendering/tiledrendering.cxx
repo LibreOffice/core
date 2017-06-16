@@ -1383,7 +1383,7 @@ void SwTiledRenderingTest::testTrackChangesCallback()
 
     CPPUNIT_ASSERT_EQUAL(-1, m_nTrackedChangeIndex);
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
-    SfxItemSet aSet(pWrtShell->GetDoc()->GetAttrPool(), FN_REDLINE_ACCEPT_DIRECT, FN_REDLINE_ACCEPT_DIRECT);
+    SfxItemSet aSet(pWrtShell->GetDoc()->GetAttrPool(), svl::Items<FN_REDLINE_ACCEPT_DIRECT, FN_REDLINE_ACCEPT_DIRECT>{});
     SfxVoidItem aItem(FN_REDLINE_ACCEPT_DIRECT);
     aSet.Put(aItem);
     pWrtShell->GetView().GetState(aSet);
@@ -1730,8 +1730,8 @@ namespace {
 
 void checkUndoRepairStates(SwXTextDocument* pXTextDocument, SwView* pView1, SwView* pView2)
 {
-    SfxItemSet aItemSet1(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), SID_UNDO, SID_UNDO);
-    SfxItemSet aItemSet2(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), SID_UNDO, SID_UNDO);
+    SfxItemSet aItemSet1(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), svl::Items<SID_UNDO, SID_UNDO>{});
+    SfxItemSet aItemSet2(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), svl::Items<SID_UNDO, SID_UNDO>{});
     // first view, undo enabled
     pView1->GetState(aItemSet1);
     CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet1.GetItemState(SID_UNDO));
@@ -1764,8 +1764,8 @@ void SwTiledRenderingTest::testDisableUndoRepair()
     int nView2 = SfxLokHelper::getView();
 
     {
-        SfxItemSet aItemSet1(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), SID_UNDO, SID_UNDO);
-        SfxItemSet aItemSet2(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), SID_UNDO, SID_UNDO);
+        SfxItemSet aItemSet1(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), svl::Items<SID_UNDO, SID_UNDO>{});
+        SfxItemSet aItemSet2(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), svl::Items<SID_UNDO, SID_UNDO>{});
         pView1->GetState(aItemSet1);
         CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED, aItemSet1.GetItemState(SID_UNDO));
         pView2->GetState(aItemSet2);
@@ -1785,8 +1785,8 @@ void SwTiledRenderingTest::testDisableUndoRepair()
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'u', 0);
     Scheduler::ProcessEventsToIdle();
     {
-        SfxItemSet aItemSet1(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), SID_UNDO, SID_UNDO);
-        SfxItemSet aItemSet2(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), SID_UNDO, SID_UNDO);
+        SfxItemSet aItemSet1(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), svl::Items<SID_UNDO, SID_UNDO>{});
+        SfxItemSet aItemSet2(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), svl::Items<SID_UNDO, SID_UNDO>{});
         // second view, undo enabled
         pView2->GetState(aItemSet2);
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet2.GetItemState(SID_UNDO));

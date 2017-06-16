@@ -153,7 +153,7 @@ bool Put( std::shared_ptr<const SfxItemSet>& rpAttrSet, const SwContentNode& rNo
     std::unique_ptr<SfxItemSet> pStyleNames;
     if ( SfxItemState::SET == rSet.GetItemState( RES_FRMATR_STYLE_NAME, false ) )
     {
-        pStyleNames.reset(new SfxItemSet( *aNewSet.GetPool(), RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME ));
+        pStyleNames.reset(new SfxItemSet( *aNewSet.GetPool(), svl::Items<RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME>{} ));
         pStyleNames->Put( aNewSet );
     }
 
@@ -200,7 +200,7 @@ bool Put_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
     std::unique_ptr<SfxItemSet> pStyleNames;
     if ( SfxItemState::SET == rSet.GetItemState( RES_FRMATR_STYLE_NAME, false ) )
     {
-        pStyleNames.reset(new SfxItemSet( *aNewSet.GetPool(), RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME ));
+        pStyleNames.reset(new SfxItemSet( *aNewSet.GetPool(), svl::Items<RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME>{} ));
         pStyleNames->Put( aNewSet );
     }
 

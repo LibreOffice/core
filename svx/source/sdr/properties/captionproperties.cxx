@@ -38,7 +38,7 @@ namespace sdr
             return o3tl::make_unique<SfxItemSet>(rPool,
 
                 // range from SdrAttrObj
-                SDRATTR_START, SDRATTR_SHADOW_LAST,
+                svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
                 SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
@@ -46,10 +46,7 @@ namespace sdr
                 SDRATTR_CAPTION_FIRST, SDRATTR_CAPTION_LAST,
 
                 // range from SdrTextObj
-                EE_ITEMS_START, EE_ITEMS_END,
-
-                // end
-                0, 0);
+                EE_ITEMS_START, EE_ITEMS_END>{});
         }
 
         CaptionProperties::CaptionProperties(SdrObject& rObj)

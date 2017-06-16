@@ -143,7 +143,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     bool   bLoad = false;           // appear the new master pages?
     OUString aFile;
 
-    SfxItemSet aSet(mpDoc->GetPool(), ATTR_PRESLAYOUT_START, ATTR_PRESLAYOUT_END);
+    SfxItemSet aSet(mpDoc->GetPool(), svl::Items<ATTR_PRESLAYOUT_START, ATTR_PRESLAYOUT_END>{});
 
     aSet.Put( SfxBoolItem( ATTR_PRESLAYOUT_LOAD, bLoad));
     aSet.Put( SfxBoolItem( ATTR_PRESLAYOUT_MASTER_PAGE, bMasterPage ) );

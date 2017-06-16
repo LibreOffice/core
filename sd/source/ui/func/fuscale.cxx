@@ -69,7 +69,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
 
     if( !pArgs )
     {
-        SfxItemSet aNewAttr( mpDoc->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM );
+        SfxItemSet aNewAttr( mpDoc->GetPool(), svl::Items<SID_ATTR_ZOOM, SID_ATTR_ZOOM>{} );
         std::unique_ptr<SvxZoomItem> pZoomItem;
         SvxZoomEnableFlags nZoomValues = SvxZoomEnableFlags::ALL;
 

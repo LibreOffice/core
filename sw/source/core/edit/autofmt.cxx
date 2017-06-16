@@ -578,9 +578,8 @@ bool SwAutoFormat::DoUnderline()
             break;
         }
         SfxItemSet aSet(m_pDoc->GetAttrPool(),
-                    RES_PARATR_CONNECT_BORDER, RES_PARATR_CONNECT_BORDER,
-                    RES_BOX, RES_BOX,
-                    0);
+                    svl::Items<RES_PARATR_CONNECT_BORDER, RES_PARATR_CONNECT_BORDER,
+                    RES_BOX, RES_BOX>{});
         aSet.Put( SwParaConnectBorderItem( false ) );
         SvxBoxItem aBox( RES_BOX );
         aBox.SetLine( &aLine, SvxBoxItemLine::BOTTOM );
@@ -988,11 +987,10 @@ void SwAutoFormat::SetColl( sal_uInt16 nId, bool bHdLineOrText )
 
     // keep hard tabs, alignment, language, hyphenation, DropCaps and nearly all frame attributes
     SfxItemSet aSet( m_pDoc->GetAttrPool(),
-                        RES_PARATR_ADJUST, RES_PARATR_ADJUST,
+                        svl::Items<RES_PARATR_ADJUST, RES_PARATR_ADJUST,
                         RES_PARATR_TABSTOP, RES_PARATR_DROP,
                         RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
-                        RES_BACKGROUND, RES_SHADOW,
-                        0 );
+                        RES_BACKGROUND, RES_SHADOW>{} );
 
     if( m_pCurTextNd->HasSwAttrSet() )
     {

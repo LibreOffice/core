@@ -58,7 +58,7 @@ void SwFootNoteOptionDlg::PageCreated( sal_uInt16 /*nId*/, SfxTabPage &rPage )
 
 IMPL_LINK( SwFootNoteOptionDlg, OkHdl, Button *, pBtn, void )
 {
-    SfxItemSet aDummySet(rSh.GetAttrPool(), 1, 1 );
+    SfxItemSet aDummySet(rSh.GetAttrPool(), svl::Items<1, 1>{} );
     SfxTabPage *pPage = GetTabPage( m_nFootNoteId );
     if ( pPage )
         pPage->FillItemSet( &aDummySet );

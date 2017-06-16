@@ -477,7 +477,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
         const sal_uInt16 nBoxArrLen = pTAFormat ? 16 : 4;
         aBoxFormatArr.resize( nBoxArrLen, nullptr );
     }
-    SfxItemSet aCharSet( GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1 );
+    SfxItemSet aCharSet( GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1>{} );
 
     SwNodeIndex aNdIdx( *pTableNd, 1 ); // Set to StartNode of first Box
     SwTableLines& rLines = rNdTable.GetTabLines();
@@ -766,7 +766,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
             aBoxFormatArr2.reset(new std::vector<SwTableBoxFormat*>( nBoxArrLen, nullptr ));
         }
 
-        SfxItemSet aCharSet( GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1 );
+        SfxItemSet aCharSet( GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1>{} );
 
         SwHistory* pHistory = pUndo ? &pUndo->GetHistory() : nullptr;
 
@@ -3701,7 +3701,7 @@ static bool lcl_SetAFormatBox(FndBox_ & rBox, SetAFormatTabPara *pSetPara, bool 
                 pSetBox->SetDirectFormatting(false);
 
             SwDoc* pDoc = pSetBox->GetFrameFormat()->GetDoc();
-            SfxItemSet aCharSet(pDoc->GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1);
+            SfxItemSet aCharSet(pDoc->GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1>{});
             SfxItemSet aBoxSet(pDoc->GetAttrPool(), aTableBoxSetRange);
             sal_uInt8 nPos = pSetPara->nAFormatLine * 4 + pSetPara->nAFormatBox;
             pSetPara->rTableFormat.UpdateToSet(nPos, aCharSet, SwTableAutoFormat::UPDATE_CHAR, nullptr);
@@ -4078,7 +4078,7 @@ void SwDoc::ChkBoxNumFormat( SwTableBox& rBox, bool bCallUpdate )
             }
 
             SwTableBoxFormat* pBoxFormat = static_cast<SwTableBoxFormat*>(rBox.GetFrameFormat());
-            SfxItemSet aBoxSet( GetAttrPool(), RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
+            SfxItemSet aBoxSet( GetAttrPool(), svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{} );
 
             bool bLockModify = true;
             bool bSetNumberFormat = IsInsTableFormatNum();
@@ -4230,8 +4230,7 @@ void SwDoc::ClearLineNumAttrs( SwPosition & rPos )
         {
             const SfxPoolItem* pFormatItem = nullptr;
             SfxItemSet rSet( pTextNode->GetDoc()->GetAttrPool(),
-                        RES_PARATR_BEGIN, RES_PARATR_END - 1,
-                        0);
+                        svl::Items<RES_PARATR_BEGIN, RES_PARATR_END - 1>{});
             pTextNode->SwContentNode::GetAttr( rSet );
             if ( SfxItemState::SET == rSet.GetItemState( RES_PARATR_NUMRULE , false , &pFormatItem ) )
             {

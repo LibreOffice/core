@@ -143,7 +143,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getSupportedServiceNames( 
 void SAL_CALL SvxUnoMarkerTable::ImplInsertByName( const OUString& aName, const uno::Any& aElement )
 {
     maItemSetVector.push_back(
-        o3tl::make_unique<SfxItemSet>( *mpModelPool, XATTR_LINESTART, XATTR_LINEEND ));
+        o3tl::make_unique<SfxItemSet>( *mpModelPool, svl::Items<XATTR_LINESTART, XATTR_LINEEND>{} ));
     auto pInSet = maItemSetVector.back().get();
 
     XLineEndItem aEndMarker(XATTR_LINEEND);

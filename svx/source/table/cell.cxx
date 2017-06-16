@@ -183,7 +183,7 @@ namespace sdr
             return o3tl::make_unique<SfxItemSet>(rPool,
 
                 // range from SdrAttrObj
-                SDRATTR_START, SDRATTR_SHADOW_LAST,
+                svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
                 SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
@@ -191,10 +191,7 @@ namespace sdr
                 SDRATTR_TABLE_FIRST, SDRATTR_TABLE_LAST,
 
                 // range from SdrTextObj
-                EE_ITEMS_START, EE_ITEMS_END,
-
-                // end
-                0, 0);
+                EE_ITEMS_START, EE_ITEMS_END>{});
         }
 
         const svx::ITextProvider& CellProperties::getTextProvider() const
@@ -360,8 +357,7 @@ namespace sdr
 
                 // prepare ItemSet to set exchanged width and height items
                 SfxItemSet aNewSet(*rSet.GetPool(),
-                    SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
-                    0, 0);
+                    svl::Items<SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT>{});
 
                 aNewSet.Put(rSet);
                 aNewSet.Put(makeSdrTextAutoGrowWidthItem(bAutoGrowHeight));
@@ -1116,7 +1112,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
         }
         default:
         {
-            SfxItemSet aSet( GetModel()->GetItemPool(), pMap->nWID, pMap->nWID);
+            SfxItemSet aSet( GetModel()->GetItemPool(), {{pMap->nWID, pMap->nWID}});
             aSet.Put(mpProperties->GetItem(pMap->nWID));
 
             bool bSpecial = false;
@@ -1236,7 +1232,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
         }
         default:
         {
-            SfxItemSet aSet( GetModel()->GetItemPool(), pMap->nWID, pMap->nWID);
+            SfxItemSet aSet( GetModel()->GetItemPool(), {{pMap->nWID, pMap->nWID}});
             aSet.Put(mpProperties->GetItem(pMap->nWID));
 
             Any aAny;
@@ -1570,7 +1566,7 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName )
         {
             if( SfxItemPool::IsWhich(pMap->nWID) )
             {
-                SfxItemSet aSet( GetModel()->GetItemPool(), pMap->nWID, pMap->nWID);
+                SfxItemSet aSet( GetModel()->GetItemPool(), {{pMap->nWID, pMap->nWID}});
                 aSet.Put(GetModel()->GetItemPool().GetDefaultItem(pMap->nWID));
                 return GetAnyForItem( aSet, pMap );
             }

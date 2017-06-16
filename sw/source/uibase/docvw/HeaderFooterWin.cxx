@@ -419,10 +419,10 @@ void SwHeaderFooterWin::ExecuteCommand(const OString& rIdent)
 
         SfxItemPool* pPool = pHFFormat->GetAttrSet().GetPool();
         SfxItemSet aSet( *pPool,
-               RES_BACKGROUND, RES_BACKGROUND,
+               svl::Items<RES_BACKGROUND, RES_BACKGROUND,
                RES_BOX, RES_BOX,
                SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
-               RES_SHADOW, RES_SHADOW, 0 );
+               RES_SHADOW, RES_SHADOW>{} );
 
         aSet.Put( pHFFormat->GetAttrSet() );
 

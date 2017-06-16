@@ -3479,7 +3479,7 @@ XLineAttrSetItem::XLineAttrSetItem( std::unique_ptr<SfxItemSet>&& pItemSet ) :
 
 XLineAttrSetItem::XLineAttrSetItem( SfxItemPool* pItemPool ) :
     SfxSetItem( XATTRSET_LINE,
-        o3tl::make_unique<SfxItemSet>( *pItemPool, XATTR_LINE_FIRST, XATTR_LINE_LAST))
+        o3tl::make_unique<SfxItemSet>( *pItemPool, svl::Items<XATTR_LINE_FIRST, XATTR_LINE_LAST>{}))
 {
 }
 
@@ -3503,7 +3503,7 @@ SfxPoolItem* XLineAttrSetItem::Clone( SfxItemPool* pPool ) const
 SfxPoolItem* XLineAttrSetItem::Create( SvStream& rStream, sal_uInt16 /*nVersion*/) const
 {
     auto pSet2 = o3tl::make_unique<SfxItemSet>( *GetItemSet().GetPool(),
-                                    XATTR_LINE_FIRST, XATTR_LINE_LAST);
+                                    svl::Items<XATTR_LINE_FIRST, XATTR_LINE_LAST>{});
     pSet2->Load( rStream );
     return new XLineAttrSetItem( std::move(pSet2) );
 }
@@ -3516,7 +3516,7 @@ XFillAttrSetItem::XFillAttrSetItem( std::unique_ptr<SfxItemSet>&& pItemSet ) :
 
 XFillAttrSetItem::XFillAttrSetItem( SfxItemPool* pItemPool ) :
     SfxSetItem( XATTRSET_FILL,
-        o3tl::make_unique<SfxItemSet>( *pItemPool, XATTR_FILL_FIRST, XATTR_FILL_LAST))
+        o3tl::make_unique<SfxItemSet>( *pItemPool, svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{}))
 {
 }
 
@@ -3540,7 +3540,7 @@ SfxPoolItem* XFillAttrSetItem::Clone( SfxItemPool* pPool ) const
 SfxPoolItem* XFillAttrSetItem::Create( SvStream& rStream, sal_uInt16 /*nVersion*/) const
 {
     auto pSet2 = o3tl::make_unique<SfxItemSet>( *GetItemSet().GetPool(),
-                                    XATTR_FILL_FIRST, XATTR_FILL_LAST);
+                                    svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
     pSet2->Load( rStream );
     return new XFillAttrSetItem( std::move(pSet2) );
 }

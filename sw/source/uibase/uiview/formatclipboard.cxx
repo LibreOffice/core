@@ -55,7 +55,7 @@ RES_COL, RES_KEEP, \
 /* no RES_URL */ \
 RES_EDIT_IN_READONLY, RES_LAYOUT_SPLIT, \
 /* no RES_CHAIN */ \
-RES_TEXTGRID, RES_FRMATR_END-1,
+RES_TEXTGRID, RES_FRMATR_END-1
 
 #define FORMAT_PAINTBRUSH_PARAGRAPH_IDS \
 RES_PARATR_BEGIN, RES_PARATR_END -1, \
@@ -68,8 +68,7 @@ std::unique_ptr<SfxItemSet> lcl_CreateEmptyItemSet( SelectionType nSelectionType
     if( nSelectionType & (SelectionType::Frame | SelectionType::Ole | SelectionType::Graphic) )
     {
         pItemSet = o3tl::make_unique<SfxItemSet>(rPool,
-                        FORMAT_PAINTBRUSH_FRAME_IDS
-                        0);
+                        svl::Items<FORMAT_PAINTBRUSH_FRAME_IDS>{});
     }
     else if( nSelectionType & SelectionType::DrawObject )
     {
@@ -79,13 +78,11 @@ std::unique_ptr<SfxItemSet> lcl_CreateEmptyItemSet( SelectionType nSelectionType
     {
         if( bNoParagraphFormats )
             pItemSet = o3tl::make_unique<SfxItemSet>(rPool,
-                    RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
-                    0);
+                    svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>{});
         else
             pItemSet = o3tl::make_unique<SfxItemSet>(rPool,
-                    RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
-                    FORMAT_PAINTBRUSH_PARAGRAPH_IDS
-                    0);
+                    svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
+                    FORMAT_PAINTBRUSH_PARAGRAPH_IDS>{});
     }
     return pItemSet;
 }
@@ -376,7 +373,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
     if( nSelectionType & SelectionType::TableCell )//only copy table attributes if really cells are selected (not only text in tables)
     {
         m_pTableItemSet = o3tl::make_unique<SfxItemSet>(rPool,
-                        SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_SHADOW, //SID_ATTR_BORDER_OUTER is inbetween
+                        svl::Items<SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_SHADOW, //SID_ATTR_BORDER_OUTER is inbetween
                         RES_BACKGROUND,         RES_SHADOW, //RES_BOX is inbetween
                         SID_ATTR_BRUSH_ROW,     SID_ATTR_BRUSH_TABLE,
                         RES_BREAK,              RES_BREAK,
@@ -387,8 +384,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
                         RES_FRAMEDIR,           RES_FRAMEDIR,
                         FN_PARAM_TABLE_HEADLINE, FN_PARAM_TABLE_HEADLINE,
                         FN_TABLE_BOX_TEXTORIENTATION, FN_TABLE_BOX_TEXTORIENTATION,
-                        FN_TABLE_SET_VERT_ALIGN, FN_TABLE_SET_VERT_ALIGN,
-                        0);
+                        FN_TABLE_SET_VERT_ALIGN, FN_TABLE_SET_VERT_ALIGN>{});
         lcl_getTableAttributes( *m_pTableItemSet, rWrtShell );
     }
 

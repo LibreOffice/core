@@ -1565,7 +1565,7 @@ void SwXStyle::SetPropertyValue<HINT_BEGIN>(const SfxItemPropertySimpleEntry& rE
 {
     // default ItemSet handling
     SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
-    SfxItemSet aSet(*rStyleSet.GetPool(), rEntry.nWID, rEntry.nWID);
+    SfxItemSet aSet(*rStyleSet.GetPool(), {{rEntry.nWID, rEntry.nWID}});
     aSet.SetParent(&rStyleSet);
     rPropSet.setPropertyValue(rEntry, rValue, aSet);
     rStyleSet.Put(aSet);
@@ -1675,7 +1675,7 @@ void SwXStyle::SetPropertyValue<RES_PAPER_BIN>(const SfxItemPropertySimpleEntry&
     if(nBin == std::numeric_limits<printeridx_t>::max())
         throw lang::IllegalArgumentException();
     SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
-    SfxItemSet aSet(*rStyleSet.GetPool(), rEntry.nWID, rEntry.nWID);
+    SfxItemSet aSet(*rStyleSet.GetPool(), {{rEntry.nWID, rEntry.nWID}});
     aSet.SetParent(&rStyleSet);
     rPropSet.setPropertyValue(rEntry, uno::makeAny(static_cast<sal_Int8>(nBin == std::numeric_limits<printeridx_t>::max()-1 ? -1 : nBin)), aSet);
     rStyleSet.Put(aSet);
@@ -2602,7 +2602,7 @@ void SAL_CALL SwXStyle::setPropertiesToDefault(const uno::Sequence<OUString>& aP
         {
             //
             SwDoc* pDoc = pTargetFormat->GetDoc();
-            SfxItemSet aSet(pDoc->GetAttrPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+            SfxItemSet aSet(pDoc->GetAttrPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
             aSet.SetParent(&pTargetFormat->GetAttrSet());
 
             aSet.ClearItem(XATTR_FILLBMP_STRETCH);
@@ -2873,7 +2873,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                     {
                         // Header/footer gets switched on, create defaults and the needed SfxSetItem
                         SfxItemSet aTempSet(*aBaseImpl.GetItemSet().GetPool(),
-                            RES_FRMATR_BEGIN,RES_FRMATR_END - 1,            // [82
+                            svl::Items<RES_FRMATR_BEGIN,RES_FRMATR_END - 1,            // [82
 
                             // FillAttribute support
                             XATTR_FILL_FIRST, XATTR_FILL_LAST,              // [1014
@@ -2881,8 +2881,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                             SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER,    // [10023
                             SID_ATTR_PAGE_SIZE,SID_ATTR_PAGE_SIZE,          // [10051
                             SID_ATTR_PAGE_ON,SID_ATTR_PAGE_SHARED,          // [10060
-                            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST,
-                            0);
+                            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST>{});
 
                         // set correct parent to get the XFILL_NONE FillStyle as needed
                         aTempSet.SetParent(&GetDoc()->GetDfltFrameFormat()->GetAttrSet());
@@ -3275,7 +3274,7 @@ void SwXFrameStyle::SetItem(enum RES_FRMATR eAtr, const SfxPoolItem& rItem)
         return;
     rtl::Reference<SwDocStyleSheet> xStyle(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
     SfxItemSet& rStyleSet = xStyle->GetItemSet();
-    SfxItemSet aSet(*rStyleSet.GetPool(), eAtr, eAtr);
+    SfxItemSet aSet(*rStyleSet.GetPool(), {{sal_uInt16(eAtr), sal_uInt16(eAtr)}});
     aSet.Put(rItem);
     xStyle->SetItemSet(aSet);
 }
@@ -3719,7 +3718,7 @@ SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAut
                 if ( aRubyMap.find( aPair ) == aRubyMap.end() )
                 {
                     aRubyMap.insert( aPair );
-                    std::shared_ptr<SfxItemSet> pItemSet( new SfxItemSet( rAttrPool, RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY ) );
+                    std::shared_ptr<SfxItemSet> pItemSet( new SfxItemSet( rAttrPool, svl::Items<RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY>{} ) );
                     pItemSet->Put( *pItem );
                     mAutoStyles.push_back( pItemSet );
                 }

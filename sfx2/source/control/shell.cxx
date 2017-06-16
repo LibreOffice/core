@@ -382,7 +382,7 @@ bool SfxShell::CanExecuteSlot_Impl( const SfxSlot &rSlot )
     // Get Slot status
     SfxItemPool &rPool = GetPool();
     const sal_uInt16 nId = rSlot.GetWhich( rPool );
-    SfxItemSet aSet(rPool, nId, nId);
+    SfxItemSet aSet(rPool, {{nId, nId}});
     SfxStateFunc pFunc = rSlot.GetStateFnc();
     CallState( pFunc, aSet );
     return aSet.GetItemState(nId) != SfxItemState::DISABLED;
@@ -454,7 +454,7 @@ const SfxPoolItem* SfxShell::GetSlotState
 
     // Get Item and Item status
     const SfxPoolItem *pItem = nullptr;
-    SfxItemSet aSet( rPool, nSlotId, nSlotId ); // else pItem dies too soon
+    SfxItemSet aSet( rPool, {{nSlotId, nSlotId}} ); // else pItem dies too soon
     if ( pSlot )
     {
         // Call Status method

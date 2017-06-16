@@ -85,7 +85,7 @@ ScPatternAttr::ScPatternAttr( std::unique_ptr<SfxItemSet>&& pItemSet )
 }
 
 ScPatternAttr::ScPatternAttr( SfxItemPool* pItemPool )
-    :   SfxSetItem  ( ATTR_PATTERN, o3tl::make_unique<SfxItemSet>( *pItemPool, ATTR_PATTERN_START, ATTR_PATTERN_END ) ),
+    :   SfxSetItem  ( ATTR_PATTERN, o3tl::make_unique<SfxItemSet>( *pItemPool, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} ) ),
         pName       ( nullptr ),
         pStyle      ( nullptr ),
         mnKey(0)
@@ -161,7 +161,7 @@ SfxPoolItem* ScPatternAttr::Create( SvStream& rStream, sal_uInt16 /* nVersion */
         pStr = new OUString( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
 
     auto pNewSet = o3tl::make_unique<SfxItemSet>( *GetItemSet().GetPool(),
-                                       ATTR_PATTERN_START, ATTR_PATTERN_END );
+                                       svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} );
     pNewSet->Load( rStream );
 
     ScPatternAttr* pPattern = new ScPatternAttr( std::move(pNewSet) );

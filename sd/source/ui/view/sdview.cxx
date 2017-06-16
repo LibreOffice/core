@@ -991,8 +991,8 @@ bool View::IsMorphingAllowed() const
              ( nKind1 != OBJ_CAPTION && nKind2 !=  OBJ_CAPTION ) &&
              dynamic_cast< const E3dObject *>( pObj1 ) == nullptr && dynamic_cast< const E3dObject *>( pObj2 ) ==  nullptr )
         {
-            SfxItemSet      aSet1( mrDoc.GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
-            SfxItemSet      aSet2( mrDoc.GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
+            SfxItemSet      aSet1( mrDoc.GetPool(), svl::Items<XATTR_FILLSTYLE, XATTR_FILLSTYLE>{} );
+            SfxItemSet      aSet2( mrDoc.GetPool(), svl::Items<XATTR_FILLSTYLE, XATTR_FILLSTYLE>{} );
 
             aSet1.Put(pObj1->GetMergedItemSet());
             aSet2.Put(pObj2->GetMergedItemSet());

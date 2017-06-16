@@ -131,9 +131,8 @@ void Svx3DPreviewControl::Construct()
     mpScene->SetRectsDirty();
 
     SfxItemSet aSet( mpModel->GetItemPool(),
-        XATTR_LINESTYLE, XATTR_LINESTYLE,
-        XATTR_FILL_FIRST, XATTR_FILLBITMAP,
-        0, 0 );
+        svl::Items<XATTR_LINESTYLE, XATTR_LINESTYLE,
+        XATTR_FILL_FIRST, XATTR_FILLBITMAP>{} );
     aSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
     aSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
     aSet.Put( XFillColorItem( "", Color( COL_WHITE ) ) );
@@ -189,7 +188,7 @@ void Svx3DPreviewControl::SetObjectType(SvxPreviewObjectType nType)
 {
     if( mnObjectType != nType || !mp3DObj)
     {
-        SfxItemSet aSet(mpModel->GetItemPool(), SDRATTR_START, SDRATTR_END, 0, 0);
+        SfxItemSet aSet(mpModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{});
         mnObjectType = nType;
 
         if( mp3DObj )

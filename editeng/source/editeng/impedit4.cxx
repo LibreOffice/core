@@ -2154,7 +2154,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
                 if(aCurrentNewPortion->sText != aCurrentOldPortion->sText)
                 {
                     //change text and apply language
-                    SfxItemSet aSet( aEditDoc.GetItemPool(), nLangWhichId, nLangWhichId);
+                    SfxItemSet aSet( aEditDoc.GetItemPool(), {{nLangWhichId, nLangWhichId}});
                     aSet.Put(SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId));
                     SetAttribs( *aCurrentOldPosition, aSet );
                     ImpInsertText( *aCurrentOldPosition, aCurrentNewPortion->sText );
@@ -2162,7 +2162,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
                 else if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
                 {
                     //apply language
-                    SfxItemSet aSet( aEditDoc.GetItemPool(), nLangWhichId, nLangWhichId);
+                    SfxItemSet aSet( aEditDoc.GetItemPool(), {{nLangWhichId, nLangWhichId}});
                     aSet.Put(SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId));
                     SetAttribs( *aCurrentOldPosition, aSet );
                 }
@@ -2199,7 +2199,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
                         case SvtScriptType::COMPLEX : nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
                         default: break;
                     }
-                    SfxItemSet aSet( aEditDoc.GetItemPool(), nLangWhichId, nLangWhichId);
+                    SfxItemSet aSet( aEditDoc.GetItemPool(), {{nLangWhichId, nLangWhichId}});
                     aSet.Put(SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId));
                     SetAttribs( aCurrentPaM, aSet );
                 }

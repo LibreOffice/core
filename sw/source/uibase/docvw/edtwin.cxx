@@ -787,7 +787,7 @@ static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView&
         }
         if(bLang)
         {
-            SfxItemSet aLangSet(rView.GetPool(), nWhich, nWhich);
+            SfxItemSet aLangSet(rView.GetPool(), {{nWhich, nWhich}});
             SwWrtShell& rSh = rView.GetWrtShell();
             rSh.GetCurAttr(aLangSet);
             if(SfxItemState::DEFAULT <= aLangSet.GetItemState(nWhich))
@@ -1010,11 +1010,11 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
         rSh.IsSelObjProtected( FlyProtectFlags::Pos ) == FlyProtectFlags::NONE )
     {
         SfxItemSet aSet(rSh.GetAttrPool(),
-                        RES_FRM_SIZE, RES_FRM_SIZE,
+                        svl::Items<RES_FRM_SIZE, RES_FRM_SIZE,
                         RES_VERT_ORIENT, RES_ANCHOR,
                         RES_COL, RES_COL,
                         RES_PROTECT, RES_PROTECT,
-                        RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW, 0);
+                        RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW>{});
         rSh.GetFlyFrameAttr( aSet );
         RndStdIds eAnchorId = static_cast<const SwFormatAnchor&>(aSet.Get(RES_ANCHOR)).GetAnchorId();
         Size aSnap;
@@ -2242,7 +2242,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eKeyState = SwKeyState::GoIntoFly;
                         else
                         {
-                            SfxItemSet aSet(rSh.GetAttrPool(), RES_TXTATR_INETFMT, RES_TXTATR_INETFMT);
+                            SfxItemSet aSet(rSh.GetAttrPool(), svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
                             rSh.GetCurAttr(aSet);
                             if(SfxItemState::SET == aSet.GetItemState(RES_TXTATR_INETFMT, false))
                             {
