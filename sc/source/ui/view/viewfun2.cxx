@@ -614,6 +614,7 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
     SCCOL nMarkEndCol = nEndCol;
     SCROW nMarkEndRow = nEndRow;
     ScAutoSum eSum = ScAutoSumNone;
+    ScRangeList aSumRangeList;
 
     if ( bRow )
     {
@@ -637,13 +638,12 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
         {
             if ( !pDoc->IsBlockEmpty( nTab, nCol, nStartRow, nCol, nSumEndRow ) )
             {
-                ScRangeList aRangeList;
                 // Include the originally selected start row.
                 const ScRange aRange( nCol, rRange.aStart.Row(), nTab, nCol, nSumEndRow, nTab );
-                if ( (eSum = lcl_GetAutoSumForColumnRange( pDoc, aRangeList, aRange )) != ScAutoSumNone )
+                if ( (eSum = lcl_GetAutoSumForColumnRange( pDoc, aSumRangeList, aRange )) != ScAutoSumNone )
                 {
                     const OUString aFormula = GetAutoSumFormula(
-                        aRangeList, bSubTotal, ScAddress(nCol, nInsRow, nTab));
+                        aSumRangeList, bSubTotal, ScAddress(nCol, nInsRow, nTab));
                     EnterData( nCol, nInsRow, nTab, aFormula );
                 }
             }
@@ -672,22 +672,28 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
         {
             if ( !pDoc->IsBlockEmpty( nTab, nStartCol, nRow, nSumEndCol, nRow ) )
             {
-                ScRangeList aRangeList;
                 // Include the originally selected start column.
                 const ScRange aRange( rRange.aStart.Col(), nRow, nTab, nSumEndCol, nRow, nTab );
-                if ( (eSum = lcl_GetAutoSumForRowRange( pDoc, aRangeList, aRange )) != ScAutoSumNone )
+                if ( (eSum = lcl_GetAutoSumForRowRange( pDoc, aSumRangeList, aRange )) != ScAutoSumNone )
                 {
-                    const OUString aFormula = GetAutoSumFormula( aRangeList, bSubTotal, ScAddress(nInsCol, nRow, nTab) );
+                    const OUString aFormula = GetAutoSumFormula( aSumRangeList, bSubTotal, ScAddress(nInsCol, nRow, nTab) );
                     EnterData( nInsCol, nRow, nTab, aFormula );
                 }
             }
         }
     }
 
-    // set new mark range and cursor position
+    // Set new mark range and cursor position.
+    // For sum of sums (and data until sum) mark the actual resulting range if
+    // there is only one, or the data range if more than one. Otherwise use the
+    // original selection. All extended by end column/row where the sum is put.
     const ScRange aMarkRange(
-            (eSum == ScAutoSumSum ? nStartCol : rRange.aStart.Col()),
-            (eSum == ScAutoSumSum ? nStartRow : rRange.aStart.Row()),
+            (eSum == ScAutoSumSum ?
+             (aSumRangeList.size() == 1 ? aSumRangeList[0]->aStart.Col() : nStartCol) :
+             rRange.aStart.Col()),
+            (eSum == ScAutoSumSum ?
+             (aSumRangeList.size() == 1 ? aSumRangeList[0]->aStart.Row() : nStartRow) :
+             rRange.aStart.Row()),
             nTab, nMarkEndCol, nMarkEndRow, nTab );
     MarkRange( aMarkRange, false, bContinue );
     if ( bSetCursor )
