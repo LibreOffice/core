@@ -919,6 +919,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             it->Value <<= aPropertyValues;
 
         xPropertySet->setPropertyValue("CustomShapeGeometry", uno::makeAny(comphelper::containerToSequence(aGeomPropVec)));
+        xPropertySet->setPropertyValue("TextAutoGrowHeight", uno::makeAny(false));
+        xPropertySet->setPropertyValue("TextAutoGrowWidth", uno::makeAny(false));
     }
 
     if (!boost::logic::indeterminate(obRelFlipV) && xPropertySet.is())
