@@ -1426,7 +1426,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
                 bool bLock = pFrameFormat->GetDoc()->GetNumberFormatter()
                                      ->IsTextFormat( nNumFormat );
                 SfxItemSet aItemSet( *pFrameFormat->GetAttrSet().GetPool(),
-                                     RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
+                                     svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{} );
                 SvxAdjust eAdjust = SvxAdjust::End;
                 SwContentNode *pCNd = nullptr;
                 if( !bLock )
@@ -2819,8 +2819,8 @@ SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
 
     if( !rStyle.isEmpty() || !rId.isEmpty() || !rClass.isEmpty() )
     {
-        SfxItemSet aItemSet( m_xDoc->GetAttrPool(), RES_BACKGROUND,
-                                                  RES_BACKGROUND );
+        SfxItemSet aItemSet( m_xDoc->GetAttrPool(), svl::Items<RES_BACKGROUND,
+                                                  RES_BACKGROUND>{} );
         SvxCSS1PropertyInfo aPropInfo;
 
         if( !rClass.isEmpty() )
@@ -3524,7 +3524,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     // the table should be put in a text frame
 
                     SfxItemSet aFrameSet( m_xDoc->GetAttrPool(),
-                                        RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
+                                        svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{} );
                     if( !pCurTable->IsNewDoc() )
                         Reader::ResetFrameFormatAttrs( aFrameSet );
 

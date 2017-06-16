@@ -465,7 +465,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
 
         // HeaderInfo, margins, background, border
         SfxItemSet aHeaderSet(*rSet.GetPool(),
-            RES_FRMATR_BEGIN,RES_FRMATR_END - 1,            // [82
+            svl::Items<RES_FRMATR_BEGIN,RES_FRMATR_END - 1,            // [82
 
             // FillAttribute support
             XATTR_FILL_FIRST, XATTR_FILL_LAST,              // [1014
@@ -473,8 +473,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
             SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER,    // [10023
             SID_ATTR_PAGE_SIZE,SID_ATTR_PAGE_SIZE,          // [10051
             SID_ATTR_PAGE_ON,SID_ATTR_PAGE_SHARED,          // [10060
-            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST,
-            0, 0);
+            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST>{});
 
         // set correct parent to get the XFILL_NONE FillStyle as needed
         aHeaderSet.SetParent(&rMaster.GetDoc()->GetDfltFrameFormat()->GetAttrSet());
@@ -516,7 +515,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
 
         // FooterInfo, margins, background, border
         SfxItemSet aFooterSet(*rSet.GetPool(),
-            RES_FRMATR_BEGIN,RES_FRMATR_END - 1,            // [82
+            svl::Items<RES_FRMATR_BEGIN,RES_FRMATR_END - 1,            // [82
 
             // FillAttribute support
             XATTR_FILL_FIRST, XATTR_FILL_LAST,              // [1014
@@ -524,8 +523,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
             SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER,    // [10023
             SID_ATTR_PAGE_SIZE,SID_ATTR_PAGE_SIZE,          // [10051
             SID_ATTR_PAGE_ON,SID_ATTR_PAGE_SHARED,          // [10060
-            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST,
-            0, 0);
+            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST>{});
 
         // set correct parent to get the XFILL_NONE FillStyle as needed
         aFooterSet.SetParent(&rMaster.GetDoc()->GetDfltFrameFormat()->GetAttrSet());
@@ -637,7 +635,7 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
     }
     else
     {
-        SfxItemSet aCoreSet(rShell.GetView().GetPool(), RES_PAGEDESC, RES_PAGEDESC );
+        SfxItemSet aCoreSet(rShell.GetView().GetPool(), svl::Items<RES_PAGEDESC, RES_PAGEDESC>{} );
         rShell.GetCurAttr( aCoreSet );
         if(SfxItemState::SET == aCoreSet.GetItemState( RES_PAGEDESC, true, &pItem ) )
         {

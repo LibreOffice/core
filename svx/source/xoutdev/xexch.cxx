@@ -86,7 +86,7 @@ SvStream& ReadXFillExchangeData( SvStream& rIStm, XFillExchangeData& rData )
 {
     DBG_ASSERT( rData.pPool, "XFillExchangeData has no pool" );
 
-    auto pSet = o3tl::make_unique<SfxItemSet>( *rData.pPool, XATTR_FILL_FIRST, XATTR_FILL_LAST );
+    auto pSet = o3tl::make_unique<SfxItemSet>( *rData.pPool, svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{} );
     sal_uInt32      nItemCount = 0;
     sal_uInt16          nWhich, nItemVersion;
 

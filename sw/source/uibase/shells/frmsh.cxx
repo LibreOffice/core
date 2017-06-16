@@ -166,7 +166,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 if(pArgs->GetItemState(SID_ATTR_COLUMNS, false, &pItem) == SfxItemState::SET)
                     nCols = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
 
-                SfxItemSet aSet(GetPool(),RES_COL,RES_COL);
+                SfxItemSet aSet(GetPool(),svl::Items<RES_COL,RES_COL>{});
                 rSh.GetFlyFrameAttr( aSet );
                 SwFormatCol aCol(static_cast<const SwFormatCol&>(aSet.Get(RES_COL)));
                 // GutterWidth will not always passed, hence get firstly
@@ -201,7 +201,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 const OUString& rURL = rHLinkItem.GetURL();
                 const OUString& rTarget = rHLinkItem.GetTargetFrame();
 
-                SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
+                SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_URL, RES_URL>{} );
                 rSh.GetFlyFrameAttr( aSet );
                 SwFormatURL aURL( static_cast<const SwFormatURL&>(aSet.Get( RES_URL )) );
 
@@ -388,7 +388,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             else
             {
                 SfxItemSet aSet(GetPool(),  // sorted by indices
-                    RES_FRMATR_BEGIN,       RES_FRMATR_END-1,                       // [82
+                    svl::Items<RES_FRMATR_BEGIN,       RES_FRMATR_END-1,                       // [82
 
                     // FillAttribute support
                     XATTR_FILL_FIRST,       XATTR_FILL_LAST,                        // [1014
@@ -412,8 +412,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                     FN_SET_FRM_ALT_NAME,    FN_SET_FRM_ALT_NAME,                    // [21318
                     FN_UNO_DESCRIPTION,     FN_UNO_DESCRIPTION,                     // [21320
                     FN_OLE_IS_MATH,         FN_MATH_BASELINE_ALIGNMENT,             // [22314
-                    FN_PARAM_CHAIN_PREVIOUS, FN_PARAM_CHAIN_NEXT,                   // [22420
-                    0);
+                    FN_PARAM_CHAIN_PREVIOUS, FN_PARAM_CHAIN_NEXT>{});               // [22420
 
                 // create needed items for XPropertyList entries from the DrawModel so that
                 // the Area TabPage can access them
@@ -512,11 +511,10 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             // Anything which is not supported by the format must be set hard.
                             if(SfxItemState::SET == pOutSet->GetItemState(FN_SET_FRM_NAME, false, &pItem))
                                 rSh.SetFlyName(static_cast<const SfxStringItem*>(pItem)->GetValue());
-                            SfxItemSet aShellSet(GetPool(), RES_FRM_SIZE,   RES_FRM_SIZE,
+                            SfxItemSet aShellSet(GetPool(), svl::Items<RES_FRM_SIZE,   RES_FRM_SIZE,
                                                             RES_SURROUND,   RES_SURROUND,
                                                             RES_ANCHOR,     RES_ANCHOR,
-                                                            RES_VERT_ORIENT,RES_HORI_ORIENT,
-                                                            0);
+                                                            RES_VERT_ORIENT,RES_HORI_ORIENT>{});
                             aShellSet.Put(*pOutSet);
                             aMgr.SetAttrSet(aShellSet);
                             if(SfxItemState::SET == pOutSet->GetItemState(FN_SET_FRM_NAME, false, &pItem))
@@ -608,7 +606,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             SwFormatHoriOrient aHori(aMgr.GetHoriOrient());
             bool bMirror = !aHori.IsPosToggle();
             aHori.SetPosToggle(bMirror);
-            SfxItemSet aSet(GetPool(), RES_HORI_ORIENT, RES_HORI_ORIENT);
+            SfxItemSet aSet(GetPool(), svl::Items<RES_HORI_ORIENT, RES_HORI_ORIENT>{});
             aSet.Put(aHori);
             aMgr.SetAttrSet(aSet);
             bCopyToFormat = true;
@@ -693,11 +691,10 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
     if (rSh.IsFrameSelected())
     {
         SfxItemSet aSet( rSh.GetAttrPool(),
-                            RES_LR_SPACE, RES_UL_SPACE,
+                            svl::Items<RES_LR_SPACE, RES_UL_SPACE,
                             RES_PROTECT, RES_HORI_ORIENT,
                             RES_OPAQUE, RES_OPAQUE,
-                            RES_PRINT, RES_OPAQUE,
-                            0 );
+                            RES_PRINT, RES_OPAQUE>{} );
         rSh.GetFlyFrameAttr( aSet );
 
         bool bProtect = rSh.IsSelObjProtected(FlyProtectFlags::Pos) != FlyProtectFlags::NONE;
@@ -837,7 +834,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                     SvxHyperlinkItem aHLinkItem;
                     const SfxPoolItem* pItem;
 
-                    SfxItemSet aURLSet(GetPool(), RES_URL, RES_URL);
+                    SfxItemSet aURLSet(GetPool(), svl::Items<RES_URL, RES_URL>{});
                     rSh.GetFlyFrameAttr( aURLSet );
 
                     if(SfxItemState::SET == aURLSet.GetItemState(RES_URL, true, &pItem))
@@ -992,7 +989,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
     const SvxBoxItem* pPoolBoxItem = static_cast<const SvxBoxItem*>(::GetDfltAttr(RES_BOX));
 
     const SfxItemSet *pArgs = rReq.GetArgs();
-    SfxItemSet aFrameSet(rSh.GetAttrPool(), RES_BOX, RES_BOX);
+    SfxItemSet aFrameSet(rSh.GetAttrPool(), svl::Items<RES_BOX, RES_BOX>{});
 
     rSh.GetFlyFrameAttr( aFrameSet );
     const SvxBoxItem& rBoxItem = static_cast<const SvxBoxItem&>(aFrameSet.Get(RES_BOX));
@@ -1184,7 +1181,7 @@ void SwFrameShell::GetLineStyleState(SfxItemSet &rSet)
     {
         if (rSh.IsFrameSelected())
         {
-            SfxItemSet aFrameSet( rSh.GetAttrPool(), RES_BOX, RES_BOX );
+            SfxItemSet aFrameSet( rSh.GetAttrPool(), svl::Items<RES_BOX, RES_BOX>{} );
 
             rSh.GetFlyFrameAttr(aFrameSet);
 

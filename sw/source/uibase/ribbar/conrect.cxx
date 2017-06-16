@@ -95,7 +95,7 @@ bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                 {
                     // Set the attributes needed for scrolling
                     SfxItemSet aItemSet( pSdrView->GetModel()->GetItemPool(),
-                                        SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST);
+                                        svl::Items<SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST>{});
 
                     aItemSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
                     aItemSet.Put( makeSdrTextAutoGrowHeightItem( false ) );

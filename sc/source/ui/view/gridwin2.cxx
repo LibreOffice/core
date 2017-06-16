@@ -199,7 +199,7 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
             }
 
             SfxItemSet aArgSet( pViewData->GetViewShell()->GetPool(),
-                                        SCITEM_QUERYDATA, SCITEM_QUERYDATA );
+                                        svl::Items<SCITEM_QUERYDATA, SCITEM_QUERYDATA>{} );
             aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, pViewData, &aQueryParam ) );
 
             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();

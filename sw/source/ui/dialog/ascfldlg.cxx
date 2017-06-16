@@ -183,9 +183,8 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
             if( !pPrt )
             {
                 auto pSet = o3tl::make_unique<SfxItemSet>( rDocSh.GetPool(),
-                            SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                            SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
-                            0 );
+                            svl::Items<SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
+                            SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC>{} );
                 pPrt = VclPtr<SfxPrinter>::Create( std::move(pSet) );
                 bDelPrinter = true;
             }

@@ -405,7 +405,7 @@ void ScModule::Execute( SfxRequest& rReq )
                         bSet = !GetDocOptions().IsAutoSpell();
                 }
 
-                SfxItemSet aSet( GetPool(), SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK );
+                SfxItemSet aSet( GetPool(), svl::Items<SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK>{} );
                 aSet.Put( SfxBoolItem( SID_AUTOSPELL_CHECK, bSet ) );
                 ModifyOptions( aSet );
                 rReq.Done();
@@ -1932,7 +1932,7 @@ std::unique_ptr<SfxItemSet> ScModule::CreateItemSet( sal_uInt16 nId )
     {
         pRet = o3tl::make_unique<SfxItemSet>( GetPool(),
                             // TP_CALC:
-                            SID_SCDOCOPTIONS,       SID_SCDOCOPTIONS,
+                            svl::Items<SID_SCDOCOPTIONS,       SID_SCDOCOPTIONS,
                             // TP_VIEW:
                             SID_SCVIEWOPTIONS,      SID_SCVIEWOPTIONS,
                             SID_SC_OPT_SYNCZOOM,    SID_SC_OPT_SYNCZOOM,
@@ -1955,8 +1955,7 @@ std::unique_ptr<SfxItemSet> ScModule::CreateItemSet( sal_uInt16 nId )
                             // TP_DEFAULTS
                             SID_SCDEFAULTSOPTIONS, SID_SCDEFAULTSOPTIONS,
                             // TP_FORMULA
-                            SID_SCFORMULAOPTIONS, SID_SCFORMULAOPTIONS,
-                            0 );
+                            SID_SCFORMULAOPTIONS, SID_SCFORMULAOPTIONS>{} );
 
         const ScAppOptions& rAppOpt = GetAppOptions();
 

@@ -3260,7 +3260,7 @@ SfxPoolItem* SvxScriptTypeItem::Clone( SfxItemPool * ) const
 
 SvxScriptSetItem::SvxScriptSetItem( sal_uInt16 nSlotId, SfxItemPool& rPool )
     : SfxSetItem( nSlotId, o3tl::make_unique<SfxItemSet>( rPool,
-                        SID_ATTR_CHAR_FONT, SID_ATTR_CHAR_FONT ))
+                        svl::Items<SID_ATTR_CHAR_FONT, SID_ATTR_CHAR_FONT>{} ))
 {
     sal_uInt16 nLatin, nAsian, nComplex;
     GetWhichIds( nLatin, nAsian, nComplex );

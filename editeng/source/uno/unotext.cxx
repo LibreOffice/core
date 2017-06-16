@@ -1273,7 +1273,7 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aProp
                     // Get Default from ItemPool
                     if(SfxItemPool::IsWhich(pMap->nWID))
                     {
-                        SfxItemSet aSet( *pPool,    pMap->nWID, pMap->nWID);
+                        SfxItemSet aSet( *pPool,    {{pMap->nWID, pMap->nWID}});
                         aSet.Put(pPool->GetDefaultItem(pMap->nWID));
                         return SvxItemPropertySet::getPropertyValue(pMap, aSet, true, false );
                     }

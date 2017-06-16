@@ -84,8 +84,8 @@ static const SwFrameFormat *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& 
                         SwFrameFormat &rFormat,
                         sal_uInt16 nCol, sal_uInt16 nRow )
 {
-    SfxItemSet aSet(rSh.GetAttrPool(), RES_ANCHOR, RES_ANCHOR,
-                        RES_VERT_ORIENT, RES_VERT_ORIENT, RES_HORI_ORIENT, RES_HORI_ORIENT, 0 );
+    SfxItemSet aSet(rSh.GetAttrPool(), svl::Items<RES_ANCHOR, RES_ANCHOR,
+                        RES_VERT_ORIENT, RES_VERT_ORIENT, RES_HORI_ORIENT, RES_HORI_ORIENT>{} );
     sal_uInt16 nPhyPageNum, nVirtPageNum;
     rSh.GetPageNum( nPhyPageNum, nVirtPageNum );
 
@@ -121,8 +121,8 @@ static const SwFrameFormat *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem&
                         SwFrameFormat &rFormat, SwFieldMgr& rFieldMgr,
                         sal_uInt16 nCol, sal_uInt16 nRow, bool bLast )
 {
-    SfxItemSet aSet(rSh.GetAttrPool(), RES_ANCHOR, RES_ANCHOR,
-                        RES_VERT_ORIENT, RES_VERT_ORIENT, RES_HORI_ORIENT, RES_HORI_ORIENT, 0 );
+    SfxItemSet aSet(rSh.GetAttrPool(), svl::Items<RES_ANCHOR, RES_ANCHOR,
+                        RES_VERT_ORIENT, RES_VERT_ORIENT, RES_HORI_ORIENT, RES_HORI_ORIENT>{} );
     sal_uInt16 nPhyPageNum, nVirtPageNum;
     rSh.GetPageNum( nPhyPageNum, nVirtPageNum );
 
@@ -165,7 +165,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
     SwLabCfgItem aLabCfg(bLabel);
 
     // Move up Dialog
-    SfxItemSet aSet( GetPool(), FN_LABEL, FN_LABEL, 0 );
+    SfxItemSet aSet( GetPool(), svl::Items<FN_LABEL, FN_LABEL>{} );
     aSet.Put( aLabCfg.GetItem() );
 
     SwAbstractDialogFactory* pDialogFactory = SwAbstractDialogFactory::Create();

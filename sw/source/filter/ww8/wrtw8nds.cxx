@@ -398,7 +398,7 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
     const SfxPoolItem *pGrabBag = nullptr;
 
     SfxItemSet aExportSet(*rNd.GetSwAttrSet().GetPool(),
-        RES_CHRATR_BEGIN, RES_TXTATR_END - 1);
+        svl::Items<RES_CHRATR_BEGIN, RES_TXTATR_END - 1>{});
 
     //The hard formatting properties that affect the entire paragraph
     if (rNd.HasSwAttrSet())
@@ -2784,7 +2784,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
     // Exception: if there is a character style hint at the end of the
     // paragraph only, then still go with 2), as RES_TXTATR_CHARFMT is always
     // set as a hint.
-    SfxItemSet aParagraphMarkerProperties(m_pDoc->GetAttrPool(), RES_CHRATR_BEGIN, RES_TXTATR_END);
+    SfxItemSet aParagraphMarkerProperties(m_pDoc->GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_TXTATR_END>{});
     bool bCharFormatOnly = true;
     if(const SwpHints* pTextAttrs = rNode.GetpSwpHints())
     {

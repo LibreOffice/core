@@ -236,7 +236,7 @@ short SwRedlineItr::Seek_(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
                     {
                         SwAttrPool& rPool =
                             const_cast<SwDoc&>(rDoc).GetAttrPool();
-                        pSet = o3tl::make_unique<SfxItemSet>(rPool, RES_CHRATR_BEGIN, RES_CHRATR_END-1);
+                        pSet = o3tl::make_unique<SfxItemSet>(rPool, svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1>{});
                     }
 
                     if( 1 < pRed->GetStackCount() )

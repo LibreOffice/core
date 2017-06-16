@@ -100,10 +100,9 @@ SfxPrinter* DrawDocShell::GetPrinter(bool bCreate)
     {
         // create ItemSet with special pool area
         auto pSet = o3tl::make_unique<SfxItemSet>( GetPool(),
-                            SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
+                            svl::Items<SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
                             SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
-                            ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT,
-                            0 );
+                            ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT>{} );
         // set PrintOptionsSet
         SdOptionsPrintItem aPrintItem( SD_MOD()->GetSdOptions(mpDoc->GetDocumentType()) );
         SfxFlagItem aFlagItem( SID_PRINTER_CHANGESTODOC );

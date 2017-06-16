@@ -487,7 +487,7 @@ IMAGE_SETEVENT:
         ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
 
     SfxItemSet aFrameSet( m_xDoc->GetAttrPool(),
-                        RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
+                        svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{} );
     if( !IsNewDoc() )
         Reader::ResetFrameFormatAttrs( aFrameSet );
 

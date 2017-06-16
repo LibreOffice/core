@@ -1033,7 +1033,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
     }
 
     short nType = GetCurrentNumberFormatType();
-    SfxItemSet aSet( GetPool(), nSlot, nSlot );
+    SfxItemSet aSet( GetPool(), {{nSlot, nSlot}} );
     switch ( nSlot )
     {
         case SID_NUMBER_TWODEC:
@@ -1239,7 +1239,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                     const SfxItemSet& rOldSet =
                         pTabViewShell->GetSelectionPattern()->GetItemSet();
                     SfxItemPool* pDocPool = GetViewData()->GetDocument()->GetPool();
-                    SfxItemSet aNewSet( *pDocPool, ATTR_PATTERN_START, ATTR_PATTERN_END );
+                    SfxItemSet aNewSet( *pDocPool, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} );
                     aNewSet.Put( *pItem );
                     pTabViewShell->ApplyAttributes( &aNewSet, &rOldSet );
                 }
@@ -1873,13 +1873,13 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     std::unique_ptr<SfxItemSet> pOldSet(
                                                 new SfxItemSet(
                                                         *(pDoc->GetPool()),
-                                                        ATTR_PATTERN_START,
-                                                        ATTR_PATTERN_END ));
+                                                        svl::Items<ATTR_PATTERN_START,
+                                                        ATTR_PATTERN_END>{} ));
                     std::unique_ptr<SfxItemSet> pNewSet(
                                                 new SfxItemSet(
                                                         *(pDoc->GetPool()),
-                                                        ATTR_PATTERN_START,
-                                                        ATTR_PATTERN_END ));
+                                                        svl::Items<ATTR_PATTERN_START,
+                                                        ATTR_PATTERN_END>{} ));
                     const SfxPoolItem&      rBorderAttr =
                                                 pOldAttrs->GetItemSet().
                                                     Get( ATTR_BORDER );

@@ -120,11 +120,10 @@ SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
     {
         auto pSet =
             o3tl::make_unique<SfxItemSet>( *xPoolHelper->GetDocPool(),
-                            SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
+                            svl::Items<SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
                             SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
                             SID_PRINT_SELECTEDSHEET,    SID_PRINT_SELECTEDSHEET,
-                            SID_SCPRINTOPTIONS,         SID_SCPRINTOPTIONS,
-                            nullptr );
+                            SID_SCPRINTOPTIONS,         SID_SCPRINTOPTIONS>{} );
 
         ::utl::MiscCfg aMisc;
         SfxPrinterChangeFlags nFlags = SfxPrinterChangeFlags::NONE;

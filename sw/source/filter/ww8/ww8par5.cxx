@@ -2307,7 +2307,7 @@ WW8PostProcessAttrsInfo::WW8PostProcessAttrsInfo(WW8_CP nCpStart, WW8_CP nCpEnd,
     , mnCpStart(nCpStart)
     , mnCpEnd(nCpEnd)
     , mPaM(*rPaM.GetMark(), *rPaM.GetPoint())
-    , mItemSet(rPaM.GetDoc()->GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_END - 1)
+    , mItemSet(rPaM.GetDoc()->GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_PARATR_END - 1>{})
 {
 }
 
@@ -2396,8 +2396,8 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, OUString& rStr )
             that we have inserted a graphic link and the suiting SwAttrSet will be
             inserted into the frame format.
         */
-        SfxItemSet aFlySet( m_rDoc.GetAttrPool(), RES_FRMATR_BEGIN,
-            RES_FRMATR_END-1 );
+        SfxItemSet aFlySet( m_rDoc.GetAttrPool(), svl::Items<RES_FRMATR_BEGIN,
+            RES_FRMATR_END-1>{} );
         aFlySet.Put( SwFormatAnchor( RndStdIds::FLY_AS_CHAR ) );
         aFlySet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
         m_pFlyFormatOfJustInsertedGraphic =
@@ -3400,7 +3400,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
         if ( nIndexCols > 1 )
         {
             // Set the column number for index
-            SfxItemSet aSet( m_rDoc.GetAttrPool(), RES_COL, RES_COL );
+            SfxItemSet aSet( m_rDoc.GetAttrPool(), svl::Items<RES_COL, RES_COL>{} );
             SwFormatCol aCol;
             aCol.Init( nIndexCols, 708, USHRT_MAX );
             aSet.Put( aCol );

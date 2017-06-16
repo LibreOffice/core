@@ -341,7 +341,7 @@ SwDoc::SwDoc()
     // pass empty item set containing the paragraph's list attributes
     // as ignorable items to the stype manager.
     {
-        SfxItemSet aIgnorableParagraphItems( GetAttrPool(), RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1);
+        SfxItemSet aIgnorableParagraphItems( GetAttrPool(), svl::Items<RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1>{});
         mpStyleAccess = createStyleManager( &aIgnorableParagraphItems );
     }
 

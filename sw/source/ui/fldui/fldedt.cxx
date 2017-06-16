@@ -178,7 +178,7 @@ VclPtr<SfxTabPage> SwFieldEditDlg::CreatePage(sal_uInt16 nGroup)
         case GRP_REG:
             {
                 SfxObjectShell* pDocSh = SfxObjectShell::Current();
-                SfxItemSet* pSet = new SfxItemSet( pDocSh->GetPool(), SID_DOCINFO, SID_DOCINFO );
+                SfxItemSet* pSet = new SfxItemSet( pDocSh->GetPool(), svl::Items<SID_DOCINFO, SID_DOCINFO>{} );
                 using namespace ::com::sun::star;
                 uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                     pDocSh->GetModel(), uno::UNO_QUERY_THROW);
@@ -299,8 +299,7 @@ IMPL_LINK_NOARG(SwFieldEditDlg, AddressHdl, Button*, void)
     SwField *pCurField = rMgr.GetCurField();
 
     SfxItemSet aSet( pSh->GetAttrPool(),
-                        SID_FIELD_GRABFOCUS, SID_FIELD_GRABFOCUS,
-                        0L );
+                        svl::Items<SID_FIELD_GRABFOCUS, SID_FIELD_GRABFOCUS>{} );
 
     EditPosition nEditPos = EditPosition::UNKNOWN;
 

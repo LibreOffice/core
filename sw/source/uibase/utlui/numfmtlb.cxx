@@ -370,12 +370,11 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox&, rBox, void )
         SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
 
         SfxItemSet aCoreSet( rSh.GetAttrPool(),
-            SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_VALUE,
+            svl::Items<SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_VALUE,
             SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO,
             SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA,
             SID_ATTR_NUMBERFORMAT_NOLANGUAGE, SID_ATTR_NUMBERFORMAT_NOLANGUAGE,
-            SID_ATTR_NUMBERFORMAT_ADD_AUTO, SID_ATTR_NUMBERFORMAT_ADD_AUTO,
-            0 );
+            SID_ATTR_NUMBERFORMAT_ADD_AUTO, SID_ATTR_NUMBERFORMAT_ADD_AUTO>{} );
 
         double fValue = GetDefValue( nCurrFormatType);
 

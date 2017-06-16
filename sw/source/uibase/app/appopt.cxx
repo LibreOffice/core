@@ -97,7 +97,7 @@ std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
         }
 
     // Options/Edit
-    auto pRet = o3tl::make_unique<SfxItemSet>(GetPool(),   FN_PARAM_DOCDISP,       FN_PARAM_ELEM,
+    auto pRet = o3tl::make_unique<SfxItemSet>(GetPool(),   svl::Items<FN_PARAM_DOCDISP,       FN_PARAM_ELEM,
                                     SID_PRINTPREVIEW,       SID_PRINTPREVIEW,
                                     SID_ATTR_GRID_OPTIONS,  SID_ATTR_GRID_OPTIONS,
                                     FN_PARAM_PRINTER,       FN_PARAM_STDFONTS,
@@ -113,11 +113,7 @@ std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
                                     FN_HSCROLL_METRIC,      FN_VSCROLL_METRIC,
                                     SID_ATTR_LANGUAGE,      SID_ATTR_LANGUAGE,
                                     SID_ATTR_CHAR_CJK_LANGUAGE,   SID_ATTR_CHAR_CJK_LANGUAGE,
-                                    SID_ATTR_CHAR_CTL_LANGUAGE, SID_ATTR_CHAR_CTL_LANGUAGE,
-#if OSL_DEBUG_LEVEL > 1
-                                    FN_PARAM_SWTEST,        FN_PARAM_SWTEST,
-#endif
-                                    0);
+                                    SID_ATTR_CHAR_CTL_LANGUAGE, SID_ATTR_CHAR_CTL_LANGUAGE>{});
 
     pRet->Put( SwDocDisplayItem( aViewOpt ) );
     pRet->Put( SwElemItem( aViewOpt ) );

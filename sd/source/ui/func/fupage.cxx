@@ -212,15 +212,14 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
     PageKind ePageKind = mpDrawViewShell->GetPageKind();
 
     SfxItemSet aNewAttr(mpDoc->GetPool(),
-                        mpDoc->GetPool().GetWhich(SID_ATTR_LRSPACE),
-                        mpDoc->GetPool().GetWhich(SID_ATTR_ULSPACE),
-                        SID_ATTR_PAGE, SID_ATTR_PAGE_SHARED,
-                        SID_ATTR_BORDER_OUTER, SID_ATTR_BORDER_OUTER,
-                        SID_ATTR_BORDER_SHADOW, SID_ATTR_BORDER_SHADOW,
-                        XATTR_FILL_FIRST, XATTR_FILL_LAST,
-                        SID_ATTR_PAGE_COLOR,SID_ATTR_PAGE_FILLSTYLE,
-                        EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
-                        0);
+                        {{mpDoc->GetPool().GetWhich(SID_ATTR_LRSPACE),
+                        mpDoc->GetPool().GetWhich(SID_ATTR_ULSPACE)},
+                        {SID_ATTR_PAGE, SID_ATTR_PAGE_SHARED},
+                        {SID_ATTR_BORDER_OUTER, SID_ATTR_BORDER_OUTER},
+                        {SID_ATTR_BORDER_SHADOW, SID_ATTR_BORDER_SHADOW},
+                        {XATTR_FILL_FIRST, XATTR_FILL_LAST},
+                        {SID_ATTR_PAGE_COLOR,SID_ATTR_PAGE_FILLSTYLE},
+                        {EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR}});
 
     // Retrieve additional data for dialog
 
@@ -279,7 +278,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
         p2 = pPtr[3];
         pPtr += 2;
     }
-    SfxItemSet aMergedAttr( *aNewAttr.GetPool(), p1, p2 );
+    SfxItemSet aMergedAttr( *aNewAttr.GetPool(), {{p1, p2}} );
 
     mergeItemSetsImpl( aMergedAttr, aNewAttr );
 
@@ -316,12 +315,12 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
             int nError = aDlg.GetGraphic(aGraphic);
             if( nError == ERRCODE_NONE )
             {
-                pTempSet.reset( new SfxItemSet( mpDoc->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0) );
+                pTempSet.reset( new SfxItemSet( mpDoc->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{}) );
 
                 pTempSet->Put( XFillStyleItem( drawing::FillStyle_BITMAP ) );
 
                 // MigrateItemSet makes sure the XFillBitmapItem will have a unique name
-                SfxItemSet aMigrateSet( mpDoc->GetPool(), XATTR_FILLBITMAP, XATTR_FILLBITMAP );
+                SfxItemSet aMigrateSet( mpDoc->GetPool(), svl::Items<XATTR_FILLBITMAP, XATTR_FILLBITMAP>{} );
                 aMigrateSet.Put(XFillBitmapItem(OUString("background"), aGraphic));
                 SdrModel::MigrateItemSet( &aMigrateSet, pTempSet.get(), mpDoc );
 

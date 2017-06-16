@@ -126,7 +126,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
     FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( &rWrtSh.GetView()) != nullptr );
     SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
     SfxItemSet aCoreSet( rWrtSh.GetView().GetPool(),
-                        RES_CHRATR_BEGIN,      RES_CHRATR_END-1,
+                        svl::Items<RES_CHRATR_BEGIN,      RES_CHRATR_END-1,
                         RES_TXTATR_INETFMT,    RES_TXTATR_INETFMT,
                         RES_BACKGROUND,        RES_BACKGROUND,
                         RES_BOX,               RES_BOX,
@@ -134,8 +134,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
                         SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                         FN_PARAM_SELECTION,    FN_PARAM_SELECTION,
                         SID_HTML_MODE,         SID_HTML_MODE,
-                        SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,   SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
-                        0 );
+                        SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,   SID_ATTR_CHAR_WIDTH_FIT_TO_LINE>{} );
     rWrtSh.GetCurAttr( aCoreSet );
     bool bSel = rWrtSh.HasSelection();
     bool bSelectionPut = false;
@@ -359,10 +358,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     const OUString aStrResetLangs("RESET_LANGUAGES");
 
                     SfxItemSet aCoreSet( GetPool(),
-                            RES_CHRATR_LANGUAGE,        RES_CHRATR_LANGUAGE,
+                            svl::Items<RES_CHRATR_LANGUAGE,        RES_CHRATR_LANGUAGE,
                             RES_CHRATR_CJK_LANGUAGE,    RES_CHRATR_CJK_LANGUAGE,
-                            RES_CHRATR_CTL_LANGUAGE,    RES_CHRATR_CTL_LANGUAGE,
-                            0 );
+                            RES_CHRATR_CTL_LANGUAGE,    RES_CHRATR_CTL_LANGUAGE>{} );
 
                     sal_Int32 nPos = 0;
                     bool bForSelection = true;
@@ -464,7 +462,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if ( bFont )
             {
                 rWrtSh.Left( CRSR_SKIP_CHARS, true, 1, false );
-                SfxItemSet aSet( rWrtSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
+                SfxItemSet aSet( rWrtSh.GetAttrPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT>{} );
                 rWrtSh.GetCurAttr( aSet );
                 rWrtSh.SetAttrSet( aSet, SetAttrMode::DONTEXPAND );
                 rWrtSh.ResetSelect(nullptr, false);
@@ -782,7 +780,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 {
                     if( rWrtSh.IsCursorInTable() )
                     {
-                        SfxItemSet aSet( rWrtSh.GetAttrPool(), RES_BOXATR_FORMULA, RES_BOXATR_FORMULA );
+                        SfxItemSet aSet( rWrtSh.GetAttrPool(), svl::Items<RES_BOXATR_FORMULA, RES_BOXATR_FORMULA>{} );
                         aSet.Put( SwTableBoxFormula( sFormula ));
                         rWrtSh.SetTableBoxFormulaAttrs( aSet );
                         rWrtSh.UpdateTable();
@@ -907,7 +905,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SW_MOD()->PutItem(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, bApplyCharUnit));
 
             SfxItemSet aCoreSet( GetPool(), // sorted by indices, one group of three concatenated
-                            RES_PARATR_BEGIN,           RES_PARATR_END - 1,         // [60
+                            svl::Items<RES_PARATR_BEGIN,           RES_PARATR_END - 1,         // [60
                             RES_PARATR_LIST_BEGIN,      RES_PARATR_LIST_END - 1,    // [77
                             RES_FRMATR_BEGIN,           RES_FRMATR_END - 1,         // [82
 
@@ -929,8 +927,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             SID_ATTR_PARA_PAGENUM,      SID_ATTR_PARA_PAGENUM,      // [10457
                             FN_PARAM_1,                 FN_PARAM_1,                 // [21160
                             FN_NUMBER_NEWSTART,         FN_NUMBER_NEWSTART_AT,      // [21738
-                            FN_DROP_TEXT,               FN_DROP_CHAR_STYLE_NAME,    // [22418
-                            0);
+                            FN_DROP_TEXT,               FN_DROP_CHAR_STYLE_NAME>{});// [22418
 
             // get also the list level indent values merged as LR-SPACE item, if needed.
             rWrtSh.GetPaMAttr( pPaM, aCoreSet, true );
@@ -1211,7 +1208,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     rWrtSh.SetAttrItem( SvxBrushItem(RES_CHRATR_HIGHLIGHT) );
 
                     // Remove shading marker
-                    SfxItemSet aCoreSet( rWrtSh.GetView().GetPool(), RES_CHRATR_GRABBAG, RES_CHRATR_GRABBAG );
+                    SfxItemSet aCoreSet( rWrtSh.GetView().GetPool(), svl::Items<RES_CHRATR_GRABBAG, RES_CHRATR_GRABBAG>{} );
                     rWrtSh.GetCurAttr( aCoreSet );
 
                     const SfxPoolItem *pTmpItem;
@@ -1311,8 +1308,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
     case FN_COPY_HYPERLINK_LOCATION:
     {
         SfxItemSet aSet(GetPool(),
-                        RES_TXTATR_INETFMT,
-                        RES_TXTATR_INETFMT);
+                        svl::Items<RES_TXTATR_INETFMT,
+                        RES_TXTATR_INETFMT>{});
         rWrtSh.GetCurAttr(aSet);
         if(SfxItemState::SET <= aSet.GetItemState( RES_TXTATR_INETFMT ))
         {
@@ -1666,8 +1663,8 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             case FN_COPY_HYPERLINK_LOCATION:
                 {
                     SfxItemSet aSet(GetPool(),
-                        RES_TXTATR_INETFMT,
-                        RES_TXTATR_INETFMT);
+                        svl::Items<RES_TXTATR_INETFMT,
+                        RES_TXTATR_INETFMT>{});
                     rSh.GetCurAttr(aSet);
                     if(SfxItemState::SET > aSet.GetItemState( RES_TXTATR_INETFMT ) || rSh.HasReadonlySel())
                     {
@@ -1678,8 +1675,8 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             case FN_REMOVE_HYPERLINK:
             {
                 SfxItemSet aSet(GetPool(),
-                                RES_TXTATR_INETFMT,
-                                RES_TXTATR_INETFMT);
+                                svl::Items<RES_TXTATR_INETFMT,
+                                RES_TXTATR_INETFMT>{});
                 rSh.GetCurAttr(aSet);
 
                 // If a hyperlink is selected, either alone or along with other text...
@@ -1721,8 +1718,8 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             case  SID_OPEN_HYPERLINK:
             {
                 SfxItemSet aSet(GetPool(),
-                                RES_TXTATR_INETFMT,
-                                RES_TXTATR_INETFMT);
+                                svl::Items<RES_TXTATR_INETFMT,
+                                RES_TXTATR_INETFMT>{});
                 rSh.GetCurAttr(aSet);
                 if(SfxItemState::SET > aSet.GetItemState( RES_TXTATR_INETFMT, false ))
                     rSet.DisableItem(nWhich);

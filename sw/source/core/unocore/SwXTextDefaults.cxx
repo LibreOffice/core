@@ -72,7 +72,7 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
     const SfxPoolItem& rItem = m_pDoc->GetDefault(pMap->nWID);
     if (RES_PAGEDESC == pMap->nWID && MID_PAGEDESC_PAGEDESCNAME == pMap->nMemberId)
     {
-        SfxItemSet aSet( m_pDoc->GetAttrPool(), RES_PAGEDESC, RES_PAGEDESC );
+        SfxItemSet aSet( m_pDoc->GetAttrPool(), svl::Items<RES_PAGEDESC, RES_PAGEDESC>{} );
         aSet.Put(rItem);
         SwUnoCursorHelper::SetPageDesc( aValue, *m_pDoc, aSet );
         m_pDoc->SetDefault(aSet.Get(RES_PAGEDESC));

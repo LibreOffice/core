@@ -3110,12 +3110,12 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
         {
             std::unique_ptr<SfxItemSet> pOldSet(new SfxItemSet(
                                             *(pDoc->GetPool()),
-                                            ATTR_PATTERN_START,
-                                            ATTR_PATTERN_END ));
+                                            svl::Items<ATTR_PATTERN_START,
+                                            ATTR_PATTERN_END>{} ));
             std::unique_ptr<SfxItemSet> pNewSet(new SfxItemSet(
                                             *(pDoc->GetPool()),
-                                            ATTR_PATTERN_START,
-                                            ATTR_PATTERN_END ));
+                                            svl::Items<ATTR_PATTERN_START,
+                                            ATTR_PATTERN_END>{} ));
 
             SvxBorderLine           aLine;
 

@@ -462,7 +462,7 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&                rDocument,
     pBoxFormat(nullptr),
     rDoc(rDocument),
     aCoreSet(GetPool().GetPool(),   // sorted by indices, one double removed
-            RES_CHRATR_BEGIN,       RES_CHRATR_END - 1,             // [1
+            svl::Items<RES_CHRATR_BEGIN,       RES_CHRATR_END - 1,             // [1
             RES_PARATR_BEGIN,       RES_PARATR_END - 1,             // [60
             RES_PARATR_LIST_BEGIN,  RES_PARATR_LIST_END - 1,        // [77
             RES_FRMATR_BEGIN,       RES_FRMATR_END - 1,             // [82
@@ -488,8 +488,7 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&                rDocument,
             SID_ATTR_NUMBERING_RULE,    SID_ATTR_NUMBERING_RULE,    // [10855
             SID_ATTR_AUTO_STYLE_UPDATE, SID_ATTR_AUTO_STYLE_UPDATE, // [12065
             FN_PARAM_FTN_INFO,      FN_PARAM_FTN_INFO,              // [21123
-            FN_COND_COLL,           FN_COND_COLL,                   // [22401
-            0),
+            FN_COND_COLL,           FN_COND_COLL>{}),               // [22401
     bPhysical(false)
 {
     nHelpId = UCHAR_MAX;

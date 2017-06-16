@@ -130,7 +130,7 @@ std::unique_ptr<SfxItemSet> TableProperties::CreateObjectSpecificItemSet(SfxItem
     return o3tl::make_unique<SfxItemSet>(rPool,
 
         // range from SdrAttrObj
-        SDRATTR_START, SDRATTR_SHADOW_LAST,
+        svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
         SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
         SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
@@ -138,10 +138,7 @@ std::unique_ptr<SfxItemSet> TableProperties::CreateObjectSpecificItemSet(SfxItem
         SDRATTR_TABLE_FIRST, SDRATTR_TABLE_LAST,
 
         // range from SdrTextObj
-        EE_ITEMS_START, EE_ITEMS_END,
-
-        // end
-        0, 0);
+        EE_ITEMS_START, EE_ITEMS_END>{});
 }
 
 class TableObjectGeoData : public SdrTextObjGeoData

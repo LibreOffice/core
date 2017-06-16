@@ -350,7 +350,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 SwView* pView = &GetView();
                 FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( pView) !=  nullptr );
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
-                SfxItemSet aDlgAttr(GetPool(), EE_ITEMS_START, EE_ITEMS_END);
+                SfxItemSet aDlgAttr(GetPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{});
 
                 // util::Language does not exists in the EditEngine! That is why not in set.
 
@@ -419,12 +419,11 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( pView) !=  nullptr );
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
                 SfxItemSet aDlgAttr(GetPool(),
-                                    EE_ITEMS_START, EE_ITEMS_END,
+                                    svl::Items<EE_ITEMS_START, EE_ITEMS_END,
                                     SID_ATTR_PARA_HYPHENZONE, SID_ATTR_PARA_HYPHENZONE,
                                     SID_ATTR_PARA_SPLIT, SID_ATTR_PARA_SPLIT,
                                     SID_ATTR_PARA_WIDOWS, SID_ATTR_PARA_WIDOWS,
-                                    SID_ATTR_PARA_ORPHANS, SID_ATTR_PARA_ORPHANS,
-                                    0);
+                                    SID_ATTR_PARA_ORPHANS, SID_ATTR_PARA_ORPHANS>{});
 
                 aDlgAttr.Put(aEditAttr);
 
@@ -507,8 +506,8 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 pSdrView->SdrEndTextEdit(true);
 
                 SfxItemSet aAttr( *aNewAttr.GetPool(),
-                            SDRATTR_TEXTDIRECTION,
-                            SDRATTR_TEXTDIRECTION );
+                            svl::Items<SDRATTR_TEXTDIRECTION,
+                            SDRATTR_TEXTDIRECTION>{} );
 
                 aAttr.Put( SvxWritingModeItem(
                     nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
@@ -538,9 +537,8 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                     bLeftToRight = !bLeftToRight;
             }
             SfxItemSet aAttr( *aNewAttr.GetPool(),
-                        EE_PARA_JUST, EE_PARA_JUST,
-                        EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
-                        0 );
+                        svl::Items<EE_PARA_JUST, EE_PARA_JUST,
+                        EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR>{} );
 
             SvxAdjust nAdjust = SvxAdjust::Left;
             if( SfxItemState::SET == aEditAttr.GetItemState(EE_PARA_JUST, true, &pPoolItem ) )
