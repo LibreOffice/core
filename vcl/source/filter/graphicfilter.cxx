@@ -1306,8 +1306,14 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject& rP
     return nRetValue;
 }
 
-ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
-                                     sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags, WMF_EXTERNALHEADER *pExtHeader )
+ErrCode GraphicFilter::ImportGraphic(
+    Graphic& rGraphic,
+    const OUString& rPath,
+    SvStream& rIStream,
+    sal_uInt16 nFormat,
+    sal_uInt16* pDeterminedFormat,
+    GraphicFilterImportFlags nImportFlags,
+    WmfExternal *pExtHeader)
 {
     return ImportGraphic( rGraphic, rPath, rIStream, nFormat, pDeterminedFormat, nImportFlags, nullptr, pExtHeader );
 }
@@ -1462,7 +1468,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
 ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
                                      sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
                                      css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
-                                     WMF_EXTERNALHEADER *pExtHeader )
+                                     WmfExternal *pExtHeader )
 {
     OUString                       aFilterName;
     OUString                       aExternalFilterName;
@@ -1766,52 +1772,46 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_WMF ) ||
                 aFilterName.equalsIgnoreAsciiCase( IMP_EMF ) )
         {
-            static bool bCheckEmfWmf = true;
-            if (bCheckEmfWmf)
+            // use new UNO API service, do not directly import but create a
+            // Graphic that contains the original data and decomposes to
+            // primitives on demand
+            if (rGraphic.IsDummyContext())
+                rGraphic.SetDummyContext(false);
+
+            const sal_uInt32 nStreamPosition(rIStream.Tell());
+            const sal_uInt32 nStreamLength(rIStream.Seek(STREAM_SEEK_TO_END) - nStreamPosition);
+            VectorGraphicDataArray aNewData(nStreamLength);
+            bool bOkay(false);
+
+            rIStream.Seek(nStreamPosition);
+            rIStream.ReadBytes(aNewData.begin(), nStreamLength);
+
+            if (!rIStream.GetError())
             {
-                if (rGraphic.IsDummyContext())
-                    rGraphic.SetDummyContext(false);
+                const bool bIsWmf(aFilterName.equalsIgnoreAsciiCase(IMP_WMF));
+                const VectorGraphicDataType aDataType(bIsWmf ? VectorGraphicDataType::Wmf : VectorGraphicDataType::Emf);
+                VectorGraphicDataPtr aVectorGraphicDataPtr(
+                    new VectorGraphicData(
+                        aNewData,
+                        rPath,
+                        aDataType));
 
-                const sal_uInt32 nStreamPosition(rIStream.Tell());
-                const sal_uInt32 nStreamLength(rIStream.Seek(STREAM_SEEK_TO_END) - nStreamPosition);
-                VectorGraphicDataArray aNewData(nStreamLength);
-                bool bOkay(false);
-
-                rIStream.Seek(nStreamPosition);
-                rIStream.ReadBytes(aNewData.begin(), nStreamLength);
-
-                if (!rIStream.GetError())
+                if (pExtHeader)
                 {
-                    const bool bIsWmf(aFilterName.equalsIgnoreAsciiCase(IMP_WMF));
-                    const VectorGraphicDataType aDataType(bIsWmf ? VectorGraphicDataType::Wmf : VectorGraphicDataType::Emf);
-                    VectorGraphicDataPtr aVectorGraphicDataPtr(
-                        new VectorGraphicData(
-                            aNewData,
-                            rPath,
-                            aDataType));
-                    rGraphic = Graphic(aVectorGraphicDataPtr);
-                    bOkay = true;
+                    aVectorGraphicDataPtr->setWmfExternalHeader(*pExtHeader);
                 }
 
-                if (bOkay)
-                {
-                    eLinkType = GfxLinkType::NativeWmf;
-                }
-                else
-                {
-                    nStatus = ERRCODE_GRFILTER_FILTERERROR;
-                }
+                rGraphic = Graphic(aVectorGraphicDataPtr);
+                bOkay = true;
+            }
+
+            if (bOkay)
+            {
+                eLinkType = GfxLinkType::NativeWmf;
             }
             else
             {
-                GDIMetaFile aMtf;
-                if (!ConvertWMFToGDIMetaFile(rIStream, aMtf, nullptr, pExtHeader))
-                    nStatus = ERRCODE_GRFILTER_FORMATERROR;
-                else
-                {
-                    rGraphic = aMtf;
-                    eLinkType = GfxLinkType::NativeWmf;
-                }
+                nStatus = ERRCODE_GRFILTER_FILTERERROR;
             }
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_SVSGF )
