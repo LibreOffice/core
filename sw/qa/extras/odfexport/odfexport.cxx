@@ -752,7 +752,7 @@ DECLARE_ODFEXPORT_TEST(testTdf103091, "tdf103091.fodt")
             "Conditional"), uno::UNO_QUERY);
     auto conditions(getProperty<uno::Sequence<beans::NamedValue>>(xStyle1, "ParaStyleConditions"));
 
-    CPPUNIT_ASSERT_EQUAL(28, conditions.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(28), conditions.getLength());
     CPPUNIT_ASSERT_EQUAL(OUString("TableHeader"), conditions[0].Name);
     CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Addressee")), conditions[0].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("Table"), conditions[1].Name);
