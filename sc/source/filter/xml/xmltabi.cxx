@@ -221,26 +221,6 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLName);
     if (pExternalRefInfo.get())
     {
-        // We only care about the table-row and table-source elements for
-        // external cache data.
-        switch (nToken)
-        {
-            case XML_TOK_TABLE_ROW_GROUP:
-            case XML_TOK_TABLE_HEADER_ROWS:
-            case XML_TOK_TABLE_ROWS:
-                // #i101319# don't discard rows in groups or header (repeat range)
-                return new ScXMLExternalRefRowsContext(
-                    GetScImport(), nPrefix, rLName, xAttrList, *pExternalRefInfo);
-            case XML_TOK_TABLE_ROW:
-                return new ScXMLExternalRefRowContext(
-                    GetScImport(), nPrefix, rLName, xAttrList, *pExternalRefInfo);
-            case XML_TOK_TABLE_SOURCE:
-                return new ScXMLExternalRefTabSourceContext(
-                    GetScImport(), nPrefix, rLName, xAttrList, *pExternalRefInfo);
-            default:
-                ;
-        }
-
         return new SvXMLImportContext(GetImport(), nPrefix, rLName);
     }
 
@@ -324,6 +304,25 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     sal_uInt16 nToken = rTokenMap.Get( nElement );
     if (pExternalRefInfo.get())
     {
+        // We only care about the table-row and table-source elements for
+        // external cache data.
+        switch (nToken)
+        {
+            case XML_TOK_TABLE_ROW_GROUP:
+            case XML_TOK_TABLE_HEADER_ROWS:
+            case XML_TOK_TABLE_ROWS:
+                // #i101319# don't discard rows in groups or header (repeat range)
+                return new ScXMLExternalRefRowsContext(
+                    GetScImport(), nElement, xAttrList, *pExternalRefInfo);
+            case XML_TOK_TABLE_ROW:
+                return new ScXMLExternalRefRowContext(
+                    GetScImport(), nElement, xAttrList, *pExternalRefInfo);
+            case XML_TOK_TABLE_SOURCE:
+                return new ScXMLExternalRefTabSourceContext(
+                    GetScImport(), nElement, xAttrList, *pExternalRefInfo);
+            default:
+                ;
+        }
         return new SvXMLImportContext( GetImport() );
     }
 
