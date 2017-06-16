@@ -53,13 +53,14 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
     unsigned char* pBuffer = nullptr;
     HFONT hFont = static_cast<HFONT>(pUserData);
     HDC hDC = GetDC(nullptr);
-    SelectObject(hDC, hFont);
+    HGDIOBJ hOrigFont = SelectObject(hDC, hFont);
     nLength = ::GetFontData(hDC, OSL_NETDWORD(nTableTag), 0, nullptr, 0);
     if (nLength > 0 && nLength != GDI_ERROR)
     {
         pBuffer = new unsigned char[nLength];
         ::GetFontData(hDC, OSL_NETDWORD(nTableTag), 0, pBuffer, nLength);
     }
+    SelectObject(hDC, hOrigFont);
     ReleaseDC(nullptr, hDC);
 #elif defined(MACOSX) || defined(IOS)
     unsigned char* pBuffer = nullptr;
