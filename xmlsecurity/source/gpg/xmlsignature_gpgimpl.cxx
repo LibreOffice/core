@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 #include <rtl/uuid.h>
-#include "xmlsignature_gpgimpl.hxx"
+#include "gpg/xmlsignature_gpgimpl.hxx"
 
 #include <gpgme.h>
 #include <context.h>

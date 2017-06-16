@@ -386,15 +386,16 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
         return;
     try
     {
-        std::vector<uno::Reference<xml::crypto::XSecurityEnvironment>> xSecEnvs;
-        xSecEnvs.push_back(maSignatureManager.getSecurityEnvironment());
-        xSecEnvs.push_back(maSignatureManager.getGpgSecurityEnvironment());
+        std::vector<uno::Reference<xml::crypto::XXMLSecurityContext>> xSecContexts;
+        xSecContexts.push_back(maSignatureManager.getSecurityContext());
+        xSecContexts.push_back(maSignatureManager.getGpgSecurityContext());
 
-        ScopedVclPtrInstance< CertificateChooser > aChooser( this, mxCtx, xSecEnvs );
+        ScopedVclPtrInstance< CertificateChooser > aChooser( this, mxCtx, xSecContexts );
         if ( aChooser->Execute() == RET_OK )
         {
             sal_Int32 nSecurityId;
-            if (!maSignatureManager.add(aChooser->GetSelectedCertificate(), aChooser->GetDescription(), nSecurityId, m_bAdESCompliant))
+            if (!maSignatureManager.add(aChooser->GetSelectedCertificate(), aChooser->GetSelectedSecurityContext(),
+                                        aChooser->GetDescription(), nSecurityId, m_bAdESCompliant))
                 return;
             mbSignaturesChanged = true;
 
