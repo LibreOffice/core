@@ -10,6 +10,8 @@
 #include "XMLSecurityContext.hxx"
 #include "SecurityEnvironment.hxx"
 
+#include <cppuhelper/supportsservice.hxx>
+
 #include "xmlsec/xmlstreamio.hxx"
 #include "xmlsec-wrapper.h"
 
@@ -88,6 +90,21 @@ sal_Int32 SAL_CALL XMLSecurityContextGpg::getDefaultSecurityEnvironmentIndex()
 void SAL_CALL XMLSecurityContextGpg::setDefaultSecurityEnvironmentIndex(sal_Int32 nDefaultEnvIndex)
 {
     m_nDefaultEnvIndex = nDefaultEnvIndex;
+}
+
+/* XServiceInfo */
+OUString SAL_CALL XMLSecurityContextGpg::getImplementationName() {
+    return "com.sun.star.xml.security.gpg.XMLSecurityContext_GpgImpl";
+}
+
+/* XServiceInfo */
+sal_Bool SAL_CALL XMLSecurityContextGpg::supportsService( const OUString& serviceName) {
+    return cppu::supportsService(this, serviceName);
+}
+
+/* XServiceInfo */
+Sequence< OUString > SAL_CALL XMLSecurityContextGpg::getSupportedServiceNames() {
+    return { "com.sun.star.xml.crypto.XMLSecurityContext" };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
