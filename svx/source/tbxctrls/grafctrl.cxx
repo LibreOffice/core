@@ -19,6 +19,7 @@
 
 #include <string>
 
+#include <i18nutil/unicode.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
@@ -92,7 +93,7 @@ ImplGrafMetricField::ImplGrafMetricField( vcl::Window* pParent, const OUString& 
     maCommand( rCmd ),
     mxFrame( rFrame )
 {
-    Size aSize(CalcMinimumSizeForText("-100 %"));
+    Size aSize(CalcMinimumSizeForText(unicode::formatPercent(-100, Application::GetSettings().GetUILanguageTag())));
     SetSizePixel(aSize);
 
     if ( maCommand == ".uno:GrafGamma" )
