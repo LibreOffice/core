@@ -175,9 +175,9 @@ void SlideBackground::Initialize()
             mpMasterSlide->SelectEntry(aLayoutName);
         }
 
-        DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell);
-        EditMode eMode = pDrawViewShell->GetEditMode();
-        if ( eMode == EditMode::MasterPage )
+        DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pMainViewShell);
+        if ( pDrawViewShell != nullptr
+             && pDrawViewShell->GetEditMode() == EditMode::MasterPage )
         {
             mpCloseMaster->Show();
             mpEditMaster->Hide();
