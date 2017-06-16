@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_22c04fe0",
+        "filename": "sw/source/core/doc/number.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-06-16T00:45:45Z",
+      "side": 1,
+      "message": "1st string argument must conform to the log areas as defined in include/sal/log-areas.dox -\u003e I suggest sw.core, and kill the method name, sal_warn prints filename \u0026 line number anyway",
+      "revId": "15edd02d97825aa9e415c7a05bb5acf9716a3979",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
