@@ -41,10 +41,14 @@ interface XEmfParser : ::com::sun::star::uno::XInterface
 
         @param aAbsolutePath
         The path containing the WMF/EMF/EMF+ data
-     */
+
+        @param Properties
+        Optional values to override MapMode and size
+*/
     sequence< XPrimitive2D > getDecomposition(
         [in] io::XInputStream xEmfStream,
-        [in] string aAbsolutePath);
+        [in] string aAbsolutePath,
+        [in] ::com::sun::star::beans::PropertyValues Properties);
 };
 
 }; }; }; };

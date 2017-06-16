@@ -23,6 +23,9 @@
 #include <mtftools.hxx>
 #include <tools/stream.hxx>
 
+// predefines
+struct WmfExternal;
+
 namespace emfio
 {
     class WmfReader : public MtfTools
@@ -46,6 +49,9 @@ namespace emfio
         sal_uInt32      mnSkipActions;
         sal_uInt32      mnCurrentAction;
 
+        // eventually handed over external header
+        const WmfExternal* mpExternalHeader;
+
         // reads header of the WMF-Datei
         bool            ReadHeader();
 
@@ -59,7 +65,7 @@ namespace emfio
         void            GetPlaceableBound(tools::Rectangle& rSize, SvStream* pStrm);
 
     public:
-        WmfReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile);
+        WmfReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile, const WmfExternal* pExternalHeader);
 
         // read WMF file from stream and fill the GDIMetaFile
         void ReadWMF();

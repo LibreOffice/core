@@ -828,11 +828,11 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     // Store, and get its URL.
     pStream->Seek(0);
     uno::Reference<io::XInputStream> xInputStream(new utl::OInputStreamWrapper(pStream));
-    WMF_EXTERNALHEADER aExtHeader;
+    WmfExternal aExtHeader;
     aExtHeader.mapMode = m_aStates.top().aPicture.eWMetafile;
     aExtHeader.xExt = m_aStates.top().aPicture.nWidth;
     aExtHeader.yExt = m_aStates.top().aPicture.nHeight;
-    WMF_EXTERNALHEADER* pExtHeader = &aExtHeader;
+    WmfExternal* pExtHeader = &aExtHeader;
     uno::Reference<lang::XServiceInfo> xServiceInfo(m_aStates.top().aDrawingObject.xShape, uno::UNO_QUERY);
     if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
         pExtHeader = nullptr;

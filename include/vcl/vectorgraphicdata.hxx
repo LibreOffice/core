@@ -23,6 +23,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <vcl/bitmapex.hxx>
+#include <vcl/wmfexternal.hxx>
 #include <rtl/ustring.hxx>
 #include <deque>
 
@@ -57,11 +58,13 @@ private:
 
     // on demand created content
     basegfx::B2DRange           maRange;
-    std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >
-                                maSequence;
+    std::deque< css::uno::Reference< css::graphic::XPrimitive2D > > maSequence;
     BitmapEx                    maReplacement;
     size_t                      mNestedBitmapSize;
     VectorGraphicDataType       meVectorGraphicDataType;
+
+    // extra:
+    WmfExternal*         mpExternalHeader;
 
     // on demand creators
     void ensureReplacement();
@@ -78,9 +81,13 @@ public:
     VectorGraphicData(
         const OUString& rPath,
         VectorGraphicDataType eVectorDataType);
+    ~VectorGraphicData();
 
     /// compare op
     bool operator==(const VectorGraphicData& rCandidate) const;
+
+    /// special: needed for emf/wmf, maybe replaced by scaling the result later (?)
+    void setWmfExternalHeader(const WmfExternal& aExtHeader);
 
     /// data read
     const VectorGraphicDataArray& getVectorGraphicDataArray() const { return maVectorGraphicDataArray; }
