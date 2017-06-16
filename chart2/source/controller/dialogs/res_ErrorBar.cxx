@@ -258,11 +258,11 @@ void ErrorBarResources::UpdateControlStates()
         ( m_pRbFunction->IsChecked()) &&
         ( m_pLbFunction->GetSelectEntryPos() == CHART_LB_FUNCTION_ERROR_MARGIN ));
     bool bIsPercentage( m_pRbPercent->IsChecked() || bIsErrorMargin );
-    OUString aCustomUnit;
+    FieldUnit eFieldUnit = FUNIT_NONE;
 
     if( bIsPercentage )
     {
-        aCustomUnit = " %";
+        eFieldUnit = FUNIT_PERCENT;
         m_pMfPositive->SetDecimalDigits( 1 );
         m_pMfPositive->SetSpinSize( 10 );
         m_pMfNegative->SetDecimalDigits( 1 );
@@ -282,8 +282,8 @@ void ErrorBarResources::UpdateControlStates()
     m_pMfPositive->SetValue( nPlusValue );
     m_pMfNegative->SetValue( nMinusValue );
 
-    m_pMfPositive->SetCustomUnitText( aCustomUnit );
-    m_pMfNegative->SetCustomUnitText( aCustomUnit );
+    m_pMfPositive->SetUnit(eFieldUnit);
+    m_pMfNegative->SetUnit(eFieldUnit);
 
     // positive and negative value fields
     bool bPosEnabled = ( m_pRbPositive->IsChecked() || m_pRbBoth->IsChecked());
