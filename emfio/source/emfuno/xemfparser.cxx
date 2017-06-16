@@ -186,11 +186,11 @@ namespace emfio
 
                     if (nMetaType == 0x464d4520)
                     {
-                        emfio::EmfReader(*pStream, aMtf, nullptr).ReadEnhWMF();
+                        emfio::EmfReader(*pStream, aMtf).ReadEnhWMF();
                     }
                     else
                     {
-                        emfio::WmfReader(*pStream, aMtf, nullptr).ReadWMF();
+                        emfio::WmfReader(*pStream, aMtf).ReadWMF();
                     }
 
                     pStream->SetEndian(nOrigNumberFormat);
