@@ -479,6 +479,10 @@
 <block-list:block block-list:abbreviated-name="contactos" block-list:name="contactos"/>
 <block-list:block block-list:abbreviated-name="contactou" block-list:name="contactou"/>
 <block-list:block block-list:abbreviated-name="contezto" block-list:name="contexto"/>
+<block-list:block block-list:abbreviated-name="contigência" block-list:name="contingência"/>
+<block-list:block block-list:abbreviated-name="contigências" block-list:name="contingências"/>
+<block-list:block block-list:abbreviated-name="contribuínte" block-list:name="contribuinte"/>
+<block-list:block block-list:abbreviated-name="contribuíntes" block-list:name="contribuintes"/>
 <block-list:block block-list:abbreviated-name="convivio" block-list:name="convívio"/>
 <block-list:block block-list:abbreviated-name="conxa" block-list:name="concha"/>
 <block-list:block block-list:abbreviated-name="conzinha" block-list:name="cozinha"/>
@@ -510,6 +514,7 @@
 <block-list:block block-list:abbreviated-name="crespuscular" block-list:name="crepuscular"/>
 <block-list:block block-list:abbreviated-name="criacem" block-list:name="criassem"/>
 <block-list:block block-list:abbreviated-name="criansisse" block-list:name="criancice"/>
+<block-list:block block-list:abbreviated-name="cristamente" block-list:name="cristãmente"/>
 <block-list:block block-list:abbreviated-name="culmatar" block-list:name="colmatar"/>
 <block-list:block block-list:abbreviated-name="cumplice" block-list:name="cúmplice"/>
 <block-list:block block-list:abbreviated-name="cuzinha" block-list:name="cozinha"/>
@@ -613,6 +618,7 @@
 <block-list:block block-list:abbreviated-name="dissionario" block-list:name="dicionário"/>
 <block-list:block block-list:abbreviated-name="dissionarios" block-list:name="dicionários"/>
 <block-list:block block-list:abbreviated-name="distingeu" block-list:name="distingue"/>
+<block-list:block block-list:abbreviated-name="diúrno" block-list:name="diurno"/>
 <block-list:block block-list:abbreviated-name="diverção" block-list:name="diversão"/>
 <block-list:block block-list:abbreviated-name="dominio" block-list:name="domínio"/>
 <block-list:block block-list:abbreviated-name="dominios" block-list:name="domínios"/>
@@ -714,6 +720,8 @@
 <block-list:block block-list:abbreviated-name="entervalos" block-list:name="intervalos"/>
 <block-list:block block-list:abbreviated-name="entitulado" block-list:name="intitulado"/>
 <block-list:block block-list:abbreviated-name="entitulados" block-list:name="intitulados"/>
+<block-list:block block-list:abbreviated-name="entitular" block-list:name="intitular"/>
+<block-list:block block-list:abbreviated-name="entorpeçar" block-list:name="entropeçar"/>
 <block-list:block block-list:abbreviated-name="entropecido" block-list:name="entorpecido"/>
 <block-list:block block-list:abbreviated-name="entropecidos" block-list:name="entorpecidos"/>
 <block-list:block block-list:abbreviated-name="envez" block-list:name="em vez"/>
@@ -777,6 +785,7 @@
 <block-list:block block-list:abbreviated-name="espressem" block-list:name="expressem"/>
 <block-list:block block-list:abbreviated-name="espresso" block-list:name="expresso"/>
 <block-list:block block-list:abbreviated-name="espressos" block-list:name="expressos"/>
+<block-list:block block-list:abbreviated-name="espurgar" block-list:name="expurgar"/>
 <block-list:block block-list:abbreviated-name="esquenci" block-list:name="esqueci"/>
 <block-list:block block-list:abbreviated-name="esquesito" block-list:name="esquisito"/>
 <block-list:block block-list:abbreviated-name="esquesitos" block-list:name="esquisitos"/>
@@ -955,13 +964,17 @@
 <block-list:block block-list:abbreviated-name="fiko" block-list:name="fico"/>
 <block-list:block block-list:abbreviated-name="fisica" block-list:name="física"/>
 <block-list:block block-list:abbreviated-name="fisicas" block-list:name="físicas"/>
+<block-list:block block-list:abbreviated-name="fisilogia" block-list:name="fisiologia"/>
 <block-list:block block-list:abbreviated-name="fisioterapista" block-list:name="fisioterapeuta"/>
 <block-list:block block-list:abbreviated-name="fisioterapistas" block-list:name="fisioterapeutas"/>
 <block-list:block block-list:abbreviated-name="fixão" block-list:name="ficção"/>
+<block-list:block block-list:abbreviated-name="flajelo" block-list:name="flagelo"/>
 <block-list:block block-list:abbreviated-name="flexa" block-list:name="flecha"/>
 <block-list:block block-list:abbreviated-name="flw" block-list:name="falou"/>
 <block-list:block block-list:abbreviated-name="fmz" block-list:name="firmeza"/>
 <block-list:block block-list:abbreviated-name="fôfo" block-list:name="fofo"/>
+<block-list:block block-list:abbreviated-name="foguête" block-list:name="foguete"/>
+<block-list:block block-list:abbreviated-name="foguêtes" block-list:name="foguetes"/>
 <block-list:block block-list:abbreviated-name="forão" block-list:name="foram"/>
 <block-list:block block-list:abbreviated-name="fortuíto" block-list:name="fortuito"/>
 <block-list:block block-list:abbreviated-name="forum" block-list:name="fórum"/>
@@ -983,9 +996,11 @@
 <block-list:block block-list:abbreviated-name="gnt" block-list:name="gente"/>
 <block-list:block block-list:abbreviated-name="gorgeta" block-list:name="gorjeta"/>
 <block-list:block block-list:abbreviated-name="gracha" block-list:name="graxa"/>
+<block-list:block block-list:abbreviated-name="graínha" block-list:name="grainha"/>
 <block-list:block block-list:abbreviated-name="grassa" block-list:name="graça"/>
 <block-list:block block-list:abbreviated-name="grassas" block-list:name="graças"/>
 <block-list:block block-list:abbreviated-name="gratuíto" block-list:name="gratuito"/>
+<block-list:block block-list:abbreviated-name="guela" block-list:name="goela"/>
 <block-list:block block-list:abbreviated-name="Guine Bissau" block-list:name="Guiné-Bissau"/>
 <block-list:block block-list:abbreviated-name="Guiné Bissau" block-list:name="Guiné-Bissau"/>
 <block-list:block block-list:abbreviated-name="guizar" block-list:name="guisar"/>
@@ -1150,6 +1165,7 @@
 <block-list:block block-list:abbreviated-name="júniores" block-list:name="juniores"/>
 <block-list:block block-list:abbreviated-name="junot" block-list:name="junto"/>
 <block-list:block block-list:abbreviated-name="junots" block-list:name="juntos"/>
+<block-list:block block-list:abbreviated-name="juri" block-list:name="júri"/>
 <block-list:block block-list:abbreviated-name="kbça" block-list:name="cabeça"/>
 <block-list:block block-list:abbreviated-name="kbças" block-list:name="cabeças"/>
 <block-list:block block-list:abbreviated-name="kd" block-list:name="cada"/>
@@ -1206,6 +1222,8 @@
 <block-list:block block-list:abbreviated-name="magestade" block-list:name="majestade"/>
 <block-list:block block-list:abbreviated-name="magestades" block-list:name="majestades"/>
 <block-list:block block-list:abbreviated-name="maizena" block-list:name="maisena"/>
+<block-list:block block-list:abbreviated-name="mangerico" block-list:name="manjerico"/>
+<block-list:block block-list:abbreviated-name="mangericos" block-list:name="manjericos"/>
 <block-list:block block-list:abbreviated-name="manicombio" block-list:name="manicómio"/>
 <block-list:block block-list:abbreviated-name="manicombios" block-list:name="manicómios"/>
 <block-list:block block-list:abbreviated-name="mantêmos" block-list:name="mantemos"/>
@@ -1272,6 +1290,8 @@
 <block-list:block block-list:abbreviated-name="mini álbum" block-list:name="mini-álbum"/>
 <block-list:block block-list:abbreviated-name="mini álbuns" block-list:name="mini-álbuns"/>
 <block-list:block block-list:abbreviated-name="mis" block-list:name="mais"/>
+<block-list:block block-list:abbreviated-name="miupe" block-list:name="míope"/>
+<block-list:block block-list:abbreviated-name="miupes" block-list:name="míopes"/>
 <block-list:block block-list:abbreviated-name="miuta" block-list:name="muita"/>
 <block-list:block block-list:abbreviated-name="miutas" block-list:name="muitas"/>
 <block-list:block block-list:abbreviated-name="miuto" block-list:name="muito"/>
