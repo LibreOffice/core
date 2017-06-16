@@ -23,12 +23,24 @@
 
 module com {  module sun {  module star {  module xml {  module sax {
 
-/** @since LibreOffice 5.3 */
+/** Stores and manages namespace declarations of a sax
+    document parsed by XFastParser.
+
+    @since LibreOffice 5.3
+ */
 interface XFastNamespaceHandler: com::sun::star::uno::XInterface
 {
+
+    /** receives notification of namespace declarations
+        from a XFastParser.
+     */
     void registerNamespace( [in] string NamespacePrefix, [in] string NamespaceURI );
 
+
+    /** retrieves the namespace URI of a namespace prefix
+     */
     string getNamespaceURI( [in] string NamespacePrefix );
+
 };
 
 
