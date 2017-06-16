@@ -32,7 +32,7 @@ namespace
     bool lcl_GetPageDesc(SwWrtShell *pSh, sal_uInt16 &rPageNo, const SwFormatPageDesc **ppPageFormatDesc)
     {
         bool bRet = false;
-        SfxItemSet aSet( pSh->GetAttrPool(), RES_PAGEDESC, RES_PAGEDESC );
+        SfxItemSet aSet( pSh->GetAttrPool(), svl::Items<RES_PAGEDESC, RES_PAGEDESC>{} );
         if (pSh->GetCurAttr( aSet ))
         {
             const SfxPoolItem* pItem(nullptr);

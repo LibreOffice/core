@@ -1131,7 +1131,7 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
                 SID_HTML_MODE, SID_HTML_MODE,
                 0 );
 
-            SfxItemSet aOptSet( SfxGetpApp()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER );
+            SfxItemSet aOptSet( SfxGetpApp()->GetPool(), svl::Items<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER>{} );
             SfxGetpApp()->GetOptions(aOptSet);
             pRet->Put(aOptSet);
 
@@ -1278,7 +1278,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
         {
             utl::MiscCfg    aMisc;
             const SfxPoolItem* pItem = nullptr;
-            SfxItemSet aOptSet(SfxGetpApp()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER );
+            SfxItemSet aOptSet(SfxGetpApp()->GetPool(), svl::Items<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER>{} );
             aOptSet.Put(rSet);
             if(aOptSet.Count())
                 SfxGetpApp()->SetOptions( aOptSet );

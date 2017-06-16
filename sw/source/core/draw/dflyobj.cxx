@@ -747,7 +747,7 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
         return ;
 
     // Get old values for crop in 10th of mm
-    SfxItemSet aSet( pSh->GetAttrPool(), RES_GRFATR_CROPGRF, RES_GRFATR_CROPGRF );
+    SfxItemSet aSet( pSh->GetAttrPool(), svl::Items<RES_GRFATR_CROPGRF, RES_GRFATR_CROPGRF>{} );
     pSh->GetCurAttr( aSet );
     SwCropGrf aCrop( static_cast<const SwCropGrf&>(aSet.Get(RES_GRFATR_CROPGRF)) );
 

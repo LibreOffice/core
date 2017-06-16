@@ -599,12 +599,11 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, Button*, void)
         {
             pBBSet = new SfxItemSet(
                 *GetItemSet().GetPool(),
-                XATTR_FILL_FIRST, XATTR_FILL_LAST,  // DrawingLayer FillStyle definitions
-                SID_COLOR_TABLE, SID_PATTERN_LIST,   // XPropertyLists for Color, Gradient, Hatch and Graphic fills
-                nOuter, nOuter,
-                nInner, nInner,
-                nShadow, nShadow,
-                0, 0);
+                {{XATTR_FILL_FIRST, XATTR_FILL_LAST},  // DrawingLayer FillStyle definitions
+                {SID_COLOR_TABLE, SID_PATTERN_LIST},   // XPropertyLists for Color, Gradient, Hatch and Graphic fills
+                {nOuter, nOuter},
+                {nInner, nInner},
+                {nShadow, nShadow}});
 
             // copy items for XPropertyList entries from the DrawModel so that
             // the Area TabPage can access them
@@ -637,11 +636,10 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, Button*, void)
 
             pBBSet = new SfxItemSet(
                 *GetItemSet().GetPool(),
-                nBrush, nBrush,
-                nOuter, nOuter,
-                nInner, nInner,
-                nShadow, nShadow,
-                0, 0);
+                {{nBrush, nBrush},
+                {nOuter, nOuter},
+                {nInner, nInner},
+                {nShadow, nShadow}});
         }
 
         const SfxPoolItem* pItem;
@@ -713,7 +711,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, Button*, void)
                     {
                         // create FillAttributes from SvxBrushItem
                         const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(pBBSet->Get(nWhich));
-                        SfxItemSet aTempSet(*pBBSet->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+                        SfxItemSet aTempSet(*pBBSet->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
                         setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
                         aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
@@ -800,7 +798,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
                 {
                     // create FillAttributes from SvxBrushItem
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
-                    SfxItemSet aTempSet(*rTmpSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+                    SfxItemSet aTempSet(*rTmpSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
                     setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
                     aHeaderFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
@@ -844,7 +842,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
                 {
                     // create FillAttributes from SvxBrushItem
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
-                    SfxItemSet aTempSet(*rTmpSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+                    SfxItemSet aTempSet(*rTmpSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
                     setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
                     aFooterFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
@@ -877,7 +875,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
         {
             // create FillAttributes from SvxBrushItem
             const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rSet.Get(nWhich));
-            SfxItemSet aTempSet(*rSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+            SfxItemSet aTempSet(*rSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
             setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
             aPageFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));

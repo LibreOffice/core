@@ -118,7 +118,7 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
                 {
                     SwFrameFormat* pFormat = pBox->ClaimFrameFormat();
                     SfxItemSet aTmp( pDoc->GetAttrPool(),
-                                        RES_BOXATR_BEGIN,RES_BOXATR_END-1 );
+                                        svl::Items<RES_BOXATR_BEGIN,RES_BOXATR_END-1>{} );
                     aTmp.Put( SwTableBoxValue( nRet ) );
                     if( SfxItemState::SET != pFormat->GetItemState( RES_BOXATR_FORMAT ))
                         aTmp.Put( SwTableBoxNumFormat( 0 ));

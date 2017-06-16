@@ -112,9 +112,8 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     case SID_OUTLINE_BULLET:
     {
         SfxItemSet aSet( GetPool(),
-                         SID_HTML_MODE, SID_HTML_MODE,
-                         SID_ATTR_NUMBERING_RULE, SID_PARAM_CUR_NUM_LEVEL,
-                         0 );
+                         svl::Items<SID_HTML_MODE, SID_HTML_MODE,
+                         SID_ATTR_NUMBERING_RULE, SID_PARAM_CUR_NUM_LEVEL>{} );
         SwDocShell* pDocSh = GetView().GetDocShell();
         const bool bHtml = dynamic_cast<SwWebDocShell*>( pDocSh  ) !=  nullptr;
         const SwNumRule* pNumRuleAtCurrentSelection = GetShell().GetNumRuleAtCurrentSelection();

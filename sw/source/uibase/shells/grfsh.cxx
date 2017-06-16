@@ -151,7 +151,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     convertTwipToMm100(rSh.GetAnyCurRect(CurRectType::FlyEmbedded).Width()),
                     convertTwipToMm100(rSh.GetAnyCurRect(CurRectType::FlyEmbedded).Height()));
 
-                SfxItemSet aSet( rSh.GetAttrPool(), RES_GRFATR_MIRRORGRF, RES_GRFATR_CROPGRF );
+                SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_GRFATR_MIRRORGRF, RES_GRFATR_CROPGRF>{} );
                 rSh.GetCurAttr( aSet );
                 SwMirrorGrf aMirror( static_cast<const SwMirrorGrf&>( aSet.Get(RES_GRFATR_MIRRORGRF)) );
                 SwCropGrf aCrop( static_cast<const SwCropGrf&>( aSet.Get(RES_GRFATR_CROPGRF)) );
@@ -220,7 +220,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
             SfxItemSet aSet(GetPool(), // sorted by indices
 
-                RES_FRMATR_BEGIN,RES_FRMATR_END - 1,                            // [   82
+                svl::Items<RES_FRMATR_BEGIN,RES_FRMATR_END - 1,                            // [   82
                 RES_GRFATR_MIRRORGRF,RES_GRFATR_CROPGRF,                        // [  123
 
                 // FillAttribute support
@@ -244,8 +244,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 FN_SET_FRM_NAME,FN_KEEP_ASPECT_RATIO,                           // [21306
                 FN_SET_FRM_ALT_NAME,FN_SET_FRM_ALT_NAME,                        // [21318
                 SID_REFERER,            SID_REFERER,
-                FN_UNO_DESCRIPTION, FN_UNO_DESCRIPTION,                         // [21320
-                0);
+                FN_UNO_DESCRIPTION, FN_UNO_DESCRIPTION>{});                     // [21320
 
             // create needed items for XPropertyList entries from the DrawModel so that
             // the Area TabPage can access them
@@ -329,7 +328,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             // get Mirror and Crop
             {
                 SfxItemSet aTmpSet( rSh.GetAttrPool(),
-                                RES_GRFATR_MIRRORGRF, RES_GRFATR_CROPGRF );
+                                svl::Items<RES_GRFATR_MIRRORGRF, RES_GRFATR_CROPGRF>{} );
 
                 rSh.GetCurAttr( aTmpSet );
                 aSet.Put( aTmpSet );
@@ -389,11 +388,10 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 if(pFormat && pFormat->IsAutoUpdateFormat())
                 {
                     pFormat->SetFormatAttr(*pSet);
-                    SfxItemSet aShellSet(GetPool(), RES_FRM_SIZE,   RES_FRM_SIZE,
+                    SfxItemSet aShellSet(GetPool(), svl::Items<RES_FRM_SIZE,   RES_FRM_SIZE,
                                                     RES_SURROUND,   RES_SURROUND,
                                                     RES_ANCHOR,     RES_ANCHOR,
-                                                    RES_VERT_ORIENT,RES_HORI_ORIENT,
-                                                    0);
+                                                    RES_VERT_ORIENT,RES_HORI_ORIENT>{});
                     aShellSet.Put(*pSet);
                     aMgr.SetAttrSet(aShellSet);
                 }
@@ -461,8 +459,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                                         FN_UNO_DESCRIPTION, true, &pItem ))
                     rSh.SetObjDescription( static_cast<const SfxStringItem*>(pItem)->GetValue() );
 
-                SfxItemSet aGrfSet( rSh.GetAttrPool(), RES_GRFATR_BEGIN,
-                                                       RES_GRFATR_END-1 );
+                SfxItemSet aGrfSet( rSh.GetAttrPool(), svl::Items<RES_GRFATR_BEGIN,
+                                                       RES_GRFATR_END-1>{} );
                 aGrfSet.Put( *pSet );
                 if( aGrfSet.Count() )
                     rSh.SetAttrSet( aGrfSet );
@@ -475,7 +473,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
         case FN_GRAPHIC_MIRROR_ON_EVEN_PAGES:
         {
-            SfxItemSet aSet(rSh.GetAttrPool(), RES_GRFATR_MIRRORGRF, RES_GRFATR_MIRRORGRF);
+            SfxItemSet aSet(rSh.GetAttrPool(), svl::Items<RES_GRFATR_MIRRORGRF, RES_GRFATR_MIRRORGRF>{});
             rSh.GetCurAttr( aSet );
             SwMirrorGrf aGrf(static_cast<const SwMirrorGrf &>(aSet.Get(RES_GRFATR_MIRRORGRF)));
             aGrf.SetGrfToggle(!aGrf.IsGrfToggle());
@@ -506,8 +504,8 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
     if (GraphicType::Bitmap == nGrfType ||
         GraphicType::GdiMetafile == nGrfType)
     {
-        SfxItemSet aGrfSet( GetShell().GetAttrPool(), RES_GRFATR_BEGIN,
-                                                      RES_GRFATR_END -1 );
+        SfxItemSet aGrfSet( GetShell().GetAttrPool(), svl::Items<RES_GRFATR_BEGIN,
+                                                      RES_GRFATR_END -1>{} );
         const SfxItemSet *pArgs = rReq.GetArgs();
         const SfxPoolItem* pItem;
         sal_uInt16 nSlot = rReq.GetSlot();
@@ -878,7 +876,7 @@ void SwGrfShell::ExecuteRotation(SfxRequest &rReq)
     Size aSize(nRotatedWidth, nRotatedHeight);
     aManager.SetSize(aSize);
     aManager.UpdateFlyFrame();
-    SfxItemSet aSet( rShell.GetAttrPool(), RES_GRFATR_CROPGRF, RES_GRFATR_CROPGRF );
+    SfxItemSet aSet( rShell.GetAttrPool(), svl::Items<RES_GRFATR_CROPGRF, RES_GRFATR_CROPGRF>{} );
     rShell.GetCurAttr( aSet );
     SwCropGrf aCrop( static_cast<const SwCropGrf&>( aSet.Get(RES_GRFATR_CROPGRF) ) );
     tools::Rectangle aCropRectangle(aCrop.GetLeft(),  aCrop.GetTop(), aCrop.GetRight(), aCrop.GetBottom());

@@ -635,7 +635,7 @@ void IMapWindow::DoMacroAssign()
 
     if ( pSdrObj )
     {
-        SfxItemSet      aSet( *pIMapPool, SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG, 0 );
+        SfxItemSet      aSet( *pIMapPool, svl::Items<SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG>{} );
 
         SfxEventNamesItem aNamesItem(SID_EVENTCONFIG);
         aNamesItem.AddEvent( "MouseOver", "", SFX_EVENT_MOUSEOVER_OBJECT );

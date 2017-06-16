@@ -1081,7 +1081,7 @@ SdrPageProperties::SdrPageProperties(SdrPage& rSdrPage)
 :   SfxListener(),
     mpSdrPage(&rSdrPage),
     mpStyleSheet(nullptr),
-    maProperties(mpSdrPage->GetModel()->GetItemPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST)
+    maProperties(mpSdrPage->GetModel()->GetItemPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{})
 {
     if(!rSdrPage.IsMasterPage())
     {

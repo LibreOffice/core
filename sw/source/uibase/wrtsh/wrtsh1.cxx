@@ -1535,7 +1535,7 @@ void SwWrtShell::AutoUpdatePara(SwTextFormatColl* pColl, const SfxItemSet& rStyl
 {
     SwPaM* pCursor = pPaM ? pPaM : GetCursor( );
     SfxItemSet aCoreSet( GetAttrPool(),
-            RES_CHRATR_BEGIN,           RES_CHRATR_END - 1,
+            svl::Items<RES_CHRATR_BEGIN,           RES_CHRATR_END - 1,
             RES_PARATR_BEGIN,           RES_PARATR_END - 1,
             RES_FRMATR_BEGIN,           RES_FRMATR_END - 1,
             SID_ATTR_TABSTOP_POS,       SID_ATTR_TABSTOP_POS,
@@ -1543,8 +1543,7 @@ void SwWrtShell::AutoUpdatePara(SwTextFormatColl* pColl, const SfxItemSet& rStyl
             SID_ATTR_TABSTOP_OFFSET,    SID_ATTR_TABSTOP_OFFSET,
             SID_ATTR_BORDER_INNER,      SID_ATTR_BORDER_INNER,
             SID_ATTR_PARA_MODEL,        SID_ATTR_PARA_KEEP,
-            SID_ATTR_PARA_PAGENUM,      SID_ATTR_PARA_PAGENUM,
-            0   );
+            SID_ATTR_PARA_PAGENUM,      SID_ATTR_PARA_PAGENUM>{}   );
     GetPaMAttr( pCursor, aCoreSet );
     bool bReset = false;
     SfxItemIter aParaIter( aCoreSet );

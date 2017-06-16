@@ -2326,7 +2326,7 @@ void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
     if( bNewFormat || bNewFormula || bNewValue )
     {
         SfxItemSet aBoxSet( rDoc.GetAttrPool(),
-                                RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
+                                svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{} );
 
         // Resetting attributes is not enough. In addition, take care that the
         // text will be also formatted correctly.
@@ -2355,7 +2355,7 @@ void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
     else if( css::util::NumberFormat::TEXT != static_cast<sal_Int16>(nFormatIdx) )
     {
         SfxItemSet aBoxSet( rDoc.GetAttrPool(),
-                            RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
+                            svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{} );
 
         aBoxSet.Put( SwTableBoxNumFormat( nFormatIdx ));
         aBoxSet.Put( SwTableBoxValue( fNum ));
@@ -2529,8 +2529,8 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
         aInsIdx = rBox.GetSttIdx() + 1;
         rDoc.GetNodes().Delete( aInsIdx );
 
-        SfxItemSet aTmpSet( rDoc.GetAttrPool(), RES_BOXATR_FORMAT, RES_BOXATR_VALUE,
-                                                RES_VERT_ORIENT, RES_VERT_ORIENT, 0 );
+        SfxItemSet aTmpSet( rDoc.GetAttrPool(), svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE,
+                                                RES_VERT_ORIENT, RES_VERT_ORIENT>{} );
         aTmpSet.Put( rBox.GetFrameFormat()->GetAttrSet() );
         if( aTmpSet.Count() )
         {
@@ -2620,8 +2620,8 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
         aInsIdx = rBox.GetSttIdx() + 1;
         rDoc.GetNodes().Delete( aInsIdx );
 
-        SfxItemSet aTmpSet( rDoc.GetAttrPool(), RES_BOXATR_FORMAT, RES_BOXATR_VALUE,
-                                                RES_VERT_ORIENT, RES_VERT_ORIENT, 0 );
+        SfxItemSet aTmpSet( rDoc.GetAttrPool(), svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE,
+                                                RES_VERT_ORIENT, RES_VERT_ORIENT>{} );
         aTmpSet.Put( rBox.GetFrameFormat()->GetAttrSet() );
         if( aTmpSet.Count() )
         {

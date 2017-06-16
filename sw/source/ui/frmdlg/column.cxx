@@ -145,10 +145,9 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
     if( pPageDesc )
     {
         pPageSet = new SfxItemSet( rWrtShell.GetAttrPool(),
-                                    RES_COL, RES_COL,
+                                    svl::Items<RES_COL, RES_COL,
                                     RES_FRM_SIZE, RES_FRM_SIZE,
-                                    RES_LR_SPACE, RES_LR_SPACE,
-                                    0 );
+                                    RES_LR_SPACE, RES_LR_SPACE>{} );
 
         const SwFrameFormat &rFormat = pPageDesc->GetMaster();
         nPageWidth = rFormat.GetFrameSize().GetSize().Width();
@@ -318,7 +317,7 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl, Button*, void)
     }
     if(pFrameSet && SfxItemState::SET == pFrameSet->GetItemState(RES_COL) && bFrameChanged)
     {
-        SfxItemSet aTmp(*pFrameSet->GetPool(), RES_COL, RES_COL);
+        SfxItemSet aTmp(*pFrameSet->GetPool(), svl::Items<RES_COL, RES_COL>{});
         aTmp.Put(*pFrameSet);
         rWrtShell.StartAction();
         rWrtShell.Push();

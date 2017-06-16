@@ -331,13 +331,13 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                     std::unique_ptr<SfxItemSet> pEmptySet(
                                         new SfxItemSet( *pReqArgs->GetPool(),
-                                                        ATTR_PATTERN_START,
-                                                        ATTR_PATTERN_END ));
+                                                        svl::Items<ATTR_PATTERN_START,
+                                                        ATTR_PATTERN_END>{} ));
 
                     std::unique_ptr<SfxItemSet> pNewSet(
                                         new SfxItemSet( *pReqArgs->GetPool(),
-                                                        ATTR_PATTERN_START,
-                                                        ATTR_PATTERN_END ));
+                                                        svl::Items<ATTR_PATTERN_START,
+                                                        ATTR_PATTERN_END>{} ));
 
                     const SfxPoolItem*  pAttr = nullptr;
                     sal_uInt16              nWhich = 0;

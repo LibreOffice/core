@@ -532,7 +532,7 @@ void FuText::ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj)
 void FuText::ImpSetAttributesFitToSize(SdrTextObj* pTxtObj)
 {
     // FitToSize (fit to frame)
-    SfxItemSet aSet(mpViewShell->GetPool(), SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWWIDTH);
+    SfxItemSet aSet(mpViewShell->GetPool(), svl::Items<SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWWIDTH>{});
     SdrFitToSizeType eFTS = SdrFitToSizeType::Proportional;
     aSet.Put(SdrTextFitToSizeTypeItem(eFTS));
     aSet.Put(makeSdrTextAutoGrowHeightItem(false));
@@ -544,7 +544,7 @@ void FuText::ImpSetAttributesFitToSize(SdrTextObj* pTxtObj)
 void FuText::ImpSetAttributesFitToSizeVertical(SdrTextObj* pTxtObj)
 {
     SfxItemSet aSet(mpViewShell->GetPool(),
-        SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWWIDTH);
+        svl::Items<SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWWIDTH>{});
     SdrFitToSizeType eFTS = SdrFitToSizeType::Proportional;
     aSet.Put(SdrTextFitToSizeTypeItem(eFTS));
     aSet.Put(makeSdrTextAutoGrowHeightItem(false));

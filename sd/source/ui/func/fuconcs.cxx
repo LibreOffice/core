@@ -191,7 +191,7 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
                             {
                                 const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
                                 SfxItemSet aDest( pObj->GetModel()->GetItemPool(),              // ranges from SdrAttrObj
-                                SDRATTR_START, SDRATTR_SHADOW_LAST,
+                                svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
                                 SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
                                 // Graphic Attributes
@@ -201,9 +201,7 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
                                 // CustomShape properties
                                 SDRATTR_CUSTOMSHAPE_FIRST, SDRATTR_CUSTOMSHAPE_LAST,
                                 // range from SdrTextObj
-                                EE_ITEMS_START, EE_ITEMS_END,
-                                // end
-                                0, 0);
+                                EE_ITEMS_START, EE_ITEMS_END>{});
                                 aDest.Set( rSource );
                                 pObj->SetMergedItemSet( aDest );
                                 sal_Int32 nAngle = pSourceObj->GetRotateAngle();

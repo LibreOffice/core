@@ -162,7 +162,7 @@ SfxItemSet* SwFieldDlg::CreateInputItemSet( sal_uInt16 nID  )
     SwDocShell *const pDocSh(static_cast<SwDocShell*>(SfxObjectShell::Current()));
     if (nID == m_nDokInf && pDocSh) // might not have a shell if the dialog is restored on startup
     {
-        SfxItemSet* pISet = new SfxItemSet( pDocSh->GetPool(), SID_DOCINFO, SID_DOCINFO );
+        SfxItemSet* pISet = new SfxItemSet( pDocSh->GetPool(), svl::Items<SID_DOCINFO, SID_DOCINFO>{} );
         using namespace ::com::sun::star;
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             pDocSh->GetModel(), uno::UNO_QUERY_THROW);

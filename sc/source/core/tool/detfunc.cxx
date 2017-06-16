@@ -134,11 +134,11 @@ static bool lcl_HasThickLine( SdrObject& rObj )
 }
 
 ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
-    aBoxSet( pModel->GetItemPool(), SDRATTR_START, SDRATTR_END ),
-    aArrowSet( pModel->GetItemPool(), SDRATTR_START, SDRATTR_END ),
-    aToTabSet( pModel->GetItemPool(), SDRATTR_START, SDRATTR_END ),
-    aFromTabSet( pModel->GetItemPool(), SDRATTR_START, SDRATTR_END ),
-    aCircleSet( pModel->GetItemPool(), SDRATTR_START, SDRATTR_END )
+    aBoxSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{} ),
+    aArrowSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{} ),
+    aToTabSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{} ),
+    aFromTabSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{} ),
+    aCircleSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{} )
 {
     nMaxLevel = 0;
 
@@ -194,7 +194,7 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
 }
 
 ScCommentData::ScCommentData( ScDocument& rDoc, SdrModel* pModel ) :
-    aCaptionSet( pModel->GetItemPool(), SDRATTR_START, SDRATTR_END, EE_ITEMS_START, EE_ITEMS_END, 0, 0 )
+    aCaptionSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END, EE_ITEMS_START, EE_ITEMS_END>{} )
 {
     basegfx::B2DPolygon aTriangle;
     aTriangle.append(basegfx::B2DPoint(10.0, 0.0));

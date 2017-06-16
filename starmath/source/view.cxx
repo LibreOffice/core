@@ -1715,7 +1715,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 }
                 else
                 {
-                    SfxItemSet aSet( SmDocShell::GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
+                    SfxItemSet aSet( SmDocShell::GetPool(), svl::Items<SID_ATTR_ZOOM, SID_ATTR_ZOOM>{});
                     aSet.Put( SvxZoomItem( SvxZoomType::PERCENT, mpGraphic->GetZoom()));
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)

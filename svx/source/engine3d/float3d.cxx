@@ -2793,7 +2793,7 @@ void Svx3DWin::UpdatePreview()
         pModel = new FmFormModel();
 
     // Get Itemset
-    SfxItemSet aSet( pModel->GetItemPool(), SDRATTR_START, SDRATTR_END);
+    SfxItemSet aSet( pModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{});
 
     // Get Attributes and set the preview
     GetAttr( aSet );

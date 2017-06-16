@@ -44,8 +44,8 @@ ScHFPage::ScHFPage( vcl::Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSe
 
     :   SvxHFPage   ( pParent, rSet, nSetId ),
         aDataSet    ( *rSet.GetPool(),
-                       ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERRIGHT,
-                       ATTR_PAGE, ATTR_PAGE, 0 ),
+                       svl::Items<ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERRIGHT,
+                       ATTR_PAGE, ATTR_PAGE>{} ),
         nPageUsage  ( SvxPageUsage::All ),
         pStyleDlg   ( nullptr )
 {

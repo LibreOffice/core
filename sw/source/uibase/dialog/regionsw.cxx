@@ -62,14 +62,13 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
     const SfxItemSet *pSet = rReq.GetArgs();
 
     SfxItemSet aSet(GetPool(),
-            RES_COL, RES_COL,
+            svl::Items<RES_COL, RES_COL,
             RES_LR_SPACE, RES_LR_SPACE,
             RES_COLUMNBALANCE, RES_FRAMEDIR,
             RES_BACKGROUND, RES_BACKGROUND,
             RES_FRM_SIZE, RES_FRM_SIZE,
             RES_FTN_AT_TXTEND, RES_END_AT_TXTEND,
-            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
-            0);
+            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>{});
 
     if (!pSet || pSet->Count()==0)
     {
@@ -181,11 +180,10 @@ IMPL_LINK( SwWrtShell, InsertRegionDialog, void*, p, void )
     if (xSectionData.get())
     {
         SfxItemSet aSet(GetView().GetPool(),
-                RES_COL, RES_COL,
+                svl::Items<RES_COL, RES_COL,
                 RES_BACKGROUND, RES_BACKGROUND,
                 RES_FRM_SIZE, RES_FRM_SIZE,
-                SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
-                0);
+                SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>{});
         SwRect aRect;
         CalcBoundRect(aRect, RndStdIds::FLY_AS_CHAR);
         long nWidth = aRect.Width();

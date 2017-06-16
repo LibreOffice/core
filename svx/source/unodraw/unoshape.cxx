@@ -649,7 +649,7 @@ void SvxShape::ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet)
     DBG_TESTSOLARMUTEX();
     if(mpObj.is() && rPropSet.AreThereOwnUsrAnys() && mpModel)
     {
-        SfxItemSet aSet( mpModel->GetItemPool(), SDRATTR_START, SDRATTR_END);
+        SfxItemSet aSet( mpModel->GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{});
         Reference< beans::XPropertySet > xShape( static_cast<OWeakObject*>(this), UNO_QUERY );
         SvxItemPropertySet_ObtainSettingsFromPropertySet(rPropSet, aSet, xShape, &mpPropSet->getPropertyMap() );
 
@@ -1399,7 +1399,7 @@ void SAL_CALL SvxShape::removeVetoableChangeListener( const OUString& , const Re
 
 bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName )
 {
-    SfxItemSet aSet( mpModel->GetItemPool(),    (sal_uInt16)nWID, (sal_uInt16)nWID );
+    SfxItemSet aSet( mpModel->GetItemPool(),    {{(sal_uInt16)nWID, (sal_uInt16)nWID}} );
 
     if( SetFillAttribute( nWID, rName, aSet, mpModel ) )
     {
@@ -1651,7 +1651,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
     }
     else
     {
-        pSet = new SfxItemSet( mpModel->GetItemPool(),  pMap->nWID, pMap->nWID);
+        pSet = new SfxItemSet( mpModel->GetItemPool(),  {{pMap->nWID, pMap->nWID}});
     }
 
     if( pSet->GetItemState( pMap->nWID ) != SfxItemState::SET )
@@ -1727,7 +1727,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
             DBG_ASSERT( pMap->nWID == SDRATTR_TEXTDIRECTION || (pMap->nWID < SDRATTR_NOTPERSIST_FIRST || pMap->nWID > SDRATTR_NOTPERSIST_LAST), "Not persist item not handled!" );
             DBG_ASSERT( pMap->nWID < OWN_ATTR_VALUE_START || pMap->nWID > OWN_ATTR_VALUE_END, "Not item property not handled!" );
 
-            SfxItemSet aSet( mpModel->GetItemPool(),    pMap->nWID, pMap->nWID);
+            SfxItemSet aSet( mpModel->GetItemPool(),    {{pMap->nWID, pMap->nWID}});
             aSet.Put(mpObj->GetMergedItem(pMap->nWID));
 
             if(SvxUnoTextRangeBase::GetPropertyValueHelper(  aSet, pMap, aAny ))
@@ -3011,7 +3011,7 @@ uno::Any SAL_CALL SvxShape::_getPropertyDefault( const OUString& aPropertyName )
     if(!SfxItemPool::IsWhich(pMap->nWID))
         throw beans::UnknownPropertyException( "No WhichID " + OUString::number(pMap->nWID) + " for " + aPropertyName, static_cast<cppu::OWeakObject*>(this));
 
-    SfxItemSet aSet( mpModel->GetItemPool(),    pMap->nWID, pMap->nWID);
+    SfxItemSet aSet( mpModel->GetItemPool(),    {{pMap->nWID, pMap->nWID}});
     aSet.Put(mpModel->GetItemPool().GetDefaultItem(pMap->nWID));
 
     return GetAnyForItem( aSet, pMap );

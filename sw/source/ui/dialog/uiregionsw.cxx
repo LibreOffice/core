@@ -1049,14 +1049,13 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, Button*, void)
     {
         SectRepr* pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
         SfxItemSet aSet(rSh.GetView().GetPool(),
-                            RES_COL, RES_COL,
+                            svl::Items<RES_COL, RES_COL,
                             RES_COLUMNBALANCE, RES_FRAMEDIR,
                             RES_BACKGROUND, RES_BACKGROUND,
                             RES_FRM_SIZE, RES_FRM_SIZE,
                             SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
                             RES_LR_SPACE, RES_LR_SPACE,
-                            RES_FTN_AT_TXTEND, RES_END_AT_TXTEND,
-                            0);
+                            RES_FTN_AT_TXTEND, RES_END_AT_TXTEND>{});
 
         aSet.Put( pSectRepr->GetCol() );
         aSet.Put( pSectRepr->GetBackground() );

@@ -227,7 +227,7 @@ SwAttrCheckArr::SwAttrCheckArr( const SfxItemSet& rSet, bool bFwd,
     , nNdEnd(0)
     , nFound(0)
     , nStackCnt(0)
-    , aCmpSet( *rSet.GetPool(), RES_CHRATR_BEGIN, RES_TXTATR_END-1 )
+    , aCmpSet( *rSet.GetPool(), svl::Items<RES_CHRATR_BEGIN, RES_TXTATR_END-1>{} )
     , bNoColls(bNoCollections)
     , bForward(bFwd)
 {
@@ -977,7 +977,7 @@ bool SwPaM::Find( const SfxItemSet& rSet, bool bNoColls, SwMoveFnCollection cons
     // check which text/char attributes are searched
     SwAttrCheckArr aCmpArr( rSet, bSrchForward, bNoColls );
     SfxItemSet aOtherSet( GetDoc()->GetAttrPool(),
-                            RES_PARATR_BEGIN, RES_GRFATR_END-1 );
+                            svl::Items<RES_PARATR_BEGIN, RES_GRFATR_END-1>{} );
     aOtherSet.Put( rSet, false );   // got all invalid items
 
     FnSearchAttr fnSearch = bSrchForward

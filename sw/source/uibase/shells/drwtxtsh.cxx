@@ -766,10 +766,9 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 
         SfxItemSet aOldSet( pOLV->GetAttribs() );
         SfxItemSet aFontSet( *aOldSet.GetPool(),
-                            EE_CHAR_FONTINFO, EE_CHAR_FONTINFO,
+                            svl::Items<EE_CHAR_FONTINFO, EE_CHAR_FONTINFO,
                             EE_CHAR_FONTINFO_CJK, EE_CHAR_FONTINFO_CJK,
-                            EE_CHAR_FONTINFO_CTL, EE_CHAR_FONTINFO_CTL,
-                            0 );
+                            EE_CHAR_FONTINFO_CTL, EE_CHAR_FONTINFO_CTL>{} );
         aFontSet.Set( aOldSet );
 
         // Insert string

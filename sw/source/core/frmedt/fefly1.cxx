@@ -1063,7 +1063,7 @@ SfxItemSet SwFEShell::makeItemSetFromFormatAnchor(SfxItemPool& rPool, const SwFo
     // The set also includes VERT/HORI_ORIENT, because the align
     // shall be changed in FEShell::SetFlyFrameAttr/SetFlyFrameAnchor,
     // possibly as a result of the anchor change.
-    SfxItemSet aSet(rPool, RES_VERT_ORIENT, RES_ANCHOR);
+    SfxItemSet aSet(rPool, svl::Items<RES_VERT_ORIENT, RES_ANCHOR>{});
     aSet.Put(rAnchor);
     return aSet;
 }

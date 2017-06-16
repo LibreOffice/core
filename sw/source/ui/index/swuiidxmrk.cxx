@@ -345,7 +345,7 @@ void    SwIndexMarkPane::UpdateLanguageDependenciesForPhoneticReading()
             case SvtScriptType::COMPLEX:nWhich = RES_CHRATR_CTL_LANGUAGE; break;
             default:nWhich = RES_CHRATR_LANGUAGE; break;
         }
-        SfxItemSet aLangSet(pSh->GetAttrPool(), nWhich, nWhich);
+        SfxItemSet aLangSet(pSh->GetAttrPool(), {{nWhich, nWhich}});
         pSh->GetCurAttr(aLangSet);
         nLangForPhoneticReading = static_cast<const SvxLanguageItem&>(aLangSet.Get(nWhich)).GetLanguage();
     }

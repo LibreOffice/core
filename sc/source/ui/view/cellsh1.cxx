@@ -3036,7 +3036,7 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
 
     ScopedVclPtr<SfxAbstractTabDialog> pDlg;
     ScSubTotalParam aSubTotalParam;
-    SfxItemSet aArgSet( GetPool(), SCITEM_SUBTDATA, SCITEM_SUBTDATA );
+    SfxItemSet aArgSet( GetPool(), svl::Items<SCITEM_SUBTDATA, SCITEM_SUBTDATA>{} );
 
     // Only get existing named database range.
     ScDBData* pDBData = pTabViewShell->GetDBData(true, SC_DB_OLD);

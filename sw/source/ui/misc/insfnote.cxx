@@ -59,7 +59,7 @@ void SwInsFootNoteDlg::Apply()
         if( rSh.SetCurFootnote( aNote ) && bExtCharAvailable )
         {
             rSh.Right(CRSR_SKIP_CHARS, true, 1, false );
-            SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
+            SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT>{} );
             rSh.GetCurAttr( aSet );
             const SvxFontItem &rFont = static_cast<const SvxFontItem &>( aSet.Get( RES_CHRATR_FONT ));
             SvxFontItem aFont( rFont.GetFamily(), m_aFontName,
@@ -102,7 +102,7 @@ IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberExtCharHdl, Button*, void)
 {
     m_pNumberCharBtn->Check();
 
-    SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
+    SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT>{} );
     rSh.GetCurAttr( aSet );
     const SvxFontItem &rFont = static_cast<const SvxFontItem &>( aSet.Get( RES_CHRATR_FONT ) );
 
@@ -231,7 +231,7 @@ void SwInsFootNoteDlg::Init()
             sNumStr = aFootnoteNote.GetNumStr();
 
             rSh.Right(CRSR_SKIP_CHARS, true, 1, false );
-            SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
+            SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT>{} );
             rSh.GetCurAttr( aSet );
             const SvxFontItem &rFont = static_cast<const SvxFontItem &>( aSet.Get( RES_CHRATR_FONT ) );
 

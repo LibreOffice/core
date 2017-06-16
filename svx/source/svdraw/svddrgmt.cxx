@@ -3978,7 +3978,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
     sal_Int32 nBottomCrop = static_cast<sal_Int32>( rOldCrop.GetBottom() - nDiffBottom * fScaleY );
 
     SfxItemPool& rPool = getSdrDragView().GetModel()->GetItemPool();
-    SfxItemSet aSet( rPool, SDRATTR_GRAFCROP, SDRATTR_GRAFCROP );
+    SfxItemSet aSet( rPool, svl::Items<SDRATTR_GRAFCROP, SDRATTR_GRAFCROP>{} );
     aSet.Put( SdrGrafCropItem( nLeftCrop, nTopCrop, nRightCrop, nBottomCrop ) );
     getSdrDragView().SetAttributes( aSet, false );
 

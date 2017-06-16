@@ -323,8 +323,8 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, Button*, void)
 
         // create empty itemset for macro-dlg
         std::unique_ptr<SfxItemSet> pItemSet( new SfxItemSet(SfxGetpApp()->GetPool(),
-                                              SID_ATTR_MACROITEM,
-                                              SID_ATTR_MACROITEM ) );
+                                              svl::Items<SID_ATTR_MACROITEM,
+                                              SID_ATTR_MACROITEM>{} ) );
         pItemSet->Put ( aItem );
 
         /*  disable HyperLinkDlg for input while the MacroAssignDlg is working

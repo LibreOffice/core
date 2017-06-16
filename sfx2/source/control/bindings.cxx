@@ -1043,7 +1043,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
         {
             // The value is attached to a toggleable attribute (Bools)
             sal_uInt16 nWhich = pSlot->GetWhich(rPool);
-            SfxItemSet aSet(rPool, nWhich, nWhich);
+            SfxItemSet aSet(rPool, {{nWhich, nWhich}});
             SfxStateFunc aFunc  = pSlot->GetStateFnc();
             pShell->CallState( aFunc, aSet );
             const SfxPoolItem *pOldItem;

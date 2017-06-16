@@ -1072,24 +1072,21 @@ namespace //local functions originally from docfmt.cxx
         if ( !bCharAttr && !bOtherAttr )
         {
             SfxItemSet* pTmpCharItemSet = new SfxItemSet( pDoc->GetAttrPool(),
-                                       RES_CHRATR_BEGIN, RES_CHRATR_END-1,
+                                       svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1,
                                        RES_TXTATR_AUTOFMT, RES_TXTATR_AUTOFMT,
                                        RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
                                        RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
-                   RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
-                                       0 );
+                   RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER>{} );
 
             SfxItemSet* pTmpOtherItemSet = new SfxItemSet( pDoc->GetAttrPool(),
-                                        RES_PARATR_BEGIN, RES_PARATR_END-1,
+                                        svl::Items<RES_PARATR_BEGIN, RES_PARATR_END-1,
                                         RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
                                         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
                                         RES_GRFATR_BEGIN, RES_GRFATR_END-1,
                                         RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
 
                                         // FillAttribute support
-                                        XATTR_FILL_FIRST, XATTR_FILL_LAST,
-
-                                        0 );
+                                        XATTR_FILL_FIRST, XATTR_FILL_LAST>{} );
 
             pTmpCharItemSet->Put( rChgSet );
             pTmpOtherItemSet->Put( rChgSet );
@@ -1151,7 +1148,7 @@ namespace //local functions originally from docfmt.cxx
             if ( !bCharAttr && !bOtherAttr )
             {
                 SfxItemSet aTextSet( pDoc->GetAttrPool(),
-                            RES_TXTATR_NOEND_BEGIN, RES_TXTATR_NOEND_END-1 );
+                            svl::Items<RES_TXTATR_NOEND_BEGIN, RES_TXTATR_NOEND_END-1>{} );
                 aTextSet.Put( rChgSet );
                 if( aTextSet.Count() )
                 {
@@ -1182,11 +1179,10 @@ namespace //local functions originally from docfmt.cxx
                 // CharFormat and URL attributes are treated separately!
                 // TEST_TEMP ToDo: AutoFormat!
                 SfxItemSet aTextSet( pDoc->GetAttrPool(),
-                                    RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK,
+                                    svl::Items<RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK,
                                     RES_TXTATR_META, RES_TXTATR_METAFIELD,
                                     RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
-                                    RES_TXTATR_INPUTFIELD, RES_TXTATR_INPUTFIELD,
-                                    0 );
+                                    RES_TXTATR_INPUTFIELD, RES_TXTATR_INPUTFIELD>{} );
 
                 aTextSet.Put( rChgSet );
                 if( aTextSet.Count() )
@@ -3092,7 +3088,7 @@ bool DocumentContentOperationsManager::InsertPoolItem(
         pUndoAttr = new SwUndoAttr( rRg, rHt, nFlags );
     }
 
-    SfxItemSet aSet( m_rDoc.GetAttrPool(), rHt.Which(), rHt.Which() );
+    SfxItemSet aSet( m_rDoc.GetAttrPool(), {{rHt.Which(), rHt.Which()}} );
     aSet.Put( rHt );
     const bool bRet = lcl_InsAttr( &m_rDoc, rRg, aSet, nFlags, pUndoAttr, bExpandCharToPara );
 
@@ -3882,9 +3878,8 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
             {
                 // Apply the first character's attributes to the ReplaceText
                 SfxItemSet aSet( m_rDoc.GetAttrPool(),
-                            RES_CHRATR_BEGIN,     RES_TXTATR_WITHEND_END - 1,
-                            RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-                            0 );
+                            svl::Items<RES_CHRATR_BEGIN,     RES_TXTATR_WITHEND_END - 1,
+                            RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1>{} );
                 pTextNd->GetAttr( aSet, nStt+1, nStt+1 );
 
                 aSet.ClearItem( RES_TXTATR_REFMARK );

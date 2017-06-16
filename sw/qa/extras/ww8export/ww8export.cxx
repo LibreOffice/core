@@ -129,7 +129,7 @@ protected:
 
             // emulate the behavior from tdf#94386 - insert an envelope to the
             // document
-            SfxItemSet aSet(pWrtShell->GetView().GetCurShell()->GetPool(), FN_ENVELOP, FN_ENVELOP);
+            SfxItemSet aSet(pWrtShell->GetView().GetCurShell()->GetPool(), svl::Items<FN_ENVELOP, FN_ENVELOP>{});
             aSet.Put(SwEnvItem());
             SfxRequest aRequest(FN_ENVELOP, SfxCallMode::SYNCHRON, aSet);
             SW_MOD()->ExecOther(aRequest);

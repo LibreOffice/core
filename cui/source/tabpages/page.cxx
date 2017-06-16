@@ -1155,7 +1155,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
                 {
                     // create FillAttributes from SvxBrushItem
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
-                    SfxItemSet aTempSet(*rTmpSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+                    SfxItemSet aTempSet(*rTmpSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
                     setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
                     aHeaderFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
@@ -1199,7 +1199,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
                 {
                     // create FillAttributes from SvxBrushItem
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
-                    SfxItemSet aTempSet(*rTmpSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+                    SfxItemSet aTempSet(*rTmpSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
                     setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
                     aFooterFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
@@ -1233,7 +1233,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
         {
             // create FillAttributes from SvxBrushItem
             const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(*pItem);
-            SfxItemSet aTempSet(*rSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+            SfxItemSet aTempSet(*rSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
             setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
             aPageFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
@@ -1303,7 +1303,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
             {
                 // aBspWin.SetHdColor(rItem.GetColor());
                 const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rHeaderSet.Get(nWhich));
-                SfxItemSet aTempSet(*rHeaderSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+                SfxItemSet aTempSet(*rHeaderSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
                 setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
                 aHeaderFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));
@@ -1365,7 +1365,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
             {
                 // aBspWin.SetFtColor(rItem.GetColor());
                 const SvxBrushItem& rItem = static_cast<const SvxBrushItem&>(rFooterSet.Get(nWhich));
-                SfxItemSet aTempSet(*rFooterSet.GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+                SfxItemSet aTempSet(*rFooterSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
                 setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
                 aFooterFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aTempSet));

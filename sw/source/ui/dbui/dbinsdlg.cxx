@@ -1052,8 +1052,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
         if( pSelection && pTableSet )
             SetTabSet();
 
-        SfxItemSet aTableSet( rSh.GetAttrPool(), RES_BOXATR_FORMAT,
-                                                RES_BOXATR_VALUE );
+        SfxItemSet aTableSet( rSh.GetAttrPool(), svl::Items<RES_BOXATR_FORMAT,
+                                                RES_BOXATR_VALUE>{} );
         bool bIsAutoUpdateCells = rSh.IsAutoUpdateCells();
         rSh.SetAutoUpdateCells( false );
 

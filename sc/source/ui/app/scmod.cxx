@@ -405,7 +405,7 @@ void ScModule::Execute( SfxRequest& rReq )
                         bSet = !GetDocOptions().IsAutoSpell();
                 }
 
-                SfxItemSet aSet( GetPool(), SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK );
+                SfxItemSet aSet( GetPool(), svl::Items<SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK>{} );
                 aSet.Put( SfxBoolItem( SID_AUTOSPELL_CHECK, bSet ) );
                 ModifyOptions( aSet );
                 rReq.Done();

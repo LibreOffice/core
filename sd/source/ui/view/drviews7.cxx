@@ -1546,7 +1546,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         SdPage* pPage = GetActualPage();
         if (pPage != nullptr && GetDoc() != nullptr)
         {
-            SfxItemSet aMergedAttr(GetDoc()->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0);
+            SfxItemSet aMergedAttr(GetDoc()->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
             SdStyleSheet* pStyleSheet = pPage->getPresentationStyle(HID_PSEUDOSHEET_BACKGROUND);
             MergePageBackgroundFilling(pPage, pStyleSheet, meEditMode == EditMode::MasterPage, aMergedAttr);
             if (drawing::FillStyle_BITMAP == static_cast<const XFillStyleItem&>(aMergedAttr.Get(XATTR_FILLSTYLE)).GetValue())
@@ -1751,7 +1751,7 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
                     XFillGradientItem aGradientItem( static_cast<const XFillGradientItem&>(pArgs->Get( XATTR_FILLGRADIENT )) );
 
                     // MigrateItemSet guarantees unique gradient names
-                    SfxItemSet aMigrateSet( mpDrawView->GetModel()->GetItemPool(), XATTR_FILLGRADIENT, XATTR_FILLGRADIENT );
+                    SfxItemSet aMigrateSet( mpDrawView->GetModel()->GetItemPool(), svl::Items<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT>{} );
                     aMigrateSet.Put( aGradientItem );
                     SdrModel::MigrateItemSet( &aMigrateSet, pTempSet, mpDrawView->GetModel() );
 

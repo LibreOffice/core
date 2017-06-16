@@ -116,7 +116,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
             pOutl->SetText(*pParaObj);
 
             // remove hard paragraph- and character attributes
-            SfxItemSet aEmptyEEAttr(mpDoc->GetPool(), EE_ITEMS_START, EE_ITEMS_END);
+            SfxItemSet aEmptyEEAttr(mpDoc->GetPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{});
             sal_Int32 nParaCount1 = pOutl->GetParagraphCount();
 
             for (sal_Int32 nPara = 0; nPara < nParaCount1; nPara++)

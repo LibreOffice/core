@@ -267,7 +267,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             SvxLRSpaceItem aLRSpace = static_cast<const SvxLRSpaceItem&>(pArgs->Get(
                 GetPool().GetWhich(nSpaceSlot)));
 
-            SfxItemSet aEditAttr( GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
+            SfxItemSet aEditAttr( GetPool(), svl::Items<EE_PARA_LRSPACE, EE_PARA_LRSPACE>{} );
             aLRSpace.SetWhich( EE_PARA_LRSPACE );
 
             aEditAttr.Put( aLRSpace );
@@ -279,7 +279,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
         case SID_HANGING_INDENT:
         {
-            SfxItemSet aLRSpaceSet( GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
+            SfxItemSet aLRSpaceSet( GetPool(), svl::Items<EE_PARA_LRSPACE, EE_PARA_LRSPACE>{} );
             mpView->GetAttributes( aLRSpaceSet );
             SvxLRSpaceItem aParaMargin( static_cast<const SvxLRSpaceItem&>( aLRSpaceSet.Get( EE_PARA_LRSPACE ) ) );
 
@@ -324,7 +324,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
         {
             mpView->SdrEndTextEdit();
-            SfxItemSet aAttr( mpView->GetDoc().GetPool(), SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION, 0 );
+            SfxItemSet aAttr( mpView->GetDoc().GetPool(), svl::Items<SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION>{} );
             aAttr.Put( SvxWritingModeItem(
                 nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
                     css::text::WritingMode_LR_TB : css::text::WritingMode_TB_RL,

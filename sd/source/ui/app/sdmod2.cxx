@@ -628,10 +628,9 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     }
 
     SfxItemSet aPrintSet( GetPool(),
-                    SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
+                    svl::Items<SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
                     SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
-                    ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT,
-                    0 );
+                    ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT>{} );
 
     // Print
     const SdOptionsPrintItem* pPrintItem = nullptr;

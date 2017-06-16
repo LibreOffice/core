@@ -1285,7 +1285,7 @@ class SvxMacroAssignDialog : public VclAbstractDialog
 public:
     SvxMacroAssignDialog( vcl::Window* _pParent, const Reference< XFrame >& _rxDocumentFrame, const bool _bUnoDialogMode,
             const Reference< XNameReplace >& _rxEvents, const sal_uInt16 _nInitiallySelectedEvent )
-        :m_aItems( SfxGetpApp()->GetPool(), SID_ATTR_MACROITEM, SID_ATTR_MACROITEM )
+        :m_aItems( SfxGetpApp()->GetPool(), svl::Items<SID_ATTR_MACROITEM, SID_ATTR_MACROITEM>{} )
     {
         m_aItems.Put( SfxBoolItem( SID_ATTR_MACROITEM, _bUnoDialogMode ) );
         m_pDialog.reset( VclPtr<SvxMacroAssignDlg>::Create( _pParent, _rxDocumentFrame, m_aItems, _rxEvents, _nInitiallySelectedEvent ) );

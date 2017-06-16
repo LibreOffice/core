@@ -1884,8 +1884,8 @@ bool SwFEShell::ImpEndCreate()
         }
     }
 
-    SfxItemSet aSet( GetDoc()->GetAttrPool(), RES_FRM_SIZE, RES_FRM_SIZE,
-                                            RES_SURROUND, RES_ANCHOR, 0 );
+    SfxItemSet aSet( GetDoc()->GetAttrPool(), svl::Items<RES_FRM_SIZE, RES_FRM_SIZE,
+                                            RES_SURROUND, RES_ANCHOR>{} );
     aSet.Put( aAnch );
 
     // OD 2004-03-30 #i26791# - determine relative object position
@@ -1953,7 +1953,7 @@ bool SwFEShell::ImpEndCreate()
             ::GetHtmlMode( GetDoc()->GetDocShell() ) &&
             nullptr != ( pFlyFrame = GetSelectedFlyFrame() ))
         {
-            SfxItemSet aHtmlSet( GetDoc()->GetAttrPool(), RES_VERT_ORIENT, RES_HORI_ORIENT );
+            SfxItemSet aHtmlSet( GetDoc()->GetAttrPool(), svl::Items<RES_VERT_ORIENT, RES_HORI_ORIENT>{} );
             // horizontal orientation:
             const bool bLeftFrame = aFlyRect.Left() <
                                       pAnch->Frame().Left() + pAnch->Prt().Left(),
@@ -2704,8 +2704,8 @@ void SwFEShell::CheckUnboundObjects()
             // First the action here, to assure GetCharRect delivers current values.
             StartAllAction();
 
-            SfxItemSet aSet( GetAttrPool(), RES_FRM_SIZE, RES_FRM_SIZE,
-                                            RES_SURROUND, RES_ANCHOR, 0 );
+            SfxItemSet aSet( GetAttrPool(), svl::Items<RES_FRM_SIZE, RES_FRM_SIZE,
+                                            RES_SURROUND, RES_ANCHOR>{} );
             aSet.Put( aAnch );
 
             Point aRelNullPt;
@@ -3069,7 +3069,7 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
 
             if(bMarquee)
             {
-                SfxItemSet aSet(pDrawModel->GetItemPool(), SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST);
+                SfxItemSet aSet(pDrawModel->GetItemPool(), svl::Items<SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST>{});
                 aSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
                 aSet.Put( makeSdrTextAutoGrowHeightItem( false ) );
                 aSet.Put( SdrTextAniKindItem( SdrTextAniKind::Slide ) );

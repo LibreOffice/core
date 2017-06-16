@@ -764,15 +764,13 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     if(pSearch->HasSearchAttributes()||pSearch->HasReplaceAttributes())
     {
         SfxItemSet aSearch(pDocShell->GetDoc()->GetAttrPool(),
-                            RES_CHRATR_BEGIN, RES_CHRATR_END-1,
+                            svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1,
                             RES_PARATR_BEGIN, RES_PARATR_END-1,
-                            RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-                            0);
+                            RES_FRMATR_BEGIN, RES_FRMATR_END-1>{});
         SfxItemSet aReplace(pDocShell->GetDoc()->GetAttrPool(),
-                            RES_CHRATR_BEGIN, RES_CHRATR_END-1,
+                            svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1,
                             RES_PARATR_BEGIN, RES_PARATR_END-1,
-                            RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-                            0);
+                            RES_FRMATR_BEGIN, RES_FRMATR_END-1>{});
         pSearch->FillSearchItemSet(aSearch);
         pSearch->FillReplaceItemSet(aReplace);
         bool bCancel;
@@ -898,11 +896,10 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
         if(pSearch->HasSearchAttributes())
         {
             SfxItemSet aSearch(pDocShell->GetDoc()->GetAttrPool(),
-                                RES_CHRATR_BEGIN, RES_CHRATR_END-1,
+                                svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1,
                                 RES_PARATR_BEGIN, RES_PARATR_END-1,
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-                                RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT,
-                                0);
+                                RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT>{});
             pSearch->FillSearchItemSet(aSearch);
             bool bCancel;
             nResult = (sal_Int32)pUnoCursor->Find( aSearch, !pSearch->m_bStyles,

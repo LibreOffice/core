@@ -484,8 +484,8 @@ void MSWordExportBase::AbstractNumberingDefinitions()
             const SfxItemSet* pOutSet = nullptr;
 
             // cbGrpprlChpx
-            SfxItemSet aSet( m_pDoc->GetAttrPool(), RES_CHRATR_BEGIN,
-                                                  RES_CHRATR_END );
+            SfxItemSet aSet( m_pDoc->GetAttrPool(), svl::Items<RES_CHRATR_BEGIN,
+                                                  RES_CHRATR_END>{} );
             if ( rFormat.GetCharFormat() || bWriteBullet )
             {
                 if ( bWriteBullet )

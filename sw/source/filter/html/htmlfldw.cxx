@@ -327,11 +327,10 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
         //sequence of (start, end) property ranges we want to
         //query
         SfxItemSet aScriptItemSet( rWrt.pDoc->GetAttrPool(),
-                                   RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
+                                   svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
                                    RES_CHRATR_POSTURE, RES_CHRATR_POSTURE,
                                    RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,
-                                   RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT,
-                                   0 );
+                                   RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT>{} );
         rTextNd.GetAttr( aScriptItemSet, nFieldPos, nFieldPos+1 );
 
         sal_uInt16 aWesternWhichIds[4] =

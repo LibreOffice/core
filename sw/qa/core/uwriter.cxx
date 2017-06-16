@@ -970,7 +970,7 @@ void SwDocTest::testGraphicAnchorDeletion()
     aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), RTL_CONSTASCII_LENGTH("graphic anchor>>"));
 
     //Insert a graphic at X of >>X<< in paragraph 2
-    SfxItemSet aFlySet(m_pDoc->GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1);
+    SfxItemSet aFlySet(m_pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{});
     SwFormatAnchor aAnchor(RndStdIds::FLY_AS_CHAR);
     aAnchor.SetAnchor(aPaM.GetPoint());
     aFlySet.Put(aAnchor);

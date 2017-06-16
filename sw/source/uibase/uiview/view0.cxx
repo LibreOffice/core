@@ -603,7 +603,7 @@ void SwView::ExecFormatFootnote()
 
 void SwView::ExecNumberingOutline(SfxItemPool & rPool)
 {
-    SfxItemSet aTmp(rPool, FN_PARAM_1, FN_PARAM_1);
+    SfxItemSet aTmp(rPool, svl::Items<FN_PARAM_1, FN_PARAM_1>{});
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");
     ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,

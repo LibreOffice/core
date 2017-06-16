@@ -352,12 +352,11 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
     aSect.SetEditInReadonlyFlag(m_pImpl->m_pProps->m_bEditInReadonly);
 
     SfxItemSet aSet(pDoc->GetAttrPool(),
-                RES_COL, RES_COL,
+                svl::Items<RES_COL, RES_COL,
                 RES_BACKGROUND, RES_BACKGROUND,
                 RES_FTN_AT_TXTEND, RES_FRAMEDIR,
                 RES_LR_SPACE, RES_LR_SPACE,
-                RES_UNKNOWNATR_CONTAINER,RES_UNKNOWNATR_CONTAINER,
-                0);
+                RES_UNKNOWNATR_CONTAINER,RES_UNKNOWNATR_CONTAINER>{});
     if (m_pImpl->m_pProps->m_pBrushItem.get())
     {
         aSet.Put(*m_pImpl->m_pProps->m_pBrushItem);
@@ -811,7 +810,7 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
                 if (pFormat)
                 {
                     const SfxItemSet& rOldAttrSet = pFormat->GetAttrSet();
-                    pItemSet.reset( new SfxItemSet(*rOldAttrSet.GetPool(), pEntry->nWID, pEntry->nWID));
+                    pItemSet.reset( new SfxItemSet(*rOldAttrSet.GetPool(), {{pEntry->nWID, pEntry->nWID}}));
                     pItemSet->Put(rOldAttrSet);
                     m_rPropSet.setPropertyValue(*pEntry,
                             pValues[nProperty], *pItemSet);
@@ -1541,7 +1540,7 @@ SwXTextSection::setPropertyToDefault(const OUString& rPropertyName)
                 if (pFormat)
                 {
                     const SfxItemSet& rOldAttrSet = pFormat->GetAttrSet();
-                    pNewAttrSet.reset( new SfxItemSet(*rOldAttrSet.GetPool(), pEntry->nWID, pEntry->nWID));
+                    pNewAttrSet.reset( new SfxItemSet(*rOldAttrSet.GetPool(), {{pEntry->nWID, pEntry->nWID}}));
                     pNewAttrSet->ClearItem(pEntry->nWID);
                 }
                 else

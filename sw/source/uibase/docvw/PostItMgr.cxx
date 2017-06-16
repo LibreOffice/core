@@ -1580,7 +1580,7 @@ void SwPostItMgr::ExecuteFormatAllDialog(SwView& rView)
     OutlinerView* pOLV = pWin->GetOutlinerView();
     SfxItemSet aEditAttr(pOLV->GetAttribs());
     SfxItemPool* pPool(SwAnnotationShell::GetAnnotationPool(rView));
-    SfxItemSet aDlgAttr(*pPool, EE_ITEMS_START, EE_ITEMS_END);
+    SfxItemSet aDlgAttr(*pPool, svl::Items<EE_ITEMS_START, EE_ITEMS_END>{});
     aDlgAttr.Put(aEditAttr);
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(rView.GetWindow(), rView, aDlgAttr, SwCharDlgMode::Ann));

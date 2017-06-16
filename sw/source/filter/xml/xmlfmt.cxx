@@ -486,7 +486,7 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
         pItemSet.reset( new SfxItemSet( rItemPool, aTableSetRange ) );
         break;
     case XML_STYLE_FAMILY_TABLE_COLUMN:
-        pItemSet.reset( new SfxItemSet( rItemPool, RES_FRM_SIZE, RES_FRM_SIZE, 0 ) );
+        pItemSet.reset( new SfxItemSet( rItemPool, svl::Items<RES_FRM_SIZE, RES_FRM_SIZE>{} ) );
         break;
     case XML_STYLE_FAMILY_TABLE_ROW:
         pItemSet.reset( new SfxItemSet( rItemPool, aTableLineSetRange ) );

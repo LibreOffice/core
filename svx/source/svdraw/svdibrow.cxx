@@ -1138,7 +1138,7 @@ IMPL_LINK(SdrItemBrowser, ChangedHdl, SdrItemBrowserControl&, rBrowse, void)
         SfxItemSet aSet(pView->GetModel()->GetItemPool());
         pView->GetAttributes(aSet);
 
-        SfxItemSet aNewSet(*aSet.GetPool(),pEntry->nWhichId,pEntry->nWhichId);
+        SfxItemSet aNewSet(*aSet.GetPool(),{{pEntry->nWhichId,pEntry->nWhichId}});
         OUString aNewText(rBrowse.GetNewEntryValue());
         bool bDel( aNewText == "del"
             || aNewText == "Del"

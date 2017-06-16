@@ -77,7 +77,7 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
         mpView->GetAttributes( aEditAttr );
 
         SfxItemSet aNewAttr( mpViewShell->GetPool(),
-                             EE_ITEMS_START, EE_ITEMS_END );
+                             svl::Items<EE_ITEMS_START, EE_ITEMS_END>{} );
         aNewAttr.Put( aEditAttr, false );
 
         // create and execute dialog
@@ -150,7 +150,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
         return;
     }
 
-    SfxItemSet aNewAttr( mpViewShell->GetPool(), EE_ITEMS_START, EE_ITEMS_END );
+    SfxItemSet aNewAttr( mpViewShell->GetPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{} );
     {
         SfxItemSet aEditAttr( mpDoc->GetPool() );
         mpView->GetAttributes( aEditAttr );
@@ -270,7 +270,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
 
     if (bInMasterView && pNumRule)
     {
-        SfxItemSet aSetAttr( mpViewShell->GetPool(), EE_ITEMS_START, EE_ITEMS_END );
+        SfxItemSet aSetAttr( mpViewShell->GetPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{} );
         aSetAttr.Put(SvxNumBulletItem( *pNumRule, nNumItemId ));
         mpView->SetAttributes(aSetAttr);
     }

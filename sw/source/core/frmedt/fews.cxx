@@ -518,7 +518,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
                 //the next line, pushing the caption text out of
                 //the frame making the caption apparently disappear
                 SvxCharHiddenItem aHidden(true, RES_CHRATR_HIDDEN);
-                SfxItemSet aSet(GetDoc()->GetAttrPool(), aHidden.Which(), aHidden.Which());
+                SfxItemSet aSet(GetDoc()->GetAttrPool(), {{aHidden.Which(), aHidden.Which()}});
                 aSet.Put(aHidden);
                 pTextNode->SetAttr(aSet, nIndex, nIndex + 1);
             }

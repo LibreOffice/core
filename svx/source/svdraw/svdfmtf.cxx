@@ -715,7 +715,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaRoundRectAction& rAct)
     SetAttributes(pRect);
     long nRad=(rAct.GetHorzRound()+rAct.GetVertRound())/2;
     if (nRad!=0) {
-        SfxItemSet aSet(*mpLineAttr->GetPool(), SDRATTR_ECKENRADIUS, SDRATTR_ECKENRADIUS, 0, 0);
+        SfxItemSet aSet(*mpLineAttr->GetPool(), svl::Items<SDRATTR_ECKENRADIUS, SDRATTR_ECKENRADIUS>{});
         aSet.Put(SdrMetricItem(SDRATTR_ECKENRADIUS, nRad));
         pRect->SetMergedItemSet(aSet);
     }
@@ -1016,7 +1016,7 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
 
     if (!aFnt.IsTransparent())
     {
-        SfxItemSet aAttr(*mpFillAttr->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0, 0);
+        SfxItemSet aAttr(*mpFillAttr->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
         aAttr.Put(XFillStyleItem(drawing::FillStyle_SOLID));
         aAttr.Put(XFillColorItem(OUString(), aFnt.GetFillColor()));
         pText->SetMergedItemSet(aAttr);

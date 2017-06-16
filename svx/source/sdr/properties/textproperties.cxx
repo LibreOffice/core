@@ -483,7 +483,7 @@ namespace sdr
 
                                     if(bHasURL)
                                     {
-                                        SfxItemSet aColorSet(*aSet.GetPool(), EE_CHAR_COLOR, EE_CHAR_COLOR );
+                                        SfxItemSet aColorSet(*aSet.GetPool(), svl::Items<EE_CHAR_COLOR, EE_CHAR_COLOR>{} );
                                         aColorSet.Put(aSet, false);
 
                                         ESelection aSel(nPara, 0);

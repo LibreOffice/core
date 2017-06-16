@@ -360,8 +360,7 @@ namespace sdr
 
                 // prepare ItemSet to set exchanged width and height items
                 SfxItemSet aNewSet(*rSet.GetPool(),
-                    SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
-                    0, 0);
+                    svl::Items<SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT>{});
 
                 aNewSet.Put(rSet);
                 aNewSet.Put(makeSdrTextAutoGrowWidthItem(bAutoGrowHeight));
@@ -1116,7 +1115,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
         }
         default:
         {
-            SfxItemSet aSet( GetModel()->GetItemPool(), pMap->nWID, pMap->nWID);
+            SfxItemSet aSet( GetModel()->GetItemPool(), {{pMap->nWID, pMap->nWID}});
             aSet.Put(mpProperties->GetItem(pMap->nWID));
 
             bool bSpecial = false;
@@ -1236,7 +1235,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
         }
         default:
         {
-            SfxItemSet aSet( GetModel()->GetItemPool(), pMap->nWID, pMap->nWID);
+            SfxItemSet aSet( GetModel()->GetItemPool(), {{pMap->nWID, pMap->nWID}});
             aSet.Put(mpProperties->GetItem(pMap->nWID));
 
             Any aAny;
@@ -1570,7 +1569,7 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName )
         {
             if( SfxItemPool::IsWhich(pMap->nWID) )
             {
-                SfxItemSet aSet( GetModel()->GetItemPool(), pMap->nWID, pMap->nWID);
+                SfxItemSet aSet( GetModel()->GetItemPool(), {{pMap->nWID, pMap->nWID}});
                 aSet.Put(GetModel()->GetItemPool().GetDefaultItem(pMap->nWID));
                 return GetAnyForItem( aSet, pMap );
             }

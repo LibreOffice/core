@@ -319,7 +319,7 @@ IMPL_LINK_NOARG(SdModifyFieldDlg, LanguageChangeHdl, ListBox&, void)
 
 SfxItemSet SdModifyFieldDlg::GetItemSet()
 {
-    SfxItemSet aOutput( *maInputSet.GetPool(), EE_CHAR_LANGUAGE, EE_CHAR_LANGUAGE_CTL );
+    SfxItemSet aOutput( *maInputSet.GetPool(), svl::Items<EE_CHAR_LANGUAGE, EE_CHAR_LANGUAGE_CTL>{} );
 
     if( m_pLbLanguage->IsValueChangedFromSaved() )
     {

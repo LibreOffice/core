@@ -1230,7 +1230,7 @@ void SwEditShell::ApplyChangedSentence(const svx::SpellPortions& rNewPortions, b
                     case SvtScriptType::COMPLEX : nLangWhichId = RES_CHRATR_CTL_LANGUAGE; break;
                     default: break;
                 }
-                SfxItemSet aSet(GetAttrPool(), nLangWhichId, nLangWhichId, 0);
+                SfxItemSet aSet(GetAttrPool(), {{nLangWhichId, nLangWhichId}});
                 GetCurAttr( aSet );
                 const SvxLanguageItem& rLang = static_cast<const SvxLanguageItem& >(aSet.Get(nLangWhichId));
                 if(rLang.GetLanguage() != aCurrentNewPortion->eLanguage)
@@ -1558,7 +1558,7 @@ static LanguageType lcl_GetLanguage(SwEditShell& rSh)
         case SvtScriptType::COMPLEX : nLangWhichId = RES_CHRATR_CTL_LANGUAGE; break;
         default: break;
     }
-    SfxItemSet aSet(rSh.GetAttrPool(), nLangWhichId, nLangWhichId, 0);
+    SfxItemSet aSet(rSh.GetAttrPool(), {{nLangWhichId, nLangWhichId}});
     rSh.GetCurAttr( aSet );
     const SvxLanguageItem& rLang = static_cast<const SvxLanguageItem& >(aSet.Get(nLangWhichId));
     return rLang.GetLanguage();

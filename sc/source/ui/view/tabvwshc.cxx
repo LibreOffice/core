@@ -203,8 +203,8 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
         case SID_OPENDLG_CONSOLIDATE:
         {
             SfxItemSet aArgSet( GetPool(),
-                                SCITEM_CONSOLIDATEDATA,
-                                SCITEM_CONSOLIDATEDATA );
+                                svl::Items<SCITEM_CONSOLIDATEDATA,
+                                SCITEM_CONSOLIDATEDATA>{} );
 
             const ScConsolidateParam* pDlgData =
                             pDoc->GetConsolidateDlgData();
@@ -254,8 +254,8 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
         {
             ScQueryParam    aQueryParam;
             SfxItemSet      aArgSet( GetPool(),
-                                     SCITEM_QUERYDATA,
-                                     SCITEM_QUERYDATA );
+                                     svl::Items<SCITEM_QUERYDATA,
+                                     SCITEM_QUERYDATA>{} );
 
             ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, ScGetDBSelection::RowDown);
             pDBData->ExtendDataArea(pDoc);
@@ -284,8 +284,8 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
 
             ScQueryParam    aQueryParam;
             SfxItemSet      aArgSet( GetPool(),
-                                     SCITEM_QUERYDATA,
-                                     SCITEM_QUERYDATA );
+                                     svl::Items<SCITEM_QUERYDATA,
+                                     SCITEM_QUERYDATA>{} );
 
             ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, ScGetDBSelection::RowDown);
             pDBData->ExtendDataArea(pDoc);

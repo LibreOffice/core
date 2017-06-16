@@ -1224,14 +1224,13 @@ bool SwHTMLWriter::HasScriptDependentItems( const SfxItemSet& rItemSet,
             //sequence of (start, end) property ranges we want to
             //query
             SfxItemSet aTstItemSet( *pDCCharFormat->GetAttrSet().GetPool(),
-                RES_CHRATR_FONT,        RES_CHRATR_FONT,
+                svl::Items<RES_CHRATR_FONT,        RES_CHRATR_FONT,
                 RES_CHRATR_POSTURE,     RES_CHRATR_POSTURE,
                 RES_CHRATR_WEIGHT,      RES_CHRATR_WEIGHT,
                 RES_CHRATR_CJK_FONT,    RES_CHRATR_CJK_FONT,
                 RES_CHRATR_CJK_POSTURE, RES_CHRATR_CJK_WEIGHT,
                 RES_CHRATR_CTL_FONT,    RES_CHRATR_CTL_FONT,
-                RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT,
-                0 );
+                RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT>{} );
             aTstItemSet.Set( pDCCharFormat->GetAttrSet() );
             return HasScriptDependentItems( aTstItemSet, false );
         }
@@ -1275,11 +1274,10 @@ static bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const OUString& rSelector,
             //sequence of (start, end) property ranges we want to
             //query
             SfxItemSet aScriptItemSet( *rItemSet.GetPool(),
-                                       RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
+                                       svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
                                        RES_CHRATR_LANGUAGE, RES_CHRATR_POSTURE,
                                        RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,
-                                       RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT,
-                                       0 );
+                                       RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT>{} );
             aScriptItemSet.Put( rItemSet );
 
             OUString aNewSelector( aSelector );
@@ -1378,11 +1376,10 @@ static void OutCSS1DropCapRule(
             }
 
             SfxItemSet aScriptItemSet( rHTMLWrt.pDoc->GetAttrPool(),
-                                       RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
+                                       svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
                                        RES_CHRATR_LANGUAGE, RES_CHRATR_POSTURE,
                                        RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,
-                                       RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT,
-                                       0 );
+                                       RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT>{} );
             if( pDCCharFormat )
                 aScriptItemSet.Set( pDCCharFormat->GetAttrSet() );
 
@@ -1697,7 +1694,7 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
     // Export the distance-Attributes as normally
     const SwFrameFormat &rMaster = rPageDesc.GetMaster();
     SfxItemSet aItemSet( *rMaster.GetAttrSet().GetPool(),
-                         RES_LR_SPACE, RES_UL_SPACE );
+                         svl::Items<RES_LR_SPACE, RES_UL_SPACE>{} );
     aItemSet.Set( rMaster.GetAttrSet() );
 
     if( pRefPageDesc )

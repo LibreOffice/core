@@ -1270,10 +1270,9 @@ bool SdrEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHard
 SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
 {
     SfxItemSet aRetSet(mpModel->GetItemPool(),   // SID_ATTR_TRANSFORM_... from s:svxids.hrc
-        SID_ATTR_TRANSFORM_POS_X,               SID_ATTR_TRANSFORM_ANGLE,
+        svl::Items<SID_ATTR_TRANSFORM_POS_X,               SID_ATTR_TRANSFORM_ANGLE,
         SID_ATTR_TRANSFORM_PROTECT_POS,         SID_ATTR_TRANSFORM_AUTOHEIGHT,
-        SDRATTR_ECKENRADIUS,                    SDRATTR_ECKENRADIUS,
-        0);
+        SDRATTR_ECKENRADIUS,                    SDRATTR_ECKENRADIUS>{});
 
     if (AreObjectsMarked())
     {

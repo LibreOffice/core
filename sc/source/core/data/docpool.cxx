@@ -211,12 +211,11 @@ ScDocumentPool::ScDocumentPool()
     SvxBoxInfoItem* pGlobalBorderInnerAttr = new SvxBoxInfoItem( ATTR_BORDER_INNER );
     auto pSet = o3tl::make_unique<SfxItemSet>( *this, ATTR_PATTERN_START, ATTR_PATTERN_END );
     SfxItemSet      aSetItemItemSet( *this,
-                                     ATTR_BACKGROUND, ATTR_BACKGROUND,
+                                     svl::Items<ATTR_BACKGROUND, ATTR_BACKGROUND,
                                      ATTR_BORDER,     ATTR_SHADOW,
                                      ATTR_LRSPACE,    ATTR_ULSPACE,
                                      ATTR_PAGE_SIZE,  ATTR_PAGE_SIZE,
-                                     ATTR_PAGE_ON,    ATTR_PAGE_SHARED,
-                                     0 );
+                                     ATTR_PAGE_ON,    ATTR_PAGE_SHARED>{} );
 
     pGlobalBorderInnerAttr->SetLine(nullptr, SvxBoxInfoItemLine::HORI);
     pGlobalBorderInnerAttr->SetLine(nullptr, SvxBoxInfoItemLine::VERT);

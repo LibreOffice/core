@@ -597,7 +597,7 @@ void SwSpellPopup::checkRedline()
         FN_REDLINE_PREV_CHANGE
     };
     SwDoc *pDoc = m_pSh->GetDoc();
-    SfxItemSet aSet(pDoc->GetAttrPool(), FN_REDLINE_ACCEPT_DIRECT, FN_REDLINE_PREV_CHANGE);
+    SfxItemSet aSet(pDoc->GetAttrPool(), svl::Items<FN_REDLINE_ACCEPT_DIRECT, FN_REDLINE_PREV_CHANGE>{});
     for (sal_uInt16 nWhich : pRedlineIds)
     {
         aSet.Put(SfxVoidItem(nWhich));
@@ -822,10 +822,9 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         // Set language for selection or for paragraph...
 
         SfxItemSet aCoreSet( m_pSh->GetView().GetPool(),
-                    RES_CHRATR_LANGUAGE,        RES_CHRATR_LANGUAGE,
+                    svl::Items<RES_CHRATR_LANGUAGE,        RES_CHRATR_LANGUAGE,
                     RES_CHRATR_CJK_LANGUAGE,    RES_CHRATR_CJK_LANGUAGE,
-                    RES_CHRATR_CTL_LANGUAGE,    RES_CHRATR_CTL_LANGUAGE,
-                    0 );
+                    RES_CHRATR_CTL_LANGUAGE,    RES_CHRATR_CTL_LANGUAGE>{} );
         OUString aNewLangText;
 
         if (MN_SET_LANGUAGE_SELECTION_START <= nId && nId <= MN_SET_LANGUAGE_SELECTION_END)

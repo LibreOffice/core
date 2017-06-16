@@ -525,7 +525,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
     }
     else if (sItemIdent == "macro")
     {
-        SfxItemSet aSet( pSh->GetAttrPool(), RES_FRMMACRO, RES_FRMMACRO, SID_EVENTCONFIG, SID_EVENTCONFIG, 0 );
+        SfxItemSet aSet( pSh->GetAttrPool(), svl::Items<RES_FRMMACRO, RES_FRMMACRO, SID_EVENTCONFIG, SID_EVENTCONFIG>{} );
 
         SvxMacro aStart(aEmptyOUStr, aEmptyOUStr, STARBASIC);
         SvxMacro aEnd(aEmptyOUStr, aEmptyOUStr, STARBASIC);
