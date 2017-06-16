@@ -2556,13 +2556,39 @@ static int
 GetUpdateFileNames(std::vector<tstring> fileNames)
 {
     NS_tchar fileName[MAXPATHLEN];
-    // TODO: moggi: needs adaption for LibreOffice
-    // We would like to store the name inside of an ini file
     NS_tsnprintf(fileName, MAXPATHLEN,
                  NS_T("%s/update.mar"), gPatchDirPath);
     fileNames.push_back(fileName);
 
     // add the language packs
+    NS_tDIR* dir = NS_topendir(gPatchDirPath);
+    if (!dir)
+    {
+        LOG(("Could not open directory " LOG_S, gPatchDirPath));
+        return READ_ERROR;
+    }
+
+    NS_tdirent* entry;
+    while ((entry = NS_treaddir(dir)) != nullptr)
+    {
+        if (NS_tstrcmp(entry->d_name, NS_T(".")) &&
+                NS_tstrcmp(entry->d_name, NS_T("..")))
+        {
+            if (NS_tstrncmp(entry->d_name, NS_T("update"), 6) == 0)
+            {
+                char *dot = strrchr(entry->d_name, '.');
+                if (dot && !strcmp(dot, ".mar"))
+                {
+                    NS_tchar updatePath[MAXPATHLEN];
+                    NS_tsnprintf(updatePath, sizeof(updatePath)/sizeof(updatePath[0]),
+                            NS_T("%s/%s"), gPatchDirPath, entry->d_name);
+
+                    LOG (("Found language update file: " LOG_S, updatePath));
+                    fileNames.push_back(updatePath);
+                }
+            }
+        }
+    }
     return OK;
 }
 
