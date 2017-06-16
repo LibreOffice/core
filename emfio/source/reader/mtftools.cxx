@@ -20,13 +20,10 @@
 #include <mtftools.hxx>
 
 #include <memory>
-//#include "winmtf.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-//#include <vcl/metaact.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/canvastools.hxx>
-//#include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/fract.hxx>
 #include <rtl/strbuf.hxx>
@@ -1249,7 +1246,7 @@ namespace emfio
         }
     }
 
-    void MtfTools::DrawPolygon( tools::Polygon& rPolygon, bool bRecordPath )
+    void MtfTools::DrawPolygon( tools::Polygon rPolygon, bool bRecordPath )
     {
         UpdateClipRegion();
         ImplMap( rPolygon );
@@ -1354,7 +1351,7 @@ namespace emfio
         }
     }
 
-    void MtfTools::DrawPolyLine( tools::Polygon& rPolygon, bool bTo, bool bRecordPath )
+    void MtfTools::DrawPolyLine( tools::Polygon rPolygon, bool bTo, bool bRecordPath )
     {
         UpdateClipRegion();
 
@@ -1377,7 +1374,7 @@ namespace emfio
         }
     }
 
-    void MtfTools::DrawPolyBezier( tools::Polygon& rPolygon, bool bTo, bool bRecordPath )
+    void MtfTools::DrawPolyBezier( tools::Polygon rPolygon, bool bTo, bool bRecordPath )
     {
         sal_uInt16 nPoints = rPolygon.GetSize();
         if ( ( nPoints >= 4 ) && ( ( ( nPoints - 4 ) % 3 ) == 0 ) )

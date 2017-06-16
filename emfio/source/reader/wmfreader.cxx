@@ -1242,26 +1242,45 @@ namespace emfio
         {
             mnUnitsPerInch = 96;
 
-
-            mpInputStream->Seek( nStrmPos + 18 );    // set the streampos to the start of the metaactions
-            GetPlaceableBound( aPlaceableBound, mpInputStream );
-
-            // The image size is not known so normalize the calculated bounds so that the
-            // resulting image is not too big
-            const double fMaxWidth = static_cast<double>(aMaxWidth);
-            if (aPlaceableBound.GetWidth() > aMaxWidth)
+            if (mpExternalHeader != nullptr
+                && mpExternalHeader->xExt > 0
+                && mpExternalHeader->yExt > 0
+                && (mpExternalHeader->mapMode == MM_ISOTROPIC || mpExternalHeader->mapMode == MM_ANISOTROPIC))
             {
-                double fRatio = aPlaceableBound.GetWidth() / fMaxWidth;
+                // #n417818#: If we have an external header then overwrite the bounds!
+                tools::Rectangle aExtRect(0, 0,
+                    (double)mpExternalHeader->xExt * 567 * mnUnitsPerInch / 1440000,
+                    (double)mpExternalHeader->yExt * 567 * mnUnitsPerInch / 1440000);
+                aPlaceableBound = aExtRect;
 
-                aPlaceableBound = tools::Rectangle(
-                                    aPlaceableBound.Left()   / fRatio,
-                                    aPlaceableBound.Top()    / fRatio,
-                                    aPlaceableBound.Right()  / fRatio,
-                                    aPlaceableBound.Bottom() / fRatio);
-
-                SAL_INFO("vcl.wmf", "Placeable bounds "
-                        " t: " << aPlaceableBound.Left()  << " l: " << aPlaceableBound.Top()
+                SAL_INFO("vcl.wmf", "External header size "
+                    " t: " << aPlaceableBound.Left() << " l: " << aPlaceableBound.Top()
                     << " b: " << aPlaceableBound.Right() << " r: " << aPlaceableBound.Bottom());
+
+                SetMapMode(mpExternalHeader->mapMode);
+            }
+            else
+            {
+                mpInputStream->Seek(nStrmPos + 18);    // set the streampos to the start of the metaactions
+                GetPlaceableBound(aPlaceableBound, mpInputStream);
+
+                // The image size is not known so normalize the calculated bounds so that the
+                // resulting image is not too big
+                const double fMaxWidth = static_cast<double>(aMaxWidth);
+                if (aPlaceableBound.GetWidth() > aMaxWidth)
+                {
+                    double fRatio = aPlaceableBound.GetWidth() / fMaxWidth;
+
+                    aPlaceableBound = tools::Rectangle(
+                        aPlaceableBound.Left() / fRatio,
+                        aPlaceableBound.Top() / fRatio,
+                        aPlaceableBound.Right() / fRatio,
+                        aPlaceableBound.Bottom() / fRatio);
+
+                    SAL_INFO("vcl.wmf", "Placeable bounds "
+                        " t: " << aPlaceableBound.Left() << " l: " << aPlaceableBound.Top()
+                        << " b: " << aPlaceableBound.Right() << " r: " << aPlaceableBound.Bottom());
+                }
             }
 
             mpInputStream->Seek( nStrmPos );
@@ -1800,7 +1819,7 @@ namespace emfio
         }
     }
 
-    WmfReader::WmfReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile)
+    WmfReader::WmfReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile, const WmfExternal* pExternalHeader)
         : MtfTools(rGDIMetaFile, rStreamWMF)
         , mnUnitsPerInch(96)
         , mnRecSize(0)
@@ -1810,6 +1829,7 @@ namespace emfio
         , mnEMFSize(0)
         , mnSkipActions(0)
         , mnCurrentAction(0)
+        , mpExternalHeader(pExternalHeader)
     {
     }
 }

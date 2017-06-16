@@ -23,7 +23,6 @@
 #include <unotest/bootstrapfixturebase.hxx>
 #include <vcl/wmf.hxx>
 #include <vcl/metaact.hxx>
-#include <winmtf.hxx>
 
 using namespace css;
 
