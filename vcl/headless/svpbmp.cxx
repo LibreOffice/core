@@ -135,7 +135,15 @@ BitmapBuffer* ImplCreateDIB(
 
             try
             {
-                size_t size = pDIB->mnScanlineSize * pDIB->mnHeight;
+                size_t size;
+                bFail = o3tl::checked_multiply<size_t>(pDIB->mnHeight, pDIB->mnScanlineSize, size);
+                SAL_WARN_IF(bFail, "vcl.gdi", "checked multiply failed");
+                if (bFail)
+                {
+                    delete pDIB;
+                    return nullptr;
+                }
+
                 pDIB->mpBits = new sal_uInt8[size];
 #ifdef __SANITIZE_ADDRESS__
                 if (!pDIB->mpBits)
