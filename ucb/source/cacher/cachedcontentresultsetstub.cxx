@@ -137,29 +137,22 @@ XTYPEPROVIDER_COMMON_IMPL( CachedContentResultSetStub )
 Sequence< Type > SAL_CALL CachedContentResultSetStub
     ::getTypes()
 {
-    static Sequence< Type >* pTypes = nullptr;
-    if( !pTypes )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pTypes )
-        {
-            pTypes = new Sequence< Type >(13);
-            (*pTypes)[0] = CPPU_TYPE_REF( XTypeProvider );
-            (*pTypes)[1] = CPPU_TYPE_REF( XServiceInfo );
-            (*pTypes)[2] = CPPU_TYPE_REF( XComponent );
-            (*pTypes)[3] = CPPU_TYPE_REF( XCloseable );
-            (*pTypes)[4] = CPPU_TYPE_REF( XResultSetMetaDataSupplier );
-            (*pTypes)[5] = CPPU_TYPE_REF( XPropertySet );
-            (*pTypes)[6] = CPPU_TYPE_REF( XPropertyChangeListener );
-            (*pTypes)[7] = CPPU_TYPE_REF( XVetoableChangeListener );
-            (*pTypes)[8] = CPPU_TYPE_REF( XResultSet );
-            (*pTypes)[9] = CPPU_TYPE_REF( XContentAccess );
-            (*pTypes)[10] = CPPU_TYPE_REF( XRow );
-            (*pTypes)[11] = CPPU_TYPE_REF( XFetchProvider );
-            (*pTypes)[12] = CPPU_TYPE_REF( XFetchProviderForContentAccess );
-        }
-    }
-    return *pTypes;
+    static Sequence<Type> ourTypes(
+                {   CPPU_TYPE_REF( XTypeProvider ),
+                    CPPU_TYPE_REF( XServiceInfo ),
+                    CPPU_TYPE_REF( XComponent ),
+                    CPPU_TYPE_REF( XCloseable ),
+                    CPPU_TYPE_REF( XResultSetMetaDataSupplier ),
+                    CPPU_TYPE_REF( XPropertySet ),
+                    CPPU_TYPE_REF( XPropertyChangeListener ),
+                    CPPU_TYPE_REF( XVetoableChangeListener ),
+                    CPPU_TYPE_REF( XResultSet ),
+                    CPPU_TYPE_REF( XContentAccess ),
+                    CPPU_TYPE_REF( XRow ),
+                    CPPU_TYPE_REF( XFetchProvider ),
+                    CPPU_TYPE_REF( XFetchProviderForContentAccess ) } );
+
+    return ourTypes;
 }
 
 

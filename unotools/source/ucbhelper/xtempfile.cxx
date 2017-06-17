@@ -74,20 +74,11 @@ throw ()
 
 css::uno::Sequence< css::uno::Type > SAL_CALL OTempFileService::getTypes(  )
 {
-    static ::cppu::OTypeCollection* pTypeCollection = nullptr;
-    if ( pTypeCollection == nullptr )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-
-        if ( pTypeCollection == nullptr )
-        {
-            static ::cppu::OTypeCollection aTypeCollection(
+    static ::cppu::OTypeCollection ourTypeCollection(
                 cppu::UnoType<css::beans::XPropertySet>::get()
                 ,OTempFileBase::getTypes() );
-            pTypeCollection = &aTypeCollection;
-        }
-    }
-    return pTypeCollection->getTypes();
+
+    return ourTypeCollection.getTypes();
 };
 
 //  XTempFile

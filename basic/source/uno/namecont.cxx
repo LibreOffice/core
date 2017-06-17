@@ -3130,21 +3130,13 @@ void SfxLibrary::removeByName( const OUString& Name )
 // XTypeProvider
 Sequence< Type > SfxLibrary::getTypes()
 {
-    static OTypeCollection * s_pTypes_NameContainer = nullptr;
-    if( !s_pTypes_NameContainer )
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if( !s_pTypes_NameContainer )
-        {
-            static OTypeCollection s_aTypes_NameContainer(
+    static OTypeCollection ourTypes_NameContainer(
                 cppu::UnoType<XNameContainer>::get(),
                 cppu::UnoType<XContainer>::get(),
                 cppu::UnoType<XChangesNotifier>::get(),
                 OComponentHelper::getTypes() );
-            s_pTypes_NameContainer = &s_aTypes_NameContainer;
-        }
-    }
-    return s_pTypes_NameContainer->getTypes();
+
+    return ourTypes_NameContainer.getTypes();
 }
 
 
