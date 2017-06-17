@@ -33,7 +33,6 @@
 #include <textboxhelper.hxx>
 #include <dcontact.hxx>
 #include <algorithm>
-#include <filter/msfilter/rtfutil.hxx>
 
 using namespace css;
 
