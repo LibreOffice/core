@@ -60,4 +60,9 @@ void UndoManager::ClearLinkedRedoActions()
         mpLinkedUndoManager->ClearRedo();
 }
 
+void UndoManager::EmptyActionsChanged()
+{
+    SdrUndoManager::EmptyActionsChanged();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

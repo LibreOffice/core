@@ -42,6 +42,9 @@ public:
     */
     void SetLinkedUndoManager (::svl::IUndoManager* pLinkedUndoManager);
 
+protected:
+    virtual void EmptyActionsChanged() override;
+
 private:
     using SdrUndoManager::Undo;
     using SdrUndoManager::Redo;
