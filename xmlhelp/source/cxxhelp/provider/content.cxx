@@ -83,15 +83,8 @@ XTYPEPROVIDER_COMMON_IMPL( Content );
 // virtual
 uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 {
-    static cppu::OTypeCollection* pCollection = nullptr;
-
-    if ( !pCollection )
-    {
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
-          if ( !pCollection )
-          {
-              static cppu::OTypeCollection aCollection(
-                CPPU_TYPE_REF( lang::XTypeProvider ),
+    static cppu::OTypeCollection ourTypeCollection(
+                   CPPU_TYPE_REF( lang::XTypeProvider ),
                    CPPU_TYPE_REF( lang::XServiceInfo ),
                    CPPU_TYPE_REF( lang::XComponent ),
                    CPPU_TYPE_REF( ucb::XContent ),
@@ -101,11 +94,8 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
                    CPPU_TYPE_REF( beans::XPropertyContainer ),
                    CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                    CPPU_TYPE_REF( container::XChild ) );
-              pCollection = &aCollection;
-        }
-    }
 
-    return (*pCollection).getTypes();
+    return ourTypeCollection.getTypes();
 }
 
 // XServiceInfo methods.

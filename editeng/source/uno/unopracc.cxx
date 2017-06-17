@@ -27,7 +27,6 @@
 #include <cppuhelper/weakref.hxx>
 #include <editeng/unopracc.hxx>
 #include <editeng/unoedsrc.hxx>
-#include <osl/mutex.hxx>
 
 using namespace ::com::sun::star;
 
@@ -67,30 +66,14 @@ void SAL_CALL SvxAccessibleTextPropertySet::release()
 // XTypeProvider
 uno::Sequence< uno::Type > SAL_CALL SvxAccessibleTextPropertySet::getTypes()
 {
-    static ::cppu::OTypeCollection* pTypeCollection = nullptr ;
-
-    // double-checked locking pattern.
-    if ( pTypeCollection == nullptr )
-    {
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
-
-        // Control these pointer again ... it can be, that another instance will be faster then these!
-        if ( pTypeCollection == nullptr )
-        {
-            // Create a static typecollection ...
-            static ::cppu::OTypeCollection aTypeCollection(
+    static ::cppu::OTypeCollection ourTypeCollection(
                 ::cppu::UnoType<beans::XPropertySet>::get(),
                 ::cppu::UnoType<beans::XMultiPropertySet>::get(),
                 ::cppu::UnoType<beans::XPropertyState>::get(),
                 ::cppu::UnoType<lang::XServiceInfo>::get(),
                 ::cppu::UnoType<lang::XTypeProvider>::get() );
 
-            // ... and set his address to static pointer!
-            pTypeCollection = &aTypeCollection ;
-        }
-    }
-
-    return pTypeCollection->getTypes() ;
+    return ourTypeCollection.getTypes() ;
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SvxAccessibleTextPropertySet::getImplementationId()

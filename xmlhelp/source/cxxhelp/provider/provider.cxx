@@ -90,23 +90,15 @@ css::uno::Sequence< sal_Int8 > SAL_CALL ContentProvider::getImplementationId()
 
 css::uno::Sequence< css::uno::Type > SAL_CALL ContentProvider::getTypes()
 {
-    static cppu::OTypeCollection* pCollection = nullptr;
-      if ( !pCollection )
-      {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if ( !pCollection )
-        {
-            static cppu::OTypeCollection collection(
+    static cppu::OTypeCollection ourTypeCollection(
                     cppu::UnoType<lang::XTypeProvider>::get(),
                     cppu::UnoType<lang::XServiceInfo>::get(),
                     cppu::UnoType<ucb::XContentProvider>::get(),
                     cppu::UnoType<lang::XComponent>::get(),
                     cppu::UnoType<container::XContainerListener>::get()
                 );
-            pCollection = &collection;
-        }
-    }
-    return (*pCollection).getTypes();
+
+    return ourTypeCollection.getTypes();
 }
 
 
