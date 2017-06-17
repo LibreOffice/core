@@ -134,19 +134,12 @@ SvtSysLocale::~SvtSysLocale()
 // static
 Mutex& SvtSysLocale::GetMutex()
 {
-    static Mutex* pMutex = nullptr;
-    if( !pMutex )
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if( !pMutex )
-        {
-            // #i77768# Due to a static reference in the toolkit lib
-            // we need a mutex that lives longer than the svl library.
-            // Otherwise the dtor would use a destructed mutex!!
-            pMutex = new Mutex;
-        }
-    }
-    return *pMutex;
+    // #i77768# Due to a static reference in the toolkit lib
+    // we need a mutex that lives longer than the svl library.
+    // Otherwise the dtor would use a destructed mutex!!
+    static Mutex persistentMutex;
+
+    return persistentMutex;
 }
 
 const LocaleDataWrapper& SvtSysLocale::GetLocaleData() const

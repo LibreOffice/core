@@ -98,18 +98,9 @@ Sequence< OUString > const & SvtHelpOptions_Impl::GetPropertyNames()
 
 ::osl::Mutex & SvtHelpOptions_Impl::getInitMutex()
 {
-    static ::osl::Mutex *pMutex = nullptr;
+    static ::osl::Mutex ourMutex;
 
-    if( ! pMutex )
-    {
-        ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
-        if( ! pMutex )
-        {
-            static ::osl::Mutex mutex;
-            pMutex = &mutex;
-        }
-    }
-    return *pMutex;
+    return ourMutex;
 }
 
 SvtHelpOptions_Impl::SvtHelpOptions_Impl()
