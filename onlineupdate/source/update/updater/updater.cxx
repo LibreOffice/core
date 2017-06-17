@@ -2685,7 +2685,7 @@ static void
 UpdateThreadFunc(void * /*param*/)
 {
     // open ZIP archive and process...
-    int rv;
+    int rv = OK;
     if (sReplaceRequest)
     {
         rv = ProcessReplaceRequest();
