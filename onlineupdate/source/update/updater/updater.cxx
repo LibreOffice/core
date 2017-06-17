@@ -40,6 +40,7 @@
 #include "errors.h"
 #include "bzlib.h"
 #include <thread>
+#include <vector>
 
 #include <stdio.h>
 #include <string.h>
