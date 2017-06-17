@@ -6178,7 +6178,16 @@ bool SAL_CALL TestImportDOC(SvStream &rStream, const OUString &rFltName)
     pReader->pStrm = &rStream;
     if (rFltName != "WW6")
     {
-        xStorage = tools::SvRef<SotStorage>(new SotStorage(rStream));
+        try
+        {
+            xStorage = tools::SvRef<SotStorage>(new SotStorage(rStream));
+            if (xStorage->GetError())
+                return false;
+        }
+        catch (...)
+        {
+            return false;
+        }
         pReader->pStg = xStorage.get();
     }
     pReader->SetFltName(rFltName);
