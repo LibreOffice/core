@@ -3481,6 +3481,25 @@ SfxVoidItem Redo SID_REDO
     GroupId = GID_EDIT;
 ]
 
+SfxBoolItem DocumentRepair SID_DOC_REPAIR
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = ;
+]
+
 SfxBoolItem Reload SID_RELOAD
 ()
 [

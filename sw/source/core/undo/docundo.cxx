@@ -629,6 +629,14 @@ bool UndoManager::Redo()
     }
 }
 
+void UndoManager::EmptyActionsChanged()
+{
+    if (m_pDocShell)
+    {
+        m_pDocShell->Broadcast(SfxHint(SFX_HINT_DOCREPAIR));
+    }
+}
+
 /** N.B.: this does _not_ call SdrUndoManager::Repeat because it is not
           possible to wrap a list action around it:
           calling EnterListAction here will cause SdrUndoManager::Repeat
