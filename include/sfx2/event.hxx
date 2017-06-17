@@ -67,6 +67,8 @@ enum class SfxEventHintId {
     SwEventFieldMerge,
     SwEventFieldMergeFinished,
     SwEventLayoutFinished,
+    // LOKIT events
+    LOKViewCallbackRegistered,
 };
 
 class SFX2_DLLPUBLIC SfxEventHint : public SfxHint
