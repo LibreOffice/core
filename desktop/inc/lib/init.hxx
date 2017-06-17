@@ -23,6 +23,11 @@
 
 #include <desktop/dllapi.h>
 
+#define EVENT_LOKIT_START             30000
+//      EVENT_LOKIT_END               39999
+
+#define LOKIT_VIEWCALLBACK_REGISTERED          (EVENT_LOKIT_START + 1)
+
 class LOKInteractionHandler;
 
 namespace desktop {
