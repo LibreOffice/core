@@ -211,6 +211,35 @@ struct update_info
     std::vector<language_file> aLanguageFiles;
 };
 
+bool isUserWritable(const OUString& rFileURL)
+{
+    osl::FileStatus aStatus(osl_FileStatus_Mask_Attributes);
+    osl::DirectoryItem aDirectoryItem;
+
+    osl::FileBase::RC eRes = osl::DirectoryItem::get(rFileURL, aDirectoryItem);
+    if (eRes != osl::FileBase::E_None)
+    {
+        Updater::log("Could not get the directory item for: " + rFileURL);
+        return false;
+    }
+
+    osl::FileBase::RC eResult = aDirectoryItem.getFileStatus(aStatus);
+    if (eResult != osl::FileBase::E_None)
+    {
+        Updater::log("Could not get the file status for: " + rFileURL);
+        return false;
+    }
+
+    bool bReadOnly = (aStatus.getAttributes() & static_cast<sal_uInt64>(osl_File_Attribute_ReadOnly)) != 0;
+    if (bReadOnly)
+    {
+        Updater::log("Update location as determined by: " + rFileURL + " is read-only.");
+        return false;
+    }
+
+    return true;
+}
+
 }
 
 void update()
@@ -602,6 +631,15 @@ void download_file(const OUString& rURL, size_t nFileSize, const OUString& rHash
 
 void update_checker()
 {
+    OUString aBrandBaseDir("${BRAND_BASE_DIR}");
+    rtl::Bootstrap::expandMacros(aBrandBaseDir);
+    bool bUserWritable = isUserWritable(aBrandBaseDir);
+    if (!bUserWritable)
+    {
+        Updater::log("Can't update as the update location is not user writable");
+        return;
+    }
+
     OUString aDownloadCheckBaseURL = officecfg::Office::Update::Update::URL::get();
     static const char* pDownloadCheckBaseURLEnv = std::getenv("LIBO_UPDATER_URL");
     if (pDownloadCheckBaseURLEnv)
