@@ -94,7 +94,7 @@ void SAL_CALL XMLSecurityContextGpg::setDefaultSecurityEnvironmentIndex(sal_Int3
 
 /* XServiceInfo */
 OUString SAL_CALL XMLSecurityContextGpg::getImplementationName() {
-    return "com.sun.star.xml.security.gpg.XMLSecurityContext_GpgImpl";
+    return OUString("com.sun.star.xml.security.gpg.XMLSecurityContext_GpgImpl");
 }
 
 /* XServiceInfo */
@@ -104,7 +104,7 @@ sal_Bool SAL_CALL XMLSecurityContextGpg::supportsService( const OUString& servic
 
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL XMLSecurityContextGpg::getSupportedServiceNames() {
-    return { "com.sun.star.xml.crypto.XMLSecurityContext" };
+    return { OUString("com.sun.star.xml.crypto.XMLSecurityContext") };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
