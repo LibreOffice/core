@@ -258,7 +258,7 @@
 //      SID_SFX_free_END                    (SID_SFX_START + 3999)
 
 #define SID_OPEN_NEW_VIEW                   (SID_SFX_START + 520)
-    // FREE, was SID_VIEW_ZOOM_MODE
+#define SID_DOC_REPAIR                      (SID_SFX_START + 521)
     // FREE, was SID_VIEW_POS_SIZE
 #define SID_VIEW_ID                         (SID_SFX_START + 523)
     // FREE, was SID_USER_DATA

@@ -51,6 +51,7 @@
 #include <vcl/layout.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
+#include <svl/undo.hxx>
 #include <svl/visitem.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svtools/sfxecode.hxx>
@@ -1060,6 +1061,15 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 // the slot makes sense only if there is a macro in the document
                 if ( pImpl->documentStorageHasMacros() || pImpl->aMacroMode.hasMacroLibrary() )
                     rSet.Put( SfxUInt16Item( SID_MACRO_SIGNATURE, static_cast<sal_uInt16>(GetScriptingSignatureState()) ) );
+                else
+                    rSet.DisableItem( nWhich );
+                break;
+            }
+            case SID_DOC_REPAIR:
+            {
+                svl::IUndoManager* pIUndoMgr = GetUndoManager();
+                if (pIUndoMgr)
+                    rSet.Put( SfxBoolItem(nWhich, pIUndoMgr->IsEmptyActions()) );
                 else
                     rSet.DisableItem( nWhich );
                 break;
