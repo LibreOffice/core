@@ -10,14 +10,6 @@ MOCHITESTROOT = $(abspath $(DEPTH))/_tests/testing/mochitest/chrome/toolkit/moza
 
 include $(topsrcdir)/config/rules.mk
 
-ifndef MOZ_WINCONSOLE
-ifdef MOZ_DEBUG
-MOZ_WINCONSOLE = 1
-else
-MOZ_WINCONSOLE = 0
-endif
-endif
-
 libs::
 ifeq (cocoa,$(MOZ_WIDGET_TOOLKIT))
 	# Copy for xpcshell tests
@@ -38,5 +30,3 @@ else
 	cp $(PROGRAM) $(XPCSHELLTESTROOT)/data/updater$(BIN_SUFFIX)
 	cp $(PROGRAM) $(MOCHITESTROOT)/data/updater$(BIN_SUFFIX)
 endif
-
-CXXFLAGS += $(MOZ_BZ2_CFLAGS)
