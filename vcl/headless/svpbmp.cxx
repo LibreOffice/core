@@ -132,8 +132,10 @@ BitmapBuffer* ImplCreateDIB(
         pDIB->maPalette.SetEntryCount( nColors );
     }
 
-    const size_t size = pDIB->mnScanlineSize * pDIB->mnHeight;
-    if (size > SAL_MAX_INT32/2)
+    size_t size;
+    bFail = o3tl::checked_multiply<size_t>(pDIB->mnHeight, pDIB->mnScanlineSize, size);
+    SAL_WARN_IF(bFail, "vcl.gdi", "checked multiply failed");
+    if (bFail || size > SAL_MAX_INT32/2)
     {
         delete pDIB;
         return nullptr;
