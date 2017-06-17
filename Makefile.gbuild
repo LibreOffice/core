@@ -49,6 +49,6 @@ create-partial-info:
 	$(eval VERSION := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX))
 	$(eval PLATFORM := $(RTL_OS)_$(RTL_ARCH))
 	$(eval MAR_NAME_PREFIX := $(PRODUCTNAME)_$(VERSION)_$(PLATFORM)_$(BUILDID))
-	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_partial_update.py "$(WORKDIR)" "$(MAR_NAME_PREFIX)" "$(UPDATE_CONFIG)" "$(PLATFORM)" "$(BUILDID)"
+	MBSDIFF=$(WORKDIR)/LinkTarget/Executable/mbsdiff MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_partial_update.py "$(WORKDIR)" "$(MAR_NAME_PREFIX)" "$(UPDATE_CONFIG)" "$(PLATFORM)" "$(BUILDID)"
 
 # vim: set noet sw=4 ts=4:
