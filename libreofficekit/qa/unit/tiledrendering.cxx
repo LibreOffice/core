@@ -76,6 +76,7 @@ public:
     void testCalcSheetNames( Office* pOffice );
     void testPaintPartTile( Office* pOffice );
     void testDocumentLoadLanguage(Office* pOffice);
+    void testDocRepairState(Office* pOffice);
 #if 0
     void testOverlay( Office* pOffice );
 #endif
@@ -84,6 +85,37 @@ public:
     CPPUNIT_TEST(runAllTests);
     CPPUNIT_TEST_SUITE_END();
 };
+
+class ViewCallback
+{
+public:
+    bool m_bDocRepairState;
+
+    ViewCallback()
+        : m_bDocRepairState(false)
+    {
+    }
+
+    static void callback(int nType, const char* pPayload, void* pData)
+    {
+        static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
+    }
+
+    void callbackImpl(int nType, const char* pPayload)
+    {
+        OString aPayload(pPayload);
+        switch (nType)
+        {
+        case LOK_CALLBACK_STATE_CHANGED:
+        {
+            if (aPayload.startsWith(".uno:DocumentRepair="))
+                m_bDocRepairState = aPayload.endsWith("enabled") ? true : false;
+        }
+        break;
+        }
+    }
+};
+
 
 void TiledRenderingTest::runAllTests()
 {
@@ -104,6 +136,7 @@ void TiledRenderingTest::runAllTests()
     testCalcSheetNames( pOffice.get() );
     testPaintPartTile( pOffice.get() );
     testDocumentLoadLanguage(pOffice.get());
+    testDocRepairState( pOffice.get() );
 #if 0
     testOverlay( pOffice.get() );
 #endif
@@ -222,6 +255,7 @@ void TiledRenderingTest::testPaintPartTile(Office* pOffice)
     pDocument->paintPartTile(aBuffer.data(), /*nPart=*/0, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/0, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
 }
 
+
 namespace {
 
 void processEventsToIdle()
@@ -312,6 +346,39 @@ void TiledRenderingTest::testDocumentLoadLanguage(Office* pOffice)
     aResult = pDocument->getTextSelection("text/plain;charset=utf-8");
     CPPUNIT_ASSERT_EQUAL(OString("3\n"), aResult);
 #endif
+}
+
+void TiledRenderingTest::testDocRepairState(Office* pOffice)
+{
+    ViewCallback aView1;
+    ViewCallback aView2;
+    const string sDocPath = m_sSrcRoot + "/libreofficekit/qa/data/blank_presentation.odp";
+
+    aView1.m_bDocRepairState = true;
+    aView2.m_bDocRepairState = false;
+
+    std::unique_ptr<Document> pDocument(pOffice->documentLoad(sDocPath.c_str()));
+    CPPUNIT_ASSERT(pDocument.get());
+
+    pDocument->registerCallback(&ViewCallback::callback, &aView1);
+    processEventsToIdle();
+    // Check DocRepair state
+    CPPUNIT_ASSERT_EQUAL(false, aView1.m_bDocRepairState);
+
+    // edit something to trigger doc repair state
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, 1282/*awt::Key::TAB*/);
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, 1282/*awt::Key::TAB*/);
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    processEventsToIdle();
+
+    // create second view
+    pDocument->createView();
+    pDocument->registerCallback(&ViewCallback::callback, &aView2);
+    processEventsToIdle();
+
+    // Check DocRepair state
+    CPPUNIT_ASSERT_EQUAL(true, aView2.m_bDocRepairState);
 }
 
 #if 0
