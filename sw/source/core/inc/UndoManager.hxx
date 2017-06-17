@@ -94,6 +94,9 @@ public:
     SwNodes      & GetUndoNodes();
     void SetDocShell(SwDocShell* pDocShell);
 
+protected:
+    virtual void EmptyActionsChanged() override;
+
 private:
     IDocumentDrawModelAccess & m_rDrawModelAccess;
     IDocumentRedlineAccess & m_rRedlineAccess;
