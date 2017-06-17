@@ -330,17 +330,9 @@ css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader::activate(
 
 static Mutex & getInitMutex()
 {
-    static Mutex * pMutex = nullptr;
-    if( ! pMutex )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pMutex )
-        {
-            static Mutex mutex;
-            pMutex = &mutex;
-        }
-    }
-    return *pMutex;
+    static Mutex ourMutex;
+
+    return ourMutex;
 }
 
 /// @throws Exception

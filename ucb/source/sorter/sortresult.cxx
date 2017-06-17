@@ -49,18 +49,9 @@ using namespace cppu;
 //  The mutex to synchronize access to containers.
 static osl::Mutex& getContainerMutex()
 {
-    static osl::Mutex* pMutex = nullptr;
-    if( !pMutex )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pMutex )
-        {
-            static osl::Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
+    static osl::Mutex ourMutex;
 
-    return *pMutex;
+    return ourMutex;
 }
 
 

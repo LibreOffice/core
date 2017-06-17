@@ -350,19 +350,12 @@ void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
 // static
 ::osl::Mutex& SvNumberFormatter::GetMutex()
 {
-    static ::osl::Mutex* pMutex = nullptr;
-    if( !pMutex )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pMutex )
-        {
-            // #i77768# Due to a static reference in the toolkit lib
-            // we need a mutex that lives longer than the svl library.
-            // Otherwise the dtor would use a destructed mutex!!
-            pMutex = new ::osl::Mutex;
-        }
-    }
-    return *pMutex;
+    // #i77768# Due to a static reference in the toolkit lib
+    // we need a mutex that lives longer than the svl library.
+    // Otherwise the dtor would use a destructed mutex!!
+    static ::osl::Mutex persistantMutex;
+
+    return persistantMutex;
 }
 
 
