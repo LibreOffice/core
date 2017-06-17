@@ -1247,6 +1247,12 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 break;
             }
 
+            case SfxHintId::DocumentRepair:
+            {
+                GetBindings().Invalidate( SID_DOC_REPAIR );
+                break;
+            }
+
             case SfxHintId::Deinitializing:
                 GetFrame().DoClose();
                 break;

@@ -226,6 +226,7 @@ struct SfxUndoManager_Data
     bool            mbUndoEnabled;
     bool            mbDoing;
     bool            mbClearUntilTopLevel;
+    bool            mbEmptyActions;
 
     UndoListeners   aListeners;
 
@@ -237,6 +238,7 @@ struct SfxUndoManager_Data
         ,mbUndoEnabled( true )
         ,mbDoing( false )
         ,mbClearUntilTopLevel( false )
+        ,mbEmptyActions( true )
     {
         pActUndoArray = pUndoArray.get();
     }
@@ -398,6 +400,7 @@ using namespace ::svl::undo::impl;
 SfxUndoManager::SfxUndoManager( size_t nMaxUndoActionCount )
     :m_xData( new SfxUndoManager_Data( nMaxUndoActionCount ) )
 {
+    m_xData->mbEmptyActions = !ImplIsEmptyActions();
 }
 
 
@@ -478,6 +481,7 @@ void SfxUndoManager::SetMaxUndoActionCount( size_t nMaxUndoActionCount )
     }
 
     m_xData->pActUndoArray->nMaxUndoActions = nMaxUndoActionCount;
+    ImplCheckEmptyActions();
 }
 
 
@@ -496,6 +500,7 @@ void SfxUndoManager::ImplClearCurrentLevel_NoNotify( UndoManagerGuard& i_guard )
 
     m_xData->mnMarks = 0;
     m_xData->mnEmptyMark = MARK_INVALID;
+    ImplCheckEmptyActions();
 }
 
 
@@ -576,6 +581,7 @@ void SfxUndoManager::ImplClearUndo( UndoManagerGuard& i_guard )
         i_guard.markForDeletion( pUndoAction );
         --m_xData->pActUndoArray->nCurUndoAction;
     }
+    ImplCheckEmptyActions();
     // TODO: notifications? We don't have clearedUndo, only cleared and clearedRedo at the SfxUndoListener
 }
 
@@ -593,6 +599,7 @@ void SfxUndoManager::ImplClearRedo( UndoManagerGuard& i_guard, bool const i_curr
         i_guard.markForDeletion( pAction );
     }
 
+    ImplCheckEmptyActions();
     // notification - only if the top level's stack was cleared
     if ( i_currentLevel == IUndoManager::TopLevel )
         i_guard.scheduleNotification( &SfxUndoListener::clearedRedo );
@@ -646,6 +653,7 @@ bool SfxUndoManager::ImplAddUndoAction_NoNotify( SfxUndoAction *pAction, bool bT
 
     // append new action
     m_xData->pActUndoArray->aUndoActions.Insert( pAction, m_xData->pActUndoArray->nCurUndoAction++ );
+    ImplCheckEmptyActions();
     return true;
 }
 
@@ -713,6 +721,7 @@ void SfxUndoManager::RemoveLastUndoAction()
     m_xData->pActUndoArray->aUndoActions.Remove(
         m_xData->pActUndoArray->nCurUndoAction,
         m_xData->pActUndoArray->aUndoActions.size() - m_xData->pActUndoArray->nCurUndoAction );
+    ImplCheckEmptyActions();
 }
 
 
@@ -902,6 +911,7 @@ bool SfxUndoManager::ImplRedo( SfxUndoContext* i_contextOrNull )
         throw;
     }
 
+    ImplCheckEmptyActions();
     aGuard.scheduleNotification( &SfxUndoListener::actionRedone, sActionComment );
 
     return true;
@@ -1126,6 +1136,7 @@ size_t SfxUndoManager::ImplLeaveListAction( const bool i_merge, UndoManagerGuard
         }
     }
 
+    ImplIsEmptyActions();
     // notify listeners
     i_guard.scheduleNotification( &SfxUndoListener::listActionLeft, pListAction->GetComment() );
 
@@ -1229,6 +1240,7 @@ void SfxUndoManager::RemoveOldestUndoAction()
     aGuard.markForDeletion( pActionToRemove );
     m_xData->pUndoArray->aUndoActions.Remove( 0 );
     --m_xData->pUndoArray->nCurUndoAction;
+    ImplCheckEmptyActions();
 }
 
 void SfxUndoManager::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -1318,6 +1330,33 @@ OUString SfxUndoManager::GetRedoActionsInfo() const
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
     return OUString::fromUtf8(aStream.str().c_str());
+}
+
+bool SfxUndoManager::IsEmptyActions() const
+{
+    UndoManagerGuard aGuard(*m_xData);
+
+    return ImplIsEmptyActions();
+}
+
+inline bool SfxUndoManager::ImplIsEmptyActions() const
+{
+    return m_xData->pUndoArray->nCurUndoAction || m_xData->pUndoArray->aUndoActions.size() - m_xData->pUndoArray->nCurUndoAction;
+}
+
+void SfxUndoManager::ImplCheckEmptyActions()
+{
+    bool bEmptyActions = ImplIsEmptyActions();
+    if (m_xData->mbEmptyActions != bEmptyActions)
+    {
+        m_xData->mbEmptyActions = bEmptyActions;
+        EmptyActionsChanged();
+    }
+}
+
+void SfxUndoManager::EmptyActionsChanged()
+{
+
 }
 
 struct SfxListUndoAction::Impl

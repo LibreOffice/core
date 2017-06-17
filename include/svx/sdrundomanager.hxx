@@ -24,6 +24,8 @@
 #include <editeng/editund2.hxx>
 #include <tools/link.hxx>
 
+class SfxObjectShell;
+
 class SVX_DLLPUBLIC SdrUndoManager : public EditUndoManager
 {
 private:
@@ -35,8 +37,10 @@ private:
     bool            mbEndTextEditTriggeredFromUndo;
 
 protected:
+    SfxObjectShell* m_pDocSh;
     // call to check for TextEdit active
     bool isTextEditActive() const;
+    virtual void EmptyActionsChanged() override;
 
 public:
     SdrUndoManager();
@@ -59,6 +63,7 @@ public:
     // is needed to detect inside end text edit if it is a regular one or triggered
     // by a last undo during text edit
     bool isEndTextEditTriggeredFromUndo() { return mbEndTextEditTriggeredFromUndo; }
+    void SetDocShell(SfxObjectShell* pDocShell);
 };
 
 #endif // INCLUDED_SVX_SDRUNDOMANAGER_HXX
