@@ -85,6 +85,7 @@ public:
     void testInsertGraphicInvalidations();
     void testDocumentSizeWithTwoViews();
     void testDisableUndoRepair();
+    void testDocumentRepair();
     void testLanguageStatus();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
@@ -113,6 +114,7 @@ public:
     CPPUNIT_TEST(testInsertGraphicInvalidations);
     CPPUNIT_TEST(testDocumentSizeWithTwoViews);
     CPPUNIT_TEST(testDisableUndoRepair);
+    CPPUNIT_TEST(testDocumentRepair);
     CPPUNIT_TEST(testLanguageStatus);
     CPPUNIT_TEST_SUITE_END();
 
@@ -1413,6 +1415,55 @@ void ScTiledRenderingTest::testDisableUndoRepair()
         CPPUNIT_ASSERT_EQUAL(static_cast< sal_uInt32 >(SID_REPAIRPACKAGE), pUInt32Item->GetValue());
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aSet2.GetItemState(SID_UNDO));
         CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(aSet2.GetItem(SID_UNDO)));
+    }
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testDocumentRepair()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    // Create two views.
+    ScModelObj* pModelObj = createDoc("cursor-away.ods");
+    CPPUNIT_ASSERT(pModelObj);
+
+    // view #1
+    SfxViewShell* pView1 = SfxViewShell::Current();
+
+    // view #2
+    SfxLokHelper::createView();
+    SfxViewShell* pView2 = SfxViewShell::Current();
+    int nView2 = SfxLokHelper::getView();
+    CPPUNIT_ASSERT(pView1 != pView2);
+    {
+        std::unique_ptr<SfxPoolItem> pItem1;
+        std::unique_ptr<SfxPoolItem> pItem2;
+        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem1);
+        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem2);
+        CPPUNIT_ASSERT(dynamic_cast< const SfxBoolItem* >(pItem1.get()));
+        CPPUNIT_ASSERT(dynamic_cast< const SfxBoolItem* >(pItem2.get()));
+        CPPUNIT_ASSERT_EQUAL(false, dynamic_cast< const SfxBoolItem* >(pItem1.get())->GetValue());
+        CPPUNIT_ASSERT_EQUAL(false, dynamic_cast< const SfxBoolItem* >(pItem2.get())->GetValue());
+    }
+
+    // Insert a character in the second view.
+    SfxLokHelper::setView(nView2);
+    pModelObj->setPart(1);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+    {
+        std::unique_ptr<SfxPoolItem> pItem1;
+        std::unique_ptr<SfxPoolItem> pItem2;
+        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem1);
+        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem2);
+        CPPUNIT_ASSERT(dynamic_cast< const SfxBoolItem* >(pItem1.get()));
+        CPPUNIT_ASSERT(dynamic_cast< const SfxBoolItem* >(pItem2.get()));
+        CPPUNIT_ASSERT_EQUAL(true, dynamic_cast< const SfxBoolItem* >(pItem1.get())->GetValue());
+        CPPUNIT_ASSERT_EQUAL(true, dynamic_cast< const SfxBoolItem* >(pItem2.get())->GetValue());
     }
 
     comphelper::LibreOfficeKit::setActive(false);

@@ -293,6 +293,7 @@ namespace svl
         /// adds a new listener to be notified about changes in the UndoManager's state
         virtual void            AddUndoListener( SfxUndoListener& i_listener ) = 0;
         virtual void            RemoveUndoListener( SfxUndoListener& i_listener ) = 0;
+        virtual bool            IsEmptyActions() const = 0;
    };
 }
 
@@ -343,6 +344,8 @@ public:
     virtual bool            IsUndoEnabled() const override;
     virtual void            AddUndoListener( SfxUndoListener& i_listener ) override;
     virtual void            RemoveUndoListener( SfxUndoListener& i_listener ) override;
+    virtual bool            IsEmptyActions() const override;
+
 
     /** marks the current top-level element of the Undo stack, and returns a unique ID for it
     */
@@ -379,6 +382,7 @@ protected:
         undo actions on the then-current level are removed, too. This is continued until the top level is reached.
     */
     void    ClearAllLevels();
+    virtual void EmptyActionsChanged();
 
 private:
     size_t  ImplLeaveListAction( const bool i_merge, ::svl::undo::impl::UndoManagerGuard& i_guard );
@@ -391,8 +395,10 @@ private:
     bool    ImplIsInListAction_Lock() const;
     void    ImplEnableUndo_Lock( bool const i_enable );
 
-    bool ImplUndo( SfxUndoContext* i_contextOrNull );
-    bool ImplRedo( SfxUndoContext* i_contextOrNull );
+    bool    ImplUndo( SfxUndoContext* i_contextOrNull );
+    bool    ImplRedo( SfxUndoContext* i_contextOrNull );
+    void    ImplCheckEmptyActions();
+    inline  bool    ImplIsEmptyActions() const;
 
     friend class ::svl::undo::impl::LockGuard;
 };

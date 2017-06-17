@@ -18,7 +18,8 @@
  */
 
 #include <svx/sdrundomanager.hxx>
-
+#include <sfx2/objsh.hxx>
+#include <svl/hint.hxx>
 
 SdrUndoManager::SdrUndoManager()
     : EditUndoManager(20/*nMaxUndoActionCount*/)
@@ -129,6 +130,19 @@ void SdrUndoManager::SetEndTextEditHdl(const Link<SdrUndoManager*,void>& rLink)
 bool SdrUndoManager::isTextEditActive() const
 {
     return maEndTextEditHdl.IsSet();
+}
+
+void SdrUndoManager::SetDocShell(SfxObjectShell* pDocShell)
+{
+    m_pDocSh = pDocShell;
+}
+
+void SdrUndoManager::EmptyActionsChanged()
+{
+    if (m_pDocSh)
+    {
+        m_pDocSh->Broadcast(SfxHint(SfxHintId::DocumentRepair));
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

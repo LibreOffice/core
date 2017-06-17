@@ -6322,7 +6322,10 @@ SfxUndoManager* ScDocument::GetUndoManager()
     {
         // to support enhanced text edit for draw objects, use an SdrUndoManager
         ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
-        mpUndoManager = new SdrUndoManager;
+
+        SdrUndoManager* pUndoManager = new SdrUndoManager;
+        pUndoManager->SetDocShell(GetDocumentShell());
+        mpUndoManager = pUndoManager;
     }
 
     return mpUndoManager;
