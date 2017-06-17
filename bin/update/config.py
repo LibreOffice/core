@@ -1,5 +1,6 @@
 
 import configparser
+import os
 
 class Config(object):
 
@@ -13,7 +14,7 @@ class Config(object):
 
 def parse_config(config_file):
     config = configparser.ConfigParser()
-    config.read(config_file)
+    config.read(os.path.expanduser(config_file))
 
     data = Config()
     updater_data = config['Updater']

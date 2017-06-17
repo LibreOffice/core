@@ -12,7 +12,7 @@ def main(argv):
     updater_config = sys.argv[2]
 
     config = configparser.ConfigParser()
-    config.read(updater_config)
+    config.read(os.path.expanduser(updater_config))
 
     user = config["Updater"]["User"]
     password = config["Updater"]["Password"]
