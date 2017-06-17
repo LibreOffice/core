@@ -62,6 +62,7 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <sfx2/event.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
@@ -95,6 +96,8 @@
 #include <lib/init.hxx>
 
 #include "lokinteractionhandler.hxx"
+#include "lokundomanagerlistener.hxx"
+#include "lokgloballistener.hxx"
 #include <lokclipboard.hxx>
 
 using namespace css;
@@ -1202,6 +1205,8 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         return nullptr;
     }
 
+    LOKGlobalListener::Get();
+
     try
     {
         // 'Language=...' is an option that LOK consumes by itself, and does
@@ -1259,6 +1264,13 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             pLib->maLastExceptionMsg = "loadComponentFromURL returned an empty reference";
             SAL_INFO("lok", "Document can't be loaded - " << pLib->maLastExceptionMsg);
             return nullptr;
+        }
+
+        const uno::Reference<document::XUndoManagerSupplier> xUndoMgrS(xComponent, uno::UNO_QUERY);
+        const uno::Reference<document::XUndoManager> xUndoMgr(xUndoMgrS.is() ? xUndoMgrS->getUndoManager() : nullptr, uno::UNO_QUERY);
+        if (xUndoMgr.is())
+        {
+            xUndoMgr->addUndoManagerListener(new LOKUndoManagerListener(xUndoMgr, pLib));
         }
 
         return new LibLODocument_Impl(xComponent);
@@ -2034,7 +2046,16 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
     }
 
     if (SfxViewShell* pViewShell = SfxViewShell::Current())
+    {
         pViewShell->registerLibreOfficeKitViewCallback(CallbackFlushHandler::callback, pDocument->mpCallbackFlushHandlers[nView].get());
+        // the creation of a new view was done, so notify this
+        SfxViewEventHint aHint(
+            SfxEventHintId::LOKViewCallbackRegistered,
+            OUString("lokit view callback registered"),
+            pViewShell->GetObjectShell(),
+            pViewShell->GetController());
+            SfxGetpApp()->NotifyEvent( aHint );
+    }
 }
 
 /// Returns the JSON representation of all the comments in the document
