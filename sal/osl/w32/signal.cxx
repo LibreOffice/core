@@ -58,6 +58,10 @@ bool onInitSignal()
     return true;
 }
 
+void initSignal(SignalAction&)
+{
+};
+
 bool onDeInitSignal()
 {
     SetUnhandledExceptionFilter(pPreviousHandler);
