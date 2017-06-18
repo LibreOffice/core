@@ -138,7 +138,10 @@ struct SystemGraphicsData
 #elif defined( IOS )
     CGContextRef    rCGContext;     // CoreGraphics graphic context
 #elif defined( UNX )
+    void*           pDisplay;       // the relevant display connection
     long            hDrawable;      // a drawable
+    void*           pVisual;        // the visual in use
+    int             nScreen;        // the current screen of the drawable
     void*           pXRenderFormat;  // render format for drawable
 #endif
     SystemGraphicsData()
@@ -153,7 +156,10 @@ struct SystemGraphicsData
 #elif defined( IOS )
         , rCGContext( NULL )
 #elif defined( UNX )
+        , pDisplay( nullptr )
         , hDrawable( 0 )
+        , pVisual( nullptr )
+        , nScreen( 0 )
         , pXRenderFormat( nullptr )
 #endif
     { }
