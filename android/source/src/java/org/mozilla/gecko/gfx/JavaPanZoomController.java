@@ -984,6 +984,9 @@ class JavaPanZoomController
 
     @Override
     public boolean onDoubleTap(MotionEvent motionEvent) {
+        if (!mTarget.getZoomConstraints().getAllowDoubleTapZoom()) {
+            return true;
+        }
         // Double tap zooms in or out depending on the current zoom factor
         PointF pointOfTap = getMotionInDocumentCoordinates(motionEvent);
         ImmutableViewportMetrics metrics = getMetrics();

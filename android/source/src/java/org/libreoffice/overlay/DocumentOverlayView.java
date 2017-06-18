@@ -67,6 +67,7 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
     private PageNumberRect mPageNumberRect;
     private boolean mPageNumberAvailable = false;
     private int previousIndex = 0; // previous page number, used to compare with the current
+    private CalcHeadersController mCalcHeadersController;
 
     public DocumentOverlayView(Context context) {
         super(context);
@@ -217,6 +218,9 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
 
         mGraphicSelection.draw(canvas);
 
+        if (mCalcHeadersController != null) {
+            mCalcHeadersController.showHeaders();
+        }
     }
 
     /**
@@ -449,6 +453,10 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
 
     public RectF getCurrentCursorPosition() {
         return mCursor.mPosition;
+    }
+
+    public void setCalcHeadersController(CalcHeadersController calcHeadersController) {
+        mCalcHeadersController = calcHeadersController;
     }
 }
 
