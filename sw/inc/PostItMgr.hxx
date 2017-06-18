@@ -167,7 +167,7 @@ class SwPostItMgr: public SfxListener
 
         typedef std::list<sw::annotation::SwAnnotationWin*>::iterator  SwAnnotationWin_iterator;
 
-        void            AddPostIts(bool bCheckExistance = true,bool bFocus = true);
+        void            AddPostIts(bool bCheckExistence = true,bool bFocus = true);
         void            RemoveSidebarWin();
         void            PreparePageContainer();
         void            Scroll(const long lScroll,const unsigned long aPage );
@@ -190,7 +190,7 @@ class SwPostItMgr: public SfxListener
 
         sw::annotation::SwAnnotationWin* GetSidebarWin(const SfxBroadcaster* pBroadcaster) const;
 
-        SwSidebarItem*  InsertItem( SfxBroadcaster* pItem, bool bCheckExistance, bool bFocus);
+        SwSidebarItem*  InsertItem( SfxBroadcaster* pItem, bool bCheckExistence, bool bFocus);
         void            RemoveItem( SfxBroadcaster* pBroadcast );
 
     public:

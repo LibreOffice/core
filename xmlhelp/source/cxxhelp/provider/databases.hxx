@@ -314,11 +314,11 @@ namespace chelp {
         bool,
         OUStringHash
     >
-    ExtensionHelpExistanceMap;
+    ExtensionHelpExistenceMap;
 
     class ExtensionIteratorBase
     {
-        static ExtensionHelpExistanceMap    aHelpExistanceMap;
+        static ExtensionHelpExistenceMap    aHelpExistenceMap;
 
     public:
         ExtensionIteratorBase( css::uno::Reference< css::uno::XComponentContext > const & xContext,
