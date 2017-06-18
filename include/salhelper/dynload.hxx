@@ -170,7 +170,7 @@ public:
         return (*this);
     }
 
-    /// returns a poiner to the initialized API function structure.
+    /// returns a pointer to the initialized API function structure.
     API* SAL_CALL getApi() const
     {
         return static_cast<API*>(m_pLoader->getApi());

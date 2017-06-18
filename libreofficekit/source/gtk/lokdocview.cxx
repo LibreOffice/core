@@ -1149,7 +1149,7 @@ callback (gpointer pData)
     LOKDocViewPrivate& priv = getPrivate(pDocView);
 
     //callback registered before the widget was destroyed.
-    //Use existance of lokThreadPool as flag it was torn down
+    //Use existence of lokThreadPool as flag it was torn down
     if (!priv->lokThreadPool)
     {
         delete pCallback;
