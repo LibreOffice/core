@@ -94,7 +94,7 @@ namespace writerfilter {
 namespace dmapper{
 
 //line numbering for header/footer
-void lcl_linenumberingHeaderFooter( const uno::Reference<container::XNameContainer>& xStyles, const OUString& rname, DomainMapper_Impl* dmapper )
+static void lcl_linenumberingHeaderFooter( const uno::Reference<container::XNameContainer>& xStyles, const OUString& rname, DomainMapper_Impl* dmapper )
 {
     const StyleSheetEntryPtr pEntry = dmapper->GetStyleSheetTable()->FindStyleSheetByISTD( rname );
     if (!pEntry)
@@ -118,7 +118,7 @@ void lcl_linenumberingHeaderFooter( const uno::Reference<container::XNameContain
 }
 
 // Populate Dropdown Field properties from FFData structure
-void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >& rxFieldProps, const FFDataHandler::Pointer_t& pFFDataHandler )
+static void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >& rxFieldProps, const FFDataHandler::Pointer_t& pFFDataHandler )
 {
     if ( rxFieldProps.is() )
     {
@@ -139,7 +139,7 @@ void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >& rxFie
     }
 }
 
-void lcl_handleTextField( const uno::Reference< beans::XPropertySet >& rxFieldProps, const FFDataHandler::Pointer_t& pFFDataHandler )
+static void lcl_handleTextField( const uno::Reference< beans::XPropertySet >& rxFieldProps, const FFDataHandler::Pointer_t& pFFDataHandler )
 {
     if ( rxFieldProps.is() && pFFDataHandler )
     {
@@ -759,7 +759,7 @@ bool DomainMapper_Impl::isParaSdtEndDeferred()
     return m_bParaSdtEndDeferred;
 }
 
-void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& rFrameProperties,
+static void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& rFrameProperties,
     uno::Reference<text::XTextRange> const& xStartTextRange,
     uno::Reference<text::XTextRange> const& xEndTextRange )
 {
@@ -805,7 +805,7 @@ void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& rFramePr
 }
 
 
-void lcl_AddRangeAndStyle(
+static void lcl_AddRangeAndStyle(
     ParagraphPropertiesPtr& pToBeSavedProperties,
     uno::Reference< text::XTextAppend > const& xTextAppend,
     const PropertyMapPtr& pPropertyMap,
@@ -2187,7 +2187,7 @@ void DomainMapper_Impl::ClearPreviousParagraph()
     m_xPreviousParagraph.clear();
 }
 
-sal_Int16 lcl_ParseNumberingType( const OUString& rCommand )
+static sal_Int16 lcl_ParseNumberingType( const OUString& rCommand )
 {
     sal_Int16 nRet = style::NumberingType::PAGE_DESCRIPTOR;
 
@@ -2284,7 +2284,7 @@ style::NumberingType::
 }
 
 
-OUString lcl_ParseFormat( const OUString& rCommand )
+static OUString lcl_ParseFormat( const OUString& rCommand )
 {
     //  The command looks like: " DATE \@"dd MMMM yyyy"
     //  Remove whitespace permitted by standard between \@ and "
@@ -2438,7 +2438,7 @@ std::tuple<OUString, std::vector<OUString>, std::vector<OUString> > splitFieldCo
     return std::make_tuple(sType, arguments, switches);
 }
 
-OUString lcl_ExctractVariableAndHint( const OUString& rCommand, OUString& rHint )
+static OUString lcl_ExctractVariableAndHint( const OUString& rCommand, OUString& rHint )
 {
     // the first word after "ASK " is the variable
     // the text after the variable and before a '\' is the hint
@@ -2463,7 +2463,7 @@ OUString lcl_ExctractVariableAndHint( const OUString& rCommand, OUString& rHint 
 }
 
 
-bool lcl_FindInCommand(
+static bool lcl_FindInCommand(
     const OUString& rCommand,
     sal_Unicode cSwitch,
     OUString& rValue )
@@ -2880,7 +2880,7 @@ void DomainMapper_Impl::AppendFieldCommand(OUString& rPartOfCommand)
 
 typedef std::multimap < sal_Int32, OUString > TOCStyleMap;
 
-const FieldConversionMap_t & lcl_GetFieldConversion()
+static const FieldConversionMap_t & lcl_GetFieldConversion()
 {
     static const FieldConversionMap_t aFieldConversionMap
     {
@@ -2953,7 +2953,7 @@ const FieldConversionMap_t & lcl_GetFieldConversion()
     return aFieldConversionMap;
 }
 
-const FieldConversionMap_t & lcl_GetEnhancedFieldConversion()
+static const FieldConversionMap_t & lcl_GetEnhancedFieldConversion()
 {
     static const FieldConversionMap_t aEnhancedFieldConversionMap =
     {
@@ -3284,7 +3284,7 @@ void DomainMapper_Impl::handleAuthor
 #undef SET_DATE
 }
 
-uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool bHyperlinks, const OUString& sChapterNoSeparator,
+static uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool bHyperlinks, const OUString& sChapterNoSeparator,
                                    const uno::Sequence< beans::PropertyValues >& aLevel )
 {
     //create a copy of the level and add two new entries - hyperlink start and end
@@ -4436,7 +4436,7 @@ void DomainMapper_Impl::AppendFieldResult(OUString const& rString)
 }
 
 // Calculates css::DateTime based on ddddd.sssss since 1900-1-0
-util::DateTime lcl_dateTimeFromSerial(const double& dSerial)
+static util::DateTime lcl_dateTimeFromSerial(const double& dSerial)
 {
     const sal_uInt32 secondsPerDay = 86400;
     const sal_uInt16 secondsPerHour = 3600;
