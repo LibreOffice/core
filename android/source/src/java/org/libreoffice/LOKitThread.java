@@ -156,6 +156,9 @@ class LOKitThread extends Thread {
         mLayerClient.clearAndResetlayers();
         redraw();
         updatePartPageRectangles();
+        if (mTileProvider.isSpreadsheet()) {
+            updateCalcHeaders();
+        }
     }
 
     /**
@@ -170,11 +173,15 @@ class LOKitThread extends Thread {
 
     private void updateZoomConstraints() {
         mLayerClient = mContext.getLayerClient();
-
-        // Set min zoom to the page width so that you cannot zoom below page width
-        // applies to all types of document; in the future spreadsheets may be singled out
-        float minZoom = mLayerClient.getViewportMetrics().getWidth()/mTileProvider.getPageWidth();
-        mLayerClient.setZoomConstraints(new ZoomConstraints(true, 0.0f, minZoom, 0.0f));
+        if (mTileProvider.isSpreadsheet()) {
+            // Calc has a fixed zoom at 1x and doesn't allow zooming for now
+            mLayerClient.setZoomConstraints(new ZoomConstraints(false, 1f, 0f, 0f));
+        } else {
+            // Set min zoom to the page width so that you cannot zoom below page width
+            // applies to all types of document; in the future spreadsheets may be singled out
+            float minZoom = mLayerClient.getViewportMetrics().getWidth()/mTileProvider.getPageWidth();
+            mLayerClient.setZoomConstraints(new ZoomConstraints(true, 1f, minZoom, 0f));
+        }
     }
 
 
@@ -204,7 +211,7 @@ class LOKitThread extends Thread {
         LOKitShell.showProgressSpinner(mContext);
         mTileProvider.changePart(partIndex);
         mViewportMetrics = mLayerClient.getViewportMetrics();
-        mLayerClient.setViewportMetrics(mViewportMetrics.scaleTo(0.9f, new PointF()));
+        // mLayerClient.setViewportMetrics(mViewportMetrics.scaleTo(0.9f, new PointF()));
         refresh();
         LOKitShell.hideProgressSpinner(mContext);
     }
@@ -343,7 +350,17 @@ class LOKitThread extends Thread {
             case LOEvent.UPDATE_ZOOM_CONSTRAINTS:
                 updateZoomConstraints();
                 break;
+            case LOEvent.UPDATE_CALC_HEADERS:
+                updateCalcHeaders();
+                break;
+
         }
+    }
+
+    private void updateCalcHeaders() {
+        LOKitTileProvider tileProvider = (LOKitTileProvider)mTileProvider;
+        String values = tileProvider.getCalcHeaders();
+        mContext.getCalcHeadersController().setHeaders(values);
     }
 
     /**
