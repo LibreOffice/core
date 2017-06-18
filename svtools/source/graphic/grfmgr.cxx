@@ -153,25 +153,23 @@ void GraphicObject::ImplEnsureGraphicManager()
 {
     if (!mpGlobalMgr)
     {
+        sal_uLong nCacheSize = 20000;
+        sal_uLong nMaxObjCacheSize = 20000;
+        sal_uLong nTimeoutSeconds = 20000;
         if (!utl::ConfigManager::IsAvoidConfig())
         {
-            mpGlobalMgr = new GraphicManager(
-                (officecfg::Office::Common::Cache::GraphicManager::
-                 TotalCacheSize::get()),
-                (officecfg::Office::Common::Cache::GraphicManager::
-                 ObjectCacheSize::get()));
-            mpGlobalMgr->SetCacheTimeout(
-                officecfg::Office::Common::Cache::GraphicManager::
-                ObjectReleaseTime::get());
+            try
+            {
+                nCacheSize = officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::get();
+                nMaxObjCacheSize = officecfg::Office::Common::Cache::GraphicManager::ObjectCacheSize::get();
+                nTimeoutSeconds = officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::get();
+            }
+            catch (...)
+            {
+            }
         }
-        else
-        {
-            mpGlobalMgr = new GraphicManager(
-                20000,
-                20000);
-            mpGlobalMgr->SetCacheTimeout(
-                20000);
-        }
+        mpGlobalMgr = new GraphicManager(nCacheSize, nMaxObjCacheSize);
+        mpGlobalMgr->SetCacheTimeout(nTimeoutSeconds);
     }
 }
 
