@@ -24,6 +24,7 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
+#include <osl/signal.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/uri.hxx>
@@ -3205,6 +3206,29 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             {
                 InitVCL();
 
+#ifdef UNX
+
+/** When InitVCL is called from soffice, it does so early, before potentially
+    instantiating any JVM, so there are no problems with establishing our SEGV,
+    etc. handlers.  However, when InitVCL is called from a process where a JVM
+    is already instantiated (either because it's a Java application, or because
+    it's a native process that already instantiated a JVM), we must not install
+    SEGV etc. handlers overriding the JVM ones.
+*/
+                for (SignalAction &rSignal : Signals)
+                {
+                    switch (rSignal.Signal)
+                    {
+                        case SIGSEGV:
+                        case SIGWINCH: // caters for Apache, this is the signal for graceful shutdown
+                        case SIGILL:
+                            initSignal(rSignal);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+#endif
                 // pre-load all component libraries.
                 if (!xContext.is())
                     throw css::uno::DeploymentException("preInit: XComponentContext is not created");
