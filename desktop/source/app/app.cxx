@@ -1236,7 +1236,7 @@ bool isTimeForUpdateCheck()
     sal_uInt64 nLastUpdate = officecfg::Office::Update::Update::LastUpdateTime::get();
     sal_uInt64 nNow = tools::Time::GetSystemTicks();
 
-    sal_uInt64 n7DayInMS = 1000 * 60 * 60 * 24 * 7; // 7 days in ms
+    sal_uInt64 n7DayInMS = 1000 * 60 * 60 * 12 * 1; // 12 hours in ms
     if (nNow - n7DayInMS >= nLastUpdate)
         return true;
 
