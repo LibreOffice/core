@@ -2884,7 +2884,6 @@ typedef std::multimap < sal_Int32, OUString > TOCStyleMap;
 const FieldConversionMap_t & lcl_GetFieldConversion()
 {
 static FieldConversionMap_t aFieldConversionMap;
-static FieldConversionMap_t aEnhancedFieldConversionMap;
 
 static bool bFilled = false;
 
