@@ -33,7 +33,6 @@ using namespace std;
 namespace XmlSec
 {
     static ResMgr*          pResMgr = nullptr;
-    static SvtSysLocale*    pSysLocale = nullptr;
 
     ResMgr* GetResMgr()
     {
@@ -44,9 +43,9 @@ namespace XmlSec
 
     const LocaleDataWrapper&    GetLocaleData()
     {
-        if (!pSysLocale)
-            pSysLocale = new SvtSysLocale;
-        return pSysLocale->GetLocaleData();
+        static SvtSysLocale ourSysLocale;
+
+        return ourSysLocale.GetLocaleData();
     }
 
     DateTime GetDateTime( const css::util::DateTime& _rDT )
