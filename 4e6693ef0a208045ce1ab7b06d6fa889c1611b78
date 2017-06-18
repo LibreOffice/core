@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_cc9e2f07",
+        "filename": "sal/osl/w32/file_url.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-18T16:25:54Z",
+      "side": 1,
+      "message": "this should probably be an assert",
+      "revId": "4e6693ef0a208045ce1ab7b06d6fa889c1611b78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
