@@ -33,6 +33,7 @@ import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.Toast;
 
+import org.libreoffice.overlay.CalcHeadersController;
 import org.libreoffice.overlay.DocumentOverlay;
 import org.libreoffice.storage.DocumentProviderFactory;
 import org.libreoffice.storage.IFile;
@@ -91,6 +92,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private ToolbarController mToolbarController;
     private FontController mFontController;
     private SearchController mSearchController;
+    private CalcHeadersController mCalcHeadersController;
 
     public GeckoLayerClient getLayerClient() {
         return mLayerClient;
@@ -645,6 +647,10 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         return mDocumentOverlay;
     }
 
+    public CalcHeadersController getCalcHeadersController() {
+        return mCalcHeadersController;
+    }
+
     public ToolbarController getToolbarController() {
         return mToolbarController;
     }
@@ -683,6 +689,18 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
             Log.d(LOGTAG, "Editing Preference Changed");
             mIsExperimentalMode = sharedPreferences.getBoolean(ENABLE_EXPERIMENTAL_PREFS_KEY, false);
         }
+    }
+
+    public void initializeCalcHeaders() {
+        mCalcHeadersController = new CalcHeadersController(this, mLayerClient.getView());
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                findViewById(R.id.calc_header_top_left).setVisibility(View.VISIBLE);
+                findViewById(R.id.calc_header_row).setVisibility(View.VISIBLE);
+                findViewById(R.id.calc_header_column).setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private class DocumentPartClickListener implements android.widget.AdapterView.OnItemClickListener {
