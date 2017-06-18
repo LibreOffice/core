@@ -80,7 +80,6 @@ const OUString& SalGetDesktopEnvironment()
 
 SalData::SalData() :
     m_pInstance( nullptr ),
-    m_pPlugin( nullptr ),
     m_pPIManager( nullptr )
 {
 }
