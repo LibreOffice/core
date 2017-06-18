@@ -35,6 +35,8 @@
 #include <systools/win32/uwinapi.h>
 #include <sal/macros.h>
 
+#include "w32/initsignal.hxx"
+
 namespace
 {
 long WINAPI signalHandlerFunction(LPEXCEPTION_POINTERS lpEP);
@@ -57,6 +59,10 @@ bool onInitSignal()
 
     return true;
 }
+
+void initSignal(SignalAction&)
+{
+};
 
 bool onDeInitSignal()
 {
