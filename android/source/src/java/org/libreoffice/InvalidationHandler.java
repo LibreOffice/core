@@ -91,8 +91,19 @@ public class InvalidationHandler implements Document.MessageCallback {
                 Log.d(LOGTAG, "LOK_CALLBACK: Search not found.");
                 // this callback is never caught. Hope someone fix this.
                 break;
+            case Document.CALLBACK_CELL_CURSOR:
+                invalidateCellCursor(payload);
+                break;
             default:
                 Log.d(LOGTAG, "LOK_CALLBACK uncaught: " + messageID + " : " + payload);
+        }
+    }
+
+    private void invalidateCellCursor(String payload) {
+        RectF cellCursorRect = convertPayloadToRectangle(payload);
+
+        if (cellCursorRect != null) {
+            mDocumentOverlay.showCellSelection(cellCursorRect);
         }
     }
 
@@ -374,6 +385,9 @@ public class InvalidationHandler implements Document.MessageCallback {
             }
             changeStateTo(OverlayState.SELECTION);
             mDocumentOverlay.changeSelections(rectangles);
+            if (mContext.isSpreadsheet()) {
+                mDocumentOverlay.showHeaderSelection(rectangles.get(0));
+            }
         }
     }
 

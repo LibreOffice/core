@@ -53,9 +53,6 @@ class LOKitTileProvider implements TileProvider {
     LOKitTileProvider(LibreOfficeMainActivity context, Document.MessageCallback messageCallback, String input) {
         mContext = context;
         mMessageCallback = messageCallback;
-        mDPI = LOKitShell.getDpi(mContext);
-        mTileWidth = pixelToTwip(TILE_SIZE, mDPI);
-        mTileHeight = pixelToTwip(TILE_SIZE, mDPI);
 
         LibreOfficeKit.putenv("SAL_LOG=+WARN+INFO");
         LibreOfficeKit.init(mContext);
@@ -79,6 +76,14 @@ class LOKitTileProvider implements TileProvider {
         }
 
         Log.i(LOGTAG, "====> mDocument = " + mDocument);
+
+        if(isSpreadsheet()) {
+            mContext.setIsSpreadsheet(true); // Calc is treated differently e.g. DPI = 96f
+        }
+
+        mDPI = LOKitShell.getDpi(mContext);
+        mTileWidth = pixelToTwip(TILE_SIZE, mDPI);
+        mTileHeight = pixelToTwip(TILE_SIZE, mDPI);
 
         if (mDocument != null)
             mDocument.initializeForRendering();
@@ -122,6 +127,11 @@ class LOKitTileProvider implements TileProvider {
         } else {
             mContext.disableNavigationDrawer();
             mContext.getToolbarController().disableMenuItem(R.id.action_parts, true);
+        }
+
+        // Enable headers for Calc documents
+        if (mDocument.getDocumentType() == Document.DOCTYPE_SPREADSHEET) {
+            mContext.initializeCalcHeaders();
         }
 
         mDocument.setPart(0);
@@ -227,6 +237,18 @@ class LOKitTileProvider implements TileProvider {
      */
     public String getPartPageRectangles() {
         return mDocument.getPartPageRectangles();
+    }
+
+    /**
+     * Fetch Calc header information.
+     */
+    public String getCalcHeaders() {
+        long nX = 0;
+        long nY = 0;
+        long nWidth = mDocument.getDocumentWidth();
+        long nHeight = mDocument.getDocumentHeight();
+        return mDocument.getCommandValues(".uno:ViewRowColumnHeaders?x=" + nX + "&y=" + nY
+                + "&width=" + nWidth + "&height=" + nHeight);
     }
 
     /**
