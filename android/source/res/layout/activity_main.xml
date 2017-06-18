@@ -36,22 +36,53 @@
             </android.support.design.widget.AppBarLayout>
 
             <RelativeLayout
-                android:id="@+id/gecko_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-                <org.mozilla.gecko.gfx.LayerView
-                    android:id="@+id/layer_view"
+                <View
+                    android:id="@+id/calc_header_top_left"
+                    android:layout_width="@dimen/calc_header_width"
+                    android:layout_height="@dimen/calc_header_height"
+                    android:visibility="gone"/>
+
+                <org.libreoffice.overlay.CalcHeadersView
+                    android:id="@+id/calc_header_column"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="@dimen/calc_header_height"
+                    android:layout_toRightOf="@+id/calc_header_top_left"
+                    android:layout_toEndOf="@+id/calc_header_top_left"
+                    android:visibility="gone"/>
 
-                <org.libreoffice.overlay.DocumentOverlayView
-                    android:id="@+id/text_cursor_view"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"/>
+                <org.libreoffice.overlay.CalcHeadersView
+                    android:id="@+id/calc_header_row"
+                    android:layout_width="@dimen/calc_header_width"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/calc_header_top_left"
+                    android:visibility="gone"/>
+
+                <RelativeLayout
+                    android:id="@+id/gecko_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_toRightOf="@+id/calc_header_row"
+                    android:layout_toEndOf="@+id/calc_header_row"
+                    android:layout_below="@+id/calc_header_column">
+
+                    <org.mozilla.gecko.gfx.LayerView
+                        android:id="@+id/layer_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+
+                    <org.libreoffice.overlay.DocumentOverlayView
+                        android:id="@+id/text_cursor_view"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"/>
+
+                </RelativeLayout>
 
             </RelativeLayout>
+
         </LinearLayout>
 
         <include layout="@layout/toolbar_bottom"/>

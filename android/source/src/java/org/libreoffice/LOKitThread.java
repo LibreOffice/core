@@ -343,7 +343,17 @@ class LOKitThread extends Thread {
             case LOEvent.UPDATE_ZOOM_CONSTRAINTS:
                 updateZoomConstraints();
                 break;
+            case LOEvent.UPDATE_CALC_HEADERS:
+                updateCalcHeaders();
+                break;
+
         }
+    }
+
+    private void updateCalcHeaders() {
+        LOKitTileProvider tileProvider = (LOKitTileProvider)mTileProvider;
+        String values = tileProvider.getCalcHeaders();
+        mContext.getCalcHeadersController().setHeaders(values);
     }
 
     /**
