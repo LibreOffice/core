@@ -115,56 +115,30 @@ void initSignal(SignalAction &rSignal)
     {
         if (rSignal.Action == ACT_HIDE)
         {
-            struct sigaction ign;
-
-            ign.sa_handler = SIG_IGN;
-            ign.sa_flags   = 0;
-            sigemptyset(&ign.sa_mask);
-
-            struct sigaction oact;
-            if (sigaction(rSignal.Signal, &ign, &oact) == 0) {
-                rSignal.siginfo = (oact.sa_flags & SA_SIGINFO) != 0;
-                if (rSignal.siginfo) {
-                    rSignal.Handler = reinterpret_cast<Handler1>(
-                        oact.sa_sigaction);
-                } else {
-                    rSignal.Handler = oact.sa_handler;
-                }
-            } else {
-                rSignal.Handler = SIG_DFL;
-                rSignal.siginfo = false;
+            if (rSignal.Action == ACT_HIDE)
+            {
+                act.sa_handler = SIG_IGN;
+                act.sa_flags   = 0;
+                sigemptyset(&act.sa_mask);
             }
-        }
-        else
-        {
+
             struct sigaction oact;
-            if (sigaction(rSignal.Signal, &act, &oact) == 0) {
-                rSignal.siginfo = (oact.sa_flags & SA_SIGINFO) != 0;
-                if (rSignal.siginfo) {
-                    rSignal.Handler = reinterpret_cast<Handler1>(
-                        oact.sa_sigaction);
-                } else {
+
+            if (sigaction(rSignal.Signal, &act, &oact) == 0)
+            {
+                rSignal.siginfo = ((oact.sa_flags & SA_SIGINFO) != 0);
+                if (rSignal.siginfo)
+                    rSignal.Handler = reinterpret_cast<Handler1>(oact.sa_sigaction);
+                else
                     rSignal.Handler = oact.sa_handler;
-                }
-            } else {
+            }
+            else
+            {
                 rSignal.Handler = SIG_DFL;
                 rSignal.siginfo = false;
             }
         }
     }
-
-    /* Clear signal mask inherited from parent process (on Mac OS X, upon a
-       crash soffice re-execs itself from within the signal handler, so the
-       second soffice would have the guilty signal blocked and would freeze upon
-       encountering a similar crash again): */
-    sigset_t unset;
-    if (sigemptyset(&unset) < 0 ||
-        pthread_sigmask(SIG_SETMASK, &unset, nullptr) < 0)
-    {
-        SAL_WARN("sal.osl", "sigemptyset or pthread_sigmask failed");
-    }
-
-    return true;
 }
 
 bool onDeInitSignal()
@@ -179,7 +153,7 @@ bool onDeInitSignal()
         {
             if (Signals[i].siginfo) {
                 act.sa_sigaction = reinterpret_cast<Handler2>(
-                    Signals[i].Handler);
+                        Signals[i].Handler);
                 act.sa_flags = SA_SIGINFO;
             } else {
                 act.sa_handler = Signals[i].Handler;
