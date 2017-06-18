@@ -120,6 +120,11 @@ class LOKitTileProvider implements TileProvider {
             mContext.getToolbarController().disableMenuItem(R.id.action_parts, true);
         }
 
+        // Enable headers for Calc documents
+        if (mDocument.getDocumentType() == Document.DOCTYPE_SPREADSHEET) {
+            mContext.initializeCalcHeaders();
+        }
+
         mDocument.setPart(0);
 
         setupDocumentFonts();
