@@ -164,7 +164,7 @@ ScVbaCommandBarControls::Item( const uno::Any& aIndex, const uno::Any& /*aIndex*
 }
 
 uno::Reference< XCommandBarControl > SAL_CALL
-ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const uno::Any& Parameter, const uno::Any& Before, const uno::Any& Temporary )
+ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const uno::Any& Parameter, const uno::Any& Before, SAL_UNUSED_PARAMETER const uno::Any& )
 {
     // Parameter is not supported
     // the following name needs to be individually created;
@@ -172,7 +172,6 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
     OUString sCommandUrl( CUSTOM_MENU_STR + sLabel);
     sal_Int32 nType = office::MsoControlType::msoControlButton;
     sal_Int32 nPosition = 0;
-    bool bTemporary = true;
 
     if( Type.hasValue() )
     {
@@ -192,9 +191,6 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
         Before >>= nPosition;
     else
         nPosition = m_xIndexAccess->getCount();
-
-    if( Temporary.hasValue() )
-        Temporary >>= bTemporary;
 
     uno::Any aSubMenu;
     if( nType == office::MsoControlType::msoControlPopup )
