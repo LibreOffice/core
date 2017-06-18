@@ -25,6 +25,7 @@
 /* system headers */
 #include "system.h"
 #include <tchar.h>
+#include <werapi.h>
 
 #include "file_url.hxx"
 #include "path_helper.hxx"
@@ -45,16 +46,7 @@ LPTOP_LEVEL_EXCEPTION_FILTER pPreviousHandler = nullptr;
 bool onInitSignal()
 {
     pPreviousHandler = SetUnhandledExceptionFilter(signalHandlerFunction);
-
-    HMODULE hFaultRep = LoadLibrary( "faultrep.dll" );
-    if ( hFaultRep )
-    {
-        pfn_ADDEREXCLUDEDAPPLICATIONW pfn = reinterpret_cast<pfn_ADDEREXCLUDEDAPPLICATIONW>(GetProcAddress( hFaultRep, "AddERExcludedApplicationW" ));
-        if ( pfn )
-            pfn( L"SOFFICE.EXE" );
-        FreeLibrary( hFaultRep );
-    }
-
+    WerAddExcludedApplication (L"SOFFICE.EXE", true);
     return true;
 }
 
