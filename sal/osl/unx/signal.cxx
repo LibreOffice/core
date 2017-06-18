@@ -148,54 +148,16 @@ what looks like a bug in the new handler*/
 };
 const int NoSignals = SAL_N_ELEMENTS(Signals);
 
-bool bSetSEGVHandler = false;
-bool bSetWINCHHandler = false;
-bool bSetILLHandler = false;
-
 void signalHandlerFunction(int, siginfo_t *, void *);
 
-void getExecutableName_Impl (rtl_String ** ppstrProgName)
-{
-    rtl_uString* ustrProgFile = nullptr;
-    osl_getExecutableFile (&ustrProgFile);
-    if (ustrProgFile)
-    {
-        rtl_uString * ustrProgName = nullptr;
-        osl_systemPathGetFileNameOrLastDirectoryPart (ustrProgFile, &ustrProgName);
-        if (ustrProgName != nullptr)
-        {
-            rtl_uString2String (
-                ppstrProgName,
-                rtl_uString_getStr (ustrProgName), rtl_uString_getLength (ustrProgName),
-                osl_getThreadTextEncoding(),
-                OUSTRING_TO_OSTRING_CVTFLAGS);
-            rtl_uString_release (ustrProgName);
-        }
-        rtl_uString_release (ustrProgFile);
-    }
-}
-
-bool is_soffice_Impl()
-{
-    sal_Int32 idx = -1;
-    rtl_String* strProgName = nullptr;
-
-    getExecutableName_Impl (&strProgName);
-    if (strProgName)
-    {
-        idx = rtl_str_indexOfStr (rtl_string_getStr (strProgName), "soffice");
-        rtl_string_release (strProgName);
-    }
-    return (idx != -1);
-}
 
 #if HAVE_FEATURE_BREAKPAD
 bool is_unset_signal(int signal)
 {
 #ifdef DBG_UTIL
-    return (!bSetSEGVHandler && signal == SIGSEGV) ||
-        (!bSetWINCHHandler && signal == SIGWINCH) ||
-        (!bSetILLHandler && signal == SIGILL);
+    return (signal == SIGSEGV) ||
+        (signal == SIGWINCH) ||
+        (signal == SIGILL);
 #else
     (void) signal;
     return false;
@@ -207,29 +169,6 @@ bool is_unset_signal(int signal)
 
 bool onInitSignal()
 {
-    if (is_soffice_Impl())
-    {
-        // WORKAROUND FOR SEGV HANDLER CONFLICT
-        //
-        // the java jit needs SIGSEGV for proper work
-        // and we need SIGSEGV for the office crashguard
-        //
-        // TEMPORARY SOLUTION:
-        //   the office sets the signal handler during startup
-        //   java can than overwrite it, if needed
-        bSetSEGVHandler = true;
-
-        // WORKAROUND FOR WINCH HANDLER (SEE ABOVE)
-        bSetWINCHHandler = true;
-
-        // WORKAROUND FOR ILLEGAL INSTRUCTION HANDLER (SEE ABOVE)
-        bSetILLHandler = true;
-    }
-
-#ifdef DBG_UTIL
-    bSetSEGVHandler = bSetWINCHHandler = bSetILLHandler = false;
-#endif
-
     struct sigaction act;
     act.sa_sigaction = signalHandlerFunction;
     act.sa_flags = SA_RESTART | SA_SIGINFO;
@@ -244,50 +183,44 @@ bool onInitSignal()
             rSignal.Action = ACT_IGNORE;
 #endif
 
-        /* hack: stomcatd is attaching JavaVM which does not work with an sigaction(SEGV) */
-        if ((bSetSEGVHandler || rSignal.Signal != SIGSEGV)
-        && (bSetWINCHHandler || rSignal.Signal != SIGWINCH)
-        && (bSetILLHandler   || rSignal.Signal != SIGILL))
+        if (rSignal.Action != ACT_SYSTEM)
         {
-            if (rSignal.Action != ACT_SYSTEM)
+            if (rSignal.Action == ACT_HIDE)
             {
-                if (rSignal.Action == ACT_HIDE)
-                {
-                    struct sigaction ign;
+                struct sigaction ign;
 
-                    ign.sa_handler = SIG_IGN;
-                    ign.sa_flags   = 0;
-                    sigemptyset(&ign.sa_mask);
+                ign.sa_handler = SIG_IGN;
+                ign.sa_flags   = 0;
+                sigemptyset(&ign.sa_mask);
 
-                    struct sigaction oact;
-                    if (sigaction(rSignal.Signal, &ign, &oact) == 0) {
-                        rSignal.siginfo = (oact.sa_flags & SA_SIGINFO) != 0;
-                        if (rSignal.siginfo) {
-                            rSignal.Handler = reinterpret_cast<Handler1>(
-                                oact.sa_sigaction);
-                        } else {
-                            rSignal.Handler = oact.sa_handler;
-                        }
+                struct sigaction oact;
+                if (sigaction(rSignal.Signal, &ign, &oact) == 0) {
+                    rSignal.siginfo = (oact.sa_flags & SA_SIGINFO) != 0;
+                    if (rSignal.siginfo) {
+                        rSignal.Handler = reinterpret_cast<Handler1>(
+                            oact.sa_sigaction);
                     } else {
-                        rSignal.Handler = SIG_DFL;
-                        rSignal.siginfo = false;
+                        rSignal.Handler = oact.sa_handler;
                     }
+                } else {
+                    rSignal.Handler = SIG_DFL;
+                    rSignal.siginfo = false;
                 }
-                else
-                {
-                    struct sigaction oact;
-                    if (sigaction(rSignal.Signal, &act, &oact) == 0) {
-                        rSignal.siginfo = (oact.sa_flags & SA_SIGINFO) != 0;
-                        if (rSignal.siginfo) {
-                            rSignal.Handler = reinterpret_cast<Handler1>(
-                                oact.sa_sigaction);
-                        } else {
-                            rSignal.Handler = oact.sa_handler;
-                        }
+            }
+            else
+            {
+                struct sigaction oact;
+                if (sigaction(rSignal.Signal, &act, &oact) == 0) {
+                    rSignal.siginfo = (oact.sa_flags & SA_SIGINFO) != 0;
+                    if (rSignal.siginfo) {
+                        rSignal.Handler = reinterpret_cast<Handler1>(
+                            oact.sa_sigaction);
                     } else {
-                        rSignal.Handler = SIG_DFL;
-                        rSignal.siginfo = false;
+                        rSignal.Handler = oact.sa_handler;
                     }
+                } else {
+                    rSignal.Handler = SIG_DFL;
+                    rSignal.siginfo = false;
                 }
             }
         }
@@ -473,22 +406,18 @@ void signalHandlerFunction(int signal, siginfo_t * info, void * context)
 
 #if HAVE_FEATURE_BREAKPAD
     if ((Info.Signal == osl_Signal_AccessViolation ||
-            Info.Signal == osl_Signal_IntegerDivideByZero ||
-            Info.Signal == osl_Signal_FloatDivideByZero) && !is_unset_signal(signal))
+         Info.Signal == osl_Signal_IntegerDivideByZero ||
+         Info.Signal == osl_Signal_FloatDivideByZero) && !is_unset_signal(signal))
     {
         for (SignalAction & rSignal : Signals)
         {
             if (rSignal.Signal == signal)
             {
                 if (rSignal.siginfo)
-                {
-                    (*reinterpret_cast<Handler2>(rSignal.Handler))(
-                        signal, info, context);
-                }
+                    (*reinterpret_cast<Handler2>(rSignal.Handler))(signal, info, context);
                 else
-                {
                     rSignal.Handler(signal);
-                }
+
                 break;
             }
         }
