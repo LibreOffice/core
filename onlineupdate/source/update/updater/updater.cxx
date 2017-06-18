@@ -2596,8 +2596,8 @@ GetUpdateFileNames(std::vector<tstring>& fileNames)
         {
             if (NS_tstrncmp(entry->d_name, NS_T("update"), 6) == 0)
             {
-                char *dot = strrchr(entry->d_name, '.');
-                if (dot && !strcmp(dot, ".mar"))
+                NS_tchar *dot = NS_tstrrchr(entry->d_name, NS_T('.'));
+                if (dot && !NS_tstrcmp(dot, NS_T(".mar")))
                 {
                     NS_tchar updatePath[MAXPATHLEN];
                     NS_tsnprintf(updatePath, sizeof(updatePath)/sizeof(updatePath[0]),
