@@ -491,6 +491,7 @@ SystemGraphicsData X11SalGraphics::GetGraphicsData() const
 
     aRes.nSize = sizeof(aRes);
     aRes.hDrawable = hDrawable_;
+    aRes.nScreen   = m_nXScreen.getXScreen();
     aRes.pXRenderFormat = m_pXRenderFormat;
     return aRes;
 }
