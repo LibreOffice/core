@@ -120,6 +120,11 @@ class LOKitTileProvider implements TileProvider {
             mContext.getToolbarController().disableMenuItem(R.id.action_parts, true);
         }
 
+        // Enable headers for Calc documents
+        if (mDocument.getDocumentType() == Document.DOCTYPE_SPREADSHEET) {
+            mContext.initializeCalcHeaders();
+        }
+
         mDocument.setPart(0);
 
         setupDocumentFonts();
@@ -205,6 +210,18 @@ class LOKitTileProvider implements TileProvider {
      */
     public String getPartPageRectangles() {
         return mDocument.getPartPageRectangles();
+    }
+
+    /**
+     * Fetch Calc header information.
+     */
+    public String getCalcHeaders() {
+        long nX = 0;
+        long nY = 0;
+        long nWidth = mDocument.getDocumentWidth();
+        long nHeight = mDocument.getDocumentHeight();
+        return mDocument.getCommandValues(".uno:ViewRowColumnHeaders?x=" + nX + "&y=" + nY
+                + "&width=" + nWidth + "&height=" + nHeight);
     }
 
     /**

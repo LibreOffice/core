@@ -156,6 +156,9 @@ class LOKitThread extends Thread {
         mLayerClient.clearAndResetlayers();
         redraw();
         updatePartPageRectangles();
+        if (mTileProvider.isSpreadsheet()) {
+            updateCalcHeaders();
+        }
     }
 
     /**
@@ -204,7 +207,7 @@ class LOKitThread extends Thread {
         LOKitShell.showProgressSpinner(mContext);
         mTileProvider.changePart(partIndex);
         mViewportMetrics = mLayerClient.getViewportMetrics();
-        mLayerClient.setViewportMetrics(mViewportMetrics.scaleTo(0.9f, new PointF()));
+        // mLayerClient.setViewportMetrics(mViewportMetrics.scaleTo(0.9f, new PointF()));
         refresh();
         LOKitShell.hideProgressSpinner(mContext);
     }
@@ -343,7 +346,17 @@ class LOKitThread extends Thread {
             case LOEvent.UPDATE_ZOOM_CONSTRAINTS:
                 updateZoomConstraints();
                 break;
+            case LOEvent.UPDATE_CALC_HEADERS:
+                updateCalcHeaders();
+                break;
+
         }
+    }
+
+    private void updateCalcHeaders() {
+        LOKitTileProvider tileProvider = (LOKitTileProvider)mTileProvider;
+        String values = tileProvider.getCalcHeaders();
+        mContext.getCalcHeadersController().setHeaders(values);
     }
 
     /**
