@@ -3703,7 +3703,7 @@ void DomainMapper_Impl::CloseFieldCommand()
         m_bSetUserFieldContent = false;
         m_bSetCitation = false;
         m_bSetDateValue = false;
-        FieldConversionMap_t aFieldConversionMap = lcl_GetFieldConversion();
+        const FieldConversionMap_t& aFieldConversionMap = lcl_GetFieldConversion();
 
         try
         {
@@ -3714,7 +3714,7 @@ void DomainMapper_Impl::CloseFieldCommand()
             OUString const sFirstParam(std::get<1>(field).empty()
                     ? OUString() : std::get<1>(field).front());
 
-            FieldConversionMap_t::iterator const aIt =
+            FieldConversionMap_t::const_iterator const aIt =
                 aFieldConversionMap.find(std::get<0>(field));
             if(aIt != aFieldConversionMap.end())
             {
@@ -3768,8 +3768,8 @@ void DomainMapper_Impl::CloseFieldCommand()
                     OUString sServiceName("com.sun.star.text.");
                     if ( bCreateEnhancedField )
                     {
-                        FieldConversionMap_t aEnhancedFieldConversionMap = lcl_GetEnhancedFieldConversion();
-                        FieldConversionMap_t::iterator aEnhancedIt =
+                        const FieldConversionMap_t& aEnhancedFieldConversionMap = lcl_GetEnhancedFieldConversion();
+                        FieldConversionMap_t::const_iterator aEnhancedIt =
                             aEnhancedFieldConversionMap.find(std::get<0>(field));
                         if ( aEnhancedIt != aEnhancedFieldConversionMap.end())
                             sServiceName += OUString::createFromAscii(aEnhancedIt->second.cFieldServiceName );
