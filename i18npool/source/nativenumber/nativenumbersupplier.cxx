@@ -866,6 +866,7 @@ void makeHebrewNumber(sal_Int64 value, OUStringBuffer& output, bool isLast, bool
                 // By convention, the numbers 15 and 16 are represented as 9 + 6 and 9 + 7
                 if (num == 15 || num == 16) // substitution for 15 and 16
                     j++;
+                assert(j < sal_Int32(SAL_N_ELEMENTS(HebrewNumberCharArray)));
                 num = sal::static_int_cast<sal_Int16>( num - HebrewNumberCharArray[j].value );
                 output.append(HebrewNumberCharArray[j].code);
             }
