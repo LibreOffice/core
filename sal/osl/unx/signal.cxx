@@ -72,7 +72,7 @@ void signalHandlerFunction(int, siginfo_t *, void *);
 bool onInitSignal()
 {
     /* Initialize the rest of the signals */
-    for (SignalAction &rSignal : Signals)
+    for (SignalAction & rSignal : Signals)
     {
         // Don't wipe out JVM signal handlers
         switch (rSignal.Signal)
@@ -81,10 +81,9 @@ bool onInitSignal()
             case SIGWINCH: // caters for Apache, this is the signal for graceful shutdown
             case SIGILL:
                 break;
-            default:
-                initSignal(rSignal);
         }
 
+        initSignal(rSignal);
     }
 
     /* Clear signal mask inherited from parent process (on Mac OS X, upon a
@@ -107,69 +106,36 @@ void initSignal(SignalAction &rSignal)
 
     sigfillset(&(act.sa_mask));
 
-    /* Initialize the rest of the signals */
-    for (SignalAction & rSignal : Signals)
-    {
 #if defined HAVE_VALGRIND_HEADERS
-        if (rSignal.Signal == SIGUSR2 && RUNNING_ON_VALGRIND)
-            rSignal.Action = ACT_IGNORE;
+    if (rSignal.Signal == SIGUSR2 && RUNNING_ON_VALGRIND)
+        rSignal.Action = ACT_IGNORE;
 #endif
 
-        if (rSignal.Action != ACT_SYSTEM)
+    if (rSignal.Action != ACT_SYSTEM)
+    {
+        if (rSignal.Action == ACT_HIDE)
         {
-            if (rSignal.Action == ACT_HIDE)
-            {
-                struct sigaction ign;
+            act.sa_handler = SIG_IGN;
+            act.sa_flags   = 0;
+            sigemptyset(&act.sa_mask);
+        }
 
-                ign.sa_handler = SIG_IGN;
-                ign.sa_flags   = 0;
-                sigemptyset(&ign.sa_mask);
+        struct sigaction oact;
 
-                struct sigaction oact;
-                if (sigaction(rSignal.Signal, &ign, &oact) == 0) {
-                    rSignal.siginfo = (oact.sa_flags & SA_SIGINFO) != 0;
-                    if (rSignal.siginfo) {
-                        rSignal.Handler = reinterpret_cast<Handler1>(
-                            oact.sa_sigaction);
-                    } else {
-                        rSignal.Handler = oact.sa_handler;
-                    }
-                } else {
-                    rSignal.Handler = SIG_DFL;
-                    rSignal.siginfo = false;
-                }
-            }
+        if (sigaction(rSignal.Signal, &act, &oact) == 0)
+        {
+            rSignal.siginfo = ((oact.sa_flags & SA_SIGINFO) != 0);
+            if (rSignal.siginfo)
+                rSignal.Handler = reinterpret_cast<Handler1>(oact.sa_sigaction);
             else
-            {
-                struct sigaction oact;
-                if (sigaction(rSignal.Signal, &act, &oact) == 0) {
-                    rSignal.siginfo = (oact.sa_flags & SA_SIGINFO) != 0;
-                    if (rSignal.siginfo) {
-                        rSignal.Handler = reinterpret_cast<Handler1>(
-                            oact.sa_sigaction);
-                    } else {
-                        rSignal.Handler = oact.sa_handler;
-                    }
-                } else {
-                    rSignal.Handler = SIG_DFL;
-                    rSignal.siginfo = false;
-                }
-            }
+                rSignal.Handler = oact.sa_handler;
+        }
+        else
+        {
+            rSignal.Handler = SIG_DFL;
+            rSignal.siginfo = false;
         }
     }
-
-    /* Clear signal mask inherited from parent process (on Mac OS X, upon a
-       crash soffice re-execs itself from within the signal handler, so the
-       second soffice would have the guilty signal blocked and would freeze upon
-       encountering a similar crash again): */
-    sigset_t unset;
-    if (sigemptyset(&unset) < 0 ||
-        pthread_sigmask(SIG_SETMASK, &unset, nullptr) < 0)
-    {
-        SAL_WARN("sal.osl", "sigemptyset or pthread_sigmask failed");
-    }
-
-    return true;
 }
 
 bool onDeInitSignal()
@@ -180,19 +146,23 @@ bool onDeInitSignal()
 
     /* Initialize the rest of the signals */
     for (int i = NoSignals - 1; i >= 0; i--)
+    {
         if (Signals[i].Action != ACT_SYSTEM)
-	    {
-            if (Signals[i].siginfo) {
-                act.sa_sigaction = reinterpret_cast<Handler2>(
-                    Signals[i].Handler);
+        {
+            if (Signals[i].siginfo)
+            {
+                act.sa_sigaction = reinterpret_cast<Handler2>(Signals[i].Handler);
                 act.sa_flags = SA_SIGINFO;
-            } else {
+            }
+            else
+            {
                 act.sa_handler = Signals[i].Handler;
                 act.sa_flags = 0;
             }
 
             sigaction(Signals[i].Signal, &act, nullptr);
         }
+    }
 
     return false;
 }
