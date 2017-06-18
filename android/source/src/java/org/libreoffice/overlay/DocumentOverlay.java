@@ -8,11 +8,11 @@
  */
 package org.libreoffice.overlay;
 
-import org.libreoffice.LibreOfficeMainActivity;
 import android.graphics.RectF;
 import android.util.Log;
 
 import org.libreoffice.LOKitShell;
+import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.R;
 import org.libreoffice.canvas.SelectionHandle;
 import org.mozilla.gecko.gfx.Layer;
@@ -237,6 +237,11 @@ public class DocumentOverlay {
     public RectF getCurrentCursorPosition() {
         return mDocumentOverlayView.getCurrentCursorPosition();
     }
+
+    public void setCalcHeadersController(CalcHeadersController calcHeadersController) {
+        mDocumentOverlayView.setCalcHeadersController(calcHeadersController);
+    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
