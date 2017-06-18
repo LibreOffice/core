@@ -27,6 +27,7 @@ public class LOKitShell {
     private static final String LOGTAG = LOKitShell.class.getSimpleName();
 
     public static float getDpi(Context context) {
+        if (((LibreOfficeMainActivity)context).isSpreadsheet()) return 96f;
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         return metrics.density * 160;
     }

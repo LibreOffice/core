@@ -13,9 +13,15 @@ public class CalcHeaderCell extends CommonCanvasElement {
     private RectF mBounds;
     private String mText;
 
-    public CalcHeaderCell(float left, float top, float width, float height, String text) {
+    public CalcHeaderCell(float left, float top, float width, float height, String text, boolean selected) {
         mBounds = new RectF(left, top, left + width, top + height);
-        mBgPaint.setStyle(Style.STROKE);
+        if (selected) {
+            // if the cell is selected, display filled
+            mBgPaint.setStyle(Style.FILL_AND_STROKE);
+        } else {
+            // if not, display only the frame
+            mBgPaint.setStyle(Style.STROKE);
+        }
         mBgPaint.setColor(Color.GRAY);
         mBgPaint.setAlpha(100);  // hard coded for now
         mTextPaint.setColor(Color.GRAY);

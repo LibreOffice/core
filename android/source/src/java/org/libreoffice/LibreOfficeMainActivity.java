@@ -93,6 +93,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private FontController mFontController;
     private SearchController mSearchController;
     private CalcHeadersController mCalcHeadersController;
+    private boolean mIsSpreadsheet;
 
     public GeckoLayerClient getLayerClient() {
         return mLayerClient;
@@ -701,6 +702,14 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                 findViewById(R.id.calc_header_column).setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    public void setIsSpreadsheet(boolean b) {
+        mIsSpreadsheet = b;
+    }
+
+    public boolean isSpreadsheet() {
+        return mIsSpreadsheet;
     }
 
     private class DocumentPartClickListener implements android.widget.AdapterView.OnItemClickListener {
