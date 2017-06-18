@@ -157,7 +157,6 @@ void lcl_handleTextField( const uno::Reference< beans::XPropertySet >& rxFieldPr
 
 struct FieldConversion
 {
-    OUString            sWordCommand;
     const sal_Char*     cFieldServiceName;
     FieldId             eFieldId;
 };
@@ -2883,119 +2882,86 @@ typedef std::multimap < sal_Int32, OUString > TOCStyleMap;
 
 const FieldConversionMap_t & lcl_GetFieldConversion()
 {
-static FieldConversionMap_t aFieldConversionMap;
-
-static bool bFilled = false;
-
-if(!bFilled)
-{
-    static const FieldConversion aFields[] =
+    static const FieldConversionMap_t aFieldConversionMap
     {
-//            {OUString("ADDRESSBLOCK"),  "",                         "", FIELD_ADDRESSBLOCK  },
-//            {OUString("ADVANCE"),       "",                         "", FIELD_ADVANCE       },
-        {OUString("ASK"),           "SetExpression",              FIELD_ASK      },
-            {OUString("AUTONUM"),       "SetExpression",            FIELD_AUTONUM   },
-            {OUString("AUTONUMLGL"),     "SetExpression",           FIELD_AUTONUMLGL },
-            {OUString("AUTONUMOUT"),     "SetExpression",           FIELD_AUTONUMOUT },
-            {OUString("AUTHOR"),        "DocInfo.CreateAuthor",     FIELD_AUTHOR       },
-            {OUString("DATE"),          "DateTime",                 FIELD_DATE         },
-            {OUString("COMMENTS"),      "DocInfo.Description",      FIELD_COMMENTS     },
-            {OUString("CREATEDATE"),    "DocInfo.CreateDateTime",   FIELD_CREATEDATE   },
-            {OUString("DOCPROPERTY"),   "",                         FIELD_DOCPROPERTY },
-            {OUString("DOCVARIABLE"),   "User",                     FIELD_DOCVARIABLE  },
-            {OUString("EDITTIME"),      "DocInfo.EditTime",         FIELD_EDITTIME     },
-            {OUString("EQ"),            "",                         FIELD_EQ     },
-            {OUString("FILLIN"),        "Input",                    FIELD_FILLIN       },
-            {OUString("FILENAME"),      "FileName",                 FIELD_FILENAME     },
-//            {OUString("FILESIZE"),      "",                         FIELD_FILESIZE     },
-            {OUString("FORMULA"),       "TableFormula",             FIELD_FORMULA },
-            {OUString("FORMCHECKBOX"),     "",                        FIELD_FORMCHECKBOX},
-            {OUString("FORMDROPDOWN"),     "DropDown",                FIELD_FORMDROPDOWN},
-            {OUString("FORMTEXT"),     "Input", FIELD_FORMTEXT},
-//            {OUString("GOTOBUTTON"),    "",                         FIELD_GOTOBUTTON   },
-            {OUString("HYPERLINK"),     "",                         FIELD_HYPERLINK    },
-            {OUString("IF"),            "ConditionalText",          FIELD_IF           },
-//            {OUString("INFO"),      "",FIELD_INFO         },
-            {OUString("INCLUDEPICTURE"), "",                        FIELD_INCLUDEPICTURE},
-            {OUString("KEYWORDS"),      "DocInfo.KeyWords",         FIELD_KEYWORDS     },
-            {OUString("LASTSAVEDBY"),   "DocInfo.ChangeAuthor",                         FIELD_LASTSAVEDBY  },
-            {OUString("MACROBUTTON"),   "Macro",                         FIELD_MACROBUTTON  },
-            {OUString("MERGEFIELD"),    "Database",                 FIELD_MERGEFIELD},
-            {OUString("MERGEREC"),      "DatabaseNumberOfSet",      FIELD_MERGEREC     },
-//            {OUString("MERGESEQ"),      "",                         FIELD_MERGESEQ     },
-            {OUString("NEXT"),          "DatabaseNextSet",          FIELD_NEXT         },
-            {OUString("NEXTIF"),        "DatabaseNextSet",          FIELD_NEXTIF       },
-            {OUString("PAGE"),          "PageNumber",               FIELD_PAGE         },
-            {OUString("PAGEREF"),       "GetReference",             FIELD_PAGEREF      },
-            {OUString("REF"),           "GetReference",             FIELD_REF          },
-            {OUString("REVNUM"),        "DocInfo.Revision",         FIELD_REVNUM       },
-            {OUString("SAVEDATE"),      "DocInfo.Change",           FIELD_SAVEDATE     },
-//            {OUString("SECTION"),       "",                         FIELD_SECTION      },
-//            {OUString("SECTIONPAGES"),  "",                         FIELD_SECTIONPAGES },
-            {OUString("SEQ"),           "SetExpression",            FIELD_SEQ          },
-            {OUString("SET"),           "SetExpression",            FIELD_SET          },
-//            {OUString("SKIPIF"),"",                                 FIELD_SKIPIF       },
-//            {OUString("STYLEREF"),"",                               FIELD_STYLEREF     },
-            {OUString("SUBJECT"),       "DocInfo.Subject",          FIELD_SUBJECT      },
-            {OUString("SYMBOL"),"",                                FIELD_SYMBOL       },
-            {OUString("TEMPLATE"),      "TemplateName",             FIELD_TEMPLATE},
-            {OUString("TIME"),          "DateTime",                 FIELD_TIME         },
-            {OUString("TITLE"),         "DocInfo.Title",            FIELD_TITLE        },
-            {OUString("USERINITIALS"),  "Author",                   FIELD_USERINITIALS       },
-//            {OUString("USERADDRESS"),   "",                         FIELD_USERADDRESS  },
-            {OUString("USERNAME"), "Author",                   FIELD_USERNAME       },
+//      {"ADDRESSBLOCK",    {"",                        FIELD_ADDRESSBLOCK  }},
+//      {"ADVANCE",         {"",                        FIELD_ADVANCE       }},
+        {"ASK",             {"SetExpression",           FIELD_ASK           }},
+        {"AUTONUM",         {"SetExpression",           FIELD_AUTONUM       }},
+        {"AUTONUMLGL",      {"SetExpression",           FIELD_AUTONUMLGL    }},
+        {"AUTONUMOUT",      {"SetExpression",           FIELD_AUTONUMOUT    }},
+        {"AUTHOR",          {"DocInfo.CreateAuthor",    FIELD_AUTHOR        }},
+        {"DATE",            {"DateTime",                FIELD_DATE          }},
+        {"COMMENTS",        {"DocInfo.Description",     FIELD_COMMENTS      }},
+        {"CREATEDATE",      {"DocInfo.CreateDateTime",  FIELD_CREATEDATE    }},
+        {"DOCPROPERTY",     {"",                        FIELD_DOCPROPERTY   }},
+        {"DOCVARIABLE",     {"User",                    FIELD_DOCVARIABLE   }},
+        {"EDITTIME",        {"DocInfo.EditTime",        FIELD_EDITTIME      }},
+        {"EQ",              {"",                        FIELD_EQ            }},
+        {"FILLIN",          {"Input",                   FIELD_FILLIN        }},
+        {"FILENAME",        {"FileName",                FIELD_FILENAME      }},
+//      {"FILESIZE",        {"",                        FIELD_FILESIZE      }},
+        {"FORMULA",         {"TableFormula",            FIELD_FORMULA       }},
+        {"FORMCHECKBOX",    {"",                        FIELD_FORMCHECKBOX  }},
+        {"FORMDROPDOWN",    {"DropDown",                FIELD_FORMDROPDOWN  }},
+        {"FORMTEXT",        {"Input",                   FIELD_FORMTEXT      }},
+//      {"GOTOBUTTON",      {"",                        FIELD_GOTOBUTTON    }},
+        {"HYPERLINK",       {"",                        FIELD_HYPERLINK     }},
+        {"IF",              {"ConditionalText",         FIELD_IF            }},
+//      {"INFO",            {"",                        FIELD_INFO          }},
+        {"INCLUDEPICTURE",  {"",                        FIELD_INCLUDEPICTURE}},
+        {"KEYWORDS",        {"DocInfo.KeyWords",        FIELD_KEYWORDS      }},
+        {"LASTSAVEDBY",     {"DocInfo.ChangeAuthor",    FIELD_LASTSAVEDBY   }},
+        {"MACROBUTTON",     {"Macro",                   FIELD_MACROBUTTON   }},
+        {"MERGEFIELD",      {"Database",                FIELD_MERGEFIELD    }},
+        {"MERGEREC",        {"DatabaseNumberOfSet",     FIELD_MERGEREC      }},
+//      {"MERGESEQ",        {"",                        FIELD_MERGESEQ      }},
+        {"NEXT",            {"DatabaseNextSet",         FIELD_NEXT          }},
+        {"NEXTIF",          {"DatabaseNextSet",         FIELD_NEXTIF        }},
+        {"PAGE",            {"PageNumber",              FIELD_PAGE          }},
+        {"PAGEREF",         {"GetReference",            FIELD_PAGEREF       }},
+        {"REF",             {"GetReference",            FIELD_REF           }},
+        {"REVNUM",          {"DocInfo.Revision",        FIELD_REVNUM        }},
+        {"SAVEDATE",        {"DocInfo.Change",          FIELD_SAVEDATE      }},
+//      {"SECTION",         {"",                        FIELD_SECTION       }},
+//      {"SECTIONPAGES",    {"",                        FIELD_SECTIONPAGES  }},
+        {"SEQ",             {"SetExpression",           FIELD_SEQ           }},
+        {"SET",             {"SetExpression",           FIELD_SET           }},
+//      {"SKIPIF",          {"",                        FIELD_SKIPIF        }},
+//      {"STYLEREF",        {"",                        FIELD_STYLEREF      }},
+        {"SUBJECT",         {"DocInfo.Subject",         FIELD_SUBJECT       }},
+        {"SYMBOL",          {"",                        FIELD_SYMBOL        }},
+        {"TEMPLATE",        {"TemplateName",            FIELD_TEMPLATE      }},
+        {"TIME",            {"DateTime",                FIELD_TIME          }},
+        {"TITLE",           {"DocInfo.Title",           FIELD_TITLE         }},
+        {"USERINITIALS",    {"Author",                  FIELD_USERINITIALS  }},
+//      {"USERADDRESS",     {"",                        FIELD_USERADDRESS   }},
+        {"USERNAME",        {"Author",                  FIELD_USERNAME      }},
 
 
-            {OUString("TOC"), "com.sun.star.text.ContentIndex", FIELD_TOC},
-            {OUString("TC"), "com.sun.star.text.ContentIndexMark", FIELD_TC},
-            {OUString("NUMCHARS"), "CharacterCount", FIELD_NUMCHARS},
-            {OUString("NUMWORDS"), "WordCount", FIELD_NUMWORDS},
-            {OUString("NUMPAGES"), "PageCount", FIELD_NUMPAGES},
-            {OUString("INDEX"), "com.sun.star.text.DocumentIndex", FIELD_INDEX},
-            {OUString("XE"), "com.sun.star.text.DocumentIndexMark", FIELD_XE},
-            {OUString("BIBLIOGRAPHY"), "com.sun.star.text.Bibliography", FIELD_BIBLIOGRAPHY},
-            {OUString("CITATION"), "com.sun.star.text.TextField.Bibliography", FIELD_CITATION},
-
-//            {OUString(), "", "", FIELD_},
-
-        };
-        size_t nConversions = SAL_N_ELEMENTS(aFields);
-        for( size_t nConversion = 0; nConversion < nConversions; ++nConversion)
-        {
-            aFieldConversionMap.insert( FieldConversionMap_t::value_type(
-                aFields[nConversion].sWordCommand,
-                aFields[nConversion] ));
-        }
-
-        bFilled = true;
-    }
+        {"TOC",         {"com.sun.star.text.ContentIndex",          FIELD_TOC           }},
+        {"TC",          {"com.sun.star.text.ContentIndexMark",      FIELD_TC            }},
+        {"NUMCHARS",    {"CharacterCount",                          FIELD_NUMCHARS      }},
+        {"NUMWORDS",    {"WordCount",                               FIELD_NUMWORDS      }},
+        {"NUMPAGES",    {"PageCount",                               FIELD_NUMPAGES      }},
+        {"INDEX",       {"com.sun.star.text.DocumentIndex",         FIELD_INDEX         }},
+        {"XE",          {"com.sun.star.text.DocumentIndexMark",     FIELD_XE            }},
+        {"BIBLIOGRAPHY",{"com.sun.star.text.Bibliography",          FIELD_BIBLIOGRAPHY  }},
+        {"CITATION",    {"com.sun.star.text.TextField.Bibliography",FIELD_CITATION      }},
+    };
 
     return aFieldConversionMap;
 }
 
 const FieldConversionMap_t & lcl_GetEnhancedFieldConversion()
 {
-    static FieldConversionMap_t aEnhancedFieldConversionMap;
-
-    static bool bFilled = false;
-
-    if(!bFilled)
+    static const FieldConversionMap_t aEnhancedFieldConversionMap =
     {
-        static const FieldConversion aEnhancedFields[] =
-        {
-            {OUString("FORMCHECKBOX"),     "FormFieldmark",                           FIELD_FORMCHECKBOX},
-            {OUString("FORMDROPDOWN"),     "FormFieldmark",                           FIELD_FORMDROPDOWN},
-            {OUString("FORMTEXT"),     "Fieldmark", FIELD_FORMTEXT},
-        };
+        {"FORMCHECKBOX", {"FormFieldmark", FIELD_FORMCHECKBOX}},
+        {"FORMDROPDOWN", {"FormFieldmark", FIELD_FORMDROPDOWN}},
+        {"FORMTEXT",     {"Fieldmark",     FIELD_FORMTEXT}},
+    };
 
-        size_t nConversions = SAL_N_ELEMENTS(aEnhancedFields);
-        for( size_t nConversion = 0; nConversion < nConversions; ++nConversion)
-        {
-            aEnhancedFieldConversionMap.insert( FieldConversionMap_t::value_type(
-                aEnhancedFields[nConversion].sWordCommand,
-                aEnhancedFields[nConversion] ));
-        }
-    }
     return aEnhancedFieldConversionMap;
 }
 
