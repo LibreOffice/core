@@ -1125,7 +1125,7 @@ void Databases::setInstallPath( const OUString& aInstDir )
 
 // class ExtensionIteratorBase
 
-ExtensionHelpExistanceMap ExtensionIteratorBase::aHelpExistanceMap;
+ExtensionHelpExistenceMap ExtensionIteratorBase::aHelpExistenceMap;
 
 ExtensionIteratorBase::ExtensionIteratorBase( Reference< XComponentContext > const & xContext,
     Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage )
@@ -1173,8 +1173,8 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromP
 
     // #i84550 Cache information about help content in extension
     OUString aExtensionPath = xPackage->getURL();
-    ExtensionHelpExistanceMap::iterator it = aHelpExistanceMap.find( aExtensionPath );
-    bool bFound = ( it != aHelpExistanceMap.end() );
+    ExtensionHelpExistenceMap::iterator it = aHelpExistenceMap.find( aExtensionPath );
+    bool bFound = ( it != aHelpExistenceMap.end() );
     bool bHasHelp = bFound && it->second;
     if( bFound && !bHasHelp )
         return xHelpPackage;
@@ -1221,7 +1221,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromP
     }
 
     if( !bFound )
-        aHelpExistanceMap[ aExtensionPath ] = xHelpPackage.is();
+        aHelpExistenceMap[ aExtensionPath ] = xHelpPackage.is();
 
     return xHelpPackage;
 }

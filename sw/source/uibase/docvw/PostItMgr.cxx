@@ -278,10 +278,10 @@ void SwPostItMgr::CheckForRemovedPostIts()
     }
 }
 
-SwSidebarItem* SwPostItMgr::InsertItem(SfxBroadcaster* pItem, bool bCheckExistance, bool bFocus)
+SwSidebarItem* SwPostItMgr::InsertItem(SfxBroadcaster* pItem, bool bCheckExistence, bool bFocus)
 {
     SwSidebarItem* pAnnotationItem = nullptr;
-    if (bCheckExistance)
+    if (bCheckExistence)
     {
         for(std::list<SwSidebarItem*>::iterator i = mvPostItFields.begin(); i != mvPostItFields.end() ; ++i)
         {
@@ -1297,7 +1297,7 @@ bool SwPostItMgr::LayoutByPage(std::list<SwAnnotationWin*> &aVisiblePostItList, 
     return bScrollbars;
  }
 
-void SwPostItMgr::AddPostIts(bool bCheckExistance, bool bFocus)
+void SwPostItMgr::AddPostIts(bool bCheckExistence, bool bFocus)
 {
     bool bEmpty = mvPostItFields.empty();
     SwFieldType* pType = mpView->GetDocShell()->GetDoc()->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Postit, OUString(),false);
@@ -1308,7 +1308,7 @@ void SwPostItMgr::AddPostIts(bool bCheckExistance, bool bFocus)
         if ( pSwFormatField->GetTextField())
         {
             if ( pSwFormatField->IsFieldInDoc() )
-                InsertItem(pSwFormatField,bCheckExistance,bFocus);
+                InsertItem(pSwFormatField,bCheckExistence,bFocus);
         }
         pSwFormatField = aIter.Next();
     }
