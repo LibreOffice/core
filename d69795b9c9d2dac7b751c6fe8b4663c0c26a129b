@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_2ccb3374",
+        "filename": "vcl/unx/generic/gdi/cairo_xlib_cairo.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-06-18T12:15:40Z",
+      "side": 0,
+      "message": "these fields should get initialized with something.\n\nin include/vcl/sysdata.hxx they where initialized with nullptr/0\nbut in vcl/unx/generic/gdi/salgdi.cxx\nthey were set with GetXDisplay(), GetVisual().visual and m_nXScreen.getXScreen() are you sure these fields were unused?",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 33
+      },
+      "revId": "d69795b9c9d2dac7b751c6fe8b4663c0c26a129b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
