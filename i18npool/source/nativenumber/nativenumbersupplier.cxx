@@ -862,6 +862,8 @@ void makeHebrewNumber(sal_Int64 value, OUStringBuffer& output, bool isLast, bool
         for (sal_Int32 j = 0; num > 0 && j < sal_Int32(SAL_N_ELEMENTS(HebrewNumberCharArray)); j++) {
             if (num - HebrewNumberCharArray[j].value >= 0) {
                 nbOfChar++;
+                // https://en.wikipedia.org/wiki/Hebrew_numerals#Key_exceptions
+                // By convention, the numbers 15 and 16 are represented as 9 + 6 and 9 + 7
                 if (num == 15 || num == 16) // substitution for 15 and 16
                     j++;
                 num = sal::static_int_cast<sal_Int16>( num - HebrewNumberCharArray[j].value );
