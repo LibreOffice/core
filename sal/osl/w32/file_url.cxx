@@ -557,7 +557,7 @@ static bool osl_decodeURL_(rtl_String* strUTF8, rtl_uString** pstrDecodedURL)
     if (bValidEncoded)
     {
         rtl_string2UString(pstrDecodedURL, pBuffer, rtl_str_getLength(pBuffer), RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
-        OSL_ASSERT(*pstrDecodedURL != nullptr);
+        assert(*pstrDecodedURL != nullptr);
     }
 
     rtl_freeMemory(pBuffer);
@@ -568,7 +568,6 @@ static bool osl_decodeURL_(rtl_String* strUTF8, rtl_uString** pstrDecodedURL)
 static void osl_encodeURL_(rtl_uString *strURL, rtl_String **pstrEncodedURL)
 {
     /* Encode non ascii characters within the URL */
-
     rtl_String *strUTF8 = nullptr;
     sal_Char *pszEncodedURL;
     const sal_Char *pURLScan;
@@ -813,7 +812,7 @@ oslFileError osl_getFileURLFromSystemPath(rtl_uString* strPath, rtl_uString** ps
             {
                 case PATHTYPE_ABSOLUTE_UNC:
                     nIgnore = SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX_UNC) - 1;
-                    OSL_ENSURE(nIgnore == 8, "Unexpected long path UNC prefix!");
+                    SAL_WARN_IF(nIgnore == 8, "sal.osl", "Unexpected long path UNC prefix!");
 
                     /* generate the normal UNC path */
                     nLength = rtl_uString_getLength(strPath);
@@ -826,7 +825,7 @@ oslFileError osl_getFileURLFromSystemPath(rtl_uString* strPath, rtl_uString** ps
 
                 case PATHTYPE_ABSOLUTE_LOCAL:
                     nIgnore = SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1;
-                    OSL_ENSURE(nIgnore == 4, "Unexpected long path prefix!");
+                    SAL_WARN_IF(nIgnore == 4, "sal.osl", "Unexpected long path prefix!");
 
                     /* generate the normal path */
                     nLength = rtl_uString_getLength(strPath);
@@ -837,7 +836,7 @@ oslFileError osl_getFileURLFromSystemPath(rtl_uString* strPath, rtl_uString** ps
                     break;
 
                 default:
-                    OSL_FAIL("Unexpected long path format!");
+                    SAL_WARN("sal.osl", "Unexpected long path format!");
                     rtl_uString_newReplace(&strTempPath, strPath, '\\', '/');
                     break;
             }
@@ -881,7 +880,7 @@ oslFileError osl_getFileURLFromSystemPath(rtl_uString* strPath, rtl_uString** ps
 
         /* Provide URL via unicode string */
         rtl_string2UString(pstrURL, rtl_string_getStr(strEncodedURL), rtl_string_getLength(strEncodedURL), RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS);
-        OSL_ASSERT(*pstrURL != nullptr);
+        assert(*pstrURL != nullptr);
         rtl_string_release(strEncodedURL);
     }
 
@@ -987,14 +986,14 @@ oslFileError SAL_CALL osl_getAbsoluteFileURL(rtl_uString* ustrBaseURL, rtl_uStri
     if (ustrBaseURL && ustrBaseURL->length)
     {
         eError = osl_getSystemPathFromFileURL_(ustrBaseURL, &ustrBaseSysPath, false);
-        OSL_ENSURE(eError == osl_File_E_None, "osl_getAbsoluteFileURL called with relative or invalid base URL");
+        SAL_WARN_IF(eError == osl_File_E_None, "sal.osl", "osl_getAbsoluteFileURL called with relative or invalid base URL");
 
         eError = osl_getSystemPathFromFileURL_(ustrRelativeURL, &ustrRelSysPath, true);
     }
     else
     {
         eError = osl_getSystemPathFromFileURL_(ustrRelativeURL, &ustrRelSysPath, false);
-        OSL_ENSURE(eError == osl_File_E_None, "osl_getAbsoluteFileURL called with empty base URL and/or invalid relative URL");
+        SAL_WARN_IF(eError == osl_File_E_None, "sal.osl", "osl_getAbsoluteFileURL called with empty base URL and/or invalid relative URL");
     }
 
     if (!eError)
@@ -1004,9 +1003,8 @@ oslFileError SAL_CALL osl_getAbsoluteFileURL(rtl_uString* ustrBaseURL, rtl_uStri
         LPWSTR lpFilePart = nullptr;
         DWORD dwResult;
 
-/** @TODO
-  Bad, bad hack, this only works if the base path really exists which is not necessary according
-  to RFC2396 The whole FileURL implementation should be merged with the rtl/uri class.
+/** @TODO Bad, bad hack, this only works if the base path really exists which is not necessary according
+          to RFC2396 The whole FileURL implementation should be merged with the rtl/uri class.
 */
         if (ustrBaseSysPath)
         {
