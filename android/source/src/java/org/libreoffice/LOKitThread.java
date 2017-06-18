@@ -211,7 +211,7 @@ class LOKitThread extends Thread {
         LOKitShell.showProgressSpinner(mContext);
         mTileProvider.changePart(partIndex);
         mViewportMetrics = mLayerClient.getViewportMetrics();
-        mLayerClient.setViewportMetrics(mViewportMetrics.scaleTo(0.9f, new PointF()));
+        // mLayerClient.setViewportMetrics(mViewportMetrics.scaleTo(0.9f, new PointF()));
         refresh();
         LOKitShell.hideProgressSpinner(mContext);
     }

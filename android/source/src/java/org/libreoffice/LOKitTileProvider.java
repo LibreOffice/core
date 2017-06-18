@@ -28,7 +28,6 @@ import java.nio.ByteBuffer;
  */
 class LOKitTileProvider implements TileProvider {
     private static final String LOGTAG = LOKitTileProvider.class.getSimpleName();
-    private static final float DPI_1X_ZOOM = 96f; // for use in Calc at fixed zoom 1x
     private static int TILE_SIZE = 256;
     private final float mTileWidth;
     private final float mTileHeight;
@@ -79,11 +78,10 @@ class LOKitTileProvider implements TileProvider {
         Log.i(LOGTAG, "====> mDocument = " + mDocument);
 
         if(isSpreadsheet()) {
-            mDPI = DPI_1X_ZOOM; // Calc has a fixed zoom at 1x
-        } else {
-            mDPI = LOKitShell.getDpi(mContext);
+            mContext.setIsSpreadsheet(true); // Calc is treated differently e.g. DPI = 96f
         }
 
+        mDPI = LOKitShell.getDpi(mContext);
         mTileWidth = pixelToTwip(TILE_SIZE, mDPI);
         mTileHeight = pixelToTwip(TILE_SIZE, mDPI);
 
