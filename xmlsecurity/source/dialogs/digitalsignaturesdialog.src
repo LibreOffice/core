@@ -35,4 +35,9 @@ String STR_XMLSECDLG_QUERY_REMOVEDOCSIGNBEFORESIGN
         "Do you really want to continue?";
 };
 
+String STR_XMLSECDLG_QUERY_REALLYREMOVE
+{
+    Text [ en-US ] = "Document signature cannot be restored, once removed.\n"
+        "Do you really want to remove selected signature?";
+};
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

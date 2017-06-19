@@ -316,7 +316,14 @@ bool DigitalSignaturesDialog::canAdd()
 
 bool DigitalSignaturesDialog::canRemove()
 {
-    return canAddRemove();
+    if ( maSignatureManager.meSignatureMode == DocumentSignatureMode::Content )
+    {
+        short nDlgRet = ScopedVclPtrInstance<MessageDialog>(
+              nullptr, XMLSEC_RES(STR_XMLSECDLG_QUERY_REALLYREMOVE), VclMessageType::Question, VclButtonsType::YesNo)->Execute();
+        return ( nDlgRet == RET_YES );
+    }
+    else
+        return canAddRemove();
 }
 
 short DigitalSignaturesDialog::Execute()
