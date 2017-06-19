@@ -293,7 +293,7 @@ GetNestedTextContent(SwTextNode & rTextNode, sal_Int32 const nIndex,
     {
         ::sw::Meta *const pMeta(
             static_cast<SwFormatMeta &>(pTextAttr->GetAttr()).GetMeta());
-        OSL_ASSERT(pMeta);
+        assert(pMeta);
         xRet.set(pMeta->MakeUnoObject(), uno::UNO_QUERY);
     }
     return xRet;
