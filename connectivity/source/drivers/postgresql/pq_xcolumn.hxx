@@ -52,7 +52,7 @@ namespace pq_sdbc_driver
 class Column : public ReflectionBase
 {
 public:
-    Column( const ::rtl::Reference< RefCountedMutex > & refMutex,
+    Column( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
             const css::uno::Reference< css::sdbc::XConnection > & connection,
             ConnectionSettings *pSettings);
 
@@ -66,7 +66,7 @@ class ColumnDescriptor : public ReflectionBase
 {
 public:
     ColumnDescriptor(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection > & connection,
         ConnectionSettings *pSettings );
 

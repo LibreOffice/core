@@ -61,7 +61,7 @@ Any SequenceResultSet::getValue( sal_Int32 columnIndex )
 }
 
 SequenceResultSet::SequenceResultSet(
-    const ::rtl::Reference< RefCountedMutex > & mutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & mutex,
     const css::uno::Reference< css::uno::XInterface > &owner,
     const std::vector< OUString > &colNames,
     const std::vector< std::vector< Any > > &data,

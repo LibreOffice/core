@@ -73,7 +73,7 @@ using com::sun::star::sdbcx::XKeysSupplier;
 namespace pq_sdbc_driver
 {
 Tables::Tables(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings )
     : Container( refMutex, origin, pSettings,  getStatics().TABLE )
@@ -86,7 +86,7 @@ void Tables::refresh()
 {
     try
     {
-        osl::MutexGuard guard( m_refMutex->mutex );
+        osl::MutexGuard guard( m_xMutex->GetMutex() );
         Statics & st = getStatics();
 
         Reference< XDatabaseMetaData > meta = m_origin->getMetaData();
@@ -105,7 +105,7 @@ void Tables::refresh()
             // if creating all these tables turns out to have too bad performance, we might
             // instead offer a factory interface
             Table * pTable =
-                new Table( m_refMutex, m_origin, m_pSettings );
+                new Table( m_xMutex, m_origin, m_pSettings );
             Reference< css::beans::XPropertySet > prop = pTable;
 
             OUString name = xRow->getString( TABLE_INDEX_NAME+1);
@@ -237,7 +237,7 @@ static void appendKeyList(
 void Tables::appendByDescriptor(
     const css::uno::Reference< css::beans::XPropertySet >& descriptor )
 {
-    osl::MutexGuard guard( m_refMutex->mutex );
+    osl::MutexGuard guard( m_xMutex->GetMutex() );
     Reference< XStatement > stmt =
         m_origin->createStatement();
 
@@ -311,7 +311,7 @@ void Tables::appendByDescriptor(
 
 void Tables::dropByIndex( sal_Int32 index )
 {
-    osl::MutexGuard guard( m_refMutex->mutex );
+    osl::MutexGuard guard( m_xMutex->GetMutex() );
     if( index < 0 ||  index >= (sal_Int32)m_values.size() )
     {
         throw css::lang::IndexOutOfBoundsException(
@@ -350,11 +350,11 @@ void Tables::dropByIndex( sal_Int32 index )
 
 css::uno::Reference< css::beans::XPropertySet > Tables::createDataDescriptor()
 {
-    return new TableDescriptor( m_refMutex, m_origin, m_pSettings );
+    return new TableDescriptor( m_xMutex, m_origin, m_pSettings );
 }
 
 Reference< css::container::XNameAccess > Tables::create(
-    const ::rtl::Reference< RefCountedMutex > & refMutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const css::uno::Reference< css::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings,
     Tables **ppTables)

@@ -59,7 +59,7 @@ class Index : public ReflectionBase,
     OUString m_tableName;
 
 public:
-    Index( const ::rtl::Reference< RefCountedMutex > & refMutex,
+    Index( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
            const css::uno::Reference< css::sdbc::XConnection > & connection,
            ConnectionSettings *pSettings,
            const OUString &schemaName,
@@ -93,7 +93,7 @@ class IndexDescriptor : public ReflectionBase,
 
 public:
     IndexDescriptor(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection > & connection,
         ConnectionSettings *pSettings);
 

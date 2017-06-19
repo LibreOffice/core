@@ -52,7 +52,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/byteseq.hxx>
 
-#include <salhelper/simplereferenceobject.hxx>
+#include <comphelper/refcountedmutex.hxx>
 
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -68,12 +68,6 @@ namespace pq_sdbc_driver
 #else
 #define POSTGRE_TRACE(x) ((void)0)
 #endif
-
-class RefCountedMutex : public salhelper::SimpleReferenceObject
-{
-public:
-    osl::Mutex mutex;
-};
 
 struct ConnectionSettings;
 
@@ -160,7 +154,7 @@ class Connection : public ConnectionBase
     css::uno::Reference< css::uno::XComponentContext > m_ctx;
     css::uno::Reference< css::container::XNameAccess > m_typeMap;
     ConnectionSettings m_settings;
-    ::rtl::Reference< RefCountedMutex > m_refMutex;
+    ::rtl::Reference< comphelper::RefCountedMutex > m_xMutex;
     css::uno::Reference< css::sdbc::XDatabaseMetaData > m_meta;
     WeakHashMap m_myStatements;
 
@@ -171,7 +165,7 @@ private:
 
 public:
     Connection(
-        const rtl::Reference< RefCountedMutex > &refMutex,
+        const rtl::Reference< comphelper::RefCountedMutex > &refMutex,
         const css::uno::Reference< css::uno::XComponentContext > & ctx );
 
     virtual ~Connection( ) override;

@@ -56,7 +56,7 @@ class FakedUpdateableResultSet :
 
 public:
     FakedUpdateableResultSet(
-        const ::rtl::Reference< RefCountedMutex > & mutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & mutex,
         const css::uno::Reference< css::uno::XInterface > &owner,
         ConnectionSettings **pSettings,
         PGresult *result,

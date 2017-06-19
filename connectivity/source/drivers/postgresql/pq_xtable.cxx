@@ -73,7 +73,7 @@ using com::sun::star::sdbc::SQLException;
 
 namespace pq_sdbc_driver
 {
-Table::Table( const ::rtl::Reference< RefCountedMutex > & refMutex,
+Table::Table( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
               const Reference< css::sdbc::XConnection > & connection,
               ConnectionSettings *pSettings)
     : ReflectionBase(
@@ -89,7 +89,7 @@ Table::Table( const ::rtl::Reference< RefCountedMutex > & refMutex,
 Reference< XPropertySet > Table::createDataDescriptor(  )
 {
     TableDescriptor * pTable = new TableDescriptor(
-        m_refMutex, m_conn, m_pSettings );
+        m_xMutex, m_conn, m_pSettings );
     pTable->copyValuesFrom( this );
 
     return Reference< XPropertySet > ( pTable );
@@ -100,7 +100,7 @@ Reference< XNameAccess > Table::getColumns(  )
     if( ! m_columns.is() )
     {
         m_columns = Columns::create(
-            m_refMutex,
+            m_xMutex,
             m_conn,
             m_pSettings,
             extractStringProperty( this, getStatics().SCHEMA_NAME ),
@@ -115,7 +115,7 @@ Reference< XNameAccess > Table::getIndexes()
     if( ! m_indexes.is() )
     {
         m_indexes = ::pq_sdbc_driver::Indexes::create(
-            m_refMutex,
+            m_xMutex,
             m_conn,
             m_pSettings,
             extractStringProperty( this, getStatics().SCHEMA_NAME ),
@@ -129,7 +129,7 @@ Reference< XIndexAccess > Table::getKeys(  )
     if( ! m_keys.is() )
     {
         m_keys = ::pq_sdbc_driver::Keys::create(
-            m_refMutex,
+            m_xMutex,
             m_conn,
             m_pSettings,
             extractStringProperty( this, getStatics().SCHEMA_NAME ),
@@ -140,7 +140,7 @@ Reference< XIndexAccess > Table::getKeys(  )
 
 void Table::rename( const OUString& newName )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     Statics & st = getStatics();
 
     OUString oldName = extractStringProperty(this,st.NAME );
@@ -319,7 +319,7 @@ void Table::setName( const OUString& aName )
 
 
 TableDescriptor::TableDescriptor(
-    const ::rtl::Reference< RefCountedMutex > & refMutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const Reference< css::sdbc::XConnection > & connection,
     ConnectionSettings *pSettings)
     : ReflectionBase(
@@ -336,7 +336,7 @@ Reference< XNameAccess > TableDescriptor::getColumns(  )
 {
     if( ! m_columns.is() )
     {
-        m_columns = new ColumnDescriptors(m_refMutex, m_conn, m_pSettings );
+        m_columns = new ColumnDescriptors(m_xMutex, m_conn, m_pSettings );
     }
     return m_columns;
 }
@@ -346,7 +346,7 @@ Reference< XNameAccess > TableDescriptor::getIndexes()
     if( ! m_indexes.is() )
     {
         m_indexes = ::pq_sdbc_driver::IndexDescriptors::create(
-            m_refMutex,
+            m_xMutex,
             m_conn,
             m_pSettings);
     }
@@ -358,7 +358,7 @@ Reference< XIndexAccess > TableDescriptor::getKeys(  )
     if( ! m_keys.is() )
     {
         m_keys = ::pq_sdbc_driver::KeyDescriptors::create(
-            m_refMutex,
+            m_xMutex,
             m_conn,
             m_pSettings );
     }
@@ -408,7 +408,7 @@ Any TableDescriptor::queryInterface( const Type & reqType )
 Reference< XPropertySet > TableDescriptor::createDataDescriptor(  )
 {
     TableDescriptor * pTable = new TableDescriptor(
-        m_refMutex, m_conn, m_pSettings );
+        m_xMutex, m_conn, m_pSettings );
 
     // TODO: deep copies
     pTable->m_values = m_values;

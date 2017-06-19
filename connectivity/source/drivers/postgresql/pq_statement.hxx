@@ -78,7 +78,7 @@ private:
     css::uno::Reference< css::sdbc::XConnection > m_connection;
     ConnectionSettings *m_pSettings;
     css::uno::Reference< css::sdbc::XCloseable > m_lastResultset;
-    ::rtl::Reference< RefCountedMutex > m_refMutex;
+    ::rtl::Reference< comphelper::RefCountedMutex > m_xMutex;
     bool  m_multipleResultAvailable;
     sal_Int32 m_multipleResultUpdateCount;
     sal_Int32 m_lastOidInserted;
@@ -90,7 +90,7 @@ public:
      * @param ppConnection The piece of memory, pConnection points to, is accessible
      *                     as long as a reference to paramenter con is held.
      */
-    Statement( const rtl::Reference< RefCountedMutex > & refMutex,
+    Statement( const rtl::Reference< comphelper::RefCountedMutex > & refMutex,
                const css::uno::Reference< css::sdbc::XConnection> & con,
                struct ConnectionSettings *pSettings );
 
@@ -174,7 +174,7 @@ struct CommandData
     OUString *pLastTableInserted;
     css::uno::Reference< css::sdbc::XCloseable > *pLastResultset;
     OString *pLastQuery;
-    ::rtl::Reference< RefCountedMutex > refMutex;
+    ::rtl::Reference< comphelper::RefCountedMutex > refMutex;
     css::uno::Reference< css::uno::XInterface > owner;
     css::uno::Reference< css::sdbcx::XTablesSupplier > tableSupplier;
     sal_Int32 concurrency;

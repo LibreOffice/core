@@ -62,7 +62,7 @@ using com::sun::star::beans::XPropertySet;
 
 namespace pq_sdbc_driver
 {
-Index::Index( const ::rtl::Reference< RefCountedMutex > & refMutex,
+Index::Index( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
           const Reference< css::sdbc::XConnection > & connection,
           ConnectionSettings *pSettings,
           const OUString & schemaName,
@@ -81,7 +81,7 @@ Index::Index( const ::rtl::Reference< RefCountedMutex > & refMutex,
 Reference< XPropertySet > Index::createDataDescriptor(  )
 {
     IndexDescriptor * pIndex = new IndexDescriptor(
-        m_refMutex, m_conn, m_pSettings );
+        m_xMutex, m_conn, m_pSettings );
     pIndex->copyValuesFrom( this );
 
     return Reference< XPropertySet > ( pIndex );
@@ -95,7 +95,7 @@ Reference< XNameAccess > Index::getColumns(  )
         getPropertyValue( getStatics().PRIVATE_COLUMN_INDEXES ) >>= columnNames;
         OUString indexName = extractStringProperty( this, getStatics().NAME );
         m_indexColumns = IndexColumns::create(
-             m_refMutex, m_conn, m_pSettings, m_schemaName,
+             m_xMutex, m_conn, m_pSettings, m_schemaName,
              m_tableName, indexName, columnNames );
     }
     return m_indexColumns;
@@ -137,7 +137,7 @@ Any Index::queryInterface( const Type & reqType )
 
 
 IndexDescriptor::IndexDescriptor(
-    const ::rtl::Reference< RefCountedMutex > & refMutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const Reference< css::sdbc::XConnection > & connection,
     ConnectionSettings *pSettings )
     : ReflectionBase(
@@ -152,7 +152,7 @@ IndexDescriptor::IndexDescriptor(
 Reference< XPropertySet > IndexDescriptor::createDataDescriptor(  )
 {
     IndexDescriptor * pIndex = new IndexDescriptor(
-        m_refMutex, m_conn, m_pSettings );
+        m_xMutex, m_conn, m_pSettings );
     pIndex->copyValuesFrom( this );
     return Reference< XPropertySet > ( pIndex );
 }
@@ -162,12 +162,12 @@ Reference< XNameAccess > IndexDescriptor::getColumns(  )
     if( ! m_indexColumns.is() )
     {
         m_indexColumns = IndexColumnDescriptors::create(
-            m_refMutex, m_conn, m_pSettings );
+            m_xMutex, m_conn, m_pSettings );
 //         Sequence< OUString > columnNames;
 //         getPropertyValue( getStatics().PRIVATE_COLUMN_INDEXES ) >>= columnNames;
 //         OUString indexName = extractStringProperty( this, getStatics().NAME );
 //         m_indexColumns = IndexColumns::create(
-//              m_refMutex, m_conn, m_pSettings, m_schemaName,
+//              m_xMutex, m_conn, m_pSettings, m_schemaName,
 //              m_tableName, indexName, columnNames );
     }
     return m_indexColumns;

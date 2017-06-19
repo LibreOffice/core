@@ -76,7 +76,7 @@ void ResultSet::checkClosed()
 
 }
 
-ResultSet::ResultSet( const ::rtl::Reference< RefCountedMutex > & refMutex,
+ResultSet::ResultSet( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
                       const Reference< XInterface > & owner,
                       ConnectionSettings **ppSettings,
                       PGresult * result,
@@ -130,7 +130,7 @@ void ResultSet::close(  )
 {
     Reference< XInterface > owner;
     {
-        MutexGuard guard( m_refMutex->mutex );
+        MutexGuard guard( m_xMutex->GetMutex() );
         if( m_result )
         {
             PQclear(m_result );
@@ -144,15 +144,15 @@ void ResultSet::close(  )
 
 Reference< XResultSetMetaData > ResultSet::getMetaData(  )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     return new ResultSetMetaData(
-        m_refMutex, this, this, m_ppSettings, m_result, m_schema, m_table );
+        m_xMutex, this, this, m_ppSettings, m_result, m_schema, m_table );
 }
 
 sal_Int32 ResultSet::findColumn( const OUString& columnName )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     sal_Int32 res = PQfnumber( m_result,
                                OUStringToOString( columnName, ConnectionSettings::encoding ).getStr());

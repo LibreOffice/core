@@ -59,7 +59,7 @@ class Key : public ReflectionBase,
     OUString m_tableName;
 
 public:
-    Key( const ::rtl::Reference< RefCountedMutex > & refMutex,
+    Key( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
          const css::uno::Reference< css::sdbc::XConnection > & connection,
          ConnectionSettings *pSettings,
          const OUString &schemaName,
@@ -91,7 +91,7 @@ class KeyDescriptor : public ReflectionBase, public css::sdbcx::XColumnsSupplier
     css::uno::Reference< css::container::XNameAccess > m_keyColumns;
 
 public:
-    KeyDescriptor( const ::rtl::Reference< RefCountedMutex > & refMutex,
+    KeyDescriptor( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
          const css::uno::Reference< css::sdbc::XConnection > & connection,
          ConnectionSettings *pSettings );
 

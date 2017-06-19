@@ -159,11 +159,11 @@ static LogLevel readLogLevelFromConfiguration()
 }
 
 Connection::Connection(
-    const rtl::Reference< RefCountedMutex > &refMutex,
+    const rtl::Reference< comphelper::RefCountedMutex > &refMutex,
     const css::uno::Reference< css::uno::XComponentContext > & ctx )
-    : ConnectionBase( refMutex->mutex ),
+    : ConnectionBase( refMutex->GetMutex() ),
       m_ctx( ctx ) ,
-      m_refMutex( refMutex )
+      m_xMutex( refMutex )
 {
     m_settings.m_nLogLevel = readLogLevelFromConfiguration();
 
@@ -205,7 +205,7 @@ void Connection::close()
     CloseableList lst;
     DisposeableList lstDispose;
     {
-        MutexGuard guard( m_refMutex->mutex );
+        MutexGuard guard( m_xMutex->GetMutex() );
         // silently ignore, if the connection has been closed already
         if( m_settings.pConnection )
         {
@@ -248,7 +248,7 @@ void Connection::close()
 void Connection::removeFromWeakMap( const ::rtl::ByteSequence & id )
 {
     // shrink the list !
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     WeakHashMap::iterator ii = m_myStatements.find( id );
     if( ii != m_myStatements.end() )
         m_myStatements.erase( ii );
@@ -256,10 +256,10 @@ void Connection::removeFromWeakMap( const ::rtl::ByteSequence & id )
 
 Reference< XStatement > Connection::createStatement()
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
 
-    Statement *stmt = new Statement( m_refMutex, this , &m_settings );
+    Statement *stmt = new Statement( m_xMutex, this , &m_settings );
     Reference< XStatement > ret( stmt );
     ::rtl::ByteSequence id( 16 );
     rtl_createUuid( reinterpret_cast<sal_uInt8*>(id.getArray()), nullptr, false );
@@ -270,11 +270,11 @@ Reference< XStatement > Connection::createStatement()
 
 Reference< XPreparedStatement > Connection::prepareStatement( const OUString& sql )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
 
     OString byteSql = OUStringToOString( sql, ConnectionSettings::encoding );
-    PreparedStatement *stmt = new PreparedStatement( m_refMutex, this, &m_settings, byteSql );
+    PreparedStatement *stmt = new PreparedStatement( m_xMutex, this, &m_settings, byteSql );
     Reference< XPreparedStatement > ret = stmt;
 
     ::rtl::ByteSequence id( 16 );
@@ -325,10 +325,10 @@ sal_Bool Connection::isClosed()
 
 Reference< XDatabaseMetaData > Connection::getMetaData()
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     if( ! m_meta.is() )
-        m_meta = new DatabaseMetaData( m_refMutex, this, &m_settings );
+        m_meta = new DatabaseMetaData( m_xMutex, this, &m_settings );
     return m_meta;
 }
 
@@ -351,7 +351,7 @@ void Connection::setCatalog( const OUString& )
 
 OUString Connection::getCatalog()
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     if( m_settings.pConnection == nullptr )
     {
         throw SQLException( "pq_connection: connection is closed", *this,
@@ -376,7 +376,7 @@ Reference< XNameAccess > Connection::getTypeMap()
 {
     Reference< XNameAccess > t;
     {
-        MutexGuard guard( m_refMutex->mutex );
+        MutexGuard guard( m_xMutex->GetMutex() );
         t = m_typeMap;
     }
     return t;
@@ -384,7 +384,7 @@ Reference< XNameAccess > Connection::getTypeMap()
 
 void Connection::setTypeMap( const Reference< XNameAccess >& typeMap )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     m_typeMap = typeMap;
 }
 Any Connection::getWarnings()
@@ -603,9 +603,9 @@ Reference< XNameAccess > Connection::getTables()
     {
         log(&m_settings, LogLevel::Info, "Connection::getTables() got called");
     }
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     if( !m_settings.tables.is() )
-        m_settings.tables = Tables::create( m_refMutex, this, &m_settings , &m_settings.pTablesImpl);
+        m_settings.tables = Tables::create( m_xMutex, this, &m_settings , &m_settings.pTablesImpl);
     else
         // TODO: how to overcome the performance problem ?
         Reference< css::util::XRefreshable > ( m_settings.tables, UNO_QUERY )->refresh();
@@ -618,9 +618,9 @@ Reference< XNameAccess > Connection::getViews()
     {
         log(&m_settings, LogLevel::Info, "Connection::getViews() got called");
     }
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     if( !m_settings.views.is() )
-        m_settings.views = Views::create( m_refMutex, this, &m_settings, &(m_settings.pViewsImpl) );
+        m_settings.views = Views::create( m_xMutex, this, &m_settings, &(m_settings.pViewsImpl) );
     else
         // TODO: how to overcome the performance problem ?
         Reference< css::util::XRefreshable > ( m_settings.views, UNO_QUERY )->refresh();
@@ -635,9 +635,9 @@ Reference< XNameAccess > Connection::getUsers()
         log(&m_settings, LogLevel::Info, "Connection::getUsers() got called");
     }
 
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     if( !m_settings.users.is() )
-        m_settings.users = Users::create( m_refMutex, this, &m_settings );
+        m_settings.users = Users::create( m_xMutex, this, &m_settings );
     return m_settings.users;
 }
 
@@ -645,7 +645,7 @@ Reference< XNameAccess > Connection::getUsers()
 Reference< XInterface >  ConnectionCreateInstance(
     const Reference< XComponentContext > & ctx )
 {
-    ::rtl::Reference< RefCountedMutex > ref = new RefCountedMutex;
+    ::rtl::Reference< comphelper::RefCountedMutex > ref = new comphelper::RefCountedMutex;
     return * new Connection( ref, ctx );
 }
 
