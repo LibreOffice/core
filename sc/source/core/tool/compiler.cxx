@@ -4808,8 +4808,7 @@ bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
 
 void ScCompiler::AdjustSheetLocalNameRelReferences( SCTAB nDelta )
 {
-    maArrIterator.Reset();
-    for (formula::FormulaToken* t = maArrIterator.GetNextReference(); t; t = maArrIterator.GetNextReference())
+    for ( auto t: pArr->References() )
     {
         ScSingleRefData& rRef1 = *t->GetSingleRef();
         if (rRef1.IsTabRel())
@@ -4827,9 +4826,7 @@ void ScCompiler::AdjustSheetLocalNameRelReferences( SCTAB nDelta )
 
 void ScCompiler::SetRelNameReference()
 {
-    maArrIterator.Reset();
-    for( formula::FormulaToken* t = maArrIterator.GetNextReference(); t;
-                  t = maArrIterator.GetNextReference() )
+    for ( auto t: pArr->References() )
     {
         ScSingleRefData& rRef1 = *t->GetSingleRef();
         if ( rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel() )
@@ -4847,9 +4844,7 @@ void ScCompiler::SetRelNameReference()
 // don't call for other token arrays!
 void ScCompiler::MoveRelWrap( SCCOL nMaxCol, SCROW nMaxRow )
 {
-    maArrIterator.Reset();
-    for( formula::FormulaToken* t = maArrIterator.GetNextReference(); t;
-                  t = maArrIterator.GetNextReference() )
+    for ( auto t: pArr->References() )
     {
         if ( t->GetType() == svSingleRef || t->GetType() == svExternalSingleRef )
             ScRefUpdate::MoveRelWrap( pDoc, aPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( *t->GetSingleRef() ).Ref() );
@@ -4863,9 +4858,7 @@ void ScCompiler::MoveRelWrap( SCCOL nMaxCol, SCROW nMaxRow )
 void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddress& rPos,
                               SCCOL nMaxCol, SCROW nMaxRow )
 {
-    formula::FormulaTokenArrayPlainIterator aIter(rArr);
-    for( formula::FormulaToken* t = aIter.GetNextReference(); t;
-                  t = aIter.GetNextReference() )
+    for ( auto t: rArr.References() )
     {
         if ( t->GetType() == svSingleRef || t->GetType() == svExternalSingleRef )
             ScRefUpdate::MoveRelWrap( pDoc, rPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( *t->GetSingleRef() ).Ref() );

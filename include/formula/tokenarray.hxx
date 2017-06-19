@@ -136,6 +136,97 @@ public:
     }
 };
 
+class FORMULA_DLLPUBLIC FormulaTokenArrayReferencesIterator
+{
+private:
+    FormulaToken** maIter;
+    FormulaToken** maEnd;
+
+    void nextReference()
+    {
+        while (maIter != maEnd)
+        {
+            switch ((*maIter)->GetType())
+            {
+            case svSingleRef:
+            case svDoubleRef:
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
+                return;
+            default:
+                maIter++;
+            }
+        }
+    }
+
+    enum class Dummy { Flag };
+
+    FormulaTokenArrayReferencesIterator(const FormulaTokenArrayStandardRange& rRange, Dummy) :
+        maIter(rRange.end()),
+        maEnd(rRange.end())
+    {
+    }
+
+public:
+    FormulaTokenArrayReferencesIterator(const FormulaTokenArrayStandardRange& rRange) :
+        maIter(rRange.begin()),
+        maEnd(rRange.end())
+    {
+        nextReference();
+    }
+
+    FormulaTokenArrayReferencesIterator operator++(int)
+    {
+        FormulaTokenArrayReferencesIterator result(*this);
+        operator++();
+        return result;
+    }
+
+    FormulaTokenArrayReferencesIterator operator++()
+    {
+        assert(maIter != maEnd);
+        maIter++;
+        nextReference();
+        return *this;
+    }
+
+    FormulaToken* operator*() const
+    {
+        return *maIter;
+    }
+
+    bool operator==(const FormulaTokenArrayReferencesIterator& rhs) const
+    {
+        return maIter == rhs.maIter;
+    }
+
+    bool operator!=(const FormulaTokenArrayReferencesIterator& rhs) const
+    {
+        return !operator==(rhs);
+    }
+
+    static FormulaTokenArrayReferencesIterator endOf(const FormulaTokenArrayStandardRange& rRange)
+    {
+        return FormulaTokenArrayReferencesIterator(rRange, Dummy::Flag);
+    }
+};
+
+class FORMULA_DLLPUBLIC FormulaTokenArrayReferencesRange
+{
+private:
+    const FormulaTokenArray& mrFTA;
+
+public:
+    FormulaTokenArrayReferencesRange(const FormulaTokenArray& rFTA) :
+        mrFTA(rFTA)
+    {
+    }
+
+    FormulaTokenArrayReferencesIterator begin();
+
+    FormulaTokenArrayReferencesIterator end();
+};
+
 class FORMULA_DLLPUBLIC FormulaTokenArray
 {
 protected:
@@ -284,6 +375,11 @@ public:
         return FormulaTokenArrayStandardRange(pRPN, nRPN);
     }
 
+    FormulaTokenArrayReferencesRange References() const
+    {
+        return FormulaTokenArrayReferencesRange(*this);
+    }
+
     sal_uInt16     GetLen() const     { return nLen; }
     sal_uInt16     GetCodeLen() const { return nRPN; }
     FormulaError   GetCodeError() const      { return nError; }
@@ -399,6 +495,16 @@ inline OpCode FormulaTokenArray::GetOuterFuncOpCode()
     if ( pRPN && nRPN )
         return pRPN[nRPN-1]->GetOpCode();
     return ocNone;
+}
+
+inline FormulaTokenArrayReferencesIterator FormulaTokenArrayReferencesRange::begin()
+{
+    return FormulaTokenArrayReferencesIterator(mrFTA.Tokens());
+}
+
+inline FormulaTokenArrayReferencesIterator FormulaTokenArrayReferencesRange::end()
+{
+    return FormulaTokenArrayReferencesIterator::endOf(mrFTA.Tokens());
 }
 
 class FORMULA_DLLPUBLIC FormulaTokenIterator
