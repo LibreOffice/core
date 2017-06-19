@@ -936,6 +936,10 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
         flags = osl_file_adjustLockFlags (cpFilePath, flags);
     }
 
+    // O_EXCL can be set only when O_CREAT is set
+    if (flags & O_EXCL && !(flags & O_CREAT))
+        flags &= ~O_EXCL;
+
     /* open the file */
     int fd = open_c( cpFilePath, flags, mode );
 
