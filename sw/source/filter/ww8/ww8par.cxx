@@ -6170,12 +6170,22 @@ extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportDOC()
     return new WW8Reader;
 }
 
+class FontCacheGuard
+{
+public:
+    ~FontCacheGuard()
+    {
+        FlushFontCache();
+    }
+};
+
 bool SAL_CALL TestImportDOC(SvStream &rStream, const OUString &rFltName)
 {
-    Reader *pReader = ImportDOC();
+    FontCacheGuard aFontCacheGuard;
+    std::unique_ptr<Reader> xReader(ImportDOC());
 
     tools::SvRef<SotStorage> xStorage;
-    pReader->pStrm = &rStream;
+    xReader->pStrm = &rStream;
     if (rFltName != "WW6")
     {
         try
@@ -6188,9 +6198,9 @@ bool SAL_CALL TestImportDOC(SvStream &rStream, const OUString &rFltName)
         {
             return false;
         }
-        pReader->pStg = xStorage.get();
+        xReader->pStg = xStorage.get();
     }
-    pReader->SetFltName(rFltName);
+    xReader->SetFltName(rFltName);
 
     SwGlobals::ensure();
 
@@ -6207,11 +6217,8 @@ bool SAL_CALL TestImportDOC(SvStream &rStream, const OUString &rFltName)
     SwPaM aPaM( aIdx );
     aPaM.GetPoint()->nContent.Assign(aIdx.GetNode().GetContentNode(), 0);
     pD->SetInReading(true);
-    bool bRet = pReader->Read(*pD, OUString(), aPaM, OUString()) == 0;
+    bool bRet = xReader->Read(*pD, OUString(), aPaM, OUString()) == 0;
     pD->SetInReading(false);
-    delete pReader;
-
-    FlushFontCache();
 
     return bRet;
 }
