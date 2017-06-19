@@ -676,6 +676,11 @@ void SvTreeListBox::RemoveSelection()
         pModel->Remove(*it);
 }
 
+void SvTreeListBox::RemoveEntry(SvTreeListEntry* pEntry)
+{
+    pModel->Remove(pEntry);
+}
+
 void SvTreeListBox::RecalcViewData()
 {
     SvTreeListEntry* pEntry = First();
