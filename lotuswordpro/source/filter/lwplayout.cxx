@@ -367,19 +367,25 @@ bool LwpVirtualLayout::IsStyleLayout()
 LwpVirtualLayout* LwpVirtualLayout::FindChildByType(LWP_LAYOUT_TYPE eType)
 {
     LwpObjectID& rID = GetChildHead();
+    LwpVirtualLayout* pPrevLayout = nullptr;
 
     while(!rID.IsNull())
     {
         LwpVirtualLayout * pLayout = dynamic_cast<LwpVirtualLayout *>(rID.obj().get());
         if (!pLayout)
+            break;
+
+        if (pPrevLayout && pLayout == pPrevLayout)
         {
+            SAL_WARN("lwp", "loop in layout");
             break;
         }
 
+        pPrevLayout = pLayout;
+
         if (pLayout->GetLayoutType() == eType)
-        {
             return pLayout;
-        }
+
         rID = pLayout->GetNext();
     }
 
