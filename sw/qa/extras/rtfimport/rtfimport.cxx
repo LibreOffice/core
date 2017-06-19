@@ -2430,6 +2430,14 @@ DECLARE_RTFIMPORT_TEST(testTdf86814, "tdf86814.rtf")
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(1), 1), "CharWeight"));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf108416, "tdf108416.rtf")
+{
+    uno::Reference<container::XNameAccess> xCharacterStyles(getStyles("CharacterStyles"));
+    uno::Reference<beans::XPropertySet> xListLabel(xCharacterStyles->getByName("ListLabel 1"), uno::UNO_QUERY);
+    // This was awt::FontWeight::BOLD, list numbering got an unexpected bold formatting.
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xListLabel, "CharWeight"));
+}
+
 DECLARE_RTFIMPORT_TEST(testTdf90315, "tdf90315.rtf")
 {
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
