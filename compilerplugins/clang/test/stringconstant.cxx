@@ -14,7 +14,7 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "rtl/strbuf.hxx"
 
-extern void foo(OUString const &); // expected-error {{extern prototype in main file without definition}}
+extern void foo(OUString const &);
 
 struct Foo {
     Foo(OUString const &, int) {}

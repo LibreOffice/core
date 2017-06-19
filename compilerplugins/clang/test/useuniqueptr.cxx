@@ -10,7 +10,7 @@
 
 class Foo {
     char* m_pbar; // expected-note {{member is here [loplugin:useuniqueptr]}}
-    ~Foo() // expected-error {{Unreferenced externally visible function definition [loplugin:unreffun]}}
+    ~Foo()
     {
         delete m_pbar; // expected-error {{a destructor with only a single unconditional call to delete on a member, is a sure sign it should be using std::unique_ptr for that field [loplugin:useuniqueptr]}}
         m_pbar = nullptr;

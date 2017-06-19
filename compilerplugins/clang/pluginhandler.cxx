@@ -62,16 +62,15 @@ PluginHandler::PluginHandler( CompilerInstance& compiler, const vector< string >
     , rewriter( compiler.getSourceManager(), compiler.getLangOpts())
     , scope( "mainfile" )
     , warningsAsErrors( false )
+    , unitTestMode( false )
     {
     set< string > rewriters;
-    for( vector< string >::const_iterator it = args.begin();
-         it != args.end();
-         ++it )
+    for( string const & arg : args )
         {
-        if( it->size() >= 2 && (*it)[ 0 ] == '-' && (*it)[ 1 ] == '-' )
-            handleOption( it->substr( 2 ));
+        if( arg.size() >= 2 && arg[ 0 ] == '-' && arg[ 1 ] == '-' )
+            handleOption( arg.substr( 2 ));
         else
-            rewriters.insert( *it );
+            rewriters.insert( arg );
         }
     createPlugins( rewriters );
     bPluginObjectsCreated = true;
@@ -110,6 +109,8 @@ void PluginHandler::handleOption( const string& option )
         }
     else if( option == "warnings-as-errors" )
         warningsAsErrors = true;
+    else if( option == "unit-test-mode" )
+        unitTestMode = true;
     else
         report( DiagnosticsEngine::Fatal, "unknown option %0" ) << option;
     }
@@ -190,7 +191,12 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
          ++i )
         {
         if( plugins[ i ].object != NULL )
-            plugins[ i ].object->run();
+            {
+            // When in unit-test mode, ignore plugins whose names don't match the filename of the test,
+            // so that we only generate warnings for the plugin that we want to test.
+            if (!unitTestMode || mainFileName.find(plugins[ i ].optionName) != StringRef::npos)
+                plugins[ i ].object->run();
+            }
         }
 #if defined _WIN32
     //TODO: make the call to 'rename' work on Windows (where the renamed-to
