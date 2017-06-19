@@ -52,58 +52,58 @@ SwTOIOptions SwTOXSortTabBase::nOpt = SwTOIOptions::NONE;
 
 SwTOXInternational::SwTOXInternational( LanguageType nLang, SwTOIOptions nOpt,
                                         const OUString& rSortAlgorithm ) :
-    eLang( nLang ),
-    sSortAlgorithm(rSortAlgorithm),
-    nOptions( nOpt )
+    m_eLang( nLang ),
+    m_sSortAlgorithm(rSortAlgorithm),
+    m_nOptions( nOpt )
 {
     Init();
 }
 
 SwTOXInternational::SwTOXInternational( const SwTOXInternational& rIntl ) :
-    eLang( rIntl.eLang ),
-    sSortAlgorithm(rIntl.sSortAlgorithm),
-    nOptions( rIntl.nOptions )
+    m_eLang( rIntl.m_eLang ),
+    m_sSortAlgorithm(rIntl.m_sSortAlgorithm),
+    m_nOptions( rIntl.m_nOptions )
 {
   Init();
 }
 
 void SwTOXInternational::Init()
 {
-    pIndexWrapper = new IndexEntrySupplierWrapper();
+    m_pIndexWrapper = new IndexEntrySupplierWrapper();
 
-    const lang::Locale aLcl( LanguageTag::convertToLocale( eLang ) );
-    pIndexWrapper->SetLocale( aLcl );
+    const lang::Locale aLcl( LanguageTag::convertToLocale( m_eLang ) );
+    m_pIndexWrapper->SetLocale( aLcl );
 
-    if(sSortAlgorithm.isEmpty())
+    if(m_sSortAlgorithm.isEmpty())
     {
-        Sequence < OUString > aSeq( pIndexWrapper->GetAlgorithmList( aLcl ));
+        Sequence < OUString > aSeq( m_pIndexWrapper->GetAlgorithmList( aLcl ));
         if(aSeq.getLength())
-            sSortAlgorithm = aSeq.getConstArray()[0];
+            m_sSortAlgorithm = aSeq.getConstArray()[0];
     }
 
-    if ( nOptions & SwTOIOptions::CaseSensitive )
-        pIndexWrapper->LoadAlgorithm( aLcl, sSortAlgorithm, 0 );
+    if ( m_nOptions & SwTOIOptions::CaseSensitive )
+        m_pIndexWrapper->LoadAlgorithm( aLcl, m_sSortAlgorithm, 0 );
     else
-        pIndexWrapper->LoadAlgorithm( aLcl, sSortAlgorithm, SW_COLLATOR_IGNORES );
+        m_pIndexWrapper->LoadAlgorithm( aLcl, m_sSortAlgorithm, SW_COLLATOR_IGNORES );
 
-    pCharClass = new CharClass( LanguageTag( aLcl ));
+    m_pCharClass = new CharClass( LanguageTag( aLcl ));
 
 }
 
 SwTOXInternational::~SwTOXInternational()
 {
-    delete pCharClass;
-    delete pIndexWrapper;
+    delete m_pCharClass;
+    delete m_pIndexWrapper;
 }
 
 OUString SwTOXInternational::ToUpper( const OUString& rStr, sal_Int32 nPos ) const
 {
-    return pCharClass->uppercase( rStr, nPos, 1 );
+    return m_pCharClass->uppercase( rStr, nPos, 1 );
 }
 
 inline bool SwTOXInternational::IsNumeric( const OUString& rStr ) const
 {
-    return pCharClass->isNumeric( rStr );
+    return m_pCharClass->isNumeric( rStr );
 }
 
 sal_Int32 SwTOXInternational::Compare( const TextAndReading& rTaR1,
@@ -111,19 +111,19 @@ sal_Int32 SwTOXInternational::Compare( const TextAndReading& rTaR1,
                                        const TextAndReading& rTaR2,
                                        const lang::Locale& rLocale2 ) const
 {
-    return pIndexWrapper->CompareIndexEntry( rTaR1.sText, rTaR1.sReading, rLocale1,
+    return m_pIndexWrapper->CompareIndexEntry( rTaR1.sText, rTaR1.sReading, rLocale1,
                                              rTaR2.sText, rTaR2.sReading, rLocale2 );
 }
 
 OUString SwTOXInternational::GetIndexKey( const TextAndReading& rTaR,
                                         const lang::Locale& rLocale ) const
 {
-    return pIndexWrapper->GetIndexKey( rTaR.sText, rTaR.sReading, rLocale );
+    return m_pIndexWrapper->GetIndexKey( rTaR.sText, rTaR.sReading, rLocale );
 }
 
 OUString SwTOXInternational::GetFollowingText( bool bMorePages ) const
 {
-    return pIndexWrapper->GetFollowingText( bMorePages );
+    return m_pIndexWrapper->GetFollowingText( bMorePages );
 }
 
 // SortElement for TOX entries
