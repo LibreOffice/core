@@ -162,6 +162,11 @@ Sequence< sal_Int8 > SAL_CALL CertificateImpl::getMD5Thumbprint()
     return Sequence< sal_Int8 > ();
 }
 
+CertificateKind SAL_CALL CertificateImpl::getCertificateKind()
+{
+    return CertificateKind_OPENPGP;
+}
+
 sal_Int32 SAL_CALL CertificateImpl::getCertificateUsage()
 {
     return KeyUsage::DIGITAL_SIGNATURE | KeyUsage::NON_REPUDIATION  | KeyUsage::KEY_ENCIPHERMENT | KeyUsage::DATA_ENCIPHERMENT;
