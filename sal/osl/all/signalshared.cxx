@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
 #include <sal/config.h>
 
 #include <signalshared.hxx>
@@ -68,8 +67,6 @@ oslSignalAction callSignalHandler(oslSignalInfo* pInfo)
 
 oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction handler, void* pData)
 {
-    assert(handler);
-
     if (!handler)
         return nullptr;
 
@@ -98,8 +95,6 @@ oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction handler,
 
 sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler handler)
 {
-    assert(handler);
-
     if (!bInitSignal)
         bInitSignal = initSignal();
 
