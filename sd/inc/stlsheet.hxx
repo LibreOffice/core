@@ -54,7 +54,8 @@ class SdStyleSheet : public SdStyleSheetBase, private ::cppu::BaseMutex
 {
 public:
     SdStyleSheet( const OUString& rDisplayName, SfxStyleSheetBasePool& rPool, SfxStyleFamily eFamily, sal_uInt16 nMask );
-    SdStyleSheet( const SdStyleSheet& );
+    SdStyleSheet( const SdStyleSheet& ) = delete;
+    SdStyleSheet& operator=( const SdStyleSheet& ) = delete;
 
     virtual bool        SetParent (const OUString& rParentName) override;
     virtual SfxItemSet& GetItemSet() override;
