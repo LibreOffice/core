@@ -511,8 +511,7 @@ SbxObject* SbFormFactory::CreateObject( const OUString& rClassName )
                 if( bInitState )
                 {
                     // Not the first instantiate, reset
-                    bool bTriggerTerminateEvent = false;
-                    pFormModule->ResetApiObj( bTriggerTerminateEvent );
+                    pFormModule->ResetApiObj( false/*bTriggerTerminateEvent*/ );
                     pFormModule->setInitState( false );
                 }
                 else
@@ -747,8 +746,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
                         }
                         else if( aObjClass.equalsIgnoreAsciiCase( "Collection" ) )
                         {
-                            OUString aCollectionName("Collection");
-                            BasicCollection* pNewCollection = new BasicCollection( aCollectionName );
+                            BasicCollection* pNewCollection = new BasicCollection( "Collection" );
                             pNewCollection->SetName( pProp->GetName() );
                             pNewCollection->SetParent( pClassModule->pParent );
                             pNewProp->PutObject( pNewCollection );

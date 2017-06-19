@@ -591,7 +591,6 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             {
                 OUString aName( pNameItem->GetValue() );
                 OUString aModType( "Module" );
-                OUString aDlgType( "Dialog" );
                 OUString aType( aModType );
                 const SfxStringItem* pTypeItem = rReq.GetArg<SfxStringItem>(SID_BASICIDE_ARG_TYPE);
                 if ( pTypeItem )
@@ -600,7 +599,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                 BaseWindow* pWin = nullptr;
                 if ( aType == aModType )
                     pWin = FindBasWin( *pDocument, aLibName, aName );
-                else if ( aType == aDlgType )
+                else if ( aType == "Dialog" )
                     pWin = FindDlgWin( *pDocument, aLibName, aName );
 
                 if ( pWin )
@@ -873,8 +872,7 @@ void Shell::GetState(SfxItemSet &rSet)
             break;
             case SID_BASICIDE_STAT_DATE:
             {
-                OUString aDate( "Datum?!" );
-                SfxStringItem aItem( SID_BASICIDE_STAT_DATE, aDate );
+                SfxStringItem aItem( SID_BASICIDE_STAT_DATE, "Datum?!" );
                 rSet.Put( aItem );
             }
             break;
