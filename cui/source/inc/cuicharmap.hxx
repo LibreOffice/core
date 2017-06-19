@@ -26,7 +26,7 @@
 #include <vcl/lstbox.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svx/charmap.hxx>
-#include "charwin.hxx"
+#include <sfx2/charwin.hxx>
 
 using namespace ::com::sun::star;
 class SubsetMap;
