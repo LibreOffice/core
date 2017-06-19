@@ -74,7 +74,7 @@ class UpdateableResultSet :
 
 protected:
     UpdateableResultSet(
-        const ::rtl::Reference< RefCountedMutex > & mutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & mutex,
         const css::uno::Reference< css::uno::XInterface > &owner,
         const std::vector< OUString > &colNames,
         const std::vector< std::vector< css::uno::Any > > &data,
@@ -113,7 +113,7 @@ protected:
 
 public:
     static css::uno::Reference< css::sdbc::XCloseable > createFromPGResultSet(
-        const ::rtl::Reference< RefCountedMutex > & mutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & mutex,
         const css::uno::Reference< css::uno::XInterface > &owner,
         ConnectionSettings **ppSettings,
         PGresult *result,

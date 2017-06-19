@@ -84,7 +84,7 @@ namespace pq_sdbc_driver
 
 
 css::uno::Reference< css::sdbc::XCloseable > UpdateableResultSet::createFromPGResultSet(
-    const ::rtl::Reference< RefCountedMutex > & mutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & mutex,
     const css::uno::Reference< css::uno::XInterface > &owner,
     ConnectionSettings **ppSettings,
     PGresult *result,
@@ -193,7 +193,7 @@ OUString UpdateableResultSet::buildWhereClause()
 
 void UpdateableResultSet::insertRow(  )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     if (isLog(*m_ppSettings, LogLevel::Info))
     {
         log(*m_ppSettings, LogLevel::Info, "UpdateableResultSet::insertRow got called");
@@ -287,7 +287,7 @@ void UpdateableResultSet::insertRow(  )
 
 void UpdateableResultSet::updateRow(  )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     if (isLog(*m_ppSettings, LogLevel::Info))
     {
         log(*m_ppSettings, LogLevel::Info, "UpdateableResultSet::updateRow got called");
@@ -375,7 +375,7 @@ void UpdateableResultSet::deleteRow(  )
 
 void UpdateableResultSet::cancelRowUpdates(  )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     m_updateableField = UpdateableFieldVector();
 }
 
@@ -399,7 +399,7 @@ void UpdateableResultSet::checkUpdate( sal_Int32 columnIndex)
 
 void UpdateableResultSet::updateNull( sal_Int32 columnIndex )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     checkUpdate( columnIndex );
     m_updateableField[columnIndex-1].value = Any();
@@ -407,7 +407,7 @@ void UpdateableResultSet::updateNull( sal_Int32 columnIndex )
 
 void UpdateableResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     checkUpdate( columnIndex );
 
@@ -429,7 +429,7 @@ void UpdateableResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 x )
 void UpdateableResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x )
 {
     updateLong( columnIndex, x );
-//     MutexGuard guard( m_refMutex->mutex );
+//     MutexGuard guard( m_xMutex->GetMutex() );
 //     checkClosed();
 //     checkUpdate( columnIndex );
 
@@ -439,7 +439,7 @@ void UpdateableResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x )
 
 void UpdateableResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     checkUpdate( columnIndex );
 
@@ -453,7 +453,7 @@ void UpdateableResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x )
 void UpdateableResultSet::updateFloat( sal_Int32 columnIndex, float x )
 {
 
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     checkUpdate( columnIndex );
 
@@ -462,7 +462,7 @@ void UpdateableResultSet::updateFloat( sal_Int32 columnIndex, float x )
 
 void UpdateableResultSet::updateDouble( sal_Int32 columnIndex, double x )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     checkUpdate( columnIndex );
 
@@ -471,7 +471,7 @@ void UpdateableResultSet::updateDouble( sal_Int32 columnIndex, double x )
 
 void UpdateableResultSet::updateString( sal_Int32 columnIndex, const OUString& x )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     checkUpdate( columnIndex );
 
@@ -480,7 +480,7 @@ void UpdateableResultSet::updateString( sal_Int32 columnIndex, const OUString& x
 
 void UpdateableResultSet::updateBytes( sal_Int32 columnIndex, const css::uno::Sequence< sal_Int8 >& x )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     checkUpdate( columnIndex );
 

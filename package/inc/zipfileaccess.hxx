@@ -29,9 +29,8 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/refcountedmutex.hxx>
 #include <cppuhelper/implbase.hxx>
-
-#include <mutexholder.hxx>
 
 #include <ZipFile.hxx>
 #include <HashMaps.hxx>
@@ -44,7 +43,7 @@ class OZipFileAccess : public ::cppu::WeakImplHelper<
                         css::lang::XComponent,
                         css::lang::XServiceInfo >
 {
-    rtl::Reference<SotMutexHolder> m_aMutexHolder;
+    rtl::Reference<comphelper::RefCountedMutex> m_aMutexHolder;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::io::XInputStream > m_xContentStream;
     std::unique_ptr<ZipFile> m_pZipFile;

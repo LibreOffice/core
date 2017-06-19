@@ -43,6 +43,10 @@ namespace comphelper
         return *this;
     }
 
+    RefCountedMutex::~RefCountedMutex()
+    {
+    }
+
 
 } // namespace comphelper
 
