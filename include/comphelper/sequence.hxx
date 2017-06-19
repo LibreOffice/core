@@ -301,12 +301,10 @@ namespace comphelper
     }
 
     // handle arrays
-    template<typename SrcElementType, std::size_t SrcSize>
-    inline css::uno::Sequence< SrcElementType > containerToSequence( SrcElementType const (&i_Array)[ SrcSize ] )
+    template<typename ElementType, std::size_t SrcSize>
+    inline css::uno::Sequence< ElementType > containerToSequence( ElementType const (&i_Array)[ SrcSize ] )
     {
-        css::uno::Sequence< SrcElementType > result( SrcSize );
-        ::std::copy( std::begin(i_Array), std::end(i_Array), result.getArray() );
-        return result;
+        return css::uno::Sequence< ElementType >( i_Array, SrcSize );
     }
 
     template <typename T>
