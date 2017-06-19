@@ -107,7 +107,7 @@ typedef ::cppu::WeakComponentImplHelper
 class /* abstract */ Container : public ContainerBase
 {
 protected:
-    ::rtl::Reference< RefCountedMutex > m_refMutex;
+    ::rtl::Reference< comphelper::RefCountedMutex > m_xMutex;
     ConnectionSettings *m_pSettings;
     css::uno::Reference< css::sdbc::XConnection > m_origin;
     String2IntMap m_name2index;  // maps the element name to an index
@@ -116,7 +116,7 @@ protected:
 
 public:
     Container(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
         const OUString & type  // for exception messages

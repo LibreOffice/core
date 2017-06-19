@@ -72,7 +72,7 @@ protected:
     css::uno::Any m_props[BASERESULTSET_SIZE];
     css::uno::Reference< css::uno::XInterface > m_owner;
     css::uno::Reference< css::script::XTypeConverter > m_tc;
-    ::rtl::Reference< RefCountedMutex > m_refMutex;
+    ::rtl::Reference< comphelper::RefCountedMutex > m_xMutex;
     sal_Int32 m_row;
     sal_Int32 m_rowCount;
     sal_Int32 m_fieldCount;
@@ -96,7 +96,7 @@ protected:
 
 protected:
     BaseResultSet(
-        const ::rtl::Reference< RefCountedMutex > & mutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & mutex,
         const css::uno::Reference< css::uno::XInterface > &owner,
         sal_Int32 rowCount,
         sal_Int32 columnCount,

@@ -19,6 +19,7 @@
 
 
 #include <comphelper/sharedmutex.hxx>
+#include <comphelper/refcountedmutex.hxx>
 
 
 namespace comphelper
@@ -41,6 +42,10 @@ namespace comphelper
     {
         m_pMutexImpl = _rhs.m_pMutexImpl;
         return *this;
+    }
+
+    RefCountedMutex::~RefCountedMutex()
+    {
     }
 
 
