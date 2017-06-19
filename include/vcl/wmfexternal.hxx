@@ -23,6 +23,7 @@
 #include <vcl/dllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 struct VCL_DLLPUBLIC WmfExternal
 {

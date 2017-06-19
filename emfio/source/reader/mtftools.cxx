@@ -1246,7 +1246,7 @@ namespace emfio
         }
     }
 
-    void MtfTools::DrawPolygon( tools::Polygon& rPolygon, bool bRecordPath )
+    void MtfTools::DrawPolygon( tools::Polygon rPolygon, bool bRecordPath )
     {
         UpdateClipRegion();
         ImplMap( rPolygon );
@@ -1351,7 +1351,7 @@ namespace emfio
         }
     }
 
-    void MtfTools::DrawPolyLine( tools::Polygon& rPolygon, bool bTo, bool bRecordPath )
+    void MtfTools::DrawPolyLine( tools::Polygon rPolygon, bool bTo, bool bRecordPath )
     {
         UpdateClipRegion();
 
@@ -1374,7 +1374,7 @@ namespace emfio
         }
     }
 
-    void MtfTools::DrawPolyBezier( tools::Polygon& rPolygon, bool bTo, bool bRecordPath )
+    void MtfTools::DrawPolyBezier( tools::Polygon rPolygon, bool bTo, bool bRecordPath )
     {
         sal_uInt16 nPoints = rPolygon.GetSize();
         if ( ( nPoints >= 4 ) && ( ( ( nPoints - 4 ) % 3 ) == 0 ) )

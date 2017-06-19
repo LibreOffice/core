@@ -593,13 +593,13 @@ namespace emfio
             const Point& rStartAngle,
             const Point& rEndAngle
         );
-        void                DrawPolygon(tools::Polygon& rPolygon, bool bRecordPath);
+        void                DrawPolygon(tools::Polygon rPolygon, bool bRecordPath);
         void                DrawPolyPolygon(tools::PolyPolygon& rPolyPolygon, bool bRecordPath = false);
-        void                DrawPolyLine(tools::Polygon& rPolygon,
+        void                DrawPolyLine(tools::Polygon rPolygon,
             bool bDrawTo = false,
             bool bRecordPath = false
         );
-        void                DrawPolyBezier(tools::Polygon& rPolygin,
+        void                DrawPolyBezier(tools::Polygon rPolygin,
             bool bDrawTo,
             bool bRecordPath
         );
