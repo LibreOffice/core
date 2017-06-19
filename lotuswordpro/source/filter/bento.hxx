@@ -347,7 +347,7 @@ public: // Internal methods
     CUtListElmt * pPrevObject, const OString& rName,
     CUtListElmt * pPrevNamedObjectListElmt);
 
-    const char * GetNameCStr() { return csName.getStr(); }
+    const OString& GetName() { return csName; }
 
 private: // Data
     OString csName;
