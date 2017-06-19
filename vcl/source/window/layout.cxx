@@ -1656,14 +1656,6 @@ bool VclAlignment::set_property(const OString &rKey, const OUString &rValue)
         m_nRightPadding = rValue.toInt32();
     else if (rKey == "top-padding")
         m_nTopPadding = rValue.toInt32();
-    else if (rKey == "xalign")
-        ;
-    else if (rKey == "xscale")
-        ;
-    else if (rKey == "yalign")
-        ;
-    else if (rKey == "yscale")
-        ;
     else
         return VclBin::set_property(rKey, rValue);
     return true;
