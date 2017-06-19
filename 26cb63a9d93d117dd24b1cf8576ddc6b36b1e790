@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_323c682f",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-19T20:34:54Z",
+      "side": 1,
+      "message": "that\u0027s not complete yet - if the end position of the portion is before the start of the selection the portion should be skipped here",
+      "revId": "26cb63a9d93d117dd24b1cf8576ddc6b36b1e790",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_123f6c26",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-19T20:34:54Z",
+      "side": 1,
+      "message": "perhaps best to do this check first, even before the loop?\n\noh, now i realize that it\u0027s actually wrong if we get here: then the enumeration will produce empty paragraphs, but it should produce \"nothing\" - which is strictly less than some paragraphs that happen to be empty :)\n\nso this check needs to be done in the outer enumeration.",
+      "revId": "26cb63a9d93d117dd24b1cf8576ddc6b36b1e790",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
