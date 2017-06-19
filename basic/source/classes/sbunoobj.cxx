@@ -2221,8 +2221,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
                 else if( bInvocation && pParams && mxInvocation.is() )
                 {
-                    bool bOLEAutomation = true;
-                    processAutomationParams( pParams, args, bOLEAutomation, nParamCount );
+                    processAutomationParams( pParams, args, true/*bOLEAutomation*/, nParamCount );
                 }
 
                 // call the method
@@ -2529,9 +2528,7 @@ SbxInfo* SbUnoMethod::GetInfo()
                 const ParamInfo& rInfo = pParamInfos[i];
                 OUString aParamName = rInfo.aName;
 
-                SbxDataType t = SbxVARIANT;
-                SbxFlagBits nFlags_ = SbxFlagBits::Read;
-                pInfo->AddParam( aParamName, t, nFlags_ );
+                pInfo->AddParam( aParamName, SbxVARIANT, SbxFlagBits::Read );
             }
         }
     }

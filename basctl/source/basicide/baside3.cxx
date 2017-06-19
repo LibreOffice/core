@@ -676,7 +676,6 @@ void DialogWindow::SaveDialog()
                 OUString aDialogName( aURLObj.getName() );
                 aURLObj.removeSegment();
                 OUString aURL( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
-                bool bReadOnly = false;
                 OUString aComment = "# " + aDialogName + " strings" ;
                 Reference< task::XInteractionHandler > xDummyHandler;
 
@@ -719,7 +718,7 @@ void DialogWindow::SaveDialog()
                 }
 
                 Reference< XStringResourceWithLocation > xStringResourceWithLocation =
-                    StringResourceWithLocation::create( xContext, aURL, bReadOnly,
+                    StringResourceWithLocation::create( xContext, aURL, false/*bReadOnly*/,
                         xStringResourceResolver->getDefaultLocale(), aDialogName, aComment, xDummyHandler );
 
                 // Add locales
@@ -941,9 +940,8 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
             // Resource?
             css::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
             Reference< task::XInteractionHandler > xDummyHandler;
-            bool bReadOnly = true;
             Reference< XStringResourceWithLocation > xImportStringResource =
-                StringResourceWithLocation::create( xContext, aBasePath, bReadOnly,
+                StringResourceWithLocation::create( xContext, aBasePath, true/*bReadOnly*/,
                 aLocale, aXmlDlgName, OUString(), xDummyHandler );
 
             Sequence< lang::Locale > aImportLocaleSeq = xImportStringResource->getLocales();

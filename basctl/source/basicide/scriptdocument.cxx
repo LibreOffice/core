@@ -953,12 +953,9 @@ namespace basctl
                 OSL_VERIFY( aFileItem.getFileStatus( aFileStatus ) == ::osl::FileBase::E_None );
                 OUString aCanonicalFileURL( aFileStatus.getFileURL() );
 
-                OUString aSearchURL1( "share/basic" );
-                OUString aSearchURL2( "share/uno_packages" );
-                OUString aSearchURL3( "share/extensions" );
-                if( aCanonicalFileURL.indexOf( aSearchURL1 ) >= 0 ||
-                    aCanonicalFileURL.indexOf( aSearchURL2 ) >= 0 ||
-                    aCanonicalFileURL.indexOf( aSearchURL3 ) >= 0 )
+                if( aCanonicalFileURL.indexOf( "share/basic" ) >= 0 ||
+                    aCanonicalFileURL.indexOf( "share/uno_packages" ) >= 0 ||
+                    aCanonicalFileURL.indexOf( "share/extensions" ) >= 0 )
                         bIsShared = true;
             }
         }

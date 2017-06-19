@@ -662,8 +662,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                             aSourceStreamName,
                             embed::ElementModes::READWRITE );
                     uno::Reference< beans::XPropertySet > xProps( xSourceStream, uno::UNO_QUERY_THROW );
-                    OUString aMime( "text/xml" );
-                    xProps->setPropertyValue("MediaType", uno::Any( aMime ) );
+                    xProps->setPropertyValue("MediaType", uno::Any( OUString( "text/xml" ) ) );
 
                     // Set encryption key
                     setStreamKey( xSourceStream, pLib->maPassword );
@@ -746,10 +745,8 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                     SbModule* pMod = pBasicLib->FindModule( aElementName );
                     if( pMod )
                     {
-                        OUString aCodeStreamName( "code.bin" );
-
                         uno::Reference< io::XStream > xCodeStream = xElementRootStorage->openStreamElement(
-                                            aCodeStreamName,
+                                            "code.bin",
                                             embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
                         SvMemoryStream aMemStream;
@@ -792,8 +789,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                     }
 
                     uno::Reference< beans::XPropertySet > xProps( xSourceStream, uno::UNO_QUERY_THROW );
-                    OUString aMime( "text/xml" );
-                    xProps->setPropertyValue("MediaType", uno::Any( aMime ) );
+                    xProps->setPropertyValue("MediaType", uno::Any( OUString( "text/xml" ) ) );
 
                     Reference< XOutputStream > xOut = xSourceStream->getOutputStream();
                     Reference< XNameContainer > xLib( pLib );
@@ -1023,9 +1019,8 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
 
                         try
                         {
-                            OUString aCodeStreamName( "code.bin" );
                             uno::Reference< io::XStream > xCodeStream = xElementRootStorage->openStreamElement(
-                                                                        aCodeStreamName,
+                                                                        "code.bin",
                                                                         embed::ElementModes::READ );
 
                             std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( xCodeStream ));

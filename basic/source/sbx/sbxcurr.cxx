@@ -31,7 +31,7 @@ static OUString ImpCurrencyToString( sal_Int64 rVal )
     bool isNeg = ( rVal < 0 );
     sal_Int64 absVal = isNeg ? -rVal : rVal;
 
-    sal_Unicode cDecimalSep = '.';
+    sal_Unicode const cDecimalSep = '.';
 
     OUString aAbsStr = OUString::number( absVal );
     OUStringBuffer aBuf;
@@ -92,8 +92,8 @@ static sal_Int64 ImpStringToCurrency( const OUString &rStr )
 
     sal_Int32   nFractDigit = 4;
 
-    sal_Unicode cDeciPnt = '.';
-    sal_Unicode c1000Sep = ',';
+    sal_Unicode const cDeciPnt = '.';
+    sal_Unicode const c1000Sep = ',';
 
     // lets use the existing string number conversions
     // there is a performance impact here ( multiple string copies )
