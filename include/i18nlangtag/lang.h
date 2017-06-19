@@ -737,6 +737,7 @@ namespace o3tl
 #define LANGUAGE_USER_HUNGARIAN_ROVAS       LanguageType(0x800E)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_HUNGARIAN)) */
 #define LANGUAGE_USER_MANCHU                LanguageType(0x069A)
 #define LANGUAGE_USER_XIBE                  LanguageType(0x069B)
+#define LANGUAGE_USER_KITUBA_DRCONGO        LanguageType(0x069C)
 
 
 /* XXX Add new user defined LCIDs ^^^ there.
