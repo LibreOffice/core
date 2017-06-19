@@ -371,12 +371,12 @@ LwpVirtualLayout* LwpVirtualLayout::FindChildByType(LWP_LAYOUT_TYPE eType)
     while(!rID.IsNull())
     {
         LwpVirtualLayout * pLayout = dynamic_cast<LwpVirtualLayout *>(rID.obj().get());
-        if(!pLayout)
+        if (!pLayout)
         {
             break;
         }
 
-        if (pLayout && pLayout->GetLayoutType() == eType)
+        if (pLayout->GetLayoutType() == eType)
         {
             return pLayout;
         }
