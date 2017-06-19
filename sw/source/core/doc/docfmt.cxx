@@ -110,10 +110,12 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
 
         // remove unused attribute RES_LR_SPACE
         // add list attributes
-        SfxItemSet aSavedAttrsSet(pDoc->GetAttrPool(), svl::Items<RES_PAGEDESC, RES_BREAK,
-                                  RES_PARATR_NUMRULE, RES_PARATR_NUMRULE,
-                                  RES_PARATR_LIST_BEGIN,
-                                  RES_PARATR_LIST_END - 1>{});
+        SfxItemSet aSavedAttrsSet(
+            pDoc->GetAttrPool(),
+            svl::Items<
+                RES_PARATR_NUMRULE, RES_PARATR_NUMRULE,
+                RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1,
+                RES_PAGEDESC, RES_BREAK>{});
         const SfxItemSet* pAttrSetOfNode = pNode->GetpSwAttrSet();
 
         std::vector<sal_uInt16> aClearWhichIds;

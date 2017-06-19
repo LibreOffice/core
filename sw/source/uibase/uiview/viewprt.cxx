@@ -313,11 +313,13 @@ void SetAppPrintOptions( SwViewShell* pSh, bool bWeb )
     {
         // Close application own printing options in SfxPrinter.
         SwAddPrinterItem aAddPrinterItem(aPrtData);
-        SfxItemSet aSet( pSh->GetAttrPool(),
-                    svl::Items<FN_PARAM_ADDPRINTER,        FN_PARAM_ADDPRINTER,
-                    SID_HTML_MODE,              SID_HTML_MODE,
-                    SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
-                    SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC>{} );
+        SfxItemSet aSet(
+            pSh->GetAttrPool(),
+            svl::Items<
+                SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
+                SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
+                SID_HTML_MODE, SID_HTML_MODE,
+                FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER>{});
 
         utl::MiscCfg aMisc;
 

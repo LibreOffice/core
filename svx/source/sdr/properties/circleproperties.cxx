@@ -37,18 +37,16 @@ namespace sdr
         // create a new itemset
         std::unique_ptr<SfxItemSet> CircleProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return o3tl::make_unique<SfxItemSet>(rPool,
-
-                // range from SdrAttrObj
-                svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
-                SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
-
-                // range from SdrCircObj
-                SDRATTR_CIRC_FIRST, SDRATTR_CIRC_LAST,
-
-                // range from SdrTextObj
-                EE_ITEMS_START, EE_ITEMS_END>{});
+            return o3tl::make_unique<SfxItemSet>(
+                rPool,
+                svl::Items<
+                    // Ranges from SdrAttrObj, SdrCircObj
+                    SDRATTR_START, SDRATTR_SHADOW_LAST,
+                    SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
+                    SDRATTR_CIRC_FIRST, SDRATTR_CIRC_LAST,
+                    SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
+                    // Range from SdrTextObj:
+                    EE_ITEMS_START, EE_ITEMS_END>{});
         }
 
         CircleProperties::CircleProperties(SdrObject& rObj)

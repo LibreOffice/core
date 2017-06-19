@@ -283,11 +283,13 @@ SdrOutliner* DrawViewWrapper::getOutliner() const
 
 SfxItemSet DrawViewWrapper::getPositionAndSizeItemSetFromMarkedObject() const
 {
-    SfxItemSet aFullSet( GetModel()->GetItemPool(),
-                    svl::Items<SID_ATTR_TRANSFORM_POS_X, SID_ATTR_TRANSFORM_ANGLE,
-                    SID_ATTR_TRANSFORM_PROTECT_POS, SID_ATTR_TRANSFORM_AUTOHEIGHT,
-                    SDRATTR_ECKENRADIUS, SDRATTR_ECKENRADIUS,
-                    SID_ATTR_METRIC, SID_ATTR_METRIC>{});
+    SfxItemSet aFullSet(
+        GetModel()->GetItemPool(),
+        svl::Items<
+            SDRATTR_ECKENRADIUS, SDRATTR_ECKENRADIUS,
+            SID_ATTR_TRANSFORM_POS_X, SID_ATTR_TRANSFORM_ANGLE,
+            SID_ATTR_TRANSFORM_PROTECT_POS, SID_ATTR_TRANSFORM_AUTOHEIGHT,
+            SID_ATTR_METRIC, SID_ATTR_METRIC>{});
     SfxItemSet aGeoSet( E3dView::GetGeoAttrFromMarked() );
     aFullSet.Put( aGeoSet );
     aFullSet.Put( SfxUInt16Item(SID_ATTR_METRIC,static_cast< sal_uInt16 >( ConfigurationAccess::getFieldUnit())));

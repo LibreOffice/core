@@ -418,11 +418,11 @@ void SwHeaderFooterWin::ExecuteCommand(const OString& rIdent)
             pHFFormat = const_cast< SwFrameFormat* >( rMaster.GetHeader().GetHeaderFormat() );
 
         SfxItemPool* pPool = pHFFormat->GetAttrSet().GetPool();
-        SfxItemSet aSet( *pPool,
-               svl::Items<RES_BACKGROUND, RES_BACKGROUND,
-               RES_BOX, RES_BOX,
-               SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
-               RES_SHADOW, RES_SHADOW>{} );
+        SfxItemSet aSet(
+            *pPool,
+            svl::Items<
+                RES_BACKGROUND, RES_SHADOW,
+                SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>{});
 
         aSet.Put( pHFFormat->GetAttrSet() );
 

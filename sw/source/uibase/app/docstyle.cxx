@@ -461,34 +461,29 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&                rDocument,
     pTableFormat(nullptr),
     pBoxFormat(nullptr),
     rDoc(rDocument),
-    aCoreSet(GetPool().GetPool(),   // sorted by indices, one double removed
-            svl::Items<RES_CHRATR_BEGIN,       RES_CHRATR_END - 1,             // [1
-            RES_PARATR_BEGIN,       RES_PARATR_END - 1,             // [60
-            RES_PARATR_LIST_BEGIN,  RES_PARATR_LIST_END - 1,        // [77
-            RES_FRMATR_BEGIN,       RES_FRMATR_END - 1,             // [82
-            RES_UNKNOWNATR_BEGIN,   RES_UNKNOWNATR_END-1,           // [143
-
-            // FillAttribute support
-            XATTR_FILL_FIRST, XATTR_FILL_LAST,                      // [1014
-
-            SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,          // [10023
-            SID_ATTR_PAGE,          SID_ATTR_PAGE_EXT1,             // [10050
-            SID_ATTR_PAGE_HEADERSET,SID_ATTR_PAGE_FOOTERSET,        // [10058
-            SID_ATTR_PARA_MODEL,    SID_ATTR_PARA_MODEL,            // [10065
-
-            // items to hand over XPropertyList things like
-            // XColorList, XHatchList, XGradientList and XBitmapList
-            // to the Area TabPage
-            SID_COLOR_TABLE,        SID_PATTERN_LIST,                // [10179
-
-            SID_SWREGISTER_COLLECTION, SID_SWREGISTER_COLLECTION,   // [10451
-            SID_ATTR_PARA_PAGENUM, SID_ATTR_PARA_PAGENUM,           // [10457
-            SID_SWREGISTER_MODE,    SID_SWREGISTER_MODE,            // [10467
-            SID_ATTR_BRUSH_CHAR,  SID_ATTR_BRUSH_CHAR,              // [10590
-            SID_ATTR_NUMBERING_RULE,    SID_ATTR_NUMBERING_RULE,    // [10855
-            SID_ATTR_AUTO_STYLE_UPDATE, SID_ATTR_AUTO_STYLE_UPDATE, // [12065
-            FN_PARAM_FTN_INFO,      FN_PARAM_FTN_INFO,              // [21123
-            FN_COND_COLL,           FN_COND_COLL>{}),               // [22401
+    aCoreSet(
+        GetPool().GetPool(),
+        svl::Items<
+            RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
+            RES_PARATR_BEGIN, RES_FRMATR_END - 1,
+            RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1,
+            // FillAttribute support:
+            XATTR_FILL_FIRST, XATTR_FILL_LAST,
+            SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
+            SID_ATTR_PAGE, SID_ATTR_PAGE_EXT1,
+            SID_ATTR_PAGE_HEADERSET, SID_ATTR_PAGE_FOOTERSET,
+            SID_ATTR_PARA_MODEL, SID_ATTR_PARA_MODEL,
+            // Items to hand over XPropertyList things like XColorList,
+            // XHatchList, XGradientList, and XBitmapList to the Area TabPage:
+            SID_COLOR_TABLE, SID_PATTERN_LIST,
+            SID_SWREGISTER_COLLECTION, SID_SWREGISTER_COLLECTION,
+            SID_ATTR_PARA_PAGENUM, SID_ATTR_PARA_PAGENUM,
+            SID_SWREGISTER_MODE, SID_SWREGISTER_MODE,
+            SID_ATTR_BRUSH_CHAR, SID_ATTR_BRUSH_CHAR,
+            SID_ATTR_NUMBERING_RULE, SID_ATTR_NUMBERING_RULE,
+            SID_ATTR_AUTO_STYLE_UPDATE, SID_ATTR_AUTO_STYLE_UPDATE,
+            FN_PARAM_FTN_INFO, FN_PARAM_FTN_INFO,
+            FN_COND_COLL, FN_COND_COLL>{}),
     bPhysical(false)
 {
     nHelpId = UCHAR_MAX;

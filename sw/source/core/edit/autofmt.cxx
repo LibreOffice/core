@@ -986,11 +986,13 @@ void SwAutoFormat::SetColl( sal_uInt16 nId, bool bHdLineOrText )
     m_aDelPam.GetPoint()->nContent.Assign( m_pCurTextNd, 0 );
 
     // keep hard tabs, alignment, language, hyphenation, DropCaps and nearly all frame attributes
-    SfxItemSet aSet( m_pDoc->GetAttrPool(),
-                        svl::Items<RES_PARATR_ADJUST, RES_PARATR_ADJUST,
-                        RES_PARATR_TABSTOP, RES_PARATR_DROP,
-                        RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
-                        RES_BACKGROUND, RES_SHADOW>{} );
+    SfxItemSet aSet(
+        m_pDoc->GetAttrPool(),
+        svl::Items<
+            RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
+            RES_PARATR_ADJUST, RES_PARATR_ADJUST,
+            RES_PARATR_TABSTOP, RES_PARATR_DROP,
+            RES_BACKGROUND, RES_SHADOW>{});
 
     if( m_pCurTextNd->HasSwAttrSet() )
     {

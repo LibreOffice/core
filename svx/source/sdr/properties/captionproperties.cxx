@@ -35,18 +35,14 @@ namespace sdr
         // create a new itemset
         std::unique_ptr<SfxItemSet> CaptionProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return o3tl::make_unique<SfxItemSet>(rPool,
-
-                // range from SdrAttrObj
-                svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
-                SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
-
-                // range from SdrCaptionObj
-                SDRATTR_CAPTION_FIRST, SDRATTR_CAPTION_LAST,
-
-                // range from SdrTextObj
-                EE_ITEMS_START, EE_ITEMS_END>{});
+            return o3tl::make_unique<SfxItemSet>(
+                rPool,
+                svl::Items<
+                    // Ranges from SdrAttrObj, SdrCaptionObj:
+                    SDRATTR_START, SDRATTR_MISC_LAST,
+                    SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
+                    // Range from SdrTextObj:
+                    EE_ITEMS_START, EE_ITEMS_END>{});
         }
 
         CaptionProperties::CaptionProperties(SdrObject& rObj)

@@ -42,8 +42,8 @@ namespace detail {
 constexpr bool validRange(sal_uInt16 wid1, sal_uInt16 wid2)
 { return wid1 != 0 && wid1 <= wid2; }
 
-constexpr bool validGap(sal_uInt16, sal_uInt16)
-{ return true; } //TODO: wid2 > wid1 && wid2 - wid1 > 1
+constexpr bool validGap(sal_uInt16 wid1, sal_uInt16 wid2)
+{ return wid2 > wid1 && wid2 - wid1 > 1; }
 
 template<sal_uInt16 WID1, sal_uInt16 WID2> constexpr bool validRanges()
 { return validRange(WID1, WID2); }

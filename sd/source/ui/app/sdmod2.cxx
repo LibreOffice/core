@@ -441,21 +441,13 @@ std::unique_ptr<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
     SfxItemPool& rPool = GetPool();
     rPool.SetDefaultMetric( MapUnit::Map100thMM );
 
-    auto pRet = o3tl::make_unique<SfxItemSet>( rPool,
-                        svl::Items<SID_ATTR_METRIC, SID_ATTR_METRIC,
-                        SID_ATTR_DEFTABSTOP, SID_ATTR_DEFTABSTOP,
-
-                        ATTR_OPTIONS_LAYOUT, ATTR_OPTIONS_LAYOUT,
-                        ATTR_OPTIONS_CONTENTS, ATTR_OPTIONS_CONTENTS,
-                        ATTR_OPTIONS_MISC, ATTR_OPTIONS_MISC,
-
-                        ATTR_OPTIONS_SNAP, ATTR_OPTIONS_SNAP,
-
-                        ATTR_OPTIONS_SCALE_START, ATTR_OPTIONS_SCALE_END,
-
-                        ATTR_OPTIONS_PRINT, ATTR_OPTIONS_PRINT,
-
-                        SID_ATTR_GRID_OPTIONS, SID_ATTR_GRID_OPTIONS>{} );
+    auto pRet = o3tl::make_unique<SfxItemSet>(
+        rPool,
+        svl::Items<
+            SID_ATTR_GRID_OPTIONS, SID_ATTR_GRID_OPTIONS,
+            SID_ATTR_METRIC, SID_ATTR_METRIC,
+            SID_ATTR_DEFTABSTOP, SID_ATTR_DEFTABSTOP,
+            ATTR_OPTIONS_LAYOUT, ATTR_OPTIONS_SCALE_END>{});
 
     // TP_OPTIONS_LAYOUT:
     pRet->Put( SdOptionsLayoutItem( pOptions, pFrameView ) );

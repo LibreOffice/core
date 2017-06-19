@@ -84,8 +84,8 @@ static const SwFrameFormat *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& 
                         SwFrameFormat &rFormat,
                         sal_uInt16 nCol, sal_uInt16 nRow )
 {
-    SfxItemSet aSet(rSh.GetAttrPool(), svl::Items<RES_ANCHOR, RES_ANCHOR,
-                        RES_VERT_ORIENT, RES_VERT_ORIENT, RES_HORI_ORIENT, RES_HORI_ORIENT>{} );
+    SfxItemSet aSet(
+        rSh.GetAttrPool(), svl::Items<RES_VERT_ORIENT, RES_ANCHOR>{});
     sal_uInt16 nPhyPageNum, nVirtPageNum;
     rSh.GetPageNum( nPhyPageNum, nVirtPageNum );
 
@@ -121,8 +121,8 @@ static const SwFrameFormat *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem&
                         SwFrameFormat &rFormat, SwFieldMgr& rFieldMgr,
                         sal_uInt16 nCol, sal_uInt16 nRow, bool bLast )
 {
-    SfxItemSet aSet(rSh.GetAttrPool(), svl::Items<RES_ANCHOR, RES_ANCHOR,
-                        RES_VERT_ORIENT, RES_VERT_ORIENT, RES_HORI_ORIENT, RES_HORI_ORIENT>{} );
+    SfxItemSet aSet(
+        rSh.GetAttrPool(), svl::Items<RES_VERT_ORIENT, RES_ANCHOR>{});
     sal_uInt16 nPhyPageNum, nVirtPageNum;
     rSh.GetPageNum( nPhyPageNum, nVirtPageNum );
 

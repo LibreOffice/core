@@ -524,12 +524,11 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( pView) !=  nullptr );
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
                 */
-                SfxItemSet aDlgAttr(GetPool(),
-                                    svl::Items<EE_ITEMS_START, EE_ITEMS_END,
-                                    SID_ATTR_PARA_HYPHENZONE, SID_ATTR_PARA_HYPHENZONE,
-                                    SID_ATTR_PARA_SPLIT, SID_ATTR_PARA_SPLIT,
-                                    SID_ATTR_PARA_WIDOWS, SID_ATTR_PARA_WIDOWS,
-                                    SID_ATTR_PARA_ORPHANS, SID_ATTR_PARA_ORPHANS>{});
+                SfxItemSet aDlgAttr(
+                    GetPool(),
+                    svl::Items<
+                        EE_ITEMS_START, EE_ITEMS_END,
+                        SID_ATTR_PARA_HYPHENZONE, SID_ATTR_PARA_WIDOWS>{});
 
                 aDlgAttr.Put(aEditAttr);
 
@@ -574,9 +573,11 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 if( !static_cast<const SfxBoolItem*>(pPoolItem)->GetValue() )
                     bLeftToRight = !bLeftToRight;
             }
-            SfxItemSet aAttr( *aNewAttr.GetPool(),
-                        svl::Items<EE_PARA_JUST, EE_PARA_JUST,
-                        EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR>{} );
+            SfxItemSet aAttr(
+                *aNewAttr.GetPool(),
+                svl::Items<
+                    EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
+                    EE_PARA_JUST, EE_PARA_JUST>{});
 
             SvxAdjust nAdjust = SvxAdjust::Left;
             if( SfxItemState::SET == aEditAttr.GetItemState(EE_PARA_JUST, true, &pPoolItem ) )
@@ -1790,10 +1791,11 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
         pOutliner->SetUpdateMode(false);
 
         SfxItemSet aOldSet( pOLV->GetAttribs() );
-        SfxItemSet aFontSet( *aOldSet.GetPool(),
-                            svl::Items<EE_CHAR_FONTINFO, EE_CHAR_FONTINFO,
-                            EE_CHAR_FONTINFO_CJK, EE_CHAR_FONTINFO_CJK,
-                            EE_CHAR_FONTINFO_CTL, EE_CHAR_FONTINFO_CTL>{} );
+        SfxItemSet aFontSet(
+            *aOldSet.GetPool(),
+            svl::Items<
+                EE_CHAR_FONTINFO, EE_CHAR_FONTINFO,
+                EE_CHAR_FONTINFO_CJK, EE_CHAR_FONTINFO_CTL>{});
         aFontSet.Set( aOldSet );
 
         // Insert string

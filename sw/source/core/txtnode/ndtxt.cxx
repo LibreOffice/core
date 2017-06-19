@@ -1705,11 +1705,12 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
                    pDest->HasSwAttrSet() ||
                    nLen != pDest->GetText().getLength()))
             {
-                SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
-                                    svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-                                    RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
-                                    RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
-                                    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1>{} );
+                SfxItemSet aCharSet(
+                    pDest->GetDoc()->GetAttrPool(),
+                    svl::Items<
+                        RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
+                        RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT,
+                        RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1>{} );
                 aCharSet.Put( *GetpSwAttrSet() );
                 if( aCharSet.Count() )
                 {
@@ -1747,11 +1748,12 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
                pDest->HasSwAttrSet() ||
                nLen != pDest->GetText().getLength()))
         {
-            SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
-                svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-                RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
-                RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
-                RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1>{} );
+            SfxItemSet aCharSet(
+                pDest->GetDoc()->GetAttrPool(),
+                svl::Items<
+                    RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
+                    RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT,
+                    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1>{});
             aCharSet.Put( *GetpSwAttrSet() );
             if( aCharSet.Count() )
             {
@@ -2105,11 +2107,12 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
         if( nInitSize || pDest->HasSwAttrSet() ||
             nLen != pDest->GetText().getLength())
         {
-            SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
-                                svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-                                RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
-                                RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
-                                RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1>{} );
+            SfxItemSet aCharSet(
+                pDest->GetDoc()->GetAttrPool(),
+                svl::Items<
+                    RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
+                    RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT,
+                    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1>{});
             aCharSet.Put( *GetpSwAttrSet() );
             if( aCharSet.Count() )
                 pDest->SetAttr( aCharSet, nDestStart, nDestStart + nLen );

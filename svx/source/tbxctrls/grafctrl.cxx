@@ -677,12 +677,13 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                     aGrfAttr.Put(pObj->GetMergedItemSet());
                     rPool.SetDefaultMetric( MapUnit::MapTwip );
 
-                    SfxItemSet  aCropDlgAttr( rPool,
-                                            svl::Items<SDRATTR_GRAFCROP, SDRATTR_GRAFCROP,
-                                            SID_ATTR_GRAF_GRAPHIC, SID_ATTR_GRAF_GRAPHIC,
-                                            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
-                                            SID_ATTR_GRAF_FRMSIZE, SID_ATTR_GRAF_FRMSIZE,
-                                            SID_ATTR_GRAF_CROP, SID_ATTR_GRAF_CROP>{} );
+                    SfxItemSet  aCropDlgAttr(
+                        rPool,
+                        svl::Items<
+                            SDRATTR_GRAFCROP, SDRATTR_GRAFCROP,
+                            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
+                            SID_ATTR_GRAF_CROP, SID_ATTR_GRAF_FRMSIZE,
+                            SID_ATTR_GRAF_GRAPHIC, SID_ATTR_GRAF_GRAPHIC>{});
 
                     aCropDlgAttr.Put( SvxBrushItem( pObj->GetGraphic(), GPOS_MM, SID_ATTR_GRAF_GRAPHIC ) );
                     aCropDlgAttr.Put( SvxSizeItem( SID_ATTR_PAGE_SIZE,

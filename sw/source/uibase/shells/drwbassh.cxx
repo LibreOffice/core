@@ -124,11 +124,14 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                     if( rMarkList.GetMark(0) != nullptr )
                     {
-                        SfxItemSet aSet(GetPool(),  svl::Items<RES_SURROUND, RES_SURROUND,
-                                                    RES_ANCHOR, RES_ANCHOR,
-                                                    RES_LR_SPACE, RES_UL_SPACE,
-                                                    SID_HTML_MODE, SID_HTML_MODE,
-                                                    FN_DRAW_WRAP_DLG, FN_DRAW_WRAP_DLG>{});
+                        SfxItemSet aSet(
+                            GetPool(),
+                            svl::Items<
+                                RES_LR_SPACE, RES_UL_SPACE,
+                                RES_SURROUND, RES_SURROUND,
+                                RES_ANCHOR, RES_ANCHOR,
+                                SID_HTML_MODE, SID_HTML_MODE,
+                                FN_DRAW_WRAP_DLG, FN_DRAW_WRAP_DLG>{});
 
                         aSet.Put(SfxBoolItem(SID_HTML_MODE,
                             0 != ::GetHtmlMode(pSh->GetView().GetDocShell())));

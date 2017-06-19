@@ -644,10 +644,8 @@ void ScDocShell::ExecuteChangeCommentDialog( ScChangeAction* pAction, vcl::Windo
     aDate += " ";
     aDate += ScGlobal::pLocaleData->getTime( aDT, false );
 
-    SfxItemSet aSet( GetPool(),
-                      svl::Items<SID_ATTR_POSTIT_AUTHOR, SID_ATTR_POSTIT_AUTHOR,
-                      SID_ATTR_POSTIT_DATE,   SID_ATTR_POSTIT_DATE,
-                      SID_ATTR_POSTIT_TEXT,   SID_ATTR_POSTIT_TEXT>{} );
+    SfxItemSet aSet(
+        GetPool(), svl::Items<SID_ATTR_POSTIT_AUTHOR, SID_ATTR_POSTIT_TEXT>{});
 
     aSet.Put( SvxPostItTextItem  ( aComment, SID_ATTR_POSTIT_TEXT ) );
     aSet.Put( SvxPostItAuthorItem( aAuthor,  SID_ATTR_POSTIT_AUTHOR ) );

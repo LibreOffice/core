@@ -97,23 +97,25 @@ std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
         }
 
     // Options/Edit
-    auto pRet = o3tl::make_unique<SfxItemSet>(GetPool(),   svl::Items<FN_PARAM_DOCDISP,       FN_PARAM_ELEM,
-                                    SID_PRINTPREVIEW,       SID_PRINTPREVIEW,
-                                    SID_ATTR_GRID_OPTIONS,  SID_ATTR_GRID_OPTIONS,
-                                    FN_PARAM_PRINTER,       FN_PARAM_STDFONTS,
-                                    FN_PARAM_WRTSHELL,      FN_PARAM_WRTSHELL,
-                                    FN_PARAM_ADDPRINTER,    FN_PARAM_ADDPRINTER,
-                                    SID_ATTR_METRIC,        SID_ATTR_METRIC,
-                                    SID_ATTR_APPLYCHARUNIT, SID_ATTR_APPLYCHARUNIT,
-                                    SID_ATTR_DEFTABSTOP,    SID_ATTR_DEFTABSTOP,
-                                    RES_BACKGROUND,         RES_BACKGROUND,
-                                    SID_HTML_MODE,          SID_HTML_MODE,
-                                    FN_PARAM_SHADOWCURSOR,  FN_PARAM_SHADOWCURSOR,
-                                    FN_PARAM_CRSR_IN_PROTECTED, FN_PARAM_CRSR_IN_PROTECTED,
-                                    FN_HSCROLL_METRIC,      FN_VSCROLL_METRIC,
-                                    SID_ATTR_LANGUAGE,      SID_ATTR_LANGUAGE,
-                                    SID_ATTR_CHAR_CJK_LANGUAGE,   SID_ATTR_CHAR_CJK_LANGUAGE,
-                                    SID_ATTR_CHAR_CTL_LANGUAGE, SID_ATTR_CHAR_CTL_LANGUAGE>{});
+    auto pRet = o3tl::make_unique<SfxItemSet>(
+        GetPool(),
+        svl::Items<
+            RES_BACKGROUND, RES_BACKGROUND,
+            SID_PRINTPREVIEW, SID_PRINTPREVIEW,
+            SID_ATTR_GRID_OPTIONS, SID_ATTR_GRID_OPTIONS,
+            SID_HTML_MODE, SID_HTML_MODE,
+            SID_ATTR_CHAR_CJK_LANGUAGE, SID_ATTR_CHAR_CJK_LANGUAGE,
+            SID_ATTR_CHAR_CTL_LANGUAGE, SID_ATTR_CHAR_CTL_LANGUAGE,
+            SID_ATTR_LANGUAGE, SID_ATTR_METRIC,
+            SID_ATTR_DEFTABSTOP, SID_ATTR_DEFTABSTOP,
+            SID_ATTR_APPLYCHARUNIT, SID_ATTR_APPLYCHARUNIT,
+            FN_HSCROLL_METRIC, FN_VSCROLL_METRIC,
+            FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
+            FN_PARAM_DOCDISP, FN_PARAM_ELEM,
+            FN_PARAM_PRINTER, FN_PARAM_STDFONTS,
+            FN_PARAM_WRTSHELL, FN_PARAM_WRTSHELL,
+            FN_PARAM_SHADOWCURSOR, FN_PARAM_SHADOWCURSOR,
+            FN_PARAM_CRSR_IN_PROTECTED, FN_PARAM_CRSR_IN_PROTECTED>{});
 
     pRet->Put( SwDocDisplayItem( aViewOpt ) );
     pRet->Put( SwElemItem( aViewOpt ) );

@@ -360,10 +360,12 @@ void SwXTextPortion::GetPropertyValue(
                 {
                     if(!pSet)
                     {
-                        pSet = o3tl::make_unique<SfxItemSet>(pUnoCursor->GetDoc()->GetAttrPool(),
-                            svl::Items<RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
-                            RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
-                            RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER>{});
+                        pSet = o3tl::make_unique<SfxItemSet>(
+                            pUnoCursor->GetDoc()->GetAttrPool(),
+                            svl::Items<
+                                RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
+                                RES_UNKNOWNATR_CONTAINER,
+                                    RES_UNKNOWNATR_CONTAINER>{});
                         SwUnoCursorHelper::GetCursorAttr(*pUnoCursor, *pSet);
                     }
                     m_pPropSet->getPropertyValue(rEntry, *pSet, rVal);

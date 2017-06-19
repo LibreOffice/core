@@ -1223,14 +1223,15 @@ bool SwHTMLWriter::HasScriptDependentItems( const SfxItemSet& rItemSet,
         {
             //sequence of (start, end) property ranges we want to
             //query
-            SfxItemSet aTstItemSet( *pDCCharFormat->GetAttrSet().GetPool(),
-                svl::Items<RES_CHRATR_FONT,        RES_CHRATR_FONT,
-                RES_CHRATR_POSTURE,     RES_CHRATR_POSTURE,
-                RES_CHRATR_WEIGHT,      RES_CHRATR_WEIGHT,
-                RES_CHRATR_CJK_FONT,    RES_CHRATR_CJK_FONT,
-                RES_CHRATR_CJK_POSTURE, RES_CHRATR_CJK_WEIGHT,
-                RES_CHRATR_CTL_FONT,    RES_CHRATR_CTL_FONT,
-                RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT>{} );
+            SfxItemSet aTstItemSet(
+                *pDCCharFormat->GetAttrSet().GetPool(),
+                svl::Items<
+                    RES_CHRATR_FONT, RES_CHRATR_FONT,
+                    RES_CHRATR_POSTURE, RES_CHRATR_POSTURE,
+                    RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,
+                    RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT,
+                    RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_FONT,
+                    RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT>{});
             aTstItemSet.Set( pDCCharFormat->GetAttrSet() );
             return HasScriptDependentItems( aTstItemSet, false );
         }
