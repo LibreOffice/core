@@ -5289,11 +5289,13 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::GetCurrentNumberingCharSt
         if (!xLevels.is())
         {
             PropertyMapPtr pContext = m_pTopContext;
-            if (IsRTFImport())
+            if (IsRTFImport() && !IsOpenField())
             {
                 // Looking up the paragraph context explicitly (and not just taking
                 // the top context) is necessary for RTF, where formatting of a run
                 // and of the paragraph mark is not separated.
+                // We know that the formatting inside a field won't affect the
+                // paragraph marker formatting, though.
                 pContext = GetTopContextOfType(CONTEXT_PARAGRAPH);
                 if (!pContext)
                     return xRet;
