@@ -25,12 +25,12 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/xml/crypto/XCipherContext.hpp>
 
+#include <comphelper/refcountedmutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <package/Inflater.hxx>
 #include <ZipEntry.hxx>
 #include <CRC32.hxx>
-#include <mutexholder.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
@@ -47,7 +47,7 @@ class XUnbufferedStream : public cppu::WeakImplHelper
 >
 {
 protected:
-    rtl::Reference<SotMutexHolder> maMutexHolder;
+    rtl::Reference<comphelper::RefCountedMutex> maMutexHolder;
 
     css::uno::Reference < css::io::XInputStream > mxZipStream;
     css::uno::Reference < css::io::XSeekable > mxZipSeek;
@@ -65,7 +65,7 @@ protected:
 public:
     XUnbufferedStream(
                  const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                 const rtl::Reference<SotMutexHolder>& aMutexHolder,
+                 const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
                  ZipEntry & rEntry,
                  css::uno::Reference < css::io::XInputStream > const & xNewZipStream,
                  const ::rtl::Reference< EncryptionData >& rData,
@@ -77,7 +77,7 @@ public:
     // allows to read package raw stream
     XUnbufferedStream(
                  const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                 const rtl::Reference<SotMutexHolder>& aMutexHolder,
+                 const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
                  const css::uno::Reference < css::io::XInputStream >& xRawStream,
                  const ::rtl::Reference< EncryptionData >& rData );
 

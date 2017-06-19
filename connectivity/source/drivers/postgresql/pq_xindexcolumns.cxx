@@ -72,7 +72,7 @@ namespace pq_sdbc_driver
 {
 
 IndexColumns::IndexColumns(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
         const OUString &schemaName,
@@ -112,7 +112,7 @@ void IndexColumns::refresh()
             log( m_pSettings, LogLevel::Info, buf.makeStringAndClear().getStr() );
         }
 
-        osl::MutexGuard guard( m_refMutex->mutex );
+        osl::MutexGuard guard( m_xMutex->GetMutex() );
 
         Statics &st = getStatics();
         Reference< XDatabaseMetaData > meta = m_origin->getMetaData();
@@ -134,7 +134,7 @@ void IndexColumns::refresh()
                 continue;
 
             IndexColumn * pIndexColumn =
-                new IndexColumn( m_refMutex, m_origin, m_pSettings );
+                new IndexColumn( m_xMutex, m_origin, m_pSettings );
             Reference< css::beans::XPropertySet > prop = pIndexColumn;
 
             columnMetaData2SDBCX( pIndexColumn, xRow );
@@ -160,7 +160,7 @@ void IndexColumns::appendByDescriptor(
     throw css::sdbc::SQLException(
         "SDBC-POSTGRESQL: IndexesColumns.appendByDescriptor not yet implemented",
         *this, OUString(), 1, Any() );
-//     osl::MutexGuard guard( m_refMutex->mutex );
+//     osl::MutexGuard guard( m_xMutex->GetMutex() );
 //     Statics & st = getStatics();
 //     Reference< XPropertySet > past = createDataDescriptor();
 //     past->setPropertyValue( st.IS_NULLABLE, makeAny( css::sdbc::ColumnValue::NULLABLE ) );
@@ -198,7 +198,7 @@ void IndexColumns::dropByIndex( sal_Int32 index )
     throw css::sdbc::SQLException(
         "SDBC-POSTGRESQL: IndexesColumns.dropByIndex not yet implemented",
         *this, OUString(), 1, Any() );
-//     osl::MutexGuard guard( m_refMutex->mutex );
+//     osl::MutexGuard guard( m_xMutex->GetMutex() );
 //     if( index < 0 ||  index >= m_values.getLength() )
 //     {
 //         OUStringBuffer buf( 128 );
@@ -231,11 +231,11 @@ void IndexColumns::dropByIndex( sal_Int32 index )
 
 Reference< css::beans::XPropertySet > IndexColumns::createDataDescriptor()
 {
-    return new IndexColumnDescriptor( m_refMutex, m_origin, m_pSettings );
+    return new IndexColumnDescriptor( m_xMutex, m_origin, m_pSettings );
 }
 
 Reference< css::container::XNameAccess > IndexColumns::create(
-    const ::rtl::Reference< RefCountedMutex > & refMutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const css::uno::Reference< css::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings,
     const OUString &schemaName,
@@ -253,14 +253,14 @@ Reference< css::container::XNameAccess > IndexColumns::create(
 
 
 IndexColumnDescriptors::IndexColumnDescriptors(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings)
     : Container( refMutex, origin, pSettings,  getStatics().INDEX_COLUMN )
 {}
 
 Reference< css::container::XNameAccess > IndexColumnDescriptors::create(
-    const ::rtl::Reference< RefCountedMutex > & refMutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const css::uno::Reference< css::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings)
 {
@@ -269,7 +269,7 @@ Reference< css::container::XNameAccess > IndexColumnDescriptors::create(
 
 css::uno::Reference< css::beans::XPropertySet > IndexColumnDescriptors::createDataDescriptor()
 {
-    return new IndexColumnDescriptor( m_refMutex, m_origin, m_pSettings );
+    return new IndexColumnDescriptor( m_xMutex, m_origin, m_pSettings );
 }
 
 };

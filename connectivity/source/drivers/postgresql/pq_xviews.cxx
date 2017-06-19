@@ -64,7 +64,7 @@ using com::sun::star::sdbc::XResultSet;
 namespace pq_sdbc_driver
 {
 Views::Views(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings )
     : Container( refMutex, origin, pSettings,  getStatics().VIEW )
@@ -77,7 +77,7 @@ void Views::refresh()
 {
     try
     {
-        osl::MutexGuard guard( m_refMutex->mutex );
+        osl::MutexGuard guard( m_xMutex->GetMutex() );
         Statics & st = getStatics();
 
         Reference< XStatement > stmt = m_origin->createStatement();
@@ -105,7 +105,7 @@ void Views::refresh()
             table = xRow->getString( 2 );
             command = xRow->getString( 3 );
 
-            View *pView = new View (m_refMutex, m_origin, m_pSettings );
+            View *pView = new View (m_xMutex, m_origin, m_pSettings );
             Reference< css::beans::XPropertySet > prop = pView;
 
             pView->setPropertyValue_NoBroadcast_public(st.NAME , makeAny(table) );
@@ -133,7 +133,7 @@ void Views::refresh()
 void Views::appendByDescriptor(
     const css::uno::Reference< css::beans::XPropertySet >& descriptor )
 {
-    osl::MutexGuard guard( m_refMutex->mutex );
+    osl::MutexGuard guard( m_xMutex->GetMutex() );
 
     Statics &st = getStatics();
     OUString name,schema,command;
@@ -172,7 +172,7 @@ void Views::dropByName( const OUString& elementName )
 
 void Views::dropByIndex( sal_Int32 index )
 {
-    osl::MutexGuard guard( m_refMutex->mutex );
+    osl::MutexGuard guard( m_xMutex->GetMutex() );
     if( index < 0 ||  index >= (sal_Int32)m_values.size() )
     {
         throw css::lang::IndexOutOfBoundsException(
@@ -199,11 +199,11 @@ void Views::dropByIndex( sal_Int32 index )
 
 css::uno::Reference< css::beans::XPropertySet > Views::createDataDescriptor()
 {
-    return new ViewDescriptor( m_refMutex, m_origin, m_pSettings );
+    return new ViewDescriptor( m_xMutex, m_origin, m_pSettings );
 }
 
 Reference< css::container::XNameAccess > Views::create(
-    const ::rtl::Reference< RefCountedMutex > & refMutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const css::uno::Reference< css::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings,
     Views **ppViews)

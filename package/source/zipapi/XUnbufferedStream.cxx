@@ -40,7 +40,7 @@ using com::sun::star::packages::zip::ZipIOException;
 
 XUnbufferedStream::XUnbufferedStream(
                       const uno::Reference< uno::XComponentContext >& xContext,
-                      const rtl::Reference<SotMutexHolder>& aMutexHolder,
+                      const rtl::Reference< comphelper::RefCountedMutex >& aMutexHolder,
                       ZipEntry & rEntry,
                       Reference < XInputStream > const & xNewZipStream,
                       const ::rtl::Reference< EncryptionData >& rData,
@@ -108,7 +108,7 @@ XUnbufferedStream::XUnbufferedStream(
 // allows to read package raw stream
 XUnbufferedStream::XUnbufferedStream(
                     const uno::Reference< uno::XComponentContext >& /*xContext*/,
-                    const rtl::Reference<SotMutexHolder>& aMutexHolder,
+                    const rtl::Reference< comphelper::RefCountedMutex >& aMutexHolder,
                     const Reference < XInputStream >& xRawStream,
                     const ::rtl::Reference< EncryptionData >& rData )
 : maMutexHolder( aMutexHolder )

@@ -29,8 +29,9 @@
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/refcountedmutex.hxx>
+#include <rtl/ref.hxx>
 
-#include "mutexholder.hxx"
 
 struct OWriteStream_Impl;
 
@@ -41,7 +42,7 @@ class OInputCompStream : public cppu::WeakImplHelper < css::io::XInputStream
 {
 protected:
     OWriteStream_Impl* m_pImpl;
-    rtl::Reference<SotMutexHolder> m_rMutexRef;
+    rtl::Reference<comphelper::RefCountedMutex> m_xMutex;
     css::uno::Reference < css::io::XInputStream > m_xStream;
     ::comphelper::OInterfaceContainerHelper2* m_pInterfaceContainer;
     css::uno::Sequence < css::beans::PropertyValue > m_aProperties;

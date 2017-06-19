@@ -17,36 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_PACKAGE_INC_MUTEXHOLDER_HXX
-#define INCLUDED_PACKAGE_INC_MUTEXHOLDER_HXX
+#ifndef INCLUDED_COMPHELPER_REFCOUNTEDMUTEX_HXX
+#define INCLUDED_COMPHELPER_REFCOUNTEDMUTEX_HXX
 
 #include <osl/mutex.hxx>
-#include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
-class SotMutexHolder
+namespace comphelper
 {
-friend class rtl::Reference<SotMutexHolder>;
 
-    ::osl::Mutex m_aMutex;
-    sal_Int32    m_nRefCount;
-
-    void acquire()
-    {
-        m_nRefCount++;
-    }
-
-    void release()
-    {
-        if ( !--m_nRefCount )
-            delete this;
-    }
-
+class COMPHELPER_DLLPUBLIC RefCountedMutex : public salhelper::SimpleReferenceObject
+{
+    osl::Mutex m_aMutex;
 public:
-    SotMutexHolder() : m_nRefCount( 0 ) {}
-
     ::osl::Mutex& GetMutex() { return m_aMutex; }
 };
 
-#endif
+} // namespace comphelper
+
+#endif // INCLUDED_COMPHELPER_REFCOUNTEDMUTEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
