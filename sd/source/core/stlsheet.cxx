@@ -138,15 +138,6 @@ SdStyleSheet::SdStyleSheet(const OUString& rDisplayName, SfxStyleSheetBasePool& 
 {
 }
 
-SdStyleSheet::SdStyleSheet( const SdStyleSheet & r )
-: SdStyleSheetBase( r )
-, ::cppu::BaseMutex()
-, msApiName( r.msApiName )
-, mxPool( r.mxPool )
-, mrBHelper( m_aMutex )
-{
-}
-
 SdStyleSheet::~SdStyleSheet()
 {
     delete pSet;
