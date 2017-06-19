@@ -91,7 +91,6 @@ ScColumn::ScColumn() :
     nTab( 0 ),
     pAttrArray( nullptr ),
     pDocument( nullptr ),
-    mbDirtyGroups(true),
     mnBlkCountFormula(0)
 {
     maCells.resize(MAXROWCOUNT);
@@ -1910,8 +1909,6 @@ void ScColumn::SwapCol(ScColumn& rCol)
     // AttrArray needs to have the right column number
     pAttrArray->SetCol(nCol);
     rCol.pAttrArray->SetCol(rCol.nCol);
-
-    std::swap(mbDirtyGroups, rCol.mbDirtyGroups);
 
     // Reset column positions in formula cells.
     resetColumnPosition(maCells, nCol);
