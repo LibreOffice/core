@@ -254,7 +254,7 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
         std::vector<SwTextAttr *>::const_iterator const iter(
             std::find_if(newMarks.begin(), newMarks.end(),
                 NotContainedIn<SwTextAttr *>(oldMarks)));
-        OSL_ASSERT(newMarks.end() != iter);
+        assert(newMarks.end() != iter);
         if (newMarks.end() != iter)
         {
             pTextAttr = *iter;
@@ -263,7 +263,7 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
     else
     {
         SwTextNode *pTextNd = rPam.GetNode().GetTextNode();
-        OSL_ASSERT(pTextNd);
+        assert(pTextNd);
         pTextAttr = pTextNd ? rPam.GetNode().GetTextNode()->GetTextAttrForCharAt(
                 rPam.GetPoint()->nContent.GetIndex() - 1, RES_TXTATR_REFMARK) : nullptr;
     }
