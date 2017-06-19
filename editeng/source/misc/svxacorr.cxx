@@ -105,17 +105,17 @@ static const sal_Char
 
 OUString EncryptBlockName_Imp(const OUString& rName);
 
-static inline bool IsWordDelim( const sal_Unicode c )
-{
-    return ' ' == c || '\t' == c || 0x0a == c ||
-            cNonBreakingSpace == c || 0x2011 == c || 0x1 == c;
-}
-
-static inline bool IsAutoCapitalizeWordDelim( const sal_Unicode c )
+static inline bool NonFieldWordDelim( const sal_Unicode c )
 {
     return ' ' == c || '\t' == c || 0x0a == c ||
             cNonBreakingSpace == c || 0x2011 == c;
 }
+
+static inline bool IsWordDelim( const sal_Unicode c )
+{
+    return c == 0x1 || NonFieldWordDelim(c);
+}
+
 
 static inline bool IsLowerLetter( sal_Int32 nCharType )
 {
@@ -882,9 +882,9 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
 
     if( !bAtStart ) // Still no beginning of a paragraph?
     {
-        if (IsAutoCapitalizeWordDelim(*pStr))
+        if (NonFieldWordDelim(*pStr))
         {
-            while (!(bAtStart = (pStart == pStr--)) && IsAutoCapitalizeWordDelim(*pStr))
+            while (!(bAtStart = (pStart == pStr--)) && NonFieldWordDelim(*pStr))
                 ;
         }
         // Asian full stop, full width full stop, full width exclamation mark
@@ -915,7 +915,7 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
 
         do {            // overwrite all blanks
             --pStr;
-            if (!IsAutoCapitalizeWordDelim(*pStr))
+            if (!NonFieldWordDelim(*pStr))
                 break;
             bAtStart = (pStart == pStr);
         } while( !bAtStart );
@@ -1011,7 +1011,7 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
                 else
                     bAlphaFnd = true;
             }
-            else if (bAlphaFnd || IsAutoCapitalizeWordDelim(*pTmpStr))
+            else if (bAlphaFnd || NonFieldWordDelim(*pTmpStr))
                 break;
 
             if( pTmpStr == pStart )
@@ -1027,7 +1027,7 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
     bool bNumericOnly = '0' <= *(pStr+1) && *(pStr+1) <= '9';
 
     // Search for the beginning of the word
-    while (!IsAutoCapitalizeWordDelim(*pStr))
+    while (!NonFieldWordDelim(*pStr))
     {
         if( bNumericOnly && rCC.isLetter( aText, pStr - pStart ) )
             bNumericOnly = false;
@@ -1041,7 +1041,7 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
     if( bNumericOnly )      // consists of only numbers, then not
         return false;
 
-    if (IsAutoCapitalizeWordDelim(*pStr))
+    if (NonFieldWordDelim(*pStr))
         ++pStr;
 
     OUString sWord;
