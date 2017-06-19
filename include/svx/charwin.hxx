@@ -21,8 +21,9 @@
 #define INCLUDED_CUI_SOURCE_INC_CHARWIN_HXX
 
 #include <vcl/ctrl.hxx>
+#include <svx/svxdllapi.h>
 
-class SvxCharView : public Control
+class SVX_DLLPUBLIC SvxCharView : public Control
 {
 public:
     SvxCharView(vcl::Window* pParent);
