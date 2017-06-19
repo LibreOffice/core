@@ -695,7 +695,7 @@ class EnumConverter():
                     continue
                 else:
                     node = self._stack.pop()
-                    assert (isinstance(node, RubyNode), 
+                    assert (isinstance(node, RubyNode),
                         "stack error: Ruby expected; is: {}".format(str(node)))
             elif type_ == "InContentMetadata":
                 xMeta = xPortion.InContentMetadata
@@ -1163,6 +1163,177 @@ class TextPortionEnumerationTest(unittest.TestCase):
         root.appendchild(DocumentIndexMarkEndNode(name2))
         root.appendchild(DocumentIndexMarkEndNode(name1))
         root.appendchild(TextNode("de"))
+        self.dotest(root)
+
+    def test_marks1(self):
+        name1 = self.mkname("bookmark")
+        name2 = self.mkname("toxmark")
+        name3 = self.mkname("refmark")
+        name4 = self.mkname("toxmark")
+        root = TreeNode()
+        root.appendchild(BookmarkStartNode(name1))
+        root.appendchild(DocumentIndexMarkNode(name2))
+        root.appendchild(ReferenceMarkStartNode(name3))
+        root.appendchild(TextNode("abc"))
+        root.appendchild(BookmarkEndNode(name1))
+        root.appendchild(DocumentIndexMarkStartNode(name4))
+        root.appendchild(TextNode("de"))
+        root.appendchild(DocumentIndexMarkEndNode(name4))
+        root.appendchild(ReferenceMarkEndNode(name3))
+        self.dotest(root)
+
+    def test_marks2(self):
+        name1 = self.mkname("bookmark")
+        name2 = self.mkname("refmark")
+        name3 = self.mkname("refmark")
+        name4 = self.mkname("toxmark")
+        name5 = self.mkname("refmark")
+        root = TreeNode()
+        root.appendchild(BookmarkStartNode(name1))
+        root.appendchild(ReferenceMarkNode(name2))
+        root.appendchild(ReferenceMarkStartNode(name3))
+        root.appendchild(TextNode("abc"))
+        root.appendchild(DocumentIndexMarkStartNode(name4))
+        root.appendchild(ReferenceMarkStartNode(name5))
+        # BUG: #i102541# (this is actually not unoportenum's fault)
+        root.appendchild(ReferenceMarkEndNode(name3))
+        root.appendchild(TextNode("de"))
+        root.appendchild(DocumentIndexMarkEndNode(name4))
+        root.appendchild(BookmarkEndNode(name1))
+        root.appendchild(ReferenceMarkEndNode(name5))
+        self.dotest(root)
+
+    def test_marks3(self):
+        name1 = self.mkname("bookmark")
+        name2 = self.mkname("refmark")
+        name3 = self.mkname("refmark")
+        name4 = self.mkname("toxmark")
+        name5 = self.mkname("refmark")
+        root = TreeNode()
+        root.appendchild(BookmarkStartNode(name1))
+        root.appendchild(DocumentIndexMarkNode(name2))
+        root.appendchild(DocumentIndexMarkStartNode(name3))
+        root.appendchild(TextNode("abc"))
+        root.appendchild(ReferenceMarkStartNode(name4))
+        root.appendchild(DocumentIndexMarkStartNode(name5))
+        root.appendchild(DocumentIndexMarkEndNode(name3))
+        root.appendchild(TextNode("de"))
+        root.appendchild(ReferenceMarkEndNode(name4))
+        root.appendchild(BookmarkEndNode(name1))
+        root.appendchild(DocumentIndexMarkEndNode(name5))
+        self.dotest(root)
+
+    def test_frame_mark1(self):
+        name1 = self.mkname("bookmark")
+        name2 = self.mkname("frame")
+        root = TreeNode()
+        root.appendchild(TextNode("abc"))
+        root.appendchild(BookmarkNode(name1))
+        root.appendchild(TextNode("de"))
+        root.appendchild(FrameNode(name2, AS_CHARACTER))
+        self.dotest(root)
+
+    def test_frame_mark2(self):
+        # BUG: #i98530#
+        name1 = self.mkname("bookmark")
+        name2 = self.mkname("frame")
+        root = TreeNode()
+        root.appendchild(TextNode("abc"))
+        root.appendchild(BookmarkNode(name1))
+        root.appendchild(TextNode("de"))
+        root.appendchild(FrameNode(name2, AT_CHARACTER))
+        self.dotest(root)
+
+    def test_frame_mark3(self):
+        name1 = self.mkname("frame")
+        name2 = self.mkname("bookmark")
+        root = TreeNode()
+        root.appendchild(TextNode("abc"))
+        root.appendchild(FrameNode(name1, AS_CHARACTER))
+        root.appendchild(TextNode("de"))
+        root.appendchild(BookmarkNode(name2))
+        self.dotest(root)
+
+    def test_frame_mark4(self):
+        name1 = self.mkname("frame")
+        name2 = self.mkname("bookmark")
+        root = TreeNode()
+        root.appendchild(TextNode("abc"))
+        root.appendchild(FrameNode(name1, AT_CHARACTER))
+        root.appendchild(TextNode("de"))
+        root.appendchild(BookmarkNode(name2))
+        self.dotest(root)
+
+    def test_frames1(self):
+        name1 = self.mkname("frame")
+        name2 = self.mkname("frame")
+        name3 = self.mkname("frame")
+        root = TreeNode()
+        root.appendchild(FrameNode(name1, AT_CHARACTER))
+        root.appendchild(FrameNode(name2, AT_CHARACTER))
+        root.appendchild(FrameNode(name3, AT_CHARACTER))
+        self.dotest(root)
+
+    def test_frames2(self):
+        name1 = self.mkname("frame")
+        name2 = self.mkname("frame")
+        name3 = self.mkname("frame")
+        root = TreeNode()
+        root.appendchild(FrameNode(name1, AS_CHARACTER))
+        root.appendchild(FrameNode(name2, AS_CHARACTER))
+        root.appendchild(FrameNode(name3, AS_CHARACTER))
+        self.dotest(root)
+
+    def test_frames3(self):
+        name1 = self.mkname("frame")
+        name2 = self.mkname("frame")
+        name3 = self.mkname("frame")
+        root = TreeNode()
+        root.appendchild(FrameNode(name1, AT_CHARACTER))
+        root.appendchild(FrameNode(name2, AS_CHARACTER))
+        root.appendchild(FrameNode(name3, AT_CHARACTER))
+        self.dotest(root)
+
+    def test_frames4(self):
+        name1 = self.mkname("frame")
+        name2 = self.mkname("frame")
+        name3 = self.mkname("frame")
+        root = TreeNode()
+        root.appendchild(FrameNode(name1, AT_CHARACTER))
+        root.appendchild(FrameNode(name2, AT_CHARACTER))
+        root.appendchild(FrameNode(name3, AS_CHARACTER))
+        self.dotest(root)
+
+    def test_frames5(self):
+        name1 = self.mkname("frame")
+        name2 = self.mkname("frame")
+        name3 = self.mkname("frame")
+        root = TreeNode()
+        root.appendchild(FrameNode(name1, AS_CHARACTER))
+        root.appendchild(FrameNode(name2, AT_CHARACTER))
+        root.appendchild(FrameNode(name3, AT_CHARACTER))
+        self.dotest(root)
+
+    def test_ruby_hyperlink1(self):
+        name1 = self.mkname("ruby")
+        name2 = self.mkname("url")
+        root = TreeNode()
+        ruby = RubyNode(name1)
+        href = HyperlinkNode(name2)
+        href.appendchild(TextNode("abc"))
+        ruby.appendchild(href)
+        root.appendchild(ruby)
+        self.dotest(root)
+
+    def test_ruby_hyperlink2(self):
+        name1 = self.mkname("url")
+        name2 = self.mkname("ruby")
+        root = TreeNode()
+        href = HyperlinkNode(name1)
+        ruby = RubyNode(name2)
+        ruby.appendchild(TextNode("abc"))
+        href.appendchild(ruby)
+        root.appendchild(href)
         self.dotest(root)
 
     def dotest(self, intree, insert=True):
