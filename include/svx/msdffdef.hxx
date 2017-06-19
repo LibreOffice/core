@@ -846,6 +846,11 @@ enum MSO_SYSCOLORINDEX {
     mso_colorBParamShift = 16           // To extract the parameter value
 };
 
+enum MSO_TextGeometryProperties {
+    use_gtextFBestFit   = 0x00000100,
+    gtextFBestFit       = 0x01000000
+};
+
 //ALT_TXT_MSINTEROP
 #define MSPROP_DESCRIPTION_MAX_LEN  4096
 
