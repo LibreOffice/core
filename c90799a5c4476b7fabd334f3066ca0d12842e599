@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_d2aa4485",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-19T17:53:19Z",
+      "side": 1,
+      "message": "I assume the language tag used for the web pages does include the script tag if it is not the default script for that language? For example \u0027sr\u0027 for Serbian in Cyrillic script, as Cyrillic is the default script for Serbian, and \u0027sr-Latn\u0027 for Serbian in Latin script? Then this should be obtained using getLanguageAndScript() instead of getLanguage()",
+      "revId": "c90799a5c4476b7fabd334f3066ca0d12842e599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_f2af4092",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-19T17:53:19Z",
+      "side": 1,
+      "message": "Ditto, getLanguageAndScript()",
+      "revId": "c90799a5c4476b7fabd334f3066ca0d12842e599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
