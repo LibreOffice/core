@@ -78,6 +78,7 @@
 
 #include <map>
 #include <tuple>
+#include <unordered_map>
 
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
@@ -161,8 +162,7 @@ struct FieldConversion
     FieldId             eFieldId;
 };
 
-typedef ::std::map< OUString, FieldConversion>
-            FieldConversionMap_t;
+typedef std::unordered_map<OUString, FieldConversion, OUStringHash> FieldConversionMap_t;
 
 uno::Any FloatingTableInfo::getPropertyValue(const OUString &propertyName)
 {
