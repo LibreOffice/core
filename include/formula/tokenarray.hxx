@@ -112,6 +112,30 @@ public:
 
 typedef std::unordered_set<OpCode, std::hash<std::underlying_type<OpCode>::type> > unordered_opcode_set;
 
+class FORMULA_DLLPUBLIC FormulaTokenArrayStandardIterator
+{
+private:
+    FormulaToken** mpBegin;
+    FormulaToken** mpEnd;
+
+public:
+    FormulaTokenArrayStandardIterator(FormulaToken** pBegin, sal_uInt16 nSize) :
+        mpBegin(pBegin),
+        mpEnd(pBegin + nSize)
+    {
+    }
+
+    FormulaToken** begin() const
+    {
+        return mpBegin;
+    }
+
+    FormulaToken** end() const
+    {
+        return mpEnd;
+    }
+};
+
 class FORMULA_DLLPUBLIC FormulaTokenArray
 {
 protected:
@@ -247,7 +271,19 @@ public:
     }
 
     FormulaToken** GetArray() const  { return pCode; }
+
+    FormulaTokenArrayStandardIterator Tokens() const
+    {
+        return FormulaTokenArrayStandardIterator(pCode, nLen);
+    }
+
     FormulaToken** GetCode()  const  { return pRPN; }
+
+    FormulaTokenArrayStandardIterator RPNTokens() const
+    {
+        return FormulaTokenArrayStandardIterator(pRPN, nRPN);
+    }
+
     sal_uInt16     GetLen() const     { return nLen; }
     sal_uInt16     GetCodeLen() const { return nRPN; }
     FormulaError   GetCodeError() const      { return nError; }

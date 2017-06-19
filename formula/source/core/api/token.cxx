@@ -495,15 +495,15 @@ FormulaToken* FormulaTokenArray::FirstRPNToken() const
 
 bool FormulaTokenArray::HasReferences() const
 {
-    for (sal_uInt16 i = 0; i < nLen; ++i)
+    for (auto i: Tokens())
     {
-        if (pCode[i]->IsRef())
+        if (i->IsRef())
             return true;
     }
 
-    for (sal_uInt16 i = 0; i < nRPN; ++i)
+    for (auto i: RPNTokens())
     {
-        if (pRPN[i]->IsRef())
+        if (i->IsRef())
             return true;
     }
 
@@ -512,9 +512,9 @@ bool FormulaTokenArray::HasReferences() const
 
 bool FormulaTokenArray::HasExternalRef() const
 {
-    for ( sal_uInt16 j=0; j < nLen; j++ )
+    for (auto i: Tokens())
     {
-        if (pCode[j]->IsExternalRef())
+        if (i->IsExternalRef())
             return true;
     }
     return false;
@@ -522,9 +522,9 @@ bool FormulaTokenArray::HasExternalRef() const
 
 bool FormulaTokenArray::HasOpCode( OpCode eOp ) const
 {
-    for ( sal_uInt16 j=0; j < nLen; j++ )
+    for (auto i: Tokens())
     {
-        if ( pCode[j]->GetOpCode() == eOp )
+        if (i->GetOpCode() == eOp)
             return true;
     }
     return false;
@@ -532,9 +532,9 @@ bool FormulaTokenArray::HasOpCode( OpCode eOp ) const
 
 bool FormulaTokenArray::HasOpCodeRPN( OpCode eOp ) const
 {
-    for ( sal_uInt16 j=0; j < nRPN; j++ )
+    for (auto i: RPNTokens())
     {
-        if ( pRPN[j]->GetOpCode() == eOp )
+        if (i->GetOpCode() == eOp)
             return true;
     }
     return false;
@@ -542,9 +542,9 @@ bool FormulaTokenArray::HasOpCodeRPN( OpCode eOp ) const
 
 bool FormulaTokenArray::HasNameOrColRowName() const
 {
-    for ( sal_uInt16 j=0; j < nLen; j++ )
+    for (auto i: Tokens())
     {
-        if( pCode[j]->GetType() == svIndex || pCode[j]->GetOpCode() == ocColRowName )
+        if (i->GetType() == svIndex || i->GetOpCode() == ocColRowName )
             return true;
     }
     return false;
@@ -552,12 +552,9 @@ bool FormulaTokenArray::HasNameOrColRowName() const
 
 bool FormulaTokenArray::HasOpCodes(const unordered_opcode_set& rOpCodes) const
 {
-    FormulaToken** p = pCode;
-    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
-    for (; p != pEnd; ++p)
+    for (auto i: Tokens())
     {
-        OpCode eOp = (*p)->GetOpCode();
-        if (rOpCodes.count(eOp) > 0)
+        if (rOpCodes.count(i->GetOpCode()) > 0)
             return true;
     }
 
@@ -853,9 +850,8 @@ bool FormulaTokenArray::HasMatrixDoubleRefOps()
         std::unique_ptr<FormulaToken*[]> pStack(new FormulaToken* [nRPN]);
         FormulaToken* pResult = new FormulaDoubleToken( 0.0 );
         short sp = 0;
-        for ( sal_uInt16 j = 0; j < nRPN; j++ )
+        for ( auto t: RPNTokens() )
         {
-            FormulaToken* t = pRPN[j];
             OpCode eOp = t->GetOpCode();
             sal_uInt8 nParams = t->GetParamCount();
             switch ( eOp )
@@ -1248,9 +1244,9 @@ bool FormulaMissingContext::AddMissing( FormulaTokenArray *pNewArr, const Missin
 
 bool FormulaTokenArray::NeedsPodfRewrite( const MissingConventionODF & rConv )
 {
-    for ( int i = 0; i < nLen; ++i )
+    for ( auto i: Tokens()  )
     {
-        if ( rConv.isRewriteNeeded( pCode[i]->GetOpCode()))
+        if ( rConv.isRewriteNeeded( i->GetOpCode()))
             return true;
     }
     return false;
@@ -1258,9 +1254,9 @@ bool FormulaTokenArray::NeedsPodfRewrite( const MissingConventionODF & rConv )
 
 bool FormulaTokenArray::NeedsOoxmlRewrite()
 {
-    for ( int i = 0; i < nLen; ++i )
+    for ( auto i: Tokens() )
     {
-        if ( MissingConventionOOXML::isRewriteNeeded( pCode[i]->GetOpCode()))
+        if ( MissingConventionOOXML::isRewriteNeeded( i->GetOpCode()))
             return true;
     }
     return false;
@@ -1484,12 +1480,12 @@ FormulaToken* FormulaTokenArray::AddOpCode( OpCode eOp )
 
 void FormulaTokenArray::ReinternStrings( svl::SharedStringPool& rPool )
 {
-    for (sal_uInt16 i=0; i < nLen; ++i)
+    for (auto i: Tokens())
     {
-        switch (pCode[i]->GetType())
+        switch (i->GetType())
         {
             case svString:
-                pCode[i]->SetString( rPool.intern( pCode[i]->GetString().getString()));
+                i->SetString( rPool.intern( i->GetString().getString()));
                 break;
             default:
                 ;   // nothing
