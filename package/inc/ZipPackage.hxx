@@ -31,10 +31,10 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <comphelper/refcountedmutex.hxx>
 
 #include <HashMaps.hxx>
 #include <osl/file.h>
-#include <mutexholder.hxx>
 #include <vector>
 #include <memory>
 
@@ -69,7 +69,7 @@ class ZipPackage : public cppu::WeakImplHelper
                     >
 {
 protected:
-    rtl::Reference<SotMutexHolder> m_aMutexHolder;
+    rtl::Reference<comphelper::RefCountedMutex> m_aMutexHolder;
 
     css::uno::Sequence< css::beans::NamedValue > m_aStorageEncryptionKeys;
     css::uno::Sequence< sal_Int8 > m_aEncryptionKey;
@@ -126,7 +126,7 @@ public:
     sal_Int32 GetChecksumAlgID() const { return m_nChecksumDigestID; }
     sal_Int32 GetDefaultDerivedKeySize() const { return m_nCommonEncryptionID == css::xml::crypto::CipherID::AES_CBC_W3C_PADDING ? 32 : 16; }
 
-    rtl::Reference<SotMutexHolder>& GetSharedMutexRef() { return m_aMutexHolder; }
+    rtl::Reference<comphelper::RefCountedMutex>& GetSharedMutexRef() { return m_aMutexHolder; }
 
     void ConnectTo( const css::uno::Reference< css::io::XInputStream >& xInStream );
     const css::uno::Sequence< sal_Int8 > GetEncryptionKey();

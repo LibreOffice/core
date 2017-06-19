@@ -104,7 +104,7 @@ static Any isAutoIncrement( const OUString & defaultValue )
 }
 
 Columns::Columns(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
         const OUString &schemaName,
@@ -226,7 +226,7 @@ OUString columnMetaData2SDBCX(
 
 // class CommentChanger : public cppu::WeakImplHelper< XPropertyChangeListener >
 // {
-//     ::rtl::Reference< RefCountedMutex > m_refMutex;
+//     ::rtl::Reference< comphelper::RefCountedMutex > m_xMutex;
 //     css::uno::Reference< css::sdbc::XConnection > m_connection;
 //     ConnectionSettings *m_pSettings;
 //     OUString m_schema;
@@ -235,13 +235,13 @@ OUString columnMetaData2SDBCX(
 
 // public:
 //     CommentChanger(
-//         const ::rtl::Reference< RefCountedMutex > & refMutex,
+//         const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
 //         const css::uno::Reference< css::sdbc::XConnection > & connection,
 //         ConnectionSettings *pSettings,
 //         const OUString & schema,
 //         const OUString & table,
 //         const OUString & column ) :
-//         m_refMutex( refMutex ),
+//         m_xMutex( refMutex ),
 //         m_connection( connection ),
 //         m_pSettings( pSettings ),
 //         m_schema ( schema ),
@@ -253,13 +253,13 @@ OUString columnMetaData2SDBCX(
 //     // Methods
 //     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException)
 //     {
-//         osl::MutexGuard guard( m_refMutex->mutex );
+//         osl::MutexGuard guard( m_xMutex->GetMutex() );
 //         m_connection.clear();
 //     }
 //         // Methods
 //     virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException)
 //     {
-//         osl::MutexGuard guard( m_refMutex->mutex );
+//         osl::MutexGuard guard( m_xMutex->GetMutex() );
 //         OUStringBuffer buf( 128 );
 //         OUString comment;
 //         evt.NewValue >>= comment;
@@ -289,7 +289,7 @@ void Columns::refresh()
             buf.append( OUStringToOString( m_tableName, ConnectionSettings::encoding ) );
             log( m_pSettings, LogLevel::Info, buf.makeStringAndClear().getStr() );
         }
-        osl::MutexGuard guard( m_refMutex->mutex );
+        osl::MutexGuard guard( m_xMutex->GetMutex() );
 
         Statics &st = getStatics();
         Reference< XDatabaseMetaData > meta = m_origin->getMetaData();
@@ -307,14 +307,14 @@ void Columns::refresh()
         while( rs->next() )
         {
             Column * pColumn =
-                new Column( m_refMutex, m_origin, m_pSettings );
+                new Column( m_xMutex, m_origin, m_pSettings );
             Reference< css::beans::XPropertySet > prop = pColumn;
 
             OUString name = columnMetaData2SDBCX( pColumn, xRow );
 //             pColumn->addPropertyChangeListener(
 //                 st.HELP_TEXT,
 //                 new CommentChanger(
-//                     m_refMutex,
+//                     m_xMutex,
 //                     m_origin,
 //                     m_pSettings,
 //                     m_schemaName,
@@ -462,7 +462,7 @@ void alterColumnByDescriptor(
 void Columns::appendByDescriptor(
     const css::uno::Reference< css::beans::XPropertySet >& future )
 {
-    osl::MutexGuard guard( m_refMutex->mutex );
+    osl::MutexGuard guard( m_xMutex->GetMutex() );
     Statics & st = getStatics();
     Reference< XPropertySet > past = createDataDescriptor();
     past->setPropertyValue( st.IS_NULLABLE, makeAny( css::sdbc::ColumnValue::NULLABLE ) );
@@ -496,7 +496,7 @@ void Columns::appendByDescriptor(
 
 void Columns::dropByIndex( sal_Int32 index )
 {
-    osl::MutexGuard guard( m_refMutex->mutex );
+    osl::MutexGuard guard( m_xMutex->GetMutex() );
     if( index < 0 ||  index >= (sal_Int32)m_values.size() )
     {
         throw css::lang::IndexOutOfBoundsException(
@@ -527,11 +527,11 @@ void Columns::dropByIndex( sal_Int32 index )
 
 css::uno::Reference< css::beans::XPropertySet > Columns::createDataDescriptor()
 {
-    return new ColumnDescriptor( m_refMutex, m_origin, m_pSettings );
+    return new ColumnDescriptor( m_xMutex, m_origin, m_pSettings );
 }
 
 Reference< css::container::XNameAccess > Columns::create(
-    const ::rtl::Reference< RefCountedMutex > & refMutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const css::uno::Reference< css::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings,
     const OUString &schemaName,
@@ -548,7 +548,7 @@ Reference< css::container::XNameAccess > Columns::create(
 
 
 ColumnDescriptors::ColumnDescriptors(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings )
     : Container( refMutex, origin, pSettings,  "COLUMN-DESCRIPTOR" )
@@ -557,7 +557,7 @@ ColumnDescriptors::ColumnDescriptors(
 
 Reference< css::beans::XPropertySet > ColumnDescriptors::createDataDescriptor()
 {
-    return new ColumnDescriptor( m_refMutex, m_origin, m_pSettings );
+    return new ColumnDescriptor( m_xMutex, m_origin, m_pSettings );
 }
 
 }

@@ -26,10 +26,10 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <ZipPackageEntry.hxx>
 #include <rtl/ref.hxx>
+#include <comphelper/refcountedmutex.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <EncryptionData.hxx>
-#include <mutexholder.hxx>
 
 #define PACKAGE_STREAM_NOTSET           0
 #define PACKAGE_STREAM_PACKAGEMEMBER    1

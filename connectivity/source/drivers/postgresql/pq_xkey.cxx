@@ -62,7 +62,7 @@ using com::sun::star::beans::XPropertySet;
 
 namespace pq_sdbc_driver
 {
-Key::Key( const ::rtl::Reference< RefCountedMutex > & refMutex,
+Key::Key( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
           const Reference< css::sdbc::XConnection > & connection,
           ConnectionSettings *pSettings,
           const OUString & schemaName,
@@ -81,7 +81,7 @@ Key::Key( const ::rtl::Reference< RefCountedMutex > & refMutex,
 Reference< XPropertySet > Key::createDataDescriptor(  )
 {
     KeyDescriptor * pKeyDescriptor = new KeyDescriptor(
-        m_refMutex, m_conn, m_pSettings );
+        m_xMutex, m_conn, m_pSettings );
     pKeyDescriptor->copyValuesFrom( this );
 
     return Reference< XPropertySet > ( pKeyDescriptor );
@@ -97,7 +97,7 @@ Reference< XNameAccess > Key::getColumns(  )
         getPropertyValue( getStatics().PRIVATE_FOREIGN_COLUMNS ) >>= foreignColumnNames;
 
         m_keyColumns = KeyColumns::create(
-            m_refMutex, m_conn, m_pSettings, m_schemaName,
+            m_xMutex, m_conn, m_pSettings, m_schemaName,
             m_tableName, columnNames, foreignColumnNames );
     }
     return m_keyColumns;
@@ -138,7 +138,7 @@ Any Key::queryInterface( const Type & reqType )
 }
 
 
-KeyDescriptor::KeyDescriptor( const ::rtl::Reference< RefCountedMutex > & refMutex,
+KeyDescriptor::KeyDescriptor( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
           const Reference< css::sdbc::XConnection > & connection,
           ConnectionSettings *pSettings )
     : ReflectionBase(
@@ -154,7 +154,7 @@ KeyDescriptor::KeyDescriptor( const ::rtl::Reference< RefCountedMutex > & refMut
 Reference< XPropertySet > KeyDescriptor::createDataDescriptor(  )
 {
     KeyDescriptor * pKeyDescriptor = new KeyDescriptor(
-        m_refMutex, m_conn, m_pSettings );
+        m_xMutex, m_conn, m_pSettings );
     pKeyDescriptor->copyValuesFrom( this );
 
     return Reference< XPropertySet > ( pKeyDescriptor );
@@ -165,7 +165,7 @@ Reference< XNameAccess > KeyDescriptor::getColumns(  )
     // TODO: cash columns object !
     if( !m_keyColumns.is() )
     {
-        m_keyColumns = new KeyColumnDescriptors( m_refMutex, m_conn, m_pSettings );
+        m_keyColumns = new KeyColumnDescriptors( m_xMutex, m_conn, m_pSettings );
     }
     return m_keyColumns;
 }

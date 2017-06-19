@@ -136,7 +136,7 @@ class DummyInputStream : public ::cppu::WeakImplHelper< XInputStream >
 };
 
 ZipPackage::ZipPackage ( const uno::Reference < XComponentContext > &xContext )
-: m_aMutexHolder( new SotMutexHolder )
+: m_aMutexHolder( new comphelper::RefCountedMutex )
 , m_nStartKeyGenerationID( xml::crypto::DigestID::SHA1 )
 , m_nChecksumDigestID( xml::crypto::DigestID::SHA1_1K )
 , m_nCommonEncryptionID( xml::crypto::CipherID::BLOWFISH_CFB_8 )

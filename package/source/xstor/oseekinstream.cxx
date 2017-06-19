@@ -56,7 +56,7 @@ uno::Sequence< uno::Type > SAL_CALL OInputSeekStream::getTypes()
 
     if ( pTypeCollection == nullptr )
     {
-        ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
+        ::osl::MutexGuard aGuard( m_xMutex->GetMutex() ) ;
 
         if ( pTypeCollection == nullptr )
         {
@@ -101,7 +101,7 @@ void SAL_CALL OInputSeekStream::release()
 
 void SAL_CALL OInputSeekStream::seek( sal_Int64 location )
 {
-    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
     if ( m_bDisposed )
     {
         SAL_INFO("package.xstor", "Disposed!");
@@ -119,7 +119,7 @@ void SAL_CALL OInputSeekStream::seek( sal_Int64 location )
 
 sal_Int64 SAL_CALL OInputSeekStream::getPosition()
 {
-    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
     if ( m_bDisposed )
     {
         SAL_INFO("package.xstor", "Disposed!");
@@ -137,7 +137,7 @@ sal_Int64 SAL_CALL OInputSeekStream::getPosition()
 
 sal_Int64 SAL_CALL OInputSeekStream::getLength()
 {
-    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
     if ( m_bDisposed )
     {
         SAL_INFO("package.xstor", "Disposed!");

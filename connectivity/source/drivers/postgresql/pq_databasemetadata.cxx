@@ -118,10 +118,10 @@ namespace pq_sdbc_driver
 #define DEFERRABILITY_NONE                7
 
 DatabaseMetaData::DatabaseMetaData(
-    const ::rtl::Reference< RefCountedMutex > & refMutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const css::uno::Reference< css::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings )
-  : m_refMutex( refMutex ),
+  : m_xMutex( refMutex ),
     m_pSettings( pSettings ),
     m_origin( origin ),
     m_getIntSetting_stmt ( m_origin->prepareStatement("SELECT setting FROM pg_catalog.pg_settings WHERE name=?") )
@@ -899,7 +899,7 @@ sal_Int32 DatabaseMetaData::getMaxCharLiteralLength(  )
 // Copied / adapted / simplified from JDBC driver
 sal_Int32 DatabaseMetaData::getIntSetting(const OUString& settingName)
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
 
     Reference< XParameters > params(m_getIntSetting_stmt, UNO_QUERY_THROW );
     params->setString(1, settingName );
@@ -1093,9 +1093,9 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getProcedures(
 
 // LEM TODO: implement
 // LEM TODO: at least fake the columns, even if no row.
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     return new SequenceResultSet(
-        m_refMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > > (), m_pSettings->tc );
+        m_xMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > > (), m_pSettings->tc );
 }
 
 css::uno::Reference< XResultSet > DatabaseMetaData::getProcedureColumns(
@@ -1105,11 +1105,11 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getProcedureColumns(
     const OUString& columnNamePattern )
 {
     (void) catalog; (void) schemaPattern; (void) procedureNamePattern; (void) columnNamePattern;
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
 // LEM TODO: implement
 // LEM TODO: at least fake the columns, even if no row.
     return new SequenceResultSet(
-        m_refMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > >(), m_pSettings->tc );
+        m_xMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > >(), m_pSettings->tc );
 }
 
 css::uno::Reference< XResultSet > DatabaseMetaData::getTables(
@@ -1121,7 +1121,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTables(
     (void) catalog; (void) types;
     Statics &statics = getStatics();
 
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
 
     if (isLog(m_pSettings, LogLevel::Info))
     {
@@ -1194,7 +1194,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTables(
         closeable->close();
 
     return new SequenceResultSet(
-        m_refMutex, *this, statics.tablesRowNames, vec, m_pSettings->tc );
+        m_xMutex, *this, statics.tablesRowNames, vec, m_pSettings->tc );
 }
 
 namespace
@@ -1252,7 +1252,7 @@ namespace
 
 css::uno::Reference< XResultSet > DatabaseMetaData::getSchemas(  )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
 
     if (isLog(m_pSettings, LogLevel::Info))
     {
@@ -1281,24 +1281,24 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getSchemas(  )
     if( closeable.is() )
         closeable->close();
     return new SequenceResultSet(
-        m_refMutex, *this, getStatics().schemaNames, vec, m_pSettings->tc );
+        m_xMutex, *this, getStatics().schemaNames, vec, m_pSettings->tc );
 }
 
 css::uno::Reference< XResultSet > DatabaseMetaData::getCatalogs(  )
 {
     // LEM TODO: return the current catalog like JDBC driver?
     //           at least fake the columns, even if no content
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     return new SequenceResultSet(
-        m_refMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > >(), m_pSettings->tc );
+        m_xMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > >(), m_pSettings->tc );
 }
 
 css::uno::Reference< XResultSet > DatabaseMetaData::getTableTypes(  )
 {
     // LEM TODO: this can be made dynamic, see JDBC driver
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     return new SequenceResultSet(
-        m_refMutex, *this, getStatics().tableTypeNames, getStatics().tableTypeData,
+        m_xMutex, *this, getStatics().tableTypeNames, getStatics().tableTypeData,
         m_pSettings->tc );
 }
 
@@ -1456,7 +1456,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getColumns(
     Statics &statics = getStatics();
 
     // continue !
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
 
     if (isLog(m_pSettings, LogLevel::Info))
     {
@@ -1628,7 +1628,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getColumns(
         closeable->close();
 
     return new SequenceResultSet(
-        m_refMutex, *this, statics.columnRowNames, vec, m_pSettings->tc );
+        m_xMutex, *this, statics.columnRowNames, vec, m_pSettings->tc );
 }
 
 css::uno::Reference< XResultSet > DatabaseMetaData::getColumnPrivileges(
@@ -1639,7 +1639,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getColumnPrivileges(
 {
     (void) catalog;
 
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
 
     if (isLog(m_pSettings, LogLevel::Info))
     {
@@ -1668,7 +1668,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTablePrivileges(
     const OUString& schemaPattern,
     const OUString& tableNamePattern )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
 
     if (isLog(m_pSettings, LogLevel::Info))
     {
@@ -1697,9 +1697,9 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getBestRowIdentifier(
     sal_Bool )
 {
     //LEM TODO: implement! See JDBC driver
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     return new SequenceResultSet(
-        m_refMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > >(), m_pSettings->tc );
+        m_xMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > >(), m_pSettings->tc );
 }
 
 css::uno::Reference< XResultSet > DatabaseMetaData::getVersionColumns(
@@ -1708,9 +1708,9 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getVersionColumns(
     const OUString& )
 {
     //LEM TODO: implement! See JDBC driver
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     return new SequenceResultSet(
-        m_refMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > >(), m_pSettings->tc );
+        m_xMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > >(), m_pSettings->tc );
 }
 
 css::uno::Reference< XResultSet > DatabaseMetaData::getPrimaryKeys(
@@ -1719,7 +1719,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getPrimaryKeys(
     const OUString& table )
 {
     //LEM TODO: review
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
 
 //        1.  TABLE_CAT string =&gt; table catalog (may be NULL )
 //        2. TABLE_SCHEM string =&gt; table schema (may be NULL )
@@ -1837,7 +1837,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getPrimaryKeys(
         elements ++;
     }
     return new SequenceResultSet(
-        m_refMutex, *this, getStatics().primaryKeyNames, ret, m_pSettings->tc );
+        m_xMutex, *this, getStatics().primaryKeyNames, ret, m_pSettings->tc );
 }
 
 // Copied / adapted / simplified from JDBC driver
@@ -2317,7 +2317,7 @@ namespace
 css::uno::Reference< XResultSet > DatabaseMetaData::getTypeInfo(  )
 {
     // Note: Indexes start at 0 (in the API doc, they start at 1)
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
 
     if (isLog(m_pSettings, LogLevel::Info))
     {
@@ -2355,7 +2355,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTypeInfo(  )
     std::sort( vec.begin(), vec.end(), TypeInfoByDataTypeSorter() );
 
     return new SequenceResultSet(
-        m_refMutex,
+        m_xMutex,
         *this,
         getStatics().typeinfoColumnNames,
         vec,
@@ -2372,7 +2372,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getIndexInfo(
     sal_Bool )
 {
     //LEM TODO: review
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
 
     /*
        1. TABLE_CAT string -> table catalog (may be NULL )
@@ -2484,7 +2484,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getIndexInfo(
         }
     }
     return new SequenceResultSet(
-        m_refMutex, *this, getStatics().indexinfoColumnNames,
+        m_xMutex, *this, getStatics().indexinfoColumnNames,
         vec,
         m_pSettings->tc );
 }
@@ -2559,9 +2559,9 @@ sal_Bool DatabaseMetaData::supportsBatchUpdates(  )
 css::uno::Reference< XResultSet > DatabaseMetaData::getUDTs( const css::uno::Any&, const OUString&, const OUString&, const css::uno::Sequence< sal_Int32 >& )
 {
     //LEM TODO: implement! See JDBC driver
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     return new SequenceResultSet(
-        m_refMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > >(), m_pSettings->tc );
+        m_xMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > >(), m_pSettings->tc );
 }
 
 css::uno::Reference< css::sdbc::XConnection > DatabaseMetaData::getConnection()
