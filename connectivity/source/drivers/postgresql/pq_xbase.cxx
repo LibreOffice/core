@@ -60,15 +60,15 @@ namespace pq_sdbc_driver
 ReflectionBase::ReflectionBase(
     const OUString &implName,
     const css::uno::Sequence< OUString > &supportedServices,
-    const ::rtl::Reference< RefCountedMutex >& refMutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex >& refMutex,
     const css::uno::Reference< css::sdbc::XConnection > &conn,
     ConnectionSettings *pSettings,
     cppu::IPropertyArrayHelper & props /* must survive this object !*/ )
-    : ReflectionBase_BASE( refMutex->mutex ),
+    : ReflectionBase_BASE( refMutex->GetMutex() ),
       OPropertySetHelper( ReflectionBase_BASE::rBHelper ),
       m_implName( implName ),
       m_supportedServices( supportedServices ),
-      m_refMutex( refMutex ),
+      m_xMutex( refMutex ),
       m_conn( conn ),
       m_pSettings( pSettings ),
       m_propsDesc( props ),
@@ -152,7 +152,7 @@ Sequence< OUString > ReflectionBase::getSupportedServiceNames()
 
 Sequence< css::uno::Type > ReflectionBase::getTypes()
 {
-    osl::MutexGuard guard( m_refMutex->mutex );
+    osl::MutexGuard guard( m_xMutex->GetMutex() );
     static Sequence< css::uno::Type > collection(
             ::comphelper::concatSequences(
                 ::cppu::OPropertySetHelper::getTypes(),

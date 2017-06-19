@@ -46,9 +46,9 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <comphelper/refcountedmutex.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-
-#include "mutexholder.hxx"
+#include <rtl/ref.hxx>
 
 #include <list>
 #include <memory>
@@ -116,7 +116,7 @@ struct OStorage_Impl
 {
     typedef std::list<StorageHolder_Impl> StorageHoldersType;
 
-    rtl::Reference<SotMutexHolder> m_rMutexRef;
+    rtl::Reference<comphelper::RefCountedMutex> m_xMutex;
 
     OStorage*                   m_pAntiImpl;         // only valid if external references exists
     StorageHoldersType          m_aReadOnlyWrapList; // only valid if readonly external reference exists

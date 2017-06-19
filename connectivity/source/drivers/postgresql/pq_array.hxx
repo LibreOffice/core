@@ -50,18 +50,18 @@ class Array : public cppu::WeakImplHelper< css::sdbc::XArray >
     std::vector< css::uno::Any > m_data;
     css::uno::Reference< css::uno::XInterface > m_owner;
     css::uno::Reference< css::script::XTypeConverter > m_tc;
-    rtl::Reference< RefCountedMutex > m_refMutex;
+    rtl::Reference< comphelper::RefCountedMutex > m_xMutex;
 
 public:
     Array(
-        const rtl::Reference< RefCountedMutex > & mutex,
+        const rtl::Reference< comphelper::RefCountedMutex > & mutex,
         const std::vector< css::uno::Any > & data,
         const css::uno::Reference< css::uno::XInterface > & owner,
         const css::uno::Reference< css::script::XTypeConverter > &tc) :
         m_data( data ),
         m_owner( owner ),
         m_tc( tc ),
-        m_refMutex( mutex )
+        m_xMutex( mutex )
     {}
 
 public: // XArray

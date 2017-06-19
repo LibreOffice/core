@@ -71,7 +71,7 @@ using ZipUtils::Inflater;
 
 /** This class is used to read entries from a zip file
  */
-ZipFile::ZipFile( const rtl::Reference<SotMutexHolder>& aMutexHolder,
+ZipFile::ZipFile( const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
                   uno::Reference < XInputStream > &xInput,
                   const uno::Reference < XComponentContext > & rxContext,
                   bool bInitialise )
@@ -92,7 +92,7 @@ ZipFile::ZipFile( const rtl::Reference<SotMutexHolder>& aMutexHolder,
     }
 }
 
-ZipFile::ZipFile( const rtl::Reference<SotMutexHolder>& aMutexHolder,
+ZipFile::ZipFile( const rtl::Reference< comphelper::RefCountedMutex >& aMutexHolder,
                   uno::Reference < XInputStream > &xInput,
                   const uno::Reference < XComponentContext > & rxContext,
                   bool bInitialise, bool bForceRecovery)
@@ -383,7 +383,7 @@ bool ZipFile::StaticFillData (  ::rtl::Reference< BaseEncryptionData > & rData,
     return bOk;
 }
 
-uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const rtl::Reference<SotMutexHolder>& aMutexHolder,
+uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const rtl::Reference< comphelper::RefCountedMutex >& aMutexHolder,
                                                                 const uno::Reference< uno::XComponentContext >& rxContext,
                                                                 const uno::Reference< XInputStream >& xStream,
                                                                 const ::rtl::Reference< EncryptionData > &rData )
@@ -604,7 +604,7 @@ public:
 }
 
 uno::Reference< XInputStream > ZipFile::createStreamForZipEntry(
-            const rtl::Reference<SotMutexHolder>& aMutexHolder,
+            const rtl::Reference< comphelper::RefCountedMutex >& aMutexHolder,
             ZipEntry & rEntry,
             const ::rtl::Reference< EncryptionData > &rData,
             sal_Int8 nStreamMode,
@@ -635,7 +635,7 @@ std::unique_ptr<ZipEnumeration> ZipFile::entries()
 uno::Reference< XInputStream > ZipFile::getInputStream( ZipEntry& rEntry,
         const ::rtl::Reference< EncryptionData > &rData,
         bool bIsEncrypted,
-        const rtl::Reference<SotMutexHolder>& aMutexHolder )
+        const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
@@ -662,7 +662,7 @@ uno::Reference< XInputStream > ZipFile::getInputStream( ZipEntry& rEntry,
 uno::Reference< XInputStream > ZipFile::getDataStream( ZipEntry& rEntry,
         const ::rtl::Reference< EncryptionData > &rData,
         bool bIsEncrypted,
-        const rtl::Reference<SotMutexHolder>& aMutexHolder )
+        const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
@@ -698,7 +698,7 @@ uno::Reference< XInputStream > ZipFile::getDataStream( ZipEntry& rEntry,
 uno::Reference< XInputStream > ZipFile::getRawData( ZipEntry& rEntry,
         const ::rtl::Reference< EncryptionData >& rData,
         bool bIsEncrypted,
-        const rtl::Reference<SotMutexHolder>& aMutexHolder )
+        const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
@@ -712,7 +712,7 @@ uno::Reference< XInputStream > ZipFile::getWrappedRawStream(
         ZipEntry& rEntry,
         const ::rtl::Reference< EncryptionData >& rData,
         const OUString& aMediaType,
-        const rtl::Reference<SotMutexHolder>& aMutexHolder )
+        const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 

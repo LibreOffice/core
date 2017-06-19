@@ -126,16 +126,16 @@ static ::cppu::IPropertyArrayHelper & getResultSetPropertyArrayHelper()
 }
 
 BaseResultSet::BaseResultSet(
-    const ::rtl::Reference< RefCountedMutex > & refMutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const Reference< XInterface > & owner,
     sal_Int32 rowCount,
     sal_Int32 colCount,
     const Reference< css::script::XTypeConverter > & tc )
-    : BaseResultSet_BASE( refMutex->mutex )
+    : BaseResultSet_BASE( refMutex->GetMutex() )
     , OPropertySetHelper( BaseResultSet_BASE::rBHelper )
     , m_owner( owner )
     , m_tc( tc )
-    , m_refMutex( refMutex )
+    , m_xMutex( refMutex )
     , m_row( -1 )
     , m_rowCount( rowCount )
     , m_fieldCount( colCount )
@@ -144,7 +144,7 @@ BaseResultSet::BaseResultSet(
     POSTGRE_TRACE( "ctor BaseResultSet" );
 }
 
-// LEM TODO: refMutex->mutex should live longer than OComponentHelper,
+// LEM TODO: refMutex->GetMutex() should live longer than OComponentHelper,
 // but calling OComponentHelper::dispose explicitly here calls
 // BaseResultSet::~BaseResultSet in an infinite loop :(
 BaseResultSet::~BaseResultSet()
@@ -201,12 +201,12 @@ Sequence< sal_Int8> BaseResultSet::getImplementationId()
 // {
 //     ResultSetGuard guard(*this);
 //     checkClosed();
-//     return new ResultSetMetaData( m_refMutex, this, &m_result );
+//     return new ResultSetMetaData( m_xMutex, this, &m_result );
 // }
 
 sal_Bool BaseResultSet::next(  )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     m_row ++;
     return m_row < m_rowCount;
@@ -214,49 +214,49 @@ sal_Bool BaseResultSet::next(  )
 
 sal_Bool BaseResultSet::isBeforeFirst(  )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     return m_row == -1;
 }
 
 sal_Bool BaseResultSet::isAfterLast(  )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     return m_row >= m_rowCount;
 }
 
 sal_Bool BaseResultSet::isFirst(  )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     return m_row == 0 && m_rowCount;
 }
 
 sal_Bool BaseResultSet::isLast(  )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     return m_row >= 0 && m_row + 1 == m_rowCount;
 }
 
 void BaseResultSet::beforeFirst(  )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     m_row = -1;
 }
 
 void BaseResultSet::afterLast(  )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     m_row = m_rowCount;
 }
 
 sal_Bool BaseResultSet::first(  )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     bool bRet = ( m_rowCount > 0 );
     if( bRet )
@@ -266,7 +266,7 @@ sal_Bool BaseResultSet::first(  )
 
 sal_Bool BaseResultSet::last(  )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     bool bRet = ( m_rowCount > 0 );
     if( bRet )
@@ -276,14 +276,14 @@ sal_Bool BaseResultSet::last(  )
 
 sal_Int32 BaseResultSet::getRow(  )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     return m_row +1;
 }
 
 sal_Bool BaseResultSet::absolute( sal_Int32 row )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     if( row > 0 )
     {
@@ -302,7 +302,7 @@ sal_Bool BaseResultSet::absolute( sal_Int32 row )
 
 sal_Bool BaseResultSet::relative( sal_Int32 rows )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     m_row += rows;
 
@@ -315,7 +315,7 @@ sal_Bool BaseResultSet::relative( sal_Int32 rows )
 
 sal_Bool BaseResultSet::previous(  )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     bool bRet = ( m_row != -1 );
     if( bRet )
@@ -345,7 +345,7 @@ sal_Bool BaseResultSet::rowDeleted(  )
 
 Reference< XInterface > BaseResultSet::getStatement()
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     return m_owner;
 }
@@ -374,7 +374,7 @@ Any BaseResultSet::convertTo( const Any & val , const Type & type )
 
 sal_Bool BaseResultSet::getBoolean( sal_Int32 columnIndex )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     checkColumnIndex( columnIndex );
     checkRowIndex();
@@ -399,7 +399,7 @@ sal_Bool BaseResultSet::getBoolean( sal_Int32 columnIndex )
 
 sal_Int8 BaseResultSet::getByte( sal_Int32 columnIndex )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     checkColumnIndex( columnIndex );
     checkRowIndex();
@@ -410,7 +410,7 @@ sal_Int8 BaseResultSet::getByte( sal_Int32 columnIndex )
 
 sal_Int16 BaseResultSet::getShort( sal_Int32 columnIndex )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     checkColumnIndex( columnIndex );
     checkRowIndex();
@@ -421,7 +421,7 @@ sal_Int16 BaseResultSet::getShort( sal_Int32 columnIndex )
 
 OUString BaseResultSet::getString( sal_Int32 columnIndex )
 {
-    MutexGuard guard(m_refMutex->mutex);
+    MutexGuard guard(m_xMutex->GetMutex());
     checkClosed();
     checkColumnIndex( columnIndex );
     checkRowIndex();
@@ -433,7 +433,7 @@ OUString BaseResultSet::getString( sal_Int32 columnIndex )
 
 sal_Int32 BaseResultSet::getInt( sal_Int32 columnIndex )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     checkColumnIndex( columnIndex );
     checkRowIndex();
@@ -444,7 +444,7 @@ sal_Int32 BaseResultSet::getInt( sal_Int32 columnIndex )
 
 sal_Int64 BaseResultSet::getLong( sal_Int32 columnIndex )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     checkColumnIndex( columnIndex );
     checkRowIndex();
@@ -455,7 +455,7 @@ sal_Int64 BaseResultSet::getLong( sal_Int32 columnIndex )
 
 float BaseResultSet::getFloat( sal_Int32 columnIndex )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     checkColumnIndex( columnIndex );
     checkRowIndex();
@@ -466,7 +466,7 @@ float BaseResultSet::getFloat( sal_Int32 columnIndex )
 
 double BaseResultSet::getDouble( sal_Int32 columnIndex )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     checkColumnIndex( columnIndex );
     double d = 0.;
@@ -476,7 +476,7 @@ double BaseResultSet::getDouble( sal_Int32 columnIndex )
 
 Sequence< sal_Int8 > BaseResultSet::getBytes( sal_Int32 columnIndex )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     checkColumnIndex( columnIndex );
     checkRowIndex();
@@ -550,7 +550,7 @@ Reference< css::sdbc::XClob > BaseResultSet::getClob( sal_Int32 /* columnIndex *
 
 Reference< css::sdbc::XArray > BaseResultSet::getArray( sal_Int32 columnIndex )
 {
-    return new Array( m_refMutex, parseArray( getString( columnIndex ) ), *this, m_tc );
+    return new Array( m_xMutex, parseArray( getString( columnIndex ) ), *this, m_tc );
 }
 
 ::cppu::IPropertyArrayHelper & BaseResultSet::getInfoHelper()
