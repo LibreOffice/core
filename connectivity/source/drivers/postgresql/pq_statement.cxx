@@ -152,14 +152,14 @@ static ::cppu::IPropertyArrayHelper & getStatementPropertyArrayHelper()
     return *pArrayHelper;
 }
 
-Statement::Statement( const ::rtl::Reference< RefCountedMutex > & refMutex,
+Statement::Statement( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
                       const Reference< XConnection > & conn,
                       struct ConnectionSettings *pSettings )
-    : Statement_BASE( refMutex->mutex )
+    : Statement_BASE( refMutex->GetMutex() )
     , OPropertySetHelper( Statement_BASE::rBHelper )
     , m_connection( conn )
     , m_pSettings( pSettings )
-    , m_refMutex( refMutex )
+    , m_xMutex( refMutex )
     , m_multipleResultAvailable(false)
     , m_multipleResultUpdateCount(0)
     , m_lastOidInserted(InvalidOid)
@@ -221,7 +221,7 @@ void Statement::close(  )
     Reference< XConnection > r;
     Reference< XCloseable > resultSet;
     {
-        MutexGuard guard( m_refMutex->mutex );
+        MutexGuard guard( m_xMutex->GetMutex() );
         m_pSettings = nullptr;
         r = m_connection;
         m_connection.clear();
@@ -820,7 +820,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
 
 sal_Bool Statement::execute( const OUString& sql )
 {
-    osl::MutexGuard guard( m_refMutex->mutex );
+    osl::MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     OString cmd = OUStringToOString( sql, m_pSettings );
 
@@ -828,7 +828,7 @@ sal_Bool Statement::execute( const OUString& sql )
     m_lastTableInserted.clear();
 
     struct CommandData data;
-    data.refMutex = m_refMutex;
+    data.refMutex = m_xMutex;
     data.ppSettings = &m_pSettings;
     data.pLastOidInserted = &m_lastOidInserted;
     data.pLastQuery = &m_lastQuery;
@@ -847,7 +847,7 @@ Reference< XConnection > Statement::getConnection(  )
 {
     Reference< XConnection > ret;
     {
-        MutexGuard guard( m_refMutex->mutex );
+        MutexGuard guard( m_xMutex->GetMutex() );
         checkClosed();
         ret = m_connection;
     }
@@ -966,7 +966,7 @@ void Statement::disposing()
 
 Reference< XResultSet > Statement::getGeneratedValues(  )
 {
-    osl::MutexGuard guard( m_refMutex->mutex );
+    osl::MutexGuard guard( m_xMutex->GetMutex() );
     return getGeneratedValuesFromLastInsert(
         m_pSettings, m_connection, m_lastOidInserted, m_lastTableInserted, m_lastQuery );
 }
