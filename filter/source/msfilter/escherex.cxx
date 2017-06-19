@@ -3482,6 +3482,10 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             if ( pOutlinerParaObject && pOutlinerParaObject->IsVertical() )
                                 nTextPathFlags |= 0x2000;
                         }
+
+                        // Use best fit to avoid stretching in the MSO
+                        nTextPathFlags |= use_gtextFBestFit | gtextFBestFit;
+
                         if ( nTextPathFlags != nTextPathFlagsOrg )
                             AddOpt( DFF_Prop_gtextFStrikethrough, nTextPathFlags );
                     }
