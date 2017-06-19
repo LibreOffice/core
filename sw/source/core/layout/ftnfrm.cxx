@@ -1905,7 +1905,8 @@ void SwFootnoteBossFrame::MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool b
     SwFootnoteFrame* pLastInsertedFootnote = nullptr;
     for (SwFootnoteFrame* pFootnote : rFootnoteArr)
     {
-        SwFootnoteBossFrame* pRefBoss = pFootnote->GetRef()->FindFootnoteBossFrame( true );
+        SwFootnoteBossFrame* pRefBoss(pFootnote->GetRef()->FindFootnoteBossFrame(
+                !pFootnote->GetAttr()->GetFootnote().IsEndNote()));
         if( pRefBoss != this )
         {
             const sal_uInt16 nRefNum = pRefBoss->FindPageFrame()->GetPhyPageNum();
