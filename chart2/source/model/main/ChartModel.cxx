@@ -632,26 +632,8 @@ void SAL_CALL ChartModel::close( sal_Bool bDeliverOwnership )
 
         if( m_aLifeTimeManager.g_close_isNeedToCancelLongLastingCalls( bDeliverOwnership, aVetoException ) )
         {
-            ////you can empty this block, if you never start longlasting calls or
-            ////if your longlasting calls are per default not cancelable (check how you have constructed your LifeTimeManager)
-
-            bool bLongLastingCallsAreCanceled = false;
-            try
-            {
-                //try to cancel running longlasting calls
-                //// @todo
-            }
-            catch (const uno::Exception&)
-            {
-                //// @todo
-                //do not throw anything here!! (without endTryClose)
-            }
-            //if not successful canceled
-            if(!bLongLastingCallsAreCanceled)
-            {
-                m_aLifeTimeManager.g_close_endTryClose( bDeliverOwnership );
-                throw aVetoException;
-            }
+            m_aLifeTimeManager.g_close_endTryClose( bDeliverOwnership );
+            throw aVetoException;
         }
 
     }

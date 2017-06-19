@@ -68,9 +68,8 @@ void BubbleChart::calculateMaximumLogicBubbleSize()
 {
     double fMaxSize = 0.0;
 
-    sal_Int32 nStartIndex = 0;
     sal_Int32 nEndIndex = VSeriesPlotter::getPointCount();
-    for( sal_Int32 nIndex = nStartIndex; nIndex < nEndIndex; nIndex++ )
+    for( sal_Int32 nIndex = 0; nIndex < nEndIndex; nIndex++ )
     {
         std::vector< std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
         const std::vector< std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
@@ -196,7 +195,7 @@ void BubbleChart::createShapes()
     //update/create information for current group
     double fLogicZ = 1.0;//as defined
 
-    sal_Int32 nStartIndex = 0; // inclusive       ;..todo get somehow from x scale
+    sal_Int32 const nStartIndex = 0; // inclusive       ;..todo get somehow from x scale
     sal_Int32 nEndIndex = VSeriesPlotter::getPointCount();
     if(nEndIndex<=0)
         nEndIndex=1;

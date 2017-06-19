@@ -53,7 +53,6 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
                      , double fLogicRadius
                      , double fLogicZ )
 {
-    sal_Int32 nDimensionCount = 2;
     AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
 
     FixedNumberFormatter aFixedNumberFormatter(
@@ -116,7 +115,7 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
             double fLogicAngle = pTickInfo->getUnscaledTickValue();
 
             LabelAlignment eLabelAlignment(LABEL_ALIGN_CENTER);
-            PolarLabelPositionHelper aPolarLabelPositionHelper(m_pPosHelper.get(), nDimensionCount, xTarget, pShapeFactory);
+            PolarLabelPositionHelper aPolarLabelPositionHelper(m_pPosHelper.get(), 2/*nDimensionCount*/, xTarget, pShapeFactory);
             sal_Int32 nScreenValueOffsetInRadiusDirection = m_aAxisLabelProperties.m_aMaximumSpaceForLabels.Height/15;
             awt::Point aAnchorScreenPosition2D( aPolarLabelPositionHelper.getLabelScreenPositionAndAlignmentForLogicValues(
                     eLabelAlignment, fLogicAngle, fLogicRadius, fLogicZ, nScreenValueOffsetInRadiusDirection ));
@@ -177,7 +176,7 @@ void VPolarAngleAxis::createLabels()
 
         AxisLabelProperties aAxisLabelProperties( m_aAxisLabelProperties );
         aAxisLabelProperties.bOverlapAllowed = true;
-        double fLogicZ      = 1.0;//as defined
+        double const fLogicZ = 1.0;//as defined
         while( !createTextShapes_ForAngleAxis( m_xTextTarget, aTickIter
                         , aAxisLabelProperties
                         , fLogicRadius, fLogicZ
@@ -195,7 +194,7 @@ void VPolarAngleAxis::createShapes()
         return;
 
     double fLogicRadius = m_pPosHelper->getOuterLogicRadius();
-    double fLogicZ      = 1.0;//as defined
+    double const fLogicZ = 1.0;//as defined
 
     //create axis main lines
     drawing::PointSequenceSequence aPoints(1);

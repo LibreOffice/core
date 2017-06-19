@@ -207,10 +207,9 @@ void RangeHighlighter::fillRangesForDataSeries( const uno::Reference< chart2::XD
     Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
     if( xSource.is())
     {
-        sal_Int32 nPreferredColor = defaultPreferredColor;
         lcl_fillRanges( m_aSelectedRanges,
                         ::chart::DataSourceHelper::getRangesFromDataSource( xSource ),
-                        nPreferredColor );
+                        defaultPreferredColor );
     }
 }
 
@@ -238,10 +237,9 @@ void RangeHighlighter::fillRangesForErrorBars(
         Reference< chart2::data::XDataSource > xSource( xErrorBar, uno::UNO_QUERY );
         if( xSource.is())
         {
-            sal_Int32 nPreferredColor = defaultPreferredColor;
             lcl_fillRanges( m_aSelectedRanges,
                             ::chart::DataSourceHelper::getRangesFromDataSource( xSource ),
-                            nPreferredColor );
+                            defaultPreferredColor );
         }
     }
     else
