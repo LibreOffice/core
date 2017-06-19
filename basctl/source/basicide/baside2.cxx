@@ -810,7 +810,6 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
     {
         nLineHeight = 1;
     }
-    sal_Int32 nParaSpace = 10;
 
     Size aPaperSz = pPrinter->GetOutputSize();
     aPaperSz.Width() -= (Print::nLeftMargin + Print::nRightMargin);
@@ -848,7 +847,7 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
             if( nCurPage-1 == nPrintPage )
                 pPrinter->DrawText( aPos, aTmpLine );
         }
-        aPos.Y() += nParaSpace;
+        aPos.Y() += 10; // nParaSpace
     }
 
     pPrinter->SetFont( aOldFont );

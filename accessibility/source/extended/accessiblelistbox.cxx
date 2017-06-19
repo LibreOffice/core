@@ -120,23 +120,7 @@ namespace accessibility
             case VclEventId::ListboxTreeFocus:
                 {
                     VclPtr<SvTreeListBox> pBox = getListBox();
-                    bool bNeedFocus = false;
-                    if (pBox)
-                    {
-                        vcl::Window* pParent = static_cast<vcl::Window*>(pBox)->GetParent();
-                        if (pParent && pParent->GetType() == WindowType::FLOATINGWINDOW)
-                        {
-                            // MT: ImplGetAppSVData shouldn't be exported from VCL.
-                            // In which scenario is this needed?
-                            // If needed, we need to find an other solution
-                            /*
-                              ImplSVData* pSVData = ImplGetAppSVData();
-                              if (pSVData && pSVData->maWinData.mpFirstFloat == (FloatingWindow*)pParent)
-                              bNeedFocus = true;
-                            */
-                        }
-                    }
-                    if( pBox && (pBox->HasFocus() || bNeedFocus) )
+                    if( pBox && pBox->HasFocus() )
                     {
                         uno::Any aNewValue;
                         SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
