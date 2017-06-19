@@ -2334,8 +2334,8 @@ int CommonSubseq::FindLCS( int *pLcs1, int *pLcs2, int nStt1, int nEnd1,
     int nLen1 = nEnd1 ? nEnd1 - nStt1 : rCmp.GetLen1();
     int nLen2 = nEnd2 ? nEnd2 - nStt2 : rCmp.GetLen2();
 
-    OSL_ASSERT( nLen1 >= 0 );
-    OSL_ASSERT( nLen2 >= 0 );
+    assert( nLen1 >= 0 );
+    assert( nLen2 >= 0 );
 
     std::unique_ptr<int*[]> pLcs( new int*[ nLen1 + 1 ] );
     pLcs[ 0 ] = pData.get();

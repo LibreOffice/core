@@ -2295,7 +2295,7 @@ TableMergeErr SwDoc::MergeTable( SwPaM& rPam )
                 if (pU && pU->GetRedlSaveCount())
                 {
                     SwEditShell *const pEditShell(GetEditShell());
-                    OSL_ASSERT(pEditShell);
+                    assert(pEditShell);
                     ::sw::UndoRedoContext context(*this, *pEditShell);
                     static_cast<SfxUndoAction *>(pU)->UndoWithContext(context);
                 }

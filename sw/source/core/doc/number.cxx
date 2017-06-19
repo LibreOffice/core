@@ -78,7 +78,7 @@ OUString SwNumRule::GetOutlineRuleName()
 
 const SwNumFormat& SwNumRule::Get( sal_uInt16 i ) const
 {
-    OSL_ASSERT( i < MAXLEVEL && meRuleType < RULE_END );
+    assert( i < MAXLEVEL && meRuleType < RULE_END );
     return maFormats[ i ]
            ? *maFormats[ i ]
            : ( meDefaultNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION
@@ -90,7 +90,7 @@ const SwNumFormat* SwNumRule::GetNumFormat( sal_uInt16 i ) const
 {
     const SwNumFormat * pResult = nullptr;
 
-    OSL_ASSERT( i < MAXLEVEL && meRuleType < RULE_END );
+    assert( i < MAXLEVEL && meRuleType < RULE_END );
     if ( i < MAXLEVEL && meRuleType < RULE_END)
     {
         pResult = maFormats[ i ];
