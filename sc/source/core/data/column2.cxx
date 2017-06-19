@@ -1504,8 +1504,6 @@ void ScColumn::CellStorageModified()
 {
     // TODO: Update column's "last updated" timestamp here.
 
-    mbDirtyGroups = true;
-
 #if DEBUG_COLUMN_STORAGE
     if (maCells.size() != MAXROWCOUNT)
     {

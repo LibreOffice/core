@@ -142,7 +142,6 @@ class ScColumn
 
     ScAttrArray*          pAttrArray;
     ScDocument*           pDocument;
-    bool mbDirtyGroups;     /// formula groups are dirty.
 
     size_t mnBlkCountFormula;
 
