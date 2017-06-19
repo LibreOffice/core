@@ -22,15 +22,15 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <comphelper/refcountedmutex.hxx>
 #include <cppuhelper/implbase.hxx>
-
-#include <mutexholder.hxx>
+#include <rtl/ref.hxx>
 
 class WrapStreamForShare : public cppu::WeakImplHelper < css::io::XInputStream
                                                         , css::io::XSeekable >
 {
 protected:
-    rtl::Reference<SotMutexHolder> m_rMutexRef;
+    rtl::Reference< comphelper::RefCountedMutex > m_xMutex;
     css::uno::Reference < css::io::XInputStream > m_xInStream;
     css::uno::Reference < css::io::XSeekable > m_xSeekable;
 
@@ -38,7 +38,7 @@ protected:
 
 public:
     WrapStreamForShare( const css::uno::Reference< css::io::XInputStream >& xInStream,
-                        const rtl::Reference<SotMutexHolder>& rMutexRef );
+                        const rtl::Reference< comphelper::RefCountedMutex >& rMutexRef );
     virtual ~WrapStreamForShare() override;
 
     // XInputStream

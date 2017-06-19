@@ -134,12 +134,12 @@ public:
 };
 
 Container::Container(
-    const ::rtl::Reference< RefCountedMutex > & refMutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const css::uno::Reference< css::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings,
     const OUString &type)
-    : ContainerBase( refMutex->mutex ),
-      m_refMutex( refMutex ),
+    : ContainerBase( refMutex->GetMutex() ),
+      m_xMutex( refMutex ),
       m_pSettings( pSettings ),
       m_origin( origin ),
       m_type( type )
@@ -266,7 +266,7 @@ void Container::rename( const OUString &oldName, const OUString &newName )
 {
     Any newValue;
     {
-        osl::MutexGuard guard ( m_refMutex->mutex );
+        osl::MutexGuard guard ( m_xMutex->GetMutex() );
         String2IntMap::iterator ii = m_name2index.find( oldName );
         if( ii != m_name2index.end() )
         {
@@ -282,7 +282,7 @@ void Container::rename( const OUString &oldName, const OUString &newName )
 
 void Container::dropByName( const OUString& elementName )
 {
-    osl::MutexGuard guard( m_refMutex->mutex );
+    osl::MutexGuard guard( m_xMutex->GetMutex() );
     String2IntMap::const_iterator ii = m_name2index.find( elementName );
     if( ii == m_name2index.end() )
     {
@@ -296,7 +296,7 @@ void Container::dropByName( const OUString& elementName )
 
 void Container::dropByIndex( sal_Int32 index )
 {
-    osl::MutexGuard guard( m_refMutex->mutex );
+    osl::MutexGuard guard( m_xMutex->GetMutex() );
     if( index < 0 ||  index >=(sal_Int32)m_values.size() )
     {
         throw css::lang::IndexOutOfBoundsException(
@@ -346,7 +346,7 @@ void Container::append(
     const css::uno::Reference< css::beans::XPropertySet >& descriptor )
 
 {
-    osl::MutexGuard guard( m_refMutex->mutex );
+    osl::MutexGuard guard( m_xMutex->GetMutex() );
 
     if( hasByName( name ) )
     {

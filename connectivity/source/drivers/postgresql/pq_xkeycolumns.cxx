@@ -68,7 +68,7 @@ namespace pq_sdbc_driver
 {
 
 KeyColumns::KeyColumns(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
         const OUString &schemaName,
@@ -100,7 +100,7 @@ void KeyColumns::refresh()
             log( m_pSettings, LogLevel::Info, buf.makeStringAndClear().getStr() );
         }
 
-        osl::MutexGuard guard( m_refMutex->mutex );
+        osl::MutexGuard guard( m_xMutex->GetMutex() );
 
         Statics &st = getStatics();
         Reference< XDatabaseMetaData > meta = m_origin->getMetaData();
@@ -129,7 +129,7 @@ void KeyColumns::refresh()
                 continue;
 
             KeyColumn * pKeyColumn =
-                new KeyColumn( m_refMutex, m_origin, m_pSettings );
+                new KeyColumn( m_xMutex, m_origin, m_pSettings );
             Reference< css::beans::XPropertySet > prop = pKeyColumn;
 
             OUString name = columnMetaData2SDBCX( pKeyColumn, xRow );
@@ -164,7 +164,7 @@ void KeyColumns::appendByDescriptor(
         "KeyColumns::appendByDescriptor not implemented yet",
         *this, OUString(), 1, Any() );
 
-//     osl::MutexGuard guard( m_refMutex->mutex );
+//     osl::MutexGuard guard( m_xMutex->GetMutex() );
 //     Statics & st = getStatics();
 //     Reference< XPropertySet > past = createDataDescriptor();
 //     past->setPropertyValue( st.IS_NULLABLE, makeAny( css::sdbc::ColumnValue::NULLABLE ) );
@@ -180,7 +180,7 @@ void KeyColumns::dropByIndex( sal_Int32 index )
     throw css::sdbc::SQLException(
         "KeyColumns::dropByIndex not implemented yet",
         *this, OUString(), 1, Any() );
-//     osl::MutexGuard guard( m_refMutex->mutex );
+//     osl::MutexGuard guard( m_xMutex->GetMutex() );
 //     if( index < 0 ||  index >= m_values.getLength() )
 //     {
 //         OUStringBuffer buf( 128 );
@@ -213,11 +213,11 @@ void KeyColumns::dropByIndex( sal_Int32 index )
 
 Reference< css::beans::XPropertySet > KeyColumns::createDataDescriptor()
 {
-    return new KeyColumnDescriptor( m_refMutex, m_origin, m_pSettings );
+    return new KeyColumnDescriptor( m_xMutex, m_origin, m_pSettings );
 }
 
 Reference< css::container::XNameAccess > KeyColumns::create(
-    const ::rtl::Reference< RefCountedMutex > & refMutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const css::uno::Reference< css::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings,
     const OUString &schemaName,
@@ -235,7 +235,7 @@ Reference< css::container::XNameAccess > KeyColumns::create(
 
 
 KeyColumnDescriptors::KeyColumnDescriptors(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings )
     : Container( refMutex, origin, pSettings,  "KEY_COLUMN" )
@@ -243,7 +243,7 @@ KeyColumnDescriptors::KeyColumnDescriptors(
 
 Reference< css::beans::XPropertySet > KeyColumnDescriptors::createDataDescriptor()
 {
-    return new KeyColumnDescriptor( m_refMutex, m_origin, m_pSettings );
+    return new KeyColumnDescriptor( m_xMutex, m_origin, m_pSettings );
 }
 };
 

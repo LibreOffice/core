@@ -60,7 +60,7 @@ class ReflectionBase :
 protected:
     const OUString m_implName;
     const css::uno::Sequence< OUString > m_supportedServices;
-    ::rtl::Reference< RefCountedMutex > m_refMutex;
+    ::rtl::Reference< comphelper::RefCountedMutex > m_xMutex;
     css::uno::Reference< css::sdbc::XConnection > m_conn;
     ConnectionSettings *m_pSettings;
     cppu::IPropertyArrayHelper & m_propsDesc;
@@ -69,7 +69,7 @@ public:
     ReflectionBase(
         const OUString &implName,
         const css::uno::Sequence< OUString > &supportedServices,
-        const ::rtl::Reference< RefCountedMutex >& refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex >& refMutex,
         const css::uno::Reference< css::sdbc::XConnection > &conn,
         ConnectionSettings *pSettings,
         cppu::IPropertyArrayHelper & props /* must survive this object !*/ );
