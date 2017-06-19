@@ -21,6 +21,7 @@ $(call gb_LinkTarget_get_target,$(2)): ENABLE_WERROR := $(true)
 $(call gb_CompilerTest_get_target,$(1)): $(call gb_LinkTarget_get_target,$(2))
 $(call gb_CompilerTest_get_clean_target,$(1)): $(call gb_LinkTarget_get_clean_target,$(2))
 $$(eval $$(call gb_Module_register_target,$(call gb_CompilerTest_get_target,$(1)),$(call gb_CompilerTest_get_clean_target,$(1))))
+gb_COMPILER_PLUGINS += -Xclang -plugin-arg-loplugin -Xclang --unit-test-mode
 $(call gb_Helper_make_userfriendly_targets,$(1),CompilerTest)
 
 endef

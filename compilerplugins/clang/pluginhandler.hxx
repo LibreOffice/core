@@ -47,6 +47,7 @@ class PluginHandler
         string scope;
         string warningsOnly;
         bool warningsAsErrors;
+        bool unitTestMode;
     };
 
 /**
