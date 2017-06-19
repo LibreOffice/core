@@ -191,6 +191,7 @@ gb_LinkTarget_INCLUDE :=\
     -I$(BUILDDIR)/config_$(gb_Side) \
 
 ifeq ($(COM_IS_CLANG),TRUE)
+gb_COMPILER_TEST_FLAGS := -Xclang -plugin-arg-loplugin -Xclang --unit-test-mode
 ifeq ($(COMPILER_PLUGIN_TOOL),)
 gb_COMPILER_PLUGINS := -Xclang -load -Xclang $(BUILDDIR)/compilerplugins/obj/plugin.so -Xclang -add-plugin -Xclang loplugin
 ifneq ($(COMPILER_PLUGIN_WARNINGS_ONLY),)
@@ -209,6 +210,7 @@ gb_COMPILER_PLUGINS_SETUP := ICECC_EXTRAFILES=$(SRCDIR)/include/sal/log-areas.do
 gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS := \
     -Xclang -plugin-arg-loplugin -Xclang --warnings-as-errors
 else
+gb_COMPILER_TEST_FLAGS :=
 gb_COMPILER_SETUP :=
 gb_COMPILER_PLUGINS :=
 gb_COMPILER_PLUGINS_SETUP :=

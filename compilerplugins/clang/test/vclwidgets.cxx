@@ -16,7 +16,7 @@ struct Widget : public VclReferenceBase
 {
     VclPtr<Widget> mpParent;
 
-    void widget1() // expected-error {{Unreferenced externally visible function definition [loplugin:unreffun]}}
+    void widget1()
     {
         // test that we ignore assignments from a member field
         Widget* p = mpParent;
@@ -48,7 +48,7 @@ Widget* g()
 }
 
 // test the variable init detection
-void bar() // expected-error {{Unreferenced externally visible function definition [loplugin:unreffun]}}
+void bar()
 {
     Widget* p = f(); // expected-error {{assigning a returned-by-value VclPtr<T> to a T* variable is dodgy, should be assigned to a VclPtr. If you know that the RHS does not return a newly created T, then add a '.get()' to the RHS [loplugin:vclwidgets]}}
     (void)p;
@@ -59,7 +59,7 @@ void bar() // expected-error {{Unreferenced externally visible function definiti
 }
 
 // test the assignment detection
-void bar2() // expected-error {{Unreferenced externally visible function definition [loplugin:unreffun]}}
+void bar2()
 {
     Widget* p;
     p = nullptr;
@@ -76,7 +76,7 @@ void bar2() // expected-error {{Unreferenced externally visible function definit
 template<class T>
 T * get() { return nullptr; }
 
-void bar3() // expected-error {{Unreferenced externally visible function definition [loplugin:unreffun]}}
+void bar3()
 {
     Widget* p;
     p = get<Widget>();
