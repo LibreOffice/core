@@ -56,6 +56,7 @@ interface TableDrawText
     SID_SELECTALL       [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_CHARMAP         [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_EMOJI_CONTROL   [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_CHARMAP_CONTROL   [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_THES            [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_THESAURUS       [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     // attribute:
