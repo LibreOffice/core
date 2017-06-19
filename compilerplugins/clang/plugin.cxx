@@ -265,6 +265,11 @@ SourceLocation Plugin::locationAfterToken( SourceLocation location )
     return Lexer::getLocForEndOfToken( location, 0, compiler.getSourceManager(), compiler.getLangOpts());
     }
 
+bool Plugin::isUnitTestMode()
+    {
+    return PluginHandler::isUnitTestMode();
+    }
+
 RewritePlugin::RewritePlugin( const InstantiationData& data )
     : Plugin( data )
     , rewriter( data.rewriter )

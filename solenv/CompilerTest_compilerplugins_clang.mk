@@ -27,6 +27,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/stringconstant \
     compilerplugins/clang/test/unnecessaryoverride-dtor \
     compilerplugins/clang/test/unoany \
+    compilerplugins/clang/test/unusedfields \
     compilerplugins/clang/test/useuniqueptr \
     compilerplugins/clang/test/vclwidgets \
 ))

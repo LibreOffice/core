@@ -78,6 +78,8 @@ class Plugin
         bool isInUnoIncludeFile(const FunctionDecl*) const;
 
         static void normalizeDotDotInFilePath(std::string&);
+
+        static bool isUnitTestMode();
     private:
         static void registerPlugin( Plugin* (*create)( const InstantiationData& ), const char* optionName, bool isPPCallback, bool byDefault );
         template< typename T > static Plugin* createHelper( const InstantiationData& data );

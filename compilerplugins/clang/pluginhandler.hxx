@@ -37,6 +37,7 @@ class PluginHandler
         DiagnosticBuilder report( DiagnosticsEngine::Level level, const char * plugin, StringRef message,
             CompilerInstance& compiler, SourceLocation loc = SourceLocation());
         bool addRemoval( SourceLocation loc );
+        static bool isUnitTestMode();
     private:
         void handleOption( const string& option );
         void createPlugins( set< string > rewriters );
@@ -47,7 +48,6 @@ class PluginHandler
         string scope;
         string warningsOnly;
         bool warningsAsErrors;
-        bool unitTestMode;
     };
 
 /**
