@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_8f497991",
+        "filename": "sal/osl/unx/signal.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-06-19T12:06:28Z",
+      "side": 1,
+      "message": "here and below: why add unrelated changes? if you want your changes getting reviewed, then don\u0027t do that (when reviewing, it\u0027s a pain having to determine what\u0027s relevant and what\u0027s not)",
+      "revId": "6700e8d2e3eb6e805c352a0a87dbb293b8c13d84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
