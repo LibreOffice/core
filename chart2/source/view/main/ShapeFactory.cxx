@@ -640,9 +640,8 @@ uno::Reference<drawing::XShape>
         try
         {
             //PercentDiagonal
-            sal_Int16 nPercentDiagonal = 5;
             xProp->setPropertyValue( UNO_NAME_3D_PERCENT_DIAGONAL
-                , uno::Any( nPercentDiagonal ) );
+                , uno::Any( sal_Int16(5) ) );
 
             //Polygon
             sal_Int32 nVerticalSegmentCount = 0;
@@ -938,9 +937,8 @@ uno::Reference< drawing::XShape >
                 , uno::Any((sal_Int32)fDepth) );
 
             //PercentDiagonal
-            sal_Int16 nPercentDiagonal = 0;
             xProp->setPropertyValue( UNO_NAME_3D_PERCENT_DIAGONAL
-                , uno::Any( nPercentDiagonal ) );
+                , uno::Any( sal_Int16(0) ) );
 
             //Polygon
             drawing::PolyPolygonShape3D aPoly( BezierToPoly(aCoords) );
@@ -1063,9 +1061,8 @@ uno::Reference< drawing::XShape >
                 , uno::Any((sal_Int32)fDepth) );
 
             //PercentDiagonal
-            sal_Int16 nPercentDiagonal = 0;
             xProp->setPropertyValue( UNO_NAME_3D_PERCENT_DIAGONAL
-                , uno::Any( nPercentDiagonal ) );
+                , uno::Any( sal_Int16(0) ) );
 
             //Polygon
             xProp->setPropertyValue( UNO_NAME_3D_POLYPOLYGON3D
@@ -1859,9 +1856,7 @@ uno::Reference< drawing::XShape >
     {
         try
         {
-            drawing::CircleKind eKind = drawing::CircleKind_FULL;
-            xProp->setPropertyValue( UNO_NAME_CIRCKIND
-                , uno::Any( eKind ) );
+            xProp->setPropertyValue( UNO_NAME_CIRCKIND, uno::Any( drawing::CircleKind_FULL ) );
         }
         catch( const uno::Exception& e )
         {
@@ -2279,13 +2274,10 @@ uno::Reference< drawing::XShape >
 
         //fill some more shape properties into the ValueMap
         {
-            drawing::TextHorizontalAdjust eHorizontalAdjust = drawing::TextHorizontalAdjust_CENTER;
-            drawing::TextVerticalAdjust eVerticalAdjust = drawing::TextVerticalAdjust_CENTER;
-
-            aValueMap.insert( tPropertyNameValueMap::value_type( "TextHorizontalAdjust", uno::Any(eHorizontalAdjust) ) ); // drawing::TextHorizontalAdjust
-            aValueMap.insert( tPropertyNameValueMap::value_type( "TextVerticalAdjust", uno::Any(eVerticalAdjust) ) ); //drawing::TextVerticalAdjust
-            aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowHeight", uno::Any(true) ) ); // sal_Bool
-            aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowWidth", uno::Any(true) ) ); // sal_Bool
+            aValueMap.insert( { "TextHorizontalAdjust", uno::Any(drawing::TextHorizontalAdjust_CENTER) } ); // drawing::TextHorizontalAdjust
+            aValueMap.insert( { "TextVerticalAdjust", uno::Any(drawing::TextVerticalAdjust_CENTER) } ); //drawing::TextVerticalAdjust
+            aValueMap.insert( { "TextAutoGrowHeight", uno::Any(true) } ); // sal_Bool
+            aValueMap.insert( { "TextAutoGrowWidth", uno::Any(true) } ); // sal_Bool
 
             //set name/classified ObjectID (CID)
             if( !aName.isEmpty() )
@@ -2371,10 +2363,8 @@ uno::Reference< drawing::XShape >
         if ( xShapeProp.is() && ( xShapeProp->getPropertyValue( "CharHeight" ) >>= fFontHeight ) )
         {
             fFontHeight *= ( 2540.0f / 72.0f );  // pt -> 1/100 mm
-            float fXFraction = 0.18f;
-            sal_Int32 nXDistance = static_cast< sal_Int32 >( ::rtl::math::round( fFontHeight * fXFraction ) );
-            float fYFraction = 0.30f;
-            sal_Int32 nYDistance = static_cast< sal_Int32 >( ::rtl::math::round( fFontHeight * fYFraction ) );
+            sal_Int32 nXDistance = static_cast< sal_Int32 >( ::rtl::math::round( fFontHeight * 0.18f ) );
+            sal_Int32 nYDistance = static_cast< sal_Int32 >( ::rtl::math::round( fFontHeight * 0.30f ) );
             xShapeProp->setPropertyValue( "TextLeftDistance", uno::Any( nXDistance ) );
             xShapeProp->setPropertyValue( "TextRightDistance", uno::Any( nXDistance ) );
             xShapeProp->setPropertyValue( "TextUpperDistance", uno::Any( nYDistance ) );

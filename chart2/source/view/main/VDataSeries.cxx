@@ -759,8 +759,7 @@ double VDataSeries::getXMeanValue() const
         uno::Reference< XRegressionCurveCalculator > xCalculator( RegressionCurveHelper::createRegressionCurveCalculatorByServiceName( "com.sun.star.chart2.MeanValueRegressionCurve" ) );
         uno::Sequence< double > aXValuesDummy;
         xCalculator->recalculateRegression( aXValuesDummy, getAllX() );
-        double fXDummy = 1.0;
-        m_fXMeanValue = xCalculator->getCurveValue( fXDummy );
+        m_fXMeanValue = xCalculator->getCurveValue( 1.0 );
     }
     return m_fXMeanValue;
 }
@@ -773,8 +772,7 @@ double VDataSeries::getYMeanValue() const
             RegressionCurveHelper::createRegressionCurveCalculatorByServiceName("com.sun.star.chart2.MeanValueRegressionCurve"));
         uno::Sequence< double > aXValuesDummy;
         xCalculator->recalculateRegression( aXValuesDummy, getAllY() );
-        double fXDummy = 1.0;
-        m_fYMeanValue = xCalculator->getCurveValue( fXDummy );
+        m_fYMeanValue = xCalculator->getCurveValue( 1.0 );
     }
     return m_fYMeanValue;
 }

@@ -84,7 +84,6 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
                 "ChartPanelFactory::createUIElement called without valid ChartController",
                 nullptr);
 
-        sal_Int32 nMinimumSize = -1;
         VclPtr<vcl::Window> pPanel;
         if (rsResourceURL.endsWith("/ElementsPanel"))
             pPanel = ChartElementsPanel::Create( pParentWindow, xFrame, pController );
@@ -104,7 +103,7 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
                 rsResourceURL,
                 xFrame,
                 pPanel,
-                css::ui::LayoutSize(nMinimumSize,-1,-1));
+                css::ui::LayoutSize(-1,-1,-1));
     }
     catch (const css::uno::RuntimeException &)
     {

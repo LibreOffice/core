@@ -226,10 +226,6 @@ namespace vclcanvas
             // scales.
             if( !!(*maContent) )
             {
-                // when true, fast path for slide transition has
-                // already redrawn the sprite.
-                bool bSpriteRedrawn( false );
-
                 rTargetSurface.Push( PushFlags::CLIPREGION );
 
                 // apply clip (if any)
@@ -260,35 +256,32 @@ namespace vclcanvas
                     }
                 }
 
-                if( !bSpriteRedrawn )
+                if( ::rtl::math::approxEqual(fAlpha, 1.0) )
                 {
-                    if( ::rtl::math::approxEqual(fAlpha, 1.0) )
-                    {
-                        // no alpha modulation -> just copy to output
-                        if( maContent->IsTransparent() )
-                            rTargetSurface.DrawBitmapEx( aOutPos, aOutputSize, *maContent );
-                        else
-                            rTargetSurface.DrawBitmap( aOutPos, aOutputSize, maContent->GetBitmap() );
-                    }
+                    // no alpha modulation -> just copy to output
+                    if( maContent->IsTransparent() )
+                        rTargetSurface.DrawBitmapEx( aOutPos, aOutputSize, *maContent );
                     else
-                    {
-                        // TODO(P3): Switch to OutputDevice::DrawTransparent()
-                        // here
+                        rTargetSurface.DrawBitmap( aOutPos, aOutputSize, maContent->GetBitmap() );
+                }
+                else
+                {
+                    // TODO(P3): Switch to OutputDevice::DrawTransparent()
+                    // here
 
-                        // draw semi-transparent
-                        sal_uInt8 nColor( static_cast<sal_uInt8>( ::basegfx::fround( 255.0*(1.0 - fAlpha) + .5) ) );
-                        AlphaMask aAlpha( maContent->GetSizePixel(),
-                                          &nColor );
+                    // draw semi-transparent
+                    sal_uInt8 nColor( static_cast<sal_uInt8>( ::basegfx::fround( 255.0*(1.0 - fAlpha) + .5) ) );
+                    AlphaMask aAlpha( maContent->GetSizePixel(),
+                                      &nColor );
 
-                        // mask out fully transparent areas
-                        if( maContent->IsTransparent() )
-                            aAlpha.Replace( maContent->GetMask(), 255 );
+                    // mask out fully transparent areas
+                    if( maContent->IsTransparent() )
+                        aAlpha.Replace( maContent->GetMask(), 255 );
 
-                        // alpha-blend to output
-                        rTargetSurface.DrawBitmapEx( aOutPos, aOutputSize,
-                                                     BitmapEx( maContent->GetBitmap(),
-                                                               aAlpha ) );
-                    }
+                    // alpha-blend to output
+                    rTargetSurface.DrawBitmapEx( aOutPos, aOutputSize,
+                                                 BitmapEx( maContent->GetBitmap(),
+                                                           aAlpha ) );
                 }
 
                 rTargetSurface.Pop();
