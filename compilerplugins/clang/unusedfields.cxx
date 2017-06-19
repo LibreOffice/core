@@ -44,6 +44,7 @@ namespace {
 
 struct MyFieldInfo
 {
+    const RecordDecl* parentRecord;
     std::string parentClass;
     std::string fieldName;
     std::string fieldType;
@@ -71,10 +72,25 @@ class UnusedFields:
 public:
     explicit UnusedFields(InstantiationData const & data): Plugin(data) {}
 
-    virtual void run() override
-    {
-        TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+    virtual void run() override;
 
+    bool shouldVisitTemplateInstantiations () const { return true; }
+    bool shouldVisitImplicitCode() const { return true; }
+
+    bool VisitFieldDecl( const FieldDecl* );
+    bool VisitMemberExpr( const MemberExpr* );
+    bool VisitDeclRefExpr( const DeclRefExpr* );
+private:
+    MyFieldInfo niceName(const FieldDecl*);
+    void checkTouched(const FieldDecl* fieldDecl, const Expr* memberExpr);
+};
+
+void UnusedFields::run()
+{
+    TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+
+    if (!isUnitTestMode())
+    {
         // dump all our output in one write call - this is to try and limit IO "crosstalk" between multiple processes
         // writing to the same logfile
         std::string output;
@@ -95,17 +111,19 @@ public:
         myfile << output;
         myfile.close();
     }
+    else
+    {
+        for (const MyFieldInfo & s : readFromSet)
+        {
+            report(
+                DiagnosticsEngine::Warning,
+                "read %0",
+                s.parentRecord->getLocStart())
+                << s.fieldName;
+        }
+    }
+}
 
-    bool shouldVisitTemplateInstantiations () const { return true; }
-    bool shouldVisitImplicitCode() const { return true; }
-
-    bool VisitFieldDecl( const FieldDecl* );
-    bool VisitMemberExpr( const MemberExpr* );
-    bool VisitDeclRefExpr( const DeclRefExpr* );
-private:
-    MyFieldInfo niceName(const FieldDecl*);
-    void checkTouched(const FieldDecl* fieldDecl, const Expr* memberExpr);
-};
 
 MyFieldInfo UnusedFields::niceName(const FieldDecl* fieldDecl)
 {
@@ -117,10 +135,14 @@ MyFieldInfo UnusedFields::niceName(const FieldDecl* fieldDecl)
     {
         if (cxxRecordDecl->getTemplateInstantiationPattern())
             cxxRecordDecl = cxxRecordDecl->getTemplateInstantiationPattern();
+        aInfo.parentRecord = cxxRecordDecl;
         aInfo.parentClass = cxxRecordDecl->getQualifiedNameAsString();
     }
     else
+    {
+        aInfo.parentRecord = recordDecl;
         aInfo.parentClass = recordDecl->getQualifiedNameAsString();
+    }
 
     aInfo.fieldName = fieldDecl->getNameAsString();
     // sometimes the name (if it's anonymous thing) contains the full path of the build folder, which we don't need
@@ -217,20 +239,33 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
 
   // for the write-only analysis
 
+    auto parentsRange = compiler.getASTContext().getParents(*memberExpr);
     const Stmt* child = memberExpr;
-    const Stmt* parent = parentStmt(memberExpr);
+    const Stmt* parent = parentsRange.begin() == parentsRange.end() ? nullptr : parentsRange.begin()->get<Stmt>();
     // walk up the tree until we find something interesting
     bool bPotentiallyReadFrom = false;
     bool bDump = false;
     do {
         if (!parent) {
-            return true;
+            // check if we're inside a CXXCtorInitializer
+            auto parentsRange = compiler.getASTContext().getParents(*child);
+            if ( parentsRange.begin() != parentsRange.end())
+            {
+                const Decl* decl = parentsRange.begin()->get<Decl>();
+                if (decl && isa<CXXConstructorDecl>(decl))
+                    bPotentiallyReadFrom = true;
+            }
+            if (!bPotentiallyReadFrom)
+                return true;
+            else
+                break;
         }
         if (isa<CastExpr>(parent) || isa<MemberExpr>(parent) || isa<ParenExpr>(parent) || isa<ParenListExpr>(parent)
              || isa<ExprWithCleanups>(parent) || isa<UnaryOperator>(parent))
         {
             child = parent;
-            parent = parentStmt(parent);
+            auto parentsRange = compiler.getASTContext().getParents(*parent);
+            parent = parentsRange.begin() == parentsRange.end() ? nullptr : parentsRange.begin()->get<Stmt>();
         }
         else if (isa<CaseStmt>(parent))
         {
@@ -278,7 +313,8 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
             // so walk up the tree.
             if (binaryOp->getLHS() == child && op == BO_Assign) {
                 child = parent;
-                parent = parentStmt(parent);
+                auto parentsRange = compiler.getASTContext().getParents(*parent);
+                parent = parentsRange.begin() == parentsRange.end() ? nullptr : parentsRange.begin()->get<Stmt>();
             } else {
                 bPotentiallyReadFrom = true;
                 break;
