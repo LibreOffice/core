@@ -321,7 +321,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Haitian" ; LANGUAGE_USER_HAITIAN ; > ;
         < "Beembe" ; LANGUAGE_USER_BEEMBE ; > ;
         < "Bekwel" ; LANGUAGE_USER_BEKWEL ; > ;
-        < "Kituba" ; LANGUAGE_USER_KITUBA ; > ;
+        < "Kituba (Congo)" ; LANGUAGE_USER_KITUBA ; > ;
         < "Lari" ; LANGUAGE_USER_LARI ; > ;
         < "Mbochi" ; LANGUAGE_USER_MBOCHI ; > ;
         < "Teke-Eboo" ; LANGUAGE_USER_TEKE_EBOO ; > ;
@@ -402,6 +402,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "English (Malaysia)" ; LANGUAGE_ENGLISH_MALAYSIA ; > ;
         < "Manchu" ; LANGUAGE_USER_MANCHU ; > ;
         < "Xibe" ; LANGUAGE_USER_XIBE ; > ;
+        < "Kituba (Democratic Republic of the Congo)" ; LANGUAGE_USER_KITUBA_DRCONGO ; > ;
     };
 };
 
