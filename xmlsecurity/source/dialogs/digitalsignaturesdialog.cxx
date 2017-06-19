@@ -263,6 +263,8 @@ void DigitalSignaturesDialog::SetSignatureStream( const css::uno::Reference < cs
 
 bool DigitalSignaturesDialog::canAddRemove()
 {
+    //FIXME: this func needs some cleanup, such as real split between
+    //'canAdd' and 'canRemove' case
     bool ret = true;
 
     if (!maSignatureManager.mxStore.is())
@@ -317,7 +319,16 @@ bool DigitalSignaturesDialog::canAdd()
 
 bool DigitalSignaturesDialog::canRemove()
 {
-    return canAddRemove();
+    bool bRet = true;
+
+    if ( maSignatureManager.meSignatureMode == DocumentSignatureMode::Content )
+    {
+        short nDlgRet = ScopedVclPtrInstance<MessageDialog>(
+              nullptr, XsResId(STR_XMLSECDLG_QUERY_REALLYREMOVE), VclMessageType::Question, VclButtonsType::YesNo)->Execute();
+        bRet = ( nDlgRet == RET_YES );
+    }
+
+    return (bRet && canAddRemove());
 }
 
 short DigitalSignaturesDialog::Execute()
