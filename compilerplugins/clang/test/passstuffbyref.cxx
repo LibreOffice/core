@@ -19,11 +19,13 @@ struct S {
 };
 
 
-void f() // expected-error {{Unreferenced externally visible function definition [loplugin:unreffun]}}
+void f()
 {
     S* s;
     OUString v1, v2;
     s = new S(v1, v2);
 }
+
+// expected-no-diagnostics
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
