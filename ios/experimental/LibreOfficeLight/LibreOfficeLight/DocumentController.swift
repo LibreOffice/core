@@ -11,15 +11,24 @@ import UIKit
 
 class DocumentController: UIViewController, MenuDelegate, UIDocumentPickerDelegate
 {
+    var currentDocumentName : String?
+    var currentCloudUrl : URL?
+
+
     public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL)
     {
+        currentCloudUrl = url
+        currentDocumentName = url.lastPathComponent
     }
 
     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController)
     {
+        currentCloudUrl = nil
+        currentDocumentName = nil
     }
 
 
+    @IBOutlet weak var janTest: UILabel!
 
 
     // Show sidemenu (part of documentcontroller)
@@ -76,6 +85,13 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentPickerDelega
 
 
 
+    func actionName(_ name : String)
+    {
+        currentDocumentName = name
+    }
+
+
+
     func actionMenuSelected(_ tag : Int)
     {
         switch tag
@@ -93,28 +109,27 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentPickerDelega
                 print("menu Save to be done")
 
             case 4: // Save as...
-                print("menu Save as... to be done")
+                let vc = storyboard?.instantiateViewController(withIdentifier: "setNameAction") as! setNameAction
+                vc.modalPresentationStyle = .popover
+                vc.delegate = self
+                let popover = vc.popoverPresentationController!
+                popover.delegate = self as? UIPopoverPresentationControllerDelegate
+                popover.permittedArrowDirections = .up
+                popover.sourceView = janTest
+                popover.sourceRect = janTest.bounds
+                present(vc, animated: true, completion: nil)
 
+                print("menu Save as... to be done")
             case 5: // Save as PDF...
                 print("menu Save as PDF... to be done")
 
             case 6: // Print...
                 print("menu Print... to be done")
 
-            case 7: // Copy TO iPad
-                print("menu Copy TO iPad to be done")
-
-            case 8: // Delete FROM iPad
-                print("menu Delete FROM iPad to be done")
-
-            case 9: // Move FROM iPad
-                print("menu Move FROM iPad to be done")
-
             default: // should not happen
                 print("unknown menu" + String(tag))
         }
     }
-
 
 
     override func viewDidLoad()
@@ -142,6 +157,7 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentPickerDelega
 protocol MenuDelegate
 {
     func actionMenuSelected(_ tag : Int)
+    func actionName(_ name : String)
 }
 
 
@@ -159,13 +175,9 @@ class DocumentActions: UITableViewController
     @IBOutlet weak var buttonSaveAs: UIButton!
     @IBOutlet weak var buttonSaveAsPDF: UIButton!
     @IBOutlet weak var buttonPrint: UIButton!
-    @IBOutlet weak var buttonCopyTOiPad: UIButton!
-    @IBOutlet weak var buttonDeleteFROMiPad: UIButton!
-    @IBOutlet weak var buttonMoveFROMiPad: UIButton!
 
 
 
-    // Actions
     @IBAction func actionMenuSelect(_ sender: UIButton)
     {
         dismiss(animated: false)
@@ -176,11 +188,52 @@ class DocumentActions: UITableViewController
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        buttonDeleteFROMiPad.isEnabled = isDocActive
         buttonSave.isEnabled = isDocActive
         buttonSaveAs.isEnabled = isDocActive
         buttonSaveAsPDF.isEnabled = isDocActive
         buttonPrint.isEnabled = isDocActive
+    }
+}
+
+
+
+class setNameAction: UIViewController
+{
+    // Pointer to callback class
+    var delegate  : MenuDelegate?
+    var didEdit : Bool = false
+
+    // reference to new name
+    @IBOutlet weak var editText: UITextField!
+
+
+    // continue "save as..." with new name
+    @IBAction func actionOK(_ sender: UIButton)
+    {
+        dismiss(animated: false)
+        if didEdit && editText.text != "" {
+            delegate?.actionName(editText.text!)
+        }
+    }
+
+
+    @IBAction func actionStartEdit(_ sender: UITextField)
+    {
+        if !didEdit {
+            sender.text = ""
+            didEdit = true
+        }
+    }
+
+    @IBAction func actionCancel(_ sender: UIButton)
+    {
+        dismiss(animated: false)
+    }
+
+
+    override func viewDidLoad()
+    {
+        super.viewDidLoad()
     }
 }
 
