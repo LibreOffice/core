@@ -69,7 +69,7 @@ namespace pq_sdbc_driver
 {
 
 Keys::Keys(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
         const OUString &schemaName,
@@ -118,7 +118,7 @@ void Keys::refresh()
             log( m_pSettings, LogLevel::Info, buf.getStr() );
         }
 
-        osl::MutexGuard guard( m_refMutex->mutex );
+        osl::MutexGuard guard( m_xMutex->GetMutex() );
         Statics & st = getStatics();
 
         Int2StringMap mainMap;
@@ -152,7 +152,7 @@ void Keys::refresh()
         while( rs->next() )
         {
             Key * pKey =
-                new Key( m_refMutex, m_origin, m_pSettings , m_schemaName, m_tableName );
+                new Key( m_xMutex, m_origin, m_pSettings , m_schemaName, m_tableName );
             Reference< css::beans::XPropertySet > prop = pKey;
 
             pKey->setPropertyValue_NoBroadcast_public(
@@ -208,7 +208,7 @@ void Keys::refresh()
 void Keys::appendByDescriptor(
     const css::uno::Reference< css::beans::XPropertySet >& descriptor )
 {
-    osl::MutexGuard guard( m_refMutex->mutex );
+    osl::MutexGuard guard( m_xMutex->GetMutex() );
 
     OUStringBuffer buf( 128 );
     buf.append( "ALTER TABLE " );
@@ -224,7 +224,7 @@ void Keys::appendByDescriptor(
 
 void Keys::dropByIndex( sal_Int32 index )
 {
-    osl::MutexGuard guard( m_refMutex->mutex );
+    osl::MutexGuard guard( m_xMutex->GetMutex() );
     if( index < 0 ||  index >= (sal_Int32)m_values.size() )
     {
         throw css::lang::IndexOutOfBoundsException(
@@ -251,11 +251,11 @@ void Keys::dropByIndex( sal_Int32 index )
 
 css::uno::Reference< css::beans::XPropertySet > Keys::createDataDescriptor()
 {
-    return new KeyDescriptor( m_refMutex, m_origin, m_pSettings );
+    return new KeyDescriptor( m_xMutex, m_origin, m_pSettings );
 }
 
 Reference< css::container::XIndexAccess > Keys::create(
-    const ::rtl::Reference< RefCountedMutex > & refMutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const css::uno::Reference< css::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings,
     const OUString & schemaName,
@@ -269,14 +269,14 @@ Reference< css::container::XIndexAccess > Keys::create(
 }
 
 KeyDescriptors::KeyDescriptors(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings)
     : Container( refMutex, origin, pSettings,  getStatics().KEY )
 {}
 
 Reference< css::container::XIndexAccess > KeyDescriptors::create(
-    const ::rtl::Reference< RefCountedMutex > & refMutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const css::uno::Reference< css::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings)
 {
@@ -285,7 +285,7 @@ Reference< css::container::XIndexAccess > KeyDescriptors::create(
 
 css::uno::Reference< css::beans::XPropertySet > KeyDescriptors::createDataDescriptor()
 {
-    return new KeyDescriptor( m_refMutex, m_origin, m_pSettings );
+    return new KeyDescriptor( m_xMutex, m_origin, m_pSettings );
 }
 
 };

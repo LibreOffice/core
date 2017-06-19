@@ -76,7 +76,7 @@ namespace pq_sdbc_driver
 {
 
 Indexes::Indexes(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
         const OUString &schemaName,
@@ -104,7 +104,7 @@ void Indexes::refresh()
             log( m_pSettings, LogLevel::Info, buf.makeStringAndClear().getStr() );
         }
 
-        osl::MutexGuard guard( m_refMutex->mutex );
+        osl::MutexGuard guard( m_xMutex->GetMutex() );
         Statics & st = getStatics();
 
         Int2StringMap column2NameMap;
@@ -144,7 +144,7 @@ void Indexes::refresh()
             static const sal_Int32 C_COLUMNS = 7;
             OUString currentIndexName = row->getString( C_INDEXNAME );
             Index *pIndex =
-                new Index( m_refMutex, m_origin, m_pSettings,
+                new Index( m_xMutex, m_origin, m_pSettings,
                            m_schemaName, m_tableName );
 
             (void) C_SCHEMA; (void) C_TABLENAME;
@@ -241,7 +241,7 @@ void Indexes::dropByIndex( sal_Int32 index )
 {
 
 
-    osl::MutexGuard guard( m_refMutex->mutex );
+    osl::MutexGuard guard( m_xMutex->GetMutex() );
     if( index < 0 ||  index >= (sal_Int32)m_values.size() )
     {
         throw css::lang::IndexOutOfBoundsException(
@@ -267,11 +267,11 @@ void Indexes::dropByIndex( sal_Int32 index )
 
 css::uno::Reference< css::beans::XPropertySet > Indexes::createDataDescriptor()
 {
-    return new IndexDescriptor( m_refMutex, m_origin, m_pSettings );
+    return new IndexDescriptor( m_xMutex, m_origin, m_pSettings );
 }
 
 Reference< css::container::XNameAccess > Indexes::create(
-    const ::rtl::Reference< RefCountedMutex > & refMutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const css::uno::Reference< css::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings,
     const OUString & schemaName,
@@ -285,14 +285,14 @@ Reference< css::container::XNameAccess > Indexes::create(
 
 
 IndexDescriptors::IndexDescriptors(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings)
     : Container( refMutex, origin, pSettings,  getStatics().INDEX )
 {}
 
 Reference< css::container::XNameAccess > IndexDescriptors::create(
-    const ::rtl::Reference< RefCountedMutex > & refMutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const css::uno::Reference< css::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings)
 {
@@ -301,7 +301,7 @@ Reference< css::container::XNameAccess > IndexDescriptors::create(
 
 css::uno::Reference< css::beans::XPropertySet > IndexDescriptors::createDataDescriptor()
 {
-    return new IndexDescriptor( m_refMutex, m_origin, m_pSettings );
+    return new IndexDescriptor( m_xMutex, m_origin, m_pSettings );
 }
 
 };

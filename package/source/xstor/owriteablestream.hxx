@@ -42,24 +42,17 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
+#include <comphelper/refcountedmutex.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <list>
 #include <memory>
 
 #include "ocompinstream.hxx"
-#include "mutexholder.hxx"
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
-
-struct MutexHolder
-{
-    const rtl::Reference<SotMutexHolder> m_rMutexRef;
-
-    MutexHolder() : m_rMutexRef( new SotMutexHolder ) {}
-};
 
 namespace package {
     bool PackageEncryptionDatasEqual( const ::comphelper::SequenceAsHashMap& aHash1, const ::comphelper::SequenceAsHashMap& aHash2 );
@@ -72,8 +65,10 @@ typedef ::std::list< OInputCompStream* > InputStreamsList_Impl;
 struct OStorage_Impl;
 class OWriteStream;
 
-struct OWriteStream_Impl : public MutexHolder
+struct OWriteStream_Impl
 {
+    rtl::Reference<comphelper::RefCountedMutex> m_xMutex;
+
     friend struct OStorage_Impl;
     friend class OWriteStream;
     friend class OInputCompStream;

@@ -113,14 +113,14 @@ static void extractPrecisionAndScale( sal_Int32 atttypmod, sal_Int32 *precision,
 }
 
 ResultSetMetaData::ResultSetMetaData(
-    const ::rtl::Reference< RefCountedMutex > & refMutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const css::uno::Reference< css::sdbc::XResultSet >  & origin,
     ResultSet * pResultSet,
     ConnectionSettings **ppSettings,
     PGresult *pResult,
     const OUString &schemaName,
     const OUString &tableName ) :
-    m_refMutex( refMutex ),
+    m_xMutex( refMutex ),
     m_ppSettings( ppSettings ),
     m_origin( origin ),
     m_tableName( tableName ),
@@ -225,7 +225,7 @@ sal_Int32 ResultSetMetaData::getIntColumnProperty( const OUString & name, int in
     sal_Int32 ret = def; // give defensive answers, when data is not available
     try
     {
-        MutexGuard guard( m_refMutex->mutex );
+        MutexGuard guard( m_xMutex->GetMutex() );
         checkColumnIndex( index );
         Reference< XPropertySet > set = getColumnByIndex( index );
 
@@ -245,7 +245,7 @@ bool ResultSetMetaData::getBoolColumnProperty( const OUString & name, int index,
     bool ret = def;
     try
     {
-        MutexGuard guard( m_refMutex->mutex );
+        MutexGuard guard( m_xMutex->GetMutex() );
         checkColumnIndex( index );
         Reference< XPropertySet > set = getColumnByIndex( index );
         if( set.is() )
@@ -324,7 +324,7 @@ sal_Bool ResultSetMetaData::isSigned( sal_Int32 column )
 
 sal_Int32 ResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkColumnIndex( column );
     return m_colDesc[column-1].displaySize;
 }
@@ -336,7 +336,7 @@ OUString ResultSetMetaData::getColumnLabel( sal_Int32 column )
 
 OUString ResultSetMetaData::getColumnName( sal_Int32 column )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkColumnIndex( column );
 
     return m_colDesc[column-1].name;
@@ -350,14 +350,14 @@ OUString ResultSetMetaData::getSchemaName( sal_Int32 column )
 
 sal_Int32 ResultSetMetaData::getPrecision( sal_Int32 column )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkColumnIndex( column );
     return m_colDesc[column-1].precision;
 }
 
 sal_Int32 ResultSetMetaData::getScale( sal_Int32 column )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
     checkColumnIndex( column );
     return m_colDesc[column-1].scale;
 }
@@ -391,7 +391,7 @@ OUString ResultSetMetaData::getColumnTypeName( sal_Int32 column )
     OUString ret; // give defensive answers, when data is not available
     try
     {
-        MutexGuard guard( m_refMutex->mutex );
+        MutexGuard guard( m_xMutex->GetMutex() );
         checkColumnIndex( column );
         Reference< XPropertySet > set = getColumnByIndex( column );
 

@@ -63,7 +63,7 @@ using com::sun::star::sdbc::SQLException;
 namespace pq_sdbc_driver
 {
 
-User::User( const ::rtl::Reference< RefCountedMutex > & refMutex,
+User::User( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
             const Reference< css::sdbc::XConnection > & connection,
             ConnectionSettings *pSettings )
     : ReflectionBase(
@@ -77,7 +77,7 @@ User::User( const ::rtl::Reference< RefCountedMutex > & refMutex,
 
 Reference< XPropertySet > User::createDataDescriptor(  )
 {
-    UserDescriptor * pUser = new UserDescriptor( m_refMutex, m_conn, m_pSettings );
+    UserDescriptor * pUser = new UserDescriptor( m_xMutex, m_conn, m_pSettings );
     pUser->copyValuesFrom( this );
 
     return Reference< XPropertySet > ( pUser );
@@ -173,7 +173,7 @@ void User::revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int
 
 
 UserDescriptor::UserDescriptor(
-    const ::rtl::Reference< RefCountedMutex > & refMutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const Reference< css::sdbc::XConnection > & connection,
     ConnectionSettings *pSettings )
     : ReflectionBase(
@@ -187,7 +187,7 @@ UserDescriptor::UserDescriptor(
 
 Reference< XPropertySet > UserDescriptor::createDataDescriptor(  )
 {
-    UserDescriptor * pUser = new UserDescriptor( m_refMutex, m_conn, m_pSettings );
+    UserDescriptor * pUser = new UserDescriptor( m_xMutex, m_conn, m_pSettings );
     pUser->copyValuesFrom( this );
 
     return Reference< XPropertySet > ( pUser );

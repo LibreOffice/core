@@ -63,7 +63,7 @@ using com::sun::star::sdbc::XResultSet;
 namespace pq_sdbc_driver
 {
 Users::Users(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings )
     : Container( refMutex, origin, pSettings,  getStatics().USER )
@@ -76,7 +76,7 @@ void Users::refresh()
 {
     try
     {
-        osl::MutexGuard guard( m_refMutex->mutex );
+        osl::MutexGuard guard( m_xMutex->GetMutex() );
         Statics & st = getStatics();
 
         Reference< XStatement > stmt = m_origin->createStatement();
@@ -92,7 +92,7 @@ void Users::refresh()
         while( rs->next() )
         {
             User * pUser =
-                new User( m_refMutex, m_origin, m_pSettings );
+                new User( m_xMutex, m_origin, m_pSettings );
             Reference< css::beans::XPropertySet > prop = pUser;
 
             OUString name = xRow->getString( 1);
@@ -119,7 +119,7 @@ void Users::refresh()
 void Users::appendByDescriptor(
     const css::uno::Reference< css::beans::XPropertySet >& descriptor )
 {
-    osl::MutexGuard guard( m_refMutex->mutex );
+    osl::MutexGuard guard( m_xMutex->GetMutex() );
 
     OUStringBuffer update( 128 );
     update.append( "CREATE USER " );
@@ -147,7 +147,7 @@ void Users::dropByName( const OUString& elementName )
 void Users::dropByIndex( sal_Int32 index )
 {
 
-    osl::MutexGuard guard( m_refMutex->mutex );
+    osl::MutexGuard guard( m_xMutex->GetMutex() );
     if( index < 0 ||  index >= (sal_Int32)m_values.size() )
     {
         throw css::lang::IndexOutOfBoundsException(
@@ -175,11 +175,11 @@ void Users::dropByIndex( sal_Int32 index )
 
 css::uno::Reference< css::beans::XPropertySet > Users::createDataDescriptor()
 {
-    return new UserDescriptor( m_refMutex, m_origin, m_pSettings  );
+    return new UserDescriptor( m_xMutex, m_origin, m_pSettings  );
 }
 
 Reference< css::container::XNameAccess > Users::create(
-    const ::rtl::Reference< RefCountedMutex > & refMutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const css::uno::Reference< css::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings )
 {

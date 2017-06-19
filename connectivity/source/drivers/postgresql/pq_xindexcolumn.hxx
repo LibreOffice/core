@@ -53,7 +53,7 @@ class IndexColumn : public ReflectionBase
 {
 public:
     IndexColumn(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection > & connection,
         ConnectionSettings *pSettings);
 
@@ -67,7 +67,7 @@ class IndexColumnDescriptor : public ReflectionBase
 {
 public:
     IndexColumnDescriptor(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection > & connection,
         ConnectionSettings *pSettings);
 

@@ -20,6 +20,7 @@ $(eval $(call gb_Library_set_precompiled_header,postgresql-sdbc-impl,$(SRCDIR)/c
 $(eval $(call gb_Library_use_sdk_api,postgresql-sdbc-impl))
 
 $(eval $(call gb_Library_use_libraries,postgresql-sdbc-impl,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	dbtools \

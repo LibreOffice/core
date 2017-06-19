@@ -48,7 +48,7 @@ namespace pq_sdbc_driver
 class DatabaseMetaData :
         public ::cppu::WeakImplHelper< css::sdbc::XDatabaseMetaData >
 {
-    ::rtl::Reference< RefCountedMutex > m_refMutex;
+    ::rtl::Reference< comphelper::RefCountedMutex > m_xMutex;
     ConnectionSettings *m_pSettings;
     css::uno::Reference< css::sdbc::XConnection > m_origin;
     css::uno::Reference< css::sdbc::XPreparedStatement > m_getIntSetting_stmt;
@@ -75,7 +75,7 @@ class DatabaseMetaData :
 
 public:
     DatabaseMetaData(
-        const ::rtl::Reference< RefCountedMutex > & reMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & reMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings
         );
