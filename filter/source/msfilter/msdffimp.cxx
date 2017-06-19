@@ -4338,7 +4338,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     pRet = new SdrObjCustomShape();
                     pRet->SetModel( pSdrModel );
 
-                    bool bIsFontwork = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x4000 ) != 0;
+                    sal_uInt32 ngtextFStrikethrough = GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 );
+                    bool bIsFontwork = ( ngtextFStrikethrough & 0x4000 ) != 0;
 
                     // in case of a FontWork, the text is set by the escher import
                     if ( bIsFontwork )
@@ -4363,16 +4364,16 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
                         // SJ: applying fontattributes for Fontwork :
                         if ( IsHardAttribute( DFF_Prop_gtextFItalic ) )
-                            aSet.Put( SvxPostureItem( ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x0010 ) != 0 ? ITALIC_NORMAL : ITALIC_NONE, EE_CHAR_ITALIC ) );
+                            aSet.Put( SvxPostureItem( ( ngtextFStrikethrough & 0x0010 ) != 0 ? ITALIC_NORMAL : ITALIC_NONE, EE_CHAR_ITALIC ) );
 
                         if ( IsHardAttribute( DFF_Prop_gtextFBold ) )
-                            aSet.Put( SvxWeightItem( ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x0020 ) != 0 ? WEIGHT_BOLD : WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
+                            aSet.Put( SvxWeightItem( ( ngtextFStrikethrough & 0x0020 ) != 0 ? WEIGHT_BOLD : WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
 
                         // SJ TODO: Vertical Writing is not correct, instead
                         // this should be replaced through "CharacterRotation"
                         // by 90 degrees, therefore a new Item has to be
                         // supported by svx core, api and xml file format
-                        static_cast<SdrObjCustomShape*>(pRet)->SetVerticalWriting( ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x2000 ) != 0 );
+                        static_cast<SdrObjCustomShape*>(pRet)->SetVerticalWriting( ( ngtextFStrikethrough & 0x2000 ) != 0 );
 
                         if ( SeekToContent( DFF_Prop_gtextUNICODE, rSt ) )
                         {
@@ -4407,12 +4408,35 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             if ( nTextWidth != 100 )
                                 aSet.Put( SvxCharScaleWidthItem( (sal_uInt16)nTextWidth, EE_CHAR_FONTWIDTH ) );
                         }
-                        if ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x1000 ) // SJ: Font Kerning On ?
+                        if ( ngtextFStrikethrough & 0x1000 ) // SJ: Font Kerning On ?
                             aSet.Put( SvxKerningItem( 1, EE_CHAR_KERNING ) );
 
                         // #i119496# the resize autoshape to fit text attr of word art in MS PPT is always false
                         aSet.Put(makeSdrTextAutoGrowHeightItem(false));
                         aSet.Put(makeSdrTextAutoGrowWidthItem(false));
+
+                        double fRatio = 0;
+                        OutputDevice* pOut = Application::GetDefaultDevice();
+                        vcl::Font aFont( pOut->GetFont() );
+                        aFont.SetFamilyName( aFontName );
+                        auto nTextWidth = pOut->GetTextWidth( aObjectText );
+
+                        if ( nTextWidth )
+                        {
+                            fRatio = aFont.GetFontSize().Height();
+                            fRatio /= nTextWidth;
+                            sal_Int32 nNewHeight = fRatio * aObjData.aBoundRect.getWidth();
+                            sal_Int32 nPaddingY = aObjData.aBoundRect.getHeight() - nNewHeight;
+
+                            if ( nPaddingY > 0 )
+                            {
+                                // Remember that value because original size have to be exported
+                                aSet.Put( SdrMetricItem( SDRATTR_TEXT_UPPERDIST, nPaddingY ) );
+                                aObjData.aBoundRect.setHeight( nNewHeight );
+                            }
+                            else
+                                aSet.Put( SdrMetricItem( SDRATTR_TEXT_UPPERDIST, 0 ) );
+                        }
                     }
                     pRet->SetMergedItemSet( aSet );
 
