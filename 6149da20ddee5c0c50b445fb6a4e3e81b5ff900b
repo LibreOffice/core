@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_2f3c052f",
+        "filename": "unotools/source/config/syslocaleoptions.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-19T09:15:44Z",
+      "side": 1,
+      "message": "If the described case still holds (please check, I don\u0027t know if) then this change (and other similar) likely is wrong and reintroduces the problem. For reference see https://bz.apache.org/ooo/show_bug.cgi?id\u003d77768#c4 and https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d8a555d8316342817c522f4d079c8d8bb932e3b23",
+      "revId": "6149da20ddee5c0c50b445fb6a4e3e81b5ff900b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
