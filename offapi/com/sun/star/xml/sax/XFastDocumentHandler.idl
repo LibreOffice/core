@@ -51,6 +51,7 @@ interface XFastDocumentHandler: XFastContextHandler
 
 
     /** receives notification of a processing instruction.
+        @since LibreOffice 6.0
      */
     void processingInstruction( [in] string aTarget, [in] string aData )
             raises( com::sun::star::xml::sax::SAXException );
