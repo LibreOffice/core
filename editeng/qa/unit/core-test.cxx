@@ -375,6 +375,7 @@ void Test::testAutocorrect()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
     }
 
+    // don't autocapitalize after a field mark
     {
         OUString sInput("Test. \x01 test");
         sal_Unicode cNextChar(' ');
@@ -385,6 +386,22 @@ void Test::testAutocorrect()
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
     }
+
+    // consider field contents as text for auto quotes
+    {
+        OUString sInput("T\x01");
+        sal_Unicode cNextChar('"');
+        const sal_Unicode EXPECTED[] = { 'T', 0x01, 0x0201d };
+        OUString sExpected(EXPECTED, SAL_N_ELEMENTS(EXPECTED));
+
+        TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
+        aAutoCorrect.SetAutoCorrFlag(ChgQuotes, true);
+        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
+        fprintf(stderr, "text is %x\n", aFoo.getResult()[aFoo.getResult().getLength() - 1]);
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
+    }
+
 }
 
 void Test::testHyperlinkCopyPaste()

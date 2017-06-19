@@ -1258,7 +1258,7 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
             {
                 sal_Unicode cPrev;
                 bool bSttQuote = !nInsPos ||
-                        IsWordDelim( ( cPrev = rTxt[ nInsPos-1 ])) ||
+                        NonFieldWordDelim( ( cPrev = rTxt[ nInsPos-1 ])) ||
                         lcl_IsInAsciiArr( "([{", cPrev ) ||
                         ( cEmDash && cEmDash == cPrev ) ||
                         ( cEnDash && cEnDash == cPrev );
