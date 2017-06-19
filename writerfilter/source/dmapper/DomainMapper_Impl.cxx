@@ -3188,7 +3188,6 @@ void DomainMapper_Impl::handleAuthor
     if (!rFirstParam.isEmpty())
     {
         #define SET_ARABIC      0x01
-        #define SET_FULL_NAME   0x02
         #define SET_DATE        0x04
         struct DocPropertyMap
         {
@@ -3265,10 +3264,6 @@ void DomainMapper_Impl::handleAuthor
                 xFieldProperties->setPropertyValue(
                     getPropertyName(PROP_NUMBERING_TYPE),
                     uno::makeAny( style::NumberingType::ARABIC ));
-            else if(0 != (aDocProperties[nMap].nFlags & SET_FULL_NAME))
-                xFieldProperties->setPropertyValue(
-                    getPropertyName(PROP_FULL_NAME),
-                        uno::makeAny( true ));
             else if(0 != (aDocProperties[nMap].nFlags & SET_DATE))
             {
                 xFieldProperties->setPropertyValue(
@@ -3280,7 +3275,6 @@ void DomainMapper_Impl::handleAuthor
     }
 
 #undef SET_ARABIC
-#undef SET_FULL_NAME
 #undef SET_DATE
 }
 
