@@ -77,6 +77,7 @@ public:
 
     /// @see xmlsecurity::Certificate::getSHA256Thumbprint().
     virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() override;
+    virtual OUString getCertificateKind() override;
 
     // Helper methods
     void setCertificate(const GpgME::Key& key);

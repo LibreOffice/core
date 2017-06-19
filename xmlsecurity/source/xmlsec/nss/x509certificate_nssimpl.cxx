@@ -455,6 +455,11 @@ css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_NssImpl::getMD5Thumbprin
     return getThumbprint(m_pCert, SEC_OID_MD5);
 }
 
+OUString SAL_CALL X509Certificate_NssImpl::getCertificateKind()
+{
+    return OUString("X.509");
+}
+
 sal_Int32 SAL_CALL X509Certificate_NssImpl::getCertificateUsage(  )
 {
     SECStatus rv;

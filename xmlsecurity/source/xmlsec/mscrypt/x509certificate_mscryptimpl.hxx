@@ -67,6 +67,8 @@ class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper<
         virtual OUString SAL_CALL getSignatureAlgorithm() override;
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getSHA1Thumbprint() override;
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getMD5Thumbprint() override;
+        virtual OUString SAL_CALL getCertificateKind() override;
+
 
         virtual sal_Int32 SAL_CALL getCertificateUsage( ) override;
 

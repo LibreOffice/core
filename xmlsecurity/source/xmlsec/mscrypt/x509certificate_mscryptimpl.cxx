@@ -594,6 +594,11 @@ css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getMD5Thumb
     return getThumbprint(m_pCertContext, CERT_MD5_HASH_PROP_ID);
 }
 
+OUString SAL_CALL X509Certificate_MSCryptImpl::getCertificateKind()
+{
+    return OUString("X.509");
+}
+
 sal_Int32 SAL_CALL X509Certificate_MSCryptImpl::getCertificateUsage(  )
 {
     sal_Int32 usage =

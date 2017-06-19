@@ -29,7 +29,7 @@ module com { module sun { module star { module security {
 /**
  * Interface of a PKI Certificate
  *
- * <p>This interface represents a x509 certificate.</p>
+ * <p>This interface represents a certificate (X.509 or OpenPGP) .</p>
  */
 interface XCertificate : com::sun::star::uno::XInterface
 {
@@ -107,6 +107,11 @@ interface XCertificate : com::sun::star::uno::XInterface
      * the MD5 thumbprint
      */
     [attribute, readonly] sequence< byte > MD5Thumbprint;
+
+    /**
+     *  the kind of certificate, X.509 or OpenPGP
+     */
+    [attribute, readonly] string CertificateKind;
 
     /**
      * Find a extension with a object identifier.
