@@ -1444,6 +1444,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case FN_EDIT_FORMULA:
         case SID_CHARMAP:
         case SID_EMOJI_CONTROL:
+        case SID_CHARMAP_CONTROL:
             {
                 const SelectionType nType = rSh.GetSelectionType();
                 if (!(nType & SelectionType::Text) &&

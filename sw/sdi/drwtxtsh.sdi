@@ -108,6 +108,11 @@ interface TextDrawText
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    SID_CHARMAP_CONTROL
+    [
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     FN_INSERT_STRING
     [
             ExecMethod = ExecDraw ;

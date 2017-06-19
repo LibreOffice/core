@@ -91,7 +91,6 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/dialogs/about \
     cui/source/dialogs/colorpicker \
     cui/source/dialogs/cuicharmap \
-    cui/source/dialogs/charwin \
     cui/source/dialogs/cuifmsearch \
     cui/source/dialogs/cuigaldlg \
     cui/source/dialogs/cuigrfflt \
