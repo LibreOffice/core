@@ -184,6 +184,11 @@ interface _Annotation
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    SID_CHARMAP_CONTROL
+    [
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     SID_ATTR_PARA_LRSPACE
     [
         ExecMethod = Exec;

@@ -61,6 +61,7 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertFieldCtrl"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertSymbol"/>
  <toolbar:toolbaritem xlink:href=".uno:EmojiControl" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:CharmapControl"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertFootnote"/>

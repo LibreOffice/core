@@ -161,6 +161,8 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/emojiview \
     sfx2/source/control/emojicontrol \
     sfx2/source/control/emojipopup \
+    sfx2/source/control/charmapcontrol \
+    sfx2/source/control/charwin \
     sfx2/source/control/unoctitm \
     sfx2/source/dialog/alienwarn \
     sfx2/source/dialog/backingcomp \
@@ -168,6 +170,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/dialog/basedlgs \
     sfx2/source/dialog/checkin \
     sfx2/source/dialog/dialoghelper \
+    sfx2/source/dialog/charmappopup \
     sfx2/source/dialog/dinfdlg \
     sfx2/source/dialog/dockwin \
     sfx2/source/dialog/documentfontsdialog \

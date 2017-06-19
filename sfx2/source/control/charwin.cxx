@@ -19,12 +19,11 @@
 
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
-#include "charwin.hxx"
+#include <sfx2/charwin.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/dispatchcommand.hxx>
+#include <comphelper/processfactory.hxx>
 #include <sfx2/app.hxx>
-#include "cuicharmap.hxx"
-#include "macroass.hxx"
 
 using namespace com::sun::star;
 

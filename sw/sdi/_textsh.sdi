@@ -175,6 +175,13 @@ interface BaseText
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+
+    SID_CHARMAP_CONTROL
+    [
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     FN_INSERT_PAGEHEADER    // status(final|play|rec)
     [
         ExecMethod = Execute ;
