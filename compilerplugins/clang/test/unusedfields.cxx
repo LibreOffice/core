@@ -17,12 +17,27 @@ struct Foo
 
 struct Bar
 // expected-error@-1 {{read m_bar2 [loplugin:unusedfields]}}
+// expected-error@-2 {{read m_bar3 [loplugin:unusedfields]}}
+// expected-error@-3 {{read m_bar4 [loplugin:unusedfields]}}
+// expected-error@-4 {{read m_functionpointer [loplugin:unusedfields]}}
 {
     int m_bar1;
     int m_bar2 = 1;
+    int* m_bar3;
+    int m_bar4;
+    void (*m_functionpointer)(int&);
+    //check that we see reads of fields when referred to via constructor initializer
     Bar(Foo const & foo) : m_bar1(foo.m_foo1) {}
 
-    int bar() { return m_bar2; }
+    int bar1() { return m_bar2; }
+
+    // check that we see reads of fields when operated on via pointer de-ref
+    void bar2() { *m_bar3 = 2; }
+
+    // check that we see reads of field when passed to a function pointer
+    // check that we see read of a field that is a function pointer
+    void bar3() { m_functionpointer(m_bar4); }
+
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
