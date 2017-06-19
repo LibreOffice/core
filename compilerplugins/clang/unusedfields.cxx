@@ -261,8 +261,24 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
                 break;
         }
         if (isa<CastExpr>(parent) || isa<MemberExpr>(parent) || isa<ParenExpr>(parent) || isa<ParenListExpr>(parent)
-             || isa<ExprWithCleanups>(parent) || isa<UnaryOperator>(parent))
+             || isa<ExprWithCleanups>(parent))
         {
+            child = parent;
+            auto parentsRange = compiler.getASTContext().getParents(*parent);
+            parent = parentsRange.begin() == parentsRange.end() ? nullptr : parentsRange.begin()->get<Stmt>();
+        }
+        else if (auto unaryOperator = dyn_cast<UnaryOperator>(parent))
+        {
+            UnaryOperator::Opcode op = unaryOperator->getOpcode();
+            if (op == UO_AddrOf || op == UO_Deref
+                || op == UO_Plus || op == UO_Minus
+                || op == UO_Not || op == UO_LNot
+                || op == UO_PreInc || op == UO_PostInc
+                || op == UO_PreDec || op == UO_PostDec)
+            {
+                bPotentiallyReadFrom = true;
+                break;
+            }
             child = parent;
             auto parentsRange = compiler.getASTContext().getParents(*parent);
             parent = parentsRange.begin() == parentsRange.end() ? nullptr : parentsRange.begin()->get<Stmt>();
