@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_12ca0c50",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-19T19:43:57Z",
+      "side": 1,
+      "message": "this is a memory leak; there\u0027s no point in this variable being a pointer",
+      "revId": "38fc27a25e9e29458092d551136915290f17e998",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_32c70847",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-19T19:43:57Z",
+      "side": 1,
+      "message": "the \"r\" name prefix is used for C++ references but this isn\u0027t one\n\nalso this variable isn\u0027t used outside of the loop, better to use a \"for\" loop",
+      "revId": "38fc27a25e9e29458092d551136915290f17e998",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_d2e6c4e7",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-19T19:43:57Z",
+      "side": 1,
+      "message": "mnNextPortion isn\u0027t updated during the loop - to determine that it\u0027s not the 1st iteration, this should check the \"rPortionIndex\" var",
+      "revId": "38fc27a25e9e29458092d551136915290f17e998",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_f2ebc0ae",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-19T19:43:57Z",
+      "side": 1,
+      "message": "i think you should use the \"mnSel\" selection here? like intersect it or something?",
+      "revId": "38fc27a25e9e29458092d551136915290f17e998",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_f2b4a0d2",
+        "filename": "include/editeng/unotext.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-19T19:43:57Z",
+      "side": 1,
+      "message": "to ensure the elements aren\u0027t deleted, this needs to be a vector of uno::Reference or rtl::Reference",
+      "revId": "38fc27a25e9e29458092d551136915290f17e998",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
