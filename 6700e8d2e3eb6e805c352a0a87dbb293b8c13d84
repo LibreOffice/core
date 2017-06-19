@@ -2,6 +2,74 @@
   "comments": [
     {
       "key": {
+        "uuid": "3a461143_8f17b953",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-06-19T13:04:58Z",
+      "side": 1,
+      "message": "No, it\u0027s the other way around.  Our signal handler must not override any signals that an already-instantiated JVM may be needing (which is at least SEGV, probably also ILL, not exactly sure how WINCH made it into that set).",
+      "revId": "6700e8d2e3eb6e805c352a0a87dbb293b8c13d84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_af1c7578",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-06-19T13:04:58Z",
+      "side": 1,
+      "message": "I think \u003chttps://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d0a1cc7826beade023be930ac966a465c11819d55\u003e \"Kill \u0027Portal Demo HACK\u0027, whatever it is\", removing bDoHardKill, is rather unrelated to this change.",
+      "revId": "6700e8d2e3eb6e805c352a0a87dbb293b8c13d84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_2f096532",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-06-19T13:04:58Z",
+      "side": 1,
+      "message": "see general comments",
+      "revId": "6700e8d2e3eb6e805c352a0a87dbb293b8c13d84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_6f2c4dac",
+        "filename": "sal/osl/unx/signal.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-06-19T13:04:58Z",
+      "side": 1,
+      "message": "In onInitSignal you do your changes as if bSet*Handler were all effectively true now (which I think is OK, see general comments to this change); but here, you do your changes as if they were all false, which I don\u0027t understand.  (I think is_unset_signal can go completely now.)",
+      "revId": "6700e8d2e3eb6e805c352a0a87dbb293b8c13d84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_8f497991",
         "filename": "sal/osl/unx/signal.cxx",
         "patchSetId": 3
