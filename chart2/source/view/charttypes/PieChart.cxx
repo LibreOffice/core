@@ -132,7 +132,6 @@ bool PiePositionHelper::getInnerAndOuterRadius( double fCategoryX
     if( !bUseRings )
         fCategoryX = 1.0;
 
-    bool bIsVisible = true;
     double fLogicInner = fCategoryX -0.5+m_fRingDistance/2.0;
     double fLogicOuter = fCategoryX +0.5-m_fRingDistance/2.0;
 
@@ -158,7 +157,7 @@ bool PiePositionHelper::getInnerAndOuterRadius( double fCategoryX
     fLogicOuterRadius = fLogicOuter;
     if( !isMathematicalOrientationRadius() )
         std::swap(fLogicInnerRadius,fLogicOuterRadius);
-    return bIsVisible;
+    return true;
 }
 
 PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel

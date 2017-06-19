@@ -326,8 +326,8 @@ sal_Bool SAL_CALL PieChartTypeTemplate::matchesTemplate(
             //check offset of outer series
             if( !aSeriesVec.empty() )
             {
-                sal_Int32 nOuterSeriesIndex = 0; //@todo in future this will depend on Orientation of the radius axis scale
-                Reference< chart2::XDataSeries > xSeries( aSeriesVec[nOuterSeriesIndex] );
+                //@todo in future this will depend on Orientation of the radius axis scale
+                Reference< chart2::XDataSeries > xSeries( aSeriesVec[0] );
                 Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY_THROW );
                 xProp->getPropertyValue( "Offset") >>= fOffset;
 
@@ -454,8 +454,7 @@ void SAL_CALL PieChartTypeTemplate::applyStyle(
 
         bool bTemplateUsesRings = false;
         getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ) >>= bTemplateUsesRings;
-        sal_Int32 nOuterSeriesIndex = 0; //@todo in future this will depend on Orientation of the radius axis scale
-        if( nSeriesIndex == nOuterSeriesIndex )
+        if( nSeriesIndex == 0 ) //@todo in future this will depend on Orientation of the radius axis scale
         {
             const OUString aOffsetPropName( "Offset" );
             // get offset mode

@@ -683,8 +683,7 @@ void ChartTypeTemplate::createAxes(
     //create missing axes
     if( rCoordSys.getLength() > 0 )
     {
-        sal_Int32 nCooSysIdx = 0;
-        Reference< XCoordinateSystem > xCooSys( rCoordSys[nCooSysIdx] );
+        Reference< XCoordinateSystem > xCooSys( rCoordSys[0] );
         if(!xCooSys.is())
             return;
 

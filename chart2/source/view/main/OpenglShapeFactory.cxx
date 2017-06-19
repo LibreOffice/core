@@ -426,16 +426,10 @@ uno::Reference< drawing::XShape >
     }
 
     //fill some more shape properties into the ValueMap
-    {
-        drawing::TextHorizontalAdjust eHorizontalAdjust = drawing::TextHorizontalAdjust_CENTER;
-        drawing::TextVerticalAdjust eVerticalAdjust = drawing::TextVerticalAdjust_CENTER;
-
-        aValueMap.insert( tPropertyNameValueMap::value_type( "TextHorizontalAdjust", uno::Any(eHorizontalAdjust) ) ); // drawing::TextHorizontalAdjust
-        aValueMap.insert( tPropertyNameValueMap::value_type( "TextVerticalAdjust", uno::Any(eVerticalAdjust) ) ); //drawing::TextVerticalAdjust
-        aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowHeight", uno::Any(true) ) ); // sal_Bool
-        aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowWidth", uno::Any(true) ) ); // sal_Bool
-
-    }
+    aValueMap.insert( { "TextHorizontalAdjust", uno::Any(drawing::TextHorizontalAdjust_CENTER) } );
+    aValueMap.insert( { "TextVerticalAdjust", uno::Any(drawing::TextVerticalAdjust_CENTER) } );
+    aValueMap.insert( { "TextAutoGrowHeight", uno::Any(true) } );
+    aValueMap.insert( { "TextAutoGrowWidth", uno::Any(true) } );
 
     //set global title properties
     tNameSequence aPropNames;

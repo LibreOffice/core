@@ -414,8 +414,7 @@ Reference< XAxis > AxisHelper::createAxis( sal_Int32 nDimensionIndex, bool bMain
         return nullptr;
 
     sal_Int32 nAxisIndex = bMainAxis ? MAIN_AXIS_INDEX : SECONDARY_AXIS_INDEX;
-    sal_Int32 nCooSysIndex = 0;
-    Reference< XCoordinateSystem > xCooSys = AxisHelper::getCoordinateSystemByIndex( xDiagram, nCooSysIndex );
+    Reference< XCoordinateSystem > xCooSys = AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 );
 
     // create axis
     return AxisHelper::createAxis(
