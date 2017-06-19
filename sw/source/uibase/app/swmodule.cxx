@@ -51,6 +51,7 @@
 #include <svx/hyperdlg.hxx>
 #include <svx/modctrl.hxx>
 #include <sfx2/emojipopup.hxx>
+#include <sfx2/charmappopup.hxx>
 #include <com/sun/star/scanner/ScannerManager.hpp>
 #include <com/sun/star/linguistic2/LanguageGuessing.hpp>
 #include <comphelper/processfactory.hxx>
@@ -356,6 +357,8 @@ void SwDLL::RegisterControls()
     SwWordCountWrapper::RegisterChildWindow( false, pMod );
     SvxRubyChildWindow::RegisterChildWindow( false, pMod);
     SwSpellDialogChildWindow::RegisterChildWindow(false, pMod);
+
+    CharmapPopup::RegisterControl(SID_CHARMAP_CONTROL, pMod );
 
     SvxGrafRedToolBoxControl::RegisterControl( SID_ATTR_GRAF_RED, pMod );
     SvxGrafGreenToolBoxControl::RegisterControl( SID_ATTR_GRAF_GREEN, pMod );

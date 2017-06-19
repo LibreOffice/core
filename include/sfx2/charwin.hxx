@@ -17,12 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CUI_SOURCE_INC_CHARWIN_HXX
-#define INCLUDED_CUI_SOURCE_INC_CHARWIN_HXX
+#ifndef INCLUDED_SFX2_INC_CHARWIN_HXX
+#define INCLUDED_SFX2_INC_CHARWIN_HXX
+
+#include <sfx2/tbxctrl.hxx>
+#include <sfx2/dllapi.h>
+
 
 #include <vcl/ctrl.hxx>
+#include <svx/svxdllapi.h>
 
-class SvxCharView : public Control
+class SVX_DLLPUBLIC SvxCharView : public Control
 {
 public:
     SvxCharView(vcl::Window* pParent);
