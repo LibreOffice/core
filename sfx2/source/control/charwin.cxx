@@ -19,12 +19,11 @@
 
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
-#include "charwin.hxx"
+#include <sfx2/charwin.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/dispatchcommand.hxx>
+#include <comphelper/processfactory.hxx>
 #include <sfx2/app.hxx>
-#include "cuicharmap.hxx"
-#include "macroass.hxx"
 
 using namespace com::sun::star;
 
@@ -39,16 +38,17 @@ VCL_BUILDER_FACTORY(SvxCharView)
 
 void SvxCharView::MouseButtonDown( const MouseEvent& rMEvt )
 {
+    Control::MouseButtonDown(rMEvt);
+
     if ( rMEvt.IsLeft() )
     {
-        maMouseClickHdl.Call(this);
         if ( !(rMEvt.GetClicks() % 2) )
         {
             InsertCharToDoc();
         }
-    }
 
-    Control::MouseButtonDown(rMEvt);
+        maMouseClickHdl.Call(this);
+    }
 }
 
 void SvxCharView::KeyInput( const KeyEvent& rKEvt )
