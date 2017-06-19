@@ -894,9 +894,11 @@ void FlatFndBox::FillFlat(const FndBox_& rBox, bool bLastBox)
                     SfxItemState::SET == pFormat->GetItemState( RES_BOXATR_FORMULA ) ||
                     SfxItemState::SET == pFormat->GetItemState( RES_BOXATR_VALUE ) )
                 {
-                    auto pSet = o3tl::make_unique<SfxItemSet>( pDoc->GetAttrPool(),
-                                    svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE,
-                                    RES_VERT_ORIENT, RES_VERT_ORIENT>{} );
+                    auto pSet = o3tl::make_unique<SfxItemSet>(
+                        pDoc->GetAttrPool(),
+                        svl::Items<
+                            RES_VERT_ORIENT, RES_VERT_ORIENT,
+                            RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{});
                     pSet->Put( pFormat->GetAttrSet() );
                     if( ppItemSets.empty() )
                     {

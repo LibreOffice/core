@@ -247,16 +247,12 @@ std::unique_ptr<SfxItemSet> SmModule::CreateItemSet( sal_uInt16 nId )
     std::unique_ptr<SfxItemSet> pRet;
     if(nId == SID_SM_EDITOPTIONS)
     {
-        pRet = o3tl::make_unique<SfxItemSet>(GetPool(),
-                             //TP_SMPRINT
-                             svl::Items<SID_PRINTSIZE,         SID_PRINTSIZE,
-                             SID_PRINTZOOM,         SID_PRINTZOOM,
-                             SID_PRINTTITLE,        SID_PRINTTITLE,
-                             SID_PRINTTEXT,         SID_PRINTTEXT,
-                             SID_PRINTFRAME,        SID_PRINTFRAME,
-                             SID_NO_RIGHT_SPACES,   SID_NO_RIGHT_SPACES,
-                             SID_SAVE_ONLY_USED_SYMBOLS, SID_SAVE_ONLY_USED_SYMBOLS,
-                             SID_AUTO_CLOSE_BRACKETS,    SID_AUTO_CLOSE_BRACKETS>{} );
+        pRet = o3tl::make_unique<SfxItemSet>(
+            GetPool(),
+            svl::Items< //TP_SMPRINT
+                SID_PRINTTITLE, SID_PRINTZOOM,
+                SID_NO_RIGHT_SPACES, SID_SAVE_ONLY_USED_SYMBOLS,
+                SID_AUTO_CLOSE_BRACKETS, SID_AUTO_CLOSE_BRACKETS>{});
 
             GetConfig()->ConfigToItemSet(*pRet);
     }

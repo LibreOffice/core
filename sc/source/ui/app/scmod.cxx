@@ -1930,32 +1930,29 @@ std::unique_ptr<SfxItemSet> ScModule::CreateItemSet( sal_uInt16 nId )
     std::unique_ptr<SfxItemSet> pRet;
     if(SID_SC_EDITOPTIONS == nId)
     {
-        pRet = o3tl::make_unique<SfxItemSet>( GetPool(),
-                            // TP_CALC:
-                            svl::Items<SID_SCDOCOPTIONS,       SID_SCDOCOPTIONS,
-                            // TP_VIEW:
-                            SID_SCVIEWOPTIONS,      SID_SCVIEWOPTIONS,
-                            SID_SC_OPT_SYNCZOOM,    SID_SC_OPT_SYNCZOOM,
-                            // TP_INPUT:
-                            SID_SC_INPUT_SELECTION,SID_SC_INPUT_MARK_HEADER,
-                            SID_SC_INPUT_TEXTWYSIWYG,SID_SC_INPUT_TEXTWYSIWYG,
-                            SID_SC_INPUT_REPLCELLSWARN,SID_SC_INPUT_REPLCELLSWARN,
-                            SID_SC_INPUT_LEGACY_CELL_SELECTION,SID_SC_OPT_SORT_REF_UPDATE,
-                            // TP_USERLISTS:
-                            SCITEM_USERLIST,        SCITEM_USERLIST,
-                            // TP_PRINT:
-                            SID_SCPRINTOPTIONS, SID_SCPRINTOPTIONS,
-                            // TP_GRID:
-                            SID_ATTR_GRID_OPTIONS, SID_ATTR_GRID_OPTIONS,
-
-                            SID_ATTR_METRIC,        SID_ATTR_METRIC,
-                            SID_ATTR_DEFTABSTOP,    SID_ATTR_DEFTABSTOP,
-                            // TP_COMPATIBILITY
-                            SID_SC_OPT_KEY_BINDING_COMPAT, SID_SC_OPT_KEY_BINDING_COMPAT,
-                            // TP_DEFAULTS
-                            SID_SCDEFAULTSOPTIONS, SID_SCDEFAULTSOPTIONS,
-                            // TP_FORMULA
-                            SID_SCFORMULAOPTIONS, SID_SCFORMULAOPTIONS>{} );
+        pRet = o3tl::make_unique<SfxItemSet>(
+            GetPool(),
+            svl::Items<
+                // TP_USERLISTS:
+                SCITEM_USERLIST, SCITEM_USERLIST,
+                // TP_GRID:
+                SID_ATTR_GRID_OPTIONS, SID_ATTR_GRID_OPTIONS,
+                SID_ATTR_METRIC, SID_ATTR_METRIC,
+                SID_ATTR_DEFTABSTOP, SID_ATTR_DEFTABSTOP,
+                // TP_INPUT:
+                SID_SC_INPUT_LEGACY_CELL_SELECTION, SID_SC_OPT_SORT_REF_UPDATE,
+                // TP_FORMULA, TP_DEFAULTS:
+                SID_SCFORMULAOPTIONS, SID_SCDEFAULTSOPTIONS,
+                // TP_VIEW, TP_CALC:
+                SID_SCVIEWOPTIONS, SID_SCDOCOPTIONS,
+                // TP_PRINT:
+                SID_SCPRINTOPTIONS, SID_SCPRINTOPTIONS,
+                // TP_INPUT:
+                SID_SC_INPUT_SELECTION, SID_SC_INPUT_MARK_HEADER,
+                SID_SC_INPUT_TEXTWYSIWYG, SID_SC_INPUT_TEXTWYSIWYG,
+                SID_SC_INPUT_REPLCELLSWARN, SID_SC_INPUT_REPLCELLSWARN,
+                // TP_VIEW:
+                SID_SC_OPT_SYNCZOOM, SID_SC_OPT_KEY_BINDING_COMPAT>{});
 
         const ScAppOptions& rAppOpt = GetAppOptions();
 

@@ -35,18 +35,15 @@ namespace sdr
         // create a new itemset
         std::unique_ptr<SfxItemSet> ConnectorProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return o3tl::make_unique<SfxItemSet>(rPool,
-
-                // range from SdrAttrObj
-                svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
-                SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
-
-                // range from SdrEdgeObj
-                SDRATTR_EDGE_FIRST, SDRATTR_EDGE_LAST,
-
-                // range from SdrTextObj
-                EE_ITEMS_START, EE_ITEMS_END>{});
+            return o3tl::make_unique<SfxItemSet>(
+                rPool,
+                svl::Items<
+                    // Ranges from SdrAttrObj, SdrEdgeObj:
+                    SDRATTR_START, SDRATTR_SHADOW_LAST,
+                    SDRATTR_MISC_FIRST, SDRATTR_EDGE_LAST,
+                    SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
+                    // Range from SdrTextObj:
+                    EE_ITEMS_START, EE_ITEMS_END>{});
         }
 
         ConnectorProperties::ConnectorProperties(SdrObject& rObj)

@@ -1825,16 +1825,15 @@ void SwTableProperties_Impl::AddItemToSet(SfxItemSet& rSet, std::function<Tpooli
 }
 void SwTableProperties_Impl::ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc)
 {
-    SfxItemSet aSet(rDoc.GetAttrPool(),
-        svl::Items<RES_LAYOUT_SPLIT,   RES_LAYOUT_SPLIT,
-        RES_BACKGROUND,     RES_BACKGROUND,
-        RES_FRM_SIZE,       RES_UL_SPACE,
-        RES_HORI_ORIENT,    RES_HORI_ORIENT,
-        RES_BREAK,          RES_BREAK,
-        RES_KEEP,           RES_KEEP,
-        RES_SHADOW,         RES_SHADOW,
-        RES_PAGEDESC,       RES_PAGEDESC>{}
-        );
+    SfxItemSet aSet(
+        rDoc.GetAttrPool(),
+        svl::Items<
+            RES_FRM_SIZE, RES_BREAK,
+            RES_HORI_ORIENT, RES_HORI_ORIENT,
+            RES_BACKGROUND, RES_BACKGROUND,
+            RES_SHADOW, RES_SHADOW,
+            RES_KEEP, RES_KEEP,
+            RES_LAYOUT_SPLIT, RES_LAYOUT_SPLIT>{});
     const uno::Any* pRepHead;
     const SwFrameFormat &rFrameFormat = *rTable.GetFrameFormat();
     if(GetProperty(FN_TABLE_HEADLINE_REPEAT, 0xff, pRepHead ))
@@ -3564,10 +3563,12 @@ uno::Any SAL_CALL SwXCellRange::getPropertyValue(const OUString& rPropertyName)
                 break;
                 default:
                 {
-                    SfxItemSet aSet(m_pImpl->m_pTableCursor->GetDoc()->GetAttrPool(),
-                        svl::Items<RES_CHRATR_BEGIN,       RES_FRMATR_END -1,
-                        RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
-                        RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER>{});
+                    SfxItemSet aSet(
+                        m_pImpl->m_pTableCursor->GetDoc()->GetAttrPool(),
+                        svl::Items<
+                            RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
+                            RES_UNKNOWNATR_CONTAINER,
+                                RES_UNKNOWNATR_CONTAINER>{});
                     // first look at the attributes of the cursor
                     SwUnoTableCursor *const pCursor =
                         dynamic_cast<SwUnoTableCursor*>(&(*m_pImpl->m_pTableCursor));

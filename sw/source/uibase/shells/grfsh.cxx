@@ -218,33 +218,30 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             const SwViewOption* pVOpt = rSh.GetViewOptions();
             SwViewOption aUsrPref( *pVOpt );
 
-            SfxItemSet aSet(GetPool(), // sorted by indices
-
-                svl::Items<RES_FRMATR_BEGIN,RES_FRMATR_END - 1,                            // [   82
-                RES_GRFATR_MIRRORGRF,RES_GRFATR_CROPGRF,                        // [  123
-
-                // FillAttribute support
-                XATTR_FILL_FIRST,       XATTR_FILL_LAST,                        // [ 1014
-
-                SID_DOCFRAME,SID_DOCFRAME,                                      // [ 5598
-                SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER,                    // [10023
-                SID_ATTR_PAGE_SIZE,SID_ATTR_PAGE_SIZE,                          // [10051
-                SID_ATTR_GRAF_KEEP_ZOOM,SID_ATTR_GRAF_KEEP_ZOOM,                // [10882
-                SID_ATTR_GRAF_FRMSIZE,SID_ATTR_GRAF_GRAPHIC,                    // [10884, contains SID_ATTR_GRAF_FRMSIZE_PERCENT
-
-                // items to hand over XPropertyList things like
-                // XColorList, XHatchList, XGradientList and XBitmapList
-                // to the Area TabPage
-                SID_COLOR_TABLE,        SID_PATTERN_LIST,                        // [10179
-
-                SID_HTML_MODE,SID_HTML_MODE,                                    // [10414
-                FN_GET_PRINT_AREA,FN_GET_PRINT_AREA,                            // [21032
-                FN_PARAM_GRF_CONNECT,FN_PARAM_GRF_CONNECT,                      // [21153
-                FN_PARAM_GRF_DIALOG,FN_PARAM_GRF_DIALOG,                        // [21171
-                FN_SET_FRM_NAME,FN_KEEP_ASPECT_RATIO,                           // [21306
-                FN_SET_FRM_ALT_NAME,FN_SET_FRM_ALT_NAME,                        // [21318
-                SID_REFERER,            SID_REFERER,
-                FN_UNO_DESCRIPTION, FN_UNO_DESCRIPTION>{});                     // [21320
+            SfxItemSet aSet(
+                GetPool(),
+                svl::Items<
+                    RES_FRMATR_BEGIN, RES_GRFATR_CROPGRF,
+                    // FillAttribute support:
+                    XATTR_FILL_FIRST, XATTR_FILL_LAST,
+                    SID_DOCFRAME, SID_DOCFRAME,
+                    SID_REFERER, SID_REFERER,
+                    SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
+                    SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
+                    // Items to hand over XPropertyList things like
+                    // XColorList, XHatchList, XGradientList, and XBitmapList to
+                    // the Area TabPage:
+                    SID_COLOR_TABLE, SID_PATTERN_LIST,
+                    SID_HTML_MODE, SID_HTML_MODE,
+                    SID_ATTR_GRAF_KEEP_ZOOM, SID_ATTR_GRAF_KEEP_ZOOM,
+                    SID_ATTR_GRAF_FRMSIZE, SID_ATTR_GRAF_GRAPHIC,
+                        // contains SID_ATTR_GRAF_FRMSIZE_PERCENT
+                    FN_GET_PRINT_AREA, FN_GET_PRINT_AREA,
+                    FN_PARAM_GRF_CONNECT, FN_PARAM_GRF_CONNECT,
+                    FN_PARAM_GRF_DIALOG, FN_PARAM_GRF_DIALOG,
+                    FN_SET_FRM_NAME, FN_KEEP_ASPECT_RATIO,
+                    FN_SET_FRM_ALT_NAME, FN_SET_FRM_ALT_NAME,
+                    FN_UNO_DESCRIPTION, FN_UNO_DESCRIPTION>{});
 
             // create needed items for XPropertyList entries from the DrawModel so that
             // the Area TabPage can access them
@@ -388,10 +385,11 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 if(pFormat && pFormat->IsAutoUpdateFormat())
                 {
                     pFormat->SetFormatAttr(*pSet);
-                    SfxItemSet aShellSet(GetPool(), svl::Items<RES_FRM_SIZE,   RES_FRM_SIZE,
-                                                    RES_SURROUND,   RES_SURROUND,
-                                                    RES_ANCHOR,     RES_ANCHOR,
-                                                    RES_VERT_ORIENT,RES_HORI_ORIENT>{});
+                    SfxItemSet aShellSet(
+                        GetPool(),
+                        svl::Items<
+                            RES_FRM_SIZE, RES_FRM_SIZE,
+                            RES_SURROUND, RES_ANCHOR>{});
                     aShellSet.Put(*pSet);
                     aMgr.SetAttrSet(aShellSet);
                 }

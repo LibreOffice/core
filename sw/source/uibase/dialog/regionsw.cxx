@@ -61,13 +61,14 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
     SwWrtShell& rSh = GetShell();
     const SfxItemSet *pSet = rReq.GetArgs();
 
-    SfxItemSet aSet(GetPool(),
-            svl::Items<RES_COL, RES_COL,
-            RES_LR_SPACE, RES_LR_SPACE,
-            RES_COLUMNBALANCE, RES_FRAMEDIR,
-            RES_BACKGROUND, RES_BACKGROUND,
+    SfxItemSet aSet(
+        GetPool(),
+        svl::Items<
             RES_FRM_SIZE, RES_FRM_SIZE,
-            RES_FTN_AT_TXTEND, RES_END_AT_TXTEND,
+            RES_LR_SPACE, RES_LR_SPACE,
+            RES_BACKGROUND, RES_BACKGROUND,
+            RES_COL, RES_COL,
+            RES_FTN_AT_TXTEND, RES_FRAMEDIR,
             SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>{});
 
     if (!pSet || pSet->Count()==0)
@@ -179,10 +180,12 @@ IMPL_LINK( SwWrtShell, InsertRegionDialog, void*, p, void )
     std::unique_ptr<SwSectionData> xSectionData(pSect);
     if (xSectionData.get())
     {
-        SfxItemSet aSet(GetView().GetPool(),
-                svl::Items<RES_COL, RES_COL,
-                RES_BACKGROUND, RES_BACKGROUND,
+        SfxItemSet aSet(
+            GetView().GetPool(),
+            svl::Items<
                 RES_FRM_SIZE, RES_FRM_SIZE,
+                RES_BACKGROUND, RES_BACKGROUND,
+                RES_COL, RES_COL,
                 SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>{});
         SwRect aRect;
         CalcBoundRect(aRect, RndStdIds::FLY_AS_CHAR);

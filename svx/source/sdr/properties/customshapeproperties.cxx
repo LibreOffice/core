@@ -64,24 +64,18 @@ namespace sdr
 
         std::unique_ptr<SfxItemSet> CustomShapeProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return o3tl::make_unique<SfxItemSet>(rPool,
-
-                // ranges from SdrAttrObj
-                svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
-                SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
-
-                // Graphic Attributes
-                SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST,
-
-                // 3d Properties
-                SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
-
-                // CustomShape properties
-                SDRATTR_CUSTOMSHAPE_FIRST, SDRATTR_CUSTOMSHAPE_LAST,
-
-                // range from SdrTextObj
-                EE_ITEMS_START, EE_ITEMS_END>{});
+            return o3tl::make_unique<SfxItemSet>(
+                rPool,
+                svl::Items<
+                    // Ranges from SdrAttrObj:
+                    SDRATTR_START, SDRATTR_SHADOW_LAST,
+                    SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
+                    SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
+                    // Graphic attributes, 3D properties, CustomShape
+                    // properties:
+                    SDRATTR_GRAF_FIRST, SDRATTR_CUSTOMSHAPE_LAST,
+                    // Range from SdrTextObj:
+                    EE_ITEMS_START, EE_ITEMS_END>{});
         }
 
         bool CustomShapeProperties::AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem ) const

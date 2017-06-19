@@ -41,18 +41,16 @@ namespace sdr
         // create a new itemset
         std::unique_ptr<SfxItemSet> MeasureProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return o3tl::make_unique<SfxItemSet>(rPool,
-
-                // range from SdrAttrObj
-                svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
-                SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
-
-                // range from SdrMeasureObj
-                SDRATTR_MEASURE_FIRST, SDRATTR_MEASURE_LAST,
-
-                // range from SdrTextObj
-                EE_ITEMS_START, EE_ITEMS_END>{});
+            return o3tl::make_unique<SfxItemSet>(
+                rPool,
+                svl::Items<
+                    // Ranges from SdrAttrObj, SdrMeasureObj:
+                    SDRATTR_START, SDRATTR_SHADOW_LAST,
+                    SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
+                    SDRATTR_MEASURE_FIRST, SDRATTR_MEASURE_LAST,
+                    SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
+                    // Range from SdrTextObj:
+                    EE_ITEMS_START, EE_ITEMS_END>{});
         }
 
         MeasureProperties::MeasureProperties(SdrObject& rObj)

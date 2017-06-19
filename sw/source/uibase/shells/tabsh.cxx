@@ -639,9 +639,11 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( pView) !=  nullptr );
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
                 SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
-                SfxItemSet aCoreSet( GetPool(),
-                                 svl::Items<SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_VALUE,
-                                 SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO>{} );
+                SfxItemSet aCoreSet(
+                    GetPool(),
+                    svl::Items<
+                        SID_ATTR_NUMBERFORMAT_VALUE,
+                            SID_ATTR_NUMBERFORMAT_INFO>{});
 
                 SfxItemSet aBoxSet( *aCoreSet.GetPool(),
                                     svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_FORMAT,

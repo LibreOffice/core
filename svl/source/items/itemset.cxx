@@ -146,18 +146,18 @@ SfxItemSet::SfxItemSet(
     std::size_t i = 0;
     std::size_t size = 0;
 #if !defined NDEBUG
-    sal_uInt16 prev = 0;
+    //TODO: sal_uInt16 prev = 0;
 #endif
     for (auto const & p: wids) {
         assert(svl::detail::validRange(p.wid1, p.wid2));
-        assert(prev == 0 || svl::detail::validGap(prev, p.wid1));
+        //TODO: assert(prev == 0 || svl::detail::validGap(prev, p.wid1));
         m_pWhichRanges[i++] = p.wid1;
         m_pWhichRanges[i++] = p.wid2;
         size += svl::detail::rangeSize(p.wid1, p.wid2);
             // cannot overflow, assuming std::size_t is no smaller than
             // sal_uInt16
 #if !defined NDEBUG
-        prev = p.wid2;
+        //TODO: prev = p.wid2;
 #endif
     }
     m_pWhichRanges[i] = 0;

@@ -865,13 +865,15 @@ void    SwGlobalTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
         {
             if(pContCopy)
             {
-                SfxItemSet aSet(m_pActiveShell->GetView().GetPool(),
-                            svl::Items<RES_COL, RES_COL,
-                            RES_BACKGROUND, RES_BACKGROUND,
-                            RES_FRM_SIZE, RES_FRM_SIZE,
-                            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
-                            RES_LR_SPACE, RES_LR_SPACE,
-                            FN_PARAM_TOX_TYPE, FN_PARAM_TOX_TYPE>{});
+                SfxItemSet aSet(
+                    m_pActiveShell->GetView().GetPool(),
+                    svl::Items<
+                        RES_FRM_SIZE, RES_FRM_SIZE,
+                        RES_LR_SPACE, RES_LR_SPACE,
+                        RES_BACKGROUND, RES_BACKGROUND,
+                        RES_COL, RES_COL,
+                        SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
+                        FN_PARAM_TOX_TYPE, FN_PARAM_TOX_TYPE>{});
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 assert(pFact && "Dialog creation failed!");

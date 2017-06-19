@@ -1008,12 +1008,14 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
     if( aTmp.HasArea() &&
         rSh.IsSelObjProtected( FlyProtectFlags::Pos ) == FlyProtectFlags::NONE )
     {
-        SfxItemSet aSet(rSh.GetAttrPool(),
-                        svl::Items<RES_FRM_SIZE, RES_FRM_SIZE,
-                        RES_VERT_ORIENT, RES_ANCHOR,
-                        RES_COL, RES_COL,
-                        RES_PROTECT, RES_PROTECT,
-                        RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW>{});
+        SfxItemSet aSet(
+            rSh.GetAttrPool(),
+            svl::Items<
+                RES_FRM_SIZE, RES_FRM_SIZE,
+                RES_PROTECT, RES_PROTECT,
+                RES_VERT_ORIENT, RES_ANCHOR,
+                RES_COL, RES_COL,
+                RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW>{});
         rSh.GetFlyFrameAttr( aSet );
         RndStdIds eAnchorId = static_cast<const SwFormatAnchor&>(aSet.Get(RES_ANCHOR)).GetAnchorId();
         Size aSnap;

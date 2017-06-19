@@ -1071,22 +1071,21 @@ namespace //local functions originally from docfmt.cxx
         // - The attribute in rChgSet does not belong to one of the above categories
         if ( !bCharAttr && !bOtherAttr )
         {
-            SfxItemSet* pTmpCharItemSet = new SfxItemSet( pDoc->GetAttrPool(),
-                                       svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-                                       RES_TXTATR_AUTOFMT, RES_TXTATR_AUTOFMT,
-                                       RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
-                                       RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
-                   RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER>{} );
+            SfxItemSet* pTmpCharItemSet = new SfxItemSet(
+                pDoc->GetAttrPool(),
+                svl::Items<
+                    RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
+                    RES_TXTATR_AUTOFMT, RES_TXTATR_CHARFMT,
+                    RES_TXTATR_UNKNOWN_CONTAINER,
+                        RES_TXTATR_UNKNOWN_CONTAINER>{});
 
-            SfxItemSet* pTmpOtherItemSet = new SfxItemSet( pDoc->GetAttrPool(),
-                                        svl::Items<RES_PARATR_BEGIN, RES_PARATR_END-1,
-                                        RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
-                                        RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-                                        RES_GRFATR_BEGIN, RES_GRFATR_END-1,
-                                        RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-
-                                        // FillAttribute support
-                                        XATTR_FILL_FIRST, XATTR_FILL_LAST>{} );
+            SfxItemSet* pTmpOtherItemSet = new SfxItemSet(
+                pDoc->GetAttrPool(),
+                svl::Items<
+                    RES_PARATR_BEGIN, RES_GRFATR_END - 1,
+                    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1,
+                    // FillAttribute support:
+                    XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
 
             pTmpCharItemSet->Put( rChgSet );
             pTmpOtherItemSet->Put( rChgSet );
@@ -1178,11 +1177,12 @@ namespace //local functions originally from docfmt.cxx
             {
                 // CharFormat and URL attributes are treated separately!
                 // TEST_TEMP ToDo: AutoFormat!
-                SfxItemSet aTextSet( pDoc->GetAttrPool(),
-                                    svl::Items<RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK,
-                                    RES_TXTATR_META, RES_TXTATR_METAFIELD,
-                                    RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
-                                    RES_TXTATR_INPUTFIELD, RES_TXTATR_INPUTFIELD>{} );
+                SfxItemSet aTextSet(
+                    pDoc->GetAttrPool(),
+                    svl::Items<
+                        RES_TXTATR_REFMARK, RES_TXTATR_METAFIELD,
+                        RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
+                        RES_TXTATR_INPUTFIELD, RES_TXTATR_INPUTFIELD>{});
 
                 aTextSet.Put( rChgSet );
                 if( aTextSet.Count() )

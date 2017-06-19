@@ -144,10 +144,12 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
     const SwPageDesc* pPageDesc = rWrtShell.GetSelectedPageDescs();
     if( pPageDesc )
     {
-        pPageSet = new SfxItemSet( rWrtShell.GetAttrPool(),
-                                    svl::Items<RES_COL, RES_COL,
-                                    RES_FRM_SIZE, RES_FRM_SIZE,
-                                    RES_LR_SPACE, RES_LR_SPACE>{} );
+        pPageSet = new SfxItemSet(
+            rWrtShell.GetAttrPool(),
+            svl::Items<
+                RES_FRM_SIZE, RES_FRM_SIZE,
+                RES_LR_SPACE, RES_LR_SPACE,
+                RES_COL, RES_COL>{});
 
         const SwFrameFormat &rFormat = pPageDesc->GetMaster();
         nPageWidth = rFormat.GetFrameSize().GetSize().Width();

@@ -190,18 +190,20 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
                             if( pSourceObj )
                             {
                                 const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
-                                SfxItemSet aDest( pObj->GetModel()->GetItemPool(),              // ranges from SdrAttrObj
-                                svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
-                                SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                                SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
-                                // Graphic Attributes
-                                SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST,
-                                // 3d Properties
-                                SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
-                                // CustomShape properties
-                                SDRATTR_CUSTOMSHAPE_FIRST, SDRATTR_CUSTOMSHAPE_LAST,
-                                // range from SdrTextObj
-                                EE_ITEMS_START, EE_ITEMS_END>{});
+                                SfxItemSet aDest(
+                                    pObj->GetModel()->GetItemPool(),
+                                    svl::Items<
+                                        // Ranges from SdrAttrObj:
+                                        SDRATTR_START, SDRATTR_SHADOW_LAST,
+                                        SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
+                                        SDRATTR_TEXTDIRECTION,
+                                            SDRATTR_TEXTDIRECTION,
+                                        // Graphic attributes, 3D properties,
+                                        // CustomShape properties:
+                                        SDRATTR_GRAF_FIRST,
+                                            SDRATTR_CUSTOMSHAPE_LAST,
+                                        // Range from SdrTextObj:
+                                        EE_ITEMS_START, EE_ITEMS_END>{});
                                 aDest.Set( rSource );
                                 pObj->SetMergedItemSet( aDest );
                                 sal_Int32 nAngle = pSourceObj->GetRotateAngle();

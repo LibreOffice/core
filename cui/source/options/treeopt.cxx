@@ -1124,11 +1124,12 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
         {
             pRet = o3tl::make_unique<SfxItemSet>(
                 SfxGetpApp()->GetPool(),
-                svl::Items<SID_ATTR_METRIC, SID_ATTR_SPELL,
-                SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK,
-                SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER,
-                SID_ATTR_YEAR2000, SID_ATTR_YEAR2000,
-                SID_HTML_MODE, SID_HTML_MODE>{} );
+                svl::Items<
+                    SID_HTML_MODE, SID_HTML_MODE,
+                    SID_ATTR_METRIC, SID_ATTR_SPELL,
+                    SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK,
+                    SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER,
+                    SID_ATTR_YEAR2000, SID_ATTR_YEAR2000>{} );
 
             SfxItemSet aOptSet( SfxGetpApp()->GetPool(), svl::Items<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER>{} );
             SfxGetpApp()->GetOptions(aOptSet);
@@ -1162,11 +1163,13 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
         break;
         case SID_LANGUAGE_OPTIONS :
         {
-            pRet = o3tl::make_unique<SfxItemSet>(SfxGetpApp()->GetPool(),
-                    svl::Items<SID_ATTR_LANGUAGE, SID_AUTOSPELL_CHECK,
+            pRet = o3tl::make_unique<SfxItemSet>(
+                SfxGetpApp()->GetPool(),
+                svl::Items<
                     SID_ATTR_CHAR_CJK_LANGUAGE, SID_ATTR_CHAR_CTL_LANGUAGE,
-                    SID_OPT_LOCALE_CHANGED, SID_OPT_LOCALE_CHANGED,
-                    SID_SET_DOCUMENT_LANGUAGE, SID_SET_DOCUMENT_LANGUAGE>{} );
+                    SID_SET_DOCUMENT_LANGUAGE, SID_SET_DOCUMENT_LANGUAGE,
+                    SID_ATTR_LANGUAGE, SID_AUTOSPELL_CHECK,
+                    SID_OPT_LOCALE_CHANGED, SID_OPT_LOCALE_CHANGED>{});
 
             // for linguistic
 
@@ -1239,11 +1242,13 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
                 SfxGetpApp()->GetOptions(*pRet);
         break;
         case SID_FILTER_DLG:
-            pRet = o3tl::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(),
-            svl::Items<SID_ATTR_DOCINFO, SID_ATTR_AUTOSAVEMINUTE,
-            SID_SAVEREL_INET, SID_SAVEREL_FSYS,
-            SID_ATTR_PRETTYPRINTING, SID_ATTR_PRETTYPRINTING,
-            SID_ATTR_WARNALIENFORMAT, SID_ATTR_WARNALIENFORMAT>{} );
+            pRet = o3tl::make_unique<SfxItemSet>(
+                SfxGetpApp()->GetPool(),
+                svl::Items<
+                    SID_ATTR_WARNALIENFORMAT, SID_ATTR_WARNALIENFORMAT,
+                    SID_ATTR_DOCINFO, SID_ATTR_AUTOSAVEMINUTE,
+                    SID_SAVEREL_INET, SID_SAVEREL_FSYS,
+                    SID_ATTR_PRETTYPRINTING, SID_ATTR_PRETTYPRINTING>{} );
             SfxGetpApp()->GetOptions(*pRet);
             break;
 

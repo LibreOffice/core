@@ -1737,10 +1737,11 @@ uno::Any SwUnoCursorHelper::GetPropertyValue(
 
     if (!bDone)
     {
-        SfxItemSet aSet(rPaM.GetDoc()->GetAttrPool(),
-            svl::Items<RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
-            RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
-            RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER>{});
+        SfxItemSet aSet(
+            rPaM.GetDoc()->GetAttrPool(),
+            svl::Items<
+                RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
+                RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER>{});
         SwUnoCursorHelper::GetCursorAttr(rPaM, aSet);
 
         rPropSet.getPropertyValue(*pEntry, aSet, aAny);
@@ -1925,9 +1926,10 @@ SwUnoCursorHelper::GetPropertyStates(
                         default:
                             pSet.reset( new SfxItemSet(
                                 rPaM.GetDoc()->GetAttrPool(),
-                                svl::Items<RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
-                                RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
-                                RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER>{} ));
+                                svl::Items<
+                                    RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
+                                    RES_UNKNOWNATR_CONTAINER,
+                                        RES_UNKNOWNATR_CONTAINER>{}));
                     }
                     // #i63870#
                     SwUnoCursorHelper::GetCursorAttr( rPaM, *pSet );

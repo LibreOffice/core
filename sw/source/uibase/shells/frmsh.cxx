@@ -387,32 +387,28 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             }
             else
             {
-                SfxItemSet aSet(GetPool(),  // sorted by indices
-                    svl::Items<RES_FRMATR_BEGIN,       RES_FRMATR_END-1,                       // [82
-
-                    // FillAttribute support
-                    XATTR_FILL_FIRST,       XATTR_FILL_LAST,                        // [1014
-
-                    SID_DOCFRAME,           SID_DOCFRAME,                           // [5598
-
-                    SID_ATTR_BRUSH,         SID_ATTR_BRUSH,                         // [10001
-                    SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,                  // [10023
-                    SID_ATTR_LRSPACE,       SID_ATTR_ULSPACE,                       // [10048
-                    SID_ATTR_PAGE_SIZE,     SID_ATTR_PAGE_SIZE,                     // [10051
-
-                    // items to hand over XPropertyList things like
-                    // XColorList, XHatchList, XGradientList and XBitmapList
-                    // to the Area TabPage
-                    SID_COLOR_TABLE,        SID_PATTERN_LIST,                        // [10179
-
-                    SID_HTML_MODE,          SID_HTML_MODE,                          // [10414
-                    FN_GET_PRINT_AREA,      FN_GET_PRINT_AREA,                      // [21032
-                    FN_SURROUND,            FN_HORI_ORIENT,                         // [21303
-                    FN_SET_FRM_NAME,        FN_KEEP_ASPECT_RATIO,                   // [21306
-                    FN_SET_FRM_ALT_NAME,    FN_SET_FRM_ALT_NAME,                    // [21318
-                    FN_UNO_DESCRIPTION,     FN_UNO_DESCRIPTION,                     // [21320
-                    FN_OLE_IS_MATH,         FN_MATH_BASELINE_ALIGNMENT,             // [22314
-                    FN_PARAM_CHAIN_PREVIOUS, FN_PARAM_CHAIN_NEXT>{});               // [22420
+                SfxItemSet aSet(
+                    GetPool(),
+                    svl::Items<
+                        RES_FRMATR_BEGIN, RES_FRMATR_END - 1,
+                        // FillAttribute support:
+                        XATTR_FILL_FIRST, XATTR_FILL_LAST,
+                        SID_DOCFRAME, SID_DOCFRAME,
+                        SID_ATTR_BRUSH, SID_ATTR_BRUSH,
+                        SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
+                        SID_ATTR_LRSPACE, SID_ATTR_ULSPACE,
+                        SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
+                        // Items to hand over XPropertyList things like
+                        // XColorList, XHatchList, XGradientList, and
+                        // XBitmapList to the Area TabPage
+                        SID_COLOR_TABLE, SID_PATTERN_LIST,
+                        SID_HTML_MODE, SID_HTML_MODE,
+                        FN_GET_PRINT_AREA, FN_GET_PRINT_AREA,
+                        FN_SURROUND, FN_KEEP_ASPECT_RATIO,
+                        FN_SET_FRM_ALT_NAME, FN_SET_FRM_ALT_NAME,
+                        FN_UNO_DESCRIPTION, FN_UNO_DESCRIPTION,
+                        FN_OLE_IS_MATH, FN_MATH_BASELINE_ALIGNMENT,
+                        FN_PARAM_CHAIN_PREVIOUS, FN_PARAM_CHAIN_NEXT>{});
 
                 // create needed items for XPropertyList entries from the DrawModel so that
                 // the Area TabPage can access them
@@ -511,10 +507,11 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             // Anything which is not supported by the format must be set hard.
                             if(SfxItemState::SET == pOutSet->GetItemState(FN_SET_FRM_NAME, false, &pItem))
                                 rSh.SetFlyName(static_cast<const SfxStringItem*>(pItem)->GetValue());
-                            SfxItemSet aShellSet(GetPool(), svl::Items<RES_FRM_SIZE,   RES_FRM_SIZE,
-                                                            RES_SURROUND,   RES_SURROUND,
-                                                            RES_ANCHOR,     RES_ANCHOR,
-                                                            RES_VERT_ORIENT,RES_HORI_ORIENT>{});
+                            SfxItemSet aShellSet(
+                                GetPool(),
+                                svl::Items<
+                                    RES_FRM_SIZE, RES_FRM_SIZE,
+                                    RES_SURROUND, RES_ANCHOR>{});
                             aShellSet.Put(*pOutSet);
                             aMgr.SetAttrSet(aShellSet);
                             if(SfxItemState::SET == pOutSet->GetItemState(FN_SET_FRM_NAME, false, &pItem))
@@ -690,11 +687,11 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
     bool bHtmlMode = 0 != ::GetHtmlMode(rSh.GetView().GetDocShell());
     if (rSh.IsFrameSelected())
     {
-        SfxItemSet aSet( rSh.GetAttrPool(),
-                            svl::Items<RES_LR_SPACE, RES_UL_SPACE,
-                            RES_PROTECT, RES_HORI_ORIENT,
-                            RES_OPAQUE, RES_OPAQUE,
-                            RES_PRINT, RES_OPAQUE>{} );
+        SfxItemSet aSet(
+            rSh.GetAttrPool(),
+            svl::Items<
+                RES_LR_SPACE, RES_UL_SPACE,
+                RES_PRINT, RES_HORI_ORIENT>{});
         rSh.GetFlyFrameAttr( aSet );
 
         bool bProtect = rSh.IsSelObjProtected(FlyProtectFlags::Pos) != FlyProtectFlags::NONE;

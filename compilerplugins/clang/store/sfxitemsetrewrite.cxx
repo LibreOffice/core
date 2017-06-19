@@ -7,10 +7,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <algorithm>
+#include <sstream>
+#include <tuple>
+#include <vector>
+
 #include "check.hxx"
 #include "plugin.hxx"
 
 namespace {
+
+bool gap(APSInt n1, APSInt n2) { return n1 < n2 && n2 - n1 > 1; }
 
 class Visitor final:
     public RecursiveASTVisitor<Visitor>, public loplugin::RewritePlugin
@@ -94,6 +101,120 @@ public:
         return true;
     }
 
+    bool VisitTemplateSpecializationTypeLoc(
+        TemplateSpecializationTypeLoc typeLoc)
+    {
+        auto const loc = typeLoc.getBeginLoc();
+        if (loc.isInvalid() || ignoreLocation(loc)) {
+            return true;
+        }
+        if (!loplugin::TypeCheck(typeLoc.getType()).Struct("Items")
+            .Namespace("svl").GlobalNamespace())
+        {
+            return true;
+        }
+        unsigned const numArgs = typeLoc.getNumArgs();
+        if (numArgs == 0) {
+            report(
+                DiagnosticsEngine::Warning,
+                ("unexpected svl::Items specialization with zero template"
+                 " arguments"),
+                loc)
+                << typeLoc.getSourceRange();
+            return true;
+        }
+        if (numArgs % 2 == 1) {
+            report(
+                DiagnosticsEngine::Warning,
+                ("unexpected svl::Items specialization with odd number of"
+                 " template arguments"),
+                loc)
+                << typeLoc.getSourceRange();
+            return true;
+        }
+        std::vector<Range> ranges;
+        auto good = true;
+        APSInt prev;
+        for (unsigned i = 0; i != numArgs; ++i) {
+            auto const argLoc = typeLoc.getArgLoc(i);
+            auto const & arg = argLoc.getArgument();
+            APSInt v;
+            switch (arg.getKind()) {
+            case TemplateArgument::Integral:
+                v = arg.getAsIntegral();
+                break;
+            case TemplateArgument::Expression:
+                if (arg.getAsExpr()->EvaluateAsInt(v, compiler.getASTContext()))
+                {
+                    break;
+                }
+                // [[fallthrough]];
+            default:
+                report(
+                    DiagnosticsEngine::Warning,
+                    ("unexpected svl::Items specialization with non-integral"
+                     " template argument %0"),
+                    argLoc.getLocation())
+                    << (i + 1)
+                    << typeLoc.getSourceRange();
+                return true;
+            }
+            if (i % 2 == 0) {
+                good = good && (i == 0 || gap(prev, v));
+            } else {
+                if (v < prev) {
+                    report(
+                        DiagnosticsEngine::Warning,
+                        ("unexpected svl::Items specialization with template"
+                         " argument %0 smaller than previous one, %1 < %2"),
+                        argLoc.getLocation())
+                        << (i + 1) << v.toString(10) << prev.toString(10)
+                        << typeLoc.getSourceRange();
+                    return true;
+                }
+                ranges.emplace_back(prev, v, (i / 2) + 1);
+            }
+            prev = v;
+        }
+        if (good) {
+            return true;
+        }
+        std::ostringstream buf1;
+        for (auto const i: ranges) {
+            buf1 << "\n    ";
+            printBegin(buf1, typeLoc, i);
+            buf1 << " ... ";
+            printEnd(buf1, typeLoc, i);
+        }
+        std::sort(ranges.begin(), ranges.end());
+        std::ostringstream buf2;
+        for (auto i = ranges.begin(); i != ranges.end();) {
+            buf2 << "\n    ";
+            printBegin(buf2, typeLoc, *i);
+            buf2 << " ... ";
+            auto end = *i;
+            for (;;) {
+                auto j = i + 1;
+                if (j == ranges.end() || gap(get<1>(end), get<0>(*j))) {
+                    printEnd(buf2, typeLoc, end);
+                    i = j;
+                    break;
+                }
+                if (get<1>(*j) >= get<1>(end)) {
+                    end = *j;
+                }
+                i = j;
+            }
+        }
+        report(
+            DiagnosticsEngine::Warning,
+            ("reorder svl::Items specialization template arguments from:%0\nto:"
+             "%1"),
+            loc)
+            << buf1.str() << buf2.str() << typeLoc.getSourceRange();
+        return true;
+    }
+
 private:
     void run() override {
         if (compiler.getLangOpts().CPlusPlus) {
@@ -121,6 +242,42 @@ private:
                 .second;
         }
         return loc;
+    }
+
+    using Range = std::tuple<APSInt, APSInt, unsigned>;
+
+    void printSource(
+        std::ostringstream & s, TemplateSpecializationTypeLoc typeLoc, Range r,
+        bool end)
+    {
+        auto const argLoc = typeLoc.getArgLoc(
+            2 * (get<2>(r) - 1) + (end ? 1 : 0));
+        auto const src1 = argLoc.getSourceRange();
+        auto const src2 = SourceRange(
+            atMacroExpansionStart(src1.getBegin()),
+            Lexer::getLocForEndOfToken(
+                compiler.getSourceManager().getExpansionLoc(
+                    atMacroExpansionEnd(src1.getEnd())),
+                0, compiler.getSourceManager(), compiler.getLangOpts()));
+        s << " '" << Lexer::getSourceText(
+            Lexer::getAsCharRange(
+                src2, compiler.getSourceManager(), compiler.getLangOpts()),
+            compiler.getSourceManager(), compiler.getLangOpts()).str()
+          << "'";
+    }
+
+    void printBegin(
+        std::ostringstream & s, TemplateSpecializationTypeLoc typeLoc, Range r)
+    {
+        s << get<2>(r) << "B: " << get<0>(r).toString(10);
+        printSource(s, typeLoc, r, false);
+    }
+
+    void printEnd(
+        std::ostringstream & s, TemplateSpecializationTypeLoc typeLoc, Range r)
+    {
+        s << get<2>(r) << "E: " << get<1>(r).toString(10);
+        printSource(s, typeLoc, r, true);
     }
 
     void rewrite(

@@ -125,16 +125,16 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
 {
     FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( &rWrtSh.GetView()) != nullptr );
     SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
-    SfxItemSet aCoreSet( rWrtSh.GetView().GetPool(),
-                        svl::Items<RES_CHRATR_BEGIN,      RES_CHRATR_END-1,
-                        RES_TXTATR_INETFMT,    RES_TXTATR_INETFMT,
-                        RES_BACKGROUND,        RES_BACKGROUND,
-                        RES_BOX,               RES_BOX,
-                        RES_SHADOW,            RES_SHADOW,
-                        SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
-                        FN_PARAM_SELECTION,    FN_PARAM_SELECTION,
-                        SID_HTML_MODE,         SID_HTML_MODE,
-                        SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,   SID_ATTR_CHAR_WIDTH_FIT_TO_LINE>{} );
+    SfxItemSet aCoreSet(
+        rWrtSh.GetView().GetPool(),
+        svl::Items<
+            RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
+            RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
+            RES_BACKGROUND, RES_SHADOW,
+            SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
+            SID_HTML_MODE, SID_HTML_MODE,
+            SID_ATTR_CHAR_WIDTH_FIT_TO_LINE, SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
+            FN_PARAM_SELECTION, FN_PARAM_SELECTION>{} );
     rWrtSh.GetCurAttr( aCoreSet );
     bool bSel = rWrtSh.HasSelection();
     bool bSelectionPut = false;
@@ -904,30 +904,25 @@ void SwTextShell::Execute(SfxRequest &rReq)
             bool bApplyCharUnit = ::HasCharUnit( dynamic_cast<SwWebView*>( &GetView()) != nullptr  );
             SW_MOD()->PutItem(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, bApplyCharUnit));
 
-            SfxItemSet aCoreSet( GetPool(), // sorted by indices, one group of three concatenated
-                            svl::Items<RES_PARATR_BEGIN,           RES_PARATR_END - 1,         // [60
-                            RES_PARATR_LIST_BEGIN,      RES_PARATR_LIST_END - 1,    // [77
-                            RES_FRMATR_BEGIN,           RES_FRMATR_END - 1,         // [82
-
-                            // FillAttribute support
-                            XATTR_FILL_FIRST, XATTR_FILL_LAST,                      // [1014
-
-                            // includes SID_ATTR_TABSTOP_POS
-                            SID_ATTR_TABSTOP_DEFAULTS,  SID_ATTR_TABSTOP_OFFSET,    // [10003 .. 10005
-
-                            SID_ATTR_BORDER_INNER,      SID_ATTR_BORDER_INNER,      // [10023
-                            SID_ATTR_PARA_MODEL,        SID_ATTR_PARA_KEEP,         // [10065
-
-                            // items to hand over XPropertyList things like
-                            // XColorList, XHatchList, XGradientList and XBitmapList
-                            // to the Area TabPage
-                            SID_COLOR_TABLE,        SID_PATTERN_LIST,                // [10179
-
-                            SID_HTML_MODE,              SID_HTML_MODE,              // [10414
-                            SID_ATTR_PARA_PAGENUM,      SID_ATTR_PARA_PAGENUM,      // [10457
-                            FN_PARAM_1,                 FN_PARAM_1,                 // [21160
-                            FN_NUMBER_NEWSTART,         FN_NUMBER_NEWSTART_AT,      // [21738
-                            FN_DROP_TEXT,               FN_DROP_CHAR_STYLE_NAME>{});// [22418
+            SfxItemSet aCoreSet(
+                GetPool(),
+                svl::Items<
+                    RES_PARATR_BEGIN, RES_FRMATR_END - 1,
+                    // FillAttribute support:
+                    XATTR_FILL_FIRST, XATTR_FILL_LAST,
+                    // Includes SID_ATTR_TABSTOP_POS:
+                    SID_ATTR_TABSTOP_DEFAULTS, SID_ATTR_TABSTOP_OFFSET,
+                    SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
+                    SID_ATTR_PARA_MODEL, SID_ATTR_PARA_KEEP,
+                    // Items to hand over XPropertyList things like XColorList,
+                    // XHatchList, XGradientList, and XBitmapList to the Area
+                    // TabPage:
+                    SID_COLOR_TABLE, SID_PATTERN_LIST,
+                    SID_HTML_MODE, SID_HTML_MODE,
+                    SID_ATTR_PARA_PAGENUM, SID_ATTR_PARA_PAGENUM,
+                    FN_PARAM_1, FN_PARAM_1,
+                    FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT,
+                    FN_DROP_TEXT, FN_DROP_CHAR_STYLE_NAME>{});
 
             // get also the list level indent values merged as LR-SPACE item, if needed.
             rWrtSh.GetPaMAttr( pPaM, aCoreSet, true );
