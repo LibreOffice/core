@@ -58,7 +58,7 @@ namespace OpenStormBento
 {
 
 CBenNamedObject *
-FindNamedObject(CUtList * pList, const char * sName,
+FindNamedObject(CUtList * pList, const OString& rName,
   CUtListElmt ** ppPrev)
 {
     CUtListElmt& rTerminating = pList->GetTerminating();
@@ -68,8 +68,8 @@ FindNamedObject(CUtList * pList, const char * sName,
         CBenNamedObjectListElmt * pCurrNamedObjectListElmt =
           static_cast<CBenNamedObjectListElmt *>(pCurr);
 
-        int Comp = strcmp(sName, pCurrNamedObjectListElmt->GetNamedObject()->
-          GetNameCStr());
+        sal_Int32 Comp = rName.compareTo(pCurrNamedObjectListElmt->GetNamedObject()->
+          GetName());
 
         if (Comp == 0)
             return pCurrNamedObjectListElmt->GetNamedObject();
