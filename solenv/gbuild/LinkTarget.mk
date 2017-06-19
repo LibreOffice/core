@@ -127,6 +127,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
 		$(gb_COMPILER_PLUGINS) \
+		$(if $(COMPILER_TEST),$(gb_COMPILER_TEST_FLAGS)) \
 		$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		-c $(2) \

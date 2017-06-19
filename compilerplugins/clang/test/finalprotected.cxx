@@ -10,25 +10,25 @@
 
 class S final {
 protected:
-    void f(int f) { f1 = f; }  // expected-error {{final class should not have protected members - convert them to private [loplugin:finalprotected]}} expected-error {{[loplugin:unreffun]}}
+    void f(int f) { f1 = f; }  // expected-error {{final class should not have protected members - convert them to private [loplugin:finalprotected]}}
     int f1;      // expected-error {{final class should not have protected members - convert them to private [loplugin:finalprotected]}}
 public:
-    void g();    // expected-error {{[loplugin:externandnotdefined]}} expected-error {{[loplugin:unreffun]}}
+    void g();
     int g1;
 private:
-    void h();    // expected-error {{[loplugin:externandnotdefined]}} expected-error {{[loplugin:unreffun]}}
+    void h();
     int h1;
 };
 
 class S2 {
 protected:
-    void f(int f) { f1 = f; } // expected-error {{[loplugin:unreffun]}}
+    void f(int f) { f1 = f; }
     int f1;
 public:
-    void g();    // expected-error {{[loplugin:externandnotdefined]}} expected-error {{[loplugin:unreffun]}}
+    void g();
     int g1;
 private:
-    void h();    // expected-error {{[loplugin:externandnotdefined]}} expected-error {{[loplugin:unreffun]}}
+    void h();
     int h1;
 };
 

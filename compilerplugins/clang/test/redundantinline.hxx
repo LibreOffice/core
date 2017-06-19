@@ -19,7 +19,7 @@ S1::S1() = default;
 
 struct S2 {
     inline S2() = default; // expected-error {{[loplugin:redundantinline]}}
-    inline ~S2() = default; // expected-error {{[loplugin:redundantinline]}} expected-error {{[loplugin:unnecessaryoverride]}}
+    inline ~S2() = default; // expected-error {{[loplugin:redundantinline]}}
 };
 
 struct S3 {
