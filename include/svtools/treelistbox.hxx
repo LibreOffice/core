@@ -380,6 +380,7 @@ public:
     bool            CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget );
     bool            MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, SvTreeListEntry* pTarget, bool bAllowCopyFallback );
     void            RemoveSelection();
+    void            RemoveEntry(SvTreeListEntry* pEntry);
 
     DragDropMode    GetDragDropMode() const { return nDragDropMode; }
     SelectionMode   GetSelectionMode() const { return eSelMode; }

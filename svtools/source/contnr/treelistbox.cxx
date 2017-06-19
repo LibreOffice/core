@@ -676,6 +676,18 @@ void SvTreeListBox::RemoveSelection()
         pModel->Remove(*it);
 }
 
+/**
+ * Removes the entry along with all of its descendants
+ */
+void SvTreeListBox::RemoveEntry(SvTreeListEntry* pEntry)
+{
+    while (pEntry->HasChildren())
+    {
+        RemoveEntry(pModel->FirstChild(pEntry));
+    }
+    pModel->Remove(pEntry);
+}
+
 void SvTreeListBox::RecalcViewData()
 {
     SvTreeListEntry* pEntry = First();
