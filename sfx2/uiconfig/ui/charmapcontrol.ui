@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
+<interface>
+  <requires lib="gtk+" version="3.12"/>
+  <object class="GtkWindow" id="charmapctrl">
+    <property name="can_focus">False</property>
+    <property name="resizable">False</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="type_hint">popup-menu</property>
+    <property name="skip_pager_hint">True</property>
+    <property name="deletable">False</property>
+    <child>
+      <object class="GtkBox" id="box1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="resize_mode">queue</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkLabel" id="label1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Recent Characters</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid" id="grid1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="row_homogeneous">True</property>
+            <property name="column_homogeneous">True</property>
+            <child>
+              <object class="cuilo-SvxCharView" id="viewchar1">
+                <property name="width_request">35</property>
+                <property name="height_request">35</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="cuilo-SvxCharView" id="viewchar2">
+                <property name="width_request">35</property>
+                <property name="height_request">35</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="cuilo-SvxCharView" id="viewchar4">
+                <property name="width_request">35</property>
+                <property name="height_request">35</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">3</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="cuilo-SvxCharView" id="viewchar3">
+                <property name="width_request">35</property>
+                <property name="height_request">35</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="cuilo-SvxCharView" id="viewchar12">
+                <property name="width_request">35</property>
+                <property name="height_request">35</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">3</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="cuilo-SvxCharView" id="viewchar11">
+                <property name="width_request">35</property>
+                <property name="height_request">35</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="cuilo-SvxCharView" id="viewchar10">
+                <property name="width_request">35</property>
+                <property name="height_request">35</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="cuilo-SvxCharView" id="viewchar9">
+                <property name="width_request">35</property>
+                <property name="height_request">35</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="cuilo-SvxCharView" id="viewchar5">
+                <property name="width_request">35</property>
+                <property name="height_request">35</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">4</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="cuilo-SvxCharView" id="viewchar6">
+                <property name="width_request">35</property>
+                <property name="height_request">35</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">5</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="cuilo-SvxCharView" id="viewchar7">
+                <property name="width_request">35</property>
+                <property name="height_request">35</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">6</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="cuilo-SvxCharView" id="viewchar8">
+                <property name="width_request">35</property>
+                <property name="height_request">35</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">7</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="cuilo-SvxCharView" id="viewchar13">
+                <property name="width_request">35</property>
+                <property name="height_request">35</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">4</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="cuilo-SvxCharView" id="viewchar14">
+                <property name="width_request">35</property>
+                <property name="height_request">35</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">5</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="cuilo-SvxCharView" id="viewchar15">
+                <property name="width_request">35</property>
+                <property name="height_request">35</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">6</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="cuilo-SvxCharView" id="viewchar16">
+                <property name="width_request">35</property>
+                <property name="height_request">35</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">7</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="specialchardlg">
+            <property name="label" translatable="yes">Launch Dialog</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
