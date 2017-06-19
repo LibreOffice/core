@@ -756,7 +756,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                 OSL_ENSURE(pObj, "Where is the SDR-Object?");
                 if (pObj)
                 {
-                    aRect = pObj->GetSnapRect();
+                    aRect = pObj->GetLogicRect();
                 }
             }
 

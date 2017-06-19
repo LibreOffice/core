@@ -3486,6 +3486,10 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             if ( pOutlinerParaObject && pOutlinerParaObject->IsVertical() )
                                 nTextPathFlags |= 0x2000;
                         }
+
+                        // Use gtextFStretch for Watermark like MSO does
+                        nTextPathFlags |= use_gtextFStretch | gtextFStretch;
+
                         if ( nTextPathFlags != nTextPathFlagsOrg )
                             AddOpt( DFF_Prop_gtextFStrikethrough, nTextPathFlags );
                     }
