@@ -56,13 +56,13 @@ const int MAX_PLUGINS = 100;
 static PluginData plugins[ MAX_PLUGINS ];
 static int pluginCount = 0;
 static bool bPluginObjectsCreated = false;
+static bool unitTestMode = false;
 
 PluginHandler::PluginHandler( CompilerInstance& compiler, const vector< string >& args )
     : compiler( compiler )
     , rewriter( compiler.getSourceManager(), compiler.getLangOpts())
     , scope( "mainfile" )
     , warningsAsErrors( false )
-    , unitTestMode( false )
     {
     set< string > rewriters;
     for( string const & arg : args )
@@ -87,6 +87,11 @@ PluginHandler::~PluginHandler()
             if( !plugins[ i ].isPPCallback )
                 delete plugins[ i ].object;
             }
+    }
+
+bool PluginHandler::isUnitTestMode()
+    {
+    return unitTestMode;
     }
 
 void PluginHandler::handleOption( const string& option )
@@ -121,10 +126,13 @@ void PluginHandler::createPlugins( set< string > rewriters )
          i < pluginCount;
          ++i )
         {
-        if( rewriters.erase( plugins[i].optionName ) != 0 )
-            plugins[ i ].object = plugins[ i ].create( Plugin::InstantiationData { plugins[ i ].optionName, *this, compiler, &rewriter } );
+        const char* name = plugins[i].optionName;
+        if( rewriters.erase( name ) != 0 )
+            plugins[ i ].object = plugins[ i ].create( Plugin::InstantiationData { name, *this, compiler, &rewriter } );
         else if( plugins[ i ].byDefault )
-            plugins[ i ].object = plugins[ i ].create( Plugin::InstantiationData { plugins[ i ].optionName, *this, compiler, NULL } );
+            plugins[ i ].object = plugins[ i ].create( Plugin::InstantiationData { name, *this, compiler, NULL } );
+        else if( unitTestMode && strcmp(name, "unusedmethodsremove") != 0 && strcmp(name, "unusedfieldsremove") != 0)
+            plugins[ i ].object = plugins[ i ].create( Plugin::InstantiationData { name, *this, compiler, NULL } );
         }
     for( auto r: rewriters )
         report( DiagnosticsEngine::Fatal, "unknown plugin tool %0" ) << r;
