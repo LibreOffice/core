@@ -2194,60 +2194,63 @@ RTFError RTFDocumentImpl::popState()
     break;
     case Destination::DATAFIELD:
     {
-        if (&m_aStates.top().aDestinationText != m_aStates.top().pDestinationText)
-            break; // not for nested group
-        OString aStr = OUStringToOString(m_aStates.top().pDestinationText->makeStringAndClear(), aState.nCurrentEncoding);
-        // decode hex dump
-        OStringBuffer aBuf;
-        int b = 0, count = 2;
-        for (int i = 0; i < aStr.getLength(); ++i)
+        if (m_bFormField)
         {
-            char ch = aStr[i];
-            if (ch != 0x0d && ch != 0x0a)
+            if (&m_aStates.top().aDestinationText != m_aStates.top().pDestinationText)
+                break; // not for nested group
+            OString aStr = OUStringToOString(m_aStates.top().pDestinationText->makeStringAndClear(), aState.nCurrentEncoding);
+            // decode hex dump
+            OStringBuffer aBuf;
+            int b = 0, count = 2;
+            for (int i = 0; i < aStr.getLength(); ++i)
             {
-                b = b << 4;
-                sal_Int8 parsed = RTFTokenizer::asHex(ch);
-                if (parsed == -1)
-                    return RTFError::HEX_INVALID;
-                b += parsed;
-                count--;
-                if (!count)
+                char ch = aStr[i];
+                if (ch != 0x0d && ch != 0x0a)
                 {
-                    aBuf.append((char)b);
-                    count = 2;
-                    b = 0;
+                    b = b << 4;
+                    sal_Int8 parsed = RTFTokenizer::asHex(ch);
+                    if (parsed == -1)
+                        return RTFError::HEX_INVALID;
+                    b += parsed;
+                    count--;
+                    if (!count)
+                    {
+                        aBuf.append((char)b);
+                        count = 2;
+                        b = 0;
+                    }
                 }
             }
-        }
-        aStr = aBuf.makeStringAndClear();
+            aStr = aBuf.makeStringAndClear();
 
-        // ignore the first bytes
-        if (aStr.getLength() > 8)
-            aStr = aStr.copy(8);
-        // extract name
-        sal_Int32 nLength = aStr.toChar();
-        if (!aStr.isEmpty())
-            aStr = aStr.copy(1);
-        nLength = std::min(nLength, aStr.getLength());
-        OString aName = aStr.copy(0, nLength);
-        if (aStr.getLength() > nLength)
-            aStr = aStr.copy(nLength+1); // zero-terminated string
-        else
-            aStr.clear();
-        // extract default text
-        nLength = aStr.toChar();
-        if (!aStr.isEmpty())
-            aStr = aStr.copy(1);
-        auto pNValue = std::make_shared<RTFValue>(OStringToOUString(aName, aState.nCurrentEncoding));
-        m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFData_name, pNValue);
-        if (nLength > 0)
-        {
-            OString aDefaultText = aStr.copy(0, std::min(nLength, aStr.getLength()));
-            auto pDValue = std::make_shared<RTFValue>(OStringToOUString(aDefaultText, aState.nCurrentEncoding));
-            m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFTextInput_default, pDValue);
-        }
+            // ignore the first bytes
+            if (aStr.getLength() > 8)
+                aStr = aStr.copy(8);
+            // extract name
+            sal_Int32 nLength = aStr.toChar();
+            if (!aStr.isEmpty())
+                aStr = aStr.copy(1);
+            nLength = std::min(nLength, aStr.getLength());
+            OString aName = aStr.copy(0, nLength);
+            if (aStr.getLength() > nLength)
+                aStr = aStr.copy(nLength+1); // zero-terminated string
+            else
+                aStr.clear();
+            // extract default text
+            nLength = aStr.toChar();
+            if (!aStr.isEmpty())
+                aStr = aStr.copy(1);
+            auto pNValue = std::make_shared<RTFValue>(OStringToOUString(aName, aState.nCurrentEncoding));
+            m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFData_name, pNValue);
+            if (nLength > 0)
+            {
+                OString aDefaultText = aStr.copy(0, std::min(nLength, aStr.getLength()));
+                auto pDValue = std::make_shared<RTFValue>(OStringToOUString(aDefaultText, aState.nCurrentEncoding));
+                m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFTextInput_default, pDValue);
+            }
 
-        m_bFormField = false;
+            m_bFormField = false;
+        }
     }
     break;
     case Destination::CREATIONTIME:
