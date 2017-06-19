@@ -1418,9 +1418,7 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
         ScTokenArray* pFormula = nPass ? pFormula2 : pFormula1;
         if (pFormula)
         {
-            formula::FormulaTokenArrayPlainIterator aIter(*pFormula);
-            formula::FormulaToken* t;
-            while ( ( t = aIter.GetNextReference() ) != nullptr )
+            for ( auto t: pFormula->References() )
             {
                 ScSingleRefData& rRef1 = *t->GetSingleRef();
                 ScAddress aAbs = rRef1.toAbs(aSrcPos);

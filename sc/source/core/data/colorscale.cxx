@@ -41,9 +41,7 @@ void ScFormulaListener::startListening(ScTokenArray* pArr, const ScRange& rRange
     if (!pArr || mpDoc->IsClipOrUndo())
         return;
 
-    formula::FormulaToken* t;
-    formula::FormulaTokenArrayPlainIterator aIter( *pArr );
-    while ( ( t = aIter.GetNextReference() ) != nullptr )
+    for ( auto t: pArr->References() )
     {
         switch (t->GetType())
         {
