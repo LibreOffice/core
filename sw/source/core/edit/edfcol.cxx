@@ -26,6 +26,7 @@
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -494,6 +495,7 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
             xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT_RELATION, uno::makeAny(static_cast<sal_Int16>(text::RelOrientation::PAGE_PRINT_AREA)));
             xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME, uno::makeAny(sFont));
             xPropertySet->setPropertyValue("Transformation", uno::makeAny(aMatrix));
+            xPropertySet->setPropertyValue(UNO_NAME_TEXT_HORZADJUST, uno::makeAny(drawing::TextHorizontalAdjust_CENTER));
             xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::HoriOrientation::CENTER)));
             xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::VertOrientation::CENTER)));
 
