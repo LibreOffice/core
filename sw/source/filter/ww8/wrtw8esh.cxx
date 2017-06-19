@@ -756,7 +756,12 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                 OSL_ENSURE(pObj, "Where is the SDR-Object?");
                 if (pObj)
                 {
-                    aRect = pObj->GetSnapRect();
+                    aRect = pObj->GetLogicRect();
+
+                    // We have to export original size with padding
+                    const SfxItemSet& rSet = pObj->GetMergedItemSet();
+                    const SdrMetricItem* pItem = static_cast<const SdrMetricItem*>(rSet.GetItem(SDRATTR_TEXT_UPPERDIST));
+                    aRect.SetSize(Size(aRect.GetWidth(), aRect.GetHeight() + pItem->GetValue()));
                 }
             }
 
