@@ -53,7 +53,7 @@ class View : public ReflectionBase,
              public css::sdbcx::XRename
 {
 public:
-    View( const ::rtl::Reference< RefCountedMutex > & refMutex,
+    View( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
           const css::uno::Reference< css::sdbc::XConnection > & connection,
           ConnectionSettings *pSettings);
 
@@ -84,7 +84,7 @@ public:
 class ViewDescriptor : public ReflectionBase
 {
 public:
-    ViewDescriptor( const ::rtl::Reference< RefCountedMutex > & refMutex,
+    ViewDescriptor( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
           const css::uno::Reference< css::sdbc::XConnection > & connection,
           ConnectionSettings *pSettings);
 

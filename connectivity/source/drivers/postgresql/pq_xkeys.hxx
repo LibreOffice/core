@@ -48,7 +48,7 @@ class Keys : public Container
 
 public: // instances Columns 'exception safe'
     static css::uno::Reference< css::container::XIndexAccess > create(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
         const OUString &schemaName,
@@ -56,7 +56,7 @@ public: // instances Columns 'exception safe'
 
 protected:
     Keys(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
         const OUString &schemaName,
@@ -83,13 +83,13 @@ class KeyDescriptors : public Container
 {
 public: // instances Columns 'exception safe'
     static css::uno::Reference< css::container::XIndexAccess > create(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings );
 
 protected:
     KeyDescriptors(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings );
 

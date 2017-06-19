@@ -82,7 +82,7 @@ private:
     css::uno::Reference< css::sdbc::XCloseable > m_lastResultset;
     OString m_stmt;
     OString m_executedStatement;
-    ::rtl::Reference< RefCountedMutex > m_refMutex;
+    ::rtl::Reference< comphelper::RefCountedMutex > m_xMutex;
     OStringVector m_vars;
     OStringVector m_splittedStatement;
     bool  m_multipleResultAvailable;
@@ -96,7 +96,7 @@ public:
      * @param ppConnection The piece of memory, pConnection points to, is accessible
      *                     as long as a reference to paramenter con is held.
      */
-    PreparedStatement( const rtl::Reference< RefCountedMutex > & refMutex,
+    PreparedStatement( const rtl::Reference< comphelper::RefCountedMutex > & refMutex,
                        const css::uno::Reference< css::sdbc::XConnection> & con,
                        struct ConnectionSettings *pSettings,
                        const OString &stmt );

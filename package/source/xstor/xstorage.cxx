@@ -73,7 +73,7 @@ typedef ::std::list< uno::WeakReference< lang::XComponent > > WeakComponentList;
 
 struct StorInternalData_Impl
 {
-    rtl::Reference<SotMutexHolder> m_rSharedMutexRef;
+    rtl::Reference<comphelper::RefCountedMutex> m_xSharedMutex;
     ::cppu::OMultiTypeInterfaceContainerHelper m_aListenersContainer; // list of listeners
     ::std::unique_ptr< ::cppu::OTypeCollection> m_pTypeCollection;
     bool m_bIsRoot;
@@ -87,8 +87,8 @@ struct StorInternalData_Impl
     ::rtl::Reference< OHierarchyHolder_Impl > m_rHierarchyHolder;
 
     // the mutex reference MUST NOT be empty
-    StorInternalData_Impl( const rtl::Reference<SotMutexHolder>& rMutexRef, bool bRoot, sal_Int32 nStorageType, bool bReadOnlyWrap )
-    : m_rSharedMutexRef( rMutexRef )
+    StorInternalData_Impl( const rtl::Reference<comphelper::RefCountedMutex>& rMutexRef, bool bRoot, sal_Int32 nStorageType, bool bReadOnlyWrap )
+    : m_xSharedMutex( rMutexRef )
     , m_aListenersContainer( rMutexRef->GetMutex() )
     , m_pTypeCollection()
     , m_bIsRoot( bRoot )
@@ -173,7 +173,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > const & xInpu
                                 const uno::Sequence< beans::PropertyValue >& xProperties,
                                 uno::Reference< uno::XComponentContext > const & xContext,
                                 sal_Int32 nStorageType )
-: m_rMutexRef( new SotMutexHolder )
+: m_xMutex( new comphelper::RefCountedMutex )
 , m_pAntiImpl( nullptr )
 , m_nStorageMode( nMode & ~embed::ElementModes::SEEKABLE )
 , m_bIsModified( ( nMode & ( embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE ) ) == ( embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE ) )
@@ -214,7 +214,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > const & xStream,
                                 const uno::Sequence< beans::PropertyValue >& xProperties,
                                 uno::Reference< uno::XComponentContext > const & xContext,
                                 sal_Int32 nStorageType )
-: m_rMutexRef( new SotMutexHolder )
+: m_xMutex( new comphelper::RefCountedMutex )
 , m_pAntiImpl( nullptr )
 , m_nStorageMode( nMode & ~embed::ElementModes::SEEKABLE )
 , m_bIsModified( ( nMode & ( embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE ) ) == ( embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE ) )
@@ -257,7 +257,7 @@ OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
                                 uno::Reference< lang::XSingleServiceFactory > const & xPackage,
                                 uno::Reference< uno::XComponentContext > const & xContext,
                                 sal_Int32 nStorageType )
-: m_rMutexRef( new SotMutexHolder )
+: m_xMutex( new comphelper::RefCountedMutex )
 , m_pAntiImpl( nullptr )
 , m_nStorageMode( nMode & ~embed::ElementModes::SEEKABLE )
 , m_bIsModified( ( nMode & ( embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE ) ) == ( embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE ) )
@@ -286,7 +286,7 @@ OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
 OStorage_Impl::~OStorage_Impl()
 {
     {
-        ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+        ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
         if ( m_pAntiImpl ) // root storage wrapper must set this member to NULL before destruction of object
         {
             SAL_WARN_IF( m_bIsRoot, "package.xstor", "The root storage wrapper must be disposed already" );
@@ -406,7 +406,7 @@ void OStorage_Impl::OpenOwnPackage()
 {
     SAL_WARN_IF( !m_bIsRoot, "package.xstor", "Opening of the package has no sense!" );
 
-    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
     if ( !m_xPackageFolder.is() )
     {
@@ -486,7 +486,7 @@ void OStorage_Impl::OpenOwnPackage()
 
 SotElementList_Impl& OStorage_Impl::GetChildrenList()
 {
-    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
     ReadContents();
     return m_aChildrenList;
@@ -562,7 +562,7 @@ void OStorage_Impl::ReadRelInfoIfNecessary()
 
 void OStorage_Impl::ReadContents()
 {
-    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
     if ( m_bListCreated )
         return;
@@ -634,7 +634,7 @@ void OStorage_Impl::ReadContents()
 
 void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDest, bool bDirect )
 {
-    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
     uno::Reference< beans::XPropertySet > xPropSet( xDest, uno::UNO_QUERY );
     if ( !xPropSet.is() )
@@ -729,7 +729,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
     SAL_WARN_IF( !xDest.is(), "package.xstor", "No destination storage!" );
     SAL_WARN_IF( aName.isEmpty(), "package.xstor", "Empty element name!" );
 
-    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
     uno::Reference< container::XNameAccess > xDestAccess( xDest, uno::UNO_QUERY_THROW );
     if ( xDestAccess->hasByName( aName )
@@ -938,7 +938,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > OStorage_Impl::GetAllRelatio
 
 void OStorage_Impl::CopyLastCommitTo( const uno::Reference< embed::XStorage >& xNewStor )
 {
-    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
     SAL_WARN_IF( !m_xPackageFolder.is(), "package.xstor", "A committed storage is incomplete!" );
     if ( !m_xPackageFolder.is() )
@@ -958,7 +958,7 @@ void OStorage_Impl::CopyLastCommitTo( const uno::Reference< embed::XStorage >& x
 void OStorage_Impl::InsertIntoPackageFolder( const OUString& aName,
                                              const uno::Reference< container::XNameContainer >& xParentPackageFolder )
 {
-    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
     SAL_WARN_IF( !m_xPackageFolder.is(), "package.xstor", "An inserted storage is incomplete!" );
     uno::Reference< lang::XUnoTunnel > xTunnel( m_xPackageFolder, uno::UNO_QUERY_THROW );
@@ -969,7 +969,7 @@ void OStorage_Impl::InsertIntoPackageFolder( const OUString& aName,
 
 void OStorage_Impl::Commit()
 {
-    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
     if ( !m_bIsModified )
         return;
@@ -1209,7 +1209,7 @@ void OStorage_Impl::Commit()
 
 void OStorage_Impl::Revert()
 {
-    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
     if ( !( m_nStorageMode & embed::ElementModes::WRITE ) )
         return; // nothing to do
@@ -1270,7 +1270,7 @@ void OStorage_Impl::Revert()
 
 ::comphelper::SequenceAsHashMap OStorage_Impl::GetCommonRootEncryptionData()
 {
-    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
+    ::osl::MutexGuard aGuard( m_xMutex->GetMutex() ) ;
 
     if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         throw packages::NoEncryptionException( THROW_WHERE );
@@ -1295,7 +1295,7 @@ SotElement_Impl* OStorage_Impl::FindElement( const OUString& rName )
 {
     SAL_WARN_IF( rName.isEmpty(), "package.xstor", "Name is empty!" );
 
-    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
     ReadContents();
 
@@ -1416,7 +1416,7 @@ SotElement_Impl* OStorage_Impl::InsertElement( const OUString& aName, bool bIsSt
 {
     OSL_ENSURE( FindElement( aName ) == nullptr, "Should not try to insert existing element" );
 
-    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
     SotElement_Impl* pDeletedElm = nullptr;
 
@@ -1455,7 +1455,7 @@ void OStorage_Impl::OpenSubStorage( SotElement_Impl* pElement, sal_Int32 nStorag
     SAL_WARN_IF( !pElement, "package.xstor", "pElement is not set!" );
     SAL_WARN_IF( !pElement->m_bIsStorage, "package.xstor", "Storage flag is not set!" );
 
-    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
     if (!pElement->m_xStorage)
     {
@@ -1476,7 +1476,7 @@ void OStorage_Impl::OpenSubStream( SotElement_Impl* pElement )
     SAL_WARN_IF( !pElement, "package.xstor", "pElement is not set!" );
     SAL_WARN_IF( pElement->m_bIsStorage, "package.xstor", "Storage flag is set!" );
 
-    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
     if (!pElement->m_xStream)
     {
@@ -1496,7 +1496,7 @@ void OStorage_Impl::OpenSubStream( SotElement_Impl* pElement )
 
 uno::Sequence< OUString > OStorage_Impl::GetElementNames()
 {
-    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
     ReadContents();
 
@@ -1780,7 +1780,7 @@ OStorage::OStorage( uno::Reference< io::XInputStream > const & xInputStream,
 : m_pImpl( new OStorage_Impl( xInputStream, nMode, xProperties, xContext, nStorageType ) )
 {
     m_pImpl->m_pAntiImpl = this;
-    m_pData.reset(new StorInternalData_Impl( m_pImpl->m_rMutexRef, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, false));
+    m_pData.reset(new StorInternalData_Impl( m_pImpl->m_xMutex, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, false));
 }
 
 OStorage::OStorage( uno::Reference< io::XStream > const & xStream,
@@ -1791,16 +1791,16 @@ OStorage::OStorage( uno::Reference< io::XStream > const & xStream,
 : m_pImpl( new OStorage_Impl( xStream, nMode, xProperties, xContext, nStorageType ) )
 {
     m_pImpl->m_pAntiImpl = this;
-    m_pData.reset(new StorInternalData_Impl( m_pImpl->m_rMutexRef, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, false));
+    m_pData.reset(new StorInternalData_Impl( m_pImpl->m_xMutex, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, false));
 }
 
 OStorage::OStorage( OStorage_Impl* pImpl, bool bReadOnlyWrap )
 : m_pImpl( pImpl )
 {
     // this call can be done only from OStorage_Impl implementation to create child storage
-    OSL_ENSURE( m_pImpl && m_pImpl->m_rMutexRef.is(), "The provided pointer & mutex MUST NOT be empty!" );
+    OSL_ENSURE( m_pImpl && m_pImpl->m_xMutex.is(), "The provided pointer & mutex MUST NOT be empty!" );
 
-    m_pData.reset(new StorInternalData_Impl( m_pImpl->m_rMutexRef, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, bReadOnlyWrap));
+    m_pData.reset(new StorInternalData_Impl( m_pImpl->m_xMutex, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, bReadOnlyWrap));
 
     OSL_ENSURE( ( m_pImpl->m_nStorageMode & embed::ElementModes::WRITE ) == embed::ElementModes::WRITE ||
                     m_pData->m_bReadOnlyWrap,
@@ -1812,7 +1812,7 @@ OStorage::OStorage( OStorage_Impl* pImpl, bool bReadOnlyWrap )
 
 OStorage::~OStorage()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
     if ( m_pImpl )
     {
         m_refCount++; // to call dispose
@@ -2003,7 +2003,7 @@ void OStorage::BroadcastTransaction( sal_Int8 nMessage )
 
 SotElement_Impl* OStorage::OpenStreamElement_Impl( const OUString& aStreamName, sal_Int32 nOpenMode, bool bEncr )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     OSL_ENSURE( !m_pData->m_bReadOnlyWrap || ( nOpenMode & embed::ElementModes::WRITE ) != embed::ElementModes::WRITE,
                 "An element can not be opened for writing in readonly storage!\n" );
@@ -2133,7 +2133,7 @@ uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
 {
     if (! m_pData->m_pTypeCollection)
     {
-        ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+        ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
         if (! m_pData->m_pTypeCollection)
         {
@@ -2204,7 +2204,7 @@ uno::Sequence< sal_Int8 > SAL_CALL OStorage::getImplementationId()
 //  XStorage
 void SAL_CALL OStorage::copyToStorage( const uno::Reference< embed::XStorage >& xDest )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -2257,7 +2257,7 @@ void SAL_CALL OStorage::copyToStorage( const uno::Reference< embed::XStorage >& 
 uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
     const OUString& aStreamName, sal_Int32 nOpenMode )
 {
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -2346,7 +2346,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStreamElement(
 uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
             const OUString& aStorName, sal_Int32 nStorageMode )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -2482,7 +2482,7 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
 
 uno::Reference< io::XStream > SAL_CALL OStorage::cloneStreamElement( const OUString& aStreamName )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -2555,7 +2555,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneEncryptedStreamElement(
 void SAL_CALL OStorage::copyLastCommitTo(
             const uno::Reference< embed::XStorage >& xTargetStorage )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -2608,7 +2608,7 @@ void SAL_CALL OStorage::copyStorageElementLastCommitTo(
             const OUString& aStorName,
             const uno::Reference< embed::XStorage >& xTargetStorage )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -2689,7 +2689,7 @@ void SAL_CALL OStorage::copyStorageElementLastCommitTo(
 
 sal_Bool SAL_CALL OStorage::isStreamElement( const OUString& aElementName )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -2747,7 +2747,7 @@ sal_Bool SAL_CALL OStorage::isStreamElement( const OUString& aElementName )
 
 sal_Bool SAL_CALL OStorage::isStorageElement( const OUString& aElementName )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -2805,7 +2805,7 @@ sal_Bool SAL_CALL OStorage::isStorageElement( const OUString& aElementName )
 
 void SAL_CALL OStorage::removeElement( const OUString& aElementName )
 {
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -2881,7 +2881,7 @@ void SAL_CALL OStorage::removeElement( const OUString& aElementName )
 
 void SAL_CALL OStorage::renameElement( const OUString& aElementName, const OUString& aNewName )
 {
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -2968,7 +2968,7 @@ void SAL_CALL OStorage::copyElementTo(  const OUString& aElementName,
                                         const uno::Reference< embed::XStorage >& xDest,
                                         const OUString& aNewName )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3049,7 +3049,7 @@ void SAL_CALL OStorage::moveElementTo(  const OUString& aElementName,
                                         const uno::Reference< embed::XStorage >& xDest,
                                         const OUString& aNewName )
 {
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3141,7 +3141,7 @@ void SAL_CALL OStorage::moveElementTo(  const OUString& aElementName,
 uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStream(
     const OUString& aStreamName, sal_Int32 nOpenMode, const uno::Sequence< beans::NamedValue >& aEncryptionData )
 {
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3230,7 +3230,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneEncryptedStream(
     const OUString& aStreamName,
     const uno::Sequence< beans::NamedValue >& aEncryptionData )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3302,7 +3302,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneEncryptedStream(
 uno::Reference< io::XInputStream > SAL_CALL OStorage::getPlainRawStreamElement(
             const OUString& sStreamName )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3393,7 +3393,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getPlainRawStreamElement(
 uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
             const OUString& sStreamName )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3493,7 +3493,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
 void SAL_CALL OStorage::insertRawEncrStreamElement( const OUString& aStreamName,
                                 const uno::Reference< io::XInputStream >& xInStream )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3575,7 +3575,7 @@ void SAL_CALL OStorage::commit()
     try {
         BroadcastTransaction( STOR_MESS_PRECOMMIT );
 
-        ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+        ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
         if ( !m_pImpl )
         {
@@ -3630,7 +3630,7 @@ void SAL_CALL OStorage::revert()
 
     BroadcastTransaction( STOR_MESS_PREREVERT );
 
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3690,7 +3690,7 @@ void SAL_CALL OStorage::revert()
 //  XTransactionBroadcaster
 void SAL_CALL OStorage::addTransactionListener( const uno::Reference< embed::XTransactionListener >& aListener )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3704,7 +3704,7 @@ void SAL_CALL OStorage::addTransactionListener( const uno::Reference< embed::XTr
 
 void SAL_CALL OStorage::removeTransactionListener( const uno::Reference< embed::XTransactionListener >& aListener )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3723,7 +3723,7 @@ void SAL_CALL OStorage::removeTransactionListener( const uno::Reference< embed::
 
 sal_Bool SAL_CALL OStorage::isModified()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3736,7 +3736,7 @@ sal_Bool SAL_CALL OStorage::isModified()
 
 void SAL_CALL OStorage::setModified( sal_Bool bModified )
 {
-    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3761,7 +3761,7 @@ void SAL_CALL OStorage::setModified( sal_Bool bModified )
 void SAL_CALL OStorage::addModifyListener(
             const uno::Reference< util::XModifyListener >& aListener )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3777,7 +3777,7 @@ void SAL_CALL OStorage::addModifyListener(
 void SAL_CALL OStorage::removeModifyListener(
             const uno::Reference< util::XModifyListener >& aListener )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3794,7 +3794,7 @@ void SAL_CALL OStorage::removeModifyListener(
 
 uno::Any SAL_CALL OStorage::getByName( const OUString& aName )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3850,7 +3850,7 @@ uno::Any SAL_CALL OStorage::getByName( const OUString& aName )
 
 uno::Sequence< OUString > SAL_CALL OStorage::getElementNames()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3880,7 +3880,7 @@ uno::Sequence< OUString > SAL_CALL OStorage::getElementNames()
 
 sal_Bool SAL_CALL OStorage::hasByName( const OUString& aName )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3919,7 +3919,7 @@ sal_Bool SAL_CALL OStorage::hasByName( const OUString& aName )
 
 uno::Type SAL_CALL OStorage::getElementType()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3933,7 +3933,7 @@ uno::Type SAL_CALL OStorage::getElementType()
 
 sal_Bool SAL_CALL OStorage::hasElements()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3964,7 +3964,7 @@ sal_Bool SAL_CALL OStorage::hasElements()
 //  XComponent
 void SAL_CALL OStorage::dispose()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3995,7 +3995,7 @@ void SAL_CALL OStorage::dispose()
 void SAL_CALL OStorage::addEventListener(
             const uno::Reference< lang::XEventListener >& xListener )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4010,7 +4010,7 @@ void SAL_CALL OStorage::addEventListener(
 void SAL_CALL OStorage::removeEventListener(
             const uno::Reference< lang::XEventListener >& xListener )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4031,7 +4031,7 @@ void SAL_CALL OStorage::setEncryptionPassword( const OUString& aPass )
 
 void SAL_CALL OStorage::removeEncryption()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4096,7 +4096,7 @@ void SAL_CALL OStorage::removeEncryption()
 
 void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValue >& aEncryptionData )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4152,7 +4152,7 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
 
 sal_Bool SAL_CALL OStorage::hasEncryptionData()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     return m_pImpl && m_pImpl->m_bHasCommonEncryptionData;
 }
@@ -4161,7 +4161,7 @@ sal_Bool SAL_CALL OStorage::hasEncryptionData()
 
 void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::NamedValue >& aAlgorithms )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4221,7 +4221,7 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::Nam
 
 uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4282,7 +4282,7 @@ uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL OStorage::getPropertySetInfo()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4296,7 +4296,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OStorage::getPropertySetInfo(
 
 void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4398,7 +4398,7 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const u
 
 uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4494,7 +4494,7 @@ void SAL_CALL OStorage::addPropertyChangeListener(
     const OUString& /*aPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4509,7 +4509,7 @@ void SAL_CALL OStorage::removePropertyChangeListener(
     const OUString& /*aPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4524,7 +4524,7 @@ void SAL_CALL OStorage::addVetoableChangeListener(
     const OUString& /*PropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4539,7 +4539,7 @@ void SAL_CALL OStorage::removeVetoableChangeListener(
     const OUString& /*PropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4556,7 +4556,7 @@ void SAL_CALL OStorage::removeVetoableChangeListener(
 
 sal_Bool SAL_CALL OStorage::hasByID(  const OUString& sID )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4582,7 +4582,7 @@ sal_Bool SAL_CALL OStorage::hasByID(  const OUString& sID )
 
 OUString SAL_CALL OStorage::getTargetByID(  const OUString& sID  )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4603,7 +4603,7 @@ OUString SAL_CALL OStorage::getTargetByID(  const OUString& sID  )
 
 OUString SAL_CALL OStorage::getTypeByID(  const OUString& sID  )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4624,7 +4624,7 @@ OUString SAL_CALL OStorage::getTypeByID(  const OUString& sID  )
 
 uno::Sequence< beans::StringPair > SAL_CALL OStorage::getRelationshipByID(  const OUString& sID  )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4651,7 +4651,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OStorage::getRelationshipByID(  cons
 
 uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getRelationshipsByType(  const OUString& sType  )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4685,7 +4685,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getRelati
 
 uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getAllRelationships()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4722,7 +4722,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getAllRel
 
 void SAL_CALL OStorage::insertRelationshipByID(  const OUString& sID, const uno::Sequence< beans::StringPair >& aEntry, sal_Bool bReplace  )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4782,7 +4782,7 @@ void SAL_CALL OStorage::insertRelationshipByID(  const OUString& sID, const uno:
 
 void SAL_CALL OStorage::removeRelationshipByID(  const OUString& sID  )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4820,7 +4820,7 @@ void SAL_CALL OStorage::removeRelationshipByID(  const OUString& sID  )
 
 void SAL_CALL OStorage::insertRelationships(  const uno::Sequence< uno::Sequence< beans::StringPair > >& aEntries, sal_Bool bReplace  )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4899,7 +4899,7 @@ void SAL_CALL OStorage::insertRelationships(  const uno::Sequence< uno::Sequence
 
 void SAL_CALL OStorage::clearRelationships()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4930,7 +4930,7 @@ void SAL_CALL OStorage::insertStreamElementDirect(
             const uno::Reference< io::XInputStream >& xInStream,
             const uno::Sequence< beans::PropertyValue >& aProps )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -5005,7 +5005,7 @@ void SAL_CALL OStorage::copyElementDirectlyTo(
             const uno::Reference< embed::XOptimizedStorage >& xDest,
             const OUString& aNewName )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -5085,7 +5085,7 @@ void SAL_CALL OStorage::copyElementDirectlyTo(
 
 void SAL_CALL OStorage::writeAndAttachToStream( const uno::Reference< io::XStream >& xStream )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -5143,7 +5143,7 @@ void SAL_CALL OStorage::writeAndAttachToStream( const uno::Reference< io::XStrea
 void SAL_CALL OStorage::attachToURL( const OUString& sURL,
                                     sal_Bool bReadOnly )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -5211,7 +5211,7 @@ void SAL_CALL OStorage::attachToURL( const OUString& sURL,
 
 uno::Any SAL_CALL OStorage::getElementPropertyValue( const OUString& aElementName, const OUString& aPropertyName )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -5297,7 +5297,7 @@ uno::Any SAL_CALL OStorage::getElementPropertyValue( const OUString& aElementNam
 
 void SAL_CALL OStorage::copyStreamElementData( const OUString& aStreamName, const uno::Reference< io::XStream >& xTargetStream )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -5368,7 +5368,7 @@ void SAL_CALL OStorage::copyStreamElementData( const OUString& aStreamName, cons
 // XHierarchicalStorageAccess
 uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openStreamElementByHierarchicalName( const OUString& aStreamPath, ::sal_Int32 nOpenMode )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -5431,7 +5431,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openEncrypted
 
 void SAL_CALL OStorage::removeStreamElementByHierarchicalName( const OUString& aStreamPath )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -5458,7 +5458,7 @@ void SAL_CALL OStorage::removeStreamElementByHierarchicalName( const OUString& a
 // XHierarchicalStorageAccess2
 uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openEncryptedStreamByHierarchicalName( const OUString& aStreamPath, ::sal_Int32 nOpenMode, const uno::Sequence< beans::NamedValue >& aEncryptionData )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {

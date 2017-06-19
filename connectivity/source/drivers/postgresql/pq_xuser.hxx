@@ -54,7 +54,7 @@ class User : public ReflectionBase,
 {
 
 public:
-    User( const ::rtl::Reference< RefCountedMutex > & refMutex,
+    User( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
           const css::uno::Reference< css::sdbc::XConnection > & connection,
           ConnectionSettings *pSettings);
 
@@ -84,7 +84,7 @@ class UserDescriptor : public ReflectionBase
 {
 public:
     UserDescriptor(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection > & connection,
         ConnectionSettings *pSettings);
 

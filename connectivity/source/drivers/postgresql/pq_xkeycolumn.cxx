@@ -45,7 +45,7 @@ using com::sun::star::beans::XPropertySet;
 
 namespace pq_sdbc_driver
 {
-KeyColumn::KeyColumn( const ::rtl::Reference< RefCountedMutex > & refMutex,
+KeyColumn::KeyColumn( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
                       const Reference< css::sdbc::XConnection > & connection,
                       ConnectionSettings *pSettings)
     : ReflectionBase(
@@ -60,14 +60,14 @@ KeyColumn::KeyColumn( const ::rtl::Reference< RefCountedMutex > & refMutex,
 Reference< XPropertySet > KeyColumn::createDataDescriptor(  )
 {
     KeyColumnDescriptor * pKeyColumn = new KeyColumnDescriptor(
-        m_refMutex, m_conn, m_pSettings );
+        m_xMutex, m_conn, m_pSettings );
     pKeyColumn->copyValuesFrom( this );
 
     return Reference< XPropertySet > ( pKeyColumn );
 }
 
 KeyColumnDescriptor::KeyColumnDescriptor(
-    const ::rtl::Reference< RefCountedMutex > & refMutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const Reference< css::sdbc::XConnection > & connection,
     ConnectionSettings *pSettings)
     : ReflectionBase(
@@ -82,7 +82,7 @@ KeyColumnDescriptor::KeyColumnDescriptor(
 Reference< XPropertySet > KeyColumnDescriptor::createDataDescriptor(  )
 {
     KeyColumnDescriptor * pKeyColumn = new KeyColumnDescriptor(
-        m_refMutex, m_conn, m_pSettings );
+        m_xMutex, m_conn, m_pSettings );
     pKeyColumn->copyValuesFrom( this );
 
     return Reference< XPropertySet > ( pKeyColumn );

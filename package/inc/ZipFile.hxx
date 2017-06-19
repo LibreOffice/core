@@ -26,12 +26,11 @@
 #include <com/sun/star/xml/crypto/XCipherContext.hpp>
 #include <com/sun/star/xml/crypto/XDigestContext.hpp>
 
+#include <comphelper/refcountedmutex.hxx>
 #include <package/Inflater.hxx>
 #include <ByteGrabber.hxx>
 #include <HashMaps.hxx>
 #include <EncryptionData.hxx>
-
-#include <mutexholder.hxx>
 
 #include <memory>
 
@@ -55,7 +54,7 @@ class ZipEnumeration;
 
 class ZipFile
 {
-    rtl::Reference<SotMutexHolder> m_aMutexHolder;
+    rtl::Reference<comphelper::RefCountedMutex> m_aMutexHolder;
 
     EntryHash       aEntries;
     ByteGrabber     aGrabber;
@@ -67,7 +66,7 @@ class ZipFile
 
     // aMediaType parameter is used only for raw stream header creation
     css::uno::Reference < css::io::XInputStream >  createStreamForZipEntry(
-            const rtl::Reference<SotMutexHolder>& aMutexHolder,
+            const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
             ZipEntry & rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             sal_Int8 nStreamMode,
@@ -89,12 +88,12 @@ class ZipFile
 
 public:
 
-    ZipFile( const rtl::Reference<SotMutexHolder>& aMutexHolder,
+    ZipFile( const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
              css::uno::Reference < css::io::XInputStream > &xInput,
              const css::uno::Reference < css::uno::XComponentContext > &rxContext,
              bool bInitialise );
 
-    ZipFile( const rtl::Reference<SotMutexHolder>& aMutexHolder,
+    ZipFile( const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
              css::uno::Reference < css::io::XInputStream > &xInput,
              const css::uno::Reference < css::uno::XComponentContext > &rxContext,
              bool bInitialise,
@@ -109,7 +108,7 @@ public:
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             bool bDecrypt,
-            const rtl::Reference<SotMutexHolder>& aMutexHolder );
+            const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder );
 
     static css::uno::Reference< css::xml::crypto::XDigestContext > StaticGetDigestContextForChecksum(
             const css::uno::Reference< css::uno::XComponentContext >& xArgContext,
@@ -135,7 +134,7 @@ public:
                                      const css::uno::Reference < css::io::XInputStream >& rStream );
 
     static css::uno::Reference< css::io::XInputStream > StaticGetDataFromRawStream(
-            const rtl::Reference<SotMutexHolder>& aMutexHolder,
+            const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const css::uno::Reference< css::io::XInputStream >& xStream,
             const ::rtl::Reference < EncryptionData > &rData );
@@ -149,19 +148,19 @@ public:
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             bool bDecrypt,
-            const rtl::Reference<SotMutexHolder>& aMutexHolder );
+            const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder );
 
     css::uno::Reference< css::io::XInputStream > getDataStream(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             bool bDecrypt,
-            const rtl::Reference<SotMutexHolder>& aMutexHolder );
+            const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder );
 
     css::uno::Reference< css::io::XInputStream > getWrappedRawStream(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             const OUString& aMediaType,
-            const rtl::Reference<SotMutexHolder>& aMutexHolder );
+            const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder );
 
     std::unique_ptr<ZipEnumeration> entries();
 };

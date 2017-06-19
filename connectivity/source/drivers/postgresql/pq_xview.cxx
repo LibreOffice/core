@@ -65,7 +65,7 @@ using com::sun::star::sdbc::SQLException;
 namespace pq_sdbc_driver
 {
 
-View::View( const ::rtl::Reference< RefCountedMutex > & refMutex,
+View::View( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
             const Reference< css::sdbc::XConnection > & connection,
             ConnectionSettings *pSettings)
     : ReflectionBase(
@@ -80,7 +80,7 @@ View::View( const ::rtl::Reference< RefCountedMutex > & refMutex,
 Reference< XPropertySet > View::createDataDescriptor(  )
 {
     ViewDescriptor * pView = new ViewDescriptor(
-        m_refMutex, m_conn, m_pSettings );
+        m_xMutex, m_conn, m_pSettings );
     pView->copyValuesFrom( this );
 
     return Reference< XPropertySet > ( pView );
@@ -88,7 +88,7 @@ Reference< XPropertySet > View::createDataDescriptor(  )
 
 void View::rename( const OUString& newName )
 {
-    MutexGuard guard( m_refMutex->mutex );
+    MutexGuard guard( m_xMutex->GetMutex() );
 
     Statics & st = getStatics();
 
@@ -204,7 +204,7 @@ void View::setName( const OUString& aName )
 
 
 ViewDescriptor::ViewDescriptor(
-    const ::rtl::Reference< RefCountedMutex > & refMutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const Reference< css::sdbc::XConnection > & connection,
     ConnectionSettings *pSettings)
     : ReflectionBase(
@@ -219,7 +219,7 @@ ViewDescriptor::ViewDescriptor(
 Reference< XPropertySet > ViewDescriptor::createDataDescriptor(  )
 {
     ViewDescriptor * pView = new ViewDescriptor(
-        m_refMutex, m_conn, m_pSettings );
+        m_xMutex, m_conn, m_pSettings );
     pView->copyValuesFrom( this );
 
     return Reference< XPropertySet > ( pView );

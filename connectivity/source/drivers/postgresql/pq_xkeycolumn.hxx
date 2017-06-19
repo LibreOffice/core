@@ -52,7 +52,7 @@ namespace pq_sdbc_driver
 class KeyColumn : public ReflectionBase
 {
 public:
-    KeyColumn( const ::rtl::Reference< RefCountedMutex > & refMutex,
+    KeyColumn( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
                const css::uno::Reference< css::sdbc::XConnection > & connection,
                ConnectionSettings *pSettings);
 
@@ -66,7 +66,7 @@ class KeyColumnDescriptor : public ReflectionBase
 {
 public:
     KeyColumnDescriptor(
-        const ::rtl::Reference< RefCountedMutex > & refMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection > & connection,
         ConnectionSettings *pSettings);
 

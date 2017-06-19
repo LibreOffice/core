@@ -45,7 +45,7 @@ using com::sun::star::beans::XPropertySet;
 
 namespace pq_sdbc_driver
 {
-IndexColumn::IndexColumn( const ::rtl::Reference< RefCountedMutex > & refMutex,
+IndexColumn::IndexColumn( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
                       const Reference< css::sdbc::XConnection > & connection,
                       ConnectionSettings *pSettings )
     : ReflectionBase(
@@ -60,7 +60,7 @@ IndexColumn::IndexColumn( const ::rtl::Reference< RefCountedMutex > & refMutex,
 Reference< XPropertySet > IndexColumn::createDataDescriptor(  )
 {
     IndexColumnDescriptor * pIndexColumn = new IndexColumnDescriptor(
-        m_refMutex, m_conn, m_pSettings  );
+        m_xMutex, m_conn, m_pSettings  );
     pIndexColumn->copyValuesFrom( this );
 
     return Reference< XPropertySet > ( pIndexColumn );
@@ -68,7 +68,7 @@ Reference< XPropertySet > IndexColumn::createDataDescriptor(  )
 
 
 IndexColumnDescriptor::IndexColumnDescriptor(
-    const ::rtl::Reference< RefCountedMutex > & refMutex,
+    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const Reference< css::sdbc::XConnection > & connection,
     ConnectionSettings *pSettings )
     : ReflectionBase(
@@ -83,7 +83,7 @@ IndexColumnDescriptor::IndexColumnDescriptor(
 Reference< XPropertySet > IndexColumnDescriptor::createDataDescriptor(  )
 {
     IndexColumnDescriptor * pIndexColumn = new IndexColumnDescriptor(
-        m_refMutex, m_conn, m_pSettings  );
+        m_xMutex, m_conn, m_pSettings  );
     pIndexColumn->copyValuesFrom( this );
 
     return Reference< XPropertySet > ( pIndexColumn );

@@ -64,7 +64,7 @@ class ResultSet;
 class ResultSetMetaData :
         public ::cppu::WeakImplHelper< css::sdbc::XResultSetMetaData >
 {
-    ::rtl::Reference< RefCountedMutex > m_refMutex;
+    ::rtl::Reference< comphelper::RefCountedMutex > m_xMutex;
     ConnectionSettings **m_ppSettings;
     css::uno::Reference< css::sdbc::XResultSet > m_origin;
     css::uno::Reference< css::beans::XPropertySet > m_table;
@@ -90,7 +90,7 @@ class ResultSetMetaData :
 
 public:
     ResultSetMetaData(
-        const ::rtl::Reference< RefCountedMutex > & reMutex,
+        const ::rtl::Reference< comphelper::RefCountedMutex > & reMutex,
         const css::uno::Reference< css::sdbc::XResultSet >  & origin,
         ResultSet *pResultSet,
         ConnectionSettings **pSettings,
