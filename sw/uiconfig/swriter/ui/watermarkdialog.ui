@@ -81,8 +81,8 @@
                   <object class="GtkLabel" id="TextLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">Text</property>
-                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -114,8 +114,8 @@
                   <object class="GtkLabel" id="FontLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">Font</property>
-                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -126,8 +126,8 @@
                   <object class="GtkLabel" id="AngleLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">Angle</property>
-                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -138,8 +138,8 @@
                   <object class="GtkLabel" id="TransparencyLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">Transparency</property>
-                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -150,8 +150,8 @@
                   <object class="GtkLabel" id="ColorLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">Color</property>
-                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
