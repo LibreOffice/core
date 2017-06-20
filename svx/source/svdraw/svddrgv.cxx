@@ -56,7 +56,6 @@ void SdrDragView::ImpClearVars()
     meDragHdl=SdrHdlKind::Move;
     mpDragHdl=nullptr;
     mbDragHdl=false;
-    mbDragSpecial=false;
     mpCurrentSdrDragMethod=nullptr;
     mbDragStripes=false;
     mbDragWithCopy=false;
@@ -67,7 +66,6 @@ void SdrDragView::ImpClearVars()
     mnDragXorPolyLimit=100;
     mnDragXorPointLimit=500;
     mbNoDragXorPolys=false;
-    mnDetailedEdgeDraggingLimit=10;
     mbResizeAtCenter=false;
     mbCrookAtCenter=false;
 
@@ -206,7 +204,6 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
         SetDragWithCopy(false);
         //TODO: aAni.Reset();
         mpCurrentSdrDragMethod=nullptr;
-        mbDragSpecial=false;
         mbDragLimit=false;
         SdrDragMode eTmpMode=meDragMode;
         if (eTmpMode==SdrDragMode::Move && pHdl!=nullptr && pHdl->GetKind()!=SdrHdlKind::Move) {
@@ -462,7 +459,6 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                             if(!mpCurrentSdrDragMethod)
                             {
                                 // fallback to DragSpecial if no interaction defined
-                                mbDragSpecial = true;
                                 mpCurrentSdrDragMethod = new SdrDragObjOwn(*this);
                             }
                         }
@@ -486,7 +482,6 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                     // Obj may not Move SpecialDrag, so try with MoveFrameDrag
                     delete mpCurrentSdrDragMethod;
                     mpCurrentSdrDragMethod = nullptr;
-                    mbDragSpecial=false;
 
                     if (!IsMoveAllowed())
                         return false;

@@ -418,8 +418,6 @@ void NumberingTypeMgr::Init()
         {
             NumSettings_Impl* pNew = lcl_CreateNumberingSettingsPtr(pValuesArr[i]);
             NumberSettings_Impl* pNumEntry = new NumberSettings_Impl;
-            pNumEntry->nIndex = i + 1;
-            pNumEntry->nIndexDefault = i;
             pNumEntry->pNumSetting = pNew;
             if ( i < 8 )
                 pNumEntry->sDescription = SvxResId( RID_SVXSTR_SINGLENUM_DESCRIPTIONS + i );

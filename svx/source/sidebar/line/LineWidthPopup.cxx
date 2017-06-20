@@ -36,9 +36,7 @@ LineWidthPopup::LineWidthPopup(LinePropertyPanelBase& rParent)
     , m_eMapUnit(MapUnit::MapTwip)
     , m_bVSFocus(true)
     , m_bCustom(false)
-    , m_bCloseByEdit(false)
     , m_nCustomWidth(0)
-    , m_nTmpCustomWidth(0)
     , m_aIMGCus(BitmapEx(RID_SVXBMP_WIDTH_CUSTOM))
     , m_aIMGCusGray(BitmapEx(RID_SVXBMP_WIDTH_CUSTOM_GRAY))
 {
@@ -123,8 +121,6 @@ IMPL_LINK(LineWidthPopup, VSSelectHdl, ValueSet*, /*pControl*/, void)
         m_rParent.setLineWidth(aWidthItem);
         m_rParent.SetWidthIcon(iPos);
         m_rParent.SetWidth(nVal);
-        m_bCloseByEdit = false;
-        m_nTmpCustomWidth = 0;
     }
     else if (iPos == 9)
     {//last custom
@@ -136,8 +132,6 @@ IMPL_LINK(LineWidthPopup, VSSelectHdl, ValueSet*, /*pControl*/, void)
             XLineWidthItem aWidthItem( nVal );
             m_rParent.setLineWidth(aWidthItem);
             m_rParent.SetWidth(nVal);
-            m_bCloseByEdit = false;
-            m_nTmpCustomWidth = 0;
         }
         else
         {
@@ -170,16 +164,12 @@ IMPL_LINK(LineWidthPopup, MFModifyHdl, Edit&, /*rControl*/, void)
     sal_Int32 nNewWidth = (short)m_xMFWidth->Denormalize( nVal );
     XLineWidthItem aWidthItem(nNewWidth);
     m_rParent.setLineWidth(aWidthItem);
-
-    m_bCloseByEdit = true;
-    m_nTmpCustomWidth = nTmp;
 }
 
 void LineWidthPopup::SetWidthSelect(long lValue, bool bValuable, MapUnit eMapUnit)
 {
     m_bVSFocus = true;
     m_xVSWidth->SetSelItem(0);
-    m_bCloseByEdit = false;
     m_eMapUnit = eMapUnit;
     SvtViewOptions aWinOpt( EViewType::Window, SIDEBAR_LINE_WIDTH_GLOBAL_VALUE );
     if (aWinOpt.Exists())

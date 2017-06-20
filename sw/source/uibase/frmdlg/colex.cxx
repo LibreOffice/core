@@ -136,13 +136,6 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
                     std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(
                             aTempSet));
             }
-
-            if ( rHeaderSet.GetItemState( RES_BOX ) == SfxItemState::SET )
-            {
-                const SvxBoxItem& rItem =
-                    static_cast<const SvxBoxItem&>(rHeaderSet.Get( RES_BOX ));
-                SetHdBorder( rItem );
-            }
         }
         else
             SetHeader( false );
@@ -181,13 +174,6 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
                 setFooterFillAttributes(
                     std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(
                             aTempSet));
-            }
-
-            if( rFooterSet.GetItemState( RES_BOX ) == SfxItemState::SET )
-            {
-                const SvxBoxItem& rItem =
-                    static_cast<const SvxBoxItem&>(rFooterSet.Get( RES_BOX ));
-                SetFtBorder( rItem );
             }
         }
         else

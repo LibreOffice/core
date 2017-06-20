@@ -77,7 +77,7 @@ class  SVX_DLLPUBLIC BulletsSettings
 {
 public:
     bool            bIsCustomized;
-    rtl::OUString   sDescription;
+    OUString        sDescription;
     sal_Unicode     cBulletChar;
     vcl::Font       aFont;
     BulletsSettings() : bIsCustomized(false), cBulletChar(0) {}
@@ -87,16 +87,12 @@ public:
 class  SVX_DLLPUBLIC NumberSettings_Impl
 {
     public:
-        bool            bIsCustomized;
-        rtl::OUString   sDescription;
-        sal_uInt16      nIndex; //index in the tab page display
-        sal_uInt16      nIndexDefault;
-        NumSettings_Impl    *pNumSetting;
+        bool              bIsCustomized;
+        OUString          sDescription;
+        NumSettings_Impl* pNumSetting;
     public:
         NumberSettings_Impl() :
             bIsCustomized(false),
-            nIndex((sal_uInt16)0xFFFF),
-            nIndexDefault((sal_uInt16)0xFFFF),
             pNumSetting(nullptr)
             {}
 };

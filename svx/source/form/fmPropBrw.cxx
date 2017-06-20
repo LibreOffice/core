@@ -186,7 +186,6 @@ FmPropBrw::FmPropBrw( const Reference< XComponentContext >& _xORB, SfxBindings* 
     :SfxFloatingWindow(_pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE) )
     ,SfxControllerItem(SID_FM_PROPERTY_CONTROL, *_pBindings)
     ,m_bInitialStateChange(true)
-    ,m_bInStateChange( false )
     ,m_xORB(_xORB)
 {
 
@@ -622,7 +621,6 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
     if (!pState  || SID_FM_PROPERTY_CONTROL != nSID)
         return;
 
-    m_bInStateChange = true;
     try
     {
         if (eState >= SfxItemState::DEFAULT)
@@ -671,7 +669,6 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
     {
         OSL_FAIL("FmPropBrw::StateChanged: Exception occurred!");
     }
-    m_bInStateChange = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

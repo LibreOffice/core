@@ -232,15 +232,9 @@ void SdrItemBrowserControl::ImpCtor()
     pAktChangeEntry = nullptr;
     nLastWhichOfs = 0;
     nLastWhich = 0;
-    nLastWhichOben = 0;  // not implemented yet
-    nLastWhichUnten = 0; // not implemented yet
     bWhichesButNames = false;
     bDontHideIneffectiveItems = false;
     bDontSortItems = false;
-    bShowWhichIds = false;
-    bShowRealValues = false;
-    bShowWhichIds = true;   // not implemented yet
-    bShowRealValues = true; // not implemented yet
 
     InsertDataColumn(
         ITEMBROWSER_WHICHCOL_ID,
@@ -459,8 +453,6 @@ void SdrItemBrowserControl::ImpSaveWhich()
         nLastWhichOfs=nPos-nTop;
         if (nTop<0) nTop=0;
         if (nBtm>=(long)aList.size()) nBtm=aList.size()-1;
-        nLastWhichOben=ImpGetEntry(nTop)->nWhichId;
-        nLastWhichUnten=ImpGetEntry(nBtm)->nWhichId;
     }
 }
 

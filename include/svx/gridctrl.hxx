@@ -297,7 +297,6 @@ private:
     bool                m_bHandle : 1;
     bool                m_bFilterMode : 1;
     bool                m_bWantDestruction : 1;
-    bool                m_bInAdjustDataSource : 1;
     bool                m_bPendingAdjustRows : 1;   // if an async adjust is pending, is it for AdjustRows or AdjustDataSource ?
     bool                m_bHideScrollbars : 1;
 

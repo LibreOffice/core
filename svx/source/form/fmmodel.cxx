@@ -39,13 +39,11 @@ struct FmFormModelImplData
 {
     rtl::Reference<FmXUndoEnvironment>  mxUndoEnv;
     bool                bOpenInDesignIsDefaulted;
-    bool                bMovingPage;
     ::boost::optional< sal_Bool >
                             aControlsUseRefDevice;
 
     FmFormModelImplData()
         :bOpenInDesignIsDefaulted( true )
-        ,bMovingPage( false )
         ,aControlsUseRefDevice()
     {
     }
@@ -107,16 +105,6 @@ void FmFormModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
         SetObjectShell(m_pObjShell);
 
     SdrModel::InsertPage( pPage, nPos );
-}
-
-void FmFormModel::MovePage( sal_uInt16 nPgNum, sal_uInt16 nNewPos )
-{
-    m_pImpl->bMovingPage = true;
-        // see InsertPage for this
-
-    SdrModel::MovePage( nPgNum, nNewPos );
-
-    m_pImpl->bMovingPage = false;
 }
 
 SdrPage* FmFormModel::RemovePage(sal_uInt16 nPgNum)
