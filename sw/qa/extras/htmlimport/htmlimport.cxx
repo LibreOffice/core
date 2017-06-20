@@ -228,29 +228,47 @@ DECLARE_HTMLIMPORT_TEST(testTableBorder1px, "table_border_1px.html")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
 
+    table::BorderLine2 aBorder;
+
     uno::Reference<text::XTextRange> xCellA1(xTable->getCellByName("A1"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x808080,9,9,9,3,26), getProperty<table::BorderLine2>(xCellA1,"TopBorder"));
-    CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x808080,0,2,4,3,2), getProperty<table::BorderLine2>(xCellA1,"BottomBorder"));
-    CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x808080,9,9,9,3,26), getProperty<table::BorderLine2>(xCellA1,"LeftBorder"));
-    CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x808080,9,9,9,3,26), getProperty<table::BorderLine2>(xCellA1,"RightBorder"));
+    aBorder = getProperty<table::BorderLine2>(xCellA1, "TopBorder");
+    CPPUNIT_ASSERT_MESSAGE("Missing cell top border", aBorder.InnerLineWidth > 0);
+    aBorder = getProperty<table::BorderLine2>(xCellA1, "BottomBorder");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cell bottom border", sal_Int16(0), aBorder.InnerLineWidth);
+    aBorder = getProperty<table::BorderLine2>(xCellA1, "LeftBorder");
+    CPPUNIT_ASSERT_MESSAGE("Missing cell left border", aBorder.InnerLineWidth > 0);
+    aBorder = getProperty<table::BorderLine2>(xCellA1, "RightBorder");
+    CPPUNIT_ASSERT_MESSAGE("Missing cell right border", aBorder.InnerLineWidth > 0);
 
     uno::Reference<text::XTextRange> xCellB1(xTable->getCellByName("B1"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x808080,9,9,9,3,26), getProperty<table::BorderLine2>(xCellB1,"TopBorder"));
-    CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x808080,0,2,4,3,2), getProperty<table::BorderLine2>(xCellB1,"BottomBorder"));
-    CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x808080,0,2,4,3,2), getProperty<table::BorderLine2>(xCellB1,"LeftBorder"));
-    CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x808080,9,9,9,3,26), getProperty<table::BorderLine2>(xCellB1,"RightBorder"));
+    aBorder = getProperty<table::BorderLine2>(xCellB1, "TopBorder");
+    CPPUNIT_ASSERT_MESSAGE("Missing cell top border", aBorder.InnerLineWidth > 0);
+    aBorder = getProperty<table::BorderLine2>(xCellB1, "BottomBorder");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cell bottom border", sal_Int16(0), aBorder.InnerLineWidth);
+    aBorder = getProperty<table::BorderLine2>(xCellB1, "LeftBorder");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cell left border", sal_Int16(0), aBorder.InnerLineWidth);
+    aBorder = getProperty<table::BorderLine2>(xCellB1, "RightBorder");
+    CPPUNIT_ASSERT_MESSAGE("Missing cell right border", aBorder.InnerLineWidth > 0);
 
     uno::Reference<text::XTextRange> xCellA2(xTable->getCellByName("A2"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x0,0,0,0,0,0), getProperty<table::BorderLine2>(xCellA2,"TopBorder"));
-    CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x808080,0,2,4,3,2), getProperty<table::BorderLine2>(xCellA2,"BottomBorder"));
-    CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x808080,9,9,9,3,26), getProperty<table::BorderLine2>(xCellA2,"LeftBorder"));
-    CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x808080,9,9,9,3,26), getProperty<table::BorderLine2>(xCellA2,"RightBorder"));
+    aBorder = getProperty<table::BorderLine2>(xCellA2, "TopBorder");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cell top border", sal_Int16(0), aBorder.InnerLineWidth);
+    aBorder = getProperty<table::BorderLine2>(xCellA2, "BottomBorder");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cell bottom border", sal_Int16(0), aBorder.InnerLineWidth);
+    aBorder = getProperty<table::BorderLine2>(xCellA2, "LeftBorder");
+    CPPUNIT_ASSERT_MESSAGE("Missing cell left border", aBorder.InnerLineWidth > 0);
+    aBorder = getProperty<table::BorderLine2>(xCellA2,"RightBorder");
+    CPPUNIT_ASSERT_MESSAGE("Missing cell right border", aBorder.InnerLineWidth > 0);
 
     uno::Reference<text::XTextRange> xCellB2(xTable->getCellByName("B2"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x0,0,0,0,0,0), getProperty<table::BorderLine2>(xCellB2,"TopBorder"));
-    CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x808080,0,2,4,3,2), getProperty<table::BorderLine2>(xCellB2,"BottomBorder"));
-    CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x808080,0,2,4,3,2), getProperty<table::BorderLine2>(xCellB2,"LeftBorder"));
-    CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x808080,9,9,9,3,26), getProperty<table::BorderLine2>(xCellB2,"RightBorder"));
+    aBorder = getProperty<table::BorderLine2>(xCellB2, "TopBorder");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cell top border", sal_Int16(0), aBorder.InnerLineWidth);
+    aBorder = getProperty<table::BorderLine2>(xCellB2, "BottomBorder");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cell bottom border", sal_Int16(0), aBorder.InnerLineWidth);
+    aBorder = getProperty<table::BorderLine2>(xCellB2, "LeftBorder");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected cell left border", sal_Int16(0), aBorder.InnerLineWidth);
+    aBorder = getProperty<table::BorderLine2>(xCellB2, "RightBorder");
+    CPPUNIT_ASSERT_MESSAGE("Missing cell right border", aBorder.InnerLineWidth > 0);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
