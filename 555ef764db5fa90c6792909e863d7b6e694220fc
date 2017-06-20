@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_552f1ea1",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-20T19:27:48Z",
+      "side": 1,
+      "message": "this check isn\u0027t sufficient: if an instance exists already for the paragraph that spans the entire paragraph, and the selection doesn\u0027t include it, the cached instance must not be used",
+      "revId": "555ef764db5fa90c6792909e863d7b6e694220fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_b51cc278",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-20T19:27:48Z",
+      "side": 1,
+      "message": "this function also needs to skip over all paragraphs before maSelection.nStartPara (and all behind nEndPara)",
+      "revId": "555ef764db5fa90c6792909e863d7b6e694220fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
