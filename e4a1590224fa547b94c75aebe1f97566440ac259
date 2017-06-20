@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_00f8f6e4",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2017-06-20T23:09:41Z",
+      "side": 1,
+      "message": "I personally dislike use of \u0027lcl\u0027 prefix for file local functions.  Not a big deal, but I prefer it not being used for new code.",
+      "revId": "e4a1590224fa547b94c75aebe1f97566440ac259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_20ddf270",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2017-06-20T23:09:41Z",
+      "side": 1,
+      "message": "Another nitpick, but we typically indent on the case keyword.  It would look a bit more consistent if you did.",
+      "revId": "e4a1590224fa547b94c75aebe1f97566440ac259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_80e4e63b",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2017-06-20T23:09:41Z",
+      "side": 1,
+      "message": "Same as above.",
+      "revId": "e4a1590224fa547b94c75aebe1f97566440ac259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_a0cf22b2",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2017-06-20T23:09:41Z",
+      "side": 1,
+      "message": "Same as above.",
+      "revId": "e4a1590224fa547b94c75aebe1f97566440ac259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_40dafe79",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2017-06-20T23:09:41Z",
+      "side": 1,
+      "message": "Let\u0027s not use auto here.  Use explicit type OUString instead.  Also, you should use const reference too.",
+      "revId": "e4a1590224fa547b94c75aebe1f97566440ac259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_60e7fa40",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2017-06-20T23:09:41Z",
+      "side": 1,
+      "message": "Let\u0027s use const reference here.",
+      "revId": "e4a1590224fa547b94c75aebe1f97566440ac259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
