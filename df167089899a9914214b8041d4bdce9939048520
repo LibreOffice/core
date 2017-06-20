@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_35929258",
+        "filename": "include/editeng/unotext.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-20T11:29:46Z",
+      "side": 1,
+      "message": "/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/include/editeng/unotext.hxx:540:5: error: data member maSelection is shadowing member in superclass, through inheritance path SvxUnoTextContent-\u003eSvxUnoTextRangeBase [loplugin:datamembershadow]\n    const ESelection        maSelection;\n    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/include/editeng/unotext.hxx:256:5: note: superclass member here [loplugin:datamembershadow]\n    ESelection              maSelection;\n    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n1 error generated.",
+      "revId": "df167089899a9914214b8041d4bdce9939048520",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_559f1e5f",
+        "filename": "include/editeng/unotext.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-20T11:29:46Z",
+      "side": 1,
+      "message": "to ensure the elements aren\u0027t deleted, this needs to be a vector of uno::Reference or rtl::Reference",
+      "revId": "df167089899a9914214b8041d4bdce9939048520",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
