@@ -37,6 +37,7 @@
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <osl/signal.h>
+#include <rtl/crc.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
@@ -1301,13 +1302,45 @@ SimpleResMgr* SimpleResMgr::Create(const sal_Char* pPrefixName, const LanguageTa
     return new SimpleResMgr(pPrefixName, rLocale);
 }
 
+namespace
+{
+    OUString createFromUtf8(const char* data, size_t size)
+    {
+        OUString aTarget;
+        bool bSuccess = rtl_convertStringToUString(&aTarget.pData,
+                                                   data,
+                                                   size,
+                                                   RTL_TEXTENCODING_UTF8,
+                                                   RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR|RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR|RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR);
+        (void) bSuccess;
+        assert(bSuccess);
+        return aTarget;
+    }
+
+    OString genKeyId(const OString& rGenerator)
+    {
+        sal_uInt32 nCRC = rtl_crc32(0, rGenerator.getStr(), rGenerator.getLength());
+        // Use simple ASCII characters, exclude I, l, 1 and O, 0 to avoid confusing IDs
+        static const char sSymbols[] =
+            "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
+        char sKeyId[6];
+        for (short nKeyInd = 0; nKeyInd < 5; ++nKeyInd)
+        {
+            sKeyId[nKeyInd] = sSymbols[(nCRC & 63) % strlen(sSymbols)];
+            nCRC >>= 6;
+        }
+        sKeyId[5] = '\0';
+        return OString(sKeyId);
+    }
+}
+
 namespace Translate
 {
     std::locale Create(const sal_Char* pPrefixName, const LanguageTag& rLocale)
     {
         boost::locale::generator gen;
         gen.characters(boost::locale::char_facet);
-        gen.categories(boost::locale::message_facet);
+        gen.categories(boost::locale::message_facet | boost::locale::information_facet);
         OUString uri("$BRAND_BASE_DIR/$BRAND_SHARE_RESOURCE_SUBDIR/");
         rtl::Bootstrap::expandMacros(uri);
         OUString path;
@@ -1318,24 +1351,28 @@ namespace Translate
         return gen(sIdentifier.getStr());
     }
 
-    OUString get(const char* pId, const std::locale &loc)
+    OUString get(const char* pContextAndId, const std::locale &loc)
     {
+        OString sContext;
+        const char *pId = strchr(pContextAndId, '\004');
+        if (!pId)
+            pId = pContextAndId;
+        else
+        {
+            sContext = OString(pContextAndId, pId - pContextAndId);
+            ++pId;
+        }
+
         //if its a key id locale, generate it here
-        if (loc.name() == "qtz")
-            return "somekey" + OUStringLiteral1(0x2016) + OUString::createFromAscii(pId);
+        if (std::use_facet<boost::locale::info>(loc).language() == "qtz")
+        {
+            OString sKeyId(genKeyId(OString(pContextAndId).replace('\004', '|')));
+            return OUString::fromUtf8(sKeyId) + OUStringLiteral1(0x2016) + createFromUtf8(pId, strlen(pId));
+        }
 
-        std::string ret = boost::locale::gettext(pId, loc);
-
-        OUString aTarget;
-        bool bSuccess = rtl_convertStringToUString(&aTarget.pData,
-                                                   ret.data(),
-                                                   ret.size(),
-                                                   RTL_TEXTENCODING_UTF8,
-                                                   RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR|RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR|RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR);
-        (void) bSuccess;
-        assert(bSuccess);
-
-        return ResMgr::ExpandVariables(aTarget);
+        //otherwise translate it
+        const std::string ret = boost::locale::pgettext(sContext.getStr(), pId, loc);
+        return ResMgr::ExpandVariables(createFromUtf8(ret.data(), ret.size()));
     }
 }
 
