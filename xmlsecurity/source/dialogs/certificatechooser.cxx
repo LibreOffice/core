@@ -52,10 +52,11 @@ CertificateChooser::CertificateChooser(vcl::Window* _pParent,
     pSignatures->set_height_request(aControlSize.Height());
 
     m_pCertLB = VclPtr<SvSimpleTable>::Create(*pSignatures);
-    static long nTabs[] = { 4, 0, 20*nControlWidth/100, 40*nControlWidth/100, 80*nControlWidth/100 };
+    static long nTabs[] = { 5, 0, 20*nControlWidth/100, 50*nControlWidth/100, 60*nControlWidth/100, 70*nControlWidth/100  };
     m_pCertLB->SetTabs( &nTabs[0] );
     m_pCertLB->InsertHeaderEntry(get<FixedText>("issuedto")->GetText() + "\t" + get<FixedText>("issuedby")->GetText()
-        + "\t" + get<FixedText>("usage")->GetText() + "\t" + get<FixedText>("expiration")->GetText());
+        + "\t" + get<FixedText>("type")->GetText() + "\t" + get<FixedText>("expiration")->GetText()
+        + "\t" + get<FixedText>("usage")->GetText());
     m_pCertLB->SetSelectHdl( LINK( this, CertificateChooser, CertificateHighlightHdl ) );
     m_pCertLB->SetDoubleClickHdl( LINK( this, CertificateChooser, CertificateSelectHdl ) );
     m_pViewBtn->SetClickHdl( LINK( this, CertificateChooser, ViewButtonHdl ) );
@@ -189,8 +190,9 @@ void CertificateChooser::ImplInitialize()
             mvUserData.push_back(userData);
             SvTreeListEntry* pEntry = m_pCertLB->InsertEntry( XmlSec::GetContentPart( xCerts[ nC ]->getSubjectName() )
                 + "\t" + XmlSec::GetContentPart( xCerts[ nC ]->getIssuerName() )
-                + "\t" + UsageInClearText( xCerts[ nC ]->getCertificateUsage() )
-                + "\t" + XmlSec::GetDateString( xCerts[ nC ]->getNotValidAfter() ) );
+                + "\t" + XmlSec::GetCertificateKind( xCerts[ nC ]->getCertificateKind() )
+                + "\t" + XmlSec::GetDateString( xCerts[ nC ]->getNotValidAfter() )
+                + "\t" + UsageInClearText( xCerts[ nC ]->getCertificateUsage() ) );
             pEntry->SetUserData( userData.get() );
         }
     }
