@@ -751,9 +751,7 @@ Image SfxConfigGroupListBox::GetImage(
     Image aImage;
     if ( bIsRootNode )
     {
-        OUString user("user");
-        OUString share("share");
-        if (node->getName().equals( user ) || node->getName().equals(share ) )
+        if (node->getName() == "user" || node->getName() == "share" )
         {
             aImage = xImp->m_hdImage;
         }

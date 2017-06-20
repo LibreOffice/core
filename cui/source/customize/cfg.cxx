@@ -5387,13 +5387,12 @@ void SvxIconSelectorDialog::ImportGraphics(
     if ( rejectedCount != 0 )
     {
         OUString message;
-        OUString newLine("\n");
         OUString fPath;
         if (rejectedCount > 1)
               fPath = rPaths[0].copy(8) + "/";
         for ( sal_Int32 i = 0; i < rejectedCount; ++i )
         {
-            message += fPath + rejected[i] + newLine;
+            message += fPath + rejected[i] + "\n";
         }
 
         ScopedVclPtrInstance< SvxIconChangeDialog > aDialog(this, message);

@@ -1098,7 +1098,7 @@ void SvxBorderTabPage::FillLineListBox_Impl()
 
     m_pLbLineStyle->SetNone( SvxResId( RID_SVXSTR_NONE ) );
 
-    for (size_t i = 0, n = SAL_N_ELEMENTS(aLines); i < n; ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aLines); ++i)
     {
         if (!IsBorderLineStyleAllowed(aLines[i].mnStyle))
             continue;

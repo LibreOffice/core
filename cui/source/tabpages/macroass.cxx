@@ -278,9 +278,7 @@ IMPL_LINK_NOARG( SfxMacroTabPage, SelectEvent_Impl, SvTreeListBox*, void)
 {
     SvHeaderTabListBox&     rListBox = mpImpl->pEventLB->GetListBox();
     SvTreeListEntry*            pE = rListBox.FirstSelected();
-    sal_uLong                   nPos;
-    if( !pE || LISTBOX_ENTRY_NOTFOUND ==
-        ( nPos = rListBox.GetModel()->GetAbsPos( pE ) ) )
+    if( !pE || LISTBOX_ENTRY_NOTFOUND == rListBox.GetModel()->GetAbsPos( pE ) )
     {
         DBG_ASSERT( pE, "Where does the empty entry come from?" );
         return;
@@ -321,9 +319,7 @@ bool SfxMacroTabPage::AssignDeleteHdl(Control* pBtn)
 {
     SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
     SvTreeListEntry* pE = rListBox.FirstSelected();
-    sal_uLong nPos;
-    if( !pE || LISTBOX_ENTRY_NOTFOUND ==
-        ( nPos = rListBox.GetModel()->GetAbsPos( pE ) ) )
+    if( !pE || LISTBOX_ENTRY_NOTFOUND == rListBox.GetModel()->GetAbsPos( pE ) )
     {
         DBG_ASSERT( pE, "Where does the empty entry come from?" );
         return false;
