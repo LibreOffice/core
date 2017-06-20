@@ -171,10 +171,12 @@ SAL_CALL XMLSignature_GpgImpl::generate(
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
     //Sign the template via gpgme
+    // TODO move init to central place
     GpgME::initializeLibrary();
     if( GpgME::checkEngine(GpgME::OpenPGP) )
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
+    // TODO get ctx from SecurityEnv?
     GpgME::Context* ctx = GpgME::Context::createForProtocol(GpgME::OpenPGP);
     if( ctx == nullptr )
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
@@ -315,10 +317,12 @@ SAL_CALL XMLSignature_GpgImpl::validate(
             throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
         // Validate the template via gpgme
+        // TODO move init to central place
         GpgME::initializeLibrary();
         if( GpgME::checkEngine(GpgME::OpenPGP) )
             throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
+        // TODO get ctx from SecurityEnv?
         GpgME::Context* ctx = GpgME::Context::createForProtocol(GpgME::OpenPGP);
         if( ctx == nullptr )
             throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
