@@ -95,7 +95,6 @@ void SvLBoxColorString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::Rende
 
 SvxRedlinTable::SvxRedlinTable(SvSimpleTableContainer& rParent, WinBits nBits)
     : SvSimpleTable(rParent,nBits)
-    , bIsCalc(false)
     , nDatePos(WRITER_DATE)
     , bAuthor(false)
     , bDate(false)
@@ -163,9 +162,9 @@ sal_Int32 SvxRedlinTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* pRi
 
     return nCompare;
 }
+
 void SvxRedlinTable::SetCalcView()
 {
-    bIsCalc=true;
     nDatePos=CALC_DATE;
 }
 

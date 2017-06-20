@@ -609,11 +609,11 @@ void SvxStdParagraphTabPage::EnableRelativeMode()
 {
     DBG_ASSERT( GetItemSet().GetParent(), "RelativeMode, but no parent-set!" );
 
-    m_pLeftIndent->EnableRelativeMode( 0, 999, 5 );
-    m_pFLineIndent->EnableRelativeMode( 0, 999, 5 );
-    m_pRightIndent->EnableRelativeMode( 0, 999, 5 );
-    m_pTopDist->EnableRelativeMode( 0, 999, 5 );
-    m_pBottomDist->EnableRelativeMode( 0, 999, 5 );
+    m_pLeftIndent->EnableRelativeMode( 0, 999 );
+    m_pFLineIndent->EnableRelativeMode( 0, 999 );
+    m_pRightIndent->EnableRelativeMode( 0, 999 );
+    m_pTopDist->EnableRelativeMode( 0, 999 );
+    m_pBottomDist->EnableRelativeMode( 0, 999 );
     bRelativeMode = true;
 }
 
@@ -895,19 +895,11 @@ void SvxStdParagraphTabPage::UpdateExample_Impl()
         case LLINESPACE_115:
         case LLINESPACE_15:
         case LLINESPACE_2:
-            m_pExampleWin->SetLineSpace( (SvxPrevLineSpace)nPos );
-            break;
-
         case LLINESPACE_PROP:
-            m_pExampleWin->SetLineSpace( (SvxPrevLineSpace)nPos,
-                (sal_uInt16)m_pLineDistAtPercentBox->Denormalize( m_pLineDistAtPercentBox->GetValue() ) );
-            break;
-
         case LLINESPACE_MIN:
         case LLINESPACE_DURCH:
         case LLINESPACE_FIX:
-            m_pExampleWin->SetLineSpace( (SvxPrevLineSpace)nPos,
-                (sal_uInt16)GetCoreValue( *m_pLineDistAtMetricBox, MapUnit::MapTwip ) );
+            m_pExampleWin->SetLineSpace( (SvxPrevLineSpace)nPos );
             break;
     }
     m_pExampleWin->Invalidate();

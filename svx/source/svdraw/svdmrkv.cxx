@@ -138,7 +138,6 @@ void SdrMarkView::ImpClearVars()
     mbMarkedPointsRectsDirty=false;
     mbMarkHandlesHidden = false;
     mbMrkPntDirty=false;
-    mbMarkHdlWhenTextEdit=false;
 
     // Migrate selections
     BrkMarkObj();

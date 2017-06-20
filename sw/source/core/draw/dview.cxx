@@ -103,7 +103,6 @@ SwDrawView::SwDrawView( SwViewShellImp &rI, SdrModel *pMd, OutputDevice *pOutDev
     SetHlplVisible( false );
     SetGlueVisible( false );
     SetFrameDragSingles();
-    SetVirtualObjectBundling( true );
     SetSwapAsynchron();
 
     EnableExtendedKeyInputDispatcher( false );

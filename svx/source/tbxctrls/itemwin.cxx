@@ -383,8 +383,7 @@ void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
 SvxFillTypeBox::SvxFillTypeBox( vcl::Window* pParent ) :
     FillTypeLB( pParent, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL | WB_TABSTOP ),
     nCurPos ( 0 ),
-    bSelect ( false ),
-    bRelease( true )
+    bSelect ( false )
 {
     SetSizePixel( LogicToPixel( Size(40, 40 ),MapUnit::MapAppFont ));
     Fill();
@@ -433,10 +432,9 @@ bool SvxFillTypeBox::EventNotify( NotifyEvent& rNEvt )
                 bHandled = true;
                 GetSelectHdl().Call( *this );
             break;
+
             case KEY_TAB:
-                bRelease = false;
                 GetSelectHdl().Call( *this );
-                bRelease = true;
                 break;
 
             case KEY_ESCAPE:
@@ -463,9 +461,7 @@ void SvxFillTypeBox::ReleaseFocus_Impl()
 
 SvxFillAttrBox::SvxFillAttrBox( vcl::Window* pParent ) :
     FillAttrLB( pParent, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL | WB_TABSTOP ),
-    nCurPos( 0 ),
-    bRelease( true )
-
+    nCurPos( 0 )
 {
     SetPosPixel( Point( 90, 0 ) );
     SetSizePixel( LogicToPixel( Size(50, 80 ), MapUnit::MapAppFont ));
@@ -500,9 +496,7 @@ bool SvxFillAttrBox::EventNotify( NotifyEvent& rNEvt )
                 bHandled = true;
             break;
             case KEY_TAB:
-                bRelease = false;
                 GetSelectHdl().Call( *this );
-                bRelease = true;
             break;
             case KEY_ESCAPE:
                 SelectEntryPos( nCurPos );

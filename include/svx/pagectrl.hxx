@@ -40,7 +40,6 @@ private:
     long nLeft;
     long nRight;
 
-    SvxBoxItem* pBorder;
     bool bResetBackground;
     bool bFrameDirection;
     SvxFrameDirection nFrameDirection;
@@ -49,13 +48,11 @@ private:
     long nHdRight;
     long nHdDist;
     long nHdHeight;
-    SvxBoxItem* pHdBorder;
 
     long nFtLeft;
     long nFtRight;
     long nFtDist;
     long nFtHeight;
-    SvxBoxItem* pFtBorder;
 
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maHeaderFillAttributes;
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maFooterFillAttributes;
@@ -82,7 +79,6 @@ protected:
 public:
     SvxPageWindow(vcl::Window* pParent);
     virtual ~SvxPageWindow() override;
-    virtual void dispose() override;
 
     void setHeaderFillAttributes(const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes)
     {
@@ -113,7 +109,6 @@ public:
     void SetBottom(long nNew) { nBottom = nNew; }
     void SetLeft(long nNew) { nLeft = nNew; }
     void SetRight(long nNew) { nRight = nNew; }
-    void SetBorder(const SvxBoxItem& rNew);
 
     long GetTop() const { return nTop; }
     long GetBottom() const { return nBottom; }
@@ -124,7 +119,6 @@ public:
     void SetHdRight(long nNew) { nHdRight = nNew; }
     void SetHdDist(long nNew) { nHdDist = nNew; }
     void SetHdHeight(long nNew) { nHdHeight = nNew; }
-    void SetHdBorder(const SvxBoxItem& rNew);
 
     long GetHdLeft() const { return nHdLeft; }
     long GetHdRight() const { return nHdRight; }
@@ -135,7 +129,6 @@ public:
     void SetFtRight(long nNew) { nFtRight = nNew; }
     void SetFtDist(long nNew) { nFtDist = nNew; }
     void SetFtHeight(long nNew) { nFtHeight = nNew; }
-    void SetFtBorder(const SvxBoxItem& rNew);
 
     long GetFtLeft() const { return nFtLeft; }
     long GetFtRight() const { return nFtRight; }

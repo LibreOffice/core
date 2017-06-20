@@ -41,13 +41,9 @@ friend class ImpItemEdit;
     ImpItemListRow* pAktChangeEntry;
     long   nLastWhichOfs;
     sal_uInt16 nLastWhich;
-    sal_uInt16 nLastWhichOben;
-    sal_uInt16 nLastWhichUnten;
     bool bWhichesButNames;
     bool bDontHideIneffectiveItems;
     bool bDontSortItems;
-    bool bShowWhichIds;
-    bool bShowRealValues;
 
 private:
     void ImpCtor();

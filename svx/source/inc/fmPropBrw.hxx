@@ -43,7 +43,6 @@ class FmFormShell;
 class FmPropBrw : public SfxFloatingWindow, public SfxControllerItem
 {
     bool            m_bInitialStateChange;
-    bool            m_bInStateChange;
     OUString        m_sLastActivePage;
     css::uno::Reference< css::uno::XComponentContext >
                     m_xInspectorContext;

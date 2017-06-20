@@ -158,8 +158,6 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< css::bea
             case DataType::DATE:
             case DataType::TIME:
             case DataType::TIMESTAMP:
-                m_bDateTime = true;
-                SAL_FALLTHROUGH;
             case DataType::BIT:
             case DataType::BOOLEAN:
             case DataType::TINYINT:
@@ -1215,9 +1213,7 @@ void DbTextField::implSetEffectiveMaxTextLen( sal_Int32 _nMaxLen )
 
 DbFormattedField::DbFormattedField(DbGridColumn& _rColumn)
     :DbLimitedLengthField(_rColumn)
-    ,m_nKeyType(css::util::NumberFormat::UNDEFINED)
 {
-
     // if our model's format key changes we want to propagate the new value to our windows
     doPropertyListening( FM_PROP_FORMATKEY );
 }
@@ -1335,8 +1331,6 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
     if (nFormatKey == -1)
         nFormatKey = 0;
 
-    m_nKeyType  = comphelper::getNumberFormatType(m_xSupplier->getNumberFormats(), nFormatKey);
-
     static_cast<FormattedField*>(m_pWindow.get())->SetFormatter(pFormatterUsed);
     static_cast<FormattedField*>(m_pPainter.get())->SetFormatter(pFormatterUsed);
 
@@ -1448,7 +1442,6 @@ void DbFormattedField::_propertyChanged( const PropertyChangeEvent& _rEvent )
     if (_rEvent.PropertyName == FM_PROP_FORMATKEY )
     {
         sal_Int32 nNewKey = _rEvent.NewValue.hasValue() ? ::comphelper::getINT32(_rEvent.NewValue) : 0;
-        m_nKeyType = comphelper::getNumberFormatType(m_xSupplier->getNumberFormats(), nNewKey);
 
         DBG_ASSERT(m_pWindow && m_pPainter, "DbFormattedField::_propertyChanged : where are my windows ?");
         if (m_pWindow)
