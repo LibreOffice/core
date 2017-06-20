@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_958ee625",
+        "filename": "include/o3tl/safeint.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-06-20T11:51:11Z",
+      "side": 1,
+      "message": "Does _clang_ actually work? See e.g. commit 2685678cd0221f4522e8502183baeaecb5ddd0a4, I think this should be __clang__.",
+      "revId": "6347a4dceec22e73215ef3829f4002150b99834c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
