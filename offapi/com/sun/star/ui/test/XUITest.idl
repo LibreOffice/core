@@ -16,9 +16,9 @@ module com { module sun { module star { module ui { module test {
 
 interface XUITest
 {
-    void executeCommand([in] string command);
+    boolean executeCommand([in] string command);
 
-    void executeDialog([in] string command);
+    boolean executeDialog([in] string command);
 
     XUIObject getTopFocusWindow();
 

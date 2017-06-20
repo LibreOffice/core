@@ -17,24 +17,20 @@
 
 #include <comphelper/dispatchcommand.hxx>
 
-void UITest::executeCommand(const OUString& rCommand)
+bool UITest::executeCommand(const OUString& rCommand)
 {
-    bool bSuccess = comphelper::dispatchCommand(
+    return comphelper::dispatchCommand(
         rCommand,
         {{"SynchronMode", -1, css::uno::Any(true),
           css::beans::PropertyState_DIRECT_VALUE}});
-
-    SAL_WARN_IF(!bSuccess, "vcl.uitest", "failed to execute command: " << rCommand);
 }
 
-void UITest::executeDialog(const OUString& rCommand)
+bool UITest::executeDialog(const OUString& rCommand)
 {
-    bool bSuccess = comphelper::dispatchCommand(
+    return comphelper::dispatchCommand(
         rCommand,
         {{"SynchronMode", -1, css::uno::Any(false),
           css::beans::PropertyState_DIRECT_VALUE}});
-
-    SAL_WARN_IF(!bSuccess, "vcl.uitest", "failed to execute dialog command: " << rCommand);
 }
 
 std::unique_ptr<UIObject> UITest::getFocusTopWindow()
