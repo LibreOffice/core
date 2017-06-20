@@ -103,12 +103,6 @@ static UScriptCode lcl_getHardCodedScriptNameForFont (const OutputDevice &rDevic
     return USCRIPT_INVALID_CODE;
 }
 
-bool isOpenSymbolFont(const vcl::Font &rFont)
-{
-    return rFont.GetFamilyName().equalsIgnoreAsciiCase("starsymbol") ||
-           rFont.GetFamilyName().equalsIgnoreAsciiCase("opensymbol");
-}
-
 bool isSymbolFont(const vcl::Font &rFont)
 {
     return (rFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL) ||
@@ -136,7 +130,7 @@ bool isSymbolFont(const vcl::Font &rFont)
             rFont.GetFamilyName().startsWith("STIXNonUnicode") ||
             rFont.GetFamilyName().startsWith("STIXSize") ||
             rFont.GetFamilyName().startsWith("STIXVariants") ||
-            isOpenSymbolFont(rFont);
+            IsStarSymbol(rFont.GetFamilyName());
 }
 
 bool canRenderNameOfSelectedFont(OutputDevice &rDevice)
@@ -161,7 +155,7 @@ OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
         return OUString(aImplAdobeSymbolText);
     }
 
-    const bool bOpenSymbol = isOpenSymbolFont(rDevice.GetFont());
+    const bool bOpenSymbol = IsStarSymbol(rDevice.GetFont().GetFamilyName());
 
     if (!bOpenSymbol)
     {
