@@ -511,8 +511,6 @@ VclPtr<SvxRuler> DrawViewShell::CreateHRuler (::sd::Window* pWin)
     pRuler = VclPtr<Ruler>::Create(*this, GetParentWindow(), pWin, nFlags,
         GetViewFrame()->GetBindings(), aWBits);
 
-    pRuler->SetSourceUnit(pWin->GetMapMode().GetMapUnit());
-
     // Metric ...
     sal_uInt16 nMetric = (sal_uInt16)GetDoc()->GetUIUnit();
 
@@ -543,7 +541,6 @@ VclPtr<SvxRuler> DrawViewShell::CreateVRuler(::sd::Window* pWin)
 
     pRuler = VclPtr<Ruler>::Create(*this, GetParentWindow(), pWin, nFlags,
         GetViewFrame()->GetBindings(), aWBits);
-    pRuler->SetSourceUnit(pWin->GetMapMode().GetMapUnit());
 
     // Metric same as HRuler, use document setting
     sal_uInt16 nMetric = (sal_uInt16)GetDoc()->GetUIUnit();

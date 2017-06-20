@@ -42,7 +42,6 @@ void SvLBoxButtonData::InitData( bool _bRadioBtn, const Control* pCtrl )
     aBmps.resize((int)SvBmp::STATICIMAGE+1);
 
     bDataOk = false;
-    eState = SvButtonState::Unchecked;
     pImpl->bDefaultImages = true;
     pImpl->bShowRadioButton = _bRadioBtn;
 
@@ -99,10 +98,9 @@ void SvLBoxButtonData::SetWidthAndHeight()
 }
 
 
-void SvLBoxButtonData::StoreButtonState( SvTreeListEntry* pActEntry, SvItemStateFlags nItemFlags )
+void SvLBoxButtonData::StoreButtonState( SvTreeListEntry* pActEntry )
 {
     pImpl->pEntry = pActEntry;
-    eState = ConvertToButtonState( nItemFlags );
 }
 
 SvButtonState SvLBoxButtonData::ConvertToButtonState( SvItemStateFlags nItemFlags )
@@ -279,7 +277,7 @@ bool SvLBoxButton::ClickHdl( SvTreeListEntry* pEntry )
             SetStateUnchecked();
         else
             SetStateChecked();
-        pData->StoreButtonState( pEntry, nItemFlags );
+        pData->StoreButtonState( pEntry );
         pData->CallLink();
     }
     return false;

@@ -44,12 +44,10 @@ namespace comphelper
 class ImpLBSelEng : public FunctionSet
 {
     SvImpLBox*          pImp;
-    SelectionEngine*    pSelEng;
     VclPtr<SvTreeListBox>  pView;
 
 public:
-    ImpLBSelEng( SvImpLBox* pImp, SelectionEngine* pSelEng,
-                 SvTreeListBox* pView );
+    ImpLBSelEng( SvImpLBox* pImp, SvTreeListBox* pView );
     virtual ~ImpLBSelEng() override;
     void        BeginDrag() override;
     void        CreateAnchor() override;
@@ -126,11 +124,10 @@ private:
     Idle                aAsyncBeginDragIdle;
     Point               aAsyncBeginDragPos;
 
-    long                nYoffsNodeBmp;
     long                nNodeBmpWidth;
     long                nMostRight;
     short               nHorSBarHeight, nVerSBarWidth;
-    sal_uInt16              nCurTabPos;
+    sal_uInt16          nCurTabPos;
 
     bool                bUpdateMode : 1;
     bool                bAsyncBeginDrag : 1;

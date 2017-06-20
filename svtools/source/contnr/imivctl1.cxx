@@ -108,7 +108,6 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     pCurHighlightFrame = nullptr;
     pEdit = nullptr;
     pAnchor = nullptr;
-    pPrevDropTarget = nullptr;
     pHdlEntry = nullptr;
     pHead = nullptr;
     pCursor = nullptr;
@@ -125,7 +124,6 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     nUserEventShowCursor = nullptr;
     nMaxVirtWidth = DEFAULT_MAX_VIRT_WIDTH;
     nMaxVirtHeight = DEFAULT_MAX_VIRT_HEIGHT;
-    pDDRefEntry = nullptr;
     pDDDev = nullptr;
     pDDBufDev = nullptr;
     pDDTempDev = nullptr;
@@ -2720,7 +2718,6 @@ void SvxIconChoiceCtrl_Impl::ShowFocus ( tools::Rectangle& rRect )
     else
         aPenColor.SetColor(COL_WHITE);
 
-    aFocus.bOn = true;
     aFocus.aPenColor = aPenColor;
     aFocus.aRect = rRect;
 }

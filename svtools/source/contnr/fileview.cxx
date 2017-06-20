@@ -320,9 +320,6 @@ protected:
     bool                                m_bRunningAsyncAction;
     bool                                m_bAsyncActionCancelled;
 
-    FileViewMode                        m_eViewMode;
-
-
 public:
 
     ::std::vector< SortingData_Impl* >  maContent;
@@ -971,7 +968,6 @@ SvtFileView::SvtFileView( vcl::Window* pParent, WinBits nBits,
 
     mpImpl.reset( new SvtFileView_Impl( this, xCmdEnv, nFlags, bOnlyFolder ) );
     mpImpl->mpView->ForbidEmptyText();
-    bSortColumn = true;
 
     HeaderBar* pHeaderBar = mpImpl->mpView->GetHeaderBar();
     pHeaderBar->SetSelectHdl( LINK( this, SvtFileView, HeaderSelect_Impl ) );
@@ -1448,7 +1444,6 @@ SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommand
     ,m_eAsyncActionResult       ( ::svt::EnumerationResult::ERROR )
     ,m_bRunningAsyncAction      ( false )
     ,m_bAsyncActionCancelled    ( false )
-    ,m_eViewMode                ( eDetailedList )
     ,mpNameTrans                ( nullptr )
     ,mnSortColumn               ( COLUMN_TITLE )
     ,mbAscending                ( true )
@@ -2163,7 +2158,6 @@ sal_uLong SvtFileView_Impl::GetEntryPos( const OUString& rURL )
 
 void SvtFileView_Impl::SetViewMode( FileViewMode eMode )
 {
-    m_eViewMode = eMode;
     switch ( eMode )
     {
         case eDetailedList:

@@ -189,7 +189,6 @@ class SVT_DLLPUBLIC SvtIconChoiceCtrl : public Control
     friend class SvxIconChoiceCtrl_Impl;
 
     Link<SvtIconChoiceCtrl*,void>  _aClickIconHdl;
-    KeyEvent*                      _pCurKeyEvent;
     std::unique_ptr<SvxIconChoiceCtrl_Impl>        _pImpl;
 
 protected:

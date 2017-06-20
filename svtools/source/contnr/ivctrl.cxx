@@ -70,7 +70,6 @@ SvtIconChoiceCtrl::SvtIconChoiceCtrl( vcl::Window* pParent, WinBits nWinStyle ) 
      // WB_CLIPCHILDREN on, as ScrollBars lie on the window!
     Control( pParent, nWinStyle | WB_CLIPCHILDREN ),
 
-    _pCurKeyEvent   ( nullptr ),
     _pImpl           ( new SvxIconChoiceCtrl_Impl( this, nWinStyle ) )
 {
     SetLineColor();
@@ -287,9 +286,7 @@ void SvtIconChoiceCtrl::KeyInput( const KeyEvent& rKEvt )
     bool bKeyUsed = DoKeyInput( rKEvt );
     if ( !bKeyUsed )
     {
-        _pCurKeyEvent = const_cast<KeyEvent*>(&rKEvt);
         Control::KeyInput( rKEvt );
-        _pCurKeyEvent = nullptr;
     }
 }
 bool SvtIconChoiceCtrl::DoKeyInput( const KeyEvent& rKEvt )
@@ -297,9 +294,7 @@ bool SvtIconChoiceCtrl::DoKeyInput( const KeyEvent& rKEvt )
     // under OS/2, we get key up/down even while editing
     if( _pImpl->IsEntryEditing() )
         return true;
-    _pCurKeyEvent = const_cast<KeyEvent*>(&rKEvt);
     bool bHandled = _pImpl->KeyInput( rKEvt );
-    _pCurKeyEvent = nullptr;
     return bHandled;
 }
 sal_Int32 SvtIconChoiceCtrl::GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const

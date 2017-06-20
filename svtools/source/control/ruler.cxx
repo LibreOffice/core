@@ -236,8 +236,6 @@ void Ruler::ImplInit( WinBits nWinBits )
     mnDragSize      = RulerDragSize::Move;  // Did size change at dragging
     mnDragModifier  = 0;                    // Modifier key at dragging
     mnExtraStyle    = 0;                    // Style of Extra field
-    mnExtraClicks   = 0;                    // No. of clicks for Extra field
-    mnExtraModifier = 0;                    // Modifier key at click in extra field
     mnCharWidth     = 371;
     mnLineHeight    = 551;
     mbCalc          = true;                 // Should recalculate page width
@@ -256,7 +254,6 @@ void Ruler::ImplInit( WinBits nWinBits )
     mnUnitIndex     = RULER_UNIT_CM;
     meUnit          = FUNIT_CM;
     maZoom          = Fraction( 1, 1 );
-    meSourceUnit    = MapUnit::Map100thMM;
 
     // Recalculate border widths
     if ( nWinBits & WB_BORDER )
@@ -1971,11 +1968,7 @@ void Ruler::MouseButtonDown( const MouseEvent& rMEvt )
 
         if ( maExtraRect.IsInside( aMousePos ) )
         {
-            mnExtraClicks = nMouseClicks;
-            mnExtraModifier = nMouseModifier;
             ExtraDown();
-            mnExtraClicks = 0;
-            mnExtraModifier = 0;
         }
         else
         {
