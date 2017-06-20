@@ -21,6 +21,7 @@
 #include <sys/wait.h>
 #include <signal.h>
 
+#include "unx/cpdmgr.hxx"
 #include "unx/cupsmgr.hxx"
 #include <vcl/strhelper.hxx>
 
@@ -83,7 +84,9 @@ PrinterInfoManager& PrinterInfoManager::get()
 
     if( ! pSalData->m_pPIManager )
     {
-        pSalData->m_pPIManager = CUPSManager::tryLoadCUPS();
+        pSalData->m_pPIManager = CPDManager::tryLoadCPD();
+        if( ! pSalData->m_pPIManager )
+            pSalData->m_pPIManager = CUPSManager::tryLoadCUPS();
         if( ! pSalData->m_pPIManager )
             pSalData->m_pPIManager = new PrinterInfoManager();
 
