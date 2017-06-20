@@ -16,6 +16,24 @@
       "revId": "707caf61b7bcf5ff3a60c148593552babc644afe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_954c2678",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4811,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2017-06-20T06:20:55Z",
+      "side": 1,
+      "message": "No. Whether it could be made unnecessary I don\u0027t know, and probably don\u0027t have time allocated to figure out.",
+      "parentUuid": "3a461143_b52a027d",
+      "revId": "707caf61b7bcf5ff3a60c148593552babc644afe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
