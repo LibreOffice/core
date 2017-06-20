@@ -32,6 +32,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
+#include <com/sun/star/security/CertificateKind.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/packages/manifest/ManifestReader.hpp>
@@ -554,9 +555,13 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             {
                 //check the validity of the cert
                 try {
-                    // TODO: check for both sec envs ...
-                    sal_Int32 certResult = xGpgSecEnv->verifyCertificate(xCert,
-                        Sequence<css::uno::Reference<css::security::XCertificate> >());
+                    sal_Int32 certResult;
+                    if (xCert->getCertificateKind() == CertificateKind_OPENPGP)
+                        certResult = xGpgSecEnv->verifyCertificate(xCert,Sequence<css::uno::Reference<css::security::XCertificate> >());
+                    else if (xCert->getCertificateKind() == CertificateKind_X509)
+                        certResult = xSecEnv->verifyCertificate(xCert, Sequence<css::uno::Reference<css::security::XCertificate> >());
+                    else
+                        throw RuntimeException("Unknown certificate kind");
 
                     bCertValid = certResult == css::security::CertificateValidity::VALID;
                     if ( bCertValid )
