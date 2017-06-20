@@ -23,6 +23,10 @@ then
         echo "Backtraces:"
         GDBCOMMANDFILE=$(mktemp)
         printf "info registers\nthread apply all backtrace full\n" > "$GDBCOMMANDFILE"
+        guess=$(file "$COREFILE")
+        guess=${guess#* execfn: \'}
+        guess=${guess%%\'*}
+        if [ -x "$guess" ]; then EXECUTABLE=$guess; fi
         gdb -x "$GDBCOMMANDFILE" --batch "$EXECUTABLE" "$COREFILE"
         rm "$GDBCOMMANDFILE"
         echo
