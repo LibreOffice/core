@@ -1559,6 +1559,8 @@ void ScColumn::CellStorageModified()
         while (itAttr != maCellTextAttrs.end() && itAttr->type != sc::element_type_empty)
             ++itAttr;
     }
+#else
+    (void) this; // Avoid "this member function can be declared static [loplugin:staticmethods]"
 #endif
 }
 
