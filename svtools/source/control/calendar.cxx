@@ -164,15 +164,12 @@ void Calendar::ImplInit( WinBits nWinStyle )
     mbDrag                  = false;
     mbSelection             = false;
     mbMultiSelection        = false;
-    mbWeekSel               = false;
     mbUnSel                 = false;
     mbMenuDown              = false;
     mbSpinDown              = false;
     mbPrevIn                = false;
     mbNextIn                = false;
-    mbDirect                = false;
     mbTravelSelect          = false;
-    mbScrollDateRange       = false;
     mbSelLeft               = false;
     mbAllSel                = false;
     mbDropPos               = false;
@@ -1144,9 +1141,7 @@ void Calendar::ImplScroll( bool bPrev )
     }
     else
         aNewFirstMonth += aNewFirstMonth.GetDaysInMonth();
-    mbDirect = true;
     SetFirstDate( aNewFirstMonth );
-    mbDirect = false;
 }
 
 void Calendar::ImplShowMenu( const Point& rPos, const Date& rDate )
@@ -1215,9 +1210,7 @@ void Calendar::ImplTracking( const Point& rPos, bool bRepeat )
 
         if ( bRepeat && (mbPrevIn || mbNextIn) )
         {
-            mbScrollDateRange = true;
             ImplScroll( mbPrevIn );
-            mbScrollDateRange = false;
         }
     }
     else
@@ -1295,9 +1288,7 @@ IMPL_LINK_NOARG( Calendar, ScrollHdl, Timer*, void )
     bool bNextIn = (mnDragScrollHitTest & CALENDAR_HITTEST_NEXT) != 0;
     if( bNextIn || bPrevIn )
     {
-        mbScrollDateRange = true;
         ImplScroll( bPrevIn );
-        mbScrollDateRange = false;
     }
 }
 
@@ -1320,9 +1311,7 @@ void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
                 if ( mbPrevIn || mbNextIn )
                 {
                     mbSpinDown = true;
-                    mbScrollDateRange = true;
                     ImplScroll( mbPrevIn );
-                    mbScrollDateRange = false;
                     // it should really read BUTTONREPEAT, therefore do not
                     // change it to SCROLLREPEAT, check with TH,
                     // why it could be different (71775)
@@ -1343,10 +1332,6 @@ void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
                         }
 
                         mbMultiSelection = (mnWinStyle & (WB_MULTISELECT | WB_RANGESELECT)) != 0;
-                        if ( (nHitTest & CALENDAR_HITTEST_DAY) && mbMultiSelection )
-                            mbWeekSel = true;
-                        else
-                            mbWeekSel = false;
                         ImplMouseSelect( aTempDate, nHitTest, false, rMEvt.IsShift(), rMEvt.IsMod1() );
                     }
                 }
@@ -1473,9 +1458,7 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
                 }
             }
             ImplCalendarSelectDateRange( mpSelectTable, aNewDate, maAnchorDate, true );
-            mbDirect = true;
             SetCurDate( aNewDate );
-            mbDirect = false;
             maAnchorDate = aOldAnchorDate;
             ImplUpdateSelection( pOldSel.get() );
         }
@@ -1486,9 +1469,7 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
                 SetNoSelection();
                 SelectDate( aNewDate );
             }
-            mbDirect = true;
             SetCurDate( aNewDate );
-            mbDirect = false;
         }
         mbTravelSelect = true;
         Select();

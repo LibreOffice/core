@@ -52,8 +52,6 @@ private:
     OUString                    aCurEntry;
 
 protected:
-    SvTreeListEntry*                pViewParent;
-
     static OUString             GetToken( const OUString &sStr, sal_Int32 &nIndex );
 
     virtual void                SetTabs() override;

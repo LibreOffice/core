@@ -50,7 +50,7 @@ sal_Int32 SvImpLBox::s_nImageRefCount   = 0;
 SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinStyle)
     : aHorSBar(VclPtr<ScrollBar>::Create(pLBView, WB_DRAG | WB_HSCROLL))
     , aScrBarBox(VclPtr<ScrollBarBox>::Create(pLBView))
-    , aFctSet(this, &aSelEng, pLBView)
+    , aFctSet(this, pLBView)
     , bAreChildrenTransient(true)
     , m_pStringSorter(nullptr)
     , aVerSBar(VclPtr<ScrollBar>::Create(pLBView, WB_DRAG | WB_VSCROLL))
@@ -86,7 +86,6 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     pAnchor             = nullptr;
     nVisibleCount       = 0;    // number of rows of data in control
     nNodeBmpTabDistance = NODE_BMP_TABDIST_NOTVALID;
-    nYoffsNodeBmp       = 0;
     nNodeBmpWidth       = 0;
 
     bAsyncBeginDrag     = false;
@@ -1571,7 +1570,7 @@ void SvImpLBox::CollapsingEntry( SvTreeListEntry* pEntry )
 void SvImpLBox::SetNodeBmpYOffset( const Image& rBmp )
 {
     Size aSize;
-    nYoffsNodeBmp = pView->GetHeightOffset( rBmp, aSize );
+    pView->GetHeightOffset( rBmp, aSize );
     nNodeBmpWidth = aSize.Width();
 }
 
@@ -2590,11 +2589,9 @@ void SvImpLBox::SelectEntry( SvTreeListEntry* pEntry, bool bSelect )
     pView->Select( pEntry, bSelect );
 }
 
-ImpLBSelEng::ImpLBSelEng( SvImpLBox* pImpl, SelectionEngine* pSEng,
-    SvTreeListBox* pV )
+ImpLBSelEng::ImpLBSelEng( SvImpLBox* pImpl, SvTreeListBox* pV )
 {
     pImp = pImpl;
-    pSelEng = pSEng;
     pView = pV;
 }
 

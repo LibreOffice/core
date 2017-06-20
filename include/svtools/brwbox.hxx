@@ -203,7 +203,6 @@ private:
     long            nDataRowHeight; // height of a single data-row
     sal_uInt16      nTitleLines;    // number of lines in title row
     sal_uLong       nControlAreaWidth; // width of fixed area beneath hscroll
-    bool            bThumbDragging; // handle thumb dragging
     bool            bColumnCursor;  // single columns and fields selectable
     bool            bMultiSelection;// allow multiple selected rows
     bool            bKeepHighlight; // don't hide selection on LoseFocus

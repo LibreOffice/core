@@ -602,7 +602,6 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
             aBgdColor = pBgdAttr->GetColor();
             sal_uInt16 nCol = GetItemId_Impl(*m_pBackgroundColorSet, aBgdColor);
             m_pBackgroundColorSet->SelectItem( nCol );
-            m_pBackgroundColorSet->SaveValue();
             m_pPreviewWin1->NotifyChange( aBgdColor );
         }
     }

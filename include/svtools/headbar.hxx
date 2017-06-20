@@ -241,19 +241,16 @@ private:
     Link<HeaderBar*,void> maDoubleClickHdl;
     Link<HeaderBar*,void> maCreateAccessibleHdl;
 
-    VCLXHeaderBar*      m_pVCLXHeaderBar;
-
-
     css::uno::Reference< css::accessibility::XAccessible >
-                        mxAccessible;
+                          mxAccessible;
 
     using Window::ImplInit;
     SVT_DLLPRIVATE void             ImplInit( WinBits nWinStyle );
     SVT_DLLPRIVATE void             ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SVT_DLLPRIVATE long             ImplGetItemPos( sal_uInt16 nPos ) const;
-    SVT_DLLPRIVATE tools::Rectangle            ImplGetItemRect( sal_uInt16 nPos ) const;
+    SVT_DLLPRIVATE tools::Rectangle ImplGetItemRect( sal_uInt16 nPos ) const;
     using Window::ImplHitTest;
-    SVT_DLLPRIVATE sal_uInt16               ImplHitTest( const Point& rPos, long& nMouseOff, sal_uInt16& nPos ) const;
+    SVT_DLLPRIVATE sal_uInt16       ImplHitTest( const Point& rPos, long& nMouseOff, sal_uInt16& nPos ) const;
     SVT_DLLPRIVATE void             ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos );
     SVT_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
                                                  const tools::Rectangle& rItemRect, const tools::Rectangle* pRect);
