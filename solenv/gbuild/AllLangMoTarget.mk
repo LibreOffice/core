@@ -43,9 +43,10 @@ $(call gb_MoTarget_get_target,%) : $(gb_Helper_MISCDUMMY) $(gb_MoTarget_LOCALEST
 	$(call gb_Output_announce,$*,$(true),MO,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
-		find $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION) -name "*.po" -exec sh -c "mkdir -p $(WORKDIR)/MoTarget/$(LIBRARY)/$(LANGUAGE){} && cat {} | $(SRCDIR)/solenv/bin/strip-msgctxt | msguniq --use-first > $(WORKDIR)/MoTarget/$(LIBRARY)/$(LANGUAGE)/{}/stripped.po" \; && \
-		msgcat --use-first `find $(WORKDIR)/MoTarget/$(LIBRARY)/$(LANGUAGE) -name "stripped.po" | grep -v registry` > $(WORKDIR)/MoTarget/$(LIBRARY)/$(LANGUAGE)/combined.po && \
-		cat $(WORKDIR)/MoTarget/$(LIBRARY)/$(LANGUAGE)/combined.po | msgfmt - -f -o $@)
+		mkdir -p $(WORKDIR)/MoTarget/$(LIBRARY)/$(LANGUAGE) && \
+		msgcat `find $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION) -name "*.po" | grep -v registry` | $(SRCDIR)/solenv/bin/strip-msgctxt | msguniq > $(WORKDIR)/MoTarget/$(LIBRARY)/$(LANGUAGE)/combined.po && \
+		cat $(WORKDIR)/MoTarget/$(LIBRARY)/$(LANGUAGE)/combined.po | msgfmt - -f -o $@ && \
+		touch $@)
 
 #$(info $(call gb_MoTarget_get_target,$(1)))
 define gb_MoTarget_MoTarget
