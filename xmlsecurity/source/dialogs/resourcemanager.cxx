@@ -68,6 +68,19 @@ namespace XmlSec
         return GetLocaleData().getDate( GetDateTime( _rDT ) );
     }
 
+    OUString GetCertificateKind( const css::security::CertificateKind &rKind )
+    {
+        switch (rKind)
+        {
+            case css::security::CertificateKind_X509:
+                return OUString("X.509");
+            case css::security::CertificateKind_OPENPGP:
+                return OUString("OpenPGP");
+            default:
+                return OUString();
+        }
+    }
+
     /*
         Creates two strings based on the distinguished name which are displayed in the
         certificate details view. The first string contains only the values of the attribute
