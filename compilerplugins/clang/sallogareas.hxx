@@ -34,9 +34,9 @@ class SalLogAreas
         void readLogAreas();
         const FunctionDecl* inFunction;
         SourceLocation lastSalDetailLogStreamMacro;
-        set< string > logAreas;
+        std::set< std::string > logAreas;
 #if 0
-        string firstSeenLogArea;
+        std::string firstSeenLogArea;
         SourceLocation firstSeenLocation;
 #endif
     };

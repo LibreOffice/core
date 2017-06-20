@@ -28,45 +28,45 @@ namespace loplugin
 */
 class PluginHandler
     : public ASTConsumer
-    {
-    public:
-        PluginHandler( CompilerInstance& compiler, const vector< string >& args );
-        virtual ~PluginHandler();
-        virtual void HandleTranslationUnit( ASTContext& context ) override;
-        static void registerPlugin( Plugin* (*create)( const Plugin::InstantiationData& ), const char* optionName, bool isPPCallback, bool byDefault );
-        DiagnosticBuilder report( DiagnosticsEngine::Level level, const char * plugin, StringRef message,
+{
+public:
+    PluginHandler( CompilerInstance& compiler, const std::vector< std::string >& args );
+    virtual ~PluginHandler();
+    virtual void HandleTranslationUnit( ASTContext& context ) override;
+    static void registerPlugin( Plugin* (*create)( const Plugin::InstantiationData& ), const char* optionName, bool isPPCallback, bool byDefault );
+    DiagnosticBuilder report( DiagnosticsEngine::Level level, const char * plugin, StringRef message,
             CompilerInstance& compiler, SourceLocation loc = SourceLocation());
-        bool addRemoval( SourceLocation loc );
-        static bool isUnitTestMode();
-    private:
-        void handleOption( const string& option );
-        void createPlugins( set< string > rewriters );
-        DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc = SourceLocation());
-        CompilerInstance& compiler;
-        Rewriter rewriter;
-        set< SourceLocation > removals;
-        string scope;
-        string warningsOnly;
-        bool warningsAsErrors;
-    };
+    bool addRemoval( SourceLocation loc );
+    static bool isUnitTestMode();
+private:
+    void handleOption( const std::string& option );
+    void createPlugins( std::set< std::string > rewriters );
+    DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc = SourceLocation());
+    CompilerInstance& compiler;
+    Rewriter rewriter;
+    std::set< SourceLocation > removals;
+    std::string scope;
+    std::string warningsOnly;
+    bool warningsAsErrors;
+};
 
 /**
  The Clang plugin class, just forwards to PluginHandler.
 */
 class LibreOfficeAction
     : public PluginASTAction
-    {
-    public:
+{
+public:
 #if CLANG_VERSION >= 30600
-        virtual std::unique_ptr<ASTConsumer> CreateASTConsumer( CompilerInstance& Compiler, StringRef InFile );
+    virtual std::unique_ptr<ASTConsumer> CreateASTConsumer( CompilerInstance& Compiler, StringRef InFile );
 #else
-        virtual ASTConsumer* CreateASTConsumer( CompilerInstance& Compiler, StringRef InFile );
+    virtual ASTConsumer* CreateASTConsumer( CompilerInstance& Compiler, StringRef InFile );
 #endif
 
-        virtual bool ParseArgs( const CompilerInstance& CI, const vector< string >& args );
-    private:
-        vector< string > _args;
-    };
+    virtual bool ParseArgs( const CompilerInstance& CI, const std::vector< std::string >& args );
+private:
+    std::vector< std::string > _args;
+};
 
 } // namespace
 

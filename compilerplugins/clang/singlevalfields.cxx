@@ -84,8 +84,8 @@ public:
             output += "asgn:\t" + s.parentClass + "\t" + s.fieldName + "\t" + s.value + "\n";
         for (const MyFieldInfo & s : definitionSet)
             output += "defn:\t" + s.parentClass + "\t" + s.fieldName + "\t" + s.sourceLocation + "\n";
-        ofstream myfile;
-        myfile.open( SRCDIR "/loplugin.singlevalfields.log", ios::app | ios::out);
+        std::ofstream myfile;
+        myfile.open( SRCDIR "/loplugin.singlevalfields.log", std::ios::app | std::ios::out);
         myfile << output;
         myfile.close();
     }

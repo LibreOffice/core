@@ -82,8 +82,8 @@ public:
             output += "deletedInDestructor:\t" + s.parentClass + "\t" + s.fieldName + "\n";
         for (const MyFieldInfo & s : newedInConstructorSet)
             output += "newedInConstructor:\t" + s.parentClass + "\t" + s.fieldName + "\n";
-        ofstream myfile;
-        myfile.open( SRCDIR "/loplugin.inlinefields.log", ios::app | ios::out);
+        std::ofstream myfile;
+        myfile.open( SRCDIR "/loplugin.inlinefields.log", std::ios::app | std::ios::out);
         myfile << output;
         myfile.close();
     }
