@@ -6,7 +6,8 @@
 Sub Main
 Dim a, b()
 	_ErrorHandler(False)
-	TraceConsole()
+&apos;	DebugPrint vbLF
+&apos;	TraceConsole()
 	exit sub
 End Sub
 

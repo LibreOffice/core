@@ -1122,6 +1122,7 @@ Const cstMaxInfo = 40
 	ReDim _ColumnPrecisions(0 To cstMaxInfo)
 Const cstHSQLDB1 = &quot;HSQL Database Engine 1.&quot;
 Const cstHSQLDB2 = &quot;HSQL Database Engine 2.&quot;
+Const cstFirebird = &quot;sdbc:embedded:firebird&quot;
 Const cstMSAccess2003 = &quot;MS Jet 0&quot;
 Const cstMSAccess2007 = &quot;MS Jet 04.&quot;
 Const cstMYSQL = &quot;MySQL&quot;
@@ -1173,6 +1174,10 @@ Const cstSQLITE = &quot;SQLite&quot;
 				_RDBMS = DBMS_HSQLDB2
 				_ColumnTypesAlias = Array(0, -5, -3, -7, 2004, 16, 1, 2005, 91, 3, 0, 8, 8, 4, -3, 12, 2, 0, 0, 8, 0, 5, 0, 0, 92, 93, -6, -3, 12)
 				_BinaryStream = True
+			Case .URL = cstFirebird
+				_RDBMS = DBMS_FIREBIRD
+				_ColumnTypesAlias = Array(0, -5, 2004, 16, 2004, 16, 1, 12, 91, 8, 0, 8, 6, 4, 2004, 12, 8, 0, 0, 8, 0, 5, 0, 0, 92, 93, 4, 2004, 12)
+				_BinaryStream = True
 			Case Len(sProduct) &gt; Len(cstMSAccess2007) And Left(sProduct, Len(cstMSAccess2007)) = cstMSAccess2007
 				_RDBMS = DBMS_MSACCESS2007
 				_ColumnTypesAlias = Array(0, 4, -2, 16, -2, 16, 12, 12, 93, 8, 0, 8, 6, 4, -3, 12, 2, 0, 0, 8, 0, 5, 0, 0, 93, 93, -6, -2, 12)
@@ -1193,7 +1198,7 @@ Const cstSQLITE = &quot;SQLite&quot;
 				_RDBMS = DBMS_SQLITE
 				_ColumnTypesAlias = Array(0, -5, -4, -7, -4, -7, 1, -1, 91, 8, 0, 8, 6, 4, -4, -1, 8, 0, 0, 8, 0, 5, 0, 0, 92, 93, -6, -4, 12)
 				_BinaryStream = True
-			Case Else		&apos;	Firebird TODO
+			Case Else
 				_RDBMS = DBMS_UNKNOWN
 				_BinaryStream = True
 		End Select
