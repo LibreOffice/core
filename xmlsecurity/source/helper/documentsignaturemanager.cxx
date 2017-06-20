@@ -37,6 +37,8 @@
 #include <certificate.hxx>
 #include <biginteger.hxx>
 
+#include <xmlsec/xmlsec_init.hxx>
+
 using namespace css;
 
 DocumentSignatureManager::DocumentSignatureManager(const uno::Reference<uno::XComponentContext>& xContext, DocumentSignatureMode eMode)
@@ -46,13 +48,19 @@ DocumentSignatureManager::DocumentSignatureManager(const uno::Reference<uno::XCo
 {
 }
 
-DocumentSignatureManager::~DocumentSignatureManager() = default;
+DocumentSignatureManager::~DocumentSignatureManager()
+{
+    deInitXmlSec();
+}
 
 bool DocumentSignatureManager::init()
 {
     SAL_WARN_IF(mxSEInitializer.is(), "xmlsecurity.helper", "DocumentSignatureManager::Init - mxSEInitializer already set!");
     SAL_WARN_IF(mxSecurityContext.is(), "xmlsecurity.helper", "DocumentSignatureManager::Init - mxSecurityContext already set!");
     SAL_WARN_IF(mxGpgSEInitializer.is(), "xmlsecurity.helper", "DocumentSignatureManager::Init - mxGpgSEInitializer already set!");
+
+    // xmlsec is needed by both services, so init before those
+    initXmlSec();
 
     mxSEInitializer = xml::crypto::SEInitializer::create(mxContext);
 #if !defined(MACOSX) && !defined(WNT)
