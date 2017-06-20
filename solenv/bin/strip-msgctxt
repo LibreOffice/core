@@ -6,8 +6,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-# strip msgctxt from a po file
-# which could be achieved with sed '/^msgctxt/,/^msgid/{/^msgid/!d}'
+# minimize our msgctxt in po file
 # and fix up trivial missing/added newlines between msgid and msgstr
 
 import fileinput
@@ -19,6 +18,8 @@ msgstr = False;
 prevline = ""
 lastmsgidline = ""
 lastmsgstrline = ""
+msgctxtline = 0
+uiline = False
 
 for line in fileinput.input():
 	prevmsgid = msgid
@@ -30,9 +31,20 @@ for line in fileinput.input():
 
 	if line.startswith("msgctxt"):
 		msgctxt = True
+		msgctxtline = 0
 		msgid = False
 		msgstr = False
 	elif line.startswith("msgid"):
+
+                if msgctxt and not uiline:
+                    if not prevline.endswith('string.text"\n') and not prevline.endswith('itemlist.text"\n'):
+                        print "bad", prevline
+                        raise "Disaster"
+                elif msgctxt and uiline:
+                    if not prevline.endswith('string.text"\n') and not prevline.endswith('stringlist.text"\n'):
+                        print "bad", prevline
+                        raise "Disaster"
+
 		msgctxt = False
 		msgid = True
 		msgstr = False
@@ -54,6 +66,49 @@ for line in fileinput.input():
 	prevline = line
 
         if msgctxt:
+            if msgctxtline == 0:
+                if not line.endswith('""\n'):
+                    raise "Disaster"
+            elif msgctxtline == 1:
+                if line.endswith('.src\\n"\n'):
+                    srcfile = line[1:-4]
+                    uiline = False
+                elif line.endswith('.ui\\n"\n'):
+                    uiline = True
+                    uifile = line[1:-4]
+                    if not uifile.endswith(".ui"):
+                        raise "Disaster"
+                else:
+                    raise "Disaster"
+            elif msgctxtline == 2 and not uiline:
+                if line.endswith('\\n"\n'):
+                    ctxline = line[1:-4]
+                    if (ctxline.startswith("STR_REDLINE_") and srcfile == 'undo.src'):
+                        ctxline = ctxline.replace("STR_REDLINE_", "STR_UNDO_REDLINE_")
+                    elif (ctxline.startswith("STR_LINE_") and srcfile == 'frmui.src'):
+                        ctxline = ctxline.replace("STR_", "STR_FRMUI_")
+                    elif (ctxline.endswith("+RID_SC_FUNC_DESCRIPTIONS_START")):
+                        ctxline = ctxline[:-len("+RID_SC_FUNC_DESCRIPTIONS_START")]
+                    elif (ctxline.endswith("+RID_GLOBSTR_OFFSET")):
+                        ctxline = ctxline[:-len("+RID_GLOBSTR_OFFSET")]
+                    print "msgctxt", '"' + ctxline + '"'
+                else:
+                    raise "Disaster"
+            elif msgctxtline == 2 and uiline:
+                if line.endswith('\\n"\n'):
+                    widgetid = line[1:-4]
+                else:
+                    raise "Disaster"
+            elif msgctxtline == 3 and uiline:
+                if line.endswith('\\n"\n'):
+                    typeid = line[1:-4]
+                    if typeid == "tooltip_text":
+                        print "msgctxt", '"' + uifile[:-3] + "|" + widgetid + "|" + typeid + '"'
+                    else:
+                        print "msgctxt", '"' + uifile[:-3] + "|" + widgetid + '"'
+                else:
+                    raise "Disaster"
+            msgctxtline = msgctxtline + 1
             continue
 
         if prevmsgstr and not msgstr and lastmsgstrline != 'msgstr ""\n':
