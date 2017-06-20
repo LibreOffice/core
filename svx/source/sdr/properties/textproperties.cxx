@@ -555,8 +555,6 @@ namespace sdr
 
                     if(SfxHintId::DataChanged == nId)
                     {
-                        rObj.SetPortionInfoChecked(false);
-
                         sal_Int32 nText = rTextProvider.getTextCount();
                         while (nText--)
                         {
@@ -579,7 +577,6 @@ namespace sdr
 
                     if(SfxHintId::Dying == nId)
                     {
-                        rObj.SetPortionInfoChecked(false);
                         sal_Int32 nText = rTextProvider.getTextCount();
                         while (nText--)
                         {

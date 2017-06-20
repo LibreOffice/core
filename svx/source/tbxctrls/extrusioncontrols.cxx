@@ -581,8 +581,6 @@ ExtrusionLightingWindow::ExtrusionLightingWindow(svt::ToolboxController& rContro
     , maImgBright(BitmapEx(RID_SVXBMP_LIGHTING_BRIGHT))
     , maImgNormal(BitmapEx(RID_SVXBMP_LIGHTING_NORMAL))
     , maImgDim(BitmapEx(RID_SVXBMP_LIGHTING_DIM))
-    , mnLevel(0)
-    , mbLevelEnabled(false)
     , mnDirection(FROM_FRONT)
     , mbDirectionEnabled(false)
 {
@@ -643,8 +641,6 @@ void ExtrusionLightingWindow::dispose()
 
 void ExtrusionLightingWindow::implSetIntensity( int nLevel, bool bEnabled )
 {
-    mnLevel = nLevel;
-    mbLevelEnabled = bEnabled;
     for (int i = 0; i < 3; ++i)
     {
         checkEntry( i, (i == nLevel) && bEnabled );

@@ -61,7 +61,6 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
 
     EnableExtendedKeyInputDispatcher(false);
     EnableExtendedMouseEventDispatcher(false);
-    EnableExtendedCommandEventDispatcher(false);
 
     SetGridFront( false );
     SetHlplFront( false );

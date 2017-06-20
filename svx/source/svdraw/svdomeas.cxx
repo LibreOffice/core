@@ -230,7 +230,6 @@ SdrMeasureObj::~SdrMeasureObj()
 
 void SdrMeasureObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bSelectAllowed    =true;
     rInfo.bMoveAllowed      =true;
     rInfo.bResizeFreeAllowed=true;
     rInfo.bResizePropAllowed=true;
@@ -240,7 +239,6 @@ void SdrMeasureObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bMirror45Allowed  =true;
     rInfo.bMirror90Allowed  =true;
     rInfo.bTransparenceAllowed = false;
-    rInfo.bGradientAllowed = false;
     rInfo.bShearAllowed     =true;
     rInfo.bEdgeRadiusAllowed=false;
     rInfo.bNoOrthoDesired   =true;
@@ -261,7 +259,6 @@ struct ImpMeasureRec : public SdrDragStatUserData
 {
     Point                       aPt1;
     Point                       aPt2;
-    SdrMeasureKind              eKind;
     css::drawing::MeasureTextHorzPos eWantTextHPos;
     css::drawing::MeasureTextVertPos eWantTextVPos;
     long                        nLineDist;
@@ -272,15 +269,10 @@ struct ImpMeasureRec : public SdrDragStatUserData
     bool                        bBelowRefEdge;
     bool                        bTextRota90;
     bool                        bTextUpsideDown;
-    long                        nMeasureOverhang;
-    FieldUnit                   eMeasureUnit;
     Fraction                    aMeasureScale;
-    bool                        bShowUnit;
     OUString                    aFormatString;
     bool                        bTextAutoAngle;
     long                        nTextAutoAngleView;
-    bool                        bTextIsFixedAngle;
-    long                        nTextFixedAngle;
 };
 
 struct ImpLineRec
@@ -303,8 +295,6 @@ struct ImpMeasurePoly
     long                        nHlpAngle;
     double                      nLineSin;
     double                      nLineCos;
-    double                      nHlpSin;
-    double                      nHlpCos;
     sal_uInt16                      nMainlineAnz;
     css::drawing::MeasureTextHorzPos eUsedTextHPos;
     css::drawing::MeasureTextVertPos eUsedTextVPos;
@@ -314,10 +304,7 @@ struct ImpMeasurePoly
     long                        nArrow1Wdt; // width of 1st arrow
     long                        nArrow2Wdt; // width of 2nd arrow
     long                        nShortLineLen; // line length, if PfeileAussen (arrowheads on the outside)
-    bool                        bArrow1Center; // arrowhead 1 centered?
-    bool                        bArrow2Center; // arrowhead 2 centered?
     bool                        bAutoUpsideDown; // UpsideDown via automation
-    bool                        bPfeileAussen; // arrowheads on the outside
     bool                        bBreakedLine;
 };
 
@@ -327,7 +314,6 @@ void SdrMeasureObj::ImpTakeAttr(ImpMeasureRec& rRec) const
     rRec.aPt2 = aPt2;
 
     const SfxItemSet& rSet = GetObjectItemSet();
-    rRec.eKind             =static_cast<const SdrMeasureKindItem&             >(rSet.Get(SDRATTR_MEASUREKIND            )).GetValue();
     rRec.eWantTextHPos     =static_cast<const SdrMeasureTextHPosItem&         >(rSet.Get(SDRATTR_MEASURETEXTHPOS        )).GetValue();
     rRec.eWantTextVPos     =static_cast<const SdrMeasureTextVPosItem&         >(rSet.Get(SDRATTR_MEASURETEXTVPOS        )).GetValue();
     rRec.nLineDist         =static_cast<const SdrMetricItem&                  >(rSet.Get(SDRATTR_MEASURELINEDIST        )).GetValue();
@@ -338,15 +324,10 @@ void SdrMeasureObj::ImpTakeAttr(ImpMeasureRec& rRec) const
     rRec.bBelowRefEdge     =static_cast<const SdrMeasureBelowRefEdgeItem&     >(rSet.Get(SDRATTR_MEASUREBELOWREFEDGE    )).GetValue();
     rRec.bTextRota90       =static_cast<const SdrMeasureTextRota90Item&       >(rSet.Get(SDRATTR_MEASURETEXTROTA90      )).GetValue();
     rRec.bTextUpsideDown   =static_cast<const SdrMeasureTextUpsideDownItem&   >(rSet.Get(SDRATTR_MEASURETEXTUPSIDEDOWN  )).GetValue();
-    rRec.nMeasureOverhang  =static_cast<const SdrMeasureOverhangItem&         >(rSet.Get(SDRATTR_MEASUREOVERHANG        )).GetValue();
-    rRec.eMeasureUnit      =static_cast<const SdrMeasureUnitItem&             >(rSet.Get(SDRATTR_MEASUREUNIT            )).GetValue();
     rRec.aMeasureScale     =static_cast<const SdrMeasureScaleItem&            >(rSet.Get(SDRATTR_MEASURESCALE           )).GetValue();
-    rRec.bShowUnit         =static_cast<const SdrYesNoItem&                   >(rSet.Get(SDRATTR_MEASURESHOWUNIT        )).GetValue();
     rRec.aFormatString     =static_cast<const SdrMeasureFormatStringItem&     >(rSet.Get(SDRATTR_MEASUREFORMATSTRING    )).GetValue();
     rRec.bTextAutoAngle    =static_cast<const SdrMeasureTextAutoAngleItem&    >(rSet.Get(SDRATTR_MEASURETEXTAUTOANGLE    )).GetValue();
     rRec.nTextAutoAngleView=static_cast<const SdrMeasureTextAutoAngleViewItem&>(rSet.Get(SDRATTR_MEASURETEXTAUTOANGLEVIEW)).GetValue();
-    rRec.bTextIsFixedAngle =static_cast<const SdrMeasureTextIsFixedAngleItem& >(rSet.Get(SDRATTR_MEASURETEXTISFIXEDANGLE )).GetValue();
-    rRec.nTextFixedAngle   =static_cast<const SdrMeasureTextFixedAngleItem&   >(rSet.Get(SDRATTR_MEASURETEXTFIXEDANGLE   )).GetValue();
 }
 
 long impGetLineStartEndDistance(const basegfx::B2DPolyPolygon& rPolyPolygon, long nNewWidth, bool bCenter)
@@ -439,11 +420,8 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     rPol.nArrow1Wdt=nArrow1Wdt;
     rPol.nArrow2Wdt=nArrow2Wdt;
     rPol.nShortLineLen=nShortLen;
-    rPol.bPfeileAussen=bPfeileAussen;
     rPol.nArrow1Len=nArrow1Len;
-    rPol.bArrow1Center=bArrow1Center;
     rPol.nArrow2Len=nArrow2Len;
-    rPol.bArrow2Center=bArrow2Center;
 
     rPol.nLineAngle=GetAngle(aDelt);
     double a=rPol.nLineAngle*nPi180;
@@ -475,8 +453,6 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
         nHlpSin=-nHlpSin;
         nHlpCos=-nHlpCos;
     }
-    rPol.nHlpSin=nHlpSin;
-    rPol.nHlpCos=nHlpCos;
 
     long nLineDist=rRec.nLineDist;
     long nOverhang=rRec.nHelplineOverhang;

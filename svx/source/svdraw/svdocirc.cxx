@@ -355,7 +355,6 @@ struct ImpCircUser : public SdrDragStatUserData
     Point                       aCenter;
     Point                       aP1;
     Point                       aP2;
-    long                        nMaxRad;
     long                        nHgt;
     long                        nWdt;
     long                        nStart;
@@ -363,8 +362,7 @@ struct ImpCircUser : public SdrDragStatUserData
 
 public:
     ImpCircUser()
-    :   nMaxRad(0),
-        nHgt(0),
+    :   nHgt(0),
         nWdt(0),
         nStart(0),
         nEnd(0)
@@ -616,7 +614,6 @@ void ImpCircUser::SetCreateParams(SdrDragStat& rStat)
     aCenter=aR.Center();
     nWdt=aR.Right()-aR.Left();
     nHgt=aR.Bottom()-aR.Top();
-    nMaxRad=((nWdt>nHgt ? nWdt : nHgt)+1) /2;
     nStart=0;
     nEnd=36000;
     if (rStat.GetPointCount()>2) {

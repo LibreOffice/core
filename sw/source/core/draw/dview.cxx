@@ -108,7 +108,6 @@ SwDrawView::SwDrawView( SwViewShellImp &rI, SdrModel *pMd, OutputDevice *pOutDev
 
     EnableExtendedKeyInputDispatcher( false );
     EnableExtendedMouseEventDispatcher( false );
-    EnableExtendedCommandEventDispatcher( false );
 
     SetHitTolerancePixel( GetMarkHdlSizePixel()/2 );
 

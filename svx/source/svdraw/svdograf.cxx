@@ -678,7 +678,6 @@ void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bMirror45Allowed = bNoPresGrf;
     rInfo.bMirror90Allowed = !bEmptyPresObj;
     rInfo.bTransparenceAllowed = false;
-    rInfo.bGradientAllowed = false;
 
     // #i118485# Shear allowed and possible now
     rInfo.bShearAllowed = true;

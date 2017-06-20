@@ -142,8 +142,6 @@ private:
     Image maImgNormal;
     Image maImgDim;
 
-    int     mnLevel;
-    bool    mbLevelEnabled;
     int     mnDirection;
     bool    mbDirectionEnabled;
 
