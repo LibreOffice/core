@@ -193,7 +193,7 @@
                   <item translatable="yes">Middle</item>
                   <item translatable="yes">Bottom</item>
                   <item translatable="yes">Left</item>
-                  <item translatable="yes">Middle</item>
+                  <item translatable="yes">Center</item>
                   <item translatable="yes">Right</item>
                 </items>
               </object>
