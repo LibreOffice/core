@@ -1714,13 +1714,10 @@ namespace {
 CGPoint* makeCGptArray(sal_uInt32 nPoints, const SalPoint* pPtAry)
 {
     CGPoint *CGpoints = new CGPoint[nPoints];
-    if ( CGpoints )
+    for(sal_uLong i=0;i<nPoints;i++)
     {
-        for(sal_uLong i=0;i<nPoints;i++)
-        {
-            CGpoints[i].x = pPtAry[i].mnX;
-            CGpoints[i].y = pPtAry[i].mnY;
-        }
+        CGpoints[i].x = pPtAry[i].mnX;
+        CGpoints[i].y = pPtAry[i].mnY;
     }
     return CGpoints;
 }

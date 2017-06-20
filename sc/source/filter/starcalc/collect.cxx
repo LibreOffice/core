@@ -78,8 +78,6 @@ bool ScCollection::AtInsert(sal_uInt16 nIndex, ScDataObject* pScDataObject)
         if (nCount == nLimit)
         {
             ScDataObject** pNewItems = new ScDataObject*[nLimit + nDelta];
-            if (!pNewItems)
-                return false;
             nLimit = sal::static_int_cast<sal_uInt16>( nLimit + nDelta );
             memcpy(pNewItems, pItems, nCount * sizeof(ScDataObject*));
             delete[] pItems;
