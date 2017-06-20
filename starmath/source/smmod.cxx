@@ -62,7 +62,7 @@ const OUString SmLocalizedSymbolData::GetUiSymbolName( const OUString &rExportNa
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(RID_UI_SYMBOL_NAMES); ++i)
     {
-        if (rExportName.equalsAscii(RID_UI_SYMBOL_NAMES[i]))
+        if (rExportName.equalsAscii(strchr(RID_UI_SYMBOL_NAMES[i], '\004') + 1))
         {
             aRes = SmResId(RID_UI_SYMBOL_NAMES[i]);
             break;
@@ -80,7 +80,8 @@ const OUString SmLocalizedSymbolData::GetExportSymbolName( const OUString &rUiNa
     {
         if (rUiName == SmResId(RID_UI_SYMBOL_NAMES[i]))
         {
-            aRes = OUString(RID_UI_SYMBOL_NAMES[i], strlen(RID_UI_SYMBOL_NAMES[i]), RTL_TEXTENCODING_UTF8);
+            const char *pKey = strchr(RID_UI_SYMBOL_NAMES[i], '\004') + 1;
+            aRes = OUString(pKey, strlen(pKey), RTL_TEXTENCODING_UTF8);
             break;
         }
     }
@@ -94,7 +95,7 @@ const OUString SmLocalizedSymbolData::GetUiSymbolSetName( const OUString &rExpor
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(RID_UI_SYMBOLSET_NAMES); ++i)
     {
-        if (rExportName.equalsAscii(RID_UI_SYMBOLSET_NAMES[i]))
+        if (rExportName.equalsAscii(strchr(RID_UI_SYMBOLSET_NAMES[i], '\004') + 1))
         {
             aRes = SmResId(RID_UI_SYMBOLSET_NAMES[i]);
             break;
@@ -112,7 +113,8 @@ const OUString SmLocalizedSymbolData::GetExportSymbolSetName( const OUString &rU
     {
         if (rUiName == SmResId(RID_UI_SYMBOLSET_NAMES[i]))
         {
-            aRes = OUString(RID_UI_SYMBOLSET_NAMES[i], strlen(RID_UI_SYMBOL_NAMES[i]), RTL_TEXTENCODING_UTF8);
+            const char *pKey = strchr(RID_UI_SYMBOLSET_NAMES[i], '\004') + 1;
+            aRes = OUString(pKey, strlen(pKey), RTL_TEXTENCODING_UTF8);
             break;
         }
     }
