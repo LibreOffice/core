@@ -474,6 +474,9 @@ Reference< XCertificate > SecurityEnvironment_NssImpl::getCertificate( const OUS
 }
 
 Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl::buildCertificatePath( const Reference< XCertificate >& begin ) {
+    // Remember the signing certificate.
+    m_xSigningCertificate = begin;
+
     const X509Certificate_NssImpl* xcert ;
     const CERTCertificate* cert ;
     CERTCertList* certChain ;
@@ -881,18 +884,7 @@ X509Certificate_NssImpl* NssPrivKeyToXCert( SECKEYPrivateKey* priKey )
     return xcert ;
 }
 
-
-/* Native methods */
 xmlSecKeysMngrPtr SecurityEnvironment_NssImpl::createKeysManager() {
-
-    unsigned int i ;
-    CERTCertDBHandle* handler = nullptr ;
-    PK11SymKey* symKey = nullptr ;
-    SECKEYPublicKey* pubKey = nullptr ;
-    SECKEYPrivateKey* priKey = nullptr ;
-    xmlSecKeysMngrPtr pKeysMngr = nullptr ;
-
-    handler = m_pHandler;
 
     /*-
      * The following lines is based on the private version of xmlSec-NSS
@@ -905,14 +897,15 @@ xmlSecKeysMngrPtr SecurityEnvironment_NssImpl::createKeysManager() {
     for (CIT_SLOTS islots = m_Slots.begin();islots != m_Slots.end(); ++islots, ++count)
         slots[count] = *islots;
 
-    pKeysMngr = xmlSecNssAppliedKeysMngrCreate(slots, cSlots, handler ) ;
+    xmlSecKeysMngrPtr pKeysMngr = xmlSecNssAppliedKeysMngrCreate(slots, cSlots, m_pHandler ) ;
     if( pKeysMngr == nullptr )
         throw RuntimeException() ;
 
     /*-
      * Adopt symmetric key into keys manager
      */
-    for( i = 0 ; ( symKey = this->getSymKey( i ) ) != nullptr ; i ++ ) {
+    PK11SymKey* symKey = nullptr ;
+    for( unsigned int i = 0 ; ( symKey = this->getSymKey( i ) ) != nullptr ; i ++ ) {
         if( xmlSecNssAppliedKeysMngrSymKeyLoad( pKeysMngr, symKey ) < 0 ) {
             throw RuntimeException() ;
         }
@@ -921,7 +914,8 @@ xmlSecKeysMngrPtr SecurityEnvironment_NssImpl::createKeysManager() {
     /*-
      * Adopt asymmetric public key into keys manager
      */
-    for( i = 0 ; ( pubKey = this->getPubKey( i ) ) != nullptr ; i ++ ) {
+    SECKEYPublicKey* pubKey = nullptr ;
+    for( unsigned int i = 0 ; ( pubKey = this->getPubKey( i ) ) != nullptr ; i ++ ) {
         if( xmlSecNssAppliedKeysMngrPubKeyLoad( pKeysMngr, pubKey ) < 0 ) {
             throw RuntimeException() ;
         }
@@ -930,11 +924,26 @@ xmlSecKeysMngrPtr SecurityEnvironment_NssImpl::createKeysManager() {
     /*-
      * Adopt asymmetric private key into keys manager
      */
-    for( i = 0 ; ( priKey = this->getPriKey( i ) ) != nullptr ; i ++ ) {
+    SECKEYPrivateKey* priKey = nullptr ;
+    for( unsigned int i = 0 ; ( priKey = this->getPriKey( i ) ) != nullptr ; i ++ ) {
         if( xmlSecNssAppliedKeysMngrPriKeyLoad( pKeysMngr, priKey ) < 0 ) {
             throw RuntimeException() ;
         }
     }
+
+    // Adopt the private key of the signing certificate, if it has any.
+    if (auto pCertificate = dynamic_cast<X509Certificate_NssImpl*>(m_xSigningCertificate.get()))
+    {
+        if (auto pCERTCertificate = const_cast<CERTCertificate*>(pCertificate->getNssCert()))
+        {
+            SECKEYPrivateKey* pPrivateKey = PK11_FindPrivateKeyFromCert(pCERTCertificate->slot, pCERTCertificate, nullptr);
+            xmlSecKeyDataPtr pKeyData = xmlSecNssPKIAdoptKey(pPrivateKey, nullptr);
+            xmlSecKeyPtr pKey = xmlSecKeyCreate();
+            xmlSecKeySetValue(pKey, pKeyData);
+            xmlSecNssAppDefaultKeysMngrAdoptKey(pKeysMngr, pKey);
+        }
+    }
+
     return pKeysMngr ;
 }
 void SecurityEnvironment_NssImpl::destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) {
