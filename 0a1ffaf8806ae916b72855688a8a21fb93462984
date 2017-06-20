@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_803146ef",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-06-20T20:16:19Z",
+      "side": 1,
+      "message": "Any bugzilla bugid that\u0027s describing the problem? If yes please state.",
+      "revId": "0a1ffaf8806ae916b72855688a8a21fb93462984",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_40375ee3",
+        "filename": "oox/source/export/shapes.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1449,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-06-20T20:16:19Z",
+      "side": 1,
+      "message": "good catch",
+      "revId": "0a1ffaf8806ae916b72855688a8a21fb93462984",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_60345ade",
+        "filename": "sd/source/filter/eppt/pptx-epptooxml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-06-20T20:16:19Z",
+      "side": 1,
+      "message": "this change does not obviously look related, can you expand?",
+      "revId": "0a1ffaf8806ae916b72855688a8a21fb93462984",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
