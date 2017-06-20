@@ -54,6 +54,8 @@ private:
 
     std::list< PK11SlotInfo* > m_Slots;
     typedef std::list< PK11SlotInfo* >::const_iterator CIT_SLOTS;
+    /// The last used certificate which has the private key for signing.
+    css::uno::Reference<css::security::XCertificate> m_xSigningCertificate;
 
     osl::Mutex m_mutex;
 
