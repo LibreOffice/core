@@ -41,7 +41,6 @@ friend class SvtURLBox_Impl;
     INetProtocol                    eSmartProtocol;
     bool                            bAutoCompleteMode   : 1;
     bool                            bOnlyDirectories    : 1;
-    bool                            bCtrlClick          : 1;
     bool                            bHistoryDisabled    : 1;
     bool                            bNoSelection        : 1;
     bool                            bIsAutoCompleteEnabled : 1;

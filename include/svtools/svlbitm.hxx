@@ -65,7 +65,6 @@ private:
     long                    nHeight;
     std::unique_ptr<SvLBoxButtonData_Impl> pImpl;
     bool                    bDataOk;
-    SvButtonState           eState;
     std::vector<Image>      aBmps;  // indices s. constants BMP_ ....
 
     SVT_DLLPRIVATE void     SetWidthAndHeight();
@@ -85,7 +84,7 @@ public:
     // as buttons are not derived from LinkHdl
     void                    CallLink();
 
-    void                    StoreButtonState( SvTreeListEntry* pEntry, SvItemStateFlags nItemFlags );
+    void                    StoreButtonState( SvTreeListEntry* pEntry );
     static SvButtonState    ConvertToButtonState( SvItemStateFlags nItemFlags );
 
     SvTreeListEntry*        GetActEntry() const;

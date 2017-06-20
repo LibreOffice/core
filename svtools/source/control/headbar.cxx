@@ -73,7 +73,6 @@ void HeaderBar::ImplInit( WinBits nWinStyle )
     mbOutDrag       = false;
     mbItemMode      = false;
 
-    m_pVCLXHeaderBar = nullptr;
     // StyleBits auswerten
     if ( nWinStyle & WB_DRAG )
         mbDragable = true;
@@ -1381,7 +1380,6 @@ css::uno::Reference< css::awt::XWindowPeer > HeaderBar::GetComponentInterface( b
     if ( !xPeer.is() && bCreate )
     {
         css::awt::XWindowPeer* pPeer = new VCLXHeaderBar(this);
-        m_pVCLXHeaderBar = static_cast<VCLXHeaderBar*>(pPeer);
         SetComponentInterface(pPeer);
         return pPeer;
     }

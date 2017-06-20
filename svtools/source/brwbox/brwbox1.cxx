@@ -2142,10 +2142,9 @@ void BrowseBox::SetMode( BrowserMode nMode )
 
     pVScroll.disposeAndClear();
 
-    bThumbDragging = ( nMode & BrowserMode::THUMBDRAGGING ) == BrowserMode::THUMBDRAGGING;
-    bMultiSelection = ( nMode & BrowserMode::MULTISELECTION ) == BrowserMode::MULTISELECTION;
-    bColumnCursor = ( nMode & BrowserMode::COLUMNSELECTION ) == BrowserMode::COLUMNSELECTION;
-    bKeepHighlight = ( nMode & BrowserMode::KEEPHIGHLIGHT ) == BrowserMode::KEEPHIGHLIGHT;
+    bMultiSelection = bool( nMode & BrowserMode::MULTISELECTION );
+    bColumnCursor = bool( nMode & BrowserMode::COLUMNSELECTION );
+    bKeepHighlight = bool( nMode & BrowserMode::KEEPHIGHLIGHT );
 
     bHideSelect = ((nMode & BrowserMode::HIDESELECT) == BrowserMode::HIDESELECT);
     // default: do not hide the cursor at all (untaken scrolling and such)

@@ -636,14 +636,11 @@ private:
     RulerDragSize   mnDragSize;
     sal_uInt16      mnDragModifier;
     sal_uInt16      mnExtraStyle;
-    sal_uInt16      mnExtraClicks;
-    sal_uInt16      mnExtraModifier;
     long            mnCharWidth;
     long            mnLineHeight;
 
     RulerExtra      meExtraType;
     RulerType       meDragType;
-    MapUnit         meSourceUnit;
     FieldUnit       meUnit;
     Fraction        maZoom;
     bool            mbCalc;
@@ -746,8 +743,6 @@ public:
     void            SetUnit( FieldUnit eNewUnit );
     FieldUnit       GetUnit() const { return meUnit; }
     void            SetZoom( const Fraction& rNewZoom );
-
-    void            SetSourceUnit( MapUnit eNewUnit ) { meSourceUnit = eNewUnit; }
 
     void            SetExtraType( RulerExtra eNewExtraType, sal_uInt16 nStyle = 0 );
 

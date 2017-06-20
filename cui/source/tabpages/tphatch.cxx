@@ -426,7 +426,6 @@ void SvxHatchTabPage::ChangeHatchHdl_Impl()
     m_pLbLineType->SaveValue();
     m_pLbLineColor->SaveValue();
     m_pLbBackgroundColor->SaveValue();
-    m_pHatchLB->SaveValue();
 }
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)

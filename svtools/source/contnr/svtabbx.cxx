@@ -92,7 +92,6 @@ SvTabListBox::SvTabListBox( vcl::Window* pParent, WinBits nBits )
 {
     pTabList = nullptr;
     nTabCount = 0;
-    pViewParent = nullptr;
     SetHighlightRange();    // select full width
 }
 
