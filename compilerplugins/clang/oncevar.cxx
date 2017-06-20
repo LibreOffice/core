@@ -91,20 +91,11 @@ public:
     bool VisitVarDecl( const VarDecl* );
 
 private:
-    StringRef getFilename(SourceLocation loc);
-
     std::unordered_set<VarDecl const *> maVarDeclSet;
     std::unordered_set<VarDecl const *> maVarDeclToIgnoreSet;
     std::unordered_map<VarDecl const *, int> maVarUsesMap;
     std::unordered_map<VarDecl const *, SourceRange> maVarUseSourceRangeMap;
 };
-
-StringRef OnceVar::getFilename(SourceLocation loc)
-{
-    SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(loc);
-    StringRef name { compiler.getSourceManager().getFilename(spellingLocation) };
-    return name;
-}
 
 bool OnceVar::VisitVarDecl( const VarDecl* varDecl )
 {
