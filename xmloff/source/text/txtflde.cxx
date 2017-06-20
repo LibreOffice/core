@@ -2230,23 +2230,10 @@ void XMLTextFieldExport::ExportElement(enum XMLTokenEnum eElementName,
     if (eElementName != XML_TOKEN_INVALID)
     {
         // Element
-        if (eElementName == XML_SENDER_INITIALS)
-        {
-            if (SvtSaveOptions().GetODFDefaultVersion() > SvtSaveOptions::ODFVER_012)
-            {
-                SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_LO_EXT,
-                        eElementName, false, false );
-                // export content
-                GetExport().Characters(sContent);
-            }
-        }
-        else
-        {
-            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
-                                      eElementName, false, false );
-            // export content
-            GetExport().Characters(sContent);
-        }
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
+                eElementName, false, false );
+        // export content
+        GetExport().Characters(sContent);
     } else {
         // always export content
         GetExport().Characters(sContent);
