@@ -1,0 +1,446 @@
+#!/usr/bin/python
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# insert msgctxt into prepared .hrc files
+
+import fileinput
+
+context = ''
+
+for line in fileinput.input():
+    line = line[0:-1]
+    if line == '#define N_(String) (u8##String)':
+        print '#define NC_(Context, String) (Context "\\0004" u8##String)'
+    elif line.startswith('#define'):
+        index = line.find(' N_("')
+        if index != -1:
+            print line[:index] + ' NC_("' + line.split()[1] + '", ' + line[index+4:]
+        else:
+            print line
+    elif line == 'std::pair<const char*, FieldUnit> SV_FUNIT_STRINGS[] =':
+        context = 'SV_FUNIT_STRINGS'
+        print line
+    elif line == 'const char* RID_STR_PAPERNAMES[] =':
+        context = 'RID_STR_PAPERNAMES'
+        print line
+    elif line == 'const std::pair<const char*, int> STRARY_SVT_DOCINFO[] =':
+        context = 'STRARY_SVT_DOCINFO'
+        print line
+    elif line == 'const ErrMsgCode RID_ERRCTX[] =':
+        context = 'RID_ERRCTX'
+        print line
+    elif line == 'const ErrMsgCode RID_ERRHDL[] =':
+        context = 'RID_ERRHDL'
+        print line
+    elif line == 'const std::pair<const char*, LanguageType> STR_ARR_SVT_LANGUAGE_TABLE[] =':
+        context = 'STR_ARR_SVT_LANGUAGE_TABLE'
+        print line
+    elif line == 'const char* SFX_CB_PROPERTY_STRINGARRAY[] =':
+        context = 'SFX_CB_PROPERTY_STRINGARRAY'
+        print line
+    elif line == 'const char* TEMPLATE_LONG_NAMES_ARY[] =':
+        context = 'TEMPLATE_LONG_NAMES_ARY'
+        print line
+    elif line == 'const char* ANALYSIS_Workday[] =':
+        context = 'ANALYSIS_Workday'
+        print line
+    elif line == 'const char* ANALYSIS_Yearfrac[] =':
+        context = 'ANALYSIS_Yearfrac'
+        print line
+    elif line == 'const char* ANALYSIS_Edate[] =':
+        context = 'ANALYSIS_Edate'
+        print line
+    elif line == 'const char* ANALYSIS_Weeknum[] =':
+        context = 'ANALYSIS_Weeknum'
+        print line
+    elif line == 'const char* ANALYSIS_Eomonth[] =':
+        context = 'ANALYSIS_Eomonth'
+        print line
+    elif line == 'const char* ANALYSIS_Networkdays[] =':
+        context = 'ANALYSIS_Networkdays'
+        print line
+    elif line == 'const char* ANALYSIS_Iseven[] =':
+        context = 'ANALYSIS_Iseven'
+        print line
+    elif line == 'const char* ANALYSIS_Isodd[] =':
+        context = 'ANALYSIS_Isodd'
+        print line
+    elif line == 'const char* ANALYSIS_Multinomial[] =':
+        context = 'ANALYSIS_Multinomial'
+        print line
+    elif line == 'const char* ANALYSIS_Seriessum[] =':
+        context = 'ANALYSIS_Seriessum'
+        print line
+    elif line == 'const char* ANALYSIS_Quotient[] =':
+        context = 'ANALYSIS_Quotient'
+        print line
+    elif line == 'const char* ANALYSIS_Mround[] =':
+        context = 'ANALYSIS_Mround'
+        print line
+    elif line == 'const char* ANALYSIS_Sqrtpi[] =':
+        context = 'ANALYSIS_Sqrtpi'
+        print line
+    elif line == 'const char* ANALYSIS_Randbetween[] =':
+        context = 'ANALYSIS_Randbetween'
+        print line
+    elif line == 'const char* ANALYSIS_Gcd[] =':
+        context = 'ANALYSIS_Gcd'
+        print line
+    elif line == 'const char* ANALYSIS_Lcm[] =':
+        context = 'ANALYSIS_Lcm'
+        print line
+    elif line == 'const char* ANALYSIS_Besseli[] =':
+        context = 'ANALYSIS_Besseli'
+        print line
+    elif line == 'const char* ANALYSIS_Besselj[] =':
+        context = 'ANALYSIS_Besselj'
+        print line
+    elif line == 'const char* ANALYSIS_Besselk[] =':
+        context = 'ANALYSIS_Besselk'
+        print line
+    elif line == 'const char* ANALYSIS_Bessely[] =':
+        context = 'ANALYSIS_Bessely'
+        print line
+    elif line == 'const char* ANALYSIS_Bin2Oct[] =':
+        context = 'ANALYSIS_Bin2Oct'
+        print line
+    elif line == 'const char* ANALYSIS_Bin2Dec[] =':
+        context = 'ANALYSIS_Bin2Dec'
+        print line
+    elif line == 'const char* ANALYSIS_Bin2Hex[] =':
+        context = 'ANALYSIS_Bin2Hex'
+        print line
+    elif line == 'const char* ANALYSIS_Oct2Bin[] =':
+        context = 'ANALYSIS_Oct2Bin'
+        print line
+    elif line == 'const char* ANALYSIS_Oct2Dec[] =':
+        context = 'ANALYSIS_Oct2Dec'
+        print line
+    elif line == 'const char* ANALYSIS_Oct2Hex[] =':
+        context = 'ANALYSIS_Oct2Hex'
+        print line
+    elif line == 'const char* ANALYSIS_Dec2Bin[] =':
+        context = 'ANALYSIS_Dec2Bin'
+        print line
+    elif line == 'const char* ANALYSIS_Dec2Hex[] =':
+        context = 'ANALYSIS_Dec2Hex'
+        print line
+    elif line == 'const char* ANALYSIS_Dec2Oct[] =':
+        context = 'ANALYSIS_Dec2Oct'
+        print line
+    elif line == 'const char* ANALYSIS_Hex2Bin[] =':
+        context = 'ANALYSIS_Hex2Bin'
+        print line
+    elif line == 'const char* ANALYSIS_Hex2Dec[] =':
+        context = 'ANALYSIS_Hex2Dec'
+        print line
+    elif line == 'const char* ANALYSIS_Hex2Oct[] =':
+        context = 'ANALYSIS_Hex2Oct'
+        print line
+    elif line == 'const char* ANALYSIS_Delta[] =':
+        context = 'ANALYSIS_Delta'
+        print line
+    elif line == 'const char* ANALYSIS_Erf[] =':
+        context = 'ANALYSIS_Erf'
+        print line
+    elif line == 'const char* ANALYSIS_Erfc[] =':
+        context = 'ANALYSIS_Erfc'
+        print line
+    elif line == 'const char* ANALYSIS_Gestep[] =':
+        context = 'ANALYSIS_Gestep'
+        print line
+    elif line == 'const char* ANALYSIS_Factdouble[] =':
+        context = 'ANALYSIS_Factdouble'
+        print line
+    elif line == 'const char* ANALYSIS_Imabs[] =':
+        context = 'ANALYSIS_Imabs'
+        print line
+    elif line == 'const char* ANALYSIS_Imaginary[] =':
+        context = 'ANALYSIS_Imaginary'
+        print line
+    elif line == 'const char* ANALYSIS_Impower[] =':
+        context = 'ANALYSIS_Impower'
+        print line
+    elif line == 'const char* ANALYSIS_Imargument[] =':
+        context = 'ANALYSIS_Imargument'
+        print line
+    elif line == 'const char* ANALYSIS_Imcos[] =':
+        context = 'ANALYSIS_Imcos'
+        print line
+    elif line == 'const char* ANALYSIS_Imdiv[] =':
+        context = 'ANALYSIS_Imdiv'
+        print line
+    elif line == 'const char* ANALYSIS_Imexp[] =':
+        context = 'ANALYSIS_Imexp'
+        print line
+    elif line == 'const char* ANALYSIS_Imconjugate[] =':
+        context = 'ANALYSIS_Imconjugate'
+        print line
+    elif line == 'const char* ANALYSIS_Imln[] =':
+        context = 'ANALYSIS_Imln'
+        print line
+    elif line == 'const char* ANALYSIS_Imlog10[] =':
+        context = 'ANALYSIS_Imlog10'
+        print line
+    elif line == 'const char* ANALYSIS_Imlog2[] =':
+        context = 'ANALYSIS_Imlog2'
+        print line
+    elif line == 'const char* ANALYSIS_Improduct[] =':
+        context = 'ANALYSIS_Improduct'
+        print line
+    elif line == 'const char* ANALYSIS_Imreal[] =':
+        context = 'ANALYSIS_Imreal'
+        print line
+    elif line == 'const char* ANALYSIS_Imsin[] =':
+        context = 'ANALYSIS_Imsin'
+        print line
+    elif line == 'const char* ANALYSIS_Imsub[] =':
+        context = 'ANALYSIS_Imsub'
+        print line
+    elif line == 'const char* ANALYSIS_Imsqrt[] =':
+        context = 'ANALYSIS_Imsqrt'
+        print line
+    elif line == 'const char* ANALYSIS_Imsum[] =':
+        context = 'ANALYSIS_Imsum'
+        print line
+    elif line == 'const char* ANALYSIS_Imtan[] =':
+        context = 'ANALYSIS_Imtan'
+        print line
+    elif line == 'const char* ANALYSIS_Imsec[] =':
+        context = 'ANALYSIS_Imsec'
+        print line
+    elif line == 'const char* ANALYSIS_Imcsc[] =':
+        context = 'ANALYSIS_Imcsc'
+        print line
+    elif line == 'const char* ANALYSIS_Imcot[] =':
+        context = 'ANALYSIS_Imcot'
+        print line
+    elif line == 'const char* ANALYSIS_Imsinh[] =':
+        context = 'ANALYSIS_Imsinh'
+        print line
+    elif line == 'const char* ANALYSIS_Imcosh[] =':
+        context = 'ANALYSIS_Imcosh'
+        print line
+    elif line == 'const char* ANALYSIS_Imsech[] =':
+        context = 'ANALYSIS_Imsech'
+        print line
+    elif line == 'const char* ANALYSIS_Imcsch[] =':
+        context = 'ANALYSIS_Imcsch'
+        print line
+    elif line == 'const char* ANALYSIS_Complex[] =':
+        context = 'ANALYSIS_Complex'
+        print line
+    elif line == 'const char* ANALYSIS_Convert[] =':
+        context = 'ANALYSIS_Convert'
+        print line
+    elif line == 'const char* ANALYSIS_Amordegrc[] =':
+        context = 'ANALYSIS_Amordegrc'
+        print line
+    elif line == 'const char* ANALYSIS_Amorlinc[] =':
+        context = 'ANALYSIS_Amorlinc'
+        print line
+    elif line == 'const char* ANALYSIS_Accrint[] =':
+        context = 'ANALYSIS_Accrint'
+        print line
+    elif line == 'const char* ANALYSIS_Accrintm[] =':
+        context = 'ANALYSIS_Accrintm'
+        print line
+    elif line == 'const char* ANALYSIS_Received[] =':
+        context = 'ANALYSIS_Received'
+        print line
+    elif line == 'const char* ANALYSIS_Disc[] =':
+        context = 'ANALYSIS_Disc'
+        print line
+    elif line == 'const char* ANALYSIS_Duration[] =':
+        context = 'ANALYSIS_Duration'
+        print line
+    elif line == 'const char* ANALYSIS_Effect[] =':
+        context = 'ANALYSIS_Effect'
+        print line
+    elif line == 'const char* ANALYSIS_Cumprinc[] =':
+        context = 'ANALYSIS_Cumprinc'
+        print line
+    elif line == 'const char* ANALYSIS_Cumipmt[] =':
+        context = 'ANALYSIS_Cumipmt'
+        print line
+    elif line == 'const char* ANALYSIS_Price[] =':
+        context = 'ANALYSIS_Price'
+        print line
+    elif line == 'const char* ANALYSIS_Pricedisc[] =':
+        context = 'ANALYSIS_Pricedisc'
+        print line
+    elif line == 'const char* ANALYSIS_Pricemat[] =':
+        context = 'ANALYSIS_Pricemat'
+        print line
+    elif line == 'const char* ANALYSIS_Mduration[] =':
+        context = 'ANALYSIS_Mduration'
+        print line
+    elif line == 'const char* ANALYSIS_Nominal[] =':
+        context = 'ANALYSIS_Nominal'
+        print line
+    elif line == 'const char* ANALYSIS_Dollarfr[] =':
+        context = 'ANALYSIS_Dollarfr'
+        print line
+    elif line == 'const char* ANALYSIS_Dollarde[] =':
+        context = 'ANALYSIS_Dollarde'
+        print line
+    elif line == 'const char* ANALYSIS_Yield[] =':
+        context = 'ANALYSIS_Yield'
+        print line
+    elif line == 'const char* ANALYSIS_Yielddisc[] =':
+        context = 'ANALYSIS_Yielddisc'
+        print line
+    elif line == 'const char* ANALYSIS_Yieldmat[] =':
+        context = 'ANALYSIS_Yieldmat'
+        print line
+    elif line == 'const char* ANALYSIS_Tbilleq[] =':
+        context = 'ANALYSIS_Tbilleq'
+        print line
+    elif line == 'const char* ANALYSIS_Tbillprice[] =':
+        context = 'ANALYSIS_Tbillprice'
+        print line
+    elif line == 'const char* ANALYSIS_Tbillyield[] =':
+        context = 'ANALYSIS_Tbillyield'
+        print line
+    elif line == 'const char* ANALYSIS_Oddfprice[] =':
+        context = 'ANALYSIS_Oddfprice'
+        print line
+    elif line == 'const char* ANALYSIS_Oddfyield[] =':
+        context = 'ANALYSIS_Oddfyield'
+        print line
+    elif line == 'const char* ANALYSIS_Oddlprice[] =':
+        context = 'ANALYSIS_Oddlprice'
+        print line
+    elif line == 'const char* ANALYSIS_Oddlyield[] =':
+        context = 'ANALYSIS_Oddlyield'
+        print line
+    elif line == 'const char* ANALYSIS_Xirr[] =':
+        context = 'ANALYSIS_Xirr'
+        print line
+    elif line == 'const char* ANALYSIS_Xnpv[] =':
+        context = 'ANALYSIS_Xnpv'
+        print line
+    elif line == 'const char* ANALYSIS_Intrate[] =':
+        context = 'ANALYSIS_Intrate'
+        print line
+    elif line == 'const char* ANALYSIS_Coupncd[] =':
+        context = 'ANALYSIS_Coupncd'
+        print line
+    elif line == 'const char* ANALYSIS_Coupdays[] =':
+        context = 'ANALYSIS_Coupdays'
+        print line
+    elif line == 'const char* ANALYSIS_Coupdaysnc[] =':
+        context = 'ANALYSIS_Coupdaysnc'
+        print line
+    elif line == 'const char* ANALYSIS_Coupdaybs[] =':
+        context = 'ANALYSIS_Coupdaybs'
+        print line
+    elif line == 'const char* ANALYSIS_Couppcd[] =':
+        context = 'ANALYSIS_Couppcd'
+        print line
+    elif line == 'const char* ANALYSIS_Coupnum[] =':
+        context = 'ANALYSIS_Coupnum'
+        print line
+    elif line == 'const char* ANALYSIS_Fvschedule[] =':
+        context = 'ANALYSIS_Fvschedule'
+        print line
+    elif line == 'const char* DATE_FUNCDESC_DiffWeeks[] =':
+        context = 'DATE_FUNCDESC_DiffWeeks'
+        print line
+    elif line == 'const char* DATE_FUNCDESC_DiffMonths[] =':
+        context = 'DATE_FUNCDESC_DiffMonths'
+        print line
+    elif line == 'const char* DATE_FUNCDESC_DiffYears[] =':
+        context = 'DATE_FUNCDESC_DiffYears'
+        print line
+    elif line == 'const char* DATE_FUNCDESC_IsLeapYear[] =':
+        context = 'DATE_FUNCDESC_IsLeapYear'
+        print line
+    elif line == 'const char* DATE_FUNCDESC_DaysInMonth[] =':
+        context = 'DATE_FUNCDESC_DaysInMonth'
+        print line
+    elif line == 'const char* DATE_FUNCDESC_DaysInYear[] =':
+        context = 'DATE_FUNCDESC_DaysInYear'
+        print line
+    elif line == 'const char* DATE_FUNCDESC_WeeksInYear[] =':
+        context = 'DATE_FUNCDESC_WeeksInYear'
+        print line
+    elif line == 'const char* DATE_FUNCDESC_Rot13[] =':
+        context = 'DATE_FUNCDESC_Rot13'
+        print line
+    elif line == 'const char* PRICING_FUNCDESC_OptBarrier[] =':
+        context = 'PRICING_FUNCDESC_OptBarrier'
+        print line
+    elif line == 'const char* PRICING_FUNCDESC_OptTouch[] =':
+        context = 'PRICING_FUNCDESC_OptTouch'
+        print line
+    elif line == 'const char* PRICING_FUNCDESC_OptProbHit[] =':
+        context = 'PRICING_FUNCDESC_OptProbHit'
+        print line
+    elif line == 'const char* PRICING_FUNCDESC_OptProbInMoney[] =':
+        context = 'PRICING_FUNCDESC_OptProbInMoney'
+        print line
+    elif line == 'std::pair<const char*, ErrCode> RID_BASIC_START[] =':
+        context = 'RID_BASIC_START'
+        print line
+    elif line == 'const std::pair<const char*, int> RID_STRLIST_FUNCTION_NAMES[] =':
+        context = 'RID_STRLIST_FUNCTION_NAMES'
+        print line
+    elif line == 'const std::pair<const char*, int> RID_SVXSTRARY_PAPERSIZE_STD[] =':
+        context = 'RID_SVXSTRARY_PAPERSIZE_STD'
+        print line
+    elif line == 'const std::pair<const char*, int> RID_SVXSTRARY_PAPERSIZE_DRAW[] =':
+        context = 'RID_SVXSTRARY_PAPERSIZE_DRAW'
+        print line
+    elif line == 'const std::pair<const char*, int> RID_SVXSTRARY_SPACING[] =':
+        context = 'RID_SVXSTRARY_SPACING'
+        print line
+    elif line == 'const char* RID_RSC_SQL_INTERNATIONAL[] =':
+        context = 'RID_RSC_SQL_INTERNATIONAL'
+        print line
+    elif line == 'const std::pair<const char*, int> RID_SVXSTRARY_SAMECONTENT[] =':
+        context = 'RID_SVXSTRARY_SAMECONTENT'
+        print line
+    elif line == 'const std::pair<const char*, sal_uInt16> RID_ATTR_NAMES[] =':
+        context = 'RID_ATTR_NAMES'
+        print line
+    elif line == 'std::pair<const char*, sal_uInt16> RID_SVXSTR_FRMSEL_TEXTS[] =':
+        context = 'RID_SVXSTR_FRMSEL_TEXTS'
+        print line
+    elif line == 'std::pair<const char*, sal_uInt16> RID_SVXSTR_FRMSEL_DESCRIPTIONS[] =':
+        context = 'RID_SVXSTR_FRMSEL_DESCRIPTIONS'
+        print line
+    elif line == 'const std::pair<const char*, sal_uInt16> RID_SUBSETMAP[] =':
+        context = 'RID_SUBSETMAP'
+        print line
+    elif line == 'const std::pair<const char*, FieldUnit> RID_SVXSTR_FIELDUNIT_TABLE[] =':
+        context = 'RID_SVXSTR_FIELDUNIT_TABLE'
+        print line
+    elif line == 'const std::pair<const char*, rtl_TextEncoding> RID_SVXSTR_TEXTENCODING_TABLE[] =':
+        context = 'RID_SVXSTR_TEXTENCODING_TABLE'
+        print line
+    elif line == 'const char* RID_SVXSW_FRAMEPOSITIONS[] =':
+        context = 'RID_SVXSW_FRAMEPOSITIONS'
+        print line
+    elif line == 'const ErrMsgCode RID_SVXERRCTX[] =':
+        context = 'RID_SVXERRCTX'
+        print line
+    elif line == 'const ErrMsgCode RID_SVXERRCODE[] =':
+        context = 'RID_SVXERRCODE'
+        print line
+    elif line == 'const char* RID_RSC_TABWIN_PREFIX[] =':
+        context = 'RID_RSC_TABWIN_PREFIX'
+        print line
+    elif context != "":
+        index = line.find(' N_("')
+        if index != -1:
+            print line[:index] + ' NC_("' + context + '", ' + line[index+4:]
+        else:
+            print line
+    else:
+        print line
