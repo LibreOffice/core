@@ -1,0 +1,1877 @@
+#!/usr/bin/python
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# insert msgctxt into prepared .hrc files
+
+import fileinput
+
+context = ''
+
+for line in fileinput.input():
+    line = line[0:-1]
+    if line == '#define N_(String) (u8##String)':
+        print '#define NC_(Context, String) (Context "\\004" u8##String)'
+    elif line.startswith('#define'):
+        index = line.find(' N_("')
+        if index != -1:
+            print line[:index] + ' NC_("' + line.split()[1] + '", ' + line[index+4:]
+        else:
+            print line
+    elif line == 'std::pair<const char*, FieldUnit> SV_FUNIT_STRINGS[] =':
+        context = 'SV_FUNIT_STRINGS'
+        print line
+    elif line == 'const char* RID_STR_PAPERNAMES[] =':
+        context = 'RID_STR_PAPERNAMES'
+        print line
+    elif line == 'const std::pair<const char*, int> STRARY_SVT_DOCINFO[] =':
+        context = 'STRARY_SVT_DOCINFO'
+        print line
+    elif line == 'const ErrMsgCode RID_ERRCTX[] =':
+        context = 'RID_ERRCTX'
+        print line
+    elif line == 'const ErrMsgCode RID_ERRHDL[] =':
+        context = 'RID_ERRHDL'
+        print line
+    elif line == 'const std::pair<const char*, LanguageType> STR_ARR_SVT_LANGUAGE_TABLE[] =':
+        context = 'STR_ARR_SVT_LANGUAGE_TABLE'
+        print line
+    elif line == 'const char* SFX_CB_PROPERTY_STRINGARRAY[] =':
+        context = 'SFX_CB_PROPERTY_STRINGARRAY'
+        print line
+    elif line == 'const char* TEMPLATE_LONG_NAMES_ARY[] =':
+        context = 'TEMPLATE_LONG_NAMES_ARY'
+        print line
+    elif line == 'const char* ANALYSIS_Workday[] =':
+        context = 'ANALYSIS_Workday'
+        print line
+    elif line == 'const char* ANALYSIS_Yearfrac[] =':
+        context = 'ANALYSIS_Yearfrac'
+        print line
+    elif line == 'const char* ANALYSIS_Edate[] =':
+        context = 'ANALYSIS_Edate'
+        print line
+    elif line == 'const char* ANALYSIS_Weeknum[] =':
+        context = 'ANALYSIS_Weeknum'
+        print line
+    elif line == 'const char* ANALYSIS_Eomonth[] =':
+        context = 'ANALYSIS_Eomonth'
+        print line
+    elif line == 'const char* ANALYSIS_Networkdays[] =':
+        context = 'ANALYSIS_Networkdays'
+        print line
+    elif line == 'const char* ANALYSIS_Iseven[] =':
+        context = 'ANALYSIS_Iseven'
+        print line
+    elif line == 'const char* ANALYSIS_Isodd[] =':
+        context = 'ANALYSIS_Isodd'
+        print line
+    elif line == 'const char* ANALYSIS_Multinomial[] =':
+        context = 'ANALYSIS_Multinomial'
+        print line
+    elif line == 'const char* ANALYSIS_Seriessum[] =':
+        context = 'ANALYSIS_Seriessum'
+        print line
+    elif line == 'const char* ANALYSIS_Quotient[] =':
+        context = 'ANALYSIS_Quotient'
+        print line
+    elif line == 'const char* ANALYSIS_Mround[] =':
+        context = 'ANALYSIS_Mround'
+        print line
+    elif line == 'const char* ANALYSIS_Sqrtpi[] =':
+        context = 'ANALYSIS_Sqrtpi'
+        print line
+    elif line == 'const char* ANALYSIS_Randbetween[] =':
+        context = 'ANALYSIS_Randbetween'
+        print line
+    elif line == 'const char* ANALYSIS_Gcd[] =':
+        context = 'ANALYSIS_Gcd'
+        print line
+    elif line == 'const char* ANALYSIS_Lcm[] =':
+        context = 'ANALYSIS_Lcm'
+        print line
+    elif line == 'const char* ANALYSIS_Besseli[] =':
+        context = 'ANALYSIS_Besseli'
+        print line
+    elif line == 'const char* ANALYSIS_Besselj[] =':
+        context = 'ANALYSIS_Besselj'
+        print line
+    elif line == 'const char* ANALYSIS_Besselk[] =':
+        context = 'ANALYSIS_Besselk'
+        print line
+    elif line == 'const char* ANALYSIS_Bessely[] =':
+        context = 'ANALYSIS_Bessely'
+        print line
+    elif line == 'const char* ANALYSIS_Bin2Oct[] =':
+        context = 'ANALYSIS_Bin2Oct'
+        print line
+    elif line == 'const char* ANALYSIS_Bin2Dec[] =':
+        context = 'ANALYSIS_Bin2Dec'
+        print line
+    elif line == 'const char* ANALYSIS_Bin2Hex[] =':
+        context = 'ANALYSIS_Bin2Hex'
+        print line
+    elif line == 'const char* ANALYSIS_Oct2Bin[] =':
+        context = 'ANALYSIS_Oct2Bin'
+        print line
+    elif line == 'const char* ANALYSIS_Oct2Dec[] =':
+        context = 'ANALYSIS_Oct2Dec'
+        print line
+    elif line == 'const char* ANALYSIS_Oct2Hex[] =':
+        context = 'ANALYSIS_Oct2Hex'
+        print line
+    elif line == 'const char* ANALYSIS_Dec2Bin[] =':
+        context = 'ANALYSIS_Dec2Bin'
+        print line
+    elif line == 'const char* ANALYSIS_Dec2Hex[] =':
+        context = 'ANALYSIS_Dec2Hex'
+        print line
+    elif line == 'const char* ANALYSIS_Dec2Oct[] =':
+        context = 'ANALYSIS_Dec2Oct'
+        print line
+    elif line == 'const char* ANALYSIS_Hex2Bin[] =':
+        context = 'ANALYSIS_Hex2Bin'
+        print line
+    elif line == 'const char* ANALYSIS_Hex2Dec[] =':
+        context = 'ANALYSIS_Hex2Dec'
+        print line
+    elif line == 'const char* ANALYSIS_Hex2Oct[] =':
+        context = 'ANALYSIS_Hex2Oct'
+        print line
+    elif line == 'const char* ANALYSIS_Delta[] =':
+        context = 'ANALYSIS_Delta'
+        print line
+    elif line == 'const char* ANALYSIS_Erf[] =':
+        context = 'ANALYSIS_Erf'
+        print line
+    elif line == 'const char* ANALYSIS_Erfc[] =':
+        context = 'ANALYSIS_Erfc'
+        print line
+    elif line == 'const char* ANALYSIS_Gestep[] =':
+        context = 'ANALYSIS_Gestep'
+        print line
+    elif line == 'const char* ANALYSIS_Factdouble[] =':
+        context = 'ANALYSIS_Factdouble'
+        print line
+    elif line == 'const char* ANALYSIS_Imabs[] =':
+        context = 'ANALYSIS_Imabs'
+        print line
+    elif line == 'const char* ANALYSIS_Imaginary[] =':
+        context = 'ANALYSIS_Imaginary'
+        print line
+    elif line == 'const char* ANALYSIS_Impower[] =':
+        context = 'ANALYSIS_Impower'
+        print line
+    elif line == 'const char* ANALYSIS_Imargument[] =':
+        context = 'ANALYSIS_Imargument'
+        print line
+    elif line == 'const char* ANALYSIS_Imcos[] =':
+        context = 'ANALYSIS_Imcos'
+        print line
+    elif line == 'const char* ANALYSIS_Imdiv[] =':
+        context = 'ANALYSIS_Imdiv'
+        print line
+    elif line == 'const char* ANALYSIS_Imexp[] =':
+        context = 'ANALYSIS_Imexp'
+        print line
+    elif line == 'const char* ANALYSIS_Imconjugate[] =':
+        context = 'ANALYSIS_Imconjugate'
+        print line
+    elif line == 'const char* ANALYSIS_Imln[] =':
+        context = 'ANALYSIS_Imln'
+        print line
+    elif line == 'const char* ANALYSIS_Imlog10[] =':
+        context = 'ANALYSIS_Imlog10'
+        print line
+    elif line == 'const char* ANALYSIS_Imlog2[] =':
+        context = 'ANALYSIS_Imlog2'
+        print line
+    elif line == 'const char* ANALYSIS_Improduct[] =':
+        context = 'ANALYSIS_Improduct'
+        print line
+    elif line == 'const char* ANALYSIS_Imreal[] =':
+        context = 'ANALYSIS_Imreal'
+        print line
+    elif line == 'const char* ANALYSIS_Imsin[] =':
+        context = 'ANALYSIS_Imsin'
+        print line
+    elif line == 'const char* ANALYSIS_Imsub[] =':
+        context = 'ANALYSIS_Imsub'
+        print line
+    elif line == 'const char* ANALYSIS_Imsqrt[] =':
+        context = 'ANALYSIS_Imsqrt'
+        print line
+    elif line == 'const char* ANALYSIS_Imsum[] =':
+        context = 'ANALYSIS_Imsum'
+        print line
+    elif line == 'const char* ANALYSIS_Imtan[] =':
+        context = 'ANALYSIS_Imtan'
+        print line
+    elif line == 'const char* ANALYSIS_Imsec[] =':
+        context = 'ANALYSIS_Imsec'
+        print line
+    elif line == 'const char* ANALYSIS_Imcsc[] =':
+        context = 'ANALYSIS_Imcsc'
+        print line
+    elif line == 'const char* ANALYSIS_Imcot[] =':
+        context = 'ANALYSIS_Imcot'
+        print line
+    elif line == 'const char* ANALYSIS_Imsinh[] =':
+        context = 'ANALYSIS_Imsinh'
+        print line
+    elif line == 'const char* ANALYSIS_Imcosh[] =':
+        context = 'ANALYSIS_Imcosh'
+        print line
+    elif line == 'const char* ANALYSIS_Imsech[] =':
+        context = 'ANALYSIS_Imsech'
+        print line
+    elif line == 'const char* ANALYSIS_Imcsch[] =':
+        context = 'ANALYSIS_Imcsch'
+        print line
+    elif line == 'const char* ANALYSIS_Complex[] =':
+        context = 'ANALYSIS_Complex'
+        print line
+    elif line == 'const char* ANALYSIS_Convert[] =':
+        context = 'ANALYSIS_Convert'
+        print line
+    elif line == 'const char* ANALYSIS_Amordegrc[] =':
+        context = 'ANALYSIS_Amordegrc'
+        print line
+    elif line == 'const char* ANALYSIS_Amorlinc[] =':
+        context = 'ANALYSIS_Amorlinc'
+        print line
+    elif line == 'const char* ANALYSIS_Accrint[] =':
+        context = 'ANALYSIS_Accrint'
+        print line
+    elif line == 'const char* ANALYSIS_Accrintm[] =':
+        context = 'ANALYSIS_Accrintm'
+        print line
+    elif line == 'const char* ANALYSIS_Received[] =':
+        context = 'ANALYSIS_Received'
+        print line
+    elif line == 'const char* ANALYSIS_Disc[] =':
+        context = 'ANALYSIS_Disc'
+        print line
+    elif line == 'const char* ANALYSIS_Duration[] =':
+        context = 'ANALYSIS_Duration'
+        print line
+    elif line == 'const char* ANALYSIS_Effect[] =':
+        context = 'ANALYSIS_Effect'
+        print line
+    elif line == 'const char* ANALYSIS_Cumprinc[] =':
+        context = 'ANALYSIS_Cumprinc'
+        print line
+    elif line == 'const char* ANALYSIS_Cumipmt[] =':
+        context = 'ANALYSIS_Cumipmt'
+        print line
+    elif line == 'const char* ANALYSIS_Price[] =':
+        context = 'ANALYSIS_Price'
+        print line
+    elif line == 'const char* ANALYSIS_Pricedisc[] =':
+        context = 'ANALYSIS_Pricedisc'
+        print line
+    elif line == 'const char* ANALYSIS_Pricemat[] =':
+        context = 'ANALYSIS_Pricemat'
+        print line
+    elif line == 'const char* ANALYSIS_Mduration[] =':
+        context = 'ANALYSIS_Mduration'
+        print line
+    elif line == 'const char* ANALYSIS_Nominal[] =':
+        context = 'ANALYSIS_Nominal'
+        print line
+    elif line == 'const char* ANALYSIS_Dollarfr[] =':
+        context = 'ANALYSIS_Dollarfr'
+        print line
+    elif line == 'const char* ANALYSIS_Dollarde[] =':
+        context = 'ANALYSIS_Dollarde'
+        print line
+    elif line == 'const char* ANALYSIS_Yield[] =':
+        context = 'ANALYSIS_Yield'
+        print line
+    elif line == 'const char* ANALYSIS_Yielddisc[] =':
+        context = 'ANALYSIS_Yielddisc'
+        print line
+    elif line == 'const char* ANALYSIS_Yieldmat[] =':
+        context = 'ANALYSIS_Yieldmat'
+        print line
+    elif line == 'const char* ANALYSIS_Tbilleq[] =':
+        context = 'ANALYSIS_Tbilleq'
+        print line
+    elif line == 'const char* ANALYSIS_Tbillprice[] =':
+        context = 'ANALYSIS_Tbillprice'
+        print line
+    elif line == 'const char* ANALYSIS_Tbillyield[] =':
+        context = 'ANALYSIS_Tbillyield'
+        print line
+    elif line == 'const char* ANALYSIS_Oddfprice[] =':
+        context = 'ANALYSIS_Oddfprice'
+        print line
+    elif line == 'const char* ANALYSIS_Oddfyield[] =':
+        context = 'ANALYSIS_Oddfyield'
+        print line
+    elif line == 'const char* ANALYSIS_Oddlprice[] =':
+        context = 'ANALYSIS_Oddlprice'
+        print line
+    elif line == 'const char* ANALYSIS_Oddlyield[] =':
+        context = 'ANALYSIS_Oddlyield'
+        print line
+    elif line == 'const char* ANALYSIS_Xirr[] =':
+        context = 'ANALYSIS_Xirr'
+        print line
+    elif line == 'const char* ANALYSIS_Xnpv[] =':
+        context = 'ANALYSIS_Xnpv'
+        print line
+    elif line == 'const char* ANALYSIS_Intrate[] =':
+        context = 'ANALYSIS_Intrate'
+        print line
+    elif line == 'const char* ANALYSIS_Coupncd[] =':
+        context = 'ANALYSIS_Coupncd'
+        print line
+    elif line == 'const char* ANALYSIS_Coupdays[] =':
+        context = 'ANALYSIS_Coupdays'
+        print line
+    elif line == 'const char* ANALYSIS_Coupdaysnc[] =':
+        context = 'ANALYSIS_Coupdaysnc'
+        print line
+    elif line == 'const char* ANALYSIS_Coupdaybs[] =':
+        context = 'ANALYSIS_Coupdaybs'
+        print line
+    elif line == 'const char* ANALYSIS_Couppcd[] =':
+        context = 'ANALYSIS_Couppcd'
+        print line
+    elif line == 'const char* ANALYSIS_Coupnum[] =':
+        context = 'ANALYSIS_Coupnum'
+        print line
+    elif line == 'const char* ANALYSIS_Fvschedule[] =':
+        context = 'ANALYSIS_Fvschedule'
+        print line
+    elif line == 'const char* DATE_FUNCDESC_DiffWeeks[] =':
+        context = 'DATE_FUNCDESC_DiffWeeks'
+        print line
+    elif line == 'const char* DATE_FUNCDESC_DiffMonths[] =':
+        context = 'DATE_FUNCDESC_DiffMonths'
+        print line
+    elif line == 'const char* DATE_FUNCDESC_DiffYears[] =':
+        context = 'DATE_FUNCDESC_DiffYears'
+        print line
+    elif line == 'const char* DATE_FUNCDESC_IsLeapYear[] =':
+        context = 'DATE_FUNCDESC_IsLeapYear'
+        print line
+    elif line == 'const char* DATE_FUNCDESC_DaysInMonth[] =':
+        context = 'DATE_FUNCDESC_DaysInMonth'
+        print line
+    elif line == 'const char* DATE_FUNCDESC_DaysInYear[] =':
+        context = 'DATE_FUNCDESC_DaysInYear'
+        print line
+    elif line == 'const char* DATE_FUNCDESC_WeeksInYear[] =':
+        context = 'DATE_FUNCDESC_WeeksInYear'
+        print line
+    elif line == 'const char* DATE_FUNCDESC_Rot13[] =':
+        context = 'DATE_FUNCDESC_Rot13'
+        print line
+    elif line == 'const char* PRICING_FUNCDESC_OptBarrier[] =':
+        context = 'PRICING_FUNCDESC_OptBarrier'
+        print line
+    elif line == 'const char* PRICING_FUNCDESC_OptTouch[] =':
+        context = 'PRICING_FUNCDESC_OptTouch'
+        print line
+    elif line == 'const char* PRICING_FUNCDESC_OptProbHit[] =':
+        context = 'PRICING_FUNCDESC_OptProbHit'
+        print line
+    elif line == 'const char* PRICING_FUNCDESC_OptProbInMoney[] =':
+        context = 'PRICING_FUNCDESC_OptProbInMoney'
+        print line
+    elif line == 'std::pair<const char*, ErrCode> RID_BASIC_START[] =':
+        context = 'RID_BASIC_START'
+        print line
+    elif line == 'const std::pair<const char*, int> RID_STRLIST_FUNCTION_NAMES[] =':
+        context = 'RID_STRLIST_FUNCTION_NAMES'
+        print line
+    elif line == 'const std::pair<const char*, int> RID_SVXSTRARY_PAPERSIZE_STD[] =':
+        context = 'RID_SVXSTRARY_PAPERSIZE_STD'
+        print line
+    elif line == 'const std::pair<const char*, int> RID_SVXSTRARY_PAPERSIZE_DRAW[] =':
+        context = 'RID_SVXSTRARY_PAPERSIZE_DRAW'
+        print line
+    elif line == 'const std::pair<const char*, int> RID_SVXSTRARY_SPACING[] =':
+        context = 'RID_SVXSTRARY_SPACING'
+        print line
+    elif line == 'const char* RID_RSC_SQL_INTERNATIONAL[] =':
+        context = 'RID_RSC_SQL_INTERNATIONAL'
+        print line
+    elif line == 'const std::pair<const char*, int> RID_SVXSTRARY_SAMECONTENT[] =':
+        context = 'RID_SVXSTRARY_SAMECONTENT'
+        print line
+    elif line == 'const std::pair<const char*, sal_uInt16> RID_ATTR_NAMES[] =':
+        context = 'RID_ATTR_NAMES'
+        print line
+    elif line == 'std::pair<const char*, sal_uInt16> RID_SVXSTR_FRMSEL_TEXTS[] =':
+        context = 'RID_SVXSTR_FRMSEL_TEXTS'
+        print line
+    elif line == 'std::pair<const char*, sal_uInt16> RID_SVXSTR_FRMSEL_DESCRIPTIONS[] =':
+        context = 'RID_SVXSTR_FRMSEL_DESCRIPTIONS'
+        print line
+    elif line == 'const std::pair<const char*, sal_uInt16> RID_SUBSETMAP[] =':
+        context = 'RID_SUBSETMAP'
+        print line
+    elif line == 'const std::pair<const char*, FieldUnit> RID_SVXSTR_FIELDUNIT_TABLE[] =':
+        context = 'RID_SVXSTR_FIELDUNIT_TABLE'
+        print line
+    elif line == 'const std::pair<const char*, rtl_TextEncoding> RID_SVXSTR_TEXTENCODING_TABLE[] =':
+        context = 'RID_SVXSTR_TEXTENCODING_TABLE'
+        print line
+    elif line == 'const char* RID_SVXSW_FRAMEPOSITIONS[] =':
+        context = 'RID_SVXSW_FRAMEPOSITIONS'
+        print line
+    elif line == 'const ErrMsgCode RID_SVXERRCTX[] =':
+        context = 'RID_SVXERRCTX'
+        print line
+    elif line == 'const ErrMsgCode RID_SVXERRCODE[] =':
+        context = 'RID_SVXERRCODE'
+        print line
+    elif line == 'const char* RID_RSC_TABWIN_PREFIX[] =':
+        context = 'RID_RSC_TABWIN_PREFIX'
+        print line
+    elif line == 'const std::pair<const char*, int> RID_GRAPHICSTYLEFAMILY[] =':
+        context = 'RID_GRAPHICSTYLEFAMILY'
+        print line
+    elif line == 'const std::pair<const char*, int> RID_PRESENTATIONSTYLEFAMILY[] =':
+        context = 'RID_PRESENTATIONSTYLEFAMILY'
+        print line
+    elif line == 'const char* SC_OPCODE_DB_COUNT_ARY[] =':
+        context = 'SC_OPCODE_DB_COUNT'
+        print line
+    elif line == 'const char* SC_OPCODE_DB_COUNT_2_ARY[] =':
+        context = 'SC_OPCODE_DB_COUNT_2'
+        print line
+    elif line == 'const char* SC_OPCODE_DB_AVERAGE_ARY[] =':
+        context = 'SC_OPCODE_DB_AVERAGE'
+        print line
+    elif line == 'const char* SC_OPCODE_DB_GET_ARY[] =':
+        context = 'SC_OPCODE_DB_GET'
+        print line
+    elif line == 'const char* SC_OPCODE_DB_MAX_ARY[] =':
+        context = 'SC_OPCODE_DB_MAX'
+        print line
+    elif line == 'const char* SC_OPCODE_DB_MIN_ARY[] =':
+        context = 'SC_OPCODE_DB_MIN'
+        print line
+    elif line == 'const char* SC_OPCODE_DB_PRODUCT_ARY[] =':
+        context = 'SC_OPCODE_DB_PRODUCT'
+        print line
+    elif line == 'const char* SC_OPCODE_DB_STD_DEV_ARY[] =':
+        context = 'SC_OPCODE_DB_STD_DEV'
+        print line
+    elif line == 'const char* SC_OPCODE_DB_STD_DEV_P_ARY[] =':
+        context = 'SC_OPCODE_DB_STD_DEV_P'
+        print line
+    elif line == 'const char* SC_OPCODE_DB_SUM_ARY[] =':
+        context = 'SC_OPCODE_DB_SUM'
+        print line
+    elif line == 'const char* SC_OPCODE_DB_VAR_ARY[] =':
+        context = 'SC_OPCODE_DB_VAR'
+        print line
+    elif line == 'const char* SC_OPCODE_DB_VAR_P_ARY[] =':
+        context = 'SC_OPCODE_DB_VAR_P'
+        print line
+    elif line == 'const char* SC_OPCODE_GET_DATE_ARY[] =':
+        context = 'SC_OPCODE_GET_DATE'
+        print line
+    elif line == 'const char* SC_OPCODE_GET_DATE_VALUE_ARY[] =':
+        context = 'SC_OPCODE_GET_DATE_VALUE'
+        print line
+    elif line == 'const char* SC_OPCODE_GET_DAY_ARY[] =':
+        context = 'SC_OPCODE_GET_DAY'
+        print line
+    elif line == 'const char* SC_OPCODE_GET_DIFF_DATE_360_ARY[] =':
+        context = 'SC_OPCODE_GET_DIFF_DATE_360'
+        print line
+    elif line == 'const char* SC_OPCODE_NETWORKDAYS_ARY[] =':
+        context = 'SC_OPCODE_NETWORKDAYS'
+        print line
+    elif line == 'const char* SC_OPCODE_NETWORKDAYS_MS_ARY[] =':
+        context = 'SC_OPCODE_NETWORKDAYS_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_WORKDAY_MS_ARY[] =':
+        context = 'SC_OPCODE_WORKDAY_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_GET_HOUR_ARY[] =':
+        context = 'SC_OPCODE_GET_HOUR'
+        print line
+    elif line == 'const char* SC_OPCODE_GET_MIN_ARY[] =':
+        context = 'SC_OPCODE_GET_MIN'
+        print line
+    elif line == 'const char* SC_OPCODE_GET_MONTH_ARY[] =':
+        context = 'SC_OPCODE_GET_MONTH'
+        print line
+    elif line == 'const char* SC_OPCODE_GET_ACT_TIME_ARY[] =':
+        context = 'SC_OPCODE_GET_ACT_TIME'
+        print line
+    elif line == 'const char*SC_OPCODE_GET_SEC_ARY[] =':
+        context = 'SC_OPCODE_GET_SEC'
+        print line
+    elif line == 'const char* SC_OPCODE_GET_TIME_ARY[] =':
+        context = 'SC_OPCODE_GET_TIME'
+        print line
+    elif line == 'const char* SC_OPCODE_GET_TIME_VALUE_ARY[] =':
+        context = 'SC_OPCODE_GET_TIME_VALUE'
+        print line
+    elif line == 'const char* SC_OPCODE_GET_ACT_DATE_ARY[] =':
+        context = 'SC_OPCODE_GET_ACT_DATE'
+        print line
+    elif line == 'const char* SC_OPCODE_GET_DAY_OF_WEEK_ARY[] =':
+        context = 'SC_OPCODE_GET_DAY_OF_WEEK'
+        print line
+    elif line == 'const char* SC_OPCODE_GET_YEAR_ARY[] =':
+        context = 'SC_OPCODE_GET_YEAR'
+        print line
+    elif line == 'const char* SC_OPCODE_GET_DIFF_DATE_ARY[] =':
+        context = 'SC_OPCODE_GET_DIFF_DATE'
+        print line
+    elif line == 'const char* SC_OPCODE_GET_DATEDIF_ARY[] =':
+        context = 'SC_OPCODE_GET_DATEDIF'
+        print line
+    elif line == 'const char* SC_OPCODE_WEEK_ARY[] =':
+        context = 'SC_OPCODE_WEEK'
+        print line
+    elif line == 'const char* SC_OPCODE_ISOWEEKNUM_ARY[] =':
+        context = 'SC_OPCODE_ISOWEEKNUM'
+        print line
+    elif line == 'const char* SC_OPCODE_WEEKNUM_OOO_ARY[] =':
+        context = 'SC_OPCODE_WEEKNUM_OOO'
+        print line
+    elif line == 'const char* SC_OPCODE_EASTERSUNDAY_ARY[] =':
+        context = 'SC_OPCODE_EASTERSUNDAY'
+        print line
+    elif line == 'const char* SC_OPCODE_PV_ARY[] =':
+        context = 'SC_OPCODE_PV'
+        print line
+    elif line == 'const char* SC_OPCODE_FV_ARY[] =':
+        context = 'SC_OPCODE_FV'
+        print line
+    elif line == 'const char* SC_OPCODE_NPER_ARY[] =':
+        context = 'SC_OPCODE_NPER'
+        print line
+    elif line == 'const char* SC_OPCODE_PMT_ARY[] =':
+        context = 'SC_OPCODE_PMT'
+        print line
+    elif line == 'const char* SC_OPCODE_RATE_ARY[] =':
+        context = 'SC_OPCODE_RATE'
+        print line
+    elif line == 'const char* SC_OPCODE_IPMT_ARY[] =':
+        context = 'SC_OPCODE_IPMT'
+        print line
+    elif line == 'const char* SC_OPCODE_PPMT_ARY[] =':
+        context = 'SC_OPCODE_PPMT'
+        print line
+    elif line == 'const char* SC_OPCODE_CUM_PRINC_ARY[] =':
+        context = 'SC_OPCODE_CUM_PRINC'
+        print line
+    elif line == 'const char* SC_OPCODE_CUM_IPMT_ARY[] =':
+        context = 'SC_OPCODE_CUM_IPMT'
+        print line
+    elif line == 'const char* SC_OPCODE_SYD_ARY[] =':
+        context = 'SC_OPCODE_SYD'
+        print line
+    elif line == 'const char* SC_OPCODE_SLN_ARY[] =':
+        context = 'SC_OPCODE_SLN'
+        print line
+    elif line == 'const char* SC_OPCODE_DDB_ARY[] =':
+        context = 'SC_OPCODE_DDB'
+        print line
+    elif line == 'const char* SC_OPCODE_DB_ARY[] =':
+        context = 'SC_OPCODE_DB'
+        print line
+    elif line == 'const char* SC_OPCODE_VBD_ARY[] =':
+        context = 'SC_OPCODE_VBD'
+        print line
+    elif line == 'const char* SC_OPCODE_EFFECT_ARY[] =':
+        context = 'SC_OPCODE_EFFECT'
+        print line
+    elif line == 'const char* SC_OPCODE_NOMINAL_ARY[] =':
+        context = 'SC_OPCODE_NOMINAL'
+        print line
+    elif line == 'const char* SC_OPCODE_NPV_ARY[] =':
+        context = 'SC_OPCODE_NPV'
+        print line
+    elif line == 'const char* SC_OPCODE_IRR_ARY[] =':
+        context = 'SC_OPCODE_IRR'
+        print line
+    elif line == 'const char* SC_OPCODE_MIRR_ARY[] =':
+        context = 'SC_OPCODE_MIRR'
+        print line
+    elif line == 'const char* SC_OPCODE_ISPMT_ARY[] =':
+        context = 'SC_OPCODE_ISPMT'
+        print line
+    elif line == 'const char* SC_OPCODE_PDURATION_ARY[] =':
+        context = 'SC_OPCODE_PDURATION'
+        print line
+    elif line == 'const char* SC_OPCODE_RRI_ARY[] =':
+        context = 'SC_OPCODE_RRI'
+        print line
+    elif line == 'const char* SC_OPCODE_IS_REF_ARY[] =':
+        context = 'SC_OPCODE_IS_REF'
+        print line
+    elif line == 'const char* SC_OPCODE_IS_ERR_ARY[] =':
+        context = 'SC_OPCODE_IS_ERR'
+        print line
+    elif line == 'const char* SC_OPCODE_IS_ERROR_ARY[] =':
+        context = 'SC_OPCODE_IS_ERROR'
+        print line
+    elif line == 'const char* SC_OPCODE_IS_EMPTY_ARY[] =':
+        context = 'SC_OPCODE_IS_EMPTY'
+        print line
+    elif line == 'const char* SC_OPCODE_IS_LOGICAL_ARY[] =':
+        context = 'SC_OPCODE_IS_LOGICAL'
+        print line
+    elif line == 'const char* SC_OPCODE_IS_NV_ARY[] =':
+        context = 'SC_OPCODE_IS_NV'
+        print line
+    elif line == 'const char* SC_OPCODE_IS_NON_STRING_ARY[] =':
+        context = 'SC_OPCODE_IS_NON_STRING'
+        print line
+    elif line == 'const char* SC_OPCODE_IS_STRING_ARY[] =':
+        context = 'SC_OPCODE_IS_STRING'
+        print line
+    elif line == 'const char* SC_OPCODE_IS_VALUE_ARY[] =':
+        context = 'SC_OPCODE_IS_VALUE'
+        print line
+    elif line == 'const char* SC_OPCODE_IS_FORMULA_ARY[] =':
+        context = 'SC_OPCODE_IS_FORMULA'
+        print line
+    elif line == 'const char* SC_OPCODE_FORMULA_ARY[] =':
+        context = 'SC_OPCODE_FORMULA'
+        print line
+    elif line == 'const char* SC_OPCODE_N_ARY[] =':
+        context = 'SC_OPCODE_N'
+        print line
+    elif line == 'const char* SC_OPCODE_NO_VALUE_ARY[] =':
+        context = 'SC_OPCODE_NO_VALUE'
+        print line
+    elif line == 'const char* SC_OPCODE_TYPE_ARY[] =':
+        context = 'SC_OPCODE_TYPE'
+        print line
+    elif line == 'const char* SC_OPCODE_CELL_ARY[] =':
+        context = 'SC_OPCODE_CELL'
+        print line
+    elif line == 'const char* SC_OPCODE_CURRENT_ARY[] =':
+        context = 'SC_OPCODE_CURRENT'
+        print line
+    elif line == 'const char* SC_OPCODE_FALSE_ARY[] =':
+        context = 'SC_OPCODE_FALSE'
+        print line
+    elif line == 'const char* SC_OPCODE_NOT_ARY[] =':
+        context = 'SC_OPCODE_NOT'
+        print line
+    elif line == 'const char* SC_OPCODE_TRUE_ARY[] =':
+        context = 'SC_OPCODE_TRUE'
+        print line
+    elif line == 'const char* SC_OPCODE_IF_ARY[] =':
+        context = 'SC_OPCODE_IF'
+        print line
+    elif line == 'const char* SC_OPCODE_IF_ERROR_ARY[] =':
+        context = 'SC_OPCODE_IF_ERROR'
+        print line
+    elif line == 'const char* SC_OPCODE_IF_NA_ARY[] =':
+        context = 'SC_OPCODE_IF_NA'
+        print line
+    elif line == 'const char* SC_OPCODE_OR_ARY[] =':
+        context = 'SC_OPCODE_OR'
+        print line
+    elif line == 'const char* SC_OPCODE_XOR_ARY[] =':
+        context = 'SC_OPCODE_XOR'
+        print line
+    elif line == 'const char* SC_OPCODE_AND_ARY[] =':
+        context = 'SC_OPCODE_AND'
+        print line
+    elif line == 'const char* SC_OPCODE_ABS_ARY[] =':
+        context = 'SC_OPCODE_ABS'
+        print line
+    elif line == 'const char* SC_OPCODE_POWER_ARY[] =':
+        context = 'SC_OPCODE_POWER'
+        print line
+    elif line == 'const char* SC_OPCODE_COUNT_EMPTY_CELLS_ARY[] =':
+        context = 'SC_OPCODE_COUNT_EMPTY_CELLS'
+        print line
+    elif line == 'const char* SC_OPCODE_PI_ARY[] =':
+        context = 'SC_OPCODE_PI'
+        print line
+    elif line == 'const char* SC_OPCODE_SUM_ARY[] =':
+        context = 'SC_OPCODE_SUM'
+        print line
+    elif line == 'const char* SC_OPCODE_SUM_SQ_ARY[] =':
+        context = 'SC_OPCODE_SUM_SQ'
+        print line
+    elif line == 'const char* SC_OPCODE_PRODUCT_ARY[] =':
+        context = 'SC_OPCODE_PRODUCT'
+        print line
+    elif line == 'const char* SC_OPCODE_SUM_IF_ARY[] =':
+        context = 'SC_OPCODE_SUM_IF'
+        print line
+    elif line == 'const char* SC_OPCODE_AVERAGE_IF_ARY[] =':
+        context = 'SC_OPCODE_AVERAGE_IF'
+        print line
+    elif line == 'const char* SC_OPCODE_SUM_IFS_ARY[] =':
+        context = 'SC_OPCODE_SUM_IFS'
+        print line
+    elif line == 'const char* SC_OPCODE_AVERAGE_IFS_ARY[] =':
+        context = 'SC_OPCODE_AVERAGE_IFS'
+        print line
+    elif line == 'const char* SC_OPCODE_COUNT_IFS_ARY[] =':
+        context = 'SC_OPCODE_COUNT_IFS'
+        print line
+    elif line == 'const char* SC_OPCODE_COUNT_IF_ARY[] =':
+        context = 'SC_OPCODE_COUNT_IF'
+        print line
+    elif line == 'const char* SC_OPCODE_SQRT_ARY[] =':
+        context = 'SC_OPCODE_SQRT'
+        print line
+    elif line == 'const char* SC_OPCODE_RANDOM_ARY[] =':
+        context = 'SC_OPCODE_RANDOM'
+        print line
+    elif line == 'const char* SC_OPCODE_IS_EVEN_ARY[] =':
+        context = 'SC_OPCODE_IS_EVEN'
+        print line
+    elif line == 'const char* SC_OPCODE_IS_ODD_ARY[] =':
+        context = 'SC_OPCODE_IS_ODD'
+        print line
+    elif line == 'const char* SC_OPCODE_COMBIN_ARY[] =':
+        context = 'SC_OPCODE_COMBIN'
+        print line
+    elif line == 'const char* SC_OPCODE_COMBIN_A_ARY[] =':
+        context = 'SC_OPCODE_COMBIN_A'
+        print line
+    elif line == 'const char* SC_OPCODE_ARC_COS_ARY[] =':
+        context = 'SC_OPCODE_ARC_COS'
+        print line
+    elif line == 'const char* SC_OPCODE_ARC_SIN_ARY[] =':
+        context = 'SC_OPCODE_ARC_SIN'
+        print line
+    elif line == 'const char* SC_OPCODE_ARC_COS_HYP_ARY[] =':
+        context = 'SC_OPCODE_ARC_COS_HYP'
+        print line
+    elif line == 'const char* SC_OPCODE_ARC_SIN_HYP_ARY[] =':
+        context = 'SC_OPCODE_ARC_SIN_HYP'
+        print line
+    elif line == 'const char* SC_OPCODE_ARC_COT_ARY[] =':
+        context = 'SC_OPCODE_ARC_COT'
+        print line
+    elif line == 'const char* SC_OPCODE_ARC_TAN_ARY[] =':
+        context = 'SC_OPCODE_ARC_TAN'
+        print line
+    elif line == 'const char* SC_OPCODE_ARC_COT_HYP_ARY[] =':
+        context = 'SC_OPCODE_ARC_COT_HYP'
+        print line
+    elif line == 'const char* SC_OPCODE_ARC_TAN_HYP_ARY[] =':
+        context = 'SC_OPCODE_ARC_TAN_HYP'
+        print line
+    elif line == 'const char* SC_OPCODE_COS_ARY[] =':
+        context = 'SC_OPCODE_COS'
+        print line
+    elif line == 'const char* SC_OPCODE_SIN_ARY[] =':
+        context = 'SC_OPCODE_SIN'
+        print line
+    elif line == 'const char* SC_OPCODE_COT_ARY[] =':
+        context = 'SC_OPCODE_COT'
+        print line
+    elif line == 'const char* SC_OPCODE_TAN_ARY[] =':
+        context = 'SC_OPCODE_TAN'
+        print line
+    elif line == 'const char* SC_OPCODE_COS_HYP_ARY[] =':
+        context = 'SC_OPCODE_COS_HYP'
+        print line
+    elif line == 'const char* SC_OPCODE_SIN_HYP_ARY[] =':
+        context = 'SC_OPCODE_SIN_HYP'
+        print line
+    elif line == 'const char* SC_OPCODE_COT_HYP_ARY[] =':
+        context = 'SC_OPCODE_COT_HYP'
+        print line
+    elif line == 'const char* SC_OPCODE_TAN_HYP_ARY[] =':
+        context = 'SC_OPCODE_TAN_HYP'
+        print line
+    elif line == 'const char* SC_OPCODE_ARC_TAN_2_ARY[] =':
+        context = 'SC_OPCODE_ARC_TAN_2'
+        print line
+    elif line == 'const char* SC_OPCODE_COSECANT_ARY[] =':
+        context = 'SC_OPCODE_COSECANT'
+        print line
+    elif line == 'const char* SC_OPCODE_SECANT_ARY[] =':
+        context = 'SC_OPCODE_SECANT'
+        print line
+    elif line == 'const char* SC_OPCODE_COSECANT_HYP_ARY[] =':
+        context = 'SC_OPCODE_COSECANT_HYP'
+        print line
+    elif line == 'const char* SC_OPCODE_SECANT_HYP_ARY[] =':
+        context = 'SC_OPCODE_SECANT_HYP'
+        print line
+    elif line == 'const char* SC_OPCODE_DEG_ARY[] =':
+        context = 'SC_OPCODE_DEG'
+        print line
+    elif line == 'const char* SC_OPCODE_RAD_ARY[] =':
+        context = 'SC_OPCODE_RAD'
+        print line
+    elif line == 'const char* SC_OPCODE_EXP_ARY[] =':
+        context = 'SC_OPCODE_EXP'
+        print line
+    elif line == 'const char* SC_OPCODE_LOG_ARY[] =':
+        context = 'SC_OPCODE_LOG'
+        print line
+    elif line == 'const char* SC_OPCODE_LN_ARY[] =':
+        context = 'SC_OPCODE_LN'
+        print line
+    elif line == 'const char* SC_OPCODE_LOG10_ARY[] =':
+        context = 'SC_OPCODE_LOG10'
+        print line
+    elif line == 'const char* SC_OPCODE_FACT_ARY[] =':
+        context = 'SC_OPCODE_FACT'
+        print line
+    elif line == 'const char* SC_OPCODE_MOD_ARY[] =':
+        context = 'SC_OPCODE_MOD'
+        print line
+    elif line == 'const char* SC_OPCODE_PLUS_MINUS_ARY[] =':
+        context = 'SC_OPCODE_PLUS_MINUS'
+        print line
+    elif line == 'const char* SC_OPCODE_SUB_TOTAL_ARY[] =':
+        context = 'SC_OPCODE_SUB_TOTAL'
+        print line
+    elif line == 'const char* SC_OPCODE_AGGREGATE_ARY[] =':
+        context = 'SC_OPCODE_AGGREGATE'
+        print line
+    elif line == 'const char* SC_OPCODE_INT_ARY[] =':
+        context = 'SC_OPCODE_INT'
+        print line
+    elif line == 'const char* SC_OPCODE_TRUNC_ARY[] =':
+        context = 'SC_OPCODE_TRUNC'
+        print line
+    elif line == 'const char* SC_OPCODE_ROUND_ARY[] =':
+        context = 'SC_OPCODE_ROUND'
+        print line
+    elif line == 'const char* SC_OPCODE_ROUND_UP_ARY[] =':
+        context = 'SC_OPCODE_ROUND_UP'
+        print line
+    elif line == 'const char* SC_OPCODE_ROUND_DOWN_ARY[] =':
+        context = 'SC_OPCODE_ROUND_DOWN'
+        print line
+    elif line == 'const char* SC_OPCODE_EVEN_ARY[] =':
+        context = 'SC_OPCODE_EVEN'
+        print line
+    elif line == 'const char* SC_OPCODE_ODD_ARY[] =':
+        context = 'SC_OPCODE_ODD'
+        print line
+    elif line == 'const char* SC_OPCODE_CEIL_MS_ARY[] =':
+        context = 'SC_OPCODE_CEIL_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_CEIL_PRECISE_ARY[] =':
+        context = 'SC_OPCODE_CEIL_PRECISE'
+        print line
+    elif line == 'const char* SC_OPCODE_CEIL_ISO_ARY[] =':
+        context = 'SC_OPCODE_CEIL_ISO'
+        print line
+    elif line == 'const char* SC_OPCODE_CEIL_ARY[] =':
+        context = 'SC_OPCODE_CEIL'
+        print line
+    elif line == 'const char* SC_OPCODE_CEIL_MATH_ARY[] =':
+        context = 'SC_OPCODE_CEIL_MATH'
+        print line
+    elif line == 'const char* SC_OPCODE_FLOOR_ARY[] =':
+        context = 'SC_OPCODE_FLOOR'
+        print line
+    elif line == 'const char* SC_OPCODE_FLOOR_MS_ARY[] =':
+        context = 'SC_OPCODE_FLOOR_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_FLOOR_MATH_ARY[] =':
+        context = 'SC_OPCODE_FLOOR_MATH'
+        print line
+    elif line == 'const char* SC_OPCODE_FLOOR_PRECISE_ARY[] =':
+        context = 'SC_OPCODE_FLOOR_PRECISE'
+        print line
+    elif line == 'const char* SC_OPCODE_GCD_ARY[] =':
+        context = 'SC_OPCODE_GCD'
+        print line
+    elif line == 'const char* SC_OPCODE_LCM_ARY[] =':
+        context = 'SC_OPCODE_LCM'
+        print line
+    elif line == 'const char* SC_OPCODE_MAT_TRANS_ARY[] =':
+        context = 'SC_OPCODE_MAT_TRANS'
+        print line
+    elif line == 'const char* SC_OPCODE_MAT_MULT_ARY[] =':
+        context = 'SC_OPCODE_MAT_MULT'
+        print line
+    elif line == 'const char* SC_OPCODE_MAT_DET_ARY[] =':
+        context = 'SC_OPCODE_MAT_DET'
+        print line
+    elif line == 'const char* SC_OPCODE_MAT_INV_ARY[] =':
+        context = 'SC_OPCODE_MAT_INV'
+        print line
+    elif line == 'const char* SC_OPCODE_MATRIX_UNIT_ARY[] =':
+        context = 'SC_OPCODE_MATRIX_UNIT'
+        print line
+    elif line == 'const char* SC_OPCODE_SUM_PRODUCT_ARY[] =':
+        context = 'SC_OPCODE_SUM_PRODUCT'
+        print line
+    elif line == 'const char* SC_OPCODE_SUM_X2MY2_ARY[] =':
+        context = 'SC_OPCODE_SUM_X2MY2'
+        print line
+    elif line == 'const char* SC_OPCODE_SUM_X2DY2_ARY[] =':
+        context = 'SC_OPCODE_SUM_X2DY2'
+        print line
+    elif line == 'const char* SC_OPCODE_SUM_XMY2_ARY[] =':
+        context = 'SC_OPCODE_SUM_XMY2'
+        print line
+    elif line == 'const char* SC_OPCODE_FREQUENCY_ARY[] =':
+        context = 'SC_OPCODE_FREQUENCY'
+        print line
+    elif line == 'const char* SC_OPCODE_LINEST_ARY[] =':
+        context = 'SC_OPCODE_LINEST'
+        print line
+    elif line == 'const char* SC_OPCODE_LOGEST_ARY[] =':
+        context = 'SC_OPCODE_LOGEST'
+        print line
+    elif line == 'const char* SC_OPCODE_TREND_ARY[] =':
+        context = 'SC_OPCODE_TREND'
+        print line
+    elif line == 'const char* SC_OPCODE_GROWTH_ARY[] =':
+        context = 'SC_OPCODE_GROWTH'
+        print line
+    elif line == 'const char* SC_OPCODE_COUNT_ARY[] =':
+        context = 'SC_OPCODE_COUNT'
+        print line
+    elif line == 'const char* SC_OPCODE_COUNT_2_ARY[] =':
+        context = 'SC_OPCODE_COUNT_2'
+        print line
+    elif line == 'const char* SC_OPCODE_MAX_ARY[] =':
+        context = 'SC_OPCODE_MAX'
+        print line
+    elif line == 'const char* SC_OPCODE_MAX_A_ARY[] =':
+        context = 'SC_OPCODE_MAX_A'
+        print line
+    elif line == 'const char* SC_OPCODE_MIN_ARY[] =':
+        context = 'SC_OPCODE_MIN'
+        print line
+    elif line == 'const char* SC_OPCODE_MIN_A_ARY[] =':
+        context = 'SC_OPCODE_MIN_A'
+        print line
+    elif line == 'const char* SC_OPCODE_VAR_ARY[] =':
+        context = 'SC_OPCODE_VAR'
+        print line
+    elif line == 'const char* SC_OPCODE_VAR_S_ARY[] =':
+        context = 'SC_OPCODE_VAR_S'
+        print line
+    elif line == 'const char* SC_OPCODE_VAR_A_ARY[] =':
+        context = 'SC_OPCODE_VAR_A'
+        print line
+    elif line == 'const char* SC_OPCODE_VAR_P_ARY[] =':
+        context = 'SC_OPCODE_VAR_P'
+        print line
+    elif line == 'const char* SC_OPCODE_VAR_P_MS_ARY[] =':
+        context = 'SC_OPCODE_VAR_P_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_VAR_P_A_ARY[] =':
+        context = 'SC_OPCODE_VAR_P_A'
+        print line
+    elif line == 'const char* SC_OPCODE_ST_DEV_ARY[] =':
+        context = 'SC_OPCODE_ST_DEV'
+        print line
+    elif line == 'const char* SC_OPCODE_ST_DEV_S_ARY[] =':
+        context = 'SC_OPCODE_ST_DEV_S'
+        print line
+    elif line == 'const char* SC_OPCODE_ST_DEV_A_ARY[] =':
+        context = 'SC_OPCODE_ST_DEV_A'
+        print line
+    elif line == 'const char* SC_OPCODE_ST_DEV_P_ARY[] =':
+        context = 'SC_OPCODE_ST_DEV_P'
+        print line
+    elif line == 'const char* SC_OPCODE_ST_DEV_P_MS_ARY[] =':
+        context = 'SC_OPCODE_ST_DEV_P_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_ST_DEV_P_A_ARY[] =':
+        context = 'SC_OPCODE_ST_DEV_P_A'
+        print line
+    elif line == 'const char* SC_OPCODE_AVERAGE_ARY[] =':
+        context = 'SC_OPCODE_AVERAGE'
+        print line
+    elif line == 'const char* SC_OPCODE_AVERAGE_A_ARY[] =':
+        context = 'SC_OPCODE_AVERAGE_A'
+        print line
+    elif line == 'const char* SC_OPCODE_DEV_SQ_ARY[] =':
+        context = 'SC_OPCODE_DEV_SQ'
+        print line
+    elif line == 'const char* SC_OPCODE_AVE_DEV_ARY[] =':
+        context = 'SC_OPCODE_AVE_DEV'
+        print line
+    elif line == 'const char* SC_OPCODE_SKEW_ARY[] =':
+        context = 'SC_OPCODE_SKEW'
+        print line
+    elif line == 'const char* SC_OPCODE_SKEWP_ARY[] =':
+        context = 'SC_OPCODE_SKEWP'
+        print line
+    elif line == 'const char* SC_OPCODE_KURT_ARY[] =':
+        context = 'SC_OPCODE_KURT'
+        print line
+    elif line == 'const char* SC_OPCODE_GEO_MEAN_ARY[] =':
+        context = 'SC_OPCODE_GEO_MEAN'
+        print line
+    elif line == 'const char* SC_OPCODE_HAR_MEAN_ARY[] =':
+        context = 'SC_OPCODE_HAR_MEAN'
+        print line
+    elif line == 'const char* SC_OPCODE_MODAL_VALUE_ARY[] =':
+        context = 'SC_OPCODE_MODAL_VALUE'
+        print line
+    elif line == 'const char* SC_OPCODE_MODAL_VALUE_MS_ARY[] =':
+        context = 'SC_OPCODE_MODAL_VALUE_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_MODAL_VALUE_MULTI_ARY[] =':
+        context = 'SC_OPCODE_MODAL_VALUE_MULTI'
+        print line
+    elif line == 'const char* SC_OPCODE_MEDIAN_ARY[] =':
+        context = 'SC_OPCODE_MEDIAN'
+        print line
+    elif line == 'const char* SC_OPCODE_PERCENTILE_ARY[] =':
+        context = 'SC_OPCODE_PERCENTILE'
+        print line
+    elif line == 'const char* SC_OPCODE_PERCENTILE_EXC_ARY[] =':
+        context = 'SC_OPCODE_PERCENTILE_EXC'
+        print line
+    elif line == 'const char* SC_OPCODE_PERCENTILE_INC_ARY[] =':
+        context = 'SC_OPCODE_PERCENTILE_INC'
+        print line
+    elif line == 'const char* SC_OPCODE_QUARTILE_ARY[] =':
+        context = 'SC_OPCODE_QUARTILE'
+        print line
+    elif line == 'const char* SC_OPCODE_QUARTILE_EXC_ARY[] =':
+        context = 'SC_OPCODE_QUARTILE_EXC'
+        print line
+    elif line == 'const char* SC_OPCODE_QUARTILE_INC_ARY[] =':
+        context = 'SC_OPCODE_QUARTILE_INC'
+        print line
+    elif line == 'const char* SC_OPCODE_LARGE_ARY[] =':
+        context = 'SC_OPCODE_LARGE'
+        print line
+    elif line == 'const char* SC_OPCODE_SMALL_ARY[] =':
+        context = 'SC_OPCODE_SMALL'
+        print line
+    elif line == 'const char* SC_OPCODE_PERCENT_RANK_ARY[] =':
+        context = 'SC_OPCODE_PERCENT_RANK'
+        print line
+    elif line == 'const char* SC_OPCODE_PERCENT_RANK_EXC_ARY[] =':
+        context = 'SC_OPCODE_PERCENT_RANK_EXC'
+        print line
+    elif line == 'const char* SC_OPCODE_PERCENT_RANK_INC_ARY[] =':
+        context = 'SC_OPCODE_PERCENT_RANK_INC'
+        print line
+    elif line == 'const char* SC_OPCODE_RANK_ARY[] =':
+        context = 'SC_OPCODE_RANK'
+        print line
+    elif line == 'const char* SC_OPCODE_RANK_EQ_ARY[] =':
+        context = 'SC_OPCODE_RANK_EQ'
+        print line
+    elif line == 'const char* SC_OPCODE_RANK_AVG_ARY[] =':
+        context = 'SC_OPCODE_RANK_AVG'
+        print line
+    elif line == 'const char* SC_OPCODE_TRIM_MEAN_ARY[] =':
+        context = 'SC_OPCODE_TRIM_MEAN'
+        print line
+    elif line == 'const char* SC_OPCODE_PROB_ARY[] =':
+        context = 'SC_OPCODE_PROB'
+        print line
+    elif line == 'const char* SC_OPCODE_B_ARY[] =':
+        context = 'SC_OPCODE_B'
+        print line
+    elif line == 'const char* SC_OPCODE_PHI_ARY[] =':
+        context = 'SC_OPCODE_PHI'
+        print line
+    elif line == 'const char* SC_OPCODE_GAUSS_ARY[] =':
+        context = 'SC_OPCODE_GAUSS'
+        print line
+    elif line == 'const char* SC_OPCODE_FISHER_ARY[] =':
+        context = 'SC_OPCODE_FISHER'
+        print line
+    elif line == 'const char* SC_OPCODE_FISHER_INV_ARY[] =':
+        context = 'SC_OPCODE_FISHER_INV'
+        print line
+    elif line == 'const char* SC_OPCODE_BINOM_DIST_ARY[] =':
+        context = 'SC_OPCODE_BINOM_DIST'
+        print line
+    elif line == 'const char* SC_OPCODE_BINOM_DIST_MS_ARY[] =':
+        context = 'SC_OPCODE_BINOM_DIST_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_NEG_BINOM_VERT_ARY[] =':
+        context = 'SC_OPCODE_NEG_BINOM_VERT'
+        print line
+    elif line == 'const char* SC_OPCODE_NEG_BINOM_DIST_MS_ARY[] =':
+        context = 'SC_OPCODE_NEG_BINOM_DIST_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_CRIT_BINOM_ARY[] =':
+        context = 'SC_OPCODE_CRIT_BINOM'
+        print line
+    elif line == 'const char* SC_OPCODE_BINOM_INV_ARY[] =':
+        context = 'SC_OPCODE_BINOM_INV'
+        print line
+    elif line == 'const char* SC_OPCODE_POISSON_DIST_ARY[] =':
+        context = 'SC_OPCODE_POISSON_DIST'
+        print line
+    elif line == 'const char* SC_OPCODE_POISSON_DIST_MS_ARY[] =':
+        context = 'SC_OPCODE_POISSON_DIST_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_NORM_DIST_ARY[] =':
+        context = 'SC_OPCODE_NORM_DIST'
+        print line
+    elif line == 'const char* SC_OPCODE_NORM_DIST_MS_ARY[] =':
+        context = 'SC_OPCODE_NORM_DIST_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_NORM_INV_ARY[] =':
+        context = 'SC_OPCODE_NORM_INV'
+        print line
+    elif line == 'const char* SC_OPCODE_NORM_INV_MS_ARY[] =':
+        context = 'SC_OPCODE_NORM_INV_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_STD_NORM_DIST_ARY[] =':
+        context = 'SC_OPCODE_STD_NORM_DIST'
+        print line
+    elif line == 'const char* SC_OPCODE_STD_NORM_DIST_MS_ARY[] =':
+        context = 'SC_OPCODE_STD_NORM_DIST_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_S_NORM_INV_ARY[] =':
+        context = 'SC_OPCODE_S_NORM_INV'
+        print line
+    elif line == 'const char* SC_OPCODE_S_NORM_INV_MS_ARY[] =':
+        context = 'SC_OPCODE_S_NORM_INV_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_LOG_NORM_DIST_ARY[] =':
+        context = 'SC_OPCODE_LOG_NORM_DIST'
+        print line
+    elif line == 'const char* SC_OPCODE_LOG_NORM_DIST_MS_ARY[] =':
+        context = 'SC_OPCODE_LOG_NORM_DIST_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_LOG_INV_ARY[] =':
+        context = 'SC_OPCODE_LOG_INV'
+        print line
+    elif line == 'const char* SC_OPCODE_LOG_INV_MS_ARY[] =':
+        context = 'SC_OPCODE_LOG_INV_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_EXP_DIST_ARY[] =':
+        context = 'SC_OPCODE_EXP_DIST'
+        print line
+    elif line == 'const char* SC_OPCODE_EXP_DIST_MS_ARY[] =':
+        context = 'SC_OPCODE_EXP_DIST_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_GAMMA_DIST_ARY[] =':
+        context = 'SC_OPCODE_GAMMA_DIST'
+        print line
+    elif line == 'const char* SC_OPCODE_GAMMA_DIST_MS_ARY[] =':
+        context = 'SC_OPCODE_GAMMA_DIST_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_GAMMA_INV_ARY[] =':
+        context = 'SC_OPCODE_GAMMA_INV'
+        print line
+    elif line == 'const char* SC_OPCODE_GAMMA_INV_MS_ARY[] =':
+        context = 'SC_OPCODE_GAMMA_INV_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_GAMMA_LN_ARY[] =':
+        context = 'SC_OPCODE_GAMMA_LN'
+        print line
+    elif line == 'const char* SC_OPCODE_GAMMA_LN_MS_ARY[] =':
+        context = 'SC_OPCODE_GAMMA_LN_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_GAMMA_ARY[] =':
+        context = 'SC_OPCODE_GAMMA'
+        print line
+    elif line == 'const char* SC_OPCODE_BETA_DIST_ARY[] =':
+        context = 'SC_OPCODE_BETA_DIST'
+        print line
+    elif line == 'const char* SC_OPCODE_BETA_INV_ARY[] =':
+        context = 'SC_OPCODE_BETA_INV'
+        print line
+    elif line == 'const char* SC_OPCODE_BETA_DIST_MS_ARY[] =':
+        context = 'SC_OPCODE_BETA_DIST_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_BETA_INV_MS_ARY[] =':
+        context = 'SC_OPCODE_BETA_INV_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_WEIBULL_ARY[] =':
+        context = 'SC_OPCODE_WEIBULL'
+        print line
+    elif line == 'const char* SC_OPCODE_WEIBULL_MS_ARY[] =':
+        context = 'SC_OPCODE_WEIBULL_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_HYP_GEOM_DIST_ARY[] =':
+        context = 'SC_OPCODE_HYP_GEOM_DIST'
+        print line
+    elif line == 'const char* SC_OPCODE_HYP_GEOM_DIST_MS_ARY[] =':
+        context = 'SC_OPCODE_HYP_GEOM_DIST_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_T_DIST_ARY[] =':
+        context = 'SC_OPCODE_T_DIST'
+        print line
+    elif line == 'const char* SC_OPCODE_T_DIST_2T_ARY[] =':
+        context = 'SC_OPCODE_T_DIST_2T'
+        print line
+    elif line == 'const char* SC_OPCODE_T_DIST_MS_ARY[] =':
+        context = 'SC_OPCODE_T_DIST_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_T_DIST_RT_ARY[] =':
+        context = 'SC_OPCODE_T_DIST_RT'
+        print line
+    elif line == 'const char* SC_OPCODE_T_INV_ARY[] =':
+        context = 'SC_OPCODE_T_INV'
+        print line
+    elif line == 'const char* SC_OPCODE_T_INV_MS_ARY[] =':
+        context = 'SC_OPCODE_T_INV_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_T_INV_2T_ARY[] =':
+        context = 'SC_OPCODE_T_INV_2T'
+        print line
+    elif line == 'const char* SC_OPCODE_F_DIST_ARY[] =':
+        context = 'SC_OPCODE_F_DIST'
+        print line
+    elif line == 'const char* SC_OPCODE_F_DIST_LT_ARY[] =':
+        context = 'SC_OPCODE_F_DIST_LT'
+        print line
+    elif line == 'const char* SC_OPCODE_F_DIST_RT_ARY[] =':
+        context = 'SC_OPCODE_F_DIST_RT'
+        print line
+    elif line == 'const char* SC_OPCODE_F_INV_ARY[] =':
+        context = 'SC_OPCODE_F_INV'
+        print line
+    elif line == 'const char* SC_OPCODE_F_INV_LT_ARY[] =':
+        context = 'SC_OPCODE_F_INV_LT'
+        print line
+    elif line == 'const char* SC_OPCODE_F_INV_RT_ARY[] =':
+        context = 'SC_OPCODE_F_INV_RT'
+        print line
+    elif line == 'const char* SC_OPCODE_CHI_DIST_ARY[] =':
+        context = 'SC_OPCODE_CHI_DIST'
+        print line
+    elif line == 'const char* SC_OPCODE_CHI_DIST_MS_ARY[] =':
+        context = 'SC_OPCODE_CHI_DIST_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_CHISQ_DIST_ARY[] =':
+        context = 'SC_OPCODE_CHISQ_DIST'
+        print line
+    elif line == 'const char* SC_OPCODE_CHISQ_DIST_MS_ARY[] =':
+        context = 'SC_OPCODE_CHISQ_DIST_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_CHI_INV_ARY[] =':
+        context = 'SC_OPCODE_CHI_INV'
+        print line
+    elif line == 'const char* SC_OPCODE_CHI_INV_MS_ARY[] =':
+        context = 'SC_OPCODE_CHI_INV_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_CHISQ_INV_ARY[] =':
+        context = 'SC_OPCODE_CHISQ_INV'
+        print line
+    elif line == 'const char* SC_OPCODE_CHISQ_INV_MS_ARY[] =':
+        context = 'SC_OPCODE_CHISQ_INV_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_STANDARD_ARY[] =':
+        context = 'SC_OPCODE_STANDARD'
+        print line
+    elif line == 'const char* SC_OPCODE_PERMUT_ARY[] =':
+        context = 'SC_OPCODE_PERMUT'
+        print line
+    elif line == 'const char* SC_OPCODE_PERMUTATION_A_ARY[] =':
+        context = 'SC_OPCODE_PERMUTATION_A'
+        print line
+    elif line == 'const char* SC_OPCODE_CONFIDENCE_ARY[] =':
+        context = 'SC_OPCODE_CONFIDENCE'
+        print line
+    elif line == 'const char* SC_OPCODE_CONFIDENCE_N_ARY[] =':
+        context = 'SC_OPCODE_CONFIDENCE_N'
+        print line
+    elif line == 'const char* SC_OPCODE_CONFIDENCE_T_ARY[] =':
+        context = 'SC_OPCODE_CONFIDENCE_T'
+        print line
+    elif line == 'const char* SC_OPCODE_Z_TEST_ARY[] =':
+        context = 'SC_OPCODE_Z_TEST'
+        print line
+    elif line == 'const char* SC_OPCODE_Z_TEST_MS_ARY[] =':
+        context = 'SC_OPCODE_Z_TEST_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_CHI_TEST_ARY[] =':
+        context = 'SC_OPCODE_CHI_TEST'
+        print line
+    elif line == 'const char* SC_OPCODE_CHI_TEST_MS_ARY[] =':
+        context = 'SC_OPCODE_CHI_TEST_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_F_TEST_ARY[] =':
+        context = 'SC_OPCODE_F_TEST'
+        print line
+    elif line == 'const char* SC_OPCODE_F_TEST_MS_ARY[] =':
+        context = 'SC_OPCODE_F_TEST_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_T_TEST_ARY[] =':
+        context = 'SC_OPCODE_T_TEST'
+        print line
+    elif line == 'const char* SC_OPCODE_T_TEST_MS_ARY[] =':
+        context = 'SC_OPCODE_T_TEST_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_RSQ_ARY[] =':
+        context = 'SC_OPCODE_RSQ'
+        print line
+    elif line == 'const char* SC_OPCODE_INTERCEPT_ARY[] =':
+        context = 'SC_OPCODE_INTERCEPT'
+        print line
+    elif line == 'const char* SC_OPCODE_SLOPE_ARY[] =':
+        context = 'SC_OPCODE_SLOPE'
+        print line
+    elif line == 'const char* SC_OPCODE_STEYX_ARY[] =':
+        context = 'SC_OPCODE_STEYX'
+        print line
+    elif line == 'const char* SC_OPCODE_PEARSON_ARY[] =':
+        context = 'SC_OPCODE_PEARSON'
+        print line
+    elif line == 'const char* SC_OPCODE_CORREL_ARY[] =':
+        context = 'SC_OPCODE_CORREL'
+        print line
+    elif line == 'const char* SC_OPCODE_COVAR_ARY[] =':
+        context = 'SC_OPCODE_COVAR'
+        print line
+    elif line == 'const char* SC_OPCODE_COVARIANCE_P_ARY[] =':
+        context = 'SC_OPCODE_COVARIANCE_P'
+        print line
+    elif line == 'const char* SC_OPCODE_COVARIANCE_S_ARY[] =':
+        context = 'SC_OPCODE_COVARIANCE_S'
+        print line
+    elif line == 'const char* SC_OPCODE_FORECAST_ARY[] =':
+        context = 'SC_OPCODE_FORECAST'
+        print line
+    elif line == 'const char* SC_OPCODE_FORECAST_ETS_ADD_ARY[] =':
+        context = 'SC_OPCODE_FORECAST_ETS_ADD'
+        print line
+    elif line == 'const char* SC_OPCODE_FORECAST_ETS_MUL_ARY[] =':
+        context = 'SC_OPCODE_FORECAST_ETS_MUL'
+        print line
+    elif line == 'const char* SC_OPCODE_FORECAST_ETS_PIA_ARY[] =':
+        context = 'SC_OPCODE_FORECAST_ETS_PIA'
+        print line
+    elif line == 'const char* SC_OPCODE_FORECAST_ETS_PIM_ARY[] =':
+        context = 'SC_OPCODE_FORECAST_ETS_PIM'
+        print line
+    elif line == 'const char* SC_OPCODE_FORECAST_ETS_SEA_ARY[] =':
+        context = 'SC_OPCODE_FORECAST_ETS_SEA'
+        print line
+    elif line == 'const char* SC_OPCODE_FORECAST_ETS_STA_ARY[] =':
+        context = 'SC_OPCODE_FORECAST_ETS_STA'
+        print line
+    elif line == 'const char* SC_OPCODE_FORECAST_ETS_STM_ARY[] =':
+        context = 'SC_OPCODE_FORECAST_ETS_STM'
+        print line
+    elif line == 'const char* SC_OPCODE_FORECAST_LIN_ARY[] =':
+        context = 'SC_OPCODE_FORECAST_LIN'
+        print line
+    elif line == 'const char* SC_OPCODE_ADDRESS_ARY[] =':
+        context = 'SC_OPCODE_ADDRESS'
+        print line
+    elif line == 'const char* SC_OPCODE_AREAS_ARY[] =':
+        context = 'SC_OPCODE_AREAS'
+        print line
+    elif line == 'const char* SC_OPCODE_CHOOSE_ARY[] =':
+        context = 'SC_OPCODE_CHOOSE'
+        print line
+    elif line == 'const char* SC_OPCODE_COLUMN_ARY[] =':
+        context = 'SC_OPCODE_COLUMN'
+        print line
+    elif line == 'const char* SC_OPCODE_ROW_ARY[] =':
+        context = 'SC_OPCODE_ROW'
+        print line
+    elif line == 'const char* SC_OPCODE_SHEET_ARY[] =':
+        context = 'SC_OPCODE_SHEET'
+        print line
+    elif line == 'const char* SC_OPCODE_COLUMNS_ARY[] =':
+        context = 'SC_OPCODE_COLUMNS'
+        print line
+    elif line == 'const char* SC_OPCODE_ROWS_ARY[] =':
+        context = 'SC_OPCODE_ROWS'
+        print line
+    elif line == 'const char* SC_OPCODE_SHEETS_ARY[] =':
+        context = 'SC_OPCODE_SHEETS'
+        print line
+    elif line == 'const char* SC_OPCODE_H_LOOKUP_ARY[] =':
+        context = 'SC_OPCODE_H_LOOKUP'
+        print line
+    elif line == 'const char* SC_OPCODE_V_LOOKUP_ARY[] =':
+        context = 'SC_OPCODE_V_LOOKUP'
+        print line
+    elif line == 'const char* SC_OPCODE_INDEX_ARY[] =':
+        context = 'SC_OPCODE_INDEX'
+        print line
+    elif line == 'const char* SC_OPCODE_INDIRECT_ARY[] =':
+        context = 'SC_OPCODE_INDIRECT'
+        print line
+    elif line == 'const char* SC_OPCODE_LOOKUP_ARY[] =':
+        context = 'SC_OPCODE_LOOKUP'
+        print line
+    elif line == 'const char* SC_OPCODE_MATCH_ARY[] =':
+        context = 'SC_OPCODE_MATCH'
+        print line
+    elif line == 'const char* SC_OPCODE_OFFSET_ARY[] =':
+        context = 'SC_OPCODE_OFFSET'
+        print line
+    elif line == 'const char* SC_OPCODE_ERROR_TYPE_ARY[] =':
+        context = 'SC_OPCODE_ERROR_TYPE'
+        print line
+    elif line == 'const char* SC_OPCODE_ERROR_TYPE_ODF_ARY[] =':
+        context = 'SC_OPCODE_ERROR_TYPE_ODF'
+        print line
+    elif line == 'const char* SC_OPCODE_STYLE_ARY[] =':
+        context = 'SC_OPCODE_STYLE'
+        print line
+    elif line == 'const char* SC_OPCODE_DDE_ARY[] =':
+        context = 'SC_OPCODE_DDE'
+        print line
+    elif line == 'const char* SC_OPCODE_HYPERLINK_ARY[] =':
+        context = 'SC_OPCODE_HYPERLINK'
+        print line
+    elif line == 'const char* SC_OPCODE_GET_PIVOT_DATA_ARY[] =':
+        context = 'SC_OPCODE_GET_PIVOT_DATA'
+        print line
+    elif line == 'const char* SC_OPCODE_BAHTTEXT_ARY[] =':
+        context = 'SC_OPCODE_BAHTTEXT'
+        print line
+    elif line == 'const char* SC_OPCODE_JIS_ARY[] =':
+        context = 'SC_OPCODE_JIS'
+        print line
+    elif line == 'const char* SC_OPCODE_ASC_ARY[] =':
+        context = 'SC_OPCODE_ASC'
+        print line
+    elif line == 'const char* SC_OPCODE_CODE_ARY[] =':
+        context = 'SC_OPCODE_CODE'
+        print line
+    elif line == 'const char* SC_OPCODE_CURRENCY_ARY[] =':
+        context = 'SC_OPCODE_CURRENCY'
+        print line
+    elif line == 'const char* SC_OPCODE_CHAR_ARY[] =':
+        context = 'SC_OPCODE_CHAR'
+        print line
+    elif line == 'const char* SC_OPCODE_CLEAN_ARY[] =':
+        context = 'SC_OPCODE_CLEAN'
+        print line
+    elif line == 'const char* SC_OPCODE_CONCAT_ARY[] =':
+        context = 'SC_OPCODE_CONCAT'
+        print line
+    elif line == 'const char* SC_OPCODE_CONCAT_MS_ARY[] =':
+        context = 'SC_OPCODE_CONCAT_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_TEXTJOIN_MS_ARY[] =':
+        context = 'SC_OPCODE_TEXTJOIN_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_IFS_MS_ARY[] =':
+        context = 'SC_OPCODE_IFS_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_SWITCH_MS_ARY[] =':
+        context = 'SC_OPCODE_SWITCH_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_MINIFS_MS_ARY[] =':
+        context = 'SC_OPCODE_MINIFS_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_MAXIFS_MS_ARY[] =':
+        context = 'SC_OPCODE_MAXIFS_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_EXACT_ARY[] =':
+        context = 'SC_OPCODE_EXACT'
+        print line
+    elif line == 'const char* SC_OPCODE_FIND_ARY[] =':
+        context = 'SC_OPCODE_FIND'
+        print line
+    elif line == 'const char* SC_OPCODE_SEARCH_ARY[] =':
+        context = 'SC_OPCODE_SEARCH'
+        print line
+    elif line == 'const char* SC_OPCODE_TRIM_ARY[] =':
+        context = 'SC_OPCODE_TRIM'
+        print line
+    elif line == 'const char* SC_OPCODE_PROPER_ARY[] =':
+        context = 'SC_OPCODE_PROPER'
+        print line
+    elif line == 'const char* SC_OPCODE_UPPER_ARY[] =':
+        context = 'SC_OPCODE_UPPER'
+        print line
+    elif line == 'const char* SC_OPCODE_LOWER_ARY[] =':
+        context = 'SC_OPCODE_LOWER'
+        print line
+    elif line == 'const char* SC_OPCODE_VALUE_ARY[] =':
+        context = 'SC_OPCODE_VALUE'
+        print line
+    elif line == 'const char* SC_OPCODE_TEXT_ARY[] =':
+        context = 'SC_OPCODE_TEXT'
+        print line
+    elif line == 'const char* SC_OPCODE_T_ARY[] =':
+        context = 'SC_OPCODE_T'
+        print line
+    elif line == 'const char* SC_OPCODE_REPLACE_ARY[] =':
+        context = 'SC_OPCODE_REPLACE'
+        print line
+    elif line == 'const char* SC_OPCODE_FIXED_ARY[] =':
+        context = 'SC_OPCODE_FIXED'
+        print line
+    elif line == 'const char* SC_OPCODE_LEN_ARY[] =':
+        context = 'SC_OPCODE_LEN'
+        print line
+    elif line == 'const char* SC_OPCODE_LEFT_ARY[] =':
+        context = 'SC_OPCODE_LEFT'
+        print line
+    elif line == 'const char* SC_OPCODE_RIGHT_ARY[] =':
+        context = 'SC_OPCODE_RIGHT'
+        print line
+    elif line == 'const char* SC_OPCODE_MID_ARY[] =':
+        context = 'SC_OPCODE_MID'
+        print line
+    elif line == 'const char* SC_OPCODE_REPT_ARY[] =':
+        context = 'SC_OPCODE_REPT'
+        print line
+    elif line == 'const char* SC_OPCODE_SUBSTITUTE_ARY[] =':
+        context = 'SC_OPCODE_SUBSTITUTE'
+        print line
+    elif line == 'const char* SC_OPCODE_BASE_ARY[] =':
+        context = 'SC_OPCODE_BASE'
+        print line
+    elif line == 'const char* SC_OPCODE_DECIMAL_ARY[] =':
+        context = 'SC_OPCODE_DECIMAL'
+        print line
+    elif line == 'const char* SC_OPCODE_CONVERT_OOO_ARY[] =':
+        context = 'SC_OPCODE_CONVERT_OOO'
+        print line
+    elif line == 'const char* SC_OPCODE_ROMAN_ARY[] =':
+        context = 'SC_OPCODE_ROMAN'
+        print line
+    elif line == 'const char* SC_OPCODE_ARABIC_ARY[] =':
+        context = 'SC_OPCODE_ARABIC'
+        print line
+    elif line == 'const char* SC_OPCODE_INFO_ARY[] =':
+        context = 'SC_OPCODE_INFO'
+        print line
+    elif line == 'const char* SC_OPCODE_UNICODE_ARY[] =':
+        context = 'SC_OPCODE_UNICODE'
+        print line
+    elif line == 'const char* SC_OPCODE_UNICHAR_ARY[] =':
+        context = 'SC_OPCODE_UNICHAR'
+        print line
+    elif line == 'const char* SC_OPCODE_EUROCONVERT_ARY[] =':
+        context = 'SC_OPCODE_EUROCONVERT'
+        print line
+    elif line == 'const char* SC_OPCODE_NUMBERVALUE_ARY[] =':
+        context = 'SC_OPCODE_NUMBERVALUE'
+        print line
+    elif line == 'const char* SC_OPCODE_BITAND_ARY[] =':
+        context = 'SC_OPCODE_BITAND'
+        print line
+    elif line == 'const char* SC_OPCODE_BITOR_ARY[] =':
+        context = 'SC_OPCODE_BITOR'
+        print line
+    elif line == 'const char* SC_OPCODE_BITXOR_ARY[] =':
+        context = 'SC_OPCODE_BITXOR'
+        print line
+    elif line == 'const char* SC_OPCODE_BITRSHIFT_ARY[] =':
+        context = 'SC_OPCODE_BITRSHIFT'
+        print line
+    elif line == 'const char* SC_OPCODE_BITLSHIFT_ARY[] =':
+        context = 'SC_OPCODE_BITLSHIFT'
+        print line
+    elif line == 'const char* SC_OPCODE_LENB_ARY[] =':
+        context = 'SC_OPCODE_LENB'
+        print line
+    elif line == 'const char* SC_OPCODE_RIGHTB_ARY[] =':
+        context = 'SC_OPCODE_RIGHTB'
+        print line
+    elif line == 'const char* SC_OPCODE_LEFTB_ARY[] =':
+        context = 'SC_OPCODE_LEFTB'
+        print line
+    elif line == 'const char* SC_OPCODE_MIDB_ARY[] =':
+        context = 'SC_OPCODE_MIDB'
+        print line
+    elif line == 'const char* SC_OPCODE_FILTERXML_ARY[] =':
+        context = 'SC_OPCODE_FILTERXML'
+        print line
+    elif line == 'const char* SC_OPCODE_COLOR_ARY[] =':
+        context = 'SC_OPCODE_COLOR'
+        print line
+    elif line == 'const char* SC_OPCODE_WEBSERVICE_ARY[] =':
+        context = 'SC_OPCODE_WEBSERVICE'
+        print line
+    elif line == 'const char* SC_OPCODE_ENCODEURL_ARY[] =':
+        context = 'SC_OPCODE_ENCODEURL'
+        print line
+    elif line == 'const char* SC_OPCODE_ERF_MS_ARY[] =':
+        context = 'SC_OPCODE_ERF_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_ERFC_MS_ARY[] =':
+        context = 'SC_OPCODE_ERFC_MS'
+        print line
+    elif line == 'const char* SC_OPCODE_RAWSUBTRACT_ARY[] =':
+        context = 'SC_OPCODE_RAWSUBTRACT'
+        print line
+    elif line == 'const char* SC_OPCODE_ROUNDSIG_ARY[] =':
+        context = 'SC_OPCODE_ROUNDSIG'
+        print line
+    elif line == 'const ErrMsgCode RID_SD_ERRHDL[] =':
+        context = 'RID_SD_ERRHDL'
+        print line
+    elif line == 'const char* STR_IMPRESS_PRINT_UI_CONTENT_CHOICES[] =':
+        context = 'STR_IMPRESS_PRINT_UI_CONTENT_CHOICES'
+        print line
+    elif line == 'const char* STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES[] =':
+        context = 'STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES'
+        print line
+    elif line == 'const char* STR_IMPRESS_PRINT_UI_ORDER_CHOICES[] =':
+        context = 'STR_IMPRESS_PRINT_UI_ORDER_CHOICES'
+        print line
+    elif line == 'const char* STR_IMPRESS_PRINT_UI_QUALITY_CHOICES[] =':
+        context = 'STR_IMPRESS_PRINT_UI_QUALITY_CHOICES'
+        print line
+    elif line == 'const char* STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES[] =':
+        context = 'STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES'
+        print line
+    elif line == 'const char* STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW[] =':
+        context = 'STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW'
+        print line
+    elif line == 'const char* STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST[] =':
+        context = 'STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST'
+        print line
+    elif line == 'const char* STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE[] =':
+        context = 'STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE'
+        print line
+    elif line == 'const char* STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE[] =':
+        context = 'STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE'
+        print line
+    elif line == 'const char* RID_FUNCTION_CATEGORIES[] =':
+        context = 'RID_FUNCTION_CATEGORIES'
+        print line
+    elif line == 'const std::pair<const char*, int> RID_CELLSTYLEFAMILY[] =':
+        context = 'RID_CELLSTYLEFAMILY'
+        print line
+    elif line == 'const std::pair<const char*, int> RID_PAGESTYLEFAMILY[] =':
+        context = 'RID_PAGESTYLEFAMILY'
+        print line
+    elif line == 'const ErrMsgCode RID_ERRHDLSC[] =':
+        context = 'RID_ERRHDLSC'
+        print line
+    elif line == 'const char* RID_UI_SYMBOLSET_NAMES[] =':
+        context = 'RID_UI_SYMBOLSET_NAMES'
+        print line
+    elif line == 'const char* RID_UI_SYMBOL_NAMES[] =':
+        context = 'RID_UI_SYMBOL_NAMES'
+        print line
+    elif line == 'const char* SCSTR_DPFUNCLISTBOX[] =':
+        context = 'SCSTR_DPFUNCLISTBOX'
+        print line
+    elif line == 'const std::pair<const char*, int> RID_PARAGRAPHSTYLEFAMILY[] =':
+        context = 'RID_PARAGRAPHSTYLEFAMILY'
+        print line
+    elif line == 'const std::pair<const char*, int> RID_CHARACTERSTYLEFAMILY[] =':
+        context = 'RID_CHARACTERSTYLEFAMILY'
+        print line
+    elif line == 'const std::pair<const char*, int> RID_FRAMESTYLEFAMILY[] =':
+        context = 'RID_FRAMESTYLEFAMILY'
+        print line
+    elif line == 'const std::pair<const char*, int> RID_PAGESTYLEFAMILY[] =':
+        context = 'RID_PAGESTYLEFAMILY'
+        print line
+    elif line == 'const std::pair<const char*, int> RID_LISTSTYLEFAMILY[] =':
+        context = 'RID_LISTSTYLEFAMILY'
+        print line
+    elif line == 'const std::pair<const char*, int> RID_TABLESTYLEFAMILY[] =':
+        context = 'RID_TABLESTYLEFAMILY'
+        print line
+    elif line == 'const std::pair<const char*, int> SA_ADDRESS_HEADER[] =':
+        context = 'SA_ADDRESS_HEADER'
+        print line
+    elif line == 'const ErrMsgCode RID_SW_ERRHDL[] =':
+        context = 'RID_SW_ERRHDL'
+        print line
+    elif line == 'const std::pair<const char*, FieldUnit> SCSTR_UNIT[] =':
+        context = 'SCSTR_UNIT'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_SHOWHIDE[] =':
+        context = 'RID_RSC_ENUM_SHOWHIDE'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_YESNO[] =':
+        context = 'RID_RSC_ENUM_YESNO'
+        print line
+    elif line == 'const char* RID_SHELLRES_AUTOFMTSTRS[] =':
+        context = 'RID_SHELLRES_AUTOFMTSTRS'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_VERTICAL_ALIGN[] =':
+        context = 'RID_RSC_ENUM_VERTICAL_ALIGN'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_ICONSIZE_TYPE[] =':
+        context = 'RID_RSC_ENUM_ICONSIZE_TYPE'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_BORDER_TYPE[] =':
+        context = 'RID_RSC_ENUM_BORDER_TYPE'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_LISTSOURCE_TYPE[] =':
+        context = 'RID_RSC_ENUM_LISTSOURCE_TYPE'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_ALIGNMENT[] =':
+        context = 'RID_RSC_ENUM_ALIGNMENT'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_BUTTONTYPE[] =':
+        context = 'RID_RSC_ENUM_BUTTONTYPE'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_SUBMIT_METHOD[] =':
+        context = 'RID_RSC_ENUM_SUBMIT_METHOD'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_SUBMIT_ENCODING[] =':
+        context = 'RID_RSC_ENUM_SUBMIT_ENCODING'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_DATEFORMAT_LIST[] =':
+        context = 'RID_RSC_ENUM_DATEFORMAT_LIST'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_TIMEFORMAT_LIST[] =':
+        context = 'RID_RSC_ENUM_TIMEFORMAT_LIST'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_CHECKED[] =':
+        context = 'RID_RSC_ENUM_CHECKED'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_CYCLE[] =':
+        context = 'RID_RSC_ENUM_CYCLE'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_NAVIGATION[] =':
+        context = 'RID_RSC_ENUM_NAVIGATION'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_SUBMIT_TARGET[] =':
+        context = 'RID_RSC_ENUM_SUBMIT_TARGET'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_SELECTION_TYPE[] =':
+        context = 'RID_RSC_ENUM_SELECTION_TYPE'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_ORIENTATION[] =':
+        context = 'RID_RSC_ENUM_ORIENTATION'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_PUSHBUTTONTYPE[] =':
+        context = 'RID_RSC_ENUM_PUSHBUTTONTYPE'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_CELL_EXCHANGE_TYPE[] =':
+        context = 'RID_RSC_ENUM_CELL_EXCHANGE_TYPE'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_TEXTTYPE[] =':
+        context = 'RID_RSC_ENUM_TEXTTYPE'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_LINEEND_FORMAT[] =':
+        context = 'RID_RSC_ENUM_LINEEND_FORMAT'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_SCROLLBARS[] =':
+        context = 'RID_RSC_ENUM_SCROLLBARS'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_VISUALEFFECT[] =':
+        context = 'RID_RSC_ENUM_VISUALEFFECT'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_IMAGE_POSITION[] =':
+        context = 'RID_RSC_ENUM_IMAGE_POSITION'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_WHITESPACE_HANDLING[] =':
+        context = 'RID_RSC_ENUM_WHITESPACE_HANDLING'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_SCALE_MODE[] =':
+        context = 'RID_RSC_ENUM_SCALE_MODE'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_WRITING_MODE[] =':
+        context = 'RID_RSC_ENUM_WRITING_MODE'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_WHEEL_BEHAVIOR[] =':
+        context = 'RID_RSC_ENUM_WHEEL_BEHAVIOR'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_TEXT_ANCHOR_TYPE[] =':
+        context = 'RID_RSC_ENUM_TEXT_ANCHOR_TYPE'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_SHEET_ANCHOR_TYPE[] =':
+        context = 'RID_RSC_ENUM_SHEET_ANCHOR_TYPE'
+        print line
+    elif line == 'const char* RID_RSC_ENUM_COMMAND_TYPE[] =':
+        context = 'RID_RSC_ENUM_COMMAND_TYPE'
+        print line
+    elif line == 'const char* RID_SVXSTR_PERSONA_CATEGORIES[] =':
+        context = 'RID_SVXSTR_PERSONA_CATEGORIES'
+        print line
+    elif line == 'const std::pair<const char*, sal_uInt16> SID_GENERAL_OPTIONS_RES[] =':
+        context = 'SID_GENERAL_OPTIONS_RES'
+        print line
+    elif line == 'const std::pair<const char*, sal_uInt16> SID_LANGUAGE_OPTIONS_RES[] =':
+        context = 'SID_LANGUAGE_OPTIONS_RES'
+        print line
+    elif line == 'const std::pair<const char*, sal_uInt16> SID_INET_DLG_RES[] =':
+        context = 'SID_INET_DLG_RES'
+        print line
+    elif line == 'const std::pair<const char*, sal_uInt16> SID_SW_EDITOPTIONS_RES[] =':
+        context = 'SID_SW_EDITOPTIONS_RES'
+        print line
+    elif line == 'const std::pair<const char*, sal_uInt16> SID_SW_ONLINEOPTIONS_RES[] =':
+        context = 'SID_SW_ONLINEOPTIONS_RES'
+        print line
+    elif line == 'const std::pair<const char*, sal_uInt16> SID_SM_EDITOPTIONS_RES[] =':
+        context = 'SID_SM_EDITOPTIONS_RES'
+        print line
+    elif line == 'const std::pair<const char*, sal_uInt16> SID_SC_EDITOPTIONS_RES[] =':
+        context = 'SID_SC_EDITOPTIONS_RES'
+        print line
+    elif line == 'const std::pair<const char*, sal_uInt16> SID_SD_EDITOPTIONS_RES[] =':
+        context = 'SID_SD_EDITOPTIONS_RES'
+        print line
+    elif line == 'const std::pair<const char*, sal_uInt16> SID_SD_GRAPHIC_OPTIONS_RES[] =':
+        context = 'SID_SD_GRAPHIC_OPTIONS_RES'
+        print line
+    elif line == 'const std::pair<const char*, sal_uInt16> SID_SCH_EDITOPTIONS_RES[] =':
+        context = 'SID_SCH_EDITOPTIONS_RES'
+        print line
+    elif line == 'const std::pair<const char*, sal_uInt16> SID_FILTER_DLG_RES[] =':
+        context = 'SID_FILTER_DLG_RES'
+        print line
+    elif line == 'const std::pair<const char*, sal_uInt16> SID_SB_STARBASEOPTIONS_RES[] =':
+        context = 'SID_SB_STARBASEOPTIONS_RES'
+        print line
+    elif line == 'const std::pair<const char*, FieldUnit> STR_ARR_METRIC[] =':
+        context = 'STR_ARR_METRIC'
+        print line
+    elif line == 'const std::pair<const char*, int> RES_SRCTYPES[] =':
+        context = 'RES_SRCTYPES'
+        print line
+    elif line == 'const char* RA_SALUTATION[] =':
+        context = 'RA_SALUTATION'
+        print line
+    elif line == 'const char* RA_PUNCTUATION[] =':
+        context = 'RA_PUNCTUATION'
+        print line
+    elif line == 'const char* RSC_QUERY_OBJECT_TYPE[] =':
+        context = 'RSC_QUERY_OBJECT_TYPE'
+        print line
+    elif line == 'const std::pair<const char*, ErrCode> RID_UUI_ERRHDL[] =':
+        context = 'RID_UUI_ERRHDL'
+        print line
+    elif line == 'const char* RID_STR_FORCENEWPAGE_CONST[] =':
+        context = 'RID_STR_FORCENEWPAGE_CONST'
+        print line
+    elif line == 'const char* RID_STR_GROUPKEEPTOGETHER_CONST[] =':
+        context = 'RID_STR_GROUPKEEPTOGETHER_CONST'
+        print line
+    elif line == 'const char* RID_STR_REPORTPRINTOPTION_CONST[] =':
+        context = 'RID_STR_REPORTPRINTOPTION_CONST'
+        print line
+    elif line == 'const char* RID_STR_TYPE_CONST[] =':
+        context = 'RID_STR_TYPE_CONST'
+        print line
+    elif line == 'const char* RID_STR_BOOL[] =':
+        context = 'RID_STR_BOOL'
+        print line
+    elif line == 'const char* RID_STR_KEEPTOGETHER_CONST[] =':
+        context = 'RID_STR_KEEPTOGETHER_CONST'
+        print line
+    elif line == 'const char* RID_STR_VERTICAL_ALIGN_CONST[] =':
+        context = 'RID_STR_VERTICAL_ALIGN_CONST'
+        print line
+    elif line == 'const char* RID_STR_PARAADJUST_CONST[] =':
+        context = 'RID_STR_PARAADJUST_CONST'
+        print line
+    elif line == 'const char* SV_PRINT_NATIVE_STRINGS[] =':
+        context = 'SV_PRINT_NATIVE_STRINGS'
+        print line
+    elif context != "":
+        index = line.find(' N_("')
+        if index != -1:
+            print line[:index] + ' NC_("' + context + '", ' + line[index+4:]
+        else:
+            print line
+    else:
+        print line
