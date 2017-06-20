@@ -41,9 +41,6 @@ namespace svgio
             /// variable scan values, dependent of given XAttributeList
             SvgNumber               maStartOffset;
 
-            bool                    mbMethod : 1; // true = align, false = stretch
-            bool                    mbSpacing : 1; // true = auto, false = exact
-
         public:
             SvgTextPathNode(
                 SvgDocument& rDocument,
@@ -60,12 +57,6 @@ namespace svgio
 
             /// StartOffset content
             const SvgNumber& getStartOffset() const { return maStartOffset; }
-
-            /// Method content
-            void setMethod(bool bNew) { mbMethod = bNew; }
-
-            /// Spacing content
-            void setSpacing(bool bNew) { mbSpacing = bNew; }
         };
     } // end of namespace svgreader
 } // end of namespace svgio

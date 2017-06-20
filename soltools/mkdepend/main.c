@@ -512,7 +512,6 @@ struct filepointer *getfile(char *file)
             fatalerr("makedepend:  Failed to read file \"%s\"\n", file);
 
     close(fd);
-    content->f_len = bytes_read+1;
     content->f_p = content->f_base;
     content->f_end = content->f_base + bytes_read;
     *content->f_end = '\0';

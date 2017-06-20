@@ -424,7 +424,6 @@ public:
     SvStream*                   m_pStream;      // the stream worked on; for readonly streams it is the original stream of the content
                                                 // for read/write streams it's a copy into a temporary file
     OUString                    m_aTempURL;     // URL of this temporary stream
-    RepresentMode               m_nRepresentMode; // should it be used as XInputStream or as SvStream
     ErrCode                     m_nError;
     StreamMode                  m_nMode;        // open mode ( read/write/trunc/nocreate/sharing )
     bool                        m_bSourceRead;  // Source still contains useful information
@@ -484,7 +483,6 @@ public:
                                                 // this means that the root storage does an autocommit when its external
                                                 // reference is destroyed
     bool                        m_bIsRoot;      // marks this storage as root storages that manages all commits and reverts
-    bool                        m_bDirty;       // ???
     bool                        m_bIsLinked;
     bool                        m_bListCreated;
     SotClipboardFormatId        m_nFormat;
@@ -638,7 +636,6 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const OUString& rName, StreamMode 
     , m_aURL( rName )
     , m_pContent( nullptr )
     , m_pStream( nullptr )
-    , m_nRepresentMode( RepresentMode::NONE )
     , m_nError( ERRCODE_NONE )
     , m_nMode( nMode )
     , m_bSourceRead( !( nMode & StreamMode::TRUNC ) )
@@ -697,8 +694,6 @@ bool UCBStorageStream_Impl::Init()
     {
         // no temporary stream was created
         // create one
-
-        m_nRepresentMode = RepresentMode::svstream; // can not be used as XInputStream
 
         if ( m_aTempURL.isEmpty() )
             m_aTempURL = ::utl::TempFile().GetURL();
@@ -1186,7 +1181,6 @@ void UCBStorageStream_Impl::Free()
     }
 #endif
 
-    m_nRepresentMode = RepresentMode::NONE;
     m_rSource.clear();
     DELETEZ( m_pStream );
 }
@@ -1475,7 +1469,6 @@ UCBStorage_Impl::UCBStorage_Impl( const ::ucbhelper::Content& rContent, const OU
     , m_bCommited( false )
     , m_bDirect( bDirect )
     , m_bIsRoot( bIsRoot )
-    , m_bDirty( false )
     , m_bIsLinked( true )
     , m_bListCreated( false )
     , m_nFormat( SotClipboardFormatId::NONE )
@@ -1507,7 +1500,6 @@ UCBStorage_Impl::UCBStorage_Impl( const OUString& rName, StreamMode nMode, UCBSt
     , m_bCommited( false )
     , m_bDirect( bDirect )
     , m_bIsRoot( bIsRoot )
-    , m_bDirty( false )
     , m_bIsLinked( false )
     , m_bListCreated( false )
     , m_nFormat( SotClipboardFormatId::NONE )
@@ -1557,7 +1549,6 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, bool 
     , m_bCommited( false )
     , m_bDirect( bDirect )
     , m_bIsRoot( true )
-    , m_bDirty( false )
     , m_bIsLinked( false )
     , m_bListCreated( false )
     , m_nFormat( SotClipboardFormatId::NONE )
@@ -2353,7 +2344,6 @@ bool UCBStorage::IsRoot() const
 
 void UCBStorage::SetDirty()
 {
-    pImp->m_bDirty = true;
 }
 
 void UCBStorage::SetClass( const SvGlobalName & rClass, SotClipboardFormatId nOriginalClipFormat, const OUString & rUserTypeName )

@@ -138,7 +138,6 @@ struct filepointer {
     char    *f_p;
     char    *f_base;
     char    *f_end;
-    long    f_len;
     long    f_line;
 };
 
@@ -172,8 +171,7 @@ int find_includes(struct filepointer *filep, struct inclist *file,
     struct IncludesCollection* incCollection, struct symhash *symbols);
 void included_by(struct inclist *ip,
     struct inclist * newfile);
-int cppsetup(char *line,
-    struct filepointer *filep, struct inclist *inc);
+int cppsetup(char *line);
 void add_include(struct filepointer *filep, struct inclist *file,
     struct inclist *file_red, char *include, boolean dot, boolean failOK,
     struct IncludesCollection* incCollection, struct symhash *symbols);

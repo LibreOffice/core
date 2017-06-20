@@ -34,11 +34,9 @@ char *hash_lookup( char *symbol, struct symhash *symbols );
 void hash_undefine( char *symbol, struct symhash *symbols );
 int gobble( struct filepointer *filep, struct inclist *file,
     struct inclist *file_red, struct symhash *symbols );
-int deftype ( char *line, struct filepointer *filep,
-    struct inclist *file_red, struct inclist *file,
+int deftype ( char *line, struct inclist *file,
     int parse_it, struct symhash *symbols);
-int zero_value(char *exp, struct filepointer *filep,
-    struct inclist *file_red, struct symhash *symbols);
+int zero_value(char *exp, struct symhash *symbols);
 
 extern struct symhash *maininclist;
 
@@ -49,7 +47,7 @@ int find_includes(struct filepointer *filep, struct inclist *file, struct inclis
     boolean recfailOK;
 
     while ((line = get_line(filep))) {
-        switch(type = deftype(line, filep, file_red, file, TRUE, symbols)) {
+        switch(type = deftype(line, file, TRUE, symbols)) {
         case IF:
         doif:
             type = find_includes(filep, file,
@@ -172,7 +170,7 @@ int gobble(struct filepointer *filep,
     int    type;
 
     while ((line = get_line(filep))) {
-        switch(type = deftype(line, filep, file_red, file, FALSE, symbols)) {
+        switch(type = deftype(line, file, FALSE, symbols)) {
         case IF:
         case IFFALSE:
         case IFGUESSFALSE:
@@ -217,7 +215,7 @@ int gobble(struct filepointer *filep,
 /*
  * Decide what type of # directive this line is.
  */
-int deftype (char *line, struct filepointer *filep, struct inclist *file_red, struct inclist *file, int parse_it, struct symhash *symbols)
+int deftype (char *line, struct inclist *file, int parse_it, struct symhash *symbols)
 {
     char   *p;
     char    *directive, savechar;
@@ -253,7 +251,7 @@ int deftype (char *line, struct filepointer *filep, struct inclist *file_red, st
          */
         debug(0,("%s, line %d: #elif %s ",
            file->i_file, filep->f_line, p));
-        ret = zero_value(p, filep, file_red, symbols);
+        ret = zero_value(p, symbols);
         if (ret != IF)
         {
           debug(0,("false...\n"));
@@ -282,7 +280,7 @@ int deftype (char *line, struct filepointer *filep, struct inclist *file_red, st
         /*
          * parse an expression.
          */
-        ret = zero_value(p, filep, file_red, symbols);
+        ret = zero_value(p, symbols);
         debug(0,("%s, line %d: %s #if %s\n",
              file->i_file, filep->f_line, ret?"false":"true", p));
         break;
@@ -372,10 +370,10 @@ char * isdefined( char *symbol )
 /*
  * Return type based on if the #if expression evaluates to 0
  */
-int zero_value(char *exp, struct filepointer *filep, struct inclist *file_red, struct symhash *symbols)
+int zero_value(char *exp, struct symhash *symbols)
 {
     global_symbols = symbols; /* HACK! see above */
-    if (cppsetup(exp, filep, file_red))
+    if (cppsetup(exp))
         return IFFALSE;
     else
         return IF;

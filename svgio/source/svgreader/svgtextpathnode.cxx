@@ -251,9 +251,7 @@ namespace svgio
         :   SvgNode(SVGTokenTextPath, rDocument, pParent),
             maSvgStyleAttributes(*this),
             maXLink(),
-            maStartOffset(),
-            mbMethod(true),
-            mbSpacing(false)
+            maStartOffset()
         {
         }
 
@@ -297,32 +295,10 @@ namespace svgio
                 }
                 case SVGTokenMethod:
                 {
-                    if(!aContent.isEmpty())
-                    {
-                        if(aContent.startsWith("align"))
-                        {
-                            setMethod(true);
-                        }
-                        else if(aContent.startsWith("stretch"))
-                        {
-                            setMethod(false);
-                        }
-                    }
                     break;
                 }
                 case SVGTokenSpacing:
                 {
-                    if(!aContent.isEmpty())
-                    {
-                        if(aContent.startsWith("auto"))
-                        {
-                            setSpacing(true);
-                        }
-                        else if(aContent.startsWith("exact"))
-                        {
-                            setSpacing(false);
-                        }
-                    }
                     break;
                 }
                 case SVGTokenXlinkHref:

@@ -193,7 +193,6 @@ storeError OStoreDirectory_Impl::iterate (storeFindData &rFindData)
 
                 rFindData.m_nLength  = static_cast<sal_Int32>(n);
                 rFindData.m_nAttrib |= aPage.attrib();
-                rFindData.m_nSize    = aPage.dataLength();
 
                 // Leave.
                 rFindData.m_nReserved = store::ntohl(aKey.m_nLow);

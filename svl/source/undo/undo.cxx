@@ -223,7 +223,6 @@ struct SfxUndoManager_Data
     std::unique_ptr<SfxUndoArray>
                     pUndoArray;
     SfxUndoArray*   pActUndoArray;
-    SfxUndoArray*   pFatherUndoArray;
 
     sal_Int32       mnMarks;
     sal_Int32       mnEmptyMark;
@@ -236,7 +235,6 @@ struct SfxUndoManager_Data
     explicit SfxUndoManager_Data( size_t i_nMaxUndoActionCount )
         :pUndoArray( new SfxUndoArray( i_nMaxUndoActionCount ) )
         ,pActUndoArray( nullptr )
-        ,pFatherUndoArray( nullptr )
         ,mnMarks( 0 )
         ,mnEmptyMark(MARK_INVALID)
         ,mbUndoEnabled( true )
@@ -1000,7 +998,6 @@ void SfxUndoManager::EnterListAction( const OUString& rComment,
     if ( !m_xData->pUndoArray->nMaxUndoActions )
         return;
 
-    m_xData->pFatherUndoArray = m_xData->pActUndoArray;
     SfxListUndoAction* pAction = new SfxListUndoAction( rComment, rRepeatComment, nId, nViewShellId, m_xData->pActUndoArray );
     OSL_VERIFY( ImplAddUndoAction_NoNotify( pAction, false, false, aGuard ) );
     // expected to succeed: all conditions under which it could fail should have been checked already
