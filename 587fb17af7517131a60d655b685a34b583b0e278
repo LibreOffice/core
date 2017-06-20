@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_752c1aac",
+        "filename": "svtools/source/contnr/treelistbox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-20T19:24:05Z",
+      "side": 1,
+      "message": "The Doxygen documentation should be at the declaration in the header file instead.",
+      "revId": "587fb17af7517131a60d655b685a34b583b0e278",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
