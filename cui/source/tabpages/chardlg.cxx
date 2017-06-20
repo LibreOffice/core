@@ -2815,7 +2815,6 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
 
     short nEsc = 0;
     sal_uInt8 nEscProp = 100;
-    sal_uInt8 nProp = 100;
 
     m_pHighLowFT->Disable();
     m_pHighLowMF->Disable();
@@ -2893,7 +2892,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
     }
 
     // set BspFont
-    SetPrevFontEscapement( nProp, nEscProp, nEsc );
+    SetPrevFontEscapement( 100, nEscProp, nEsc );
 
     // Kerning
     nWhich = GetWhich( SID_ATTR_CHAR_KERNING );
@@ -2902,10 +2901,8 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
     {
         const SvxKerningItem& rItem = static_cast<const SvxKerningItem&>(rSet->Get( nWhich ));
         MapUnit eUnit = rSet->GetPool()->GetMetric( nWhich );
-        MapUnit eOrgUnit = eUnit;
-        MapUnit ePntUnit( MapUnit::MapPoint );
         long nBig = static_cast<long>(m_pKerningMF->Normalize( static_cast<long>(rItem.GetValue()) ));
-        long nKerning = LogicToLogic( nBig, eOrgUnit, ePntUnit );
+        long nKerning = LogicToLogic( nBig, eUnit, MapUnit::MapPoint );
 
         // set Kerning at the Font, convert into Twips before
         long nKern = LogicToLogic( rItem.GetValue(), eUnit, MapUnit::MapTwip );

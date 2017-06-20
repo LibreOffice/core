@@ -950,13 +950,12 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
         sal_uInt16 nIdx = m_pExamplesVS->GetSelectItemId() - 1;
 
         sal_uInt16 nMask = 1;
-        SvxNumType nSetNumberingType = SVX_NUM_BITMAP;
         for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
         {
             if(nActNumLvl & nMask)
             {
                 SvxNumberFormat aFmt(pActNum->GetLevel(i));
-                aFmt.SetNumberingType(nSetNumberingType);
+                aFmt.SetNumberingType(SVX_NUM_BITMAP);
                 aFmt.SetPrefix( "" );
                 aFmt.SetSuffix( "" );
                 aFmt.SetCharFormatName( sNumCharFmtName );
@@ -1417,15 +1416,13 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
     //one must be enabled
     if(!pActNum->IsFeatureSupported(SvxNumRuleFlags::ENABLE_LINKED_BMP))
     {
-        sal_IntPtr nData = SVX_NUM_BITMAP|LINK_TOKEN;
-        sal_Int32 nPos = m_pFmtLB->GetEntryPos(reinterpret_cast<void*>(nData));
+        sal_Int32 nPos = m_pFmtLB->GetEntryPos(reinterpret_cast<void*>(SVX_NUM_BITMAP|LINK_TOKEN));
         if(LISTBOX_ENTRY_NOTFOUND != nPos)
             m_pFmtLB->RemoveEntry(nPos);
     }
     else if(!pActNum->IsFeatureSupported(SvxNumRuleFlags::ENABLE_EMBEDDED_BMP))
     {
-        sal_IntPtr nData = SVX_NUM_BITMAP;
-        sal_Int32 nPos = m_pFmtLB->GetEntryPos(reinterpret_cast<void*>(nData));
+        sal_Int32 nPos = m_pFmtLB->GetEntryPos(reinterpret_cast<void*>(SVX_NUM_BITMAP));
         if(LISTBOX_ENTRY_NOTFOUND != nPos)
             m_pFmtLB->RemoveEntry(nPos);
     }
@@ -2534,8 +2531,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
         else
         {
             //#i5153# painting gray or black rectangles as 'normal' numbering text
-            OUString sMsg("Preview");
-            long nWidth = pVDev->GetTextWidth(sMsg);
+            long nWidth = pVDev->GetTextWidth("Preview");
             long nTextHeight = pVDev->GetTextHeight();
             long nRectHeight = nTextHeight * 2 / 3;
             long nTopOffset = nTextHeight - nRectHeight;

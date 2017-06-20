@@ -275,7 +275,7 @@ SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage(
 
 void IconChoiceDialog::SetCtrlStyle()
 {
-    WinBits aWinBits = WB_3DLOOK | WB_ICON | WB_BORDER | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN | WB_ALIGN_LEFT | WB_NOHSCROLL;
+    WinBits const aWinBits = WB_3DLOOK | WB_ICON | WB_BORDER | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN | WB_ALIGN_LEFT | WB_NOHSCROLL;
     m_pIconCtrl->SetStyle(aWinBits);
     m_pIconCtrl->ArrangeIcons();
 }

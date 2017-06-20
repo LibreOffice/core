@@ -371,7 +371,7 @@ namespace svx
         m_aValueSet->SetLineCount( LINE_CNT );
         m_aValueSet->SetStyle( m_aValueSet->GetStyle() | WB_ITEMBORDER | WB_FLATVALUESET | WB_VSCROLL );
         m_aValueSet->SetBorderStyle( WindowBorderStyle::MONO );
-        OUString aOneCharacter("AU");
+        OUString const aOneCharacter("AU");
         long nItemWidth = 2*GetTextWidth( aOneCharacter );
         m_aValueSet->SetItemWidth( nItemWidth );
 

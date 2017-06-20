@@ -561,10 +561,8 @@ IMPL_LINK_NOARG( SvxMacroTabPage_, SelectEvent_Impl, SvTreeListBox*, void)
 {
     SvHeaderTabListBox&        rListBox = mpImpl->pEventLB->GetListBox();
     SvTreeListEntry*           pE = rListBox.FirstSelected();
-    sal_uLong                  nPos;
 
-    if( !pE || LISTBOX_ENTRY_NOTFOUND ==
-        ( nPos = rListBox.GetModel()->GetAbsPos( pE ) ) )
+    if( !pE || LISTBOX_ENTRY_NOTFOUND == rListBox.GetModel()->GetAbsPos( pE ) )
     {
         DBG_ASSERT( pE, "Where does the empty entry come from?" );
         return;
@@ -589,9 +587,7 @@ long SvxMacroTabPage_::GenericHandler_Impl( SvxMacroTabPage_* pThis, PushButton*
     SvxMacroTabPage_Impl*    pImpl = pThis->mpImpl;
     SvHeaderTabListBox& rListBox = pImpl->pEventLB->GetListBox();
     SvTreeListEntry* pE = rListBox.FirstSelected();
-    sal_uLong nPos;
-    if( !pE || LISTBOX_ENTRY_NOTFOUND ==
-        ( nPos = rListBox.GetModel()->GetAbsPos( pE ) ) )
+    if( !pE || LISTBOX_ENTRY_NOTFOUND == rListBox.GetModel()->GetAbsPos( pE ) )
     {
         DBG_ASSERT( pE, "Where does the empty entry come from?" );
         return 0;
