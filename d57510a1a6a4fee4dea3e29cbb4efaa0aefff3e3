@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_55ad5e87",
+        "filename": "svtools/source/contnr/treelistbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-20T12:05:50Z",
+      "side": 1,
+      "message": "The while() loop and the recursive RemoveEntry() call should be unnecessary as SvTreeList::Remove() also removes all children. What is the reason for this handling?\n\nAlso, if for some reason such handling would be really necessary (which I still doubt unless proven otherwise), then recursion should be avoided. FirstChild() and Next() and pModel-\u003eGetDepth() provide means to control that without recursion.",
+      "revId": "d57510a1a6a4fee4dea3e29cbb4efaa0aefff3e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
