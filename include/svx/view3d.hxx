@@ -46,17 +46,10 @@ protected:
     Color                       aDefaultLightColor;             // The parameters for the last colors
     Color                       aDefaultAmbientColor;
 
-    double                      fDefaultScaleX;                 // Scaling
     double                      fDefaultScaleY;
     double                      fDefaultScaleZ;
-    double                      fDefaultRotateX;                // and Rotation
     double                      fDefaultRotateY;
     double                      fDefaultRotateZ;
-    double                      fDefaultExtrusionDeepth;        // Extrusion depth
-    double                      fDefaultLightIntensity;         // Intensity of the two (necessary) light sources.
-    double                      fDefaultAmbientIntensity;
-    long                        nHDefaultSegments;              // Amount of HSegments required by the Lathe object
-    long                        nVDefaultSegments;              // Amount of VSegments required by the Lathe object
 
     E3dDragConstraint           eDragConstraint;
 

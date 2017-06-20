@@ -123,7 +123,6 @@ XFBGImage* LwpBackgroundStuff::GetFillPattern()
     // create XOBitmap object from bitmap object
     XOBitmap aXOBitmap( aBmp );
     aXOBitmap.Bitmap2Array();
-    aXOBitmap.SetBitmapType( XBitmapType::N8x8 );
 
     // set back/fore-ground colors
     if (m_aFillColor.IsValidColor() && m_aPatternColor.IsValidColor())

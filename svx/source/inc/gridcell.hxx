@@ -667,7 +667,6 @@ class DbFilterField
     sal_Int16   m_nControlClass;
     bool        m_bFilterList : 1;
     bool        m_bFilterListFilled : 1;
-    bool        m_bBound : 1;
 
 public:
     DbFilterField(const css::uno::Reference< css::uno::XComponentContext >& rxContext, DbGridColumn& _rColumn);

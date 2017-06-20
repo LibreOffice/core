@@ -135,17 +135,16 @@ protected:
     Size                        maGridBig;   // FIXME: We need to get rid of this eventually
     Size                        maGridFin;   // FIXME: We need to get rid of this eventually
     SdrDragStat                 maDragStat;
-    tools::Rectangle                   maMaxWorkArea;
+    tools::Rectangle            maMaxWorkArea;
     SfxItemSet                  maDefaultAttr;
     Idle                        maComeBackIdle;
 
     SdrAnimationMode            meAnimationMode;
 
-    sal_uInt16                      mnHitTolPix;
-    sal_uInt16                      mnMinMovPix;
-    sal_uInt16                      mnHitTolLog;
-    sal_uInt16                      mnMinMovLog;
-    GraphicManagerDrawFlags         mnGraphicManagerDrawMode;
+    sal_uInt16                  mnHitTolPix;
+    sal_uInt16                  mnMinMovPix;
+    sal_uInt16                  mnHitTolLog;
+    sal_uInt16                  mnMinMovLog;
 
     // Hold an incarnation of Drawinglayer configuration options
     SvtOptionsDrawinglayer      maDrawinglayerOpt;

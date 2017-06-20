@@ -270,11 +270,6 @@ void E3dObject::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     // no transparence for 3d objects
     rInfo.bTransparenceAllowed = false;
 
-    // gradient depends on fillstyle
-    // BM *** check if SetItem is NULL ***
-    drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem&>(GetMergedItem(XATTR_FILLSTYLE)).GetValue();
-    rInfo.bGradientAllowed = (eFillStyle == drawing::FillStyle_GRADIENT);
-
     // Convert 3D objects in a group of polygons:
     // At first not only possible, because the creation of a group of
     // 2D polygons would be required which need to be sorted by depth,

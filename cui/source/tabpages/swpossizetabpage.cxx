@@ -1157,7 +1157,6 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl, Control&, void)
 
     aVal.nAnchorType = GetAnchorType();
     aVal.bAutoHeight = false;
-    aVal.bAutoWidth = false;
     aVal.bMirror = m_pHoriMirrorCB->IsChecked();
     // #i18732#
     aVal.bFollowTextFlow = m_pFollowCB->IsChecked();

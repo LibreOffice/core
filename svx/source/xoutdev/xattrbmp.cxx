@@ -45,7 +45,6 @@
 using namespace ::com::sun::star;
 
 XOBitmap::XOBitmap( const Bitmap& rBmp ) :
-    eType           ( XBitmapType::Import ),
     xGraphicObject  (new GraphicObject(rBmp)),
     bGraphicDirty   ( false )
 {

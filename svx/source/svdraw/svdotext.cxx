@@ -89,7 +89,6 @@ SdrTextObj::SdrTextObj()
 {
     bTextSizeDirty=false;
     bTextFrame=false;
-    bPortionInfoChecked=false;
     bNoShear=false;
     bNoMirror=false;
     bDisableAutoWidthOnDragging=false;
@@ -112,7 +111,6 @@ SdrTextObj::SdrTextObj(const tools::Rectangle& rNewRect)
 {
     bTextSizeDirty=false;
     bTextFrame=false;
-    bPortionInfoChecked=false;
     bNoShear=false;
     bNoMirror=false;
     bDisableAutoWidthOnDragging=false;
@@ -135,7 +133,6 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind)
 {
     bTextSizeDirty=false;
     bTextFrame=true;
-    bPortionInfoChecked=false;
     bNoShear=true;
     bNoMirror=true;
     bDisableAutoWidthOnDragging=false;
@@ -158,7 +155,6 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const tools::Rectangle& rNewRect
 {
     bTextSizeDirty=false;
     bTextFrame=true;
-    bPortionInfoChecked=false;
     bNoShear=true;
     bNoMirror=true;
     bDisableAutoWidthOnDragging=false;
@@ -428,9 +424,6 @@ void SdrTextObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     // allow transparency
     rInfo.bTransparenceAllowed = true;
 
-    // gradient depends on fillstyle
-    drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem&>(GetObjectItem(XATTR_FILLSTYLE)).GetValue();
-    rInfo.bGradientAllowed = (eFillStyle == drawing::FillStyle_GRADIENT);
     rInfo.bShearAllowed     =bNoTextFrame;
     rInfo.bEdgeRadiusAllowed=true;
     bool bCanConv=ImpCanConvTextToCurve();

@@ -117,7 +117,6 @@ void SdrObjGroup::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
         rInfo.bMirror45Allowed  =false;
         rInfo.bMirror90Allowed  =false;
         rInfo.bTransparenceAllowed = false;
-        rInfo.bGradientAllowed = false;
         rInfo.bShearAllowed     =false;
         rInfo.bEdgeRadiusAllowed=false;
         rInfo.bNoContortion     =true;
@@ -126,7 +125,6 @@ void SdrObjGroup::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     {
         // only allowed if single object selected
         rInfo.bTransparenceAllowed = false;
-        rInfo.bGradientAllowed = false;
     }
 }
 

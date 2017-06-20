@@ -105,7 +105,6 @@ struct SVX_DLLPUBLIC SdrViewEvent
     Point                       aLogicPos;
     SdrHitKind                  eHit;
     SdrEventKind                eEvent;
-    SdrCreateCmd                eEndCreateCmd;   // for EndInsPoint too
 
     sal_uInt16                  nMouseClicks;
     MouseEventModifiers         nMouseMode;
@@ -117,15 +116,10 @@ struct SVX_DLLPUBLIC SdrViewEvent
     bool                        bMouseUp : 1;
     bool                        bIsAction : 1;       // Action is active
     bool                        bIsTextEdit : 1;     // TextEdit runs currently
-    bool                        bTextEditHit : 1;    // hit open OutlinerView?
     bool                        bAddMark : 1;
     bool                        bUnmark : 1;
     bool                        bPrevNextMark : 1;
     bool                        bMarkPrev : 1;
-    bool                        bInsPointNewObj : 1;
-    bool                        bDragWithCopy : 1;
-    bool                        bCaptureMouse : 1;
-    bool                        bReleaseMouse : 1;
 
 public:
     SdrViewEvent();
@@ -150,17 +144,12 @@ public:
 };
 
 
-/*
- * View
- */
 class SVX_DLLPUBLIC SdrView: public SdrCreateView, public tools::WeakBase< SdrView >
 {
     friend class                SdrPageView;
 
     bool                        bNoExtendedMouseDispatcher : 1;
     bool                        bNoExtendedKeyDispatcher : 1;
-    bool                        bNoExtendedCommandDispatcher : 1;
-    bool                        bTextEditOnObjectsWithoutTextIfTextTool : 1;
     bool                        mbMasterPagePaintCaching : 1;
 
 protected:
@@ -185,10 +174,6 @@ public:
 
     void EnableExtendedKeyInputDispatcher(bool bOn) { bNoExtendedKeyDispatcher=!bOn; }
     bool IsExtendedKeyInputDispatcherEnabled() const { return bNoExtendedKeyDispatcher; }
-
-    void EnableExtendedCommandEventDispatcher(bool bOn) { bNoExtendedCommandDispatcher=!bOn; }
-
-    void EnableTextEditOnObjectsWithoutTextIfTextTool(bool bOn) { bTextEditOnObjectsWithoutTextIfTextTool=bOn; }
 
     void SetMasterPagePaintCaching(bool bOn);
     bool IsMasterPagePaintCaching() const { return mbMasterPagePaintCaching; }

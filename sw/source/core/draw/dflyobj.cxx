@@ -471,7 +471,7 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject(
 
 void SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
 {
-    rInfo.bSelectAllowed     = rInfo.bMoveAllowed =
+    rInfo.bMoveAllowed =
     rInfo.bResizeFreeAllowed = rInfo.bResizePropAllowed = true;
 
     rInfo.bRotateFreeAllowed = rInfo.bRotate90Allowed =

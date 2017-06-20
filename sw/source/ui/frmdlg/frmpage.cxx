@@ -1817,7 +1817,6 @@ void SwFramePage::RangeModifyHdl()
 
     aVal.nAnchorType = GetAnchor();
     aVal.bAutoHeight = m_pAutoHeightCB->IsChecked();
-    aVal.bAutoWidth = m_pAutoWidthCB->IsChecked();
     aVal.bMirror = m_pMirrorPagesCB->IsChecked();
     aVal.bFollowTextFlow = m_pFollowTextFlowCB->IsChecked();
 

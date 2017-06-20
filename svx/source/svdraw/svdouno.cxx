@@ -201,7 +201,6 @@ void SdrUnoObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bMirror45Allowed          =   false;
     rInfo.bMirror90Allowed          =   false;
     rInfo.bTransparenceAllowed = false;
-    rInfo.bGradientAllowed = false;
     rInfo.bShearAllowed             =   false;
     rInfo.bEdgeRadiusAllowed        =   false;
     rInfo.bNoOrthoDesired           =   false;

@@ -131,11 +131,9 @@ View::View(SdDrawDocument& rDrawDoc, OutputDevice* pOutDev,
 
     EnableExtendedKeyInputDispatcher(false);
     EnableExtendedMouseEventDispatcher(false);
-    EnableExtendedCommandEventDispatcher(false);
 
     SetUseIncompatiblePathCreateInterface(false);
     SetMarkHdlWhenTextEdit(true);
-    EnableTextEditOnObjectsWithoutTextIfTextTool(true);
 
     SetMinMoveDistancePixel(2);
     SetHitTolerancePixel(2);

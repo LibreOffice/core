@@ -140,8 +140,6 @@ void CellUndo::getDataFromCell( Data& rData )
         else
             rData.mpOutlinerParaObject =  nullptr;
 
-        rData.mnCellContentType = mxCell->mnCellContentType;
-
         rData.msFormula = mxCell->msFormula;
         rData.mfValue = mxCell->mfValue;
         rData.mnError = mxCell->mnError;
