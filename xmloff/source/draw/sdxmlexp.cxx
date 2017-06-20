@@ -2654,16 +2654,13 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
                     this->Characters(aAuthor);
                 }
 
-                if (SvtSaveOptions().GetODFDefaultVersion() > SvtSaveOptions::ODFVER_012)
+                // initials
+                OUString aInitials( xAnnotation->getInitials() );
+                if( !aInitials.isEmpty() )
                 {
-                    // initials
-                    OUString aInitials( xAnnotation->getInitials() );
-                    if( !aInitials.isEmpty() )
-                    {
-                        SvXMLElementExport aInitialsElem( *this, XML_NAMESPACE_LO_EXT,
-                                XML_SENDER_INITIALS, true, false );
-                        this->Characters(aInitials);
-                    }
+                    SvXMLElementExport aInitialsElem( *this, XML_NAMESPACE_LO_EXT,
+                            XML_SENDER_INITIALS, true, false );
+                    this->Characters(aInitials);
                 }
 
                 {
