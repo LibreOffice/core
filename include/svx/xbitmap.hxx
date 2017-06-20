@@ -30,7 +30,6 @@
 class SVX_DLLPUBLIC XOBitmap
 {
 private:
-    XBitmapType     eType;
     std::unique_ptr<GraphicObject> xGraphicObject;
     std::unique_ptr<sal_uInt16[]>  pPixelArray;
     Color           aPixelColor;
@@ -50,7 +49,6 @@ public:
     void Bitmap2Array();
     void Array2Bitmap();
 
-    void SetBitmapType( XBitmapType eNewType )          { eType = eNewType; }
     void SetPixelColor( const Color& rColor )           { aPixelColor = rColor; bGraphicDirty = true; }
     void SetBackgroundColor( const Color& rColor )      { aBckgrColor = rColor; bGraphicDirty = true; }
 

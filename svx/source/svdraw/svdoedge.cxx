@@ -356,7 +356,6 @@ void SdrEdgeObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bMirror45Allowed = true;
     rInfo.bMirror90Allowed = true;
     rInfo.bTransparenceAllowed = false;
-    rInfo.bGradientAllowed = false;
     rInfo.bShearAllowed = true;
     rInfo.bEdgeRadiusAllowed = false;
     bool bCanConv=!HasText() || ImpCanConvTextToCurve();

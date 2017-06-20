@@ -60,7 +60,6 @@ SdrViewEvent::SdrViewEvent()
       pURLField(nullptr),
       eHit(SdrHitKind::NONE),
       eEvent(SdrEventKind::NONE),
-      eEndCreateCmd(SdrCreateCmd::NextPoint),
       nMouseClicks(0),
       nMouseMode(MouseEventModifiers::NONE),
       nMouseCode(0),
@@ -70,15 +69,10 @@ SdrViewEvent::SdrViewEvent()
       bMouseUp(false),
       bIsAction(false),
       bIsTextEdit(false),
-      bTextEditHit(false),
       bAddMark(false),
       bUnmark(false),
       bPrevNextMark(false),
-      bMarkPrev(false),
-      bInsPointNewObj(false),
-      bDragWithCopy(false),
-      bCaptureMouse(false),
-      bReleaseMouse(false)
+      bMarkPrev(false)
 {
 }
 
@@ -156,11 +150,8 @@ SdrView::SdrView(SdrModel* pModel1, OutputDevice* pOut)
 :   SdrCreateView(pModel1,pOut),
     bNoExtendedMouseDispatcher(false),
     bNoExtendedKeyDispatcher(false),
-    bNoExtendedCommandDispatcher(false),
     mbMasterPagePaintCaching(false)
 {
-    bTextEditOnObjectsWithoutTextIfTextTool=false;
-
     maAccessibilityOptions.AddListener(this);
 
     onAccessibilityOptionsChanged();
@@ -568,14 +559,10 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                 if (IsDragObj())
                 {
                     eEvent=SdrEventKind::EndDrag;
-                    rVEvt.bDragWithCopy=MODKEY_CopyDrag;
                 }
                 else if (IsCreateObj() || IsInsObjPoint())
                 {
                     eEvent=IsCreateObj() ? SdrEventKind::EndCreate : SdrEventKind::EndInsertObjPoint;
-                    rVEvt.eEndCreateCmd=SdrCreateCmd::NextPoint;
-                    if (MODKEY_PolyPoly) rVEvt.eEndCreateCmd=SdrCreateCmd::NextObject;
-                    if (rVEvt.nMouseClicks>1) rVEvt.eEndCreateCmd=SdrCreateCmd::ForceEnd;
                 }
                 else if (IsMarking())
                 {
@@ -652,7 +639,6 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         else if (bInsPolyPt && (MODKEY_PolyPoly || (!MODKEY_MultiMark && !MODKEY_DeepMark)))
         {
             eEvent=SdrEventKind::BeginInsertObjPoint;
-            rVEvt.bInsPointNewObj=MODKEY_PolyPoly;
         }
         else if (bInsGluePt && !MODKEY_MultiMark && !MODKEY_DeepMark)
         {
@@ -718,7 +704,6 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     }
     rVEvt.bIsAction=bIsAction;
     rVEvt.bIsTextEdit=bIsTextEdit;
-    rVEvt.bTextEditHit=bTextEditHit;
     rVEvt.aLogicPos=aLocalLogicPosition;
     rVEvt.pHdl=pHdl;
     rVEvt.pObj=pObj;
@@ -729,8 +714,6 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     rVEvt.nGlueId=nGlueId;
     rVEvt.eHit=eHit;
     rVEvt.eEvent=eEvent;
-    rVEvt.bCaptureMouse=bMouseLeft && bMouseDown && eEvent!=SdrEventKind::NONE;
-    rVEvt.bReleaseMouse=bMouseLeft && bMouseUp;
 #ifdef DGB_UTIL
     if (rVEvt.pRootObj!=NULL) {
         if (rVEvt.pRootObj->GetObjList()!=rVEvt.pPV->GetObjList()) {
@@ -956,7 +939,6 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
         aHitRec.pVisiLayer=&pMacroPV->GetVisibleLayers();
         aHitRec.pPageView=pMacroPV;
         aHitRec.pOut=pMacroWin.get();
-        aHitRec.bDown=bMacroDown;
         return pMacroObj->GetMacroPointer(aHitRec);
     }
 

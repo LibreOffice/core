@@ -67,7 +67,6 @@ void ScDrawView::Construct()
 {
     EnableExtendedKeyInputDispatcher(false);
     EnableExtendedMouseEventDispatcher(false);
-    EnableExtendedCommandEventDispatcher(false);
 
     SetFrameDragSingles();
 

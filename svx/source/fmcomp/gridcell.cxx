@@ -2662,7 +2662,6 @@ DbFilterField::DbFilterField(const Reference< XComponentContext >& rxContext,DbG
               ,m_nControlClass(css::form::FormComponentType::TEXTFIELD)
               ,m_bFilterList(false)
               ,m_bFilterListFilled(false)
-              ,m_bBound(false)
 {
 
     setAlignedController( false );
@@ -2715,7 +2714,6 @@ void DbFilterField::SetList(const Any& rItems, bool bComboBox)
                 pField->InsertEntry(*pStrings);
 
             m_rColumn.getModel()->getPropertyValue(FM_PROP_VALUE_SEQ) >>= m_aValueList;
-            m_bBound = m_aValueList.getLength() > 0;
         }
     }
 }

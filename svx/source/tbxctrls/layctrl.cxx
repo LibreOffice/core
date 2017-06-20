@@ -52,9 +52,8 @@ private:
     ::Color             aBackgroundColor;
     long                nCol;
     long                nLine;
-    bool                m_bMod1;
     Reference< XFrame > mxFrame;
-    OUString       maCommand;
+    OUString            maCommand;
 
     static const long TABLE_CELLS_HORIZ;
     static const long TABLE_CELLS_VERT;
@@ -106,7 +105,6 @@ TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUStri
     , aTableButton( VclPtr<PushButton>::Create(this) )
     , nCol( 0 )
     , nLine( 0 )
-    , m_bMod1(false)
     , mxFrame( rFrame )
     , maCommand( rCmd )
     , mnTablePosX(2)
@@ -226,7 +224,6 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
     }
     else if(KEY_MOD1 == nModifier && KEY_RETURN == nKey)
     {
-        m_bMod1 = true;
         EndPopupMode( FloatWinPopupEndFlags::CloseAll );
     }
 

@@ -182,10 +182,9 @@ public:
     Point                       aPos;
     Point                       aDownPos;
     VclPtr<OutputDevice>        pOut;
-    const SdrLayerIDSet*            pVisiLayer;
+    const SdrLayerIDSet*        pVisiLayer;
     const SdrPageView*          pPageView;
     sal_uInt16                  nTol;
-    bool                        bDown;
 
     SdrObjMacroHitRec();
 };
@@ -244,7 +243,6 @@ public:
 class SVX_DLLPUBLIC SdrObjTransformInfoRec
 {
 public:
-    bool bSelectAllowed : 1;           // if false, object cannot be selected
     bool bMoveAllowed : 1;             // if false, object cannot be moved
     bool bResizeFreeAllowed : 1;       // if false, object cannot be resized freely
     bool bResizePropAllowed : 1;       // if false, object cannot even be resized proportionally
@@ -254,7 +252,6 @@ public:
     bool bMirror45Allowed : 1;         // if false, object cannot even be mirrored over axes in a 45 degree raster
     bool bMirror90Allowed : 1;         // if false, object cannot even be mirrored over axes in a 90 degree raster
     bool bTransparenceAllowed : 1;     // if false, object does not have an interactive transparence control
-    bool bGradientAllowed : 1;         // if false, object does not have an interactive gradient control
     bool bShearAllowed : 1;            // if false, object cannot be sheared
     bool bEdgeRadiusAllowed : 1;
     bool bNoOrthoDesired : 1;          // is true for Rect; is false for BMP, MTF

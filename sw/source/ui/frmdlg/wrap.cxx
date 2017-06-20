@@ -424,7 +424,6 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
 
         aVal.nAnchorType = m_nAnchorId;
         aVal.bAutoHeight = rFrameSize.GetHeightSizeType() == ATT_MIN_SIZE;
-        aVal.bAutoWidth = rFrameSize.GetWidthSizeType() == ATT_MIN_SIZE;
         aVal.bMirror = rHori.IsPosToggle();
         // #i18732#
         aVal.bFollowTextFlow =

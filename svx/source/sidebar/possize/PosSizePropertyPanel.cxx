@@ -80,7 +80,6 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mbAutoWidth(false),
     mbAutoHeight(false),
     mbAdjustEnabled(false),
-    mbIsFlip(false),
     mxSidebar(rxSidebar)
 {
     get( mpFtPosX,    "horizontallabel" );
@@ -312,7 +311,6 @@ void PosSizePropertyPanel::HandleContextChange(
     // Flip
     mpFtFlip->Show(bShowFlip);
     mpFlipTbx->Show(bShowFlip);
-    mbIsFlip = bShowFlip;
 
     if (mxSidebar.is())
         mxSidebar->requestLayout();

@@ -67,7 +67,6 @@ class ImpCaptParams
 {
 public:
     SdrCaptionType              eType;
-    long                        nAngle;
     long                        nGap;
     long                        nEscRel;
     long                        nEscAbs;
@@ -82,7 +81,6 @@ public:
     {
         eType      =SdrCaptionType::Type3;
         bFixedAngle=false;
-        nAngle     =4500;
         nGap       =0;
         eEscDir    =SdrCaptionEscDir::Horizontal;
         bEscRel    =true;
@@ -220,7 +218,6 @@ void SdrCaptionObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bMirror45Allowed  =false;
     rInfo.bMirror90Allowed  =false;
     rInfo.bTransparenceAllowed = false;
-    rInfo.bGradientAllowed = false;
     rInfo.bShearAllowed     =false;
     rInfo.bEdgeRadiusAllowed=false;
     rInfo.bCanConvToPath    =true;
@@ -420,7 +417,6 @@ void SdrCaptionObj::ImpGetCaptParams(ImpCaptParams& rPara) const
     const SfxItemSet& rSet = GetObjectItemSet();
     rPara.eType      =static_cast<const SdrCaptionTypeItem&>      (rSet.Get(SDRATTR_CAPTIONTYPE      )).GetValue();
     rPara.bFixedAngle=static_cast<const SdrOnOffItem&>            (rSet.Get(SDRATTR_CAPTIONFIXEDANGLE)).GetValue();
-    rPara.nAngle     =static_cast<const SdrCaptionAngleItem&>     (rSet.Get(SDRATTR_CAPTIONANGLE     )).GetValue();
     rPara.nGap       =static_cast<const SdrCaptionGapItem&>       (rSet.Get(SDRATTR_CAPTIONGAP       )).GetValue();
     rPara.eEscDir    =static_cast<const SdrCaptionEscDirItem&>    (rSet.Get(SDRATTR_CAPTIONESCDIR    )).GetValue();
     rPara.bEscRel    =static_cast<const SdrCaptionEscIsRelItem&>  (rSet.Get(SDRATTR_CAPTIONESCISREL  )).GetValue();

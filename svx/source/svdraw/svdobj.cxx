@@ -152,8 +152,7 @@ SdrObjMacroHitRec::SdrObjMacroHitRec() :
     pOut(nullptr),
     pVisiLayer(nullptr),
     pPageView(nullptr),
-    nTol(0),
-    bDown(false) {}
+    nTol(0) {}
 
 
 SdrObjUserData::SdrObjUserData(SdrInventor nInv, sal_uInt16 nId) :
@@ -182,7 +181,6 @@ SdrObjGeoData::~SdrObjGeoData()
 }
 
 SdrObjTransformInfoRec::SdrObjTransformInfoRec() :
-    bSelectAllowed(true),
     bMoveAllowed(true),
     bResizeFreeAllowed(true),
     bResizePropAllowed(true),
@@ -192,7 +190,6 @@ SdrObjTransformInfoRec::SdrObjTransformInfoRec() :
     bMirror45Allowed(true),
     bMirror90Allowed(true),
     bTransparenceAllowed(true),
-    bGradientAllowed(true),
     bShearAllowed(true),
     bEdgeRadiusAllowed(true),
     bNoOrthoDesired(true),
@@ -548,7 +545,6 @@ void SdrObject::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bRotateFreeAllowed=false;
     rInfo.bMirrorFreeAllowed=false;
     rInfo.bTransparenceAllowed = false;
-    rInfo.bGradientAllowed = false;
     rInfo.bShearAllowed     =false;
     rInfo.bEdgeRadiusAllowed=false;
     rInfo.bCanConvToPath    =false;

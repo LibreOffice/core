@@ -35,7 +35,6 @@ struct SvxSwFrameValidation
     sal_Int16           nHRelOrient; //css::text::RelOrientation
     sal_Int16           nVRelOrient; //css::text::RelOrientation
     bool                bAutoHeight;
-    bool                bAutoWidth;
     bool                bMirror;
     bool                bFollowTextFlow;
 
@@ -64,7 +63,6 @@ struct SvxSwFrameValidation
         nHRelOrient(0),
         nVRelOrient(0),
         bAutoHeight(false),
-        bAutoWidth(false),
         bMirror(false),
         bFollowTextFlow( false ),
         nHPos(0),

@@ -143,7 +143,6 @@ private:
     bool                                    mbAutoWidth : 1;
     bool                                    mbAutoHeight : 1;
     bool                                    mbAdjustEnabled : 1;
-    bool                                    mbIsFlip : 1;
 
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
 

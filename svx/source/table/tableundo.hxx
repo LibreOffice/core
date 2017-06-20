@@ -58,8 +58,6 @@ private:
         sdr::properties::TextProperties* mpProperties;
         OutlinerParaObject* mpOutlinerParaObject;
 
-        css::table::CellContentType mnCellContentType;
-
         OUString        msFormula;
         double          mfValue;
         ::sal_Int32     mnError;
@@ -70,7 +68,6 @@ private:
         Data()
             : mpProperties(nullptr)
             , mpOutlinerParaObject(nullptr)
-            , mnCellContentType(css::table::CellContentType_EMPTY)
             , mfValue(0)
             , mnError(0)
             , mbMerged(false)
