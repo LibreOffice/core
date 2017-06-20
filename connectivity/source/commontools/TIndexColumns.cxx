@@ -60,11 +60,10 @@ sdbcx::ObjectType OIndexColumns::createObject(const OUString& _rName)
     if ( xResult.is() )
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
-        OUString aD("D");
         while( xResult->next() )
         {
             if(xRow->getString(9) == _rName)
-                bAsc = xRow->getString(10) != aD;
+                bAsc = xRow->getString(10) != "D";
         }
     }
 

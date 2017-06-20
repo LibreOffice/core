@@ -1153,8 +1153,7 @@ bool implSetObject( const Reference< XParameters >& _rxParameters,
     {
         case css::uno::TypeClass_HYPER:
         {
-            sal_Int64 nValue = 0;
-            _rxParameters->setLong( _nColumnIndex, nValue );
+            _rxParameters->setLong( _nColumnIndex, sal_Int64(0) );
         }
         break;
 

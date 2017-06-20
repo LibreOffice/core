@@ -145,56 +145,47 @@ OUString ODatabaseMetaData::impl_getCatalogSeparator_throw(  )
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxBinaryLiteralLength(  )
 {
-    sal_Int32 nValue = 65535; // 0 means no limit
-    return nValue;
+    return 65535; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxRowSize(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCatalogNameLength(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCharLiteralLength(  )
 {
-    sal_Int32 nValue = 254; // 0 means no limit
-    return nValue;
+    return 254; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnNameLength(  )
 {
-    sal_Int32 nValue = 20; // 0 means no limit
-    return nValue;
+    return 20; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInIndex(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCursorNameLength(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxConnections(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInTable(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 ODatabaseMetaData::impl_getMaxStatements_throw(  )
@@ -204,8 +195,7 @@ sal_Int32 ODatabaseMetaData::impl_getMaxStatements_throw(  )
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTableNameLength(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 ODatabaseMetaData::impl_getMaxTablesInSelect_throw(  )
@@ -262,8 +252,7 @@ bool ODatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxIndexLength(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  )
@@ -412,14 +401,12 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatementLength(  )
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxProcedureNameLength(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxSchemaNameLength(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactions(  )
@@ -746,26 +733,22 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsLimitedOuterJoins(  )
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInGroupBy(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInOrderBy(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInSelect(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxUserNameLength(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetType( sal_Int32 /*setType*/ )
