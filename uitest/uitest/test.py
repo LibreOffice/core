@@ -70,7 +70,8 @@ class UITest(object):
 
     def execute_dialog_through_command(self, command):
         with EventListener(self._xContext, "DialogExecute") as event:
-            self._xUITest.executeDialog(command)
+            if not self._xUITest.executeDialog(command):
+                raise DialogNotExecutedException(command)
             time_ = 0
             while time_ < MAX_WAIT:
                 if event.executed:
@@ -83,7 +84,8 @@ class UITest(object):
 
     def execute_modeless_dialog_through_command(self, command):
         with EventListener(self._xContext, "ModelessDialogVisible") as event:
-            self._xUITest.executeCommand(command)
+            if not self._xUITest.executeCommand(command):
+                raise DialogNotExecutedException(command)
             time_ = 0
             while time_ < MAX_WAIT:
                 if event.executed:
@@ -160,7 +162,8 @@ class UITest(object):
 
     def close_doc(self):
         with EventListener(self._xContext, ["DialogExecute", "OnViewClosed"] ) as event:
-            self._xUITest.executeDialog(".uno:CloseDoc")
+            if not self._xUITest.executeDialog(".uno:CloseDoc"):
+                raise DialogNotExecutedException(".uno:CloseDoc")
             time_ = 0
             while time_ < MAX_WAIT:
                 if event.hasExecuted("DialogExecute"):
