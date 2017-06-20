@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_b52a027d",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4811,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-20T05:54:29Z",
+      "side": 1,
+      "message": "does this mean the maArrIterator is maybe unused now?",
+      "revId": "707caf61b7bcf5ff3a60c148593552babc644afe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
