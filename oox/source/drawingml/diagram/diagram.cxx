@@ -386,13 +386,13 @@ void importFragment( core::XmlFilterBase& rFilter,
 }
 
 void loadDiagram( ShapePtr& pShape,
-                  core::XmlFilterBase& rFilter,
-                  const OUString& rDataModelPath,
-                  const OUString& rLayoutPath,
-                  const OUString& rQStylePath,
-                  const OUString& rColorStylePath )
+                  core::XmlFilterBase& /*rFilter*/,
+                  const OUString& /*rDataModelPath*/,
+                  const OUString& /*rLayoutPath*/,
+                  const OUString& /*rQStylePath*/,
+                  const OUString& /*rColorStylePath*/ )
 {
-    DiagramPtr pDiagram( new Diagram );
+    /*DiagramPtr pDiagram( new Diagram );
 
     DiagramDataPtr pData( new DiagramData() );
     pDiagram->setData( pData );
@@ -479,7 +479,12 @@ void loadDiagram( ShapePtr& pShape,
     }
 
     // diagram loaded. now lump together & attach to shape
-    pDiagram->addTo(pShape);
+    pDiagram->addTo(pShape);*/
+
+    ShapePtr pChildShape(new Shape("com.sun.star.drawing.CustomShape"));
+    pChildShape->setName("test");
+    pChildShape->setSize(awt::Size(360000, 360000)); // 1cm in EMU, tested smaller values as well in case different unit is used
+    pShape->addChild(pChildShape);
 }
 
 void loadDiagram( const ShapePtr& pShape,
