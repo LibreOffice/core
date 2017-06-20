@@ -134,6 +134,8 @@ bool CommonStylePreviewRenderer::recalculate()
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_FONT)) != nullptr)
     {
         const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(pItem);
+        if (IsStarSymbol(pFontItem->GetFamilyName()))
+            return false;
         pFont->SetFamilyName(pFontItem->GetFamilyName());
         pFont->SetStyleName(pFontItem->GetStyleName());
     }
