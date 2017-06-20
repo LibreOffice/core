@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_60629ada",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-20T21:17:01Z",
+      "side": 1,
+      "message": "if you assign it to pContent before checking that it can be inserted into mpContents, then it\u0027s quite possible that you\u0027ll not insert anything for a paragraph and wrongly skip it",
+      "revId": "54b86fb7ac76bf32a997a5d7594020ba661e259d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
