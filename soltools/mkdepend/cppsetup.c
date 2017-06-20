@@ -114,11 +114,6 @@ yyerror(s)
 #else /* not CPP */
 
 #include "ifparser.h"
-struct parse_data {
-    struct filepointer *filep;
-    struct inclist *inc;
-    const char *line;
-};
 
 static const char *
 my_if_errors (IfParser *ip, const char *cp, const char *expecting)
@@ -199,19 +194,14 @@ my_eval_variable (IfParser *ip, const char *var, size_t len)
 }
 
 
-int cppsetup(char *line, struct filepointer *filep, struct inclist *inc)
+int cppsetup(char *line)
 {
     IfParser ip;
-    struct parse_data pd;
     int val = 0;
 
-    pd.filep = filep;
-    pd.inc = inc;
-    pd.line = line;
     ip.funcs.handle_error = my_if_errors;
     ip.funcs.eval_defined = my_eval_defined;
     ip.funcs.eval_variable = my_eval_variable;
-    ip.data = (char *) &pd;
 
     (void) ParseIfExpression (&ip, line, &val);
     if (val)

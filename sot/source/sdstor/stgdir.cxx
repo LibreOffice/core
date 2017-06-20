@@ -67,7 +67,6 @@ void StgDirEntry::InitMembers()
     m_aSave       = m_aEntry;
     m_pUp         =
     m_pDown       = nullptr;
-    m_ppRoot      = nullptr;
     m_pStgStrm    = nullptr;
     m_pCurStrm    =
     m_pTmpStrm    = nullptr;
@@ -727,11 +726,9 @@ void StgDirEntry::Invalidate( bool bDel )
 StgDirStrm::StgDirStrm( StgIo& r )
           : StgDataStrm( r, r.m_aHdr.GetTOCStart(), -1 )
           , m_pRoot( nullptr )
-          , m_nEntries( 0 )
 {
     if( r.GetError() )
         return;
-    m_nEntries = m_nPageSize / STGENTRY_SIZE;
     if( m_nStart == STG_EOF )
     {
         StgEntry aRoot;
@@ -817,7 +814,6 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
                 ( reinterpret_cast<StgAvlNode**>( pUpper ? &pUpper->m_pDown : &m_pRoot ), pCur ) )
             {
                 pCur->m_pUp    = pUpper;
-                pCur->m_ppRoot = &m_pRoot;
             }
             else
             {
@@ -972,7 +968,6 @@ StgDirEntry* StgDirStrm::Create( StgDirEntry& rStg, const OUString& rName, StgEn
         if( StgAvlNode::Insert( reinterpret_cast<StgAvlNode**>(&rStg.m_pDown), pRes ) )
         {
             pRes->m_pUp    = &rStg;
-            pRes->m_ppRoot = &m_pRoot;
             pRes->m_bCreated =
             pRes->m_bDirty = true;
         }

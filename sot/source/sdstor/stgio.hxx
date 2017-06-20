@@ -44,7 +44,6 @@ enum class FatError
 struct StgLinkArg
 {
     OUString aFile;
-    FatError nErr;
 };
 
 class StgIo : public StgCache {

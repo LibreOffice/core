@@ -120,12 +120,6 @@ typedef struct
      */
     sal_uInt32 m_nAttrib;
 
-    /** Size.
-        @see store_getStreamSize()
-        @see store_setStreamSize()
-     */
-    sal_uInt32 m_nSize;
-
     /** Reserved for internal use.
      */
     sal_uInt32 m_nReserved;

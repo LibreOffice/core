@@ -383,7 +383,6 @@ FatError StgIo::ValidateFATs()
         {
             StgLinkArg aArg;
             aArg.aFile = pFileStrm->GetFileName();
-            aArg.nErr = nErr;
             ErrorLink::get().Call( aArg );
             m_bCopied = true;
         }

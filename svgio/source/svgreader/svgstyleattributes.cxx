@@ -1230,7 +1230,6 @@ namespace svgio
             maFontSizeNumber(),
             maFontStretch(FontStretch_notset),
             maFontStyle(FontStyle_notset),
-            maFontVariant(FontVariant_notset),
             maFontWeight(FontWeight_notset),
             maTextAlign(TextAlign_notset),
             maTextDecoration(TextDecoration_notset),
@@ -1651,17 +1650,6 @@ namespace svgio
                 }
                 case SVGTokenFontVariant:
                 {
-                    if(!aContent.isEmpty())
-                    {
-                        if(aContent.startsWith("normal"))
-                        {
-                            setFontVariant(FontVariant_normal);
-                        }
-                        else if(aContent.startsWith("small-caps"))
-                        {
-                            setFontVariant(FontVariant_small_caps);
-                        }
-                    }
                     break;
                 }
                 case SVGTokenFontWeight:
