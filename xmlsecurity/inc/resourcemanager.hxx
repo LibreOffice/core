@@ -22,6 +22,7 @@
 
 #include <tools/resmgr.hxx>
 #include <tools/datetime.hxx>
+#include <com/sun/star/security/CertificateKind.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -39,6 +40,7 @@ namespace XmlSec
     DateTime        GetDateTime( const css::util::DateTime& _rDT );
     OUString        GetDateTimeString( const css::util::DateTime& _rDT );
     OUString        GetDateString( const css::util::DateTime& _rDT );
+    OUString        GetCertificateKind( const css::security::CertificateKind& rKind );
 
     std::vector< std::pair< OUString, OUString> >
         parseDN(const OUString& rRawString);
