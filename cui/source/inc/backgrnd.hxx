@@ -107,6 +107,7 @@ private:
     bool        bIsGraphicValid     : 1;
     bool        bLinkOnly           : 1;
     bool        bHighlighting       : 1;
+    bool        m_bColorSelected    : 1;
     Graphic     aBgdGraphic;
     OUString    aBgdGraphicPath;
     OUString    aBgdGraphicFilter;
