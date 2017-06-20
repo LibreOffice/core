@@ -36,6 +36,7 @@
 
 namespace {
 
+#ifndef ANDROID
 rtl::OUString get_this_libpath() {
     static rtl::OUString s_uri;
     if (s_uri.isEmpty()) {
@@ -55,7 +56,7 @@ rtl::OUString get_this_libpath() {
     }
     return s_uri;
 }
-
+#endif
 }
 
 rtl::OUString cppu::getUnoIniUri() {
