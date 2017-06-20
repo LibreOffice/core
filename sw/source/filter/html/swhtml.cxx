@@ -4779,7 +4779,7 @@ void SwHTMLParser::NewCharFormat( HtmlTokenId nToken )
 
 void SwHTMLParser::InsertSpacer()
 {
-    // und es ggf. durch die Optionen veraendern
+    // and if applicable change it via the options
     OUString aId;
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
@@ -4810,17 +4810,17 @@ void SwHTMLParser::InsertSpacer()
                                   eHoriOri );
             break;
         case HtmlOptionId::WIDTH:
-            // erstmal nur als Pixelwerte merken!
+            // First only save as pixel value!
             bPrcWidth = (rOption.GetString().indexOf('%') != -1);
             aSize.Width() = (long)rOption.GetNumber();
             break;
         case HtmlOptionId::HEIGHT:
-            // erstmal nur als Pixelwerte merken!
+            // First only save as pixel value!
             bPrcHeight = (rOption.GetString().indexOf('%') != -1);
             aSize.Height() = (long)rOption.GetNumber();
             break;
         case HtmlOptionId::SIZE:
-            // erstmal nur als Pixelwerte merken!
+            // First only save as pixel value!
             nSize = rOption.GetNumber();
             break;
         default: break;
@@ -4831,18 +4831,18 @@ void SwHTMLParser::InsertSpacer()
     {
     case HTML_SPTYPE_BLOCK:
         {
-            // einen leeren Textrahmen anlegen
+            // create a empty text frame
 
-            // den Itemset holen
+            // fetch the ItemSet
             SfxItemSet aFrameSet( m_xDoc->GetAttrPool(),
                                 svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{} );
             if( !IsNewDoc() )
                 Reader::ResetFrameFormatAttrs( aFrameSet );
 
-            // den Anker und die Ausrichtung setzen
+            // set the anchor and the adjustment
             SetAnchorAndAdjustment( eVertOri, eHoriOri, aFrameSet );
 
-            // und noch die Groesse des Rahmens
+            // and still the size of frames
             Size aDfltSz( MINFLY, MINFLY );
             Size aSpace( 0, 0 );
             SfxItemSet aDummyItemSet( m_xDoc->GetAttrPool(),
@@ -4853,17 +4853,17 @@ void SwHTMLParser::InsertSpacer()
                         aDummyItemSet, aDummyPropInfo, aFrameSet );
             SetSpace( aSpace, aDummyItemSet, aDummyPropInfo, aFrameSet );
 
-            // den Inhalt schuetzen
+            // protect the content
             SvxProtectItem aProtectItem( RES_PROTECT) ;
             aProtectItem.SetContentProtect( true );
             aFrameSet.Put( aProtectItem );
 
-            // der Rahmen anlegen
+            // create the frame
             RndStdIds eAnchorId =
                 static_cast<const SwFormatAnchor &>(aFrameSet.Get(RES_ANCHOR)).GetAnchorId();
             SwFrameFormat *pFlyFormat = m_xDoc->MakeFlySection( eAnchorId,
                                             m_pPam->GetPoint(), &aFrameSet );
-            // Ggf Frames anlegen und auto-geb. Rahmen registrieren
+            // Possibly create frames and register auto-bound frames.
             RegisterFlyFrame( pFlyFormat );
         }
         break;
@@ -4877,21 +4877,21 @@ void SwHTMLParser::InsertSpacer()
                                             MapMode(MapUnit::MapTwip) ).Height();
             }
 
-            // einen Absatz-Abstand setzen
+            // set a paragraph margin
             SwTextNode *pTextNode = nullptr;
             if( !m_pPam->GetPoint()->nContent.GetIndex() )
             {
-                // den unteren Absatz-Abstand des vorherigen Nodes aendern,
-                // wenn moeglich
+                // if possible change the bottom paragraph margin
+                // of previous node
 
-                SetAttr();  // noch offene Absatz-Attribute setzen
+                SetAttr();  // set still open paragraph attributes
 
                 pTextNode = m_xDoc->GetNodes()[m_pPam->GetPoint()->nNode.GetIndex()-1]
                                ->GetTextNode();
 
-                // Wenn der Abstz davor kein Textenode ist, dann wird jetzt
-                // ein leere Absatz angelegt, der eh schon eine Zeilenhoehe
-                // Abstand erzeugt.
+                // If the previous paragraph isn't a text node, then now an
+                // empty paragraph is created, which already generates line
+                // height as margin.
                 if( !pTextNode )
                     nSize = nSize>HTML_PARSPACE ? nSize-HTML_PARSPACE : 0;
             }
@@ -4908,15 +4908,15 @@ void SwHTMLParser::InsertSpacer()
                 NewAttr( &m_aAttrTab.pULSpace, SvxULSpaceItem( 0, (sal_uInt16)nSize, RES_UL_SPACE ) );
                 EndAttr( m_aAttrTab.pULSpace, false );
 
-                AppendTextNode();    // nicht am Abstand drehen!
+                AppendTextNode();    // Don't change margin!
             }
         }
         break;
     case HTML_SPTYPE_HORI:
         if( nSize > 0 )
         {
-            // wenn der Absatz noch leer ist, einen Erstzeilen-Einzug
-            // setzen, sondern Sperrschrift ueber einem Space aufspannen
+            // If the paragraph is still empty, don't set first line
+            // indentation, but span a spaced type over a space.
 
             if( nSize && Application::GetDefaultDevice() )
             {
@@ -5009,27 +5009,23 @@ void SwHTMLParser::InsertIDOption()
 
 void SwHTMLParser::InsertLineBreak()
 {
-    // <BR CLEAR=xxx> wird wie folgt behandelt:
-    // 1.) Es werden nur nur absatzgebundene Rahmen betrachtet, die
-    //     im aktuellen Absatz verankert sind.
-    // 2.) Fuer linksbuendig ausgerichtete Rahmen wird bei CLEAR=LEFT
-    //     oder ALL und auf rechtsbuendige ausgerichtete Rahmen bei
-    //     CLEAR=RIGHT oder ALL der Durchlauf wie folgt geaendert:
-    // 3.) Wenn der Absatz keinen Text enthaelt, bekommt der Rahmen keinen
-    //     Umlauf
-    // 4.) sonst erhaelt ein links ausgerichteter Rahmen eine rechten
-    //     "nur Anker" Umlauf und recht rechst ausg. Rahmen einen linken
-    //     "nur Anker" Umlauf.
-    // 5.) wenn in einem nicht-leeren Absatz der Umlauf eines Rahmens
-    //     geaendert wird, wird ein neuer Absatz aufgemacht
-    // 6.) Wenn von keinem Rahmen der Umlauf geaendert wird, wird ein
-    //     harter Zeilenumbruch eingefuegt
+    // <BR CLEAR=xxx> is handled as:
+    // 1.) Only regard the paragraph-bound frames anchored in current paragraph.
+    // 2.) For left-justified aligned frames, CLEAR=LEFT or ALL, and for right-
+    //     justified aligned frames, CLEAR=RIGHT or ALL, the wrap-through is
+    //     changed as following:
+    // 3.) If the paragraph contains no text, then the frames don't get a wrapping
+    // 4.) otherwise a left aligned frame gets a right "only anchor" wrapping
+    //     and a right aligned frame gets a left "only anchor" wrapping.
+    // 5.) if in a none-empty paragraph the wrapping of a frame is changed,
+    //     then a new paragraph is opened
+    // 6.) If no wrapping of frames are changed, a hard line break is insert.
 
-    OUString aId, aStyle, aClass;             // die ID der Bookmark
+    OUString aId, aStyle, aClass;             // the id of bookmark
     bool bClearLeft = false, bClearRight = false;
-    bool bCleared = false;  // wurde ein CLEAR ausgefuehrt?
+    bool bCleared = false;  // Was a CLEAR executed?
 
-    // dann holen wir mal die Optionen
+    // then we fetch the options
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
@@ -5063,7 +5059,7 @@ void SwHTMLParser::InsertLineBreak()
         }
     }
 
-    // CLEAR wird nur fuer den aktuellen Absaetz unterstuetzt
+    // CLEAR is only supported for the current paragraph
     if( bClearLeft || bClearRight )
     {
         SwNodeIndex& rNodeIdx = m_pPam->GetPoint()->nNode;
@@ -5109,10 +5105,10 @@ void SwHTMLParser::InsertLineBreak()
                         pFormat->SetFormatAttr( aSurround );
                         bCleared = true;
                     }
-                } // Anker ist nicht im Node
-            } // Schleife ueber Fly-Frames
-        } // kein Text-Node
-    } // kein CLEAR
+                }
+            }
+        }
+    }
 
     // parse styles
     SvxFormatBreakItem aBreakItem( SvxBreak::NONE, RES_BREAK );
@@ -5142,18 +5138,17 @@ void SwHTMLParser::InsertLineBreak()
 
     if( !bCleared && !bBreakItem )
     {
-        // wenn kein CLEAR ausgefuehrt werden sollte oder konnte, wird
-        // ein Zeilenumbruch eingef?gt
+        // If no CLEAR could or should be executed, a line break will be inserted
         OUString sTmp( u'\x000a' );   // make the Mac happy :-)
         m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, sTmp );
     }
     else if( m_pPam->GetPoint()->nContent.GetIndex() )
     {
-        // wenn ein clear in einem nicht-leeren Absatz ausgefuehrt wurde,
-        // muss anschliessen ein neuer Absatz aufgemacht werden
-        // MIB 21.02.97: Eigentlich muesste man hier den unteren Absatz-
-        // Absatnd auf 0 drehen. Das geht aber bei sowas wie <BR ..><P>
-        // schief (>Netscape). Deshalb lassen wir das erstmal.
+        // If a CLEAR is executed in a none-empty paragraph, then after it
+        // a new paragraph has be opened.
+        // MIB 21.02.97: Here actually we should change the bottom paragraph
+        // margin to zero. This will fail by something like this <BR ..><P>
+        // (>Netscape). That's why we don't do it.
         AppendTextNode( AM_NOSPACE );
     }
     if( bBreakItem && SvxBreak::PageBefore==aBreakItem.GetBreak() )
@@ -5177,7 +5172,7 @@ void SwHTMLParser::InsertHorzRule()
     Color aColor;
     OUString aId;
 
-    // dann holen wir mal die Optionen
+    // let's fetch the options
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
@@ -5195,7 +5190,7 @@ void SwHTMLParser::InsertHorzRule()
             nWidth = (sal_uInt16)rOption.GetNumber();
             if( bPrcWidth && nWidth>=100 )
             {
-                // 100%-Linien sind der default-Fall (keine Attrs neotig)
+                // the default case are 100% lines (no attributes necessary)
                 nWidth = 0;
                 bPrcWidth = false;
             }
@@ -5221,22 +5216,22 @@ void SwHTMLParser::InsertHorzRule()
     AppendTextNode();
     m_pPam->Move( fnMoveBackward );
 
-    // ... und in einem Kontext merken
+    // ...and save in a context
     HTMLAttrContext *pCntxt =
         new HTMLAttrContext( HtmlTokenId::HORZRULE, RES_POOLCOLL_HTML_HR, aEmptyOUStr );
 
     PushContext( pCntxt );
 
-    // die neue Vorlage setzen
+    // set the new style
     SetTextCollAttrs( pCntxt );
 
-    // die harten Attribute an diesem Absatz werden nie mehr ungueltig
+    // the hard attributes of the current paragraph will never get invalid
     if( !m_aParaAttrs.empty() )
         m_aParaAttrs.clear();
 
     if( nSize>0 || bColor || bNoShade )
     {
-        // Farbe und/oder Breite der Linie setzen
+        // set line colour and/or width
         if( !bColor )
             aColor.SetColor( COL_GRAY );
 
@@ -5269,14 +5264,13 @@ void SwHTMLParser::InsertHorzRule()
     }
     if( nWidth )
     {
-        // Wenn wir in keiner Tabelle sind, wird die Breitenangabe durch
-        // Absatz-Einzuege "getuerkt". In einer Tabelle macht das wenig
-        // Sinn. Um zu Vermeiden, dass die Linie bei der Breitenberechnung
-        // beruecksichtigt wird, bekommt sie aber trotzdem entsprechendes
-        // LRSpace-Item verpasst.
+        // If we aren't in a table, then the width value will be "faked" with
+        // paragraph indents. That makes little sense in a table. In order to
+        // avoid that the line is regarded during the width calculation, she
+        // still gets an appropriate LRSpace-Item.
         if( !m_pTable )
         {
-            // Laenge und Ausrichtung der Linie ueber Absatz-Einzuege "tuerken"
+            // fake length and alignment of line above paragraph indents
             long nBrowseWidth = GetCurrentBrowseWidth();
             nWidth = bPrcWidth ? (sal_uInt16)((nWidth*nBrowseWidth) / 100)
                                : ToTwips( (sal_uInt16)nBrowseWidth );
@@ -5311,18 +5305,18 @@ void SwHTMLParser::InsertHorzRule()
         }
     }
 
-    // Bookmarks koennen nicht in Hyperlinks eingefueht werden
+    // it's not possible to insert bookmarks in links
     if( !aId.isEmpty() )
         InsertBookmark( aId );
 
     // pop current context of stack
     HTMLAttrContext *pPoppedContext = PopContext( HtmlTokenId::HORZRULE );
-    OSL_ENSURE( pPoppedContext==pCntxt, "wo kommt denn da ein HR-Kontext her?" );
+    OSL_ENSURE( pPoppedContext==pCntxt, "Where does the HR context came from?" );
     delete pPoppedContext;
 
     m_pPam->Move( fnMoveForward );
 
-    // und im Absatz danach die dort aktuelle Vorlage setzen
+    // and set the current style in the next paragraph
     SetTextCollAttrs();
 }
 
@@ -5352,10 +5346,10 @@ void SwHTMLParser::ParseMoreMetaOptions()
         }
     }
 
-    // Hier wird es etwas tricky: Wir wissen genau, da? die Dok-Info
-    // nicht geaendert wurde. Deshalb genuegt es, auf Generator und
-    // auf refresh abzufragen, um noch nicht verarbeitete Token zu finden,
-    // denn das sind die einzigen, die die Dok-Info nicht modifizieren.
+    // Here things get a little tricky: We know for sure, that the Doc-Info
+    // wasn't changed. Therefore it's enough to query for Generator and Refresh
+    // to find a not processed Token. These are the only ones which wont change
+    // the Doc-Info.
     if( aName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_META_generator ) ||
         aName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_META_refresh ) ||
         aName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_META_content_type ) ||
