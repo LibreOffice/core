@@ -107,8 +107,7 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::available()
     if (eError != FileBase::E_None)
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
-    sal_uInt64 nDummy = 0;
-    eError = m_pFile->setPos(osl_Pos_End, nDummy);
+    eError = m_pFile->setPos(osl_Pos_End, 0);
     if (eError != FileBase::E_None)
        throw css::io::NotConnectedException(OUString(),static_cast<css::uno::XWeak*>(this));
 

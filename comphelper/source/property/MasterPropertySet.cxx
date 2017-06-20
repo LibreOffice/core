@@ -322,8 +322,6 @@ PropertyState SAL_CALL MasterPropertySet::getPropertyState( const OUString& Prop
     if( aIter == mxInfo->maMap.end())
         throw UnknownPropertyException( PropertyName, static_cast< XPropertySet* >( this ) );
 
-    PropertyState aState(PropertyState_AMBIGUOUS_VALUE);
-
     // 0 means it's one of ours !
     if ( (*aIter).second->mnMapId != 0 )
     {
@@ -335,7 +333,7 @@ PropertyState SAL_CALL MasterPropertySet::getPropertyState( const OUString& Prop
             xMutexGuard.reset( new osl::Guard< comphelper::SolarMutex >(pSlave->mpMutex) );
     }
 
-    return aState;
+    return PropertyState_AMBIGUOUS_VALUE;
 }
 
 Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const Sequence< OUString >& rPropertyNames )

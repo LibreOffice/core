@@ -206,8 +206,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTableNameLength()
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTablesInSelect(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 
@@ -341,8 +340,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsTableCorrelationNames()
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxIndexLength(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  )
@@ -444,14 +442,12 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsIntegrityEnhancementFacility(  )
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatements(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxProcedureNameLength(  )
 {
-    sal_Int32 nValue = 31; // TODO: confirm
-    return nValue;
+    return 31; // TODO: confirm
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::allProceduresAreCallable(  )
@@ -682,20 +678,17 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsLimitedOuterJoins(  )
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInGroupBy(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInOrderBy(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInSelect(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxUserNameLength(  )

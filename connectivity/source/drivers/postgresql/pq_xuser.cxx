@@ -135,7 +135,6 @@ void User::changePassword(
 
 sal_Int32 User::getPrivileges( const OUString& objName, sal_Int32 objType )
 {
-    sal_Int32 ret = 0xffffffff;
     if (isLog(m_pSettings, LogLevel::Info))
     {
         Statics & st = getStatics();
@@ -147,7 +146,7 @@ sal_Int32 User::getPrivileges( const OUString& objName, sal_Int32 objType )
         log(m_pSettings, LogLevel::Info, buf.makeStringAndClear());
     }
     // all privileges
-    return ret;
+    return 0xffffffff;
 }
 
 sal_Int32 User::getGrantablePrivileges( const OUString& objName, sal_Int32 objType )
