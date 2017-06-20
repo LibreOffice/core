@@ -805,7 +805,6 @@ namespace {
 static oslFileError
 openMemoryAsFile( void *address, size_t size, oslFileHandle *pHandle, const char *path )
 {
-    oslFileError eRet;
     FileHandle_Impl * pImpl = new FileHandle_Impl (-1, FileHandle_Impl::KIND_MEM, path);
     pImpl->m_size = sal::static_int_cast< sal_uInt64 >(size);
 
