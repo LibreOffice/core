@@ -138,7 +138,6 @@ VCL_BUILDER_DECL_FACTORY(SvxLanguageComboBox)
 
 SvxLanguageBoxBase::SvxLanguageBoxBase()
     : m_pSpellUsedLang(nullptr)
-    , m_nLangList(SvxLanguageListFlags::EMPTY)
     , m_bHasLangNone(false)
     , m_bLangNoneIsLangAll(false)
     , m_bWithCheckmark(false)
@@ -150,7 +149,6 @@ void SvxLanguageBoxBase::ImplLanguageBoxBaseInit()
     m_aNotCheckedImage = Image(BitmapEx(RID_SVXBMP_NOTCHECKED));
     m_aCheckedImage = Image(BitmapEx(RID_SVXBMP_CHECKED));
     m_aAllString            = SvxResId( RID_SVXSTR_LANGUAGE_ALL );
-    m_nLangList             = SvxLanguageListFlags::EMPTY;
     m_bHasLangNone          = false;
     m_bLangNoneIsLangAll    = false;
 
@@ -171,7 +169,6 @@ void SvxLanguageBoxBase::ImplLanguageBoxBaseInit()
             if ( bInsert )
                 InsertLanguage( nLangType );
         }
-        m_nLangList = SvxLanguageListFlags::ALL;
     }
 }
 
@@ -227,7 +224,6 @@ void SvxLanguageBoxBase::SetLanguageList( SvxLanguageListFlags nLangList,
 {
     ImplClear();
 
-    m_nLangList             = nLangList;
     m_bHasLangNone          = bHasLangNone;
     m_bLangNoneIsLangAll    = bLangNoneIsLangAll;
     m_bWithCheckmark        = bCheckSpellAvail;

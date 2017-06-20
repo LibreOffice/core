@@ -31,9 +31,7 @@ SvxParaPrevWindow::SvxParaPrevWindow( vcl::Window* pParent,  WinBits nBits) :
     nLower          ( 0 ),
     eAdjust         ( SvxAdjust::Left ),
     eLastLine       ( SvxAdjust::Left ),
-    eLine           ( SvxPrevLineSpace::N1 ),
-    nLineVal        ( 0 )
-
+    eLine           ( SvxPrevLineSpace::N1 )
 {
     // Count in Twips by default
     SetMapMode(MapMode(MapUnit::MapTwip));

@@ -175,7 +175,6 @@ protected:
     SdrUndoGroup*       pAktUndoGroup;  // for deeper
     sal_uInt16          nUndoLevel;     // undo nesting
     bool                bMyPool:1;        // to clean up pMyPool from 303a
-    bool                bUIOnlyDecimalMark:1; // see eUIUnit
     bool                mbUndoEnabled:1;  // If false no undo is recorded or we are during the execution of an undo action
     bool                bExtColorTable:1; // ne separate ColorTable
     bool                mbChanged:1;
@@ -188,7 +187,6 @@ protected:
     bool                bPasteResize:1; // Objects are being resized due to Paste with different MapMode
     bool                bStarDrawPreviewMode:1;
     bool                mbDisableTextEditUsesCommonUndoManager:1;
-    SvStreamEndian      nStreamNumberFormat;
     sal_uInt16          nDefaultTabulator;
     sal_uInt32          nMaxUndoCount;
 
@@ -196,7 +194,6 @@ protected:
 
 
 public:
-    sal_uInt16          nStarDrawPreviewMasterPageNum;
     rtl::Reference<SvxForbiddenCharactersTable> mpForbiddenCharactersTable;
     SdrSwapGraphicsMode nSwapGraphicsMode;
 
@@ -214,11 +211,6 @@ public:
     // Color, Dash, Line-End, Hatch, Gradient, Bitmap property lists ...
     o3tl::enumarray<XPropertyListType, XPropertyListRef> maProperties;
 
-    // New src638: NumberFormatter for drawing layer and
-    // method for getting it. It is constructed on demand
-    // and destroyed when destroying the SdrModel.
-    SvNumberFormatter* mpNumberFormatter;
-public:
     sal_uInt16 getHandoutPageCount() const { return mnHandoutPageCount; }
     void setHandoutPageCount( sal_uInt16 nHandoutPageCount ) { mnHandoutPageCount = nHandoutPageCount; }
 

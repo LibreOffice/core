@@ -124,7 +124,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     eUIUnit=FUNIT_MM;
     aUIScale=Fraction(1,1);
     nUIUnitDecimalMark=0;
-    bUIOnlyDecimalMark=false;
     pLayerAdmin=nullptr;
     pItemPool=pPool;
     bMyPool=false;
@@ -150,12 +149,9 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     nSwapGraphicsMode=SdrSwapGraphicsMode::DEFAULT;
     bPasteResize=false;
     bReadOnly=false;
-    nStreamNumberFormat=SvStreamEndian::BIG;
     nDefaultTabulator=0;
-    mpNumberFormatter = nullptr;
     bTransparentTextFrames=false;
     bStarDrawPreviewMode = false;
-    nStarDrawPreviewMasterPageNum = SDRPAGE_NOTFOUND;
     mpForbiddenCharactersTable = nullptr;
     mbModelLocked = false;
     mpOutlinerCache = nullptr;
@@ -172,9 +168,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     else
         mnCharCompressType = CharCompressType::NONE;
 
-#ifdef OSL_LITENDIAN
-    nStreamNumberFormat=SvStreamEndian::LITTLE;
-#endif
     bExtColorTable=bUseExtColorTable;
 
     if ( pPool == nullptr )
@@ -303,8 +296,6 @@ SdrModel::~SdrModel()
     }
 
     mpForbiddenCharactersTable.clear();
-
-    delete mpNumberFormatter;
 
     delete mpImpl->mpUndoFactory;
 }
@@ -1042,7 +1033,6 @@ void SdrModel::ImpSetUIUnit()
 
     // end preparations, set member values
     aUIUnitFact = Fraction(sal_Int32(nMul), sal_Int32(nDiv));
-    bUIOnlyDecimalMark = (nMul == nDiv);
     TakeUnitStr(eUIUnit, aUIUnitStr);
 }
 

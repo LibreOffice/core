@@ -34,16 +34,14 @@ protected:
     SdrHdl*                     mpDragHdl;
     SdrDragMethod*              mpCurrentSdrDragMethod;
     SdrUndoGeoObj*              mpInsPointUndo;
-    tools::Rectangle                   maDragLimit;
+    tools::Rectangle            maDragLimit;
     OUString                    maInsPointUndoStr;
     SdrHdlKind                  meDragHdl;
 
     sal_uIntPtr                 mnDragXorPolyLimit;
     sal_uIntPtr                 mnDragXorPointLimit;
-    sal_uInt16                  mnDetailedEdgeDraggingLimit;
 
     bool                        mbFramDrag : 1;        // currently frame dragging
-    bool                        mbDragSpecial : 1;     // currently Special Obj-dragging
     bool                        mbMarkedHitMovesAlways : 1; // Persistent
     bool                        mbDragLimit : 1;      // Limit on SnapRect instead of BoundRect
     bool                        mbDragHdl : 1;        // TRUE: RefPt is slid

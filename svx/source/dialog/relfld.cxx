@@ -25,7 +25,6 @@ SvxRelativeField::SvxRelativeField(
     : MetricField( pParent, nBits)
     , nRelMin(0)
     , nRelMax(0)
-    , nRelStep(0)
     , bRelativeMode(false)
     , bRelative(false)
     , bNegativeEnabled(false)
@@ -85,13 +84,11 @@ void SvxRelativeField::Modify()
 }
 
 
-void SvxRelativeField::EnableRelativeMode( sal_uInt16 nMin,
-                                           sal_uInt16 nMax, sal_uInt16 nStep )
+void SvxRelativeField::EnableRelativeMode( sal_uInt16 nMin, sal_uInt16 nMax )
 {
     bRelativeMode = true;
     nRelMin       = nMin;
     nRelMax       = nMax;
-    nRelStep      = nStep;
     SetUnit( FUNIT_CM );
 }
 

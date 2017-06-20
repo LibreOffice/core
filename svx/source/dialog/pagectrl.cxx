@@ -46,7 +46,6 @@ SvxPageWindow::SvxPageWindow(vcl::Window* pParent)
     nLeft(0),
     nRight(0),
 
-    pBorder(nullptr),
     bResetBackground(false),
     bFrameDirection(false),
     nFrameDirection(SvxFrameDirection::Horizontal_LR_TB),
@@ -56,13 +55,10 @@ SvxPageWindow::SvxPageWindow(vcl::Window* pParent)
     nHdDist(0),
     nHdHeight(0),
 
-    pHdBorder(nullptr),
     nFtLeft(0),
     nFtRight(0),
     nFtDist(0),
     nFtHeight(0),
-
-    pFtBorder(nullptr),
 
     maHeaderFillAttributes(),
     maFooterFillAttributes(),
@@ -88,13 +84,6 @@ SvxPageWindow::SvxPageWindow(vcl::Window* pParent)
 SvxPageWindow::~SvxPageWindow()
 {
     disposeOnce();
-}
-
-void SvxPageWindow::dispose()
-{
-    delete pHdBorder;
-    delete pFtBorder;
-    vcl::Window::dispose();
 }
 
 VCL_BUILDER_FACTORY(SvxPageWindow)
@@ -403,26 +392,6 @@ void SvxPageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
     }
 }
 
-
-void SvxPageWindow::SetBorder(const SvxBoxItem& rNew)
-{
-    delete pBorder;
-    pBorder = new SvxBoxItem(rNew);
-}
-
-
-void SvxPageWindow::SetHdBorder(const SvxBoxItem& rNew)
-{
-    delete pHdBorder;
-    pHdBorder = new SvxBoxItem(rNew);
-}
-
-
-void SvxPageWindow::SetFtBorder(const SvxBoxItem& rNew)
-{
-    delete pFtBorder;
-    pFtBorder = new SvxBoxItem(rNew);
-}
 
 void SvxPageWindow::EnableFrameDirection(bool bEnable)
 {

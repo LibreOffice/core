@@ -91,7 +91,6 @@ private:
     bool                m_bObject : 1;  // does the column reference an object datatype?
     bool                m_bHidden : 1;
     bool                m_bLocked : 1;
-    bool                m_bDateTime : 1;
 
     static ::svt::CellControllerRef s_xEmptyController;
         // used by locked columns
@@ -113,7 +112,6 @@ public:
         ,m_bObject(false)
         ,m_bHidden(false)
         ,m_bLocked(false)
-        ,m_bDateTime(false)
     {
     }
 
@@ -413,7 +411,6 @@ class DbFormattedField : public DbLimitedLengthField
 {
 protected:
     css::uno::Reference< css::util::XNumberFormatsSupplier >  m_xSupplier;
-    sal_Int16                       m_nKeyType;
 
 
 public:

@@ -1163,14 +1163,6 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
             }
 
             m_pBspWin->setHeaderFillAttributes(aHeaderFillAttributes);
-            nWhich = GetWhich(SID_ATTR_BORDER_OUTER);
-
-            if(rTmpSet.GetItemState(nWhich) == SfxItemState::SET)
-            {
-                const SvxBoxItem& rItem =
-                    static_cast<const SvxBoxItem&>(rTmpSet.Get( nWhich ));
-                m_pBspWin->SetHdBorder( rItem );
-            }
         }
     }
 
@@ -1207,13 +1199,6 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
             }
 
             m_pBspWin->setFooterFillAttributes(aFooterFillAttributes);
-            nWhich = GetWhich(SID_ATTR_BORDER_OUTER);
-
-            if(rTmpSet.GetItemState(nWhich) == SfxItemState::SET)
-            {
-                const SvxBoxItem& rItem = static_cast< const SvxBoxItem& >(rTmpSet.Get(nWhich));
-                m_pBspWin->SetFtBorder(rItem);
-            }
         }
     }
 
@@ -1241,12 +1226,6 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
     }
 
     m_pBspWin->setPageFillAttributes(aPageFillAttributes);
-    pItem = GetItem(rSet, SID_ATTR_BORDER_OUTER);
-
-    if(pItem)
-    {
-        m_pBspWin->SetBorder(static_cast< const SvxBoxItem& >(*pItem));
-    }
 }
 
 void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
@@ -1311,14 +1290,6 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
         }
 
         m_pBspWin->setHeaderFillAttributes(aHeaderFillAttributes);
-        const sal_uInt16 nWhich(GetWhich(SID_ATTR_BORDER_OUTER));
-
-        if ( rHeaderSet.GetItemState( nWhich ) >= SfxItemState::DEFAULT )
-        {
-            const SvxBoxItem& rItem =
-                static_cast<const SvxBoxItem&>(rHeaderSet.Get( nWhich ));
-            m_pBspWin->SetHdBorder( rItem );
-        }
     }
 
     // evaluate footer attributes
@@ -1373,14 +1344,6 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
         }
 
         m_pBspWin->setFooterFillAttributes(aFooterFillAttributes);
-        const sal_uInt16 nWhich(GetWhich(SID_ATTR_BORDER_OUTER));
-
-        if ( rFooterSet.GetItemState( nWhich ) >= SfxItemState::DEFAULT )
-        {
-            const SvxBoxItem& rItem =
-                static_cast<const SvxBoxItem&>(rFooterSet.Get( nWhich ));
-            m_pBspWin->SetFtBorder( rItem );
-        }
     }
 }
 

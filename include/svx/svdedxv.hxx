@@ -70,13 +70,12 @@ protected:
     OutlinerView*               pTextEditOutlinerView; // current view of the outliners
     VclPtr<vcl::Window>         pTextEditWin;          // matching window to pTextEditOutlinerView
     vcl::Cursor*                pTextEditCursorMerker; // to restore the cursor in each window
-    ImpSdrEditPara*             pEditPara;             // trash bin for everything else to stay compatible
     SdrObject*                  pMacroObj;
     SdrPageView*                pMacroPV;
     VclPtr<vcl::Window>         pMacroWin;
 
-    tools::Rectangle                   aTextEditArea;
-    tools::Rectangle                   aMinTextEditArea;
+    tools::Rectangle            aTextEditArea;
+    tools::Rectangle            aMinTextEditArea;
     Link<EditFieldInfo*,void>   aOldCalcFieldValueLink; // for call the old handler
     Point                       aMacroDownPos;
 

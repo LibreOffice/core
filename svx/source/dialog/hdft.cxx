@@ -730,20 +730,6 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, Button*, void)
                 }
             }
 
-            {
-                const sal_uInt16 nWhich = GetWhich(SID_ATTR_BORDER_OUTER);
-
-                if(pBBSet->GetItemState(nWhich) == SfxItemState::SET)
-                {
-                    const SvxBoxItem& rItem = static_cast<const SvxBoxItem&>(pBBSet->Get(nWhich));
-
-                    if(nId == SID_ATTR_PAGE_HEADERSET)
-                        m_pBspWin->SetHdBorder(rItem);
-                    else
-                        m_pBspWin->SetFtBorder(rItem);
-                }
-            }
-
         }
 
         UpdateExample();
@@ -806,14 +792,6 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
             }
 
             m_pBspWin->setHeaderFillAttributes(aHeaderFillAttributes);
-            nWhich = GetWhich(SID_ATTR_BORDER_OUTER);
-
-            if(rTmpSet.GetItemState(nWhich) == SfxItemState::SET)
-            {
-                const SvxBoxItem& rItem =
-                    static_cast<const SvxBoxItem&>(rTmpSet.Get(nWhich));
-                m_pBspWin->SetHdBorder(rItem);
-            }
         }
     }
 
@@ -851,12 +829,6 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
 
             m_pBspWin->setFooterFillAttributes(aFooterFillAttributes);
             nWhich = GetWhich(SID_ATTR_BORDER_OUTER);
-
-            if(rTmpSet.GetItemState(nWhich) == SfxItemState::SET)
-            {
-                const SvxBoxItem& rItem = static_cast< const SvxBoxItem& >(rTmpSet.Get(nWhich));
-                m_pBspWin->SetFtBorder(rItem);
-            }
         }
     }
 
@@ -883,13 +855,6 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
     }
 
     m_pBspWin->setPageFillAttributes(aPageFillAttributes);
-    nWhich = GetWhich(SID_ATTR_BORDER_OUTER);
-
-    if(rSet.GetItemState(nWhich) >= SfxItemState::DEFAULT)
-    {
-        const SvxBoxItem& rItem = static_cast< const SvxBoxItem& >(rSet.Get(nWhich));
-        m_pBspWin->SetBorder(rItem);
-    }
 }
 
 void SvxHFPage::ActivatePage( const SfxItemSet& rSet )

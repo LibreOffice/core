@@ -52,10 +52,9 @@ private:
     SvxAdjust           eLastLine;
     // line distance
     SvxPrevLineSpace    eLine;
-    sal_uInt16          nLineVal;
 
     OUString            aText;
-    tools::Rectangle           Lines[9];
+    tools::Rectangle    Lines[9];
 
 protected:
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
@@ -94,9 +93,9 @@ public:
     {
         eLastLine = eNew;
     }
-    void SetLineSpace( SvxPrevLineSpace eNew, sal_uInt16 nNew = 0 )
+    void SetLineSpace( SvxPrevLineSpace eNew )
     {
-        eLine = eNew; nLineVal = nNew;
+        eLine = eNew;
     }
     void SetText( const OUString& rStr ) override
     {
