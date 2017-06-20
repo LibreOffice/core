@@ -253,6 +253,8 @@ public:
     void testTdf107976();
     void testTdf113790();
     void testParagraphOfTextRange();
+    void testTdf108524();
+    void testTableInSection();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -393,6 +395,8 @@ public:
     CPPUNIT_TEST(testTdf107976);
     CPPUNIT_TEST(testTdf113790);
     CPPUNIT_TEST(testParagraphOfTextRange);
+    CPPUNIT_TEST(testTdf108524);
+    CPPUNIT_TEST(testTableInSection);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5044,6 +5048,32 @@ void SwUiWriterTest::testParagraphOfTextRange()
     // This failed as there were no TextParagraph property.
     auto xParagraph = getProperty< uno::Reference<text::XTextRange> >(xViewCursor->getStart(), "TextParagraph");
     CPPUNIT_ASSERT_EQUAL(OUString("In section"), xParagraph->getString());
+}
+
+void SwUiWriterTest::testTdf108524()
+{
+    createDoc("tdf108524.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // In total we expect two cells containing a section.
+    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/section", 2);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell/section", 1);
+    // This was 0, section wasn't split, instead it was only on the first page
+    // and it was cut off.
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell/section", 1);
+}
+
+void SwUiWriterTest::testTableInSection()
+{
+    // The document has a section, containing a table that spans over 2 pages.
+    createDoc("table-in-sect.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // In total we expect 4 cells.
+    assertXPath(pXmlDoc, "/root/page/body/section/tab/row/cell", 4);
+
+    // Assert that on both pages the section contains 2 cells.
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row/cell", 2);
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/row/cell", 2);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
