@@ -197,7 +197,6 @@ private:
     bool                    mbEPS           : 1;
     bool                    mbIsInSwapIn    : 1;
     bool                    mbIsInSwapOut   : 1;
-    bool                    mbAlpha         : 1;
 
     void                    SVT_DLLPRIVATE ImplAssignGraphicData();
     static void             SVT_DLLPRIVATE ImplEnsureGraphicManager();

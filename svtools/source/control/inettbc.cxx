@@ -818,7 +818,6 @@ SvtURLBox::SvtURLBox( vcl::Window* pParent, INetProtocol eSmart, bool bSetDefaul
         eSmartProtocol( eSmart ),
         bAutoCompleteMode( false ),
         bOnlyDirectories( false ),
-        bCtrlClick( false ),
         bHistoryDisabled( false ),
         bNoSelection( false ),
         bIsAutoCompleteEnabled( true )
@@ -838,7 +837,6 @@ SvtURLBox::SvtURLBox( vcl::Window* pParent, WinBits _nStyle, INetProtocol eSmart
         eSmartProtocol( eSmart ),
         bAutoCompleteMode( false ),
         bOnlyDirectories( false ),
-        bCtrlClick( false ),
         bHistoryDisabled( false ),
         bNoSelection( false ),
         bIsAutoCompleteEnabled( true )
@@ -1007,7 +1005,6 @@ bool SvtURLBox::ProcessKey( const vcl::KeyCode& rKey )
             Resize();
         }
 
-        bCtrlClick = rKey.IsMod1();
         bool bHandled = false;
         if ( GetOpenHdl().IsSet() )
         {
@@ -1019,8 +1016,6 @@ bool SvtURLBox::ProcessKey( const vcl::KeyCode& rKey )
             bHandled = true;
             GetSelectHdl().Call(*this);
         }
-
-        bCtrlClick = false;
 
         ClearModifyFlag();
         return bHandled;

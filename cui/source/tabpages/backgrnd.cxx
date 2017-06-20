@@ -599,7 +599,6 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
             aBgdColor = pBgdAttr->GetColor();
             sal_uInt16 nCol = GetItemId_Impl(*m_pBackgroundColorSet, aBgdColor);
             m_pBackgroundColorSet->SelectItem( nCol );
-            m_pBackgroundColorSet->SaveValue();
             m_pPreviewWin1->NotifyChange( aBgdColor );
         }
     }
@@ -1423,7 +1422,6 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
         {
             bool bNoSelection = m_pBackgroundColorSet->IsNoSelection();
             m_pBackgroundColorSet->SelectItem( nCol );
-            m_pBackgroundColorSet->SaveValue();
             // The actual selection is user set, not what we preset.
             if (bNoSelection)
                 m_pBackgroundColorSet->SetNoSelection();

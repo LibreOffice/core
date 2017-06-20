@@ -916,7 +916,7 @@ void SwHTMLParser::DocumentDetected()
     if( IsNewDoc() )
     {
         if( IsInHeader() )
-            FinishHeader( true );
+            FinishHeader();
 
         CallEndAction( true );
 
@@ -1991,7 +1991,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
 
     case HtmlTokenId::NOFRAMES_ON:
         if( IsInHeader() )
-            FinishHeader( true );
+            FinishHeader();
         bInsertUnknown = m_bKeepUnknown;
         break;
 

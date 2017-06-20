@@ -216,7 +216,6 @@ HTMLParser::HTMLParser( SvStream& rIn, bool bReadNewDoc ) :
     SvParser<HtmlTokenId>( rIn ),
     bNewDoc(bReadNewDoc),
     bIsInHeader(true),
-    bIsInBody(false),
     bReadListing(false),
     bReadXMP(false),
     bReadPRE(false),
@@ -284,7 +283,6 @@ HtmlTokenId HTMLParser::FilterToken( HtmlTokenId nToken )
         break;          // don't pass
 
     case HtmlTokenId::HEAD_OFF:
-        bIsInBody = true;
         bIsInHeader = false;
         break;
 
@@ -294,16 +292,14 @@ HtmlTokenId HTMLParser::FilterToken( HtmlTokenId nToken )
 
     case HtmlTokenId::BODY_ON:
         bIsInHeader = false;
-        bIsInBody = true;
         break;
 
     case HtmlTokenId::FRAMESET_ON:
         bIsInHeader = false;
-        bIsInBody = false;
         break;
 
     case HtmlTokenId::BODY_OFF:
-        bIsInBody = bReadPRE = bReadListing = bReadXMP = false;
+        bReadPRE = bReadListing = bReadXMP = false;
         break;
 
     case HtmlTokenId::HTML_OFF:

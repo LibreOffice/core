@@ -140,7 +140,6 @@ void GraphicObject::ImplAssignGraphicData()
     mnSizeBytes = maGraphic.GetSizeBytes();
     meType = maGraphic.GetType();
     mbTransparent = maGraphic.IsTransparent();
-    mbAlpha = maGraphic.IsAlpha();
     mbAnimated = maGraphic.IsAnimated();
     mbEPS = maGraphic.IsEPS();
     mnAnimationLoopCount = ( mbAnimated ? maGraphic.GetAnimationLoopCount() : 0 );
