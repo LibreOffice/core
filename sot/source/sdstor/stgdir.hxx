@@ -35,9 +35,8 @@ class StgDirEntry : public StgAvlNode
     friend class StgIterator;
     friend class StgDirStrm;
     StgEntry     m_aSave;                     // original dir entry
-    StgDirEntry*  m_pUp;                      // parent directory
-    StgDirEntry*  m_pDown;                    // child directory for storages
-    StgDirEntry** m_ppRoot;                   // root of TOC tree
+    StgDirEntry* m_pUp;                      // parent directory
+    StgDirEntry* m_pDown;                    // child directory for storages
     StgStrm*     m_pStgStrm;                  // storage stream
     StgTmpStrm*  m_pTmpStrm;                  // temporary stream
     StgTmpStrm*  m_pCurStrm;                  // temp stream after commit
@@ -92,7 +91,6 @@ class StgDirStrm : public StgDataStrm
 {
     friend class StgIterator;
     StgDirEntry* m_pRoot;                         // root of dir tree
-    short        m_nEntries;                      // entries per page
     void         SetupEntry( sal_Int32, StgDirEntry* );
 public:
     explicit StgDirStrm( StgIo& );

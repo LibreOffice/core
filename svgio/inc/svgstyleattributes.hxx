@@ -204,7 +204,6 @@ namespace svgio
             SvgNumber                   maFontSizeNumber;
             FontStretch                 maFontStretch;
             FontStyle                   maFontStyle;
-            FontVariant                 maFontVariant;
             FontWeight                  maFontWeight;
             TextAlign                   maTextAlign;
             TextDecoration              maTextDecoration;
@@ -380,9 +379,6 @@ namespace svgio
             /// FontStyle content
             FontStyle getFontStyle() const;
             void setFontStyle(const FontStyle aFontStyle) { maFontStyle = aFontStyle; }
-
-            /// FontVariant content
-            void setFontVariant(const FontVariant aFontVariant) { maFontVariant = aFontVariant; }
 
             /// FontWeight content
             FontWeight getFontWeight() const;

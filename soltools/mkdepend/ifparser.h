@@ -68,7 +68,6 @@ typedef struct if_parser {
       int         (*eval_variable) (struct if_parser *, const char *, size_t);
       int         (*eval_defined)  (struct if_parser *, const char *, size_t);
     } funcs;
-    char *data;
 } IfParser;
 
 const char *ParseIfExpression (IfParser *, const char *, int *);

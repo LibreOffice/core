@@ -141,13 +141,11 @@ class OnDemandCalendarWrapper
     mutable std::unique_ptr<CalendarWrapper>
                                 pPtr;
     mutable bool                bValid;
-            bool                bInitialized;
 
 public:
                                 OnDemandCalendarWrapper()
                                     : pPtr(nullptr)
                                     , bValid(false)
-                                    , bInitialized(false)
                                     {}
 
             void                init(
@@ -158,7 +156,6 @@ public:
                                         m_xContext = rxContext;
                                         changeLocale( rLocale );
                                         pPtr.reset();
-                                        bInitialized = true;
                                     }
 
             void                changeLocale( const css::lang::Locale& rLocale )
@@ -252,12 +249,10 @@ class OnDemandNativeNumberWrapper
             css::uno::Reference< css::uno::XComponentContext > m_xContext;
     mutable std::unique_ptr<NativeNumberWrapper>
                                     pPtr;
-            bool                    bInitialized;
 
 public:
                                 OnDemandNativeNumberWrapper()
                                     : pPtr(nullptr)
-                                    , bInitialized(false)
                                     {}
 
             void                init(
@@ -266,7 +261,6 @@ public:
                                     {
                                         m_xContext = rxContext;
                                         pPtr.reset();
-                                        bInitialized = true;
                                     }
 
             NativeNumberWrapper*    get() const
