@@ -29,7 +29,7 @@ template<typename T> inline bool checked_multiply(T a, T b, T& result)
     return !msl::utilities::SafeMultiply(a, b, result);
 }
 
-#elif (defined __GNUC__ && __GNUC__ >= 5) || (__has_builtin(__builtin_mul_overflow))
+#elif (defined __GNUC__ && __GNUC__ >= 5) || (__has_builtin(__builtin_mul_overflow) && !(defined ANDROID && defined __clang__))
 
 template<typename T> inline bool checked_multiply(T a, T b, T& result)
 {
