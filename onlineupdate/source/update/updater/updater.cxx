@@ -315,10 +315,6 @@ get_full_path(const NS_tchar *relpath)
     size_t lendestpath = NS_tstrlen(destpath);
     size_t lenrelpath = NS_tstrlen(relpath);
     NS_tchar *s = new NS_tchar[lendestpath + lenrelpath + 2];
-    if (!s)
-    {
-        return nullptr;
-    }
 
     NS_tchar *c = s;
 

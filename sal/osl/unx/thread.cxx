@@ -148,13 +148,10 @@ static void osl_thread_init_Impl()
 Thread_Impl* osl_thread_construct_Impl()
 {
     Thread_Impl* pImpl = new Thread_Impl;
-    if (pImpl)
-    {
-        memset (pImpl, 0, sizeof(Thread_Impl));
+    memset (pImpl, 0, sizeof(Thread_Impl));
 
-        pthread_mutex_init (&(pImpl->m_Lock), PTHREAD_MUTEXATTR_DEFAULT);
-        pthread_cond_init  (&(pImpl->m_Cond), PTHREAD_CONDATTR_DEFAULT);
-    }
+    pthread_mutex_init (&(pImpl->m_Lock), PTHREAD_MUTEXATTR_DEFAULT);
+    pthread_cond_init  (&(pImpl->m_Cond), PTHREAD_CONDATTR_DEFAULT);
     return pImpl;
 }
 
