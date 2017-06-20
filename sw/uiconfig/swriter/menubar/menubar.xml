@@ -267,7 +267,6 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
-      <menu:menuitem menu:id=".uno:Watermark"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:DrawText"/>
       <menu:menuitem menu:id=".uno:InsertAnnotation"/>
@@ -453,6 +452,7 @@
       <menu:menuitem menu:id=".uno:TitlePageDialog"/>
       <menu:menuitem menu:id=".uno:RubyDialog"/>
       <menu:menuitem menu:id=".uno:FormatColumns"/>
+      <menu:menuitem menu:id=".uno:Watermark"/>
       <menu:menuitem menu:id=".uno:EditRegion"/>
       <menu:menuitem menu:id=".uno:FormatAllNotes"/>
       <menu:menuseparator/>
@@ -694,7 +694,7 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ChapterNumberingDialog"/>
       <menu:menuitem menu:id=".uno:LineNumberingDialog"/>
-      <menu:menuitem menu:id=".uno:FootnoteDialog"/>
+      <menu:menuitem menu:id=".uno:FootnoteDialog"/>104845
       <menu:menu menu:id=".uno:ToolsFormsMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:ShowFmExplorer"/>
