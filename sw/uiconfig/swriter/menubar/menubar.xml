@@ -451,7 +451,6 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:TitlePageDialog"/>
       <menu:menuitem menu:id=".uno:RubyDialog"/>
-      <menu:menuitem menu:id=".uno:FormatColumns"/>
       <menu:menuitem menu:id=".uno:Watermark"/>
       <menu:menuitem menu:id=".uno:EditRegion"/>
       <menu:menuitem menu:id=".uno:FormatAllNotes"/>
