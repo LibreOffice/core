@@ -72,11 +72,8 @@ UnusedFieldsRemove::~UnusedFieldsRemove()
 
 std::string niceName(const FieldDecl* fieldDecl)
 {
-    std::string s = fieldDecl->getParent()->getQualifiedNameAsString() + " " +
+    return fieldDecl->getParent()->getQualifiedNameAsString() + " " +
         fieldDecl->getNameAsString();
-    if (s.find("m_xExternalProgress") != std::string::npos)
-            cout << s << endl;
-    return s;
 }
 
 bool UnusedFieldsRemove::VisitFieldDecl( const FieldDecl* fieldDecl )

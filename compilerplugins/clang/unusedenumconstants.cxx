@@ -77,8 +77,8 @@ public:
             output += "write:\t" + s.parentClass + "\t" + s.fieldName + "\n";
         for (const MyFieldInfo & s : readSet)
             output += "read:\t" + s.parentClass + "\t" + s.fieldName + "\n";
-        ofstream myfile;
-        myfile.open( SRCDIR "/loplugin.unusedenumconstants.log", ios::app | ios::out);
+        std::ofstream myfile;
+        myfile.open( SRCDIR "/loplugin.unusedenumconstants.log", std::ios::app | std::ios::out);
         myfile << output;
         myfile.close();
     }

@@ -48,7 +48,7 @@ class CheckConfigMacros
         enum { isPPCallback = true };
     private:
         void checkMacro( const Token& macroToken, SourceLocation location );
-        std::set< string > configMacros;
+        std::set< std::string > configMacros;
     };
 
 CheckConfigMacros::CheckConfigMacros( const InstantiationData& data )

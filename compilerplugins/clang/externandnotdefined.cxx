@@ -45,7 +45,7 @@ bool ExternAndNotDefined::VisitFunctionDecl(const FunctionDecl * functionDecl) {
         return true;
     }
     // this is the bison/flex C API, it has to be defined this way
-    string functionName = functionDecl->getNameAsString();
+    std::string functionName = functionDecl->getNameAsString();
     if (functionName == "yyerror" || functionName == "YYWarning" || functionName == "yyparse" || functionName == "yylex") {
         return true;
     }

@@ -100,8 +100,8 @@ public:
         // for the "method can be private" analysis
         for (const MyFuncInfo & s : calledFromOutsideSet)
             output += "outside:\t" + s.returnType + "\t" + s.nameAndParams + "\n";
-        ofstream myfile;
-        myfile.open( SRCDIR "/loplugin.unusedmethods.log", ios::app | ios::out);
+        std::ofstream myfile;
+        myfile.open( SRCDIR "/loplugin.unusedmethods.log", std::ios::app | std::ios::out);
         myfile << output;
         myfile.close();
     }

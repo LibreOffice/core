@@ -101,7 +101,6 @@ bool MemoryVar::TraverseFunctionDecl(FunctionDecl * decl)
                "delete called here",
                maVarDeleteSourceRangeMap[varLoc].getBegin())
             << maVarDeleteSourceRangeMap[varLoc];
-        cout << "xxxx " << aFileName.str() << endl;
     }
     return true;
 }

@@ -65,8 +65,8 @@ public:
             output += "has-subclass:\t" + s.first + "\t" + s.second + "\n";
         for (const std::pair<std::string,std::string> & s : definitionMap)
             output += "definition:\t" + s.first + "\t" + s.second + "\n";
-        ofstream myfile;
-        myfile.open( SRCDIR "/loplugin.mergeclasses.log", ios::app | ios::out);
+        std::ofstream myfile;
+        myfile.open( SRCDIR "/loplugin.mergeclasses.log", std::ios::app | std::ios::out);
         myfile << output;
         myfile.close();
     }

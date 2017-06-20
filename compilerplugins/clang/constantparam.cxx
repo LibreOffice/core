@@ -77,8 +77,8 @@ public:
         for (const MyCallSiteInfo & s : callSet)
             output += s.returnType + "\t" + s.nameAndParams + "\t" + s.sourceLocation + "\t"
                         + s.paramName + "\t" + s.paramType + "\t" + s.callValue + "\n";
-        ofstream myfile;
-        myfile.open( SRCDIR "/loplugin.constantparam.log", ios::app | ios::out);
+        std::ofstream myfile;
+        myfile.open( SRCDIR "/loplugin.constantparam.log", std::ios::app | std::ios::out);
         myfile << output;
         myfile.close();
     }

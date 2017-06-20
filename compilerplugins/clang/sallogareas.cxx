@@ -202,18 +202,18 @@ bad:
 
 void SalLogAreas::readLogAreas()
     {
-    ifstream is( SRCDIR "/include/sal/log-areas.dox" );
+    std::ifstream is( SRCDIR "/include/sal/log-areas.dox" );
     while( is.good())
         {
-        string line;
+        std::string line;
         getline( is, line );
         size_t pos = line.find( "@li @c " );
-        if( pos != string::npos )
+        if( pos != std::string::npos )
             {
             pos += strlen( "@li @c " );
             size_t end = line.find( ' ', pos );
             std::string area;
-            if( end == string::npos )
+            if( end == std::string::npos )
                 area = line.substr( pos );
             else if( pos != end )
                 area = line.substr( pos, end - pos );
