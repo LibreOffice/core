@@ -22,32 +22,10 @@ using namespace css::xml::crypto;
 XMLSecurityContextGpg::XMLSecurityContextGpg()
     : m_nDefaultEnvIndex(-1)
 {
-    // TODO: same code in XMLSecurityContext_NssImpl, not a good idea
-    // prolly to initialize twice ...
-    //Init xmlsec library
-    if( xmlSecInit() < 0 ) {
-        throw RuntimeException() ;
-    }
-
-    //Init xmlsec crypto engine library
-    if( xmlSecCryptoInit() < 0 ) {
-        xmlSecShutdown() ;
-        throw RuntimeException() ;
-    }
-
-    //Enable external stream handlers
-    if( xmlEnableStreamInputCallbacks() < 0 ) {
-        xmlSecCryptoShutdown() ;
-        xmlSecShutdown() ;
-        throw RuntimeException() ;
-    }
 }
 
 XMLSecurityContextGpg::~XMLSecurityContextGpg()
 {
-    xmlDisableStreamInputCallbacks() ;
-    xmlSecCryptoShutdown() ;
-    xmlSecShutdown() ;
 }
 
 sal_Int32 SAL_CALL XMLSecurityContextGpg::addSecurityEnvironment(
