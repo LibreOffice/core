@@ -241,7 +241,10 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
             break;
         }
         if (isa<CastExpr>(parent) || isa<MemberExpr>(parent) || isa<ParenExpr>(parent) || isa<ParenListExpr>(parent)
-             || isa<ExprWithCleanups>(parent) || isa<ArrayInitLoopExpr>(parent))
+#if CLANG_VERSION >= 30900
+             || isa<ArrayInitLoopExpr>(parent)
+#endif
+             || isa<ExprWithCleanups>(parent))
         {
             child = parent;
             auto parentsRange = compiler.getASTContext().getParents(*parent);
