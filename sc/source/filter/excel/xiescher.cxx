@@ -715,7 +715,6 @@ void XclImpDrawObjBase::ConvertFillStyle( SdrObject& rSdrObj, const XclObjFillDa
 
             XOBitmap aXOBitmap( aBitmap );
             aXOBitmap.Bitmap2Array();
-            aXOBitmap.SetBitmapType( XBitmapType::N8x8 );
             if( aXOBitmap.GetBackgroundColor().GetColor() == COL_BLACK )
                 ::std::swap( aPattColor, aBackColor );
             aXOBitmap.SetPixelColor( aPattColor );

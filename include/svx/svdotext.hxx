@@ -158,12 +158,6 @@ private:
         return pEdtOutl;
     }
 
-    // This method is only allowed for sdr::properties::TextProperties
-    SVX_DLLPRIVATE void SetPortionInfoChecked(bool bNew)
-    {
-        bPortionInfoChecked = bNew;
-    }
-
     // to allow sdr::properties::TextProperties access to SetPortionInfoChecked()
     // and GetTextEditOutliner()
     friend class sdr::properties::TextProperties;
@@ -234,7 +228,6 @@ protected:
     // The actual text frame is realized by an SdrRectObj with
     // bTextFrame=sal_True.
     bool                        bTextFrame : 1;
-    bool                        bPortionInfoChecked : 1; // to optimise text objects
     bool                        bNoShear : 1;            // disable shearing   (->graphic+Ole+TextFrame)
     bool                        bNoMirror : 1;           // disable mirroring (->Ole,TextFrame)
     bool                        bTextSizeDirty : 1;

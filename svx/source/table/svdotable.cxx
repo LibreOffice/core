@@ -1338,9 +1338,6 @@ void SdrTableObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     // allow transparence
     rInfo.bTransparenceAllowed = true;
 
-    // gradient depends on fillstyle
-    drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem&>(GetObjectItem(XATTR_FILLSTYLE)).GetValue();
-    rInfo.bGradientAllowed = (eFillStyle == drawing::FillStyle_GRADIENT);
     rInfo.bShearAllowed     =false;
     rInfo.bEdgeRadiusAllowed=false;
     rInfo.bCanConvToPath    =false;

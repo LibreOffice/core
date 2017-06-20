@@ -1514,17 +1514,10 @@ void E3dView::ResetCreationActive ()
 void E3dView::InitView ()
 {
     eDragConstraint          = E3dDragConstraint::XYZ;
-    fDefaultScaleX           =
     fDefaultScaleY           =
     fDefaultScaleZ           = 1.0;
-    fDefaultRotateX          =
     fDefaultRotateY          =
     fDefaultRotateZ          = 0.0;
-    fDefaultExtrusionDeepth  = 1000; // old: 2000;
-    fDefaultLightIntensity   = 0.8; // old: 0.6;
-    fDefaultAmbientIntensity = 0.4;
-    nHDefaultSegments        = 12;
-    nVDefaultSegments        = 12;
     aDefaultLightColor       = RGB_Color(COL_WHITE);
     aDefaultAmbientColor     = RGB_Color(COL_BLACK);
     mpMirrorOverlay          = nullptr;

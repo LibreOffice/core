@@ -600,7 +600,6 @@ public:
     SdrLightEmbeddedClient_Impl* pLightClient; // must be registered as client only using AddOwnLightClient() call
 
     bool mbFrame:1; // Due to compatibility at SdrTextObj for now
-    bool mbInDestruction:1;
     bool mbSuppressSetVisAreaSize:1; // #i118524#
     mutable bool mbTypeAsked:1;
     mutable bool mbIsChart:1;
@@ -615,7 +614,6 @@ public:
     explicit SdrOle2ObjImpl( bool bFrame ) :
         pLightClient (nullptr),
         mbFrame(bFrame),
-        mbInDestruction(false),
         mbSuppressSetVisAreaSize(false),
         mbTypeAsked(false),
         mbIsChart(false),
@@ -630,7 +628,6 @@ public:
         mxObjRef(rObjRef),
         pLightClient (nullptr),
         mbFrame(bFrame),
-        mbInDestruction(false),
         mbSuppressSetVisAreaSize(false),
         mbTypeAsked(false),
         mbIsChart(false),
@@ -711,8 +708,6 @@ OUString SdrOle2Obj::GetStyleString()
 
 SdrOle2Obj::~SdrOle2Obj()
 {
-    mpImpl->mbInDestruction = true;
-
     if ( mpImpl->mbConnected )
         Disconnect();
 
@@ -1406,7 +1401,6 @@ void SdrOle2Obj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bMirror45Allowed = true;
     rInfo.bMirror90Allowed = true;
     rInfo.bTransparenceAllowed = true;
-    rInfo.bGradientAllowed = true;
     rInfo.bShearAllowed = true;
     rInfo.bEdgeRadiusAllowed = false;
     rInfo.bNoOrthoDesired = false;
