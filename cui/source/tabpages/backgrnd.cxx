@@ -330,6 +330,7 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSe
     , bIsGraphicValid(false)
     , bLinkOnly(false)
     , bHighlighting(false)
+    , m_bColorSelected(false)
     , pPageImpl(new SvxBackgroundPage_Impl)
     , pImportDlg(nullptr)
     , pTableBck_Impl(nullptr)
@@ -447,6 +448,8 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
         ResetFromWallpaperItem( *rSet );
         return;
     }
+
+    m_bColorSelected = false;
 
     // condition of the preview button is persistent due to UserData
     OUString aUserData = GetUserData();
@@ -684,7 +687,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
             {
                 // Brush-treatment:
                 if ( rOldItem.GetColor() != aBgdColor ||
-                     (SfxItemState::DEFAULT >= eOldItemState && !m_pBackgroundColorSet->IsNoSelection()))
+                     (SfxItemState::DEFAULT >= eOldItemState && m_bColorSelected))
                 {
                     bModified = true;
                     rCoreSet->Put( SvxBrushItem( aBgdColor, nWhich ) );
@@ -1138,6 +1141,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BackgroundColorHdl_Impl, ValueSet*, void)
     sal_uInt16 nItemId = m_pBackgroundColorSet->GetSelectItemId();
     Color aColor = nItemId ? ( m_pBackgroundColorSet->GetItemColor( nItemId ) ) : Color( COL_TRANSPARENT );
     aBgdColor = aColor;
+    m_bColorSelected = true;
     m_pPreviewWin1->NotifyChange( aBgdColor );
 }
 
@@ -1423,13 +1427,9 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
         }
         else
         {
-            bool bNoSelection = m_pBackgroundColorSet->IsNoSelection();
             m_pBackgroundColorSet->SelectItem( nCol );
-            m_pBackgroundColorSet->SaveValue();
-            // The actual selection is user set, not what we preset.
-            if (bNoSelection)
-                m_pBackgroundColorSet->SetNoSelection();
         }
+        m_pBackgroundColorSet->SaveValue();
 
         m_pPreviewWin1->NotifyChange( aBgdColor );
 
