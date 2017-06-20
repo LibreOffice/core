@@ -2196,6 +2196,7 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID, sal
             {
                 bool bTranslated = false;
                 sal_uInt32 nId = 0;
+                OString sContext;
 
                 while (reader.nextAttribute(&nsId, &name))
                 {
@@ -2208,6 +2209,11 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID, sal
                     {
                         bTranslated = true;
                     }
+                    else if (name.equals("context"))
+                    {
+                        name = reader.getAttributeValue(false);
+                        sContext = OString(name.begin, name.length);
+                    }
                 }
 
                 reader.nextItem(
@@ -2216,7 +2222,11 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID, sal
                 OString sValue = OString(name.begin, name.length);
                 OUString sFinalValue;
                 if (bTranslated)
+                {
+                    if (!sContext.isEmpty())
+                        sValue = sContext + "\004" + sValue;
                     sFinalValue = Translate::get(sValue.getStr(), m_pParserState->m_aResLocale);
+                }
                 else
                     sFinalValue = OUString::fromUtf8(sValue);
 
@@ -2344,12 +2354,18 @@ std::vector<OUString> VclBuilder::handleItems(xmlreader::XmlReader &reader, cons
             if (name.equals("item"))
             {
                 bool bTranslated = false;
+                OString sContext;
 
                 while (reader.nextAttribute(&nsId, &name))
                 {
                     if (name.equals("translatable") && reader.getAttributeValue(false).equals("yes"))
                     {
                         bTranslated = true;
+                    }
+                    else if (name.equals("context"))
+                    {
+                        name = reader.getAttributeValue(false);
+                        sContext = OString(name.begin, name.length);
                     }
                 }
 
@@ -2359,7 +2375,11 @@ std::vector<OUString> VclBuilder::handleItems(xmlreader::XmlReader &reader, cons
                 OString sValue = OString(name.begin, name.length);
                 OUString sFinalValue;
                 if (bTranslated)
+                {
+                    if (!sContext.isEmpty())
+                        sValue = sContext + "\004" + sValue;
                     sFinalValue = Translate::get(sValue.getStr(), m_pParserState->m_aResLocale);
+                }
                 else
                     sFinalValue = OUString::fromUtf8(sValue);
 
@@ -3088,7 +3108,7 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const OString & /
     xmlreader::Span name;
     int nsId;
 
-    OString sProperty;
+    OString sProperty, sContext;
 
     bool bTranslated = false;
 
@@ -3098,6 +3118,11 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const OString & /
         {
             name = reader.getAttributeValue(false);
             sProperty = OString(name.begin, name.length);
+        }
+        else if (name.equals("context"))
+        {
+            name = reader.getAttributeValue(false);
+            sContext = OString(name.begin, name.length);
         }
         else if (name.equals("translatable") && reader.getAttributeValue(false).equals("yes"))
         {
@@ -3109,7 +3134,11 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const OString & /
     OString sValue = OString(name.begin, name.length);
     OUString sFinalValue;
     if (bTranslated)
+    {
+        if (!sContext.isEmpty())
+            sValue = sContext + "\004" + sValue;
         sFinalValue = Translate::get(sValue.getStr(), m_pParserState->m_aResLocale);
+    }
     else
         sFinalValue = OUString::fromUtf8(sValue);
 
