@@ -874,10 +874,25 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                     rAppendContext.pLastParagraphProperties->Geth() :
                     pStyleProperties->Geth() > 0 ? pStyleProperties->Geth() : DEFAULT_FRAME_MIN_HEIGHT));
 
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), sal_Int16(
+            sal_Int16 nhRule = sal_Int16(
                 rAppendContext.pLastParagraphProperties->GethRule() >= 0 ?
                     rAppendContext.pLastParagraphProperties->GethRule() :
-                    pStyleProperties->GethRule() >=0 ? pStyleProperties->GethRule() : text::SizeType::VARIABLE)));
+                    pStyleProperties->GethRule());
+            if ( nhRule < 0 )
+            {
+                if ( rAppendContext.pLastParagraphProperties->Geth() >= 0 ||
+                    pStyleProperties->GethRule() >= 0 )
+                {
+                    // [MS-OE376] Word uses a default value of "atLeast" for
+                    // this attribute when the value of the h attribute is not 0.
+                    nhRule = text::SizeType::MIN;
+                }
+                else
+                {
+                    nhRule = text::SizeType::VARIABLE;
+                }
+            }
+            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), nhRule));
 
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_WIDTH_TYPE), bAutoWidth ?  text::SizeType::MIN : text::SizeType::FIX));
 
@@ -967,10 +982,21 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 nWidth = DEFAULT_FRAME_MIN_WIDTH;
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_WIDTH), nWidth));
 
-            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), sal_Int16(
-                rAppendContext.pLastParagraphProperties->GethRule() >= 0 ?
-                    rAppendContext.pLastParagraphProperties->GethRule() :
-                    text::SizeType::VARIABLE)));
+            sal_Int16 nhRule = sal_Int16(rAppendContext.pLastParagraphProperties->GethRule());
+            if ( nhRule < 0 )
+            {
+                if ( rAppendContext.pLastParagraphProperties->Geth() >= 0 )
+                {
+                    // [MS-OE376] Word uses a default value of atLeast for
+                    // this attribute when the value of the h attribute is not 0.
+                    nhRule = text::SizeType::MIN;
+                }
+                else
+                {
+                    nhRule = text::SizeType::VARIABLE;
+                }
+            }
+            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), nhRule));
 
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_WIDTH_TYPE), bAutoWidth ?  text::SizeType::MIN : text::SizeType::FIX));
 

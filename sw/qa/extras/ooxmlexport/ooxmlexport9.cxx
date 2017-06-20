@@ -711,6 +711,23 @@ DECLARE_OOXMLEXPORT_TEST(testTdf108682, "tdf108682.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(459), aLineSpacing.Height);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf100075, "tdf100075.docx")
+{
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+
+    // There are two frames in document
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xIndexAccess->getCount());
+
+    uno::Reference<beans::XPropertySet> xFrame1(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame2(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
+
+    // Ensure that frame#1 height is more that frame#2: if no hRul attribute
+    // defined, MS Word will use hRul=auto if height is not defined,
+    // and hRul=atLeast if height is provided. So frame#1 should be higher
+    CPPUNIT_ASSERT(getProperty<sal_Int32>(xFrame1, "Height") > getProperty<sal_Int32>(xFrame2, "Height"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
