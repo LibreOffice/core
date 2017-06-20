@@ -145,7 +145,7 @@ MyFieldInfo UnusedFields::niceName(const FieldDecl* fieldDecl)
     }
 
     aInfo.fieldName = fieldDecl->getNameAsString();
-    // sometimes the name (if it's anonymous thing) contains the full path of the build folder, which we don't need
+    // sometimes the name (if it's an anonymous thing) contains the full path of the build folder, which we don't need
     size_t idx = aInfo.fieldName.find(SRCDIR);
     if (idx != std::string::npos) {
         aInfo.fieldName = aInfo.fieldName.replace(idx, strlen(SRCDIR), "");
@@ -179,27 +179,6 @@ bool UnusedFields::VisitFieldDecl( const FieldDecl* fieldDecl )
         return true;
     }
 
-    QualType type = fieldDecl->getType();
-    // unwrap array types
-    while (type->isArrayType())
-        type = type->getAsArrayTypeUnsafe()->getElementType();
-/*
-    if( CXXRecordDecl* recordDecl = type->getAsCXXRecordDecl() )
-    {
-        bool warn_unused = recordDecl->hasAttr<WarnUnusedAttr>();
-        if( !warn_unused )
-        {
-            string n = recordDecl->getQualifiedNameAsString();
-            // Check some common non-LO types.
-            if( n == "std::string" || n == "std::basic_string"
-                || n == "std::list" || n == "std::__debug::list"
-                || n == "std::vector" || n == "std::__debug::vector" )
-                warn_unused = true;
-        }
-        if (!warn_unused)
-            return true;
-    }
-*/
     definitionSet.insert(niceName(fieldDecl));
     return true;
 }
@@ -245,23 +224,24 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
     // walk up the tree until we find something interesting
     bool bPotentiallyReadFrom = false;
     bool bDump = false;
-    do {
-        if (!parent) {
-            // check if we're inside a CXXCtorInitializer
+    do
+    {
+        if (!parent)
+        {
+            // check if we're inside a CXXCtorInitializer or a VarDecl
             auto parentsRange = compiler.getASTContext().getParents(*child);
             if ( parentsRange.begin() != parentsRange.end())
             {
                 const Decl* decl = parentsRange.begin()->get<Decl>();
-                if (decl && isa<CXXConstructorDecl>(decl))
+                if (decl && (isa<CXXConstructorDecl>(decl) || isa<VarDecl>(decl)))
                     bPotentiallyReadFrom = true;
             }
             if (!bPotentiallyReadFrom)
                 return true;
-            else
-                break;
+            break;
         }
         if (isa<CastExpr>(parent) || isa<MemberExpr>(parent) || isa<ParenExpr>(parent) || isa<ParenListExpr>(parent)
-             || isa<ExprWithCleanups>(parent))
+             || isa<ExprWithCleanups>(parent) || isa<ArrayInitLoopExpr>(parent))
         {
             child = parent;
             auto parentsRange = compiler.getASTContext().getParents(*parent);
@@ -283,20 +263,19 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
             auto parentsRange = compiler.getASTContext().getParents(*parent);
             parent = parentsRange.begin() == parentsRange.end() ? nullptr : parentsRange.begin()->get<Stmt>();
         }
-        else if (isa<CaseStmt>(parent))
+        else if (auto caseStmt = dyn_cast<CaseStmt>(parent))
         {
-            bPotentiallyReadFrom = dyn_cast<CaseStmt>(parent)->getLHS() == child
-                                  || dyn_cast<CaseStmt>(parent)->getRHS() == child;
+            bPotentiallyReadFrom = caseStmt->getLHS() == child || caseStmt->getRHS() == child;
             break;
         }
-        else if (isa<IfStmt>(parent))
+        else if (auto ifStmt = dyn_cast<IfStmt>(parent))
         {
-            bPotentiallyReadFrom = dyn_cast<IfStmt>(parent)->getCond() == child;
+            bPotentiallyReadFrom = ifStmt->getCond() == child;
             break;
         }
-        else if (isa<DoStmt>(parent))
+        else if (auto doStmt = dyn_cast<DoStmt>(parent))
         {
-            bPotentiallyReadFrom = dyn_cast<DoStmt>(parent)->getCond() == child;
+            bPotentiallyReadFrom = doStmt->getCond() == child;
             break;
         }
         else if (auto callExpr = dyn_cast<CallExpr>(parent))
@@ -312,7 +291,7 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
                     ;
                 else if (name == "clear" || name == "dispose" || name == "clearAndDispose" || name == "swap")
                     // we're abusing the write-only analysis here to look for fields which don't have anything useful
-                    // being done to them, so we're ignoring things like std::vector::clear, vector::swap,
+                    // being done to them, so we're ignoring things like std::vector::clear, std::vector::swap,
                     // and VclPtr::clearAndDispose
                     ;
                 else
@@ -325,16 +304,11 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
         else if (auto binaryOp = dyn_cast<BinaryOperator>(parent))
         {
             BinaryOperator::Opcode op = binaryOp->getOpcode();
-            // If the child is on the LHS and it is an assignment, we are obviously not reading from it,
-            // so walk up the tree.
-            if (binaryOp->getLHS() == child && op == BO_Assign) {
-                child = parent;
-                auto parentsRange = compiler.getASTContext().getParents(*parent);
-                parent = parentsRange.begin() == parentsRange.end() ? nullptr : parentsRange.begin()->get<Stmt>();
-            } else {
+            // If the child is on the LHS and it is an assignment, we are obviously not reading from it
+            if (!(binaryOp->getLHS() == child && op == BO_Assign)) {
                 bPotentiallyReadFrom = true;
-                break;
             }
+            break;
         }
         else if (isa<ReturnStmt>(parent)
                  || isa<CXXConstructExpr>(parent)
@@ -348,7 +322,7 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
                  || isa<InitListExpr>(parent)
                  || isa<CXXDependentScopeMemberExpr>(parent)
                  || isa<UnresolvedMemberExpr>(parent)
-                 || isa<MaterializeTemporaryExpr>(parent))  //???
+                 || isa<MaterializeTemporaryExpr>(parent))
         {
             bPotentiallyReadFrom = true;
             break;
@@ -364,12 +338,14 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
         {
             break;
         }
-        else {
+        else
+        {
             bPotentiallyReadFrom = true;
             bDump = true;
             break;
         }
     } while (true);
+
     if (bDump)
     {
         report(
@@ -377,12 +353,18 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
              "oh dear, what can the matter be?",
               memberExpr->getLocStart())
               << memberExpr->getSourceRange();
+        report(
+             DiagnosticsEngine::Note,
+             "parent over here",
+              parent->getLocStart())
+              << parent->getSourceRange();
         parent->dump();
+        memberExpr->dump();
     }
+
     if (bPotentiallyReadFrom)
-    {
         readFromSet.insert(fieldInfo);
-    }
+
     return true;
 }
 
