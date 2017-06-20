@@ -228,8 +228,7 @@ showmodules :
 
 translations : $(WORKDIR)/pot.done
 
-$(WORKDIR)/pot.done : $(foreach exec,cfgex helpex localize transex3 \
-									propex uiex ulfex xrmex treex, \
+$(WORKDIR)/pot.done : $(foreach exec,cfgex helpex localize propex ulfex xrmex treex, \
 							$(call gb_Executable_get_target_for_build,$(exec)))
 	$(call gb_Output_announce,$(subst .pot,,$(subst $(WORKDIR)/,,$@)),$(true),POT,1)
 	$(call gb_Helper_abbreviate_dirs,\

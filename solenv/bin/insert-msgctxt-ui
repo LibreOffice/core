@@ -1,0 +1,34 @@
+#!/usr/bin/python
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# insert msgctxt into prepared .hrc files
+
+import fileinput
+import re
+
+context = ''
+
+idpattern = re.compile('.*class=.*id="(.*)">')
+
+for line in fileinput.input():
+    name = fileinput.filename()
+    line = line[0:-1]
+    if line.find('translatable="yes"') != -1:
+        if line.find('name="tooltip_text"') != -1:
+            thiscontext = context + '|tooltip_text'
+        else:
+            thiscontext = context
+        if line.find('context="') == -1:
+            print line.replace('translatable="yes"', 'translatable="yes"' + ' context="' + thiscontext + '"')
+        else:
+            print line
+        continue
+    m = idpattern.match(line)
+    if m:
+        context = (name.split('.')[0]).split('/')[-1] + '|' + m.groups()[0]
+    print line

@@ -36,16 +36,14 @@ $(call gb_MoTarget_get_clean_target,%) :
 			$(call gb_MoTarget_get_install_target,$*))
 
 #for the moment merge existing source and ui translations into a single .po,
-#remove msgctxt and unique the translations and allow fuzzy
+#and minimize msgctxt
 #eventually instead can do something like
-#msgfmt $(gb_POLOCATION)/$(LANGUAGE)/$(LIBRARY)/$(LIBRARY).po -o $@)
+#msgfmt $(gb_POLOCATION)/$(LANGUAGE)/$(LIBRARY)/messages.po -o $@)
 $(call gb_MoTarget_get_target,%) : $(gb_Helper_MISCDUMMY) $(gb_MoTarget_LOCALESTRDEPS)
 	$(call gb_Output_announce,$*,$(true),MO,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
-		find $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION) -name "*.po" -exec sh -c "mkdir -p $(WORKDIR)/MoTarget/$(LIBRARY)/$(LANGUAGE){} && cat {} | $(SRCDIR)/solenv/bin/strip-msgctxt | msguniq --use-first > $(WORKDIR)/MoTarget/$(LIBRARY)/$(LANGUAGE)/{}/stripped.po" \; && \
-		msgcat --use-first `find $(WORKDIR)/MoTarget/$(LIBRARY)/$(LANGUAGE) -name "stripped.po" | grep -v registry` > $(WORKDIR)/MoTarget/$(LIBRARY)/$(LANGUAGE)/combined.po && \
-		cat $(WORKDIR)/MoTarget/$(LIBRARY)/$(LANGUAGE)/combined.po | msgfmt - -f -o $@)
+		$(MSGUNIQ) $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION)/messages.po | $(MSGFMT) - -o $@)
 
 #$(info $(call gb_MoTarget_get_target,$(1)))
 define gb_MoTarget_MoTarget

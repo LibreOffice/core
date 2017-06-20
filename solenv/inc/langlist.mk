@@ -101,13 +101,10 @@ rw \
 sa-IN \
 sat \
 sd \
-sr-Latn \
 si \
 sid \
 sk \
-sl \
 sq \
-sr \
 ss \
 st \
 sv \
