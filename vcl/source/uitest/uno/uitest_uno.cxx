@@ -38,9 +38,9 @@ public:
 
     UITestUnoObj();
 
-    void SAL_CALL executeCommand(const OUString& rCommand) override;
+    sal_Bool SAL_CALL executeCommand(const OUString& rCommand) override;
 
-    void SAL_CALL executeDialog(const OUString& rCommand) override;
+    sal_Bool SAL_CALL executeDialog(const OUString& rCommand) override;
 
     css::uno::Reference<css::ui::test::XUIObject> SAL_CALL getTopFocusWindow() override;
 
@@ -59,16 +59,16 @@ UITestUnoObj::UITestUnoObj():
 {
 }
 
-void SAL_CALL UITestUnoObj::executeCommand(const OUString& rCommand)
+sal_Bool SAL_CALL UITestUnoObj::executeCommand(const OUString& rCommand)
 {
     SolarMutexGuard aGuard;
-    UITest::executeCommand(rCommand);
+    return UITest::executeCommand(rCommand);
 }
 
-void SAL_CALL UITestUnoObj::executeDialog(const OUString& rCommand)
+sal_Bool SAL_CALL UITestUnoObj::executeDialog(const OUString& rCommand)
 {
     SolarMutexGuard aGuard;
-    UITest::executeDialog(rCommand);
+    return UITest::executeDialog(rCommand);
 }
 
 css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UITestUnoObj::getTopFocusWindow()
