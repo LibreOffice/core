@@ -546,7 +546,6 @@ void TabBar::ImplInit( WinBits nWinStyle )
     mbFormat        = true;
     mbFirstFormat   = true;
     mbSizeFormat    = true;
-    mbInSwitching   = false;
     mbAutoEditMode  = false;
     mbEditCanceled  = false;
     mbDropPos       = false;
@@ -2472,7 +2471,6 @@ void TabBar::SwitchPage(const Point& rPos)
             {
                 if (tools::Time::GetSystemTicks() > mnSwitchTime + 500)
                 {
-                    mbInSwitching = true;
                     if (ImplDeactivatePage())
                     {
                         SetCurPageId( mnSwitchId );
@@ -2480,7 +2478,6 @@ void TabBar::SwitchPage(const Point& rPos)
                         ImplActivatePage();
                         ImplSelect();
                     }
-                    mbInSwitching = false;
                 }
             }
         }

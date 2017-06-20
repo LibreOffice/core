@@ -93,11 +93,8 @@ enum class IcnViewFieldType
 
 struct LocalFocus
 {
-    bool        bOn;
     tools::Rectangle   aRect;
-    Color       aPenColor;
-
-    LocalFocus() { bOn = false; }
+    Color              aPenColor;
 };
 
 
@@ -189,9 +186,7 @@ class SvxIconChoiceCtrl_Impl
     bool                    bHighlightFramePressed;
     SvxIconChoiceCtrlEntry* pHead;                      // top left entry
     SvxIconChoiceCtrlEntry* pCursor;
-    SvxIconChoiceCtrlEntry* pPrevDropTarget;
     SvxIconChoiceCtrlEntry* pHdlEntry;
-    SvxIconChoiceCtrlEntry* pDDRefEntry;
     VclPtr<VirtualDevice>   pDDDev;
     VclPtr<VirtualDevice>   pDDBufDev;
     VclPtr<VirtualDevice>   pDDTempDev;

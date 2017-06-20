@@ -494,7 +494,6 @@ SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
     m_pLinePosDLB->SetSelectHdl(LINK(this, SwColumnPage, UpdateColMgrListBox));
 
     // Separator line
-    m_pLineTypeDLB->SetUnit( FUNIT_POINT );
     m_pLineTypeDLB->SetSourceUnit( FUNIT_TWIP );
 
     // Fill the line styles listbox

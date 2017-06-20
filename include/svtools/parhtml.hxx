@@ -149,7 +149,6 @@ private:
 
     bool bNewDoc        : 1;        // read new Doc?
     bool bIsInHeader    : 1;        // scan header section
-    bool bIsInBody      : 1;        // scan body section
     bool bReadListing   : 1;        // read listings
     bool bReadXMP       : 1;        // read XMP
     bool bReadPRE       : 1;        // read preformatted text
@@ -180,7 +179,7 @@ protected:
 
     virtual ~HTMLParser() override;
 
-    void FinishHeader( bool bBody ) { bIsInHeader = false; bIsInBody = bBody; }
+    void FinishHeader() { bIsInHeader = false; }
 
 public:
     HTMLParser( SvStream& rIn, bool bReadNewDoc = true );

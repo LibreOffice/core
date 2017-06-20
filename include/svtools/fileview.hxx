@@ -71,9 +71,8 @@ struct FileViewAsyncAction
 class SVT_DLLPUBLIC SvtFileView : public Control
 {
 private:
-    std::unique_ptr<SvtFileView_Impl>              mpImpl;
-    bool                           bSortColumn;
-    css::uno::Sequence< OUString > mpBlackList;
+    std::unique_ptr<SvtFileView_Impl> mpImpl;
+    css::uno::Sequence< OUString >    mpBlackList;
 
     DECL_DLLPRIVATE_LINK( HeaderSelect_Impl, HeaderBar*, void );
     DECL_DLLPRIVATE_LINK( HeaderEndDrag_Impl, HeaderBar*, void );

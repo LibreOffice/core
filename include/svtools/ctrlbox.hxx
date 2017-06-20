@@ -202,7 +202,6 @@ class SVT_DLLPUBLIC LineListBox : public ListBox
     Size            aTxtSize;
     Color           aColor;
     Color           maPaintCol;
-    FieldUnit       eUnit;
     FieldUnit       eSourceUnit;
 
     SVT_DLLPRIVATE void         ImpGetLine( long nLine1, long nLine2, long nDistance,
@@ -243,8 +242,6 @@ public:
 
     void            SelectEntry( SvxBorderLineStyle nStyle, bool bSelect = true );
     SvxBorderLineStyle GetSelectEntryStyle() const;
-
-    void            SetUnit( FieldUnit eNewUnit ) { eUnit = eNewUnit; }
 
     void            SetSourceUnit( FieldUnit eNewUnit ) { eSourceUnit = eNewUnit; }
 
