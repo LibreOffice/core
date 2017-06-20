@@ -734,8 +734,6 @@ oslFileHandle osl::detail::createFileHandleFromFD( int fd )
         return nullptr; // EBADF
 
     FileHandle_Impl * pImpl = new FileHandle_Impl (fd);
-    if (pImpl == nullptr)
-        return nullptr; // ENOMEM
 
     // assume writeable
     pImpl->m_state |= FileHandle_Impl::STATE_WRITEABLE;
@@ -809,11 +807,6 @@ openMemoryAsFile( void *address, size_t size, oslFileHandle *pHandle, const char
 {
     oslFileError eRet;
     FileHandle_Impl * pImpl = new FileHandle_Impl (-1, FileHandle_Impl::KIND_MEM, path);
-    if (!pImpl)
-    {
-        eRet = oslTranslateFileError (OSL_FET_ERROR, ENOMEM);
-        return eRet;
-    }
     pImpl->m_size = sal::static_int_cast< sal_uInt64 >(size);
 
     *pHandle = (oslFileHandle)(pImpl);
@@ -1015,12 +1008,6 @@ openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags,
 
     /* allocate memory for impl structure */
     FileHandle_Impl * pImpl = new FileHandle_Impl (fd, FileHandle_Impl::KIND_FD, cpFilePath);
-    if (!pImpl)
-    {
-        eRet = oslTranslateFileError (OSL_FET_ERROR, ENOMEM);
-        (void) close(fd);
-        return eRet;
-    }
     if (flags & O_RDWR)
         pImpl->m_state |= FileHandle_Impl::STATE_WRITEABLE;
     pImpl->m_size = sal::static_int_cast< sal_uInt64 >(aFileStat.st_size);

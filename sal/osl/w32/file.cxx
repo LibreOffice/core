@@ -677,12 +677,6 @@ SAL_CALL osl_createFileHandleFromOSHandle (
         return nullptr; // EINVAL
 
     FileHandle_Impl * pImpl = new FileHandle_Impl(hFile);
-    if (pImpl == nullptr)
-    {
-        // cleanup and fail
-        (void) ::CloseHandle(hFile);
-        return nullptr; // ENOMEM
-    }
 
     /* check for regular file */
     if (FILE_TYPE_DISK == GetFileType(hFile))
