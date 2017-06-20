@@ -58,9 +58,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	sp2bv \
 	svg2odf \
 	svidl \
-	transex3 \
 	treex \
-	uiex \
 	ulfex \
 	unoidl-read \
 	unoidl-write \

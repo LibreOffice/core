@@ -11589,7 +11589,20 @@ if test -z "$WITH_LANG" -o "$WITH_LANG" = "en-US"; then
 else
     AC_MSG_RESULT([$WITH_LANG])
     GIT_NEEDED_SUBMODULES="translations $GIT_NEEDED_SUBMODULES"
+    if test -n "$LODE_HOME" -a -x "$LODE_HOME/opt/bin/msgfmt" ; then
+        MSGFMT="$LODE_HOME/opt/bin/msgfmt"
+        MSGUNIQ="$LODE_HOME/opt/bin/msguniq"
+    elif test -x "/opt/lo/bin/msgfmt"; then
+        MSGFMT="/opt/lo/bin/msgfmt"
+        MSGUNIQ="/opt/lo/bin/msguniq"
+    fi
+    if test -z "$MSGFMT"; then
+        AC_CHECK_PROGS(MSGFMT, [msgfmt])
+        AC_CHECK_PROGS(MSGUNIQ, [msguniq])
+    fi
 fi
+AC_SUBST(MSGFMT)
+AC_SUBST(MSGUNIQ)
 # check that the list is valid
 for lang in $WITH_LANG; do
     test "$lang" = "ALL" && continue

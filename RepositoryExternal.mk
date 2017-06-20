@@ -3810,7 +3810,7 @@ endef
 
 define gb_Executable__register_localize
 $(call gb_Executable_add_runtime_dependencies,localize,\
-	$(foreach exec,cfgex helpex propex transex3 treex uiex ulfex xrmex,\
+	$(foreach exec,cfgex helpex propex treex ulfex xrmex,\
 		$(call gb_Executable_get_runtime_dependencies,$(exec)) \
 	) \
 )
