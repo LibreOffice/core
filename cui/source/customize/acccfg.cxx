@@ -931,16 +931,13 @@ void SfxAcceleratorConfigPage::Init(const uno::Reference<ui::XAcceleratorConfigu
     // Insert all editable accelerators into list box. It is possible
     // that some accelerators are not mapped on the current system/keyboard
     // but we don't want to lose these mappings.
-    sal_Int32 c1 = KEYCODE_ARRAY_SIZE;
-    sal_Int32 i1  = 0;
-    sal_Int32 nListPos = 0;
-    for (i1 = 0; i1 < c1; ++i1)
+    for (sal_Int32 i1 = 0; i1 < KEYCODE_ARRAY_SIZE; ++i1)
     {
         vcl::KeyCode aKey = KEYCODE_ARRAY[i1];
         OUString sKey = aKey.GetName();
         if (sKey.isEmpty())
             continue;
-        TAccInfo*    pEntry   = new TAccInfo(i1, nListPos, aKey);
+        TAccInfo*    pEntry   = new TAccInfo(i1, 0/*nListPos*/, aKey);
         SvTreeListEntry* pLBEntry = m_pEntriesBox->InsertEntryToColumn(sKey, nullptr, TREELIST_APPEND, 0xFFFF);
         pLBEntry->SetUserData(pEntry);
     }
