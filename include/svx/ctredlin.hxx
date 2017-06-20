@@ -113,7 +113,6 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxRedlinTable : public SvSimpleTable
 
 private:
 
-    bool            bIsCalc;
     sal_uInt16      nDatePos;
     bool            bAuthor;
     bool            bDate;

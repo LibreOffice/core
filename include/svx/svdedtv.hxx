@@ -82,7 +82,6 @@ protected:
     bool                        bGroupPossible : 1;
     bool                        bUnGroupPossible : 1;
     bool                        bGrpEnterPossible : 1;
-    bool                        bDeletePossible : 1;
     bool                        bToTopPossible : 1;
     bool                        bToBtmPossible : 1;
     bool                        bReverseOrderPossible : 1;
@@ -92,7 +91,6 @@ protected:
     bool                        bCombineNoPolyPolyPossible : 1;
     bool                        bDismantleMakeLinesPossible : 1;
     bool                        bOrthoDesiredOnMarked : 1;
-    bool                        bMoreThanOneNotMovable : 1;   // more then one objects are not moveable
     bool                        bOneOrMoreMovable : 1;        // at least one object is moveable
     bool                        bMoreThanOneNoMovRot : 1;     // more then one object is not movable nor turnable (Crook)
     bool                        bContortionPossible : 1;      // all polygones (grouped if necessary)
@@ -112,12 +110,8 @@ protected:
     bool                        bCanConvToPath : 1;
     bool                        bCanConvToPoly : 1;
     bool                        bCanConvToContour : 1;
-    bool                        bCanConvToPathLineToArea : 1;
-    bool                        bCanConvToPolyLineToArea : 1;
     bool                        bMoveProtect : 1;
     bool                        bResizeProtect : 1;
-    // maintain Z-order of the virtual objects (Writer)
-    bool                        bBundleVirtObj : 1;
 
 private:
     SVX_DLLPRIVATE void ImpClearVars();
@@ -396,12 +390,6 @@ public:
     // The SdrGrafObjs/SdrOle2Objs are replaced by the new objects.
     void DoImportMarkedMtf(SvdProgressInfo *pProgrInfo=nullptr);
     bool IsImportMtfPossible() const { ForcePossibilities(); return bImportMtfPossible; }
-
-    // If the mode VirtualObjectBundling is switched on, all ToTop/ToBtm
-    // virtual objects which reference the same object, are contained
-    // in their Z-order (Writer).
-    // Default setting is sal_False=switched off.
-    void SetVirtualObjectBundling(bool bOn) { bBundleVirtObj=bOn; }
 
     // override SdrMarkView, for internal use
     virtual void MarkListHasChanged() override;

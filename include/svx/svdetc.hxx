@@ -128,7 +128,6 @@ sal_uInt16* RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRange
 class SVX_DLLPUBLIC SvdProgressInfo
 {
 private:
-    size_t      m_nSumActionCount; // Sum of all Actions
     size_t      m_nSumCurAction;   // Sum of all handled Actions
 
     size_t      m_nActionCount;   // Count of Actions in the current object
@@ -145,7 +144,7 @@ private:
 public:
     SvdProgressInfo( const Link<void*,bool>& _pLink );
 
-    void Init( size_t _nSumActionCount, size_t _nObjCount );
+    void Init( size_t _nObjCount );
 
     void SetNextObject();
 

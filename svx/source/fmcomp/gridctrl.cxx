@@ -969,7 +969,6 @@ DbGridControl::DbGridControl(
             ,m_bHandle(true)
             ,m_bFilterMode(false)
             ,m_bWantDestruction(false)
-            ,m_bInAdjustDataSource(false)
             ,m_bPendingAdjustRows(false)
             ,m_bHideScrollbars( false )
             ,m_bUpdating(false)
@@ -2252,7 +2251,6 @@ void DbGridControl::AdjustDataSource(bool bFull)
     if (nNewPos < 0)// could not find any position
         return;
 
-    m_bInAdjustDataSource = true;
     if (nNewPos != m_nCurrentPos)
     {
         if (m_bSynchDisplay)
@@ -2270,7 +2268,6 @@ void DbGridControl::AdjustDataSource(bool bFull)
         SetCurrent(nNewPos);
         RowModified(nNewPos);
     }
-    m_bInAdjustDataSource = false;
 
     // if the data cursor was moved from outside, this section is voided
     SetNoSelection();

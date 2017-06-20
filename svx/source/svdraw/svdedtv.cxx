@@ -48,7 +48,6 @@ void SdrEditView::ImpResetPossibilityFlags()
     bGroupPossible          =false;
     bUnGroupPossible        =false;
     bGrpEnterPossible       =false;
-    bDeletePossible         =false;
     bToTopPossible          =false;
     bToBtmPossible          =false;
     bReverseOrderPossible   =false;
@@ -60,7 +59,6 @@ void SdrEditView::ImpResetPossibilityFlags()
     bDismantleMakeLinesPossible=false;
     bOrthoDesiredOnMarked   =false;
 
-    bMoreThanOneNotMovable  =false;
     bOneOrMoreMovable       =false;
     bMoreThanOneNoMovRot    =false;
     bContortionPossible     =false;
@@ -80,8 +78,6 @@ void SdrEditView::ImpResetPossibilityFlags()
     bCanConvToPath          =false;
     bCanConvToPoly          =false;
     bCanConvToContour       =false;
-    bCanConvToPathLineToArea=false;
-    bCanConvToPolyLineToArea=false;
     bMoveProtect            =false;
     bResizeProtect          =false;
 }
@@ -90,7 +86,6 @@ void SdrEditView::ImpClearVars()
 {
     ImpResetPossibilityFlags();
     bPossibilitiesDirty=true;   // << Purify didn't like this
-    bBundleVirtObj=false;
 }
 
 SdrEditView::SdrEditView(SdrModel* pModel1, OutputDevice* pOut):
@@ -492,7 +487,6 @@ void SdrEditView::CheckPossibilities()
                 }
             }
             bCombineNoPolyPolyPossible=bCombinePossible;
-            bDeletePossible=true;
             // accept transformations for now
             bMoveAllowed      =true;
             bResizeFreeAllowed=true;
@@ -591,8 +585,6 @@ void SdrEditView::CheckPossibilities()
                 // ConvertToCurve: If at least one can be converted, that is fine.
                 if (aInfo.bCanConvToPath          ) bCanConvToPath          =true;
                 if (aInfo.bCanConvToPoly          ) bCanConvToPoly          =true;
-                if (aInfo.bCanConvToPathLineToArea) bCanConvToPathLineToArea=true;
-                if (aInfo.bCanConvToPolyLineToArea) bCanConvToPolyLineToArea=true;
 
                 // Combine/Dismantle
                 if(bCombinePossible)
@@ -624,7 +616,6 @@ void SdrEditView::CheckPossibilities()
                 }
             }
 
-            bMoreThanOneNotMovable=nMovableCount<nMarkCount-1;
             bOneOrMoreMovable=nMovableCount!=0;
             bGrpEnterPossible=bUnGroupPossible;
         }
