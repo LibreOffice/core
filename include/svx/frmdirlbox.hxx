@@ -51,12 +51,6 @@ public:
     void                SelectEntryValue( SvxFrameDirection eDirection );
     /** Returns the currently selected frame direction. */
     SvxFrameDirection   GetSelectEntryValue() const;
-
-    /** Saves the currently selected frame direction. */
-    void         SaveValue() { meSaveValue = GetSelectEntryValue(); }
-
-private:
-    SvxFrameDirection   meSaveValue;    /// Saved value for later comparison.
 };
 
 typedef FrameDirectionListBox FrameDirListBox;

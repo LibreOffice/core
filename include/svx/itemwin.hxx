@@ -104,7 +104,6 @@ protected:
 private:
     sal_uInt16      nCurPos;
     bool            bSelect;
-    bool            bRelease;
 
     static void     ReleaseFocus_Impl();
 };
@@ -122,7 +121,6 @@ protected:
 
 private:
     sal_uInt16      nCurPos;
-    bool            bRelease;
 
     static void     ReleaseFocus_Impl();
 };

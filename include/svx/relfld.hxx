@@ -31,7 +31,6 @@ class SVX_DLLPUBLIC SvxRelativeField : public MetricField
 private:
     sal_uInt16          nRelMin;
     sal_uInt16          nRelMax;
-    sal_uInt16          nRelStep;
     bool                bRelativeMode;
     bool                bRelative;
     bool                bNegativeEnabled;
@@ -42,8 +41,7 @@ protected:
 public:
     SvxRelativeField(vcl::Window* pParent, WinBits nBits, FieldUnit eUnit);
 
-    void            EnableRelativeMode( sal_uInt16 nMin, sal_uInt16 nMax,
-                                        sal_uInt16 nStep );
+    void            EnableRelativeMode( sal_uInt16 nMin, sal_uInt16 nMax );
     void            SetRelative( bool bRelative );
     bool            IsRelative() const { return bRelative; }
     void            EnableNegativeMode() {bNegativeEnabled = true;}

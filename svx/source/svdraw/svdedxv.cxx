@@ -76,7 +76,6 @@ void SdrObjEditView::ImpClearVars()
     pTextEditPV=nullptr;
     pTextEditWin=nullptr;
     pTextEditCursorMerker=nullptr;
-    pEditPara=nullptr;
     bTextEditNewObj=false;
     bMacroDown=false;
     pMacroObj=nullptr;

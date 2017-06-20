@@ -48,9 +48,7 @@ private:
     MapUnit m_eMapUnit;
     bool m_bVSFocus;
     bool m_bCustom;
-    bool m_bCloseByEdit;
     long m_nCustomWidth;
-    long m_nTmpCustomWidth;
     VclPtr<MetricField> m_xMFWidth;
     VclPtr<VclContainer> m_xBox;
     VclPtr<LineWidthValueSet> m_xVSWidth;

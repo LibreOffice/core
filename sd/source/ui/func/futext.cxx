@@ -255,7 +255,6 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 
     bool bReturn = FuDraw::MouseButtonDown(rMEvt);
 
-    mpView->SetMarkHdlWhenTextEdit(true);
     SdrViewEvent aVEvt;
     SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
@@ -900,7 +899,6 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 bool FuText::KeyInput(const KeyEvent& rKEvt)
 {
     bool bReturn = false;
-    mpView->SetMarkHdlWhenTextEdit(true);
 
     vcl::KeyCode nCode = rKEvt.GetKeyCode();
     bool bShift = nCode.IsShift();

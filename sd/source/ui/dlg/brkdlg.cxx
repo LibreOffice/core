@@ -62,7 +62,7 @@ BreakDlg::BreakDlg(
 
     pProgrInfo = new SvdProgressInfo( LINK(this, BreakDlg, UpDate) );
     // every action is edited 3 times in DoImport()
-    pProgrInfo->Init( nSumActionCount*3, nObjCount );
+    pProgrInfo->Init( nObjCount );
 
     pDrView = _pDrView;
     bCancel = false;

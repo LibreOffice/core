@@ -124,7 +124,6 @@ protected:
     bool                        mbDesignMode : 1;          // DesignMode for SdrUnoObj
     bool                        mbForceFrameHandles : 1;   // Persistent - FrameDrag also for single objects
     bool                        mbPlusHdlAlways : 1;       // Persistent
-    bool                        mbMarkHdlWhenTextEdit : 1; // Persistent, default=FALSE
     bool                        mbInsPolyPoint : 1;        // at this time InsPolyPointDragging
     bool                        mbMarkedObjRectDirty : 1;
     bool                        mbMrkPntDirty : 1;
@@ -347,10 +346,6 @@ public:
     // Select that additional handles are displayed permanently.
     void SetPlusHandlesAlwaysVisible(bool bOn);
     bool IsPlusHandlesAlwaysVisible() const { return mbPlusHdlAlways; }
-
-    // Are Handles visible during TextEdit (in double size)?
-    // Persistent, default=FALSE
-    void SetMarkHdlWhenTextEdit(bool bOn) { mbMarkHdlWhenTextEdit=bOn; }
 
     bool HasMarkableGluePoints() const;
     bool HasMarkedGluePoints() const;

@@ -496,7 +496,6 @@ sal_uInt16* RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRange
 SvdProgressInfo::SvdProgressInfo( const Link<void*,bool>&_rLink )
 {
     maLink = _rLink;
-    m_nSumActionCount = 0;
     m_nSumCurAction   = 0;
 
     m_nObjCount = 0;
@@ -509,9 +508,8 @@ SvdProgressInfo::SvdProgressInfo( const Link<void*,bool>&_rLink )
     m_nCurInsert   = 0;
 }
 
-void SvdProgressInfo::Init( size_t nSumActionCount, size_t nObjCount )
+void SvdProgressInfo::Init( size_t nObjCount )
 {
-    m_nSumActionCount = nSumActionCount;
     m_nObjCount = nObjCount;
 }
 
