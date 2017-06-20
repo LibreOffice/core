@@ -382,6 +382,11 @@ public:
 
     void addEncapsulatedX509Certificate(const OUString& rEncapsulatedX509Certificate);
 
+    void setGpgCertificate(
+        sal_Int32 nSecurityId,
+        const OUString& ouCertDigest,
+        const OUString& ouCert);
+
     void setDate(
         sal_Int32 nSecurityId,
         const css::util::DateTime& rDateTime );

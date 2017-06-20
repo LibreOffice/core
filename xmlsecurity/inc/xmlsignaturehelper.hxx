@@ -150,6 +150,9 @@ public:
 
     void AddEncapsulatedX509Certificate(const OUString& ouEncapsulatedX509Certificate);
 
+    void SetGpgCertificate(sal_Int32 nSecurityId, const OUString& ouGpgCertDigest,
+        const OUString& ouGpgCert);
+
     void        SetDateTime( sal_Int32 nSecurityId, const Date& rDate, const tools::Time& rTime );
     void SetDescription(sal_Int32 nSecurityId, const OUString& rDescription);
 
