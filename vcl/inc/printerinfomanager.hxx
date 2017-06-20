@@ -62,7 +62,7 @@ struct PrinterInfo : JobData
 class VCL_DLLPUBLIC PrinterInfoManager
 {
 public:
-    enum class Type { Default = 0, CUPS = 1 };
+    enum class Type { Default = 0, CUPS = 1, CPD = 2 };
 
     struct SystemPrintQueue
     {
