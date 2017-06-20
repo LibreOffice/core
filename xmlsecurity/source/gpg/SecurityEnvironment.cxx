@@ -59,11 +59,13 @@ OUString SecurityEnvironmentGpg::getSecurityEnvironmentInformation()
 
 Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getPersonalCertificates()
 {
+    // TODO: move to central init
     GpgME::initializeLibrary();
     GpgME::Error err = GpgME::checkEngine(GpgME::OpenPGP);
     if (err)
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
+    // TODO: keep that around for SecurityEnvironmentGpg lifetime
     GpgME::Context* ctx = GpgME::Context::createForProtocol(GpgME::OpenPGP);
     if (ctx == nullptr)
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
@@ -79,7 +81,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getPersonalCertif
             break;
         if (!k.isInvalid()) {
             xCert = new CertificateImpl();
-            xCert->setCertificate(k);
+            xCert->setCertificate(ctx,k);
             certsList.push_back(xCert);
         }
     }
@@ -96,11 +98,13 @@ Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getPersonalCertif
 
 Reference< XCertificate > SecurityEnvironmentGpg::getCertificate( const OUString& issuerName, const Sequence< sal_Int8 >& /*serialNumber*/ )
 {
+    // TODO: move to central init
     GpgME::initializeLibrary();
     GpgME::Error err = GpgME::checkEngine(GpgME::OpenPGP);
     if (err)
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
+    // TODO: keep that around for SecurityEnvironmentGpg lifetime
     GpgME::Context* ctx = GpgME::Context::createForProtocol(GpgME::OpenPGP);
     if (ctx == nullptr)
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
@@ -117,13 +121,14 @@ Reference< XCertificate > SecurityEnvironmentGpg::getCertificate( const OUString
             break;
         if (!k.isInvalid()) {
             xCert = new CertificateImpl();
-            xCert->setCertificate(k);
+            xCert->setCertificate(ctx, k);
             ctx->endKeyListing();
             return xCert;
         }
     }
     ctx->endKeyListing();
 
+    // TODO: cleanup ctx
     return nullptr;
 }
 

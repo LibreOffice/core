@@ -34,6 +34,7 @@ class CertificateImpl : public cppu::WeakImplHelper< css::security::XCertificate
 {
 private:
     GpgME::Key m_pKey;
+    css::uno::Sequence< sal_Int8 > m_aBits;
 
 public:
     CertificateImpl();
@@ -81,7 +82,7 @@ public:
     virtual css::security::CertificateKind getCertificateKind() override;
 
     // Helper methods
-    void setCertificate(GpgME::Key key);
+    void setCertificate(GpgME::Context* ctx, const GpgME::Key& key);
     const GpgME::Key* getCertificate() const;
 } ;
 

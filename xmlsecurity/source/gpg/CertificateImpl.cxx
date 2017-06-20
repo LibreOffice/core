@@ -10,8 +10,13 @@
 #include "CertificateImpl.hxx"
 
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <com/sun/star/security/KeyUsage.hpp>
+
+#include <gpgme.h>
+#include <context.h>
+#include <data.h>
 
 using namespace css;
 using namespace css::uno;
@@ -25,6 +30,7 @@ CertificateImpl::CertificateImpl() :
 
 CertificateImpl::~CertificateImpl()
 {
+    // TODO: cleanup key
 }
 
 //Methods from XCertificateImpl
@@ -35,8 +41,10 @@ sal_Int16 SAL_CALL CertificateImpl::getVersion()
 
 Sequence< sal_Int8 > SAL_CALL CertificateImpl::getSerialNumber()
 {
-    // Empty for gpg
-    return Sequence< sal_Int8 > ();
+    // This is mapped to the fingerprint for gpg
+    const char* keyId = m_pKey.primaryFingerprint();
+    return comphelper::arrayToSequence<sal_Int8>(
+        keyId, strlen(keyId));
 }
 
 OUString SAL_CALL CertificateImpl::getIssuerName()
@@ -113,8 +121,8 @@ Reference< XCertificateExtension > SAL_CALL CertificateImpl::findCertificateExte
 
 Sequence< sal_Int8 > SAL_CALL CertificateImpl::getEncoded()
 {
-    // Empty for gpg
-    return Sequence< sal_Int8 > ();
+    // Export key to base64Empty for gpg
+    return m_aBits;
 }
 
 OUString SAL_CALL CertificateImpl::getSubjectPublicKeyAlgorithm()
@@ -146,20 +154,26 @@ OUString SAL_CALL CertificateImpl::getSignatureAlgorithm()
 
 Sequence< sal_Int8 > SAL_CALL CertificateImpl::getSHA1Thumbprint()
 {
-    // Empty for gpg
-    return Sequence< sal_Int8 > ();
+    // This is mapped to the short keyID for gpg
+    const char* keyId = m_pKey.shortKeyID();
+    return comphelper::arrayToSequence<sal_Int8>(
+        keyId, strlen(keyId));
 }
 
 uno::Sequence<sal_Int8> CertificateImpl::getSHA256Thumbprint()
 {
-    // Empty for gpg
-    return Sequence< sal_Int8 > ();
+    // This is mapped to the long keyID for gpg
+    const char* keyId = m_pKey.keyID();
+    return comphelper::arrayToSequence<sal_Int8>(
+        keyId, strlen(keyId));
 }
 
 Sequence< sal_Int8 > SAL_CALL CertificateImpl::getMD5Thumbprint()
 {
-    // Empty for gpg
-    return Sequence< sal_Int8 > ();
+    // This is mapped to the short keyID for gpg
+    const char* keyId = m_pKey.shortKeyID();
+    return comphelper::arrayToSequence<sal_Int8>(
+        keyId, strlen(keyId));
 }
 
 CertificateKind SAL_CALL CertificateImpl::getCertificateKind()
@@ -192,9 +206,25 @@ const Sequence< sal_Int8>& CertificateImpl::getUnoTunnelId() {
     return CertificateImplUnoTunnelId::get().getSeq();
 }
 
-void CertificateImpl::setCertificate(GpgME::Key key)
+void CertificateImpl::setCertificate(GpgME::Context* ctx, const GpgME::Key& key)
 {
     m_pKey = key;
+
+    // extract key data, store into m_aBits
+    GpgME::Data data_out;
+    ctx->exportPublicKeys(key.keyID(), data_out);
+
+    // TODO: needs some error handling
+    data_out.seek(0,SEEK_SET);
+    int len=0, curr=0; char buf;
+    while( (curr=data_out.read(&buf, 1)) )
+        len += curr;
+
+    // write bits to sequence of bytes
+    m_aBits.realloc(len);
+    data_out.seek(0,SEEK_SET);
+    if( data_out.read(m_aBits.getArray(), len) != len )
+        throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 }
 
 const GpgME::Key* CertificateImpl::getCertificate() const
