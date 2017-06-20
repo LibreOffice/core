@@ -2177,13 +2177,13 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
 
             std::size_t nLastFkpPos = nPN + nIMax - 1;
             nLastFkpPos = nLastFkpPos << 9;
-            // Anz. Fkp-Eintraege des letzten Fkp
+            // number of FC entries of last Fkp
             if (!checkSeek(rSt, nLastFkpPos + 511))
                 break;
 
             sal_uInt8 nb(0);
             rSt.ReadUChar( nb );
-            // letzer FC-Eintrag des letzten Fkp
+            // last FC entry of last Fkp
             if (!checkSeek(rSt, nLastFkpPos + nb * 4))
                 break;
 
