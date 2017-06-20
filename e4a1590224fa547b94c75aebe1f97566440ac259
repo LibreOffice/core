@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3a461143_20c41291",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2017-06-20T23:18:42Z",
+      "side": 1,
+      "message": "Also, the new rule is that we always use \u003c\u003e even for local headers.",
+      "revId": "e4a1590224fa547b94c75aebe1f97566440ac259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_00f8f6e4",
         "filename": "sc/source/filter/excel/xepivotxml.cxx",
         "patchSetId": 3
