@@ -694,7 +694,7 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ChapterNumberingDialog"/>
       <menu:menuitem menu:id=".uno:LineNumberingDialog"/>
-      <menu:menuitem menu:id=".uno:FootnoteDialog"/>104845
+      <menu:menuitem menu:id=".uno:FootnoteDialog"/>
       <menu:menu menu:id=".uno:ToolsFormsMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:ShowFmExplorer"/>
