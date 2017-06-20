@@ -22,9 +22,6 @@
 #include "securityenvironment_nssimpl.hxx"
 
 #include "xmlsecuritycontext_nssimpl.hxx"
-#include "xmlsec/xmlstreamio.hxx"
-
-#include "xmlsec-wrapper.h"
 
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;
@@ -37,34 +34,10 @@ using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 XMLSecurityContext_NssImpl::XMLSecurityContext_NssImpl()
     : m_nDefaultEnvIndex(-1)
 {
-#if 0
-    //Init xmlsec library
-    if( xmlSecInit() < 0 ) {
-        throw RuntimeException() ;
-    }
-
-    //Init xmlsec crypto engine library
-    if( xmlSecCryptoInit() < 0 ) {
-        xmlSecShutdown() ;
-        throw RuntimeException() ;
-    }
-
-    //Enable external stream handlers
-    if( xmlEnableStreamInputCallbacks() < 0 ) {
-        xmlSecCryptoShutdown() ;
-        xmlSecShutdown() ;
-        throw RuntimeException() ;
-    }
-#endif
 }
 
 XMLSecurityContext_NssImpl::~XMLSecurityContext_NssImpl()
 {
-#if 0
-    xmlDisableStreamInputCallbacks() ;
-    xmlSecCryptoShutdown() ;
-    xmlSecShutdown() ;
-#endif
 }
 
 sal_Int32 SAL_CALL XMLSecurityContext_NssImpl::addSecurityEnvironment(

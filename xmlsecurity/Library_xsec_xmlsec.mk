@@ -67,6 +67,7 @@ $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/serialnumberadapter \
 	xmlsecurity/source/xmlsec/xmldocumentwrapper_xmlsecimpl \
 	xmlsecurity/source/xmlsec/xmlelementwrapper_xmlsecimpl \
+	xmlsecurity/source/xmlsec/xmlsec_init \
 	xmlsecurity/source/xmlsec/xmlstreamio \
 	xmlsecurity/source/xmlsec/xsec_xmlsec \
 	xmlsecurity/source/xmlsec/nss/ciphercontext \
