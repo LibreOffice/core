@@ -194,9 +194,7 @@ PropertyState SAL_CALL ChainablePropertySet::getPropertyState( const OUString& P
     if( aIter == mxInfo->maMap.end())
         throw UnknownPropertyException( PropertyName, static_cast< XPropertySet* >( this ) );
 
-    PropertyState aState(PropertyState_AMBIGUOUS_VALUE);
-
-    return aState;
+    return PropertyState_AMBIGUOUS_VALUE;
 }
 
 Sequence< PropertyState > SAL_CALL ChainablePropertySet::getPropertyStates( const Sequence< OUString >& rPropertyNames )

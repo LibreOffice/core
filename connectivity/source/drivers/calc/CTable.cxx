@@ -776,8 +776,7 @@ bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
 {
     // read the bookmark
 
-    bool bIsCurRecordDeleted = false;
-    _rRow->setDeleted(bIsCurRecordDeleted);
+    _rRow->setDeleted(false);
     *(_rRow->get())[0] = m_nFilePos;
 
     if (!bRetrieveData)
