@@ -685,7 +685,6 @@ void SwAnnotationWin::SetPosAndSize()
                                       basegfx::B2DPoint( mPageBorder ,mAnchorRect.Bottom()+2*15),
                                       basegfx::B2DPoint( aLineStart.X(),aLineStart.Y()),
                                       basegfx::B2DPoint( aLineEnd.X(),aLineEnd.Y()));
-            mpAnchor->SetHeight(mAnchorRect.Height());
         }
         else
         {
@@ -697,7 +696,6 @@ void SwAnnotationWin::SetPosAndSize()
                                                                        mColorAnchor );
             if ( mpAnchor )
             {
-                mpAnchor->SetHeight(mAnchorRect.Height());
                 mpAnchor->setVisible(true);
                 mpAnchor->SetAnchorState(AnchorState::Tri);
                 if (HasChildPathFocus())

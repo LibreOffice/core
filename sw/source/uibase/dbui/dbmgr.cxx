@@ -3163,8 +3163,6 @@ std::shared_ptr<SwMailMergeConfigItem> SwDBManager::PerformMailMerge(SwView* pVi
     aMergeDesc.bCreateSingleFile = true;
     rSh.GetDBManager()->Merge(aMergeDesc);
 
-    xConfigItem->SetMergeDone();
-
     return xConfigItem;
 }
 

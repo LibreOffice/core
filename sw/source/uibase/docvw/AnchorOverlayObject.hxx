@@ -73,8 +73,6 @@ class AnchorOverlayObject: public sdr::overlay::OverlayObjectWithBasePosition
         void setLineSolid( const bool bNew );
         bool getLineSolid() const { return mbLineSolid; }
 
-        void SetHeight( const unsigned long aHeight ) { mHeight = aHeight; };
-
         void SetAnchorState( const AnchorState aState );
         AnchorState GetAnchorState() const { return mAnchorState; }
 
@@ -104,7 +102,6 @@ class AnchorOverlayObject: public sdr::overlay::OverlayObjectWithBasePosition
         basegfx::B2DPolygon maTriangle;
         basegfx::B2DPolygon maLine;
         basegfx::B2DPolygon maLineTop;
-        unsigned long mHeight;
         AnchorState mAnchorState;
 
         bool mbLineSolid : 1;

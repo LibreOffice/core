@@ -191,7 +191,6 @@ class SwSendMailDialog : public ModelessDialog //SfxModalDialog
 
     SwSendMailDialog_Impl*  m_pImpl;
     SwMailMergeConfigItem*  m_pConfigItem;
-    sal_Int32               m_nStatusHeight;
     sal_Int32               m_nSendCount;
     sal_Int32               m_nErrorCount;
 
