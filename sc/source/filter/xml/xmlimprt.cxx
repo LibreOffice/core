@@ -2176,7 +2176,6 @@ ScXMLImport::ScXMLImport(
     nProgressCount(0),
     nPrevCellType(0),
     bLoadDoc( true ),
-    bRemoveLastChar(false),
     bNullDateSetted(false),
     bSelfImportingXMLSet(false),
     mbLockSolarMutex(true),

@@ -302,7 +302,7 @@ class ScXMLDataPilotFieldContext : public ScXMLImportContext
     bool                        bDateValue:1;
     bool                        bAutoStart:1;
     bool                        bAutoEnd:1;
-    bool                        mbHasHiddenMember:1;
+    bool                        mbHasHiddenMember:1; // TODO: import to document core
 
 public:
 

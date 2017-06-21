@@ -44,11 +44,9 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
                                       const uno::Reference<xml::sax::XAttributeList>& xAttrList,
-                                      ScXMLAnnotationData& rAnnotationData,
-                                      ScXMLTableRowCellContext* pTempCellContext) :
+                                      ScXMLAnnotationData& rAnnotationData) :
     ScXMLImportContext( rImport, nPrfx, rLName ),
     mrAnnotationData( rAnnotationData ),
-    pCellContext(pTempCellContext),
     pShapeContext(nullptr)
 {
     uno::Reference<drawing::XShapes> xLocalShapes (GetScImport().GetTables().GetCurrentXShapes());
@@ -60,7 +58,6 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
             GetScImport(), nPrfx, rLName, xAttrList, xLocalShapes, true);
     }
 
-    pCellContext = pTempCellContext;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAnnotationAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )

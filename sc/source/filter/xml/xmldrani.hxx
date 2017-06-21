@@ -76,7 +76,7 @@ class ScXMLDatabaseRangeContext : public ScXMLImportContext
     bool            bContainsSort;
     bool            bContainsSubTotal;
     bool            bNative;
-    bool            bIsSelection;
+    bool            bIsSelection; // TODO: import to document core
     bool            bKeepFormats;
     bool            bMoveCells;
     bool            bStripData;
