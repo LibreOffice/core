@@ -1521,7 +1521,6 @@ void ScHTMLLayoutParser::FontOn( HtmlImportInfo* pInfo )
 
 void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
 {
-    bool bSetLastToken = true;
     switch ( pInfo->nToken )
     {
         case HtmlTokenId::META:
@@ -1681,13 +1680,8 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
                 aString += pInfo->aText;
         }
         break;
-        default:
-        {   // Don't set nHtmlLastToken!
-            bSetLastToken = false;
-        }
+        default: ;
     }
-    if ( bSetLastToken )
-        nHtmlLastToken = pInfo->nToken;
 }
 
 // HTML DATA QUERY PARSER

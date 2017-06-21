@@ -67,7 +67,6 @@ LotAttrCache::LotAttrCache (LOTUS_ROOT* pLotRoot)
     ppColorItems[ 4 ] = new SvxColorItem( GetColor( 5 ), ATTR_FONT_COLOR );
     ppColorItems[ 5 ] = new SvxColorItem( GetColor( 6 ), ATTR_FONT_COLOR );     // 6
 
-    pBlack = new SvxColorItem( Color( COL_BLACK ), ATTR_FONT_COLOR );
     pWhite = new SvxColorItem( Color( COL_WHITE ), ATTR_FONT_COLOR );
 }
 
@@ -76,7 +75,6 @@ LotAttrCache::~LotAttrCache()
     for(SvxColorItem* p : ppColorItems)
         delete p;
 
-    delete pBlack;
     delete pWhite;
 
     delete[] pColTab;

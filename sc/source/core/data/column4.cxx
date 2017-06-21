@@ -1289,11 +1289,10 @@ class StartListeningFormulaCellsHandler
     sc::StartListeningContext& mrStartCxt;
     sc::EndListeningContext& mrEndCxt;
     SCROW mnStartRow;
-    SCROW mnEndRow;
 
 public:
     StartListeningFormulaCellsHandler( sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt ) :
-        mrStartCxt(rStartCxt), mrEndCxt(rEndCxt), mnStartRow(-1), mnEndRow(-1) {}
+        mrStartCxt(rStartCxt), mrEndCxt(rEndCxt), mnStartRow(-1) {}
 
     void operator() ( const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize )
     {
@@ -1341,7 +1340,6 @@ public:
             // extends beyond the range, in which case have the excess
             // formula cells stop listening.
             size_t nEndGroupPos = (pp - ppBeg) + pFC->GetSharedLength();
-            mnEndRow = node.position + nOffset + nEndGroupPos - 1; // absolute row position of the last one in the group.
             if (nEndGroupPos > nDataSize)
             {
                 size_t nExcessSize = nEndGroupPos - nDataSize;
