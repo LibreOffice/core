@@ -56,8 +56,6 @@ class SW_DLLPUBLIC SwDrawTextInfo
     SwFont *m_pFnt;
     SwUnderlineFont* m_pUnderFnt;
     sal_Int32* m_pHyphPos;
-    long m_nLeft;
-    long m_nRight;
     long m_nKanaDiff;
     sal_Int32 m_nIdx;
     sal_Int32 m_nLen;
@@ -140,8 +138,6 @@ public:
         m_pSmartTags = nullptr;
         m_pFnt = nullptr;
         m_pHyphPos = nullptr;
-        m_nLeft = 0;
-        m_nRight = 0;
         m_nKanaDiff = 0;
         m_nOfst = 0;
         m_nAscent = 0;
@@ -467,22 +463,6 @@ public:
         m_nOfst = nNew;
 #ifdef DBG_UTIL
         m_bOfst = true;
-#endif
-    }
-
-    void SetLeft( long nNew )
-    {
-        m_nLeft = nNew;
-#ifdef DBG_UTIL
-        m_bLeft = true;
-#endif
-    }
-
-    void SetRight( long nNew )
-    {
-        m_nRight = nNew;
-#ifdef DBG_UTIL
-        m_bRight = true;
 #endif
     }
 

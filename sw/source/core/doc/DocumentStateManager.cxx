@@ -31,7 +31,6 @@ DocumentStateManager::DocumentStateManager( SwDoc& i_rSwdoc ) :
     m_rDoc( i_rSwdoc ),
     mbEnableSetModified(true),
     mbModified(false),
-    mbLoaded(false),
     mbUpdateExpField(false),
     mbNewDoc(false),
     mbInCallModified(false)
@@ -116,7 +115,6 @@ void DocumentStateManager::SetUpdateExpFieldStat(bool b)
 
 void DocumentStateManager::SetLoaded()
 {
-    mbLoaded = true;
 }
 
 }

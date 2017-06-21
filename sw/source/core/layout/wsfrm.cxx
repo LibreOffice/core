@@ -55,7 +55,6 @@ using namespace ::com::sun::star;
 
 SwFrame::SwFrame( SwModify *pMod, SwFrame* pSib ) :
     SwClient( pMod ),
-    mbIfAccTableShouldDisposing( false ), //A member to identify if the acc table should dispose
     mbInDtor(false),
     mnFrameId( SwFrame::mnLastFrameId++ ),
     mpRoot( pSib ? pSib->getRootFrame() : nullptr ),

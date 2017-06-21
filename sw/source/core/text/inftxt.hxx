@@ -499,9 +499,6 @@ class SwTextFormatInfo : public SwTextPaintInfo
     sal_uInt16 m_nLineNetHeight; // line height without spacing
     sal_uInt16 m_nForcedLeftMargin; // Shift of left margin due to frame
 
-    sal_Int16  m_nMinLeading;     // minimum number of chars before hyphenation point
-    sal_Int16  m_nMinTrailing;    // minimum number of chars after hyphenation point
-
     bool m_bFull : 1;             // Line is full
     bool m_bFootnoteDone : 1;          // Footnote already formatted
     bool m_bErgoDone : 1;         // ErgoDone already formatted

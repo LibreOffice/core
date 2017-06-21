@@ -389,7 +389,7 @@ void SwHyphStrPortion::HandlePortion( SwPortionHandler& rPH ) const
 SwLinePortion *SwSoftHyphPortion::Compress() { return this; }
 
 SwSoftHyphPortion::SwSoftHyphPortion() :
-    bExpand(false), nViewWidth(0), nHyphWidth(0)
+    bExpand(false), nViewWidth(0)
 {
     SetLen(1);
     SetWhichPor( POR_SOFTHYPH );
@@ -495,7 +495,6 @@ bool SwSoftHyphPortion::Format( SwTextFormatInfo &rInf )
     if( !bFull )
     {
         // By default, we do not have a width, but we do have a height
-        nHyphWidth = Width();
         Width(0);
     }
     return bFull;
@@ -518,7 +517,6 @@ void SwSoftHyphPortion::FormatEOL( SwTextFormatInfo &rInf )
         rInf.X( rInf.X() - PrtWidth() );
         rInf.SetIdx( rInf.GetIdx() - GetLen() );
         const bool bFull = SwHyphPortion::Format( rInf );
-        nHyphWidth = Width();
 
         // Shady business: We're allowed to get wider, but a Fly is also
         // being processed, which needs a correct X position
