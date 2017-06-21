@@ -942,7 +942,6 @@ class ScXMLImport: public SvXMLImport
     sal_Int32               nProgressCount;
     sal_Int16               nPrevCellType;
     bool                    bLoadDoc;   // Load doc or styles only
-    bool                    bRemoveLastChar;
     bool                    bNullDateSetted;
     bool                    bSelfImportingXMLSet;
     bool mbLockSolarMutex;
@@ -1116,8 +1115,6 @@ public:
     bool GetValidation(const OUString& sName, ScMyImportValidation& aValidation);
 
     ScMyImpDetectiveOpArray* GetDetectiveOpArray();
-
-    void SetRemoveLastChar(bool bValue) { bRemoveLastChar = bValue; }
 
     ScXMLChangeTrackingImportHelper* GetChangeTrackingImportHelper();
     void InsertStyles();

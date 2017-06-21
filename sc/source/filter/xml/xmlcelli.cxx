@@ -153,7 +153,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
 {
     rtl::math::setNan(&fValue); // NaN by default
 
-    rXMLImport.SetRemoveLastChar(false);
     rXMLImport.GetTables().AddColumn(bTempIsCovered);
 
     std::unique_ptr<OUString> xStyleName;
@@ -673,7 +672,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
             OSL_ENSURE( !mxAnnotationData.get(), "ScXMLTableRowCellContext::CreateChildContext - multiple annotations in one cell" );
             mxAnnotationData.reset( new ScXMLAnnotationData );
             pContext = new ScXMLAnnotationContext( rXMLImport, nPrefix, rLName,
-                                                    xAttrList, *mxAnnotationData, this);
+                                                    xAttrList, *mxAnnotationData);
         }
         break;
         case XML_TOK_TABLE_ROW_CELL_DETECTIVE:

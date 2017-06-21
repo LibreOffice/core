@@ -111,11 +111,11 @@ public:
 private:
     ScXMLImport&            mrScImport;
     ScXMLExternalTabData&   mrExternalRefInfo;
-    OUString         maCellString;
+    OUString                maCellString;
     double                  mfCellValue;
     sal_Int32               mnRepeatCount;
     sal_Int32               mnNumberFormat;
-    sal_Int16               mnCellType;
+    sal_Int16               mnCellType; // TODO: import to document core
     bool                    mbIsNumeric;
     bool                    mbIsEmpty;
 };
