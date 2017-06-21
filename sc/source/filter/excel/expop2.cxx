@@ -57,7 +57,7 @@ enum class VBAExportMode
 }
 
 ExportBiff5::ExportBiff5( XclExpRootData& rExpData, SvStream& rStrm ):
-    ExportTyp( rStrm, &rExpData.mrDoc, rExpData.meTextEnc ),
+    ExportTyp( rStrm ),
     XclExpRoot( rExpData )
 {
     // only need part of the Root data

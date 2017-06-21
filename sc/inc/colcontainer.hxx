@@ -32,10 +32,9 @@ class ScColContainer
 {
     typedef std::vector<ScColumn*> ScColumnVector;
     ScColumnVector    aCols;
-    ScDocument*       pDocument;
 
 public:
-    ScColContainer( ScDocument* pDoc, const size_t nSize );
+    ScColContainer( const size_t nSize );
     ~ScColContainer() COVERITY_NOEXCEPT_FALSE;
 
     const ScColumn& operator[] ( const size_t nIndex ) const

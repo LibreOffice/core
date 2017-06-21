@@ -42,8 +42,7 @@ ScAccessibleFilterMenuItem::ScAccessibleFilterMenuItem(
     const Reference<XAccessible>& rxParent, ScMenuFloatingWindow* pWin, const OUString& rName, size_t nMenuPos) :
     ScAccessibleContextBase(rxParent, AccessibleRole::MENU_ITEM),
     mpWindow(pWin),
-    mnMenuPos(nMenuPos),
-    mbEnabled(true)
+    mnMenuPos(nMenuPos)
 {
     SetName(rName);
 }
@@ -119,11 +118,6 @@ void SAL_CALL ScAccessibleFilterMenuItem::release() throw ()
 bool ScAccessibleFilterMenuItem::isSelected() const
 {
     return mpWindow->isMenuItemSelected(mnMenuPos);
-}
-
-void ScAccessibleFilterMenuItem::setEnabled(bool bEnabled)
-{
-    mbEnabled = bEnabled;
 }
 
 tools::Rectangle ScAccessibleFilterMenuItem::GetBoundingBoxOnScreen() const

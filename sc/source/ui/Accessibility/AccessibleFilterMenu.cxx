@@ -80,8 +80,7 @@ private:
 ScAccessibleFilterMenu::ScAccessibleFilterMenu(const Reference<XAccessible>& rxParent, ScMenuFloatingWindow* pWin, const OUString& rName, size_t nMenuPos) :
     ScAccessibleContextBase(rxParent, AccessibleRole::MENU),
     mnMenuPos(nMenuPos),
-    mpWindow(pWin),
-    mbEnabled(true)
+    mpWindow(pWin)
 {
     SetName(rName);
 }
@@ -279,7 +278,7 @@ tools::Rectangle ScAccessibleFilterMenu::GetBoundingBox() const
     return aRect;
 }
 
-void ScAccessibleFilterMenu::appendMenuItem(const OUString& rName, bool bEnabled, size_t nMenuPos)
+void ScAccessibleFilterMenu::appendMenuItem(const OUString& rName, size_t nMenuPos)
 {
     // Check whether this menu item is a sub menu or a regular menu item.
     ScMenuFloatingWindow* pSubMenu = mpWindow->getSubMenuWindow(nMenuPos);
@@ -289,15 +288,11 @@ void ScAccessibleFilterMenu::appendMenuItem(const OUString& rName, bool bEnabled
         xAccessible = pSubMenu->CreateAccessible();
         ScAccessibleFilterMenu* p =
             static_cast<ScAccessibleFilterMenu*>(xAccessible.get());
-        p->setEnabled(bEnabled);
         p->setMenuPos(nMenuPos);
     }
     else
     {
         xAccessible.set(new ScAccessibleFilterMenuItem(this, mpWindow, rName, nMenuPos));
-        ScAccessibleFilterMenuItem* p =
-            static_cast<ScAccessibleFilterMenuItem*>(xAccessible.get());
-        p->setEnabled(bEnabled);
     }
     maMenuItems.push_back(xAccessible);
 }
@@ -305,11 +300,6 @@ void ScAccessibleFilterMenu::appendMenuItem(const OUString& rName, bool bEnabled
 void ScAccessibleFilterMenu::setMenuPos(size_t nMenuPos)
 {
     mnMenuPos = nMenuPos;
-}
-
-void ScAccessibleFilterMenu::setEnabled(bool bEnabled)
-{
-    mbEnabled = bEnabled;
 }
 
 sal_Int32 ScAccessibleFilterMenu::getMenuItemCount() const

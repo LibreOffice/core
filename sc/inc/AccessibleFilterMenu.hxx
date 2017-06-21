@@ -119,9 +119,8 @@ public:
 
     /// non-UNO methods
 
-    void appendMenuItem(const OUString& rName, bool bEnabled, size_t nMenuPos);
+    void appendMenuItem(const OUString& rName, size_t nMenuPos);
     void setMenuPos(size_t nMenuPos);
-    void setEnabled(bool bEnabled);
 
 protected:
 
@@ -142,8 +141,6 @@ private:
 
     size_t mnMenuPos;
     VclPtr<ScMenuFloatingWindow> mpWindow;
-
-    bool mbEnabled:1;
 };
 
 #endif

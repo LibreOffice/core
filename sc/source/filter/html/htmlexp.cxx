@@ -204,7 +204,6 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocume
     bTabHasGraphics( false ),
     bTabAlignedLeft( false ),
     bCalcAsShown( pDocP->GetDocOptions().IsCalcAsShown() ),
-    bTableDataWidth( true ),
     bTableDataHeight( true ),
     mbSkipImages ( false ),
     mbSkipHeaderFooter( false )
@@ -782,7 +781,6 @@ void ScHTMLExport::WriteTables()
         // IncIndent(1); TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_tbody );
         // At least old (3.x, 4.x?) Netscape doesn't follow <TABLE COLS=n> and
         // <COL WIDTH=x> specified, but needs a width at every column.
-        bTableDataWidth = true;     // widths in first row
         bool bHasHiddenRows = pDoc->HasHiddenRows(nStartRow, nEndRow, nTab);
         for ( SCROW nRow=nStartRow; nRow<=nEndRow; nRow++ )
         {
@@ -805,7 +803,6 @@ void ScHTMLExport::WriteTables()
                 WriteCell( nCol2, nRow, nTab );
                 bTableDataHeight = false;
             }
-            bTableDataWidth = false;    // widths only in first row
 
             if ( nRow == nEndRow )
                 IncIndent(-1);

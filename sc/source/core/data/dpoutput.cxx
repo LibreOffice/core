@@ -519,7 +519,6 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
     nHeaderSize(0),
     bDoFilter(bFilter),
     bResultsError(false),
-    mbHasDataLayout(false),
     bSizesValid(false),
     bSizeOverflow(false),
     mbHeaderLayout(false)
@@ -597,7 +596,6 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                 double fValue;
                                 rtl::math::setNan(&fValue);
 
-                                bool bRowFieldHasMember = false;
                                 switch ( eDimOrient )
                                 {
                                     case sheet::DataPilotFieldOrientation_COLUMN:
@@ -619,7 +617,6 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                             ScDPOutLevelData tmp(nDim, nHierarchy, nLev, nDimPos, nNumFmt, aResult, aName,
                                                                    aCaption, fValue, bHasHiddenMember, bIsDataLayout, false);
                                             pRowFields.push_back(tmp);
-                                            bRowFieldHasMember = true;
                                         }
                                     }
                                     break;
@@ -641,9 +638,6 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                 // get number formats from data dimensions
                                 if ( bIsDataLayout )
                                 {
-                                    if (bRowFieldHasMember)
-                                        mbHasDataLayout = true;
-
                                     OSL_ENSURE( nLevCount == 1, "data layout: multiple levels?" );
                                     if ( eDimOrient == sheet::DataPilotFieldOrientation_COLUMN )
                                         lcl_FillNumberFormats( pColNumFmt, nColFmtCount, xLevRes, xDims );

@@ -447,8 +447,7 @@ ScTabViewObj::ScTabViewObj( ScTabViewShell* pViewSh ) :
     nPreviousTab( 0 ),
     bDrawSelModeSet(false),
     bFilteredRangeSelection(false),
-    mbLeftMousePressed(false),
-    mbPendingSelectionChanged(false)
+    mbLeftMousePressed(false)
 {
     if (pViewSh)
         nPreviousTab = pViewSh->GetViewData().GetTabNo();
@@ -1259,7 +1258,6 @@ bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
     {
         try
         {
-            mbPendingSelectionChanged = false;
             ScTabViewShell* pViewSh = GetViewShell();
             ScViewData& rViewData = pViewSh->GetViewData();
             ScDocShell* pDocSh = rViewData.GetDocShell();
@@ -1721,7 +1719,6 @@ void ScTabViewObj::SelectionChanged()
     }
     if ( !mbLeftMousePressed ) // selection still in progress
     {
-        mbPendingSelectionChanged = false;
         try
         {
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( rDoc.GetVbaEventProcessor(), uno::UNO_SET_THROW );
@@ -1732,10 +1729,6 @@ void ScTabViewObj::SelectionChanged()
         catch( uno::Exception& )
         {
         }
-    }
-    else
-    {
-        mbPendingSelectionChanged = true;
     }
 }
 

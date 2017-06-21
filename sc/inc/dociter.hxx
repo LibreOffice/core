@@ -165,7 +165,6 @@ private:
         ScDBQueryParamMatrix* mpParam;
         SCROW mnCurRow;
         SCROW mnRows;
-        SCCOL mnCols;
     };
 
     ::std::unique_ptr<ScDBQueryParamBase> mpParam;
@@ -422,8 +421,6 @@ class ScHorizontalCellIterator      // walk through all non empty cells in an ar
     SCCOL           nEndCol;
     SCROW           nStartRow;
     SCROW           nEndRow;
-    SCROW*          pNextRows;
-    SCSIZE*         pNextIndices;
     SCCOL           mnCol;
     SCROW           mnRow;
     ScRefCellValue  maCurCell;

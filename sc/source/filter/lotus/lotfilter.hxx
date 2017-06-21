@@ -44,7 +44,6 @@ struct LotusContext
     std::map<sal_uInt16, ScPatternAttr> aLotusPatternPool;
 
     SvxHorJustifyItem *pAttrRight, *pAttrLeft, *pAttrCenter, *pAttrRepeat, *pAttrStandard;
-    ScProtectionAttr* pAttrUnprot;
 
     FormCache*       pValueFormCache; // -> initialized in memory.cxx
 
@@ -60,7 +59,6 @@ struct LotusContext
         , pAttrCenter(nullptr)
         , pAttrRepeat(nullptr)
         , pAttrStandard(nullptr)
-        , pAttrUnprot(nullptr)
         , pValueFormCache(nullptr)
     {
     }

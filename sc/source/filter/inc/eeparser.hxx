@@ -106,7 +106,6 @@ protected:
     ScEEParseEntry*     pActEntry;
     ColWidthsMap        maColWidths;
     int                 nRtfLastToken;
-    HtmlTokenId         nHtmlLastToken;
     SCCOL               nColCnt;
     SCROW               nRowCnt;
     SCCOL               nColMax;
