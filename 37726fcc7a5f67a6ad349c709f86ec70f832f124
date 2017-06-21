@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_3b10c34e",
+        "filename": "sw/source/core/unocore/unoflatpara.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T12:34:34Z",
+      "side": 1,
+      "message": "this is a UNO service implementation, and xPara is a parameter; we can\u0027t use assert in this case because it\u0027s not necessarily a bug in LO code if this is triggered, any user could use BASIC to call this with bogus arguments and it should handle that gracefully, so better use SAL_WARN or SAL_INFO here\n\n(ideally it should throw an IllegalArgumentException, but given that it never did, it\u0027s not obvious that doing so is harmless wrt. backward compatibility)",
+      "revId": "37726fcc7a5f67a6ad349c709f86ec70f832f124",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_5b1d8f65",
+        "filename": "sw/source/core/unocore/unoflatpara.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T12:34:34Z",
+      "side": 1,
+      "message": "here too",
+      "revId": "37726fcc7a5f67a6ad349c709f86ec70f832f124",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
