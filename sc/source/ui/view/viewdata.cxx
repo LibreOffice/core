@@ -502,6 +502,7 @@ ScViewData::~ScViewData() COVERITY_NOEXCEPT_FALSE
 
 void ScViewData::UpdateCurrentTab()
 {
+    assert(0 <= nTabNo && static_cast<size_t>(nTabNo) < maTabData.size());
     pThisTab = maTabData[nTabNo];
     while (!pThisTab)
     {
