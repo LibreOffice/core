@@ -1532,8 +1532,6 @@ void ViewShell::Paint (const ::tools::Rectangle&, ::sd::Window* )
 
 void ViewShell::ShowUIControls (bool bVisible)
 {
-    mpImpl->mbIsShowingUIControls = bVisible;
-
     if (mbHasRulers)
     {
         if (mpHorizontalRuler.get() != nullptr)

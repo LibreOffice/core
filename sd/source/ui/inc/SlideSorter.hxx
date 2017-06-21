@@ -221,10 +221,6 @@ private:
     VclPtr<ScrollBar> mpVerticalScrollBar;
     VclPtr<ScrollBarBox> mpScrollBarBox;
 
-    /** Set this flag to <TRUE/> to force a layout before the next paint.
-    */
-    bool mbLayoutPending;
-
     /** Some slide sorter wide properties that are used in different
         classes.
     */

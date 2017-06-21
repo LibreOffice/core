@@ -176,15 +176,15 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
     mnTransparency = AddTabPage( "RID_SVXPAGE_TRANSPARENCE", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), nullptr );
     mnFont = AddTabPage( "RID_SVXPAGE_CHAR_NAME", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), nullptr );
     mnEffects = AddTabPage( "RID_SVXPAGE_CHAR_EFFECTS", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), nullptr );
-    mnParagr = AddTabPage( "RID_SVXPAGE_STD_PARAGRAPH", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_STD_PARAGRAPH ), nullptr );
+    AddTabPage( "RID_SVXPAGE_STD_PARAGRAPH", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_STD_PARAGRAPH ), nullptr );
     mnTextAtt = AddTabPage( "RID_SVXPAGE_TEXTATTR", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TEXTATTR ), nullptr );
-    mnBullet = AddTabPage( "RID_SVXPAGE_PICK_BULLET", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PICK_BULLET ), nullptr );
-    mnNum = AddTabPage( "RID_SVXPAGE_PICK_SINGLE_NUM", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PICK_SINGLE_NUM ), nullptr );
-    mnBitmap = AddTabPage( "RID_SVXPAGE_PICK_BMP", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PICK_BMP ), nullptr );
-    mnOptions = AddTabPage( "RID_SVXPAGE_NUM_OPTIONS", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUM_OPTIONS ), nullptr );
-    mnTab =  AddTabPage( "RID_SVXPAGE_TABULATOR", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TABULATOR ), nullptr );
-    mnAsian = AddTabPage( "RID_SVXPAGE_PARA_ASIAN", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PARA_ASIAN ), nullptr );
-    mnAlign = AddTabPage( "RID_SVXPAGE_ALIGN_PARAGRAPH", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGN_PARAGRAPH ), nullptr );
+    AddTabPage( "RID_SVXPAGE_PICK_BULLET", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PICK_BULLET ), nullptr );
+    AddTabPage( "RID_SVXPAGE_PICK_SINGLE_NUM", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PICK_SINGLE_NUM ), nullptr );
+    AddTabPage( "RID_SVXPAGE_PICK_BMP", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PICK_BMP ), nullptr );
+    AddTabPage( "RID_SVXPAGE_NUM_OPTIONS", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUM_OPTIONS ), nullptr );
+    AddTabPage( "RID_SVXPAGE_TABULATOR", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TABULATOR ), nullptr );
+    AddTabPage( "RID_SVXPAGE_PARA_ASIAN", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PARA_ASIAN ), nullptr );
+    AddTabPage( "RID_SVXPAGE_ALIGN_PARAGRAPH", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGN_PARAGRAPH ), nullptr );
     mnBackground = AddTabPage( "RID_SVXPAGE_BACKGROUND", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr);
 
     SvtCJKOptions aCJKOptions;

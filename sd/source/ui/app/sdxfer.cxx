@@ -94,7 +94,6 @@ SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, 
 ,   mbLateInit( bInitOnGetData )
 ,   mbPageTransferable( false )
 ,   mbPageTransferablePersistent( false )
-,   mbIsUnoObj( false )
 ,   maUserData()
 {
     if( mpSourceDoc )
@@ -249,8 +248,6 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
 
         if( pInfo )
             mpImageMap = new ImageMap( pInfo->GetImageMap() );
-
-        mbIsUnoObj = pObj && pObj->IsUnoObj();
     }
 }
 

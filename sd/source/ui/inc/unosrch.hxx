@@ -84,14 +84,12 @@ protected:
     bool mbCaseSensitive;
     bool mbWords;
 
-    bool mbReplace;
-
     OUString maSearchStr;
     OUString maReplaceStr;
 
 public:
     /// @throws css::uno::RuntimeException
-    SdUnoSearchReplaceDescriptor(bool bReplace);
+    SdUnoSearchReplaceDescriptor();
     virtual ~SdUnoSearchReplaceDescriptor() throw() override;
 
     bool IsCaseSensitive() const { return mbCaseSensitive; }
