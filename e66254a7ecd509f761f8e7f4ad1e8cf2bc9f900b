@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_406afe1b",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T10:09:06Z",
+      "side": 1,
+      "message": "this aIter variable isn\u0027t used outside the loop",
+      "revId": "e66254a7ecd509f761f8e7f4ad1e8cf2bc9f900b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_6077fa02",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T10:09:06Z",
+      "side": 1,
+      "message": "i think it should work to declare it as \"auto aIter \u003d...\"",
+      "revId": "e66254a7ecd509f761f8e7f4ad1e8cf2bc9f900b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_c07d0ee9",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T10:09:06Z",
+      "side": 1,
+      "message": "mnNextParagraph is always 0 at this point; i think you want currentPara instead",
+      "revId": "e66254a7ecd509f761f8e7f4ad1e8cf2bc9f900b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_206df232",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T10:09:06Z",
+      "side": 1,
+      "message": "we use the \"p\" naming prefix for pointers, not for values",
+      "revId": "e66254a7ecd509f761f8e7f4ad1e8cf2bc9f900b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_8074e6fd",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T10:09:06Z",
+      "side": 1,
+      "message": "here mnNextParagraph is also wrong",
+      "revId": "e66254a7ecd509f761f8e7f4ad1e8cf2bc9f900b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_a05f2274",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T10:09:06Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "e66254a7ecd509f761f8e7f4ad1e8cf2bc9f900b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_c0642e4b",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T10:09:06Z",
+      "side": 1,
+      "message": "this should give the same ESelection as the one 10 lines above, so why do you calculate it twice, and differently wrong each time? better to create the ESelection once before the inner loop",
+      "revId": "e66254a7ecd509f761f8e7f4ad1e8cf2bc9f900b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
