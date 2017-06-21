@@ -271,7 +271,6 @@ SwSendMailDialog::SwSendMailDialog(vcl::Window *pParent, SwMailMergeConfigItem& 
     m_pStatus = VclPtr<SvSimpleTable>::Create(*m_pContainer);
     m_pStatusHB = &(m_pStatus->GetTheHeaderBar());
 
-    m_nStatusHeight = m_pContainer->get_height_request();
     OUString sTask(SwResId(ST_TASK));
     OUString sStatus(SwResId(ST_STATUS));
 

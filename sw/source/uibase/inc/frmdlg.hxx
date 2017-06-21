@@ -37,9 +37,6 @@ class SwFrameDlg : public SfxTabDialog
     sal_uInt16 m_nStdId;
     sal_uInt16 m_nAddId;
     sal_uInt16 m_nWrapId;
-    sal_uInt16 m_nUrlId;
-    sal_uInt16 m_nPictureId;
-    sal_uInt16 m_nCropId;
     sal_uInt16 m_nColumnId;
     //sal_uInt16 m_nBackgroundId;
     sal_uInt16 m_nAreaId;

@@ -238,7 +238,6 @@ AnchorOverlayObject::AnchorOverlayObject( const basegfx::B2DPoint& rBasePos,
     , maTriangle()
     , maLine()
     , maLineTop()
-    , mHeight(0)
     , mAnchorState(AnchorState::All)
     , mbLineSolid(false)
 {

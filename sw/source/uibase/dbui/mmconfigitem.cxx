@@ -703,11 +703,8 @@ void SwMailMergeConfigItem_Impl::SetCurrentGreeting(
 SwMailMergeConfigItem::SwMailMergeConfigItem() :
     m_pImpl(new SwMailMergeConfigItem_Impl),
     m_bAddressInserted(false),
-    m_bMergeDone(false),
     m_bGreetingInserted(false),
     m_nGreetingMoves(0),
-    m_nStartPrint(0),
-    m_nEndPrint(0),
     m_pSourceView(nullptr),
     m_pTargetView(nullptr)
 {
@@ -1534,7 +1531,6 @@ void SwMailMergeConfigItem::SetInServerPassword(const OUString& rPassword)
 
 void SwMailMergeConfigItem::DocumentReloaded()
 {
-    m_bMergeDone = false;
     m_bGreetingInserted = false;
     m_bAddressInserted = false;
     m_rAddressBlockFrame.clear();
@@ -1602,7 +1598,6 @@ void  SwMailMergeConfigItem::SetTargetView(SwView* pView)
     if(!m_pTargetView)
     {
         m_pImpl->m_aMergeInfos.clear();
-        m_bMergeDone = false;
     }
 }
 

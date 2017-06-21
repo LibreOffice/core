@@ -60,10 +60,6 @@ using namespace ::com::sun::star::beans;
 
 SFX_IMPL_CHILDWINDOW_WITHID(SwSpellDialogChildWindow, FN_SPELL_GRAMMAR_DIALOG)
 
-#define SPELL_START_BODY        0   // body text area
-#define SPELL_START_OTHER       1   // frame, footnote, header, footer
-#define SPELL_START_DRAWTEXT    2   // started in a draw text object
-
 struct SpellState
 {
     bool                m_bInitialCall;
@@ -71,7 +67,6 @@ struct SpellState
     bool                m_bLostFocus;
 
     // restart and progress information
-    sal_uInt16              m_SpellStartPosition;
     bool                m_bBodySpelled;  // body already spelled
     bool                m_bOtherSpelled; // frames, footnotes, headers and footers spelled
     bool                m_bStartedInOther; // started the spelling inside of the _other_ area
@@ -101,7 +96,6 @@ struct SpellState
         m_bInitialCall(true),
         m_bLockFocus(false),
         m_bLostFocus(false),
-        m_SpellStartPosition(SPELL_START_BODY),
         m_bBodySpelled(false),
         m_bOtherSpelled(false),
         m_bStartedInOther(false),
@@ -226,7 +220,6 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence(bool bRecheck)
                 }
                 // determine if the selection is outside of the body text
                 bOtherText = !(pWrtShell->GetFrameType(nullptr,true) & FrameTypeFlags::BODY);
-                m_pSpellState->m_SpellStartPosition = bOtherText ? SPELL_START_OTHER : SPELL_START_BODY;
                 if(bOtherText)
                 {
                     m_pSpellState->pOtherCursor.reset( new SwPaM(*pWrtShell->GetCursor()->GetPoint()) );
@@ -250,7 +243,6 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence(bool bRecheck)
             else
             {
                 SdrView* pSdrView = pWrtShell->GetDrawView();
-                m_pSpellState->m_SpellStartPosition = SPELL_START_DRAWTEXT;
                 m_pSpellState->m_pStartDrawing = pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                 OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
                 // start checking at the top of the drawing object

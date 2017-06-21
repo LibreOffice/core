@@ -72,7 +72,7 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher* pDispatcher)
     , m_bCallUndo(false)
 {
     bFirst = true;
-    bActive = bIsTable = bDelSel = false;
+    bIsTable = bDelSel = false;
 
     aEdit->SetSizePixel(aEdit->CalcMinimumSize());
     aPos->SetSizePixel(aPos->LogicToPixel(Size(45, 11), MapMode(MapUnit::MapAppFont)));

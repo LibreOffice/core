@@ -64,9 +64,6 @@ SwFrameDlg::SwFrameDlg( SfxViewFrame*       pViewFrame,
     , m_nStdId(0)
     , m_nAddId(0)
     , m_nWrapId(0)
-    , m_nUrlId(0)
-    , m_nPictureId(0)
-    , m_nCropId(0)
     , m_nColumnId(0)
     //, m_nBackgroundId(0)
     , m_nAreaId(0)
@@ -87,11 +84,11 @@ SwFrameDlg::SwFrameDlg( SfxViewFrame*       pViewFrame,
     m_nStdId = AddTabPage("type",  SwFramePage::Create, nullptr);
     m_nAddId = AddTabPage("options",  SwFrameAddPage::Create, nullptr);
     m_nWrapId = AddTabPage("wrap", SwWrapTabPage::Create, nullptr);
-    m_nUrlId = AddTabPage("hyperlink",  SwFrameURLPage::Create, nullptr);
+    AddTabPage("hyperlink",  SwFrameURLPage::Create, nullptr);
     if (m_sDlgType == "PictureDialog")
     {
-        m_nPictureId = AddTabPage("picture", SwGrfExtPage::Create, nullptr);
-        m_nCropId = AddTabPage("crop", RID_SVXPAGE_GRFCROP);
+        AddTabPage("picture", SwGrfExtPage::Create, nullptr);
+        AddTabPage("crop", RID_SVXPAGE_GRFCROP);
     }
     if (m_sDlgType == "FrameDialog")
     {
