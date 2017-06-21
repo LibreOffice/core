@@ -145,7 +145,6 @@ class SW_DLLPUBLIC SwFrame: public SwClient, public SfxBroadcaster
     // cache for (border) attributes
     static SwCache *mpCache;
 
-    bool mbIfAccTableShouldDisposing;
     bool mbInDtor;
 
     // #i65250#
@@ -573,8 +572,6 @@ public:
     virtual Size ChgSize( const Size& aNewSize );
 
     virtual void Cut() = 0;
-    //Add a method to change the acc table dispose state.
-    void SetAccTableDispose(bool bDispose) { mbIfAccTableShouldDisposing = bDispose;}
     virtual void Paste( SwFrame* pParent, SwFrame* pSibling = nullptr ) = 0;
 
     void ValidateLineNum() { mbValidLineNum = true; }

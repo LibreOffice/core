@@ -197,8 +197,6 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
     aDrawInf.SetWrong( nullptr );
     aDrawInf.SetGrammarCheck( nullptr );
     aDrawInf.SetSmartTags( nullptr );
-    aDrawInf.SetLeft( 0 );
-    aDrawInf.SetRight( LONG_MAX );
     aDrawInf.SetFrame( pTextFrame );
     aDrawInf.SetFont( pFnt.get() );
     aDrawInf.SetSnapToGrid( false );
@@ -551,8 +549,6 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                 {
                     const OUString aTmp( CH_PAR );
                     SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), nullptr, aTmp, 0, 1 );
-                    aDrawInf.SetLeft( rRect.Left() );
-                    aDrawInf.SetRight( rRect.Right() );
                     aDrawInf.SetPos( aPos );
                     aDrawInf.SetSpace( 0 );
                     aDrawInf.SetKanaComp( 0 );

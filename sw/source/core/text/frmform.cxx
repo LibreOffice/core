@@ -1217,8 +1217,6 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
 
         const_cast<SwLineLayout*>(rLine.GetCurr())->SetUnderscore( bHasUnderscore );
     }
-    if( !bUnChg )
-        rLine.SetChanges();
 
     // Calculating the good ol' nDelta
     pPara->GetDelta() -= long(pNew->GetLen()) - long(nOldLen);

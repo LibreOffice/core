@@ -1356,11 +1356,7 @@ void SwContentNode::DelFrames( bool bIsDisposeAccTable )
                 pCFrame->FindMaster()->Prepare( PREP_FTN_GONE );
             }
         }
-        //Set acc table dispose state
-        pFrame->SetAccTableDispose( bIsDisposeAccTable );
         pFrame->Cut();
-        //Set acc table dispose state to default value
-        pFrame->SetAccTableDispose( true );
         SwFrame::DestroyFrame(pFrame);
     }
 

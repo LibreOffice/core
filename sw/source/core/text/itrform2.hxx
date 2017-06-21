@@ -41,7 +41,6 @@ class SwTextFormatter : public SwTextPainter
     sal_Int32 nRightScanIdx; // scanning for portion ends
     bool bOnceMore : 1; // Another round?
     bool bFlyInCntBase : 1; // Base reference that sets a character-bound frame
-    bool bChanges : 1; // Flag for calculating the repaint rectangle
     bool bTruncLines : 1; // Flag for extending the repaint rect, if needed
     bool bUnclipped : 1; // Flag whether repaint is larger than the fixed line height
     size_t m_nHintEndIndex; // HACK for TryNewNoLengthPortion
@@ -202,8 +201,6 @@ public:
 
     bool IsOnceMore() const { return bOnceMore; }
     void SetOnceMore( bool bNew ) { bOnceMore = bNew; }
-
-    void SetChanges()       { bChanges = true; }
 
     bool HasTruncLines() const { return bTruncLines; }
     void SetTruncLines( bool bNew ) { bTruncLines = bNew; }

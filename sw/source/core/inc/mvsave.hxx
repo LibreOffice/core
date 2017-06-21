@@ -115,7 +115,6 @@ class SwDataChanged
     const SwPaM* pPam;
     const SwPosition* pPos;
     SwDoc* pDoc;
-    sal_uLong nNode;
     sal_Int32 nContent;
 
 public:

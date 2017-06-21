@@ -114,7 +114,6 @@ class SwSpellIter : public SwLinguIter
 
     SpellContentPositions               aLastPositions;
     bool                                bBackToStartOfSentence;
-    bool                                bMoveToEndOfSentence;
 
     void    CreatePortion(uno::Reference< XSpellAlternatives > const & xAlt,
                 linguistic2::ProofreadingResult* pGrammarResult,
@@ -125,7 +124,7 @@ class SwSpellIter : public SwLinguIter
                        const SpellContentPositions& rDeletedRedlines);
 public:
     SwSpellIter() :
-        bBackToStartOfSentence(false), bMoveToEndOfSentence(false) {}
+        bBackToStartOfSentence(false) {}
 
     void Start( SwEditShell *pSh, SwDocPositions eStart, SwDocPositions eEnd );
 
@@ -135,7 +134,6 @@ public:
     void                                ToSentenceStart();
     const svx::SpellPortions&           GetLastPortions() const { return aLastPortions;}
     const SpellContentPositions&        GetLastPositions() const {return aLastPositions;}
-    void                                ContinueAfterThisSentence() { bMoveToEndOfSentence = true; }
 };
 
 /// used for text conversion
@@ -1107,7 +1105,6 @@ void SwEditShell::MoveContinuationPosToEndOfCheckedSentence()
     if (g_pSpellIter)
     {
         g_pSpellIter->SetCurr( new SwPosition( *g_pSpellIter->GetCurrX() ) );
-        g_pSpellIter->ContinueAfterThisSentence();
     }
 }
 

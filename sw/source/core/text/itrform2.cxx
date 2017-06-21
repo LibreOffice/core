@@ -94,7 +94,6 @@ void SwTextFormatter::CtorInitTextFormatter( SwTextFrame *pNewFrame, SwTextForma
 
     bOnceMore = false;
     bFlyInCntBase = false;
-    bChanges = false;
     bTruncLines = false;
     nCntEndHyph = 0;
     nCntMidHyph = 0;

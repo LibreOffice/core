@@ -54,7 +54,6 @@ private:
 
     bool mbEnableSetModified; //< FALSE: changing document modification status (temporarily) locked
     bool mbModified      ;    //< TRUE: document has changed.
-    bool mbLoaded        ;    //< TRUE: Doc loaded.
     bool mbUpdateExpField;    //< TRUE: Update expression fields.
     bool mbNewDoc        ;    //< TRUE: new Doc.
     bool mbInCallModified;    //< TRUE: in Set/Reset-Modified link.

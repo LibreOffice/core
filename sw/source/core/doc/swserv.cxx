@@ -285,14 +285,12 @@ void SwServerObject::SetDdeBookmark( ::sw::mark::IMark& rBookmark)
 SwDataChanged::SwDataChanged( const SwPaM& rPam )
     : pPam( &rPam ), pPos( nullptr ), pDoc( rPam.GetDoc() )
 {
-    nNode = rPam.GetPoint()->nNode.GetIndex();
     nContent = rPam.GetPoint()->nContent.GetIndex();
 }
 
 SwDataChanged::SwDataChanged( SwDoc* pDc, const SwPosition& rPos )
     : pPam( nullptr ), pPos( &rPos ), pDoc( pDc )
 {
-    nNode = rPos.nNode.GetIndex();
     nContent = rPos.nContent.GetIndex();
 }
 
