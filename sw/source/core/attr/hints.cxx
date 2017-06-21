@@ -72,7 +72,7 @@ SwTableFormulaUpdate::SwTableFormulaUpdate( const SwTable* pNewTable )
 }
 
 SwAutoFormatGetDocNode::SwAutoFormatGetDocNode( const SwNodes* pNds )
-    : SwMsgPoolItem( RES_AUTOFMT_DOCNODE ), pContentNode( nullptr ), pNodes( pNds )
+    : SwMsgPoolItem( RES_AUTOFMT_DOCNODE ), pNodes( pNds )
 {
 }
 

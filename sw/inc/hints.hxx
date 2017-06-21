@@ -181,7 +181,6 @@ public:
 class SwAutoFormatGetDocNode: public SwMsgPoolItem
 {
 public:
-    const SwContentNode* pContentNode;
     const SwNodes* pNodes;
 
     SwAutoFormatGetDocNode( const SwNodes* pNds );

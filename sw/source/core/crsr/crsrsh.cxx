@@ -222,7 +222,6 @@ void SwCursorShell::StartAction()
         m_nAktNode = rNd.GetIndex();
         m_nAktContent = m_pCurrentCursor->GetPoint()->nContent.GetIndex();
         m_nAktNdTyp = rNd.GetNodeType();
-        m_bAktSelection = *m_pCurrentCursor->GetPoint() != *m_pCurrentCursor->GetMark();
         if( rNd.IsTextNode() )
             m_nLeftFramePos = SwCallLink::getLayoutFrame( GetLayout(), const_cast<SwTextNode&>(*rNd.GetTextNode()), m_nAktContent, true );
         else
@@ -2648,7 +2647,6 @@ SwCursorShell::SwCursorShell( SwCursorShell& rShell, vcl::Window *pInitWin )
     , m_nAktNode(0)
     , m_nAktContent(0)
     , m_nAktNdTyp(SwNodeType::NONE)
-    , m_bAktSelection(false)
     , m_nCursorMove( 0 )
     , m_eMvState( MV_NONE )
     , m_sMarkedListId()
@@ -2685,7 +2683,6 @@ SwCursorShell::SwCursorShell( SwDoc& rDoc, vcl::Window *pInitWin,
     , m_nAktNode(0)
     , m_nAktContent(0)
     , m_nAktNdTyp(SwNodeType::NONE)
-    , m_bAktSelection(false)
     , m_nCursorMove( 0 )
     , m_eMvState( MV_NONE ) // state for crsr-travelling - GetCursorOfst
     , m_sMarkedListId()

@@ -53,7 +53,6 @@ class SW_DLLPUBLIC SwFormat : public SwModify
                                        (is not hard attribution!!!) */
     sal_uInt16 m_nPoolHelpId;       ///< HelpId for this Pool-style.
     sal_uInt8 m_nPoolHlpFileId;     ///< FilePos to Doc to these style helps.
-    bool   m_bWritten : 1;      ///< TRUE: already written.
     bool   m_bAutoFormat : 1;      /**< FALSE: it is a template.
                                        default is true! */
     bool   m_bFormatInDTOR : 1;    /**< TRUE: Format becomes deleted. In order to be able

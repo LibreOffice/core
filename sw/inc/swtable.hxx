@@ -139,10 +139,6 @@ protected:
 
     bool        m_bModifyLocked   :1;
     bool        m_bNewModel       :1; // false: old SubTableModel; true: new RowSpanModel
-#ifdef DBG_UTIL
-    /// This is set by functions (like Merge()) to forbid a late model change.
-    bool m_bDontChangeModel;
-#endif
 
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
 
@@ -238,18 +234,12 @@ public:
     bool Merge( SwDoc* pDoc, const SwSelBoxes& rBoxes, const SwSelBoxes& rMerged,
                 SwTableBox* pMergeBox, SwUndoTableMerge* pUndo )
     {
-#ifdef DBG_UTIL
-        m_bDontChangeModel = true;
-#endif
         return m_bNewModel ? NewMerge( pDoc, rBoxes, rMerged, pUndo ) :
                              OldMerge( pDoc, rBoxes, pMergeBox, pUndo );
     }
     bool SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
                    bool bSameHeight )
     {
-#ifdef DBG_UTIL
-        m_bDontChangeModel = true;
-#endif
         return m_bNewModel ? NewSplitRow( pDoc, rBoxes, nCnt, bSameHeight ) :
                            OldSplitRow( pDoc, rBoxes, nCnt, bSameHeight );
     }

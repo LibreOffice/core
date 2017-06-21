@@ -85,7 +85,6 @@ class SW_DLLPUBLIC SwNode
 
     /// For text nodes: level of auto format. Was put here because we had still free bits.
     sal_uInt8 m_nAFormatNumLvl : 3;
-    bool m_bSetNumLSpace : 1;         ///< For numbering: TRUE: set indent.
     bool m_bIgnoreDontExpand : 1;     ///< for Text Attributes - ignore the flag
 
 #ifdef DBG_UTIL
@@ -127,8 +126,6 @@ public:
 
     sal_uInt8 GetAutoFormatLvl() const     { return m_nAFormatNumLvl; }
     void SetAutoFormatLvl( sal_uInt8 nVal )      { m_nAFormatNumLvl = nVal; }
-
-    void SetNumLSpace( bool bFlag )        { m_bSetNumLSpace = bFlag; }
 
     bool IsIgnoreDontExpand() const  { return m_bIgnoreDontExpand; }
     void SetIgnoreDontExpand( bool bNew )  { m_bIgnoreDontExpand = bNew; }
