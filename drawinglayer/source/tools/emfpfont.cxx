@@ -44,11 +44,8 @@ namespace emfplushelper
         sal_uInt32 header;
         sal_uInt32 reserved;
         sal_uInt32 length;
-
         s.ReadUInt32(header).ReadFloat(emSize).ReadUInt32(sizeUnit).ReadInt32(fontFlags).ReadUInt32(reserved).ReadUInt32(length);
-
         SAL_WARN_IF((header >> 12) != 0xdbc01, "cppcanvas.emf", "Invalid header - not 0xdbc01");
-
         SAL_INFO("cppcanvas.emf", "EMF+\tfont\nEMF+\theader: 0x" << std::hex << (header >> 12) << " version: 0x" << (header & 0x1fff) << " size: " << std::dec << emSize << " unit: 0x" << std::hex << sizeUnit << std::dec);
         SAL_INFO("cppcanvas.emf", "EMF+\tflags: 0x" << std::hex << fontFlags << " reserved: 0x" << reserved << " length: 0x" << std::hex << length << std::dec);
 
@@ -58,7 +55,9 @@ namespace emfplushelper
             sal_Unicode *chars = pStr->buffer;
 
             for (sal_uInt32 i = 0; i < length; ++i)
+            {
                 s.ReadUtf16(chars[i]);
+            }
 
             family = OUString(pStr, SAL_NO_ACQUIRE);
             SAL_INFO("cppcanvas.emf", "EMF+\tfamily: " << family);

@@ -55,7 +55,8 @@ namespace emfplushelper
 
     EMFPRegion::~EMFPRegion()
     {
-        if (combineMode) {
+        if (combineMode)
+        {
             delete[] combineMode;
             combineMode = nullptr;
         }
@@ -64,19 +65,21 @@ namespace emfplushelper
     void EMFPRegion::Read(SvStream& s)
     {
         sal_uInt32 header;
-
         s.ReadUInt32(header).ReadInt32(parts);
-
         SAL_INFO("cppcanvas.emf", "EMF+\tregion");
         SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " parts: " << parts << std::dec);
 
-        if (parts) {
+        if (parts)
+        {
             if (parts<0 || sal_uInt32(parts)>SAL_MAX_INT32 / sizeof(sal_Int32))
+            {
                 parts = SAL_MAX_INT32 / sizeof(sal_Int32);
+            }
 
             combineMode = new sal_Int32[parts];
 
-            for (int i = 0; i < parts; i++) {
+            for (int i = 0; i < parts; i++)
+            {
                 s.ReadInt32(combineMode[i]);
                 SAL_INFO("cppcanvas.emf", "EMF+\tcombine mode [" << i << "]: 0x" << std::hex << combineMode[i] << std::dec);
             }
