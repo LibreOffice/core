@@ -384,14 +384,9 @@ void signalHandlerFunction(int signal, siginfo_t * info, void * context)
             if (rSignal.Signal == signal)
             {
                 if (rSignal.siginfo)
-                {
-                    (*reinterpret_cast<Handler2>(
-                        rSignal.Handler))(signal, info, context);
-                }
+                    (*reinterpret_cast<Handler2>(rSignal.Handler))(signal, info, context);
                 else
-                {
                     rSignal.Handler(signal);
-                }
                 break;
             }
         }
