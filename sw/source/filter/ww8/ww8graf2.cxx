@@ -526,7 +526,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
         }
         else if((0x64 == aPic.MFP.mm) || (0x66 == aPic.MFP.mm))
         {
-            // verlinkte Grafik im Escher-Objekt
+            // linked graphic in ESCHER-Object
             SdrObject* pObject = nullptr;
 
             WW8PicDesc aPD( aPic );
