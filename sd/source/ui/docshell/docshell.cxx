@@ -125,8 +125,7 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
     mpFontList(nullptr),
     meDocType(eDocumentType),
     mbSdDataObj(bDataObject),
-    mbOwnPrinter(false),
-    mbNewDocument( true )
+    mbOwnPrinter(false)
 {
     Construct( eMode == SfxObjectCreateMode::INTERNAL );
 }
@@ -140,8 +139,7 @@ DrawDocShell::DrawDocShell( SfxModelFlags nModelCreationFlags, bool bDataObject,
     mpFontList(nullptr),
     meDocType(eDocumentType),
     mbSdDataObj(bDataObject),
-    mbOwnPrinter(false),
-    mbNewDocument( true )
+    mbOwnPrinter(false)
 {
     Construct( false );
 }
@@ -157,8 +155,7 @@ DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
     mpFontList(nullptr),
     meDocType(eDocumentType),
     mbSdDataObj(bDataObject),
-    mbOwnPrinter(false),
-    mbNewDocument( true )
+    mbOwnPrinter(false)
 {
     Construct( eMode == SfxObjectCreateMode::INTERNAL );
 }

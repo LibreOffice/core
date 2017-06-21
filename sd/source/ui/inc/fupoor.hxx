@@ -148,7 +148,6 @@ protected:
     SdDrawDocument* mpDoc;
 
     sal_uInt16          nSlotId;
-    sal_uInt16          nSlotValue;
 
     VclPtr<Dialog>             pDialog;
 

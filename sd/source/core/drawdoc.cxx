@@ -172,7 +172,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 , mbAllocDocSh(false)
 , meDocType(eType)
 , mpCharClass(nullptr)
-, mpLocale(nullptr)
 , mbUseEmbedFonts(false)
 {
     mpDrawPageListWatcher.reset(new ImpDrawPageListWatcher(*this));
@@ -236,7 +235,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     LanguageType eRealLanguage = MsLangId::getRealLanguage( meLanguage );
     LanguageTag aLanguageTag( eRealLanguage);
-    mpLocale = new css::lang::Locale( aLanguageTag.getLocale());
     mpCharClass = new CharClass( aLanguageTag );
 
     // If the current application language is a language that uses right-to-left text...
@@ -419,9 +417,6 @@ SdDrawDocument::~SdDrawDocument()
 
     delete mpInternalOutliner;
     mpInternalOutliner = nullptr;
-
-    delete mpLocale;
-    mpLocale = nullptr;
 
     delete mpCharClass;
     mpCharClass = nullptr;

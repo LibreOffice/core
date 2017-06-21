@@ -173,8 +173,6 @@ SdOutliner::SdOutliner( SdDrawDocument* pDoc, OutlinerMode nMode )
       maCurrentPosition(),
       maSearchStartPosition(),
       maLastValidPosition(),
-      mbExpectingSelectionChangeEvent(false),
-      mbWholeDocumentProcessed(false),
       mbPrepareSpellingPending(true)
 {
     SetStyleSheetPool(static_cast<SfxStyleSheetPool*>( mpDrawDocument->GetStyleSheetPool() ));
@@ -271,7 +269,6 @@ void SdOutliner::PrepareSpelling()
     {
         mbStringFound = false;
 
-        mbWholeDocumentProcessed = false;
         // Supposed that we are not located at the very beginning/end of
         // the document then there may be a match in the document
         // prior/after the current position.
@@ -1175,8 +1172,6 @@ void SdOutliner::EndOfSearch()
 
 void SdOutliner::ShowEndOfSearchDialog()
 {
-    mbWholeDocumentProcessed = true;
-
     if (meMode == SEARCH)
     {
         if (!mbStringFound)
@@ -1420,7 +1415,6 @@ void SdOutliner::EnterEditMode (bool bGrabFocus)
         // object that is put into edit mode would have also to be selected.
         // Starting the text edit mode is not enough so we do it here by
         // hand.
-        mbExpectingSelectionChangeEvent = true;
         mpView->UnmarkAllObj (pPV);
         mpView->MarkObj (mpTextObj, pPV);
 

@@ -172,7 +172,6 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         sal_uInt32          mnExEmbed;
         SvMemoryStream*     mpExEmbed;
 
-        sal_uInt32          mnDrawings;         // number of Slides +  masterpages + notes +  handout
         sal_uInt32          mnPagesWritten;
         sal_uInt32          mnTxId;             // Identifier determined by the HOST (PP) ????
         sal_uInt32          mnDiaMode;          // 0 -> manual

@@ -93,7 +93,6 @@ PPTWriter::PPTWriter( tools::SvRef<SotStorage>& rSvStorage,
     mpVBA                   ( pVBA ),
     mnExEmbed               ( 0 ),
     mpExEmbed               ( new SvMemoryStream ),
-    mnDrawings              ( 0 ),
     mnPagesWritten          ( 0 ),
     mnTxId                  ( 0x7a2f64 ),
     mnDiaMode               ( 0 ),
@@ -106,9 +105,6 @@ void PPTWriter::exportPPTPre( const std::vector< css::beans::PropertyValue >& rM
 {
     if ( !mrStg.is() )
         return;
-
-    // master pages + slides and notes + notes master page
-    mnDrawings = mnMasterPages + ( mnPages << 1 ) + 1;
 
     if ( mXStatusIndicator.is() )
     {
