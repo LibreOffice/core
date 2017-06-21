@@ -136,6 +136,10 @@ NotebookbarTabControl::NotebookbarTabControl( Window* pParent )
 {
 }
 
+NotebookbarTabControl::~NotebookbarTabControl()
+{
+}
+
 void NotebookbarTabControl::StateChanged(StateChangedType nStateChange)
 {
     if( !m_bInitialized && SfxViewFrame::Current() )
@@ -146,7 +150,7 @@ void NotebookbarTabControl::StateChanged(StateChangedType nStateChange)
         SetToolBox( static_cast<ToolBox*>( pShortcuts.get() ) );
         SetIconClickHdl( LINK( this, NotebookbarTabControl, OpenNotebookbarPopupMenu ) );
 
-        m_pListener = new ChangedUIEventListener( this );
+        m_pListener.reset( new ChangedUIEventListener( this ) );
 
         m_bInitialized = true;
     }

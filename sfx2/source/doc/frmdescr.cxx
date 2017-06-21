@@ -43,9 +43,7 @@ SfxFrameDescriptor::SfxFrameDescriptor() :
     eScroll( ScrollingMode::Auto ),
     bHasBorder( true ),
     bHasBorderSet( false ),
-    bResizeHorizontal( true ),
     bResizeVertical( true ),
-    bReadOnly( false ),
     pImpl( new SfxFrameDescriptor_Impl )
 {
 }

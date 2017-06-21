@@ -1557,7 +1557,7 @@ void ScFiltersTest::testPassword_Impl(const OUString& aFileNameBase)
     SotClipboardFormatId nFormat = SotClipboardFormatId::STARCALC_8;
     std::shared_ptr<const SfxFilter> pFilter(new SfxFilter(
         aFilterName,
-        OUString(), getFileFormats()[0].nFormatType, nFormat, aFilterType, 0, OUString(),
+        OUString(), getFileFormats()[0].nFormatType, nFormat, aFilterType, OUString(),
         OUString(), "private:factory/scalc*" ));
     const_cast<SfxFilter*>(pFilter.get())->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 

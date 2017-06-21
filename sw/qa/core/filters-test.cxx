@@ -82,7 +82,7 @@ bool SwFiltersTest::filter(const OUString &rFilter, const OUString &rURL,
 {
     std::shared_ptr<const SfxFilter> pFilter(new SfxFilter(
         rFilter, OUString(), nFilterFlags,
-        nClipboardID, OUString(), 0, OUString(),
+        nClipboardID, OUString(), OUString(),
         rUserData, OUString()));
     const_cast<SfxFilter*>(pFilter.get())->SetVersion(nFilterVersion);
 

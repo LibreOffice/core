@@ -230,11 +230,8 @@ sal_uInt32 SfxViewShell_Impl::m_nLastViewShellId = 0;
 
 SfxViewShell_Impl::SfxViewShell_Impl(SfxViewShellFlags const nFlags)
 : aInterceptorContainer( aMutex )
-,   m_bControllerSet(false)
 ,   m_bHasPrintOptions(nFlags & SfxViewShellFlags::HAS_PRINTOPTIONS)
 ,   m_bIsShowView(!(nFlags & SfxViewShellFlags::NO_SHOW))
-,   m_bGotOwnership(false)
-,   m_bGotFrameOwnership(false)
 ,   m_nFamily(0xFFFF)   // undefined, default set by TemplateDialog
 ,   m_pController(nullptr)
 ,   mpIPClientList(nullptr)
@@ -1725,7 +1722,6 @@ void SfxViewShell::JumpToMark( const OUString& rMark )
 void SfxViewShell::SetController( SfxBaseController* pController )
 {
     pImpl->m_pController = pController;
-    pImpl->m_bControllerSet = true;
 
     // there should be no old listener, but if there is one, it should be disconnected
     if (  pImpl->xClipboardListener.is() )
@@ -1914,20 +1910,6 @@ bool SfxViewShell::TryContextMenuInterception( Menu& rMenu, const OUString& rMen
     }
 
     return true;
-}
-
-void SfxViewShell::TakeOwnership_Impl()
-{
-    // currently there is only one reason to take Ownership: a hidden frame is printed
-    // so the ViewShell will check this on EndPrint (->prnmon.cxx)
-    pImpl->m_bGotOwnership = true;
-}
-
-void SfxViewShell::TakeFrameOwnership_Impl()
-{
-    // currently there is only one reason to take Ownership: a hidden frame is printed
-    // so the ViewShell will check this on EndPrint (->prnmon.cxx)
-    pImpl->m_bGotFrameOwnership = true;
 }
 
 bool SfxViewShell::HandleNotifyEvent_Impl( NotifyEvent& rEvent )

@@ -1040,7 +1040,6 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
                                      nFlags                  ,
                                      nClipboardId            ,
                                      sType                   ,
-                                     (sal_uInt16)nDocumentIconId ,
                                      sMimeType               ,
                                      sUserData               ,
                                      sServiceName ));
@@ -1054,7 +1053,6 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
             pFilt->nFormatType  = nFlags;
             pFilt->lFormat      = nClipboardId;
             pFilt->aTypeName    = sType;
-            pFilt->nDocIcon     = (sal_uInt16)nDocumentIconId;
             pFilt->aMimeType    = sMimeType;
             pFilt->aUserData    = sUserData;
             pFilt->aServiceName = sServiceName;

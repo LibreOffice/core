@@ -355,7 +355,7 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::disposing( const lang:
 {
 }
 
-void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const lang::EventObject& aEvent, sal_Bool bDeliverOwnership )
+void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const lang::EventObject& /*aEvent*/, sal_Bool /*bDeliverOwnership*/ )
 {
     SolarMutexGuard aGuard;
     SfxViewShell* pShell = m_pController->GetViewShell_Impl();
@@ -364,16 +364,6 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const la
         bool bCanClose = pShell->PrepareClose( false );
         if ( !bCanClose )
         {
-            if ( bDeliverOwnership && ( !pShell->GetWindow() || !pShell->GetWindow()->IsReallyVisible() ) )
-            {
-                // ignore Ownership in case of visible frame (will be closed by user)
-                Reference < frame::XModel > xModel( aEvent.Source, uno::UNO_QUERY );
-                if ( xModel.is() )
-                    pShell->TakeOwnership_Impl();
-                else
-                    pShell->TakeFrameOwnership_Impl();
-            }
-
             throw util::CloseVetoException("Controller disagree ...",static_cast< ::cppu::OWeakObject*>(this));
         }
     }
@@ -978,7 +968,6 @@ void SAL_CALL SfxBaseController::dispose()
         if ( pFrame && pFrame->GetViewShell() == m_pData->m_pViewShell )
             pFrame->GetFrame().SetIsClosing_Impl();
         m_pData->m_pViewShell->DiscardClients_Impl();
-        m_pData->m_pViewShell->pImpl->m_bControllerSet = false;
 
         if ( pFrame )
         {

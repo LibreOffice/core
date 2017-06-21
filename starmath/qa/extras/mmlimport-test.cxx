@@ -59,7 +59,6 @@ private:
                                            SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::TEMPLATE,
                                            SotClipboardFormatId::STARCALC_8,
                                            "MathML 2.0",
-                                           0,
                                            OUString(),
                                            OUString(),
                                            "private:factory/smath*"));

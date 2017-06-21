@@ -190,7 +190,7 @@ void SwDocTest::testFileNameFields()
 
     std::shared_ptr<SfxFilter> pFilter(new SfxFilter(
         "Text",
-        OUString(), SfxFilterFlags::NONE, SotClipboardFormatId::NONE, OUString(), 0, OUString(),
+        OUString(), SfxFilterFlags::NONE, SotClipboardFormatId::NONE, OUString(), OUString(),
         "TEXT", OUString() ));
     aDstMed.SetFilter(pFilter);
 
