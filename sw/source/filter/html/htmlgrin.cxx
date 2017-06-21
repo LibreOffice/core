@@ -1141,8 +1141,8 @@ ANCHOR_SETEVENT:
         }
     }
 
-    // Sprungziele, die unseren ipmliziten Zielen entsprechen, schmeissen
-    // wir hier ganz rigoros raus.
+    // Jump targets, which match our implicit targets,
+    // here we throw out rigorously.
     if( !aName.isEmpty() )
     {
         OUString sDecoded( INetURLObject::decode( aName,
