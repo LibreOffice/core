@@ -99,16 +99,13 @@ SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
     , aTypeIds(50, 10)
     , m_pRecs(new SwLabRecs)
     , m_bLabel(bLabel)
-    , m_nFormatId(0)
     , m_nOptionsId(0)
     , m_nLabelId(0)
     , m_nCardsId(0)
-    , m_nBusinessId(0)
-    , m_nPrivateId(0)
 {
     WaitObject aWait( pParent );
 
-    m_nFormatId = AddTabPage("format", SwLabFormatPage::Create, nullptr);
+    AddTabPage("format", SwLabFormatPage::Create, nullptr);
     m_nOptionsId = AddTabPage("options", SwLabPrtPage::Create, nullptr);
     m_nCardsId = AddTabPage("cards", SwVisitingCardPage::Create, nullptr);
     m_sBusinessCardDlg = GetPageText(m_nCardsId);
@@ -126,8 +123,8 @@ SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
         RemoveTabPage("labels");
         RemoveTabPage("cards");
         m_nLabelId = AddTabPage("medium", SwLabPage::Create, nullptr);
-        m_nBusinessId = AddTabPage("business", SwBusinessDataPage::Create, nullptr );
-        m_nPrivateId = AddTabPage("private", SwPrivateDataPage::Create, nullptr);
+        AddTabPage("business", SwBusinessDataPage::Create, nullptr );
+        AddTabPage("private", SwPrivateDataPage::Create, nullptr);
         SetText(m_sBusinessCardDlg);
     }
     // Read user label from writer.cfg

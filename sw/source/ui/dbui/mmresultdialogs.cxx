@@ -822,7 +822,6 @@ IMPL_LINK(SwMMResultPrintDialog, PrintHdl_Impl, Button*, pButton, void)
         if(nEnd > documentCount)
             nEnd = documentCount;
     }
-    xConfigItem->SetPrintRange((sal_uInt16)nBegin, (sal_uInt16)nEnd);
 
     OUString sPages(OUString::number(documentStartPageNumber(xConfigItem.get(), nBegin)));
     sPages += " - ";

@@ -54,15 +54,11 @@ class SW_DLLPUBLIC SwMailMergeConfigItem
     std::unique_ptr<SwMailMergeConfigItem_Impl> m_pImpl;
     //session information - not stored in configuration
     bool m_bAddressInserted;
-    bool m_bMergeDone;
     bool m_bGreetingInserted;
     sal_Int32 m_nGreetingMoves;
     OUString m_rAddressBlockFrame;
     std::set<sal_Int32> m_aExcludedRecords;
     css::uno::Reference<css::view::XSelectionChangeListener> m_xDBChangedListener;
-
-    sal_uInt16 m_nStartPrint;
-    sal_uInt16 m_nEndPrint;
 
     OUString m_sSelectedPrinter;
 
@@ -226,9 +222,6 @@ public:
     void MoveGreeting( sal_Int32 nMove) { m_nGreetingMoves += nMove;}
     sal_Int32 GetGreetingMoves() const { return m_nGreetingMoves;}
 
-    void SetMergeDone(  )
-        { m_bMergeDone = true; }
-
     // new source document - reset some flags
     void DocumentReloaded();
 
@@ -239,9 +232,6 @@ public:
     //returns the page and database cursor information of each merged document
     SwDocMergeInfo& GetDocumentMergeInfo(sal_uInt32 nDocument);
     sal_uInt32 GetMergedDocumentCount();
-
-    void SetPrintRange( sal_uInt16 nStartDocument, sal_uInt16 nEndDocument)
-        { m_nStartPrint = nStartDocument; m_nEndPrint = nEndDocument; }
 
     const OUString&  GetSelectedPrinter() const
         { return m_sSelectedPrinter; }

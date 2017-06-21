@@ -55,7 +55,6 @@ friend class InputEdit;
     OUString        aAktTableName, sOldFormula;
 
     bool            bFirst : 1;  // initialisations at first call
-    bool            bActive : 1; // for hide/show when switching documents
     bool            bIsTable : 1;
     bool            bDelSel : 1;
     bool            m_bDoesUndo : 1;

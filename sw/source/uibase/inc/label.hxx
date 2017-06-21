@@ -42,12 +42,9 @@ class SwLabDlg : public SfxTabDialog
     OUString   aLstGroup;
     OUString   m_sBusinessCardDlg;
     bool       m_bLabel;
-    sal_uInt16 m_nFormatId;
     sal_uInt16 m_nOptionsId;
     sal_uInt16 m_nLabelId;
     sal_uInt16 m_nCardsId;
-    sal_uInt16 m_nBusinessId;
-    sal_uInt16 m_nPrivateId;
     void          ReplaceGroup_( const OUString &rMake );
 
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
