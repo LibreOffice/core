@@ -2105,9 +2105,7 @@ void SwPostItMgr::SetActiveSidebarWin( SwAnnotationWin* p)
         if (mpActivePostIt)
         {
             mpActivePostIt->GotoPos();
-            mpView->SetAnnotationMode(true);
             mpView->AttrChangedNotify(nullptr);
-            mpView->SetAnnotationMode(false);
             mpActivePostIt->ActivatePostIt();
         }
     }

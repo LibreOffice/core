@@ -248,8 +248,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                     m_bInDtor : 1, //detect destructor to prevent creating of sub shells while closing
                     m_bOldShellWasPagePreview : 1,
                     m_bIsPreviewDoubleClick : 1, // #i114045#
-                    m_bMakeSelectionVisible : 1, // transport the bookmark selection
-                    m_bAnnotationMode; ///< The real cursor position is inside an annotation.
+                    m_bMakeSelectionVisible : 1; // transport the bookmark selection
 
     /// LibreOfficeKit has to force the page size for PgUp/PgDown
     /// functionality based on the user's view, instead of using the m_aVisArea.
@@ -627,8 +626,6 @@ public:
     void SelectShellForDrop();
 
     void UpdateDocStats();
-    /// Where is the real cursor: in the annotation or in the main document?
-    void SetAnnotationMode(bool bMode);
 
     // methods for printing
     SAL_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( bool bCreate = false ) override;

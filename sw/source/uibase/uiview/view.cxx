@@ -708,7 +708,6 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_bInDtor(false),
     m_bOldShellWasPagePreview(false),
     m_bIsPreviewDoubleClick(false),
-    m_bAnnotationMode(false),
     m_nLOKPageUpDownOffset(0)
 {
     static bool bRequestDoubleBuffering = getenv("VCL_DOUBLEBUFFERING_ENABLE");

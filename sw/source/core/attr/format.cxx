@@ -49,7 +49,7 @@ SwFormat::SwFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
 {
     m_bAutoUpdateFormat = false; // LAYER_IMPL
     m_bAutoFormat = true;
-    m_bWritten = m_bFormatInDTOR = m_bHidden = false;
+    m_bFormatInDTOR = m_bHidden = false;
 
     if( pDrvdFrame )
         m_aSet.SetParent( &pDrvdFrame->m_aSet );
@@ -68,7 +68,7 @@ SwFormat::SwFormat( SwAttrPool& rPool, const OUString& rFormatNm,
 {
     m_bAutoUpdateFormat = false; // LAYER_IMPL
     m_bAutoFormat = true;
-    m_bWritten = m_bFormatInDTOR = m_bHidden = false;
+    m_bFormatInDTOR = m_bHidden = false;
 
     if( pDrvdFrame )
         m_aSet.SetParent( &pDrvdFrame->m_aSet );
@@ -83,7 +83,7 @@ SwFormat::SwFormat( const SwFormat& rFormat )
     m_nPoolHelpId( rFormat.GetPoolHelpId() ),
     m_nPoolHlpFileId( rFormat.GetPoolHlpFileId() )
 {
-    m_bWritten = m_bFormatInDTOR = false; // LAYER_IMPL
+    m_bFormatInDTOR = false; // LAYER_IMPL
     m_bAutoFormat = rFormat.m_bAutoFormat;
     m_bHidden = rFormat.m_bHidden;
     m_bAutoUpdateFormat = rFormat.m_bAutoUpdateFormat;
@@ -305,8 +305,6 @@ void SwFormat::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValu
         break;
     case RES_RESET_FMTWRITTEN:
         {
-            m_bWritten = false;
-
             // mba: here we don't use the additional stuff from NotifyClients().
             // should we?!
             // mba: move the code that ignores this event to the clients

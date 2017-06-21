@@ -1251,11 +1251,6 @@ void SwView::UpdateDocStats()
     rBnd.Update( FN_STAT_WORDCOUNT );
 }
 
-void SwView::SetAnnotationMode(bool bMode)
-{
-    m_bAnnotationMode = bMode;
-}
-
 /// get status of the status line
 void SwView::StateStatusLine(SfxItemSet &rSet)
 {

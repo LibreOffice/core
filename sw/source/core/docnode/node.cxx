@@ -283,7 +283,6 @@ long SwNode::s_nSerial = 0;
 SwNode::SwNode( const SwNodeIndex &rWhere, const SwNodeType nNdType )
     : m_nNodeType( nNdType )
     , m_nAFormatNumLvl( 0 )
-    , m_bSetNumLSpace( false )
     , m_bIgnoreDontExpand( false)
 #ifdef DBG_UTIL
     , m_nSerial( s_nSerial++)
@@ -316,7 +315,6 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const SwNodeType nNdType )
 SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const SwNodeType nNdType )
     : m_nNodeType( nNdType )
     , m_nAFormatNumLvl( 0 )
-    , m_bSetNumLSpace( false )
     , m_bIgnoreDontExpand( false)
 #ifdef DBG_UTIL
     , m_nSerial( s_nSerial++)
@@ -1387,7 +1385,6 @@ bool SwContentNode::GetInfo( SfxPoolItem& rInfo ) const
     case RES_AUTOFMT_DOCNODE:
         if( &GetNodes() == static_cast<SwAutoFormatGetDocNode&>(rInfo).pNodes )
         {
-            static_cast<SwAutoFormatGetDocNode&>(rInfo).pContentNode = this;
             return false;
         }
         break;

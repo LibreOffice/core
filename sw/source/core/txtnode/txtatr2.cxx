@@ -77,7 +77,6 @@ bool SwTextCharFormat::GetInfo( SfxPoolItem& rInfo ) const
         return true;
     }
 
-    static_cast<SwAutoFormatGetDocNode&>(rInfo).pContentNode = m_pTextNode;
     return false;
 }
 
@@ -191,7 +190,6 @@ bool SwTextINetFormat::GetInfo( SfxPoolItem& rInfo ) const
         return true;
     }
 
-    static_cast<SwAutoFormatGetDocNode&>(rInfo).pContentNode = m_pTextNode;
     return false;
 }
 
@@ -240,7 +238,6 @@ bool SwTextRuby::GetInfo( SfxPoolItem& rInfo ) const
         return true;
     }
 
-    static_cast<SwAutoFormatGetDocNode&>(rInfo).pContentNode = m_pTextNode;
     return false;
 }
 
