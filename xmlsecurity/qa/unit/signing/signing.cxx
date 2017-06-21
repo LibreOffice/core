@@ -56,6 +56,8 @@ class SigningTest : public test::BootstrapFixture, public unotest::MacrosTest, p
 {
     uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<lang::XComponent> mxComponent;
+    uno::Reference<xml::crypto::XSEInitializer> mxSEInitializer;
+    uno::Reference<xml::crypto::XXMLSecurityContext> mxSecurityContext;
 
 public:
     SigningTest();
@@ -135,6 +137,8 @@ void SigningTest::setUp()
 
     mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
+    mxSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
+    mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
 
 #ifndef _WIN32
     // Set up cert8.db in workdir/CppunitTest/
@@ -214,7 +218,7 @@ void SigningTest::testDescription()
         return;
     OUString aDescription("SigningTest::testDescription");
     sal_Int32 nSecurityId;
-    aManager.add(xCertificate, aDescription, nSecurityId, false);
+    aManager.add(xCertificate, mxSecurityContext, aDescription, nSecurityId, false);
 
     // Read back the signature and make sure that the description survives the roundtrip.
     aManager.read(/*bUseTempStream=*/true);
@@ -248,7 +252,7 @@ void SigningTest::testOOXMLDescription()
         return;
     OUString aDescription("SigningTest::testDescription");
     sal_Int32 nSecurityId;
-    aManager.add(xCertificate, aDescription, nSecurityId, false);
+    aManager.add(xCertificate, mxSecurityContext, aDescription, nSecurityId, false);
 
     // Read back the signature and make sure that the description survives the roundtrip.
     aManager.read(/*bUseTempStream=*/true);
@@ -281,7 +285,7 @@ void SigningTest::testOOXMLAppend()
     if (!xCertificate.is())
         return;
     sal_Int32 nSecurityId;
-    aManager.add(xCertificate, OUString(), nSecurityId, false);
+    aManager.add(xCertificate, mxSecurityContext, OUString(), nSecurityId, false);
 
     // Read back the signatures and make sure that we have the expected amount.
     aManager.read(/*bUseTempStream=*/true);
@@ -586,7 +590,7 @@ void SigningTest::testXAdES()
     if (!xCertificate.is())
         return;
     sal_Int32 nSecurityId;
-    aManager.add(xCertificate, /*rDescription=*/OUString(), nSecurityId, /*bAdESCompliant=*/true);
+    aManager.add(xCertificate, mxSecurityContext, /*rDescription=*/OUString(), nSecurityId, /*bAdESCompliant=*/true);
 
     // Write to storage.
     aManager.read(/*bUseTempStream=*/true);
