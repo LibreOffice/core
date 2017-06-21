@@ -62,8 +62,7 @@ using namespace ::com::sun::star::drawing::framework;
 namespace sd {
 
 ViewShell::Implementation::Implementation (ViewShell& rViewShell)
-    : mbIsShowingUIControls(false),
-      mbIsMainViewShell(false),
+    : mbIsMainViewShell(false),
       mbIsInitialized(false),
       mbArrangeActive(false),
       mpSubShellFactory(),

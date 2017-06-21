@@ -118,7 +118,6 @@ SlideSorter::SlideSorter (
       mpHorizontalScrollBar(pHorizontalScrollBar),
       mpVerticalScrollBar(pVerticalScrollBar),
       mpScrollBarBox(pScrollBarBox),
-      mbLayoutPending(true),
       mpProperties(new controller::Properties()),
       mpTheme(new view::Theme(mpProperties))
 {
@@ -139,7 +138,6 @@ SlideSorter::SlideSorter (
       mpHorizontalScrollBar(VclPtr<ScrollBar>::Create(&rParentWindow,WinBits(WB_HSCROLL | WB_DRAG))),
       mpVerticalScrollBar(VclPtr<ScrollBar>::Create(&rParentWindow,WinBits(WB_VSCROLL | WB_DRAG))),
       mpScrollBarBox(VclPtr<ScrollBarBox>::Create(&rParentWindow)),
-      mbLayoutPending(true),
       mpProperties(new controller::Properties()),
       mpTheme(new view::Theme(mpProperties))
 {
@@ -359,8 +357,6 @@ void SlideSorter::ArrangeGUIElements (
         mpSlideSorterController->Resize (::tools::Rectangle(aOrigin, rSize));
 
         GetContentWindow()->EnablePaint (true);
-
-        mbLayoutPending = false;
     }
 }
 

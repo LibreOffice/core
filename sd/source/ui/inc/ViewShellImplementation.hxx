@@ -36,7 +36,6 @@ namespace sd {
 class ViewShell::Implementation
 {
 public:
-    bool mbIsShowingUIControls;
     bool mbIsMainViewShell;
     /// Set to true when the ViewShell::Init() method has been called.
     bool mbIsInitialized;
