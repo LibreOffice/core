@@ -366,7 +366,7 @@ ScVbaInterior::getPatternColorIndex()
     sal_Int32 nColor = 0;
     XLRGBToOORGB( getPatternColor() ) >>= nColor;
 
-    return GetIndexColor( nColor );
+    return uno::makeAny( GetColorIndex( nColor ) );
 }
 void SAL_CALL
 ScVbaInterior::setPatternColorIndex( const uno::Any& _patterncolorindex )
