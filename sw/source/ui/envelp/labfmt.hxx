@@ -37,8 +37,6 @@ class SwLabPreview : public vcl::Window
     OUString m_aUpperStr;
     OUString m_aColsStr;
     OUString m_aRowsStr;
-    OUString m_aPWidthStr;
-    OUString m_aPHeightStr;
 
     long m_lHDistWidth;
     long m_lVDistWidth;
