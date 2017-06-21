@@ -178,10 +178,10 @@ test -f $DESTDIR/gid_Module_Root_Brand && echo "$PREFIXDIR/bin/soffice" >>$DESTD
 
 # create bash completion
 mkdir -p $DESTDIR/usr/share/bash-completion/completions
-"${SRCDIR?}"/bin/generate-bash-completion bin/bash-completion.in $DESTDIR/usr/share/bash-completion/completions/$INSTALLDIRNAME.sh
+"${SRCDIR?}"/bin/generate-bash-completion.py bin/bash-completion.in $DESTDIR/usr/share/bash-completion/completions/$INSTALLDIRNAME.sh
 test -f $DESTDIR/gid_Module_Root_Brand && echo "/usr/share/bash-completion/completions/$INSTALLDIRNAME.sh" >>$DESTDIR/gid_Module_Root_Brand
 if test "$WITH_COMPAT_OOWRAPPERS" = "TRUE" ; then
-    "${SRCDIR?}"/bin/generate-bash-completion --compat-oowrappers bin/bash-completion.in $DESTDIR/usr/share/bash-completion/completions/ooffice.sh
+    "${SRCDIR?}"/bin/generate-bash-completion.py --compat-oowrappers bin/bash-completion.in $DESTDIR/usr/share/bash-completion/completions/ooffice.sh
     test -f $DESTDIR/gid_Module_Root_Brand && echo "/usr/share/bash-completion/completions/ooffice.sh" >>$DESTDIR/gid_Module_Root_Brand
 fi
 
