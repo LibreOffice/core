@@ -754,8 +754,8 @@ namespace sw
                                          nIndex - 1);
                     sw::mark::IFieldmark *const pFieldMark(
                         rPos.GetDoc()->getIDocumentMarkAccess()->getFieldmarkFor(end));
-                    assert(pFieldMark);
-                    if (pFieldMark->GetMarkPos().nNode.GetIndex() == (*aResult)->m_aMkPos.m_nNode.GetIndex()+1
+                    SAL_WARN_IF(!pFieldMark, "sw.ww8", "expected a field mark");
+                    if (pFieldMark && pFieldMark->GetMarkPos().nNode.GetIndex() == (*aResult)->m_aMkPos.m_nNode.GetIndex()+1
                         && pFieldMark->GetMarkPos().nContent.GetIndex() < (*aResult)->m_aMkPos.m_nContent)
                     {
                         (*aResult)->SetEndPos(end);
