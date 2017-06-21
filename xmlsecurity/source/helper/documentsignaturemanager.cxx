@@ -66,7 +66,7 @@ bool DocumentSignatureManager::init()
 
     mxSEInitializer = xml::crypto::SEInitializer::create(mxContext);
 #if !defined(MACOSX) && !defined(WNT)
-    mxGpgSEInitializer.set(new SEInitializerGpg(mxContext));
+    mxGpgSEInitializer.set(new SEInitializerGpg());
 #endif
 
     if (mxSEInitializer.is())

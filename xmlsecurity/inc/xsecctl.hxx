@@ -292,6 +292,7 @@ private:
      * For signature verification
      */
     void addSignature();
+    void switchGpgSignature();
     void addReference(
         const OUString& ouUri,
         sal_Int32 nDigestID );
