@@ -124,12 +124,10 @@ public:
     css::uno::Reference< css::frame::XDispatchProvider >  xProv;
     SfxWorkWindow*          pWorkWin;
     SfxBindings*            pSubBindings;
-    SfxBindings*            pSuperBindings;
     std::vector<SfxStateCache *> pCaches;   // One chache for each binding
     std::size_t             nCachedFunc1;   // index for the last one called
     std::size_t             nCachedFunc2;   // index for the second last called
     std::size_t             nMsgPos;        // Message-Position relative the one to be updated
-    SfxPopupAction          ePopupAction;   // Checked in DeleteFloatinWindow()
     bool                    bContextChanged;
     bool                    bMsgDirty;      // Has a MessageServer been invalidated?
     bool                    bAllMsgDirty;   //  Has a MessageServer been invalidated?
@@ -139,7 +137,6 @@ public:
     bool                    bInUpdate;      // for Assertions
     bool                    bInNextJob;     // for Assertions
     bool                    bFirstRound;    // First round in Update
-    sal_uInt16              nFirstShell;    // Shell, the first round is preferred
     sal_uInt16              nOwnRegLevel;   // Counts the real Locks, except those of the Super Bindings
     InvalidateSlotMap       m_aInvalidateSlots; // store slots which are invalidated while in update
 };
@@ -155,7 +152,6 @@ SfxBindings::SfxBindings()
     pImpl->bContextChanged = false;
     pImpl->bMsgDirty = true;
     pImpl->bAllDirty = true;
-    pImpl->ePopupAction = SfxPopupAction::DELETE;
     pImpl->nCachedFunc1 = 0;
     pImpl->nCachedFunc2 = 0;
     pImpl->bCtrlReleased = false;
@@ -163,7 +159,6 @@ SfxBindings::SfxBindings()
     pImpl->bInNextJob = false;
     pImpl->bInUpdate = false;
     pImpl->pSubBindings = nullptr;
-    pImpl->pSuperBindings = nullptr;
     pImpl->pWorkWin = nullptr;
     pImpl->nOwnRegLevel = nRegLevel;
 
@@ -256,35 +251,10 @@ void SfxBindings::DeleteControllers_Impl()
 
 void SfxBindings::HidePopups( bool bHide )
 {
-    // Hide SfxPopupWindows
-    HidePopupCtrls_Impl( bHide );
-    SfxBindings *pSub = pImpl->pSubBindings;
-    while ( pSub )
-    {
-        pImpl->pSubBindings->HidePopupCtrls_Impl( bHide );
-        pSub = pSub->pImpl->pSubBindings;
-    }
-
     // Hide SfxChildWindows
     DBG_ASSERT( pDispatcher, "HidePopups not allowed without dispatcher" );
     if ( pImpl->pWorkWin )
         pImpl->pWorkWin->HidePopups_Impl( bHide, true );
-}
-
-void SfxBindings::HidePopupCtrls_Impl( bool bHide )
-{
-    if ( bHide )
-    {
-        // Hide SfxPopupWindows
-        pImpl->ePopupAction = SfxPopupAction::HIDE;
-    }
-    else
-    {
-        // Show SfxPopupWindows
-        pImpl->ePopupAction = SfxPopupAction::SHOW;
-    }
-
-    pImpl->ePopupAction = SfxPopupAction::DELETE;
 }
 
 void SfxBindings::Update_Impl(SfxStateCache& rCache /*The up to date SfxStatusCache*/)
@@ -685,7 +655,6 @@ void SfxBindings::InvalidateShell
             pImpl->aAutoTimer.SetTimeout(TIMEOUT_FIRST);
             pImpl->aAutoTimer.Start();
             pImpl->bFirstRound = true;
-            pImpl->nFirstShell = nLevel;
         }
     }
 }
@@ -1680,7 +1649,6 @@ void SfxBindings::SetSubBindings_Impl( SfxBindings *pSub )
     if ( pImpl->pSubBindings )
     {
         pImpl->pSubBindings->SetDispatchProvider_Impl( css::uno::Reference< css::frame::XDispatchProvider > () );
-        pImpl->pSubBindings->pImpl->pSuperBindings = nullptr;
     }
 
     pImpl->pSubBindings = pSub;
@@ -1688,7 +1656,6 @@ void SfxBindings::SetSubBindings_Impl( SfxBindings *pSub )
     if ( pSub )
     {
         pImpl->pSubBindings->SetDispatchProvider_Impl( pImpl->xProv );
-        pSub->pImpl->pSuperBindings = this;
     }
 }
 

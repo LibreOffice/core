@@ -176,7 +176,6 @@ struct SfxToolBoxControl_Impl
 {
     VclPtr<ToolBox>         pBox;
     bool                    bShowString;
-    SfxTbxCtrlFactory*      pFact;
     sal_uInt16              nTbxId;
     sal_uInt16              nSlotId;
     VclPtr<SfxPopupWindow>  mpFloatingWindow;
@@ -208,7 +207,6 @@ SfxToolBoxControl::SfxToolBoxControl(
 {
     pImpl->pBox = &rBox;
     pImpl->bShowString = bShowStringItems;
-    pImpl->pFact = nullptr;
     pImpl->nTbxId = nID;
     pImpl->nSlotId = nSlotID;
     pImpl->mpFloatingWindow = nullptr;
@@ -300,7 +298,6 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uIn
                 if( nFactory < nCount )
                 {
                     pCtrl = rFactories[nFactory].pCtor( nSlotId, nTbxId, *pBox );
-                    pCtrl->pImpl->pFact = &rFactories[nFactory];
                     return pCtrl;
                 }
             }
@@ -326,7 +323,6 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uIn
         if( nFactory < nCount )
         {
             pCtrl = rFactories[nFactory].pCtor( nSlotId, nTbxId, *pBox );
-            pCtrl->pImpl->pFact = &rFactories[nFactory];
             return pCtrl;
         }
     }

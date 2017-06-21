@@ -35,7 +35,6 @@ struct SfxDock_Impl
     VclPtr<SfxDockingWindow> pWin;      // SplitWindow has this window
     bool              bNewLine;
     bool              bHide;     // SplitWindow had this window
-    long              nSize;
 };
 
 class SfxSplitWindow : public SplitWindow
@@ -47,7 +46,6 @@ private:
     SfxWorkWindow*      pWorkWin;
     std::vector<std::unique_ptr<SfxDock_Impl> >
                         maDockArr;
-    bool                bLocked;
     bool                bPinned;
     VclPtr<SfxEmptySplitWin_Impl>  pEmptyWin;
     VclPtr<SfxDockingWindow>       pActive;
@@ -100,7 +98,6 @@ public:
 
     void                Lock( bool bLock=true )
                         {
-                            bLocked = bLock;
                             SetUpdateMode( !bLock );
                         }
     using Window::IsLocked;

@@ -2622,8 +2622,6 @@ bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString
     }
     rItemSet.ClearItem( SID_COPY_STREAM_IF_POSSIBLE );
 
-    pImpl->bPasswd = SfxItemState::SET == rItemSet.GetItemState(SID_PASSWORD);
-
     SfxMedium *pActMed = GetMedium();
     const INetURLObject aActName(pActMed->GetName());
 

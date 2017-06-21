@@ -94,13 +94,12 @@ struct SfxChild_Impl
     SfxChildAlignment               eAlign;
     SfxChildVisibility              nVisible;
     bool                            bResize;
-    bool                            bCanGetFocus;
     bool                            bSetFocus;
 
     SfxChild_Impl( vcl::Window& rChild, const Size& rSize,
                    SfxChildAlignment eAlignment, bool bIsVisible ):
         pWin(&rChild), aSize(rSize), eAlign(eAlignment), bResize(false),
-        bCanGetFocus( false ), bSetFocus( false )
+        bSetFocus( false )
     {
         nVisible = bIsVisible ? SfxChildVisibility::VISIBLE : SfxChildVisibility::NOT_VISIBLE;
     }
@@ -253,7 +252,7 @@ public:
     // Methods for all Child windows
     void                    DataChanged_Impl();
     void                    ReleaseChild_Impl( vcl::Window& rWindow );
-    SfxChild_Impl*          RegisterChild_Impl( vcl::Window& rWindow, SfxChildAlignment eAlign, bool bCanGetFocus );
+    SfxChild_Impl*          RegisterChild_Impl( vcl::Window& rWindow, SfxChildAlignment eAlign );
     void                    ShowChildren_Impl();
     void                    HideChildren_Impl();
     bool                    PrepareClose_Impl();

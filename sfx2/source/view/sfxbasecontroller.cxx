@@ -195,15 +195,11 @@ friend class SfxBaseController;
     Reference < XController > xOwner;
     Reference < task::XStatusIndicator > xProgress;
     SfxWorkWindow*          pWorkWindow;
-    sal_Int32               _nRange;
-    sal_Int32               _nValue;
     long                    _nStartTime;
 public:
                             SfxStatusIndicator(SfxBaseController* pController, SfxWorkWindow* pWork)
                                 : xOwner( pController )
                                 , pWorkWindow( pWork )
-                                , _nRange(0)
-                                , _nValue(0)
                                 , _nStartTime(0)
                             {
                                 ++m_refCount;
@@ -228,9 +224,6 @@ void SAL_CALL SfxStatusIndicator::start(const OUString& aText, sal_Int32 nRange)
     SolarMutexGuard aGuard;
     if ( xOwner.is() )
     {
-        _nRange = nRange;
-        _nValue = 0;
-
         if ( !xProgress.is() )
             xProgress = pWorkWindow->GetStatusIndicator();
 
@@ -277,8 +270,6 @@ void SAL_CALL SfxStatusIndicator::setValue( sal_Int32 nValue )
     SolarMutexGuard aGuard;
     if ( xOwner.is() )
     {
-        _nValue = nValue;
-
         if ( !xProgress.is() )
             xProgress = pWorkWindow->GetStatusIndicator();
 

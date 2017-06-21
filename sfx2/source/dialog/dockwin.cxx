@@ -390,17 +390,16 @@ friend class SfxDockingWindow;
 
     // The following members are only valid in the time from startDocking to
     // EndDocking:
-    bool                bEndDocked;
     Size                aSplitSize;
     long                nHorizontalSize;
     long                nVerticalSize;
-    sal_uInt16              nLine;
-    sal_uInt16              nPos;
-    sal_uInt16              nDockLine;
-    sal_uInt16              nDockPos;
+    sal_uInt16          nLine;
+    sal_uInt16          nPos;
+    sal_uInt16          nDockLine;
+    sal_uInt16          nDockPos;
     bool                bNewLine;
     bool                bDockingPrevented;
-    OString aWinState;
+    OString             aWinState;
 
     explicit            SfxDockingWindow_Impl(SfxDockingWindow *pBase);
     SfxChildAlignment   GetLastAlignment() const
@@ -419,7 +418,6 @@ SfxDockingWindow_Impl::SfxDockingWindow_Impl(SfxDockingWindow* pBase)
     ,bConstructed(false)
     ,pSplitWin(nullptr)
     ,bSplitable(true)
-    ,bEndDocked(false)
     ,nHorizontalSize(0)
     ,nVerticalSize(0)
     ,nLine(0)
@@ -801,9 +799,7 @@ void SfxDockingWindow::EndDocking( const tools::Rectangle& rRect, bool bFloatMod
     }
     else
     {
-        pImpl->bEndDocked = true;
         DockingWindow::EndDocking(rRect, bFloatMode);
-        pImpl->bEndDocked = false;
     }
 
     SetAlignment( IsFloatingMode() ? SfxChildAlignment::NOALIGNMENT : pImpl->GetDockAlignment() );

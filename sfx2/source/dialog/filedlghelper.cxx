@@ -878,7 +878,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
 
     mpPreferredParentWindow = _pPreferredParentWindow;
     mpAntiImpl              = _pAntiImpl;
-    mnError                 = ERRCODE_NONE;
     mbHasAutoExt            = false;
     mbHasPassword           = false;
     m_bHaveFilterOptions    = false;
@@ -919,7 +918,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
 
     if ( ! mxFileDlg.is() || ! xNotifier.is() )
     {
-        mnError = ERRCODE_ABORT;
         return;
     }
 

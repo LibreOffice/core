@@ -183,7 +183,6 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
 :   SplitWindow ( pParent, WB_BORDER | WB_SIZEABLE | WB_3DLOOK | WB_HIDE ),
     eAlign(eAl),
     pWorkWin(pW),
-    bLocked(false),
     bPinned(true),
     pEmptyWin(nullptr),
     pActive(nullptr)
@@ -660,8 +659,6 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
         nWinSize = rSize.Height();
     }
 
-    pDock->nSize = nWinSize;
-
     DeactivateUpdateMode* pDeactivateUpdateMode = new DeactivateUpdateMode( *this );
 
     if ( bNewLine || nLine == GetItemCount() )
@@ -688,7 +685,6 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
     // "pixel" actually only makes sense if also items with percentage or
     // relative sizes are present.
     nItemBits |= SplitWindowItemFlags::PercentSize;
-    bLocked = true;
     sal_uInt16 nSet = GetItemId( nLine );
     InsertItem( pDockWin->GetType(), pDockWin, nWinSize, nPos, nSet, nItemBits );
 
@@ -706,7 +702,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
             SetPinned_Impl( false );
             pEmptyWin->Actualize();
             SAL_INFO("sfx", "SfxSplitWindow::InsertWindow_Impl - registering empty Splitwindow" );
-            pWorkWin->RegisterChild_Impl( *GetSplitWindow(), eAlign, true )->nVisible = SfxChildVisibility::VISIBLE;
+            pWorkWin->RegisterChild_Impl( *GetSplitWindow(), eAlign )->nVisible = SfxChildVisibility::VISIBLE;
             pWorkWin->ArrangeChildren_Impl();
             if ( bFadeIn )
                 FadeIn();
@@ -724,7 +720,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
             {
                 SAL_INFO("sfx", "SfxSplitWindow::InsertWindow_Impl - registering real Splitwindow" );
             }
-            pWorkWin->RegisterChild_Impl( *GetSplitWindow(), eAlign, true )->nVisible = SfxChildVisibility::VISIBLE;
+            pWorkWin->RegisterChild_Impl( *GetSplitWindow(), eAlign )->nVisible = SfxChildVisibility::VISIBLE;
             pWorkWin->ArrangeChildren_Impl();
             if ( bFadeIn )
                 FadeIn();
@@ -734,7 +730,6 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
     }
 
     delete pDeactivateUpdateMode;
-    bLocked = false;
 
     // workaround insuffiency of <SplitWindow> regarding dock layouting:
     // apply FIXED item size as 'original' item size to improve layouting of undock-dock-cycle of a window
@@ -811,16 +806,12 @@ void SfxSplitWindow::RemoveWindow( SfxDockingWindow* pDockWin, bool bHide )
 
     // Remove Windows, and if it was the last of the line, then also remove
     // the line (line = itemset)
-    DeactivateUpdateMode* pDeactivateUpdateMode = new DeactivateUpdateMode( *this );
-    bLocked = true;
+    std::unique_ptr<DeactivateUpdateMode> pDeactivateUpdateMode( new DeactivateUpdateMode( *this ) );
 
     RemoveItem( pDockWin->GetType() );
 
     if ( nSet && !GetItemCount( nSet ) )
         RemoveItem( nSet );
-
-    delete pDeactivateUpdateMode;
-    bLocked = false;
 };
 
 
@@ -1047,7 +1038,7 @@ void SfxSplitWindow::SetPinned_Impl( bool bOn )
             Hide();
             pEmptyWin->Actualize();
             SAL_INFO("sfx", "SfxSplitWindow::SetPinned_Impl - registering empty Splitwindow" );
-            pWorkWin->RegisterChild_Impl( *pEmptyWin, eAlign, true )->nVisible = SfxChildVisibility::VISIBLE;
+            pWorkWin->RegisterChild_Impl( *pEmptyWin, eAlign )->nVisible = SfxChildVisibility::VISIBLE;
         }
 
         Point aPos( GetPosPixel() );
@@ -1072,7 +1063,7 @@ void SfxSplitWindow::SetPinned_Impl( bool bOn )
             pWorkWin->ReleaseChild_Impl( *pEmptyWin );
             pEmptyWin->Hide();
             SAL_INFO("sfx", "SfxSplitWindow::SetPinned_Impl - registering real Splitwindow" );
-            pWorkWin->RegisterChild_Impl( *this, eAlign, true )->nVisible = SfxChildVisibility::VISIBLE;
+            pWorkWin->RegisterChild_Impl( *this, eAlign )->nVisible = SfxChildVisibility::VISIBLE;
         }
     }
 }
@@ -1101,7 +1092,7 @@ void SfxSplitWindow::SetFadeIn_Impl( bool bOn )
             pWorkWin->ReleaseChild_Impl( *pEmptyWin );
             pEmptyWin->Hide();
             SAL_INFO("sfx", "SfxSplitWindow::SetFadeIn_Impl - registering real Splitwindow" );
-            pWorkWin->RegisterChild_Impl( *this, eAlign, true )->nVisible = SfxChildVisibility::VISIBLE;
+            pWorkWin->RegisterChild_Impl( *this, eAlign )->nVisible = SfxChildVisibility::VISIBLE;
             pWorkWin->ArrangeChildren_Impl();
             pWorkWin->ShowChildren_Impl();
         }
@@ -1118,7 +1109,7 @@ void SfxSplitWindow::SetFadeIn_Impl( bool bOn )
             Hide();
             pEmptyWin->Actualize();
             SAL_INFO("sfx", "SfxSplitWindow::SetFadeIn_Impl - registering empty Splitwindow" );
-            pWorkWin->RegisterChild_Impl( *pEmptyWin, eAlign, true )->nVisible = SfxChildVisibility::VISIBLE;
+            pWorkWin->RegisterChild_Impl( *pEmptyWin, eAlign )->nVisible = SfxChildVisibility::VISIBLE;
             pWorkWin->ArrangeChildren_Impl();
             pWorkWin->ShowChildren_Impl();
             pWorkWin->ArrangeAutoHideWindows( this );
