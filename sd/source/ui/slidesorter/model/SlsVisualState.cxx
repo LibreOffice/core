@@ -26,7 +26,6 @@ namespace sd { namespace slidesorter { namespace model {
 VisualState::VisualState (const sal_Int32 nPageId)
     : mnPageId(nPageId),
       meCurrentVisualState(VS_None),
-      meOldVisualState(VS_None),
       maLocationOffset(0,0)
 {
 }
@@ -37,7 +36,6 @@ VisualState::~VisualState()
 
 void VisualState::SetVisualState (const State eState)
 {
-    meOldVisualState = meCurrentVisualState;
     meCurrentVisualState = eState;
 }
 

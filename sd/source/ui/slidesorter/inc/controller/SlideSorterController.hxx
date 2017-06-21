@@ -241,7 +241,6 @@ private:
     int mnModelChangeLockCount;
     bool mbIsForcedRearrangePending;
 
-    bool mbPreModelChangeDone;
     bool mbPostModelChangePending;
 
     /** This array stores the indices of the  selected page descriptors at
@@ -267,10 +266,6 @@ private:
         Paint().
     */
     sal_Int32 mnPaintEntranceCount;
-
-    /** Remember whether the context menu is open.
-    */
-    bool mbIsContextMenuOpen;
 
     /** Prepare for several model changes, i.e. prevent time-consuming and
         non-critical operations like repaints until UnlockModelChange() is

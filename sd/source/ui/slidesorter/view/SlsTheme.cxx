@@ -62,7 +62,6 @@ ColorData HGBAdapt (
 
 Theme::Theme (const std::shared_ptr<controller::Properties>& rpProperties)
     : maBackgroundColor(rpProperties->GetBackgroundColor().GetColor()),
-      maPageBackgroundColor(COL_WHITE),
       maGradients(),
       maIcons(),
       maColor()
@@ -83,7 +82,6 @@ void Theme::Update (const std::shared_ptr<controller::Properties>& rpProperties)
 {
     // Set up colors.
     maBackgroundColor = rpProperties->GetBackgroundColor().GetColor();
-    maPageBackgroundColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
 
     maColor[Color_Background] = maBackgroundColor;
 
