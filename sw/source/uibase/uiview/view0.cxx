@@ -131,10 +131,9 @@ void SwView::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOpt
 
 }
 
-void SwView::SetMailMergeConfigItem(std::shared_ptr<SwMailMergeConfigItem>& rConfigItem,
-                                    sal_uInt16 nRestart)
+void SwView::SetMailMergeConfigItem(std::shared_ptr<SwMailMergeConfigItem>& rConfigItem)
 {
-    m_pViewImpl->SetMailMergeConfigItem(rConfigItem, nRestart);
+    m_pViewImpl->SetMailMergeConfigItem(rConfigItem);
     UIFeatureChanged();
 }
 

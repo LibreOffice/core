@@ -828,7 +828,7 @@ IMPL_LINK(SwMMResultPrintDialog, PrintHdl_Impl, Button*, pButton, void)
     sPages += " - ";
     sPages += OUString::number(documentEndPageNumber(xConfigItem.get(), nEnd - 1));
 
-    pTargetView->SetMailMergeConfigItem(xConfigItem, 0);
+    pTargetView->SetMailMergeConfigItem(xConfigItem);
     if(m_pTempPrinter)
     {
         SfxPrinter *const pDocumentPrinter = pTargetView->GetWrtShell()

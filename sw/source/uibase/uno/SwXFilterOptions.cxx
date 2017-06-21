@@ -41,8 +41,7 @@ using namespace ::com::sun::star::lang;
 
 #define FILTER_OPTIONS_NAME             "FilterOptions"
 
-SwXFilterOptions::SwXFilterOptions() :
-    bExport( false )
+SwXFilterOptions::SwXFilterOptions()
 {
 }
 
@@ -116,13 +115,11 @@ sal_Int16 SwXFilterOptions::execute()
 
 void   SwXFilterOptions::setTargetDocument( const uno::Reference< XComponent >& xDoc )
 {
-    bExport = false;
     xModel = xDoc;
 }
 
 void   SwXFilterOptions::setSourceDocument( const uno::Reference<XComponent >& xDoc )
 {
-    bExport = true;
     xModel = xDoc;
 }
 
