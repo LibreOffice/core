@@ -15,23 +15,26 @@ EXITCODE=${3}
 
 if test -n "$(which gdb)"
 then
-    if test "$(find "$COREDIR" -name "core*" | wc -l)" -eq 1
-    then
-        COREFILE=$(ls "$COREDIR"/core*)
-        echo
-        echo "It looks like ${EXECUTABLE} generated a core file at ${COREFILE}"
-        echo "Backtraces:"
-        GDBCOMMANDFILE=$(mktemp)
-        printf "info registers\nthread apply all backtrace full\n" > "$GDBCOMMANDFILE"
-        guess=$(file "$COREFILE")
-        guess=${guess#* execfn: \'}
-        guess=${guess%%\'*}
-        if [ -x "$guess" ]; then EXECUTABLE=$guess; fi
-        gdb -x "$GDBCOMMANDFILE" --batch "$EXECUTABLE" "$COREFILE"
-        rm "$GDBCOMMANDFILE"
-        echo
-        exit 0
-    elif [ "$EXITCODE" -ge 128 ]; then
+    found=
+    for COREFILE in "$COREDIR"/core*
+    do
+        if [ -f "$COREFILE" ]
+        then
+            printf '\nIt looks like %s generated %s\nBacktraces:\n' \
+                "$EXECUTABLE" "$COREFILE"
+            GDBCOMMANDFILE=$(mktemp)
+            printf "info registers\nthread apply all backtrace full\n" \
+                >"$GDBCOMMANDFILE"
+            guess=$(file "$COREFILE")
+            guess=${guess#* execfn: \'}
+            guess=${guess%%\'*}
+            if [ ! -x "$guess" ]; then guess=$EXECUTABLE; fi
+            gdb -x "$GDBCOMMANDFILE" --batch "$guess" "$COREFILE" && found=x
+            rm "$GDBCOMMANDFILE"
+            echo
+        fi
+    done
+    if [ -z "$found" -a "$EXITCODE" -ge 128 ]; then
         echo
         echo "No core file identified in directory ${COREDIR}"
         echo "To show backtraces for crashes during test execution,"
