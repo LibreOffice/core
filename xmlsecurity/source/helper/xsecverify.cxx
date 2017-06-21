@@ -246,6 +246,28 @@ void XSecController::setDigestValue( sal_Int32 nDigestID, OUString& ouDigestValu
     reference.ouDigestValue = ouDigestValue;
 }
 
+void XSecController::setGpgKeyID( OUString& ouKeyID )
+{
+    if (m_vInternalSignatureInformations.empty())
+    {
+        SAL_INFO("xmlsecurity.helper","XSecController::setGpgKeyID: no signature");
+        return;
+    }
+    InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
+    isi.signatureInfor.ouGpgKeyID = ouKeyID;
+}
+
+void XSecController::setGpgCertificate( OUString& ouGpgCert )
+{
+    if (m_vInternalSignatureInformations.empty())
+    {
+        SAL_INFO("xmlsecurity.helper","XSecController::setGpgCertificate: no signature");
+        return;
+    }
+    InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
+    isi.signatureInfor.ouGpgCertificate = ouGpgCert;
+}
+
 void XSecController::setDate( OUString& ouDate )
 {
     if (m_vInternalSignatureInformations.empty())

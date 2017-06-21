@@ -24,10 +24,14 @@
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
+#include <gpgme.h>
+#include <context.h>
 
 class SecurityEnvironmentGpg : public cppu::WeakImplHelper< css::xml::crypto::XSecurityEnvironment,
                                                             css::lang::XUnoTunnel >
 {
+    std::unique_ptr<GpgME::Context> m_ctx;
+
 public:
     SecurityEnvironmentGpg();
     virtual ~SecurityEnvironmentGpg() override;
@@ -61,6 +65,7 @@ public:
     virtual css::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromAscii(
         const OUString& asciiCertificate ) override;
 
+    GpgME::Context& getGpgContext() { return *m_ctx.get(); }
 } ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_GPG_SECURITYENVIRONMENT_HXX

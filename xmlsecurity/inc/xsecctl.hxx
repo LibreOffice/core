@@ -306,6 +306,8 @@ private:
     void setX509Certificate( OUString& ouX509Certificate );
     void setSignatureValue( OUString& ouSignatureValue );
     void setDigestValue( sal_Int32 nDigestID, OUString& ouDigestValue );
+    void setGpgKeyID( OUString& ouKeyID );
+    void setGpgCertificate( OUString& ouGpgCert );
 
     void setDate( OUString& ouDate );
     void setDescription(const OUString& rDescription);

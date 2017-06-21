@@ -735,7 +735,7 @@ void XSecController::exportSignature(
                     xDocumentHandler->endElement( "PGPKeyID" );
 
                     /* Write PGPKeyPacket element */
-                    if (!signatureInfo.ouX509Certificate.isEmpty())
+                    if (!signatureInfo.ouGpgCertificate.isEmpty())
                     {
                         xDocumentHandler->startElement(
                             "PGPKeyPacket",
