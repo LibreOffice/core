@@ -736,7 +736,7 @@ ErrCode SaveOrDelMSVBAStorage( SfxObjectShell& rDoc, SotStorage& rStor, bool bSa
         return ErrCode(pFunction( rDoc, rStor, bSaveInto, rStorageName ));
     return ERRCODE_NONE;
 #else
-    return SaveOrDelMSVBAStorage_ww8( rDoc, rStor, bSaveInto, rStorageName );
+    return ErrCode(SaveOrDelMSVBAStorage_ww8( rDoc, rStor, bSaveInto, rStorageName ));
 #endif
 }
 
@@ -748,7 +748,7 @@ ErrCode GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS )
         return ErrCode(pFunction( rDocS ));
     return ERRCODE_NONE;
 #else
-    return GetSaveWarningOfMSVBAStorage_ww8( rDocS );
+    return ErrCode(GetSaveWarningOfMSVBAStorage_ww8( rDocS ));
 #endif
 }
 
