@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "3a461143_e034ca4b",
+        "filename": "include/formula/tokenarray.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-21T09:37:48Z",
+      "side": 1,
+      "message": "Nitpick: use pre-increment ++maIter",
+      "revId": "707caf61b7bcf5ff3a60c148593552babc644afe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_003ab636",
+        "filename": "include/formula/tokenarray.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-21T09:37:48Z",
+      "side": 1,
+      "message": "Nitpick: use pre-increment ++maIter",
+      "revId": "707caf61b7bcf5ff3a60c148593552babc644afe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_b52a027d",
         "filename": "sc/source/core/tool/compiler.cxx",
         "patchSetId": 1
