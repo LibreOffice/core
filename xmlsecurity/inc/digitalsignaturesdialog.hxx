@@ -101,6 +101,10 @@ private:
     void                ImplFillSignaturesBox();
     void                ImplShowSignaturesDetails();
 
+    css::uno::Reference<css::security::XCertificate> getCertificate(const SignatureInformation& rInfo);
+    css::uno::Reference<css::xml::crypto::XSecurityEnvironment> getSecurityEnvironmentForCertificate(
+        css::uno::Reference<css::security::XCertificate> xCert);
+
     //Checks if adding is allowed.
     //See the spec at specs/www/appwide/security/Electronic_Signatures_and_Security.sxw
     //(6.6.2)Behaviour with regard to ODF 1.2
