@@ -108,7 +108,6 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     bContainsSort(false),
     bContainsSubTotal(false),
     bNative(true),
-    bIsSelection(false),
     bKeepFormats(false),
     bMoveCells(false),
     bStripData(false),
@@ -143,9 +142,6 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
             }
             break;
             case XML_TOK_DATABASE_RANGE_ATTR_IS_SELECTION :
-            {
-                bIsSelection = IsXMLToken(sValue, XML_TRUE);
-            }
             break;
             case XML_TOK_DATABASE_RANGE_ATTR_ON_UPDATE_KEEP_STYLES :
             {

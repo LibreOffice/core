@@ -237,7 +237,6 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
     mfCellValue(0.0),
     mnRepeatCount(1),
     mnNumberFormat(-1),
-    mnCellType(css::util::NumberFormat::UNDEFINED),
     mbIsNumeric(false),
     mbIsEmpty(true)
 {
@@ -267,9 +266,6 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
                 }
                 break;
                 case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE:
-                {
-                    mnCellType = mrScImport.GetCellType( it.toString() );
-                }
                 break;
                 case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE:
                 {

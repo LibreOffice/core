@@ -305,7 +305,6 @@ struct RevisionLogFragment::Impl
 {
     ScChangeTrack& mrChangeTrack;
 
-    sal_Int32 mnRevIndex;
     sal_Int32 mnSheetIndex;
 
     RevisionType meType;
@@ -323,7 +322,6 @@ struct RevisionLogFragment::Impl
 
     explicit Impl( ScChangeTrack& rChangeTrack ) :
         mrChangeTrack(rChangeTrack),
-        mnRevIndex(-1),
         mnSheetIndex(-1),
         meType(REV_UNKNOWN),
         mbEndOfList(false) {}
@@ -391,7 +389,6 @@ void RevisionLogFragment::finalizeImport() {}
 
 void RevisionLogFragment::importCommon( const AttributeList& rAttribs )
 {
-    mpImpl->mnRevIndex   = rAttribs.getInteger(XML_rId, -1);
     mpImpl->mnSheetIndex = rAttribs.getInteger(XML_sId, -1);
 }
 

@@ -70,8 +70,7 @@ public:
     ScXMLAnnotationContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
                         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
-                        ScXMLAnnotationData& rAnnotationData,
-                        ScXMLTableRowCellContext* pCellContext);
+                        ScXMLAnnotationData& rAnnotationData);
 
     virtual ~ScXMLAnnotationContext() override;
 
@@ -98,7 +97,6 @@ private:
     OUStringBuffer maAuthorBuffer;
     OUStringBuffer maCreateDateBuffer;
     OUStringBuffer maCreateDateStringBuffer;
-    ScXMLTableRowCellContext* pCellContext;
     SvXMLImportContext* pShapeContext;
 };
 

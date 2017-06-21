@@ -956,8 +956,7 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
     bIsGroupField(false),
     bDateValue(false),
     bAutoStart(false),
-    bAutoEnd(false),
-    mbHasHiddenMember(false)
+    bAutoEnd(false)
 {
     bool bHasName = false;
     bool bDataLayout = false;
@@ -1068,9 +1067,6 @@ void ScXMLDataPilotFieldContext::AddMember(ScDPSaveMember* pMember)
     if (xDim)
     {
         xDim->AddMember(pMember);
-        if (!pMember->GetIsVisible())
-            // This member is hidden.
-            mbHasHiddenMember = true;
     }
     else
         delete pMember;

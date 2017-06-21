@@ -173,8 +173,7 @@ ScXMLChangeTrackingImportHelper::ScXMLChangeTrackingImportHelper() :
     pCurrentAction(nullptr),
     sIDPrefix(SC_CHANGE_ID_PREFIX),
     nMultiSpanned(0),
-    nMultiSpannedSlaveCount(0),
-    bChangeTrack(false)
+    nMultiSpannedSlaveCount(0)
 {
     nPrefixLength = sIDPrefix.getLength();
 }
