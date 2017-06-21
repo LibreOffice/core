@@ -57,6 +57,8 @@ private:
     OUString m_ouX509IssuerName;
     OUString m_ouX509SerialNumber;
     OUString m_ouX509Certificate;
+    OUString m_ouGpgCertificate;
+    OUString m_ouGpgKeyID;
     OUString m_ouCertDigest;
     OUString m_ouEncapsulatedX509Certificate;
     OUString m_ouDigestValue;
@@ -71,6 +73,8 @@ private:
     bool m_bInX509IssuerName;
     bool m_bInX509SerialNumber;
     bool m_bInX509Certificate;
+    bool m_bInGpgCertificate;
+    bool m_bInGpgKeyID;
     bool m_bInCertDigest;
     bool m_bInEncapsulatedX509Certificate;
     bool m_bInSigningTime;

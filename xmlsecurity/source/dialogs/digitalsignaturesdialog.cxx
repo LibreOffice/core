@@ -518,6 +518,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             const SignatureInformation& rInfo = maSignatureManager.maCurrentSignatureInformations[n];
             uno::Reference< css::security::XCertificate > xCert = getCertificate(rInfo);
 
+            // TODO - should use pgpdata from info provider?
             OUString aSubject;
             OUString aIssuer;
             OUString aDateTimeStr;

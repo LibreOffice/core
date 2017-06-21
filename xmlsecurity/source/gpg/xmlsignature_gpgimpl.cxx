@@ -98,8 +98,6 @@ SAL_CALL XMLSignature_GpgImpl::generate(
     if( pSecEnv == nullptr )
         throw RuntimeException() ;
 
-    // TODO figure out key from pSecEnv!
-    // unclear how/where that is transported in nss impl...
     setErrorRecorder();
 
     //Create Signature context
@@ -170,20 +168,10 @@ SAL_CALL XMLSignature_GpgImpl::generate(
     if( xmlSecTransformCtxXmlExecute(&(pDsigCtx->transformCtx), nodeset) < 0 )
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
-    //Sign the template via gpgme
-    // TODO move init to central place
-    GpgME::initializeLibrary();
-    if( GpgME::checkEngine(GpgME::OpenPGP) )
-        throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
-
-    // TODO get ctx from SecurityEnv?
-    GpgME::Context* ctx = GpgME::Context::createForProtocol(GpgME::OpenPGP);
-    if( ctx == nullptr )
-        throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
-
-    ctx->setKeyListMode(GPGME_KEYLIST_MODE_LOCAL);
+    GpgME::Context& rCtx=pSecEnv->getGpgContext();
+    rCtx.setKeyListMode(GPGME_KEYLIST_MODE_LOCAL);
     GpgME::Error err;
-    if( ctx->addSigningKey(ctx->key("0x909BE2575CEDBEA3", err, true)) )
+    if( rCtx.addSigningKey(rCtx.key("0x909BE2575CEDBEA3", err, true)) )
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
     // good, ctx is setup now, let's sign the lot
@@ -194,17 +182,16 @@ SAL_CALL XMLSignature_GpgImpl::generate(
 
     SAL_INFO("xmlsecurity.xmlsec.gpg", "Generating signature for: " << xmlSecBufferGetData(pDsigCtx->transformCtx.result));
 
-    GpgME::SigningResult sign_res=ctx->sign(data_in, data_out,
+    GpgME::SigningResult sign_res=rCtx.sign(data_in, data_out,
                                             GpgME::Detached);
-    // TODO: needs some error handling
-    data_out.seek(0,SEEK_SET);
+    assert(data_out.seek(0,SEEK_SET) == 0);
     int len=0, curr=0; char buf;
     while( (curr=data_out.read(&buf, 1)) )
         len += curr;
 
     // write signed data to xml
     std::vector<unsigned char> buf2(len);
-    data_out.seek(0,SEEK_SET);
+    assert(data_out.seek(0,SEEK_SET) == 0);
     if( data_out.read(&buf2[0], len) != len )
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
@@ -273,15 +260,11 @@ SAL_CALL XMLSignature_GpgImpl::validate(
     {
         Reference< XSecurityEnvironment > aEnvironment = aSecurityCtx->getSecurityEnvironmentByIndex(i);
 
-#if 0
-        //Get Keys Manager
         SecurityEnvironmentGpg* pSecEnv =
             dynamic_cast<SecurityEnvironmentGpg*>(aEnvironment.get());
         if( pSecEnv == nullptr )
             throw RuntimeException() ;
-#endif
 
-        // TODO pSecEnv is still from nss, roll our own impl there
         // TODO figure out key from pSecEnv!
         // unclear how/where that is transported in nss impl...
 
@@ -317,17 +300,8 @@ SAL_CALL XMLSignature_GpgImpl::validate(
             throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
         // Validate the template via gpgme
-        // TODO move init to central place
-        GpgME::initializeLibrary();
-        if( GpgME::checkEngine(GpgME::OpenPGP) )
-            throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+        GpgME::Context& rCtx=pSecEnv->getGpgContext();
 
-        // TODO get ctx from SecurityEnv?
-        GpgME::Context* ctx = GpgME::Context::createForProtocol(GpgME::OpenPGP);
-        if( ctx == nullptr )
-            throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
-
-        // good, ctx is setup now, let's validate the lot
         GpgME::Data data_text(
             reinterpret_cast<char*>(xmlSecBufferGetData(pDsigCtx->transformCtx.result)),
             xmlSecBufferGetSize(pDsigCtx->transformCtx.result), false);
@@ -345,7 +319,7 @@ SAL_CALL XMLSignature_GpgImpl::validate(
             reinterpret_cast<char*>(pSignatureValue),
             xmlStrlen(pSignatureValue), false);
 
-        GpgME::VerificationResult verify_res=ctx->verifyDetachedSignature(
+        GpgME::VerificationResult verify_res=rCtx.verifyDetachedSignature(
             data_signature, data_text);
 
         xmlFree(pSignatureValue);
