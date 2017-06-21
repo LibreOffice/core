@@ -1686,8 +1686,6 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
             bSetLastToken = false;
         }
     }
-    if ( bSetLastToken )
-        nHtmlLastToken = pInfo->nToken;
 }
 
 // HTML DATA QUERY PARSER

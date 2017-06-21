@@ -288,7 +288,7 @@ Reference<XAccessible> ScMenuFloatingWindow::CreateAccessible()
         for (itr = itrBeg; itr != itrEnd; ++itr)
         {
             size_t nPos = ::std::distance(itrBeg, itr);
-            p->appendMenuItem(itr->maText, itr->mbEnabled, nPos);
+            p->appendMenuItem(itr->maText, nPos);
         }
     }
 
@@ -596,7 +596,7 @@ void ScMenuFloatingWindow::fillMenuItemsToAccessible(ScAccessibleFilterMenu* pAc
     for (itr = itrBeg; itr != itrEnd; ++itr)
     {
         size_t nPos = ::std::distance(itrBeg, itr);
-        pAccMenu->appendMenuItem(itr->maText, itr->mbEnabled, nPos);
+        pAccMenu->appendMenuItem(itr->maText, nPos);
     }
 }
 

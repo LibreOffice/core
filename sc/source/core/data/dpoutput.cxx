@@ -519,7 +519,6 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
     nHeaderSize(0),
     bDoFilter(bFilter),
     bResultsError(false),
-    mbHasDataLayout(false),
     bSizesValid(false),
     bSizeOverflow(false),
     mbHeaderLayout(false)
@@ -641,9 +640,6 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                 // get number formats from data dimensions
                                 if ( bIsDataLayout )
                                 {
-                                    if (bRowFieldHasMember)
-                                        mbHasDataLayout = true;
-
                                     OSL_ENSURE( nLevCount == 1, "data layout: multiple levels?" );
                                     if ( eDimOrient == sheet::DataPilotFieldOrientation_COLUMN )
                                         lcl_FillNumberFormats( pColNumFmt, nColFmtCount, xLevRes, xDims );
