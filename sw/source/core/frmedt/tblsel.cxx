@@ -2250,11 +2250,7 @@ void FndBox_::DelFrames( SwTable &rTable )
                             // next turn.
                             static_cast<SwTabFrame*>(pTabFrame)->SetFollowFlowLine( false );
                         }
-                        //Set acc table dispose state
-                        pFrame->SetAccTableDispose( false/*bAccTableDispose*/ );
                         pFrame->Cut();
-                        //Set acc table dispose state to default value.
-                        pFrame->SetAccTableDispose( true );
                         SwFrame::DestroyFrame(pFrame);
                     }
                 }

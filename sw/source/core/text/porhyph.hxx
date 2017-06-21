@@ -59,7 +59,6 @@ class SwSoftHyphPortion : public SwHyphPortion
 {
     bool    bExpand;
     sal_uInt16  nViewWidth;
-    sal_uInt16  nHyphWidth;
 
 public:
     SwSoftHyphPortion();

@@ -80,8 +80,7 @@ SwAccessiblePortionData::SwAccessiblePortionData(
     m_aPortionAttrs(),
     m_pSentences( nullptr ),
     m_nBeforePortions( 0 ),
-    m_bFinished( false ),
-    m_bLastIsSpecial( false )
+    m_bFinished( false )
 {
     OSL_ENSURE( m_pTextNode != nullptr, "Text node is needed!" );
 
@@ -120,8 +119,6 @@ void SwAccessiblePortionData::Text(sal_Int32 nLength, sal_uInt16 nType, sal_Int3
     // update buffer + nModelPosition
     m_aBuffer.append( m_pTextNode->GetText().copy(m_nModelPosition, nLength) );
     m_nModelPosition += nLength;
-
-    m_bLastIsSpecial = false;
 }
 
 void SwAccessiblePortionData::SetAttrFieldType( sal_uInt16 nAttrFieldType )
@@ -210,11 +207,6 @@ void SwAccessiblePortionData::Special(
     // update buffer + nModelPosition
     m_aBuffer.append( sDisplay );
     m_nModelPosition += nLength;
-
-    // remember 'last' special portion (unless it's our own 'closing'
-    // portions from 'Finish()'
-    if( nType != POR_TERMINATE )
-        m_bLastIsSpecial = true;
 }
 
 void SwAccessiblePortionData::LineBreak(sal_Int32 /*nWidth*/)

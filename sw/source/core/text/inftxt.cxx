@@ -617,9 +617,6 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
     SwDrawTextInfo aDrawInf( m_pFrame->getRootFrame()->GetCurrShell(), *m_pOut, pSI, rText, nStart, nLength,
                              rPor.Width(), bBullet );
 
-    aDrawInf.SetLeft( GetPaintRect().Left() );
-    aDrawInf.SetRight( GetPaintRect().Right());
-
     aDrawInf.SetUnderFnt( m_pUnderFnt );
 
     const long nSpaceAdd = ( rPor.IsBlankPortion() || rPor.IsDropPortion() ||
@@ -1410,8 +1407,6 @@ void SwTextFormatInfo::CtorInitTextFormatInfo( OutputDevice* pRenderContext, SwT
     m_bInterHyph = bNewInterHyph;
 
     //! needs to be done in this order
-    m_nMinLeading     = 2;
-    m_nMinTrailing    = 2;
     m_bAutoHyph = InitHyph();
 
     m_bIgnoreFly = false;
@@ -1552,8 +1547,6 @@ SwTextFormatInfo::SwTextFormatInfo( const SwTextFormatInfo& rInf,
     m_nLineNetHeight = 0;
     m_nForcedLeftMargin = 0;
 
-    m_nMinLeading = 0;
-    m_nMinTrailing = 0;
     m_bFull = false;
     m_bFootnoteDone = true;
     m_bErgoDone = true;

@@ -68,7 +68,6 @@ class SwAccessiblePortionData : public SwPortionHandler
 
     size_t m_nBeforePortions;     /// # of portions before first model character
     bool m_bFinished;
-    bool m_bLastIsSpecial;    /// set if last portion was 'Special()'
 
     /// returns the index of the first position whose value is smaller
     /// or equal, and whose following value is equal or larger
