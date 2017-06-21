@@ -134,7 +134,6 @@ private:
         sal_Int32 mnBorderOffset2;
     };
     ColorData maBackgroundColor;
-    ColorData maPageBackgroundColor;
     ::std::vector<GradientDescriptor> maGradients;
     ::std::vector<BitmapEx> maIcons;
     ::std::vector<ColorData> maColor;

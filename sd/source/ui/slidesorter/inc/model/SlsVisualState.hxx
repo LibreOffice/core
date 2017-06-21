@@ -55,8 +55,6 @@ public:
 
 private:
     State meCurrentVisualState;
-    State meOldVisualState;
-
     Point maLocationOffset;
 };
 

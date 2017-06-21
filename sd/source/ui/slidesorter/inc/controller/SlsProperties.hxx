@@ -117,7 +117,6 @@ private:
     Color maSelectionColor;
     Color maHighlightColor;
     bool mbIsUIReadOnly;
-    bool mbIsHighContrastModeActive;
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

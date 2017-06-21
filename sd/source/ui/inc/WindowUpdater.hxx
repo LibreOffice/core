@@ -73,12 +73,6 @@ public:
     */
     void UnregisterWindow (vcl::Window* pWindow);
 
-    /** Set the view shell whose output devices shall be kept up to date.
-        It is used to clear the master page cache so that a redraw affects
-        the master page content as well.
-    */
-    void SetViewShell (ViewShell& rViewShell);
-
     /** Set the document so that it is reformatted when one of the monitored
         values changes.
         @param pDocument
@@ -103,9 +97,6 @@ public:
 private:
     /// Options to monitor for changes.
     SvtCTLOptions maCTLOptions;
-
-    /// Keep the output devices of this view shell up to date.
-    ViewShell* mpViewShell;
 
     /// The document rendered in the output devices.
     SdDrawDocument* mpDocument;

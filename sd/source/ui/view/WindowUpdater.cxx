@@ -32,8 +32,7 @@
 namespace sd {
 
 WindowUpdater::WindowUpdater()
-    : mpViewShell (nullptr),
-      mpDocument (nullptr)
+    : mpDocument (nullptr)
 {
     maCTLOptions.AddListener(this);
 }
@@ -68,11 +67,6 @@ void WindowUpdater::UnregisterWindow (vcl::Window* pWindow)
     {
         maWindowList.erase (aWindowIterator);
     }
-}
-
-void WindowUpdater::SetViewShell (ViewShell& rViewShell)
-{
-    mpViewShell = &rViewShell;
 }
 
 void WindowUpdater::SetDocument (SdDrawDocument* pDocument)

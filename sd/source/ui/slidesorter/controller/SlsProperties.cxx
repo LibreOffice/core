@@ -34,9 +34,7 @@ Properties::Properties()
       maTextColor(Application::GetSettings().GetStyleSettings().GetActiveTextColor()),
       maSelectionColor(Application::GetSettings().GetStyleSettings().GetHighlightColor()),
       maHighlightColor(Application::GetSettings().GetStyleSettings().GetMenuHighlightColor()),
-      mbIsUIReadOnly(false),
-      mbIsHighContrastModeActive(
-          Application::GetSettings().GetStyleSettings().GetHighContrastMode())
+      mbIsUIReadOnly(false)
 {
 }
 
@@ -50,8 +48,6 @@ void Properties::HandleDataChangeEvent()
     maTextColor = Application::GetSettings().GetStyleSettings().GetActiveTextColor();
     maSelectionColor = Application::GetSettings().GetStyleSettings().GetHighlightColor();
     maHighlightColor = Application::GetSettings().GetStyleSettings().GetMenuHighlightColor();
-    mbIsHighContrastModeActive
-        = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 }
 
 void Properties::SetHighlightCurrentSlide (const bool bIsHighlightCurrentSlide)

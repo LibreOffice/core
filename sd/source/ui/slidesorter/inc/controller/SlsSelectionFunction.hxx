@@ -108,14 +108,6 @@ protected:
     virtual ~SelectionFunction() override;
 
 private:
-    /** We use this flag to filter out the cases where MouseMotion() is called
-        with a pressed mouse button but without a prior MouseButtonDown()
-        call.  This is an indication that the mouse button was pressed over
-        another control, e.g. the view tab bar, and that a re-layout of the
-        controls moved the slide sorter under the mouse.
-    */
-    bool mbProcessingMouseButtonDown;
-
     /** Remember the slide where the shift key was pressed and started a
         multiselection via keyboard.
     */

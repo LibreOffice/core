@@ -110,7 +110,6 @@ public:
     SdrPage* mpHitPage;
     sal_uInt32 mnEventCode;
     InsertionIndicatorHandler::Mode meDragMode;
-    bool mbMakeSelectionVisible;
     bool mbIsLeaving;
 
     EventDescriptor (
@@ -322,7 +321,6 @@ SelectionFunction::SelectionFunction (
         rRequest),
       mrSlideSorter(rSlideSorter),
       mrController(mrSlideSorter.GetController()),
-      mbProcessingMouseButtonDown(false),
       mnShiftKeySelectionAnchor(-1),
       mpModeHandler(new NormalModeHandler(rSlideSorter, *this))
 {
@@ -346,7 +344,6 @@ bool SelectionFunction::MouseButtonDown (const MouseEvent& rEvent)
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode (rEvent.GetButtons());
     aMDPos = rEvent.GetPosPixel();
-    mbProcessingMouseButtonDown = true;
 
     //  mpWindow->CaptureMouse();
 
@@ -366,8 +363,6 @@ bool SelectionFunction::MouseButtonUp (const MouseEvent& rEvent)
     mrController.GetScrollBarManager().StopAutoScroll ();
 
     ProcessMouseEvent(BUTTON_UP, rEvent);
-
-    mbProcessingMouseButtonDown = false;
 
     return true;
 }
@@ -770,7 +765,6 @@ SelectionFunction::EventDescriptor::EventDescriptor (
       mpHitPage(),
       mnEventCode(nEventType),
       meDragMode(InsertionIndicatorHandler::MoveMode),
-      mbMakeSelectionVisible(true),
       mbIsLeaving(false)
 {
     maMouseModelPosition = rSlideSorter.GetContentWindow()->PixelToLogic(maMousePosition);
@@ -802,7 +796,6 @@ SelectionFunction::EventDescriptor::EventDescriptor (
       mpHitPage(),
       mnEventCode(nEventType),
       meDragMode(InsertionIndicatorHandler::GetModeFromDndAction(nDragAction)),
-      mbMakeSelectionVisible(true),
       mbIsLeaving(false)
 {
     maMouseModelPosition = rSlideSorter.GetContentWindow()->PixelToLogic(maMousePosition);
@@ -1075,12 +1068,10 @@ bool NormalModeHandler::ProcessButtonDownEvent (
             // selection is set to this single page.  Otherwise the
             // selection is not modified.
             SetCurrentPage(rDescriptor.mpHitDescriptor);
-            rDescriptor.mbMakeSelectionVisible = false;
             break;
 
         case BUTTON_DOWN | RIGHT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE:
             // Do not change the selection.  Just adjust the insertion indicator.
-            rDescriptor.mbMakeSelectionVisible = false;
             break;
 
         case BUTTON_DOWN | RIGHT_BUTTON | SINGLE_CLICK | NOT_OVER_PAGE:
@@ -1335,7 +1326,6 @@ bool MultiSelectionModeHandler::ProcessMotionEvent (
     {
         SetSelectionModeFromModifier(rDescriptor.mnEventCode);
         UpdatePosition(rDescriptor.maMousePosition, true);
-        rDescriptor.mbMakeSelectionVisible = false;
         return true;
     }
     else
