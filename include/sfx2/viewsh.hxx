@@ -317,8 +317,6 @@ public:
     SAL_DLLPRIVATE void CheckIPClient_Impl(SfxInPlaceClient*, const tools::Rectangle&);
     SAL_DLLPRIVATE void PushSubShells_Impl( bool bPush=true );
     SAL_DLLPRIVATE void PopSubShells_Impl() { PushSubShells_Impl( false ); }
-    SAL_DLLPRIVATE void TakeOwnership_Impl();
-    SAL_DLLPRIVATE void TakeFrameOwnership_Impl();
     SAL_DLLPRIVATE bool ExecKey_Impl(const KeyEvent& aKey);
 
     /// The actual per-view implementation of lok::Document::registerCallback().

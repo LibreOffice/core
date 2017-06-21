@@ -35,7 +35,6 @@ static sal_Char const sHTML_SC_yes[] =  "YES";
 static sal_Char const sHTML_SC_no[] =       "NO";
 static sal_Char const sHTML_SC_auto[] = "AUTO";
 
-#define HTML_O_READONLY "READONLY"
 #define HTML_O_EDIT     "EDIT"
 
 static HTMLOptionEnum<ScrollingMode> const aScrollingTable[] =
@@ -109,15 +108,7 @@ void SfxFrameHTMLParser::ParseFrameOptions(
             pFrame->SetResizable( false );
             break;
         default:
-            if (rOption.GetTokenString().equalsIgnoreAsciiCase(HTML_O_READONLY))
-            {
-                const OUString& aStr = rOption.GetString();
-                bool bReadonly = true;
-                if ( aStr.equalsIgnoreAsciiCase("FALSE") )
-                    bReadonly = false;
-                pFrame->SetReadOnly( bReadonly );
-            }
-            else if (rOption.GetTokenString().equalsIgnoreAsciiCase(HTML_O_EDIT))
+            if (rOption.GetTokenString().equalsIgnoreAsciiCase(HTML_O_EDIT))
             {
                 const OUString& aStr = rOption.GetString();
                 bool bEdit = true;

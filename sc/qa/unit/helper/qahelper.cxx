@@ -566,7 +566,7 @@ ScDocShellRef ScBootstrapFixture::load( bool bReadWrite,
 {
     std::shared_ptr<const SfxFilter> pFilter(new SfxFilter(
         rFilter,
-        OUString(), nFilterFlags, nClipboardID, rTypeName, 0, OUString(),
+        OUString(), nFilterFlags, nClipboardID, rTypeName, OUString(),
         rUserData, "private:factory/scalc"));
     const_cast<SfxFilter*>(pFilter.get())->SetVersion(nFilterVersion);
 
@@ -658,7 +658,7 @@ ScDocShellRef ScBootstrapFixture::saveAndReload(
         nExportFormat = SotClipboardFormatId::STARCHART_8;
     std::shared_ptr<const SfxFilter> pExportFilter(new SfxFilter(
         rFilter,
-        OUString(), nFormatType, nExportFormat, rTypeName, 0, OUString(),
+        OUString(), nFormatType, nExportFormat, rTypeName, OUString(),
         rUserData, "private:factory/scalc*" ));
     const_cast<SfxFilter*>(pExportFilter.get())->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
     aStoreMedium.SetFilter(pExportFilter);
@@ -704,7 +704,7 @@ std::shared_ptr<utl::TempFile> ScBootstrapFixture::exportTo( ScDocShell* pShell,
         nExportFormat = SotClipboardFormatId::STARCHART_8;
     std::shared_ptr<SfxFilter> pExportFilter(new SfxFilter(
         aFilterName,
-        OUString(), nFormatType, nExportFormat, aFilterType, 0, OUString(),
+        OUString(), nFormatType, nExportFormat, aFilterType, OUString(),
         OUString(), "private:factory/scalc*" ));
     pExportFilter.get()->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
     aStoreMedium.SetFilter(pExportFilter);

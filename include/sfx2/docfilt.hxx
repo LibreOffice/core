@@ -60,7 +60,6 @@ class SFX2_DLLPUBLIC SfxFilter
     SfxFilterFlags  nFormatType;
     sal_uIntPtr     nVersion;
     SotClipboardFormatId lFormat;
-    sal_uInt16      nDocIcon;
 
 public:
     SfxFilter( const OUString& rProvider, const OUString& rFilterName );
@@ -70,7 +69,6 @@ public:
                SfxFilterFlags nFormatType,
                SotClipboardFormatId lFormat,
                const OUString &rTypeName,
-               sal_uInt16 nDocIcon,
                const OUString &rMimeType,
                const OUString &rUserData,
                const OUString& rServiceName );

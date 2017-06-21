@@ -131,7 +131,7 @@ protected:
             OUString::createFromAscii( pFmt->pFilterName ),
             OUString(), pFmt->nFormatType, nOptions,
             OUString::createFromAscii( pFmt->pTypeName ),
-            0, OUString(),
+            OUString(),
             OUString::createFromAscii( pFmt->pUserData ),
             "private:factory/simpress*" );
         pFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
@@ -168,7 +168,7 @@ protected:
                                         OUString::createFromAscii(pFormat->pFilterName),
                                         OUString(), pFormat->nFormatType, nExportFormat,
                                         OUString::createFromAscii(pFormat->pTypeName),
-                                        0, OUString(),
+                                        OUString(),
                                         OUString::createFromAscii(pFormat->pUserData),
                                         "private:factory/simpress*" ));
         const_cast<SfxFilter*>(pExportFilter.get())->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
@@ -187,7 +187,7 @@ protected:
                                         OUString::createFromAscii(pFormat->pFilterName),
                                         OUString(), pFormat->nFormatType, nExportFormat,
                                         OUString::createFromAscii(pFormat->pTypeName),
-                                        0, OUString(),
+                                        OUString(),
                                         OUString::createFromAscii(pFormat->pUserData),
                                         "private:factory/simpress*" ));
         const_cast<SfxFilter*>(pExportFilter.get())->SetVersion(SOFFICE_FILEFORMAT_CURRENT);

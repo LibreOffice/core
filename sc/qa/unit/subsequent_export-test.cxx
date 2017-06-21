@@ -344,7 +344,7 @@ ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const OUSt
         nExportFormat = SotClipboardFormatId::STARCHART_8;
     std::shared_ptr<const SfxFilter> pExportFilter(new SfxFilter(
         rFilter,
-        OUString(), nFormatType, nExportFormat, rTypeName, 0, OUString(),
+        OUString(), nFormatType, nExportFormat, rTypeName, OUString(),
         rUserData, "private:factory/scalc*" ));
     const_cast<SfxFilter*>(pExportFilter.get())->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
     aStoreMedium.SetFilter(pExportFilter);

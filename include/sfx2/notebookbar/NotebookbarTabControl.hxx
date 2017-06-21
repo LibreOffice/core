@@ -13,6 +13,7 @@
 #include <vcl/toolbox.hxx>
 #include <sfx2/dllapi.h>
 #include <vcl/tabctrl.hxx>
+#include <memory>
 
 class ChangedUIEventListener;
 
@@ -22,6 +23,7 @@ friend class ChangedUIEventListener;
 
 public:
     NotebookbarTabControl( Window* pParent );
+    ~NotebookbarTabControl() override;
 
     virtual void StateChanged(StateChangedType nStateChange) override;
     virtual Size calculateRequisition() const override;
@@ -34,7 +36,7 @@ private:
                              );
     DECL_LINK(OpenNotebookbarPopupMenu, NotebookBar*, void);
 
-    ChangedUIEventListener* m_pListener;
+    std::unique_ptr<ChangedUIEventListener> m_pListener;
     css::uno::Reference<css::frame::XFrame> m_xFrame;
 
 protected:
