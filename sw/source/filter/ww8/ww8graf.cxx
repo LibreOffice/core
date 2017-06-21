@@ -773,7 +773,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
         return false;
     }
 
-    // ggfs. zuerst die richtige TextBox-Story finden
+    // if applicable first find the right TextBox-Story
     bool bCheckTextBoxStory = ( nTxBxS && pT->GetIMax() >= nTxBxS );
     if(  bCheckTextBoxStory )
         pT->SetIdx( nTxBxS-1 );
@@ -864,7 +864,7 @@ sal_Int32 SwWW8ImplReader::GetRangeAsDrawingString(OUString& rString, long nStar
     WW8_CP nOffset = 0;
     m_pWwFib->GetBaseCp(eType, &nOffset); //TODO: check return value
 
-    OSL_ENSURE(nStartCp <= nEndCp, "+Wo ist der Grafik-Text (7) ?");
+    OSL_ENSURE(nStartCp <= nEndCp, "+where's the text graphic (7)?");
     if (nStartCp == nEndCp)
         rString.clear();      // empty string: entirely possible
     else if (nStartCp < nEndCp)
@@ -1172,12 +1172,13 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
         pTextObj->NbcSetOutlinerParaObject( pOp );
         pTextObj->SetVerticalWriting(bVertical);
 
-        // Fuer die naechste Textbox noch die alten Absatz-Attribute
-        // und Styles entfernen, sonst startet die naechste Box
-        // mit falschen Attributen.
-        // Vorgehen: Text loeschen = auf 1 Absatz reduzieren
-        // und an diesem Absatz die Absatzattribute und Styles loeschen
-        // (Empfehlung JOE)
+        // For the next TextBox also remove the old paragraph attributes
+        // and styles, otherwise the next box will start with the wrong
+        // attributes.
+        // Course of action: delete text = reduce to one paragraph
+        //                   and on this one delete the paragraph attributes
+        //                   and styles
+        // (Recommendation JOE)
         m_pDrawEditEngine->SetText( OUString() );
         m_pDrawEditEngine->SetParaAttribs(0, m_pDrawEditEngine->GetEmptyItemSet());
     }
@@ -1342,7 +1343,7 @@ SdrObject* SwWW8ImplReader::ReadGrafPrimitive(short& rLeft, SfxAllItemSet &rSet)
     // This whole archaic word 6 graphic import can probably be refactored
     // into an object hierarchy with a little effort.
     SdrObject *pRet=nullptr;
-    WW8_DPHEAD aHd;                         // Lese Draw-Primitive-Header
+    WW8_DPHEAD aHd;                         // Read Draw-Primitive-Header
     bool bCouldRead = checkRead(*m_pStrm, &aHd, sizeof(WW8_DPHEAD)) &&
                       SVBT16ToShort(aHd.cb) >= sizeof(WW8_DPHEAD);
     OSL_ENSURE(bCouldRead, "Graphic Primitive header short read" );
@@ -1477,15 +1478,14 @@ sal_Int32 SwMSDffManager::GetEscherLineMatch(MSO_LineStyle eStyle,
 {
     sal_Int32 nOutsideThick = 0;
     /*
-    Beachte: im Gegensatz zu den Winword-ueblichen Tabellen- und
-    Rahmen-Randbreiten-Angaben, bei denen jeweils aus der Staerke *einer*
-    Linie die Gesamt-Randbreite zu errechnen ist, liegen die aus dem ESCHER
-    stammenden Daten bereits als Gesamt-Breite [twips] vor!
+    Observe: In contrast to the regular WinWord table and frame margin width,
+    where the overall margin width has to be calculated from the width of *one*
+    line, the data from ESCHER already contains the overall width [twips]!
 
-    Der Winword default ist 15 tw. Wir nehmen hierfuer unsere 20 tw Linie.  (
-    0.75 pt uns 1.0 pt sehen sich auf dem Ausdruck naemlich aehnlicher als
-    etwas 0.75 pt und unsere 0.05 pt Haarlinie. ) Die Haarlinie setzen wir nur
-    bei Winword-Staerken bis zu maximal 0.5 pt ein.
+    The WinWord default is 15 tw. We take for this our 20 tw line.
+    (0.75 pt and 1.0 pt looking similar on the hardcopy as 0.75 pt and our
+    0.05 pt hairline.) The hairline we only set by WinWord strength up to max.
+    0.5 pt.
     */
     switch( eStyle )
     {
@@ -1546,15 +1546,14 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
         eShapeType, rLineThick);
 
     /*
-    Beachte: im Gegensatz zu den Winword-ueblichen Tabellen- und
-    Rahmen-Randbreiten-Angaben, bei denen jeweils aus der Staerke *einer*
-    Linie die Gesamt-Randbreite zu errechnen ist, liegen die aus dem ESCHER
-    stammenden Daten bereits als Gesamt-Breite [twips] vor!
+    Observe: In contrast to the regular WinWord table and frame margin width,
+    where the overall margin width has to be calculated from the width of *one*
+    line, the data from ESCHER already contains the overall width [twips]!
 
-    Der Winword default ist 15 tw. Wir nehmen hierfuer unsere 20 tw Linie.  (
-    0.75 pt uns 1.0 pt sehen sich auf dem Ausdruck naemlich aehnlicher als
-    etwas 0.75 pt und unsere 0.05 pt Haarlinie. ) Die Haarlinie setzen wir nur
-    bei Winword-Staerken bis zu maximal 0.5 pt ein.
+    The WinWord default is 15 tw. We take for this our 20 tw line.
+    (0.75 pt and 1.0 pt looking similar on the hardcopy as 0.75 pt and our
+    0.05 pt hairline.) The hairline we only set by WinWord strength up to max.
+    0.5 pt.
     */
     switch( +eLineStyle )
     {
@@ -1621,33 +1620,33 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     SfxItemSet& rFlySet, MSO_LineStyle eLineStyle, MSO_LineDashing eDashing, MSO_SPT eShapeType,
     tools::Rectangle& rInnerDist )
 {
-/*
-    am Rahmen zu setzende Frame-Attribute
+    /*
+    attributes to be set on the frame
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    SwFormatFrameSize            falls noch nicht gesetzt, hier setzen
-    SvxLRSpaceItem          hier setzen
-    SvxULSpaceItem          hier setzen
-    SvxOpaqueItem           (Derzeit bei Rahmen nicht moeglich! khz 10.2.1999)
-    SwFormatSurround           bereits gesetzt
-    SwFormatVertOrient         bereits gesetzt
-    SwFormatHoriOrient         bereits gesetzt
-    SwFormatAnchor             bereits gesetzt
-    SvxBoxItem              hier setzen
-    SvxBrushItem            hier setzen
-    SvxShadowItem           hier setzen
-*/
+    SwFormatFrameSize       if not set set here
+    SvxLRSpaceItem          set here
+    SvxULSpaceItem          set here
+    SvxOpaqueItem           (Currently not possible for frames! khz 10.2.1999)
+    SwFormatSurround        already set
+    SwFormatVertOrient      already set
+    SwFormatHoriOrient      already set
+    SwFormatAnchor          already set
+    SvxBoxItem              set here
+    SvxBrushItem            set here
+    SvxShadowItem           set here
+    */
 
-    // 1. GrafikObjekt des Docs?
+    // 1. GraphicObject of documents?
     GrafikCtor();
 
     const SfxItemSet& rOldSet = pSdrObj->GetMergedItemSet();
 
-    // einige Items koennen direkt so uebernommen werden
+    // some Items can be taken over directly
     const sal_uInt16 nDirectMatch = 2;
     static RES_FRMATR const aDirectMatch[ nDirectMatch ] =
     {
-        RES_LR_SPACE,   // Aussenabstand links/rechts: SvxLRSpaceItem
-        RES_UL_SPACE    // Aussenabstand Oben/unten:   SvxULSpaceItem
+        RES_LR_SPACE,   // outer spacing left/right: SvxLRSpaceItem
+        RES_UL_SPACE    // outer spacing top/bottom: SvxULSpaceItem
     };
     const SfxPoolItem* pPoolItem;
     for(RES_FRMATR i : aDirectMatch)
@@ -1657,10 +1656,10 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
             rFlySet.Put( *pPoolItem );
         }
 
-    // jetzt die Umrandung berechnen und die Box bauen: Das Mass wird fuer die
-    // Rahmen-GROESSE benoetigt!
+    // now calculate the borders and build the box: The unit is needed for the
+    // frame SIZE!
     SvxBoxItem aBox(sw::util::ItemGet<SvxBoxItem>(rFlySet, RES_BOX));
-    // dashed oder solid wird zu solid
+    // dashed or solid becomes solid
     // WW-default: 0.75 pt = 15 twips
     sal_Int32 nLineThick = 15, nOutside=0;
 
@@ -1742,10 +1741,10 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
         rFlySet.Put(aVert);
     }
 
-    // jetzt die Umrandung setzen
+    // now set the border
     rFlySet.Put( aBox );
 
-    // Schattenwurf der Box: SvxShadowItem
+    // shadow of the box: SvxShadowItem
     if( WW8ITEMVALUE(rOldSet, SDRATTR_SHADOW, SdrOnOffItem) )
     {
         SvxShadowItem aShadow( RES_SHADOW );
@@ -2532,7 +2531,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     // when in a header or footer word appears to treat all elements as wrap through
 
-    // Umfluss-Modus ermitteln
+    // determine wrapping mode
     SfxItemSet aFlySet(m_rDoc.GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{});
     css::text::WrapTextMode eSurround = css::text::WrapTextMode_PARALLEL;
     bool bContour = false;
@@ -2555,7 +2554,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             break;
     }
 
-    // bei Modus 2 oder 4 auch den Zusatzparameter beruecksichtigen
+    // if mode 2 or 4 also regard the additional parameters
     if ( (2 == pF->nwr) || (4 == pF->nwr) )
     {
         switch( pF->nwrk )
@@ -2584,8 +2583,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     aSur.SetOutside(true); // Winword can only do outside contours
     aFlySet.Put( aSur );
 
-    // eingelesenes Objekt (kann eine ganze Gruppe sein) jetzt korrekt
-    // positionieren usw.
+    // now position read object correctly and so (can be a whole group)
 
     OSL_ENSURE(!((aData.size() != 1) && bReplaceable),
         "Replaceable drawing with > 1 entries ?");
@@ -2775,11 +2773,11 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
 {
     SdrTextObj* pSdrTextObj;
 
-    // Pruefen, ob Gruppenobjekt (z.B. zwei Klammern) vorliegt
+    // check for group object (e.g. two parenthesis)
     if (SdrObjGroup* pThisGroup = dynamic_cast<SdrObjGroup*>( pRecord->pObj) )
     {
-        // Gruppenobjekte haben keinen Text. Fuege ein Textobjekt in die
-        // Gruppe ein, um den Text zu halten.
+        // Group objects don't have text. Insert a text object into
+        // the group for holding the text.
         pSdrTextObj = new SdrRectObj( OBJ_TEXT, pThisGroup->GetCurrentBoundRect());
 
         SfxItemSet aSet(m_pDrawModel->GetItemPool());
@@ -2800,7 +2798,7 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
         Size aObjSize(pSdrTextObj->GetSnapRect().GetWidth(),
             pSdrTextObj->GetSnapRect().GetHeight());
 
-        // Objekt ist Bestandteil einer Gruppe?
+        // Object is part of a group?
         SdrObject* pGroupObject = pSdrTextObj->GetUpGroup();
 
         const size_t nOrdNum = pSdrTextObj->GetOrdNum();
@@ -2815,18 +2813,18 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
         {
             if( pGroupObject || (pSdrTextObj != pTrueObject) )
             {
-                // Objekt wurde bereits (in der Gruppe und) der Drawing-Page
-                // durch ein neues SdrGrafObj ersetzt.
+                // Object is already replaced by a new SdrGrafObj (in the group
+                // and) the Drawing-Page.
 
                 SdrObject* pNewObj = pGroupObject ?
                     pGroupObject->GetSubList()->GetObj(nOrdNum) : pTrueObject;
                 if (pSdrTextObj != pNewObj)
                 {
-                    // Objekt in der Z-Order-Liste ersetzen
+                    // Replace object in the Z-Order-List
                     m_pMSDffManager->ExchangeInShapeOrder(pSdrTextObj, 0, pNewObj);
-                    // Objekt jetzt noch loeschen
+                    // now delete object
                     SdrObject::Free( pRecord->pObj );
-                    // und das neue Objekt merken.
+                    // and save the new object.
                     pRecord->pObj = pNewObj;
                 }
             }
@@ -2837,11 +2835,11 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
                 // take the object from the drawing page
                 if( pSdrTextObj->GetPage() )
                     m_pDrawPg->RemoveObject( pSdrTextObj->GetOrdNum() );
-                // und FrameFormat entfernen, da durch Grafik ersetzt (dies
-                // loescht auch das Objekt)
+                // and delete FrameFormat, because replace by graphic
+                // (this also deletes the object)
                 m_rDoc.DelFrameFormat( pRetFrameFormat );
                 pRetFrameFormat = nullptr;
-                // auch den Objektmerker loeschen
+                // also delete the object record
                 pRecord->pObj = nullptr;
             }
         }
@@ -2896,7 +2894,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
             "Not the anchor type requested!");
 
         // if everything is OK, find pointer on new object and correct
-        // Z-order list (oder delete entry)
+        // Z-order list (or delete entry)
         rpOurNewObject = CreateContactObject(pRetFrameFormat);
 
         // remove old object from the Z-Order list
@@ -3053,16 +3051,16 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
             if( OBJ_OLE2 != SdrObjKind(rpObject->GetObjIdentifier()) )
                 SetAttributesAtGrfNode( pRecord, pRetFrameFormat, pF );
         }
-        // mehrfaches Auftreten gleicher Grafik-Namen vermeiden
+        // avoid multiple occurrences of the same graphic name
         m_aGrfNameGenerator.SetUniqueGraphName(pRetFrameFormat, aObjectName);
     }
-    // falls alles Ok, Zeiger auf neues Objekt ermitteln und Z-Order-Liste
-    // entsprechend korrigieren (oder Eintrag loeschen)
+    // if everything is OK, determine pointer to new object and correct
+    // Z-Order-List accordingly (or delete entry)
     rpOurNewObject = CreateContactObject(pRetFrameFormat);
 
-    // altes Objekt aus der Z-Order-Liste entfernen
+    // remove old object from Z-Order-List
     m_pMSDffManager->RemoveFromShapeOrder( rpObject );
-    // aus der Drawing-Page rausnehmen
+    // remove from Drawing-Page
     if( rpObject->GetPage() )
         m_pDrawPg->RemoveObject( rpObject->GetOrdNum() );
 
@@ -3072,14 +3070,14 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
         Warning: from now on query only pOrgShapeObject!
     */
 
-    // Kontakt-Objekt in die Z-Order-Liste und die Page aufnehmen
+    // add Contact-Object to the Z-Order-List and the page
     if (rpOurNewObject)
     {
         if (!m_bHdFtFootnoteEdn)
             m_pMSDffManager->StoreShapeOrder(pF->nSpId, 0, rpOurNewObject );
 
-        // Das Kontakt-Objekt MUSS in die Draw-Page gesetzt werden, damit in
-        // SwWW8ImplReader::LoadDoc1() die Z-Order festgelegt werden kann !!!
+        // The Contact-Object MUST be set in the Draw-Page, so that in
+        // SwWW8ImplReader::LoadDoc1() the Z-Order can be defined !!!
         if (!rpOurNewObject->IsInserted())
         {
             // pass information, if object is in page header|footer to method.
@@ -3096,7 +3094,7 @@ void SwWW8ImplReader::GrafikCtor()  // For SVDraw and VCControls and Escher
     {
         m_rDoc.getIDocumentDrawModelAccess().GetOrCreateDrawModel(); // #i52858# - method name changed
         m_pDrawModel  = m_rDoc.getIDocumentDrawModelAccess().GetDrawModel();
-        OSL_ENSURE(m_pDrawModel, "Kann DrawModel nicht anlegen");
+        OSL_ENSURE(m_pDrawModel, "Cannot create DrawModel");
         m_pDrawPg = m_pDrawModel->GetPage(0);
 
         m_pMSDffManager = new SwMSDffManager(*this, m_bSkipImages);
@@ -3114,8 +3112,8 @@ void SwWW8ImplReader::GrafikCtor()  // For SVDraw and VCControls and Escher
 
 void SwWW8ImplReader::GrafikDtor()
 {
-    DELETEZ(m_pDrawEditEngine); // evtl. von Grafik angelegt
-    DELETEZ(m_pWWZOrder);       // dito
+    DELETEZ(m_pDrawEditEngine); // maybe create from graphic
+    DELETEZ(m_pWWZOrder);       // same
 }
 
 void SwWW8FltAnchorStack::AddAnchor(const SwPosition& rPos, SwFrameFormat *pFormat)
