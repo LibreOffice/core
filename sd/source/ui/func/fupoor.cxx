@@ -72,7 +72,6 @@ FuPoor::FuPoor (
       mpDocSh( pDrDoc->GetDocSh() ),
       mpDoc(pDrDoc),
       nSlotId( rReq.GetSlot() ),
-      nSlotValue(0),
       pDialog(nullptr),
       bIsInDragMode(false),
       bNoScrollUntilInside (true),
@@ -1028,22 +1027,8 @@ bool FuPoor::RequestHelp(const HelpEvent& rHEvt)
     return bReturn;
 }
 
-void FuPoor::ReceiveRequest(SfxRequest& rReq)
+void FuPoor::ReceiveRequest(SfxRequest& /*rReq*/)
 {
-    const SfxItemSet* pSet = rReq.GetArgs();
-
-    if (pSet)
-    {
-        if( pSet->GetItemState( nSlotId ) == SfxItemState::SET )
-        {
-            const SfxPoolItem& rItem = pSet->Get( nSlotId );
-
-            if( dynamic_cast< const SfxAllEnumItem *>( &rItem ) !=  nullptr )
-            {
-                nSlotValue = static_cast<const SfxAllEnumItem&>( rItem ).GetValue();
-            }
-        }
-    }
 }
 
 SdrObject* FuPoor::CreateDefaultObject(const sal_uInt16, const ::tools::Rectangle& )

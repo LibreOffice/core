@@ -701,7 +701,6 @@ void SAL_CALL SlideShow::end()
                     pFrameView->SetPreviousViewShellType(ViewShell::ST_NONE);
 
                     pFrameView->SetPresentationViewShellId(SID_VIEWSHELL0);
-                    pFrameView->SetSlotId(SID_OBJECT_SELECT);
                     pFrameView->SetPreviousViewShellType(pViewShell->GetShellType());
 
                     framework::FrameworkHelper::Instance(*mpCurrentViewShellBase)->RequestView(

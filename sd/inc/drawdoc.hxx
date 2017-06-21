@@ -173,7 +173,6 @@ private:
     bool                mbAllocDocSh;       // => AllocModel()
     DocumentType        meDocType;
     CharClass*          mpCharClass;
-    css::lang::Locale*  mpLocale;
 
     ::std::unique_ptr<ImpDrawPageListWatcher> mpDrawPageListWatcher;
     ::std::unique_ptr<ImpMasterPageListWatcher> mpMasterPageListWatcher;

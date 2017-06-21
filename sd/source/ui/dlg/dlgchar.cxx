@@ -45,7 +45,7 @@ SdCharDlg::SdCharDlg( vcl::Window* pParent, const SfxItemSet* pAttr,
 
     mnCharName = AddTabPage( "RID_SVXPAGE_CHAR_NAME", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), nullptr );
     mnCharEffects =  AddTabPage( "RID_SVXPAGE_CHAR_EFFECTS", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), nullptr );
-    mnCharPosition =  AddTabPage( "RID_SVXPAGE_CHAR_POSITION", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), nullptr );
+    AddTabPage( "RID_SVXPAGE_CHAR_POSITION", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), nullptr );
     mnCharBackground = AddTabPage( "RID_SVXPAGE_BACKGROUND", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr );
 }
 

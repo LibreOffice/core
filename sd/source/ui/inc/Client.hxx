@@ -33,7 +33,6 @@ class Client : public SfxInPlaceClient
 {
     ViewShell*      mpViewShell;
     SdrOle2Obj*     pSdrOle2Obj;
-    SdrGrafObj*     pSdrGrafObj;
 
     virtual void    ObjectAreaChanged() override;
     virtual void    RequestNewObjectArea( ::tools::Rectangle& ) override;
@@ -42,7 +41,6 @@ class Client : public SfxInPlaceClient
 public:
     Client (SdrOle2Obj* pObj, ViewShell* pSdViewShell, vcl::Window* pWindow);
     virtual ~Client() override;
-    void            SetSdrGrafObj(SdrGrafObj* pObj) { pSdrGrafObj = pObj; }
 };
 
 } // end of namespace sd

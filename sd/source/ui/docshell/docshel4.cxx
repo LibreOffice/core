@@ -267,8 +267,6 @@ bool DrawDocShell::InitNew( const css::uno::Reference< css::embed::XStorage >& x
  */
 bool DrawDocShell::Load( SfxMedium& rMedium )
 {
-    mbNewDocument = false;
-
     // If this is an ODF file being loaded, then by default, use legacy processing
     // for tdf#99729 (if required, it will be overridden in *::ReadUserDataSequence())
     if (IsOwnStorageFormat(rMedium))
@@ -356,8 +354,6 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
  */
 bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
 {
-    mbNewDocument = false;
-
     WaitObject* pWait = nullptr;
     if( mpViewShell )
         pWait = new WaitObject( static_cast<vcl::Window*>(mpViewShell->GetActiveWindow()) );
@@ -438,8 +434,6 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
  */
 bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
 {
-    mbNewDocument = false;
-
     const OUString  aFilterName( rMedium.GetFilter()->GetFilterName() );
     bool            bRet = false;
     bool            bStartPresentation = false;

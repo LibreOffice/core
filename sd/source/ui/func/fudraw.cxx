@@ -344,17 +344,6 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 }
                 else
                 {
-                    /* If IP-Client active, we reset the pointer to the OLE- and
-                       to the old graphic object of SdClient. With this, we
-                       avoid the restoration of an no more existing object in
-                       ::SelectionHasChanged after deletion. All other OLE
-                       objects are not affected. */
-                    OSL_ASSERT (mpViewShell->GetViewShell()!=nullptr);
-                    Client* pIPClient = static_cast<Client*>(
-                        mpViewShell->GetViewShell()->GetIPClient());
-                    if (pIPClient && pIPClient->IsObjectInPlaceActive())
-                        pIPClient->SetSdrGrafObj(nullptr);
-
                     // wait-mousepointer while deleting object
                     WaitObject aWait( static_cast<vcl::Window*>(mpViewShell->GetActiveWindow()) );
                     // delete object

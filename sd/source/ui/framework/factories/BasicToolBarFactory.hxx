@@ -82,7 +82,6 @@ public:
 private:
     css::uno::Reference<css::drawing::framework::XConfigurationController> mxConfigurationController;
     css::uno::Reference<css::frame::XController> mxController;
-    ViewShellBase* mpViewShellBase;
 
     void Shutdown();
 
