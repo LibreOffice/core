@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_3bc1a381",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T15:43:01Z",
+      "side": 1,
+      "message": "the mpContents is leaked\n\nactually there\u0027s no reason why this has to be a pointer, just make it a value and replace checks of mpContents !\u003d nullptr with a check of empty()",
+      "revId": "d1f1ac45e6228ce5ba02c3f53af050759fd76d0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_3b48c32d",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T15:43:01Z",
+      "side": 1,
+      "message": "empty line after { is a bit much whitespace",
+      "revId": "d1f1ac45e6228ce5ba02c3f53af050759fd76d0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_5b558fc4",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T15:43:01Z",
+      "side": 1,
+      "message": "the caller must ensure that nPara is consistent with rSel i.e. the latter does not contain other paragraphs than this one... so best to convert this new mnParagraph check to an assert() and use \u003d\u003d not \u003e\u003d/\u003c\u003d",
+      "revId": "d1f1ac45e6228ce5ba02c3f53af050759fd76d0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_1b72277d",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T15:43:01Z",
+      "side": 1,
+      "message": "this loop needs to skip over portions that end before mnSel.aStartPos, or start after mnSel.aEndPos",
+      "revId": "d1f1ac45e6228ce5ba02c3f53af050759fd76d0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_bb62f3ab",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T15:43:01Z",
+      "side": 1,
+      "message": "this check is superfluous, see above comment",
+      "revId": "d1f1ac45e6228ce5ba02c3f53af050759fd76d0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_db57bfc8",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T15:43:01Z",
+      "side": 1,
+      "message": "this check is suprefluous",
+      "revId": "d1f1ac45e6228ce5ba02c3f53af050759fd76d0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_fb5c7bef",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T15:43:01Z",
+      "side": 1,
+      "message": "this variable isn\u0027t used outside the loop",
+      "revId": "d1f1ac45e6228ce5ba02c3f53af050759fd76d0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
