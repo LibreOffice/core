@@ -47,6 +47,25 @@
             </info>
             <value>daily-master-gandalf</value>
         </prop>
+        <prop oor:name="UpdateRunning" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+                <desc>Determines if we are currently in an update process.
+                    Needs to be reset after the update has been applied</desc>
+            </info>
+            <value>false</value>
+        </prop>
+        <prop oor:name="OldBuildID" oor:type="xs:string" oor:nillable="false">
+            <info>
+                <desc>The build ID of the build before the update</desc>
+            </info>
+            <value></value>
+        </prop>
+        <prop oor:name="SeeAlso" oor:type="xs:string" oor:nillable="false">
+            <info>
+                <desc>The URL to open after a successful update.</desc>
+            </info>
+            <value></value>
+        </prop>
     </group>
   </component>
 </oor:component-schema>

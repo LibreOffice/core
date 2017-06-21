@@ -75,6 +75,8 @@
 #include <com/sun/star/ui/theUIElementFactoryManager.hpp>
 #include <com/sun/star/ui/theWindowStateConfiguration.hpp>
 #include <com/sun/star/office/Quickstart.hpp>
+#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 
 #include <desktop/exithelper.h>
 #include <sal/log.hxx>
@@ -1465,6 +1467,41 @@ int Desktop::Main()
 #if HAVE_FEATURE_UPDATE_MAR
         if (officecfg::Office::Update::Update::Enabled::get())
         {
+            // check if we just updated
+            bool bUpdateRunning = officecfg::Office::Update::Update::UpdateRunning::get();
+            if (bUpdateRunning)
+            {
+                OUString aSeeAlso = officecfg::Office::Update::Update::SeeAlso::get();
+                OUString aOldBuildID = officecfg::Office::Update::Update::OldBuildID::get();
+
+                OUString aBuildID("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}");
+                rtl::Bootstrap::expandMacros(aBuildID);
+                if (aOldBuildID == aBuildID)
+                {
+                    SAL_INFO("desktop", "failed updater");
+                }
+                else
+                {
+                    if (!aSeeAlso.isEmpty())
+                    {
+                        SAL_INFO("desktop", "See also: " << aSeeAlso);
+                                Reference< css::system::XSystemShellExecute > xSystemShell(
+                        SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
+
+                        xSystemShell->execute( aSeeAlso, OUString(), SystemShellExecuteFlags::URIS_ONLY );
+                    }
+                }
+
+                // reset all the configuration values,
+                // all values need to be read before this code
+                std::shared_ptr< comphelper::ConfigurationChanges > batch(
+                        comphelper::ConfigurationChanges::create());
+                officecfg::Office::Update::Update::UpdateRunning::set(false, batch);
+                officecfg::Office::Update::Update::SeeAlso::set(OUString(), batch);
+                officecfg::Office::Update::Update::OldBuildID::set(OUString(), batch);
+                batch->commit();
+            }
+
             osl::DirectoryItem aPatchInfo;
             osl::DirectoryItem::get(Updater::getUpdateInfoURL(), aPatchInfo);
             osl::DirectoryItem aDirectoryItem;
@@ -1472,6 +1509,13 @@ int Desktop::Main()
 
             if (aPatchInfo.is() && aDirectoryItem.is())
             {
+                OUString aBuildID("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}");
+                rtl::Bootstrap::expandMacros(aBuildID);
+                std::shared_ptr< comphelper::ConfigurationChanges > batch(
+                        comphelper::ConfigurationChanges::create());
+                officecfg::Office::Update::Update::OldBuildID::set(aBuildID, batch);
+                officecfg::Office::Update::Update::UpdateRunning::set(true, batch);
+                batch->commit();
                 update();
             }
             else if (isTimeForUpdateCheck())
