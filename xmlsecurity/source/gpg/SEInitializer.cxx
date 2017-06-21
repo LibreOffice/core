@@ -11,6 +11,8 @@
 #include "SecurityEnvironment.hxx"
 #include "XMLSecurityContext.hxx"
 
+#include <gpgme.h>
+#include <context.h>
 
 using namespace css;
 using namespace css::lang;
@@ -21,6 +23,9 @@ using namespace css::xml::crypto;
 SEInitializerGpg::SEInitializerGpg( const css::uno::Reference< css::uno::XComponentContext > &rxContext )
 {
     m_xContext = rxContext;
+
+    // Also init GpgME while we're at it
+    GpgME::initializeLibrary();
 }
 
 SEInitializerGpg::~SEInitializerGpg()

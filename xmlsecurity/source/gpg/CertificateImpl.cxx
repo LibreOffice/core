@@ -24,13 +24,12 @@ using namespace css::security;
 using namespace css::util;
 
 CertificateImpl::CertificateImpl() :
-    m_pKey(nullptr)
+    m_pKey()
 {
 }
 
 CertificateImpl::~CertificateImpl()
 {
-    // TODO: cleanup key
 }
 
 //Methods from XCertificateImpl
@@ -214,17 +213,16 @@ void CertificateImpl::setCertificate(GpgME::Context* ctx, const GpgME::Key& key)
     GpgME::Data data_out;
     ctx->exportPublicKeys(key.keyID(), data_out);
 
-    // TODO: needs some error handling
-    data_out.seek(0,SEEK_SET);
+    assert(data_out.seek(0,SEEK_SET) == 0);
     int len=0, curr=0; char buf;
     while( (curr=data_out.read(&buf, 1)) )
         len += curr;
 
     // write bits to sequence of bytes
     m_aBits.realloc(len);
-    data_out.seek(0,SEEK_SET);
+    assert(data_out.seek(0,SEEK_SET) == 0);
     if( data_out.read(m_aBits.getArray(), len) != len )
-        throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+        throw RuntimeException("The GpgME library failed to read the key");
 }
 
 const GpgME::Key* CertificateImpl::getCertificate() const
