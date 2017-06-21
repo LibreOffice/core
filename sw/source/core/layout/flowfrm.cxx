@@ -402,8 +402,18 @@ SwLayoutFrame *SwFlowFrame::CutTree( SwFrame *pStart )
         if ( !pLay->Lower() && !pLay->IsColLocked() &&
              !static_cast<SwFootnoteFrame*>(pLay)->IsBackMoveLocked() )
         {
-            pLay->Cut();
-            SwFrame::DestroyFrame(pLay);
+            // tdf#101821 don't delete it while iterating over it
+            if (!pLay->IsDeleteForbidden())
+            {
+                pLay->Cut();
+                SwFrame::DestroyFrame(pLay);
+            }
+            // else: assume there is code on the stack to clean up empty
+            // footnote frames
+            // (don't go into the else branch below, it produces a disconnected
+            // footnote with null upper that can be returned by
+            // SwFootnoteBossFrame::FindFootnote() causing null pointer deref
+            // in SwTextFrame::ConnectFootnote()
         }
         else
         {
