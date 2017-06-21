@@ -917,7 +917,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	wizards_basicusr \
 	wizards_properties \
 	wizards_wizardshare \
-	xmlsec \
 	$(if $(ENABLE_HEADLESS),, \
 		chart2_opengl_shader \
 	) \
