@@ -366,7 +366,6 @@ public:
 
     bool m_bFirstCSS1Rule : 1;        // was a property already written
     bool m_bFirstCSS1Property : 1;    // was a property already written
-    bool m_bPoolCollTextModified : 1; // the text body style was modified
 
     // 16
     bool m_bCSS1IgnoreFirstPageDesc : 1;

@@ -1084,7 +1084,6 @@ IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
 
     //create the send dialog
     VclPtr<SwSendMailDialog> pDlg = VclPtr<SwSendMailDialog>::Create(pButton, *xConfigItem);
-    pDlg->SetDocumentCount( nEnd );
     pDlg->ShowDialog();
     //help to force painting the dialog
     //TODO/CLEANUP
@@ -1241,7 +1240,7 @@ IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
             break;
         }
     }
-    pDlg->EnableDesctruction();
+    pDlg->EnableDestruction();
     ::osl::File::remove( sTargetTempURL );
 
     endDialog(pButton);

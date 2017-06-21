@@ -212,8 +212,7 @@ public:
     virtual void        dispose() override;
 
     void                AddDocument( SwMailDescriptor& rDesc );
-    void                SetDocumentCount( sal_Int32 nAllDocuments );
-    void                EnableDesctruction() {m_bDesctructionEnabled = true;}
+    void                EnableDestruction() {m_bDesctructionEnabled = true;}
     void                ShowDialog();
 
     void                DocumentSent( css::uno::Reference< css::mail::XMailMessage> const & xMessage,

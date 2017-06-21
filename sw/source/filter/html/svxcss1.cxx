@@ -722,7 +722,6 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL,
     sBaseURL( rBaseURL ),
     pSheetItemSet(nullptr),
     pItemSet(nullptr),
-    pSearchEntry( nullptr ),
     pPropInfo( nullptr ),
     nMinFixLineSpace(  MM50/2 ),
     eDfltEnc( RTL_TEXTENCODING_DONTKNOW ),
@@ -774,14 +773,12 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL,
 
     pSheetItemSet = new SfxItemSet( rPool, &aWhichMap[0] );
     pSheetPropInfo = new SvxCSS1PropertyInfo;
-    pSearchEntry = new SvxCSS1MapEntry( rPool, &aWhichMap[0] );
 }
 
 SvxCSS1Parser::~SvxCSS1Parser()
 {
     delete pSheetItemSet;
     delete pSheetPropInfo;
-    delete pSearchEntry;
 }
 
 void SvxCSS1Parser::InsertId( const OUString& rId,

@@ -46,8 +46,6 @@ class SwLabPreview : public vcl::Window
     long m_lLeftWidth;
     long m_lUpperWidth;
     long m_lColsWidth;
-    long m_lPWidthWidth;
-    long m_lPHeightWidth;
 
     long m_lXWidth;
     long m_lXHeight;
