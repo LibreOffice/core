@@ -43,13 +43,10 @@ struct SfxViewShell_Impl
 {
     ::osl::Mutex                aMutex;
     ::comphelper::OInterfaceContainerHelper2 aInterceptorContainer;
-    bool                        m_bControllerSet;
     SfxShellArr_Impl            aArr;
     Size                        aMargin;
     bool                        m_bHasPrintOptions;
     bool                        m_bIsShowView;
-    bool                        m_bGotOwnership;
-    bool                        m_bGotFrameOwnership;
     sal_uInt16                  m_nFamily;
     ::rtl::Reference<SfxBaseController> m_pController;
     std::unique_ptr< ::svt::AcceleratorExecute > m_xAccExec;

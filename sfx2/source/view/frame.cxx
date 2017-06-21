@@ -338,10 +338,6 @@ void SfxFrame::GetViewData_Impl()
     SfxViewFrame* pViewFrame = GetCurrentViewFrame();
     if( pViewFrame && pViewFrame->GetViewShell() )
     {
-        const SfxMedium *pMed = GetCurrentDocument()->GetMedium();
-        bool bReadOnly = pMed->GetOpenMode() == SFX_STREAM_READONLY;
-        GetDescriptor()->SetReadOnly( bReadOnly );
-
         SfxItemSet *pSet = GetDescriptor()->GetArgs();
         bool bGetViewData = false;
         if ( GetController().is() && pSet->GetItemState( SID_VIEW_DATA ) != SfxItemState::SET )
