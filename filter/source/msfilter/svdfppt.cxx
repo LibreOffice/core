@@ -2934,6 +2934,8 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                         pPtr->pAObj = nullptr;
                                     if (pPtr->pBObj == rSlidePersist.pBObj)
                                         pPtr->pBObj = nullptr;
+                                    if (pPtr->pCObj == rSlidePersist.pBObj)
+                                        pPtr->pCObj = nullptr;
                                 }
                             }
                             SdrObject::Free(rSlidePersist.pBObj);
