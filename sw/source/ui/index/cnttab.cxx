@@ -298,7 +298,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet&
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");
     m_nSelectId = AddTabPage("index", SwTOXSelectTabPage::Create, nullptr);
-    m_nStylesId = AddTabPage("styles", SwTOXStylesTabPage::Create, nullptr);
+    AddTabPage("styles", SwTOXStylesTabPage::Create, nullptr);
     m_nColumnId = AddTabPage("columns", SwColumnPage::Create, nullptr);
     m_nBackGroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr);
     m_nEntriesId = AddTabPage("entries", SwTOXEntryTabPage::Create, nullptr);

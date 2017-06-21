@@ -83,15 +83,11 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
     , bNewStyle(bNew)
     , m_nIndentsId(0)
     , m_nAlignId(0)
-    , m_nTextFlowId(0)
-    , m_nAsianTypo(0)
     , m_nFontId(0)
     , m_nFontEffectId(0)
     , m_nPositionId(0)
     , m_nAsianLayoutId(0)
-    , m_nTabId(0)
     , m_nOutlineId(0)
-    , m_nDropCapsId(0)
     , m_nBackgroundId(0)
     , m_nAreaId(0)
     , m_nTransparenceId(0)
@@ -105,12 +101,8 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
     , m_nHeaderId(0)
     , m_nFooterId(0)
     , m_nPageId(0)
-    , m_nFootNoteId(0)
-    , m_nTextGridId(0)
-    , m_nSingleId(0)
     , m_nBulletId(0)
     , m_nNumId(0)
-    , m_nBmpId(0)
     , m_nNumOptId(0)
     , m_nNumPosId(0)
 {
@@ -165,11 +157,11 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
 
             OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH), "GetTabPageRangesFunc fail!");
-            m_nTextFlowId = AddTabPage("textflow", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH) );
+            AddTabPage("textflow", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH) );
 
             OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageRangesFunc fail!");
-            m_nAsianTypo = AddTabPage("asiantypo",  pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),       pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN) );
+            AddTabPage("asiantypo",  pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),       pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN) );
 
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageRangesFunc fail!");
@@ -193,12 +185,10 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
 
             OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR), "GetTabPageRangesFunc fail!");
-            m_nTabId = AddTabPage("tabs", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR) );
+            AddTabPage("tabs", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR) );
 
-            m_nOutlineId = AddTabPage("outline", SwParagraphNumTabPage::Create,
-                                    SwParagraphNumTabPage::GetRanges);
-            m_nDropCapsId = AddTabPage("dropcaps", SwDropCapsPage::Create,
-                           SwDropCapsPage::GetRanges );
+            AddTabPage("outline", SwParagraphNumTabPage::Create, SwParagraphNumTabPage::GetRanges);
+            AddTabPage("dropcaps", SwDropCapsPage::Create, SwDropCapsPage::GetRanges );
 
             // add Area and Transparence TabPages
             m_nAreaId = AddTabPage("area", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_AREA ));
@@ -289,12 +279,8 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
                 m_nBorderId = AddTabPage("borders",
                                 pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
                 m_nColumnId = AddTabPage("columns", SwColumnPage::Create, SwColumnPage::GetRanges );
-                m_nFootNoteId = AddTabPage("footnotes",
-                                                SwFootNotePage::Create,
-                                                SwFootNotePage::GetRanges );
-                m_nTextGridId = AddTabPage("textgrid",
-                                                SwTextGridPage::Create,
-                                                SwTextGridPage::GetRanges );
+                AddTabPage("footnotes", SwFootNotePage::Create, SwFootNotePage::GetRanges );
+                AddTabPage("textgrid", SwTextGridPage::Create, SwTextGridPage::GetRanges );
                 SvtCJKOptions aCJKOptions;
                 if(!aCJKOptions.IsAsianTypographyEnabled())
                     RemoveTabPage("textgrid");
@@ -311,10 +297,10 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
         // numbering styles
         case SfxStyleFamily::Pseudo:
         {
-            m_nSingleId = AddTabPage("numbering", RID_SVXPAGE_PICK_SINGLE_NUM);
+            AddTabPage("numbering", RID_SVXPAGE_PICK_SINGLE_NUM);
             m_nBulletId = AddTabPage("bullets", RID_SVXPAGE_PICK_BULLET);
             m_nNumId = AddTabPage("outline", RID_SVXPAGE_PICK_NUM);
-            m_nBmpId = AddTabPage("graphics", RID_SVXPAGE_PICK_BMP);
+            AddTabPage("graphics", RID_SVXPAGE_PICK_BMP);
             m_nNumOptId = AddTabPage("customize", RID_SVXPAGE_NUM_OPTIONS );
             m_nNumPosId = AddTabPage("position", RID_SVXPAGE_NUM_POSITION );
         }

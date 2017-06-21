@@ -103,7 +103,6 @@ class SwView_Impl
 
     std::shared_ptr<SwMailMergeConfigItem>
                                 xConfigItem;
-    sal_uInt16                  nMailMergeRestartPage;
 
     sfx2::DocumentInserter*     m_pDocInserter;
     SfxRequest*                 m_pRequest;
@@ -135,10 +134,9 @@ public:
 
     void                            AddTransferable(SwTransferable& rTransferable);
 
-    void SetMailMergeConfigItem(std::shared_ptr<SwMailMergeConfigItem>& rItem, sal_uInt16 nRestart)
+    void SetMailMergeConfigItem(std::shared_ptr<SwMailMergeConfigItem>& rItem)
     {
         xConfigItem = rItem;
-        nMailMergeRestartPage = nRestart;
     }
     std::shared_ptr<SwMailMergeConfigItem>  GetMailMergeConfigItem() {return xConfigItem;}
 

@@ -245,7 +245,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
 // start field dialog
 void NewXForms( SfxRequest& rReq ); // implementation: below
 
-std::shared_ptr<SwMailMergeConfigItem> SwView::EnsureMailMergeConfigItem(const SfxItemSet* pArgs, sal_uInt16 nWizardRestartPage)
+std::shared_ptr<SwMailMergeConfigItem> SwView::EnsureMailMergeConfigItem(const SfxItemSet* pArgs)
 {
     // create if it does not exist yet
     std::shared_ptr<SwMailMergeConfigItem> xMMConfig = GetMailMergeConfigItem();
@@ -302,7 +302,7 @@ std::shared_ptr<SwMailMergeConfigItem> SwView::EnsureMailMergeConfigItem(const S
             }
         }
 
-        SetMailMergeConfigItem(xMMConfig, nWizardRestartPage);
+        SetMailMergeConfigItem(xMMConfig);
     }
     return xMMConfig;
 }
@@ -448,7 +448,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
     acquire();
 
     // create if it does not exist yet
-    std::shared_ptr<SwMailMergeConfigItem> xMMConfig = m_pView->EnsureMailMergeConfigItem(pArgs, m_pWizard ? m_pWizard->GetRestartPage() : 0);
+    std::shared_ptr<SwMailMergeConfigItem> xMMConfig = m_pView->EnsureMailMergeConfigItem(pArgs);
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     m_pWizard = pFact->CreateMailMergeWizard(*m_pView, xMMConfig);
