@@ -168,10 +168,30 @@ SAL_CALL XMLSignature_GpgImpl::generate(
     if( xmlSecTransformCtxXmlExecute(&(pDsigCtx->transformCtx), nodeset) < 0 )
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
+    // now extract the keyid from PGPData
+    // walk xml tree to PGPData node - go to children, first is
+    // SignedInfo, 2nd is signaturevalue, 3rd is KeyInfo
+    // 1st child is PGPData, 1st grandchild is PGPKeyID
+    cur = xmlSecGetNextElementNode(pNode->children);
+    // TODO error handling
+    cur = xmlSecGetNextElementNode(cur->next);
+    cur = xmlSecGetNextElementNode(cur->next);
+    cur = xmlSecGetNextElementNode(cur->children);
+    // check that this is now PGPData
+    if(!xmlSecCheckNodeName(cur, xmlSecNamePGPData, xmlSecDSigNs))
+        throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+    // check that this is now PGPKeyID
+    cur = xmlSecGetNextElementNode(cur->children);
+    static const xmlChar xmlSecNodePGPKeyID[] = "PGPKeyID";
+    if(!xmlSecCheckNodeName(cur, xmlSecNodePGPKeyID, xmlSecDSigNs))
+        throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+
     GpgME::Context& rCtx=pSecEnv->getGpgContext();
     rCtx.setKeyListMode(GPGME_KEYLIST_MODE_LOCAL);
     GpgME::Error err;
-    if( rCtx.addSigningKey(rCtx.key("0x909BE2575CEDBEA3", err, true)) )
+    if( rCtx.addSigningKey(
+            rCtx.key(
+                reinterpret_cast<char*>(xmlNodeGetContent(cur)), err, true)) )
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
     // good, ctx is setup now, let's sign the lot
