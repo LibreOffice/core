@@ -64,7 +64,7 @@ Warning           ||   ||      |
 /** we get included in contexts that don't have access to config_typesizes.h or C++11 */
 #ifndef __RSC
 
-class ErrCode final
+class SAL_WARN_UNUSED ErrCode final
 {
 public:
     explicit constexpr ErrCode(sal_uInt32 value) : m_value(value) {}
