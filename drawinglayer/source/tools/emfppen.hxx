@@ -60,7 +60,7 @@ namespace emfplushelper
 
         virtual ~EMFPPen() override;
 
-        void SetStrokeWidth(com::sun::star::rendering::StrokeAttributes& rStrokeAttributes, EmfPlusHelperData& rR, const OutDevState& rState);
+        void SetStrokeWidth(com::sun::star::rendering::StrokeAttributes& rStrokeAttributes, EmfPlusHelperData& rR, const ::basegfx::B2DHomMatrix& mapModeTransform);
 
         void SetStrokeAttributes(com::sun::star::rendering::StrokeAttributes& rStrokeAttributes);
 

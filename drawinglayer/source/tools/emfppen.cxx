@@ -97,11 +97,11 @@ namespace emfplushelper
         delete customEndCap;
     }
 
-    void EMFPPen::SetStrokeWidth(rendering::StrokeAttributes& rStrokeAttributes, EmfPlusHelperData& rR, const OutDevState& rState)
+    void EMFPPen::SetStrokeWidth(rendering::StrokeAttributes& rStrokeAttributes, EmfPlusHelperData& rR, const ::basegfx::B2DHomMatrix& mapModeTransform)
     {
         // If a zero width is specified, a minimum value is used, which is determined by the units.
         //TODO Add support for other units than Pixel
-        rStrokeAttributes.StrokeWidth = fabs((rState.mapModeTransform * rR.MapSize(penWidth == 0.0 ? 0.05 : penWidth, 0)).getLength());
+        rStrokeAttributes.StrokeWidth = fabs((mapModeTransform * rR.MapSize(penWidth == 0.0 ? 0.05 : penWidth, 0)).getLength());
 
         // tdf#31814 Based on observation of different EMF+ files (eg. exported by ChemDraw),
         // there is minimal value of line width
@@ -183,7 +183,7 @@ namespace emfplushelper
             " pen data flags: 0x" << penDataFlags << " unit: " << penUnit << " width: " << std::dec << penWidth);
 
         if (penDataFlags & PenDataTransform)
-            readXForm(s, pen_transformation);
+            rR.readXForm(s, pen_transformation);
 
         if (penDataFlags & PenDataStartCap)
         {

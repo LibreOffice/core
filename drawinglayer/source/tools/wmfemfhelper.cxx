@@ -3028,7 +3028,11 @@ namespace wmfemfhelper
                             SAL_INFO("cppcanvas.emf", "EMF+ passed to canvas mtf renderer - header info, size: " << pA->GetDataSize());
                             SvMemoryStream aMemoryStream(const_cast<sal_uInt8 *>(pA->GetData()), pA->GetDataSize(), StreamMode::READ);
 
-                            aEMFPlus.reset(new emfplushelper::EmfPlusHelper(aMemoryStream));
+                            aEMFPlus.reset(
+                                new emfplushelper::EmfPlusHelper(
+                                    aMemoryStream,
+                                    rTargetHolders,
+                                    rPropertyHolders));
                         }
                     }
                     else if (pA->GetComment().equalsIgnoreAsciiCase("EMF_PLUS"))
@@ -3061,8 +3065,6 @@ namespace wmfemfhelper
 
                                 aEMFPlus->processEmfPlusData(
                                     aMemoryStream,
-                                    rTargetHolders,
-                                    rPropertyHolders,
                                     rViewInformation);
                             }
 

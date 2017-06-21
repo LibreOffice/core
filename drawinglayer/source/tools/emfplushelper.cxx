@@ -22,24 +22,22 @@
 
 namespace emfplushelper
 {
-    EmfPlusHelper::EmfPlusHelper(SvMemoryStream& rMS)
-        : mpD(new EmfPlusHelperData(rMS))
+    EmfPlusHelper::EmfPlusHelper(
+        SvMemoryStream& rMS,
+        wmfemfhelper::TargetHolders& rTargetHolders,
+        wmfemfhelper::PropertyHolders& rPropertyHolders)
+    :   mpD(new EmfPlusHelperData(rMS, rTargetHolders, rPropertyHolders))
     {
     }
 
     EmfPlusHelper::~EmfPlusHelper()
     {
-        delete mpD;
     }
 
     void EmfPlusHelper::processEmfPlusData(
         SvMemoryStream& rMS,
-        wmfemfhelper::TargetHolders& rTargetHolders,
-        wmfemfhelper::PropertyHolders& rPropertyHolders,
         const drawinglayer::geometry::ViewInformation2D& rViewInformation)
     {
-        mpD->setTargetHolders(rTargetHolders);
-        mpD->setPropertyHolders(rPropertyHolders);
         mpD->processEmfPlusData(rMS, rViewInformation);
     }
 }

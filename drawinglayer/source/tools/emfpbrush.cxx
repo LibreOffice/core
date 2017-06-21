@@ -200,7 +200,7 @@ namespace emfplushelper
 
             if (additionalFlags & 0x02) {
                 SAL_INFO("cppcanvas.emf", "EMF+\tuse transformation");
-                readXForm(s, brush_transformation);
+                rR.readXForm(s, brush_transformation);
                 hasTransformation = true;
                 SAL_INFO("cppcanvas.emf",
                             "EMF+\tm11: " << brush_transformation.get(0,0) << " m12: " << brush_transformation.get(1,0) <<
@@ -273,7 +273,7 @@ namespace emfplushelper
 
             if (additionalFlags & 0x02) {
                 SAL_INFO("cppcanvas.emf", "EMF+\tuse transformation");
-                readXForm(s, brush_transformation);
+                rR.readXForm(s, brush_transformation);
                 hasTransformation = true;
                 SAL_INFO("cppcanvas.emf",
                     "EMF+\tm11: " << brush_transformation.get(0,0) << " m12: " << brush_transformation.get(1,0) <<

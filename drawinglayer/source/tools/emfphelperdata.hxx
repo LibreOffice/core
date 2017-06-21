@@ -21,83 +21,82 @@
 #define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPHELPERDATA_HXX
 
 #include <emfplushelper.hxx>
-#include <com/sun/star/rendering/XCanvasFont.hpp>
-#include <com/sun/star/rendering/TextDirection.hpp>
-//#include <emfpbrush.hxx>
+//#include <com/sun/star/rendering/XCanvasFont.hpp>
+//#include <com/sun/star/rendering/TextDirection.hpp>
 
 namespace emfplushelper
 {
-        // EMF+ commands
-#define EmfPlusRecordTypeHeader 0x4001
-#define EmfPlusRecordTypeEndOfFile 0x4002
-        //TODO EmfPlusRecordTypeComment 0x4003
-#define EmfPlusRecordTypeGetDC 0x4004
-        //TODO EmfPlusRecordTypeMultiFormatStart 0x4005
-        //TODO EmfPlusRecordTypeMultiFormatSection 0x4006
-        //TODO EmfPlusRecordTypeMultiFormatEnd 0x4007
-#define EmfPlusRecordTypeObject 0x4008
-        //TODO EmfPlusRecordTypeClear 0x4009
-#define EmfPlusRecordTypeFillRects 0x400A
-#define EmfPlusRecordTypeDrawRects 0x400B
-#define EmfPlusRecordTypeFillPolygon 0x400C
-#define EmfPlusRecordTypeDrawLines 0x400D
-#define EmfPlusRecordTypeFillEllipse 0x400E
-#define EmfPlusRecordTypeDrawEllipse 0x400F
-#define EmfPlusRecordTypeFillPie 0x4010
-#define EmfPlusRecordTypeDrawPie 0x4011
-#define EmfPlusRecordTypeDrawArc 0x4012
-        //TODO EmfPlusRecordTypeFillRegion 0x4013
-#define EmfPlusRecordTypeFillPath 0x4014
-#define EmfPlusRecordTypeDrawPath 0x4015
-        //TODO EmfPlusRecordTypeFillClosedCurve 0x4016
-        //TODO EmfPlusRecordTypeDrawClosedCurve 0x4017
-        //TODO EmfPlusRecordTypeDrawCurve 0x4018
-#define EmfPlusRecordTypeDrawBeziers 0x4019
-#define EmfPlusRecordTypeDrawImage 0x401A
-#define EmfPlusRecordTypeDrawImagePoints 0x401B
-#define EmfPlusRecordTypeDrawString 0x401C
-#define EmfPlusRecordTypeSetRenderingOrigin 0x401D
-#define EmfPlusRecordTypeSetAntiAliasMode 0x401E
-#define EmfPlusRecordTypeSetTextRenderingHint 0x401F
-#define EmfPlusRecordTypeSetInterpolationMode 0x4021
-#define EmfPlusRecordTypeSetPixelOffsetMode 0x4022
-        //TODO EmfPlusRecordTypeSetCompositingMode 0x4023
-#define EmfPlusRecordTypeSetCompositingQuality 0x4024
-#define EmfPlusRecordTypeSave 0x4025
-#define EmfPlusRecordTypeRestore 0x4026
-        //TODO EmfPlusRecordTypeBeginContainer 0x4027
-#define EmfPlusRecordTypeBeginContainerNoParams 0x4028
-#define EmfPlusRecordTypeEndContainer 0x4029
-#define EmfPlusRecordTypeSetWorldTransform 0x402A
-#define EmfPlusRecordTypeResetWorldTransform 0x402B
-#define EmfPlusRecordTypeMultiplyWorldTransform 0x402C
-#define EmfPlusRecordTypeTranslateWorldTransform 0x402D
-#define EmfPlusRecordTypeScaleWorldTransform 0x402E
-        //TODO EmfPlusRecordTypeRotateWorldTransform 0x402F
-#define EmfPlusRecordTypeSetPageTransform 0x4030
-        //TODO EmfPlusRecordTypeResetClip 0x4031
-#define EmfPlusRecordTypeSetClipRect 0x4032
-#define EmfPlusRecordTypeSetClipPath 0x4033
-#define EmfPlusRecordTypeSetClipRegion 0x4034
-        //TODO EmfPlusRecordTypeOffsetClip 0x4035
-#define EmfPlusRecordTypeDrawDriverString 0x4036
-        //TODO EmfPlusRecordTypeStrokeFillPath 0x4037
-        //TODO EmfPlusRecordTypeSerializableObject 0x4038
-        //TODO EmfPlusRecordTypeSetTSGraphics 0x4039
-        //TODO EmfPlusRecordTypeSetTSClip 0x403A
+    // EMF+ commands
+    #define EmfPlusRecordTypeHeader 0x4001
+    #define EmfPlusRecordTypeEndOfFile 0x4002
+    //TODO EmfPlusRecordTypeComment 0x4003
+    #define EmfPlusRecordTypeGetDC 0x4004
+    //TODO EmfPlusRecordTypeMultiFormatStart 0x4005
+    //TODO EmfPlusRecordTypeMultiFormatSection 0x4006
+    //TODO EmfPlusRecordTypeMultiFormatEnd 0x4007
+    #define EmfPlusRecordTypeObject 0x4008
+    //TODO EmfPlusRecordTypeClear 0x4009
+    #define EmfPlusRecordTypeFillRects 0x400A
+    #define EmfPlusRecordTypeDrawRects 0x400B
+    #define EmfPlusRecordTypeFillPolygon 0x400C
+    #define EmfPlusRecordTypeDrawLines 0x400D
+    #define EmfPlusRecordTypeFillEllipse 0x400E
+    #define EmfPlusRecordTypeDrawEllipse 0x400F
+    #define EmfPlusRecordTypeFillPie 0x4010
+    #define EmfPlusRecordTypeDrawPie 0x4011
+    #define EmfPlusRecordTypeDrawArc 0x4012
+    //TODO EmfPlusRecordTypeFillRegion 0x4013
+    #define EmfPlusRecordTypeFillPath 0x4014
+    #define EmfPlusRecordTypeDrawPath 0x4015
+    //TODO EmfPlusRecordTypeFillClosedCurve 0x4016
+    //TODO EmfPlusRecordTypeDrawClosedCurve 0x4017
+    //TODO EmfPlusRecordTypeDrawCurve 0x4018
+    #define EmfPlusRecordTypeDrawBeziers 0x4019
+    #define EmfPlusRecordTypeDrawImage 0x401A
+    #define EmfPlusRecordTypeDrawImagePoints 0x401B
+    #define EmfPlusRecordTypeDrawString 0x401C
+    #define EmfPlusRecordTypeSetRenderingOrigin 0x401D
+    #define EmfPlusRecordTypeSetAntiAliasMode 0x401E
+    #define EmfPlusRecordTypeSetTextRenderingHint 0x401F
+    #define EmfPlusRecordTypeSetInterpolationMode 0x4021
+    #define EmfPlusRecordTypeSetPixelOffsetMode 0x4022
+    //TODO EmfPlusRecordTypeSetCompositingMode 0x4023
+    #define EmfPlusRecordTypeSetCompositingQuality 0x4024
+    #define EmfPlusRecordTypeSave 0x4025
+    #define EmfPlusRecordTypeRestore 0x4026
+    //TODO EmfPlusRecordTypeBeginContainer 0x4027
+    #define EmfPlusRecordTypeBeginContainerNoParams 0x4028
+    #define EmfPlusRecordTypeEndContainer 0x4029
+    #define EmfPlusRecordTypeSetWorldTransform 0x402A
+    #define EmfPlusRecordTypeResetWorldTransform 0x402B
+    #define EmfPlusRecordTypeMultiplyWorldTransform 0x402C
+    #define EmfPlusRecordTypeTranslateWorldTransform 0x402D
+    #define EmfPlusRecordTypeScaleWorldTransform 0x402E
+    //TODO EmfPlusRecordTypeRotateWorldTransform 0x402F
+    #define EmfPlusRecordTypeSetPageTransform 0x4030
+    //TODO EmfPlusRecordTypeResetClip 0x4031
+    #define EmfPlusRecordTypeSetClipRect 0x4032
+    #define EmfPlusRecordTypeSetClipPath 0x4033
+    #define EmfPlusRecordTypeSetClipRegion 0x4034
+    //TODO EmfPlusRecordTypeOffsetClip 0x4035
+    #define EmfPlusRecordTypeDrawDriverString 0x4036
+    //TODO EmfPlusRecordTypeStrokeFillPath 0x4037
+    //TODO EmfPlusRecordTypeSerializableObject 0x4038
+    //TODO EmfPlusRecordTypeSetTSGraphics 0x4039
+    //TODO EmfPlusRecordTypeSetTSClip 0x403A
 
-        // EMF+object types
-#define EmfPlusObjectTypeBrush 0x100
-#define EmfPlusObjectTypePen 0x200
-#define EmfPlusObjectTypePath 0x300
-#define EmfPlusObjectTypeRegion 0x400
-#define EmfPlusObjectTypeImage 0x500
-#define EmfPlusObjectTypeFont 0x600
-#define EmfPlusObjectTypeStringFormat 0x700
-#define EmfPlusObjectTypeImageAttributes 0x800
-#define EmfPlusObjectTypeCustomLineCap 0x900
+    // EMF+object types
+    #define EmfPlusObjectTypeBrush 0x100
+    #define EmfPlusObjectTypePen 0x200
+    #define EmfPlusObjectTypePath 0x300
+    #define EmfPlusObjectTypeRegion 0x400
+    #define EmfPlusObjectTypeImage 0x500
+    #define EmfPlusObjectTypeFont 0x600
+    #define EmfPlusObjectTypeStringFormat 0x700
+    #define EmfPlusObjectTypeImageAttributes 0x800
+    #define EmfPlusObjectTypeCustomLineCap 0x900
 
-#define EmfPlusRegionInitialStateInfinite 0x10000003
+    #define EmfPlusRegionInitialStateInfinite 0x10000003
 
     enum UnitType
     {
@@ -126,71 +125,65 @@ namespace emfplushelper
         virtual ~EMFPObject();
     };
 
-    bool readXForm(SvStream& rIn, basegfx::B2DHomMatrix& rTarget);
-    void readRectangle(SvStream& s, float& x, float& y, float &width, float& height, bool bCompressed);
+//    struct OutDevState
+//    {
+//        OutDevState();
+//
+//        ::basegfx::B2DPolyPolygon                                                clip;
+//        ::tools::Rectangle                                                              clipRect;
+//        css::uno::Reference< css::rendering::XPolyPolygon2D >                    xClipPoly;
+//
+//        css::uno::Sequence< double >                                             lineColor;
+//        css::uno::Sequence< double >                                             fillColor;
+//        css::uno::Sequence< double >                                             textColor;
+//        css::uno::Sequence< double >                                             textFillColor;
+//        css::uno::Sequence< double >                                             textLineColor;
+//
+//        /** Current font.
+//
+//        @attention Beware, this member can be NULL, and
+//        nevertheless text output is generated.
+//        */
+//        css::uno::Reference< css::rendering::XCanvasFont >                       xFont;
+//        ::basegfx::B2DHomMatrix                                                  transform;
+//        ::basegfx::B2DHomMatrix                                                  mapModeTransform;
+//        double                                                                   fontRotation;
+//
+//        FontEmphasisMark                                                         textEmphasisMarkStyle;
+//        PushFlags                                                                pushFlags;
+//        sal_Int8                                                                 textDirection;
+//        sal_Int8                                                                 textAlignment;
+//        FontRelief                                                               textReliefStyle;
+//        sal_Int8                                                                 textOverlineStyle;
+//        sal_Int8                                                                 textUnderlineStyle;
+//        sal_Int8                                                                 textStrikeoutStyle;
+//        TextAlign                                                                textReferencePoint;
+//
+//        bool                                                                     isTextOutlineModeSet;
+//        bool                                                                     isTextEffectShadowSet;
+//        bool                                                                     isTextWordUnderlineSet;
+//
+//        bool                                                                     isLineColorSet;
+//        bool                                                                     isFillColorSet;
+//        bool                                                                     isTextFillColorSet;
+//        bool                                                                     isTextLineColorSet;
+//    };
 
-    struct OutDevState
-    {
-        OutDevState();
-
-        ::basegfx::B2DPolyPolygon                                                clip;
-        ::tools::Rectangle                                                              clipRect;
-        css::uno::Reference< css::rendering::XPolyPolygon2D >                    xClipPoly;
-
-        css::uno::Sequence< double >                                             lineColor;
-        css::uno::Sequence< double >                                             fillColor;
-        css::uno::Sequence< double >                                             textColor;
-        css::uno::Sequence< double >                                             textFillColor;
-        css::uno::Sequence< double >                                             textLineColor;
-
-        /** Current font.
-
-        @attention Beware, this member can be NULL, and
-        nevertheless text output is generated.
-        */
-        css::uno::Reference< css::rendering::XCanvasFont >                       xFont;
-        ::basegfx::B2DHomMatrix                                                  transform;
-        ::basegfx::B2DHomMatrix                                                  mapModeTransform;
-        double                                                                   fontRotation;
-
-        FontEmphasisMark                                                         textEmphasisMarkStyle;
-        PushFlags                                                                pushFlags;
-        sal_Int8                                                                 textDirection;
-        sal_Int8                                                                 textAlignment;
-        FontRelief                                                               textReliefStyle;
-        sal_Int8                                                                 textOverlineStyle;
-        sal_Int8                                                                 textUnderlineStyle;
-        sal_Int8                                                                 textStrikeoutStyle;
-        TextAlign                                                                textReferencePoint;
-
-        bool                                                                     isTextOutlineModeSet;
-        bool                                                                     isTextEffectShadowSet;
-        bool                                                                     isTextWordUnderlineSet;
-
-        bool                                                                     isLineColorSet;
-        bool                                                                     isFillColorSet;
-        bool                                                                     isTextFillColorSet;
-        bool                                                                     isTextLineColorSet;
-    };
-
-    typedef struct
-    {
-        basegfx::B2DHomMatrix   aWorldTransform;
-        OutDevState             aDevState;
-    } EmfPlusGraphicState;
-
-    typedef std::map<int, EmfPlusGraphicState> GraphicStateMap;
+//    typedef struct
+//    {
+//        basegfx::B2DHomMatrix   aWorldTransform;
+//        OutDevState             aDevState;
+//    } EmfPlusGraphicState;
+//
+//    typedef std::map<int, EmfPlusGraphicState> GraphicStateMap;
 
     struct EmfPlusHelperData
     {
     private:
-        // allow setTargetHolders/setPropertyHolders call from there
-        friend class EmfPlusHelper;
-
         /* EMF+ */
         basegfx::B2DHomMatrix   aBaseTransform;
         basegfx::B2DHomMatrix   aWorldTransform;
-        EMFPObject*             aObjects[256];
+        std::unique_ptr<EMFPObject> aObjects[256];
         float                   fPageScale;
         sal_Int32               nOriginX;
         sal_Int32               nOriginY;
@@ -213,37 +206,42 @@ namespace emfplushelper
         SvMemoryStream          mMStream;
 
         /* emf+ graphic state stack */
-        GraphicStateMap         mGSStack;
-        GraphicStateMap         mGSContainerStack;
+//        GraphicStateMap         mGSStack;
+//        GraphicStateMap         mGSContainerStack;
 
         /// data holders
-        wmfemfhelper::TargetHolders*    mpTargetHolders;
-        wmfemfhelper::PropertyHolders*  mpPropertyHolders;
+        wmfemfhelper::TargetHolders&    mrTargetHolders;
+        wmfemfhelper::PropertyHolders&  mrPropertyHolders;
 
+        // readers
         void processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags, sal_uInt32 dataSize, bool bUseWholeStream = false);
         void ReadPoint(SvStream& s, float& x, float& y, sal_uInt32 flags);
-        void ReadRectangle(SvStream& s, float& x, float& y, float &width, float& height, bool bCompressed = false);
 
+        // internal mapper
         void MapToDevice(double& x, double& y);
-    public:
-        ::basegfx::B2DPoint Map(double ix, double iy);
-        ::basegfx::B2DSize MapSize(double iwidth, double iheight);
-    private:
-
-        // to set data holders from EmfPlusHelper
-        void setTargetHolders(wmfemfhelper::TargetHolders& rTargetHolders) { mpTargetHolders = &rTargetHolders; }
-        void setPropertyHolders(wmfemfhelper::PropertyHolders& rPropertyHolders) { mpPropertyHolders = &rPropertyHolders; }
 
     public:
-        EmfPlusHelperData(SvMemoryStream& rMS);
+        EmfPlusHelperData(
+            SvMemoryStream& rMS,
+            wmfemfhelper::TargetHolders& rTargetHolders,
+            wmfemfhelper::PropertyHolders& rPropertyHolders);
+        ~EmfPlusHelperData();
 
         void processEmfPlusData(
             SvMemoryStream& rMS,
             const drawinglayer::geometry::ViewInformation2D& rViewInformation);
 
+        // mappers
+        ::basegfx::B2DPoint Map(double ix, double iy);
+        ::basegfx::B2DSize MapSize(double iwidth, double iheight);
+
+        // readers
+        void ReadRectangle(SvStream& s, float& x, float& y, float &width, float& height, bool bCompressed = false);
+        bool readXForm(SvStream& rIn, basegfx::B2DHomMatrix& rTarget);
+
         /// data holders access
-        wmfemfhelper::TargetHolders& getTargetHolders() const { return *mpTargetHolders; }
-        wmfemfhelper::PropertyHolders& getPropertyHolders() const { return *mpPropertyHolders; }
+//        wmfemfhelper::TargetHolders& getTargetHolders() const { return mrTargetHolders; }
+//        wmfemfhelper::PropertyHolders& getPropertyHolders() const { return mrPropertyHolders; }
     };
 }
 
