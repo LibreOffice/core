@@ -134,7 +134,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/core/drawdoc4 \
 	sd/source/core/drawdoc_animations \
 	sd/source/core/pglink \
-	sd/source/core/sdattr \
 	sd/source/core/sdiocmpt \
 	sd/source/core/sdobjfac \
 	sd/source/core/sdpage \
