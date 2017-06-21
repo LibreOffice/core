@@ -21,7 +21,7 @@ namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 2
 
-class ScCellCursorObj : public CalcUnoApiTest, apitest::XCellSeries
+class ScCellCursorObj : public CalcUnoApiTest, private apitest::XCellSeries
 {
 public:
     ScCellCursorObj();
