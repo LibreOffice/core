@@ -116,8 +116,8 @@ namespace emfplushelper
     {
         switch (nEmfStroke)
         {
-        case EmfPlusLineCapTypeSquare: return rendering::PathCapType::SQUARE;
-        case EmfPlusLineCapTypeRound:  return rendering::PathCapType::ROUND;
+            case EmfPlusLineCapTypeSquare: return rendering::PathCapType::SQUARE;
+            case EmfPlusLineCapTypeRound:  return rendering::PathCapType::ROUND;
         }
 
         // we have no mapping for EmfPlusLineCapTypeTriangle = 0x00000003,
@@ -129,11 +129,12 @@ namespace emfplushelper
     {
         switch (nEmfLineJoin)
         {
-        case EmfPlusLineJoinTypeMiter:        // fall-through
-        case EmfPlusLineJoinTypeMiterClipped: return rendering::PathJoinType::MITER;
-        case EmfPlusLineJoinTypeBevel:        return rendering::PathJoinType::BEVEL;
-        case EmfPlusLineJoinTypeRound:        return rendering::PathJoinType::ROUND;
+            case EmfPlusLineJoinTypeMiter:        // fall-through
+            case EmfPlusLineJoinTypeMiterClipped: return rendering::PathJoinType::MITER;
+            case EmfPlusLineJoinTypeBevel:        return rendering::PathJoinType::BEVEL;
+            case EmfPlusLineJoinTypeRound:        return rendering::PathJoinType::ROUND;
         }
+
         assert(false); // Line Join type isn't in specification.
         return 0;
     }
@@ -154,12 +155,13 @@ namespace emfplushelper
             const float *pPattern = nullptr;
             switch (dashStyle)
             {
-            case EmfPlusLineStyleDash:       nLen = SAL_N_ELEMENTS(dash); pPattern = dash; break;
-            case EmfPlusLineStyleDot:        nLen = SAL_N_ELEMENTS(dot); pPattern = dot; break;
-            case EmfPlusLineStyleDashDot:    nLen = SAL_N_ELEMENTS(dashdot); pPattern = dashdot; break;
-            case EmfPlusLineStyleDashDotDot: nLen = SAL_N_ELEMENTS(dashdotdot); pPattern = dashdotdot; break;
-            case EmfPlusLineStyleCustom:     nLen = dashPatternLen; pPattern = dashPattern; break;
+                case EmfPlusLineStyleDash:       nLen = SAL_N_ELEMENTS(dash); pPattern = dash; break;
+                case EmfPlusLineStyleDot:        nLen = SAL_N_ELEMENTS(dot); pPattern = dot; break;
+                case EmfPlusLineStyleDashDot:    nLen = SAL_N_ELEMENTS(dashdot); pPattern = dashdot; break;
+                case EmfPlusLineStyleDashDotDot: nLen = SAL_N_ELEMENTS(dashdotdot); pPattern = dashdotdot; break;
+                case EmfPlusLineStyleCustom:     nLen = dashPatternLen; pPattern = dashPattern; break;
             }
+
             if (nLen > 0)
             {
                 uno::Sequence<double> aDashArray(nLen);
@@ -175,15 +177,15 @@ namespace emfplushelper
     {
         sal_uInt32 graphicsVersion, penType, penDataFlags, penUnit;
         int i;
-
         s.ReadUInt32(graphicsVersion).ReadUInt32(penType).ReadUInt32(penDataFlags).ReadUInt32(penUnit).ReadFloat(penWidth);
-
         SAL_INFO("cppcanvas.emf", "EMF+\tpen");
         SAL_INFO("cppcanvas.emf", "EMF+\t graphics version: 0x" << std::hex << graphicsVersion << " type (must be set to zero): " << penType <<
             " pen data flags: 0x" << penDataFlags << " unit: " << penUnit << " width: " << std::dec << penWidth);
 
         if (penDataFlags & PenDataTransform)
+        {
             rR.readXForm(s, pen_transformation);
+        }
 
         if (penDataFlags & PenDataStartCap)
         {
@@ -191,7 +193,9 @@ namespace emfplushelper
             SAL_INFO("cppcanvas.emf", "EMF+\t\tstartCap: 0x" << std::hex << startCap);
         }
         else
+        {
             startCap = 0;
+        }
 
         if (penDataFlags & PenDataEndCap)
         {
@@ -199,17 +203,27 @@ namespace emfplushelper
             SAL_INFO("cppcanvas.emf", "EMF+\t\tendCap: 0x" << std::hex << endCap);
         }
         else
+        {
             endCap = 0;
+        }
 
         if (penDataFlags & PenDataJoin)
+        {
             s.ReadInt32(lineJoin);
+        }
         else
+        {
             lineJoin = 0;
+        }
 
         if (penDataFlags & PenDataMiterLimit)
+        {
             s.ReadFloat(mitterLimit);
+        }
         else
+        {
             mitterLimit = 0;
+        }
 
         if (penDataFlags & PenDataLineStyle)
         {
@@ -217,28 +231,41 @@ namespace emfplushelper
             SAL_INFO("cppcanvas.emf", "EMF+\t\tdashStyle: 0x" << std::hex << dashStyle);
         }
         else
+        {
             dashStyle = 0;
+        }
 
         if (penDataFlags & PenDataDashedLineCap)
+        {
             s.ReadInt32(dashCap);
+        }
         else
+        {
             dashCap = 0;
+        }
 
         if (penDataFlags & PenDataDashedLineOffset)
+        {
             s.ReadFloat(dashOffset);
+        }
         else
+        {
             dashOffset = 0;
+        }
 
         if (penDataFlags & PenDataDashedLine)
         {
             dashStyle = EmfPlusLineStyleCustom;
-
             s.ReadInt32(dashPatternLen);
             SAL_INFO("cppcanvas.emf", "EMF+\t\tdashPatternLen: " << dashPatternLen);
 
             if (dashPatternLen<0 || sal_uInt32(dashPatternLen)>SAL_MAX_INT32 / sizeof(float))
+            {
                 dashPatternLen = SAL_MAX_INT32 / sizeof(float);
+            }
+
             dashPattern = new float[dashPatternLen];
+
             for (i = 0; i < dashPatternLen; i++)
             {
                 s.ReadFloat(dashPattern[i]);
@@ -246,23 +273,39 @@ namespace emfplushelper
             }
         }
         else
+        {
             dashPatternLen = 0;
+        }
 
         if (penDataFlags & PenDataNonCenter)
+        {
             s.ReadInt32(alignment);
-        else
-            alignment = 0;
-
-        if (penDataFlags & PenDataCompoundLine) {
-            s.ReadInt32(compoundArrayLen);
-            if (compoundArrayLen<0 || sal_uInt32(compoundArrayLen)>SAL_MAX_INT32 / sizeof(float))
-                compoundArrayLen = SAL_MAX_INT32 / sizeof(float);
-            compoundArray = new float[compoundArrayLen];
-            for (i = 0; i < compoundArrayLen; i++)
-                s.ReadFloat(compoundArray[i]);
         }
         else
+        {
+            alignment = 0;
+        }
+
+        if (penDataFlags & PenDataCompoundLine)
+        {
+            s.ReadInt32(compoundArrayLen);
+
+            if (compoundArrayLen<0 || sal_uInt32(compoundArrayLen)>SAL_MAX_INT32 / sizeof(float))
+            {
+                compoundArrayLen = SAL_MAX_INT32 / sizeof(float);
+            }
+
+            compoundArray = new float[compoundArrayLen];
+
+            for (i = 0; i < compoundArrayLen; i++)
+            {
+                s.ReadFloat(compoundArray[i]);
+            }
+        }
+        else
+        {
             compoundArrayLen = 0;
+        }
 
         if (penDataFlags & PenDataCustomStartCap)
         {
@@ -277,7 +320,9 @@ namespace emfplushelper
             s.Seek(pos + customStartCapLen);
         }
         else
+        {
             customStartCapLen = 0;
+        }
 
         if (penDataFlags & PenDataCustomEndCap)
         {
@@ -292,7 +337,9 @@ namespace emfplushelper
             s.Seek(pos + customEndCapLen);
         }
         else
+        {
             customEndCapLen = 0;
+        }
 
         EMFPBrush::Read(s, rR);
     }

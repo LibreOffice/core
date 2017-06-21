@@ -44,10 +44,14 @@ namespace emfplushelper
 {
     EMFPPath::EMFPPath (sal_Int32 _nPoints, bool bLines)
     {
-        if( _nPoints<0 || sal_uInt32(_nPoints)>SAL_MAX_INT32/(2*sizeof(float)) )
-            _nPoints = SAL_MAX_INT32/(2*sizeof(float));
+        if (_nPoints<0 || sal_uInt32(_nPoints)>SAL_MAX_INT32 / (2 * sizeof(float)))
+        {
+            _nPoints = SAL_MAX_INT32 / (2 * sizeof(float));
+        }
+
         nPoints = _nPoints;
         pPoints = new float [nPoints*2];
+
         if (!bLines)
             pPointTypes = new sal_uInt8 [_nPoints];
         else
@@ -63,13 +67,17 @@ namespace emfplushelper
     // TODO: remove rR argument when debug code is no longer needed
     void EMFPPath::Read (SvStream& s, sal_uInt32 pathFlags, EmfPlusHelperData& rR)
     {
-        for (int i = 0; i < nPoints; i ++) {
-            if (pathFlags & 0x800) {
+        for (int i = 0; i < nPoints; i ++)
+        {
+            if (pathFlags & 0x800)
+            {
                 // EMFPlusPointR: points are stored in EMFPlusInteger7 or
                 // EMFPlusInteger15 objects, see section 2.2.2.21/22
                 // If 0x800 bit is set, the 0x4000 bit is undefined and must be ignored
                 SAL_WARN("cppcanvas.emf", "EMF+\t\t TODO - parse EMFPlusPointR object (section 2.2.1.6)");
-            } else if (pathFlags & 0x4000) {
+            }
+            else if (pathFlags & 0x4000)
+            {
                 // EMFPlusPoint: stored in signed short 16bit integer format
                 sal_Int16 x, y;
 
@@ -77,19 +85,23 @@ namespace emfplushelper
                 SAL_INFO ("cppcanvas.emf", "EMF+\t EMFPlusPoint [x,y]: " << x << "," << y);
                 pPoints [i*2] = x;
                 pPoints [i*2 + 1] = y;
-            } else {
+            }
+            else
+            {
                 // EMFPlusPointF: stored in Single (float) format
                 s.ReadFloat( pPoints [i*2] ).ReadFloat( pPoints [i*2 + 1] );
                 SAL_INFO ("cppcanvas.emf", "EMF+\t EMFPlusPointF [x,y]: " << pPoints [i*2] << "," << pPoints [i*2 + 1]);
             }
-
         }
 
         if (pPointTypes)
-            for (int i = 0; i < nPoints; i ++) {
-                s.ReadUChar( pPointTypes [i] );
-                SAL_INFO ("cppcanvas.emf", "EMF+\tpoint type: " << (int)pPointTypes [i]);
+        {
+            for (int i = 0; i < nPoints; i++)
+            {
+                s.ReadUChar(pPointTypes[i]);
+                SAL_INFO("cppcanvas.emf", "EMF+\tpoint type: " << (int)pPointTypes[i]);
             }
+        }
 
         aPolygon.clear ();
 
@@ -106,14 +118,15 @@ namespace emfplushelper
     ::basegfx::B2DPolyPolygon& EMFPPath::GetPolygon (EmfPlusHelperData& rR, bool bMapIt, bool bAddLineToCloseShape)
     {
         ::basegfx::B2DPolygon polygon;
-
         aPolygon.clear ();
-
         int last_normal = 0, p = 0;
         ::basegfx::B2DPoint prev, mapped;
         bool hasPrev = false;
-        for (int i = 0; i < nPoints; i ++) {
-            if (p && pPointTypes && (pPointTypes [i] == 0)) {
+
+        for (int i = 0; i < nPoints; i ++)
+        {
+            if (p && pPointTypes && (pPointTypes [i] == 0))
+            {
                 aPolygon.append (polygon);
                 last_normal = i;
                 p = 0;
@@ -124,29 +137,45 @@ namespace emfplushelper
                 mapped = rR.Map (pPoints [i*2], pPoints [i*2 + 1]);
             else
                 mapped = ::basegfx::B2DPoint (pPoints [i*2], pPoints [i*2 + 1]);
-            if (pPointTypes) {
-                if ((pPointTypes [i] & 0x07) == 3) {
-                    if (((i - last_normal )% 3) == 1) {
+
+            if (pPointTypes)
+            {
+                if ((pPointTypes [i] & 0x07) == 3)
+                {
+                    if (((i - last_normal )% 3) == 1)
+                    {
                         polygon.setNextControlPoint (p - 1, mapped);
                         SAL_INFO ("cppcanvas.emf", "polygon append  next: " << p - 1 << " mapped: " << mapped.getX () << "," << mapped.getY ());
                         continue;
-                    } else if (((i - last_normal) % 3) == 2) {
+                    }
+                    else if (((i - last_normal) % 3) == 2)
+                    {
                         prev = mapped;
                         hasPrev = true;
                         continue;
                     }
-                } else
+                }
+                else
+                {
                     last_normal = i;
+                }
             }
+
             polygon.append (mapped);
             SAL_INFO ("cppcanvas.emf", "polygon append point: " << pPoints [i*2] << "," << pPoints [i*2 + 1] << " mapped: " << mapped.getX () << ":" << mapped.getY ());
-            if (hasPrev) {
+
+            if (hasPrev)
+            {
                 polygon.setPrevControlPoint (p, prev);
                 SAL_INFO ("cppcanvas.emf", "polygon append  prev: " << p << " mapped: " << prev.getX () << "," << prev.getY ());
                 hasPrev = false;
             }
+
             p ++;
-            if (pPointTypes && (pPointTypes [i] & 0x80)) { // closed polygon
+
+            if (pPointTypes && (pPointTypes [i] & 0x80))
+            {
+                // closed polygon
                 polygon.setClosed (true);
                 aPolygon.append (polygon);
                 SAL_INFO ("cppcanvas.emf", "close polygon");
@@ -155,14 +184,18 @@ namespace emfplushelper
                 polygon.clear ();
             }
         }
+
         // Draw an extra line between the last point and the first point, to close the shape.
-        if (bAddLineToCloseShape) {
+        if (bAddLineToCloseShape)
+        {
             if (bMapIt)
                 polygon.append (rR.Map (pPoints [0], pPoints [1]) );
             else
                 polygon.append (::basegfx::B2DPoint (pPoints [0], pPoints [1]) );
         }
-        if (polygon.count ()) {
+
+        if (polygon.count ())
+        {
             aPolygon.append (polygon);
 
 #if OSL_DEBUG_LEVEL > 1

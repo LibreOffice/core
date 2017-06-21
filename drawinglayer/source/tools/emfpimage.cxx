@@ -43,36 +43,39 @@ namespace emfplushelper
     void EMFPImage::Read(SvMemoryStream &s, sal_uInt32 dataSize, bool bUseWholeStream)
     {
         sal_uInt32 header, bitmapType;
-
         s.ReadUInt32(header).ReadUInt32(type);
-
         SAL_INFO("cppcanvas.emf", "EMF+\timage\nEMF+\theader: 0x" << std::hex << header << " type: " << type << std::dec);
 
-        if (type == 1) { // bitmap
+        if (1 == type)
+        {
+            // bitmap
             s.ReadInt32(width).ReadInt32(height).ReadInt32(stride).ReadInt32(pixelFormat).ReadUInt32(bitmapType);
             SAL_INFO("cppcanvas.emf", "EMF+\tbitmap width: " << width << " height: " << height << " stride: " << stride << " pixelFormat: 0x" << std::hex << pixelFormat << std::dec);
-            if ((bitmapType != 0) || (width == 0)) { // non native formats
-                GraphicFilter filter;
 
+            if ((bitmapType != 0) || (width == 0))
+            {
+                // non native formats
+                GraphicFilter filter;
                 filter.ImportGraphic(graphic, OUString(), s);
                 SAL_INFO("cppcanvas.emf", "EMF+\tbitmap width: " << graphic.GetBitmap().GetSizePixel().Width() << " height: " << graphic.GetBitmap().GetSizePixel().Height());
             }
-
         }
-        else if (type == 2) { // metafile
+        else if (2 == type)
+        {
+            // metafile
             sal_Int32 mfType, mfSize;
-
             s.ReadInt32(mfType).ReadInt32(mfSize);
+
             if (bUseWholeStream)
                 dataSize = s.remainingSize();
             else
                 dataSize -= 16;
+
             SAL_INFO("cppcanvas.emf", "EMF+\tmetafile type: " << mfType << " dataSize: " << mfSize << " real size calculated from record dataSize: " << dataSize);
 
             GraphicFilter filter;
             // workaround buggy metafiles, which have wrong mfSize set (n#705956 for example)
             SvMemoryStream mfStream(const_cast<char *>(static_cast<char const *>(s.GetData()) + s.Tell()), dataSize, StreamMode::READ);
-
             filter.ImportGraphic(graphic, OUString(), mfStream);
 
             // debug code - write the stream to debug file /tmp/emf-stream.emf
