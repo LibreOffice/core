@@ -921,6 +921,34 @@ endef
 endif # SYSTEM_LIBXSLT
 
 
+ifneq ($(SYSTEM_XMLSEC),)
+
+define gb_LinkTarget__use_xmlsec
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DSYSTEM_XMLSEC \
+)
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(XMLSEC_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(XMLSEC_LIBS))
+
+endef
+
+gb_ExternalProject__use_xmlsec:=
+
+else # !SYSTEM_XMLSEC
+
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	xmlsec \
+))
+
+define gb_LinkTarget__use_xmlsec
+
+endef
+
+endif # SYSTEM_XMLSEC
+
 ifneq ($(SYSTEM_LIBLANGTAG),)
 
 define gb_LinkTarget__use_liblangtag
