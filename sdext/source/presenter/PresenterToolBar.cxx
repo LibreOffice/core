@@ -366,7 +366,6 @@ PresenterToolBar::PresenterToolBar (
       mpPresenterController(rpPresenterController),
       mbIsLayoutPending(false),
       meAnchor(eAnchor),
-      maBoundingBox(),
       maMinimalSize()
 {
 }
@@ -763,11 +762,6 @@ void PresenterToolBar::Layout (
     // Place the parts.
     double nY ((aWindowBox.Height - aTotalSize.Height) / 2);
     bIsHorizontal = true;
-
-    maBoundingBox.X1 = nX;
-    maBoundingBox.Y1 = nY;
-    maBoundingBox.X2 = nX + aTotalSize.Width + nTotalHorizontalGap;
-    maBoundingBox.Y2 = nY + aTotalSize.Height;
 
     /* push front or back ? ... */
     /// check whether RTL interface or not

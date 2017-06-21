@@ -259,7 +259,6 @@ PresenterScreen::PresenterScreen (
       mpPresenterController(),
       mxSavedConfiguration(),
       mpPaneContainer(),
-      mnComponentIndex(0),
       mxPaneFactory(),
       mxViewFactory(),
       maViewDescriptors()
@@ -685,7 +684,6 @@ void PresenterScreen::ProcessLayout (
         aProperties[3] = "RelativeY";
         aProperties[4] = "RelativeWidth";
         aProperties[5] = "RelativeHeight";
-        mnComponentIndex = 1;
         PresenterConfigurationAccess::ForAll(
             xList,
             aProperties,
@@ -713,7 +711,6 @@ void PresenterScreen::ProcessViewDescriptions (
         aProperties[1] = "Title";
         aProperties[2] = "AccessibleTitle";
         aProperties[3] = "IsOpaque";
-        mnComponentIndex = 1;
         PresenterConfigurationAccess::ForAll(
             xViewDescriptionsNode,
             aProperties,
@@ -761,11 +758,7 @@ void PresenterScreen::ProcessComponent (
                 rxAnchorId,
                 sPaneURL,
                 sViewURL,
-                PresenterPaneContainer::ViewInitializationFunction(),
-                nX,
-                nY,
-                nX+nWidth,
-                nY+nHeight);
+                PresenterPaneContainer::ViewInitializationFunction());
         }
        }
     catch (const Exception&)
@@ -806,11 +799,7 @@ void PresenterScreen::SetupView(
     const Reference<XResourceId>& rxAnchorId,
     const OUString& rsPaneURL,
     const OUString& rsViewURL,
-    const PresenterPaneContainer::ViewInitializationFunction& rViewInitialization,
-    const double nLeft,
-    const double nTop,
-    const double nRight,
-    const double nBottom)
+    const PresenterPaneContainer::ViewInitializationFunction& rViewInitialization)
 {
     Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
     if (xCC.is())
@@ -830,11 +819,7 @@ void PresenterScreen::SetupView(
             aViewDescriptor.msTitle,
             aViewDescriptor.msAccessibleTitle,
             aViewDescriptor.mbIsOpaque,
-            rViewInitialization,
-            nLeft,
-            nTop,
-            nRight,
-            nBottom);
+            rViewInitialization);
     }
 }
 

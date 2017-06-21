@@ -132,7 +132,6 @@ private:
     ::rtl::Reference<PresenterController> mpPresenterController;
     css::uno::Reference<css::drawing::framework::XConfiguration> mxSavedConfiguration;
     ::rtl::Reference<PresenterPaneContainer> mpPaneContainer;
-    sal_Int32 mnComponentIndex;
     css::uno::Reference<css::drawing::framework::XResourceFactory> mxPaneFactory;
     css::uno::Reference<css::drawing::framework::XResourceFactory> mxViewFactory;
 
@@ -204,11 +203,7 @@ private:
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxAnchorId,
         const OUString& rsPaneURL,
         const OUString& rsViewURL,
-        const PresenterPaneContainer::ViewInitializationFunction& rViewInitialization,
-        const double nLeft,
-        const double nTop,
-        const double nRight,
-        const double nBottom);
+        const PresenterPaneContainer::ViewInitializationFunction& rViewInitialization);
 
     /** Return the built-in screen number on the presentation will normally
         display the presenter console.

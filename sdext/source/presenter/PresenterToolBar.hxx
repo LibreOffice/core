@@ -159,7 +159,6 @@ private:
     ::rtl::Reference<PresenterController> mpPresenterController;
     bool mbIsLayoutPending;
     const Anchor meAnchor;
-    css::geometry::RealRectangle2D maBoundingBox;
     /** The minimal size that is necessary to display all elements without
         overlap and with minimal gaps between them.
     */

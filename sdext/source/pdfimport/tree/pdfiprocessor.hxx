@@ -73,9 +73,6 @@ namespace pdfi
         explicit PDFIProcessor( const css::uno::Reference< css::task::XStatusIndicator >& xStat,
             css::uno::Reference< css::uno::XComponentContext > const & xContext) ;
 
-        /// TEMP - enable writer-like text:p on doc level
-        void enableToplevelText();
-
         void emit( XmlEmitter&               rEmitter,
                    const TreeVisitorFactory& rVisitorFactory );
 
@@ -193,11 +190,8 @@ namespace pdfi
 
         sal_Int32                          m_nPages;
         sal_Int32                          m_nNextZOrder;
-        css::uno::Reference<
-            css::task::XStatusIndicator >
+        css::uno::Reference< css::task::XStatusIndicator >
                                            m_xStatusIndicator;
-
-        bool                               m_bHaveTextOnDocLevel;
     };
     class CharGlyph final
     {
