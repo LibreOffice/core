@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_4023de05",
+        "filename": "include/formula/FormulaCompiler.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-21T09:51:23Z",
+      "side": 1,
+      "message": "When moving this to the initializer list then please pass eGrammar instead of meGrammar, so reordering members and thus initialization wouldn\u0027t leave an undefined state.",
+      "range": {
+        "startLine": 104,
+        "startChar": 12,
+        "endLine": 104,
+        "endChar": 63
+      },
+      "revId": "1451883fb09adc5cb24579badbb2d95f9c42cf22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
