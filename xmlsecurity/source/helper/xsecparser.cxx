@@ -34,6 +34,8 @@ XSecParser::XSecParser(XMLSignatureHelper& rXMLSignatureHelper,
     : m_bInX509IssuerName(false)
     , m_bInX509SerialNumber(false)
     , m_bInX509Certificate(false)
+    , m_bInGpgCertificate(false)
+    , m_bInGpgKeyID(false)
     , m_bInCertDigest(false)
     , m_bInEncapsulatedX509Certificate(false)
     , m_bInSigningTime(false)
@@ -68,6 +70,8 @@ void SAL_CALL XSecParser::startDocument(  )
     m_bInX509IssuerName = false;
     m_bInX509SerialNumber = false;
     m_bInX509Certificate = false;
+    m_bInGpgCertificate = false;
+    m_bInGpgKeyID = false;
     m_bInSignatureValue = false;
     m_bInDigestValue = false;
     m_bInDate = false;
@@ -173,6 +177,16 @@ void SAL_CALL XSecParser::startElement(
         {
             m_ouX509Certificate.clear();
             m_bInX509Certificate = true;
+        }
+        else if (aName == "PGPKeyID")
+        {
+            m_ouGpgKeyID.clear();
+            m_bInGpgKeyID = true;
+        }
+        else if (aName == "PGPKeyPacket")
+        {
+            m_ouGpgCertificate.clear();
+            m_bInGpgCertificate = true;
         }
         else if (aName == "SignatureValue")
         {
@@ -287,6 +301,16 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
             m_pXSecController->setX509Certificate( m_ouX509Certificate );
             m_bInX509Certificate = false;
         }
+        else if (aName == "PGPKeyID")
+        {
+            m_pXSecController->setGpgKeyID( m_ouGpgKeyID );
+            m_bInGpgKeyID = false;
+        }
+        else if (aName == "PGPKeyPacket")
+        {
+            m_pXSecController->setGpgCertificate( m_ouGpgCertificate );
+            m_bInGpgCertificate = false;
+        }
         else if (aName == "xd:CertDigest")
         {
             m_pXSecController->setCertDigest( m_ouCertDigest );
@@ -349,6 +373,14 @@ void SAL_CALL XSecParser::characters( const OUString& aChars )
     else if (m_bInX509Certificate)
     {
         m_ouX509Certificate += aChars;
+    }
+    else if (m_bInGpgCertificate)
+    {
+        m_ouGpgCertificate += aChars;
+    }
+    else if (m_bInGpgKeyID)
+    {
+        m_ouGpgKeyID += aChars;
     }
     else if (m_bInSignatureValue)
     {
