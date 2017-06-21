@@ -108,9 +108,6 @@ class SW_DLLPUBLIC SwTextNode: public SwContentNode, public ::sfx2::Metadatable
        Needed to avoid duplicate handling of attribute change actions. */
     bool mbInSetOrResetAttr;
 
-    /// pointer to the list, to whose the text node is added to
-    SwList* mpList;
-
     std::unique_ptr< OUString > m_pNumStringCache;
 
     css::uno::WeakReference<css::text::XTextContent> m_wXParagraph;

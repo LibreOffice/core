@@ -1897,8 +1897,7 @@ bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
                 if (!m_TabSortContentBoxes.empty())
                 {
                     SwNodeIndex aIdx( *m_TabSortContentBoxes[0]->GetSttNd() );
-                    static_cast<SwAutoFormatGetDocNode&>(rInfo).pContentNode =
-                                    GetFrameFormat()->GetDoc()->GetNodes().GoNext( &aIdx );
+                    GetFrameFormat()->GetDoc()->GetNodes().GoNext( &aIdx );
                 }
                 return false;
             }

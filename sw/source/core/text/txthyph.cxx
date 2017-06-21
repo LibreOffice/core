@@ -241,13 +241,9 @@ bool SwTextFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         rHyphInf.SetHyphWord( xHyphWord );
         rHyphInf.nWordStart = nWrdStart;
         rHyphInf.nWordLen = nLen;
-        rHyphInf.SetNoLang( false );
         rHyphInf.SetCheck( true );
         return true;
     }
-
-    if ( !rHyphInf.IsCheck() )
-        rHyphInf.SetNoLang( true );
 
     return false;
 }

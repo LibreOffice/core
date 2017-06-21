@@ -311,7 +311,6 @@ bool SwFormatField::GetInfo( SfxPoolItem& rInfo ) const
         &pTextNd->GetNodes() != static_cast<SwAutoFormatGetDocNode&>(rInfo).pNodes )
         return true;
 
-    static_cast<SwAutoFormatGetDocNode&>(rInfo).pContentNode = pTextNd;
     return false;
 }
 

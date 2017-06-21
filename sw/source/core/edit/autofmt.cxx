@@ -1597,7 +1597,6 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
             }
 
             m_pCurTextNd->SetAttrListLevel(nLvl);
-            m_pCurTextNd->SetNumLSpace( true );
 
             // start new list
             m_pDoc->SetNumRule( m_aDelPam, aRule, true );

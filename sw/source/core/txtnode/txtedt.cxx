@@ -1616,8 +1616,6 @@ bool SwTextNode::Hyphenate( SwInterHyphInfo &rHyphInf )
     if ( LANGUAGE_NONE == GetSwAttrSet().GetLanguage().GetLanguage()
          && LanguageType(USHRT_MAX) == GetLang(0, m_Text.getLength()))
     {
-        if( !rHyphInf.IsCheck() )
-            rHyphInf.SetNoLang( true );
         return false;
     }
 

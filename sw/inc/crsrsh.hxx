@@ -194,7 +194,6 @@ private:
     sal_uLong m_nAktNode;             // save CursorPos at Start-Action
     sal_Int32 m_nAktContent;
     SwNodeType m_nAktNdTyp;
-    bool m_bAktSelection;
 
     /*
      * Via the Method SttCursorMove and EndCursorMove this counter gets

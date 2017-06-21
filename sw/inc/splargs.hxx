@@ -113,7 +113,6 @@ class SwInterHyphInfo
 {
     css::uno::Reference< css::linguistic2::XHyphenatedWord >    xHyphWord;
     const Point aCursorPos;
-    bool bNoLang : 1;
     bool bCheck  : 1;
 public:
     sal_Int32 nStart;
@@ -123,7 +122,6 @@ public:
 
     SwInterHyphInfo( const Point &rCursorPos )
         : aCursorPos(rCursorPos)
-        , bNoLang(false)
         , bCheck(false)
         , nStart(0)
         , nEnd(SAL_MAX_INT32)
@@ -140,7 +138,6 @@ public:
     }
     bool IsCheck() const { return bCheck; }
     void SetCheck( const bool bNew ) { bCheck = bNew; }
-    void SetNoLang( const bool bNew ) { bNoLang = bNew; }
     void SetHyphWord(const css::uno::Reference< css::linguistic2::XHyphenatedWord >  &rxHW)
     {
         xHyphWord = rxHW;

@@ -209,7 +209,6 @@ SwTextNode::SwTextNode( const SwNodeIndex &rWhere, SwTextFormatColl *pTextColl, 
     m_bNotifiable( false ),
     mbEmptyListStyleSetDueToSetOutlineLevelAttr( false ),
     mbInSetOrResetAttr( false ),
-    mpList( nullptr ),
     m_pNumStringCache(),
     m_wXParagraph(),
     maFillAttributes()
@@ -3937,7 +3936,6 @@ void SwTextNode::AddToList()
         if ( pList )
         {
             pList->InsertListItem( *CreateNum(), GetAttrListLevel() );
-            mpList = pList;
         }
     }
 }
@@ -3947,7 +3945,6 @@ void SwTextNode::RemoveFromList()
     if ( IsInList() )
     {
         SwList::RemoveListItem( *mpNodeNum );
-        mpList = nullptr;
         delete mpNodeNum;
         mpNodeNum = nullptr;
 
