@@ -94,7 +94,6 @@ class SwNavigationPI : public PanelLayout,
     Size        m_aExpandedSize;
 
     bool    m_bIsZoomedIn : 1;
-    bool    m_bPageCtrlsVisible : 1;
     bool    m_bGlobalMode : 1;
 
     bool IsZoomedIn() const {return m_bIsZoomedIn;}

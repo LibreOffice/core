@@ -69,7 +69,6 @@ class SwMultiTOXTabDialog : public SfxTabDialog
     SwWrtShell&             m_rWrtShell;
 
     sal_uInt16              m_nSelectId;
-    sal_uInt16              m_nStylesId;
     sal_uInt16              m_nColumnId;
     sal_uInt16              m_nBackGroundId;
     sal_uInt16              m_nEntriesId;

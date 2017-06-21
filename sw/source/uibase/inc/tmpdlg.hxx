@@ -35,15 +35,11 @@ class SwTemplateDlg: public SfxStyleDialog
 
     sal_uInt16 m_nIndentsId;
     sal_uInt16 m_nAlignId;
-    sal_uInt16 m_nTextFlowId;
-    sal_uInt16 m_nAsianTypo;
     sal_uInt16 m_nFontId;
     sal_uInt16 m_nFontEffectId;
     sal_uInt16 m_nPositionId;
     sal_uInt16 m_nAsianLayoutId;
-    sal_uInt16 m_nTabId;
     sal_uInt16 m_nOutlineId;
-    sal_uInt16 m_nDropCapsId;
     sal_uInt16 m_nBackgroundId;
     sal_uInt16 m_nAreaId;
     sal_uInt16 m_nTransparenceId;
@@ -57,12 +53,8 @@ class SwTemplateDlg: public SfxStyleDialog
     sal_uInt16 m_nHeaderId;
     sal_uInt16 m_nFooterId;
     sal_uInt16 m_nPageId;
-    sal_uInt16 m_nFootNoteId;
-    sal_uInt16 m_nTextGridId;
-    sal_uInt16 m_nSingleId;
     sal_uInt16 m_nBulletId;
     sal_uInt16 m_nNumId;
-    sal_uInt16 m_nBmpId;
     sal_uInt16 m_nNumOptId;
     sal_uInt16 m_nNumPosId;
 

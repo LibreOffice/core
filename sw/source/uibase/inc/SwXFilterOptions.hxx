@@ -41,7 +41,6 @@ class SwXFilterOptions : public ::cppu::WeakImplHelper<
 
     css::uno::Reference< css::io::XInputStream > xInputStream;
     css::uno::Reference< css::lang::XComponent > xModel;
-    bool            bExport;
 
 public:
                             SwXFilterOptions();

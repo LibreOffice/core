@@ -598,7 +598,6 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     , m_nAutoMarkIdx(1)
     , m_nRegionMode(RegionMode::NONE)
     , m_bIsZoomedIn(false)
-    , m_bPageCtrlsVisible(false)
     , m_bGlobalMode(false)
 {
     get(m_aContentToolBox, "content");
@@ -632,8 +631,6 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     m_xEdit->SetAccessibleName(m_xEdit->GetQuickHelpText());
     m_xEdit->SetUpHdl(LINK(this, SwNavigationPI, PageEditModifyHdl));
     m_xEdit->SetDownHdl(LINK(this, SwNavigationPI, PageEditModifyHdl));
-
-    m_bPageCtrlsVisible = true;
 
     // Double separators are not allowed, so you have to
     // determine the suitable size differently.
