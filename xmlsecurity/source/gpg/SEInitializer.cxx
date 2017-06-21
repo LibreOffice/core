@@ -20,10 +20,8 @@ using namespace css::uno;
 using namespace css::xml::crypto;
 
 
-SEInitializerGpg::SEInitializerGpg( const css::uno::Reference< css::uno::XComponentContext > &rxContext )
+SEInitializerGpg::SEInitializerGpg()
 {
-    m_xContext = rxContext;
-
     // Also init GpgME while we're at it
     GpgME::initializeLibrary();
 }

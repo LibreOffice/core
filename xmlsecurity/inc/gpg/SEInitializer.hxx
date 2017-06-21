@@ -22,11 +22,8 @@
 
 class XSECGPG_DLLPUBLIC SEInitializerGpg : public cppu::WeakImplHelper< css::xml::crypto::XSEInitializer >
 {
-protected:
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
-
 public:
-    explicit SEInitializerGpg(const css::uno::Reference<css::uno::XComponentContext > &rxContext);
+    SEInitializerGpg();
     virtual ~SEInitializerGpg() override;
 
     /* XSEInitializer */
