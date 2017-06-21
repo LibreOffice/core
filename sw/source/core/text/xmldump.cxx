@@ -9,6 +9,7 @@
 
 #include "frame.hxx"
 #include "frmfmt.hxx"
+#include "ftnfrm.hxx"
 #include "sectfrm.hxx"
 #include "tabfrm.hxx"
 #include "txtfrm.hxx"
@@ -386,6 +387,15 @@ void SwFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "upper" ), "%" SAL_PRIuUINT32, GetUpper()->GetFrameId() );
     if ( GetLower( ) )
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "lower" ), "%" SAL_PRIuUINT32, GetLower()->GetFrameId() );
+    if (IsFootnoteFrame())
+    {
+        SwFootnoteFrame const*const pFF(static_cast<SwFootnoteFrame const*>(this));
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("ref"), "%" SAL_PRIuUINT32, pFF->GetRef()->GetFrameId() );
+        if (pFF->GetMaster())
+            xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("master"), "%" SAL_PRIuUINT32, pFF->GetMaster()->GetFrameId() );
+        if (pFF->GetFollow())
+            xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("follow"), "%" SAL_PRIuUINT32, pFF->GetFollow()->GetFrameId() );
+    }
     if ( IsTextFrame(  ) )
     {
         const SwTextFrame *pTextFrame = static_cast<const SwTextFrame *>(this);
