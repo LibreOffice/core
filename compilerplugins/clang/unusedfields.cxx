@@ -241,7 +241,7 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
             break;
         }
         if (isa<CastExpr>(parent) || isa<MemberExpr>(parent) || isa<ParenExpr>(parent) || isa<ParenListExpr>(parent)
-#if CLANG_VERSION >= 30900
+#if CLANG_VERSION >= 40000
              || isa<ArrayInitLoopExpr>(parent)
 #endif
              || isa<ExprWithCleanups>(parent))
