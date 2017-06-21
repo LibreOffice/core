@@ -933,7 +933,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	wizards_basicsrvtools \
 	wizards_basicsrvtutorials \
 	wizards_basicusr \
-	xmlsec \
 	$(if $(ENABLE_HEADLESS),, \
 		chart2_opengl_shader \
 	) \
