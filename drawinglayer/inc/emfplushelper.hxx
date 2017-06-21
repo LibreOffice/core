@@ -33,16 +33,17 @@ namespace emfplushelper
     class EmfPlusHelper
     {
     private:
-        EmfPlusHelperData*      mpD;
+        const std::unique_ptr<EmfPlusHelperData>  mpD;
 
     public:
-        EmfPlusHelper(SvMemoryStream& rMemoryStream);
+        EmfPlusHelper(
+            SvMemoryStream& rMemoryStream,
+            wmfemfhelper::TargetHolders& rTargetHolders,
+            wmfemfhelper::PropertyHolders& rPropertyHolders);
         ~EmfPlusHelper();
 
         void processEmfPlusData(
             SvMemoryStream& rMemoryStream,
-            wmfemfhelper::TargetHolders& rTargetHolders,
-            wmfemfhelper::PropertyHolders& rPropertyHolders,
             const drawinglayer::geometry::ViewInformation2D& rViewInformation);
     };
 }
