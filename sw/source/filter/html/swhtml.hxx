@@ -412,7 +412,6 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     Size    m_aHTMLPageSize;      // page size of HTML template
 
     sal_uInt32  m_aFontHeights[7];    // font heights 1-7
-    sal_uInt32  m_nScriptStartLineNr; // line number of script block
     ImplSVEvent * m_nEventId;
 
     sal_uInt16  m_nBaseFontStMin;

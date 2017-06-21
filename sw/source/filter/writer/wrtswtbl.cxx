@@ -74,7 +74,7 @@ SwWriteTableCell *SwWriteTableRow::AddCell( const SwTableBox *pBox,
 }
 
 SwWriteTableCol::SwWriteTableCol(sal_uInt32 nPosition)
-    : nPos(nPosition), nWidthOpt(0), bRelWidthOpt(false), bOutWidth(true),
+    : nPos(nPosition), nWidthOpt(0), bRelWidthOpt(false),
     bLeftBorder(true), bRightBorder(true)
 {
 }

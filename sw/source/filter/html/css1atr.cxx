@@ -1604,9 +1604,6 @@ static Writer& OutCSS1_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         bHasScriptDependencies = true;
     }
 
-    if( nPoolFormatId==RES_POOLCOLL_TEXT && !rHTMLWrt.m_bFirstCSS1Property )
-        rHTMLWrt.m_bPoolCollTextModified = true;
-
     // export Drop-Caps
     const SfxPoolItem *pItem;
     if( SfxItemState::SET==aItemSet.GetItemState( RES_PARATR_DROP, false, &pItem ))

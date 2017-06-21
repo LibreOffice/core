@@ -131,8 +131,6 @@ SwLabPreview::SwLabPreview(vcl::Window* pParent)
     m_lLeftWidth   = GetTextWidth(m_aLeftStr  );
     m_lUpperWidth  = GetTextWidth(m_aUpperStr );
     m_lColsWidth   = GetTextWidth(m_aColsStr  );
-    m_lPWidthWidth  = GetTextWidth(m_aPWidthStr);
-    m_lPHeightWidth = GetTextWidth(m_aPHeightStr);
     m_lXHeight = GetTextHeight();
     m_lXWidth  = GetTextWidth(OUString('X'));
 }

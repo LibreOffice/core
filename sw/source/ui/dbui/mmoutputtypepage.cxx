@@ -95,7 +95,6 @@ struct SwSendMailDialog_Impl
 
     std::vector< SwMailDescriptor >             aDescriptors;
     sal_uInt32                                  nCurrentDescriptor;
-    sal_uInt32                                  nDocumentCount;
     ::rtl::Reference< MailDispatcher >          xMailDispatcher;
     ::rtl::Reference< IMailDispatcherListener>  xMailListener;
     uno::Reference< mail::XMailService >        xConnectedMailService;
@@ -103,11 +102,10 @@ struct SwSendMailDialog_Impl
     Idle                                        aRemoveIdle;
 
     SwSendMailDialog_Impl() :
-        nCurrentDescriptor(0),
-        nDocumentCount(0)
-             {
-                aRemoveIdle.SetPriority(TaskPriority::LOWEST);
-             }
+        nCurrentDescriptor(0)
+    {
+        aRemoveIdle.SetPriority(TaskPriority::LOWEST);
+    }
 
     ~SwSendMailDialog_Impl()
     {
@@ -348,13 +346,6 @@ void SwSendMailDialog::AddDocument( SwMailDescriptor& rDesc )
     {
         IterateMails();
     }
-
-}
-
-void SwSendMailDialog::SetDocumentCount( sal_Int32 nAllDocuments )
-{
-    m_pImpl->nDocumentCount = nAllDocuments;
-    UpdateTransferStatus();
 }
 
 IMPL_LINK( SwSendMailDialog, StopHdl_Impl, Button*, pButton, void )

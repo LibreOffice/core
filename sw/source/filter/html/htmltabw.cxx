@@ -262,7 +262,6 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     if ( !nRowSpan )
         return;
 
-    SwWriteTableCol *pCol = m_aCols[nCol];
     bool bOutWidth = true;
 
     const SwStartNode* pSttNd = pBox->GetSttNd();
@@ -374,8 +373,6 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
             sOut.append(static_cast<sal_Int32>(aPixelSz.Width()));
         }
         sOut.append("\"");
-        if( !m_bLayoutExport && nColSpan==1 )
-            pCol->SetOutWidth( false );
     }
 
     if( nHeight )
