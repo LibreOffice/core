@@ -23,7 +23,7 @@
 #include <typeinfo>
 #include <exception>
 #include <cstddef>
-#include <unwind.h>
+#include <unwind-arm.h>
 
 #include <cxxabi.h>
 #ifndef _GLIBCXX_CDTOR_CALLABI // new in GCC 4.7 cxxabi.h
