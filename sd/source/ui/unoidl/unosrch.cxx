@@ -100,7 +100,7 @@ SdUnoSearchReplaceShape::~SdUnoSearchReplaceShape() throw()
 // util::XReplaceable
 uno::Reference< util::XReplaceDescriptor > SAL_CALL SdUnoSearchReplaceShape::createReplaceDescriptor()
 {
-    return new SdUnoSearchReplaceDescriptor(true);
+    return new SdUnoSearchReplaceDescriptor;
 }
 
 sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< util::XSearchDescriptor >& xDesc )
@@ -196,7 +196,7 @@ sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< ut
 // XSearchable
 uno::Reference< css::util::XSearchDescriptor > SAL_CALL SdUnoSearchReplaceShape::createSearchDescriptor(  )
 {
-    return new SdUnoSearchReplaceDescriptor(false);
+    return new SdUnoSearchReplaceDescriptor;
 }
 
 uno::Reference< css::container::XIndexAccess > SAL_CALL SdUnoSearchReplaceShape::findAll( const css::uno::Reference< css::util::XSearchDescriptor >& xDesc )
@@ -696,15 +696,13 @@ uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetShape( const uno:
 
 UNO3_GETIMPLEMENTATION_IMPL( SdUnoSearchReplaceDescriptor );
 
-SdUnoSearchReplaceDescriptor::SdUnoSearchReplaceDescriptor( bool bReplace )
+SdUnoSearchReplaceDescriptor::SdUnoSearchReplaceDescriptor()
 {
     mpPropSet.reset( new SvxItemPropertySet(ImplGetSearchPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool()) );
 
     mbBackwards = false;
     mbCaseSensitive = false;
     mbWords = false;
-
-    mbReplace = bReplace;
 }
 
 SdUnoSearchReplaceDescriptor::~SdUnoSearchReplaceDescriptor() throw()

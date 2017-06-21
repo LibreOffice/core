@@ -70,14 +70,9 @@ SdTabTemplateDlg::SdTabTemplateDlg( vcl::Window* pParent,
     , m_nTransparencyId(0)
     , m_nFontId(0)
     , m_nFontEffectId(0)
-    , m_nIndentsId(0)
     , m_nTextId(0)
-    , m_nAnimationId(0)
     , m_nDimensionId(0)
     , m_nConnectorId(0)
-    , m_nAlignId(0)
-    , m_nTabId(0)
-    , m_nAsianTypoId(0)
 {
     // fill Listbox and set Select-Handler
 
@@ -87,16 +82,16 @@ SdTabTemplateDlg::SdTabTemplateDlg( vcl::Window* pParent,
     m_nTransparencyId = AddTabPage("transparency", RID_SVXPAGE_TRANSPARENCE);
     m_nFontId = AddTabPage("font", RID_SVXPAGE_CHAR_NAME);
     m_nFontEffectId = AddTabPage("fonteffect", RID_SVXPAGE_CHAR_EFFECTS);
-    m_nIndentsId = AddTabPage("indents", RID_SVXPAGE_STD_PARAGRAPH);
+    AddTabPage("indents", RID_SVXPAGE_STD_PARAGRAPH);
     m_nTextId = AddTabPage("text", RID_SVXPAGE_TEXTATTR);
-    m_nAnimationId = AddTabPage("animation", RID_SVXPAGE_TEXTANIMATION);
+    AddTabPage("animation", RID_SVXPAGE_TEXTANIMATION);
     m_nDimensionId = AddTabPage("dimensioning", RID_SVXPAGE_MEASURE);
     m_nConnectorId = AddTabPage("connector", RID_SVXPAGE_CONNECTION);
-    m_nAlignId = AddTabPage("alignment", RID_SVXPAGE_ALIGN_PARAGRAPH);
-    m_nTabId = AddTabPage("tabs", RID_SVXPAGE_TABULATOR);
+    AddTabPage("alignment", RID_SVXPAGE_ALIGN_PARAGRAPH);
+    AddTabPage("tabs", RID_SVXPAGE_TABULATOR);
     SvtCJKOptions aCJKOptions;
     if( aCJKOptions.IsAsianTypographyEnabled() )
-        m_nAsianTypoId = AddTabPage("asiantypo", RID_SVXPAGE_PARA_ASIAN);
+        AddTabPage("asiantypo", RID_SVXPAGE_PARA_ASIAN);
     else
         RemoveTabPage("asiantypo");
 }

@@ -729,7 +729,6 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                 pAction->SetSoundOn(pInfo->mbSoundOn, bSoundOn);
                 pAction->SetSound(pInfo->maSoundFile, aSound);
                 pAction->SetPlayFull(pInfo->mbPlayFull, bPlayFull);
-                pAction->SetPathObj(nullptr, pPath);
                 pAction->SetClickAction(pInfo->meClickAction, eClickAction);
                 pAction->SetBookmark(pInfo->GetBookmark(), aBookmark);
                 pAction->SetVerb(pInfo->mnVerb, (sal_uInt16)pInfo->GetBookmark().toInt32() );
