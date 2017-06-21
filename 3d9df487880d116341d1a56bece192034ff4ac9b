@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_dbe6dfe7",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T19:15:20Z",
+      "side": 1,
+      "message": "in the constructor, the vector is already created as empty, so this is not necessary",
+      "revId": "3d9df487880d116341d1a56bece192034ff4ac9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_fbeb9bae",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T19:15:20Z",
+      "side": 1,
+      "message": "this vector is also initalized empty so no need to clear it here",
+      "revId": "3d9df487880d116341d1a56bece192034ff4ac9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_fb02bb6e",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T19:15:20Z",
+      "side": 1,
+      "message": "why does this loop still not skip portions outside the selection?",
+      "revId": "3d9df487880d116341d1a56bece192034ff4ac9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_1bd147fc",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T19:15:20Z",
+      "side": 1,
+      "message": "also unnecessary",
+      "revId": "3d9df487880d116341d1a56bece192034ff4ac9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_5bc4af3f",
+        "filename": "include/editeng/unotext.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T19:15:20Z",
+      "side": 1,
+      "message": "we use the \"p\" naming prefix for pointers, not for values",
+      "revId": "3d9df487880d116341d1a56bece192034ff4ac9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_7bc16b2e",
+        "filename": "include/editeng/unotext.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T19:15:20Z",
+      "side": 1,
+      "message": "we use the \"p\" naming prefix for pointers, not for values",
+      "revId": "3d9df487880d116341d1a56bece192034ff4ac9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
