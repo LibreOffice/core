@@ -150,7 +150,6 @@ class RowInfoFiller
         RowInfo& rThisRowInfo = mpRowInfo[mnArrY];
         CellInfo& rInfo = rThisRowInfo.pCellInfo[mnArrX];
         rInfo.maCell = rCell;
-        rThisRowInfo.bEmptyText = false;
         rInfo.bEmptyCellText = false;
         ++mnArrY;
     }
@@ -232,7 +231,6 @@ void initRowInfo(ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow,
             pThisRowInfo->nRowNo        = nY;               //TODO: case < 0 ?
             pThisRowInfo->nHeight       = nHeight;
             pThisRowInfo->bEmptyBack    = true;
-            pThisRowInfo->bEmptyText    = true;
             pThisRowInfo->bChanged      = true;
             pThisRowInfo->bAutoFilter   = false;
             pThisRowInfo->bPivotButton  = false;
@@ -253,13 +251,11 @@ void initRowInfo(ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow,
 }
 
 void initCellInfo(RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nRotMax, bool bPaintMarks,
-        const SvxShadowItem* pDefShadow, SCROW nBlockStartY, SCROW nBlockEndY,
-        SCCOL nBlockStartX, SCCOL nBlockEndX)
+        const SvxShadowItem* pDefShadow)
 {
     for (SCSIZE nArrRow = 0; nArrRow < nArrCount; ++nArrRow)
     {
         RowInfo& rThisRowInfo = pRowInfo[nArrRow];
-        SCROW nY = rThisRowInfo.nRowNo;
         rThisRowInfo.pCellInfo = new CellInfo[nRotMax + 1 + 2];  // to delete the caller!
 
         for (SCCOL nArrCol = 0; nArrCol <= nRotMax+2; ++nArrCol) // Preassign cell info
@@ -272,8 +268,6 @@ void initCellInfo(RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nRotMax, bool bPain
                     nX = nArrCol-1;
                 else
                     nX = MAXCOL+1;      // invalid
-                rInfo.bMarked = (nX >= nBlockStartX && nX <= nBlockEndX &&
-                                 nY >= nBlockStartY && nY <= nBlockEndY);
             }
             rInfo.bEmptyCellText = true;
             rInfo.pShadowAttr    = pDefShadow;
@@ -450,8 +444,7 @@ void ScDocument::FillInfo(
 
     //  Allocate cell information only after the test rotation
     //  to nRotMax due to nRotateDir Flag
-    initCellInfo(pRowInfo, nArrCount, nRotMax, bPaintMarks, pDefShadow,
-            nBlockStartY, nBlockEndY, nBlockStartX, nBlockEndX);
+    initCellInfo(pRowInfo, nArrCount, nRotMax, bPaintMarks, pDefShadow);
 
     initColWidths(pRowInfo, this, fColScale, nTab, nCol2, nRotMax);
 
@@ -638,26 +631,11 @@ void ScDocument::FillInfo(
                             do
                             {
                                 nThisRow=aThisMarkArr.pData[nIndex].nRow;      // End of range
-                                const bool bThisMarked=aThisMarkArr.pData[nIndex].bMarked;
 
                                 do
                                 {
                                     if ( !RowHidden( nCurRow,nTab ) )
                                     {
-                                        if ( bThisMarked )
-                                        {
-                                            bool bSkip = bSkipMarks &&
-                                                        nX      >= nBlockStartX &&
-                                                        nX      <= nBlockEndX   &&
-                                                        nCurRow >= nBlockStartY &&
-                                                        nCurRow <= nBlockEndY;
-                                            if (!bSkip)
-                                            {
-                                                RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
-                                                CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrCol];
-                                                pInfo->bMarked = true;
-                                            }
-                                        }
                                         ++nArrRow;
                                     }
                                     ++nCurRow;
@@ -810,8 +788,6 @@ void ScDocument::FillInfo(
                         if ( aThisMarkArr.Search( nStartY, nIndex ) )
                             bCellMarked=aThisMarkArr.pData[nIndex].bMarked;
                     }
-
-                    pInfo->bMarked = bCellMarked;
                 }
             }
         }

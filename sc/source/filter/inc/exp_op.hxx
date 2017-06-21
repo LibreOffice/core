@@ -36,15 +36,8 @@ protected:
                         ~ExportTyp() {}
 
     SvStream&           aOut;
-    ScDocument*         pD;
-    rtl_TextEncoding    eTargetCharset;      // target character set
 public:
-                        ExportTyp( SvStream& aStream, ScDocument* pDoc, rtl_TextEncoding eDest ):
-                            aOut( aStream )
-                        {
-                            eTargetCharset = eDest;
-                            pD = pDoc;
-                        }
+                        ExportTyp( SvStream& aStream ) : aOut( aStream ) {}
 
     virtual ErrCode     Write() = 0;
 };

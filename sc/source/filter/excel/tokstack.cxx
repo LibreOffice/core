@@ -69,9 +69,6 @@ TokenPool::TokenPool( svl::SharedStringPool& rSPool ) :
     nP_Dbl = 8;
     pP_Dbl = new double[ nP_Dbl ];
 
-    // pool for error codes
-    pP_Err = new sal_uInt16[ nP_Err ];
-
     // pool for References
     nP_RefTr = 32;
     ppP_RefTr = new ScSingleRefData *[ nP_RefTr ];
@@ -104,7 +101,6 @@ TokenPool::~TokenPool()
     delete[] pType;
     delete[] pSize;
     delete[] pP_Dbl;
-    delete[] pP_Err;
 
     for( n = 0 ; n < nP_RefTr ; n++ )
         delete ppP_RefTr[ n ];
