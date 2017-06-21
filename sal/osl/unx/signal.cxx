@@ -149,19 +149,23 @@ bool onDeInitSignal()
 
     /* Initialize the rest of the signals */
     for (int i = NoSignals - 1; i >= 0; i--)
+    {
         if (Signals[i].Action != ACT_SYSTEM)
         {
-            if (Signals[i].siginfo) {
-                act.sa_sigaction = reinterpret_cast<Handler2>(
-                        Signals[i].Handler);
+            if (Signals[i].siginfo)
+            {
+                act.sa_sigaction = reinterpret_cast<Handler2>(Signals[i].Handler);
                 act.sa_flags = SA_SIGINFO;
-            } else {
+            }
+            else
+            {
                 act.sa_handler = Signals[i].Handler;
                 act.sa_flags = 0;
             }
 
             sigaction(Signals[i].Signal, &act, nullptr);
         }
+    }
 
     return false;
 }
@@ -315,14 +319,9 @@ void signalHandlerFunction(int signal, siginfo_t * info, void * context)
             if (rSignal.Signal == signal)
             {
                 if (rSignal.siginfo)
-                {
-                    (*reinterpret_cast<Handler2>(rSignal.Handler))(
-                        signal, info, context);
-                }
+                    (*reinterpret_cast<Handler2>(rSignal.Handler))(signal, info, context);
                 else
-                {
                     rSignal.Handler(signal);
-                }
                 break;
             }
         }
