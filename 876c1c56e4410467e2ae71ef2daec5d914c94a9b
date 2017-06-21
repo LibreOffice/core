@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_7b46cbc0",
+        "filename": "editeng/qa/unit/core-test.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T19:44:50Z",
+      "side": 1,
+      "message": "do these tests still fail?",
+      "revId": "876c1c56e4410467e2ae71ef2daec5d914c94a9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_5b490fd0",
+        "filename": "editeng/source/uno/unotext2.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-21T19:44:50Z",
+      "side": 1,
+      "message": "ah, this is much better!\n\ni am not entirely sure if \"\u003e\" is the right check here\n\n* maybe it should be \"\u003e\u003d\" in the usual case of non-empty portions\n\n* but i don\u0027t know if EditEngine can legitimately have empty portions where start \u003d end",
+      "revId": "876c1c56e4410467e2ae71ef2daec5d914c94a9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
