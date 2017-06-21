@@ -694,6 +694,11 @@ void update_checker()
                     }
                 }
                 CreateValidUpdateDir(aUpdateInfo);
+                OUString aSeeAlsoURL = aUpdateInfo.aSeeAlsoURL;
+                std::shared_ptr< comphelper::ConfigurationChanges > batch(
+                        comphelper::ConfigurationChanges::create());
+                officecfg::Office::Update::Update::SeeAlso::set(aSeeAlsoURL, batch);
+                batch->commit();
             }
         }
     }
