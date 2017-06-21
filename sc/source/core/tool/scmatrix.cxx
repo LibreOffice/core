@@ -1284,6 +1284,8 @@ public:
 
     size_t getMatching() const { return mnResult; }
 
+    size_t getRemainingCount() const { return ((mnCol2 + 1) * maSize.row) - mnIndex; }
+
     size_t compare(const MatrixImplType::element_block_node_type& node) const;
 
     void operator() (const MatrixImplType::element_block_node_type& node)
@@ -1293,7 +1295,7 @@ public:
             return;
 
         // limit lookup to the requested columns
-        if ((mnCol1 * maSize.row) <= mnIndex && mnIndex < ((mnCol2 + 1) * maSize.row))
+        if ((mnCol1 * maSize.row) <= mnIndex && getRemainingCount() > 0)
         {
             mnResult = compare(node);
         }
@@ -1314,7 +1316,8 @@ size_t WalkAndMatchElements<double>::compare(const MatrixImplType::element_block
 
             block_type::const_iterator it = block_type::begin(*node.data);
             block_type::const_iterator itEnd = block_type::end(*node.data);
-            for (; it != itEnd; ++it, nCount++)
+            const size_t nRemaining = getRemainingCount();
+            for (; it != itEnd && nCount < nRemaining; ++it, ++nCount)
             {
                 if (*it == maMatchValue)
                 {
@@ -1329,7 +1332,8 @@ size_t WalkAndMatchElements<double>::compare(const MatrixImplType::element_block
 
             block_type::const_iterator it = block_type::begin(*node.data);
             block_type::const_iterator itEnd = block_type::end(*node.data);
-            for (; it != itEnd; ++it, ++nCount)
+            const size_t nRemaining = getRemainingCount();
+            for (; it != itEnd && nCount < nRemaining; ++it, ++nCount)
             {
                 if (int(*it) == maMatchValue)
                 {
@@ -1359,7 +1363,8 @@ size_t WalkAndMatchElements<svl::SharedString>::compare(const MatrixImplType::el
 
             block_type::const_iterator it = block_type::begin(*node.data);
             block_type::const_iterator itEnd = block_type::end(*node.data);
-            for (; it != itEnd; ++it, ++nCount)
+            const size_t nRemaining = getRemainingCount();
+            for (; it != itEnd && nCount < nRemaining; ++it, ++nCount)
             {
                 if (it->getDataIgnoreCase() == maMatchValue.getDataIgnoreCase())
                 {
