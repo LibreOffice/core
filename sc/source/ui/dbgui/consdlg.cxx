@@ -40,20 +40,17 @@ class ScAreaData
 {
 public:
     ScAreaData()
-        : bIsDbArea(false)
     {
     }
 
-    void Set( const OUString& rName, const OUString& rArea, bool bDb )
-                {
-                    aStrName  = rName;
-                    aStrArea  = rArea;
-                    bIsDbArea = bDb;
-                }
+    void Set( const OUString& rName, const OUString& rArea )
+    {
+        aStrName  = rName;
+        aStrArea  = rArea;
+    }
 
     OUString  aStrName;
     OUString  aStrArea;
-    bool  bIsDbArea;
 };
 
 ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
@@ -218,7 +215,7 @@ void ScConsolidateDlg::Init()
         while ( aIter.Next( aStrName, aRange ) )
         {
             OUString aStrArea(aRange.Format(ScRefFlags::ADDR_ABS_3D, pDoc, eConv));
-            pAreaData[nAt++].Set( aStrName, aStrArea, aIter.WasDBName() );
+            pAreaData[nAt++].Set( aStrName, aStrArea );
         }
     }
 

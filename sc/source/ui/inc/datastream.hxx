@@ -105,7 +105,6 @@ private:
     ScDocShell* mpDocShell;
     DocumentStreamAccess maDocAccess;
     OUString msURL;
-    sal_Int32 mnLimit;
     sal_uInt32 mnSettings;
     MoveType meOrigMove; // Initial move setting. This one gets saved to file.
     MoveType meMove; // move setting during streaming, which may change in the middle.

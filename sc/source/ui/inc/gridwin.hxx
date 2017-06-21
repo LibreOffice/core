@@ -193,7 +193,6 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     bool                    bRFSize:1;
     bool                    bPagebreakDrawn:1;
     bool                    bDragRect:1;
-    bool                    bIsInScroll:1;
     bool                    bIsInPaint:1;
     bool                    bNeedsRepaint:1;
     bool                    bAutoMarkVisible:1;

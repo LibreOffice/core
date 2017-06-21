@@ -106,7 +106,6 @@ void ScFillSeriesDlg::dispose()
 
 void ScFillSeriesDlg::SetEdStartValEnabled(bool bFlag)
 {
-    bStartValFlag=bFlag;
     if(bFlag)
     {
        m_pFtStartVal->Enable();
@@ -201,8 +200,6 @@ void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
     if ( fEndVal != MAXDOUBLE )
         rDoc.GetFormatTable()->GetInputLineString( fEndVal, 0, aEndTxt );
     m_pEdEndVal->SetText( aEndTxt );
-
-    bStartValFlag = false;
 }
 
 bool ScFillSeriesDlg::CheckStartVal()

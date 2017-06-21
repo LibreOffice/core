@@ -135,8 +135,6 @@ private:
 
     bool                    bActiveDrawSh;
     bool                    bActiveDrawTextSh;
-    bool                    bActivePivotSh;
-    bool                    bActiveAuditingSh;
     bool                    bActiveDrawFormSh;
     bool                    bActiveOleObjectSh;
     bool                    bActiveChartSh;

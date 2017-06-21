@@ -225,7 +225,6 @@ private:
     ScAddress       maActiveCell;
     SCTAB           mnTab;
     bool            mbIsSpreadsheet;
-    bool            mbHasSelection;
     bool            mbDelIns;
     bool            mbIsFocusSend;
 

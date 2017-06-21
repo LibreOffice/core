@@ -53,7 +53,6 @@ private:
     VclPtr<FixedText> maFtCondNr;
     VclPtr<FixedText> maFtCondition;
 
-    sal_Int32 mnIndex;
     OUString maStrCondition;
 protected:
     VclPtr<ListBox> maLbType;

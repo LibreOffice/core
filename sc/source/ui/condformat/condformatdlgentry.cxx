@@ -41,7 +41,6 @@
 ScCondFrmtEntry::ScCondFrmtEntry(vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos)
     : VclContainer(pParent, WB_CLIPCHILDREN | WB_BORDER)
     , mbActive(false)
-    , mnIndex(0)
     , maStrCondition(ScResId(SCSTR_CONDITION))
     , mpDoc(pDoc)
     , maPos(rPos)
@@ -106,10 +105,7 @@ bool ScCondFrmtEntry::EventNotify( NotifyEvent& rNEvt )
 
 void ScCondFrmtEntry::SetIndex(sal_Int32 nIndex)
 {
-    mnIndex = nIndex;
-    OUStringBuffer aBuffer(maStrCondition);
-    aBuffer.append(OUString::number(nIndex));
-    maFtCondNr->SetText(aBuffer.makeStringAndClear());
+    maFtCondNr->SetText(maStrCondition + OUString::number(nIndex));
 }
 
 void ScCondFrmtEntry::SetHeight()

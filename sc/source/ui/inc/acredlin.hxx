@@ -85,8 +85,6 @@ private:
     OUString           aUnknown;
     sal_uLong                   nAcceptCount;
     sal_uLong                   nRejectCount;
-    bool                    bAcceptEnableFlag:1;
-    bool                    bRejectEnableFlag:1;
     bool                    bIgnoreMsg:1;
     bool                    bNoSelection:1;
     bool                    bHasFilterEntry:1;

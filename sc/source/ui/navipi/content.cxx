@@ -141,8 +141,6 @@ ScContentTree::ScContentTree(vcl::Window* pParent, ScNavigatorDlg* pNavigatorDlg
     SetNodeDefaultImages();
 
     SetDoubleClickHdl( LINK( this, ScContentTree, ContentDoubleClickHdl ) );
-
-    pTmpEntry= nullptr;
 }
 
 Size ScContentTree::GetOptimalSize() const

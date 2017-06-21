@@ -29,9 +29,6 @@ class SdrOutliner;
 /** Base class for Text functions */
 class FuText : public FuConstruct
 {
-protected:
-    SdrTextObj*     pTextObj;
-
 public:
     FuText(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
                    SdrModel* pDoc, SfxRequest& rReq);

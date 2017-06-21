@@ -163,7 +163,6 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     eType( eNewType ),
     mnPPTX( nPixelPerTwipsX ),
     mnPPTY( nPixelPerTwipsY ),
-    pEditObj( nullptr ),
     pViewShell( nullptr ),
     pDrawView( nullptr ),
     bEditMode( false ),
@@ -215,7 +214,6 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
         nScrH += pRowInfo[nArrY].nHeight;
 
     bTabProtected = mpDoc->IsTabProtected( nTab );
-    nTabTextDirection = mpDoc->GetEditTextDirection( nTab );
     bLayoutRTL = mpDoc->IsLayoutRTL( nTab );
 }
 

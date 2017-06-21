@@ -55,8 +55,7 @@ ScPivotFilterDlg::ScPivotFilterDlg(vcl::Window* pParent, const SfxItemSet& rArgS
         pOutItem        ( nullptr ),
         pViewData       ( nullptr ),
         pDoc            ( nullptr ),
-        nSrcTab         ( nSourceTab ),     // is not in QueryParam
-        nFieldCount     ( 0 )
+        nSrcTab         ( nSourceTab )     // is not in QueryParam
 {
     get(m_pLbField1, "field1");
     get(m_pLbCond1, "cond1");
@@ -285,7 +284,6 @@ void ScPivotFilterDlg::FillFieldLists()
             m_pLbField3->InsertEntry( aFieldName, i );
             i++;
         }
-        nFieldCount = i;
     }
 }
 

@@ -74,7 +74,6 @@ private:
     ScDocument*         pDoc;
     SCTAB               nSrcTab;
 
-    sal_uInt16              nFieldCount;
     VclPtr<ComboBox>           aValueEdArr[3];
     VclPtr<ListBox>            aFieldLbArr[3];
     VclPtr<ListBox>            aCondLbArr[3];
