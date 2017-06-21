@@ -114,9 +114,7 @@ struct CellInfo
         , nClipMark(ScClipMark::NONE)
         , nWidth(0)
         , nRotateDir(ScRotateDir::NONE)
-        , bMarked(false)
         , bEmptyCellText(false)
-        , bMerged(false)
         , bHOverlapped(false)
         , bVOverlapped(false)
         , bAutoFilter(false)
@@ -157,7 +155,6 @@ struct CellInfo
     sal_uInt16                  nWidth;
     ScRotateDir                 nRotateDir;
 
-    bool                        bMarked : 1;
     bool                        bEmptyCellText : 1;
     bool                        bMerged : 1;
     bool                        bHOverlapped : 1;
@@ -185,7 +182,6 @@ struct RowInfo
     SCCOL               nRotMaxCol;         // SC_ROTMAX_NONE, if nothing
 
     bool                bEmptyBack:1;
-    bool                bEmptyText:1;
     bool                bAutoFilter:1;
     bool                bPivotButton:1;
     bool                bChanged:1;           // TRUE, if not tested

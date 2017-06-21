@@ -94,7 +94,6 @@ private:
 
     ScDocumentPool*     pDocPool;
     SvxColorItem*       ppColorItems[6];        // 0 and 7 are missing!
-    SvxColorItem*       pBlack;
     SvxColorItem*       pWhite;
     Color*              pColTab;
     std::vector< std::unique_ptr<ENTRY> > aEntries;

@@ -78,9 +78,7 @@ AddressConverter::AddressConverter( const WorkbookHelper& rHelper ) :
     mbRowOverflow( false ),
     mbTabOverflow( false )
 {
-    maDConChars.set( 0xFFFF, '\x01', 0xFFFF, '\x02', 0xFFFF );
     initializeMaxPos( OOX_MAXTAB, OOX_MAXCOL, OOX_MAXROW );
-    maLinkChars.set( 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF );
 }
 
 bool AddressConverter::parseOoxAddress2d(
@@ -463,17 +461,6 @@ Sequence<CellRangeAddress> AddressConverter::toApiSequence(const ScRangeList& or
 }
 
 // private --------------------------------------------------------------------
-
-void AddressConverter::ControlCharacters::set(
-        sal_Unicode cThisWorkbook, sal_Unicode cExternal,
-        sal_Unicode cThisSheet, sal_Unicode cInternal, sal_Unicode cSameSheet )
-{
-    mcThisWorkbook = cThisWorkbook;
-    mcExternal     = cExternal;
-    mcThisSheet    = cThisSheet;
-    mcInternal     = cInternal;
-    mcSameSheet    = cSameSheet;
-}
 
 void AddressConverter::initializeMaxPos(
         sal_Int16 nMaxXlsTab, sal_Int32 nMaxXlsCol, sal_Int32 nMaxXlsRow )

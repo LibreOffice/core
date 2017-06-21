@@ -85,7 +85,6 @@ private:
         sal_uInt16                      nP_Dbl;
         sal_uInt16                      nP_DblAkt;
 
-        sal_uInt16*                     pP_Err;     // Pool for error codes
         static const sal_uInt16         nP_Err = 8;
         sal_uInt16                      nP_ErrAkt;
 

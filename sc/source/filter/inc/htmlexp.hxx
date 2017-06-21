@@ -121,7 +121,6 @@ class ScHTMLExport : public ScExportBase
     bool             bTabAlignedLeft;
     bool             bCalcAsShown;
     bool             bCopyLocalFileToINet;
-    bool             bTableDataWidth;
     bool             bTableDataHeight;
     bool             mbSkipImages;
     /// If HTML header and footer should be written as well, or just the content itself.
