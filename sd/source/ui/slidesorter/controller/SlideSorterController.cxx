@@ -111,14 +111,12 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
       mpListener(),
       mnModelChangeLockCount(0),
       mbIsForcedRearrangePending(false),
-      mbPreModelChangeDone(false),
       mbPostModelChangePending(false),
       maSelectionBeforeSwitch(),
       mnCurrentPageBeforeSwitch(0),
       mpEditModeChangeMasterPage(nullptr),
       maTotalWindowArea(),
-      mnPaintEntranceCount(0),
-      mbIsContextMenuOpen(false)
+      mnPaintEntranceCount(0)
 {
     sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     OSL_ASSERT(pWindow);
@@ -380,7 +378,6 @@ bool SlideSorterController::Command (
                 }
             }
 
-            mbIsContextMenuOpen = true;
             if (pViewShell != nullptr)
             {
                 SfxDispatcher* pDispatcher = pViewShell->GetDispatcher();
@@ -393,7 +390,6 @@ bool SlideSorterController::Command (
                         pFunction->ResetMouseAnchor();
                 }
             }
-            mbIsContextMenuOpen = false;
             if (pPage == nullptr)
             {
                 // Remember the position of the insertion indicator before
@@ -464,7 +460,6 @@ void SlideSorterController::PreModelChange()
     // Prevent PreModelChange to execute more than once per model lock.
     if (mbPostModelChangePending)
         return;
-    mbPreModelChangeDone = true;
 
     if (mrSlideSorter.GetViewShell() != nullptr)
         mrSlideSorter.GetViewShell()->Broadcast(

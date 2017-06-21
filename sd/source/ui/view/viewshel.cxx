@@ -232,7 +232,6 @@ void ViewShell::construct()
 
     GetDoc()->StartOnlineSpelling(false);
 
-    mpWindowUpdater->SetViewShell (*this);
     mpWindowUpdater->SetDocument (GetDoc());
 
     // Re-initialize the spell dialog.
