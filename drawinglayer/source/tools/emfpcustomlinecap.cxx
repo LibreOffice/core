@@ -46,7 +46,6 @@ namespace emfplushelper
 {
     const sal_uInt32 EmfPlusCustomLineCapDataTypeDefault = 0x00000000;
     const sal_uInt32 EmfPlusCustomLineCapDataTypeAdjustableArrow = 0x00000001;
-
     const sal_uInt32 EmfPlusCustomLineCapDataFillPath = 0x00000001;
     const sal_uInt32 EmfPlusCustomLineCapDataLinePath = 0x00000002;
 
@@ -75,17 +74,14 @@ namespace emfplushelper
         sal_Int32 pathLength;
         s.ReadInt32(pathLength);
         SAL_INFO("cppcanvas.emf", "EMF+\t\tpath length: " << pathLength);
-
         sal_uInt32 pathHeader;
         sal_Int32 pathPoints, pathFlags;
         s.ReadUInt32(pathHeader).ReadInt32(pathPoints).ReadInt32(pathFlags);
-
         SAL_INFO("cppcanvas.emf", "EMF+\t\tpath (custom cap line path)");
         SAL_INFO("cppcanvas.emf", "EMF+\t\theader: 0x" << std::hex << pathHeader << " points: " << std::dec << pathPoints << " additional flags: 0x" << std::hex << pathFlags << std::dec);
 
         EMFPPath path(pathPoints);
         path.Read(s, pathFlags, rR);
-
         polygon = path.GetPolygon(rR, false);
         mbIsFilled = bFill;
 
@@ -93,16 +89,13 @@ namespace emfplushelper
         // expects
         B2DHomMatrix aMatrix;
         aMatrix.scale(1.0, -1.0);
-
         polygon.transform(aMatrix);
     };
 
     void EMFPCustomLineCap::Read(SvStream& s, EmfPlusHelperData& rR)
     {
         sal_uInt32 header;
-
         s.ReadUInt32(header).ReadUInt32(type);
-
         SAL_INFO("cppcanvas.emf", "EMF+\t\tcustom cap");
         SAL_INFO("cppcanvas.emf", "EMF+\t\theader: 0x" << std::hex << header << " type: " << type << std::dec);
 
