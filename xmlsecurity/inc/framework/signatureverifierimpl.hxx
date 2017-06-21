@@ -76,6 +76,9 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+
+    void updateSignature( const css::uno::Reference< css::xml::crypto::XXMLSignature >& xSignature,
+                          const css::uno::Reference< css::xml::crypto::XXMLSecurityContext >& xContext ) { m_xXMLSignature = xSignature; m_xXMLSecurityContext = xContext; }
 };
 
 /// @throws css::uno::RuntimeException
