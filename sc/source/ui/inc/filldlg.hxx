@@ -94,8 +94,6 @@ private:
     double      fIncrement;
     double      fEndVal;
 
-    bool        bStartValFlag;
-
     void Init( sal_uInt16 nPossDir );
     bool CheckStartVal();
     bool CheckIncrementVal();

@@ -201,7 +201,6 @@ private:
     sal_uInt16      nDownId;
     sal_uInt16      nUpId;
     sal_uInt16      nDataId;
-    sal_uInt16      nAreaId;
     ScArea*         pMarkArea;
     ScViewData*     pViewData;
 

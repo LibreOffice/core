@@ -98,8 +98,6 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window
         aStrChildOrgContent  (ScResId(STR_CHG_CHILD_ORGCONTENT)),
         aStrEmpty            (ScResId(STR_CHG_EMPTY)),
         aUnknown("Unknown"),
-        bAcceptEnableFlag(true),
-        bRejectEnableFlag(true),
         bIgnoreMsg(false),
         bNoSelection(false),
         bHasFilterEntry(false),
@@ -182,8 +180,6 @@ void ScAcceptChgDlg::ReInit(ScViewData* ptrViewData)
     bIgnoreMsg=false;
     nAcceptCount=0;
     nRejectCount=0;
-    bAcceptEnableFlag=true;
-    bRejectEnableFlag=true;
 
     //  don't call Init here (switching between views), just set link below
     //  (dialog is just hidden, not deleted anymore, when switching views)
@@ -754,8 +750,6 @@ void ScAcceptChgDlg::UpdateView()
     SvTreeListEntry* pParent=nullptr;
     ScChangeTrack* pChanges=nullptr;
     const ScChangeAction* pScChangeAction=nullptr;
-    bAcceptEnableFlag=true;
-    bRejectEnableFlag=true;
     SetPointer(Pointer(PointerStyle::Wait));
     pTheView->SetUpdateMode(false);
     bool bFilterFlag = pTPFilter->IsDate() || pTPFilter->IsRange() ||
@@ -1387,8 +1381,6 @@ void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartActio
     if(pChanges!=nullptr)
     {
         SvTreeListEntry* pParent=nullptr;
-        bAcceptEnableFlag=true;
-        bRejectEnableFlag=true;
         SetPointer(Pointer(PointerStyle::Wait));
         pTheView->SetUpdateMode(false);
 
@@ -1637,8 +1629,6 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, UpdateSelectionHdl, Timer *, void)
             bAcceptFlag = false;
             bRejectFlag = false;
         }
-        bAcceptEnableFlag = bAcceptFlag;
-        bRejectEnableFlag = bRejectFlag;
 
         pEntry = pTheView->NextSelected( pEntry );
     }

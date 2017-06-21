@@ -97,8 +97,6 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
         // the object area must be set after the scaling since it triggers the resizing
         aRect.SetSize( aOleSize );
         pClient->SetObjArea( aRect );
-
-        static_cast<ScClient*>(pClient)->SetGrafEdit( nullptr );
     }
 }
 
@@ -206,8 +204,6 @@ void ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
             // the object area must be set after the scaling since it triggers the resizing
             aRect.SetSize( aOleSize );
             pClient->SetObjArea( aRect );
-
-            static_cast<ScClient*>(pClient)->SetGrafEdit( nullptr );
 
             nErr = pClient->DoVerb( nVerb );
             bErrorShown = true;

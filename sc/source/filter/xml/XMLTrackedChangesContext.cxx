@@ -89,11 +89,9 @@ class ScXMLCellContentDeletionContext : public ScXMLImportContext
     sal_uInt32                          nID;
     sal_Int32                           nMatrixCols;
     sal_Int32                           nMatrixRows;
-    formula::FormulaGrammar::Grammar                  eGrammar;
+    formula::FormulaGrammar::Grammar    eGrammar;
     sal_uInt16                          nType;
     ScMatrixMode                        nMatrixFlag;
-    bool                            bBigRange;
-    bool                            bContainsCell;
 
 public:
     ScXMLCellContentDeletionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -629,9 +627,7 @@ ScXMLCellContentDeletionContext::ScXMLCellContentDeletionContext(  ScXMLImport& 
     nMatrixRows(0),
     eGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT),
     nType(css::util::NumberFormat::ALL),
-    nMatrixFlag(ScMatrixMode::NONE),
-    bBigRange(false),
-    bContainsCell(false)
+    nMatrixFlag(ScMatrixMode::NONE)
 {
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
@@ -660,14 +656,12 @@ SvXMLImportContext *ScXMLCellContentDeletionContext::CreateChildContext( sal_uIn
     {
         if (IsXMLToken(rLocalName, XML_CHANGE_TRACK_TABLE_CELL))
         {
-            bContainsCell = true;
             pContext = new ScXMLChangeCellContext(GetScImport(), nPrefix, rLocalName, xAttrList,
                 maCell, sFormulaAddress, sFormula, sFormulaNmsp, eGrammar, sInputString, fValue, nType, nMatrixFlag, nMatrixCols, nMatrixRows );
         }
         else if (IsXMLToken(rLocalName, XML_CELL_ADDRESS))
         {
             OSL_ENSURE(!nID, "a action with a ID should not contain a BigRange");
-            bBigRange = true;
             pContext = new ScXMLBigRangeContext(GetScImport(), nPrefix, rLocalName, xAttrList, aBigRange);
         }
     }

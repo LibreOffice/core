@@ -40,16 +40,10 @@ private:
 
     sal_uInt16 m_nNumberId;
     sal_uInt16 m_nFontId;
-    sal_uInt16 m_nFontEffectId;
-    sal_uInt16 m_nAlignmentId;
-    sal_uInt16 m_nAsianId;
-    sal_uInt16 m_nBorderId;
     sal_uInt16 m_nBackgroundId;
-    sal_uInt16 m_nProtectId;
     sal_uInt16 m_nPageId;
     sal_uInt16 m_nHeaderId;
     sal_uInt16 m_nFooterId;
-    sal_uInt16 m_nSheetId;
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_STYLEDLG_HXX

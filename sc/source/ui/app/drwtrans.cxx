@@ -84,7 +84,6 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
     pDragSourceView( nullptr ),
     nDragSourceFlags( ScDragSrc::Undefined ),
     bDragWasInternal( false ),
-    nSourceDocID( 0 ),
     maShellID(SfxObjectShell::CreateShellID(pContainerShell))
 {
 
@@ -210,7 +209,6 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
     if ( pContainerShell )
     {
         ScDocument& rDoc = pContainerShell->GetDocument();
-        nSourceDocID = rDoc.GetDocumentID();
         if ( pPage )
         {
             ScChartHelper::FillProtectedChartRangesVector( m_aProtectedChartRangesVector, &rDoc, pPage );

@@ -85,10 +85,8 @@ private:
         SvxCellOrientation      meOrient;
         SCSIZE                  mnArrY;
         SCCOL                   mnX;
-        SCROW                   mnY;
         SCCOL                   mnCellX;
         SCROW                   mnCellY;
-        SCTAB                   mnTab;
         long                    mnPosX;
         long                    mnPosY;
         long                    mnInitPosX;
@@ -168,8 +166,6 @@ private:
     Fraction aZoomX;
     Fraction aZoomY;
 
-    SdrObject* pEditObj;        // Omit when painting
-
     ScTabViewShell* pViewShell; // for connect from visible plug-ins
 
     FmFormView* pDrawView;      // SdrView to paint to
@@ -203,7 +199,6 @@ private:
     bool    bAnyRotated;        // internal
     bool    bAnyClipped;        // internal
     bool    bTabProtected;
-    sal_uInt8   nTabTextDirection;  // EEHorizontalTextDirection values
     bool    bLayoutRTL;
 
     // #i74769# use SdrPaintWindow direct, remember it during BeginDrawLayers/EndDrawLayers
@@ -266,12 +261,11 @@ public:
 
                     ~ScOutputData();
 
-    void SetSpellCheckContext( const sc::SpellCheckContext* pCxt );
+    void    SetSpellCheckContext( const sc::SpellCheckContext* pCxt );
     void    SetContentDevice( OutputDevice* pContentDev );
 
     void    SetRefDevice( OutputDevice* pRDev ) { mpRefDevice = pFmtDevice = pRDev; }
     void    SetFmtDevice( OutputDevice* pRDev ) { pFmtDevice = pRDev; }
-    void    SetEditObject( SdrObject* pObj )    { pEditObj = pObj; }
     void    SetViewShell( ScTabViewShell* pSh ) { pViewShell = pSh; }
 
     void    SetDrawView( FmFormView* pNew )     { pDrawView = pNew; }

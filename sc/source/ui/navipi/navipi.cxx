@@ -480,7 +480,7 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
     nScenarioId = aTbxCmd->GetItemId("scenarios");
     nDownId = aTbxCmd->GetItemId("end");
     nUpId = aTbxCmd->GetItemId("start");
-    nAreaId = aTbxCmd->GetItemId("datarange");
+    nDataId = aTbxCmd->GetItemId("datarange");
     get(aContentBox, "contentbox");
     aLbEntries = VclPtr<ScContentTree>::Create(aContentBox, this);
     aLbEntries->set_hexpand(true);
