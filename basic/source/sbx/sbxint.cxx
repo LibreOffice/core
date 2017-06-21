@@ -154,7 +154,7 @@ start:
             {
                 double d;
                 SbxDataType t;
-                if( ImpScan( *p->pOUString, d, t, nullptr ) != ERRCODE_SBX_OK )
+                if( ImpScan( *p->pOUString, d, t, nullptr ) != ERRCODE_NONE )
                     nRes = 0;
                 else if( d > SbxMAXINT )
                 {
@@ -440,7 +440,7 @@ start:
                     // Check if really 0 or invalid conversion
                     double d;
                     SbxDataType t;
-                    if( ImpScan( *p->pOUString, d, t, nullptr ) != ERRCODE_SBX_OK )
+                    if( ImpScan( *p->pOUString, d, t, nullptr ) != ERRCODE_NONE )
                         nRes = 0;
                     else
                         nRes = (sal_Int64) d;
@@ -702,7 +702,7 @@ start:
                     // Check if really 0 or invalid conversion
                     double d;
                     SbxDataType t;
-                    if( ImpScan( *p->pOUString, d, t, nullptr ) != ERRCODE_SBX_OK )
+                    if( ImpScan( *p->pOUString, d, t, nullptr ) != ERRCODE_NONE )
                         nRes = 0;
                     else if( d > SbxMAXSALUINT64 )
                     {

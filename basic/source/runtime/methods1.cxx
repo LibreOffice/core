@@ -334,7 +334,7 @@ RTLFUNC(CDbl)  // JSM
             // #41690
             OUString aScanStr = pSbxVariable->GetOUString();
             ErrCode Error = SbxValue::ScanNumIntnl( aScanStr, nVal );
-            if( Error != ERRCODE_SBX_OK )
+            if( Error != ERRCODE_NONE )
             {
                 StarBASIC::Error( Error );
             }
@@ -403,7 +403,7 @@ RTLFUNC(CSng)  // JSM
             double dVal = 0.0;
             OUString aScanStr = pSbxVariable->GetOUString();
             ErrCode Error = SbxValue::ScanNumIntnl( aScanStr, dVal, /*bSingle=*/true );
-            if( SbxBase::GetError() == ERRCODE_SBX_OK && Error != ERRCODE_SBX_OK )
+            if( SbxBase::GetError() == ERRCODE_NONE && Error != ERRCODE_NONE )
             {
                 StarBASIC::Error( Error );
             }
