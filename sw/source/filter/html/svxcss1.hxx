@@ -196,7 +196,6 @@ class SvxCSS1Parser : public CSS1Parser
 
     SfxItemSet *pSheetItemSet;  // item set of Style-Sheet
     SfxItemSet *pItemSet;       // current item set
-    SvxCSS1MapEntry *pSearchEntry;
 
     SvxCSS1PropertyInfo *pSheetPropInfo;
     SvxCSS1PropertyInfo *pPropInfo;

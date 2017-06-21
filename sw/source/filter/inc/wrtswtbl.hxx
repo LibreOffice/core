@@ -164,7 +164,6 @@ class SW_DLLPUBLIC SwWriteTableCol
     sal_uInt32 nWidthOpt;
 
     bool bRelWidthOpt : 1;
-    bool bOutWidth : 1;                 // output the column width?
 
 public:
     bool bLeftBorder : 1;               // which borders are there?
@@ -177,8 +176,6 @@ public:
     bool HasLeftBorder() const                  { return bLeftBorder; }
 
     bool HasRightBorder() const                 { return bRightBorder; }
-
-    void SetOutWidth( bool bSet )               { bOutWidth = bSet; }
 
     inline bool operator==( const SwWriteTableCol& rCol ) const;
     inline bool operator<( const SwWriteTableCol& rCol ) const;

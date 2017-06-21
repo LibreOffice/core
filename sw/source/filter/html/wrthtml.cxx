@@ -138,7 +138,6 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
     , m_bOutFlyFrame( false )
     , m_bFirstCSS1Rule( false )
     , m_bFirstCSS1Property( false )
-    , m_bPoolCollTextModified( false )
     , m_bCSS1IgnoreFirstPageDesc( false )
     , m_bNoAlign( false )
     , m_bClearLeft( false )
@@ -290,7 +289,6 @@ ErrCode SwHTMLWriter::WriteStream()
     m_nLeftMargin = m_nDfltLeftMargin = m_nDfltRightMargin = 0;
     m_nDfltTopMargin = m_nDfltBottomMargin = 0;
     m_nFirstLineIndent = m_nDfltFirstLineIndent = 0;
-    m_bPoolCollTextModified = false;
     m_bFirstCSS1Property = m_bFirstCSS1Rule = false;
     m_bCSS1IgnoreFirstPageDesc = false;
     m_nIndentLvl = 0;

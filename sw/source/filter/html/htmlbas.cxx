@@ -223,11 +223,6 @@ void SwHTMLParser::AddScriptSource()
         {
             m_aScriptSource += "\n";
         }
-        else
-        {
-            // We're behind the CR/LF of the line before
-            m_nScriptStartLineNr = GetLineNr() - 1;
-        }
         m_aScriptSource += aToken;
     }
 }
