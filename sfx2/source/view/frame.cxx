@@ -380,11 +380,6 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
     const SfxMedium *pMed = pDoc->GetMedium();
     GetDescriptor()->SetActualURL( pMed->GetOrigURL() );
 
-    const SfxBoolItem* pItem = SfxItemSet::GetItem<SfxBoolItem>(pMed->GetItemSet(), SID_EDITDOC, false);
-    bool bEditable = ( !pItem || pItem->GetValue() );
-
-    GetDescriptor()->SetEditable( bEditable );
-
     // Mark FileOpen parameter
     SfxItemSet* pItemSet = pMed->GetItemSet();
 

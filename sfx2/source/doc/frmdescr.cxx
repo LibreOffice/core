@@ -28,9 +28,8 @@ struct SfxFrameDescriptor_Impl
 {
     Wallpaper*  pWallpaper;
     SfxItemSet* pArgs;
-    bool        bEditable;
 
-    SfxFrameDescriptor_Impl() : pWallpaper( nullptr ), pArgs( nullptr ), bEditable( true ) {}
+    SfxFrameDescriptor_Impl() : pWallpaper( nullptr ), pArgs( nullptr ) {}
     ~SfxFrameDescriptor_Impl()
     {
         delete pWallpaper;
@@ -70,11 +69,6 @@ void SfxFrameDescriptor::SetActualURL( const OUString& rURL )
     aActualURL = INetURLObject(rURL);
     if ( pImpl->pArgs )
         pImpl->pArgs->ClearItem();
-}
-
-void SfxFrameDescriptor::SetEditable( bool bSet )
-{
-    pImpl->bEditable = bSet;
 }
 
 void SfxFrameDescriptor::SetWallpaper( const Wallpaper& rWallpaper )

@@ -742,13 +742,6 @@ void SfxDispatcher::DoActivate_Impl(bool bMDI)
 
     if ( bMDI && xImp->pFrame )
     {
-        SfxBindings *pBind = GetBindings();
-        while ( pBind )
-        {
-            pBind->HidePopupCtrls_Impl( false );
-            pBind = pBind->GetSubBindings_Impl();
-        }
-
         xImp->pFrame->GetFrame().GetWorkWindow_Impl()->HidePopups_Impl( false, false, 1 );
     }
 
@@ -825,13 +818,6 @@ void SfxDispatcher::DoDeactivate_Impl(bool bMDI, SfxViewFrame* pNew)
 
     if ( bHidePopups )
     {
-        SfxBindings *pBind = GetBindings();
-        while ( pBind )
-        {
-            pBind->HidePopupCtrls_Impl();
-            pBind = pBind->GetSubBindings_Impl();
-        }
-
         xImp->pFrame->GetFrame().GetWorkWindow_Impl()->HidePopups_Impl( true, false, 1 );
     }
 

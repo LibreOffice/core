@@ -87,7 +87,6 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
     tools::Rectangle maStartCentButtons;
 
     bool mbInitControls;
-    sal_Int32 mnHideExternalLinks;
     std::unique_ptr<svt::AcceleratorExecute> mpAccExec;
 
     void setupButton(PushButton* pButton);

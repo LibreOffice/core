@@ -72,8 +72,7 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     Window( i_pParent ),
     mbLocalViewInitialized(false),
     maButtonsTextColor(officecfg::Office::Common::Help::StartCenter::StartCenterTextColor::get()),
-    mbInitControls( false ),
-    mnHideExternalLinks( 0 )
+    mbInitControls( false )
 {
     m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), "sfx/ui/startcenter.ui", "StartCenter" ));
 
@@ -128,21 +127,6 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     try
     {
         mxContext.set( ::comphelper::getProcessComponentContext(), uno::UNO_SET_THROW );
-        Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( mxContext );
-        Sequence<Any> args(1);
-        PropertyValue val(
-            "nodepath",
-            0,
-            Any(OUString("/org.openoffice.Office.Common/Help/StartCenter")),
-            PropertyState_DIRECT_VALUE);
-        args.getArray()[0] <<= val;
-        Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,args), UNO_QUERY);
-        if( xNameAccess.is() )
-        {
-            //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
-            Any value( xNameAccess->getByName("StartCenterHideExternalLinks") );
-            mnHideExternalLinks = value.get<sal_Int32>();
-        }
     }
     catch (const Exception& e)
     {

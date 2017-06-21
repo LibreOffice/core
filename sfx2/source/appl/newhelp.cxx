@@ -1436,7 +1436,6 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl(SfxHelpWindow_Impl* _pParent)
     m_pTabCtrl->SetCurPageId( (sal_uInt16)nPageId );
     ActivatePageHdl( m_pTabCtrl );
     m_pActiveLB->SetSelectHdl( LINK( this, SfxHelpIndexWindow_Impl, SelectHdl ) );
-    nMinWidth = ( m_pActiveLB->GetSizePixel().Width() / 2 );
 
     aIdle.SetInvokeHandler( LINK( this, SfxHelpIndexWindow_Impl, InitHdl ) );
     aIdle.SetPriority( TaskPriority::LOWER );
