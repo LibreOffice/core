@@ -86,8 +86,6 @@ OUString normalizePath(const OUString& rPath)
         aPath = aTempPath.copy(0, i) + aPath.copy(nIndex + 3);
     }
 
-    SAL_DEBUG(aPath);
-
     return aPath;
 }
 
@@ -267,13 +265,24 @@ void update()
 
 
 #if UNX
-    if (execv(aPath.getStr(), pArgs))
+    const char* pUpdaterTestReplace = std::getenv("LIBO_UPDATER_TEST_REPLACE");
+    if (!pUpdaterTestReplace)
     {
-        printf("execv failed with error %d %s\n",errno,strerror(errno));
+        if (execv(aPath.getStr(), pArgs))
+        {
+            printf("execv failed with error %d %s\n",errno,strerror(errno));
+        }
+    }
+    else
+    {
+        for (size_t i = 0; i < 8 + rtl_getAppCommandArgCount(); ++i)
+        {
+            SAL_WARN("desktop.updater", pArgs[i]);
+        }
     }
 #endif
 
-    for (size_t i = 0; i < 8; ++i)
+    for (size_t i = 0; i < 8 + rtl_getAppCommandArgCount(); ++i)
     {
         delete[] pArgs[i];
     }
