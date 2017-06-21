@@ -986,7 +986,7 @@ StarBASIC::~StarBASIC()
         lclRemoveDocBasicItem( *this );
 
         SbxBase::ResetError();
-        if( eOld != ERRCODE_SBX_OK )
+        if( eOld != ERRCODE_NONE )
         {
             SbxBase::SetError( eOld );
         }
@@ -1357,7 +1357,7 @@ bool StarBASIC::Call( const OUString& rName, SbxArray* pParam )
     {
         ErrCode eErr = SbxBase::GetError();
         SbxBase::ResetError();
-        if( eErr != ERRCODE_SBX_OK )
+        if( eErr != ERRCODE_NONE )
         {
             RTError( eErr, OUString(), 0, 0, 0 );
         }

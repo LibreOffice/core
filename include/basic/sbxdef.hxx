@@ -128,8 +128,6 @@ enum class SbxNameType {          // Type of the questioned name of a variable
 
 
 // New error codes per define
-#define ERRCODE_SBX_OK            ERRCODE_NONE    // processed
-
 #define ERRCODE_SBX_SYNTAX              ErrCode(1UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_COMPILER)
 #define ERRCODE_SBX_NOTIMP              ErrCode(2UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_NOTSUPPORTED)
 #define ERRCODE_SBX_OVERFLOW            ErrCode(3UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_SBX)        // overflow

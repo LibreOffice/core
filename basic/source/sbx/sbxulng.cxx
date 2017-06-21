@@ -118,7 +118,7 @@ start:
             {
                 double d;
                 SbxDataType t;
-                if( ImpScan( *p->pOUString, d, t, nullptr ) != ERRCODE_SBX_OK )
+                if( ImpScan( *p->pOUString, d, t, nullptr ) != ERRCODE_NONE )
                     nRes = 0;
                 else if( d > SbxMAXULNG )
                 {
