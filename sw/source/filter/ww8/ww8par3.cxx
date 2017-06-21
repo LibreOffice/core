@@ -2030,7 +2030,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             if (m_pAktColl && (m_nLFOPosition == 2047-1) && m_nAktColl < m_vColl.size())
                 m_vColl[m_nAktColl].m_bHasBrokenWW6List = true;
 
-            // die Streamdaten sind hier 1 basiert, wir ziehen EINS ab
+            // here the stream data is 1-based, we substact ONE
             if (USHRT_MAX > m_nLFOPosition)
             {
                 if (m_nLFOPosition != 2047-1) //Normal ww8+ list behaviour

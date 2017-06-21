@@ -1110,7 +1110,7 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
 
     // pNd->UpdateNum without a set of rules crashes at the latest whilst storing as sdw3
 
-    // WW:10 = numberierung -> SW:0 & WW:11 = bullets -> SW:0
+    // WW:10 = numbering -> SW:0 & WW:11 = bullets -> SW:0
     if (*pSprm13 == 10 || *pSprm13 == 11)
     {
         m_nSwNumLevel = 0;
