@@ -109,8 +109,6 @@ SwLabPreview::SwLabPreview(vcl::Window* pParent)
     , m_aUpperStr(SwResId(STR_UPPER))
     , m_aColsStr(SwResId(STR_COLS))
     , m_aRowsStr(SwResId(STR_ROWS))
-    , m_aPWidthStr(SwResId(STR_PWIDTH))
-    , m_aPHeightStr(SwResId(STR_PHEIGHT))
 {
     SetMapMode(MapUnit::MapPixel);
 

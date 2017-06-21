@@ -32,12 +32,10 @@
 #define STR_UPPER    (RC_LABFMT_BEGIN +  6)
 #define STR_COLS     (RC_LABFMT_BEGIN +  7)
 #define STR_ROWS     (RC_LABFMT_BEGIN +  8)
-#define STR_PWIDTH   (RC_LABFMT_BEGIN +  9)
-#define STR_PHEIGHT  (RC_LABFMT_BEGIN + 10)
 
 // overflow check ********************************************************
 
-#define LABFMT_ACT_END STR_PHEIGHT
+#define LABFMT_ACT_END STR_ROWS
 
 #if LABFMT_ACT_END > RC_LABFMT_END
 #error Resource overflow in #file, #line

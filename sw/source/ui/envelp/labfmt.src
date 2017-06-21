@@ -52,12 +52,4 @@ String STR_ROWS
 {
     Text [ en-US ] = "Rows" ;
 };
-String STR_PWIDTH
-{
-    Text [ en-US ] = "Page Width" ;
-};
-String STR_PHEIGHT
-{
-    Text [ en-US ] = "Page Height" ;
-};
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
