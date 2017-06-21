@@ -142,7 +142,6 @@ private:
     ::rtl::Reference<PresenterController> mpPresenterController;
     css::uno::Reference<css::presentation::XSlideShowController> mxSlideShowController;
     css::uno::Reference<css::drawing::XSlidePreviewCache> mxPreviewCache;
-    bool mbIsPaintPending;
     bool mbIsLayoutPending;
     class Layout;
     std::shared_ptr<Layout> mpLayout;

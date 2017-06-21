@@ -189,14 +189,6 @@ void PresenterWindowManager::SetPanePosSizeAbsolute (
         mpPaneContainer->FindPaneURL(rsPaneURL));
     if (pDescriptor.get() != nullptr)
     {
-        awt::Rectangle aParentBox = mxParentWindow->getPosSize();
-        if (aParentBox.Width > 0 && aParentBox.Height > 0)
-        {
-            pDescriptor->mnLeft = nX / aParentBox.Width;
-            pDescriptor->mnTop = nY / aParentBox.Height;
-            pDescriptor->mnRight = (nX + nWidth) / aParentBox.Width;
-            pDescriptor->mnBottom = (nY + nHeight) / aParentBox.Height;
-        }
         if (pDescriptor->mxBorderWindow.is())
             pDescriptor->mxBorderWindow->setPosSize(
                 ::sal::static_int_cast<sal_Int32>(nX),
@@ -922,25 +914,6 @@ void PresenterWindowManager::UpdateWindowSize (const Reference<awt::XWindow>& rx
     if (pDescriptor.get() != nullptr)
     {
         mxClipPolygon = nullptr;
-
-        awt::Rectangle aParentBox = mxParentWindow->getPosSize();
-        awt::Rectangle aBorderBox (pDescriptor->mxBorderWindow->getPosSize());
-
-        if ( ! mbIsLayouting)
-        {
-            const double nWidth (aParentBox.Width);
-            const double nHeight (aParentBox.Height);
-            pDescriptor->mnLeft = double(aBorderBox.X) / nWidth;
-            pDescriptor->mnTop = double(aBorderBox.Y) / nHeight;
-            pDescriptor->mnRight = double(aBorderBox.X + aBorderBox.Width) / nWidth;
-            pDescriptor->mnBottom = double(aBorderBox.Y + aBorderBox.Height) / nHeight;
-        }
-        else
-        {
-            // This update of the window size was initiated by
-            // Layout(). Therefore the window size does not have to be
-            // updated.
-        }
 
         // ToTop is called last because it may invalidate the iterator.
         if ( ! mbIsLayouting)

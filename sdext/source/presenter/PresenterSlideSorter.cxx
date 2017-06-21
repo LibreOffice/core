@@ -247,7 +247,6 @@ PresenterSlideSorter::PresenterSlideSorter (
       mpPresenterController(rpPresenterController),
       mxSlideShowController(mpPresenterController->GetSlideShowController()),
       mxPreviewCache(),
-      mbIsPaintPending(true),
       mbIsLayoutPending(true),
       mpLayout(),
       mpVerticalScrollBar(),
@@ -441,7 +440,6 @@ void SAL_CALL PresenterSlideSorter::disposing (const lang::EventObject& rEventOb
     {
         mxCanvas = nullptr;
         mbIsLayoutPending = true;
-        mbIsPaintPending = true;
 
         mpPresenterController->GetPaintManager()->Invalidate(mxWindow);
     }
@@ -665,7 +663,6 @@ void PresenterSlideSorter::UpdateLayout()
         return;
 
     mbIsLayoutPending = false;
-    mbIsPaintPending = true;
 
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());
     awt::Rectangle aCenterBox (aWindowBox);
@@ -997,8 +994,6 @@ void PresenterSlideSorter::Paint (const awt::Rectangle& rUpdateBox)
         OSL_ASSERT(mpLayout->mnRowCount>0 || mpLayout->mnColumnCount>0);
         return;
     }
-
-    mbIsPaintPending = false;
 
     ClearBackground(mxCanvas, rUpdateBox);
 
