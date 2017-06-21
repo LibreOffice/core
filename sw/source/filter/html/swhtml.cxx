@@ -188,7 +188,7 @@ bool HTMLReader::SetStrmStgPtr()
 
 }
 
-    // Aufruf fuer die allg. Reader-Schnittstelle
+// Call for the general Reader-Interface
 ErrCode HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, const OUString & rName )
 {
     if( !pStrm )
