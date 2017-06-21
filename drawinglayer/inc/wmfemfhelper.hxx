@@ -208,6 +208,11 @@ namespace wmfemfhelper
     drawinglayer::primitive2d::Primitive2DContainer interpretMetafile(
         const GDIMetaFile& rMetaFile,
         const drawinglayer::geometry::ViewInformation2D& rViewInformation);
+
+    void HandleNewClipRegion(
+        const basegfx::B2DPolyPolygon& rClipPolyPolygon,
+        TargetHolders& rTargetHolders,
+        PropertyHolders& rPropertyHolders);
 }
 
 #endif

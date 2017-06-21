@@ -220,6 +220,10 @@ namespace emfplushelper
         // internal mapper
         void MapToDevice(double& x, double& y);
 
+        // primitive creators
+        void EMFPPlusDrawPolygon(const ::basegfx::B2DPolyPolygon& polygon, sal_uInt32 penIndex);
+        void EMFPPlusFillPolygon(const ::basegfx::B2DPolyPolygon& polygon, bool isColor, sal_uInt32 brushIndexOrColor);
+
     public:
         EmfPlusHelperData(
             SvMemoryStream& rMS,
