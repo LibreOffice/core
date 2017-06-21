@@ -1179,7 +1179,8 @@ bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                                     if (bLoading && !bNoUI)
                                     {
                                         bIoErr = true;
-                                        bResult = ShowLockFileProblemDialog(LockFileIgnore);
+                                        ShowLockFileProblemDialog(LockFileIgnore);
+                                        bResult = true;   // always delete the defect lock-file
                                     }
                                 }
                                 catch (const uno::Exception&)
@@ -1187,7 +1188,8 @@ bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                                     if (bLoading && !bNoUI)
                                     {
                                         bIoErr = true;
-                                        bResult = ShowLockFileProblemDialog(LockFileIgnore);
+                                        ShowLockFileProblemDialog(LockFileIgnore);
+                                        bResult = true;   // always delete the defect lock-file
                                     }
                                 }
 
