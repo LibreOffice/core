@@ -25,6 +25,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/configmgr.hxx>
 #include <osl/file.hxx>
+#include <rtl/process.h>
 
 #include <curl/curl.h>
 
@@ -140,7 +141,8 @@ char** createCommandLine()
     OUString aInstallDir( "$BRAND_BASE_DIR/" );
     rtl::Bootstrap::expandMacros(aInstallDir);
 
-    size_t nArgs = 8;
+    size_t nCommandLineArgs = rtl_getAppCommandArgCount();
+    size_t nArgs = 8 + nCommandLineArgs;
     char** pArgs = new char*[nArgs];
     {
         createStr(pUpdaterName, pArgs, 0);
@@ -183,6 +185,15 @@ char** createCommandLine()
         OUString aSofficePath = getPathFromURL(aSofficePathURL);
         createStr(aSofficePath, pArgs, 6);
     }
+
+    // add the command line arguments from the soffice list
+    for (size_t i = 0; i < nCommandLineArgs; ++i)
+    {
+        OUString aCommandLineArg;
+        rtl_getAppCommandArg(i, &aCommandLineArg.pData);
+        createStr(aCommandLineArg, pArgs, 7 + i);
+    }
+
     pArgs[nArgs - 1] = nullptr;
 
     return pArgs;
