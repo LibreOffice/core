@@ -3640,6 +3640,65 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                 case svSingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
+                        if (rCxt.mnRowDelta < 0)
+                        {
+                            // row(s) deleted.
+
+                            if (rRef.IsRowRel())
+                                // Don't modify relative references in names.
+                                break;
+
+                            ScAddress aAbs = rRef.toAbs(rPos);
+
+                            if (aAbs.Col() < rCxt.maRange.aStart.Col() || rCxt.maRange.aEnd.Col() < aAbs.Col())
+                                // column of the reference is not in the deleted column range.
+                                break;
+
+                            if (aAbs.Tab() > rCxt.maRange.aEnd.Tab() || aAbs.Tab() < rCxt.maRange.aStart.Tab())
+                                // wrong tables
+                                break;
+
+                            const SCROW nDelStartRow = rCxt.maRange.aStart.Row() + rCxt.mnRowDelta;
+                            const SCROW nDelEndRow = nDelStartRow - rCxt.mnRowDelta - 1;
+
+                            if (nDelStartRow <= aAbs.Row() && aAbs.Row() <= nDelEndRow)
+                            {
+                                // This reference is deleted.
+                                rRef.SetRowDeleted(true);
+                                aRes.mbReferenceModified = true;
+                                break;
+                            }
+                        }
+                        else if (rCxt.mnColDelta < 0)
+                        {
+                            // column(s) deleted.
+
+                            if (rRef.IsColRel())
+                                // Don't modify relative references in names.
+                                break;
+
+                            ScAddress aAbs = rRef.toAbs(rPos);
+
+                            if (aAbs.Row() < rCxt.maRange.aStart.Row() || rCxt.maRange.aEnd.Row() < aAbs.Row())
+                                // row of the reference is not in the deleted row range.
+                                break;
+
+                            if (aAbs.Tab() > rCxt.maRange.aEnd.Tab() || aAbs.Tab() < rCxt.maRange.aStart.Tab())
+                                // wrong tables
+                                break;
+
+                            const SCCOL nDelStartCol = rCxt.maRange.aStart.Col() + rCxt.mnColDelta;
+                            const SCCOL nDelEndCol = nDelStartCol - rCxt.mnColDelta - 1;
+
+                            if (nDelStartCol <= aAbs.Col() && aAbs.Col() <= nDelEndCol)
+                            {
+                                // This reference is deleted.
+                                rRef.SetColDeleted(true);
+                                aRes.mbReferenceModified = true;
+                                break;
+                            }
+                        }
+
                         if (adjustSingleRefInName(rRef, rCxt, rPos, nullptr))
                             aRes.mbReferenceModified = true;
                     }
