@@ -242,10 +242,6 @@ bool PDFIRawAdaptor::parse( const uno::Reference<io::XInputStream>&       xInput
     std::shared_ptr<PDFIProcessor> pSink(
         new PDFIProcessor(xStatus, m_xContext));
 
-    // TEMP! TEMP!
-    if( m_bEnableToplevelText )
-        pSink->enableToplevelText();
-
     bool bSuccess=false;
 
     if( xInput.is() )

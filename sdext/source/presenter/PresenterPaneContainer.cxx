@@ -57,11 +57,7 @@ void PresenterPaneContainer::PreparePane (
     const OUString& rsTitle,
     const OUString& rsAccessibleTitle,
     const bool bIsOpaque,
-    const ViewInitializationFunction& rViewInitialization,
-    const double nLeft,
-    const double nTop,
-    const double nRight,
-    const double nBottom)
+    const ViewInitializationFunction& rViewInitialization)
 {
     if ( ! rxPaneId.is())
         return;
@@ -86,10 +82,6 @@ void PresenterPaneContainer::PreparePane (
         }
         pDescriptor->msAccessibleTitleTemplate = rsAccessibleTitle;
         pDescriptor->maViewInitialization = rViewInitialization;
-        pDescriptor->mnLeft = nLeft;
-        pDescriptor->mnTop = nTop;
-        pDescriptor->mnRight = nRight;
-        pDescriptor->mnBottom = nBottom;
         pDescriptor->mbIsActive = true;
         pDescriptor->mbIsOpaque = bIsOpaque;
         pDescriptor->maSpriteProvider = PaneDescriptor::SpriteProvider();
@@ -124,7 +116,7 @@ PresenterPaneContainer::SharedPaneDescriptor
         pDescriptor = FindPaneURL(sPaneURL);
         if (pDescriptor.get() == nullptr)
             PreparePane(xPaneId, OUString(), OUString(), OUString(),
-                false, ViewInitializationFunction(), 0,0,0,0);
+                false, ViewInitializationFunction());
         pDescriptor = FindPaneURL(sPaneURL);
         if (pDescriptor.get() != nullptr)
         {

@@ -90,10 +90,6 @@ public:
         OUString msAccessibleTitleTemplate;
         OUString msTitle;
         ViewInitializationFunction maViewInitialization;
-        double mnLeft;
-        double mnTop;
-        double mnRight;
-        double mnBottom;
         SharedBitmapDescriptor mpViewBackground;
         bool mbIsActive;
         bool mbIsOpaque;
@@ -114,11 +110,7 @@ public:
         const OUString& rsTitle,
         const OUString& rsAccessibleTitle,
         const bool bIsOpaque,
-        const ViewInitializationFunction& rViewIntialization,
-        const double nLeft,
-        const double nTop,
-        const double nRight,
-        const double nBottom);
+        const ViewInitializationFunction& rViewIntialization);
 
     SharedPaneDescriptor StorePane (
         const rtl::Reference<PresenterPaneBase>& rxPane);

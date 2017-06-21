@@ -70,8 +70,7 @@ namespace pdfi
     m_aImages(),
     m_nPages(0),
     m_nNextZOrder( 1 ),
-    m_xStatusIndicator( xStat ),
-    m_bHaveTextOnDocLevel(false)
+    m_xStatusIndicator( xStat )
 {
     FontAttributes aDefFont;
     aDefFont.familyName = "Helvetica";
@@ -85,11 +84,6 @@ namespace pdfi
     m_aGCStack.push_back( aDefGC );
     m_aIdToGC[ 0 ] = aDefGC;
     m_aGCToId[ aDefGC ] = 0;
-}
-
-void PDFIProcessor::enableToplevelText()
-{
-    m_bHaveTextOnDocLevel = true;
 }
 
 void PDFIProcessor::setPageNum( sal_Int32 nPages )
