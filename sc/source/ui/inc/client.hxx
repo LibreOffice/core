@@ -31,7 +31,6 @@ class ScClient : public SfxInPlaceClient
 {
 private:
     SdrModel*       pModel;
-    SdrGrafObj*     pGrafEdit;
 
     virtual void    ObjectAreaChanged() override;
     virtual void    RequestNewObjectArea( tools::Rectangle& ) override;
@@ -41,7 +40,6 @@ public:
                     ScClient( ScTabViewShell* pViewShell, vcl::Window* pDraw, SdrModel* pSdrModel, SdrOle2Obj* pObj );
     virtual         ~ScClient() override;
 
-    void            SetGrafEdit(SdrGrafObj* pNew)   { pGrafEdit = pNew; }
     SdrOle2Obj*     GetDrawObj();
 };
 

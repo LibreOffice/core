@@ -59,8 +59,6 @@ private:
     ScDragSrc                       nDragSourceFlags;
     bool                            bDragWasInternal;
 
-    sal_uInt32                      nSourceDocID;
-
     ScRangeListVector               m_aProtectedChartRangesVector;
 
     OUString maShellID;

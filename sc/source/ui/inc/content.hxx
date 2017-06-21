@@ -99,8 +99,6 @@ class ScContentTree : public SvTreeListBox
 
     DECL_LINK( ContentDoubleClickHdl, SvTreeListBox*, bool );
     DECL_LINK( ExecDragHdl, void*, void );
-public:
-    SvTreeListEntry* pTmpEntry;
 
 protected:
 

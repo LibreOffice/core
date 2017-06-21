@@ -452,7 +452,6 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos 
             bRFSize( false ),
             bPagebreakDrawn( false ),
             bDragRect( false ),
-            bIsInScroll( false ),
             bIsInPaint( false ),
             bNeedsRepaint( false ),
             bAutoMarkVisible( false ),
@@ -4416,8 +4415,6 @@ void ScGridWindow::ScrollPixel( long nDifX, long nDifY )
     ClickExtern();
     HideNoteMarker();
 
-    bIsInScroll = true;
-
     SetMapMode(MapUnit::MapPixel);
     Scroll( nDifX, nDifY, ScrollFlags::Children );
     SetMapMode( GetDrawMapMode() );             // generated shifted MapMode
@@ -4425,7 +4422,6 @@ void ScGridWindow::ScrollPixel( long nDifX, long nDifY )
     UpdateEditViewPos();
 
     DrawAfterScroll();
-    bIsInScroll = false;
 }
 
 // Update Formulas ------------------------------------------------------

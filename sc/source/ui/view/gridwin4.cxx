@@ -553,7 +553,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     aOutputData.SetUseStyleColor( true );       // always set in table view
 
-    aOutputData.SetEditObject( GetEditObject() );
     aOutputData.SetViewShell( pViewData->GetViewShell() );
 
     bool bGrid = rOpts.GetOption( VOPT_GRID ) && pViewData->GetShowGrid();

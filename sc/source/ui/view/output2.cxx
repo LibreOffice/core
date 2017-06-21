@@ -95,7 +95,6 @@ class ScDrawStringsVars
     SvxCellHorJustify   eAttrHorJust;
     SvxCellVerJustify   eAttrVerJust;
     SvxCellJustifyMethod eAttrHorJustMethod;
-    SvxCellJustifyMethod eAttrVerJustMethod;
     const SvxMarginItem* pMargin;
     sal_uInt16          nIndent;
     bool                bRotated;
@@ -188,7 +187,6 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, bool bPTL) :
     eAttrHorJust( SvxCellHorJustify::Standard ),
     eAttrVerJust( SVX_VER_JUSTIFY_BOTTOM ),
     eAttrHorJustMethod( SvxCellJustifyMethod::Auto ),
-    eAttrVerJustMethod( SvxCellJustifyMethod::Auto ),
     pMargin     ( nullptr ),
     nIndent     ( 0 ),
     bRotated    ( false ),
@@ -334,7 +332,6 @@ void ScDrawStringsVars::SetPattern(
     // justification method
 
     eAttrHorJustMethod = lcl_GetValue<SvxJustifyMethodItem, SvxCellJustifyMethod>(*pPattern, ATTR_HOR_JUSTIFY_METHOD, pCondSet);
-    eAttrVerJustMethod = lcl_GetValue<SvxJustifyMethodItem, SvxCellJustifyMethod>(*pPattern, ATTR_VER_JUSTIFY_METHOD, pCondSet);
 
     //  line break
 
@@ -2331,7 +2328,7 @@ ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const 
     meVerJustMethod( lcl_GetValue<SvxJustifyMethodItem, SvxCellJustifyMethod>(*pPattern, ATTR_VER_JUSTIFY_METHOD, pCondSet) ),
     meOrient( pPattern->GetCellOrientation(pCondSet) ),
     mnArrY(0),
-    mnX(0), mnY(0), mnCellX(0), mnCellY(0), mnTab(0),
+    mnX(0), mnCellX(0), mnCellY(0),
     mnPosX(0), mnPosY(0), mnInitPosX(0),
     mbBreak( (meHorJustAttr == SvxCellHorJustify::Block) || lcl_GetBoolValue(*pPattern, ATTR_LINEBREAK, pCondSet) ),
     mbCellIsValue(bCellIsValue),
@@ -4586,10 +4583,8 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                         aParam.maCell = aCell;
                         aParam.mnArrY = nArrY;
                         aParam.mnX = nX;
-                        aParam.mnY = nY;
                         aParam.mnCellX = nCellX;
                         aParam.mnCellY = nCellY;
-                        aParam.mnTab = nTab;
                         aParam.mnPosX = nPosX;
                         aParam.mnPosY = nPosY;
                         aParam.mnInitPosX = nInitPosX;

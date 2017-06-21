@@ -103,8 +103,7 @@ static void lcl_UpdateHyphenator( Outliner& rOutliner, SdrObject* pObj )
 
 FuText::FuText(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq) :
-    FuConstruct(pViewSh, pWin, pViewP, pDoc, rReq),
-    pTextObj(nullptr)
+    FuConstruct(pViewSh, pWin, pViewP, pDoc, rReq)
 {
 }
 
@@ -566,8 +565,6 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
         }
     }
 
-    pTextObj = nullptr;
-
     if ( pObj )
     {
         sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
@@ -606,7 +603,6 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
                     //  EditEngine-UndoManager anmelden
                     pViewShell->SetDrawTextUndo( &pO->GetUndoManager() );
 
-                    pTextObj = static_cast<SdrTextObj*>(pObj);
                     pView->SetEditMode();
 
                     //  set text cursor to click position or to end,

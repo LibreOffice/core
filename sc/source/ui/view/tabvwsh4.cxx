@@ -669,8 +669,6 @@ void ScTabViewShell::SetDrawTextShell( bool bActive )
 
 void ScTabViewShell::SetPivotShell( bool bActive )
 {
-    bActivePivotSh = bActive;
-
     //  SetPivotShell is called from CursorPosChanged every time
     //  -> don't change anything except switching between cell and pivot shell
 
@@ -693,7 +691,6 @@ void ScTabViewShell::SetPivotShell( bool bActive )
 
 void ScTabViewShell::SetAuditShell( bool bActive )
 {
-    bActiveAuditingSh = bActive;
     if ( bActive )
     {
         bActiveDrawTextSh = bActiveDrawSh = false;
@@ -1660,14 +1657,11 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     pNavSettings(nullptr),
     bActiveDrawSh(false),
     bActiveDrawTextSh(false),
-    bActivePivotSh(false),
-    bActiveAuditingSh(false),
     bActiveDrawFormSh(false),
     bActiveOleObjectSh(false),
     bActiveChartSh(false),
     bActiveGraphicSh(false),
     bActiveMediaSh(false),
-    bActiveEditSh(false),
     bFormShellAtTop(false),
     bDontSwitch(false),
     bInFormatDialog(false),

@@ -290,7 +290,6 @@ void ScAccessibleSpreadsheet::ConstructScAccessibleSpreadsheet(
     mpAccCell.clear();
     meSplitPos = eSplitPos;
     mnTab = nTab;
-    mbHasSelection = false;
     mbDelIns = false;
     mbIsFocusSend = false;
     maVisCells = GetVisCells(GetVisArea(mpViewShell, meSplitPos));
@@ -299,10 +298,7 @@ void ScAccessibleSpreadsheet::ConstructScAccessibleSpreadsheet(
         mpViewShell->AddAccessibilityObject(*this);
 
         const ScViewData& rViewData = mpViewShell->GetViewData();
-        const ScMarkData& rMarkData = rViewData.GetMarkData();
         maActiveCell = rViewData.GetCurPos();
-        mbHasSelection = rMarkData.GetTableSelect(maActiveCell.Tab()) &&
-                    (rMarkData.IsMarked() || rMarkData.IsMultiMarked());
         mpAccCell = GetAccessibleCellAt(maActiveCell.Row(), maActiveCell.Col());
         ScDocument* pScDoc= GetDocument(mpViewShell);
         if (pScDoc)
@@ -333,7 +329,6 @@ void ScAccessibleSpreadsheet::CompleteSelectionChanged(bool bNewState)
     }
     if (mpMarkedRanges)
         DELETEZ(mpMarkedRanges);
-    mbHasSelection = bNewState;
 
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::STATE_CHANGED;
