@@ -34,7 +34,7 @@
 
 
 SbxAppData::SbxAppData()
-    : eErrCode(ERRCODE_SBX_OK)
+    : eErrCode(ERRCODE_NONE)
     , pBasicFormater(nullptr)
     , eBasicFormaterLangType(LANGUAGE_DONTKNOW)
 {
@@ -102,18 +102,18 @@ ErrCode SbxBase::GetError()
 void SbxBase::SetError( ErrCode e )
 {
     SbxAppData& r = GetSbxData_Impl();
-    if( e && r.eErrCode == ERRCODE_SBX_OK )
+    if( e && r.eErrCode == ERRCODE_NONE )
         r.eErrCode = e;
 }
 
 bool SbxBase::IsError()
 {
-    return GetSbxData_Impl().eErrCode != ERRCODE_SBX_OK;
+    return GetSbxData_Impl().eErrCode != ERRCODE_NONE;
 }
 
 void SbxBase::ResetError()
 {
-    GetSbxData_Impl().eErrCode = ERRCODE_SBX_OK;
+    GetSbxData_Impl().eErrCode = ERRCODE_NONE;
 }
 
 void SbxBase::AddFactory( SbxFactory* pFac )

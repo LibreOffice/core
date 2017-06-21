@@ -269,7 +269,7 @@ bool SbxValue::Get( SbxValues& rRes ) const
 {
     bool bRes = false;
     ErrCode eOld = GetError();
-    if( eOld != ERRCODE_SBX_OK )
+    if( eOld != ERRCODE_NONE )
         ResetError();
     if( !CanRead() )
     {
@@ -357,7 +357,7 @@ bool SbxValue::Get( SbxValues& rRes ) const
     if( !IsError() )
     {
         bRes = true;
-        if( eOld != ERRCODE_SBX_OK )
+        if( eOld != ERRCODE_NONE )
             SetError( eOld );
     }
     return bRes;
@@ -423,7 +423,7 @@ bool SbxValue::Put( const SbxValues& rVal )
 {
     bool bRes = false;
     ErrCode eOld = GetError();
-    if( eOld != ERRCODE_SBX_OK )
+    if( eOld != ERRCODE_NONE )
         ResetError();
     if( !CanWrite() )
         SetError( ERRCODE_SBX_PROP_READONLY );
@@ -520,7 +520,7 @@ bool SbxValue::Put( const SbxValues& rVal )
             {
                 p->SetModified( true );
                 p->Broadcast( SfxHintId::BasicDataChanged );
-                if( eOld != ERRCODE_SBX_OK )
+                if( eOld != ERRCODE_NONE )
                     SetError( eOld );
                 bRes = true;
             }
@@ -699,7 +699,7 @@ bool SbxValue::ImpIsNumeric( bool bOnlyIntntl ) const
             double n;
             SbxDataType t2;
             sal_uInt16 nLen = 0;
-            if( ImpScan( s, n, t2, &nLen, /*bAllowIntntl*/false, bOnlyIntntl ) == ERRCODE_SBX_OK )
+            if( ImpScan( s, n, t2, &nLen, /*bAllowIntntl*/false, bOnlyIntntl ) == ERRCODE_NONE )
                 return nLen == s.getLength();
         }
         return false;
@@ -835,7 +835,7 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
     SbxDataType eThisType = GetType();
     SbxDataType eOpType = rOp.GetType();
     ErrCode eOld = GetError();
-    if( eOld != ERRCODE_SBX_OK )
+    if( eOld != ERRCODE_NONE )
         ResetError();
     if( !CanWrite() )
         SetError( ERRCODE_SBX_PROP_READONLY );
@@ -1196,7 +1196,7 @@ Lbl_OpIsDouble:
 Lbl_OpIsEmpty:
 
     bool bRes = !IsError();
-    if( bRes && eOld != ERRCODE_SBX_OK )
+    if( bRes && eOld != ERRCODE_NONE )
         SetError( eOld );
     return bRes;
 }
@@ -1213,7 +1213,7 @@ bool SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
 
     bool bRes = false;
     ErrCode eOld = GetError();
-    if( eOld != ERRCODE_SBX_OK )
+    if( eOld != ERRCODE_NONE )
         ResetError();
     if( !CanRead() || !rOp.CanRead() )
         SetError( ERRCODE_SBX_PROP_WRITEONLY );
@@ -1357,7 +1357,7 @@ bool SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
             }
         }
     }
-    if( eOld != ERRCODE_SBX_OK )
+    if( eOld != ERRCODE_NONE )
         SetError( eOld );
     return bRes;
 }
@@ -1386,7 +1386,7 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
                 RTL_TEXTENCODING_ASCII_US);
             double d;
             SbxDataType t;
-            if( ImpScan( aVal, d, t, nullptr ) != ERRCODE_SBX_OK || t == SbxDOUBLE )
+            if( ImpScan( aVal, d, t, nullptr ) != ERRCODE_NONE || t == SbxDOUBLE )
             {
                 aData.nSingle = 0.0F;
                 return false;
@@ -1401,7 +1401,7 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             OUString aVal = read_uInt16_lenPrefixed_uInt8s_ToOUString(r,
                 RTL_TEXTENCODING_ASCII_US);
             SbxDataType t;
-            if( ImpScan( aVal, aData.nDouble, t, nullptr ) != ERRCODE_SBX_OK )
+            if( ImpScan( aVal, aData.nDouble, t, nullptr ) != ERRCODE_NONE )
             {
                 aData.nDouble = 0.0;
                 return false;
