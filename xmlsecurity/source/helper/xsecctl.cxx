@@ -22,7 +22,9 @@
 #include "documentsignaturehelper.hxx"
 #include "framework/saxeventkeeperimpl.hxx"
 #include "xmlsec/xmldocumentwrapper_xmlsecimpl.hxx"
-#include "gpg/xmlsignature_gpgimpl.hxx"
+#if !defined(MACOSX) && !defined(WNT)
+# include "gpg/xmlsignature_gpgimpl.hxx"
+#endif
 
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp>
@@ -125,10 +127,12 @@ void XSecController::createXSecComponent( )
 
     cssu::Reference< cssl::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
 
+#if !defined(MACOSX) && !defined(WNT)
     uno::Reference< lang::XServiceInfo > xServiceInfo( m_xSecurityContext, cssu::UNO_QUERY );
     if (xServiceInfo->getImplementationName() == "com.sun.star.xml.security.gpg.XMLSecurityContext_GpgImpl")
         m_xXMLSignature.set(new XMLSignature_GpgImpl());
     else // xmlsec or mscrypt
+#endif
         m_xXMLSignature.set(xMCF->createInstanceWithContext("com.sun.star.xml.crypto.XMLSignature", mxCtx), cssu::UNO_QUERY);
 
     bool bSuccess = m_xXMLSignature.is();
