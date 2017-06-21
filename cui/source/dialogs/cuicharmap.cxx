@@ -37,7 +37,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/dispatchcommand.hxx>
-#include <sfx2/app.hxx>
 
 #include <cuires.hrc>
 #include <dialmgr.hxx>
