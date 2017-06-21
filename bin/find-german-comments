@@ -339,7 +339,7 @@ class Parser:
             "svl" : 1,
             "svtools" : 1,
             "svx" : 1,
-            "sw" : 0, #
+            "sw" : 1,
             "test" : 1,
             "testtools" : 1,
             "toolkit" : 1,
