@@ -1752,7 +1752,6 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, 
     mbRewind(false),
     maTabNames(rCxt.getTabNames())
 {
-    nMaxTab = pDoc->GetTableCount() - 1;
     SetGrammar(rCxt.getGrammar());
 }
 
@@ -1776,7 +1775,6 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos, ScTokenArr
     SetGrammar( ((eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED) ?
                 pDocument->GetGrammar() :
                 eGrammar) );
-    nMaxTab = pDoc->GetTableCount() - 1;
 }
 
 ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos ) :
@@ -1794,7 +1792,6 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos )
     mbRewind(false),
     maTabNames(rCxt.getTabNames())
 {
-    nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
     SetGrammar(rCxt.getGrammar());
 }
 
@@ -1818,7 +1815,6 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
     SetGrammar( ((eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED) ?
                 (pDocument ? pDocument->GetGrammar() : formula::FormulaGrammar::GRAM_DEFAULT) :
                 eGrammar));
-    nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
 }
 
 ScCompiler::~ScCompiler()

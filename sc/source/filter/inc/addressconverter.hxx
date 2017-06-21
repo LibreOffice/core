@@ -484,25 +484,9 @@ private:
                             sal_Int16 nMaxXlsTab, sal_Int32 nMaxXlsCol, sal_Int32 nMaxXlsRow );
 
 private:
-    struct ControlCharacters
-    {
-        sal_Unicode         mcThisWorkbook;             /// Control character: Link to current workbook.
-        sal_Unicode         mcExternal;                 /// Control character: Link to external workbook/sheet.
-        sal_Unicode         mcThisSheet;                /// Control character: Link to current sheet.
-        sal_Unicode         mcInternal;                 /// Control character: Link to internal sheet.
-        sal_Unicode         mcSameSheet;                /// Control character: Link to same sheet (special '!A1' syntax).
-
-        void                set(
-                                sal_Unicode cThisWorkbook, sal_Unicode cExternal,
-                                sal_Unicode cThisSheet, sal_Unicode cInternal,
-                                sal_Unicode cSameSheet );
-    };
-
     ScAddress maMaxApiPos;     /// Maximum valid cell address in Calc.
     ScAddress maMaxXlsPos;     /// Maximum valid cell address in Excel.
     ScAddress maMaxPos;        /// Maximum valid cell address in Calc/Excel.
-    ControlCharacters       maLinkChars;     /// Control characters for external link import (BIFF).
-    ControlCharacters       maDConChars;     /// Control characters for DCON* record import (BIFF).
     bool                    mbColOverflow;   /// Flag for "columns overflow".
     bool                    mbRowOverflow;   /// Flag for "rows overflow".
     bool                    mbTabOverflow;   /// Flag for "tables overflow".

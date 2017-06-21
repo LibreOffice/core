@@ -33,7 +33,6 @@ bool MemNew(LotusContext &rContext)
     rContext.pValueFormCache = new FormCache(rContext.pDoc);
 
     // for tool.cxx::PutFormString()
-    rContext.pAttrUnprot = new ScProtectionAttr( true );
     rContext.pAttrRight = new SvxHorJustifyItem( SvxCellHorJustify::Right, ATTR_HOR_JUSTIFY );
     rContext.pAttrLeft = new SvxHorJustifyItem( SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY );
     rContext.pAttrCenter = new SvxHorJustifyItem( SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY );
@@ -51,7 +50,6 @@ void MemDelete(LotusContext &rContext)
     delete rContext.pAttrCenter;
     delete rContext.pAttrRepeat;
     delete rContext.pAttrStandard;
-    delete rContext.pAttrUnprot;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

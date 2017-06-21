@@ -166,7 +166,6 @@ private:
     void                    EndMouseListening();
     void                    EndActivationListening();
     bool                    mbLeftMousePressed;
-    bool                    mbPendingSelectionChanged;
 public:
                             ScTabViewObj(ScTabViewShell* pViewSh);
                             ScTabViewObj() = delete;

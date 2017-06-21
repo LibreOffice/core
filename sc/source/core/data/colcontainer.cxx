@@ -22,9 +22,8 @@
 #include "column.hxx"
 #include "document.hxx"
 
-ScColContainer::ScColContainer( ScDocument* pDoc, const size_t nSize )
+ScColContainer::ScColContainer( const size_t nSize )
 {
-    pDocument = pDoc;
     aCols.resize( nSize );
     for ( size_t nCol = 0; nCol < nSize; ++nCol )
         aCols[nCol] = new ScColumn;

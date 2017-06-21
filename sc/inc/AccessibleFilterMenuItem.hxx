@@ -75,8 +75,6 @@ public:
 
     /// Non-UNO Methods
 
-    void setEnabled(bool bEnabled);
-
 protected:
 
     virtual tools::Rectangle GetBoundingBoxOnScreen() const override;
@@ -92,7 +90,6 @@ private:
 
     VclPtr<ScMenuFloatingWindow> mpWindow;
     size_t mnMenuPos;
-    bool mbEnabled;
 };
 
 #endif

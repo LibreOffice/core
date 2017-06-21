@@ -281,7 +281,6 @@ private:
 
     const CharClass*    pCharClass;         // which character classification is used for parseAnyToken
     sal_uInt16      mnPredetectedReference;     // reference when reading ODF, 0 (none), 1 (single) or 2 (double)
-    SCTAB       nMaxTab;                    // last sheet in document
     sal_Int32   mnRangeOpPosInSymbol;       // if and where a range operator is in symbol
     const Convention *pConv;
     ExtendedErrorDetection  meExtendedErrorDetection;

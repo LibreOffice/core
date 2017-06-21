@@ -76,7 +76,6 @@ private:
     SCROW                   nTabEndRow;
     bool                    bDoFilter:1;
     bool                    bResultsError:1;
-    bool                    mbHasDataLayout:1;
     bool                    bSizesValid:1;
     bool                    bSizeOverflow:1;
     bool                    mbHeaderLayout:1;  // true : grid, false : standard

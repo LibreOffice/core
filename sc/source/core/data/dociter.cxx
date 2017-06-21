@@ -522,7 +522,6 @@ ScDBQueryDataIterator::DataAccessMatrix::DataAccessMatrix(ScDBQueryParamMatrix* 
     SCSIZE nC, nR;
     mpParam->mpMatrix->GetDimensions(nC, nR);
     mnRows = static_cast<SCROW>(nR);
-    mnCols = static_cast<SCCOL>(nC);
 }
 
 ScDBQueryDataIterator::DataAccessMatrix::~DataAccessMatrix()
@@ -1941,8 +1940,6 @@ ScHorizontalCellIterator::ScHorizontalCellIterator(ScDocument* pDocument, SCTAB 
     if (mnTab >= pDoc->GetTableCount())
         OSL_FAIL("try to access index out of bounds, FIX IT");
 
-    pNextRows = new SCROW[ nCol2-nCol1+1 ];
-    pNextIndices = new SCSIZE[ nCol2-nCol1+1 ];
     maColPositions.reserve( nCol2-nCol1+1 );
 
     SetTab( mnTab );
@@ -1950,8 +1947,6 @@ ScHorizontalCellIterator::ScHorizontalCellIterator(ScDocument* pDocument, SCTAB 
 
 ScHorizontalCellIterator::~ScHorizontalCellIterator()
 {
-    delete [] pNextRows;
-    delete [] pNextIndices;
 }
 
 void ScHorizontalCellIterator::SetTab( SCTAB nTabP )

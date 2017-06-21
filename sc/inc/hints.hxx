@@ -78,7 +78,6 @@ class ScLinkRefreshedHint : public SfxHint
     OUString    aDdeAppl;   // used for dde links:
     OUString    aDdeTopic;
     OUString    aDdeItem;
-    sal_uInt8   nDdeMode;
     ScAddress   aDestPos;   // used to identify area links
                             //! also use source data for area links?
 
@@ -87,7 +86,7 @@ public:
                     virtual ~ScLinkRefreshedHint() override;
 
     void            SetSheetLink( const OUString& rSourceUrl );
-    void            SetDdeLink( const OUString& rA, const OUString& rT, const OUString& rI, sal_uInt8 nM );
+    void            SetDdeLink( const OUString& rA, const OUString& rT, const OUString& rI );
     void            SetAreaLink( const ScAddress& rPos );
 
     ScLinkRefType       GetLinkType() const { return nLinkType; }

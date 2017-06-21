@@ -211,7 +211,7 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
         //  must be after TrackFormulas
         //TODO: do this asynchronously?
         ScLinkRefreshedHint aHint;
-        aHint.SetDdeLink( aAppl, aTopic, aItem, nMode );
+        aHint.SetDdeLink( aAppl, aTopic, aItem );
         pDoc->BroadcastUno( aHint );
     }
 
