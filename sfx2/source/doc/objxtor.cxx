@@ -209,13 +209,10 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,nVisualDocumentNumber( USHRT_MAX)
     ,nDocumentSignatureState( SignatureState::UNKNOWN )
     ,nScriptingSignatureState( SignatureState::UNKNOWN )
-    ,bInList( false)
     ,bClosing( false)
     ,bIsSaving( false)
-    ,bPasswd( false)
     ,bIsNamedVisible( false)
     ,bIsAbortingImport ( false)
-    ,bImportDone ( false)
     ,bInPrepareClose( false )
     ,bPreparedForClose( false )
     ,bForbidReload( false )
@@ -261,7 +258,6 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     SfxObjectShell* pDoc = &_rDocShell;
     SfxObjectShellArr_Impl &rArr = SfxGetpApp()->GetObjectShells_Impl();
     rArr.push_back( pDoc );
-    bInList = true;
 }
 
 
@@ -424,7 +420,6 @@ bool SfxObjectShell::CloseInternal()
                 SfxObjectShellArr_Impl::iterator it = std::find( rDocs.begin(), rDocs.end(), this );
                 if ( it != rDocs.end() )
                     rDocs.erase( it );
-                pImpl->bInList = false;
             }
         }
     }
@@ -523,10 +518,10 @@ bool SfxObjectShell::IsInPrepareClose() const
 
 struct BoolEnv_Impl
 {
-    SfxObjectShell_Impl* pImpl;
-    explicit BoolEnv_Impl( SfxObjectShell_Impl* pImplP) : pImpl( pImplP )
-    { pImplP->bInPrepareClose = true; }
-    ~BoolEnv_Impl() { pImpl->bInPrepareClose = false; }
+    SfxObjectShell_Impl& rImpl;
+    explicit BoolEnv_Impl( SfxObjectShell_Impl& rImplP) : rImpl( rImplP )
+    { rImplP.bInPrepareClose = true; }
+    ~BoolEnv_Impl() { rImpl.bInPrepareClose = false; }
 };
 
 
@@ -538,7 +533,7 @@ bool SfxObjectShell::PrepareClose
 {
     if( pImpl->bInPrepareClose || pImpl->bPreparedForClose )
         return true;
-    BoolEnv_Impl aBoolEnv( pImpl.get() );
+    BoolEnv_Impl aBoolEnv( *pImpl );
 
     // DocModalDialog?
     if ( IsInModalMode() )

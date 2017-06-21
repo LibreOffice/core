@@ -298,7 +298,6 @@ private:
     VclPtr<SearchTabPage_Impl>     pSPage;
     VclPtr<BookmarksTabPage_Impl>  pBPage;
 
-    long                nMinWidth;
     bool                bWasCursorLeftOrRight;
     bool                bIsInitDone;
 

@@ -172,14 +172,6 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
             }
             else
             {
-                // Hide all
-                SfxBindings *pBind = &GetBindings();
-                while ( pBind )
-                {
-                    pBind->HidePopupCtrls_Impl( !bShow );
-                    pBind = pBind->GetSubBindings_Impl();
-                }
-
                 pWorkWin->HidePopups_Impl( !bShow, true );
                 pWorkWin->MakeChildrenVisible_Impl( bShow );
             }
@@ -375,19 +367,15 @@ void SfxViewFrame::INetState_Impl( SfxItemSet &rItemSet )
         rItemSet.DisableItem( SID_CREATELINK );
 }
 
-void SfxViewFrame::Activate( bool bMDI )
+void SfxViewFrame::Activate( bool /*bMDI*/ )
 {
     DBG_ASSERT(GetViewShell(), "No Shell");
-    if ( bMDI )
-        m_pImpl->bActive = true;
 //(mba): here maybe as in Beanframe NotifyEvent ?!
 }
 
-void SfxViewFrame::Deactivate( bool bMDI )
+void SfxViewFrame::Deactivate( bool /*bMDI*/ )
 {
     DBG_ASSERT(GetViewShell(), "No Shell");
-    if ( bMDI )
-        m_pImpl->bActive = false;
 //(mba): here maybe as in Beanframe NotifyEvent ?!
 }
 

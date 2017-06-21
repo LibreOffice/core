@@ -67,13 +67,10 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     sal_uInt16          nVisualDocumentNumber;
     SignatureState      nDocumentSignatureState;
     SignatureState      nScriptingSignatureState;
-    bool                bInList:1,          // if reachable by First/Next
-                        bClosing:1,         // sal_True while Close(), to prevent recurrences Notification
+    bool                bClosing:1,         // sal_True while Close(), to prevent recurrences Notification
                         bIsSaving:1,
-                        bPasswd:1,
                         bIsNamedVisible:1,
                         bIsAbortingImport:1,  // Import operation should be canceled.
-                        bImportDone : 1, // Import finished already? For auto reload of Docs.
                         bInPrepareClose : 1,
                         bPreparedForClose : 1,
                         bForbidReload : 1,

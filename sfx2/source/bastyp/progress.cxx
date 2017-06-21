@@ -54,10 +54,8 @@ struct SfxProgress_Impl
     OUString                aText, aStateText;
     sal_uIntPtr             nMax;
     clock_t                 nCreate;
-    clock_t                 nNextReschedule;
     bool                    bLocked;
     bool                    bWaitMode;
-    bool                    bAllowRescheduling;
     bool                    bRunning;
 
     SfxProgress*            pActiveProgress;
@@ -96,10 +94,8 @@ void SfxProgress_Impl::Enable_Impl()
 SfxProgress_Impl::SfxProgress_Impl()
     : nMax(0)
     , nCreate(0)
-    , nNextReschedule(0)
     , bLocked(false)
     , bWaitMode(false)
-    , bAllowRescheduling(false)
     , bRunning(false)
     , pActiveProgress(nullptr)
     , pWorkWin(nullptr)
@@ -137,7 +133,6 @@ SfxProgress::SfxProgress
     bSuspended(true)
 {
     pImpl->bRunning = true;
-    pImpl->bAllowRescheduling = Application::IsInExecute();
 
     pImpl->xObjSh = pObjSh;
     pImpl->aText = rText;
@@ -145,7 +140,6 @@ SfxProgress::SfxProgress
     pImpl->bLocked = false;
     pImpl->bWaitMode = bWait;
     pImpl->nCreate = Get10ThSec();
-    pImpl->nNextReschedule = pImpl->nCreate;
     SAL_INFO(
         "sfx.bastyp",
         "SfxProgress: created for '" << rText << "' at " << pImpl->nCreate

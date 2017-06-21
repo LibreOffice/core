@@ -1059,7 +1059,6 @@ void SfxObjectShell::FinishedLoading( SfxLoadedFlags nFlags )
     {
         pImpl->nFlagsInProgress |= SfxLoadedFlags::MAINDOCUMENT;
         static_cast<SfxHeaderAttributes_Impl*>(GetHeaderAttributes())->SetAttributes();
-        pImpl->bImportDone = true;
 
         if ( ( GetModifyPasswordHash() || GetModifyPasswordInfo().getLength() ) && !IsModifyPasswordEntered() )
             SetReadOnly();

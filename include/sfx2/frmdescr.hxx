@@ -79,7 +79,6 @@ public:
                             { return aURL; }
     void                    SetURL( const OUString& rURL );
     void                    SetActualURL( const OUString& rURL );
-    void                    SetEditable( bool bSet );
 
                             // Size
     void                    SetResizable( bool bRes )

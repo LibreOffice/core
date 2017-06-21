@@ -861,7 +861,7 @@ bool SfxWorkWindow::PrepareClose_Impl()
 
 
 SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl( vcl::Window& rWindow,
-                    SfxChildAlignment eAlign, bool bCanGetFocus )
+                    SfxChildAlignment eAlign )
 {
     DBG_ASSERT( aChildren.size() < 255, "too many children" );
     DBG_ASSERT( SfxChildAlignValid(eAlign), "invalid align" );
@@ -873,7 +873,6 @@ SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl( vcl::Window& rWindow,
 
     SfxChild_Impl *pChild = new SfxChild_Impl(rWindow, rWindow.GetSizePixel(),
                                     eAlign, rWindow.IsVisible());
-    pChild->bCanGetFocus = bCanGetFocus;
 
     aChildren.push_back(pChild);
     bSorted = false;
@@ -1375,7 +1374,7 @@ void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW, bool bSetFocus )
         {
             // The window is not docked or docked outside of one split windows
             // and must therefore be registered explicitly as a Child
-            pCW->pCli = RegisterChild_Impl(*(pChildWin->GetWindow()), pChildWin->GetAlignment(), pChildWin->CanGetFocus());
+            pCW->pCli = RegisterChild_Impl(*(pChildWin->GetWindow()), pChildWin->GetAlignment());
             pCW->pCli->nVisible = SfxChildVisibility::VISIBLE;
             if ( pChildWin->GetAlignment() != SfxChildAlignment::NOALIGNMENT && bIsFullScreen )
                 pCW->pCli->nVisible ^= SfxChildVisibility::ACTIVE;
@@ -1549,7 +1548,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             if ( eChild == SfxChildIdentifier::SPLITWINDOW && eConfig == SfxDockingConfig::TOGGLEFLOATMODE)
             {
                 // DockingWindow was dragged out of a SplitWindow
-                pCW->pCli = RegisterChild_Impl(*pDockWin, pDockWin->GetAlignment(), pCW->pWin->CanGetFocus());
+                pCW->pCli = RegisterChild_Impl(*pDockWin, pDockWin->GetAlignment());
                 pCW->pCli->nVisible = SfxChildVisibility::VISIBLE;
             }
 

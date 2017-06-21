@@ -45,7 +45,6 @@ struct SfxViewFrame_Impl
     bool                bModal:1;
     bool                bEnabled:1;
     bool                bWindowWasEnabled:1;
-    bool                bActive;
     OUString            aFactoryName;
 
     explicit SfxViewFrame_Impl(SfxFrame& i_rFrame)
@@ -61,7 +60,6 @@ struct SfxViewFrame_Impl
         , bModal(false)
         , bEnabled(false)
         , bWindowWasEnabled(true)
-        , bActive(false)
     {
     }
 };

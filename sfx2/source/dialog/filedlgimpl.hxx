@@ -72,8 +72,6 @@ namespace sfx2
 
         ImplSVEvent *               mnPostUserEventId;
 
-        ErrCode                     mnError;
-
         FileDialogHelper::Context   meContext;
 
         bool                    mbHasPassword           : 1;
