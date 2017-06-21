@@ -14,7 +14,7 @@ $(eval $(call gb_Module_add_moduledir,external,msc-externals))
 endif
 
 $(eval $(call gb_Module_add_moduledirs,external,\
-	$(if $(filter-out IOS,$(OS)),libxmlsec) \
+	$(if $(filter-out IOS,$(OS)),$(call gb_Helper_optional,XMLSEC,libxmlsec)) \
 	$(call gb_Helper_optional,ABW,libabw) \
 	$(call gb_Helper_optional,APACHE_COMMONS,apache-commons) \
 	$(call gb_Helper_optional,APR,apr) \
