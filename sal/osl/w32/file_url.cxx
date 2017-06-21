@@ -21,20 +21,20 @@
 #define _UNICODE
 #include "systools/win32/uwinapi.h"
 
-#include "file_url.hxx"
 #include <sal/macros.h>
-#include "file_error.hxx"
-
-#include "rtl/alloc.h"
+#include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
-#include "osl/diagnose.h"
-#include "osl/file.h"
-#include "osl/mutex.h"
+#include <osl/diagnose.h>
+#include <osl/file.h>
+#include <osl/mutex.h>
 
+#include "file_url.hxx"
+#include "file_error.hxx"
 #include "path_helper.hxx"
 
+#include <cassert>
 #include <cstdlib>
-#include <stdio.h>
+#include <cstdio>
 #include <tchar.h>
 
 #define WSTR_SYSTEM_ROOT_PATH               L"\\\\.\\"
