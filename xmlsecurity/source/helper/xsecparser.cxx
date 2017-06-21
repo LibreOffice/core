@@ -180,6 +180,10 @@ void SAL_CALL XSecParser::startElement(
             m_ouX509Certificate.clear();
             m_bInX509Certificate = true;
         }
+        else if (aName == "PGPData")
+        {
+            m_pXSecController->switchGpgSignature();
+        }
         else if (aName == "PGPKeyID")
         {
             m_ouGpgKeyID.clear();
