@@ -32,12 +32,16 @@ $(eval $(call gb_Library_use_sdk_api,xsec_gpg))
 
 $(eval $(call gb_Library_set_precompiled_header,xsec_gpg,$(SRCDIR)/xmlsecurity/inc/pch/precompiled_xsec_gpg))
 
+ifeq ($(SYSTEM_XMLSEC),)
 $(eval $(call gb_Library_use_packages,xsec_gpg,\
 	xmlsec \
 ))
+endif
+
 $(eval $(call gb_Library_use_externals,xsec_gpg,\
 	boost_headers \
 	libxml2 \
+	xmlsec \
 	nss3 \
 	gpgmepp))
 
@@ -55,10 +59,12 @@ $(eval $(call gb_Library_use_libraries,xsec_gpg,\
 $(eval $(call gb_Library_add_defs,xsec_gpg,\
 	-DXMLSEC_CRYPTO_NSS \
 ))
+ifeq ($(SYSTEM_XMLSEC),)
 $(eval $(call gb_Library_add_libs,xsec_gpg,\
 	$(call gb_UnpackedTarball_get_dir,xmlsec)/src/nss/.libs/libxmlsec1-nss.a \
 	$(call gb_UnpackedTarball_get_dir,xmlsec)/src/.libs/libxmlsec1.a \
 ))
+endif
 
 $(eval $(call gb_Library_add_exception_objects,xsec_gpg,\
 	xmlsecurity/source/gpg/CertificateImpl \

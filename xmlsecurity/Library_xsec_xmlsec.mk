@@ -45,12 +45,16 @@ $(eval $(call gb_Library_use_libraries,xsec_xmlsec,\
 	xo \
 ))
 
+ifeq ($(SYSTEM_XMLSEC),)
 $(eval $(call gb_Library_use_packages,xsec_xmlsec,\
 	xmlsec \
 ))
+endif
+
 $(eval $(call gb_Library_use_externals,xsec_xmlsec,\
 	boost_headers \
 	libxml2 \
+	xmlsec \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
@@ -108,10 +112,14 @@ $(eval $(call gb_Library_add_libs,xsec_xmlsec,\
 	$(call gb_UnpackedTarball_get_dir,xmlsec)/src/.libs/libxmlsec1.a \
 ))
 else
+
+ifeq ($(SYSTEM_XMLSEC),)
 $(eval $(call gb_Library_add_libs,xsec_xmlsec,\
 	$(call gb_UnpackedTarball_get_dir,xmlsec)/src/nss/.libs/libxmlsec1-nss.a \
 	$(call gb_UnpackedTarball_get_dir,xmlsec)/src/.libs/libxmlsec1.a \
 ))
+endif
+
 endif
 
 $(eval $(call gb_Library_use_externals,xsec_xmlsec,\
