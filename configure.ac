@@ -417,7 +417,6 @@ if test -n "$with_android_ndk"; then
         ANDROID_COMPILER_DIR=$ANDROID_BINUTILS_DIR
         ;;
     clang3.3|clang3.4)
-        AC_MSG_WARN([Building with the Clang tool-chain is known to break in the bridges module, fix that please])
         ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-4.8
         ANDROID_COMPILER_DIR=$ANDROID_NDK_HOME/toolchains/llvm-${with_android_ndk_toolchain_version#clang}
         ANDROID_USING_CLANG=true
@@ -559,7 +558,7 @@ if test -n "$with_android_ndk"; then
     fi
 
     if test $host_cpu = arm; then
-        ANDROIDCXXFLAGS="$ANDROIDCFLAGS -I $ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}include -I$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/armeabi-v7a/include"
+        ANDROIDCXXFLAGS="$ANDROIDCFLAGS -I $ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}include -I $ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/armeabi-v7a/include -I $ANDROID_NDK_HOME/sources/cxx-stl/gabi++/include"
     elif test $host_cpu = mips; then
         ANDROIDCXXFLAGS="$ANDROIDCFLAGS -I $ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}include -I$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/mips/include"
     else # x86
