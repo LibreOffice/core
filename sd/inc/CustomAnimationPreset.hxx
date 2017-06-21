@@ -61,7 +61,6 @@ public:
 private:
     OUString maPresetId;
     OUString maProperty;
-    sal_Int16 mnPresetClass;
     OUString maLabel;
     OUString maDefaultSubTyp;
     double mfDuration;

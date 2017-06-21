@@ -739,11 +739,6 @@ bool DrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         ToolBarManager::UpdateLock aLock (GetViewShellBase().GetToolBarManager());
 
         bActivated = ViewShell::ActivateObject(pObj, nVerb);
-
-        OSL_ASSERT(GetViewShell()!=nullptr);
-        Client* pClient = static_cast<Client*>(GetViewShell()->GetIPClient());
-        if (pClient)
-            pClient->SetSdrGrafObj(nullptr);
     }
 
     return bActivated;

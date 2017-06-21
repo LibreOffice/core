@@ -225,7 +225,6 @@ protected:
     bool                    mbSdDataObj;
     bool                    mbInDestruction;
     bool                    mbOwnPrinter;
-    bool                    mbNewDocument;
 
     bool                    mbOwnDocument;          // if true, we own mpDoc and will delete it in our d'tor
     void                    Construct(bool bClipboard);

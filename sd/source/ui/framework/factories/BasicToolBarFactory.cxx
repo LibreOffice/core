@@ -40,8 +40,7 @@ BasicToolBarFactory::BasicToolBarFactory (
     const Reference<XComponentContext>& rxContext)
     : BasicToolBarFactoryInterfaceBase(m_aMutex),
       mxConfigurationController(),
-      mxController(),
-      mpViewShellBase(nullptr)
+      mxController()
 {
     (void)rxContext;
 }
@@ -57,7 +56,6 @@ void SAL_CALL BasicToolBarFactory::disposing()
 
 void BasicToolBarFactory::Shutdown()
 {
-    mpViewShellBase = nullptr;
     Reference<lang::XComponent> xComponent (mxConfigurationController, UNO_QUERY);
     if (xComponent.is())
         xComponent->removeEventListener(static_cast<lang::XEventListener*>(this));
@@ -78,13 +76,6 @@ void SAL_CALL BasicToolBarFactory::initialize (const Sequence<Any>& aArguments)
         {
             // Get the XController from the first argument.
             mxController.set(aArguments[0], UNO_QUERY_THROW);
-
-            // Tunnel through the controller to obtain a ViewShellBase.
-            Reference<lang::XUnoTunnel> xTunnel (mxController, UNO_QUERY_THROW);
-            ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
-                xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
-            if (pController != nullptr)
-                mpViewShellBase = pController->GetViewShellBase();
 
             utl::MediaDescriptor aDescriptor (mxController->getModel()->getArgs());
             if ( ! aDescriptor.getUnpackedValueOrDefault(

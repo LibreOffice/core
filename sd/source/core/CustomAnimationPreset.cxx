@@ -127,7 +127,6 @@ CustomAnimationPreset::CustomAnimationPreset( const CustomAnimationEffectPtr& pE
 {
     maPresetId = pEffect->getPresetId();
     maProperty = pEffect->getProperty();
-    mnPresetClass = pEffect->getPresetClass();
 
     add( pEffect );
 

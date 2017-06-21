@@ -320,17 +320,6 @@ private:
     */
     ::sd::outliner::IteratorPosition maLastValidPosition;
 
-    /** This flag indicates whether a selection change event is expected due
-        to a programatical change of the selection.
-    */
-    bool mbExpectingSelectionChangeEvent;
-
-    /** This flag is set to true when the whole document has been
-        processed once 'officially', i.e. a message box has been shown
-        that tells the user so.
-    */
-    bool mbWholeDocumentProcessed;
-
     /** When this flag is true then a PrepareSpelling() is executed when
         StartSearchAndReplace() is called the next time.
     */

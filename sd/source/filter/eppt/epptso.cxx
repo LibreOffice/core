@@ -2922,10 +2922,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 struct CellBorder
 {
     sal_Int32                       mnPos;      // specifies the distance to the top/left position of the table
-    sal_Int32                       mnLength;
     table::BorderLine               maCellBorder;
 
-    CellBorder() : mnPos ( 0 ), mnLength( 0 ){};
+    CellBorder() : mnPos ( 0 ) {};
 };
 
 bool PPTWriter::ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2)
@@ -3175,7 +3174,6 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                 {
                     CellBorder aCellBorder;
                     aCellBorder.mnPos = aColumns[ nColumn ].first;
-                    aCellBorder.mnLength = aColumns[ nColumn ].second;
                     bool bTop = false;
                     //write nLine*nColumn cell's top border
                     if ( nLine < xRows->getCount() )
@@ -3233,7 +3231,6 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
 
                     CellBorder aCellBorder;
                     aCellBorder.mnPos = aRows[ nRow].first;
-                    aCellBorder.mnLength = aRows[ nRow].second;
                     bool bLeft = false;
                     if ( nLine < xColumns->getCount() )
                     {   // left border
