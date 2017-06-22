@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_61fc5c3f",
+        "filename": "editeng/qa/unit/core-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-22T19:35:45Z",
+      "side": 1,
+      "message": "i don\u0027t think aCopyTextLen is right here; it should be the length of the 2nd paragraph, if you want to copy the first 2 paragraphs entirely",
+      "revId": "d7d1ab6825efb9e713763f954f8e760dd721338f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
