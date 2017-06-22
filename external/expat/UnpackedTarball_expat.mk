@@ -14,6 +14,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,expat,$(EXPAT_TARBALL)))
 $(eval $(call gb_UnpackedTarball_add_patches,expat,\
 	external/expat/expat-winapi.patch \
 	external/expat/expat-iOS.patch \
+	external/expat/expat-2.2.1.patch \
 ))
 
 # This is a bit hackish.
