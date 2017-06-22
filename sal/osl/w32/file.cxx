@@ -19,24 +19,22 @@
 
 #define UNICODE
 #define _UNICODE
-#include "systools/win32/uwinapi.h"
+#include <systools/win32/uwinapi.h>
 
-#include "osl/file.hxx"
+#include <osl/file.hxx>
+#include <osl/diagnose.h>
+#include <rtl/alloc.h>
+#include <rtl/byteseq.h>
+#include <rtl/ustring.hxx>
 
-#include <file-impl.hxx>
+#include "file-impl.hxx"
 #include "file_url.hxx"
 #include "file_error.hxx"
 
-#include "osl/diagnose.h"
-#include "rtl/alloc.h"
-#include "rtl/byteseq.h"
-#include "rtl/ustring.hxx"
-
-#include <stdio.h>
-#include <tchar.h>
-
+#include <cstdio>
 #include <algorithm>
 #include <limits>
+#include <tchar.h>
 
 #ifdef max /* conflict w/ std::numeric_limits<T>::max() */
 #undef max
