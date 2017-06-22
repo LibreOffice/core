@@ -211,7 +211,7 @@ void SfxApplication::Initialize_Impl()
     Help::EnableExtHelp();
 
     pImpl->m_pToolsErrorHdl = new SfxErrorHandler(
-        RID_ERRHDL, ErrCode(ERRCODE_AREA_TOOLS), ErrCode(ERRCODE_AREA_LIB1));
+        RID_ERRHDL, ErrCode(ERRCODE_AREA_IO), ErrCode(ERRCODE_AREA_SVX));
 
 #if HAVE_FEATURE_SCRIPTING
     pImpl->pBasicResMgr = ResMgr::CreateResMgr("sb");

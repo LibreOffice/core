@@ -157,7 +157,7 @@ UUIInteractionHelper::handleErrorHandlerRequest(
                 RID_SVXERRCODE,
                 RID_UUI_ERRHDL };
         ErrCode nErrorId = nErrorCode.IgnoreWarning();
-        Source eSource = nErrorId < ErrCode(ERRCODE_AREA_LIB1) ?
+        Source eSource = nErrorId < ErrCode(ERRCODE_AREA_SVX) ?
             SOURCE_DEFAULT :
             nErrorId >= ErrCode(ERRCODE_AREA_SVX)
             && nErrorId <= ErrCode(ERRCODE_AREA_SVX_END) ?
