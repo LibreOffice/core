@@ -93,7 +93,6 @@ Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getPersonalCertif
 Reference< XCertificate > SecurityEnvironmentGpg::getCertificate( const OUString& issuerName, const Sequence< sal_Int8 >& /*serialNumber*/ )
 {
     CertificateImpl* xCert=nullptr;
-    std::list< CertificateImpl* > certsList;
 
     m_ctx->setKeyListMode(GPGME_KEYLIST_MODE_LOCAL);
     OString ostr = OUStringToOString( issuerName , RTL_TEXTENCODING_UTF8 );
