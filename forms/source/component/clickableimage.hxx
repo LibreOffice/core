@@ -69,7 +69,6 @@ namespace frm
         SfxMedium*                          m_pMedium;     // Download medium
         rtl::Reference<ImageProducer>       m_xProducer;
         bool                                m_bDispatchUrlInternal; // property: is not allowed to set : 1
-        bool                                m_bDownloading : 1;     // Is a download in progress?
         bool                                m_bProdStarted : 1;
 
         // XSubmission stuff

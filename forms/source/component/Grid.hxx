@@ -40,13 +40,6 @@ namespace frm
 
 class OGridColumn;
 
-    struct ColumnDescription : public ElementDescription
-    {
-    public:
-        OGridColumn*                pColumn; // not owned by this instance! only to prevent duplicate XUnoTunnel usage
-    };
-
-
 // OGridControlModel
 
 typedef ::cppu::ImplHelper7 <   css::awt::XControlModel

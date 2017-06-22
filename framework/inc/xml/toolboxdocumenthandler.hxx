@@ -102,7 +102,6 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler :
         css::uno::Reference< css::xml::sax::XLocator >            m_xLocator;
 
         sal_Int32                                                 m_nHashCode_Style_Radio;
-        sal_Int32                                                 m_nHashCode_Style_Auto;
         sal_Int32                                                 m_nHashCode_Style_Left;
         sal_Int32                                                 m_nHashCode_Style_AutoSize;
         sal_Int32                                                 m_nHashCode_Style_DropDown;

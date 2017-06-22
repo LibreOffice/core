@@ -146,7 +146,6 @@ private:
     ::rtl::Reference< ::svt::AsyncPickerAction > m_pCurrentAsyncAction;
 
     css::uno::Sequence< OUString > m_aBlackList;
-    ::svt::IFilePickerListener* m_pFileNotifier;
 
     VclPtr< PushButton > m_pOk_btn;
     VclPtr< CancelButton > m_pCancel_btn;

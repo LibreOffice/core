@@ -177,7 +177,6 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, PickerFlags nBits )
     , m_nWidth( 0 )
     , m_nHeight( 0 )
     , m_pCurrentAsyncAction( nullptr )
-    , m_pFileNotifier( nullptr )
     , m_pSplitter( nullptr )
     , m_pFileView( nullptr )
     , m_pContainer( nullptr )
@@ -1311,9 +1310,8 @@ void RemoteFilesDialog::FilterSelect()
 {
 }
 
-void RemoteFilesDialog::SetFileCallback( ::svt::IFilePickerListener *pNotifier )
+void RemoteFilesDialog::SetFileCallback( ::svt::IFilePickerListener * )
 {
-    m_pFileNotifier = pNotifier;
 }
 
 void RemoteFilesDialog::onAsyncOperationStarted()

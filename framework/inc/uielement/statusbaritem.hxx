@@ -39,7 +39,6 @@ class StatusbarItem : protected cppu::BaseMutex,
 public:
     explicit StatusbarItem(
                             StatusBar              *pStatusBar,
-                            AddonStatusbarItemData *pItemData,
                             sal_uInt16              nId,
                             const rtl::OUString&   aCommand );
     virtual ~StatusbarItem() override;
@@ -69,7 +68,6 @@ public:
 
 private:
     VclPtr<StatusBar>       m_pStatusBar;
-    AddonStatusbarItemData *m_pItemData;
     sal_uInt16              m_nId;
     sal_uInt16              m_nStyle;
     rtl::OUString           m_aCommand;

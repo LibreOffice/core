@@ -95,7 +95,6 @@ void lcl_CreateStatusbarItem( StatusBar* pStatusbar,
     // add-on specific data
     AddonStatusbarItemData *pUserData = new AddonStatusbarItemData;
     pUserData->aLabel = rAddonItem.aLabel;
-    pUserData->nItemBits = rAddonItem.nItemBits;
     pStatusbar->SetItemData( nItemId, pUserData );
 }
 

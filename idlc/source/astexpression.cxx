@@ -784,8 +784,6 @@ bool AstExpression::compareLong(AstExpression *pExpr)
 
 void AstExpression::fillDefinitionDetails()
 {
-    m_pScope = idlc()->scopes()->depth() > 0 ? idlc()->scopes()->top() : nullptr;
-    m_lineNo = idlc()->getLineNumber();
     m_fileName = idlc()->getFileName();
 }
 

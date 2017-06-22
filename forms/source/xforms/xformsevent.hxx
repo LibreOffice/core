@@ -35,8 +35,7 @@ class XFormsEventConcrete : public cppu::WeakImplHelper< XFormsEvent > {
     public:
 
         XFormsEventConcrete()
-            : m_canceled(false)
-            , m_bubbles(false)
+            : m_bubbles(false)
             , m_cancelable(false)
         {
         }
@@ -60,10 +59,6 @@ class XFormsEventConcrete : public cppu::WeakImplHelper< XFormsEvent > {
             const OUString& eventTypeArg,
             sal_Bool canBubbleArg,
             sal_Bool cancelableArg) override;
-
-    private:
-
-        bool m_canceled;
 
     protected:
 
