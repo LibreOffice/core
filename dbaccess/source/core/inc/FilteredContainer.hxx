@@ -39,7 +39,6 @@ namespace dbaccess
         mutable bool m_bConstructed;        // late ctor called
 
     protected:
-        ::dbtools::WarningsContainer*  m_pWarningsContainer;
         IRefreshListener*               m_pRefreshListener;
         oslInterlockedCount&            m_nInAppend;
 
@@ -104,7 +103,6 @@ namespace dbaccess
                             const css::uno::Reference< css::sdbc::XConnection >& _xCon,
                             bool _bCase,
                             IRefreshListener*   _pRefreshListener,
-                            ::dbtools::WarningsContainer* _pWarningsContainer,
                             oslInterlockedCount& _nInAppend
                         );
 

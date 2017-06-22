@@ -76,10 +76,10 @@ protected:
     friend class OAutoActionReset;
     class OAutoActionReset
     {
-        OQuery*             m_pActor;
+        OQuery&             m_rActor;
     public:
-        explicit OAutoActionReset(OQuery* _pActor) : m_pActor(_pActor) { }
-        ~OAutoActionReset() { m_pActor->m_eDoingCurrently = NONE; }
+        explicit OAutoActionReset(OQuery& _rActor) : m_rActor(_rActor) { }
+        ~OAutoActionReset() { m_rActor.m_eDoingCurrently = NONE; }
     };
 
 protected:

@@ -78,10 +78,10 @@ namespace dbaccess
         friend class OAutoActionReset;
         class OAutoActionReset
         {
-            OQueryContainer*        m_pActor;
+            OQueryContainer&        m_rActor;
         public:
-            OAutoActionReset(OQueryContainer* _pActor) : m_pActor(_pActor) { }
-            ~OAutoActionReset() { m_pActor->m_eDoingCurrently = NONE; }
+            OAutoActionReset(OQueryContainer& _rActor) : m_rActor(_rActor) { }
+            ~OAutoActionReset() { m_rActor.m_eDoingCurrently = NONE; }
         };
 
         // ODefinitionContainer

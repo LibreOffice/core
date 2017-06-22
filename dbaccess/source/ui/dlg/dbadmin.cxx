@@ -52,7 +52,6 @@ ODbAdminDialog::ODbAdminDialog(vcl::Window* _pParent
                                , const Reference< XComponentContext >& _rxContext)
     : SfxTabDialog(_pParent, "AdminDialog",
         "dbaccess/ui/admindialog.ui", _pItems)
-    , m_bApplied(false)
     , m_bUIEnabled(true)
 {
     m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxContext,this,this));
@@ -249,8 +248,6 @@ ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
         // This does the usual ActivatePage, so the pages can save their current status.
         // This way, next time they're asked what has changed since now and here, they really
         // can compare with the status they have _now_ (not the one they had before this apply call).
-
-    m_bApplied = true;
 
     return AR_LEAVE_MODIFIED;
 }

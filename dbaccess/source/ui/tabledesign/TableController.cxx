@@ -477,7 +477,7 @@ void OTableController::doEditIndexes()
     if (!xIndexes.is())
         return;
 
-    ScopedVclPtrInstance< DbaIndexDialog > aDialog(getView(), aFieldNames, xIndexes, getConnection(), getORB(), isConnected() && getConnection()->getMetaData().is() ? getConnection()->getMetaData()->getMaxColumnsInIndex() : 0);
+    ScopedVclPtrInstance< DbaIndexDialog > aDialog(getView(), aFieldNames, xIndexes, getConnection(), getORB());
     if (RET_OK != aDialog->Execute())
         return;
 

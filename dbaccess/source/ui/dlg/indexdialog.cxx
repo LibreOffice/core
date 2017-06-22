@@ -160,7 +160,7 @@ namespace dbaui
     DbaIndexDialog::DbaIndexDialog( vcl::Window* _pParent, const Sequence< OUString >& _rFieldNames,
                                     const Reference< XNameAccess >& _rxIndexes,
                                     const Reference< XConnection >& _rxConnection,
-                                    const Reference< XComponentContext >& _rxContext,sal_Int32 _nMaxColumnsInIndex)
+                                    const Reference< XComponentContext >& _rxContext)
         :ModalDialog( _pParent, "IndexDesignDialog", "dbaccess/ui/indexdesigndialog.ui")
         ,m_xConnection(_rxConnection)
         ,m_pIndexes(nullptr)
@@ -211,7 +211,7 @@ namespace dbaui
         m_pIndexList->setConnection(m_xConnection);
 
         m_pFields->SetSizePixel(Size(300, 100));
-        m_pFields->Init(_rFieldNames, _nMaxColumnsInIndex, ::dbtools::getBooleanDataSourceSetting( m_xConnection, "AddIndexAppendix" ));
+        m_pFields->Init(_rFieldNames, ::dbtools::getBooleanDataSourceSetting( m_xConnection, "AddIndexAppendix" ));
 
         setToolBox(m_pActions);
 

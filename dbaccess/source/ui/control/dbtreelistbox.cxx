@@ -374,7 +374,6 @@ bool DBTreeListBox::EditingEntry( SvTreeListEntry* /*pEntry*/, Selection& /*_aSe
 bool DBTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
 {
     DBTreeEditedEntry aEntry;
-    aEntry.pEntry = pEntry;
     aEntry.aNewText = rNewText;
     SetEntryText(pEntry,aEntry.aNewText);
 

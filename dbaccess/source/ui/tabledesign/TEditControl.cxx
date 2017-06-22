@@ -140,7 +140,6 @@ OTableEditorCtrl::OTableEditorCtrl(vcl::Window* pWindow)
     ,nInvalidateTypeEvent(nullptr)
     ,m_eChildFocus(NONE)
     ,nOldDataPos(-1)
-    ,bSaveOnMove(true)
     ,bReadOnly(true)
     ,m_aInvalidate(this)
 {
@@ -801,9 +800,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
     }
     // RowInserted calls CursorMoved.
     // The UI data should not be stored here.
-    bSaveOnMove = false;
     RowInserted( nRow,vInsertedUndoRedoRows.size() );
-    bSaveOnMove = true;
 
     // Create the Undo-Action
     GetUndoManager().AddUndoAction( new OTableEditorInsUndoAct(this, nRow,vInsertedUndoRedoRows) );
@@ -820,7 +817,6 @@ void OTableEditorCtrl::DeleteRows()
     // Delete all marked rows
     long nIndex = FirstSelectedRow();
     nOldDataPos = nIndex;
-    bSaveOnMove = false;
 
     while( nIndex >= 0 && nIndex < static_cast<long>(m_pRowList->size()) )
     {
@@ -834,8 +830,6 @@ void OTableEditorCtrl::DeleteRows()
 
         nIndex = FirstSelectedRow();
     }
-
-    bSaveOnMove = true;
 
     // Force the current record to be displayed
     m_nDataPos = GetCurRow();

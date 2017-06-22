@@ -33,10 +33,7 @@ namespace dbaui
     {
         OUString            m_sCurrent;
         sal_Int32           m_nTableCount;
-        sal_Int16           m_nWidth;
         sal_Int16           m_nColumnWidth; ///< maximum column width
-        bool            m_bMetaOptions; ///< true when we scanned the meta information
-        bool            m_bSDNum;
 
     protected:
         virtual void        NextToken( HtmlTokenId nToken ) override; // base class

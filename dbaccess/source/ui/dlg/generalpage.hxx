@@ -36,8 +36,6 @@ namespace dbaui
         OGeneralPage( vcl::Window* pParent, const OUString& _rUIXMLDescription, const SfxItemSet& _rItems );
 
         OUString            m_eCurrentSelection;    /// currently selected type
-        ::dbaccess::DATASOURCE_TYPE
-                            m_eNotSupportedKnownType;   /// if a data source of an unsupported, but known type is encountered ....
 
     private:
         VclPtr<FixedText>          m_pSpecialMessage;
@@ -50,7 +48,6 @@ namespace dbaui
         SPECIAL_MESSAGE     m_eLastMessage;
 
         Link<OGeneralPage&,void>   m_aTypeSelectHandler;   /// to be called if a new type is selected
-        bool                m_bDisplayingInvalid : 1;   /// the currently displayed data source is deleted
         bool                m_bInitTypeList : 1;
         bool                approveDatasourceType( const OUString& _sURLPrefix, OUString& _inout_rDisplayName );
         void                insertDatasourceTypeEntryData( const OUString& _sType, const OUString& sDisplayName );
