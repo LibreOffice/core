@@ -278,12 +278,7 @@ void FileHandle_Impl::operator delete (void * p)
 
 size_t FileHandle_Impl::getpagesize()
 {
-#if defined(FREEBSD) || defined(NETBSD) || defined(MACOSX) || \
-    defined(OPENBSD) || defined(DRAGONFLY)
-    return sal::static_int_cast< size_t >(::getpagesize());
-#else /* POSIX */
     return sal::static_int_cast< size_t >(::sysconf(_SC_PAGESIZE));
-#endif /* xBSD || POSIX */
 }
 
 sal_uInt64 FileHandle_Impl::getPos() const
