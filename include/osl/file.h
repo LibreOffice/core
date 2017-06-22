@@ -415,7 +415,8 @@ typedef struct _oslFileStatus {
     @retval osl_File_E_OVERFLOW value too large for defined data type
     @retval osl_File_E_INTR function call was interrupted
     @retval osl_File_E_NOLINK link has been severed
-    @retval osl_File_E_MULTIHOP components of path require hopping to multiple remote machines and the file system does not allow it
+    @retval osl_File_E_MULTIHOP components of path require hopping to multiple
+        remote machines and the file system does not allow it
     @retval osl_File_E_MFILE too many open files used by the process
     @retval osl_File_E_NFILE too many open files in the system
     @retval osl_File_E_NOSPC no space left on device
@@ -530,7 +531,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getVolumeDeviceMountPath(
 */
 
 typedef struct _oslVolumeInfo {
-/** Must be initialized with the size in bytes of the structure before passing it to any function */
+/** Must be initialized with the size in bytes of the structure before
+    passing it to any function */
     sal_uInt32      uStructSize;
 /** Determines which members of the structure contain valid data */
     sal_uInt32      uValidFields;
@@ -546,10 +548,12 @@ typedef struct _oslVolumeInfo {
     sal_uInt32      uMaxNameLength;
 /** Maximum length of a full qualified path in system notation */
     sal_uInt32      uMaxPathLength;
-/** Points to a string that receives the name of the file system type. String should be set to zero before calling osl_getVolumeInformation
-    and released after usage. */
+/** Points to a string that receives the name of the file system type. String
+    should be set to zero before calling osl_getVolumeInformation and released
+    after usage. */
     rtl_uString     *ustrFileSystemName;
-/** Pointer to handle the receives underlying device. Handle should be set to zero before calling osl_getVolumeInformation*/
+/** Pointer to handle the receives underlying device. Handle should be set to
+    zero before calling osl_getVolumeInformation */
     oslVolumeDeviceHandle   *pDeviceHandle;
 } oslVolumeInfo;
 
@@ -668,16 +672,20 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_openFile(
     Handle to a file received by a previous call to osl_openFile().
 
     @param uHow [in]
-    How to calculate the offset - osl_Pos_Absolut means start at the beginning of the file, osl_Pos_Current means
-    offset from the current seek position and osl_Pos_End means the offset will be negative and the position will be
-    calculated backwards from the end of the file by the offset provided.
+    How to calculate the offset - osl_Pos_Absolut means start at the
+    beginning of the file, osl_Pos_Current means offset from the current
+    seek position and osl_Pos_End means the offset will be negative and
+    the position will be calculated backwards from the end of the file by
+    the offset provided.
 
     @param uPos [in]
     Seek offset, depending on uHow. If uHow is osl_Pos_End then the value must be negative.
 
     @retval osl_File_E_None on success
-    @retval osl_File_E_INVAL the format of the parameters was not valid (e.g. if uHow is osl_Pos_End then must be negative)
-    @retval osl_File_E_OVERFLOW the resulting file offset would be a value which cannot be represented correctly for regular files
+    @retval osl_File_E_INVAL the format of the parameters was not valid
+        (e.g. if uHow is osl_Pos_End then must be negative)
+    @retval osl_File_E_OVERFLOW the resulting file offset would be a
+        value which cannot be represented correctly for regular files
 
     @see    osl_openFile()
     @see    osl_getFilePos()
@@ -695,7 +703,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_setFilePos(
 
     @retval osl_File_E_None on success
     @retval osl_File_E_INVAL the format of the parameters was not valid
-    @retval osl_File_E_OVERFLOW the resulting file offset would be a value which cannot be represented correctly for regular files
+    @retval osl_File_E_OVERFLOW the resulting file offset would be a value
+        which cannot be represented correctly for regular files
 
     @see osl_openFile()
     @see osl_setFilePos()
@@ -718,7 +727,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFilePos(
 
     @retval osl_File_E_None on success
     @retval osl_File_E_INVAL the format of the parameters was not valid
-    @retval osl_File_E_OVERFLOW the resulting file offset would be a value which cannot be represented correctly for regular files
+    @retval osl_File_E_OVERFLOW the resulting file offset would be a value
+        which cannot be represented correctly for regular files
 
     @see osl_openFile()
     @see osl_setFilePos()
@@ -741,7 +751,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_setFileSize(
 
     @retval osl_File_E_None on success
     @retval osl_File_E_INVAL the format of the parameters was not valid
-    @retval osl_File_E_OVERFLOW the resulting file offset would be a value which cannot be represented correctly for regular files
+    @retval osl_File_E_OVERFLOW the resulting file offset would be a value
+        which cannot be represented correctly for regular files
 
     @see osl_openFile()
     @see osl_setFilePos()
@@ -750,7 +761,9 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_setFileSize(
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileSize(
         oslFileHandle Handle, sal_uInt64 *pSize );
 
-/** Map flags.
+/** Indicate that the file can be accessws randomly (i.e. there is no sequential
+    reading). Basically it means that the first byte of every page in the
+    file-mapping will be read.
 
     @since UDK 3.2.10
  */
@@ -759,6 +772,10 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileSize(
 /** Map flag denoting that the mapped address space will be accessed by the
     process soon (and it is advantageous for the operating system to already
     start paging in the data).
+
+    @attention As this assumes that madvise() with the WILLREAD flag is
+    asynchronous (which is I'm afraid an incorrect assumption), Linux systems
+    will ignore this flag.
 
     @since UDK 3.2.12
 */
@@ -1374,14 +1391,14 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileURLFromSystemPath(
     A system dependent path, a file URL, a file or relative directory.
 
     @param pustrSearchPath [in]
-    A list of system paths, in which a given file has to be searched. The Notation of a path list is
-    system dependent, e.g. on UNIX system "/usr/bin:/bin" and on Windows "C:\BIN;C:\BATCH".
+    A list of system paths, in which a given file has to be searched. The Notation of a path
+    list is system dependent, e.g. on UNIX system "/usr/bin:/bin" and on Windows "C:\BIN;C:\BATCH".
     These paths are only for the search of a file or a relative path, otherwise it will be ignored.
-    If pustrSearchPath is NULL or while using the search path the search failed, the function searches for
-    a matching file in all system directories and in the directories listed in the PATH environment
-    variable.
-    The value of an environment variable should be used (e.g. LD_LIBRARY_PATH) if the caller is not
-    aware of the Operating System and so doesn't know which path list delimiter to use.
+    If pustrSearchPath is NULL or while using the search path the search failed, the function
+    searches for a matching file in all system directories and in the directories listed in the PATH
+    environment variable.<br/> The value of an environment variable should be used (e.g.
+    LD_LIBRARY_PATH) if the caller is not aware of the Operating System and so doesn't know which
+    path list delimiter to use.
 
     @param ppustrFileURL [out]
     On success it receives the full qualified file URL.
