@@ -139,9 +139,7 @@ SvxSpellWrapper::SvxSpellWrapper( vcl::Window* pWn,
     const bool bStart, const bool bIsAllRight ) :
 
     pWin        ( pWn ),
-    mpTextObj   ( nullptr),
     bOtherCntnt ( false ),
-    bDialog     ( false ),
     bHyphen     ( false ),
     bStartChk   ( false ),
     bRevAllowed ( true ),
@@ -160,9 +158,7 @@ SvxSpellWrapper::SvxSpellWrapper( vcl::Window* pWn,
         const bool bStart, const bool bOther ) :
     pWin        ( pWn ),
     xHyph       ( xHyphenator ),
-    mpTextObj( nullptr),
     bOtherCntnt ( bOther ),
-    bDialog     ( false ),
     bHyphen     ( false ),
     bReverse    ( false ),
     bStartDone  ( bOther || ( !bReverse && bStart ) ),
@@ -280,7 +276,6 @@ void SvxSpellWrapper::SpellDocument( )
         Reference< XHyphenatedWord >        xHyphWord( GetLast(), UNO_QUERY );
 
         vcl::Window *pOld = pWin;
-        bDialog = true;
         if (xHyphWord.is())
         {
             EditAbstractDialogFactory* pFact = EditAbstractDialogFactory::Create();
@@ -291,7 +286,6 @@ void SvxSpellWrapper::SpellDocument( )
             pWin = pDlg->GetWindow();
             pDlg->Execute();
         }
-        bDialog = false;
         pWin = pOld;
     }
 }

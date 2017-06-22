@@ -72,7 +72,6 @@ SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
     , bIsSetDfltTab( false)
     , bChkStyleAttr( false )
     , bCalcValue( false )
-    , bPardTokenRead( false)
     , bReadDocInfo( false )
     , bIsLeftToRightDef( true)
     , bIsInReadStyleTab( false)
@@ -334,7 +333,7 @@ void SvxRTFParser::ReadStyleTable()
             }
             break;
 
-        case RTF_SBASEDON:  pStyle->nBasedOn = sal_uInt16(nTokenValue); pStyle->bBasedOnIsSet=true; break;
+        case RTF_SBASEDON:  pStyle->nBasedOn = sal_uInt16(nTokenValue); break;
         case RTF_SNEXT:     pStyle->nNext = sal_uInt16(nTokenValue);    break;
         case RTF_OUTLINELEVEL:
         case RTF_SOUTLVL:   pStyle->nOutlineNo = sal_uInt8(nTokenValue);    break;
@@ -343,7 +342,6 @@ void SvxRTFParser::ReadStyleTable()
                             break;
         case RTF_CS:        nStyleNo = (short)nTokenValue;
                             bHasStyleNo = true;
-                            pStyle->bIsCharFmt = true;
                             break;
 
         case RTF_TEXTTOKEN:
@@ -1099,9 +1097,7 @@ SvxRTFStyleType::SvxRTFStyleType( SfxItemPool& rPool, const sal_uInt16* pWhichRa
 {
     nOutlineNo = sal_uInt8(-1);         // not set
     nBasedOn = 0;
-    bBasedOnIsSet = false;          //$flr #117411#
     nNext = 0;
-    bIsCharFmt = false;
 }
 
 

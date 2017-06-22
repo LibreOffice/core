@@ -45,7 +45,6 @@ HtmlImportInfo::HtmlImportInfo( HtmlImportState eSt, SvParser<HtmlTokenId>* pPrs
     eState      = eSt;
     nToken      = HtmlTokenId::NONE;
     nTokenValue = 0;
-    pAttrs      = nullptr;
 }
 
 HtmlImportInfo::~HtmlImportInfo()
@@ -59,7 +58,6 @@ RtfImportInfo::RtfImportInfo( RtfImportState eSt, SvParser<int>* pPrsrs, const E
     eState      = eSt;
     nToken      = 0;
     nTokenValue = 0;
-    pAttrs      = nullptr;
 }
 
 RtfImportInfo::~RtfImportInfo()
@@ -73,7 +71,6 @@ EditRTFParser::EditRTFParser(
     mpEditEngine(pEditEngine),
     aRTFMapMode(MapUnit::MapTwip),
     nDefFont(0),
-    nDefTab(0),
     bLastActionInsertParaBreak(false)
 {
     SetInsPos(EditPosition(mpEditEngine, &aCurSel));
@@ -190,9 +187,6 @@ void EditRTFParser::NextToken( int nToken )
         }
         break;
         case RTF_DEFTAB:
-        {
-            nDefTab = sal_uInt16(nTokenValue);
-        }
         break;
         case RTF_CELL:
         {
@@ -364,7 +358,6 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     {
         EditSelection aSel( aStartPaM, aEndPaM );
         RtfImportInfo aImportInfo(RtfImportState::SetAttr, this, mpEditEngine->CreateESelection(aSel));
-        aImportInfo.pAttrs = &rSet;
         mpEditEngine->CallRtfImportHandler(aImportInfo);
     }
 

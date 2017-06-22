@@ -638,7 +638,6 @@ void Outliner::FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_In
     if ( aFieldClickedHdl.IsSet() )
     {
         EditFieldInfo aFldInfo( this, rField, nPara, nPos );
-        aFldInfo.SetSimpleClick( true );
         aFieldClickedHdl.Call( &aFldInfo );
     }
 }
@@ -1263,7 +1262,6 @@ Outliner::Outliner(SfxItemPool* pPool, OutlinerMode nMode)
     , nDepthChangedHdlPrevDepth(0)
     , nMaxDepth(9)
     , nMinDepth(-1)
-    , nFirstPage(1)
     , bFirstParaIsEmpty(true)
     , nBlockInsCallback(0)
     , bStrippingPortions(false)

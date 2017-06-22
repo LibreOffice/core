@@ -79,8 +79,7 @@ PackageRegistryBackend::PackageRegistryBackend(
     Reference<XComponentContext> const & xContext )
     : t_BackendBase( getMutex() ),
       m_xComponentContext( xContext ),
-      m_eContext( Context::Unknown ),
-      m_readOnly( false )
+      m_eContext( Context::Unknown )
 {
     assert(xContext.is());
     boost::optional<OUString> cachePath;
@@ -88,8 +87,6 @@ PackageRegistryBackend::PackageRegistryBackend(
     comphelper::unwrapArgs( args, m_context, cachePath, readOnly );
     if (cachePath)
         m_cachePath = *cachePath;
-    if (readOnly)
-        m_readOnly = *readOnly;
 
     if ( m_context == "user" )
         m_eContext = Context::User;

@@ -227,8 +227,6 @@ struct HtmlImportInfo
 
     OUString                aText;
 
-    SfxItemSet*             pAttrs;
-
     HtmlImportInfo( HtmlImportState eState, SvParser<HtmlTokenId>* pPrsrs, const ESelection& rSel );
     ~HtmlImportInfo();
 };
@@ -243,8 +241,6 @@ struct RtfImportInfo
     short                   nTokenValue;
 
     OUString                aText;
-
-    SvxRTFItemStackType*    pAttrs;
 
     RtfImportInfo( RtfImportState eState, SvParser<int>* pPrsrs, const ESelection& rSel );
     ~RtfImportInfo();

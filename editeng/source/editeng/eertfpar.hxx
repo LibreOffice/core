@@ -34,8 +34,7 @@ private:
     MapMode             aRTFMapMode;
     MapMode             aEditMapMode;
 
-    sal_uInt16              nDefFont;
-    sal_uInt16              nDefTab;
+    sal_uInt16          nDefFont;
     bool                bLastActionInsertParaBreak;
 
 protected:
