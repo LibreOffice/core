@@ -786,7 +786,6 @@ rtl_cache_activate (
     size_t           objalign,
     int  (SAL_CALL * constructor)(void * obj, void * userarg),
     void (SAL_CALL * destructor) (void * obj, void * userarg),
-    void (SAL_CALL * reclaim)    (void * userarg),
     void *           userarg,
     rtl_arena_type * source,
     int              flags
@@ -829,7 +828,6 @@ rtl_cache_activate (
 
         cache->m_constructor = constructor;
         cache->m_destructor  = destructor;
-        cache->m_reclaim     = reclaim;
         cache->m_userarg     = userarg;
 
         /* slab layer */
@@ -1056,7 +1054,7 @@ SAL_CALL rtl_cache_create (
     sal_Size         objalign,
     int  (SAL_CALL * constructor)(void * obj, void * userarg),
     void (SAL_CALL * destructor) (void * obj, void * userarg),
-    void (SAL_CALL * reclaim)    (void * userarg),
+    void (SAL_CALL * /*reclaim*/)    (void * userarg),
     void *           userarg,
     rtl_arena_type * source,
     int              flags
@@ -1086,7 +1084,6 @@ try_alloc:
             objalign,
             constructor,
             destructor,
-            reclaim,
             userarg,
             source,
             flags
@@ -1552,7 +1549,6 @@ rtl_cache_init()
             0,                               /* objalign */
             rtl_cache_magazine_constructor,
             rtl_cache_magazine_destructor,
-            nullptr, /* reclaim */
             nullptr, /* userarg: NYI */
             gp_default_arena, /* source */
             RTL_CACHE_FLAG_NOMAGAZINE /* during bootstrap; activated below */
@@ -1576,7 +1572,6 @@ rtl_cache_init()
             0,                           /* objalign */
             rtl_cache_slab_constructor,
             rtl_cache_slab_destructor,
-            nullptr,                           /* reclaim */
             nullptr,                           /* userarg: none */
             gp_default_arena,            /* source */
             0                            /* flags: none */
@@ -1597,7 +1592,6 @@ rtl_cache_init()
             0,                             /* objalign  */
             nullptr,                /* constructor */
             nullptr,                /* destructor */
-            nullptr,                /* reclaim */
             nullptr,                /* userarg */
             gp_default_arena, /* source */
             0                 /* flags: none */

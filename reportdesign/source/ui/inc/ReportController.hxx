@@ -122,7 +122,6 @@ namespace rptui
         bool                    m_bGridVisible;
         bool                    m_bGridUse;
         bool                    m_bShowProperties;
-        bool                    m_bGroupFloaterWasVisible;
         bool                    m_bHelplinesMove;
         bool                    m_bChartEnabled;
         bool                    m_bChartEnabledAsked;
