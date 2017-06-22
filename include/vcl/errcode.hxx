@@ -144,15 +144,13 @@ inline std::ostream& operator<<(std::ostream& os, const ErrCode& err)
 #define ErrCode(X) (X)
 #endif
 
-#define ERRCODE_AREA_TOOLS               (0   << ERRCODE_AREA_SHIFT)
+#define ERRCODE_AREA_IO                  (0   << ERRCODE_AREA_SHIFT)
 #define ERRCODE_AREA_SV                  (1   << ERRCODE_AREA_SHIFT)
 #define ERRCODE_AREA_SFX                 (2   << ERRCODE_AREA_SHIFT)
 #define ERRCODE_AREA_INET                (3   << ERRCODE_AREA_SHIFT)
-#define ERRCODE_AREA_IO                  ERRCODE_AREA_TOOLS
 #define ERRCODE_AREA_VCL                 (4   << ERRCODE_AREA_SHIFT)
 
-#define ERRCODE_AREA_LIB1                (8   << ERRCODE_AREA_SHIFT)
-#define ERRCODE_AREA_SVX                 ERRCODE_AREA_LIB1
+#define ERRCODE_AREA_SVX                 (8   << ERRCODE_AREA_SHIFT)
 #define ERRCODE_AREA_SVX_END             (ERRCODE_AREA_SO-1)
 #define ERRCODE_AREA_SO                  (9   << ERRCODE_AREA_SHIFT)
 #define ERRCODE_AREA_SO_END              (ERRCODE_AREA_SBX-1)
@@ -184,8 +182,6 @@ inline std::ostream& operator<<(std::ostream& os, const ErrCode& err)
 
 #define ERRCODE_AREA_SW                  ERRCODE_AREA_APP4
 #define ERRCODE_AREA_SW_END              (ERRCODE_AREA_APP5-1)
-
-#define ERRCODE_AREA_OFA_END             (ERRCODE_AREA_APP6-1)
 
 #define ERRCODE_CLASS_NONE               ( 0  << ERRCODE_CLASS_SHIFT)
 #define ERRCODE_CLASS_ABORT              ( 1  << ERRCODE_CLASS_SHIFT)
@@ -278,9 +274,6 @@ inline std::ostream& operator<<(std::ostream& os, const ErrCode& err)
 #define SVSTREAM_WRONGVERSION            ERRCODE_IO_WRONGVERSION
 
 #define SVSTREAM_DISK_FULL               ERRCODE_IO_OUTOFSPACE
-
-// For the EditEngine:
-#define SVSTREAM_ERRBASE_USER            ERRCODE_AREA_LIB1
 
 #define PRINTER_ABORT                    ERRCODE_IO_ABORT
 #define PRINTER_GENERALERROR             ERRCODE_IO_GENERAL
