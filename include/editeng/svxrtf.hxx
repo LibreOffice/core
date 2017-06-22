@@ -101,9 +101,7 @@ struct SvxRTFStyleType
     SfxItemSet aAttrSet;        // the attributes of Style (+ derivate!)
     OUString sName;
     sal_uInt16 nBasedOn, nNext;
-    bool bBasedOnIsSet;
     sal_uInt8 nOutlineNo;
-    bool bIsCharFmt;
 
     SvxRTFStyleType( SfxItemPool& rPool, const sal_uInt16* pWhichRange );
 };
@@ -205,7 +203,6 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     bool    bIsSetDfltTab : 1;      // sal_True - DefTab was loaded
     bool    bChkStyleAttr : 1;      // sal_True - StyleSheets are evaluated
     bool    bCalcValue : 1;         // sal_True - Twip values adapt to App
-    bool    bPardTokenRead : 1;     // sal_True - Token \pard was detected
     bool    bReadDocInfo : 1;       // sal_True - DocInfo to read
     bool    bIsLeftToRightDef : 1;  // sal_True - in LeftToRight char run def.
                                         // sal_False - in RightToLeft char run def.

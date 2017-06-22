@@ -54,9 +54,7 @@ private:
         css::uno::XInterface >             xLast;  // result of last spelling/hyphenation attempt
     css::uno::Reference<
         css::linguistic2::XHyphenator >    xHyph;
-    SdrObject*  mpTextObj;
     bool        bOtherCntnt : 1; // set => Check special sections initially
-    bool        bDialog     : 1; // Is pWin the Svx...Dialog?
     bool        bHyphen     : 1; // Split instead of spell checking
     bool        bReverse    : 1; // Reverse spell check
     bool        bStartDone  : 1; // Beginning already corrected
@@ -112,8 +110,6 @@ protected:
                  GetAllRightDic();
     virtual void SpellEnd();                        // Finish area
     virtual void InsertHyphen( const sal_Int32 nPos ); // Insert hyphen
-
-    void SetCurTextObj( SdrObject* pObj ) { mpTextObj = pObj; }
 };
 
 #endif

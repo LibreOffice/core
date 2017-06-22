@@ -455,7 +455,6 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                 if ( pData->GetTextAttr() )
                 {
                     mpIMEInfos->CopyAttribs( pData->GetTextAttr(), pData->GetText().getLength() );
-                    mpIMEInfos->bCursor = pData->IsCursorVisible();
                 }
                 else
                 {

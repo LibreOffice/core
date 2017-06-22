@@ -147,7 +147,6 @@ struct ImplIMEInfos
     std::unique_ptr<ExtTextInputAttr[]> pAttribs;
     EditPaM     aPos;
     sal_Int32   nLen;
-    bool        bCursor;
     bool        bWasCursorOverwrite;
 
             ImplIMEInfos( const EditPaM& rPos, const OUString& rOldTextAfterStartPos );
