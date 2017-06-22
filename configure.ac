@@ -420,9 +420,9 @@ if test -n "$with_android_ndk"; then
         ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-$with_android_ndk_toolchain_version
         ANDROID_COMPILER_DIR=$ANDROID_BINUTILS_DIR
         ;;
-    clang3.3|clang3.4)
-        ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-4.8
-        ANDROID_COMPILER_DIR=$ANDROID_NDK_HOME/toolchains/llvm-${with_android_ndk_toolchain_version#clang}
+    clang3.3|clang3.4|clang5.0)
+        ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-4.9
+        ANDROID_COMPILER_DIR=$ANDROID_NDK_HOME/toolchains/llvm
         ANDROID_USING_CLANG=true
         ;;
     *)
@@ -474,7 +474,7 @@ if test -n "$with_android_ndk"; then
         # as is the case when using the ndk-bundle as installed with android studio
         ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR="${with_android_ndk_toolchain_version}/"
         if test -n "$ANDROID_USING_CLANG"; then
-            ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR=4.8/
+            ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR=4.9/
         fi
     fi
 
