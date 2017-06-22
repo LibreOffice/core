@@ -63,8 +63,9 @@ Primitive2DSequence Test::parseEmf(const char* aSource)
 
     Sequence<sal_Int8> aData(pBuffer.get(), nSize + 1);
     Reference<XInputStream> aInputStream(new comphelper::SequenceInputStream(aData));
+    css::uno::Sequence< css::beans::PropertyValue > aEmptyValues;
 
-    return xEmfParser->getDecomposition(aInputStream, aPath);
+    return xEmfParser->getDecomposition(aInputStream, aPath, aEmptyValues);
 }
 
 void Test::checkRectPrimitive(Primitive2DSequence& rPrimitive)
@@ -74,16 +75,10 @@ void Test::checkRectPrimitive(Primitive2DSequence& rPrimitive)
 
     CPPUNIT_ASSERT (pDocument);
 
-    // emfio: add examples
+    // emfio: add examples (later)
     // assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "color", "#00cc00"); // rect background color
     // assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "height", "100"); // rect background height
     // assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "width", "100"); // rect background width
-    // assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "minx", "10");
-    // assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "miny", "10");
-    // assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "maxx", "110");
-    // assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "maxy", "110");
-    // assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", "color", "#ff0000"); // rect stroke color
-    // assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", "width", "3"); // rect stroke width
 }
 
 void Test::testWorking()

@@ -1710,10 +1710,9 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
                 {
-                    static bool bUseMetaFilePrimitiveDecomposition(true);
                     const primitive2d::MetafilePrimitive2D& aMetafile = static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate);
 
-                    if(bUseMetaFilePrimitiveDecomposition && !aMetafile.getMetaFile().GetUseCanvas())
+                    if(!aMetafile.getMetaFile().GetUseCanvas())
                     {
                         // Use new Metafile decomposition.
                         // TODO EMF+ stuffed into METACOMMENT support required
@@ -1721,8 +1720,24 @@ namespace drawinglayer
                     }
                     else
                     {
+#ifdef DBG_UTIL
+                        // switch to test EMFPlus-enhanced MetafileDecomposition, don't do
+                        // this by default in debug mode
+                        static bool bTestEMFPDecomposition(false);
+
+                        if (bTestEMFPDecomposition)
+                        {
+                            process(rCandidate);
+                        }
+                        else
+                        {
+                            // direct draw of MetaFile
+                            RenderMetafilePrimitive2D(aMetafile);
+                        }
+#else // DBG_UTIL
                         // direct draw of MetaFile, use default processing
                         RenderMetafilePrimitive2D(aMetafile);
+#endif // DBG_UTIL
                     }
 
                     break;
