@@ -168,6 +168,7 @@
 #include <svx/svdview.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <SwSpellDialogChildWindow.hxx>
 #include <memory>
 
 #define TWIPS_PER_PIXEL 15
@@ -3640,12 +3641,20 @@ vcl::DialogID SwXTextDocument::findDialog()
     return vcl::DialogID(0);
 }
 
-void SwXTextDocument::paintDialog(vcl::DialogID /*rDialogID*/, VirtualDevice& /*rDevice*/, int /*nWidth*/, int /*nHeight*/)
+void SwXTextDocument::paintDialog(vcl::DialogID /*rDialogID*/, VirtualDevice& rDevice, int nWidth, int nHeight)
 {
-    //SwViewShell* pViewShell = pDocShell->GetWrtShell();
+    SfxViewShell* pViewShell = pDocShell->GetView();
+    SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
+    SfxChildWindow* pSfxChildWindow = SwSpellDialogChildWindow::CreateImpl(&pViewFrame->GetWindow(), SwSpellDialogChildWindow::GetChildWindowId(),
+                                                                           &pViewFrame->GetBindings(), nullptr);
 
-    //SwSpellDialogChildWindow::CreateImpl(nullptr, SwSpellDialogChildWindow::GetChildWindowId(),
-    //                                     pViewShell->GetBindings(), );
+    Size aSize(nWidth, nHeight);
+
+    vcl::Window* pWindow = pSfxChildWindow->GetWindow();
+
+    pWindow->SetSizePixel(aSize);
+    pWindow->Show();
+    pWindow->Paint(rDevice, tools::Rectangle(Point(), aSize));
 }
 
 void SwXTextDocument::postDialogMouseEvent(vcl::DialogID /*rDialogID*/, int /*nType*/, int /*nCharCode*/, int /*nKeyCode*/)
