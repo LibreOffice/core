@@ -168,7 +168,6 @@ private:
 
     Link<SpellUndoAction_Impl&,void> aDialogUndoLink;
 
-    bool            bModified;
     bool            bFocusLocked;
 
     svx::SpellDialogChildWindow& rParent;

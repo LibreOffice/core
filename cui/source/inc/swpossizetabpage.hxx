@@ -92,8 +92,6 @@ class SvxSwPosSizeTabPage : public SfxTabPage
 
     double  m_fWidthHeightRatio; //width-to-height ratio to support the KeepRatio button
     bool    m_bHtmlMode;
-    bool    m_bAtHoriPosModified;
-    bool    m_bAtVertPosModified;
     bool    m_bIsVerticalFrame;
     bool    m_bPositioningDisabled;
     bool    m_bIsMultiSelection;

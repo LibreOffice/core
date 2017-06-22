@@ -54,11 +54,9 @@ SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInA
                           "cui/ui/shadowtabpage.ui",
                           rInAttrs ),
     m_rOutAttrs           ( rInAttrs ),
-    m_eRP                 ( RectPoint::LT ),
     m_pnColorListState    ( nullptr ),
     m_nPageType           ( PageType::Area ),
     m_nDlgType            ( 0 ),
-    m_pbAreaTP            ( nullptr ),
     m_aXFillAttr          ( rInAttrs.GetPool() ),
     m_rXFSet              ( m_aXFillAttr.GetItemSet() )
 {
@@ -504,10 +502,8 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl, Edit&, void)
 }
 
 
-void SvxShadowTabPage::PointChanged( vcl::Window*, RectPoint eRcPt )
+void SvxShadowTabPage::PointChanged( vcl::Window*, RectPoint )
 {
-    m_eRP = eRcPt;
-
     // repaint shadow
     ModifyShadowHdl_Impl( *m_pMtrTransparent );
 }

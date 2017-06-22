@@ -312,7 +312,6 @@ void SvxHyphenWordDialog::SelLeft()
                 break;
             }
         }
-        m_nHyphPos = GetHyphIndex_Impl();
         EnableLRBtn_Impl();
     }
 }
@@ -334,7 +333,6 @@ void SvxHyphenWordDialog::SelRight()
             break;
         }
     }
-    m_nHyphPos = GetHyphIndex_Impl();
     EnableLRBtn_Impl();
 }
 
@@ -450,7 +448,6 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
     , m_aActWord(rWord)
     , m_nActLanguage(nLang)
     , m_nMaxHyphenationPos(0)
-    , m_nHyphPos(0)
     , m_nOldPos(0)
     , m_nHyphenationPositionsOffset(0)
     , m_bBusy(false)

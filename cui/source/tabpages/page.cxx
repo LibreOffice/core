@@ -152,7 +152,6 @@ SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr 
     bLandscape          ( false ),
     eMode               ( SVX_PAGE_MODE_STANDARD ),
     ePaperStart         ( PAPER_A3 ),
-    ePaperEnd           ( PAPER_ENV_DL ),
     m_nPos              ( 0 ),
     mpDefPrinter        ( nullptr ),
     mbDelPrinter        ( false ),
@@ -1647,7 +1646,7 @@ void SvxPageDescPage::PageCreated(const SfxAllItemSet& aSet)
 
     if(pPaperStartItem && pPaperEndItem)
     {
-        SetPaperFormatRanges((Paper)pPaperStartItem->GetEnumValue(),(Paper)pPaperEndItem->GetEnumValue());
+        SetPaperFormatRanges((Paper)pPaperStartItem->GetEnumValue());
     }
 
     if(pCollectListItem)

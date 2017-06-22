@@ -249,7 +249,6 @@ std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyles(const OUString& s
 
 SfxConfigFunctionListBox::SfxConfigFunctionListBox(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox( pParent, nStyle )
-    , pStylesInfo( nullptr )
 {
     SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
     GetModel()->SetSortMode( SortAscending );
@@ -358,11 +357,6 @@ OUString SfxConfigFunctionListBox::GetCurLabel()
     if (!pData->sLabel.isEmpty())
         return pData->sLabel;
     return pData->sCommand;
-}
-
-void SfxConfigFunctionListBox::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
-{
-    pStylesInfo = pStyles;
 }
 
 struct SvxConfigGroupBoxResource_Impl
@@ -1046,7 +1040,6 @@ void SfxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
 */
 {
     SfxGroupInfo_Impl *pInfo = static_cast<SfxGroupInfo_Impl*>(pEntry->GetUserData());
-    pInfo->bWasOpened = true;
     switch ( pInfo->nKind )
     {
         case SfxCfgKind::GROUP_SCRIPTCONTAINER:
@@ -1212,7 +1205,6 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
         xModel = xController->getModel();
 
     m_aStylesInfo.init(aModuleName, xModel);
-    m_pCommands->SetStylesInfo(&m_aStylesInfo);
     m_pCategories->SetStylesInfo(&m_aStylesInfo);
 
     UpdateUI();

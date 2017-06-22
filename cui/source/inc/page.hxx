@@ -136,7 +136,6 @@ private:
     bool                bBorderModified;
     SvxModeType         eMode;
     Paper               ePaperStart;
-    Paper               ePaperEnd;
 
     MarginPosition      m_nPos;
     VclPtr<Printer>     mpDefPrinter;
@@ -193,8 +192,8 @@ public:
     virtual ~SvxPageDescPage() override;
     virtual void        dispose() override;
 
-    void                SetPaperFormatRanges( Paper eStart, Paper eEnd )
-                            { ePaperStart = eStart; ePaperEnd = eEnd; }
+    void                SetPaperFormatRanges( Paper eStart )
+                            { ePaperStart = eStart; }
 
     void                SetCollectionList(const std::vector<OUString> &aList);
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;

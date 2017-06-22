@@ -82,7 +82,6 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
 :   IconChoiceDialog( pParent, "HyperlinkDialog", "cui/ui/hyperlinkdialog.ui" ),
     maCtrl          ( SID_HYPERLINK_GETLINK, *pBindings, this ),
     mpBindings      ( pBindings ),
-    mbReadOnly      ( false ),
     mbIsHTMLDoc     ( false )
 {
     mbGrabFocus = true;
@@ -359,7 +358,6 @@ void SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
 
 void SvxHpLinkDlg::SetReadOnlyMode( bool bRdOnly )
 {
-    mbReadOnly = bRdOnly;
     if ( bRdOnly )
         GetOKButton().Disable();
     else

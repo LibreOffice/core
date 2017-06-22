@@ -55,7 +55,6 @@ SvxGrfCropPage::SvxGrfCropPage ( vcl::Window *pParent, const SfxItemSet &rSet )
     , nOldWidth(0)
     , nOldHeight(0)
     , bReset(false)
-    , bInitialized(false)
     , bSetOrigSize(false)
 {
     get(m_pCropFrame, "cropframe");
@@ -318,8 +317,6 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet *rSet)
                     SID_ATTR_GRAF_KEEP_ZOOM), m_pZoomConstRB->IsChecked() ) );
     }
 
-    bInitialized = false;
-
     return bModified;
 }
 
@@ -369,7 +366,6 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
             m_pHeightMF->SetValue(nHeight, FUNIT_TWIP);
     }
     m_pHeightMF->SaveValue();
-    bInitialized = true;
 
     if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, false, &pItem ) )
     {

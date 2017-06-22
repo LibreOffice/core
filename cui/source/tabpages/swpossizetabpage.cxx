@@ -522,8 +522,6 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(vcl::Window* pParent, const SfxItemSet&
     , m_nOldVRel(RelOrientation::PRINT_AREA)
     , m_fWidthHeightRatio(1.0)
     , m_bHtmlMode(false)
-    , m_bAtHoriPosModified(false)
-    , m_bAtVertPosModified(false)
     , m_bIsVerticalFrame(false)
     , m_bPositioningDisabled(false)
     , m_bIsMultiSelection(false)
@@ -1258,11 +1256,6 @@ IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, ListBox&, rLB, void )
 
     UpdateExample();
 
-    if (bHori)
-        m_bAtHoriPosModified = true;
-    else
-        m_bAtVertPosModified = true;
-
     if (m_bHtmlMode && RndStdIds::FLY_AT_CHAR == GetAnchorType()) // again special treatment
     {
         if(bHori)
@@ -1320,11 +1313,6 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox&, rLB, void )
         pRelLB->Clear();
 
     UpdateExample();
-
-    if (bHori)
-        m_bAtHoriPosModified = true;
-    else
-        m_bAtVertPosModified = true;
 
     // special treatment for HTML-Mode with horz-vert-dependencies
     if (m_bHtmlMode && RndStdIds::FLY_AT_CHAR == GetAnchorType())

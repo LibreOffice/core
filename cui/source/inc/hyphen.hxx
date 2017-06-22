@@ -58,7 +58,6 @@ class SvxHyphenWordDialog : public SfxModalDialog
     OUString            m_aActWord;           // actual word to be hyphenated
     LanguageType        m_nActLanguage;       // and its language
     sal_Int16           m_nMaxHyphenationPos; // right most valid hyphenation pos
-    sal_uInt16          m_nHyphPos;
     sal_Int32           m_nOldPos;
     sal_Int32           m_nHyphenationPositionsOffset;
     bool                m_bBusy;

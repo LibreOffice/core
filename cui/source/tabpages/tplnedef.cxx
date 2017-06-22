@@ -61,7 +61,6 @@ SvxLineDefTabPage::SvxLineDefTabPage
               , "cui/ui/linestyletabpage.ui"
               , &rInAttrs ),
     rOutAttrs       ( rInAttrs ),
-    bObjSelected    ( false ),
 
     aXLStyle            ( drawing::LineStyle_DASH ),
     aXWidth             ( XOUT_WIDTH ),

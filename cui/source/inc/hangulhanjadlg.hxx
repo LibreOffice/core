@@ -207,8 +207,6 @@ namespace svx
         VclPtr<PushButton>         m_pDeletePB;
         VclPtr<OKButton>           m_pOkPB;
 
-        SvLBoxButtonData*   m_pCheckButtonData;
-
         HHDictList          m_aDictList;
         css::uno::Reference< css::linguistic2::XConversionDictionaryList > m_xConversionDictionaryList;
 

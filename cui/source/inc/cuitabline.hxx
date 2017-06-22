@@ -55,7 +55,6 @@ private:
     PageType            nPageType;
     sal_Int32           nPosDashLb;
     sal_Int32           nPosLineEndLb;
-    bool            mbAreaTP;
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
 
@@ -146,7 +145,6 @@ private:
     bool                m_bSymbols;
 
     const SfxItemSet&   m_rOutAttrs;
-    RectPoint          m_eRP;
     bool                m_bObjSelected;
 
     XLineAttrSetItem    m_aXLineAttr;
@@ -264,7 +262,6 @@ private:
 
     const SfxItemSet&   rOutAttrs;
     XDash               aDash;
-    bool            bObjSelected;
 
     XLineStyleItem      aXLStyle;
     XLineWidthItem      aXWidth;
@@ -317,7 +314,6 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
     void    SetDashList( XDashListRef const & pDshLst ) { pDashList = pDshLst; }
-    void    SetObjSelected( bool bHasObj ) { bObjSelected = bHasObj; }
 
     void    SetPageType( PageType* pInType ) { pPageType = pInType; }
     void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
@@ -347,7 +343,6 @@ private:
 
     const SfxItemSet&   rOutAttrs;
     const SdrObject*    pPolyObj;
-    bool            bObjSelected;
 
     XLineStyleItem      aXLStyle;
     XLineWidthItem      aXWidth;
@@ -387,7 +382,6 @@ public:
 
     void    SetLineEndList( XLineEndListRef const & pInList ) { pLineEndList = pInList; }
     void    SetPolyObj( const SdrObject* pObj ) { pPolyObj = pObj; }
-    void    SetObjSelected( bool bHasObj ) { bObjSelected = bHasObj; }
 
     void    SetPageType( PageType* pInType ) { pPageType = pInType; }
     void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
