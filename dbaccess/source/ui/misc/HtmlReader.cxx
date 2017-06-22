@@ -73,10 +73,7 @@ OHTMLReader::OHTMLReader(SvStream& rIn,const SharedConnection& _rxConnection,
     : HTMLParser(rIn)
     , ODatabaseExport( _rxConnection, _rxNumberF, _rxContext, rIn )
     , m_nTableCount(0)
-    , m_nWidth(0)
     , m_nColumnWidth(87)
-    , m_bMetaOptions(false)
-    , m_bSDNum(false)
 {
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
     // If the file starts with a BOM, switch to UCS2.
@@ -94,10 +91,7 @@ OHTMLReader::OHTMLReader(SvStream& rIn,
     : HTMLParser(rIn)
     , ODatabaseExport( nRows, _rColumnPositions, _rxNumberF, _rxContext, pList, _pInfoMap, _bAutoIncrementEnabled, rIn )
     , m_nTableCount(0)
-    , m_nWidth(0)
     , m_nColumnWidth(87)
-    , m_bMetaOptions(false)
-    , m_bSDNum(false)
 {
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
     // If the file starts with a BOM, switch to UCS2.
@@ -205,7 +199,7 @@ void OHTMLReader::NextToken( HtmlTokenId nToken )
                     m_sCurrent.clear();
                     m_nColumnPos++;
                     eraseTokens();
-                    m_bSDNum = m_bInTbl = false;
+                    m_bInTbl = false;
                 }
                 break;
             case HtmlTokenId::TABLEROW_OFF:
@@ -266,7 +260,7 @@ void OHTMLReader::NextToken( HtmlTokenId nToken )
                     m_sTextToken = m_sCurrent;
                 adjustFormat();
                 m_nColumnPos++;
-                m_bSDNum = m_bInTbl = false;
+                m_bInTbl = false;
                 m_sCurrent.clear();
                 break;
             case HtmlTokenId::TABLEROW_OFF:
@@ -291,10 +285,7 @@ void OHTMLReader::fetchOptions()
         switch( rOption.GetToken() )
         {
             case HtmlOptionId::SDVAL:
-            {
                 m_sValToken = rOption.GetString();
-                m_bSDNum = true;
-            }
             break;
             case HtmlOptionId::SDNUM:
                 m_sNumToken = rOption.GetString();
@@ -323,9 +314,6 @@ void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal)
                 else
                     eVal = SvxCellHorJustify::Standard;
             }
-            break;
-            case HtmlOptionId::WIDTH:
-                m_nWidth = GetWidthPixel( rOption );
             break;
             default: break;
         }
@@ -512,7 +500,6 @@ bool OHTMLReader::CreateTable(HtmlTokenId nToken)
 
 void OHTMLReader::setTextEncoding()
 {
-    m_bMetaOptions = true;
     ParseMetaOptions(nullptr, nullptr);
 }
 

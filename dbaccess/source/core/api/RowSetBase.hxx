@@ -364,10 +364,6 @@ namespace dbaccess
         bool        m_bWasNew;
         bool        m_bWasModified;
 
-#ifdef DBG_UTIL
-        bool        m_bNotifyCalled;
-#endif
-
     public:
         /** constructs the object, and cancels the insertion
 

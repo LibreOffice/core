@@ -102,7 +102,6 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     ,m_bRowCountFinal(false)
     ,m_bBeforeFirst(true)
     ,m_bAfterLast( false )
-    ,m_bUpdated(false)
     ,m_bModified(_bModified)
     ,m_bNew(_bNew)
 {
@@ -1405,7 +1404,7 @@ void ORowSetCache::cancelRowUpdates(  )
 void ORowSetCache::moveToInsertRow(  )
 {
     m_bNew      = true;
-    m_bUpdated  = m_bAfterLast = false;
+    m_bAfterLast = false;
 
     m_aInsertRow = m_pInsertMatrix->begin();
     if(!m_aInsertRow->is())

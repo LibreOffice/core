@@ -35,7 +35,6 @@ namespace dbaui
 {
     struct DBTreeEditedEntry
     {
-        SvTreeListEntry*    pEntry;
         OUString       aNewText;
     };
 

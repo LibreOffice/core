@@ -311,7 +311,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
         {
         }
         Reference< XNameContainer > xTableDefinitions(_rDB.getTables(),UNO_QUERY);
-        m_pTables = new OTableContainer( *this, m_aMutex, this, bCase, xTableDefinitions, this, &m_aWarnings,m_nInAppend );
+        m_pTables = new OTableContainer( *this, m_aMutex, this, bCase, xTableDefinitions, this, m_nInAppend );
 
         // check if we supports types
         if ( xMeta.is() )
@@ -340,7 +340,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
             }
             if(m_bSupportsViews)
             {
-                m_pViews = new OViewContainer(*this, m_aMutex, this, bCase,this,&m_aWarnings,m_nInAppend);
+                m_pViews = new OViewContainer(*this, m_aMutex, this, bCase, this, m_nInAppend);
                 m_pViews->addContainerListener(m_pTables);
                 m_pTables->addContainerListener(m_pViews);
             }

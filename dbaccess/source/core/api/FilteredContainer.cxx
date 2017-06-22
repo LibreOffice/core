@@ -239,11 +239,9 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::vector<
                                  const Reference< XConnection >& _xCon,
                                  bool _bCase,
                                  IRefreshListener*  _pRefreshListener,
-                                 ::dbtools::WarningsContainer* _pWarningsContainer
-                                 ,oslInterlockedCount& _nInAppend)
+                                 oslInterlockedCount& _nInAppend)
         :OCollection(_rParent,_bCase,_rMutex,std::vector< OUString>())
         ,m_bConstructed(false)
-        ,m_pWarningsContainer(_pWarningsContainer)
         ,m_pRefreshListener(_pRefreshListener)
         ,m_nInAppend(_nInAppend)
         ,m_xConnection(_xCon)
@@ -385,7 +383,6 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::vector<
 
         m_xMasterContainer  = nullptr;
         m_xMetaData         = nullptr;
-        m_pWarningsContainer = nullptr;
         m_pRefreshListener  = nullptr;
         m_bConstructed      = false;
     }

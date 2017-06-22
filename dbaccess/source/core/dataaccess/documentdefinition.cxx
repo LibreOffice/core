@@ -219,14 +219,9 @@ namespace dbaccess
     }
 
     // OEmbeddedClientHelper
-    typedef ::cppu::WeakImplHelper<   XEmbeddedClient
-                                  >   EmbeddedClientHelper_BASE;
-    class OEmbeddedClientHelper : public EmbeddedClientHelper_BASE
+    class OEmbeddedClientHelper : public ::cppu::WeakImplHelper<XEmbeddedClient>
     {
-        ODocumentDefinition* m_pClient;
     public:
-        explicit OEmbeddedClientHelper(ODocumentDefinition* _pClient) :m_pClient(_pClient) {}
-
         virtual void SAL_CALL saveObject(  ) override
         {
         }
@@ -240,7 +235,6 @@ namespace dbaccess
         virtual void SAL_CALL visibilityChanged( sal_Bool /*bVisible*/ ) override
         {
         }
-        void resetClient() { m_pClient = nullptr; }
     };
 
     // LockModifiable
@@ -454,11 +448,7 @@ void ODocumentDefinition::closeObject()
         {
         }
         m_xEmbeddedObject = nullptr;
-        if ( m_pClientHelper.is() )
-        {
-            m_pClientHelper->resetClient();
-            m_pClientHelper.clear();
-        }
+        m_pClientHelper.clear();
     }
 }
 
@@ -1616,7 +1606,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
             {
                 if ( !m_pClientHelper.is() )
                 {
-                    m_pClientHelper = new OEmbeddedClientHelper(this);
+                    m_pClientHelper = new OEmbeddedClientHelper;
                 }
                 Reference<XEmbeddedClient> xClient = m_pClientHelper.get();
                 m_xEmbeddedObject->setClientSite(xClient);
@@ -1638,7 +1628,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
         {
             if ( !m_pClientHelper.is() )
             {
-                m_pClientHelper = new OEmbeddedClientHelper(this);
+                m_pClientHelper = new OEmbeddedClientHelper;
             }
             Reference<XEmbeddedClient> xClient = m_pClientHelper.get();
             m_xEmbeddedObject->setClientSite(xClient);

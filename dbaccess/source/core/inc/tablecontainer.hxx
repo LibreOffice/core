@@ -47,7 +47,6 @@ namespace dbaccess
     {
         css::uno::Reference< css::container::XNameContainer > m_xTableDefinitions;
         ::rtl::Reference< OContainerMediator >                m_pTableMediator;
-        bool                m_bInDrop;                  // set when we are in the drop method
 
         // OFilteredContainer
         virtual void addMasterContainerListener() override;
@@ -90,7 +89,6 @@ namespace dbaccess
             bool _bCase,
             const css::uno::Reference< css::container::XNameContainer >&  _xTableDefinitions,
             IRefreshListener*   _pRefreshListener,
-            ::dbtools::WarningsContainer* _pWarningsContainer,
             oslInterlockedCount& _nInAppend
             );
 

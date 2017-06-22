@@ -101,12 +101,10 @@ OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
                                  bool _bCase,
                                  const Reference< XNameContainer >& _xTableDefinitions,
                                  IRefreshListener*  _pRefreshListener,
-                                 ::dbtools::WarningsContainer* _pWarningsContainer
-                                 ,oslInterlockedCount& _nInAppend)
-    :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_pWarningsContainer,_nInAppend)
+                                 oslInterlockedCount& _nInAppend)
+    :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_nInAppend)
     ,m_xTableDefinitions(_xTableDefinitions)
     ,m_pTableMediator( nullptr )
-    ,m_bInDrop(false)
 {
 }
 
@@ -345,7 +343,6 @@ ObjectType OTableContainer::appendObject( const OUString& _rForName, const Refer
 // XDrop
 void OTableContainer::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
 {
-    m_bInDrop = true;
     try
     {
         Reference< XDrop > xDrop(m_xMasterContainer,UNO_QUERY);
@@ -400,10 +397,8 @@ void OTableContainer::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
     }
     catch(const Exception&)
     {
-        m_bInDrop = false;
         throw;
     }
-    m_bInDrop = false;
 }
 
 void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event )

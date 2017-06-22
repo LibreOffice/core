@@ -2270,7 +2270,7 @@ Reference< XNameAccess > ORowSet::impl_getTables_throw()
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        m_pTables = new OTableContainer(*this,m_aMutex,m_xActiveConnection,bCase,nullptr,nullptr,nullptr,m_nInAppend);
+        m_pTables = new OTableContainer(*this,m_aMutex,m_xActiveConnection,bCase,nullptr,nullptr,m_nInAppend);
         xTables = m_pTables;
         Sequence<OUString> aTableFilter { "%" };
         m_pTables->construct(aTableFilter,Sequence< OUString>());

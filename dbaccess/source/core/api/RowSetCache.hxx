@@ -87,7 +87,6 @@ namespace dbaccess
         bool                    m_bRowCountFinal ;
         bool                    m_bBeforeFirst ;
         bool                    m_bAfterLast ;
-        bool                    m_bUpdated ;
         bool&                   m_bModified ;           // points to the rowset member m_bModified
         bool&                   m_bNew ;                // points to the rowset member m_bNew
 
