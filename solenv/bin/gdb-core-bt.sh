@@ -25,7 +25,6 @@ then
             GDBCOMMANDFILE=$(mktemp)
             printf "info registers\nthread apply all backtrace full\n" \
                 >"$GDBCOMMANDFILE"
-file "$COREFILE"
             guess=$(file "$COREFILE")
             guess=${guess#* execfn: \'}
             guess=${guess%%\'*}
