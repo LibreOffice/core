@@ -43,8 +43,8 @@
 #undef min
 #endif
 
-// File handle implementation
-
+/** File handle implementation.
+*/
 struct FileHandle_Impl
 {
     CRITICAL_SECTION m_mutex;
@@ -54,19 +54,19 @@ struct FileHandle_Impl
      */
     enum StateBits
     {
-        STATE_SEEKABLE  = 1, /* open() sets, iff regular file */
-        STATE_READABLE  = 2, /* open() sets, read() requires */
-        STATE_WRITEABLE = 4, /* open() sets, write() requires */
+        STATE_SEEKABLE  = 1, /*< open() sets, iff regular file */
+        STATE_READABLE  = 2, /*< open() sets, read() requires */
+        STATE_WRITEABLE = 4, /*< open() sets, write() requires */
         STATE_MODIFIED  = 8  /* write() sets, flush() resets */
     };
     int          m_state;
 
-    sal_uInt64   m_size;    /* file size */
-    LONGLONG     m_offset;  /* physical offset from begin of file */
-    LONGLONG     m_filepos; /* logical offset from begin of file */
+    sal_uInt64   m_size;    /*< file size */
+    LONGLONG     m_offset;  /*< physical offset from begin of file */
+    LONGLONG     m_filepos; /*< logical offset from begin of file */
 
-    LONGLONG     m_bufptr;  /* buffer offset from begin of file */
-    SIZE_T       m_buflen;  /* buffer filled [0, m_bufsiz - 1] */
+    LONGLONG     m_bufptr;  /*< buffer offset from begin of file */
+    SIZE_T       m_buflen;  /*< buffer filled [0, m_bufsiz - 1] */
 
     SIZE_T       m_bufsiz;
     sal_uInt8 *  m_buffer;
@@ -664,8 +664,6 @@ oslFileError FileHandle_Impl::syncFile()
     return result;
 }
 
-// File I/O functions
-
 extern "C" oslFileHandle
 SAL_CALL osl_createFileHandleFromOSHandle (
     HANDLE     hFile,
@@ -1089,8 +1087,6 @@ SAL_CALL osl_setFileSize (oslFileHandle Handle, sal_uInt64 uSize)
 
     return pImpl->setSize (uSize);
 }
-
-// File handling functions
 
 oslFileError SAL_CALL osl_removeFile( rtl_uString* strPath )
 {
