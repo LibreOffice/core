@@ -93,13 +93,12 @@ struct SfxGroupInfo_Impl
     SfxCfgKind  nKind;
     sal_uInt16  nUniqueID;
     void*       pObject;
-    bool        bWasOpened;
     OUString    sCommand;
     OUString    sLabel;
     OUString    sHelpText;
 
                 SfxGroupInfo_Impl( SfxCfgKind n, sal_uInt16 nr, void* pObj = nullptr ) :
-                    nKind( n ), nUniqueID( nr ), pObject( pObj ), bWasOpened(false) {}
+                    nKind( n ), nUniqueID( nr ), pObject( pObj ) {}
 };
 
 typedef std::vector<std::unique_ptr<SfxGroupInfo_Impl> > SfxGroupInfoArr_Impl;
@@ -108,7 +107,6 @@ class SfxConfigFunctionListBox : public SvTreeListBox
 {
     friend class SfxConfigGroupListBox;
     SfxGroupInfoArr_Impl aArr;
-    SfxStylesInfo_Impl*  pStylesInfo;
 
     virtual void  MouseMove( const MouseEvent& rMEvt ) override;
 
@@ -123,7 +121,6 @@ public:
     OUString      GetCurLabel();
     OUString      GetSelectedScriptURI();
     OUString      GetHelpText();
-    void          SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
 
 struct SvxConfigGroupBoxResource_Impl;

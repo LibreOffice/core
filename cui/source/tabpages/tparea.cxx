@@ -96,7 +96,6 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     m_pHatchingList( nullptr ),
     m_pBitmapList( nullptr ),
     m_pPatternList( nullptr ),
-    mpDrawModel(nullptr),
 
     // local fixed not o be changed values for local pointers
     maFixed_ChangeType(ChangeType::NONE),
@@ -107,9 +106,6 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     m_pnPatternListState(&maFixed_ChangeType),
     m_pnGradientListState(&maFixed_ChangeType),
     m_pnHatchingListState(&maFixed_ChangeType),
-    m_nPageType(PageType::Area),
-    m_nDlgType(0),
-    m_pbAreaTP(nullptr),
     m_aXFillAttr          ( rInAttrs.GetPool() ),
     m_rXFSet              ( m_aXFillAttr.GetItemSet() )
 {

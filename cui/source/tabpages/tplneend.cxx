@@ -62,7 +62,6 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
               , &rInAttrs ),
     rOutAttrs           ( rInAttrs ),
     pPolyObj            ( nullptr ),
-    bObjSelected        ( false ),
 
     aXLStyle            ( css::drawing::LineStyle_SOLID ),
     aXWidth             ( XOUT_WIDTH ),

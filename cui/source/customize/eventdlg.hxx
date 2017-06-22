@@ -35,8 +35,6 @@ class SvxEventConfigPage : public SvxMacroTabPage_
     css::uno::Reference< css::container::XNameReplace >   m_xDocumentEvents;
     css::uno::Reference< css::util::XModifiable >         m_xDocumentModifiable;
 
-    bool            bAppConfig;
-
     DECL_LINK(      SelectHdl_Impl, ListBox&, void );
 
     SvxEventConfigPage (const SvxEventConfigPage &) = delete;

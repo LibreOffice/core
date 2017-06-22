@@ -108,8 +108,6 @@ class SfxAcceleratorConfigPage : public SfxTabPage
     friend class SfxAccCfgTabListBox_Impl;
 private:
     const SfxMacroInfoItem*         m_pMacroInfoItem;
-    const SfxStringItem*            m_pStringItem;
-    const SfxStringItem*            m_pFontItem;
     sfx2::FileDialogHelper*         m_pFileDlg;
 
     VclPtr<SfxAccCfgTabListBox_Impl>    m_pEntriesBox;

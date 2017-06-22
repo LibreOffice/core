@@ -100,11 +100,6 @@ struct SvxBackgroundPage_Impl
     {}
 };
 
-static inline sal_uInt8 lcl_TransparencyToPercent(sal_uInt8 nTrans)
-{
-    return (nTrans * 100 + 127) / 254;
-}
-
 /// Returns the fill style of the currently selected entry.
 static drawing::FillStyle lcl_getFillStyle(ListBox* pLbSelect)
 {
@@ -171,7 +166,6 @@ private:
     Point           aDrawPos;
     Size            aDrawSize;
     ::tools::Rectangle       aDrawRect;
-    sal_uInt8            nTransparency;
 };
 
 BackgroundPreviewImpl::BackgroundPreviewImpl(vcl::Window* pParent)
@@ -179,7 +173,6 @@ BackgroundPreviewImpl::BackgroundPreviewImpl(vcl::Window* pParent)
     , bIsBmp(false)
     , pBitmap(nullptr)
     , aDrawRect(Point(0,0), GetOutputSizePixel())
-    , nTransparency(0)
 {
     SetBorderStyle(WindowBorderStyle::MONO);
     Invalidate(aDrawRect);
@@ -214,8 +207,6 @@ void BackgroundPreviewImpl::NotifyChange( const Color& rColor )
     if ( !bIsBmp )
     {
         const static Color aTranspCol( COL_TRANSPARENT );
-
-        nTransparency = lcl_TransparencyToPercent( rColor.GetTransparency() );
 
         SetFillColor( rColor == aTranspCol ? GetSettings().GetStyleSettings().GetFieldColor() : Color(rColor.GetRGBColor()) );
         Invalidate(aDrawRect);

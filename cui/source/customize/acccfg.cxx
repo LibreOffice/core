@@ -725,8 +725,6 @@ void SfxAccCfgTabListBox_Impl::KeyInput(const KeyEvent& aKey)
 SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( vcl::Window* pParent, const SfxItemSet& aSet )
     : SfxTabPage(pParent, "AccelConfigPage", "cui/ui/accelconfigpage.ui", &aSet)
     , m_pMacroInfoItem()
-    , m_pStringItem()
-    , m_pFontItem()
     , m_pFileDlg(nullptr)
     , aLoadAccelConfigStr(CuiResId(RID_SVXSTR_LOADACCELCONFIG))
     , aSaveAccelConfigStr(CuiResId(RID_SVXSTR_SAVEACCELCONFIG))
@@ -938,7 +936,6 @@ void SfxAcceleratorConfigPage::Init(const uno::Reference<ui::XAcceleratorConfigu
             xModel = xController->getModel();
 
         m_aStylesInfo.init(m_sModuleLongName, xModel);
-        m_pFunctionBox->SetStylesInfo(&m_aStylesInfo);
         m_pGroupLBox->SetStylesInfo(&m_aStylesInfo);
         m_bStylesInfoInitialized = true;
     }
@@ -1461,16 +1458,6 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet* rSet )
     {
         m_pMacroInfoItem = &dynamic_cast<const SfxMacroInfoItem&>(*pMacroItem);
         m_pGroupLBox->SelectMacro( m_pMacroInfoItem );
-    }
-    else
-    {
-        const SfxPoolItem* pStringItem=nullptr;
-        if( SfxItemState::SET == rSet->GetItemState( SID_CHARMAP, true, &pStringItem ) )
-            m_pStringItem = dynamic_cast<const SfxStringItem*>( pStringItem  );
-
-        const SfxPoolItem* pFontItem=nullptr;
-        if( SfxItemState::SET == rSet->GetItemState( SID_ATTR_SPECIALCHAR, true, &pFontItem ) )
-            m_pFontItem = dynamic_cast<const SfxStringItem*>( pFontItem  );
     }
 }
 

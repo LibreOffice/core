@@ -84,7 +84,6 @@ private:
     long                    nWidth;
     long                    nMinFixDist;
     bool                    bRelativeMode;
-    bool                    bNegativeIndents;
 
     void                    SetLineSpacing_Impl( const SvxLineSpacingItem& rAttr );
     void                    Init_Impl();

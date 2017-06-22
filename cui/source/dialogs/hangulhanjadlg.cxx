@@ -1098,7 +1098,6 @@ namespace svx
     HangulHanjaOptionsDialog::HangulHanjaOptionsDialog(vcl::Window* _pParent)
         : ModalDialog( _pParent, "HangulHanjaOptDialog",
             "cui/ui/hangulhanjaoptdialog.ui" )
-        , m_pCheckButtonData(nullptr)
         , m_xConversionDictionaryList(nullptr)
     {
         get(m_pDictsLB, "dicts");
@@ -1158,9 +1157,6 @@ namespace svx
                 pEntry = m_pDictsLB->Next( pEntry );
             }
         }
-
-        delete m_pCheckButtonData;
-        m_pCheckButtonData = nullptr;
 
         m_pDictsLB.clear();
         m_pIgnorepostCB.clear();

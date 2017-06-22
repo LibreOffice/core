@@ -93,8 +93,6 @@ class SpellUndoAction_Impl : public SfxUndoAction
     bool            m_bEnableChangePB;
     bool            m_bEnableChangeAllPB;
     //undo of MarkNextError - used in change and change all, ignore and ignore all
-    long            m_nNewErrorStart;
-    long            m_nNewErrorEnd;
     long            m_nOldErrorStart;
     long            m_nOldErrorEnd;
     bool            m_bIsErrorLanguageSelected;
@@ -110,8 +108,6 @@ public:
         m_rActionLink( rActionLink),
         m_bEnableChangePB(false),
         m_bEnableChangeAllPB(false),
-        m_nNewErrorStart(-1),
-        m_nNewErrorEnd(-1),
         m_nOldErrorStart(-1),
         m_nOldErrorEnd(-1),
         m_bIsErrorLanguageSelected(false),
@@ -127,10 +123,8 @@ public:
     void                    SetEnableChangeAllPB(){m_bEnableChangeAllPB = true;}
     bool                    IsEnableChangeAllPB(){return m_bEnableChangeAllPB;}
 
-    void                    SetErrorMove(long nNewStart, long nNewEnd, long nOldStart, long nOldEnd)
+    void                    SetErrorMove(long nOldStart, long nOldEnd)
                                 {
-                                        m_nNewErrorStart = nNewStart;
-                                        m_nNewErrorEnd  = nNewEnd;
                                         m_nOldErrorStart = nOldStart;
                                         m_nOldErrorEnd = nOldEnd;
                                 }
@@ -169,7 +163,6 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
     : SfxModelessDialog (_pBindings, pChildWindow,
         pParent, "SpellingDialog", "cui/ui/spellingdialog.ui")
     , aDialogUndoLink(LINK (this, SpellDialog, DialogUndoHdl))
-    , bModified(false)
     , bFocusLocked(true)
     , rParent(*pChildWindow)
     , pImpl( new SpellDialog_Impl )
@@ -569,7 +562,6 @@ IMPL_LINK_NOARG(SpellDialog, ChangeHdl, Button*, void)
         OUString aString = getReplacementString();
         m_pSentenceED->ChangeMarkedWord(aString, GetSelectedLang_Impl());
         SpellContinue_Impl();
-        bModified = false;
         m_pSentenceED->UndoActionEnd();
     }
     if(!m_pChangePB->IsEnabled())
@@ -602,7 +594,6 @@ IMPL_LINK_NOARG(SpellDialog, ChangeAllHdl, Button*, void)
 
     m_pSentenceED->ChangeMarkedWord(aString, eLang);
     SpellContinue_Impl();
-    bModified = false;
     m_pSentenceED->UndoActionEnd();
 }
 
@@ -649,7 +640,6 @@ IMPL_LINK( SpellDialog, IgnoreAllHdl, Button *, pButton, void )
     }
 
     SpellContinue_Impl();
-    bModified = false;
     m_pSentenceED->UndoActionEnd();
 }
 
@@ -931,7 +921,6 @@ IMPL_LINK(SpellDialog, ModifyHdl, Edit&, rEd, void)
 {
     if (m_pSentenceED == &rEd)
     {
-        bModified = true;
         m_pSuggestionLB->SetNoSelection();
         m_pSuggestionLB->Disable();
         OUString sNewText( m_pSentenceED->GetText() );
@@ -1620,7 +1609,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
         //add an undo action
         SpellUndoAction_Impl* pAction = new SpellUndoAction_Impl(
                 SPELLUNDO_CHANGE_NEXTERROR, GetSpellDialog()->aDialogUndoLink);
-        pAction->SetErrorMove(m_nErrorStart, m_nErrorEnd, nOldErrorStart, nOldErrorEnd);
+        pAction->SetErrorMove(nOldErrorStart, nOldErrorEnd);
         const SpellErrorAttrib* pOldAttrib = static_cast<const SpellErrorAttrib*>(
                 pTextEngine->FindAttrib( TextPaM(0, nOldErrorStart), TEXTATTR_SPELL_ERROR ));
         pAction->SetErrorLanguageSelected(pOldAttrib && pOldAttrib->GetErrorDescription().aSuggestions.getLength() &&

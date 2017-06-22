@@ -116,8 +116,6 @@ private:
     SfxItemSet*             pExampleSet;
     sal_uInt16*                 pRanges;
 
-    bool                    bInOK;
-
     DECL_LINK( ChosePageHdl_Impl, SvtIconChoiceCtrl*, void );
     DECL_LINK( OkHdl, Button*, void );
     DECL_LINK( ApplyHdl, Button*, void) ;
