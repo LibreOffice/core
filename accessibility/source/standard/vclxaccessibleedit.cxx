@@ -61,7 +61,6 @@ using namespace ::comphelper;
 VCLXAccessibleEdit::VCLXAccessibleEdit( VCLXWindow* pVCLWindow )
     :VCLXAccessibleTextComponent( pVCLWindow )
 {
-    m_nSelectionStart = getSelectionStart();
     m_nCaretPosition = getCaretPosition();
 }
 

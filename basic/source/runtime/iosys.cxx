@@ -126,7 +126,6 @@ SbiStream::SbiStream()
     , nLine(0)
     , nLen(0)
     , nMode(SbiStreamFlags::NONE)
-    , nChan(0)
     , nError(0)
 {
 }
@@ -449,11 +448,10 @@ void    UCBStream::SetSize( sal_uInt64 nSize )
 
 
 ErrCode SbiStream::Open
-( short nCh, const OString& rName, StreamMode nStrmMode, SbiStreamFlags nFlags, short nL )
+( const OString& rName, StreamMode nStrmMode, SbiStreamFlags nFlags, short nL )
 {
     nMode   = nFlags;
     nLen    = nL;
-    nChan   = nCh;
     nLine   = 0;
     nExpandOnWriteTo = 0;
     if( ( nStrmMode & ( StreamMode::READ|StreamMode::WRITE ) ) == StreamMode::READ )
@@ -522,7 +520,6 @@ ErrCode SbiStream::Close()
         MapError();
         pStrm.reset();
     }
-    nChan = 0;
     return nError;
 }
 
@@ -674,8 +671,8 @@ void SbiIoSystem::Open(short nCh, const OString& rName, StreamMode nMode, SbiStr
     }
     else
     {
-        pChan[ nCh ] = new SbiStream;
-        nError = pChan[ nCh ]->Open( nCh, rName, nMode, nFlags, nLen );
+       pChan[ nCh ] = new SbiStream;
+       nError = pChan[ nCh ]->Open( rName, nMode, nFlags, nLen );
        if( nError )
        {
             delete pChan[ nCh ];

@@ -86,8 +86,6 @@ ErrorBarResources::ErrorBarResources( VclBuilderContainer* pParent, Dialog * pPa
         m_eIndicate( SvxChartIndicate::Both ),
         m_bErrorKindUnique( true ),
         m_bIndicatorUnique( true ),
-        m_bPlusUnique( true ),
-        m_bMinusUnique( true ),
         m_bRangePosUnique( true ),
         m_bRangeNegUnique( true ),
         m_bNoneAvailable( bNoneAvailable ),
@@ -535,14 +533,12 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
 
     // parameters
     aState = rInAttrs.GetItemState( SCHATTR_STAT_CONSTPLUS, true, &pPoolItem );
-    m_bPlusUnique = ( aState != SfxItemState::DONTCARE );
     if( aState == SfxItemState::SET )
     {
         m_fPlusValue = static_cast<const SvxDoubleItem*>(pPoolItem)->GetValue();
     }
 
     aState = rInAttrs.GetItemState( SCHATTR_STAT_CONSTMINUS, true, &pPoolItem );
-    m_bMinusUnique = ( aState != SfxItemState::DONTCARE );
     if( aState == SfxItemState::SET )
     {
         m_fMinusValue = static_cast<const SvxDoubleItem*>(pPoolItem)->GetValue();

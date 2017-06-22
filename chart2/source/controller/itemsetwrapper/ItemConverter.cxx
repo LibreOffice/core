@@ -36,8 +36,7 @@ ItemConverter::ItemConverter(
     SfxItemPool& rItemPool ) :
         m_xPropertySet( rPropertySet ),
         m_xPropertySetInfo( nullptr ),
-        m_rItemPool( rItemPool ),
-        m_bIsValid( true )
+        m_rItemPool( rItemPool )
 {
     resetPropertySet( m_xPropertySet );
 }
@@ -70,12 +69,8 @@ SfxItemSet ItemConverter::CreateEmptyItemSet() const
     return SfxItemSet( GetItemPool(), GetWhichPairs() );
 }
 
-void ItemConverter::_disposing( const lang::EventObject& rSource )
+void ItemConverter::_disposing( const lang::EventObject& )
 {
-    if( rSource.Source == m_xPropertySet )
-    {
-        m_bIsValid = false;
-    }
 }
 
 void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const

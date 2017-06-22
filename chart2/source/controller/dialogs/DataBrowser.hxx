@@ -63,8 +63,6 @@ protected:
     virtual void EndScroll() override;
     virtual void MouseButtonDown( const BrowserMouseEvent& rEvt ) override;
 
-    void SetDirty();
-
 public:
     DataBrowser( vcl::Window* pParent, WinBits nStyle, bool bLiveUpdate );
     virtual ~DataBrowser() override;
@@ -92,9 +90,6 @@ public:
 
     void SetReadOnly( bool bNewState );
     bool IsReadOnly() const { return m_bIsReadOnly;}
-
-    /// reset the dirty status, if changes have been saved
-    void SetClean();
 
     void SetDataFromModel( const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc,
                            const css::uno::Reference< css::uno::XComponentContext > & xContext );
@@ -155,7 +150,6 @@ private:
     /// the row that is currently painted
     long                m_nSeekRow;
     bool                m_bIsReadOnly;
-    bool                m_bIsDirty;
     bool                m_bLiveUpdate;
     bool                m_bDataValid;
 
