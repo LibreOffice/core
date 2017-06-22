@@ -822,7 +822,6 @@ ImplIMEInfos::ImplIMEInfos( const EditPaM& rPos, const OUString& rOldTextAfterSt
  pAttribs(nullptr),
  aPos(rPos),
  nLen(0),
- bCursor(true),
  bWasCursorOverwrite(false)
  {
  }

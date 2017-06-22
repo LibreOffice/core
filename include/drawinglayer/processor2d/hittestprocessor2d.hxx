@@ -47,7 +47,6 @@ namespace drawinglayer
             double                      mfDiscreteHitTolerance;
 
             bool                        mbHit : 1;
-            bool                        mbHitToleranceUsed : 1;
 
             /// flag to concentrate on text hits only
             bool                        mbHitTextOnly : 1;

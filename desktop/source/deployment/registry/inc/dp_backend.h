@@ -220,7 +220,6 @@ protected:
     enum class Context {
         Unknown, User, Shared, Bundled, Tmp, Document
     } m_eContext;
-    bool m_readOnly;
 
     struct StrCannotDetectMediaType : public ::dp_misc::StaticResourceString<
         StrCannotDetectMediaType, RID_STR_CANNOT_DETECT_MEDIA_TYPE> {};

@@ -1639,7 +1639,6 @@ private:
         for (size_t nIndex = 0, nCount = aPages.size(); nIndex < nCount;)
         {
             pOutliner->Clear();
-            pOutliner->SetFirstPageNumber(aPages[nIndex]+1);
 
             Paragraph* pPara = nullptr;
             long nH (0);

@@ -124,7 +124,6 @@ bool EditSpellWrapper::SpellMore()
     if ( pSpellInfo->bMultipleDoc )
     {
         bMore = pEE->SpellNextDocument();
-        SetCurTextObj( nullptr );
         if ( bMore )
         {
             // The text has been entered into the engine, when backwards then

@@ -92,14 +92,12 @@ struct TabInfo
     bool        bValid;
 
     SvxTabStop  aTabStop;
-    sal_Int32   nCharPos;
     sal_Int32   nTabPortion;
     long        nStartPosX;
     long        nTabPos;
 
     TabInfo()
         : bValid(false)
-        , nCharPos(0)
         , nTabPortion(0)
         , nStartPosX(0)
         , nTabPos(0)
@@ -990,7 +988,6 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                             // For LEFT / DEFAULT this tab is not considered.
                             aCurrentTab.bValid = true;
                             aCurrentTab.nStartPosX = nTmpWidth;
-                            aCurrentTab.nCharPos = nTmpPos;
                             aCurrentTab.nTabPortion = nTmpPortion;
                         }
 

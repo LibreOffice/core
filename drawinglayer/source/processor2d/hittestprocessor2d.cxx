@@ -46,7 +46,6 @@ namespace drawinglayer
             maDiscreteHitPosition(),
             mfDiscreteHitTolerance(0.0),
             mbHit(false),
-            mbHitToleranceUsed(false),
             mbHitTextOnly(bHitTextOnly)
         {
             // init hit tolerance
@@ -66,9 +65,6 @@ namespace drawinglayer
 
             // generate discrete hit position
             maDiscreteHitPosition = getViewInformation2D().getObjectToViewTransformation() * rLogicHitPosition;
-
-            // check if HitTolerance is used
-            mbHitToleranceUsed = basegfx::fTools::more(getDiscreteHitTolerance(), 0.0);
         }
 
         HitTestProcessor2D::~HitTestProcessor2D()

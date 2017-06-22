@@ -506,7 +506,6 @@ private:
 
     sal_Int32           nPara;
     sal_Int32           nPos;
-    bool                bSimpleClick;
 
                         EditFieldInfo( const EditFieldInfo& ) = delete;
 
@@ -518,7 +517,7 @@ public:
                     {
                         pOutliner = pOutl;
                         nPara = nPa; nPos = nPo;
-                        pTxtColor = nullptr; pFldColor = nullptr; bSimpleClick = false;
+                        pTxtColor = nullptr; pFldColor = nullptr;
                         mpSdrPage = nullptr;
                     }
                     ~EditFieldInfo()
@@ -543,8 +542,6 @@ public:
 
     sal_Int32       GetPara() const { return nPara; }
     sal_Int32       GetPos() const { return nPos; }
-
-    void            SetSimpleClick( bool bSimple ) { bSimpleClick = bSimple; }
 
     const OUString&     GetRepresentation() const                { return aRepresentation; }
     OUString&           GetRepresentation()                      { return aRepresentation; }
@@ -619,7 +616,6 @@ private:
     sal_Int32           nDepthChangedHdlPrevDepth;
     sal_Int16           nMaxDepth;
     const sal_Int16     nMinDepth;
-    sal_Int32           nFirstPage;
 
     OutlinerMode        nOutlinerMode;
 
@@ -807,8 +803,6 @@ public:
 
     const Size&     GetPaperSize() const;
     void            SetPaperSize( const Size& rSize );
-
-    void            SetFirstPageNumber( sal_Int32 n )  { nFirstPage = n; }
 
     void            SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon );
     void            SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon);

@@ -207,7 +207,6 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
     FontLineStyle eUnderline;
     FontLineStyle eOverline;
     FontEmphasisMark eEmphasis;
-    bPardTokenRead = false;
     RTF_CharTypeDef eCharType = NOTDEF_CHARTYPE;
     SvxParaVertAlignItem::Align nFontAlign;
 
@@ -219,7 +218,6 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
         {
         case RTF_PARD:
             RTFPardPlain( true, &pSet );
-            bPardTokenRead = true;
             break;
 
         case RTF_PLAIN:
