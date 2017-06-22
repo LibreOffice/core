@@ -38,29 +38,10 @@ XMLSecurityContext_MSCryptImpl::XMLSecurityContext_MSCryptImpl()
     ://m_pKeysMngr( NULL ) ,
      m_xSecurityEnvironment( nullptr )
 {
-    //Init xmlsec library
-    if( xmlSecInit() < 0 ) {
-        throw RuntimeException() ;
-    }
-
-    //Init xmlsec crypto engine library
-    if( xmlSecCryptoInit() < 0 ) {
-        xmlSecShutdown() ;
-        throw RuntimeException() ;
-    }
-
-    //Enable external stream handlers
-    if( xmlEnableStreamInputCallbacks() < 0 ) {
-        xmlSecCryptoShutdown() ;
-        xmlSecShutdown() ;
-        throw RuntimeException() ;
-    }
 }
 
-XMLSecurityContext_MSCryptImpl::~XMLSecurityContext_MSCryptImpl() {
-    xmlDisableStreamInputCallbacks() ;
-    xmlSecCryptoShutdown() ;
-    xmlSecShutdown() ;
+XMLSecurityContext_MSCryptImpl::~XMLSecurityContext_MSCryptImpl()
+{
 }
 
 sal_Int32 SAL_CALL XMLSecurityContext_MSCryptImpl::addSecurityEnvironment(
