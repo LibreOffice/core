@@ -12,6 +12,7 @@ BOOTSTRAPDIR=../Bootstrap
 include $(BOOTSTRAPDIR)/Makefile.shared
 
 native-code.cxx: $(SRCDIR)/solenv/bin/native-code.py
+	@echo "[build PY ] $@"
 	$< -j -g core -g writer -g calc -g draw -g edit > $@
 
 install:
