@@ -288,7 +288,6 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
     Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
 
     std::vector< DispatchHolder >   aDispatches;
-    OUString                 aAsTemplateArg( "AsTemplate" );
     bool                     bSetInputFilter = false;
     OUString                 aForcedInputFilter;
 
@@ -343,13 +342,11 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
             aArgs[1].Name = "InteractionHandler";
             aArgs[1].Value <<= xInteraction;
 
-            sal_Int16 nMacroExecMode = css::document::MacroExecMode::USE_CONFIG;
             aArgs[2].Name = "MacroExecutionMode";
-            aArgs[2].Value <<= nMacroExecMode;
+            aArgs[2].Value <<= css::document::MacroExecMode::USE_CONFIG;
 
-            sal_Int16 nUpdateDoc = css::document::UpdateDocMode::ACCORDING_TO_CONFIG;
             aArgs[3].Name = "UpdateDocMode";
-            aArgs[3].Value <<= nUpdateDoc;
+            aArgs[3].Value <<= css::document::UpdateDocMode::ACCORDING_TO_CONFIG;
         }
 
         if ( !aDispatchRequest.aPreselectedFactory.isEmpty() )
@@ -475,7 +472,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
             {
                 sal_Int32 nIndex = aArgs.getLength();
                 aArgs.realloc( nIndex+1 );
-                aArgs[nIndex].Name = aAsTemplateArg;
+                aArgs[nIndex].Name = "AsTemplate";
                 if ( aDispatchRequest.aRequestType == REQUEST_FORCENEW )
                     aArgs[nIndex].Value <<= true;
                 else

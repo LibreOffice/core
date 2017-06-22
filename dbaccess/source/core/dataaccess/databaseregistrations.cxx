@@ -184,23 +184,11 @@ namespace dbaccess
         if (aNodeForName.isValid())
             throw ElementExistException( _rName, *this );
 
-        OUString sNewNodeName;
+        // make unique
+        OUString sNewNodeName = "org.openoffice." + _rName;
+        while ( m_aConfigurationRoot.hasByName( sNewNodeName ) )
         {
-            OUStringBuffer aNewNodeName;
-            aNewNodeName.append( "org.openoffice." );
-            aNewNodeName.append( _rName );
-
-            // make unique
-            OUStringBuffer aReset( aNewNodeName );
-            sNewNodeName = aNewNodeName.makeStringAndClear();
-            sal_Int32 i=2;
-            while ( m_aConfigurationRoot.hasByName( sNewNodeName ) )
-            {
-                aNewNodeName = aReset;
-                aNewNodeName.append( " " );
-                aNewNodeName.append( i );
-                sNewNodeName = aNewNodeName.makeStringAndClear();
-            }
+            sNewNodeName = "org.openoffice." + _rName + " 2";
         }
 
         ::utl::OConfigurationNode aNewNode( m_aConfigurationRoot.createNode( sNewNodeName ) );

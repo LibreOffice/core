@@ -1035,7 +1035,7 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
     _rColumns.clear();
 
     OFieldDescription* pActFieldDescr = nullptr;
-    OUString sCreateParam("x");
+    OUString const sCreateParam("x");
     // ReadOnly-Flag
     // On drop no line must be editable.
     // On add only empty lines must be editable.
@@ -1509,7 +1509,7 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType, bool& _bN
         if ( !pType.get() )
         {
             _bNotConvert = false;
-            OUString sCreate("x");
+            OUString const sCreate("x");
             pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,DataType::VARCHAR,_pType->aTypeName,sCreate,50,0,false,bForce);
             if ( !pType.get() )
                 pType = m_pTypeInfo;

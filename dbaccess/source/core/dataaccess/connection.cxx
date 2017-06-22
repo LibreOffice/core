@@ -319,12 +319,11 @@ OConnection::OConnection(ODatabaseSource& _rDB
             Reference<XResultSet> xRes = xMeta->getTableTypes();
             if(xRes.is())
             {
-                OUString sView("VIEW");
                 Reference<XRow> xRow(xRes,UNO_QUERY);
                 while(xRes->next())
                 {
                     OUString sValue = xRow->getString(1);
-                    if( !xRow->wasNull() && sValue == sView)
+                    if( !xRow->wasNull() && sValue == "VIEW")
                     {
                         m_bSupportsViews = true;
                         break;

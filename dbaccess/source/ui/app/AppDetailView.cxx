@@ -76,8 +76,7 @@ OCreationList::OCreationList( OTasksWindow& _rParent )
     ,m_pMouseDownEntry( nullptr )
     ,m_pLastActiveEntry( nullptr )
 {
-    sal_uInt16 nSize = SPACEBETWEENENTRIES;
-    SetSpaceBetweenEntries(nSize);
+    SetSpaceBetweenEntries(SPACEBETWEENENTRIES);
     SetSelectionMode( SelectionMode::NONE );
     SetExtendedWinBits( EWB_NO_AUTO_CURENTRY );
     SetNodeDefaultImages( );

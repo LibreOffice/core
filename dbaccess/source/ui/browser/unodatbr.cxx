@@ -3413,7 +3413,6 @@ void SbaTableQueryBrowser::implAdministrate( SvTreeListEntry* _pApplyTo )
     try
     {
         // get the desktop object
-        sal_Int32 nFrameSearchFlag = FrameSearchFlag::ALL | FrameSearchFlag::GLOBAL ;
         Reference< XDesktop2 > xFrameLoader = Desktop::create( getORB() );
 
         // the initial selection
@@ -3443,7 +3442,7 @@ void SbaTableQueryBrowser::implAdministrate( SvTreeListEntry* _pApplyTo )
             xFrameLoader->loadComponentFromURL(
                 xDocumentModel->getURL(),
                 "_default",
-                nFrameSearchFlag,
+                FrameSearchFlag::ALL | FrameSearchFlag::GLOBAL,
                 aLoadArgPV
             );
         }
