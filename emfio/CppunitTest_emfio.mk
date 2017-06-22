@@ -39,6 +39,7 @@ $(eval $(call gb_CppunitTest_use_libraries,emfio,\
     unotest \
     tl \
     vcl \
+    utl \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,emfio,\

@@ -25,8 +25,6 @@
 #include <tools/stream.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dsize.hxx>
-//#include <com/sun/star/rendering/XCanvasFont.hpp>
-//#include <com/sun/star/rendering/TextDirection.hpp>
 
 // predefines
 class SvStream;
@@ -252,10 +250,6 @@ namespace emfplushelper
         // readers
         void ReadRectangle(SvStream& s, float& x, float& y, float &width, float& height, bool bCompressed = false);
         bool readXForm(SvStream& rIn, basegfx::B2DHomMatrix& rTarget);
-
-        /// data holders access
-//        wmfemfhelper::TargetHolders& getTargetHolders() const { return mrTargetHolders; }
-//        wmfemfhelper::PropertyHolders& getPropertyHolders() const { return mrPropertyHolders; }
     };
 }
 

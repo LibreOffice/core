@@ -64,7 +64,7 @@ bool VCL_DLLPUBLIC WriteDIBBitmapEx(
     const BitmapEx& rSource,
     SvStream& rOStm);
 
-// needed for emfio migration
+// needed in emfio for emf/wmf migration
 sal_uInt32 VCL_DLLPUBLIC getDIBV5HeaderSize();
 
 #endif // INCLUDED_VCL_DIBTOOLS_HXX
