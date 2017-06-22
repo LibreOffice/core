@@ -523,12 +523,10 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
     mbSubTotal(false),
     meCalcState(sc::GroupCalcEnabled)
 {
-    SAL_INFO( "sc.core.formulacell", "ScFormulaCellGroup ctor this " << this);
 }
 
 ScFormulaCellGroup::~ScFormulaCellGroup()
 {
-    SAL_INFO( "sc.core.formulacell", "ScFormulaCellGroup dtor this " << this);
     delete mpCode;
 }
 
@@ -624,7 +622,6 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos ) :
     mbIsExtRef(false),
     aPos(rPos)
 {
-    SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
 }
 
 ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
@@ -656,8 +653,6 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     mbIsExtRef(false),
     aPos(rPos)
 {
-    SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
-
     Compile( rFormula, true, eGrammar );    // bNoListening, Insert does that
     if (!pCode)
         // We need to have a non-NULL token array instance at all times.
@@ -692,7 +687,6 @@ ScFormulaCell::ScFormulaCell(
     mbIsExtRef(false),
     aPos(rPos)
 {
-    SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
     assert(pArray); // Never pass a NULL pointer here.
 
     // Generate RPN token array.
@@ -742,8 +736,6 @@ ScFormulaCell::ScFormulaCell(
     mbIsExtRef(false),
     aPos(rPos)
 {
-    SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
-
     // RPN array generation
     if( pCode->GetLen() && pCode->GetCodeError() == FormulaError::NONE && !pCode->GetCodeLen() )
     {
@@ -792,8 +784,6 @@ ScFormulaCell::ScFormulaCell(
     mbIsExtRef(false),
     aPos(rPos)
 {
-    SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
-
     if (bSubTotal)
         pDocument->AddSubTotalCell(this);
 }
@@ -825,8 +815,6 @@ ScFormulaCell::ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const
     mbIsExtRef(false),
     aPos(rPos)
 {
-    SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
-
     pCode = rCell.pCode->Clone();
 
     //  set back any errors and recompile
@@ -931,8 +919,6 @@ ScFormulaCell::ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const
 
 ScFormulaCell::~ScFormulaCell()
 {
-    SAL_INFO( "sc.core.formulacell", "ScFormulaCell dtor this " << this);
-
     pDocument->RemoveFromFormulaTrack( this );
     pDocument->RemoveFromFormulaTree( this );
     pDocument->RemoveSubTotalCell(this);
@@ -1332,9 +1318,6 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
                 pCode = pPreviousCell->pCode;
                 if (pPreviousCell->mbIsExtRef)
                     pDocument->GetExternalRefManager()->insertRefCellFromTemplate( pPreviousCell, this );
-
-                SAL_INFO( "sc.core.formulacell", "merged '" << aFormula << "' == '" << aShouldBe
-                          << "'extend group to " << xGroup->mnLength );
             }
         }
     }
