@@ -28,6 +28,8 @@
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <wmfemfhelper.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 namespace emfplushelper
 {
@@ -131,14 +133,14 @@ namespace emfplushelper
             case EmfPlusObjectTypeBrush:
             {
                 EMFPBrush *brush;
-                aObjects[index].reset(brush = new EMFPBrush());
+                maEMFPObjects[index].reset(brush = new EMFPBrush());
                 brush->Read(rObjectStream, *this);
                 break;
             }
             case EmfPlusObjectTypePen:
             {
                 EMFPPen *pen;
-                aObjects[index].reset(pen = new EMFPPen());
+                maEMFPObjects[index].reset(pen = new EMFPPen());
                 pen->Read(rObjectStream, *this);
                 break;
             }
@@ -151,21 +153,21 @@ namespace emfplushelper
                 SAL_INFO("cppcanvas.emf", "EMF+\tpath");
                 SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " points: " << std::dec << points << " additional flags: 0x" << std::hex << pathFlags << std::dec);
                 EMFPPath *path;
-                aObjects[index].reset(path = new EMFPPath(points));
+                maEMFPObjects[index].reset(path = new EMFPPath(points));
                 path->Read(rObjectStream, pathFlags, *this);
                 break;
             }
             case EmfPlusObjectTypeRegion:
             {
                 EMFPRegion *region;
-                aObjects[index].reset(region = new EMFPRegion());
+                maEMFPObjects[index].reset(region = new EMFPRegion());
                 region->Read(rObjectStream);
                 break;
             }
             case EmfPlusObjectTypeImage:
             {
                 EMFPImage *image;
-                aObjects[index].reset(image = new EMFPImage);
+                maEMFPObjects[index].reset(image = new EMFPImage);
                 image->type = 0;
                 image->width = 0;
                 image->height = 0;
@@ -177,7 +179,7 @@ namespace emfplushelper
             case EmfPlusObjectTypeFont:
             {
                 EMFPFont *font;
-                aObjects[index].reset(font = new EMFPFont);
+                maEMFPObjects[index].reset(font = new EMFPFont);
                 font->emSize = 0;
                 font->sizeUnit = 0;
                 font->fontFlags = 0;
@@ -187,7 +189,7 @@ namespace emfplushelper
             case EmfPlusObjectTypeStringFormat:
             {
                 EMFPStringFormat *stringFormat;
-                aObjects[index].reset(stringFormat = new EMFPStringFormat());
+                maEMFPObjects[index].reset(stringFormat = new EMFPStringFormat());
                 stringFormat->Read(rObjectStream);
                 break;
             }
@@ -287,49 +289,39 @@ namespace emfplushelper
         return true;
     }
 
-    void EmfPlusHelperData::MapToDevice(double& x, double& y)
+    void EmfPlusHelperData::mappingChanged()
     {
-        // TODO: other units
-        x = 100 * mnMmX*x / mnPixX;
-        y = 100 * mnMmY*y / mnPixY;
+        // Call when mnMmX/mnMmY/mnPixX/mnPixY/mnFrameLeft/mnFrameTop/maWorldTransform/ changes.
+        // Currently not used are mnHDPI/mnVDPI/mnFrameRight/mnFrameBottom. *If* these should
+        // be used in the future, this method will need to be called.
+        //
+        // Re-calculate maMapTransform to contain the complete former transformation so that
+        // it can be applied by a single matrix multiplication or be added to an encapsulated
+        // primitive later
+        //
+        // To evtl. correct and see where this came from, please compare with the implementations
+        // of EmfPlusHelperData::MapToDevice and EmfPlusHelperData::Map* in prev versions
+        maMapTransform = maWorldTransform;
+        maMapTransform *= basegfx::tools::createScaleB2DHomMatrix(100.0 * mnMmX / mnPixX, 100.0 * mnMmY / mnPixY);
+        maMapTransform *= basegfx::tools::createTranslateB2DHomMatrix(double(-mnFrameLeft), double(-mnFrameTop));
+        maMapTransform *= basegfx::tools::createScaleB2DHomMatrix(maBaseTransform.get(0, 0), maBaseTransform.get(1, 1));
     }
 
     ::basegfx::B2DPoint EmfPlusHelperData::Map(double ix, double iy)
     {
-        double x, y;
-
-        x = ix*aWorldTransform.get(0,0) + iy*aWorldTransform.get(0,1) + aWorldTransform.get(0,2);
-        y = ix*aWorldTransform.get(1,0) + iy*aWorldTransform.get(1,1) + aWorldTransform.get(1,2);
-
-        MapToDevice(x, y);
-
-        x -= mnFrameLeft;
-        y -= mnFrameTop;
-
-        x *= aBaseTransform.get(0,0);
-        y *= aBaseTransform.get(1,1);
-
-        return ::basegfx::B2DPoint(x, y);
+        // map in one step using complete MapTransform (see mappingChanged)
+        return maMapTransform * ::basegfx::B2DPoint(ix, iy);
     }
 
     ::basegfx::B2DSize EmfPlusHelperData::MapSize(double iwidth, double iheight)
     {
-        double w, h;
-
-        w = iwidth*aWorldTransform.get(0,0) + iheight*aWorldTransform.get(1,0);
-        h = iwidth*aWorldTransform.get(1,0) + iheight*aWorldTransform.get(1,1);
-
-        MapToDevice(w, h);
-
-        w *= aBaseTransform.get(0,0);
-        h *= aBaseTransform.get(1,1);
-
-        return ::basegfx::B2DSize(w, h);
+        // map in one step using complete MapTransform (see mappingChanged)
+        return maMapTransform * ::basegfx::B2DSize(iwidth, iheight);
     }
 
     void EmfPlusHelperData::EMFPPlusDrawPolygon(const ::basegfx::B2DPolyPolygon& polygon, sal_uInt32 penIndex)
     {
-        const EMFPPen* pen = static_cast<EMFPPen*>(aObjects[penIndex & 0xff].get());
+        const EMFPPen* pen = static_cast<EMFPPen*>(maEMFPObjects[penIndex & 0xff].get());
         SAL_WARN_IF(!pen, "cppcanvas.emf", "emf+ missing pen");
 
         if (pen && polygon.count())
@@ -359,14 +351,15 @@ namespace emfplushelper
         SvMemoryStream& rMS,
         wmfemfhelper::TargetHolders& rTargetHolders,
         wmfemfhelper::PropertyHolders& rPropertyHolders)
-    :   aBaseTransform(),
-        aWorldTransform(),
-        aObjects(),
-        fPageScale(0.0),
-        nOriginX(0),
-        nOriginY(0),
-        nHDPI(0),
-        nVDPI(0),
+    :   maBaseTransform(),
+        maWorldTransform(),
+        maMapTransform(),
+        maEMFPObjects(),
+        mfPageScale(0.0),
+        mnOriginX(0),
+        mnOriginY(0),
+        mnHDPI(0),
+        mnVDPI(0),
         mnFrameLeft(0),
         mnFrameTop(0),
         mnFrameRight(0),
@@ -387,7 +380,8 @@ namespace emfplushelper
         SAL_INFO("cppcanvas.emf", "EMF+ picture frame: " << mnFrameLeft << "," << mnFrameTop << " - " << mnFrameRight << "," << mnFrameBottom);
         rMS.ReadInt32(mnPixX).ReadInt32(mnPixY).ReadInt32(mnMmX).ReadInt32(mnMmY);
         SAL_INFO("cppcanvas.emf", "EMF+ ref device pixel size: " << mnPixX << "x" << mnPixY << " mm size: " << mnMmX << "x" << mnMmY);
-        readXForm(rMS, aBaseTransform);
+        readXForm(rMS, maBaseTransform);
+        mappingChanged();
     }
 
     EmfPlusHelperData::~EmfPlusHelperData()
@@ -466,9 +460,9 @@ namespace emfplushelper
                     {
                         sal_uInt32 header, version;
 
-                        rMS.ReadUInt32(header).ReadUInt32(version).ReadInt32(nHDPI).ReadInt32(nVDPI);
+                        rMS.ReadUInt32(header).ReadUInt32(version).ReadInt32(mnHDPI).ReadInt32(mnVDPI);
                         SAL_INFO("cppcanvas.emf", "EMF+ Header");
-                        SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " version: " << std::dec << version << " horizontal DPI: " << nHDPI << " vertical DPI: " << nVDPI << " dual: " << (flags & 1));
+                        SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " version: " << std::dec << version << " horizontal DPI: " << mnHDPI << " vertical DPI: " << mnVDPI << " dual: " << (flags & 1));
                         break;
                     }
                     case EmfPlusRecordTypeEndOfFile:
@@ -573,8 +567,8 @@ namespace emfplushelper
                         rMS.ReadUInt32(brushIndexOrColor);
                         SAL_INFO("cppcanvas.emf", "EMF+ FillPath slot: " << index);
 
-                        EMFPPlusFillPolygon(static_cast<EMFPPath*>(aObjects[index].get())->GetPolygon(*this), flags & 0x8000, brushIndexOrColor);
-    //                    EMFPPlusFillPolygon(static_cast<EMFPPath*>(aObjects[index])->GetPolygon(*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
+                        EMFPPlusFillPolygon(static_cast<EMFPPath*>(maEMFPObjects[index].get())->GetPolygon(*this), flags & 0x8000, brushIndexOrColor);
+    //                    EMFPPlusFillPolygon(static_cast<EMFPPath*>(maEMFPObjects[index])->GetPolygon(*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
                     }
                     break;
                     case EmfPlusRecordTypeDrawEllipse:
@@ -705,7 +699,7 @@ namespace emfplushelper
                         rMS.ReadUInt32(penIndex);
                         SAL_INFO("cppcanvas.emf", "EMF+ DrawPath");
                         SAL_INFO("cppcanvas.emf", "EMF+\tpen: " << penIndex);
-                        EMFPPath* path = static_cast<EMFPPath*>(aObjects[flags & 0xff].get());
+                        EMFPPath* path = static_cast<EMFPPath*>(maEMFPObjects[flags & 0xff].get());
                         SAL_WARN_IF(!path, "cppcanvas.emf", "EmfPlusRecordTypeDrawPath missing path");
 
                         EMFPPlusDrawPolygon(path->GetPolygon(*this), penIndex);
@@ -768,10 +762,10 @@ namespace emfplushelper
                         SAL_INFO("cppcanvas.emf", "EMF+ " << (type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage") << "attributes index: " << attrIndex << "source unit: " << sourceUnit);
                         SAL_INFO("cppcanvas.emf", "EMF+\tTODO: use image attributes");
 
-                        if (sourceUnit == 2 && aObjects[flags & 0xff].get())
+                        if (sourceUnit == 2 && maEMFPObjects[flags & 0xff].get())
                         {
                             // we handle only GraphicsUnit.Pixel now
-                            EMFPImage& image = *static_cast<EMFPImage *>(aObjects[flags & 0xff].get());
+                            EMFPImage& image = *static_cast<EMFPImage *>(maEMFPObjects[flags & 0xff].get());
                             float sx, sy, sw, sh;
                             sal_Int32 aCount;
                             ReadRectangle(rMS, sx, sy, sw, sh);
@@ -867,7 +861,7 @@ namespace emfplushelper
                             rMS.ReadFloat(lx).ReadFloat(ly).ReadFloat(lw).ReadFloat(lh);
                             SAL_INFO("cppcanvas.emf", "EMF+ DrawString layoutRect: " << lx << "," << ly << " - " << lw << "x" << lh);
                             OUString text = read_uInt16s_ToOUString(rMS, stringLength);
-                            EMFPStringFormat *stringFormat = static_cast< EMFPStringFormat* >(aObjects[formatId & 0xff].get());
+                            EMFPStringFormat *stringFormat = static_cast< EMFPStringFormat* >(maEMFPObjects[formatId & 0xff].get());
     //                        css::rendering::FontRequest aFontRequest;
     //
     //                        if (stringFormat)
@@ -922,9 +916,9 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeSetPageTransform:
                     {
-                        rMS.ReadFloat(fPageScale);
+                        rMS.ReadFloat(mfPageScale);
                         SAL_INFO("cppcanvas.emf", "EMF+ SetPageTransform");
-                        SAL_INFO("cppcanvas.emf", "EMF+\tscale: " << fPageScale << " unit: " << flags);
+                        SAL_INFO("cppcanvas.emf", "EMF+\tscale: " << mfPageScale << " unit: " << flags);
 
                         if (flags != UnitTypePixel)
                         {
@@ -932,16 +926,17 @@ namespace emfplushelper
                         }
                         else
                         {
-                            mnMmX *= fPageScale;
-                            mnMmY *= fPageScale;
+                            mnMmX *= mfPageScale;
+                            mnMmY *= mfPageScale;
+                            mappingChanged();
                         }
                         break;
                     }
                     case EmfPlusRecordTypeSetRenderingOrigin:
                     {
-                        rMS.ReadInt32(nOriginX).ReadInt32(nOriginY);
+                        rMS.ReadInt32(mnOriginX).ReadInt32(mnOriginY);
                         SAL_INFO("cppcanvas.emf", "EMF+ SetRenderingOrigin");
-                        SAL_INFO("cppcanvas.emf", "EMF+\torigin [x,y]: " << nOriginX << "," << nOriginY);
+                        SAL_INFO("cppcanvas.emf", "EMF+\torigin [x,y]: " << mnOriginX << "," << mnOriginY);
                         break;
                     }
                     case EmfPlusRecordTypeSetTextRenderingHint:
@@ -1017,17 +1012,19 @@ namespace emfplushelper
                         SAL_INFO("cppcanvas.emf", "EMF+ SetWorldTransform");
                         basegfx::B2DHomMatrix transform;
                         readXForm(rMS, transform);
-                        aWorldTransform = transform;
+                        maWorldTransform = transform;
+                        mappingChanged();
                         SAL_INFO("cppcanvas.emf",
-                            "EMF+\tm11: " << aWorldTransform.get(0,0) << "\tm12: " << aWorldTransform.get(1,0) <<
-                            "\tm21: " << aWorldTransform.get(0,1) << "\tm22: " << aWorldTransform.get(1,1) <<
-                            "\tdx: " << aWorldTransform.get(0,2) << "\tdy: " << aWorldTransform.get(1,2));
+                            "EMF+\tm11: " << maWorldTransform.get(0,0) << "\tm12: " << maWorldTransform.get(1,0) <<
+                            "\tm21: " << maWorldTransform.get(0,1) << "\tm22: " << maWorldTransform.get(1,1) <<
+                            "\tdx: " << maWorldTransform.get(0,2) << "\tdy: " << maWorldTransform.get(1,2));
                         break;
                     }
                     case EmfPlusRecordTypeResetWorldTransform:
                     {
                         SAL_INFO("cppcanvas.emf", "EMF+ ResetWorldTransform");
-                        aWorldTransform.identity();
+                        maWorldTransform.identity();
+                        mappingChanged();
                         break;
                     }
                     case EmfPlusRecordTypeMultiplyWorldTransform:
@@ -1044,19 +1041,21 @@ namespace emfplushelper
                         if (flags & 0x2000)
                         {
                             // post multiply
-                            aWorldTransform *= transform;
+                            maWorldTransform *= transform;
                         }
                         else
                         {
                             // pre multiply
-                            transform *= aWorldTransform;
-                            aWorldTransform = transform;
+                            transform *= maWorldTransform;
+                            maWorldTransform = transform;
                         }
 
+                        mappingChanged();
+
                         SAL_INFO("cppcanvas.emf",
-                            "EMF+\tmatrix m11: " << aWorldTransform.get(0, 0) << "m12: " << aWorldTransform.get(0, 1) <<
-                            "EMF+\tm21: " << aWorldTransform.get(1, 0) << "m22: " << aWorldTransform.get(1, 1) <<
-                            "EMF+\tdx: " << aWorldTransform.get(2, 0) << "dy: " << aWorldTransform.get(2, 1));
+                            "EMF+\tmatrix m11: " << maWorldTransform.get(0, 0) << "m12: " << maWorldTransform.get(0, 1) <<
+                            "EMF+\tm21: " << maWorldTransform.get(1, 0) << "m22: " << maWorldTransform.get(1, 1) <<
+                            "EMF+\tdx: " << maWorldTransform.get(2, 0) << "dy: " << maWorldTransform.get(2, 1));
                         break;
                     }
                     case EmfPlusRecordTypeTranslateWorldTransform:
@@ -1077,19 +1076,21 @@ namespace emfplushelper
                         if (flags & 0x2000)
                         {
                             // post multiply
-                            aWorldTransform *= transform;
+                            maWorldTransform *= transform;
                         }
                         else
                         {
                             // pre multiply
-                            transform *= aWorldTransform;
-                            aWorldTransform = transform;
+                            transform *= maWorldTransform;
+                            maWorldTransform = transform;
                         }
 
+                        mappingChanged();
+
                         SAL_INFO("cppcanvas.emf",
-                            "EMF+\tmatrix m11: " << aWorldTransform.get(0, 0) << "m12: " << aWorldTransform.get(0, 1) <<
-                            "EMF+\tm21: " << aWorldTransform.get(1, 0) << "m22: " << aWorldTransform.get(1, 1) <<
-                            "EMF+\tdx: " << aWorldTransform.get(2, 0) << "dy: " << aWorldTransform.get(2, 1));
+                            "EMF+\tmatrix m11: " << maWorldTransform.get(0, 0) << "m12: " << maWorldTransform.get(0, 1) <<
+                            "EMF+\tm21: " << maWorldTransform.get(1, 0) << "m22: " << maWorldTransform.get(1, 1) <<
+                            "EMF+\tdx: " << maWorldTransform.get(2, 0) << "dy: " << maWorldTransform.get(2, 1));
                         break;
                     }
                     case EmfPlusRecordTypeScaleWorldTransform:
@@ -1102,26 +1103,28 @@ namespace emfplushelper
 
                         SAL_INFO("cppcanvas.emf", "EMF+ ScaleWorldTransform Sx: " << transform.get(0,0) << " Sy: " << transform.get(1,1));
                         SAL_INFO("cppcanvas.emf",
-                            "EMF+\t m11: " << aWorldTransform.get(0,0) << ", m12: " << aWorldTransform.get(0,1) <<
-                            "EMF+\t m21: " << aWorldTransform.get(1,0) << ", m22: " << aWorldTransform.get(1,1) <<
-                            "EMF+\t dx: " << aWorldTransform.get(2,0) << ", dy: " << aWorldTransform.get(2,1));
+                            "EMF+\t m11: " << maWorldTransform.get(0,0) << ", m12: " << maWorldTransform.get(0,1) <<
+                            "EMF+\t m21: " << maWorldTransform.get(1,0) << ", m22: " << maWorldTransform.get(1,1) <<
+                            "EMF+\t dx: " << maWorldTransform.get(2,0) << ", dy: " << maWorldTransform.get(2,1));
 
                         if (flags & 0x2000)
                         {
                             // post multiply
-                            aWorldTransform *= transform;
+                            maWorldTransform *= transform;
                         }
                         else
                         {
                             // pre multiply
-                            transform *= aWorldTransform;
-                            aWorldTransform = transform;
+                            transform *= maWorldTransform;
+                            maWorldTransform = transform;
                         }
 
+                        mappingChanged();
+
                         SAL_INFO("cppcanvas.emf",
-                            "EMF+\t m11: " << aWorldTransform.get(0, 0) << ", m12: " << aWorldTransform.get(0, 1) <<
-                            "EMF+\t m21: " << aWorldTransform.get(1, 0) << ", m22: " << aWorldTransform.get(1, 1) <<
-                            "EMF+\t dx: " << aWorldTransform.get(2, 0) << ", dy: " << aWorldTransform.get(2, 1));
+                            "EMF+\t m11: " << maWorldTransform.get(0, 0) << ", m12: " << maWorldTransform.get(0, 1) <<
+                            "EMF+\t m21: " << maWorldTransform.get(1, 0) << ", m22: " << maWorldTransform.get(1, 1) <<
+                            "EMF+\t dx: " << maWorldTransform.get(2, 0) << ", dy: " << maWorldTransform.get(2, 1));
                         break;
                     }
                     case EmfPlusRecordTypeSetClipRect:
@@ -1161,7 +1164,7 @@ namespace emfplushelper
                         SAL_INFO("cppcanvas.emf", "EMF+ SetClipPath combine mode: " << combineMode);
                         SAL_INFO("cppcanvas.emf", "EMF+\tpath in slot: " << (flags & 0xff));
 
-                        EMFPPath& path = *static_cast<EMFPPath*>(aObjects[flags & 0xff].get());
+                        EMFPPath& path = *static_cast<EMFPPath*>(maEMFPObjects[flags & 0xff].get());
                         ::basegfx::B2DPolyPolygon& clipPoly(path.GetPolygon(*this));
                         // clipPoly.transform(rState.mapModeTransform);
 
@@ -1192,7 +1195,7 @@ namespace emfplushelper
                         int combineMode = (flags >> 8) & 0xf;
                         SAL_INFO("cppcanvas.emf", "EMF+ SetClipRegion");
                         SAL_INFO("cppcanvas.emf", "EMF+\tregion in slot: " << (flags & 0xff) << " combine mode: " << combineMode);
-                        EMFPRegion *region = static_cast<EMFPRegion*>(aObjects[flags & 0xff].get());
+                        EMFPRegion *region = static_cast<EMFPRegion*>(maEMFPObjects[flags & 0xff].get());
 
                         // reset clip
                         if (region && region->parts == 0 && region->initialState == EmfPlusRegionInitialStateInfinite)

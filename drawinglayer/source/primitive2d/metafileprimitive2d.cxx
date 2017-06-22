@@ -21,7 +21,7 @@
 #include <wmfemfhelper.hxx>
 
 //#include <basegfx/tools/canvastools.hxx>
-//#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 //#include <basegfx/color/bcolor.hxx>
 //#include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 //#include <vcl/lineinfo.hxx>
@@ -29,7 +29,7 @@
 //#include <drawinglayer/attribute/strokeattribute.hxx>
 //#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 //#include <vcl/metaact.hxx>
-//#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 //#include <basegfx/matrix/b2dhommatrixtools.hxx>
 //#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 //#include <basegfx/polygon/b2dpolygontools.hxx>
