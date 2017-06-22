@@ -78,13 +78,9 @@ void lcl_setRows_throw(const Reference< XResultSet >& _xResultSet,sal_Int32 _nTy
 
 ODatabaseMetaData::ODatabaseMetaData(OConnection& _rCon)
     :m_rConnection(_rCon)
-    ,m_bUseCatalog(true)
     ,meta(_rCon.getConnectionSettings().cppConnection->getMetaData())
     ,identifier_quote_string_set(false)
 {
-    osl_atomic_increment(&m_refCount);
-    m_bUseCatalog = !(usesLocalFiles() || usesLocalFilePerTable());
-    osl_atomic_decrement(&m_refCount);
 }
 
 ODatabaseMetaData::~ODatabaseMetaData()

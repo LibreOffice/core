@@ -43,7 +43,6 @@ typedef std::vector< OString* > LngLineList;
 class LngParser
 {
 private:
-    sal_uInt16 nError;
     LngLineList *pLines;
     OString sSource;
     std::vector<OString> aLanguages;
