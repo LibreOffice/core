@@ -922,7 +922,7 @@ void l10nMem::addKey(int             iLineNo,
         l10nMem_file_entry& curF = mcFileList[miCurFileInx];
         vector<l10nMem_enus_entry>::iterator it = mcENUSlist.begin();
 
-        // file is registred, so we need to add the entry at the end of the file range
+        // file is registered, so we need to add the entry at the end of the file range
         curF.miEnd++;
         miCurENUSinx = curF.miEnd;
         mcENUSlist.insert(it + curF.miEnd,

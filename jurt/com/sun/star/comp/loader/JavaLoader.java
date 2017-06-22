@@ -356,7 +356,7 @@ public class JavaLoader implements XImplementationLoader,
      * the call is delegated to that method. Otherwise a default registration
      * will be accomplished.</p>
      *
-     * @param       regKey                  the root key under that the component should be registred.
+     * @param       regKey                  the root key under that the component should be registered.
      * @param       implementationLoaderUrl specifies the loader, the component is loaded by.
      * @param       locationUrl             points to an archive (JAR file) which contains a component.
      * @return      true if registration is successfully - otherwise false.

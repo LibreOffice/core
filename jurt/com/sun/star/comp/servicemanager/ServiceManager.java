@@ -309,7 +309,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * <p>The listener is notified when a service is added (removed) to (from)
      * the <code>ServiceManager</code>.</p>
      *
-     * <p>If the listener is already registred a
+     * <p>If the listener is already registered a
      * <code>com.sun.star.uno.RuntimeException</code> will be thrown.</p>
      *
      * @param   xListener   the new listener which should been added.
@@ -322,7 +322,7 @@ public class ServiceManager implements XMultiServiceFactory,
             throw new com.sun.star.uno.RuntimeException("Listener must not be null");
 
           if ( eventListener.contains(xListener) )
-              throw new com.sun.star.uno.RuntimeException("Listener already registred.");
+              throw new com.sun.star.uno.RuntimeException("Listener already registered.");
 
            eventListener.add(xListener);
     }
@@ -355,7 +355,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * interface.</p>
      *
      * @param   object object which provides a <code>XServiceInfo</code> interface.
-     * @return  true if the component is registred otherwise false.
+     * @return  true if the component is registered otherwise false.
      *
      * @see     com.sun.star.container.XSet
      * @see     com.sun.star.lang.XServiceInfo
@@ -395,7 +395,7 @@ public class ServiceManager implements XMultiServiceFactory,
 
         if ( factoriesByImplNames.containsKey( xServiceInfo.getImplementationName() ) ) {
             throw new com.sun.star.container.ElementExistException(
-                xServiceInfo.getImplementationName() + " already registred"
+                xServiceInfo.getImplementationName() + " already registered"
             );
         }
 
@@ -508,7 +508,7 @@ public class ServiceManager implements XMultiServiceFactory,
     /**
      * Checks if the any components are registered.
      *
-     * @return  true - if the list of the registred components is not empty - otherwise false.
+     * @return  true - if the list of the registered components is not empty - otherwise false.
      * @see     com.sun.star.container.XElementAccess
      */
     public boolean hasElements() {
