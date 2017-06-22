@@ -23,6 +23,7 @@
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/TextRangeSelection.hpp>
 
+#include <osl/mutex.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 #include <svl/intitem.hxx>
@@ -1272,7 +1273,7 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aProp
                     // Get Default from ItemPool
                     if(SfxItemPool::IsWhich(pMap->nWID))
                     {
-                        SfxItemSet aSet( *pPool,    {{pMap->nWID, pMap->nWID}});
+                        SfxItemSet aSet( *pPool,    pMap->nWID, pMap->nWID);
                         aSet.Put(pPool->GetDefaultItem(pMap->nWID));
                         return SvxItemPropertySet::getPropertyValue(pMap, aSet, true, false );
                     }
@@ -1957,12 +1958,7 @@ void SAL_CALL SvxUnoTextBase::setString( const OUString& aString )
 uno::Reference< container::XEnumeration > SAL_CALL SvxUnoTextBase::createEnumeration()
 {
     SolarMutexGuard aGuard;
-
-    ESelection aSelection;
-    ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
-    SetSelection( aSelection );
-
-    uno::Reference< container::XEnumeration > xEnum( static_cast<container::XEnumeration*>(new SvxUnoTextContentEnumeration( *this )) );
+    uno::Reference< container::XEnumeration > xEnum( static_cast<container::XEnumeration*>( new SvxUnoTextContentEnumeration( *this, maSelection ) ) );
     return xEnum;
 }
 

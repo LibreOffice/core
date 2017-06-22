@@ -507,24 +507,6 @@ public:
 };
 
 
-class SvxUnoTextContentEnumeration : public ::cppu::WeakAggImplHelper1< css::container::XEnumeration >
-{
-private:
-    css::uno::Reference< css::text::XText > mxParentText;
-    std::unique_ptr<SvxEditSource>          mpEditSource;
-    sal_Int32               mnNextParagraph;
-    const SvxUnoTextBase&   mrText;
-
-public:
-    SvxUnoTextContentEnumeration( const SvxUnoTextBase& _rText ) throw();
-    virtual ~SvxUnoTextContentEnumeration() throw() override;
-
-    // css::container::XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) override;
-    virtual css::uno::Any SAL_CALL nextElement(  ) override;
-};
-
-
 class SvxUnoTextContent : public SvxUnoTextRangeBase,
                           public css::text::XTextContent,
                           public css::container::XEnumerationAccess,
@@ -599,6 +581,26 @@ public:
 };
 
 
+class SvxUnoTextContentEnumeration : public ::cppu::WeakAggImplHelper1< css::container::XEnumeration >
+{
+private:
+    css::uno::Reference< css::text::XText > mxParentText;
+    std::unique_ptr<SvxEditSource>          mpEditSource;
+    sal_Int32               mnNextParagraph;
+    const SvxUnoTextBase&   mrText;
+    const ESelection        maSelection;
+    std::vector< rtl::Reference<SvxUnoTextContent> >  maContents;
+
+public:
+    SvxUnoTextContentEnumeration( const SvxUnoTextBase& _rText, const ESelection rSel ) throw();
+    virtual ~SvxUnoTextContentEnumeration() throw() override;
+
+    // css::container::XEnumeration
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) override;
+    virtual css::uno::Any SAL_CALL nextElement(  ) override;
+};
+
+
 class SvxUnoTextRangeEnumeration : public ::cppu::WeakAggImplHelper1< css::container::XEnumeration >
 {
 private:
@@ -606,11 +608,12 @@ private:
     css::uno::Reference< css::text::XText > mxParentText;
     const SvxUnoTextBase&    mrParentText;
     sal_Int32                mnParagraph;
-    std::vector<sal_Int32>*  mpPortions;
+    std::vector< rtl::Reference<SvxUnoTextRange> >  maPortions;
     sal_uInt16               mnNextPortion;
+    const ESelection         mnSel;
 
 public:
-    SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rText, sal_Int32 nPara ) throw();
+    SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rText, sal_Int32 nPara, const ESelection rSel ) throw();
     virtual ~SvxUnoTextRangeEnumeration() throw() override;
 
     // css::container::XEnumeration
