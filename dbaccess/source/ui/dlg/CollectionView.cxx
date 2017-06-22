@@ -157,10 +157,9 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click, Button*, void)
                     aValue.Value <<= OUString("folder");
                     aValues[1] <<= aValue;
 
-                    InteractionClassification eClass = InteractionClassification_ERROR;
-                    css::ucb::IOErrorCode eError = IOErrorCode_NOT_EXISTING_PATH;
-                    OUString sTemp;
-                    InteractiveAugmentedIOException aException(sTemp,Reference<XInterface>(),eClass,eError,aValues);
+                    InteractiveAugmentedIOException aException(OUString(),Reference<XInterface>(),
+                                                               InteractionClassification_ERROR,
+                                                               IOErrorCode_NOT_EXISTING_PATH,aValues);
 
                     Reference<XInteractionHandler2> xHandler(
                         InteractionHandler::createWithParent(m_xContext, VCLUnoHelper::GetInterface( this )));

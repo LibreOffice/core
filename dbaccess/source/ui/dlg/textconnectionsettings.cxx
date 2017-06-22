@@ -71,8 +71,7 @@ namespace dbaui
     {
         if ( m_pTextConnectionHelper->prepareLeave() )
         {
-            bool bUnused = false;
-            m_pTextConnectionHelper->FillItemSet( m_rItems, bUnused );
+            m_pTextConnectionHelper->FillItemSet( m_rItems, false/*bUnused*/ );
             EndDialog( RET_OK );
         }
     }

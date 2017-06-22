@@ -473,9 +473,7 @@ void BackendImpl::implProcessHelp(
                             else
                                 aLang = "en";
 
-                            OUString aMod("help");
-
-                            HelpIndexer aIndexer(aLang, aMod, langFolderDestExpanded, langFolderDestExpanded);
+                            HelpIndexer aIndexer(aLang, "help", langFolderDestExpanded, langFolderDestExpanded);
                             aIndexer.indexDocuments();
                         }
 
@@ -496,7 +494,7 @@ void BackendImpl::implProcessHelp(
 
                                 // Remove CR/LF
                                 OUString aErrMsg( aErrorInfo.m_aErrorMsg );
-                                sal_Unicode nCR = 13, nLF = 10;
+                                sal_Unicode const nCR = 13, nLF = 10;
                                 sal_Int32 nSearchCR = aErrMsg.indexOf( nCR );
                                 sal_Int32 nSearchLF = aErrMsg.indexOf( nLF );
                                 sal_Int32 nCopy;

@@ -2134,9 +2134,8 @@ void OApplicationController::renameEntry()
                         }
                         catch(const ElementExistException& e)
                         {
-                            OUString sStatus("S1000");
-                            OUString sMsg = OUString( ModuleRes( STR_NAME_ALREADY_EXISTS ) );
-                            showError(SQLExceptionInfo(SQLException(sMsg.replaceAll("#", e.Message), e.Context, sStatus, 0, Any())));
+                            OUString sMsg( ModuleRes( STR_NAME_ALREADY_EXISTS ) );
+                            showError(SQLExceptionInfo(SQLException(sMsg.replaceAll("#", e.Message), e.Context, "S1000", 0, Any())));
                         }
                         catch(const Exception& )
                         {

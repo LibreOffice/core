@@ -262,7 +262,6 @@ void OTableFieldDescWin::LoseFocus()
 
 bool OTableFieldDescWin::PreNotify( NotifyEvent& rNEvt )
 {
-    bool bHandled = false;
     if (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS)
     {
         if( getGenPage() && getGenPage()->HasChildPathFocus() )
@@ -270,7 +269,7 @@ bool OTableFieldDescWin::PreNotify( NotifyEvent& rNEvt )
         else
             m_eChildFocus = HELP;
     }
-    return bHandled || TabPage::PreNotify(rNEvt);
+    return TabPage::PreNotify(rNEvt);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
