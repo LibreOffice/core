@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_e1404c0a",
+        "filename": "sfx2/source/control/charmapcontrol.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1001193
+      },
+      "writtenOn": "2017-06-22T14:00:40Z",
+      "side": 1,
+      "message": "here",
+      "range": {
+        "startLine": 49,
+        "startChar": 8,
+        "endLine": 49,
+        "endChar": 46
+      },
+      "revId": "a01217a1f478942b9c6bd29702ca44d6789a71e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_01463823",
+        "filename": "sfx2/source/control/charmapcontrol.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1001193
+      },
+      "writtenOn": "2017-06-22T14:00:40Z",
+      "side": 1,
+      "message": "here",
+      "range": {
+        "startLine": 99,
+        "startChar": 8,
+        "endLine": 99,
+        "endChar": 45
+      },
+      "revId": "a01217a1f478942b9c6bd29702ca44d6789a71e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
