@@ -61,7 +61,7 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
 
         if (rProp.Name == "AsTemplate")
         {
-            ISSET_AsTemplate = rProp.Value >>= AsTemplate;
+            rProp.Value >>= AsTemplate;
             addModelProp(rProp);
         }
         else if (rProp.Name == "Author")
@@ -79,7 +79,6 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         else if (rProp.Name == "ComponentData")
         {
             ComponentData = rProp.Value;
-            ISSET_ComponentData = ComponentData.hasValue();
             addModelProp(rProp);
         }
         else if (rProp.Name == "FileName")
@@ -89,7 +88,6 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         else if (rProp.Name == "FilterData")
         {
             FilterData = rProp.Value;
-            ISSET_FilterData = FilterData.hasValue();
             addModelProp(rProp);
         }
         else if (rProp.Name == "FilterName")
@@ -111,12 +109,12 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         }
         else if (rProp.Name == "Hidden")
         {
-            ISSET_Hidden = rProp.Value >>= Hidden;
+            rProp.Value >>= Hidden;
             addModelProp(rProp);
         }
         else if (rProp.Name == "HierarchicalDocumentName")
         {
-            ISSET_HierarchicalDocumentName = rProp.Value >>= HierarchicalDocumentName;
+            rProp.Value >>= HierarchicalDocumentName;
             addModelProp(rProp);
         }
         else if (rProp.Name == "OutputStream")
@@ -147,12 +145,12 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         }
         else if (rProp.Name == "OpenNewView")
         {
-            ISSET_OpenNewView = rProp.Value >>= OpenNewView;
+            rProp.Value >>= OpenNewView;
             addRegularProp(rProp);
         }
         else if (rProp.Name == "Overwrite")
         {
-            ISSET_Overwrite = rProp.Value >>= Overwrite;
+            rProp.Value >>= Overwrite;
             addModelProp(rProp);
         }
         else if (rProp.Name == "Password")
@@ -173,12 +171,12 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         }
         else if (rProp.Name == "Preview")
         {
-            ISSET_Preview = rProp.Value >>= Preview;
+            rProp.Value >>= Preview;
             addModelProp(rProp);
         }
         else if (rProp.Name == "ReadOnly")
         {
-            ISSET_ReadOnly = rProp.Value >>= ReadOnly;
+            rProp.Value >>= ReadOnly;
             addRegularProp(rProp);
         }
         else if (rProp.Name == "Referer")
@@ -187,12 +185,12 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         }
         else if (rProp.Name == "SetEmbedded")
         {
-            ISSET_SetEmbedded = rProp.Value >>= SetEmbedded;
+            rProp.Value >>= SetEmbedded;
             addRegularProp(rProp);
         }
         else if (rProp.Name == "Silent")
         {
-            ISSET_Silent = rProp.Value >>= Silent;
+            rProp.Value >>= Silent;
             addRegularProp(rProp);
         }
         else if (rProp.Name == "StatusIndicator")
@@ -219,7 +217,7 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         }
         else if (rProp.Name == "Unpacked")
         {
-            ISSET_Unpacked = rProp.Value >>= Unpacked;
+            rProp.Value >>= Unpacked;
             addModelProp(rProp);
         }
         else if (rProp.Name == "URL")
@@ -229,18 +227,17 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         }
         else if (rProp.Name == "Version")
         {
-            ISSET_Version = rProp.Value >>= Version;
+            rProp.Value >>= Version;
             addModelProp(rProp);
         }
         else if (rProp.Name == "ViewData")
         {
             ViewData = rProp.Value;
-            ISSET_ViewData = ViewData.hasValue();
             addModelProp(rProp);
         }
         else if (rProp.Name == "ViewId")
         {
-            ISSET_ViewId = rProp.Value >>= ViewId;
+            rProp.Value >>= ViewId;
             addModelProp(rProp);
         }
         else if (rProp.Name == "WinExtent")
@@ -263,41 +260,25 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
 void MediaDescriptorHelper::impl_init()
 {
     AsTemplate = false;
-    ISSET_AsTemplate = false;
 
-    ISSET_ComponentData = false;
-
-    ISSET_FilterData = false;
     ISSET_FilterName = false;
 
     Hidden = false;
-    ISSET_Hidden = false;
-    ISSET_HierarchicalDocumentName = false;
     ISSET_OutputStream = false;
     ISSET_InputStream = false;
     OpenNewView = false;
-    ISSET_OpenNewView = false;
     Overwrite = false;
-    ISSET_Overwrite = false;
 
     Preview = false;
-    ISSET_Preview = false;
     ReadOnly = false;
-    ISSET_ReadOnly = false;
     Silent = false;
-    ISSET_Silent = false;
     Unpacked = false;
-    ISSET_Unpacked = false;
     ISSET_URL = false;
     Version = 0;
-    ISSET_Version = false;
 
-    ISSET_ViewData = false;
     ViewId = 0;
-    ISSET_ViewId = false;
 
     SetEmbedded = false;
-    ISSET_SetEmbedded = false;
 
     ISSET_Storage = false;
     ISSET_Stream = false;

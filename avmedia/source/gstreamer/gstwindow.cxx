@@ -35,8 +35,7 @@ namespace avmedia { namespace gstreamer {
 
 
 Window::Window() :
-    meZoomLevel( media::ZoomLevel_NOT_AVAILABLE ),
-    mnPointerType( awt::SystemPointer::ARROW )
+    meZoomLevel( media::ZoomLevel_NOT_AVAILABLE )
 {
 }
 
@@ -74,9 +73,8 @@ media::ZoomLevel SAL_CALL Window::getZoomLevel(  )
     return meZoomLevel;
 }
 
-void SAL_CALL Window::setPointerType( sal_Int32 nPointerType )
+void SAL_CALL Window::setPointerType( sal_Int32 /*nPointerType*/ )
 {
-    mnPointerType = nPointerType;
 }
 
 // XWindow

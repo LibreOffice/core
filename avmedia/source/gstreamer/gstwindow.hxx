@@ -76,7 +76,6 @@ public:
 private:
 
     css::media::ZoomLevel                       meZoomLevel;
-    int                                         mnPointerType;
 };
 
 } // namespace gstreamer

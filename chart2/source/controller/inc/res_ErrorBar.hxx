@@ -103,8 +103,6 @@ private:
 
     bool                 m_bErrorKindUnique;
     bool                 m_bIndicatorUnique;
-    bool                 m_bPlusUnique;
-    bool                 m_bMinusUnique;
     bool                 m_bRangePosUnique;
     bool                 m_bRangeNegUnique;
 

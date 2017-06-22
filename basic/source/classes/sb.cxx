@@ -915,7 +915,6 @@ StarBASIC::StarBASIC( StarBASIC* p, bool bIsDocBasic  )
     : SbxObject("StarBASIC"), bDocBasic( bIsDocBasic )
 {
     SetParent( p );
-    pLibInfo = nullptr;
     bNoRtl = bBreak = false;
     bVBAEnabled = false;
 

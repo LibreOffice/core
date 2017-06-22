@@ -40,7 +40,6 @@ class VCLXAccessibleEdit : public VCLXAccessibleTextComponent,
     friend class VCLXAccessibleBox;
 
 private:
-    sal_Int32   m_nSelectionStart;
     sal_Int32   m_nCaretPosition;
 
 protected:

@@ -54,14 +54,13 @@ class SbiStream
     sal_uInt64  nLine;
     short  nLen;                    // buffer length
     SbiStreamFlags  nMode;
-    short  nChan;
     ErrCode nError;
     void   MapError();
 
 public:
     SbiStream();
    ~SbiStream();
-    ErrCode Open( short, const OString&, StreamMode, SbiStreamFlags, short );
+    ErrCode Open( const OString&, StreamMode, SbiStreamFlags, short );
     ErrCode Close();
     ErrCode Read(OString&, sal_uInt16 = 0, bool bForceReadingPerByte=false);
     ErrCode Read( char& );

@@ -70,7 +70,6 @@ public:
     SbiCodeGen    aGen;             // Code-Generator
     SbiSymPool*   pPool;
     short         nBase;            // OPTION BASE-value
-    bool          bText;            // OPTION COMPARE TEXT
     bool          bExplicit;        // true: OPTION EXPLICIT
     bool          bClassModule;     // true: OPTION ClassModule
     StringVector  aIfaceVector;     // Holds all interfaces implemented by a class module

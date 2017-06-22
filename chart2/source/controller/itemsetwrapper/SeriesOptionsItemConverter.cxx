@@ -65,7 +65,6 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         , m_bConnectBars(false)
         , m_bSupportingAxisSideBySide(false)
         , m_bGroupBarsPerAxis(true)
-        , m_bAllSeriesAttachedToSameAxis(true)
         , m_nAllSeriesAxisIndex(-1)
         , m_bSupportingStartingAngle(false)
         , m_nStartingAngle(90)
@@ -128,7 +127,6 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         if( m_bSupportingAxisSideBySide && xDiagramProperties.is() )
         {
             xDiagramProperties->getPropertyValue( "GroupBarsPerAxis" ) >>= m_bGroupBarsPerAxis;
-            m_bAllSeriesAttachedToSameAxis = DataSeriesHelper::areAllSeriesAttachedToSameAxis( xChartType, m_nAllSeriesAxisIndex );
         }
 
         m_bSupportingStartingAngle = ChartTypeHelper::isSupportingStartingAngle( xChartType );

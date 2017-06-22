@@ -428,8 +428,7 @@ void DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
 }
 
 DlgEdFuncSelect::DlgEdFuncSelect (DlgEditor& rParent_) :
-    DlgEdFunc(rParent_),
-    bMarkAction(false)
+    DlgEdFunc(rParent_)
 {
 }
 
@@ -485,7 +484,6 @@ void DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 // select object
                 rView.BegMarkObj(aMDPos);
-                bMarkAction = true;
             }
         }
     }
@@ -522,8 +520,6 @@ bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
             rView.EndAction();
         }
     }
-
-    bMarkAction = false;
 
     rWindow.SetPointer( rView.GetPreferredPointer( aPnt, &rWindow, nHitLog ) );
     rWindow.ReleaseMouse();
