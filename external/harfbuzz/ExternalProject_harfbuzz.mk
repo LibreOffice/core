@@ -43,10 +43,9 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			CXXFLAGS=' \
 				$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS)) \
-				$(if $(debug), \
-					$(gb_COMPILERNOOPTFLAGS) $(gb_DEBUG_CFLAGS) \
-						$(gb_DEBUG_CXXFLAGS), \
-					$(gb_COMPILEROPTFLAGS)) \
+				$(if $(ENABLE_OPTIMIZED), \
+					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
+				$(if $(debug),$(gb_DEBUG_CFLAGS) $(gb_DEBUG_CXXFLAGS)) \
 				$(CXXFLAGS) \
 				$(ICU_UCHAR_TYPE) \
 				$(if $(filter LINUX,$(OS)),-fvisibility=hidden)' \
