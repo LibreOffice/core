@@ -791,6 +791,34 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileSize(
     just a pointer to the file inside the already mapped .apk is
     returned.
 
+    @param Handle   [in]    Handle of the file to be mapped.
+    @param ppAddr   [out]   Memory address of the mapped file
+    @param uLength  [in]    Amount to map of the file from the offset
+    @param uOffset  [in]    Offset into the file to map
+    @param uFlags   [in]    osl_File_MapFlag_RandomAccess or
+                            osl_File_MapFlag_WillNeed
+
+    @retval osl_File_E_None on success
+    @retval osl_File_E_INVAL invalid file handle, on Unix systems also
+                can mean that the address, length of the file or the
+                file offset are too large or not aligned on a page
+                boundaryi; on Linux can also mean after Linux 2.6.12
+                that the length was set to 0 (illogical.
+    @retval osl_File_E_OVERFLOW requested mapping size too large,
+                or the file offset was too large
+    @retval osl_File_E_ACCES file descriptor to non-regular file, or
+                file descriptor not open for reading, or the file
+                descriptor is not open in read/write mode
+    @retval osl_File_E_AGAIN file has been locked, or too much memory
+                has been locked
+    @retval osl_File_E_NODEV underlying filesystem of specified file
+                does not support memory mapping
+    @retval osl_File_E_TXTBSY on Linux means that writing to the mapped
+                file is denied, but the file descriptor points to a file
+                open for writing
+    @retval osl_File_E_NOMEM process's maximum number of mappings have
+                been exceeded
+
     @since UDK 3.2.10
 */
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_mapFile (
