@@ -381,12 +381,16 @@ if test -n "$with_android_ndk"; then
     fi
     case $ANDROID_NDK_VERSION in
     r9*|r10*)
+        AC_MSG_ERROR([Bulding for Android is only supported with NDK versions above 15.0.*])
         ;;
-    11.1.*|12.1.*|13.1.*|14.1.*|15.0*)
+    11.1.*|12.1.*|13.1.*|14.1.*)
+        AC_MSG_ERROR([Bulding for Android is only supported with NDK versions above 15.0.*])
+        ;;
+    15.0.*)
         ;;
     *)
-        AC_MSG_WARN([Untested android NDK version $ANDROID_NDK_VERSION, only versions r9* til 15.0.* have been used successfully. Proceed at your own risk.])
-        add_warning "Untested android NDK version $ANDROID_NDK_VERSION, only versions r9* til 15.0.* have been used successfully. Proceed at your own risk."
+        AC_MSG_WARN([Untested android NDK version $ANDROID_NDK_VERSION, only version 15.0.* have been used successfully. Proceed at your own risk.])
+        add_warning "Untested android NDK version $ANDROID_NDK_VERSION, only version 15.0.* have been used successfully. Proceed at your own risk."
         ;;
     esac
 
@@ -1164,12 +1168,6 @@ libo_FUZZ_ARG_ENABLE(symbols,
          By default, enabled for --enable-debug and --enable-dbgutil, disabled
          otherwise.]))
 
-libo_FUZZ_ARG_ENABLE(optimized,
-    AS_HELP_STRING([--disable-optimized],
-        [Whether to compile with optimization flags.
-         By default, disabled for --enable-debug and --enable-dbgutil, enabled
-         otherwise.]))
-
 libo_FUZZ_ARG_ENABLE(runtime-optimizations,
     AS_HELP_STRING([--disable-runtime-optimizations],
         [Statically disable certain runtime optimizations (like rtl/alloc.h or
@@ -1177,10 +1175,6 @@ libo_FUZZ_ARG_ENABLE(runtime-optimizations,
          tools (like -fsanitize=address or Valgrind).  By default, disabled iff
          CC contains "-fsanitize=*".  (For Valgrind, those runtime optimizations
          are typically disabled dynamically via RUNNING_ON_VALGRIND.)]))
-
-AC_ARG_WITH(valgrind,
-    AS_HELP_STRING([--with-valgrind],
-        [Make availability of Valgrind headers a hard requirement.]))
 
 libo_FUZZ_ARG_ENABLE(compiler-plugins,
     AS_HELP_STRING([--enable-compiler-plugins],
@@ -3407,7 +3401,7 @@ if test "$_os" = "WINNT"; then
         else
             AC_MSG_ERROR([No msbuild found, Visual Studio installation broken?])
         fi
-	AC_MSG_RESULT([$regvalue])
+    AC_MSG_RESULT([$regvalue])
     fi
 
     # Find the version of devenv.exe
@@ -3933,23 +3927,6 @@ if test "$enable_release_build" != yes -a \( -n "$ENABLE_SYMBOLS" -o -n "$ENABLE
     XCODE_DEBUG_INFORMATION_FORMAT=dwarf
 fi
 AC_SUBST(XCODE_DEBUG_INFORMATION_FORMAT)
-
-AC_MSG_CHECKING([whether to compile with optimization flags])
-if test -z "$enable_optimized"; then
-    if test -n "$ENABLE_DEBUG$ENABLE_DBGUTIL"; then
-        enable_optimized=no
-    else
-        enable_optimized=yes
-    fi
-fi
-if test "$enable_optimized" != no; then
-    ENABLE_OPTIMIZED=TRUE
-    AC_MSG_RESULT([yes])
-else
-    ENABLE_OPTIMIZED=
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ENABLE_OPTIMIZED)
 
 #
 # determine CPUNAME, OS, ...
@@ -5750,7 +5727,7 @@ dnl ===================================================================
 dnl Check if valgrind headers are available
 dnl ===================================================================
 ENABLE_VALGRIND=
-if test "$cross_compiling" != yes -a "$with_valgrind" != no; then
+if test "$cross_compiling" != yes; then
     prev_cppflags=$CPPFLAGS
     # Is VALGRIND_CFLAGS something one is supposed to have in the environment,
     # or where does it come from?
@@ -5761,9 +5738,6 @@ if test "$cross_compiling" != yes -a "$with_valgrind" != no; then
 fi
 AC_SUBST([ENABLE_VALGRIND])
 if test -z "$ENABLE_VALGRIND"; then
-    if test "$with_valgrind" = yes; then
-        AC_MSG_ERROR([--with-valgrind specified but no Valgrind headers found])
-    fi
     VALGRIND_CFLAGS=
 fi
 AC_SUBST([VALGRIND_CFLAGS])
@@ -7495,11 +7469,11 @@ else
               msdosdjgpp* | go32*)
                 objfmt='COFF'
               ;;
-              os2-emx*)			# not tested
-                objfmt='MSOMF'		# obj
+              os2-emx*)         # not tested
+                objfmt='MSOMF'      # obj
               ;;
               linux*coff* | linux*oldld*)
-                objfmt='COFF'		# ???
+                objfmt='COFF'       # ???
               ;;
               linux*aout*)
                 objfmt='a.out'
@@ -7682,11 +7656,6 @@ dnl ===================================================================
 dnl Check for system expat
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([expat], [EXPAT], [expat])
-
-dnl ===================================================================
-dnl Check for system xmlsec
-dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([xmlsec], [XMLSEC], [xmlsec1-nss >= 1.2.24])
 
 AC_MSG_CHECKING([whether to enable Embedded OpenType support])
 if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_eot" = "yes"; then
@@ -10731,9 +10700,9 @@ the root of your Qt installation by exporting QT4DIR before running "configure".
 
     PKG_CHECK_MODULES([QT4],[QtNetwork QtGui])
     if ! test -z "$kde4_incdir"; then
-    	KDE4_CFLAGS="-I$kde4_incdir $QT4_CFLAGS -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
+        KDE4_CFLAGS="-I$kde4_incdir $QT4_CFLAGS -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
     else
-    	KDE4_CFLAGS="$QT4_CFLAGS -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
+        KDE4_CFLAGS="$QT4_CFLAGS -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
     fi
 
     KDE4_LIBS="-L$kde4_libdir -lkio -lkfile -lkdeui -lkdecore -L$qt4_lib_dir $QT4_LIBS"
@@ -12443,6 +12412,51 @@ place yourself in a working directory of you choice.
 
 should result in a WinRel/gnumake.exe.
 Copy it to the Cygwin /opt/lo/bin directory as make.exe
+
+Then re-run autogen.sh
+
+Note: autogen.sh will try to use /opt/lo/bin/make if the environment variable GNUMAKE is not already defined.
+Alternatively, you can install the 'new' make where ever you want and make sure that `which make` finds it.
+
+_EOS
+fi
+
+cat << _EOF
+****************************************************************************
+
+To build, run:
+$GNUMAKE
+
+To view some help, run:
+$GNUMAKE help
+
+_EOF
+
+if test $_os != WINNT -a "$CROSS_COMPILING" != TRUE; then
+    cat << _EOF
+After the build of LibreOffice has finished successfully, you can immediately run LibreOffice using the command:
+_EOF
+
+    if test $_os = Darwin; then
+        echo open instdir/$PRODUCTNAME.app
+    else
+        echo instdir/program/soffice
+    fi
+    cat << _EOF
+
+If you want to run the smoketest, run:
+$GNUMAKE check
+
+_EOF
+fi
+
+if test -f warn; then
+    cat warn
+    rm warn
+fi
+
+dnl vim:set shiftwidth=4 softtabstop=4 expandtab:
+opt/lo/bin directory as make.exe
 
 Then re-run autogen.sh
 
