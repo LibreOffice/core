@@ -346,7 +346,6 @@ void XMLFile2UTFConverter::initializeDecoding()
 Text2UnicodeConverter::Text2UnicodeConverter( const OString &sEncoding )
     : m_convText2Unicode(nullptr)
     , m_contextText2Unicode(nullptr)
-    , m_rtlEncoding(RTL_TEXTENCODING_DONTKNOW)
 {
     rtl_TextEncoding encoding = rtl_getTextEncodingFromMimeCharset( sEncoding.getStr() );
     if( RTL_TEXTENCODING_DONTKNOW == encoding )
@@ -376,7 +375,6 @@ void Text2UnicodeConverter::init( rtl_TextEncoding encoding )
 
     m_convText2Unicode  = rtl_createTextToUnicodeConverter(encoding);
     m_contextText2Unicode = rtl_createTextToUnicodeContext( m_convText2Unicode );
-    m_rtlEncoding = encoding;
 }
 
 
@@ -448,7 +446,6 @@ Unicode2TextConverter::Unicode2TextConverter( rtl_TextEncoding encoding )
 {
     m_convUnicode2Text  = rtl_createUnicodeToTextConverter( encoding );
     m_contextUnicode2Text = rtl_createUnicodeToTextContext( m_convUnicode2Text );
-    m_rtlEncoding = encoding;
 }
 
 

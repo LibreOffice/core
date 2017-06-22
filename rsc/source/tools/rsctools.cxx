@@ -191,7 +191,6 @@ RscWriteRc::RscWriteRc( RSCBYTEORDER_TYPE nOrder )
 #endif
         bSwap = nOrder != nMachineOrder;
     }
-    nByteOrder = nOrder;
     nLen = 0;
     pMem = nullptr;
 }

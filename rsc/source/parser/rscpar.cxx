@@ -34,8 +34,6 @@ void RscFileInst::Init()
 
 RscFileInst::RscFileInst( RscTypCont * pTC, RscFileTab::Index lIndexSrc,
                           RscFileTab::Index lFIndex, FILE * fFile )
-    : nErrorLine(0)
-    , nErrorPos(0)
 {
     pTypCont = pTC;
     Init();
@@ -156,8 +154,6 @@ void RscFileInst::SetError( ERRTYPE aError )
     if( aError.IsOk() )
     {
         aFirstError = aError;
-        nErrorLine  = GetLineNo();
-        nErrorPos   = GetScanPos() -1;
     }
 };
 

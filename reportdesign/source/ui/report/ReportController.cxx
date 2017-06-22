@@ -288,7 +288,6 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
     ,m_bGridVisible(true)
     ,m_bGridUse(true)
     ,m_bShowProperties(true)
-    ,m_bGroupFloaterWasVisible(false)
     ,m_bHelplinesMove(true)
     ,m_bChartEnabled(false)
     ,m_bChartEnabledAsked(false)
@@ -1414,7 +1413,6 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             break;
         case SID_SORTINGANDGROUPING:
             openSortingAndGroupingDialog();
-            m_bGroupFloaterWasVisible = m_pGroupsFloater && m_pGroupsFloater->IsVisible();
             break;
         case SID_BACKGROUND_COLOR:
             {

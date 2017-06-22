@@ -116,7 +116,6 @@ struct rtl_cache_st
 
     int  (SAL_CALL * m_constructor)(void * obj, void * userarg); /* const */
     void (SAL_CALL * m_destructor) (void * obj, void * userarg); /* const */
-    void (SAL_CALL * m_reclaim)    (void * userarg);             /* const */
     void *                    m_userarg;
 
     /* slab layer */
