@@ -55,7 +55,7 @@ enum class EEAnchorMode {
 EDITENG_DLLPUBLIC extern const size_t EE_APPEND;
 
 // Error messages for Read / Write Method
-#define EE_READWRITE_WRONGFORMAT     ErrCode(SVSTREAM_ERRBASE_USER+1)
+#define EE_READWRITE_WRONGFORMAT     ErrCode(ERRCODE_AREA_SVX+1)
 
 #define EDITUNDO_REMOVECHARS        100
 #define EDITUNDO_CONNECTPARAS       101
