@@ -125,14 +125,12 @@ class ConvDicXMLEntryTextContext_Impl :
     public ConvDicXMLImportContext
 {
     OUString    aLeftText;
-    sal_Int16   nPropertyType;  // used for Chinese simplified/traditional conversion
 
 public:
     ConvDicXMLEntryTextContext_Impl(
             ConvDicXMLImport &rImport,
             sal_uInt16 nPrefix, const OUString& rLName ) :
-        ConvDicXMLImportContext( rImport, nPrefix, rLName ),
-        nPropertyType( ConversionPropertyType::NOT_DEFINED )
+        ConvDicXMLImportContext( rImport, nPrefix, rLName )
     {
     }
 
@@ -256,8 +254,6 @@ void ConvDicXMLEntryTextContext_Impl::StartElement(
 
         if ( nPrefix == XML_NAMESPACE_TCD && aLocalName == "left-text" )
             aLeftText = aValue;
-        if ( nPrefix == XML_NAMESPACE_TCD && aLocalName == "property-type" )
-            nPropertyType = (sal_Int16) aValue.toInt32();
     }
 }
 

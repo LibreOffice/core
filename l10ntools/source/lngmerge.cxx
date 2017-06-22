@@ -49,8 +49,7 @@ void lcl_RemoveUTF8ByteOrderMarker( OString &rString )
 // class LngParser
 
 LngParser::LngParser(const OString &rLngFile)
-    : nError( LNG_OK )
-    , pLines( nullptr )
+    : pLines( nullptr )
     , sSource( rLngFile )
 {
     pLines = new LngLineList;
@@ -76,8 +75,6 @@ LngParser::LngParser(const OString &rLngFile)
         }
         pLines->push_back( new OString() );
     }
-    else
-        nError = LNG_COULD_NOT_OPEN;
 }
 
 LngParser::~LngParser()
@@ -166,10 +163,6 @@ bool LngParser::Merge(
 {
     std::ofstream aDestination(
         rDestinationFile.getStr(), std::ios_base::out | std::ios_base::trunc);
-    if (!aDestination.is_open()) {
-        nError = LNG_COULD_NOT_OPEN;
-    }
-    nError = LNG_OK;
 
     MergeDataFile aMergeDataFile( rPOFile, sSource, false, true );
     if( rLanguage.equalsIgnoreAsciiCase("ALL") )

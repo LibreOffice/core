@@ -3282,7 +3282,6 @@ lok_doc_view_open_document (LOKDocView* pDocView,
     GError* error = nullptr;
 
     LOEvent* pLOEvent = new LOEvent(LOK_LOAD_DOC);
-    pLOEvent->m_pPath = pPath;
 
     priv->m_aDocPath = pPath;
     if (pRenderingArguments)

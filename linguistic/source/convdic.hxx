@@ -77,7 +77,6 @@ protected:
     bool            bNeedEntries;
     bool            bIsModified;
     bool            bIsActive;
-    bool            bIsReadonly;
 
     // disallow copy-constructor and assignment-operator for now
     ConvDic(const ConvDic &);
