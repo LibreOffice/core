@@ -761,7 +761,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_setFileSize(
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileSize(
         oslFileHandle Handle, sal_uInt64 *pSize );
 
-/** Indicate that the file can be accessws randomly (i.e. there is no sequential
+/** Indicate that the file can be accessed randomly (i.e. there is no sequential
     reading). Basically it means that the first byte of every page in the
     file-mapping will be read.
 
