@@ -235,52 +235,80 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         ScDPCache::ScDPItemDataVec::const_iterator it = rFieldItems.begin(), itEnd = rFieldItems.end();
 
         std::set<ScDPItemData::Type> aDPTypes;
+        double fMin = std::numeric_limits<double>::infinity(), fMax = -std::numeric_limits<double>::infinity();
         for (; it != itEnd; ++it)
         {
-            aDPTypes.insert(it->GetType());
+            ScDPItemData::Type eType = it->GetType();
+            aDPTypes.insert(eType);
+            if (eType == ScDPItemData::Value)
+            {
+                double fVal = it->GetValue();
+                fMin = std::min(fMin, fVal);
+                fMax = std::max(fMax, fVal);
+            }
         }
 
         auto aDPTypeEnd = aDPTypes.cend();
 
-        pDefStrm->startElement(XML_sharedItems,
-            XML_count, OString::number(static_cast<long>(rFieldItems.size())).getStr(),
-            XML_containsMixedTypes, XclXmlUtils::ToPsz10(aDPTypes.size() > 1),
-            XML_containsSemiMixedTypes, XclXmlUtils::ToPsz10(aDPTypes.size() > 1),
-            XML_containsString, XclXmlUtils::ToPsz10(aDPTypes.find(ScDPItemData::String) != aDPTypeEnd),
-            XML_containsNumber, XclXmlUtils::ToPsz10(aDPTypes.find(ScDPItemData::Value) != aDPTypeEnd),
-            FSEND);
-
-        it = rFieldItems.begin();
-        for (; it != itEnd; ++it)
+        auto pAttList = sax_fastparser::FastSerializerHelper::createAttrList();
+        // tdf#89139: Only create item list for string-only fields.
+        // Using containsXXX attributes in this case makes Excel think the file is corrupted.
+        // OTOH listing items for e.g. number fields also triggers "corrupted" warning in Excel.
+        bool bListItems = aDPTypes.size() == 1 && aDPTypes.find(ScDPItemData::String) != aDPTypeEnd;
+        if (bListItems)
         {
-            const ScDPItemData& rItem = *it;
-            switch (rItem.GetType())
+            pAttList->add(XML_count, OString::number(static_cast<long>(rFieldItems.size())));
+        }
+        else
+        {
+            pAttList->add(XML_containsMixedTypes, XclXmlUtils::ToPsz10(aDPTypes.size() > 1));
+            pAttList->add(XML_containsSemiMixedTypes, XclXmlUtils::ToPsz10(aDPTypes.size() > 1));
+            pAttList->add(XML_containsString, XclXmlUtils::ToPsz10(aDPTypes.find(ScDPItemData::String) != aDPTypeEnd));
+            if (aDPTypes.find(ScDPItemData::Value) != aDPTypeEnd)
             {
-                case ScDPItemData::String:
-                    pDefStrm->singleElement(XML_s,
-                        XML_v, XclXmlUtils::ToOString(rItem.GetString()).getStr(),
-                        FSEND);
-                break;
-                case ScDPItemData::Value:
-                    pDefStrm->singleElement(XML_n,
-                        XML_v, OString::number(rItem.GetValue()).getStr(),
-                        FSEND);
-                break;
-                case ScDPItemData::Empty:
-                    pDefStrm->singleElement(XML_m, FSEND);
-                break;
-                case ScDPItemData::Error:
-                    pDefStrm->singleElement(XML_e,
-                        XML_v, XclXmlUtils::ToOString(rItem.GetString()).getStr(),
-                        FSEND);
-                break;
-                case ScDPItemData::GroupValue:
-                case ScDPItemData::RangeStart:
-                    // TODO : What do we do with these types?
-                    pDefStrm->singleElement(XML_m, FSEND);
-                break;
-                default:
-                    ;
+                pAttList->add(XML_containsNumber, XclXmlUtils::ToPsz10(true));
+                pAttList->add(XML_minValue, OString::number(fMin));
+                pAttList->add(XML_maxValue, OString::number(fMax));
+            }
+        }
+        sax_fastparser::XFastAttributeListRef xAttributeList(pAttList);
+
+        pDefStrm->startElement(XML_sharedItems, xAttributeList);
+
+        if (bListItems)
+        {
+            it = rFieldItems.begin();
+            for (; it != itEnd; ++it)
+            {
+                const ScDPItemData& rItem = *it;
+                switch (rItem.GetType())
+                {
+                    case ScDPItemData::String:
+                        pDefStrm->singleElement(XML_s,
+                            XML_v, XclXmlUtils::ToOString(rItem.GetString()),
+                            FSEND);
+                    break;
+                    case ScDPItemData::Value:
+                        pDefStrm->singleElement(XML_n,
+                            XML_v, OString::number(rItem.GetValue()),
+                            FSEND);
+                    break;
+                    case ScDPItemData::Empty:
+                        pDefStrm->singleElement(XML_m, FSEND);
+                    break;
+                    case ScDPItemData::Error:
+                        pDefStrm->singleElement(XML_e,
+                            XML_v, XclXmlUtils::ToOString(rItem.GetString()),
+                            FSEND);
+                    break;
+                    case ScDPItemData::GroupValue:
+                    case ScDPItemData::RangeStart:
+                        // TODO : What do we do with these types?
+                        pDefStrm->singleElement(XML_m, FSEND);
+                    break;
+                    default:
+                        ;
+                }
             }
         }
 
