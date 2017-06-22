@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_c6e1a6d2",
+        "filename": "bin/generate-bash-completion.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-06-22T06:57:28Z",
+      "side": 1,
+      "message": "Please add the license header, see http://opengrok.libreoffice.org/xref/core/TEMPLATE.SOURCECODE.HEADER#57",
+      "revId": "2b4d65424afa7afcd416e10f2992142e0a1cb09f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
