@@ -675,7 +675,7 @@ uno::Reference<security::XCertificate> DigitalSignaturesDialog::getCertificate(c
     return xCert;
 }
 
-uno::Reference<xml::crypto::XSecurityEnvironment> DigitalSignaturesDialog::getSecurityEnvironmentForCertificate(uno::Reference<security::XCertificate> xCert)
+uno::Reference<xml::crypto::XSecurityEnvironment> DigitalSignaturesDialog::getSecurityEnvironmentForCertificate(const uno::Reference<security::XCertificate>& xCert)
 {
     if (xCert->getCertificateKind() == CertificateKind_OPENPGP)
         return maSignatureManager.getGpgSecurityEnvironment();

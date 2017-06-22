@@ -62,7 +62,7 @@ public:
     SignatureStreamHelper ImplOpenSignatureStream(sal_Int32 eStreamMode, bool bTempStream);
     /// Add a new signature, using xCert as a signing certificate, and rDescription as description.
     bool add(const css::uno::Reference<css::security::XCertificate>& xCert,
-             const css::uno::Reference<css::xml::crypto::XXMLSecurityContext> xSecurityContext,
+             const css::uno::Reference<css::xml::crypto::XXMLSecurityContext>& xSecurityContext,
              const OUString& rDescription, sal_Int32& nSecurityId, bool bAdESCompliant);
     /// Remove signature at nPosition.
     void remove(sal_uInt16 nPosition);

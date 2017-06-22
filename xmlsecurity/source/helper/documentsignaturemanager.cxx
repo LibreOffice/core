@@ -41,7 +41,6 @@
 #include <xmlsec/xmlsec_init.hxx>
 
 using namespace css;
-namespace cssu = com::sun::star::uno;
 
 DocumentSignatureManager::DocumentSignatureManager(const uno::Reference<uno::XComponentContext>& xContext, DocumentSignatureMode eMode)
     : mxContext(xContext),
@@ -254,7 +253,7 @@ SignatureStreamHelper DocumentSignatureManager::ImplOpenSignatureStream(sal_Int3
 }
 
 bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>& xCert,
-                                   const uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext,
+                                   const uno::Reference<xml::crypto::XXMLSecurityContext>& xSecurityContext,
                                    const OUString& rDescription,
                                    sal_Int32& nSecurityId,
                                    bool bAdESCompliant)
@@ -266,7 +265,7 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
     }
 
     // GPG or X509 key?
-    uno::Reference< lang::XServiceInfo > xServiceInfo( xSecurityContext, cssu::UNO_QUERY );
+    uno::Reference< lang::XServiceInfo > xServiceInfo(xSecurityContext, uno::UNO_QUERY);
     if (xServiceInfo->getImplementationName() == "com.sun.star.xml.security.gpg.XMLSecurityContext_GpgImpl")
     {
         // GPG keys only really have PGPKeyId and PGPKeyPacket
