@@ -232,7 +232,6 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl()   :
     _nStyle             ( PickerFlags::NONE ),
     _bDoubleClick       ( false ),
     m_bNeedDelayedFilterExecute ( false ),
-    _pDefaultFilter     ( nullptr ),
     _bMultiSelection    ( false )
 {
 }

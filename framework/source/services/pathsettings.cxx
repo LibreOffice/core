@@ -172,8 +172,6 @@ private:
 
     ::cppu::OPropertyArrayHelper* m_pPropHelp;
 
-    bool m_bIgnoreEvents;
-
 public:
 
     /** initialize a new instance of this class.
@@ -448,7 +446,6 @@ PathSettings::PathSettings( const css::uno::Reference< css::uno::XComponentConte
     , ::cppu::OPropertySetHelper(cppu::WeakComponentImplHelperBase::rBHelper)
     ,   m_xContext (xContext)
     ,   m_pPropHelp(nullptr    )
-    ,  m_bIgnoreEvents(false)
 {
 }
 
@@ -644,8 +641,6 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const OUString& sPath)
 
 void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
 {
-    m_bIgnoreEvents = true;
-
     css::uno::Reference< css::container::XNameAccess > xCfgNew = fa_getCfgNew();
     css::uno::Reference< css::container::XNameAccess > xCfgOld = fa_getCfgOld();
 
@@ -683,8 +678,6 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
         xProps->setPropertyValue(aResubstPath.sPathName, css::uno::Any());
         ::comphelper::ConfigurationHelper::flush(xCfgOld);
     }
-
-    m_bIgnoreEvents = false;
 }
 
 void PathSettings::impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,

@@ -252,16 +252,12 @@ namespace framework
             css::uno::Reference< css::awt::XWindow >                       m_xContainerWindow;
             css::uno::Reference< css::awt::XTopWindow2 >                   m_xContainerTopWindow;
             sal_Int32                                                      m_nLockCount;
-            bool                                                           m_bActive;
             bool                                                           m_bInplaceMenuSet;
             bool                                                           m_bMenuVisible;
-            bool                                                           m_bComponentAttached;
-            bool                                                           m_bDoLayout;
             bool                                                           m_bVisible;
             bool                                                           m_bParentWindowVisible;
             bool                                                           m_bMustDoLayout;
             bool                                                           m_bAutomaticToolbars;
-            bool                                                           m_bStoreWindowState;
             bool                                                           m_bHideCurrentUI;
             bool                                                           m_bGlobalSettings;
             bool                                                           m_bPreserveContentSize;

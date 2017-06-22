@@ -130,7 +130,6 @@ OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageListsDescriptor& aI
     m_bImageContainerStartFound     = false;
     m_bImageContainerEndFound       = false;
     m_bImagesStartFound             = false;
-    m_bImageStartFound              = false;
     m_bExternalImagesStartFound     = false;
     m_bExternalImageStartFound      = false;
 }
@@ -300,8 +299,6 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
 
                 if ( !m_pImages->pImageItemList )
                     m_pImages->pImageItemList.reset( new ImageItemListDescriptor );
-
-                m_bImageStartFound = true;
 
                 // Create new image item descriptor
                 std::unique_ptr<ImageItemDescriptor> pItem(new ImageItemDescriptor);
@@ -509,12 +506,6 @@ void SAL_CALL OReadImagesDocumentHandler::endElement(const OUString& aName)
             }
             break;
 
-            case IMG_ELEMENT_ENTRY:
-            {
-                m_bImageStartFound = false;
-            }
-            break;
-
             case IMG_ELEMENT_EXTERNALIMAGES:
             {
                 if ( m_pExternalImages && !m_aImageList.pExternalImageList )
@@ -534,8 +525,7 @@ void SAL_CALL OReadImagesDocumentHandler::endElement(const OUString& aName)
             }
             break;
 
-                  default:
-                      break;
+            default: break;
         }
     }
 }

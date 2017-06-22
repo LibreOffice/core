@@ -192,7 +192,6 @@ namespace framework
     private:
         ::osl::Mutex                        m_aMutex;
         ::osl::Mutex                        m_aQueueMutex;
-        bool                                m_disposed;
         bool                                m_bAPIActionRunning;
         bool                                m_bProcessingEvents;
         sal_Int32                           m_nLockCount;
@@ -213,7 +212,6 @@ namespace framework
         explicit UndoManagerHelper_Impl( IUndoManagerImplementation& i_undoManagerImpl )
             :m_aMutex()
             ,m_aQueueMutex()
-            ,m_disposed( false )
             ,m_bAPIActionRunning( false )
             ,m_bProcessingEvents( false )
             ,m_nLockCount( 0 )
@@ -318,8 +316,6 @@ namespace framework
         ::osl::MutexGuard aGuard( m_aMutex );
 
         getUndoManager().RemoveUndoListener( *this );
-
-        m_disposed = true;
     }
 
     UndoManagerEvent UndoManagerHelper_Impl::buildEvent( OUString const& i_title ) const

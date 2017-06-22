@@ -70,8 +70,6 @@ css::util::Time SAL_CALL XFormsEventConcrete::getTimeStamp()
 
 void SAL_CALL XFormsEventConcrete::stopPropagation()
 {
-    if(m_cancelable)
-        m_canceled = true;
 }
 void SAL_CALL XFormsEventConcrete::preventDefault()
 {

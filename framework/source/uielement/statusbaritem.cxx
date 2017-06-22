@@ -63,12 +63,10 @@ sal_uInt16 impl_convertItemBitsToItemStyle( StatusBarItemBits nItemBits )
 
 StatusbarItem::StatusbarItem(
     StatusBar              *pStatusBar,
-    AddonStatusbarItemData *pItemData,
     sal_uInt16              nId,
     const rtl::OUString&    aCommand )
     : StatusbarItem_Base( m_aMutex )
     , m_pStatusBar( pStatusBar )
-    , m_pItemData( pItemData )
     , m_nId( nId )
     , m_nStyle( 0 )
     , m_aCommand( aCommand )
@@ -85,7 +83,6 @@ StatusbarItem::~StatusbarItem()
 void SAL_CALL StatusbarItem::disposing()
 {
     osl::MutexGuard aGuard( m_aMutex );
-    m_pItemData = nullptr;
     m_pStatusBar = nullptr;
 }
 

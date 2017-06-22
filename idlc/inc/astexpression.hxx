@@ -124,8 +124,6 @@ private:
     std::unique_ptr<AstExprValue> eval_un_op();
     AstExprValue* eval_symbol();
 
-    AstScope*       m_pScope;       // scope defined in
-    sal_Int32       m_lineNo;       // line number defined in
     OString  m_fileName;     // fileName defined in
 
     ExprComb        m_combOperator;

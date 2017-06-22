@@ -450,7 +450,6 @@ namespace frm
         ,m_xGraphicObject()
         ,m_pMedium(nullptr)
         ,m_bDispatchUrlInternal(false)
-        ,m_bDownloading(false)
         ,m_bProdStarted(false)
     {
         implConstruct();
@@ -464,7 +463,6 @@ namespace frm
         ,m_xGraphicObject( _pOriginal->m_xGraphicObject )
         ,m_pMedium( nullptr )
         ,m_bDispatchUrlInternal(false)
-        ,m_bDownloading( false )
         ,m_bProdStarted( false )
     {
         implConstruct();
@@ -676,7 +674,6 @@ namespace frm
             else
                 // caution: the medium may be NULL if somebody gave us an invalid URL to work with
                 pImgProd->SetImage(OUString());
-            m_bDownloading = false;
             return;
         }
         if (m_pMedium->GetErrorCode()==ERRCODE_NONE)
@@ -692,7 +689,6 @@ namespace frm
             pImgProd->SetImage(OUString());
             delete m_pMedium;
             m_pMedium = nullptr;
-            m_bDownloading = false;
         }
     }
 
@@ -781,9 +777,6 @@ namespace frm
             }
     #endif
 
-            // Set downloading flag to true. They will be Data Available Links,
-            // if get to the pending staus.
-            m_bDownloading = true;
             m_bProdStarted = false;
 
             // Kick off download (caution: can be synchronous).
@@ -810,7 +803,6 @@ namespace frm
     void OClickableImageBaseModel::DownloadDone()
     {
         DataAvailable();
-        m_bDownloading = false;
     }
 
 

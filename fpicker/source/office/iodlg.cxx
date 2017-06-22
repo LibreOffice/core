@@ -1923,8 +1923,6 @@ short SvtFileDialog::PrepareExecute()
         pImpl->SelectFilterListEntry( aAll );
     }
 
-    pImpl->_pDefaultFilter = pImpl->GetCurFilter();
-
     // if applicable isolate filter
     OUString aFilter;
 
