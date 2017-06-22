@@ -69,9 +69,6 @@ public:
 
 class DlgEdFuncSelect : public DlgEdFunc
 {
-protected:
-    bool    bMarkAction;
-
 public:
     explicit DlgEdFuncSelect (DlgEditor& rParent);
     virtual ~DlgEdFuncSelect () override;

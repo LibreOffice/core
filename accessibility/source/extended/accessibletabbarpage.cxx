@@ -50,7 +50,6 @@ namespace accessibility
         ,m_nPageId( nPageId )
         ,m_xParent( rxParent )
     {
-        m_bEnabled  = IsEnabled();
         m_bShowing  = IsShowing();
         m_bSelected = IsSelected();
 

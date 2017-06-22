@@ -61,7 +61,6 @@ private:
 
     bool m_bSupportingAxisSideBySide;
     bool m_bGroupBarsPerAxis;
-    bool m_bAllSeriesAttachedToSameAxis;
     sal_Int32 m_nAllSeriesAxisIndex;
 
     bool m_bSupportingStartingAngle;

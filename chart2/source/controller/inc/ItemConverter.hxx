@@ -186,7 +186,6 @@ private:
     css::uno::Reference< css::beans::XPropertySetInfo > m_xPropertySetInfo;
 
     SfxItemPool&                                    m_rItemPool;
-    bool                                            m_bIsValid;
 };
 
 }}

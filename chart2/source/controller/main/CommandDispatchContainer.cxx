@@ -37,9 +37,8 @@ namespace chart
 {
 
 CommandDispatchContainer::CommandDispatchContainer(
-    const Reference< uno::XComponentContext > & xContext, ChartController* pController )
+    const Reference< uno::XComponentContext > & xContext )
         :m_xContext( xContext )
-        ,m_pChartController( pController )
         ,m_pDrawCommandDispatch( nullptr )
         ,m_pShapeController( nullptr )
 {
@@ -155,7 +154,6 @@ void CommandDispatchContainer::DisposeAndClear()
     m_aToBeDisposedDispatches.clear();
     m_xChartDispatcher.clear();
     m_aChartCommands.clear();
-    m_pChartController = nullptr;
     m_pDrawCommandDispatch = nullptr;
     m_pShapeController = nullptr;
 }

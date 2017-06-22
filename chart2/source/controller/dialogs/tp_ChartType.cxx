@@ -180,13 +180,10 @@ private:
     VclPtr<RadioButton> m_pRB_Stack_Y;
     VclPtr<RadioButton> m_pRB_Stack_Y_Percent;
     VclPtr<RadioButton> m_pRB_Stack_Z;
-
-    bool m_bShowDeepStacking;
 };
 
 StackingResourceGroup::StackingResourceGroup(VclBuilderContainer* pWindow)
         : ChangingResource()
-        , m_bShowDeepStacking(true)
 {
     pWindow->get(m_pCB_Stacked, "stack");
     pWindow->get(m_pRB_Stack_Y, "ontop");
@@ -201,7 +198,6 @@ StackingResourceGroup::StackingResourceGroup(VclBuilderContainer* pWindow)
 
 void StackingResourceGroup::showControls( bool bShow, bool bShowDeepStacking )
 {
-    m_bShowDeepStacking = bShowDeepStacking;
     m_pCB_Stacked->Show(bShow);
     m_pRB_Stack_Y->Show(bShow);
     m_pRB_Stack_Y_Percent->Show(bShow);

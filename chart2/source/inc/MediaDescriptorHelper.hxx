@@ -70,21 +70,16 @@ public:
 
     //@todo define this for debug only, except URL
     bool            AsTemplate; //document is a template.
-    bool            ISSET_AsTemplate;
 
     css::uno::Any
                         ComponentData;
-    bool            ISSET_ComponentData;
     css::uno::Any
                         FilterData;
-    bool            ISSET_FilterData;
     OUString     FilterName; //internal filter name.
     bool            ISSET_FilterName;
     bool            Hidden; //load document, invisible.
-    bool            ISSET_Hidden;
 
     OUString     HierarchicalDocumentName;
-    bool            ISSET_HierarchicalDocumentName;
 
     css::uno::Reference< css::io::XOutputStream >
                         OutputStream; //a stream to receive the document data for saving
@@ -94,30 +89,21 @@ public:
     bool            ISSET_InputStream;
 
     bool            OpenNewView; //opens a new view for an already loaded document.
-    bool            ISSET_OpenNewView;
     bool            Overwrite; //opens a new view for an already loaded document.
-    bool            ISSET_Overwrite;
 
     bool            Preview; //show preview.
-    bool            ISSET_Preview;
     bool            ReadOnly; //open document readonly.
-    bool            ISSET_ReadOnly;
 
         //not documented ... @todo remove?
     bool            Silent; //prevents dialogs to query for more information.
-    bool            ISSET_Silent;
     bool            Unpacked;
-    bool            ISSET_Unpacked;
     OUString     URL;// FileName, URL of the document.
     bool            ISSET_URL;
     sal_Int16           Version; //storage version.
-    bool            ISSET_Version;
 
     css::uno::Any
                         ViewData;
-    bool            ISSET_ViewData;
     sal_Int16           ViewId; //id of the initial view.
-    bool            ISSET_ViewId;
 
     // new framework objects
     css::uno::Reference< css::embed::XStorage >
@@ -128,7 +114,6 @@ public:
     bool            ISSET_Stream;
 
     bool            SetEmbedded;
-    bool            ISSET_SetEmbedded;
 
 protected:
 SAL_DLLPRIVATE void impl_init();

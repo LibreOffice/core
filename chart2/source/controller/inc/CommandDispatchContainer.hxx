@@ -70,8 +70,7 @@ public:
     // handled by other dispatchers.  (Chart is currently the controller
     // itself)
     explicit CommandDispatchContainer(
-        const css::uno::Reference< css::uno::XComponentContext > & xContext,
-        ChartController* pController );
+        const css::uno::Reference< css::uno::XComponentContext > & xContext );
 
     void setModel(
         const css::uno::Reference< css::frame::XModel > & xModel );
@@ -126,7 +125,6 @@ private:
     css::uno::Reference< css::frame::XDispatch >          m_xChartDispatcher;
     std::set< OUString >                                m_aChartCommands;
 
-    ChartController* m_pChartController;
     DrawCommandDispatch* m_pDrawCommandDispatch;
     ShapeController* m_pShapeController;
 };

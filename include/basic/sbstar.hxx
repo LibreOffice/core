@@ -59,7 +59,6 @@ class BASIC_DLLPUBLIC StarBASIC : public SbxObject
     bool            bBreak;                 // if true: Break, otherwise Step
     bool            bDocBasic;
     bool            bVBAEnabled;
-    BasicLibInfo*   pLibInfo;           // Info block for basic manager
     bool            bQuit;
 
     SbxObjectRef pVBAGlobals;

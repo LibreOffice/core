@@ -50,7 +50,6 @@ namespace accessibility
 
     private:
         sal_uInt16              m_nPageId;
-        bool                    m_bEnabled;
         bool                    m_bShowing;
         bool                    m_bSelected;
         OUString                m_sPageText;

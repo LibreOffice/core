@@ -342,7 +342,6 @@ private:
 
     bool              bDoLoad;
     bool              bReference;
-    bool              bPasswordVerified;
 
     // Lib represents library in new UNO library container
     uno::Reference< script::XLibraryContainer > mxScriptCont;
@@ -381,7 +380,6 @@ public:
     const OUString&   GetPassword() const                 { return aPassword; }
     void              SetPassword( const OUString& rNewPassword )
                                                         { aPassword = rNewPassword; }
-    void              SetPasswordVerified()               { bPasswordVerified = true; }
 
     static BasicLibInfo*    Create( SotStorageStream& rSStream );
 
@@ -395,7 +393,6 @@ public:
 BasicLibInfo::BasicLibInfo()
 {
     bReference          = false;
-    bPasswordVerified   = false;
     bDoLoad             = false;
     mxScriptCont        = nullptr;
     aStorageName        = szImbedded;
@@ -601,7 +598,6 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
                         {
                             pOldBasicPassword->setLibraryPassword(
                                 pLib->GetName(), rpBasLibInfo->GetPassword() );
-                            rpBasLibInfo->SetPasswordVerified();
                         }
                     }
                 }

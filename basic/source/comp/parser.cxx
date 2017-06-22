@@ -122,7 +122,6 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
     pStack   = nullptr;
     pWithVar = nullptr;
     nBase    = 0;
-    bText    =
     bGblDefs =
     bNewGblDefs =
     bSingleLineIf =
@@ -788,11 +787,9 @@ void SbiParser::Option()
             SbiToken eTok = Next();
             if( eTok == BINARY )
             {
-                bText = false;
             }
             else if( eTok == SYMBOL && GetSym().equalsIgnoreAsciiCase("text") )
             {
-                bText = true;
             }
             else
             {

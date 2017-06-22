@@ -439,7 +439,6 @@ DataBrowser::DataBrowser( vcl::Window* pParent, WinBits nStyle, bool bLiveUpdate
     ::svt::EditBrowseBox( pParent, EditBrowseBoxFlags::SMART_TAB_TRAVEL | EditBrowseBoxFlags::HANDLE_COLUMN_TEXT, nStyle, BrowserStdFlags ),
     m_nSeekRow( 0 ),
     m_bIsReadOnly( false ),
-    m_bIsDirty( false ),
     m_bLiveUpdate( bLiveUpdate ),
     m_bDataValid( true ),
     m_aNumberEditField( VclPtr<FormattedField>::Create( & EditBrowseBox::GetDataWindow(), WB_NOBORDER ) ),
@@ -452,7 +451,6 @@ DataBrowser::DataBrowser( vcl::Window* pParent, WinBits nStyle, bool bLiveUpdate
     m_aNumberEditField->SetDefaultValue( fNan );
     m_aNumberEditField->TreatAsNumber( true );
     RenewTable();
-    SetClean();
 }
 
 DataBrowser::~DataBrowser()
@@ -628,7 +626,6 @@ void DataBrowser::RenewTable()
     }
 
     ImplAdjustHeaderControls();
-    SetDirty();
     SetUpdateMode( bLastUpdateMode );
     ActivateCell();
     Invalidate();
@@ -737,17 +734,6 @@ void DataBrowser::SetReadOnly( bool bNewState )
     }
 }
 
-void DataBrowser::SetClean()
-{
-    m_bIsDirty = false;
-}
-
-void DataBrowser::SetDirty()
-{
-    if( !m_bLiveUpdate )
-        m_bIsDirty = true;
-}
-
 void DataBrowser::CursorMoved()
 {
     EditBrowseBox::CursorMoved();
@@ -804,7 +790,6 @@ bool DataBrowser::IsDataValid()
 void DataBrowser::CellModified()
 {
     m_bDataValid = IsDataValid();
-    SetDirty();
     m_aCursorMovedHdlLink.Call( this );
 }
 
@@ -840,7 +825,6 @@ void DataBrowser::SetDataFromModel(
         GoToRow( 0 );
         GoToColumnId( 1 );
     }
-    SetClean();
 }
 
 void DataBrowser::InsertColumn()
@@ -1213,7 +1197,6 @@ bool DataBrowser::SaveModified()
         ::svt::CellController* pCtrl = GetController( GetCurRow(), GetCurColumnId());
         if( pCtrl )
             pCtrl->ClearModified();
-        SetDirty();
     }
 
     return bChangeValid;

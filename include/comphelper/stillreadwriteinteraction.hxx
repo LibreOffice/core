@@ -38,7 +38,6 @@ private:
 
     bool m_bUsed;
     bool m_bHandledByMySelf;
-    bool m_bHandledByInternalHandler;
 
 public:
     StillReadWriteInteraction(const css::uno::Reference< css::task::XInteractionHandler >& xHandler,

@@ -117,7 +117,7 @@ ChartController::ChartController(uno::Reference<uno::XComponentContext> const & 
     m_bConnectingToView(false),
     m_bDisposed(false),
     m_xUndoManager( nullptr ),
-    m_aDispatchContainer( m_xCC, this ),
+    m_aDispatchContainer( m_xCC ),
     m_eDrawMode( CHARTDRAW_SELECT ),
     mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
             [this]() { return this->GetContextName(); },
