@@ -1187,8 +1187,10 @@ bool SlideshowImpl::swipe(const CommandSwipeData &rSwipeData)
 {
     if (mbUsePen || mnContextMenuEvent)
         return false;
-
     double nVelocityX = rSwipeData.getVelocityX();
+    // tdf#108475 make it swipe only if some reasonable movement was involved
+    if (fabs(nVelocityX) < 50)
+        return false;
     if (nVelocityX > 0)
     {
         gotoPreviousSlide();
