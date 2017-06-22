@@ -415,18 +415,19 @@ if test -n "$with_android_ndk"; then
         with_android_ndk_toolchain_version=clang5.0
     fi
 
+    if test -z "$with_android_ndk_toolchain_version"; then
+        # Default to Clang 5.0
+        with_android_ndk_toolchain_version=clang5.0
+    fi
+
     case "$with_android_ndk_toolchain_version" in
-    4.6|4.7|4.8|4.9)
-        ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-$with_android_ndk_toolchain_version
-        ANDROID_COMPILER_DIR=$ANDROID_BINUTILS_DIR
-        ;;
-    clang3.3|clang3.4|clang5.0)
+    clang5.0)
         ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-4.9
         ANDROID_COMPILER_DIR=$ANDROID_NDK_HOME/toolchains/llvm
         ANDROID_USING_CLANG=true
         ;;
     *)
-        AC_MSG_ERROR([Unrecognized value for the --with-android-ndk-toolchain-version option])
+        AC_MSG_ERROR([Unrecognized value for the --with-android-ndk-toolchain-version option. Building for Android is only supported with Clang 5.*])
     esac
 
     if test ! -d $ANDROID_BINUTILS_DIR; then
