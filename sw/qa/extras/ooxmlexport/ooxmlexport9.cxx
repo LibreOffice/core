@@ -25,6 +25,8 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/LineSpacingMode.hpp>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -692,6 +694,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107618, "tdf107618.doc")
     // This was false, header was lost on export.
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, "HeaderIsOn"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf108682, "tdf108682.docx")
+{
+    auto aLineSpacing = getProperty<style::LineSpacing>(getParagraph(1), "ParaLineSpacing");
+    // This was style::LineSpacingMode::PROP.
+    CPPUNIT_ASSERT_EQUAL(style::LineSpacingMode::FIX, aLineSpacing.Mode);
+    // 260 twips in mm100, this was a negative value.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(459), aLineSpacing.Height);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

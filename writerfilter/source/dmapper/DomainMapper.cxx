@@ -453,9 +453,19 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     if( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_doc_ST_LineSpacingRule_auto)
                     {
                         m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "lineRule", "auto");
-                        aSpacing.Mode = style::LineSpacingMode::PROP;
-                        //reinterpret the already set value
-                        aSpacing.Height = sal_Int16( aSpacing.Height * 100 /  ConversionHelper::convertTwipToMM100( nSingleLineSpacing ));
+                        if (aSpacing.Height >= 0)
+                        {
+                            aSpacing.Mode = style::LineSpacingMode::PROP;
+                            //reinterpret the already set value
+                            aSpacing.Height = sal_Int16( aSpacing.Height * 100 /  ConversionHelper::convertTwipToMM100( nSingleLineSpacing ));
+                        }
+                        else
+                        {
+                            // Negative value still means a positive height,
+                            // just the mode is "exact".
+                            aSpacing.Mode = style::LineSpacingMode::FIX;
+                            aSpacing.Height *= -1;
+                        }
                     }
                     else if( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_doc_ST_LineSpacingRule_atLeast)
                     {
