@@ -41,7 +41,6 @@ private:
     rtl_TextToUnicodeContext     m_contextText2Unicode;
     bool                         m_bCanContinue;
     bool                         m_bInitialized;
-    rtl_TextEncoding             m_rtlEncoding;
     css::uno::Sequence<sal_Int8> m_seqSource;
 };
 
@@ -61,7 +60,6 @@ public:
 private:
     rtl_UnicodeToTextConverter      m_convUnicode2Text;
     rtl_UnicodeToTextContext        m_contextUnicode2Text;
-    rtl_TextEncoding                m_rtlEncoding;
     css::uno::Sequence<sal_Unicode> m_seqSource;
 };
 

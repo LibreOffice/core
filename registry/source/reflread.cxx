@@ -861,7 +861,6 @@ class MethodList : public BlopObject
 public:
 
     sal_uInt16      m_numOfEntries;
-    sal_uInt16      m_numOfMethodEntries;
     sal_uInt16      m_numOfParamEntries;
     size_t          m_PARAM_ENTRY_SIZE;
     std::unique_ptr<sal_uInt32[]>  m_pIndex;
@@ -874,12 +873,11 @@ public:
     {
         if ( m_numOfEntries > 0 )
         {
-            m_numOfMethodEntries = readUINT16(0);
+            readUINT16(0) /* numOfMethodEntries */;
             m_numOfParamEntries = readUINT16(sizeof(sal_uInt16));
             m_PARAM_ENTRY_SIZE = m_numOfParamEntries * sizeof(sal_uInt16);
         } else
         {
-            m_numOfMethodEntries = 0;
             m_numOfParamEntries = 0;
             m_PARAM_ENTRY_SIZE = 0;
         }

@@ -79,7 +79,6 @@ struct oslProcessImpl {
 struct ProcessData
 {
     const sal_Char*  m_pszArgs[MAX_ARGS + 1];
-    oslProcessOption m_options;
     const sal_Char*  m_pszDir;
     sal_Char*        m_pszEnv[MAX_ENVS + 1];
     uid_t            m_uid;
@@ -604,7 +603,6 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
         Data.m_pszArgs[i+2] = nullptr;
     }
 
-    Data.m_options = Options;
     Data.m_pszDir  = (pszDirectory != nullptr) ? strdup(pszDirectory) : nullptr;
 
     if (pszEnvironments != nullptr)

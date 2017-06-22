@@ -31,8 +31,6 @@ class RscTypCont;
 class RscFileInst
 {
     ERRTYPE             aFirstError;
-    sal_uInt32          nErrorLine;
-    sal_uInt32          nErrorPos;
     sal_uInt32          nLineNo;    // line in input file
     RscFileTab::Index   lFileIndex; // index input file
     RscFileTab::Index   lSrcIndex;  // index base file
