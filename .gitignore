@@ -171,3 +171,6 @@ LibreOffice.VC.VC.opendb
 # Sublime Specific
 *.sublime-project
 *.sublime-workspace
+
+# vim-ide-integration
+compile_commands.json
