@@ -171,7 +171,7 @@ namespace emfplushelper
 
 //    typedef struct
 //    {
-//        basegfx::B2DHomMatrix   aWorldTransform;
+//        basegfx::B2DHomMatrix   maWorldTransform;
 //        OutDevState             aDevState;
 //    } EmfPlusGraphicState;
 //
@@ -181,29 +181,31 @@ namespace emfplushelper
     {
     private:
         /* EMF+ */
-        basegfx::B2DHomMatrix   aBaseTransform;
-        basegfx::B2DHomMatrix   aWorldTransform;
-        std::unique_ptr<EMFPObject> aObjects[256];
-        float                   fPageScale;
-        sal_Int32               nOriginX;
-        sal_Int32               nOriginY;
-        sal_Int32               nHDPI;
-        sal_Int32               nVDPI;
+        basegfx::B2DHomMatrix       maBaseTransform;
+        basegfx::B2DHomMatrix       maWorldTransform;
+        basegfx::B2DHomMatrix       maMapTransform;
+
+        std::unique_ptr<EMFPObject> maEMFPObjects[256];
+        float                       mfPageScale;
+        sal_Int32                   mnOriginX;
+        sal_Int32                   mnOriginY;
+        sal_Int32                   mnHDPI;
+        sal_Int32                   mnVDPI;
 
         /* EMF+ emf header info */
-        sal_Int32               mnFrameLeft;
-        sal_Int32               mnFrameTop;
-        sal_Int32               mnFrameRight;
-        sal_Int32               mnFrameBottom;
-        sal_Int32               mnPixX;
-        sal_Int32               mnPixY;
-        sal_Int32               mnMmX;
-        sal_Int32               mnMmY;
+        sal_Int32                   mnFrameLeft;
+        sal_Int32                   mnFrameTop;
+        sal_Int32                   mnFrameRight;
+        sal_Int32                   mnFrameBottom;
+        sal_Int32                   mnPixX;
+        sal_Int32                   mnPixY;
+        sal_Int32                   mnMmX;
+        sal_Int32                   mnMmY;
 
         /* multipart object data */
-        bool                    mbMultipart;
-        sal_uInt16              mMFlags;
-        SvMemoryStream          mMStream;
+        bool                        mbMultipart;
+        sal_uInt16                  mMFlags;
+        SvMemoryStream              mMStream;
 
         /* emf+ graphic state stack */
 //        GraphicStateMap         mGSStack;
@@ -218,7 +220,7 @@ namespace emfplushelper
         void ReadPoint(SvStream& s, float& x, float& y, sal_uInt32 flags);
 
         // internal mapper
-        void MapToDevice(double& x, double& y);
+        void mappingChanged();
 
         // primitive creators
         void EMFPPlusDrawPolygon(const ::basegfx::B2DPolyPolygon& polygon, sal_uInt32 penIndex);
