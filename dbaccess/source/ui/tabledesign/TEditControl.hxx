@@ -62,7 +62,6 @@ namespace dbaui
 
         long nOldDataPos;
 
-        bool bSaveOnMove;
         bool bReadOnly;
 
         // helper class

@@ -130,10 +130,6 @@ void ORTFReader::NextToken( int nToken )
                 }
                 break;
 
-            case RTF_DEFLANG:
-            case RTF_LANG: // inquire language
-                m_nDefToken = (rtl_TextEncoding)nTokenValue;
-                break;
             case RTF_TROWD:
                 {
                     bool bInsertRow = true;

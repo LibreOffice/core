@@ -62,7 +62,6 @@ namespace dbaccess
                         const css::uno::Reference< css::sdbc::XConnection >& _xCon,
                         bool _bCase,
                         IRefreshListener*   _pRefreshListener,
-                        ::dbtools::WarningsContainer* _pWarningsContainer,
                         oslInterlockedCount& _nInAppend
                         );
 

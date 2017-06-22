@@ -292,7 +292,7 @@ void OQuery::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _r
     {   // the base class holds the property values itself, but we have to forward this to our CommandDefinition
 
         m_eDoingCurrently = SETTING_PROPERTIES;
-        OAutoActionReset aAutoReset(this);
+        OAutoActionReset aAutoReset(*this);
         m_xCommandDefinition->setPropertyValue(sAggPropName, _rValue);
 
         if ( PROPERTY_ID_COMMAND == _nHandle )

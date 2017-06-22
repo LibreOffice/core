@@ -1373,9 +1373,6 @@ ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet )
     :m_pRowSet( _pRowSet )
     ,m_bWasNew( false )
     ,m_bWasModified( false )
-#ifdef DBG_UTIL
-    ,m_bNotifyCalled( false )
-#endif
 {
 
     OSL_ENSURE( m_pRowSet, "ORowSetNotifier::ORowSetNotifier: invalid row set. This wil crash." );
@@ -1394,9 +1391,6 @@ ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet,const ORowSetValueVector
     ,m_pRowSet( _pRowSet )
     ,m_bWasNew( false )
     ,m_bWasModified( false )
-#ifdef DBG_UTIL
-    ,m_bNotifyCalled( false )
-#endif
 {
 
     OSL_ENSURE( m_pRowSet, "ORowSetNotifier::ORowSetNotifier: invalid row set. This wil crash." );
@@ -1421,10 +1415,6 @@ void ORowSetNotifier::fire()
         &&  ( m_bWasNew != m_pRowSet->isNew( ORowSetBase::GrantNotifierAccess() ) )
         )
         m_pRowSet->fireProperty( PROPERTY_ID_ISNEW, false, true, ORowSetBase::GrantNotifierAccess() );
-
-#ifdef DBG_UTIL
-    m_bNotifyCalled = true;
-#endif
 }
 
 std::vector<sal_Int32>& ORowSetNotifier::getChangedColumns() const

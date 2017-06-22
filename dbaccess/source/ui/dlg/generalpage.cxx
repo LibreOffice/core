@@ -52,10 +52,8 @@ namespace dbaui
     // OGeneralPage
     OGeneralPage::OGeneralPage( vcl::Window* pParent, const OUString& _rUIXMLDescription, const SfxItemSet& _rItems )
         :OGenericAdministrationPage( pParent, "PageGeneral", _rUIXMLDescription, _rItems )
-        ,m_eNotSupportedKnownType       ( ::dbaccess::DST_UNKNOWN )
         ,m_pSpecialMessage              ( nullptr )
         ,m_eLastMessage                 ( smNone )
-        ,m_bDisplayingInvalid           ( false )
         ,m_bInitTypeList                ( true )
         ,m_pDatasourceType              ( nullptr )
         ,m_pCollection                  ( nullptr )
@@ -255,7 +253,6 @@ namespace dbaui
             sConnectURL = pUrlItem->GetValue();
         }
 
-        m_eNotSupportedKnownType =  ::dbaccess::DST_UNKNOWN;
         implSetCurrentType(  OUString() );
 
         // compare the DSN prefix with the registered ones
@@ -275,9 +272,6 @@ namespace dbaui
             // show a message saying so
             //  eSpecialMessage = smUnsupportedType;
             insertEmbeddedDBTypeEntryData( m_eCurrentSelection, sDisplayName );
-            // remember this type so we can show the special message again if the user selects this
-            // type again (without changing the data source)
-            m_eNotSupportedKnownType = m_pCollection->determineType( m_eCurrentSelection ); // TODO:
         }
 
         return sDisplayName;
@@ -291,7 +285,6 @@ namespace dbaui
 
         // if the selection is invalid, disable everything
         OUString sName,sConnectURL;
-        m_bDisplayingInvalid = !bValid;
         if ( bValid )
         {
             // collect some items and some values
@@ -303,7 +296,6 @@ namespace dbaui
             sConnectURL = pUrlItem->GetValue();
         }
 
-        m_eNotSupportedKnownType =  ::dbaccess::DST_UNKNOWN;
         implSetCurrentType(  OUString() );
 
         // compare the DSN prefix with the registered ones
@@ -323,9 +315,6 @@ namespace dbaui
             // show a message saying so
             //  eSpecialMessage = smUnsupportedType;
             insertDatasourceTypeEntryData( m_eCurrentSelection, sDisplayName );
-            // remember this type so we can show the special message again if the user selects this
-            // type again (without changing the data source)
-            m_eNotSupportedKnownType = m_pCollection->determineType( m_eCurrentSelection );
         }
 
         return sDisplayName;

@@ -96,7 +96,6 @@ namespace dbaui
         sal_Int32           m_nColumnPos;   ///< current column position
         sal_Int32           m_nRows;        ///< number of rows to be searched
         sal_Int32           m_nRowCount;    ///< current count of rows
-        rtl_TextEncoding    m_nDefToken;    ///< language
         bool            m_bError;       ///< error and termination code
         bool            m_bInTbl;       ///< true, if parser is in RTF table
         bool            m_bHead;        ///< true, if the header hasn't been read yet

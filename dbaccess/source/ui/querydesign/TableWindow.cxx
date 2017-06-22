@@ -95,12 +95,10 @@ OTableWindow::OTableWindow( vcl::Window* pParent, const TTableWindowData::value_
           ,Window( pParent, WB_3DLOOK|WB_MOVEABLE )
           ,m_aTypeImage( VclPtr<FixedImage>::Create(this) )
           ,m_xTitle( VclPtr<OTableWindowTitle>::Create(this) )
-          ,m_pAccessible(nullptr)
           ,m_pData( pTabWinData )
           ,m_nMoveCount(0)
           ,m_nMoveIncrement(1)
           ,m_nSizingFlags( SizingFlags::NONE )
-          ,m_bActive( false )
 {
 
     // Set position and size
@@ -135,7 +133,6 @@ void OTableWindow::dispose()
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
 
-    m_pAccessible = nullptr;
     m_aTypeImage.disposeAndClear();
     m_xTitle.disposeAndClear();
     vcl::Window::dispose();
@@ -485,7 +482,6 @@ void OTableWindow::GetFocus()
 void OTableWindow::setActive(bool _bActive)
 {
     SetBoldTitle( _bActive );
-    m_bActive = _bActive;
     if (!_bActive && m_xListBox && m_xListBox->GetSelectionCount() != 0)
         m_xListBox->SelectAll(false);
 }
@@ -560,9 +556,7 @@ void OTableWindow::StateChanged( StateChangedType nType )
 
 Reference< XAccessible > OTableWindow::CreateAccessible()
 {
-    OTableWindowAccess* pAccessible = new OTableWindowAccess(this);
-    m_pAccessible = pAccessible;
-    return pAccessible;
+    return new OTableWindowAccess(this);
 }
 
 void OTableWindow::Command(const CommandEvent& rEvt)

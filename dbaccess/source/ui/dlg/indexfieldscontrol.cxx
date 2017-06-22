@@ -72,7 +72,6 @@ namespace dbaui
         , m_aSeekRow(m_aFields.end())
         , m_pSortingCell(nullptr)
         , m_pFieldNameCell(nullptr)
-        , m_nMaxColumnsInIndex(0)
         , m_bAddIndexAppendix(false)
     {
     }
@@ -190,9 +189,8 @@ namespace dbaui
         return EditBrowseBox::GetTotalCellWidth(_nRow, _nColId);
     }
 
-    void IndexFieldsControl::Init(const Sequence< OUString >& _rAvailableFields, sal_Int32 _nMaxColumnsInIndex,bool _bAddIndexAppendix)
+    void IndexFieldsControl::Init(const Sequence< OUString >& _rAvailableFields, bool _bAddIndexAppendix)
     {
-        m_nMaxColumnsInIndex = _nMaxColumnsInIndex;
         m_bAddIndexAppendix = _bAddIndexAppendix;
 
         RemoveColumns();

@@ -104,8 +104,7 @@ namespace dbaui
             const css::uno::Sequence< OUString >& _rFieldNames,
             const css::uno::Reference< css::container::XNameAccess >& _rxIndexes,
             const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
-            sal_Int32 _nMaxColumnsInIndex
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext
             );
         virtual ~DbaIndexDialog() override;
         virtual void dispose() override;

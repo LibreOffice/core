@@ -48,7 +48,6 @@ namespace dbaui
         OUString                    m_sAscendingText;
         OUString                    m_sDescendingText;
 
-        sal_Int32                   m_nMaxColumnsInIndex;
         bool                        m_bAddIndexAppendix;
 
     public:
@@ -56,7 +55,7 @@ namespace dbaui
         virtual ~IndexFieldsControl() override;
         virtual void dispose() override;
 
-        void Init(const css::uno::Sequence< OUString >& _rAvailableFields, sal_Int32 _nMaxColumnsInIndex,bool _bAddIndexAppendix);
+        void Init(const css::uno::Sequence< OUString >& _rAvailableFields, bool _bAddIndexAppendix);
 
         void initializeFrom(const IndexFields& _rFields);
         void commitTo(IndexFields& _rFields);

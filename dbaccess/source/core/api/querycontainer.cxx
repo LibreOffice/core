@@ -183,7 +183,7 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
     // insert the basic object into the definition container
     {
         m_eDoingCurrently = INSERTING;
-        OAutoActionReset aAutoReset(this);
+        OAutoActionReset aAutoReset(*this);
         m_xCommandDefinitions->insertByName(sNewObjectName, makeAny(xCommandDefinitionPart));
     }
 

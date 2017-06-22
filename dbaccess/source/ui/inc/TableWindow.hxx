@@ -64,7 +64,6 @@ namespace dbaui
         VclPtr<FixedImage>          m_aTypeImage;
         VclPtr<OTableWindowTitle>   m_xTitle;
         VclPtr<OTableWindowListBox> m_xListBox;
-        OTableWindowAccess*     m_pAccessible;
 
     private:
         TTableWindowData::value_type
@@ -74,7 +73,6 @@ namespace dbaui
         sal_Int32               m_nMoveCount;           // how often the arrow keys was pressed
         sal_Int32               m_nMoveIncrement;       // how many pixel we should move
         SizingFlags             m_nSizingFlags;
-        bool                    m_bActive;
 
         // OContainerListener
         virtual void _elementInserted( const css::container::ContainerEvent& _rEvent ) override;
