@@ -16,58 +16,64 @@
 
 set -e
 
-iwyu_INCLUDES=$(grep -h -r ":$" ${BUILDDIR}/workdir/Dep/*Object* \
+iwyu_INCLUDES=$(grep -h -r ":$" "$BUILDDIR"/workdir/Dep/*Object* \
     | grep -v 'workdir\|config_host' | grep -v "^/usr" \
     | sed -e "s,^${SRCDIR}/,," | sed -e "s/:$//"  | sort -u)
 
-iwyu_INCLUDEDIRS=$(echo "${iwyu_INCLUDES}" | sed -e "s,/[^/]*$,," | grep -v "^include" | sort -u)
+iwyu_INCLUDEDIRS=$(echo "$iwyu_INCLUDES" | sed -e "s,/[^/]*$,," | grep -v "^include" | sort -u)
 
-iwyu_EXTERNALS=$(ls ${SRCDIR}/*/*Library*mk ${SRCDIR}/*/*Executable*mk \
-    | xargs awk -f ${SRCDIR}/bin/gen-iwyu-dummy-lib.awk \
+iwyu_EXTERNALS=$(ls "$SRCDIR"/*/*Library*mk "$SRCDIR"/*/*Executable*mk \
+    | xargs awk -f "$SRCDIR"/bin/gen-iwyu-dummy-lib.awk \
     | grep -v '$(\|)\|tde\|expat_x64\|zlib_x64\|mozilla\|apr\|serf')
 
-mkdir -p ${BUILDDIR}/iwyudummy
-iwyu_MOD=${BUILDDIR}/iwyudummy/Module_iwyudummy.mk
-iwyu_LIB=${BUILDDIR}/iwyudummy/StaticLibrary_iwyudummy.mk
+iwyu_DIR="$BUILDDIR"/iwyudummy/
+mkdir -p "$iwyu_DIR"
 
-echo 'module_directory:=$(dir $(realpath $(firstword $(MAKEFILE_LIST))))' > ${BUILDDIR}/iwyudummy/Makefile
-echo "include ${SRCDIR}/solenv/gbuild/partial_build.mk" >> ${BUILDDIR}/iwyudummy/Makefile
-echo '$(eval $(call gb_Module_Module,iwyudummy))' > ${iwyu_MOD}
-echo '$(eval $(call gb_Module_add_targets,iwyudummy,StaticLibrary_iwyudummy))' >> ${iwyu_MOD}
+{
+    echo 'module_directory:=$(dir $(realpath $(firstword $(MAKEFILE_LIST))))'
+    echo "include ${SRCDIR}/solenv/gbuild/partial_build.mk"
+} > "$iwyu_DIR"Makefile
 
-# prevent some common configuration errors
-echo 'ifneq ($(COMPILER_PLUGINS),)' > ${iwyu_LIB}
-echo '    $(call gb_Output_error,--enable-compiler-plugins does not work well with this: bailing out)' >> ${iwyu_LIB}
-echo 'endif' >> ${iwyu_LIB}
+{
+    echo '$(eval $(call gb_Module_Module,iwyudummy))'
+    echo '$(eval $(call gb_Module_add_targets,iwyudummy,StaticLibrary_iwyudummy))'
+} > "$iwyu_DIR"Module_iwyudummy.mk
 
-echo '$(eval $(call gb_StaticLibrary_StaticLibrary,iwyudummy))' >> ${iwyu_LIB}
-# clang will "compile" headers to .gch by default
-echo '$(eval $(call gb_StaticLibrary_add_cxxflags,iwyudummy,-x c++ -Wno-unused-macros -Wno-unused-const-variable))' >> ${iwyu_LIB}
-echo '$(eval $(call gb_StaticLibrary_use_custom_headers,iwyudummy,officecfg/registry))' >> ${iwyu_LIB}
-echo '$(eval $(call gb_StaticLibrary_use_sdk_api,iwyudummy))' >> ${iwyu_LIB}
-echo '$(eval $(call gb_StaticLibrary_use_externals,iwyudummy,\' >> ${iwyu_LIB}
-for ext in ${iwyu_EXTERNALS}; do
-    echo "${ext} \\";
-done >> ${iwyu_LIB}
-echo '))' >> ${iwyu_LIB}
+{
+    # prevent some common configuration errors
+    echo 'ifneq ($(COMPILER_PLUGINS),)'
+    echo '    $(call gb_Output_error,--enable-compiler-plugins does not work well with this: bailing out)'
+    echo 'endif'
 
-echo '$(eval $(call gb_StaticLibrary_set_include,iwyudummy,\' >> ${iwyu_LIB}
-echo '$$(INCLUDE) \' >> ${iwyu_LIB}
-for dir in ${iwyu_INCLUDEDIRS}; do
-    if echo ${dir} | grep ".*/inc/" &>/dev/null; then
-        iwyu_INCLUDEDIRS_EXTRA+=" ${dir%/inc/*}/inc"
-    fi
-done
-for dir in $(echo ${iwyu_INCLUDEDIRS_EXTRA} | sed -e "s/ /\n/g" | uniq) ${iwyu_INCLUDEDIRS}; do
-    echo "-I${SRCDIR}/${dir} \\";
-done >> ${iwyu_LIB}
-# it fails to find stddef.h?
-echo "-I/usr/lib/clang/$(llvm-config --version)/include \\" >> ${iwyu_LIB}
-echo "))" >> ${iwyu_LIB} >> ${iwyu_LIB}
+    echo '$(eval $(call gb_StaticLibrary_StaticLibrary,iwyudummy))'
+    # clang will "compile" headers to .gch by default
+    echo '$(eval $(call gb_StaticLibrary_add_cxxflags,iwyudummy,-x c++ -Wno-unused-macros -Wno-unused-const-variable))'
+    echo '$(eval $(call gb_StaticLibrary_use_custom_headers,iwyudummy,officecfg/registry))'
+    echo '$(eval $(call gb_StaticLibrary_use_sdk_api,iwyudummy))'
+    echo '$(eval $(call gb_StaticLibrary_use_externals,iwyudummy,\'
+    for ext in ${iwyu_EXTERNALS}; do
+        echo "${ext} \\";
+    done
+    echo '))'
 
-echo '$(eval $(call gb_StaticLibrary__add_iwyu_headers,iwyudummy,\' >> ${iwyu_LIB}
-for hdr in ${iwyu_INCLUDES}; do
-    echo "${hdr} \\";
-done >> ${iwyu_LIB}
-echo '))' >> ${iwyu_LIB}
+    echo '$(eval $(call gb_StaticLibrary_set_include,iwyudummy,\'
+    echo '$$(INCLUDE) \'
+    for dir in ${iwyu_INCLUDEDIRS}; do
+        if echo "$dir" | grep ".*/inc/" &>/dev/null; then
+            iwyu_INCLUDEDIRS_EXTRA+=" ${dir%/inc/*}/inc"
+        fi
+    done
+    for dir in $(echo ${iwyu_INCLUDEDIRS_EXTRA} | sed -e "s/ /\n/g" | uniq) ${iwyu_INCLUDEDIRS}; do
+        echo "-I${SRCDIR}/${dir} \\";
+    done
+    # it fails to find stddef.h?
+    echo "-I/usr/lib/clang/$(llvm-config --version)/include \\"
+    echo "))"
+
+    echo '$(eval $(call gb_StaticLibrary__add_iwyu_headers,iwyudummy,\'
+    for hdr in ${iwyu_INCLUDES}; do
+        echo "${hdr} \\";
+    done
+    echo '))'
+} > "$iwyu_DIR"StaticLibrary_iwyudummy.mk
 
