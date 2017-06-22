@@ -21,6 +21,8 @@
 #define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPBRUSH_HXX
 
 #include <emfphelperdata.hxx>
+#include <tools/color.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 namespace emfplushelper
 {
