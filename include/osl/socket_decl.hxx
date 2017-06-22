@@ -314,15 +314,13 @@ namespace osl
 
 
         /** Queries the socket for its type.
-            @return one of:
-            <ul>
-            <li> <code>osl_Socket_TypeStream</code>
-            <li> <code>osl_Socket_TypeDgram</code>
-            <li> <code>osl_Socket_TypeRaw</code>
-            <li> <code>osl_Socket_TypeRdm</code>
-            <li> <code>osl_Socket_TypeSeqPacket</code>
-            <li> <code>osl_invalid_SocketType</code>, if an error occurred
-            </ul>
+
+            @retval osl_Socket_TypeStream
+            @retval osl_Socket_TypeDgram
+            @retval osl_Socket_TypeRaw
+            @retval osl_Socket_TypeRdm
+            @retval osl_Socket_TypeSeqPacket
+            @retval osl_invalid_SocketType if an error occurred
         */
         inline oslSocketType    SAL_CALL getType() const;
 

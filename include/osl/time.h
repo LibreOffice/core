@@ -84,7 +84,7 @@ extern "C" {
 
 typedef struct _oslDateTime
 {
-    /** contains the nanoseconds .
+    /** contains the nanoseconds
     */
     sal_uInt32 NanoSeconds;
 

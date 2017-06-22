@@ -139,10 +139,10 @@ typedef void *oslDirectoryItem;
 
 /** Open a directory for enumerating its contents.
 
-    @param  pustrDirectoryURL [in]
+    @param [in]  pustrDirectoryURL
     The full qualified URL of the directory.
 
-    @param  pDirectory [out]
+    @param [out]  pDirectory
     On success it receives a handle used for subsequent calls by osl_getNextDirectoryItem().
     The handle has to be released by a call to osl_closeDirectory().
 
@@ -168,14 +168,14 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_openDirectory(
     Retrieves the next item of a previously opened directory.
     All handles have an initial refcount of 1.
 
-    @param  Directory [in]
+    @param [in]  Directory
     A directory handle received from a previous call to osl_openDirectory().
 
-    @param  pItem [out]
+    @param [out]  pItem
     On success it receives a handle that can be used for subsequent calls to osl_getFileStatus().
     The handle has to be released by a call to osl_releaseDirectoryItem().
 
-    @param  uHint [in]
+    @param [in]  uHint
     With this parameter the caller can tell the implementation that (s)he
     is going to call this function uHint times afterwards. This enables the implementation to
     get the information for more than one file and cache it until the next calls.
@@ -200,7 +200,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getNextDirectoryItem(
 
 /** Release a directory handle.
 
-    @param Directory [in]
+    @param [in] Directory
     A handle received by a call to osl_openDirectory().
 
     @retval osl_File_E_None on success
@@ -220,10 +220,10 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_closeDirectory(
     Due to performance issues it is not recommended to use this function while
     enumerating the contents of a directory. In this case use osl_getNextDirectoryItem() instead.
 
-    @param pustrFileURL [in]
+    @param [in] pustrFileURL
     An absolute file URL.
 
-    @param pItem [out]
+    @param [out] pItem
     On success it receives a handle which can be used for subsequent calls to osl_getFileStatus().
     The handle has to be released by a call to osl_releaseDirectoryItem().
 
@@ -257,7 +257,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getDirectoryItem(
 
     The caller responsible for releasing the directory item handle using osl_releaseDirectoryItem().
 
-    @param  Item [in]
+    @param [in]  Item
     A handle received by a call to osl_getDirectoryItem() or osl_getNextDirectoryItem().
 
     @retval osl_File_E_None on success
@@ -278,7 +278,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_acquireDirectoryItem(
     If the refcount reaches 0 the data associated with
     this directory item handle will be released.
 
-    @param  Item [in]
+    @param [in]  Item
     A handle received by a call to osl_getDirectoryItem() or osl_getNextDirectoryItem().
 
     @retval osl_File_E_None on success
@@ -297,10 +297,10 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_releaseDirectoryItem(
     The comparison is done first by URL, and then by resolving links to
     find the target, and finally by comparing inodes on unix.
 
-    @param  pItemA [in]
+    @param [in]  pItemA
     A directory handle to compare with another handle
 
-    @param  pItemB [in]
+    @param [in]  pItemB
     A directory handle to compare with pItemA
 
     @retval sal_True if the items point to an identical resource
@@ -392,15 +392,15 @@ typedef struct _oslFileStatus {
 
 /** Retrieve information about a single file or directory.
 
-    @param  Item [in]
+    @param [in]  Item
     A handle received by a previous call to osl_getDirectoryItem() or osl_getNextDirectoryItem().
 
-    @param  pStatus [in|out]
+    @param [in,out] pStatus
     Points to a structure which receives the information of the file or directory
     represented by the handle Item. The member uStructSize has to be initialized to
     sizeof(oslFileStatus) before calling this function.
 
-    @param  uFieldMask [in]
+    @param [in]  uFieldMask
     Specifies which fields of the structure pointed to by pStatus are of interest to the caller.
 
     @retval osl_File_E_None on success
@@ -438,7 +438,7 @@ typedef void *oslVolumeDeviceHandle;
     Releases the given oslVolumeDeviceHandle which was acquired by a call to
     osl_getVolumeInformation() or osl_acquireVolumeDeviceHandle().
 
-    @param Handle [in]
+    @param [in] Handle
     An oslVolumeDeviceHandle received by a call to osl_getVolumeInformation().
 
     @retval
@@ -459,7 +459,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_releaseVolumeDeviceHandle(
     osl_getVolumeInformation(). The caller is responsible for releasing the
     acquired handle by calling osl_releaseVolumeDeviceHandle().
 
-    @param Handle [in]
+    @param [in] Handle
     An oslVolumeDeviceHandle received by a call to osl_getVolumeInformation().
 
     @retval
@@ -475,10 +475,10 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_acquireVolumeDeviceHandle(
 
 /** Get the full qualified URL where a device is mounted to.
 
-    @param Handle [in]
+    @param [in] Handle
     An oslVolumeDeviceHandle received by a call to osl_getVolumeInformation().
 
-    @param ppustrDirectoryURL [out]
+    @param [out] ppustrDirectoryURL
     Receives the full qualified URL where the device is mounted to.
 
     @retval osl_File_E_None on success
@@ -564,13 +564,13 @@ typedef struct _oslVolumeInfo {
     function osl_getFileStatus() should be called to determine if the type is
     osl_file_Type_Volume.
 
-    @param pustrDirectoryURL [in]
+    @param [in] pustrDirectoryURL
     Full qualified URL of the volume
 
-    @param pInfo [out]
+    @param [out] pInfo
     On success it receives information about the volume.
 
-    @param uFieldMask [in]
+    @param [in] uFieldMask
     Specifies which members of the structure should be filled
 
     @retval osl_File_E_None on success
@@ -610,13 +610,13 @@ typedef void *oslFileHandle;
 
     Open a file. Only regular files can be openend.
 
-    @param pustrFileURL [in]
+    @param [in] pustrFileURL
     The full qualified URL of the file to open.
 
-    @param pHandle [out]
+    @param [out] pHandle
     On success it receives a handle to the open file.
 
-    @param uFlags [in]
+    @param [in] uFlags
     Specifies the open mode.
 
     On Android, if the file path is below the /assets folder, the file
@@ -668,17 +668,17 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_openFile(
 
 /** Set the internal position pointer of an open file.
 
-    @param Handle [in]
+    @param [in] Handle
     Handle to a file received by a previous call to osl_openFile().
 
-    @param uHow [in]
+    @param [in] uHow
     How to calculate the offset - osl_Pos_Absolut means start at the
     beginning of the file, osl_Pos_Current means offset from the current
     seek position and osl_Pos_End means the offset will be negative and
     the position will be calculated backwards from the end of the file by
     the offset provided.
 
-    @param uPos [in]
+    @param [in] uPos
     Seek offset, depending on uHow. If uHow is osl_Pos_End then the value must be negative.
 
     @retval osl_File_E_None on success
@@ -695,10 +695,10 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_setFilePos(
 
 /** Retrieve the current position of the internal pointer of an open file.
 
-    @param Handle [in]
+    @param [in] Handle
     Handle to a file received by a previous call to osl_openFile().
 
-    @param pPos [out]
+    @param [out] pPos
     On success receives the current position of the file pointer.
 
     @retval osl_File_E_None on success
@@ -719,10 +719,10 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFilePos(
     Sets the file size of an open file. The file can be truncated or enlarged by the function.
     The position of the file pointer is not affeced by this function.
 
-    @param Handle [in]
+    @param [in] Handle
     Handle to a file received by a previous call to osl_openFile().
 
-    @param uSize [in]
+    @param [in] uSize
     New size in bytes.
 
     @retval osl_File_E_None on success
@@ -743,10 +743,10 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_setFileSize(
     Gets the file size of an open file.
     The position of the file pointer is not affeced by this function.
 
-    @param Handle [in]
+    @param [in] Handle
     Handle to a file received by a previous call to osl_openFile().
 
-    @param pSize [out]
+    @param [out] pSize
     Current size in bytes.
 
     @retval osl_File_E_None on success
@@ -791,11 +791,11 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileSize(
     just a pointer to the file inside the already mapped .apk is
     returned.
 
-    @param Handle   [in]    Handle of the file to be mapped.
-    @param ppAddr   [out]   Memory address of the mapped file
-    @param uLength  [in]    Amount to map of the file from the offset
-    @param uOffset  [in]    Offset into the file to map
-    @param uFlags   [in]    osl_File_MapFlag_RandomAccess or
+    @param [in] Handle       Handle of the file to be mapped.
+    @param [out] ppAddr      Memory address of the mapped file
+    @param [in] uLength      Amount to map of the file from the offset
+    @param [in] uOffset      Offset into the file to map
+    @param [in] uFlags       osl_File_MapFlag_RandomAccess or
                             osl_File_MapFlag_WillNeed
 
     @retval osl_File_E_None on success
@@ -872,17 +872,17 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_unmapMappedFile (
     Reads a number of bytes from a file. The internal file pointer is
     increased by the number of bytes read.
 
-    @param Handle [in]
+    @param [in] Handle
     Handle to a file received by a previous call to osl_openFile().
 
-    @param pBuffer [out]
+    @param [out] pBuffer
     Points to a buffer which receives data. The buffer must be large enough
     to hold uBytesRequested bytes.
 
-    @param uBytesRequested [in]
+    @param [in] uBytesRequested
     Number of bytes which should be retrieved.
 
-    @param pBytesRead [out]
+    @param [out] pBytesRead
     On success the number of bytes which have actually been retrieved.
 
     @retval osl_File_E_None on success
@@ -905,10 +905,10 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_readFile(
 
 /** Test if the end of a file is reached.
 
-    @param Handle [in]
+    @param [in] Handle
     Handle to a file received by a previous call to osl_openFile().
 
-    @param pIsEOF [out]
+    @param [out] pIsEOF
     Points to a variable that receives the end-of-file status.
 
     @retval osl_File_E_None on success
@@ -934,16 +934,16 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_isEndOfFile(
     Writes a number of bytes to a file.
     The internal file pointer is increased by the number of bytes read.
 
-    @param Handle [in]
+    @param [in] Handle
     Handle to a file received by a previous call to osl_openFile().
 
-    @param pBuffer [in]
+    @param [in] pBuffer
     Points to a buffer which contains the data.
 
-    @param uBytesToWrite [in]
+    @param [in] uBytesToWrite
     Number of bytes which should be written.
 
-    @param pBytesWritten [out]
+    @param [out] pBytesWritten
     On success the number of bytes which have actually been written.
 
     @retval osl_File_E_None on success
@@ -971,20 +971,20 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_writeFile(
 
     The current position of the internal file pointer may or may not be changed.
 
-    @param Handle [in]
+    @param [in] Handle
     Handle to a file received by a previous call to osl_openFile().
 
-    @param uOffset [in]
+    @param [in] uOffset
     Offset position from start of file where read starts
 
-    @param pBuffer [out]
+    @param [out] pBuffer
     Points to a buffer which receives data. The buffer must be large enough
     to hold uBytesRequested bytes.
 
-    @param uBytesRequested [in]
+    @param [in] uBytesRequested
     Number of bytes which should be retrieved.
 
-    @param pBytesRead [out]
+    @param [out] pBytesRead
     On success the number of bytes which have actually been retrieved.
 
     @retval osl_File_E_None on success
@@ -1010,19 +1010,19 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_readFileAt(
 
     The current position of the internal file pointer may or may not be changed.
 
-    @param Handle [in]
+    @param [in] Handle
     Handle to a file received by a previous call to osl_openFile().
 
-    @param uOffset [in]
+    @param [in] uOffset
     Position of file to write into.
 
-    @param pBuffer [in]
+    @param [in] pBuffer
     Points to a buffer which contains the data.
 
-    @param uBytesToWrite [in]
+    @param [in] uBytesToWrite
     Number of bytes which should be written.
 
-    @param pBytesWritten [out]
+    @param [out] pBytesWritten
     On success the number of bytes which have actually been written.
 
     @retval osl_File_E_None on success
@@ -1052,10 +1052,10 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_writeFileAt(
 
     Reads a line from a file. The new line delimiter is NOT returned!
 
-    @param Handle [in]
+    @param [in] Handle
     Handle to a file received by a previous call to osl_openFile().
 
-    @param  ppSequence [in/out]
+    @param [in,out] ppSequence
     A pointer pointer to a sal_Sequence that will hold the line read on success.
 
     @retval osl_File_E_None on success
@@ -1101,7 +1101,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_syncFile( oslFileHandle Handle );
 
 /** Close an open file.
 
-    @param Handle [in]
+    @param [in] Handle
     Handle to a file received by a previous call to osl_openFile().
 
     @retval osl_File_E_None on success
@@ -1118,7 +1118,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_closeFile( oslFileHandle Handle );
 
 /** Create a directory.
 
-    @param pustrDirectoryURL [in]
+    @param [in] pustrDirectoryURL
     Full qualified URL of the directory to create.
 
     @retval osl_File_E_None on success
@@ -1162,7 +1162,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_createDirectoryWithFlags(
 
 /** Remove an empty directory.
 
-    @param pustrDirectoryURL [in]
+    @param [in] pustrDirectoryURL
     Full qualified URL of the directory.
 
     @retval osl_File_E_None on success
@@ -1254,7 +1254,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_createDirectoryPath(
 
 /** Remove a regular file.
 
-    @param pustrFileURL [in]
+    @param [in] pustrFileURL
     Full qualified URL of the file to remove.
 
     @retval osl_File_E_None on success
@@ -1286,10 +1286,10 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_removeFile(
     Copies a file to a new destination. Copies only files not directories.
     No assumptions should be made about preserving attributes or file time.
 
-    @param pustrSourceFileURL [in]
+    @param [in] pustrSourceFileURL
     Full qualified URL of the source file.
 
-    @param pustrDestFileURL [in]
+    @param [in] pustrDestFileURL
     Full qualified URL of the destination file. A directory is NOT a valid destination file!
 
     @retval osl_File_E_None on success
@@ -1315,10 +1315,10 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_copyFile(
     Moves a file or directory to a new destination or renames it.
     File time and attributes are preserved.
 
-    @param pustrSourceFileURL [in]
+    @param [in] pustrSourceFileURL
     Full qualified URL of the source file.
 
-    @param pustrDestFileURL [in]
+    @param [in] pustrDestFileURL
     Full qualified URL of the destination file. An existing directory is NOT a valid destination !
 
     @retval osl_File_E_None on success
@@ -1344,10 +1344,10 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_moveFile(
     If a file or directory with the requested name already exists a new name is generated following
     the common rules on the actual Operating System and File System.
 
-    @param pustrRequestedURL [in]
+    @param [in] pustrRequestedURL
     Requested name of a file or directory.
 
-    @param ppustrValidURL [out]
+    @param [out] ppustrValidURL
     On success receives a name which is unused and valid on the actual Operating System and
     File System.
 
@@ -1365,15 +1365,15 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getCanonicalName(
     The function resolves symbolic links if possible and path ellipses, so on success
     the resulting absolute path is fully resolved.
 
-    @param pustrBaseDirectoryURL [in]
+    @param [in] pustrBaseDirectoryURL
     Base directory URL to which the relative path is related to.
 
-    @param pustrRelativeFileURL [in]
+    @param [in] pustrRelativeFileURL
     An URL of a file or directory relative to the directory path specified by pustrBaseDirectoryURL
     or an absolute path.
     If pustrRelativeFileURL denotes an absolute path pustrBaseDirectoryURL will be ignored.
 
-    @param ppustrAbsoluteFileURL [out]
+    @param [out] ppustrAbsoluteFileURL
     On success it receives the full qualified absolute file URL.
 
     @retval osl_File_E_None on success
@@ -1399,10 +1399,10 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getAbsoluteFileURL(
 
 /** Convert a system dependent path into a file URL.
 
-    @param pustrSystemPath [in]
+    @param [in] pustrSystemPath
     A System dependent path of a file or directory.
 
-    @param ppustrFileURL [out]
+    @param [out] ppustrFileURL
     On success it receives the file URL.
 
     @retval osl_File_E_None on success
@@ -1415,10 +1415,10 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileURLFromSystemPath(
 
 /** Search a full qualified system path or a file URL.
 
-    @param pustrFileName [in]
+    @param [in] pustrFileName
     A system dependent path, a file URL, a file or relative directory.
 
-    @param pustrSearchPath [in]
+    @param [in] pustrSearchPath
     A list of system paths, in which a given file has to be searched. The Notation of a path
     list is system dependent, e.g. on UNIX system "/usr/bin:/bin" and on Windows "C:\BIN;C:\BATCH".
     These paths are only for the search of a file or a relative path, otherwise it will be ignored.
@@ -1428,7 +1428,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileURLFromSystemPath(
     LD_LIBRARY_PATH) if the caller is not aware of the Operating System and so doesn't know which
     path list delimiter to use.
 
-    @param ppustrFileURL [out]
+    @param [out] ppustrFileURL
     On success it receives the full qualified file URL.
 
     @retval osl_File_E_None on success
@@ -1444,10 +1444,10 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_searchFileURL(
 
 /** Convert a file URL into a system dependent path.
 
-    @param pustrFileURL [in]
+    @param [in] pustrFileURL
     A File URL.
 
-    @param ppustrSystemPath [out]
+    @param [out] ppustrSystemPath
     On success it receives the system path.
 
     @retval osl_File_E_None on success
@@ -1460,7 +1460,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getSystemPathFromFileURL(
 
 /** Function pointer representing the function called back from osl_abbreviateSystemPath
 
-    @param ustrText [in]
+    @param [in] ustrText
     Text to calculate the width for
 
     @return
@@ -1473,16 +1473,16 @@ typedef sal_uInt32 (SAL_CALL *oslCalcTextWidthFunc)( rtl_uString *ustrText );
 
 /** Abbreviate a system notation path.
 
-    @param ustrSystemPath [in]
+    @param [in] ustrSystemPath
     The full system path to abbreviate
 
-    @param pustrCompacted [out]
+    @param [out] pustrCompacted
     Receives the compacted system path on output
 
-    @param pCalcWidth [in]
+    @param [in] pCalcWidth
     Function ptr that calculates the width of a string. Can be zero.
 
-    @param uMaxWidth [in]
+    @param [in] uMaxWidth
     Maximum width allowed that is returned from pCalcWidth.
     If pCalcWidth is zero the character count is assumed as width.
 
@@ -1498,10 +1498,10 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_abbreviateSystemPath(
 
 /** Set file attributes.
 
-    @param pustrFileURL [in]
+    @param [in] pustrFileURL
     The full qualified file URL.
 
-    @param uAttributes [in]
+    @param [in] uAttributes
     Attributes of the file to be set.
 
     @retval osl_File_E_None on success
@@ -1514,16 +1514,16 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_setFileAttributes(
 
 /** Set the file time.
 
-    @param pustrFileURL [in]
+    @param [in] pustrFileURL
     The full qualified URL of the file.
 
-    @param aCreationTime [in]
+    @param [in] aCreationTime
     Creation time of the given file.
 
-    @param aLastAccessTime [in]
+    @param [in] aLastAccessTime
     Time of the last access of the given file.
 
-    @param aLastWriteTime [in]
+    @param [in] aLastWriteTime
     Time of the last modifying of the given file.
 
     @retval osl_File_E_None on success
@@ -1570,15 +1570,15 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getTempDirURL(
     the file name will be returned, the caller is responsible for closing and removing
     the file.
 
-    @param  pustrDirectoryURL [in]
+    @param [in]  pustrDirectoryURL
     Specifies the full qualified URL where the temporary file should be created.
     If pustrDirectoryURL is 0 the path returned by osl_getTempDirURL will be used.
 
-    @param  pHandle [out]
+    @param [out]  pHandle
     On success receives a handle to the open file. If pHandle is 0 the file will
     be closed on return, in this case ppustrTempFileURL must not be 0.
 
-    @param  ppustrTempFileURL [out]
+    @param [out]  ppustrTempFileURL
     On success receives the full qualified URL of the temporary file.
     If ppustrTempFileURL is 0 the file will be automatically removed on close,
     in this case pHandle must not be 0.

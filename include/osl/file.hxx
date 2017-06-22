@@ -113,10 +113,10 @@ public:
         If a file or directory with the requested name already exists a new name is generated following
         the common rules on the actual Operating System and File System.
 
-        @param ustrRequestedURL [in]
+        @param [in] ustrRequestedURL
         Requested name of a file or directory.
 
-        @param ustrValidURL [out]
+        @param [out] ustrValidURL
         On success receives a name which is unused and valid on the actual Operating System and
         File System.
 
@@ -137,15 +137,15 @@ public:
         The function resolves symbolic links if possible and path ellipses, so on success
         the resulting absolute path is fully resolved.
 
-        @param ustrBaseDirectoryURL [in]
+        @param [in] ustrBaseDirectoryURL
         Base directory URL to which the relative path is related to.
 
-        @param ustrRelativeFileURL [in]
+        @param [in] ustrRelativeFileURL
         An URL of a file or directory relative to the directory path specified by ustrBaseDirectoryURL
         or an absolute path.
         If ustrRelativeFileURL denotes an absolute path ustrBaseDirectoryURL will be ignored.
 
-        @param ustrAbsoluteFileURL [out]
+        @param [out] ustrAbsoluteFileURL
         On success it receives the full qualified absolute file URL.
 
         @retval E_None on success
@@ -172,10 +172,10 @@ public:
 
     /** Convert a file URL into a system dependent path.
 
-        @param ustrFileURL [in]
+        @param [in] ustrFileURL
         A File URL.
 
-        @param ustrSystemPath [out]
+        @param [out] ustrSystemPath
         On success it receives the system path.
 
         @retval E_None on success
@@ -191,10 +191,10 @@ public:
 
     /** Convert a system dependent path into a file URL.
 
-        @param ustrSystemPath [in]
+        @param [in] ustrSystemPath
         A System dependent path of a file or directory.
 
-        @param ustrFileURL [out]
+        @param [out] ustrFileURL
         On success it receives the file URL.
 
         @retval E_None on success
@@ -210,10 +210,10 @@ public:
 
     /** Searche a full qualified system path or a file URL.
 
-        @param ustrFileName [in]
+        @param [in] ustrFileName
         A system dependent path, a file URL, a file or relative directory
 
-        @param ustrSearchPath [in]
+        @param [in] ustrSearchPath
         A list of system paths, in which a given file has to be searched. The Notation of a path list is
         system dependent, e.g. on UNIX system "/usr/bin:/bin" and on Windows "C:\BIN;C:\BATCH".
         These paths are only for the search of a file or a relative path, otherwise it will be ignored.
@@ -223,7 +223,7 @@ public:
         The value of an environment variable should be used (e.g. LD_LIBRARY_PATH) if the caller is not
         aware of the Operating System and so doesn't know which path list delimiter to use.
 
-        @param ustrFileURL [out]
+        @param [out] ustrFileURL
         On success it receives the full qualified file URL.
 
         @retval E_None on success
@@ -262,16 +262,16 @@ public:
         it, the file will be automatically removed on close else the caller is
         responsible for removing the file on success.<br><br>
 
-        @param  pustrDirectoryURL [in]
+        @param [in]  pustrDirectoryURL
         Specifies the full qualified URL where the temporary file should be created.
         If pustrDirectoryURL is 0 the path returned by osl_getTempDirURL will be used.
 
-        @param  pHandle [out]
+        @param [out] pHandle
         On success receives a handle to the open file.
         If pHandle is 0 the file will be closed on return, in this case
         pustrTempFileURL must not be 0.
 
-        @param  pustrTempFileURL [out]
+        @param [out] pustrTempFileURL
         On success receives the full qualified URL of the temporary file.
         If pustrTempFileURL is 0 the file will be automatically removed
         on close, in this case pHandle must not be 0.
@@ -912,7 +912,7 @@ public:
 
     /** Constructor.
 
-        @param  ustrFileURL [in]
+        @param [in]  ustrFileURL
         The full qualified URL of the file. Relative paths are not allowed.
     */
 
@@ -939,7 +939,7 @@ public:
 
         Open a file. Only regular files can be openend.
 
-        @param uFlags [in]
+        @param [in] uFlags
         Specifies the open mode.
 
         @retval E_None on success
@@ -1010,10 +1010,10 @@ public:
 
     /** Set the internal position pointer of an open file.
 
-        @param uHow [in]
+        @param [in] uHow
         Distance to move the internal position pointer (from uPos).
 
-        @param uPos [in]
+        @param [in] uPos
         Absolute position from the beginning of the file.
 
         @retval E_None on success
@@ -1031,7 +1031,7 @@ public:
 
     /** Retrieve the current position of the internal pointer of an open file.
 
-        @param uPos [out]
+        @param [out] uPos
         On success receives the current position of the file pointer.
 
         @retval E_None on success
@@ -1051,7 +1051,7 @@ public:
 
     /** Test if the end of a file is reached.
 
-        @param pIsEOF [out]
+        @param [out] pIsEOF
         Points to a variable that receives the end-of-file status.
 
         @retval E_None on success
@@ -1080,7 +1080,7 @@ public:
         Sets the file size of an open file. The file can be truncated or enlarged by the function.
         The position of the file pointer is not affeced by this function.
 
-        @param uSize [in]
+        @param [in] uSize
         New size in bytes.
 
         @retval E_None on success
@@ -1102,7 +1102,7 @@ public:
         Gets the file size of an open file.
         The position of the file pointer is not affeced by this function.
 
-        @param rSize [out]
+        @param [out] rSize
         Current size in bytes.
 
         @retval E_None on success
@@ -1126,14 +1126,14 @@ public:
         Reads a number of bytes from a file. The internal file pointer is
         increased by the number of bytes read.
 
-        @param pBuffer [out]
+        @param [out] pBuffer
         Points to a buffer which receives data. The buffer must be large enough
         to hold uBytesRequested bytes.
 
-        @param uBytesRequested [in]
+        @param [in] uBytesRequested
         Number of bytes which should be retrieved.
 
-        @param rBytesRead [out]
+        @param [out] rBytesRead
         On success the number of bytes which have actually been retrieved.
 
         @retval E_None on success
@@ -1162,13 +1162,13 @@ public:
         Writes a number of bytes to a file.
         The internal file pointer is increased by the number of bytes read.
 
-        @param pBuffer [in]
+        @param [in] pBuffer
         Points to a buffer which contains the data.
 
-        @param uBytesToWrite [in]
+        @param [in] uBytesToWrite
         Number of bytes which should be written.
 
-        @param rBytesWritten [out]
+        @param [out] rBytesWritten
         On success the number of bytes which have actually been written.
 
         @retval E_None on success
@@ -1200,7 +1200,7 @@ public:
 
         Reads a line from a file. The new line delimiter is NOT returned!
 
-        @param  aSeq [in/out]
+        @param [in,out] aSeq
         A reference to a ::rtl::ByteSequence that will hold the line read on success.
 
         @retval E_None on success
@@ -1254,10 +1254,10 @@ public:
         Copies a file to a new destination. Copies only files not directories.
         No assumptions should be made about preserving attributes or file time.
 
-        @param ustrSourceFileURL [in]
+        @param [in] ustrSourceFileURL
         Full qualified URL of the source file.
 
-        @param ustrDestFileURL [in]
+        @param [in] ustrDestFileURL
         Full qualified URL of the destination file. A directory is NOT a valid destination file!
 
         @retval E_None on success
@@ -1284,10 +1284,10 @@ public:
         Moves a file or directory to a new destination or renames it.
         File time and attributes are preserved.
 
-        @param ustrSourceFileURL [in]
+        @param [in] ustrSourceFileURL
         Full qualified URL of the source file.
 
-        @param ustrDestFileURL [in]
+        @param [in] ustrDestFileURL
         Full qualified URL of the destination file. An existing directory is NOT a valid destination !
 
         @retval E_None on success
@@ -1309,7 +1309,7 @@ public:
 
     /** Remove a regular file.
 
-        @param ustrFileURL [in]
+        @param [in] ustrFileURL
         Full qualified URL of the file to remove.
 
         @retval E_None on success
@@ -1341,10 +1341,10 @@ public:
 
     /** Set file attributes.
 
-        @param ustrFileURL [in]
+        @param [in] ustrFileURL
         The full qualified file URL.
 
-        @param uAttributes [in]
+        @param [in] uAttributes
         Attributes of the file to be set.
 
         @return
@@ -1361,16 +1361,16 @@ public:
 
     /** Set the file time.
 
-        @param ustrFileURL [in]
+        @param [in] ustrFileURL
         The full qualified URL of the file.
 
-        @param rCreationTime [in]
+        @param [in] rCreationTime
         Creation time of the given file.
 
-        @param rLastAccessTime [in]
+        @param [in] rLastAccessTime
         Time of the last access of the given file.
 
-        @param rLastWriteTime [in]
+        @param [in] rLastWriteTime
         Time of the last modifying of the given file.
 
         @retval E_None on success
@@ -1468,10 +1468,10 @@ public:
         Due to performance issues it is not recommended to use this function while
         enumerating the contents of a directory. In this case use osl_getNextDirectoryItem() instead.
 
-        @param ustrFileURL [in]
+        @param [in] ustrFileURL
         An absolute file URL.
 
-        @param rItem [out]
+        @param [out] rItem
         On success it receives a handle which can be used for subsequent calls to osl_getFileStatus().
         The handle has to be released by a call to osl_releaseDirectoryItem().
 
@@ -1508,7 +1508,7 @@ public:
 
     /** Retrieve information about a single file or directory.
 
-        @param  rStatus [in|out]
+        @param [in,out] rStatus
         Reference to a class which receives the information of the file or directory
         represented by this directory item.
 
@@ -1626,7 +1626,7 @@ public:
 
     /** Constructor.
 
-        @param strPath [in]
+        @param [in] strPath
         The full qualified URL of the directory.
         Relative URLs are not allowed.
      */
@@ -1737,10 +1737,10 @@ public:
 
         Retrieves the next item of a previously opened directory.
 
-        @param  rItem [out]
+        @param [out] rItem
         On success a valid DirectoryItem.
 
-        @param  nHint [in]
+        @param [in]  nHint
         With this parameter the caller can tell the implementation that (s)he
         is going to call this function uHint times afterwards. This enables the implementation to
         get the information for more than one file and cache it until the next calls.
@@ -1771,10 +1771,10 @@ public:
         Retrieves information about a volume. A volume can either be a mount point, a network
         resource or a drive depending on Operating System and File System.
 
-        @param ustrDirectoryURL [in]
+        @param [in] ustrDirectoryURL
         Full qualified URL of the volume
 
-        @param rInfo [out]
+        @param [out] rInfo
         On success it receives information about the volume.
 
         @retval E_None on success
@@ -1803,10 +1803,10 @@ public:
 
     /** Create a directory.
 
-        @param ustrDirectoryURL [in]
+        @param [in] ustrDirectoryURL
         Full qualified URL of the directory to create.
 
-        @param flags [in]
+        @param [in] flags
         Optional flags, see osl_createDirectoryWithFlags for details.  This
         defaulted parameter is new since LibreOffice 4.3.
 
@@ -1841,7 +1841,7 @@ public:
 
     /** Remove an empty directory.
 
-        @param ustrDirectoryURL [in]
+        @param [in] ustrDirectoryURL
         Full qualified URL of the directory.
 
         @retval E_None on success
