@@ -863,7 +863,7 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount )
         nCount = nMaxRecords;
     }
 
-    // neue Objekte einlesen
+    // read new objects
     for (size_t i = 0; i < nCount; ++i)
     {
         sal_uInt16 nType;

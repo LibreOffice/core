@@ -116,7 +116,7 @@ inline const SfxUInt32Item* FormCache::GetAttr( sal_uInt8 nFormat, sal_uInt8 nSt
         pRet = aIdents[ nIndex ].GetAttr();
     else
     {
-        // neues Attribut anlegen
+        // create new attribute
         pAttr = NewAttr( nFormat, nSt );
         OSL_ENSURE( pAttr, "FormCache::GetAttr(): Nothing to save" );
 

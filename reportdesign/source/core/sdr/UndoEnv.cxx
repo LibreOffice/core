@@ -360,7 +360,7 @@ void SAL_CALL OXUndoEnvironment::elementInserted(const ContainerEvent& evt)
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
-    // neues Object zum lauschen
+    // new listener object
     Reference< uno::XInterface >  xIface( evt.Element, UNO_QUERY );
     if ( !IsLocked() )
     {
