@@ -316,8 +316,6 @@ class AsynchReader: public salhelper::Thread
     size_t  m_nDataSize;
     std::unique_ptr<sal_Char[]> m_arData;
 
-    bool m_bError;
-    bool m_bDone;
     FileHandleGuard m_aGuard;
 
     virtual ~AsynchReader() override {}
@@ -336,8 +334,8 @@ public:
 };
 
 AsynchReader::AsynchReader(oslFileHandle & rHandle):
-    Thread("jvmfwkAsyncReader"), m_nDataSize(0), m_bError(false),
-    m_bDone(false), m_aGuard(rHandle)
+    Thread("jvmfwkAsyncReader"), m_nDataSize(0),
+    m_aGuard(rHandle)
 {
 }
 
@@ -363,13 +361,11 @@ void AsynchReader::execute()
         case osl_File_E_None:
             break;
         default:
-            m_bError = true;
             return;
         }
 
         if (nRead == 0)
         {
-            m_bDone = true;
             break;
         }
         else if (nRead <= BUFFER_SIZE)

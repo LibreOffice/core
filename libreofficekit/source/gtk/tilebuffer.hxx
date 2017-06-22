@@ -180,11 +180,6 @@ struct LOEvent
     gboolean m_bNotifyWhenFinished;
     ///@}
 
-    /// @name open_document parameter
-    ///@{
-    const gchar* m_pPath;
-    ///@}
-
     /// set_edit parameter
     gboolean m_bEdit;
 
@@ -240,7 +235,6 @@ struct LOEvent
         , m_pCommand(nullptr)
         , m_pArguments(nullptr)
         , m_bNotifyWhenFinished(false)
-        , m_pPath(nullptr)
         , m_bEdit(false)
         , m_nPartMode(0)
         , m_nPart(0)
