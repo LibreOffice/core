@@ -750,7 +750,9 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_setFileSize(
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileSize(
         oslFileHandle Handle, sal_uInt64 *pSize );
 
-/** Map flags.
+/** Indicate that the file can be access randomly (i.e. there is no sequential
+    reading). Basically it means that the first byte of every page in the
+    file-mapping will be read.
 
     @since UDK 3.2.10
  */
@@ -759,6 +761,10 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileSize(
 /** Map flag denoting that the mapped address space will be accessed by the
     process soon (and it is advantageous for the operating system to already
     start paging in the data).
+
+    @attention As this assumes that madvise() with the WILLREAD flag is
+    asynchronous (which is I'm afraid an incorrect assumption), Linux systems
+    will ignore this flag.
 
     @since UDK 3.2.12
 */
