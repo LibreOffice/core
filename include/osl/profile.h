@@ -57,10 +57,10 @@ SAL_DLLPUBLIC oslProfile SAL_CALL osl_openProfile(
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_closeProfile(
         oslProfile Profile) SAL_COLD;
 
-
 /** Deprecated API.
     @deprecated
 */
+
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_flushProfile(
         oslProfile Profile) SAL_COLD;
 /** Deprecated API.
@@ -94,6 +94,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_writeProfileString(
                                oslProfile Profile,
                                const sal_Char* pszSection, const sal_Char* pszEntry,
                                const sal_Char* pszString) SAL_COLD;
+
 /** Deprecated API.
     @deprecated
 */
@@ -101,6 +102,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_writeProfileBool(
                              oslProfile Profile,
                              const sal_Char* pszSection, const sal_Char* pszEntry,
                              sal_Bool Value) SAL_COLD;
+
 /** Deprecated API.
     @deprecated
 */

@@ -73,7 +73,7 @@ typedef struct
 #   pragma pack(pop)
 #endif
 
-/** the function-ptr. representing the signal handler-function.
+/** The function-ptr representing the signal handler-function.
 */
 typedef oslSignalAction (SAL_CALL *oslSignalHandlerFunction)(void* pData, oslSignalInfo* pInfo);
 
@@ -90,8 +90,7 @@ SAL_DLLPUBLIC oslSignalAction SAL_CALL osl_raiseSignal(
 
     On default error reporting is enabled after process startup.
 
-    @param  bEnable [in]
-    Enables or disables error reporting.
+    @param[in]  bEnable Enables or disables error reporting.
 
     @retval sal_True if previous state of error reporting was enabled
     @retval sal_False if previous state of error reporting was disabled
