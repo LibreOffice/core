@@ -63,7 +63,6 @@ ToolbarLayoutManager::ToolbarLayoutManager(
     m_pGlobalSettings( nullptr ),
     m_bComponentAttached( false ),
     m_bLayoutDirty( false ),
-    m_bStoreWindowState( false ),
     m_bGlobalSettings( false ),
     m_bDockingInProgress( false ),
     m_bLayoutInProgress( false ),
@@ -1563,7 +1562,6 @@ void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElemen
 {
     SolarMutexResettableGuard aWriteLock;
     uno::Reference< container::XNameAccess > xPersistentWindowState( m_xPersistentWindowState );
-    m_bStoreWindowState = true; // set flag to determine that we triggered the notification
     aWriteLock.clear();
 
     bool bPersistent( false );
@@ -1633,7 +1631,6 @@ void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElemen
 
     // Reset flag
     aWriteLock.reset();
-    m_bStoreWindowState = false;
     aWriteLock.clear();
 }
 

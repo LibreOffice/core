@@ -749,7 +749,7 @@ void OGridControlModel::impl_replacedElement( const ContainerEvent& _rEvent, ::o
 
 ElementDescription* OGridControlModel::createElementMetaData( )
 {
-    return new ColumnDescription;
+    return new ElementDescription;
 }
 
 void OGridControlModel::approveNewElement( const Reference< XPropertySet >& _rxObject, ElementDescription* _pElement )
@@ -758,9 +758,6 @@ void OGridControlModel::approveNewElement( const Reference< XPropertySet >& _rxO
     if ( !pCol )
         throw IllegalArgumentException();
     OInterfaceContainer::approveNewElement( _rxObject, _pElement );
-    // if we're here, the object passed all tests
-    if ( _pElement )
-        static_cast< ColumnDescription* >( _pElement )->pColumn = pCol;
 }
 
 // XPersistObject

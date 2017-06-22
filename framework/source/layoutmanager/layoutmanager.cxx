@@ -106,11 +106,8 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
         , m_xContext( xContext )
         , m_xURLTransformer( URLTransformer::create(xContext) )
         , m_nLockCount( 0 )
-        , m_bActive( false )
         , m_bInplaceMenuSet( false )
         , m_bMenuVisible( true )
-        , m_bComponentAttached( false )
-        , m_bDoLayout( false )
         , m_bVisible( true )
         , m_bParentWindowVisible( false )
         , m_bMustDoLayout( true )
@@ -119,7 +116,6 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
 #else
         , m_bAutomaticToolbars( false )
 #endif
-        , m_bStoreWindowState( false )
         , m_bHideCurrentUI( false )
         , m_bGlobalSettings( false )
         , m_bPreserveContentSize( false )
@@ -380,7 +376,6 @@ void LayoutManager::implts_reset( bool bAttached )
         SolarMutexClearableGuard aWriteLock;
         m_xModel = xModel;
         m_aDockingArea = awt::Rectangle();
-        m_bComponentAttached = bAttached;
         m_aModuleIdentifier = aModuleIdentifier;
         m_xModuleCfgMgr = xModCfgMgr;
         m_xDocCfgMgr = xDokCfgMgr;
@@ -623,8 +618,6 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
     SolarMutexResettableGuard aWriteLock;
     Reference< XNameAccess > xPersistentWindowState( m_xPersistentWindowState );
 
-    // set flag to determine that we triggered the notification
-    m_bStoreWindowState = true;
     aWriteLock.clear();
 
     bool bPersistent( false );
@@ -691,7 +684,6 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
 
     // Reset flag
     aWriteLock.reset();
-    m_bStoreWindowState = false;
     aWriteLock.clear();
 }
 
@@ -2295,7 +2287,6 @@ bool LayoutManager::implts_doLayout( bool bForceRequestBorderSpace, bool bOuterR
         bLayouted = true;
 
         SolarMutexResettableGuard aWriteGuard;
-        m_bDoLayout = true;
         aWriteGuard.clear();
 
         awt::Rectangle aDockSpace( implts_calcDockingAreaSizes() );
@@ -2378,7 +2369,6 @@ bool LayoutManager::implts_doLayout( bool bForceRequestBorderSpace, bool bOuterR
             xDockingAreaAcceptor->setDockingAreaSpace( aBorderSpace );
 
             aWriteGuard.reset();
-            m_bDoLayout = false;
             aWriteGuard.clear();
         }
     }
@@ -2723,7 +2713,6 @@ void SAL_CALL LayoutManager::frameAction( const FrameActionEvent& aEvent )
         SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::frameAction (COMPONENT_ATTACHED|REATTACHED)" );
 
         SolarMutexClearableGuard aWriteLock;
-        m_bComponentAttached = true;
         m_bMustDoLayout = true;
         aWriteLock.clear();
 
@@ -2735,19 +2724,11 @@ void SAL_CALL LayoutManager::frameAction( const FrameActionEvent& aEvent )
     {
         SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::frameAction (FRAME_UI_ACTIVATED|DEACTIVATING)" );
 
-        SolarMutexClearableGuard aWriteLock;
-        m_bActive = ( aEvent.Action == FrameAction_FRAME_UI_ACTIVATED );
-        aWriteLock.clear();
-
         implts_toggleFloatingUIElementsVisibility( aEvent.Action == FrameAction_FRAME_UI_ACTIVATED );
     }
     else if ( aEvent.Action == FrameAction_COMPONENT_DETACHING )
     {
         SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::frameAction (COMPONENT_DETACHING)" );
-
-        SolarMutexClearableGuard aWriteLock;
-        m_bComponentAttached = false;
-        aWriteLock.clear();
 
         implts_reset( false );
     }

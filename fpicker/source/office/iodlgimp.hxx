@@ -165,10 +165,6 @@ public:
     bool                        _bDoubleClick;
     bool                        m_bNeedDelayedFilterExecute;
 
-    // list of the 5 most recently used filters
-    // Defaultfilter for <All> or <All ...>
-    const SvtFileDialogFilter_Impl* _pDefaultFilter;
-
     // MultiSelection?
     bool                        _bMultiSelection;
 

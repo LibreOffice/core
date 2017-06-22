@@ -297,7 +297,7 @@ void StatusBarManager::CreateControllers()
         uno::Reference< frame::XStatusbarController > xController;
         AddonStatusbarItemData *pItemData = static_cast< AddonStatusbarItemData *>( m_pStatusBar->GetItemData( nId ) );
         uno::Reference< ui::XStatusbarItem > xStatusbarItem(
-            static_cast< cppu::OWeakObject *>( new StatusbarItem( m_pStatusBar, pItemData, nId, aCommandURL ) ),
+            static_cast< cppu::OWeakObject *>( new StatusbarItem( m_pStatusBar, nId, aCommandURL ) ),
             uno::UNO_QUERY );
 
         beans::PropertyValue aPropValue;

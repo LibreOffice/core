@@ -46,7 +46,6 @@ static Sequence< sal_Int8 > const & impl_getStaticIdentifier()
 RootActionTriggerContainer::RootActionTriggerContainer( const Menu* pMenu, const OUString* pMenuIdentifier ) :
     PropertySetContainer()
     ,   m_bContainerCreated( false )
-    ,   m_bContainerChanged( false )
     ,   m_bInContainerCreation( false )
     ,   m_pMenu( pMenu )
     ,   m_pMenuIdentifier( pMenuIdentifier )
@@ -123,8 +122,6 @@ void SAL_CALL RootActionTriggerContainer::insertByIndex( sal_Int32 Index, const 
     if ( !m_bContainerCreated )
         FillContainer();
 
-    if ( !m_bInContainerCreation )
-        m_bContainerChanged = true;
     PropertySetContainer::insertByIndex( Index, Element );
 }
 
@@ -135,8 +132,6 @@ void SAL_CALL RootActionTriggerContainer::removeByIndex( sal_Int32 Index )
     if ( !m_bContainerCreated )
         FillContainer();
 
-    if ( !m_bInContainerCreation )
-        m_bContainerChanged = true;
     PropertySetContainer::removeByIndex( Index );
 }
 
@@ -148,8 +143,6 @@ void SAL_CALL RootActionTriggerContainer::replaceByIndex( sal_Int32 Index, const
     if ( !m_bContainerCreated )
         FillContainer();
 
-    if ( !m_bInContainerCreation )
-        m_bContainerChanged = true;
     PropertySetContainer::replaceByIndex( Index, Element );
 }
 

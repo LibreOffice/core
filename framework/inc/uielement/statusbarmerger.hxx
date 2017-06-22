@@ -29,7 +29,6 @@ namespace framework
 struct AddonStatusbarItemData
 {
     rtl::OUString     aLabel;
-    StatusBarItemBits nItemBits;
 };
 
 struct AddonStatusbarItem

@@ -152,7 +152,6 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
 
     // pre-calculate a hash code for all style strings to speed up xml read process
     m_nHashCode_Style_Radio         = OUString( ATTRIBUTE_ITEMSTYLE_RADIO ).hashCode();
-    m_nHashCode_Style_Auto          = OUString( ATTRIBUTE_ITEMSTYLE_AUTO ).hashCode();
     m_nHashCode_Style_Left          = OUString( ATTRIBUTE_ITEMSTYLE_LEFT ).hashCode();
     m_nHashCode_Style_AutoSize      = OUString( ATTRIBUTE_ITEMSTYLE_AUTOSIZE ).hashCode();
     m_nHashCode_Style_DropDown      = OUString( ATTRIBUTE_ITEMSTYLE_DROPDOWN ).hashCode();
