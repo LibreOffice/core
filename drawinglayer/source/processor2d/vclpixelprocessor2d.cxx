@@ -497,17 +497,52 @@ namespace drawinglayer
 
                     const primitive2d::MetafilePrimitive2D& rMetafilePrimitive( static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate) );
 
-                    static bool bTestMetaFilePrimitiveDecomposition( true );
-                    if( bTestMetaFilePrimitiveDecomposition && !rMetafilePrimitive.getMetaFile().GetUseCanvas() )
+                    if( !rMetafilePrimitive.getMetaFile().GetUseCanvas() )
                     {
                         // use new Metafile decomposition
-                        // TODO EMF+ stuffed into METACOMMENT support required
                         process(rCandidate);
                     }
                     else
                     {
+#ifdef DBG_UTIL
+                        // switch to test EMFPlus-enhanced MetafileDecomposition
+                        static bool bTestEMFPDecomposition(true);
+                        // switch to show the new visualization color.-changed behind
+                        // the original output vor visual testing
+                        static bool bUseChangedColorObject(true);
+
+                        if (bTestEMFPDecomposition)
+                        {
+                            if (bUseChangedColorObject)
+                            {
+                                primitive2d::Primitive2DContainer aDecomposition;
+                                rMetafilePrimitive.get2DDecomposition(aDecomposition, getViewInformation2D());
+                                const primitive2d::ModifiedColorPrimitive2D aPrimitiveR(
+                                    aDecomposition,
+                                    basegfx::BColorModifierSharedPtr(
+                                        new basegfx::BColorModifier_RGBLuminanceContrast(
+                                            0.5, // red
+                                            -0.5, // green
+                                            -0.5, // blue
+                                            0.0, // luminance
+                                            0.0))); // contrast
+                                processBasePrimitive2D(aPrimitiveR);
+                                RenderMetafilePrimitive2D(rMetafilePrimitive);
+                            }
+                            else
+                            {
+                                process(rCandidate);
+                            }
+                        }
+                        else
+                        {
+                            // direct draw of MetaFile
+                            RenderMetafilePrimitive2D(rMetafilePrimitive);
+                        }
+#else // DBG_UTIL
                         // direct draw of MetaFile
-                        RenderMetafilePrimitive2D( rMetafilePrimitive );
+                        RenderMetafilePrimitive2D(rMetafilePrimitive);
+#endif // DBG_UTIL
                     }
 
                     if(bForceLineSnap)

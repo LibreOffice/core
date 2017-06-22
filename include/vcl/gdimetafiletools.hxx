@@ -46,6 +46,7 @@ class VCL_DLLPUBLIC MetafileAccessor
 {
 public:
     virtual bool accessMetafile(GDIMetaFile& rTargetMetafile) const = 0;
+    virtual ~MetafileAccessor();
 };
 
 
