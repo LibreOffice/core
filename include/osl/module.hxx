@@ -45,11 +45,8 @@ public:
         Similar to getUrlFromAddress, but use a function address to get URL of the Module.
         Use Function pointer as symbol address to conceal type conversion.
 
-        @param addr
-        [in] function address in oslGenericFunction format.
-
-        @param libraryUrl
-        [in|out] receives the URL of the module.
+        @param[in] addr            function address in oslGenericFunction format.
+        @param[in,out] libraryUrl  receives the URL of the module.
 
         @retval true on success
         @retval false can not get the URL from the specified function address or the parameter is invalid.
@@ -134,8 +131,7 @@ public:
         getFunctionSymbol is an alternative function for getSymbol.
         Use Function pointer as symbol address to conceal type conversion.
 
-        @param ustrFunctionSymbolName
-        [in] Function name to be looked up.
+        @param[in] ustrFunctionSymbolName  Function name to be looked up.
 
         @retval oslGenericFunction format function address on success
         @retval NULL lookup failed or parameter is somewhat invalid

@@ -34,7 +34,7 @@ namespace osl
 /** threadFunc is the function which is executed by the threads
     created by the osl::Thread class. The function's signature
     matches the one of oslWorkerFunction which is declared in
-    osl/thread.h .
+    osl/thread.h
 */
 extern "C" inline void SAL_CALL threadFunc( void* param);
 
