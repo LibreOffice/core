@@ -123,7 +123,6 @@ private:
     ChangeType          mnHatchingListState;
 
     PageType            mnPageType;
-    bool                mbAreaTP;
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
 
@@ -149,7 +148,6 @@ class SvxTransparenceTabPage : public SvxTabPage
     static const sal_uInt16 pTransparenceRanges[];
 
     const SfxItemSet&   rOutAttrs;
-    RectPoint          eRP;
 
     PageType               nPageType;
     sal_uInt16             nDlgType;
@@ -241,7 +239,6 @@ private:
     XHatchListRef         m_pHatchingList;
     XBitmapListRef        m_pBitmapList;
     XPatternListRef       m_pPatternList;
-    SdrModel*             mpDrawModel;
 
     // Placeholders for pointer-based entries; these will be inited
     // to point to these so that the page is usable without that
@@ -254,10 +251,6 @@ private:
     ChangeType*         m_pnPatternListState;
     ChangeType*         m_pnGradientListState;
     ChangeType*         m_pnHatchingListState;
-
-    PageType            m_nPageType;
-    sal_uInt16          m_nDlgType;
-    bool*               m_pbAreaTP;
 
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
@@ -291,10 +284,6 @@ public:
                 { m_pHatchingList = pHtchLst; }
     void    SetBitmapList( XBitmapListRef const & pBmpLst) { m_pBitmapList = pBmpLst; }
     void    SetPatternList( XPatternListRef const &pPtrnLst ) { m_pPatternList = pPtrnLst; }
-    void    SetDrawModel( SdrModel* pModel ) { mpDrawModel = pModel; }
-    void    SetPageType( PageType nInType ) { m_nPageType = nInType; }
-    void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
-    void    SetAreaTP( bool* pIn ) { m_pbAreaTP = pIn; }
     virtual void PageCreated(const SfxAllItemSet& aSet) override;
     void    CreatePage(sal_Int32 nId, SfxTabPage* pTab);
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
@@ -321,13 +310,11 @@ private:
     VclPtr<SvxXShadowPreview>  m_pCtlXRectPreview;
 
     const SfxItemSet&   m_rOutAttrs;
-    RectPoint          m_eRP;
 
     XColorListRef       m_pColorList;
     ChangeType*         m_pnColorListState;
     PageType            m_nPageType;
     sal_uInt16          m_nDlgType;
-    bool*               m_pbAreaTP;
 
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
@@ -354,7 +341,6 @@ public:
     void    SetColorList( XColorListRef const & pColorList ) { m_pColorList = pColorList; }
     void    SetPageType( PageType nInType ) { m_nPageType = nInType; }
     void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
-    void    SetAreaTP( bool* pIn ) { m_pbAreaTP = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
     virtual void PageCreated(const SfxAllItemSet& aSet) override;
 };

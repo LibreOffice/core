@@ -58,7 +58,6 @@ SvxEventConfigPage::SvxEventConfigPage(vcl::Window *pParent, const SfxItemSet& r
     SvxEventConfigPage::EarlyInit)
     : SvxMacroTabPage_(pParent, "EventsConfigPage",
         "cui/ui/eventsconfigpage.ui", rSet)
-    , bAppConfig(true)
 {
     get(m_pSaveInListBox, "savein");
 
@@ -157,8 +156,6 @@ void SvxEventConfigPage::ImplInitDocument()
 
             m_pSaveInListBox->SetEntryData( nPos, new bool(false) );
             m_pSaveInListBox->SelectEntryPos( nPos );
-
-            bAppConfig = false;
         }
     }
     catch( const uno::Exception& )
@@ -173,7 +170,6 @@ IMPL_LINK_NOARG( SvxEventConfigPage, SelectHdl_Impl, ListBox&, void )
             m_pSaveInListBox->GetSelectEntryPos()));
 
     mpImpl->pEventLB->SetUpdateMode( false );
-    bAppConfig = *bApp;
     if ( *bApp )
     {
         SetReadOnly( false );

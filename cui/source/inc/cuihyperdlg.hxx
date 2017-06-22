@@ -69,7 +69,6 @@ private:
     std::unique_ptr<SfxItemSet> mpItemSet;
 
     bool            mbGrabFocus : 1;
-    bool            mbReadOnly  : 1;
     bool            mbIsHTMLDoc : 1;
 
     DECL_LINK (ClickOkHdl_Impl, Button *, void );

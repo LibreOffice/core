@@ -256,7 +256,6 @@ class TPGalleryThemeProperties : public SfxTabPage
     OUString                aLastFilterName;
     OUString                aPreviewString;
     INetURLObject           aURL;
-    sal_uInt16              nCurFilterPos;
     sal_uInt16              nFirstExtFilterPos;
     bool                    bEntriesFound;
     bool                    bInputAllowed;

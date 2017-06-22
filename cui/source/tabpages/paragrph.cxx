@@ -633,8 +633,7 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage( vcl::Window* pParent,  const Sfx
     nWidth          ( 11905 /*567 * 50*/ ),
     nMinFixDist(0L),
 
-    bRelativeMode   ( false ),
-    bNegativeIndents(false)
+    bRelativeMode   ( false )
 
 {
     get(m_pLeftIndent,"spinED_LEFTINDENT");
@@ -705,7 +704,6 @@ void SvxStdParagraphTabPage::EnableNegativeMode()
     m_pRightIndent->SetMin(-9999);
     m_pRightIndent->EnableNegativeMode();
     m_pLeftIndent->EnableNegativeMode();
-    bNegativeIndents = true;
 }
 
 void SvxStdParagraphTabPage::SetLineSpacing_Impl

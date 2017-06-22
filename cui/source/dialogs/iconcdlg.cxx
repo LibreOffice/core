@@ -154,9 +154,7 @@ IconChoiceDialog::IconChoiceDialog ( vcl::Window* pParent, const OUString& rID,
     pSet            ( nullptr ),
     pOutSet         ( nullptr ),
     pExampleSet     ( nullptr ),
-    pRanges         ( nullptr ),
-
-    bInOK           ( false )
+    pRanges         ( nullptr )
 {
     get(m_pOKBtn, "ok");
     get(m_pApplyBtn, "apply");
@@ -348,8 +346,6 @@ IMPL_LINK_NOARG(IconChoiceDialog , ChosePageHdl_Impl, SvtIconChoiceCtrl*, void)
 
 IMPL_LINK_NOARG(IconChoiceDialog, OkHdl, Button*, void)
 {
-    bInOK = true;
-
     if ( OK_Impl() )
     {
         Ok();
@@ -360,8 +356,6 @@ IMPL_LINK_NOARG(IconChoiceDialog, OkHdl, Button*, void)
 
 IMPL_LINK_NOARG(IconChoiceDialog, ApplyHdl, Button*, void)
 {
-    bInOK = true;
-
     if ( OK_Impl() )
     {
         Ok();
@@ -653,8 +647,6 @@ bool IconChoiceDialog::OK_Impl()
 
 void IconChoiceDialog::Ok()
 {
-    bInOK = true;
-
     if ( !pOutSet )
     {
         if ( !pExampleSet && pSet )

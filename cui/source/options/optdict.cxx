@@ -45,8 +45,6 @@ using namespace linguistic;
 
 // static ----------------------------------------------------------------
 
-static const short  NOACTDICT   = -1;
-
 static long nStaticTabs[]=
 {
     2,10,71,120
@@ -218,7 +216,6 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
     ModalDialog( pParent, "EditDictionaryDialog" ,"cui/ui/editdictionarydialog.ui" ),
 
     sModify         (CuiResId(STR_MODIFY)),
-    nOld            ( NOACTDICT ),
     bFirstSelect    (true),
     bDoNothing      (false),
     bDicIsReadonly  (false)
@@ -480,7 +477,6 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
 {
     Reference< XDictionary >  xDic = aDics.getConstArray()[ nId ];
 
-    nOld = nId;
     EnterWait();
 
     OUString aStr;

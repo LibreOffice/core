@@ -114,7 +114,6 @@ private:
         css::uno::Reference<
             css::linguistic2::XDictionary >  > aDics;  //! snapshot copy to work on
 
-    short               nOld;
     long                nWidth;
     bool            bFirstSelect;
     bool            bDoNothing;

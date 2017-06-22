@@ -101,7 +101,6 @@ private:
     SvxTabStopItem  aNewTabs;
     long            nDefDist;
     FieldUnit       eDefUnit;
-    bool        bCheck;
 
     void            InitTabPos_Impl( sal_uInt16 nPos = 0 );
     void            SetFillAndTabType_Impl();

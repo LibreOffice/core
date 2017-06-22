@@ -709,7 +709,6 @@ VclPtr<SfxTabPage> TPGalleryThemeGeneral::Create( vcl::Window* pParent, const Sf
 TPGalleryThemeProperties::TPGalleryThemeProperties( vcl::Window* pWindow, const SfxItemSet& rSet )
     : SfxTabPage(pWindow, "GalleryFilesPage", "cui/ui/galleryfilespage.ui", &rSet)
     , pData(nullptr)
-    , nCurFilterPos(0)
     , nFirstExtFilterPos(0)
     , bEntriesFound(false)
     , bInputAllowed(true)
@@ -766,8 +765,6 @@ void TPGalleryThemeProperties::StartSearchFiles( const OUString& _rFolderURL, sh
         bSearchRecursive = true;    // UI choice no longer possible, windows file picker allows no user controls
         SearchFiles();
     }
-
-    nCurFilterPos = m_pCbbFileType->GetEntryPos( m_pCbbFileType->GetText() );
 }
 
 
@@ -1009,8 +1006,6 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl, Button*, void)
                     bSearchRecursive = true;    // UI choice no longer possible, windows file picker allows no user controls
                     SearchFiles();
                 }
-
-                nCurFilterPos = m_pCbbFileType->GetEntryPos( m_pCbbFileType->GetText() );
             }
         }
         catch (const IllegalArgumentException&)

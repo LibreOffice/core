@@ -65,8 +65,7 @@ SvxLineTabDialog::SvxLineTabDialog
     mnColorListState( ChangeType::NONE ),
     nPageType( PageType::Area ), // We use it here primarily to get the right attributes with FillItemSet
     nPosDashLb( 0 ),
-    nPosLineEndLb( 0 ),
-    mbAreaTP( false )
+    nPosLineEndLb( 0 )
 {
     bool bLineOnly = false;
     if( pObj && pObj->GetObjInventor() == SdrInventor::Default )
@@ -214,7 +213,6 @@ void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         static_cast<SvxLineDefTabPage&>(rPage).SetPageType( &nPageType );
         static_cast<SvxLineDefTabPage&>(rPage).SetPosDashLb( &nPosDashLb );
         static_cast<SvxLineDefTabPage&>(rPage).SetDashChgd( &nDashListState );
-        static_cast<SvxLineDefTabPage&>(rPage).SetObjSelected( bObjSelected );
         static_cast<SvxLineDefTabPage&>(rPage).Construct();
     }
     else if(nId == m_nEndTabPage)
@@ -225,7 +223,6 @@ void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         static_cast<SvxLineEndDefTabPage&>(rPage).SetPageType( &nPageType );
         static_cast<SvxLineEndDefTabPage&>(rPage).SetPosLineEndLb( &nPosLineEndLb );
         static_cast<SvxLineEndDefTabPage&>(rPage).SetLineEndChgd( &nLineEndListState );
-        static_cast<SvxLineEndDefTabPage&>(rPage).SetObjSelected( bObjSelected );
         static_cast<SvxLineEndDefTabPage&>(rPage).Construct();
     }
     else if (nId == m_nShadowTabPage)
@@ -233,7 +230,6 @@ void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         static_cast<SvxShadowTabPage&>(rPage).SetColorList( pColorList );
         static_cast<SvxShadowTabPage&>(rPage).SetPageType( nPageType );
         static_cast<SvxShadowTabPage&>(rPage).SetDlgType( 0 );
-        static_cast<SvxShadowTabPage&>(rPage).SetAreaTP( &mbAreaTP );
         static_cast<SvxShadowTabPage&>(rPage).SetColorChgd( &mnColorListState );
     }
 }

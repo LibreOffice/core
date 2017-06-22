@@ -95,7 +95,6 @@ SvxTabulatorTabPage::SvxTabulatorTabPage(vcl::Window* pParent, const SfxItemSet&
     , aNewTabs(0, 0, SvxTabAdjust::Left, GetWhich(SID_ATTR_TABSTOP))
     , nDefDist(0)
     , eDefUnit(FUNIT_100TH_MM)
-    , bCheck(false)
 {
     get(m_pTabBox,"ED_TABPOS");
     //the tab images
@@ -510,8 +509,6 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn, void )
     m_pDelBtn->Enable();
     m_pTabBox->GrabFocus();
 
-    // If no RadioButton was clicked, we need to put anyway
-    bCheck = true;
     // Set the selection into the position Edit
     m_pTabBox->SetSelection(Selection(0, m_pTabBox->GetText().getLength()));
 }
@@ -551,9 +548,6 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, DelHdl_Impl, Button*, void)
         m_pNewBtn->Enable();
         m_pTabBox->GrabFocus();
     }
-
-    // If no RadioButton was clicked, we need to put anyway
-    bCheck = true;
 }
 
 IMPL_LINK_NOARG(SvxTabulatorTabPage, DelAllHdl_Impl, Button*, void)
@@ -562,15 +556,11 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, DelAllHdl_Impl, Button*, void)
     {
         aNewTabs = SvxTabStopItem( 0 );
         InitTabPos_Impl();
-
-        // So that we put in FillItemSet()
-        bCheck = true;
     }
 }
 
 IMPL_LINK( SvxTabulatorTabPage, TabTypeCheckHdl_Impl, Button *, pBox, void )
 {
-    bCheck = true;
     SvxTabAdjust eAdj;
     m_pDezChar->Disable();
     m_pDezCharLabel->Disable();
@@ -602,7 +592,6 @@ IMPL_LINK( SvxTabulatorTabPage, TabTypeCheckHdl_Impl, Button *, pBox, void )
 
 IMPL_LINK( SvxTabulatorTabPage, FillTypeCheckHdl_Impl, Button *, pBox, void )
 {
-    bCheck = true;
     sal_uInt8 cFill = ' ';
     m_pFillChar->SetText( "" );
     m_pFillChar->Disable();

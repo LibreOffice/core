@@ -87,7 +87,6 @@ class SvxGrfCropPage : public SfxTabPage
     long            nOldWidth;
     long            nOldHeight;
     bool            bReset;
-    bool            bInitialized;
     bool            bSetOrigSize;
 
 

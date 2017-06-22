@@ -53,7 +53,7 @@ SvxTextTabDialog::SvxTextTabDialog( vcl::Window* pParent,
         pView               ( pSdrView )
 {
     m_nTextId = AddTabPage( "RID_SVXPAGE_TEXTATTR", SvxTextAttrPage::Create, nullptr);
-    m_nTextAnimId = AddTabPage( "RID_SVXPAGE_TEXTANIMATION", SvxTextAnimationPage::Create, nullptr);
+    AddTabPage( "RID_SVXPAGE_TEXTANIMATION", SvxTextAnimationPage::Create, nullptr);
 }
 
 /*************************************************************************
