@@ -47,7 +47,7 @@ mkdir -p "$iwyu_DIR"
 
     echo '$(eval $(call gb_StaticLibrary_StaticLibrary,iwyudummy))'
     # clang will "compile" headers to .gch by default
-    echo '$(eval $(call gb_StaticLibrary_add_cxxflags,iwyudummy,-x c++ -Wno-unused-macros -Wno-unused-const-variable))'
+    echo '$(eval $(call gb_StaticLibrary_add_cxxflags,iwyudummy,-x c++ -D__cplusplus=201402L -D__STDC_VERSION__=201112L -Wno-unused-macros -Wno-unused-const-variable))'
     echo '$(eval $(call gb_StaticLibrary_use_custom_headers,iwyudummy,officecfg/registry))'
     echo '$(eval $(call gb_StaticLibrary_use_sdk_api,iwyudummy))'
     echo '$(eval $(call gb_StaticLibrary_use_externals,iwyudummy,\'
