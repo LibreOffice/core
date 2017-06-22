@@ -103,7 +103,7 @@ private:
 
     css::uno::Reference<css::security::XCertificate> getCertificate(const SignatureInformation& rInfo);
     css::uno::Reference<css::xml::crypto::XSecurityEnvironment> getSecurityEnvironmentForCertificate(
-        css::uno::Reference<css::security::XCertificate> xCert);
+        const css::uno::Reference<css::security::XCertificate>& xCert);
 
     //Checks if adding is allowed.
     //See the spec at specs/www/appwide/security/Electronic_Signatures_and_Security.sxw

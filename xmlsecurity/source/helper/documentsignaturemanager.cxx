@@ -254,7 +254,7 @@ SignatureStreamHelper DocumentSignatureManager::ImplOpenSignatureStream(sal_Int3
 }
 
 bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>& xCert,
-                                   const uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext,
+                                   const uno::Reference<xml::crypto::XXMLSecurityContext>& xSecurityContext,
                                    const OUString& rDescription,
                                    sal_Int32& nSecurityId,
                                    bool bAdESCompliant)
