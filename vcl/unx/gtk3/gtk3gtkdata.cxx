@@ -170,13 +170,22 @@ GdkCursor* GtkSalDisplay::getFromXBM( const unsigned char *pBitmap,
                                       int nWidth, int nHeight,
                                       int nXHot, int nYHot )
 {
-    int cairo_stride = cairo_format_stride_for_width(CAIRO_FORMAT_A1, nWidth);
+    cairo_surface_t *source = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
+    cairo_t *cr = cairo_create(source);
+    cairo_set_source_rgba(cr, 1, 1, 1, 1);
+    cairo_paint(cr);
+
+    const int cairo_stride = cairo_format_stride_for_width(CAIRO_FORMAT_A1, nWidth);
 
     unsigned char *pPaddedXBM = ensurePaddedForCairo(pBitmap, nWidth, nHeight, cairo_stride);
-    cairo_surface_t *source = cairo_image_surface_create_for_data(
+    cairo_surface_t *xbm = cairo_image_surface_create_for_data(
         pPaddedXBM,
         CAIRO_FORMAT_A1, nWidth, nHeight,
         cairo_stride);
+    cairo_set_source_rgba(cr, 0, 0, 0, 1);
+    cairo_mask_surface(cr, xbm, 0, 0);
+    cairo_surface_destroy(xbm);
+    cairo_destroy(cr);
 
     unsigned char *pPaddedMaskXBM = ensurePaddedForCairo(pMask, nWidth, nHeight, cairo_stride);
     cairo_surface_t *mask = cairo_image_surface_create_for_data(
@@ -184,10 +193,12 @@ GdkCursor* GtkSalDisplay::getFromXBM( const unsigned char *pBitmap,
         CAIRO_FORMAT_A1, nWidth, nHeight,
         cairo_stride);
 
-    cairo_surface_t *s = cairo_surface_create_similar(source, CAIRO_CONTENT_ALPHA, nWidth, nHeight);
-    cairo_t *cr = cairo_create(s);
+    cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
+    cr = cairo_create(s);
     cairo_set_source_surface(cr, source, 0, 0);
     cairo_mask_surface(cr, mask, 0, 0);
+    cairo_surface_destroy(mask);
+    cairo_surface_destroy(source);
     cairo_destroy(cr);
 
 #if GTK_CHECK_VERSION(3,10,0)
@@ -199,8 +210,6 @@ GdkCursor* GtkSalDisplay::getFromXBM( const unsigned char *pBitmap,
 #endif
 
     cairo_surface_destroy(s);
-    cairo_surface_destroy(mask);
-    cairo_surface_destroy(source);
 
     if (pPaddedMaskXBM != pMask)
         delete [] pPaddedMaskXBM;
