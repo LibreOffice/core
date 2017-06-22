@@ -7050,6 +7050,7 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
                 nX = nDelta;
                 nY = static_cast<SCSIZE>(nZIndex);
             }
+            assert( nX < nC && nY < nR );
             if ( pMat->IsString( nX, nY) )
                 PushString(pMat->GetString( nX,nY).getString());
             else
