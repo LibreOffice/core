@@ -3021,7 +3021,7 @@ void SwFlyFrameFormat::MakeFrames()
                     break;
 
                 default:
-                    assert(false && "Neuer Ankertyp" );
+                    assert(false && "New anchor type" );
                 }
                 pFrame->AppendFly( pFly );
                 pFly->GetFormat()->SetObjTitle(GetObjTitle());

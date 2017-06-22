@@ -1005,7 +1005,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
                             }
                             else
                             {
-                                OSL_ENSURE( RES_DRAWFRMFMT == pNew->Which(), "Neues Format.");
+                                OSL_ENSURE( RES_DRAWFRMFMT == pNew->Which(), "New format.");
                                 // #i52780# - drawing object has
                                 // to be made visible on paste.
                                 pNew->CallSwClientNotify(sw::DrawFrameFormatHint(sw::DrawFrameFormatHintId::PREPPASTING));

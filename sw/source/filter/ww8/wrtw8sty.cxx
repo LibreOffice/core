@@ -1526,7 +1526,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
     /*  sprmSBkc, break code:   0 No break, 1 New column
         2 New page, 3 Even page, 4 Odd page
         */
-    sal_uInt8 nBreakCode = 2;            // default neue Seite beginnen
+    sal_uInt8 nBreakCode = 2;            // default start new page
     bool bOutPgDscSet = true, bLeftRightPgChain = false, bOutputStyleItemSet = false;
     const SwFrameFormat* pPdFormat = &pPd->GetMaster();
     if ( rSepInfo.pSectionFormat )

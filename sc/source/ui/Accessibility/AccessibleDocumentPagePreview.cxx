@@ -360,7 +360,7 @@ sal_Int32 ScNotesChildren::CheckChanges(const ScPreviewLocationData& rData,
                     if (aNote.maNoteText == aItr->maNoteText)
                     {
                         aNote.mpTextHelper = aItr->mpTextHelper;
-                        if (aNote.maRect != aItr->maRect)  //neue VisArea setzen
+                        if (aNote.maRect != aItr->maRect)  // set new VisArea
                         {
                             aNote.mpTextHelper->SetOffset(aNote.maRect.TopLeft());
                             aNote.mpTextHelper->UpdateChildren();
