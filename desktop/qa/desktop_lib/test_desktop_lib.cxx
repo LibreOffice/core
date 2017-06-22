@@ -39,7 +39,7 @@
 #include <cairo.h>
 #include <ostream>
 #include <config_features.h>
-#include <vcl/scheduler.hxx>
+#include <png.h>
 
 #include <lib/init.hxx>
 
@@ -115,6 +115,7 @@ public:
     void testCommentsCallbacksWriter();
     void testRunMacro();
     void testExtractParameter();
+    void testDialogsWriter();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
@@ -157,6 +158,7 @@ public:
     CPPUNIT_TEST(testCommentsCallbacksWriter);
     CPPUNIT_TEST(testRunMacro);
     CPPUNIT_TEST(testExtractParameter);
+    CPPUNIT_TEST(testDialogsWriter);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -178,7 +180,6 @@ public:
     // for testContextMenu{Calc, Writer}
     osl::Condition m_aContextMenuCondition;
     boost::property_tree::ptree m_aContextMenuResult;
-
 };
 
 LibLODocument_Impl* DesktopLOKTest::loadDoc(const char* pName, LibreOfficeKitDocumentType eType)
@@ -2150,6 +2151,29 @@ void DesktopLOKTest::testExtractParameter()
     aValue = extractParameter(aOptions, "Language");
     CPPUNIT_ASSERT_EQUAL(OUString(), aValue);
     CPPUNIT_ASSERT_EQUAL(OUString("Something1,Something2=blah,Something3"), aOptions);
+}
+
+void DesktopLOKTest::testDialogsWriter()
+{
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    int nCanvasWidth = 100;
+    int nCanvasHeight = 300;
+    sal_Int32 nStride = cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, nCanvasWidth);
+    std::vector<unsigned char> aBuffer(nStride * nCanvasHeight);
+
+    pDocument->pClass->paintDialog(pDocument, aBuffer.data(), nCanvasWidth, nCanvasHeight);
+
+    for (long y = 0; y < nCanvasHeight; ++y)
+    {
+        unsigned char* c = &aBuffer.data()[y * nStride];
+        for (long x = 0; x < nStride; ++x)
+        {
+            printf ("%02x ", c[x]);
+        }
+        printf ("\n");
+    }
+
+    CPPUNIT_ASSERT(false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
