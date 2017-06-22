@@ -505,11 +505,13 @@ namespace drawinglayer
                     else
                     {
 #ifdef DBG_UTIL
-                        // switch to test EMFPlus-enhanced MetafileDecomposition
-                        static bool bTestEMFPDecomposition(true);
-                        // switch to show the new visualization color.-changed behind
-                        // the original output vor visual testing
-                        static bool bUseChangedColorObject(true);
+                        // switch to test EMFPlus-enhanced MetafileDecomposition, don't do
+                        // this by default in debug mode
+                        static bool bTestEMFPDecomposition(false);
+
+                        // switch to show the new visualization color changed behind
+                        // the original output vor visual testing, also not by default in debug mode
+                        static bool bUseChangedColorObject(false);
 
                         if (bTestEMFPDecomposition)
                         {
