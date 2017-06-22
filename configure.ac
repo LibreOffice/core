@@ -411,8 +411,8 @@ if test -n "$with_android_ndk"; then
     fi
 
     if test -z "$with_android_ndk_toolchain_version"; then
-        # Default to gcc 4.9
-        with_android_ndk_toolchain_version=4.9
+        # Default to Clang 5.0
+        with_android_ndk_toolchain_version=clang5.0
     fi
 
     case "$with_android_ndk_toolchain_version" in
