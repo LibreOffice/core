@@ -72,6 +72,9 @@ public:
     /// Test Copy/Paste with Underline text using Legacy Format
     void testUnderlineCopyPaste();
 
+    /// Test Copy/Paste with mutiple paragraphs
+    void testMultiParaCopyPaste();
+
     void testSectionAttributes();
 
     CPPUNIT_TEST_SUITE(Test);
@@ -84,6 +87,7 @@ public:
     CPPUNIT_TEST(testHyperlinkSearch);
     CPPUNIT_TEST(testBoldItalicCopyPaste);
     CPPUNIT_TEST(testUnderlineCopyPaste);
+    CPPUNIT_TEST(testMultiParaCopyPaste);
     CPPUNIT_TEST(testSectionAttributes);
     CPPUNIT_TEST_SUITE_END();
 
@@ -1038,6 +1042,47 @@ void Test::testUnderlineCopyPaste()
     CPPUNIT_ASSERT_EQUAL( 34, (int)pSecAttr->mnEnd );
     CPPUNIT_ASSERT_EQUAL( 1, (int)pSecAttr->maAttributes.size() );
     CPPUNIT_ASSERT_MESSAGE( "This section must be underlined.", hasUnderline(*pSecAttr) );
+}
+
+void Test::testMultiParaCopyPaste()
+{
+    // Create EditEngine's instance
+    EditEngine aEditEngine( mpItemPool );
+
+    // Get EditDoc for current EditEngine's instance
+    EditDoc &rDoc = aEditEngine.GetEditDoc();
+
+    // Initially no text should be there
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
+
+    // Insert initial text
+    OUString aFirstPara = "This is first paragraph";
+    OUString aSecondPara = "This is second paragraph";
+    OUString aThirdPara = "This is third paragraph";
+    OUString aText = aFirstPara + "\n" + aSecondPara + "\n" + aThirdPara;
+    sal_Int32 aTextLen = aText.getLength();
+    aEditEngine.SetText( aText );
+    sal_Int32 aCopyTextLen = aFirstPara.getLength() + aSecondPara.getLength();
+
+    // Assert changes
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen-2), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aFirstPara, rDoc.GetParaAsString(sal_Int32(0)) );
+    CPPUNIT_ASSERT_EQUAL( aSecondPara, rDoc.GetParaAsString(sal_Int32(1)) );
+    CPPUNIT_ASSERT_EQUAL( aThirdPara, rDoc.GetParaAsString(sal_Int32(2)) );
+
+    // Copy initial text using legacy format
+    uno::Reference< datatransfer::XTransferable > xData = aEditEngine.CreateTransferable( ESelection(0,0,1,aSecondPara.getLength()) );
+
+    // Paste text at the end
+    aEditEngine.InsertText( xData, OUString(), rDoc.GetEndPaM(), true );
+
+    // Assert changes
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen-2 + aCopyTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( OUString(aFirstPara), rDoc.GetParaAsString(sal_Int32(0)) );
+    CPPUNIT_ASSERT_EQUAL( OUString(aSecondPara), rDoc.GetParaAsString(sal_Int32(1)) );
+    CPPUNIT_ASSERT_EQUAL( OUString(aThirdPara+aFirstPara), rDoc.GetParaAsString(sal_Int32(2)) );
+    CPPUNIT_ASSERT_EQUAL( OUString(aSecondPara), rDoc.GetParaAsString(sal_Int32(3)) );
 }
 
 void Test::testSectionAttributes()
