@@ -412,10 +412,6 @@ if test -n "$with_android_ndk"; then
     fi
 
     case "$with_android_ndk_toolchain_version" in
-    4.6|4.7|4.8|4.9)
-        ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-$with_android_ndk_toolchain_version
-        ANDROID_COMPILER_DIR=$ANDROID_BINUTILS_DIR
-        ;;
     clang3.3|clang3.4)
         AC_MSG_WARN([Building with the Clang tool-chain is known to break in the bridges module, fix that please])
         ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-4.8
@@ -423,7 +419,7 @@ if test -n "$with_android_ndk"; then
         ANDROID_USING_CLANG=true
         ;;
     *)
-        AC_MSG_ERROR([Unrecognized value for the --with-android-ndk-toolchain-version option])
+        AC_MSG_ERROR([Unrecognized value for the --with-android-ndk-toolchain-version option. Building for Android is only supported with Clang 5.*])
     esac
 
     if test ! -d $ANDROID_BINUTILS_DIR; then
@@ -532,9 +528,9 @@ if test -n "$with_android_ndk"; then
     test -z "$RANLIB" && RANLIB=$ANDROID_BINUTILS_BIN/$android_gnu_prefix-ranlib
     test -z "$STRIP" && STRIP=$ANDROID_BINUTILS_BIN/$android_gnu_prefix-strip
 
-    # When using the 4.6 or newer toolchain, use the gold linker
+    # When using the Clang 5.0 or newer toolchain, use the gold linker
     case "$with_android_ndk_toolchain_version" in
-    4.[[6789]]*|[[56789]].*|clang*)
+    clang*)
         if test "$host_cpu" = arm -a "$ENABLE_LTO" != TRUE; then
             ANDROIDCFLAGS="$ANDROIDCFLAGS -fuse-ld=gold"
         fi
@@ -568,18 +564,12 @@ if test -n "$with_android_ndk"; then
 
     if test -z "$CC"; then
         case "$with_android_ndk_toolchain_version" in
-        4.*)
-            CC="$ANDROID_COMPILER_BIN/$android_gnu_prefix-gcc $ANDROIDCFLAGS"
-            ;;
         clang*)
             CC="$ANDROID_COMPILER_BIN/clang $ANDROIDCFLAGS"
         esac
     fi
     if test -z "$CXX"; then
         case "$with_android_ndk_toolchain_version" in
-        4.*)
-            CXX="$ANDROID_COMPILER_BIN/$android_gnu_prefix-g++ $ANDROIDCXXFLAGS"
-            ;;
         clang*)
             CXX="$ANDROID_COMPILER_BIN/clang++ $ANDROIDCXXFLAGS"
             ;;
