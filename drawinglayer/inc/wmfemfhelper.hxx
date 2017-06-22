@@ -22,6 +22,9 @@
 
 #include <sal/config.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <vcl/font.hxx>
+#include <vcl/outdevstate.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 // predefines
 namespace drawinglayer { namespace geometry { class ViewInformation2D; }}

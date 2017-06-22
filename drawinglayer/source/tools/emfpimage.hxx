@@ -21,6 +21,7 @@
 #define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPIMAGE_HXX
 
 #include <emfphelperdata.hxx>
+#include <vcl/graph.hxx>
 
 namespace emfplushelper
 {

@@ -21,8 +21,16 @@
 #define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPHELPERDATA_HXX
 
 #include <emfplushelper.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <tools/stream.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 //#include <com/sun/star/rendering/XCanvasFont.hpp>
 //#include <com/sun/star/rendering/TextDirection.hpp>
+
+// predefines
+class SvStream;
+namespace basegfx { class B2DPolyPolygon; }
 
 namespace emfplushelper
 {
