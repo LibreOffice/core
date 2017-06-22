@@ -65,8 +65,7 @@ DBTreeListBox::DBTreeListBox( vcl::Window* pParent, WinBits nWinStyle )
 
 void DBTreeListBox::init()
 {
-    sal_uInt16 nSize = SPACEBETWEENENTRIES;
-    SetSpaceBetweenEntries(nSize);
+    SetSpaceBetweenEntries(SPACEBETWEENENTRIES);
 
     m_aTimer.SetTimeout(900);
     m_aTimer.SetInvokeHandler(LINK(this, DBTreeListBox, OnTimeOut));

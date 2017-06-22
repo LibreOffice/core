@@ -213,7 +213,6 @@ void OTableDesignView::resizeDocumentView(tools::Rectangle& _rPlayground)
 
 bool OTableDesignView::PreNotify( NotifyEvent& rNEvt )
 {
-    bool bHandled = false;
     if (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS)
     {
         if( GetDescWin() && GetDescWin()->HasChildPathFocus() )
@@ -224,7 +223,7 @@ bool OTableDesignView::PreNotify( NotifyEvent& rNEvt )
             m_eChildFocus = NONE;
     }
 
-    return bHandled || ODataView::PreNotify(rNEvt);
+    return ODataView::PreNotify(rNEvt);
 }
 
 IClipboardTest* OTableDesignView::getActiveChild() const

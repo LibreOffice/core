@@ -216,7 +216,6 @@ static void create_pixmap(struct splash* splash)
 {
     Pixmap pixmap;
     GC pixmap_gc;
-    unsigned long value_mask = 0;
     XGCValues values;
 
     if ( !splash->bitmap_rows )
@@ -225,7 +224,7 @@ static void create_pixmap(struct splash* splash)
     }
     pixmap = XCreatePixmap( splash->display, splash->win, splash->width, splash->height, splash->depth );
 
-    pixmap_gc = XCreateGC( splash->display, pixmap, value_mask, &values );
+    pixmap_gc = XCreateGC( splash->display, pixmap, 0/*value_mask*/, &values );
 
     if ( splash->visual->class == TrueColor )
     {
@@ -469,7 +468,6 @@ static int splash_init_display( struct splash* splash, int argc, char** argv )
 static int splash_create_window(struct splash* splash)
 {
     Window root_win;
-    unsigned long value_mask = 0;
     XGCValues values;
     const char* name = "LibreOffice";
     const char* icon = "icon"; // FIXME
@@ -495,7 +493,7 @@ static int splash_create_window(struct splash* splash)
     XAllocColor( splash->display, splash->color_map, &(splash->framecolor) );
 
     // not resizable, no decorations, etc.
-    splash->gc = XCreateGC( splash->display, splash->win, value_mask, &values );
+    splash->gc = XCreateGC( splash->display, splash->win, 0/*value_mask*/, &values );
 
     size_hints.flags = PPosition | PSize | PMinSize | PMaxSize;
     size_hints.x = splash->display_x_pos;

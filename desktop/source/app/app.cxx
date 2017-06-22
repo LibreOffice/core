@@ -1537,9 +1537,8 @@ int Desktop::Main()
 
 #ifdef DBG_UTIL
         //include buildid in non product builds
-        OUString aDefault("development");
         aTitle += " [";
-        aTitle += utl::Bootstrap::getBuildIdData(aDefault);
+        aTitle += utl::Bootstrap::getBuildIdData("development");
         aTitle += "]";
 #endif
 
@@ -1672,7 +1671,6 @@ int Desktop::Main()
     if ( !pExecGlobals->bRestartRequested )
     {
         Application::SetFilterHdl( LINK( this, Desktop, ImplInitFilterHdl ) );
-        bool bTerminateRequested = false;
 
         // Preload function depends on an initialized sfx application!
         SetSplashScreenProgress(75);
@@ -1682,7 +1680,7 @@ int Desktop::Main()
 
         SetSplashScreenProgress(80);
 
-        if ( !bTerminateRequested && !rCmdLineArgs.IsInvisible() &&
+        if ( !rCmdLineArgs.IsInvisible() &&
              !rCmdLineArgs.IsNoQuickstart() )
             InitializeQuickstartMode( xContext );
 
@@ -2072,8 +2070,7 @@ IMPL_LINK_NOARG(Desktop, OpenClients_Impl, void*, void)
         if (pExitPostStartup && *pExitPostStartup)
             new ExitTimer();
     } catch (const css::uno::Exception &e) {
-        OUString a( "UNO exception during client open:\n"  );
-        Application::Abort( a + e.Message );
+        Application::Abort( "UNO exception during client open: " + e.Message );
     }
 }
 
@@ -2598,9 +2595,8 @@ void Desktop::OpenSplashScreen()
         if ( rCmdLine.HasSplashPipe() )
             aSplashService = "com.sun.star.office.PipeSplashScreen";
 
-        bool bVisible = true;
         Sequence< Any > aSeq( 2 );
-        aSeq[0] <<= bVisible;
+        aSeq[0] <<= true; // bVisible
         aSeq[1] <<= aAppName;
         css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         m_rSplashScreen.set(
