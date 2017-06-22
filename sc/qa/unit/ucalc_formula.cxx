@@ -3075,6 +3075,18 @@ void Test::testFormulaRefUpdateNameDeleteRow()
     OUString aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$4"), aExpr);
 
+    // Insert a new name 'MyAddress' to reference $B$3. Note absolute row.
+    bInserted = m_pDoc->InsertNewRangeName("MyAddress", ScAddress(0,0,0), "$B$3");
+    CPPUNIT_ASSERT(bInserted);
+
+    const ScRangeData* pName2 = m_pDoc->GetRangeName()->findByUpperName("MYADDRESS");
+    CPPUNIT_ASSERT(pName2);
+
+    sc::TokenStringContext aCxt2(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
+    const ScTokenArray* pCode2 = pName2->GetCode();
+    OUString aExpr2 = pCode2->CreateString(aCxt2, ScAddress(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString("$B$3"), aExpr2);
+
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
 
     // Delete row 3.
@@ -3082,9 +3094,13 @@ void Test::testFormulaRefUpdateNameDeleteRow()
     aMark.SelectOneTable(0);
     rFunc.DeleteCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, DEL_CELLSUP, true);
 
-    // The reference in the name should get updated to B2:B3.
+    // The reference in the 'MyRange' name should get updated to B2:B3.
     aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$3"), aExpr);
+
+    // The reference in the 'MyAddress' name should get updated to $B$#REF!.
+    aExpr2 = pCode2->CreateString(aCxt2, ScAddress(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString("$B$#REF!"), aExpr2);
 
     // Delete row 3 again.
     rFunc.DeleteCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, DEL_CELLSUP, true);
@@ -3130,6 +3146,13 @@ void Test::testFormulaRefUpdateNameDeleteRow()
     aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$4"), aExpr);
 
+    pName2 = m_pDoc->GetRangeName()->findByUpperName("MYADDRESS");
+    CPPUNIT_ASSERT(pName2);
+    pCode2 = pName2->GetCode();
+
+    aExpr2 = pCode2->CreateString(aCxt2, ScAddress(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString("$B$3"), aExpr2);
+
     m_pDoc->InsertTab(1, "test2");
 
     ScMarkData aMark2;
@@ -3142,6 +3165,19 @@ void Test::testFormulaRefUpdateNameDeleteRow()
 
     aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$4"), aExpr);
+
+    pName2 = m_pDoc->GetRangeName()->findByUpperName("MYADDRESS");
+    CPPUNIT_ASSERT(pName2);
+    pCode2 = pName2->GetCode();
+
+    // Deleting a range the 'MyAddress' name points into due to its implicit
+    // relative sheet reference to the sheet where used does not invalidate
+    // the named expression because when updating the sheet reference is
+    // relative to its base position on sheet 0 (same for the 'MyRange' range,
+    // which is the reason why it is not updated either).
+    // This is a tad confusing..
+    aExpr2 = pCode2->CreateString(aCxt2, ScAddress(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString("$B$3"), aExpr2);
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
