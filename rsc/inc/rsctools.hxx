@@ -79,7 +79,6 @@ class RscWriteRc
 {
     sal_uInt32          nLen;
     bool                bSwap;
-    RSCBYTEORDER_TYPE   nByteOrder;
     char *              pMem;
     char *              GetPointer( sal_uInt32 nSize );
 public:
