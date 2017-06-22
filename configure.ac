@@ -1164,6 +1164,12 @@ libo_FUZZ_ARG_ENABLE(symbols,
          By default, enabled for --enable-debug and --enable-dbgutil, disabled
          otherwise.]))
 
+libo_FUZZ_ARG_ENABLE(optimized,
+    AS_HELP_STRING([--disable-optimized],
+        [Whether to compile with optimization flags.
+         By default, disabled for --enable-debug and --enable-dbgutil, enabled
+         otherwise.]))
+
 libo_FUZZ_ARG_ENABLE(runtime-optimizations,
     AS_HELP_STRING([--disable-runtime-optimizations],
         [Statically disable certain runtime optimizations (like rtl/alloc.h or
@@ -3923,6 +3929,23 @@ if test "$enable_release_build" != yes -a \( -n "$ENABLE_SYMBOLS" -o -n "$ENABLE
     XCODE_DEBUG_INFORMATION_FORMAT=dwarf
 fi
 AC_SUBST(XCODE_DEBUG_INFORMATION_FORMAT)
+
+AC_MSG_CHECKING([whether to compile with optimization flags])
+if test -z "$enable_optimized"; then
+    if test -n "$ENABLE_DEBUG$ENABLE_DBGUTIL"; then
+        enable_optimized=no
+    else
+        enable_optimized=yes
+    fi
+fi
+if test "$enable_optimized" != no; then
+    ENABLE_OPTIMIZED=TRUE
+    AC_MSG_RESULT([yes])
+else
+    ENABLE_OPTIMIZED=
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_OPTIMIZED)
 
 #
 # determine CPUNAME, OS, ...
