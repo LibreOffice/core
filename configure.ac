@@ -1178,6 +1178,10 @@ libo_FUZZ_ARG_ENABLE(runtime-optimizations,
          CC contains "-fsanitize=*".  (For Valgrind, those runtime optimizations
          are typically disabled dynamically via RUNNING_ON_VALGRIND.)]))
 
+AC_ARG_WITH(valgrind,
+    AS_HELP_STRING([--with-valgrind],
+        [Make availability of Valgrind headers a hard requirement.]))
+
 libo_FUZZ_ARG_ENABLE(compiler-plugins,
     AS_HELP_STRING([--enable-compiler-plugins],
         [Enable compiler plugins that will perform additional checks during
@@ -5746,7 +5750,7 @@ dnl ===================================================================
 dnl Check if valgrind headers are available
 dnl ===================================================================
 ENABLE_VALGRIND=
-if test "$cross_compiling" != yes; then
+if test "$cross_compiling" != yes -a "$with_valgrind" != no; then
     prev_cppflags=$CPPFLAGS
     # Is VALGRIND_CFLAGS something one is supposed to have in the environment,
     # or where does it come from?
@@ -5757,6 +5761,9 @@ if test "$cross_compiling" != yes; then
 fi
 AC_SUBST([ENABLE_VALGRIND])
 if test -z "$ENABLE_VALGRIND"; then
+    if test "$with_valgrind" = yes; then
+        AC_MSG_ERROR([--with-valgrind specified but no Valgrind headers found])
+    fi
     VALGRIND_CFLAGS=
 fi
 AC_SUBST([VALGRIND_CFLAGS])
