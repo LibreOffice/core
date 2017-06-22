@@ -108,8 +108,6 @@ namespace connectivity
             MysqlCDriver&   m_rDriver;      // Pointer to the owning driver object
             sql::Driver*    cppDriver;
 
-            bool    m_bClosed;
-
         public:
             /// @throws SQLException
             /// @throws RuntimeException

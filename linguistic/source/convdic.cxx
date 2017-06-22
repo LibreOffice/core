@@ -179,12 +179,11 @@ ConvDic::ConvDic(
 
     bNeedEntries = true;
     bIsModified  = bIsActive = false;
-    bIsReadonly = false;
 
     if( !rMainURL.isEmpty() )
     {
         bool bExists = false;
-        bIsReadonly = IsReadOnly( rMainURL, &bExists );
+        IsReadOnly( rMainURL, &bExists );
 
         if( !bExists )  // new empty dictionary
         {
@@ -193,7 +192,6 @@ ConvDic::ConvDic(
             //! that could be found by the dictionary-list implementation
             // (Note: empty dictionaries are not just empty files!)
             Save();
-            bIsReadonly = IsReadOnly( rMainURL );   // will be sal_False if Save was successful
         }
     }
     else

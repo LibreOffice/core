@@ -67,7 +67,6 @@ OConnection::OConnection(MysqlCDriver& _rDriver, sql::Driver * _cppDriver)
     ,m_xMetaData(nullptr)
     ,m_rDriver(_rDriver)
     ,cppDriver(_cppDriver)
-    ,m_bClosed(false)
 {
     m_rDriver.acquire();
 }
@@ -507,7 +506,6 @@ void OConnection::disposing()
     }
     m_aStatements.clear();
 
-    m_bClosed   = true;
     m_xMetaData = WeakReference< XDatabaseMetaData >();
 
     dispose_ChildImpl();

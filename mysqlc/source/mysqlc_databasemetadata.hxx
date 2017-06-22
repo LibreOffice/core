@@ -42,7 +42,6 @@ namespace connectivity
         class ODatabaseMetaData : public ODatabaseMetaData_BASE
         {
             OConnection&    m_rConnection;
-            bool            m_bUseCatalog;
         protected:
             sql::DatabaseMetaData * meta;
             rtl::OUString           identifier_quote_string;
