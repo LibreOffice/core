@@ -343,7 +343,7 @@ void OGroupUndo::implReInsert( )
     }
     catch(uno::Exception&)
     {
-        OSL_FAIL("Exception catched while undoing remove group");
+        OSL_FAIL("Exception caught while undoing remove group");
     }
 }
 
@@ -355,7 +355,7 @@ void OGroupUndo::implReRemove( )
     }
     catch(uno::Exception&)
     {
-        OSL_FAIL("Exception catched while redoing remove group");
+        OSL_FAIL("Exception caught while redoing remove group");
     }
 }
 

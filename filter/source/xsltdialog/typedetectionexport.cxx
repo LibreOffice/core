@@ -214,7 +214,7 @@ void TypeDetectionExporter::doExport( const Reference< XOutputStream >& xOS,  co
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "TypeDetectionExporter::doExport exception catched!" );
+        OSL_FAIL( "TypeDetectionExporter::doExport exception caught!" );
     }
 }
 
@@ -244,7 +244,7 @@ void TypeDetectionExporter::addProperty( const Reference< XWriter >& xHandler, c
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "TypeDetectionExporter::addProperty exception catched!" );
+        OSL_FAIL( "TypeDetectionExporter::addProperty exception caught!" );
     }
 }
 
@@ -275,7 +275,7 @@ void TypeDetectionExporter::addLocaleProperty( const Reference< XWriter >& xHand
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "TypeDetectionExporter::addLocaleProperty exception catched!" );
+        OSL_FAIL( "TypeDetectionExporter::addLocaleProperty exception caught!" );
     }
 }
 

@@ -825,7 +825,7 @@ struct osl_procStat
     char signal[24];          /* pending signals */
     char blocked[24];         /* blocked signals */
     char sigignore[24];       /* ignored signals */
-    char sigcatch[24];        /* catched signals */
+    char sigcatch[24];        /* caught signals */
     unsigned long wchan;      /* 'channel' the process is waiting in */
     unsigned long nswap;      /* ? */
     unsigned long cnswap;     /* ? */

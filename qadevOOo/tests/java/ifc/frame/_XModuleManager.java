@@ -60,7 +60,7 @@ public class _XModuleManager extends MultiMethodTest {
      * value of method <CODE>indetify()</CODE> if the method was called with
      * coresponding value.<p>
      * As enhancement the method <CODE>identify()</CODE> was called with invalid
-     * parameter. In this case the thrown exceptions was catched.
+     * parameter. In this case the thrown exceptions were caught.
      */
     public XModuleManager oObj = null;
     /**

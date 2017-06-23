@@ -43,7 +43,7 @@ constants TolerantPropertySetResultType
 
         <p>For example if a
         com::sun::star::beans::UnknownPropertyException
-        was catched.</p>
+        was caught.</p>
     */
     const short UNKNOWN_PROPERTY    = 1;
 
@@ -51,7 +51,7 @@ constants TolerantPropertySetResultType
 
         <p>For example if a
         com::sun::star::lang::IllegalArgumentException
-        was catched.</p>
+        was caught.</p>
     */
     const short ILLEGAL_ARGUMENT    = 2;
 
@@ -59,7 +59,7 @@ constants TolerantPropertySetResultType
 
         <p>For example if a
         com::sun::star::beans::PropertyVetoException
-        was catched.</p>
+        was caught.</p>
     */
     const short PROPERTY_VETO       = 3;
 
