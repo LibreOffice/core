@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_96bb490e",
+        "filename": "sc/source/filter/xml/xmldpimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-23T16:14:42Z",
+      "side": 0,
+      "message": "I\u0027d rather not remove things from filter code if they are actually read ie. have an XML representation, having such unused features during import usually means we don\u0027t import to the document model, but maybe rather should instead of dropping everything. This hidden member thing for example does even have a core representation.\n\nBetter add a comment\n\n // TODO: import to document core\n\nto such fields.",
+      "revId": "bc8443e3e5dbc6a45668de80561201c6a930b37c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_b63685b2",
+        "filename": "sc/source/filter/xml/xmldrani.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-23T16:14:42Z",
+      "side": 0,
+      "message": "Ditto, dropping an XML feature.",
+      "revId": "bc8443e3e5dbc6a45668de80561201c6a930b37c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_d63b119b",
+        "filename": "sc/source/filter/xml/xmlexternaltabi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-23T16:14:42Z",
+      "side": 0,
+      "message": "Ditto, dropping an XML feature.",
+      "revId": "bc8443e3e5dbc6a45668de80561201c6a930b37c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
