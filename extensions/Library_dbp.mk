@@ -19,10 +19,6 @@ $(eval $(call gb_Library_set_include,dbp,\
 	-I$(SRCDIR)/extensions/source/inc \
 ))
 
-$(eval $(call gb_Library_add_defs,dbp,\
-	-DCOMPMOD_NAMESPACE=dbp \
-))
-
 $(eval $(call gb_Library_use_external,dbp,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,dbp))

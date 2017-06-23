@@ -73,11 +73,11 @@ namespace dbp
         {
             case FormComponentType::LISTBOX:
                 m_bListBox = true;
-                setTitleBase(ModuleRes(RID_STR_LISTWIZARD_TITLE));
+                setTitleBase(compmodule::ModuleRes(RID_STR_LISTWIZARD_TITLE));
                 return true;
             case FormComponentType::COMBOBOX:
                 m_bListBox = false;
-                setTitleBase(ModuleRes(RID_STR_COMBOWIZARD_TITLE));
+                setTitleBase(compmodule::ModuleRes(RID_STR_COMBOWIZARD_TITLE));
                 return true;
         }
         return false;
@@ -354,7 +354,7 @@ namespace dbp
         get(m_pSelectTableField, "selectfield");
         get(m_pDisplayedField, "displayfield");
         get(m_pInfo, "info");
-        m_pInfo->SetText(ModuleRes( isListBox() ? RID_STR_FIELDINFO_LISTBOX : RID_STR_FIELDINFO_COMBOBOX));
+        m_pInfo->SetText(compmodule::ModuleRes( isListBox() ? RID_STR_FIELDINFO_LISTBOX : RID_STR_FIELDINFO_COMBOBOX));
         m_pSelectTableField->SetSelectHdl(LINK(this, OContentFieldSelection, OnFieldSelected));
         m_pSelectTableField->SetDoubleClickHdl(LINK(this, OContentFieldSelection, OnTableDoubleClicked));
     }
@@ -505,7 +505,7 @@ namespace dbp
     OComboDBFieldPage::OComboDBFieldPage( OControlWizard* _pParent )
         :ODBFieldPage(_pParent)
     {
-        setDescriptionText(ModuleRes(RID_STR_COMBOWIZ_DBFIELD));
+        setDescriptionText(compmodule::ModuleRes(RID_STR_COMBOWIZ_DBFIELD));
     }
 
 

@@ -32,7 +32,7 @@ extern "C" void SAL_CALL dbp_initializeModule()
         createRegistryInfo_OGroupBoxWizard();
         createRegistryInfo_OListComboWizard();
         createRegistryInfo_OGridWizard();
-        ::dbp::OModule::setResourceFilePrefix("dbp");
+        compmodule::OModule::setResourceFilePrefix("dbp");
         s_bInit = true;
     }
 }
@@ -48,7 +48,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL dbp_component_getFactory(
     Reference< XInterface > xRet;
     if (pServiceManager && pImplementationName)
     {
-        xRet = ::dbp::OModule::getComponentFactory(
+        xRet = compmodule::OModule::getComponentFactory(
             OUString::createFromAscii(pImplementationName),
             static_cast< XMultiServiceFactory* >(pServiceManager));
     }

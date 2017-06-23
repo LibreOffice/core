@@ -74,7 +74,7 @@ namespace abp
             *pArguments++ <<= PropertyValue("ParentWindow", -1, makeAny(xDialogParent), PropertyState_DIRECT_VALUE);
 
             // the title of the dialog
-            OUString sAdminDialogTitle(ModuleRes(RID_STR_ADMINDIALOGTITLE));
+            OUString sAdminDialogTitle(compmodule::ModuleRes(RID_STR_ADMINDIALOGTITLE));
             *pArguments++ <<= PropertyValue("Title", -1, makeAny(sAdminDialogTitle), PropertyState_DIRECT_VALUE);
 
             // the name of the new data source

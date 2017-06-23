@@ -105,7 +105,7 @@ namespace abp
 #else
         m_aSettings.eType = AST_OTHER;
 #endif
-        m_aSettings.sDataSourceName = ModuleRes(RID_STR_DEFAULT_NAME);
+        m_aSettings.sDataSourceName = compmodule::ModuleRes(RID_STR_DEFAULT_NAME);
         m_aSettings.bRegisterDataSource = false;
         m_aSettings.bEmbedDataSource = false;
         m_aSettings.bIgnoreNoTable = false;
@@ -116,7 +116,7 @@ namespace abp
 
         typeSelectionChanged( m_aSettings.eType );
 
-        OUString sDialogTitle = ModuleRes(RID_STR_ABSOURCEDIALOGTITLE);
+        OUString sDialogTitle = compmodule::ModuleRes(RID_STR_ABSOURCEDIALOGTITLE);
         setTitleBase(sDialogTitle);
         SetHelpId(HID_ABSPILOT);
     }
@@ -137,7 +137,7 @@ namespace abp
         OUString sDisplayName;
         if ( nResId )
         {
-            sDisplayName = ModuleRes(nResId);
+            sDisplayName = compmodule::ModuleRes(nResId);
         }
 
         return sDisplayName;
@@ -260,7 +260,7 @@ namespace abp
 
             if ( aTables.empty() )
             {
-                if (RET_YES != ScopedVclPtrInstance<MessageDialog>(this, ModuleRes(( getSettings().eType == AST_EVOLUTION_GROUPWISE ? RID_STR_QRY_NO_EVO_GW : RID_STR_QRY_NOTABLES)), VclMessageType::Question, VclButtonsType::YesNo)->Execute())
+                if (RET_YES != ScopedVclPtrInstance<MessageDialog>(this, compmodule::ModuleRes(( getSettings().eType == AST_EVOLUTION_GROUPWISE ? RID_STR_QRY_NO_EVO_GW : RID_STR_QRY_NOTABLES)), VclMessageType::Question, VclButtonsType::YesNo)->Execute())
                 {
                     // cannot ask the user, or the user chose to use this data source, though there are no tables
                     bAllow = false;
