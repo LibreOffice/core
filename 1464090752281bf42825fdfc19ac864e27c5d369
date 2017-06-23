@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_d6a5d1b5",
+        "filename": "extensions/source/abpilot/unodialogabp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-23T19:58:41Z",
+      "side": 1,
+      "message": "if ever these two extensions are used simultaneously, they will now conflict here.",
+      "revId": "1464090752281bf42825fdfc19ac864e27c5d369",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_f6aacd84",
+        "filename": "extensions/source/dbpilots/dbpservices.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-23T19:58:41Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "1464090752281bf42825fdfc19ac864e27c5d369",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_16b039f4",
+        "filename": "extensions/source/inc/componentmodule.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-23T19:58:41Z",
+      "side": 1,
+      "message": "and now they will share this global state, where before each extension had it\u0027s own copy",
+      "revId": "1464090752281bf42825fdfc19ac864e27c5d369",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
