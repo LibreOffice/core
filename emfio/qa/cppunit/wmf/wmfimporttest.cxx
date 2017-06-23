@@ -23,6 +23,7 @@
 #include <unotest/bootstrapfixturebase.hxx>
 #include <vcl/wmf.hxx>
 #include <vcl/metaact.hxx>
+#include <mtftools.hxx>
 
 using namespace css;
 
@@ -37,7 +38,7 @@ class WmfTest : public test::BootstrapFixtureBase, public XmlTestTools
 
 public:
     WmfTest() :
-        maDataUrl("/vcl/qa/cppunit/wmf/data/")
+        maDataUrl("/emfio/qa/cppunit/wmf/data/")
     {}
 
     // Hack around missing "once per class" setUp/tearDown in CppUnit; must be
@@ -248,7 +249,7 @@ void WmfTest::testTdf99402()
 {
     // Symbol font should arrive with RTL_TEXTENCODING_SYMBOL encoding,
     // even if charset is OEM_CHARSET/DEFAULT_CHARSET in WMF
-    LOGFONTW logfontw;
+    emfio::LOGFONTW logfontw;
     logfontw.lfHeight = 0;
     logfontw.lfWidth = 0;
     logfontw.lfEscapement = 0;
@@ -260,7 +261,7 @@ void WmfTest::testTdf99402()
     logfontw.lfPitchAndFamily = FF_ROMAN | DEFAULT_PITCH;
     logfontw.alfFaceName = "Symbol";
 
-    WinMtfFontStyle fontStyle(logfontw);
+    emfio::WinMtfFontStyle fontStyle(logfontw);
 
     CPPUNIT_ASSERT_EQUAL(RTL_TEXTENCODING_SYMBOL, fontStyle.aFont.GetCharSet());
 }
