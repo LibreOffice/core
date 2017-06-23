@@ -103,9 +103,9 @@ void TestTextSearch::testSearches()
 {
     OUString str( "acababaabcababadcdaa" );
     sal_Int32 startPos = 2, endPos = 20 ;
-    OUString searchStr( "(ab)*a(c|d)+" );
-    sal_Int32 fStartRes = 10, fEndRes = 18 ;
-    sal_Int32 bStartRes = 18, bEndRes = 10 ;
+    OUString const searchStr( "(ab)*a(c|d)+" );
+    sal_Int32 const fStartRes = 10, fEndRes = 18 ;
+    sal_Int32 const bStartRes = 18, bEndRes = 10 ;
 
     // set options
     util::SearchOptions aOptions;

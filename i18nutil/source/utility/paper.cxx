@@ -259,7 +259,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
                 bool bHalve = false;
 
-                size_t nExtraTabSize = SAL_N_ELEMENTS(aCustoms);
+                size_t const nExtraTabSize = SAL_N_ELEMENTS(aCustoms);
                 for (size_t i = 0; i < nExtraTabSize; ++i)
                 {
                     if (rtl_str_compareIgnoreAsciiCase(aCustoms[i].pName, aPaper.getStr()) == 0)

@@ -122,11 +122,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportHWP(SvStream &rStream)
     {
         std::unique_ptr<HStream> stream(new HStream);
         byte aData[32768];
-        std::size_t nRead, nBlock = 32768;
+        std::size_t nRead;
 
         while (true)
         {
-            nRead = rStream.ReadBytes(aData, nBlock);
+            nRead = rStream.ReadBytes(aData, 32768);
             if (nRead == 0)
                 break;
             stream->addData(aData, (int)nRead);
@@ -153,10 +153,10 @@ sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor)
 
     std::unique_ptr<HStream> stream(new HStream);
     Sequence < sal_Int8 > aBuffer;
-    sal_Int32 nRead, nBlock = 32768, nTotal = 0;
+    sal_Int32 nRead, nTotal = 0;
     while( true )
     {
-        nRead = xInputStream->readBytes(aBuffer, nBlock);
+        nRead = xInputStream->readBytes(aBuffer, 32768);
         if( nRead == 0 )
             break;
         stream->addData( reinterpret_cast<const byte *>(aBuffer.getConstArray()), nRead );

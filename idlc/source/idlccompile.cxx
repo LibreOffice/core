@@ -180,8 +180,8 @@ bool copyFile(const OString* source, const OString& target)
         return false;
     }
 
-    size_t totalSize = 512;
-    char   pBuffer[513];
+    size_t const totalSize = 512;
+    char   pBuffer[totalSize + 1];
 
     while ( !feof(pSource) )
     {

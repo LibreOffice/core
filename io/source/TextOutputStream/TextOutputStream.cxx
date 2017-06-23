@@ -159,8 +159,7 @@ void OTextOutputStream::writeString( const OUString& aString )
     checkOutputStream();
     if( !mbEncodingInitialized )
     {
-        OUString aUtf8Str("utf8");
-        setEncoding( aUtf8Str );
+        setEncoding( "utf8" );
     }
     if( !mbEncodingInitialized )
         return;

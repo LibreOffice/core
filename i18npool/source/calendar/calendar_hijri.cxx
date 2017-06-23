@@ -316,12 +316,12 @@ Calendar_hijri::getJulianDay(sal_Int32 day, sal_Int32 month, sal_Int32 year)
     sal_Int32 intgr = (sal_Int32)((sal_Int32)(365.25 * jy) + (sal_Int32)(30.6001 * jm) + day + 1720995 );
 
     //check for switch to Gregorian calendar
-    double gregcal = 15 + 31 * ( 10 + 12 * 1582 );
+    double const gregcal = 15 + 31 * ( 10 + 12 * 1582 );
 
     if( day + 31 * (month + 12 * year) >= gregcal ) {
-    double ja;
-    ja = (sal_Int32)(0.01 * jy);
-    intgr += (sal_Int32)(2 - ja + (sal_Int32)(0.25 * ja));
+        double ja;
+        ja = (sal_Int32)(0.01 * jy);
+        intgr += (sal_Int32)(2 - ja + (sal_Int32)(0.25 * ja));
     }
 
     return (double) intgr;

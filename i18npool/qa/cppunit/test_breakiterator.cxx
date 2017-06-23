@@ -115,7 +115,7 @@ void TestBreakIterator::testLineBreaking()
 
     //See https://bz.apache.org/ooo/show_bug.cgi?id=17155
     {
-        OUString aTest("foo /bar/baz");
+        OUString const aTest("foo /bar/baz");
 
         aLocale.Language = "en";
         aLocale.Country = "US";
