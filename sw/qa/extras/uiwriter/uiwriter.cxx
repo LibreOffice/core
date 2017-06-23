@@ -1617,7 +1617,7 @@ void SwUiWriterTest::testXFlatParagraph()
     CPPUNIT_ASSERT_EQUAL(OUString("This is sample text"), xFlatPara->getText());
     //checking modified status
     CPPUNIT_ASSERT(!xFlatPara->isModified());
-    //checking "checked" staus, modifying it and asserting the changes
+    //checking "checked" status, modifying it and asserting the changes
     CPPUNIT_ASSERT(!xFlatPara->isChecked(sal_Int32(text::TextMarkupType::SPELLCHECK)));
     xFlatPara->setChecked((sal_Int32(text::TextMarkupType::SPELLCHECK)), true);
     CPPUNIT_ASSERT(xFlatPara->isChecked(sal_Int32(text::TextMarkupType::SPELLCHECK)));

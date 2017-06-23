@@ -802,7 +802,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileSize(
     @retval osl_File_E_INVAL invalid file handle, on Unix systems also
                 can mean that the address, length of the file or the
                 file offset are too large or not aligned on a page
-                boundaryi; on Linux can also mean after Linux 2.6.12
+                boundary; on Linux can also mean after Linux 2.6.12
                 that the length was set to 0 (illogical.
     @retval osl_File_E_OVERFLOW requested mapping size too large,
                 or the file offset was too large
