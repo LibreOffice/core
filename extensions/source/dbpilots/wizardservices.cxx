@@ -29,21 +29,21 @@
 // the registration methods
 extern "C" void SAL_CALL createRegistryInfo_OGroupBoxWizard()
 {
-    static ::dbp::OMultiInstanceAutoRegistration<
+    static compmodule::OMultiInstanceAutoRegistration<
         ::dbp::OUnoAutoPilot< ::dbp::OGroupBoxWizard, ::dbp::OGroupBoxSI >
     > aAutoRegistration;
 }
 
 extern "C" void SAL_CALL createRegistryInfo_OListComboWizard()
 {
-    static ::dbp::OMultiInstanceAutoRegistration<
+    static compmodule::OMultiInstanceAutoRegistration<
         ::dbp::OUnoAutoPilot< ::dbp::OListComboWizard, ::dbp::OListComboSI >
     > aAutoRegistration;
 }
 
 extern "C" void SAL_CALL createRegistryInfo_OGridWizard()
 {
-    static ::dbp::OMultiInstanceAutoRegistration<
+    static compmodule::OMultiInstanceAutoRegistration<
         ::dbp::OUnoAutoPilot< ::dbp::OGridWizard, ::dbp::OGridSI >
     > aAutoRegistration;
 }
