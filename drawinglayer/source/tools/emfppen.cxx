@@ -184,7 +184,7 @@ namespace emfplushelper
 
         if (penDataFlags & PenDataTransform)
         {
-            rR.readXForm(s, pen_transformation);
+            EmfPlusHelperData::readXForm(s, pen_transformation);
         }
 
         if (penDataFlags & PenDataStartCap)
