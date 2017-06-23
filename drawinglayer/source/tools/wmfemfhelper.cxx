@@ -46,6 +46,7 @@
 #include <vcl/gradient.hxx>
 #include <vcl/hatch.hxx>
 #include <emfplushelper.hxx>
+#include <numeric>
 
 namespace drawinglayer
 {
