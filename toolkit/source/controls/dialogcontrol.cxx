@@ -120,9 +120,8 @@ public:
     virtual void SAL_CALL removeByName( const OUString& aName ) override
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        if ( !hasByName( aName ) )
+        if ( things.erase( aName ) == 0 )
             throw NoSuchElementException();
-        things.erase( things.find( aName ) );
     }
     virtual Type SAL_CALL getElementType(  ) override
     {

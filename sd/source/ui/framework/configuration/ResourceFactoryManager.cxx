@@ -141,7 +141,7 @@ void ResourceFactoryManager::RemoveFactoryForReference(
     // Remove the entries whose keys we just have collected.
     ::std::vector<OUString>::const_iterator iKey;
     for (iKey=aKeys.begin(); iKey!=aKeys.end();  ++iKey)
-        maFactoryMap.erase(maFactoryMap.find(*iKey));
+        maFactoryMap.erase(*iKey);
 
     // Remove the pattern entries whose factories are identical to the given
     // factory.

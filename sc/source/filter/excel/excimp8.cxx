@@ -156,9 +156,8 @@ public:
     virtual void SAL_CALL removeByName( const OUString& aName ) override
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        if ( !hasByName( aName ) )
+        if ( IdToOleNameHash.erase( aName ) == 0 )
             throw container::NoSuchElementException();
-        IdToOleNameHash.erase( IdToOleNameHash.find( aName ) );
     }
     virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement ) override
     {
