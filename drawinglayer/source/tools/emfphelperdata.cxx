@@ -860,12 +860,8 @@ namespace emfplushelper
                             float lx, ly, lw, lh;
                             rMS.ReadFloat(lx).ReadFloat(ly).ReadFloat(lw).ReadFloat(lh);
                             SAL_INFO("cppcanvas.emf", "EMF+ DrawString layoutRect: " << lx << "," << ly << " - " << lw << "x" << lh);
-                            OUString text = read_uInt16s_ToOUString(rMS, stringLength);
-                            EMFPStringFormat *stringFormat = static_cast< EMFPStringFormat* >(maEMFPObjects[formatId & 0xff].get());
-
-                            (void)(text); // avoid warning
-                            (void)(stringFormat); // avoid warning
-
+    //                      OUString text = read_uInt16s_ToOUString(rMS, stringLength);
+    //                      EMFPStringFormat *stringFormat = static_cast< EMFPStringFormat* >(maEMFPObjects[formatId & 0xff].get());
     //                        css::rendering::FontRequest aFontRequest;
     //
     //                        if (stringFormat)
@@ -1248,6 +1244,8 @@ namespace emfplushelper
                                     ", " << transform.get(0,1) << ", " << transform.get(1,1) <<
                                     ", " << transform.get(0,2) << ", " << transform.get(1,2));
                             }
+
+                            (void)text; // avoid warning
 
     //                        rendering::FontRequest aFontRequest;
     //                        // add the text action
