@@ -519,16 +519,18 @@ namespace drawinglayer
                             {
                                 primitive2d::Primitive2DContainer aDecomposition;
                                 rMetafilePrimitive.get2DDecomposition(aDecomposition, getViewInformation2D());
-                                const primitive2d::ModifiedColorPrimitive2D aPrimitiveR(
-                                    aDecomposition,
-                                    basegfx::BColorModifierSharedPtr(
-                                        new basegfx::BColorModifier_RGBLuminanceContrast(
-                                            0.5, // red
-                                            -0.5, // green
-                                            -0.5, // blue
-                                            0.0, // luminance
-                                            0.0))); // contrast
-                                processBasePrimitive2D(aPrimitiveR);
+                                primitive2d::BasePrimitive2D* pBasePrimitive = nullptr;
+                                const primitive2d::Primitive2DReference aPrimitiveR(
+                                    pBasePrimitive = new primitive2d::ModifiedColorPrimitive2D(
+                                        aDecomposition,
+                                        basegfx::BColorModifierSharedPtr(
+                                            new basegfx::BColorModifier_RGBLuminanceContrast(
+                                                0.5, // red
+                                                -0.5, // green
+                                                -0.5, // blue
+                                                0.0, // luminance
+                                                0.0)))); // contrast
+                                processBasePrimitive2D(*pBasePrimitive);
                                 RenderMetafilePrimitive2D(rMetafilePrimitive);
                             }
                             else
