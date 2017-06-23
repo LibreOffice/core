@@ -1298,6 +1298,7 @@ void ScInterpreter::GetExternalDoubleRef(
 
     formula::FormulaTokenArrayPlainIterator aIter(*pArray);
     formula::FormulaToken* pToken = aIter.First();
+    assert(pToken);
     if (pToken->GetType() == svError)
     {
         SetError( pToken->GetError());
