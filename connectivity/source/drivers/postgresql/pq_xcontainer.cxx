@@ -396,7 +396,7 @@ void Container::fire( const EventBroadcastHelper &helper )
             }
             catch ( css::uno::RuntimeException & )
             {
-                OSL_ENSURE( false, "exception catched" );
+                OSL_ENSURE( false, "exception caught" );
                 // loose coupling, a runtime exception shall not break anything
                 // TODO: log away as warning !
             }

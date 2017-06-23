@@ -82,7 +82,7 @@ OXMLComponent::OXMLComponent( ORptFilter& _rImport
         }
         catch(const Exception&)
         {
-            OSL_FAIL("Exception catched while putting props into report component!");
+            OSL_FAIL("Exception caught while putting props into report component!");
         }
     }
 }

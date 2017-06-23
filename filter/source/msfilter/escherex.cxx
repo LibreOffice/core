@@ -2474,7 +2474,7 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
                 catch ( ... )
                 {
                     EnhancedCustomShapeEquation aEquation;      // #i112309# EnhancedCustomShape::Parse error
-                    aEquation.nOperation = 0;                   // not catched on linux platform
+                    aEquation.nOperation = 0;                   // not caught on linux platform
                     aEquation.nPara[ 0 ] = 1;
                     rEquations.push_back( aEquation );
                 }

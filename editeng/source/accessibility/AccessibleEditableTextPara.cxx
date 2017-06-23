@@ -2734,7 +2734,7 @@ namespace accessibility
         }
         catch (const lang::IndexOutOfBoundsException&)
         {
-            // this one needs to be catched since this interface does not allow for it.
+            // this one needs to be caught since this interface does not allow for it.
         }
         return aResult;
     }
@@ -2750,7 +2750,7 @@ namespace accessibility
         }
         catch (const lang::IndexOutOfBoundsException&)
         {
-            // this one needs to be catched since this interface does not allow for it.
+            // this one needs to be caught since this interface does not allow for it.
         }
         return nRes;
     }

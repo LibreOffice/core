@@ -224,7 +224,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "XMLFilterJarHelper::savePackage exception catched!" );
+        OSL_FAIL( "XMLFilterJarHelper::savePackage exception caught!" );
     }
 
     osl::File::remove( rPackageURL );
@@ -294,7 +294,7 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "XMLFilterJarHelper::savePackage exception catched!" );
+        OSL_FAIL( "XMLFilterJarHelper::savePackage exception caught!" );
     }
 }
 
@@ -365,7 +365,7 @@ bool XMLFilterJarHelper::copyFile( const Reference< XHierarchicalNameAccess >& x
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "XMLFilterJarHelper::copyFile exception catched" );
+        OSL_FAIL( "XMLFilterJarHelper::copyFile exception caught" );
     }
     return false;
 }

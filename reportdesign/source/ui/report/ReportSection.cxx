@@ -104,7 +104,7 @@ OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< re
     }
     catch(uno::Exception&)
     {
-        OSL_FAIL("Exception catched!");
+        OSL_FAIL("Exception caught!");
     }
 
     m_pFunc.reset(new DlgEdFuncSelect( this ));

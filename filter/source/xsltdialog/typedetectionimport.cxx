@@ -62,7 +62,7 @@ void TypeDetectionImporter::doImport( const Reference< XComponentContext >& rxCo
     }
     catch( const Exception& /* e */ )
     {
-        OSL_FAIL( "TypeDetectionImporter::doImport exception catched!" );
+        OSL_FAIL( "TypeDetectionImporter::doImport exception caught!" );
     }
 }
 

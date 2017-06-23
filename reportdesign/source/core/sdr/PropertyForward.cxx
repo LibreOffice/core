@@ -147,7 +147,7 @@ void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt 
         }
         catch(Exception&)
         {
-            OSL_FAIL("Exception catched!");
+            OSL_FAIL("Exception caught!");
         }
         m_bInChange = false;
     }
