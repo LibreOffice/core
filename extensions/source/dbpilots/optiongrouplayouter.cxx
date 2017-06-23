@@ -75,8 +75,6 @@ namespace dbp
         // no. of buttons to create
         sal_Int32 nRadioButtons = _rSettings.aLabels.size();
 
-        sal_Int32 nTopSpace = 0;
-
         // the shape of the groupbox
         css::awt::Size aControlShapeSize = _rContext.xObjectShape->getSize();
         // maybe need to adjust the size if the control shapes
@@ -112,7 +110,7 @@ namespace dbp
         StringArray::const_iterator aValueIter = _rSettings.aValues.begin();
         for (sal_Int32 i=0; i<nRadioButtons; ++i, ++aLabelIter, ++aValueIter)
         {
-            aButtonPosition.Y = aShapePosition.Y + (i+1) * nTempHeight + nTopSpace;
+            aButtonPosition.Y = aShapePosition.Y + (i+1) * nTempHeight;
 
             Reference< XPropertySet > xRadioModel(
                     xDocFactory->createInstance("com.sun.star.form.component.RadioButton"),

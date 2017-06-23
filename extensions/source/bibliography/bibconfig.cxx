@@ -124,9 +124,6 @@ BibConfig::BibConfig()
             }
         }
     }
-    OUString sName("DataSourceName");
-    OUString sTable("Command");
-    OUString sCommandType("CommandType");
     Sequence< OUString > aNodeNames = GetNodeNames(cDataSourceHistory);
     const OUString* pNodeNames = aNodeNames.getConstArray();
     for(sal_Int32 nNode = 0; nNode < aNodeNames.getLength(); nNode++)
@@ -138,12 +135,9 @@ BibConfig::BibConfig()
         sPrefix += "/";
         sPrefix += pNodeNames[nNode];
         sPrefix += "/";
-        pHistoryNames[0] = sPrefix;
-        pHistoryNames[0] += sName;
-        pHistoryNames[1] = sPrefix;
-        pHistoryNames[1] += sTable;
-        pHistoryNames[2] = sPrefix;
-        pHistoryNames[2] += sCommandType;
+        pHistoryNames[0] = sPrefix + "DataSourceName";
+        pHistoryNames[1] = sPrefix + "Command";
+        pHistoryNames[2] = sPrefix + "CommandType";
 
         Sequence<Any> aHistoryValues = GetProperties( aHistoryNames );
         const Any* pHistoryValues = aHistoryValues.getConstArray();
@@ -233,9 +227,6 @@ void    BibConfig::ImplCommit()
     PropertyValue* pNodeValues = aNodeValues.getArray();
 
     sal_Int32 nIndex = 0;
-    OUString sName("DataSourceName");
-    OUString sTable("Command");
-    OUString sCommandType("CommandType");
     for(sal_Int32 i = 0; i < (sal_Int32)pMappingsArr->size(); i++)
     {
         const Mapping* pMapping = (*pMappingsArr)[i].get();
@@ -243,14 +234,11 @@ void    BibConfig::ImplCommit()
         sPrefix += "/_";
         sPrefix += OUString::number(i);
         sPrefix += "/";
-        pNodeValues[nIndex].Name    = sPrefix;
-        pNodeValues[nIndex].Name    += sName;
+        pNodeValues[nIndex].Name    = sPrefix + "DataSourceName";
         pNodeValues[nIndex++].Value <<= pMapping->sURL;
-        pNodeValues[nIndex].Name    = sPrefix;
-        pNodeValues[nIndex].Name    += sTable;
+        pNodeValues[nIndex].Name    = sPrefix + "Command";
         pNodeValues[nIndex++].Value <<= pMapping->sTableName;
-        pNodeValues[nIndex].Name    = sPrefix;
-        pNodeValues[nIndex].Name    += sCommandType;
+        pNodeValues[nIndex].Name    = sPrefix + "CommandType";
         pNodeValues[nIndex++].Value <<= pMapping->nCommandType;
         SetSetProperties(cDataSourceHistory, aNodeValues);
 

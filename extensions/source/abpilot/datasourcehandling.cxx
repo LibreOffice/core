@@ -547,9 +547,8 @@ namespace abp
         // failure to create the interaction handler is a serious issue ...
         if (!xInteractions.is())
         {
-            OUString s_sInteractionHandlerServiceName("com.sun.star.task.InteractionHandler");
             if ( _pMessageParent )
-                ShowServiceNotAvailableError( _pMessageParent, s_sInteractionHandlerServiceName, true );
+                ShowServiceNotAvailableError( _pMessageParent, "com.sun.star.task.InteractionHandler", true );
             return false;
         }
 

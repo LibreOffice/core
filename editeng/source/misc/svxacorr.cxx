@@ -2067,8 +2067,7 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
             {
                 xStrm->SetSize( 0 );
                 xStrm->SetBufferSize( 8192 );
-                OUString aMime( "text/xml" );
-                xStrm->SetProperty( "MediaType", Any(aMime) );
+                xStrm->SetProperty( "MediaType", Any(OUString( "text/xml" )) );
 
 
                 uno::Reference< uno::XComponentContext > xContext =
@@ -2356,8 +2355,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
         try
         {
             OUString sMain(aDest.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ));
-            sal_Unicode cSlash = '/';
-            sal_Int32 nSlashPos = sMain.lastIndexOf(cSlash);
+            sal_Int32 nSlashPos = sMain.lastIndexOf('/');
             sMain = sMain.copy(0, nSlashPos);
             ::ucbhelper::Content aNewContent( sMain, uno::Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
             TransferInfo aInfo;
@@ -2432,9 +2430,7 @@ bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SotStorage& rStg )
         {
             refList->SetSize( 0 );
             refList->SetBufferSize( 8192 );
-            OUString aPropName( "MediaType" );
-            OUString aMime( "text/xml" );
-            refList->SetProperty( aPropName, Any(aMime) );
+            refList->SetProperty( "MediaType", Any(OUString( "text/xml" )) );
 
             uno::Reference< uno::XComponentContext > xContext =
                 comphelper::getProcessComponentContext();
