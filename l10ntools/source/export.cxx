@@ -152,8 +152,7 @@ bool ResData::SetId( const OString& rId, IdLevel nLevel )
 
         if ( bChild && bChildWithText )
         {
-            OString sError("ResId after child definition");
-            yyerror(sError.getStr());
+            yyerror("ResId after child definition");
             SetError();
         }
 
@@ -830,9 +829,8 @@ OString Export::FullId()
     }
     if (sFull.getLength() > 255)
     {
-        OString sError("GroupId > 255 chars");
         printf("GroupID = %s\n", sFull.getStr());
-        yyerror(sError.getStr());
+        yyerror("GroupId > 255 chars");
     }
 
     return sFull.makeStringAndClear();

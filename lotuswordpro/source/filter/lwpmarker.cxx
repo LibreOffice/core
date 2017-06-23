@@ -421,11 +421,7 @@ bool LwpFieldMark::IsFormulaInsert()
 bool LwpFieldMark::IsDateTimeField(sal_uInt8& type,OUString& formula)
 {
     OUString sFormula = m_Formula.str();
-    sal_Int32 index;
-    sal_Unicode ch1(0x0020);//space
-    OUString tag;
-
-    index = sFormula.indexOf(ch1);
+    sal_Int32 index = sFormula.indexOf(0x20); // space
     if (index < 0)
     {
         if (sFormula == "TotalEditingTime")
@@ -436,7 +432,7 @@ bool LwpFieldMark::IsDateTimeField(sal_uInt8& type,OUString& formula)
         return false;
     }
 
-    tag = sFormula.copy(0,index);
+    OUString tag = sFormula.copy(0,index);
     if (tag == "Now()")
     {
         type = DATETIME_NOW;
@@ -468,11 +464,7 @@ bool LwpFieldMark::IsDateTimeField(sal_uInt8& type,OUString& formula)
 bool LwpFieldMark::IsCrossRefField(sal_uInt8& nType, OUString& sMarkName)
 {
     OUString sFormula = m_Formula.str();
-    sal_Int32 index;
-    sal_Unicode ch1(0x0020);//space
-    OUString tag;
-
-    index = sFormula.indexOf(ch1);
+    sal_Int32 index = sFormula.indexOf(0x20); // space
     if (index < 0)
     {
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
@@ -487,7 +479,7 @@ bool LwpFieldMark::IsCrossRefField(sal_uInt8& nType, OUString& sMarkName)
             return false;
     }
 
-    tag = sFormula.copy(0,index);
+    OUString tag = sFormula.copy(0,index);
     if (tag == "PageRef")
     {
         sMarkName = sFormula.copy(index+1,sFormula.getLength()-index-1);

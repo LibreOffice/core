@@ -78,7 +78,6 @@ void    XFTextContent::SetText(const OUString& text)
 void    XFTextContent::ToXml(IXFStream *pStrm)
 {
 //  pStrm->Characters(m_strText);
-    OUString sSpaceToken("  ");
     OUString sSubString;
     sal_Int32 nIndex = 0;
     sal_Int32 nSize = m_strText.getLength();
@@ -86,7 +85,7 @@ void    XFTextContent::ToXml(IXFStream *pStrm)
     for (i=0; i<nSize;)
     {
         sSubString = m_strText.copy(i,nSize-i);
-        nIndex = sSubString.indexOf(sSpaceToken);
+        nIndex = sSubString.indexOf("  ");
         if (nIndex == -1)
         {
             pStrm->Characters(sSubString);

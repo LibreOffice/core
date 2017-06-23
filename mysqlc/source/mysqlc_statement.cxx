@@ -291,9 +291,8 @@ sal_Bool OCommonStatement::convertFastPropertyValue(
         Any & /* rConvertedValue */, Any & /* rOldValue */,
         sal_Int32 /* nHandle */, const Any& /* rValue */)
 {
-    bool bConverted = false;
     // here we have to try to convert
-    return bConverted;
+    return false;
 }
 
 void OCommonStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& /* rValue */)

@@ -155,7 +155,7 @@ void SAL_CALL FlushListener::processDictionaryListEvent(
     if (rDicListEvent.Source == xDicList)
     {
         sal_Int16 nEvt = rDicListEvent.nCondensedEvent;
-        sal_Int16 nFlushFlags =
+        sal_Int16 const nFlushFlags =
                 DictionaryListEventFlags::ADD_NEG_ENTRY     |
                 DictionaryListEventFlags::DEL_POS_ENTRY     |
                 DictionaryListEventFlags::ACTIVATE_NEG_DIC  |

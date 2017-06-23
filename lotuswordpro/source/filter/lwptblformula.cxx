@@ -123,14 +123,13 @@ bool LwpFormulaInfo::ReadCellID()
 {
     LwpRowSpecifier RowSpecifier;
     LwpColumnSpecifier ColumnSpecifier;
-    bool readSucceeded = true;
 
     RowSpecifier.QuickRead(m_pObjStrm.get());
     ColumnSpecifier.QuickRead(m_pObjStrm.get());
 
     m_aStack.push_back( new LwpFormulaCellAddr(ColumnSpecifier.ColumnID(cColumn),
                                                 RowSpecifier.RowID(m_nFormulaRow)) );
-    return readSucceeded;
+    return true;
 }
 
 void LwpFormulaInfo::ReadCellRange()

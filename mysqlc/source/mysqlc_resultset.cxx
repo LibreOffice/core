@@ -1045,8 +1045,7 @@ void OResultSet::checkColumnIndex(sal_Int32 index)
 {
     if ((index < 1 || index > (int) fieldCount)) {
         /* static object for efficiency or thread safety is a problem ? */
-        rtl::OUString buf( "index out of range" );
-        throw SQLException(buf, *this, rtl::OUString(), 1, Any());
+        throw SQLException("index out of range", *this, rtl::OUString(), 1, Any());
     }
 }
 

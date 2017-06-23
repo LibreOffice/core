@@ -659,8 +659,7 @@ rtl::OUString SAL_CALL ODatabaseMetaData::getUserName()
 
 rtl::OUString SAL_CALL ODatabaseMetaData::getDriverName()
 {
-    rtl::OUString aValue( "MySQL Connector/OO.org" );
-    return aValue;
+    return rtl::OUString( "MySQL Connector/OO.org" );
 }
 
 rtl::OUString SAL_CALL ODatabaseMetaData::getDriverVersion()
