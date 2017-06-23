@@ -114,7 +114,7 @@
 
 namespace
 {
-    static void GetWinExtMax(const Point& rSource, tools::Rectangle& rPlaceableBound, const sal_Int16 nMapMode)
+    void GetWinExtMax(const Point& rSource, tools::Rectangle& rPlaceableBound, const sal_Int16 nMapMode)
     {
         Point aSource(rSource);
         if (nMapMode == MM_HIMETRIC)
@@ -129,7 +129,7 @@ namespace
             rPlaceableBound.Bottom() = aSource.Y();
     }
 
-    static void GetWinExtMax(const tools::Rectangle& rSource, tools::Rectangle& rPlaceableBound, const sal_Int16 nMapMode)
+    void GetWinExtMax(const tools::Rectangle& rSource, tools::Rectangle& rPlaceableBound, const sal_Int16 nMapMode)
     {
         GetWinExtMax(rSource.TopLeft(), rPlaceableBound, nMapMode);
         GetWinExtMax(rSource.BottomRight(), rPlaceableBound, nMapMode);
