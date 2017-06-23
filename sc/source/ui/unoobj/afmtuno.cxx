@@ -187,7 +187,7 @@ ScAutoFormatObj* ScAutoFormatsObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
     if (nIndex < ScGlobal::GetOrCreateAutoFormat()->size())
         return new ScAutoFormatObj(nIndex);
 
-    return nullptr;    // falscher Index
+    return nullptr;    // wrong index
 }
 
 ScAutoFormatObj* ScAutoFormatsObj::GetObjectByName_Impl(const OUString& aName)
@@ -255,7 +255,7 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const OUString& aName, const uno::
 void SAL_CALL ScAutoFormatsObj::replaceByName( const OUString& aName, const uno::Any& aElement )
 {
     SolarMutexGuard aGuard;
-    //! zusammenfassen?
+    //! combine?
     removeByName( aName );
     insertByName( aName, aElement );
 }
@@ -270,8 +270,8 @@ void SAL_CALL ScAutoFormatsObj::removeByName( const OUString& aName )
     {
         pFormats->erase(it);
 
-        //! Notify fuer andere Objekte
-        pFormats->Save();   // sofort speichern
+        //! notify to other objects
+        pFormats->Save();   // save immediately
     }
     else
     {
@@ -307,7 +307,7 @@ uno::Any SAL_CALL ScAutoFormatsObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScAutoFormatsObj::getElementType()
 {
     SolarMutexGuard aGuard;
-    return cppu::UnoType<container::XNamed>::get();    // muss zu getByIndex passen
+    return cppu::UnoType<container::XNamed>::get();    // must match getByIndex
 }
 
 sal_Bool SAL_CALL ScAutoFormatsObj::hasElements()
@@ -433,7 +433,7 @@ sal_Int32 SAL_CALL ScAutoFormatObj::getCount()
 {
     SolarMutexGuard aGuard;
     if (IsInserted())
-        return SC_AF_FIELD_COUNT;   // immer 16 Elemente
+        return SC_AF_FIELD_COUNT;   // always 16 elements
     else
         return 0;
 }
@@ -453,7 +453,7 @@ uno::Any SAL_CALL ScAutoFormatObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScAutoFormatObj::getElementType()
 {
     SolarMutexGuard aGuard;
-    return cppu::UnoType<beans::XPropertySet>::get();  // muss zu getByIndex passen
+    return cppu::UnoType<beans::XPropertySet>::get();  // must match getByIndex
 }
 
 sal_Bool SAL_CALL ScAutoFormatObj::hasElements()
@@ -671,7 +671,7 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
                 }
 
                 if (bDone)
-                    //! Notify fuer andere Objekte?
+                    //! Notify to other objects?
                     pFormats->SetSaveLater(true);
             }
         }

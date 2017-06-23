@@ -749,7 +749,7 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const ::tools
                             if( bUndo )
                                 pUndoManager->AddUndoAction( new UndoObjectUserCall(*pObj) );
 
-                            // Objekt was resized by user and does not listen to its slide anymore
+                            // Object was resized by user and does not listen to its slide anymore
                             pObj->SetUserCall(nullptr);
                         }
                     }
