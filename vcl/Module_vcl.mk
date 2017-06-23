@@ -151,7 +151,6 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
 	CppunitTest_vcl_mapmode \
 	CppunitTest_vcl_outdev \
 	CppunitTest_vcl_app_test \
-	$(if $(MERGELIBS),,CppunitTest_vcl_wmf_test) \
 	CppunitTest_vcl_jpeg_read_write_test \
 	CppunitTest_vcl_svm_test \
 	CppunitTest_vcl_pdfexport \
