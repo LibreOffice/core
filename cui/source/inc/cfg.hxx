@@ -48,7 +48,6 @@
 
 class SvxConfigEntry;
 class SvxConfigPage;
-class SvxMenuConfigPage;
 class SvxToolbarConfigPage;
 
 typedef std::vector< SvxConfigEntry* > SvxEntries;
@@ -473,41 +472,6 @@ public:
         GetFrameWithDefaultAndIdentify( css::uno::Reference< css::frame::XFrame >& _inout_rxFrame );
 };
 
-class SvxMenuConfigPage : public SvxConfigPage
-{
-private:
-    bool m_bIsMenuBar;
-    DECL_LINK( SelectMenu, ListBox&, void );
-    DECL_LINK( SelectMenuEntry, SvTreeListBox *, void );
-    DECL_LINK( NewMenuHdl, Button *, void );
-    DECL_LINK( MenuSelectHdl, MenuButton *, void );
-    DECL_LINK( EntrySelectHdl, MenuButton *, void );
-    DECL_LINK( AddCommandsHdl, Button *, void );
-    DECL_LINK( AddSeparatorHdl, Button *, void );
-    DECL_LINK( AddSubmenuHdl, Button *, void );
-    DECL_LINK( DeleteCommandHdl, Button *, void );
-    DECL_LINK( AddFunctionHdl, SvxScriptSelectorDialog&, void );
-
-    void            Init() override;
-    void            UpdateButtonStates() override;
-    short           QueryReset() override;
-    void            DeleteSelectedContent() override;
-    void            DeleteSelectedTopLevel() override;
-
-public:
-    SvxMenuConfigPage( vcl::Window *pParent, const SfxItemSet& rItemSet, bool bIsMenuBar = true );
-    virtual ~SvxMenuConfigPage() override;
-    virtual void dispose() override;
-
-    SaveInData* CreateSaveInData(
-        const css::uno::Reference <
-            css::ui::XUIConfigurationManager >&,
-        const css::uno::Reference <
-            css::ui::XUIConfigurationManager >&,
-        const OUString& aModuleId,
-        bool docConfig ) override;
-};
-
 class SvxMainMenuOrganizerDialog : public ModalDialog
 {
     VclPtr<VclContainer>   m_pMenuBox;
@@ -759,6 +723,60 @@ public:
     virtual ~SvxIconChangeDialog() override;
     virtual void dispose() override;
 };
+
+namespace killmelater
+{
+//TODO:This is copy/pasted from cfg.cxx
+inline void RemoveEntry( SvxEntries* pEntries, SvxConfigEntry* pChildEntry )
+{
+    SvxEntries::iterator iter = pEntries->begin();
+
+    while ( iter != pEntries->end() )
+    {
+        if ( pChildEntry == *iter )
+        {
+            pEntries->erase( iter );
+            break;
+        }
+        ++iter;
+    }
+}
+
+//TODO:This is copy/pasted from cfg.cxx
+inline OUString replaceSaveInName(
+    const OUString& rMessage,
+    const OUString& rSaveInName )
+{
+    OUString name;
+    OUString placeholder("%SAVE IN SELECTION%" );
+
+    sal_Int32 pos = rMessage.indexOf( placeholder );
+
+    if ( pos != -1 )
+    {
+        name = rMessage.replaceAt(
+            pos, placeholder.getLength(), rSaveInName );
+    }
+
+    return name;
+}
+
+//TODO:This is copy/pasted from cfg.cxx
+inline OUString
+stripHotKey( const OUString& str )
+{
+    sal_Int32 index = str.indexOf( '~' );
+    if ( index == -1 )
+    {
+        return str;
+    }
+    else
+    {
+        return str.replaceAt( index, 1, OUString() );
+    }
+}
+}
+
 #endif // INCLUDED_CUI_SOURCE_INC_CFG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
