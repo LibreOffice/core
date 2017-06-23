@@ -21,6 +21,10 @@ $(eval $(call gb_CppunitTest_use_externals,emfio,\
     libxml2 \
 ))
 
+$(eval $(call gb_CppunitTest_add_exception_objects,emfio,\
+    emfio/qa/cppunit/emf/EmfImportTest \
+))
+
 $(eval $(call gb_CppunitTest_use_sdk_api,emfio))
 
 $(eval $(call gb_CppunitTest_use_library_objects,emfio,\
@@ -40,10 +44,6 @@ $(eval $(call gb_CppunitTest_use_libraries,emfio,\
     tl \
     vcl \
     utl \
-))
-
-$(eval $(call gb_CppunitTest_add_exception_objects,emfio,\
-    emfio/qa/cppunit/EmfImportTest \
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,emfio))

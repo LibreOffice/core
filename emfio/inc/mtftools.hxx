@@ -599,7 +599,7 @@ namespace emfio
             bool bDrawTo = false,
             bool bRecordPath = false
         );
-        void                DrawPolyBezier(tools::Polygon rPolygin,
+        void                DrawPolyBezier(tools::Polygon rPolygon,
             bool bDrawTo,
             bool bRecordPath
         );

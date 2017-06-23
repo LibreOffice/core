@@ -113,7 +113,7 @@ namespace emfio
 
         uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > XEmfParser::getDecomposition(
             const uno::Reference< ::io::XInputStream >& xEmfStream,
-            const OUString& aAbsolutePath,
+            const OUString& /*aAbsolutePath*/,
             const uno::Sequence< ::beans::PropertyValue >& rProperties)
         {
             drawinglayer::primitive2d::Primitive2DContainer aRetval;

@@ -390,7 +390,7 @@ namespace emfplushelper
 
     void EmfPlusHelperData::processEmfPlusData(
         SvMemoryStream& rMS,
-        const drawinglayer::geometry::ViewInformation2D& rViewInformation)
+        const drawinglayer::geometry::ViewInformation2D& /*rViewInformation*/)
     {
         sal_uInt64 length = rMS.GetSize();
 
@@ -862,6 +862,10 @@ namespace emfplushelper
                             SAL_INFO("cppcanvas.emf", "EMF+ DrawString layoutRect: " << lx << "," << ly << " - " << lw << "x" << lh);
                             OUString text = read_uInt16s_ToOUString(rMS, stringLength);
                             EMFPStringFormat *stringFormat = static_cast< EMFPStringFormat* >(maEMFPObjects[formatId & 0xff].get());
+
+                            (void)(text); // avoid warning
+                            (void)(stringFormat); // avoid warning
+
     //                        css::rendering::FontRequest aFontRequest;
     //
     //                        if (stringFormat)
