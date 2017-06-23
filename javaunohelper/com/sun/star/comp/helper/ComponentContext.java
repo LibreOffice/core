@@ -291,7 +291,7 @@ public class ComponentContext implements XComponentContext, XComponent
         if (xListener == null)
             throw new com.sun.star.uno.RuntimeException( "Listener must not be null" );
           if (m_eventListener.contains( xListener ))
-              throw new com.sun.star.uno.RuntimeException( "Listener already registred." );
+              throw new com.sun.star.uno.RuntimeException( "Listener already registered." );
 
            m_eventListener.add( xListener );
     }
