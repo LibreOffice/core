@@ -227,6 +227,10 @@ class ImplDynamicErrorInfo
     friend class ErrorInfo;
 
 private:
+    explicit ImplDynamicErrorInfo(DialogMask nInMask)
+        : nMask(nInMask)
+    {
+    }
     void                        RegisterError(DynamicErrorInfo *);
     static void                 UnRegisterError(DynamicErrorInfo const *);
     static ErrorInfo*           GetDynamicErrorInfo(ErrCode nId);
@@ -287,10 +291,9 @@ ErrorInfo::~ErrorInfo()
 
 DynamicErrorInfo::DynamicErrorInfo(ErrCode nArgUserId, DialogMask nMask)
 : ErrorInfo(nArgUserId),
-  pImpl(new ImplDynamicErrorInfo)
+  pImpl(new ImplDynamicErrorInfo(nMask))
 {
     pImpl->RegisterError(this);
-    pImpl->nMask=nMask;
 }
 
 DynamicErrorInfo::~DynamicErrorInfo()
