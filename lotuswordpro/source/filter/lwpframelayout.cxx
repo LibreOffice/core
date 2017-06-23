@@ -592,8 +592,6 @@ void LwpFrame::ParseAnchorType(XFFrame *pXFFrame)
     //set position
     double fXOffset = 0;
     double fYOffset = 0;
-    //page number
-    sal_uInt16 nPageNum = 0;
     //set anchor type
     enumXFAnchor eAnchor = enumXFAnchorNone;
 
@@ -705,7 +703,7 @@ void LwpFrame::ParseAnchorType(XFFrame *pXFFrame)
 
     pXFFrame->SetX(fXOffset);
     pXFFrame->SetY(fYOffset);
-    pXFFrame->SetAnchorPage(nPageNum);
+    pXFFrame->SetAnchorPage(0);
     pXFFrame->SetAnchorType(eAnchor);
 }
 

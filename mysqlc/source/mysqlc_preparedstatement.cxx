@@ -728,8 +728,7 @@ void OPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
 void OPreparedStatement::checkParameterIndex(sal_Int32 column)
 {
     if (column < 1 || column > (sal_Int32) m_paramCount) {
-        rtl::OUString buf( "Parameter index out of range" );
-        throw SQLException(buf, *this, rtl::OUString(), 1, Any ());
+        throw SQLException("Parameter index out of range", *this, rtl::OUString(), 1, Any ());
     }
 }
 

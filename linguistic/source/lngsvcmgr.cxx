@@ -308,7 +308,7 @@ void SAL_CALL
 
     // "translate" DictionaryList event into linguistic2::LinguServiceEvent
     sal_Int16 nLngSvcEvt = 0;
-    sal_Int16 nSpellCorrectFlags =
+    sal_Int16 const nSpellCorrectFlags =
             linguistic2::DictionaryListEventFlags::ADD_NEG_ENTRY        |
             linguistic2::DictionaryListEventFlags::DEL_POS_ENTRY        |
             linguistic2::DictionaryListEventFlags::ACTIVATE_NEG_DIC |
@@ -316,7 +316,7 @@ void SAL_CALL
     if (0 != (nDlEvt & nSpellCorrectFlags))
         nLngSvcEvt |= linguistic2::LinguServiceEventFlags::SPELL_CORRECT_WORDS_AGAIN;
 
-    sal_Int16 nSpellWrongFlags =
+    sal_Int16 const nSpellWrongFlags =
             linguistic2::DictionaryListEventFlags::ADD_POS_ENTRY        |
             linguistic2::DictionaryListEventFlags::DEL_NEG_ENTRY        |
             linguistic2::DictionaryListEventFlags::ACTIVATE_POS_DIC |
@@ -324,7 +324,7 @@ void SAL_CALL
     if (0 != (nDlEvt & nSpellWrongFlags))
         nLngSvcEvt |= linguistic2::LinguServiceEventFlags::SPELL_WRONG_WORDS_AGAIN;
 
-    sal_Int16 nHyphenateFlags =
+    sal_Int16 const nHyphenateFlags =
             linguistic2::DictionaryListEventFlags::ADD_POS_ENTRY        |
             linguistic2::DictionaryListEventFlags::DEL_POS_ENTRY        |
             linguistic2::DictionaryListEventFlags::ACTIVATE_POS_DIC |
@@ -392,28 +392,26 @@ void LngSvcMgrListenerHelper::DisposeAndClear( const lang::EventObject &rEvtObj 
 bool LngSvcMgrListenerHelper::AddLngSvcEvtBroadcaster(
         const uno::Reference< linguistic2::XLinguServiceEventBroadcaster > &rxBroadcaster )
 {
-    bool bRes = false;
     if (rxBroadcaster.is())
     {
         aLngSvcEvtBroadcasters.addInterface( rxBroadcaster );
         rxBroadcaster->addLinguServiceEventListener(
                 static_cast<linguistic2::XLinguServiceEventListener *>(this) );
     }
-    return bRes;
+    return false;
 }
 
 
 bool LngSvcMgrListenerHelper::RemoveLngSvcEvtBroadcaster(
         const uno::Reference< linguistic2::XLinguServiceEventBroadcaster > &rxBroadcaster )
 {
-    bool bRes = false;
     if (rxBroadcaster.is())
     {
         aLngSvcEvtBroadcasters.removeInterface( rxBroadcaster );
         rxBroadcaster->removeLinguServiceEventListener(
                 static_cast<linguistic2::XLinguServiceEventListener *>(this) );
     }
-    return bRes;
+    return false;
 }
 
 

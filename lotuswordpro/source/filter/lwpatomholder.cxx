@@ -82,9 +82,7 @@ void LwpAtomHolder::Read(LwpObjectStream *pStrm)
     }
     m_nAtom = m_nAssocAtom = len;
 
-    //rtl_TextEncoding rEncode =  osl_getThreadTextEncoding();
-    rtl_TextEncoding rEncode =  RTL_TEXTENCODING_MS_1252;
-    LwpTools::QuickReadUnicode(pStrm, m_String, diskSize-sizeof(diskSize), rEncode);
+    LwpTools::QuickReadUnicode(pStrm, m_String, diskSize-sizeof(diskSize), RTL_TEXTENCODING_MS_1252);
 }
 /**
  * @descr       skip the atom holder in object stream

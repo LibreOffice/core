@@ -122,14 +122,9 @@ void LngParser::WritePO(PoOfstream &aPOStream,
     OStringHashMap &rText_inout, const OString &rActFileName,
     const OString &rID)
 {
-
-   bool bExport = true;
-   if ( bExport )
-    {
-        common::writePoEntry(
-            "Ulfex", aPOStream, rActFileName, "LngText",
-            rID, OString(), rText_inout.count("x-comment") ? rText_inout["x-comment"] : OString(), rText_inout["en-US"]);
-   }
+    common::writePoEntry(
+        "Ulfex", aPOStream, rActFileName, "LngText",
+        rID, OString(), rText_inout.count("x-comment") ? rText_inout["x-comment"] : OString(), rText_inout["en-US"]);
 }
 
 bool LngParser::isNextGroup(OString &sGroup_out, const OString &sLine_in)

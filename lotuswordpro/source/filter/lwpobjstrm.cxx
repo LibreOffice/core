@@ -371,8 +371,7 @@ OUString LwpObjectStream::QuickReadStringPtr()
     QuickReaduInt16(); //len
 
     OUString str;
-    rtl_TextEncoding rEncode =  RTL_TEXTENCODING_MS_1252;
-    LwpTools::QuickReadUnicode(this, str, diskSize-sizeof(diskSize), rEncode);
+    LwpTools::QuickReadUnicode(this, str, diskSize-sizeof(diskSize), RTL_TEXTENCODING_MS_1252);
     return str;
 }
 

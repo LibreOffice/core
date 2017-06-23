@@ -368,14 +368,11 @@ void LwpFribField::RegisterTimeField(LwpFieldMark* pFieldMark)
         RegisterTotalTimeStyle();
     else
     {
-        sal_Int32 index;
-        sal_Unicode ch1(0x0020);//space
-        OUString tag;
-        index = sFormula.indexOf(ch1);
+        sal_Int32 index = sFormula.indexOf(0x20); //space
         if (index < 0)
             return;
 
-        tag = sFormula.copy(0,index);
+        OUString tag = sFormula.copy(0,index);
         if (tag == "Now()" || tag == "CreateDate" ||  tag == "EditDate")
             RegisterDateTimeStyle(sFormula.copy(index+1,sFormula.getLength()-index-1));
     }

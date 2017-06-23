@@ -262,9 +262,8 @@ void CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
             else
             {
                 OString sError( "Misplaced close tag: " );
-                OString sInFile(" in file ");
                 sError += sToken;
-                sError += sInFile;
+                sError += " in file ";
                 sError += global::inputPathname;
                 yyerror(sError.getStr());
                 std::exit(EXIT_FAILURE);
