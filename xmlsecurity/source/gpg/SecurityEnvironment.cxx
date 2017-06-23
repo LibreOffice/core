@@ -89,10 +89,10 @@ Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getPersonalCertif
     }
 
     Sequence< Reference< XCertificate > > xCertificateSequence(certsList.size());
-    std::list< CertificateImpl* >::iterator xcertIt;
-    int i;
-    for (i = 0, xcertIt = certsList.begin(); xcertIt != certsList.end(); ++xcertIt, ++i)
-        xCertificateSequence[i] = *xcertIt ;
+    int i = 0;
+    for (auto const& cert : certsList) {
+        xCertificateSequence[i++] = cert;
+    }
 
     return xCertificateSequence;
 }
