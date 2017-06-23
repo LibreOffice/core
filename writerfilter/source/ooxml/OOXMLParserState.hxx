@@ -59,6 +59,7 @@ class OOXMLParserState final
     bool savedInCharacterGroup;
     bool savedLastParagraphInSection;
     std::vector<SavedAlternateState> maSavedAlternateStates;
+    OOXMLPropertySet::Pointer_t mpPostponedBreak;
 
 public:
     typedef std::shared_ptr<OOXMLParserState> Pointer_t;
@@ -102,6 +103,9 @@ public:
     void setRowProperties(const OOXMLPropertySet::Pointer_t& pProps);
     void resolveTableProperties(Stream & rStream);
     void setTableProperties(const OOXMLPropertySet::Pointer_t& pProps);
+    // tdf#108714
+    void resolvePostponedBreak(Stream & rStream);
+    void setPostponedBreak(const OOXMLPropertySet::Pointer_t& pProps);
 
     void startTable();
     void endTable();
