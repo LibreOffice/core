@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a461143_169e7956",
+        "filename": "extensions/source/abpilot/unodialogabp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-06-23T20:36:04Z",
+      "side": 1,
+      "message": "are you sure?\ncompmodule is not a library but just a namespace within each extension library, unlike comphelper or similar libraries.\ncomponentmodule.hxx contains no classes or functions with SAL_* decorations.\n\nBut my knowledge about linkers is sketchy, maybe i\u0027m totally wrong.\n\nbtw you found the reason, why COMPMOD_RESPREFIX is not used :-)",
+      "parentUuid": "3a461143_d6a5d1b5",
+      "revId": "1464090752281bf42825fdfc19ac864e27c5d369",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_f6aacd84",
         "filename": "extensions/source/dbpilots/dbpservices.cxx",
         "patchSetId": 1
