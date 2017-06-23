@@ -211,6 +211,12 @@ public:
     virtual void markLastParagraphInSection( ) { };
 
     /**
+       Notifies the stream that paragraph was closed in source;
+       does not end paragraph group.
+     */
+    virtual void notifyParagraphClosed() {};
+
+    /**
        Receives start mark for group with the same character properties.
      */
     virtual void startCharacterGroup() = 0;

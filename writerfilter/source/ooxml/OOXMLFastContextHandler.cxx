@@ -405,6 +405,14 @@ void OOXMLFastContextHandler::endParagraphGroup()
     }
 }
 
+void OOXMLFastContextHandler::notifyParagraphClosed()
+{
+    if (isForwardEvents())
+    {
+        mpStream->notifyParagraphClosed();
+    }
+}
+
 void OOXMLFastContextHandler::startSdt()
 {
     OOXMLPropertySet * pProps = new OOXMLPropertySet;

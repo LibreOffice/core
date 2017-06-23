@@ -1302,6 +1302,32 @@ DECLARE_OOXMLIMPORT_TEST(testVmlAdjustments, "vml-adjustments.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(17639), aAdjustmentValue.Value.get<sal_Int32>());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf108714, "tdf108714.docx")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Page break is absent - we lost bug-to-bug compatibility with Word", 3, getPages());
+    // The second (empty) paragraph must be at first page, despite the <w:br> element was before it.
+    // That's because Word treats such break as first element in first run of following paragraph:
+    //
+    //    <w:br w:type="page"/>
+    //    <w:p>
+    //        <w:r>
+    //            <w:t/>
+    //        </w:r>
+    //    </w:p>
+    //
+    // is equal to
+    //
+    //    <w:p>
+    //        <w:r>
+    //            <w:br w:type="page"/>
+    //        </w:r>
+    //    </w:p>
+    //
+    // which emits page break after that empty paragraph.
+    OUString paraContent = parseDump("/root/page[1]/body/txt[2]");
+    CPPUNIT_ASSERT_EQUAL(OUString(""), paraContent);
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();

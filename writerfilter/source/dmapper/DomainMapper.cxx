@@ -2981,6 +2981,8 @@ void DomainMapper::lcl_startParagraphGroup()
     m_pImpl->SetIsOutsideAParagraph(false);
     m_pImpl->clearDeferredBreaks();
     m_pImpl->setParaSdtEndDeferred(false);
+    // tdf#108714 : a break encountered out-of-order in OOXML (bug-to-bug compatibility with Word)
+    m_pImpl->ProcesPageBreakAfterNextParagraph();
 }
 
 void DomainMapper::lcl_endParagraphGroup()
@@ -2996,6 +2998,11 @@ void DomainMapper::lcl_endParagraphGroup()
 void DomainMapper::markLastParagraphInSection( )
 {
     m_pImpl->SetIsLastParagraphInSection( true );
+}
+
+void DomainMapper::notifyParagraphClosed()
+{
+    m_pImpl->SetIsOutsideAParagraph(true);
 }
 
 void DomainMapper::markLastSectionGroup( )

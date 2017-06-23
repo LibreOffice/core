@@ -137,6 +137,7 @@ public:
     void endSectionGroup();
     void startParagraphGroup();
     void endParagraphGroup();
+    void notifyParagraphClosed();
     void startCharacterGroup();
     void endCharacterGroup();
     void startSdt();

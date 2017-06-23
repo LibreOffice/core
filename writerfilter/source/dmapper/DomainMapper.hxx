@@ -80,6 +80,7 @@ public:
 
     // Stream
     virtual void markLastParagraphInSection() override;
+    virtual void notifyParagraphClosed() override;
     virtual void markLastSectionGroup() override;
 
     // BinaryObj
