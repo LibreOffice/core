@@ -782,11 +782,11 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                             SAL_WARN("vcl", "file is shorter than requested len");
                             nSize = nRemainingSize;
                         }
-                        UCHAR *pBuffer = new UCHAR[nSize+1]; // add one for LookAhead at CK-separation
-                        size_t nReadSize = rInp.ReadBytes(pBuffer, nSize);
-                        pBuffer[nReadSize] = 0;
-                        if (!rInp.GetError() && nReadSize == aText.BufSize) aText.Draw(rOut, pBuffer);
-                        delete[] pBuffer;
+                        std::vector<UCHAR> aBuffer(nSize+1); // add one for LookAhead at CK-separation
+                        size_t nReadSize = rInp.ReadBytes(aBuffer.data(), nSize);
+                        aBuffer[nReadSize] = 0;
+                        if (!rInp.GetError() && nReadSize == aText.BufSize)
+                            aText.Draw(rOut, aBuffer.data());
                     }
                 } break;
                 case ObjBmap: {
