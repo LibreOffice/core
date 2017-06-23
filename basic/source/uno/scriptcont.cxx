@@ -1241,11 +1241,8 @@ void SAL_CALL SfxScriptLibrary::insertModuleInfo( const OUString& ModuleName, co
 void SAL_CALL SfxScriptLibrary::removeModuleInfo( const OUString& ModuleName )
 {
         // #FIXME add NoSuchElementException to the spec
-    if ( !hasModuleInfo( ModuleName ) )
-    {
+    if ( mModuleInfo.erase( ModuleName ) == 0 )
         throw NoSuchElementException();
-    }
-    mModuleInfo.erase( mModuleInfo.find( ModuleName ) );
 }
 
 }   // namespace basic
