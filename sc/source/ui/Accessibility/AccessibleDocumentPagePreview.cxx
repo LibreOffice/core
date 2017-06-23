@@ -704,7 +704,7 @@ void ScShapeChildren::Notify(SfxBroadcaster&, const SfxHint& rHint)
         {
             switch (pSdrHint->GetKind())
             {
-                case SdrHintKind::ObjectChange :         // Objekt geaendert
+                case SdrHintKind::ObjectChange :
                 {
                 }
                 break;

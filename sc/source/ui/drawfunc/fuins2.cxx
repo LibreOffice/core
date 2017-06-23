@@ -382,7 +382,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
                 // XXX Activate from macro is deadly !!! ???
                 if (bIsFromFile)
                 {
-                    // Objekt selected, activate Draw-Shell
+                    // Object selected, activate Draw-Shell
                     pViewShell->SetDrawShell( true );
                 }
                 else
@@ -501,7 +501,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
     SCTAB nMarkTab;
     bool bDrawRect = pViewShell->GetChartArea( aDummy, aMarkDest, nMarkTab );
 
-    //  Objekt-Groesse
+    // object size
     awt::Size aSz = xObj->getVisualAreaSize( nAspect );
     Size aSize( aSz.Width, aSz.Height );
 
