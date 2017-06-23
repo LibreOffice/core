@@ -386,6 +386,10 @@ void OOXMLFastContextHandler::startParagraphGroup()
         {
             mpStream->startParagraphGroup();
             mpParserState->setInParagraphGroup(true);
+
+            // tdf#108714 : if we have a postponed break information,
+            // then apply it now, before any other paragraph content.
+            mpParserState->resolvePostponedBreak(*mpStream);
         }
     }
 }
@@ -1052,6 +1056,15 @@ void OOXMLFastContextHandlerProperties::handleBreak()
     {
         OOXMLBreakHandler aBreakHandler(*mpStream);
         getPropertySet()->resolve(aBreakHandler);
+    }
+}
+
+// tdf#108714 : allow <w:br> at block level (despite this is illegal according to ECMA-376-1:2016)
+void OOXMLFastContextHandlerProperties::handleOutOfOrderBreak()
+{
+    if(isForwardEvents())
+    {
+        mpParserState->setPostponedBreak(getPropertySet());
     }
 }
 
