@@ -43,7 +43,7 @@ enum class RTFError
 class RTFListener
 {
 public:
-    virtual ~RTFListener() { }
+    virtual ~RTFListener() = default;
     // Dispatching of control words and characters.
     virtual RTFError dispatchDestination(RTFKeyword nKeyword) = 0;
     virtual RTFError dispatchFlag(RTFKeyword nKeyword) = 0;

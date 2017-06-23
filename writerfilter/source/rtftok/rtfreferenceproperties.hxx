@@ -24,7 +24,7 @@ public:
     RTFReferenceProperties(const RTFSprms& rAttributes, const RTFSprms& rSprms);
     explicit RTFReferenceProperties(const RTFSprms& rAttributes);
     virtual ~RTFReferenceProperties();
-    virtual void resolve(Properties& rHandler) override;
+    void resolve(Properties& rHandler) override;
     RTFSprms& getAttributes()
     {
         return m_aAttributes;

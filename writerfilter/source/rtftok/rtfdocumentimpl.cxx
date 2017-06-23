@@ -2088,7 +2088,7 @@ RTFError RTFDocumentImpl::popState()
     case Destination::SHAPEPROPERTYNAME:
         if (&m_aStates.top().aDestinationText != m_aStates.top().pDestinationText)
             break; // not for nested group
-        aState.aShape.aProperties.push_back(std::make_pair(m_aStates.top().pDestinationText->makeStringAndClear(), OUString()));
+        aState.aShape.aProperties.emplace_back(m_aStates.top().pDestinationText->makeStringAndClear(), OUString());
         break;
     case Destination::SHAPEPROPERTYVALUE:
         if (aState.aShape.aProperties.size())
@@ -3258,58 +3258,13 @@ void RTFDocumentImpl::resetFrame()
     m_aStates.top().aFrame = RTFFrame(&m_aStates.top());
 }
 
-RTFColorTableEntry::RTFColorTableEntry()
-    : nRed(0),
-      nGreen(0),
-      nBlue(0)
-{
-}
+RTFColorTableEntry::RTFColorTableEntry() = default;
 
-RTFPicture::RTFPicture()
-    : nWidth(0),
-      nHeight(0),
-      nGoalWidth(0),
-      nGoalHeight(0),
-      nScaleX(100),
-      nScaleY(100),
-      nCropT(0),
-      nCropB(0),
-      nCropL(0),
-      nCropR(0),
-      eWMetafile(0),
-      eStyle(RTFBmpStyle::NONE)
-{
-}
+RTFPicture::RTFPicture() = default;
 
-RTFShape::RTFShape()
-    : nLeft(0),
-      nTop(0),
-      nRight(0),
-      nBottom(0),
-      nHoriOrientRelation(0),
-      nVertOrientRelation(0),
-      nHoriOrientRelationToken(0),
-      nVertOrientRelationToken(0),
-      nWrap(text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE),
-      bInBackground(false)
-{
-}
+RTFShape::RTFShape() = default;
 
-RTFDrawingObject::RTFDrawingObject()
-    : nLineColorR(0),
-      nLineColorG(0),
-      nLineColorB(0),
-      bHasLineColor(false),
-      nFillColorR(0),
-      nFillColorG(0),
-      nFillColorB(0),
-      bHasFillColor(false),
-      nDhgt(0),
-      nFLine(-1),
-      nPolyLineCount(0),
-      bHadShapeText(false)
-{
-}
+RTFDrawingObject::RTFDrawingObject() = default;
 
 RTFFrame::RTFFrame(RTFParserState* pParserState)
     : m_pDocumentImpl(pParserState->m_pDocumentImpl),

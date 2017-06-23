@@ -29,10 +29,10 @@ public:
     /// Pointer to this stream.
     using Pointer_t = std::shared_ptr<RTFDocument>;
 
-    virtual ~RTFDocument() { }
+    virtual ~RTFDocument() = default;
 
     /// Resolves this document to a stream handler.
-    virtual void resolve(Stream& rHandler) override = 0;
+    void resolve(Stream& rHandler) override = 0;
 };
 
 /// Interface to create an RTFDocument instance.

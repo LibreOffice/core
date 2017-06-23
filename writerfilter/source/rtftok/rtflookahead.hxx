@@ -28,23 +28,23 @@ class RTFLookahead : public RTFListener
 {
 public:
     RTFLookahead(SvStream& rStream, sal_uInt64 nGroupStart);
-    virtual ~RTFLookahead() override;
-    virtual RTFError dispatchDestination(RTFKeyword nKeyword) override;
-    virtual RTFError dispatchFlag(RTFKeyword nKeyword) override;
-    virtual RTFError dispatchSymbol(RTFKeyword nKeyword) override;
-    virtual RTFError dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam) override;
-    virtual RTFError dispatchValue(RTFKeyword nKeyword, int nParam) override;
-    virtual RTFError resolveChars(char ch) override;
-    virtual RTFError pushState() override;
-    virtual RTFError popState() override;
-    virtual Destination getDestination() override;
-    virtual void setDestination(Destination eDestination) override;
-    virtual RTFInternalState getInternalState() override;
-    virtual void setInternalState(RTFInternalState nInternalState) override;
-    virtual bool getSkipUnknown() override;
-    virtual void setSkipUnknown(bool bSkipUnknown) override;
-    virtual void finishSubstream() override;
-    virtual bool isSubstream() const override;
+    ~RTFLookahead() override;
+    RTFError dispatchDestination(RTFKeyword nKeyword) override;
+    RTFError dispatchFlag(RTFKeyword nKeyword) override;
+    RTFError dispatchSymbol(RTFKeyword nKeyword) override;
+    RTFError dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam) override;
+    RTFError dispatchValue(RTFKeyword nKeyword, int nParam) override;
+    RTFError resolveChars(char ch) override;
+    RTFError pushState() override;
+    RTFError popState() override;
+    Destination getDestination() override;
+    void setDestination(Destination eDestination) override;
+    RTFInternalState getInternalState() override;
+    void setInternalState(RTFInternalState nInternalState) override;
+    bool getSkipUnknown() override;
+    void setSkipUnknown(bool bSkipUnknown) override;
+    void finishSubstream() override;
+    bool isSubstream() const override;
     bool hasTable()
     {
         return m_bHasTable;
