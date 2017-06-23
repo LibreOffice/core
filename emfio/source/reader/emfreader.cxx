@@ -18,16 +18,14 @@
  */
 
 #include <emfreader.hxx>
-
 #include <osl/endian.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/dibtools.hxx>
 #include <o3tl/make_unique.hxx>
-
+#include <tools/stream.hxx>
 #include <memory>
 
 #ifdef DBG_UTIL
-#include <tools/stream.hxx>
 #include <vcl/pngwrite.hxx>
 #endif
 

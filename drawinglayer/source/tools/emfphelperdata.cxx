@@ -1249,6 +1249,8 @@ namespace emfplushelper
                                     ", " << transform.get(0,2) << ", " << transform.get(1,2));
                             }
 
+                            (void)(text); // avoid warning
+
     //                        rendering::FontRequest aFontRequest;
     //                        // add the text action
     //                        setFont(aFontRequest, flags & 0xff, rFactoryParms, rState);
