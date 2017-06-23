@@ -1683,7 +1683,8 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         aRectFnSet.Refresh(this);
         if (!bMovedFwd && bFootnote && GetIndPrev() != pPre)
         {   // SwFlowFrame::CutTree() could have formatted and deleted pPre
-            auto const pPrevFootnoteFrame(static_cast<SwFootnoteFrame const*>(GetUpper())->GetMaster());
+            auto const pPrevFootnoteFrame(static_cast<SwFootnoteFrame const*>(
+                        FindFootnoteFrame())->GetMaster());
             bool bReset = true;
             if (pPrevFootnoteFrame)
             {   // use GetIndNext() in case there are sections
