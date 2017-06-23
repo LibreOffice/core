@@ -828,7 +828,6 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
             }
 
             m_pBspWin->setFooterFillAttributes(aFooterFillAttributes);
-            nWhich = GetWhich(SID_ATTR_BORDER_OUTER);
         }
     }
 
