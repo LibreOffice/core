@@ -36,7 +36,7 @@ public:
     bool VisitUnresolvedMemberExpr(const UnresolvedMemberExpr *) { bVisitedThis = true; return true; }
     bool VisitCXXDependentScopeMemberExpr(const CXXDependentScopeMemberExpr *) { bVisitedThis = true; return true; }
 private:
-    std::string getFilename(SourceLocation loc);
+    StringRef getFilename(SourceLocation loc);
 };
 
 bool BaseCheckNotTestFixtureSubclass(
@@ -64,7 +64,7 @@ bool isDerivedFromTestFixture(const CXXRecordDecl *decl) {
     return false;
 }
 
-std::string StaticMethods::getFilename(SourceLocation loc)
+StringRef StaticMethods::getFilename(SourceLocation loc)
 {
     SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(loc);
     return compiler.getSourceManager().getFilename(spellingLocation);
@@ -103,7 +103,7 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
         return true;
     }
     // the DDE has a dummy implementation on Linux and a real one on Windows
-    std::string aFilename = getFilename(pCXXMethodDecl->getCanonicalDecl()->getLocStart());
+    auto aFilename = getFilename(pCXXMethodDecl->getCanonicalDecl()->getLocStart());
     if (loplugin::isSamePathname(aFilename, SRCDIR "/include/svl/svdde.hxx")) {
         return true;
     }
