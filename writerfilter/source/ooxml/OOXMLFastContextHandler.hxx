@@ -277,6 +277,7 @@ public:
     void handleComment();
     void handlePicture();
     void handleBreak();
+    void handleBlockLevelBreak();
     void handleOLE();
     void handleFontRel();
     void handleHyperlinkURL();

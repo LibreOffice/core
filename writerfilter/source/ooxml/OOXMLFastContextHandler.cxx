@@ -1050,6 +1050,15 @@ void OOXMLFastContextHandlerProperties::handleBreak()
     }
 }
 
+void OOXMLFastContextHandlerProperties::handleBlockLevelBreak()
+{
+//    if(isForwardEvents())
+//    {
+//        OOXMLBreakHandler aBreakHandler(*mpStream);
+//        getPropertySet()->resolve(aBreakHandler);
+//    }
+}
+
 void OOXMLFastContextHandlerProperties::handleOLE()
 {
     OOXMLOLEHandler aOLEHandler(this);

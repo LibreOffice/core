@@ -191,6 +191,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsFirstSection( true ),
         m_bIsColumnBreakDeferred( false ),
         m_bIsPageBreakDeferred( false ),
+        m_bIsPageBreakAfterNextParagraph(false),
         m_bSdtEndDeferred(false),
         m_bParaSdtEndDeferred(false),
         m_bStartTOC(false),
@@ -697,7 +698,15 @@ void DomainMapper_Impl::deferBreak( BreakType deferredBreakType)
             if (m_nTableDepth > 0)
                 return;
 
-            m_bIsPageBreakDeferred = true;
+            if (m_bIsOutsideAParagraph)
+            {
+                // tdf#108714 : a break encountered out-of-order in OOXML (bug-to-bug compatibility with Word)
+                m_bIsPageBreakAfterNextParagraph = true;
+            }
+            else
+            {
+                m_bIsPageBreakDeferred = true;
+            }
         break;
     default:
         return;
@@ -729,6 +738,16 @@ void DomainMapper_Impl::clearDeferredBreak(BreakType deferredBreakType)
         break;
     default:
         break;
+    }
+}
+
+// tdf#108714 : a break encountered out-of-order in OOXML (bug-to-bug compatibility with Word)
+void DomainMapper_Impl::ProcesPageBreakAfterNextParagraph()
+{
+    if (m_bIsPageBreakAfterNextParagraph)
+    {
+        m_bIsPageBreakAfterNextParagraph = false;
+        m_bIsPageBreakDeferred = true;
     }
 }
 

@@ -13224,6 +13224,16 @@
           <ref name="ST_BrClear"/>
         </attribute>
       </define>
+      <!-- tdf#108714 : allow <w:br> at block level (despite this is illegal according to ECMA-376-1:2016) - bug-to-bug compatibility with Word -->
+      <define name="CT_BlockLevel_Br">
+        <attribute name="type">
+          <ref name="ST_BrType"/>
+        </attribute>
+        <attribute name="clear">
+          <ref name="ST_BrClear"/>
+        </attribute>
+      </define>
+      <!-- end tdf#108714 -->
       <define name="ST_PTabAlignment">
         <choice>
           <!-- Left -->
@@ -13963,6 +13973,12 @@
           <element name="tbl">
             <ref name="CT_Tbl"/>
           </element>
+          <!-- tdf#108714 : allow <w:br> at block level (despite this is illegal according to ECMA-376-1:2016) - bug-to-bug compatibility with Word -->
+          <element name="br">
+            <!--<ref name="CT_BlockLevel_Br"/>-->
+            <ref name="CT_Br"/>
+          </element>
+          <!-- end tdf#108714 -->
           <ref name="EG_RunLevelElts"/>
         </choice>
       </define>
@@ -17842,6 +17858,13 @@
       <attribute name="clear" tokenid="ooxml:CT_Br_clear"/>
       <action name="end" action="handleBreak"/>
     </resource>
+    <!-- tdf#108714 : allow <w:br> at block level (despite this is illegal according to ECMA-376-1:2016) - bug-to-bug compatibility with Word -->
+    <resource name="CT_BlockLevel_Br" resource="Properties">
+      <attribute name="type" tokenid="ooxml:CT_Br_type"/>
+      <attribute name="clear" tokenid="ooxml:CT_Br_clear"/>
+      <action name="end" action="handleBlockLevelBreak"/>
+    </resource>
+    <!-- end tdf#108714 -->
     <resource name="ST_PTabAlignment" resource="List">
       <value tokenid="ooxml:Value_ST_PTabAlignment_left">left</value>
       <value tokenid="ooxml:Value_ST_PTabAlignment_center">center</value>
@@ -18197,6 +18220,7 @@
       <action name="start" action="setHandle"/>
       <action name="start" action="sendTableDepth"/>
       <action name="end" action="endOfParagraph"/>
+      <action name="end" action="endParagraphGroup"/>
     </resource>
     <resource name="ST_TblWidth" resource="List">
       <value tokenid="ooxml:Value_ST_TblWidth_nil">nil</value>

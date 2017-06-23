@@ -357,6 +357,8 @@ private:
     bool                                                                            m_bIsFirstSection;
     bool                                                                            m_bIsColumnBreakDeferred;
     bool                                                                            m_bIsPageBreakDeferred;
+    // tdf#108714 : a break encountered out-of-order in OOXML (bug-to-bug compatibility with Word)
+    bool                                                                            m_bIsPageBreakAfterNextParagraph;
     /// If we want to set "sdt end" on the next character context.
     bool                                                                            m_bSdtEndDeferred;
     /// If we want to set "paragraph sdt end" on the next paragraph context.
@@ -541,6 +543,8 @@ public:
     bool isBreakDeferred( BreakType deferredBreakType );
     void clearDeferredBreaks();
     void clearDeferredBreak(BreakType deferredBreakType);
+    // tdf#108714 : a break encountered out-of-order in OOXML (bug-to-bug compatibility with Word)
+    void ProcesPageBreakAfterNextParagraph();
 
     void setSdtEndDeferred(bool bSdtEndDeferred);
     bool isSdtEndDeferred();
