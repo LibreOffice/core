@@ -235,29 +235,38 @@ void OOXMLHeaderHandler::sprm(Sprm & /*sprm*/)
 /*
   class OOXMLBreakHandler
  */
-OOXMLBreakHandler::OOXMLBreakHandler(Stream &rStream)
+OOXMLBreakHandler::OOXMLBreakHandler(Stream &rStream, bool bOutOfOrder)
 : mnType(0), mnClear(0),
-  mrStream(rStream)
+  mrStream(rStream),
+  mbOutOfOrder(bOutOfOrder)
 {
 }
 
 OOXMLBreakHandler::~OOXMLBreakHandler()
 {
-    sal_uInt8 tmpBreak[1];
+    sal_uInt8 tmpBreak;
     switch (mnType)
     {
     case NS_ooxml::LN_Value_ST_BrType_column:
-        tmpBreak[0] = 0x0E;
+        tmpBreak = 0x0E;
         break;
     case NS_ooxml::LN_Value_ST_BrType_page:
-        tmpBreak[0] = 0x0C;
+        tmpBreak = 0x0C;
         break;
     case NS_ooxml::LN_Value_ST_BrType_textWrapping:
     default: // when no attribute type is present, the spec assume textWrapping
-        tmpBreak[0] = 0x0A;
+        tmpBreak = 0x0A;
         break;
     }
-    mrStream.text(&tmpBreak[0], 1);
+    if (mbOutOfOrder)
+    {
+        // tdf#108714 : allow <w:br> at block level (despite this is illegal according to ECMA-376-1:2016)
+        mrStream.postponeText(&tmpBreak, 1);
+    }
+    else
+    {
+        mrStream.text(&tmpBreak, 1);
+    }
 }
 
 void OOXMLBreakHandler::attribute(Id name, Value & val)

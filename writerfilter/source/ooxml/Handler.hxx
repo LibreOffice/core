@@ -112,8 +112,9 @@ class OOXMLBreakHandler : public Properties
 {
     sal_Int32 mnType, mnClear;
     Stream & mrStream;
+    bool mbOutOfOrder;
 public:
-    explicit OOXMLBreakHandler(Stream & rStream);
+    explicit OOXMLBreakHandler(Stream & rStream, bool bOutOfOrder = false);
     virtual ~OOXMLBreakHandler();
     virtual void attribute(Id name, Value & val) override;
     virtual void sprm(Sprm & sprm) override;

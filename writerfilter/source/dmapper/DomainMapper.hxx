@@ -136,6 +136,7 @@ private:
 
     virtual void lcl_text(const sal_uInt8 * data, size_t len) override;
     virtual void lcl_utext(const sal_uInt8 * data, size_t len) override;
+    virtual void lcl_postponeText(const sal_uInt8 * data, size_t len) override;
     virtual void lcl_positionOffset(const OUString& rText, bool bVertical) override;
     virtual css::awt::Point getPositionOffset() override;
     virtual void lcl_align(const OUString& rText, bool bVertical) override;
@@ -167,6 +168,7 @@ private:
     std::unique_ptr< GraphicZOrderHelper > zOrderHelper;
     std::unique_ptr<GraphicNamingHelper> m_pGraphicNamingHelper;
     OUString m_sGlossaryEntryName;
+    OString m_sPostponedText;
 };
 
 } // namespace dmapper
