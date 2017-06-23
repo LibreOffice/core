@@ -2394,6 +2394,12 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
                     static_cast<const SfxStringItem*>( rMed.GetItemSet()->GetItem( SID_FILE_NAME ) );
                 INetURLObject aDbtFile( pNameItem->GetValue(), INetProtocol::File );
                 aDbtFile.setExtension("dbt");
+
+                // tdf#40713: don't lose dbt file
+                // if aDbtFile corresponds exactly to aTmpFile, we just have to return
+                if (aDbtFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ) == aTmpFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ))
+                    return bRet;
+
                 if ( IsDocument( aDbtFile ) && !KillFile( aDbtFile ) )
                     bRet = false;
                 if ( bRet && !MoveFile( aTmpFile, aDbtFile ) )
