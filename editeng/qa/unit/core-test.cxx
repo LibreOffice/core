@@ -60,6 +60,9 @@ public:
     /// Test Copy/Paste using Legacy Format
     void testCopyPaste();
 
+    /// Test Copy/Paste with selective selection over multiple paragraphs
+    void testMultiParaSelCopyPaste();
+
     /// Test Copy/Paste with Tabs
     void testTabsCopyPaste();
 
@@ -80,6 +83,7 @@ public:
     CPPUNIT_TEST(testAutocorrect);
     CPPUNIT_TEST(testHyperlinkCopyPaste);
     CPPUNIT_TEST(testCopyPaste);
+    CPPUNIT_TEST(testMultiParaSelCopyPaste);
     CPPUNIT_TEST(testTabsCopyPaste);
     CPPUNIT_TEST(testHyperlinkSearch);
     CPPUNIT_TEST(testBoldItalicCopyPaste);
@@ -561,6 +565,50 @@ void Test::testCopyPaste()
     // Assert changes
     CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + aTextLen), rDoc.GetTextLen() );
     CPPUNIT_ASSERT_EQUAL( OUString(aText + aText), rDoc.GetParaAsString(sal_Int32(0)) );
+}
+
+void Test::testMultiParaSelCopyPaste()
+{
+    // Create EditEngine's instance
+    EditEngine aEditEngine( mpItemPool );
+
+    // Get EditDoc for current EditEngine's instance
+    EditDoc &rDoc = aEditEngine.GetEditDoc();
+
+    // Initially no text should be there
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
+
+    // Insert initial text
+    OUString aFirstPara = "This is first paragraph";
+    // Selection Ref       ........8..............
+    OUString aSecondPara = "This is second paragraph";
+    // Selection Ref        .............14.........
+    OUString aThirdPara = "This is third paragraph";
+    OUString aText = aFirstPara + "\n" + aSecondPara + "\n" + aThirdPara;
+    sal_Int32 aTextLen = aFirstPara.getLength() + aSecondPara.getLength() + aThirdPara.getLength();
+    aEditEngine.SetText( aText );
+    OUString aCopyText = "first paragraphThis is second";
+    sal_Int32 aCopyTextLen = aCopyText.getLength();
+
+    // Assert changes
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aFirstPara, rDoc.GetParaAsString(sal_Int32(0)) );
+    CPPUNIT_ASSERT_EQUAL( aSecondPara, rDoc.GetParaAsString(sal_Int32(1)) );
+    CPPUNIT_ASSERT_EQUAL( aThirdPara, rDoc.GetParaAsString(sal_Int32(2)) );
+
+    // Copy initial text using legacy format
+    uno::Reference< datatransfer::XTransferable > xData = aEditEngine.CreateTransferable( ESelection(0,8,1,14) );
+
+    // Paste text at the end
+    aEditEngine.InsertText( xData, OUString(), rDoc.GetEndPaM(), true );
+
+    // Assert changes
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + aCopyTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( OUString(aFirstPara), rDoc.GetParaAsString(sal_Int32(0)) );
+    CPPUNIT_ASSERT_EQUAL( OUString(aSecondPara), rDoc.GetParaAsString(sal_Int32(1)) );
+    CPPUNIT_ASSERT_EQUAL( OUString(aThirdPara + "first paragraph"), rDoc.GetParaAsString(sal_Int32(2)) );
+    CPPUNIT_ASSERT_EQUAL( OUString("This is second"), rDoc.GetParaAsString(sal_Int32(3)) );
 }
 
 void Test::testTabsCopyPaste()
