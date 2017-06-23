@@ -7,31 +7,31 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_CppunitTest_CppunitTest,emfio))
+$(eval $(call gb_CppunitTest_CppunitTest,emfio_emf))
 
-$(eval $(call gb_CppunitTest_set_componentfile,emfio,emfio/emfio))
+$(eval $(call gb_CppunitTest_set_componentfile,emfio_emf,emfio/emfio))
 
-$(eval $(call gb_CppunitTest_set_include,emfio,\
+$(eval $(call gb_CppunitTest_set_include,emfio_emf,\
     $$(INCLUDE) \
     -I$(SRCDIR)/emfio/inc \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,emfio,\
+$(eval $(call gb_CppunitTest_use_externals,emfio_emf,\
     boost_headers \
     libxml2 \
 ))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,emfio,\
+$(eval $(call gb_CppunitTest_add_exception_objects,emfio_emf,\
     emfio/qa/cppunit/emf/EmfImportTest \
 ))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,emfio))
+$(eval $(call gb_CppunitTest_use_sdk_api,emfio_emf))
 
-$(eval $(call gb_CppunitTest_use_library_objects,emfio,\
+$(eval $(call gb_CppunitTest_use_library_objects,emfio_emf,\
     emfio \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,emfio,\
+$(eval $(call gb_CppunitTest_use_libraries,emfio_emf,\
     basegfx \
     drawinglayer \
     cppu \
@@ -46,10 +46,10 @@ $(eval $(call gb_CppunitTest_use_libraries,emfio,\
     utl \
 ))
 
-$(eval $(call gb_CppunitTest_use_ure,emfio))
-$(eval $(call gb_CppunitTest_use_vcl,emfio))
+$(eval $(call gb_CppunitTest_use_ure,emfio_emf))
+$(eval $(call gb_CppunitTest_use_vcl,emfio_emf))
 
-$(eval $(call gb_CppunitTest_use_components,emfio,\
+$(eval $(call gb_CppunitTest_use_components,emfio_emf,\
     configmgr/source/configmgr \
     dtrans/util/mcnttype \
     framework/util/fwk \
@@ -63,6 +63,6 @@ $(eval $(call gb_CppunitTest_use_components,emfio,\
     unotools/util/utl \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,emfio))
+$(eval $(call gb_CppunitTest_use_configuration,emfio_emf))
 
 # vim: set noet sw=4 ts=4:
