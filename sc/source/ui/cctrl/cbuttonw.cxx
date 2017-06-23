@@ -43,9 +43,8 @@ void ScDDComboBoxButton::SetOutputDevice( OutputDevice* pOutputDevice )
 
 void ScDDComboBoxButton::SetOptSizePixel()
 {
-    aBtnSize = pOut->LogicToPixel( Size(0,11), MapUnit::MapAppFont );
-    //aBtnSize.Width() = GetSystemMetrics( SM_CXVSCROLL ) - 1; // Win SDK function
-    aBtnSize.Width() = pOut->GetSettings().GetStyleSettings().GetScrollBarSize();
+    aBtnSize = pOut->LogicToPixel(Size(8, 11), MapUnit::MapAppFont);
+    aBtnSize.Width() = std::max(aBtnSize.Width(), pOut->GetSettings().GetStyleSettings().GetScrollBarSize());
 }
 
 void ScDDComboBoxButton::Draw( const Point& rAt,
