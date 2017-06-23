@@ -303,7 +303,6 @@ SvStream& ReadTextType(SvStream& rInp, TextType& rText)
     rInp.ReadInt16(rText.FitBreit);
     assert(rInp.GetError() || rInp.Tell() == nOldPos + TextSize);
     (void) nOldPos;
-    rText.Buffer=nullptr;
     return rInp;
 }
 SvStream& ReadBmapType(SvStream& rInp, BmapType& rBmap)
@@ -405,11 +404,11 @@ void SetArea(ObjAreaType& rArea, OutputDevice& rOut)
         rOut.SetFillColor( Sgv2SvFarbe( rArea.FFarbe,rArea.FBFarbe,rArea.FIntens ) );
 }
 
-void ObjkType::Draw(OutputDevice&)
+void ObjkType::Draw(OutputDevice&, UCHAR *)
 {
 }
 
-void StrkType::Draw(OutputDevice& rOut)
+void StrkType::Draw(OutputDevice& rOut, UCHAR *)
 {
     SetLine(L,rOut);
     rOut.DrawLine(Point(Pos1.x,Pos1.y),Point(Pos2.x,Pos2.y)); // !!!
@@ -508,7 +507,7 @@ void DrawSlideRect(sal_Int16 x1, sal_Int16 y1, sal_Int16 x2, sal_Int16 y2, ObjAr
     }
 }
 
-void RectType::Draw(OutputDevice& rOut)
+void RectType::Draw(OutputDevice& rOut, UCHAR *)
 {
     if (L.LMuster!=0) L.LMuster=1; // no line separator here, only on or off
     SetArea(F,rOut);
@@ -543,7 +542,7 @@ void RectType::Draw(OutputDevice& rOut)
     }
 }
 
-void PolyType::Draw(OutputDevice& rOut)
+void PolyType::Draw(OutputDevice& rOut, UCHAR *)
 {
     if ((Flags & PolyClosBit) !=0) SetArea(F,rOut);
     SetLine(L,rOut);
@@ -557,7 +556,7 @@ void PolyType::Draw(OutputDevice& rOut)
     }
 }
 
-void SplnType::Draw(OutputDevice& rOut)
+void SplnType::Draw(OutputDevice& rOut, UCHAR *)
 {
     if ((Flags & PolyClosBit) !=0) SetArea(F,rOut);
     SetLine(L,rOut);
@@ -660,7 +659,7 @@ void DrawSlideCirc(sal_Int16 cx, sal_Int16 cy, sal_Int16 rx, sal_Int16 ry, ObjAr
     }
 }
 
-void CircType::Draw(OutputDevice& rOut)
+void CircType::Draw(OutputDevice& rOut, UCHAR *)
 {
     tools::Rectangle aRect(Center.x-Radius.x,Center.y-Radius.y,Center.x+Radius.x,Center.y+Radius.y);
 
@@ -711,7 +710,7 @@ void CircType::Draw(OutputDevice& rOut)
     }
 }
 
-void BmapType::Draw(OutputDevice& rOut)
+void BmapType::Draw(OutputDevice& rOut, UCHAR *)
 {
     //ifstream aInp;
     sal_uInt16      nVersion;
@@ -769,24 +768,24 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
         ReadObjkType( rInp, aObjk );
         if (!rInp.GetError()) {
             switch(aObjk.Art) {
-                case ObjStrk: { StrkType aStrk; ReadStrkType( rInp, aStrk ); if (!rInp.GetError()) aStrk.Draw(rOut); } break;
-                case ObjRect: { RectType aRect; ReadRectType( rInp, aRect ); if (!rInp.GetError()) aRect.Draw(rOut); } break;
-                case ObjCirc: { CircType aCirc; ReadCircType( rInp, aCirc ); if (!rInp.GetError()) aCirc.Draw(rOut); } break;
+                case ObjStrk: { StrkType aStrk; ReadStrkType( rInp, aStrk ); if (!rInp.GetError()) aStrk.Draw(rOut, nullptr); } break;
+                case ObjRect: { RectType aRect; ReadRectType( rInp, aRect ); if (!rInp.GetError()) aRect.Draw(rOut, nullptr); } break;
+                case ObjCirc: { CircType aCirc; ReadCircType( rInp, aCirc ); if (!rInp.GetError()) aCirc.Draw(rOut, nullptr); } break;
                 case ObjText: {
                     TextType aText;
                     ReadTextType( rInp, aText );
                     if (!rInp.GetError()) {
-                        aText.Buffer=new UCHAR[aText.BufSize+1]; // add one for LookAhead at CK-separation
-                        rInp.ReadBytes(aText.Buffer, aText.BufSize);
-                        if (!rInp.GetError()) aText.Draw(rOut);
-                        delete[] aText.Buffer;
+                        UCHAR *pBuffer = new UCHAR[aText.BufSize+1]; // add one for LookAhead at CK-separation
+                        rInp.ReadBytes(pBuffer, aText.BufSize);
+                        if (!rInp.GetError()) aText.Draw(rOut, pBuffer);
+                        delete[] pBuffer;
                     }
                 } break;
                 case ObjBmap: {
                     BmapType aBmap;
                     ReadBmapType( rInp, aBmap );
                     if (!rInp.GetError()) {
-                        aBmap.Draw(rOut);
+                        aBmap.Draw(rOut, nullptr);
                     }
                 } break;
                 case ObjPoly: {
@@ -799,7 +798,7 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                             rInp.ReadInt16(aPoly.EckP[i].x);
                             rInp.ReadInt16(aPoly.EckP[i].y);
                         }
-                        if (!rInp.GetError()) aPoly.Draw(rOut);
+                        if (!rInp.GetError()) aPoly.Draw(rOut, nullptr);
                         delete[] aPoly.EckP;
                     }
                 } break;
@@ -813,7 +812,7 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                             rInp.ReadInt16(aSpln.EckP[i].x);
                             rInp.ReadInt16(aSpln.EckP[i].y);
                         }
-                        if (!rInp.GetError()) aSpln.Draw(rOut);
+                        if (!rInp.GetError()) aSpln.Draw(rOut, nullptr);
                         delete[] aSpln.EckP;
                     }
                 } break;
@@ -826,7 +825,7 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                     }
                 } break;
                 default: {
-                    aObjk.Draw(rOut);          // object name on 2. Screen
+                    aObjk.Draw(rOut, nullptr); // object name on 2. Screen
                     ObjkOverSeek(rInp,aObjk);  // to next object
                 }
             }

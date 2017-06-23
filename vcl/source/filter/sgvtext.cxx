@@ -862,7 +862,7 @@ void DrawChar(OutputDevice& rOut, UCHAR c, ObjTextType T, PointType Pos, sal_uIn
     rOut.DrawText( Point( Pos.x, Pos.y ), s );
 }
 
-void TextType::Draw(OutputDevice& rOut)
+void TextType::Draw(OutputDevice& rOut, UCHAR* pBuffer)
 {
     if ((Flags & TextOutlBit)!=0) return;   // source text for Outliner !!
 
@@ -892,7 +892,7 @@ void TextType::Draw(OutputDevice& rOut)
     sal_uInt16 FitYMul;
     sal_uInt16 FitYDiv;
     bool   Error;
-    UCHAR* Buf=Buffer; // pointer to the letters
+    UCHAR* Buf = pBuffer; // pointer to the letters
 
     pSgfFonts->ReadList();
     xLine.reset(new short[ChrXPosArrSize]);
