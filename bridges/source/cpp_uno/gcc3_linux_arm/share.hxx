@@ -23,7 +23,11 @@
 #include <typeinfo>
 #include <exception>
 #include <cstddef>
+#ifndef ANDROID
+#include <unwind.h>
+#else
 #include <unwind-arm.h>
+#endif
 
 #include <cxxabi.h>
 #ifndef _GLIBCXX_CDTOR_CALLABI // new in GCC 4.7 cxxabi.h
