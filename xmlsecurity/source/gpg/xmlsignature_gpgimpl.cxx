@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 #include <rtl/uuid.h>
+#include <cppuhelper/supportsservice.hxx>
 #include "gpg/xmlsignature_gpgimpl.hxx"
 
 #include <gpgme.h>
@@ -405,13 +406,7 @@ OUString SAL_CALL XMLSignature_GpgImpl::getImplementationName() {
 
 /* XServiceInfo */
 sal_Bool SAL_CALL XMLSignature_GpgImpl::supportsService( const OUString& serviceName) {
-    Sequence< OUString > seqServiceNames = getSupportedServiceNames() ;
-    const OUString* pArray = seqServiceNames.getConstArray() ;
-    for( sal_Int32 i = 0 ; i < seqServiceNames.getLength() ; i ++ ) {
-        if( *( pArray + i ) == serviceName )
-            return true ;
-    }
-    return false ;
+    return cppu::supportsService(this, serviceName);
 }
 
 /* XServiceInfo */
