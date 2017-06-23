@@ -211,10 +211,18 @@ SAL_CALL XMLSignature_GpgImpl::generate(
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
     // write signed data to xml
-    std::vector<unsigned char> buf2(len);
-    assert(data_out.seek(0,SEEK_SET) == 0);
-    if( data_out.read(&buf2[0], len) != len )
+    xmlChar* signature = static_cast<xmlChar*>(xmlMalloc(len + 1));
+    if(signature == nullptr)
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+    assert(data_out.seek(0,SEEK_SET) == 0);
+    if( data_out.read(signature, len) != len )
+        throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+
+    // conversion to base64
+    xmlChar* signatureEncoded=nullptr;
+    if( !(signatureEncoded=xmlSecBase64Encode(reinterpret_cast<xmlSecByte*>(signature), len, 79)) )
+        throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+    xmlFree(signature);
 
     // walk xml tree to sign value node - go to children, first is
     // SignedInfo, 2nd is signaturevalue
@@ -222,7 +230,8 @@ SAL_CALL XMLSignature_GpgImpl::generate(
     cur = xmlSecGetNextElementNode(cur->next);
 
     // TODO some assert would be good...
-    xmlNodeSetContentLen(cur, &buf2[0], len);
+    xmlNodeSetContentLen(cur, signatureEncoded, xmlStrlen(signatureEncoded));
+    xmlFree(signatureEncoded);
 
     aTemplate->setStatus(SecurityOperationStatus_OPERATION_SUCCEEDED);
 
@@ -334,8 +343,12 @@ SAL_CALL XMLSignature_GpgImpl::validate(
         cur = xmlSecGetNextElementNode(pNode->children);
         cur = xmlSecGetNextElementNode(cur->next);
 
-        // TODO some assert would be good that cur is actually SignatureValue
+        if(!xmlSecCheckNodeName(cur, xmlSecNodeSignatureValue, xmlSecDSigNs))
+            throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
         xmlChar* pSignatureValue=xmlNodeGetContent(cur);
+        if(xmlSecBase64Decode(pSignatureValue, reinterpret_cast<xmlSecByte*>(pSignatureValue), xmlStrlen(pSignatureValue)) < 0)
+            throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+
         GpgME::Data data_signature(
             reinterpret_cast<char*>(pSignatureValue),
             xmlStrlen(pSignatureValue), false);
