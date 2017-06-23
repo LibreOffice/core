@@ -2981,6 +2981,12 @@ void DomainMapper::lcl_startParagraphGroup()
     m_pImpl->SetIsOutsideAParagraph(false);
     m_pImpl->clearDeferredBreaks();
     m_pImpl->setParaSdtEndDeferred(false);
+    // tdf#108714: this must go after paragraph group initialization, as the first run
+    if (!m_sPostponedText.isEmpty())
+    {
+        lcl_text(reinterpret_cast<const sal_uInt8*>(m_sPostponedText.getStr()), m_sPostponedText.getLength());
+        m_sPostponedText.clear();
+    }
 }
 
 void DomainMapper::lcl_endParagraphGroup()
@@ -3191,6 +3197,11 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
     {
         SAL_WARN("writerfilter", "failed. Message :" << e.Message);
     }
+}
+
+void DomainMapper::lcl_postponeText(const sal_uInt8 * data_, size_t len)
+{
+    m_sPostponedText = OString(reinterpret_cast<const char*>(data_), len);
 }
 
 void DomainMapper::lcl_positionOffset(const OUString& rText, bool bVertical)
