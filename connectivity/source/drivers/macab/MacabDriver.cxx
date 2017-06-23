@@ -96,7 +96,7 @@ namespace
 
             if ( !_rFunction )
             {   // did not find the symbol
-                OSL_FAIL( OString( OString( "lcl_getFunctionFromModuleOrUnload: could not find the symbol " ) + OString( _pAsciiSymbolName ) ).getStr() );
+                SAL_WARN( "connectivity.macab", "lcl_getFunctionFromModuleOrUnload: could not find the symbol " << _pAsciiSymbolName );
                 osl_unloadModule( _rModule );
                 _rModule = nullptr;
             }

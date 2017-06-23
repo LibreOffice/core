@@ -211,26 +211,14 @@ bool FmSearchEngine::MoveCursor()
     }
     catch(css::sdbc::SQLException const& e)
     {
-#if OSL_DEBUG_LEVEL > 0
-        OStringBuffer sDebugMessage("FmSearchEngine::MoveCursor : catched a DatabaseException (");
-        sDebugMessage.append(OUStringToOString(e.SQLState, RTL_TEXTENCODING_ASCII_US));
-        sDebugMessage.append(") !");
-        OSL_FAIL(sDebugMessage.getStr());
-#else
         (void)e;
-#endif
+        SAL_WARN( "svx", "FmSearchEngine::MoveCursor: catched a DatabaseException: " << e.SQLState );
         bSuccess = false;
     }
     catch(Exception const& e)
     {
-#if OSL_DEBUG_LEVEL > 0
-        OStringBuffer sDebugMessage("FmSearchEngine::MoveCursor : catched an Exception (");
-        sDebugMessage.append(OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US));
-        sDebugMessage.append(") !");
-        OSL_FAIL(sDebugMessage.getStr());
-#else
         (void)e;
-#endif
+        SAL_WARN( "svx", "FmSearchEngine::MoveCursor: catched an Exception: " << e.Message);
         bSuccess = false;
     }
     catch(...)

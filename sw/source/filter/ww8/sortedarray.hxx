@@ -95,7 +95,7 @@ namespace ww
             }
             if (bBroken)
             {
-               OSL_FAIL( OUStringToOString( sError, RTL_TEXTENCODING_ASCII_US ).getStr() );
+               SAL_WARN( "sw", sError );
             }
 #endif
         }

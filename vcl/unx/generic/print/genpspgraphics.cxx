@@ -859,9 +859,7 @@ FontAttributes GenPspGraphics::Info2FontAttributes( const psp::FastPrintFontInfo
 #if OSL_DEBUG_LEVEL > 2
     if( aDFA.HasMapNames() )
     {
-        OString aOrigName(OUStringToOString(aDFA.GetFamilyName(), osl_getThreadTextEncoding()));
-        OString aAliasNames(OUStringToOString(aDFA.GetAliasNames(), osl_getThreadTextEncoding()));
-        SAL_INFO( "vcl.fonts", "using alias names " << aAliasNames.getStr() << " for font family " << aOrigName.getStr() );
+        SAL_INFO( "vcl.fonts", "using alias names " << aDFA.GetAliasNames() << " for font family " << aDFA.GetFamilyName() );
     }
 #endif
 

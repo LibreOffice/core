@@ -519,14 +519,12 @@ void DemoApp::Main()
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL( OUStringToOString(
-                        comphelper::anyToString( cppu::getCaughtException() ),
-                        RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_WARN( "slideshow", comphelper::anyToString( cppu::getCaughtException() ) );
     }
 
     if( !xFactory.is() )
     {
-        SAL_INFO("slideshow",( "Could not bootstrap UNO, installation must be in disorder. Exiting." );
+        SAL_INFO("slideshow", "Could not bootstrap UNO, installation must be in disorder. Exiting." );
         exit( 1 );
     }
 

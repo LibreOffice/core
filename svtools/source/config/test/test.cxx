@@ -194,7 +194,7 @@ void TestApplication::impl_testDynamicMenuOptions()
         }
     }
 
-    OSL_FAIL( OUStringToOString( sOut.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr() );
+    SAL_WARN( "svtools", sOut );
 }
 
 

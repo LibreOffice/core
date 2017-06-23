@@ -922,10 +922,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                 OUString aValue;
                 if ( eSourceType == SC_CAT_CONTENT )
                     static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewString( aValue, &aDocument );
-                OStringBuffer aError(OUStringToOString(aValue,
-                    osl_getThreadTextEncoding()));
-                aError.append(" weggelassen");
-                OSL_FAIL( aError.getStr() );
+                SAL_WARN( "sc", aValue << " omitted");
 #endif
             }
             else

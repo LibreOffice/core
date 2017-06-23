@@ -194,12 +194,7 @@ ErrCode ReadThroughComponent(
         if( bEncrypted )
             return ERRCODE_SFX_WRONGPASSWORD;
 
-#if OSL_DEBUG_LEVEL > 0
-        OStringBuffer aError("SAX parse exception caught while importing:\n");
-        aError.append(OUStringToOString(r.Message,
-            RTL_TEXTENCODING_ASCII_US));
-        OSL_FAIL(aError.getStr());
-#endif
+        SAL_WARN( "sw", "SAX parse exception caught while importing: " << r.Message );
 
         const OUString sErr( OUString::number( r.LineNumber )
             + ","
@@ -229,46 +224,25 @@ ErrCode ReadThroughComponent(
         if( bEncrypted )
             return ERRCODE_SFX_WRONGPASSWORD;
 
-#if OSL_DEBUG_LEVEL > 0
-        OStringBuffer aError("SAX exception caught while importing:\n");
-        aError.append(OUStringToOString(r.Message,
-            RTL_TEXTENCODING_ASCII_US));
-        OSL_FAIL(aError.getStr());
-#endif
-
+        SAL_WARN( "sw", "SAX exception caught while importing: " << r.Message);
         return ERR_SWG_READ_ERROR;
     }
     catch(const packages::zip::ZipIOException& r)
     {
         (void)r;
-#if OSL_DEBUG_LEVEL > 0
-        OStringBuffer aError("Zip exception caught while importing:\n");
-        aError.append(OUStringToOString(r.Message,
-            RTL_TEXTENCODING_ASCII_US));
-        OSL_FAIL(aError.getStr());
-#endif
+        SAL_WARN( "sw", "Zip exception caught while importing: " << r.Message);
         return ERRCODE_IO_BROKENPACKAGE;
     }
     catch(const io::IOException& r)
     {
         (void)r;
-#if OSL_DEBUG_LEVEL > 0
-        OStringBuffer aError("IO exception caught while importing:\n");
-        aError.append(OUStringToOString(r.Message,
-            RTL_TEXTENCODING_ASCII_US));
-        OSL_FAIL(aError.getStr());
-#endif
+        SAL_WARN( "sw", "IO exception caught while importing: " << r.Message);
         return ERR_SWG_READ_ERROR;
     }
     catch(const uno::Exception& r)
     {
         (void)r;
-#if OSL_DEBUG_LEVEL > 0
-        OStringBuffer aError("uno exception caught while importing:\n");
-        aError.append(OUStringToOString(r.Message,
-            RTL_TEXTENCODING_ASCII_US));
-        OSL_FAIL(aError.getStr());
-#endif
+        SAL_WARN( "sw", "uno exception caught while importing: " << r.Message );
         return ERR_SWG_READ_ERROR;
     }
 

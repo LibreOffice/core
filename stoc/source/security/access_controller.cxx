@@ -607,13 +607,7 @@ PermissionCollection AccessController::getEffectivePermissions(
             rec->push_back( pair< OUString, Any >( userId, demanded_perm ) );
         }
 #ifdef __DIAGNOSE
-        OUStringBuffer buf( 48 );
-        buf.append( "> info: recurring call of user \"" );
-        buf.append( userId );
-        buf.append( "\"" );
-        OString str(
-            OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-        SAL_INFO("stoc",( "%s", str.getStr() );
+        SAL_INFO("stoc", "> info: recurring call of user: " << userId );
 #endif
         return PermissionCollection( new AllPermission() );
     }

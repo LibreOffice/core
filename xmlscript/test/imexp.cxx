@@ -72,8 +72,7 @@ Reference< XComponentContext > createInitialComponentContext(
 
     catch( const Exception& rExc )
     {
-        OString aStr( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_FAIL( aStr.getStr() );
+        SAL_WARN( "xmlscript", rExc.Message );
     }
 
     return xContext;
@@ -186,19 +185,18 @@ void MyApp::Main()
     }
     catch (const xml::sax::SAXException & rExc)
     {
-        OString aStr( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
+        OUString aStr( rExc.Message );
         uno::Exception exc;
         if (rExc.WrappedException >>= exc)
         {
             aStr += " >>> ";
-            aStr += OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US );
+            aStr += exc.Message;
         }
-        OSL_FAIL( aStr.getStr() );
+        SAL_WARN( "xmlscript", aStr );
     }
     catch (const uno::Exception & rExc)
     {
-        OString aStr( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_FAIL( aStr.getStr() );
+        SAL_WARN( "xmlscript", rExc.Message );
     }
 
     Reference< lang::XComponent > xComp( xContext, UNO_QUERY );

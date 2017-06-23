@@ -82,14 +82,8 @@ void SAL_CALL Mapping_cli2uno(
     }
     catch (BridgeRuntimeError & err)
     {
-#if OSL_DEBUG_LEVEL >= 1
-        OString cstr_msg(
-            OUStringToOString(
-                "[cli_uno bridge error] " + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_FAIL( cstr_msg.getStr() );
-#else
-        (void) err; // unused
-#endif
+        (void) err;
+        SAL_WARN( "cli", "[cli_uno bridge error] " << err.m_message );
     }
 }
 
@@ -142,14 +136,8 @@ void SAL_CALL Mapping_uno2cli(
     }
     catch (BridgeRuntimeError & err)
     {
-#if OSL_DEBUG_LEVEL >= 1
-        OString cstr_msg(
-            OUStringToOString(
-                "[cli_uno bridge error] " + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_FAIL( cstr_msg.getStr() );
-#else
-        (void) err; // unused
-#endif
+        (void) err;
+        SAL_WARN( "cli", "[cli_uno bridge error] " << err.m_message );
     }
 }
 
@@ -320,14 +308,8 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     }
     catch (BridgeRuntimeError & err)
     {
-#if OSL_DEBUG_LEVEL >= 1
-        OString cstr_msg(
-            OUStringToOString(
-                "[cli_uno bridge error] " + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_FAIL( cstr_msg.getStr() );
-#else
-        (void) err; // unused
-#endif
+        (void) err;
+        SAL_WARN( "cli", "[cli_uno bridge error] " << err.m_message );
     }
     *ppMapping = mapping;
 }

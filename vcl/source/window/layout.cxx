@@ -723,7 +723,7 @@ bool VclButtonBox::set_property(const OString &rKey, const OUString &rValue)
             eStyle = VclButtonBoxStyle::Center;
         else
         {
-            SAL_WARN("vcl.layout", "unknown layout style " << rValue.getStr());
+            SAL_WARN("vcl.layout", "unknown layout style " << rValue);
         }
         m_eLayoutStyle = eStyle;
     }
@@ -2139,7 +2139,7 @@ bool VclSizeGroup::set_property(const OString &rKey, const OUString &rValue)
             eMode = VclSizeGroupMode::Both;
         else
         {
-            SAL_WARN("vcl.layout", "unknown size group mode" << rValue.getStr());
+            SAL_WARN("vcl.layout", "unknown size group mode" << rValue);
         }
         set_mode(eMode);
     }
@@ -2465,7 +2465,7 @@ bool MessageDialog::set_property(const OString &rKey, const OUString &rValue)
             eMode = VclMessageType::Error;
         else
         {
-            SAL_WARN("vcl.layout", "unknown message type mode" << rValue.getStr());
+            SAL_WARN("vcl.layout", "unknown message type mode" << rValue);
         }
         m_eMessageType = eMode;
     }
@@ -2486,7 +2486,7 @@ bool MessageDialog::set_property(const OString &rKey, const OUString &rValue)
             eMode = VclButtonsType::OkCancel;
         else
         {
-            SAL_WARN("vcl.layout", "unknown buttons type mode" << rValue.getStr());
+            SAL_WARN("vcl.layout", "unknown buttons type mode" << rValue);
         }
         m_eButtonsType = eMode;
     }

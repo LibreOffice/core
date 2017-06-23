@@ -150,17 +150,10 @@ ErrCode ReadThroughComponent(
     }
     catch (const SAXParseException& r)
     {
-#if OSL_DEBUG_LEVEL > 1
-        OStringBuffer aError("SAX parse exception caught while importing:\n");
-        aError.append(OUStringToOString(r.Message,
-            RTL_TEXTENCODING_ASCII_US));
-        aError.append(r.LineNumber);
-        aError.append(',');
-        aError.append(r.ColumnNumber);
-        OSL_FAIL(aError.getStr());
-#else
         (void)r;
-#endif
+        SAL_WARN( "reportdesign", "SAX parse exception caught while importing: "
+                    << r.Message << " "
+                    << r.LineNumber << ',' << r.ColumnNumber );
         return ErrCode(1);
     }
     catch (const SAXException&)

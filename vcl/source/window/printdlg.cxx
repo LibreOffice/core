@@ -1164,11 +1164,7 @@ void PrintDialog::setupOptionalUI()
         }
         else
         {
-            OStringBuffer sMessage;
-            sMessage.append("Unsupported UI option: \"");
-            sMessage.append(OUStringToOString(aCtrlType, RTL_TEXTENCODING_UTF8));
-            sMessage.append('"');
-            OSL_FAIL( sMessage.getStr() );
+            SAL_WARN( "vcl", "Unsupported UI option: \"" << aCtrlType << '"');
         }
     }
 

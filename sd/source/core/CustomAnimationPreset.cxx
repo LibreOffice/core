@@ -472,13 +472,8 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
     }
 
 #ifdef DEBUG
-    if( !aMissedPresetIds.isEmpty() )
-    {
-        OStringBuffer aTmp("sd::CustomAnimationPresets::importPresets(), invalid preset id!\n");
-        aTmp.append(OUStringToOString(aMissedPresetIds,
-            RTL_TEXTENCODING_ASCII_US));
-        OSL_FAIL(aTmp.getStr());
-    }
+    SAL_WARN_IF(!aMissedPresetIds.isEmpty(), "sd", "sd::CustomAnimationPresets::importPresets(), invalid preset id: "
+                    << aMissedPresetIds);
 #endif
 }
 

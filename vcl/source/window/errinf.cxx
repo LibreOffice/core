@@ -70,11 +70,7 @@ void ErrorRegistry::RegisterDisplay(WindowDisplayErrorFunc *aDsp)
 
 static void aDspFunc(const OUString &rErr, const OUString &rAction)
 {
-    OStringBuffer aErr("Action: ");
-    aErr.append(OUStringToOString(rAction, RTL_TEXTENCODING_ASCII_US));
-    aErr.append(" Error: ");
-    aErr.append(OUStringToOString(rErr, RTL_TEXTENCODING_ASCII_US));
-    OSL_FAIL(aErr.getStr());
+    SAL_WARN("vcl", "Action: " << rAction << " Error: " << rErr);
 }
 
 ErrorHandler::ErrorHandler()
@@ -156,11 +152,7 @@ DialogMask ErrorHandler::HandleError(ErrCode nErrCodeId, DialogMask nFlags)
     {
         if(!rData.pDsp)
         {
-            OStringBuffer aStr("Action: ");
-            aStr.append(OUStringToOString(aAction, RTL_TEXTENCODING_ASCII_US));
-            aStr.append("\nError: ");
-            aStr.append(OUStringToOString(aErr, RTL_TEXTENCODING_ASCII_US));
-            OSL_FAIL(aStr.getStr());
+            SAL_WARN( "vcl", "Action: " << aAction <<  "Error: " << aErr);
         }
         else
         {

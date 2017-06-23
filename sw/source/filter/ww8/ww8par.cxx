@@ -3337,10 +3337,7 @@ void SwWW8ImplReader::simpleAddTextToParagraph(const OUString& rAddString)
         return;
 
 #if OSL_DEBUG_LEVEL > 1
-        {
-            OString sText(OUStringToOString(rAddString, RTL_TEXTENCODING_UTF8));
-            SAL_INFO("sw.ww8", "<addTextToParagraph>" << sText.getStr() << "</addTextToParagraph>");
-        }
+    SAL_INFO("sw.ww8", "<addTextToParagraph>" << rAddString << "</addTextToParagraph>");
 #endif
 
     const SwContentNode *pCntNd = m_pPaM->GetContentNode();

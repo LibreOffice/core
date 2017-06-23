@@ -108,10 +108,7 @@ void SfxObjectFactory::RegisterViewFactory
         {
             if ( (*it)->GetAPIViewName() != sViewName )
                 continue;
-            OStringBuffer aStr("SfxObjectFactory::RegisterViewFactory: duplicate view name '");
-            aStr.append(OUStringToOString(sViewName, RTL_TEXTENCODING_ASCII_US));
-            aStr.append("'!");
-            OSL_FAIL(aStr.getStr());
+            SAL_WARN( "sfx", "SfxObjectFactory::RegisterViewFactory: duplicate view name: " << sViewName );
             break;
         }
     }

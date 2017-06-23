@@ -291,10 +291,7 @@ void SAL_CALL IUnknownWrapper_Impl::setValue( const OUString& aPropertyName,
              || (aVarDesc && aVarDesc->wVarFlags == VARFLAG_FREADONLY) )
         {
             //read-only
-            OUString msg("[automation bridge] Property " + aPropertyName +
-                         " is read-only");
-            OString sMsg = OUStringToOString(msg, osl_getThreadTextEncoding());
-            OSL_FAIL(sMsg.getStr());
+            SAL_WARN( "extensions.ole", "[automation bridge] Property " << aPropertyName << " is read-only");
             // ignore silently
             return;
         }

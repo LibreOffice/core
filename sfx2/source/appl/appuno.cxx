@@ -194,11 +194,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 
         if ( !pItem )
         {
-#ifdef DBG_UTIL
-            OStringBuffer aStr("No creator method for item: ");
-            aStr.append(static_cast<sal_Int32>(nSlotId));
-            OSL_FAIL(aStr.getStr());
-#endif
+            SAL_WARN( "sfx", "No creator method for item: " << nSlotId );
             return;
         }
 
@@ -216,14 +212,10 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
             if( pItem->PutValue( rProp.Value, bConvertTwips ? CONVERT_TWIPS : 0 ) )
                 // only use successfully converted items
                 rSet.Put( *pItem );
-#ifdef DBG_UTIL
             else
             {
-                OStringBuffer aStr("Property not convertible: ");
-                aStr.append(pSlot->pUnoName);
-                OSL_FAIL( aStr.getStr() );
+                SAL_WARN( "sfx", "Property not convertible: " << pSlot->pUnoName );
             }
-#endif
         }
 #ifdef DBG_UTIL
         else if ( nSubCount == 0 )
@@ -242,9 +234,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
             // so this should be notified as a warning only
             if ( nCount != nSubCount )
             {
-                OStringBuffer aStr("MacroPlayer: wrong number of parameters for slot: ");
-                aStr.append(static_cast<sal_Int32>(nSlotId));
-                SAL_INFO("sfx.appl", aStr.getStr());
+                SAL_INFO("sfx.appl", "MacroPlayer: wrong number of parameters for slot: " << nSlotId );
             }
 #endif
             // complex property; collect sub items from the parameter set and reconstruct complex item
@@ -265,27 +255,16 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                             nSubId |= CONVERT_TWIPS;
                         if ( pItem->PutValue( rPropValue.Value, nSubId ) )
                             nFound++;
-#ifdef DBG_UTIL
                         else
                         {
-                            OStringBuffer aDbgStr("Property not convertible: ");
-                            aDbgStr.append(pSlot->pUnoName);
-                            OSL_FAIL( aDbgStr.getStr() );
+                            SAL_WARN( "sfx.appl", "Property not convertible: " << pSlot->pUnoName);
                         }
-#endif
                         break;
                     }
                 }
 
-#ifdef DBG_UTIL
-                if ( nSub >= nSubCount )
-                {
-                    // there was a parameter with a name that didn't match to any of the members
-                    OStringBuffer aStr("Property name does not match: ");
-                    aStr.append(OUStringToOString(rPropValue.Name, RTL_TEXTENCODING_UTF8));
-                    OSL_FAIL( aStr.getStr() );
-                }
-#endif
+                // there was a parameter with a name that didn't match to any of the members
+                SAL_WARN_IF( nSub >= nSubCount, "sfx.appl", "Property name does not match: " << rPropValue.Name );
             }
 
             // at least one part of the complex item must be present; other parts can have default values
@@ -311,11 +290,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         std::unique_ptr<SfxPoolItem> pItem(rArg.CreateItem());
         if ( !pItem )
         {
-#ifdef DBG_UTIL
-            OStringBuffer aStr("No creator method for argument: ");
-            aStr.append(rArg.pName);
-            OSL_FAIL( aStr.getStr() );
-#endif
+            SAL_WARN( "sfx", "No creator method for argument: " << rArg.pName );
             return;
         }
 
@@ -339,14 +314,10 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                     if( pItem->PutValue( rProp.Value, 0 ) )
                         // only use successfully converted items
                         rSet.Put( *pItem );
-#ifdef DBG_UTIL
                     else
                     {
-                        OStringBuffer aStr("Property not convertible: ");
-                        aStr.append(rArg.pName);
-                        OSL_FAIL( aStr.getStr() );
+                        SAL_WARN( "sfx", "Property not convertible: " << rArg.pName );
                     }
-#endif
                     break;
                 }
             }
@@ -368,14 +339,10 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                     if( pItem->PutValue( rProp.Value, 0 ) )
                         // only use successfully converted items
                         rSet.Put( *pItem );
-#ifdef DBG_UTIL
                     else
                     {
-                        OStringBuffer aStr("Property not convertible: ");
-                        aStr.append(rArg.pName);
-                        OSL_FAIL( aStr.getStr() );
+                        SAL_WARN( "sfx", "Property not convertible: " << rArg.pName );
                     }
-#endif
                 }
             }
 
@@ -407,11 +374,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                             {
                                 // ... but it was not convertible
                                 bRet = false;
-#ifdef DBG_UTIL
-                                OStringBuffer aDbgStr("Property not convertible: ");
-                                aDbgStr.append(rArg.pName);
-                                OSL_FAIL( aDbgStr.getStr() );
-#endif
+                                SAL_WARN( "sfx", "Property not convertible: " << rArg.pName );
                             }
 
                             break;
@@ -901,9 +864,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
     if ( nFoundArgs == nCount )
     {
         // except for the "special" slots: assure that every argument was convertible
-        OStringBuffer aStr("MacroPlayer: Some properties didn't match to any formal argument for slot: ");
-        aStr.append(pSlot->pUnoName);
-        SAL_INFO( "sfx.appl", aStr.getStr() );
+        SAL_INFO( "sfx.appl", "MacroPlayer: Some properties didn't match to any formal argument for slot: "<< pSlot->pUnoName );
     }
 #endif
 }
@@ -945,15 +906,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                 // simple property: we expect to get exactly one item
                 nProps++;
         }
-#ifdef DBG_UTIL
         else
         {
             // we will not rely on the "toggle" ability of some property slots
-            OStringBuffer aStr("Processing property slot without argument: ");
-            aStr.append(static_cast<sal_Int32>(nSlotId));
-            OSL_FAIL(aStr.getStr());
+            SAL_WARN( "sfx", "Processing property slot without argument: " << nSlotId );
         }
-#endif
 
 #ifdef DBG_UTIL
         nItems++;
@@ -1281,9 +1238,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                 pValue[nActProp].Name = OUString::createFromAscii(pSlot->pUnoName) ;
                 if ( !pItem->QueryValue( pValue[nActProp].Value ) )
                 {
-                    OStringBuffer aStr("Item not convertible: ");
-                    aStr.append(static_cast<sal_Int32>(nSlotId));
-                    OSL_FAIL(aStr.getStr());
+                    SAL_WARN( "sfx", "Item not convertible: " << nSlotId );
                 }
             }
             else
@@ -1302,12 +1257,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                     pValue[nActProp].Name = aName;
                     if ( !pItem->QueryValue( pValue[nActProp++].Value, nSubId ) )
                     {
-                        OStringBuffer aStr("Sub item ");
-                        aStr.append(static_cast<sal_Int32>(
-                            pType->aAttrib[n-1].nAID));
-                        aStr.append(" not convertible in slot: ");
-                        aStr.append(static_cast<sal_Int32>(nSlotId));
-                        OSL_FAIL( aStr.getStr() );
+                        SAL_WARN( "sfx", "Sub item " << pType->aAttrib[n-1].nAID
+                                    << " not convertible in slot: " << nSlotId );
                     }
                 }
             }
@@ -1333,9 +1284,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                 pValue[nActProp].Name = OUString::createFromAscii( rArg.pName ) ;
                 if ( !pItem->QueryValue( pValue[nActProp++].Value ) )
                 {
-                    OStringBuffer aStr("Item not convertible: ");
-                    aStr.append(static_cast<sal_Int32>(rArg.nSlotId));
-                    OSL_FAIL(aStr.getStr());
+                    SAL_WARN( "sfx", "Item not convertible: " << rArg.nSlotId );
                 }
             }
             else
@@ -1354,12 +1303,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                     pValue[nActProp].Name = aName;
                     if ( !pItem->QueryValue( pValue[nActProp++].Value, nSubId ) )
                     {
-                        OStringBuffer aStr("Sub item ");
-                        aStr.append(static_cast<sal_Int32>(
-                            rArg.pType->aAttrib[n-1].nAID));
-                        aStr.append(" not convertible in slot: ");
-                        aStr.append(static_cast<sal_Int32>(rArg.nSlotId));
-                        OSL_FAIL(aStr.getStr());
+                        SAL_WARN( "sfx", "Sub item "
+                                    << rArg.pType->aAttrib[n-1].nAID
+                                    << " not convertible in slot: "
+                                    << rArg.nSlotId );
                     }
                 }
             }
