@@ -528,7 +528,7 @@ namespace pcr
         // Initialization
         if(!s_pPropertyInfos)
             getPropertyInfo();
-        OPropertyInfoImpl  aSearch(_rName, 0L, OUString(), 0, "", 0);
+        OPropertyInfoImpl  aSearch(_rName, 0, OUString(), 0, "", 0);
 
         const OPropertyInfoImpl* pInfo = std::lower_bound(
             s_pPropertyInfos, s_pPropertyInfos + s_nCount, aSearch, PropertyInfoLessByName() );

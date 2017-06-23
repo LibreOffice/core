@@ -598,7 +598,7 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
 
         // the second sequence element
         nInitInd = 1;
-        CComVariant pStrArr( 1L );
+        CComVariant pStrArr( 1 );
         SafeArrayPutElement( pInitVals, &nInitInd, &pStrArr );
 
         // the third sequence element
