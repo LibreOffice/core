@@ -412,6 +412,10 @@ public:
         of v should be unchanged,
     */
     virtual bool good() const { return !(eof() || bad()); }
+
+private:
+    void readNumberWithoutSwap(void * pDataDest, int nDataSize);
+    void writeNumberWithoutSwap(const void * pDataSrc, int nDataSize);
 };
 
 inline SvStream& operator<<( SvStream& rStr, SvStrPtr f )
