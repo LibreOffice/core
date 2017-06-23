@@ -65,6 +65,7 @@ OUString SecurityEnvironmentGpg::getSecurityEnvironmentInformation()
 Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getPersonalCertificates()
 {
     CertificateImpl* xCert;
+    std::list< GpgME::Key > keyList;
     std::list< CertificateImpl* > certsList;
 
     m_ctx->setKeyListMode(GPGME_KEYLIST_MODE_LOCAL);
@@ -74,12 +75,18 @@ Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getPersonalCertif
         if (err)
             break;
         if (!k.isInvalid()) {
-            xCert = new CertificateImpl();
-            xCert->setCertificate(m_ctx.get(),k);
-            certsList.push_back(xCert);
+            // We can't create CertificateImpl here as CertificateImpl::setCertificate uses GpgME API
+            // which interrupts our key listing here. So first get the keys from GpgME, then create the CertificateImpls
+            keyList.push_back(k);
         }
     }
     m_ctx->endKeyListing();
+
+    for (auto const& key : keyList) {
+        xCert = new CertificateImpl();
+        xCert->setCertificate(m_ctx.get(),key);
+        certsList.push_back(xCert);
+    }
 
     Sequence< Reference< XCertificate > > xCertificateSequence(certsList.size());
     std::list< CertificateImpl* >::iterator xcertIt;
