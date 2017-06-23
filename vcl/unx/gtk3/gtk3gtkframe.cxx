@@ -832,6 +832,11 @@ GtkSalFrame::~GtkSalFrame()
 
     delete m_pIMHandler;
 
+    //tdf#108705 remove grabs on event widget before
+    //destroying event widget
+    while (m_nGrabLevel)
+        removeGrabLevel();
+
     GtkWidget *pEventWidget = getMouseEventWidget();
     for (auto handler_id : m_aMouseSignalIds)
         g_signal_handler_disconnect(G_OBJECT(pEventWidget), handler_id);
