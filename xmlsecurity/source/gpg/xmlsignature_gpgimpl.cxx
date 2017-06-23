@@ -207,6 +207,8 @@ SAL_CALL XMLSignature_GpgImpl::generate(
 
     SAL_INFO("xmlsecurity.xmlsec.gpg", "Generating signature for: " << xmlSecBufferGetData(pDsigCtx->transformCtx.result));
 
+    // we base64-encode anyway
+    rCtx.setArmor(false);
     GpgME::SigningResult sign_res=rCtx.sign(data_in, data_out,
                                             GpgME::Detached);
     assert(data_out.seek(0,SEEK_SET) == 0);

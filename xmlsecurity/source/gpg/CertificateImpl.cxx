@@ -211,7 +211,11 @@ void CertificateImpl::setCertificate(GpgME::Context* ctx, const GpgME::Key& key)
 
     // extract key data, store into m_aBits
     GpgME::Data data_out;
-    ctx->exportPublicKeys(key.keyID(), data_out);
+    ctx->setArmor(false); // caller will base64-encode anyway
+    GpgME::Error err = ctx->exportPublicKeys(key.keyID(), data_out);
+
+    if (err)
+        throw RuntimeException("The GpgME library failed to retrieve the public key");
 
     assert(data_out.seek(0,SEEK_SET) == 0);
     int len=0, curr=0; char buf;
