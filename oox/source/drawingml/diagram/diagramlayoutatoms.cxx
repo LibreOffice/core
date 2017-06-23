@@ -271,6 +271,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             break;
 
         case XML_lin:
+        case XML_snake:
         {
             if( rShape->getChildren().empty() )
             {
@@ -300,8 +301,8 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                     aCurrPos.Y + sz.Height);
 
                 // HACK: the spacing is arbitrary
-                aCurrPos.X += nIncX*(sz.Width+5);
-                aCurrPos.Y += nIncY*(sz.Height+5);
+                aCurrPos.X += nIncX*(sz.Width+50);
+                aCurrPos.Y += nIncY*(sz.Height+50);
 
                 ++aCurrShape;
             }
@@ -311,7 +312,6 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
         }
 
         case XML_pyra:
-        case XML_snake:
             break;
 
         case XML_sp:
@@ -331,8 +331,8 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
             // HACK - count chars & paragraphs to come up with *some*
             // notion of necessary size
-            const sal_Int32 nHackyFontHeight=50;
-            const sal_Int32 nHackyFontWidth=20;
+            const sal_Int32 nHackyFontHeight=500;
+            const sal_Int32 nHackyFontWidth=400;
             awt::Size aTotalSize;
             for( size_t nPara=0; nPara<pTextBody->getParagraphs().size(); ++nPara )
             {
@@ -488,6 +488,12 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
                 if( rColor.maTextFillColor.isUsed() )
                     rShape->getShapeStyleRefs()[XML_fontRef].maPhClr = rColor.maTextFillColor;
             }
+        }
+        else
+        {
+            // if no style label apply at least some fill color
+            rShape->getShapeStyleRefs()[XML_fillRef].maPhClr.setScrgbClr(0, 0, 0);
+            rShape->getShapeStyleRefs()[XML_fillRef].mnThemedIdx = 2;
         }
 
         // even if no data node found, successful anyway. it's

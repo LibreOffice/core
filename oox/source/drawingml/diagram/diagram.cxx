@@ -317,6 +317,8 @@ void Diagram::addTo( const ShapePtr & pParentShape )
     // collect data, init maps
     build( );
 
+    pParentShape->setChildSize(pParentShape->getSize());
+
     // create Shape hierarchy
     ShapeCreationVisitor aCreationVisitor(pParentShape, *this);
     if( mpLayout->getNode() )
