@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_76341dde",
+        "filename": "sc/source/ui/navipi/navipi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-23T14:46:25Z",
+      "side": 1,
+      "message": "I think this should init nDataId instead, which is never initialized but used, whereas nAreaId was initialized but never used..",
+      "revId": "bc8443e3e5dbc6a45668de80561201c6a930b37c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_3641b53a",
+        "filename": "sc/source/ui/styleui/styledlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-23T14:46:25Z",
+      "side": 1,
+      "message": "Nitpick: please align properly..",
+      "revId": "bc8443e3e5dbc6a45668de80561201c6a930b37c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
