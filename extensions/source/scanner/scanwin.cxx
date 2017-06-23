@@ -436,7 +436,7 @@ void ImpTwain::ImplXfer()
             nYRes = FIXTOLONG( aInfo.YResolution );
         }
         else
-            nWidth = nHeight = nXRes = nYRes = -1L;
+            nWidth = nHeight = nXRes = nYRes = -1;
 
         switch( PFUNC( &aAppIdent, &aSrcIdent, DG_IMAGE, DAT_IMAGENATIVEXFER, MSG_GET, &hDIB ) )
         {

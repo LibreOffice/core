@@ -369,13 +369,13 @@ void GridWindow::computeChunk( double fMin, double fMax, double& fChunkOut, doub
 
 void GridWindow::computeNew()
 {
-    if(2L == m_aHandles.size())
+    if(2 == m_aHandles.size())
     {
         // special case: only left and right markers
         double xleft, yleft;
         double xright, yright;
-        transform(m_aHandles[0L].maPos, xleft, yleft);
-        transform(m_aHandles[1L].maPos, xright, yright );
+        transform(m_aHandles[0].maPos, xleft, yleft);
+        transform(m_aHandles[1].maPos, xright, yright );
         double factor = (yright-yleft)/(xright-xleft);
         for( int i = 0; i < m_nValues; i++ )
         {
@@ -393,7 +393,7 @@ void GridWindow::computeNew()
         std::unique_ptr<double[]> nodex(new double[ nSorted ]);
         std::unique_ptr<double[]> nodey(new double[ nSorted ]);
 
-        for( i = 0L; i < nSorted; i++ )
+        for( i = 0; i < nSorted; i++ )
             transform( m_aHandles[i].maPos, nodex[ i ], nodey[ i ] );
 
         for( i = 0; i < m_nValues; i++ )
@@ -543,7 +543,7 @@ void GridWindow::MouseMove( const MouseEvent& rEvt )
     {
         Point aPoint( rEvt.GetPosPixel() );
 
-        if( m_nDragIndex == 0 || m_nDragIndex == m_aHandles.size() - 1L)
+        if( m_nDragIndex == 0 || m_nDragIndex == m_aHandles.size() - 1)
         {
             aPoint.X() = m_aHandles[m_nDragIndex].maPos.X();
         }
@@ -590,7 +590,7 @@ void GridWindow::MouseButtonDown( const MouseEvent& rEvt )
     Point aPoint( rEvt.GetPosPixel() );
     Handles::size_type nMarkerIndex = npos;
 
-    for(Handles::size_type a(0L); nMarkerIndex == npos && a < m_aHandles.size(); a++)
+    for(Handles::size_type a(0); nMarkerIndex == npos && a < m_aHandles.size(); a++)
     {
         if(m_aHandles[a].isHit(*this, aPoint))
         {
@@ -611,7 +611,7 @@ void GridWindow::MouseButtonDown( const MouseEvent& rEvt )
         // user wants to add/delete a button
         if( nMarkerIndex != npos )
         {
-            if( nMarkerIndex != 0L && nMarkerIndex != m_aHandles.size() - 1L)
+            if( nMarkerIndex != 0 && nMarkerIndex != m_aHandles.size() - 1L)
             {
                 // delete marker under mouse
                 if( m_nDragIndex == nMarkerIndex )
@@ -692,7 +692,7 @@ void GridWindow::ChangeMode(ResetType nType)
             }
             if( 0 == i )
                 m_aHandles[i].maPos = transform( m_fMinX, m_pNewYValues[ nIndex ] );
-            else if( m_aHandles.size() - 1L == i )
+            else if( m_aHandles.size() - 1 == i )
                 m_aHandles[i].maPos = transform( m_fMaxX, m_pNewYValues[ nIndex ] );
             else
                 m_aHandles[i].maPos = transform( m_pXValues[ nIndex ], m_pNewYValues[ nIndex ] );
