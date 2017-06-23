@@ -3509,7 +3509,7 @@ void SwTabFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
     OSL_ENSURE( pParent != this, "I'm the parent myself." );
     OSL_ENSURE( pSibling != this, "I'm my own neighbour." );
     OSL_ENSURE( !GetPrev() && !GetNext() && !GetUpper(),
-            "I'm still registred somewhere." );
+            "I'm still registered somewhere." );
 
     //Insert in the tree.
     InsertBefore( static_cast<SwLayoutFrame*>(pParent), pSibling );
