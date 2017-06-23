@@ -35,18 +35,10 @@
 #include "SecurityEnvironment.hxx"
 #include "xmlsec-wrapper.h"
 
-using namespace ::com::sun::star::uno ;
-using namespace ::com::sun::star::lang ;
-using ::com::sun::star::lang::XMultiServiceFactory ;
-using ::com::sun::star::lang::XSingleServiceFactory ;
-
-using ::com::sun::star::xml::wrapper::XXMLElementWrapper ;
-using ::com::sun::star::xml::wrapper::XXMLDocumentWrapper ;
-using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
-using ::com::sun::star::xml::crypto::XXMLSignature ;
-using ::com::sun::star::xml::crypto::XXMLSignatureTemplate ;
-using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
-using ::com::sun::star::xml::crypto::XUriBinding ;
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::xml::wrapper;
+using namespace css::xml::crypto;
 
 XMLSignature_GpgImpl::XMLSignature_GpgImpl() {
 }
@@ -223,7 +215,7 @@ SAL_CALL XMLSignature_GpgImpl::generate(
     // TODO some assert would be good...
     xmlNodeSetContentLen(cur, &buf2[0], len);
 
-    aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
+    aTemplate->setStatus(SecurityOperationStatus_OPERATION_SUCCEEDED);
 
     // done
     xmlSecDSigCtxDestroy( pDsigCtx ) ;
@@ -392,7 +384,7 @@ SAL_CALL XMLSignature_GpgImpl::validate(
         }
 
         // TODO - also verify manifest (only relevant for ooxml)?
-        aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
+        aTemplate->setStatus(SecurityOperationStatus_OPERATION_SUCCEEDED);
 
         // done
         xmlSecDSigCtxDestroy( pDsigCtx ) ;
