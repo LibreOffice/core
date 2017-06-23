@@ -27,6 +27,7 @@
 #include <key.h>
 #include <data.h>
 #include <signingresult.h>
+#include <importresult.h>
 
 #include "xmlsec/xmldocumentwrapper_xmlsecimpl.hxx"
 #include "xmlsec/xmlelementwrapper_xmlsecimpl.hxx"
@@ -358,16 +359,70 @@ SAL_CALL XMLSignature_GpgImpl::validate(
         GpgME::VerificationResult verify_res=rCtx.verifyDetachedSignature(
             data_signature, data_text);
 
-        xmlFree(pSignatureValue);
-
         // TODO: needs some more error handling, needs checking _all_ signatures
         if( verify_res.isNull() ||
             verify_res.numSignatures() == 0 ||
             verify_res.signature(0).validity() < GpgME::Signature::Full )
         {
-            clearErrorRecorder();
-            return aTemplate;
+            // let's try again, but this time import the public key payload
+            // (avoiding that in a first cut for being a bit speedier)
+
+            // walk xml tree to PGPData node - go to children, first is
+            // SignedInfo, 2nd is signaturevalue, 3rd is KeyInfo
+            // 1st child is PGPData, 1st or 2nd grandchild is PGPKeyPacket
+            cur = xmlSecGetNextElementNode(pNode->children);
+            // TODO error handling
+            cur = xmlSecGetNextElementNode(cur->next);
+            cur = xmlSecGetNextElementNode(cur->next);
+            cur = xmlSecGetNextElementNode(cur->children);
+            // check that this is now PGPData
+            if(!xmlSecCheckNodeName(cur, xmlSecNodePGPData, xmlSecDSigNs))
+                throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+            // check that this is now PGPKeyPacket
+            cur = xmlSecGetNextElementNode(cur->children);
+            static const xmlChar xmlSecNodePGPKeyPacket[] = "PGPKeyPacket";
+            if(!xmlSecCheckNodeName(cur, xmlSecNodePGPKeyPacket, xmlSecDSigNs))
+            {
+                // not this one, maybe the next?
+                cur = xmlSecGetNextElementNode(cur->next);
+                if(!xmlSecCheckNodeName(cur, xmlSecNodePGPKeyPacket, xmlSecDSigNs))
+                {
+                    // ok, giving up
+                    clearErrorRecorder();
+                    xmlFree(pSignatureValue);
+
+                    return aTemplate;
+                }
+            }
+
+            // got a key packet, import & re-validate
+            xmlChar* pKeyPacket=xmlNodeGetContent(cur);
+            if(xmlSecBase64Decode(pKeyPacket, (xmlSecByte*)pKeyPacket, xmlStrlen(pKeyPacket)) < 0)
+                throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+
+            GpgME::Data data_key(
+                reinterpret_cast<char*>(pKeyPacket),
+                xmlStrlen(pKeyPacket), false);
+
+            GpgME::ImportResult import_res=rCtx.importKeys(data_key);
+            xmlFree(pKeyPacket);
+
+            // and re-run
+            verify_res=rCtx.verifyDetachedSignature(data_signature, data_text);
+
+            // TODO: needs some more error handling, needs checking _all_ signatures
+            if( verify_res.isNull() ||
+                verify_res.numSignatures() == 0 ||
+                verify_res.signature(0).validity() < GpgME::Signature::Full )
+            {
+                clearErrorRecorder();
+                xmlFree(pSignatureValue);
+
+                return aTemplate;
+            }
         }
+
+        xmlFree(pSignatureValue);
 
         // now verify digest for all references
         cur = xmlSecGetNextElementNode(pNode->children);
