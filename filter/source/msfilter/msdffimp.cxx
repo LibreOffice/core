@@ -941,7 +941,6 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
             rSet.Put(XLineStyleItem( drawing::LineStyle_SOLID ) );
         else
         {
-            css::drawing::DashStyle  eDash = css::drawing::DashStyle_RECT;
             sal_uInt16  nDots = 1;
             sal_uInt32  nDotLen = nLineWidth / 360;
             sal_uInt16  nDashes = 0;
@@ -997,7 +996,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
                 break;
             }
 
-            rSet.Put( XLineDashItem( OUString(), XDash( eDash, nDots, nDotLen, nDashes, nDashLen, nDistance ) ) );
+            rSet.Put( XLineDashItem( OUString(), XDash( css::drawing::DashStyle_RECT, nDots, nDotLen, nDashes, nDashLen, nDistance ) ) );
             rSet.Put( XLineStyleItem( drawing::LineStyle_DASH ) );
         }
         rSet.Put( XLineColorItem( OUString(), rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_lineColor, 0 ) ) ) );
@@ -1974,26 +1973,23 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
 
                 if ( nFlags & SvxMSDffHandleFlags::MIRRORED_X )
                 {
-                    bool bMirroredX = true;
                     const OUString sHandleMirroredX( "MirroredX" );
                     aProp.Name = sHandleMirroredX;
-                    aProp.Value <<= bMirroredX;
+                    aProp.Value <<= true;
                     aHandlePropVec.push_back( aProp );
                 }
                 if ( nFlags & SvxMSDffHandleFlags::MIRRORED_Y )
                 {
-                    bool bMirroredY = true;
                     const OUString sHandleMirroredY( "MirroredY" );
                     aProp.Name = sHandleMirroredY;
-                    aProp.Value <<= bMirroredY;
+                    aProp.Value <<= true;
                     aHandlePropVec.push_back( aProp );
                 }
                 if ( nFlags & SvxMSDffHandleFlags::SWITCHED )
                 {
-                    bool bSwitched = true;
                     const OUString sHandleSwitched( "Switched" );
                     aProp.Name = sHandleSwitched;
-                    aProp.Value <<= bSwitched;
+                    aProp.Value <<= true;
                     aHandlePropVec.push_back( aProp );
                 }
                 if ( nFlags & SvxMSDffHandleFlags::POLAR )
@@ -3952,9 +3948,9 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
         if( bGrfRead && !bLinkGrf && IsProperty( DFF_Prop_pictureId ) )
         {
             // TODO/LATER: in future probably the correct aspect should be provided here
-            sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
             // #i32596# - pass <nCalledByGroup> to method
-            pRet = ImportOLE( GetPropertyValue( DFF_Prop_pictureId, 0 ), aGraf, rObjData.aBoundRect, aVisArea, rObjData.nCalledByGroup, nAspect );
+            pRet = ImportOLE( GetPropertyValue( DFF_Prop_pictureId, 0 ), aGraf, rObjData.aBoundRect, aVisArea, rObjData.nCalledByGroup,
+                              embed::Aspects::MSOLE_CONTENT );
         }
         if( !pRet )
         {
@@ -5269,7 +5265,6 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 
                 SdrTextVertAdjust eTVA = SDRTEXTVERTADJUST_CENTER;
                 bool bTVASet(false);
-                SdrTextHorzAdjust eTHA = SDRTEXTHORZADJUST_CENTER;
                 bool bTHASet(false);
 
                 switch( eTextAnchor )
@@ -5316,7 +5311,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 if ( bTVASet )
                     aSet.Put( SdrTextVertAdjustItem( eTVA ) );
                 if ( bTHASet )
-                    aSet.Put( SdrTextHorzAdjustItem( eTHA ) );
+                    aSet.Put( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_CENTER ) );
             }
 
             pTextObj->SetMergedItemSet(aSet);
@@ -6575,9 +6570,6 @@ bool SvxMSDffManager::MakeContentStream( SotStorage * pStor, const GDIMetaFile &
     xStm->SetVersion( pStor->GetVersion() );
     xStm->SetBufferSize( 8192 );
 
-    sal_uInt16 nAspect = ASPECT_CONTENT;
-    sal_uLong nAdviseModes = 2;
-
     Impl_OlePres aEle;
     // Convert the size in 1/100 mm
     // If a not applicable MapUnit (device dependent) is used,
@@ -6587,8 +6579,8 @@ bool SvxMSDffManager::MakeContentStream( SotStorage * pStor, const GDIMetaFile &
     MapMode aMMDst( MapUnit::Map100thMM );
     aSize = OutputDevice::LogicToLogic( aSize, aMMSrc, aMMDst );
     aEle.SetSize( aSize );
-    aEle.SetAspect( nAspect );
-    aEle.SetAdviseFlags( nAdviseModes );
+    aEle.SetAspect( ASPECT_CONTENT );
+    aEle.SetAdviseFlags( 2 );
     aEle.SetMtf( rMtf );
     aEle.Write( *xStm );
 

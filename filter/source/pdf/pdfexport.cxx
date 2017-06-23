@@ -1011,7 +1011,6 @@ bool PDFExport::ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& 
     basegfx::B2DRange aRangePDF(aSizePDF.getB2DRange());
     Point           aOrigin;
     tools::Rectangle       aPageRect( aOrigin, rMtf.GetPrefSize() );
-    bool        bRet = true;
 
     rWriter.NewPage( aRangePDF.getWidth(), aRangePDF.getHeight() );
     rWriter.SetMapMode( rMtf.GetPrefMapMode() );
@@ -1043,7 +1042,7 @@ bool PDFExport::ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& 
     if (!msWatermark.isEmpty())
         ImplWriteWatermark( rWriter, Size(aRangePDF.getWidth(), aRangePDF.getHeight()) );
 
-    return bRet;
+    return true;
 }
 
 
