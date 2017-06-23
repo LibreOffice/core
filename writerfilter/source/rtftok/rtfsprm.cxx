@@ -268,7 +268,7 @@ void RTFSprms::ensureCopyBeforeWrite()
 {
     if (m_pSprms->m_nRefCount > 1)
     {
-        boost::intrusive_ptr<RTFSprmsImpl> pClone(new RTFSprmsImpl());
+        boost::intrusive_ptr<RTFSprmsImpl> pClone(new RTFSprmsImpl);
         for (auto& rSprm : *m_pSprms)
             pClone->push_back(std::make_pair(rSprm.first, RTFValue::Pointer_t(rSprm.second->Clone())));
         m_pSprms = pClone;
@@ -276,7 +276,7 @@ void RTFSprms::ensureCopyBeforeWrite()
 }
 
 RTFSprms::RTFSprms()
-    : m_pSprms(new RTFSprmsImpl())
+    : m_pSprms(new RTFSprmsImpl)
 {
 }
 
@@ -292,7 +292,7 @@ void RTFSprms::clear()
     if (m_pSprms->m_nRefCount == 1)
         return m_pSprms->clear();
     else
-        m_pSprms.reset(new RTFSprmsImpl());
+        m_pSprms.reset(new RTFSprmsImpl);
 }
 
 } // namespace rtftok

@@ -28,8 +28,7 @@ using RTFSprmsImplBase = std::vector< std::pair<Id, RTFValue::Pointer_t> >;
 class RTFSprmsImpl : public RTFSprmsImplBase
 {
 public:
-    sal_Int32 m_nRefCount;
-    RTFSprmsImpl() : RTFSprmsImplBase(), m_nRefCount(0) {}
+    sal_Int32 m_nRefCount = 0;
 };
 
 inline void intrusive_ptr_add_ref(RTFSprmsImpl* p)
@@ -102,13 +101,13 @@ class RTFSprm
 {
 public:
     RTFSprm(Id nKeyword, RTFValue::Pointer_t& pValue);
-    virtual ~RTFSprm() {}
-    virtual sal_uInt32 getId() const override;
-    virtual Value::Pointer_t getValue() override;
-    virtual writerfilter::Reference<Properties>::Pointer_t getProps() override;
+    virtual ~RTFSprm() = default;
+    sal_uInt32 getId() const override;
+    Value::Pointer_t getValue() override;
+    writerfilter::Reference<Properties>::Pointer_t getProps() override;
 #ifdef DEBUG_WRITERFILTER
-    virtual std::string getName() const override;
-    virtual std::string toString() const override;
+    std::string getName() const override;
+    std::string toString() const override;
 #endif
 private:
     Id m_nKeyword;

@@ -26,7 +26,7 @@ public:
     using Entry_t = std::pair<int, writerfilter::Reference<Properties>::Pointer_t>;
     explicit RTFReferenceTable(Entries_t aEntries);
     virtual ~RTFReferenceTable();
-    virtual void resolve(Table& rHandler) override;
+    void resolve(Table& rHandler) override;
 private:
     Entries_t m_aEntries;
 };

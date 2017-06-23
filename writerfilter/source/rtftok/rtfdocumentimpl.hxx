@@ -110,12 +110,12 @@ struct TableRowBuffer
     writerfilter::Reference<Properties>::Pointer_t pFrameProperties;
     writerfilter::Reference<Properties>::Pointer_t pRowProperties;
 
-    TableRowBuffer(RTFBuffer_t const& rBuffer,
-                   ::std::deque<RTFSprms> const& rSprms,
-                   ::std::deque<RTFSprms> const& rAttributes,
+    TableRowBuffer(RTFBuffer_t aBuffer,
+                   std::deque<RTFSprms> aSprms,
+                   std::deque<RTFSprms> aAttributes,
                    int const i_nCells)
-        : buffer(rBuffer)
-        , cellsSprms(rSprms), cellsAttributes(rAttributes)
+        : buffer(std::move(aBuffer))
+        , cellsSprms(std::move(aSprms)), cellsAttributes(std::move(aAttributes))
         , nCells(i_nCells)
     {}
 };
@@ -125,9 +125,9 @@ class RTFColorTableEntry
 {
 public:
     RTFColorTableEntry();
-    sal_uInt8 nRed;
-    sal_uInt8 nGreen;
-    sal_uInt8 nBlue;
+    sal_uInt8 nRed = 0;
+    sal_uInt8 nGreen = 0;
+    sal_uInt8 nBlue = 0;
 };
 
 /// Stores the properties of a shape.
@@ -137,18 +137,18 @@ public:
     RTFShape();
     std::vector< std::pair<OUString, OUString> > aProperties; ///< Properties of a single shape.
     std::vector< std::pair<OUString, OUString> > aGroupProperties; ///< Properties applied on the groupshape.
-    sal_Int32 nLeft;
-    sal_Int32 nTop;
-    sal_Int32 nRight;
-    sal_Int32 nBottom;
+    sal_Int32 nLeft = 0;
+    sal_Int32 nTop = 0;
+    sal_Int32 nRight = 0;
+    sal_Int32 nBottom = 0;
     boost::optional<sal_Int32> oZ; ///< Z-Order of the shape.
-    sal_Int16 nHoriOrientRelation; ///< Horizontal text::RelOrientation for drawinglayer shapes.
-    sal_Int16 nVertOrientRelation; ///< Vertical text::RelOrientation for drawinglayer shapes.
-    sal_uInt32 nHoriOrientRelationToken; ///< Horizontal dmapper token for Writer pictures.
-    sal_uInt32 nVertOrientRelationToken; ///< Vertical dmapper token for Writer pictures.
-    css::text::WrapTextMode nWrap;
+    sal_Int16 nHoriOrientRelation = 0; ///< Horizontal text::RelOrientation for drawinglayer shapes.
+    sal_Int16 nVertOrientRelation = 0; ///< Vertical text::RelOrientation for drawinglayer shapes.
+    sal_uInt32 nHoriOrientRelationToken = 0; ///< Horizontal dmapper token for Writer pictures.
+    sal_uInt32 nVertOrientRelationToken = 0; ///< Vertical dmapper token for Writer pictures.
+    css::text::WrapTextMode nWrap = css::text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE;
     /// If shape is below text (true) or text is below shape (false).
-    bool bInBackground;
+    bool bInBackground = false;
     /// Wrap polygon, written by RTFSdrImport::resolve(), read by RTFDocumentImpl::resolvePict().
     RTFSprms aWrapPolygonSprms;
     /// Anchor attributes like wrap distance, written by RTFSdrImport::resolve(), read by RTFDocumentImpl::resolvePict().
@@ -163,15 +163,19 @@ public:
     css::uno::Reference<css::drawing::XShape> xShape;
     css::uno::Reference<css::beans::XPropertySet> xPropertySet;
     std::vector<css::beans::PropertyValue> aPendingProperties;
-    sal_uInt8 nLineColorR, nLineColorG, nLineColorB;
-    bool bHasLineColor;
-    sal_uInt8 nFillColorR, nFillColorG, nFillColorB;
-    bool bHasFillColor;
-    sal_Int32 nDhgt;
-    sal_Int32 nFLine;
-    sal_Int32 nPolyLineCount;
+    sal_uInt8 nLineColorR = 0;
+    sal_uInt8 nLineColorG = 0;
+    sal_uInt8 nLineColorB = 0;
+    bool bHasLineColor = false;
+    sal_uInt8 nFillColorR = 0;
+    sal_uInt8 nFillColorG = 0;
+    sal_uInt8 nFillColorB = 0;
+    bool bHasFillColor = false;
+    sal_Int32 nDhgt = 0;
+    sal_Int32 nFLine = -1;
+    sal_Int32 nPolyLineCount = 0;
     std::vector<css::awt::Point> aPolyLinePoints;
-    bool bHadShapeText;
+    bool bHadShapeText = false;
 };
 
 /// Stores the properties of a picture.
@@ -179,12 +183,18 @@ class RTFPicture
 {
 public:
     RTFPicture();
-    sal_uInt16 nWidth, nHeight;
-    sal_uInt16 nGoalWidth, nGoalHeight;
-    sal_uInt16 nScaleX, nScaleY;
-    short nCropT, nCropB, nCropL, nCropR;
-    sal_uInt16 eWMetafile;
-    RTFBmpStyle eStyle;
+    sal_uInt16 nWidth = 0;
+    sal_uInt16 nHeight = 0;
+    sal_uInt16 nGoalWidth = 0;
+    sal_uInt16 nGoalHeight = 0;
+    sal_uInt16 nScaleX = 100;
+    sal_uInt16 nScaleY = 100;
+    short nCropT = 0;
+    short nCropB = 0;
+    short nCropL = 0;
+    short nCropR = 0;
+    sal_uInt16 eWMetafile = 0;
+    RTFBmpStyle eStyle = RTFBmpStyle::NONE;
 };
 
 /// Stores the properties of a frame
@@ -383,28 +393,28 @@ public:
                     css::uno::Reference<css::frame::XFrame> const& xFrame,
                     css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator,
                     const utl::MediaDescriptor& rMediaDescriptor);
-    virtual ~RTFDocumentImpl() override;
+    ~RTFDocumentImpl() override;
 
     // RTFDocument
-    virtual void resolve(Stream& rHandler) override;
+    void resolve(Stream& rHandler) override;
 
     // RTFListener
-    virtual RTFError dispatchDestination(RTFKeyword nKeyword) override;
-    virtual RTFError dispatchFlag(RTFKeyword nKeyword) override;
-    virtual RTFError dispatchSymbol(RTFKeyword nKeyword) override;
-    virtual RTFError dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam) override;
-    virtual RTFError dispatchValue(RTFKeyword nKeyword, int nParam) override;
-    virtual RTFError resolveChars(char ch) override;
-    virtual RTFError pushState() override;
-    virtual RTFError popState() override;
-    virtual Destination getDestination() override;
-    virtual void setDestination(Destination eDestination) override;
-    virtual RTFInternalState getInternalState() override;
-    virtual void setInternalState(RTFInternalState nInternalState) override;
-    virtual bool getSkipUnknown() override;
-    virtual void setSkipUnknown(bool bSkipUnknown) override;
-    virtual void finishSubstream() override;
-    virtual bool isSubstream() const override;
+    RTFError dispatchDestination(RTFKeyword nKeyword) override;
+    RTFError dispatchFlag(RTFKeyword nKeyword) override;
+    RTFError dispatchSymbol(RTFKeyword nKeyword) override;
+    RTFError dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam) override;
+    RTFError dispatchValue(RTFKeyword nKeyword, int nParam) override;
+    RTFError resolveChars(char ch) override;
+    RTFError pushState() override;
+    RTFError popState() override;
+    Destination getDestination() override;
+    void setDestination(Destination eDestination) override;
+    RTFInternalState getInternalState() override;
+    void setInternalState(RTFInternalState nInternalState) override;
+    bool getSkipUnknown() override;
+    void setSkipUnknown(bool bSkipUnknown) override;
+    void finishSubstream() override;
+    bool isSubstream() const override;
 
     Stream& Mapper()
     {

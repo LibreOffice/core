@@ -42,15 +42,15 @@ public:
     explicit RTFValue(css::uno::Reference<css::embed::XEmbeddedObject> xObject);
     explicit RTFValue(const RTFShape& aShape);
     explicit RTFValue(const RTFPicture& rPicture);
-    virtual ~RTFValue() override;
+    ~RTFValue() override;
     void setString(const OUString& sValue);
-    virtual int getInt() const override;
-    virtual OUString getString() const override;
-    virtual css::uno::Any getAny() const override;
-    virtual writerfilter::Reference<Properties>::Pointer_t getProperties() override;
-    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() override;
+    int getInt() const override;
+    OUString getString() const override;
+    css::uno::Any getAny() const override;
+    writerfilter::Reference<Properties>::Pointer_t getProperties() override;
+    writerfilter::Reference<BinaryObj>::Pointer_t getBinary() override;
 #ifdef DEBUG_WRITERFILTER
-    virtual std::string toString() const override;
+    std::string toString() const override;
 #endif
     RTFValue* Clone();
     RTFValue* CloneWithSprms(RTFSprms const& rAttributes, RTFSprms const& rSprms);
@@ -59,16 +59,16 @@ public:
     RTFShape& getShape() const;
     RTFPicture& getPicture() const;
     bool equals(RTFValue& rOther);
-private:
     RTFValue& operator=(RTFValue const& rOther) = delete;
-    int m_nValue;
+private:
+    int m_nValue = 0;
     OUString m_sValue;
     std::shared_ptr<RTFSprms> m_pAttributes;
     std::shared_ptr<RTFSprms> m_pSprms;
     css::uno::Reference<css::drawing::XShape> m_xShape;
     css::uno::Reference<css::io::XInputStream> m_xStream;
     css::uno::Reference<css::embed::XEmbeddedObject> m_xObject;
-    bool m_bForceString;
+    bool m_bForceString = false;
     std::shared_ptr<RTFShape> m_pShape;
     std::shared_ptr<RTFPicture> m_pPicture;
 };
