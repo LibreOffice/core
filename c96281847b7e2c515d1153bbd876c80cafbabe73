@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_d335e3f7",
+        "filename": "tools/source/stream/stream.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-23T13:13:13Z",
+      "side": 1,
+      "message": "This is a bad replacement, it changes size determination from a known good proven destination size to an arbitrary size provided by the caller that easily can overrun any buffer.",
+      "revId": "c96281847b7e2c515d1153bbd876c80cafbabe73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_f33adfe6",
+        "filename": "tools/source/stream/stream.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-23T13:13:13Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "c96281847b7e2c515d1153bbd876c80cafbabe73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
