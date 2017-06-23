@@ -454,6 +454,17 @@ namespace emfio
         mpInputStream->SeekRel(nRemainder);
     }
 
+    // these are referenced from inside the templates
+    SvStream& operator >> (SvStream& rStream, sal_Int16 &n)
+    {
+        return rStream.ReadInt16(n);
+    }
+
+    SvStream& operator >> (SvStream& rStream, sal_Int32 &n)
+    {
+        return rStream.ReadInt32(n);
+    }
+
     /**
      * Reads polygons from the stream.
      * The \<class T> parameter is for the type of the points (sal_uInt32 or sal_uInt16).
@@ -540,18 +551,6 @@ namespace emfio
                 DrawPolyLine( aPolygon, false, mbRecordPath);
             }
         }
-    }
-
-    // these are referenced from inside the templates
-
-    SvStream& operator>>(SvStream& rStream, sal_Int16 &n)
-    {
-        return rStream.ReadInt16(n);
-    }
-
-    SvStream& operator>>(SvStream& rStream, sal_Int32 &n)
-    {
-        return rStream.ReadInt32(n);
     }
 
     /**

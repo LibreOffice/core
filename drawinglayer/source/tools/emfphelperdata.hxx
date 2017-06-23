@@ -223,7 +223,7 @@ namespace emfplushelper
 
         // readers
         void processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags, sal_uInt32 dataSize, bool bUseWholeStream = false);
-        void ReadPoint(SvStream& s, float& x, float& y, sal_uInt32 flags);
+        static void ReadPoint(SvStream& s, float& x, float& y, sal_uInt32 flags);
 
         // internal mapper
         void mappingChanged();
@@ -248,8 +248,8 @@ namespace emfplushelper
         ::basegfx::B2DSize MapSize(double iwidth, double iheight);
 
         // readers
-        void ReadRectangle(SvStream& s, float& x, float& y, float &width, float& height, bool bCompressed = false);
-        bool readXForm(SvStream& rIn, basegfx::B2DHomMatrix& rTarget);
+        static void ReadRectangle(SvStream& s, float& x, float& y, float &width, float& height, bool bCompressed = false);
+        static bool readXForm(SvStream& rIn, basegfx::B2DHomMatrix& rTarget);
     };
 }
 
