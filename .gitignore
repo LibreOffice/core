@@ -173,4 +173,4 @@ LibreOffice.VC.VC.opendb
 *.sublime-workspace
 
 # vim-ide-integration
-compile_commands.json
+/compile_commands.json
