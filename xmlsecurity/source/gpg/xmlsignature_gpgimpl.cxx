@@ -171,7 +171,7 @@ SAL_CALL XMLSignature_GpgImpl::generate(
     cur = xmlSecGetNextElementNode(cur->next);
     cur = xmlSecGetNextElementNode(cur->children);
     // check that this is now PGPData
-    if(!xmlSecCheckNodeName(cur, xmlSecNamePGPData, xmlSecDSigNs))
+    if(!xmlSecCheckNodeName(cur, xmlSecNodePGPData, xmlSecDSigNs))
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
     // check that this is now PGPKeyID
     cur = xmlSecGetNextElementNode(cur->children);
@@ -182,10 +182,15 @@ SAL_CALL XMLSignature_GpgImpl::generate(
     GpgME::Context& rCtx=pSecEnv->getGpgContext();
     rCtx.setKeyListMode(GPGME_KEYLIST_MODE_LOCAL);
     GpgME::Error err;
+    xmlChar* pKey=xmlNodeGetContent(cur);
+    if(xmlSecBase64Decode(pKey, reinterpret_cast<xmlSecByte*>(pKey), xmlStrlen(pKey)) < 0)
+        throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
     if( rCtx.addSigningKey(
             rCtx.key(
-                reinterpret_cast<char*>(xmlNodeGetContent(cur)), err, true)) )
+                reinterpret_cast<char*>(pKey), err, true)) )
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+
+    xmlFree(pKey);
 
     // good, ctx is setup now, let's sign the lot
     GpgME::Data data_in(
@@ -201,6 +206,9 @@ SAL_CALL XMLSignature_GpgImpl::generate(
     int len=0, curr=0; char buf;
     while( (curr=data_out.read(&buf, 1)) )
         len += curr;
+
+    if(sign_res.error() || !len)
+        throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
     // write signed data to xml
     std::vector<unsigned char> buf2(len);
