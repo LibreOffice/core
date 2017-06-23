@@ -216,7 +216,7 @@ OUString PersistentWindowState::implst_getWindowStateFromWindow(const css::uno::
             (pWindow->IsSystemWindow())
            )
         {
-            WindowStateMask nMask = WindowStateMask::All & ~(WindowStateMask::Minimized);
+            WindowStateMask const nMask = WindowStateMask::All & ~(WindowStateMask::Minimized);
             sWindowState = OStringToOUString(
                             static_cast<SystemWindow*>(pWindow.get())->GetWindowState(nMask),
                             RTL_TEXTENCODING_UTF8);

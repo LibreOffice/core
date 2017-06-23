@@ -1057,8 +1057,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css:
 
             sal_Int32 nIndex = 0;
             OUString sKeyCommand = sKey.getToken(0, '_', nIndex);
-            OUString sPrefix("KEY_");
-            aKeyEvent.KeyCode = KeyMapping::get().mapIdentifierToCode(sPrefix + sKeyCommand);
+            aKeyEvent.KeyCode = KeyMapping::get().mapIdentifierToCode("KEY_" + sKeyCommand);
 
             css::uno::Sequence< OUString > sToken(4);
             const sal_Int32 nToken = 4;

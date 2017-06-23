@@ -559,8 +559,6 @@ void RemoteFilesDialog::AddFilter( const OUString& rFilter, const OUString& rTyp
 
 FileViewResult RemoteFilesDialog::OpenURL( OUString const & sURL )
 {
-    FileViewResult eResult = eFailure;
-
     if( m_pFileView )
     {
         m_pTreeView->EndSelection();
@@ -609,7 +607,7 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString const & sURL )
         EnableChildPointerOverwrite( false );
     }
 
-    return eResult;
+    return eFailure;
 }
 
 void RemoteFilesDialog::AddFileExtension()

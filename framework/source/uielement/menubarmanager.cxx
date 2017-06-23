@@ -597,12 +597,11 @@ void MenuBarManager::CheckAndAddMenuExtension( Menu* pMenu )
         sal_uInt16 nNewItemId( 0 );
         sal_uInt16 nInsertPos( MENU_APPEND );
         sal_uInt16 nBeforePos( MENU_APPEND );
-        OUString aCommandBefore( ".uno:About" );
         for ( sal_uInt16 n = 0; n < pMenu->GetItemCount(); n++ )
         {
             sal_uInt16 nItemId = pMenu->GetItemId( n );
             nNewItemId = std::max( nItemId, nNewItemId );
-            if ( pMenu->GetItemCommand( nItemId ) == aCommandBefore )
+            if ( pMenu->GetItemCommand( nItemId ) == ".uno:About" )
                 nBeforePos = n;
         }
         ++nNewItemId;

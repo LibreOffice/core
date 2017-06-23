@@ -2860,12 +2860,11 @@ void SAL_CALL LayoutManager::elementInserted( const ui::ConfigurationEvent& Even
             Reference< XUIElementSettings > xElementSettings( xUIElement, UNO_QUERY );
             if ( xElementSettings.is() )
             {
-                OUString aConfigSourcePropName( "ConfigurationSource" );
                 uno::Reference< XPropertySet > xPropSet( xElementSettings, uno::UNO_QUERY );
                 if ( xPropSet.is() )
                 {
                     if ( Event.Source == uno::Reference< uno::XInterface >( m_xDocCfgMgr, uno::UNO_QUERY ))
-                        xPropSet->setPropertyValue( aConfigSourcePropName, makeAny( m_xDocCfgMgr ));
+                        xPropSet->setPropertyValue( "ConfigurationSource", makeAny( m_xDocCfgMgr ));
                 }
                 xElementSettings->updateSettings();
             }
@@ -2991,12 +2990,11 @@ void SAL_CALL LayoutManager::elementReplaced( const ui::ConfigurationEvent& Even
             Reference< XUIElementSettings > xElementSettings( xUIElement, UNO_QUERY );
             if ( xElementSettings.is() )
             {
-                OUString           aConfigSourcePropName( "ConfigurationSource" );
                 Reference< XInterface >   xElementCfgMgr;
                 Reference< XPropertySet > xPropSet( xElementSettings, UNO_QUERY );
 
                 if ( xPropSet.is() )
-                    xPropSet->getPropertyValue( aConfigSourcePropName ) >>= xElementCfgMgr;
+                    xPropSet->getPropertyValue( "ConfigurationSource" ) >>= xElementCfgMgr;
 
                 if ( !xElementCfgMgr.is() )
                     return;

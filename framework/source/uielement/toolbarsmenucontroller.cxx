@@ -422,7 +422,6 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
 
         bool          bAddCommand( true );
         SvtCommandOptions aCmdOptions;
-        OUString     aConfigureToolbar( ".uno:ConfigureDialog" );
 
         if ( aCmdOptions.HasEntries( SvtCommandOptions::CMDOPTION_DISABLED ))
         {
@@ -440,7 +439,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                 m_xPopupMenu->insertSeparator( nItemCount+1 );
             }
 
-            addCommand( m_xPopupMenu, aConfigureToolbar, "" );
+            addCommand( m_xPopupMenu, ".uno:ConfigureDialog", "" );
         }
 
         // Add separator if no configure has been added

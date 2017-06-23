@@ -252,7 +252,6 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
     // Allow calling of XController->suspend() everytimes.
     // Dispatch is an UI functionality. We implement such dispatch object here.
     // And further XController->suspend() was designed to bring an UI ...
-    bool bAllowSuspend        = true;
     bool bControllerSuspended = false;
 
     bool bCloseAllViewsToo;
@@ -325,7 +324,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
     //    document inside our own frame and decide then again, what has to be done!
     else
     {
-        if (implts_prepareFrameForClosing(m_xCloseFrame, bAllowSuspend, bCloseAllViewsToo, bControllerSuspended))
+        if (implts_prepareFrameForClosing(m_xCloseFrame, true/*bAllowSuspend*/, bCloseAllViewsToo, bControllerSuspended))
         {
             // OK; this frame is empty now.
             // Check the environment again to decide, what is the next step.
