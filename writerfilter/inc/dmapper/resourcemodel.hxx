@@ -244,6 +244,11 @@ public:
     virtual void utext(const sal_uInt8 * data, size_t len) = 0;
 
     /**
+       The same as text(), but postpones its effect until next paragraph starts
+     */
+    virtual void postponeText(const sal_uInt8 * data, size_t len) = 0;
+
+    /**
      * Offset in EMUs for a shape.
      *
      * Call *before* an ooxml::CT_PosH/V_posOffset sprm is sent.

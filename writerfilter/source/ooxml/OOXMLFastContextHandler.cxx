@@ -1050,6 +1050,16 @@ void OOXMLFastContextHandlerProperties::handleBreak()
     }
 }
 
+// tdf#108714 : allow <w:br> at block level (despite this is illegal according to ECMA-376-1:2016)
+void OOXMLFastContextHandlerProperties::handleOutOfOrderBreak()
+{
+    if(isForwardEvents())
+    {
+        OOXMLBreakHandler aBreakHandler(*mpStream, true);
+        getPropertySet()->resolve(aBreakHandler);
+    }
+}
+
 void OOXMLFastContextHandlerProperties::handleOLE()
 {
     OOXMLOLEHandler aOLEHandler(this);

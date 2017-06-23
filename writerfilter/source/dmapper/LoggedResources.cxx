@@ -202,6 +202,25 @@ void LoggedStream::utext(const sal_uInt8 * data, size_t len)
 #endif
 }
 
+void LoggedStream::postponeText(const sal_uInt8 * data, size_t len)
+{
+#ifdef DEBUG_WRITERFILTER
+    mHelper.startElement("postponeText");
+
+    OUString sText(reinterpret_cast<const char*>(data), len, RTL_TEXTENCODING_MS_1252);
+
+    mHelper.startElement("data");
+    LoggedResourcesHelper::chars(sText);
+    LoggedResourcesHelper::endElement("data");
+#endif
+
+    lcl_postponeText(data, len);
+
+#ifdef DEBUG_WRITERFILTER
+    LoggedResourcesHelper::endElement("postponeText");
+#endif
+}
+
 void LoggedStream::positionOffset(const OUString& rText, bool bVertical)
 {
 #ifdef DEBUG_WRITERFILTER

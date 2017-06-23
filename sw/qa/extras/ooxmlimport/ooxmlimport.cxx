@@ -27,6 +27,7 @@
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -1300,6 +1301,52 @@ DECLARE_OOXMLIMPORT_TEST(testVmlAdjustments, "vml-adjustments.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aAdjustmentValues.getLength());
     drawing::EnhancedCustomShapeAdjustmentValue aAdjustmentValue = *aAdjustmentValues.begin();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(17639), aAdjustmentValue.Value.get<sal_Int32>());
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf108714, "tdf108714.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(4, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Page break is absent - we lost bug-to-bug compatibility with Word", 3, getPages());
+
+    // The second (empty) paragraph must be at first page, despite the <w:br> element was before it.
+    // That's because Word treats such break as first element in first run of following paragraph:
+    //
+    //    <w:br w:type="page"/>
+    //    <w:p>
+    //        <w:r>
+    //            <w:t/>
+    //        </w:r>
+    //    </w:p>
+    //
+    // is equal to
+    //
+    //    <w:p>
+    //        <w:r>
+    //            <w:br w:type="page"/>
+    //        </w:r>
+    //    </w:p>
+    //
+    // which emits page break after that empty paragraph.
+
+    uno::Reference< text::XTextRange > paragraph = getParagraph(1);
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 1"), paragraph->getString());
+    style::BreakType breakType = getProperty<style::BreakType>(paragraph, "BreakType");
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE, breakType);
+
+    paragraph = getParagraph(2);
+    CPPUNIT_ASSERT_EQUAL(OUString(), paragraph->getString());
+    breakType = getProperty<style::BreakType>(paragraph, "BreakType");
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE, breakType);
+
+    paragraph = getParagraph(3);
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 2"), paragraph->getString());
+    breakType = getProperty<style::BreakType>(paragraph, "BreakType");
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, breakType);
+
+    paragraph = getParagraph(4);
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 3"), paragraph->getString());
+    breakType = getProperty<style::BreakType>(paragraph, "BreakType");
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, breakType);
 }
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
