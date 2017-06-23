@@ -131,37 +131,41 @@ static void SwapUnicode(sal_Unicode & r) { r = OSL_SWAPWORD(r); }
 
 //SDO
 
-#define READNUMBER_WITHOUT_SWAP(datatype,value) \
-    if (m_isIoRead && sizeof(datatype) <= m_nBufFree)       \
-    {                                                       \
-        for (std::size_t i = 0; i < sizeof(datatype); i++)  \
-            reinterpret_cast<char *>(&value)[i] = m_pBufPos[i]; \
-        m_nBufActualPos += sizeof(datatype);                \
-        m_pBufPos += sizeof(datatype);                      \
-        m_nBufFree -= sizeof(datatype);                     \
-    }                                                       \
-    else                                                    \
-    {                                                       \
-        ReadBytes( &value, sizeof(datatype) );              \
-    }                                                       \
+void SvStream::readNumberWithoutSwap_(void * pDataDest, int nDataSize)
+{
+    if (m_isIoRead && nDataSize <= m_nBufFree)
+    {
+        for (int i = 0; i < nDataSize; i++)
+            static_cast<char*>(pDataDest)[i] = m_pBufPos[i];
+        m_nBufActualPos += nDataSize;
+        m_pBufPos += nDataSize;
+        m_nBufFree -= nDataSize;
+    }
+    else
+    {
+        ReadBytes( pDataDest, nDataSize );
+    }
+}
 
 
-#define WRITENUMBER_WITHOUT_SWAP(datatype,value) \
-    if (m_isIoWrite && sizeof(datatype) <= m_nBufFree)      \
-    {                                                       \
-        for (std::size_t i = 0; i < sizeof(datatype); i++)  \
-            m_pBufPos[i] = reinterpret_cast<char const *>(&value)[i]; \
-        m_nBufFree -= sizeof(datatype);                     \
-        m_nBufActualPos += sizeof(datatype);                \
-        if (m_nBufActualPos > m_nBufActualLen)              \
-            m_nBufActualLen = m_nBufActualPos;              \
-        m_pBufPos += sizeof(datatype);                      \
-        m_isDirty = true;                                   \
-    }                                                       \
-    else                                                    \
-    {                                                       \
-        WriteBytes( &value, sizeof(datatype) );             \
-    }                                                       \
+void SvStream::writeNumberWithoutSwap_(const void * pDataSrc, int nDataSize)
+{
+    if (m_isIoWrite && nDataSize <= m_nBufFree)
+    {
+        for (int i = 0; i < nDataSize; i++)
+            m_pBufPos[i] = static_cast<const char*>(pDataSrc)[i];
+        m_nBufFree -= nDataSize;
+        m_nBufActualPos += nDataSize;
+        if (m_nBufActualPos > m_nBufActualLen)
+            m_nBufActualLen = m_nBufActualPos;
+        m_pBufPos += nDataSize;
+        m_isDirty = true;
+    }
+    else
+    {
+        WriteBytes( pDataSrc, nDataSize );
+    }
+}
 
 //  class SvLockBytes
 
@@ -731,7 +735,7 @@ void SvStream::StartWritingUnicodeText()
     // http://www.unicode.org/faq/utf_bom.html#BOM
     // Upon read: 0xfeff(-257) => no swap; 0xfffe(-2) => swap
     sal_uInt16 v = 0xfeff;
-    WRITENUMBER_WITHOUT_SWAP(sal_uInt16, v); // write native format
+    writeNumberWithoutSwap(v); // write native format
 }
 
 void SvStream::StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet )
@@ -812,7 +816,7 @@ sal_uInt64 SvStream::SeekRel(sal_Int64 const nPos)
 SvStream& SvStream::ReadUInt16(sal_uInt16& r)
 {
     sal_uInt16 n = 0;
-    READNUMBER_WITHOUT_SWAP(sal_uInt16, n)
+    readNumberWithoutSwap(n);
     if (good())
     {
         if (m_isSwap)
@@ -825,7 +829,7 @@ SvStream& SvStream::ReadUInt16(sal_uInt16& r)
 SvStream& SvStream::ReadUInt32(sal_uInt32& r)
 {
     sal_uInt32 n = 0;
-    READNUMBER_WITHOUT_SWAP(sal_uInt32, n)
+    readNumberWithoutSwap(n);
     if (good())
     {
         if (m_isSwap)
@@ -838,7 +842,7 @@ SvStream& SvStream::ReadUInt32(sal_uInt32& r)
 SvStream& SvStream::ReadUInt64(sal_uInt64& r)
 {
     sal_uInt64 n = 0;
-    READNUMBER_WITHOUT_SWAP(sal_uInt64, n)
+    readNumberWithoutSwap(n);
     if (good())
     {
         if (m_isSwap)
@@ -851,7 +855,7 @@ SvStream& SvStream::ReadUInt64(sal_uInt64& r)
 SvStream& SvStream::ReadInt16(sal_Int16& r)
 {
     sal_Int16 n = 0;
-    READNUMBER_WITHOUT_SWAP(sal_Int16, n)
+    readNumberWithoutSwap(n);
     if (good())
     {
         if (m_isSwap)
@@ -864,7 +868,7 @@ SvStream& SvStream::ReadInt16(sal_Int16& r)
 SvStream& SvStream::ReadInt32(sal_Int32& r)
 {
     sal_Int32 n = 0;
-    READNUMBER_WITHOUT_SWAP(sal_Int32, n)
+    readNumberWithoutSwap(n);
     if (good())
     {
         if (m_isSwap)
@@ -877,7 +881,7 @@ SvStream& SvStream::ReadInt32(sal_Int32& r)
 SvStream& SvStream::ReadInt64(sal_Int64& r)
 {
     sal_Int64 n = 0;
-    READNUMBER_WITHOUT_SWAP(sal_Int64, n)
+    readNumberWithoutSwap(n);
     if (good())
     {
         if (m_isSwap)
@@ -937,7 +941,7 @@ SvStream& SvStream::ReadUChar( unsigned char& r )
 SvStream& SvStream::ReadUtf16(sal_Unicode& r)
 {
     sal_uInt16 n = 0;
-    READNUMBER_WITHOUT_SWAP(sal_uInt16, n)
+    readNumberWithoutSwap(n);
     if (good())
     {
         if (m_isSwap)
@@ -974,7 +978,7 @@ SvStream& SvStream::ReadCharAsBool( bool& r )
 SvStream& SvStream::ReadFloat(float& r)
 {
     float n = 0;
-    READNUMBER_WITHOUT_SWAP(float, n)
+    readNumberWithoutSwap(n);
     if (good())
     {
 #if defined UNX
@@ -989,7 +993,7 @@ SvStream& SvStream::ReadFloat(float& r)
 SvStream& SvStream::ReadDouble(double& r)
 {
     double n = 0;
-    READNUMBER_WITHOUT_SWAP(double, n)
+    readNumberWithoutSwap(n);
     if (good())
     {
 #if defined UNX
@@ -1019,7 +1023,7 @@ SvStream& SvStream::WriteUInt16( sal_uInt16 v )
 {
     if (m_isSwap)
         SwapUShort(v);
-    WRITENUMBER_WITHOUT_SWAP(sal_uInt16,v)
+    writeNumberWithoutSwap(v);
     return *this;
 }
 
@@ -1027,7 +1031,7 @@ SvStream& SvStream::WriteUInt32( sal_uInt32 v )
 {
     if (m_isSwap)
         SwapULong(v);
-    WRITENUMBER_WITHOUT_SWAP(sal_uInt32,v)
+    writeNumberWithoutSwap(v);
     return *this;
 }
 
@@ -1035,7 +1039,7 @@ SvStream& SvStream::WriteUInt64( sal_uInt64 v )
 {
     if (m_isSwap)
         SwapUInt64(v);
-    WRITENUMBER_WITHOUT_SWAP(sal_uInt64,v)
+    writeNumberWithoutSwap(v);
     return *this;
 }
 
@@ -1043,7 +1047,7 @@ SvStream& SvStream::WriteInt16( sal_Int16 v )
 {
     if (m_isSwap)
         SwapShort(v);
-    WRITENUMBER_WITHOUT_SWAP(sal_Int16,v)
+    writeNumberWithoutSwap(v);
     return *this;
 }
 
@@ -1051,7 +1055,7 @@ SvStream& SvStream::WriteInt32( sal_Int32 v )
 {
     if (m_isSwap)
         SwapLongInt(v);
-    WRITENUMBER_WITHOUT_SWAP(sal_Int32,v)
+    writeNumberWithoutSwap(v);
     return *this;
 }
 
@@ -1059,7 +1063,7 @@ SvStream& SvStream::WriteInt64  (sal_Int64 v)
 {
     if (m_isSwap)
         SwapInt64(v);
-    WRITENUMBER_WITHOUT_SWAP(sal_Int64,v)
+    writeNumberWithoutSwap(v);
     return *this;
 }
 
@@ -1135,7 +1139,7 @@ SvStream& SvStream::WriteFloat( float v )
     if (m_isSwap)
       SwapFloat(v);
 #endif
-    WRITENUMBER_WITHOUT_SWAP(float,v)
+    writeNumberWithoutSwap(v);
     return *this;
 }
 
@@ -1146,13 +1150,13 @@ SvStream& SvStream::WriteDouble ( const double& r )
     {
       double nHelp = r;
       SwapDouble(nHelp);
-      WRITENUMBER_WITHOUT_SWAP(double,nHelp)
+      writeNumberWithoutSwap(nHelp);
       return *this;
     }
     else
 #endif
     {
-        WRITENUMBER_WITHOUT_SWAP(double,r);
+        writeNumberWithoutSwap(r);
     }
     return *this;
 }
