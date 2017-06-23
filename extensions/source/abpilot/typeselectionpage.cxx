@@ -226,7 +226,7 @@ namespace abp
 
         if (AST_INVALID == getSelectedType( ))
         {
-            ScopedVclPtrInstance< MessageDialog > aError(this, ModuleRes(RID_STR_NEEDTYPESELECTION));
+            ScopedVclPtrInstance< MessageDialog > aError(this, compmodule::ModuleRes(RID_STR_NEEDTYPESELECTION));
             aError->Execute();
             return false;
         }

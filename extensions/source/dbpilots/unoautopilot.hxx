@@ -36,7 +36,7 @@ namespace dbp
     class OUnoAutoPilot
             :public OUnoAutoPilot_Base
             ,public ::comphelper::OPropertyArrayUsageHelper< OUnoAutoPilot< TYPE, SERVICEINFO > >
-            ,public OModuleResourceClient
+            ,public compmodule::OModuleResourceClient
     {
         explicit OUnoAutoPilot(const css::uno::Reference< css::uno::XComponentContext >& _rxORB)
             : OUnoAutoPilot_Base(_rxORB)

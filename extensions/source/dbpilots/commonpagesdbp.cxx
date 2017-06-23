@@ -450,7 +450,7 @@ namespace dbp
         get(m_pStoreYes, "yesRadiobutton");
         get(m_pStoreNo, "noRadiobutton");
         get(m_pStoreWhere, "storeInFieldCombobox");
-        SetText(ModuleRes(RID_STR_OPTION_DB_FIELD_TITLE));
+        SetText(compmodule::ModuleRes(RID_STR_OPTION_DB_FIELD_TITLE));
 
         announceControls(*m_pStoreYes, *m_pStoreNo, *m_pStoreWhere);
         m_pStoreWhere->SetDropDownLineCount(10);

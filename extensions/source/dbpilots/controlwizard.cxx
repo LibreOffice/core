@@ -230,7 +230,7 @@ namespace dbp
                     nCommandTypeResourceId = RID_STR_TYPE_COMMAND;
                     break;
             }
-            m_pFormContentType->SetText(ModuleRes(nCommandTypeResourceId));
+            m_pFormContentType->SetText(compmodule::ModuleRes(nCommandTypeResourceId));
         }
 
         OControlWizardPage_Base::initializePage();
@@ -606,7 +606,7 @@ namespace dbp
 
             // prepend an extra SQLContext explaining what we were doing
             SQLContext aContext;
-            aContext.Message = ModuleRes(RID_STR_COULDNOTOPENTABLE);
+            aContext.Message = compmodule::ModuleRes(RID_STR_COULDNOTOPENTABLE);
             aContext.NextException = aSQLException;
 
             // create an interaction handler to display this exception

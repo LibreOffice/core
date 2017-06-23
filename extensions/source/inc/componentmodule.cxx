@@ -30,7 +30,7 @@
     ensureImpl()
 
 
-namespace COMPMOD_NAMESPACE
+namespace compmodule
 {
 
 
@@ -259,7 +259,7 @@ namespace COMPMOD_NAMESPACE
     }
 
 
-}   // namespace COMPMOD_NAMESPACE
+}   // namespace compmodule
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

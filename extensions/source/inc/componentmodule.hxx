@@ -23,9 +23,6 @@
 /** you may find this file helpful if you implement a component (in it's own library) which can't use
     the usual infrastructure.<br/>
     More precise, you find helper classes to ease the use of resources and the registration of services.
-    <p>
-    You need to define a preprocessor variable COMPMOD_NAMESPACE in order to use this file. Set it to a string
-    which should be used as namespace for the classes defined herein.</p>
 */
 
 #include <osl/mutex.hxx>
@@ -41,7 +38,7 @@
 class ResMgr;
 
 
-namespace COMPMOD_NAMESPACE
+namespace compmodule
 {
 
 
@@ -193,7 +190,7 @@ typedef css::uno::Reference< css::lang::XSingleServiceFactory > (SAL_CALL *Facto
         OModule::revokeComponent(TYPE::getImplementationName_Static());
     }
 
-}   // namespace COMPMOD_NAMESPACE
+}   // namespace compmodule
 
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_INC_COMPONENTMODULE_HXX
