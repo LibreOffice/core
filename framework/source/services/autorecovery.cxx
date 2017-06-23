@@ -2344,8 +2344,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired, Timer *, void)
         // force save of all currently open documents
         // The called method returns an info, if and how this
         // timer must be restarted.
-        bool bAllowUserIdleLoop = true;
-        AutoRecovery::ETimerType eSuggestedTimer = implts_saveDocs(bAllowUserIdleLoop, false);
+        AutoRecovery::ETimerType eSuggestedTimer = implts_saveDocs(true/*bAllowUserIdleLoop*/, false);
 
         // If timer is not used for "short callbacks" (means polling
         // for special states) ... reset the handle state of all
@@ -3700,7 +3699,7 @@ void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
     // Of course this method returns the right state -
     // because it knows, that we are running in EMERGENCY SAVE mode .-)
 
-    bool                 bAllowUserIdleLoop = false; // not allowed to change that .-)
+    bool const bAllowUserIdleLoop = false; // not allowed to change that .-)
     AutoRecovery::ETimerType eSuggestedTimer    = AutoRecovery::E_DONT_START_TIMER;
     do
     {
@@ -3768,7 +3767,7 @@ void AutoRecovery::implts_doSessionSave(const DispatchParams& aParams)
     // Of course this method returns the right state -
     // because it knows, that we are running in SESSION SAVE mode .-)
 
-    bool                 bAllowUserIdleLoop = false; // not allowed to change that .-)
+    bool const bAllowUserIdleLoop = false; // not allowed to change that .-)
     AutoRecovery::ETimerType eSuggestedTimer    = AutoRecovery::E_DONT_START_TIMER;
     do
     {

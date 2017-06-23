@@ -263,14 +263,13 @@ void ComboboxToolbarController::executeControlCommand( const css::frame::Control
     }
     else if ( rControlCommand.Command == "AddEntry" )
     {
-        sal_Int32      nPos( COMBOBOX_APPEND );
         OUString   aText;
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
             if ( rControlCommand.Arguments[i].Name == "Text" )
             {
                 if ( rControlCommand.Arguments[i].Value >>= aText )
-                    m_pComboBox->InsertEntry( aText, nPos );
+                    m_pComboBox->InsertEntry( aText, COMBOBOX_APPEND );
                 break;
             }
         }

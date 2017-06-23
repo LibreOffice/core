@@ -676,7 +676,6 @@ void ToolBarManager::CreateControllers()
         if ( nId == 0 )
             continue;
 
-        OUString                 aLoadURL( ".uno:OpenUrl" );
         bool                     bInit( true );
         bool                     bCreate( true );
         Reference< XStatusListener > xController;
@@ -730,7 +729,7 @@ void ToolBarManager::CreateControllers()
             bInit = false; // Initialization is done through the factory service
         }
 
-        if (( aCommandURL == aLoadURL ) && ( !m_pToolBar->IsItemVisible(nId)))
+        if (( aCommandURL == ".uno:OpenUrl" ) && ( !m_pToolBar->IsItemVisible(nId)))
             bCreate = false;
 
         if ( !xController.is() && bCreate )

@@ -207,14 +207,13 @@ void DropdownToolbarController::executeControlCommand( const css::frame::Control
     }
     else if ( rControlCommand.Command == "AddEntry" )
     {
-        sal_Int32      nPos( LISTBOX_APPEND );
         OUString   aText;
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
             if ( rControlCommand.Arguments[i].Name == "Text" )
             {
                 if ( rControlCommand.Arguments[i].Value >>= aText )
-                    m_pListBoxControl->InsertEntry( aText, nPos );
+                    m_pListBoxControl->InsertEntry( aText, LISTBOX_APPEND );
                 break;
             }
         }

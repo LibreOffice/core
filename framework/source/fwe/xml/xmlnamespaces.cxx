@@ -166,8 +166,7 @@ OUString XMLNamespaces::getNamespaceValue( const OUString& aNamespace ) const
         else
         {
             // namespace not defined => throw exception!
-            OUString aErrorMessage( "XML namespace used but not defined!" );
-            throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+            throw SAXException( "XML namespace used but not defined!", Reference< XInterface >(), Any() );
         }
     }
 }

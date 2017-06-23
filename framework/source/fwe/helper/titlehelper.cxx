@@ -559,8 +559,7 @@ void TitleHelper::impl_appendDebugVersion (OUStringBuffer& sTitle)
     OUString version(utl::ConfigManager::getProductVersion());
     sTitle.append(' ');
     sTitle.append(version);
-    OUString sDefault("development");
-    OUString sVersion = ::utl::Bootstrap::getBuildIdData(sDefault);
+    OUString sVersion = ::utl::Bootstrap::getBuildIdData("development");
     sTitle.append(" [");
     sTitle.append(sVersion);
     if (OpenGLWrapper::isVCLOpenGLEnabled())

@@ -127,24 +127,20 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
     m_aIsVisible( ITEM_DESCRIPTOR_VISIBLE ),
     m_aCommandURL( ITEM_DESCRIPTOR_COMMANDURL )
  {
-    OUString aNamespaceToolBar( XMLNS_TOOLBAR );
-    OUString aNamespaceXLink( XMLNS_XLINK );
-    OUString aSeparator( XMLNS_FILTER_SEPARATOR );
-
     // create hash map
     for ( int i = 0; i < (int)TB_XML_ENTRY_COUNT; i++ )
     {
         if ( ToolBoxEntries[i].nNamespace == TB_NS_TOOLBAR )
         {
-            OUString temp( aNamespaceToolBar );
-            temp += aSeparator;
+            OUString temp( XMLNS_TOOLBAR );
+            temp += XMLNS_FILTER_SEPARATOR;
             temp += OUString::createFromAscii( ToolBoxEntries[i].aEntryName );
             m_aToolBoxMap.insert( ToolBoxHashMap::value_type( temp, (ToolBox_XML_Entry)i ) );
         }
         else
         {
-            OUString temp( aNamespaceXLink );
-            temp += aSeparator;
+            OUString temp( XMLNS_XLINK );
+            temp += XMLNS_FILTER_SEPARATOR;
             temp += OUString::createFromAscii( ToolBoxEntries[i].aEntryName );
             m_aToolBoxMap.insert( ToolBoxHashMap::value_type( temp, (ToolBox_XML_Entry)i ) );
         }

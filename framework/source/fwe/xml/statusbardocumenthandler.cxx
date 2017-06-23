@@ -147,24 +147,20 @@ OReadStatusBarDocumentHandler::OReadStatusBarDocumentHandler(
     const Reference< XIndexContainer >& rStatusBarItems ) :
     m_aStatusBarItems( rStatusBarItems )
 {
-    OUString aNamespaceStatusBar( XMLNS_STATUSBAR );
-    OUString aNamespaceXLink( XMLNS_XLINK );
-    OUString aSeparator( XMLNS_FILTER_SEPARATOR );
-
     // create hash map
     for ( int i = 0; i < (int)SB_XML_ENTRY_COUNT; i++ )
     {
         if ( StatusBarEntries[i].nNamespace == SB_NS_STATUSBAR )
         {
-            OUString temp( aNamespaceStatusBar );
-            temp += aSeparator;
+            OUString temp( XMLNS_STATUSBAR );
+            temp += XMLNS_FILTER_SEPARATOR;
             temp += OUString::createFromAscii( StatusBarEntries[i].aEntryName );
             m_aStatusBarMap.insert( StatusBarHashMap::value_type( temp, (StatusBar_XML_Entry)i ) );
         }
         else
         {
-            OUString temp( aNamespaceXLink );
-            temp += aSeparator;
+            OUString temp( XMLNS_XLINK );
+            temp += XMLNS_FILTER_SEPARATOR;
             temp += OUString::createFromAscii( StatusBarEntries[i].aEntryName );
             m_aStatusBarMap.insert( StatusBarHashMap::value_type( temp, (StatusBar_XML_Entry)i ) );
         }
