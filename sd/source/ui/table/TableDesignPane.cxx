@@ -484,7 +484,7 @@ CellInfo::CellInfo( const Reference< XStyle >& xStyle )
 }
 
 typedef std::vector< std::shared_ptr< CellInfo > > CellInfoVector;
-typedef std::shared_ptr< CellInfo > CellInfoMatrix[nPreviewColumns][nPreviewRows];
+typedef std::shared_ptr< CellInfo > CellInfoMatrix[nPreviewColumns * nPreviewRows];
 
 struct TableStyleSettings
 {
@@ -594,7 +594,7 @@ static void FillCellInfoMatrix( const CellInfoVector& rStyle, const TableStyleSe
                 xCellInfo = rStyle[sdr::table::body_style];
             }
 
-            rMatrix[nCol][nRow] = xCellInfo;
+            rMatrix[(nCol * nPreviewColumns) + nRow] = xCellInfo;
         }
     }
 }
@@ -629,7 +629,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
             sal_Int32 nX = 0;
             for( sal_Int32 nCol = 0; nCol < nPreviewColumns; ++nCol, nX += nCellWidth-1 )
             {
-                std::shared_ptr< CellInfo > xCellInfo( aMatrix[nCol][nRow] );
+                std::shared_ptr< CellInfo > xCellInfo(aMatrix[(nCol * nPreviewColumns) + nRow]);
 
                 Color aTextColor( COL_AUTO );
                 if( xCellInfo.get() )
@@ -663,7 +663,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
             sal_Int32 nX = 0;
             for( sal_Int32 nCol = 0; nCol < nPreviewColumns; ++nCol, nX += nCellWidth-1 )
             {
-                std::shared_ptr< CellInfo > xCellInfo( aMatrix[nCol][nRow] );
+                std::shared_ptr< CellInfo > xCellInfo(aMatrix[(nCol * nPreviewColumns) + nRow]);
 
                 if( xCellInfo.get() )
                 {
@@ -687,7 +687,7 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
                         if( (nBorderCol >= 0) && (nBorderCol < nPreviewColumns) && (nBorderRow >= 0) && (nBorderRow < nPreviewRows) )
                         {
                             // check border
-                            std::shared_ptr< CellInfo > xBorderInfo( aMatrix[nBorderCol][nBorderRow] );
+                            std::shared_ptr< CellInfo > xBorderInfo(aMatrix[(nBorderCol * nPreviewColumns) + nBorderRow]);
                             if( xBorderInfo.get() )
                             {
                                 const ::editeng::SvxBorderLine* pBorderLine2 = xBorderInfo->maBorder.GetLine(static_cast<SvxBoxItemLine>(static_cast<int>(nLine)^1));
