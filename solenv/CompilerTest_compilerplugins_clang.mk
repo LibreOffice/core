@@ -15,10 +15,10 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/externvar \
     compilerplugins/clang/test/finalprotected \
     compilerplugins/clang/test/loopvartoosmall \
-    compilerplugins/clang/test/passstuffbyref \
     compilerplugins/clang/test/oslendian-1 \
     compilerplugins/clang/test/oslendian-2 \
     compilerplugins/clang/test/oslendian-3 \
+    compilerplugins/clang/test/passstuffbyref \
     compilerplugins/clang/test/redundantcast \
     compilerplugins/clang/test/redundantcopy \
     compilerplugins/clang/test/redundantinline \
