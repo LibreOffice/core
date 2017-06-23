@@ -348,7 +348,7 @@ void SAL_CALL OXReportControllerObserver::elementInserted(const container::Conta
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
-    // new listner object
+    // new listener object
     uno::Reference< uno::XInterface >  xIface( evt.Element, uno::UNO_QUERY );
     if ( xIface.is() )
     {
