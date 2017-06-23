@@ -133,7 +133,7 @@ LanguageType EditView::CheckLanguage(
         lang::Locale a3( LanguageTag::convertToLocale( aLangList[3] ) );
 #endif
 
-        sal_Int32 nCount = SAL_N_ELEMENTS(aLangList);
+        sal_Int32 const nCount = SAL_N_ELEMENTS(aLangList);
         for (sal_Int32 i = 0;  i < nCount;  i++)
         {
             LanguageType nTmpLang = aLangList[i];

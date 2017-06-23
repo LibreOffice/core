@@ -1106,8 +1106,7 @@ public:
 
 void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
 {
-    sal_uInt16 nVer = 603;
-    rOStream.WriteUInt16( nVer );
+    rOStream.WriteUInt16( 603 ); // nVer
 
     rOStream.WriteBool( bOwnerOfPool );
 

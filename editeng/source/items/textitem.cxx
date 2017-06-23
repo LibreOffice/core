@@ -357,8 +357,7 @@ SvStream& SvxFontItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) co
     // catch for EditEngine, only set while creating clipboard stream.
     if ( bEnableStoreUnicodeNames )
     {
-        sal_uInt32 nMagic = STORE_UNICODE_MAGIC_MARKER;
-        rStrm.WriteUInt32( nMagic );
+        rStrm.WriteUInt32( STORE_UNICODE_MAGIC_MARKER );
         rStrm.WriteUniOrByteString( aStoreFamilyName, RTL_TEXTENCODING_UNICODE );
         rStrm.WriteUniOrByteString( GetStyleName(), RTL_TEXTENCODING_UNICODE );
     }
@@ -2652,7 +2651,6 @@ bool SvxEmphasisMarkItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) cons
 bool SvxEmphasisMarkItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
-    bool bRet = true;
     switch( nMemberId )
     {
     case MID_EMPHASIS:
@@ -2677,7 +2675,7 @@ bool SvxEmphasisMarkItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     }
     break;
     }
-    return bRet;
+    return true;
 }
 
 sal_uInt16 SvxEmphasisMarkItem::GetVersion( sal_uInt16 nFFVer ) const
