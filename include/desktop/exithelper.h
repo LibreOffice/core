@@ -25,7 +25,7 @@ enum EExitCodes {
     EXITHELPER_NO_ERROR = 0,
     /* pipe was detected - second office must terminate itself */
     EXITHELPER_SECOND_OFFICE = 1,
-    /* an uno exception was catched during startup */
+    /* an uno exception was caught during startup */
     EXITHELPER_FATAL_ERROR = 77,
     /* user force automatic restart after crash */
     EXITHELPER_CRASH_WITH_RESTART = 79,

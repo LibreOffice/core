@@ -940,7 +940,7 @@ namespace svxform
 
 #ifdef DBG_UTIL
             DBG_ASSERT(bHasHiddenControlsFormat, "NavigatorTree::implExecuteDataTransfer: only copying of hidden controls is supported !");
-                // should be catched by AcceptDrop
+                // should be caught by AcceptDrop
 #endif
 
             // because i want to select all targets (and only them)

@@ -108,7 +108,7 @@ OXMLTable::OXMLTable( ORptFilter& rImport
     }
     catch(Exception&)
     {
-        OSL_FAIL("Exception catched while filling the section props");
+        OSL_FAIL("Exception caught while filling the section props");
     }
 }
 
@@ -266,7 +266,7 @@ void OXMLTable::EndElement()
     }
     catch(Exception&)
     {
-        OSL_FAIL("OXMLTable::EndElement -> exception catched");
+        OSL_FAIL("OXMLTable::EndElement -> exception caught");
     }
 }
 

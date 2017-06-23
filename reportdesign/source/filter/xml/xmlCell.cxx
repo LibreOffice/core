@@ -233,7 +233,7 @@ void OXMLCell::EndElement()
                }
             catch(uno::Exception&)
             {
-                OSL_FAIL("OXMLCell::EndElement -> exception catched");
+                OSL_FAIL("OXMLCell::EndElement -> exception caught");
             }
         }
     }

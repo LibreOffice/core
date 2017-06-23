@@ -530,7 +530,7 @@ OUStringList FilterFactory::impl_readSortedFilterListFromConfig(const OUString& 
     try
     {
         css::uno::Reference< css::container::XNameAccess > xUISortConfig = officecfg::TypeDetection::UISort::ModuleDependendFilterOrder::get(xContext);
-        // don't check the module name here. If it does not exists, an exception is thrown and catched below.
+        // don't check the module name here. If it does not exists, an exception is thrown and caught below.
         // We return an empty list as result then.
         css::uno::Reference< css::container::XNameAccess > xModule;
         xUISortConfig->getByName(sModule) >>= xModule;

@@ -134,7 +134,7 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog(vcl::Window* pParent,
     }
     catch(const Exception&)
     {
-        OSL_FAIL( "XMLFilterSettingsDialog::XMLFilterSettingsDialog exception catched!" );
+        OSL_FAIL( "XMLFilterSettingsDialog::XMLFilterSettingsDialog exception caught!" );
     }
 }
 
@@ -429,7 +429,7 @@ OUString XMLFilterSettingsDialog::createUniqueInterfaceName( const OUString& rIn
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "XMLFilterSettingsDialog::createUniqueInterfaceName exception catched!" );
+        OSL_FAIL( "XMLFilterSettingsDialog::createUniqueInterfaceName exception caught!" );
     }
 
     OUString aInterfaceName( rInterfaceName );
@@ -471,7 +471,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
+            OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception caught!" );
             bOk = false;
         }
     }
@@ -592,7 +592,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
+            OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception caught!" );
             bOk = false;
         }
     }
@@ -650,7 +650,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
+                OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception caught!" );
                 bOk = false;
             }
         }
@@ -665,7 +665,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
+                OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception caught!" );
                 bOk = false;
             }
         }
@@ -679,7 +679,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
+                OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception caught!" );
                 bOk = false;
             }
         }
@@ -695,7 +695,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
                 }
                 catch( const Exception& )
                 {
-                    OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
+                    OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception caught!" );
                     bOk = false;
                 }
 
@@ -708,7 +708,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
                     }
                     catch( const Exception& )
                     {
-                        OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
+                        OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception caught!" );
                     }
                 }
 
@@ -879,7 +879,7 @@ void XMLFilterSettingsDialog::onDelete()
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "XMLFilterSettingsDialog::onDelete exception catched!" );
+                OSL_FAIL( "XMLFilterSettingsDialog::onDelete exception caught!" );
             }
         }
     }
@@ -1207,7 +1207,7 @@ void XMLFilterSettingsDialog::initFilterList()
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "XMLFilterSettingsDialog::initFilterList exception catched!" );
+                OSL_FAIL( "XMLFilterSettingsDialog::initFilterList exception caught!" );
             }
 
         }
@@ -1659,7 +1659,7 @@ bool copyStreams( const Reference< XInputStream >& xIS, const Reference< XOutput
     }
     catch(const Exception&)
     {
-        OSL_FAIL( "copyStreams() exception catched!" );
+        OSL_FAIL( "copyStreams() exception caught!" );
     }
 
     return false;

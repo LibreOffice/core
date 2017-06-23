@@ -93,7 +93,7 @@ OXMLSection::OXMLSection( ORptFilter& rImport,
     }
     catch(Exception&)
     {
-        OSL_FAIL("Exception catched while filling the section props");
+        OSL_FAIL("Exception caught while filling the section props");
     }
 }
 

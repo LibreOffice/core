@@ -596,7 +596,7 @@ EditBrowseBox::RowStatus OFieldExpressionControl::GetRowStatus(long nRow) const
         }
         catch(uno::Exception&)
         {
-            OSL_FAIL("Exception catched while try to get a group!");
+            OSL_FAIL("Exception caught while try to get a group!");
         }
     }
     return EditBrowseBox::CLEAN;

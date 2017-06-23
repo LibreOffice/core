@@ -224,7 +224,7 @@ void SAL_CALL SvxUnoTextContent::dispose()
     SolarMutexGuard aGuard;
 
     if( mbDisposing )
-        return; // catched a recursion
+        return; // caught a recursion
 
     mbDisposing = true;
 

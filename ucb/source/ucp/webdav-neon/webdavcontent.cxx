@@ -1289,7 +1289,7 @@ void GetPropsUsingHeadRequest(DAVResource& resource,
         // clean cached value of PROPFIND property names
         // PROPPATCH can change them
         Content::removeCachedPropertyNames(aTargetURL);
-        // test if HEAD allowed, if not, throw, should be catched immediately
+        // test if HEAD allowed, if not, throw, should be caught immediately
         // SC_GONE used internally by us, see comment in Content::getPropertyValues
         // in the catch scope
         if (aDAVOptions.getHttpResponseStatusCode() != SC_GONE &&

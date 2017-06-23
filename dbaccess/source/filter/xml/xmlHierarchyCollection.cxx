@@ -93,7 +93,7 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
         }
         catch(Exception&)
         {
-            OSL_FAIL("OXMLHierarchyCollection::OXMLHierarchyCollection -> exception catched");
+            OSL_FAIL("OXMLHierarchyCollection::OXMLHierarchyCollection -> exception caught");
         }
     }
 }

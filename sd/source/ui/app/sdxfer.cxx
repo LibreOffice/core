@@ -617,7 +617,7 @@ bool SdTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* 
             }
             catch( Exception& )
             {
-                OSL_FAIL( "sd::SdTransferable::WriteObject(), exception catched!" );
+                OSL_FAIL( "sd::SdTransferable::WriteObject(), exception caught!" );
                 bRet = false;
             }
         }

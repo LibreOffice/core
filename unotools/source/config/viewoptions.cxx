@@ -58,7 +58,7 @@
 #define SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION_PARAM_EXCEPTION)            \
     {                                                                                                               \
         OUStringBuffer sMsg(256);                                                                            \
-        sMsg.append("Unexpected exception catched. Original message was:\n\""      );                          \
+        sMsg.append("Unexpected exception caught. Original message was:\n\""      );                          \
         sMsg.append     (SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION_PARAM_EXCEPTION.Message);                          \
         sMsg.append("\""                                                           );                          \
     }

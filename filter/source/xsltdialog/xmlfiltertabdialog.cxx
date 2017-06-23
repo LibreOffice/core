@@ -126,7 +126,7 @@ bool XMLFilterTabDialog::onOk()
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "XMLFilterTabDialog::onOk exception catched!" );
+                OSL_FAIL( "XMLFilterTabDialog::onOk exception caught!" );
             }
         }
     }
@@ -184,7 +184,7 @@ bool XMLFilterTabDialog::onOk()
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "XMLFilterTabDialog::onOk exception catched!" );
+                OSL_FAIL( "XMLFilterTabDialog::onOk exception caught!" );
             }
         }
     }

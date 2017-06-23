@@ -212,18 +212,18 @@ bool FmSearchEngine::MoveCursor()
     catch(css::sdbc::SQLException const& e)
     {
         (void)e;
-        SAL_WARN( "svx", "FmSearchEngine::MoveCursor: catched a DatabaseException: " << e.SQLState );
+        SAL_WARN( "svx", "FmSearchEngine::MoveCursor: caught a DatabaseException: " << e.SQLState );
         bSuccess = false;
     }
     catch(Exception const& e)
     {
         (void)e;
-        SAL_WARN( "svx", "FmSearchEngine::MoveCursor: catched an Exception: " << e.Message);
+        SAL_WARN( "svx", "FmSearchEngine::MoveCursor: caught an Exception: " << e.Message);
         bSuccess = false;
     }
     catch(...)
     {
-        OSL_FAIL("FmSearchEngine::MoveCursor : catched an unknown Exception !");
+        OSL_FAIL("FmSearchEngine::MoveCursor : caught an unknown Exception !");
         bSuccess = false;
     }
 

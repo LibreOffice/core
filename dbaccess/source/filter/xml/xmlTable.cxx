@@ -172,7 +172,7 @@ void OXMLTable::setProperties(uno::Reference< XPropertySet > & _xProp )
     }
     catch(Exception&)
     {
-        OSL_FAIL("OXMLTable::EndElement -> exception catched");
+        OSL_FAIL("OXMLTable::EndElement -> exception caught");
     }
 }
 
@@ -205,7 +205,7 @@ void OXMLTable::EndElement()
         }
         catch(Exception&)
         {
-            OSL_FAIL("OXMLQuery::EndElement -> exception catched");
+            OSL_FAIL("OXMLQuery::EndElement -> exception caught");
         }
     }
 

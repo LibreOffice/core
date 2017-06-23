@@ -241,7 +241,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
         }
         catch(uno::Exception&)
         {
-            OSL_FAIL("Exception catched while filling the report definition props");
+            OSL_FAIL("Exception caught while filling the report definition props");
         }
         bExport = false;
     }

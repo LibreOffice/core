@@ -417,7 +417,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                 }
                 catch(const Exception&)
                 {
-                    OSL_FAIL("Exception catched while changing the data source");
+                    OSL_FAIL("Exception caught while changing the data source");
                 }
             }
         }

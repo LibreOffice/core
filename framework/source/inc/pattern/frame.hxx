@@ -79,7 +79,7 @@ inline bool closeIt(const css::uno::Reference< css::uno::XInterface >& xResource
         { throw; } // should not be suppressed!
     catch(const css::uno::Exception&)
         { return false;  } // ??? We defined to return a boolean value instead of throwing exceptions...
-                               // (OK: RuntimeExceptions should not be catched inside the core..)
+                               // (OK: RuntimeExceptions should not be caught inside the core..)
 
     return true;
 }

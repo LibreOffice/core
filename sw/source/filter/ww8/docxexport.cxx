@@ -1247,7 +1247,7 @@ void DocxExport::WriteActiveX()
             }
             catch(const uno::Exception&)
             {
-                SAL_WARN("sw.ww8", "WriteActiveX() ::Failed to copy Inputstream to outputstream exception catched!");
+                SAL_WARN("sw.ww8", "WriteActiveX() ::Failed to copy Inputstream to outputstream exception caught!");
             }
 
             xOutStream->closeOutput();
@@ -1381,7 +1381,7 @@ void DocxExport::WriteEmbeddings()
             }
             catch(const uno::Exception&)
             {
-                SAL_WARN("sw.ww8", "WriteEmbeddings() ::Failed to copy Inputstream to outputstream exception catched!");
+                SAL_WARN("sw.ww8", "WriteEmbeddings() ::Failed to copy Inputstream to outputstream exception caught!");
             }
             xOutStream->closeOutput();
         }

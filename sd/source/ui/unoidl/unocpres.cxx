@@ -231,7 +231,7 @@ void SAL_CALL SdXCustomPresentation::dispose()
     SolarMutexGuard aGuard;
 
     if( bDisposing )
-        return; // catched a recursion
+        return; // caught a recursion
 
     bDisposing = true;
 

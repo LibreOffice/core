@@ -183,7 +183,7 @@ class ODatabaseForm :public OFormComponents
     rtl::Reference<OFormSubmitResetThread>  m_pThread;
     OUString                    m_sCurrentErrorContext;
     // will be used as additional context information
-    // when an exception is catched and forwarded to the listeners
+    // when an exception is caught and forwarded to the listeners
 
     sal_Int32                   m_nResetsPending;
 //  <overwritten_properties>

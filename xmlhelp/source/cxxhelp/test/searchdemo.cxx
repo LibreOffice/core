@@ -98,7 +98,7 @@ int main( int argc,char* argv[] )
     }
     catch( ... )
     {
-        printf( "catched exception" );
+        printf( "caught exception" );
         throw;
     }
     return 0;

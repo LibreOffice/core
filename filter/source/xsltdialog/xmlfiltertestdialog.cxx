@@ -124,7 +124,7 @@ static bool checkComponent( Reference< XComponent >& rxComponent, const OUString
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "checkComponent exception catched!" );
+        OSL_FAIL( "checkComponent exception caught!" );
     }
 
     return false;
@@ -169,7 +169,7 @@ XMLFilterTestDialog::XMLFilterTestDialog(vcl::Window* pParent,
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "XMLFilterTestDialog::XMLFilterTestDialog exception catched!" );
+        OSL_FAIL( "XMLFilterTestDialog::XMLFilterTestDialog exception caught!" );
     }
 }
 
@@ -187,7 +187,7 @@ void XMLFilterTestDialog::dispose()
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "XMLFilterTestDialog::~XMLFilterTestDialog exception catched!" );
+        OSL_FAIL( "XMLFilterTestDialog::~XMLFilterTestDialog exception caught!" );
     }
 
     delete m_pFilterInfo;
@@ -527,7 +527,7 @@ void XMLFilterTestDialog::doExport( const Reference< XComponent >& xComp )
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "XMLFilterTestDialog::doExport exception catched!" );
+        OSL_FAIL( "XMLFilterTestDialog::doExport exception caught!" );
     }
 }
 
@@ -643,7 +643,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
     }
     catch(const Exception&)
     {
-        OSL_FAIL("XMLFilterTestDialog::import catched an exception" );
+        OSL_FAIL("XMLFilterTestDialog::import caught an exception" );
     }
 }
 
@@ -718,7 +718,7 @@ Reference< XComponent > XMLFilterTestDialog::getFrontMostDocument( const OUStrin
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "XMLFilterTestDialog::getFrontMostDocument exception catched!" );
+        OSL_FAIL( "XMLFilterTestDialog::getFrontMostDocument exception caught!" );
     }
 
     return xRet;
