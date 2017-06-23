@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <iostream>
 #include "OOXMLParserState.hxx"
+#include "Handler.hxx"
 
 namespace writerfilter {
 namespace ooxml
@@ -208,6 +209,22 @@ void OOXMLParserState::setTableProperties(const OOXMLPropertySet::Pointer_t& pPr
         else
             rTableProps->add(pProps);
     }
+}
+
+// tdf#108714
+void OOXMLParserState::resolvePostponedBreak(Stream & rStream)
+{
+    if (mpPostponedBreak)
+    {
+        OOXMLBreakHandler aBreakHandler(rStream);
+        mpPostponedBreak->resolve(aBreakHandler);
+        mpPostponedBreak.reset();
+    }
+}
+
+void OOXMLParserState::setPostponedBreak(const OOXMLPropertySet::Pointer_t & pProps)
+{
+    mpPostponedBreak = pProps;
 }
 
 void OOXMLParserState::startTable()
