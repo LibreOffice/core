@@ -54,7 +54,8 @@ using namespace ::com::sun::star;
 using namespace oox;
 using namespace ::std;
 
-static set<OOXMLFastContextHandler *> aSetContexts;
+// tdf#108714 : We only import one document at any given moment
+static OOXMLPropertySet::Pointer_t g_pPostponedBreak;
 
 /*
   class OOXMLFastContextHandler
@@ -76,7 +77,6 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   m_bTookChoice(false)
 {
     mnInstanceCount++;
-    aSetContexts.insert(this);
 
     if (mpParserState.get() == nullptr)
         mpParserState.reset(new OOXMLParserState());
@@ -102,13 +102,13 @@ OOXMLFastContextHandler::OOXMLFastContextHandler(OOXMLFastContextHandler * pCont
         mpParserState.reset(new OOXMLParserState());
 
     mnInstanceCount++;
-    aSetContexts.insert(this);
     mpParserState->incContextCount();
 }
 
 OOXMLFastContextHandler::~OOXMLFastContextHandler()
 {
-    aSetContexts.erase(this);
+    if (--mnInstanceCount == 0)
+        g_pPostponedBreak.reset();
 }
 
 bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Reference<xml::sax::XFastAttributeList>& rAttribs)
@@ -386,6 +386,15 @@ void OOXMLFastContextHandler::startParagraphGroup()
         {
             mpStream->startParagraphGroup();
             mpParserState->setInParagraphGroup(true);
+
+            // tdf#108714 : if we have a postponed break information,
+            // then apply it now, before any other paragraph content.
+            if (g_pPostponedBreak)
+            {
+                OOXMLBreakHandler aBreakHandler(*mpStream);
+                g_pPostponedBreak->resolve(aBreakHandler);
+                g_pPostponedBreak.reset();
+            }
         }
     }
 }
@@ -1047,6 +1056,15 @@ void OOXMLFastContextHandlerProperties::handleBreak()
     {
         OOXMLBreakHandler aBreakHandler(*mpStream);
         getPropertySet()->resolve(aBreakHandler);
+    }
+}
+
+// tdf#108714 : allow <w:br> at block level (despite this is illegal according to ECMA-376-1:2016)
+void OOXMLFastContextHandlerProperties::handleOutOfOrderBreak()
+{
+    if(isForwardEvents())
+    {
+        g_pPostponedBreak = getPropertySet();
     }
 }
 
