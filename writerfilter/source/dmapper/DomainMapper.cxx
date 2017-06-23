@@ -2969,17 +2969,12 @@ void DomainMapper::lcl_startParagraphGroup()
             m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, uno::makeAny( OUString(sDefault) ) );
             m_pImpl->SetCurrentParaStyleId(sDefault);
         }
-        if (m_pImpl->isBreakDeferred(PAGE_BREAK))
-            m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
-        else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
-            m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_COLUMN_BEFORE));
 
         if (m_pImpl->isParaSdtEndDeferred())
             m_pImpl->GetTopContext()->Insert(PROP_PARA_SDT_END_BEFORE, uno::makeAny(true), true, PARA_GRAB_BAG);
     }
     m_pImpl->SetIsFirstRun(true);
     m_pImpl->SetIsOutsideAParagraph(false);
-    m_pImpl->clearDeferredBreaks();
     m_pImpl->setParaSdtEndDeferred(false);
 }
 

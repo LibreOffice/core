@@ -1302,6 +1302,11 @@ DECLARE_OOXMLIMPORT_TEST(testVmlAdjustments, "vml-adjustments.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(17639), aAdjustmentValue.Value.get<sal_Int32>());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf108714, "tdf108714.docx")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Page break is absent - we lost bug-to-bug compatibility with Word", 2, getPages());
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
