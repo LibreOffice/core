@@ -721,6 +721,9 @@ bool SwGlossaryHdl::ImportGlossaries( const OUString& rName )
                     bRet = aReader.ReadGlossaries( *pR, *pGlossary,
                                 rCfg.IsSaveRelFile() );
                 }
+
+                if (!pCurGrp)
+                    delete pGlossary;
             }
         }
     }
