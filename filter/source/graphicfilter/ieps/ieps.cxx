@@ -435,7 +435,7 @@ void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_uInt32 
         nSizeTIFF = aTIFFBuf.size();
 
         SvMemoryStream aReplacement( nSizeWMF + nSizeTIFF + 28 );
-        sal_uInt32 nMagic = 0xc6d3d0c5;
+        sal_uInt32 const nMagic = 0xc6d3d0c5;
         sal_uInt32 nPPos = 28 + nSizeWMF + nSizeTIFF;
         sal_uInt32 nWPos = nSizeWMF ? 28 : 0;
         sal_uInt32 nTPos = nSizeTIFF ? 28 + nSizeWMF : 0;

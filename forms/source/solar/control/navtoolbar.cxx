@@ -270,9 +270,8 @@ namespace frm
             { FormFeature::RemoveFilterAndSort,     false, false },
         };
 
-        size_t nSupportedFeatures = SAL_N_ELEMENTS( aSupportedFeatures );
         FeatureDescription* pSupportedFeatures = aSupportedFeatures;
-        FeatureDescription* pSupportedFeaturesEnd = aSupportedFeatures + nSupportedFeatures;
+        FeatureDescription* pSupportedFeaturesEnd = aSupportedFeatures + SAL_N_ELEMENTS( aSupportedFeatures );
         for ( ; pSupportedFeatures < pSupportedFeaturesEnd; ++pSupportedFeatures )
         {
             if ( pSupportedFeatures->nId )

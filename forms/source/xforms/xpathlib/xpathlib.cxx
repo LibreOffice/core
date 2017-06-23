@@ -294,7 +294,7 @@ static bool parseDateTime(const OUString& aString, DateTime& aDateTime)
         return false;
 
     sal_Int32 nDateLength = 10;
-    sal_Int32 nTimeLength = 8;
+    sal_Int32 const nTimeLength = 8;
 
     OUString aDateString = aDateTimeString.copy(0, nDateLength);
     OUString aTimeString = aDateTimeString.copy(nDateLength+1, nTimeLength);

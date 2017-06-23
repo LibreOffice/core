@@ -64,14 +64,13 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::Property
     OUString udConvertClass    = msUserData[0];
     const OUString sXMLImportService = msUserData[2];
     sal_Int32 nSteps= 0;
-    sal_Int32 nProgressRange = 4;
 
     utl::MediaDescriptor aMediaMap(aDescriptor);
     Reference< XStatusIndicator > xStatusIndicator(aMediaMap.getUnpackedValueOrDefault(
         utl::MediaDescriptor::PROP_STATUSINDICATOR(), Reference< XStatusIndicator >()));
 
     if (xStatusIndicator.is()){
-        xStatusIndicator->start( "Loading :",nProgressRange);
+        xStatusIndicator->start( "Loading :", 4);
     }
 
     Sequence< Any > aAnys(1);
@@ -182,13 +181,12 @@ bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< css::beans::Property
 
     // Status Bar
     sal_Int32 nSteps= 1;
-    sal_Int32 nProgressRange(3);
     utl::MediaDescriptor aMediaMap(aDescriptor);
     Reference< XStatusIndicator > xStatusIndicator(aMediaMap.getUnpackedValueOrDefault(
         utl::MediaDescriptor::PROP_STATUSINDICATOR(), Reference< XStatusIndicator >()));
 
     if (xStatusIndicator.is())
-       xStatusIndicator->start( "Saving :",nProgressRange);
+       xStatusIndicator->start( "Saving :", 3);
 
     // Set up converter bridge.
     Reference< css::xml::XExportFilter > xConverter(mxContext->getServiceManager()->createInstanceWithContext( udConvertClass, mxContext ), UNO_QUERY);

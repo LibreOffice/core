@@ -707,9 +707,8 @@ void Binding::valueModified()
 
 void Binding::distributeMIP( const css::uno::Reference<css::xml::dom::XNode> & rxNode ) {
 
-    OUString sEventName("xforms-generic");
     css::xforms::XFormsEventConcrete *pEvent = new css::xforms::XFormsEventConcrete;
-    pEvent->initXFormsEvent(sEventName, true, false);
+    pEvent->initXFormsEvent("xforms-generic", true, false);
     Reference<XEvent> xEvent(pEvent);
 
     // naive depth-first traversal

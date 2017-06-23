@@ -95,7 +95,6 @@ ErrCode ImgProdLockBytes::ReadAt(sal_uInt64 const nPos,
     else
     {
         const std::size_t nSeqLen = maSeq.getLength();
-        ErrCode nErr = ERRCODE_NONE;
 
         if( nPos < nSeqLen )
         {
@@ -108,7 +107,7 @@ ErrCode ImgProdLockBytes::ReadAt(sal_uInt64 const nPos,
         else
             *pRead = 0UL;
 
-        return nErr;
+        return ERRCODE_NONE;
     }
 }
 

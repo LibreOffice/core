@@ -594,12 +594,9 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
             aGradientRecords.push_back( GradRecord( 0x00, maGradient.GetEndColor() ) );
             aGradientRecords.push_back( GradRecord( 0x80, maGradient.GetStartColor() ) );
             aGradientRecords.push_back( GradRecord( 0xff, maGradient.GetEndColor() ) );
-            double tx = ( 32768.0 / 2.0 );
-            double ty = ( 32768.0 / 2.0 );
             double scalex = (double)maBoundRect.GetWidth() / 32768.0;
             double scaley = (double)maBoundRect.GetHeight() / 32768.0;
-
-            m.translate( tx, ty );
+            m.translate( 32768.0 / 2.0, 32768.0 / 2.0 );
             m.scale( scalex, scaley );
         }
         break;

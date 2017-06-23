@@ -5291,10 +5291,9 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
             PPTCharPropSet aCharPropSet(0);
             aCharPropSet.mnOriginalTextPos = 0;
 
-            sal_uInt32 nCharAnzRead = 0;
             sal_uInt32 nExtParaFlags = 0, nAnmScheme = 0;
             sal_uInt16 nBuBlip = 0xffff, nHasAnm = 0;
-            ReadCharProps( rIn, aCharPropSet, aString, nCharCount, nCharAnzRead,
+            ReadCharProps( rIn, aCharPropSet, aString, nCharCount, 0/*nCharAnzRead*/,
                            bTextPropAtom, nExtParaPos, aStyleTextProp9, nExtParaFlags,
                            nBuBlip, nHasAnm, nAnmScheme );
 
