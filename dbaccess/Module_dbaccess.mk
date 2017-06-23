@@ -34,6 +34,7 @@ $(eval $(call gb_Module_add_l10n_targets,dbaccess,\
 	UIConfig_dbtdata \
 ))
 
+ifneq ($(OS),IOS)
 ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
 $(eval $(call gb_Module_add_check_targets,dbaccess,\
     CppunitTest_dbaccess_firebird_test \
@@ -83,6 +84,7 @@ $(eval $(call gb_Module_add_screenshot_targets,dbaccess,\
     CppunitTest_dbaccess_dialogs_test \
 ))
 
+endif
 endif
 
 # vim: set noet sw=4 ts=4:

@@ -25,6 +25,7 @@ $(eval $(call gb_Module_add_l10n_targets,chart2,\
 	UIConfig_chart2 \
 ))
 
+ifneq ($(OS),IOS)
 $(eval $(call gb_Module_add_check_targets,chart2,\
 	CppunitTest_chart2_common_functors \
 ))
@@ -53,5 +54,6 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,chart2,\
 $(eval $(call gb_Module_add_screenshot_targets,chart2,\
     CppunitTest_chart2_dialogs_test \
 ))
+endif
 
 # vim: set noet sw=4 ts=4:

@@ -29,6 +29,7 @@ $(eval $(call gb_Module_add_targets,sw,\
 	$(call gb_Helper_optional,DESKTOP,Library_swui) \
 ))
 
+ifneq ($(OS),IOS)
 $(eval $(call gb_Module_add_l10n_targets,sw,\
     AllLangResTarget_sw \
 	UIConfig_sglobal \
@@ -115,5 +116,6 @@ $(eval $(call gb_Module_add_screenshot_targets,sw,\
     CppunitTest_sw_dialogs_test \
     CppunitTest_sw_dialogs_test_2 \
 ))
+endif
 
 # vim: set noet sw=4 ts=4:

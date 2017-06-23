@@ -32,6 +32,7 @@ $(eval $(call gb_Module_add_targets,sc,\
 
 endif
 
+ifneq ($(OS),IOS)
 $(eval $(call gb_Module_add_check_targets,sc,\
 	Library_scqahelper \
 	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
@@ -146,5 +147,6 @@ $(eval $(call gb_Module_add_uicheck_targets,sc,\
 	UITest_autofilter \
 	UITest_search_replace \
 ))
+endif
 
 # vim: set noet sw=4 ts=4:
