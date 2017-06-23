@@ -60,7 +60,7 @@ namespace dbp
         m_pNextPage->SetHelpId(HID_GRIDWIZARD_NEXT);
         m_pCancel->SetHelpId(HID_GRIDWIZARD_CANCEL);
         m_pFinish->SetHelpId(HID_GRIDWIZARD_FINISH);
-        setTitleBase(ModuleRes(RID_STR_GRIDWIZARD_TITLE));
+        setTitleBase(compmodule::ModuleRes(RID_STR_GRIDWIZARD_TITLE));
 
         // if we do not need the data source selection page ...
         if (!needDatasourceSelection())
@@ -160,11 +160,11 @@ namespace dbp
 
                 case DataType::TIMESTAMP:
                     aColumnServiceNames.push_back(OUString("DateField"));
-                    aColumnLabelPostfixes.push_back(ModuleRes(RID_STR_DATEPOSTFIX));
+                    aColumnLabelPostfixes.push_back(compmodule::ModuleRes(RID_STR_DATEPOSTFIX));
 
                     aFormFieldNames.push_back(*pSelectedFields);
                     aColumnServiceNames.push_back(OUString("TimeField"));
-                    aColumnLabelPostfixes.push_back(ModuleRes(RID_STR_TIMEPOSTFIX));
+                    aColumnLabelPostfixes.push_back(compmodule::ModuleRes(RID_STR_TIMEPOSTFIX));
                     break;
 
                 default:

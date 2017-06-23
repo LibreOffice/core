@@ -373,7 +373,7 @@ bool VCLWidgets::VisitVarDecl(const VarDecl * pVarDecl) {
         || tc.Class("list").StdNamespace()
         || tc.Class("mem_fun1_t").StdNamespace()
           // registration template thing, doesn't actually allocate anything we need to care about
-        || tc.Class("OMultiInstanceAutoRegistration").Namespace("dbp").GlobalNamespace())
+        || tc.Class("OMultiInstanceAutoRegistration").Namespace("compmodule").GlobalNamespace())
     {
         return true;
     }
