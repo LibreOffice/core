@@ -412,6 +412,19 @@ public:
         of v should be unchanged,
     */
     virtual bool good() const { return !(eof() || bad()); }
+
+private:
+    template<typename T>
+    void readNumberWithoutSwap(T& rDataDest)
+    { readNumberWithoutSwap_(&rDataDest, sizeof(rDataDest)); }
+
+    void readNumberWithoutSwap_(void * pDataDest, int nDataSize);
+
+    template<typename T>
+    void writeNumberWithoutSwap(T const & rDataSrc)
+    { writeNumberWithoutSwap_(&rDataSrc, sizeof(rDataSrc)); }
+
+    void writeNumberWithoutSwap_(const void * pDataSrc, int nDataSize);
 };
 
 inline SvStream& operator<<( SvStream& rStr, SvStrPtr f )
