@@ -775,9 +775,17 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                     TextType aText;
                     ReadTextType( rInp, aText );
                     if (!rInp.GetError()) {
-                        UCHAR *pBuffer = new UCHAR[aText.BufSize+1]; // add one for LookAhead at CK-separation
-                        rInp.ReadBytes(pBuffer, aText.BufSize);
-                        if (!rInp.GetError()) aText.Draw(rOut, pBuffer);
+                        const size_t nRemainingSize = rInp.remainingSize();
+                        size_t nSize = aText.BufSize;
+                        if (nSize > nRemainingSize)
+                        {
+                            SAL_WARN("vcl", "file is shorter than requested len");
+                            nSize = nRemainingSize;
+                        }
+                        UCHAR *pBuffer = new UCHAR[nSize+1]; // add one for LookAhead at CK-separation
+                        size_t nReadSize = rInp.ReadBytes(pBuffer, nSize);
+                        pBuffer[nReadSize] = 0;
+                        if (!rInp.GetError() && nReadSize == aText.BufSize) aText.Draw(rOut, pBuffer);
                         delete[] pBuffer;
                     }
                 } break;
