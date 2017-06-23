@@ -1096,11 +1096,7 @@ void SAL_CALL cli_proxy_dispatch(
             css::uno::XInterface >() );
         css::uno::Type const & exc_type = cppu::UnoType<decltype(exc)>::get();
         uno_type_any_construct( *uno_exc, &exc, exc_type.getTypeLibType(), 0);
-#if OSL_DEBUG_LEVEL >= 1
-        OString cstr_msg(OUStringToOString(exc.Message,
-                                             RTL_TEXTENCODING_ASCII_US ) );
-        OSL_FAIL(cstr_msg.getStr());
-#endif
+        SAL_WARN( "cli", exc.Message);
     }
 }
 

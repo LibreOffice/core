@@ -220,13 +220,7 @@ namespace utl
             }
             catch (NoSuchElementException&)
             {
-                #if OSL_DEBUG_LEVEL > 0
-                OStringBuffer aBuf( 256 );
-                aBuf.append("OConfigurationNode::removeNode: there is no element named!");
-                aBuf.append( OUStringToOString( _rName, RTL_TEXTENCODING_ASCII_US ) );
-                aBuf.append( "!" );
-                OSL_FAIL(aBuf.getStr());
-                #endif
+                SAL_WARN( "unotools", "OConfigurationNode::removeNode: there is no element named: " << _rName );
             }
             catch (WrappedTargetException&)
             {
@@ -316,13 +310,7 @@ namespace utl
         }
         catch(const NoSuchElementException&)
         {
-            #if OSL_DEBUG_LEVEL > 0
-            OStringBuffer aBuf( 256 );
-            aBuf.append("OConfigurationNode::openNode: there is no element named ");
-            aBuf.append( OUStringToOString( _rPath, RTL_TEXTENCODING_ASCII_US ) );
-            aBuf.append("!");
-            OSL_FAIL(aBuf.getStr());
-            #endif
+            SAL_WARN( "unotools", "OConfigurationNode::openNode: there is no element named " << _rPath );
         }
         catch(Exception&)
         {

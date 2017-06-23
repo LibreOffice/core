@@ -179,12 +179,9 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
                 pCurSlot = pCurSlot->pNextSlot;
                 if ( pCurSlot->GetStateFnc() != pIter->GetStateFnc() )
                 {
-                    OStringBuffer aStr("Linked Slots with different State Methods : ");
-                    aStr.append(static_cast<sal_Int32>(
-                        pCurSlot->GetSlotId()));
-                    aStr.append(" , ");
-                    aStr.append(static_cast<sal_Int32>(pIter->GetSlotId()));
-                    SAL_WARN("sfx.control", aStr.getStr());
+                    SAL_WARN("sfx.control", "Linked Slots with different State Methods : "
+                                << pCurSlot->GetSlotId()
+                                << " , " << pIter->GetSlotId() );
                 }
             }
             while ( pCurSlot != pIter );

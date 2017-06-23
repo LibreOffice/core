@@ -2187,11 +2187,7 @@ void SAL_CALL LayoutManager::lock()
 
     SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::lock lockCount=" << nLockCount );
 #ifdef DBG_UTIL
-    OStringBuffer aStr("LayoutManager::lock ");
-    aStr.append(reinterpret_cast<sal_Int64>(this));
-    aStr.append(" - ");
-    aStr.append(nLockCount);
-    SAL_INFO( "fwk", "" << aStr.getStr());
+    SAL_INFO( "fwk", "LayoutManager::lock " << reinterpret_cast<sal_Int64>(this) << " - " << nLockCount );
 #endif
 
     Any a( nLockCount );
@@ -2208,11 +2204,7 @@ void SAL_CALL LayoutManager::unlock()
 
     SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::unlock lockCount=" << nLockCount );
 #ifdef DBG_UTIL
-    OStringBuffer aStr("LayoutManager::unlock ");
-    aStr.append(reinterpret_cast<sal_Int64>(this));
-    aStr.append(" - ");
-    aStr.append(nLockCount);
-    SAL_INFO( "fwk", "" << aStr.getStr());
+    SAL_INFO( "fwk", "LayoutManager::unlock " << reinterpret_cast<sal_Int64>(this) << " - " << nLockCount);
 #endif
     // conform to documentation: unlock with lock count == 0 means force a layout
 

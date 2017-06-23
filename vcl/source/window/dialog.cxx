@@ -751,10 +751,8 @@ bool Dialog::ImplStartExecuteModal()
     if ( mbInExecute )
     {
 #ifdef DBG_UTIL
-        OStringBuffer aErrorStr;
-        aErrorStr.append("Dialog::StartExecuteModal() is called in Dialog::StartExecuteModal(): ");
-        aErrorStr.append(ImplGetDialogText(this));
-        OSL_FAIL(aErrorStr.getStr());
+        SAL_WARN( "vcl", "Dialog::StartExecuteModal() is called in Dialog::StartExecuteModal(): "
+                    << ImplGetDialogText(this) );
 #endif
         return false;
     }

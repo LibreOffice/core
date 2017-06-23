@@ -249,13 +249,8 @@ SdrModel::~SdrModel()
 
     ClearUndoBuffer();
 #ifdef DBG_UTIL
-    if(pAktUndoGroup)
-    {
-        OStringBuffer aStr("In the Dtor of the SdrModel there is an open Undo left: \"");
-        aStr.append(OUStringToOString(pAktUndoGroup->GetComment(), osl_getThreadTextEncoding()))
-            .append('\"');
-        OSL_FAIL(aStr.getStr());
-    }
+    SAL_WARN_IF(pAktUndoGroup, "svx", "In the Dtor of the SdrModel there is an open Undo left: \""
+                    << pAktUndoGroup->GetComment() << '\"');
 #endif
     delete pAktUndoGroup;
 

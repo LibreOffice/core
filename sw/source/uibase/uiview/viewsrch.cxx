@@ -498,13 +498,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
         }
         break;
         default:
-#if OSL_DEBUG_LEVEL > 1
-            if(nSlot)
-            {
-                OString sStr("nSlot: " + OString::number(nSlot) + " wrong Dispatcher (viewsrch.cxx)");
-                OSL_FAIL(sStr.getStr());
-            }
-#endif
+            SAL_WARN_IF( nSlot, "sw", "nSlot: " << nSlot << " wrong Dispatcher (viewsrch.cxx)" );
             return;
     }
 }

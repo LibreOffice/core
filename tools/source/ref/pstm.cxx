@@ -454,10 +454,7 @@ void SvPersistStream::ReadObj
             if( !pFunc )
             {
 #ifdef DBG_UTIL
-                OStringBuffer aStr("no class with id: " );
-                aStr.append(static_cast<sal_Int32>(nClassId));
-                aStr.append(" registered");
-                SAL_INFO("tools", aStr.getStr());
+                SAL_INFO( "tools", "no class with id: " << nClassId << " registered" );
 #else
                 (void)nObjLen;
 #endif
@@ -475,16 +472,8 @@ void SvPersistStream::ReadObj
             SAL_WARN_IF( (nHdr & P_DBGUTIL) && (nId != nNewId), "tools","read write id conflict: not the same");
 
             rpObj->Load( *this );
-#ifdef DBG_UTIL
-            if( nObjLen + nObjPos != Tell() )
-            {
-                OStringBuffer aStr("false object len: read = ");
-                aStr.append(static_cast<sal_Int64>((long)(Tell() - nObjPos)));
-                aStr.append(", should = ");
-                aStr.append(static_cast<sal_Int32>(nObjLen));
-                OSL_FAIL(aStr.getStr());
-            }
-#endif
+            SAL_WARN_IF( nObjLen + nObjPos != Tell(), "tools", "false object len: read = " << (Tell() - nObjPos)
+                            << ", should = " << nObjLen);
             rpObj->RestoreNoDelete();
             rpObj->ReleaseRef();
         }

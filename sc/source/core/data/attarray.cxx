@@ -116,14 +116,7 @@ void ScAttrArray::TestData() const
     if ( nPos && pData[nPos-1].nRow != MAXROW )
         ++nErr;
 
-    if (nErr)
-    {
-        OStringBuffer aMsg;
-        aMsg.append(static_cast<sal_Int32>(nErr));
-        aMsg.append(" errors in attribute array, column ");
-        aMsg.append(static_cast<sal_Int32>(nCol));
-        OSL_FAIL(aMsg.getStr());
-    }
+    SAL_WARN_IF( nErr, "sc", nErr << " errors in attribute array, column " << nCol );
 }
 #endif
 

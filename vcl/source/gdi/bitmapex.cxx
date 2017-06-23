@@ -109,16 +109,7 @@ void BitmapEx::loadFromIconTheme( const OUString& rIconName )
         bSuccess = false;
     }
 
-    if (!bSuccess)
-    {
-#ifdef DBG_UTIL
-        OStringBuffer aErrorStr(
-            "BitmapEx::BitmapEx(): could not load image <");
-        aErrorStr.append(OUStringToOString(rIconName, RTL_TEXTENCODING_ASCII_US)).append("> via icon theme ");
-        aErrorStr.append(OUStringToOString(aIconTheme, RTL_TEXTENCODING_ASCII_US)).append('.');
-        OSL_FAIL(aErrorStr.getStr());
-#endif
-    }
+    SAL_WARN_IF( !bSuccess, "vcl", "BitmapEx::BitmapEx(): could not load image " << rIconName << " via icon theme " << aIconTheme);
 }
 
 BitmapEx::BitmapEx( const Bitmap& rBmp ) :

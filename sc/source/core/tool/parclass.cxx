@@ -489,12 +489,9 @@ void ScParameterClassification::MergeArgumentsFromFunctionResource()
         }
         if ( nArgs > CommonData::nMaxParams )
         {
-            OStringBuffer aBuf;
-            aBuf.append("ScParameterClassification::Init: too many arguments in listed function: ");
-            aBuf.append(OUStringToOString(*(pDesc->pFuncName), RTL_TEXTENCODING_UTF8));
-            aBuf.append(": ");
-            aBuf.append(sal_Int32(nArgs));
-            OSL_FAIL( aBuf.getStr());
+            SAL_WARN( "sc", "ScParameterClassification::Init: too many arguments in listed function: "
+                        << *(pDesc->pFuncName)
+                        << ": " << nArgs );
             nArgs = CommonData::nMaxParams - 1;
             pRun->aData.nRepeatLast = 1;
         }

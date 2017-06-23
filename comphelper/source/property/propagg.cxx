@@ -598,16 +598,8 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
         catch( const UnknownPropertyException& )
         {
             // by definition of XMultiPropertySet::setPropertyValues, unknown properties are to be ignored
-        #if OSL_DEBUG_LEVEL > 0
-            OStringBuffer aMessage;
-            aMessage.append( "OPropertySetAggregationHelper::setPropertyValues: unknown property '" );
-            aMessage.append( OUStringToOString( _rPropertyNames[0], RTL_TEXTENCODING_ASCII_US ) );
-            aMessage.append( "'" );
-            aMessage.append( "\n(implementation " );
-            aMessage.append( typeid( *this ).name() );
-            aMessage.append( ")" );
-            OSL_FAIL( aMessage.getStr() );
-        #endif
+            SAL_WARN( "comphelper", "OPropertySetAggregationHelper::setPropertyValues: unknown property: '"
+                    << _rPropertyNames[0] << "', implementation: " << typeid( *this ).name() );
         }
     }
     else

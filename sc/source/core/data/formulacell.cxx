@@ -2715,13 +2715,10 @@ sc::MatrixEdge ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
                 else
                 {
 #if OSL_DEBUG_LEVEL > 0
-                    OStringBuffer aMsg("broken Matrix, no MatFormula at origin, Pos: ");
-                    OUString aTmp(aPos.Format(ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID, pDocument));
-                    aMsg.append(OUStringToOString(aTmp, RTL_TEXTENCODING_ASCII_US));
-                    aMsg.append(", MatOrg: ");
-                    aTmp = aOrg.Format(ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID, pDocument);
-                    aMsg.append(OUStringToOString(aTmp, RTL_TEXTENCODING_ASCII_US));
-                    OSL_FAIL(aMsg.getStr());
+                    SAL_WARN( "sc", "broken Matrix, no MatFormula at origin, Pos: "
+                                << aPos.Format(ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID, pDocument)
+                                << ", MatOrg: "
+                                << aOrg.Format(ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID, pDocument) );
 #endif
                     return sc::MatrixEdge::Nothing;
                 }

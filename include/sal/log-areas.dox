@@ -558,6 +558,7 @@ certain functionality.
 @li @c animations
 @li @c basegfx
 @li @c binaryurp
+@li @c cli
 @li @c configmgr
 @li @c configmgr.dconf
 @li @c cppcanvas

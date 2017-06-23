@@ -801,11 +801,7 @@ void ResMgr::Init( const OUString& rFileName )
 
     if ( !pImpRes )
     {
-#ifdef DBG_UTIL
-        OStringBuffer aStr("Resourcefile not found:\n");
-        aStr.append(OUStringToOString(rFileName, RTL_TEXTENCODING_UTF8));
-        OSL_FAIL(aStr.getStr());
-#endif
+        SAL_WARN( "tools.rc", "Resourcefile not found: " << rFileName);
         RscException_Impl();
     }
 #ifdef DBG_UTIL

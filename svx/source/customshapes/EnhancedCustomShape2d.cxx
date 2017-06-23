@@ -1943,9 +1943,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
                 case UNKNOWN :
                 default :
                 {
-                    OStringBuffer aString("CustomShapes::unknown PolyFlagValue :");
-                    aString.append(static_cast<sal_Int32>(nCommand));
-                    OSL_FAIL(aString.getStr());
+                    SAL_WARN( "svx", "CustomShapes::unknown PolyFlagValue :" << nCommand );
                 }
                 break;
 #endif

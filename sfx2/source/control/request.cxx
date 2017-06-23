@@ -191,14 +191,10 @@ SfxRequest::SfxRequest
         pImpl->xRecorder = SfxRequest::GetMacroRecorder( pViewFrame );
         pImpl->aTarget = pImpl->pShell->GetName();
     }
-#ifdef DBG_UTIL
     else
     {
-        OStringBuffer aStr("Recording unsupported slot: ");
-        aStr.append(static_cast<sal_Int32>(pImpl->pPool->GetSlotId(nSlotId)));
-        OSL_FAIL(aStr.getStr());
+        SAL_WARN( "sfx", "Recording unsupported slot: " << pImpl->pPool->GetSlotId(nSlotId) );
     }
-#endif
 }
 
 
@@ -573,12 +569,8 @@ void SfxRequest::Done_Impl
 
     // recordable?
     // new Recording uses UnoName!
-    if ( !pImpl->pSlot->pUnoName )
-    {
-        OStringBuffer aStr("Recording not exported slot: ");
-        aStr.append(static_cast<sal_Int32>(pImpl->pSlot->GetSlotId()));
-        OSL_FAIL(aStr.getStr());
-    }
+    SAL_WARN_IF( !pImpl->pSlot->pUnoName, "sfx", "Recording not exported slot: "
+                    << pImpl->pSlot->GetSlotId() );
 
     if ( !pImpl->pSlot->pUnoName ) // playing it safe
         return;
@@ -593,14 +585,8 @@ void SfxRequest::Done_Impl
         const SfxPoolItem *pItem;
         sal_uInt16 nWhich = rPool.GetWhich(pImpl->pSlot->GetSlotId());
         SfxItemState eState = pSet ? pSet->GetItemState( nWhich, false, &pItem ) : SfxItemState::UNKNOWN;
-#ifdef DBG_UTIL
-        if ( SfxItemState::SET != eState )
-        {
-            OStringBuffer aStr("Recording property not available: ");
-            aStr.append(static_cast<sal_Int32>(pImpl->pSlot->GetSlotId()));
-            OSL_FAIL(aStr.getStr());
-        }
-#endif
+        SAL_WARN_IF( SfxItemState::SET != eState, "sfx", "Recording property not available: "
+                     << pImpl->pSlot->GetSlotId() );
         uno::Sequence < beans::PropertyValue > aSeq;
         if ( eState == SfxItemState::SET )
             TransformItems( pImpl->pSlot->GetSlotId(), *pSet, aSeq, pImpl->pSlot );

@@ -779,7 +779,7 @@ namespace
             return VclResId(SV_BUTTONTEXT_YES);
         else if (rType == "gtk-no")
             return VclResId(SV_BUTTONTEXT_NO);
-        SAL_WARN("vcl.layout", "unknown stock type: " << rType.getStr());
+        SAL_WARN("vcl.layout", "unknown stock type: " << rType);
         return OUString();
     }
 
@@ -1461,20 +1461,20 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             if (sPattern == "hh:mm")
             {
                 connectTimeFormatterAdjustment(id, sAdjustment);
-                SAL_INFO("vcl.layout", "making time field for " << name << " " << sUnit.getStr());
+                SAL_INFO("vcl.layout", "making time field for " << name << " " << sUnit);
                 xWindow = VclPtr<TimeField>::Create(pParent, nBits);
             }
             else if (sPattern == "yy:mm:dd")
             {
                 connectDateFormatterAdjustment(id, sAdjustment);
-                SAL_INFO("vcl.layout", "making date field for " << name << " " << sUnit.getStr());
+                SAL_INFO("vcl.layout", "making date field for " << name << " " << sUnit);
                 xWindow = VclPtr<DateField>::Create(pParent, nBits);
             }
             else
             {
                 connectNumericFormatterAdjustment(id, sAdjustment);
                 FieldUnit eUnit = detectMetricUnit(sUnit);
-                SAL_INFO("vcl.layout", "making metric field for " << name << " " << sUnit.getStr());
+                SAL_INFO("vcl.layout", "making metric field for " << name << " " << sUnit);
                 VclPtrInstance<MetricField> xField(pParent, nBits);
                 xField->SetUnit(eUnit);
                 if (eUnit == FUNIT_CUSTOM)
