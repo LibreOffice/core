@@ -3431,8 +3431,8 @@ void ScInterpreter::ScMacro()
         else if ( eResType & SbxARRAY )
         {
             SbxBase* pElemObj = refRes->GetObject();
-            SbxDimArray* pDimArray = dynamic_cast< SbxDimArray *>( pElemObj );
-            short nDim = pDimArray->GetDims();
+            SbxDimArray* pDimArray = dynamic_cast<SbxDimArray*>(pElemObj);
+            short nDim = pDimArray ? pDimArray->GetDims() : 0;
             if ( 1 <= nDim && nDim <= 2 )
             {
                 sal_Int32 nCs, nCe, nRs, nRe;
