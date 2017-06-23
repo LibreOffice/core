@@ -120,7 +120,7 @@ private:
 
 public:
     OpenGLCfg();
-    ~OpenGLCfg() COVERITY_NOEXCEPT_FALSE;
+    ~OpenGLCfg();
 
     bool useOpenGL() const;
     bool forceOpenGL() const;
@@ -144,16 +144,22 @@ void OpenGLCfg::reset()
     mbModified = false;
 }
 
-OpenGLCfg::~OpenGLCfg() COVERITY_NOEXCEPT_FALSE
+OpenGLCfg::~OpenGLCfg()
 {
     if (mbModified)
     {
-        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-        if (!officecfg::Office::Common::VCL::UseOpenGL::isReadOnly())
-            officecfg::Office::Common::VCL::UseOpenGL::set(mbUseOpenGL, batch);
-        if (!officecfg::Office::Common::VCL::ForceOpenGL::isReadOnly())
-            officecfg::Office::Common::VCL::ForceOpenGL::set(mbForceOpenGL, batch);
-        batch->commit();
+        try
+        {
+            std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+            if (!officecfg::Office::Common::VCL::UseOpenGL::isReadOnly())
+                officecfg::Office::Common::VCL::UseOpenGL::set(mbUseOpenGL, batch);
+            if (!officecfg::Office::Common::VCL::ForceOpenGL::isReadOnly())
+                officecfg::Office::Common::VCL::ForceOpenGL::set(mbForceOpenGL, batch);
+            batch->commit();
+        }
+        catch (...)
+        {
+        }
     }
 }
 
