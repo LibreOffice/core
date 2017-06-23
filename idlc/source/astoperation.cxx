@@ -42,7 +42,6 @@ bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
 {
     sal_uInt16      nParam = getNodeCount(NT_parameter);
     sal_uInt16      nExcep = (sal_uInt16)m_exceptions.size();
-    RTMethodMode    methodMode = RTMethodMode::TWOWAY;
 
     OUString returnTypeName;
     if (m_pReturnType == nullptr) {
@@ -52,7 +51,7 @@ bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
             m_pReturnType->getRelativName(), RTL_TEXTENCODING_UTF8);
     }
     rBlob.setMethodData(
-        index, getDocumentation(), methodMode,
+        index, getDocumentation(), RTMethodMode::TWOWAY,
         OStringToOUString(getLocalName(), RTL_TEXTENCODING_UTF8),
         returnTypeName, nParam, nExcep);
 

@@ -151,7 +151,7 @@ void writeKeyValue_DBHelp( FILE* pFile, const std::string& aKeyStr, const std::s
 {
     if( pFile == nullptr )
         return;
-    char cLF = 10;
+    char const cLF = 10;
     unsigned int nKeyLen = aKeyStr.length();
     unsigned int nValueLen = aValueStr.length();
     fprintf( pFile, "%x ", nKeyLen );
