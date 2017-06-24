@@ -151,8 +151,10 @@
 #else
 #define PAR_MAC            (31 + 1)
 #endif
-/* NWORK wg. grooossen Makros in *.src erhoeht,
- da wir bald 10 Sprachen haben werden gleich ordentlich reingehauen.. */
+/*
+ * NWORK increased due to large macros in *.src,
+ * added a proper bunch right away, because we are soon going to have 10 languages.
+ */
 #define NWORK                   128000
 #define NBUFF                   NWORK
 #define NFWORK                  1024

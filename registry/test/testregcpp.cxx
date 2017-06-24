@@ -120,7 +120,7 @@ void test_coreReflection()
                                                               OUString("I am a double"),
                                                               OUString("DummyFile"), RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_STRING;
-        OUString tmpStr("dies ist ein unicode string");
+        OUString tmpStr("this is a unicode string");
         aConst.m_value.aString = tmpStr.getStr();
 
         writer.setFieldData(10, OUString("aConstString"),
@@ -162,7 +162,7 @@ void test_coreReflection()
                                   OUString("ModuleA/StructA"),
                                   OUString(), 3, 0, 0);
 
-        writer.setDoku(OUString("Hallo ich bin eine Struktur"));
+        writer.setDoku(OUString("Hello I am a structure"));
         writer.setFileName(OUString("DummyFile"));
 
         writer.setFieldData(0, OUString("asal_uInt32"),
@@ -191,11 +191,11 @@ void test_coreReflection()
         aConst.m_type = RT_TYPE_UINT32;
         aConst.m_value.aULong = 10;
 
-        writer.setDoku(OUString("Hallo ich bin ein Enum"));
+        writer.setDoku(OUString("Hello I am an enum"));
         writer.setFileName(OUString("DummyFile"));
 
         writer.setFieldData(0, OUString("ENUM_VAL_1"),
-                            OUString(), OUString("ich bin ein enum value"),
+                            OUString(), OUString("I am an enum value"),
                             OUString(), RTFieldAccess::CONST, aConst);
 
         aConst.m_value.aULong = 10;
@@ -218,7 +218,7 @@ void test_coreReflection()
         RTUik aUik = {1,2,3,4,5};
 
         writer.setUik(aUik);
-        writer.setDoku(OUString("Hallo ich bin ein Interface"));
+        writer.setDoku(OUString("Hello I am an interface"));
         writer.setFileName(OUString("DummyFile"));
 
         writer.setFieldData(0, OUString("aString"),
@@ -236,7 +236,7 @@ void test_coreReflection()
 
         writer.setMethodData(0, OUString("methodA"),
                              OUString("double"), RTMethodMode::TWOWAY, 2, 1,
-                             OUString("Hallo ich bin die methodA"));
+                             OUString("Hello I am the methodA"));
         writer.setParamData(0, 0, OUString("ModuleA/StructA"),
                             OUString("aStruct"), RT_PARAM_IN);
         writer.setParamData(0, 1, OUString("unsigned short"),
@@ -273,11 +273,11 @@ void test_coreReflection()
                                   OUString("ModuleA/ExceptionA"),
                                   OUString(), 1, 0, 0);
 
-        writer.setDoku(OUString("Hallo ich bin eine Exception"));
+        writer.setDoku(OUString("Hello I am an exception"));
 
         writer.setFieldData(0, OUString("aSource"),
                             OUString("stardiv/uno/XInterface"),
-                            OUString("ich bin ein interface member"),
+                            OUString("I am an interface member"),
                             OUString(), RTFieldAccess::READWRITE);
 
         const sal_uInt8* pBlop = writer.getBlop();
@@ -291,23 +291,23 @@ void test_coreReflection()
                                   OUString("ModuleA/ServiceA"),
                                   OUString(), 1, 0, 4);
 
-        writer.setDoku(OUString("Hallo ich bin ein Service"));
+        writer.setDoku(OUString("Hello I am a service"));
         writer.setFileName(OUString("DummyFile"));
 
         writer.setFieldData(0, OUString("aProperty"),
                             OUString("stardiv/uno/XInterface"),
-                            OUString("ich bin eine property"),
+                            OUString("I am a property"),
                             OUString(), RTFieldAccess::READWRITE);
 
         writer.setReferenceData(0, OUString("ModuleA/XInterfaceA"), RTReferenceType::SUPPORTS,
-                                OUString("Hallo ich eine Reference auf ein supported interface"),
+                                OUString("Hello I am a reference to a supported interface"),
                                 RTFieldAccess::OPTIONAL);
         writer.setReferenceData(1, OUString("ModuleA/XInterfaceA"), RTReferenceType::OBSERVES,
-                                OUString("Hallo ich eine Reference auf ein observed interface"));
+                                OUString("Hello I am a reference to an observed interface"));
         writer.setReferenceData(2, OUString("ModuleA/ServiceB"), RTReferenceType::EXPORTS,
-                                OUString("Hallo ich eine Reference auf einen exported service"));
+                                OUString("Hello I am a reference to an exported service"));
         writer.setReferenceData(3, OUString("ModuleA/ServiceB"), RTReferenceType::NEEDS,
-                                OUString("Hallo ich eine Reference auf einen needed service"));
+                                OUString("Hello I am a reference to a needed service"));
 
         const sal_uInt8* pBlop = writer.getBlop();
         sal_uInt32      aBlopSize = writer.getBlopSize();
@@ -337,26 +337,26 @@ void test_coreReflection()
 
         RTConstValue aConst;
 
-        writer.setDoku(OUString("Hallo ich bin eine Constants Group"));
+        writer.setDoku(OUString("Hello I am a constants group"));
         writer.setFileName(OUString("DummyFile"));
 
         aConst.m_type = RT_TYPE_BOOL;
         aConst.m_value.aBool = sal_True;
         writer.setFieldData(0, OUString("ConstantsA_aConstBool"),
                             OUString("boolean"),
-                            OUString("ich bin ein boolean"),
+                            OUString("I am a boolean"),
                             OUString("DummyFile"), RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_BYTE;
         aConst.m_value.aByte = 127;
         writer.setFieldData(1, OUString("ConstantsA_aConstByte"),
                             OUString("byte"),
-                            OUString("ich bin ein byte"),
+                            OUString("I am a byte"),
                             OUString("DummyFile"),  RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_INT16;
         aConst.m_value.aShort = -10;
         writer.setFieldData(2, OUString("ConstantsA_aConstShort"),
                             OUString("short"),
-                            OUString("ich bin ein short"),
+                            OUString("I am a short"),
                             OUString("DummyFile"),  RTFieldAccess::CONST, aConst);
 
         const sal_uInt8* pBlop = writer.getBlop();
@@ -491,7 +491,7 @@ void test_registry_CppApi()
     REG_ENSURE(!key8.closeKey(),  "test_registry_CppApi error 8d");
 
 
-    sal_Char* Value=(sal_Char*)"Mein erster Value";
+    sal_Char* Value=(sal_Char*)"My first value";
     REG_ENSURE(!rootKey.setValue(OUString("mySecondKey"), RegValueType::STRING, Value, 18), "test_registry_CppApi error 9");
 
     RegValueType    valueType;
@@ -508,9 +508,9 @@ void test_registry_CppApi()
     rtl_freeMemory(readValue);
 
     const sal_Char* pList[3];
-    const sal_Char* n1= "Hallo";
-    const sal_Char* n2= "jetzt komm";
-    const sal_Char* n3= "ich";
+    const sal_Char* n1= "Hello";
+    const sal_Char* n2= "now I";
+    const sal_Char* n3= "come";
 
     pList[0]=n1;
     pList[1]=n2;
@@ -544,7 +544,7 @@ void test_registry_CppApi()
     REG_ENSURE(pLong[2] == longList.getElement(2), "test_registry_CppApi error 13j");
 
 
-    OUString sWTestValue("Mein erster Unicode Value");
+    OUString sWTestValue("My first unicode value");
     const sal_Unicode* wTestValue= sWTestValue.getStr();
     REG_ENSURE(!rootKey.setValue(OUString("mySixthKey"), RegValueType::UNICODE, (void*)wTestValue,
                 (rtl_ustr_getLength(wTestValue)+1)*sizeof(sal_Unicode)), "test_registry_CppApi error 13j1");
@@ -556,9 +556,9 @@ void test_registry_CppApi()
     REG_ENSURE(rtl_ustr_compare(wTestValue, pTmpValue) == 0, "test_registry_CppApi error 13j4");
 
     const sal_Unicode* pUnicode[3];
-    OUString w1("Hallo");
-    OUString w2("jetzt komm");
-    OUString w3("ich als unicode");
+    OUString w1("Hello");
+    OUString w2("now I");
+    OUString w3("come as unicode");
 
     pUnicode[0]=w1.getStr();
     pUnicode[1]=w2.getStr();
@@ -642,7 +642,7 @@ void test_registry_CppApi()
     REG_ENSURE(!key1.closeKey() &&
                 !key2.closeKey(), "test_registry_CppApi error 41");
 
-    const sal_Unicode* wValue= OUString("Mein erster Unicode Value").getStr();
+    const sal_Unicode* wValue= OUString("My first unicode value").getStr();
     REG_ENSURE(!key3.setValue(OUString(), RegValueType::UNICODE, (void*)wValue,
                 (rtl_ustr_getLength(wValue)+1)*sizeof(sal_Unicode)), "test_registry_CppApi error 42");
 

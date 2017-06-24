@@ -187,7 +187,7 @@ RscTupel * RscTypCont::InitStringLongTupel()
     RscTop *    pTupel;
     Atom        nId;
 
-    // Clientvariablen einfuegen
+    // insert client variables
     pTupel = new RscTupel( pHS->getID( "CharsLongTupel" ), RSC_NOTYPE );
     nId = aNmTb.Put( "ItemText", VARNAME );
     pTupel->SetVariable( nId, &aString );

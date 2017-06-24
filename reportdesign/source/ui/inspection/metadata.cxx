@@ -65,7 +65,7 @@ namespace rptui
     }
 
 
-    // Vergleichen von PropertyInfo
+    // compare PropertyInfo
     struct PropertyInfoLessByName : public ::std::binary_function< OPropertyInfoImpl, OPropertyInfoImpl, bool >
     {
         bool operator()( const OPropertyInfoImpl& _lhs, const OPropertyInfoImpl& _rhs )
@@ -185,7 +185,7 @@ namespace rptui
 
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(const OUString& _rName)
     {
-        // intialisierung
+        // initialization
         if(!s_pPropertyInfos)
             getPropertyInfo();
         OPropertyInfoImpl  aSearch(_rName, 0L, OUString(), "", PropUIFlags::NONE);
@@ -202,7 +202,7 @@ namespace rptui
 
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(sal_Int32 _nId)
     {
-        // intialisierung
+        // initialization
         if(!s_pPropertyInfos)
             getPropertyInfo();
 
