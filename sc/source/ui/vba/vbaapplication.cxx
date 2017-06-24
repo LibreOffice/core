@@ -914,6 +914,14 @@ ScVbaApplication::getPathSeparator()
     return OUString( (sal_Unicode) SAL_PATHDELIMITER );
 }
 
+OUString SAL_CALL
+ScVbaApplication::getOperatingSystem()
+{
+    // TODO implement
+    SAL_WARN("ScVbaApplication::getOperatingSystem", "not implemented");
+    return OUString();
+}
+
 // Helpers for Intersect and Union
 
 namespace {
