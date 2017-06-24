@@ -221,5 +221,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 	$(if $(call fetch_Optional,LIBGLTF,LIBGLTF_TARBALL) \
 	, $(call fetch_Download_item,https://dev-www.libreoffice.org/src/libgltf,$(call fetch_Optional,LIBGLTF,LIBGLTF_TARBALL)))
 	@mkdir -p $(dir $@) && touch $@
+	@mkdir -p $(dir $@)/Executable
 
 # vim: set noet sw=4 ts=4:
