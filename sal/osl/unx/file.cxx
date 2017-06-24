@@ -19,15 +19,12 @@
 
 #include <config_features.h>
 
-#include "osl/file.hxx"
-#include "osl/detail/file.h"
-
-#include "osl/diagnose.h"
-#include "rtl/alloc.h"
-
-#include <rtl/string.hxx>
-
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
+#include <osl/file.hxx>
+#include <osl/detail/file.h>
+#include <rtl/alloc.h>
+#include <rtl/string.hxx>
 
 #include "system.hxx"
 #include "createfilehandlefromfd.hxx"
