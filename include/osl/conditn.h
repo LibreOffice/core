@@ -45,15 +45,11 @@ typedef enum {
 
     The condition is in the reset-state.
 
-    @relates Condition
-
     @retval osl_cond_result_error Condition could not be created.
 */
 SAL_DLLPUBLIC oslCondition SAL_CALL osl_createCondition(void);
 
 /** Free the memory used by the condition.
-
-    @relates Condition
 
     @param Condition the condition handle.
 */
@@ -63,8 +59,6 @@ SAL_DLLPUBLIC void SAL_CALL osl_destroyCondition(oslCondition Condition);
 
     @attention @em all threads waiting on this condition are unblocked!
 
-    @relates Condition
-
     @param Condition handle to a created condition.
     @retval False if system-call failed.
 */
@@ -72,16 +66,12 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setCondition(oslCondition Condition);
 
 /** Sets condition to False => wait() will block, check() returns False
 
-    @relates Condition
-
     @param Condition handle to a created condition.
     @retval False if system-call failed.
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition);
 
 /** Blocks if condition is not set.
-
-    @relates Condition
 
     @param Condition handle to a created condition.
     @param pTimeout Timeout value or NULL for infinite waiting
@@ -91,9 +81,8 @@ SAL_DLLPUBLIC oslConditionResult SAL_CALL osl_waitCondition(oslCondition Conditi
 
 /** Queries the state of the condition without blocking.
 
-    @relates Condition
-
     @param Condition handle to a created condition.
+
     @retval True condition is set
     @retval False condition is not set
 */
