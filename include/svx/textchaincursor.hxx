@@ -26,6 +26,8 @@ class SdrObjEditView;
 class SdrTextObj;
 class KeyEvent;
 class SdrOutliner;
+enum class CursorChainingEvent;
+struct ESelection;
 
 
 class SVX_DLLPUBLIC TextChainCursorManager
@@ -37,11 +39,11 @@ public:
 
     // Used by HandledKeyEvent and basic building block for handling cursor event
     void HandleCursorEvent(const CursorChainingEvent aCurEvt,
-                           const ESelection  aNewSel);
+                           const ESelection& aNewSel);
 
     // To be used after chaining event to deal with some nuisances
     void  HandleCursorEventAfterChaining(const CursorChainingEvent aCurEvt,
-                                         const ESelection  aNewSel);
+                                         const ESelection& aNewSel);
 
 private:
     SdrObjEditView *mpEditView;
@@ -52,9 +54,9 @@ private:
 
     void impChangeEditingTextObj(SdrTextObj *pTargetTextObj, ESelection aNewSel);
     void impDetectEvent(const KeyEvent& rKEvt,
-                        CursorChainingEvent *pOutCursorEvt,
-                        ESelection *pOutSel,
-                        bool *bOutHandled);
+                        CursorChainingEvent& rOutCursorEvt,
+                        ESelection& rOutSel,
+                        bool& rOutHandled);
 };
 
 
