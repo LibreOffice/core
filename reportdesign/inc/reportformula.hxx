@@ -90,7 +90,7 @@ namespace rptui
         /** returns a bracketed field name of the formula denotes a field reference,
             or the undecorated expression if the formula denotes an expression.
 
-            Effectively, this means the method returns the complete formular, stripped by the prefix
+            Effectively, this means the method returns the complete formula, stripped by the prefix
             which indicates a field or a expression.
         */
         OUString getBracketedFieldOrExpression() const;

@@ -129,7 +129,7 @@ void RscArray::Destroy( const RSCINST & rInst )
 
     pClassData = reinterpret_cast<RscArrayInst *>(rInst.pData + nOffInstData);
 
-    //Baum rekursiv loeschen
+    // delete the tree recursively
     ::Destroy( pClassData->pNode );
 }
 
