@@ -43,7 +43,7 @@ bool TextChainCursorManager::HandleKeyEvent( const KeyEvent& rKEvt )
 
     // check what the cursor/event situation looks like
     bool bCompletelyHandled = false;
-    impDetectEvent(rKEvt, &aCursorEvent, &aNewSel, &bCompletelyHandled);
+    impDetectEvent(rKEvt, aCursorEvent, aNewSel, bCompletelyHandled);
 
     if (aCursorEvent == CursorChainingEvent::NULL_EVENT)
         return false;
@@ -55,9 +55,9 @@ bool TextChainCursorManager::HandleKeyEvent( const KeyEvent& rKEvt )
 }
 
 void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
-                                            CursorChainingEvent *pOutCursorEvt,
-                                            ESelection *pOutSel,
-                                            bool *bOutHandled)
+                                            CursorChainingEvent& rOutCursorEvt,
+                                            ESelection& rOutSel,
+                                            bool& rOutHandled)
 {
     SdrOutliner *pOutl = mpEditView->GetTextEditOutliner();
     OutlinerView *pOLV = mpEditView->GetTextEditOutlinerView();
@@ -70,7 +70,7 @@ void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
     // We need to have this KeyFuncType
     if (eFunc !=  KeyFuncType::DONTKNOW && eFunc != KeyFuncType::DELETE)
     {
-        *pOutCursorEvt = CursorChainingEvent::NULL_EVENT;
+        rOutCursorEvt = CursorChainingEvent::NULL_EVENT;
         return;
     }
 
@@ -89,18 +89,18 @@ void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
     // Possibility: Are we "pushing" at the end of the object?
     if (nCode == KEY_RIGHT && bAtEndOfTextContent && pNextLink)
     {
-        *pOutCursorEvt = CursorChainingEvent::TO_NEXT_LINK;
+        rOutCursorEvt = CursorChainingEvent::TO_NEXT_LINK;
         // Selection unchanged: we are at the beginning of the box
-        *bOutHandled = true; // Nothing more to do than move cursor
+        rOutHandled = true; // Nothing more to do than move cursor
         return;
     }
 
     // Possibility: Are we "pushing" at the end of the object?
     if (eFunc == KeyFuncType::DELETE && bAtEndOfTextContent && pNextLink)
     {
-        *pOutCursorEvt = CursorChainingEvent::TO_NEXT_LINK;
+        rOutCursorEvt = CursorChainingEvent::TO_NEXT_LINK;
         // Selection unchanged: we are at the beginning of the box
-        *bOutHandled = false; // We still need to delete the characters
+        rOutHandled = false; // We still need to delete the characters
         mbHandlingDel = true;
         return;
     }
@@ -111,29 +111,29 @@ void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
     // Possibility: Are we "pushing" at the start of the object?
     if (nCode == KEY_LEFT && bAtStartOfTextContent && pPrevLink)
     {
-        *pOutCursorEvt = CursorChainingEvent::TO_PREV_LINK;
-        *pOutSel = aEndSelPrevBox; // Set at end of selection
-        *bOutHandled = true; // Nothing more to do than move cursor
+        rOutCursorEvt = CursorChainingEvent::TO_PREV_LINK;
+        rOutSel = aEndSelPrevBox; // Set at end of selection
+        rOutHandled = true; // Nothing more to do than move cursor
         return;
     }
 
     // Possibility: Are we "pushing" at the start of the object and deleting left?
     if (nCode == KEY_BACKSPACE && bAtStartOfTextContent && pPrevLink)
     {
-        *pOutCursorEvt = CursorChainingEvent::TO_PREV_LINK;
-        *pOutSel = aEndSelPrevBox; // Set at end of selection
-        *bOutHandled = false; // We need to delete characters after moving cursor
+        rOutCursorEvt = CursorChainingEvent::TO_PREV_LINK;
+        rOutSel = aEndSelPrevBox; // Set at end of selection
+        rOutHandled = false; // We need to delete characters after moving cursor
         return;
     }
 
     // If arrived here there is no event detected
-    *pOutCursorEvt = CursorChainingEvent::NULL_EVENT;
+    rOutCursorEvt = CursorChainingEvent::NULL_EVENT;
 
 }
 
 void TextChainCursorManager::HandleCursorEventAfterChaining(
                             const CursorChainingEvent aCurEvt,
-                            const ESelection  aNewSel)
+                            const ESelection& aNewSel)
 
 {
      // Special case for DELETE handling: we need to get back at the end of the prev box
@@ -155,7 +155,7 @@ void TextChainCursorManager::HandleCursorEventAfterChaining(
 
 void TextChainCursorManager::HandleCursorEvent(
                             const CursorChainingEvent aCurEvt,
-                            const ESelection  aNewSel)
+                            const ESelection& aNewSel)
 
 {
 
