@@ -2031,7 +2031,7 @@ void OBoundControlModel::impl_connectDatabaseColumn_noNotify( bool _bFromReload 
     // consistency checks
     DBG_ASSERT( !( hasField() && !_bFromReload ),
         "OBoundControlModel::impl_connectDatabaseColumn_noNotify: the form is just *loaded*, but we already have a field!" );
-    (void)_bFromReload;
+
     Reference< XRowSet > xRowSet( m_xAmbientForm, UNO_QUERY );
     OSL_ENSURE( xRowSet.is(), "OBoundControlModel::impl_connectDatabaseColumn_noNotify: no row set!" );
     if ( !xRowSet.is() )
