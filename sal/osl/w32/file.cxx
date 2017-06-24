@@ -178,10 +178,12 @@ FileHandle_Impl::Allocator::~Allocator()
     m_cache = nullptr;
 }
 
-void FileHandle_Impl::Allocator::allocate (sal_uInt8 ** ppBuffer, SIZE_T * pnSize)
+void FileHandle_Impl::Allocator::allocate (sal_uInt8 **ppBuffer, SIZE_T * pnSize)
 {
-    OSL_PRECOND((ppBuffer) && (pnSize), "FileHandle_Impl::Allocator::allocate(): contract violation");
+    SAL_WARN_IF((!ppBuffer) || (!pnSize), "sal.osl", "FileHandle_Impl::Allocator::allocate(): contract violation");
+    assert((ppBuffer) && (pnSize));
     *ppBuffer = static_cast< sal_uInt8* >(rtl_cache_alloc(m_cache));
+
     *pnSize = m_bufsiz;
 }
 
@@ -194,13 +196,15 @@ void FileHandle_Impl::Allocator::deallocate (sal_uInt8 * pBuffer)
 FileHandle_Impl::Guard::Guard(LPCRITICAL_SECTION pMutex)
     : m_mutex (pMutex)
 {
-    OSL_PRECOND (m_mutex != nullptr, "FileHandle_Impl::Guard::Guard(): null pointer.");
+    SAL_WARN_IF(!(m_mutex), "sal.osl", "FileHandle_Impl::Guard::Guard(): null pointer.");
+    assert(m_mutex);
     ::EnterCriticalSection (m_mutex);
 }
 
 FileHandle_Impl::Guard::~Guard()
 {
-    OSL_PRECOND (m_mutex != nullptr, "FileHandle_Impl::Guard::~Guard(): null pointer.");
+    SAL_WARN_IF(!(m_mutex), "sal.osl", "FileHandle_Impl::Guard::~Guard(): null pointer.");
+    assert(m_mutex);
     ::LeaveCriticalSection (m_mutex);
 }
 
@@ -285,11 +289,11 @@ oslFileError FileHandle_Impl::readAt(
     DWORD        nBytesRequested,
     sal_uInt64 * pBytesRead)
 {
-    OSL_PRECOND(m_state & STATE_SEEKABLE, "FileHandle_Impl::readAt(): not seekable");
+    SAL_WARN_IF(!(m_state & STATE_SEEKABLE), "sal.osl", "FileHandle_Impl::readAt(): not seekable");
     if (!(m_state & STATE_SEEKABLE))
         return osl_File_E_SPIPE;
 
-    OSL_PRECOND(m_state & STATE_READABLE, "FileHandle_Impl::readAt(): not readable");
+    SAL_WARN_IF(!(m_state & STATE_READABLE), "sal.osl", "FileHandle_Impl::readAt(): not readable");
     if (!(m_state & STATE_READABLE))
         return osl_File_E_BADF;
 
@@ -316,11 +320,11 @@ oslFileError FileHandle_Impl::writeAt(
     DWORD        nBytesToWrite,
     sal_uInt64 * pBytesWritten)
 {
-    OSL_PRECOND(m_state & STATE_SEEKABLE, "FileHandle_Impl::writeAt(): not seekable");
+    SAL_WARN_IF(!(m_state & STATE_SEEKABLE), "sal.osl", "FileHandle_Impl::writeAt(): not seekable");
     if (!(m_state & STATE_SEEKABLE))
         return osl_File_E_SPIPE;
 
-    OSL_PRECOND(m_state & STATE_WRITEABLE, "FileHandle_Impl::writeAt(): not writeable");
+    SAL_WARN_IF(!(m_state & STATE_WRITEABLE, "sal.osl", "FileHandle_Impl::writeAt(): not writeable");
     if (!(m_state & STATE_WRITEABLE))
         return osl_File_E_BADF;
 
