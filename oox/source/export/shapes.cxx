@@ -1448,7 +1448,8 @@ ShapeExport& ShapeExport::WriteTextBox( const Reference< XInterface >& xIface, s
         }
     }
 
-    if( NonEmptyText( xIface ) )
+    Reference< XText > xXText( xIface, UNO_QUERY );
+    if( NonEmptyText( xIface ) && xXText.is() )
     {
         FSHelperPtr pFS = GetFS();
 
