@@ -523,11 +523,11 @@ public:
 
 class SdrUndoMoveLayer : public SdrUndoLayer
 {
-    sal_uInt16                      nNeuPos;
+    sal_uInt16                      nNewPos;
 
 public:
-    SdrUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNeuPos1)
-    :   SdrUndoLayer(nLayerNum,rNewLayerAdmin,rNewModel), nNeuPos(nNeuPos1) {}
+    SdrUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNewPos1)
+    :   SdrUndoLayer(nLayerNum,rNewLayerAdmin,rNewModel), nNewPos(nNewPos1) {}
 
     virtual void Undo() override;
     virtual void Redo() override;
@@ -761,7 +761,7 @@ public:
     // Layer
     virtual SdrUndoAction* CreateUndoNewLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
     virtual SdrUndoAction* CreateUndoDeleteLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
-    virtual SdrUndoAction* CreateUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNeuPos1);
+    virtual SdrUndoAction* CreateUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNewPos1);
 
     // Page
     virtual SdrUndoAction* CreateUndoDeletePage(SdrPage& rPage);

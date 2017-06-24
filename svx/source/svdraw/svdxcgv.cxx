@@ -299,22 +299,22 @@ bool SdrExchangeView::Paste(
         {
             const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
 
-            SdrObject* pNeuObj = pSrcOb->Clone();
+            SdrObject* pNewObj = pSrcOb->Clone();
 
-            if (pNeuObj!=nullptr)
+            if (pNewObj!=nullptr)
             {
                 if(bResize)
                 {
-                    pNeuObj->GetModel()->SetPasteResize(true);
-                    pNeuObj->NbcResize(aPt0,aXResize,aYResize);
-                    pNeuObj->GetModel()->SetPasteResize(false);
+                    pNewObj->GetModel()->SetPasteResize(true);
+                    pNewObj->NbcResize(aPt0,aXResize,aYResize);
+                    pNewObj->GetModel()->SetPasteResize(false);
                 }
 
                 // #i39861#
-                pNeuObj->SetModel(pDstLst->GetModel());
-                pNeuObj->SetPage(pDstLst->GetPage());
+                pNewObj->SetModel(pDstLst->GetModel());
+                pNewObj->SetPage(pDstLst->GetPage());
 
-                pNeuObj->NbcMove(aSiz);
+                pNewObj->NbcMove(aSiz);
 
                 const SdrPage* pPg = pDstLst->GetPage();
 
@@ -324,7 +324,7 @@ bool SdrExchangeView::Paste(
                     const SdrLayerAdmin& rAd = pPg->GetLayerAdmin();
                     SdrLayerID nLayer(0);
 
-                    if(dynamic_cast<const FmFormObj*>( pNeuObj) !=  nullptr)
+                    if(dynamic_cast<const FmFormObj*>( pNewObj) !=  nullptr)
                     {
                         // for FormControls, force to form layer
                         nLayer = rAd.GetLayerID(rAd.GetControlLayerName());
@@ -339,22 +339,22 @@ bool SdrExchangeView::Paste(
                         nLayer = SdrLayerID(0);
                     }
 
-                    pNeuObj->SetLayer(nLayer);
+                    pNewObj->SetLayer(nLayer);
                 }
 
-                pDstLst->InsertObject(pNeuObj, SAL_MAX_SIZE);
+                pDstLst->InsertObject(pNewObj, SAL_MAX_SIZE);
 
                 if( bUndo )
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNeuObj));
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNewObj));
 
                 if (bMark) {
                     // Don't already set Markhandles!
                     // That is instead being done by ModelHasChanged in MarkView.
-                    MarkObj(pNeuObj,pMarkPV,false,true);
+                    MarkObj(pNewObj,pMarkPV,false,true);
                 }
 
                 // #i13033#
-                aCloneList.AddPair(pSrcOb, pNeuObj);
+                aCloneList.AddPair(pSrcOb, pNewObj);
             }
             else
             {
@@ -731,27 +731,27 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
 
         for(SdrObject* pObj : aSdrObjects)
         {
-            SdrObject*          pNeuObj;
+            SdrObject*          pNewObj;
 
             if( dynamic_cast<const SdrPageObj*>( pObj) !=  nullptr )
             {
                 // convert SdrPageObj's to a graphic representation, because
                 // virtual connection to referenced page gets lost in new model
-                pNeuObj = new SdrGrafObj( GetObjGraphic( mpModel, pObj ), pObj->GetLogicRect() );
-                pNeuObj->SetPage( pNeuPag );
-                pNeuObj->SetModel( pNeuMod );
+                pNewObj = new SdrGrafObj( GetObjGraphic( mpModel, pObj ), pObj->GetLogicRect() );
+                pNewObj->SetPage( pNeuPag );
+                pNewObj->SetModel( pNeuMod );
             }
             else
             {
-                pNeuObj = pObj->Clone();
-                pNeuObj->SetPage( pNeuPag );
-                pNeuObj->SetModel( pNeuMod );
+                pNewObj = pObj->Clone();
+                pNewObj->SetPage( pNeuPag );
+                pNewObj->SetModel( pNeuMod );
             }
 
-            pNeuPag->InsertObject(pNeuObj, SAL_MAX_SIZE);
+            pNeuPag->InsertObject(pNewObj, SAL_MAX_SIZE);
 
             // #i13033#
-            aCloneList.AddPair(pObj, pNeuObj);
+            aCloneList.AddPair(pObj, pNewObj);
         }
 
         // #i13033#

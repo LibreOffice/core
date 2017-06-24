@@ -265,11 +265,11 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                         SdrObject* pObject = pShape ? pShape->GetSdrObject() : nullptr;
                         if ( pObject )
                         {
-                            SdrObject* pNeuObj = pObject->Clone();
+                            SdrObject* pNewObj = pObject->Clone();
 
-                            pNeuObj->SetPage( m_pPage );
-                            pNeuObj->SetModel( m_pModel.get() );
-                            m_pPage->InsertObject(pNeuObj, SAL_MAX_SIZE);
+                            pNewObj->SetPage( m_pPage );
+                            pNewObj->SetModel( m_pModel.get() );
+                            m_pPage->InsertObject(pNewObj, SAL_MAX_SIZE);
 
                             tools::Rectangle aRet(VCLPoint((*pCopiesIter)->getPosition()),VCLSize((*pCopiesIter)->getSize()));
                             aRet.setHeight(aRet.getHeight() + 1);
@@ -277,15 +277,15 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                             bool bOverlapping = true;
                             while ( bOverlapping )
                             {
-                                bOverlapping = isOver(aRet,*m_pPage,*m_pView,true,pNeuObj) != nullptr;
+                                bOverlapping = isOver(aRet,*m_pPage,*m_pView,true,pNewObj) != nullptr;
                                 if ( bOverlapping )
                                 {
                                     aRet.Move(0,aRet.getHeight()+1);
-                                    pNeuObj->SetLogicRect(aRet);
+                                    pNewObj->SetLogicRect(aRet);
                                 }
                             }
-                            m_pView->AddUndo( m_pView->GetModel()->GetSdrUndoFactory().CreateUndoNewObject( *pNeuObj ) );
-                            m_pView->MarkObj( pNeuObj, m_pView->GetSdrPageView() );
+                            m_pView->AddUndo( m_pView->GetModel()->GetSdrUndoFactory().CreateUndoNewObject( *pNewObj ) );
+                            m_pView->MarkObj( pNewObj, m_pView->GetSdrPageView() );
                             if ( m_xSection.is() && (static_cast<sal_uInt32>(aRet.getHeight() + aRet.Top()) > m_xSection->getHeight()) )
                                 m_xSection->setHeight(aRet.getHeight() + aRet.Top());
                         }
@@ -358,8 +358,8 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
         {
             try
             {
-                SdrObject* pNeuObj = pSdrObject->Clone();
-                aCopies.push_back(uno::Reference<report::XReportComponent>(pNeuObj->getUnoShape(),uno::UNO_QUERY));
+                SdrObject* pNewObj = pSdrObject->Clone();
+                aCopies.push_back(uno::Reference<report::XReportComponent>(pNewObj->getUnoShape(),uno::UNO_QUERY));
                 if ( _bEraseAnddNoClone )
                 {
                     m_pView->AddUndo( rUndo.CreateUndoDeleteObject( *pSdrObject ) );

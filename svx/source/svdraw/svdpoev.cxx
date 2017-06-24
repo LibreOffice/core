@@ -366,14 +366,14 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
             for(SdrUShortCont::const_reverse_iterator it = rPts.rbegin(); it != rPts.rend(); ++it)
             {
                 sal_uInt32 nNewPt0Idx(0L);
-                SdrObject* pNeuObj = pObj->RipPoint(*it, nNewPt0Idx);
+                SdrObject* pNewObj = pObj->RipPoint(*it, nNewPt0Idx);
 
-                if(pNeuObj)
+                if(pNewObj)
                 {
-                    pM->GetPageView()->GetObjList()->InsertObject(pNeuObj, pObj->GetOrdNum() + 1);
+                    pM->GetPageView()->GetObjList()->InsertObject(pNewObj, pObj->GetOrdNum() + 1);
                     if( bUndo )
-                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNeuObj));
-                    MarkObj(pNeuObj, pM->GetPageView(), false, true);
+                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNewObj));
+                    MarkObj(pNewObj, pM->GetPageView(), false, true);
                 }
 
                 if(nNewPt0Idx)

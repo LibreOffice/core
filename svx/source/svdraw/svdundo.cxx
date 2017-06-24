@@ -1344,7 +1344,7 @@ OUString SdrUndoDelLayer::GetComment() const
 
 void SdrUndoMoveLayer::Undo()
 {
-    SdrLayer* pCmpLayer= pLayerAdmin->RemoveLayer(nNeuPos);
+    SdrLayer* pCmpLayer= pLayerAdmin->RemoveLayer(nNewPos);
     DBG_ASSERT(pCmpLayer==pLayer,"SdrUndoMoveLayer::Undo(): Removed layer is != pLayer.");
     pLayerAdmin->InsertLayer(pLayer,nNum);
 }
@@ -1353,7 +1353,7 @@ void SdrUndoMoveLayer::Redo()
 {
     SdrLayer* pCmpLayer= pLayerAdmin->RemoveLayer(nNum);
     DBG_ASSERT(pCmpLayer==pLayer,"SdrUndoMoveLayer::Redo(): Removed layer is != pLayer.");
-    pLayerAdmin->InsertLayer(pLayer,nNeuPos);
+    pLayerAdmin->InsertLayer(pLayer,nNewPos);
 }
 
 OUString SdrUndoMoveLayer::GetComment() const
@@ -1835,9 +1835,9 @@ SdrUndoAction* SdrUndoFactory::CreateUndoDeleteLayer(sal_uInt16 nLayerNum, SdrLa
     return new SdrUndoDelLayer( nLayerNum, rNewLayerAdmin, rNewModel );
 }
 
-SdrUndoAction* SdrUndoFactory::CreateUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNeuPos1)
+SdrUndoAction* SdrUndoFactory::CreateUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNewPos1)
 {
-    return new SdrUndoMoveLayer( nLayerNum, rNewLayerAdmin, rNewModel, nNeuPos1 );
+    return new SdrUndoMoveLayer( nLayerNum, rNewLayerAdmin, rNewModel, nNewPos1 );
 }
 
 // page

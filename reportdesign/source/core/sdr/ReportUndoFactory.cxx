@@ -127,9 +127,9 @@ SdrUndoAction* OReportUndoFactory::CreateUndoDeleteLayer(sal_uInt16 nLayerNum, S
     return m_pUndoFactory->CreateUndoDeleteLayer( nLayerNum, rNewLayerAdmin, rNewModel );
 }
 
-SdrUndoAction* OReportUndoFactory::CreateUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNeuPos1)
+SdrUndoAction* OReportUndoFactory::CreateUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNewPos1)
 {
-    return m_pUndoFactory->CreateUndoMoveLayer( nLayerNum, rNewLayerAdmin, rNewModel, nNeuPos1 );
+    return m_pUndoFactory->CreateUndoMoveLayer( nLayerNum, rNewLayerAdmin, rNewModel, nNewPos1 );
 }
 
 // page
