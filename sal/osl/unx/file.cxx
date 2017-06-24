@@ -190,7 +190,7 @@ FileHandle_Impl::Allocator::Allocator()
     size_t const pagesize = FileHandle_Impl::getpagesize();
     if (pagesize != size_t(-1))
     {
-        m_cache  = rtl_cache_create (
+        m_cache = rtl_cache_create (
             "osl_file_buffer_cache", pagesize, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0);
         if (m_cache != nullptr)
             m_bufsiz = pagesize;
@@ -204,7 +204,8 @@ FileHandle_Impl::Allocator::~Allocator()
 
 void FileHandle_Impl::Allocator::allocate (sal_uInt8 ** ppBuffer, size_t * pnSize)
 {
-    OSL_PRECOND((nullptr != ppBuffer) && (nullptr != pnSize), "FileHandle_Impl::Allocator::allocate(): contract violation");
+    SAL_WARN_IF((!ppBuffer) || (!pnSize), "sal.osl", "FileHandle_Impl::Allocator::allocate(): contract violation");
+    assert(ppBuffer && pnSize);
     if ((ppBuffer != nullptr) && (pnSize != nullptr))
     {
         *ppBuffer = static_cast< sal_uInt8* >(rtl_cache_alloc(m_cache));
@@ -340,11 +341,11 @@ oslFileError FileHandle_Impl::readAt (
     size_t       nBytesRequested,
     sal_uInt64 * pBytesRead)
 {
-    OSL_PRECOND((m_state & STATE_SEEKABLE), "FileHandle_Impl::readAt(): not seekable");
+    SAL_WARN_IF(!(m_state & STATE_SEEKABLE), "sal.osl", "FileHandle_Impl::readAt(): not seekable");
     if (!(m_state & STATE_SEEKABLE))
         return osl_File_E_SPIPE;
 
-    OSL_PRECOND((m_state & STATE_READABLE), "FileHandle_Impl::readAt(): not readable");
+    SAL_WARN_IF(!(m_state & STATE_READABLE), "sal.osl", "FileHandle_Impl::readAt(): not readable");
     if (!(m_state & STATE_READABLE))
         return osl_File_E_BADF;
 
@@ -388,11 +389,11 @@ oslFileError FileHandle_Impl::writeAt (
     size_t       nBytesToWrite,
     sal_uInt64 * pBytesWritten)
 {
-    OSL_PRECOND((m_state & STATE_SEEKABLE), "FileHandle_Impl::writeAt(): not seekable");
+    SAL_WARN_IF(!(m_state & STATE_SEEKABLE), "sal.osl", "FileHandle_Impl::writeAt(): not seekable");
     if (!(m_state & STATE_SEEKABLE))
         return osl_File_E_SPIPE;
 
-    OSL_PRECOND((m_state & STATE_WRITEABLE), "FileHandle_Impl::writeAt(): not writeable");
+    SAL_WARN_IF(!(m_state & STATE_WRITEABLE), "sal.osl", "FileHandle_Impl::writeAt(): not writeable");
     if (!(m_state & STATE_WRITEABLE))
         return osl_File_E_BADF;
 
