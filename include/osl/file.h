@@ -1419,14 +1419,18 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileURLFromSystemPath(
     A system dependent path, a file URL, a file or relative directory.
 
     @param[in] pustrSearchPath
-    A list of system paths, in which a given file has to be searched. The Notation of a path
-    list is system dependent, e.g. on UNIX system "/usr/bin:/bin" and on Windows "C:\BIN;C:\BATCH".
-    These paths are only for the search of a file or a relative path, otherwise it will be ignored.
-    If pustrSearchPath is NULL or while using the search path the search failed, the function
-    searches for a matching file in all system directories and in the directories listed in the PATH
-    environment variable.<br/> The value of an environment variable should be used (e.g.
-    LD_LIBRARY_PATH) if the caller is not aware of the Operating System and so doesn't know which
-    path list delimiter to use.
+    @parblock
+        A list of system paths, in which a given file has to be searched. The Notation of a path
+        list is system dependent, e.g. on UNIX system "/usr/bin:/bin" and on Windows "C:\BIN;C:\BATCH".
+        These paths are only for the search of a file or a relative path, otherwise it will be ignored.
+        If pustrSearchPath is NULL or while using the search path the search failed, the function
+        searches for a matching file in all system directories and in the directories listed in the PATH
+        environment variable.
+
+        The value of an environment variable should be used (e.g.
+        LD_LIBRARY_PATH) if the caller is not aware of the Operating System and so doesn't know which
+        path list delimiter to use.
+    @endparblock
 
     @param[out] ppustrFileURL
     On success it receives the full qualified file URL.
