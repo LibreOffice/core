@@ -60,7 +60,7 @@
 struct FileHandle_Impl
 {
     pthread_mutex_t m_mutex;
-    rtl_String *    m_strFilePath; /* holds native file path */
+    rtl_String *    m_strFilePath; /*< holds native file path */
     int             m_fd;
 
     enum Kind
@@ -73,19 +73,19 @@ struct FileHandle_Impl
      */
     enum StateBits
     {
-        STATE_SEEKABLE  = 1, /* default */
-        STATE_READABLE  = 2, /* default */
-        STATE_WRITEABLE = 4, /* open() sets, write() requires, else osl_File_E_BADF */
-        STATE_MODIFIED  = 8  /* write() sets, flush() resets  */
+        STATE_SEEKABLE  = 1, /*< default */
+        STATE_READABLE  = 2, /*< default */
+        STATE_WRITEABLE = 4, /*< open() sets, write() requires, else osl_File_E_BADF */
+        STATE_MODIFIED  = 8  /*< write() sets, flush() resets  */
     };
     int          m_state;
 
-    sal_uInt64   m_size;    /* file size */
-    off_t        m_offset;  /* physical offset from begin of file */
-    off_t        m_fileptr; /* logical offset from begin of file */
+    sal_uInt64   m_size;    /*< file size */
+    off_t        m_offset;  /*< physical offset from begin of file */
+    off_t        m_fileptr; /*< logical offset from begin of file */
 
-    off_t        m_bufptr;  /* buffer offset from begin of file */
-    size_t       m_buflen;  /* buffer filled [0, m_bufsiz - 1] */
+    off_t        m_bufptr;  /*< buffer offset from begin of file */
+    size_t       m_buflen;  /*< buffer filled [0, m_bufsiz - 1] */
 
     size_t       m_bufsiz;
     sal_uInt8 *  m_buffer;
@@ -161,8 +161,6 @@ struct FileHandle_Impl
         ~Allocator();
     };
 
-    /** Guard.
-     */
     class Guard
     {
         pthread_mutex_t * m_mutex;
