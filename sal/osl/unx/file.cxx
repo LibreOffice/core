@@ -60,11 +60,6 @@
 #include <android/asset_manager.h>
 #endif
 
-/*******************************************************************
- *
- * FileHandle_Impl interface
- *
- ******************************************************************/
 struct FileHandle_Impl
 {
     pthread_mutex_t m_mutex;
