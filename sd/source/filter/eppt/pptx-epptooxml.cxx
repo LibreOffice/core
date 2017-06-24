@@ -302,7 +302,7 @@ ShapeExport& PowerPointShapeExport::WriteUnknownShape( const Reference< XShape >
         mrExport.EnterGroup( rXIndexAccess );
         SAL_INFO("sd.eppt", "enter group");
     }
-    else if ( sShapeType == "com.sun.star.drawing.PageShape" )
+    else if ( sShapeType == "com.sun.star.presentation.PageShape" )
     {
         WritePageShape( xShape, mePageType, mrExport.GetPresObj() );
     }
