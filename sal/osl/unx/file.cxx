@@ -201,7 +201,7 @@ FileHandle_Impl::Allocator::~Allocator()
 void FileHandle_Impl::Allocator::allocate(sal_uInt8 **ppBuffer, size_t *pnSize)
 {
     SAL_WARN_IF((!ppBuffer) || (!pnSize), "sal.osl", "FileHandle_Impl::Allocator::allocate(): contract violation");
-    assert(ppBuffer && pnSize);
+    assert((ppBuffer) && (pnSize));
     if ((ppBuffer) && (pnSize))
     {
         *ppBuffer = static_cast< sal_uInt8* >(rtl_cache_alloc(m_cache));
@@ -347,7 +347,7 @@ oslFileError FileHandle_Impl::readAt(
     if (!(m_state & STATE_SEEKABLE))
         return osl_File_E_SPIPE;
 
-    SAL_WARN_IF(!(m_state & STATE_READABLE), "FileHandle_Impl::readAt(): not readable");
+    SAL_WARN_IF(!(m_state & STATE_READABLE), "sal.osl", "FileHandle_Impl::readAt(): not readable");
     if (!(m_state & STATE_READABLE))
         return osl_File_E_BADF;
 
