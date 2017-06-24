@@ -87,6 +87,41 @@
       "revId": "d13a037e3165444fbabc4327c5c40b06b5d81dee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_e91f5259",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2230,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-06-24T08:51:27Z",
+      "side": 1,
+      "message": "Here left only m_pOpenMenu-\u003eSetSizePixel(...)\nPosition will be set in the ImplPlaceTabs",
+      "parentUuid": "5a3905b3_11d48745",
+      "revId": "d13a037e3165444fbabc4327c5c40b06b5d81dee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_c92a967e",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2577,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-06-24T08:51:27Z",
+      "side": 1,
+      "message": "Here only m_pOpenMenu-\u003eSetPosPixel is needed (size is set in the constructor)\n\nits position should be (nWidth - nHamburgerDim, 0)",
+      "revId": "d13a037e3165444fbabc4327c5c40b06b5d81dee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
