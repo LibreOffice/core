@@ -32,41 +32,70 @@ extern "C" {
 #endif
 
 typedef enum {
-    osl_Pipe_E_None,                /* no error */
-    osl_Pipe_E_NotFound,            /* Pipe could not be found */
-    osl_Pipe_E_AlreadyExists,       /* Pipe already exists */
-    osl_Pipe_E_NoProtocol,          /* Protocol not available */
-    osl_Pipe_E_NetworkReset,        /* Network dropped connection because of reset */
-    osl_Pipe_E_ConnectionAbort,     /* Software caused connection abort */
-    osl_Pipe_E_ConnectionReset,     /* Connection reset by peer */
-    osl_Pipe_E_NoBufferSpace,       /* No buffer space available */
-    osl_Pipe_E_TimedOut,            /* Connection timed out */
-    osl_Pipe_E_ConnectionRefused,   /* Connection refused */
-    osl_Pipe_E_invalidError,        /* unmapped error: always last entry in enum! */
+    osl_Pipe_E_None,                    /*< no error */
+    osl_Pipe_E_NotFound,                /*< Pipe could not be found */
+    osl_Pipe_E_AlreadyExists,           /*< Pipe already exists */
+    osl_Pipe_E_NoProtocol,              /*< Protocol not available */
+    osl_Pipe_E_NetworkReset,            /*< Network dropped connection because of reset */
+    osl_Pipe_E_ConnectionAbort,         /*< Software caused connection abort */
+    osl_Pipe_E_ConnectionReset,         /*< Connection reset by peer */
+    osl_Pipe_E_NoBufferSpace,           /*< No buffer space available */
+    osl_Pipe_E_TimedOut,                /*< Connection timed out */
+    osl_Pipe_E_ConnectionRefused,       /*< Connection refused */
+    osl_Pipe_E_invalidError,            /*< unmapped error: always last entry in enum! */
     osl_Pipe_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslPipeError;
 
+/** Pipe creation options.
+
+    A pipe can either be opened, or a new pipe can be created and opened.
+*/
 typedef sal_uInt32 oslPipeOptions;
-#define osl_Pipe_OPEN        0x0000     /* open existing pipe */
-#define osl_Pipe_CREATE      0x0001     /* create pipe and open it, fails if already exists */
+#define osl_Pipe_OPEN        0x0000     /*< open existing pipe */
+#define osl_Pipe_CREATE      0x0001     /*< create pipe and open it, fails if already exists */
 
 typedef struct oslPipeImpl * oslPipe;
 
+/** Create or open a pipe.
+
+    @param[in] strPipeName  pipe name
+    @param[in] Options      create or open the pipe
+    @param[in] Security     pipe creator
+
+    @returns nullptr on failure, otherwise returns the pipe handle
+
+    @see osl_closePipe
+*/
 SAL_DLLPUBLIC oslPipe SAL_CALL osl_createPipe(
         rtl_uString *strPipeName, oslPipeOptions Options, oslSecurity Security);
 
-/** decreases the refcount of the pipe.
+/** Decreases the refcount of the pipe.
+
     If the refcount drops to zero, the handle is destroyed.
- */
-SAL_DLLPUBLIC void    SAL_CALL osl_releasePipe( oslPipe );
 
-/** increases the refcount of the pipe.
- */
-SAL_DLLPUBLIC void    SAL_CALL osl_acquirePipe( oslPipe Pipe );
+    @param[in] Pipe         pipe handle
 
-/** closes the pipe, any read,write or accept actions stop immeadiatly.
+    @see osl_acquirePipe
  */
-SAL_DLLPUBLIC void    SAL_CALL osl_closePipe( oslPipe );
+SAL_DLLPUBLIC void    SAL_CALL osl_releasePipe(oslPipe Pipe);
+
+/** Increases the refcount of the pipe.
+
+    @param[in] Pipe         pipe handle
+
+    @see osl_releasePipe
+ */
+SAL_DLLPUBLIC void    SAL_CALL osl_acquirePipe(oslPipe Pipe);
+
+/** Close the pipe.
+
+    Any read, write or accept actions stop immediately.
+
+    @param[in] Pipe         pipe handle
+
+    @see osl_createPipe
+ */
+SAL_DLLPUBLIC void    SAL_CALL osl_closePipe(oslPipe Pipe);
 
 
 SAL_DLLPUBLIC oslPipe SAL_CALL osl_acceptPipe(oslPipe Pipe);
