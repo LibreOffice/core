@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a461143_493ce62f",
+        "filename": "sc/source/core/data/fillinfo.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-24T19:06:39Z",
+      "side": 0,
+      "message": "it starts with rInfo.bMarked being write-only, everything after that here is a chain reaction",
+      "parentUuid": "3a461143_09ec9ec6",
+      "revId": "1c15c117bfa3cf8b1470810f9d73b4d0fcd02396",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_69db621c",
         "filename": "sc/source/core/data/fillinfo.cxx",
         "patchSetId": 5
@@ -47,6 +65,24 @@
       "writtenOn": "2017-06-24T17:14:17Z",
       "side": 0,
       "message": "So this shouldn\u0027t..",
+      "revId": "1c15c117bfa3cf8b1470810f9d73b4d0fcd02396",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_6949a2d0",
+        "filename": "sc/source/core/data/fillinfo.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-24T19:06:39Z",
+      "side": 0,
+      "message": "this is where it starts - the pInfo-\u003ebMarked field is write-only, which leads to an upward chain reaction in this method",
+      "parentUuid": "3a461143_49cea65b",
       "revId": "1c15c117bfa3cf8b1470810f9d73b4d0fcd02396",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
