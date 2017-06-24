@@ -81,7 +81,7 @@ static oslPipe createPipeImpl()
     oslPipe pPipeImpl;
 
     pPipeImpl = static_cast< oslPipe >(calloc(1, sizeof(struct oslPipeImpl)));
-    if (pPipeImpl == nullptr)
+    if (!pPipeImpl)
         return nullptr;
 
     pPipeImpl->m_nRefCount = 1;
@@ -96,7 +96,7 @@ static oslPipe createPipeImpl()
 
 static void destroyPipeImpl(oslPipe pImpl)
 {
-    if (pImpl != nullptr)
+    if (pImpl)
         free(pImpl);
 }
 
@@ -105,7 +105,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Option
     oslPipe pPipe = nullptr;
     rtl_String* strPipeName = nullptr;
 
-    if (ustrPipeName != nullptr)
+    if (ustrPipeName)
     {
         rtl_uString2String(&strPipeName,
                            rtl_uString_getStr(ustrPipeName),
@@ -115,7 +115,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Option
         sal_Char* pszPipeName = rtl_string_getStr(strPipeName);
         pPipe = osl_psz_createPipe(pszPipeName, Options, Security);
 
-        if (strPipeName != nullptr)
+        if (strPipeName)
             rtl_string_release(strPipeName);
     }
 
@@ -214,7 +214,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     /* alloc memory */
     pPipe = createPipeImpl();
 
-    if (pPipe == nullptr)
+    if (!pPipe)
         return nullptr;
 
     /* create socket */
@@ -320,7 +320,7 @@ void SAL_CALL osl_acquirePipe(oslPipe pPipe)
 
 void SAL_CALL osl_releasePipe(oslPipe pPipe)
 {
-    if(pPipe == nullptr)
+    if (!pPipe)
         return;
 
     if (osl_atomic_decrement(&(pPipe->m_nRefCount)) == 0)
@@ -400,7 +400,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     oslPipe pAcceptedPipe;
 
     OSL_ASSERT(pPipe);
-    if (pPipe == nullptr)
+    if (!pPipe)
         return nullptr;
 
     OSL_ASSERT(strlen(pPipe->m_Name) > 0);
@@ -433,7 +433,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     pAcceptedPipe = createPipeImpl();
 
     OSL_ASSERT(pAcceptedPipe);
-    if(pAcceptedPipe==nullptr)
+    if (!pAcceptedPipe)
     {
         close(s);
         return nullptr;
@@ -461,7 +461,7 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
 
     OSL_ASSERT(pPipe);
 
-    if (pPipe == nullptr)
+    if (!pPipe)
     {
         SAL_WARN("sal.osl.pipe", "osl_receivePipe: Invalid socket");
         errno=EINVAL;
@@ -484,7 +484,7 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
 
     OSL_ASSERT(pPipe);
 
-    if (pPipe == nullptr)
+    if (!pPipe)
     {
         SAL_WARN("sal.osl.pipe", "osl_sendPipe: Invalid socket");
         errno=EINVAL;

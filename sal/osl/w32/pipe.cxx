@@ -86,12 +86,12 @@ oslPipe osl_createPipeImpl(void)
 
 void osl_destroyPipeImpl(oslPipe pPipe)
 {
-    if (pPipe != nullptr)
+    if (pPipe)
     {
-        if ( pPipe->m_NamedObject != INVALID_HANDLE_VALUE && pPipe->m_NamedObject != nullptr )
-            CloseHandle( pPipe->m_NamedObject );
+        if (pPipe->m_NamedObject != INVALID_HANDLE_VALUE && pPipe->m_NamedObject)
+            CloseHandle(pPipe->m_NamedObject);
 
-        if (pPipe->m_Security != nullptr)
+        if (pPipe->m_Security)
         {
             rtl_freeMemory(pPipe->m_Security->lpSecurityDescriptor);
             rtl_freeMemory(pPipe->m_Security);
@@ -176,7 +176,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
 
         pPipe->m_NamedObject = CreateMutexW(nullptr, FALSE, SAL_W(name->buffer));
 
-        if (pPipe->m_NamedObject != INVALID_HANDLE_VALUE && pPipe->m_NamedObject != nullptr)
+        if (pPipe->m_NamedObject != INVALID_HANDLE_VALUE && pPipe->m_NamedObject)
         {
             if (GetLastError() != ERROR_ALREADY_EXISTS)
             {
@@ -258,12 +258,10 @@ void SAL_CALL osl_acquirePipe(oslPipe pPipe)
 
 void SAL_CALL osl_releasePipe(oslPipe pPipe)
 {
-//      OSL_ASSERT( pPipe );
-
-    if (nullptr == pPipe)
+    if (!pPipe)
         return;
 
-    if (0 == osl_atomic_decrement(&(pPipe->m_Reference)))
+    if (osl_atomic_decrement(&(pPipe->m_Reference)) == 0)
     {
         if (!pPipe->m_bClosed)
             osl_closePipe(pPipe);
@@ -274,7 +272,7 @@ void SAL_CALL osl_releasePipe(oslPipe pPipe)
 
 void SAL_CALL osl_closePipe(oslPipe pPipe)
 {
-    if(pPipe && !pPipe->m_bClosed)
+    if (pPipe && !pPipe->m_bClosed)
     {
         pPipe->m_bClosed = true;
         /* if we have a system pipe close it */
@@ -491,7 +489,7 @@ oslPipeError SAL_CALL osl_getLastPipeError(oslPipe pPipe)
 {
     oslPipeError Error;
 
-    if (pPipe != nullptr)
+    if (pPipe)
     {
         Error = pPipe->m_Error;
         pPipe->m_Error = osl_Pipe_E_None;
