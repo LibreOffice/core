@@ -25,7 +25,7 @@ namespace rptui
 {
 /*************************************************************************
 |*
-|* Seite einrichten-Tab-Dialog
+|* Page setup tab dialog
 |*
 \************************************************************************/
 class ORptPageDialog : public SfxTabDialog

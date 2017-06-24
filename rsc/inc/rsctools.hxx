@@ -30,7 +30,7 @@ class  RscPtrPtr;
 #include <rtl/ustring.hxx>
 #include <osl/endian.h>
 
-// Zeichensatz
+// character set
 enum COMPARE { LESS = -1, EQUAL = 0, GREATER = 1 };
 
 enum RSCBYTEORDER_TYPE { RSC_BIGENDIAN, RSC_LITTLEENDIAN, RSC_SYSTEMENDIAN };
@@ -84,7 +84,7 @@ class RscWriteRc
 public:
                 RscWriteRc( RSCBYTEORDER_TYPE nOrder = RSC_SYSTEMENDIAN );
                 ~RscWriteRc();
-    sal_uInt32      IncSize( sal_uInt32 nSize );// gibt die vorherige Groesse
+    sal_uInt32      IncSize( sal_uInt32 nSize ); // gives the previous size
     void *      GetBuffer()
                 {
                     return GetPointer( 0 );

@@ -245,7 +245,7 @@ extern SIZES    size_table[];           /* For #if sizeof sizes         */
 #ifndef _NO_PROTO
 int rscpp_main( int argc, char **argv );
 #endif
-#define MAIN   rscpp_main     /* fuer die cpp.lib muss main() geandert werden */
+#define MAIN   rscpp_main     /* main() needs to be changed for the cpp.lib */
 #else
 #ifdef _WIN32
 #define MAIN   __cdecl main
