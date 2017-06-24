@@ -54,7 +54,7 @@ https://developer.mozilla.org/en/Windows_Build_Prerequisites#ss2.2
 
 The direct link:
 
-http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/MozillaBuildSetup-1.3.exe
+http://ftp.mozilla.org/pub/mozilla/libraries/win32/MozillaBuildSetup-2.2.0.exe
 
 libsqlite3
 ----------
