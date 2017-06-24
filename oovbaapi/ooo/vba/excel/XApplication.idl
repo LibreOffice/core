@@ -67,6 +67,7 @@ interface XApplication
     [attribute, readonly] string LibraryPath;
     [attribute, readonly] string TemplatesPath;
     [attribute, readonly] string PathSeparator;
+    [attribute, readonly] string OperatingSystem;
 
     void setDefaultFilePath([in] string DefaultFilePath) raises(com::sun::star::script::BasicErrorException);
 
