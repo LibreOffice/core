@@ -129,7 +129,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
         rtl_uString *Ident = nullptr;
         rtl_uString *Delim = nullptr;
 
-        OSL_VERIFY(osl_getUserIdent(Security, &Ident));
+        assert(osl_getUserIdent(Security, &Ident));
         rtl_uString_newFromAscii(&Delim, "_");
 
         rtl_uString_newConcat(&temp, name, Ident);
@@ -147,8 +147,8 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
             pSecDesc = static_cast<PSECURITY_DESCRIPTOR>(rtl_allocateMemory(SECURITY_DESCRIPTOR_MIN_LENGTH));
 
             /* add a NULL disc. ACL to the security descriptor */
-            OSL_VERIFY(InitializeSecurityDescriptor(pSecDesc, SECURITY_DESCRIPTOR_REVISION));
-            OSL_VERIFY(SetSecurityDescriptorDacl(pSecDesc, TRUE, nullptr, FALSE));
+            assert(InitializeSecurityDescriptor(pSecDesc, SECURITY_DESCRIPTOR_REVISION));
+            assert(SetSecurityDescriptorDacl(pSecDesc, TRUE, nullptr, FALSE));
 
             pSecAttr = static_cast<PSECURITY_ATTRIBUTES>(rtl_allocateMemory(sizeof(SECURITY_ATTRIBUTES)));
             pSecAttr->nLength = sizeof(SECURITY_ATTRIBUTES);
@@ -298,8 +298,8 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     rtl_uString* path = nullptr;
     rtl_uString* temp = nullptr;
 
-    OSL_ASSERT(pPipe);
-    OSL_ASSERT(pPipe->m_File != INVALID_HANDLE_VALUE);
+    assert(pPipe);
+    assert(pPipe->m_File != INVALID_HANDLE_VALUE);
 
     memset(&os, 0, sizeof(OVERLAPPED));
     os.hEvent = pPipe->m_AcceptEvent;
@@ -340,7 +340,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     }
 
     pAcceptedPipe = osl_createPipeImpl();
-    OSL_ASSERT(pAcceptedPipe);
+    assert(pAcceptedPipe);
 
     osl_atomic_increment(&(pAcceptedPipe->m_Reference));
     rtl_uString_assign(&pAcceptedPipe->m_Name, pPipe->m_Name);
@@ -374,7 +374,7 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
     DWORD nBytes;
     OVERLAPPED os;
 
-    OSL_ASSERT(pPipe);
+    assert(pPipe);
 
     memset(&os, 0, sizeof(OVERLAPPED));
     os.hEvent = pPipe->m_ReadEvent;
@@ -413,7 +413,7 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
     DWORD nBytes;
     OVERLAPPED os;
 
-    OSL_ASSERT(pPipe);
+    assert(pPipe);
 
     memset(&os, 0, sizeof(OVERLAPPED));
     os.hEvent = pPipe->m_WriteEvent;
@@ -440,7 +440,7 @@ sal_Int32 SAL_CALL osl_writePipe(oslPipe pPipe, const void *pBuffer , sal_Int32 
     sal_Int32 BytesSend = 0;
     sal_Int32 BytesToSend = n;
 
-    OSL_ASSERT(pPipe);
+    assert(pPipe);
     while (BytesToSend > 0)
     {
         sal_Int32 RetVal;
@@ -465,7 +465,8 @@ sal_Int32 SAL_CALL osl_readPipe(oslPipe pPipe, void *pBuffer, sal_Int32 n)
     sal_Int32 BytesRead = 0;
     sal_Int32 BytesToRead = n;
 
-    OSL_ASSERT(pPipe);
+    assert(pPipe);
+
     while (BytesToRead > 0)
     {
         sal_Int32 RetVal;
