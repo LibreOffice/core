@@ -285,9 +285,9 @@ void SdrMarkList::InsertEntry(const SdrMark& rMark, bool bChkSort)
     {
         SdrMark* pLast = GetMark(nCount - 1);
         const SdrObject* pLastObj = pLast->GetMarkedSdrObj();
-        const SdrObject* pNeuObj = rMark.GetMarkedSdrObj();
+        const SdrObject* pNewObj = rMark.GetMarkedSdrObj();
 
-        if(pLastObj == pNeuObj)
+        if(pLastObj == pNewObj)
         {
             // This one already exists.
             // Con1/Con2 Merging
@@ -304,14 +304,14 @@ void SdrMarkList::InsertEntry(const SdrMark& rMark, bool bChkSort)
 
             // now check if the sort is ok
             const SdrObjList* pLastOL = pLastObj!=nullptr ? pLastObj->GetObjList() : nullptr;
-            const SdrObjList* pNeuOL = pNeuObj !=nullptr ? pNeuObj ->GetObjList() : nullptr;
+            const SdrObjList* pNeuOL = pNewObj !=nullptr ? pNewObj ->GetObjList() : nullptr;
 
             if(pLastOL == pNeuOL)
             {
                 const sal_uLong nLastNum(pLastObj!=nullptr ? pLastObj->GetOrdNum() : 0);
-                const sal_uLong nNeuNum(pNeuObj !=nullptr ? pNeuObj ->GetOrdNum() : 0);
+                const sal_uLong nNewNum(pNewObj !=nullptr ? pNewObj ->GetOrdNum() : 0);
 
-                if(nNeuNum < nLastNum)
+                if(nNewNum < nLastNum)
                 {
                     // at some point, we have to sort
                     mbSorted = false;

@@ -1683,14 +1683,14 @@ void SdrModel::Merge(SdrModel& rSourceModel,
 
                     if (bMergeMasterPages)
                     {
-                        sal_uInt16 nNeuNum(0xFFFF);
+                        sal_uInt16 nNewNum(0xFFFF);
 
                         if(pMasterMap)
                         {
-                            nNeuNum = pMasterMap[nMaPgNum];
+                            nNewNum = pMasterMap[nMaPgNum];
                         }
 
-                        if(nNeuNum != 0xFFFF)
+                        if(nNewNum != 0xFFFF)
                         {
                             // tdf#90357 here pPg and the to-be-set new masterpage are parts of the new model
                             // already, but the currently set masterpage is part of the old model. Remove master
@@ -1705,9 +1705,9 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                                 AddUndo(GetSdrUndoFactory().CreateUndoPageChangeMasterPage(*pPg));
                             }
 
-                            pPg->TRG_SetMasterPage(*GetMasterPage(nNeuNum));
+                            pPg->TRG_SetMasterPage(*GetMasterPage(nNewNum));
                         }
-                        DBG_ASSERT(nNeuNum!=0xFFFF,"SdrModel::Merge(): Something is crooked with the mapping of the MasterPages.");
+                        DBG_ASSERT(nNewNum!=0xFFFF,"SdrModel::Merge(): Something is crooked with the mapping of the MasterPages.");
                     } else {
                         if (nMaPgNum>=nDstMasterPageAnz) {
                             // This is outside of the original area of the MasterPage of the DstModel.

@@ -153,25 +153,25 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                 const SdrMark* pM=aMark.GetMark(nm);
                 const SdrObject* pObj=pM->GetMarkedSdrObj();
 
-                SdrObject* pNeuObj=pObj->Clone();
+                SdrObject* pNewObj=pObj->Clone();
 
-                if (pNeuObj!=nullptr)
+                if (pNewObj!=nullptr)
                 {
-                    pNeuObj->SetModel(pDrawModel);
-                    pNeuObj->SetPage(pDestPage);
+                    pNewObj->SetModel(pDrawModel);
+                    pNewObj->SetPage(pDestPage);
 
                     //  copy graphics within the same model - always needs new name
-                    if ( dynamic_cast<const SdrGrafObj*>( pNeuObj) !=  nullptr && !bPasteIsMove )
-                        pNeuObj->SetName(static_cast<ScDrawLayer*>(pDrawModel)->GetNewGraphicName());
+                    if ( dynamic_cast<const SdrGrafObj*>( pNewObj) !=  nullptr && !bPasteIsMove )
+                        pNewObj->SetName(static_cast<ScDrawLayer*>(pDrawModel)->GetNewGraphicName());
 
                     if (nDiffX!=0 || nDiffY!=0)
-                        pNeuObj->NbcMove(Size(nDiffX,nDiffY));
+                        pNewObj->NbcMove(Size(nDiffX,nDiffY));
                     if (pDestPage)
-                        pDestPage->InsertObject( pNeuObj );
-                    pScDrawView->AddUndo(new SdrUndoInsertObj( *pNeuObj ));
+                        pDestPage->InsertObject( pNewObj );
+                    pScDrawView->AddUndo(new SdrUndoInsertObj( *pNewObj ));
 
-                    if (ScDrawLayer::IsCellAnchored(*pNeuObj))
-                        ScDrawLayer::SetCellAnchoredFromPosition(*pNeuObj, *GetViewData().GetDocument(), nTab);
+                    if (ScDrawLayer::IsCellAnchored(*pNewObj))
+                        ScDrawLayer::SetCellAnchoredFromPosition(*pNewObj, *GetViewData().GetDocument(), nTab);
                 }
             }
 
