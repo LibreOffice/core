@@ -62,10 +62,6 @@ public:
     virtual css::uno::Any SAL_CALL getStrikethrough() override;
     virtual css::uno::Any SAL_CALL getShadow() override;
     virtual css::uno::Any SAL_CALL getItalic() override;
-    virtual css::uno::Any SAL_CALL getSubscript() override;
-    virtual void SAL_CALL setSubscript( const css::uno::Any& _subscript ) override;
-    virtual css::uno::Any SAL_CALL getSuperscript() override;
-    virtual void SAL_CALL setSuperscript( const css::uno::Any& _superscript ) override;
     virtual css::uno::Any SAL_CALL getName() override;
     virtual css::uno::Any SAL_CALL getColor() override ;
     virtual css::uno::Any SAL_CALL getOutlineFont() override ;
