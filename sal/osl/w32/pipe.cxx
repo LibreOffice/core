@@ -43,10 +43,6 @@ typedef struct
 
 } oslPipeBuffer;
 
-/*****************************************************************************/
-/* oslPipeImpl */
-/*****************************************************************************/
-
 struct oslPipeImpl
 {
     oslInterlockedCount  m_Reference;
@@ -60,10 +56,6 @@ struct oslPipeImpl
     oslPipeError         m_Error;
     bool                 m_bClosed;
 };
-
-/*****************************************************************************/
-/* osl_create/destroy-PipeImpl */
-/*****************************************************************************/
 
 oslPipe osl_createPipeImpl(void)
 {
@@ -108,9 +100,6 @@ void osl_destroyPipeImpl(oslPipe pPipe)
     }
 }
 
-/*****************************************************************************/
-/* osl_createPipe  */
-/*****************************************************************************/
 oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options,
                        oslSecurity Security)
 {
@@ -239,7 +228,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
                 }
                 else
                 {
-                    // Pipe instance maybe catched by another client -> try again
+                    // Pipe instance maybe cached by another client -> try again
                 }
             }
         } while ( fPipeAvailable );
@@ -280,16 +269,12 @@ void SAL_CALL osl_closePipe(oslPipe pPipe)
         /* if we have a system pipe close it */
         if (pPipe->m_File != INVALID_HANDLE_VALUE)
         {
-            /*          FlushFileBuffers(pPipe->m_File); */
             DisconnectNamedPipe(pPipe->m_File);
             CloseHandle(pPipe->m_File);
         }
     }
 }
 
-/*****************************************************************************/
-/* osl_acceptPipe  */
-/*****************************************************************************/
 oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
 {
     oslPipe pAcceptedPipe = nullptr;
@@ -322,8 +307,8 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
                 // blocking call to accept
                 if( !GetOverlappedResult(pPipe->m_File, &os, &nBytesTransfered, TRUE))
                 {
-                    // Possible error could be that between ConnectNamedPipe and GetOverlappedResult a connect
-                    // took place.
+                    // Possible error could be that between ConnectNamedPipe and
+                    // GetOverlappedResult a connect took place.
 
                     switch (GetLastError())
                     {
@@ -366,9 +351,6 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     return pAcceptedPipe;
 }
 
-/*****************************************************************************/
-/* osl_receivePipe  */
-/*****************************************************************************/
 sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
                         void* pBuffer,
                         sal_Int32 BytesToRead)
@@ -405,9 +387,6 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
     return nBytes;
 }
 
-/*****************************************************************************/
-/* osl_sendPipe  */
-/*****************************************************************************/
 sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
                        const void* pBuffer,
                        sal_Int32 BytesToSend)
@@ -484,9 +463,6 @@ sal_Int32 SAL_CALL osl_readPipe(oslPipe pPipe, void *pBuffer, sal_Int32 n)
     return BytesRead;
 }
 
-/*****************************************************************************/
-/* osl_getLastPipeError  */
-/*****************************************************************************/
 oslPipeError SAL_CALL osl_getLastPipeError(oslPipe pPipe)
 {
     oslPipeError Error;

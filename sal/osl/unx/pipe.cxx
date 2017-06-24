@@ -62,7 +62,6 @@ static struct
     { -1,              osl_Pipe_E_invalidError      }
 };
 
-/* reverse map */
 static oslPipeError osl_PipeErrorFromNative(int nativeType)
 {
     int i = 0;
