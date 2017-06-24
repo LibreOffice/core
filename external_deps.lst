@@ -20,13 +20,12 @@
 #    downloaded file.
 
 # Wherever possible the external tar-balls are loaded from their original distribution sites.
-# Where that is not possible (version is not archived any longer,
-# project does not any longer, server is temporarily not available) a
-# fallback server is used.
+# Where that is not possible (version is not archived any longer, project does not exist any
+# longer, server is temporarily not available) a fallback server is used.
 
 # The primary fallback site.
 # OOO_EXTRAS=http://ooo-extras.apache-extras.org.codespot.com/files/
-OOO_EXTRAS=http://sourceforge.net/projects/oooextras.mirror/files/
+OOO_EXTRAS=https://sourceforge.net/projects/oooextras.mirror/files/
 
 
 ###############################################################################
@@ -48,7 +47,7 @@ if (ENABLE_UNIT_TESTS == YES)
 if ( true )
     MD5 = 067201ea8b126597670b5eff72e1f66c
     name = mythes-1.2.0.tar.gz
-    URL1 = http://sourceforge.net/projects/hunspell/files/MyThes/1.2.0/mythes-1.2.0.tar.gz/download
+    URL1 = https://sourceforge.net/projects/hunspell/files/MyThes/1.2.0/mythes-1.2.0.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_MDDS != YES)
@@ -66,7 +65,7 @@ if (SYSTEM_LIBTEXTCAT != YES)
 if (SOLAR_JAVA == TRUE)
     MD5 = 17410483b5b5f267aa18b7e00b65e6e0
     name = hsqldb_1_8_0.zip
-    URL1 = http://sourceforge.net/projects/hsqldb/files/hsqldb/hsqldb_1_8_0/hsqldb_1_8_0_10.zip/download
+    URL1 = https://sourceforge.net/projects/hsqldb/files/hsqldb/hsqldb_1_8_0/hsqldb_1_8_0_10.zip
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if ( true )
@@ -209,7 +208,7 @@ if (SYSTEM_PYTHON != YES)
 if (SYSTEM_BOOST != YES)
     MD5 = d6eef4b4cacb2183f2bf265a5a03a354
     name = boost_1_55_0.tar.bz2
-    URL1 = http://sourceforge.net/projects/boost/files/boost/1.55.0/boost_1_55_0.tar.bz2/download
+    URL1 = https://sourceforge.net/projects/boost/files/boost/1.55.0/boost_1_55_0.tar.bz2
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_VIGRA != YES)
@@ -221,7 +220,7 @@ if (SYSTEM_VIGRA != YES)
 if (SYSTEM_EXPAT != YES)
     MD5 = 2f47841c829facb346eb6e3fab5212e2
     name = expat-2.2.0.tar.bz2
-    URL1 = http://downloads.sourceforge.net/project/expat/expat/2.2.0/expat-2.2.0.tar.bz2
+    URL1 = https://sourceforge.net/projects/expat/files/expat/2.2.0/expat-2.2.0.tar.bz2
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_CURL != YES)
@@ -233,7 +232,7 @@ if (SYSTEM_CURL != YES)
 if (WITH_CATA_FONTS == YES)
     MD5 = d0efec10b9f110a32e9b8f796e21782c
     name = dejavu-fonts-ttf-2.37.tar.bz2
-    URL1 = http://sourceforge.net/projects/dejavu/files/dejavu/2.37/$(name)/download
+    URL1 = https://sourceforge.net/projects/dejavu/files/dejavu/2.37/$(name)
     # URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (WITH_CATA_FONTS==YES)
@@ -252,7 +251,7 @@ if ( true )
     MD5 = fdb27bfe2dbe2e7b57ae194d9bf36bab
     name = SampleICC-1.3.2.tar.gz
     # This seems to be the original host, but the MD5 sum does not match.
-    # URL1 = http://sourceforge.net/projects/sampleicc/files/sampleicc/SampleICC%201.3.2/SampleICC-1.3.2.zip/download
+    # URL1 = https://sourceforge.net/projects/sampleicc/files/sampleicc/SampleICC%201.3.2/SampleICC-1.3.2.zip
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (RAT_JAR_HOME==BUILD)
@@ -292,13 +291,13 @@ if (WITH_CATB_FONTS == YES)
 if (ENABLE_CATEGORY_B==YES && SYSTEM_HYPH!=YES)
     MD5 = 48a9f787f43a09c0a9b7b00cd1fddbbf
     name = hyphen-2.7.1.tar.gz
-    URL1 = http://sourceforge.net/projects/hunspell/files/Hyphen/2.7/hyphen-2.7.1.tar.gz/download
+    URL1 = https://sourceforge.net/projects/hunspell/files/Hyphen/2.7/hyphen-2.7.1.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && SYSTEM_HUNSPELL!=YES)
     name = hunspell-1.3.3.tar.gz
     MD5 = 4967da60b23413604c9e563beacc63b4
-    URL1 = http://sourceforge.net/projects/hunspell/files/Hunspell/1.3.3/hunspell-1.3.3.tar.gz/download
+    URL1 = https://sourceforge.net/projects/hunspell/files/Hunspell/1.3.3/hunspell-1.3.3.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (ENABLE_CATEGORY_B==YES && SOLAR_JAVA==TRUE && ENABLE_JAVASCRIPT==YES)
@@ -336,5 +335,5 @@ if (ENABLE_CATEGORY_B==YES && SYSTEM_GRAPHITE!=YES && ENABLE_GRAPHITE==TRUE)
 if (ENABLE_CATEGORY_B==YES && SYSTEM_GRAPHITE!=YES && ENABLE_GRAPHITE==TRUE)
     MD5 = d35724900f6a4105550293686688bbb3
     name = silgraphite-2.3.1.tar.gz
-    URL1 = http://sourceforge.net/projects/silgraphite/files/silgraphite/2.3.1/silgraphite-2.3.1.tar.gz/download
+    URL1 = https://sourceforge.net/projects/silgraphite/files/silgraphite/2.3.1/silgraphite-2.3.1.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
