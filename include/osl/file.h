@@ -792,7 +792,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileSize(
     returned.
 
     @param[in] Handle       Handle of the file to be mapped.
-    @param[out] ppAddr      Memory address of the mapped file
+    @param[in,out] ppAddr   Memory address of the mapped file
     @param[in] uLength      Amount to map of the file from the offset
     @param[in] uOffset      Offset into the file to map
     @param[in] uFlags       osl_File_MapFlag_RandomAccess or
