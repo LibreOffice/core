@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_09ec9ec6",
+        "filename": "sc/source/core/data/fillinfo.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-24T17:14:17Z",
+      "side": 0,
+      "message": "Removing all this looks wrong. Clearly initCellInfo() is called with two different states of bPaintMarks.",
+      "revId": "1c15c117bfa3cf8b1470810f9d73b4d0fcd02396",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_69db621c",
+        "filename": "sc/source/core/data/fillinfo.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-24T17:14:17Z",
+      "side": 0,
+      "message": "How can this be removed?",
+      "revId": "1c15c117bfa3cf8b1470810f9d73b4d0fcd02396",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_49cea65b",
+        "filename": "sc/source/core/data/fillinfo.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-24T17:14:17Z",
+      "side": 0,
+      "message": "So this shouldn\u0027t..",
+      "revId": "1c15c117bfa3cf8b1470810f9d73b4d0fcd02396",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_e9e672e7",
+        "filename": "sc/source/filter/excel/tokstack.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-24T17:14:17Z",
+      "side": 0,
+      "message": "Please don\u0027t remove, see commented (and currently disabled) TokenPool::GrowError()",
+      "revId": "1c15c117bfa3cf8b1470810f9d73b4d0fcd02396",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_c908d694",
+        "filename": "sc/source/filter/inc/tokstack.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-24T17:14:17Z",
+      "side": 0,
+      "message": "See tokstack.cxx",
+      "revId": "1c15c117bfa3cf8b1470810f9d73b4d0fcd02396",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
