@@ -31,6 +31,8 @@
 
 #include <rtl/alloc.h>
 
+#include <cassert>
+
 #define PIPESYSTEM      "\\\\.\\pipe\\"
 #define PIPEPREFIX      "OSL_PIPE_"
 
@@ -118,7 +120,13 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
         rtl_uString *Ident = nullptr;
         rtl_uString *Delim = nullptr;
 
-        OSL_VERIFY(osl_getUserIdent(Security, &Ident));
+        // must have a valid security identifier!
+        if (!osl_getUserIdent(Security, &Ident))
+        {
+            SAL_WARN("sal.osl.pipe", "osl_getUserIdent() failed: invalid user identity");
+            return nullptr;
+        }
+
         rtl_uString_newFromAscii(&Delim, "_");
 
         rtl_uString_newConcat(&temp, name, Ident);
@@ -133,11 +141,20 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
         {
             PSECURITY_DESCRIPTOR pSecDesc;
 
+            /* Add a NULL discertionary ACL to the security descriptor.
+               We first create and initialize the descriptor, then we add a
+               NULL DACL, which allows all access to the object. */
             pSecDesc = static_cast< PSECURITY_DESCRIPTOR >(rtl_allocateMemory(SECURITY_DESCRIPTOR_MIN_LENGTH));
 
-            /* add a NULL disc. ACL to the security descriptor */
-            OSL_VERIFY(InitializeSecurityDescriptor(pSecDesc, SECURITY_DESCRIPTOR_REVISION));
-            OSL_VERIFY(SetSecurityDescriptorDacl(pSecDesc, TRUE, nullptr, FALSE));
+            if (InitializeSecurityDescriptor(pSecDesc, SECURITY_DESCRIPTOR_REVISION))
+            {
+                if (!SetSecurityDescriptorDacl(pSecDesc, TRUE, nullptr, FALSE))
+                    SAL_WARN("osl.sal.pipe", "Cannot set a NULL DACL to descriptor");
+            }
+            else
+            {
+                SAL_WARN("osl.sal.pipe", "Cannot initialize security descriptor");
+            }
 
             pSecAttr = static_cast< PSECURITY_ATTRIBUTES >(rtl_allocateMemory(sizeof(SECURITY_ATTRIBUTES)));
             pSecAttr->nLength = sizeof(SECURITY_ATTRIBUTES);
@@ -283,8 +300,17 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     rtl_uString* path = nullptr;
     rtl_uString* temp = nullptr;
 
-    OSL_ASSERT(pPipe);
-    OSL_ASSERT(pPipe->m_File != INVALID_HANDLE_VALUE);
+    if (!pPipe)
+    {
+        SAL_WARN("sal.osl.pipe", "no valid pipe");
+        return nullptr;
+    }
+
+    if (pPipe->m_File == INVALID_HANDLE_VALUE)
+    {
+        SAL_WARN("sal.osl.pipe", "invalid pipe handle");
+        return nullptr;
+    }
 
     memset(&os, 0, sizeof(OVERLAPPED));
     os.hEvent = pPipe->m_AcceptEvent;
@@ -325,7 +351,11 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     }
 
     pAcceptedPipe = osl_createPipeImpl();
-    OSL_ASSERT(pAcceptedPipe);
+    if(!pAcceptedPipe)
+    {
+        SAL_WARN("sal.osl.pipe", "osl_createPipeImpl(): cannot create pipe");
+        return nullptr;
+    }
 
     osl_atomic_increment(&(pAcceptedPipe->m_Reference));
     rtl_uString_assign(&pAcceptedPipe->m_Name, pPipe->m_Name);
@@ -356,7 +386,11 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
     DWORD nBytes;
     OVERLAPPED os;
 
-    OSL_ASSERT(pPipe);
+    if (!pPipe)
+    {
+        SAL_WARN("sal.osl.pipe", "no valid pipe");
+        return 0;
+    }
 
     memset(&os, 0, sizeof(OVERLAPPED));
     os.hEvent = pPipe->m_ReadEvent;
@@ -392,7 +426,11 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
     DWORD nBytes;
     OVERLAPPED os;
 
-    OSL_ASSERT(pPipe);
+    if (!pPipe)
+    {
+        SAL_WARN("sal.osl.pipe", "no valid pipe");
+        return 0;
+    }
 
     memset(&os, 0, sizeof(OVERLAPPED));
     os.hEvent = pPipe->m_WriteEvent;
@@ -400,9 +438,9 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
 
     if (!WriteFile(pPipe->m_File, pBuffer, BytesToSend, &nBytes, &os) &&
         ((GetLastError() != ERROR_IO_PENDING) ||
-          ! GetOverlappedResult(pPipe->m_File, &os, &nBytes, TRUE)))
+          !GetOverlappedResult(pPipe->m_File, &os, &nBytes, TRUE)))
     {
-          if (GetLastError() == ERROR_PIPE_NOT_CONNECTED)
+        if (GetLastError() == ERROR_PIPE_NOT_CONNECTED)
             nBytes = 0;
         else
             nBytes = (DWORD) -1;
@@ -419,7 +457,12 @@ sal_Int32 SAL_CALL osl_writePipe(oslPipe pPipe, const void *pBuffer , sal_Int32 
     sal_Int32 BytesSend = 0;
     sal_Int32 BytesToSend = n;
 
-    OSL_ASSERT(pPipe);
+    if (!pPipe)
+    {
+        SAL_WARN("sal.osl.pipe", "no valid pipe");
+        return 0;
+    }
+
     while (BytesToSend > 0)
     {
         sal_Int32 RetVal;
@@ -444,7 +487,12 @@ sal_Int32 SAL_CALL osl_readPipe(oslPipe pPipe, void *pBuffer, sal_Int32 n)
     sal_Int32 BytesRead = 0;
     sal_Int32 BytesToRead = n;
 
-    OSL_ASSERT(pPipe);
+    if (!pPipe)
+    {
+        SAL_WARN("sal.osl.pipe", "no valid pipe");
+        return 0;
+    }
+
     while (BytesToRead > 0)
     {
         sal_Int32 RetVal;

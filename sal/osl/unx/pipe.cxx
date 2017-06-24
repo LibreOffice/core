@@ -31,6 +31,8 @@
 #include "sockimpl.hxx"
 #include "secimpl.hxx"
 
+#include <cassert>
+
 #define PIPEDEFAULTPATH     "/tmp"
 #define PIPEALTERNATEPATH   "/var/tmp"
 
@@ -189,10 +191,13 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
         if (Security)
         {
             sal_Char Ident[256];
-
             Ident[0] = '\0';
 
-            OSL_VERIFY(osl_psz_getUserIdent(Security, Ident, sizeof(Ident)));
+            if (!osl_psz_getUserIdent(Security, Ident, sizeof(Ident)))
+            {
+                SAL_WARN("sal.osl.pipe", "osl_create_pipe: invalid user identity");
+                return nullptr;
+            }
 
             nRealLength = snprintf(&name[nNameLength], sizeof(name) - nNameLength, SECPIPENAMEMASK, Ident, pszPipeName);
         }
@@ -337,10 +342,16 @@ void SAL_CALL osl_closePipe(oslPipe pPipe)
     int ConnFD;
 
     if (!pPipe)
+    {
+        SAL_WARN("sal.osl.pipe", "osl_closePipe(): no valid pipe");
         return;
+    }
 
     if (pPipe->m_bClosed)
+    {
+        SAL_WARN("sal.osl.pipe", "osl_closePipe(): attempting to close already closed pipe");
         return;
+    }
 
     ConnFD = pPipe->m_Socket;
 
@@ -364,26 +375,23 @@ void SAL_CALL osl_closePipe(oslPipe pPipe)
 
         memset(&addr, 0, sizeof(addr));
 
-        SAL_INFO("sal.osl.pipe", "osl_destroyPipe : Pipe Name '" << pPipe->m_Name << "'");
+        SAL_INFO("sal.osl.pipe", "osl_destroyPipe: Pipe Name '" << pPipe->m_Name << "'");
 
         addr.sun_family = AF_UNIX;
         strncpy(addr.sun_path, pPipe->m_Name, sizeof(addr.sun_path) - 1);
 
         nRet = connect(fd, reinterpret_cast< sockaddr* >(&addr), sizeof(addr));
-        if (nRet < 0)
-            SAL_WARN("sal.osl.pipe", "connect() failed: " << strerror(errno));
+        SAL_WARN_IF(nRet < 0, "sal.osl.pipe", "connect() failed: " << strerror(errno));
 
         close(fd);
     }
 #endif /* CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT */
 
     nRet = shutdown(ConnFD, 2);
-    if (nRet < 0)
-        SAL_WARN("sal.osl.pipe", "shutdown() failed: " << strerror(errno));
+    SAL_WARN_IF(nRet < 0, "sal.osl.pipe", "shutdown() failed: " << strerror(errno));
 
     nRet = close(ConnFD);
-    if (nRet < 0)
-        SAL_WARN("sal.osl.pipe", "close() failed: " << strerror(errno));
+    SAL_WARN_IF(nRet < 0, "sal.osl.pipe", "close() failed: " << strerror(errno));
 
     /* remove filesystem entry */
     if (strlen(pPipe->m_Name) > 0)
@@ -397,11 +405,13 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     int s;
     oslPipe pAcceptedPipe;
 
-    OSL_ASSERT(pPipe);
     if (!pPipe)
+    {
+        SAL_WARN("sal.osl.pipe", "osl_acceptPipe() failed: no valid pipe");
         return nullptr;
+    }
 
-    OSL_ASSERT(strlen(pPipe->m_Name) > 0);
+    assert(strlen(pPipe->m_Name) > 0);
 
 #if defined(CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT)
     pPipe->m_bIsAccepting = true;
@@ -430,9 +440,9 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     /* alloc memory */
     pAcceptedPipe = createPipeImpl();
 
-    OSL_ASSERT(pAcceptedPipe);
     if (!pAcceptedPipe)
     {
+        SAL_WARN("sal.osl.pipe", "no pipe to accept");
         close(s);
         return nullptr;
     }
@@ -457,8 +467,6 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
 {
     int nRet = 0;
 
-    OSL_ASSERT(pPipe);
-
     if (!pPipe)
     {
         SAL_WARN("sal.osl.pipe", "osl_receivePipe: Invalid socket");
@@ -468,8 +476,7 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
 
     nRet = recv(pPipe->m_Socket, pBuffer, BytesToRead, 0);
 
-    if (nRet < 0)
-        SAL_WARN("sal.osl.pipe", "recv() failed: " << strerror(errno));
+    SAL_WARN_IF(nRet < 0, "sal.osl.pipe", "recv() failed: " << strerror(errno));
 
     return nRet;
 }
@@ -480,8 +487,6 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
 {
     int nRet=0;
 
-    OSL_ASSERT(pPipe);
-
     if (!pPipe)
     {
         SAL_WARN("sal.osl.pipe", "osl_sendPipe: Invalid socket");
@@ -491,10 +496,9 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
 
     nRet = send(pPipe->m_Socket, pBuffer, BytesToSend, 0);
 
-    if (nRet <= 0)
-        SAL_WARN("sal.osl.pipe", "send() failed: " << strerror(errno));
+    SAL_WARN_IF(nRet <= 0,"sal.osl.pipe", "send() failed: " << strerror(errno));
 
-     return nRet;
+    return nRet;
 }
 
 oslPipeError SAL_CALL osl_getLastPipeError(oslPipe pPipe)
@@ -503,50 +507,55 @@ oslPipeError SAL_CALL osl_getLastPipeError(oslPipe pPipe)
     return osl_PipeErrorFromNative(errno);
 }
 
-sal_Int32 SAL_CALL osl_writePipe(oslPipe pPipe, const void *pBuffer, sal_Int32 n)
+sal_Int32 SAL_CALL osl_writePipe(oslPipe pPipe, const void *pBuffer, sal_Int32 nWriteSize)
 {
     /* loop until all desired bytes were send or an error occurred */
-    sal_Int32 BytesSend = 0;
-    sal_Int32 BytesToSend = n;
+    sal_Int32 BytesSent = 0;
+    sal_Int32 BytesToSend = nWriteSize;
 
-    OSL_ASSERT(pPipe);
-    while (BytesToSend > 0)
+    SAL_WARN_IF(!pPipe, "sal.osl.pipe", "Pipe not valid");
+    if (pPipe)
     {
-        sal_Int32 RetVal;
+        while (BytesToSend > 0)
+        {
+            sal_Int32 RetVal;
+            RetVal = osl_sendPipe(pPipe, pBuffer, BytesToSend);
 
-        RetVal= osl_sendPipe(pPipe, pBuffer, BytesToSend);
+            /* error occurred? */
+            if (RetVal <= 0)
+                break;
 
-        /* error occurred? */
-        if (RetVal <= 0)
-            break;
-
-        BytesToSend -= RetVal;
-        BytesSend += RetVal;
-        pBuffer= static_cast< sal_Char const* >(pBuffer) + RetVal;
+            BytesToSend -= RetVal;
+            BytesSent += RetVal;
+            pBuffer= static_cast< sal_Char const* >(pBuffer) + RetVal;
+        }
     }
 
-    return BytesSend;
+    return BytesSent;
 }
 
-sal_Int32 SAL_CALL osl_readPipe( oslPipe pPipe, void *pBuffer , sal_Int32 n )
+sal_Int32 SAL_CALL osl_readPipe(oslPipe pPipe, void *pBuffer , sal_Int32 nReadSize)
 {
     /* loop until all desired bytes were read or an error occurred */
     sal_Int32 BytesRead = 0;
-    sal_Int32 BytesToRead = n;
+    sal_Int32 BytesToRead = nReadSize;
 
-    OSL_ASSERT(pPipe);
-    while (BytesToRead > 0)
+    SAL_WARN_IF(!pPipe, "sal.osl.pipe", "Pipe not valid");
+    if (pPipe)
     {
-        sal_Int32 RetVal;
-        RetVal= osl_receivePipe(pPipe, pBuffer, BytesToRead);
+        while (BytesToRead > 0)
+        {
+            sal_Int32 RetVal;
+            RetVal= osl_receivePipe(pPipe, pBuffer, BytesToRead);
 
-        /* error occurred? */
-        if (RetVal <= 0)
-            break;
+            /* error occurred? */
+            if (RetVal <= 0)
+                break;
 
-        BytesToRead -= RetVal;
-        BytesRead += RetVal;
-        pBuffer= static_cast< sal_Char* >(pBuffer) + RetVal;
+            BytesToRead -= RetVal;
+            BytesRead += RetVal;
+            pBuffer= static_cast< sal_Char* >(pBuffer) + RetVal;
+        }
     }
 
     return BytesRead;
