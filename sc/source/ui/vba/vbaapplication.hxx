@@ -67,6 +67,7 @@ public:
     virtual OUString SAL_CALL getPathSeparator() override;
     virtual OUString SAL_CALL getLibraryPath() override;
     virtual OUString SAL_CALL getTemplatesPath() override;
+    virtual OUString SAL_CALL getOperatingSystem() override;
 
     virtual OUString SAL_CALL getName() override;
     virtual sal_Bool SAL_CALL getDisplayAlerts() override;
