@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_093ade36",
+        "filename": "reportdesign/inc/reportformula.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-24T19:02:55Z",
+      "side": 1,
+      "message": "form-\u003eformula",
+      "revId": "f52c8818436b3e1fabff0fb6487ba71d732acc06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
