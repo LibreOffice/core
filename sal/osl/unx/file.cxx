@@ -601,7 +601,7 @@ oslFileError FileHandle_Impl::readLineAt(
     size_t bufpos = nOffset - m_bufptr, curpos = bufpos, dstpos = 0;
     int state = (bufpos >= m_buflen) ? LINE_STATE_LF : LINE_STATE_BEGIN;
 
-    for ( ; state != LINE_STATE_LF; )
+    while (state != LINE_STATE_LF)
     {
         if (curpos >= m_buflen)
         {
