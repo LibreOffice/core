@@ -144,7 +144,9 @@ ScVbaShape::getType( const css::uno::Reference< drawing::XShape >& xShape )
     }
     else if( sShapeType == "com.sun.star.drawing.LineShape" )
         return office::MsoShapeType::msoLine;
-    else if( sShapeType == "com.sun.star.drawing.CustomShape" || sShapeType == "com.sun.star.drawing.RectangleShape" )
+    else if( sShapeType == "com.sun.star.drawing.CustomShape"
+            || sShapeType == "com.sun.star.drawing.RectangleShape"
+            || sShapeType == "com.sun.star.drawing.EllipseShape" )
         return office::MsoShapeType::msoAutoShape;
     else if( sShapeType == "com.sun.star.drawing.TextShape" )
         return office::MsoShapeType::msoTextBox;
