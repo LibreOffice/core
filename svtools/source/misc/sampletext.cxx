@@ -126,6 +126,11 @@ bool isSymbolFont(const vcl::Font &rFont)
             rFont.GetFamilyName().equalsIgnoreAsciiCase("MusiSync") ||
             rFont.GetFamilyName().equalsIgnoreAsciiCase("stmary10") ||
             rFont.GetFamilyName().equalsIgnoreAsciiCase("Symbol") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("Webdings") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("Wingdings") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("Wingdings 2") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("Wingdings 3") ||
+            rFont.GetFamilyName().equalsIgnoreAsciiCase("Bookshelf Symbol 7") ||
             rFont.GetFamilyName().startsWith("STIXIntegrals") ||
             rFont.GetFamilyName().startsWith("STIXNonUnicode") ||
             rFont.GetFamilyName().startsWith("STIXSize") ||
