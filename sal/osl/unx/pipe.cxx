@@ -193,7 +193,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
 
             Ident[0] = '\0';
 
-            OSL_VERIFY(osl_psz_getUserIdent(Security, Ident, sizeof(Ident)));
+            assert(osl_psz_getUserIdent(Security, Ident, sizeof(Ident)));
 
             nRealLength = snprintf(&name[nNameLength], sizeof(name) - nNameLength, SECPIPENAMEMASK, Ident, pszPipeName);
         }
@@ -399,11 +399,11 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     int s;
     oslPipe pAcceptedPipe;
 
-    OSL_ASSERT(pPipe);
+    assert(pPipe);
     if (!pPipe)
         return nullptr;
 
-    OSL_ASSERT(strlen(pPipe->m_Name) > 0);
+    assert(strlen(pPipe->m_Name) > 0);
 
 #if defined(CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT)
     pPipe->m_bIsAccepting = true;
@@ -432,7 +432,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     /* alloc memory */
     pAcceptedPipe = createPipeImpl();
 
-    OSL_ASSERT(pAcceptedPipe);
+    assert(pAcceptedPipe);
     if (!pAcceptedPipe)
     {
         close(s);
@@ -459,8 +459,7 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
 {
     int nRet = 0;
 
-    OSL_ASSERT(pPipe);
-
+    assert(pPipe);
     if (!pPipe)
     {
         SAL_WARN("sal.osl.pipe", "osl_receivePipe: Invalid socket");
@@ -482,8 +481,7 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
 {
     int nRet=0;
 
-    OSL_ASSERT(pPipe);
-
+    assert(pPipe);
     if (!pPipe)
     {
         SAL_WARN("sal.osl.pipe", "osl_sendPipe: Invalid socket");
@@ -511,7 +509,7 @@ sal_Int32 SAL_CALL osl_writePipe(oslPipe pPipe, const void *pBuffer, sal_Int32 n
     sal_Int32 BytesSend = 0;
     sal_Int32 BytesToSend = n;
 
-    OSL_ASSERT(pPipe);
+    assert(pPipe);
     while (BytesToSend > 0)
     {
         sal_Int32 RetVal;
@@ -536,7 +534,8 @@ sal_Int32 SAL_CALL osl_readPipe( oslPipe pPipe, void *pBuffer , sal_Int32 n )
     sal_Int32 BytesRead = 0;
     sal_Int32 BytesToRead = n;
 
-    OSL_ASSERT(pPipe);
+    assert(pPipe);
+
     while (BytesToRead > 0)
     {
         sal_Int32 RetVal;
