@@ -120,8 +120,7 @@ uno::Any SAL_CALL ColorPropertySet::getPropertyValue( const OUString& aPropertyN
 {
     if( aPropertyName == "FillStyle" && m_bIsFillColor )
     {
-        css::drawing::FillStyle aFillStyle = css::drawing::FillStyle_SOLID;
-        return uno::makeAny(aFillStyle);
+        return uno::makeAny(css::drawing::FillStyle_SOLID);
     }
     else if (aPropertyName == m_aColorPropName)
         return uno::makeAny( m_nColor );

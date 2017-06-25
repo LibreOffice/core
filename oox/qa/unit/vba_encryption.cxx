@@ -73,7 +73,7 @@ void TestVbaEncryption::testSimple2()
 
 void TestVbaEncryption::testProjKey1()
 {
-    OUString aProjectID("{917DED54-440B-4FD1-A5C1-74ACF261E600}");
+    OUString const aProjectID("{917DED54-440B-4FD1-A5C1-74ACF261E600}");
     sal_uInt8 nProjKey = VBAEncryption::calculateProjKey(aProjectID);
     CPPUNIT_ASSERT_EQUAL((int)0xdf, (int)nProjKey);
 }

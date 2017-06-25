@@ -382,8 +382,6 @@ void ZipPackage::parseManifest()
         bool bODF12AndNewer = ( m_xRootFolder->GetVersion().compareTo( ODFVER_012_TEXT ) >= 0 );
         if ( !m_bForceRecovery && bODF12AndNewer )
         {
-            bool bDifferentStartKeyAlgorithm = false;
-
             if ( m_bInconsistent )
             {
                 // this is an ODF1.2 document that contains streams not referred in the manifest.xml;
@@ -392,13 +390,9 @@ void ZipPackage::parseManifest()
                 throw ZipIOException(
                     THROW_WHERE "there are streams not referred in manifest.xml" );
             }
-            else if ( bDifferentStartKeyAlgorithm )
-            {
-                // all the streams should be encrypted with the same StartKey in ODF1.2
-                // TODO/LATER: in future the exception should be thrown
-                OSL_ENSURE( false, "ODF1.2 contains different StartKey Algorithms" );
-                // throw ZipIOException( THROW_WHERE "More than one Start Key Generation algorithm is specified!" );
-            }
+            // all the streams should be encrypted with the same StartKey in ODF1.2
+            // TODO/LATER: in future the exception should be thrown
+            // throw ZipIOException( THROW_WHERE "More than one Start Key Generation algorithm is specified!" );
         }
 
         // in case it is a correct ODF1.2 document, the version must be set
@@ -1309,8 +1303,7 @@ uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
             try
             {
                 Exception aDetect;
-                sal_Int64 aSize = 0;
-                Any aAny = aOriginalContent.setPropertyValue("Size", makeAny( aSize ) );
+                Any aAny = aOriginalContent.setPropertyValue("Size", makeAny( sal_Int64(0) ) );
                 if( !( aAny >>= aDetect ) )
                     bTruncSuccess = true;
             }

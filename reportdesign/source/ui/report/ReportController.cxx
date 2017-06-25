@@ -3020,7 +3020,6 @@ void OReportController::insertGraphic()
 sal_Bool SAL_CALL OReportController::select( const Any& aSelection )
 {
     ::osl::MutexGuard aGuard( getMutex() );
-    bool bRet = true;
     if ( getDesignView() )
     {
         getDesignView()->unmarkAllObjects();
@@ -3054,7 +3053,7 @@ sal_Bool SAL_CALL OReportController::select( const Any& aSelection )
         }
         InvalidateAll();
     }
-    return bRet;
+    return true;
 }
 
 Any SAL_CALL OReportController::getSelection(  )

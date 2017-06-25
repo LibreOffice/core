@@ -368,9 +368,8 @@ void SAL_CALL osl_closePipe(oslPipe pPipe)
 
         addr.sun_family = AF_UNIX;
         strncpy(addr.sun_path, pPipe->m_Name, sizeof(addr.sun_path) - 1);
-        size_t len = sizeof(addr);
 
-        nRet = connect(fd, reinterpret_cast< sockaddr* >(&addr), len);
+        nRet = connect(fd, reinterpret_cast< sockaddr* >(&addr), sizeof(addr));
         if (nRet < 0)
             SAL_WARN("sal.osl.pipe", "connect() failed: " << strerror(errno));
 

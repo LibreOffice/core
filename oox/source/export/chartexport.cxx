@@ -781,8 +781,7 @@ void ChartExport::exportExternalData( const Reference< css::chart::XChartDocumen
         // Converting absolute path to relative path.
         if( externalDataPath[ 0 ] != '.' && externalDataPath[ 1 ] != '.')
         {
-            sal_Int32 nStartPos = 0;
-            sal_Int32 nSepPos = externalDataPath.indexOf( '/', nStartPos );
+            sal_Int32 nSepPos = externalDataPath.indexOf( '/', 0 );
             if( nSepPos > 0)
             {
                 relationPath = relationPath.copy( nSepPos,  ::std::max< sal_Int32 >( externalDataPath.getLength(), 0 ) -  nSepPos );
@@ -1630,9 +1629,8 @@ void ChartExport::exportDoughnutChart( const Reference< chart2::XChartType >& xC
     // firstSliceAng
     exportFirstSliceAng( );
     //FIXME: holeSize
-    sal_Int32 nHoleSize = 50;
     pFS->singleElement( FSNS( XML_c, XML_holeSize ),
-            XML_val, I32S( nHoleSize ),
+            XML_val, I32S( 50 ),
             FSEND );
 
     pFS->endElement( FSNS( XML_c, XML_doughnutChart ) );
@@ -1876,9 +1874,8 @@ void ChartExport::exportUpDownBars( const Reference< chart2::XChartType >& xChar
         pFS->startElement( FSNS( XML_c, XML_upDownBars ),
                 FSEND );
         // TODO: gapWidth
-        sal_Int32 nGapWidth = 150;
         pFS->singleElement( FSNS( XML_c, XML_gapWidth ),
-                XML_val, I32S( nGapWidth ),
+                XML_val, I32S( 150 ),
                     FSEND );
 
         Reference< beans::XPropertySet > xChartPropSet = xChartPropProvider->getUpBar();
@@ -2626,9 +2623,8 @@ void ChartExport::_exportAxis(
         if( bLogarithmic )
         {
             // default value is 10?
-            sal_Int32 nLogBase = 10;
             pFS->singleElement( FSNS( XML_c, XML_logBase ),
-                XML_val, I32S( nLogBase ),
+                XML_val, I32S( 10 ),
                 FSEND );
         }
     }
@@ -2871,9 +2867,8 @@ void ChartExport::_exportAxis(
         }
 
         // FIXME: seems not support? lblOffset
-        sal_Int32 nLblOffset = 100;
         pFS->singleElement( FSNS( XML_c, XML_lblOffset ),
-            XML_val, I32S( nLblOffset ),
+            XML_val, I32S( 100 ),
             FSEND );
     }
 

@@ -218,9 +218,8 @@ bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
 
 bool DlgEdFunc::MouseButtonUp( const MouseEvent& /*rMEvt*/ )
 {
-    bool bHandled = false;
     m_pParent->getSectionWindow()->getViewsWindow()->stopScrollTimer();
-    return bHandled;
+    return false;
 }
 
 void DlgEdFunc::checkTwoCklicks(const MouseEvent& rMEvt)

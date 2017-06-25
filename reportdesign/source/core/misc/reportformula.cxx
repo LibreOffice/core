@@ -83,11 +83,9 @@ namespace rptui
         m_sCompleteFormula = _rFormula;
 
         // is it an ordinary expression?
-        if ( m_sCompleteFormula.startsWith( sExpressionPrefix ) )
+        if ( m_sCompleteFormula.startsWith( sExpressionPrefix, &m_sUndecoratedContent ) )
         {
-            sal_Int32 nPrefixLen = strlen(sExpressionPrefix);
             m_eType = Expression;
-            m_sUndecoratedContent = m_sCompleteFormula.copy( nPrefixLen );
             return;
         }
 

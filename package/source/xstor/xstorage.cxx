@@ -2622,9 +2622,6 @@ void SAL_CALL OStorage::copyStorageElementLastCommitTo(
     if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aStorName == "_rels" )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 ); // unacceptable storage name
 
-    // it's always possible to read written storage in this implementation
-    sal_Int32 nStorageMode = embed::ElementModes::READ;
-
     try
     {
         SotElement_Impl *pElement = m_pImpl->FindElement( aStorName );
@@ -2639,7 +2636,7 @@ void SAL_CALL OStorage::copyStorageElementLastCommitTo(
         }
 
         if (!pElement->m_xStorage)
-            m_pImpl->OpenSubStorage( pElement, nStorageMode );
+            m_pImpl->OpenSubStorage( pElement, embed::ElementModes::READ );
 
         if (pElement->m_xStorage)
         {
