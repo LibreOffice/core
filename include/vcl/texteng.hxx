@@ -137,9 +137,6 @@ private:
     bool                mbRightToLeft       : 1;
     bool                mbHasMultiLineParas : 1;
 
-                        TextEngine( const TextEngine& ) : SfxBroadcaster()  {}
-    TextEngine&         operator=( const TextEngine& )      { return *this; }
-
 protected:
 
     void                CursorMoved( sal_uInt32 nNode );
@@ -222,6 +219,8 @@ protected:
 public:
                         TextEngine();
                         virtual ~TextEngine() override;
+                        TextEngine( const TextEngine& ) = delete;
+    TextEngine&         operator=( const TextEngine& ) = delete;
 
     void                SetText( const OUString& rStr );
     OUString            GetText( LineEnd aSeparator = LINEEND_LF ) const;
