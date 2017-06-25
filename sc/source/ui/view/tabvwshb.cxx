@@ -270,7 +270,6 @@ ErrCode ScTabViewShell::DoVerb(long nVerb)
         return ERRCODE_SO_NOTIMPL;          // should not be
 
     SdrOle2Obj* pOle2Obj = nullptr;
-    ErrCode nErr = ERRCODE_NONE;
 
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     if (rMarkList.GetMarkCount() == 1)
@@ -289,7 +288,7 @@ ErrCode ScTabViewShell::DoVerb(long nVerb)
         OSL_FAIL("no object for Verb found");
     }
 
-    return nErr;
+    return ERRCODE_NONE;
 }
 
 void ScTabViewShell::DeactivateOle()

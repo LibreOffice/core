@@ -992,7 +992,6 @@ void XclChPropSetHelper::WriteAreaProperties( ScfPropertySet& rPropSet,
     namespace cssd = ::com::sun::star::drawing;
     cssd::FillStyle eFillStyle = cssd::FillStyle_NONE;
     Color aColor;
-    sal_Int16 nTransparency = 0;
 
     // fill color
     if( rAreaFmt.mnPattern != EXC_PATT_NONE )
@@ -1004,7 +1003,7 @@ void XclChPropSetHelper::WriteAreaProperties( ScfPropertySet& rPropSet,
     // write the properties
     ScfPropSetHelper& rAreaHlp = GetAreaHelper( ePropMode );
     rAreaHlp.InitializeWrite();
-    rAreaHlp << eFillStyle << aColor << nTransparency;
+    rAreaHlp << eFillStyle << aColor << 0/*nTransparency*/;
     rAreaHlp.WriteToPropertySet( rPropSet );
 }
 

@@ -717,10 +717,9 @@ long ScDrawStringsVars::GetMaxDigitWidth()
     if (nMaxDigitWidth > 0)
         return nMaxDigitWidth;
 
-    sal_Char cZero = '0';
     for (sal_Char i = 0; i < 10; ++i)
     {
-        sal_Char cDigit = cZero + i;
+        sal_Char cDigit = '0' + i;
         long n = pOutput->pFmtDevice->GetTextWidth(OUString(cDigit));
         nMaxDigitWidth = ::std::max(nMaxDigitWidth, n);
     }
@@ -1878,8 +1877,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
 
                     // check horizontal space
 
-                    bool bNeedEditEngine = false;
-                    if ( !bNeedEditEngine && !bOutside )
+                    if ( !bOutside )
                     {
                         bool bRightAdjusted = false;        // to correct text width calculation later
                         switch (eOutHorJust)

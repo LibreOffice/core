@@ -1641,7 +1641,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         {
             // getRenderer(0) is used to query the settings, so it must always return something
 
-            SCTAB nCurTab = 0;      //! use current sheet from view?
+            SCTAB const nCurTab = 0;      //! use current sheet from view?
             ScPrintFunc aDefaultFunc( pDocShell, pDocShell->GetPrinter(), nCurTab );
             Size aTwips = aDefaultFunc.GetPageSize();
             awt::Size aPageSize( TwipsToHMM( aTwips.Width() ), TwipsToHMM( aTwips.Height() ) );
@@ -1797,8 +1797,8 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
             sal_Int32 nDestID = pPDFData->CreateDest( aArea );
             OUString aTabName;
             rDoc.GetName( nTab, aTabName );
-            sal_Int32 nParent = -1;     // top-level
-            pPDFData->CreateOutlineItem( nParent, aTabName, nDestID );
+            // top-level
+            pPDFData->CreateOutlineItem( -1/*nParent*/, aTabName, nDestID );
         }
         // #i56629# add the named destination stuff
         if( pPDFData && pPDFData->GetIsExportNamedDestinations() )
@@ -3419,10 +3419,8 @@ sal_Int32 ScTableSheetsObj::importSheet(
         throw lang::IndexOutOfBoundsException();
 
     // Transfer Tab
-    bool bInsertNew = true;
-    bool bNotifyAndPaint = true;
     pDocShell->TransferTab(
-        *pDocShellSrc, nIndexSrc, nIndexDest, bInsertNew, bNotifyAndPaint );
+        *pDocShellSrc, nIndexSrc, nIndexDest, true/*bInsertNew*/, true/*bNotifyAndPaint*/ );
 
     return nIndexDest;
 }
@@ -4322,8 +4320,8 @@ void SAL_CALL ScScenariosObj::addNewByName( const OUString& aName,
         }
 
         Color aColor( COL_LIGHTGRAY );  // Default
-        ScScenarioFlags nFlags = ScScenarioFlags::ShowFrame | ScScenarioFlags::PrintFrame
-                               | ScScenarioFlags::TwoWay    | ScScenarioFlags::Protected;
+        ScScenarioFlags const nFlags = ScScenarioFlags::ShowFrame | ScScenarioFlags::PrintFrame
+                                     | ScScenarioFlags::TwoWay    | ScScenarioFlags::Protected;
 
         pDocShell->MakeScenario( nTab, aName, aComment, aColor, nFlags, aMarkData );
     }

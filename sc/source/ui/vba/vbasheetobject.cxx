@@ -225,7 +225,7 @@ void SAL_CALL ScVbaSheetObjectBase::setName( const OUString& rName )
 
 sal_Int32 SAL_CALL ScVbaSheetObjectBase::getPlacement()
 {
-    sal_Int32 nRet = excel::XlPlacement::xlMoveAndSize;
+    sal_Int32 const nRet = excel::XlPlacement::xlMoveAndSize;
 #if 0 // TODO: not working at the moment.
     SvxShape* pShape = SvxShape::getImplementation( mxShape );
     if(pShape)

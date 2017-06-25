@@ -1452,7 +1452,6 @@ bool dequote( const OUString& rSource, sal_Int32 nStartPos, sal_Int32& rEndPos, 
 {
     // nStartPos has to point to opening quote
 
-    bool bRet = false;
     const sal_Unicode cQuote = '\'';
 
     if (rSource[nStartPos] == cQuote)
@@ -1488,7 +1487,7 @@ bool dequote( const OUString& rSource, sal_Int32 nStartPos, sal_Int32& rEndPos, 
         // no closing quote before the end of the string -> error (bRet still false)
     }
 
-    return bRet;
+    return false;
 }
 
 struct ScGetPivotDataFunctionEntry
@@ -2426,8 +2425,6 @@ bool ScDPObject::FillLabelDataForDimension(
     OUString aSubtotalName = ScUnoHelpFunctions::GetStringProperty(
         xDimProp, SC_UNO_DP_FIELD_SUBTOTALNAME, OUString());
 
-    bool bIsValue = true;                               //TODO: check
-
     // Name from the UNO dimension object may have trailing '*'s in which
     // case it's a duplicate dimension. Convert that to a duplicate index.
 
@@ -2438,7 +2435,7 @@ bool ScDPObject::FillLabelDataForDimension(
     rLabelData.mnCol = static_cast<SCCOL>(nDim);
     rLabelData.mnDupCount = nDupCount;
     rLabelData.mbDataLayout = bData;
-    rLabelData.mbIsValue = bIsValue;
+    rLabelData.mbIsValue = true; //TODO: check
 
     if (!bData)
     {
@@ -3749,15 +3746,10 @@ ScDPObject* ScDPCollection::GetByName(const OUString& rName) const
 
 OUString ScDPCollection::CreateNewName() const
 {
-    OUString aBase("DataPilot");
-
     size_t n = maTables.size();
     for (size_t nAdd = 0; nAdd <= n; ++nAdd)   //  nCount+1 tries
     {
-        OUStringBuffer aBuf;
-        aBuf.append(aBase);
-        aBuf.append(static_cast<sal_Int32>(1 + nAdd));
-        OUString aNewName = aBuf.makeStringAndClear();
+        OUString aNewName = "DataPilot" + OUString::number(1 + nAdd);
         bool bFound = false;
         TablesType::const_iterator itr = maTables.begin(), itrEnd = maTables.end();
         for (; itr != itrEnd; ++itr)

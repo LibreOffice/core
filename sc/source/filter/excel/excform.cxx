@@ -1610,11 +1610,10 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz )
         // [Parameter{;Parameter}]
         if( nLast > nSkipEnd )
         {
-            sal_Int16 nNull = -1;       // skip this parameter
             aPool << eParam[ nLast ];
             for( nLauf = nLast - 1 ; nLauf > nSkipEnd ; nLauf-- )
             {
-                if( nLauf != nNull )
+                if( nLauf != -1 ) // skip this parameter
                     aPool << ocSep << eParam[ nLauf ];
             }
         }

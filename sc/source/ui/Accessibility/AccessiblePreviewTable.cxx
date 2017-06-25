@@ -580,8 +580,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessiblePreviewTable::getImplementationId()
 
 OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleDescription()
 {
-    OUString sDesc(STR_ACC_TABLE_DESCR);
-    return sDesc;
+    return OUString(STR_ACC_TABLE_DESCR);
 }
 
 OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleName()

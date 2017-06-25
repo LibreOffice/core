@@ -147,7 +147,7 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
                     sal_uInt16 nHorIter = 0;
                     const double fHorStepAngle = 5.0;
                     const double fHorMaxAngle = 80.0;
-                    int nHorMaxIter = static_cast<int>( fHorMaxAngle / fHorStepAngle );
+                    int const nHorMaxIter = static_cast<int>( fHorMaxAngle / fHorStepAngle );
                     bool bDoneHorMove = false;
 
                     while ( !bDoneHorMove && !bHorMoveError && nHorIter++ < nHorMaxIter )

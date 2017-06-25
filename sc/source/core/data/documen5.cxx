@@ -143,7 +143,6 @@ void ScDocument::UpdateAllCharts()
                                 OUString sRangeStr;
                                 aRanges->Format( sRangeStr, ScRefFlags::RANGE_ABS_3D, this, GetAddressConvention() );
 
-                                chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
                                 bool bHasCategories = pChartObj->HasRowHeaders();
                                 bool bFirstCellAsLabel = pChartObj->HasColHeaders();
 
@@ -163,7 +162,7 @@ void ScDocument::UpdateAllCharts()
                                             pShell->GetModel(), uno::UNO_QUERY );
                                     xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
 
-                                    lcl_SetChartParameters( xReceiver, sRangeStr, eDataRowSource,
+                                    lcl_SetChartParameters( xReceiver, sRangeStr, chart::ChartDataRowSource_COLUMNS,
                                                             bHasCategories, bFirstCellAsLabel );
                                 }
 

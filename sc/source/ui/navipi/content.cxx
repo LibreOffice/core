@@ -1476,7 +1476,6 @@ bool ScContentTree::LoadFile( const OUString& rUrl )
     if ( nPos != -1 )
         aDocName = aDocName.copy(0, nPos);           // only the name without #...
 
-    bool bReturn = false;
     OUString aURL = aDocName;
     OUString aFilter, aOptions;
     ScDocumentLoader aLoader( aURL, aFilter, aOptions );
@@ -1496,7 +1495,7 @@ bool ScContentTree::LoadFile( const OUString& rUrl )
 
     //  document is closed again by ScDocumentLoader in dtor
 
-    return bReturn;
+    return false;
 }
 
 void ScContentTree::InitWindowBits( bool bButtons )

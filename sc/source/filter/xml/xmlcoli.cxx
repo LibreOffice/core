@@ -135,11 +135,10 @@ void ScXMLTableColContext::EndElement()
                         }
                     }
                 }
-                OUString sVisible(SC_UNONAME_CELLVIS);
                 bool bValue(true);
                 if (!IsXMLToken(sVisibility, XML_VISIBLE))
                     bValue = false;
-                xColumnProperties->setPropertyValue(sVisible, uno::makeAny(bValue));
+                xColumnProperties->setPropertyValue(SC_UNONAME_CELLVIS, uno::makeAny(bValue));
             }
         }
     }

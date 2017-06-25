@@ -787,20 +787,15 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     if ( bHasChange || bHasScenario || !rHigh.empty() )
     {
-
         //! Merge SetChangedClip() with DrawMarks() ?? (different MapMode!)
 
-        bool bAny = true;
-        if (bAny)
-        {
-            if ( bHasChange )
-                aOutputData.DrawChangeTrack();
+        if ( bHasChange )
+            aOutputData.DrawChangeTrack();
 
-            if ( bHasScenario )
-                lcl_DrawScenarioFrames( pContentDev, pViewData, eWhich, nX1,nY1,nX2,nY2 );
+        if ( bHasScenario )
+            lcl_DrawScenarioFrames( pContentDev, pViewData, eWhich, nX1,nY1,nX2,nY2 );
 
-            lcl_DrawHighlight( aOutputData, pViewData, rHigh );
-        }
+        lcl_DrawHighlight( aOutputData, pViewData, rHigh );
     }
 
         // Drawing foreground

@@ -91,10 +91,10 @@ ScRange getCachedRange(const ScExternalRefCache::TableTypeRef& pCacheTab)
 void Test::testFormulaCreateStringFromTokens()
 {
     // Insert sheets.
-    OUString aTabName1("Test");
-    OUString aTabName2("Kevin's Data");
-    OUString aTabName3("Past Data");
-    OUString aTabName4("2013");
+    OUString const aTabName1("Test");
+    OUString const aTabName2("Kevin's Data");
+    OUString const aTabName3("Past Data");
+    OUString const aTabName4("2013");
     m_pDoc->InsertTab(0, aTabName1);
     m_pDoc->InsertTab(1, aTabName2);
     m_pDoc->InsertTab(2, aTabName3);
@@ -118,7 +118,7 @@ void Test::testFormulaCreateStringFromTokens()
     CPPUNIT_ASSERT_MESSAGE("Failed to obtain global named expression object.", pGlobalNames);
     CPPUNIT_ASSERT_MESSAGE("Failed to obtain sheet-local named expression object.", pSheetNames);
 
-    for (size_t i = 0, n = SAL_N_ELEMENTS(aNames); i < n; ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
     {
         ScRangeData* pName = new ScRangeData(
             m_pDoc, OUString::createFromAscii(aNames[i].pName), OUString::createFromAscii(aNames[i].pExpr),
@@ -153,7 +153,7 @@ void Test::testFormulaCreateStringFromTokens()
     ScDBCollection* pDBs = m_pDoc->GetDBCollection();
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch DB collection object.", pDBs);
 
-    for (size_t i = 0, n = SAL_N_ELEMENTS(aDBs); i < n; ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aDBs); ++i)
     {
         ScDBData* pData = new ScDBData(
             OUString::createFromAscii(
@@ -194,7 +194,7 @@ void Test::testFormulaCreateStringFromTokens()
 
     ScAddress aPos(0,0,0);
 
-    for (size_t i = 0, n = SAL_N_ELEMENTS(aTests); i < n; ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
     {
 #if 0
         OUString aFormula = OUString::createFromAscii(aTests[i]);
@@ -1017,7 +1017,7 @@ void Test::testFormulaCompiler()
         { "=B1-$C2+D$3-$E$4", FormulaGrammar::GRAM_NATIVE, "RC[1]-R[1]C3+R3C[3]-R4C5", FormulaGrammar::GRAM_NATIVE_XL_R1C1 },
     };
 
-    for (size_t i = 0, n = SAL_N_ELEMENTS(aTests); i < n; ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
     {
         std::unique_ptr<ScTokenArray> pArray;
         {
@@ -1046,7 +1046,7 @@ void Test::testFormulaCompilerJumpReordering()
     getDocShell().SetFormulaOptions(aOptions);
 
     {
-        OUString aInput("=IF(B1;12;\"text\")");
+        OUString const aInput("=IF(B1;12;\"text\")");
 
         // Compile formula string first.
         std::unique_ptr<ScTokenArray> pCode(compileFormula(m_pDoc, aInput));
@@ -3806,9 +3806,8 @@ void Test::testFuncROW()
 
 void Test::testFuncSUM()
 {
-    OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            m_pDoc->InsertTab (0, aTabName));
+                            m_pDoc->InsertTab (0, "foo"));
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
@@ -3872,8 +3871,7 @@ void Test::testFuncPRODUCT()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto recalc.
 
-    OUString aTabName("foo");
-    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab(0, aTabName));
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab(0, "foo"));
 
     ScAddress aPos(3, 0, 0);
     m_pDoc->SetValue(0, 0, 0, 3.0); // A1
@@ -4042,7 +4040,7 @@ void Test::testFuncMIN()
 
 void Test::testFuncN()
 {
-    OUString aTabName("foo");
+    OUString const aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
 
@@ -4126,9 +4124,8 @@ void Test::testFuncCOUNTIF()
 
     // COUNTIF (test case adopted from OOo i#36381)
 
-    OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            m_pDoc->InsertTab (0, aTabName));
+                            m_pDoc->InsertTab (0, "foo"));
 
     // Empty A1:A39 first.
     clearRange(m_pDoc, ScRange(0, 0, 0, 0, 40, 0));
@@ -4309,9 +4306,8 @@ void Test::testFuncIFERROR()
 {
     // IFERROR/IFNA (fdo#56124)
 
-    OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            m_pDoc->InsertTab (0, aTabName));
+                            m_pDoc->InsertTab (0, "foo"));
 
     // Empty A1:A39 first.
     clearRange(m_pDoc, ScRange(0, 0, 0, 0, 40, 0));
@@ -4421,8 +4417,8 @@ void Test::testFuncIFERROR()
 
 void Test::testFuncSHEET()
 {
-    OUString aTabName1("test1");
-    OUString aTabName2("test2");
+    OUString const aTabName1("test1");
+    OUString const aTabName2("test2");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (SC_TAB_APPEND, aTabName1));
 
@@ -4454,9 +4450,8 @@ void Test::testFuncSHEET()
 
 void Test::testFuncNOW()
 {
-    OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            m_pDoc->InsertTab (0, aTabName));
+                            m_pDoc->InsertTab (0, "foo"));
 
     double val = 1;
     m_pDoc->SetValue(0, 0, 0, val);
@@ -4486,9 +4481,8 @@ void Test::testFuncNUMBERVALUE()
 {
     // NUMBERVALUE fdo#57180
 
-    OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            m_pDoc->InsertTab (0, aTabName));
+                            m_pDoc->InsertTab (0, "foo"));
 
     // Empty A1:A39 first.
     clearRange(m_pDoc, ScRange(0, 0, 0, 0, 40, 0));
@@ -4628,9 +4622,8 @@ void Test::testFuncVLOOKUP()
 {
     // VLOOKUP
 
-    OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            m_pDoc->InsertTab (0, aTabName));
+                            m_pDoc->InsertTab (0, "foo"));
 
     // Clear A1:F40.
     clearRange(m_pDoc, ScRange(0, 0, 0, 5, 39, 0));
@@ -4876,9 +4869,8 @@ void runTestHorizontalMATCH(ScDocument* pDoc, const char* aData[DataSize], StrSt
 
 void Test::testFuncMATCH()
 {
-    OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            m_pDoc->InsertTab (0, aTabName));
+                            m_pDoc->InsertTab (0, "foo"));
 
     clearRange(m_pDoc, ScRange(0, 0, 0, 40, 40, 0));
     {
@@ -5012,7 +5004,7 @@ void Test::testFuncMATCH()
 
 void Test::testFuncCELL()
 {
-    OUString aTabName("foo");
+    OUString const aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
 
@@ -5021,8 +5013,7 @@ void Test::testFuncCELL()
     {
         const char* pContent = "Some random text";
         m_pDoc->SetString(2, 9, 0, OUString::createFromAscii(pContent)); // Set this value to C10.
-        double val = 1.2;
-        m_pDoc->SetValue(2, 0, 0, val); // Set numeric value to C1;
+        m_pDoc->SetValue(2, 0, 0, 1.2); // Set numeric value to C1;
 
         // We don't test: FILENAME, FORMAT, WIDTH, PROTECT, PREFIX
         StrStrCheck aChecks[] = {
@@ -5055,9 +5046,8 @@ void Test::testFuncCELL()
 /** See also test case document fdo#44456 sheet cpearson */
 void Test::testFuncDATEDIF()
 {
-    OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            m_pDoc->InsertTab (0, aTabName));
+                            m_pDoc->InsertTab (0, "foo"));
 
     const char* aData[][5] = {
         { "2007-01-01", "2007-01-10",  "d",   "9", "=DATEDIF(A1;B1;C1)" } ,
@@ -5655,16 +5645,16 @@ void Test::testExternalRef()
     rExtDoc.InsertTab(1, aExtSh2Name);
     rExtDoc.InsertTab(2, aExtSh3Name);
 
-    OUString name("Name");
-    OUString value("Value");
-    OUString andy("Andy");
-    OUString bruce("Bruce");
-    OUString charlie("Charlie");
-    OUString david("David");
-    OUString edward("Edward");
-    OUString frank("Frank");
-    OUString george("George");
-    OUString henry("Henry");
+    OUString const name("Name");
+    OUString const value("Value");
+    OUString const andy("Andy");
+    OUString const bruce("Bruce");
+    OUString const charlie("Charlie");
+    OUString const david("David");
+    OUString const edward("Edward");
+    OUString const frank("Frank");
+    OUString const george("George");
+    OUString const henry("Henry");
 
     // Sheet 1
     rExtDoc.SetString(0, 0, 0, name);
@@ -5813,8 +5803,8 @@ void Test::testExternalRangeName()
 {
     ScDocShellRef xExtDocSh = new ScDocShell;
     xExtDocSh->SetIsInUcalc();
-    OUString aExtDocName("file:///extdata.fake");
-    OUString aExtSh1Name("Data1");
+    OUString const aExtDocName("file:///extdata.fake");
+    OUString const aExtSh1Name("Data1");
     SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
     xExtDocSh->DoInitNew(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
@@ -6321,7 +6311,7 @@ void Test::testFuncTableRef()
         ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
         CPPUNIT_ASSERT_MESSAGE("Failed to obtain global named expression object.", pGlobalNames);
 
-        for (size_t i = 0, n = SAL_N_ELEMENTS(aNames); i < n; ++i)
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
         {
             // Choose base position that does not intersect with the database
             // range definition to test later use of [#This Row] results in
@@ -6336,7 +6326,7 @@ void Test::testFuncTableRef()
     }
 
     // Use the named expressions in COUNTA() formulas, on row 2 that intersects.
-    for (size_t i = 0, n = SAL_N_ELEMENTS(aNames); i < n; ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
     {
         OUString aFormula( "=COUNTA(" + OUString::createFromAscii( aNames[i].pName) + ")");
         ScAddress aPos(3+i,1,0);
@@ -6348,7 +6338,7 @@ void Test::testFuncTableRef()
     }
 
     // Use the named expressions in SUM() formulas, on row 3 that intersects.
-    for (size_t i = 0, n = SAL_N_ELEMENTS(aNames); i < n; ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
     {
         OUString aFormula( "=SUM(" + OUString::createFromAscii( aNames[i].pName) + ")");
         ScAddress aPos(3+i,2,0);
@@ -6360,7 +6350,7 @@ void Test::testFuncTableRef()
     }
 
     // Use the named expressions in SUM() formulas, on row 4 that intersects.
-    for (size_t i = 0, n = SAL_N_ELEMENTS(aNames); i < n; ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
     {
         OUString aFormula( "=SUM(" + OUString::createFromAscii( aNames[i].pName) + ")");
         ScAddress aPos(3+i,3,0);
@@ -6372,7 +6362,7 @@ void Test::testFuncTableRef()
     }
 
     // Use the named expressions in SUM() formulas, on row 5 that does not intersect.
-    for (size_t i = 0, n = SAL_N_ELEMENTS(aNames); i < n; ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
     {
         OUString aFormula( "=SUM(" + OUString::createFromAscii( aNames[i].pName) + ")");
         ScAddress aPos(3+i,4,0);
@@ -6390,7 +6380,7 @@ void Test::testFuncTableRef()
     // Re-verify the named expression in SUM() formula, on row 4 that
     // intersects, now starting at column E, still works.
     m_pDoc->CalcAll();
-    for (size_t i = 0, n = SAL_N_ELEMENTS(aNames); i < n; ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
     {
         OUString aFormula( "=SUM(" + OUString::createFromAscii( aNames[i].pName) + ")");
         ScAddress aPos(4+i,3,0);
@@ -6495,7 +6485,7 @@ void Test::testFuncTableRef()
         ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
         CPPUNIT_ASSERT_MESSAGE("Failed to obtain global named expression object.", pGlobalNames);
 
-        for (size_t i = 0, n = SAL_N_ELEMENTS(aHlNames); i < n; ++i)
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aHlNames); ++i)
         {
             // Choose base position that does not intersect with the database
             // range definition to test later use of [#This Row] results in
@@ -6510,7 +6500,7 @@ void Test::testFuncTableRef()
     }
 
     // Use the named expressions in COUNTA() formulas, on row 10 that intersects.
-    for (size_t i = 0, n = SAL_N_ELEMENTS(aHlNames); i < n; ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aHlNames); ++i)
     {
         OUString aFormula( "=COUNTA(" + OUString::createFromAscii( aHlNames[i].pName) + ")");
         ScAddress aPos(7+i,9,0);
@@ -6522,7 +6512,7 @@ void Test::testFuncTableRef()
     }
 
     // Use the named expressions in SUM() formulas, on row 11 that intersects.
-    for (size_t i = 0, n = SAL_N_ELEMENTS(aHlNames); i < n; ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aHlNames); ++i)
     {
         OUString aFormula( "=SUM(" + OUString::createFromAscii( aHlNames[i].pName) + ")");
         ScAddress aPos(7+i,10,0);
@@ -6534,7 +6524,7 @@ void Test::testFuncTableRef()
     }
 
     // Use the named expressions in SUM() formulas, on row 12 that intersects.
-    for (size_t i = 0, n = SAL_N_ELEMENTS(aHlNames); i < n; ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aHlNames); ++i)
     {
         OUString aFormula( "=SUM(" + OUString::createFromAscii( aHlNames[i].pName) + ")");
         ScAddress aPos(7+i,11,0);
@@ -6546,7 +6536,7 @@ void Test::testFuncTableRef()
     }
 
     // Use the named expressions in SUM() formulas, on row 13 that does not intersect.
-    for (size_t i = 0, n = SAL_N_ELEMENTS(aHlNames); i < n; ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aHlNames); ++i)
     {
         OUString aFormula( "=SUM(" + OUString::createFromAscii( aHlNames[i].pName) + ")");
         ScAddress aPos(7+i,12,0);
@@ -6564,7 +6554,7 @@ void Test::testFuncTableRef()
     // Re-verify the named expression in SUM() formula, on row 12 that
     // intersects, now starting at column I, still works.
     m_pDoc->CalcAll();
-    for (size_t i = 0, n = SAL_N_ELEMENTS(aHlNames); i < n; ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aHlNames); ++i)
     {
         OUString aFormula( "=SUM(" + OUString::createFromAscii( aHlNames[i].pName) + ")");
         ScAddress aPos(8+i,11,0);
@@ -7420,8 +7410,8 @@ void Test::testFuncMDETERM()
 
     m_pDoc->InsertTab(0, "MDETERM_test");
     ScAddress aPos(8,0,0);
-    OUString aColCodes("ABCDEFGH");
-    OUString aFormulaTemplate("=MDETERM(A1:B2)");
+    OUString const aColCodes("ABCDEFGH");
+    OUString const aFormulaTemplate("=MDETERM(A1:B2)");
     OUStringBuffer aFormulaBuffer(aFormulaTemplate);
     for( SCSIZE nSize = 3; nSize <= 8; nSize++ )
     {
@@ -7701,10 +7691,9 @@ void Test::testTdf97587()
     m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
 
     // Paste it to first range.
-    InsertDeleteFlags nFlags = InsertDeleteFlags::CONTENTS;
     ScRange aDestRange(1, 1, 0, 1, TOTAL_ROWS + ROW_RANGE, 0);
     aMark.SetMarkArea(aDestRange);
-    m_pDoc->CopyFromClip(aDestRange, aMark, nFlags, nullptr, &aClipDoc);
+    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &aClipDoc);
 
     // Check the formula results in column B.
     for( SCROW i = 0; i < TOTAL_ROWS + 1; ++i )

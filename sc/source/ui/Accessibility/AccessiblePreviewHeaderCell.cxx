@@ -173,8 +173,7 @@ uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMaximumValue()
 
 uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMinimumValue()
 {
-    double fValue(0.0);
-    return uno::Any(fValue);
+    return uno::Any(0.0);
 }
 
 //=====  XAccessibleComponent  ============================================

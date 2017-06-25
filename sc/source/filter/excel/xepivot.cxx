@@ -1517,14 +1517,14 @@ void XclExpPivotTable::WriteQsiSxTag( XclExpStream& rStrm ) const
 {
     rStrm.StartRecord( 0x0802, 32 );
 
-    sal_uInt16 nRecordType = 0x0802;
-    sal_uInt16 nDummyFlags = 0x0000;
-    sal_uInt16 nTableType  = 1; // 0 = query table : 1 = pivot table
+    sal_uInt16 const nRecordType = 0x0802;
+    sal_uInt16 const nDummyFlags = 0x0000;
+    sal_uInt16 const nTableType  = 1; // 0 = query table : 1 = pivot table
 
     rStrm << nRecordType << nDummyFlags << nTableType;
 
     // General flags
-    sal_uInt16 nFlags = 0x0001;
+    sal_uInt16 const nFlags = 0x0001;
 #if 0
     // for doc purpose
     sal_uInt16 nFlags = 0x0000;
@@ -1540,7 +1540,7 @@ void XclExpPivotTable::WriteQsiSxTag( XclExpStream& rStrm ) const
 
     // Feature-specific options.  The value differs depending on the table
     // type, but we assume the table type is always pivot table.
-    sal_uInt32 nOptions = 0x00000000;
+    sal_uInt32 const nOptions = 0x00000000;
 #if 0
     // documentation for which bit is for what
     bool bNoStencil = false;
@@ -1555,7 +1555,7 @@ void XclExpPivotTable::WriteQsiSxTag( XclExpStream& rStrm ) const
     rStrm << nOptions;
 
     sal_uInt8 eXclVer = 0; // Excel2000
-    sal_uInt8 nOffsetBytes = 16;
+    sal_uInt8 const nOffsetBytes = 16;
     rStrm << eXclVer  // version table last refreshed
           << eXclVer  // minimum version to refresh
           << nOffsetBytes

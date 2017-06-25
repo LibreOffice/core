@@ -485,97 +485,85 @@ ScVbaWindow::RangeSelection()
 sal_Bool SAL_CALL
 ScVbaWindow::getDisplayGridlines()
 {
-    OUString sName( SC_UNO_SHOWGRID );
     bool bGrid = true;
-    getControllerProps()->getPropertyValue( sName ) >>= bGrid;
+    getControllerProps()->getPropertyValue( SC_UNO_SHOWGRID ) >>= bGrid;
     return bGrid;
 }
 
 void SAL_CALL
 ScVbaWindow::setDisplayGridlines( sal_Bool _displaygridlines )
 {
-    OUString sName( SC_UNO_SHOWGRID );
-    getControllerProps()->setPropertyValue( sName, uno::makeAny( _displaygridlines ));
+    getControllerProps()->setPropertyValue( SC_UNO_SHOWGRID, uno::makeAny( _displaygridlines ));
 }
 
 sal_Bool SAL_CALL
 ScVbaWindow::getDisplayHeadings()
 {
-    OUString sName( SC_UNO_COLROWHDR );
     bool bHeading = true;
-    getControllerProps()->getPropertyValue( sName ) >>= bHeading;
+    getControllerProps()->getPropertyValue( SC_UNO_COLROWHDR ) >>= bHeading;
     return bHeading;
 }
 
 void SAL_CALL
 ScVbaWindow::setDisplayHeadings( sal_Bool _bDisplayHeadings )
 {
-    OUString sName( SC_UNO_COLROWHDR );
-    getControllerProps()->setPropertyValue( sName, uno::makeAny( _bDisplayHeadings ));
+    getControllerProps()->setPropertyValue( SC_UNO_COLROWHDR, uno::makeAny( _bDisplayHeadings ));
 }
 
 sal_Bool SAL_CALL
 ScVbaWindow::getDisplayHorizontalScrollBar()
 {
-    OUString sName( SC_UNO_HORSCROLL );
     bool bHorizontalScrollBar = true;
-    getControllerProps()->getPropertyValue( sName ) >>= bHorizontalScrollBar;
+    getControllerProps()->getPropertyValue( SC_UNO_HORSCROLL ) >>= bHorizontalScrollBar;
     return bHorizontalScrollBar;
 }
 
 void SAL_CALL
 ScVbaWindow::setDisplayHorizontalScrollBar( sal_Bool _bDisplayHorizontalScrollBar )
 {
-    OUString sName( SC_UNO_HORSCROLL );
-    getControllerProps()->setPropertyValue( sName, uno::makeAny( _bDisplayHorizontalScrollBar ));
+    getControllerProps()->setPropertyValue( SC_UNO_HORSCROLL, uno::makeAny( _bDisplayHorizontalScrollBar ));
 }
 
 sal_Bool SAL_CALL
 ScVbaWindow::getDisplayOutline()
 {
-    OUString sName( SC_UNO_OUTLSYMB );
     bool bOutline = true;
-    getControllerProps()->getPropertyValue( sName ) >>= bOutline;
+    getControllerProps()->getPropertyValue( SC_UNO_OUTLSYMB ) >>= bOutline;
     return bOutline;
 }
 
 void SAL_CALL
 ScVbaWindow::setDisplayOutline( sal_Bool _bDisplayOutline )
 {
-    OUString sName( SC_UNO_OUTLSYMB );
-    getControllerProps()->setPropertyValue( sName, uno::makeAny( _bDisplayOutline ));
+    getControllerProps()->setPropertyValue( SC_UNO_OUTLSYMB, uno::makeAny( _bDisplayOutline ));
 }
 
 sal_Bool SAL_CALL
 ScVbaWindow::getDisplayVerticalScrollBar()
 {
-    OUString sName( SC_UNO_VERTSCROLL );
     bool bVerticalScrollBar = true;
-    getControllerProps()->getPropertyValue( sName ) >>= bVerticalScrollBar;
+    getControllerProps()->getPropertyValue( SC_UNO_VERTSCROLL ) >>= bVerticalScrollBar;
     return bVerticalScrollBar;
 }
 
 void SAL_CALL
 ScVbaWindow::setDisplayVerticalScrollBar( sal_Bool _bDisplayVerticalScrollBar )
 {
-    OUString sName( SC_UNO_VERTSCROLL );
-    getControllerProps()->setPropertyValue( sName, uno::makeAny( _bDisplayVerticalScrollBar ));
+    getControllerProps()->setPropertyValue( SC_UNO_VERTSCROLL, uno::makeAny( _bDisplayVerticalScrollBar ));
 }
 
 sal_Bool SAL_CALL
 ScVbaWindow::getDisplayWorkbookTabs()
 {
-    OUString sName( SC_UNO_SHEETTABS );
     bool bWorkbookTabs = true;
-    getControllerProps()->getPropertyValue( sName ) >>= bWorkbookTabs;
+    getControllerProps()->getPropertyValue( SC_UNO_SHEETTABS ) >>= bWorkbookTabs;
     return bWorkbookTabs;
 }
 
 void SAL_CALL
 ScVbaWindow::setDisplayWorkbookTabs( sal_Bool _bDisplayWorkbookTabs )
 {
-    OUString sName( SC_UNO_SHEETTABS );
-    getControllerProps()->setPropertyValue( sName, uno::makeAny( _bDisplayWorkbookTabs ));
+    getControllerProps()->setPropertyValue( SC_UNO_SHEETTABS, uno::makeAny( _bDisplayWorkbookTabs ));
 }
 
 sal_Bool SAL_CALL
