@@ -55,8 +55,7 @@ SdFilter::~SdFilter()
 
 OUString SdFilter::ImplGetFullLibraryName( const OUString& rLibraryName )
 {
-    OUString aTemp(SVLIBRARY("?"));
-    return aTemp.replaceFirst( "?", rLibraryName );
+    return OUString(SVLIBRARY("?")).replaceFirst( "?", rLibraryName );
 }
 
 #ifndef DISABLE_DYNLOADING

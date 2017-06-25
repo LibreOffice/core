@@ -539,11 +539,9 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     // ---- Default -----------------------------------------------
 
-    sal_uInt16 nMask = SFXSTYLEBIT_AUTO;
-
     OUString aDefaultCellStyleName( "default" );
 
-    pSheet = &(pSSPool->Make(aDefaultCellStyleName, SD_STYLE_FAMILY_CELL, nMask));
+    pSheet = &(pSSPool->Make(aDefaultCellStyleName, SD_STYLE_FAMILY_CELL, SFXSTYLEBIT_AUTO));
     pSheet->SetHelpId( aHelpFile, HID_SD_CELL_STYLE_DEFAULT );
     SfxItemSet& rISet = pSheet->GetItemSet();
 

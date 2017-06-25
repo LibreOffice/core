@@ -674,12 +674,11 @@ void SdStyleSheet::throwIfDisposed()
 
 SdStyleSheet* SdStyleSheet::CreateEmptyUserStyle( SfxStyleSheetBasePool& rPool, SfxStyleFamily eFamily )
 {
-    OUString aPrefix( "user" );
     OUString aName;
     sal_Int32 nIndex = 1;
     do
     {
-        aName = aPrefix + OUString::number( nIndex++ );
+        aName = "user" + OUString::number( nIndex++ );
     }
     while( rPool.Find( aName, eFamily ) != nullptr );
 

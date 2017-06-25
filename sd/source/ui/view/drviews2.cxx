@@ -322,8 +322,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 OSL_FAIL(" no value for hyphenation!");
                 SfxItemSet aSet( GetPool(), svl::Items<EE_PARA_HYPHENATE, EE_PARA_HYPHENATE>{} );
-                bool bValue = true;
-                aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, bValue ) );
+                aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, true ) );
                 mpDrawView->SetAttributes( aSet );
             }
             rReq.Done();

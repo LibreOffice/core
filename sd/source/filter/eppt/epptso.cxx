@@ -171,8 +171,8 @@ sal_uInt32 PPTWriter::ImplSlideViewInfoContainer( sal_uInt32 nInstance, SvStream
     if ( pStrm )
     {
         sal_uInt8 bShowGuides = 0;
-        sal_uInt8 bSnapToGrid = 1;
-        sal_uInt8 bSnapToShape = 0;
+        sal_uInt8 const bSnapToGrid = 1;
+        sal_uInt8 const bSnapToShape = 0;
 
         sal_Int32 nScaling = 85;
         sal_Int32 nMasterCoordinate = 0xdda;
@@ -477,8 +477,8 @@ bool PPTWriter::ImplCloseDocument()
                 mpStrm->WriteUInt16( nUniCode );
             }
             sal_uInt8   lfCharSet = ANSI_CHARSET;
-            sal_uInt8   lfClipPrecision = 0;
-            sal_uInt8   lfQuality = 6;
+            sal_uInt8 const lfClipPrecision = 0;
+            sal_uInt8 const lfQuality = 6;
             sal_uInt8   lfPitchAndFamily = 0;
 
             if ( pDesc->CharSet == RTL_TEXTENCODING_SYMBOL )
@@ -1382,9 +1382,9 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, css::presentation::ClickAct
     sal_uInt32 nSoundRef = 0;   // a reference to a sound in the sound collection, or NULL.
     sal_uInt32 nHyperLinkID = 0;// a persistent unique identifier to an external hyperlink object (only valid when action == HyperlinkAction).
     sal_uInt8   nAction = 0;     // Action See Action Table
-    sal_uInt8   nOleVerb = 0;    // OleVerb Only valid when action == OLEAction. OLE verb to use, 0 = first verb, 1 = second verb, etc.
+    sal_uInt8   const nOleVerb = 0;    // OleVerb Only valid when action == OLEAction. OLE verb to use, 0 = first verb, 1 = second verb, etc.
     sal_uInt8   nJump = 0;       // Jump See Jump Table
-    sal_uInt8   nFlags = 0;      // Bit 1: Animated. If 1, then button is animated
+    sal_uInt8   const nFlags = 0;      // Bit 1: Animated. If 1, then button is animated
                             // Bit 2: Stop sound. If 1, then stop current sound when button is pressed.
                             // Bit 3: CustomShowReturn. If 1, and this is a jump to custom show, then return to this slide after custom show.
     sal_uInt8   nHyperLinkType = 0;// HyperlinkType a value from the LinkTo enum, such as LT_URL (only valid when action == HyperlinkAction).
@@ -1637,12 +1637,12 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
     // #i119551# PPT does not support groups of polygons and text (MS patch KB2289187)
     // sal_uInt32  nGroupLevel = 0;
 
-    sal_uInt32  nInstance, nGroups, nShapes, nShapeCount, nPer, nLastPer, nIndices, nOlePictureId;
+    sal_uInt32  nGroups, nShapes, nShapeCount, nPer, nLastPer, nIndices, nOlePictureId;
     css::awt::Point   aTextRefPoint;
 
     ResetGroupTable( nShapes = mXShapes->getCount() );
 
-    nIndices = nInstance = nLastPer = nShapeCount = 0;
+    nIndices = nLastPer = nShapeCount = 0;
 
     bool bIsTitlePossible = true;           // powerpoint is not able to handle more than one title
 
@@ -2017,7 +2017,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 nOlePictureId = mnExEmbed;
 
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                sal_uInt32 nSpFlags = SHAPEFLAG_HAVESPT | SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_OLESHAPE;
+                sal_uInt32 const nSpFlags = SHAPEFLAG_HAVESPT | SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_OLESHAPE;
                 ImplCreateShape( ESCHER_ShpInst_HostControl, nSpFlags, aSolverContainer );
                 if ( aPropOpt.CreateGraphicProperties( mXPropSet, "MetaFile", false  ) )
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
@@ -3308,7 +3308,7 @@ void TextObjBinary::WriteTextSpecInfo( SvStream* pStrm )
             {
                 const PortionObj& rPortion = *(*it).get();
                 sal_Int32 nPortionSize = rPortion.mnTextSize >= nCharactersLeft ? nCharactersLeft : rPortion.mnTextSize;
-                sal_Int32 nFlags = 7;
+                sal_Int32 const nFlags = 7;
                 nCharactersLeft -= nPortionSize;
                 pStrm ->WriteUInt32( nPortionSize )
                        .WriteInt32( nFlags )

@@ -369,10 +369,9 @@ bool PowerPointExport::exportDocument()
 
     mXStatusIndicator.set( getStatusIndicator(), UNO_QUERY );
 
-    OUString sBaseURI( "BaseURI");
     std::vector< PropertyValue > aProperties;
     PropertyValue aProperty;
-    aProperty.Name = sBaseURI;
+    aProperty.Name = "BaseURI";
     aProperty.Value <<= getFileUrl();
     aProperties.push_back( aProperty );
 
@@ -1849,12 +1848,11 @@ void PowerPointExport::WriteShapeTree( const FSHelperPtr& pFS, PageType ePageTyp
     aDML.SetMaster( bMaster );
     aDML.SetPageType( ePageType );
     aDML.SetBackgroundDark(mbIsBackgroundDark);
-    sal_uInt32 nShapes;
 
     pFS->startElementNS( XML_p, XML_spTree, FSEND );
     pFS->write( MAIN_GROUP );
 
-    ResetGroupTable( nShapes = mXShapes->getCount() );
+    ResetGroupTable( mXShapes->getCount() );
 
     while( GetNextGroupEntry() ) {
 

@@ -57,8 +57,7 @@ protected:
     {
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
         utl::MediaDescriptor aMediaDescriptor;
-        OUString aFilterName("impress_svg_Export");
-        aMediaDescriptor["FilterName"] <<= aFilterName;
+        aMediaDescriptor["FilterName"] <<= OUString("impress_svg_Export");
         xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
     }
 

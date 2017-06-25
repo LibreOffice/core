@@ -835,7 +835,6 @@ IMPL_LINK( View, ExecuteNavigatorDrop, void*, p, void )
            == sal_False -> User canceled).  */
         bool    bLink = pPageObjsTransferable->GetDragType() == NAVIGATOR_DRAGTYPE_LINK;
         bool    bNameOK = GetExchangeList( aExchangeList, aBookmarkList, 2 );
-        bool    bReplace = false;
 
         /* Since we don't know the type (page or object), we fill a list with
            pages and objects.
@@ -844,7 +843,7 @@ IMPL_LINK( View, ExecuteNavigatorDrop, void*, p, void )
         if( bNameOK )
         {
             mrDoc.InsertBookmark( aBookmarkList, aExchangeList,
-                                  bLink, bReplace, nPgPos,
+                                  bLink, false/*bReplace*/, nPgPos,
                                   &pPageObjsTransferable->GetDocShell(),
                                   &aPos );
         }

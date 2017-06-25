@@ -522,7 +522,6 @@ bool SdXMLFilter::Import( ErrCode& nError )
         if(mxStatusIndicator.is())
         {
             sal_Int32 nProgressRange(1000000);
-            sal_Int32 nProgressCurrent(0);
             OUString aMsg(SdResId(STR_LOAD_DOC));
             mxStatusIndicator->start(aMsg, nProgressRange);
 
@@ -533,7 +532,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
 
             // set ProgressCurrent
             uno::Any aProgCurrent;
-            aProgCurrent <<= nProgressCurrent;
+            aProgCurrent <<= sal_Int32(0);
             xInfoSet->setPropertyValue( "ProgressCurrent" , aProgCurrent);
         }
     }
@@ -543,8 +542,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     tools::SvRef<SotStorageStream> xDocStream;
     uno::Reference < embed::XStorage > xStorage = mrMedium.GetStorage();
 
-    OUString sSourceStorage( "SourceStorage");
-    xInfoSet->setPropertyValue( sSourceStorage, Any( xStorage ) );
+    xInfoSet->setPropertyValue( "SourceStorage", Any( xStorage ) );
 
     if( !xStorage.is() )
         nRet = SD_XML_READERROR;
@@ -827,9 +825,8 @@ bool SdXMLFilter::Export()
         uno::Reference< beans::XPropertySet > xInfoSet( GenericPropertySet_CreateInstance( new PropertySetInfo( aExportInfoMap ) ) );
 
         SvtSaveOptions aSaveOpt;
-        OUString sUsePrettyPrinting("UsePrettyPrinting");
         bool bUsePrettyPrinting( aSaveOpt.IsPrettyPrinting() );
-        xInfoSet->setPropertyValue( sUsePrettyPrinting, makeAny( bUsePrettyPrinting ) );
+        xInfoSet->setPropertyValue( "UsePrettyPrinting", makeAny( bUsePrettyPrinting ) );
 
         const uno::Reference < embed::XStorage >& xStorage = mrMedium.GetOutputStorage();
 
@@ -837,8 +834,7 @@ bool SdXMLFilter::Export()
         OUString sPropName( "BaseURI" );
         xInfoSet->setPropertyValue( sPropName, makeAny( mrMedium.GetBaseURL( true ) ) );
 
-        OUString sTargetStorage( "TargetStorage" );
-        xInfoSet->setPropertyValue( sTargetStorage, Any( xStorage ) );
+        xInfoSet->setPropertyValue( "TargetStorage", Any( xStorage ) );
 
         if( SfxObjectCreateMode::EMBEDDED == mrDocShell.GetCreateMode() )
         {
@@ -883,7 +879,6 @@ bool SdXMLFilter::Export()
             if(mxStatusIndicator.is())
             {
                 sal_Int32 nProgressRange(1000000);
-                sal_Int32 nProgressCurrent(0);
                 OUString aMsg(SdResId(STR_SAVE_DOC));
                 mxStatusIndicator->start(aMsg, nProgressRange);
 
@@ -894,7 +889,7 @@ bool SdXMLFilter::Export()
 
                 // set ProgressCurrent
                 uno::Any aProgCurrent;
-                aProgCurrent <<= nProgressCurrent;
+                aProgCurrent <<= sal_Int32(0);
                 xInfoSet->setPropertyValue( "ProgressCurrent" , aProgCurrent);
             }
 

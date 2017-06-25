@@ -113,7 +113,6 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
     }
     else if ( aCommand[0].equals( "presentation_blank_screen" ) )
     {
-        sal_Int32 aColour = 0; // Default is black
         if ( aCommand.size() > 1 )
         {
 //             aColour = FIXME: get the colour in some format from this string
@@ -121,7 +120,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
         }
         if ( xSlideShowController.is() )
         {
-            xSlideShowController->blankScreen( aColour );
+            xSlideShowController->blankScreen( 0 ); // Default is black
         }
     }
     else if (aCommand[0].equals( "pointer_started" ))
