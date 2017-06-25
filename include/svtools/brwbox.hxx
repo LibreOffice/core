@@ -599,7 +599,7 @@ public:
             bool _bColumnHeaderBar
          );
 
-    /** returns the Rectangle for either the column header bar ot the row header bar
+    /** returns the Rectangle for either the column header bar or the row header bar
         @param  _bIsColumnBar
             <TRUE/> when column header bar is used
         @param  _bOnScreen

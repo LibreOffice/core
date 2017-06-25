@@ -166,7 +166,7 @@ public:
      */
     static LanguageType getReplacementForObsoleteLanguage( LanguageType nLang );
 
-    /** Whether locale is legacy, i.e. country ot confederation doesn't exist anymore. */
+    /** Whether locale is legacy, i.e. country or confederation doesn't exist anymore. */
     static bool isLegacy( LanguageType nLang );
 
 

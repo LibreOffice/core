@@ -691,7 +691,7 @@ public:
 
 namespace {
 
-/// Task for parallely-executed task to load a chart model
+/// Task for parallelly-executed task to load a chart model
 class DeflateThread : public comphelper::ThreadTask
 {
     // the data to work on

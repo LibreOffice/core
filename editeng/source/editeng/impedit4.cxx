@@ -499,18 +499,18 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                     rOutput.WriteUInt32AsString( nNumber );
                 }
 
-                // Next Style ... (more)
+                // Next Style... (more)
                 // we assume that we have only SfxStyleSheet in the pool
                 SfxStyleSheet* pNext = static_cast<SfxStyleSheet*>(pStyle);
                 if ( !pStyle->GetFollow().isEmpty() && ( pStyle->GetFollow() != pStyle->GetName() ) )
                     pNext = static_cast<SfxStyleSheet*>(GetStyleSheetPool()->Find( pStyle->GetFollow(), pStyle->GetFamily() ));
 
-                DBG_ASSERT( pNext, "Next ot found!" );
+                DBG_ASSERT( pNext, "Next not found!" );
                 rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SNEXT );
                 nNumber = aStyleSheetToIdMap.find(pNext)->second;
                 rOutput.WriteUInt32AsString( nNumber );
 
-                // Name of the template ...
+                // Name of the template...
                 rOutput.WriteCharPtr( " " );
                 RTFOutFuncs::Out_String( rOutput, pStyle->GetName(), eDestEnc );
                 rOutput.WriteCharPtr( ";}" );

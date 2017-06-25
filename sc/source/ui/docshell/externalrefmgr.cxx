@@ -2614,7 +2614,7 @@ void ScExternalRefManager::maybeLinkExternalFile( sal_uInt16 nFileId, bool bDefe
     }
     // If a filter was already set (for example, loading the cached table),
     // don't call GetFilterName which has to access the source file.
-    // If filter detection is deferred, the next successfull loadSrcDocument()
+    // If filter detection is deferred, the next successful loadSrcDocument()
     // will update SrcFileData filter name.
     if (aFilter.isEmpty() && !bDeferFilterDetection)
         ScDocumentLoader::GetFilterName(*pFileName, aFilter, aOptions, true, false);
