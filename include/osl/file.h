@@ -315,7 +315,9 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_identicalDirectoryItem(
                                         oslDirectoryItem pItemB );
 
 /**
-   @defgroup File types
+   @defgroup filetype File types
+
+   @{
  */
 typedef enum {
     osl_File_Type_Directory,        /*< directory               */
@@ -330,7 +332,7 @@ typedef enum {
 /** @} */
 
 /**
-   @defgroup File attributes
+   @defgroup fileattrs File attributes
 
    @{
  */
@@ -349,7 +351,7 @@ typedef enum {
 /** @} */
 
 /**
-   @defgroup Flags specifying which fields to retrieve by osl_getFileStatus
+   @defgroup filestatus Flags specifying which fields to retrieve by osl_getFileStatus
 
    @{
  */
@@ -512,8 +514,11 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_acquireVolumeDeviceHandle(
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_getVolumeDeviceMountPath(
         oslVolumeDeviceHandle Handle, rtl_uString **ppustrDirectoryURL);
 
-/* Volume attributes */
+/**
+   @defgroup volattrs Volume attributes
 
+   @{
+ */
 #define osl_Volume_Attribute_Removeable            0x00000001L
 #define osl_Volume_Attribute_Remote                0x00000002L
 #define osl_Volume_Attribute_CompactDisc           0x00000004L
@@ -524,7 +529,13 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getVolumeDeviceMountPath(
 #define osl_Volume_Attribute_Case_Is_Preserved     0x00000040L
 #define osl_Volume_Attribute_Case_Sensitive        0x00000080L
 
-/* Flags specifying which fields to retrieve by osl_getVolumeInfo */
+/** @} */
+
+/**
+    @defgroup volinfoflags Flags specifying which fields to retrieve by osl_getVolumeInfo
+
+    @{
+ */
 
 #define osl_VolumeInfo_Mask_Attributes             0x00000001L
 #define osl_VolumeInfo_Mask_TotalSpace             0x00000002L

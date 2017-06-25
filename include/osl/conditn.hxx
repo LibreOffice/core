@@ -104,6 +104,13 @@ namespace osl
 
         /** Blocks the calling thread until condition is set.
 
+            @param [in] pTimeout Timeout to wait before ending the condition.
+                Defaults to NULL
+
+            @retval result_ok       finished successfully
+            @retval result_error    error occurred
+            @retval result_timeout  timed out
+
             @deprecated use C++11's std::condition_variable instead
                 for a more robust and helpful condition.
         */
@@ -118,6 +125,9 @@ namespace osl
 
         /** Checks if the condition is set without blocking.
 
+            @retval true   condition is set
+            @retval false  condition is not set
+
             @deprecated use C++11's std::condition_variable instead
                 for a more robust and helpful condition.
         */
@@ -128,9 +138,11 @@ namespace osl
 
 
     private:
-        oslCondition condition;
+        oslCondition condition;     /*< condition variable */
 
-        /** The underlying oslCondition has no reference count.
+        /** Copy constructor
+
+            The underlying oslCondition has no reference count.
 
             Since the underlying oslCondition is not a reference counted
             object, copy constructed Condition may work on an already
@@ -139,7 +151,7 @@ namespace osl
             @deprecated use C++11's std::condition_variable instead
                 for a more robust and helpful condition.
         */
-        Condition(const Condition&) SAL_DELETED_FUNCTION;
+        Condition(const Condition& condition) SAL_DELETED_FUNCTION;
 
         /** This assignment operator is deleted for the same reason as
             the copy constructor.

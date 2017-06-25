@@ -27,8 +27,9 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 
-/** provides simple diagnostic support
+/** @file Provides simple diagnostic support.
 
+    @deprecated
     The facilities provided by this header are deprecated.  True assertions
     (that detect broken program logic) should use standard assert (which aborts
     if an assertion fails, and is controlled by the standard NDEBUG macro).
@@ -47,64 +48,73 @@
     of OSL_DEBUG_LEVEL macro: assertions are only active if OSL_DEBUG_LEVEL is 1
     or greater, traces if OSL_DEBUG_LEVEL is 2 or greater.
 
-    Assertions (cond is bool, msg is char*):
-    OSL_ASSERT(cond)
-        If cond is false, reports an error.
-
-    OSL_ENSURE(cond, msg)
-        If cond is false, reports an error with message msg.
-
-    OSL_FAIL(msg)
-        Reports an error with message msg unconditionally.
-
-    OSL_PRECOND(cond, msg)
-    OSL_POSTCOND(cond, msg)
-        These two are functionally equivalent to OSL_ENSURE(cond, msg). They are
-        intended to be used for checking pre- and postconditions of functions.
-
     Traces:
     OSL_TRACE(fmt, args...)
         Prints trace message. The arguments have the same meaning as the
         arguments of printf.
-
-    Other:
-    OSL_VERIFY(expr)
-        Evaluates the expression and if it is false, reports an error. The
-        expression is evaluated once without regard of the value of
-        OSL_DEBUG_LEVEL.
-
-        Example:
-
-        void extractBool(Any const& rAny, bool& rBool)
-        {
-            OSL_VERIFY(rAny >>= rBool);
-        }
-
-    OSL_DEBUG_ONLY(expr)
  */
 
 #if !defined OSL_DEBUG_LEVEL
 #define OSL_DEBUG_LEVEL 0
 #endif
 
-/* the macro OSL_LOG_PREFIX is intended to be an office internal macro for now
-
-   it is deprecated and superseded by (C++ only) SAL_WHERE
+/** @internal The macro OSL_LOG_PREFIX is intended to be an office internal macro for now
+    @deprecated superseded by (C++ only) SAL_WHERE
 */
 #define OSL_LOG_PREFIX SAL_DETAIL_WHERE
 
+/** Prints trace message.
+
+    The arguments have the same meaning as the arguments of printf.
+*/
 #define OSL_TRACE(...) \
     SAL_DETAIL_INFO_IF_FORMAT(OSL_DEBUG_LEVEL > 0, "legacy.osl", __VA_ARGS__)
 
+/** @defgroup assert Assertions
+
+    Assertions (cond is bool, msg is char*).
+
+    @{
+ */
+
+/** If cond is false, reports an error. */
 #define OSL_ASSERT(c) \
     SAL_DETAIL_WARN_IF_FORMAT(!(c), "legacy.osl", "OSL_ASSERT: %s", #c)
+/** If cond is false, reports an error with message msg. */
 #define OSL_ENSURE(c, m) SAL_DETAIL_WARN_IF_FORMAT(!(c), "legacy.osl", "%s", m)
+/** Reports an error with message msg unconditionally. */
 #define OSL_FAIL(m) SAL_DETAIL_WARN_IF_FORMAT(sal_True, "legacy.osl", "%s", m)
 
+/** Evaluates the expression and if it is false, reports an error. The
+    expression is evaluated once without regard of the value of
+    OSL_DEBUG_LEVEL.
+
+    Example:
+
+    @code{.c}
+
+    void extractBool(Any const& rAny, bool& rBool)
+    {
+        OSL_VERIFY(rAny >>= rBool);
+    }
+
+    @endcode
+*/
 #define OSL_VERIFY(c) do { if (!(c)) OSL_ASSERT(0); } while (0)
+
+/** Check the precondition of functions.
+
+    Functionally equivalent to OSL_ENSURE(cond, msg).
+*/
 #define OSL_PRECOND(c, m)   OSL_ENSURE(c, m)
+
+/** Check the postcondition of functions.
+
+    Functionally equivalent to OSL_ENSURE(cond, msg).
+*/
 #define OSL_POSTCOND(c, m)  OSL_ENSURE(c, m)
 
+/** @} */
 
 /* the macro OSL_THIS_FUNC is intended to be an office internal macro for now */
 /* copied from boost/current_function.hpp to make it usable from C

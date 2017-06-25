@@ -424,7 +424,6 @@ public:
         @param nMask
         Set of flags describing the demanded information.
     */
-
     VolumeInfo( sal_uInt32 nMask )
         : _nMask( nMask )
     {
@@ -432,9 +431,6 @@ public:
         _aInfo.uStructSize = sizeof( oslVolumeInfo );
         _aInfo.pDeviceHandle = &_aDevice._aHandle;
     }
-
-    /** Destructor.
-    */
 
     ~VolumeInfo()
     {
@@ -449,7 +445,6 @@ public:
 
         @return true if all fields are valid else false.
     */
-
     bool isValid( sal_uInt32 nMask ) const
     {
         return ( nMask & _aInfo.uValidFields ) == nMask;
@@ -460,7 +455,6 @@ public:
         @return
         true if Attributes are valid and the volume is remote else false.
     */
-
     bool getRemoteFlag() const
     {
         return (_aInfo.uAttributes & osl_Volume_Attribute_Remote) != 0;
@@ -471,7 +465,6 @@ public:
         @return
         true if attributes are valid and the volume is removable else false.
     */
-
     bool getRemoveableFlag() const
     {
         return (_aInfo.uAttributes & osl_Volume_Attribute_Removeable) != 0;
