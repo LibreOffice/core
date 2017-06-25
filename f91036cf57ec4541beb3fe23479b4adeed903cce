@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_6cf2909c",
+        "filename": "editeng/source/editeng/impedit4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-06-25T19:54:04Z",
+      "side": 1,
+      "message": "Shouldn\u0027t it be \"not\"?",
+      "range": {
+        "startLine": 508,
+        "startChar": 41,
+        "endLine": 508,
+        "endChar": 43
+      },
+      "revId": "f91036cf57ec4541beb3fe23479b4adeed903cce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
