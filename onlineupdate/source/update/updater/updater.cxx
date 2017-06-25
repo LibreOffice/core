@@ -223,7 +223,6 @@ struct MARChannelStringTable
 static NS_tchar* gPatchDirPath;
 static NS_tchar gInstallDirPath[MAXPATHLEN];
 static NS_tchar gWorkingDirPath[MAXPATHLEN];
-static ArchiveReader gArchiveReader;
 static bool gSucceeded = false;
 static bool sStagedUpdate = false;
 static bool sReplaceRequest = false;
@@ -1076,7 +1075,7 @@ static void backup_finish(const NS_tchar *path, const NS_tchar *relPath,
 
 //-----------------------------------------------------------------------------
 
-static int DoUpdate();
+static int DoUpdate(ArchiveReader *ArchiveReader);
 
 class Action
 {
@@ -1361,17 +1360,21 @@ RemoveDir::Finish(int status)
 class AddFile : public Action
 {
 public:
-    AddFile() : mAdded(false) { }
+    AddFile(ArchiveReader *ar) : mAdded(false), mArchiveReader(ar) { }
 
     virtual int Parse(NS_tchar *line);
     virtual int Prepare();
     virtual int Execute();
     virtual void Finish(int status);
 
+protected:
+    AddFile() : mAdded(false), mArchiveReader(nullptr) { }
+
 private:
     std::unique_ptr<NS_tchar> mFile;
     std::unique_ptr<NS_tchar> mRelPath;
     bool mAdded;
+    ArchiveReader *mArchiveReader;
 };
 
 int
@@ -1411,6 +1414,11 @@ AddFile::Execute()
 
     int rv;
 
+    if(!mArchiveReader) {
+        LOG(("AddFile runs without valid ArchiveReader"));
+        return USAGE_ERROR;
+    }
+
     // First make sure that we can actually get rid of any existing file.
     rv = NS_taccess(mFile.get(), F_OK);
     if (rv == 0)
@@ -1435,9 +1443,9 @@ AddFile::Execute()
         return STRING_CONVERSION_ERROR;
     }
 
-    rv = gArchiveReader.ExtractFile(sourcefile, mFile.get());
+    rv = mArchiveReader->ExtractFile(sourcefile, mFile.get());
 #else
-    rv = gArchiveReader.ExtractFile(mRelPath.get(), mFile.get());
+    rv = mArchiveReader->ExtractFile(mRelPath.get(), mFile.get());
 #endif
     if (!rv)
     {
@@ -1460,7 +1468,7 @@ AddFile::Finish(int status)
 class PatchFile : public Action
 {
 public:
-    PatchFile() : mPatchFile(nullptr), mPatchIndex(-1), buf(nullptr) { }
+    PatchFile(ArchiveReader *ar) : mPatchFile(nullptr), mPatchIndex(-1), buf(nullptr), mArchiveReader(ar) { }
 
     virtual ~PatchFile();
 
@@ -1468,6 +1476,9 @@ public:
     virtual int Prepare(); // should check for patch file and for checksum here
     virtual int Execute();
     virtual void Finish(int status);
+
+protected:
+    PatchFile() : mPatchFile(nullptr), mPatchIndex(-1), buf(nullptr), mArchiveReader(nullptr) {}
 
 private:
     int LoadSourceFile(FILE* ofile);
@@ -1482,6 +1493,7 @@ private:
     unsigned char *buf;
     NS_tchar spath[MAXPATHLEN];
     AutoFile mPatchStream;
+    ArchiveReader *mArchiveReader;
 };
 
 int PatchFile::sPatchIndex = 0;
@@ -1596,6 +1608,11 @@ PatchFile::Prepare()
 {
     LOG(("PREPARE PATCH " LOG_S, mFileRelPath.get()));
 
+    if(!mArchiveReader) {
+        LOG(("PatchFile runs without valid ArchiveReader"));
+        return USAGE_ERROR;
+    }
+
     // extract the patch to a temporary file
     mPatchIndex = sPatchIndex++;
 
@@ -1625,9 +1642,9 @@ PatchFile::Prepare()
         return STRING_CONVERSION_ERROR;
     }
 
-    int rv = gArchiveReader.ExtractFileToStream(sourcefile, mPatchStream);
+    int rv = mArchiveReader->ExtractFileToStream(sourcefile, mPatchStream);
 #else
-    int rv = gArchiveReader.ExtractFileToStream(mPatchFile, mPatchStream);
+    int rv = mArchiveReader->ExtractFileToStream(mPatchFile, mPatchStream);
 #endif
 
     return rv;
@@ -2591,9 +2608,12 @@ GetUpdateFileNames(std::vector<tstring>& fileNames)
 }
 
 static int
-CheckSignature(tstring& fileName)
+CheckSignature(tstring& fileName, ArchiveReader *archiveReader)
 {
-    int rv = gArchiveReader.Open(fileName.c_str());
+    if(!archiveReader)
+        return USAGE_ERROR;
+
+    int rv = archiveReader->Open(fileName.c_str());
 
 #ifdef VERIFY_MAR_SIGNATURE
     if (rv == OK)
@@ -2627,7 +2647,7 @@ CheckSignature(tstring& fileName)
             }
         }
 #endif
-        rv = gArchiveReader.VerifySignature();
+        rv = archiveReader->VerifySignature();
 #ifdef _WIN32
         if (baseKey)
         {
@@ -2666,13 +2686,13 @@ CheckSignature(tstring& fileName)
                 MARStrings.MARChannelID[0] = '\0';
             }
 
-            rv = gArchiveReader.VerifyProductInformation(MARStrings.MARChannelID,
+            rv = archiveReader->VerifyProductInformation(MARStrings.MARChannelID,
                     LIBO_VERSION_DOTTED);
         }
     }
 #endif
 
-    gArchiveReader.Close();
+    archiveReader->Close();
 
     return rv;
 }
@@ -2691,9 +2711,10 @@ UpdateThreadFunc(void * /*param*/)
         std::vector<tstring> fileNames;
         GetUpdateFileNames(fileNames);
 
+        ArchiveReader archiveReader;
         for (auto& fileName: fileNames)
         {
-            rv = CheckSignature(fileName);
+            rv = CheckSignature(fileName, &archiveReader);
             if (rv != OK)
             {
                 LOG(("Could not verify the signature of " LOG_S, fileName.c_str()));
@@ -2710,9 +2731,9 @@ UpdateThreadFunc(void * /*param*/)
         {
             for (auto& fileName: fileNames)
             {
-                gArchiveReader.Open(fileName.c_str());
-                rv = DoUpdate();
-                gArchiveReader.Close();
+                archiveReader.Open(fileName.c_str());
+                rv = DoUpdate(&archiveReader);
+                archiveReader.Close();
             }
             NS_tchar updatingDir[MAXPATHLEN];
             NS_tsnprintf(updatingDir, sizeof(updatingDir)/sizeof(updatingDir[0]),
@@ -4421,8 +4442,11 @@ int AddPreCompleteActions(ActionList *list)
     return OK;
 }
 
-int DoUpdate()
+int DoUpdate(ArchiveReader *archiveReader)
 {
+    if(!archiveReader)
+        return USAGE_ERROR;
+
     NS_tchar manifest[MAXPATHLEN];
     NS_tsnprintf(manifest, sizeof(manifest)/sizeof(manifest[0]),
                  NS_T("%s/updating/update.manifest"), gWorkingDirPath);
@@ -4431,10 +4455,10 @@ int DoUpdate()
     // extract the manifest
     // TODO: moggi: needs adaption for LibreOffice
     // Why would we need the manifest? Even if we need it why would we need 2?
-    int rv = gArchiveReader.ExtractFile("updatev3.manifest", manifest);
+    int rv = archiveReader->ExtractFile("updatev3.manifest", manifest);
     if (rv)
     {
-        rv = gArchiveReader.ExtractFile("updatev2.manifest", manifest);
+        rv = archiveReader->ExtractFile("updatev2.manifest", manifest);
         if (rv)
         {
             LOG(("DoUpdate: error extracting manifest file"));
@@ -4449,7 +4473,6 @@ int DoUpdate()
         LOG(("DoUpdate: error opening manifest file: " LOG_S, manifest));
         return READ_ERROR;
     }
-
 
     ActionList list;
     NS_tchar *line;
@@ -4513,11 +4536,11 @@ int DoUpdate()
         }
         else if (NS_tstrcmp(token, NS_T("add")) == 0)
         {
-            action = new AddFile();
+            action = new AddFile(archiveReader);
         }
         else if (NS_tstrcmp(token, NS_T("patch")) == 0)
         {
-            action = new PatchFile();
+            action = new PatchFile(archiveReader);
         }
         else if (NS_tstrcmp(token, NS_T("add-if")) == 0)   // Add if exists
         {
