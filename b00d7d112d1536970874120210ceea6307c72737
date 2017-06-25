@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_699362fb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001644
+      },
+      "writtenOn": "2017-06-25T01:02:51Z",
+      "side": 1,
+      "message": "I wasn\u0027t able to find a bug report for this.",
+      "revId": "b00d7d112d1536970874120210ceea6307c72737",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_09bbbe73",
+        "filename": "sd/source/filter/eppt/pptx-epptooxml.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1001644
+      },
+      "writtenOn": "2017-06-25T01:02:51Z",
+      "side": 1,
+      "message": "I updated the commit message to better explain this change.",
+      "revId": "b00d7d112d1536970874120210ceea6307c72737",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
