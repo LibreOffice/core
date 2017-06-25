@@ -432,14 +432,12 @@ sal_uLong AnnotationTag::GetMarkedPointCount() const
 
 bool AnnotationTag::MarkPoint(SdrHdl& /*rHdl*/, bool /*bUnmark*/ )
 {
-    bool bRet=false;
-    return bRet;
+    return false;
 }
 
 bool AnnotationTag::MarkPoints(const ::tools::Rectangle* /*pRect*/, bool /*bUnmark*/ )
 {
-    bool bChgd=false;
-    return bChgd;
+    return false;
 }
 
 bool AnnotationTag::getContext( SdrViewContext& /*rContext*/ )

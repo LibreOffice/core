@@ -313,8 +313,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     mbIsRulerDrag = false;
 
-    OUString aName( "DrawViewShell" );
-    SetName (aName);
+    SetName ("DrawViewShell");
 
     mnLockCount = 0UL;
 

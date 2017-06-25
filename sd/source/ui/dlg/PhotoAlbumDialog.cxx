@@ -644,11 +644,9 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl, ListBox&, void)
         Bitmap aBmp = aGraphic.GetBitmap();
         sal_Int32 nBmpWidth  = aBmp.GetSizePixel().Width();
         sal_Int32 nBmpHeight = aBmp.GetSizePixel().Height();
-        sal_Int32 nPrevWidth = 200;
-        sal_Int32 nPrewHeight = 150;
 
-        double nXRatio = (double) nPrevWidth / nBmpWidth;
-        double nYRatio = (double) nPrewHeight / nBmpHeight;
+        double nXRatio = (double) 200 / nBmpWidth;
+        double nYRatio = (double) 150 / nBmpHeight;
         if ( nXRatio < nYRatio )
             aBmp.Scale( nXRatio, nXRatio );
         else

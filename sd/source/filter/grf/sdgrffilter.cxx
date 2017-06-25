@@ -257,7 +257,6 @@ bool SdGRFFilter::Export()
                     beans::PropertyValues aArgs;
                     TransformItems( SID_SAVEASDOC, *pSet, aArgs );
 
-                    OUString sInteractionHandler( "InteractionHandler" );
                     OUString sFilterName( "FilterName" );
                     OUString sShortName( rGraphicFilter.GetExportFormatShortName( nFilter ) );
 
@@ -272,7 +271,7 @@ bool SdGRFFilter::Export()
                             aArgs[ i ].Name = sFilterName;
                             aArgs[ i ].Value <<= sShortName;
                         }
-                        else if ( rStr == sInteractionHandler )
+                        else if ( rStr == "InteractionHandler" )
                         {
                             uno::Reference< task::XInteractionHandler > xHdl;
                             if ( aArgs[ i ].Value >>= xHdl )

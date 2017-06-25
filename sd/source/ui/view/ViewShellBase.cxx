@@ -542,8 +542,6 @@ sal_uInt16 ViewShellBase::SetPrinter (
         pNewPrinter->SetMapMode(aMap);
         Size aNewSize = pNewPrinter->GetOutputSize();
 
-        bool bScaleAll = false;
-
         std::shared_ptr<DrawViewShell> pDrawViewShell (
             std::dynamic_pointer_cast<DrawViewShell>(GetMainViewShell()));
         if (pDrawViewShell)
@@ -554,7 +552,7 @@ sal_uInt16 ViewShellBase::SetPrinter (
                 pDrawViewShell->GetPageKind(),
                 aNewSize,
                 -1,-1,-1,-1,
-                bScaleAll,
+                false/*bScaleAll*/,
                 pNewPrinter->GetOrientation(),
                 pPage->GetPaperBin(),
                 pPage->IsBackgroundFullSize());
@@ -863,8 +861,7 @@ OUString ViewShellBase::GetInitialViewShellType()
         if (xViewData->getCount() == 0)
             break;
 
-        sal_Int32 nView = 0;
-        css::uno::Any aAny = xViewData->getByIndex(nView);
+        css::uno::Any aAny = xViewData->getByIndex(0);
         Sequence<beans::PropertyValue> aProperties;
         if ( ! (aAny >>= aProperties))
             break;
