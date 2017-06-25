@@ -597,7 +597,7 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
 
 void SvxMeasurePage::Construct()
 {
-    DBG_ASSERT( pView, "No valid View transfered!" );
+    DBG_ASSERT( pView, "No valid View transferred!" );
 
     m_pCtlPreview->pMeasureObj->SetModel( pView->GetModel() );
     m_pCtlPreview->Invalidate();

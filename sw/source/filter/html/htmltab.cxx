@@ -1293,7 +1293,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
         {
             // If a cell spans multiple rows, a background to that row should be copied to the cell.
             // If it's a table in a table and that cell goes over the whole height of that table,
-            // the row's background has to be copied to the cell aswell,
+            // the row's background has to be copied to the cell as well,
             // since the line is gonna be GC-ed (correctly).
             if( nRowSpan > 1 || (this != m_pTopTable && nRowSpan==m_nRows) )
             {
@@ -2332,7 +2332,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
 
     // Step 3: the actual column widths of this table are calculated (not tables in tables)
     // We need this now to decide if we need filler cells
-    // (Pass1 was needed because of this aswell)
+    // (Pass1 was needed because of this as well)
     m_pLayoutInfo->AutoLayoutPass2( nAbsAvail, nRelAvail, nAbsLeftSpace,
                                   nAbsRightSpace, nInhAbsSpace );
 
@@ -4755,7 +4755,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
 
     if( m_pTable==pCurTable )
     {
-        // On moving the caption later, the last paragraph isn't moved aswell.
+        // On moving the caption later, the last paragraph isn't moved as well.
         // That means, there has to be an empty paragraph at the end of the section
         if( m_pPam->GetPoint()->nContent.GetIndex() || bLFStripped )
             AppendTextNode( AM_NOSPACE );

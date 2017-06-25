@@ -505,7 +505,7 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                 if ( !pStyle->GetFollow().isEmpty() && ( pStyle->GetFollow() != pStyle->GetName() ) )
                     pNext = static_cast<SfxStyleSheet*>(GetStyleSheetPool()->Find( pStyle->GetFollow(), pStyle->GetFamily() ));
 
-                DBG_ASSERT( pNext, "Next ot found!" );
+                DBG_ASSERT( pNext, "Next to found!" );
                 rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_SNEXT );
                 nNumber = aStyleSheetToIdMap.find(pNext)->second;
                 rOutput.WriteUInt32AsString( nNumber );
