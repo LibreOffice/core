@@ -82,8 +82,6 @@ public:
 
     const LwpColor& GetColor();
 
-    inline LwpShadow& operator = (const LwpShadow& rOther);
-
 private:
     LwpColor        m_aColor;
     sal_Int32       m_nDirX;
@@ -106,13 +104,6 @@ inline const LwpColor& LwpShadow::GetColor()
     return m_aColor;
 }
 
-inline LwpShadow& LwpShadow::operator = (const LwpShadow& rOther)
-{
-    m_aColor = rOther.m_aColor;
-    m_nDirX = rOther.m_nDirX;
-    m_nDirY = rOther.m_nDirY;
-    return *this;
-}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

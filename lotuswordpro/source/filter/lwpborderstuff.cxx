@@ -215,29 +215,4 @@ float   LwpBorderStuff::GetSideWidth(sal_uInt16 side)
     return 0;
 }
 
-LwpBorderStuff& LwpBorderStuff::operator = (const LwpBorderStuff& rOther)
-{
-    m_nSides = rOther.m_nSides;
-    m_nValid = rOther.m_nValid;
-
-    m_nBorderGroupIDLeft = rOther.m_nBorderGroupIDLeft;
-    m_nBorderGroupIDRight = rOther.m_nBorderGroupIDRight;
-    m_nBorderGroupIDTop = rOther.m_nBorderGroupIDTop;
-    m_nBorderGroupIDBottom = rOther.m_nBorderGroupIDBottom;
-
-    m_nGroupIndent = rOther.m_nGroupIndent;
-
-    m_nWidthLeft = rOther.m_nWidthLeft;
-    m_nWidthTop = rOther.m_nWidthTop;
-    m_nWidthRight = rOther.m_nWidthRight;
-    m_nWidthBottom = rOther.m_nWidthBottom;
-
-    m_aColorLeft = rOther.m_aColorLeft;
-    m_aColorRight = rOther.m_aColorRight;
-    m_aColorTop = rOther.m_aColorTop;
-    m_aColorBottom = rOther.m_aColorBottom;
-
-    return *this;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
