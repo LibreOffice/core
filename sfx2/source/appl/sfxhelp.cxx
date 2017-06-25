@@ -530,7 +530,8 @@ static bool impl_showOnlineHelp( const OUString& rURL )
     if ( rURL.getLength() <= aInternal.getLength() || !rURL.startsWith(aInternal) )
         return false;
 
-    OUString aHelpLink( "http://help.libreoffice.org/"  );
+    OUString aHelpLink( "http://helponline.libreoffice.org/index.html?"  );
+
     aHelpLink += rURL.copy( aInternal.getLength() );
     aHelpLink = aHelpLink.replaceAll("%2F","/");
     try
