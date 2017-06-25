@@ -145,7 +145,6 @@ bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet* /*rSet*/ )
     SvtPrintWarningOptions  aWarnOptions;
     SvtPrinterOptions       aPrinterOptions;
     SvtPrintFileOptions     aPrintFileOptions;
-    bool                    bModified = false;
 
 
     if( m_pPaperSizeCB->IsValueChangedFromSaved())
@@ -161,7 +160,7 @@ bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet* /*rSet*/ )
     aPrinterOptions.SetPrinterOptions( maPrinterOptions );
     aPrintFileOptions.SetPrinterOptions( maPrintFileOptions );
 
-    return bModified;
+    return false;
 }
 
 void SfxCommonPrintOptionsTabPage::Reset( const SfxItemSet* /*rSet*/ )

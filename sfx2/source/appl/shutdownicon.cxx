@@ -377,13 +377,11 @@ IMPL_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused*/, vo
                 aArgs[0].Name = "InteractionHandler";
                 aArgs[0].Value <<= xInteraction;
 
-                sal_Int16 nMacroExecMode = css::document::MacroExecMode::USE_CONFIG;
                 aArgs[1].Name = "MacroExecutionMode";
-                aArgs[1].Value <<= nMacroExecMode;
+                aArgs[1].Value <<= sal_Int16(css::document::MacroExecMode::USE_CONFIG);
 
-                sal_Int16 nUpdateDoc = css::document::UpdateDocMode::ACCORDING_TO_CONFIG;
                 aArgs[2].Name = "UpdateDocMode";
-                aArgs[2].Value <<= nUpdateDoc;
+                aArgs[2].Value <<= sal_Int16(css::document::UpdateDocMode::ACCORDING_TO_CONFIG);
 
                 // use the filedlghelper to get the current filter name,
                 // because it removes the extensions before you get the filter name.
@@ -717,6 +715,7 @@ OUString ShutdownIcon::getShortcutName()
     return OUString();
 #else
 
+#ifdef _WIN32
     OUString aShortcutName( "StarOffice 6.0"  );
     ResMgr* pMgr = SfxResMgr::GetResMgr();
     if( pMgr )
@@ -724,7 +723,6 @@ OUString ShutdownIcon::getShortcutName()
         ::SolarMutexGuard aGuard;
         aShortcutName = SfxResId(STR_QUICKSTART_LNKNAME);
     }
-#ifdef _WIN32
     aShortcutName += ".lnk";
 
     OUString aShortcut(GetAutostartFolderNameW32());

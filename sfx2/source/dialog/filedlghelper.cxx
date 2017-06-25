@@ -453,14 +453,13 @@ void FileDialogHelper_Impl::updateExportButton()
     uno::Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
     if ( xCtrlAccess.is() )
     {
-        OUString sEllipses( "..."  );
         OUString sOldLabel( xCtrlAccess->getLabel( CommonFilePickerElementIds::PUSHBUTTON_OK ) );
 
         // initialize button label; we need the label with the mnemonic char
         if ( maButtonLabel.isEmpty() || maButtonLabel.indexOf( MNEMONIC_CHAR ) == -1 )
         {
             // cut the ellipses, if necessary
-            sal_Int32 nIndex = sOldLabel.indexOf( sEllipses );
+            sal_Int32 nIndex = sOldLabel.indexOf( "..." );
             if ( -1 == nIndex )
                 nIndex = sOldLabel.getLength();
             maButtonLabel = sOldLabel.copy( 0, nIndex );

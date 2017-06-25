@@ -418,17 +418,14 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                     aValue >>= xLayoutManager;
                     if ( xLayoutManager.is() )
                     {
-                        OUString aTextResString( "private:resource/toolbar/textobjectbar" );
-                        uno::Reference< ui::XUIElement > xElement = xLayoutManager->getElement( aTextResString );
+                        uno::Reference< ui::XUIElement > xElement = xLayoutManager->getElement( "private:resource/toolbar/textobjectbar" );
                         if(!xElement.is())
                         {
-                            OUString aFrameResString( "private:resource/toolbar/frameobjectbar" );
-                            xElement = xLayoutManager->getElement( aFrameResString );
+                            xElement = xLayoutManager->getElement( "private:resource/toolbar/frameobjectbar" );
                         }
                         if(!xElement.is())
                         {
-                            OUString aOleResString( "private:resource/toolbar/oleobjectbar" );
-                            xElement = xLayoutManager->getElement( aOleResString );
+                            xElement = xLayoutManager->getElement( "private:resource/toolbar/oleobjectbar" );
                         }
                         if(xElement.is())
                         {
@@ -585,7 +582,6 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 OUString aFilterName;
                 OUString aTypeName( "generic_HTML" );
                 OUString aFileName;
-                OUString aExtension( "htm" );
 
                 OUString aLocation = xStorable->getLocation();
                 INetURLObject aFileObj( aLocation );
@@ -637,7 +633,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
                 INetURLObject aFilePathObj( aTempDir.GetURL() );
                 aFilePathObj.insertName( aFileName );
-                aFilePathObj.setExtension( aExtension );
+                aFilePathObj.setExtension( "htm" );
 
                 OUString aFileURL = aFilePathObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
