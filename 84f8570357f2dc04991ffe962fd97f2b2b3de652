@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_4c9314a4",
+        "filename": "extras/source/wordbook/technical.dic",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-25T09:05:29Z",
+      "side": 1,
+      "message": "It looks like it should be all-capitals, as it\u0027s an abbreviation. The act seems to refer to itself in capitals as well: \"COVFEFE Act of 2017\", see https://en.wikipedia.org/w/index.php?title\u003dFile%3ACOVFEFE_Act.pdf\u0026page\u003d1",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 7
+      },
+      "revId": "84f8570357f2dc04991ffe962fd97f2b2b3de652",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
