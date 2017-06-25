@@ -97,15 +97,4 @@ void    XFRowStyle::ToXml(IXFStream *pStrm)
     pStrm->EndElement( "style:style" );
 }
 
-XFRowStyle& XFRowStyle::operator=(XFRowStyle const &other)
-{
-    if (this != &other)
-    {
-        m_fHeight = other.m_fHeight;
-        m_fMinHeight = other.m_fMinHeight;
-        m_aBackColor = other.m_aBackColor;
-    }
-    return *this;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

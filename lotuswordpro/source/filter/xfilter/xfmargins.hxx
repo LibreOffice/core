@@ -85,7 +85,6 @@ public:
 
     friend bool operator==(XFMargins& indent1, XFMargins& indent2);
     friend bool operator!=(XFMargins& indent1, XFMargins& indent2);
-    XFMargins& operator=(const XFMargins& other);
 private:
     double  m_fLeft;
     double  m_fRight;
