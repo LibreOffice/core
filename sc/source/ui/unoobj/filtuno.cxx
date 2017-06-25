@@ -292,6 +292,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
     {
         bool bDBEnc     = false;
         bool bAscii     = false;
+        bool skipDialog = false;
 
         sal_Unicode const cStrDel = '"';
         sal_Unicode cAsciiDel = ';';
@@ -333,7 +334,11 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
                 //  dBase import
                 aTitle = ScGlobal::GetRscString( STR_IMPORT_DBF );
             }
-            load_CharSet( eEncoding, bExport );
+            switch(load_CharSet( eEncoding, bExport, aFileName ))
+            {
+            case charset_from_file:
+                skipDialog = true;
+            }
             bDBEnc = true;
         }
         else if ( aFilterString == ScDocShell::GetDifFilterName() )
@@ -353,21 +358,37 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
         }
 
         ScImportOptions aOptions( cAsciiDel, cStrDel, eEncoding);
-
-        ScopedVclPtr<AbstractScImportOptionsDlg> pDlg(pFact->CreateScImportOptionsDlg(
-                                                                            bAscii, &aOptions, &aTitle, true/*bMultiByte*/, bDBEnc,
-                                                                            !bExport));
-        OSL_ENSURE(pDlg, "Dialog create fail!");
-        if ( pDlg->Execute() == RET_OK )
+        if(skipDialog)
         {
-            pDlg->SaveImportOptions();
-            pDlg->GetImportOptions( aOptions );
-            save_CharSet( aOptions.eCharSet, bExport );
+            // TODO: check we are not missing some of the stuff that ScImportOptionsDlg::GetImportOptions
+            // (file sc/source/ui/dbgui/scuiimoptdlg.cxx) does
+            // that is, if the dialog sets options that are not selected by the user (!)
+            // then we are missing them here.
+            // Then we may need to rip them out of the dialog.
+            // Or we actually change the dialog to not display if skipDialog==true
+            // in that case, add an argument skipDialog to CreateScImportOptionsDlg
+            nRet = ui::dialogs::ExecutableDialogResults::OK;
+        }
+        else
+        {
+            ScopedVclPtr<AbstractScImportOptionsDlg> pDlg(pFact->CreateScImportOptionsDlg(
+                                                                            bAscii, &aOptions, &aTitle, bMultiByte/*bMultiByte*/,
+                                                                            bDBEnc, !bExport));
+            OSL_ENSURE(pDlg, "Dialog create fail!");
+            if ( pDlg->Execute() == RET_OK )
+            {
+                pDlg->SaveImportOptions();
+                pDlg->GetImportOptions( aOptions );
+                save_CharSet( aOptions.eCharSet, bExport );
+                nRet = ui::dialogs::ExecutableDialogResults::OK;
+            }
+        }
+        if (nRet == ui::dialogs::ExecutableDialogResults::OK)
+        {
             if ( bAscii )
                 aFilterOptions = aOptions.BuildString();
             else
                 aFilterOptions = aOptions.aStrFont;
-            nRet = ui::dialogs::ExecutableDialogResults::OK;
         }
     }
 
