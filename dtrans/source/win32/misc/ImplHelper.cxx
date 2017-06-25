@@ -338,7 +338,7 @@ bool SAL_CALL CompareTargetDevice( DVTARGETDEVICE* ptdLeft, DVTARGETDEVICE* ptdR
             bRet = true;
         }
 
-        // one ot the two is NULL
+        // one of the two is NULL
         else if ( ( nullptr != ptdRight ) && ( nullptr != ptdLeft ) )
 
         if ( ptdLeft->tdSize == ptdRight->tdSize )

@@ -161,7 +161,7 @@ void SvxCaptionTabPage::dispose()
 void SvxCaptionTabPage::Construct()
 {
     // set rectangle and working area
-    DBG_ASSERT( pView, "No valid View transfered!" );
+    DBG_ASSERT( pView, "No valid View transferred!" );
 }
 
 
@@ -515,7 +515,7 @@ SvxCaptionTabDialog::SvxCaptionTabDialog(vcl::Window* pParent, const SdrView* pS
     , m_nPositionSizePageId(0)
     , m_nCaptionPageId(0)
 {
-    assert(pView); // No valid View transfered!
+    assert(pView); // No valid View transferred!
 
     //different positioning page in Writer
     if (nAnchorCtrls & (SvxAnchorIds::Paragraph | SvxAnchorIds::Character | SvxAnchorIds::Page | SvxAnchorIds::Fly))

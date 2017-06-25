@@ -37,7 +37,7 @@ class CheckSidebarRegistry(unittest.TestCase):
         param.Name = "nodepath"
 
 
-        # Deck names consitency
+        # Deck names consistency
 
         param.Value = "org.openoffice.Office.UI.Sidebar/Content/DeckList"
 
@@ -51,7 +51,7 @@ class CheckSidebarRegistry(unittest.TestCase):
                 print("\nNon-consistent sidebar.xcu Deck registry names", nodeName, node.Id)
                 result = False
 
-        # panel names consitency
+        # panel names consistency
 
         param.Value = "org.openoffice.Office.UI.Sidebar/Content/PanelList"
 

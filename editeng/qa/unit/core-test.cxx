@@ -75,7 +75,7 @@ public:
     /// Test Copy/Paste with Underline text using Legacy Format
     void testUnderlineCopyPaste();
 
-    /// Test Copy/Paste with mutiple paragraphs
+    /// Test Copy/Paste with multiple paragraphs
     void testMultiParaCopyPaste();
 
     void testSectionAttributes();

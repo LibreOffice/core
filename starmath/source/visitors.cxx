@@ -401,7 +401,7 @@ void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
     mrDev.SetLineColor( );
     aTmpDev.SetFont( pNode->GetFont( ) );
 
-    // since the width is always unscaled it corresponds ot the _original_
+    // since the width is always unscaled it corresponds to the _original_
     // _unscaled_ font height to be used, we use that to calculate the
     // bar height. Thus it is independent of the arguments height.
     // ( see display of sqrt QQQ versus sqrt stack{Q#Q#Q#Q} )

@@ -398,7 +398,7 @@ void SwHTMLParser::EndNumBulList( HtmlTokenId nToken )
                 m_xDoc->ChgNumRuleFormats( *rInfo.GetNumRule() );
 
             // On the last append, the NumRule item and NodeNum object were copied.
-            // Now we need to delete them. ResetAttr deletes the NodeNum object aswell
+            // Now we need to delete them. ResetAttr deletes the NodeNum object as well
             m_pPam->GetNode().GetTextNode()->ResetAttr( RES_PARATR_NUMRULE );
 
             rInfo.Clear();

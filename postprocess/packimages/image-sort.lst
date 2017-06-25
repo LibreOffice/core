@@ -3,7 +3,7 @@
 # icons inside the OO.o theme / images.zip file.
 #
 # Sections are processed together, and are delimited
-# by '-- <tag> [small]' a 'group' tage denotes equal
+# by '-- <tag> [small]' a 'group' tag denotes equal
 # importance: icons must be interleaved, 'ordered'
 # denotes a simple best-fit order. 'literal' denotes
 # a list of explicit image loads
