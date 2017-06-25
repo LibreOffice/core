@@ -729,28 +729,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
         case SID_CLOSEDOC:
         {
-            SfxViewFrame *pFrame = GetFrame();
-
-            bool bInFrameSet = false;
-            sal_uInt16 nFrames=0;
-            pFrame = SfxViewFrame::GetFirst( this );
-            while ( pFrame )
-            {
-                nFrames++;
-                pFrame = SfxViewFrame::GetNext( *pFrame, this );
-            }
-
-            if ( bInFrameSet )
-            {
-                // Close all views that are not in a FrameSet.
-                pFrame = SfxViewFrame::GetFirst( this );
-                while ( pFrame )
-                {
-                    pFrame->GetFrame().DoClose();
-                    pFrame = SfxViewFrame::GetNext( *pFrame, this );
-                }
-            }
-
             // Evaluate Parameter
             const SfxBoolItem* pSaveItem = rReq.GetArg<SfxBoolItem>(SID_CLOSEDOC_SAVE);
             const SfxStringItem* pNameItem = rReq.GetArg<SfxStringItem>(SID_CLOSEDOC_FILENAME);

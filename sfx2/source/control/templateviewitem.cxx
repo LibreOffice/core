@@ -59,8 +59,7 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
 {
     BColor aFillColor = pAttrs->aFillColor;
 
-    int nCount = 5;
-    drawinglayer::primitive2d::Primitive2DContainer aSeq(nCount);
+    drawinglayer::primitive2d::Primitive2DContainer aSeq(5);
     double fTransparence = 0.0;
 
     // Draw background

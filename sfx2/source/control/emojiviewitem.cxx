@@ -64,8 +64,7 @@ void EmojiViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProcessor
 {
     BColor aFillColor = pAttrs->aFillColor;
 
-    int nCount = 2;
-    drawinglayer::primitive2d::Primitive2DContainer aSeq(nCount);
+    drawinglayer::primitive2d::Primitive2DContainer aSeq(2);
     double fTransparence = 0.0;
 
     // Draw background

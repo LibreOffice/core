@@ -96,12 +96,10 @@ void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName ) const
     if ( xDispatchProvider.is() )
     {
         URL             aTargetURL;
-        OUString aTarget( "_default" );
-
         aTargetURL.Complete = aName;
 
         getURLTransformer()->parseStrict( aTargetURL );
-        Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, aTarget, 0 );
+        Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, "_default", 0 );
         if ( xDispatch.is() )
         {
             Sequence< PropertyValue > aArgs( 2 );

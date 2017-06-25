@@ -1144,7 +1144,6 @@ uno::Sequence< frame::DispatchInformation > SAL_CALL SfxBaseController::getConfi
 
         SfxViewFrame* pViewFrame( m_pData->m_pViewShell->GetFrame() );
         SfxSlotPool*  pPool( &SfxSlotPool::GetSlotPool( pViewFrame ));
-        OUString aCmdPrefix( ".uno:" );
 
         SfxSlotPool* pSlotPool = pPool ? pPool : &SFX_SLOTPOOL();
         for ( sal_uInt16 i=0; i<pSlotPool->GetGroupCount(); i++ )
@@ -1161,9 +1160,7 @@ uno::Sequence< frame::DispatchInformation > SAL_CALL SfxBaseController::getConfi
                         if ( pSfxSlot->GetMode() & nMode )
                         {
                             frame::DispatchInformation aCmdInfo;
-                            OUStringBuffer aBuf( aCmdPrefix );
-                            aBuf.appendAscii( pSfxSlot->GetUnoName() );
-                            aCmdInfo.Command = aBuf.makeStringAndClear();
+                            aCmdInfo.Command = ".uno:" + OUString::createFromAscii( pSfxSlot->GetUnoName() );
                             aCmdInfo.GroupId = nCommandGroup;
                             aCmdList.push_back( aCmdInfo );
                         }
