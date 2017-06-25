@@ -92,8 +92,7 @@ bool ScGridWindow::DrawMouseButtonUp(const MouseEvent& rMEvt)
             ScDrawView* pDrView = pViewData->GetScDrawView();
             if ( pDrView )
             {
-                bool bReplaceAll = true;
-                pDrView->SetAttrToMarked(*pDrawBrush, bReplaceAll);
+                pDrView->SetAttrToMarked(*pDrawBrush, true/*bReplaceAll*/);
             }
 
             if ( !pView->IsPaintBrushLocked() )

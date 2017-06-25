@@ -1496,10 +1496,9 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
                 {
                     if( SdrObjCustomShape* pObjCustomShape = dynamic_cast< SdrObjCustomShape* >( &rSdrObj ) )
                     {
-                        double fAngle = 180.0;
                         css::beans::PropertyValue aTextRotateAngle;
                         aTextRotateAngle.Name = "TextRotateAngle";
-                        aTextRotateAngle.Value <<= fAngle;
+                        aTextRotateAngle.Value <<= 180.0;
                         SdrCustomShapeGeometryItem aGeometryItem(static_cast<const SdrCustomShapeGeometryItem&>(pObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )));
                         aGeometryItem.SetPropertyValue( aTextRotateAngle );
                         pObjCustomShape->SetMergedItem( aGeometryItem );

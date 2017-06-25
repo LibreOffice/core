@@ -479,16 +479,14 @@ void ScViewFunc::PasteFromSystem()
             SotClipboardFormatId nBiff8 = SotExchange::RegisterFormatName("Biff8");
             SotClipboardFormatId nBiff5 = SotExchange::RegisterFormatName("Biff5");
 
-            SotExchangeDest nDestination = SotExchangeDest::SCDOC_FREE_AREA;
-            sal_uInt16 nSourceOptions = EXCHG_IN_ACTION_COPY;
             SotClipboardFormatId nFormat; // output param for GetExchangeAction
             sal_uInt8 nEventAction;      // output param for GetExchangeAction
 
             uno::Reference<css::datatransfer::XTransferable> xTransferable( aDataHelper.GetXTransferable() );
             sal_uInt8 nAction = SotExchange::GetExchangeAction(
                                     aDataHelper.GetDataFlavorExVector(),
-                                    nDestination,
-                                    nSourceOptions,
+                                    SotExchangeDest::SCDOC_FREE_AREA,
+                                    EXCHG_IN_ACTION_COPY,
                                     EXCHG_IN_ACTION_DEFAULT,
                                     nFormat, nEventAction, SotClipboardFormatId::NONE,
                                     &xTransferable );
@@ -1950,7 +1948,6 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
         bool bRowInfo = ( nStartCol==0 && nEndCol==MAXCOL );
         SCCOL nUndoEndCol = nStartCol+aColLength-1;
         SCROW nUndoEndRow = nCurrentRow;
-        InsertDeleteFlags nUndoFlags = InsertDeleteFlags::NONE;
 
         if ( bRecord )
         {
@@ -1974,7 +1971,7 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
         SfxUndoAction* pUndo = new ScUndoDataForm( pDocSh,
                                                                 nStartCol, nCurrentRow, nStartTab,
                                                                 nUndoEndCol, nUndoEndRow, nEndTab, rMark,
-                                                                pUndoDoc, pRedoDoc, nUndoFlags,
+                                                                pUndoDoc, pRedoDoc, InsertDeleteFlags::NONE,
                                                                 pUndoData );
         pUndoMgr->AddUndoAction( new ScUndoWrapper( pUndo ), true );
 

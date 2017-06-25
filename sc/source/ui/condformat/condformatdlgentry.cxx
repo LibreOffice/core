@@ -607,13 +607,12 @@ IMPL_LINK_NOARG(ScFormulaFrmtEntry, StyleSelectHdl, ListBox&, void)
 
 ScFormatEntry* ScFormulaFrmtEntry::createFormulaEntry() const
 {
-    ScConditionMode eMode = SC_COND_DIRECT;
     OUString aFormula = maEdFormula->GetText();
     if(aFormula.isEmpty())
         return nullptr;
 
     OUString aExpr2;
-    ScFormatEntry* pEntry = new ScCondFormatEntry(eMode, aFormula, aExpr2, mpDoc, maPos, maLbStyle->GetSelectEntry());
+    ScFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT, aFormula, aExpr2, mpDoc, maPos, maLbStyle->GetSelectEntry());
     return pEntry;
 }
 

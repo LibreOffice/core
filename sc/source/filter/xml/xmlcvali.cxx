@@ -383,11 +383,10 @@ void ScXMLContentValidationContext::EndElement()
     // #i36650# event-listeners element moved up one level
     if (xEventContext.is())
     {
-        OUString sOnError("OnError");
         XMLEventsImportContext* pEvents =
             static_cast<XMLEventsImportContext*>(xEventContext.get());
         uno::Sequence<beans::PropertyValue> aValues;
-        pEvents->GetEventSequence( sOnError, aValues );
+        pEvents->GetEventSequence( "OnError", aValues );
 
         sal_Int32 nLength = aValues.getLength();
         for( sal_Int32 i = 0; i < nLength; i++ )

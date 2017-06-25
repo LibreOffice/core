@@ -2050,7 +2050,7 @@ void ScPosWnd::Modify()
             tools::Rectangle aRect( aPos, aPos );
 
             OUString aText = ScGlobal::GetRscString( nStrId );
-            QuickHelpFlags nAlign = QuickHelpFlags::Left|QuickHelpFlags::Bottom;
+            QuickHelpFlags const nAlign = QuickHelpFlags::Left|QuickHelpFlags::Bottom;
             nTipVisible = Help::ShowPopover(pWin, aRect, aText, nAlign);
         }
     }

@@ -101,8 +101,9 @@ ScVbaMenuItems::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ )
 
 uno::Reference< excel::XMenuItem > SAL_CALL ScVbaMenuItems::Add( const OUString& Caption, const css::uno::Any& OnAction, const css::uno::Any& /*ShortcutKey*/, const css::uno::Any& Before, const css::uno::Any& Restore, const css::uno::Any& /*StatusBar*/, const css::uno::Any& /*HelpFile*/, const css::uno::Any& /*HelpContextID*/ )
 {
-    sal_Int32 nType = office::MsoControlType::msoControlButton;
-    uno::Reference< XCommandBarControl > xCommandBarControl = m_xCommandBarControls->Add( uno::makeAny( nType ), uno::Any(), uno::Any(), Before, Restore );
+    uno::Reference< XCommandBarControl > xCommandBarControl = m_xCommandBarControls->Add(
+            uno::makeAny( office::MsoControlType::msoControlButton ),
+            uno::Any(), uno::Any(), Before, Restore );
     xCommandBarControl->setCaption( Caption );
     if( OnAction.hasValue() )
     {

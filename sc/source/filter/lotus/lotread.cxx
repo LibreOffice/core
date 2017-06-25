@@ -197,7 +197,6 @@ ErrCode ImportLotus::Read()
     SCTAB       nCnt;
     OUString aTabName;
     OUString aBaseName;
-    OUString aRef( "temp" );
     if( nTabs != 0 )
     {
         if( nTabs > 1 )
@@ -210,7 +209,7 @@ ErrCode ImportLotus::Read()
             OSL_ENSURE( pD->HasTable( nCnt ),
                 "-ImportLotus::Read(): Where is my table?!" );
             pD->GetName( nCnt, aTabName );
-            if( aTabName.equals(aRef) )
+            if( aTabName == "temp" )
             {
                 aTabName = aBaseName;
                 pD->CreateValidTabName( aTabName );

@@ -466,9 +466,8 @@ void ScFiltersTest::testRangeNameXLS()
     ScDocument& rDoc = xDocSh->GetDocument();
     testRangeNameImpl(rDoc);
 
-    OUString aSheet2CSV("rangeExp_Sheet2.");
     OUString aCSVPath;
-    createCSVPath( aSheet2CSV, aCSVPath );
+    createCSVPath( "rangeExp_Sheet2.", aCSVPath );
     // fdo#44587
     testFile( aCSVPath, rDoc, 1);
 
@@ -661,7 +660,7 @@ void ScFiltersTest::testCachedFormulaResultsODS()
         //regardless of cached results.  if you update the ods file, you must
         //update the values here.
         //if NOW() is recalculated, then it should never equal sTodayCache
-        OUString sTodayCache("01/25/13 01:06 PM");
+        OUString const sTodayCache("01/25/13 01:06 PM");
         OUString sTodayRecalc(rDoc.GetString(0,0,1));
 
         CPPUNIT_ASSERT(sTodayCache != sTodayRecalc);
@@ -1480,9 +1479,8 @@ void ScFiltersTest::testBrokenQuotesCSV()
     CPPUNIT_ASSERT_MESSAGE("Failed to load fdo48621_broken_quotes.csv", xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
-    OUString aSheet2CSV("fdo48621_broken_quotes_exported.");
     OUString aCSVPath;
-    createCSVPath( aSheet2CSV, aCSVPath );
+    createCSVPath( "fdo48621_broken_quotes_exported.", aCSVPath );
     // fdo#48621
     testFile( aCSVPath, rDoc, 0, StringType::PureString);
 
@@ -1554,10 +1552,11 @@ void ScFiltersTest::testPassword_Impl(const OUString& aFileNameBase)
     createFileURL(aFileNameBase, aFileExtension, aFileName);
     OUString aFilterType(getFileFormats()[0].pTypeName, strlen(getFileFormats()[0].pTypeName), RTL_TEXTENCODING_UTF8);
 
-    SotClipboardFormatId nFormat = SotClipboardFormatId::STARCALC_8;
     std::shared_ptr<const SfxFilter> pFilter(new SfxFilter(
         aFilterName,
-        OUString(), getFileFormats()[0].nFormatType, nFormat, aFilterType, OUString(),
+        OUString(), getFileFormats()[0].nFormatType,
+        SotClipboardFormatId::STARCALC_8,
+        aFilterType, OUString(),
         OUString(), "private:factory/scalc*" ));
     const_cast<SfxFilter*>(pFilter.get())->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
@@ -2581,9 +2580,8 @@ void ScFiltersTest::testNewCondFormatODS()
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
-    OUString aCSVFile("new_cond_format_test.");
     OUString aCSVPath;
-    createCSVPath( aCSVFile, aCSVPath );
+    createCSVPath( "new_cond_format_test.", aCSVPath );
     testCondFile(aCSVPath, &rDoc, 0);
 
     xDocSh->DoClose();
@@ -2597,9 +2595,8 @@ void ScFiltersTest::testNewCondFormatXLSX()
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
-    OUString aCSVFile("new_cond_format_test.");
     OUString aCSVPath;
-    createCSVPath( aCSVFile, aCSVPath );
+    createCSVPath( "new_cond_format_test.", aCSVPath );
     testCondFile(aCSVPath, &rDoc, 0);
 
     xDocSh->DoClose();

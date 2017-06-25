@@ -783,8 +783,7 @@ void XclImpAutoFilterData::Apply()
     if( bActive || bCriteria)
     {
         ScDocument& rDoc = pExcRoot->pIR->GetDocRef();
-        OUString aNewName(STR_DB_LOCAL_NONAME);
-        pCurrDBData = new ScDBData(aNewName , Tab(),
+        pCurrDBData = new ScDBData(STR_DB_LOCAL_NONAME, Tab(),
                                 StartCol(),StartRow(), EndCol(),EndRow() );
         if(bCriteria)
         {

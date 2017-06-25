@@ -2653,8 +2653,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
         {
             ScDPSaveDimension* pOldDimension = aSaveData.GetDimensionByName( aDimName );
             pSaveDimension->SetOrientation( pOldDimension->GetOrientation() );
-            long nPosition = 0;     //! before (immediate) base
-            aSaveData.SetPosition( pSaveDimension, nPosition );
+            aSaveData.SetPosition( pSaveDimension, 0 ); //! before (immediate) base
         }
 
         // apply changes

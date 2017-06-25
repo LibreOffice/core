@@ -154,8 +154,7 @@ ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCompo
     OSL_ENSURE( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
-        OUString sPropName("StreamName");
-        xInfoSet->setPropertyValue( sPropName, uno::makeAny( sStream ) );
+        xInfoSet->setPropertyValue( "StreamName", uno::makeAny( sStream ) );
     }
 
     ErrCode nReturn = ERRCODE_NONE;
@@ -628,10 +627,9 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
         if (xSet.is())
         {
             xSet->setPropertyValue("MediaType", uno::makeAny(sMediaType));
-            OUString aUseCommonPassPropName("UseCommonStoragePasswordEncryption");
 
             // advise storage impl to use common encryption
-            xSet->setPropertyValue( aUseCommonPassPropName, uno::makeAny(true) );
+            xSet->setPropertyValue( "UseCommonStoragePasswordEncryption", uno::makeAny(true) );
         }
 
         xOut = xStream->getOutputStream();
@@ -644,8 +642,7 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
     OSL_ENSURE( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
-        OUString sPropName("StreamName");
-        xInfoSet->setPropertyValue( sPropName, uno::makeAny( sName ) );
+        xInfoSet->setPropertyValue( "StreamName", uno::makeAny( sName ) );
     }
 
     xWriter->setOutputStream( xOut );

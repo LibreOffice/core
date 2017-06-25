@@ -343,8 +343,7 @@ uno::Reference< XAccessible > SAL_CALL
 OUString SAL_CALL
     ScAccessibleTableBase::createAccessibleDescription()
 {
-    OUString sDesc(STR_ACC_TABLE_DESCR);
-    return sDesc;
+    return OUString(STR_ACC_TABLE_DESCR);
 }
 
 OUString SAL_CALL ScAccessibleTableBase::createAccessibleName()
@@ -398,8 +397,7 @@ void SAL_CALL ScAccessibleTableBase::selectAllAccessibleChildren()
 sal_Int32 SAL_CALL
         ScAccessibleTableBase::getSelectedAccessibleChildCount(  )
 {
-    sal_Int32 nResult(0);
-    return nResult;
+    return 0;
 }
 
 uno::Reference<XAccessible > SAL_CALL

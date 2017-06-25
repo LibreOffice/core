@@ -270,9 +270,8 @@ void XclExpStream::WriteZeroBytesToRecord( std::size_t nBytes )
         // not in record.
         return;
 
-    sal_uInt8 nZero = 0;
     for (std::size_t i = 0; i < nBytes; ++i)
-        *this << nZero;
+        *this << 0/*nZero*/;
 }
 
 void XclExpStream::CopyFromStream(SvStream& rInStrm, sal_uInt64 const nBytes)

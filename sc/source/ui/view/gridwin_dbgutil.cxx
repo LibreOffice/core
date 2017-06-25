@@ -90,8 +90,7 @@ void ScGridWindow::dumpCellProperties()
         aList.Join(aRange, false);
     }
 
-    OString aOutputFile("dump.xml");
-    xmlTextWriterPtr writer = xmlNewTextWriterFilename( aOutputFile.getStr(), 0 );
+    xmlTextWriterPtr writer = xmlNewTextWriterFilename( "dump.xml", 0 );
     xmlTextWriterSetIndent(writer,1);
     xmlTextWriterSetIndentString(writer, BAD_CAST("    "));
 
