@@ -207,11 +207,10 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
     }
     else
     {
-        bool bMultiByte = true;
         bool bDBEnc     = false;
         bool bAscii     = false;
 
-        sal_Unicode cStrDel = '"';
+        sal_Unicode const cStrDel = '"';
         sal_Unicode cAsciiDel = ';';
         rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
 
@@ -273,7 +272,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
         ScImportOptions aOptions( cAsciiDel, cStrDel, eEncoding);
 
         ScopedVclPtr<AbstractScImportOptionsDlg> pDlg(pFact->CreateScImportOptionsDlg(
-                                                                            bAscii, &aOptions, &aTitle, bMultiByte, bDBEnc,
+                                                                            bAscii, &aOptions, &aTitle, true/*bMultiByte*/, bDBEnc,
                                                                             !bExport));
         OSL_ENSURE(pDlg, "Dialog create fail!");
         if ( pDlg->Execute() == RET_OK )

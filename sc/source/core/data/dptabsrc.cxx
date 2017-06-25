@@ -1626,8 +1626,7 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName
         aRet <<= mbHasHiddenMember;
     else if (aPropertyName == SC_UNO_DP_FLAGS)
     {
-        sal_Int32 nFlags = 0;       // tabular data: all orientations are possible
-        aRet <<= nFlags;
+        aRet <<= sal_Int32(0); // tabular data: all orientations are possible
     }
     else
     {

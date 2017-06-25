@@ -2405,10 +2405,10 @@ void ScViewData::ReadUserData(const OUString& rData)
     // if available, get tab bar width:
     OUString aTabOpt = rData.getToken(2, ';');
 
-    if (aTabOpt.startsWith(TAG_TABBARWIDTH))
+    OUString aRest;
+    if (aTabOpt.startsWith(TAG_TABBARWIDTH, &aRest))
     {
-        sal_Int32 nTagLen = RTL_CONSTASCII_LENGTH(TAG_TABBARWIDTH);
-        pView->SetTabBarWidth(aTabOpt.copy(nTagLen).toInt32());
+        pView->SetTabBarWidth(aRest.toInt32());
         nTabStart = 3;
     }
 

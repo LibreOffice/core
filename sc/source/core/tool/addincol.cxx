@@ -479,7 +479,6 @@ void ScUnoAddInCollection::ReadConfiguration()
 
                 std::unique_ptr<ScAddInArgDesc[]> pVisibleArgs;
                 long nVisibleCount = 0;
-                long nCallerPos = SC_CALLERPOS_NONE;
 
                 OUString aArgumentsPath(aFuncPropPath + CFGSTR_PARAMETERS);
 
@@ -547,7 +546,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                     aFuncName, aLocalName, aDescription,
                     nCategory, sHelpId,
                     xFunc, aObject,
-                    nVisibleCount, pVisibleArgs.get(), nCallerPos );
+                    nVisibleCount, pVisibleArgs.get(), SC_CALLERPOS_NONE );
 
                 pData->SetCompNames( aCompNames );
 

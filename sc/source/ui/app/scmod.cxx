@@ -379,16 +379,10 @@ void ScModule::Execute( SfxRequest& rReq )
     switch ( nSlot )
     {
         case SID_CHOOSE_DESIGN:
-            {
-                OUString aMacroName("Template.Samples.ShowStyles");
-                SfxApplication::CallAppBasic( aMacroName );
-            }
+            SfxApplication::CallAppBasic( "Template.Samples.ShowStyles" );
             break;
         case SID_EURO_CONVERTER:
-            {
-                OUString aMacroName("Euro.ConvertRun.Main");
-                SfxApplication::CallAppBasic( aMacroName );
-            }
+            SfxApplication::CallAppBasic( "Euro.ConvertRun.Main" );
             break;
         case SID_AUTOSPELL_CHECK:
             {

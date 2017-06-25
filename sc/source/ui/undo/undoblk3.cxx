@@ -861,8 +861,6 @@ void ScUndoAutoFormat::Redo()
             nPPTY = ScGlobal::nScreenPPTY;
         }
 
-        bool bFormula = false;  // remember
-
         sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, pVirtDev);
         for (SCTAB nTab=nStartZ; nTab<=nEndZ; nTab++)
         {
@@ -886,7 +884,7 @@ void ScUndoAutoFormat::Redo()
                 if (!rDoc.ColHidden(nCol, nTab))
                 {
                     sal_uInt16 nThisSize = STD_EXTRA_WIDTH + rDoc.GetOptimalColWidth( nCol, nTab,
-                                                pVirtDev, nPPTX, nPPTY, aZoomX, aZoomY, bFormula,
+                                                pVirtDev, nPPTX, nPPTY, aZoomX, aZoomY, false/*bFormula*/,
                                                 &aDestMark );
                     rDoc.SetColWidth( nCol, nTab, nThisSize );
                     rDoc.ShowCol( nCol, nTab, true );

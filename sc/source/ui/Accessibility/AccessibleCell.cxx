@@ -540,10 +540,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScAccessibleCell::getCharacterAtt
     sal_uInt16 nParaIndent = static_cast< const SfxUInt16Item* >( mpDoc->GetAttr( maCellAddress.Col(), maCellAddress.Row(), maCellAddress.Tab(), ATTR_INDENT ) )->GetValue();
     if (nParaIndent > 0)
     {
-        OUString sLeftMarginName ("ParaLeftMargin");
         for (int i = 0; i < aAttribs.getLength(); ++i)
         {
-            if (sLeftMarginName == pAttribs[i].Name)
+            if ("ParaLeftMargin" == pAttribs[i].Name)
             {
                 pAttribs[i].Value <<= nParaIndent;
                 break;

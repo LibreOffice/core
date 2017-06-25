@@ -95,9 +95,7 @@ ScUndoCursorAttr::~ScUndoCursorAttr()
 OUString ScUndoCursorAttr::GetComment() const
 {
     //! own text for automatic attribution
-
-    sal_uInt16 nId = STR_UNDO_CURSORATTR;        // "Attribute"
-    return ScGlobal::GetRscString( nId );
+    return ScGlobal::GetRscString( STR_UNDO_CURSORATTR ); // "Attribute"
 }
 
 void ScUndoCursorAttr::SetEditData( EditTextObject* pOld, EditTextObject* pNew )

@@ -357,8 +357,6 @@ bool ScTokenConversion::ConvertToTokenArray( ScDocument& rDoc,
 bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
         uno::Sequence<sheet::FormulaToken>& rSequence, const ScTokenArray& rTokenArray )
 {
-    bool bError = false;
-
     sal_Int32 nLen = static_cast<sal_Int32>(rTokenArray.GetLen());
     formula::FormulaToken** pTokens = rTokenArray.GetArray();
     if ( pTokens )
@@ -477,7 +475,7 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
     else
         rSequence.realloc(0);
 
-    return !bError;
+    return true;
 }
 
 ScFormulaOpCodeMapperObj::ScFormulaOpCodeMapperObj(::std::unique_ptr<formula::FormulaCompiler> && _pCompiler)

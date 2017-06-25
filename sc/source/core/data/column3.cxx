@@ -1454,9 +1454,8 @@ public:
             {
                 case sc::element_type_numeric:
                 {
-                    double fVal1 = 0.0;
                     double fVal2 = sc::numeric_block::at(*aPos.first->data, aPos.second);
-                    doFunction(nDestRow, fVal1, fVal2);
+                    doFunction(nDestRow, 0.0, fVal2);
                 }
                 break;
                 case sc::element_type_string:

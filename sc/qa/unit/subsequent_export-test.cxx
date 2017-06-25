@@ -422,9 +422,8 @@ void ScExportTest::testConditionalFormatExportODS()
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
-    OUString aCSVFile("new_cond_format_test_export.");
     OUString aCSVPath;
-    createCSVPath( aCSVFile, aCSVPath );
+    createCSVPath( "new_cond_format_test_export.", aCSVPath );
     testCondFile(aCSVPath, &rDoc, 0);
 
     xDocSh->DoClose();
@@ -439,15 +438,13 @@ void ScExportTest::testConditionalFormatExportXLSX()
     CPPUNIT_ASSERT(xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
     {
-        OUString aCSVFile("new_cond_format_test_export.");
         OUString aCSVPath;
-        createCSVPath( aCSVFile, aCSVPath );
+        createCSVPath( "new_cond_format_test_export.", aCSVPath );
         testCondFile(aCSVPath, &rDoc, 0);
     }
     {
-        OUString aCSVFile("new_cond_format_test_sheet2.");
         OUString aCSVPath;
-        createCSVPath( aCSVFile, aCSVPath );
+        createCSVPath( "new_cond_format_test_sheet2.", aCSVPath );
         testCondFile(aCSVPath, &rDoc, 1);
     }
 
@@ -2242,7 +2239,7 @@ void ScExportTest::testTrackChangesSimpleXLSX()
                 return false;
             }
 
-            for (size_t i = 0, n = SAL_N_ELEMENTS(aChecks); i < n; ++i)
+            for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
             {
                 sal_uInt16 nActId = aChecks[i].mnActionId;
                 const ScChangeAction* pAction = pCT->GetAction(nActId);
@@ -2412,7 +2409,7 @@ void ScExportTest::testSheetTabColorsXLSX()
             }
 
             const char* pNames[] = { "Green", "Red", "Blue", "Yellow" };
-            for (size_t i = 0, n = SAL_N_ELEMENTS(pNames); i < n; ++i)
+            for (size_t i = 0; i < SAL_N_ELEMENTS(pNames); ++i)
             {
                 OUString aExpected = OUString::createFromAscii(pNames[i]);
                 if (aExpected != aTabNames[i])
@@ -2430,7 +2427,7 @@ void ScExportTest::testSheetTabColorsXLSX()
                 0x00FFFF00, // yellow
             };
 
-            for (size_t i = 0, n = SAL_N_ELEMENTS(aXclColors); i < n; ++i)
+            for (size_t i = 0; i < SAL_N_ELEMENTS(aXclColors); ++i)
             {
                 if (aXclColors[i] != rDoc.GetTabBgColor(i).GetColor())
                 {

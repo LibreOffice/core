@@ -1613,10 +1613,10 @@ sal_Int32 SAL_CALL ScTabViewObj::getSplitRow()
         {
             long nSplit = rViewData.GetVSplitPos();
 
-            ScSplitPos ePos = SC_SPLIT_TOPLEFT;     // split vertically
+            // split vertically
             SCCOL nCol;
             SCROW nRow;
-            rViewData.GetPosFromPixel( 0, nSplit, ePos, nCol, nRow, false );
+            rViewData.GetPosFromPixel( 0, nSplit, SC_SPLIT_TOPLEFT, nCol, nRow, false );
             if ( nRow > 0 )
                 return nRow;
         }

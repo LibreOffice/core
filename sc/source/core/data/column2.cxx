@@ -695,7 +695,6 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
         ScNeededSizeOptions aOptions;
         aOptions.bFormula = bFormula;
         const ScPatternAttr* pOldPattern = nullptr;
-        SvtScriptType nOldScript = SvtScriptType::NONE;
 
         // Go though all non-empty cells within selection.
         sc::CellStoreType::const_iterator itPos = maCells.begin();
@@ -723,7 +722,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
 
                     const ScPatternAttr* pPattern = GetPattern(nRow);
                     aOptions.pPattern = pPattern;
-                    aOptions.bGetFont = (pPattern != pOldPattern || nScript != nOldScript);
+                    aOptions.bGetFont = (pPattern != pOldPattern || nScript != SvtScriptType::NONE);
                     pOldPattern = pPattern;
                     sal_uInt16 nThis = (sal_uInt16) GetNeededSize(
                         nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, true, aOptions, &pOldPattern);

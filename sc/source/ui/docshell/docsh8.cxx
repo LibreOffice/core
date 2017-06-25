@@ -326,11 +326,9 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
         OSL_ENSURE( xRowProp.is(), "can't get RowSet" );
         if (!xRowProp.is()) return SCERR_IMPORT_CONNECT;
 
-        sal_Int32 nType = sdb::CommandType::TABLE;
-
         xRowProp->setPropertyValue( SC_DBPROP_ACTIVECONNECTION, uno::Any(xConnection) );
 
-        xRowProp->setPropertyValue( SC_DBPROP_COMMANDTYPE, uno::Any(nType) );
+        xRowProp->setPropertyValue( SC_DBPROP_COMMANDTYPE, uno::Any(sdb::CommandType::TABLE) );
 
         xRowProp->setPropertyValue( SC_DBPROP_COMMAND, uno::Any(aTabName) );
 

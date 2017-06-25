@@ -140,11 +140,10 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtStr
             aPool << eParam[ 3 ] << ocSep << eParam[ 2 ] << ocSep << eParam[ 1 ] << ocSep << eParam[ 0 ];
         else
         {
-            sal_Int16 nNull = -1;
             aPool << eParam[ nLast ];
             for( nCount = nLast - 1 ; nCount >= 0 ; nCount-- )
             {
-                if( nCount != nNull )
+                if( nCount != -1 )
                     aPool << ocSep << eParam[ nCount ];
             }
         }

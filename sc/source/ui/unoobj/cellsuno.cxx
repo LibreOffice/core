@@ -7514,8 +7514,7 @@ void SAL_CALL ScTableSheetObj::link( const OUString& aUrl, const OUString& aShee
         else if ( nMode == sheet::SheetLinkMode_VALUE )
             nLinkMode = ScLinkMode::VALUE;
 
-        sal_uLong nRefresh = 0;
-        rDoc.SetLink( nTab, nLinkMode, aFileString, aFilterString, aOptString, aSheetName, nRefresh );
+        rDoc.SetLink( nTab, nLinkMode, aFileString, aFilterString, aOptString, aSheetName, 0/*nRefresh*/ );
 
         pDocSh->UpdateLinks();                  // if needed add or delete link
         SfxBindings* pBindings = pDocSh->GetViewBindings();

@@ -2995,11 +2995,10 @@ void ScDocument::CopyMultiRangeFromClip(
     if (!bSkipAttrForEmpty)
     {
         // Do the deletion first.
-        InsertDeleteFlags nDelFlag = InsertDeleteFlags::CONTENTS;
         SCCOL nColSize = rClipParam.getPasteColSize();
         SCROW nRowSize = rClipParam.getPasteRowSize();
 
-        DeleteArea(nCol1, nRow1, nCol1+nColSize-1, nRow1+nRowSize-1, rMark, nDelFlag, false, &aBroadcastSpans);
+        DeleteArea(nCol1, nRow1, nCol1+nColSize-1, nRow1+nRowSize-1, rMark, InsertDeleteFlags::CONTENTS, false, &aBroadcastSpans);
     }
 
     sc::CopyFromClipContext aCxt(*this, nullptr, pClipDoc, nInsFlag, bAsLink, bSkipAttrForEmpty);

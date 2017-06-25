@@ -256,11 +256,11 @@ void XclExpTabBgColor::WriteBody( XclExpStream& rStrm )
 {
     if ( mrTabViewData.IsDefaultTabBgColor() )
         return;
-    sal_uInt16 rt = 0x0862; //rt
-    sal_uInt16 grbitFrt = 0x0000; //grbit must be set to 0
+    sal_uInt16 const rt = 0x0862; //rt
+    sal_uInt16 const grbitFrt = 0x0000; //grbit must be set to 0
     sal_uInt32 unused = 0x00000000; //Use twice...
-    sal_uInt32 cb = 0x00000014; // Record Size, may be larger in future...
-    sal_uInt16 reserved = 0x0000; //trailing bits are 0
+    sal_uInt32 const cb = 0x00000014; // Record Size, may be larger in future...
+    sal_uInt16 const reserved = 0x0000; //trailing bits are 0
     sal_uInt16 TabBgColorIndex;
     XclExpPalette& rPal = rStrm.GetRoot().GetPalette();
     TabBgColorIndex = rPal.GetColorIndex(mrTabViewData.mnTabBgColorId);

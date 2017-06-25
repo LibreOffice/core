@@ -2308,8 +2308,7 @@ void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
 
             if ( !nIndex && !pArray->nCount )
             {
-                SCROW nThisEnd = MAXROW;
-                pNextEnd[nPos] = nThisEnd;
+                pNextEnd[nPos] = MAXROW;
                 OSL_ENSURE( pNextEnd[nPos] >= nRow, "Sequence out of order" );
                 ppPatterns[nPos] = nullptr;
             }

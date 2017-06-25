@@ -201,10 +201,9 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
             // [Parameter{;Parameter}]
             aPool << eParam[ nLast ];
 
-            sal_Int16 nNull = -1;   // lists the parameter to be excluded
             for( nLauf = nLast - 1 ; nLauf >= 0 ; nLauf-- )
             {
-                if( nLauf != nNull )
+                if( nLauf != -1 ) // lists the parameter to be excluded
                     aPool << ocSep << eParam[ nLauf ];
             }
         }

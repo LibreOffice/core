@@ -505,7 +505,7 @@ void ScPivotLayoutDialog::ApplyChanges()
 
 
     SfxDispatcher* pDispatcher = GetBindings().GetDispatcher();
-    SfxCallMode nCallMode = SfxCallMode::SLOT | SfxCallMode::RECORD;
+    SfxCallMode const nCallMode = SfxCallMode::SLOT | SfxCallMode::RECORD;
     const SfxPoolItem* pResult = pDispatcher->ExecuteList(SID_PIVOT_TABLE,
             nCallMode, { &aPivotItem });
 

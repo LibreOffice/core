@@ -2661,15 +2661,12 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
         if (xMultiServiceFactory.is())
         {
             sal_Int32 nCount(aConfigProps.getLength());
-            OUString sCTName("TrackedChangesProtectionKey");
-            OUString sVBName("VBACompatibilityMode");
-            OUString sSCName("ScriptConfiguration");
             css::uno::Sequence<css::beans::PropertyValue> aFilteredProps(
                 aConfigProps.getLength());
             sal_Int32 nFilteredPropsLen = 0;
             for (sal_Int32 i = nCount - 1; i >= 0; --i)
             {
-                if (aConfigProps[i].Name == sCTName)
+                if (aConfigProps[i].Name == "TrackedChangesProtectionKey")
                 {
                     OUString sKey;
                     if (aConfigProps[i].Value >>= sKey)
@@ -2691,7 +2688,7 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
                     }
                 }
                 // store the following items for later use (after document is loaded)
-                else if ((aConfigProps[i].Name == sVBName) || (aConfigProps[i].Name == sSCName))
+                else if ((aConfigProps[i].Name == "VBACompatibilityMode") || (aConfigProps[i].Name == "ScriptConfiguration"))
                 {
                     uno::Reference< beans::XPropertySet > xImportInfo = getImportInfo();
                     if (xImportInfo.is())
