@@ -22,6 +22,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <connectivity/dbtools.hxx>
 
 #include "editutil.hxx"
 #include "filtuno.hxx"
@@ -43,6 +44,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace connectivity::dbase;
 
 #define SCFILTEROPTIONSOBJ_SERVICE      "com.sun.star.ui.dialogs.FilterOptionsDialog"
 #define SCFILTEROPTIONSOBJ_IMPLNAME     "com.sun.star.comp.Calc.FilterOptionsDialog"
@@ -58,44 +60,62 @@ SC_SIMPLE_SERVICE_INFO( ScFilterOptionsObj, SCFILTEROPTIONSOBJ_IMPLNAME, SCFILTE
 #define DBF_SEP_PATH_IMPORT         "Office.Calc/Dialogs/DBFImport"
 #define DBF_SEP_PATH_EXPORT         "Office.Calc/Dialogs/DBFExport"
 
-static void load_CharSet( rtl_TextEncoding &nCharSet, bool bExport )
+namespace
 {
-    Sequence<Any> aValues;
-    const Any *pProperties;
-    Sequence<OUString> aNames { DBF_CHAR_SET };
-    ScLinkConfigItem aItem( OUString::createFromAscii(
-                                bExport?DBF_SEP_PATH_EXPORT:DBF_SEP_PATH_IMPORT ) );
 
-    aValues = aItem.GetProperties( aNames );
-    pProperties = aValues.getConstArray();
-
-    // Default choice
-    nCharSet = RTL_TEXTENCODING_IBM_850;
-
-    if( pProperties[0].hasValue() )
+    enum class charsetSource
     {
-        sal_Int32 nChar = 0;
-        pProperties[0] >>= nChar;
-        if( nChar >= 0)
+        charset_from_file,
+        charset_from_user_setting,
+        charset_default
+    };
+
+    charsetSource load_CharSet(rtl_TextEncoding &nCharSet, bool bExport, SvStream* dbf_Stream)
+    {
+        if (dbfReadCharset(nCharSet, dbf_Stream))
         {
-            nCharSet = (rtl_TextEncoding) nChar;
+            return charsetSource::charset_from_file;
         }
+
+        Sequence<Any> aValues;
+        const Any *pProperties;
+        Sequence<OUString> aNames { DBF_CHAR_SET };
+        ScLinkConfigItem aItem( OUString::createFromAscii(
+                                    bExport?DBF_SEP_PATH_EXPORT:DBF_SEP_PATH_IMPORT ) );
+
+        aValues = aItem.GetProperties( aNames );
+        pProperties = aValues.getConstArray();
+
+        if( pProperties[0].hasValue() )
+        {
+            sal_Int32 nChar = 0;
+            pProperties[0] >>= nChar;
+            if( nChar >= 0)
+            {
+                nCharSet = (rtl_TextEncoding) nChar;
+                return charsetSource::charset_from_user_setting;
+            }
+        }
+
+        // Default choice
+        nCharSet = RTL_TEXTENCODING_IBM_850;
+        return charsetSource::charset_default;
     }
-}
 
-static void save_CharSet( rtl_TextEncoding nCharSet, bool bExport )
-{
-    Sequence<Any> aValues;
-    Any *pProperties;
-    Sequence<OUString> aNames { DBF_CHAR_SET };
-    ScLinkConfigItem aItem( OUString::createFromAscii(
-                                bExport?DBF_SEP_PATH_EXPORT:DBF_SEP_PATH_IMPORT ) );
+    void save_CharSet( rtl_TextEncoding nCharSet, bool bExport )
+    {
+        Sequence<Any> aValues;
+        Any *pProperties;
+        Sequence<OUString> aNames { DBF_CHAR_SET };
+        ScLinkConfigItem aItem( OUString::createFromAscii(
+                                    bExport?DBF_SEP_PATH_EXPORT:DBF_SEP_PATH_IMPORT ) );
 
-    aValues = aItem.GetProperties( aNames );
-    pProperties = aValues.getArray();
-    pProperties[0] <<= (sal_Int32) nCharSet;
+        aValues = aItem.GetProperties( aNames );
+        pProperties = aValues.getArray();
+        pProperties[0] <<= (sal_Int32) nCharSet;
 
-    aItem.PutProperties(aNames, aValues);
+        aItem.PutProperties(aNames, aValues);
+    }
 }
 
 ScFilterOptionsObj::ScFilterOptionsObj() :
@@ -210,9 +230,9 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
     }
     else
     {
-        bool bMultiByte = true;
         bool bDBEnc     = false;
         bool bAscii     = false;
+        bool skipDialog = false;
 
         sal_Unicode cStrDel = '"';
         sal_Unicode cAsciiDel = ';';
@@ -254,8 +274,20 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
                 //  dBase import
                 aTitle = ScGlobal::GetRscString( STR_IMPORT_DBF );
             }
-            load_CharSet( eEncoding, bExport );
+
+            std::unique_ptr<SvStream> pInStream;
+            if ( xInputStream.is() )
+                pInStream.reset(utl::UcbStreamHelper::CreateStream( xInputStream ));
+            switch(load_CharSet( eEncoding, bExport, pInStream.get()))
+            {
+                case charsetSource::charset_from_file:
+                  skipDialog = true;break;
+                case charsetSource::charset_from_user_setting:
+                case charsetSource::charset_default:
+                   break;
+            }
             bDBEnc = true;
+            // pInStream goes out of scope, the stream is automatically closed
         }
         else if ( aFilterString == ScDocShell::GetDifFilterName() )
         {
@@ -274,21 +306,37 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
         }
 
         ScImportOptions aOptions( cAsciiDel, cStrDel, eEncoding);
-
-        ScopedVclPtr<AbstractScImportOptionsDlg> pDlg(pFact->CreateScImportOptionsDlg(
-                                                                            bAscii, &aOptions, &aTitle, bMultiByte, bDBEnc,
-                                                                            !bExport));
-        OSL_ENSURE(pDlg, "Dialog create fail!");
-        if ( pDlg->Execute() == RET_OK )
+        if(skipDialog)
         {
-            pDlg->SaveImportOptions();
-            pDlg->GetImportOptions( aOptions );
-            save_CharSet( aOptions.eCharSet, bExport );
+            // TODO: check we are not missing some of the stuff that ScImportOptionsDlg::GetImportOptions
+            // (file sc/source/ui/dbgui/scuiimoptdlg.cxx) does
+            // that is, if the dialog sets options that are not selected by the user (!)
+            // then we are missing them here.
+            // Then we may need to rip them out of the dialog.
+            // Or we actually change the dialog to not display if skipDialog==true
+            // in that case, add an argument skipDialog to CreateScImportOptionsDlg
+            nRet = ui::dialogs::ExecutableDialogResults::OK;
+        }
+        else
+        {
+            ScopedVclPtr<AbstractScImportOptionsDlg> pDlg(pFact->CreateScImportOptionsDlg(
+                                                                            bAscii, &aOptions, &aTitle, true/*bMultiByte*/,
+                                                                            bDBEnc, !bExport));
+            OSL_ENSURE(pDlg, "Dialog create fail!");
+            if ( pDlg->Execute() == RET_OK )
+            {
+                pDlg->SaveImportOptions();
+                pDlg->GetImportOptions( aOptions );
+                save_CharSet( aOptions.eCharSet, bExport );
+                nRet = ui::dialogs::ExecutableDialogResults::OK;
+            }
+        }
+        if (nRet == ui::dialogs::ExecutableDialogResults::OK)
+        {
             if ( bAscii )
                 aFilterOptions = aOptions.BuildString();
             else
                 aFilterOptions = aOptions.aStrFont;
-            nRet = ui::dialogs::ExecutableDialogResults::OK;
         }
     }
 
