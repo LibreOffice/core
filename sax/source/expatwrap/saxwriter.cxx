@@ -1275,8 +1275,7 @@ void SAXWriter::startCDATA()
         throw SAXException ();
     }
 
-    sal_Int32 nLength = 9;
-    sal_Int32 nPrefix = getIndentPrefixLength( nLength );
+    sal_Int32 nPrefix = getIndentPrefixLength( 9 );
     if( nPrefix >= 0 )
         m_pSaxWriterHelper->insertIndentation( nPrefix );
 
@@ -1294,8 +1293,7 @@ void SAXWriter::endCDATA()
         throw except;
     }
 
-    sal_Int32 nLength = 3;
-    sal_Int32 nPrefix = getIndentPrefixLength( nLength );
+    sal_Int32 nPrefix = getIndentPrefixLength( 3 );
     if( nPrefix >= 0 )
         m_pSaxWriterHelper->insertIndentation( nPrefix );
 

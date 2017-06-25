@@ -263,8 +263,6 @@ bool ZipPackageFolder::saveChild(
         const uno::Sequence < sal_Int8 >& rEncryptionKey,
         const rtlRandomPool &rRandomPool)
 {
-    bool bSuccess = true;
-
     const OUString sMediaTypeProperty ("MediaType");
     const OUString sVersionProperty ("Version");
     const OUString sFullPathProperty ("FullPath");
@@ -290,7 +288,7 @@ bool ZipPackageFolder::saveChild(
     if ( aPropSet.getLength() && ( m_nFormat == embed::StorageFormats::PACKAGE ) )
         rManList.push_back( aPropSet );
 
-    return bSuccess;
+    return true;
 }
 
 void ZipPackageFolder::saveContents(

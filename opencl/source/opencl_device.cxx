@@ -371,8 +371,7 @@ ds_status evaluateScoreForDevice(ds_device& rDevice, std::unique_ptr<LibreOffice
         // as any good openCL implementation: no SIMD, tons of branching
         // in the inner loops etc. Generously characterise it as only 10x
         // slower than the above.
-        float fInterpretTailFactor = 10.0;
-        rDevice.fTime *= fInterpretTailFactor;
+        rDevice.fTime *= 10.0;
         rDevice.bErrors = false;
     }
     return DS_SUCCESS;

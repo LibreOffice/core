@@ -146,8 +146,6 @@ void BinaryCodec_XOR::initKey( const sal_uInt8 pnPassData[ 16 ] )
     for (sal_Int32 nIndex = nLen; nIndex < static_cast<sal_Int32>(sizeof(mpnKey)); ++nIndex, ++pnFillChar )
         mpnKey[ nIndex ] = *pnFillChar;
 
-    size_t nRotateSize = 2;
-
     // use little-endian base key to create key array
     sal_uInt8 pnBaseKeyLE[ 2 ];
     pnBaseKeyLE[ 0 ] = static_cast< sal_uInt8 >( mnBaseKey );
@@ -156,7 +154,7 @@ void BinaryCodec_XOR::initKey( const sal_uInt8 pnPassData[ 16 ] )
     for (sal_Int32 nIndex = 0; nIndex < static_cast<sal_Int32>(sizeof(mpnKey)); ++nIndex, ++pnKeyChar )
     {
         *pnKeyChar ^= pnBaseKeyLE[ nIndex & 1 ];
-        lclRotateLeft( *pnKeyChar, nRotateSize );
+        lclRotateLeft( *pnKeyChar, 2/*nRotateSize*/ );
     }
 }
 

@@ -27,7 +27,6 @@ static sal_uInt32 SAL_CALL osl_defCalcTextWidth( rtl_uString *ustrText )
 
 oslFileError SAL_CALL osl_abbreviateSystemPath( rtl_uString *ustrSystemPath, rtl_uString **pustrCompacted, sal_uInt32 uMaxWidth, oslCalcTextWidthFunc pfnCalcWidth )
 {
-    oslFileError    error = osl_File_E_None;
     rtl_uString     *ustrPath = nullptr;
     rtl_uString     *ustrFile = nullptr;
     sal_uInt32      uPathWidth, uFileWidth;
@@ -108,7 +107,7 @@ oslFileError SAL_CALL osl_abbreviateSystemPath( rtl_uString *ustrSystemPath, rtl
     if ( ustrFile )
         rtl_uString_release( ustrFile );
 
-    return error;
+    return osl_File_E_None;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
