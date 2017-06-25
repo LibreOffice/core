@@ -228,7 +228,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
                 }
                 else
                 {
-                    // Pipe instance maybe cached by another client -> try again
+                    // Pipe instance maybe caught by another client -> try again
                 }
             }
         } while ( fPipeAvailable );
