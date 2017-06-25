@@ -386,11 +386,10 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
                necessary.
                bNameOK is sal_False if the user has canceled. */
             bNameOK = mpView->GetExchangeList( aExchangeList, aBookmarkList, 0 );
-            bool bReplace = false;
 
             if( bNameOK )
                 bOK = mpDoc->InsertBookmarkAsPage( aBookmarkList, &aExchangeList,
-                                    bLink, bReplace, nPos,
+                                    bLink, false/*bReplace*/, nPos,
                                     false, nullptr, true, true, false );
 
             aBookmarkList.clear();

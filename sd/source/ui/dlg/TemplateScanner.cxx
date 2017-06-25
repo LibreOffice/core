@@ -177,13 +177,11 @@ TemplateScanner::~TemplateScanner()
 
 TemplateScanner::State TemplateScanner::GetTemplateRoot()
 {
-    State eNextState (INITIALIZE_FOLDER_SCANNING);
-
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference<frame::XDocumentTemplates> xTemplates = frame::DocumentTemplates::create(xContext);
     mxTemplateRoot = xTemplates->getContent();
 
-    return eNextState;
+    return INITIALIZE_FOLDER_SCANNING;
 }
 
 TemplateScanner::State TemplateScanner::InitializeEntryScanning()
@@ -202,8 +200,7 @@ TemplateScanner::State TemplateScanner::InitializeEntryScanning()
         aProps[2] = "TypeDescription";
 
         //  Create a cursor to iterate over the templates in this folders.
-        ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_DOCUMENTS_ONLY;
-        mxEntryResultSet.set( maFolderContent.createCursor(aProps, eInclude));
+        mxEntryResultSet.set( maFolderContent.createCursor(aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY));
     }
     else
         eNextState = ERROR;
@@ -290,8 +287,7 @@ TemplateScanner::State TemplateScanner::InitializeFolderScanning()
         aProps[1] = "TargetDirURL";
 
         //  Create an cursor to iterate over the template folders.
-        ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_ONLY;
-        mxFolderResultSet.set( aTemplateDir.createCursor(aProps, eInclude));
+        mxFolderResultSet.set( aTemplateDir.createCursor(aProps, ::ucbhelper::INCLUDE_FOLDERS_ONLY));
         if (mxFolderResultSet.is())
             eNextState = GATHER_FOLDER_LIST;
     }

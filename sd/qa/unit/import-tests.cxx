@@ -284,7 +284,7 @@ void SdImportTest::testDocumentLayout()
 
     for ( int i = 0; i < static_cast< int >( SAL_N_ELEMENTS( aFilesToCompare ) ); ++i )
     {
-        int nUpdateMe = -1; // index of test we want to update; supposedly only when the test is created
+        int const nUpdateMe = -1; // index of test we want to update; supposedly only when the test is created
 
         sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc( "/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pInput ), aFilesToCompare[i].nFormat );
         if( aFilesToCompare[i].nExportType >= 0 )

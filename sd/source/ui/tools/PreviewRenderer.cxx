@@ -322,7 +322,7 @@ void PreviewRenderer::PaintSubstitutionText (const OUString& rSubstitutionText)
             Point(0,0),
             mpPreviewDevice->PixelToLogic(
                 mpPreviewDevice->GetOutputSizePixel()));
-        DrawTextFlags nTextStyle =
+        DrawTextFlags const nTextStyle =
             DrawTextFlags::Center
             | DrawTextFlags::VCenter
             | DrawTextFlags::MultiLine

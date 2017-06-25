@@ -57,29 +57,25 @@ void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& 
             // if enumeration instead bullet is chosen, adjust bullet font to template font
 
             // to be implemented if module supports CJK
-            long nFontID = SID_ATTR_CHAR_FONT;
-            long nFontHeightID = SID_ATTR_CHAR_FONTHEIGHT;
-            long nWeightID = SID_ATTR_CHAR_WEIGHT;
-            long nPostureID = SID_ATTR_CHAR_POSTURE;
 
             vcl::Font aMyFont;
             const SvxFontItem& rFItem =
-                static_cast<const SvxFontItem&>(rSet.Get(GetWhich( (sal_uInt16)nFontID )));
+                static_cast<const SvxFontItem&>(rSet.Get(GetWhich( (sal_uInt16)SID_ATTR_CHAR_FONT )));
             aMyFont.SetFamily(rFItem.GetFamily());
             aMyFont.SetFamilyName(rFItem.GetFamilyName());
             aMyFont.SetCharSet(rFItem.GetCharSet());
             aMyFont.SetPitch(rFItem.GetPitch());
 
             const SvxFontHeightItem& rFHItem =
-                static_cast<const SvxFontHeightItem&>(rSet.Get(GetWhich( (sal_uInt16)nFontHeightID )));
+                static_cast<const SvxFontHeightItem&>(rSet.Get(GetWhich( (sal_uInt16)SID_ATTR_CHAR_FONTHEIGHT )));
             aMyFont.SetFontSize(Size(0, rFHItem.GetHeight()));
 
             const SvxWeightItem& rWItem =
-                static_cast<const SvxWeightItem&>(rSet.Get(GetWhich( (sal_uInt16)nWeightID )));
+                static_cast<const SvxWeightItem&>(rSet.Get(GetWhich( (sal_uInt16)SID_ATTR_CHAR_WEIGHT )));
             aMyFont.SetWeight(rWItem.GetWeight());
 
             const SvxPostureItem& rPItem =
-                static_cast<const SvxPostureItem&>(rSet.Get(GetWhich( (sal_uInt16)nPostureID )));
+                static_cast<const SvxPostureItem&>(rSet.Get(GetWhich( (sal_uInt16)SID_ATTR_CHAR_POSTURE )));
             aMyFont.SetItalic(rPItem.GetPosture());
 
             const SvxUnderlineItem& rUItem = static_cast<const SvxUnderlineItem&>(rSet.Get(GetWhich(SID_ATTR_CHAR_UNDERLINE)));

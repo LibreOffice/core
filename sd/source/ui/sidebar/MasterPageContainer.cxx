@@ -848,8 +848,7 @@ Reference<frame::XModel> MasterPageContainer::Implementation::GetModel()
                 xSlideSupplier->getDrawPages(), uno::UNO_QUERY);
             if (xSlides.is())
             {
-                sal_Int32 nIndex (0);
-                uno::Reference<drawing::XDrawPage> xNewPage (xSlides->insertNewByIndex(nIndex));
+                uno::Reference<drawing::XDrawPage> xNewPage (xSlides->insertNewByIndex(0));
                 uno::Reference<beans::XPropertySet> xProperties(xNewPage, uno::UNO_QUERY);
                 if (xProperties.is())
                     xProperties->setPropertyValue(

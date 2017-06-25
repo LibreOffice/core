@@ -52,8 +52,6 @@ SdUnoSlideView::~SdUnoSlideView() throw()
 
 sal_Bool SAL_CALL SdUnoSlideView::select (const Any& aSelection)
 {
-    bool bOk = true;
-
     slidesorter::controller::SlideSorterController& rSlideSorterController
         = mrSlideSorter.GetController();
     slidesorter::controller::PageSelector& rSelector (rSlideSorterController.GetPageSelector());
@@ -80,7 +78,7 @@ sal_Bool SAL_CALL SdUnoSlideView::select (const Any& aSelection)
         }
     }
 
-    return bOk;
+    return true;
 }
 
 Any SAL_CALL SdUnoSlideView::getSelection()

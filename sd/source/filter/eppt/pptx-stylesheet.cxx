@@ -471,7 +471,7 @@ void PPTExStyleSheet::WriteTxCFStyleAtom( SvStream& rSt )
 {
     const PPTExCharLevel& rCharStyle = mpCharSheet[ EPP_TEXTTYPE_Other ]->maCharLevel[ 0 ];
 
-    sal_uInt16 nFlags = 0x60        // ??
+    sal_uInt16 const nFlags = 0x60        // ??
                       | 0x02        // fontsize;
                       | 0x04;       // fontcolor
 

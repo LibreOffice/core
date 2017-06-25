@@ -225,8 +225,7 @@ void DrawViewShell::SetChildWindowState( SfxItemSet& rSet )
     }
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_NAVIGATOR ) )
     {
-        sal_uInt16 nId = SID_NAVIGATOR;
-        rSet.Put( SfxBoolItem( SID_NAVIGATOR, GetViewFrame()->HasChildWindow( nId ) ) );
+        rSet.Put( SfxBoolItem( SID_NAVIGATOR, GetViewFrame()->HasChildWindow( SID_NAVIGATOR ) ) );
     }
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_BMPMASK ) )
     {

@@ -668,9 +668,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         case SID_ATTR_PARA_LINESPACE:
             if (pArgs)
             {
-                sal_uInt16 nSlot = SID_ATTR_PARA_LINESPACE;
                 SvxLineSpacingItem aParaLineSP = static_cast<const SvxLineSpacingItem&>(pArgs->Get(
-                    GetPool().GetWhich(nSlot)));
+                    GetPool().GetWhich(SID_ATTR_PARA_LINESPACE)));
 
                 SfxItemSet aEditAttr( GetPool(), svl::Items<EE_PARA_SBL, EE_PARA_SBL>{} );
                 aParaLineSP.SetWhich( EE_PARA_SBL );
@@ -728,9 +727,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         case SID_ATTR_PARA_ULSPACE:
             if (pArgs)
             {
-                sal_uInt16 nSlot = SID_ATTR_PARA_ULSPACE;
                 SvxULSpaceItem aULSP = static_cast<const SvxULSpaceItem&>(pArgs->Get(
-                    GetPool().GetWhich(nSlot)));
+                    GetPool().GetWhich(SID_ATTR_PARA_ULSPACE)));
                 SfxItemSet aEditAttr( GetPool(), svl::Items<EE_PARA_ULSPACE, EE_PARA_ULSPACE>{} );
                 aULSP.SetWhich( EE_PARA_ULSPACE );
 
@@ -743,9 +741,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         case SID_ATTR_PARA_LRSPACE:
             if (pArgs)
             {
-                sal_uInt16 nSlot = SID_ATTR_PARA_LRSPACE;
                 SvxLRSpaceItem aLRSpace = static_cast<const SvxLRSpaceItem&>(pArgs->Get(
-                    GetPool().GetWhich(nSlot)));
+                    GetPool().GetWhich(SID_ATTR_PARA_LRSPACE)));
 
                 SfxItemSet aEditAttr( GetPool(), svl::Items<EE_PARA_LRSPACE, EE_PARA_LRSPACE>{} );
                 aLRSpace.SetWhich( EE_PARA_LRSPACE );
@@ -907,10 +904,9 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                     rSet.Put( rItem );
 
                     const SvxLRSpaceItem& rLRSpaceItem = static_cast<const SvxLRSpaceItem&>( aEditAttr.Get( EE_PARA_LRSPACE ) );
-                    sal_uInt16 nId = SID_ATTR_PARA_LRSPACE;
                     SvxLRSpaceItem aLRSpaceItem( rLRSpaceItem.GetLeft(),
                             rLRSpaceItem.GetRight(), rLRSpaceItem.GetTextLeft(),
-                            rLRSpaceItem.GetTextFirstLineOfst(), nId );
+                            rLRSpaceItem.GetTextFirstLineOfst(), SID_ATTR_PARA_LRSPACE );
 
                     const sal_Int16 nOutlineLevel = static_cast<const SfxInt16Item&>( aEditAttr.Get( EE_PARA_OUTLLEVEL )).GetValue();
                     const SvxNumBulletItem& rNumBulletItem = static_cast<const SvxNumBulletItem&>( aEditAttr.Get( EE_PARA_NUMBULLET ) );

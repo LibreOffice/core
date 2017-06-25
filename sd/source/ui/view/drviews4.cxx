@@ -244,8 +244,7 @@ void DrawViewShell::StartRulerDrag (
 //else the corresponding entry is set false .
 void DrawViewShell::FreshNavigatrEntry()
 {
-    sal_uInt16 nId = SID_NAVIGATOR;
-    SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
+    SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( SID_NAVIGATOR );
     if( pWindow )
     {
         SdNavigatorWin* pNavWin = static_cast<SdNavigatorWin*>( pWindow->GetContextWindow( SD_MOD() ) );
@@ -256,8 +255,7 @@ void DrawViewShell::FreshNavigatrEntry()
 
 void DrawViewShell::FreshNavigatrTree()
 {
-    sal_uInt16 nId = SID_NAVIGATOR;
-    SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
+    SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( SID_NAVIGATOR );
     if( pWindow )
     {
         SdNavigatorWin* pNavWin = static_cast<SdNavigatorWin*>( pWindow->GetContextWindow( SD_MOD() ) );

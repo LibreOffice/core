@@ -263,9 +263,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
         case SID_ATTR_PARA_LRSPACE:
         {
-            sal_uInt16 nSpaceSlot = SID_ATTR_PARA_LRSPACE;
             SvxLRSpaceItem aLRSpace = static_cast<const SvxLRSpaceItem&>(pArgs->Get(
-                GetPool().GetWhich(nSpaceSlot)));
+                GetPool().GetWhich(SID_ATTR_PARA_LRSPACE)));
 
             SfxItemSet aEditAttr( GetPool(), svl::Items<EE_PARA_LRSPACE, EE_PARA_LRSPACE>{} );
             aLRSpace.SetWhich( EE_PARA_LRSPACE );

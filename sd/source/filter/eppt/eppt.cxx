@@ -759,8 +759,8 @@ bool PPTWriter::ImplCreateDocument()
             if ( mXPropSet.is() )
             {
                 OUString aCustomShow;
-                sal_uInt32  nPenColor = 0x1000000;
-                sal_Int32   nRestartTime = 0x7fffffff;
+                sal_uInt32 const nPenColor = 0x1000000;
+                sal_Int32 const  nRestartTime = 0x7fffffff;
                 sal_Int16   nStartSlide = 0;
                 sal_Int16   nEndSlide = 0;
                 sal_uInt32  nFlags = 0;             // Bit 0:   Auto advance
@@ -943,7 +943,7 @@ void PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
         sal_Int32 nUrlLen = pIter->aURL.getLength();
         const OUString& rUrl = pIter->aURL;
 
-        sal_uInt32 nInfo = 7;
+        sal_uInt32 const nInfo = 7;
 
         rStrm  .WriteUInt32( 3 )    // Type VT_I4
                .WriteUInt32( nInfo );       // Info
@@ -1261,13 +1261,12 @@ void PPTWriter::ImplWriteOLE( )
                         aOleExport.ExportOLEObject( xObj, *xTempStorage );
 
                         //TODO/MBA: testing
-                        OUString aPersistStream( SVEXT_PERSIST_STREAM );
                         SvMemoryStream aStream;
                         tools::SvRef<SotStorage> xCleanStorage( new SotStorage( false, aStream ) );
                         xTempStorage->CopyTo( xCleanStorage.get() );
                         // create a dummy content stream, the dummy content is necessary for ppt, but not for
                         // doc files, so we can't share code.
-                        tools::SvRef<SotStorageStream> xStm = xCleanStorage->OpenSotStream( aPersistStream );
+                        tools::SvRef<SotStorageStream> xStm = xCleanStorage->OpenSotStream( SVEXT_PERSIST_STREAM );
                         xStm->WriteUInt32( 0 )        // no ClipboardId
                                .WriteUInt32( 4 )        // no target device
                                .WriteUInt32( 1 )        // aspect ratio
