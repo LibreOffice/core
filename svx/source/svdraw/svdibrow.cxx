@@ -446,13 +446,8 @@ void SdrItemBrowserControl::ImpSaveWhich()
 {
     sal_uInt16 nWh=GetCurrentWhich();
     if (nWh!=0) {
-        long nPos=GetCurrentPos();
-        long nTop=GetTopRow();
-        long nBtm=GetTopRow()+GetVisibleRows()+1;
         nLastWhich=nWh;
-        nLastWhichOfs=nPos-nTop;
-        if (nTop<0) nTop=0;
-        if (nBtm>=(long)aList.size()) nBtm=aList.size()-1;
+        nLastWhichOfs=GetCurrentPos()-GetTopRow();
     }
 }
 
