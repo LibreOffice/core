@@ -1526,7 +1526,7 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
         // This frame is in a table-not-in-section, its follow should be
         // inserted under the follow of the frame's cell.
         pLayLeaf = FindCellFrame()->GetFollowCell();
-        if (pLayLeaf->FindTabFrame() == FindTabFrame())
+        if (pLayLeaf && pLayLeaf->FindTabFrame() == FindTabFrame())
             SAL_WARN("sw.layout", "my table frame and my follow's table frame is the same");
         // In this case pLayLeaf pointing to an in-table frame is OK.
         bLayLeafTableAllowed = true;
