@@ -642,10 +642,9 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
     // no help button in dialogs if called from the help window
     // (pressing help button would exchange the current page inside the help
     // document that is going to be printed!)
-    OUString aHelpFilterName( "writer_web_HTML_help" );
     SfxMedium* pMedium = GetViewFrame()->GetObjectShell()->GetMedium();
     std::shared_ptr<const SfxFilter> pFilter = pMedium ? pMedium->GetFilter() : nullptr;
-    bool bPrintOnHelp = ( pFilter && pFilter->GetFilterName() == aHelpFilterName );
+    bool bPrintOnHelp = ( pFilter && pFilter->GetFilterName() == "writer_web_HTML_help" );
 
     const sal_uInt16 nId = rReq.GetSlot();
     switch( nId )

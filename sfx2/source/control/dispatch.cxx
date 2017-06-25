@@ -931,8 +931,7 @@ const SfxSlot* SfxDispatcher::GetSlot( const OUString& rCommand )
         }
     }
 
-    sal_uInt16 nFirstShell = 0;
-    for ( sal_uInt16 i = nFirstShell; i < nTotCount; ++i )
+    for ( sal_uInt16 i = 0; i < nTotCount; ++i )
     {
         SfxShell *pObjShell = GetShell(i);
         SfxInterface *pIFace = pObjShell->GetInterface();

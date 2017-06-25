@@ -68,14 +68,13 @@ SfxFilter::SfxFilter( const OUString &rName,
     OUString aExts = GetWildcard().getGlob();
     OUString aShort, aLong;
     OUString aRet;
-    sal_uInt16 nMaxLength = USHRT_MAX;
     OUString aTest;
     sal_uInt16 nPos = 0;
     while (!(aRet = aExts.getToken(nPos++, ';')).isEmpty() )
     {
         aTest = aRet;
         aTest = aTest.replaceFirst( "*." , "" );
-        if( aTest.getLength() <= nMaxLength )
+        if( aTest.getLength() <= USHRT_MAX )
         {
             if (!aShort.isEmpty())
                 aShort += ";";

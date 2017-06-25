@@ -196,8 +196,7 @@ void RecentDocsViewItem::OpenDocument()
     Reference<util::XURLTransformer> xTrans(util::URLTransformer::create(::comphelper::getProcessComponentContext()));
     xTrans->parseStrict(aTargetURL);
 
-    sal_Int32 nSize = 2;
-    aArgsList.realloc(nSize);
+    aArgsList.realloc(2);
     aArgsList[0].Name = "Referer";
     aArgsList[0].Value <<= OUString("private:user");
 

@@ -88,9 +88,9 @@ void MetadatableTest::test()
     MockMetadatable m5(*pReg);
     OUString empty;
     OUString content( "content.xml" );
-    OUString styles( "styles.xml" );
-    OUString sid1( "id1" );
-    OUString sid2( "id2" );
+    OUString const styles( "styles.xml" );
+    OUString const sid1( "id1" );
+    OUString const sid2( "id2" );
     OUString sid3( "id3" );
     OUString sid4( "id4" );
     beans::StringPair id1(content, sid1);
