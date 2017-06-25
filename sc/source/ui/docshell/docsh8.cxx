@@ -301,10 +301,6 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
 
     ErrCode nErr = ERRCODE_NONE;
 
-    // Try to get the Text Encoding from the driver
-    if( eCharSet == RTL_TEXTENCODING_IBM_850 )
-        eCharSet = RTL_TEXTENCODING_DONTKNOW;
-
     try
     {
         long i;
