@@ -314,19 +314,26 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_identicalDirectoryItem(
                                         oslDirectoryItem pItemA,
                                         oslDirectoryItem pItemB );
 
-/* File types */
+/**
+   @defgroup File types
+ */
 typedef enum {
-    osl_File_Type_Directory,
-    osl_File_Type_Volume,
-    osl_File_Type_Regular,
-    osl_File_Type_Fifo,
-    osl_File_Type_Socket,
-    osl_File_Type_Link,
-    osl_File_Type_Special,
-    osl_File_Type_Unknown
+    osl_File_Type_Directory,        /*< directory               */
+    osl_File_Type_Volume,           /*< volume (e.g. C:, A:)    */
+    osl_File_Type_Regular,          /*< regular file            */
+    osl_File_Type_Fifo,             /*< named pipe              */
+    osl_File_Type_Socket,           /*< socket                  */
+    osl_File_Type_Link,             /*< file link               */
+    osl_File_Type_Special,          /*< special device file     */
+    osl_File_Type_Unknown           /*< unknown file type       */
 } oslFileType;
+/** @} */
 
-/* File attributes */
+/**
+   @defgroup File attributes
+
+   @{
+ */
 #define osl_File_Attribute_ReadOnly             0x00000001
 #define osl_File_Attribute_Hidden               0x00000002
 #define osl_File_Attribute_Executable           0x00000010
@@ -339,9 +346,13 @@ typedef enum {
 #define osl_File_Attribute_OthWrite             0x00000800
 #define osl_File_Attribute_OthRead              0x00001000
 #define osl_File_Attribute_OthExe               0x00002000
+/** @} */
 
-/* Flags specifying which fields to retrieve by osl_getFileStatus */
+/**
+   @defgroup Flags specifying which fields to retrieve by osl_getFileStatus
 
+   @{
+ */
 #define osl_FileStatus_Mask_Type                0x00000001
 #define osl_FileStatus_Mask_Attributes          0x00000002
 #define osl_FileStatus_Mask_CreationTime        0x00000010
@@ -353,6 +364,7 @@ typedef enum {
 #define osl_FileStatus_Mask_LinkTargetURL       0x00000400
 #define osl_FileStatus_Mask_All                 0x7FFFFFFF
 #define osl_FileStatus_Mask_Validate            0x80000000
+/** @} */
 
 /** Structure containing information about files and directories
 
