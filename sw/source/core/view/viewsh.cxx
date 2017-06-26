@@ -326,7 +326,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
 
                 pRegion->Compress();
 
-                VclPtr<VirtualDevice> pVout;
+                ScopedVclPtr<VirtualDevice> pVout;
                 while ( !pRegion->empty() )
                 {
                     SwRect aRect( pRegion->back() );
@@ -420,7 +420,6 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                         lcl_PaintTransparentFormControls(*this, aRect); // i#107365
                 }
 
-                pVout.disposeAndClear();
                 delete pRegion;
                 Imp()->DelRegion();
             }
