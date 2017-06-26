@@ -199,7 +199,8 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
           << pCXXDestructorDecl->getSourceRange();
         return true;
     }
-    // check that the destructor for a BASE_REF_COUNTED_CLASS subclass does nothing except call into the disposeOnce() method
+    // Check that the destructor for a BASE_REF_COUNTED_CLASS subclass either
+    // only calls disposeOnce() or, if !bFoundVclPtrField, does nothing at all:
     bool bOk = false;
     if (pCompoundStatement) {
         bool bFoundDisposeOnce = false;
@@ -207,29 +208,39 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
         for (auto i = pCompoundStatement->body_begin();
              i != pCompoundStatement->body_end(); ++i)
         {
-            const CXXMemberCallExpr *pCallExpr = dyn_cast<CXXMemberCallExpr>(
-                *i);
-            if (pCallExpr) {
+            //TODO: The below erroneously also skips past entire statements like
+            //
+            //  assert(true), ...;
+            //
+            auto skip = false;
+            for (auto loc = (*i)->getLocStart();
+                 compiler.getSourceManager().isMacroBodyExpansion(loc);
+                 loc = compiler.getSourceManager().getImmediateMacroCallerLoc(
+                     loc))
+            {
+                auto const name = Lexer::getImmediateMacroName(
+                    loc, compiler.getSourceManager(), compiler.getLangOpts());
+                if (name == "SAL_DEBUG" || name == "assert") {
+                    skip = true;
+                    break;
+                }
+            }
+            if (skip) {
+                continue;
+            }
+            if (auto const pCallExpr = dyn_cast<CXXMemberCallExpr>(*i)) {
                 if( const FunctionDecl* func = pCallExpr->getDirectCallee()) {
                     if( func->getNumParams() == 0 && func->getIdentifier() != NULL
                         && ( func->getName() == "disposeOnce" )) {
                         bFoundDisposeOnce = true;
+                        continue;
                     }
                 }
             }
-            if (!pCallExpr) {
-                auto loc = (*i)->getLocStart();
-                if (!compiler.getSourceManager().isMacroBodyExpansion(loc)
-                    || (Lexer::getImmediateMacroName(
-                            loc, compiler.getSourceManager(),
-                            compiler.getLangOpts())
-                        != "assert"))
-                {
-                    nNumExtraStatements++;
-                }
-            }
+            nNumExtraStatements++;
         }
-        bOk = bFoundDisposeOnce && nNumExtraStatements == 0;
+        bOk = (bFoundDisposeOnce || !bFoundVclPtrField)
+            && nNumExtraStatements == 0;
     }
     if (!bOk) {
         SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(
