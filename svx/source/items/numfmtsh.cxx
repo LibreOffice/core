@@ -793,11 +793,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
 
     short           nMyCat      = SELPOS_NONE;
 
-    NfIndexTableOffset eOffsetStart=NF_CURRENCY_START;
-    NfIndexTableOffset eOffsetEnd=NF_CURRENCY_END;
-    long nIndex;
-
-    for(nIndex=eOffsetStart;nIndex<=eOffsetEnd;nIndex++)
+    for(long nIndex=NF_CURRENCY_START; nIndex<=NF_CURRENCY_END; nIndex++)
     {
         nNFEntry=pFormatter->GetFormatIndex((NfIndexTableOffset)nIndex,eCurLanguage);
 

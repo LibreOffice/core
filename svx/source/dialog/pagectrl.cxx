@@ -311,8 +311,8 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
 
         long nW = aRect.GetWidth();
         long nH = aRect.GetHeight();
-        long nTW = CELL_WIDTH * 3;
-        long nTH = CELL_HEIGHT * 3;
+        long const nTW = CELL_WIDTH * 3;
+        long const nTH = CELL_HEIGHT * 3;
         long _nLeft = bHorz ? aRect.Left() + ((nW - nTW) / 2) : aRect.Left();
         long _nTop = bVert ? aRect.Top() + ((nH - nTH) / 2) : aRect.Top();
         tools::Rectangle aCellRect(Point(_nLeft, _nTop),Size(CELL_WIDTH, CELL_HEIGHT));

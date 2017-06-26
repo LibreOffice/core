@@ -52,7 +52,7 @@ void XOutdevTest::testPdfGraphicExport()
     // Export it.
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
-    XOutFlags eFlags = XOutFlags::DontExpandFilename | XOutFlags::DontAddExtension | XOutFlags::UseNativeIfPossible;
+    XOutFlags const eFlags = XOutFlags::DontExpandFilename | XOutFlags::DontAddExtension | XOutFlags::UseNativeIfPossible;
     OUString aTempURL = aTempFile.GetURL();
     XOutBitmap::WriteGraphic(aGraphic, aTempURL, "pdf", eFlags);
 

@@ -3131,8 +3131,7 @@ void SvxCurrencyToolBoxControl::GetCurrencySymbols( std::vector<OUString>& rList
                                        rCurrencyTable[0].GetLanguage() ) );
 
     rList.push_back( aString );
-    sal_uInt16 nAuto = ( sal_uInt16 )-1;
-    rCurrencyList.push_back( nAuto );
+    rCurrencyList.push_back( sal_uInt16(-1) ); // nAuto
 
     if( bFlag )
     {

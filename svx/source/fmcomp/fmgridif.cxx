@@ -407,8 +407,7 @@ void SAL_CALL FmXGridControl::dispose()
 
 OUString FmXGridControl::GetComponentServiceName()
 {
-    OUString aName("DBGrid");
-    return aName;
+    return OUString("DBGrid");
 }
 
 

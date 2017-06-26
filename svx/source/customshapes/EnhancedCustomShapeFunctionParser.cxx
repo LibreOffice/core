@@ -245,8 +245,7 @@ public:
     {
         EnhancedCustomShapeParameter aRet;
 
-        sal_Int32 nDummy = 1;
-        aRet.Value <<= nDummy;
+        aRet.Value <<= 1;
 
         switch( meFunct )
         {
