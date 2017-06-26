@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_c7499d90",
+        "filename": "sw/source/filter/ww8/ww8scan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7068,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-26T20:53:53Z",
+      "side": 1,
+      "message": "it looks like this variable is read from a file in line 7032, so at first glance we can\u0027t assert() about its value, but there is already a check in line 7038 so given that it should be fine to assert() here.",
+      "revId": "931d552bb735f5b1f3b6c1d798bad3dcd65809df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_2749818c",
+        "filename": "sw/source/uibase/app/apphdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-26T20:53:53Z",
+      "side": 1,
+      "message": "looks like the CppunitTest_sw_filters hits this\n\nhttps://ci.libreoffice.org/job/lo_gerrit/13835/Config\u003dlinux_clang_dbgutil_64/console",
+      "revId": "931d552bb735f5b1f3b6c1d798bad3dcd65809df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
