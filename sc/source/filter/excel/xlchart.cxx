@@ -1003,7 +1003,7 @@ void XclChPropSetHelper::WriteAreaProperties( ScfPropertySet& rPropSet,
     // write the properties
     ScfPropSetHelper& rAreaHlp = GetAreaHelper( ePropMode );
     rAreaHlp.InitializeWrite();
-    rAreaHlp << eFillStyle << aColor << 0/*nTransparency*/;
+    rAreaHlp << eFillStyle << aColor << sal_Int16(0)/*nTransparency*/;
     rAreaHlp.WriteToPropertySet( rPropSet );
 }
 
