@@ -164,17 +164,13 @@ sal_Int32 VCLXAccessibleHeaderBarItem::getAccessibleIndexInParent()
 
 sal_Int16 VCLXAccessibleHeaderBarItem::getAccessibleRole()
 {
-    OExternalLockGuard aGuard( this );
-
     return AccessibleRole::COLUMN_HEADER;
 }
 
 
 OUString VCLXAccessibleHeaderBarItem::getAccessibleDescription()
 {
-    OExternalLockGuard aGuard( this );
-    OUString sDescription;
-    return sDescription;
+    return OUString();
 }
 
 
@@ -232,27 +228,19 @@ css::lang::Locale VCLXAccessibleHeaderBarItem::getLocale()
 
 Reference< XAccessible > VCLXAccessibleHeaderBarItem::getAccessibleAtPoint( const awt::Point& )
 {
-    OExternalLockGuard aGuard( this );
-
     return Reference< XAccessible >();
 }
 
 
 sal_Int32 VCLXAccessibleHeaderBarItem::getForeground()
 {
-    OExternalLockGuard aGuard( this );
-
-    sal_Int32 nColor = 0;
-    return nColor;
+    return 0;
 }
 
 
 sal_Int32 VCLXAccessibleHeaderBarItem::getBackground()
 {
-    OExternalLockGuard aGuard( this );
-
-    sal_Int32 nColor = 0;
-    return nColor;
+    return 0;
 }
 
 
@@ -261,19 +249,13 @@ sal_Int32 VCLXAccessibleHeaderBarItem::getBackground()
 
 Reference< awt::XFont > VCLXAccessibleHeaderBarItem::getFont()
 {
-    OExternalLockGuard aGuard( this );
-
-    Reference< awt::XFont > xFont;
-    return xFont;
+    return Reference< awt::XFont >();
 }
 
 
 OUString VCLXAccessibleHeaderBarItem::getTitledBorderText()
 {
-    OExternalLockGuard aGuard( this );
-
-    OUString sText;
-    return sText;
+    return OUString();
 }
 
 

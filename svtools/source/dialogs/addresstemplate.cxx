@@ -387,9 +387,8 @@ void AssignmentPersistentData::ImplCommit()
             // nothing to do
             return;
 
-        OUString sDescriptionNodePath("Fields");
         Sequence< OUString > aNames(&_rLogicalName, 1);
-        ClearNodeElements(sDescriptionNodePath, aNames);
+        ClearNodeElements("Fields", aNames);
     }
 
 

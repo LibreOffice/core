@@ -1860,8 +1860,8 @@ void SvtFileView_Impl::implEnumerationSuccess()
 
 void SvtFileView_Impl::ReplaceTabWithString( OUString& aValue )
 {
-    OUString aTab( "\t" );
-    OUString aTabString( "%09" );
+    OUString const aTab( "\t" );
+    OUString const aTabString( "%09" );
     sal_Int32 iPos;
 
     while ( ( iPos = aValue.indexOf( aTab ) ) >= 0 )
@@ -1875,7 +1875,7 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
 
     OUString aValue;
     OUString aTab( "\t" );
-    OUString aDateSep( ", " );
+    OUString const aDateSep( ", " );
 
     std::vector< SortingData_Impl* >::iterator aIt;
 
@@ -2116,7 +2116,7 @@ OUString SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString&
 
     OUString aValue;
     OUString aTab( "\t" );
-    OUString aDateSep( ", " );
+    OUString const aDateSep( ", " );
 
     // title, type, size, date
     aValue = pData->GetTitle();
