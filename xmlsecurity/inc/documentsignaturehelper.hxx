@@ -81,6 +81,9 @@ namespace DocumentSignatureHelper
     DocumentSignatureAlgorithm getDocumentAlgorithm(
         const OUString & sODFVersion, const SignatureInformation & sigInfo);
 
+    bool CanSignWithGPG(const css::uno::Reference < css::embed::XStorage >& rxStore,
+                        const OUString& sOdfVersion);
+
     bool checkIfAllFilesAreSigned( const ::std::vector< OUString > & sElementList,
         const SignatureInformation & sigInfo, const DocumentSignatureAlgorithm alg);
 
