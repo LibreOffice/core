@@ -5330,8 +5330,19 @@ void WW8PLCFxDesc::Restore( const WW8PLCFxSave1& rSave )
             pPLCFx->GetSprms(&aD);
             pPLCFx->SetDirty(false);
             aD.ReduceByOffset();
-            pMemPos = aD.pMemPos + rSave.nPLCFxMemOfs;
-            nSprmsLen = nOrigSprmsLen - rSave.nPLCFxMemOfs;
+
+            if (nOrigSprmsLen > aD.nSprmsLen)
+            {
+                //two entries exist for the same offset, cut and run
+                SAL_WARN("sw.ww8", "restored properties don't match saved properties, bailing out");
+                nSprmsLen = 0;
+                pMemPos = nullptr;
+            }
+            else
+            {
+                nSprmsLen = nOrigSprmsLen - rSave.nPLCFxMemOfs;
+                pMemPos = aD.pMemPos + rSave.nPLCFxMemOfs;
+            }
         }
     }
 }
