@@ -604,7 +604,7 @@ IMPL_LINK( SwWrapTabPage, RangeModifyHdl, SpinField&, rSpin, void )
     else if (&rEdit == m_pBottomMarginED)
         pOpposite = m_pTopMarginED;
 
-    OSL_ASSERT(pOpposite);
+    assert(pOpposite);
 
     if (pOpposite)
     {

@@ -172,7 +172,7 @@ SwDLL::~SwDLL()
 
 sw::Filters & SwDLL::getFilters()
 {
-    OSL_ASSERT(filters_);
+    assert(filters_);
     return *filters_.get();
 }
 

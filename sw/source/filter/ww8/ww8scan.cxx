@@ -7065,7 +7065,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 pVer8 += 24; //FONTSIGNATURE
                 cbFfnM1-=24;
 
-                OSL_ASSERT(cbFfnM1 >= 2);
+                assert(cbFfnM1 >= 2);
 
                 sal_uInt8 nMaxNullTerminatedPossible = cbFfnM1/2 - 1;
                 sal_Unicode *pPrimary = reinterpret_cast<sal_Unicode*>(pVer8);

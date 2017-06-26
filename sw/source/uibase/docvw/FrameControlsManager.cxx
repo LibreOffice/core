@@ -104,7 +104,7 @@ void SwFrameControlsManager::SetReadonlyControls( bool bReadonly )
 
 void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrame* pPageFrame, FrameControlType eType, Point aOffset )
 {
-    OSL_ASSERT( eType == Header || eType == Footer );
+    assert( eType == Header || eType == Footer );
 
     // Check if we already have the control
     SwFrameControlPtr pControl;
