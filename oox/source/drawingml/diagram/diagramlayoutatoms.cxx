@@ -80,9 +80,8 @@ void ConditionAttr::loadFromXAttr( const Reference< XFastAttributeList >& xAttr 
 void LayoutAtom::dump(int level)
 {
     SAL_INFO("oox.drawingml",  "level = " << level << " - " << msName << " of type " << typeid(*this).name() );
-    const std::vector<LayoutAtomPtr>& rChildren=getChildren();
-    std::for_each( rChildren.begin(), rChildren.end(),
-        [level] (LayoutAtomPtr const& pAtom) { pAtom->dump(level + 1); } );
+    for (const auto& pAtom : getChildren())
+        pAtom->dump(level + 1);
 }
 
 ForEachAtom::ForEachAtom(const Reference< XFastAttributeList >& xAttributes)

@@ -75,11 +75,12 @@ DiagramData::DiagramData()
 void DiagramData::dump()
 {
     SAL_INFO("oox.drawingml", "Dgm: DiagramData # of cnx: " << maConnections.size() );
-    std::for_each( maConnections.begin(), maConnections.end(),
-            [] (dgm::Connection & rConnection) { rConnection.dump(); } );
+    for (auto& rConnection : maConnections)
+        rConnection.dump();
+
     SAL_INFO("oox.drawingml", "Dgm: DiagramData # of pt: " << maPoints.size() );
-    std::for_each( maPoints.begin(), maPoints.end(),
-            [] (dgm::Point & rPoint) { rPoint.dump(); } );
+    for (auto& rPoint : maPoints)
+        rPoint.dump();
 }
 
 void Diagram::setData( const DiagramDataPtr & pData)
