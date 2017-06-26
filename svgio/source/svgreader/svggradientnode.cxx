@@ -64,11 +64,8 @@ namespace svgio
 
         const SvgStyleAttributes* SvgGradientNode::getSvgStyleAttributes() const
         {
-            OUString aClassStrA("linearGradient");
-            OUString aClassStrB("radialGradient");
-
             return checkForCssStyle(
-                SVGTokenLinearGradient == getType() ? aClassStrA : aClassStrB,
+                SVGTokenLinearGradient == getType() ? OUString("linearGradient") : OUString("radialGradient"),
                 maSvgStyleAttributes);
         }
 

@@ -251,25 +251,19 @@ namespace svgio
                 }
 
                 const ::FontWeight nFontWeight(getVclFontWeight(rSvgStyleAttributes.getFontWeight()));
-                bool bSymbol(false);
-                bool bVertical(false);
                 bool bItalic(FontStyle_italic == rSvgStyleAttributes.getFontStyle() || FontStyle_oblique == rSvgStyleAttributes.getFontStyle());
-                bool bMonospaced(false);
-                bool bOutline(false);
-                bool bRTL(false);
-                bool bBiDiStrong(false);
 
                 const drawinglayer::attribute::FontAttribute aFontAttribute(
                     aFontFamily,
                     OUString(),
                     nFontWeight,
-                    bSymbol,
-                    bVertical,
+                    false/*bSymbol*/,
+                    false/*bVertical*/,
                     bItalic,
-                    bMonospaced,
-                    bOutline,
-                    bRTL,
-                    bBiDiStrong);
+                    false/*bMonospaced*/,
+                    false/*bOutline*/,
+                    false/*bRTL*/,
+                    false/*bBiDiStrong*/);
 
                 // prepare FontSizeNumber
                 double fFontWidth(rSvgStyleAttributes.getFontSizeNumber().solve(*this));
