@@ -34,9 +34,8 @@ namespace oox { namespace drawingml {
 
 void ShapeCreationVisitor::defaultVisit(LayoutAtom& rAtom)
 {
-    const std::vector<LayoutAtomPtr>& rChildren=rAtom.getChildren();
-    std::for_each( rChildren.begin(), rChildren.end(),
-        [this] (LayoutAtomPtr const& pAtom) { pAtom->accept(*this); } );
+    for (const auto& pAtom : rAtom.getChildren())
+        pAtom->accept(*this);
 }
 
 void ShapeCreationVisitor::visit(ConstraintAtom& /*rAtom*/)
@@ -60,8 +59,8 @@ void ShapeCreationVisitor::visit(ForEachAtom& rAtom)
         // attribute that is contained in diagram's
         // getPointsPresNameMap()
         ShallowPresNameVisitor aVisitor(mrDgm);
-        std::for_each( rChildren.begin(), rChildren.end(),
-            [&] (LayoutAtomPtr const& pAtom) { pAtom->accept(aVisitor); } );
+        for (const auto& pAtom : rChildren)
+            pAtom->accept(aVisitor);
         nChildren = aVisitor.getCount();
     }
 
@@ -74,8 +73,8 @@ void ShapeCreationVisitor::visit(ForEachAtom& rAtom)
     for( mnCurrIdx=0; mnCurrIdx<nCnt && nStep>0; mnCurrIdx+=nStep )
     {
         // TODO there is likely some conditions
-        std::for_each( rChildren.begin(), rChildren.end(),
-            [this] (LayoutAtomPtr const& pAtom) { pAtom->accept(*this); } );
+        for (const auto& pAtom : rChildren)
+            pAtom->accept(*this);
     }
 
     // and restore idx
@@ -139,9 +138,8 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
 void ShapeLayoutingVisitor::defaultVisit(LayoutAtom& rAtom)
 {
     // visit all children, one of them needs to be the layout algorithm
-    const std::vector<LayoutAtomPtr>& rChildren=rAtom.getChildren();
-    std::for_each( rChildren.begin(), rChildren.end(),
-        [this] (LayoutAtomPtr const& pAtom) { pAtom->accept(*this); } );
+    for (const auto& pAtom : rAtom.getChildren())
+        pAtom->accept(*this);
 }
 
 void ShapeLayoutingVisitor::visit(ConstraintAtom& /*rAtom*/)
@@ -178,9 +176,8 @@ void ShallowPresNameVisitor::defaultVisit(LayoutAtom& rAtom)
 {
     // visit all children, at least one of them needs to have proper
     // name set
-    const std::vector<LayoutAtomPtr>& rChildren=rAtom.getChildren();
-    std::for_each( rChildren.begin(), rChildren.end(),
-        [this] (LayoutAtomPtr const& pAtom) { pAtom->accept(*this); } );
+    for (const auto& pAtom : rAtom.getChildren())
+        pAtom->accept(*this);
 }
 
 void ShallowPresNameVisitor::visit(ConstraintAtom& /*rAtom*/)
