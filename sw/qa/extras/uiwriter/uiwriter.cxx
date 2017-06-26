@@ -254,7 +254,9 @@ public:
     void testMsWordCompTrailingBlanks();
     void testCreateDocxAnnotation();
     void testTdf107976();
+#if 0
     void testTdf108524();
+#endif
     void testTableInSection();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
@@ -397,7 +399,9 @@ public:
     CPPUNIT_TEST(testMsWordCompTrailingBlanks);
     CPPUNIT_TEST(testCreateDocxAnnotation);
     CPPUNIT_TEST(testTdf107976);
-//    CPPUNIT_TEST(testTdf108524);
+#if 0
+    CPPUNIT_TEST(testTdf108524);
+#endif
     CPPUNIT_TEST(testTableInSection);
     CPPUNIT_TEST_SUITE_END();
 
@@ -4952,6 +4956,7 @@ void SwUiWriterTest::testTdf58604()
 #endif
 }
 
+#if 0
 void SwUiWriterTest::testTdf108524()
 {
     createDoc("tdf108524.odt");
@@ -4964,6 +4969,7 @@ void SwUiWriterTest::testTdf108524()
     // and it was cut off.
     assertXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell/section", 1);
 }
+#endif
 
 void SwUiWriterTest::testTableInSection()
 {
