@@ -189,11 +189,10 @@ void FSStorage::CopyContentToStorage_Impl( ::ucbhelper::Content* pContent, const
     OUString* pProps = aProps.getArray();
     pProps[0] = "TargetURL";
     pProps[1] = "IsFolder";
-    ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
     try
     {
-        uno::Reference< sdbc::XResultSet > xResultSet = pContent->createCursor( aProps, eInclude );
+        uno::Reference< sdbc::XResultSet > xResultSet = pContent->createCursor( aProps, ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS );
         uno::Reference< sdbc::XRow > xRow( xResultSet, uno::UNO_QUERY );
         if ( xResultSet.is() )
         {
@@ -918,10 +917,9 @@ uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
             throw io::IOException(); // TODO: error handling
 
         uno::Sequence<OUString> aProps { "Title" };
-        ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
         sal_Int32 nSize = 0;
-        uno::Reference< sdbc::XResultSet > xResultSet = GetContent()->createCursor( aProps, eInclude );
+        uno::Reference< sdbc::XResultSet > xResultSet = GetContent()->createCursor( aProps, ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS );
         uno::Reference< sdbc::XRow > xRow( xResultSet, uno::UNO_QUERY );
         if ( xResultSet.is() )
         {
@@ -1019,9 +1017,8 @@ sal_Bool SAL_CALL FSStorage::hasElements()
             throw io::IOException(); // TODO: error handling
 
         uno::Sequence<OUString> aProps { "TargetURL" };
-        ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
-        uno::Reference< sdbc::XResultSet > xResultSet = GetContent()->createCursor( aProps, eInclude );
+        uno::Reference< sdbc::XResultSet > xResultSet = GetContent()->createCursor( aProps, ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS );
         return ( xResultSet.is() && xResultSet->next() );
     }
     catch (const uno::RuntimeException&)

@@ -73,10 +73,8 @@ void IndexedStyleSheetsTest::InstantiationWorks()
 
 void IndexedStyleSheetsTest::AddedStylesheetsCanBeFoundAndRetrievedByPosition()
 {
-    rtl::OUString name1("name1");
-    rtl::OUString name2("name2");
-    rtl::Reference<SfxStyleSheetBase> sheet1(new MockedStyleSheet(name1));
-    rtl::Reference<SfxStyleSheetBase> sheet2(new MockedStyleSheet(name2));
+    rtl::Reference<SfxStyleSheetBase> sheet1(new MockedStyleSheet("name1"));
+    rtl::Reference<SfxStyleSheetBase> sheet2(new MockedStyleSheet("name2"));
     IndexedStyleSheets iss;
     iss.AddStyleSheet(sheet1);
     iss.AddStyleSheet(sheet2);
@@ -97,10 +95,8 @@ void IndexedStyleSheetsTest::AddingSameStylesheetTwiceHasNoEffect()
 
 void IndexedStyleSheetsTest::RemovedStyleSheetIsNotFound()
 {
-    rtl::OUString name1("name1");
-    rtl::OUString name2("name2");
-    rtl::Reference<SfxStyleSheetBase> sheet1(new MockedStyleSheet(name1));
-    rtl::Reference<SfxStyleSheetBase> sheet2(new MockedStyleSheet(name2));
+    rtl::Reference<SfxStyleSheetBase> sheet1(new MockedStyleSheet("name1"));
+    rtl::Reference<SfxStyleSheetBase> sheet2(new MockedStyleSheet("name2"));
     IndexedStyleSheets iss;
     iss.AddStyleSheet(sheet1);
     iss.AddStyleSheet(sheet2);
@@ -147,8 +143,8 @@ void IndexedStyleSheetsTest::StyleSheetsCanBeRetrievedByTheirName()
 
 void IndexedStyleSheetsTest::KnowsThatItStoresAStyleSheet()
 {
-    rtl::OUString name1("name1");
-    rtl::OUString name2("name2");
+    rtl::OUString const name1("name1");
+    rtl::OUString const name2("name2");
     rtl::Reference<SfxStyleSheetBase> sheet1(new MockedStyleSheet(name1));
     rtl::Reference<SfxStyleSheetBase> sheet2(new MockedStyleSheet(name1));
     rtl::Reference<SfxStyleSheetBase> sheet3(new MockedStyleSheet(name2));
@@ -169,12 +165,9 @@ void IndexedStyleSheetsTest::KnowsThatItStoresAStyleSheet()
 
 void IndexedStyleSheetsTest::PositionCanBeQueriedByFamily()
 {
-    rtl::OUString name1("name1");
-    rtl::OUString name2("name2");
-    rtl::OUString name3("name3");
-    rtl::Reference<SfxStyleSheetBase> sheet1(new MockedStyleSheet(name1, SfxStyleFamily::Char));
-    rtl::Reference<SfxStyleSheetBase> sheet2(new MockedStyleSheet(name2, SfxStyleFamily::Para));
-    rtl::Reference<SfxStyleSheetBase> sheet3(new MockedStyleSheet(name3, SfxStyleFamily::Char));
+    rtl::Reference<SfxStyleSheetBase> sheet1(new MockedStyleSheet("name1", SfxStyleFamily::Char));
+    rtl::Reference<SfxStyleSheetBase> sheet2(new MockedStyleSheet("name2", SfxStyleFamily::Para));
+    rtl::Reference<SfxStyleSheetBase> sheet3(new MockedStyleSheet("name3", SfxStyleFamily::Char));
 
     IndexedStyleSheets iss;
     iss.AddStyleSheet(sheet1);

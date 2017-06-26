@@ -384,8 +384,7 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(
         // set Base URL
         if ( rPropSet.is() )
         {
-            OUString sPropName( "StreamName");
-            rPropSet->setPropertyValue( sPropName, makeAny( sStreamName ) );
+            rPropSet->setPropertyValue( "StreamName", makeAny( sStreamName ) );
         }
 
 

@@ -116,21 +116,21 @@ void Test::testColor()
 void Test::testSimple()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/simple.mml"));
-    OUString sExpected("left ( {a + b} right )^2");
+    OUString const sExpected("left ( {a + b} right )^2");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", sExpected, mxDocShell->GetText());
 }
 
 void Test::testNsPrefixMath()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/ns-prefix-math.mml"));
-    OUString sExpected("left ( {a + b} right )^2");
+    OUString const sExpected("left ( {a + b} right )^2");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", sExpected, mxDocShell->GetText());
 }
 
 void Test::testMaction()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/maction.mml"));
-    OUString sExpected("matrix {1 ## 2 ## 3}");
+    OUString const sExpected("matrix {1 ## 2 ## 3}");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", sExpected, mxDocShell->GetText());
 }
 
@@ -143,7 +143,7 @@ void Test::testMspace()
 void Test::testtdf99556()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/tdf99556-1.mml"));
-    OUString sExpected("sqrt { {} }");
+    OUString const sExpected("sqrt { {} }");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", sExpected, mxDocShell->GetText());
 }
 
