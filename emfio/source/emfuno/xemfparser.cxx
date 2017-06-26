@@ -136,62 +136,73 @@ namespace emfio
                 pStream->ReadUInt32(nMetaType);
                 pStream->Seek(nOrgPos);
 
+                bool bReadError(false);
+
                 if (nMetaType == 0x464d4520)
                 {
-                    emfio::EmfReader(*pStream, aMtf).ReadEnhWMF();
+                    // read and get possible failure/error, ReadEnhWMF returns success
+                    bReadError = !emfio::EmfReader(*pStream, aMtf).ReadEnhWMF();
                 }
                 else
                 {
                     emfio::WmfReader(*pStream, aMtf, bExternalHeaderUsed ? &aExternalHeader : nullptr).ReadWMF();
+
+                    // Need to check for ErrCode at stream to not lose former work.
+                    // This may contain important information and will behave the
+                    // same as before. When we have an error, do not create content
+                    ErrCode aErrCode(pStream->GetError());
+
+                    bReadError = aErrCode.IsError();
                 }
 
                 pStream->SetEndian(nOrigNumberFormat);
-                Size aSize(aMtf.GetPrefSize());
 
-                if (aMtf.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
+                if (!bReadError)
                 {
-                    aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, MapUnit::Map100thMM);
+                    Size aSize(aMtf.GetPrefSize());
+
+                    if (aMtf.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
+                    {
+                        aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, MapUnit::Map100thMM);
+                    }
+                    else
+                    {
+                        aSize = OutputDevice::LogicToLogic(aSize, aMtf.GetPrefMapMode(), MapMode(MapUnit::Map100thMM));
+                    }
+
+                    // use size
+                    const basegfx::B2DHomMatrix aMetafileTransform(
+                        basegfx::tools::createScaleB2DHomMatrix(
+                            aSize.Width(),
+                            aSize.Height()));
+
+                    // ...and create a single MetafilePrimitive2D containing the Metafile.
+                    // CAUTION: Currently, ReadWindowMetafile uses the local VectorGraphicData
+                    // and a MetafileAccessor hook at the MetafilePrimitive2D inside of
+                    // ImpGraphic::ImplGetGDIMetaFile to get the Metafile. Thus, the first
+                    // and only primitive in this case *has to be* a MetafilePrimitive2D.
+                    aRetval.push_back(
+                        new drawinglayer::primitive2d::MetafilePrimitive2D(
+                            aMetafileTransform,
+                            aMtf));
+
+                    // // force to use decomposition directly to get rid of the metafile
+                    // const css::uno::Sequence< css::beans::PropertyValue > aViewParameters;
+                    // drawinglayer::primitive2d::MetafilePrimitive2D aMetafilePrimitive2D(
+                    //     aMetafileTransform,
+                    //     aMtf);
+                    // aRetval.append(aMetafilePrimitive2D.getDecomposition(aViewParameters));
+
+                    // if (aRetval.empty())
+                    // {
+                    //     // for test, just create some graphic data that will get visualized
+                    //     const basegfx::B2DRange aRange(1000, 1000, 5000, 5000);
+                    //     const basegfx::BColor aColor(1.0, 0.0, 0.0);
+                    //     const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+                    //
+                    //     aRetval.push_back(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aOutline), aColor));
+                    // }
                 }
-                else
-                {
-                    aSize = OutputDevice::LogicToLogic(aSize, aMtf.GetPrefMapMode(), MapMode(MapUnit::Map100thMM));
-                }
-
-                // use size
-                const basegfx::B2DHomMatrix aMetafileTransform(
-                    basegfx::tools::createScaleB2DHomMatrix(
-                        aSize.Width(),
-                        aSize.Height()));
-
-                // ...and create a single MetafilePrimitive2D containing the Metafile.
-                // CAUTION: Currently, ReadWindowMetafile uses the local VectorGraphicData
-                // and a MetafileAccessor hook at the MetafilePrimitive2D inside of
-                // ImpGraphic::ImplGetGDIMetaFile to get the Metafile. Thus, the first
-                // and only primitive in this case *has to be* a MetafilePrimitive2D.
-                aRetval.push_back(
-                    new drawinglayer::primitive2d::MetafilePrimitive2D(
-                        aMetafileTransform,
-                        aMtf));
-
-                // // force to use decomposition directly to get rid of the metafile
-                // const css::uno::Sequence< css::beans::PropertyValue > aViewParameters;
-                // drawinglayer::primitive2d::MetafilePrimitive2D aMetafilePrimitive2D(
-                //     aMetafileTransform,
-                //     aMtf);
-                // aRetval.append(aMetafilePrimitive2D.getDecomposition(aViewParameters));
-
-                // if (aRetval.empty())
-                // {
-                //     // for test, just create some graphic data that will get visualized
-                //     const basegfx::B2DRange aRange(1000, 1000, 5000, 5000);
-                //     const basegfx::BColor aColor(1.0, 0.0, 0.0);
-                //     const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
-                //
-                //     aRetval.push_back(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aOutline), aColor));
-                // }
-
-
-
             }
             else
             {

@@ -31,6 +31,7 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_filters_test, \
 	tl \
 	unotest \
 	vcl \
+    emfio \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,vcl_filters_test))
@@ -44,6 +45,7 @@ $(eval $(call gb_CppunitTest_use_components,vcl_filters_test,\
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
     uui/util/uui \
+    emfio/emfio \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,vcl_filters_test))
