@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_27cfc1b1",
+        "filename": "sal/osl/unx/file.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-06-26T10:27:13Z",
+      "side": 1,
+      "message": "this can either be a programming error (\u003d\u003e assert) or an uncommon event worth warning about (\u003d\u003e SAL_WARN_IF), but it can\u0027t be both (and the code following it suggest that it is not intended to be a programming error)\n\nthis needs fixing (here and elsewhere)",
+      "revId": "7c6ccc424eec53cac72a9fc81913f6ad780d91aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
