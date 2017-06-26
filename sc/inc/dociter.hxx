@@ -480,10 +480,11 @@ private:
     SCCOL                   nEndCol;
     SCROW                   nEndRow;
 
-    SCROW*                  pNextEnd;
-    SCCOL*                  pHorizEnd;
-    SCSIZE*                 pIndices;
-    const ScPatternAttr**   ppPatterns;
+    std::unique_ptr<SCROW[]>  pNextEnd;
+    std::unique_ptr<SCCOL[]>  pHorizEnd;
+    std::unique_ptr<SCSIZE[]> pIndices;
+    std::unique_ptr<const ScPatternAttr*[]>
+                              ppPatterns;
     SCCOL                   nCol;
     SCROW                   nRow;
     bool                    bRowEmpty;

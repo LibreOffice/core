@@ -2258,20 +2258,16 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB
     nCol = nStartCol;
     bRowEmpty = false;
 
-    pIndices    = new SCSIZE[nEndCol-nStartCol+1];
-    pNextEnd    = new SCROW[nEndCol-nStartCol+1];
-    pHorizEnd   = new SCCOL[nEndCol-nStartCol+1];
-    ppPatterns  = new const ScPatternAttr*[nEndCol-nStartCol+1];
+    pIndices.reset( new SCSIZE[nEndCol-nStartCol+1] );
+    pNextEnd.reset( new SCROW[nEndCol-nStartCol+1] );
+    pHorizEnd.reset( new SCCOL[nEndCol-nStartCol+1] );
+    ppPatterns.reset( new const ScPatternAttr*[nEndCol-nStartCol+1] );
 
     InitForNextRow(true);
 }
 
 ScHorizontalAttrIterator::~ScHorizontalAttrIterator()
 {
-    delete[] ppPatterns;
-    delete[] pHorizEnd;
-    delete[] pNextEnd;
-    delete[] pIndices;
 }
 
 void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)

@@ -637,18 +637,14 @@ void ScBroadcastAreaSlot::FinallyEraseAreas()
 
 ScBroadcastAreaSlotMachine::TableSlots::TableSlots()
 {
-    ppSlots = new ScBroadcastAreaSlot* [ nBcaSlots ];
-    memset( ppSlots, 0 , sizeof( ScBroadcastAreaSlot* ) * nBcaSlots );
+    ppSlots.reset( new ScBroadcastAreaSlot* [ nBcaSlots ] );
+    memset( ppSlots.get(), 0 , sizeof( ScBroadcastAreaSlot* ) * nBcaSlots );
 }
 
 ScBroadcastAreaSlotMachine::TableSlots::~TableSlots()
 {
-    for ( ScBroadcastAreaSlot** pp = ppSlots + nBcaSlots; --pp >= ppSlots; /* nothing */ )
-    {
-        if (*pp)
-            delete *pp;
-    }
-    delete [] ppSlots;
+    for ( ScBroadcastAreaSlot** pp = ppSlots.get() + nBcaSlots; --pp >= ppSlots.get(); /* nothing */ )
+        delete *pp;
 }
 
 ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
