@@ -881,7 +881,7 @@ double barrier(double S, double vol, double rd, double rf,
 // discounting and we get the probability
 double prob_hit(double S, double vol, double mu,
                 double tau, double B1, double B2) {
-    double rd=0.0;
+    double const rd=0.0;
     double rf=-mu;
     return 1.0 - touch(S,vol,rd,rf,tau,B1,B2,types::Domestic,types::KnockOut,
                        types::Continuous, types::Value);

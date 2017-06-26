@@ -80,7 +80,7 @@ double BesselJ( double x, sal_Int32 N )
             throw NoConvergenceException();
     }
 
-    double epsilon = 1.0e-15; // relative error
+    double const epsilon = 1.0e-15; // relative error
     bool bHasfound = false;
     double k= 0.0;
     // e_{-1} = 0; e_0 = alpha_0 / b_2
