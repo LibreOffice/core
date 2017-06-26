@@ -206,7 +206,7 @@ SvxFmTbxCtlRecTotal::~SvxFmTbxCtlRecTotal()
 VclPtr<vcl::Window> SvxFmTbxCtlRecTotal::CreateItemWindow( vcl::Window* pParent )
 {
     pFixedText.reset(VclPtr<FixedText>::Create( pParent ));
-    OUString aSample("123456");
+    OUString const aSample("123456");
     Size aSize( pFixedText->GetTextWidth( aSample ), pFixedText->GetTextHeight( ) );
     aSize.Width() += 12;
     pFixedText->SetSizePixel( aSize );

@@ -1441,8 +1441,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
 }
 sal_Int32 SAL_CALL AccessibleShape::getHyperLinkIndex( sal_Int32 )
 {
-    sal_Int32 nRet = 0;
-    return nRet;
+    return 0;
 }
 // XAccessibleText
 sal_Int32 SAL_CALL AccessibleShape::getCaretPosition(  ){return 0;}

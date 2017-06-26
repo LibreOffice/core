@@ -737,11 +737,10 @@ namespace svxform
                         {
                             try
                             {
-                                OUString sDelim( ": " );
                                 OUString sTemp;
                                 pNode->m_xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
                                 sNewName += sTemp;
-                                sNewName += sDelim;
+                                sNewName += ": ";
                                 pNode->m_xPropSet->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
                                 sNewName += sTemp;
                             }
@@ -858,11 +857,10 @@ namespace svxform
         {
             try
             {
-                OUString sDelim( ": " );
                 OUString sName;
                 _rEntry->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
                 sName += sTemp;
-                sName += sDelim;
+                sName += ": ";
                 _rEntry->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
                 sName += sTemp;
                 pEntry = m_pItemList->InsertEntry(
@@ -1161,7 +1159,6 @@ namespace svxform
                         if ( xNum.is() && xNum->hasMoreElements() )
                         {
                             Image aImage(BitmapEx(RID_SVXBMP_ELEMENT));
-                            OUString sDelim( ": " );
                             while ( xNum->hasMoreElements() )
                             {
                                 Reference< XPropertySet > xPropSet;
@@ -1172,7 +1169,7 @@ namespace svxform
                                     OUString sTemp;
                                     xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
                                     sEntry += sTemp;
-                                    sEntry += sDelim;
+                                    sEntry += ": ";
                                     xPropSet->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
                                     sEntry += sTemp;
 
@@ -2013,12 +2010,11 @@ namespace svxform
     void DataNavigatorWindow::CreateInstancePage( const Sequence< PropertyValue >& _xPropSeq )
     {
         OUString sInstName;
-        OUString sID( PN_INSTANCE_ID );
         const PropertyValue* pProps = _xPropSeq.getConstArray();
         const PropertyValue* pPropsEnd = pProps + _xPropSeq.getLength();
         for ( ; pProps != pPropsEnd; ++pProps )
         {
-            if ( sID == pProps->Name )
+            if ( PN_INSTANCE_ID == pProps->Name )
             {
                 pProps->Value >>= sInstName;
                 break;
@@ -3233,7 +3229,6 @@ namespace svxform
                     Reference < XEnumeration > xNum = xNumAccess->createEnumeration();
                     if ( xNum.is() && xNum->hasMoreElements() )
                     {
-                        OUString sDelim( ": " );
                         while ( xNum->hasMoreElements() )
                         {
                             Reference< XPropertySet > xPropSet;
@@ -3244,7 +3239,7 @@ namespace svxform
                                 OUString sTemp;
                                 xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
                                 sEntry += sTemp;
-                                sEntry += sDelim;
+                                sEntry += ": ";
                                 xPropSet->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
                                 sEntry += sTemp;
                                 m_pBindLB->InsertEntry( sEntry );

@@ -96,9 +96,9 @@ bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPro
             {
                 try
                 {
-                    MapUnit aMapUnit( MapUnit::Map100thMM ); // the API handles with MapUnit::Map100thMM map mode
+                    // the API handles with MapUnit::Map100thMM map mode
                     MapUnit aObjUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( embed::Aspects::MSOLE_CONTENT ) );
-                    aTmp = OutputDevice::LogicToLogic( aTmp, aMapUnit, aObjUnit );
+                    aTmp = OutputDevice::LogicToLogic( aTmp, MapUnit::Map100thMM, aObjUnit );
                     xObj->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, awt::Size( aTmp.Width(), aTmp.Height() ) );
                 }
                 catch( uno::Exception& )

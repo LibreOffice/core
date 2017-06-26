@@ -3171,8 +3171,7 @@ bool SvxRuler::StartDrag()
         {
             if( bContentProtected )
                 return false;
-            sal_uInt16 nIndent = INDENT_LEFT_MARGIN;
-            if((nIndent) == GetDragAryPos() + INDENT_GAP) {  // Left paragraph indent
+            if(INDENT_LEFT_MARGIN == GetDragAryPos() + INDENT_GAP) {  // Left paragraph indent
                 mpIndents[0] = mpIndents[INDENT_FIRST_LINE];
                 EvalModifier();
             }
