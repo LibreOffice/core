@@ -40,4 +40,10 @@ String STR_XMLSECDLG_QUERY_REALLYREMOVE
     Text [ en-US ] = "Document signature cannot be restored, once removed.\n"
         "Do you really want to remove selected signature?";
 };
+
+String STR_XMLSECDLG_SIGNING_FAILED
+{
+    Text [ en-US ] = "An error occured while adding the signature.";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
