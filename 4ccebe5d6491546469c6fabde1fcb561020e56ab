@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_c7ed1d90",
+        "filename": "bin/distro-install-sdk",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-06-26T19:45:41Z",
+      "side": 1,
+      "message": "please use spaces instead of tab",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 1
+      },
+      "revId": "4ccebe5d6491546469c6fabde1fcb561020e56ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
