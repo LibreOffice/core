@@ -130,7 +130,6 @@ public:
 
 NotebookbarTabControl::NotebookbarTabControl( Window* pParent )
 : NotebookbarTabControlBase( pParent )
-, m_pListener( nullptr )
 , m_bInitialized( false )
 , m_bInvalidate( true )
 {
@@ -150,7 +149,7 @@ void NotebookbarTabControl::StateChanged(StateChangedType nStateChange)
         SetToolBox( static_cast<ToolBox*>( pShortcuts.get() ) );
         SetIconClickHdl( LINK( this, NotebookbarTabControl, OpenNotebookbarPopupMenu ) );
 
-        m_pListener.reset( new ChangedUIEventListener( this ) );
+        m_pListener = new ChangedUIEventListener( this );
 
         m_bInitialized = true;
     }

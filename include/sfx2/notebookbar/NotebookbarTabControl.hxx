@@ -13,9 +13,11 @@
 #include <vcl/toolbox.hxx>
 #include <sfx2/dllapi.h>
 #include <vcl/tabctrl.hxx>
-#include <memory>
 
 class ChangedUIEventListener;
+namespace com { namespace sun { namespace star { namespace ui {
+    class XUIConfigurationListener;
+} } } }
 
 class SFX2_DLLPUBLIC NotebookbarTabControl : public NotebookbarTabControlBase
 {
@@ -36,7 +38,7 @@ private:
                              );
     DECL_LINK(OpenNotebookbarPopupMenu, NotebookBar*, void);
 
-    std::unique_ptr<ChangedUIEventListener> m_pListener;
+    css::uno::Reference<css::ui::XUIConfigurationListener> m_pListener;
     css::uno::Reference<css::frame::XFrame> m_xFrame;
 
 protected:
