@@ -9,11 +9,14 @@
 
 #include <sal/config.h>
 #include <test/bootstrapfixture.hxx>
+#include <unotools/configmgr.hxx>
 #include "helper/qahelper.hxx"
 #include "document.hxx"
 #include "docsh.hxx"
 
 #include "address.hxx"
+#include "rangeutl.hxx"
+#include "refupdatecontext.hxx"
 
 class ScAddressTest : public test::BootstrapFixture
 {
@@ -98,8 +101,88 @@ void ScRangeTest::tearDown()
     BootstrapFixture::tearDown();
 }
 
+class ScRangeUpdaterTest : public CppUnit::TestFixture
+{
+public:
+
+    virtual void setUp() override
+    {
+        utl::ConfigManager::EnableAvoidConfig();
+    }
+    void testUpdateInsertTabBeforePos();
+    void testUpdateInsertTabAtPos();
+    void testUpdateInsertTabAfterPos();
+    void testUpdateDeleteTabBeforePos();
+    void testUpdateDeleteTabAtPos();
+    void testUpdateDeleteTabAfterPos();
+
+    CPPUNIT_TEST_SUITE(ScRangeUpdaterTest);
+    CPPUNIT_TEST(testUpdateInsertTabBeforePos);
+    CPPUNIT_TEST(testUpdateInsertTabAtPos);
+    CPPUNIT_TEST(testUpdateInsertTabAfterPos);
+    CPPUNIT_TEST(testUpdateDeleteTabBeforePos);
+    CPPUNIT_TEST(testUpdateDeleteTabAtPos);
+    CPPUNIT_TEST(testUpdateDeleteTabAfterPos);
+    CPPUNIT_TEST_SUITE_END();
+};
+
+void ScRangeUpdaterTest::testUpdateInsertTabBeforePos()
+{
+    ScDocument aDoc;
+    ScAddress aAddr(1, 1, 1);
+    sc::RefUpdateInsertTabContext aContext(aDoc, 0, 1);
+    ScRangeUpdater::UpdateInsertTab(aAddr, aContext);
+    CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 2), aAddr);
+}
+
+void ScRangeUpdaterTest::testUpdateInsertTabAtPos()
+{
+    ScDocument aDoc;
+    ScAddress aAddr(1, 1, 1);
+    sc::RefUpdateInsertTabContext aContext(aDoc, 1, 1);
+    ScRangeUpdater::UpdateInsertTab(aAddr, aContext);
+    CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 2), aAddr);
+}
+
+void ScRangeUpdaterTest::testUpdateInsertTabAfterPos()
+{
+    ScDocument aDoc;
+    ScAddress aAddr(1, 1, 1);
+    sc::RefUpdateInsertTabContext aContext(aDoc, 2, 1);
+    ScRangeUpdater::UpdateInsertTab(aAddr, aContext);
+    CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 1), aAddr);
+}
+
+void ScRangeUpdaterTest::testUpdateDeleteTabBeforePos()
+{
+    ScDocument aDoc;
+    ScAddress aAddr(1, 1, 1);
+    sc::RefUpdateDeleteTabContext aContext(aDoc, 0, 1);
+    ScRangeUpdater::UpdateDeleteTab(aAddr, aContext);
+    CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 0), aAddr);
+}
+
+void ScRangeUpdaterTest::testUpdateDeleteTabAtPos()
+{
+    ScDocument aDoc;
+    ScAddress aAddr(1, 1, 1);
+    sc::RefUpdateDeleteTabContext aContext(aDoc, 1, 1);
+    ScRangeUpdater::UpdateDeleteTab(aAddr, aContext);
+    CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 0), aAddr);
+}
+
+void ScRangeUpdaterTest::testUpdateDeleteTabAfterPos()
+{
+    ScDocument aDoc;
+    ScAddress aAddr(1, 1, 1);
+    sc::RefUpdateDeleteTabContext aContext(aDoc, 2, 1);
+    ScRangeUpdater::UpdateDeleteTab(aAddr, aContext);
+    CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 1), aAddr);
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(ScAddressTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(ScRangeTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(ScRangeUpdaterTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
