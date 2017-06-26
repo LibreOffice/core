@@ -53,6 +53,7 @@
 #include "resourcemanager.hxx"
 
 #include <vcl/layout.hxx>
+#include <vcl/msgbox.hxx>
 #include <unotools/configitem.hxx>
 #include <comphelper/storagehelper.hxx>
 
@@ -434,6 +435,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
     catch ( uno::Exception& )
     {
         OSL_FAIL( "Exception while adding a signature!" );
+        ScopedVclPtrInstance<ErrorBox>(this, XsResId(STR_XMLSECDLG_SIGNING_FAILED))->Execute();
         // Don't keep invalid entries...
         ImplGetSignatureInformations(/*bUseTempStream=*/true, /*bCacheLastSignature=*/false);
         ImplFillSignaturesBox();
