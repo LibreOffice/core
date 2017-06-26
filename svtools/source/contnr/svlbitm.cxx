@@ -338,8 +338,7 @@ void SvLBoxButton::ImplAdjustBoxSize(Size& io_rSize, ControlType i_eType, vcl::R
     if (rRenderContext.IsNativeControlSupported( i_eType, ControlPart::Entire) )
     {
         ImplControlValue    aControlValue;
-        tools::Rectangle           aCtrlRegion( Point( 0, 0 ), io_rSize );
-        ControlState        nState = ControlState::ENABLED;
+        tools::Rectangle    aCtrlRegion( Point( 0, 0 ), io_rSize );
 
         aControlValue.setTristateVal( ButtonValue::On );
 
@@ -347,7 +346,7 @@ void SvLBoxButton::ImplAdjustBoxSize(Size& io_rSize, ControlType i_eType, vcl::R
         bool bNativeOK = rRenderContext.GetNativeControlRegion( i_eType,
                                                             ControlPart::Entire,
                                                             aCtrlRegion,
-                                                            nState,
+                                                            ControlState::ENABLED,
                                                             aControlValue,
                                                             aNativeBounds,
                                                             aNativeContent );

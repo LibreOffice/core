@@ -133,7 +133,7 @@ SvStream& Out_Char(SvStream& rStream, sal_Unicode c,
                     //export as unicode
                     OUString sBuf(&c, 1);
                     OString sConverted;
-                    sal_uInt32 nFlags =
+                    sal_uInt32 const nFlags =
                         RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
                         RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR;
                     bool bWriteAsUnicode = !(sBuf.convertToString(&sConverted,

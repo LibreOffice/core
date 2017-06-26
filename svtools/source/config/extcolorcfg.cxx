@@ -134,10 +134,9 @@ uno::Sequence< OUString> ExtendedColorConfig_Impl::GetPropertyNames(const OUStri
     uno::Sequence< OUString> aNames(GetNodeNames(rScheme));
     OUString* pIter = aNames.getArray();
     OUString* pEnd    = pIter + aNames.getLength();
-    OUString sSep("/");
     for(;pIter != pEnd;++pIter)
     {
-        *pIter = rScheme + sSep + *pIter;
+        *pIter = rScheme + "/" + *pIter;
     }
     return aNames;
 }
@@ -236,8 +235,7 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
 
     // fill display names
     TDisplayNames aDisplayNameMap;
-    OUString sEntryNames("EntryNames");
-    uno::Sequence < OUString > aComponentNames = GetPropertyNames(sEntryNames);
+    uno::Sequence < OUString > aComponentNames = GetPropertyNames("EntryNames");
     OUString sDisplayName("/DisplayName");
     OUString* pIter = aComponentNames.getArray();
     OUString* pEnd  = pIter + aComponentNames.getLength();
@@ -301,11 +299,9 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
 
     if ( sScheme != "default" )
     {
-        OUString sDefault("default");
-        if ( ExistsScheme(sDefault) )
+        if ( ExistsScheme("default") )
         {
-            OUString sBaseDefault("ExtendedColorScheme/ColorSchemes/default");
-            aComponentNames = GetPropertyNames(sBaseDefault);
+            aComponentNames = GetPropertyNames("ExtendedColorScheme/ColorSchemes/default");
             FillComponentColors(aComponentNames,aDisplayNameMap);
         }
     }
@@ -431,8 +427,7 @@ void ExtendedColorConfig_Impl::ImplCommit()
                 pPropValues->Value <<= aConIter->second.getColor();
                 // the default color will never be changed
             }
-            OUString s("ExtendedColorScheme/ColorSchemes");
-            SetSetProperties(s, aPropValues);
+            SetSetProperties("ExtendedColorScheme/ColorSchemes", aPropValues);
         }
     }
 

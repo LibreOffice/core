@@ -174,8 +174,7 @@ namespace svt
                 }
 
                 Reference< XDynamicResultSet > xDynResultSet;
-                ResultSetInclude eInclude = INCLUDE_FOLDERS_AND_DOCUMENTS;
-                xDynResultSet = aFolder.aContent.createDynamicCursor( aProps, eInclude );
+                xDynResultSet = aFolder.aContent.createDynamicCursor( aProps, INCLUDE_FOLDERS_AND_DOCUMENTS );
 
                 if ( xDynResultSet.is() )
                     xResultSet = xDynResultSet->getStaticResultSet();

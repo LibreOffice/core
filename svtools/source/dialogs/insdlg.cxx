@@ -267,15 +267,16 @@ OUString SvPasteObjectHelper::GetSotFormatUIName( SotClipboardFormatId nId )
         { SotClipboardFormatId::RICHTEXT,            STR_FORMAT_ID_RICHTEXT },
     };
 
-    OUString aUIName;
     sal_uInt16 nResId = 0;
 
-    for( sal_uInt32 i = 0, nCount = SAL_N_ELEMENTS( aSotResourcePairs ); ( i < nCount ) && !nResId; i++ )
+    sal_uInt32 const nCount = SAL_N_ELEMENTS( aSotResourcePairs );
+    for( sal_uInt32 i = 0; ( i < nCount ) && !nResId; i++ )
     {
         if( aSotResourcePairs[ i ].mnSotId == nId )
             nResId = aSotResourcePairs[ i ].mnResId;
     }
 
+    OUString aUIName;
     if( nResId )
         aUIName = SvtResId( nResId );
     else

@@ -1026,13 +1026,11 @@ void SvImpLBox::DrawNet(vcl::RenderContext& rRenderContext)
      if (rRenderContext.IsNativeControlSupported(ControlType::ListNet, ControlPart::Entire))
      {
         ImplControlValue aControlValue;
-        ControlState nState = ControlState::ENABLED;
         if (rRenderContext.DrawNativeControl(ControlType::ListNet, ControlPart::Entire,
-                                             tools::Rectangle(), nState, aControlValue, OUString()))
+                                             tools::Rectangle(), ControlState::ENABLED, aControlValue, OUString()))
         {
             return;
         }
-
     }
 
     long nEntryHeight = pView->GetEntryHeight();

@@ -1215,8 +1215,7 @@ namespace svt { namespace table
                     continue;
 
                 bool isActiveColumn = (aCell.getColumn() == getCurrentColumn());
-                bool isSelectedColumn = false;
-                pRenderer->PaintColumnHeader(aCell.getColumn(), isActiveColumn, isSelectedColumn, rRenderContext, aCell.getRect(), rStyle);
+                pRenderer->PaintColumnHeader(aCell.getColumn(), isActiveColumn, false/*isSelectedColumn*/, rRenderContext, aCell.getRect(), rStyle);
             }
         }
         // the area occupied by the row header, if any
@@ -1277,8 +1276,7 @@ namespace svt { namespace table
             // paint all cells in this row
             for (TableCellGeometry aCell(aRowIterator, m_nLeftColumn); aCell.isValid(); aCell.moveRight())
             {
-                bool isSelectedColumn = false;
-                pRenderer->PaintCell(aCell.getColumn(), isSelectedRow || isSelectedColumn, isControlFocused,
+                pRenderer->PaintCell(aCell.getColumn(), isSelectedRow, isControlFocused,
                                      rRenderContext, aCell.getRect(), rStyle);
             }
         }
