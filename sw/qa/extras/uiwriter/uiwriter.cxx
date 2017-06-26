@@ -309,6 +309,7 @@ public:
     CPPUNIT_TEST(testTdf104814);
     CPPUNIT_TEST(testParagraphOfTextRange);
     CPPUNIT_TEST(testTdf108524);
+//    CPPUNIT_TEST(testTdf108524);
     CPPUNIT_TEST(testTableInSection);
     CPPUNIT_TEST_SUITE_END();
 
