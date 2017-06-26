@@ -82,6 +82,24 @@
       "revId": "84f8570357f2dc04991ffe962fd97f2b2b3de652",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_a7e2d19d",
+        "filename": "extras/source/wordbook/technical.dic",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-26T19:49:27Z",
+      "side": 1,
+      "message": "They aligned the abbreviation to a spelling mistake by Trump: https://en.wikipedia.org/wiki/COVFEFE_Act#Covfefe_background (there are also other sources), which was in lowercase letters.\n\nNo-one is going to remember the hype in half a year, probably. I lately thought you might have been joking adding it. :)",
+      "parentUuid": "3a461143_272b4132",
+      "revId": "84f8570357f2dc04991ffe962fd97f2b2b3de652",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
