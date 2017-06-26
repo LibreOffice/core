@@ -48,6 +48,7 @@
 
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
 #define IMPLNAME    "com.sun.star.comp.stoc.InvocationAdapterFactory"
 
@@ -130,8 +131,7 @@ struct AdapterImpl
     void *                      m_key; // map key
     uno_Interface *             m_pReceiver; // XInvocation receiver
 
-    sal_Int32                   m_nInterfaces;
-    InterfaceAdapterImpl *      m_pInterfaces;
+    std::vector<InterfaceAdapterImpl>  m_vInterfaces;
 
     // XInvocation calls
     void getValue(
@@ -166,12 +166,11 @@ struct AdapterImpl
 
 inline AdapterImpl::~AdapterImpl()
 {
-    for ( sal_Int32 nPos = m_nInterfaces; nPos--; )
+    for ( size_t nPos = m_vInterfaces.size(); nPos--; )
     {
         ::typelib_typedescription_release(
-            &m_pInterfaces[ nPos ].m_pTypeDescr->aBase );
+            &m_vInterfaces[ nPos ].m_pTypeDescr->aBase );
     }
-    delete [] m_pInterfaces;
 
     (*m_pReceiver->release)( m_pReceiver );
     m_pFactory->release();
@@ -577,15 +576,15 @@ static void SAL_CALL adapter_dispatch(
         typelib_TypeDescriptionReference * pDemanded =
             *static_cast<typelib_TypeDescriptionReference **>(pArgs[0]);
         // pInterfaces[0] is XInterface
-        for ( sal_Int32 nPos = 0; nPos < that->m_nInterfaces; ++nPos )
+        for ( size_t nPos = 0; nPos < that->m_vInterfaces.size(); ++nPos )
         {
             typelib_InterfaceTypeDescription * pTD =
-                that->m_pInterfaces[nPos].m_pTypeDescr;
+                that->m_vInterfaces[nPos].m_pTypeDescr;
             while (pTD)
             {
                 if (type_equals( pTD->aBase.pWeakRef, pDemanded ))
                 {
-                    uno_Interface * pUnoI2 = &that->m_pInterfaces[nPos];
+                    uno_Interface * pUnoI2 = &that->m_vInterfaces[nPos];
                     ::uno_any_construct(
                         static_cast<uno_Any *>(pReturn), &pUnoI2,
                         &pTD->aBase, nullptr );
@@ -632,15 +631,14 @@ AdapterImpl::AdapterImpl(
     FactoryImpl * pFactory )
         : m_nRef( 1 ),
           m_pFactory( pFactory ),
-          m_key( key )
+          m_key( key ),
+          m_vInterfaces( rTypes.getLength() )
 {
     // init adapters
-    m_nInterfaces = rTypes.getLength();
-    m_pInterfaces = new InterfaceAdapterImpl[ rTypes.getLength() ];
     const Type * pTypes = rTypes.getConstArray();
     for ( sal_Int32 nPos = rTypes.getLength(); nPos--; )
     {
-        InterfaceAdapterImpl * pInterface = &m_pInterfaces[nPos];
+        InterfaceAdapterImpl * pInterface = &m_vInterfaces[nPos];
         pInterface->acquire = adapter_acquire;
         pInterface->release = adapter_release;
         pInterface->pDispatcher = adapter_dispatch;
@@ -654,9 +652,8 @@ AdapterImpl::AdapterImpl(
             for ( sal_Int32 n = 0; n < nPos; ++n )
             {
                 ::typelib_typedescription_release(
-                    &m_pInterfaces[ n ].m_pTypeDescr->aBase );
+                    &m_vInterfaces[ n ].m_pTypeDescr->aBase );
             }
-            delete [] m_pInterfaces;
             throw RuntimeException(
                 "cannot retrieve all interface type infos!" );
         }
@@ -780,11 +777,11 @@ static inline AdapterImpl * lookup_adapter(
             Type const & rType = pTypes[ nPosTypes ];
             // find in adapter's type list
             sal_Int32 nPos;
-            for ( nPos = that->m_nInterfaces; nPos--; )
+            for ( nPos = that->m_vInterfaces.size(); nPos--; )
             {
                 if (::typelib_typedescriptionreference_isAssignableFrom(
                         rType.getTypeLibType(),
-                        that->m_pInterfaces[ nPos ].m_pTypeDescr->aBase.pWeakRef ))
+                        that->m_vInterfaces[ nPos ].m_pTypeDescr->aBase.pWeakRef ))
                 {
                     // found
                     break;
@@ -847,7 +844,7 @@ Reference< XInterface > FactoryImpl::createAdapter(
         }
         }
         // map one interface to C++
-        uno_Interface * pUnoI = &that->m_pInterfaces[ 0 ];
+        uno_Interface * pUnoI = &that->m_vInterfaces[ 0 ];
         m_aUno2Cpp.mapInterface(
             reinterpret_cast<void **>(&xRet), pUnoI, cppu::UnoType<decltype(xRet)>::get() );
         that->release();

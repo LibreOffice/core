@@ -269,8 +269,6 @@ sal_uInt8 SvNumberNatNum::MapNatNumToDBNum( sal_uInt8 nNatNum, LanguageType eLan
 ImpSvNumFor::ImpSvNumFor()
 {
     nAnzStrings = 0;
-    aI.nTypeArray = nullptr;
-    aI.sStrArray = nullptr;
     aI.eScannedType = css::util::NumberFormat::UNDEFINED;
     aI.bThousand = false;
     aI.nThousand = 0;
@@ -282,27 +280,15 @@ ImpSvNumFor::ImpSvNumFor()
 
 ImpSvNumFor::~ImpSvNumFor()
 {
-    delete [] aI.sStrArray;
-    delete [] aI.nTypeArray;
 }
 
 void ImpSvNumFor::Enlarge(sal_uInt16 nAnz)
 {
     if ( nAnzStrings != nAnz )
     {
-        delete [] aI.nTypeArray;
-        delete [] aI.sStrArray;
         nAnzStrings = nAnz;
-        if ( nAnz )
-        {
-            aI.nTypeArray = new short[nAnz];
-            aI.sStrArray  = new OUString[nAnz];
-        }
-        else
-        {
-            aI.nTypeArray = nullptr;
-            aI.sStrArray  = nullptr;
-        }
+        aI.nTypeArray.resize(nAnz);
+        aI.sStrArray.resize(nAnz);
     }
 }
 
@@ -3363,11 +3349,11 @@ bool SvNumberformat::ImpIsIso8601( const ImpSvNumFor& rNumFor ) const
             eNotIso
         };
         State eState = eNone;
-        short const * const pType = rNumFor.Info().nTypeArray;
+        auto & rTypeArray = rNumFor.Info().nTypeArray;
         sal_uInt16 nAnz = rNumFor.GetCount();
         for (sal_uInt16 i=0; i < nAnz && !bIsIso && eState != eNotIso; ++i)
         {
-            switch ( pType[i] )
+            switch ( rTypeArray[i] )
             {
             case NF_KEY_YY:     // two digits not strictly ISO 8601
             case NF_KEY_YYYY:
@@ -4652,7 +4638,7 @@ const OUString* SvNumberformat::GetNumForString( sal_uInt16 nNumFor, sal_uInt16 
         nPos = nAnz - 1;
         if ( bString )
         {   // Backwards
-            short* pType = NumFor[nNumFor].Info().nTypeArray + nPos;
+            short const * pType = NumFor[nNumFor].Info().nTypeArray.data() + nPos;
             while ( nPos > 0 && (*pType != NF_SYMBOLTYPE_STRING) &&
                     (*pType != NF_SYMBOLTYPE_CURRENCY) )
             {
@@ -4672,7 +4658,7 @@ const OUString* SvNumberformat::GetNumForString( sal_uInt16 nNumFor, sal_uInt16 
     else if ( bString )
     {
         // vorwaerts
-        short* pType = NumFor[nNumFor].Info().nTypeArray + nPos;
+        short const * pType = NumFor[nNumFor].Info().nTypeArray.data() + nPos;
         while ( nPos < nAnz && (*pType != NF_SYMBOLTYPE_STRING) &&
                 (*pType != NF_SYMBOLTYPE_CURRENCY) )
         {
@@ -4730,26 +4716,25 @@ bool SvNumberformat::IsNegativeInBracket() const
     {
         return false;
     }
-    OUString *tmpStr = NumFor[1].Info().sStrArray;
-    return tmpStr[0] == "(" && tmpStr[nAnz-1] == ")";
+    auto& tmp = NumFor[1].Info().sStrArray;
+    return tmp[0] == "(" && tmp[nAnz-1] == ")";
 }
 
 bool SvNumberformat::HasPositiveBracketPlaceholder() const
 {
     sal_uInt16 nAnz = NumFor[0].GetCount();
-    OUString *tmpStr = NumFor[0].Info().sStrArray;
-    return tmpStr[nAnz-1] == "_)";
+    return NumFor[0].Info().sStrArray[nAnz-1] == "_)";
 }
 
 DateOrder SvNumberformat::GetDateOrder() const
 {
     if ( (eType & css::util::NumberFormat::DATE) == css::util::NumberFormat::DATE )
     {
-        short const * const pType = NumFor[0].Info().nTypeArray;
+        auto& rTypeArray = NumFor[0].Info().nTypeArray;
         sal_uInt16 nAnz = NumFor[0].GetCount();
         for ( sal_uInt16 j=0; j<nAnz; j++ )
         {
-            switch ( pType[j] )
+            switch ( rTypeArray[j] )
             {
             case NF_KEY_D :
             case NF_KEY_DD :
@@ -4785,12 +4770,12 @@ sal_uInt32 SvNumberformat::GetExactDateOrder() const
         SAL_WARN( "svl.numbers", "SvNumberformat::GetExactDateOrder: no date" );
         return nRet;
     }
-    short const * const pType = NumFor[0].Info().nTypeArray;
+    auto& rTypeArray = NumFor[0].Info().nTypeArray;
     sal_uInt16 nAnz = NumFor[0].GetCount();
     int nShift = 0;
     for ( sal_uInt16 j=0; j<nAnz && nShift < 3; j++ )
     {
-        switch ( pType[j] )
+        switch ( rTypeArray[j] )
         {
         case NF_KEY_D :
         case NF_KEY_DD :
@@ -5029,21 +5014,21 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
         sal_uInt32 nCalendarID = 0x0000000; // Excel ID of calendar used in sub-format see tdf#36038
         if ( nAnz )
         {
-            const short* pType = NumFor[n].Info().nTypeArray;
-            const OUString* pStr = NumFor[n].Info().sStrArray;
+            auto& rTypeArray = NumFor[n].Info().nTypeArray;
+            auto& rStrArray = NumFor[n].Info().sStrArray;
             for ( sal_uInt16 j=0; j<nAnz; j++ )
             {
-                if ( 0 <= pType[j] && pType[j] < NF_KEYWORD_ENTRIES_COUNT )
+                if ( 0 <= rTypeArray[j] && rTypeArray[j] < NF_KEYWORD_ENTRIES_COUNT )
                 {
-                    aStr.append( rKeywords[pType[j]] );
-                    if( NF_KEY_NNNN == pType[j] )
+                    aStr.append( rKeywords[rTypeArray[j]] );
+                    if( NF_KEY_NNNN == rTypeArray[j] )
                     {
                         aStr.append( rLocWrp.getLongDateDayOfWeekSep() );
                     }
                 }
                 else
                 {
-                    switch ( pType[j] )
+                    switch ( rTypeArray[j] )
                     {
                     case NF_SYMBOLTYPE_DECSEP :
                         aStr.append( rLocWrp.getNumDecimalSep() );
@@ -5053,7 +5038,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                         break;
                     case NF_SYMBOLTYPE_EXP :
                         aStr.append( rKeywords[NF_KEY_E] );
-                        if ( pStr[j].getLength() > 1 && pStr[j][1] == '+' )
+                        if ( rStrArray[j].getLength() > 1 && rStrArray[j][1] == '+' )
                             aStr.append( "+" );
                         else
                         // tdf#102370: Excel code for exponent without sign
@@ -5070,33 +5055,33 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                         break;
                     case NF_SYMBOLTYPE_FRACBLANK :
                     case NF_SYMBOLTYPE_STRING :
-                        if ( pStr[j].getLength() == 1 )
+                        if ( rStrArray[j].getLength() == 1 )
                         {
-                            if ( pType[j] == NF_SYMBOLTYPE_STRING )
+                            if ( rTypeArray[j] == NF_SYMBOLTYPE_STRING )
                                 aStr.append( '\\' );
-                            aStr.append( pStr[j] );
+                            aStr.append( rStrArray[j] );
                         }
                         else
                         {
                             aStr.append( '"' );
-                            aStr.append( pStr[j] );
+                            aStr.append( rStrArray[j] );
                             aStr.append( '"' );
                         }
                         break;
                     case NF_SYMBOLTYPE_CALDEL :
-                        if ( pStr[j+1] == "gengou" )
+                        if ( rStrArray[j+1] == "gengou" )
                         {
                             nCalendarID = 0x0030000;
                         }
-                        else if ( pStr[j+1] == "hijri" )
+                        else if ( rStrArray[j+1] == "hijri" )
                         {
                             nCalendarID = 0x0060000;
                         }
-                        else if ( pStr[j+1] == "buddhist" )
+                        else if ( rStrArray[j+1] == "buddhist" )
                         {
                             nCalendarID = 0x0070000;
                         }
-                        else if ( pStr[j+1] == "jewish" )
+                        else if ( rStrArray[j+1] == "jewish" )
                         {
                             nCalendarID = 0x0080000;
                         }
@@ -5105,7 +5090,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                             j = j+2;
                         break;
                     default:
-                        aStr.append( pStr[j] );
+                        aStr.append( rStrArray[j] );
                     }
                 }
             }
@@ -5443,10 +5428,10 @@ sal_uInt16 SvNumberformat::ImpGetNumForStringElementCount( sal_uInt16 nNumFor ) 
 {
     sal_uInt16 nCnt = 0;
     sal_uInt16 nAnz = NumFor[nNumFor].GetCount();
-    short const * const pType = NumFor[nNumFor].Info().nTypeArray;
+    auto& rTypeArray = NumFor[nNumFor].Info().nTypeArray;
     for ( sal_uInt16 j=0; j<nAnz; ++j )
     {
-        switch ( pType[j] )
+        switch ( rTypeArray[j] )
         {
         case NF_SYMBOLTYPE_STRING:
         case NF_SYMBOLTYPE_CURRENCY:

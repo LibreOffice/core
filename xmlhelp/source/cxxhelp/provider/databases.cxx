@@ -127,8 +127,6 @@ Databases::Databases( bool showBasic,
                       Reference< uno::XComponentContext > const & xContext )
     : m_xContext( xContext ),
       m_bShowBasic(showBasic),
-      m_nCustomCSSDocLength( 0 ),
-      m_pCustomCSSDoc( nullptr ),
       m_aCSS(styleSheet.toAsciiLowerCase()),
       newProdName( "$[officename]" ),
       newProdVersion( "$[officeversion]" ),
@@ -161,10 +159,6 @@ Databases::Databases( bool showBasic,
 
 Databases::~Databases()
 {
-    // release stylesheet
-
-    delete[] m_pCustomCSSDoc;
-
     // unload the databases
 
     {
@@ -945,15 +939,13 @@ Reference< XHierarchicalNameAccess > Databases::findJarFileForPath
 void Databases::changeCSS(const OUString& newStyleSheet)
 {
     m_aCSS = newStyleSheet.toAsciiLowerCase();
-    delete[] m_pCustomCSSDoc;
-    m_pCustomCSSDoc = nullptr;
-    m_nCustomCSSDocLength = 0;
+    m_vCustomCSSDoc.clear();
 }
 
 void Databases::cascadingStylesheet( const OUString& Language,
                                      OStringBuffer& buffer )
 {
-    if( ! m_pCustomCSSDoc )
+    if( m_vCustomCSSDoc.empty() )
     {
         int retry = 2;
         bool error = true;
@@ -1028,11 +1020,10 @@ void Databases::cascadingStylesheet( const OUString& Language,
             {
                 sal_uInt64 nSize;
                 aFile.getSize( nSize );
-                m_nCustomCSSDocLength = (int)nSize;
-                m_pCustomCSSDoc = new char[ 1 + m_nCustomCSSDocLength ];
-                m_pCustomCSSDoc[ m_nCustomCSSDocLength ] = 0;
-                sal_uInt64 a = m_nCustomCSSDocLength,b = m_nCustomCSSDocLength;
-                aFile.read( m_pCustomCSSDoc,a,b );
+                m_vCustomCSSDoc.resize( nSize + 1);
+                m_vCustomCSSDoc[nSize] = 0;
+                sal_uInt64 a = nSize,b = nSize;
+                aFile.read( m_vCustomCSSDoc.data(), a, b );
                 aFile.close();
                 error = false;
             }
@@ -1049,12 +1040,12 @@ void Databases::cascadingStylesheet( const OUString& Language,
 
         if( error )
         {
-            m_nCustomCSSDocLength = 0;
-            m_pCustomCSSDoc = new char[ 1 ]; // Initialize with 1 to avoid gcc compiler warning
+            m_vCustomCSSDoc.clear();
         }
     }
 
-    buffer.append( m_pCustomCSSDoc, m_nCustomCSSDocLength );
+    if (!m_vCustomCSSDoc.empty())
+        buffer.append( m_vCustomCSSDoc.data(), m_vCustomCSSDoc.size() - 1 );
 }
 
 void Databases::setActiveText( const OUString& Module,

@@ -145,14 +145,13 @@ bool StgIo::CommitAll()
 
 class EasyFat
 {
-    sal_Int32 *pFat;
-    bool  *pFree;
+    std::unique_ptr<sal_Int32[]> pFat;
+    std::unique_ptr<bool[]> pFree;
     sal_Int32 nPages;
     sal_Int32 nPageSize;
 
 public:
     EasyFat( StgIo & rIo, StgStrm *pFatStream, sal_Int32 nPSize );
-    ~EasyFat() { delete[] pFat; delete[] pFree; }
 
     sal_Int32 GetPageSize() { return nPageSize; }
 
@@ -164,8 +163,8 @@ EasyFat::EasyFat( StgIo& rIo, StgStrm* pFatStream, sal_Int32 nPSize )
 {
     nPages = pFatStream->GetSize() >> 2;
     nPageSize = nPSize;
-    pFat = new sal_Int32[ nPages ];
-    pFree = new bool[ nPages ];
+    pFat.reset( new sal_Int32[ nPages ] );
+    pFree.reset( new bool[ nPages ] );
 
     rtl::Reference< StgPage > pPage;
     sal_Int32 nFatPageSize = (1 << rIo.m_aHdr.GetPageSize()) - 2;

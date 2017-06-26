@@ -37,6 +37,8 @@
 
 #include "services.hxx"
 
+#include <vector>
+
 #define IMPLEMENTATION_NAME "com.sun.star.comp.io.TextInputStream"
 #define SERVICE_NAME "com.sun.star.io.TextInputStream"
 
@@ -67,12 +69,10 @@ class OTextInputStream : public WeakImplHelper< XTextInputStream2, XServiceInfo 
     Sequence<sal_Int8>          mSeqSource;
 
     // Internal buffer for characters that are already converted successfully
-    sal_Unicode* mpBuffer;
-    sal_Int32 mnBufferSize;
+    std::vector<sal_Unicode> mvBuffer;
     sal_Int32 mnCharsInBuffer;
     bool mbReachedEOF;
 
-    void implResizeBuffer();
     /// @throws IOException
     /// @throws RuntimeException
     OUString implReadString( const Sequence< sal_Unicode >& Delimiters,
@@ -113,8 +113,7 @@ OTextInputStream::OTextInputStream()
     , mConvText2Unicode(nullptr)
     , mContextText2Unicode(nullptr)
     , mSeqSource(READ_BYTE_COUNT)
-    , mpBuffer(nullptr)
-    , mnBufferSize(0)
+    , mvBuffer(INITIAL_UNICODE_BUFFER_CAPACITY, 0)
     , mnCharsInBuffer(0)
     , mbReachedEOF(false)
 {
@@ -127,18 +126,6 @@ OTextInputStream::~OTextInputStream()
         rtl_destroyTextToUnicodeContext( mConvText2Unicode, mContextText2Unicode );
         rtl_destroyTextToUnicodeConverter( mConvText2Unicode );
     }
-
-    delete[] mpBuffer;
-}
-
-void OTextInputStream::implResizeBuffer()
-{
-    sal_Int32 nNewBufferSize = mnBufferSize * 2;
-    sal_Unicode* pNewBuffer = new sal_Unicode[ nNewBufferSize ];
-    memcpy( pNewBuffer, mpBuffer, mnCharsInBuffer * sizeof( sal_Unicode ) );
-    delete[] mpBuffer;
-    mpBuffer = pNewBuffer;
-    mnBufferSize = nNewBufferSize;
 }
 
 
@@ -175,12 +162,6 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
     if( !mbEncodingInitialized )
         return aRetStr;
 
-    if( !mpBuffer )
-    {
-        mnBufferSize = INITIAL_UNICODE_BUFFER_CAPACITY;
-        mpBuffer = new sal_Unicode[ mnBufferSize ];
-    }
-
     // Only for bFindLineEnd
     sal_Unicode cLineEndChar1 = 0x0D;
     sal_Unicode cLineEndChar2 = 0x0A;
@@ -208,7 +189,7 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
 
         // Now there should be characters available
         // (otherwise the loop should have been breaked before)
-        sal_Unicode c = mpBuffer[ nBufferReadPos++ ];
+        sal_Unicode c = mvBuffer[ nBufferReadPos++ ];
 
         if( bFindLineEnd )
         {
@@ -257,10 +238,10 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
 
     // Create string
     if( nCopyLen )
-        aRetStr = OUString( mpBuffer, nCopyLen );
+        aRetStr = OUString( mvBuffer.data(), nCopyLen );
 
     // Copy rest of buffer
-    memmove( mpBuffer, mpBuffer + nBufferReadPos,
+    memmove( mvBuffer.data(), mvBuffer.data() + nBufferReadPos,
         (mnCharsInBuffer - nBufferReadPos) * sizeof( sal_Unicode ) );
     mnCharsInBuffer -= nBufferReadPos;
 
@@ -270,10 +251,10 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
 
 sal_Int32 OTextInputStream::implReadNext()
 {
-    sal_Int32 nFreeBufferSize = mnBufferSize - mnCharsInBuffer;
+    sal_Int32 nFreeBufferSize = mvBuffer.size() - mnCharsInBuffer;
     if( nFreeBufferSize < READ_BYTE_COUNT )
-        implResizeBuffer();
-    nFreeBufferSize = mnBufferSize - mnCharsInBuffer;
+        mvBuffer.resize(mvBuffer.size() * 2);
+    nFreeBufferSize = mvBuffer.size() - mnCharsInBuffer;
 
     try
     {
@@ -297,7 +278,7 @@ sal_Int32 OTextInputStream::implReadNext()
                                 mContextText2Unicode,
                                 reinterpret_cast<const char*>(&( pbSource[nSourceCount] )),
                                 nTotalRead - nSourceCount,
-                                mpBuffer + mnCharsInBuffer + nTargetCount,
+                                mvBuffer.data() + mnCharsInBuffer + nTargetCount,
                                 nFreeBufferSize - nTargetCount,
                                 RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT   |
                                 RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
@@ -309,7 +290,7 @@ sal_Int32 OTextInputStream::implReadNext()
             bool bCont = false;
             if( uiInfo & RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL )
             {
-                implResizeBuffer();
+                mvBuffer.resize(mvBuffer.size() * 2);
                 bCont = true;
             }
 

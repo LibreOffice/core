@@ -44,9 +44,6 @@ LocaleNode::LocaleNode (const OUString& name, const Reference< XAttributeList > 
     : aName(name)
     , aAttribs(attr)
     , parent(nullptr)
-    , children(nullptr)
-    , nChildren(0)
-    , childArrSize(0)
     , nError(0)
 {
 }
@@ -54,7 +51,7 @@ LocaleNode::LocaleNode (const OUString& name, const Reference< XAttributeList > 
 int LocaleNode::getError() const
 {
     int err = nError;
-    for (sal_Int32 i=0;i<nChildren;i++)
+    for (size_t i=0;i<children.size();i++)
         err += children[i]->getError();
     return err;
 }
@@ -69,22 +66,14 @@ void LocaleNode::print () const {
 
 void LocaleNode::printR () const {
     print();
-    for (sal_Int32 i=0;i<nChildren;i++)
+    for (size_t i=0;i<children.size();i++)
         children[i]->printR();
     printf ("\t");
     print();
 }
 
 void LocaleNode::addChild ( LocaleNode * node) {
-    if (childArrSize <= nChildren) {
-        LocaleNode ** arrN = new LocaleNode*[childArrSize+10];
-        for (sal_Int32 i = 0; i<childArrSize; ++i)
-            arrN[i] = children[i];
-        delete [] children;
-        childArrSize += 10;
-        children = arrN;
-    }
-    children[nChildren++] = node;
+    children.push_back(node);
     node->parent = this;
 }
 
@@ -100,7 +89,7 @@ const LocaleNode* LocaleNode::getRoot() const
 const LocaleNode * LocaleNode::findNode ( const sal_Char *name) const {
     if (aName.equalsAscii(name))
         return this;
-    for (sal_Int32 i = 0; i< nChildren; i++)  {
+    for (size_t i = 0; i< children.size(); i++)  {
         const LocaleNode *n=children[i]->findNode(name);
         if (n)
             return n;
@@ -110,9 +99,8 @@ const LocaleNode * LocaleNode::findNode ( const sal_Char *name) const {
 
 LocaleNode::~LocaleNode()
 {
-    for (sal_Int32 i=0; i < nChildren; ++i)
+    for (size_t i=0; i < children.size(); ++i)
         delete children[i];
-    delete [] children;
 }
 
 LocaleNode* LocaleNode::createNode (const OUString& name, const Reference< XAttributeList > & attr)
@@ -228,7 +216,7 @@ void LocaleNode::generateCode (const OFileWriter &of) const
         ++nError;
         fprintf( stderr, "Error: Locale versionDTD is not %s, see comment in locale.dtd\n", LOCALE_VERSION_DTD);
     }
-    for (sal_Int32 i=0; i<nChildren;i++)
+    for (size_t i=0; i<children.size(); i++)
         children[i]->generateCode (of);
 //      print_node( this );
 }

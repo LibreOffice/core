@@ -390,26 +390,11 @@ SvDetachedEventDescriptor::SvDetachedEventDescriptor(
     SvBaseEventDescriptor(pSupportedMacroItems),
     sImplName("SvDetachedEventDescriptor")
 {
-    // allocate aMacros
-    aMacros = new SvxMacro*[mnMacroItems];
-
-    // ... and initialize
-    for(sal_Int16 i = 0; i < mnMacroItems; i++)
-    {
-        aMacros[i] = nullptr;
-    }
+    aMacros.resize(mnMacroItems);
 }
 
 SvDetachedEventDescriptor::~SvDetachedEventDescriptor()
 {
-    // delete contents of aMacros
-    for(sal_Int16 i = 0; i < mnMacroItems; i++)
-    {
-        if (nullptr != aMacros[i])
-            delete aMacros[i];
-    }
-
-    delete [] aMacros;
 }
 
 sal_Int16 SvDetachedEventDescriptor::getIndex(const sal_uInt16 nID) const
@@ -438,8 +423,8 @@ void SvDetachedEventDescriptor::replaceByName(
     if (-1 == nIndex)
         throw IllegalArgumentException();
 
-    aMacros[nIndex] = new SvxMacro(rMacro.GetMacName(), rMacro.GetLibName(),
-                                   rMacro.GetScriptType() );
+    aMacros[nIndex].reset( new SvxMacro(rMacro.GetMacName(), rMacro.GetLibName(),
+                                   rMacro.GetScriptType() ) );
 }
 
 
