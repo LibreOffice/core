@@ -23,6 +23,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/nfkeytab.hxx>
+#include <vector>
 
 namespace utl {
     class DigitGroupingIterator;
@@ -48,8 +49,8 @@ enum SvNumberformatLimitOps
 
 struct ImpSvNumberformatInfo            // Struct for FormatInfo
 {
-    OUString* sStrArray;                // Array of symbols
-    short* nTypeArray;                  // Array of infos
+    std::vector<OUString> sStrArray;    // Array of symbols
+    std::vector<short> nTypeArray;      // Array of infos
     sal_uInt16 nThousand;               // Count of group separator sequences
     sal_uInt16 nCntPre;                 // Count of digits before decimal point
     sal_uInt16 nCntPost;                // Count of digits after decimal point

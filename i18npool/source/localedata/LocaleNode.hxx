@@ -18,6 +18,7 @@
  */
 #ifndef INCLUDED_I18NPOOL_SOURCE_LOCALEDATA_LOCALENODE_HXX
 #define INCLUDED_I18NPOOL_SOURCE_LOCALEDATA_LOCALENODE_HXX
+
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 
@@ -84,9 +85,7 @@ class LocaleNode
     OUString aValue;
     Attr aAttribs;
     LocaleNode * parent;
-    LocaleNode* * children;
-    sal_Int32 nChildren;
-    sal_Int32 childArrSize;
+    std::vector<LocaleNode*> children;
 
 protected:
     mutable int nError;
@@ -97,7 +96,7 @@ public:
     const OUString& getName() const { return aName; };
     const OUString& getValue() const { return aValue; };
     const Attr& getAttr() const { return aAttribs; };
-    sal_Int32 getNumberOfChildren () const { return nChildren; };
+    sal_Int32 getNumberOfChildren () const { return sal_Int32(children.size()); };
     LocaleNode * getChildAt (sal_Int32 idx) const { return children[idx] ; };
     const LocaleNode * findNode ( const sal_Char *name) const;
     void print () const;
