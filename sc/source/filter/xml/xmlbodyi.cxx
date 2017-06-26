@@ -205,10 +205,9 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 
     SvXMLImportContext *pContext = nullptr;
 
-    const SvXMLTokenMap& rTokenMap = GetScImport().GetBodyElemTokenMap();
-    switch( rTokenMap.Get( nElement ) )
+    switch( nElement )
     {
-    case XML_TOK_BODY_TABLE:
+    case ( NAMESPACE_TOKEN( XML_NAMESPACE_TABLE ) | XML_TABLE ):
         if (GetScImport().GetTables().GetCurrentSheet() >= MAXTAB)
         {
             GetScImport().SetRangeOverflowType(SCWARN_IMPORT_SHEET_OVERFLOW);
