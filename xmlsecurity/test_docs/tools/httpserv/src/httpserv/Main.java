@@ -50,7 +50,7 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }        // TODO code application logic here
+    }
 
     static boolean parseOptions(String[] args, Option[] inout_options) {
         if (args.length == 0) {
