@@ -269,7 +269,6 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
     if (xServiceInfo->getImplementationName() == "com.sun.star.xml.security.gpg.XMLSecurityContext_GpgImpl")
     {
         // GPG keys only really have PGPKeyId and PGPKeyPacket
-        // TODO: prevent selection of gpg keys for pdfs and ooxml early on!
         if (!mxStore.is())
         {
             SAL_WARN("xmlsecurity.helper", "cannot sign pdfs with GPG keys");
