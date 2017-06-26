@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_DIF_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_DIF_HXX
 
+#include <array>
+#include <memory>
 #include <vector>
 
 #include <rtl/ustring.hxx>
@@ -162,7 +164,7 @@ public:
 
 private:
 
-    DifColumn**         ppCols;
+    std::array<std::unique_ptr<DifColumn>,MAXCOL + 1> mvCols;
 };
 
 #endif

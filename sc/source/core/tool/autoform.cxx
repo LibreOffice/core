@@ -440,9 +440,8 @@ ScAutoFormatData::ScAutoFormatData()
     bIncludeBackground =
     bIncludeWidthHeight = true;
 
-    ppDataField = new ScAutoFormatDataField*[ 16 ];
     for( sal_uInt16 nIndex = 0; nIndex < 16; ++nIndex )
-        ppDataField[ nIndex ] = new ScAutoFormatDataField;
+        ppDataField[ nIndex ].reset( new ScAutoFormatDataField );
 }
 
 ScAutoFormatData::ScAutoFormatData( const ScAutoFormatData& rData ) :
@@ -455,29 +454,25 @@ ScAutoFormatData::ScAutoFormatData( const ScAutoFormatData& rData ) :
         bIncludeValueFormat( rData.bIncludeValueFormat ),
         bIncludeWidthHeight( rData.bIncludeWidthHeight )
 {
-    ppDataField = new ScAutoFormatDataField*[ 16 ];
     for( sal_uInt16 nIndex = 0; nIndex < 16; ++nIndex )
-        ppDataField[ nIndex ] = new ScAutoFormatDataField( rData.GetField( nIndex ) );
+        ppDataField[ nIndex ].reset( new ScAutoFormatDataField( rData.GetField( nIndex ) ) );
 }
 
 ScAutoFormatData::~ScAutoFormatData()
 {
-    for( sal_uInt16 nIndex = 0; nIndex < 16; ++nIndex )
-        delete ppDataField[ nIndex ];
-    delete[] ppDataField;
 }
 
 ScAutoFormatDataField& ScAutoFormatData::GetField( sal_uInt16 nIndex )
 {
     OSL_ENSURE( nIndex < 16, "ScAutoFormatData::GetField - illegal index" );
-    OSL_ENSURE( ppDataField && ppDataField[ nIndex ], "ScAutoFormatData::GetField - no data" );
+    OSL_ENSURE( ppDataField[ nIndex ], "ScAutoFormatData::GetField - no data" );
     return *ppDataField[ nIndex ];
 }
 
 const ScAutoFormatDataField& ScAutoFormatData::GetField( sal_uInt16 nIndex ) const
 {
     OSL_ENSURE( nIndex < 16, "ScAutoFormatData::GetField - illegal index" );
-    OSL_ENSURE( ppDataField && ppDataField[ nIndex ], "ScAutoFormatData::GetField - no data" );
+    OSL_ENSURE( ppDataField[ nIndex ], "ScAutoFormatData::GetField - no data" );
     return *ppDataField[ nIndex ];
 }
 

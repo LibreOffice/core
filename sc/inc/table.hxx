@@ -145,10 +145,10 @@ private:
 
     std::unique_ptr<ScTableProtection> pTabProtection;
 
-    sal_uInt16*         pColWidth;
+    std::unique_ptr<sal_uInt16[]>            pColWidth;
     std::unique_ptr<ScFlatUInt16RowSegments> mpRowHeights;
 
-    CRFlags*            pColFlags;
+    std::unique_ptr<CRFlags[]>               pColFlags;
     ScBitMaskCompressedArray< SCROW, CRFlags>*     pRowFlags;
     std::unique_ptr<ScFlatBoolColSegments>  mpHiddenCols;
     std::unique_ptr<ScFlatBoolRowSegments>  mpHiddenRows;

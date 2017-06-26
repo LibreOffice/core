@@ -60,12 +60,15 @@ public:
 private:
     ScRange         aEffRange;
     SCTAB           nCount;
-    SCTAB*          pTabs;
-    SCTAB*          pScenarios;
+    std::unique_ptr<SCTAB[]>
+                    pTabs;
+    std::unique_ptr<SCTAB[]>
+                    pScenarios;
     sal_uLong       nEndChangeAction;
     InsCellCmd      eCmd;
     bool            bPartOfPaste;
-    SfxUndoAction*  pPasteUndo;
+    std::unique_ptr<SfxUndoAction>
+                    pPasteUndo;
 
     void            DoChange ( const bool bUndo );
     void            SetChangeTrack();
@@ -89,8 +92,10 @@ public:
 private:
     ScRange         aEffRange;
     SCTAB           nCount;
-    SCTAB*          pTabs;
-    SCTAB*          pScenarios;
+    std::unique_ptr<SCTAB[]>
+                    pTabs;
+    std::unique_ptr<SCTAB[]>
+                    pScenarios;
     sal_uLong       nStartChangeAction;
     sal_uLong       nEndChangeAction;
     DelCellCmd      eCmd;

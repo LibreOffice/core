@@ -191,7 +191,8 @@ struct RowInfo
 struct ScTableInfo
 {
     svx::frame::Array   maArray;
-    RowInfo*            mpRowInfo;
+    std::unique_ptr<RowInfo[]>
+                        mpRowInfo;
     SCSIZE              mnArrCount;
     SCSIZE              mnArrCapacity;
     bool                mbPageMode;

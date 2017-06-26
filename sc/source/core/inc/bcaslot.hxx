@@ -265,17 +265,17 @@ private:
     public:
                                         TableSlots();
                                         ~TableSlots();
-        ScBroadcastAreaSlot**    getSlots() { return ppSlots; }
+        ScBroadcastAreaSlot**    getSlots() { return ppSlots.get(); }
 
         /**
             Obtain slot pointer, no check on validity! It is assumed that
             all calls are made with the results of ComputeSlotOffset(),
             ComputeAreaPoints() and ComputeNextSlot()
           */
-        ScBroadcastAreaSlot*     getAreaSlot( SCSIZE nOff ) { return *(ppSlots + nOff); }
+        ScBroadcastAreaSlot*     getAreaSlot( SCSIZE nOff ) { return ppSlots[nOff]; }
 
     private:
-        ScBroadcastAreaSlot**   ppSlots;
+        std::unique_ptr<ScBroadcastAreaSlot*[]>   ppSlots;
 
         TableSlots( const TableSlots& ) = delete;
         TableSlots& operator=( const TableSlots& ) = delete;

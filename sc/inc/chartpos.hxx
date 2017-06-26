@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SC_INC_CHARTPOS_HXX
 #define INCLUDED_SC_INC_CHARTPOS_HXX
 
-#include <memory>
 #include "rangelst.hxx"
+#include <memory>
 #include <map>
 
 class ScAddress;
@@ -35,10 +35,10 @@ class ScChartPositionMap
 {
     friend class ScChartPositioner;
 
-            ScAddress**         ppData;
-            ScAddress**         ppColHeader;
-            ScAddress**         ppRowHeader;
-            sal_uLong               nCount;
+            std::unique_ptr<ScAddress*[]> ppData;
+            std::unique_ptr<ScAddress*[]> ppColHeader;
+            std::unique_ptr<ScAddress*[]> ppRowHeader;
+            sal_uLong           nCount;
             SCCOL               nColCount;
             SCROW               nRowCount;
 

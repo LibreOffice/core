@@ -65,8 +65,10 @@ class ScPreviewTableInfo
     SCTAB                   nTab;
     SCCOL                   nCols;
     SCROW                   nRows;
-    ScPreviewColRowInfo*    pColInfo;
-    ScPreviewColRowInfo*    pRowInfo;
+    std::unique_ptr<ScPreviewColRowInfo[]>
+                            pColInfo;
+    std::unique_ptr<ScPreviewColRowInfo[]>
+                            pRowInfo;
 
 public:
             ScPreviewTableInfo();
@@ -75,8 +77,8 @@ public:
     SCTAB                       GetTab() const      { return nTab; }
     SCCOL                       GetCols() const     { return nCols; }
     SCROW                       GetRows() const     { return nRows; }
-    const ScPreviewColRowInfo*  GetColInfo() const  { return pColInfo; }
-    const ScPreviewColRowInfo*  GetRowInfo() const  { return pRowInfo; }
+    const ScPreviewColRowInfo*  GetColInfo() const  { return pColInfo.get(); }
+    const ScPreviewColRowInfo*  GetRowInfo() const  { return pRowInfo.get(); }
 
     void    SetTab( SCTAB nNewTab );
     void    SetColInfo( SCCOL nCount, ScPreviewColRowInfo* pNewInfo );

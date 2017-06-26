@@ -291,8 +291,8 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
 
     if (bColInfo)
     {
-        pColWidth  = new sal_uInt16[ MAXCOL+1 ];
-        pColFlags  = new CRFlags[ MAXCOL+1 ];
+        pColWidth.reset( new sal_uInt16[ MAXCOL+1 ] );
+        pColFlags.reset( new CRFlags[ MAXCOL+1 ] );
 
         for (SCCOL i=0; i<=MAXCOL; i++)
         {
@@ -347,8 +347,6 @@ ScTable::~ScTable() COVERITY_NOEXCEPT_FALSE
             pDrawLayer->ScRemovePage( nTab );
     }
 
-    delete[] pColWidth;
-    delete[] pColFlags;
     delete pRowFlags;
     delete pSheetEvents;
     delete pOutlineTable;

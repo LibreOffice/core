@@ -327,7 +327,7 @@ void lcl_SetFrame( ScDocument* pDoc, SCTAB nTab,
     pDoc->ApplyFrameAreaTab(ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab), aBox, aBoxInfo);
 }
 
-void lcl_FillNumberFormats( sal_uInt32*& rFormats, long& rCount,
+void lcl_FillNumberFormats( std::unique_ptr<sal_uInt32[]>& rFormats, long& rCount,
                             const uno::Reference<sheet::XDataPilotMemberResults>& xLevRes,
                             const uno::Reference<container::XIndexAccess>& xDims )
 {
@@ -407,7 +407,7 @@ void lcl_FillNumberFormats( sal_uInt32*& rFormats, long& rCount,
         }
     }
 
-    rFormats = pNumFmt;
+    rFormats.reset( pNumFmt );
     rCount = nSize;
 }
 
@@ -693,8 +693,6 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
 
 ScDPOutput::~ScDPOutput()
 {
-    delete[] pColNumFmt;
-    delete[] pRowNumFmt;
 }
 
 void ScDPOutput::SetPosition( const ScAddress& rPos )

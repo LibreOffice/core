@@ -65,7 +65,7 @@ class MultiPropertySetHelper
 
     /// an array of indices that maps from pPropertyNames indices to
     /// aPropertySequence indices
-    sal_Int16* pSequenceIndex;
+    std::unique_ptr<sal_Int16[]> pSequenceIndex;
 
     /// the last set of values retrieved by getValues
     css::uno::Sequence< css::uno::Any > aValues;

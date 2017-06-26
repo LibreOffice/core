@@ -96,9 +96,6 @@ ScUndoInsertCells::ScUndoInsertCells( ScDocShell* pNewDocShell,
 
 ScUndoInsertCells::~ScUndoInsertCells()
 {
-    delete pPasteUndo;
-    delete []pTabs;
-    delete []pScenarios;
 }
 
 OUString ScUndoInsertCells::GetComment() const
@@ -121,7 +118,7 @@ bool ScUndoInsertCells::Merge( SfxUndoAction* pNextAction )
             //  Store paste action if this is part of paste with inserting cells.
             //  A list action isn't used because Repeat wouldn't work (insert wrong cells).
 
-            pPasteUndo = pWrappedAction;
+            pPasteUndo.reset( pWrappedAction );
             pWrapper->ForgetWrappedUndo();      // pWrapper is deleted by UndoManager
             return true;
         }
@@ -352,8 +349,6 @@ ScUndoDeleteCells::ScUndoDeleteCells( ScDocShell* pNewDocShell,
 
 ScUndoDeleteCells::~ScUndoDeleteCells()
 {
-    delete []pTabs;
-    delete []pScenarios;
 }
 
 OUString ScUndoDeleteCells::GetComment() const

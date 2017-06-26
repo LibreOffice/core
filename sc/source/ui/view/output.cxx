@@ -150,7 +150,7 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     mpRefDevice( pNewDev ),      // default is output device
     pFmtDevice( pNewDev ),      // default is output device
     mrTabInfo( rTabInfo ),
-    pRowInfo( rTabInfo.mpRowInfo ),
+    pRowInfo( rTabInfo.mpRowInfo.get() ),
     nArrCount( rTabInfo.mnArrCount ),
     mpDoc( pNewDoc ),
     nTab( nNewTab ),

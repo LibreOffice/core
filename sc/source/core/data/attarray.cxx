@@ -67,7 +67,7 @@ ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, ScAttr
             bool bNumFormatChanged;
             ScAddress aAdrStart( nCol, 0, nTab );
             ScAddress aAdrEnd( nCol, 0, nTab );
-            pData = new ScAttrEntry[nCount];
+            pData.reset( new ScAttrEntry[nCount] );
             for ( size_t nIdx = 0; nIdx < nCount; ++nIdx )
             {
                 pData[nIdx].nRow = pDefaultColAttrArray->pData[nIdx].nRow;
@@ -95,8 +95,6 @@ ScAttrArray::~ScAttrArray()
     ScDocumentPool* pDocPool = pDocument->GetPool();
     for (SCSIZE i=0; i<nCount; i++)
         pDocPool->Remove(*pData[i].pPattern);
-
-    delete[] pData;
 }
 
 #if DEBUG_SC_TESTATTRARRAY
@@ -126,7 +124,7 @@ void ScAttrArray::SetDefaultIfNotInit( SCSIZE nNeeded )
         return;
 
     SCSIZE nNewLimit = ( SC_ATTRARRAY_DELTA > nNeeded ) ? SC_ATTRARRAY_DELTA : nNeeded;
-    pData = new ScAttrEntry[nNewLimit];
+    pData.reset( new ScAttrEntry[nNewLimit] );
     pData[0].nRow = MAXROW;
     pData[0].pPattern = pDocument->GetDefPattern(); // no put
     nCount = 1;
@@ -156,13 +154,13 @@ void ScAttrArray::Reset( const ScPatternAttr* pPattern )
         }
         pDocPool->Remove(*pOldPattern);
     }
-    delete[] pData;
+    pData.reset();
 
     if (pDocument->IsStreamValid(nTab))
         pDocument->SetStreamValid(nTab, false);
 
     nCount = nLimit = 1;
-    pData = new ScAttrEntry[1];
+    pData.reset( new ScAttrEntry[1] );
     const ScPatternAttr* pNewPattern = static_cast<const ScPatternAttr*>( &pDocPool->Put(*pPattern) );
     pData[0].nRow = MAXROW;
     pData[0].pPattern = pNewPattern;
@@ -425,7 +423,7 @@ bool ScAttrArray::Reserve( SCSIZE nReserve )
         {
             nLimit = nReserve;
             nCount = 1;
-            pData = pNewData;
+            pData.reset( pNewData );
             pData[0].nRow = MAXROW;
             pData[0].pPattern = pDocument->GetDefPattern(); // no put
             return true;
@@ -438,9 +436,8 @@ bool ScAttrArray::Reserve( SCSIZE nReserve )
         if( ScAttrEntry* pNewData = new (std::nothrow) ScAttrEntry[nReserve] )
         {
             nLimit = nReserve;
-            memcpy( pNewData, pData, nCount*sizeof(ScAttrEntry) );
-            delete[] pData;
-            pData = pNewData;
+            memcpy( pNewData, pData.get(), nCount*sizeof(ScAttrEntry) );
+            pData.reset( pNewData );
             return true;
         }
         else
@@ -470,9 +467,8 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
                 if ( nLimit < nNeeded )
                     nLimit = nNeeded;
                 ScAttrEntry* pNewData = new ScAttrEntry[nLimit];
-                memcpy( pNewData, pData, nCount*sizeof(ScAttrEntry) );
-                delete[] pData;
-                pData = pNewData;
+                memcpy( pNewData, pData.get(), nCount*sizeof(ScAttrEntry) );
+                pData.reset( pNewData );
             }
 
             ScAddress       aAdrStart( nCol, 0, nTab );
@@ -590,7 +586,7 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
                 }
                 if ( ni < nj )
                 {   // remove entries
-                    memmove( pData + ni, pData + nj, (nCount - nj) * sizeof(ScAttrEntry) );
+                    memmove( pData.get() + ni, pData.get() + nj, (nCount - nj) * sizeof(ScAttrEntry) );
                     nCount -= nj - ni;
                 }
             }
@@ -600,11 +596,11 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
                 if ( nInsert <= nCount )
                 {
                     if ( !bSplit )
-                        memmove( pData + nInsert + 1, pData + nInsert,
+                        memmove( pData.get() + nInsert + 1, pData.get() + nInsert,
                             (nCount - nInsert) * sizeof(ScAttrEntry) );
                     else
                     {
-                        memmove( pData + nInsert + 2, pData + nInsert,
+                        memmove( pData.get() + nInsert + 2, pData.get() + nInsert,
                             (nCount - nInsert) * sizeof(ScAttrEntry) );
                         pData[nInsert+1] = pData[nInsert-1];
                         nCount++;
@@ -941,9 +937,7 @@ void ScAttrArray::SetAttrEntries(ScAttrEntry* pNewData, SCSIZE nSize)
     for (SCSIZE i=0; i<nCount; i++)
         pDocPool->Remove(*pData[i].pPattern);
 
-    delete[] pData;
-
-    pData = pNewData;
+    pData.reset( pNewData );
     nCount = nLimit = nSize;
 }
 

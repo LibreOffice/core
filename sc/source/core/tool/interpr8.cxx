@@ -74,10 +74,10 @@ class ScETSForecastCalculation
 private:
     SvNumberFormatter* mpFormatter;
     std::vector< DataPoint > maRange;   // data (X, Y)
-    double* mpBase;                     // calculated base value array
-    double* mpTrend;                    // calculated trend factor array
-    double* mpPerIdx;                   // calculated periodical deviation array, not used with eds
-    double* mpForecast;                 // forecasted value array
+    std::unique_ptr<double[]> mpBase;                     // calculated base value array
+    std::unique_ptr<double[]> mpTrend;                    // calculated trend factor array
+    std::unique_ptr<double[]> mpPerIdx;                   // calculated periodical deviation array, not used with eds
+    std::unique_ptr<double[]> mpForecast;                 // forecasted value array
     SCSIZE mnSmplInPrd;                 // samples per period
     double mfStepSize;                  // increment of X in maRange
     double mfAlpha, mfBeta, mfGamma;    // constants to minimise the RMSE in the ES-equations
@@ -115,7 +115,6 @@ private:
 
 public:
     ScETSForecastCalculation( SCSIZE nSize, SvNumberFormatter* pFormatter );
-    ~ScETSForecastCalculation();
 
     bool PreprocessDataRange( const ScMatrixRef& rMatX, const ScMatrixRef& rMatY, int& rSmplInPrd,
                               bool bDataCompletion, int nAggregation, const ScMatrixRef& rTMat,
@@ -152,14 +151,6 @@ ScETSForecastCalculation::ScETSForecastCalculation( SCSIZE nSize, SvNumberFormat
     , bEDS(false)
 {
     maRange.reserve( mnCount );
-}
-
-ScETSForecastCalculation::~ScETSForecastCalculation()
-{
-    delete[] mpBase;
-    delete[] mpTrend;
-    delete[] mpPerIdx;
-    delete[] mpForecast;
 }
 
 bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, const ScMatrixRef& rMatY, int& rSmplInPrd,
@@ -393,11 +384,11 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
 bool ScETSForecastCalculation::initData( )
 {
     // give various vectors size and initial value
-    mpBase     = new double[ mnCount ];
-    mpTrend    = new double[ mnCount ];
+    mpBase.reset( new double[ mnCount ] );
+    mpTrend.reset( new double[ mnCount ] );
     if ( !bEDS )
-        mpPerIdx   = new double[ mnCount ];
-    mpForecast = new double[ mnCount ];
+        mpPerIdx.reset( new double[ mnCount ] );
+    mpForecast.reset( new double[ mnCount ] );
     mpForecast[ 0 ] = maRange[ 0 ].Y;
 
     if ( prefillTrendData() )

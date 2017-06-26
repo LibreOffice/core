@@ -48,18 +48,17 @@ TokenPool::TokenPool( svl::SharedStringPool& rSPool ) :
 {
     // pool for Id-sequences
     nP_Id = 256;
-    pP_Id = new sal_uInt16[ nP_Id ];
+    pP_Id.reset( new sal_uInt16[ nP_Id ] );
 
     // pool for Ids
     nElement = 32;
-    pElement = new sal_uInt16[ nElement ];
-    pType = new E_TYPE[ nElement ];
-    pSize = new sal_uInt16[ nElement ];
+    pElement.reset( new sal_uInt16[ nElement ] );
+    pType.reset( new E_TYPE[ nElement ] );
+    pSize.reset( new sal_uInt16[ nElement ] );
     nP_IdLast = 0;
 
     nP_Matrix = 16;
-    ppP_Matrix = new ScMatrix*[ nP_Matrix ];
-    memset( ppP_Matrix, 0, sizeof( ScMatrix* ) * nP_Matrix );
+    ppP_Matrix.reset( new ScMatrix*[ nP_Matrix ] );
 
     pScToken = new ScTokenArray;
 
@@ -68,13 +67,7 @@ TokenPool::TokenPool( svl::SharedStringPool& rSPool ) :
 
 TokenPool::~TokenPool()
 {
-    delete[] pP_Id;
-    delete[] pElement;
-    delete[] pType;
-    delete[] pSize;
-
     ClearMatrix();
-    delete[] ppP_Matrix;
 
     delete pScToken;
 }
@@ -110,8 +103,7 @@ bool TokenPool::GrowId()
 
     nP_Id = nP_IdNew;
 
-    delete[] pP_Id;
-    pP_Id = pP_IdNew;
+    pP_Id.reset( pP_IdNew );
     return true;
 }
 
@@ -141,12 +133,9 @@ bool TokenPool::GrowElement()
 
     nElement = nElementNew;
 
-    delete[] pElement;
-    delete[] pType;
-    delete[] pSize;
-    pElement = pElementNew;
-    pType = pTypeNew;
-    pSize = pSizeNew;
+    pElement.reset( pElementNew );
+    pType.reset( pTypeNew );
+    pSize.reset( pSizeNew );
     return true;
 }
 
@@ -160,11 +149,10 @@ bool TokenPool::GrowMatrix()
     if (!ppNew)
         return false;
 
-    memset( ppNew, 0, sizeof( ScMatrix* ) * nNewSize );
-    memcpy( ppNew, ppP_Matrix, sizeof( ScMatrix* ) * nP_Matrix );
+    for( sal_uInt16 nL = 0 ; nL < nP_Matrix ; nL++ )
+        ppNew[ nL ] = ppP_Matrix[ nL ];
 
-    delete[] ppP_Matrix;
-    ppP_Matrix = ppNew;
+    ppP_Matrix.reset( ppNew );
     nP_Matrix = nNewSize;
     return true;
 }
@@ -202,16 +190,6 @@ bool TokenPool::GetElement( const sal_uInt16 nId )
                 }
                 break;
             case T_Err:
-/* TODO: in case we had FormulaTokenArray::AddError() */
-#if 0
-                {
-                    sal_uInt16 n = pElement[ nId ];
-                    if (n < nP_Err)
-                        pScToken->AddError( pP_Err[ n ] );
-                    else
-                        bRet = false;
-                }
-#endif
                 break;
             case T_RefC:
                 {

@@ -1532,8 +1532,8 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
     ScDBData*       pDBData = nullptr;
     std::unique_ptr<ScQueryParam> pQueryParam;
 
-    RowInfo*        pRowInfo = rTabInfo.mpRowInfo;
-    sal_uInt16          nArrCount = rTabInfo.mnArrCount;
+    RowInfo*        pRowInfo = rTabInfo.mpRowInfo.get();
+    sal_uInt16      nArrCount = rTabInfo.mnArrCount;
 
     bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 

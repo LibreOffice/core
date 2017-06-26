@@ -34,6 +34,7 @@
 #include <linguistic/lngprophelp.hxx>
 
 #include <lingutil.hxx>
+#include <memory>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -55,7 +56,7 @@ class SpellChecker :
 {
     Sequence< Locale >                 m_aSuppLocales;
     Hunspell **                        m_aDicts;
-    rtl_TextEncoding *                 m_aDEncs;
+    std::unique_ptr<rtl_TextEncoding[]> m_aDEncs;
     Locale *                           m_aDLocs;
     OUString *                         m_aDNames;
     sal_Int32                          m_nNumDict;
