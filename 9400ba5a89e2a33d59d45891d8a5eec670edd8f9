@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_e74e9995",
+        "filename": "svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-06-26T20:53:28Z",
+      "side": 1,
+      "message": "I think you need to be explicit about integer type in such cases.\n aRet.Value \u003c\u003c\u003d sal_Int32(1);",
+      "range": {
+        "startLine": 248,
+        "startChar": 23,
+        "endLine": 248,
+        "endChar": 24
+      },
+      "revId": "9400ba5a89e2a33d59d45891d8a5eec670edd8f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
