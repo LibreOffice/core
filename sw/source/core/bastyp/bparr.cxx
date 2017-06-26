@@ -50,20 +50,19 @@ BigPtrArray::BigPtrArray()
     m_nBlock = m_nCur = 0;
     m_nSize = 0;
     m_nMaxBlock = nBlockGrowSize;
-    m_ppInf = new BlockInfo* [ m_nMaxBlock ];
+    m_ppInf.reset( new BlockInfo* [ m_nMaxBlock ] );
 }
 
 BigPtrArray::~BigPtrArray()
 {
     if( m_nBlock )
     {
-        BlockInfo** pp = m_ppInf;
+        BlockInfo** pp = m_ppInf.get();
         for( sal_uInt16 n = 0; n < m_nBlock; ++n, ++pp )
         {
             delete *pp;
         }
     }
-    delete[] m_ppInf;
 }
 
 // Also moving is done simply here. Optimization is useless because of the
@@ -138,7 +137,7 @@ sal_uInt16 BigPtrArray::Index2Block( sal_uLong pos ) const
 */
 void BigPtrArray::UpdIndex( sal_uInt16 pos )
 {
-    BlockInfo** pp = m_ppInf + pos;
+    BlockInfo** pp = m_ppInf.get() + pos;
     sal_uLong idx = (*pp)->nEnd + 1;
     while( ++pos < m_nBlock )
     {
@@ -161,14 +160,13 @@ BlockInfo* BigPtrArray::InsBlock( sal_uInt16 pos )
     {
         // than extend the array first
         BlockInfo** ppNew = new BlockInfo* [ m_nMaxBlock + nBlockGrowSize ];
-        memcpy( ppNew, m_ppInf, m_nMaxBlock * sizeof( BlockInfo* ));
-        delete[] m_ppInf;
+        memcpy( ppNew, m_ppInf.get(), m_nMaxBlock * sizeof( BlockInfo* ));
         m_nMaxBlock += nBlockGrowSize;
-        m_ppInf = ppNew;
+        m_ppInf.reset( ppNew );
     }
     if( pos != m_nBlock )
     {
-        memmove( m_ppInf + pos+1, m_ppInf + pos,
+        memmove( m_ppInf.get() + pos+1, m_ppInf.get() + pos,
                  ( m_nBlock - pos ) * sizeof( BlockInfo* ));
     }
     ++m_nBlock;
@@ -194,9 +192,8 @@ void BigPtrArray::BlockDel( sal_uInt16 nDel )
         // than shrink array
         nDel = (( m_nBlock / nBlockGrowSize ) + 1 ) * nBlockGrowSize;
         BlockInfo** ppNew = new BlockInfo* [ nDel ];
-        memcpy( ppNew, m_ppInf, m_nBlock * sizeof( BlockInfo* ));
-        delete[] m_ppInf;
-        m_ppInf = ppNew;
+        memcpy( ppNew, m_ppInf.get(), m_nBlock * sizeof( BlockInfo* ));
+        m_ppInf.reset( ppNew );
         m_nMaxBlock = nDel;
     }
 }
@@ -353,7 +350,7 @@ void BigPtrArray::Remove( sal_uLong pos, sal_uLong n )
 
         if( ( nBlk1del + nBlkdel ) < m_nBlock )
         {
-            memmove( m_ppInf + nBlk1del, m_ppInf + nBlk1del + nBlkdel,
+            memmove( m_ppInf.get() + nBlk1del, m_ppInf.get() + nBlk1del + nBlkdel,
                      ( m_nBlock - nBlkdel - nBlk1del ) * sizeof( BlockInfo* ) );
 
             // UpdateIdx updates the successor thus start before first elem
@@ -401,7 +398,7 @@ sal_uInt16 BigPtrArray::Compress()
     // Iterate over InfoBlock array from beginning to end. If there is a deleted
     // block in between so move all following ones accordingly. The pointer <pp>
     // represents the "old" and <qq> the "new" array.
-    BlockInfo** pp = m_ppInf, **qq = pp;
+    BlockInfo** pp = m_ppInf.get(), **qq = pp;
     BlockInfo* p;
     BlockInfo* pLast(nullptr);                 // last empty block
     sal_uInt16 nLast = 0;                // missing elements
