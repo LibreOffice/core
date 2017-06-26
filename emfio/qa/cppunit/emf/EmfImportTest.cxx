@@ -83,7 +83,7 @@ void Test::checkRectPrimitive(Primitive2DSequence& rPrimitive)
 
 void Test::testWorking()
 {
-    Primitive2DSequence aSequenceRect = parseEmf("/emfio/qa/cppunit/data/fdo79679-2.emf");
+    Primitive2DSequence aSequenceRect = parseEmf("/emfio/qa/cppunit/emf/data/fdo79679-2.emf");
     CPPUNIT_ASSERT_EQUAL(1, (int) aSequenceRect.getLength());
     checkRectPrimitive(aSequenceRect);
 }
