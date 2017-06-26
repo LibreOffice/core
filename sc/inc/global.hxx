@@ -589,7 +589,7 @@ public:
     SC_DLLPUBLIC static long                nLastRowHeightExtra;
     static long             nLastColWidthExtra;
 
-    static void             Init();                     // during start up
+    SC_DLLPUBLIC static void Init();                     // during start up
     static void             InitAddIns();
     static void             Clear();                    // at the end of the program
 
