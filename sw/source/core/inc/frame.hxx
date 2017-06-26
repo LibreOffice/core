@@ -42,7 +42,6 @@ class SwFootnoteFrame;
 class SwFootnoteBossFrame;
 class SwTabFrame;
 class SwRowFrame;
-class SwCellFrame;
 class SwFlowFrame;
 class SwContentFrame;
 class SfxPoolItem;
@@ -228,7 +227,6 @@ class SW_DLLPUBLIC SwFrame: public SwClient, public SfxBroadcaster
     const SwLayoutFrame* ImplGetNextLayoutLeaf( bool bFwd ) const;
 
     SwPageFrame* ImplFindPageFrame();
-    SwCellFrame* ImplFindCellFrame();
 
 protected:
     SwSortedObjs* mpDrawObjs;    // draw objects, can be 0
@@ -772,12 +770,6 @@ public:
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const;
     void dumpChildrenAsXml(xmlTextWriterPtr writer) const;
     bool IsCollapse() const;
-
-    /// Find the nearest table cell frame that contains us, if any.
-    SwCellFrame* FindCellFrame()
-    {
-        return IsInTab() ? ImplFindCellFrame() : nullptr;
-    }
 };
 
 inline bool SwFrame::IsInDocBody() const
