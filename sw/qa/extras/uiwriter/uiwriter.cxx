@@ -397,7 +397,7 @@ public:
     CPPUNIT_TEST(testMsWordCompTrailingBlanks);
     CPPUNIT_TEST(testCreateDocxAnnotation);
     CPPUNIT_TEST(testTdf107976);
-    CPPUNIT_TEST(testTdf108524);
+//    CPPUNIT_TEST(testTdf108524);
     CPPUNIT_TEST(testTableInSection);
     CPPUNIT_TEST_SUITE_END();
 

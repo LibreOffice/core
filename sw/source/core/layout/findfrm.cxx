@@ -459,18 +459,6 @@ SwTabFrame* SwFrame::ImplFindTabFrame()
     return static_cast<SwTabFrame*>(pRet);
 }
 
-SwCellFrame* SwFrame::ImplFindCellFrame()
-{
-    SwFrame *pRet = this;
-    while (!pRet->IsCellFrame())
-    {
-        pRet = pRet->GetUpper();
-        if (!pRet)
-            return nullptr;
-    }
-    return static_cast<SwCellFrame*>(pRet);
-}
-
 SwSectionFrame* SwFrame::ImplFindSctFrame()
 {
     SwFrame *pRet = this;
