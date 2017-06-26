@@ -165,7 +165,9 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
         // themselves to a default size OLESIZE
         awt::Size aOrigSize = getVisualAreaSize(nAspect);
         changeState(embed::EmbedStates::RUNNING);
-        if (aOrigSize != getVisualAreaSize(nAspect))
+        const bool bIsChart = GetDocumentServiceName() == "com.sun.star.chart2.ChartDocument";
+        // tdf#108643 unless its a chart, cause those are weird (#i103460#)
+        if (!bIsChart && aOrigSize != getVisualAreaSize(nAspect))
             setVisualAreaSize(nAspect, aOrigSize);
 
         // the links should be switched back to loaded state for now to avoid locking problems
