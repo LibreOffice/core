@@ -53,7 +53,7 @@ void ScFormulaListener::startListening(ScTokenArray* pArr, const ScRange& rRange
                 if (aRange.IsValid())
                     mpDoc->StartListeningArea(aRange, false, this);
 
-                maCells.push_back(aCell);
+                maCells.push_back(aRange);
             }
             break;
             case formula::svDoubleRef:
