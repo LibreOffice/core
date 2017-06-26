@@ -423,6 +423,30 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
     if (aFunctionName == "doc_getTileMode") {
         return true;
     }
+    // apparently this will be useful at sometime in the future
+    if (aFunctionName == "LocaleDataWrapper::getCurrZeroChar") {
+        return true;
+    }
+    // marked with TODO
+    if (aFunctionName == "oglcanvas::TextLayout::draw") {
+        return true;
+    }
+    // called from the .sdi files
+    if (aFunctionName == "SfxObjectShell::StateView_Impl") {
+        return true;
+    }
+    // gtk callback
+    if (aFunctionName == "GtkSalFrame::signalVisibility") {
+        return true;
+    }
+    // platform-version-dependent code
+    if (aFunctionName == "(anonymous namespace)::ACTIVE_TAB") {
+        return true;
+    }
+    // SMIL callbacks
+    if (aFunctionName == "boost::sp_scalar_constructor_hook" || aFunctionName == "boost::sp_scalar_destructor_hook") {
+        return true;
+    }
 
 
 
