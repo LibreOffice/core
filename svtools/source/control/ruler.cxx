@@ -88,8 +88,6 @@ private:
 
 public:
     ImplRulerData();
-
-    ImplRulerData& operator=( const ImplRulerData& rData );
 };
 
 ImplRulerData::ImplRulerData() :
@@ -108,69 +106,6 @@ ImplRulerData::ImplRulerData() :
     bAutoPageWidth    (true), // Page width == EditWin width
     bTextRTL          (false)
 {
-}
-
-ImplRulerData& ImplRulerData::operator=( const ImplRulerData& rData )
-{
-    if( this == &rData )
-        return *this;
-
-    nNullVirOff       = rData.nNullVirOff;
-    nRulVirOff        = rData.nRulVirOff;
-    nRulWidth         = rData.nRulWidth;
-    nPageOff          = rData.nPageOff;
-    nPageWidth        = rData.nPageWidth;
-    nNullOff          = rData.nNullOff;
-    nMargin1          = rData.nMargin1;
-    nMargin2          = rData.nMargin2;
-    nLeftFrameMargin  = rData.nLeftFrameMargin;
-    nRightFrameMargin = rData.nRightFrameMargin;
-    nMargin1Style     = rData.nMargin1Style;
-    nMargin2Style     = rData.nMargin2Style;
-    bAutoPageWidth    = rData.bAutoPageWidth;
-    bTextRTL          = rData.bTextRTL;
-
-    if ( !rData.pLines.empty() )
-    {
-        pLines.resize(rData.pLines.size());
-        std::copy(rData.pLines.begin(), rData.pLines.end(), pLines.begin());
-    }
-    else
-    {
-        pLines.clear();
-    }
-
-    if ( !rData.pBorders.empty() )
-    {
-        pBorders.resize(rData.pBorders.size());
-        std::copy(rData.pBorders.begin(), rData.pBorders.end(), pBorders.begin());
-    }
-    else
-    {
-        pBorders.clear();
-    }
-
-    if ( !rData.pIndents.empty() )
-    {
-        pIndents.resize(rData.pIndents.size());
-        std::copy(rData.pIndents.begin(), rData.pIndents.end(), pIndents.begin());
-    }
-    else
-    {
-        pIndents.clear();
-    }
-
-    if ( !rData.pTabs.empty() )
-    {
-        pTabs.resize(rData.pTabs.size());
-        std::copy(rData.pTabs.begin(), rData.pTabs.end(), pTabs.begin());
-    }
-    else
-    {
-        pTabs.clear();
-    }
-
-    return *this;
 }
 
 static const RulerUnitData aImplRulerUnitTab[RULER_UNIT_COUNT] =
