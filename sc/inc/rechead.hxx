@@ -21,6 +21,7 @@
 #define INCLUDED_SC_INC_RECHEAD_HXX
 
 #include <tools/stream.hxx>
+#include <memory>
 
 //      ID's for files:
 
@@ -49,9 +50,10 @@ class SvStream;
 class ScMultipleReadHeader
 {
 private:
-    SvStream&       rStream;
-    sal_uInt8*          pBuf;
-    SvMemoryStream* pMemStream;
+    SvStream&           rStream;
+    std::unique_ptr<sal_uInt8[]>
+                        pBuf;
+    SvMemoryStream*     pMemStream;
     sal_uLong           nEndPos;
     sal_uLong           nEntryEnd;
     sal_uLong           nTotalEnd;

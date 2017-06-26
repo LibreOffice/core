@@ -36,10 +36,7 @@ ScAsciiOptions::ScAsciiOptions() :
     eCharSet        ( osl_getThreadTextEncoding() ),
     eLang           ( LANGUAGE_SYSTEM ),
     bCharSetSystem  ( false ),
-    nStartRow       ( 1 ),
-    nInfoCount      ( 0 ),
-    pColStart       ( nullptr ),
-    pColFormat      ( nullptr )
+    nStartRow       ( 1 )
 {
 }
 
@@ -54,78 +51,41 @@ ScAsciiOptions::ScAsciiOptions(const ScAsciiOptions& rOpt) :
     eLang           ( rOpt.eLang ),
     bCharSetSystem  ( rOpt.bCharSetSystem ),
     nStartRow       ( rOpt.nStartRow ),
-    nInfoCount      ( rOpt.nInfoCount )
+    mvColStart      ( rOpt.mvColStart ),
+    mvColFormat     ( rOpt.mvColFormat )
 {
-    if (nInfoCount)
-    {
-        pColStart = new sal_Int32[nInfoCount];
-        pColFormat = new sal_uInt8[nInfoCount];
-        for (sal_uInt16 i=0; i<nInfoCount; i++)
-        {
-            pColStart[i] = rOpt.pColStart[i];
-            pColFormat[i] = rOpt.pColFormat[i];
-        }
-    }
-    else
-    {
-        pColStart = nullptr;
-        pColFormat = nullptr;
-    }
 }
 
 ScAsciiOptions::~ScAsciiOptions()
 {
-    delete[] pColStart;
-    delete[] pColFormat;
 }
 
 void ScAsciiOptions::SetColInfo( sal_uInt16 nCount, const sal_Int32* pStart, const sal_uInt8* pFormat )
 {
-    delete[] pColStart;
-    delete[] pColFormat;
-
-    nInfoCount = nCount;
-
-    if (nInfoCount)
+    mvColStart.resize(nCount);
+    mvColFormat.resize(nCount);
+    for (sal_uInt16 i=0; i<nCount; i++)
     {
-        pColStart = new sal_Int32[nInfoCount];
-        pColFormat = new sal_uInt8[nInfoCount];
-        for (sal_uInt16 i=0; i<nInfoCount; i++)
-        {
-            pColStart[i] = pStart[i];
-            pColFormat[i] = pFormat[i];
-        }
-    }
-    else
-    {
-        pColStart = nullptr;
-        pColFormat = nullptr;
+        mvColStart[i] = pStart[i];
+        mvColFormat[i] = pFormat[i];
     }
 }
 
 void ScAsciiOptions::SetColumnInfo( const ScCsvExpDataVec& rDataVec )
 {
-    delete[] pColStart;
-    pColStart = nullptr;
-    delete[] pColFormat;
-    pColFormat = nullptr;
-
-    nInfoCount = static_cast< sal_uInt16 >( rDataVec.size() );
-    if( nInfoCount )
+    sal_uInt16 nInfoCount = static_cast< sal_uInt16 >( rDataVec.size() );
+    mvColStart.resize(nInfoCount);
+    mvColFormat.resize(nInfoCount);
+    for( sal_uInt16 nIx = 0; nIx < nInfoCount; ++nIx )
     {
-        pColStart = new sal_Int32[ nInfoCount ];
-        pColFormat = new sal_uInt8[ nInfoCount ];
-        for( sal_uInt16 nIx = 0; nIx < nInfoCount; ++nIx )
-        {
-            pColStart[ nIx ] = rDataVec[ nIx ].mnIndex;
-            pColFormat[ nIx ] = rDataVec[ nIx ].mnType;
-        }
+        mvColStart[ nIx ] = rDataVec[ nIx ].mnIndex;
+        mvColFormat[ nIx ] = rDataVec[ nIx ].mnType;
     }
 }
 
 ScAsciiOptions& ScAsciiOptions::operator=( const ScAsciiOptions& rCpy )
 {
-    SetColInfo( rCpy.nInfoCount, rCpy.pColStart, rCpy.pColFormat );
+    SetColInfo( rCpy.mvColStart.size(), rCpy.mvColStart.data(), rCpy.mvColFormat.data() );
 
     bFixedLen       = rCpy.bFixedLen;
     aFieldSeps      = rCpy.aFieldSeps;
@@ -203,27 +163,16 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
     // Token 4: Column info.
     if ( nPos >= 0 )
     {
-        delete[] pColStart;
-        delete[] pColFormat;
-
         const OUString aToken = rString.getToken(0, ',', nPos);
         sal_Int32 nSub = comphelper::string::getTokenCount(aToken, '/');
-        nInfoCount = nSub / 2;
-        if (nInfoCount)
+        sal_Int32 nInfoCount = nSub / 2;
+        mvColStart.resize(nInfoCount);
+        mvColFormat.resize(nInfoCount);
+        sal_Int32 nP = 0;
+        for (sal_Int32 nInfo=0; nInfo<nInfoCount; ++nInfo)
         {
-            pColStart = new sal_Int32[nInfoCount];
-            pColFormat = new sal_uInt8[nInfoCount];
-            sal_Int32 nP = 0;
-            for (sal_Int32 nInfo=0; nInfo<nInfoCount; ++nInfo)
-            {
-                pColStart[nInfo]  = aToken.getToken(0, '/', nP).toInt32();
-                pColFormat[nInfo] = static_cast<sal_uInt8>(aToken.getToken(0, '/', nP).toInt32());
-            }
-        }
-        else
-        {
-            pColStart = nullptr;
-            pColFormat = nullptr;
+            mvColStart[nInfo]  = aToken.getToken(0, '/', nP).toInt32();
+            mvColFormat[nInfo] = static_cast<sal_uInt8>(aToken.getToken(0, '/', nP).toInt32());
         }
     }
 
@@ -289,14 +238,13 @@ OUString ScAsciiOptions::WriteToString() const
     aOutStr += "," + OUString::number(nStartRow) + ",";
 
     // Column info.
-    OSL_ENSURE( !nInfoCount || (pColStart && pColFormat), "NULL pointer in ScAsciiOptions column info" );
-    for (sal_uInt16 nInfo=0; nInfo<nInfoCount; nInfo++)
+    for (size_t nInfo=0; nInfo<mvColStart.size(); nInfo++)
     {
         if (nInfo)
             aOutStr += "/";
-        aOutStr += OUString::number(pColStart[nInfo]) +
+        aOutStr += OUString::number(mvColStart[nInfo]) +
                    "/" +
-                   OUString::number(pColFormat[nInfo]);
+                   OUString::number(mvColFormat[nInfo]);
     }
 
     // #i112025# the options string is used in macros and linked sheets,

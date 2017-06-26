@@ -668,38 +668,28 @@ void DifColumn::Apply( ScDocument& rDoc, const SCCOL nCol, const SCTAB nTab )
 
 DifAttrCache::DifAttrCache()
 {
-    ppCols = new DifColumn *[ MAXCOL + 1 ];
-    for( SCCOL nCnt = 0 ; nCnt <= MAXCOL ; nCnt++ )
-        ppCols[ nCnt ] = nullptr;
 }
 
 DifAttrCache::~DifAttrCache()
 {
-    for( SCCOL nCnt = 0 ; nCnt <= MAXCOL ; nCnt++ )
-    {
-        if( ppCols[ nCnt ] )
-            delete ppCols[ nCnt ];
-    }
-
-    delete[] ppCols;
 }
 
 void DifAttrCache::SetNumFormat( const SCCOL nCol, const SCROW nRow, const sal_uInt32 nNumFormat )
 {
     OSL_ENSURE( ValidCol(nCol), "-DifAttrCache::SetNumFormat(): Col too big!" );
 
-    if( !ppCols[ nCol ] )
-        ppCols[ nCol ] = new DifColumn;
+    if( !mvCols[ nCol ] )
+        mvCols[ nCol ].reset( new DifColumn );
 
-    ppCols[ nCol ]->SetNumFormat( nRow, nNumFormat );
+    mvCols[ nCol ]->SetNumFormat( nRow, nNumFormat );
 }
 
 void DifAttrCache::Apply( ScDocument& rDoc, SCTAB nTab )
 {
     for( SCCOL nCol = 0 ; nCol <= MAXCOL ; nCol++ )
     {
-        if( ppCols[ nCol ] )
-            ppCols[ nCol ]->Apply( rDoc, nCol, nTab );
+        if( mvCols[ nCol ] )
+            mvCols[ nCol ]->Apply( rDoc, nCol, nTab );
     }
 }
 

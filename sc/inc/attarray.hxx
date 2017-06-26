@@ -90,7 +90,8 @@ private:
 
     SCSIZE          nCount;
     SCSIZE          nLimit;
-    ScAttrEntry*    pData;
+    std::unique_ptr<ScAttrEntry[]>
+                    pData;
 
 friend class ScDocument;                // for FillInfo
 friend class ScDocumentIterator;

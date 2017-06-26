@@ -88,7 +88,6 @@ SpellChecker::~SpellChecker()
        }
        delete[] m_aDicts;
     }
-    delete[] m_aDEncs;
     delete[] m_aDLocs;
     delete[] m_aDNames;
     if (m_pPropHelper)
@@ -200,7 +199,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
 
             // add dictionary information
             m_aDicts  = new Hunspell* [m_nNumDict];
-            m_aDEncs  = new rtl_TextEncoding [m_nNumDict];
+            m_aDEncs.reset( new rtl_TextEncoding [m_nNumDict] );
             m_aDLocs  = new Locale [m_nNumDict];
             m_aDNames = new OUString [m_nNumDict];
             k = 0;
@@ -240,8 +239,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             m_nNumDict = 0;
             delete[] m_aDicts;
             m_aDicts  = nullptr;
-            delete[] m_aDEncs;
-            m_aDEncs = nullptr;
+            m_aDEncs.reset();
             delete[] m_aDLocs;
             m_aDLocs  = nullptr;
             delete[] m_aDNames;
