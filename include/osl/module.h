@@ -76,7 +76,7 @@ SAL_DLLPUBLIC oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_
 /** Load a shared library or module.
 
     @param[in] pModuleName denotes the name of the module to be loaded.
-    @paramiin] nRtldMode denotes the mode.
+    @param[in] nRtldMode denotes the mode.
 
     @return NULL if the module could not be loaded, otherwise a handle to the module.
 
@@ -196,7 +196,7 @@ SAL_DLLPUBLIC oslGenericFunction SAL_CALL osl_getAsciiFunctionSymbol(
 /** Lookup URL of module which is mapped at the specified address.
 
     @param[in] pv       specifies an address in the process memory space.
-    @paramout] pustrURL receives the URL of the module that is mapped at pv.
+    @param[out] pustrURL receives the URL of the module that is mapped at pv.
     @return sal_True on success, sal_False if no module can be found at the specified address.
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getModuleURLFromAddress(

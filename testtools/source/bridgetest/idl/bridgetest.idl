@@ -161,7 +161,7 @@ struct TestPolyStruct2<T,C> {
 interface XRecursiveCall : com::sun::star::uno::XInterface
 {
     /***
-     * @param nToCall If nToCall is 0, the method returns immeadiatly.
+     * @param nToCall If nToCall is 0, the method returns immediately.
      *                Otherwise, call the given interface with nToCall -1
      *
      ***/
