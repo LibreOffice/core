@@ -96,8 +96,8 @@
 /** "Safe" memory allocation in ctor */
 class WLevDisPatternMem
 {
-    sal_Unicode     *cp;
-    bool            *bp;
+    std::unique_ptr<sal_Unicode[]> cp;
+    std::unique_ptr<bool[]>        bp;
 public:
     explicit WLevDisPatternMem( sal_Int32 s )
         : cp(new sal_Unicode[s])
@@ -105,13 +105,8 @@ public:
     {
     }
 
-    ~WLevDisPatternMem()
-    {
-        delete [] cp;
-        delete [] bp;
-    }
-    sal_Unicode* GetcPtr() const        { return cp; }
-    bool* GetbPtr() const               { return bp; }
+    sal_Unicode* GetcPtr() const        { return cp.get(); }
+    bool* GetbPtr() const               { return bp.get(); }
 };
 
 class WLevDisDistanceMem

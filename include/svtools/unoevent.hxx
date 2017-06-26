@@ -24,6 +24,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <vector>
+#include <memory>
 
 class SvxMacroTableDtor;
 class SvxMacroItem;
@@ -202,7 +204,7 @@ protected:
 class SVT_DLLPUBLIC SvDetachedEventDescriptor : public SvBaseEventDescriptor
 {
     // the macros; aMacros[i] is the value for aSupportedMacroItemIDs[i]
-    SvxMacro** aMacros;
+    std::vector<std::unique_ptr<SvxMacro>> aMacros;
 
     const OUString sImplName;
 

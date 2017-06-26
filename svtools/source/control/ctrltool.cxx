@@ -338,7 +338,6 @@ FontList::FontList(OutputDevice* pDevice, OutputDevice* pDevice2)
     // initialise variables
     mpDev = pDevice;
     mpDev2 = pDevice2;
-    mpSizeAry = nullptr;
 
     // store style names
     maLight         = SvtResId(STR_SVT_STYLE_LIGHT);
@@ -368,9 +367,6 @@ FontList::FontList(OutputDevice* pDevice, OutputDevice* pDevice2)
 
 FontList::~FontList()
 {
-    // delete SizeArray if required
-    delete[] mpSizeAry;
-
     // delete FontMetrics
     ImplFontListFontMetric *pTemp, *pInfo;
     for (auto const& it : m_Entries)
@@ -748,11 +744,7 @@ const FontMetric& FontList::GetFontMetric( sal_Handle hFontMetric )
 const sal_IntPtr* FontList::GetSizeAry( const FontMetric& rInfo ) const
 {
     // first delete Size-Array
-    if ( mpSizeAry )
-    {
-        delete[] const_cast<FontList*>(this)->mpSizeAry;
-        const_cast<FontList*>(this)->mpSizeAry = nullptr;
-    }
+    mpSizeAry.reset();
 
     // use standard sizes if no name
     if ( rInfo.GetFamilyName().isEmpty() )
@@ -775,21 +767,21 @@ const sal_IntPtr* FontList::GetSizeAry( const FontMetric& rInfo ) const
 
     int nRealCount = 0;
     long    nOldHeight = 0;
-    const_cast<FontList*>(this)->mpSizeAry = new sal_IntPtr[nDevSizeCount+1];
+    mpSizeAry.reset(new sal_IntPtr[nDevSizeCount+1] );
     for (int i = 0; i < nDevSizeCount; ++i)
     {
         Size aSize = pDevice->GetDevFontSize( rInfo, i );
         if ( aSize.Height() != nOldHeight )
         {
             nOldHeight = aSize.Height();
-            const_cast<FontList*>(this)->mpSizeAry[nRealCount] = nOldHeight;
+            mpSizeAry[nRealCount] = nOldHeight;
             nRealCount++;
         }
     }
-    const_cast<FontList*>(this)->mpSizeAry[nRealCount] = 0;
+    mpSizeAry[nRealCount] = 0;
 
     pDevice->SetMapMode( aOldMapMode );
-    return mpSizeAry;
+    return mpSizeAry.get();
 }
 
 struct ImplFSNameItem
