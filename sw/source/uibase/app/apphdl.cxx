@@ -829,7 +829,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             switch( pEvHint->GetEventId() )
             {
             case SfxEventHintId::LoadFinished:
-                OSL_ASSERT(!pWrtSh);
+                assert(!pWrtSh);
                 // if it is a new document created from a template,
                 // update fixed fields
                 if (pDocSh->GetMedium())
