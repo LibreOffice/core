@@ -107,7 +107,7 @@ struct RefUpdateResult
     RefUpdateResult(const RefUpdateResult& r);
 };
 
-struct RefUpdateInsertTabContext
+struct SC_DLLPUBLIC RefUpdateInsertTabContext
 {
     ScDocument& mrDoc;
     SCTAB mnInsertPos;
@@ -117,7 +117,7 @@ struct RefUpdateInsertTabContext
     RefUpdateInsertTabContext(ScDocument& rDoc, SCTAB nInsertPos, SCTAB nSheets);
 };
 
-struct RefUpdateDeleteTabContext
+struct SC_DLLPUBLIC RefUpdateDeleteTabContext
 {
     ScDocument& mrDoc;
     SCTAB mnDeletePos;

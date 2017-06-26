@@ -29,6 +29,7 @@
 #include "convuno.hxx"
 #include "externalrefmgr.hxx"
 #include "compiler.hxx"
+#include "refupdatecontext.hxx"
 
 using ::formula::FormulaGrammar;
 using namespace ::com::sun::star;
@@ -1011,6 +1012,22 @@ bool ScAreaNameIterator::Next( OUString& rName, ScRange& rRange )
             else
                 return false;                               // nothing left
         }
+    }
+}
+
+void ScRangeUpdater::UpdateInsertTab(ScAddress& rAddr, const sc::RefUpdateInsertTabContext& rCxt)
+{
+    if (rCxt.mnInsertPos <= rAddr.Tab())
+    {
+        rAddr.IncTab(rCxt.mnSheets);
+    }
+}
+
+void ScRangeUpdater::UpdateDeleteTab(ScAddress& rAddr, const sc::RefUpdateDeleteTabContext& rCxt)
+{
+    if (rCxt.mnDeletePos <= rAddr.Tab())
+    {
+        rAddr.IncTab(-rCxt.mnSheets);
     }
 }
 
