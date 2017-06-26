@@ -127,6 +127,7 @@ void ScFormulaListener::stopListening()
         return;
 
     std::for_each(maCells.begin(), maCells.end(), StopListeningCell(mpDoc, this));
+    maCells.clear();
 }
 
 ScFormulaListener::~ScFormulaListener()
