@@ -1360,7 +1360,7 @@ RemoveDir::Finish(int status)
 class AddFile : public Action
 {
 public:
-    AddFile(ArchiveReader *ar) : mAdded(false), mArchiveReader(ar) { }
+    AddFile(ArchiveReader& ar) : mAdded(false), mArchiveReader(ar) { }
 
     virtual int Parse(NS_tchar *line);
     virtual int Prepare();
@@ -1371,7 +1371,7 @@ private:
     std::unique_ptr<NS_tchar> mFile;
     std::unique_ptr<NS_tchar> mRelPath;
     bool mAdded;
-    ArchiveReader *mArchiveReader;
+    ArchiveReader& mArchiveReader;
 };
 
 int
@@ -1411,11 +1411,6 @@ AddFile::Execute()
 
     int rv;
 
-    if(!mArchiveReader) {
-        LOG(("AddFile runs without valid ArchiveReader"));
-        return USAGE_ERROR;
-    }
-
     // First make sure that we can actually get rid of any existing file.
     rv = NS_taccess(mFile.get(), F_OK);
     if (rv == 0)
@@ -1440,9 +1435,9 @@ AddFile::Execute()
         return STRING_CONVERSION_ERROR;
     }
 
-    rv = mArchiveReader->ExtractFile(sourcefile, mFile.get());
+    rv = mArchiveReader.ExtractFile(sourcefile, mFile.get());
 #else
-    rv = mArchiveReader->ExtractFile(mRelPath.get(), mFile.get());
+    rv = mArchiveReader.ExtractFile(mRelPath.get(), mFile.get());
 #endif
     if (!rv)
     {
@@ -1465,7 +1460,7 @@ AddFile::Finish(int status)
 class PatchFile : public Action
 {
 public:
-    PatchFile(ArchiveReader *ar) : mPatchFile(nullptr), mPatchIndex(-1), buf(nullptr), mArchiveReader(ar) { }
+    PatchFile(ArchiveReader& ar) : mPatchFile(nullptr), mPatchIndex(-1), buf(nullptr), mArchiveReader(ar) { }
 
     virtual ~PatchFile();
 
@@ -1487,7 +1482,7 @@ private:
     unsigned char *buf;
     NS_tchar spath[MAXPATHLEN];
     AutoFile mPatchStream;
-    ArchiveReader *mArchiveReader;
+    ArchiveReader& mArchiveReader;
 };
 
 int PatchFile::sPatchIndex = 0;
@@ -1602,11 +1597,6 @@ PatchFile::Prepare()
 {
     LOG(("PREPARE PATCH " LOG_S, mFileRelPath.get()));
 
-    if(!mArchiveReader) {
-        LOG(("PatchFile runs without valid ArchiveReader"));
-        return USAGE_ERROR;
-    }
-
     // extract the patch to a temporary file
     mPatchIndex = sPatchIndex++;
 
@@ -1636,9 +1626,9 @@ PatchFile::Prepare()
         return STRING_CONVERSION_ERROR;
     }
 
-    int rv = mArchiveReader->ExtractFileToStream(sourcefile, mPatchStream);
+    int rv = mArchiveReader.ExtractFileToStream(sourcefile, mPatchStream);
 #else
-    int rv = mArchiveReader->ExtractFileToStream(mPatchFile, mPatchStream);
+    int rv = mArchiveReader.ExtractFileToStream(mPatchFile, mPatchStream);
 #endif
 
     return rv;
@@ -1798,7 +1788,7 @@ PatchFile::Finish(int status)
 class AddIfFile : public AddFile
 {
 public:
-    AddIfFile(ArchiveReader* archiveReader);
+    AddIfFile(ArchiveReader& archiveReader);
 
     virtual int Parse(NS_tchar *line);
     virtual int Prepare();
@@ -1809,7 +1799,7 @@ protected:
     std::unique_ptr<NS_tchar> mTestFile;
 };
 
-AddIfFile::AddIfFile(ArchiveReader* archiveReader):
+AddIfFile::AddIfFile(ArchiveReader& archiveReader):
     AddFile(archiveReader)
 {
 }
@@ -1865,7 +1855,7 @@ AddIfFile::Finish(int status)
 class AddIfNotFile : public AddFile
 {
 public:
-    AddIfNotFile(ArchiveReader* archiveReader);
+    AddIfNotFile(ArchiveReader& archiveReader);
 
     virtual int Parse(NS_tchar *line);
     virtual int Prepare();
@@ -1876,7 +1866,7 @@ protected:
     std::unique_ptr<NS_tchar> mTestFile;
 };
 
-AddIfNotFile::AddIfNotFile(ArchiveReader* archiveReader):
+AddIfNotFile::AddIfNotFile(ArchiveReader& archiveReader):
     AddFile(archiveReader)
 {
 }
@@ -1932,7 +1922,7 @@ AddIfNotFile::Finish(int status)
 class PatchIfFile : public PatchFile
 {
 public:
-    PatchIfFile(ArchiveReader* archiveReader);
+    PatchIfFile(ArchiveReader& archiveReader);
 
     virtual int Parse(NS_tchar *line);
     virtual int Prepare(); // should check for patch file and for checksum here
@@ -1943,7 +1933,7 @@ private:
     std::unique_ptr<NS_tchar> mTestFile;
 };
 
-PatchIfFile::PatchIfFile(ArchiveReader* archiveReader):
+PatchIfFile::PatchIfFile(ArchiveReader& archiveReader):
     PatchFile(archiveReader)
 {
 }
@@ -4546,23 +4536,23 @@ int DoUpdate(ArchiveReader& archiveReader)
         }
         else if (NS_tstrcmp(token, NS_T("add")) == 0)
         {
-            action = new AddFile(&archiveReader);
+            action = new AddFile(archiveReader);
         }
         else if (NS_tstrcmp(token, NS_T("patch")) == 0)
         {
-            action = new PatchFile(&archiveReader);
+            action = new PatchFile(archiveReader);
         }
         else if (NS_tstrcmp(token, NS_T("add-if")) == 0)   // Add if exists
         {
-            action = new AddIfFile(&archiveReader);
+            action = new AddIfFile(archiveReader);
         }
         else if (NS_tstrcmp(token, NS_T("add-if-not")) == 0)   // Add if not exists
         {
-            action = new AddIfNotFile(&archiveReader);
+            action = new AddIfNotFile(archiveReader);
         }
         else if (NS_tstrcmp(token, NS_T("patch-if")) == 0)   // Patch if exists
         {
-            action = new PatchIfFile(&archiveReader);
+            action = new PatchIfFile(archiveReader);
         }
         else
         {
