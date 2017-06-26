@@ -145,8 +145,7 @@ private:
 
         TokenPoolPool<std::unique_ptr<ScSingleRefData>, 32>
                                         ppP_RefTr;  // Pool for References
-
-        sal_uInt16*                     pP_Id;      // Pool for Id-sets
+        std::unique_ptr<sal_uInt16[]>   pP_Id;      // Pool for Id-sets
         sal_uInt16                      nP_Id;
         sal_uInt16                      nP_IdAkt;
         sal_uInt16                      nP_IdLast;  // last set-start
@@ -164,7 +163,7 @@ private:
         TokenPoolPool<std::unique_ptr<ScSingleRefData>, 16>
                                         ppP_Nlf;
 
-        ScMatrix**                  ppP_Matrix;     // Pool for Matrices
+        std::unique_ptr<ScMatrix*[]>    ppP_Matrix;     // Pool for Matrices
         sal_uInt16                      nP_Matrix;
         sal_uInt16                      nP_MatrixAkt;
 
@@ -202,9 +201,9 @@ private:
         };
         ::std::vector<ExtAreaRef>   maExtAreaRefs;
 
-        sal_uInt16*                     pElement;   // Array with Indices for elements
-        E_TYPE*                         pType;      // ...with Type-Info
-        sal_uInt16*                     pSize;      // ...with size (Anz. sal_uInt16)
+        std::unique_ptr<sal_uInt16[]>   pElement;   // Array with Indices for elements
+        std::unique_ptr<E_TYPE[]>       pType;      // ...with Type-Info
+        std::unique_ptr<sal_uInt16[]>   pSize;      // ...with size (Anz. sal_uInt16)
         sal_uInt16                      nElement;
         sal_uInt16                      nElementAkt;
 

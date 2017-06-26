@@ -25,6 +25,7 @@
 #include <tools/solar.h>
 #include <swdllapi.h>
 #include <array>
+#include <memory>
 
 struct BlockInfo;
 class BigPtrArray;
@@ -63,7 +64,8 @@ struct BlockInfo final
 class SW_DLLPUBLIC BigPtrArray
 {
 protected:
-    BlockInfo**     m_ppInf;              ///< block info
+    std::unique_ptr<BlockInfo*[]>
+                    m_ppInf;              ///< block info
     sal_uLong       m_nSize;              ///< number of elements
     sal_uInt16      m_nMaxBlock;          ///< current max. number of blocks
     sal_uInt16      m_nBlock;             ///< number of blocks
