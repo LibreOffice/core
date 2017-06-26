@@ -46,6 +46,42 @@
       "revId": "84f8570357f2dc04991ffe962fd97f2b2b3de652",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_07264568",
+        "filename": "extras/source/wordbook/technical.dic",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2017-06-26T12:05:17Z",
+      "side": 1,
+      "message": "Its first use was all small letters though. Tricky.",
+      "parentUuid": "3a461143_4c9314a4",
+      "revId": "84f8570357f2dc04991ffe962fd97f2b2b3de652",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_272b4132",
+        "filename": "extras/source/wordbook/technical.dic",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2017-06-26T12:05:17Z",
+      "side": 1,
+      "message": "Hmm, indeed. Then again, the term was used in an international context and does not seem to have any relation to the English language. Its not limited to that.",
+      "parentUuid": "3a461143_2746e123",
+      "revId": "84f8570357f2dc04991ffe962fd97f2b2b3de652",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
