@@ -77,14 +77,7 @@ int compareVersions(
     return 0;
 }
 }
-//If the OOo 3.0 mode is used then we exclude
-//'mimetype' and all content of 'META-INF'.
-//If the argument 'bSigning' is true then the element list is created for a signing
-//operation in which case we use the latest signing algorithm. That is all elements
-//we find in the zip storage are added to the list. We do not support the old signatures
-//which did not contain all files.
-//If 'bSigning' is false, then we validate. If the user enabled validating according to OOo 3.0
-//then mimetype and all content of META-INF must be excluded.
+
 void ImplFillElementList(
     std::vector< OUString >& rList, const Reference < css::embed::XStorage >& rxStore,
     const OUString& rRootStorageName, const bool bRecursive,
@@ -101,6 +94,8 @@ void ImplFillElementList(
             // OOXML
             continue;
 
+        // If the user enabled validating according to OOo 3.0
+        // then mimetype and all content of META-INF must be excluded.
         if (mode != DocumentSignatureAlgorithm::OOo3_2
             && (pNames[n] == "META-INF" || pNames[n] == "mimetype"))
         {
