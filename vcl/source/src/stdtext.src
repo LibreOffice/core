@@ -59,4 +59,24 @@ String SV_STDTEXT_ALLFILETYPES
     Text [en-US] = "Any type";
 };
 
+String SV_MSGBOX_INFO
+{
+    Text [en-US] = "Information";
+};
+
+String SV_MSGBOX_WARNING
+{
+    Text [en-US] = "Warning";
+};
+
+String SV_MSGBOX_ERROR
+{
+    Text [en-US] = "Error";
+};
+
+String SV_MSGBOX_QUERY
+{
+    Text [en-US] = "Confirmation";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
