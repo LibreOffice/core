@@ -189,12 +189,10 @@ On-screen display differs in step 1 and 2:
 
 === Debugging PDF export ===
 
-Debugging the PDF export becomes much easier in higher debug-levels, where
+Debugging the PDF export becomes much easier when
 compression is disabled (so the PDF file is directly readable) and
 the MARK function puts comments into the PDF file about which method
 generated the following PDF content.
-
-touch vcl/source/gdi/pdfwriter* && make vcl dbglevel=3
 
 The compression can be disabled even using a env. var:
 
