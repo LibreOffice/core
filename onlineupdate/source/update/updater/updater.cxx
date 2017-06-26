@@ -1075,7 +1075,7 @@ static void backup_finish(const NS_tchar *path, const NS_tchar *relPath,
 
 //-----------------------------------------------------------------------------
 
-static int DoUpdate(ArchiveReader *ArchiveReader);
+static int DoUpdate(ArchiveReader& ArchiveReader);
 
 class Action
 {
@@ -2623,59 +2623,52 @@ GetUpdateFileNames(std::vector<tstring>& fileNames)
 }
 
 static int
-CheckSignature(tstring& fileName, ArchiveReader *archiveReader)
+CheckSignature(ArchiveReader& archiveReader)
 {
-    if(!archiveReader)
-        return USAGE_ERROR;
-
-    int rv = archiveReader->Open(fileName.c_str());
-
 #ifdef VERIFY_MAR_SIGNATURE
-    if (rv == OK)
-    {
 #ifdef _WIN32
-        HKEY baseKey = nullptr;
-        wchar_t valueName[] = L"Image Path";
-        wchar_t rasenh[] = L"rsaenh.dll";
-        bool reset = false;
-        if (RegOpenKeyExW(HKEY_LOCAL_MACHINE,
-                          L"SOFTWARE\\Microsoft\\Cryptography\\Defaults\\Provider\\Microsoft Enhanced Cryptographic Provider v1.0",
-                          0, KEY_READ | KEY_WRITE,
-                          &baseKey) == ERROR_SUCCESS)
+    HKEY baseKey = nullptr;
+    wchar_t valueName[] = L"Image Path";
+    wchar_t rasenh[] = L"rsaenh.dll";
+    bool reset = false;
+    if (RegOpenKeyExW(HKEY_LOCAL_MACHINE,
+                      L"SOFTWARE\\Microsoft\\Cryptography\\Defaults\\Provider\\Microsoft Enhanced Cryptographic Provider v1.0",
+                      0, KEY_READ | KEY_WRITE,
+                      &baseKey) == ERROR_SUCCESS)
+    {
+        wchar_t path[MAX_PATH + 1];
+        DWORD size = sizeof(path);
+        DWORD type;
+        if (RegQueryValueExW(baseKey, valueName, 0, &type,
+                             (LPBYTE)path, &size) == ERROR_SUCCESS)
         {
-            wchar_t path[MAX_PATH + 1];
-            DWORD size = sizeof(path);
-            DWORD type;
-            if (RegQueryValueExW(baseKey, valueName, 0, &type,
-                                 (LPBYTE)path, &size) == ERROR_SUCCESS)
+            if (type == REG_SZ && wcscmp(path, rasenh) == 0)
             {
-                if (type == REG_SZ && wcscmp(path, rasenh) == 0)
+                wchar_t rasenhFullPath[] = L"%SystemRoot%\\System32\\rsaenh.dll";
+                if (RegSetValueExW(baseKey, valueName, 0, REG_SZ,
+                                   (const BYTE*)rasenhFullPath,
+                                   sizeof(rasenhFullPath)) == ERROR_SUCCESS)
                 {
-                    wchar_t rasenhFullPath[] = L"%SystemRoot%\\System32\\rsaenh.dll";
-                    if (RegSetValueExW(baseKey, valueName, 0, REG_SZ,
-                                       (const BYTE*)rasenhFullPath,
-                                       sizeof(rasenhFullPath)) == ERROR_SUCCESS)
-                    {
-                        reset = true;
-                    }
+                    reset = true;
                 }
             }
         }
-#endif
-        rv = archiveReader->VerifySignature();
-#ifdef _WIN32
-        if (baseKey)
-        {
-            if (reset)
-            {
-                RegSetValueExW(baseKey, valueName, 0, REG_SZ,
-                               (const BYTE*)rasenh,
-                               sizeof(rasenh));
-            }
-            RegCloseKey(baseKey);
-        }
-#endif
     }
+#endif
+    int rv = archiveReader.VerifySignature();
+#ifdef _WIN32
+    if (baseKey)
+    {
+        if (reset)
+        {
+            RegSetValueExW(baseKey, valueName, 0, REG_SZ,
+                           (const BYTE*)rasenh,
+                           sizeof(rasenh));
+        }
+        RegCloseKey(baseKey);
+    }
+#endif
+
 
     if (rv == OK)
     {
@@ -2701,13 +2694,11 @@ CheckSignature(tstring& fileName, ArchiveReader *archiveReader)
                 MARStrings.MARChannelID[0] = '\0';
             }
 
-            rv = archiveReader->VerifyProductInformation(MARStrings.MARChannelID,
+            rv = archiveReader.VerifyProductInformation(MARStrings.MARChannelID,
                     LIBO_VERSION_DOTTED);
         }
     }
 #endif
-
-    archiveReader->Close();
 
     return rv;
 }
@@ -2726,10 +2717,17 @@ UpdateThreadFunc(void * /*param*/)
         std::vector<tstring> fileNames;
         GetUpdateFileNames(fileNames);
 
-        ArchiveReader archiveReader;
         for (auto& fileName: fileNames)
         {
-            rv = CheckSignature(fileName, &archiveReader);
+            ArchiveReader archiveReader;
+            rv = archiveReader.Open(fileName.c_str());
+            if (rv != OK)
+            {
+                LOG(("Could not open " LOG_S, fileName.c_str()));
+                break;
+            }
+
+            rv = CheckSignature(archiveReader);
             if (rv != OK)
             {
                 LOG(("Could not verify the signature of " LOG_S, fileName.c_str()));
@@ -2746,9 +2744,9 @@ UpdateThreadFunc(void * /*param*/)
         {
             for (auto& fileName: fileNames)
             {
+                ArchiveReader archiveReader;
                 archiveReader.Open(fileName.c_str());
-                rv = DoUpdate(&archiveReader);
-                archiveReader.Close();
+                rv = DoUpdate(archiveReader);
             }
             NS_tchar updatingDir[MAXPATHLEN];
             NS_tsnprintf(updatingDir, sizeof(updatingDir)/sizeof(updatingDir[0]),
@@ -4457,11 +4455,8 @@ int AddPreCompleteActions(ActionList *list)
     return OK;
 }
 
-int DoUpdate(ArchiveReader *archiveReader)
+int DoUpdate(ArchiveReader& archiveReader)
 {
-    if(!archiveReader)
-        return USAGE_ERROR;
-
     NS_tchar manifest[MAXPATHLEN];
     NS_tsnprintf(manifest, sizeof(manifest)/sizeof(manifest[0]),
                  NS_T("%s/updating/update.manifest"), gWorkingDirPath);
@@ -4470,10 +4465,10 @@ int DoUpdate(ArchiveReader *archiveReader)
     // extract the manifest
     // TODO: moggi: needs adaption for LibreOffice
     // Why would we need the manifest? Even if we need it why would we need 2?
-    int rv = archiveReader->ExtractFile("updatev3.manifest", manifest);
+    int rv = archiveReader.ExtractFile("updatev3.manifest", manifest);
     if (rv)
     {
-        rv = archiveReader->ExtractFile("updatev2.manifest", manifest);
+        rv = archiveReader.ExtractFile("updatev2.manifest", manifest);
         if (rv)
         {
             LOG(("DoUpdate: error extracting manifest file"));
