@@ -144,7 +144,8 @@ private:
     OUString                maBoldItalic;
     OUString                maBlack;
     OUString                maBlackItalic;
-    sal_IntPtr*             mpSizeAry;
+    mutable std::unique_ptr<sal_IntPtr[]>
+                            mpSizeAry;
     VclPtr<OutputDevice>    mpDev;
     VclPtr<OutputDevice>    mpDev2;
     std::vector<std::unique_ptr<ImplFontListNameInfo>> m_Entries;

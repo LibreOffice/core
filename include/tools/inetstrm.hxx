@@ -22,6 +22,7 @@
 #include <tools/toolsdllapi.h>
 #include <tools/stream.hxx>
 #include <sal/types.h>
+#include <vector>
 
 class INetMIMEMessage;
 class SvStream;
@@ -31,7 +32,7 @@ class TOOLS_DLLPUBLIC INetMIMEMessageStream
     INetMIMEMessage *pSourceMsg;
     bool            bHeaderGenerated;
 
-    sal_Char       *pBuffer;
+    std::vector<sal_Char> mvBuffer;
     sal_Char       *pRead;
     sal_Char       *pWrite;
 
