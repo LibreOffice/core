@@ -64,46 +64,22 @@
 /**************************************************************************
  * @short:  Default constructor
 **************************************************************************/
-SdwRectangle::SdwRectangle() : m_bRotated(false)
+SdwRectangle::SdwRectangle()
+    : m_bRotated(false)
+    // m_nRectCorner array fields are default initialized with Point()
 {
-    for (sal_uInt16 i = 0; i < 4; i++)
-    {
-        m_nRectCorner[0] = Point(0, 0);
-    }
 }
 /**************************************************************************
  * @short:  Constructor
  * @param:  aPt0~aPt3 four corner points of a rectangle.
 **************************************************************************/
 SdwRectangle::SdwRectangle(const Point& rPt0, const Point& rPt1,
-        const Point& rPt2, const Point& rPt3) : m_bRotated(true)
-{
-    m_nRectCorner[0] = rPt0;
-    m_nRectCorner[1] = rPt1;
-    m_nRectCorner[2] = rPt2;
-    m_nRectCorner[3] = rPt3;
-
-    if (rPt0.Y() == rPt1.Y() && rPt0.Y() < rPt3.Y())
-    {
-        m_bRotated = false;
-    }
-}
-
-/**************************************************************************
- * @short:  Copy constructor
-**************************************************************************/
-SdwRectangle::SdwRectangle(const SdwRectangle& rOther)
-{
-    m_nRectCorner[0] = rOther.m_nRectCorner[0];
-    m_nRectCorner[1] = rOther.m_nRectCorner[1];
-    m_nRectCorner[2] = rOther.m_nRectCorner[2];
-    m_nRectCorner[3] = rOther.m_nRectCorner[3];
-
-    m_bRotated  = rOther.IsRectRotated();
-}
-SdwRectangle::~SdwRectangle()
+        const Point& rPt2, const Point& rPt3)
+    : m_bRotated(rPt0.Y() != rPt1.Y() || rPt0.Y() >= rPt3.Y())
+    , m_nRectCorner({{rPt0, rPt1, rPt2, rPt3}})
 {
 }
+
 /**************************************************************************
  * @short:  Calculate and return center point of the rectangle.
  * @return: center point
