@@ -369,7 +369,7 @@ void OSelectionBrowseBox::Init()
     }
     catch(const SQLException&)
     {
-        OSL_FAIL("Catched Exception when asking for database metadata options!");
+        OSL_FAIL("Caught Exception when asking for database metadata options!");
         m_nMaxColumns = 0;
     }
 }
