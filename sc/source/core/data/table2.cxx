@@ -361,6 +361,7 @@ void ScTable::DeleteCol(
     {
         if (pColWidth && pColFlags)
         {
+            assert( nStartCol + nSize <= MAXCOL+1 );    // moving 0 if ==MAXCOL+1 is correct
             memmove( &pColWidth[nStartCol], &pColWidth[nStartCol+nSize],
                     (MAXCOL - nStartCol + 1 - nSize) * sizeof(pColWidth[0]) );
             memmove( &pColFlags[nStartCol], &pColFlags[nStartCol+nSize],
