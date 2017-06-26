@@ -268,29 +268,6 @@ struct LayoutAtomVisitor
     virtual void visit(LayoutNode& rAtom) = 0;
 };
 
-class ShapeCreationVisitor : public LayoutAtomVisitor
-{
-    ShapePtr mpParentShape;
-    const Diagram& mrDgm;
-    sal_Int32 mnCurrIdx;
-
-    void defaultVisit(LayoutAtom& rAtom);
-    virtual void visit(ConstraintAtom& rAtom) override;
-    virtual void visit(AlgAtom& rAtom) override;
-    virtual void visit(ForEachAtom& rAtom) override;
-    virtual void visit(ConditionAtom& rAtom) override;
-    virtual void visit(ChooseAtom& rAtom) override;
-    virtual void visit(LayoutNode& rAtom) override;
-
-public:
-    ShapeCreationVisitor(const ShapePtr& rParentShape,
-                         const Diagram& rDgm) :
-        mpParentShape(rParentShape),
-        mrDgm(rDgm),
-        mnCurrIdx(0)
-    {}
-};
-
 } }
 
 #endif

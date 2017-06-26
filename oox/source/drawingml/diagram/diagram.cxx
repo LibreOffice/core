@@ -35,6 +35,7 @@
 #include "oox/ppt/pptshape.hxx"
 
 #include "diagramlayoutatoms.hxx"
+#include "layoutatomvisitors.hxx"
 #include "diagramfragmenthandler.hxx"
 
 #include <iostream>
