@@ -330,8 +330,6 @@ void SAL_CALL PresenterWindowManager::disposing (const lang::EventObject& rEvent
 
 bool PresenterWindowManager::PaintChildren (const awt::PaintEvent& rEvent) const
 {
-    bool bChildInvalidated (false);
-
     // Call windowPaint on all children that lie in or touch the
     // update rectangle.
     PresenterPaneContainer::PaneList::const_iterator iPane;
@@ -381,7 +379,7 @@ bool PresenterWindowManager::PaintChildren (const awt::PaintEvent& rEvent) const
         }
     }
 
-    return bChildInvalidated;
+    return false;
 }
 
 void PresenterWindowManager::SetLayoutMode (const LayoutMode eMode)

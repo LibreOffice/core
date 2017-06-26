@@ -1492,8 +1492,7 @@ sal_Int32 SAL_CALL PresenterAccessible::AccessibleParagraph::getIndexAtPoint (
     const css::awt::Point& )
 {
     ThrowIfDisposed();
-    sal_Int32 nIndex (-1);
-    return nIndex;
+    return -1;
 }
 
 OUString SAL_CALL PresenterAccessible::AccessibleParagraph::getSelectedText()
