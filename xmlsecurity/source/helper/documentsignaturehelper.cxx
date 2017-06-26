@@ -408,6 +408,25 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
     return aHelper;
 }
 
+/** Check whether the current file can be signed with GPG (only ODF >= 1.2 can currently) */
+bool DocumentSignatureHelper::CanSignWithGPG(
+    const Reference < css::embed::XStorage >& rxStore,
+    const OUString& sOdfVersion)
+{
+    uno::Reference<container::XNameAccess> xNameAccess(rxStore, uno::UNO_QUERY);
+    if (!xNameAccess.is())
+        throw RuntimeException();
+
+    if (xNameAccess->hasByName("META-INF")) // ODF
+    {
+        return !isODFPre_1_2(sOdfVersion);
+    }
+
+    return false;
+}
+
+
+
 //sElementList contains all files which are expected to be signed. Only those files must me signed,
 //no more, no less.
 //The DocumentSignatureAlgorithm indicates if the document was created with OOo 2.x. Then
