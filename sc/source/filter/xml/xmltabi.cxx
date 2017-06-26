@@ -39,6 +39,7 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
 
 #include <tools/urlobj.hxx>
@@ -149,33 +150,33 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
         assert( dynamic_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() ) != nullptr );
         pAttribList = static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
 
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
         for ( auto it = pAttribList->begin(); it != pAttribList->end(); ++it)
         {
-            switch( rAttrTokenMap.Get( it.getToken() ) )
+            switch( it.getToken() )
             {
-                case XML_TOK_TABLE_NAME:
+                case XML_ELEMENT( TABLE, XML_NAME ):
                         sName = it.toString();
                     break;
-                case XML_TOK_TABLE_STYLE_NAME:
+                case XML_ELEMENT( TABLE, XML_STYLE_NAME ):
                         sStyleName = it.toString();
                     break;
-                case XML_TOK_TABLE_PROTECTED:
+                case XML_ELEMENT( TABLE, XML_PROTECTED ):
                     aProtectData.mbProtected = IsXMLToken( it.toCString(), XML_TRUE );
                 break;
-                case XML_TOK_TABLE_PRINT_RANGES:
+                case XML_ELEMENT( TABLE, XML_PRINT_RANGES ):
                         sPrintRanges = it.toString();
                     break;
-                case XML_TOK_TABLE_PASSWORD:
+                case XML_ELEMENT( TABLE, XML_PROTECTION_KEY ):
                     aProtectData.maPassword = it.toString();
                 break;
-                case XML_TOK_TABLE_PASSHASH:
+                case XML_ELEMENT( TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM ):
                     aProtectData.meHash1 = ScPassHashHelper::getHashTypeFromURI( it.toString() );
                 break;
-                case XML_TOK_TABLE_PASSHASH_2:
+                case XML_ELEMENT( TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2 ):
+                case XML_ELEMENT( LO_EXT, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2 ):
                     aProtectData.meHash2 = ScPassHashHelper::getHashTypeFromURI( it.toString() );
                 break;
-                case XML_TOK_TABLE_PRINT:
+                case XML_ELEMENT( TABLE, XML_PRINT ):
                     {
                         if (IsXMLToken( it.toCString(), XML_FALSE) )
                             bPrintEntireSheet = false;
@@ -300,24 +301,22 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         ScXMLTableContext::createFastChildContext( sal_Int32 nElement,
         const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
-    const SvXMLTokenMap& rTokenMap(GetScImport().GetTableElemTokenMap());
-    sal_uInt16 nToken = rTokenMap.Get( nElement );
     if (pExternalRefInfo.get())
     {
         // We only care about the table-row and table-source elements for
         // external cache data.
-        switch (nToken)
+        switch ( nElement )
         {
-            case XML_TOK_TABLE_ROW_GROUP:
-            case XML_TOK_TABLE_HEADER_ROWS:
-            case XML_TOK_TABLE_ROWS:
+            case XML_ELEMENT( TABLE, XML_TABLE_ROW_GROUP ):
+            case XML_ELEMENT( TABLE, XML_TABLE_HEADER_ROWS ):
+            case XML_ELEMENT( TABLE, XML_TABLE_ROWS ):
                 // #i101319# don't discard rows in groups or header (repeat range)
                 return new ScXMLExternalRefRowsContext(
                     GetScImport(), nElement, xAttrList, *pExternalRefInfo);
-            case XML_TOK_TABLE_ROW:
+            case XML_ELEMENT( TABLE, XML_TABLE_ROW ):
                 return new ScXMLExternalRefRowContext(
                     GetScImport(), nElement, xAttrList, *pExternalRefInfo);
-            case XML_TOK_TABLE_SOURCE:
+            case XML_ELEMENT( TABLE, XML_TABLE_SOURCE ):
                 return new ScXMLExternalRefTabSourceContext(
                     GetScImport(), nElement, xAttrList, *pExternalRefInfo);
             default:
@@ -328,21 +327,21 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 
     SvXMLImportContext *pContext(nullptr);
 
-    switch (nToken)
+    switch ( nElement )
     {
-    case XML_TOK_TABLE_ROW_GROUP:
+    case XML_ELEMENT( TABLE, XML_TABLE_ROW_GROUP ):
         pContext = new ScXMLTableRowsContext( GetScImport(), xAttrList,
                                                    false, true );
         break;
-    case XML_TOK_TABLE_HEADER_ROWS:
+    case XML_ELEMENT( TABLE, XML_TABLE_HEADER_ROWS ):
         pContext = new ScXMLTableRowsContext( GetScImport(), xAttrList,
                                                    true, false );
         break;
-    case XML_TOK_TABLE_ROWS:
+    case XML_ELEMENT( TABLE, XML_TABLE_ROWS ):
         pContext = new ScXMLTableRowsContext( GetScImport(), xAttrList,
                                                    false, false );
         break;
-    case XML_TOK_TABLE_ROW:
+    case XML_ELEMENT( TABLE, XML_TABLE_ROW ):
             pContext = new ScXMLTableRowContext( GetScImport(),xAttrList );
         break;
     default:

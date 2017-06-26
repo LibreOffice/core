@@ -57,13 +57,13 @@ ScXMLExternalRefTabSourceContext::ScXMLExternalRefTabSourceContext(
         for ( auto it = pAttribList->begin(); it != pAttribList->end(); ++it)
         {
             sal_Int32 nAttrToken = it.getToken();
-            if ( nAttrToken == ( NAMESPACE_TOKEN( XML_NAMESPACE_XLINK ) | XML_HREF ) )
+            if ( nAttrToken == XML_ELEMENT( XLINK, XML_HREF ) )
                 maRelativeUrl = it.toString();
-            else if ( nAttrToken == ( NAMESPACE_TOKEN( XML_NAMESPACE_TABLE ) | XML_TABLE_NAME ) )
+            else if ( nAttrToken == XML_ELEMENT( TABLE, XML_TABLE_NAME ) )
                 maTableName = it.toString();
-            else if ( nAttrToken == ( NAMESPACE_TOKEN( XML_NAMESPACE_TABLE ) | XML_FILTER_NAME ) )
+            else if ( nAttrToken == XML_ELEMENT( TABLE, XML_FILTER_NAME ) )
                 maFilterName = it.toString();
-            else if ( nAttrToken == ( NAMESPACE_TOKEN( XML_NAMESPACE_TABLE ) | XML_FILTER_OPTIONS ) )
+            else if ( nAttrToken == XML_ELEMENT( TABLE, XML_FILTER_OPTIONS ) )
                 maFilterOptions = it.toString();
         }
     }

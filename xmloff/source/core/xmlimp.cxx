@@ -791,9 +791,9 @@ void SAL_CALL SvXMLImport::setDocumentLocator( const uno::Reference< xml::sax::X
 void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
-    if ( Attribs.is() && Attribs->hasAttribute( NAMESPACE_TOKEN( XML_NAMESPACE_OFFICE ) | XML_VERSION ) )
+    if ( Attribs.is() && Attribs->hasAttribute( XML_ELEMENT( OFFICE, XML_VERSION ) ) )
     {
-        mpImpl->aODFVersion = Attribs->getValue( NAMESPACE_TOKEN( XML_NAMESPACE_OFFICE ) | XML_VERSION );
+        mpImpl->aODFVersion = Attribs->getValue( XML_ELEMENT( OFFICE, XML_VERSION ) );
 
         // the ODF version in content.xml and manifest.xml must be the same starting from ODF1.2
         if ( mpImpl->mStreamName == "content.xml" && !IsODFVersionConsistent( mpImpl->aODFVersion ) )

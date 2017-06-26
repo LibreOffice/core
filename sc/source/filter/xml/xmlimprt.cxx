@@ -332,7 +332,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     ScXMLFlatDocContext_Impl::createFastChildContext( sal_Int32 nElement,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
-    if ( nElement != ( NAMESPACE_TOKEN( XML_NAMESPACE_OFFICE ) | XML_META ) )
+    if ( nElement != XML_ELEMENT( OFFICE, XML_META ) )
         return ScXMLDocContext_Impl::createFastChildContext( nElement, xAttrList );
     else
         return new SvXMLImportContext( GetImport() );
@@ -422,10 +422,9 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 {
     SvXMLImportContext *pContext(nullptr);
 
-    const SvXMLTokenMap& rTokenMap(GetScImport().GetDocElemTokenMap());
-    switch( rTokenMap.Get( nElement ) )
+    switch( nElement )
     {
-        case XML_TOK_DOC_BODY:
+        case XML_ELEMENT( OFFICE, XML_BODY ):
         if (GetScImport().getImportFlags() & SvXMLImportFlags::CONTENT)
             pContext = new ScXMLBodyContext_Impl( GetScImport() );
         break;
@@ -2046,13 +2045,13 @@ SvXMLImportContext *ScXMLImport::CreateFastContext( sal_Int32 nElement,
 
     switch( nElement )
     {
-    case ( NAMESPACE_TOKEN( XML_NAMESPACE_OFFICE ) | XML_DOCUMENT_STYLES ):
-    case ( NAMESPACE_TOKEN( XML_NAMESPACE_OFFICE ) | XML_DOCUMENT_CONTENT ):
-    case ( NAMESPACE_TOKEN( XML_NAMESPACE_OFFICE ) | XML_DOCUMENT_SETTINGS ):
+    case XML_ELEMENT( OFFICE, XML_DOCUMENT_STYLES ):
+    case XML_ELEMENT( OFFICE, XML_DOCUMENT_CONTENT ):
+    case XML_ELEMENT( OFFICE, XML_DOCUMENT_SETTINGS ):
         pContext = new ScXMLDocContext_Impl( *this );
         break;
 
-    case ( NAMESPACE_TOKEN( XML_NAMESPACE_OFFICE ) | XML_DOCUMENT ):
+    case XML_ELEMENT( OFFICE, XML_DOCUMENT ):
     {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY_THROW);
