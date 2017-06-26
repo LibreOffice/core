@@ -25,6 +25,7 @@
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/security/NoPasswordException.hpp>
@@ -401,7 +402,9 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
     {
         std::vector<uno::Reference<xml::crypto::XXMLSecurityContext>> xSecContexts;
         xSecContexts.push_back(maSignatureManager.getSecurityContext());
-        xSecContexts.push_back(maSignatureManager.getGpgSecurityContext());
+        // Gpg signing is only possible with ODF >= 1.2 documents
+        if (DocumentSignatureHelper::CanSignWithGPG(maSignatureManager.mxStore, m_sODFVersion))
+            xSecContexts.push_back(maSignatureManager.getGpgSecurityContext());
 
         ScopedVclPtrInstance< CertificateChooser > aChooser( this, mxCtx, xSecContexts );
         if ( aChooser->Execute() == RET_OK )
