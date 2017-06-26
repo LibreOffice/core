@@ -400,7 +400,9 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
     {
         std::vector<uno::Reference<xml::crypto::XXMLSecurityContext>> xSecContexts;
         xSecContexts.push_back(maSignatureManager.getSecurityContext());
-        xSecContexts.push_back(maSignatureManager.getGpgSecurityContext());
+        // Gpg signing is only possible with ODF >= 1.2 documents
+        if (!DocumentSignatureHelper::isODFPre_1_2(m_sODFVersion))
+            xSecContexts.push_back(maSignatureManager.getGpgSecurityContext());
 
         ScopedVclPtrInstance< CertificateChooser > aChooser( this, mxCtx, xSecContexts );
         if ( aChooser->Execute() == RET_OK )
