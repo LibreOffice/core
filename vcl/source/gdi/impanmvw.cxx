@@ -206,7 +206,7 @@ void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
         setMarked( true );
     else if( !mbPause )
     {
-        VclPtr<VirtualDevice>   pDev;
+        ScopedVclPtr<VirtualDevice>   pDev;
         Point                   aPosPix;
         Point                   aBmpPosPix;
         Size                    aSizePix;
@@ -300,8 +300,6 @@ void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
                 pRenderContext->SetClipRegion(*xOldClip);
                 xOldClip.reset();
             }
-
-            pDev.disposeAndClear();
 
             if( pRenderContext->GetOutDevType() == OUTDEV_WINDOW )
                 static_cast<vcl::Window*>( pRenderContext.get() )->Flush();
