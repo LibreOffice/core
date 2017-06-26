@@ -57,7 +57,30 @@ bool VclFiltersTest::load(const OUString &,
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
-    return mGraphicFilter.ImportGraphic(aGraphic, rURL, aFileStream) == ERRCODE_NONE;
+    bool bRetval(ERRCODE_NONE == mGraphicFilter.ImportGraphic(aGraphic, rURL, aFileStream));
+
+    if (!bRetval)
+    {
+        // if error occurred, we are done
+        return bRetval;
+    }
+
+    // if not and we have an embedded Vector Graphic Data, trigger it's interpretation
+    // to check for error. Graphic with VectorGraphicData (Svg/Emf/Wmf) load without error
+    // as long as one of the three types gets detected. Thus, cycles like load/save in
+    // other format will work (what may be wanted). For the test framework it was indirectly
+    // intended to trigger an error when load in the sense of deep data interpretation fails,
+    // so we need to trigger this here
+    if (aGraphic.getVectorGraphicData().get())
+    {
+        if (aGraphic.getVectorGraphicData()->getRange().isEmpty())
+        {
+            // invalid file or file with no content
+            return false;
+        }
+    }
+
+    return true;
 }
 
 void VclFiltersTest::testScaling()
