@@ -111,8 +111,7 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
             else if (  nLocalToken == XML_PROTECTION_KEY_DIGEST_ALGORITHM_2 )
                 meHash2 = ScPassHashHelper::getHashTypeFromURI( it.toString() );
         }
-        else if ( nToken == ( NAMESPACE_TOKEN( XML_NAMESPACE_LO_EXT ) |
-                                        XML_PROTECTION_KEY_DIGEST_ALGORITHM_2 ) )
+        else if ( nToken == XML_ELEMENT( LO_EXT, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2 ) )
         {
             meHash2 = ScPassHashHelper::getHashTypeFromURI( it.toString() );
         }
@@ -205,10 +204,9 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 
     SvXMLImportContext *pContext = nullptr;
 
-    const SvXMLTokenMap& rTokenMap = GetScImport().GetBodyElemTokenMap();
-    switch( rTokenMap.Get( nElement ) )
+    switch( nElement )
     {
-    case XML_TOK_BODY_TABLE:
+    case XML_ELEMENT( TABLE, XML_TABLE ):
         if (GetScImport().GetTables().GetCurrentSheet() >= MAXTAB)
         {
             GetScImport().SetRangeOverflowType(SCWARN_IMPORT_SHEET_OVERFLOW);

@@ -64,6 +64,7 @@
 #include <memory>
 
 #define NAMESPACE_TOKEN( prefixToken ) ( ( sal_Int32( prefixToken + 1 ) ) << NMSP_SHIFT )
+#define XML_ELEMENT( prefix, name ) ( NAMESPACE_TOKEN( XML_NAMESPACE_##prefix ) | name )
 
 const size_t NMSP_SHIFT = 16;
 const sal_Int32 TOKEN_MASK = 0xffff;
