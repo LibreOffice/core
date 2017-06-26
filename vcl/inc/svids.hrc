@@ -130,6 +130,11 @@
 #define SV_APP_DEFAULT                              10804
 #define SV_APP_VCLBACKEND                           10805
 
+#define SV_MSGBOX_INFO                              10900
+#define SV_MSGBOX_WARNING                           10901
+#define SV_MSGBOX_ERROR                             10902
+#define SV_MSGBOX_QUERY                             10903
+
 #endif // INCLUDED_VCL_INC_SVIDS_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
