@@ -371,7 +371,7 @@ InfoBox::InfoBox( vcl::Window* pParent, const OUString& rMessage ) :
 {
     // Default Text is the display title from the application
     if ( GetText().isEmpty() )
-        SetText( Application::GetDisplayName() );
+        SetText( GetStandardText() );
 
     SetImage( InfoBox::GetStandardImage() );
 }
@@ -381,7 +381,7 @@ InfoBox::InfoBox( vcl::Window* pParent, WinBits nStyle, const OUString& rMessage
 {
     // Default Text is the display title from the application
     if ( GetText().isEmpty() )
-        SetText( Application::GetDisplayName() );
+        SetText( GetStandardText() );
 
     SetImage( InfoBox::GetStandardImage() );
 }
@@ -392,13 +392,22 @@ Image InfoBox::GetStandardImage()
     return ImplGetSVData()->maWinData.maMsgBoxImgList[3];
 }
 
+OUString InfoBox::GetStandardText()
+{
+    ResMgr* pResMgr = ImplGetResMgr();
+    if( pResMgr )
+        return ResId(SV_MSGBOX_INFO, *pResMgr);
+
+    return Application::GetDisplayName();
+}
+
 WarningBox::WarningBox( vcl::Window* pParent, WinBits nStyle,
                         const OUString& rMessage ) :
     MessBox( pParent, nStyle, OUString(), rMessage )
 {
     // Default Text is the display title from the application
     if ( GetText().isEmpty() )
-        SetText( Application::GetDisplayName() );
+        SetText( GetStandardText() );
 
     SetImage( WarningBox::GetStandardImage() );
 }
@@ -416,12 +425,21 @@ Image WarningBox::GetStandardImage()
     return ImplGetSVData()->maWinData.maMsgBoxImgList[2];
 }
 
+OUString WarningBox::GetStandardText()
+{
+    ResMgr* pResMgr = ImplGetResMgr();
+    if( pResMgr )
+        return ResId(SV_MSGBOX_WARNING, *pResMgr);
+
+    return Application::GetDisplayName();
+}
+
 ErrorBox::ErrorBox( vcl::Window* pParent, const OUString& rMessage ) :
     MessBox( pParent, WB_OK | WB_DEF_OK, OUString(), rMessage )
 {
     // Default Text is the display title from the application
     if ( GetText().isEmpty() )
-        SetText( Application::GetDisplayName() );
+        SetText( GetStandardText() );
 
     SetImage( ErrorBox::GetStandardImage() );
 }
@@ -432,7 +450,7 @@ ErrorBox::ErrorBox( vcl::Window* pParent, WinBits nStyle,
 {
     // Default Text is the display title from the application
     if ( GetText().isEmpty() )
-        SetText( Application::GetDisplayName() );
+        SetText( GetStandardText() );
 
     SetImage( ErrorBox::GetStandardImage() );
 }
@@ -452,12 +470,21 @@ Image ErrorBox::GetStandardImage()
     return ImplGetSVData()->maWinData.maMsgBoxImgList[0];
 }
 
+OUString ErrorBox::GetStandardText()
+{
+    ResMgr* pResMgr = ImplGetResMgr();
+    if( pResMgr )
+        return ResId(SV_MSGBOX_ERROR, *pResMgr);
+
+    return Application::GetDisplayName();
+}
+
 QueryBox::QueryBox( vcl::Window* pParent, WinBits nStyle, const OUString& rMessage ) :
     MessBox( pParent, nStyle, OUString(), rMessage )
 {
     // Default Text is the display title from the application
     if ( GetText().isEmpty() )
-        SetText( Application::GetDisplayName() );
+        SetText( GetStandardText() );
 
     SetImage( QueryBox::GetStandardImage() );
 }
@@ -473,6 +500,15 @@ Image QueryBox::GetStandardImage()
 {
     ImplInitMsgBoxImageList();
     return ImplGetSVData()->maWinData.maMsgBoxImgList[1];
+}
+
+OUString QueryBox::GetStandardText()
+{
+    ResMgr* pResMgr = ImplGetResMgr();
+    if( pResMgr )
+        return ResId(SV_MSGBOX_QUERY, *pResMgr);
+
+    return Application::GetDisplayName();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
