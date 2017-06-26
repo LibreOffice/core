@@ -89,6 +89,7 @@ public:
 class VCL_DLLPUBLIC ErrorBox : public MessBox
 {
 public:
+                        ErrorBox( vcl::Window* pParent, const OUString& rMessage );
                         ErrorBox( vcl::Window* pParent, WinBits nStyle,
                                   const OUString& rMessage );
 

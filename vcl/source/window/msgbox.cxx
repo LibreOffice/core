@@ -416,6 +416,16 @@ Image WarningBox::GetStandardImage()
     return ImplGetSVData()->maWinData.maMsgBoxImgList[2];
 }
 
+ErrorBox::ErrorBox( vcl::Window* pParent, const OUString& rMessage ) :
+    MessBox( pParent, WB_OK | WB_DEF_OK, OUString(), rMessage )
+{
+    // Default Text is the display title from the application
+    if ( GetText().isEmpty() )
+        SetText( Application::GetDisplayName() );
+
+    SetImage( ErrorBox::GetStandardImage() );
+}
+
 ErrorBox::ErrorBox( vcl::Window* pParent, WinBits nStyle,
                     const OUString& rMessage ) :
     MessBox( pParent, nStyle, OUString(), rMessage )
