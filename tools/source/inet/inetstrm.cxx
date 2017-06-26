@@ -233,6 +233,7 @@ INetMIMEMessageStream::INetMIMEMessageStream(
     INetMIMEMessage *pMsg, bool headerGenerated):
     pSourceMsg(pMsg),
     bHeaderGenerated(headerGenerated),
+    mvBuffer(BUFFER_SIZE),
     pMsgStrm(nullptr),
     pMsgRead(nullptr),
     pMsgWrite(nullptr),
@@ -242,14 +243,12 @@ INetMIMEMessageStream::INetMIMEMessageStream(
 {
     assert(pMsg != nullptr);
     maMsgBuffer.SetStreamCharSet(RTL_TEXTENCODING_ASCII_US);
-    pBuffer = new sal_Char[BUFFER_SIZE];
-    pRead = pWrite = pBuffer;
+    pRead = pWrite = mvBuffer.data();
 }
 
 INetMIMEMessageStream::~INetMIMEMessageStream()
 {
     delete pChildStrm;
-    delete [] pBuffer;
     delete pMsgStrm;
 }
 
@@ -272,14 +271,14 @@ int INetMIMEMessageStream::Read(sal_Char* pData, sal_uIntPtr nSize)
         else
         {
             // Buffer empty. Reset to <Begin-of-Buffer>.
-            pRead = pWrite = pBuffer;
+            pRead = pWrite = mvBuffer.data();
 
             // Read next message line.
-            int nRead = GetMsgLine(pBuffer, BUFFER_SIZE);
+            int nRead = GetMsgLine(mvBuffer.data(), mvBuffer.size());
             if (nRead > 0)
             {
                 // Set read pointer.
-                pRead = pBuffer + nRead;
+                pRead = mvBuffer.data() + nRead;
             }
             else
             {

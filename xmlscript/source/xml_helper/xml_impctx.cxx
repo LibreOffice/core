@@ -303,7 +303,7 @@ class ExtendedAttributes :
     public ::cppu::WeakImplHelper< xml::input::XAttributes >
 {
     sal_Int32 m_nAttributes;
-    sal_Int32 * m_pUids;
+    std::unique_ptr<sal_Int32[]> m_pUids;
     OUString * m_pLocalNames;
     OUString * m_pQNames;
     OUString * m_pValues;
@@ -355,7 +355,6 @@ inline ExtendedAttributes::ExtendedAttributes(
 
 ExtendedAttributes::~ExtendedAttributes() throw ()
 {
-    delete [] m_pUids;
     delete [] m_pLocalNames;
     delete [] m_pQNames;
     delete [] m_pValues;

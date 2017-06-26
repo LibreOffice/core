@@ -235,8 +235,7 @@ namespace chelp {
 
         bool   m_bShowBasic;
 
-        int    m_nCustomCSSDocLength;
-        char*  m_pCustomCSSDoc;
+        std::vector<char> m_vCustomCSSDoc;
         OUString m_aCSS;
 
         enum {
