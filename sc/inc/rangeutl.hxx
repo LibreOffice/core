@@ -269,6 +269,14 @@ public:
     bool WasDBName() const { return !bFirstPass; }
 };
 
+struct SC_DLLPUBLIC ScRangeUpdater
+{
+    ScRangeUpdater() = delete;
+
+    static void UpdateInsertTab(ScAddress& rAddr, const sc::RefUpdateInsertTabContext& rCxt);
+    static void UpdateDeleteTab(ScAddress& rAddr, const sc::RefUpdateDeleteTabContext& rCxt);
+};
+
 #endif // INCLUDED_SC_INC_RANGEUTL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
