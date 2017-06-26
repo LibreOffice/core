@@ -73,6 +73,7 @@ public:
                                 const OUString& rMessage );
 
     static Image        GetStandardImage();
+    static OUString     GetStandardText();
 };
 
 class VCL_DLLPUBLIC WarningBox : public MessBox
@@ -84,6 +85,7 @@ public:
     void                SetDefaultCheckBoxText();
 
     static Image        GetStandardImage();
+    static OUString     GetStandardText();
 };
 
 class VCL_DLLPUBLIC ErrorBox : public MessBox
@@ -94,6 +96,7 @@ public:
                                   const OUString& rMessage );
 
     static Image        GetStandardImage();
+    static OUString     GetStandardText();
 };
 
 class VCL_DLLPUBLIC QueryBox : public MessBox
@@ -105,6 +108,7 @@ public:
     void                SetDefaultCheckBoxText();
 
     static Image        GetStandardImage();
+    static OUString     GetStandardText();
 };
 
 #endif // INCLUDED_VCL_MSGBOX_HXX
