@@ -589,10 +589,9 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
     // putting the StatusIndicator that we got from the MediaDescriptor into our local FilterData copy
     if ( rSettings.mxStatusIndicator.is() )
     {
-        OUString sStatusIndicator( "StatusIndicator" );
         int i = rSettings.maFilterData.getLength();
         rSettings.maFilterData.realloc( i + 1 );
-        rSettings.maFilterData[ i ].Name = sStatusIndicator;
+        rSettings.maFilterData[ i ].Name = "StatusIndicator";
         rSettings.maFilterData[ i ].Value <<= rSettings.mxStatusIndicator;
     }
 }

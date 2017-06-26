@@ -275,9 +275,8 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
         {
             // check readonlyness the very hard way
             INetURLObject   aTestURL( rBaseURL );
-            OUString        aTestFile( "cdefghij.klm" );
 
-            aTestURL.Append( aTestFile );
+            aTestURL.Append( "cdefghij.klm" );
             std::unique_ptr<SvStream> pTestStm(::utl::UcbStreamHelper::CreateStream( aTestURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE ));
 
             if( pTestStm )

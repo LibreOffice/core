@@ -1478,7 +1478,7 @@ bool FmGridControl::isColumnMarked(sal_uInt16 nId) const
 
 long FmGridControl::QueryMinimumRowHeight()
 {
-    long nMinimalLogicHeight = 20; // 0.2 cm
+    long const nMinimalLogicHeight = 20; // 0.2 cm
     long nMinimalPixelHeight = LogicToPixel( Point( 0, nMinimalLogicHeight ), MapUnit::Map10thMM ).Y();
     return CalcZoom( nMinimalPixelHeight );
 }

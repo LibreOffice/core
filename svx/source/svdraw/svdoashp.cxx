@@ -744,21 +744,18 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, css::beans:
     }
     if ( nFlags & SvxMSDffHandleFlags::MIRRORED_X )
     {
-        bool bMirroredX = true;
         rPropValues[ n ].Name = "MirroredX";
-        rPropValues[ n++ ].Value <<= bMirroredX;
+        rPropValues[ n++ ].Value <<= true;
     }
     if ( nFlags & SvxMSDffHandleFlags::MIRRORED_Y )
     {
-        bool bMirroredY = true;
         rPropValues[ n ].Name = "MirroredY";
-        rPropValues[ n++ ].Value <<= bMirroredY;
+        rPropValues[ n++ ].Value <<= true;
     }
     if ( nFlags & SvxMSDffHandleFlags::SWITCHED )
     {
-        bool bSwitched = true;
         rPropValues[ n ].Name = "Switched";
-        rPropValues[ n++ ].Value <<= bSwitched;
+        rPropValues[ n++ ].Value <<= true;
     }
     if ( nFlags & SvxMSDffHandleFlags::POLAR )
     {
@@ -2088,8 +2085,8 @@ void SdrObjCustomShape::DragCreateObject( SdrDragStat& rStat )
 
     std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
 
-    sal_uInt32 nDefaultObjectSizeWidth = 3000;      // default width from SDOptions ?
-    sal_uInt32 nDefaultObjectSizeHeight= 3000;
+    sal_uInt32 const nDefaultObjectSizeWidth = 3000;      // default width from SDOptions ?
+    sal_uInt32 const nDefaultObjectSizeHeight= 3000;
 
     if ( ImpVerticalSwitch( *this ) )
     {

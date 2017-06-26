@@ -58,7 +58,6 @@ void PageNumberListBox::SetSelection( sal_uInt16 nPos )
 {
     sal_Int32 nEntryCount = GetEntryCount();
     sal_Int32 nSelPos = LISTBOX_ENTRY_NOTFOUND;
-    sal_Int32 nUserPos = LISTBOX_ENTRY_NOTFOUND;
 
     for (sal_Int32 i = 0; i < nEntryCount; ++i )
     {
@@ -70,7 +69,7 @@ void PageNumberListBox::SetSelection( sal_uInt16 nPos )
             break;
         }
     }
-    SelectEntryPos( ( nSelPos != LISTBOX_ENTRY_NOTFOUND ) ? nSelPos : nUserPos );
+    SelectEntryPos( ( nSelPos != LISTBOX_ENTRY_NOTFOUND ) ? nSelPos : LISTBOX_ENTRY_NOTFOUND );
 }
 
 Size PageNumberListBox::GetOptimalSize() const

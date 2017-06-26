@@ -274,11 +274,10 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
         if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_DEPTH ) == SfxItemState::SET)
         {
             double fDepth = rReq.GetArgs()->GetItem<SvxDoubleItem>(SID_EXTRUSION_DEPTH)->GetValue();
-            double fFraction = 0.0;
             EnhancedCustomShapeParameterPair aDepthPropPair;
             aDepthPropPair.First.Value <<= fDepth;
             aDepthPropPair.First.Type = EnhancedCustomShapeParameterType::NORMAL;
-            aDepthPropPair.Second.Value <<= fFraction;
+            aDepthPropPair.Second.Value <<= 0.0; // fraction
             aDepthPropPair.Second.Type = EnhancedCustomShapeParameterType::NORMAL;
 
             css::beans::PropertyValue aPropValue;
