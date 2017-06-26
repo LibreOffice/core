@@ -158,7 +158,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
 
     std::unique_ptr<OUString> xStyleName;
     std::unique_ptr<OUString> xCurrencySymbol;
-    const SvXMLTokenMap& rTokenMap = rImport.GetTableRowCellAttrTokenMap();
     if( xAttrList.is() )
     {
         sax_fastparser::FastAttributeList *pAttribList;
@@ -167,43 +166,42 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
 
         for ( auto it = pAttribList->begin(); it != pAttribList->end(); ++it)
         {
-            sal_uInt16 nToken = rTokenMap.Get( it.getToken() );
-            switch ( nToken )
+            switch ( it.getToken() )
             {
-                case XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME:
+                case ( NAMESPACE_TOKEN( XML_NAMESPACE_TABLE ) | XML_STYLE_NAME ):
                     xStyleName.reset( new OUString( it.toString() ) );
                     mbHasStyle = true;
                 break;
-                case XML_TOK_TABLE_ROW_CELL_ATTR_CONTENT_VALIDATION_NAME:
+                case ( NAMESPACE_TOKEN( XML_NAMESPACE_TABLE ) | XML_CONTENT_VALIDATION_NAME ):
                     OSL_ENSURE(!maContentValidationName, "here should be only one Validation Name");
                     if (!it.isEmpty())
                         maContentValidationName.reset(it.toString());
                 break;
-                case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_ROWS:
+                case ( NAMESPACE_TOKEN( XML_NAMESPACE_TABLE ) | XML_NUMBER_ROWS_SPANNED ):
                     bIsMerged = true;
                     nMergedRows = static_cast<SCROW>(it.toInt32());
                 break;
-                case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_COLS:
+                case ( NAMESPACE_TOKEN( XML_NAMESPACE_TABLE ) | XML_NUMBER_COLUMNS_SPANNED ):
                     bIsMerged = true;
                     nMergedCols = static_cast<SCCOL>(it.toInt32());
                 break;
-                case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_COLS:
+                case ( NAMESPACE_TOKEN( XML_NAMESPACE_TABLE ) | XML_NUMBER_MATRIX_COLUMNS_SPANNED ):
                     bIsMatrix = true;
                     nMatrixCols = static_cast<SCCOL>(it.toInt32());
                 break;
-                case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_ROWS:
+                case ( NAMESPACE_TOKEN( XML_NAMESPACE_TABLE ) | XML_NUMBER_MATRIX_ROWS_SPANNED ):
                     bIsMatrix = true;
                     nMatrixRows = static_cast<SCROW>(it.toInt32());
                 break;
-                case XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED:
+                case ( NAMESPACE_TOKEN( XML_NAMESPACE_TABLE ) | XML_NUMBER_COLUMNS_REPEATED ):
                     nColsRepeated = static_cast<SCCOL>(std::min<sal_Int32>( MAXCOLCOUNT,
                                 std::max( it.toInt32(), static_cast<sal_Int32>(1) ) ));
                 break;
-                case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE:
+                case ( NAMESPACE_TOKEN( XML_NAMESPACE_OFFICE ) | XML_VALUE_TYPE ):
                     nCellType = GetScImport().GetCellType(it.toString());
                     bIsEmpty = false;
                 break;
-                case XML_TOK_TABLE_ROW_CELL_ATTR_NEW_VALUE_TYPE:
+                case ( NAMESPACE_TOKEN( XML_NAMESPACE_CALC_EXT ) | XML_VALUE_TYPE ):
                     if(it.isString( "error" ) )
                         mbErrorValue = true;
                     else
@@ -211,7 +209,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                     bIsEmpty = false;
                     mbNewValueType = true;
                 break;
-                case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE:
+                case ( NAMESPACE_TOKEN( XML_NAMESPACE_OFFICE ) | XML_VALUE ):
                 {
                     if (!it.isEmpty())
                     {
@@ -226,7 +224,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                     }
                 }
                 break;
-                case XML_TOK_TABLE_ROW_CELL_ATTR_DATE_VALUE:
+                case ( NAMESPACE_TOKEN( XML_NAMESPACE_OFFICE ) | XML_DATE_VALUE ):
                 {
                     if (!it.isEmpty() && rXMLImport.SetNullDateOnUnitConverter())
                     {
@@ -235,7 +233,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                     }
                 }
                 break;
-                case XML_TOK_TABLE_ROW_CELL_ATTR_TIME_VALUE:
+                case ( NAMESPACE_TOKEN( XML_NAMESPACE_OFFICE ) | XML_TIME_VALUE ):
                 {
                     if (!it.isEmpty())
                     {
@@ -244,7 +242,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                     }
                 }
                 break;
-                case XML_TOK_TABLE_ROW_CELL_ATTR_STRING_VALUE:
+                case ( NAMESPACE_TOKEN( XML_NAMESPACE_OFFICE ) | XML_STRING_VALUE ):
                 {
                     if (!it.isEmpty())
                     {
@@ -254,7 +252,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                     }
                 }
                 break;
-                case XML_TOK_TABLE_ROW_CELL_ATTR_BOOLEAN_VALUE:
+                case ( NAMESPACE_TOKEN( XML_NAMESPACE_OFFICE ) | XML_BOOLEAN_VALUE ):
                 {
                     if (!it.isEmpty())
                     {
@@ -268,7 +266,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                     }
                 }
                 break;
-                case XML_TOK_TABLE_ROW_CELL_ATTR_FORMULA:
+                case ( NAMESPACE_TOKEN( XML_NAMESPACE_TABLE ) | XML_FORMULA ):
                 {
                     if (!it.isEmpty())
                     {
@@ -279,7 +277,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                     }
                 }
                 break;
-                case XML_TOK_TABLE_ROW_CELL_ATTR_CURRENCY:
+                case ( NAMESPACE_TOKEN( XML_NAMESPACE_OFFICE ) | XML_CURRENCY ):
                     xCurrencySymbol.reset( new OUString( it.toString() ) );
                 break;
                 default:

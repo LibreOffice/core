@@ -422,10 +422,9 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 {
     SvXMLImportContext *pContext(nullptr);
 
-    const SvXMLTokenMap& rTokenMap(GetScImport().GetDocElemTokenMap());
-    switch( rTokenMap.Get( nElement ) )
+    switch( nElement )
     {
-        case XML_TOK_DOC_BODY:
+        case ( NAMESPACE_TOKEN( XML_NAMESPACE_OFFICE ) | XML_BODY ):
         if (GetScImport().getImportFlags() & SvXMLImportFlags::CONTENT)
             pContext = new ScXMLBodyContext_Impl( GetScImport() );
         break;
