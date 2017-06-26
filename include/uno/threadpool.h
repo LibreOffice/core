@@ -159,7 +159,7 @@ uno_threadpool_putJob(
   The threads waiting with uno_threadpool_enter() will return with *ppJob == 0
 
   Later calls to uno_threadpool_enter() using the hPool handle will also
-  return immeadiatly with *ppJob == 0.
+  return immediately with *ppJob == 0.
 
   @param hPool The handle to be disposed.
 

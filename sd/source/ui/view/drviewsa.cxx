@@ -381,7 +381,7 @@ bool DrawViewShell::RelocateToParentWindow (vcl::Window* pParentWindow)
  */
 
 /*
-    Polylines are represented by makros as a sequence of:
+    Polylines are represented by macros as a sequence of:
         MoveTo (x, y)
         LineTo (x, y)   [or BezierTo (x, y)]
         LineTo (x, y)
