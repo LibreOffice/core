@@ -70,6 +70,64 @@ enum E_TYPE
     T_ExtRefA
 };
 
+template<typename T, int InitialCapacity>
+struct TokenPoolPool
+{
+    std::unique_ptr<T[]> ppP_Str;
+    sal_uInt16                            m_capacity;
+    sal_uInt16                            m_writemark;
+
+    TokenPoolPool() :
+        ppP_Str( new T[InitialCapacity] ),
+        m_capacity(InitialCapacity),
+        m_writemark(0)
+    {
+    }
+    bool Grow(sal_uInt16 nByMin = 1)
+    {
+        sal_uInt16 nP_StrNew = lcl_canGrow(m_capacity, nByMin);
+        if (!nP_StrNew)
+            return false;
+
+        T* ppP_StrNew = new T[ nP_StrNew ];
+
+        for( sal_uInt16 i = 0 ; i < m_capacity ; i++ )
+            ppP_StrNew[ i ] = std::move(ppP_Str[ i ]);
+
+        m_capacity = nP_StrNew;
+
+        ppP_Str.reset( ppP_StrNew );
+        return true;
+    }
+    /** Returns the new number of elements, or 0 if overflow. */
+    static sal_uInt16 lcl_canGrow( sal_uInt16 nOld, sal_uInt16 nByMin = 1 )
+    {
+        if (!nOld)
+            return nByMin ? nByMin : 1;
+        if (nOld == SAL_MAX_UINT16)
+            return 0;
+        sal_uInt32 nNew = ::std::max( static_cast<sal_uInt32>(nOld) * 2,
+                static_cast<sal_uInt32>(nOld) + nByMin);
+        if (nNew > SAL_MAX_UINT16)
+            nNew = SAL_MAX_UINT16;
+        if (nNew - nByMin < nOld)
+            nNew = 0;
+        return static_cast<sal_uInt16>(nNew);
+    }
+    T* getIfInRange(sal_uInt16 n) const
+    {
+         return ( n < m_capacity ) ? &ppP_Str[ n ] : nullptr;
+    }
+    T const & operator[](sal_uInt16 n) const
+    {
+         return ppP_Str[ n ];
+    }
+    T & operator[](sal_uInt16 n)
+    {
+         return ppP_Str[ n ];
+    }
+};
+
 class TokenPool
 {
     // !ATTENTION!: external Id-Basis is 1, internal 0!
@@ -77,21 +135,16 @@ class TokenPool
 private:
     svl::SharedStringPool& mrStringPool;
 
-        OUString**                      ppP_Str;    // Pool for Strings
-        sal_uInt16                      nP_Str;     // ...with size
-        sal_uInt16                      nP_StrAkt;  // ...and Write-Mark
+        TokenPoolPool<std::unique_ptr<OUString>, 4>
+                                        ppP_Str;    // Pool for Strings
 
-        double*                         pP_Dbl;     // Pool for Doubles
-        sal_uInt16                      nP_Dbl;
-        sal_uInt16                      nP_DblAkt;
+        TokenPoolPool<double, 8>        pP_Dbl;     // Pool for Doubles
 
-        sal_uInt16*                     pP_Err;     // Pool for error codes
-        static const sal_uInt16         nP_Err = 8;
-        sal_uInt16                      nP_ErrAkt;
+        TokenPoolPool<sal_uInt16, 8>
+                                        pP_Err;     // Pool for error codes
 
-        ScSingleRefData**               ppP_RefTr;  // Pool for References
-        sal_uInt16                      nP_RefTr;
-        sal_uInt16                      nP_RefTrAkt;
+        TokenPoolPool<std::unique_ptr<ScSingleRefData>, 32>
+                                        ppP_RefTr;  // Pool for References
 
         sal_uInt16*                     pP_Id;      // Pool for Id-sets
         sal_uInt16                      nP_Id;
@@ -105,18 +158,11 @@ private:
                                     EXTCONT( const DefTokenId e, const OUString& r ) :
                                         eId( e ), aText( r ){}
         };
-        EXTCONT**                   ppP_Ext;
-        sal_uInt16                      nP_Ext;
-        sal_uInt16                      nP_ExtAkt;
+        TokenPoolPool<std::unique_ptr<EXTCONT>, 32>
+                                        ppP_Ext;
 
-        struct  NLFCONT
-        {
-            ScSingleRefData         aRef;
-                                    NLFCONT( const ScSingleRefData& r ) : aRef( r ) {}
-        };
-        NLFCONT**                   ppP_Nlf;
-        sal_uInt16                      nP_Nlf;
-        sal_uInt16                      nP_NlfAkt;
+        TokenPoolPool<std::unique_ptr<ScSingleRefData>, 16>
+                                        ppP_Nlf;
 
         ScMatrix**                  ppP_Matrix;     // Pool for Matrices
         sal_uInt16                      nP_Matrix;
@@ -168,17 +214,9 @@ private:
 #endif
         ScTokenArray*               pScToken;   // Token array
 
-        bool                        GrowString();
-        bool                        GrowDouble();
-/* TODO: in case we had FormulaTokenArray::AddError() */
-#if 0
-        bool                        GrowError();
-#endif
         bool                        GrowTripel( sal_uInt16 nByMin = 1 );
         bool                        GrowId();
         bool                        GrowElement();
-        bool                        GrowExt();
-        bool                        GrowNlf();
         bool                        GrowMatrix();
         bool                        GetElement( const sal_uInt16 nId );
         bool                        GetElementRek( const sal_uInt16 nId );
