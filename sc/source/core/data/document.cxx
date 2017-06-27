@@ -1416,12 +1416,21 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
     while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) ) );
 
     sc::RefUpdateContext aCxt(*this);
-    if ( ValidRow(nStartRow+nSize) )
+    const bool bLastRowIncluded = (nStartRow + nSize == MAXROWCOUNT && ValidRow(nStartRow));
+    if ( ValidRow(nStartRow+nSize) || bLastRowIncluded )
     {
         lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) );
         aCxt.meMode = URM_INSDEL;
-        aCxt.maRange = ScRange(nStartCol, nStartRow+nSize, nTabRangeStart, nEndCol, MAXROW, nTabRangeEnd);
         aCxt.mnRowDelta = -(static_cast<SCROW>(nSize));
+        if (bLastRowIncluded)
+        {
+            // Last row is included, shift a virtually non-existent row in.
+            aCxt.maRange = ScRange( nStartCol, MAXROWCOUNT, nTabRangeStart, nEndCol, MAXROWCOUNT, nTabRangeEnd);
+        }
+        else
+        {
+            aCxt.maRange = ScRange( nStartCol, nStartRow+nSize, nTabRangeStart, nEndCol, MAXROW, nTabRangeEnd);
+        }
         do
         {
             UpdateReference(aCxt, pRefUndoDoc, true, false);
@@ -1447,7 +1456,7 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
     // Mark all joined groups for group listening.
     SetNeedsListeningGroups(aGroupPos);
 
-    if ( ValidRow(nStartRow+nSize) )
+    if ( ValidRow(nStartRow+nSize) || bLastRowIncluded )
     {
         // Listeners have been removed in UpdateReference
         StartNeededListeners();
@@ -1616,12 +1625,22 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
     while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) ) );
 
     sc::RefUpdateContext aCxt(*this);
-    if ( ValidCol(sal::static_int_cast<SCCOL>(nStartCol+nSize)) )
+    const bool bLastColIncluded = (nStartCol + nSize == MAXCOLCOUNT && ValidCol(nStartCol));
+    if ( ValidCol(sal::static_int_cast<SCCOL>(nStartCol+nSize)) || bLastColIncluded )
     {
         lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) );
         aCxt.meMode = URM_INSDEL;
-        aCxt.maRange = ScRange(sal::static_int_cast<SCCOL>(nStartCol+nSize), nStartRow, nTabRangeStart, MAXCOL, nEndRow, nTabRangeEnd);
         aCxt.mnColDelta = -(static_cast<SCCOL>(nSize));
+        if (bLastColIncluded)
+        {
+            // Last column is included, shift a virtually non-existent column in.
+            aCxt.maRange = ScRange( MAXCOLCOUNT, nStartRow, nTabRangeStart, MAXCOLCOUNT, nEndRow, nTabRangeEnd);
+        }
+        else
+        {
+            aCxt.maRange = ScRange( sal::static_int_cast<SCCOL>(nStartCol+nSize), nStartRow, nTabRangeStart,
+                    MAXCOL, nEndRow, nTabRangeEnd);
+        }
         do
         {
             UpdateReference(aCxt, pRefUndoDoc, true, false);
@@ -1638,7 +1657,7 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
             maTabs[i]->DeleteCol(aCxt.maRegroupCols, nStartCol, nStartRow, nEndRow, nSize, pUndoOutline);
     }
 
-    if ( ValidCol(sal::static_int_cast<SCCOL>(nStartCol+nSize)) )
+    if ( ValidCol(sal::static_int_cast<SCCOL>(nStartCol+nSize)) || bLastColIncluded )
     {
         // Listeners have been removed in UpdateReference
         StartNeededListeners();

@@ -2650,22 +2650,29 @@ void restoreDeletedRef( ScComplexRefData& rRef, const sc::RefUpdateContext& rCxt
     restoreDeletedRef(rRef.Ref2, rCxt);
 }
 
-bool shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const ScRange& rDeletedRange,
+enum ShrinkResult
+{
+    UNMODIFIED,
+    SHRUNK,
+    STICKY
+};
+
+ShrinkResult shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const ScRange& rDeletedRange,
         const ScComplexRefData& rRef )
 {
     if (!rDeletedRange.Intersects(rRefRange))
-        return false;
+        return UNMODIFIED;
 
     if (rCxt.mnColDelta < 0)
     {
         if (rRef.IsEntireRow())
             // Entire rows are not affected, columns are anchored.
-            return false;
+            return STICKY;
 
         // Shifting left.
         if (rRefRange.aStart.Row() < rDeletedRange.aStart.Row() || rDeletedRange.aEnd.Row() < rRefRange.aEnd.Row())
             // Deleted range is only partially overlapping in vertical direction. Bail out.
-            return false;
+            return UNMODIFIED;
 
         if (rDeletedRange.aStart.Col() <= rRefRange.aStart.Col())
         {
@@ -2687,7 +2694,7 @@ bool shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
         {
             if (rRefRange.IsEndColSticky())
                 // Sticky end not affected.
-                return false;
+                return STICKY;
 
             // Reference is deleted in the middle. Move the last column
             // position to the left.
@@ -2698,25 +2705,25 @@ bool shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
         {
             if (rRefRange.IsEndColSticky())
                 // Sticky end not affected.
-                return false;
+                return STICKY;
 
             // The reference range is truncated on the right.
             SCCOL nDelta = rDeletedRange.aStart.Col() - rRefRange.aEnd.Col() - 1;
             rRefRange.IncEndColSticky(nDelta);
         }
-        return true;
+        return SHRUNK;
     }
     else if (rCxt.mnRowDelta < 0)
     {
         if (rRef.IsEntireCol())
             // Entire columns are not affected, rows are anchored.
-            return false;
+            return STICKY;
 
         // Shifting up.
 
         if (rRefRange.aStart.Col() < rDeletedRange.aStart.Col() || rDeletedRange.aEnd.Col() < rRefRange.aEnd.Col())
             // Deleted range is only partially overlapping in horizontal direction. Bail out.
-            return false;
+            return UNMODIFIED;
 
         if (rDeletedRange.aStart.Row() <= rRefRange.aStart.Row())
         {
@@ -2738,7 +2745,7 @@ bool shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
         {
             if (rRefRange.IsEndRowSticky())
                 // Sticky end not affected.
-                return false;
+                return STICKY;
 
             // Reference is deleted in the middle. Move the last row
             // position upward.
@@ -2749,16 +2756,16 @@ bool shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
         {
             if (rRefRange.IsEndRowSticky())
                 // Sticky end not affected.
-                return false;
+                return STICKY;
 
             // The reference range is truncated on the bottom.
             SCCOL nDelta = rDeletedRange.aStart.Row() - rRefRange.aEnd.Row() - 1;
             rRefRange.IncEndRowSticky(nDelta);
         }
-        return true;
+        return SHRUNK;
     }
 
-    return false;
+    return UNMODIFIED;
 }
 
 bool expandRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const ScRange& rSelectedRange,
@@ -3014,13 +3021,21 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                             }
                             else if (aSelectedRange.Intersects(aAbs))
                             {
-                                if (shrinkRange(rCxt, aAbs, aSelectedRange, rRef))
+                                const ShrinkResult eSR = shrinkRange(rCxt, aAbs, aSelectedRange, rRef);
+                                if (eSR == SHRUNK)
                                 {
                                     // The reference range has been shrunk.
                                     rRef.SetRange(aAbs, aNewPos);
                                     aRes.mbValueChanged = true;
                                     aRes.mbReferenceModified = true;
                                     break;
+                                }
+                                else if (eSR == STICKY)
+                                {
+                                    // The reference range stays the same but a
+                                    // new (empty) cell range is shifted in and
+                                    // may change the calculation result.
+                                    aRes.mbValueChanged = true;
                                 }
                             }
                         }

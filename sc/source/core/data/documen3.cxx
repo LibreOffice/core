@@ -983,7 +983,11 @@ void ScDocument::AddUnoRefChange( sal_Int64 nId, const ScRangeList& rOldRanges )
 void ScDocument::UpdateReference(
     sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, bool bIncludeDraw, bool bUpdateNoteCaptionPos )
 {
-    if (!ValidRange(rCxt.maRange))
+    if (!ValidRange(rCxt.maRange) && !(rCxt.meMode == URM_INSDEL &&
+                ((rCxt.mnColDelta < 0 &&    // convention from ScDocument::DeleteCol()
+                  rCxt.maRange.aStart.Col() == MAXCOLCOUNT && rCxt.maRange.aEnd.Col() == MAXCOLCOUNT) ||
+                 (rCxt.mnRowDelta < 0 &&    // convention from ScDocument::DeleteRow()
+                  rCxt.maRange.aStart.Row() == MAXROWCOUNT && rCxt.maRange.aEnd.Row() == MAXROWCOUNT))))
         return;
 
     std::unique_ptr<sc::ExpandRefsSwitch> pExpandRefsSwitch;
