@@ -492,6 +492,7 @@ public:
     void testFormulaListenerMultipleCellsToSingleCell();
     void testFormulaListenerSingleCellToMultipleCells();
     void testFormulaListenerMultipleCellsToMultipleCells();
+    void testFormulaListenerUpdateInsertTab();
 
     // Check that the Listeners are correctly updated when we
     // call a operation
@@ -787,6 +788,7 @@ public:
     CPPUNIT_TEST(testFormulaListenerSingleCellToMultipleCells);
     CPPUNIT_TEST(testFormulaListenerMultipleCellsToSingleCell);
     CPPUNIT_TEST(testFormulaListenerMultipleCellsToMultipleCells);
+    CPPUNIT_TEST(testFormulaListenerUpdateInsertTab);
     CPPUNIT_TEST(testImportStream);
     CPPUNIT_TEST(testDeleteContents);
     CPPUNIT_TEST(testTransliterateText);
