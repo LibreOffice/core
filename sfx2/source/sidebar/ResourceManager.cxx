@@ -719,7 +719,10 @@ void ResourceManager::UpdateModel(const css::uno::Reference<css::frame::XModel>&
         for (SharedPanelContainer::const_iterator it = rContainer.begin(); it != rContainer.end(); ++it)
         {
             css::uno::Reference<css::ui::XUpdateModel> xPanel((*it)->GetPanelComponent(), css::uno::UNO_QUERY);
-            xPanel->updateModel(xModel);
+            if (xPanel.is()) // tdf#108814 interface is optional
+            {
+                xPanel->updateModel(xModel);
+            }
         }
     }
 }
