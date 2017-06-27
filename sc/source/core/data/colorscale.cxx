@@ -52,8 +52,6 @@ void ScFormulaListener::startListening(ScTokenArray* pArr, const ScRange& rRange
                 ScRange aRange(aCell, aCell2);
                 if (aRange.IsValid())
                     mpDoc->StartListeningArea(aRange, false, this);
-
-                maCells.push_back(aRange);
             }
             break;
             case formula::svDoubleRef:
@@ -81,7 +79,6 @@ void ScFormulaListener::startListening(ScTokenArray* pArr, const ScRange& rRange
                         }
                     }
                     mpDoc->StartListeningArea(aRange1, false, this);
-                    maCells.push_back(aRange1);
                 }
             }
             break;
@@ -126,8 +123,7 @@ void ScFormulaListener::stopListening()
     if (mpDoc->IsClipOrUndo())
         return;
 
-    std::for_each(maCells.begin(), maCells.end(), StopListeningCell(mpDoc, this));
-    maCells.clear();
+    this->EndListeningAll();
 }
 
 ScFormulaListener::~ScFormulaListener()

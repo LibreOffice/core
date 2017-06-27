@@ -89,7 +89,6 @@ enum ScConditionMode
 class ScFormulaListener : public SvtListener
 {
 private:
-    std::vector<ScRange> maCells;
     mutable bool mbDirty;
     ScDocument* mpDoc;
     std::function<void()> maCallbackFunction;
