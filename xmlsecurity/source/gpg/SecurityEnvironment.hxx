@@ -55,7 +55,8 @@ public:
 
     virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getPersonalCertificates() override;
 
-    virtual css::uno::Reference< css::security::XCertificate > SAL_CALL getCertificate( const OUString& issuerName, const css::uno::Sequence< sal_Int8 >& serialNumber ) override;
+    /** We reinterpret the first parameter (originally issuerName) as keyId. We have no other way to identify a gpg key. */
+    virtual css::uno::Reference< css::security::XCertificate > SAL_CALL getCertificate( const OUString& keyId, const css::uno::Sequence< sal_Int8 >& serialNumber ) override;
 
     virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL buildCertificatePath(
         const css::uno::Reference< css::security::XCertificate >& beginCert ) override;
