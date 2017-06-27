@@ -74,7 +74,6 @@ class Point;
 namespace vcl { class Window; }
 class SdTransferable;
 struct SpellCallbackInfo;
-struct StyleRequestData;
 class SdDrawDocument;
 class SdCustomShow;
 class SdCustomShowList;

@@ -44,7 +44,6 @@ class Point;
 class Graphic;
 class SdrOutliner;
 class TransferableDataHelper;
-struct StyleRequestData;
 class Outliner;
 
 namespace sd {

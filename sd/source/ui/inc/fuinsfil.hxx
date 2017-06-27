@@ -24,7 +24,6 @@
 #include <vector>
 
 class SfxMedium;
-struct StyleRequestData;
 
 namespace sd {
 
