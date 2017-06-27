@@ -214,6 +214,22 @@ void SdrMarkView::ModelHasChanged()
             sSelection = "EMPTY";
         else
         {
+            sal_uInt32 nTotalPaintWindows = this->PaintWindowCount();
+            if (nTotalPaintWindows == 1)
+            {
+                const vcl::Window* pWin = dynamic_cast<const vcl::Window*>(this->GetFirstOutputDevice());
+                if (pWin && pWin->IsChart())
+                {
+                    const vcl::Window* pViewShellWindow = GetSfxViewShell()->GetEditWindowForActiveOLEObj();
+                    if (pViewShellWindow && pViewShellWindow->IsAncestorOf(*pWin))
+                    {
+                        Point aOffsetPx = pWin->GetOffsetPixelFrom(*pViewShellWindow);
+                        Point aLogicOffset = pWin->PixelToLogic(aOffsetPx);
+                        aSelection.Move(aLogicOffset.getX(), aLogicOffset.getY());
+                    }
+                }
+            }
+
             // In case the map mode is in 100th MM, then need to convert the coordinates over to twips for LOK.
             if (mpMarkedPV)
             {
@@ -739,10 +755,29 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
         }
 
         Rectangle aRect(GetMarkedObjRect());
+        Rectangle aSelection(aRect);
+
+        if (bTiledRendering && !aRect.IsEmpty())
+        {
+            sal_uInt32 nTotalPaintWindows = this->PaintWindowCount();
+            if (nTotalPaintWindows == 1)
+            {
+                const vcl::Window* pWin = dynamic_cast<const vcl::Window*>(this->GetFirstOutputDevice());
+                if (pWin && pWin->IsChart())
+                {
+                    const vcl::Window* pViewShellWindow = GetSfxViewShell()->GetEditWindowForActiveOLEObj();
+                    if (pViewShellWindow && pViewShellWindow->IsAncestorOf(*pWin))
+                    {
+                        Point aOffsetPx = pWin->GetOffsetPixelFrom(*pViewShellWindow);
+                        Point aLogicOffset = pWin->PixelToLogic(aOffsetPx);
+                        aSelection.Move(aLogicOffset.getX(), aLogicOffset.getY());
+                    }
+                }
+            }
+        }
 
         if (bTiledRendering)
         {
-            Rectangle aSelection(aRect);
             OString sSelection;
             if (aSelection.IsEmpty())
                 sSelection = "EMPTY";
