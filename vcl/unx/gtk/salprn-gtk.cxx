@@ -243,7 +243,6 @@ GtkSalPrinter::StartJob(
     if (!bDoJob)
         return false;
 #endif
-    int nCopies = 1;
     bool bCollate = false;
 
     //To-Do proper name, watch for encodings
@@ -254,7 +253,7 @@ GtkSalPrinter::StartJob(
 
     //To-Do, swap ps/pdf for gtk_printer_accepts_ps()/gtk_printer_accepts_pdf() ?
 
-    return impl_doJob(&aFileName, i_rJobName, i_rAppName, io_pSetupData, nCopies, bCollate, io_rController);
+    return impl_doJob(&aFileName, i_rJobName, i_rAppName, io_pSetupData, 1/*nCopies*/, bCollate, io_rController);
 }
 
 bool

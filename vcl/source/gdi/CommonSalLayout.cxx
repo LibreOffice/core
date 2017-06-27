@@ -848,7 +848,7 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
 
             Point aPos(pGlyphIter->maLinearPos.X() - nTotalWidth, 0);
             int nCharPos = pGlyphIter->mnCharPos;
-            int nFlags = GlyphItem::IS_IN_CLUSTER | GlyphItem::IS_RTL_GLYPH;
+            int const nFlags = GlyphItem::IS_IN_CLUSTER | GlyphItem::IS_RTL_GLYPH;
             while (nCopies--)
             {
                 GlyphItem aKashida(nCharPos, nKashidaIndex, aPos, nFlags, nKashidaWidth);

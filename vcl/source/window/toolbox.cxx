@@ -249,10 +249,9 @@ void ToolBox::ImplDrawGrip(vcl::RenderContext& rRenderContext,
 
         Point aPt;
         tools::Rectangle aCtrlRegion(aPt, aSz);
-        ControlState nState = ControlState::ENABLED;
 
         bNativeOk = rRenderContext.DrawNativeControl( ControlType::Toolbar, ePart,
-                                        aCtrlRegion, nState, aToolbarValue, OUString() );
+                                        aCtrlRegion, ControlState::ENABLED, aToolbarValue, OUString() );
     }
 
     if( bNativeOk )
@@ -432,10 +431,9 @@ bool ToolBox::ImplDrawNativeBackground(vcl::RenderContext& rRenderContext)
     // use NWF
     Point aPt;
     tools::Rectangle aCtrlRegion(aPt, GetOutputSizePixel());
-    ControlState  nState = ControlState::ENABLED;
 
     return rRenderContext.DrawNativeControl( ControlType::Toolbar, mbHorz ? ControlPart::DrawBackgroundHorz : ControlPart::DrawBackgroundVert,
-                                    aCtrlRegion, nState, ImplControlValue(), OUString() );
+                                    aCtrlRegion, ControlState::ENABLED, ImplControlValue(), OUString() );
 }
 
 void ToolBox::ImplDrawTransparentBackground(const vcl::Region &rRegion)
@@ -2641,8 +2639,7 @@ void ToolBox::ImplDrawSeparator(vcl::RenderContext& rRenderContext, ImplToolItem
     if (rRenderContext.IsNativeControlSupported(ControlType::Toolbar, nPart))
     {
         ImplControlValue aControlValue;
-        ControlState     nState = ControlState::NONE;
-        bNativeOk = rRenderContext.DrawNativeControl(ControlType::Toolbar, nPart, rRect, nState, aControlValue, OUString());
+        bNativeOk = rRenderContext.DrawNativeControl(ControlType::Toolbar, nPart, rRect, ControlState::NONE, aControlValue, OUString());
     }
 
     /* Draw the widget only if it can't be drawn natively. */
@@ -4538,8 +4535,7 @@ void ToolBox::LoseFocus()
 void ToolBox::TriggerItem( sal_uInt16 nItemId )
 {
     mnHighItemId = nItemId;
-    sal_uInt16 nModifier = 0;
-    vcl::KeyCode aKeyCode( 0, nModifier );
+    vcl::KeyCode aKeyCode( 0, 0 );
     ImplActivateItem( aKeyCode );
 }
 
@@ -4839,8 +4835,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
     // #107251# move focus away if this toolbox was disabled during keyinput
     if (HasFocus() && mpData->mbKeyInputDisabled && bParentIsContainer)
     {
-        sal_uInt16 n = 0;
-        vcl::Window *pFocusControl = pParent->ImplGetDlgWindow( n, GetDlgWindowType::First );
+        vcl::Window *pFocusControl = pParent->ImplGetDlgWindow( 0, GetDlgWindowType::First );
         if ( pFocusControl && pFocusControl != this )
             pFocusControl->ImplControlFocus( GetFocusFlags::Init );
     }

@@ -1484,8 +1484,7 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
 
         // calculate hyphenated break position
         OUString aHyphenStr(nHyphenChar);
-        sal_Int32 nTempLen = 1;
-        SalLayout* pHyphenLayout = ImplLayout( aHyphenStr, 0, nTempLen );
+        SalLayout* pHyphenLayout = ImplLayout( aHyphenStr, 0, 1 );
         if( pHyphenLayout )
         {
             // calculate subpixel width of hyphenation character

@@ -1925,7 +1925,6 @@ void TextView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE )
 {
     SolarMutexGuard aVclGuard;
 
-    bool bChanges = false;
     if ( !mpImpl->mbReadOnly && mpImpl->mpDDInfo )
     {
         ImpHideDDCursor();
@@ -2024,7 +2023,7 @@ void TextView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE )
 
         mpImpl->mpTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
     }
-    rDTDE.Context->dropComplete( bChanges );
+    rDTDE.Context->dropComplete( false/*bChanges*/ );
 }
 
 void TextView::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& )

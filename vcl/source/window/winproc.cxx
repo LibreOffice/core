@@ -299,7 +299,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
     pWinFrameData->mnLastMouseX = nX;
     pWinFrameData->mnLastMouseY = nY;
     pWinFrameData->mnMouseCode  = nCode;
-    MouseEventModifiers nTmpMask = MouseEventModifiers::SYNTHETIC | MouseEventModifiers::MODIFIERCHANGED;
+    MouseEventModifiers const nTmpMask = MouseEventModifiers::SYNTHETIC | MouseEventModifiers::MODIFIERCHANGED;
     pWinFrameData->mnMouseMode  = nMode & ~nTmpMask;
     if ( bMouseLeave )
     {
@@ -624,7 +624,6 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
     }
 
     // call handler
-    bool bDrag = false;
     bool bCallHelpRequest = true;
     SAL_WARN_IF( !pChild, "vcl", "ImplHandleMouseEvent: pChild is NULL" );
 
@@ -751,44 +750,41 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
     }
     else if ( (nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN) || (nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP) )
     {
-        if ( !bDrag )
+        // Command-Events
+        if ( /*!bRet &&*/ (nClicks == 1) && (nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN) &&
+             (nCode == MOUSE_MIDDLE) )
         {
-            // Command-Events
-            if ( /*!bRet &&*/ (nClicks == 1) && (nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN) &&
-                 (nCode == MOUSE_MIDDLE) )
+            MouseMiddleButtonAction nMiddleAction = pChild->GetSettings().GetMouseSettings().GetMiddleButtonAction();
+            if ( nMiddleAction == MouseMiddleButtonAction::AutoScroll )
+                bRet = !ImplCallCommand( pChild, CommandEventId::StartAutoScroll, nullptr, true, &aChildPos );
+        }
+        else
+        {
+            // ContextMenu
+            const MouseSettings& rMSettings = pChild->GetSettings().GetMouseSettings();
+            if ( (nCode == rMSettings.GetContextMenuCode()) &&
+                 (nClicks == rMSettings.GetContextMenuClicks()) )
             {
-                MouseMiddleButtonAction nMiddleAction = pChild->GetSettings().GetMouseSettings().GetMiddleButtonAction();
-                if ( nMiddleAction == MouseMiddleButtonAction::AutoScroll )
-                    bRet = !ImplCallCommand( pChild, CommandEventId::StartAutoScroll, nullptr, true, &aChildPos );
-            }
-            else
-            {
-                // ContextMenu
-                const MouseSettings& rMSettings = pChild->GetSettings().GetMouseSettings();
-                if ( (nCode == rMSettings.GetContextMenuCode()) &&
-                     (nClicks == rMSettings.GetContextMenuClicks()) )
+                bool bContextMenu = (nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN);
+                if ( bContextMenu )
                 {
-                    bool bContextMenu = (nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN);
-                    if ( bContextMenu )
+                    if( pSVData->maAppData.mpActivePopupMenu )
                     {
-                        if( pSVData->maAppData.mpActivePopupMenu )
-                        {
-                            /*  #i34277# there already is a context menu open
-                            *   that was probably just closed with EndPopupMode.
-                            *   We need to give the eventual corresponding
-                            *   PopupMenu::Execute a chance to end properly.
-                            *   Therefore delay context menu command and
-                            *   issue only after popping one frame of the
-                            *   Yield stack.
-                            */
-                            ContextMenuEvent* pEv = new ContextMenuEvent;
-                            pEv->pWindow = pChild;
-                            pEv->aChildPos = aChildPos;
-                            Application::PostUserEvent( Link<void*,void>( pEv, ContextMenuEventLink ) );
-                        }
-                        else
-                            bRet = ! ImplCallCommand( pChild, CommandEventId::ContextMenu, nullptr, true, &aChildPos );
+                        /*  #i34277# there already is a context menu open
+                        *   that was probably just closed with EndPopupMode.
+                        *   We need to give the eventual corresponding
+                        *   PopupMenu::Execute a chance to end properly.
+                        *   Therefore delay context menu command and
+                        *   issue only after popping one frame of the
+                        *   Yield stack.
+                        */
+                        ContextMenuEvent* pEv = new ContextMenuEvent;
+                        pEv->pWindow = pChild;
+                        pEv->aChildPos = aChildPos;
+                        Application::PostUserEvent( Link<void*,void>( pEv, ContextMenuEventLink ) );
                     }
+                    else
+                        bRet = ! ImplCallCommand( pChild, CommandEventId::ContextMenu, nullptr, true, &aChildPos );
                 }
             }
         }

@@ -362,12 +362,11 @@ void PNGWriterImpl::ImplWritepHYs(const BitmapEx& rBmpEx)
         if (aPrefSize.Width() && aPrefSize.Height() && mnWidth && mnHeight)
         {
             ImplOpenChunk(PNGCHUNK_pHYs);
-            sal_uInt8 nMapUnit = 1;
             sal_uInt32 nPrefSizeX = static_cast<sal_uInt32>(100000.0 / (static_cast<double>(aPrefSize.Width()) / mnWidth) + 0.5);
             sal_uInt32 nPrefSizeY = static_cast<sal_uInt32>(100000.0 / (static_cast<double>(aPrefSize.Height()) / mnHeight) + 0.5);
             ImplWriteChunk(nPrefSizeX);
             ImplWriteChunk(nPrefSizeY);
-            ImplWriteChunk(nMapUnit);
+            ImplWriteChunk(sal_uInt8(1)); // nMapUnit
         }
     }
 }

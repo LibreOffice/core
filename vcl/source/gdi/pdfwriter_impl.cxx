@@ -7490,7 +7490,7 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     aLine.append( " 0 obj\n"
                   "<</Type/OutputIntent/S/GTS_PDFA1/OutputConditionIdentifier");
 
-    OUString aComment( "sRGB IEC61966-2.1"  );
+    OUString const aComment( "sRGB IEC61966-2.1"  );
     appendLiteralStringEncrypt( aComment ,nOIObject, aLine );
     aLine.append("/DestOutputProfile ");
     aLine.append( nICCObject );
@@ -8453,7 +8453,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     bool bVertical = m_aCurrentPDFState.m_aFont.IsVertical();
     int nGlyphs;
     int nIndex = 0;
-    int nMinCharPos = 0, nMaxCharPos = rText.getLength()-1;
+    int nMaxCharPos = rText.getLength()-1;
     double fXScale = 1.0;
     double fSkew = 0.0;
     sal_Int32 nPixelFontHeight = m_pReferenceDevice->mpFontInstance->maFontSelData.mnHeight;
@@ -8584,7 +8584,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         {
             // default case: 1 glyph is one unicode
             aCodeUnitsPerGlyph.push_back(1);
-            if (pGlyphs[i]->mnCharPos >= nMinCharPos && pGlyphs[i]->mnCharPos <= nMaxCharPos)
+            if (pGlyphs[i]->mnCharPos >= 0 && pGlyphs[i]->mnCharPos <= nMaxCharPos)
             {
                 int nChars = 1;
                 // try to handle ligatures and such
@@ -12783,8 +12783,7 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
                 std::list< sal_Int32 > aNewChildren;
 
                 // add Div in RoleMap, in case no one else did (TODO: is it needed? Is it dangerous?)
-                OStringBuffer aNameBuf( "Div" );
-                OString aAliasName( aNameBuf.makeStringAndClear() );
+                OString aAliasName( "Div" );
                 m_aRoleMap[ aAliasName ] = getStructureTag( PDFWriter::Division );
 
                 while( rEle.m_aKids.size() > ncMaxPDFArraySize )

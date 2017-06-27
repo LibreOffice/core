@@ -1270,7 +1270,6 @@ bool EnhWMFReader::ReadEnhWMF()
                     pWMF->ReadUInt32( BkColorSrc ).ReadUInt32( iUsageSrc ).ReadUInt32( offBmiSrc ).ReadUInt32( cbBmiSrc )
                                .ReadUInt32( offBitsSrc ).ReadUInt32( cbBitsSrc ).ReadInt32( cxSrc ).ReadInt32( cySrc ) ;
 
-                    sal_uInt32  dwRop = SRCAND|SRCINVERT;
                     tools::Rectangle   aRect( Point( xDest, yDest ), Size( cxDest+1, cyDest+1 ) );
 
                     if ( (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc) )
@@ -1382,7 +1381,7 @@ bool EnhWMFReader::ReadEnhWMF()
                                     aPNGWriter.Write(aNew);
                                 }
 #endif
-                                aBmpSaveList.emplace_back(new BSaveStruct(aBitmapEx, aRect, dwRop));
+                                aBmpSaveList.emplace_back(new BSaveStruct(aBitmapEx, aRect, SRCAND|SRCINVERT));
                             }
                         }
                     }

@@ -65,7 +65,7 @@ class IconThemeInfoTest : public CppUnit::TestFixture
 void
 IconThemeInfoTest::UpperCaseDisplayNameIsReturnedForNonDefaultId()
 {
-    OUString id("katze");
+    OUString const id("katze");
     OUString displayName = vcl::IconThemeInfo::ThemeIdToDisplayName(id);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("theme id is properly uppercased", OUString("Katze"), displayName);
 }
@@ -73,15 +73,14 @@ IconThemeInfoTest::UpperCaseDisplayNameIsReturnedForNonDefaultId()
 void
 IconThemeInfoTest::ImagesZipIsNotValid()
 {
-    OUString id("file://images.zip");
-    bool valid = vcl::IconThemeInfo::UrlCanBeParsed(id);
+    bool valid = vcl::IconThemeInfo::UrlCanBeParsed("file://images.zip");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("images.zip is not a valid theme name", false, valid);
 }
 
 void
 IconThemeInfoTest::ImagesOxygenZipIsValid()
 {
-    OUString id("file://images_oxygen.zip");
+    OUString const id("file://images_oxygen.zip");
     bool valid = vcl::IconThemeInfo::UrlCanBeParsed(id);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("images_oxygen.zip is a valid theme name", true, valid);
 }
@@ -89,7 +88,7 @@ IconThemeInfoTest::ImagesOxygenZipIsValid()
 void
 IconThemeInfoTest::ThemeIdIsDetectedFromFileNameWithUnderscore()
 {
-    OUString fname("images_oxygen.zip");
+    OUString const fname("images_oxygen.zip");
     OUString sname = vcl::IconThemeInfo::FileNameToThemeId(fname);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'oxygen' theme id is returned for 'images_oxygen.zip'", OUString("oxygen"), sname);
 }
@@ -98,7 +97,7 @@ void
 IconThemeInfoTest::ExceptionIsThrownWhenIdCannotBeDetermined1()
 {
     bool thrown = false;
-    OUString fname("images_oxygen");
+    OUString const fname("images_oxygen");
     try {
         vcl::IconThemeInfo::FileNameToThemeId(fname);
     }
@@ -112,7 +111,7 @@ void
 IconThemeInfoTest::ExceptionIsThrownWhenIdCannotBeDetermined2()
 {
     bool thrown = false;
-    OUString fname("image_oxygen.zip");
+    OUString const fname("image_oxygen.zip");
     try {
         vcl::IconThemeInfo::FileNameToThemeId(fname);
     }
@@ -125,8 +124,8 @@ IconThemeInfoTest::ExceptionIsThrownWhenIdCannotBeDetermined2()
 void
 IconThemeInfoTest::DisplayNameForHicontrastIsHighContrast()
 {
-    OUString id("hicontrast");
-    OUString expected("High Contrast");
+    OUString const id("hicontrast");
+    OUString const expected("High Contrast");
     OUString displayName = vcl::IconThemeInfo::ThemeIdToDisplayName(id);
     CPPUNIT_ASSERT_EQUAL(expected, displayName);
 }
@@ -134,8 +133,8 @@ IconThemeInfoTest::DisplayNameForHicontrastIsHighContrast()
 void
 IconThemeInfoTest::DisplayNameForTango_testingIsTangoTesting()
 {
-    OUString id("tango_testing");
-    OUString expected("Tango Testing");
+    OUString const id("tango_testing");
+    OUString const expected("Tango Testing");
     OUString displayName = vcl::IconThemeInfo::ThemeIdToDisplayName(id);
     CPPUNIT_ASSERT_EQUAL(expected, displayName);
 }

@@ -1138,17 +1138,16 @@ void PushButton::ImplSetDefButton( bool bSet )
     if ( IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Entire) )
     {
         tools::Rectangle aBound, aCont;
-        tools::Rectangle aCtrlRect( 0, 0, 80, 20 ); // use a constant size to avoid accumulating
+        tools::Rectangle aCtrlRegion( 0, 0, 80, 20 ); // use a constant size to avoid accumulating
                                              // will not work if the theme has dynamic adornment sizes
         ImplControlValue aControlValue;
-        tools::Rectangle        aCtrlRegion( aCtrlRect );
-        ControlState     nState = ControlState::DEFAULT|ControlState::ENABLED;
 
         // get native size of a 'default' button
         // and adjust the VCL button if more space for adornment is required
         if( GetNativeControlRegion( ControlType::Pushbutton, ControlPart::Entire, aCtrlRegion,
-                                nState, aControlValue,
-                                aBound, aCont ) )
+                                    ControlState::DEFAULT|ControlState::ENABLED,
+                                    aControlValue,
+                                    aBound, aCont ) )
         {
             dLeft = aCont.Left() - aBound.Left();
             dTop = aCont.Top() - aBound.Top();
@@ -1949,13 +1948,12 @@ void RadioButton::ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext)
             tools::Rectangle aImageRect  = maStateRect;
             Size aImageSize = maImage.GetSizePixel();
             bool bEnabled = IsEnabled();
-            DrawFrameStyle nButtonStyle = DrawFrameStyle::DoubleIn;
 
             aImageSize.Width()  = CalcZoom(aImageSize.Width());
             aImageSize.Height() = CalcZoom(aImageSize.Height());
 
             // display border and selection status
-            aImageRect = aDecoView.DrawFrame(aImageRect, nButtonStyle);
+            aImageRect = aDecoView.DrawFrame(aImageRect, DrawFrameStyle::DoubleIn);
             if ((ImplGetButtonState() & DrawButtonFlags::Pressed) || !bEnabled)
                 rRenderContext.SetFillColor( rStyleSettings.GetFaceColor());
             else
@@ -2719,14 +2717,14 @@ Size RadioButton::ImplGetRadioImageSize() const
     if( IsNativeControlSupported( ControlType::Radiobutton, ControlPart::Entire ) )
     {
         ImplControlValue aControlValue;
-        tools::Rectangle        aCtrlRegion( Point( 0, 0 ), GetSizePixel() );
-        ControlState     nState = ControlState::DEFAULT|ControlState::ENABLED;
+        tools::Rectangle aCtrlRegion( Point( 0, 0 ), GetSizePixel() );
         tools::Rectangle aBoundingRgn, aContentRgn;
 
         // get native size of a radio button
         if( GetNativeControlRegion( ControlType::Radiobutton, ControlPart::Entire, aCtrlRegion,
-                                           nState, aControlValue,
-                                           aBoundingRgn, aContentRgn ) )
+                                    ControlState::DEFAULT|ControlState::ENABLED,
+                                    aControlValue,
+                                    aBoundingRgn, aContentRgn ) )
         {
             aSize = aContentRgn.GetSize();
             bDefaultSize = false;
@@ -3591,14 +3589,14 @@ Size CheckBox::ImplGetCheckImageSize() const
     if( IsNativeControlSupported( ControlType::Checkbox, ControlPart::Entire ) )
     {
         ImplControlValue aControlValue;
-        tools::Rectangle        aCtrlRegion( Point( 0, 0 ), GetSizePixel() );
-        ControlState     nState = ControlState::DEFAULT|ControlState::ENABLED;
+        tools::Rectangle aCtrlRegion( Point( 0, 0 ), GetSizePixel() );
         tools::Rectangle aBoundingRgn, aContentRgn;
 
         // get native size of a check box
         if( GetNativeControlRegion( ControlType::Checkbox, ControlPart::Entire, aCtrlRegion,
-                                           nState, aControlValue,
-                                           aBoundingRgn, aContentRgn ) )
+                                    ControlState::DEFAULT|ControlState::ENABLED,
+                                    aControlValue,
+                                    aBoundingRgn, aContentRgn ) )
         {
             aSize = aContentRgn.GetSize();
             bDefaultSize = false;

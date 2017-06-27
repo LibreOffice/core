@@ -598,9 +598,8 @@ void SpinField::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
             nStyle |= DrawButtonFlags::Pressed;
         tools::Rectangle aInnerRect = aView.DrawButton(maDropDownRect, nStyle);
 
-        SymbolType eSymbol = SymbolType::SPIN_DOWN;
         DrawSymbolFlags nSymbolStyle = IsEnabled() ? DrawSymbolFlags::NONE : DrawSymbolFlags::Disable;
-        aView.DrawSymbol(aInnerRect, eSymbol, rRenderContext.GetSettings().GetStyleSettings().GetButtonTextColor(), nSymbolStyle);
+        aView.DrawSymbol(aInnerRect, SymbolType::SPIN_DOWN, rRenderContext.GetSettings().GetStyleSettings().GetButtonTextColor(), nSymbolStyle);
     }
 
     Edit::Paint(rRenderContext, rRect);
@@ -998,11 +997,9 @@ void SpinField::Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, D
         if (GetStyle() & WB_DROPDOWN)
         {
             DecorationView aView( pDev );
-            DrawButtonFlags nStyle = DrawButtonFlags::NoLightBorder;
-            tools::Rectangle aInnerRect = aView.DrawButton( aDD, nStyle );
-            SymbolType eSymbol = SymbolType::SPIN_DOWN;
+            tools::Rectangle aInnerRect = aView.DrawButton( aDD, DrawButtonFlags::NoLightBorder );
             DrawSymbolFlags nSymbolStyle = (IsEnabled() || (nFlags & DrawFlags::NoDisable)) ? DrawSymbolFlags::NONE : DrawSymbolFlags::Disable;
-            aView.DrawSymbol(aInnerRect, eSymbol, aButtonTextColor, nSymbolStyle);
+            aView.DrawSymbol(aInnerRect, SymbolType::SPIN_DOWN, aButtonTextColor, nSymbolStyle);
         }
 
         if (GetStyle() & WB_SPIN)
