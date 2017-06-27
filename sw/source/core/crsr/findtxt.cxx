@@ -155,12 +155,12 @@ lcl_CleanStr(const SwTextNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
                             if ( bEmpty )
                                 aReplaced.push_back( nAkt );
                             buf[nAkt] = '\x7f';
-                           }
+                        }
                     }
                     break;
-                    default:
-                        OSL_FAIL( "unknown case in lcl_CleanStr" );
-                        break;
+                default:
+                    OSL_FAIL( "unknown case in lcl_CleanStr" );
+                    break;
                 }
             }
             ++n;
