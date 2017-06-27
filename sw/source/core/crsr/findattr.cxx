@@ -1121,10 +1121,9 @@ int SwFindParaAttr::Find( SwPaM* pCursor, SwMoveFnCollection const & fnMove, con
             }
 
             // TODO: searching for attributes in Outliner text?!
-            bool bSearchInNotes = false;
 
             // continue search in correct section (pTextRegion)
-            if( aSrchPam.Find( *pSearchOpt, bSearchInNotes, *pSText, fnMove, pTextRegion, bInReadOnly ) &&
+            if( aSrchPam.Find( *pSearchOpt, false/*bSearchInNotes*/, *pSText, fnMove, pTextRegion, bInReadOnly ) &&
                 *aSrchPam.GetMark() != *aSrchPam.GetPoint() )
                 break; // found
             else if( !pSet->Count() )

@@ -61,7 +61,7 @@ struct MockedSortTab : public SwTOXSortTabBase {
 void
 ToxTextGeneratorTest::EmptyStringIsReturnedForPageNumberPlaceholderOfZeroItems()
 {
-    OUString expected("");
+    OUString const expected("");
     OUString actual = ToxTextGenerator::ConstructPageNumberPlaceholder(0);
     CPPUNIT_ASSERT_EQUAL(expected, actual);
 }
@@ -69,7 +69,7 @@ ToxTextGeneratorTest::EmptyStringIsReturnedForPageNumberPlaceholderOfZeroItems()
 void
 ToxTextGeneratorTest::OneAtSignIsReturnedForPageNumberPlaceholderOfOneItem()
 {
-    OUString expected("@~");
+    OUString const expected("@~");
     OUString actual = ToxTextGenerator::ConstructPageNumberPlaceholder(1);
     CPPUNIT_ASSERT_EQUAL(expected, actual);
 }
@@ -77,7 +77,7 @@ ToxTextGeneratorTest::OneAtSignIsReturnedForPageNumberPlaceholderOfOneItem()
 void
 ToxTextGeneratorTest::TwoAtSignsAreReturnedForPageNumberPlaceholderOfOneItem()
 {
-    OUString expected("@, @~");
+    OUString const expected("@, @~");
     OUString actual = ToxTextGenerator::ConstructPageNumberPlaceholder(2);
     CPPUNIT_ASSERT_EQUAL(expected, actual);
 }
@@ -88,7 +88,7 @@ ToxTextGeneratorTest::EmptyStringIsReturnedAsNumStringIfNoTextMarkIsSet()
     MockedSortTab sortTab;
     sortTab.pTextMark = nullptr;
 
-    OUString expected("");
+    OUString const expected("");
     OUString actual = ToxTextGenerator::GetNumStringOfFirstNode(sortTab, false, 0);
     CPPUNIT_ASSERT_EQUAL(expected, actual);
 }
@@ -99,7 +99,7 @@ ToxTextGeneratorTest::EmptyStringIsReturnedAsNumStringIfToxSourcesIsEmpty()
     MockedSortTab sortTab;
     sortTab.pTextMark = reinterpret_cast<SwTextTOXMark*>(1);
 
-    OUString expected("");
+    OUString const expected("");
     OUString actual = ToxTextGenerator::GetNumStringOfFirstNode(sortTab, false, 0);
     CPPUNIT_ASSERT_EQUAL(expected, actual);
 }

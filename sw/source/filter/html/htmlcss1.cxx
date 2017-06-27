@@ -2040,7 +2040,6 @@ void SwHTMLParser::SetVarSize( SvxCSS1PropertyInfo &rPropInfo,
                                SfxItemSet &rFrameItemSet,
                                SwTwips nDfltWidth, sal_uInt8 nDfltPrcWidth )
 {
-    SwFrameSize eSize = ATT_MIN_SIZE;
     SwTwips nWidth = nDfltWidth, nHeight = MINFLY;
     sal_uInt8 nPrcWidth = nDfltPrcWidth, nPrcHeight = 0;
     switch( rPropInfo.m_eWidthType )
@@ -2070,7 +2069,7 @@ void SwHTMLParser::SetVarSize( SvxCSS1PropertyInfo &rPropInfo,
         ;
     }
 
-    SwFormatFrameSize aFrameSize( eSize, nWidth, nHeight );
+    SwFormatFrameSize aFrameSize( ATT_MIN_SIZE, nWidth, nHeight );
     aFrameSize.SetWidthPercent( nPrcWidth );
     aFrameSize.SetHeightPercent( nPrcHeight );
     rFrameItemSet.Put( aFrameSize );

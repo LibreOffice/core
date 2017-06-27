@@ -159,11 +159,10 @@ void SwMacrosTest::testVba()
             OUString("vnd.sun.Star.script:Project.NewMacros.Macro1?language=Basic&location=document")
         }
     };
-    OUString aFileExtension( "doc" );
     for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
     {
         OUString aFileName;
-        createFileURL(testInfo[i].sFileBaseName, aFileExtension, aFileName);
+        createFileURL(testInfo[i].sFileBaseName, "doc", aFileName);
         uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
         OUStringBuffer sMsg( "Failed to load " );
         sMsg.append ( aFileName );

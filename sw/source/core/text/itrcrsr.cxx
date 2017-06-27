@@ -1189,7 +1189,6 @@ bool SwTextCursor::GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
     GetAdjusted();
 
     const Point aCharPos( GetTopLeft() );
-    bool bRet = true;
 
     GetCharRect_( pOrig, nFindOfst, pCMS );
 
@@ -1244,7 +1243,7 @@ bool SwTextCursor::GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
             pOrig->Pos().X() -= nOut + 10;
     }
 
-    return bRet;
+    return true;
 }
 
 // Return: Offset in String

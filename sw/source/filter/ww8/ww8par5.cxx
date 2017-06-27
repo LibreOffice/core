@@ -169,7 +169,6 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
         // needed if the filterflags say we will convert bookmarks
         // to SetExpFields! And this the exception!
 
-        OUString sHex("\\x");
         bool bSetAsHex;
         bool bAllowCr = SwFltGetFlag(m_nFieldFlags,
             SwFltControlStack::ALLOW_FLD_CR);
@@ -206,7 +205,7 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
             if( bSetAsHex )
             {
                 //all Hex-Numbers with \x before
-                OUString sTmp( sHex );
+                OUString sTmp( "\\x" );
                 if( cChar < 0x10 )
                     sTmp += "0";
                 sTmp += OUString::number( cChar, 16 );
@@ -1018,7 +1017,6 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 // If none of these special characters is found, the function returns 0.
 void SwWW8ImplReader::MakeTagString( OUString& rStr, const OUString& rOrg )
 {
-    OUString sHex("\\x");
     bool bAllowCr = SwFltGetFlag( m_nFieldFlags, SwFltControlStack::TAGS_IN_TEXT )
                 || SwFltGetFlag( m_nFieldFlags, SwFltControlStack::ALLOW_FLD_CR );
     sal_Unicode cChar;
@@ -1071,7 +1069,7 @@ void SwWW8ImplReader::MakeTagString( OUString& rStr, const OUString& rOrg )
         if( bSetAsHex )
         {
             //all Hex-Numbers with \x before
-            OUString sTmp( sHex );
+            OUString sTmp( "\\x" );
             if( cChar < 0x10 )
                 sTmp += "0";
             sTmp += OUString::number( cChar, 16 );
@@ -3038,7 +3036,6 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
     case TOX_CONTENT:
         {
             bool bIsHyperlink = false;
-            bool bShowPage = true;
             // We set SwTOXElement::OutlineLevel only if
             // the parameter \o is within 1 to 9
             // or the parameter \f exists
@@ -3223,7 +3220,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                 {
                     aPattern.insert(aPattern.begin(), aLinkStart);
                 }
-                else if ( bShowPage )
+                else
                 {
                     for (SwFormTokens::iterator aItr = aPattern.begin();aItr!= aPattern.end();++aItr)
                     {

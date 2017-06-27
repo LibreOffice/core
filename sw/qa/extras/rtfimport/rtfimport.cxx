@@ -1643,7 +1643,7 @@ DECLARE_RTFIMPORT_TEST(testCp1000018, "cp1000018.rtf")
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
-    OUString aExpected("Footnote first line.\n");
+    OUString const aExpected("Footnote first line.\n");
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
@@ -2055,7 +2055,7 @@ DECLARE_RTFIMPORT_TEST(testFdo82114, "fdo82114.rtf")
 {
     uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Converted1"), "HeaderText");
     OUString aActual = xHeaderText->getString();
-    OUString aExpected("First page header, section 2");
+    OUString const aExpected("First page header, section 2");
     // This was 'Right page header, section 1'.
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }

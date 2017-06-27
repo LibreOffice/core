@@ -1093,8 +1093,6 @@ SwHTMLTableLayout *HTMLTable::CreateLayoutInfo()
         (*m_pColumns)[0]->bLeftBorder ? GetBorderWidth(m_aLeftBorderLine, true) : 0;
     sal_uInt16 nRightBorderWidth =
         m_bRightBorder ? GetBorderWidth( m_aRightBorderLine, true ) : 0;
-    sal_uInt16 nInhLeftBorderWidth = 0;
-    sal_uInt16 nInhRightBorderWidth = 0;
 
     m_pLayoutInfo = new SwHTMLTableLayout(
                         m_pSwTable,
@@ -1103,7 +1101,7 @@ SwHTMLTableLayout *HTMLTable::CreateLayoutInfo()
                         m_nCellSpacing, m_eTableAdjust,
                         m_nLeftMargin, m_nRightMargin,
                         nBorderWidth, nLeftBorderWidth, nRightBorderWidth,
-                        nInhLeftBorderWidth, nInhRightBorderWidth );
+                        0/*nInhLeftBorderWidth*/, 0/*nInhRightBorderWidth*/ );
 
     bool bExportable = true;
     sal_uInt16 i;

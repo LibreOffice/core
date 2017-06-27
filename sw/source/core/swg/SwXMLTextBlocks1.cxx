@@ -177,9 +177,8 @@ ErrCode SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
             xRoot = xBlkRoot->openStorageElement( aPackageName, embed::ElementModes::READ );
             bool bOasis = SotStorage::GetVersion( xRoot ) > SOFFICE_FILEFORMAT_60;
 
-            OUString sStreamName("atevent.xml");
             uno::Reference < io::XStream > xDocStream = xRoot->openStreamElement(
-                sStreamName, embed::ElementModes::READ );
+                "atevent.xml", embed::ElementModes::READ );
             OSL_ENSURE(xDocStream.is(), "Can't create stream");
             if ( xDocStream.is() )
             {
@@ -264,7 +263,6 @@ ErrCode SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
 
 ErrCode SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText )
 {
-    ErrCode n = ERRCODE_NONE;
     OUString aFolderName = GeneratePackageName ( rShort );
     OUString aStreamName = aFolderName + ".xml";
     rText.clear();
@@ -326,7 +324,7 @@ ErrCode SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText )
         OSL_FAIL( "Tried to open non-existent folder or stream!");
     }
 
-    return n;
+    return ERRCODE_NONE;
 }
 
 ErrCode SwXMLTextBlocks::PutBlockText( const OUString& rShort,
@@ -355,8 +353,7 @@ ErrCode SwXMLTextBlocks::PutBlockText( const OUString& rShort,
                 embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
     uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
-    OUString aMime ( "text/xml" );
-    xSet->setPropertyValue("MediaType", Any(aMime) );
+    xSet->setPropertyValue("MediaType", Any(OUString( "text/xml" )) );
     uno::Reference < io::XOutputStream > xOut = xDocStream->getOutputStream();
        uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
        xSrc->setOutputStream(xOut);
@@ -475,8 +472,7 @@ void SwXMLTextBlocks::WriteInfo()
                     embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
         uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
-        OUString aMime ( "text/xml" );
-        xSet->setPropertyValue("MediaType", Any(aMime) );
+        xSet->setPropertyValue("MediaType", Any(OUString( "text/xml" )) );
         uno::Reference < io::XOutputStream > xOut = xDocStream->getOutputStream();
         uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
         xSrc->setOutputStream(xOut);
@@ -531,15 +527,13 @@ ErrCode SwXMLTextBlocks::SetMacroTable(
         try
         {
             xRoot = xBlkRoot->openStorageElement( aPackageName, embed::ElementModes::WRITE );
-            OUString sStreamName("atevent.xml" );
             bool bOasis = SotStorage::GetVersion( xRoot ) > SOFFICE_FILEFORMAT_60;
 
-            uno::Reference < io::XStream > xDocStream = xRoot->openStreamElement( sStreamName,
+            uno::Reference < io::XStream > xDocStream = xRoot->openStreamElement( "atevent.xml",
                         embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
             uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
-            OUString aMime( "text/xml" );
-            xSet->setPropertyValue("MediaType", Any(aMime) );
+            xSet->setPropertyValue("MediaType", Any(OUString( "text/xml" )) );
             uno::Reference < io::XOutputStream > xOutputStream = xDocStream->getOutputStream();
 
             // get XML writer

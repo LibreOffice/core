@@ -304,8 +304,7 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrameFormat &rFormat, const wwSection &r
         aGrid.SetBaseHeight(writer_cast<sal_uInt16>(nLinePitch));
     }
 
-    sal_Int32 nRubyHeight = 0;
-    aGrid.SetRubyHeight(writer_cast<sal_uInt16>(nRubyHeight));
+    aGrid.SetRubyHeight(0);
 
     rFormat.SetFormatAttr(aGrid);
 }
@@ -1431,7 +1430,7 @@ bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRCVer9* pbrc,
         { WW8_BETW,   SvxBoxItemLine::BOTTOM }
     };
 
-    for( int i = 0, nEnd = 4; i < nEnd; ++i )
+    for( int i = 0; i < 4; ++i )
     {
         // ungueltige Borders ausfiltern
         const WW8_BRCVer9& rB = pbrc[ aIdArr[ i ].first ];

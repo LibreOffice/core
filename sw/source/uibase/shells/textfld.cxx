@@ -256,8 +256,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                                         FN_PARAM_FIELD_FORMAT, false, &pItem ))
                         nFormat = static_cast<const SfxUInt32Item *>(pItem)->GetValue();
                     OSL_FAIL("Command is not yet used");
-                    sal_Unicode cSeparator = ' ';
-                    SwInsertField_Data aData(nType, 0, aPar1, aPar2, nFormat, GetShellPtr(), cSeparator );
+                    SwInsertField_Data aData(nType, 0, aPar1, aPar2, nFormat, GetShellPtr(), ' '/*separator*/ );
                     bRes = aFieldMgr.InsertField(aData);
                 }
                 rReq.SetReturnValue(SfxBoolItem( nSlot, bRes ));

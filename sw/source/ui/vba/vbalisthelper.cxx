@@ -134,10 +134,8 @@ void SwVbaListHelper::CreateBulletListTemplate()
     sal_Int32 nLevel = 0;
     uno::Sequence< beans::PropertyValue > aPropertyValues;
     mxNumberingRules->getByIndex( nLevel ) >>= aPropertyValues;
-    OUString sCharStyleName( "Bullet Symbols" );
-    setOrAppendPropertyValue( aPropertyValues, UNO_NAME_CHAR_STYLE_NAME, uno::makeAny( sCharStyleName ) );
-    sal_Int16 nNumberingType = style::NumberingType::CHAR_SPECIAL;
-    setOrAppendPropertyValue( aPropertyValues, UNO_NAME_NUMBERING_TYPE, uno::makeAny( nNumberingType ) );
+    setOrAppendPropertyValue( aPropertyValues, UNO_NAME_CHAR_STYLE_NAME, uno::makeAny( OUString( "Bullet Symbols" ) ) );
+    setOrAppendPropertyValue( aPropertyValues, UNO_NAME_NUMBERING_TYPE, uno::makeAny( sal_Int16(style::NumberingType::CHAR_SPECIAL) ) );
 
     OUString aBulletChar;
     switch( mnTemplateType )
@@ -379,7 +377,6 @@ void SwVbaListHelper::CreateOutlineNumberForType1()
 
 void SwVbaListHelper::CreateOutlineNumberForType2()
 {
-    sal_Int16 nNumberingType = style::NumberingType::ARABIC;
     sal_Int16 nParentNumbering = 0;
     OUString sSuffix = OUString( '.' );
     uno::Sequence< beans::PropertyValue > aPropertyValues;
@@ -387,7 +384,7 @@ void SwVbaListHelper::CreateOutlineNumberForType2()
     for( sal_Int32 nLevel = 0; nLevel < LIST_LEVEL_COUNT; nLevel++ )
     {
         mxNumberingRules->getByIndex( nLevel ) >>= aPropertyValues;
-        setOrAppendPropertyValue( aPropertyValues, UNO_NAME_NUMBERING_TYPE, uno::makeAny( nNumberingType ) );
+        setOrAppendPropertyValue( aPropertyValues, UNO_NAME_NUMBERING_TYPE, uno::makeAny( sal_Int16(style::NumberingType::ARABIC) ) );
         setOrAppendPropertyValue( aPropertyValues, UNO_NAME_SUFFIX, uno::makeAny( sSuffix ) );
         if( nLevel != 0 )
         {
@@ -400,16 +397,14 @@ void SwVbaListHelper::CreateOutlineNumberForType2()
 
 void SwVbaListHelper::CreateOutlineNumberForType3()
 {
-    sal_Int16 nNumberingType = style::NumberingType::CHAR_SPECIAL;
-    OUString sCharStyleName( "Bullet Symbols" );
     OUString aBulletChar;
     uno::Sequence< beans::PropertyValue > aPropertyValues;
 
     for( sal_Int32 nLevel = 0; nLevel < LIST_LEVEL_COUNT; nLevel++ )
     {
         mxNumberingRules->getByIndex( nLevel ) >>= aPropertyValues;
-        setOrAppendPropertyValue( aPropertyValues, UNO_NAME_NUMBERING_TYPE, uno::makeAny( nNumberingType ) );
-        setOrAppendPropertyValue( aPropertyValues, UNO_NAME_CHAR_STYLE_NAME, uno::makeAny( sCharStyleName ) );
+        setOrAppendPropertyValue( aPropertyValues, UNO_NAME_NUMBERING_TYPE, uno::makeAny( sal_Int16(style::NumberingType::CHAR_SPECIAL) ) );
+        setOrAppendPropertyValue( aPropertyValues, UNO_NAME_CHAR_STYLE_NAME, uno::makeAny( OUString("Bullet Symbols") ) );
         switch( nLevel )
         {
             case 0:
@@ -471,8 +466,7 @@ void SwVbaListHelper::CreateOutlineNumberForType4()
                 nNumberingType = style::NumberingType::ARABIC;
                 sPrefix.clear();
                 sSuffix = ".";
-                sal_Int16 nParentNumbering = 0;
-                setOrAppendPropertyValue( aPropertyValues, UNO_NAME_PARENT_NUMBERING, uno::makeAny( nParentNumbering ) );
+                setOrAppendPropertyValue( aPropertyValues, UNO_NAME_PARENT_NUMBERING, uno::makeAny( sal_Int16(0) ) );
                 break;
             }
             case 2:
@@ -534,14 +528,13 @@ void SwVbaListHelper::CreateOutlineNumberForType4()
 
 void SwVbaListHelper::CreateOutlineNumberForType5()
 {
-    sal_Int16 nNumberingType = style::NumberingType::ARABIC;
     sal_Int16 nParentNumbering = 0;
     uno::Sequence< beans::PropertyValue > aPropertyValues;
 
     for( sal_Int32 nLevel = 0; nLevel < LIST_LEVEL_COUNT; nLevel++ )
     {
         mxNumberingRules->getByIndex( nLevel ) >>= aPropertyValues;
-        setOrAppendPropertyValue( aPropertyValues, UNO_NAME_NUMBERING_TYPE, uno::makeAny( nNumberingType ) );
+        setOrAppendPropertyValue( aPropertyValues, UNO_NAME_NUMBERING_TYPE, uno::makeAny( sal_Int16(style::NumberingType::ARABIC) ) );
         if( nLevel != 0 )
         {
             nParentNumbering = sal_Int16( nLevel - 1 );
@@ -636,15 +629,13 @@ void SwVbaListHelper::CreateOutlineNumberForType6()
 
 void SwVbaListHelper::CreateOutlineNumberForType7()
 {
-    sal_Int16 nNumberingType = style::NumberingType::ARABIC;
     uno::Sequence< beans::PropertyValue > aPropertyValues;
-    OUString sPrefix("Chapter ");
 
     for( sal_Int32 nLevel = 0; nLevel < LIST_LEVEL_COUNT; nLevel++ )
     {
         mxNumberingRules->getByIndex( nLevel ) >>= aPropertyValues;
-        setOrAppendPropertyValue( aPropertyValues, UNO_NAME_NUMBERING_TYPE, uno::makeAny( nNumberingType ) );
-        setOrAppendPropertyValue( aPropertyValues, UNO_NAME_PREFIX, uno::makeAny( sPrefix ) );
+        setOrAppendPropertyValue( aPropertyValues, UNO_NAME_NUMBERING_TYPE, uno::makeAny( sal_Int16(style::NumberingType::ARABIC) ) );
+        setOrAppendPropertyValue( aPropertyValues, UNO_NAME_PREFIX, uno::makeAny( OUString("Chapter ") ) );
         mxNumberingRules->replaceByIndex( nLevel, uno::makeAny( aPropertyValues ) );
     }
 }

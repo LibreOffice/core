@@ -2246,11 +2246,11 @@ void WW8AttributeOutput::TableSpacing(ww8::WW8TableNodeInfoInner::Pointer_t pTab
 
         if (rUL.GetUpper() > 0)
         {
-            sal_uInt8 nPadding = 2;
-            sal_uInt8 nPcVert = 0;
-            sal_uInt8 nPcHorz = 0;
+            sal_uInt8 const nPadding = 2;
+            sal_uInt8 const nPcVert = 0;
+            sal_uInt8 const nPcHorz = 0;
 
-            sal_uInt8 nTPc = (nPadding << 4) | (nPcVert << 2) | nPcHorz;
+            sal_uInt8 const nTPc = (nPadding << 4) | (nPcVert << 2) | nPcHorz;
 
             m_rWW8Export.InsUInt16(NS_sprm::sprmTPc);
             m_rWW8Export.pO->push_back( nTPc );
@@ -3321,8 +3321,7 @@ void WW8Export::ExportDocument_Impl()
         // Write Unencrypted Header 52 bytes to the start of the table stream
         // EncryptionVersionInfo (4 bytes): A Version structure where Version.vMajor MUST be 0x0001, and Version.vMinor MUST be 0x0001.
         pTableStrmTemp->Seek( 0 );
-        sal_uInt32 nEncType = 0x10001;
-        pTableStrmTemp->WriteUInt32( nEncType );
+        pTableStrmTemp->WriteUInt32( 0x10001 ); // nEncType
 
         sal_uInt8 pDocId[16];
         aCtx.GetDocId( pDocId );

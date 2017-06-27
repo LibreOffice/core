@@ -752,10 +752,8 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         {
             SvxULSpaceItem aParaMargin(static_cast<const SvxULSpaceItem&>(pReqArgs->Get(nSlot)));
 
-            long nUDist = 0;
-            long nLDist = 0;
-            aParaMargin.SetUpper( aParaMargin.GetUpper() - nUDist );
-            aParaMargin.SetLower(aParaMargin.GetLower() - nLDist);
+            aParaMargin.SetUpper( aParaMargin.GetUpper() );
+            aParaMargin.SetLower(aParaMargin.GetLower());
 
             aParaMargin.SetWhich( RES_UL_SPACE );
             SwTextFormatColl* pColl = rSh.GetCurTextFormatColl();

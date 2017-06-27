@@ -811,8 +811,7 @@ int SwCursorShell::SetCursor( const Point &rLPt, bool bOnlyText, bool bBlock )
 
     if( !pCursor->IsSelOvr( SwCursorSelOverFlags::ChangePos ) )
     {
-        sal_uInt16 nFlag = SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE;
-        UpdateCursor( nFlag );
+        UpdateCursor( SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE );
         bRet &= ~CRSR_POSOLD;
     }
     else if( bOnlyText && !m_pCurrentCursor->HasMark() )

@@ -720,7 +720,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                         uno::Reference< frame::XDispatchProvider > xProv = drawing::ModuleDispatcher::create( xContext );
 
-                        OUString aCmd("SendOutlineToImpress");
                         uno::Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
                         pStrm->Seek( STREAM_SEEK_TO_END );
                         pStrm->WriteChar( '\0' );
@@ -739,7 +738,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             uno::Sequence< beans::PropertyValue > aArgs(1);
                             aArgs[0].Name = "RtfOutline";
                             aArgs[0].Value <<= aSeq;
-                            xHelper->executeDispatch( xProv, aCmd, OUString(), 0, aArgs );
+                            xHelper->executeDispatch( xProv, "SendOutlineToImpress", OUString(), 0, aArgs );
                         }
                     }
                     else
@@ -786,7 +785,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                         uno::Reference< frame::XDispatchProvider > xProv = drawing::ModuleDispatcher::create( xContext );
 
-                        OUString aCmd("SendOutlineToImpress");
                         uno::Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
                         pStrm->Seek( STREAM_SEEK_TO_END );
                         pStrm->WriteChar( '\0' );
@@ -805,7 +803,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             uno::Sequence< beans::PropertyValue > aArgs(1);
                             aArgs[0].Name = "RtfOutline";
                             aArgs[0].Value <<= aSeq;
-                            xHelper->executeDispatch( xProv, aCmd, OUString(), 0, aArgs );
+                            xHelper->executeDispatch( xProv, "SendOutlineToImpress", OUString(), 0, aArgs );
                         }
                     }
                     else

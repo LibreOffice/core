@@ -38,9 +38,8 @@
 
 static rtl::Reference<SwDocStyleSheet> lcl_getDocStyleSheet(const OUString& rName, SwWrtShell *pSh)
 {
-    SfxStyleFamily nFamily = SfxStyleFamily::Para;
     SfxStyleSheetBasePool* pBase =  pSh->GetView().GetDocShell()->GetStyleSheetPool();
-    SfxStyleSheetBase* pStyle = pBase->Find(rName, nFamily);
+    SfxStyleSheetBase* pStyle = pBase->Find(rName, SfxStyleFamily::Para);
     SAL_WARN_IF( !pStyle, "sw.ui", "Style not found" );
     if(!pStyle)
         return nullptr;
