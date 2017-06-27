@@ -197,17 +197,13 @@ bool LinkSequence::toXML( const uno::Sequence< ucb::Link > & rInData,
     sal_Int32 nCount = rInData.getLength();
     if ( nCount )
     {
-        OUString aPre( "<link><src>" );
-        OUString aMid( "</src><dst>" );
-        OUString aEnd( "</dst></link>" );
-
         for ( sal_Int32 n = 0; n < nCount; ++n )
         {
-                rOutData += aPre;
+                rOutData += "<link><src>";
                 rOutData += rInData[ n ].Source;
-                rOutData += aMid;
+                rOutData += "</src><dst>";
                 rOutData += rInData[ n ].Destination;
-                rOutData += aEnd;
+                rOutData += "</dst></link>";
         }
         return true;
     }

@@ -978,12 +978,11 @@ TaskManager::setv( const OUString& aUnqPath,
                             "Uri", -1,
                             uno::makeAny(aUnqPath),
                             beans::PropertyState_DIRECT_VALUE);
-                        IOErrorCode ioError(IOErrorCode_GENERAL);
                         ret[i] <<= InteractiveAugmentedIOException(
                             OUString(),
                             nullptr,
                             task::InteractionClassification_ERROR,
-                            ioError,
+                            IOErrorCode_GENERAL,
                             names );
                     }
                 }
@@ -2069,7 +2068,7 @@ TaskManager::copy_recursive( const OUString& srcUnqPath,
         osl::FileBase::RC next = err;
         if( err == osl::FileBase::E_None )
         {
-            sal_Int32 n_Mask = osl_FileStatus_Mask_FileURL | osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_Type;
+            sal_Int32 const n_Mask = osl_FileStatus_Mask_FileURL | osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_Type;
 
             osl::DirectoryItem aDirItem;
 

@@ -249,9 +249,8 @@ VbaDocumentBase::getSaved()
 void
 VbaDocumentBase::Save()
 {
-    OUString url(".uno:Save");
     uno::Reference< frame::XModel > xModel = getModel();
-    dispatchRequests(xModel,url);
+    dispatchRequests(xModel,".uno:Save");
 }
 
 void

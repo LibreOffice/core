@@ -460,7 +460,7 @@ PointerStyles const styles[] = {
 static long lcl_loPointerToMsoPointer( PointerStyle eType )
 {
     long nRet = msforms::fmMousePointer::fmMousePointerDefault;
-    for ( int i = 0, nElems = SAL_N_ELEMENTS( styles ); i < nElems; ++i )
+    for ( int i = 0; i < int(SAL_N_ELEMENTS( styles )); ++i )
     {
         if ( styles[ i ].loPointStyle == eType )
         {
@@ -474,7 +474,7 @@ static long lcl_loPointerToMsoPointer( PointerStyle eType )
 static Pointer lcl_msoPointerToLOPointer( long msoPointerStyle )
 {
     Pointer aPointer( PointerStyle::Arrow );
-    for ( int i = 0, nElems = SAL_N_ELEMENTS( styles ); i < nElems; ++i )
+    for ( int i = 0; i < int(SAL_N_ELEMENTS( styles )); ++i )
     {
         if ( styles[ i ].msoPointerStyle == msoPointerStyle )
         {

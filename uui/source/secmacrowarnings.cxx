@@ -229,9 +229,7 @@ void MacroWarning::SetCertificate( const css::uno::Reference< css::security::XCe
     mxCert = _rxCert;
     if( mxCert.is() )
     {
-        OUString aCN_Id("CN");
-        OUString s;
-        s = GetContentPart( mxCert->getSubjectName(), aCN_Id );
+        OUString s = GetContentPart( mxCert->getSubjectName(), "CN" );
         mpSignsFI->SetText( s );
         mpViewSignsBtn->Enable();
     }
