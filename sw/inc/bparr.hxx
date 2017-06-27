@@ -24,6 +24,7 @@
 
 #include <tools/solar.h>
 #include <swdllapi.h>
+#include <array>
 
 struct BlockInfo;
 class BigPtrArray;
@@ -31,8 +32,8 @@ class BigPtrArray;
 class BigPtrEntry
 {
     friend class BigPtrArray;
-    BlockInfo* m_pBlock;
-    sal_uInt16 m_nOffset;
+    BlockInfo*  m_pBlock;
+    sal_uInt16  m_nOffset;
 public:
     BigPtrEntry() : m_pBlock(nullptr), m_nOffset(0) {}
     virtual ~BigPtrEntry() {}
@@ -50,11 +51,16 @@ public:
 // if complete compression is desired, 100 has to be specified
 #define COMPRESSLVL 80
 
-struct BlockInfo {
-    BigPtrArray* pBigArr;           ///< in this array the block is located
-    BigPtrEntry** pData;            ///< data block
-    sal_uLong nStart, nEnd;         ///< start- and end index
-    sal_uInt16 nElem;               ///< number of elements
+struct BlockInfo final
+{
+    BigPtrArray* const
+                 pBigArr;              ///< in this array the block is located
+    std::array<BigPtrEntry*, MAXENTRY>
+                 mvData;               ///< data block
+    sal_uLong    nStart, nEnd;         ///< start- and end index
+    sal_uInt16   nElem;                ///< number of elements
+
+    BlockInfo(BigPtrArray* b) : pBigArr(b) {}
 };
 
 class SW_DLLPUBLIC BigPtrArray
@@ -91,7 +97,7 @@ public:
 
 inline sal_uLong BigPtrEntry::GetPos() const
 {
-    assert(this == m_pBlock->pData[ m_nOffset ]); // element not in the block
+    assert(this == m_pBlock->mvData[ m_nOffset ]); // element not in the block
     return m_pBlock->nStart + m_nOffset;
 }
 
