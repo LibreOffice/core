@@ -52,8 +52,6 @@ void ScFormulaListener::startListening(ScTokenArray* pArr, const ScRange& rRange
                 ScRange aRange(aCell, aCell2);
                 if (aRange.IsValid())
                     mpDoc->StartListeningArea(aRange, false, this);
-
-                maCells.push_back(aRange);
             }
             break;
             case formula::svDoubleRef:
@@ -81,7 +79,6 @@ void ScFormulaListener::startListening(ScTokenArray* pArr, const ScRange& rRange
                         }
                     }
                     mpDoc->StartListeningArea(aRange1, false, this);
-                    maCells.push_back(aRange1);
                 }
             }
             break;
@@ -101,33 +98,12 @@ void ScFormulaListener::setCallback(const std::function<void()>& aCallback)
     maCallbackFunction = aCallback;
 }
 
-namespace {
-
-struct StopListeningCell
-{
-    StopListeningCell(ScDocument* pDoc, SvtListener* pListener):
-        mpDoc(pDoc), mpListener(pListener) {}
-
-    // TODO: moggi: use EndListeningArea
-    void operator()(const ScRange& rRange)
-    {
-        mpDoc->EndListeningArea(rRange, false, mpListener);
-    }
-
-private:
-    ScDocument* mpDoc;
-    SvtListener* mpListener;
-};
-
-}
-
 void ScFormulaListener::stopListening()
 {
     if (mpDoc->IsClipOrUndo())
         return;
 
-    std::for_each(maCells.begin(), maCells.end(), StopListeningCell(mpDoc, this));
-    maCells.clear();
+    this->EndListeningAll();
 }
 
 ScFormulaListener::~ScFormulaListener()
