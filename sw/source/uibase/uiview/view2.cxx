@@ -1965,8 +1965,7 @@ bool SwView::JumpToSwMark( const OUString& rMark )
                                     '\\' );
 
                 //todo/mba: assuming that notes shouldn't be searched
-                bool bSearchInNotes = false;
-                if( m_pWrtShell->SearchPattern( aSearchOpt, bSearchInNotes, SwDocPositions::Start, SwDocPositions::End ))
+                if( m_pWrtShell->SearchPattern( aSearchOpt, false/*bSearchInNotes*/, SwDocPositions::Start, SwDocPositions::End ))
                 {
                     m_pWrtShell->EnterStdMode(); // remove the selection
                     bRet = true;

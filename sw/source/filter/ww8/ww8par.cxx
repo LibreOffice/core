@@ -1907,8 +1907,7 @@ void SwWW8ImplReader::ImportDop()
             {
                 if (xInfo->hasPropertyByName("ApplyFormDesignMode"))
                 {
-                    bool bValue = false;
-                    xDocProps->setPropertyValue("ApplyFormDesignMode", css::uno::makeAny(bValue));
+                    xDocProps->setPropertyValue("ApplyFormDesignMode", css::uno::makeAny(false));
                 }
             }
         }
@@ -4869,8 +4868,6 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
 
 ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 {
-    ErrCode nErrRet = ERRCODE_NONE;
-
     m_rDoc.SetDocumentType( SwDoc::DOCTYPE_MSWORD );
     if (m_bNewDoc && m_pStg && !pGloss)
     {
@@ -5376,7 +5373,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 
     UpdatePageDescs(m_rDoc, nPageDescOffset);
 
-    return nErrRet;
+    return ERRCODE_NONE;
 }
 
 ErrCode SwWW8ImplReader::SetSubStreams(tools::SvRef<SotStorageStream> &rTableStream,

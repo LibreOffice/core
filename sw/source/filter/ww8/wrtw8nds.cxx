@@ -403,9 +403,8 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
     //The hard formatting properties that affect the entire paragraph
     if (rNd.HasSwAttrSet())
     {
-        bool bDeep = false;
         // only copy hard attributes - bDeep = false
-        aExportSet.Set(rNd.GetSwAttrSet(), bDeep);
+        aExportSet.Set(rNd.GetSwAttrSet(), false/*bDeep*/);
         // get the current font item. Use rNd.GetSwAttrSet instead of aExportSet:
         const SvxFontItem &rNdFont = ItemGet<SvxFontItem>(rNd.GetSwAttrSet(), nFontId);
         pFont = &rNdFont;
@@ -2136,7 +2135,6 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
     sal_Int32 const nEnd = aStr.getLength();
     bool bIncludeEndOfParaCRInRedlineProperties = false;
     sal_Int32 nOpenAttrWithRange = 0;
-    OUString aStringForImage("\001");
 
     ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner;
     if ( pTextNodeInfo.get() != nullptr )
@@ -2168,7 +2166,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
             3) If the anchor is associated with a text node with empty text then we ignore.
         */
         if( rNode.IsTextNode()
-            && aStr != aStringForImage && !aStr.isEmpty()
+            && aStr != "\001" && !aStr.isEmpty()
             && !rNode.GetFlyFormat()
             && !(IsInTable() && !AllowPostponedTextInTable())
             && aAttrIter.IsAnchorLinkedToThisNode(rNode.GetIndex()) )

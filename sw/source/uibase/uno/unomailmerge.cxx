@@ -137,8 +137,7 @@ static bool LoadFromURL_impl(
     Reference< frame::XModel > xTmpModel;
     Sequence < PropertyValue > aArgs( 1 );
     aArgs[0].Name = "Hidden";
-    bool bVal = true;
-    aArgs[0].Value <<= bVal;
+    aArgs[0].Value <<= true;
     try
     {
         Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );

@@ -107,8 +107,7 @@ namespace
         // logic to be written with portability in mind.
         sal_uInt64 whereToWriteEndOfSwBlock = rStream.Tell();
 
-        sal_uInt64 endOfSwBlock = 0;
-        rStream.WriteUInt64( endOfSwBlock );
+        rStream.WriteUInt64( 0 ); // endOfSwBlock
 
         return whereToWriteEndOfSwBlock;
     }
@@ -1029,8 +1028,7 @@ bool SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions )
 
 bool SwTableAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
 {
-    sal_uInt16 nVal = AUTOFORMAT_DATA_ID;
-    rStream.WriteUInt16( nVal );
+    rStream.WriteUInt16( AUTOFORMAT_DATA_ID );
     // --- from 680/dr25 on: store strings as UTF-8
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, m_aName,
         RTL_TEXTENCODING_UTF8 );
@@ -1398,8 +1396,7 @@ bool SwTableAutoFormatTable::Save( SvStream& rStream ) const
         rStream.SetVersion(AUTOFORMAT_FILE_VERSION);
 
         // Attention: We need to save a general Header here
-        sal_uInt16 nVal = AUTOFORMAT_ID;
-        rStream.WriteUInt16( nVal )
+        rStream.WriteUInt16( AUTOFORMAT_ID )
                .WriteUChar( 2 ) // Character count of the Header including this value
                .WriteUChar( GetStoreCharSet( ::osl_getThreadTextEncoding() ) );
 

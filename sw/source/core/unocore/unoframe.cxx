@@ -2952,8 +2952,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     SwFlyFrameFormat* pFormat2 = nullptr;
 
                     // TODO/LATER: Is it the only possible aspect here?
-                    sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-                    ::svt::EmbeddedObjectRef xObjRef( xIPObj, nAspect );
+                    ::svt::EmbeddedObjectRef xObjRef( xIPObj, embed::Aspects::MSOLE_CONTENT );
                     pFormat2 = pDoc->getIDocumentContentOperations().InsertEmbObject(
                             aPam, xObjRef, &aFrameSet );
                     assert(pFormat2 && "Doc->Insert(notxt) failed.");

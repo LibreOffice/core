@@ -691,8 +691,6 @@ DECLARE_OOXMLEXPORT_TEST(testAbsolutePositionOffsetValue,"fdo78432.docx")
     if (!pXmlDoc)
         return;
 
-    sal_Int32 IntMax = SAL_MAX_INT32;
-
     xmlXPathObjectPtr pXmlObjs[6];
     pXmlObjs[0] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionH[1]/wp:posOffset[1]");
     pXmlObjs[1] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionV[1]/wp:posOffset[1]");
@@ -708,7 +706,7 @@ DECLARE_OOXMLEXPORT_TEST(testAbsolutePositionOffsetValue,"fdo78432.docx")
         CPPUNIT_ASSERT(pXmlObjs[index]->nodesetval != nullptr);
         xmlNodePtr pXmlNode = pXmlObjs[index]->nodesetval->nodeTab[0];
         OUString contents = OUString::createFromAscii(reinterpret_cast<const char*>((pXmlNode->children[0]).content));
-        CPPUNIT_ASSERT( contents.toInt64() <= IntMax );
+        CPPUNIT_ASSERT( contents.toInt64() <= SAL_MAX_INT32 );
         xmlXPathFreeObject(pXmlObjs[index]);
     }
 }

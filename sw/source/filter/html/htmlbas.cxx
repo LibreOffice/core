@@ -272,7 +272,6 @@ void SwHTMLWriter::OutBasic()
         for( const auto& pModule: pBasic->GetModules() )
         {
             OUString sLang(SVX_MACRO_LANGUAGE_STARBASIC);
-            ScriptType eType = STARBASIC;
 
             if( bFirst )
             {
@@ -294,7 +293,7 @@ void SwHTMLWriter::OutBasic()
             const OUString& rModName = pModule->GetName();
             Strm().WriteCharPtr( SAL_NEWLINE_STRING );   // don't indent!
             HTMLOutFuncs::OutScript( Strm(), GetBaseURL(), pModule->GetSource(),
-                                     sLang, eType, aEmptyOUStr,
+                                     sLang, STARBASIC, aEmptyOUStr,
                                      &rLibName, &rModName,
                                      m_eDestEnc, &m_aNonConvertableCharacters );
         }

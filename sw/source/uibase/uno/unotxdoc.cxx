@@ -794,9 +794,8 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     else
     {
         //todo/mba: assuming that notes should be omitted
-        bool bSearchInNotes = false;
         bool bCancel;
-        nResult = pUnoCursor->Find( aSearchOpt, bSearchInNotes,
+        nResult = pUnoCursor->Find( aSearchOpt, false/*bSearchInNotes*/,
             eStart, eEnd, bCancel,
             (FindRanges)eRanges,
             true );
@@ -922,9 +921,8 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
         else
         {
             //todo/mba: assuming that notes should be omitted
-            bool bSearchInNotes = false;
             bool bCancel;
-            nResult = (sal_Int32)pUnoCursor->Find( aSearchOpt, bSearchInNotes,
+            nResult = (sal_Int32)pUnoCursor->Find( aSearchOpt, false/*bSearchInNotes*/,
                     eStart, eEnd, bCancel,
                     eRanges );
         }
@@ -2207,18 +2205,12 @@ void SwXTextDocument::updateLinks(  )
 PropertyState SAL_CALL SwXTextDocument::getPropertyState( const OUString& rPropertyName )
 {
     SolarMutexGuard aGuard;
-    PropertyState eRet = PropertyState_DIRECT_VALUE;
     if(!IsValid())
         throw RuntimeException();
     const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap().getByName( rPropertyName);
-
     if(!pEntry)
         throw UnknownPropertyException();
-    switch(pEntry->nWID)
-    {
-        case 0:default:break;
-    }
-    return eRet;
+    return PropertyState_DIRECT_VALUE;
 }
 
 Sequence< PropertyState > SAL_CALL SwXTextDocument::getPropertyStates( const Sequence< OUString >& rPropertyNames )
@@ -3304,14 +3296,11 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
 
     SwViewShell* pViewShell = pDocShell->GetWrtShell();
 
-    bool      bBookMode = false;
-    sal_Int16 nColumns = 1;
-
     SwView* pView = pDocShell->GetView();
     if (!pView)
         return;
 
-    pView->SetViewLayout(nColumns, bBookMode, true);
+    pView->SetViewLayout(1/*nColumns*/, false/*bBookMode*/, true);
 
     // Tiled rendering defaults.
     SwViewOption aViewOption(*pViewShell->GetViewOptions());
@@ -3982,12 +3971,11 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames()
         const size_t nOutlineCount = rOutlineNodes.size();
         aRet.realloc(nOutlineCount);
         OUString* pResArr = aRet.getArray();
-        OUString sSuffix("|outline");
         const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
         for (size_t i = 0; i < nOutlineCount; ++i)
         {
             OUString sEntry = lcl_CreateOutlineString(i, rOutlineNodes, pOutlRule);
-            sEntry += sSuffix;
+            sEntry += "|outline";
             pResArr[i] = sEntry;
         }
     }

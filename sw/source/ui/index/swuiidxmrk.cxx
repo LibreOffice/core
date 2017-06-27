@@ -452,9 +452,8 @@ static void lcl_SelectSameStrings(SwWrtShell& rSh, bool bWordOnly, bool bCaseSen
     bool bCancel;
 
     //todo/mba: assuming that notes should not be searched
-    bool bSearchInNotes = false;
-    rSh.Find( aSearchOpt,  bSearchInNotes, SwDocPositions::Start, SwDocPositions::End, bCancel,
-                        (FindRanges)(FindRanges::InSelAll|FindRanges::InBodyOnly) );
+    rSh.Find( aSearchOpt, false/*bSearchInNotes*/, SwDocPositions::Start, SwDocPositions::End, bCancel,
+              FindRanges::InSelAll | FindRanges::InBodyOnly );
 }
 
 void SwIndexMarkPane::InsertMark()
@@ -633,8 +632,7 @@ IMPL_LINK_NOARG(SwIndexMarkPane, CloseHdl, Button*, void)
 {
     if(bNewMark)
     {
-        sal_uInt16 nSlot = FN_INSERT_IDX_ENTRY_DLG;
-        SfxViewFrame::Current()->GetDispatcher()->Execute(nSlot,
+        SfxViewFrame::Current()->GetDispatcher()->Execute(FN_INSERT_IDX_ENTRY_DLG,
                     SfxCallMode::ASYNCHRON|SfxCallMode::RECORD);
     }
     else
@@ -1135,8 +1133,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, CloseHdl, Button*, void)
 {
     if(bNewEntry)
     {
-        sal_uInt16 nSlot = FN_INSERT_AUTH_ENTRY_DLG;
-        SfxViewFrame::Current()->GetDispatcher()->Execute(nSlot,
+        SfxViewFrame::Current()->GetDispatcher()->Execute(FN_INSERT_AUTH_ENTRY_DLG,
                     SfxCallMode::ASYNCHRON|SfxCallMode::RECORD);
     }
     else

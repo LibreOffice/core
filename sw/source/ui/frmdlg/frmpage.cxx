@@ -3078,11 +3078,9 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
     m_pPrintFrameCB->Check(rPrt.GetValue());               m_pPrintFrameCB->SaveValue();
 
     // textflow
-    SfxItemState eState;
     if( (!m_bHtmlMode || (0 != (nHtmlMode&HTMLMODE_SOME_STYLES)))
-            && m_sDlgType != "PictureDialog" && m_sDlgType != "ObjectDialog" &&
-        SfxItemState::UNKNOWN != ( eState = rSet->GetItemState(
-                                        RES_FRAMEDIR )) )
+        && m_sDlgType != "PictureDialog" && m_sDlgType != "ObjectDialog"
+        && SfxItemState::UNKNOWN != rSet->GetItemState( RES_FRAMEDIR ) )
     {
         m_pTextFlowFT->Show();
         m_pTextFlowLB->Show();
@@ -3090,8 +3088,7 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
         //vertical text flow is not possible in HTML
         if(m_bHtmlMode)
         {
-            SvxFrameDirection nData = SvxFrameDirection::Vertical_RL_TB;
-            m_pTextFlowLB->RemoveEntry(m_pTextFlowLB->GetEntryPos(reinterpret_cast<void*>(nData)));
+            m_pTextFlowLB->RemoveEntry(m_pTextFlowLB->GetEntryPos(reinterpret_cast<void*>(SvxFrameDirection::Vertical_RL_TB)));
         }
         SvxFrameDirection nVal = static_cast<const SvxFrameDirectionItem&>(rSet->Get(RES_FRAMEDIR)).GetValue();
         sal_Int32 nPos;

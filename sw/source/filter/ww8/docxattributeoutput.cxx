@@ -6799,13 +6799,11 @@ void DocxAttributeOutput::WritePostitFields()
 
 bool DocxAttributeOutput::DropdownField( const SwField* pField )
 {
-    bool bExpand = false;
-
     ww::eField eType = ww::eFORMDROPDOWN;
     OUString sCmd = FieldString( eType  );
     GetExport( ).OutputField( pField, eType, sCmd );
 
-    return bExpand;
+    return false;
 }
 
 bool DocxAttributeOutput::PlaceholderField( const SwField* pField )

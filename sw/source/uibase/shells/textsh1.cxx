@@ -706,8 +706,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_AUTO_CORRECT:
         {
             // At first set to blank as default.
-            sal_Unicode cChar = ' ';
-            rWrtSh.AutoCorrect( *SvxAutoCorrCfg::Get().GetAutoCorrect(), cChar );
+            rWrtSh.AutoCorrect( *SvxAutoCorrCfg::Get().GetAutoCorrect(), ' ' );
             rReq.Done();
         }
         break;

@@ -1946,10 +1946,9 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         // Add a continuous section break
                         if( GetExport().AddSectionBreaksForTOX() )
                         {
-                            sal_uLong nRstLnNum = 0;
                             SwSection *pParent = rSect.GetParent();
                             WW8_SepInfo rInfo(&GetExport( ).m_pDoc->GetPageDesc(0),
-                                pParent ? pParent->GetFormat() : nullptr, nRstLnNum);
+                                pParent ? pParent->GetFormat() : nullptr, 0/*nRstLnNum*/);
                             GetExport( ).AttrOutput().SectionBreak( msword::PageBreak, &rInfo );
                         }
 
@@ -2276,8 +2275,7 @@ void AttributeOutputBase::EndTOX( const SwSection& rSect,bool bCareEnd )
 
             if ( 0 < nCol )
             {
-                sal_uLong nRstLnNum = 0;
-                WW8_SepInfo rInfo( &GetExport( ).m_pDoc->GetPageDesc( 0 ), rSect.GetFormat() , nRstLnNum );
+                WW8_SepInfo rInfo( &GetExport( ).m_pDoc->GetPageDesc( 0 ), rSect.GetFormat(), 0/*nRstLnNum*/ );
                 GetExport( ).AttrOutput().SectionBreak( msword::PageBreak, &rInfo );
             }
         }

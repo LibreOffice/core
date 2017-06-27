@@ -1675,15 +1675,12 @@ void SwMarkPreview::PaintPage(vcl::RenderContext& rRenderContext, const tools::R
     drawRect(rRenderContext, rRect, m_aTransCol, m_aPrintAreaCol);
 
     // draw Testparagraph
-    sal_uLong nLTextBorder = 4;
-    sal_uLong nRTextBorder = 4;
-    sal_uLong nTTextBorder = 4;
 
     tools::Rectangle aTextLine = rRect;
     aTextLine.SetSize(Size(aTextLine.GetWidth(), 2));
-    aTextLine.Left()    += nLTextBorder;
-    aTextLine.Right()   -= nRTextBorder;
-    aTextLine.Move(0, nTTextBorder);
+    aTextLine.Left()    += 4;
+    aTextLine.Right()   -= 4;
+    aTextLine.Move(0, 4);
 
     const long nStep = aTextLine.GetHeight() + 2;
     const long nLines = rRect.GetHeight() / (aTextLine.GetHeight() + 2) - 1;

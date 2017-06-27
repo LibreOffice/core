@@ -151,8 +151,7 @@ SwSpellDialogChildWindow::SwSpellDialogChildWindow (
     , m_bIsGrammarCheckingOn(false)
     , m_pSpellState(new SpellState)
 {
-    OUString aPropName(UPN_IS_GRAMMAR_INTERACTIVE);
-    SvtLinguConfig().GetProperty( aPropName ) >>= m_bIsGrammarCheckingOn;
+    SvtLinguConfig().GetProperty( UPN_IS_GRAMMAR_INTERACTIVE ) >>= m_bIsGrammarCheckingOn;
 }
 
 SwSpellDialogChildWindow::~SwSpellDialogChildWindow ()
@@ -478,8 +477,7 @@ void SwSpellDialogChildWindow::SetGrammarChecking(bool bOn)
     uno::Any aVal;
     aVal <<= bOn;
     m_bIsGrammarCheckingOn = bOn;
-    OUString aPropName(UPN_IS_GRAMMAR_INTERACTIVE);
-    SvtLinguConfig().SetProperty( aPropName, aVal );
+    SvtLinguConfig().SetProperty( UPN_IS_GRAMMAR_INTERACTIVE, aVal );
     // set current spell position to the start of the current sentence to
     // continue with this sentence after grammar checking state has been changed
     SwWrtShell* pWrtShell = GetWrtShell_Impl();

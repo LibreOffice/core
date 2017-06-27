@@ -749,8 +749,7 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bo
             const sal_Int32 nPos = bSorted
                 ? InsertStringSorted(rName, rToFill, nOffset )
                 : rToFill.InsertEntry(rName);
-            sal_IntPtr nPoolId = USHRT_MAX;
-            rToFill.SetEntryData( nPos, reinterpret_cast<void*>(nPoolId));
+            rToFill.SetEntryData( nPos, reinterpret_cast<void*>(USHRT_MAX));
         }
     }
 };

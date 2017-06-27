@@ -657,7 +657,7 @@ void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
         OUString aFileN;
         rGrfNd.GetFileFilterNms( &aFileN, nullptr );
 
-            sal_uInt16 mm = 94;                    // 94 = BMP, GIF
+        sal_uInt16 const mm = 94;                    // 94 = BMP, GIF
 
         WritePICFHeader(rStrm, rFly, mm, nWidth, nHeight,
             rGrfNd.GetpSwAttrSet());
@@ -679,7 +679,6 @@ void SwWW8WrGrf::WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf,
             sal_uInt16 mm, sal_uInt16 nWidth, sal_uInt16 nHeight)
 {
     sal_Int16 nXSizeAdd = 0, nYSizeAdd = 0;
-    sal_Int16 nCropL = 0, nCropR = 0, nCropT = 0, nCropB = 0;
 
     Size aGrTwipSz(rGrf.GetPrefSize());
     sal_uInt16 nHdrLen = 0x44;
@@ -754,10 +753,10 @@ void SwWW8WrGrf::WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf,
     else
         pArr += 2;
 
-    Set_UInt16( pArr, nCropL );                     // set dxaCropLeft
-    Set_UInt16( pArr, nCropT );                     // set dyaCropTop
-    Set_UInt16( pArr, nCropR );                     // set dxaCropRight
-    Set_UInt16( pArr, nCropB );                     // set dyaCropBottom
+    Set_UInt16( pArr, 0 );                     // set dxaCropLeft
+    Set_UInt16( pArr, 0 );                     // set dyaCropTop
+    Set_UInt16( pArr, 0 );                     // set dxaCropRight
+    Set_UInt16( pArr, 0 );                     // set dyaCropBottom
 
     rStrm.WriteBytes(aArr, nHdrLen);
 }

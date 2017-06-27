@@ -3764,9 +3764,8 @@ void SwUiWriterTest::testTdf87922()
     // Get access to the single paragraph in the document.
     SwNodeIndex aNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1);
     const OUString& rText = aNodeIndex.GetNode().GetTextNode()->GetText();
-    sal_Int32 nIndex = 0;
     sal_Int32 nLength = rText.getLength();
-    SwDrawTextInfo aDrawTextInfo(pWrtShell, *pWrtShell->GetOut(), pScriptInfo, rText, nIndex, nLength);
+    SwDrawTextInfo aDrawTextInfo(pWrtShell, *pWrtShell->GetOut(), pScriptInfo, rText, 0, nLength);
     // Root -> page -> body -> text.
     SwTextFrame* pTextFrame = static_cast<SwTextFrame*>(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower());
     aDrawTextInfo.SetFrame(pTextFrame);

@@ -269,8 +269,6 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
             try
             {
                 // create object with desired ClassId
-                sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-                OUString aName("DummyName");
                 uno::Sequence < sal_Int8 > aClass( aClassName.GetByteSequence() );
                 uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
                 uno::Sequence<beans::PropertyValue> aObjArgs( comphelper::InitPropertySequence({
@@ -278,11 +276,11 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                     }));
                 uno::Reference < embed::XEmbeddedObject > xObj =
                     uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitNew(
-                    aClass, OUString(), xStorage, aName, aObjArgs), uno::UNO_QUERY );
+                    aClass, OUString(), xStorage, "DummyName", aObjArgs), uno::UNO_QUERY );
                 if ( xObj.is() )
                 {
                     //TODO/LATER: is it enough to only set the VisAreaSize?
-                    lcl_setObjectVisualArea( xObj, nAspect, aTwipSize, MapUnit::MapTwip );
+                    lcl_setObjectVisualArea( xObj, embed::Aspects::MSOLE_CONTENT, aTwipSize, MapUnit::MapTwip );
                 }
 
                 if( pTextCursor )
@@ -566,7 +564,6 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
     try
     {
         // create object with desired ClassId
-        OUString aName("DummyName");
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory =
                 embed::OOoEmbeddedObjectFactory::create(::comphelper::getProcessComponentContext());
 
@@ -587,7 +584,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
 
         uno::Reference < embed::XEmbeddedObject > xObj(
             xFactory->createInstanceLink(
-                xStorage, aName, aMediaDescriptor, uno::Sequence< beans::PropertyValue >() ),
+                xStorage, "DummyName", aMediaDescriptor, uno::Sequence< beans::PropertyValue >() ),
             uno::UNO_QUERY_THROW );
 
         {
@@ -700,12 +697,11 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
     try
     {
         // create object with desired ClassId
-        OUString aName("DummyName");
         uno::Sequence < sal_Int8 > aClass( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence() );
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory =  embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
         uno::Reference < embed::XEmbeddedObject > xObj =
             uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitNew(
-            aClass, OUString(), xStorage, aName,
+            aClass, OUString(), xStorage, "DummyName",
             uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
 
         // set size to the object
@@ -833,12 +829,11 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
     try
     {
         // create object with desired ClassId
-        OUString aName("DummyName");
         uno::Sequence < sal_Int8 > aClass( SvGlobalName( SO3_IFRAME_CLASSID ).GetByteSequence() );
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
         uno::Reference < embed::XEmbeddedObject > xObj =
             uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitNew(
-            aClass, OUString(), xStorage, aName,
+            aClass, OUString(), xStorage, "DummyName",
             uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
 
         // set size to the object

@@ -157,8 +157,6 @@ void SwEditShell::InsertTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
 /// update tables of content
 bool SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
 {
-    bool bRet = false;
-
     OSL_ENSURE( dynamic_cast<const SwTOXBaseSection*>( &rTOX) !=  nullptr,  "no TOXBaseSection!" );
     SwTOXBaseSection* pTOX = const_cast<SwTOXBaseSection*>(static_cast<const SwTOXBaseSection*>(&rTOX));
     OSL_ENSURE(pTOX, "no current listing");
@@ -194,7 +192,7 @@ bool SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
         ::EndProgress( pDocSh );
         EndAllAction();
     }
-    return bRet;
+    return false;
 }
 
 /// Get current listing before or at the Cursor
@@ -308,14 +306,13 @@ void SwEditShell::ApplyAutoMark()
         rtl_TextEncoding eChrSet = ::osl_getThreadTextEncoding();
 
         // SearchOptions to be used in loop below
-        sal_Int32 nLEV_Other    = 2;    //  -> changedChars;
-        sal_Int32 nLEV_Longer   = 3;    //! -> deletedChars;
-        sal_Int32 nLEV_Shorter  = 1;    //! -> insertedChars;
-
-        sal_Int32 nSrchFlags = SearchFlags::LEV_RELAXED;
+        sal_Int32 const nLEV_Other    = 2;    //  -> changedChars;
+        sal_Int32 const nLEV_Longer   = 3;    //! -> deletedChars;
+        sal_Int32 const nLEV_Shorter  = 1;    //! -> insertedChars;
 
         i18nutil::SearchOptions2 aSearchOpt(
-                            SearchAlgorithms_ABSOLUTE, nSrchFlags,
+                            SearchAlgorithms_ABSOLUTE,
+                            SearchFlags::LEV_RELAXED,
                             "", "",
                             SvtSysLocale().GetLanguageTag().getLocale(),
                             nLEV_Other, nLEV_Longer, nLEV_Shorter,
@@ -371,8 +368,7 @@ void SwEditShell::ApplyAutoMark()
                     bool bCancel;
 
                     // todo/mba: assuming that notes shouldn't be searched
-                    bool bSearchInNotes = false;
-                    sal_uLong nRet = Find( aSearchOpt, bSearchInNotes, SwDocPositions::Start, SwDocPositions::End, bCancel,
+                    sal_uLong nRet = Find( aSearchOpt, false/*bSearchInNotes*/, SwDocPositions::Start, SwDocPositions::End, bCancel,
                                     FindRanges::InSelAll );
 
                     if(nRet)

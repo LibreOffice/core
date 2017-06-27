@@ -508,10 +508,8 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
         pOpt->SetOnlineSpell(bSet);
         {
-            OUString aPropName(UPN_IS_SPELL_AUTO);
-
             SvtLinguConfig  aCfg;
-            aCfg.SetProperty( aPropName, uno::makeAny( bSet ) );
+            aCfg.SetProperty( UPN_IS_SPELL_AUTO, uno::makeAny( bSet ) );
 
             if (xLngProp.is())
                 xLngProp->setIsSpellAuto( bSet );

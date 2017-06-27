@@ -141,8 +141,7 @@ uno::Any SAL_CALL SwVbaRows::getAllowBreakAcrossPages()
         }
         if( bSplit != bAllowBreak )
         {
-            sal_Int32 nRet = word::WdConstants::wdUndefined;
-            return uno::makeAny( nRet );
+            return uno::makeAny( sal_Int32(word::WdConstants::wdUndefined) );
         }
     }
     return uno::makeAny( bAllowBreak );
@@ -239,9 +238,8 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent )
 
  void SwVbaRows::setIndentWithAdjustFirstColumn( const uno::Reference< word::XColumns >& xColumns, sal_Int32 indent )
  {
-    sal_Int32 nIndex = 1;
     uno::Reference< XCollection > xCol( xColumns, uno::UNO_QUERY_THROW );
-    uno::Reference< word::XColumn > xColumn( xCol->Item( uno::makeAny( nIndex ), uno::Any() ), uno::UNO_QUERY_THROW );
+    uno::Reference< word::XColumn > xColumn( xCol->Item( uno::makeAny( sal_Int32(1) ), uno::Any() ), uno::UNO_QUERY_THROW );
     sal_Int32 nWidth = xColumn->getWidth();
     nWidth -= indent;
     xColumn->setWidth( nWidth );

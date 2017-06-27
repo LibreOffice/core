@@ -1518,7 +1518,6 @@ void SwChartDataProvider::InvalidateTable( const SwTable *pTable )
 
 bool SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox &rBox )
 {
-    bool bRes = false;
     OSL_ENSURE( pTable, "table pointer is NULL" );
     if (pTable)
     {
@@ -1570,7 +1569,7 @@ bool SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox &rB
             }
         }
     }
-    return bRes;
+    return false;
 }
 
 void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )

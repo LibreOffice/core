@@ -112,10 +112,9 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl, SwOneExampleFrame&, void
          uno::Reference< container::XNameAccess >  xSections =
                                         xSectionSupplier->getTextSections();
 
-        OUString sSectionName("IndexSection_");
         for(int i = 0; i < 7; ++i )
         {
-            OUString sTmp( sSectionName ); sTmp += OUString::number(i);
+            OUString sTmp = "IndexSection_" + OUString::number(i);
             uno::Any aSection = xSections->getByName( sTmp );
             aSection >>= m_pxIndexSectionsArray[i]->xContainerSection;
          }

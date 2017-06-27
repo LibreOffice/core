@@ -4016,7 +4016,6 @@ static bool lcl_SetOtherLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam
 static bool lcl_InsDelSelLine( SwTableLine* pLine, CR_SetLineHeight& rParam,
                             SwTwips nDist, bool bCheck )
 {
-    bool bRet = true;
     if( !bCheck )
     {
         SwTableBoxes& rBoxes = pLine->GetTabBoxes();
@@ -4110,7 +4109,7 @@ static bool lcl_InsDelSelLine( SwTableLine* pLine, CR_SetLineHeight& rParam,
             }
         }
     }
-    return bRet;
+    return true;
 }
 
 bool SwTable::SetRowHeight( SwTableBox& rAktBox, TableChgWidthHeightType eType,

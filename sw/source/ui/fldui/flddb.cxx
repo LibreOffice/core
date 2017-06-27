@@ -500,8 +500,7 @@ void    SwFieldDBPage::FillUserData()
 
 void SwFieldDBPage::ActivateMailMergeAddress()
 {
-    sal_uLong nData = TYP_DBFLD;
-    m_pTypeLB->SelectEntryPos(m_pTypeLB->GetEntryPos( reinterpret_cast<const void*>( nData ) ));
+    m_pTypeLB->SelectEntryPos(m_pTypeLB->GetEntryPos( reinterpret_cast<const void*>( TYP_DBFLD ) ));
     m_pTypeLB->GetSelectHdl().Call(*m_pTypeLB);
     const SwDBData& rData = SW_MOD()->GetDBConfig()->GetAddressSource();
     m_pDatabaseTLB->Select(rData.sDataSource, rData.sCommand, aEmptyOUStr);

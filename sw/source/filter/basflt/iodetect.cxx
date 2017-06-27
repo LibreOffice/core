@@ -296,9 +296,9 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, sal_uLong &rLen,
             nNewLen = rLen/2;
             memcpy(pNewBuf, pBuf, rLen);
 #ifdef OSL_LITENDIAN
-            bool bNativeLE = true;
+            bool const bNativeLE = true;
 #else
-            bool bNativeLE = false;
+            bool const bNativeLE = false;
 #endif
             if (bLE != bNativeLE)
             {

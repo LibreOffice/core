@@ -296,9 +296,8 @@ ErrCode SwXMLTextBlocks::StartPutBlock( const OUString& rShort, const OUString& 
         xRoot = xBlkRoot->openStorageElement( rPackageName, embed::ElementModes::READWRITE );
 
         uno::Reference< beans::XPropertySet > xRootProps( xRoot, uno::UNO_QUERY_THROW );
-        OUString aPropName( "MediaType" );
         OUString aMime( SotExchange::GetFormatMimeType( SotClipboardFormatId::STARWRITER_8 ) );
-        xRootProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
+        xRootProps->setPropertyValue( "MediaType", uno::makeAny( aMime ) );
     }
     catch (const uno::Exception&)
     {
