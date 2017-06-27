@@ -62,7 +62,7 @@ void ScDataProvidersTest::testCSVImport()
     OUString aCSVPath;
     createCSVPath( "dataprovider.", aCSVPath );
     OUString aDBName = "TEST";
-    sc::ExternalDataMapper aExternalDataMapper (&getDocShell(), aCSVPath, aDBName, 0, 0, 0, 5, 5, success);
+    sc::ExternalDataMapper aExternalDataMapper (&getDocShell(), aCSVPath, aDBName, 0, 0, 0, 5, 5, false, success);
     aExternalDataMapper.StartImport();
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL (-2012.0, m_pDoc->GetValue(0, 0, 0));
