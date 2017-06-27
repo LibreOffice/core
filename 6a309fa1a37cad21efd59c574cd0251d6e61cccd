@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_1d0e9434",
+        "filename": "vcl/source/gdi/impanmvw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-27T18:35:36Z",
+      "side": 1,
+      "message": "by removing this line it changes the conditions under which pDev and pVDev (note the difference) are disposed.\nthis particular chunk of code is very tricky",
+      "revId": "6a309fa1a37cad21efd59c574cd0251d6e61cccd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
