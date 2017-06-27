@@ -472,7 +472,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl, Button*, void)
 
 IMPL_STATIC_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, Button*, void)
 {
-    const OUString aGUIServers[] = {  OUString("kleopatra"), OUString("gpa"), OUString("kgpg") };
+    const OUString aGUIServers[] = {  OUString("kleopatra"), OUString("seahorse"),  OUString("gpa"), OUString("kgpg") };
     // FIXME: the same for Windows + registry search for gpg4win
     const char* cPath = getenv("PATH");
 
