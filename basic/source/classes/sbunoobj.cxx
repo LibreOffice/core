@@ -4046,8 +4046,7 @@ sal_Bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const OUString& Nam
 // create Uno-Service
 // 1. Parameter == Prefix-Name of the macro
 // 2. Parameter == fully qualified name of the listener
-void SbRtl_CreateUnoListener( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
-//RTLFUNC(CreateUnoListener)
+RTLFUNC(CreateUnoListener)
 {
     (void)bWrite;
 
