@@ -830,6 +830,27 @@ void Test::testFormulaListenerUpdateInsertTab()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaListenerUpdateDeleteTab()
+{
+    m_pDoc->InsertTab(0, "test");
+    m_pDoc->InsertTab(0, "to_delete");
+
+    ScCompiler aCompiler(m_pDoc, ScAddress(10, 10, 1), formula::FormulaGrammar::GRAM_ENGLISH);
+    std::unique_ptr<ScTokenArray> pTokenArray(aCompiler.CompileString("A1"));
+
+    ScFormulaListener aListener(m_pDoc);
+    aListener.addTokenArray(pTokenArray.get(), ScAddress(10, 10, 1));
+    CPPUNIT_ASSERT(!aListener.NeedsRepaint());
+
+    m_pDoc->DeleteTab(0);
+
+    // check that the listener has moved
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 1.0);
+    CPPUNIT_ASSERT(aListener.NeedsRepaint());
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testCondFormatUpdateMoveTab()
 {
     m_pDoc->InsertTab(0, "test");
