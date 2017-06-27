@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_a2ee3fea",
+        "filename": "sw/source/uibase/app/apphdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-27T10:51:26Z",
+      "side": 0,
+      "message": "so i wondered what kind of idiot would add such a non-obvious assertion and what was the point of this; as it happens, i just found that the idiot who added it was myself for i#116192, but it was so long ago that i forgot about it...\n\nsome debugging reveals that the reason for the test failure is the perverted code in SwHTMLParser::SetControlSize() that forces premature creation of a SwView; that function should definitely be rated \"18+\" and nobody should look at it.",
+      "revId": "2fb2d6efdb25f718ddd65709697bc68d81815a59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
