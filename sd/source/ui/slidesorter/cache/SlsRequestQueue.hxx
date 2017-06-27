@@ -30,9 +30,7 @@
 
 namespace sd { namespace slidesorter { namespace cache {
 
-class RequestData;
-
-/** The request queue stores requests that are described by the RequestData
+/** The request queue stores requests that are described by the Request
     sorted according to priority class and then priority.
 */
 class RequestQueue : public sdr::PageUser

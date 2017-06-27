@@ -24,7 +24,6 @@
 #include "fuconstr.hxx"
 #include <svx/svdotext.hxx>
 
-struct StyleRequestData;
 class SdrTextObj;
 class FontList;
 class OutlinerView;
