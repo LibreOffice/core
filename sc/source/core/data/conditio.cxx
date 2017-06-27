@@ -36,6 +36,7 @@
 #include "rangelst.hxx"
 #include "stlpool.hxx"
 #include "rangenam.hxx"
+#include "rangeutl.hxx"
 #include "colorscale.hxx"
 #include "cellvalue.hxx"
 #include "editutil.hxx"
@@ -627,7 +628,7 @@ void ScConditionEntry::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
         DELETEZ(pFCell2);
     }
 
-    StartListening();
+    ScRangeUpdater::UpdateInsertTab(aSrcPos, rCxt);
 }
 
 void ScConditionEntry::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
@@ -644,6 +645,7 @@ void ScConditionEntry::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
         DELETEZ(pFCell2);
     }
 
+    ScRangeUpdater::UpdateDeleteTab(aSrcPos, rCxt);
     StartListening();
 }
 
