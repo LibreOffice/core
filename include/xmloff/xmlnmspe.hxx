@@ -23,13 +23,10 @@
 #include <sal/types.h>
 
 #define XML_NAMESPACE( prefix, key ) \
-const sal_uInt16 XML_NAMESPACE_##prefix         = key; \
-const sal_uInt16 XML_NAMESPACE_##prefix##_IDX   = key;
+const sal_uInt16 XML_NAMESPACE_##prefix         = key;
 
 #define XML_OLD_NAMESPACE( prefix, index ) \
 const sal_uInt16 XML_OLD_NAMESPACE_##prefix = \
-    (XML_OLD_NAMESPACE_BASE+index); \
-const sal_uInt16 XML_OLD_NAMESPACE_##prefix##_IDX = \
     (XML_OLD_NAMESPACE_BASE+index);
 
 // current namespaces
@@ -78,8 +75,7 @@ XML_NAMESPACE( VERSIONS_LIST,   37U )
 
 #define XML_NAMESPACE_EXT_BASE 38U
 #define XML_NAMESPACE_EXT( prefix, index ) \
-const sal_uInt16 XML_NAMESPACE_##prefix##_EXT       = (XML_NAMESPACE_EXT_BASE+index); \
-const sal_uInt16 XML_NAMESPACE_##prefix##_EXT_IDX   = (XML_NAMESPACE_EXT_BASE+index);
+const sal_uInt16 XML_NAMESPACE_##prefix##_EXT       = (XML_NAMESPACE_EXT_BASE+index);
 
 XML_NAMESPACE_EXT( OFFICE,       0U )
 XML_NAMESPACE_EXT( TABLE,        1U )
@@ -92,8 +88,7 @@ XML_NAMESPACE_EXT( LO,           5U )
 
 #define XML_NAMESPACE_OOO_BASE 44U
 #define XML_NAMESPACE_OOO( prefix, index ) \
-const sal_uInt16 XML_NAMESPACE_##prefix##_OOO       = (XML_NAMESPACE_OOO_BASE+index); \
-const sal_uInt16 XML_NAMESPACE_##prefix##_OOO_IDX   = (XML_NAMESPACE_OOO_BASE+index);
+const sal_uInt16 XML_NAMESPACE_##prefix##_OOO       = (XML_NAMESPACE_OOO_BASE+index);
 
 XML_NAMESPACE_OOO( OFFICE,         0U )
 XML_NAMESPACE_OOO( META,           1U )
@@ -111,8 +106,7 @@ XML_NAMESPACE_OOO( SCRIPT,        12U )
 
 #define XML_NAMESPACE_COMPAT_BASE 57U
 #define XML_NAMESPACE_COMPAT( prefix, index ) \
-const sal_uInt16 XML_NAMESPACE_##prefix##_COMPAT       = (XML_NAMESPACE_COMPAT_BASE+index); \
-const sal_uInt16 XML_NAMESPACE_##prefix##_COMPAT_IDX   = (XML_NAMESPACE_COMPAT_BASE+index);
+const sal_uInt16 XML_NAMESPACE_##prefix##_COMPAT       = (XML_NAMESPACE_COMPAT_BASE+index);
 
 XML_NAMESPACE_COMPAT( SVG,         0U )
 XML_NAMESPACE_COMPAT( FO,          1U )
@@ -120,8 +114,7 @@ XML_NAMESPACE_COMPAT( SMIL,        2U )
 
 #define XML_NAMESPACE_OASIS_BASE 60U
 #define XML_NAMESPACE_OASIS( prefix, index ) \
-const sal_uInt16 XML_NAMESPACE_##prefix##_OASIS       = (XML_NAMESPACE_OASIS_BASE+index); \
-const sal_uInt16 XML_NAMESPACE_##prefix##_OASIS_IDX   = (XML_NAMESPACE_OASIS_BASE+index);
+const sal_uInt16 XML_NAMESPACE_##prefix##_OASIS       = (XML_NAMESPACE_OASIS_BASE+index);
 
 XML_NAMESPACE_OASIS( DB,           0U )
 XML_NAMESPACE_OASIS( REPORT,       1U )
