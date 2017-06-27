@@ -83,13 +83,11 @@ AccessibleRelation AccessibleRelationSetHelperImpl::getRelationByType( sal_Int16
 {
     sal_Int32 nCount(getRelationCount());
     sal_Int32 i(0);
-    bool bFound(false);
-    while ((i < nCount) && !bFound)
+    while (i < nCount)
     {
         if (maRelations[i].RelationType == aRelationType)
             return maRelations[i];
-        else
-            i++;
+        i++;
     }
     return AccessibleRelation();
 }

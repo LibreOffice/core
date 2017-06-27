@@ -210,9 +210,7 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
     }
     else
     {
-        bool isVisible = true;
-        sal_Int32 nStyle = 0;
-        aProps = CreateToolbarItemData( sCommandUrl, sHelpUrl, sLabel, nItemType, aSubMenu, isVisible, nStyle );
+        aProps = CreateToolbarItemData( sCommandUrl, sHelpUrl, sLabel, nItemType, aSubMenu, true/*isVisible*/, 0/*nStyle*/ );
     }
 
 

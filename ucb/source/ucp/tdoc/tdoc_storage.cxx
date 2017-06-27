@@ -456,7 +456,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
         {
             try
             {
-                sal_Int32 nOpenMode = embed::ElementModes::READ
+                sal_Int32 const nOpenMode = embed::ElementModes::READ
                                       | embed::ElementModes::NOCREATE;
                 xStorage
                     = xParentStorage->openStorageElement( rName, nOpenMode );

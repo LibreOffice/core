@@ -1348,8 +1348,7 @@ const ConvertChar* ConvertChar::GetRecodeData( const OUString& rOrgFontName, con
     if( aMapName == "starsymbol"
      || aMapName == "opensymbol" )
     {
-        int nEntries = SAL_N_ELEMENTS(aStarSymbolRecodeTable);
-        for( int i = 0; i < nEntries; ++i)
+        for( int i = 0; i < int(SAL_N_ELEMENTS(aStarSymbolRecodeTable)); ++i)
         {
             const RecodeTable& r = aStarSymbolRecodeTable[i];
             if( aOrgName.equalsAscii( r.pOrgName ) )
@@ -1364,8 +1363,7 @@ const ConvertChar* ConvertChar::GetRecodeData( const OUString& rOrgFontName, con
     //adobe-symbol to unicode conversion in rtl instead
     else if( aMapName == "applesymbol" )
     {
-        int nEntries = SAL_N_ELEMENTS(aAppleSymbolRecodeTable);
-        for( int i = 0; i < nEntries; ++i)
+        for( int i = 0; i < int(SAL_N_ELEMENTS(aAppleSymbolRecodeTable)); ++i)
         {
             const RecodeTable& r = aAppleSymbolRecodeTable[i];
             if( aOrgName.equalsAscii( r.pOrgName ) )

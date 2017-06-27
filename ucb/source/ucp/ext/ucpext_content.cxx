@@ -528,10 +528,8 @@ namespace ucb { namespace ucp { namespace ext
 
     Sequence< CommandInfo > Content::getCommands( const Reference< XCommandEnvironment > & /*xEnv*/ )
     {
-        sal_uInt32 nCommandCount = 5;
         static const CommandInfo aCommandInfoTable[] =
         {
-
             // Mandatory commands
 
             CommandInfo(
@@ -564,7 +562,7 @@ namespace ucb { namespace ucp { namespace ext
             )
         };
 
-        return Sequence< CommandInfo >( aCommandInfoTable, nCommandCount );
+        return Sequence< CommandInfo >( aCommandInfoTable, SAL_N_ELEMENTS(aCommandInfoTable) );
     }
 
 

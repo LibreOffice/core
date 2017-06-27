@@ -87,8 +87,7 @@ ZipPackageHelper::ZipPackageHelper(
     mxFactory = xFactory;
 
     // get root zip folder
-    OUString szRootFolder("/");
-    mxHNameAccess->getByHierarchicalName( szRootFolder ) >>= mxRootFolder;
+    mxHNameAccess->getByHierarchicalName( "/" ) >>= mxRootFolder;
 }
 
 static OUString encodeZipUri( const OUString& rURI )
