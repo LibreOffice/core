@@ -87,8 +87,7 @@ TokenPool::TokenPool( svl::SharedStringPool& rSPool ) :
     memset( ppP_Nlf, 0, sizeof( NLFCONT* ) * nP_Nlf );
 
     nP_Matrix = 16;
-    ppP_Matrix = new ScMatrix*[ nP_Matrix ];
-    memset( ppP_Matrix, 0, sizeof( ScMatrix* ) * nP_Matrix );
+    ppP_Matrix = new rtl::Reference<ScMatrix>[ nP_Matrix ];
 
     pScToken = new ScTokenArray;
 
@@ -334,12 +333,12 @@ bool TokenPool::GrowMatrix()
     if (!nNewSize)
         return false;
 
-    ScMatrix**  ppNew = new (::std::nothrow) ScMatrix*[ nNewSize ];
+    rtl::Reference<ScMatrix>* ppNew = new (::std::nothrow) rtl::Reference<ScMatrix>[ nNewSize ];
     if (!ppNew)
         return false;
 
-    memset( ppNew, 0, sizeof( ScMatrix* ) * nNewSize );
-    memcpy( ppNew, ppP_Matrix, sizeof( ScMatrix* ) * nP_Matrix );
+    for( sal_uInt16 nL = 0 ; nL < nP_Matrix ; nL++ )
+        ppNew[ nL ] = std::move(ppP_Matrix[ nL ]);
 
     delete[] ppP_Matrix;
     ppP_Matrix = ppNew;
@@ -455,7 +454,7 @@ bool TokenPool::GetElement( const sal_uInt16 nId )
             case T_Matrix:
                 {
                     sal_uInt16      n = pElement[ nId ];
-                    ScMatrix*       p = ( n < nP_Matrix )? ppP_Matrix[ n ] : nullptr;
+                    ScMatrix*       p = ( n < nP_Matrix ) ? ppP_Matrix[ n ].get() : nullptr;
 
                     if( p )
                         pScToken->AddMatrix( p );
@@ -777,9 +776,7 @@ const TokenId TokenPool::StoreMatrix()
     pElement[ nElementAkt ] = nP_MatrixAkt;
     pType[ nElementAkt ] = T_Matrix;
 
-    ScMatrix* pM = new ScFullMatrix( 0, 0 );
-    pM->IncRef( );
-    ppP_Matrix[ nP_MatrixAkt ] = pM;
+    ppP_Matrix[ nP_MatrixAkt ] = new ScFullMatrix( 0, 0 );
 
     nElementAkt++;
     nP_MatrixAkt++;
@@ -922,7 +919,7 @@ const OUString* TokenPool::GetExternal( const TokenId& rId ) const
 ScMatrix* TokenPool::GetMatrix( unsigned int n ) const
 {
     if( n < nP_MatrixAkt )
-        return ppP_Matrix[ n ];
+        return ppP_Matrix[ n ].get();
     else
         SAL_WARN("sc.filter", "GetMatrix: " << n << " >= " << nP_MatrixAkt);
     return nullptr;
@@ -931,13 +928,7 @@ ScMatrix* TokenPool::GetMatrix( unsigned int n ) const
 void TokenPool::ClearMatrix()
 {
     for(sal_uInt16 n = 0 ; n < nP_Matrix ; n++ )
-    {
-        if( ppP_Matrix[ n ] )
-        {
-            ppP_Matrix[ n ]->DecRef( );
-            ppP_Matrix[n] = nullptr;
-        }
-    }
+        ppP_Matrix[n].clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

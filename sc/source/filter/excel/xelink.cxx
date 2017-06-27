@@ -85,7 +85,7 @@ class XclExpExtNameDde : public XclExpExtNameBase
 {
 public:
     explicit            XclExpExtNameDde( const XclExpRoot& rRoot, const OUString& rName,
-                            sal_uInt16 nFlags, const ScMatrix* pResults = nullptr );
+                            sal_uInt16 nFlags, ScMatrix* pResults = nullptr );
 
 private:
     /** Writes additional record contents. */
@@ -931,7 +931,7 @@ void XclExpExtNameAddIn::WriteAddData( XclExpStream& rStrm )
 }
 
 XclExpExtNameDde::XclExpExtNameDde( const XclExpRoot& rRoot,
-        const OUString& rName, sal_uInt16 nFlags, const ScMatrix* pResults ) :
+        const OUString& rName, sal_uInt16 nFlags, ScMatrix* pResults ) :
     XclExpExtNameBase( rRoot, rName, nFlags )
 {
     if( pResults )
@@ -1090,7 +1090,7 @@ sal_uInt16 XclExpExtNameBuffer::InsertDde(
                     GetRoot(), "StdDocumentName", EXC_EXTN_EXPDDE_STDDOC ) );
 
             // try to find DDE result array, but create EXTERNNAME record without them too
-            const ScMatrix* pScMatrix = GetDoc().GetDdeLinkResultMatrix( nPos );
+            ScMatrix* pScMatrix = GetDoc().GetDdeLinkResultMatrix( nPos );
             nIndex = AppendNew( new XclExpExtNameDde( GetRoot(), rItem, EXC_EXTN_EXPDDE, pScMatrix ) );
         }
     }

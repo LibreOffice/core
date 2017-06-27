@@ -14,6 +14,7 @@
 
 #include <boost/intrusive_ptr.hpp>
 #include <o3tl/typed_flags_set.hxx>
+#include <rtl/ref.hxx>
 
 class ScMatrix;
 
@@ -23,8 +24,7 @@ typedef sal_Int16 SCCOL;
 typedef sal_Int16 SCTAB;
 typedef sal_Int32 SCCOLROW;     ///< a type capable of holding either SCCOL or SCROW
 
-typedef ::boost::intrusive_ptr<ScMatrix>        ScMatrixRef;
-typedef ::boost::intrusive_ptr<const ScMatrix>  ScConstMatrixRef;
+typedef rtl::Reference<ScMatrix>        ScMatrixRef;
 
 namespace formula { class FormulaToken; }
 typedef ::boost::intrusive_ptr<formula::FormulaToken> ScTokenRef;

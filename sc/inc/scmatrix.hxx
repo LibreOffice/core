@@ -33,7 +33,6 @@
 #include <memory>
 #include <utility>
 #include <vector>
-#include <boost/intrusive_ptr.hpp>
 
 #define DEBUG_MATRIX 0
 
@@ -239,8 +238,8 @@ public:
         MUST be at least of the size of the original matrix. */
     virtual ScMatrix* CloneAndExtend(SCSIZE nNewCols, SCSIZE nNewRows) const = 0;
 
-    void IncRef() const;
-    void DecRef() const;
+    void acquire() const;
+    void release() const;
 
     virtual void SetErrorInterpreter( ScInterpreter* p) = 0;
     virtual void GetDimensions( SCSIZE& rC, SCSIZE& rR) const = 0;
@@ -649,7 +648,7 @@ class SC_DLLPUBLIC ScVectorRefMatrix : public ScMatrix
     ScInterpreter* mpErrorInterpreter;
 
     /// For the operations that are not fully implemented, create a ScFullMatrix, and operate on it.
-    std::unique_ptr<ScFullMatrix> mpFullMatrix;
+    rtl::Reference<ScFullMatrix> mpFullMatrix;
 
     SCSIZE mnRowStart;
     SCSIZE mnRowSize;
@@ -863,16 +862,6 @@ public:
     }
 #endif
 };
-
-inline void intrusive_ptr_add_ref(const ScMatrix* p)
-{
-    p->IncRef();
-}
-
-inline void intrusive_ptr_release(const ScMatrix* p)
-{
-    p->DecRef();
-}
 
 #endif // INCLUDED_SC_INC_SCMATRIX_HXX
 

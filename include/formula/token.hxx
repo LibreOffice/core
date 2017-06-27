@@ -199,8 +199,7 @@ public:
     virtual ScComplexRefData*       GetDoubleRef();
     virtual const ScSingleRefData*  GetSingleRef2() const;
     virtual ScSingleRefData*        GetSingleRef2();
-    virtual const ScMatrix*     GetMatrix() const;
-    virtual ScMatrix*           GetMatrix();
+    virtual ScMatrix*           GetMatrix() const;
     virtual ScJumpMatrix*       GetJumpMatrix() const;
     virtual const std::vector<ScComplexRefData>* GetRefList() const;
     virtual       std::vector<ScComplexRefData>* GetRefList();

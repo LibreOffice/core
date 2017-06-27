@@ -274,7 +274,7 @@ bool containsSvRefBaseSubclass(const Type* pType0) {
     }
 }
 
-bool containsSalhelperReferenceObjectSubclass(const Type* pType0) {
+bool containsRtlReferenceManagedSubclass(const Type* pType0, const char * targetClass) {
     if (!pType0)
         return false;
     const Type* pType = pType0->getUnqualifiedDesugaredType();
@@ -293,7 +293,7 @@ bool containsSalhelperReferenceObjectSubclass(const Type* pType0) {
             for(unsigned i=0; i<pTemplate->getTemplateArgs().size(); ++i) {
                 const TemplateArgument& rArg = pTemplate->getTemplateArgs()[i];
                 if (rArg.getKind() == TemplateArgument::ArgKind::Type &&
-                    containsSalhelperReferenceObjectSubclass(rArg.getAsType().getTypePtr()))
+                    containsRtlReferenceManagedSubclass(rArg.getAsType().getTypePtr(), targetClass))
                 {
                     return true;
                 }
@@ -306,11 +306,12 @@ bool containsSalhelperReferenceObjectSubclass(const Type* pType0) {
     } else if (pType->isArrayType()) {
         const ArrayType* pArrayType = dyn_cast<ArrayType>(pType);
         QualType elementType = pArrayType->getElementType();
-        return containsSalhelperReferenceObjectSubclass(elementType.getTypePtr());
+        return containsRtlReferenceManagedSubclass(elementType.getTypePtr(), targetClass);
     } else {
-        return isDerivedFrom(pRecordDecl, "salhelper::SimpleReferenceObject");
+        return isDerivedFrom(pRecordDecl, targetClass);
     }
 }
+
 
 static bool containsStaticTypeMethod(const CXXRecordDecl* x)
 {
@@ -358,10 +359,18 @@ bool RefCounting::visitTemporaryObjectExpr(Expr const * expr) {
              " managed, should be managed via tools::SvRef"),
             expr->getLocStart())
             << t.getUnqualifiedType() << expr->getSourceRange();
-    } else if (containsSalhelperReferenceObjectSubclass(t.getTypePtr())) {
+    } else if (containsRtlReferenceManagedSubclass(t.getTypePtr(), "salhelper::SimpleReferenceObject")) {
         report(
             DiagnosticsEngine::Warning,
             ("Temporary object of salhelper::SimpleReferenceObject subclass %0"
+             " being directly stack managed, should be managed via"
+             " rtl::Reference"),
+            expr->getLocStart())
+            << t.getUnqualifiedType() << expr->getSourceRange();
+    } else if (containsRtlReferenceManagedSubclass(t.getTypePtr(), "ScMatrix")) {
+        report(
+            DiagnosticsEngine::Warning,
+            ("Temporary object of ScMatrix subclass %0"
              " being directly stack managed, should be managed via"
              " rtl::Reference"),
             expr->getLocStart())
@@ -398,10 +407,20 @@ bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
           << fieldDecl->getSourceRange();
     }
 
-    if (containsSalhelperReferenceObjectSubclass(fieldDecl->getType().getTypePtr())) {
+    if (containsRtlReferenceManagedSubclass(fieldDecl->getType().getTypePtr(), "salhelper::SimpleReferenceObject")) {
         report(
             DiagnosticsEngine::Warning,
             "salhelper::SimpleReferenceObject subclass being directly heap managed, should be managed via rtl::Reference, "
+            + fieldDecl->getType().getAsString()
+            + ", parent is " + aParentName,
+            fieldDecl->getLocation())
+          << fieldDecl->getSourceRange();
+    }
+
+    if (containsRtlReferenceManagedSubclass(fieldDecl->getType().getTypePtr(), "ScMatrix")) {
+        report(
+            DiagnosticsEngine::Warning,
+            "ScMatrix subclass being directly heap managed, should be managed via rtl::Reference, "
             + fieldDecl->getType().getAsString()
             + ", parent is " + aParentName,
             fieldDecl->getLocation())
@@ -445,7 +464,7 @@ bool RefCounting::VisitVarDecl(const VarDecl * varDecl) {
                 varDecl->getLocation())
               << varDecl->getSourceRange();
         }
-        if (containsSalhelperReferenceObjectSubclass(varDecl->getType().getTypePtr())) {
+        if (containsRtlReferenceManagedSubclass(varDecl->getType().getTypePtr(), "salhelper::SimpleReferenceObject")) {
             StringRef name { compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(varDecl->getLocation())) };
             // this is playing games that it believes is safe
             if (loplugin::isSamePathname(name, SRCDIR "/stoc/source/security/permissions.cxx"))
@@ -453,6 +472,14 @@ bool RefCounting::VisitVarDecl(const VarDecl * varDecl) {
             report(
                 DiagnosticsEngine::Warning,
                 "salhelper::SimpleReferenceObject subclass being directly stack managed, should be managed via rtl::Reference, "
+                + varDecl->getType().getAsString(),
+                varDecl->getLocation())
+              << varDecl->getSourceRange();
+        }
+        if (containsRtlReferenceManagedSubclass(varDecl->getType().getTypePtr(), "ScMatrix")) {
+            report(
+                DiagnosticsEngine::Warning,
+                "ScMatrix subclass being directly stack managed, should be managed via rtl::Reference, "
                 + varDecl->getType().getAsString(),
                 varDecl->getLocation())
               << varDecl->getSourceRange();

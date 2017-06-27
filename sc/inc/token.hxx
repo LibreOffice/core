@@ -112,8 +112,7 @@ public:
     ScMatrixToken( const ScMatrixRef& p );
     ScMatrixToken( const ScMatrixToken& r );
 
-    virtual const ScMatrix*     GetMatrix() const override;
-    virtual ScMatrix*           GetMatrix() override;
+    virtual ScMatrix*           GetMatrix() const override;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override { return new ScMatrixToken(*this); }
 };
@@ -133,8 +132,7 @@ public:
     ScMatrixRangeToken( const ScMatrixRangeToken& r );
 
     virtual sal_uInt8 GetByte() const override;
-    virtual const ScMatrix* GetMatrix() const override;
-    virtual ScMatrix* GetMatrix() override;
+    virtual ScMatrix* GetMatrix() const override;
     virtual const ScComplexRefData* GetDoubleRef() const override;
     virtual ScComplexRefData* GetDoubleRef() override;
     virtual bool operator==( const formula::FormulaToken& rToken ) const override;
@@ -304,20 +302,16 @@ public:
 /**  Transports the result from the interpreter to the formula cell. */
 class SC_DLLPUBLIC ScMatrixCellResultToken : public formula::FormulaToken
 {
-    // No non-const access implemented, silence down unxsols4 complaining about
-    // the public GetMatrix() hiding the one from FormulaToken.
-    virtual ScMatrix*           GetMatrix() override;
-
 protected:
-    ScConstMatrixRef xMatrix;
+    ScMatrixRef xMatrix;
     formula::FormulaConstTokenRef     xUpperLeft;
 public:
-    ScMatrixCellResultToken( const ScConstMatrixRef& pMat, formula::FormulaToken* pUL );
+    ScMatrixCellResultToken( const ScMatrixRef& pMat, formula::FormulaToken* pUL );
     ScMatrixCellResultToken( const ScMatrixCellResultToken& r );
     virtual ~ScMatrixCellResultToken() override;
     virtual double              GetDouble() const override;
     virtual svl::SharedString GetString() const override;
-    virtual const ScMatrix*     GetMatrix() const override;
+    virtual ScMatrix*           GetMatrix() const override;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override;
     formula::StackVar           GetUpperLeftType() const
@@ -338,7 +332,7 @@ private:
             SCROW               nRows;
             SCCOL               nCols;
 public:
-    ScMatrixFormulaCellToken( SCCOL nC, SCROW nR, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL );
+    ScMatrixFormulaCellToken( SCCOL nC, SCROW nR, const ScMatrixRef& pMat, formula::FormulaToken* pUL );
     ScMatrixFormulaCellToken( SCCOL nC, SCROW nR );
     ScMatrixFormulaCellToken( const ScMatrixFormulaCellToken& r );
     virtual ~ScMatrixFormulaCellToken() override;

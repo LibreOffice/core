@@ -373,7 +373,7 @@ public:
 
     OUString GetHybridFormula() const;
 
-    void SetResultMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL );
+    void SetResultMatrix( SCCOL nCols, SCROW nRows, const ScMatrixRef& pMat, formula::FormulaToken* pUL );
 
     /** For import only: set a double result.
         Use this instead of SetHybridDouble() if there is no (temporary)

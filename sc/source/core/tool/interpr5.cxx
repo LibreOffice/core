@@ -297,7 +297,7 @@ ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR, bool bEmpty)
     if ( nCols != nC || nRows != nR )
     {   // arbitray limit of elements exceeded
         SetError( FormulaError::MatrixSize);
-        pMat.reset();
+        pMat.clear();
     }
     return pMat;
 }
@@ -327,11 +327,11 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
     {
         /* XXX casting const away here is ugly; ScMatrixToken (to which the
          * result of this function usually is assigned) should not be forced to
-         * carry a ScConstMatrixRef though.
+         * carry a ScMatrixRef though.
          * TODO: a matrix already stored in pTokenMatrixMap should be
          * read-only and have a copy-on-write mechanism. Previously all tokens
          * were modifiable so we're already better than before ... */
-        return const_cast<FormulaToken*>((*aIter).second.get())->GetMatrix();
+        return (*aIter).second->GetMatrix();
     }
 
     ScMatrixRef pMat = GetNewMat( nMatCols, nMatRows, true);

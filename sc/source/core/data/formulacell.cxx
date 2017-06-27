@@ -2401,7 +2401,7 @@ svl::SharedString ScFormulaCell::GetResultString() const
     return aResult.GetString();
 }
 
-void ScFormulaCell::SetResultMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL )
+void ScFormulaCell::SetResultMatrix( SCCOL nCols, SCROW nRows, const ScMatrixRef& pMat, formula::FormulaToken* pUL )
 {
     aResult.SetMatrix(nCols, nRows, pMat, pUL);
 }
@@ -2484,15 +2484,15 @@ void ScFormulaCell::GetURLResult( OUString& rURL, OUString& rCellText )
         aCellString = GetString().getString();
         pFormatter->GetOutputString( aCellString, nCellFormat, rCellText, &pColor );
     }
-    ScConstMatrixRef xMat( aResult.GetMatrix());
-    if (xMat)
+    ScMatrix const * pMat( aResult.GetMatrix());
+    if (pMat)
     {
         // determine if the matrix result is a string or value.
-        if (!xMat->IsValue(0, 1))
-            rURL = xMat->GetString(0, 1).getString();
+        if (!pMat->IsValue(0, 1))
+            rURL = pMat->GetString(0, 1).getString();
         else
             pFormatter->GetOutputString(
-                xMat->GetDouble(0, 1), nURLFormat, rURL, &pColor);
+                pMat->GetDouble(0, 1), nURLFormat, rURL, &pColor);
     }
 
     if(rURL.isEmpty())
@@ -2616,7 +2616,7 @@ const ScMatrix* ScFormulaCell::GetMatrix()
         || (!bDirty && cMatrixFlag == ScMatrixMode::Formula && !aResult.GetMatrix()))
             Interpret();
     }
-    return aResult.GetMatrix().get();
+    return aResult.GetMatrix();
 }
 
 bool ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const

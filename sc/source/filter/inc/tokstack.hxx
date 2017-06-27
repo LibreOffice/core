@@ -118,7 +118,7 @@ private:
         sal_uInt16                      nP_Nlf;
         sal_uInt16                      nP_NlfAkt;
 
-        ScMatrix**                  ppP_Matrix;     // Pool for Matrices
+        rtl::Reference<ScMatrix>*       ppP_Matrix;     // Pool for Matrices
         sal_uInt16                      nP_Matrix;
         sal_uInt16                      nP_MatrixAkt;
 

@@ -1470,7 +1470,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                     if ( ScParameterClassification::GetParameterType( pCur, nParams - i)
                             == formula::ParamClass::Value )
                     {   // only if single value expected
-                        ScConstMatrixRef pMat = p->GetMatrix();
+                        ScMatrixRef pMat = p->GetMatrix();
                         if ( !pMat )
                             SetError( FormulaError::UnknownVariable);
                         else
@@ -1616,10 +1616,7 @@ ScMatrixRef ScInterpreter::PopMatrix()
                 break;
             case svMatrix:
                 {
-                    // ScMatrix itself maintains an im/mutable flag that should
-                    // be obeyed where necessary.. so we can return ScMatrixRef
-                    // here instead of ScConstMatrixRef.
-                    ScMatrix* pMat = const_cast<FormulaToken*>(p)->GetMatrix();
+                    ScMatrix* pMat = p->GetMatrix();
                     if ( pMat )
                         pMat->SetErrorInterpreter( this);
                     else
@@ -1646,7 +1643,7 @@ sc::RangeMatrix ScInterpreter::PopRangeMatrix()
             {
                 --sp;
                 const FormulaToken* p = pStack[sp];
-                aRet.mpMat = const_cast<FormulaToken*>(p)->GetMatrix();
+                aRet.mpMat = p->GetMatrix();
                 if (aRet.mpMat)
                 {
                     aRet.mpMat->SetErrorInterpreter(this);

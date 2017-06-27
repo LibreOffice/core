@@ -66,7 +66,7 @@ public:
 
                     // for interpreter:
 
-    const ScMatrix* GetResult() const;
+    ScMatrix*       GetResult() const;
     void            SetResult( const ScMatrixRef& pRes );
 
     const OUString&   GetAppl() const     { return aAppl; }

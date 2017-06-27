@@ -487,7 +487,7 @@ svl::SharedString ScFormulaResult::GetString() const
     return svl::SharedString::getEmptyString();
 }
 
-ScConstMatrixRef ScFormulaResult::GetMatrix() const
+ScMatrix const * ScFormulaResult::GetMatrix() const
 {
     if (GetType() == formula::svMatrixCell)
         return mpToken->GetMatrix();
@@ -572,7 +572,7 @@ void ScFormulaResult::SetHybridFormula( const OUString & rFormula )
     mbToken = true;
 }
 
-void ScFormulaResult::SetMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL )
+void ScFormulaResult::SetMatrix( SCCOL nCols, SCROW nRows, const ScMatrixRef& pMat, formula::FormulaToken* pUL )
 {
     ResetToDefaults();
     if (mbToken && mpToken)

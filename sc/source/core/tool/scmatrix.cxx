@@ -2725,12 +2725,12 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
     }
 }
 
-void ScMatrix::IncRef() const
+void ScMatrix::acquire() const
 {
     ++nRefCnt;
 }
 
-void ScMatrix::DecRef() const
+void ScMatrix::release() const
 {
     --nRefCnt;
     if (nRefCnt == 0)
@@ -3554,7 +3554,7 @@ void ScVectorRefMatrix::ensureFullMatrix()
 
     const std::vector<formula::VectorRefArray>& rArrays = mpToken->GetArrays();
     size_t nColSize = rArrays.size();
-    mpFullMatrix.reset(new ScFullMatrix(nColSize, mnRowSize));
+    mpFullMatrix = new ScFullMatrix(nColSize, mnRowSize);
 
     if (mpErrorInterpreter)
         mpFullMatrix->SetErrorInterpreter(mpErrorInterpreter);

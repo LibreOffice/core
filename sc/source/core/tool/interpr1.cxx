@@ -1069,7 +1069,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
                 break;
             default:
                 SAL_WARN("sc",  "ScInterpreter::QueryMat: unhandled comparison operator: " << (int)eOp);
-                aRes.mpMat.reset();
+                aRes.mpMat.clear();
                 return aRes;
         }
     }

@@ -697,8 +697,7 @@ ScMatrixToken::ScMatrixToken( const ScMatrixRef& p ) :
 ScMatrixToken::ScMatrixToken( const ScMatrixToken& r ) :
     FormulaToken(r), pMatrix(r.pMatrix) {}
 
-const ScMatrix* ScMatrixToken::GetMatrix() const        { return pMatrix.get(); }
-ScMatrix*       ScMatrixToken::GetMatrix()              { return pMatrix.get(); }
+ScMatrix* ScMatrixToken::GetMatrix() const { return pMatrix.get(); }
 bool ScMatrixToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && pMatrix == r.GetMatrix();
@@ -721,12 +720,7 @@ sal_uInt8 ScMatrixRangeToken::GetByte() const
     return MATRIX_TOKEN_HAS_RANGE;
 }
 
-const ScMatrix* ScMatrixRangeToken::GetMatrix() const
-{
-    return mpMatrix.get();
-}
-
-ScMatrix* ScMatrixRangeToken::GetMatrix()
+ScMatrix * ScMatrixRangeToken::GetMatrix() const
 {
     return mpMatrix.get();
 }
@@ -1021,7 +1015,7 @@ bool ScEmptyCellToken::operator==( const FormulaToken& r ) const
         bDisplayedAsString == static_cast< const ScEmptyCellToken & >(r).IsDisplayedAsString();
 }
 
-ScMatrixCellResultToken::ScMatrixCellResultToken( const ScConstMatrixRef& pMat, formula::FormulaToken* pUL ) :
+ScMatrixCellResultToken::ScMatrixCellResultToken( const ScMatrixRef& pMat, formula::FormulaToken* pUL ) :
     FormulaToken(formula::svMatrixCell), xMatrix(pMat), xUpperLeft(pUL) {}
 
 ScMatrixCellResultToken::ScMatrixCellResultToken( const ScMatrixCellResultToken& r ) :
@@ -1036,13 +1030,7 @@ svl::SharedString ScMatrixCellResultToken::GetString() const
     return xUpperLeft->GetString();
 }
 
-const ScMatrix* ScMatrixCellResultToken::GetMatrix() const  { return xMatrix.get(); }
-// Non-const GetMatrix() is private and unused but must be implemented to
-// satisfy vtable linkage.
-ScMatrix* ScMatrixCellResultToken::GetMatrix()
-{
-    return const_cast<ScMatrix*>(xMatrix.get());
-}
+ScMatrix * ScMatrixCellResultToken::GetMatrix() const  { return xMatrix.get(); }
 
 bool ScMatrixCellResultToken::operator==( const FormulaToken& r ) const
 {
@@ -1063,7 +1051,7 @@ void ScMatrixCellResultToken::Assign( const ScMatrixCellResultToken & r )
 }
 
 ScMatrixFormulaCellToken::ScMatrixFormulaCellToken(
-    SCCOL nC, SCROW nR, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL ) :
+    SCCOL nC, SCROW nR, const ScMatrixRef& pMat, formula::FormulaToken* pUL ) :
     ScMatrixCellResultToken(pMat, pUL), nRows(nR), nCols(nC)
 {
     CloneUpperLeftIfNecessary();

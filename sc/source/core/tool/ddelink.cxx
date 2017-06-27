@@ -150,7 +150,7 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
 
     if (!nRows || !nCols)               // no data
     {
-        pResult.reset();
+        pResult.clear();
     }
     else                                // split data
     {
@@ -238,7 +238,7 @@ void ScDdeLink::ListenersGone()
     bIsInUpdate = bWas;
 }
 
-const ScMatrix* ScDdeLink::GetResult() const
+ScMatrix* ScDdeLink::GetResult() const
 {
     return pResult.get();
 }

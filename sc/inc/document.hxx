@@ -915,7 +915,7 @@ public:
     /** Returns the result matrix of the specified DDE link.
         @param nDdePos  Index of the DDE link (does not include other links from link manager).
         @return  The result matrix, if the DDE link has been found, 0 otherwise. */
-    SC_DLLPUBLIC const ScMatrix* GetDdeLinkResultMatrix( size_t nDdePos ) const;
+    SC_DLLPUBLIC ScMatrix* GetDdeLinkResultMatrix( size_t nDdePos ) const;
 
     /** Tries to find a DDE link or creates a new, if not extant.
         @param pResults  If not 0, sets the matrix as DDE link result matrix (also for existing links).

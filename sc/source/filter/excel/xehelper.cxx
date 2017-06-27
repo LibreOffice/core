@@ -978,19 +978,17 @@ OUString XclExpUrlHelper::EncodeDde( const OUString& rApplic, const OUString& rT
 
 // Cached Value Lists =========================================================
 
-XclExpCachedMatrix::XclExpCachedMatrix( const ScMatrix& rMatrix )
-    : mrMatrix( rMatrix )
+XclExpCachedMatrix::XclExpCachedMatrix( ScMatrix& rMatrix )
+    : mxMatrix( &rMatrix )
 {
-    mrMatrix.IncRef();
 }
 XclExpCachedMatrix::~XclExpCachedMatrix()
 {
-    mrMatrix.DecRef();
 }
 
 void XclExpCachedMatrix::GetDimensions( SCSIZE & nCols, SCSIZE & nRows ) const
 {
-    mrMatrix.GetDimensions( nCols, nRows );
+    mxMatrix->GetDimensions( nCols, nRows );
 
     OSL_ENSURE( nCols && nRows, "XclExpCachedMatrix::GetDimensions - empty matrix" );
     OSL_ENSURE( nCols <= 256, "XclExpCachedMatrix::GetDimensions - too many columns" );
@@ -1025,7 +1023,7 @@ void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
     {
         for( SCSIZE nCol = 0; nCol < nCols; ++nCol )
         {
-            ScMatrixValue nMatVal = mrMatrix.Get( nCol, nRow );
+            ScMatrixValue nMatVal = mxMatrix->Get( nCol, nRow );
 
             FormulaError nScError;
             if( ScMatValType::Empty == nMatVal.nType )

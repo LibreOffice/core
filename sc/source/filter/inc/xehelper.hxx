@@ -422,7 +422,7 @@ class XclExpCachedMatrix
 public:
     /** Constructs and fills a new matrix.
         @param rMatrix  The Calc value matrix. */
-    explicit        XclExpCachedMatrix( const ScMatrix& rMatrix );
+    explicit        XclExpCachedMatrix( ScMatrix& rMatrix );
                    ~XclExpCachedMatrix();
 
     /** Returns the byte count of all contained data. */
@@ -431,7 +431,7 @@ public:
     void            Save( XclExpStream& rStrm ) const;
 
 private:
-    const ScMatrix& mrMatrix;
+    rtl::Reference<ScMatrix> mxMatrix;
 };
 
 #endif

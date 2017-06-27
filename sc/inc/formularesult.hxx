@@ -182,7 +182,7 @@ public:
     svl::SharedString GetString() const;
 
     /** Return matrix if type formula::svMatrixCell and ScMatrix present, else NULL. */
-    ScConstMatrixRef GetMatrix() const;
+    ScMatrix const * GetMatrix() const;
 
     /** Return formula string if type formula::svHybridCell, else empty string. */
     const OUString& GetHybridFormula() const;
@@ -207,7 +207,7 @@ public:
         SetHybridFormula() for formula string to be compiled later. */
     SC_DLLPUBLIC void SetHybridFormula( const OUString & rFormula );
 
-    SC_DLLPUBLIC void SetMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL );
+    SC_DLLPUBLIC void SetMatrix( SCCOL nCols, SCROW nRows, const ScMatrixRef& pMat, formula::FormulaToken* pUL );
 
     /** Get the const ScMatrixFormulaCellToken* if token is of that type, else
         NULL. */
