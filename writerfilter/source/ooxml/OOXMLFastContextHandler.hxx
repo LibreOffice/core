@@ -20,15 +20,10 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTCONTEXTHANDLER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTCONTEXTHANDLER_HXX
 
-#include <string>
 #include <set>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/xml/sax/XFastContextHandler.hpp>
-#include <com/sun/star/xml/sax/XFastShapeContextHandler.hpp>
 #include <oox/mathml/import.hxx>
 #include <oox/mathml/importutils.hxx>
-#include <svtools/embedhlp.hxx>
 #include "OOXMLParserState.hxx"
 #include "OOXMLPropertySet.hxx"
 
@@ -236,8 +231,6 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     bool m_bDiscardChildren;
     bool m_bTookChoice; ///< Did we take the Choice or want Fallback instead?
-
-    static sal_uInt32 mnInstanceCount;
 
 };
 
