@@ -2185,7 +2185,7 @@ void SwNodes::ForEach( sal_uLong nStart, sal_uLong nEnd,
     if( nStart < nEnd )
     {
         sal_uInt16 cur = Index2Block( nStart );
-        BlockInfo** pp = m_ppInf + cur;
+        BlockInfo** pp = m_vpInf.data() + cur;
         BlockInfo* p = *pp;
         sal_uInt16 nElem = sal_uInt16( nStart - p->nStart );
         auto pElem = p->mvData.begin() + nElem;
