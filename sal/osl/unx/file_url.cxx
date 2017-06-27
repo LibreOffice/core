@@ -227,7 +227,7 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
         e = getSystemPathFromFileUrl(
             OUString::unacquired(&ustrFileURL), &path, true);
     }
-    catch (std::length_error)
+    catch (std::length_error &)
     {
         e = osl_File_E_RANGE;
     }
