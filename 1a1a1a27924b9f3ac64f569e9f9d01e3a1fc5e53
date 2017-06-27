@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_bd2bc032",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-27T22:03:49Z",
+      "side": 1,
+      "message": "Which I dislike.",
+      "revId": "1a1a1a27924b9f3ac64f569e9f9d01e3a1fc5e53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_7d0318b9",
+        "filename": "sc/inc/document.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-27T22:03:49Z",
+      "side": 1,
+      "message": "I don\u0027t like the non-constness here. It\u0027s wrong.",
+      "revId": "1a1a1a27924b9f3ac64f569e9f9d01e3a1fc5e53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_5df65cd8",
+        "filename": "sc/inc/formularesult.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-27T22:03:49Z",
+      "side": 1,
+      "message": "I\u0027d rather prefer rtl::Reference\u003cconst ScMatrix\u003e here (still typedef\u0027ed probably). The caller should be encouraged to not accidentally hold a raw pointer bypassing ref-counting.",
+      "revId": "1a1a1a27924b9f3ac64f569e9f9d01e3a1fc5e53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_5d481c2e",
+        "filename": "sc/inc/token.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-27T22:03:49Z",
+      "side": 1,
+      "message": "I don\u0027t like this. It should really be a const ScMatrix.",
+      "revId": "1a1a1a27924b9f3ac64f569e9f9d01e3a1fc5e53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_7d6cf89c",
+        "filename": "sc/inc/types.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-27T22:03:49Z",
+      "side": 1,
+      "message": "If an additional rtl::Reference\u003cconst ScMatrix\u003e is not possible then rtl::Reference just might not be the right tool.",
+      "revId": "1a1a1a27924b9f3ac64f569e9f9d01e3a1fc5e53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_9d69a48e",
+        "filename": "sc/source/core/inc/ddelink.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-27T22:03:49Z",
+      "side": 1,
+      "message": "I don\u0027t like the non-constness here. It\u0027s wrong.",
+      "revId": "1a1a1a27924b9f3ac64f569e9f9d01e3a1fc5e53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_1d14d4f3",
+        "filename": "sc/source/filter/excel/xelink.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-27T22:03:49Z",
+      "side": 1,
+      "message": "I don\u0027t like the non-constness here. It\u0027s wrong.",
+      "revId": "1a1a1a27924b9f3ac64f569e9f9d01e3a1fc5e53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_fd0e28e4",
+        "filename": "sc/source/filter/inc/xehelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-27T22:03:49Z",
+      "side": 1,
+      "message": "I don\u0027t like the non-constness here. It\u0027s wrong.",
+      "revId": "1a1a1a27924b9f3ac64f569e9f9d01e3a1fc5e53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

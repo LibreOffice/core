@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_9d00c4ac",
+        "filename": "sc/inc/token.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-27T22:03:49Z",
+      "side": 0,
+      "message": "I\u0027d prefer if we could keep the const getter as well.",
+      "revId": "344a5dbc5c35255994a9e31df83cf964e6709246",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_bd04a0c6",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1621,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-27T22:03:49Z",
+      "side": 0,
+      "message": "Please don\u0027t remove the comment, it still holds.",
+      "revId": "344a5dbc5c35255994a9e31df83cf964e6709246",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
