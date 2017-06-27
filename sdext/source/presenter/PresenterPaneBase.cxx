@@ -314,34 +314,6 @@ void PresenterPaneBase::SetBackground (const SharedBitmapDescriptor& rpBackgroun
     mpViewBackground = rpBackground;
 }
 
-void PresenterPaneBase::PaintBorderBackground (
-    const awt::Rectangle& rBorderBox,
-    const awt::Rectangle& rUpdateBox)
-{
-    (void)rBorderBox;
-    (void)rUpdateBox;
-    /*
-    // The outer box of the border is given.  We need the center and inner
-    // box as well.
-    awt::Rectangle aCenterBox (
-        mxBorderPainter->removeBorder(
-            mxPaneId->getResourceURL(),
-            rBorderBox,
-            drawing::framework::BorderType_OUTER_BORDER));
-    awt::Rectangle aInnerBox (
-        mxBorderPainter->removeBorder(
-            mxPaneId->getResourceURL(),
-            rBorderBox,
-            drawing::framework::BorderType_TOTAL_BORDER));
-    mpPresenterController->GetCanvasHelper()->Paint(
-        mpViewBackground,
-        mxBorderCanvas,
-        rUpdateBox,
-        aCenterBox,
-        aInnerBox);
-    */
-}
-
 void PresenterPaneBase::PaintBorder (const awt::Rectangle& rUpdateBox)
 {
     OSL_ASSERT(mxPaneId.is());
@@ -351,7 +323,7 @@ void PresenterPaneBase::PaintBorder (const awt::Rectangle& rUpdateBox)
         awt::Rectangle aBorderBox (mxBorderWindow->getPosSize());
         awt::Rectangle aLocalBorderBox (0,0, aBorderBox.Width, aBorderBox.Height);
 
-        PaintBorderBackground(aLocalBorderBox, rUpdateBox);
+        //TODO: paint border background?
 
         mxBorderPainter->paintBorder(
                 mxPaneId->getResourceURL(),

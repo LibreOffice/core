@@ -122,9 +122,6 @@ protected:
     void CreateWindows (
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const bool bIsWindowVisibleOnCreation);
-    static void PaintBorderBackground (
-        const css::awt::Rectangle& rCenterBox,
-        const css::awt::Rectangle& rUpdateBox);
     void PaintBorder (const css::awt::Rectangle& rUpdateRectangle);
     void ToTop();
     void LayoutContextWindow();
