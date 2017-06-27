@@ -1397,6 +1397,15 @@ DECLARE_OOXMLIMPORT_TEST(testTdf108408, "tdf108408.docx")
     CPPUNIT_ASSERT_EQUAL(double(20), getProperty<double>(xRun, "CharHeight"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf108806, "tdf108806.docx")
+{
+    // tdf#108806:The CRLF in the text contents of XML must be converted to single spaces.
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+    uno::Reference< text::XTextRange > paragraph = getParagraph(1);
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("First part of a line (before CRLF). Second part of the same line (after CRLF)."),
+        paragraph->getString());
+}
 
 DECLARE_OOXMLIMPORT_TEST(testTdf108714, "tdf108714.docx")
 {
