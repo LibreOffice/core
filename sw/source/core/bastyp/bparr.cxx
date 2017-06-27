@@ -75,13 +75,13 @@ void BigPtrArray::Move( sal_uLong from, sal_uLong to )
     {
         sal_uInt16 cur = Index2Block( from );
         BlockInfo* p = m_ppInf[ cur ];
-        ElementPtr pElem = p->pData[ from - p->nStart ];
+        BigPtrEntry* pElem = p->pData[ from - p->nStart ];
         Insert( pElem, to ); // insert first, then delete!
         Remove( ( to < from ) ? ( from + 1 ) : from );
     }
 }
 
-ElementPtr BigPtrArray::operator[]( sal_uLong idx ) const
+BigPtrEntry* BigPtrArray::operator[]( sal_uLong idx ) const
 {
     assert(idx < m_nSize); // operator[]: Index out of bounds
     m_nCur = Index2Block( idx );
@@ -183,7 +183,7 @@ BlockInfo* BigPtrArray::InsBlock( sal_uInt16 pos )
 
     p->nEnd--;  // no elements
     p->nElem = 0;
-    p->pData = new ElementPtr [ MAXENTRY ];
+    p->pData = new BigPtrEntry* [ MAXENTRY ];
     p->pBigArr = this;
     return p;
 }
@@ -203,7 +203,7 @@ void BigPtrArray::BlockDel( sal_uInt16 nDel )
     }
 }
 
-void BigPtrArray::Insert( const ElementPtr& rElem, sal_uLong pos )
+void BigPtrArray::Insert( BigPtrEntry* pElem, sal_uLong pos )
 {
     CHECKIDX( ppInf, nBlock, nSize, nCur );
 
@@ -240,8 +240,8 @@ void BigPtrArray::Insert( const ElementPtr& rElem, sal_uLong pos )
             if( q->nElem )
             {
                 int nCount = q->nElem;
-                ElementPtr *pFrom = q->pData + nCount,
-                                    *pTo = pFrom+1;
+                BigPtrEntry** pFrom = q->pData + nCount;
+                BigPtrEntry** pTo   = pFrom + 1;
                 while( nCount-- )
                     ++( *--pTo = *--pFrom )->m_nOffset;
             }
@@ -258,7 +258,7 @@ void BigPtrArray::Insert( const ElementPtr& rElem, sal_uLong pos )
             {
                 // Something was moved before the current position and all
                 // pointer might be invalid. Thus restart Insert.
-                Insert( rElem, pos );
+                Insert( pElem, pos );
                 return ;
             }
 
@@ -266,7 +266,7 @@ void BigPtrArray::Insert( const ElementPtr& rElem, sal_uLong pos )
         }
 
         // entry does not fit anymore - clear space
-        ElementPtr pLast = p->pData[ MAXENTRY-1 ];
+        BigPtrEntry* pLast = p->pData[ MAXENTRY-1 ];
         pLast->m_nOffset = 0;
         pLast->m_pBlock = q;
 
@@ -283,15 +283,15 @@ void BigPtrArray::Insert( const ElementPtr& rElem, sal_uLong pos )
     if( pos != p->nElem )
     {
         int nCount = p->nElem - sal_uInt16(pos);
-        ElementPtr *pFrom = p->pData + p->nElem;
-        ElementPtr *pTo   = pFrom + 1;
+        BigPtrEntry* *pFrom = p->pData + p->nElem;
+        BigPtrEntry* *pTo   = pFrom + 1;
         while( nCount-- )
             ++( *--pTo = *--pFrom )->m_nOffset;
     }
     // insert element and update indices
-    rElem->m_nOffset = sal_uInt16(pos);
-    rElem->m_pBlock = p;
-    p->pData[ pos ] = rElem;
+    pElem->m_nOffset = sal_uInt16(pos);
+    pElem->m_pBlock = p;
+    p->pData[ pos ] = pElem;
     p->nEnd++;
     p->nElem++;
     m_nSize++;
@@ -321,8 +321,8 @@ void BigPtrArray::Remove( sal_uLong pos, sal_uLong n )
         // move elements if needed
         if( ( pos + nel ) < sal_uLong(p->nElem) )
         {
-            ElementPtr *pTo = p->pData + pos;
-            ElementPtr *pFrom = pTo + nel;
+            BigPtrEntry* *pTo = p->pData + pos;
+            BigPtrEntry* *pFrom = pTo + nel;
             int nCount = p->nElem - nel - sal_uInt16(pos);
             while( nCount-- )
             {
@@ -386,14 +386,14 @@ void BigPtrArray::Remove( sal_uLong pos, sal_uLong n )
     CHECKIDX( ppInf, nBlock, nSize, nCur );
 }
 
-void BigPtrArray::Replace( sal_uLong idx, const ElementPtr& rElem)
+void BigPtrArray::Replace( sal_uLong idx, BigPtrEntry* pElem)
 {
     assert(idx < m_nSize); // Index out of bounds
     m_nCur = Index2Block( idx );
     BlockInfo* p = m_ppInf[ m_nCur ];
-    rElem->m_nOffset = sal_uInt16(idx - p->nStart);
-    rElem->m_pBlock = p;
-    p->pData[ idx - p->nStart ] = rElem;
+    pElem->m_nOffset = sal_uInt16(idx - p->nStart);
+    pElem->m_pBlock = p;
+    p->pData[ idx - p->nStart ] = pElem;
 }
 
 /** Compress the array */
@@ -434,8 +434,8 @@ sal_uInt16 BigPtrArray::Compress()
                 n = nLast;
 
             // move elements from current to last block
-            ElementPtr* pElem = pLast->pData + pLast->nElem;
-            ElementPtr* pFrom = p->pData;
+            BigPtrEntry** pElem = pLast->pData + pLast->nElem;
+            BigPtrEntry** pFrom = p->pData;
             for( sal_uInt16 nCount = n, nOff = pLast->nElem;
                             nCount; --nCount, ++pElem )
             {
