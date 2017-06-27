@@ -67,9 +67,9 @@ public:
 
     void insert(key_value_pair_t& rPair)
     {
-        map_iterator_t iterator = mLruMap.find(rPair.first);
+        map_iterator_t i = mLruMap.find(rPair.first);
 
-        if (iterator == mLruMap.end()) // doesn't exist -> add to queue and map
+        if (i == mLruMap.end()) // doesn't exist -> add to queue and map
         {
             // add to front of the list
             mLruList.push_front(rPair);
@@ -80,17 +80,17 @@ public:
         else // already exists -> replace value
         {
             // replace value
-            iterator->second->second = rPair.second;
+            i->second->second = rPair.second;
             // bring to front of the lru list
-            mLruList.splice(mLruList.begin(), mLruList, iterator->second);
+            mLruList.splice(mLruList.begin(), mLruList, i->second);
         }
     }
 
     void insert(key_value_pair_t&& rPair)
     {
-        map_iterator_t iterator = mLruMap.find(rPair.first);
+        map_iterator_t i = mLruMap.find(rPair.first);
 
-        if (iterator == mLruMap.end()) // doesn't exist -> add to list and map
+        if (i == mLruMap.end()) // doesn't exist -> add to list and map
         {
             // add to front of the list
             mLruList.push_front(std::move(rPair));
@@ -101,16 +101,16 @@ public:
         else // already exists -> replace value
         {
             // replace value
-            iterator->second->second = std::move(rPair.second);
+            i->second->second = std::move(rPair.second);
             // push to back of the lru list
-            mLruList.splice(mLruList.begin(), mLruList, iterator->second);
+            mLruList.splice(mLruList.begin(), mLruList, i->second);
         }
     }
 
     const list_const_iterator_t find(const Key& key)
     {
-        const map_iterator_t iterator = mLruMap.find(key);
-        if (iterator == mLruMap.cend()) // can't find entry for the key
+        const map_iterator_t i = mLruMap.find(key);
+        if (i == mLruMap.cend()) // can't find entry for the key
         {
             // return empty iterator
             return mLruList.cend();
@@ -118,8 +118,8 @@ public:
         else
         {
             // push to back of the lru list
-            mLruList.splice(mLruList.begin(), mLruList, iterator->second);
-            return iterator->second;
+            mLruList.splice(mLruList.begin(), mLruList, i->second);
+            return i->second;
         }
     }
 
