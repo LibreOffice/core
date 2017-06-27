@@ -880,13 +880,6 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
                 aTypeName = pType->getTokenValue();
                 if (pDatatype->count() == 2 && (pType->getTokenID() == SQL_TOKEN_CHAR || pType->getTokenID() == SQL_TOKEN_CHARACTER ))
                     nType = DataType::CHAR;
-
-                const OSQLParseNode *pParams = pDatatype->getChild(pDatatype->count()-1);
-                if ( pParams->count() )
-                {
-                    sal_Int32 nLen = pParams->getChild(1)->getTokenValue().toInt32();
-                    (void)nLen;
-                }
             }
             else if(pDatatype && pDatatype->getNodeType() == SQLNodeType::Keyword)
             {
