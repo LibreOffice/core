@@ -16,6 +16,24 @@
       "revId": "130b08bd40d691d7dab3e4547740cf65c7710e7a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_7d1a3819",
+        "filename": "sc/source/core/tool/chartlis.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-27T22:14:55Z",
+      "side": 1,
+      "message": "Dereferencing a null pointer is undefined behaviour. Yes, most known implementations will just crash.. still, the assert() terminates in a defined way and displays file and line number and reason. Most of the assert() calls converted in this change just test for non-nullptr.",
+      "parentUuid": "3a461143_c2118bb1",
+      "revId": "130b08bd40d691d7dab3e4547740cf65c7710e7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
