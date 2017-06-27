@@ -379,6 +379,17 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
             {
                 std::vector<tools::Rectangle> aRectangles;
                 pRegion->GetRegionRectangles(aRectangles);
+                if (pOutWin->IsChart())
+                {
+                    const vcl::Window* pViewShellWindow = mpViewShell->GetEditWindowForActiveOLEObj();
+                    if (pViewShellWindow && pViewShellWindow->IsAncestorOf(*pOutWin))
+                    {
+                        Point aOffsetPx = pOutWin->GetOffsetPixelFrom(*pViewShellWindow);
+                        Point aLogicOffset = pOutWin->PixelToLogic(aOffsetPx);
+                        for (tools::Rectangle& rRect : aRectangles)
+                            rRect.Move(aLogicOffset.getX(), aLogicOffset.getY());
+                    }
+                }
 
                 if (!aRectangles.empty())
                 {
@@ -1021,8 +1032,19 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 
         if (comphelper::LibreOfficeKit::isActive() && mpViewShell)
         {
-            const Point& rPos = GetCursor()->GetPos();
-            tools::Rectangle aRect(rPos.getX(), rPos.getY(), rPos.getX() + GetCursor()->GetWidth(), rPos.getY() + GetCursor()->GetHeight());
+            Point aPos = GetCursor()->GetPos();
+            if (pOutWin->IsChart())
+            {
+                const vcl::Window* pViewShellWindow = mpViewShell->GetEditWindowForActiveOLEObj();
+                if (pViewShellWindow && pViewShellWindow->IsAncestorOf(*pOutWin))
+                {
+                    Point aOffsetPx = pOutWin->GetOffsetPixelFrom(*pViewShellWindow);
+                    Point aLogicOffset = pOutWin->PixelToLogic(aOffsetPx);
+                    aPos.Move(aLogicOffset.getX(), aLogicOffset.getY());
+                }
+            }
+
+            tools::Rectangle aRect(aPos.getX(), aPos.getY(), aPos.getX() + GetCursor()->GetWidth(), aPos.getY() + GetCursor()->GetHeight());
 
             // LOK output is always in twips, convert from mm100 if necessary.
             if (pOutWin->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)

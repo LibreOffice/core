@@ -25,6 +25,7 @@
 #include <svx/srchdlg.hxx>
 #include <svx/svdobj.hxx>
 #include <sfx2/viewsh.hxx>
+#include <sfx2/ipclient.hxx>
 #include <drawdoc.hxx>
 #include <swwait.hxx>
 #include <swmodule.hxx>
@@ -1887,10 +1888,12 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     rDevice.SetMapMode(aMapMode);
 
     // Update scaling of SwEditWin and its sub-widgets, needed for comments.
+    sal_uInt16 nOldZoomValue = 0;
     if (GetWin() && GetWin()->GetMapMode().GetScaleX() != scaleX)
     {
         double fScale = scaleX;
         SwViewOption aOption(*GetViewOptions());
+        nOldZoomValue = aOption.GetZoom();
         aOption.SetZoom(fScale * 100);
         ApplyViewOptions(aOption);
         // Make sure the map mode (disabled in SwXTextDocument::initializeForTiledRendering()) is still disabled.
@@ -1920,6 +1923,32 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
         pPostItMgr->PaintTile(rDevice);
 
     // SwViewShell's output device tear down
+
+    // A view shell can get a PaintTile call for a tile at a zoom level
+    // different from the one, the related client really is.
+    // In such a case it is better to reset the current scale value to
+    // the original one, since such a value should be in synchronous with
+    // the zoom level in the client (see setClientZoom).
+    // At present the zoom value returned by GetViewOptions()->GetZoom() is
+    // used in SwXTextDocument methods (postMouseEvent and setGraphicSelection)
+    // for passing the correct mouse position to an edited chart (if any).
+    if (nOldZoomValue !=0)
+    {
+        SwViewOption aOption(*GetViewOptions());
+        aOption.SetZoom(nOldZoomValue);
+        ApplyViewOptions(aOption);
+
+        // Changing the zoom value doesn't always trigger the updating of
+        // the client ole object area, so we call it directly.
+        SfxInPlaceClient* pIPClient = GetSfxViewShell()->GetIPClient();
+        if (pIPClient)
+        {
+            pIPClient->VisAreaChanged();
+        }
+        // Make sure the map mode (disabled in SwXTextDocument::initializeForTiledRendering()) is still disabled.
+        GetWin()->EnableMapMode(false);
+    }
+
     mpOut = pSaveOut;
     comphelper::LibreOfficeKit::setTiledPainting(false);
 }

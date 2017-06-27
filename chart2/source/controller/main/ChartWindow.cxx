@@ -28,6 +28,13 @@
 #include <config_features.h>
 #include <com/sun/star/chart2/X3DChartWindowProvider.hpp>
 
+#include <sfx2/ipclient.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <comphelper/lok.hxx>
+
+#define TWIPS_PER_PIXEL 15
+
 using namespace ::com::sun::star;
 
 namespace
@@ -50,6 +57,7 @@ ChartWindow::ChartWindow( ChartController* pController, vcl::Window* pParent, Wi
         : Window(pParent, nStyle)
         , m_pWindowController( pController )
         , m_bInPaint(false)
+        , m_pViewShellWindow( nullptr )
 #if HAVE_FEATURE_OPENGL
         , m_pOpenGLWindow(VclPtr<OpenGLWindow>::Create(this, false))
 #else
@@ -108,6 +116,10 @@ void ChartWindow::PrePaint(vcl::RenderContext& )
 
 void ChartWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
+    if (comphelper::LibreOfficeKit::isActive()
+        && rRenderContext.GetOutDevType() != OutDevType::OUTDEV_VIRDEV)
+        return;
+
     m_bInPaint = true;
     if (m_pOpenGLWindow && m_pOpenGLWindow->IsVisible())
     {
@@ -301,6 +313,56 @@ void ChartWindow::Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags
     }
 }
 
+void ChartWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
+{
+    OString sRectangle;
+    if (!pRectangle)
+    {
+        // we have to invalidate the whole chart area not the whole document
+        sRectangle = GetBoundingBox().toString();
+    }
+    else
+    {
+        tools::Rectangle aRectangle(*pRectangle);
+        // When dragging shapes the map mode is disabled.
+        if (IsMapModeEnabled())
+        {
+            if (GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
+                aRectangle = OutputDevice::LogicToLogic(aRectangle, MapUnit::Map100thMM, MapUnit::MapTwip);
+        }
+        else
+        {
+            aRectangle = PixelToLogic(aRectangle, MapMode(MapUnit::MapTwip));
+        }
+
+        vcl::Window* pEditWin = GetParentEditWin();
+        if (pEditWin)
+        {
+            MapMode aCWMapMode = GetMapMode();
+            double fXScale = aCWMapMode.GetScaleX();
+            double fYScale = aCWMapMode.GetScaleY();
+
+            if (!IsMapModeEnabled())
+            {
+                aRectangle.Left() /= fXScale;
+                aRectangle.Right() /= fXScale;
+                aRectangle.Top() /= fYScale;
+                aRectangle.Bottom() /= fYScale;
+            }
+
+            Point aOffset = this->GetOffsetPixelFrom(*pEditWin);
+            aOffset.X() *= (TWIPS_PER_PIXEL / fXScale);
+            aOffset.Y() *= (TWIPS_PER_PIXEL / fYScale);
+
+            aRectangle = tools::Rectangle(aRectangle.TopLeft() + aOffset, aRectangle.GetSize());
+        }
+
+        sRectangle = aRectangle.toString();
+    }
+    SfxViewShell* pCurrentShell = SfxViewShell::Current();
+    SfxLokHelper::notifyInvalidation(pCurrentShell, sRectangle);
+}
+
 FactoryFunction ChartWindow::GetUITestFactory() const
 {
     return ChartWindowUIObject::create;
@@ -309,6 +371,53 @@ FactoryFunction ChartWindow::GetUITestFactory() const
 ChartController* ChartWindow::GetController()
 {
     return m_pWindowController;
+}
+
+vcl::Window* ChartWindow::GetParentEditWin()
+{
+    if (m_pViewShellWindow)
+        return m_pViewShellWindow;
+
+    // So, you are thinking, why do not invoke pCurrentShell->GetWindow() ?
+    // Because in Impress the parent edit win is not view shell window.
+    SfxViewShell* pCurrentShell = SfxViewShell::Current();
+    if( pCurrentShell )
+    {
+        SfxInPlaceClient* pIPClient = pCurrentShell->GetIPClient();
+        if (pIPClient)
+        {
+            vcl::Window* pRootWin = pIPClient->GetEditWin();
+            if(pRootWin && pRootWin->IsAncestorOf(*this))
+            {
+                m_pViewShellWindow = pRootWin;
+                return m_pViewShellWindow;
+            }
+        }
+    }
+    return nullptr;
+}
+
+tools::Rectangle ChartWindow::GetBoundingBox()
+{
+    tools::Rectangle aBBox;
+
+    vcl::Window* pRootWin = GetParentEditWin();
+    if (pRootWin)
+    {
+        // In all cases, the following code fragment
+        // returns the chart bounding box in twips.
+        MapMode aCWMapMode = GetMapMode();
+        double fXScale = aCWMapMode.GetScaleX();
+        double fYScale = aCWMapMode.GetScaleY();
+        Point aOffset = GetOffsetPixelFrom(*pRootWin);
+        aOffset.X() *= (TWIPS_PER_PIXEL / fXScale);
+        aOffset.Y() *= (TWIPS_PER_PIXEL / fYScale);
+        Size aSize = GetSizePixel();
+        aSize.Width() *= (TWIPS_PER_PIXEL / fXScale);
+        aSize.Height() *= (TWIPS_PER_PIXEL / fYScale);
+        aBBox = tools::Rectangle(aOffset, aSize);
+    }
+    return aBBox;
 }
 
 } //namespace chart
