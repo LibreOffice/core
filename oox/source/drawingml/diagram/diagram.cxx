@@ -319,7 +319,12 @@ void Diagram::addTo( const ShapePtr & pParentShape )
     // collect data, init maps
     build( );
 
-    pParentShape->setChildSize(pParentShape->getSize());
+    // TODO FIXME apparently when importing diagrams from DOCX, the size is
+    // zero - fix that, it should be something reasonable; try
+    // eg. sw/qa/extras/ooxmlexport/data/fdo79822.docx
+    awt::Size aSize(pParentShape->getSize());
+    if (aSize.Width != 0 || aSize.Height != 0)
+        pParentShape->setChildSize(aSize);
 
     // create Shape hierarchy
     ShapeCreationVisitor aCreationVisitor(pParentShape, *this);
