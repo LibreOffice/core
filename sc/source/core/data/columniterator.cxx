@@ -62,7 +62,7 @@ void ScColumnTextWidthIterator::next()
     }
 
     // Reached the end.
-    OSL_ASSERT(miBlockCur == miBlockEnd);
+    assert(miBlockCur == miBlockEnd);
 }
 
 bool ScColumnTextWidthIterator::hasCell() const
@@ -72,19 +72,19 @@ bool ScColumnTextWidthIterator::hasCell() const
 
 SCROW ScColumnTextWidthIterator::getPos() const
 {
-    OSL_ASSERT(miBlockCur != miBlockEnd && miDataCur != miDataEnd);
+    assert(miBlockCur != miBlockEnd && miDataCur != miDataEnd);
     return static_cast<SCROW>(mnCurPos);
 }
 
 sal_uInt16 ScColumnTextWidthIterator::getValue() const
 {
-    OSL_ASSERT(miBlockCur != miBlockEnd && miDataCur != miDataEnd);
+    assert(miBlockCur != miBlockEnd && miDataCur != miDataEnd);
     return miDataCur->mnTextWidth;
 }
 
 void ScColumnTextWidthIterator::setValue(sal_uInt16 nVal)
 {
-    OSL_ASSERT(miBlockCur != miBlockEnd && miDataCur != miDataEnd);
+    assert(miBlockCur != miBlockEnd && miDataCur != miDataEnd);
     miDataCur->mnTextWidth = nVal;
 }
 
@@ -141,7 +141,7 @@ void ScColumnTextWidthIterator::init(SCROW nStartRow, SCROW nEndRow)
     }
 
     // Not found.
-    OSL_ASSERT(miBlockCur == miBlockEnd);
+    assert(miBlockCur == miBlockEnd);
 }
 
 void ScColumnTextWidthIterator::getDataIterators(size_t nOffsetInBlock)
