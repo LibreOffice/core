@@ -447,7 +447,6 @@ void B3dCamera::CalcNewViewportValues()
 bool B3dCamera::CalcFocalLength()
 {
     double fWidth = GetDeviceRectangleWidth();
-    bool bRetval = false;
 
     // Adjust focal length based on given position
     basegfx::B3DPoint aOldPosition;
@@ -456,7 +455,7 @@ bool B3dCamera::CalcFocalLength()
         fFocalLength = aOldPosition.getZ() / fWidth * 35.0;
     if(fFocalLength < 5.0)
         fFocalLength = 5.0;
-    return bRetval;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

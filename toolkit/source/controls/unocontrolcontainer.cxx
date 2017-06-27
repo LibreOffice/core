@@ -281,10 +281,9 @@ UnoControlHolderList::ControlIdentifier UnoControlHolderList::impl_getFreeIdenti
 
 OUString UnoControlHolderList::impl_getFreeName_throw()
 {
-    OUString name( "control_" );
     for ( ControlIdentifier candidateId = 0; candidateId < ::std::numeric_limits< ControlIdentifier >::max(); ++candidateId )
     {
-        OUString candidateName( name + OUString::number( candidateId ) );
+        OUString candidateName( "control_" + OUString::number( candidateId ) );
         ControlMap::const_iterator loop = maControls.begin();
         for ( ; loop != maControls.end(); ++loop )
         {
