@@ -17,14 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <iostream>
-#include <set>
-#include <comphelper/servicehelper.hxx>
-#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/xml/sax/FastShapeContextHandler.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
-#include <ooxml/QNameToString.hxx>
 #include <ooxml/resourceids.hxx>
 #include <oox/token/namespaces.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
@@ -54,13 +49,9 @@ using namespace ::com::sun::star;
 using namespace oox;
 using namespace ::std;
 
-static set<OOXMLFastContextHandler *> aSetContexts;
-
 /*
   class OOXMLFastContextHandler
  */
-
-sal_uInt32 OOXMLFastContextHandler::mnInstanceCount = 0;
 
 OOXMLFastContextHandler::OOXMLFastContextHandler
 (uno::Reference< uno::XComponentContext > const & context)
@@ -75,9 +66,6 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   m_bDiscardChildren(false),
   m_bTookChoice(false)
 {
-    mnInstanceCount++;
-    aSetContexts.insert(this);
-
     if (mpParserState.get() == nullptr)
         mpParserState.reset(new OOXMLParserState());
 
@@ -101,14 +89,11 @@ OOXMLFastContextHandler::OOXMLFastContextHandler(OOXMLFastContextHandler * pCont
     if (mpParserState.get() == nullptr)
         mpParserState.reset(new OOXMLParserState());
 
-    mnInstanceCount++;
-    aSetContexts.insert(this);
     mpParserState->incContextCount();
 }
 
 OOXMLFastContextHandler::~OOXMLFastContextHandler()
 {
-    aSetContexts.erase(this);
 }
 
 bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Reference<xml::sax::XFastAttributeList>& rAttribs)
