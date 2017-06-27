@@ -2188,7 +2188,7 @@ void SwNodes::ForEach( sal_uLong nStart, sal_uLong nEnd,
         BlockInfo** pp = m_ppInf + cur;
         BlockInfo* p = *pp;
         sal_uInt16 nElem = sal_uInt16( nStart - p->nStart );
-        BigPtrEntry** pElem = p->pData + nElem;
+        auto pElem = p->mvData.begin() + nElem;
         nElem = p->nElem - nElem;
         for(;;)
         {
@@ -2200,7 +2200,7 @@ void SwNodes::ForEach( sal_uLong nStart, sal_uLong nEnd,
             {
                 // new block
                 p = *++pp;
-                pElem = p->pData;
+                pElem = p->mvData.begin();
                 nElem = p->nElem;
             }
         }
