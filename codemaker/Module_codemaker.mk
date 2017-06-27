@@ -11,15 +11,13 @@ $(eval $(call gb_Module_Module,codemaker))
 
 # if not cross-compiling or we need this for ODK
 ifneq (,$(if $(CROSS_COMPILING),,T)$(filter ODK,$(BUILD_TYPE)))
-ifneq ($(OS),IOS)
 $(eval $(call gb_Module_add_targets,codemaker,\
     StaticLibrary_codemaker \
     StaticLibrary_codemaker_cpp \
-    StaticLibrary_codemaker_java \
-    Executable_javamaker \
+    $(if $(filter TRUE,$(ENABLE_JAVA)),StaticLibrary_codemaker_java) \
+    $(if $(filter TRUE,$(ENABLE_JAVA)),Executable_javamaker) \
     Executable_cppumaker \
 ))
-endif
 endif
 
 # vim:set noet sw=4 ts=4:

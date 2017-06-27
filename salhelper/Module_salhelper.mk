@@ -14,8 +14,10 @@ $(eval $(call gb_Module_add_targets,salhelper,\
 	Library_salhelper \
 ))
 
+ifneq ($(OS),IOS)
 $(eval $(call gb_Module_add_check_targets,salhelper,\
 	CppunitTest_salhelper_testapi \
 ))
+endif
 
 # vim: set noet sw=4 ts=4:
