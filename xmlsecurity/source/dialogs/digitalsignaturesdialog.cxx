@@ -502,7 +502,10 @@ IMPL_STATIC_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, Button*, void)
            xSystemShell->execute( sExecutable, OUString(),
                css::system::SystemShellExecuteFlags::DEFAULTS );
        }
-       //else FIXME: none of the certificate managers' there
+       else
+       {
+           ScopedVclPtrInstance<InfoBox>(nullptr, XsResId(STR_XMLSECDLG_NO_CERT_MANAGER))->Execute();
+       }
 
     }
 
