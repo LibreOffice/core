@@ -1628,21 +1628,16 @@ void ControlContainerBase::ImplModelPropertiesChanged( const Sequence< PropertyC
 {
     if( !isDesignMode() && !mbCreatingCompatiblePeer )
     {
-        OUString s1( "PositionX" );
-        OUString s2( "PositionY" );
-        OUString s3( "Width" );
-        OUString s4( "Height" );
-
         sal_Int32 nLen = rEvents.getLength();
         for( sal_Int32 i = 0; i < nLen; i++ )
         {
             const PropertyChangeEvent& rEvt = rEvents.getConstArray()[i];
             Reference< XControlModel > xModel( rEvt.Source, UNO_QUERY );
             bool bOwnModel = xModel.get() == getModel().get();
-            if ( ( rEvt.PropertyName == s1 ) ||
-                 ( rEvt.PropertyName == s2 ) ||
-                 ( rEvt.PropertyName == s3 ) ||
-                 ( rEvt.PropertyName == s4 ) )
+            if ( ( rEvt.PropertyName == "PositionX" ) ||
+                 ( rEvt.PropertyName == "PositionY" ) ||
+                 ( rEvt.PropertyName == "Width" ) ||
+                 ( rEvt.PropertyName == "Height" ) )
             {
                 if ( bOwnModel )
                 {
@@ -1778,10 +1773,9 @@ void ControlContainerBase::ImplStartListingForResourceEvents()
 
 void ControlContainerBase::ImplUpdateResourceResolver()
 {
-    OUString aPropName( PROPERTY_RESOURCERESOLVER );
     Reference< resource::XStringResourceResolver > xStringResourceResolver;
 
-    ImplGetPropertyValue( aPropName ) >>= xStringResourceResolver;
+    ImplGetPropertyValue( PROPERTY_RESOURCERESOLVER ) >>= xStringResourceResolver;
     if ( !xStringResourceResolver.is() )
         return;
 

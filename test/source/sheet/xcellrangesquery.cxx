@@ -24,7 +24,7 @@ namespace apitest {
 
 void XCellRangesQuery::testQueryColumnDifference()
 {
-    OUString aExpected( "Sheet1.B1:C1,Sheet1.B3:C5" );
+    OUString const aExpected( "Sheet1.B1:C1,Sheet1.B3:C5" );
     uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery(init(),UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryColumnDifferences(table::CellAddress(0, 1, 1));
     OUString aResult = xRanges->getRangeAddressesAsString();
@@ -34,7 +34,7 @@ void XCellRangesQuery::testQueryColumnDifference()
 
 void XCellRangesQuery::testQueryContentDifference()
 {
-    OUString aExpected( "Sheet1.B3,Sheet1.C2" );
+    OUString const aExpected( "Sheet1.B3,Sheet1.C2" );
     uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery(init(),UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryContentCells(sheet::CellFlags::VALUE);
     OUString aResult = xRanges->getRangeAddressesAsString();
@@ -54,7 +54,7 @@ void XCellRangesQuery::testQueryEmptyCells()
 
 void XCellRangesQuery::testQueryFormulaCells()
 {
-    OUString aExpected( "Sheet1.B2" );
+    OUString const aExpected( "Sheet1.B2" );
     uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery(init(),UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryFormulaCells(sheet::CellFlags::FORMULA);
     OUString aResult = xRanges->getRangeAddressesAsString();
@@ -64,7 +64,7 @@ void XCellRangesQuery::testQueryFormulaCells()
 
 void XCellRangesQuery::testQueryIntersection()
 {
-    OUString aExpected( "Sheet1.D4:E5" );
+    OUString const aExpected( "Sheet1.D4:E5" );
     uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery(init(),UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryIntersection(table::CellRangeAddress(0,3,3,7,7));
     OUString aResult = xRanges->getRangeAddressesAsString();
@@ -74,7 +74,7 @@ void XCellRangesQuery::testQueryIntersection()
 
 void XCellRangesQuery::testQueryRowDifference()
 {
-    OUString aExpected( "Sheet1.A2:A4,Sheet1.C2:E4" );
+    OUString const aExpected( "Sheet1.A2:A4,Sheet1.C2:E4" );
     uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery(init(),UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryRowDifferences(table::CellAddress(0,1,1));
     OUString aResult = xRanges->getRangeAddressesAsString();
@@ -84,7 +84,7 @@ void XCellRangesQuery::testQueryRowDifference()
 
 void XCellRangesQuery::testQueryVisibleCells()
 {
-    OUString aExpected( "Sheet1.A1:E5" );
+    OUString const aExpected( "Sheet1.A1:E5" );
     uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery(init(),UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryVisibleCells();
     OUString aResult = xRanges->getRangeAddressesAsString();

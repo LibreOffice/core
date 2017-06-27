@@ -76,8 +76,7 @@ void XStyleLoader::checkStyleProperties( uno::Reference< style::XStyleFamiliesSu
   uno::Reference< style::XStyle > xMyStyle (xCellStyles->getByName("myStyle"), UNO_QUERY_THROW);
   uno::Reference< beans::XPropertySet > xPropSet (xMyStyle, UNO_QUERY_THROW);
 
-  OUString aCellStyleName("CellBackColor");
-  uno::Any aBackColor = xPropSet->getPropertyValue(aCellStyleName);
+  uno::Any aBackColor = xPropSet->getPropertyValue("CellBackColor");
   uno::Any expectedBackColor(sal_Int32(16724787));
 
   CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong CellBackColor" , expectedBackColor, aBackColor);
