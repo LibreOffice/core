@@ -59,6 +59,8 @@
 #include <comphelper/lok.hxx>
 #include <svx/svdviter.hxx>
 
+#include <sfx2/lokhelper.hxx>
+
 using namespace ::com::sun::star;
 
 // interface to SdrPaintWindow
@@ -1115,6 +1117,13 @@ void SdrPaintView::ShowItemBrowser(bool bShow)
 
 void SdrPaintView::MakeVisible(const tools::Rectangle& rRect, vcl::Window& rWin)
 {
+    // TODO: handle when the text cursor goes out of the chart area
+    // However this hack avoids that the cursor gets misplaced wrt the text.
+    if (comphelper::LibreOfficeKit::isActive() && rWin.IsChart())
+    {
+        return;
+    }
+
     MapMode aMap(rWin.GetMapMode());
     Size aActualSize(rWin.GetOutputSize());
 

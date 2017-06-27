@@ -1005,6 +1005,11 @@ void Window::SetParent( vcl::Window* pNewParent )
         Show( true, ShowFlags::NoFocusChange | ShowFlags::NoActivate );
 }
 
+bool Window::IsAncestorOf( const vcl::Window& rWindow ) const
+{
+    return ImplIsRealParentPath(&rWindow);
+}
+
 sal_uInt16 Window::GetChildCount() const
 {
     if (!mpWindowImpl)

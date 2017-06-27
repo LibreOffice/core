@@ -934,6 +934,7 @@ public:
     vcl::Window*                        GetParent() const;
     // return the dialog we are contained in or NULL if un-contained
     Dialog*                             GetParentDialog() const;
+    bool                                IsAncestorOf( const vcl::Window& rWindow ) const;
 
     void                                Show( bool bVisible = true, ShowFlags nFlags = ShowFlags::NONE );
     void                                Hide() { Show( false ); }
@@ -1033,6 +1034,7 @@ public:
     virtual void                        SetOutputSizePixel( const Size& rNewSize );
     bool                                IsDefaultPos() const;
     bool                                IsDefaultSize() const;
+    Point                               GetOffsetPixelFrom(const vcl::Window& rWindow) const;
 
     // those conversion routines might deliver different results during UI mirroring
     Point                               OutputToScreenPixel( const Point& rPos ) const;
@@ -1543,6 +1545,8 @@ public:
     virtual Selection GetSurroundingTextSelection() const;
 
     virtual FactoryFunction GetUITestFactory() const;
+
+    virtual bool IsChart() const { return false; }
 };
 
 }
