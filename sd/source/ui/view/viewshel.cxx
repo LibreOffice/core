@@ -1259,11 +1259,18 @@ void ViewShell::ImpSidUndo(bool, SfxRequest& rReq)
     ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
     sal_uInt16 nNumber(1);
     const SfxItemSet* pReqArgs = rReq.GetArgs();
+    bool bRepair = false;
 
     if(pReqArgs)
     {
         const SfxUInt16Item* pUIntItem = static_cast<const SfxUInt16Item*>(&pReqArgs->Get(SID_UNDO));
         nNumber = pUIntItem->GetValue();
+
+        // Repair mode: allow undo/redo of all undo actions, even if access would
+        // be limited based on the view shell ID.
+        const SfxPoolItem* pRepairItem;
+        if (pReqArgs->GetItemState(SID_REPAIRPACKAGE, false, &pRepairItem) == SfxItemState::SET)
+            bRepair = static_cast<const SfxBoolItem*>(pRepairItem)->GetValue();
     }
 
     if(nNumber && pUndoManager)
@@ -1271,6 +1278,17 @@ void ViewShell::ImpSidUndo(bool, SfxRequest& rReq)
         sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
         if(nCount >= nNumber)
         {
+            if (comphelper::LibreOfficeKit::isActive() && !bRepair)
+            {
+                // If an other view created the first undo action, prevent redoing it from this view.
+                const SfxUndoAction* pAction = pUndoManager->GetUndoAction();
+                if (pAction->GetViewShellId() != static_cast<sal_Int32>(GetViewShellBase().GetViewShellId()))
+                {
+                    rReq.SetReturnValue(SfxUInt32Item(SID_UNDO, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)));
+                    return;
+                }
+            }
+
             try
             {
                 // when UndoStack is cleared by ModifyPageUndoAction
@@ -1310,11 +1328,17 @@ void ViewShell::ImpSidRedo(bool, SfxRequest& rReq)
     ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
     sal_uInt16 nNumber(1);
     const SfxItemSet* pReqArgs = rReq.GetArgs();
+    bool bRepair = false;
 
     if(pReqArgs)
     {
         const SfxUInt16Item* pUIntItem = static_cast<const SfxUInt16Item*>(&pReqArgs->Get(SID_REDO));
         nNumber = pUIntItem->GetValue();
+        // Repair mode: allow undo/redo of all undo actions, even if access would
+        // be limited based on the view shell ID.
+        const SfxPoolItem* pRepairItem;
+        if (pReqArgs->GetItemState(SID_REPAIRPACKAGE, false, &pRepairItem) == SfxItemState::SET)
+            bRepair = static_cast<const SfxBoolItem*>(pRepairItem)->GetValue();
     }
 
     if(nNumber && pUndoManager)
@@ -1322,6 +1346,17 @@ void ViewShell::ImpSidRedo(bool, SfxRequest& rReq)
         sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
         if(nCount >= nNumber)
         {
+            if (comphelper::LibreOfficeKit::isActive() && !bRepair)
+            {
+                // If an other view created the first undo action, prevent redoing it from this view.
+                const SfxUndoAction* pAction = pUndoManager->GetRedoAction();
+                if (pAction->GetViewShellId() != static_cast<sal_Int32>(GetViewShellBase().GetViewShellId()))
+                {
+                    rReq.SetReturnValue(SfxUInt32Item(SID_REDO, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)));
+                    return;
+                }
+            }
+
             try
             {
                 // when UndoStack is cleared by ModifyPageRedoAction
