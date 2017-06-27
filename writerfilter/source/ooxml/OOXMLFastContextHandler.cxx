@@ -623,9 +623,14 @@ void OOXMLFastContextHandler::endTxbxContent()
 void OOXMLFastContextHandler::text(const OUString & sText)
 {
     if (isForwardEvents())
+    {
+        // tdf#108806: CRLFs in XML were converted to \n before this point.
+        // These must be converted to spaces before further processing.
+        OUString sNormalizedText = sText.replaceAll("\n", " ");
         mpStream->utext(reinterpret_cast < const sal_uInt8 * >
-                        (sText.getStr()),
-                        sText.getLength());
+                        (sNormalizedText.getStr()),
+                        sNormalizedText.getLength());
+    }
 }
 
 void OOXMLFastContextHandler::positionOffset(const OUString& rText)
