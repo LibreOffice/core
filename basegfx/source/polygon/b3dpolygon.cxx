@@ -77,11 +77,6 @@ public:
     {
     }
 
-    explicit CoordinateDataArray3D(const CoordinateDataArray3D& rOriginal)
-    :   maVector(rOriginal.maVector)
-    {
-    }
-
     CoordinateDataArray3D(const CoordinateDataArray3D& rOriginal, sal_uInt32 nIndex, sal_uInt32 nCount)
     :   maVector(rOriginal.maVector.begin() + nIndex, rOriginal.maVector.begin() + (nIndex + nCount))
     {
@@ -255,12 +250,6 @@ public:
     {
     }
 
-    explicit BColorArray(const BColorArray& rOriginal)
-    :   maVector(rOriginal.maVector),
-        mnUsedEntries(rOriginal.mnUsedEntries)
-    {
-    }
-
     BColorArray(const BColorArray& rOriginal, sal_uInt32 nIndex, sal_uInt32 nCount)
     :   maVector(),
         mnUsedEntries(0)
@@ -406,12 +395,6 @@ public:
     explicit NormalsArray3D(sal_uInt32 nCount)
     :   maVector(nCount),
         mnUsedEntries(0)
-    {
-    }
-
-    explicit NormalsArray3D(const NormalsArray3D& rOriginal)
-    :   maVector(rOriginal.maVector),
-        mnUsedEntries(rOriginal.mnUsedEntries)
     {
     }
 
@@ -569,12 +552,6 @@ public:
     explicit TextureCoordinate2D(sal_uInt32 nCount)
     :   maVector(nCount),
         mnUsedEntries(0)
-    {
-    }
-
-    explicit TextureCoordinate2D(const TextureCoordinate2D& rOriginal)
-    :   maVector(rOriginal.maVector),
-        mnUsedEntries(rOriginal.mnUsedEntries)
     {
     }
 

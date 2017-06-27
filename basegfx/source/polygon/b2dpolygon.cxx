@@ -62,11 +62,6 @@ public:
     {
     }
 
-    explicit CoordinateDataArray2D(const CoordinateDataArray2D& rOriginal)
-    :   maVector(rOriginal.maVector)
-    {
-    }
-
     CoordinateDataArray2D(const CoordinateDataArray2D& rOriginal, sal_uInt32 nIndex, sal_uInt32 nCount)
     :   maVector(rOriginal.maVector.begin() + nIndex, rOriginal.maVector.begin() + (nIndex + nCount))
     {
