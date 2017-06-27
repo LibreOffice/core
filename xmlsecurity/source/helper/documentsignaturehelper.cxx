@@ -410,7 +410,7 @@ bool DocumentSignatureHelper::CanSignWithGPG(
 {
     uno::Reference<container::XNameAccess> xNameAccess(rxStore, uno::UNO_QUERY);
     if (!xNameAccess.is())
-        throw RuntimeException();
+        return false;
 
     if (xNameAccess->hasByName("META-INF")) // ODF
     {
