@@ -841,9 +841,11 @@ SfxInPlaceClient* SfxViewShell::GetUIActiveClient() const
     if ( !pClients )
         return nullptr;
 
+    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
+
     for (SfxInPlaceClient* pIPClient : *pClients)
     {
-        if ( pIPClient->IsObjectUIActive() )
+        if ( pIPClient->IsObjectUIActive() || ( bIsTiledRendering && pIPClient->IsObjectInPlaceActive() ) )
             return pIPClient;
     }
 
