@@ -56,7 +56,7 @@ using namespace util;
 
 static OUString
 lcl_CleanStr(const SwTextNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
-             std::vector<sal_Int32> &rArr, bool const bRemoveSoftHyphen)
+             std::vector<sal_Int32> &rArr, bool const bRemoveSoftHyphen, bool const bRemoveCommentAnchors)
 {
     OUStringBuffer buf(rNd.GetText());
     rArr.clear();
@@ -127,7 +127,6 @@ lcl_CleanStr(const SwTextNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
                 case RES_TXTATR_FLYCNT:
                 case RES_TXTATR_FTN:
                 case RES_TXTATR_FIELD:
-                case RES_TXTATR_ANNOTATION:
                 case RES_TXTATR_REFMARK:
                 case RES_TXTATR_TOXMARK:
                 case RES_TXTATR_META:
@@ -140,9 +139,7 @@ lcl_CleanStr(const SwTextNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
                         // simply removed if first. If at the end, we keep the
                         // replacement and remove afterwards all at a string's
                         // end (might be normal 0x7f).
-                        const bool bEmpty =
-                            ( pHt->Which() != RES_TXTATR_FIELD
-                              && pHt->Which() != RES_TXTATR_ANNOTATION )
+                        const bool bEmpty = pHt->Which() != RES_TXTATR_FIELD
                             || (static_txtattr_cast<SwTextField const*>(pHt)->GetFormatField().GetField()->ExpandField(true).isEmpty());
                         if ( bEmpty && nStart == nAkt )
                         {
@@ -157,6 +154,8 @@ lcl_CleanStr(const SwTextNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
                             buf[nAkt] = '\x7f';
                         }
                     }
+                    break;
+                case RES_TXTATR_ANNOTATION:
                     break;
                 default:
                     OSL_FAIL( "unknown case in lcl_CleanStr" );
@@ -184,6 +183,18 @@ lcl_CleanStr(const SwTextNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
             buf.truncate(nTmp);
             rArr.push_back( nTmp );
             --rEnd;
+        }
+    }
+
+    if( bRemoveCommentAnchors )
+    {
+        sal_Int32 nCommentPosition = buf.indexOf( CH_TXTATR_INWORD );
+        while( nCommentPosition != -1 )
+        {
+            buf.remove( nCommentPosition, 1 );
+            rArr.push_back( nCommentPosition );
+            --rEnd;
+            nCommentPosition = buf.indexOf( CH_TXTATR_INWORD, nCommentPosition );
         }
     }
 
@@ -483,6 +494,7 @@ bool SwPaM::DoSearch( const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearc
     // if the search string contains a soft hyphen,
     // we don't strip them from the text:
     bool bRemoveSoftHyphens = true;
+    bool bRemoveCommentAnchors = true;
 
     if ( bRegSearch )
     {
@@ -502,12 +514,17 @@ bool SwPaM::DoSearch( const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearc
              bRemoveSoftHyphens = false;
     }
 
+    // if the search string contains a comment anchor, then don't strip them from the text
+    const sal_Int32 nCommentPosition = rSearchOpt.searchString.indexOf( CH_TXTATR_INWORD );
+    if( nCommentPosition != -1 )
+        bRemoveCommentAnchors = false;
+
     if( bSrchForward )
         sCleanStr = lcl_CleanStr(*pNode->GetTextNode(), nStart, nEnd,
-                        aFltArr, bRemoveSoftHyphens);
+                        aFltArr, bRemoveSoftHyphens, bRemoveCommentAnchors);
     else
         sCleanStr = lcl_CleanStr(*pNode->GetTextNode(), nEnd, nStart,
-                        aFltArr, bRemoveSoftHyphens);
+                        aFltArr, bRemoveSoftHyphens, bRemoveCommentAnchors);
 
     SwScriptIterator* pScriptIter = nullptr;
     sal_uInt16 nSearchScript = 0;
