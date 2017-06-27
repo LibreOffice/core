@@ -49,6 +49,7 @@
 #include <tools/multisel.hxx>
 #include <tools/resary.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/saveopt.hxx>
 
 #include <float.h>
@@ -76,6 +77,7 @@
 #include <opencl/platforminfo.hxx>
 #endif
 #include <sfx2/lokhelper.hxx>
+#include <sfx2/lokcharthelper.hxx>
 
 #include "cellsuno.hxx"
 #include <columnspanset.hxx>
@@ -504,6 +506,9 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
 
     pGridWindow->PaintTile( rDevice, nOutputWidth, nOutputHeight,
                             nTilePosX, nTilePosY, nTileWidth, nTileHeight );
+
+    LokChartHelper::PaintAllChartsOnTile(rDevice, nOutputWidth, nOutputHeight,
+                                         nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 }
 
 void ScModelObj::setPart( int nPart )
@@ -571,20 +576,28 @@ void ScModelObj::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     // There seems to be no clear way of getting the grid window for this
     // particular document, hence we need to hope we get the right window.
     ScViewData* pViewData = ScDocShell::GetViewData();
-    ScGridWindow* pGridWindow = pViewData->GetActiveWin();
+    vcl::Window* pWindow = pViewData->GetActiveWin();
 
-    if (!pGridWindow)
+    if (!pWindow)
         return;
 
     KeyEvent aEvent(nCharCode, nKeyCode, 0);
 
+    ScTabViewShell * pTabViewShell = pViewData->GetViewShell();
+    LokChartHelper aChartHelper(pTabViewShell);
+    vcl::Window* pChartWindow = aChartHelper.GetWindow();
+    if (pChartWindow)
+    {
+        pWindow = pChartWindow;
+    }
+
     switch (nType)
     {
     case LOK_KEYEVENT_KEYINPUT:
-        pGridWindow->KeyInput(aEvent);
+        pWindow->KeyInput(aEvent);
         break;
     case LOK_KEYEVENT_KEYUP:
-        pGridWindow->KeyUp(aEvent);
+        pWindow->KeyUp(aEvent);
         break;
     default:
         assert(false);
@@ -607,6 +620,23 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
     // update the aLogicMode in ScViewData to something predictable
     pViewData->SetZoom(Fraction(mnTilePixelWidth * TWIPS_PER_PIXEL, mnTileTwipWidth),
                        Fraction(mnTilePixelHeight * TWIPS_PER_PIXEL, mnTileTwipHeight), true);
+
+    // check if user hit a chart which is being edited by him
+    ScTabViewShell * pTabViewShell = pViewData->GetViewShell();
+    LokChartHelper aChartHelper(pTabViewShell);
+    if (aChartHelper.postMouseEvent(nType, nX, nY,
+                                    nCount, nButtons, nModifier,
+                                    pViewData->GetPPTX(), pViewData->GetPPTY()))
+        return;
+
+    // check if the user hit a chart which is being edited by someone else
+    // and, if so, skip current mouse event
+    if (nType != LOK_MOUSEEVENT_MOUSEMOVE)
+    {
+        if (LokChartHelper::HitAny(Point(nX, nY)))
+            return;
+    }
+
 
     // Calc operates in pixels...
     Point aPos(nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY());
@@ -646,9 +676,13 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
 void ScModelObj::setTextSelection(int nType, int nX, int nY)
 {
     SolarMutexGuard aGuard;
-
     ScViewData* pViewData = ScDocShell::GetViewData();
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
+
+    LokChartHelper aChartHelper(pViewShell);
+    if (aChartHelper.setTextSelection(nType, nX, nY))
+        return;
+
     ScInputHandler* pInputHandler = SC_MOD()->GetInputHdl(pViewShell);
     ScDrawView* pDrawView = pViewData->GetScDrawView();
 
@@ -823,9 +857,16 @@ void ScModelObj::setGraphicSelection(int nType, int nX, int nY)
     // update the aLogicMode in ScViewData to something predictable
     pViewData->SetZoom(Fraction(mnTilePixelWidth * TWIPS_PER_PIXEL, mnTileTwipWidth),
                        Fraction(mnTilePixelHeight * TWIPS_PER_PIXEL, mnTileTwipHeight), true);
+    double fPPTX = pViewData->GetPPTX();
+    double fPPTY = pViewData->GetPPTY();
 
-    int nPixelX = nX * pViewData->GetPPTX();
-    int nPixelY = nY * pViewData->GetPPTY();
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    LokChartHelper aChartHelper(pViewShell);
+    if (aChartHelper.setGraphicSelection(nType, nX, nY, fPPTX, fPPTY))
+        return;
+
+    int nPixelX = nX * fPPTX;
+    int nPixelY = nY * fPPTY;
 
     switch (nType)
     {

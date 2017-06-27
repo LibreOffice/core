@@ -384,6 +384,7 @@ public:
     virtual void NotifyOtherViews(int nType, const OString& rKey, const OString& rPayload) = 0;
     /// Wrapper around SfxLokHelper::notifyOtherView().
     virtual void NotifyOtherView(OutlinerViewShell* pOtherShell, int nType, const OString& rKey, const OString& rPayload) = 0;
+    virtual vcl::Window* GetEditWindowForActiveOLEObj() const = 0;
 
 protected:
     ~OutlinerViewShell() throw () {}

@@ -37,6 +37,8 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <sfx2/lokcharthelper.hxx>
+#include <sfx2/ipclient.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <cmdid.h>
@@ -165,6 +167,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <memory>
+
+#define TWIPS_PER_PIXEL 15
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -3079,6 +3083,9 @@ void SwXTextDocument::paintTile( VirtualDevice &rDevice,
     SwViewShell* pViewShell = pDocShell->GetWrtShell();
     pViewShell->PaintTile(rDevice, nOutputWidth, nOutputHeight,
                           nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+
+    LokChartHelper::PaintAllChartsOnTile(rDevice, nOutputWidth, nOutputHeight,
+                                         nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 }
 
 Size SwXTextDocument::getDocumentSize()
@@ -3157,6 +3164,34 @@ void SwXTextDocument::setClientVisibleArea(const tools::Rectangle& rRectangle)
 
     // set the PgUp/PgDown offset
     pView->ForcePageUpDownOffset(2 * rRectangle.GetHeight() / 3);
+}
+
+void SwXTextDocument::setClientZoom(int nTilePixelWidth_, int /*nTilePixelHeight_*/,
+                                    int nTileTwipWidth_, int /*nTileTwipHeight_*/)
+{
+    // Here we set the zoom value as it has been set by the user in the client.
+    // This value is used in postMouseEvent and setGraphicSelection methods
+    // for in place chart editing. We assume that x and y scale is rougly
+    // the same.
+    // Indeed we could set mnTilePixelWidth, mnTilePixelHeight, mnTileTwipWidth,
+    // mnTileTwipHeight data members of this class but they are not very useful
+    // since we need to be able to retrieve the zoom value for each view shell.
+    SfxInPlaceClient* pIPClient = pDocShell->GetView()->GetIPClient();
+    if (pIPClient)
+    {
+        SwViewShell* pWrtViewShell = pDocShell->GetWrtShell();
+        double fScale = nTilePixelWidth_ * TWIPS_PER_PIXEL / (nTileTwipWidth_ * 1.0);
+        SwViewOption aOption(*(pWrtViewShell->GetViewOptions()));
+        if (aOption.GetZoom() != fScale * 100)
+        {
+            aOption.SetZoom(fScale * 100);
+            pWrtViewShell->ApplyViewOptions(aOption);
+
+            // Changing the zoom value doesn't always trigger the updating of
+            // the client ole object area, so we call it directly.
+            pIPClient->VisAreaChanged();
+        }
+    }
 }
 
 Pointer SwXTextDocument::getPointer()
@@ -3323,6 +3358,11 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
         }
     }
 
+    // Set the initial zoom value to 1; usually it is set in setClientZoom and
+    // SwViewShell::PaintTile; zoom value is used for chart in place
+    // editing, see postMouseEvent and setGraphicSelection methods.
+    aViewOption.SetZoom(1 * 100);
+
     aViewOption.SetPostIts(comphelper::LibreOfficeKit::isTiledAnnotations());
     pViewShell->ApplyViewOptions(aViewOption);
 
@@ -3355,16 +3395,25 @@ void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
 
-    SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
+    vcl::Window* pWindow = &(pDocShell->GetView()->GetEditWin());
+
+    SfxViewShell* pViewShell = pDocShell->GetView();
+    LokChartHelper aChartHelper(pViewShell);
+    vcl::Window* pChartWindow = aChartHelper.GetWindow();
+    if (pChartWindow)
+    {
+        pWindow = pChartWindow;
+    }
+
     KeyEvent aEvent(nCharCode, nKeyCode, 0);
 
     switch (nType)
     {
     case LOK_KEYEVENT_KEYINPUT:
-        rEditWin.KeyInput(aEvent);
+        pWindow->KeyInput(aEvent);
         break;
     case LOK_KEYEVENT_KEYUP:
-        rEditWin.KeyUp(aEvent);
+        pWindow->KeyUp(aEvent);
         break;
     default:
         assert(false);
@@ -3375,6 +3424,26 @@ void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
 void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
 {
     SolarMutexGuard aGuard;
+
+    SwViewShell* pWrtViewShell = pDocShell->GetWrtShell();
+    SwViewOption aOption(*(pWrtViewShell->GetViewOptions()));
+    double fScale = aOption.GetZoom() / (TWIPS_PER_PIXEL * 100.0);
+
+    // check if user hit a chart which is being edited by him
+    SfxViewShell* pViewShell = pDocShell->GetView();
+    LokChartHelper aChartHelper(pViewShell);
+    if (aChartHelper.postMouseEvent(nType, nX, nY,
+                                    nCount, nButtons, nModifier,
+                                    fScale, fScale))
+        return;
+
+    // check if the user hit a chart which is being edited by someone else
+    // and, if so, skip current mouse event
+    if (nType != LOK_MOUSEEVENT_MOUSEMOVE)
+    {
+        if (LokChartHelper::HitAny(Point(nX, nY)))
+            return;
+    }
 
     SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
     Point aPos(nX , nY);
@@ -3406,6 +3475,11 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int 
 void SwXTextDocument::setTextSelection(int nType, int nX, int nY)
 {
     SolarMutexGuard aGuard;
+
+    SfxViewShell* pViewShell = pDocShell->GetView();
+    LokChartHelper aChartHelper(pViewShell);
+    if (aChartHelper.setTextSelection(nType, nX, nY))
+        return;
 
     SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
     switch (nType)
@@ -3504,6 +3578,15 @@ OString SwXTextDocument::getTextSelection(const char* pMimeType, OString& rUsedM
 void SwXTextDocument::setGraphicSelection(int nType, int nX, int nY)
 {
     SolarMutexGuard aGuard;
+
+    SwViewShell* pWrtViewShell = pDocShell->GetWrtShell();
+    SwViewOption aOption(*(pWrtViewShell->GetViewOptions()));
+    double fScale = aOption.GetZoom() / (TWIPS_PER_PIXEL * 100.0);
+
+    SfxViewShell* pViewShell = pDocShell->GetView();
+    LokChartHelper aChartHelper(pViewShell);
+    if (aChartHelper.setGraphicSelection(nType, nX, nY, fScale, fScale))
+        return;
 
     SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
     switch (nType)
