@@ -3036,6 +3036,17 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                                     // new (empty) cell range is shifted in and
                                     // may change the calculation result.
                                     aRes.mbValueChanged = true;
+                                    // Sticky when intersecting the selected
+                                    // range means also that the other
+                                    // conditions below are not met,
+                                    // specifically not the
+                                    // if (rCxt.maRange.In(aAbs))
+                                    // that is able to update the reference,
+                                    // but aSelectedRange does not intersect
+                                    // with rCxt.maRange so that can't happen
+                                    // and we can bail out early without
+                                    // updating the reference.
+                                    break;
                                 }
                             }
                         }
