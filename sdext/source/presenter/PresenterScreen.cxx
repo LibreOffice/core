@@ -687,9 +687,9 @@ void PresenterScreen::ProcessLayout (
         PresenterConfigurationAccess::ForAll(
             xList,
             aProperties,
-            [this, rxContext, rxAnchorId](OUString const& rString, std::vector<uno::Any> const& rArgs)
+            [this, rxContext, rxAnchorId](std::vector<uno::Any> const& rArgs)
             {
-                this->ProcessComponent(rString, rArgs, rxContext, rxAnchorId);
+                this->ProcessComponent(rArgs, rxContext, rxAnchorId);
             });
     }
     catch (const RuntimeException&)
@@ -714,9 +714,9 @@ void PresenterScreen::ProcessViewDescriptions (
         PresenterConfigurationAccess::ForAll(
             xViewDescriptionsNode,
             aProperties,
-            [this](OUString const& rString, std::vector<uno::Any> const& rArgs)
+            [this](std::vector<uno::Any> const& rArgs)
             {
-                return this->ProcessViewDescription(rString, rArgs);
+                return this->ProcessViewDescription(rArgs);
             });
     }
     catch (const RuntimeException&)
@@ -726,13 +726,10 @@ void PresenterScreen::ProcessViewDescriptions (
 }
 
 void PresenterScreen::ProcessComponent (
-    const OUString& rsKey,
     const ::std::vector<Any>& rValues,
     const Reference<XComponentContext>& rxContext,
     const Reference<XResourceId>& rxAnchorId)
 {
-    (void)rsKey;
-
     if (rValues.size() != 6)
         return;
 
@@ -768,11 +765,8 @@ void PresenterScreen::ProcessComponent (
 }
 
 void PresenterScreen::ProcessViewDescription (
-    const OUString& rsKey,
     const ::std::vector<Any>& rValues)
 {
-    (void)rsKey;
-
     if (rValues.size() != 4)
         return;
 

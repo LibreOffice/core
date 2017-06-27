@@ -210,7 +210,7 @@ void PresenterConfigurationAccess::ForAll (
             else
                 bHasAllValues = false;
             if (bHasAllValues)
-                rProcessor(rsKey,aValues);
+                rProcessor(aValues);
         }
     }
 }

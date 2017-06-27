@@ -155,7 +155,6 @@ public:
 private:
     void ProcessPaneStyle (
         ReadContext& rReadContext,
-        const OUString& rsKey,
         const ::std::vector<css::uno::Any>& rValues);
 };
 
@@ -217,7 +216,6 @@ private:
 
     void ProcessStyleAssociation(
         ReadContext& rReadContext,
-        const OUString& rsKey,
         const ::std::vector<css::uno::Any>& rValues);
 };
 
@@ -847,20 +845,17 @@ void PaneStyleContainer::Read (
         PresenterConfigurationAccess::ForAll(
             xPaneStyleList,
             aProperties,
-            [this, &rReadContext] (OUString const& rKey, std::vector<uno::Any> const& rValues)
+            [this, &rReadContext] (std::vector<uno::Any> const& rValues)
             {
-                return this->ProcessPaneStyle(rReadContext, rKey, rValues);
+                return this->ProcessPaneStyle(rReadContext, rValues);
             });
     }
 }
 
 void PaneStyleContainer::ProcessPaneStyle(
     ReadContext& rReadContext,
-    const OUString& rsKey,
     const ::std::vector<Any>& rValues)
 {
-    (void)rsKey;
-
     if (rValues.size() != 6)
         return;
 
@@ -1086,9 +1081,9 @@ void StyleAssociationContainer::Read (
         PresenterConfigurationAccess::ForAll(
             xStyleAssociationList,
             aProperties,
-            [this, &rReadContext] (OUString const& rKey, std::vector<uno::Any> const& rValues)
+            [this, &rReadContext] (std::vector<uno::Any> const& rValues)
             {
-                return this->ProcessStyleAssociation(rReadContext, rKey, rValues);
+                return this->ProcessStyleAssociation(rReadContext, rValues);
             });
     }
 }
@@ -1104,11 +1099,9 @@ OUString StyleAssociationContainer::GetStyleName (const OUString& rsResourceName
 
 void StyleAssociationContainer::ProcessStyleAssociation(
     ReadContext& rReadContext,
-    const OUString& rsKey,
     const ::std::vector<Any>& rValues)
 {
     (void)rReadContext;
-    (void)rsKey;
 
     if (rValues.size() != 2)
         return;

@@ -123,7 +123,6 @@ public:
     void CommitChanges();
 
     typedef ::std::function<void (
-        const OUString&,
         const ::std::vector<css::uno::Any>&) > ItemProcessor;
     typedef ::std::function<void (
         const OUString&,

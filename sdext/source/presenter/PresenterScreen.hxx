@@ -182,7 +182,6 @@ private:
         configuration list.
     */
     void ProcessComponent (
-        const OUString& rsKey,
         const ::std::vector<css::uno::Any>& rValues,
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxAnchorId);
@@ -195,7 +194,6 @@ private:
     /** Called by ProcessViewDescriptions for a single entry.
     */
     void ProcessViewDescription (
-        const OUString& rsKey,
         const ::std::vector<css::uno::Any>& rValues);
 
     void SetupView (
