@@ -806,6 +806,30 @@ void Test::testFormulaListenerMultipleCellsToMultipleCells()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaListenerUpdateInsertTab()
+{
+    m_pDoc->InsertTab(0, "test");
+
+    ScCompiler aCompiler(m_pDoc, ScAddress(10, 10, 0), formula::FormulaGrammar::GRAM_ENGLISH);
+    std::unique_ptr<ScTokenArray> pTokenArray(aCompiler.CompileString("A1"));
+
+    ScFormulaListener aListener(m_pDoc);
+    aListener.addTokenArray(pTokenArray.get(), ScAddress(10, 10, 0));
+    CPPUNIT_ASSERT(!aListener.NeedsRepaint());
+
+    m_pDoc->InsertTab(0, "new_tab");
+
+    // check that the listener has moved to the new sheet
+    m_pDoc->SetValue(ScAddress(0, 0, 1), 1.0);
+    CPPUNIT_ASSERT(aListener.NeedsRepaint());
+
+    // check that we are not listening to the old sheet
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 1.0);
+    CPPUNIT_ASSERT(!aListener.NeedsRepaint());
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testCondFormatUpdateMoveTab()
 {
     m_pDoc->InsertTab(0, "test");
