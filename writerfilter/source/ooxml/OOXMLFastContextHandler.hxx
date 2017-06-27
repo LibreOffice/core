@@ -237,8 +237,6 @@ private:
     bool m_bDiscardChildren;
     bool m_bTookChoice; ///< Did we take the Choice or want Fallback instead?
 
-    static sal_uInt32 mnInstanceCount;
-
 };
 
 class OOXMLFastContextHandlerStream : public OOXMLFastContextHandler
