@@ -9,17 +9,23 @@
 
 $(eval $(call gb_Library_Library,$(gb_CPPU_ENV)_uno))
 
-ifeq ($(CPUNAME),ARM)
-
 ifeq ($(OS),IOS)
-$(eval $(call gb_Library_use_sdk_api,gcc3_uno))
 bridges_SELECTED_BRIDGE := gcc3_ios_arm
-bridge_asm_objects := helper
-bridge_exception_objects := cpp2uno cpp2uno-arm cpp2uno-arm64 cpp2uno-i386 except uno2cpp uno2cpp-arm uno2cpp-arm64 uno2cpp-i386
-$(eval $(call gb_Library_use_custom_headers,gcc3_uno,\
-	bridges/source/cpp_uno/gcc3_ios_arm \
-))
-else ifneq ($(filter ANDROID DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
+bridge_noopt_objects := cpp2uno except uno2cpp
+# HACK
+#$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,gcc3_uno)) : \
+#	$(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_linux_arm)/armhelper.objectlist
+#$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,gcc3_uno)) : \
+#	EXTRAOBJECTLISTS += $(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_linux_arm)/armhelper.objectlist
+
+#$(eval $(call gb_Library_use_sdk_api,gcc3_uno))
+#bridge_asm_objects := helper
+#bridge_exception_objects := cpp2uno cpp2uno-arm cpp2uno-arm64 cpp2uno-i386 except uno2cpp uno2cpp-arm uno2cpp-arm64 uno2cpp-i386
+#$(eval $(call gb_Library_use_custom_headers,gcc3_uno,bridges/source/cpp_uno/gcc3_ios_arm))
+
+else ifeq ($(CPUNAME),ARM)
+
+ifneq ($(filter ANDROID DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_arm
 bridge_noopt_objects := cpp2uno except uno2cpp
 # HACK
