@@ -81,7 +81,6 @@ namespace {
         SharedBitmapDescriptor mpBottom;
         SharedBitmapDescriptor mpBottomRight;
         SharedBitmapDescriptor mpBottomCallout;
-        SharedBitmapDescriptor mpBackground;
         SharedBitmapDescriptor mpEmpty;
         PresenterTheme::SharedFontDescriptor mpFont;
         sal_Int32 mnFontXOffset;
@@ -147,8 +146,7 @@ private:
         const sal_Int32 nStartOffset,
         const sal_Int32 nEndOffset,
         const bool bExpand,
-        const SharedBitmapDescriptor& rpBitmap,
-        const SharedBitmapDescriptor& rpBackgroundBitmap);
+        const SharedBitmapDescriptor& rpBitmap);
 };
 
 // ===== PresenterPaneBorderPainter ===========================================
@@ -438,15 +436,14 @@ void PresenterPaneBorderPainter::Renderer::PaintBorder (
     SharedBitmapDescriptor pBottomLeft (pStyle->mpBottomLeft);
     SharedBitmapDescriptor pBottomRight (pStyle->mpBottomRight);
     SharedBitmapDescriptor pBottom (pStyle->mpBottom);
-    SharedBitmapDescriptor pBackground (pStyle->mpBackground);
 
     // Paint the sides.
     PaintBitmap(aCenterBox, rUpdateBox, 0,-1,
-        pTopLeft->mnXOffset, pTopRight->mnXOffset, true, pTop, pBackground);
+        pTopLeft->mnXOffset, pTopRight->mnXOffset, true, pTop);
     PaintBitmap(aCenterBox, rUpdateBox, -1,0,
-        pTopLeft->mnYOffset, pBottomLeft->mnYOffset, true, pLeft, pBackground);
+        pTopLeft->mnYOffset, pBottomLeft->mnYOffset, true, pLeft);
     PaintBitmap(aCenterBox, rUpdateBox, +1,0,
-        pTopRight->mnYOffset, pBottomRight->mnYOffset, true, pRight, pBackground);
+        pTopRight->mnYOffset, pBottomRight->mnYOffset, true, pRight);
     if (mbHasCallout && pStyle->mpBottomCallout->GetNormalBitmap().is())
     {
         const sal_Int32 nCalloutWidth (pStyle->mpBottomCallout->mnWidth);
@@ -457,25 +454,25 @@ void PresenterPaneBorderPainter::Renderer::PaintBorder (
         if (nCalloutX > pBottomRight->mnXOffset + aCenterBox.X + aCenterBox.Width)
             nCalloutX = pBottomRight->mnXOffset + aCenterBox.X + aCenterBox.Width;
         // Paint bottom callout.
-        PaintBitmap(aCenterBox, rUpdateBox, 0,+1, nCalloutX,0, false, pStyle->mpBottomCallout, pBackground);
+        PaintBitmap(aCenterBox, rUpdateBox, 0,+1, nCalloutX,0, false, pStyle->mpBottomCallout);
         // Paint regular bottom bitmap left and right.
         PaintBitmap(aCenterBox, rUpdateBox, 0,+1,
-            pBottomLeft->mnXOffset, nCalloutX-aCenterBox.Width, true, pBottom, pBackground);
+            pBottomLeft->mnXOffset, nCalloutX-aCenterBox.Width, true, pBottom);
         PaintBitmap(aCenterBox, rUpdateBox, 0,+1,
-            nCalloutX+nCalloutWidth, pBottomRight->mnXOffset, true, pBottom, pBackground);
+            nCalloutX+nCalloutWidth, pBottomRight->mnXOffset, true, pBottom);
     }
     else
     {
         // Stretch the bottom bitmap over the full width.
         PaintBitmap(aCenterBox, rUpdateBox, 0,+1,
-            pBottomLeft->mnXOffset, pBottomRight->mnXOffset, true, pBottom, pBackground);
+            pBottomLeft->mnXOffset, pBottomRight->mnXOffset, true, pBottom);
     }
 
     // Paint the corners.
-    PaintBitmap(aCenterBox, rUpdateBox, -1,-1, 0,0, false, pTopLeft, pBackground);
-    PaintBitmap(aCenterBox, rUpdateBox, +1,-1, 0,0, false, pTopRight, pBackground);
-    PaintBitmap(aCenterBox, rUpdateBox, -1,+1, 0,0, false, pBottomLeft, pBackground);
-    PaintBitmap(aCenterBox, rUpdateBox, +1,+1, 0,0, false, pBottomRight, pBackground);
+    PaintBitmap(aCenterBox, rUpdateBox, -1,-1, 0,0, false, pTopLeft);
+    PaintBitmap(aCenterBox, rUpdateBox, +1,-1, 0,0, false, pTopRight);
+    PaintBitmap(aCenterBox, rUpdateBox, -1,+1, 0,0, false, pBottomLeft);
+    PaintBitmap(aCenterBox, rUpdateBox, +1,+1, 0,0, false, pBottomRight);
 
     // Paint the title.
     PaintTitle(rsTitle, pStyle, rUpdateBox, aOuterBox, aInnerBox);
@@ -604,11 +601,8 @@ void PresenterPaneBorderPainter::Renderer::PaintBitmap(
     const sal_Int32 nStartOffset,
     const sal_Int32 nEndOffset,
     const bool bExpand,
-    const SharedBitmapDescriptor& rpBitmap,
-    const SharedBitmapDescriptor& rpBackgroundBitmap)
+    const SharedBitmapDescriptor& rpBitmap)
 {
-    (void)rpBackgroundBitmap;
-
     bool bUseCanvas (mxCanvas.is());
     if ( ! bUseCanvas)
         return;
@@ -765,7 +759,6 @@ RendererPaneStyle::RendererPaneStyle (
       mpBottom(),
       mpBottomRight(),
       mpBottomCallout(),
-      mpBackground(),
       mpEmpty(new PresenterBitmapDescriptor()),
       mpFont(),
       mnFontXOffset(0),
@@ -786,7 +779,6 @@ RendererPaneStyle::RendererPaneStyle (
         mpBottom = GetBitmap(rpTheme, rsStyleName, "Bottom");
         mpBottomRight = GetBitmap(rpTheme, rsStyleName, "BottomRight");
         mpBottomCallout = GetBitmap(rpTheme, rsStyleName, "BottomCallout");
-        mpBackground = GetBitmap(rpTheme, OUString(), "Background");
 
         // Get font description.
         mpFont = rpTheme->GetFont(rsStyleName);
