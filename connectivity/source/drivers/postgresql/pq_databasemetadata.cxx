@@ -2409,7 +2409,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getIndexInfo(
     static const sal_Int32 C_INDEXNAME = 3;
     static const sal_Int32 C_IS_CLUSTERED = 4;
     static const sal_Int32 C_IS_UNIQUE = 5;
-    static const sal_Int32 C_IS_PRIMARY = 6;
+    // C_IS_PRIMARY = 6
     static const sal_Int32 C_COLUMNS = 7;
 
     static const sal_Int32 R_TABLE_SCHEM = 1;
@@ -2454,8 +2454,6 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getIndexInfo(
         OUString currentTable = xRow->getString( C_TABLENAME );
         OUString currentIndexName = xRow->getString( C_INDEXNAME );
         bool isNonUnique = ! xRow->getBoolean( C_IS_UNIQUE );
-        bool isPrimary = xRow->getBoolean( C_IS_PRIMARY );
-        (void)isPrimary;
         sal_Int32 indexType =  xRow->getBoolean( C_IS_CLUSTERED ) ?
             css::sdbc::IndexType::CLUSTERED :
             css::sdbc::IndexType::HASHED;
