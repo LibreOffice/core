@@ -89,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "3a461143_c2ed0b90",
+        "filename": "sc/source/core/data/fillinfo.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-27T15:17:30Z",
+      "side": 0,
+      "message": "Hum.. indeed.. I had to dig a bit deeper what happened there, the related code was in an inactive #ifdef and removed with commit b6cbae43385418be3238ed6e5cd5f90aeb69aa8a",
+      "parentUuid": "3a461143_6949a2d0",
+      "revId": "1c15c117bfa3cf8b1470810f9d73b4d0fcd02396",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_e9e672e7",
         "filename": "sc/source/filter/excel/tokstack.cxx",
         "patchSetId": 5
