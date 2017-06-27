@@ -2869,7 +2869,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         aDestMark.SelectTable( nTab, true );        // select destination
     aDestMark.SetMarkArea( aPasteDest );
 
-    /*  Do not drawing objects here. While pasting, the
+    /*  Do not copy drawing objects here. While pasting, the
         function ScDocument::UpdateReference() is called which calls
         ScDrawLayer::MoveCells() which may move away inserted objects to wrong
         positions (e.g. if source and destination range overlaps).*/
