@@ -14,8 +14,8 @@ ifneq (,$(if $(CROSS_COMPILING),,T)$(filter ODK,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,codemaker,\
     StaticLibrary_codemaker \
     StaticLibrary_codemaker_cpp \
-    $(if $(filter TRUE,$(ENABLE_JAVA)),StaticLibrary_codemaker_java) \
-    $(if $(filter TRUE,$(ENABLE_JAVA)),Executable_javamaker) \
+    StaticLibrary_codemaker_java \
+    Executable_javamaker \
     Executable_cppumaker \
 ))
 endif
