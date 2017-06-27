@@ -62,6 +62,7 @@ public:
     virtual void Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
     virtual void Invalidate( const Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
     virtual void Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
+    virtual void LogicInvalidate( const Rectangle* pRectangle ) override;
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
@@ -69,9 +70,17 @@ public:
 
     ChartController* GetController();
 
+    virtual bool IsChart() const override { return true; }
+    vcl::Window* GetParentEditWin();
+
+private:
+    // returns the chart bounding box in twips
+    Rectangle GetBoundingBox();
+
 private:
     ChartController* m_pWindowController;
     bool m_bInPaint;
+    VclPtr<vcl::Window> m_pViewShellWindow;
     VclPtr<OpenGLWindow> m_pOpenGLWindow;
 
     void adjustHighContrastMode();

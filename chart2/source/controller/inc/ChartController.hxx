@@ -546,6 +546,8 @@ private:
     void executeDispatch_ToggleGridHorizontal();
     void executeDispatch_ToggleGridVertical();
 
+    void executeDispatch_LOKSetTextSelection(int nType, int nX, int nY);
+
     void impl_ShapeControllerDispatch( const css::util::URL& rURL,
         const css::uno::Sequence< css::beans::PropertyValue >& rArgs );
 

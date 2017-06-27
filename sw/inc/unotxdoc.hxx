@@ -436,6 +436,8 @@ public:
     virtual bool isMimeTypeSupported() override;
     /// @see vcl::ITiledRenderable::setClientVisibleArea().
     virtual void setClientVisibleArea(const Rectangle& rRectangle) override;
+    /// @see vcl::ITiledRenderable::setClientZoom.
+    virtual void setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int nTileTwipWidth_, int nTileTwipHeight_) override;
     /// @see vcl::ITiledRenderable::getPointer().
     virtual Pointer getPointer() override;
     /// @see vcl::ITiledRenderable::getTrackedChanges().
