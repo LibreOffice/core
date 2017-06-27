@@ -2188,7 +2188,7 @@ void SwNodes::ForEach( sal_uLong nStart, sal_uLong nEnd,
         BlockInfo** pp = m_ppInf + cur;
         BlockInfo* p = *pp;
         sal_uInt16 nElem = sal_uInt16( nStart - p->nStart );
-        ElementPtr* pElem = p->pData + nElem;
+        BigPtrEntry** pElem = p->pData + nElem;
         nElem = p->nElem - nElem;
         for(;;)
         {
@@ -2314,14 +2314,14 @@ void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, bool bDel )
 void SwNodes::InsertNode( const SwNodePtr pNode,
                           const SwNodeIndex& rPos )
 {
-    const ElementPtr pIns = pNode;
+    BigPtrEntry* pIns = pNode;
     BigPtrArray::Insert( pIns, rPos.GetIndex() );
 }
 
 void SwNodes::InsertNode( const SwNodePtr pNode,
                           sal_uLong nPos )
 {
-    const ElementPtr pIns = pNode;
+    BigPtrEntry* pIns = pNode;
     BigPtrArray::Insert( pIns, nPos );
 }
 
