@@ -16,6 +16,7 @@
 
 #include <key.h>
 #include <keylistresult.h>
+#include "xmlsec-wrapper.h"
 
 using namespace css;
 using namespace css::security;
@@ -97,18 +98,23 @@ Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getPersonalCertif
     return xCertificateSequence;
 }
 
-Reference< XCertificate > SecurityEnvironmentGpg::getCertificate( const OUString& issuerName, const Sequence< sal_Int8 >& /*serialNumber*/ )
+Reference< XCertificate > SecurityEnvironmentGpg::getCertificate( const OUString& keyId, const Sequence< sal_Int8 >& /*serialNumber*/ )
 {
     CertificateImpl* xCert=nullptr;
 
+    //xmlChar* pSignatureValue=xmlNodeGetContent(cur);
+    OString ostr = OUStringToOString( keyId , RTL_TEXTENCODING_UTF8 );
+    const xmlChar* strKeyId = reinterpret_cast<const xmlChar*>(ostr.getStr());
+    if(xmlSecBase64Decode(strKeyId, const_cast<xmlSecByte*>(strKeyId), xmlStrlen(strKeyId)) < 0)
+        throw RuntimeException("Base64 decode failed");
+
     m_ctx->setKeyListMode(GPGME_KEYLIST_MODE_LOCAL);
-    OString ostr = OUStringToOString( issuerName , RTL_TEXTENCODING_UTF8 );
-    GpgME::Error err = m_ctx->startKeyListing(ostr.getStr(), true);
+    GpgME::Error err = m_ctx->startKeyListing("", true);
     while (!err) {
         GpgME::Key k = m_ctx->nextKey(err);
         if (err)
             break;
-        if (!k.isInvalid()) {
+        if (!k.isInvalid() && strcmp(k.keyID(), reinterpret_cast<const char*>(strKeyId)) == 0) {
             xCert = new CertificateImpl();
             xCert->setCertificate(m_ctx.get(), k);
             m_ctx->endKeyListing();
