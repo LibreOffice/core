@@ -336,6 +336,9 @@ public:
     virtual void NotifyCursor(SfxViewShell* /*pViewShell*/) const;
     /// Where a new view can perform some update/initialization soon after the callback has been registered.
     virtual void afterCallbackRegistered();
+    /// See OutlinerViewShell::GetEditWindowForActiveOLEObj().
+    virtual vcl::Window* GetEditWindowForActiveOLEObj() const override;
+
 };
 
 

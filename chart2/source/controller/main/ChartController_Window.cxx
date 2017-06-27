@@ -888,7 +888,10 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
             else
                 m_aSelection.resetPossibleSelectionAfterSingleClickWasEnsured();
         }
-        else if( isDoubleClick(rMEvt) && !bMouseUpWithoutMouseDown /*#i106966#*/ )
+        // In tiled rendering drag mode could be not yet over on the call
+        // that should handle the double-click, so better to perform this check
+        // always.
+        if( isDoubleClick(rMEvt) && !bMouseUpWithoutMouseDown /*#i106966#*/ )
         {
             Point aMousePixel = rMEvt.GetPosPixel();
             execute_DoubleClick( &aMousePixel );
