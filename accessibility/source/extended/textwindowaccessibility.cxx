@@ -489,10 +489,10 @@ sal_Bool SAL_CALL Paragraph::setText(OUString const & rText)
 
 // virtual
 css::uno::Sequence< css::beans::PropertyValue > SAL_CALL
-Paragraph::getDefaultAttributes(const css::uno::Sequence< OUString >& RequestedAttributes)
+Paragraph::getDefaultAttributes(const css::uno::Sequence< OUString >&)
 {
     checkDisposed();
-    return m_xDocument->retrieveDefaultAttributes( this, RequestedAttributes );
+    return {}; // default attributes are not supported by text engine
 }
 
 // virtual
@@ -1017,21 +1017,10 @@ Document::retrieveCharacterAttributes(
             " Document::retrieveCharacterAttributes",
             static_cast< css::uno::XWeak * >(this));
 
-    // retrieve default attributes
-    tPropValMap aCharAttrSeq;
-    retrieveDefaultAttributesImpl( pParagraph, aRequestedAttributes, aCharAttrSeq );
 
     // retrieve run attributes
-    tPropValMap aRunAttrSeq;
-    retrieveRunAttributesImpl( pParagraph, nIndex, aRequestedAttributes, aRunAttrSeq );
-
-    // merge default and run attributes
-    for ( tPropValMap::const_iterator aRunIter  = aRunAttrSeq.begin();
-          aRunIter != aRunAttrSeq.end();
-          ++aRunIter )
-    {
-        aCharAttrSeq[ aRunIter->first ] = aRunIter->second;
-    }
+    tPropValMap aCharAttrSeq;
+    retrieveRunAttributesImpl( pParagraph, nIndex, aRequestedAttributes, aCharAttrSeq );
 
     css::beans::PropertyValue* pValues = aAttribs.getArray();
     for (i = 0; i < AttributeCount; i++,pValues++)
@@ -1057,30 +1046,6 @@ Document::retrieveCharacterAttributes(
     }
 
     return aNewValues;
-}
-
-void Document::retrieveDefaultAttributesImpl(
-    Paragraph const * pParagraph,
-    const css::uno::Sequence< OUString >& RequestedAttributes,
-    tPropValMap& rDefAttrSeq)
-{
-    // default attributes are not supported by text engine
-    (void) pParagraph;
-    (void) RequestedAttributes;
-    (void) rDefAttrSeq;
-}
-
-css::uno::Sequence< css::beans::PropertyValue >
-Document::retrieveDefaultAttributes(
-    Paragraph const * pParagraph,
-    const css::uno::Sequence< OUString >& RequestedAttributes)
-{
-    SolarMutexGuard aGuard;
-    ::osl::MutexGuard aInternalGuard( GetMutex() );
-
-    tPropValMap aDefAttrSeq;
-    retrieveDefaultAttributesImpl( pParagraph, RequestedAttributes, aDefAttrSeq );
-    return comphelper::mapValuesToSequence( aDefAttrSeq );
 }
 
 void Document::retrieveRunAttributesImpl(

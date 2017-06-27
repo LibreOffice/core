@@ -412,15 +412,6 @@ public:
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "Paragraph const &" instead of a
     // "::rtl::Reference< Paragraph > const &".
-    css::uno::Sequence< css::beans::PropertyValue > retrieveDefaultAttributes(
-        Paragraph const * pParagraph,
-        const css::uno::Sequence< OUString >& RequestedAttributes);
-
-    // Must be called only after init has been called.
-    // To make it possible for this method to be (indirectly) called from
-    // within Paragraph's constructor (i.e., when the Paragraph's ref count is
-    // still zero), pass a "Paragraph const &" instead of a
-    // "::rtl::Reference< Paragraph > const &".
     // Throws css::lang::IndexOutOfBoundsException.
     css::uno::Sequence< css::beans::PropertyValue > retrieveRunAttributes(
         Paragraph const * pParagraph, ::sal_Int32 Index,
@@ -562,11 +553,6 @@ private:
     static css::uno::Any mapFontWeight(::FontWeight nWeight);
 
     static ::FontWeight mapFontWeight(css::uno::Any const & rWeight);
-
-    static void retrieveDefaultAttributesImpl(
-        Paragraph const * pParagraph,
-        const css::uno::Sequence< OUString >& RequestedAttributes,
-        tPropValMap& rDefAttrSeq);
 
     void retrieveRunAttributesImpl(
         Paragraph const * pParagraph, ::sal_Int32 Index,
