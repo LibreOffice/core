@@ -85,10 +85,6 @@ private:
         sal_uInt16                      nP_Dbl;
         sal_uInt16                      nP_DblAkt;
 
-        sal_uInt16*                     pP_Err;     // Pool for error codes
-        static const sal_uInt16         nP_Err = 8;
-        sal_uInt16                      nP_ErrAkt;
-
         ScSingleRefData**               ppP_RefTr;  // Pool for References
         sal_uInt16                      nP_RefTr;
         sal_uInt16                      nP_RefTrAkt;
@@ -170,10 +166,6 @@ private:
 
         bool                        GrowString();
         bool                        GrowDouble();
-/* TODO: in case we had FormulaTokenArray::AddError() */
-#if 0
-        bool                        GrowError();
-#endif
         bool                        GrowTripel( sal_uInt16 nByMin = 1 );
         bool                        GrowId();
         bool                        GrowElement();

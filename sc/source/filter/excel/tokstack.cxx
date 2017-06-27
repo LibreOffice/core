@@ -69,9 +69,6 @@ TokenPool::TokenPool( svl::SharedStringPool& rSPool ) :
     nP_Dbl = 8;
     pP_Dbl = new double[ nP_Dbl ];
 
-    // pool for error codes
-    pP_Err = new sal_uInt16[ nP_Err ];
-
     // pool for References
     nP_RefTr = 32;
     ppP_RefTr = new ScSingleRefData *[ nP_RefTr ];
@@ -104,7 +101,6 @@ TokenPool::~TokenPool()
     delete[] pType;
     delete[] pSize;
     delete[] pP_Dbl;
-    delete[] pP_Err;
 
     for( n = 0 ; n < nP_RefTr ; n++ )
         delete ppP_RefTr[ n ];
@@ -187,29 +183,6 @@ bool TokenPool::GrowDouble()
     pP_Dbl = pP_DblNew;
     return true;
 }
-
-/* TODO: in case we had FormulaTokenArray::AddError() */
-#if 0
-void TokenPool::GrowError()
-{
-    sal_uInt16 nP_ErrNew = lcl_canGrow( nP_Err);
-    if (!nP_ErrNew)
-        return false;
-
-    sal_uInt16*     pP_ErrNew = new (::std::nothrow) sal_uInt16[ nP_ErrNew ];
-    if (!pP_ErrNew)
-        return false;
-
-    for( sal_uInt16 nL = 0 ; nL < nP_Err ; nL++ )
-        pP_ErrNew[ nL ] = pP_Err[ nL ];
-
-    nP_Err = nP_ErrNew;
-
-    delete[] pP_Err;
-    pP_Err = pP_ErrNew;
-    return true;
-}
-#endif
 
 bool TokenPool::GrowTripel( sal_uInt16 nByMin )
 {
@@ -380,16 +353,6 @@ bool TokenPool::GetElement( const sal_uInt16 nId )
                 }
                 break;
             case T_Err:
-/* TODO: in case we had FormulaTokenArray::AddError() */
-#if 0
-                {
-                    sal_uInt16 n = pElement[ nId ];
-                    if (n < nP_Err)
-                        pScToken->AddError( pP_Err[ n ] );
-                    else
-                        bRet = false;
-                }
-#endif
                 break;
             case T_RefC:
                 {
@@ -867,7 +830,7 @@ const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const OUString& rTabNa
 
 void TokenPool::Reset()
 {
-    nP_IdAkt = nP_IdLast = nElementAkt = nP_StrAkt = nP_DblAkt = nP_ErrAkt = nP_RefTrAkt = nP_ExtAkt = nP_NlfAkt = nP_MatrixAkt = 0;
+    nP_IdAkt = nP_IdLast = nElementAkt = nP_StrAkt = nP_DblAkt = nP_RefTrAkt = nP_ExtAkt = nP_NlfAkt = nP_MatrixAkt = 0;
     maRangeNames.clear();
     maExtNames.clear();
     maExtCellRefs.clear();
