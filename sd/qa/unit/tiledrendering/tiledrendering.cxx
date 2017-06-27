@@ -1174,31 +1174,44 @@ void SdTiledRenderingTest::testUndoLimiting()
 
     // Create the first view.
     SdXImpressDocument* pXImpressDocument = createDoc("title-shape.odp");
-    SfxViewShell& rViewShell1 = pXImpressDocument->GetDocShell()->GetViewShell()->GetViewShellBase();
+    sd::ViewShell* pViewShell1 = pXImpressDocument->GetDocShell()->GetViewShell();
+    int nView1 = SfxLokHelper::getView();
     SfxLokHelper::createView();
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    SfxViewShell& rViewShell2 = pXImpressDocument->GetDocShell()->GetViewShell()->GetViewShellBase();
+    sd::ViewShell* pViewShell2 = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell1 != pViewShell2);
 
     // Begin text edit on the only object on the slide.
-    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    SdrView* pView = pViewShell->GetView();
+    SfxLokHelper::setView(nView1);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT(pView->IsTextEdit());
+    CPPUNIT_ASSERT(pViewShell1->GetView()->IsTextEdit());
 
-    // Now check what views see the undo action.
-    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
-    sd::UndoManager* pUndoManager = pDocument->GetUndoManager();
-    pUndoManager->SetViewShell(&rViewShell1);
-    // This was 1, undo action was visible to the first view, even if the
-    // action belongs to the second view.
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pUndoManager->GetUndoActionCount());
-    pUndoManager->SetViewShell(&rViewShell2);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pUndoManager->GetUndoActionCount());
-    pUndoManager->SetViewShell(nullptr);
+    // Now check view2 cannot undo actions.
+    {
+        SfxRequest aReq2(SID_UNDO, SfxCallMode::SLOT, pXImpressDocument->GetDocShell()->GetDoc()->GetPool());
+        aReq2.AppendItem(SfxUInt16Item(SID_UNDO, 1));
+        pViewShell2->ExecuteSlot(aReq2);
+        CPPUNIT_ASSERT(dynamic_cast< const SfxUInt32Item* >(aReq2.GetReturnValue()));
+        CPPUNIT_ASSERT_EQUAL(static_cast< sal_uInt32 >(SID_REPAIRPACKAGE), dynamic_cast< const SfxUInt32Item * >(aReq2.GetReturnValue())->GetValue());
+    }
+
+    // Also check view2 undo state
+    {
+        const SfxPoolItem* pState = pViewShell2->GetSlotState(SID_UNDO);
+        CPPUNIT_ASSERT(dynamic_cast< const SfxUInt32Item* >(pState));
+        CPPUNIT_ASSERT_EQUAL(static_cast< sal_uInt32 >(SID_REPAIRPACKAGE), dynamic_cast< const SfxUInt32Item * >(pState)->GetValue());
+    }
+
+    // Now check view1 can undo action
+    {
+        SfxRequest aReq1(SID_UNDO, SfxCallMode::SLOT, pXImpressDocument->GetDocShell()->GetDoc()->GetPool());
+        aReq1.AppendItem(SfxUInt16Item(SID_UNDO, 1));
+        pViewShell1->ExecuteSlot(aReq1);
+        CPPUNIT_ASSERT(aReq1.IsDone());
+    }
 
     mxComponent->dispose();
     mxComponent.clear();
