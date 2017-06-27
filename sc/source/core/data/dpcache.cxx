@@ -726,7 +726,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                 bOk = pCellData->IsEmpty();
             else
             {
-                OSL_ASSERT(rEntry.IsQueryByNonEmpty());
+                assert(rEntry.IsQueryByNonEmpty());
                 bOk = !pCellData->IsEmpty();
             }
         }

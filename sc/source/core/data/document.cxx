@@ -2073,7 +2073,7 @@ void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
             CopyToDocument(0, 0, 0, MAXCOL, MAXROW, nTab1-1, InsertDeleteFlags::FORMULA, false, rDestDoc);
 
         sc::CopyToDocContext aCxt(rDestDoc);
-        OSL_ASSERT( nTab2 < static_cast<SCTAB>(maTabs.size()) && nTab2 < static_cast<SCTAB>(rDestDoc.maTabs.size()));
+        assert( nTab2 < static_cast<SCTAB>(maTabs.size()) && nTab2 < static_cast<SCTAB>(rDestDoc.maTabs.size()));
         for (SCTAB i = nTab1; i <= nTab2; i++)
         {
             if (maTabs[i] && rDestDoc.maTabs[i])
