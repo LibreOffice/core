@@ -236,12 +236,11 @@ void MyWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rR
         rRenderContext.SetTextColor(Color(nRed, nGreen, nBlue));
 
         OUStringBuffer aPrintText(1024);
-        long nMaxWidth = 0;
 
         aPrintText.append( "SVP test program" );
 
         rRenderContext.DrawText(tools::Rectangle(Point((aPaperSize.Width() - 4000) / 2, 2000),
-                                Size(aPaperSize.Width() - 2100 - nMaxWidth, aPaperSize.Height() - 4000)),
+                                Size(aPaperSize.Width() - 2100, aPaperSize.Height() - 4000)),
                                 aPrintText.makeStringAndClear(),
                                 DrawTextFlags::MultiLine);
     }

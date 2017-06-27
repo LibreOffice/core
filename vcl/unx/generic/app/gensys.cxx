@@ -92,7 +92,6 @@ SalGenericSystem::~SalGenericSystem()
 
 int SalGenericSystem::ShowNativeMessageBox( const OUString& rTitle, const OUString& rMessage )
 {
-    int nDefButton = 0;
     std::list< OUString > aButtons;
     int nButtonIds[5] = {0}, nBut = 0;
 
@@ -100,7 +99,7 @@ int SalGenericSystem::ShowNativeMessageBox( const OUString& rTitle, const OUStri
 
     aButtons.push_back( GetNativeMessageBoxButtonText( StandardButtonType::OK, false/*bUseResources*/ ) );
     nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK;
-    int nResult = ShowNativeDialog( rTitle, rMessage, aButtons, nDefButton );
+    int nResult = ShowNativeDialog( rTitle, rMessage, aButtons, 0/*nDefButton*/ );
 
     return nResult != -1 ? nButtonIds[ nResult ] : 0;
 }

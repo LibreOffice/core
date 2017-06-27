@@ -1644,7 +1644,6 @@ void Window::ImplScroll( const tools::Rectangle& rRect,
         // so it has to be re-mirrored before calling the Paint-handler
         mpWindowImpl->mnPaintFlags |= ImplPaintFlags::CheckRtl;
 
-        InvalidateFlags nPaintFlags = InvalidateFlags::Children;
         if ( !bScrollChildren )
         {
             if ( nOrgFlags & ScrollFlags::NoChildren )
@@ -1652,7 +1651,7 @@ void Window::ImplScroll( const tools::Rectangle& rRect,
             else
                 ImplClipChildren( aInvalidateRegion );
         }
-        ImplInvalidateFrameRegion( &aInvalidateRegion, nPaintFlags );
+        ImplInvalidateFrameRegion( &aInvalidateRegion, InvalidateFlags::Children );
     }
 
     if ( bScrollChildren )

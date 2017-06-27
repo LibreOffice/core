@@ -50,7 +50,6 @@ using namespace ::com::sun::star;
 long ImplSysChildProc( void* pInst, SalObjEvent nEvent )
 {
     VclPtr<SystemChildWindow> pWindow = static_cast<SystemChildWindow*>(pInst);
-    long nRet = 0;
 
     switch ( nEvent )
     {
@@ -99,7 +98,7 @@ long ImplSysChildProc( void* pInst, SalObjEvent nEvent )
         default: break;
     }
 
-    return nRet;
+    return 0;
 }
 
 void SystemChildWindow::ImplInitSysChild( vcl::Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow )

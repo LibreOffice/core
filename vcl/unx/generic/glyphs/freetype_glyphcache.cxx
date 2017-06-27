@@ -642,11 +642,8 @@ void FreetypeFont::InitGlyphData(const GlyphItem& rGlyph, GlyphData& rGD ) const
 
 bool FreetypeFont::GetAntialiasAdvice() const
 {
-    if( GetFontSelData().mbNonAntialiased || (mnPrioAntiAlias<=0) )
-        return false;
-    bool bAdviseAA = true;
     // TODO: also use GASP info
-    return bAdviseAA;
+    return !GetFontSelData().mbNonAntialiased && (mnPrioAntiAlias > 0);
 }
 
 // determine unicode ranges in font

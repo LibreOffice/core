@@ -808,8 +808,7 @@ ErrCode GraphicFilter::ImpTestOrFindFormat( const OUString& rPath, SvStream& rSt
                 nBase = 1;
             else if ( pConfig->GetImportFilterType( rFormat ).equalsIgnoreAsciiCase( "pcd_Photo_CD_Base16" ) )
                 nBase = 0;
-            OUString aFilterConfigPath( "Office.Common/Filter/Graphic/Import/PCD" );
-            FilterConfigItem aFilterConfigItem( aFilterConfigPath );
+            FilterConfigItem aFilterConfigItem( "Office.Common/Filter/Graphic/Import/PCD" );
             aFilterConfigItem.WriteInt32( "Resolution", nBase );
         }
     }

@@ -382,7 +382,7 @@ public:
         {
             rDev.SetClipRegion( vcl::Region(r) );
 
-            OUString aLatinText("Click any rect to zoom!!!!");
+            OUString const aLatinText("Click any rect to zoom!!!!");
 
             const unsigned char pTextUTF8[] = {
                 0xd9, 0x88, 0xd8, 0xa7, 0xd8, 0xad, 0xd9, 0x90,
@@ -419,9 +419,7 @@ public:
                 "Times", "Liberation Sans", "Arial", "Linux Biolinum G", "Linux Libertine Display G"
               };
 
-            size_t nNumFontNames = SAL_N_ELEMENTS(pNames);
-
-            for (size_t i = 0; i < nNumFontNames; i++)
+            for (size_t i = 0; i < SAL_N_ELEMENTS(pNames); i++)
                 aFontNames.push_back(OUString::createFromAscii(pNames[i]));
 
             if (bClip && !bRotate)
@@ -437,7 +435,7 @@ public:
 
                 if (nPrintNumCopies == 1)
                 {
-                    float nFontMagnitude = 0.25f;
+                    float const nFontMagnitude = 0.25f;
                     // random font size to avoid buffering
                     nFontHeight = 1 + nFontMagnitude * (0.9 + comphelper::rng::uniform_real_distribution(0.0, std::nextafter(0.1, DBL_MAX))) * (r.Bottom() - r.Top());
                     nFontIndex=0;
@@ -464,9 +462,7 @@ public:
                     aFontRect.Top() += nHeight/2;
                     aFontRect.Bottom() += nHeight;
 
-                    int nDegrees = 45;
-
-                    aFont.SetOrientation(nDegrees * 10);
+                    aFont.SetOrientation(45 * 10); // 45 degrees
 
                     rDev.SetFont(aFont);
                     rDev.DrawText(aFontRect, aText);

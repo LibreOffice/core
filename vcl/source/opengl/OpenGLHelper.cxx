@@ -141,8 +141,7 @@ static void addPreamble(OString& rShaderSource, const OString& rPreamble)
     if (rPreamble.isEmpty())
         return;
 
-    OString aVersionStr("#version");
-    int nVersionStrStartPos = rShaderSource.indexOf(aVersionStr);
+    int nVersionStrStartPos = rShaderSource.indexOf("#version");
 
     if (nVersionStrStartPos == -1)
     {

@@ -559,7 +559,6 @@ namespace
 
     bool identifyType1Font( const char* i_pBuffer, sal_uInt32 i_nSize, Font& o_rResult )
     {
-        bool bResult = false;
         // might be a type1, find eexec
         const char* pStream = i_pBuffer;
         const char* const pExec = "eexec";
@@ -639,7 +638,7 @@ namespace
                     o_rResult.SetPitch( PITCH_VARIABLE );
             }
         }
-        return bResult;
+        return false;
     }
 }
 

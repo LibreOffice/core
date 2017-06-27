@@ -492,7 +492,7 @@ static int GetSimpleTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoin
 static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray, TTGlyphMetrics *metrics, std::vector< sal_uInt32 >& glyphlist)
 {
     sal_uInt16 flags, index;
-    sal_Int16 e, f, numberOfContours;
+    sal_Int16 e, f;
     const sal_uInt8* table = getTable( ttf, O_glyf );
     std::vector<ControlPoint> myPoints;
     ControlPoint *nextComponent, *pa;
@@ -506,7 +506,7 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
         return 0;
 
     const sal_uInt8* ptr = table + ttf->goffsets[glyphID];
-    if ((numberOfContours = GetInt16(ptr, 0)) != -1)   /*- glyph is not compound */
+    if (GetInt16(ptr, 0) != -1)   /* number of contours - glyph is not compound */
         return 0;
 
     if (metrics) {
