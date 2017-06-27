@@ -37,6 +37,7 @@ namespace sc {
 
 class DataProvider;
 class CSVDataProvider;
+class ScDBDataManager;
 
 class SC_DLLPUBLIC ExternalDataMapper
 {
@@ -45,10 +46,11 @@ class SC_DLLPUBLIC ExternalDataMapper
     std::unique_ptr<DataProvider> mpDataProvider;
     ScDocument maDocument;
     ScDBCollection* mpDBCollection;
+    std::shared_ptr<ScDBDataManager> mpDBDataManager;
 
 public:
     ExternalDataMapper(ScDocShell* pDocShell, const OUString& rUrl, const OUString& rName,
-        SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCOL2, SCROW nRow2, bool& bSuccess);
+        SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCOL2, SCROW nRow2, bool bAllowResize, bool& bSuccess);
 
     ~ExternalDataMapper();
 
@@ -89,6 +91,7 @@ class CSVFetchThread : public salhelper::Thread
     ScDocument& mrDocument;
     OUString maURL;
     size_t mnColCount;
+    ScDBDataManager* mpDBDataManager;
 
     bool mbTerminate;
     osl::Mutex maMtxTerminate;
@@ -104,7 +107,7 @@ class CSVFetchThread : public salhelper::Thread
     virtual void execute() override;
 
 public:
-    CSVFetchThread(ScDocument& rDoc, const OUString&, size_t);
+    CSVFetchThread(ScDocument& rDoc, ScDBDataManager*, const OUString&, size_t);
     virtual ~CSVFetchThread() override;
 
     void RequestTerminate();
@@ -139,6 +142,7 @@ class CSVDataProvider : public DataProvider
     rtl::Reference<CSVFetchThread> mxCSVFetchThread;
     ScDocShell* mpDocShell;
     ScDocument* mpDocument;
+    ScDBDataManager* mpDBDataManager;
     LinesType* mpLines;
     size_t mnLineCount;
 
@@ -146,7 +150,7 @@ class CSVDataProvider : public DataProvider
 
 
 public:
-    CSVDataProvider (ScDocShell* pDocShell, const OUString& rUrl, const ScRange& rRange);
+    CSVDataProvider (ScDocShell* pDocShell, const OUString& rUrl, ScRange& rRange, ScDBDataManager*);
     virtual ~CSVDataProvider() override;
 
     virtual void StartImport() override;
@@ -159,6 +163,29 @@ public:
         return mrRange;
     }
     const OUString& GetURL() const override { return maURL; }
+};
+
+class ScDBDataManager
+{
+    ScDBData* mpDBData;
+    ScRange maSourceRange;
+    ScRange maDestinationRange;
+    bool mbAllowResize;
+
+public:
+    ScDBDataManager(ScDBData*, bool);
+    ~ScDBDataManager();
+
+    bool IsResizeAllowed();
+    bool Resize();
+    bool RequiresResize(SCROW&, SCCOL&);
+
+    void SetDatabase(ScDBData*);
+    void SetSourceRange(SCCOL, SCROW);
+    void SetDestinationRange(ScRange&);
+
+    ScRange& GetDestinationRange();
+    ScRange& GetSourceRange();
 };
 
 }
