@@ -829,7 +829,6 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             switch( pEvHint->GetEventId() )
             {
             case SfxEventHintId::LoadFinished:
-                SAL_WARN_IF(pWrtSh, "sw", "pWrtSh should be null");
                 // if it is a new document created from a template,
                 // update fixed fields
                 if (pDocSh->GetMedium())
@@ -837,6 +836,9 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     const SfxBoolItem* pTemplateItem = SfxItemSet::GetItem<SfxBoolItem>(pDocSh->GetMedium()->GetItemSet(), SID_TEMPLATE, false);
                     if (pTemplateItem && pTemplateItem->GetValue())
                     {
+                        // assume that not calling via SwEditShell::SetFixFields
+                        // is allowed, because the shell hasn't been created yet
+                        assert(!pWrtSh);
                         pDocSh->GetDoc()->getIDocumentFieldsAccess().SetFixFields(nullptr);
                     }
                 }
