@@ -101,9 +101,7 @@ bool TokenPool::GrowId()
     if (!nP_IdNew)
         return false;
 
-    sal_uInt16* pP_IdNew = new (::std::nothrow) sal_uInt16[ nP_IdNew ];
-    if (!pP_IdNew)
-        return false;
+    sal_uInt16* pP_IdNew = new sal_uInt16[ nP_IdNew ];
 
     for( sal_uInt16 nL = 0 ; nL < nP_Id ; nL++ )
         pP_IdNew[ nL ] = pP_Id[ nL ];
@@ -121,16 +119,9 @@ bool TokenPool::GrowElement()
     if (!nElementNew)
         return false;
 
-    sal_uInt16* pElementNew = new (::std::nothrow) sal_uInt16[ nElementNew ];
-    E_TYPE* pTypeNew = new (::std::nothrow) E_TYPE[ nElementNew ];
-    sal_uInt16* pSizeNew = new (::std::nothrow) sal_uInt16[ nElementNew ];
-    if (!pElementNew || !pTypeNew || !pSizeNew)
-    {
-        delete [] pElementNew;
-        delete [] pTypeNew;
-        delete [] pSizeNew;
-        return false;
-    }
+    sal_uInt16* pElementNew = new sal_uInt16[ nElementNew ];
+    E_TYPE* pTypeNew = new E_TYPE[ nElementNew ];
+    sal_uInt16* pSizeNew = new sal_uInt16[ nElementNew ];
 
     for( sal_uInt16 nL = 0 ; nL < nElement ; nL++ )
     {
@@ -156,9 +147,7 @@ bool TokenPool::GrowMatrix()
     if (!nNewSize)
         return false;
 
-    ScMatrix**  ppNew = new (::std::nothrow) ScMatrix*[ nNewSize ];
-    if (!ppNew)
-        return false;
+    ScMatrix**  ppNew = new ScMatrix*[ nNewSize ];
 
     memset( ppNew, 0, sizeof( ScMatrix* ) * nNewSize );
     memcpy( ppNew, ppP_Matrix, sizeof( ScMatrix* ) * nP_Matrix );
