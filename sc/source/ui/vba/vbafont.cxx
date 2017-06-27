@@ -70,6 +70,9 @@ ScVbaFont::getSize()
 void SAL_CALL
 ScVbaFont::setColorIndex( const uno::Any& _colorindex )
 {
+    if(mbFormControl)
+        return;
+
     sal_Int32 nIndex = 0;
     _colorindex >>= nIndex;
     // #FIXME  xlColorIndexAutomatic & xlColorIndexNone are not really
@@ -87,6 +90,8 @@ ScVbaFont::setColorIndex( const uno::Any& _colorindex )
 uno::Any SAL_CALL
 ScVbaFont::getColorIndex()
 {
+    if(mbFormControl)
+        return uno::Any( (sal_Int32) 0 );
     if ( GetDataSet() )
         if (  GetDataSet()->GetItemState( ATTR_FONT_COLOR) == SfxItemState::DONTCARE )
             return aNULL();
@@ -187,6 +192,9 @@ ScVbaFont::getBold()
 void SAL_CALL
 ScVbaFont::setUnderline( const uno::Any& aValue )
 {
+    if(mbFormControl)
+        return;
+
     // default
     sal_Int32 nValue = excel::XlUnderlineStyle::xlUnderlineStyleNone;
     aValue >>= nValue;
@@ -226,6 +234,10 @@ ScVbaFont::getUnderline()
             return aNULL();
 
     sal_Int32 nValue = awt::FontUnderline::NONE;
+
+    if(mbFormControl)
+        return uno::makeAny( nValue );
+
     mxFont->getPropertyValue("CharUnderline") >>= nValue;
     switch ( nValue )
     {
@@ -293,7 +305,8 @@ ScVbaFont::getColor()
 void  SAL_CALL
 ScVbaFont::setOutlineFont( const uno::Any& aValue )
 {
-    mxFont->setPropertyValue("CharContoured", aValue );
+    if(!mbFormControl)
+        mxFont->setPropertyValue("CharContoured", aValue );
 }
 
 uno::Any SAL_CALL
@@ -302,7 +315,7 @@ ScVbaFont::getOutlineFont()
     if ( GetDataSet() )
         if (  GetDataSet()->GetItemState( ATTR_FONT_CONTOUR) == SfxItemState::DONTCARE )
             return aNULL();
-    return mxFont->getPropertyValue("CharContoured");
+    return mbFormControl ? uno::Any( false ) : mxFont->getPropertyValue("CharContoured");
 }
 
 OUString
