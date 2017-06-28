@@ -30,7 +30,6 @@
 #include <osl/diagnose.h>
 
 #include <algorithm>
-#include <functional>
 
 
 namespace sfx2
@@ -121,7 +120,7 @@ namespace sfx2
 
     namespace
     {
-        struct IsSpecialArgument : public ::std::unary_function< Any, bool >
+        struct IsSpecialArgument
         {
             static bool isSpecialArgumentName( const OUString& _rValueName )
             {

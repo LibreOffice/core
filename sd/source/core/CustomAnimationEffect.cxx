@@ -2746,7 +2746,7 @@ void EffectSequenceHelper::removeListener( ISequenceListener* pListener )
     maListeners.remove( pListener );
 }
 
-struct stl_notify_listeners_func : public std::unary_function<ISequenceListener*, void>
+struct stl_notify_listeners_func
 {
     stl_notify_listeners_func() {}
     void operator()(ISequenceListener* pListener) { pListener->notify_change(); }

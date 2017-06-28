@@ -2033,7 +2033,7 @@ Reference< XInterface > ODatabaseDocument::getThis() const
     return *const_cast< ODatabaseDocument* >( this );
 }
 
-struct CreateAny : public std::unary_function< Reference<XController>, Any>
+struct CreateAny
 {
     Any operator() (const Reference<XController>& lhs) const
     {

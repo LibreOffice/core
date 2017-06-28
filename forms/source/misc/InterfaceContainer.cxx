@@ -356,7 +356,7 @@ void SAL_CALL OInterfaceContainer::writeEvents(const Reference<XObjectOutputStre
 }
 
 
-struct TransformEventTo52Format : public ::std::unary_function< ScriptEventDescriptor, void >
+struct TransformEventTo52Format
 {
     void operator()( ScriptEventDescriptor& _rDescriptor )
     {

@@ -54,7 +54,7 @@ void PivotTableSources::appendSelectedPages( ScDPObject* pObj, const SelectedPag
 
 namespace {
 
-struct SelectedPageProcessor : std::unary_function<PivotTableSources::SelectedPages, void>
+struct SelectedPageProcessor
 {
     void operator() ( PivotTableSources::SelectedPages& rItem )
     {
@@ -81,7 +81,7 @@ struct SelectedPageProcessor : std::unary_function<PivotTableSources::SelectedPa
     }
 };
 
-struct PivotSheetDescSetter : std::unary_function<sc::PivotTableSources::SheetSource, void>
+struct PivotSheetDescSetter
 {
     void operator() ( sc::PivotTableSources::SheetSource& rSrc )
     {
@@ -90,7 +90,7 @@ struct PivotSheetDescSetter : std::unary_function<sc::PivotTableSources::SheetSo
     }
 };
 
-struct PivotDBDescSetter : std::unary_function<sc::PivotTableSources::DBSource, void>
+struct PivotDBDescSetter
 {
     void operator() ( sc::PivotTableSources::DBSource& rSrc )
     {
@@ -99,7 +99,7 @@ struct PivotDBDescSetter : std::unary_function<sc::PivotTableSources::DBSource, 
     }
 };
 
-struct PivotServiceDataSetter : std::unary_function<sc::PivotTableSources::ServiceSource, void>
+struct PivotServiceDataSetter
 {
     void operator() ( sc::PivotTableSources::ServiceSource& rSrc )
     {

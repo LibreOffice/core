@@ -82,7 +82,6 @@
 
 using namespace com::sun::star;
 using ::std::vector;
-using ::std::unary_function;
 using ::std::shared_ptr;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -584,7 +583,7 @@ public:
     }
 };
 
-class FindIntersectingTable : public std::unary_function<std::unique_ptr<ScDPObject>, bool>
+class FindIntersectingTable
 {
     ScRange maRange;
 public:
@@ -596,7 +595,7 @@ public:
     }
 };
 
-class FindIntersectingTableByColumns : public std::unary_function<std::unique_ptr<ScDPObject>, bool>
+class FindIntersectingTableByColumns
 {
     SCCOL mnCol1;
     SCCOL mnCol2;
@@ -630,7 +629,7 @@ public:
     }
 };
 
-class FindIntersectingTableByRows : public std::unary_function<std::unique_ptr<ScDPObject>, bool>
+class FindIntersectingTableByRows
 {
     SCCOL mnCol;
     SCROW mnRow1;
@@ -664,7 +663,7 @@ public:
     }
 };
 
-class AccumulateOutputRanges : public std::unary_function<std::unique_ptr<ScDPObject>, void>
+class AccumulateOutputRanges
 {
     ScRangeList maRanges;
     SCTAB mnTab;
@@ -1326,7 +1325,7 @@ void ScDPObject::GetHeaderPositionData(const ScAddress& rPos, DataPilotTableHead
 
 namespace {
 
-class FindByName : public std::unary_function<const ScDPSaveDimension*, bool>
+class FindByName
 {
     OUString maName; // must be all uppercase.
 public:
@@ -2144,7 +2143,7 @@ static PivotFunc lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& x
 
 namespace {
 
-class FindByColumn : public std::unary_function<ScPivotField, bool>
+class FindByColumn
 {
     SCCOL mnCol;
     PivotFunc mnMask;
@@ -2614,7 +2613,7 @@ bool hasFieldColumn(const vector<ScPivotField>* pRefFields, SCCOL nCol)
     return false;
 }
 
-class FindByOriginalDim : public std::unary_function<ScPivotField, bool>
+class FindByOriginalDim
 {
     long mnDim;
 public:
@@ -2902,7 +2901,7 @@ ScDPCollection::SheetCaches::SheetCaches(ScDocument* pDoc) : mpDoc(pDoc) {}
 
 namespace {
 
-struct FindInvalidRange : public std::unary_function<ScRange, bool>
+struct FindInvalidRange
 {
     bool operator() (const ScRange& r) const
     {
@@ -3388,7 +3387,7 @@ namespace {
 /**
  * Unary predicate to match DP objects by the table ID.
  */
-class MatchByTable : public unary_function<std::unique_ptr<ScDPObject>, bool>
+class MatchByTable
 {
     SCTAB mnTab;
 public:
@@ -3857,7 +3856,7 @@ bool ScDPCollection::HasTable( const ScRange& rRange ) const
 
 namespace {
 
-struct DumpTable : std::unary_function<std::unique_ptr<ScDPObject>, void>
+struct DumpTable
 {
     void operator() (const std::unique_ptr<ScDPObject>& rObj) const
     {

@@ -24,8 +24,6 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <vcl/window.hxx>
 
-#include <functional>
-
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -119,7 +117,7 @@ OUString OTableFieldDesc::GetCriteria( sal_uInt16 nIdx ) const
 
 namespace
 {
-    struct SelectPropertyValueAsString : public std::unary_function< PropertyValue, OUString >
+    struct SelectPropertyValueAsString
     {
         OUString operator()( const PropertyValue& i_rPropValue ) const
         {

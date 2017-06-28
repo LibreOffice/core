@@ -19,7 +19,6 @@
 
 #include "sal/config.h"
 
-#include <functional>
 #include <algorithm>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -126,7 +125,7 @@ shrinkFilterName( const rtl::OUString& aFilterName, bool bAllowNoStar = false )
 
 namespace {
 
-    struct FilterTitleMatch : public ::std::unary_function< FilterEntry, bool >
+    struct FilterTitleMatch
     {
 protected:
         const rtl::OUString rTitle;

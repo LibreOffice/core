@@ -249,7 +249,7 @@ public:
 };
 
 //Used to find a XPackage with a particular URL
-class XPackage_eq : public std::unary_function<Reference<deployment::XPackage>, bool>
+class XPackage_eq
 {
     OUString m_URL;
 public:

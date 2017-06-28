@@ -1957,7 +1957,7 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
 
 namespace {
 
-class SetTableIndex : public ::std::unary_function<ScRange, void>
+class SetTableIndex
 {
     SCTAB mnTab;
 public:

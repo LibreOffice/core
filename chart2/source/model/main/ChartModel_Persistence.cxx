@@ -59,7 +59,6 @@
 #include <vcl/settings.hxx>
 
 #include <algorithm>
-#include <functional>
 
 using namespace ::com::sun::star;
 
@@ -69,7 +68,7 @@ using ::osl::MutexGuard;
 
 namespace
 {
-struct lcl_PropNameEquals : public std::unary_function< beans::PropertyValue, bool >
+struct lcl_PropNameEquals
 {
     explicit lcl_PropNameEquals( const OUString & rStrToCompareWith ) :
             m_aStr( rStrToCompareWith )

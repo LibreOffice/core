@@ -32,7 +32,6 @@
 
 #include <list>
 #include <algorithm>
-#include <functional>
 #include <utility>
 
 namespace chart
@@ -103,7 +102,7 @@ namespace impl
 {
 
 template< class InterfaceRef >
-struct addListenerFunctor : public std::unary_function< InterfaceRef, void >
+struct addListenerFunctor
 {
     explicit addListenerFunctor( const css::uno::Reference< css::util::XModifyListener > & xListener ) :
             m_xListener( xListener )
@@ -121,7 +120,7 @@ private:
 };
 
 template< class InterfaceRef >
-struct removeListenerFunctor : public std::unary_function< InterfaceRef, void >
+struct removeListenerFunctor
 {
     explicit removeListenerFunctor( const css::uno::Reference< css::util::XModifyListener > & xListener ) :
             m_xListener( xListener )
@@ -139,7 +138,7 @@ private:
 };
 
 template< class Pair >
-struct addListenerToMappedElementFunctor : public std::unary_function< Pair, void >
+struct addListenerToMappedElementFunctor
 {
     explicit addListenerToMappedElementFunctor( const css::uno::Reference< css::util::XModifyListener > & xListener ) :
             m_xListener( xListener )
@@ -157,7 +156,7 @@ private:
 };
 
 template< class Pair >
-struct removeListenerFromMappedElementFunctor : public std::unary_function< Pair, void >
+struct removeListenerFromMappedElementFunctor
 {
     explicit removeListenerFromMappedElementFunctor( const css::uno::Reference< css::util::XModifyListener > & xListener ) :
             m_xListener( xListener )

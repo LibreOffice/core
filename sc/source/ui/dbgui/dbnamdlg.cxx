@@ -496,7 +496,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl, Button*, void)
 
 namespace {
 
-class FindByName : public ::std::unary_function<std::unique_ptr<ScDBData>, bool>
+class FindByName
 {
     const OUString& mrName;
 public:

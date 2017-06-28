@@ -220,7 +220,7 @@ class ScDPDataMember;
 #define SC_DPMEASURE_ALL    -1
 #define SC_DPMEASURE_ANY    -2
 
-struct MemberHashIndexFunc : public std::unary_function< const SCROW &, size_t >
+struct MemberHashIndexFunc
 {
     size_t operator() (SCROW rDataIndex) const { return rDataIndex; }
 };

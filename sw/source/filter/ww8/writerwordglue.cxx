@@ -24,7 +24,6 @@
 #include <IDocumentStylePoolAccess.hxx>
 
 #include <algorithm>
-#include <functional>
 
 #include <rtl/tencinfo.h>
 
@@ -322,7 +321,6 @@ namespace myImplHelpers
 
     //Utility to remove entries before a given starting position
     class IfBeforeStart
-        : public std::unary_function<const sw::util::CharRunEntry&, bool>
     {
     private:
         sal_Int32 mnStart;

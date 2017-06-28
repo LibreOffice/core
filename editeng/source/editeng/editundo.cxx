@@ -510,7 +510,7 @@ EditUndoSetAttribs::EditUndoSetAttribs(EditEngine* pEE, const ESelection& rESel,
 
 namespace {
 
-struct RemoveAttribsFromPool : std::unary_function<std::unique_ptr<ContentAttribsInfo>, void>
+struct RemoveAttribsFromPool
 {
     SfxItemPool& mrPool;
 public:

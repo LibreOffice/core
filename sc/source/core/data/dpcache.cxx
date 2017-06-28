@@ -77,7 +77,7 @@ ScDPCache::ScDPCache(ScDocument* pDoc) :
 
 namespace {
 
-struct ClearObjectSource : std::unary_function<ScDPObject*, void>
+struct ClearObjectSource
 {
     void operator() (ScDPObject* p) const
     {
@@ -185,7 +185,7 @@ struct Bucket
 using std::cout;
 using std::endl;
 
-struct PrintBucket : std::unary_function<Bucket, void>
+struct PrintBucket
 {
     void operator() (const Bucket& v) const
     {
@@ -227,7 +227,7 @@ struct EqualByOrderIndex : std::binary_function<Bucket, Bucket, bool>
     }
 };
 
-class PushBackValue : public std::unary_function<Bucket, void>
+class PushBackValue
 {
     ScDPCache::ScDPItemDataVec& mrItems;
 public:
@@ -238,7 +238,7 @@ public:
     }
 };
 
-class PushBackOrderIndex : public std::unary_function<Bucket, void>
+class PushBackOrderIndex
 {
     ScDPCache::IndexArrayType& mrData;
 public:
@@ -336,7 +336,7 @@ struct InitDocData
 
 typedef std::unordered_set<OUString, OUStringHash> LabelSet;
 
-class InsertLabel : public std::unary_function<OUString, void>
+class InsertLabel
 {
     LabelSet& mrNames;
 public:
@@ -1378,7 +1378,7 @@ void ScDPCache::GetGroupDimMemberIds(long nDim, std::vector<SCROW>& rIds) const
 
 namespace {
 
-struct ClearGroupItems : std::unary_function<std::unique_ptr<ScDPCache::Field>, void>
+struct ClearGroupItems
 {
     void operator() (std::unique_ptr<ScDPCache::Field>& r) const
     {

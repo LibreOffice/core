@@ -25,7 +25,6 @@
 #include <memory>
 #include <set>
 #include <iterator>
-#include <functional>
 #include <algorithm>
 
 #include <boost/optional.hpp>
@@ -584,7 +583,7 @@ librdf_QuerySelectResult::hasMoreElements()
     return !librdf_query_results_finished(m_pQueryResult.get());
 }
 
-class NodeArrayDeleter : public std::unary_function<librdf_node**, void>
+class NodeArrayDeleter
 {
     const int m_Count;
 

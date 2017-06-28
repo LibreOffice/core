@@ -538,7 +538,7 @@ void CustomAnimationList::update( const MainSequencePtr& pMainSequence )
         mpMainSequence->addListener( this );
 }
 
-struct stl_append_effect_func : public std::unary_function<CustomAnimationEffectPtr, void>
+struct stl_append_effect_func
 {
     explicit stl_append_effect_func( CustomAnimationList& rList ) : mrList( rList ) {}
     void operator()(const CustomAnimationEffectPtr& pEffect);
