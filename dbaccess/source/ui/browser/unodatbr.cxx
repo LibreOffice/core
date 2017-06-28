@@ -386,7 +386,7 @@ bool SbaTableQueryBrowser::Construct(vcl::Window* pParent)
 
 namespace
 {
-    struct SelectValueByName : public std::unary_function< OUString, Any >
+    struct SelectValueByName : public std::function<Any (OUString)>
     {
         const Any& operator()( OUString const& i_name ) const
         {

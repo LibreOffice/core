@@ -31,7 +31,7 @@
 
 namespace {
 
-class FindByName : public ::std::unary_function<ScUserListData::SubStr, bool>
+class FindByName : public std::function<bool (ScUserListData::SubStr)>
 {
     const OUString& mrName;
     bool mbUpper;

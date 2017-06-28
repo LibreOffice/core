@@ -29,7 +29,7 @@ namespace dbaccess
 {
 
     // TokenComposer
-    struct TokenComposer : public std::unary_function< OUString, void >
+    struct TokenComposer : public std::function<void (OUString)>
     {
     private:
         #ifdef DBG_UTIL

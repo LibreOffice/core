@@ -33,7 +33,7 @@ namespace {
 
 const size_t MAXQUERY = 8;
 
-class FindByField : public std::unary_function<ScQueryEntry, bool>
+class FindByField : public std::function<bool (ScQueryEntry)>
 {
     SCCOLROW mnField;
 public:
@@ -44,7 +44,7 @@ public:
     }
 };
 
-struct FindUnused : public std::unary_function<ScQueryEntry, bool>
+struct FindUnused : public std::function<bool (ScQueryEntry)>
 {
     bool operator() (const std::unique_ptr<ScQueryEntry>& rpEntry) const
     {

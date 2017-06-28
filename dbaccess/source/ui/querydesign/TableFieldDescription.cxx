@@ -119,7 +119,7 @@ OUString OTableFieldDesc::GetCriteria( sal_uInt16 nIdx ) const
 
 namespace
 {
-    struct SelectPropertyValueAsString : public std::unary_function< PropertyValue, OUString >
+    struct SelectPropertyValueAsString : public std::function<OUString (PropertyValue)>
     {
         OUString operator()( const PropertyValue& i_rPropValue ) const
         {

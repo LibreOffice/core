@@ -59,14 +59,9 @@ namespace
 {
 const OUString lcl_aLabelRole( "label" );
 
-struct lcl_ChartTypeToSeriesCnt : std::unary_function<
-        Reference< XChartType >, Reference< XDataSeriesContainer > >
+auto lcl_ChartTypeToSeriesCnt = [](const Reference< XChartType > & xChartType)
 {
-    Reference< XDataSeriesContainer > operator() (
-        const Reference< XChartType > & xChartType )
-    {
-        return Reference< XDataSeriesContainer >::query( xChartType );
-    }
+    return Reference< XDataSeriesContainer >::query( xChartType );
 };
 
 OUString lcl_ConvertRole( const OUString & rRoleString, bool bFromInternalToUI )
@@ -443,7 +438,7 @@ std::vector< Reference< XDataSeriesContainer > >
                 std::transform(
                     aChartTypeSeq.getConstArray(), aChartTypeSeq.getConstArray() + aChartTypeSeq.getLength(),
                     std::back_inserter( aResult ),
-                    lcl_ChartTypeToSeriesCnt() );
+                    lcl_ChartTypeToSeriesCnt);
             }
         }
     }

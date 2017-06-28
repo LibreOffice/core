@@ -57,11 +57,9 @@ void lcl_fireModifyEvent(
     }
 }
 
-struct lcl_weakReferenceToSame : public std::unary_function<
-        std::pair<
-            css::uno::WeakReference< css::util::XModifyListener >,
-            css::uno::Reference< css::util::XModifyListener > >,
-        bool >
+struct lcl_weakReferenceToSame : public std::function<
+                                            bool (std::pair<css::uno::WeakReference< css::util::XModifyListener >,
+                                                            css::uno::Reference< css::util::XModifyListener > >)>
 {
     explicit lcl_weakReferenceToSame( const Reference< util::XModifyListener > & xModListener ) :
             m_xHardRef( xModListener )

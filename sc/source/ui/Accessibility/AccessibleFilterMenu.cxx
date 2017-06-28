@@ -50,7 +50,7 @@ using ::std::for_each;
 
 namespace {
 
-class AddRemoveEventListener : public ::std::unary_function<void, Reference<XAccessible> >
+class AddRemoveEventListener : public std::function<Reference<XAccessible> (void)>
 {
 public:
     explicit AddRemoveEventListener(const Reference<XAccessibleEventListener>& rListener, bool bAdd) :

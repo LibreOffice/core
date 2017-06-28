@@ -69,7 +69,7 @@ using ::osl::MutexGuard;
 
 namespace
 {
-struct lcl_PropNameEquals : public std::unary_function< beans::PropertyValue, bool >
+struct lcl_PropNameEquals : public std::function<bool (beans::PropertyValue)>
 {
     explicit lcl_PropNameEquals( const OUString & rStrToCompareWith ) :
             m_aStr( rStrToCompareWith )

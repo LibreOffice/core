@@ -78,7 +78,7 @@ namespace
         { "PIXMAP", "image/bmp" }
     };
 
-    class DataFlavorEq : public std::unary_function<const css::datatransfer::DataFlavor&, bool>
+    class DataFlavorEq : public std::function<bool (const css::datatransfer::DataFlavor&)>
     {
     private:
         const css::datatransfer::DataFlavor& m_rData;

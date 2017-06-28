@@ -80,7 +80,7 @@ namespace
         return getTypedModelNode< XModel >( _rxModelNode );
     }
 
-    struct StringCompare : public ::std::unary_function< OUString, bool >
+    struct StringCompare : public std::function<bool (OUString)>
     {
     private:
         const OUString & m_sReference;

@@ -222,19 +222,19 @@ namespace frm
     namespace
     {
 
-        struct SelectNameOfProperty : public ::std::unary_function< Property, OUString >
+        struct SelectNameOfProperty : public std::function<OUString (Property)>
         {
             const OUString& operator()( const Property& _rProp ) const { return _rProp.Name; }
         };
 
 
-        struct SelectNameOfPropertyValue : public ::std::unary_function< PropertyValue, OUString >
+        struct SelectNameOfPropertyValue : public std::function<OUString (PropertyValue)>
         {
             const OUString& operator()( const PropertyValue& _rProp ) const { return _rProp.Name; }
         };
 
 
-        struct SelectValueOfPropertyValue : public ::std::unary_function< PropertyValue, Any >
+        struct SelectValueOfPropertyValue : public std::function<Any (PropertyValue)>
         {
             const Any& operator()( const PropertyValue& _rProp ) const { return _rProp.Value; }
         };

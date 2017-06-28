@@ -98,7 +98,7 @@ namespace
 
 
 // functor for disposing a control model
-struct DisposeControlModel : public ::std::unary_function< Reference< XControlModel >, void >
+struct DisposeControlModel : public std::function<void (Reference< XControlModel >)>
 {
     void operator()( Reference< XControlModel >& _rxModel )
     {
@@ -115,7 +115,7 @@ struct DisposeControlModel : public ::std::unary_function< Reference< XControlMo
 
 
 // functor for searching control model by name
-struct FindControlModel : public ::std::unary_function< ControlModelContainerBase::UnoControlModelHolder, bool >
+struct FindControlModel : public std::function<bool (ControlModelContainerBase::UnoControlModelHolder)>
 {
 private:
     const OUString& m_rName;
@@ -131,7 +131,7 @@ public:
 
 
 // functor for cloning a control model, and insertion into a target list
-struct CloneControlModel : public ::std::unary_function< ControlModelContainerBase::UnoControlModelHolder, void >
+struct CloneControlModel : public std::function<void (ControlModelContainerBase::UnoControlModelHolder)>
 {
 private:
     ControlModelContainerBase::UnoControlModelHolderList&   m_rTargetList;
@@ -154,7 +154,7 @@ public:
 
 
 // functor for comparing a XControlModel with a given reference
-struct CompareControlModel : public ::std::unary_function< ControlModelContainerBase::UnoControlModelHolder, bool >
+struct CompareControlModel : public std::function<bool (ControlModelContainerBase::UnoControlModelHolder)>
 {
 private:
     Reference< XControlModel > m_xReference;

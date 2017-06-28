@@ -178,7 +178,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
 
 namespace
 {
-    struct OViewSetter : public std::unary_function< OTableTreeListBox::TNames::value_type, bool>
+    struct OViewSetter : public std::function<bool (OTableTreeListBox::TNames::value_type)>
     {
         const Sequence< OUString> m_aViews;
         ::comphelper::UStringMixEqual m_aEqualFunctor;

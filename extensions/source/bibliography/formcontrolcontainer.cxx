@@ -71,7 +71,7 @@ namespace bib
         m_xForm = _rxForm;
     }
 
-    struct ControlModeSwitch : public std::unary_function< Reference< XControl >, void >
+    struct ControlModeSwitch : public std::function<void (Reference< XControl >)>
     {
         bool bDesign;
         explicit ControlModeSwitch( bool _bDesign ) : bDesign( _bDesign ) { }

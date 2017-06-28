@@ -847,7 +847,7 @@ const OUString* ScDPSaveData::GetGrandTotalName() const
 
 namespace {
 
-class DimOrderInserter : public std::unary_function<const ScDPSaveDimension*, void>
+class DimOrderInserter : public std::function<void (const ScDPSaveDimension*)>
 {
     ScDPSaveData::DimOrderType& mrNames;
 public:

@@ -260,7 +260,7 @@ void lcl_CreateUndoForPages(
     pManager->LeaveListAction();
 }
 
-struct lcl_EqualsSoundFileName : public ::std::unary_function< OUString, bool >
+struct lcl_EqualsSoundFileName : public std::function<bool (OUString)>
 {
     explicit lcl_EqualsSoundFileName( const OUString & rStr ) :
             maStr( rStr )
@@ -319,7 +319,7 @@ OUString lcl_getSoundFileURL(
     return OUString();
 }
 
-struct lcl_AppendSoundToListBox : public ::std::unary_function< OUString, void >
+struct lcl_AppendSoundToListBox : public std::function<void (OUString)>
 {
     explicit lcl_AppendSoundToListBox( ListBox*  rListBox ) :
             mrListBox( rListBox )

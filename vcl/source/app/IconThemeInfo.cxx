@@ -12,6 +12,7 @@
 
 #include <stdexcept>
 #include <algorithm>
+#include <functional>
 
 // constants for theme ids and display names. Only the theme id for hicontrast is used
 // outside of this class and hence made public.
@@ -155,7 +156,7 @@ IconThemeInfo::ThemeIdToDisplayName(const OUString& themeId)
 namespace
 {
     class SameTheme :
-        public std::unary_function<const vcl::IconThemeInfo &, bool>
+        public std::function<bool (const vcl::IconThemeInfo &)>
     {
     private:
         const OUString& m_rThemeId;

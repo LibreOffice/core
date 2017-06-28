@@ -41,7 +41,6 @@
 
 using namespace formula;
 using ::std::pair;
-using ::std::unary_function;
 
 // ScRangeData
 
@@ -652,7 +651,7 @@ namespace {
 /**
  * Predicate to check if the name references the specified range.
  */
-class MatchByRange : public unary_function<ScRangeData, bool>
+class MatchByRange : public std::function<bool (ScRangeData)>
 {
     const ScRange& mrRange;
 public:

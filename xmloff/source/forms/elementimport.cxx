@@ -1404,7 +1404,7 @@ namespace xmloff
             simulateDefaultedAttribute(OAttributeMetaData::getDatabaseAttributeName(DAFlags::ConvertEmpty), PROPERTY_EMPTY_IS_NULL, "false");
     }
 
-    struct EqualHandle : public ::std::unary_function< PropertyValue, bool >
+    struct EqualHandle : public std::function<bool (PropertyValue)>
     {
         const sal_Int32 m_nHandle;
         explicit EqualHandle( sal_Int32 _nHandle ) : m_nHandle( _nHandle ) { }
@@ -1457,7 +1457,7 @@ namespace xmloff
         // since this is the default of this property, anyway.
     }
 
-    struct EqualName : public ::std::unary_function< PropertyValue, bool >
+    struct EqualName : public std::function<bool (PropertyValue)>
     {
         const OUString & m_sName;
         explicit EqualName( const OUString& _rName ) : m_sName( _rName ) { }

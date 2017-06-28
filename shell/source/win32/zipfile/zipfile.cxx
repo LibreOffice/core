@@ -325,7 +325,7 @@ bool isZipStream(StreamInterface *stream)
 namespace internal
 {
 /* for case in-sensitive string comparison */
-struct stricmp : public std::unary_function<std::string, bool>
+struct stricmp : public std::function<bool (std::string)>
 {
     explicit stricmp(const std::string &str) : str_(str)
     {}

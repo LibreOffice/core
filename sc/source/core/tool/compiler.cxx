@@ -4337,7 +4337,7 @@ void ScCompiler::CreateStringFromXMLTokenArray( OUString& rFormula, OUString& rF
 
 namespace {
 
-class ExternalFileInserter : public std::unary_function<sal_uInt16, void>
+class ExternalFileInserter : public std::function<void (sal_uInt16)>
 {
     ScAddress maPos;
     ScExternalRefManager& mrRefMgr;

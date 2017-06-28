@@ -27,6 +27,7 @@
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
+#include <functional>
 #include <unordered_map>
 
 namespace xmloff { namespace metadata
@@ -123,7 +124,7 @@ namespace xmloff { namespace metadata
             return s_reverseTokenLookup;
         }
 
-        struct AttributeHash : public ::std::unary_function< AttributeDescription, size_t >
+        struct AttributeHash : public std::function<size_t (AttributeDescription)>
         {
             size_t operator()( const AttributeDescription& i_attribute ) const
             {

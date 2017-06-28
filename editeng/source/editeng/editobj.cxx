@@ -881,7 +881,7 @@ bool EditTextObjectImpl::RemoveCharAttribs( sal_uInt16 _nWhich )
 
 namespace {
 
-class FindByParagraph : public std::unary_function<editeng::Section, bool>
+class FindByParagraph : public std::function<bool (editeng::Section)>
 {
     sal_Int32 mnPara;
 public:
@@ -892,7 +892,7 @@ public:
     }
 };
 
-class FindBySectionStart : public std::unary_function<editeng::Section, bool>
+class FindBySectionStart : public std::function<bool (editeng::Section)>
 {
     sal_Int32 mnPara;
     sal_Int32 mnStart;
@@ -1090,7 +1090,7 @@ void EditTextObjectImpl::ChangeStyleSheetName( SfxStyleFamily eFamily,
 
 namespace {
 
-class FindAttribByChar : public std::unary_function<std::unique_ptr<XEditAttribute>, bool>
+class FindAttribByChar : public std::function<bool (std::unique_ptr<XEditAttribute>)>
 {
     sal_uInt16 mnWhich;
     sal_Int32 mnChar;

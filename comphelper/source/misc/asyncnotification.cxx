@@ -60,7 +60,7 @@ namespace comphelper
     typedef std::deque< ProcessableEvent >    EventQueue;
 
 
-    struct EqualProcessor : public std::unary_function< ProcessableEvent, bool >
+    struct EqualProcessor : public std::function<bool (ProcessableEvent)>
     {
         const ::rtl::Reference< IEventProcessor >&  rProcessor;
         explicit EqualProcessor( const ::rtl::Reference< IEventProcessor >& _rProcessor ) :rProcessor( _rProcessor ) { }

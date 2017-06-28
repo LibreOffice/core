@@ -121,7 +121,7 @@ namespace slideshow
         private:
             mutable ::osl::Mutex      maMutex;
 
-            struct EventEntry : public ::std::unary_function<EventEntry, bool>
+            struct EventEntry : public std::function<bool (EventEntry)>
             {
                 EventSharedPtr  pEvent;
                 double          nTime;

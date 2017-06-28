@@ -78,7 +78,7 @@ namespace slideshow
 
         // xxx todo: remove with boost::hash when 1.33 is available
         template <typename T>
-        struct hash : ::std::unary_function<T, ::std::size_t>
+        struct hash : std::function<::std::size_t (T)>
         {
             ::std::size_t operator()( T const& val ) const {
                 return hash_value(val);

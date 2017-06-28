@@ -582,7 +582,7 @@ public:
     }
 };
 
-class AddItemToEntry : public std::unary_function<OUString, void>
+class AddItemToEntry : public std::function<void (OUString)>
 {
     ScQueryEntry::QueryItemsType& mrItems;
     svl::SharedStringPool& mrPool;
@@ -602,7 +602,7 @@ public:
     }
 };
 
-class AddSelectedItemString : public std::unary_function<ScQueryEntry::Item, void>
+class AddSelectedItemString : public std::function<void (ScQueryEntry::Item)>
 {
     std::unordered_set<OUString, OUStringHash>& mrSet;
 public:

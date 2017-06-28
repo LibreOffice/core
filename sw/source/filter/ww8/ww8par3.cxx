@@ -442,7 +442,7 @@ SprmResult WW8ListManager::GrpprlHasSprm(sal_uInt16 nId, sal_uInt8& rSprms,
     return maSprmParser.findSprmData(nId, &rSprms, nLen);
 }
 
-class ListWithId : public std::unary_function<const WW8LSTInfo *, bool>
+class ListWithId : public std::function<bool (const WW8LSTInfo *)>
 {
 private:
     sal_uInt32 mnIdLst;

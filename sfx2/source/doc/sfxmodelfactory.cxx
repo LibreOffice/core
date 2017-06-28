@@ -121,7 +121,7 @@ namespace sfx2
 
     namespace
     {
-        struct IsSpecialArgument : public ::std::unary_function< Any, bool >
+        struct IsSpecialArgument : public std::function<bool (Any)>
         {
             static bool isSpecialArgumentName( const OUString& _rValueName )
             {

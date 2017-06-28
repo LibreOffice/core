@@ -952,7 +952,7 @@ namespace
         eForceToAnotherPage,
         eBreakAction
     };
-    class ApplySectionViewAction : public ::std::unary_function< OViewsWindow::TSectionsMap::value_type, void >
+    class ApplySectionViewAction : public std::function<void (OViewsWindow::TSectionsMap::value_type)>
     {
     private:
         SectionViewAction   m_eAction;

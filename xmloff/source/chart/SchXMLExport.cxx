@@ -273,7 +273,7 @@ public:
 namespace
 {
 
-class lcl_MatchesRole : public ::std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >
+class lcl_MatchesRole : public std::function<bool (Reference< chart2::data::XLabeledDataSequence >)>
 {
 public:
     explicit lcl_MatchesRole( const OUString & aRole ) :
@@ -703,7 +703,7 @@ typedef ::std::map< sal_Int32, SchXMLExportHelper_Impl::tLabelValuesDataPair >
     lcl_DataSequenceMap;
 
 struct lcl_SequenceToMapElement :
-    public ::std::unary_function< lcl_DataSequenceMap::mapped_type, lcl_DataSequenceMap::value_type >
+    public std::function<lcl_DataSequenceMap::value_type (lcl_DataSequenceMap::mapped_type)>
 {
     lcl_SequenceToMapElement()
     {}

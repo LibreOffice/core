@@ -32,8 +32,8 @@ class SvTreeListEntry;
 namespace dbaui
 {
     class OGenericUnoController;
-    /// unary_function Functor object for class DataFlavorExVector::value_type returntype is bool
-    struct TAppSupportedSotFunctor : std::unary_function<DataFlavorExVector::value_type,bool>
+    /// function Functor object for class DataFlavorExVector::value_type returntype is bool
+    struct TAppSupportedSotFunctor : std::function<bool (DataFlavorExVector::value_type)>
     {
         ElementType eEntryType;
         TAppSupportedSotFunctor(const ElementType& _eEntryType)

@@ -63,7 +63,7 @@ const char aCategoriesRange[] = "categories";
 typedef ::std::multimap< OUString, OUString >
     lcl_tOriginalRangeToInternalRangeMap;
 
-struct lcl_ApplyCellToData : public ::std::unary_function< SchXMLCell, void >
+struct lcl_ApplyCellToData : public std::function<void (SchXMLCell)>
 {
     explicit lcl_ApplyCellToData( Sequence< double > & rOutData ) :
             m_rData( rOutData ),

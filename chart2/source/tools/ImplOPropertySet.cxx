@@ -35,7 +35,7 @@ namespace
 {
 
 struct lcl_getPropertyStateByHandle :
-        public std::unary_function< sal_Int32,  beans::PropertyState >
+        public std::function<beans::PropertyState (sal_Int32)>
 {
     explicit lcl_getPropertyStateByHandle(
         const ::property::impl::ImplOPropertySet::tPropertyMap & rMap )
@@ -55,7 +55,7 @@ private:
 
 template< typename K, typename V >
 struct lcl_eraseMapEntry :
-        public std::unary_function< K, void >
+        public std::function<void (K)>
 {
     explicit lcl_eraseMapEntry( std::map< K, V > & rMap )
             : m_rMap( rMap )
@@ -71,7 +71,7 @@ private:
 };
 
 struct lcl_replaceInterfacePropertiesByClones :
-    public std::unary_function< ::property::impl::ImplOPropertySet::tPropertyMap::value_type, void >
+    public std::function<void (::property::impl::ImplOPropertySet::tPropertyMap::value_type)>
 {
     void operator() ( ::property::impl::ImplOPropertySet::tPropertyMap::value_type & rProp )
     {

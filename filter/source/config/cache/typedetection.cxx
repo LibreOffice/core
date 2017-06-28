@@ -337,7 +337,7 @@ struct EqualByType : public std::binary_function<FlatDetectionInfo, FlatDetectio
     }
 };
 
-class FindByType : public std::unary_function<FlatDetectionInfo, bool>
+class FindByType : public std::function<bool (FlatDetectionInfo)>
 {
     OUString maType;
 public:

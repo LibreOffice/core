@@ -662,7 +662,7 @@ void ScDPSource::FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool 
 
 namespace {
 
-class CategoryDimInserter : public std::unary_function<long, void>
+class CategoryDimInserter : public std::function<void (long)>
 {
     ScDPSource& mrSource;
     std::unordered_set<sal_Int32>& mrCatDims;

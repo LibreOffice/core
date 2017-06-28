@@ -24,7 +24,7 @@
 #include <functional>
 #include <vector>
 
-struct FilterMatch : public ::std::unary_function< bool, WildCard >
+struct FilterMatch : public std::function<WildCard (bool)>
 {
 private:
     const OUString&   m_rCompareString;
