@@ -284,9 +284,9 @@ IMPL_LINK_NOARG(ParaLRSpacingWindow, ModifySpacingHdl, Edit&, void)
     if(pDisp)
     {
         SvxLRSpaceItem aMargin(SID_ATTR_PARA_LRSPACE);
-        aMargin.SetTextLeft((const long)GetCoreValue(*m_pBeforeSpacing, m_eUnit));
-        aMargin.SetRight((const long)GetCoreValue(*m_pAfterSpacing, m_eUnit));
-        aMargin.SetTextFirstLineOfst((const short)GetCoreValue(*m_pFLSpacing, m_eUnit));
+        aMargin.SetTextLeft((long)GetCoreValue(*m_pBeforeSpacing, m_eUnit));
+        aMargin.SetRight((long)GetCoreValue(*m_pAfterSpacing, m_eUnit));
+        aMargin.SetTextFirstLineOfst((short)GetCoreValue(*m_pFLSpacing, m_eUnit));
 
         pDisp->ExecuteList(SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, {&aMargin});
     }
