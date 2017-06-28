@@ -10281,6 +10281,8 @@ if test "$_os" = "Linux"; then
         # checking for it also filters out older, KDE-dependent libgpgmepp versions
         AC_CHECK_LIB(gpgmepp, progress_callback, [ GPGMEPP_LIBS=-lgpgmepp ],
             [AC_MSG_ERROR(gpgmepp not found or not functional)], [])
+        AC_CHECK_HEADER(gpgme.h, [],
+            [AC_MSG_ERROR([gpgme headers not found, install gpgme development package])], [])
     else
         AC_MSG_RESULT([internal])
         BUILD_TYPE="$BUILD_TYPE LIBGPGERROR LIBASSUAN GPGMEPP"
