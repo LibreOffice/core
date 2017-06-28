@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_185dc2e9",
+        "filename": "chart2/source/controller/dialogs/DataBrowserModel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-06-28T15:10:42Z",
+      "side": 1,
+      "message": "keep std::function here?",
+      "range": {
+        "startLine": 174,
+        "startChar": 0,
+        "endLine": 174,
+        "endChar": 116
+      },
+      "revId": "ed0f8285af8492f7eafb513fb84634d62128d7b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_f80e36e4",
+        "filename": "chart2/source/controller/dialogs/DialogModel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-06-28T15:10:42Z",
+      "side": 1,
+      "message": "and replace these with something like this:\n auto lcl_ChartTypeToSeriesCnt \u003d [](const Reference\u003c XChartType \u003e\u0026 xChartType)\n {\n  return Reference\u003c XDataSeriesContainer \u003e::query( xChartType );\n };\n\nor what\u0027s the preferred C++11 idiom?",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 2
+      },
+      "revId": "ed0f8285af8492f7eafb513fb84634d62128d7b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
