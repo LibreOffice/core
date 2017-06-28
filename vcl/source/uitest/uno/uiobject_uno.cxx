@@ -10,6 +10,7 @@
 #include <memory>
 #include "uiobject_uno.hxx"
 #include <utility>
+#include <o3tl/make_unique.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>
 
@@ -115,9 +116,9 @@ void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::
     mAction = rAction;
     mPropValues = rPropValues;
     mReady = false;
-    Idle aIdle;
-    aIdle.SetDebugName("UI Test Idle Handler");
-    aIdle.SetPriority(TaskPriority::HIGH);
+    auto aIdle = o3tl::make_unique<Idle>();
+    aIdle->SetDebugName("UI Test Idle Handler");
+    aIdle->SetPriority(TaskPriority::HIGH);
 
     std::function<void()> func = [this](){
 
@@ -136,14 +137,17 @@ void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::
 
     ExecuteWrapper* pWrapper = new ExecuteWrapper(func, LINK(this, UIObjectUnoObj, NotifyHdl));
     std::unique_lock<std::mutex>(pWrapper->getMutex());
-    aIdle.SetInvokeHandler(LINK(pWrapper, ExecuteWrapper, ExecuteActionHdl));
+    aIdle->SetInvokeHandler(LINK(pWrapper, ExecuteWrapper, ExecuteActionHdl));
     {
         SolarMutexGuard aGuard;
-        aIdle.Start();
+        aIdle->Start();
     }
 
     cv.wait(lk, [this]{return mReady;});
     pWrapper->setSignal();
+
+    SolarMutexGuard aGuard;
+    aIdle.reset();
 }
 
 css::uno::Sequence<css::beans::PropertyValue> UIObjectUnoObj::getState()
