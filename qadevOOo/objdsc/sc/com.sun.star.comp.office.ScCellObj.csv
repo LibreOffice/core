@@ -139,7 +139,6 @@
 "ScCellObj";"com::sun::star::text::XTextRange";"getEnd()"
 "ScCellObj";"com::sun::star::text::XTextRange";"getString()"
 "ScCellObj";"com::sun::star::text::XTextRange";"setString()"
-"ScCellObj";"com::sun::star::sheet::XCellAddressable";"getCellAddress()"
 "ScCellObj";"com::sun::star::sheet::SheetCell";"Position"
 "ScCellObj";"com::sun::star::sheet::SheetCell";"Size"
 "ScCellObj";"com::sun::star::sheet::SheetCell";"FormulaLocal#optional"
