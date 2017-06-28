@@ -338,8 +338,8 @@ void GIFWriter::WriteLoopExtension( const Animation& rAnimation )
         if( nLoopCount )
             nLoopCount--;
 
-        const sal_uInt8 cLoByte = (const sal_uInt8) nLoopCount;
-        const sal_uInt8 cHiByte = (const sal_uInt8) ( nLoopCount >> 8 );
+        const sal_uInt8 cLoByte = (sal_uInt8) nLoopCount;
+        const sal_uInt8 cHiByte = (sal_uInt8) ( nLoopCount >> 8 );
 
         m_rGIF.WriteUChar( 0x21 );
         m_rGIF.WriteUChar( 0xff );
