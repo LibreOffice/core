@@ -137,8 +137,10 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
         xStatusIndicator = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STATUSINDICATOR(),
                            uno::Reference<task::XStatusIndicator>());
 
-        writerfilter::dmapper::SourceDocumentType eType = writerfilter::dmapper::SourceDocumentType::RTF;
-        writerfilter::Stream::Pointer_t pStream(writerfilter::dmapper::DomainMapperFactory::createMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, eType, aMediaDesc));
+        writerfilter::Stream::Pointer_t pStream(
+            writerfilter::dmapper::DomainMapperFactory::createMapper(
+                    m_xContext, xInputStream, m_xDstDoc, bRepairStorage,
+                    writerfilter::dmapper::SourceDocumentType::RTF, aMediaDesc));
         writerfilter::rtftok::RTFDocument::Pointer_t pDocument(
             writerfilter::rtftok::RTFDocumentFactory::createDocument(m_xContext, xInputStream, m_xDstDoc, xFrame, xStatusIndicator, aMediaDesc));
         pDocument->resolve(*pStream);
