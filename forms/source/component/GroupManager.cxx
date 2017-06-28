@@ -82,14 +82,6 @@ OGroupComp::OGroupComp()
 {
 }
 
-OGroupComp::OGroupComp(const OGroupComp& _rSource)
-    :m_xComponent( _rSource.m_xComponent )
-    ,m_xControlModel(_rSource.m_xControlModel)
-    ,m_nPos( _rSource.m_nPos )
-    ,m_nTabIndex( _rSource.m_nTabIndex )
-{
-}
-
 OGroupComp::OGroupComp(const Reference<XPropertySet>& rxSet, sal_Int32 nInsertPos )
     : m_xComponent( rxSet )
     , m_xControlModel(rxSet,UNO_QUERY)

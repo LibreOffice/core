@@ -62,7 +62,6 @@ public:
     bool        mbNeedsXSLT2;
 
     filter_info_impl();
-    filter_info_impl( const filter_info_impl& rInfo );
     bool operator==( const filter_info_impl& ) const;
 
     css::uno::Sequence< OUString > getFilterUserData() const;

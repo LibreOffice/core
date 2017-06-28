@@ -98,7 +98,6 @@ class OGroupComp
 
 public:
     OGroupComp(const css::uno::Reference< css::beans::XPropertySet>& rxElement, sal_Int32 nInsertPos );
-    OGroupComp(const OGroupComp& _rSource);
     OGroupComp();
 
     bool operator==( const OGroupComp& rComp ) const;

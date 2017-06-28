@@ -43,16 +43,6 @@ public:
         nDotCount(0),
         fDotLen(0),
         fDistance(0) {}
-
-    DXFLineInfo(const DXFLineInfo& x) :
-        eStyle(x.eStyle),
-        fWidth(x.fWidth),
-        nDashCount(x.nDashCount),
-        fDashLen(x.fDashLen),
-        nDotCount(x.nDotCount),
-        fDotLen(x.fDotLen),
-        fDistance(x.fDistance) {}
-
 };
 
 
@@ -67,7 +57,6 @@ public:
     double fx,fy,fz; // public ! - why not?
 
     inline DXFVector(double fX=0.0, double fY=0.0, double fZ=0.0);
-    inline DXFVector(const DXFVector & rV);
 
     // summation/subtraktion:
     DXFVector & operator += (const DXFVector & rV);
@@ -168,12 +157,6 @@ private:
 inline DXFVector::DXFVector(double fX, double fY, double fZ)
 {
     fx=fX; fy=fY; fz=fZ;
-}
-
-
-inline DXFVector::DXFVector(const DXFVector & rV)
-{
-    fx=rV.fx; fy=rV.fy; fz=rV.fz;
 }
 
 

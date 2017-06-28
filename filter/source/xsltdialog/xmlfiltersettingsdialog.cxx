@@ -1538,28 +1538,6 @@ filter_info_impl::filter_info_impl()
 {
 }
 
-filter_info_impl::filter_info_impl( const filter_info_impl& rInfo ) :
-    maFilterName( rInfo.maFilterName ),
-    maType( rInfo.maType ),
-    maDocumentService( rInfo.maDocumentService ),
-    maFilterService( rInfo.maFilterService ),
-    maInterfaceName( rInfo.maInterfaceName ),
-    maComment( rInfo.maComment ),
-    maExtension( rInfo.maExtension ),
-    maExportXSLT( rInfo.maExportXSLT ),
-    maImportXSLT( rInfo.maImportXSLT ),
-    maImportTemplate( rInfo.maImportTemplate ),
-    maDocType( rInfo.maDocType ),
-    maImportService( rInfo.maImportService ),
-    maExportService( rInfo.maExportService ),
-    maFlags( rInfo.maFlags ),
-    maFileFormatVersion( rInfo.maFileFormatVersion ),
-    mnDocumentIconID( rInfo.mnDocumentIconID ),
-    mbReadonly( rInfo.mbReadonly ),
-    mbNeedsXSLT2( rInfo.mbNeedsXSLT2 )
-{
-}
-
 bool filter_info_impl::operator==( const filter_info_impl& r ) const
 {
     return maFilterName == r.maFilterName &&

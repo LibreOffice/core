@@ -75,8 +75,6 @@ public:
     typedef std::vector<editeng::MisspellRange>::const_iterator const_iterator;
 
     WrongList();
-    WrongList(const WrongList& r);
-    ~WrongList();
 
     const std::vector<editeng::MisspellRange>& GetRanges() const { return maRanges;}
     void SetRanges( const std::vector<editeng::MisspellRange>& rRanges );
