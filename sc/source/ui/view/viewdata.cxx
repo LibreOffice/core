@@ -527,7 +527,7 @@ void ScViewData::InsertTab( SCTAB nTab )
 
 void ScViewData::InsertTabs( SCTAB nTab, SCTAB nNewSheets )
 {
-    if( nTab+nNewSheets >= static_cast<SCTAB>(maTabData.size()))
+    if (nTab >= static_cast<SCTAB>(maTabData.size()))
         maTabData.resize(nTab+nNewSheets, nullptr);
     else
     {
