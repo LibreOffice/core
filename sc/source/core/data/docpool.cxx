@@ -195,6 +195,11 @@ ScDocumentPool::ScDocumentPool()
                         aItemInfos, nullptr, false/*bLoadRefCounts*/ ),
     mnCurrentMaxKey(0)
 {
+    // this is a hack for unit tests that need to have a ScDocument
+    // but don't want to depend on BootstrapFixture
+    if (!pVersionMap1)
+        InitVersionMaps();
+
     //  latin font from GetDefaultFonts is not used, DEFAULTFONT_LATIN_SPREADSHEET instead
     vcl::Font aStdFont = OutputDevice::GetDefaultFont( DefaultFontType::LATIN_SPREADSHEET, LANGUAGE_ENGLISH_US,
                                                     GetDefaultFontFlags::OnlyOne );
