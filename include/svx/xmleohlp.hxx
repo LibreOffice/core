@@ -102,8 +102,7 @@ public:
     static SvXMLEmbeddedObjectHelper*   Create(
                                     const css::uno::Reference < css::embed::XStorage >&,
                                     ::comphelper::IEmbeddedHelper& rDocPersist,
-                                    SvXMLEmbeddedObjectHelperMode eCreateMode,
-                                    bool bDirect = true );
+                                    SvXMLEmbeddedObjectHelperMode eCreateMode );
     static SvXMLEmbeddedObjectHelper*   Create(
                                     ::comphelper::IEmbeddedHelper& rDocPersist,
                                     SvXMLEmbeddedObjectHelperMode eCreateMode );

@@ -94,8 +94,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     {
         pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
                                          xStg, *pPersist,
-                                         SvXMLEmbeddedObjectHelperMode::Write,
-                                         false );
+                                         SvXMLEmbeddedObjectHelperMode::Write );
         xObjectResolver = pObjectHelper;
     }
 

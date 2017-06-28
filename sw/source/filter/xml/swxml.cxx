@@ -498,8 +498,7 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     {
         pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
                                         xStorage, *pPersist,
-                                        SvXMLEmbeddedObjectHelperMode::Read,
-                                        false );
+                                        SvXMLEmbeddedObjectHelperMode::Read );
         xObjectResolver = pObjectHelper;
     }
 
