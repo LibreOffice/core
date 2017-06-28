@@ -262,7 +262,7 @@ void ScChangeTrackingExportHelper::SetValueAttributes(const double& fValue, cons
 
 void ScChangeTrackingExportHelper::WriteValueCell(const ScCellValue& rCell, const OUString& sValue)
 {
-    OSL_ASSERT(rCell.meType == CELLTYPE_VALUE);
+    assert(rCell.meType == CELLTYPE_VALUE);
 
     SetValueAttributes(rCell.mfValue, sValue);
     SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
@@ -270,7 +270,7 @@ void ScChangeTrackingExportHelper::WriteValueCell(const ScCellValue& rCell, cons
 
 void ScChangeTrackingExportHelper::WriteStringCell(const ScCellValue& rCell)
 {
-    OSL_ASSERT(rCell.meType == CELLTYPE_STRING);
+    assert(rCell.meType == CELLTYPE_STRING);
 
     rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
     SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
@@ -284,7 +284,7 @@ void ScChangeTrackingExportHelper::WriteStringCell(const ScCellValue& rCell)
 
 void ScChangeTrackingExportHelper::WriteEditCell(const ScCellValue& rCell)
 {
-    OSL_ASSERT(rCell.meType == CELLTYPE_EDIT);
+    assert(rCell.meType == CELLTYPE_EDIT);
 
     OUString sString;
     if (rCell.mpEditText)
@@ -307,7 +307,7 @@ void ScChangeTrackingExportHelper::WriteEditCell(const ScCellValue& rCell)
 
 void ScChangeTrackingExportHelper::WriteFormulaCell(const ScCellValue& rCell, const OUString& sValue)
 {
-    OSL_ASSERT(rCell.meType == CELLTYPE_FORMULA);
+    assert(rCell.meType == CELLTYPE_FORMULA);
 
     ScFormulaCell* pFormulaCell = rCell.mpFormula;
     OUString sAddress;
