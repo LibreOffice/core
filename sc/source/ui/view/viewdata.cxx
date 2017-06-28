@@ -543,9 +543,10 @@ void ScViewData::InsertTabs( SCTAB nTab, SCTAB nNewSheets )
 
 void ScViewData::DeleteTab( SCTAB nTab )
 {
+    assert(nTab < static_cast<SCTAB>(maTabData.size()));
     delete maTabData.at(nTab);
-
     maTabData.erase(maTabData.begin() + nTab);
+
     if (static_cast<size_t>(nTabNo) >= maTabData.size())
     {
         EnsureTabDataSize(1);
