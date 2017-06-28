@@ -911,7 +911,7 @@ void PageSettingsConverter::writePageSettingsProperties(
     else
     {
         // scale may be 0 which indicates uninitialized
-        sal_Int16 nScale = (rModel.mbValidSettings && (rModel.mnScale > 0)) ? getLimitedValue< sal_Int16, sal_Int32 >( rModel.mnScale, 10, 400 ) : 100;
+        sal_Int16 nScale = (rModel.mnScale > 0) ? getLimitedValue< sal_Int16, sal_Int32 >( rModel.mnScale, 10, 400 ) : 100;
         rPropSet.setProperty( PROP_PageScale, nScale );
     }
 
