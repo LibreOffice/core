@@ -904,12 +904,34 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
         rSet.DisableItem( SID_CLEARHISTORY );
 
     if ( pShUndoMgr && pShUndoMgr->GetUndoActionCount() )
-        rSet.Put( SfxStringItem( SID_UNDO, SvtResId(STR_UNDO)+pShUndoMgr->GetUndoActionComment() ) );
+    {
+        const SfxUndoAction* pAction = pShUndoMgr->GetUndoAction();
+        SfxViewShell *pViewSh = GetViewShell();
+        if (pViewSh && pAction->GetViewShellId() != pViewSh->GetViewShellId())
+        {
+            rSet.Put(SfxUInt32Item(SID_UNDO, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)));
+        }
+        else
+        {
+            rSet.Put( SfxStringItem( SID_UNDO, SvtResId(STR_UNDO)+pShUndoMgr->GetUndoActionComment() ) );
+        }
+    }
     else
         rSet.DisableItem( SID_UNDO );
 
     if ( pShUndoMgr && pShUndoMgr->GetRedoActionCount() )
-        rSet.Put( SfxStringItem( SID_REDO, SvtResId(STR_REDO)+pShUndoMgr->GetRedoActionComment() ) );
+    {
+        const SfxUndoAction* pAction = pShUndoMgr->GetRedoAction();
+        SfxViewShell *pViewSh = GetViewShell();
+        if (pViewSh && pAction->GetViewShellId() != pViewSh->GetViewShellId())
+        {
+            rSet.Put(SfxUInt32Item(SID_REDO, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)));
+        }
+        else
+        {
+            rSet.Put( SfxStringItem( SID_REDO, SvtResId(STR_REDO)+pShUndoMgr->GetRedoActionComment() ) );
+        }
+    }
     else
         rSet.DisableItem( SID_REDO );
 

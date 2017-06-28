@@ -83,6 +83,7 @@ public:
     void testUndoRepairDispatch();
     void testInsertGraphicInvalidations();
     void testDocumentSizeWithTwoViews();
+    void testDisableUndoRepair();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -109,6 +110,7 @@ public:
     CPPUNIT_TEST(testUndoRepairDispatch);
     CPPUNIT_TEST(testInsertGraphicInvalidations);
     CPPUNIT_TEST(testDocumentSizeWithTwoViews);
+    CPPUNIT_TEST(testDisableUndoRepair);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1345,6 +1347,71 @@ void ScTiledRenderingTest::testDocumentSizeWithTwoViews()
         CPPUNIT_ASSERT_EQUAL(aBuffer1[i], aBuffer2[i]);
 
     comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testDisableUndoRepair()
+{
+    comphelper::LibreOfficeKit::setActive();
+    ScModelObj* pModelObj = createDoc("cursor-away.ods");
+    CPPUNIT_ASSERT(pModelObj);
+
+    // view #1
+    int nView1 = SfxLokHelper::getView();
+    SfxViewShell* pView1 = SfxViewShell::Current();
+
+    // view #2
+    SfxLokHelper::createView();
+    int nView2 = SfxLokHelper::getView();
+    SfxViewShell* pView2 = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pView1 != pView2);
+    {
+        SfxItemSet aSet1(pView1->GetPool(), svl::Items<SID_UNDO, SID_UNDO>{});
+        SfxItemSet aSet2(pView2->GetPool(), svl::Items<SID_UNDO, SID_UNDO>{});
+        pView1->GetSlotState(SID_UNDO, nullptr, &aSet1);
+        pView2->GetSlotState(SID_UNDO, nullptr, &aSet2);
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED, aSet1.GetItemState(SID_UNDO));
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED, aSet2.GetItemState(SID_UNDO));
+    }
+
+    // text edit a cell in view #1
+    SfxLokHelper::setView(nView1);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'h', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'h', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+    {
+        SfxItemSet aSet1(pView1->GetPool(), svl::Items<SID_UNDO, SID_UNDO>{});
+        SfxItemSet aSet2(pView2->GetPool(), svl::Items<SID_UNDO, SID_UNDO>{});
+        pView1->GetSlotState(SID_UNDO, nullptr, &aSet1);
+        pView2->GetSlotState(SID_UNDO, nullptr, &aSet2);
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aSet1.GetItemState(SID_UNDO));
+        CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(aSet1.GetItem(SID_UNDO)));
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aSet2.GetItemState(SID_UNDO));
+        CPPUNIT_ASSERT(dynamic_cast< const SfxUInt32Item* >(aSet2.GetItem(SID_UNDO)));
+        CPPUNIT_ASSERT_EQUAL(static_cast< sal_uInt32 >(SID_REPAIRPACKAGE), dynamic_cast< const SfxUInt32Item* >(aSet2.GetItem(SID_UNDO))->GetValue());
+    }
+
+    // text edit a cell in view #2
+    SfxLokHelper::setView(nView2);
+    pModelObj->setPart(1);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessEventsToIdle();
+    {
+        SfxItemSet aSet1(pView1->GetPool(), svl::Items<SID_UNDO, SID_UNDO>{});
+        SfxItemSet aSet2(pView2->GetPool(), svl::Items<SID_UNDO, SID_UNDO>{});
+        pView1->GetSlotState(SID_UNDO, nullptr, &aSet1);
+        pView2->GetSlotState(SID_UNDO, nullptr, &aSet2);
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aSet1.GetItemState(SID_UNDO));
+        CPPUNIT_ASSERT(dynamic_cast< const SfxUInt32Item* >(aSet1.GetItem(SID_UNDO)));
+        CPPUNIT_ASSERT_EQUAL(static_cast< sal_uInt32 >(SID_REPAIRPACKAGE), dynamic_cast< const SfxUInt32Item* >(aSet1.GetItem(SID_UNDO))->GetValue());
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aSet2.GetItemState(SID_UNDO));
+        CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(aSet2.GetItem(SID_UNDO)));
+    }
 }
 
 }
