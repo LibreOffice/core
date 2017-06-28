@@ -345,6 +345,10 @@ void OOXMLFastContextHandler::startCharacterGroup()
             mpParserState->setInCharacterGroup(true);
             mpParserState->resolveCharacterProperties(*mpStream);
         }
+
+        // tdf#108714 : if we have a postponed break information,
+        // then apply it now, before any other paragraph content.
+        mpParserState->resolvePostponedBreak(*mpStream);
     }
 }
 
@@ -371,10 +375,6 @@ void OOXMLFastContextHandler::startParagraphGroup()
         {
             mpStream->startParagraphGroup();
             mpParserState->setInParagraphGroup(true);
-
-            // tdf#108714 : if we have a postponed break information,
-            // then apply it now, before any other paragraph content.
-            mpParserState->resolvePostponedBreak(*mpStream);
         }
     }
 }

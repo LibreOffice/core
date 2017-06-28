@@ -1315,8 +1315,8 @@ DECLARE_OOXMLIMPORT_TEST(testVmlAdjustments, "vml-adjustments.docx")
 
 DECLARE_OOXMLIMPORT_TEST(testTdf108714, "tdf108714.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(4, getParagraphs());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Page break is absent - we lost bug-to-bug compatibility with Word", 3, getPages());
+    CPPUNIT_ASSERT_EQUAL(6, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Page break is absent - we lost bug-to-bug compatibility with Word", 4, getPages());
 
     // The second (empty) paragraph must be at first page, despite the <w:br> element was before it.
     // That's because Word treats such break as first element in first run of following paragraph:
@@ -1349,12 +1349,23 @@ DECLARE_OOXMLIMPORT_TEST(testTdf108714, "tdf108714.docx")
     CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE, breakType);
 
     paragraph = getParagraph(3);
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 2"), paragraph->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 3"), paragraph->getString());
     breakType = getProperty<style::BreakType>(paragraph, "BreakType");
     CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, breakType);
 
     paragraph = getParagraph(4);
-    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 3"), paragraph->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 4"), paragraph->getString());
+    breakType = getProperty<style::BreakType>(paragraph, "BreakType");
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, breakType);
+
+    // A table with immediately following break
+    uno::Reference<text::XTextContent> table = getParagraphOrTable(5);
+    getCell(table, "A1", "Paragraph 5 in table");
+    breakType = getProperty<style::BreakType>(table, "BreakType");
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE, breakType);
+
+    paragraph = getParagraph(6);
+    CPPUNIT_ASSERT_EQUAL(OUString("Paragraph 6"), paragraph->getString());
     breakType = getProperty<style::BreakType>(paragraph, "BreakType");
     CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, breakType);
 }
