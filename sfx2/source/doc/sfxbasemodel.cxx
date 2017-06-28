@@ -1999,7 +1999,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
 
                 if (xMetaFile)
                 {
-                    aAny <<= reinterpret_cast< const sal_uInt64 >(
+                    aAny <<= reinterpret_cast< sal_uInt64 >(
                         GraphicHelper::getEnhMetaFileFromGDI_Impl( xMetaFile.get() ) );
                 }
             }
@@ -2038,7 +2038,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 if (xMetaFile)
                 {
                     Size aMetaSize = xMetaFile->GetPrefSize();
-                    aAny <<= reinterpret_cast< const sal_uInt64 >(
+                    aAny <<= reinterpret_cast< sal_uInt64 >(
                         GraphicHelper::getWinMetaFileFromGDI_Impl(
                             xMetaFile.get(), aMetaSize ) );
                 }
