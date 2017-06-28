@@ -147,8 +147,7 @@ bool Hdf::getValueForKey( const OString& rKey, HDFData& rValue )
 
     if( m_pStringToDataMap == nullptr && m_pStringToValPosMap == nullptr )
     {
-        bool bOptimizeForPerformance = false;
-        createHashMap( bOptimizeForPerformance );
+        createHashMap( false/*bOptimizeForPerformance*/ );
     }
 
     if( m_pStringToValPosMap != nullptr )
