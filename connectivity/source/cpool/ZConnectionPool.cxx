@@ -77,8 +77,7 @@ OConnectionPool::~OConnectionPool()
     clear(false);
 }
 
-struct TRemoveEventListenerFunctor : std::unary_function<TPooledConnections::value_type,void>
-                                    ,std::unary_function<TActiveConnectionMap::value_type,void>
+struct TRemoveEventListenerFunctor
 {
     OConnectionPool* m_pConnectionPool;
     bool m_bDispose;
@@ -113,7 +112,7 @@ struct TRemoveEventListenerFunctor : std::unary_function<TPooledConnections::val
     }
 };
 
-struct TConnectionPoolFunctor : std::unary_function<TConnectionMap::value_type,void>
+struct TConnectionPoolFunctor
 {
     OConnectionPool* m_pConnectionPool;
 

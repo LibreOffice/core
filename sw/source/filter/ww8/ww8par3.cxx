@@ -35,7 +35,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <algorithm>
-#include <functional>
 #include <hintids.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -442,7 +441,7 @@ SprmResult WW8ListManager::GrpprlHasSprm(sal_uInt16 nId, sal_uInt8& rSprms,
     return maSprmParser.findSprmData(nId, &rSprms, nLen);
 }
 
-class ListWithId : public std::unary_function<const WW8LSTInfo *, bool>
+class ListWithId
 {
 private:
     sal_uInt32 mnIdLst;

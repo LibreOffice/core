@@ -21,10 +21,9 @@
 #define INCLUDED_SVL_URLFILTER_HXX
 
 #include <tools/wldcrd.hxx>
-#include <functional>
 #include <vector>
 
-struct FilterMatch : public ::std::unary_function< bool, WildCard >
+struct FilterMatch
 {
 private:
     const OUString&   m_rCompareString;

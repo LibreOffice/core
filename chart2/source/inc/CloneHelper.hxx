@@ -22,7 +22,6 @@
 #include <com/sun/star/util/XCloneable.hpp>
 
 #include <map>
-#include <functional>
 #include <algorithm>
 #include <iterator>
 
@@ -33,7 +32,7 @@ namespace CloneHelper
 
 /// functor that clones a UNO-Reference
 template< class Interface >
-    struct CreateRefClone : public std::unary_function< Interface, Interface >
+    struct CreateRefClone
 {
     css::uno::Reference<Interface> operator() ( const css::uno::Reference<Interface> & xOther )
     {

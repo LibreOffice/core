@@ -55,7 +55,6 @@
 
 #include <map>
 #include <algorithm>
-#include <functional>
 #include "tools/urlobj.hxx"
 #include "osl/file.hxx"
 #include "toolkit/controls/dialogcontrol.hxx"
@@ -98,7 +97,7 @@ namespace
 
 
 // functor for disposing a control model
-struct DisposeControlModel : public ::std::unary_function< Reference< XControlModel >, void >
+struct DisposeControlModel
 {
     void operator()( Reference< XControlModel >& _rxModel )
     {
@@ -115,7 +114,7 @@ struct DisposeControlModel : public ::std::unary_function< Reference< XControlMo
 
 
 // functor for searching control model by name
-struct FindControlModel : public ::std::unary_function< ControlModelContainerBase::UnoControlModelHolder, bool >
+struct FindControlModel
 {
 private:
     const OUString& m_rName;
@@ -131,7 +130,7 @@ public:
 
 
 // functor for cloning a control model, and insertion into a target list
-struct CloneControlModel : public ::std::unary_function< ControlModelContainerBase::UnoControlModelHolder, void >
+struct CloneControlModel
 {
 private:
     ControlModelContainerBase::UnoControlModelHolderList&   m_rTargetList;
@@ -154,7 +153,7 @@ public:
 
 
 // functor for comparing a XControlModel with a given reference
-struct CompareControlModel : public ::std::unary_function< ControlModelContainerBase::UnoControlModelHolder, bool >
+struct CompareControlModel
 {
 private:
     Reference< XControlModel > m_xReference;

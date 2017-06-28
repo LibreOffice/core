@@ -282,7 +282,7 @@ void getChartSourceRanges(ScDocument* pDoc, const SdrMarkList& rObjs, std::vecto
     }
 }
 
-class InsertTabIndex : public std::unary_function<ScRange, void>
+class InsertTabIndex
 {
     std::vector<SCTAB>& mrTabs;
 public:
@@ -293,7 +293,7 @@ public:
     }
 };
 
-class CopyRangeData : public std::unary_function<ScRange, void>
+class CopyRangeData
 {
     ScDocument* mpSrc;
     ScDocument* mpDest;

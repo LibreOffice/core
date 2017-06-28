@@ -1261,7 +1261,7 @@ void ScUndoDragDrop::DoUndo( ScRange aRange )
 
 namespace {
 
-class DataChangeNotifier : public std::unary_function<SvtListener*, void>
+class DataChangeNotifier
 {
     ScHint maHint;
 public:

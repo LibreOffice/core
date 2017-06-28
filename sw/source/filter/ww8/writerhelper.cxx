@@ -151,7 +151,7 @@ namespace
     }
 
     //Utility to test if a frame is anchored at a given node index
-    class anchoredto: public std::unary_function<const ww8::Frame&, bool>
+    class anchoredto
     {
     private:
         sal_uLong mnNode;
@@ -720,8 +720,7 @@ namespace sw
             maStack.push_back(new SwFltStackEntry(rPos,rAttr.Clone()));
         }
 
-        class SameOpenRedlineType :
-            public std::unary_function<const SwFltStackEntry*, bool>
+        class SameOpenRedlineType
         {
         private:
             RedlineType_t meType;

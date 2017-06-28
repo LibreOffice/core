@@ -65,7 +65,7 @@ private:
     bool   mbIsDate;
 };
 
-class FindTypedStrData : public std::unary_function<ScTypedStrData, bool>
+class FindTypedStrData
 {
     ScTypedStrData maVal;
     bool mbCaseSens;

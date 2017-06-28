@@ -54,7 +54,7 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 
-struct lcl_ObjectToOID : public std::unary_function< Reference< uno::XInterface >, ::chart::ObjectIdentifier >
+struct lcl_ObjectToOID
 {
     explicit lcl_ObjectToOID( const Reference< chart2::XChartDocument > & xChartDoc ) :
             m_xModel( xChartDoc, uno::UNO_QUERY )

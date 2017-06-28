@@ -59,8 +59,7 @@ namespace
 {
 const OUString lcl_aLabelRole( "label" );
 
-struct lcl_ChartTypeToSeriesCnt : std::unary_function<
-        Reference< XChartType >, Reference< XDataSeriesContainer > >
+struct lcl_ChartTypeToSeriesCnt
 {
     Reference< XDataSeriesContainer > operator() (
         const Reference< XChartType > & xChartType )

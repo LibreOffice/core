@@ -41,7 +41,6 @@
 #include <utility>
 
 using ::std::unique_ptr;
-using ::std::unary_function;
 using ::std::for_each;
 using ::std::find_if;
 using ::std::remove_if;
@@ -724,7 +723,7 @@ void ScDBData::InvalidateTableColumnNames( bool bSwapToEmptyNames )
 }
 
 namespace {
-class TableColumnNameSearch : public unary_function<ScDBData, bool>
+class TableColumnNameSearch
 {
 public:
     explicit TableColumnNameSearch( const OUString& rSearchName ) :
@@ -933,7 +932,7 @@ void ScDBData::GetFilterSelCount( SCSIZE& nSelected, SCSIZE& nTotal )
 
 namespace {
 
-class FindByTable : public unary_function<std::unique_ptr<ScDBData>, bool>
+class FindByTable
 {
     SCTAB mnTab;
 public:
@@ -947,7 +946,7 @@ public:
     }
 };
 
-class UpdateRefFunc : public unary_function<std::unique_ptr<ScDBData>, void>
+class UpdateRefFunc
 {
     ScDocument* mpDoc;
     UpdateRefMode meMode;
@@ -977,7 +976,7 @@ public:
     }
 };
 
-class UpdateMoveTabFunc : public unary_function<std::unique_ptr<ScDBData>, void>
+class UpdateMoveTabFunc
 {
     SCTAB mnOldTab;
     SCTAB mnNewTab;
@@ -989,7 +988,7 @@ public:
     }
 };
 
-class FindByCursor : public unary_function<std::unique_ptr<ScDBData>, bool>
+class FindByCursor
 {
     SCCOL mnCol;
     SCROW mnRow;
@@ -1005,7 +1004,7 @@ public:
     }
 };
 
-class FindByRange : public unary_function<std::unique_ptr<ScDBData>, bool>
+class FindByRange
 {
     const ScRange& mrRange;
 public:
@@ -1018,7 +1017,7 @@ public:
     }
 };
 
-class FindByIndex : public unary_function<std::unique_ptr<ScDBData>, bool>
+class FindByIndex
 {
     sal_uInt16 mnIndex;
 public:
@@ -1029,7 +1028,7 @@ public:
     }
 };
 
-class FindByUpperName : public unary_function<std::unique_ptr<ScDBData>, bool>
+class FindByUpperName
 {
     const OUString& mrName;
 public:
@@ -1040,7 +1039,7 @@ public:
     }
 };
 
-class FindByPointer : public unary_function<std::unique_ptr<ScDBData>, bool>
+class FindByPointer
 {
     const ScDBData* mpDBData;
 public:

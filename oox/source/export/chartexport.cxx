@@ -127,7 +127,7 @@ bool isPrimaryAxes(sal_Int32 nIndex)
 
 }
 
-class lcl_MatchesRole : public ::std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >
+class lcl_MatchesRole
 {
 public:
     explicit lcl_MatchesRole( const OUString & aRole ) :

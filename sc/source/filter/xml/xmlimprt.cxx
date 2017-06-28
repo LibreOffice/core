@@ -3178,7 +3178,7 @@ void ScXMLImport::SetLabelRanges()
 
 namespace {
 
-class RangeNameInserter : public ::std::unary_function<ScMyNamedExpression, void>
+class RangeNameInserter
 {
     ScDocument* mpDoc;
     ScRangeName& mrRangeName;

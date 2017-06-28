@@ -23,7 +23,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <map>
-#include <functional>
 
 namespace svt
 {
@@ -33,7 +32,7 @@ namespace svt
     public:
         typedef ::std::map< sal_Int32, css::uno::Reference< css::accessibility::XAccessible > >  THeaderCellMap;
 
-        struct  THeaderCellMapFunctorDispose : ::std::unary_function<THeaderCellMap::value_type,void>
+        struct  THeaderCellMapFunctorDispose
         {
             void operator()(const THeaderCellMap::value_type& _aType)
             {

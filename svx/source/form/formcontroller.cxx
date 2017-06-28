@@ -499,7 +499,7 @@ IMPL_LINK_NOARG( FormController, OnActivateTabOrder, Timer*, void )
 }
 
 
-struct UpdateAllListeners : public ::std::unary_function< Reference< XDispatch >, bool >
+struct UpdateAllListeners
 {
     bool operator()( const Reference< XDispatch >& _rxDispatcher ) const
     {
@@ -699,7 +699,7 @@ Sequence< OUString> const & FormController::getSupportedServiceNames_Static()
 
 namespace
 {
-    struct ResetComponentText : public ::std::unary_function< Reference< XTextComponent >, void >
+    struct ResetComponentText
     {
         void operator()( const Reference< XTextComponent >& _rxText )
         {
@@ -707,7 +707,7 @@ namespace
         }
     };
 
-    struct RemoveComponentTextListener : public ::std::unary_function< Reference< XTextComponent >, void >
+    struct RemoveComponentTextListener
     {
         explicit RemoveComponentTextListener( const Reference< XTextListener >& _rxListener )
             :m_xListener( _rxListener )
