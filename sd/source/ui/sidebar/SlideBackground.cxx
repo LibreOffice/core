@@ -63,6 +63,7 @@
 #include "EventMultiplexer.hxx"
 #include "glob.hrc"
 #include <vcl/salbtype.hxx>
+#include <vcl/EnumContext.hxx>
 
 using namespace ::com::sun::star;
 
@@ -175,24 +176,9 @@ void SlideBackground::Initialize()
             mpMasterSlide->SelectEntry(aLayoutName);
         }
 
-        DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pMainViewShell);
-        if ( pDrawViewShell != nullptr
-             && pDrawViewShell->GetEditMode() == EditMode::MasterPage )
-        {
-            mpCloseMaster->Show();
-            mpEditMaster->Hide();
-            mpMasterSlide->Disable();
-            mpDspMasterBackground->Disable();
-            mpDspMasterObjects->Disable();
-        }
-        else
-        {
-            mpCloseMaster->Hide();
-            mpEditMaster->Show();
-            mpMasterSlide->Enable();
-            mpDspMasterBackground->Enable();
-            mpDspMasterObjects->Enable();
-        }
+        //DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pMainViewShell);
+        //if ( pDrawViewShell != nullptr
+        //     && pDrawViewShell->GetEditMode() == EditMode::MasterPage )
     }
 
     mpFillStyle->SelectEntryPos(static_cast< sal_Int32 >(NONE));
@@ -209,14 +195,32 @@ void SlideBackground::HandleContextChange(
     if (maContext == rContext)
         return;
     maContext = rContext;
-    if ( maContext == maImpressOtherContext || maContext == maImpressMasterContext )
+    /*if ( maContext == maImpressOtherContext || maContext == maImpressMasterContext )
     {
         maApplication = vcl::EnumContext::Application::Impress;
     }
     else if ( maContext == maDrawOtherContext || maContext == maDrawMasterContext )
     {
         maApplication = vcl::EnumContext::Application::Draw;
+    }*/
+
+    if ( maContext == maImpressMasterContext )
+    {
+        mpCloseMaster->Show();
+        mpEditMaster->Hide();
+        mpMasterSlide->Disable();
+        mpDspMasterBackground->Disable();
+        mpDspMasterObjects->Disable();
     }
+    else if (maContext == maImpressOtherContext )
+    {
+        mpCloseMaster->Hide();
+        mpEditMaster->Show();
+        mpMasterSlide->Enable();
+        mpDspMasterBackground->Enable();
+        mpDspMasterObjects->Enable();
+    }
+    // else Draw, do nothing
 }
 
 void SlideBackground::Update()
@@ -378,9 +382,6 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
                         }
                         else
                             SetPanelTitle(SdResId(STR_MASTERPAGE_NAME));
-                        mpMasterSlide->Disable();
-                        mpDspMasterBackground->Disable();
-                        mpDspMasterObjects->Disable();
                     }
                     else // EditMode::Page
                     {
@@ -392,9 +393,6 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
                         }
                         else
                             SetPanelTitle(SdResId(STR_PAGE_NAME));
-                        mpMasterSlide->Enable();
-                        mpDspMasterBackground->Enable();
-                        mpDspMasterObjects->Enable();
                     }
                 }
                 mbEditModeChangePending = false;
