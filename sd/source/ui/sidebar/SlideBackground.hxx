@@ -117,7 +117,6 @@ private:
     vcl::EnumContext maDrawMasterContext;
     vcl::EnumContext maImpressOtherContext;
     vcl::EnumContext maImpressMasterContext;
-    vcl::EnumContext::Application maApplication;
     bool         mbTitle;
     SfxBindings* mpBindings;
 
