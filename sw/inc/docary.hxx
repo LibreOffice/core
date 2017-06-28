@@ -332,7 +332,7 @@ private:
     vector_type maVector;
 public:
     ~SwRedlineTable();
-    bool Contains(const SwRangeRedline* p) const { return maVector.find(const_cast<SwRangeRedline* const>(p)) != maVector.end(); }
+    bool Contains(const SwRangeRedline* p) const { return maVector.find(const_cast<SwRangeRedline*>(p)) != maVector.end(); }
     size_type GetPos(const SwRangeRedline* p) const;
 
     bool Insert(SwRangeRedlinePtr& p);

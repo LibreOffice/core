@@ -1205,7 +1205,7 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
         break;
 
     case RES_CHRATR_ESCAPEMENT:
-        switch( (const SvxEscapement)
+        switch( (SvxEscapement)
                         static_cast<const SvxEscapementItem&>(rItem).GetEnumValue() )
         {
         case SvxEscapement::Superscript:
@@ -2784,7 +2784,7 @@ static Writer& OutHTML_SvxEscapement( Writer& rWrt, const SfxPoolItem& rHt )
         return rWrt;
 
     const SvxEscapement eEscape =
-        (const SvxEscapement)static_cast<const SvxEscapementItem&>(rHt).GetEnumValue();
+        (SvxEscapement)static_cast<const SvxEscapementItem&>(rHt).GetEnumValue();
     const sal_Char *pStr = nullptr;
     switch( eEscape )
     {
