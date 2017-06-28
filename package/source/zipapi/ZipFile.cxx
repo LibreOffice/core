@@ -618,8 +618,9 @@ uno::Reference< XInputStream > ZipFile::createStreamForZipEntry(
 
     uno::Reference<io::XInputStream> xBufStream;
     static const sal_Int32 nThreadingThreshold = 10000;
+    sal_Int32 nAvailableSize = xSrcStream->available();
 
-    if( xSrcStream->available() > nThreadingThreshold )
+    if( nAvailableSize > nThreadingThreshold || nAvailableSize < 0 )
         xBufStream = new XBufferedThreadedStream(xSrcStream);
     else
         xBufStream = new XBufferedStream(xSrcStream);
