@@ -717,7 +717,7 @@ void XclImpAutoFilterData::ReadAutoFilter(
     }
     else
     {
-        OSL_ASSERT(eConn == SC_OR);
+        assert(eConn == SC_OR);
         // Import only when both conditions are for simple equality, else
         // import only the 1st condition due to conflict with the ordering of
         // conditions. #i39464#.
