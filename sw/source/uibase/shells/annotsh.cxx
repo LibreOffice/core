@@ -1512,7 +1512,7 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
             rSh.GetLastUndoInfo(nullptr, &nUndoId);
             if (nUndoId == SwUndoId::CONFLICT)
             {
-                rReq.SetReturnValue( SfxUInt32Item(nId, static_cast<sal_uInt32>(nUndoId)) );
+                rReq.SetReturnValue( SfxUInt32Item(nId, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)) );
                 break;
             }
 
@@ -1543,7 +1543,7 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
             (void)rSh.GetFirstRedoInfo(nullptr, &nUndoId);
             if (nUndoId == SwUndoId::CONFLICT)
             {
-                rReq.SetReturnValue( SfxUInt32Item(nId, static_cast<sal_uInt32>(nUndoId)) );
+                rReq.SetReturnValue( SfxUInt32Item(nId, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)) );
                 break;
             }
 
@@ -1604,7 +1604,7 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
                 }
                 else if (nUndoId == SwUndoId::CONFLICT)
                 {
-                    rSet.Put( SfxUInt32Item(nWhich, static_cast<sal_uInt32>(nUndoId)) );
+                    rSet.Put( SfxUInt32Item(nWhich, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)) );
                 }
                 else
                     rSet.DisableItem(nWhich);
@@ -1621,7 +1621,7 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
                 }
                 else if (nUndoId == SwUndoId::CONFLICT)
                 {
-                    rSet.Put( SfxUInt32Item(nWhich, static_cast<sal_uInt32>(nUndoId)) );
+                    rSet.Put( SfxUInt32Item(nWhich, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)) );
                 }
                 else
                     rSet.DisableItem(nWhich);
