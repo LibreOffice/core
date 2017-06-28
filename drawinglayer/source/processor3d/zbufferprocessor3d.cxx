@@ -403,21 +403,6 @@ public:
     {
     }
 
-    RasterPrimitive3D& operator=(const RasterPrimitive3D& rComp)
-    {
-        mpGeoTexSvx = rComp.mpGeoTexSvx;
-        mpTransparenceGeoTexSvx = rComp.mpTransparenceGeoTexSvx;
-        maMaterial = rComp.maMaterial;
-        maPolyPolygon = rComp.maPolyPolygon;
-        mfCenterZ = rComp.mfCenterZ;
-        mbModulate = rComp.mbModulate;
-        mbFilter = rComp.mbFilter;
-        mbSimpleTextureActive = rComp.mbSimpleTextureActive;
-        mbIsLine = rComp.mbIsLine;
-
-        return *this;
-    }
-
     bool operator<(const RasterPrimitive3D& rComp) const
     {
         return mfCenterZ < rComp.mfCenterZ;

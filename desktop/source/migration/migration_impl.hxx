@@ -108,16 +108,6 @@ struct MigrationItem
         m_xPopupMenu      = xPopupMenu;
     }
 
-    MigrationItem& operator=(const MigrationItem& aMigrationItem)
-    {
-        m_sParentNodeName = aMigrationItem.m_sParentNodeName;
-        m_sPrevSibling    = aMigrationItem.m_sPrevSibling;
-        m_sCommandURL     = aMigrationItem.m_sCommandURL;
-        m_xPopupMenu      = aMigrationItem.m_xPopupMenu;
-
-        return *this;
-    }
-
     bool operator==(const MigrationItem& aMigrationItem)
     {
         return

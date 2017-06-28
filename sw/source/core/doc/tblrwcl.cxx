@@ -87,8 +87,6 @@ struct CpyTabFrame
     explicit CpyTabFrame( SwTableBoxFormat* pAktFrameFormat ) : pNewFrameFormat( nullptr )
     {   Value.pFrameFormat = pAktFrameFormat; }
 
-    CpyTabFrame& operator=( const CpyTabFrame& );
-
     bool operator==( const CpyTabFrame& rCpyTabFrame ) const
         { return  (sal_uLong)Value.nSize == (sal_uLong)rCpyTabFrame.Value.nSize; }
     bool operator<( const CpyTabFrame& rCpyTabFrame ) const
@@ -232,13 +230,6 @@ static bool lcl_InsDelSelLine( SwTableLine* pLine, CR_SetLineHeight& rParam,
                                 SwTwips nDist, bool bCheck );
 
 typedef bool (*FN_lcl_SetLineHeight)(SwTableLine*, CR_SetLineHeight&, SwTwips, bool );
-
-CpyTabFrame& CpyTabFrame::operator=( const CpyTabFrame& rCpyTabFrame )
-{
-    pNewFrameFormat = rCpyTabFrame.pNewFrameFormat;
-    Value = rCpyTabFrame.Value;
-    return *this;
-}
 
 typedef o3tl::sorted_vector<CpyTabFrame> CpyTabFrames;
 

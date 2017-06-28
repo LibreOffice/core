@@ -161,14 +161,6 @@ size_t WrongList::Valid = std::numeric_limits<size_t>::max();
 
 WrongList::WrongList() : mnInvalidStart(0), mnInvalidEnd(Valid) {}
 
-WrongList::WrongList(const WrongList& r) :
-    maRanges(r.maRanges),
-    mnInvalidStart(r.mnInvalidStart),
-    mnInvalidEnd(r.mnInvalidEnd) {}
-
-WrongList::~WrongList() {}
-
-
 void WrongList::SetRanges( const std::vector<editeng::MisspellRange>& rRanges )
 {
     maRanges = rRanges;
