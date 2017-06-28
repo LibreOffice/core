@@ -36,12 +36,10 @@ XMLOpaquePropHdl::~XMLOpaquePropHdl()
 
 bool XMLOpaquePropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    bool bRet = true;
-
     bool bValue = IsXMLToken( rStrImpValue, XML_OPAQUE_FOREGROUND );
     rValue <<= bValue;
 
-    return bRet;
+    return true;
 }
 
 bool XMLOpaquePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const

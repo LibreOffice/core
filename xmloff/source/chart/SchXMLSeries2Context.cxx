@@ -385,7 +385,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
         }
         if( ! mrGlobalChartTypeUsedBySeries )
             mrGlobalChartTypeUsedBySeries = (maSeriesChartTypeName.equals( maGlobalChartTypeName ));
-        sal_Int32 nCoordinateSystemIndex = 0;//so far we can only import one coordinate system
+        sal_Int32 const nCoordinateSystemIndex = 0;//so far we can only import one coordinate system
         m_xSeries.set(
             SchXMLImportHelper::GetNewDataSeries( mxNewDoc, nCoordinateSystemIndex, maSeriesChartTypeName, ! mrGlobalChartTypeUsedBySeries ));
         Reference< chart2::data::XLabeledDataSequence > xLabeledSeq( SchXMLTools::GetNewLabeledDataSequence(), uno::UNO_QUERY_THROW );

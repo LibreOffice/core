@@ -214,8 +214,6 @@ bool XMLDashStyleExport::exportXML(
     const OUString& rStrName,
     const uno::Any& rValue )
 {
-    bool bRet = false;
-
     SvXMLUnitConverter & rUnitConverter = rExport.GetMM100UnitConverter();
 
     drawing::LineDash aLineDash;
@@ -306,7 +304,7 @@ bool XMLDashStyleExport::exportXML(
                                       true, false );
         }
     }
-    return bRet;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

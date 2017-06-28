@@ -550,8 +550,7 @@ XMLExpressionFieldImportContext::XMLExpressionFieldImportContext(
 void XMLExpressionFieldImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
-    sal_Int16 nSubType = SetVariableType::FORMULA;
-    xPropertySet->setPropertyValue(sAPI_sub_type, Any(nSubType));
+    xPropertySet->setPropertyValue(sAPI_sub_type, Any(sal_Int16(SetVariableType::FORMULA)));
 
     // delegate to super class
     XMLVarFieldImportContext::PrepareField(xPropertySet);

@@ -2016,10 +2016,8 @@ XMLEventExport& SvXMLExport::GetEventExport()
         mpEventExport = new XMLEventExport(*this);
 
         // and register standard handlers + names
-        OUString sStarBasic("StarBasic");
-        mpEventExport->AddHandler(sStarBasic, new XMLStarBasicExportHandler());
-        OUString sScript("Script");
-        mpEventExport->AddHandler(sScript, new XMLScriptExportHandler());
+        mpEventExport->AddHandler("StarBasic", new XMLStarBasicExportHandler());
+        mpEventExport->AddHandler("Script", new XMLScriptExportHandler());
         mpEventExport->AddTranslationTable(aStandardEventTable);
     }
 
