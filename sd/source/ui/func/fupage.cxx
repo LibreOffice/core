@@ -251,7 +251,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
     aNewAttr.Put( aMaxSizeItem );
 
     // paperbin
-    SvxPaperBinItem aPaperBinItem( SID_ATTR_PAGE_PAPERBIN, (const sal_uInt8)mpPage->GetPaperBin() );
+    SvxPaperBinItem aPaperBinItem( SID_ATTR_PAGE_PAPERBIN, (sal_uInt8)mpPage->GetPaperBin() );
     aNewAttr.Put( aPaperBinItem );
 
     SvxLRSpaceItem aLRSpaceItem( (sal_uInt16)mpPage->GetLftBorder(), (sal_uInt16)mpPage->GetRgtBorder(), 0, 0, mpDoc->GetPool().GetWhich(SID_ATTR_LRSPACE));
