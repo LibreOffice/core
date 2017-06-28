@@ -1684,7 +1684,7 @@ void SwTiledRenderingTest::testUndoRepairResult()
     SfxLokHelper::setView(nView2);
     comphelper::dispatchCommand(".uno:Undo", {}, xListener);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SwUndoId::CONFLICT), pResult2->m_nDocRepair);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), pResult2->m_nDocRepair);
 
     mxComponent->dispose();
     mxComponent.clear();
@@ -1719,7 +1719,7 @@ void SwTiledRenderingTest::testRedoRepairResult()
     SfxLokHelper::setView(nView2);
     comphelper::dispatchCommand(".uno:Redo", {}, xListener);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SwUndoId::CONFLICT), pResult2->m_nDocRepair);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), pResult2->m_nDocRepair);
 
     mxComponent->dispose();
     mxComponent.clear();
@@ -1740,9 +1740,8 @@ void checkUndoRepairStates(SwXTextDocument* pXTextDocument, SwView* pView1, SwVi
     // second view, undo conflict
     pView2->GetState(aItemSet2);
     CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet2.GetItemState(SID_UNDO));
-    const SfxUInt32Item *pSetItem = dynamic_cast<const SfxUInt32Item*>(aItemSet2.GetItem(SID_UNDO));
-    CPPUNIT_ASSERT(pSetItem);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SwUndoId::CONFLICT), pSetItem->GetValue());
+    CPPUNIT_ASSERT(dynamic_cast< const SfxUInt32Item * >(aItemSet2.GetItem(SID_UNDO)));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), dynamic_cast< const SfxUInt32Item * >(aItemSet2.GetItem(SID_UNDO))->GetValue());
 };
 
 }
@@ -1795,9 +1794,8 @@ void SwTiledRenderingTest::testDisableUndoRepair()
         // first view, undo conflict
         pView1->GetState(aItemSet1);
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet1.GetItemState(SID_UNDO));
-        const SfxUInt32Item *pSetItem = dynamic_cast<const SfxUInt32Item*>(aItemSet1.GetItem(SID_UNDO));
-        CPPUNIT_ASSERT(pSetItem);
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SwUndoId::CONFLICT), pSetItem->GetValue());
+        CPPUNIT_ASSERT(dynamic_cast< const SfxUInt32Item * >(aItemSet1.GetItem(SID_UNDO)));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), dynamic_cast< const SfxUInt32Item * >(aItemSet1.GetItem(SID_UNDO))->GetValue());
     }
 
     // Insert a character in the first view.

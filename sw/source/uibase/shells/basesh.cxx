@@ -534,7 +534,7 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
 
     if (nUndoId == SwUndoId::CONFLICT)
     {
-        rReq.SetReturnValue( SfxUInt32Item(nId, static_cast<sal_uInt32>(nUndoId)) );
+        rReq.SetReturnValue( SfxUInt32Item(nId, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)) );
     }
 
     if (pViewFrame) { pViewFrame->GetBindings().InvalidateAll(false); }
@@ -561,7 +561,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
                 }
                 else if (nUndoId == SwUndoId::CONFLICT)
                 {
-                    rSet.Put( SfxUInt32Item(nWhich, static_cast<sal_uInt32>(nUndoId)) );
+                    rSet.Put( SfxUInt32Item(nWhich, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)) );
                 }
                 else
                     rSet.DisableItem(nWhich);
@@ -577,7 +577,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
                 }
                 else if (nUndoId == SwUndoId::CONFLICT)
                 {
-                     rSet.Put( SfxInt32Item(nWhich, static_cast<sal_uInt32>(nUndoId)) );
+                     rSet.Put( SfxInt32Item(nWhich, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)) );
                 }
                 else
                     rSet.DisableItem(nWhich);
