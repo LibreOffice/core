@@ -13,13 +13,17 @@ gb_UITest_UNITTESTFAILED ?= $(GBUILDDIR)/platform/unittest-failed-default.sh
 
 ifeq ($(SYSTEM_PYTHON),)
 gb_UITest_EXECUTABLE := $(gb_Python_INSTALLED_EXECUTABLE)
-gb_UITest_EXECUTABLE_GDB := $(gb_Python_INSTALLED_EXECUTABLE_GDB)
 gb_UITest_DEPS ?= $(call gb_Package_get_target,python3)
 else
 gb_UITest_EXECUTABLE := $(PYTHON_FOR_BUILD)
-gb_UITest_EXECUTABLE_GDB := $(PYTHON_FOR_BUILD)
 gb_UITest_DEPS :=
 endif
+
+# UITests are much more likely to generate core files for the soffice than for
+# the python executale, but solenv/bin/gdb-core-bt.sh is often unable to
+# determine the executable that generated a core file, so make it fall back to
+# the soffice executable rather than to gb_UITest_EXECUTABLE:
+gb_UITest_EXECUTABLE_GDB := $(call gb_Executable_get_target,soffice_bin)
 
 ifneq ($(strip $(UITESTTRACE)),)
 gb_UITest_GDBTRACE := --gdb
