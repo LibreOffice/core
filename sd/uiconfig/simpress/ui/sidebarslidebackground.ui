@@ -205,7 +205,7 @@
             <child>
               <object class="GtkButton" id="masterslidebutton">
                 <property name="label" translatable="yes">Master Slide</property>
-                <property name="visible">True</property>
+                <property name="visible">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="action_name">.uno:SlideMasterPage</property>
@@ -219,7 +219,7 @@
             <child>
               <object class="GtkButton" id="closemasterslide">
                 <property name="label" translatable="yes">Close Master View</property>
-                <property name="visible">True</property>
+                <property name="visible">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
               </object>
