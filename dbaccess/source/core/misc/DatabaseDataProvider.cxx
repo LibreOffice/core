@@ -634,7 +634,7 @@ namespace
         }
     };
 
-    struct CreateColumnDescription : public std::unary_function< OUString, ColumnDescription >
+    struct CreateColumnDescription
     {
         ColumnDescription operator()( const OUString& i_rName )
         {
@@ -642,7 +642,7 @@ namespace
         }
     };
 
-    struct SelectColumnName : public std::unary_function< ColumnDescription, OUString >
+    struct SelectColumnName
     {
         const OUString& operator()( const ColumnDescription& i_rColumn )
         {

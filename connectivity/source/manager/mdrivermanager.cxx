@@ -103,7 +103,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
 
 
     /// an STL functor which ensures that a SdbcDriver described by a DriverAccess is loaded
-    struct EnsureDriver : public std::unary_function< DriverAccess, DriverAccess >
+    struct EnsureDriver
     {
         explicit EnsureDriver( const Reference< XComponentContext > &rxContext )
             : mxContext( rxContext ) {}
@@ -138,7 +138,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
     };
 
     /// an STL functor which extracts a SdbcDriver from a DriverAccess
-    struct ExtractDriverFromAccess : public std::unary_function< DriverAccess, const Reference<XDriver>& >
+    struct ExtractDriverFromAccess
     {
         const Reference<XDriver>& operator()( const DriverAccess& _rAccess ) const
         {
@@ -146,7 +146,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
         }
     };
 
-    struct ExtractDriverFromCollectionElement : public std::unary_function< DriverCollection::value_type, const Reference<XDriver>& >
+    struct ExtractDriverFromCollectionElement
     {
         const Reference<XDriver>& operator()( const DriverCollection::value_type& _rElement ) const
         {
@@ -155,7 +155,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
     };
 
     // predicate for checking whether or not a driver accepts a given URL
-    class AcceptsURL : public std::unary_function< Reference<XDriver>, bool >
+    class AcceptsURL
     {
     protected:
         const OUString& m_rURL;

@@ -273,7 +273,7 @@ public:
 namespace
 {
 
-class lcl_MatchesRole : public ::std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >
+class lcl_MatchesRole
 {
 public:
     explicit lcl_MatchesRole( const OUString & aRole ) :
@@ -702,12 +702,10 @@ struct lcl_TableData
 typedef ::std::map< sal_Int32, SchXMLExportHelper_Impl::tLabelValuesDataPair >
     lcl_DataSequenceMap;
 
-struct lcl_SequenceToMapElement :
-    public ::std::unary_function< lcl_DataSequenceMap::mapped_type, lcl_DataSequenceMap::value_type >
+struct lcl_SequenceToMapElement
 {
-    lcl_SequenceToMapElement()
-    {}
-    result_type operator() ( const argument_type & rContent )
+    std::pair<const sal_Int32, SchXMLExportHelper_Impl::tLabelValuesDataPair>
+        operator() (const SchXMLExportHelper_Impl::tLabelValuesDataPair& rContent)
     {
         sal_Int32 nIndex = -1;
         if( rContent.second.is()) //has values
@@ -717,7 +715,7 @@ struct lcl_SequenceToMapElement :
         }
         else if( rContent.first.is()) //has labels
             nIndex = rContent.first->getSourceRangeRepresentation().copy( sizeof("label ")).toInt32();
-        return result_type( nIndex, rContent );
+        return std::make_pair(nIndex, rContent);
     }
 };
 

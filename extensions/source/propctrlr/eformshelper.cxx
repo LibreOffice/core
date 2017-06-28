@@ -33,7 +33,6 @@
 #include <tools/diagnose_ex.h>
 #include <rtl/ustrbuf.hxx>
 
-#include <functional>
 #include <algorithm>
 #include <o3tl/functional.hxx>
 
@@ -571,7 +570,7 @@ namespace pcr
     namespace
     {
 
-        struct PropertyBagInserter : public std::unary_function< Property, void >
+        struct PropertyBagInserter
         {
         private:
             PropertyBag& m_rProperties;

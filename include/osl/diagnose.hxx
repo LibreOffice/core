@@ -24,7 +24,6 @@
 #include <sal/config.h>
 
 #include <cstddef>
-#include <functional>
 #include <typeinfo>
 #include <unordered_set>
 
@@ -85,7 +84,7 @@ namespace osl {
 
 namespace detail {
 
-struct VoidPtrHash : ::std::unary_function<void const*, ::std::size_t> {
+struct VoidPtrHash {
     ::std::size_t operator()( void const* p ) const {
         ::std::size_t const d = static_cast< ::std::size_t >(
             reinterpret_cast< ::std::ptrdiff_t >(p) );

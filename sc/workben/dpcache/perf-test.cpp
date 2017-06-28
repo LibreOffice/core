@@ -278,7 +278,7 @@ struct equal_by_value : std::binary_function<bucket, bucket, bool>
     }
 };
 
-class push_back_value : std::unary_function<bucket, void>
+class push_back_value
 {
     std::vector<int>& items;
 public:
@@ -289,7 +289,7 @@ public:
     }
 };
 
-class push_back_order_index : std::unary_function<bucket, void>
+class push_back_order_index
 {
     std::vector<size_t>& data_indices;
 public:

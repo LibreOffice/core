@@ -23,13 +23,11 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 
-#include <functional>
-
 namespace dbaccess
 {
 
     // TokenComposer
-    struct TokenComposer : public std::unary_function< OUString, void >
+    struct TokenComposer
     {
     private:
         #ifdef DBG_UTIL

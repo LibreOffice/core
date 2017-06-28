@@ -58,7 +58,7 @@ int lclCompareVectors( const ::std::vector< Type >& rLeft, const ::std::vector< 
 /** Base class for value hashers.
     @descr  These function objects are used to hash any value to a sal_uInt32 value. */
 template< typename Type >
-struct XclHasher : public ::std::unary_function< Type, sal_uInt32 > {};
+struct XclHasher {};
 
 template< typename Type >
 struct XclDirectHasher : public XclHasher< Type >

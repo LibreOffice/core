@@ -25,7 +25,6 @@
 
 #include "event.hxx"
 
-#include <functional>
 #include <queue>
 #include <vector>
 
@@ -121,7 +120,7 @@ namespace slideshow
         private:
             mutable ::osl::Mutex      maMutex;
 
-            struct EventEntry : public ::std::unary_function<EventEntry, bool>
+            struct EventEntry
             {
                 EventSharedPtr  pEvent;
                 double          nTime;

@@ -130,7 +130,7 @@ struct MappingEntry
         {}
 };
 
-struct FctPtrHash : public std::unary_function< uno_Mapping *, size_t >
+struct FctPtrHash
 {
     size_t operator()( uno_Mapping * pKey ) const
         { return reinterpret_cast<size_t>(pKey); }

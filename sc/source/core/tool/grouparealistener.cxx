@@ -22,7 +22,7 @@ namespace sc {
 
 namespace {
 
-class Notifier : public std::unary_function<ScFormulaCell*, void>
+class Notifier
 {
     const SfxHint& mrHint;
 public:

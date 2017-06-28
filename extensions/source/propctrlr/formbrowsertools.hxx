@@ -36,7 +36,7 @@ namespace pcr
     sal_Int16 classifyComponent( const css::uno::Reference< css::uno::XInterface >& _rxComponent );
 
 
-    struct FindPropertyByHandle : public std::unary_function< css::beans::Property, bool >
+    struct FindPropertyByHandle
     {
     private:
         sal_Int32 m_nId;
@@ -50,7 +50,7 @@ namespace pcr
     };
 
 
-    struct FindPropertyByName : public std::unary_function< css::beans::Property, bool >
+    struct FindPropertyByName
     {
     private:
         OUString m_sName;

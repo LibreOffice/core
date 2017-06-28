@@ -20,8 +20,7 @@ namespace vcl {
 
 namespace {
 
-    class SameTheme :
-        public std::unary_function<const vcl::IconThemeInfo &, bool>
+    class SameTheme
     {
     private:
         const OUString& m_rThemeId;
