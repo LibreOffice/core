@@ -43,7 +43,7 @@ String STR_XMLSECDLG_QUERY_REALLYREMOVE
 
 String STR_XMLSECDLG_SIGNING_FAILED
 {
-    Text [ en-US ] = "An error occured while adding the signature.";
+    Text [ en-US ] = "An error occurred while adding the signature.";
 };
 
 String STR_XMLSECDLG_NO_CERT_MANAGER
