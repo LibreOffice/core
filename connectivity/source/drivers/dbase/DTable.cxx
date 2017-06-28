@@ -55,6 +55,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <memory>
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -1057,13 +1058,10 @@ bool ODbaseTable::CreateImpl()
         if (aContent.isDocument())
         {
             // Only if the file exists with length > 0 raise an error
-            SvStream* pFileStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::READ);
+            std::unique_ptr<SvStream> pFileStream(createStream_simpleError( aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::READ));
 
             if (pFileStream && pFileStream->Seek(STREAM_SEEK_TO_END))
-            {
                 return false;
-            }
-            delete pFileStream;
         }
     }
     catch(const Exception&) // an exception is thrown when no file exists
