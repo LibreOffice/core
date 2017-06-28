@@ -130,9 +130,11 @@ struct SwCallMouseEvent
     {
         assert(EVENT_OBJECT_IMAGE == eType || EVENT_OBJECT_URLITEM == eType || EVENT_OBJECT_IMAGEMAP == eType);
         SwClient::Modify(pOldValue, pNewValue);
-        if (!GetRegisteredIn() ||
-            (RES_FMT_CHG == pOldValue->Which()
-             && static_cast<SwFormatChg const*>(pOldValue)->pChangedFormat == PTR.pFormat))
+        if (!GetRegisteredIn()
+            || (RES_FMT_CHG == pOldValue->Which()
+                && static_cast<SwFormatChg const*>(pOldValue)->pChangedFormat == PTR.pFormat)
+            || (RES_REMOVE_UNO_OBJECT == pOldValue->Which()
+                && static_cast<SwPtrMsgPoolItem const*>(pOldValue)->pObject == PTR.pFormat))
         {
             Clear();
         }
