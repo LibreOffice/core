@@ -159,11 +159,10 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     std::unique_ptr<OUString> xCurrencySymbol;
     if( xAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList;
-        assert( dynamic_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() ) != nullptr );
-        pAttribList = static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
+        sax_fastparser::FastAttributeList *pAttribList =
+            static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
 
-        for ( auto it = pAttribList->begin(); it != pAttribList->end(); ++it)
+        for( auto &it : *pAttribList )
         {
             switch ( it.getToken() )
             {

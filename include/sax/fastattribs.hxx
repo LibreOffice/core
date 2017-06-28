@@ -123,22 +123,27 @@ public:
             return mnIdx != rhs.mnIdx;
         }
 
-        sal_Int32 getToken()
+        const FastAttributeIter& operator*() const
+        {
+            return *this;
+        }
+
+        sal_Int32 getToken() const
         {
             assert(mnIdx < mrList.maAttributeTokens.size());
             return mrList.maAttributeTokens[mnIdx];
         }
-        bool isEmpty()
+        bool isEmpty() const
         {
             assert(mnIdx < mrList.maAttributeTokens.size());
             return mrList.AttributeValueLength(mnIdx) < 1;
         }
-        sal_Int32 toInt32()
+        sal_Int32 toInt32() const
         {
             assert(mnIdx < mrList.maAttributeTokens.size());
             return rtl_str_toInt32(mrList.getFastAttributeValue(mnIdx), 10);
         }
-        OUString toString()
+        OUString toString() const
         {
             assert(mnIdx < mrList.maAttributeTokens.size());
             return OUString(mrList.getFastAttributeValue(mnIdx),
@@ -146,12 +151,12 @@ public:
                             RTL_TEXTENCODING_UTF8);
         }
 
-        const char* toCString()
+        const char* toCString() const
         {
             assert(mnIdx < mrList.maAttributeTokens.size());
             return mrList.getFastAttributeValue(mnIdx);
         }
-        bool isString(const char *str)
+        bool isString(const char *str) const
         {
             assert(mnIdx < mrList.maAttributeTokens.size());
             return !strcmp(str, mrList.getFastAttributeValue(mnIdx));
