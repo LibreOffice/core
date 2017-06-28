@@ -93,22 +93,18 @@ void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & rPrefix, 
 
     if ( Attribs.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList;
-        assert( dynamic_cast< sax_fastparser::FastAttributeList *>( Attribs.get() ) != nullptr );
-        pAttribList = static_cast< sax_fastparser::FastAttributeList *>( Attribs.get() );
+        sax_fastparser::FastAttributeList *pAttribList =
+            static_cast< sax_fastparser::FastAttributeList *>( Attribs.get() );
 
-        const std::vector< sal_Int32 >& rAttrTokenList = pAttribList->getFastAttributeTokens();
-        for ( size_t i = 0; i < rAttrTokenList.size(); i++ )
+        for( auto &it : *pAttribList )
         {
-            const OUString& rAttrValue = OUString(pAttribList->getFastAttributeValue(i),
-                                            pAttribList->AttributeValueLength(i), RTL_TEXTENCODING_UTF8);
-            sal_Int32 nToken = rAttrTokenList[ i ];
+            sal_Int32 nToken = it.getToken();
             const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken( nToken );
             OUString sAttrName = SvXMLImport::getNameFromToken( nToken );
             if ( !rAttrNamespacePrefix.isEmpty() )
                 sAttrName = rAttrNamespacePrefix + ":" + sAttrName;
 
-            mrImport.maAttrList->AddAttribute( sAttrName, "CDATA", rAttrValue );
+            mrImport.maAttrList->AddAttribute( sAttrName, "CDATA", it.toString() );
         }
 
         uno::Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();

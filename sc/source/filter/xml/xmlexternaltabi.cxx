@@ -54,7 +54,7 @@ ScXMLExternalRefTabSourceContext::ScXMLExternalRefTabSourceContext(
     {
         sax_fastparser::FastAttributeList *pAttribList = static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
 
-        for ( auto it = pAttribList->begin(); it != pAttribList->end(); ++it)
+        for( auto &it : *pAttribList )
         {
             sal_Int32 nAttrToken = it.getToken();
             if ( nAttrToken == XML_ELEMENT( XLINK, XML_HREF ) )
@@ -169,7 +169,7 @@ ScXMLExternalRefRowContext::ScXMLExternalRefRowContext(
     {
         sax_fastparser::FastAttributeList *pAttribList = static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
 
-        for ( auto it = pAttribList->begin(); it != pAttribList->end(); ++it)
+        for( auto &it : *pAttribList )
         {
             switch ( rAttrTokenMap.Get( it.getToken() ) )
             {
@@ -248,7 +248,7 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
     {
         sax_fastparser::FastAttributeList *pAttribList = static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
 
-        for ( auto it = pAttribList->begin(); it != pAttribList->end(); ++it)
+        for( auto &it : *pAttribList )
         {
             switch ( rTokenMap.Get( it.getToken() ) )
             {
