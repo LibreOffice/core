@@ -600,7 +600,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                     aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
                     aEvent.NewValue <<= xChild;
                     CommitChange(aEvent);
-                    OSL_ASSERT(m_mapSelectionSend.count(aNewCell) == 0 );
+                    assert(m_mapSelectionSend.count(aNewCell) == 0 );
                     m_mapSelectionSend.insert(MAP_ADDR_XACC::value_type(aNewCell,xChild));
 
                 }
@@ -738,7 +738,7 @@ void ScAccessibleSpreadsheet::RemoveSelection(ScMarkData &refScMarkData)
 }
 void ScAccessibleSpreadsheet::CommitFocusCell(const ScAddress &aNewCell)
 {
-    OSL_ASSERT(!IsFormulaMode());
+    assert(!IsFormulaMode());
     if(IsFormulaMode())
     {
         return ;

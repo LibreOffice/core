@@ -128,7 +128,7 @@ void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewDa
         uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
         if( xCompSupp.is())
             xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
-        OSL_ASSERT( xReceiver.is());
+        assert( xReceiver.is());
         if( xReceiver.is() )
         {
             uno::Reference<chart2::data::XDataProvider> xDataProvider;
@@ -699,8 +699,8 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
                     if( nDialogRet == ui::dialogs::ExecutableDialogResults::CANCEL )
                     {
                         // leave OLE inplace mode and unmark
-                        OSL_ASSERT( pViewShell );
-                        OSL_ASSERT( pView );
+                        assert( pViewShell );
+                        assert( pView );
                         pViewShell->DeactivateOle();
                         pView->UnmarkAll();
 
@@ -708,15 +708,15 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
                         pPV = pView->GetSdrPageView();
 
                         // remove the chart
-                        OSL_ASSERT( pPV );
+                        assert( pPV );
                         SdrPage * pPage( pPV->GetPage());
-                        OSL_ASSERT( pPage );
-                        OSL_ASSERT( pObj );
+                        assert( pPage );
+                        assert( pObj );
                         if( pPage )
                         {
                             // Remove the OLE2 object from the sdr page.
                             SdrObject* pRemoved = pPage->RemoveObject(pObj->GetOrdNum());
-                            OSL_ASSERT(pRemoved == pObj);
+                            assert(pRemoved == pObj);
                             SdrObject::Free(pRemoved); // Don't forget to free it.
                         }
 
@@ -731,7 +731,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
                     }
                     else
                     {
-                        OSL_ASSERT( nDialogRet == ui::dialogs::ExecutableDialogResults::OK );
+                        assert( nDialogRet == ui::dialogs::ExecutableDialogResults::OK );
                         //@todo maybe move chart to different table
                     }
                 }

@@ -381,12 +381,12 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
              */
             if ( aStrVal.equals(aStrEmpty) )
             {
-                OSL_ASSERT(eOp == SC_EQUAL);
+                assert(eOp == SC_EQUAL);
                 rEntry.SetQueryByEmpty();
             }
             else if ( aStrVal.equals(aStrNotEmpty) )
             {
-                OSL_ASSERT(eOp == SC_EQUAL);
+                assert(eOp == SC_EQUAL);
                 rEntry.SetQueryByNonEmpty();
             }
             else
