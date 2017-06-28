@@ -125,54 +125,58 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
     if(SfxItemState::DEFAULT == rSet.GetItemState(SID_UNDO))
     {
         ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
-        bool bActivate(false);
-
         if(pUndoManager)
         {
             if(pUndoManager->GetUndoActionCount() != 0)
             {
-                bActivate = true;
+                // If an other view created the first undo action, prevent redoing it from this view.
+                const SfxUndoAction* pAction = pUndoManager->GetUndoAction();
+                if (pAction->GetViewShellId() != static_cast<sal_Int32>(GetViewShellBase().GetViewShellId()))
+                {
+                    rSet.Put(SfxUInt32Item(SID_UNDO, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)));
+                }
+                else
+                {
+                    // Set the necessary string like in
+                    // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1072 ff.
+                    OUString aTmp(SVT_RESSTR(STR_UNDO));
+                    aTmp += pUndoManager->GetUndoActionComment();
+                    rSet.Put(SfxStringItem(SID_UNDO, aTmp));
+                }
             }
-        }
-
-        if(bActivate)
-        {
-            // Set the necessary string like in
-            // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1072 ff.
-            OUString aTmp(SVT_RESSTR(STR_UNDO));
-            aTmp += pUndoManager->GetUndoActionComment();
-            rSet.Put(SfxStringItem(SID_UNDO, aTmp));
-        }
-        else
-        {
-            rSet.DisableItem(SID_UNDO);
+            else
+            {
+                rSet.DisableItem(SID_UNDO);
+            }
         }
     }
 
     if(SfxItemState::DEFAULT == rSet.GetItemState(SID_REDO))
     {
         ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
-        bool bActivate(false);
-
         if(pUndoManager)
         {
             if(pUndoManager->GetRedoActionCount() != 0)
             {
-                bActivate = true;
+                // If an other view created the first undo action, prevent redoing it from this view.
+                const SfxUndoAction* pAction = pUndoManager->GetRedoAction();
+                if (pAction->GetViewShellId() != static_cast<sal_Int32>(GetViewShellBase().GetViewShellId()))
+                {
+                    rSet.Put(SfxUInt32Item(SID_REDO, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)));
+                }
+                else
+                {
+                    // Set the necessary string like in
+                    // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1081 ff.
+                    OUString aTmp(SVT_RESSTR(STR_REDO));
+                    aTmp += pUndoManager->GetRedoActionComment();
+                    rSet.Put(SfxStringItem(SID_REDO, aTmp));
+                }
             }
-        }
-
-        if(bActivate)
-        {
-            // Set the necessary string like in
-            // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1081 ff.
-            OUString aTmp(SVT_RESSTR(STR_REDO));
-            aTmp += pUndoManager->GetRedoActionComment();
-            rSet.Put(SfxStringItem(SID_REDO, aTmp));
-        }
-        else
-        {
-            rSet.DisableItem(SID_REDO);
+            else
+            {
+                rSet.DisableItem(SID_REDO);
+            }
         }
     }
 }
