@@ -34,6 +34,24 @@
       "revId": "130b08bd40d691d7dab3e4547740cf65c7710e7a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_781de665",
+        "filename": "sc/source/core/tool/chartlis.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-28T09:50:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a461143_7d1a3819",
+      "revId": "130b08bd40d691d7dab3e4547740cf65c7710e7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
