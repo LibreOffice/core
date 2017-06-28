@@ -588,7 +588,10 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
                     {
                         ViewShellId nViewShellId = GetViewShellId();
                         if (pAction->GetViewShellId() != nViewShellId)
+                        {
+                            rReq.SetReturnValue(SfxUInt32Item(SID_UNDO, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)));
                             return;
+                        }
                     }
                 }
 
