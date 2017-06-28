@@ -2458,6 +2458,13 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
                 aArgs[1].Name = "Password";
                 aArgs[1].Value <<= pPasswordItem->GetValue();
             }
+            const SfxUnoAnyItem* pEncryptionItem = SfxItemSet::GetItem<SfxUnoAnyItem>(GetMedium()->GetItemSet(), SID_ENCRYPTIONDATA, false);
+            if (pEncryptionItem)
+            {
+                aArgs.realloc(aArgs.getLength() + 1);
+                aArgs[aArgs.getLength() - 1].Name = "EncryptionData";
+                aArgs[aArgs.getLength() - 1].Value = pEncryptionItem->GetValue();
+            }
         }
 
         xModel.set(
