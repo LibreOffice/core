@@ -660,17 +660,20 @@ ScVbaFormat< Ifc... >::setReadingOrder( const uno::Any& ReadingOrder )
         sal_Int32 nReadingOrder = 0;
         if ( !(ReadingOrder >>= nReadingOrder ))
             throw uno::RuntimeException();
-        uno::Any aVal;
+        uno::Any aVal = aNULL();
         switch(nReadingOrder)
         {
             case excel::Constants::xlLTR:
-                aVal <<= text::WritingMode_LR_TB;
+                aVal <<= (sal_Int16) text::WritingMode_LR_TB;
                 break;
             case excel::Constants::xlRTL:
-                aVal <<= text::WritingMode_RL_TB;
+                aVal <<= (sal_Int16) text::WritingMode_RL_TB;
                 break;
             case excel::Constants::xlContext:
-                DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, OUString());
+                // TODO implement xlContext
+                // Reading order has to depend on the language of the first letter
+                // written.
+                aVal <<= (sal_Int16) text::WritingMode_LR_TB;
                 break;
             default:
                 DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
