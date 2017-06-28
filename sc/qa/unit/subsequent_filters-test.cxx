@@ -238,6 +238,8 @@ public:
     void testTdf100709XLSX();
     void testTdf97598XLSX();
 
+    void testPageScalingXLSX();
+
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
     CPPUNIT_TEST(testBasicCellContentODS);
@@ -357,6 +359,8 @@ public:
     CPPUNIT_TEST(testTdf100458);
     CPPUNIT_TEST(testTdf100709XLSX);
     CPPUNIT_TEST(testTdf97598XLSX);
+
+    CPPUNIT_TEST(testPageScalingXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3892,6 +3896,22 @@ void ScFiltersTest::testCondFormatXLSB()
     xDocSh->DoClose();
 }
 
+void ScFiltersTest::testPageScalingXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("page_scale.", FORMAT_XLSX);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    OUString aStyleName = rDoc.GetPageStyle(0);
+    ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
+    SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SfxStyleFamily::Page );
+    CPPUNIT_ASSERT(pStyleSheet);
+
+    SfxItemSet& rSet = pStyleSheet->GetItemSet();
+    sal_uInt16 nVal = static_cast<const SfxUInt16Item&>(rSet.Get(ATTR_PAGE_SCALE)).GetValue();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(90), nVal);
+
+    xDocSh->DoClose();
+}
 
 ScFiltersTest::ScFiltersTest()
       : ScBootstrapFixture( "sc/qa/unit/data" )
