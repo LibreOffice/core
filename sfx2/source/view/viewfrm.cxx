@@ -933,18 +933,36 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
 
     if ( pShUndoMgr && pShUndoMgr->GetUndoActionCount() )
     {
-        OUString aTmp(SvtResId(STR_UNDO).toString());
-        aTmp+= pShUndoMgr->GetUndoActionComment();
-        rSet.Put( SfxStringItem( SID_UNDO, aTmp ) );
+        const SfxUndoAction* pAction = pShUndoMgr->GetUndoAction();
+        SfxViewShell *pViewSh = GetViewShell();
+        if (pViewSh && pAction->GetViewShellId() != static_cast<sal_Int32>(pViewSh->GetViewShellId()))
+        {
+            rSet.Put(SfxUInt32Item(SID_UNDO, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)));
+        }
+        else
+        {
+            OUString aTmp(SvtResId(STR_UNDO).toString());
+            aTmp+= pShUndoMgr->GetUndoActionComment();
+            rSet.Put( SfxStringItem( SID_UNDO, aTmp ) );
+        }
     }
     else
         rSet.DisableItem( SID_UNDO );
 
     if ( pShUndoMgr && pShUndoMgr->GetRedoActionCount() )
     {
-        OUString aTmp(SvtResId(STR_REDO).toString());
-        aTmp += pShUndoMgr->GetRedoActionComment();
-        rSet.Put( SfxStringItem( SID_REDO, aTmp ) );
+        const SfxUndoAction* pAction = pShUndoMgr->GetRedoAction();
+        SfxViewShell *pViewSh = GetViewShell();
+        if (pViewSh && pAction->GetViewShellId() != static_cast<sal_Int32>(pViewSh->GetViewShellId()))
+        {
+            rSet.Put(SfxUInt32Item(SID_REDO, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)));
+        }
+        else
+        {
+            OUString aTmp(SvtResId(STR_REDO).toString());
+            aTmp += pShUndoMgr->GetRedoActionComment();
+            rSet.Put( SfxStringItem( SID_REDO, aTmp ) );
+        }
     }
     else
         rSet.DisableItem( SID_REDO );
