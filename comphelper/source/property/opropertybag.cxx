@@ -359,7 +359,7 @@ namespace comphelper
         };
 
         template< typename CLASS >
-        struct TransformPropertyToName : public std::unary_function< CLASS, OUString >
+        struct TransformPropertyToName
         {
             const OUString& operator()( const CLASS& _rProp )
             {
@@ -367,7 +367,7 @@ namespace comphelper
             }
         };
 
-        struct ExtractPropertyValue : public std::unary_function< PropertyValue, Any >
+        struct ExtractPropertyValue
         {
             const Any& operator()( const PropertyValue& _rProp )
             {

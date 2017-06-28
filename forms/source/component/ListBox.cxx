@@ -87,7 +87,7 @@ namespace frm
     namespace
     {
 
-        struct RowSetValueToString : public ::std::unary_function< ORowSetValue, OUString >
+        struct RowSetValueToString
         {
             OUString operator()( const ORowSetValue& _value ) const
             {
@@ -96,7 +96,7 @@ namespace frm
         };
 
 
-        struct AppendRowSetValueString : public ::std::unary_function< OUString, void >
+        struct AppendRowSetValueString
         {
             explicit AppendRowSetValueString( OUString& _string )
                 :m_string( _string )
@@ -1474,7 +1474,7 @@ namespace frm
     namespace
     {
 
-        struct ExtractStringFromSequence_Safe : public ::std::unary_function< sal_Int16, OUString >
+        struct ExtractStringFromSequence_Safe
         {
         protected:
             const std::vector< OUString >&  m_rList;
@@ -1545,7 +1545,7 @@ namespace frm
         }
 
 
-        struct ExtractAnyFromValueList_Safe : public ::std::unary_function< sal_Int16, Any >
+        struct ExtractAnyFromValueList_Safe
         {
         protected:
             const ValueList&  m_rList;

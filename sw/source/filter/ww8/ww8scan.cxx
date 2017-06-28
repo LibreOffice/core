@@ -24,7 +24,6 @@
 #include <cassert>
 #include <cstddef>
 #include <cstring>
-#include <functional>
 #include <algorithm>
 
 #include <i18nlangtag/mslangid.hxx>
@@ -2795,8 +2794,7 @@ void WW8PLCFx::SetIdx2(sal_uInt32)
 {
 }
 
-class SamePos :
-    public std::unary_function<const WW8PLCFx_Fc_FKP::WW8Fkp *, bool>
+class SamePos
 {
 private:
     long mnPo;

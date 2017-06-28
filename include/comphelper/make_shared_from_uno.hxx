@@ -19,7 +19,6 @@
 #ifndef INCLUDED_COMPHELPER_MAKE_SHARED_FROM_UNO_HXX
 #define INCLUDED_COMPHELPER_MAKE_SHARED_FROM_UNO_HXX
 
-#include <functional>
 #include <memory>
 
 namespace comphelper {
@@ -27,7 +26,7 @@ namespace comphelper {
 /// @internal
 namespace detail {
 /// @internal
-template <typename T> struct ReleaseFunc : ::std::unary_function<T *, void> {
+template <typename T> struct ReleaseFunc {
     void operator()( T * p ) const { p->release(); }
 };
 } // namespace detail

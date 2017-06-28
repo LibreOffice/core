@@ -95,7 +95,7 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::append_sheet(const char
     return maSheets.back().get();
 }
 
-class FindSheetByIndex : public std::unary_function< std::unique_ptr<ScOrcusSheet>, bool>
+class FindSheetByIndex
 {
     SCTAB mnTab;
 public:

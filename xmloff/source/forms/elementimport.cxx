@@ -50,7 +50,6 @@
 #include <comphelper/sequence.hxx>
 
 #include <algorithm>
-#include <functional>
 
 namespace xmloff
 {
@@ -1404,7 +1403,7 @@ namespace xmloff
             simulateDefaultedAttribute(OAttributeMetaData::getDatabaseAttributeName(DAFlags::ConvertEmpty), PROPERTY_EMPTY_IS_NULL, "false");
     }
 
-    struct EqualHandle : public ::std::unary_function< PropertyValue, bool >
+    struct EqualHandle
     {
         const sal_Int32 m_nHandle;
         explicit EqualHandle( sal_Int32 _nHandle ) : m_nHandle( _nHandle ) { }
@@ -1457,7 +1456,7 @@ namespace xmloff
         // since this is the default of this property, anyway.
     }
 
-    struct EqualName : public ::std::unary_function< PropertyValue, bool >
+    struct EqualName
     {
         const OUString & m_sName;
         explicit EqualName( const OUString& _rName ) : m_sName( _rName ) { }

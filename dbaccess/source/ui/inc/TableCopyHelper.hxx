@@ -26,14 +26,13 @@
 #include <svtools/transfer.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#include <functional>
 
 class SvTreeListEntry;
 namespace dbaui
 {
     class OGenericUnoController;
-    /// unary_function Functor object for class DataFlavorExVector::value_type returntype is bool
-    struct TAppSupportedSotFunctor : std::unary_function<DataFlavorExVector::value_type,bool>
+    /// Functor object for class DataFlavorExVector::value_type returntype is bool
+    struct TAppSupportedSotFunctor
     {
         ElementType eEntryType;
         TAppSupportedSotFunctor(const ElementType& _eEntryType)

@@ -332,7 +332,7 @@ namespace accessibility
     }
 
     // functor for sending child events (no stand-alone function, they are maybe not inlined)
-    class AccessibleTextHelper_OffsetChildIndex : public ::std::unary_function< ::accessibility::AccessibleEditableTextPara&, void >
+    class AccessibleTextHelper_OffsetChildIndex
     {
     public:
         explicit AccessibleTextHelper_OffsetChildIndex( sal_Int32 nDifference ) : mnDifference(nDifference) {}
@@ -828,8 +828,7 @@ namespace accessibility
     }
 
     // functor for checking changes in paragraph bounding boxes (no stand-alone function, maybe not inlined)
-    class AccessibleTextHelper_UpdateChildBounds : public ::std::unary_function< const ::accessibility::AccessibleParaManager::WeakChild&,
-        ::accessibility::AccessibleParaManager::WeakChild >
+    class AccessibleTextHelper_UpdateChildBounds
     {
     public:
         explicit AccessibleTextHelper_UpdateChildBounds() {}
@@ -880,7 +879,7 @@ namespace accessibility
 #endif
 
     // functor for sending child events (no stand-alone function, they are maybe not inlined)
-    class AccessibleTextHelper_LostChildEvent : public ::std::unary_function< const ::accessibility::AccessibleParaManager::WeakChild&, void >
+    class AccessibleTextHelper_LostChildEvent
     {
     public:
         explicit AccessibleTextHelper_LostChildEvent( AccessibleTextHelper_Impl& rImpl ) : mrImpl(rImpl) {}
@@ -975,7 +974,7 @@ namespace accessibility
     }
 
     // functor for sending child events (no stand-alone function, they are maybe not inlined)
-    class AccessibleTextHelper_ChildrenTextChanged : public ::std::unary_function< ::accessibility::AccessibleEditableTextPara&, void >
+    class AccessibleTextHelper_ChildrenTextChanged
     {
     public:
         void operator()( ::accessibility::AccessibleEditableTextPara& rPara )
@@ -989,7 +988,7 @@ namespace accessibility
         Reacts on SfxHintId::TextParaInserted/REMOVED events and stores
         their content
      */
-    class AccessibleTextHelper_QueueFunctor : public ::std::unary_function< const SfxHint*, void >
+    class AccessibleTextHelper_QueueFunctor
     {
     public:
         AccessibleTextHelper_QueueFunctor() :

@@ -172,7 +172,7 @@ namespace svt
 
 
     /// sorts the sib contents of a TemplateFolderContent
-    struct SubContentSort : public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
+    struct SubContentSort
     {
         void operator() ( TemplateFolderContent& _rFolder ) const
         {
@@ -254,9 +254,7 @@ namespace svt
     };
 
 
-    struct StoreContentURL
-            :public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
-            ,public StorageHelper
+    struct StoreContentURL : public StorageHelper
     {
         uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
 
@@ -279,9 +277,7 @@ namespace svt
 
 
     /// functor which stores the complete content of a TemplateContent
-    struct StoreFolderContent
-            :public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
-            ,public StorageHelper
+    struct StoreFolderContent : public StorageHelper
     {
         uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
 
@@ -327,9 +323,7 @@ namespace svt
 
 
     /// functor which reads a complete TemplateContent instance
-    struct ReadFolderContent
-            :public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
-            ,public StorageHelper
+    struct ReadFolderContent : public StorageHelper
     {
         uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
 

@@ -39,7 +39,6 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <rtl/ustrbuf.hxx>
 
-#include <functional>
 #include <algorithm>
 #include <iterator>
 #include <vector>
@@ -54,7 +53,7 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 
-class lcl_MatchesRole : public std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >
+class lcl_MatchesRole
 {
 public:
     explicit lcl_MatchesRole( const OUString & aRole, bool bMatchPrefix ) :
@@ -233,7 +232,9 @@ std::vector< Reference< chart2::data::XLabeledDataSequence > >
     std::vector< Reference< chart2::data::XLabeledDataSequence > > aResultVec;
     std::remove_copy_if( aDataSequences.getConstArray(), aDataSequences.getConstArray() + aDataSequences.getLength(),
                            std::back_inserter( aResultVec ),
-                           std::not1( lcl_MatchesRole( aRole, bMatchPrefix )));
+                           [aRole, bMatchPrefix](const Reference< chart2::data::XLabeledDataSequence > & xSeq)
+                           {return !(lcl_MatchesRole(aRole, bMatchPrefix).operator()(xSeq));});
+                            //TODO replace lambda with std::not_fn(lcl_MatchesRole(aRole, bMatchPrefix) in C++17
     return aResultVec;
 }
 

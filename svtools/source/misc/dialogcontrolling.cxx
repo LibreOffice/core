@@ -21,7 +21,6 @@
 #include <vcl/window.hxx>
 
 #include <algorithm>
-#include <functional>
 
 
 namespace svt
@@ -144,7 +143,7 @@ namespace svt
 
     namespace
     {
-        struct ResetDialogController : public ::std::unary_function< const std::shared_ptr<DialogController>&, void >
+        struct ResetDialogController
         {
             void operator()( const std::shared_ptr<DialogController>& _pController )
             {

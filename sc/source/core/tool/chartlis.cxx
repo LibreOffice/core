@@ -27,7 +27,6 @@
 
 using namespace com::sun::star;
 using ::std::vector;
-using ::std::unary_function;
 using ::std::for_each;
 
 // Update chart listeners quickly, to get a similar behavior to loaded charts
@@ -237,7 +236,7 @@ void ScChartListener::SetRangeList( const ScRangeListRef& rNew )
 
 namespace {
 
-class StartEndListening : public unary_function<ScTokenRef, void>
+class StartEndListening
 {
 public:
     StartEndListening(ScDocument* pDoc, ScChartListener& rParent, bool bStart) :
@@ -503,7 +502,7 @@ void ScChartListenerCollection::ChangeListening( const OUString& rName,
 
 namespace {
 
-class InsertChartListener : public std::unary_function<ScChartListener*, void>
+class InsertChartListener
 {
     ScChartListenerCollection::ListenersType& mrListeners;
 public:

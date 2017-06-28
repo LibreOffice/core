@@ -22,7 +22,6 @@
 
 #include <algorithm>
 #include <iterator>
-#include <functional>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 
 using namespace ::com::sun::star;
@@ -34,8 +33,7 @@ using ::com::sun::star::uno::Any;
 namespace
 {
 
-struct lcl_getPropertyStateByHandle :
-        public std::unary_function< sal_Int32,  beans::PropertyState >
+struct lcl_getPropertyStateByHandle
 {
     explicit lcl_getPropertyStateByHandle(
         const ::property::impl::ImplOPropertySet::tPropertyMap & rMap )
@@ -54,8 +52,7 @@ private:
 };
 
 template< typename K, typename V >
-struct lcl_eraseMapEntry :
-        public std::unary_function< K, void >
+struct lcl_eraseMapEntry
 {
     explicit lcl_eraseMapEntry( std::map< K, V > & rMap )
             : m_rMap( rMap )
@@ -70,8 +67,7 @@ private:
     std::map< K, V > m_rMap;
 };
 
-struct lcl_replaceInterfacePropertiesByClones :
-    public std::unary_function< ::property::impl::ImplOPropertySet::tPropertyMap::value_type, void >
+struct lcl_replaceInterfacePropertiesByClones
 {
     void operator() ( ::property::impl::ImplOPropertySet::tPropertyMap::value_type & rProp )
     {

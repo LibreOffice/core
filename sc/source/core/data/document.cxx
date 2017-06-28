@@ -1230,7 +1230,7 @@ bool ScDocument::CanInsertRow( const ScRange& rRange ) const
 
 namespace {
 
-struct SetDirtyIfPostponedHandler : std::unary_function<ScTable*, void>
+struct SetDirtyIfPostponedHandler
 {
     void operator() (ScTable* p)
     {
@@ -1239,7 +1239,7 @@ struct SetDirtyIfPostponedHandler : std::unary_function<ScTable*, void>
     }
 };
 
-struct BroadcastRecalcOnRefMoveHandler : std::unary_function<ScTable*, void>
+struct BroadcastRecalcOnRefMoveHandler
 {
     void operator() (ScTable* p)
     {

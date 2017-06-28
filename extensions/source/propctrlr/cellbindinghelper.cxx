@@ -37,7 +37,6 @@
 #include <tools/diagnose_ex.h>
 #include "formstrings.hxx"
 
-#include <functional>
 #include <algorithm>
 
 
@@ -60,7 +59,7 @@ namespace pcr
     namespace
     {
 
-        struct StringCompare : public std::unary_function< OUString, bool >
+        struct StringCompare
         {
         private:
             OUString m_sReference;

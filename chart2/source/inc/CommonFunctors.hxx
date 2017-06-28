@@ -20,7 +20,6 @@
 #define INCLUDED_CHART2_SOURCE_INC_COMMONFUNCTORS_HXX
 
 #include <algorithm>
-#include <functional>
 #include <o3tl/any.hxx>
 #include <rtl/math.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -38,7 +37,7 @@ namespace CommonFunctors
     (via mem_fun_ptr)</p>
 */
 template< typename T >
-    struct makeAny : public std::unary_function< T, css::uno::Any >
+    struct makeAny
 {
     css::uno::Any operator() ( const T & aVal )
     {
@@ -51,7 +50,7 @@ template< typename T >
     <p>In case no number can be generated from the Any, NaN (see
     rtl::math::SetNAN()) is returned.</p>
 */
-struct OOO_DLLPUBLIC_CHARTTOOLS AnyToDouble : public std::unary_function< css::uno::Any, double >
+struct OOO_DLLPUBLIC_CHARTTOOLS AnyToDouble
 {
     double operator() ( const css::uno::Any & rAny )
     {
@@ -65,7 +64,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS AnyToDouble : public std::unary_function< css::u
 /** unary function to convert css::uno::Any into an
     OUString.
 */
-struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString : public std::unary_function< css::uno::Any,  OUString >
+struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString
 {
     OUString operator() ( const css::uno::Any & rAny )
     {
@@ -94,7 +93,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString : public std::unary_function< css::u
 
     <p>For conversion rtl::math::StringToDouble is used.</p>
  */
-struct OOO_DLLPUBLIC_CHARTTOOLS OUStringToDouble : public std::unary_function< OUString, double >
+struct OOO_DLLPUBLIC_CHARTTOOLS OUStringToDouble
 {
     double operator() ( const OUString & rStr )
     {
@@ -112,7 +111,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS OUStringToDouble : public std::unary_function< O
 
     <p>For conversion rtl::math::DoubleToOUString is used.</p>
  */
-struct OOO_DLLPUBLIC_CHARTTOOLS DoubleToOUString : public std::unary_function< double, OUString >
+struct OOO_DLLPUBLIC_CHARTTOOLS DoubleToOUString
 {
     OUString operator() ( double fNumber )
     {

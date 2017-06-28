@@ -71,7 +71,6 @@
 #include <float.h>
 #include <map>
 #include <algorithm>
-#include <functional>
 #include <basic/basmgr.hxx>
 #include <vbahelper/vbaaccesshelper.hxx>
 #include <memory>
@@ -3556,7 +3555,7 @@ bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
 
 namespace {
 
-class FindByPointer : public ::std::unary_function<ScInterpreterTableOpParams, bool>
+class FindByPointer
 {
     const ScInterpreterTableOpParams* mpTableOp;
 public:

@@ -44,7 +44,7 @@ namespace comphelper
 {
 
 
-    struct UnoTypeLess : public std::unary_function< css::uno::Type, bool >
+    struct UnoTypeLess
     {
         bool operator()( const css::uno::Type& _rLHS, const css::uno::Type& _rRHS ) const
         {

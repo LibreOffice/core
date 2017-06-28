@@ -141,7 +141,7 @@ namespace utl
     //= functors on NodeValueAccessor instances
 
     /// base class for functors synchronizing between exchange locations and config sub nodes
-    struct SubNodeAccess : public ::std::unary_function< NodeValueAccessor, void >
+    struct SubNodeAccess
     {
     protected:
         const OConfigurationNode&   m_rRootNode;

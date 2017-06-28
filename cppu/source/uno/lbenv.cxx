@@ -93,8 +93,7 @@ struct ObjectEntry
 };
 
 
-struct FctPtrHash :
-    public std::unary_function< const void *, std::size_t >
+struct FctPtrHash
 {
     std::size_t operator () ( const void * pKey ) const
         { return reinterpret_cast< std::size_t>( pKey ); }
