@@ -1024,7 +1024,7 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
         {
             const std::array<SvxFrameDirection, 3> vDirs = { SvxFrameDirection::Horizontal_LR_TB,  SvxFrameDirection::Horizontal_RL_TB, SvxFrameDirection::Vertical_RL_TB };
             eDir = vDirs.at(aValue.get<sal_Int32>());
-        } catch(std::out_of_range) {
+        } catch(std::out_of_range &) {
             SAL_WARN("sw.uno", "unknown direction code, maybe it's a bitfield");
         }
         SvxFrameDirectionItem aItem(eDir, RES_FRAMEDIR);
