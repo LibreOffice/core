@@ -135,8 +135,8 @@ uno::Reference< uno::XInterface > OModuleRegistration::getComponentFactory(
     {
         if (pImplName->equals(_rImplementationName))
         {
-            const FactoryInstantiation FactoryInstantiationFunction = reinterpret_cast<const FactoryInstantiation>(*pFactoryFunction);
-            const ComponentInstantiation ComponentInstantiationFunction = reinterpret_cast<const ComponentInstantiation>(*pComponentFunction);
+            const FactoryInstantiation FactoryInstantiationFunction = reinterpret_cast<FactoryInstantiation>(*pFactoryFunction);
+            const ComponentInstantiation ComponentInstantiationFunction = reinterpret_cast<ComponentInstantiation>(*pComponentFunction);
 
             xReturn = FactoryInstantiationFunction( _rxServiceManager, *pImplName, ComponentInstantiationFunction, *pServices, nullptr);
             if (xReturn.is())
