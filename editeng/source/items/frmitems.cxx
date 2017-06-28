@@ -1562,7 +1562,7 @@ sal_uInt16 SvxShadowItem::GetEnumValue() const
 
 void SvxShadowItem::SetEnumValue( sal_uInt16 nVal )
 {
-    SetLocation( (const SvxShadowLocation)nVal );
+    SetLocation( (SvxShadowLocation)nVal );
 }
 
 void SvxShadowItem::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -3021,7 +3021,7 @@ SfxPoolItem* SvxFormatBreakItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) 
     rStrm.ReadSChar( eBreak );
     if( FMTBREAK_NOAUTO > nVersion )
         rStrm.ReadSChar( bDummy );
-    return new SvxFormatBreakItem( (const SvxBreak)eBreak, Which() );
+    return new SvxFormatBreakItem( (SvxBreak)eBreak, Which() );
 }
 
 

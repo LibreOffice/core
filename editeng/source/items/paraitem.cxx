@@ -444,7 +444,7 @@ sal_uInt16 SvxAdjustItem::GetEnumValue() const
 
 void SvxAdjustItem::SetEnumValue( sal_uInt16 nVal )
 {
-    SetAdjust( (const SvxAdjust)nVal );
+    SetAdjust( (SvxAdjust)nVal );
 }
 
 

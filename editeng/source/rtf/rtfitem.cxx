@@ -441,7 +441,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     if( nTokenValue > 200 )     // Data value for PropLnSp
                         nTokenValue = 200;      // is one BYTE !!!
 
-                    aLSpace.SetPropLineSpace( (const sal_uInt8)nTokenValue );
+                    aLSpace.SetPropLineSpace( (sal_uInt8)nTokenValue );
                     aLSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
 
                     pSet->Put( aLSpace );
@@ -479,7 +479,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                         CalcValue();
 
                     if (eLnSpc != SvxLineSpaceRule::Auto)
-                        aLSpace.SetLineHeight( (const sal_uInt16)nTokenValue );
+                        aLSpace.SetLineHeight( (sal_uInt16)nTokenValue );
 
                     aLSpace.SetLineSpaceRule(eLnSpc);
                     pSet->Put(aLSpace);
@@ -660,7 +660,7 @@ SET_FONTALIGNMENT:
 //                   if( IsCalcValue() )
 //                       CalcValue();
                     SvxFontHeightItem aTmpItem(
-                            (const sal_uInt16)nTokenValue, 100,
+                            (sal_uInt16)nTokenValue, 100,
                             SID_ATTR_CHAR_FONTHEIGHT );
                     SetScriptAttr( eCharType, *pSet, aTmpItem );
                 }

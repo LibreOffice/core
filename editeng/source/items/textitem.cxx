@@ -468,7 +468,7 @@ SfxPoolItem* SvxPostureItem::Create(SvStream& rStrm, sal_uInt16) const
 {
     sal_uInt8 nPosture;
     rStrm.ReadUChar( nPosture );
-    return new SvxPostureItem( (const FontItalic)nPosture, Which() );
+    return new SvxPostureItem( (FontItalic)nPosture, Which() );
 }
 
 
@@ -2099,7 +2099,7 @@ SfxPoolItem* SvxCaseMapItem::Create(SvStream& rStrm, sal_uInt16) const
 {
     sal_uInt8 cMap;
     rStrm.ReadUChar( cMap );
-    return new SvxCaseMapItem( (const SvxCaseMap)cMap, Which() );
+    return new SvxCaseMapItem( (SvxCaseMap)cMap, Which() );
 }
 
 
@@ -2275,7 +2275,7 @@ sal_uInt16 SvxEscapementItem::GetEnumValue() const
 
 void SvxEscapementItem::SetEnumValue( sal_uInt16 nVal )
 {
-    SetEscapement( (const SvxEscapement)nVal );
+    SetEscapement( (SvxEscapement)nVal );
 }
 
 bool SvxEscapementItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
