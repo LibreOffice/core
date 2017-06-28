@@ -443,7 +443,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
         pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, SvXMLGraphicHelperMode::Read );
         xGrfContainer = pGraphicHelper;
 
-        pObjectHelper = SvXMLEmbeddedObjectHelper::Create(xStorage, mrDocShell, SvXMLEmbeddedObjectHelperMode::Read, false);
+        pObjectHelper = SvXMLEmbeddedObjectHelper::Create(xStorage, mrDocShell, SvXMLEmbeddedObjectHelperMode::Read);
         xObjectResolver = pObjectHelper;
     }
     uno::Sequence<uno::Any> aStylesArgs(4);
@@ -874,7 +874,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
 
         if( pObjSh )
         {
-            pObjectHelper = SvXMLEmbeddedObjectHelper::Create( xStorage, *pObjSh, SvXMLEmbeddedObjectHelperMode::Write, false );
+            pObjectHelper = SvXMLEmbeddedObjectHelper::Create( xStorage, *pObjSh, SvXMLEmbeddedObjectHelperMode::Write );
             xObjectResolver = pObjectHelper;
         }
 
