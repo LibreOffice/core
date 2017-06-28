@@ -141,14 +141,14 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
 
     for( nRowCnt = rRange.aStart.Row() ; nRowCnt <= nEndRow ; nRowCnt++ )
     {
-        OSL_ASSERT(aOS.getLength() == 0);
+        SAL_WARN_IF(!aOS.isEmpty(), "sc/source/filter", "aOS should be empty");
         aOS.append(pSpecDataType_LF);
         aOS.append(pKeyBOT);
         aOS.append('\n');
         rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
         for( nColCnt = rRange.aStart.Col() ; nColCnt <= nEndCol ; nColCnt++ )
         {
-            OSL_ASSERT(aOS.getLength() == 0);
+            SAL_WARN_IF(!aOS.isEmpty(), "sc/source/filter", "aOS should be empty");
             bool bWriteStringData = false;
             ScRefCellValue aCell(*pDoc, ScAddress(nColCnt, nRowCnt, nTab));
 
@@ -196,7 +196,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
                 // sc/source/ui/docsh.cxx:ScDocShell::AsciiSave()
                 // In fact we should create a common method if this would be
                 // needed just one more time..
-                OSL_ASSERT(aOS.getLength() == 0);
+                SAL_WARN_IF(!aOS.isEmpty(), "sc/source/filter", "aOS should be empty");
                 OUString aTmpStr = aString;
                 aOS.append(pStringData);
                 rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear(), eCharSet);
@@ -257,7 +257,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
         aPrgrsBar.SetState( nRowCnt );
     }
 
-    OSL_ASSERT(aOS.getLength() == 0);
+    SAL_WARN_IF(!aOS.isEmpty(), "sc/source/filter", "aOS should be empty");
     aOS.append(pSpecDataType_LF);
     aOS.append(pKeyEOD);
     aOS.append('\n');

@@ -466,7 +466,7 @@ private:
         else
         {
             // Multi-item condition.
-            OSL_ASSERT(rItems.size() > 1);
+            SAL_WARN_IF(rItems.size() <= 1, "sc/source/xml", "rItems should have more than 1 element");
 
             // Store the 1st value for backward compatibility.
             const ScQueryEntry::Item& rItem = rItems.front();
