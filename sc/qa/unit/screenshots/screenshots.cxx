@@ -123,7 +123,7 @@ void ScScreenshotTest::initialize()
 
 void ScScreenshotTest::registerKnownDialogsByID(mapType& rKnownDialogs)
 {
-    // fill map of unknown dialogs
+    // fill map of known dialogs
     rKnownDialogs["modules/scalc/ui/insertsheet.ui"] = 0;
     rKnownDialogs["modules/scalc/ui/deletecells.ui"] = 1;
     rKnownDialogs["modules/scalc/ui/pastespecial.ui"] = 2;
