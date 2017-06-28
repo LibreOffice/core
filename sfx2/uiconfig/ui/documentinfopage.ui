@@ -228,7 +228,7 @@
     </child>
     <child>
       <object class="GtkButton" id="signature">
-        <property name="label" translatable="yes">Di_gital Signature...</property>
+        <property name="label" translatable="yes">Di_gital Signatures...</property>
         <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
