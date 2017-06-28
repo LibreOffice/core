@@ -1653,8 +1653,6 @@ void XMLTextParagraphExport::exportText(
     if( ! xParaEnum.is() )
         return;
 
-    bool bExportLevels = true;
-
     if (xPropertySet.is())
     {
         Reference < XPropertySetInfo > xInfo ( xPropertySet->getPropertySetInfo() );
@@ -1665,21 +1663,6 @@ void XMLTextParagraphExport::exportText(
             {
                 xPropertySet->getPropertyValue(sTextSection) >>= xBaseSection ;
             }
-
-/* #i35937#
-            // for applications that use the outliner we need to check if
-            // the current text object needs the level information exported
-            if( !bAutoStyles )
-            {
-                // fixme: move string to class member, couldn't do now because
-                //        of no incompatible build
-                OUString sHasLevels( "HasLevels" );
-                if (xInfo->hasPropertyByName( sHasLevels ) )
-                {
-                    xPropertySet->getPropertyValue(sHasLevels) >>= bExportLevels;
-                }
-            }
-*/
         }
     }
 
@@ -1688,7 +1671,7 @@ void XMLTextParagraphExport::exportText(
     if( !bAutoStyles && (pRedlineExport != nullptr) )
         pRedlineExport->ExportStartOrEndRedline( xPropertySet, true );
     exportTextContentEnumeration( xParaEnum, bAutoStyles, xBaseSection,
-                                  bIsProgress, bExportParagraph, nullptr, bExportLevels, eExtensionNS );
+                                  bIsProgress, bExportParagraph, nullptr, true/*bExportLevels*/, eExtensionNS );
     if( !bAutoStyles && (pRedlineExport != nullptr) )
         pRedlineExport->ExportStartOrEndRedline( xPropertySet, false );
 }
@@ -3153,8 +3136,7 @@ void XMLTextParagraphExport::exportEvents( const Reference < XPropertySet > & rP
     GetExport().GetEventExport().Export(xEventsSupp);
 
     // image map
-    OUString sImageMap("ImageMap");
-    if (rPropSet->getPropertySetInfo()->hasPropertyByName(sImageMap))
+    if (rPropSet->getPropertySetInfo()->hasPropertyByName("ImageMap"))
         GetExport().GetImageMapExport().Export( rPropSet );
 }
 

@@ -2468,10 +2468,6 @@ void XMLMacroFieldImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
     Any aAny;
-
-    OUString sOnClick("OnClick");
-    OUString sPropertyMacroLibrary("MacroLibrary");
-
     aAny <<= (bDescriptionOK ? sDescription : GetContent());
     xPropertySet->setPropertyValue(sAPI_hint, aAny);
 
@@ -2488,7 +2484,7 @@ void XMLMacroFieldImportContext::PrepareField(
         XMLEventsImportContext* pEvents =
             static_cast<XMLEventsImportContext*>(xEventContext.get());
         Sequence<PropertyValue> aValues;
-        pEvents->GetEventSequence( sOnClick, aValues );
+        pEvents->GetEventSequence( "OnClick", aValues );
 
         sal_Int32 nLength = aValues.getLength();
         for( sal_Int32 i = 0; i < nLength; i++ )
@@ -2535,7 +2531,7 @@ void XMLMacroFieldImportContext::PrepareField(
 
     xPropertySet->setPropertyValue("ScriptURL", Any(sScriptURL));
     xPropertySet->setPropertyValue("MacroName", Any(sMacroName));
-    xPropertySet->setPropertyValue(sPropertyMacroLibrary, Any(sLibraryName));
+    xPropertySet->setPropertyValue("MacroLibrary", Any(sLibraryName));
 }
 
 

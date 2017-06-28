@@ -146,12 +146,11 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
             }
             if (!bEnd)
                 nEndIndex = nIndex;
-            PageContextType aType = Page;
             return new PagePropertySetContext( GetImport(), nPrefix,
                                                     rLocalName, xAttrList,
                                                     XML_TYPE_PROP_PAGE_LAYOUT,
                                                     GetProperties(),
-                                                    xImpPrMap, 0, nEndIndex, aType);
+                                                    xImpPrMap, 0, nEndIndex, Page);
         }
     }
 

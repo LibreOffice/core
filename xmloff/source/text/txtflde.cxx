@@ -2236,13 +2236,7 @@ void XMLTextFieldExport::ExportMacro(
 {
     // some strings we'll need
     OUString sEventType( "EventType" );
-    OUString sStarBasic( "StarBasic" );
     OUString sScript( "Script" );
-    OUString sLibrary( "Library" );
-    OUString sMacroName( "MacroName" );
-    OUString sOnClick( "OnClick" );
-    OUString sPropertyMacroLibrary( "MacroLibrary" );
-    OUString sPropertyMacroName( "MacroName" );
     OUString sPropertyScriptURL( "ScriptURL" );
 
 
@@ -2278,15 +2272,15 @@ void XMLTextFieldExport::ExportMacro(
         aSeq = Sequence<PropertyValue> (3);
         PropertyValue* pArr = aSeq.getArray();
         pArr[0].Name = sEventType;
-        pArr[0].Value <<= sStarBasic;
-        pArr[1].Name = sLibrary;
-        pArr[1].Value = rPropSet->getPropertyValue( sPropertyMacroLibrary );
-        pArr[2].Name = sMacroName;
-        pArr[2].Value = rPropSet->getPropertyValue( sPropertyMacroName );
+        pArr[0].Value <<= OUString("StarBasic");
+        pArr[1].Name = "Library";
+        pArr[1].Value = rPropSet->getPropertyValue( "MacroLibrary" );
+        pArr[2].Name = "MacroName";
+        pArr[2].Value = rPropSet->getPropertyValue( "MacroName" );
     }
 
     // 2) export the sequence
-    GetExport().GetEventExport().ExportSingleEvent( aSeq, sOnClick, false );
+    GetExport().GetEventExport().ExportSingleEvent( aSeq, "OnClick", false );
 
     // and finally, the field presentation
     GetExport().Characters(rContent);

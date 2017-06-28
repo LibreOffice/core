@@ -684,12 +684,11 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
         if( (nPrefix & XML_NAMESPACE_UNKNOWN_FLAG) != 0 &&
             dynamic_cast< const SvXMLImportContext*>(xContext.get()) !=  nullptr )
         {
-            OUString aMsg( "Root element unknown" );
             Reference<xml::sax::XLocator> xDummyLocator;
             Sequence < OUString > aParams { rName };
 
             SetError( XMLERROR_FLAG_SEVERE|XMLERROR_UNKNOWN_ROOT,
-                      aParams, aMsg, xDummyLocator );
+                      aParams, "Root element unknown", xDummyLocator );
         }
     }
 
@@ -1390,8 +1389,7 @@ Reference < XOutputStream >
         Reference< XNameAccess > xNA( mxEmbeddedResolver, UNO_QUERY );
         if( xNA.is() )
         {
-            OUString aURL( "Obj12345678" );
-            Any aAny = xNA->getByName( aURL );
+            Any aAny = xNA->getByName( "Obj12345678" );
             aAny >>= xOLEStream;
         }
     }
@@ -1405,8 +1403,7 @@ OUString SvXMLImport::ResolveEmbeddedObjectURLFromBase64()
 
     if( mxEmbeddedResolver.is() )
     {
-        OUString aURL( "Obj12345678" );
-        sRet = mxEmbeddedResolver->resolveEmbeddedObjectURL( aURL );
+        sRet = mxEmbeddedResolver->resolveEmbeddedObjectURL( "Obj12345678" );
     }
 
     return sRet;
@@ -1557,8 +1554,7 @@ XMLEventImportHelper& SvXMLImport::GetEventImport()
         mpEventImportHelper->AddTranslationTable(aStandardEventTable);
 
         // register StarBasic event handler with capitalized spelling
-        OUString sStarBasicCap( "StarBasic" );
-        mpEventImportHelper->RegisterFactory(sStarBasicCap,
+        mpEventImportHelper->RegisterFactory("StarBasic",
                                             new XMLStarBasicContextFactory());
     }
 
@@ -1739,8 +1735,7 @@ sal_Unicode SvXMLImport::ConvStarBatsCharToStarSymbol( sal_Unicode c )
     sal_Unicode cNew = c;
     if( !mpImpl->hBatsFontConv )
     {
-        OUString sStarBats( "StarBats" );
-        mpImpl->hBatsFontConv = CreateFontToSubsFontConverter( sStarBats,
+        mpImpl->hBatsFontConv = CreateFontToSubsFontConverter( "StarBats",
                  FontToSubsFontFlags::IMPORT|FontToSubsFontFlags::ONLYOLDSOSYMBOLFONTS );
         SAL_WARN_IF( !mpImpl->hBatsFontConv, "xmloff.core", "Got no symbol font converter" );
     }
@@ -1757,8 +1752,7 @@ sal_Unicode SvXMLImport::ConvStarMathCharToStarSymbol( sal_Unicode c )
     sal_Unicode cNew = c;
     if( !mpImpl->hMathFontConv )
     {
-        OUString sStarMath( "StarMath" );
-        mpImpl->hMathFontConv = CreateFontToSubsFontConverter( sStarMath,
+        mpImpl->hMathFontConv = CreateFontToSubsFontConverter( "StarMath",
                  FontToSubsFontFlags::IMPORT|FontToSubsFontFlags::ONLYOLDSOSYMBOLFONTS );
         SAL_WARN_IF( !mpImpl->hMathFontConv, "xmloff.core", "Got no symbol font converter" );
     }

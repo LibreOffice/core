@@ -204,8 +204,7 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
             xProp->setPropertyValue("HasZAxis", aFalseBool );
             xProp->setPropertyValue("HasZAxisDescription", aFalseBool );
 
-            chart::ChartDataRowSource eSource = chart::ChartDataRowSource_COLUMNS;
-            xProp->setPropertyValue("DataRowSource", uno::Any(eSource) );
+            xProp->setPropertyValue("DataRowSource", uno::Any(chart::ChartDataRowSource_COLUMNS) );
         }
         catch( const beans::UnknownPropertyException & )
         {
