@@ -1544,7 +1544,7 @@ SvTreeListEntry* SfxAcceleratorConfigPage::applySearchFilter(OUString& rSearchTe
 
         if (!textSearch.SearchForward( aStr, &aStartPos, &aEndPos ))
         {
-            rListBox->GetModel()->Remove(pEntry);
+            rListBox->RemoveEntry(pEntry);
         }
         else if (!pFirstMatch)
         {
