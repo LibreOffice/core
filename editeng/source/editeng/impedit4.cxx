@@ -2985,7 +2985,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 // Change text without losing the attributes
                 const sal_Int32 nDiffs =
                     ReplaceTextOnly( rData.aSelection.Min().GetNode(),
-                        rData.nStart, rData.nLen, rData.aNewText, rData.aOffsets );
+                        rData.nStart, rData.aNewText, rData.aOffsets );
 
                 // adjust selection in end node to possibly changed size
                 if (aSel.Max().GetNode() == rData.aSelection.Max().GetNode())
@@ -3020,12 +3020,10 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 
 short ImpEditEngine::ReplaceTextOnly(
     ContentNode* pNode,
-    sal_Int32 nCurrentStart, sal_Int32 nLen,
+    sal_Int32 nCurrentStart,
     const OUString& rNewText,
     const uno::Sequence< sal_Int32 >& rOffsets )
 {
-    (void)  nLen;
-
     // Change text without losing the attributes
     sal_Int32 nCharsAfterTransliteration = rOffsets.getLength();
     const sal_Int32* pOffsets = rOffsets.getConstArray();

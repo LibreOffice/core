@@ -999,7 +999,7 @@ public:
     void                SetAutoCompleteText(const OUString& rStr, bool bUpdateTipWindow);
 
     EditSelection       TransliterateText( const EditSelection& rSelection, TransliterationFlags nTransliterationMode );
-    short               ReplaceTextOnly( ContentNode* pNode, sal_Int32 nCurrentStart, sal_Int32 nLen, const OUString& rText, const css::uno::Sequence< sal_Int32 >& rOffsets );
+    short               ReplaceTextOnly( ContentNode* pNode, sal_Int32 nCurrentStart, const OUString& rText, const css::uno::Sequence< sal_Int32 >& rOffsets );
 
     void                SetAsianCompressionMode( CharCompressType n );
     CharCompressType    GetAsianCompressionMode() const { return nAsianCompressionMode; }
