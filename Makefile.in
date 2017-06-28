@@ -466,7 +466,6 @@ $(eval $(call gb_Top_GbuildToIdeIntegration,$(ide))))
 
 $(foreach ide,\
 	codelite \
-	vs2013 \
 	vs2015 \
 	kdevelop \
 	vim \

@@ -216,7 +216,7 @@ class testVS2013Ide(IdeIntegrationGenerator):
         pass
 
     def retrieve_toolset(self):
-        return {'vs2013': 'v120', 'vs2015': 'v140', 'testIde':'v120'}.get(self.ide, None)
+        return {'vs2015': 'v140', 'testIde':'v120'}.get(self.ide, None)
 
     def module_make_command(self, targets):
         return '%(sh)s -c "PATH=\\"/bin:$PATH\\";BUILDDIR=\\"%(builddir)s\\" %(makecmd)s -rsC %(location)s ' + targets + '"'
@@ -838,7 +838,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         }
 
     def retrieve_toolset(self):
-        return {'vs2013': 'v120', 'vs2015': 'v140'}.get(self.ide, None)
+        return {'vs2015': 'v140'}.get(self.ide, None)
 
     def module_make_command(self, targets):
         return '%(sh)s -c "PATH=\\"/bin:$PATH\\";BUILDDIR=\\"%(builddir)s\\" %(makecmd)s -rsC %(location)s ' + targets + '"'
@@ -2183,7 +2183,6 @@ if __name__ == '__main__':
     paths = {}
     generators = {
         # Supported platforms
-        'vs2013': VisualStudioIntegrationGenerator,
         'xcode': XcodeIntegrationGenerator,
         'debug': DebugIntegrationGenerator,
         'testIde': testVS2013Ide,

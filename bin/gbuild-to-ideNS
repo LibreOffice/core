@@ -744,7 +744,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         }
 
     def retrieve_toolset(self, ide):
-        ide_toolset_map = {'vs2013': 'v120', 'vs2015': 'v140'}
+        ide_toolset_map = {'vs2015': 'v140'}
         return ide_toolset_map[ide]
 
     def module_make_command(self, targets):
@@ -1624,7 +1624,6 @@ if __name__ == '__main__':
         'eclipsecdt': EclipseCDTIntegrationGenerator,
         'kdevelop': KdevelopIntegrationGenerator,
         'xcode': XcodeIntegrationGenerator,
-        'vs2013': VisualStudioIntegrationGenerator,
         'vs2015': VisualStudioIntegrationGenerator,
         'vim': VimIntegrationGenerator,
         'debug': DebugIntegrationGenerator,
