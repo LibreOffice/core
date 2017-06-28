@@ -75,11 +75,11 @@ namespace basctl
 
     OUString        ChooseMacro(
         const css::uno::Reference< css::frame::XModel >& rxLimitToDocument, const css::uno::Reference< css::frame::XFrame >& xDocFrame,
-        bool bChooseOnly, const OUString& rMacroDesc );
+        bool bChooseOnly );
     inline OUString ChooseMacro(
         const css::uno::Reference< css::frame::XModel >& rxLimitToDocument,
-        bool bChooseOnly, const OUString& rMacroDesc )
-    { return ChooseMacro(rxLimitToDocument, css::uno::Reference< css::frame::XFrame >(), bChooseOnly, rMacroDesc); }
+        bool bChooseOnly )
+    { return ChooseMacro(rxLimitToDocument, css::uno::Reference< css::frame::XFrame >(), bChooseOnly); }
 
     /// @throws css::container::NoSuchElementException
     /// @throws css::uno::RuntimeException

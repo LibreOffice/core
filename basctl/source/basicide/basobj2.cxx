@@ -43,12 +43,11 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 
 extern "C" {
-    SAL_DLLPUBLIC_EXPORT rtl_uString* basicide_choose_macro( void* pOnlyInDocument_AsXModel, void* pDocFrame_AsXFrame, sal_Bool bChooseOnly, rtl_uString* pMacroDesc )
+    SAL_DLLPUBLIC_EXPORT rtl_uString* basicide_choose_macro( void* pOnlyInDocument_AsXModel, void* pDocFrame_AsXFrame, sal_Bool bChooseOnly )
     {
-        OUString aMacroDesc( pMacroDesc );
         Reference< frame::XModel > aDocument( static_cast< frame::XModel* >( pOnlyInDocument_AsXModel ) );
         Reference< frame::XFrame > aDocFrame( static_cast< frame::XFrame* >( pDocFrame_AsXFrame ) );
-        OUString aScriptURL = basctl::ChooseMacro( aDocument, aDocFrame, bChooseOnly, aMacroDesc );
+        OUString aScriptURL = basctl::ChooseMacro( aDocument, aDocFrame, bChooseOnly );
         rtl_uString* pScriptURL = aScriptURL.pData;
         rtl_uString_acquire( pScriptURL );
 
@@ -235,10 +234,8 @@ namespace
 
 OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument,
                       const uno::Reference< frame::XFrame >& xDocFrame,
-                      bool bChooseOnly, const OUString& rMacroDesc )
+                      bool bChooseOnly )
 {
-    (void)rMacroDesc;
-
     EnsureIde();
 
     GetExtraData()->ChoosingMacro() = true;

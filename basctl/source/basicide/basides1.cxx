@@ -268,7 +268,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         break;
         case SID_BASICIDE_CHOOSEMACRO:
         {
-            ChooseMacro( nullptr, false, OUString() );
+            ChooseMacro( nullptr, false );
         }
         break;
         case SID_BASICIDE_CREATEMACRO:
