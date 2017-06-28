@@ -38,7 +38,6 @@
 #include "hslcolor.hxx"
 
 #include <memory>
-#include <functional>
 #include <cstdlib>
 #include <string.h>
 #include <algorithm>
@@ -78,7 +77,7 @@ namespace slideshow
 
         // xxx todo: remove with boost::hash when 1.33 is available
         template <typename T>
-        struct hash : ::std::unary_function<T, ::std::size_t>
+        struct hash
         {
             ::std::size_t operator()( T const& val ) const {
                 return hash_value(val);

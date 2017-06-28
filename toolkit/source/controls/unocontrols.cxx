@@ -59,7 +59,6 @@
 #include <tools/time.hxx>
 
 #include <algorithm>
-#include <functional>
 
 #include "helper/imagealign.hxx"
 #include "helper/unopropertyarrayhelper.hxx"
@@ -2067,7 +2066,7 @@ struct ListItem
 
 typedef beans::Pair< OUString, OUString > UnoListItem;
 
-struct StripItemData : public ::std::unary_function< ListItem, UnoListItem >
+struct StripItemData
 {
     UnoListItem operator()( const ListItem& i_rItem )
     {
@@ -2221,7 +2220,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlListBoxModel::getPropertySet
 
 namespace
 {
-    struct CreateListItem : public ::std::unary_function< OUString, ListItem >
+    struct CreateListItem
     {
         ListItem operator()( const OUString& i_rItemText )
         {

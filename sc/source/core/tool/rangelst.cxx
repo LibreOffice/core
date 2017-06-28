@@ -38,7 +38,7 @@ using ::formula::FormulaGrammar;
 namespace {
 
 template<typename T>
-class FindEnclosingRange : public ::std::unary_function<ScRange*, bool>
+class FindEnclosingRange
 {
 public:
     explicit FindEnclosingRange(const T& rTest) : mrTest(rTest) {}
@@ -52,7 +52,7 @@ private:
 };
 
 template<typename T>
-class FindRangeIn : public ::std::unary_function<ScRange*, bool>
+class FindRangeIn
 {
 public:
     FindRangeIn(const T& rTest) : mrTest(rTest) {}
@@ -66,7 +66,7 @@ private:
 };
 
 template<typename T>
-class FindIntersectingRange : public ::std::unary_function<ScRange*, bool>
+class FindIntersectingRange
 {
 public:
     explicit FindIntersectingRange(const T& rTest) : mrTest(rTest) {}
@@ -79,7 +79,7 @@ private:
     const T& mrTest;
 };
 
-class AppendToList : public ::std::unary_function<const ScRange*, void>
+class AppendToList
 {
 public:
     explicit AppendToList(vector<ScRange*>& rRanges) : mrRanges(rRanges) {}
@@ -92,7 +92,7 @@ private:
     vector<ScRange*>& mrRanges;
 };
 
-class CountCells : public ::std::unary_function<const ScRange*, void>
+class CountCells
 {
 public:
     CountCells() : mnCellCount(0) {}
@@ -112,7 +112,7 @@ private:
     size_t mnCellCount;
 };
 
-class FormatString : public ::std::unary_function<const ScRange*, void>
+class FormatString
 {
 public:
     FormatString(OUString& rStr, ScRefFlags nFlags, ScDocument* pDoc, FormulaGrammar::AddressConvention eConv, sal_Unicode cDelim) :

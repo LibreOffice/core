@@ -91,7 +91,7 @@ typedef std::vector<OString> string_container_t;
 
 #if !defined _WIN32
 
-class exclude : public std::unary_function<OString, bool>
+class exclude
 {
 public:
 

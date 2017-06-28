@@ -25,7 +25,6 @@
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 
-#include <functional>
 #include <algorithm>
 #include <iterator>
 #include <map>
@@ -46,7 +45,7 @@ namespace pcr
     namespace
     {
 
-        struct SetPropertyValue : public std::unary_function< Reference< XPropertyHandler >, void >
+        struct SetPropertyValue
         {
             OUString sPropertyName;
             const Any&      rValue;

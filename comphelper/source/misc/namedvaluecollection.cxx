@@ -28,7 +28,6 @@
 #include <sal/log.hxx>
 
 #include <algorithm>
-#include <functional>
 #include <unordered_map>
 
 namespace comphelper
@@ -311,7 +310,7 @@ namespace comphelper
 
     namespace
     {
-        struct Value2PropertyValue : public std::unary_function< NamedValueRepository::value_type, PropertyValue >
+        struct Value2PropertyValue
         {
             PropertyValue operator()( const NamedValueRepository::value_type& _rValue )
             {
@@ -320,7 +319,7 @@ namespace comphelper
             }
         };
 
-        struct Value2NamedValue : public std::unary_function< NamedValueRepository::value_type, NamedValue >
+        struct Value2NamedValue
         {
             NamedValue operator()( const NamedValueRepository::value_type& _rValue )
             {

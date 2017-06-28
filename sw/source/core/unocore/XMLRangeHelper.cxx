@@ -23,7 +23,6 @@
 #include <osl/diagnose.h>
 
 #include <algorithm>
-#include <functional>
 
 namespace
 {
@@ -31,7 +30,7 @@ namespace
     array (which you can get from an OUString with getStr()) and puts the result
     into the OUStringBuffer given in the CTOR
  */
-class lcl_Escape : public std::unary_function< sal_Unicode, void >
+class lcl_Escape
 {
 public:
     explicit lcl_Escape( OUStringBuffer & aResultBuffer ) : m_aResultBuffer( aResultBuffer ) {}
@@ -54,7 +53,7 @@ private:
     you can get from an OUString with getStr()) and puts the result into the
     OUStringBuffer given in the CTOR
  */
-class lcl_UnEscape : public std::unary_function< sal_Unicode, void >
+class lcl_UnEscape
 {
 public:
     explicit lcl_UnEscape( OUStringBuffer & aResultBuffer ) : m_aResultBuffer( aResultBuffer ) {}

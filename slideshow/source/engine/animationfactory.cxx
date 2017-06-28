@@ -36,8 +36,6 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
-#include <functional>
-
 
 using namespace ::com::sun::star;
 
@@ -578,7 +576,7 @@ namespace slideshow
             };
 
             //Current c++0x draft (apparently) has std::identity, but not operator()
-            template<typename T> struct SGI_identity : public std::unary_function<T,T>
+            template<typename T> struct SGI_identity
             {
                 T& operator()(T& x) const { return x; }
                 const T& operator()(const T& x) const { return x; }

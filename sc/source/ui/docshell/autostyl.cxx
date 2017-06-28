@@ -31,7 +31,7 @@ static inline sal_uLong TimeNow()          // seconds
 
 namespace {
 
-class FindByRange : public ::std::unary_function<ScAutoStyleData, bool>
+class FindByRange
 {
     ScRange maRange;
 public:
@@ -39,7 +39,7 @@ public:
     bool operator() (const ScAutoStyleData& rData) const { return rData.aRange == maRange; }
 };
 
-class FindByTimeout : public ::std::unary_function<ScAutoStyleData, bool>
+class FindByTimeout
 {
     sal_uLong mnTimeout;
 public:
@@ -47,7 +47,7 @@ public:
     bool operator() (const ScAutoStyleData& rData) const { return rData.nTimeout >= mnTimeout; }
 };
 
-struct FindNonZeroTimeout : public ::std::unary_function<ScAutoStyleData, bool>
+struct FindNonZeroTimeout
 {
     bool operator() (const ScAutoStyleData& rData) const
     {

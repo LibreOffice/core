@@ -21,7 +21,6 @@
 #include <osl/diagnose.h>
 
 #include <algorithm>
-#include <functional>
 
 namespace bib
 {
@@ -71,7 +70,7 @@ namespace bib
         m_xForm = _rxForm;
     }
 
-    struct ControlModeSwitch : public std::unary_function< Reference< XControl >, void >
+    struct ControlModeSwitch
     {
         bool bDesign;
         explicit ControlModeSwitch( bool _bDesign ) : bDesign( _bDesign ) { }

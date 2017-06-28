@@ -89,7 +89,7 @@ std::vector< uno::Any > lcl_StringToAnyVector( const css::uno::Sequence< OUStrin
     return aResult;
 }
 
-struct lcl_setModified : public std::unary_function< lcl_tSequenceMap, void >
+struct lcl_setModified
 {
     void operator() ( const lcl_tSequenceMap::value_type & rMapEntry )
     {
@@ -104,7 +104,7 @@ struct lcl_setModified : public std::unary_function< lcl_tSequenceMap, void >
     }
 };
 
-struct lcl_internalizeSeries : public std::unary_function< Reference< chart2::XDataSeries >, void >
+struct lcl_internalizeSeries
 {
     lcl_internalizeSeries( InternalData & rInternalData,
                            InternalDataProvider & rProvider,
@@ -181,7 +181,7 @@ private:
     bool                    m_bDataInColumns;
 };
 
-struct lcl_copyFromLevel : public std::unary_function< vector< uno::Any >, uno::Any >
+struct lcl_copyFromLevel
 {
 public:
 
@@ -200,7 +200,7 @@ private:
     sal_Int32 m_nLevel;
 };
 
-struct lcl_getStringFromLevelVector : public std::unary_function< vector< uno::Any >, OUString >
+struct lcl_getStringFromLevelVector
 {
 public:
 
@@ -259,7 +259,7 @@ private:
     sal_Int32 m_nLevel;
 };
 
-struct lcl_insertAnyAtLevel : public std::unary_function< vector< uno::Any >, void >
+struct lcl_insertAnyAtLevel
 {
 public:
 
@@ -282,7 +282,7 @@ private:
     sal_Int32 m_nLevel;
 };
 
-struct lcl_removeAnyAtLevel : public std::unary_function< vector< uno::Any >, void >
+struct lcl_removeAnyAtLevel
 {
 public:
 
