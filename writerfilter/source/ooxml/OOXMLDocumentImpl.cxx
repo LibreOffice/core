@@ -562,7 +562,6 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
     {
         static const char sCustomType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml";
         static const char sCustomTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/customXml";
-        OUString sTarget("Target");
         bool bFound = false;
         sal_Int32 counter = 0;
         uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs = xRelationshipAccess->getAllRelationships();
@@ -579,7 +578,7 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
                 if (aPair.Second == sCustomType ||
                         aPair.Second == sCustomTypeStrict)
                     bFound = true;
-                else if(aPair.First == sTarget && bFound)
+                else if(aPair.First == "Target" && bFound)
                 {
                     // Adding value to extern variable customTarget. It will be used in ooxmlstreamimpl
                     // to ensure customxml target is visited in lcl_getTarget.
@@ -727,7 +726,6 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pS
         OUString sHeaderType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/header");
         OUString sHeaderTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/header");
 
-        OUString sTarget("Target");
         bool bFound = false;
         bool bHeaderFooterFound = false;
         OOXMLStream::StreamType_t streamType = OOXMLStream::UNKNOWN;
@@ -755,7 +753,7 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pS
                     bHeaderFooterFound = true;
                     streamType = OOXMLStream::HEADER;
                 }
-                else if(aPair.First == sTarget && ( bFound || bHeaderFooterFound ))
+                else if(aPair.First == "Target" && ( bFound || bHeaderFooterFound ))
                 {
                     // Adding value to extern variable customTarget. It will be used in ooxmlstreamimpl
                     // to ensure chart.xml target is visited in lcl_getTarget.
@@ -814,7 +812,6 @@ void OOXMLDocumentImpl::resolveActiveXStream(Stream & rStream)
     {
         static const char sCustomType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/control";
         static const char sCustomTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/control";
-        OUString sTarget("Target");
         bool bFound = false;
         sal_Int32 counter = 0;
         uno::Sequence< uno::Sequence< beans::StringPair > > aSeqs = xRelationshipAccess->getAllRelationships();
@@ -831,7 +828,7 @@ void OOXMLDocumentImpl::resolveActiveXStream(Stream & rStream)
                 if (aPair.Second == sCustomType ||
                         aPair.Second == sCustomTypeStrict)
                     bFound = true;
-                else if(aPair.First == sTarget && bFound)
+                else if(aPair.First == "Target" && bFound)
                 {
                     // Adding value to extern variable customTarget. It will be used in ooxmlstreamimpl
                     // to ensure ActiveX.xml target is visited in lcl_getTarget.
