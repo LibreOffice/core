@@ -212,7 +212,9 @@ SAL_CALL XMLSignature_GpgImpl::generate(
     rCtx.setArmor(false);
     GpgME::SigningResult sign_res=rCtx.sign(data_in, data_out,
                                             GpgME::Detached);
-    assert(data_out.seek(0,SEEK_SET) == 0);
+    off_t result = data_out.seek(0,SEEK_SET);
+    (void) result;
+    assert(result == 0);
     int len=0, curr=0; char buf;
     while( (curr=data_out.read(&buf, 1)) )
         len += curr;
@@ -224,7 +226,8 @@ SAL_CALL XMLSignature_GpgImpl::generate(
     xmlChar* signature = static_cast<xmlChar*>(xmlMalloc(len + 1));
     if(signature == nullptr)
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
-    assert(data_out.seek(0,SEEK_SET) == 0);
+    result = data_out.seek(0,SEEK_SET);
+    assert(result == 0);
     if( data_out.read(signature, len) != len )
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
