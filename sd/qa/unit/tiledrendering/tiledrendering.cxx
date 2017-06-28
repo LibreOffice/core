@@ -100,6 +100,7 @@ public:
     void testTdf105502();
     void testCommentCallbacks();
     void testMultiViewInsertDeletePage();
+    void testDisableUndoRepair();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -136,6 +137,7 @@ public:
     CPPUNIT_TEST(testTdf105502);
     CPPUNIT_TEST(testCommentCallbacks);
     CPPUNIT_TEST(testMultiViewInsertDeletePage);
+    CPPUNIT_TEST(testDisableUndoRepair);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1766,6 +1768,59 @@ void SdTiledRenderingTest::testMultiViewInsertDeletePage()
     mxComponent.clear();
 
     comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testDisableUndoRepair()
+{
+    // Load the document.
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SfxViewShell* pView1 = SfxViewShell::Current();
+    int nView1 = SfxLokHelper::getView();
+    SfxLokHelper::createView();
+    SfxViewShell* pView2 = SfxViewShell::Current();
+    int nView2 = SfxLokHelper::getView();
+    {
+        std::unique_ptr<SfxPoolItem> pItem1;
+        std::unique_ptr<SfxPoolItem> pItem2;
+        CPPUNIT_ASSERT(pView1->GetViewFrame()->GetBindings().QueryState(SID_UNDO, pItem1) == SfxItemState::DISABLED);
+        CPPUNIT_ASSERT(pView2->GetViewFrame()->GetBindings().QueryState(SID_UNDO, pItem2) == SfxItemState::DISABLED);
+    }
+
+    // Insert a character in the first view.
+    SfxLokHelper::setView(nView1);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'h', 0);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'h', 0);
+    Scheduler::ProcessEventsToIdle();
+    {
+        std::unique_ptr<SfxPoolItem> pItem1;
+        std::unique_ptr<SfxPoolItem> pItem2;
+        pView1->GetViewFrame()->GetBindings().QueryState(SID_UNDO, pItem1);
+        pView2->GetViewFrame()->GetBindings().QueryState(SID_UNDO, pItem2);
+        CPPUNIT_ASSERT(!dynamic_cast< const SfxUInt32Item* >(pItem1.get()));
+        CPPUNIT_ASSERT(dynamic_cast< const SfxUInt32Item* >(pItem2.get()));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), dynamic_cast< const SfxUInt32Item * >(pItem2.get())->GetValue());
+    }
+
+    // Insert a character in the second view.
+    SfxLokHelper::setView(nView2);
+    pXImpressDocument->setPart(1);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
+    Scheduler::ProcessEventsToIdle();
+    {
+        std::unique_ptr<SfxPoolItem> pItem1;
+        std::unique_ptr<SfxPoolItem> pItem2;
+        pView1->GetViewFrame()->GetBindings().QueryState(SID_UNDO, pItem1);
+        pView2->GetViewFrame()->GetBindings().QueryState(SID_UNDO, pItem2);
+        CPPUNIT_ASSERT(!dynamic_cast< const SfxUInt32Item* >(pItem2.get()));
+        CPPUNIT_ASSERT(dynamic_cast< const SfxUInt32Item* >(pItem1.get()));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), dynamic_cast< const SfxUInt32Item * >(pItem1.get())->GetValue());
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdTiledRenderingTest);
