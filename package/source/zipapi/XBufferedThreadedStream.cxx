@@ -59,6 +59,9 @@ XBufferedThreadedStream::XBufferedThreadedStream(
 , mbTerminateThread( false )
 , maSavedException( nullptr )
 {
+    // If this is negative, then we have at least SAL_MAX_INT32 bytes to read.
+    if( xSrcStream->available() < 0 )
+        mnStreamSize = SAL_MAX_INT32;
     mxUnzippingThread->launch();
 }
 
@@ -75,6 +78,7 @@ XBufferedThreadedStream::~XBufferedThreadedStream()
 void XBufferedThreadedStream::produce()
 {
     Buffer pProducedBuffer;
+    sal_Int32 nReadSize = 0;
     std::unique_lock<std::mutex> aGuard( maBufferProtector );
     do
     {
@@ -85,7 +89,16 @@ void XBufferedThreadedStream::produce()
         }
 
         aGuard.unlock();
-        mxSrcStream->readBytes( pProducedBuffer, nBufferSize );
+        nReadSize = mxSrcStream->readBytes( pProducedBuffer, nBufferSize );
+        sal_Int32 nAvailableSize = mxSrcStream->available();
+        if( nAvailableSize < 0 )
+            mnStreamSize += nReadSize;
+        else
+        {
+            sal_Int32 nDifference = nAvailableSize - (SAL_MAX_INT32 - nReadSize);
+            if ( nDifference > 0 )
+                mnStreamSize += nDifference;
+        }
 
         aGuard.lock();
         maPendingBuffers.push( pProducedBuffer );
@@ -94,7 +107,7 @@ void XBufferedThreadedStream::produce()
         if (!mbTerminateThread)
             maBufferProduceResume.wait( aGuard, [&]{return canProduce(); } );
 
-    } while( !mbTerminateThread && hasBytes() );
+    } while( !mbTerminateThread && nReadSize > 0 );
 }
 
 /**
@@ -144,7 +157,7 @@ sal_Int32 SAL_CALL XBufferedThreadedStream::readBytes( Sequence< sal_Int8 >& rDa
     if( !hasBytes() )
         return 0;
 
-    const sal_Int32 nAvailableSize = std::min<sal_Int32>( nBytesToRead, remainingSize() );
+    const sal_Int32 nAvailableSize = std::min< size_t >( nBytesToRead, remainingSize() );
     rData.realloc( nAvailableSize );
     sal_Int32 i = 0, nPendingBytes = nAvailableSize;
 
