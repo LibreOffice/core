@@ -103,9 +103,8 @@ namespace
                 dbf_Stream->SetEndian(SvStreamEndian::LITTLE);
 
                 dbf_Stream->Seek(STREAM_SEEK_TO_BEGIN + 29);
-               // TODO : how to check this?
-               // if (seek_succeeded_ie_not_end_of_file)
-                //{
+                if (! dbf_Stream->IsEof())
+                {
                     sal_uInt8 nEncoding=0;
                     dbf_Stream->ReadUChar( nEncoding );
                     if (nEncoding != 0x00)
@@ -148,9 +147,8 @@ namespace
                             return charsetSource::charset_from_file;
                         }
                     }
-                //}
+                }
             }
-            // dbf_Stream goes out of scope, is automatically closed
         }
         {
             Sequence<Any> aValues;
@@ -360,6 +358,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
                    break;
             }
             bDBEnc = true;
+            // pInStream goes out of scope, the stream is automatically closed
         }
         else if ( aFilterString == ScDocShell::GetDifFilterName() )
         {
