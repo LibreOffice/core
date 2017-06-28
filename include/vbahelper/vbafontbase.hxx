@@ -53,7 +53,7 @@ public:
     // use local constants there is no need to expose these constants
     // externally. Looking at the Format->Character dialog it seem that
     // these may in fact even be calculated. Leave hardcoded for now
-    // #FIXEME #TBD investigate the code for dialog mentioned above
+    // #FIXME #TBD investigate the code for dialog mentioned above
 
     // The font baseline is not specified.
     static const short NORMAL = 0;

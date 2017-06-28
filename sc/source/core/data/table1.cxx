@@ -1166,7 +1166,7 @@ SCCOL ScTable::FindNextVisibleColWithContent( SCCOL nCol, bool bRight, SCROW nRo
     const SCCOL nLastCol = aCol.size() - 1;
     if(bRight)
     {
-        // If nCol is the last allocated column index, there wont be any content to its right.
+        // If nCol is the last allocated column index, there won't be any content to its right.
         // To maintain the original return behaviour, return MAXCOL.
         if(nCol >= nLastCol)
             return MAXCOL;
