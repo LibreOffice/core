@@ -159,7 +159,7 @@ namespace sfx2
     }
 
 
-    struct CreateEmptyClassRememberPos : public ::std::unary_function< FilterName, void >
+    struct CreateEmptyClassRememberPos : public std::function<void (FilterName)>
     {
     protected:
         FilterClassList&        m_rClassList;
@@ -186,7 +186,7 @@ namespace sfx2
     };
 
 
-    struct ReadGlobalFilter : public ::std::unary_function< FilterName, void >
+    struct ReadGlobalFilter : public std::function<void (FilterName)>
     {
     protected:
         OConfigurationNode      m_aClassesNode;
@@ -263,7 +263,7 @@ namespace sfx2
     }
 
 
-    struct ReadLocalFilter : public ::std::unary_function< FilterName, void >
+    struct ReadLocalFilter : public std::function<void (FilterName)>
     {
     protected:
         OConfigurationNode      m_aClassesNode;
@@ -332,7 +332,7 @@ namespace sfx2
 
 
     // a struct which adds helps remembering a reference to a class entry
-    struct ReferToFilterEntry : public ::std::unary_function< FilterName, void >
+    struct ReferToFilterEntry : public std::function<void (FilterName)>
     {
     protected:
         FilterGroupEntryReferrer&   m_rEntryReferrer;
@@ -357,7 +357,7 @@ namespace sfx2
     };
 
 
-    struct FillClassGroup : public ::std::unary_function< FilterClass, void >
+    struct FillClassGroup : public std::function<void (FilterClass)>
     {
     protected:
         FilterGroup&                m_rClassGroup;
@@ -403,7 +403,7 @@ namespace sfx2
     }
 
 
-    struct CheckAppendSingleWildcard : public ::std::unary_function< OUString, void >
+    struct CheckAppendSingleWildcard : public std::function<void (OUString)>
     {
         OUString& _rToBeExtended;
 
@@ -440,7 +440,7 @@ namespace sfx2
 
 
     // a helper struct which adds a fixed (Sfx-)filter to a filter group entry given by iterator
-    struct AppendWildcardToDescriptor : public ::std::unary_function< FilterGroupEntryReferrer::value_type, void >
+    struct AppendWildcardToDescriptor : public std::function<void (FilterGroupEntryReferrer::value_type)>
     {
     protected:
         ::std::vector< OUString > aWildCards;
@@ -524,7 +524,7 @@ namespace sfx2
             MapGroupEntry2GroupEntry;
             // this is not really a map - it's just called this way because it is used as a map
 
-    struct FindGroupEntry : public ::std::unary_function< MapGroupEntry2GroupEntry::value_type, sal_Bool >
+    struct FindGroupEntry : public std::function<sal_Bool (MapGroupEntry2GroupEntry::value_type)>
     {
         FilterGroupEntryReferrer::mapped_type aLookingFor;
         explicit FindGroupEntry( FilterGroupEntryReferrer::mapped_type const & _rLookingFor ) : aLookingFor( _rLookingFor ) { }
@@ -535,7 +535,7 @@ namespace sfx2
         }
     };
 
-    struct CopyGroupEntryContent : public ::std::unary_function< MapGroupEntry2GroupEntry::value_type, void >
+    struct CopyGroupEntryContent : public std::function<void (MapGroupEntry2GroupEntry::value_type)>
     {
         void operator() ( const MapGroupEntry2GroupEntry::value_type& _rMapEntry )
         {
@@ -544,7 +544,7 @@ namespace sfx2
     };
 
 
-    struct CopyNonEmptyFilter : public ::std::unary_function< FilterDescriptor, void >
+    struct CopyNonEmptyFilter : public std::function<void (FilterDescriptor)>
     {
         FilterGroup& rTarget;
         explicit CopyNonEmptyFilter( FilterGroup& _rTarget ) :rTarget( _rTarget ) { }
@@ -716,7 +716,7 @@ namespace sfx2
     }
 
 
-    struct AppendFilter : public ::std::unary_function< FilterDescriptor, void >
+    struct AppendFilter : public std::function<void (FilterDescriptor)>
     {
         protected:
             Reference< XFilterManager >         m_xFilterManager;
@@ -786,7 +786,7 @@ namespace sfx2
 // = filling an XFilterManager
 
 
-    struct AppendFilterGroup : public ::std::unary_function< FilterGroup, void >
+    struct AppendFilterGroup : public std::function<void (FilterGroup)>
     {
     protected:
         Reference< XFilterManager >         m_xFilterManager;

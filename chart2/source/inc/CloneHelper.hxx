@@ -33,7 +33,7 @@ namespace CloneHelper
 
 /// functor that clones a UNO-Reference
 template< class Interface >
-    struct CreateRefClone : public std::unary_function< Interface, Interface >
+    struct CreateRefClone : public std::function<Interface (Interface)>
 {
     css::uno::Reference<Interface> operator() ( const css::uno::Reference<Interface> & xOther )
     {

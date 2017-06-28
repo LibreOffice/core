@@ -238,7 +238,7 @@ void ScXMLSourceDlg::HandleGetFocus(Control* pCtrl)
 
 namespace {
 
-class UnhighlightEntry : public std::unary_function<SvTreeListEntry*, void>
+class UnhighlightEntry : public std::function<void (SvTreeListEntry*)>
 {
     SvTreeListBox& mrTree;
 public:

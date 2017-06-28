@@ -176,7 +176,7 @@ IconThemeScanner::~IconThemeScanner()
 namespace
 {
     class SameTheme :
-        public std::unary_function<const vcl::IconThemeInfo &, bool>
+        public std::function<bool (const vcl::IconThemeInfo &)>
     {
     private:
         const OUString& m_rThemeId;

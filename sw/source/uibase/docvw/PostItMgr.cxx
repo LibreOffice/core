@@ -1335,7 +1335,7 @@ void SwPostItMgr::RemoveSidebarWin()
     PreparePageContainer();
 }
 
-class FilterFunctor : public std::unary_function<const SwFormatField*, bool>
+class FilterFunctor : public std::function<bool (const SwFormatField*)>
 {
 public:
     virtual bool operator()(const SwFormatField* pField) const = 0;

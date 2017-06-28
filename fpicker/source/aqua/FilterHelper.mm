@@ -126,7 +126,7 @@ shrinkFilterName( const rtl::OUString& aFilterName, bool bAllowNoStar = false )
 
 namespace {
 
-    struct FilterTitleMatch : public ::std::unary_function< FilterEntry, bool >
+    struct FilterTitleMatch : public std::function<bool (FilterEntry)>
     {
 protected:
         const rtl::OUString rTitle;

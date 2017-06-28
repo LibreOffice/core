@@ -442,7 +442,7 @@ namespace
 
     typedef std::map< OUString, sal_Int32 > PropertyAttributeCache;
 
-    struct IsDefaultAndNotRemoveable : public std::unary_function< PropertyValue, bool >
+    struct IsDefaultAndNotRemoveable : public std::function<bool (PropertyValue)>
     {
     private:
         const PropertyAttributeCache& m_rAttribs;
@@ -796,7 +796,7 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
 
 namespace
 {
-    struct SelectPropertyName : public std::unary_function< PropertyValue, OUString >
+    struct SelectPropertyName : public std::function<OUString (PropertyValue)>
     {
     public:
         const OUString& operator()( const PropertyValue& _lhs )

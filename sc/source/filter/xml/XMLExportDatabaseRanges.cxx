@@ -113,7 +113,7 @@ ScMyEmptyDatabaseRangesContainer ScXMLExportDatabaseRanges::GetEmptyDatabaseRang
 
 namespace {
 
-class WriteDatabaseRange : public ::std::unary_function<ScDBData, void>
+class WriteDatabaseRange : public std::function<void (ScDBData)>
 {
     ScXMLExport& mrExport;
     ScDocument* mpDoc;
@@ -420,7 +420,7 @@ private:
         return OUString("=");
     }
 
-    class WriteSetItem : public std::unary_function<ScQueryEntry::Item, void>
+    class WriteSetItem : public std::function<void (ScQueryEntry::Item)>
     {
         ScXMLExport& mrExport;
     public:

@@ -27,7 +27,7 @@ namespace comphelper {
 /// @internal
 namespace detail {
 /// @internal
-template <typename T> struct ReleaseFunc : ::std::unary_function<T *, void> {
+template <typename T> struct ReleaseFunc : std::function<void (T *)> {
     void operator()( T * p ) const { p->release(); }
 };
 } // namespace detail

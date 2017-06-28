@@ -54,7 +54,7 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 
-class lcl_MatchesRole : public std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >
+class lcl_MatchesRole : public std::function<bool (Reference< chart2::data::XLabeledDataSequence >)>
 {
 public:
     explicit lcl_MatchesRole( const OUString & aRole, bool bMatchPrefix ) :

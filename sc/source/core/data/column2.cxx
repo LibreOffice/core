@@ -1569,7 +1569,7 @@ namespace {
 
 #define DUMP_FORMULA_RESULTS 0
 
-struct ColumnStorageDumper : std::unary_function<sc::CellStoreType::value_type, void>
+struct ColumnStorageDumper : std::function<void (sc::CellStoreType::value_type)>
 {
     const ScDocument* mpDoc;
 
@@ -2614,7 +2614,7 @@ copyFirstFormulaBlock(
     return rCxt.setCachedColArray(nTab, nCol, pNumArray, pStrArray);
 }
 
-struct NonNullStringFinder : std::unary_function<const rtl_uString*, bool>
+struct NonNullStringFinder : std::function<bool (const rtl_uString*)>
 {
     bool operator() (const rtl_uString* p) const { return p != nullptr; }
 };

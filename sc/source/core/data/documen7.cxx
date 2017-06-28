@@ -129,7 +129,7 @@ void ScDocument::BroadcastCells( const ScRange& rRange, SfxHintId nHint, bool bB
 
 namespace {
 
-class RefMovedNotifier : public std::unary_function<SvtListener*, void>
+class RefMovedNotifier : public std::function<void (SvtListener*)>
 {
     const sc::RefMovedHint& mrHint;
 public:

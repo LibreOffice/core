@@ -144,7 +144,7 @@ namespace svt
 
     namespace
     {
-        struct ResetDialogController : public ::std::unary_function< const std::shared_ptr<DialogController>&, void >
+        struct ResetDialogController : public std::function<void (const std::shared_ptr<DialogController>&)>
         {
             void operator()( const std::shared_ptr<DialogController>& _pController )
             {

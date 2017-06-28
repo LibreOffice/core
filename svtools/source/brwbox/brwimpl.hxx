@@ -33,7 +33,7 @@ namespace svt
     public:
         typedef ::std::map< sal_Int32, css::uno::Reference< css::accessibility::XAccessible > >  THeaderCellMap;
 
-        struct  THeaderCellMapFunctorDispose : ::std::unary_function<THeaderCellMap::value_type,void>
+        struct  THeaderCellMapFunctorDispose : std::function<void (THeaderCellMap::value_type)>
         {
             void operator()(const THeaderCellMap::value_type& _aType)
             {

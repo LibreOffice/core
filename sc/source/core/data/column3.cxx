@@ -799,7 +799,7 @@ void ScColumn::InitBlockPosition( sc::ColumnBlockConstPosition& rBlockPos ) cons
 
 namespace {
 
-class CopyAttrArrayByRange : public std::unary_function<sc::RowSpan, void>
+class CopyAttrArrayByRange : public std::function<void (sc::RowSpan)>
 {
     ScAttrArray& mrDestAttrArray;
     ScAttrArray& mrSrcAttrArray;

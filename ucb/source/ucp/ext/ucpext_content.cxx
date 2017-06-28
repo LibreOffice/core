@@ -99,7 +99,7 @@ namespace ucb { namespace ucp { namespace ext
         }
 
 
-        struct SelectPropertyName : public ::std::unary_function< Property, OUString >
+        struct SelectPropertyName : public std::function<OUString (Property)>
         {
             const OUString& operator()( const Property& i_rProperty ) const
             {

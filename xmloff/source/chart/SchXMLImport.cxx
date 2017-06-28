@@ -60,7 +60,7 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-class lcl_MatchesChartType : public ::std::unary_function< Reference< chart2::XChartType >, bool >
+class lcl_MatchesChartType : public std::function<bool (Reference< chart2::XChartType >)>
 {
 public:
     explicit lcl_MatchesChartType( const OUString & aChartTypeName ) :

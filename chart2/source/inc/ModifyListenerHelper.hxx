@@ -103,7 +103,7 @@ namespace impl
 {
 
 template< class InterfaceRef >
-struct addListenerFunctor : public std::unary_function< InterfaceRef, void >
+struct addListenerFunctor : public std::function<void (InterfaceRef)>
 {
     explicit addListenerFunctor( const css::uno::Reference< css::util::XModifyListener > & xListener ) :
             m_xListener( xListener )
@@ -121,7 +121,7 @@ private:
 };
 
 template< class InterfaceRef >
-struct removeListenerFunctor : public std::unary_function< InterfaceRef, void >
+struct removeListenerFunctor : public std::function<void (InterfaceRef)>
 {
     explicit removeListenerFunctor( const css::uno::Reference< css::util::XModifyListener > & xListener ) :
             m_xListener( xListener )
@@ -139,7 +139,7 @@ private:
 };
 
 template< class Pair >
-struct addListenerToMappedElementFunctor : public std::unary_function< Pair, void >
+struct addListenerToMappedElementFunctor : public std::function<void (Pair)>
 {
     explicit addListenerToMappedElementFunctor( const css::uno::Reference< css::util::XModifyListener > & xListener ) :
             m_xListener( xListener )
@@ -157,7 +157,7 @@ private:
 };
 
 template< class Pair >
-struct removeListenerFromMappedElementFunctor : public std::unary_function< Pair, void >
+struct removeListenerFromMappedElementFunctor : public std::function<void (Pair)>
 {
     explicit removeListenerFromMappedElementFunctor( const css::uno::Reference< css::util::XModifyListener > & xListener ) :
             m_xListener( xListener )

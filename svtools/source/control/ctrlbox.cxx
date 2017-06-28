@@ -360,7 +360,7 @@ std::vector<double> GetDashing( SvxBorderLineStyle nDashing )
 
 namespace {
 
-class ApplyScale : public std::unary_function<double, void>
+class ApplyScale : public std::function<void (double)>
 {
     double mfScale;
 public:

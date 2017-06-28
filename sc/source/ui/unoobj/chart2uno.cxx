@@ -76,7 +76,6 @@ using ::std::unique_ptr;
 using ::std::vector;
 using ::std::list;
 using ::std::distance;
-using ::std::unary_function;
 using ::std::shared_ptr;
 
 namespace
@@ -104,7 +103,7 @@ const SfxItemPropertyMapEntry* lcl_GetDataSequencePropertyMap()
     return aDataSequencePropertyMap_Impl;
 }
 
-struct lcl_appendTableNumber : public ::std::unary_function< SCTAB, void >
+struct lcl_appendTableNumber : public std::function<void (SCTAB)>
 {
     explicit lcl_appendTableNumber( OUStringBuffer & rBuffer ) :
             m_rBuffer( rBuffer )
@@ -828,7 +827,7 @@ void Chart2Positioner::createPositionMap()
 /**
  * Function object to create a range string from a token list.
  */
-class Tokens2RangeString : public unary_function<ScTokenRef, void>
+class Tokens2RangeString : public std::function<void (ScTokenRef)>
 {
 public:
     Tokens2RangeString(ScDocument* pDoc, FormulaGrammar::Grammar eGram, sal_Unicode cRangeSep) :
@@ -882,7 +881,7 @@ private:
  *
  * and each address doesn't include any '$' symbols.
  */
-class Tokens2RangeStringXML : public unary_function<ScTokenRef, void>
+class Tokens2RangeStringXML : public std::function<void (ScTokenRef)>
 {
 public:
     explicit Tokens2RangeStringXML(ScDocument* pDoc) :
@@ -1357,7 +1356,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
 
 #define SHRINK_RANGE_THRESHOLD 10000
 
-class ShrinkRefTokenToDataRange : public std::unary_function<ScTokenRef, void>
+class ShrinkRefTokenToDataRange : public std::function<void (ScTokenRef)>
 {
     ScDocument* mpDoc;
 public:
@@ -1605,7 +1604,7 @@ namespace
 /**
  * Function object to create a list of table numbers from a token list.
  */
-class InsertTabNumber : public unary_function<ScTokenRef, void>
+class InsertTabNumber : public std::function<void (ScTokenRef)>
 {
 public:
     InsertTabNumber() :
@@ -3037,7 +3036,7 @@ namespace {
  * This function object is used to accumulatively count the numbers of
  * columns and rows in all reference tokens.
  */
-class AccumulateRangeSize : public unary_function<ScTokenRef, void>
+class AccumulateRangeSize : public std::function<void (ScTokenRef)>
 {
 public:
     AccumulateRangeSize() :
@@ -3067,7 +3066,7 @@ private:
  * This function object is used to generate label strings from a list of
  * reference tokens.
  */
-class GenerateLabelStrings : public unary_function<ScTokenRef, void>
+class GenerateLabelStrings : public std::function<void (ScTokenRef)>
 {
 public:
     GenerateLabelStrings(sal_Int32 nSize, chart2::data::LabelOrigin eOrigin, bool bColumn) :

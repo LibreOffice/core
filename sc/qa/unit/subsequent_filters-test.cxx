@@ -1773,7 +1773,7 @@ void ScFiltersTest::testCellAnchoredHiddenShapesXLSX()
 
 namespace {
 
-class FindDimByName : public std::unary_function<const ScDPSaveDimension*, bool>
+class FindDimByName : public std::function<bool (const ScDPSaveDimension*)>
 {
     OUString maName;
 public:

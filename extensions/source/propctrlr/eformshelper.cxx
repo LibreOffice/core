@@ -571,7 +571,7 @@ namespace pcr
     namespace
     {
 
-        struct PropertyBagInserter : public std::unary_function< Property, void >
+        struct PropertyBagInserter : public std::function<void (Property)>
         {
         private:
             PropertyBag& m_rProperties;

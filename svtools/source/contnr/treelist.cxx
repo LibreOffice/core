@@ -183,7 +183,7 @@ bool SvTreeList::IsChild(const SvTreeListEntry* pParent, const SvTreeListEntry* 
 
 namespace {
 
-class FindByPointer : public std::unary_function<SvTreeListEntry, bool>
+class FindByPointer : public std::function<bool (SvTreeListEntry)>
 {
     const SvTreeListEntry* mpEntry;
 public:

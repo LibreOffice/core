@@ -60,7 +60,7 @@ namespace pcr
     namespace
     {
 
-        struct StringCompare : public std::unary_function< OUString, bool >
+        struct StringCompare : public std::function<bool (OUString)>
         {
         private:
             OUString m_sReference;

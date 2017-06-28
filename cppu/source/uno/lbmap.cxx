@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <functional>
 #include <set>
 #include <unordered_map>
 
@@ -130,7 +131,7 @@ struct MappingEntry
         {}
 };
 
-struct FctPtrHash : public std::unary_function< uno_Mapping *, size_t >
+struct FctPtrHash : public std::function<size_t (uno_Mapping *)>
 {
     size_t operator()( uno_Mapping * pKey ) const
         { return reinterpret_cast<size_t>(pKey); }

@@ -45,7 +45,7 @@
 namespace dbaui
 {
 
-    typedef std::unary_function< OUString,bool> TColumnFindFunctorType;
+    typedef std::function<bool (OUString)> TColumnFindFunctorType;
     class TColumnFindFunctor : public TColumnFindFunctorType
     {
     public:

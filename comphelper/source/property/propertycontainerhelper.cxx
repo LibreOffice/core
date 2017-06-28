@@ -49,7 +49,7 @@ namespace
         }
     };
     // comparing two property descriptions (by name)
-    struct PropertyDescriptionNameMatch : public std::unary_function< PropertyDescription, bool >
+    struct PropertyDescriptionNameMatch : public std::function<bool (PropertyDescription)>
     {
         OUString m_rCompare;
         explicit PropertyDescriptionNameMatch( const OUString& _rCompare ) : m_rCompare( _rCompare ) { }

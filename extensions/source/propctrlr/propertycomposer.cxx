@@ -46,7 +46,7 @@ namespace pcr
     namespace
     {
 
-        struct SetPropertyValue : public std::unary_function< Reference< XPropertyHandler >, void >
+        struct SetPropertyValue : public std::function<void (Reference< XPropertyHandler >)>
         {
             OUString sPropertyName;
             const Any&      rValue;

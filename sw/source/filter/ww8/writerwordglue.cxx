@@ -322,7 +322,7 @@ namespace myImplHelpers
 
     //Utility to remove entries before a given starting position
     class IfBeforeStart
-        : public std::unary_function<const sw::util::CharRunEntry&, bool>
+        : public std::function<bool (const sw::util::CharRunEntry&)>
     {
     private:
         sal_Int32 mnStart;

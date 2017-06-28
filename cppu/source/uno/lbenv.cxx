@@ -40,6 +40,7 @@
 #include "destr.hxx"
 #include "loadmodule.hxx"
 
+#include <functional>
 #include <unordered_map>
 #include <vector>
 #include <stdio.h>
@@ -94,7 +95,7 @@ struct ObjectEntry
 
 
 struct FctPtrHash :
-    public std::unary_function< const void *, std::size_t >
+    public std::function<std::size_t (const void *)>
 {
     std::size_t operator () ( const void * pKey ) const
         { return reinterpret_cast< std::size_t>( pKey ); }

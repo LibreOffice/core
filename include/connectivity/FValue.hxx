@@ -471,8 +471,8 @@ namespace connectivity
     typedef ::rtl::Reference<ORowSetValueDecorator> ORowSetValueDecoratorRef;
 
 
-    /// TSetBound is a unary_function to set the bound value with e.q. for_each call
-    struct OOO_DLLPUBLIC_DBTOOLS TSetBound : ::std::unary_function<ORowSetValue,void>
+    /// TSetBound is a function to set the bound value with e.q. for_each call
+    struct OOO_DLLPUBLIC_DBTOOLS TSetBound : std::function<void (ORowSetValue)>
     {
         bool m_bBound;
         TSetBound(bool _bBound) : m_bBound(_bBound){}
@@ -481,8 +481,8 @@ namespace connectivity
     };
 
 
-    /// TSetBound is a unary_function to set the bound value with e.q. for_each call
-    struct OOO_DLLPUBLIC_DBTOOLS TSetRefBound : ::std::unary_function<ORowSetValueDecoratorRef,void>
+    /// TSetBound is a function to set the bound value with e.q. for_each call
+    struct OOO_DLLPUBLIC_DBTOOLS TSetRefBound : std::function<void (ORowSetValueDecoratorRef)>
     {
         bool m_bBound;
         TSetRefBound(bool _bBound) : m_bBound(_bBound){}

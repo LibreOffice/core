@@ -3556,7 +3556,7 @@ bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
 
 namespace {
 
-class FindByPointer : public ::std::unary_function<ScInterpreterTableOpParams, bool>
+class FindByPointer : public std::function<bool (ScInterpreterTableOpParams)>
 {
     const ScInterpreterTableOpParams* mpTableOp;
 public:
