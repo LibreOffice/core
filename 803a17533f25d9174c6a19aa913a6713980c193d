@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_1ee84b7c",
+        "filename": "sc/source/filter/xml/xmlbodyi.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-29T21:11:41Z",
+      "side": 0,
+      "message": "Why remove the assert() on dynamic_cast? Here and at other places.",
+      "revId": "803a17533f25d9174c6a19aa913a6713980c193d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
