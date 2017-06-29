@@ -47,11 +47,9 @@ using namespace dbtools;
 
 ObjectType OEvoabTables::createObject(const OUString& aName)
 {
-    OUString aSchema(  "%" );
-
     Sequence< OUString > aTypes { "TABLE" };
 
-    Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),aSchema,aName,aTypes);
+    Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),"%",aName,aTypes);
 
     ObjectType xRet = nullptr;
     if(xResult.is())

@@ -27,6 +27,7 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 
+#include <cstddef>
 #include <vector>
 #include <string.h>
 #include "EApi.h"
@@ -160,10 +161,9 @@ namespace connectivity
     {
         initFields();
 
-        sal_Int32 nType = G_TYPE_STRING;
         if ( nCol < nFields )
             return (pFields[nCol]->pField)->value_type;
-        return nType;
+        return G_TYPE_STRING;
     }
 
     sal_Int32
@@ -448,8 +448,7 @@ OUString SAL_CALL OEvoabDatabaseMetaData::getCatalogTerm(  )
 OUString OEvoabDatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 {
     // normally this is "
-    OUString aVal("\"");
-    return aVal;
+    return OUString("\"");
 }
 
 OUString SAL_CALL OEvoabDatabaseMetaData::getExtraNameCharacters(  )
@@ -1004,9 +1003,8 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  )
     Reference< XResultSet > xRef = pResult;
 
     // here we fill the rows which should be visible when ask for data from the resultset returned here
-    sal_Int32  nSize = SAL_N_ELEMENTS(sTableTypes);
     ODatabaseMetaDataResultSet::ORows aRows;
-    for(sal_Int32 i=0;i < nSize;++i)
+    for(std::size_t i=0;i < SAL_N_ELEMENTS(sTableTypes);++i)
     {
         ODatabaseMetaDataResultSet::ORow aRow;
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
