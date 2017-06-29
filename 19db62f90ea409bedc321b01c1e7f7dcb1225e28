@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_1e9f6b04",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 2217,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-06-29T22:07:51Z",
+      "side": 1,
+      "message": "What are you going to achieve in this line?",
+      "revId": "19db62f90ea409bedc321b01c1e7f7dcb1225e28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_bef9f74f",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 2351,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-06-29T22:07:51Z",
+      "side": 1,
+      "message": "unnecessary comment -\u003e method has good enough name",
+      "revId": "19db62f90ea409bedc321b01c1e7f7dcb1225e28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_fe99bf20",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 2426,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-06-29T22:07:51Z",
+      "side": 1,
+      "message": "is that comment needed?\n\nit looks like:\n\n// set a to 5 if a \u003c 4\nif(a \u003c 4)\n    a \u003d 5\n\n\nor only short comment is enough: \"set minimal tab width and height\"",
+      "revId": "19db62f90ea409bedc321b01c1e7f7dcb1225e28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
