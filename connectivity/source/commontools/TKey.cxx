@@ -100,7 +100,7 @@ void OTableKeyHelper::refreshColumns()
     if ( m_pColumns )
         m_pColumns->reFill(aVector);
     else
-        m_pColumns.reset( new OKeyColumnsHelper(this,m_aMutex,aVector) );
+        m_pColumns = new OKeyColumnsHelper(this,m_aMutex,aVector);
 }
 
 

@@ -484,7 +484,7 @@ private:
     bool mbTextual;
     bool mbDecimal02;
     OUString maText;
-    std::shared_ptr< SvXMLImportContext > mpSlaveContext;
+    rtl::Reference< SvXMLImportContext > mxSlaveContext;
 
 public:
 
@@ -511,7 +511,7 @@ SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext( SvXM
 :   SvXMLImportContext(rImport, nPrfx, rLocalName),
     mpParent( pParent ),
     maNumberStyle( rLocalName ),
-    mpSlaveContext( pSlaveContext )
+    mxSlaveContext( pSlaveContext )
 {
     mbLong = false;
     mbTextual = false;
@@ -548,17 +548,17 @@ SvXMLImportContext *SdXMLNumberFormatMemberImportContext::CreateChildContext( sa
                            const OUString& rLocalName,
                            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
 {
-    return mpSlaveContext->CreateChildContext( nPrefix, rLocalName, xAttrList );
+    return mxSlaveContext->CreateChildContext( nPrefix, rLocalName, xAttrList );
 }
 
 void SdXMLNumberFormatMemberImportContext::StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
 {
-    mpSlaveContext->StartElement( xAttrList );
+    mxSlaveContext->StartElement( xAttrList );
 }
 
 void SdXMLNumberFormatMemberImportContext::EndElement()
 {
-    mpSlaveContext->EndElement();
+    mxSlaveContext->EndElement();
 
     if( mpParent )
         mpParent->add( maNumberStyle, mbLong, mbTextual, mbDecimal02, maText );
@@ -566,7 +566,7 @@ void SdXMLNumberFormatMemberImportContext::EndElement()
 
 void SdXMLNumberFormatMemberImportContext::Characters( const OUString& rChars )
 {
-    mpSlaveContext->Characters( rChars );
+    mxSlaveContext->Characters( rChars );
     maText += rChars;
 }
 

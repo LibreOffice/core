@@ -56,7 +56,7 @@ namespace connectivity
                         public ODescriptor
         {
         protected:
-            std::unique_ptr<OUsers>    m_pUsers;
+            rtl::Reference<OUsers>    m_pUsers;
 
             using OGroup_BASE::rBHelper;
 

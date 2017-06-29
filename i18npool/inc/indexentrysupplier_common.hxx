@@ -23,6 +23,7 @@
 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <rtl/ref.hxx>
 #include <collatorImpl.hxx>
 
 #include <memory>
@@ -80,7 +81,7 @@ public:
 protected:
     const sal_Char *   implementationName;
     bool               usePhonetic;
-    std::unique_ptr<CollatorImpl>
+    rtl::Reference<CollatorImpl>
                        collator;
     css::lang::Locale  aLocale;
     OUString           aAlgorithm;
