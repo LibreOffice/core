@@ -230,6 +230,14 @@ Sequence< FastAttribute > FastAttributeList::getFastAttributes(  )
     return aSeq;
 }
 
+const FastAttributeList::FastAttributeIter FastAttributeList::find( sal_Int32 nToken ) const
+{
+    for (size_t i = 0; i < maAttributeTokens.size(); ++i)
+        if( maAttributeTokens[i] == nToken )
+            return FastAttributeIter(*this, i);
+    return end();
+}
+
 sal_Int32 FastTokenHandlerBase::getTokenFromChars(
         const css::uno::Reference< css::xml::sax::XFastTokenHandler > &xTokenHandler,
         FastTokenHandlerBase *pTokenHandler,

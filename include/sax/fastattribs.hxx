@@ -164,6 +164,7 @@ public:
     };
     const FastAttributeIter begin() const { return FastAttributeIter(*this, 0); }
     const FastAttributeIter end() const { return FastAttributeIter(*this, maAttributeTokens.size()); }
+    const FastAttributeIter find( sal_Int32 nToken ) const;
 
 private:
     sal_Char *mpChunk; ///< buffer to store all attribute values - null terminated strings
