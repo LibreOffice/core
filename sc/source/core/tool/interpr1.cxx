@@ -8581,7 +8581,7 @@ static const UBlockScript scriptList[] = {
     {UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B, UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT},
     {UBLOCK_CJK_STROKES, UBLOCK_CJK_STROKES}
 };
-bool SAL_CALL lcl_getScriptClass(sal_uInt32 currentChar)
+bool IsDBCS(sal_Unicode currentChar)
 {
     // for the locale of ja-JP, character U+0x005c and U+0x20ac should be ScriptType::Asian
     if( (currentChar == 0x005c || currentChar == 0x20ac) &&
@@ -8595,10 +8595,6 @@ bool SAL_CALL lcl_getScriptClass(sal_uInt32 currentChar)
     }
     bRet = (i < SAL_N_ELEMENTS(scriptList) && block >= scriptList[i].from);
     return bRet;
-}
-bool IsDBCS(sal_Unicode ch)
-{
-    return lcl_getScriptClass(ch);
 }
 sal_Int32 getLengthB(const OUString &str)
 {
