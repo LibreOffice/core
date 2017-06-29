@@ -2088,8 +2088,6 @@ void ScTable::RestorePrintRanges( const ScPrintSaverTab& rSaveTab )
     UpdatePageBreaks(nullptr);
 }
 
-SCROW ScTable::VisibleDataCellIterator::ROW_NOT_FOUND = -1;
-
 ScTable::VisibleDataCellIterator::VisibleDataCellIterator(ScFlatBoolRowSegments& rRowSegs, ScColumn& rColumn) :
     mrRowSegs(rRowSegs),
     mrColumn(rColumn),

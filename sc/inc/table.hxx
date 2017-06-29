@@ -1183,9 +1183,9 @@ private:
      */
     class VisibleDataCellIterator
     {
-    public:
-        static SCROW ROW_NOT_FOUND;
+        static constexpr SCROW ROW_NOT_FOUND = -1;
 
+    public:
         explicit VisibleDataCellIterator(ScFlatBoolRowSegments& rRowSegs, ScColumn& rColumn);
         ~VisibleDataCellIterator();
 
