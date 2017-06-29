@@ -122,6 +122,24 @@
       "revId": "d13a037e3165444fbabc4327c5c40b06b5d81dee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_e95752c8",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2577,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2017-06-29T09:39:47Z",
+      "side": 1,
+      "message": "Done but the position was put inside Point(), like:\nm_pOpenMenu-\u003eSetPosPixel(Point(nWidth - HAMBURGER_DIM, 0));",
+      "parentUuid": "3a461143_c92a967e",
+      "revId": "d13a037e3165444fbabc4327c5c40b06b5d81dee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
