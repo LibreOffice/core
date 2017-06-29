@@ -120,7 +120,7 @@ private: //member
     {
         PieLabelInfo();
         bool moveAwayFrom( const PieLabelInfo* pFix, const css::awt::Size& rPageSize
-            , bool bMoveHalfWay, bool bMoveClockwise, bool bAlternativeMoveDirection );
+            , bool bMoveHalfWay, bool bMoveClockwise );
 
         css::uno::Reference< css::drawing::XShape > xTextShape;
         css::uno::Reference< css::drawing::XShape > xLabelGroupShape;

@@ -770,7 +770,7 @@ PieChart::PieLabelInfo::PieLabelInfo()
  *  document, if the test is positive the routine returns true else returns
  *  false.
  */
-bool PieChart::PieLabelInfo::moveAwayFrom( const PieChart::PieLabelInfo* pFix, const awt::Size& rPageSize, bool bMoveHalfWay, bool bMoveClockwise, bool bAlternativeMoveDirection )
+bool PieChart::PieLabelInfo::moveAwayFrom( const PieChart::PieLabelInfo* pFix, const awt::Size& rPageSize, bool bMoveHalfWay, bool bMoveClockwise )
 {
     //return true if the move was successful
     if(!this->bMovementAllowed)
@@ -785,7 +785,7 @@ bool PieChart::PieLabelInfo::moveAwayFrom( const PieChart::PieLabelInfo* pFix, c
     aOverlap.intersect( lcl_getRect( pFix->xLabelGroupShape ) );
     if( !aOverlap.isEmpty() )
     {
-        (void)bAlternativeMoveDirection;//todo
+        //TODO: alternative move direction
 
         ///the label is shifted along the direction orthogonal to the vector
         ///starting at the pie/donut center and ending at this label anchor
@@ -1041,7 +1041,7 @@ bool PieChart::tryMoveLabels( PieLabelInfo* pFirstBorder, PieLabelInfo* pSecondB
             ///invocation has moved a label in a position that it is not
             ///completely inside the page document
 
-            if( !pCurrent->moveAwayFrom( pFix, rPageSize, !bSingleCenter && pCurrent == p2, !bLabelOrderIsAntiClockWise, rbAlternativeMoveDirection ) )
+            if( !pCurrent->moveAwayFrom( pFix, rPageSize, !bSingleCenter && pCurrent == p2, !bLabelOrderIsAntiClockWise ) )
             {
                 if( !rbAlternativeMoveDirection )
                 {
@@ -1077,7 +1077,7 @@ bool PieChart::tryMoveLabels( PieLabelInfo* pFirstBorder, PieLabelInfo* pSecondB
         PieLabelInfo* pFix = nullptr;
         for( pFix = p2->pNext ;pFix != pCurrent; pFix = pFix->pPrevious )
         {
-            if( !pCurrent->moveAwayFrom( pFix, rPageSize, false, bLabelOrderIsAntiClockWise, rbAlternativeMoveDirection ) )
+            if( !pCurrent->moveAwayFrom( pFix, rPageSize, false, bLabelOrderIsAntiClockWise ) )
             {
                 if( !rbAlternativeMoveDirection )
                 {
