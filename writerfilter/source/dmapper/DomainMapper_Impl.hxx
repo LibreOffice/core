@@ -394,9 +394,10 @@ private:
     GraphicImportPtr        m_pGraphicImport;
 
 
-    PropertyMapPtr                  m_pTopContext;
+    PropertyMapPtr           m_pTopContext;
     PropertyMapPtr           m_pLastSectionContext;
     PropertyMapPtr           m_pLastCharacterContext;
+    PropertyMapPtr           m_pDeferredSectionContext;
 
     ::std::vector<DeletableTabStop> m_aCurrentTabStops;
     OUString                 m_sCurrentParaStyleId;
@@ -441,6 +442,8 @@ private:
     bool                            m_bSdt;
     bool                            m_bIsFirstRun;
     bool                            m_bIsOutsideAParagraph;
+
+    bool                            m_bDeferredSectionActive;
 
     css::uno::Reference< css::text::XTextCursor > xTOCMarkerCursor;
     css::uno::Reference< css::text::XTextCursor > mxTOCTextCursor;
@@ -566,7 +569,9 @@ public:
     void    PushProperties(ContextType eId);
     void    PushStyleProperties(const PropertyMapPtr& pStyleProperties);
     void    PushListProperties(const PropertyMapPtr& pListProperties);
+    void    PushDeferredSectionProperties(bool bClear);
     void    PopProperties(ContextType eId);
+    void    PopDeferredSectionProperties();
 
     ContextType GetTopContextType() const { return m_aContextStack.top(); }
     const PropertyMapPtr& GetTopContext()
