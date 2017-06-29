@@ -2946,6 +2946,30 @@ void DomainMapper::lcl_endSectionGroup()
     }
 }
 
+void DomainMapper::lcl_startDeferredSectionGroupDefinition()
+{
+    if (!m_pImpl->isInIndexContext() && !m_pImpl->isInBibliographyContext())
+    {
+        m_pImpl->PushDeferredSectionProperties();
+    }
+}
+
+void DomainMapper::lcl_endDeferredSectionGroupDefinition()
+{
+    if (!m_pImpl->isInIndexContext() && !m_pImpl->isInBibliographyContext())
+    {
+        m_pImpl->PopDeferredSectionProperties();
+    }
+}
+
+void DomainMapper::lcl_applyDeferredSectionGroup()
+{
+    if (!m_pImpl->isInIndexContext() && !m_pImpl->isInBibliographyContext())
+    {
+        m_pImpl->ApplyDeferredSectionProperties();
+    }
+}
+
 void DomainMapper::lcl_startParagraphGroup()
 {
     if (m_pImpl->hasTableManager())

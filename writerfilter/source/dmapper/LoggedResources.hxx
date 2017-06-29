@@ -54,6 +54,9 @@ public:
 
     void startSectionGroup() override;
     void endSectionGroup() override;
+    void startDeferredSectionGroupDefinition() override;
+    void endDeferredSectionGroupDefinition() override;
+    void applyDeferredSectionGroup() override;
     void startParagraphGroup() override;
     void endParagraphGroup() override;
     void startCharacterGroup() override;
@@ -75,6 +78,9 @@ public:
 protected:
     virtual void lcl_startSectionGroup() = 0;
     virtual void lcl_endSectionGroup() = 0;
+    virtual void lcl_startDeferredSectionGroupDefinition() { }
+    virtual void lcl_endDeferredSectionGroupDefinition() { }
+    virtual void lcl_applyDeferredSectionGroup() { }
     virtual void lcl_startParagraphGroup() = 0;
     virtual void lcl_endParagraphGroup() = 0;
     virtual void lcl_startCharacterGroup() = 0;
