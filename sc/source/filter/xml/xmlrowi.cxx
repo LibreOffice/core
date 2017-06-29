@@ -227,11 +227,13 @@ ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
     {
         nGroupStartRow = rImport.GetTables().GetCurrentRow();
         ++nGroupStartRow;
-        if ( xAttrList.is() &&
-            xAttrList->hasAttribute( XML_ELEMENT( TABLE, XML_DISPLAY ) ) )
+        if ( xAttrList.is() )
         {
-            bGroupDisplay = IsXMLToken( xAttrList->getValue(
-                                XML_ELEMENT( TABLE, XML_DISPLAY ) ), XML_TRUE );
+            sax_fastparser::FastAttributeList *pAttribList =
+                static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
+            auto &aIter( pAttribList->find( XML_ELEMENT( TABLE, XML_DISPLAY ) ) );
+            if( aIter != pAttribList->end() )
+                bGroupDisplay = IsXMLToken( aIter.toCString(), XML_TRUE );
         }
     }
 }

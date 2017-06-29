@@ -788,17 +788,23 @@ void SAL_CALL SvXMLImport::setDocumentLocator( const uno::Reference< xml::sax::X
 void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
-    if ( Attribs.is() && Attribs->hasAttribute( XML_ELEMENT( OFFICE, XML_VERSION ) ) )
+    if ( Attribs.is() )
     {
-        mpImpl->aODFVersion = Attribs->getValue( XML_ELEMENT( OFFICE, XML_VERSION ) );
-
-        // the ODF version in content.xml and manifest.xml must be the same starting from ODF1.2
-        if ( mpImpl->mStreamName == "content.xml" && !IsODFVersionConsistent( mpImpl->aODFVersion ) )
+        sax_fastparser::FastAttributeList *pAttribList =
+            static_cast< sax_fastparser::FastAttributeList *>( Attribs.get() );
+        auto &aIter( pAttribList->find( XML_ELEMENT( OFFICE, XML_VERSION ) ) );
+        if( aIter != pAttribList->end() )
         {
-            throw xml::sax::SAXException("Inconsistent ODF versions in content.xml and manifest.xml!",
-                    uno::Reference< uno::XInterface >(),
-                    uno::makeAny(
-                        packages::zip::ZipIOException("Inconsistent ODF versions in content.xml and manifest.xml!" ) ) );
+            mpImpl->aODFVersion = aIter.toString();
+
+            // the ODF version in content.xml and manifest.xml must be the same starting from ODF1.2
+            if ( mpImpl->mStreamName == "content.xml" && !IsODFVersionConsistent( mpImpl->aODFVersion ) )
+            {
+                throw xml::sax::SAXException("Inconsistent ODF versions in content.xml and manifest.xml!",
+                        uno::Reference< uno::XInterface >(),
+                        uno::makeAny(
+                            packages::zip::ZipIOException("Inconsistent ODF versions in content.xml and manifest.xml!" ) ) );
+            }
         }
     }
 
