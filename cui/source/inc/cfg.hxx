@@ -25,15 +25,22 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/toolbox.hxx>
+#include <svtools/imgdef.hxx>
+#include <svtools/miscopt.hxx>
 #include <svtools/treelistbox.hxx>
 #include <svtools/svmedit2.hxx>
 #include <svtools/svmedit.hxx>
+
+#include <comphelper/documentinfo.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/XUIConfigurationListener.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
+#include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -46,9 +53,15 @@
 
 #include "cfgutil.hxx"
 
+static const char ITEM_MENUBAR_URL[] = "private:resource/menubar/menubar";
+static const char ITEM_TOOLBAR_URL[] = "private:resource/toolbar/";
+
+static const char CUSTOM_TOOLBAR_STR[] = "custom_toolbar_";
+
+static const char aMenuSeparatorStr[] = " | ";
+
 class SvxConfigEntry;
 class SvxConfigPage;
-class SvxToolbarConfigPage;
 
 typedef std::vector< SvxConfigEntry* > SvxEntries;
 
@@ -501,81 +514,9 @@ public:
     SvxConfigEntry* GetSelectedEntry();
 };
 
-class SvxToolbarEntriesListBox : public SvxMenuEntriesListBox
-{
-    Size            m_aCheckBoxImageSizePixel;
-    SvLBoxButtonData*   m_pButtonData;
-    VclPtr<SvxConfigPage>  pPage;
+//SvxToolbarEntriesListBox class was here
 
-    void            ChangeVisibility( SvTreeListEntry* pEntry );
-
-protected:
-
-    virtual void    CheckButtonHdl() override;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-    void            BuildCheckBoxButtonImages( SvLBoxButtonData* );
-    Image           GetSizedImage(
-        VirtualDevice& aDev, const Size& aNewSize, const Image& aImage );
-
-public:
-
-    SvxToolbarEntriesListBox(vcl::Window* pParent, SvxToolbarConfigPage* pPg);
-    virtual ~SvxToolbarEntriesListBox() override;
-    virtual void dispose() override;
-
-    virtual TriState NotifyMoving(
-        SvTreeListEntry*, SvTreeListEntry*, SvTreeListEntry*&, sal_uLong& ) override;
-
-    virtual TriState NotifyCopying(
-        SvTreeListEntry*, SvTreeListEntry*, SvTreeListEntry*&, sal_uLong&) override;
-
-    void            KeyInput( const KeyEvent& rKeyEvent ) override;
-};
-
-class SvxToolbarConfigPage : public SvxConfigPage
-{
-private:
-
-    DECL_LINK( SelectToolbar, ListBox&, void );
-    DECL_LINK( SelectToolbarEntry, SvTreeListBox*, void );
-    DECL_LINK( ToolbarSelectHdl, MenuButton *, void );
-    DECL_LINK( EntrySelectHdl, MenuButton *, void );
-    DECL_LINK( StyleChangeHdl, Button *, void );
-    DECL_LINK( NewToolbarHdl, Button *, void );
-    DECL_LINK( AddCommandsHdl, Button *, void );
-    DECL_LINK( AddSeparatorHdl, Button *, void );
-    DECL_LINK( DeleteCommandHdl, Button *, void );
-    DECL_LINK( ResetTopLevelHdl, Button *, void );
-    DECL_LINK( AddFunctionHdl, SvxScriptSelectorDialog&, void );
-    DECL_LINK( MoveHdl, Button *, void );
-
-    void            UpdateButtonStates() override;
-    short           QueryReset() override;
-    void            Init() override;
-    void            DeleteSelectedContent() override;
-    void            DeleteSelectedTopLevel() override;
-
-    VclPtr<PopupMenu> m_pMenu;
-    VclPtr<PopupMenu> m_pEntry;
-
-public:
-    SvxToolbarConfigPage( vcl::Window *pParent, const SfxItemSet& rItemSet );
-    virtual ~SvxToolbarConfigPage() override;
-    virtual void dispose() override;
-
-    void            AddFunction( SvTreeListEntry* pTarget = nullptr,
-                                             bool bFront = false );
-
-    void            MoveEntry( bool bMoveUp ) override;
-
-    SaveInData*     CreateSaveInData(
-        const css::uno::Reference <
-            css::ui::XUIConfigurationManager >&,
-        const css::uno::Reference <
-            css::ui::XUIConfigurationManager >&,
-        const OUString& aModuleId,
-        bool docConfig ) override;
-};
+//SvxToolbarConfigPage class was here
 
 class ToolbarSaveInData : public SaveInData
 {
@@ -775,6 +716,154 @@ stripHotKey( const OUString& str )
         return str.replaceAt( index, 1, OUString() );
     }
 }
+
+static sal_Int16 theImageType =
+    css::ui::ImageType::COLOR_NORMAL |
+    css::ui::ImageType::SIZE_DEFAULT;
+
+//TODO:This is copy/pasted from cfg.cxx
+inline sal_Int16 GetImageType()
+{
+    return theImageType;
+}
+
+inline void InitImageType()
+{
+    theImageType =
+        css::ui::ImageType::COLOR_NORMAL |
+        css::ui::ImageType::SIZE_DEFAULT;
+
+    if (SvtMiscOptions().GetSymbolsSize() == SFX_SYMBOLS_SIZE_LARGE)
+    {
+        theImageType |= css::ui::ImageType::SIZE_LARGE;
+    }
+    else if (SvtMiscOptions().GetSymbolsSize() == SFX_SYMBOLS_SIZE_32)
+    {
+        theImageType |= css::ui::ImageType::SIZE_32;
+    }
+}
+
+//TODO:This is copy/pasted from cfg.cxx
+inline css::uno::Reference< css::graphic::XGraphic > GetGraphic(
+    const css::uno::Reference< css::ui::XImageManager >& xImageManager,
+    const OUString& rCommandURL )
+{
+    css::uno::Reference< css::graphic::XGraphic > result;
+
+    if ( xImageManager.is() )
+    {
+        // TODO handle large graphics
+        css::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > > aGraphicSeq;
+
+        css::uno::Sequence<OUString> aImageCmdSeq { rCommandURL };
+
+        try
+        {
+            aGraphicSeq =
+                xImageManager->getImages( killmelater::GetImageType(), aImageCmdSeq );
+
+            if ( aGraphicSeq.getLength() > 0 )
+            {
+                result =  aGraphicSeq[0];
+            }
+        }
+        catch ( css::uno::Exception& )
+        {
+            // will return empty XGraphic
+        }
+    }
+
+    return result;
+}
+
+//TODO:This is copy/pasted from cfg.cxx
+inline OUString
+generateCustomName(
+    const OUString& prefix,
+    SvxEntries* entries,
+    sal_Int32 suffix = 1 )
+{
+    // find and replace the %n placeholder in the prefix string
+    OUString name;
+    OUString placeholder("%n" );
+
+    sal_Int32 pos = prefix.indexOf( placeholder );
+
+    if ( pos != -1 )
+    {
+        name = prefix.replaceAt(
+            pos, placeholder.getLength(), OUString::number( suffix ) );
+    }
+    else
+    {
+        // no placeholder found so just append the suffix
+        name = prefix + OUString::number( suffix );
+    }
+
+    if (!entries)
+        return name;
+
+    // now check is there is an already existing entry with this name
+    SvxEntries::const_iterator iter = entries->begin();
+
+    while ( iter != entries->end() )
+    {
+        SvxConfigEntry* pEntry = *iter;
+
+        if ( name.equals( pEntry->GetName() ) )
+        {
+            break;
+        }
+        ++iter;
+    }
+
+    if ( iter != entries->end() )
+    {
+        // name already exists so try the next number up
+        return generateCustomName( prefix, entries, ++suffix );
+    }
+
+    return name;
+}
+
+inline sal_uInt32 generateRandomValue()
+{
+    return comphelper::rng::uniform_uint_distribution(0, std::numeric_limits<unsigned int>::max());
+}
+
+inline OUString
+generateCustomURL(
+    SvxEntries* entries )
+{
+    OUString url = ITEM_TOOLBAR_URL;
+    url += CUSTOM_TOOLBAR_STR;
+
+    // use a random number to minimize possible clash with existing custom toolbars
+    url += OUString::number( generateRandomValue(), 16 );
+
+    // now check is there is an already existing entry with this url
+    SvxEntries::const_iterator iter = entries->begin();
+
+    while ( iter != entries->end() )
+    {
+        SvxConfigEntry* pEntry = *iter;
+
+        if ( url.equals( pEntry->GetCommand() ) )
+        {
+            break;
+        }
+        ++iter;
+    }
+
+    if ( iter != entries->end() )
+    {
+        // url already exists so try the next number up
+        return generateCustomURL( entries );
+    }
+
+    return url;
+}
+
 }
 
 #endif // INCLUDED_CUI_SOURCE_INC_CFG_HXX

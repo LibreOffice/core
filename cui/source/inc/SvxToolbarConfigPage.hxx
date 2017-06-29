@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CUI_SOURCE_INC_SVXMENUCONFIGPAGE_HXX
-#define INCLUDED_CUI_SOURCE_INC_SVXMENUCONFIGPAGE_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_SVXTOOLBARCONFIGPAGE_HXX
+#define INCLUDED_CUI_SOURCE_INC_SVXTOOLBARCONFIGPAGE_HXX
 
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
@@ -44,36 +44,46 @@
 #include <vector>
 #include <vcl/msgbox.hxx>
 
-#include "cfgutil.hxx"
+//#include "cfgutil.hxx"
 #include "cfg.hxx" //for SvxConfigPage and SaveInData
 
-class SvxMenuConfigPage : public SvxConfigPage
+class SvxToolbarConfigPage : public SvxConfigPage
 {
 private:
-    bool m_bIsMenuBar;
-    DECL_LINK( SelectMenu, ListBox&, void );
-    DECL_LINK( SelectMenuEntry, SvTreeListBox *, void );
-    DECL_LINK( NewMenuHdl, Button *, void );
-    DECL_LINK( MenuSelectHdl, MenuButton *, void );
+
+    DECL_LINK( SelectToolbar, ListBox&, void );
+    DECL_LINK( SelectToolbarEntry, SvTreeListBox*, void );
+    DECL_LINK( ToolbarSelectHdl, MenuButton *, void );
     DECL_LINK( EntrySelectHdl, MenuButton *, void );
+    DECL_LINK( StyleChangeHdl, Button *, void );
+    DECL_LINK( NewToolbarHdl, Button *, void );
     DECL_LINK( AddCommandsHdl, Button *, void );
     DECL_LINK( AddSeparatorHdl, Button *, void );
-    DECL_LINK( AddSubmenuHdl, Button *, void );
     DECL_LINK( DeleteCommandHdl, Button *, void );
+    DECL_LINK( ResetTopLevelHdl, Button *, void );
     DECL_LINK( AddFunctionHdl, SvxScriptSelectorDialog&, void );
+    DECL_LINK( MoveHdl, Button *, void );
 
-    void            Init() override;
     void            UpdateButtonStates() override;
     short           QueryReset() override;
+    void            Init() override;
     void            DeleteSelectedContent() override;
     void            DeleteSelectedTopLevel() override;
 
+    VclPtr<PopupMenu> m_pMenu;
+    VclPtr<PopupMenu> m_pEntry;
+
 public:
-    SvxMenuConfigPage( vcl::Window *pParent, const SfxItemSet& rItemSet, bool bIsMenuBar = true );
-    virtual ~SvxMenuConfigPage() override;
+    SvxToolbarConfigPage( vcl::Window *pParent, const SfxItemSet& rItemSet );
+    virtual ~SvxToolbarConfigPage() override;
     virtual void dispose() override;
 
-    SaveInData* CreateSaveInData(
+    void            AddFunction( SvTreeListEntry* pTarget = nullptr,
+                                             bool bFront = false );
+
+    void            MoveEntry( bool bMoveUp ) override;
+
+    SaveInData*     CreateSaveInData(
         const css::uno::Reference <
             css::ui::XUIConfigurationManager >&,
         const css::uno::Reference <
@@ -82,6 +92,37 @@ public:
         bool docConfig ) override;
 };
 
-#endif // INCLUDED_CUI_SOURCE_INC_SVXMENUCONFIGPAGE_HXX
+class SvxToolbarEntriesListBox : public SvxMenuEntriesListBox
+{
+    Size            m_aCheckBoxImageSizePixel;
+    SvLBoxButtonData*   m_pButtonData;
+    VclPtr<SvxConfigPage>  pPage;
+
+    void            ChangeVisibility( SvTreeListEntry* pEntry );
+
+protected:
+
+    virtual void    CheckButtonHdl() override;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
+    void            BuildCheckBoxButtonImages( SvLBoxButtonData* );
+    Image           GetSizedImage(
+        VirtualDevice& aDev, const Size& aNewSize, const Image& aImage );
+
+public:
+
+    SvxToolbarEntriesListBox(vcl::Window* pParent, SvxToolbarConfigPage* pPg);
+    virtual ~SvxToolbarEntriesListBox() override;
+    virtual void dispose() override;
+
+    virtual TriState NotifyMoving(
+        SvTreeListEntry*, SvTreeListEntry*, SvTreeListEntry*&, sal_uLong& ) override;
+
+    virtual TriState NotifyCopying(
+        SvTreeListEntry*, SvTreeListEntry*, SvTreeListEntry*&, sal_uLong&) override;
+
+    void            KeyInput( const KeyEvent& rKeyEvent ) override;
+};
+
+#endif // INCLUDED_CUI_SOURCE_INC_SVXTOOLBARCONFIGPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
