@@ -8588,7 +8588,7 @@ bool SAL_CALL lcl_getScriptClass(sal_uInt32 currentChar)
           (MsLangId::getSystemLanguage() == LANGUAGE_JAPANESE) )
         return true;
     sal_uInt16 i;
-    static bool bRet = false;
+    bool bRet = false;
     UBlockCode block = ublock_getCode(currentChar);
     for ( i = 0; i < SAL_N_ELEMENTS(scriptList); i++) {
         if (block <= scriptList[i].to) break;
