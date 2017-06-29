@@ -2692,8 +2692,6 @@ const ScPatternAttr* ScAttrRectIterator::GetNext( SCCOL& rCol1, SCCOL& rCol2,
     return nullptr; // Nothing anymore
 }
 
-SCROW ScRowBreakIterator::NOT_FOUND = -1;
-
 ScRowBreakIterator::ScRowBreakIterator(set<SCROW>& rBreaks) :
     mrBreaks(rBreaks),
     maItr(rBreaks.begin()), maEnd(rBreaks.end())
