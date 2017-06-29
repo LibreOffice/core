@@ -182,71 +182,156 @@ class SectionPropertyMap : public PropertyMap
 {
 private:
 #ifdef DEBUG_WRITERFILTER
-    sal_Int32                                       m_nDebugSectionNumber;
+    sal_Int32 m_nDebugSectionNumber;
 #endif
 
     // 'temporarily' the section page settings are imported as page styles
     // empty strings mark page settings as not yet imported
+    enum class SectionProp {
+        BorderDistanceLeft,
+        BorderDistanceRight,
+        BorderDistanceTop,
+        BorderDistanceBottom,
+        BorderParams,
+        BorderShadowLeft,
+        BorderShadowRight,
+        BorderShadowTop,
+        BorderShadowBottom,
+        TitlePage,
+        ColumnCount,
+        ColumnDistance,
+        SeparatorLineIsOn,
+        EvenlySpaced,
+        PageNoRestart,
+        PageNumber,
+        // Page number type is a value from css::style::NumberingType.
+        PageNumberType,
+        BreakType,
+        PaperBin,
+        FirstPaperBin,
+        LeftMargin,
+        RightMargin,
+        TopMargin,
+        BottomMargin,
+        HeaderTop,
+        HeaderBottom,
+        DzaGutter,
+        GridType,
+        GridLinePitch,
+        DxtCharSpace,
+        GridSnapToChars,
+
+        // line numbering
+        LnnMod,
+        Lnc,
+        dxaLnn,
+        LnnMin,
+
+        // The "Link To Previous" flag indicates whether the header/footer
+        // content should be taken from the previous section
+        DefaultHeaderLinkToPrevious,
+        EvenPageHeaderLinkToPrevious,
+        FirstPageHeaderLinkToPrevious,
+        DefaultFooterLinkToPrevious,
+        EvenPageFooterLinkToPrevious,
+        FirstPageFooterLinkToPrevious,
+    };
+
+    typedef std::map<SectionProp, css::uno::Any> SecPropMapImpl;
+    // We only store explicitly set properties; properties not set return default values in getters
+    SecPropMapImpl                                  m_aPropMap;
 
     bool                                            m_bIsFirstSection;
     css::uno::Reference< css::text::XTextRange >    m_xStartingRange;
 
     OUString                                        m_sFirstPageStyleName;
     OUString                                        m_sFollowPageStyleName;
-    css::uno::Reference< css::beans::XPropertySet > m_aFirstPageStyle;
-    css::uno::Reference< css::beans::XPropertySet > m_aFollowPageStyle;
+    css::uno::Reference< css::beans::XPropertySet > m_xFirstPageStyle;
+    css::uno::Reference< css::beans::XPropertySet > m_xFollowPageStyle;
 
     boost::optional< css::table::BorderLine2 >      m_oBorderLines[4];
-    sal_Int32                                       m_nBorderDistances[4];
-    sal_Int32                                       m_nBorderParams;
-    bool                                            m_bBorderShadows[4];
 
-    bool                                            m_bTitlePage;
-    sal_Int16                                       m_nColumnCount;
-    sal_Int32                                       m_nColumnDistance;
     css::uno::Reference< css::beans::XPropertySet > m_xColumnContainer;
     std::vector< sal_Int32 >                        m_aColWidth;
     std::vector< sal_Int32 >                        m_aColDistance;
 
-    bool                                            m_bSeparatorLineIsOn;
-    bool                                            m_bEvenlySpaced;
+    template<typename T>
+    void set(SectionProp key, T val) { m_aPropMap[key] = css::uno::Any(val); }
 
-    bool                                            m_bPageNoRestart;
-    sal_Int32                                       m_nPageNumber;
-    // Page number type is a value from css::style::NumberingType.
-    sal_Int16                                       m_nPageNumberType;
-    sal_Int32                                       m_nBreakType;
-    sal_Int32                                       m_nPaperBin;
-    sal_Int32                                       m_nFirstPaperBin;
+    template<typename T>
+    T get(SectionProp key, T defVal) const
+    {
+        const auto& it = m_aPropMap.find(key);
+        if (it == m_aPropMap.end())
+            return defVal;
 
-    sal_Int32                                       m_nLeftMargin;
-    sal_Int32                                       m_nRightMargin;
-    sal_Int32                                       m_nTopMargin;
-    sal_Int32                                       m_nBottomMargin;
-    sal_Int32                                       m_nHeaderTop;
-    sal_Int32                                       m_nHeaderBottom;
+        return it->second.get<T>();
+    }
 
-    sal_Int32                                       m_nDzaGutter;
+    static SectionProp BorderDistance(BorderPosition ePos)
+    {
+        switch (ePos)
+        {
+        case BORDER_LEFT:
+            return SectionProp::BorderDistanceLeft;
+        case BORDER_RIGHT:
+            return SectionProp::BorderDistanceRight;
+        case BORDER_TOP:
+            return SectionProp::BorderDistanceTop;
+        case BORDER_BOTTOM:
+            return SectionProp::BorderDistanceBottom;
+        }
+        return SectionProp::BorderDistanceLeft;
+    }
 
-    sal_Int32                                       m_nGridType;
-    sal_Int32                                       m_nGridLinePitch;
-    sal_Int32                                       m_nDxtCharSpace;
-    bool                                            m_bGridSnapToChars;
+    static SectionProp BorderShadow(BorderPosition ePos)
+    {
+        switch (ePos)
+        {
+        case BORDER_LEFT:
+            return SectionProp::BorderShadowLeft;
+        case BORDER_RIGHT:
+            return SectionProp::BorderShadowRight;
+        case BORDER_TOP:
+            return SectionProp::BorderShadowTop;
+        case BORDER_BOTTOM:
+            return SectionProp::BorderShadowBottom;
+        }
+        return SectionProp::BorderShadowLeft;
+    }
 
-    // line numbering
-    sal_Int32                                       m_nLnnMod;
-    sal_uInt32                                      m_nLnc;
-    sal_Int32                                       m_ndxaLnn;
-    sal_Int32                                       m_nLnnMin;
-
-    // The "Link To Previous" flag indicates whether the header/footer
-    // content should be taken from the previous section
-    bool                                            m_bDefaultHeaderLinkToPrevious;
-    bool                                            m_bEvenPageHeaderLinkToPrevious;
-    bool                                            m_bFirstPageHeaderLinkToPrevious;
-    bool                                            m_bDefaultFooterLinkToPrevious;
-    bool                                            m_bEvenPageFooterLinkToPrevious;
-    bool                                            m_bFirstPageFooterLinkToPrevious;
+    // Getters with default values
+    sal_Int32 GetBorderDistance(BorderPosition ePos) const { return get(BorderDistance(ePos),                       sal_Int32(-1)); }
+    sal_Int32 GetBorderParams()                      const { return get(SectionProp::BorderParams,                  sal_Int32(0)); }
+    bool      GetBorderShadow(BorderPosition ePos)   const { return get(BorderShadow(ePos),                         false); }
+    bool      GetTitlePage()                         const { return get(SectionProp::TitlePage,                     false); }
+    sal_Int32 GetColumnDistance()                    const { return get(SectionProp::ColumnDistance,                sal_Int32(1249)); }
+    bool      GetSeparatorLineIsOn()                 const { return get(SectionProp::SeparatorLineIsOn,             false); }
+    bool      GetEvenlySpaced()                      const { return get(SectionProp::EvenlySpaced,                  false); }
+    bool      GetPageNoRestart()                     const { return get(SectionProp::PageNoRestart,                 false); }
+    sal_Int32 GetPageNumber()                        const { return get(SectionProp::PageNumber,                    sal_Int32(-1)); }
+    sal_Int16 GetPageNumberType()                    const { return get(SectionProp::PageNumberType,                sal_Int16(-1)); }
+    sal_Int32 GetPaperBin()                          const { return get(SectionProp::PaperBin,                      sal_Int32(-1)); }
+    sal_Int32 GetFirstPaperBin()                     const { return get(SectionProp::FirstPaperBin,                 sal_Int32(-1)); }
+    sal_Int32 GetTopMargin()                         const { return get(SectionProp::TopMargin,                     sal_Int32(2540)); } // 1440 twip
+    sal_Int32 GetBottomMargin()                      const { return get(SectionProp::BottomMargin,                  sal_Int32(2540)); } // 1440 twip
+    sal_Int32 GetHeaderTop()                         const { return get(SectionProp::HeaderTop,                     sal_Int32(1270)); } // 720 twip
+    sal_Int32 GetHeaderBottom()                      const { return get(SectionProp::HeaderBottom,                  sal_Int32(1270)); } // 720 twip
+    sal_Int32 GetDzaGutter()                         const { return get(SectionProp::DzaGutter,                     sal_Int32(0)); }
+    sal_Int32 GetGridType()                          const { return get(SectionProp::GridType,                      sal_Int32(0)); }
+    sal_Int32 GetGridLinePitch()                     const { return get(SectionProp::GridLinePitch,                 sal_Int32(1)); }
+    sal_Int32 GetDxtCharSpace()                      const { return get(SectionProp::DxtCharSpace,                  sal_Int32(0)); }
+    bool      GetGridSnapToChars()                   const { return get(SectionProp::GridSnapToChars,               true); }
+    sal_Int32 GetLnnMod()                            const { return get(SectionProp::LnnMod,                        sal_Int32(0)); }
+    sal_Int32 GetLnc()                               const { return get(SectionProp::Lnc,                           sal_Int32(0)); }
+    sal_Int32 GetdxaLnn()                            const { return get(SectionProp::dxaLnn,                        sal_Int32(0)); }
+    sal_Int32 GetLnnMin()                            const { return get(SectionProp::LnnMin,                        sal_Int32(0)); }
+    bool      GetDefaultHeaderLinkToPrevious()       const { return get(SectionProp::DefaultHeaderLinkToPrevious,   true); }
+    bool      GetEvenPageHeaderLinkToPrevious()      const { return get(SectionProp::EvenPageHeaderLinkToPrevious,  true); }
+    bool      GetFirstPageHeaderLinkToPrevious()     const { return get(SectionProp::FirstPageHeaderLinkToPrevious, true); }
+    bool      GetDefaultFooterLinkToPrevious()       const { return get(SectionProp::DefaultFooterLinkToPrevious,   true); }
+    bool      GetEvenPageFooterLinkToPrevious()      const { return get(SectionProp::EvenPageFooterLinkToPrevious,  true); }
+    bool      GetFirstPageFooterLinkToPrevious()     const { return get(SectionProp::FirstPageFooterLinkToPrevious, true); }
 
     void ApplyProperties_( const css::uno::Reference< css::beans::XPropertySet >& xStyle );
 
@@ -256,15 +341,6 @@ private:
                                                                           DomainMapper_Impl& rDM_Impl);
 
     void CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl );
-
-    static void CopyHeaderFooter( const css::uno::Reference< css::beans::XPropertySet >& xPrevStyle,
-                                  const css::uno::Reference< css::beans::XPropertySet >& xStyle,
-                                  bool bOmitRightHeader = false, bool bOmitLeftHeader = false,
-                                  bool bOmitRightFooter = false, bool bOmitLeftFooter = false );
-
-    static void CopyHeaderFooterTextProperty( const css::uno::Reference< css::beans::XPropertySet >& xPrevStyle,
-                                              const css::uno::Reference< css::beans::XPropertySet >& xStyle,
-                                              PropertyIds ePropId );
 
     void PrepareHeaderFooterProperties( bool bFirstPage );
 
@@ -291,6 +367,8 @@ public:
 
     explicit SectionPropertyMap( bool bIsFirstSection );
 
+    void InsertSectionProps(const PropertyMapPtr& pFrom, DomainMapper_Impl& rDM_Impl);
+
     void SetStart( const css::uno::Reference< css::text::XTextRange >& xRange ) { m_xStartingRange = xRange; }
 
     const css::uno::Reference< css::text::XTextRange >& GetStartingRange() const { return m_xStartingRange; }
@@ -299,7 +377,7 @@ public:
                                                                   const css::uno::Reference< css::lang::XMultiServiceFactory >& xTextFactory,
                                                                   bool bFirst );
 
-    const OUString& GetPageStyleName( bool bFirstPage = false )
+    const OUString& GetPageStyleName( bool bFirstPage = false ) const
     {
         return bFirstPage ? m_sFirstPageStyleName : m_sFollowPageStyleName;
     }
@@ -312,43 +390,43 @@ public:
     void InheritOrFinalizePageStyles( DomainMapper_Impl& rDM_Impl );
 
     void SetBorder( BorderPosition ePos, sal_Int32 nLineDistance, const css::table::BorderLine2& rBorderLine, bool bShadow );
-    void SetBorderParams( sal_Int32 nSet ) { m_nBorderParams = nSet; }
+    void SetBorderParams( sal_Int32 nSet ) { set(SectionProp::BorderParams, nSet); }
 
-    void      SetColumnCount( sal_Int16 nCount ) { m_nColumnCount = nCount; }
-    sal_Int16 ColumnCount() const                { return m_nColumnCount; }
+    void SetColumnCount( sal_Int16 nCount ) { set(SectionProp::ColumnCount, nCount); }
+    sal_Int16 GetColumnCount() const        { return get(SectionProp::ColumnCount, sal_Int16(0)); }
 
-    void SetColumnDistance( sal_Int32 nDist )   { m_nColumnDistance = nDist; }
+    void SetColumnDistance( sal_Int32 nDist )   { set(SectionProp::ColumnDistance, nDist); }
     void AppendColumnWidth( sal_Int32 nWidth )  { m_aColWidth.push_back( nWidth ); }
     void AppendColumnSpacing( sal_Int32 nDist ) { m_aColDistance.push_back( nDist ); }
 
-    void SetTitlePage( bool bSet )           { m_bTitlePage = bSet; }
-    void SetSeparatorLine( bool bSet )       { m_bSeparatorLineIsOn = bSet; }
-    void SetEvenlySpaced( bool bSet )        { m_bEvenlySpaced = bSet; }
-    void SetPageNumber( sal_Int32 nSet )     { m_nPageNumber = nSet; }
-    void SetPageNumberType( sal_Int32 nSet ) { m_nPageNumberType = nSet; }
-    void SetBreakType( sal_Int32 nSet )      { m_nBreakType = nSet; }
+    void SetTitlePage( bool bSet )           { set(SectionProp::TitlePage, bSet); }
+    void SetSeparatorLine( bool bSet )       { set(SectionProp::SeparatorLineIsOn, bSet); }
+    void SetEvenlySpaced( bool bSet )        { set(SectionProp::EvenlySpaced, bSet); }
+    void SetPageNumber( sal_Int32 nSet )     { set(SectionProp::PageNumber, nSet); }
+    void SetPageNumberType( sal_Int16 nSet ) { set(SectionProp::PageNumberType, nSet); }
+    void SetBreakType( sal_Int32 nSet )      { set(SectionProp::BreakType, nSet); }
     // GetBreakType returns -1 if the breakType has not yet been identified for the section
-    sal_Int32 GetBreakType()                 { return m_nBreakType; }
+    sal_Int32 GetBreakType() const           { return get(SectionProp::BreakType, sal_Int32(-1)); }
 
-    void SetLeftMargin( sal_Int32 nSet )   { m_nLeftMargin = nSet; }
-    sal_Int32 GetLeftMargin()              { return m_nLeftMargin; }
-    void SetRightMargin( sal_Int32 nSet )  { m_nRightMargin = nSet; }
-    sal_Int32 GetRightMargin()             { return m_nRightMargin; }
-    void SetTopMargin( sal_Int32 nSet )    { m_nTopMargin = nSet; }
-    void SetBottomMargin( sal_Int32 nSet ) { m_nBottomMargin = nSet; }
-    void SetHeaderTop( sal_Int32 nSet )    { m_nHeaderTop = nSet; }
-    void SetHeaderBottom( sal_Int32 nSet ) { m_nHeaderBottom = nSet; }
-    sal_Int32 GetPageWidth();
+    void SetLeftMargin( sal_Int32 nSet )   { set(SectionProp::LeftMargin, nSet); }
+    sal_Int32 GetLeftMargin() const        { return get(SectionProp::LeftMargin, sal_Int32(3175)); } // page left margin, default 0x708 (1800) twip -> 3175 1/100 mm
+    void SetRightMargin( sal_Int32 nSet )  { set(SectionProp::RightMargin, nSet); }
+    sal_Int32 GetRightMargin() const       { return get(SectionProp::RightMargin, sal_Int32(3175)); } // page right margin, default 0x708 (1800) twip -> 3175 1/100 mm
+    void SetTopMargin( sal_Int32 nSet )    { set(SectionProp::TopMargin, nSet); }
+    void SetBottomMargin( sal_Int32 nSet ) { set(SectionProp::BottomMargin, nSet); }
+    void SetHeaderTop( sal_Int32 nSet )    { set(SectionProp::HeaderTop, nSet); }
+    void SetHeaderBottom( sal_Int32 nSet ) { set(SectionProp::HeaderBottom, nSet); }
+    sal_Int32 GetPageWidth() const;
 
-    void SetGridType( sal_Int32 nSet )      { m_nGridType = nSet; }
-    void SetGridLinePitch( sal_Int32 nSet ) { m_nGridLinePitch = nSet; }
-    void SetGridSnapToChars( bool bSet )    { m_bGridSnapToChars = bSet; }
-    void SetDxtCharSpace( sal_Int32 nSet )  { m_nDxtCharSpace = nSet; }
+    void SetGridType( sal_Int32 nSet )      { set(SectionProp::GridType, nSet); }
+    void SetGridLinePitch( sal_Int32 nSet ) { set(SectionProp::GridLinePitch, nSet); }
+    void SetGridSnapToChars( bool bSet )    { set(SectionProp::GridSnapToChars, bSet); }
+    void SetDxtCharSpace( sal_Int32 nSet )  { set(SectionProp::DxtCharSpace, nSet); }
 
-    void SetLnnMod( sal_Int32 nValue ) { m_nLnnMod = nValue; }
-    void SetLnc( sal_Int32 nValue )    { m_nLnc = nValue; }
-    void SetdxaLnn( sal_Int32 nValue ) { m_ndxaLnn = nValue; }
-    void SetLnnMin( sal_Int32 nValue ) { m_nLnnMin = nValue; }
+    void SetLnnMod( sal_Int32 nValue ) { set(SectionProp::LnnMod, nValue); }
+    void SetLnc( sal_Int32 nValue )    { set(SectionProp::Lnc, nValue); }
+    void SetdxaLnn( sal_Int32 nValue ) { set(SectionProp::dxaLnn, nValue); }
+    void SetLnnMin( sal_Int32 nValue ) { set(SectionProp::LnnMin, nValue); }
 
     // determine which style gets the borders
     void ApplyBorderToPageStyles( const css::uno::Reference< css::container::XNameContainer >& xStyles,

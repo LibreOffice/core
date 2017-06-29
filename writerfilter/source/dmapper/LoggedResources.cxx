@@ -105,6 +105,37 @@ void LoggedStream::endSectionGroup()
 #endif
 }
 
+void LoggedStream::startDeferredSectionGroupDefinition()
+{
+#ifdef DEBUG_WRITERFILTER
+    mHelper.startElement("deferredSection");
+#endif
+
+    lcl_startDeferredSectionGroupDefinition();
+}
+
+void LoggedStream::endDeferredSectionGroupDefinition()
+{
+    lcl_endDeferredSectionGroupDefinition();
+
+#ifdef DEBUG_WRITERFILTER
+    LoggedResourcesHelper::endElement("deferredSection");
+#endif
+}
+
+void LoggedStream::applyDeferredSectionGroup()
+{
+#ifdef DEBUG_WRITERFILTER
+    mHelper.startElement("deferredSectionApplied");
+#endif
+
+    lcl_applyDeferredSectionGroup();
+
+#ifdef DEBUG_WRITERFILTER
+    LoggedResourcesHelper::endElement("deferredSectionApplied");
+#endif
+}
+
 void LoggedStream::startParagraphGroup()
 {
 #ifdef DEBUG_WRITERFILTER

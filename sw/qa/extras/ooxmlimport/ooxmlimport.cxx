@@ -1370,6 +1370,12 @@ DECLARE_OOXMLIMPORT_TEST(testTdf108714, "tdf108714.docx")
     CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, breakType);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf108849, "tdf108849.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Out-of-order sectPr is treated wrong - we lost bug-to-bug compatibility with Word", 2, getPages());
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
