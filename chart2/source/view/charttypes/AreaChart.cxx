@@ -931,7 +931,7 @@ void AreaChart::createShapes()
                                     , aScenePosition.PositionY
                                     , aScenePosition.PositionZ+this->getTransformedDepth() );
 
-                            sal_Int32 nLabelPlacement = pSeries->getLabelPlacement( nIndex, m_xChartTypeModel, m_nDimension, pPosHelper->isSwapXAndY() );
+                            sal_Int32 nLabelPlacement = pSeries->getLabelPlacement( nIndex, m_xChartTypeModel, pPosHelper->isSwapXAndY() );
 
                             switch(nLabelPlacement)
                             {

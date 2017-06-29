@@ -53,7 +53,7 @@ public:
 
     //returns sequence of css::chart::DataLabelPlacement
     static css::uno::Sequence < sal_Int32 > getSupportedLabelPlacements(
-        const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount, bool bSwapXAndY
+        const css::uno::Reference< css::chart2::XChartType >& xChartType, bool bSwapXAndY
         , const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
 
     //returns sequence of css::chart::MissingValueTreatment

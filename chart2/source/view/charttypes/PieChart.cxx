@@ -274,7 +274,7 @@ void PieChart::createTextLabelShape(
     ///get the required label placement type. Available placements are
     ///`AVOID_OVERLAP`, `CENTER`, `OUTSIDE` and `INSIDE`;
     sal_Int32 nLabelPlacement = rSeries.getLabelPlacement(
-        nPointIndex, m_xChartTypeModel, m_nDimension, m_pPosHelper->isSwapXAndY());
+        nPointIndex, m_xChartTypeModel, m_pPosHelper->isSwapXAndY());
 
     ///when the placement is of `AVOID_OVERLAP` type a later rearrangement of
     ///the label position is allowed; the `createTextLabelShape` treats the

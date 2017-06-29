@@ -400,7 +400,7 @@ void SAL_CALL ChartTypeTemplate::applyStyle(
             //ensure valid label placement
             {
                 uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
-                            getChartTypeForIndex( nChartTypeIndex ), getDimension(), isSwapXAndY(), xSeries ) );
+                            getChartTypeForIndex( nChartTypeIndex ), isSwapXAndY(), xSeries ) );
                 lcl_ensureCorrectLabelPlacement( xSeriesProp, aAvailablePlacements );
 
                 uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
@@ -489,7 +489,7 @@ void SAL_CALL ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram 
                             continue;
 
                         uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
-                            xChartType, getDimension(), isSwapXAndY(), xSeries ) );
+                            xChartType, isSwapXAndY(), xSeries ) );
                         if(!aAvailablePlacements.getLength())
                             continue;
 

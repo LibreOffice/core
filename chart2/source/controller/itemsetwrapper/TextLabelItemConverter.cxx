@@ -202,7 +202,7 @@ TextLabelItemConverter::TextLabelItemConverter(
     bool bFound = false;
     bool bAmbiguous = false;
     bool bSwapXAndY = DiagramHelper::getVertical(xDiagram, bFound, bAmbiguous);
-    maAvailableLabelPlacements = ChartTypeHelper::getSupportedLabelPlacements(xChartType, DiagramHelper::getDimension(xDiagram), bSwapXAndY, xSeries);
+    maAvailableLabelPlacements = ChartTypeHelper::getSupportedLabelPlacements(xChartType, bSwapXAndY, xSeries);
 
     mbForbidPercentValue = ChartTypeHelper::getAxisType(xChartType, 0) != AxisType::CATEGORY;
 }

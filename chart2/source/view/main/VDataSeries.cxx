@@ -620,7 +620,7 @@ sal_Int32 VDataSeries::detectNumberFormatKey( sal_Int32 index ) const
     return nRet;
 }
 
-sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Reference< chart2::XChartType >& xChartType, sal_Int32 nDimensionCount, bool bSwapXAndY ) const
+sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Reference< chart2::XChartType >& xChartType, bool bSwapXAndY ) const
 {
     sal_Int32 nLabelPlacement=0;
     try
@@ -632,7 +632,7 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Refe
         //ensure that the set label placement is supported by this charttype
 
         uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
-                xChartType, nDimensionCount, bSwapXAndY, m_xDataSeries ) );
+                xChartType, bSwapXAndY, m_xDataSeries ) );
 
         for( sal_Int32 nN = 0; nN < aAvailablePlacements.getLength(); nN++ )
             if( aAvailablePlacements[nN] == nLabelPlacement )

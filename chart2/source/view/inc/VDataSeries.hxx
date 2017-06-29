@@ -107,7 +107,7 @@ public:
 
     sal_Int32 getLabelPlacement(
         sal_Int32 nPointIndex, const css::uno::Reference<css::chart2::XChartType>& xChartType,
-        sal_Int32 nDimensionCount, bool bSwapXAndY ) const;
+        bool bSwapXAndY ) const;
 
     css::uno::Reference<css::beans::XPropertySet> getPropertiesOfPoint( sal_Int32 index ) const;
 

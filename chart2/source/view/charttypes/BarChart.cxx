@@ -826,7 +826,7 @@ void BarChart::createShapes()
                             double fLogicSum = aLogicYSumMap[nAttachedAxisIndex];
 
                             LabelAlignment eAlignment(LABEL_ALIGN_CENTER);
-                            sal_Int32 nLabelPlacement = pSeries->getLabelPlacement( nPointIndex, m_xChartTypeModel, m_nDimension, pPosHelper->isSwapXAndY() );
+                            sal_Int32 nLabelPlacement = pSeries->getLabelPlacement( nPointIndex, m_xChartTypeModel, pPosHelper->isSwapXAndY() );
 
                             double fLowerBarDepth = fLogicBarDepth;
                             double fUpperBarDepth = fLogicBarDepth;

@@ -236,11 +236,9 @@ bool ChartTypeHelper::isSupportingBarConnectors(
 }
 
 uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const uno::Reference< chart2::XChartType >& xChartType
-                                                                         , sal_Int32 nDimensionCount, bool bSwapXAndY
+                                                                         , bool bSwapXAndY
                                                                          , const uno::Reference< chart2::XDataSeries >& xSeries )
 {
-    (void)nDimensionCount;
-
     uno::Sequence < sal_Int32 > aRet;
     if( !xChartType.is() )
         return aRet;
