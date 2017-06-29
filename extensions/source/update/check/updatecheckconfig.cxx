@@ -150,11 +150,10 @@ UpdateCheckROModel::getUpdateEntry(UpdateInfo& rInfo) const
 
     rInfo.Sources.push_back( DownloadSource( isDirectDownload, getStringValue(DOWNLOAD_URL) ) );
 
-    OString aStr(RELEASE_NOTE);
     for(sal_Int32 n=1; n < 6; ++n )
     {
         OUString aUStr = getStringValue(
-            OString(aStr + OString::number(n)).getStr());
+            OString(OStringLiteral(RELEASE_NOTE) + OString::number(n)).getStr());
         if( !aUStr.isEmpty() )
             rInfo.ReleaseNotes.push_back(ReleaseNote((sal_Int8) n, aUStr));
     }
