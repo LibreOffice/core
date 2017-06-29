@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_7ecb0f73",
+        "filename": "sc/source/ui/vba/vbaapplication.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 921,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-29T13:33:21Z",
+      "side": 1,
+      "message": "grep for GetVersionEx in our codebase if you need to do that",
+      "revId": "85f9ad4af25f4f8eaa76aeaabe37d2b78a28d3b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
