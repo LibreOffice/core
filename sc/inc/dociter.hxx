@@ -546,7 +546,7 @@ public:
 class ScRowBreakIterator
 {
 public:
-    static SCROW NOT_FOUND;
+    static constexpr SCROW NOT_FOUND = -1;
 
     explicit ScRowBreakIterator(::std::set<SCROW>& rBreaks);
     SCROW first();
