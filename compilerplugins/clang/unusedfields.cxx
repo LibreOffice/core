@@ -84,8 +84,9 @@ public:
     bool TraverseCXXMethodDecl( CXXMethodDecl* );
 private:
     MyFieldInfo niceName(const FieldDecl*);
-    void checkTouched(const FieldDecl* fieldDecl, const Expr* memberExpr);
-    CXXMethodDecl * insideMoveOrCopyDecl;
+    void checkTouchedFromOutside(const FieldDecl* fieldDecl, const Expr* memberExpr);
+    void checkWriteOnly(const FieldDecl* fieldDecl, const Expr* memberExpr);
+    RecordDecl * insideMoveOrCopyDeclParent;
 };
 
 void UnusedFields::run()
@@ -200,19 +201,21 @@ bool startswith(const std::string& rStr, const char* pSubStr)
 
 bool UnusedFields::TraverseCXXConstructorDecl(CXXConstructorDecl* cxxConstructorDecl)
 {
-    if (cxxConstructorDecl->isCopyOrMoveConstructor())
-        insideMoveOrCopyDecl = cxxConstructorDecl;
+    if (!ignoreLocation(cxxConstructorDecl)
+        && cxxConstructorDecl->isCopyOrMoveConstructor())
+        insideMoveOrCopyDeclParent = cxxConstructorDecl->getParent();
     bool ret = RecursiveASTVisitor::TraverseCXXConstructorDecl(cxxConstructorDecl);
-    insideMoveOrCopyDecl = nullptr;
+    insideMoveOrCopyDeclParent = nullptr;
     return ret;
 }
 
 bool UnusedFields::TraverseCXXMethodDecl(CXXMethodDecl* cxxMethodDecl)
 {
-    if (cxxMethodDecl->isCopyAssignmentOperator() || cxxMethodDecl->isMoveAssignmentOperator())
-        insideMoveOrCopyDecl = cxxMethodDecl;
+    if (!ignoreLocation(cxxMethodDecl)
+        && (cxxMethodDecl->isCopyAssignmentOperator() || cxxMethodDecl->isMoveAssignmentOperator()))
+        insideMoveOrCopyDeclParent = cxxMethodDecl->getParent();
     bool ret = RecursiveASTVisitor::TraverseCXXMethodDecl(cxxMethodDecl);
-    insideMoveOrCopyDecl = nullptr;
+    insideMoveOrCopyDeclParent = nullptr;
     return ret;
 }
 
@@ -232,21 +235,21 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
         return true;
     }
 
-    MyFieldInfo fieldInfo = niceName(fieldDecl);
+    checkTouchedFromOutside(fieldDecl, memberExpr);
 
-  // for the touched-from-outside analysis
+    checkWriteOnly(fieldDecl, memberExpr);
 
-    checkTouched(fieldDecl, memberExpr);
+    return true;
+}
 
-  // for the write-only analysis
-
-    // we don't care about reads from a field when inside that field parent class copy/move constructor/operator=
-    if (insideMoveOrCopyDecl)
+void UnusedFields::checkWriteOnly(const FieldDecl* fieldDecl, const Expr* memberExpr)
+{
+    // we don't care about reads from a field when inside the copy/move constructor/operator= for that field
+    if (insideMoveOrCopyDeclParent)
     {
-        auto cxxRecordDecl1 = dyn_cast<CXXRecordDecl>(fieldDecl->getDeclContext());
-        auto cxxRecordDecl2 = dyn_cast<CXXRecordDecl>(insideMoveOrCopyDecl->getDeclContext());
-        if (cxxRecordDecl1 && cxxRecordDecl1 == cxxRecordDecl2)
-            return true;
+        RecordDecl const * cxxRecordDecl1 = fieldDecl->getParent();
+        if (cxxRecordDecl1 && (cxxRecordDecl1 == insideMoveOrCopyDeclParent))
+            return;
     }
 
     auto parentsRange = compiler.getASTContext().getParents(*memberExpr);
@@ -268,7 +271,7 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
                     bPotentiallyReadFrom = true;
             }
             if (!bPotentiallyReadFrom)
-                return true;
+                return;
             break;
         }
         if (isa<CastExpr>(parent) || isa<MemberExpr>(parent) || isa<ParenExpr>(parent) || isa<ParenListExpr>(parent)
@@ -404,10 +407,9 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
         memberExpr->dump();
     }
 
+    MyFieldInfo fieldInfo = niceName(fieldDecl);
     if (bPotentiallyReadFrom)
         readFromSet.insert(fieldInfo);
-
-    return true;
 }
 
 bool UnusedFields::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
@@ -425,11 +427,11 @@ bool UnusedFields::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocation()))) {
         return true;
     }
-    checkTouched(fieldDecl, declRefExpr);
+    checkTouchedFromOutside(fieldDecl, declRefExpr);
     return true;
 }
 
-void UnusedFields::checkTouched(const FieldDecl* fieldDecl, const Expr* memberExpr) {
+void UnusedFields::checkTouchedFromOutside(const FieldDecl* fieldDecl, const Expr* memberExpr) {
     const FunctionDecl* memberExprParentFunction = parentFunctionDecl(memberExpr);
     const CXXMethodDecl* methodDecl = dyn_cast_or_null<CXXMethodDecl>(memberExprParentFunction);
 
