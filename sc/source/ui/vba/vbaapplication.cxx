@@ -917,9 +917,18 @@ ScVbaApplication::getPathSeparator()
 OUString SAL_CALL
 ScVbaApplication::getOperatingSystem()
 {
-    // TODO implement
-    SAL_WARN("sc", "not implemented");
-    return OUString();
+    // TODO Solution should contain the version number of the operating system
+    // too.
+#if   defined(_WIN32)
+        return OUString("Windows");
+#elif defined(MACOSX)
+        return OUString("Macintosh");
+#elif defined(UNX)
+        // M. Office is not available on Unix systems, so it is not documented.
+        return OUString("Unix");
+#else
+        return OUString("Unknown");
+#endif
 }
 
 // Helpers for Intersect and Union
