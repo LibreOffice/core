@@ -127,6 +127,9 @@ private:
     // Stream
     virtual void lcl_startSectionGroup() override;
     virtual void lcl_endSectionGroup() override;
+    virtual void lcl_startDeferredSectionGroupDefinition() override;
+    virtual void lcl_endDeferredSectionGroupDefinition() override;
+    virtual void lcl_applyDeferredSectionGroup() override;
     virtual void lcl_startParagraphGroup() override;
     virtual void lcl_endParagraphGroup() override;
     virtual void lcl_startCharacterGroup() override;

@@ -13194,6 +13194,14 @@
         </element>
         <ref name="AG_SectPrAttributes"/>
       </define>
+      <define name="CT_finalSectPr">
+        <ref name="EG_HdrFtrReferences"/>
+        <ref name="EG_SectPrContents"/>
+        <element name="sectPrChange">
+          <ref name="CT_SectPrChange"/>
+        </element>
+        <ref name="AG_SectPrAttributes"/>
+      </define>
       <define name="ST_BrType">
         <choice>
           <!-- Page Break -->
@@ -16302,7 +16310,7 @@
       <define name="CT_Body">
         <ref name="EG_BlockLevelElts"/>
         <element name="sectPr">
-          <ref name="CT_SectPr"/>
+          <ref name="CT_finalSectPr"/>
         </element>
       </define>
       <define name="CT_ShapeDefaults">
@@ -17838,6 +17846,11 @@
       <action name="start" action="handleLastParagraphInSection"/>
       <element name="sectPrChange" tokenid="ooxml:CT_SectPr_sectPrChange"/>
       <action name="start" action="setLastParagraphInSection"/>
+    </resource>
+    <resource name="CT_finalSectPr" resource="Properties">
+      <action name="start" action="startDefineLastSectionGroup"/>
+      <element name="sectPrChange" tokenid="ooxml:CT_SectPr_sectPrChange"/>
+      <action name="end" action="endDefineLastSectionGroup"/>
     </resource>
     <resource name="ST_BrType" resource="List">
       <value tokenid="ooxml:Value_ST_BrType_column">column</value>
