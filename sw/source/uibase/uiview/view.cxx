@@ -907,7 +907,10 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     SAL_WARN_IF(
         officecfg::Office::Common::Undo::Steps::get() <= 0,
         "sw.ui", "/org.openoffice.Office.Common/Undo/Steps <= 0");
-    m_pWrtShell->DoUndo();
+    if (0 < officecfg::Office::Common::Undo::Steps::get())
+    {
+        m_pWrtShell->DoUndo();
+    }
 
     const bool bBrowse = m_pWrtShell->GetViewOptions()->getBrowseMode();
     // Disable "multiple window"
