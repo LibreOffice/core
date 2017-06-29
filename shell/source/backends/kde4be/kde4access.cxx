@@ -83,9 +83,8 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
     } else if (id == "EnableATToolSupport")
     {
         /* does not make much sense without an accessibility bridge */
-        bool ATToolSupport = false;
         return css::beans::Optional< css::uno::Any >(
-            true, uno::makeAny( OUString::boolean( ATToolSupport ) ) );
+            true, uno::makeAny( OUString::boolean( false ) ) );
     } else if (id == "WorkPathVariable")
     {
         QString aDocumentsDir( KGlobalSettings::documentPath() );
