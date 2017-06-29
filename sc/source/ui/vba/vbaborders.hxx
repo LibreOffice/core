@@ -55,6 +55,8 @@ public:
     virtual void SAL_CALL setLineStyle( const css::uno::Any& _linestyle ) override;
     virtual css::uno::Any SAL_CALL getWeight() override;
     virtual void SAL_CALL setWeight( const  css::uno::Any& ) override;
+    virtual css::uno::Any SAL_CALL getTintAndShade() override;
+    virtual void SAL_CALL setTintAndShade( const  css::uno::Any& ) override;
     // xxxxBASE
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

@@ -261,6 +261,16 @@ public:
                     throw uno::RuntimeException("Method failed" );
     }
 
+    void SAL_CALL setTintAndShade( const uno::Any& /*rAny*/ ) override
+    {
+        // TODO implement
+    }
+    uno::Any SAL_CALL getTintAndShade() override
+    {
+        // TODO implement
+        return uno::makeAny(static_cast<double>(0));
+    }
+
     uno::Any SAL_CALL getLineStyle() override
     {
         // always return xlContinuous;
@@ -532,6 +542,18 @@ uno::Any SAL_CALL ScVbaBorders::getWeight()
     }
     return  weight;
 }
+
+uno::Any SAL_CALL ScVbaBorders::getTintAndShade()
+{
+    // TODO implement
+    return uno::makeAny(static_cast<double>(0));
+}
+
+void SAL_CALL ScVbaBorders::setTintAndShade(const uno::Any& /*rAny*/)
+{
+    // TODO implement
+}
+
 void SAL_CALL ScVbaBorders::setWeight( const uno::Any& _weight )
 {
     sal_Int32 count = getCount();
