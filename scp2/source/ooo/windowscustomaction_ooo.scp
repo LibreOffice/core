@@ -189,8 +189,8 @@ WindowsCustomAction gid_Customaction_SelectLanguage
     Source = "sellangmsi.dll";
     Target = "SelectLanguage";
     Inbinarytable = 1;
-    Assignment1 = ("InstallExecuteSequence", "NOT Installed And ADDLOCAL=\"\"", "MigrateFeatureStates");
-    Assignment2 = ("InstallUISequence", "NOT Installed And ADDLOCAL=\"\"", "MigrateFeatureStates");
+    Assignment1 = ("InstallExecuteSequence", "NOT Installed And (ADDLOCAL=\"\" Or NOT UI_LANGS=\"\")", "MigrateFeatureStates");
+    Assignment2 = ("InstallUISequence", "NOT Installed And (ADDLOCAL=\"\" Or NOT UI_LANGS=\"\")", "MigrateFeatureStates");
 End
 
 WindowsCustomAction gid_Customaction_SortTree
