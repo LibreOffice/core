@@ -477,6 +477,23 @@ IMPL_LINK(SvxCharacterMap, RecentClickHdl, SvxCharView*, rView, void)
     m_pShowChar->SetFont(rView->GetFont());
     m_pShowChar->Update();
     rView->GrabFocus();
+
+    // Get the hexadecimal code
+    OUString charValue = rView->GetText();
+    char aBuf[32];
+    sal_Int32 tmp = 1;
+    sal_UCS4 cChar = charValue.iterateCodePoints(&tmp, -1);
+    snprintf( aBuf, sizeof(aBuf), "%X", static_cast<unsigned>(cChar));
+    OUString aHexText = OUString::createFromAscii(aBuf);
+
+    // Get the decimal code
+    char aDecBuf[32];
+    snprintf( aDecBuf, sizeof(aDecBuf), "%u", static_cast<unsigned>(cChar));
+    OUString aDecimalText = OUString::createFromAscii(aDecBuf);
+
+    m_pHexCodeText->SetText( aHexText );
+    m_pDecimalCodeText->SetText( aDecimalText );
+
     rView->Invalidate();
     m_pOKBtn->Enable();
 }
