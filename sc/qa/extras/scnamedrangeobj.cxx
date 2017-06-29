@@ -72,8 +72,7 @@ uno::Reference< sheet::XNamedRanges > ScNamedRangeObj::init_impl()
     CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Reference< beans::XPropertySet > xPropSet (mxComponent, UNO_QUERY_THROW);
-    OUString aNamedRangesPropertyString("NamedRanges");
-    uno::Reference< sheet::XNamedRanges > xNamedRanges(xPropSet->getPropertyValue(aNamedRangesPropertyString), UNO_QUERY_THROW);
+    uno::Reference< sheet::XNamedRanges > xNamedRanges(xPropSet->getPropertyValue("NamedRanges"), UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xNamedRanges.is());
 
     return xNamedRanges;
