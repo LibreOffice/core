@@ -20,7 +20,7 @@ gb_UITest_DEPS :=
 endif
 
 # UITests are much more likely to generate core files for the soffice than for
-# the python executale, but solenv/bin/gdb-core-bt.sh is often unable to
+# the python executable, but solenv/bin/gdb-core-bt.sh is often unable to
 # determine the executable that generated a core file, so make it fall back to
 # the soffice executable rather than to gb_UITest_EXECUTABLE:
 gb_UITest_EXECUTABLE_GDB := $(call gb_Executable_get_target,soffice_bin)
