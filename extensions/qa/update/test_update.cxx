@@ -55,10 +55,10 @@ protected:
     // test the getUpdateInformationEnumeration() method
     void testGetUpdateInformationEnumeration()
     {
-        OUString aInstallSetID( "TODO" ); // unused when we do not have a 'feed'
-
         uno::Reference< container::XEnumeration > aUpdateInfoEnumeration =
-            m_xProvider->getUpdateInformationEnumeration( m_aRepositoryList, aInstallSetID );
+            m_xProvider->getUpdateInformationEnumeration(
+                m_aRepositoryList,
+                "TODO" ); // unused when we do not have a 'feed'
 
         if ( !aUpdateInfoEnumeration.is() )
             CPPUNIT_FAIL( "Calling getUpdateInformationEnumeration() with TODO failed." );
