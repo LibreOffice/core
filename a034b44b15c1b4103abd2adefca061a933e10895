@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a461143_7ef5cf81",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 2220,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2017-06-29T18:10:30Z",
+      "side": 1,
+      "message": "I used these to add the icon to the new button but cannot figure out how to remove the old one.",
+      "parentUuid": "3a461143_bee4973b",
+      "revId": "a034b44b15c1b4103abd2adefca061a933e10895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_1eca0ba2",
         "filename": "vcl/source/control/tabctrl.cxx",
         "patchSetId": 9
