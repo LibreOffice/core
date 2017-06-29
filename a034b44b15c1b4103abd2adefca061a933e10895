@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "3a461143_ded24334",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 2327,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-06-29T12:48:13Z",
+      "side": 1,
+      "message": "I mean in this example method we are checking if tab is not a hamburger menu tab to avoid switching to empty tab\n\nYou have to remove that guards, if not it will be impossible to access first tab using keyboard",
+      "parentUuid": "3a461143_9e035bb8",
+      "revId": "a034b44b15c1b4103abd2adefca061a933e10895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_fed45f48",
         "filename": "vcl/source/control/tabctrl.cxx",
         "patchSetId": 9
