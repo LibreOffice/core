@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_1ed12bce",
+        "filename": "editeng/source/uno/unotext.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1958,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-29T20:48:09Z",
+      "side": 1,
+      "message": "better use EE_PARA_MAX_COUNT constant instead of magic number",
+      "revId": "23142b67656a423c7849b80c47afa972dcc491a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
