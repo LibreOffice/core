@@ -2573,9 +2573,12 @@ void GtkSalFrame::addGrabLevel()
 
 void GtkSalFrame::removeGrabLevel()
 {
-    --m_nGrabLevel;
-    if (m_nGrabLevel == 0)
-        gtk_grab_remove(getMouseEventWidget());
+    if (m_nGrabLevel > 0)
+    {
+        --m_nGrabLevel;
+        if (m_nGrabLevel == 0)
+            gtk_grab_remove(getMouseEventWidget());
+    }
 }
 
 void GtkSalFrame::closePopup()
