@@ -41,9 +41,8 @@ class ScXMLCalculationSettingsContext : public ScXMLImportContext
     bool bMatchWholeCell;
 
 public:
-    ScXMLCalculationSettingsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const OUString& rLName,
-                        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList);
+    ScXMLCalculationSettingsContext( ScXMLImport& rImport, sal_Int32 nElement,
+                        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList);
 
     virtual ~ScXMLCalculationSettingsContext() override;
 
@@ -55,7 +54,7 @@ public:
     void SetIterationStatus(const bool bValue) { bIsIterationEnabled = bValue; }
     void SetIterationCount(const sal_Int32 nValue) { nIterationCount = nValue; }
     void SetIterationEpsilon(const double fValue) { fIterationEpsilon = fValue; }
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element ) override;
 };
 
 class ScXMLNullDateContext : public ScXMLImportContext

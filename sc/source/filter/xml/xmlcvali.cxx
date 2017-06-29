@@ -140,10 +140,9 @@ public:
 };
 
 ScXMLContentValidationsContext::ScXMLContentValidationsContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ ) :
-    ScXMLImportContext( rImport, nPrfx, rLName )
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */ ) :
+    ScXMLImportContext( rImport )
 {
     // here are no attributes
 }
@@ -170,10 +169,6 @@ SvXMLImportContext *ScXMLContentValidationsContext::CreateChildContext( sal_uInt
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 
     return pContext;
-}
-
-void ScXMLContentValidationsContext::EndElement()
-{
 }
 
 ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImport,

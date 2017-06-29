@@ -47,10 +47,10 @@ void ScXMLNamedExpressionsContext::SheetLocalInserter::insert(ScMyNamedExpressio
 }
 
 ScXMLNamedExpressionsContext::ScXMLNamedExpressionsContext(
-    ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-    const uno::Reference<xml::sax::XAttributeList>& /* xAttrList */,
+    ScXMLImport& rImport, sal_Int32 /*nElement*/,
+    const uno::Reference<xml::sax::XFastAttributeList>& /* xAttrList */,
     Inserter* pInserter ) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport ),
     mpInserter(pInserter)
 {
     rImport.LockSolarMutex();
@@ -84,12 +84,6 @@ SvXMLImportContext *ScXMLNamedExpressionsContext::CreateChildContext( sal_uInt16
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 
     return pContext;
-}
-
-void ScXMLNamedExpressionsContext::EndElement()
-{
-    // happens in ScXMLImport::EndDocument()
-    // because it has to be set after the Database Ranges
 }
 
 ScXMLNamedRangeContext::ScXMLNamedRangeContext(

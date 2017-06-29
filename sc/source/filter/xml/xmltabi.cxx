@@ -228,14 +228,6 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
 
     switch (nToken)
     {
-    case XML_TOK_TABLE_NAMED_EXPRESSIONS:
-    {
-        SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();
-        pContext = new ScXMLNamedExpressionsContext(
-            GetScImport(), nPrefix, rLName, xAttrList,
-            new ScXMLNamedExpressionsContext::SheetLocalInserter(GetScImport(), nTab));
-    }
-        break;
     case XML_TOK_TABLE_COL_GROUP:
         pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
@@ -328,6 +320,14 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 
     switch ( nElement )
     {
+    case XML_ELEMENT( TABLE, XML_NAMED_EXPRESSIONS ):
+    {
+        SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();
+        pContext = new ScXMLNamedExpressionsContext(
+            GetScImport(), nElement, xAttrList,
+            new ScXMLNamedExpressionsContext::SheetLocalInserter(GetScImport(), nTab));
+    }
+        break;
     case XML_ELEMENT( TABLE, XML_TABLE_ROW_GROUP ):
         pContext = new ScXMLTableRowsContext( GetScImport(), xAttrList,
                                                    false, true );
