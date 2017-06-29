@@ -89,6 +89,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/customize/eventdlg \
     cui/source/customize/macropg \
     cui/source/customize/SvxMenuConfigPage \
+    cui/source/customize/SvxToolbarConfigPage \
     cui/source/dialogs/about \
     cui/source/dialogs/colorpicker \
     cui/source/dialogs/cuicharmap \
