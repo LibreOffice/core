@@ -80,9 +80,12 @@ public:
     bool VisitFieldDecl( const FieldDecl* );
     bool VisitMemberExpr( const MemberExpr* );
     bool VisitDeclRefExpr( const DeclRefExpr* );
+    bool TraverseCXXConstructorDecl( CXXConstructorDecl* );
+    bool TraverseCXXMethodDecl( CXXMethodDecl* );
 private:
     MyFieldInfo niceName(const FieldDecl*);
     void checkTouched(const FieldDecl* fieldDecl, const Expr* memberExpr);
+    CXXMethodDecl * insideMoveOrCopyDecl;
 };
 
 void UnusedFields::run()
@@ -189,9 +192,28 @@ static char easytolower(char in)
         return in-('Z'-'z');
     return in;
 }
+
 bool startswith(const std::string& rStr, const char* pSubStr)
 {
     return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
+}
+
+bool UnusedFields::TraverseCXXConstructorDecl(CXXConstructorDecl* cxxConstructorDecl)
+{
+    if (cxxConstructorDecl->isCopyOrMoveConstructor())
+        insideMoveOrCopyDecl = cxxConstructorDecl;
+    bool ret = RecursiveASTVisitor::TraverseCXXConstructorDecl(cxxConstructorDecl);
+    insideMoveOrCopyDecl = nullptr;
+    return ret;
+}
+
+bool UnusedFields::TraverseCXXMethodDecl(CXXMethodDecl* cxxMethodDecl)
+{
+    if (cxxMethodDecl->isCopyAssignmentOperator() || cxxMethodDecl->isMoveAssignmentOperator())
+        insideMoveOrCopyDecl = cxxMethodDecl;
+    bool ret = RecursiveASTVisitor::TraverseCXXMethodDecl(cxxMethodDecl);
+    insideMoveOrCopyDecl = nullptr;
+    return ret;
 }
 
 bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
@@ -217,6 +239,15 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
     checkTouched(fieldDecl, memberExpr);
 
   // for the write-only analysis
+
+    // we don't care about reads from a field when inside that field parent class copy/move constructor/operator=
+    if (insideMoveOrCopyDecl)
+    {
+        auto cxxRecordDecl1 = dyn_cast<CXXRecordDecl>(fieldDecl->getDeclContext());
+        auto cxxRecordDecl2 = dyn_cast<CXXRecordDecl>(insideMoveOrCopyDecl->getDeclContext());
+        if (cxxRecordDecl1 && cxxRecordDecl1 == cxxRecordDecl2)
+            return true;
+    }
 
     auto parentsRange = compiler.getASTContext().getParents(*memberExpr);
     const Stmt* child = memberExpr;
@@ -253,7 +284,11 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
         else if (auto unaryOperator = dyn_cast<UnaryOperator>(parent))
         {
             UnaryOperator::Opcode op = unaryOperator->getOpcode();
-            if (op == UO_AddrOf || op == UO_Deref
+            if (memberExpr->getType()->isArrayType() && op == UO_Deref)
+            {
+                // ignore, deref'ing an array does not count as a read
+            }
+            else if (op == UO_AddrOf || op == UO_Deref
                 || op == UO_Plus || op == UO_Minus
                 || op == UO_Not || op == UO_LNot
                 || op == UO_PreInc || op == UO_PostInc
@@ -307,8 +342,12 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
         else if (auto binaryOp = dyn_cast<BinaryOperator>(parent))
         {
             BinaryOperator::Opcode op = binaryOp->getOpcode();
-            // If the child is on the LHS and it is an assignment, we are obviously not reading from it
-            if (!(binaryOp->getLHS() == child && op == BO_Assign)) {
+            // If the child is on the LHS and it is an assignment op, we are obviously not reading from it
+            const bool assignmentOp = op == BO_Assign || op == BO_MulAssign
+                || op == BO_DivAssign || op == BO_RemAssign || op == BO_AddAssign
+                || op == BO_SubAssign || op == BO_ShlAssign || op == BO_ShrAssign
+                || op == BO_AndAssign || op == BO_XorAssign || op == BO_OrAssign;
+            if (!(binaryOp->getLHS() == child && assignmentOp)) {
                 bPotentiallyReadFrom = true;
             }
             break;
@@ -317,7 +356,6 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
                  || isa<CXXConstructExpr>(parent)
                  || isa<ConditionalOperator>(parent)
                  || isa<SwitchStmt>(parent)
-                 || isa<ArraySubscriptExpr>(parent)
                  || isa<DeclStmt>(parent)
                  || isa<WhileStmt>(parent)
                  || isa<CXXNewExpr>(parent)
@@ -337,6 +375,7 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
                  || isa<LabelStmt>(parent)
                  || isa<CXXForRangeStmt>(parent)
                  || isa<CXXTypeidExpr>(parent)
+                 || isa<ArraySubscriptExpr>(parent)
                  || isa<DefaultStmt>(parent))
         {
             break;
@@ -414,7 +453,7 @@ void UnusedFields::checkTouched(const FieldDecl* fieldDecl, const Expr* memberEx
         if (memberExprParentFunction->getParent() == fieldDecl->getParent()) {
             touchedFromInsideSet.insert(fieldInfo);
         } else {
-           touchedFromOutsideSet.insert(fieldInfo);
+            touchedFromOutsideSet.insert(fieldInfo);
         }
     }
 }

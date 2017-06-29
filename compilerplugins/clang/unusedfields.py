@@ -125,6 +125,9 @@ for d in definitionSet:
         continue
     if "::sfx2::sidebar::ControllerItem" in fieldType:
         continue
+    # ignore reference fields, because writing to them actually writes to another field somewhere else
+    if fieldType.endswith("&"):
+        continue
 
     writeonlySet.add((clazz + " " + definitionToTypeMap[d], srcLoc))
 
