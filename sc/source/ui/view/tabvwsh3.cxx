@@ -945,23 +945,78 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             break;
 
         case SID_WINDOW_FIX:
-        case SID_WINDOW_FIX_COL:
-        case SID_WINDOW_FIX_ROW:
             {
-                SplitMethod eSplitMethod = SC_SPLIT_METHOD_CURSOR;
-                if (nSlot == SID_WINDOW_FIX_COL)
-                    eSplitMethod = SC_SPLIT_METHOD_FIRST_COL;
-                else if (nSlot == SID_WINDOW_FIX_ROW)
-                    eSplitMethod = SC_SPLIT_METHOD_FIRST_ROW;
-
                 ScSplitMode eHSplit = GetViewData().GetHSplitMode();
                 ScSplitMode eVSplit = GetViewData().GetVSplitMode();
-                if ( eHSplit == SC_SPLIT_FIX || eVSplit == SC_SPLIT_FIX )           // remove
+                // There is already a cursor freeze: remove
+                if ( eHSplit == SC_SPLIT_FIX && eVSplit == SC_SPLIT_FIX )
+                    {
                     RemoveSplit();
+                }
+                // There is a row or column freeze set: change it
+                else if ( eHSplit == SC_SPLIT_FIX || eVSplit == SC_SPLIT_FIX )
+                    {
+                    RemoveSplit();
+                    FreezeSplitters( true, SC_SPLIT_METHOD_CURSOR);
+                    }
+                // No freeze yet: create
                 else
-                    FreezeSplitters( true, eSplitMethod);        // create or fixate
-                rReq.Done();
+                    {
+                    FreezeSplitters( true, SC_SPLIT_METHOD_CURSOR);
+                    }
 
+                rReq.Done();
+                InvalidateSplit();
+            }
+            break;
+
+        case SID_WINDOW_FIX_COL:
+            {
+                ScSplitMode eHSplit = GetViewData().GetHSplitMode();
+                ScSplitMode eVSplit = GetViewData().GetVSplitMode();
+                // There is already a column freeze: remove
+                if ( eHSplit == SC_SPLIT_FIX && eVSplit != SC_SPLIT_FIX )
+                    {
+                    RemoveSplit();
+                    }
+                // There is a row or cursor freeze set: change it
+                else if ( eVSplit == SC_SPLIT_FIX )
+                    {
+                    RemoveSplit();
+                    FreezeSplitters( true, SC_SPLIT_METHOD_FIRST_COL);
+                    }
+                // No freeze yet: create
+                else
+                    {
+                    FreezeSplitters( true, SC_SPLIT_METHOD_FIRST_COL);
+                    }
+                rReq.Done();
+                InvalidateSplit();
+            }
+            break;
+
+        case SID_WINDOW_FIX_ROW:
+            {
+                ScSplitMode eHSplit = GetViewData().GetHSplitMode();
+                ScSplitMode eVSplit = GetViewData().GetVSplitMode();
+                // There is already a row freeze: remove
+                if ( eHSplit != SC_SPLIT_FIX && eVSplit == SC_SPLIT_FIX )
+                    {
+                    RemoveSplit();
+                    }
+                // There is a column or cursor freeze set: change it
+                else if ( eHSplit == SC_SPLIT_FIX )
+                    {
+                    RemoveSplit();
+                    FreezeSplitters( true, SC_SPLIT_METHOD_FIRST_ROW);
+                    }
+                // No freeze yet: create
+                else
+                    {
+                    FreezeSplitters( true, SC_SPLIT_METHOD_FIRST_ROW);
+                    }
+
+                rReq.Done();
                 InvalidateSplit();
             }
             break;
