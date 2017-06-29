@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_1eb04bdd",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-29T16:03:58Z",
+      "side": 1,
+      "message": "Just to ensure understanding:\n\naBcp47 is the full language tag, for example en-US, en-GB, pt-PT, pt-BR, zh-CN, zh-TW, sr-RS, sr-Latn-RS, ca-ES or ca-ES-valencia\n\naLang is language only, so for these examples en, en, pt, pt, zh, zh, sr, sr, ca, ca.\n\nNote: in the language-only fallback there\u0027s no differentiation between \u0027ca\u0027 and \u0027ca-valencia\u0027 or \u0027sr\u0027 Cyrillic script and \u0027sr-Latn\u0027 Latin script.\n\nI\u0027m fine with this if that is what is wanted. I just want to point it out.\n\nWe can later refine for a full fallback list using getFallbackStrings() as mentioned earlier if it turns out to be necessary and the web service supports it.",
+      "revId": "026979ca6ab254012d81e9958bc58f0193da85ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
