@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_bee4973b",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 2220,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-06-29T10:40:13Z",
+      "side": 1,
+      "message": "look at these 3 lines above",
+      "revId": "a034b44b15c1b4103abd2adefca061a933e10895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_1eca0ba2",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 2327,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-06-29T10:40:13Z",
+      "side": 1,
+      "message": "because we will remove first hamburger menu tab we can drop couple of overrided functions with special interpretation for that additional one",
+      "revId": "a034b44b15c1b4103abd2adefca061a933e10895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_fed45f48",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 2374,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-06-29T10:40:13Z",
+      "side": 1,
+      "message": "not add but placing in the correct position",
+      "revId": "a034b44b15c1b4103abd2adefca061a933e10895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_decfa3b1",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 2394,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-06-29T10:40:13Z",
+      "side": 1,
+      "message": "no need to touch internal structures",
+      "revId": "a034b44b15c1b4103abd2adefca061a933e10895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
