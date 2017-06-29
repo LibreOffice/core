@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_deede38f",
+        "filename": "sc/source/filter/xml/xmlbodyi.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-29T21:07:40Z",
+      "side": 1,
+      "message": "Just a nitpick: please, for future changes do not \"visually\" turn keywords to functions by removing the space between the keyword and the opening parenthesis. ie. for best readability this really should be\n\n for (auto \u0026 it : *pAttribList)\n\nThanks.",
+      "revId": "d6da9e495d7ca32de6cda1a94cb4c8cd26b240cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
