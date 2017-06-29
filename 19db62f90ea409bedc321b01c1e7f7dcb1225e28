@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "3a461143_fec0dfe2",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 2217,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-06-29T22:21:40Z",
+      "side": 1,
+      "message": "This should be removed to get rid of first tab. Did you tried to debug it using gdb? In which place it crashes?\nProbably somewhere else you didn\u0027t resotre previous code state (before inserting first tab). You can check my commit which introduced that menu. This also should help.",
+      "parentUuid": "3a461143_5e89f3c9",
+      "revId": "19db62f90ea409bedc321b01c1e7f7dcb1225e28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_bef9f74f",
         "filename": "vcl/source/control/tabctrl.cxx",
         "patchSetId": 14
