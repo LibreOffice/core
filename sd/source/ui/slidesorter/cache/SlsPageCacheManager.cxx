@@ -264,7 +264,7 @@ void PageCacheManager::ReleaseCache (const std::shared_ptr<Cache>& rpCache)
 
     if (iCache != mpPageCaches->end())
     {
-        OSL_ASSERT(iCache->second == rpCache);
+        assert(iCache->second == rpCache);
 
         PutRecentlyUsedCache(iCache->first.mpDocument,iCache->first.maPreviewSize,rpCache);
 
@@ -290,7 +290,7 @@ std::shared_ptr<PageCacheManager::Cache> PageCacheManager::ChangeSize (
             PageCacheContainer::CompareWithCache(rpCache)));
         if (iCacheToChange != mpPageCaches->end())
         {
-            OSL_ASSERT(iCacheToChange->second == rpCache);
+            assert(iCacheToChange->second == rpCache);
 
             // Now, we can change the preview size of the existing one by
             // removing the cache from the list and re-insert it with the
@@ -306,7 +306,7 @@ std::shared_ptr<PageCacheManager::Cache> PageCacheManager::ChangeSize (
         }
         else
         {
-            OSL_ASSERT(iCacheToChange != mpPageCaches->end());
+            assert(iCacheToChange != mpPageCaches->end());
         }
     }
 

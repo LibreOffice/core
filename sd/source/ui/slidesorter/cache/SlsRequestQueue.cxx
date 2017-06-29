@@ -103,7 +103,7 @@ void RequestQueue::AddRequest (
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    OSL_ASSERT(eRequestClass>=MIN_CLASS && eRequestClass<=MAX_CLASS);
+    assert(eRequestClass>=MIN_CLASS && eRequestClass<=MAX_CLASS);
 
     // If the request is already a member of the queue then remove it so
     // that the following insertion will use the new prioritization.
@@ -174,7 +174,7 @@ void RequestQueue::ChangeClass (
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    OSL_ASSERT(eNewRequestClass>=MIN_CLASS && eNewRequestClass<=MAX_CLASS);
+    assert(eNewRequestClass>=MIN_CLASS && eNewRequestClass<=MAX_CLASS);
 
     Container::const_iterator iRequest (
         ::std::find_if (

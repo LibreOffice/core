@@ -106,7 +106,7 @@ Bitmap GenericPageCache::GetPreviewBitmap (
     const CacheKey aKey,
     const bool bResize)
 {
-    OSL_ASSERT(aKey != nullptr);
+    assert(aKey != nullptr);
 
     Bitmap aPreview;
     bool bMayBeUpToDate = true;
@@ -143,7 +143,7 @@ Bitmap GenericPageCache::GetPreviewBitmap (
 Bitmap GenericPageCache::GetMarkedPreviewBitmap (
     const CacheKey aKey)
 {
-    OSL_ASSERT(aKey != nullptr);
+    assert(aKey != nullptr);
 
     ProvideCacheAndProcessor();
     const SdrPage* pPage = mpCacheContext->GetPage(aKey);
@@ -156,7 +156,7 @@ void GenericPageCache::SetMarkedPreviewBitmap (
     const CacheKey aKey,
     const Bitmap& rMarkedBitmap)
 {
-    OSL_ASSERT(aKey != nullptr);
+    assert(aKey != nullptr);
 
     ProvideCacheAndProcessor();
     const SdrPage* pPage = mpCacheContext->GetPage(aKey);
@@ -167,7 +167,7 @@ void GenericPageCache::RequestPreviewBitmap (
     const CacheKey aKey,
     const bool bMayBeUpToDate)
 {
-    OSL_ASSERT(aKey != nullptr);
+    assert(aKey != nullptr);
 
     const SdrPage* pPage = mpCacheContext->GetPage(aKey);
 
