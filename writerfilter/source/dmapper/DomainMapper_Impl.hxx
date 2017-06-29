@@ -394,9 +394,13 @@ private:
     GraphicImportPtr        m_pGraphicImport;
 
 
-    PropertyMapPtr                  m_pTopContext;
+    PropertyMapPtr           m_pTopContext;
     PropertyMapPtr           m_pLastSectionContext;
+    // We need to be able to set last section context to actual last
+    // when final sectPtr has replaced it in the end
+    PropertyMapPtr           m_pSectionContextBeforeLast;
     PropertyMapPtr           m_pLastCharacterContext;
+    PropertyMapPtr           m_pDeferredSectionContext;
 
     ::std::vector<DeletableTabStop> m_aCurrentTabStops;
     OUString                 m_sCurrentParaStyleId;
@@ -441,6 +445,8 @@ private:
     bool                            m_bSdt;
     bool                            m_bIsFirstRun;
     bool                            m_bIsOutsideAParagraph;
+
+    bool                            m_bDeferredSectionActive;
 
     css::uno::Reference< css::text::XTextCursor > xTOCMarkerCursor;
     css::uno::Reference< css::text::XTextCursor > mxTOCTextCursor;
@@ -566,7 +572,14 @@ public:
     void    PushProperties(ContextType eId);
     void    PushStyleProperties(const PropertyMapPtr& pStyleProperties);
     void    PushListProperties(const PropertyMapPtr& pListProperties);
+    // Makes a new clean deferred section context the current section context (to define its properties)
+    // If a deferred section was already defined, releases it
+    void    PushDeferredSectionProperties();
     void    PopProperties(ContextType eId);
+    // Pops deferred section context and keeps its properties for later application
+    void    PopDeferredSectionProperties();
+    // Copies values from deferred section to current section context
+    void    ApplyDeferredSectionProperties();
 
     ContextType GetTopContextType() const { return m_aContextStack.top(); }
     const PropertyMapPtr& GetTopContext()
