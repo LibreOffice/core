@@ -443,6 +443,26 @@ void OOXMLFastContextHandler::endSectionGroup()
     }
 }
 
+void OOXMLFastContextHandler::startDefineLastSectionGroup()
+{
+    if (isForwardEvents())
+    {
+        mpStream->startDeferredSectionGroupDefinition();
+    }
+}
+
+void OOXMLFastContextHandler::endDefineLastSectionGroup()
+{
+    if (isForwardEvents())
+    {
+        // Apply property set here, and reset it
+        // to avoid changing previously active section
+        mpStream->props(getPropertySet());
+        setPropertySet(std::make_shared<OOXMLPropertySet>());
+        mpStream->endDeferredSectionGroupDefinition();
+    }
+}
+
 void OOXMLFastContextHandler::setLastParagraphInSection()
 {
     mpParserState->setLastParagraphInSection(true);
@@ -452,6 +472,10 @@ void OOXMLFastContextHandler::setLastParagraphInSection()
 void OOXMLFastContextHandler::setLastSectionGroup()
 {
     mpStream->markLastSectionGroup( );
+    if (isForwardEvents())
+    {
+        mpStream->applyDeferredSectionGroup();
+    }
 }
 
 void OOXMLFastContextHandler::newProperty

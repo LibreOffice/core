@@ -131,8 +131,10 @@ public:
 
     void startSectionGroup();
     void setLastParagraphInSection();
-    void setLastSectionGroup();
     void endSectionGroup();
+    void startDefineLastSectionGroup();
+    void endDefineLastSectionGroup();
+    void setLastSectionGroup();
     void startParagraphGroup();
     void endParagraphGroup();
     void startCharacterGroup();
