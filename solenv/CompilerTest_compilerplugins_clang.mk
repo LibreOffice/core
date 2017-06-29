@@ -22,6 +22,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/redundantcast \
     compilerplugins/clang/test/redundantcopy \
     compilerplugins/clang/test/redundantinline \
+    compilerplugins/clang/test/refcounting \
     compilerplugins/clang/test/salbool \
     compilerplugins/clang/test/salunicodeliteral \
     compilerplugins/clang/test/stringconstant \

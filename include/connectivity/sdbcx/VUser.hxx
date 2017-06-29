@@ -53,7 +53,7 @@ namespace connectivity
                         public ODescriptor
         {
         protected:
-            std::unique_ptr<OGroups>  m_pGroups;
+            rtl::Reference<OGroups>  m_pGroups;
 
             using OUser_BASE::rBHelper;
 

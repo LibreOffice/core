@@ -566,7 +566,7 @@ void ODBTableDecorator::refreshColumns()
         OContainerMediator* pMediator = new OContainerMediator( pCol, m_xColumnDefinitions );
         m_xColumnMediator = pMediator;
         pCol->setMediator( pMediator );
-        m_pColumns.reset( pCol );
+        m_pColumns = pCol;
     }
     else
         m_pColumns->reFill(aVector);

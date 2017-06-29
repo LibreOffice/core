@@ -177,7 +177,7 @@ class ScXMLChangeTextPContext : public ScXMLImportContext
     OUString                    sLName;
     OUStringBuffer              sText;
     ScXMLChangeCellContext*     pChangeCellContext;
-    std::unique_ptr<SvXMLImportContext>
+    rtl::Reference<SvXMLImportContext>
                                 pTextPContext;
     sal_uInt16                  nPrefix;
 
@@ -877,8 +877,8 @@ SvXMLImportContext *ScXMLChangeTextPContext::CreateChildContext( sal_uInt16 nTem
         if (!pTextPContext)
         {
             bWasContext = false;
-            pTextPContext.reset( GetScImport().GetTextImport()->CreateTextChildContext(
-                                    GetScImport(), nPrefix, sLName, xAttrList) );
+            pTextPContext= GetScImport().GetTextImport()->CreateTextChildContext(
+                                    GetScImport(), nPrefix, sLName, xAttrList);
         }
         if (pTextPContext)
         {

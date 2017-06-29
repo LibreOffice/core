@@ -647,7 +647,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                     OUString transliteration;
                     getPropertyByName(aProperties, "Transliteration", true) >>= transliteration;
                     if ( !translit )
-                        translit.reset( new TransliterationImpl(m_xContext) );
+                        translit = new TransliterationImpl(m_xContext);
                     translit->loadModuleByImplName(transliteration, aLocale);
                     result += translit->transliterateString2String(tmp, 0, tmp.getLength());
                } catch (Exception& ) {

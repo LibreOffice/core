@@ -386,28 +386,67 @@ bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
         return true;
     }
 
-    std::string aParentName = fieldDecl->getParent()->getQualifiedNameAsString();
+    // check for dodgy code managing ref-counted stuff with shared_ptr or unique_ptr or similar stuff
+    QualType firstTemplateParamType;
+    if (auto recordType = fieldDecl->getType()->getUnqualifiedDesugaredType()->getAs<RecordType>()) {
+        auto recordDeclName = recordType->getDecl()->getName();
+        if (recordDeclName.contains("unique_ptr")
+            || recordDeclName.contains("shared_ptr")
+            || recordDeclName.contains("intrusive_ptr")) // boost
+        {
+            auto templateDecl = dyn_cast<ClassTemplateSpecializationDecl>(recordType->getDecl());
+            if (templateDecl && templateDecl->getTemplateArgs().size() > 0)
+                firstTemplateParamType = templateDecl->getTemplateArgs()[0].getAsType();
+        }
+    }
 
     if (containsSvRefBaseSubclass(fieldDecl->getType().getTypePtr())) {
         report(
             DiagnosticsEngine::Warning,
-            "SvRefBase subclass being directly heap managed, should be managed via tools::SvRef, "
-            + fieldDecl->getType().getAsString()
-            + ", parent is " + aParentName,
+            "SvRefBase subclass %0 being directly heap managed, should be managed via tools::SvRef, "
+            ", parent is %1",
             fieldDecl->getLocation())
-          << fieldDecl->getSourceRange();
+            << fieldDecl->getType()
+            << fieldDecl->getParent()
+            << fieldDecl->getSourceRange();
+    }
+
+    if (!firstTemplateParamType.isNull() && containsSvRefBaseSubclass(firstTemplateParamType.getTypePtr()))
+    {
+        report(
+            DiagnosticsEngine::Warning,
+            "SvRefBase subclass %0 being managed via smart pointer, should be managed via tools::SvRef, "
+            "parent is %1",
+            fieldDecl->getLocation())
+            << firstTemplateParamType
+            << fieldDecl->getParent()
+            << fieldDecl->getSourceRange();
     }
 
     if (containsSalhelperReferenceObjectSubclass(fieldDecl->getType().getTypePtr())) {
         report(
             DiagnosticsEngine::Warning,
-            "salhelper::SimpleReferenceObject subclass being directly heap managed, should be managed via rtl::Reference, "
-            + fieldDecl->getType().getAsString()
-            + ", parent is " + aParentName,
+            "salhelper::SimpleReferenceObject subclass %0 being directly heap managed, should be managed via rtl::Reference, "
+            "parent is %1",
             fieldDecl->getLocation())
-          << fieldDecl->getSourceRange();
+            << fieldDecl->getType()
+            << fieldDecl->getParent()
+            << fieldDecl->getSourceRange();
     }
 
+    if (!firstTemplateParamType.isNull() && containsSalhelperReferenceObjectSubclass(firstTemplateParamType.getTypePtr()))
+    {
+        report(
+            DiagnosticsEngine::Warning,
+            "salhelper::SimpleReferenceObject subclass %0 being managed via smart pointer, should be managed via rtl::Reference, "
+            "parent is %1",
+            fieldDecl->getLocation())
+            << firstTemplateParamType
+            << fieldDecl->getParent()
+            << fieldDecl->getSourceRange();
+    }
+
+    std::string aParentName = fieldDecl->getParent()->getQualifiedNameAsString();
     if ( aParentName == "com::sun::star::uno::BaseReference"
          || aParentName == "cppu::detail::element_alias"
          // this is playing some kind of game to avoid circular references
@@ -419,11 +458,24 @@ bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
     if (containsXInterfaceSubclass(fieldDecl->getType())) {
         report(
             DiagnosticsEngine::Warning,
-            "XInterface subclass being directly heap managed, should be managed via uno::Reference, "
-            + fieldDecl->getType().getAsString()
-            + ", parent is " + aParentName,
+            "XInterface subclass %0 being directly heap managed, should be managed via uno::Reference, "
+            "parent is %1",
             fieldDecl->getLocation())
-          << fieldDecl->getSourceRange();
+            << fieldDecl->getType()
+            << fieldDecl->getParent()
+            << fieldDecl->getSourceRange();
+    }
+
+    if (!firstTemplateParamType.isNull() && containsXInterfaceSubclass(firstTemplateParamType))
+    {
+        report(
+            DiagnosticsEngine::Warning,
+            "XInterface subclass %0 being managed via smart pointer, should be managed via uno::Reference, "
+            "parent is %1",
+            fieldDecl->getLocation())
+            << firstTemplateParamType
+            << fieldDecl->getParent()
+            << fieldDecl->getSourceRange();
     }
 
     checkUnoReference(fieldDecl->getType(), fieldDecl, aParentName, "field");

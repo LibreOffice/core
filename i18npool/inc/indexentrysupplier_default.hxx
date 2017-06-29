@@ -97,7 +97,7 @@ public:
     sal_Int16 mkeys[MAX_KEYS];
     sal_Int16 mkey_count;
     OUString skipping_chars;
-    std::unique_ptr<CollatorImpl> collator;
+    rtl::Reference<CollatorImpl> collator;
     sal_Int16 compare(sal_Unicode c1, sal_Unicode c2);
 };
 
