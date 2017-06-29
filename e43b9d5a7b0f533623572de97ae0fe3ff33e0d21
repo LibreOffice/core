@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_beee57ea",
+        "filename": "sal/osl/unx/pipe.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-29T13:30:05Z",
+      "side": 1,
+      "message": "asserts are compiled out in non-debug builds, so you can\u0027t do this.",
+      "revId": "e43b9d5a7b0f533623572de97ae0fe3ff33e0d21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_febe1fd3",
+        "filename": "sal/osl/w32/pipe.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-29T13:30:05Z",
+      "side": 1,
+      "message": "ditto here",
+      "revId": "e43b9d5a7b0f533623572de97ae0fe3ff33e0d21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_3eb987ea",
+        "filename": "sal/osl/w32/pipe.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-29T13:30:05Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "e43b9d5a7b0f533623572de97ae0fe3ff33e0d21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
