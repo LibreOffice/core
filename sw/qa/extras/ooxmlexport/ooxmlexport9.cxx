@@ -526,6 +526,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99227, "tdf99227.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf82173_footnoteStyle, "tdf82173_footnoteStyle.docx")
 {
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+
+    uno::Reference<text::XText> xFootnoteText;
+    xFootnotes->getByIndex(0) >>= xFootnoteText;
+    // This was footnote text, which didn't match with newly created footnotes
+    CPPUNIT_ASSERT_EQUAL(OUString("Footnote"), getProperty<OUString>(getParagraphOfText(1, xFootnoteText), "ParaStyleName"));
+
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("CharacterStyles")->getByName("Footnote Characters"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(58),       getProperty< sal_Int32 >(xPageStyle, "CharEscapementHeight") );
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0x00FF00), getProperty< sal_Int32 >(xPageStyle, "CharColor") );
@@ -547,7 +555,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82173_endnoteStyle, "tdf82173_endnoteStyle.docx"
 
     uno::Reference<text::XText> xEndnoteText;
     xEndnotes->getByIndex(0) >>= xEndnoteText;
-    // This was Footnote Symbol
+    // This was Endnote Symbol
     CPPUNIT_ASSERT_EQUAL(OUString("Endnote"), getProperty<OUString>(getParagraphOfText(1, xEndnoteText), "ParaStyleName"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x993300), getProperty<sal_Int32>(getParagraphOfText(1, xEndnoteText), "CharColor"));
 
