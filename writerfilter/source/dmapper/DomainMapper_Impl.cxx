@@ -226,6 +226,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bSdt(false),
         m_bIsFirstRun(false),
         m_bIsOutsideAParagraph(true),
+        m_bDeferredSectionActive(false),
         m_xAnnotationField(),
         m_nAnnotationId( -1 ),
         m_aAnnotationPositions(),
@@ -488,13 +489,16 @@ void DomainMapper_Impl::SetSdt(bool bSdt)
 }
 
 
-void    DomainMapper_Impl::PushProperties(ContextType eId)
+void DomainMapper_Impl::PushProperties(ContextType eId)
 {
     PropertyMapPtr pInsert(eId == CONTEXT_SECTION ?
         (new SectionPropertyMap( m_bIsFirstSection )) :
         eId == CONTEXT_PARAGRAPH ? new ParagraphPropertyMap :  new PropertyMap);
     if(eId == CONTEXT_SECTION)
     {
+        // Deferred section must be popped before other sections can be pushed
+        assert(!m_bDeferredSectionActive);
+
         if( m_bIsFirstSection )
             m_bIsFirstSection = false;
         // beginning with the second section group a section has to be inserted
@@ -539,14 +543,34 @@ void DomainMapper_Impl::PushListProperties(const PropertyMapPtr& pListProperties
 }
 
 
-void    DomainMapper_Impl::PopProperties(ContextType eId)
+void DomainMapper_Impl::PushDeferredSectionProperties()
+{
+    assert(!m_bDeferredSectionActive);
+    PopDeferredSectionProperties();
+    m_pDeferredSectionContext.reset(new SectionPropertyMap(m_bIsFirstSection));
+
+    m_aPropertyStacks[CONTEXT_SECTION].push(m_pDeferredSectionContext);
+    m_aContextStack.push(CONTEXT_SECTION);
+    m_pTopContext = m_pDeferredSectionContext;
+
+    m_bDeferredSectionActive = true;
+}
+
+
+void DomainMapper_Impl::PopProperties(ContextType eId)
 {
     OSL_ENSURE(!m_aPropertyStacks[eId].empty(), "section stack already empty");
     if ( m_aPropertyStacks[eId].empty() )
         return;
+    OSL_ENSURE(!m_aContextStack.empty() && (m_aContextStack.top() == eId), "context stack is empty or its top is of wrong type");
 
     if ( eId == CONTEXT_SECTION )
     {
+        if (m_bDeferredSectionActive)
+        {
+            assert(m_aPropertyStacks[CONTEXT_SECTION].top() == m_pDeferredSectionContext);
+            m_bDeferredSectionActive = false;
+        }
         m_pLastSectionContext = m_aPropertyStacks[eId].top( );
     }
     else if (eId == CONTEXT_CHARACTER)
@@ -560,12 +584,32 @@ void    DomainMapper_Impl::PopProperties(ContextType eId)
     m_aPropertyStacks[eId].pop();
     m_aContextStack.pop();
     if(!m_aContextStack.empty() && !m_aPropertyStacks[m_aContextStack.top()].empty())
-
-            m_pTopContext = m_aPropertyStacks[m_aContextStack.top()].top();
+        m_pTopContext = m_aPropertyStacks[m_aContextStack.top()].top();
     else
     {
         // OSL_ENSURE(eId == CONTEXT_SECTION, "this should happen at a section context end");
         m_pTopContext.reset();
+    }
+}
+
+
+void DomainMapper_Impl::PopDeferredSectionProperties()
+{
+    if (m_bDeferredSectionActive)
+        PopProperties(CONTEXT_SECTION);
+}
+
+
+void DomainMapper_Impl::ApplyDeferredSectionProperties()
+{
+    assert(!m_bDeferredSectionActive);
+    PopDeferredSectionProperties();
+    if (!m_aPropertyStacks[CONTEXT_SECTION].empty())
+    {
+        SectionPropertyMap* pSection = dynamic_cast<SectionPropertyMap*>(m_aPropertyStacks[CONTEXT_SECTION].top().get());
+        if (pSection)
+            pSection->InsertSectionProps(m_pDeferredSectionContext);
+        m_pDeferredSectionContext.reset();
     }
 }
 
