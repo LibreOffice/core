@@ -195,6 +195,18 @@ public:
     */
     virtual void endSectionGroup() = 0;
 
+    /**
+       Same as pair above, but creates a section properties data to be applied later.
+       Does not stop current normal section group.
+    */
+    virtual void startDeferredSectionGroupDefinition() = 0;
+    virtual void endDeferredSectionGroupDefinition() = 0;
+
+    /**
+       If deferred section group was created by the pair above, set it active.
+    */
+    virtual void applyDeferredSectionGroup() = 0;
+
     /// The current section is the last one in this body text.
     virtual void markLastSectionGroup( ) { };
 
