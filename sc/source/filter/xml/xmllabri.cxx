@@ -27,10 +27,9 @@ using namespace xmloff::token;
 
 ScXMLLabelRangesContext::ScXMLLabelRangesContext(
         ScXMLImport& rImport,
-        sal_uInt16 nPrefix,
-        const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList >& /* xAttrList */ ):
-    ScXMLImportContext( rImport, nPrefix, rLName )
+        sal_Int32 /*nElement*/,
+        const uno::Reference< xml::sax::XFastAttributeList >& /* xAttrList */ ):
+    ScXMLImportContext( rImport )
 {
     rImport.LockSolarMutex();
 }
@@ -58,10 +57,6 @@ SvXMLImportContext* ScXMLLabelRangesContext::CreateChildContext(
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 
     return pContext;
-}
-
-void ScXMLLabelRangesContext::EndElement()
-{
 }
 
 ScXMLLabelRangeContext::ScXMLLabelRangeContext(

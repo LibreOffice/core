@@ -384,33 +384,27 @@ public:
 };
 
 ScXMLTrackedChangesContext::ScXMLTrackedChangesContext( ScXMLImport& rImport,
-                                              sal_uInt16 nPrfx,
-                                                   const OUString& rLName,
-                                              const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+                                              sal_Int32 /*nElement*/,
+                                              const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
                                               ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport ),
     pChangeTrackingImportHelper(pTempChangeTrackingImportHelper)
 {
     rImport.LockSolarMutex();
 
-    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    if( xAttrList.is() )
     {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName ));
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
-        if (nPrefix == XML_NAMESPACE_TABLE)
+        sax_fastparser::FastAttributeList *pAttribList =
+            static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
+
+        auto aIter( pAttribList->find( XML_ELEMENT( TABLE, XML_PROTECTION_KEY ) ) );
+        if( aIter != pAttribList->end() )
         {
-            if (IsXMLToken(aLocalName, XML_PROTECTION_KEY))
+            if( !aIter.isEmpty() )
             {
-                if (!sValue.isEmpty())
-                {
-                    uno::Sequence<sal_Int8> aPass;
-                    ::sax::Converter::decodeBase64(aPass, sValue);
-                    pChangeTrackingImportHelper->SetProtection(aPass);
-                }
+                uno::Sequence<sal_Int8> aPass;
+                ::sax::Converter::decodeBase64( aPass, aIter.toString() );
+                pChangeTrackingImportHelper->SetProtection(aPass);
             }
         }
     }
@@ -455,10 +449,6 @@ SvXMLImportContext *ScXMLTrackedChangesContext::CreateChildContext( sal_uInt16 n
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
     return pContext;
-}
-
-void ScXMLTrackedChangesContext::EndElement()
-{
 }
 
 ScXMLChangeInfoContext::ScXMLChangeInfoContext(  ScXMLImport& rImport,

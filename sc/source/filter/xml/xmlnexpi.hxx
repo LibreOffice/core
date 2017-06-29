@@ -70,8 +70,8 @@ public:
     };
 
     ScXMLNamedExpressionsContext(
-        ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+        ScXMLImport& rImport, sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
         Inserter* pInserter );
 
     virtual ~ScXMLNamedExpressionsContext() override;
@@ -79,8 +79,6 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
-
-    virtual void EndElement() override;
 
 private:
     std::shared_ptr<Inserter> mpInserter;

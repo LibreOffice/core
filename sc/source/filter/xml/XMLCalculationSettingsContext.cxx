@@ -32,10 +32,9 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 
 ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) :
+    ScXMLImportContext( rImport ),
     fIterationEpsilon(0.001),
     nIterationCount(100),
     nYear2000(1930),
@@ -49,53 +48,45 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
     aNullDate.Day = 30;
     aNullDate.Month = 12;
     aNullDate.Year = 1899;
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    if( xAttrList.is() )
     {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName );
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
+        sax_fastparser::FastAttributeList *pAttribList =
+            static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
 
-        if (nPrefix == XML_NAMESPACE_TABLE)
+        for( auto &aIter : *pAttribList )
         {
-            if (IsXMLToken(aLocalName, XML_CASE_SENSITIVE))
+            switch( aIter.getToken() )
             {
-                if (IsXMLToken(sValue, XML_FALSE))
+            case XML_ELEMENT( TABLE, XML_CASE_SENSITIVE ):
+                if( IsXMLToken( aIter.toCString(), XML_FALSE ) )
                     bIgnoreCase = true;
-            }
-            else if (IsXMLToken(aLocalName, XML_PRECISION_AS_SHOWN))
-            {
-                if (IsXMLToken(sValue, XML_TRUE))
+                break;
+            case XML_ELEMENT( TABLE, XML_PRECISION_AS_SHOWN ):
+                if( IsXMLToken( aIter.toCString(), XML_TRUE ) )
                     bCalcAsShown = true;
-            }
-            else if (IsXMLToken(aLocalName, XML_SEARCH_CRITERIA_MUST_APPLY_TO_WHOLE_CELL))
-            {
-                if (IsXMLToken(sValue, XML_FALSE))
+                break;
+            case XML_ELEMENT( TABLE, XML_SEARCH_CRITERIA_MUST_APPLY_TO_WHOLE_CELL ):
+                if( IsXMLToken( aIter.toCString(), XML_FALSE ) )
                     bMatchWholeCell = false;
-            }
-            else if (IsXMLToken(aLocalName, XML_AUTOMATIC_FIND_LABELS))
-            {
-                if (IsXMLToken(sValue, XML_FALSE))
+                break;
+            case XML_ELEMENT( TABLE, XML_AUTOMATIC_FIND_LABELS ):
+                if( IsXMLToken( aIter.toCString(), XML_FALSE ) )
                     bLookUpLabels = false;
-            }
-            else if (IsXMLToken(aLocalName, XML_NULL_YEAR))
-            {
+                break;
+            case XML_ELEMENT( TABLE, XML_NULL_YEAR ):
                 sal_Int32 nTemp;
-                ::sax::Converter::convertNumber(nTemp, sValue);
+                ::sax::Converter::convertNumber( nTemp, aIter.toString() );
                 nYear2000 = static_cast<sal_uInt16>(nTemp);
-            }
-            else if (IsXMLToken(aLocalName, XML_USE_REGULAR_EXPRESSIONS))
-            {
+                break;
+            case XML_ELEMENT( TABLE, XML_USE_REGULAR_EXPRESSIONS ):
                 // Overwrite only the default (regex true) value, not wildcard.
-                if (eSearchType == utl::SearchParam::SearchType::Regexp && IsXMLToken(sValue, XML_FALSE))
+                if( eSearchType == utl::SearchParam::SearchType::Regexp && IsXMLToken( aIter.toCString(), XML_FALSE ) )
                     eSearchType = utl::SearchParam::SearchType::Normal;
-            }
-            else if (IsXMLToken(aLocalName, XML_USE_WILDCARDS))
-            {
-                if (IsXMLToken(sValue, XML_TRUE))
+                break;
+            case XML_ELEMENT( TABLE, XML_USE_WILDCARDS ):
+                if( IsXMLToken( aIter.toCString(), XML_TRUE ) )
                     eSearchType = utl::SearchParam::SearchType::Wildcard;
+                break;
             }
         }
     }
@@ -125,7 +116,7 @@ SvXMLImportContext *ScXMLCalculationSettingsContext::CreateChildContext( sal_uIn
     return pContext;
 }
 
-void ScXMLCalculationSettingsContext::EndElement()
+void SAL_CALL ScXMLCalculationSettingsContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     if (GetScImport().GetModel().is())
     {

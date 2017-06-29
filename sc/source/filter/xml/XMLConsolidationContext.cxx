@@ -24,54 +24,50 @@
 #include "XMLConverter.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/xmlnmspe.hxx>
 
 using namespace ::com::sun::star;
 using namespace xmloff::token;
 
 ScXMLConsolidationContext::ScXMLConsolidationContext(
         ScXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList >& xAttrList ) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+        sal_Int32 /*nElement*/,
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList ) :
+    ScXMLImportContext( rImport ),
     eFunction( SUBTOTAL_FUNC_NONE ),
     bLinkToSource( false ),
     bTargetAddr(false)
 {
     rImport.LockSolarMutex();
-    if( !xAttrList.is() ) return;
-
-    sal_Int16               nAttrCount      = xAttrList->getLength();
-    const SvXMLTokenMap&    rAttrTokenMap   = GetScImport().GetConsolidationAttrTokenMap();
-
-    for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
+    if( xAttrList.is() )
     {
-        const OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
-        const OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sax_fastparser::FastAttributeList *pAttribList =
+            static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
 
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
+        for( auto &aIter : *pAttribList )
         {
-            case XML_TOK_CONSOLIDATION_ATTR_FUNCTION:
-                eFunction = ScXMLConverter::GetSubTotalFuncFromString( sValue );
-            break;
-            case XML_TOK_CONSOLIDATION_ATTR_SOURCE_RANGES:
-                sSourceList = sValue;
-            break;
-            case XML_TOK_CONSOLIDATION_ATTR_TARGET_ADDRESS:
-                {
-                    sal_Int32 nOffset(0);
-                    bTargetAddr = ScRangeStringConverter::GetAddressFromString(
-                        aTargetAddr, sValue, GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset );
-                }
+            switch( aIter.getToken() )
+            {
+                case XML_ELEMENT( TABLE, XML_FUNCTION ):
+                    eFunction = ScXMLConverter::GetSubTotalFuncFromString( aIter.toString() );
                 break;
-            case XML_TOK_CONSOLIDATION_ATTR_USE_LABEL:
-                sUseLabel = sValue;
-            break;
-            case XML_TOK_CONSOLIDATION_ATTR_LINK_TO_SOURCE:
-                bLinkToSource = IsXMLToken(sValue, XML_TRUE);
-            break;
+                case XML_ELEMENT( TABLE, XML_SOURCE_CELL_RANGE_ADDRESSES ):
+                    sSourceList = aIter.toString();
+                break;
+                case XML_ELEMENT( TABLE, XML_TARGET_CELL_ADDRESS ):
+                    {
+                        sal_Int32 nOffset(0);
+                        bTargetAddr = ScRangeStringConverter::GetAddressFromString(
+                            aTargetAddr, aIter.toString(), GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset );
+                    }
+                    break;
+                case XML_ELEMENT( TABLE, XML_USE_LABEL ):
+                    sUseLabel = aIter.toString();
+                break;
+                case XML_ELEMENT( TABLE, XML_LINK_TO_SOURCE_DATA ):
+                    bLinkToSource = IsXMLToken( aIter.toCString(), XML_TRUE );
+                break;
+            }
         }
     }
 }
@@ -89,7 +85,7 @@ SvXMLImportContext *ScXMLConsolidationContext::CreateChildContext(
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
-void ScXMLConsolidationContext::EndElement()
+void SAL_CALL ScXMLConsolidationContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     if (bTargetAddr)
     {

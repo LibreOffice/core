@@ -32,17 +32,14 @@ class ScXMLContentValidationsContext : public ScXMLImportContext
 {
 public:
 
-    ScXMLContentValidationsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const OUString& rLName,
-                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList);
+    ScXMLContentValidationsContext( ScXMLImport& rImport, sal_Int32 nElement,
+                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList);
 
     virtual ~ScXMLContentValidationsContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
-
-    virtual void EndElement() override;
 };
 
 #endif

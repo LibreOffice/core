@@ -32,10 +32,9 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 
 ScXMLDDELinksContext::ScXMLDDELinksContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ ) :
-    ScXMLImportContext( rImport, nPrfx, rLName )
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */ ) :
+    ScXMLImportContext( rImport )
 {
     // here are no attributes
     rImport.LockSolarMutex();
@@ -59,10 +58,6 @@ SvXMLImportContext *ScXMLDDELinksContext::CreateChildContext( sal_uInt16 nPrefix
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 
     return pContext;
-}
-
-void ScXMLDDELinksContext::EndElement()
-{
 }
 
 ScXMLDDELinkContext::ScXMLDDELinkContext( ScXMLImport& rImport,

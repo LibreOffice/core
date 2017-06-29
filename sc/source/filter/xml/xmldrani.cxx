@@ -53,10 +53,9 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 
 ScXMLDatabaseRangesContext::ScXMLDatabaseRangesContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ ) :
-    ScXMLImportContext( rImport, nPrfx, rLName )
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */ ) :
+    ScXMLImportContext( rImport )
 {
     // has no attributes
     rImport.LockSolarMutex();
@@ -67,38 +66,31 @@ ScXMLDatabaseRangesContext::~ScXMLDatabaseRangesContext()
     GetScImport().UnlockSolarMutex();
 }
 
-SvXMLImportContext *ScXMLDatabaseRangesContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDatabaseRangesContext::createFastChildContext(
+                                      sal_Int32 nElement,
+                                      const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 
-    const SvXMLTokenMap& rTokenMap = GetScImport().GetDatabaseRangesElemTokenMap();
-    switch( rTokenMap.Get( nPrefix, rLName ) )
+    switch( nElement )
     {
-        case XML_TOK_DATABASE_RANGE :
+        case XML_ELEMENT( TABLE, XML_DATABASE_RANGE ):
         {
-            pContext = new ScXMLDatabaseRangeContext( GetScImport(), nPrefix,
-                                                          rLName, xAttrList);
+            pContext = new ScXMLDatabaseRangeContext( GetScImport(), nElement, xAttrList );
         }
         break;
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
 
-void ScXMLDatabaseRangesContext::EndElement()
-{
-}
-
 ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) :
+    ScXMLImportContext( rImport ),
     mpQueryParam(new ScQueryParam),
     sDatabaseRangeName(STR_DB_LOCAL_NONAME),
     aSortSequence(),
@@ -125,76 +117,74 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     meRangeType(ScDBCollection::GlobalNamed)
 {
     nSourceType = sheet::DataImportMode_NONE;
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDatabaseRangeAttrTokenMap();
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    if( xAttrList.is() )
     {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName );
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
+        sax_fastparser::FastAttributeList *pAttribList =
+            static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
 
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
+        for( auto &aIter : *pAttribList )
         {
-            case XML_TOK_DATABASE_RANGE_ATTR_NAME :
+            switch( aIter.getToken() )
             {
-                sDatabaseRangeName = sValue;
+                case XML_ELEMENT( TABLE, XML_NAME ):
+                {
+                    sDatabaseRangeName = aIter.toString();
+                }
+                break;
+                case XML_ELEMENT( TABLE, XML_IS_SELECTION ):
+                {
+                    bIsSelection = IsXMLToken( aIter.toCString(), XML_TRUE );
+                }
+                break;
+                case XML_ELEMENT( TABLE, XML_ON_UPDATE_KEEP_STYLES ):
+                {
+                    bKeepFormats = IsXMLToken( aIter.toCString(), XML_TRUE );
+                }
+                break;
+                case XML_ELEMENT( TABLE, XML_ON_UPDATE_KEEP_SIZE ):
+                {
+                    bMoveCells = !IsXMLToken( aIter.toCString(), XML_TRUE );
+                }
+                break;
+                case XML_ELEMENT( TABLE, XML_HAS_PERSISTENT_DATA ):
+                {
+                    bStripData = !IsXMLToken( aIter.toCString(), XML_TRUE );
+                }
+                break;
+                case XML_ELEMENT( TABLE, XML_ORIENTATION ):
+                {
+                    bByRow = !IsXMLToken( aIter.toCString(), XML_COLUMN );
+                    mpQueryParam->bByRow = bByRow;
+                }
+                break;
+                case XML_ELEMENT( TABLE, XML_CONTAINS_HEADER ):
+                {
+                    bHasHeader = IsXMLToken( aIter.toCString(), XML_TRUE );
+                    mpQueryParam->bHasHeader = bHasHeader;
+                }
+                break;
+                case XML_ELEMENT( TABLE, XML_DISPLAY_FILTER_BUTTONS ):
+                {
+                    bAutoFilter = IsXMLToken( aIter.toCString(), XML_TRUE );
+                }
+                break;
+                case XML_ELEMENT( TABLE, XML_TARGET_RANGE_ADDRESS ):
+                {
+                    ScDocument* pDoc = GetScImport().GetDocument();
+                    sal_Int32 nOffset = 0;
+                    if (!ScRangeStringConverter::GetRangeFromString(
+                        maRange, aIter.toString(), pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset))
+                        mbValidRange = false;
+                }
+                break;
+                case XML_ELEMENT( TABLE, XML_REFRESH_DELAY ):
+                {
+                    double fTime;
+                    if (::sax::Converter::convertDuration( fTime, aIter.toString() ))
+                        nRefresh = std::max( (sal_Int32)(fTime * 86400.0), (sal_Int32)0 );
+                }
+                break;
             }
-            break;
-            case XML_TOK_DATABASE_RANGE_ATTR_IS_SELECTION :
-            {
-                bIsSelection = IsXMLToken(sValue, XML_TRUE);
-            }
-            break;
-            case XML_TOK_DATABASE_RANGE_ATTR_ON_UPDATE_KEEP_STYLES :
-            {
-                bKeepFormats = IsXMLToken(sValue, XML_TRUE);
-            }
-            break;
-            case XML_TOK_DATABASE_RANGE_ATTR_ON_UPDATE_KEEP_SIZE :
-            {
-                bMoveCells = !IsXMLToken(sValue, XML_TRUE);
-            }
-            break;
-            case XML_TOK_DATABASE_RANGE_ATTR_HAS_PERSISTENT_DATA :
-            {
-                bStripData = !IsXMLToken(sValue, XML_TRUE);
-            }
-            break;
-            case XML_TOK_DATABASE_RANGE_ATTR_ORIENTATION :
-            {
-                bByRow = !IsXMLToken(sValue, XML_COLUMN);
-                mpQueryParam->bByRow = bByRow;
-            }
-            break;
-            case XML_TOK_DATABASE_RANGE_ATTR_CONTAINS_HEADER :
-            {
-                bHasHeader = IsXMLToken(sValue, XML_TRUE);
-                mpQueryParam->bHasHeader = bHasHeader;
-            }
-            break;
-            case XML_TOK_DATABASE_RANGE_ATTR_DISPLAY_FILTER_BUTTONS :
-            {
-                bAutoFilter = IsXMLToken(sValue, XML_TRUE);
-            }
-            break;
-            case XML_TOK_DATABASE_RANGE_ATTR_TARGET_RANGE_ADDRESS :
-            {
-                ScDocument* pDoc = GetScImport().GetDocument();
-                sal_Int32 nOffset = 0;
-                if (!ScRangeStringConverter::GetRangeFromString(
-                    maRange, sValue, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset))
-                    mbValidRange = false;
-            }
-            break;
-            case XML_TOK_DATABASE_RANGE_ATTR_REFRESH_DELAY :
-            {
-                double fTime;
-                if (::sax::Converter::convertDuration( fTime, sValue ))
-                    nRefresh = std::max( (sal_Int32)(fTime * 86400.0), (sal_Int32)0 );
-            }
-            break;
         }
     }
 
@@ -420,7 +410,7 @@ bool setAutoFilterFlags(ScDocument& rDoc, const ScDBData& rData)
 
 }
 
-void ScXMLDatabaseRangeContext::EndElement()
+void SAL_CALL ScXMLDatabaseRangeContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     ScDocument* pDoc = GetScImport().GetDocument();
     if (!pDoc)

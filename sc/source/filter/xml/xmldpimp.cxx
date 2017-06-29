@@ -56,10 +56,9 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
 
 ScXMLDataPilotTablesContext::ScXMLDataPilotTablesContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ ) :
-    ScXMLImportContext( rImport, nPrfx, rLName )
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */ ) :
+    ScXMLImportContext( rImport )
 {
     // has no Attributes
     rImport.LockSolarMutex();
@@ -91,10 +90,6 @@ SvXMLImportContext *ScXMLDataPilotTablesContext::CreateChildContext( sal_uInt16 
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 
     return pContext;
-}
-
-void ScXMLDataPilotTablesContext::EndElement()
-{
 }
 
 ScXMLDataPilotTableContext::GrandTotalItem::GrandTotalItem() :
