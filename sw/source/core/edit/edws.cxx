@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <officecfg/Office/Common.hxx>
+
 #include <vcl/window.hxx>
 
 #include <editsh.hxx>
@@ -40,7 +42,10 @@ SwEditShell::SwEditShell( SwEditShell& rEdSH, vcl::Window *pWindow )
 SwEditShell::SwEditShell( SwDoc& rDoc, vcl::Window *pWindow, const SwViewOption *pOptions )
     : SwCursorShell( rDoc, pWindow, pOptions )
 {
-    GetDoc()->GetIDocumentUndoRedo().DoUndo(true);
+    if (0 < officecfg::Office::Common::Undo::Steps::get())
+    {
+        GetDoc()->GetIDocumentUndoRedo().DoUndo(true);
+    }
 }
 
 SwEditShell::~SwEditShell() // USED
