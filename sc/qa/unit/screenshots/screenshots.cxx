@@ -196,9 +196,10 @@ VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)
 
         case 7: // "modules/scalc/ui/createnamesdialog.ui"
         {
-            //// just fake some flags
-            CreateNameFlags nFlags = CreateNameFlags::Left | CreateNameFlags::Top;
-            pReturnDialog = mpFact->CreateScNameCreateDlg(mpViewShell->GetDialogParent(), nFlags);
+            pReturnDialog = mpFact->CreateScNameCreateDlg(
+                mpViewShell->GetDialogParent(),
+                CreateNameFlags::Left | CreateNameFlags::Top);
+                    // just fake some flags
             break;
         }
 
