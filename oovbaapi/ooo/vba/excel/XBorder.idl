@@ -35,6 +35,7 @@ interface XBorder
     [attribute] any ColorIndex;
     [attribute] any LineStyle;
     [attribute] any Weight;
+    [attribute] any TintAndShade;
 };
 
 
