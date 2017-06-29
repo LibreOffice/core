@@ -327,10 +327,9 @@ css::uno::Any MacOSXBackend::getPropertyValue(
     } else if ( PropertyName == "ooInetProxyType" )
     {
         // override default for ProxyType, which is "0" meaning "No proxies".
-        sal_Int32 nProperties = 1;
         return css::uno::makeAny(
             css::beans::Optional< css::uno::Any >(
-                true, uno::makeAny( nProperties ) ) );
+                true, uno::makeAny( sal_Int32(1) ) ) );
     } else if ( PropertyName == "ooInetNoProxy" )
     {
         rtl::OUString aProxyBypassList;
