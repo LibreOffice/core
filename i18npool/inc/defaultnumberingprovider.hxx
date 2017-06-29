@@ -23,9 +23,10 @@
 #include <com/sun/star/text/XNumberingFormatter.hpp>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/i18n/XTransliteration.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 #include <transliterationImpl.hxx>
 
@@ -74,7 +75,7 @@ public:
 private:
     css::uno::Reference < css::uno::XComponentContext > m_xContext;
     css::uno::Reference < css::container::XHierarchicalNameAccess > xHierarchicalNameAccess;
-    std::unique_ptr<TransliterationImpl> translit;
+    rtl::Reference<TransliterationImpl> translit;
     /// @throws css::uno::RuntimeException
     OUString SAL_CALL makeNumberingIdentifier( sal_Int16 index );
     /// @throws css::uno::RuntimeException

@@ -37,7 +37,7 @@ OIndexHelper::OIndexHelper( OTableHelper* _pTable) : connectivity::sdbcx::OIndex
 {
     construct();
     std::vector< OUString> aVector;
-    m_pColumns.reset( new OIndexColumns(this,m_aMutex,aVector) );
+    m_pColumns = new OIndexColumns(this,m_aMutex,aVector);
 }
 
 OIndexHelper::OIndexHelper( OTableHelper* _pTable,
@@ -93,7 +93,7 @@ void OIndexHelper::refreshColumns()
     if(m_pColumns)
         m_pColumns->reFill(aVector);
     else
-        m_pColumns.reset( new OIndexColumns(this,m_aMutex,aVector) );
+        m_pColumns = new OIndexColumns(this,m_aMutex,aVector);
 }
 
 

@@ -69,7 +69,7 @@ namespace connectivity
         {
         protected:
             std::shared_ptr<KeyProperties>   m_aProps;
-            std::unique_ptr<OCollection>     m_pColumns;
+            rtl::Reference<OCollection>      m_pColumns;
 
             using ODescriptor_BASE::rBHelper;
             // OPropertyArrayUsageHelper

@@ -64,7 +64,7 @@ void OAdoKey::refreshColumns()
     if(m_pColumns)
         m_pColumns->reFill(aVector);
     else
-        m_pColumns.reset( new OColumns(*this,m_aMutex,aVector,aColumns,isCaseSensitive(),m_pConnection) );
+        m_pColumns = new OColumns(*this,m_aMutex,aVector,aColumns,isCaseSensitive(),m_pConnection);
 }
 
 Sequence< sal_Int8 > OAdoKey::getUnoTunnelImplementationId()

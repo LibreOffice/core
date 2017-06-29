@@ -103,7 +103,7 @@ void ODbaseIndex::refreshColumns()
     if(m_pColumns)
         m_pColumns->reFill(aVector);
     else
-        m_pColumns.reset( new ODbaseIndexColumns(this,m_aMutex,aVector) );
+        m_pColumns = new ODbaseIndexColumns(this,m_aMutex,aVector);
 }
 
 Sequence< sal_Int8 > ODbaseIndex::getUnoTunnelImplementationId()

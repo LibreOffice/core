@@ -34,7 +34,7 @@ class SW_DLLPUBLIC SwDBTreeList : public SvTreeListBox
     bool            bInitialized;
     bool            bShowColumns;
 
-    std::unique_ptr<SwDBTreeList_Impl> pImpl;
+    rtl::Reference<SwDBTreeList_Impl> pImpl;
 
     DECL_DLLPRIVATE_LINK( DBCompare, const SvSortData&, sal_Int32 );
 
