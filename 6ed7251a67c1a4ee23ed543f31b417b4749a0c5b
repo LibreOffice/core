@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_5e95733e",
+        "filename": "xmlscript/source/xmldlg_imexp/xmldlg_impmodels.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1836,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-06-29T14:04:39Z",
+      "side": 1,
+      "message": "Shouldn\u0027t it be \"or\" ?\nIndeed, we\u0027re testing styles, then bulletinboard (see comments above)",
+      "range": {
+        "startLine": 1836,
+        "startChar": 55,
+        "endLine": 1836,
+        "endChar": 58
+      },
+      "revId": "6ed7251a67c1a4ee23ed543f31b417b4749a0c5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
