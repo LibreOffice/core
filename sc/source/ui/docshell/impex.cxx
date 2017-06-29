@@ -2209,36 +2209,6 @@ bool ScImportExport::HTML2Doc( SvStream& rStrm, const OUString& rBaseURL )
 
 #ifndef DISABLE_DYNLOADING
 
-class ScFormatFilterMissing : public ScFormatFilterPlugin {
-  public:
-    ScFormatFilterMissing()
-    {
-      OSL_FAIL("Missing file filters");
-    }
-    virtual ~ScFormatFilterMissing() {}
-    virtual ErrCode ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding ) override { return SCERR_IMPORT_INTERNAL; }
-    virtual ErrCode ScImportQuattroPro( SvStream*, ScDocument* ) override { return SCERR_IMPORT_INTERNAL; }
-    virtual ErrCode ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) override { return SCERR_IMPORT_INTERNAL; }
-    virtual ErrCode ScImportStarCalc10( SvStream&, ScDocument* ) override { return SCERR_IMPORT_INTERNAL; }
-    virtual ErrCode ScImportDif( SvStream&, ScDocument*, const ScAddress&,
-                 const rtl_TextEncoding ) override { return SCERR_IMPORT_INTERNAL; }
-    virtual ErrCode ScImportRTF( SvStream&, const OUString&, ScDocument*, ScRange& ) override { return SCERR_IMPORT_INTERNAL; }
-    virtual ErrCode ScImportHTML( SvStream&, const OUString&, ScDocument*, ScRange&, double, bool, SvNumberFormatter*, bool ) override { return SCERR_IMPORT_INTERNAL; }
-
-    virtual ScEEAbsImport *CreateRTFImport( ScDocument*, const ScRange& ) override { return nullptr; }
-    virtual ScEEAbsImport *CreateHTMLImport( ScDocument*, const OUString&, const ScRange& ) override { return nullptr; }
-    virtual OUString       GetHTMLRangeNameList( ScDocument*, const OUString& ) override { return OUString(); }
-
-    virtual ErrCode ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel, rtl_TextEncoding ) override { return SCERR_IMPORT_INTERNAL; }
-    virtual void ScExportDif( SvStream&, ScDocument*, const ScAddress&, const rtl_TextEncoding ) override {}
-    virtual void ScExportDif( SvStream&, ScDocument*, const ScRange&, const rtl_TextEncoding ) override {}
-    virtual void ScExportHTML( SvStream&, const OUString&, ScDocument*, const ScRange&, const rtl_TextEncoding, bool,
-                  const OUString&, OUString&, const OUString& ) override {}
-    virtual void ScExportRTF( SvStream&, ScDocument*, const ScRange&, const rtl_TextEncoding ) override {}
-
-    virtual ScOrcusFilters* GetOrcusFilters() override { return nullptr; }
-};
-
 extern "C" { static void SAL_CALL thisModule() {} }
 
 #else
@@ -2269,8 +2239,7 @@ ScFormatFilterPlugin &ScFormatFilter::Get()
         if (fn != nullptr)
             plugin = reinterpret_cast<FilterFn>(fn)();
     }
-    if (plugin == nullptr)
-        plugin = new ScFormatFilterMissing();
+    assert(plugin != nullptr);
 #else
     plugin = ScFilterCreate();
 #endif
