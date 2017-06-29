@@ -2946,6 +2946,31 @@ void DomainMapper::lcl_endSectionGroup()
     }
 }
 
+void DomainMapper::lcl_startDeferredSectionGroupDefinition()
+{
+    if (!m_pImpl->isInIndexContext() && !m_pImpl->isInBibliographyContext())
+    {
+        m_pImpl->PushDeferredSectionProperties(true);
+    }
+}
+
+void DomainMapper::lcl_endDeferredSectionGroupDefinition()
+{
+    if (!m_pImpl->isInIndexContext() && !m_pImpl->isInBibliographyContext())
+    {
+        m_pImpl->PopDeferredSectionProperties();
+    }
+}
+
+void DomainMapper::lcl_applyDeferredSectionGroup()
+{
+    if (!m_pImpl->isInIndexContext() && !m_pImpl->isInBibliographyContext())
+    {
+        // When pushing, do not clear existing properties
+        m_pImpl->PushDeferredSectionProperties(false);
+    }
+}
+
 void DomainMapper::lcl_startParagraphGroup()
 {
     if (m_pImpl->hasTableManager())
