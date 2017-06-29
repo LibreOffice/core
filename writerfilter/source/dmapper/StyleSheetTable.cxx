@@ -46,11 +46,22 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+
+/** Functor for case-insensitive string comparison, usable in maps etc. */
+struct IgnoreCaseCompare
+{
+    bool operator()( const OUString& rName1, const OUString& rName2 ) const
+        { return rName1.compareToIgnoreAsciiCase( rName2 ) < 0; }
+};
+
+} // namespace
+
 namespace writerfilter {
 namespace dmapper
 {
 
-typedef ::std::map< OUString, OUString> StringPairMap_t;
+typedef ::std::map< OUString, OUString, IgnoreCaseCompare> StringPairMap_t;
 
 
 StyleSheetEntry::StyleSheetEntry() :
@@ -1291,15 +1302,6 @@ const StyleSheetEntryPtr StyleSheetTable::FindParentStyleSheet(const OUString& _
 static const sal_Char* const aStyleNamePairs[] =
 {
     "Normal",                     "Standard",
-    "heading 1",                  "Heading 1",
-    "heading 2",                  "Heading 2",
-    "heading 3",                  "Heading 3",
-    "heading 4",                  "Heading 4",
-    "heading 5",                  "Heading 5",
-    "heading 6",                  "Heading 6",
-    "heading 7",                  "Heading 7",
-    "heading 8",                  "Heading 8",
-    "heading 9",                  "Heading 9",
     "Heading1",                   "Heading 1",
     "Heading2",                   "Heading 2",
     "Heading3",                   "Heading 3",
@@ -1337,15 +1339,6 @@ static const sal_Char* const aStyleNamePairs[] =
     "TOC 8",                     "Contents 8",
     "TOC 9",                     "Contents 9",
     "TOCHeading",                "Contents Heading",
-    "toc 1",                     "Contents 1",
-    "toc 2",                     "Contents 2",
-    "toc 3",                     "Contents 3",
-    "toc 4",                     "Contents 4",
-    "toc 5",                     "Contents 5",
-    "toc 6",                     "Contents 6",
-    "toc 7",                     "Contents 7",
-    "toc 8",                     "Contents 8",
-    "toc 9",                     "Contents 9",
     "TOC1",                     "Contents 1",
     "TOC2",                     "Contents 2",
     "TOC3",                     "Contents 3",
@@ -1359,15 +1352,12 @@ static const sal_Char* const aStyleNamePairs[] =
     "Footnote Text",             "Footnote",
     "Annotation Text",           "",
     "Header",                    "Header",
-    "header",                    "Header",
     "Footer",                    "Footer",
-    "footer",                    "Footer",
     "Index Heading",             "Index Heading",
     "Caption",                   "",
     "Table of Figures",          "",
     "Envelope Address",          "Addressee",
     "Envelope Return",           "Sender",
-    "footnote reference",        "Footnote Characters",
     "Footnote Reference",        "Footnote Characters",
     "Annotation Reference",      "",
     "Line Number",               "Line numbering",
