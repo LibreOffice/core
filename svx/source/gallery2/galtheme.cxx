@@ -1368,23 +1368,16 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
 {
     sal_uInt32          nCount;
     sal_uInt16          nVersion;
-    OUString            aThemeName;
-    rtl_TextEncoding    nTextEncoding;
 
     rIStm.ReadUInt16( nVersion );
-    OString aTmpStr = read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm);
+    read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm);
     rIStm.ReadUInt32( nCount );
 
     if( nVersion >= 0x0004 )
     {
         sal_uInt16 nTmp16;
         rIStm.ReadUInt16( nTmp16 );
-        nTextEncoding = (rtl_TextEncoding) nTmp16;
     }
-    else
-        nTextEncoding = RTL_TEXTENCODING_UTF8;
-
-    aThemeName = OStringToOUString(aTmpStr, nTextEncoding);
 
     if( nCount <= ( 1L << 14 ) )
     {
