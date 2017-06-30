@@ -170,7 +170,7 @@ void SotStorageStream::SetSize(sal_uInt64 const nNewSize)
         SvStream::SetSize( nNewSize );
 
     if( nNewSize < nPos )
-        // ans Ende setzen
+        // jump to the end
         Seek( nNewSize );
 }
 
@@ -250,27 +250,22 @@ bool SotStorageStream::SetProperty( const OUString& rName, const css::uno::Any& 
     }
 }
 
-/************************************************************************
-|*
-|*    SotStorage::SotStorage()
-|*
-|*    Beschreibung      Es muss ein I... Objekt an SvObject uebergeben
-|*                      werden, da es sonst selbst ein IUnknown anlegt und
-|*                      festlegt, dass alle weiteren I... Objekte mit
-|*                      delete zerstoert werden (Owner() == true).
-|*                      Es werden aber nur IStorage Objekte benutzt und nicht
-|*                      selbst implementiert, deshalb wird so getan, als ob
-|*                      das IStorage Objekt von aussen kam und es wird mit
-|*                      Release() freigegeben.
-|*                      Die CreateStorage Methoden werden benoetigt, um
-|*                      ein IStorage Objekt vor dem Aufruf von SvObject
-|*                      zu erzeugen (Own, !Own automatik).
-|*                      Hat CreateStorage ein Objekt erzeugt, dann wurde
-|*                      der RefCounter schon um 1 erhoet.
-|*                      Die Uebergabe erfolgt in pStorageCTor. Die Variable
-|*                      ist NULL, wenn es nicht geklappt hat.
-|*
-*************************************************************************/
+/**
+ * SotStorage::SotStorage()
+ *
+ * A I.. object must be passed to SvObject, because otherwise itself will
+ * create and define an IUnknown, so that all other I... objects would be
+ * destroyed with delete (Owner() == true).
+ * But IStorage objects are only used and not implemented by ourselves,
+ * therefore we pretend the IStorage object was passed from the outside
+ * and it will be freed with Release().
+ * The CreateStorage methods are needed to create an IStorage object before the
+ * call of SvObject (Own, !Own automatic).
+ * If CreateStorage has created an object, then the RefCounter was already
+ * incremented.
+ * The transfer is done in pStorageCTor and the variable is NULL, if it didn't
+ * work.
+ */
 #define INIT_SotStorage()                     \
     : m_pOwnStg( nullptr )                       \
     , m_pStorStm( nullptr )                      \

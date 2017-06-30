@@ -226,13 +226,13 @@ bool lcl_fillQueryEntries(
     nCount = pParam->GetEntryCount();
     if (bValid)
     {
-        //  bQueryByString muss gesetzt sein
+        //  bQueryByString must be set
         for (SCSIZE i = 0; i < nCount; ++i)
             pParam->GetEntry(i).GetQueryItem().meType = ScQueryEntry::ByString;
     }
     else
     {
-        //  nix
+        //  nothing
         for (SCSIZE i = 0; i < nCount; ++i)
             pParam->GetEntry(i).Clear();
     }
