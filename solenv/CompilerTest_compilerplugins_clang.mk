@@ -35,6 +35,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
 ))
 
 $(eval $(call gb_CompilerTest_use_externals,compilerplugins_clang, \
+    boost_headers \
     cppunit \
 ))
 
