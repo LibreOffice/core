@@ -16,6 +16,24 @@
       "revId": "803a17533f25d9174c6a19aa913a6713980c193d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_fe67ff22",
+        "filename": "sc/source/filter/xml/xmlbodyi.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1001192
+      },
+      "writtenOn": "2017-06-30T02:16:13Z",
+      "side": 0,
+      "message": "When this code was first added, we used dynamic_cast for the assignment also, which was later changed. I thought the assert was obsolete since we are static casting it now. Should I add them back?",
+      "parentUuid": "3a461143_1ee84b7c",
+      "revId": "803a17533f25d9174c6a19aa913a6713980c193d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
