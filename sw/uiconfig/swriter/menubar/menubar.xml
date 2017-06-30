@@ -386,6 +386,8 @@
           <menu:menuitem menu:id=".uno:ChangeCaseToTitleCase"/>
           <menu:menuitem menu:id=".uno:ChangeCaseToToggleCase"/>
           <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:SmallCaps"/>
+          <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:ChangeCaseToHalfWidth"/>
           <menu:menuitem menu:id=".uno:ChangeCaseToFullWidth"/>
           <menu:menuitem menu:id=".uno:ChangeCaseToHiragana"/>
