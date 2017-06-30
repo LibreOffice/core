@@ -193,6 +193,21 @@ SfxChildWinFactArr_Impl* SfxModule::GetChildWinFactories_Impl() const
     return pImpl->pFactArr;
 }
 
+SfxChildWinFactory* SfxModule::GetChildWinFactory(const sal_uInt16 nId) const
+{
+    DBG_ASSERT( pImpl, "No real Module!" );
+
+    for (size_t nFactory = 0; nFactory < pImpl->pFactArr->size(); ++nFactory)
+    {
+        if (nId == (*pImpl->pFactArr)[nFactory].nId)
+        {
+            return &(*pImpl->pFactArr)[nFactory];
+        }
+    }
+
+    return nullptr;
+}
+
 VclPtr<SfxTabPage> SfxModule::CreateTabPage( sal_uInt16, vcl::Window*, const SfxItemSet& )
 {
     return VclPtr<SfxTabPage>();

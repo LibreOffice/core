@@ -78,6 +78,7 @@ public:
     void                        RegisterToolBoxControl(const SfxTbxCtrlFactory&);
     void                        RegisterChildWindow(SfxChildWinFactory*);
     void                        RegisterStatusBarControl(const SfxStbCtrlFactory&);
+    SfxChildWinFactory*         GetChildWinFactory(const sal_uInt16 nId) const;
 
     virtual VclPtr<SfxTabPage>  CreateTabPage( sal_uInt16 nId,
                                                vcl::Window* pParent,
