@@ -52,7 +52,6 @@ private:
 
     bool mbPenGC : 1;        // is Pen GC valid
     bool mbBrushGC : 1;      // is Brush GC valid
-    bool mbMonoGC : 1;       // is Mono GC valid
     bool mbCopyGC : 1;       // is Copy GC valid
     bool mbInvertGC : 1;     // is Invert GC valid
     bool mbInvert50GC : 1;   // is Invert50 GC valid

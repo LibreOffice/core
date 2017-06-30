@@ -21,6 +21,7 @@ struct Bar
 // expected-error@-3 {{read m_bar5 [loplugin:unusedfields]}}
 // expected-error@-4 {{read m_bar6 [loplugin:unusedfields]}}
 // expected-error@-5 {{read m_barfunctionpointer [loplugin:unusedfields]}}
+// expected-error@-6 {{read m_bar8 [loplugin:unusedfields]}}
 {
     int  m_bar1;
     int  m_bar2 = 1;
@@ -31,6 +32,7 @@ struct Bar
     int  m_bar5;
     std::vector<int> m_bar6;
     int m_bar7[5];
+    int m_bar8;
 
     // check that we see reads of fields like m_foo1 when referred to via constructor initializer
     Bar(Foo const & foo) : m_bar1(foo.m_foo1) {}
@@ -61,7 +63,15 @@ struct Bar
     // check that we see reads of a field when used in ranged-for
     void bar6() { for (auto i : m_bar6) { (void)i; } }
 
+    // check that we see don't see reads of array fields
     void bar7() { m_bar7[3] = 1; }
+
+    // check that we see reads when a field is used in an array expression
+    char bar8()
+    {
+        char tmp[5];
+        return tmp[m_bar8];
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
