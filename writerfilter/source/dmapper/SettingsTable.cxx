@@ -166,7 +166,6 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
 
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
-    (void)nIntValue;
     OUString sStringValue = pValue->getString();
 
     switch(nSprmId)

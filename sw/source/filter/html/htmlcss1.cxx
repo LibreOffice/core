@@ -1718,7 +1718,6 @@ bool SwHTMLParser::FileDownload( const OUString& rURL,
     // recreate View
     SwViewShell *const pVSh = CallStartAction( pOldVSh );
     OSL_ENSURE( pOldVSh == pVSh, "FileDownload: SwViewShell changed on us" );
-    (void) pVSh;
 
     return pStream!=nullptr;
 }

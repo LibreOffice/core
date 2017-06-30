@@ -161,6 +161,79 @@ ContextCheck ContextCheck::AnonymousNamespace() const {
         n != nullptr && n->isAnonymousNamespace() ? n->getParent() : nullptr);
 }
 
+namespace {
+
+bool BaseCheckNotSomethingInterestingSubclass(
+    const clang::CXXRecordDecl *BaseDefinition
+#if CLANG_VERSION < 30800
+    , void *
+#endif
+    )
+{
+    if (BaseDefinition) {
+        auto tc = TypeCheck(BaseDefinition);
+        if (tc.Class("Dialog").GlobalNamespace() || tc.Class("SfxPoolItem").GlobalNamespace()) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool isDerivedFromSomethingInteresting(const clang::CXXRecordDecl *decl) {
+    if (!decl)
+        return false;
+    auto tc = TypeCheck(decl);
+    if (tc.Class("Dialog"))
+        return true;
+    if (tc.Class("SfxPoolItem"))
+        return true;
+    if (!decl->hasDefinition()) {
+        return false;
+    }
+    if (// not sure what hasAnyDependentBases() does,
+        // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
+        !decl->hasAnyDependentBases() &&
+        !compat::forallBases(*decl, BaseCheckNotSomethingInterestingSubclass, nullptr, true)) {
+        return true;
+    }
+    return false;
+}
+
+}
+
+bool isExtraWarnUnusedType(clang::QualType type) {
+    auto const rec = type->getAsCXXRecordDecl();
+    if (rec == nullptr) {
+        return false;
+    }
+    if (rec->hasAttrs()) {
+        // Clang currently has no support for custom attributes, but the
+        // annotate attribute comes close, so check for
+        // __attribute__((annotate("lo_warn_unused"))):
+        for (auto i = rec->specific_attr_begin<clang::AnnotateAttr>(),
+                 e = rec->specific_attr_end<clang::AnnotateAttr>();
+             i != e; ++i) {
+            if ((*i)->getAnnotation() == "lo_warn_unused") {
+                return true;
+            }
+        }
+    }
+    auto const tc = TypeCheck(rec);
+    // Check some common non-LO types:
+    if (tc.Class("string").Namespace("std").GlobalNamespace()
+        || tc.Class("basic_string").Namespace("std").GlobalNamespace()
+        || tc.Class("list").Namespace("std").GlobalNamespace()
+        || (tc.Class("list").Namespace("__debug").Namespace("std")
+            .GlobalNamespace())
+        || tc.Class("vector").Namespace("std").GlobalNamespace()
+        || (tc.Class("vector" ).Namespace("__debug").Namespace("std")
+            .GlobalNamespace()))
+    {
+        return true;
+    }
+    return isDerivedFromSomethingInteresting(rec);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

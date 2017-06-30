@@ -211,9 +211,6 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
 {
     SvXMLNamespaceMap *pRewindMap = nullptr;
 
-    bool bRect = rName == "presentation:show-shape";
-    (void)bRect;
-
     // Process namespace attributes. This must happen before creating the
     // context, because namespace declaration apply to the element name itself.
     XMLMutableAttributeList *pMutableAttrList = nullptr;

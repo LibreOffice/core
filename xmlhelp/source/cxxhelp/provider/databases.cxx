@@ -787,8 +787,7 @@ KeywordInfo* Databases::getKeyword( const OUString& Database,
         KeywordElementComparator aComparator( xCollator );
         std::sort(aVector.begin(),aVector.end(),aComparator);
 
-        KeywordInfo* pInfo = it->second = new KeywordInfo( aVector );
-        (void)pInfo;
+        it->second = new KeywordInfo( aVector );
     }
 
     return it->second;

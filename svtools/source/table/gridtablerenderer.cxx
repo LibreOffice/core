@@ -233,13 +233,15 @@ namespace svt { namespace table
         rRenderContext.DrawLine(_rArea.BottomRight(), _rArea.TopRight());
 
         rRenderContext.Pop();
-        (void)_bIsColHeaderArea;
-        (void)_bIsRowHeaderArea;
     }
 
 
-    void GridTableRenderer::PaintColumnHeader(ColPos _nCol, bool _bActive, bool _bSelected, vcl::RenderContext& rRenderContext,
-                                              const tools::Rectangle& _rArea, const StyleSettings& _rStyle)
+    void GridTableRenderer::PaintColumnHeader(
+        ColPos _nCol,
+        bool, // _bActive: no special painting for the active column at the moment
+        bool, // _bSelected: selection for column header not yet implemented
+        vcl::RenderContext& rRenderContext,
+        const tools::Rectangle& _rArea, const StyleSettings& _rStyle)
     {
         rRenderContext.Push(PushFlags::LINECOLOR);
 
@@ -293,12 +295,6 @@ namespace svt { namespace table
         }
 
         rRenderContext.Pop();
-
-        (void)_bActive;
-        // no special painting for the active column at the moment
-
-        (void)_bSelected;
-        // selection for column header not yet implemented
     }
 
 
@@ -550,9 +546,8 @@ namespace svt { namespace table
     }
 
 
-    void GridTableRenderer::HideCellCursor( vcl::Window& _rView, const tools::Rectangle& _rCursorRect)
+    void GridTableRenderer::HideCellCursor( vcl::Window& _rView, const tools::Rectangle&)
     {
-        (void)_rCursorRect;
         _rView.HideFocus();
     }
 

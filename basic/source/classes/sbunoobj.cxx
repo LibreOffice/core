@@ -2902,11 +2902,8 @@ void createAllObjectProperties( SbxObject* pObj )
 }
 
 
-void RTL_Impl_CreateUnoStruct( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
+void RTL_Impl_CreateUnoStruct( SbxArray& rPar )
 {
-    (void)pBasic;
-    (void)bWrite;
-
     // We need 1 parameter minimum
     if ( rPar.Count() < 2 )
     {
@@ -2928,11 +2925,8 @@ void RTL_Impl_CreateUnoStruct( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     refVar->PutObject( xUnoObj.get() );
 }
 
-void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
+void RTL_Impl_CreateUnoService( SbxArray& rPar )
 {
-    (void)pBasic;
-    (void)bWrite;
-
     // We need 1 Parameter minimum
     if ( rPar.Count() < 2 )
     {
@@ -2976,11 +2970,8 @@ void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     }
 }
 
-void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
+void RTL_Impl_CreateUnoServiceWithArguments( SbxArray& rPar )
 {
-    (void)pBasic;
-    (void)bWrite;
-
     // We need 2 parameter minimum
     if ( rPar.Count() < 3 )
     {
@@ -3028,11 +3019,8 @@ void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, 
     }
 }
 
-void RTL_Impl_GetProcessServiceManager( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
+void RTL_Impl_GetProcessServiceManager( SbxArray& rPar )
 {
-    (void)pBasic;
-    (void)bWrite;
-
     SbxVariableRef refVar = rPar.Get(0);
 
     // get the global service manager
@@ -3043,11 +3031,8 @@ void RTL_Impl_GetProcessServiceManager( StarBASIC* pBasic, SbxArray& rPar, bool 
     refVar->PutObject( xUnoObj.get() );
 }
 
-void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
+void RTL_Impl_HasInterfaces( SbxArray& rPar )
 {
-    (void)pBasic;
-    (void)bWrite;
-
     // We need 2 parameter minimum
     sal_uInt16 nParCount = rPar.Count();
     if( nParCount < 3 )
@@ -3104,11 +3089,8 @@ void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     refVar->PutBool( true );
 }
 
-void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
+void RTL_Impl_IsUnoStruct( SbxArray& rPar )
 {
-    (void)pBasic;
-    (void)bWrite;
-
     // We need 1 parameter minimum
     if ( rPar.Count() < 2 )
     {
@@ -3141,11 +3123,8 @@ void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 }
 
 
-void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
+void RTL_Impl_EqualUnoObjects( SbxArray& rPar )
 {
-    (void)pBasic;
-    (void)bWrite;
-
     if ( rPar.Count() < 3 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -3963,11 +3942,8 @@ Reference< XIntrospectionAccess > SAL_CALL InvocationToAllListenerMapper::getInt
 
 
 Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName, const Sequence< Any >& Params,
-    Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam)
+    Sequence< sal_Int16 >&, Sequence< Any >&)
 {
-    (void)OutParamIndex;
-    (void)OutParam     ;
-
     Any aRet;
 
     // Check if to firing or approveFiring has to be called
@@ -4014,17 +3990,12 @@ Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName,
 }
 
 
-void SAL_CALL InvocationToAllListenerMapper::setValue(const OUString& PropertyName, const Any& Value)
+void SAL_CALL InvocationToAllListenerMapper::setValue(const OUString&, const Any&)
+{}
+
+
+Any SAL_CALL InvocationToAllListenerMapper::getValue(const OUString&)
 {
-    (void)PropertyName;
-    (void)Value;
-}
-
-
-Any SAL_CALL InvocationToAllListenerMapper::getValue(const OUString& PropertyName)
-{
-    (void)PropertyName;
-
     return Any();
 }
 
@@ -4107,11 +4078,8 @@ RTLFUNC(CreateUnoListener)
 
 // Represents the DefaultContext property of the ProcessServiceManager
 // in the Basic runtime system.
-void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
+void RTL_Impl_GetDefaultContext( SbxArray& rPar )
 {
-    (void)pBasic;
-    (void)bWrite;
-
     SbxVariableRef refVar = rPar.Get(0);
 
     Any aContextAny( comphelper::getProcessComponentContext() );
@@ -4123,11 +4091,8 @@ void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, bool bWrite 
 
 // Creates a Basic wrapper object for a strongly typed Uno value
 // 1. parameter: Uno type as full qualified type name, e.g. "byte[]"
-void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
+void RTL_Impl_CreateUnoValue( SbxArray& rPar )
 {
-    (void)pBasic;
-    (void)bWrite;
-
     // 2 parameters needed
     if ( rPar.Count() != 3 )
     {

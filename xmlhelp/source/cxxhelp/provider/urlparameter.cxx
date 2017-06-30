@@ -335,15 +335,8 @@ private:
 };
 
 
-void URLParameter::open( const Command& aCommand,
-                         sal_Int32 CommandId,
-                         const Reference< XCommandEnvironment >& Environment,
-                         const Reference< XOutputStream >& xDataSink )
+void URLParameter::open( const Reference< XOutputStream >& xDataSink )
 {
-    (void)aCommand;
-    (void)CommandId;
-    (void)Environment;
-
     if( ! xDataSink.is() )
         return;
 
@@ -361,15 +354,8 @@ void URLParameter::open( const Command& aCommand,
 }
 
 
-void URLParameter::open( const Command& aCommand,
-                         sal_Int32 CommandId,
-                         const Reference< XCommandEnvironment >& Environment,
-                         const Reference< XActiveDataSink >& xDataSink )
+void URLParameter::open( const Reference< XActiveDataSink >& xDataSink )
 {
-    (void)aCommand;
-    (void)CommandId;
-    (void)Environment;
-
     // a standard document or else an active help text, plug in the new input stream
     xDataSink->setInputStream( new InputStreamTransformer( this,m_pDatabases,isRoot() ) );
 }

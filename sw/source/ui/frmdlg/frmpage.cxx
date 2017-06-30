@@ -2849,10 +2849,7 @@ IMPL_LINK_NOARG(SwFrameURLPage, InsertFileHdl, Button*, void)
         if(!sTemp.isEmpty())
             xFP->setDisplayDirectory(sTemp);
     }
-    catch( const uno::Exception& rEx )
-    {
-        (void) rEx;
-    }
+    catch( const uno::Exception& ) {}
     if( aDlgHelper.Execute() == ERRCODE_NONE )
     {
         pURLED->SetText( xFP->getSelectedFiles().getConstArray()[0] );

@@ -298,10 +298,8 @@ void InsertionIndicatorOverlay::SetLocation (const Point& rLocation)
 
 void InsertionIndicatorOverlay::Paint (
     OutputDevice& rDevice,
-    const ::tools::Rectangle& rRepaintArea)
+    const ::tools::Rectangle&)
 {
-    (void)rRepaintArea;
-
     if ( ! IsVisible())
         return;
 

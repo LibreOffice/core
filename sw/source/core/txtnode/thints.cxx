@@ -1434,7 +1434,6 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                 {
                     const bool bSuccess = pDoc->GetFootnoteIdxs().insert(pTextFootnote).second;
                     OSL_ENSURE( bSuccess, "FootnoteIdx not inserted." );
-                    (void) bSuccess; // unused in non-debug
                 }
                 SwNodeIndex aTmpIndex( *this );
                 pDoc->GetFootnoteIdxs().UpdateFootnote( aTmpIndex);

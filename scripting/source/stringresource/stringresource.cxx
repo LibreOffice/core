@@ -685,10 +685,9 @@ void StringResourceImpl::implNotifyListeners()
 
 // Loading
 
-bool StringResourceImpl::loadLocale( LocaleItem* pLocaleItem )
+bool StringResourceImpl::loadLocale( LocaleItem* )
 {
     // Base implementation has nothing to load
-    (void)pLocaleItem;
     return true;
 }
 
@@ -1239,7 +1238,6 @@ Sequence< ::sal_Int8 > BinaryOutput::closeAndGetData()
 
     xSeekable->seek( 0 );
     sal_Int32 nRead = xInputStream->readBytes( aRetSeq, nSize );
-    (void)nRead;
     OSL_ENSURE( nRead == nSize, "BinaryOutput::closeAndGetData: nRead != nSize" );
 
     return aRetSeq;
@@ -1497,11 +1495,9 @@ void StringResourcePersistenceImpl::importBinary( const Sequence< ::sal_Int8 >& 
     // Import data
     BinaryInput aIn( Data, m_xContext );
 
-    sal_Int32 nVersion = aIn.readInt16();
-    (void)nVersion;
+    aIn.readInt16(); // version
     sal_Int32 nLocaleCount = aIn.readInt16();
     sal_Int32 iDefault = aIn.readInt16();
-    (void)iDefault;
 
     std::unique_ptr<sal_Int32[]> pPositions( new sal_Int32[nLocaleCount + 1] );
     for( sal_Int32 i = 0; i < nLocaleCount + 1; i++ )
@@ -2037,9 +2033,6 @@ void implWriteStringWithEncoding( const OUString& aStr,
     Reference< io::XTextOutputStream2 > const & xTextOutputStream, bool bKey )
 {
     static sal_Unicode cLineFeed = 0xa;
-
-    (void)aStr;
-    (void)xTextOutputStream;
 
     OUStringBuffer aBuf;
     sal_Int32 nLen = aStr.getLength();

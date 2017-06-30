@@ -841,7 +841,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         else if (nId == MN_SET_SELECTION_RESET)
         {
             //reset languages for current selection
-            SwLangHelper::ResetLanguages( *m_pSh, true );
+            SwLangHelper::ResetLanguages( *m_pSh );
         }
         else if (nId == MN_SET_SELECTION_MORE)
         {
@@ -870,7 +870,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             //reset languages for current paragraph
             m_pSh->Push();        // save cursor
             SwLangHelper::SelectCurrentPara( *m_pSh );
-            SwLangHelper::ResetLanguages( *m_pSh, true );
+            SwLangHelper::ResetLanguages( *m_pSh );
             m_pSh->Pop(SwCursorShell::PopMode::DeleteCurrent); // restore cursor
         }
         else if (nId == MN_SET_PARA_MORE)

@@ -436,7 +436,6 @@ SdrPage* SdPage::Clone() const
 SdrPage* SdPage::Clone(SdrModel* pNewModel) const
 {
     DBG_ASSERT( pNewModel == nullptr, "sd::SdPage::Clone(), new page ignored, please check code! CL" );
-    (void)pNewModel;
 
     SdPage* pNewPage = new SdPage(*this);
     pNewPage->lateInit( *this );

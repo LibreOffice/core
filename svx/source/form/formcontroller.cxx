@@ -4141,7 +4141,6 @@ void SAL_CALL FormController::setParent( const Reference< XInterface >& Parent)
 
 void SAL_CALL FormController::removeStatusListener( const Reference< XStatusListener >& /*_rxListener*/, const URL& _rURL )
 {
-    (void)_rURL;
     OSL_ENSURE(_rURL.Complete == FMURL_CONFIRM_DELETION, "FormController::removeStatusListener: invalid (unsupported) URL!");
     // we never really added the listener, so we don't need to remove it
 }

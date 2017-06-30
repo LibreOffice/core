@@ -98,7 +98,6 @@ namespace dbaccess
             OSQLTables::iterator aIter = m_aTables.find(_rName);
             OSL_ENSURE(aIter != m_aTables.end(),"Table not found!");
             OSL_ENSURE(aIter->second.is(),"Table is null!");
-            (void)aIter;
             return connectivity::sdbcx::ObjectType(m_aTables.find(_rName)->second,UNO_QUERY);
         }
         return nullptr;

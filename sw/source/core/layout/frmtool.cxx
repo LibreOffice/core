@@ -968,7 +968,6 @@ SwContentNotify::~SwContentNotify()
 void AppendObjs( const SwFrameFormats *pTable, sal_uLong nIndex,
                         SwFrame *pFrame, SwPageFrame *pPage, SwDoc* doc )
 {
-    (void) pTable;
 #if OSL_DEBUG_LEVEL > 0
     std::list<SwFrameFormat*> checkFormats;
     for ( size_t i = 0; i < pTable->size(); ++i )

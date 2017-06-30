@@ -260,7 +260,6 @@ void RecordParser::parseStream( const RecordInputSource& rInputSource )
                 mxStack->popContext();
             // finalize the current context and pop context info from stack
             OSL_ENSURE( mxStack->getCurrentRecId() == pEndRecInfo->mnStartRecId, "RecordParser::parseStream - context records mismatch" );
-            (void)pEndRecInfo;  // suppress compiler warning for unused variable
             ContextHandlerRef xCurrContext = mxStack->getCurrentContext();
             if( xCurrContext.is() )
             {

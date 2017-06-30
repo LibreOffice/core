@@ -70,7 +70,6 @@ Reference<rendering::XCanvas> SAL_CALL PresenterPane::getCanvas()
 
 void SAL_CALL PresenterPane::windowResized (const awt::WindowEvent& rEvent)
 {
-    (void)rEvent;
     PresenterPaneBase::windowResized(rEvent);
 
     Invalidate(maBoundingBox);
@@ -84,7 +83,6 @@ void SAL_CALL PresenterPane::windowResized (const awt::WindowEvent& rEvent)
 
 void SAL_CALL PresenterPane::windowMoved (const awt::WindowEvent& rEvent)
 {
-    (void)rEvent;
     PresenterPaneBase::windowMoved(rEvent);
 
     Invalidate(maBoundingBox);
@@ -97,7 +95,6 @@ void SAL_CALL PresenterPane::windowMoved (const awt::WindowEvent& rEvent)
 
 void SAL_CALL PresenterPane::windowShown (const lang::EventObject& rEvent)
 {
-    (void)rEvent;
     PresenterPaneBase::windowShown(rEvent);
 
     ToTop();
@@ -114,7 +111,6 @@ void SAL_CALL PresenterPane::windowShown (const lang::EventObject& rEvent)
 
 void SAL_CALL PresenterPane::windowHidden (const lang::EventObject& rEvent)
 {
-    (void)rEvent;
     PresenterPaneBase::windowHidden(rEvent);
 
     if (mxContentWindow.is())
@@ -125,7 +121,6 @@ void SAL_CALL PresenterPane::windowHidden (const lang::EventObject& rEvent)
 
 void SAL_CALL PresenterPane::windowPaint (const awt::PaintEvent& rEvent)
 {
-    (void)rEvent;
     ThrowIfDisposed();
 
     PaintBorder(rEvent.UpdateRect);

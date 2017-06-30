@@ -324,10 +324,8 @@ void PageStylesPanel::NotifyItemUpdate(
     const sal_uInt16 nSid,
     const SfxItemState eState,
     const SfxPoolItem* pState,
-    const bool bIsEnabled)
+    const bool)
 {
-    (void)bIsEnabled;
-
     if(IsDisposed())
         return;
 

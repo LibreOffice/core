@@ -611,7 +611,6 @@ void BaseNode::end()
 
 void BaseNode::notifyDeactivating( const AnimationNodeSharedPtr& rNotifier )
 {
-    (void) rNotifier; // avoid warning
     OSL_ASSERT( rNotifier->getState() == FROZEN ||
                 rNotifier->getState() == ENDED );
     // TODO(F1): for end sync functionality, this might indeed be used some day

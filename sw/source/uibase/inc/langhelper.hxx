@@ -37,8 +37,7 @@ namespace SwLangHelper
     extern void SetLanguage( SwWrtShell &rWrtSh, OutlinerView* pOLV, const ESelection& rSelection, const OUString &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );
     extern void SetLanguage_None( SwWrtShell &rWrtSh, bool bIsForSelection, SfxItemSet &rCoreSet );
     extern void SetLanguage_None( SwWrtShell &rWrtSh, OutlinerView* pOLV, const ESelection& rSelection, bool bIsForSelection, SfxItemSet &rCoreSet  );
-    extern void ResetLanguages( SwWrtShell &rWrtSh, bool bIsForSelection );
-    extern void ResetLanguages( SwWrtShell &rWrtSh, OutlinerView* pOLV, const ESelection& rSelection, bool bIsForSelection );
+    extern void ResetLanguages( SwWrtShell &rWrtSh, OutlinerView* pOLV = nullptr );
 
     // document
     extern void SelectCurrentPara( SwWrtShell &rWrtSh );

@@ -64,9 +64,7 @@ public:
 
     void UpdateAccessibilityHierarchy();
 
-    void NotifyCurrentSlideChange (
-        const sal_Int32 nCurrentSlideIndex,
-        const sal_Int32 nSlideCount);
+    void NotifyCurrentSlideChange ();
 
     virtual void SAL_CALL disposing() override;
 

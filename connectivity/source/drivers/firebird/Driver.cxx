@@ -205,9 +205,8 @@ sal_Bool SAL_CALL FirebirdDriver::acceptsURL( const OUString& url )
 }
 
 Sequence< DriverPropertyInfo > SAL_CALL FirebirdDriver::getPropertyInfo(
-    const OUString& url, const Sequence< PropertyValue >& info )
+    const OUString& url, const Sequence< PropertyValue >& )
 {
-    (void) info;
     if ( ! acceptsURL(url) )
     {
         ::connectivity::SharedResources aResources;

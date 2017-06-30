@@ -104,9 +104,8 @@ void SdrTableRtfExporter::Write()
         nPos += HundMMToTwips( nWidth );
         aColumnStart.push_back( nPos );
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("SdrTableRtfExporter::Write(), exception caught!");
     }
 
@@ -119,9 +118,8 @@ void SdrTableRtfExporter::Write()
         Reference< XPropertySet > xRowSet( xRows->getByIndex(nRow), UNO_QUERY_THROW );
         WriteRow( xRowSet, nRow, aColumnStart );
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("SdrTableRtfExporter::Write(), exception caught!");
     }
 

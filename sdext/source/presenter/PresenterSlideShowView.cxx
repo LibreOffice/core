@@ -596,33 +596,26 @@ void SAL_CALL PresenterSlideShowView::mouseMoved (const awt::MouseEvent& rEvent)
 
 //----- XWindowListener -------------------------------------------------------
 
-void SAL_CALL PresenterSlideShowView::windowResized (const awt::WindowEvent& rEvent)
+void SAL_CALL PresenterSlideShowView::windowResized (const awt::WindowEvent&)
 {
-    (void)rEvent;
-
     ThrowIfDisposed();
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
 
     Resize();
 }
 
-void SAL_CALL PresenterSlideShowView::windowMoved (const awt::WindowEvent& rEvent)
+void SAL_CALL PresenterSlideShowView::windowMoved (const awt::WindowEvent&)
 {
-    (void)rEvent;
     if ( ! mbIsPaintPending)
         mbIsForcedPaintPending = true;
 }
 
-void SAL_CALL PresenterSlideShowView::windowShown (const lang::EventObject& rEvent)
+void SAL_CALL PresenterSlideShowView::windowShown (const lang::EventObject&)
 {
-    (void)rEvent;
     Resize();
 }
 
-void SAL_CALL PresenterSlideShowView::windowHidden (const lang::EventObject& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterSlideShowView::windowHidden (const lang::EventObject&) {}
 
 //----- XView -----------------------------------------------------------------
 

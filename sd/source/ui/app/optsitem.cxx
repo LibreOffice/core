@@ -42,7 +42,6 @@ template< class T > T getSafeValue( const Any& rAny )
     bool bOk = (rAny >>= value);
 
     DBG_ASSERT( bOk, "SdOptionsItem, wrong type from configuration!" );
-    (void)bOk;
 
     return value;
 }

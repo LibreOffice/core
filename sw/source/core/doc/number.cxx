@@ -1366,9 +1366,8 @@ namespace numfunc
         }
     }
 
-    void SwNumberingUIBehaviorConfig::Notify( const css::uno::Sequence<OUString>& aPropertyNames )
+    void SwNumberingUIBehaviorConfig::Notify( const css::uno::Sequence<OUString>& )
     {
-        (void) aPropertyNames;
         SetToDefault();
         LoadConfig();
     }

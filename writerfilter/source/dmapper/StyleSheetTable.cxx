@@ -1141,7 +1141,6 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                         }
                         catch( const lang::WrappedTargetException& rWrapped)
                         {
-                            (void) rWrapped;
 #ifdef DEBUG_WRITERFILTER
                             OUString aMessage("StyleSheetTable::ApplyStyleSheets: Some style properties could not be set");
                             beans::UnknownPropertyException aUnknownPropertyException;
@@ -1150,6 +1149,8 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                                 aMessage += ": " + aUnknownPropertyException.Message;
 
                             SAL_WARN("writerfilter", aMessage);
+#else
+                            (void) rWrapped;
 #endif
                         }
                         catch( const uno::Exception& )

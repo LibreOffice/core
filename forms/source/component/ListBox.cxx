@@ -874,9 +874,8 @@ namespace frm
             onError(eSQL, FRM_RES_STRING(RID_BASELISTBOX_ERROR_FILLLIST));
             return;
         }
-        catch(const Exception& eUnknown)
+        catch(const Exception&)
         {
-            (void)eUnknown;
             return;
         }
 

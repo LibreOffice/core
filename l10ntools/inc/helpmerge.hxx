@@ -47,9 +47,8 @@ public:
     static bool CreatePO( const OString &rPOFile_in, const OString &sHelpFile,
                           XMLFile *pXmlFile, const OString &rGsi1 );
 
-/// Method merges the String from the POfile into XMLfile. Both Strings must
-/// point to existing files.
-    bool Merge( const OString &rPOFile_in, const OString &rDestinationFile_in ,
+/// Method merges the String into XMLfile, which must point to an existing file.
+    bool Merge( const OString &rDestinationFile_in ,
         const OString& sLanguage , MergeDataFile* pMergeDataFile );
 
 private:

@@ -209,7 +209,6 @@ void MasterScriptProvider::createPkgProvider()
     }
     catch ( const Exception& e )
     {
-        (void)e;
         SAL_WARN("scripting.provider", "Exception creating MasterScriptProvider for uno_packages in context "
                 << m_sCtxString << ": " << e.Message );
     }

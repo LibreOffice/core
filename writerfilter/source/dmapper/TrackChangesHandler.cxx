@@ -36,7 +36,6 @@ TrackChangesHandler::~TrackChangesHandler()
 void TrackChangesHandler::lcl_attribute(Id rName, Value & rVal)
 {
     OUString sStringValue = rVal.getString();
-    (void)rName;
     switch( rName )
     {
         case NS_ooxml::LN_CT_TrackChange_author:
@@ -90,10 +89,7 @@ uno::Sequence<beans::PropertyValue> TrackChangesHandler::getRedlineProperties() 
     return aRedlineProperties;
 }
 
-void TrackChangesHandler::lcl_sprm(Sprm & rSprm)
-{
-    (void)rSprm;
-}
+void TrackChangesHandler::lcl_sprm(Sprm &) {}
 
 } //namespace dmapper
 } //namespace writerfilter

@@ -47,7 +47,6 @@ MeasureHandler::~MeasureHandler()
 void MeasureHandler::lcl_attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
-    (void)rName;
     switch( rName )
     {
         case NS_ooxml::LN_CT_TblWidth_type:// = 90668;
@@ -101,10 +100,7 @@ void MeasureHandler::lcl_attribute(Id rName, Value & rVal)
 }
 
 
-void MeasureHandler::lcl_sprm(Sprm & rSprm)
-{
-    (void)rSprm;
-}
+void MeasureHandler::lcl_sprm(Sprm &) {}
 
 
 sal_Int32 MeasureHandler::getMeasureValue() const

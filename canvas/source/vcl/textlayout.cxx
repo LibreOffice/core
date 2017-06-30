@@ -74,7 +74,6 @@ namespace vclcanvas
 
     TextLayout::TextLayout( const rendering::StringContext&                  aText,
                             sal_Int8                                         nDirection,
-                            sal_Int64                                        nRandomSeed,
                             const CanvasFont::Reference&                     rFont,
                             const uno::Reference<rendering::XGraphicDevice>& xDevice,
                             const OutDevProviderSharedPtr&                   rOutDev ) :
@@ -85,9 +84,7 @@ namespace vclcanvas
         mxDevice( xDevice ),
         mpOutDevProvider( rOutDev ),
         mnTextDirection( nDirection )
-    {
-        (void)nRandomSeed;
-    }
+    {}
 
     void SAL_CALL TextLayout::disposing()
     {
@@ -262,65 +259,45 @@ namespace vclcanvas
         }
     }
 
-    double SAL_CALL TextLayout::justify( double nSize )
+    double SAL_CALL TextLayout::justify( double )
     {
-        (void)nSize;
-
         // TODO(F1)
         return 0.0;
     }
 
-    double SAL_CALL TextLayout::combinedJustify( const uno::Sequence< uno::Reference< rendering::XTextLayout > >& aNextLayouts,
-                                                 double                                                           nSize )
+    double SAL_CALL TextLayout::combinedJustify( const uno::Sequence< uno::Reference< rendering::XTextLayout > >&,
+                                                 double )
     {
-        (void)aNextLayouts;
-        (void)nSize;
-
         // TODO(F1)
         return 0.0;
     }
 
-    rendering::TextHit SAL_CALL TextLayout::getTextHit( const geometry::RealPoint2D& aHitPoint )
+    rendering::TextHit SAL_CALL TextLayout::getTextHit( const geometry::RealPoint2D& )
     {
-        (void)aHitPoint;
-
         // TODO(F1)
         return rendering::TextHit();
     }
 
-    rendering::Caret SAL_CALL TextLayout::getCaret( sal_Int32 nInsertionIndex, sal_Bool bExcludeLigatures )
+    rendering::Caret SAL_CALL TextLayout::getCaret( sal_Int32, sal_Bool )
     {
-        (void)nInsertionIndex;
-        (void)bExcludeLigatures;
-
         // TODO(F1)
         return rendering::Caret();
     }
 
-    sal_Int32 SAL_CALL TextLayout::getNextInsertionIndex( sal_Int32 nStartIndex, sal_Int32 nCaretAdvancement, sal_Bool bExcludeLigatures )
+    sal_Int32 SAL_CALL TextLayout::getNextInsertionIndex( sal_Int32, sal_Int32, sal_Bool )
     {
-        (void)nStartIndex;
-        (void)nCaretAdvancement;
-        (void)bExcludeLigatures;
-
         // TODO(F1)
         return 0;
     }
 
-    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryVisualHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryVisualHighlighting( sal_Int32, sal_Int32 )
     {
-        (void)nStartIndex;
-        (void)nEndIndex;
-
         // TODO(F1)
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
-    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryLogicalHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryLogicalHighlighting( sal_Int32, sal_Int32 )
     {
-        (void)nStartIndex;
-        (void)nEndIndex;
-
         // TODO(F1)
         return uno::Reference< rendering::XPolyPolygon2D >();
     }

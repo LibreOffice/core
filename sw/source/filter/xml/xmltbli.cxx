@@ -764,7 +764,6 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
         else if ( (XML_NAMESPACE_XML == nPrefix) &&
                  IsXMLToken( aLocalName, XML_ID ) )
         {
-            (void) rValue;
         //FIXME where to put this??? columns do not actually exist in writer...
         }
     }

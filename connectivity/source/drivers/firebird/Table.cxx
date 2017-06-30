@@ -222,9 +222,8 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
 }
 
 // ----- XRename --------------------------------------------------------------
-void SAL_CALL Table::rename(const OUString& rName)
+void SAL_CALL Table::rename(const OUString&)
 {
-    (void) rName;
     throw RuntimeException(); // Firebird doesn't support this.
 }
 

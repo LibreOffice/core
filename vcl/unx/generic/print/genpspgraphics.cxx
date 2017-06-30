@@ -370,7 +370,6 @@ void GenPspGraphics::SetROPFillColor( SalROPColor )
 
 void GenPspGraphics::SetXORMode( bool bSet )
 {
-    (void)bSet;
     SAL_WARN_IF( bSet, "vcl", "Error: PrinterGfx::SetXORMode() not implemented" );
 }
 
@@ -933,14 +932,13 @@ bool GenPspGraphics::drawAlphaBitmap( const SalTwoRect&,
 }
 
 bool GenPspGraphics::drawTransformedBitmap(
-    const basegfx::B2DPoint& rNull,
-    const basegfx::B2DPoint& rX,
-    const basegfx::B2DPoint& rY,
-    const SalBitmap& rSourceBitmap,
-    const SalBitmap* pAlphaBitmap)
+    const basegfx::B2DPoint&,
+    const basegfx::B2DPoint&,
+    const basegfx::B2DPoint&,
+    const SalBitmap&,
+    const SalBitmap*)
 {
     // here direct support for transformed bitmaps can be implemented
-    (void)rNull; (void)rX; (void)rY; (void)rSourceBitmap; (void)pAlphaBitmap;
     return false;
 }
 

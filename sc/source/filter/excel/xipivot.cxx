@@ -169,7 +169,6 @@ void XclImpPCItem::ReadSxdatetime( XclImpStream& rStrm )
 
 void XclImpPCItem::ReadSxempty( XclImpStream& rStrm )
 {
-    (void)rStrm;    // avoid compiler warning
     OSL_ENSURE( rStrm.GetRecSize() == 0, "XclImpPCItem::ReadSxempty - wrong record size" );
     SetEmpty();
 }

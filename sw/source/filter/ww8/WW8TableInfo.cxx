@@ -1108,10 +1108,6 @@ void WW8TableCellGrid::addShadowCells()
 
     while (aTopsIt != getRowTopsEnd())
     {
-#ifdef DBG_UTIL
-        long nTop = *aTopsIt;
-        (void) nTop;
-#endif
         CellInfoMultiSet::const_iterator aCellIt = getCellsBegin(*aTopsIt);
         CellInfoMultiSet::const_iterator aCellEndIt = getCellsEnd(*aTopsIt);
 

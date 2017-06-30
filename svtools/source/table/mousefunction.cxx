@@ -77,7 +77,6 @@ namespace svt { namespace table
             ShowTrackFlags::Split | ShowTrackFlags::TrackWindow
         );
 
-        (void)i_event;
         return ContinueFunction;
     }
 

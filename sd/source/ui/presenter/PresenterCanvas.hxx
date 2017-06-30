@@ -117,8 +117,7 @@ public:
     */
     css::uno::Reference<css::rendering::XPolyPolygon2D> UpdateSpriteClip (
         const css::uno::Reference<css::rendering::XPolyPolygon2D>& rxOriginalClip,
-        const css::geometry::RealPoint2D& rLocation,
-        const css::geometry::RealSize2D& rSize);
+        const css::geometry::RealPoint2D& rLocation);
 
     // XCanvas
 

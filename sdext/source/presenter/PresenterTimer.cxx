@@ -567,10 +567,8 @@ void PresenterClockTimer::CheckCurrentTime (const TimeValue& rCurrentTime)
 
 //----- XCallback -------------------------------------------------------------
 
-void SAL_CALL PresenterClockTimer::notify (const css::uno::Any& rUserData)
+void SAL_CALL PresenterClockTimer::notify (const css::uno::Any&)
 {
-    (void)rUserData;
-
     ListenerContainer aListenerCopy (maListeners);
 
     {

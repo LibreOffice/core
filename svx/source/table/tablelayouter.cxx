@@ -1066,9 +1066,8 @@ void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea, sal_Int32 nFir
 
         LayoutTable( rArea, true, false );
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sdr::table::TableLayouter::DistributeColumns(), exception caught!");
     }
 }
@@ -1117,9 +1116,8 @@ void TableLayouter::DistributeRows( ::tools::Rectangle& rArea, sal_Int32 nFirstR
 
         LayoutTable( rArea, false, true );
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sdr::table::TableLayouter::DistributeRows(), exception caught!");
     }
 }

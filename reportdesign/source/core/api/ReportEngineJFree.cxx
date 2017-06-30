@@ -252,9 +252,8 @@ OUString OReportEngineJFree::getNewOutputName()
             if ( sOutputName.isEmpty() )
                 throw lang::IllegalArgumentException();
         }
-        catch(const uno::Exception& e)
+        catch(const uno::Exception&)
         {
-            (void)e; // helper to know what e contains
             throw;
         }
     }

@@ -959,10 +959,6 @@ public:
         Type aRange5(5,6);
         aRange.intersect(aRange5);
         CPPUNIT_ASSERT_MESSAGE("range intersection is yielding nonempty range!", aRange.isEmpty());
-
-        // just so that this compiles -
-        Type aRange6( aRange );
-        (void)aRange6;
     }
 
     void check()
@@ -997,10 +993,6 @@ public:
         CPPUNIT_ASSERT_MESSAGE("(11,11) is inside range!",
                                tools::getCohenSutherlandClipFlags(B2IPoint(11,11),aRange) ==
                                (tools::RectClipFlags::RIGHT|tools::RectClipFlags::BOTTOM));
-
-        // just so that this compiles -
-        Type aRange1( aRange );
-        (void)aRange1;
     }
 
     void check()
@@ -1036,10 +1028,6 @@ public:
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(10,10) is inside range!",
                                tools::RectClipFlags::RIGHT|tools::RectClipFlags::BOTTOM,
                                tools::getCohenSutherlandClipFlags(B2IPoint(10,10),aBox));
-
-        // just so that this compiles -
-        B2IBox aBox1( aBox );
-        (void)aBox1;
     }
 
     // Change the following lines only, if you add, remove or rename

@@ -51,10 +51,7 @@ public:
      * Set the document "part", i.e. slide for a slideshow, and
      * tab for a spreadsheet.
      */
-    virtual void setPart( int nPart )
-    {
-        (void) nPart;
-    }
+    virtual void setPart( int ) {}
 
     /**
      * Get the number of parts -- see setPart for further details.
@@ -77,9 +74,8 @@ public:
      * Get the name of the currently displayed part, i.e. sheet in a spreadsheet
      * or slide in a presentation.
      */
-    virtual OUString getPartName(int nPart)
+    virtual OUString getPartName(int)
     {
-        (void) nPart;
         return OUString();
     }
 
@@ -90,10 +86,7 @@ public:
     virtual OUString getPartHash(int nPart) = 0;
 
     /// @see lok::Document::setPartMode().
-    virtual void setPartMode(int nPartMode)
-    {
-        (void) nPartMode;
-    }
+    virtual void setPartMode(int) {}
 
     /**
      * Setup various document properties that are needed for the document to
@@ -155,9 +148,8 @@ public:
      * @param rRectangle - if not empty, then limit the output only to the area of this rectangle
      * @return a JSON describing position/content of rows/columns
      */
-    virtual OUString getRowColumnHeaders(const tools::Rectangle& rRectangle)
+    virtual OUString getRowColumnHeaders(const tools::Rectangle& /*rRectangle*/)
     {
-        (void) rRectangle;
         return OUString();
     }
 
@@ -189,16 +181,11 @@ public:
      * @param nTileTwipWidth - tile width in twips
      * @param nTileTwipHeight - tile height in twips
      */
-    virtual void setClientZoom(int nTilePixelWidth,
-                               int nTilePixelHeight,
-                               int nTileTwipWidth,
-                               int nTileTwipHeight)
-    {
-        (void) nTilePixelWidth;
-        (void) nTilePixelHeight;
-        (void) nTileTwipWidth;
-        (void) nTileTwipHeight;
-    }
+    virtual void setClientZoom(int /*nTilePixelWidth*/,
+                               int /*nTilePixelHeight*/,
+                               int /*nTileTwipWidth*/,
+                               int /*nTileTwipHeight*/)
+    {}
 
     /// @see lok::Document::setClientVisibleArea().
     virtual void setClientVisibleArea(const tools::Rectangle& /*rRectangle*/)

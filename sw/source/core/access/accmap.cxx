@@ -252,9 +252,6 @@ public:
         const SwFEShell *pFESh,
         SwAccessibleObjShape_Impl  **pSelShape ) const;
 
-#if OSL_DEBUG_LEVEL > 0
-    iterator begin() { return maMap.begin(); }
-#endif
     iterator end() { return maMap.end(); }
     const_iterator cbegin() const { return maMap.cbegin(); }
     const_iterator cend() const { return maMap.cend(); }
@@ -1690,42 +1687,10 @@ SwAccessibleMap::~SwAccessibleMap()
 #endif
     {
         osl::MutexGuard aGuard( maMutex );
-#if OSL_DEBUG_LEVEL > 0
-        if( mpFrameMap )
-        {
-            SwAccessibleContextMap_Impl::iterator aIter = mpFrameMap->begin();
-            while( aIter != mpFrameMap->end() )
-            {
-                uno::Reference < XAccessible > xTmp = (*aIter).second;
-                if( xTmp.is() )
-                {
-                    SwAccessibleContext *pTmp =
-                        static_cast< SwAccessibleContext * >( xTmp.get() );
-                    (void) pTmp;
-                }
-                ++aIter;
-            }
-        }
-        if( mpShapeMap )
-        {
-            SwAccessibleShapeMap_Impl::iterator aIter = mpShapeMap->begin();
-            while( aIter != mpShapeMap->end() )
-            {
-                uno::Reference < XAccessible > xTmp = (*aIter).second;
-                if( xTmp.is() )
-                {
-                    ::accessibility::AccessibleShape *pTmp =
-                        static_cast< ::accessibility::AccessibleShape* >( xTmp.get() );
-                    (void) pTmp;
-                }
-                ++aIter;
-            }
-        }
         assert((!mpFrameMap || mpFrameMap->empty()) &&
                 "Frame map should be empty after disposing the root frame");
         assert((!mpShapeMap || mpShapeMap->empty()) &&
                 "Object map should be empty after disposing the root frame");
-#endif
         delete mpFrameMap;
         mpFrameMap = nullptr;
         delete mpShapeMap;

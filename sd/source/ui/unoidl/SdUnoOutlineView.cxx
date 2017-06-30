@@ -64,16 +64,12 @@ Any SAL_CALL SdUnoOutlineView::getSelection()
 }
 
 void SAL_CALL SdUnoOutlineView::addSelectionChangeListener (
-    const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
-{
-    (void)rxListener;
-}
+    const css::uno::Reference<css::view::XSelectionChangeListener>&)
+{}
 
 void SAL_CALL SdUnoOutlineView::removeSelectionChangeListener (
-    const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
-{
-    (void)rxListener;
-}
+    const css::uno::Reference<css::view::XSelectionChangeListener>&)
+{}
 
 //----- XDrawView -------------------------------------------------------------
 void SAL_CALL SdUnoOutlineView::setCurrentPage (

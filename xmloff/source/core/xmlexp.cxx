@@ -1826,9 +1826,8 @@ void SvXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>&)
 {
 }
 
-sal_Int32 SvXMLExport::GetDocumentSpecificSettings( ::std::list< SettingsGroup >& _out_rSettings )
+sal_Int32 SvXMLExport::GetDocumentSpecificSettings( ::std::list< SettingsGroup >& )
 {
-    (void)_out_rSettings;
     return 0;
 }
 

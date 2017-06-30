@@ -578,7 +578,6 @@ void SwWrongList::Remove(sal_uInt16 nIdx, sal_uInt16 nLen )
 
 #if OSL_DEBUG_LEVEL > 0
     const int nOldSize = Count();
-    (void) nOldSize;
 #endif
 
     maList.erase(i1, i2);

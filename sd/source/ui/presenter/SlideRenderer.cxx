@@ -33,11 +33,10 @@ namespace sd { namespace presenter {
 
 //===== SlideRenderer ==========================================================
 
-SlideRenderer::SlideRenderer (const Reference<XComponentContext>& rxContext)
+SlideRenderer::SlideRenderer ()
     : SlideRendererInterfaceBase(m_aMutex),
       maPreviewRenderer()
 {
-    (void)rxContext;
 }
 
 SlideRenderer::~SlideRenderer()
@@ -200,10 +199,10 @@ void SlideRenderer::ThrowIfDisposed()
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
-com_sun_star_comp_Draw_SlideRenderer_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Draw_SlideRenderer_get_implementation(css::uno::XComponentContext*,
                                                         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new sd::presenter::SlideRenderer(context));
+    return cppu::acquire(new sd::presenter::SlideRenderer);
 }
 
 

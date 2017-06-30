@@ -23,7 +23,6 @@
 #include "MutexOwner.hxx"
 
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
@@ -51,8 +50,7 @@ class BasicToolBarFactory
       public BasicToolBarFactoryInterfaceBase
 {
 public:
-    explicit BasicToolBarFactory (
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    BasicToolBarFactory ();
     virtual ~BasicToolBarFactory() override;
 
     virtual void SAL_CALL disposing() override;

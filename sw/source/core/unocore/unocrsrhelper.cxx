@@ -993,10 +993,7 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
             xReadStorage.set( ::comphelper::OStorageHelper::GetStorageFactory()->createInstanceWithArguments( aArgs ),
                               uno::UNO_QUERY );
         }
-        catch( const io::IOException& rEx)
-        {
-            (void)rEx;
-        }
+        catch( const io::IOException&) {}
     }
     if ( !pFilter )
     {

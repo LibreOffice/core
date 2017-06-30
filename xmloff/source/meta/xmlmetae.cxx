@@ -466,12 +466,10 @@ SvXMLMetaExport::ignorableWhitespace(const OUString & /*i_rWhitespaces*/)
 }
 
 void SAL_CALL
-SvXMLMetaExport::processingInstruction(const OUString & i_rTarget,
-    const OUString & i_rData)
+SvXMLMetaExport::processingInstruction(const OUString &,
+    const OUString &)
 {
     // ignore; the exporter cannot handle these
-    (void) i_rTarget;
-    (void) i_rData;
 }
 
 void SAL_CALL

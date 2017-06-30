@@ -470,10 +470,9 @@ bool ImpSvNumberInputScan::StringContainsWord( const OUString& rWhat,
             return false;   // Alpha or numeric is not word gap.
 
         sal_Int32 nIndex = nPos;
-        const sal_uInt32 uc = rString.iterateCodePoints( &nIndex);
+        rString.iterateCodePoints( &nIndex);
         if (nPos+1 < nIndex)
             return true;    // Surrogate, assume these to be new words.
-        (void)uc;
 
         const sal_Int32 nType = pFormatter->GetCharClass()->getCharacterType( rString, nPos);
         using namespace ::com::sun::star::i18n;

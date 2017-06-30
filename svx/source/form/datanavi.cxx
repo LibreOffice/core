@@ -1225,9 +1225,6 @@ namespace svxform
                         if ( xTarget.is() )
                             m_pNaviWin->AddEventBroadcaster( xTarget );
 
-                    #if OSL_DEBUG_LEVEL > 0
-                        css::xml::dom::NodeType eNodeType = xRoot->getNodeType(); (void)eNodeType;
-                    #endif
                         OUString sNodeName =
                             m_xUIHelper->getNodeDisplayName( xRoot, m_pNaviWin->IsShowDetails() );
                         if ( sNodeName.isEmpty() )

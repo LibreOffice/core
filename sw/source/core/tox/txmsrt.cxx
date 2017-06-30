@@ -165,7 +165,6 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwContentNode* pNd,
                     const SwDoc& rDoc = *pNd->GetDoc();
                     bool const bResult = GetBodyTextNode( rDoc, aPos, *pFrame );
                     OSL_ENSURE(bResult, "where is the text node");
-                    (void) bResult; // unused in non-debug
                     nPos = aPos.nNode.GetIndex();
                     nCntPos = aPos.nContent.GetIndex();
                 }

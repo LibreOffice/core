@@ -125,7 +125,6 @@ public:
     // XEventListener
     void SAL_CALL OXReportControllerObserver::disposing(const lang::EventObject& e)
     {
-        (void) e;
         // check if it's an object we have cached information about
         uno::Reference< beans::XPropertySet > xSourceSet(e.Source, uno::UNO_QUERY);
         if ( xSourceSet.is() )
@@ -147,7 +146,6 @@ public:
     // XPropertyChangeListener
     void SAL_CALL OXReportControllerObserver::propertyChange(const beans::PropertyChangeEvent& _rEvent)
     {
-        (void) _rEvent;
         ::osl::ClearableMutexGuard aGuard( m_pImpl->m_aMutex );
 
         if ( m_pImpl->m_nLocks != 0 )

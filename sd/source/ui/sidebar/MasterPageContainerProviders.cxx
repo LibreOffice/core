@@ -81,15 +81,10 @@ TemplatePreviewProvider::TemplatePreviewProvider (const OUString& rsURL)
 }
 
 Image TemplatePreviewProvider::operator() (
-    int nWidth,
-    SdPage* pPage,
-    ::sd::PreviewRenderer& rRenderer)
+    int,
+    SdPage*,
+    ::sd::PreviewRenderer&)
 {
-    // Unused parameters.
-    (void)nWidth;
-    (void)pPage;
-    (void)rRenderer;
-
     return Image(ThumbnailView::readThumbnail(msURL));
 }
 
@@ -111,11 +106,8 @@ TemplatePageObjectProvider::TemplatePageObjectProvider (const OUString& rsURL)
 {
 }
 
-SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument* pContainerDocument)
+SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument*)
 {
-    // Unused parameters.
-    (void)pContainerDocument;
-
     SdPage* pPage = nullptr;
 
     mxDocumentShell = nullptr;
@@ -202,10 +194,8 @@ ExistingPageProvider::ExistingPageProvider (SdPage* pPage)
 {
 }
 
-SdPage* ExistingPageProvider::operator() (SdDrawDocument* pDocument)
+SdPage* ExistingPageProvider::operator() (SdDrawDocument*)
 {
-    (void)pDocument; // Unused parameter.
-
     return mpPage;
 }
 

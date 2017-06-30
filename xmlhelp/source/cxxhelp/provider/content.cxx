@@ -206,7 +206,7 @@ public:
 // virtual
 uno::Any SAL_CALL Content::execute(
         const ucb::Command& aCommand,
-        sal_Int32 CommandId,
+        sal_Int32,
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
 {
     uno::Any aRet;
@@ -268,10 +268,7 @@ uno::Any SAL_CALL Content::execute(
             aOpenCommand.Sink, uno::UNO_QUERY);
 
         if(xActiveDataSink.is())
-            m_aURLParameter.open(aCommand,
-                                 CommandId,
-                                 Environment,
-                                 xActiveDataSink);
+            m_aURLParameter.open(xActiveDataSink);
 
         uno::Reference< io::XActiveDataStreamer > xActiveDataStreamer(
             aOpenCommand.Sink, uno::UNO_QUERY);
@@ -285,10 +282,7 @@ uno::Any SAL_CALL Content::execute(
             aOpenCommand.Sink, uno::UNO_QUERY);
 
         if(xOutputStream.is() )
-            m_aURLParameter.open(aCommand,
-                                 CommandId,
-                                 Environment,
-                                 xOutputStream);
+            m_aURLParameter.open(xOutputStream);
 
         if( m_aURLParameter.isRoot() )
         {

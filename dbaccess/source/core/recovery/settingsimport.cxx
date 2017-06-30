@@ -75,9 +75,8 @@ namespace dbaccess
     }
 
     // IgnoringSettingsImport
-    ::rtl::Reference< SettingsImport > IgnoringSettingsImport::nextState( const OUString& i_rElementName )
+    ::rtl::Reference< SettingsImport > IgnoringSettingsImport::nextState( const OUString& )
     {
-        (void)i_rElementName;
         return this;
     }
 
@@ -117,10 +116,9 @@ namespace dbaccess
     {
     }
 
-    ::rtl::Reference< SettingsImport > ConfigItemImport::nextState( const OUString& i_rElementName )
+    ::rtl::Reference< SettingsImport > ConfigItemImport::nextState( const OUString& )
     {
         OSL_FAIL( "ConfigItemImport::nextState: unexpected: this class is responsible for child-less items only!" );
-        (void)i_rElementName;
         return new IgnoringSettingsImport;
     }
 

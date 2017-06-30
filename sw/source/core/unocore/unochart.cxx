@@ -700,7 +700,6 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
                 OUString aTableName, aStartCell, aEndCell;
                 bool bOk2 = GetTableAndCellsFromRangeRep(
                                     pSubRanges[i], aTableName, aStartCell, aEndCell );
-                (void) bOk2;
                 OSL_ENSURE( bOk2, "failed to get table and start/end cells" );
 
                 sal_Int32 nStartRow, nStartCol, nEndRow, nEndCol;
@@ -1119,7 +1118,6 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
         {
             OSL_ENSURE( nCurLabelSeqLen == 0 && nCurValuesSeqLen == 1,
                     "trying to determine 'DataRowSource': something's fishy... should have been a single cell");
-            (void)nCurValuesSeqLen;
             nDirection = 0;     // default direction for a single cell should be 'columns'
         }
         else    // more than one cell is available (in values and label together!)
@@ -1896,7 +1894,6 @@ SwChartDataSequence::SwChartDataSequence(
     // which is required for some functions
     SwUnoTableCursor* pUnoTableCursor = dynamic_cast<SwUnoTableCursor*>(&(*m_pTableCursor));
     OSL_ENSURE(pUnoTableCursor, "SwChartDataSequence: cursor not SwUnoTableCursor");
-    (void) pUnoTableCursor;
 #endif
 }
 
@@ -1943,7 +1940,6 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
     // which is required for some functions
     SwUnoTableCursor* pUnoTableCursor = dynamic_cast<SwUnoTableCursor*>(&(*m_pTableCursor));
     OSL_ENSURE(pUnoTableCursor, "SwChartDataSequence: cursor not SwUnoTableCursor");
-    (void) pUnoTableCursor;
 #endif
 }
 

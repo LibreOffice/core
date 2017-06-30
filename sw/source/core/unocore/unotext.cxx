@@ -1970,42 +1970,6 @@ lcl_ApplyRowProperties(
     }
 }
 
-#if OSL_DEBUG_LEVEL > 0
-//-->debug cell properties of all rows
-static void
-lcl_DebugCellProperties(
-    const uno::Sequence< uno::Sequence< uno::Sequence<
-        beans::PropertyValue > > >& rCellProperties)
-{
-    OUString sNames;
-    for (sal_Int32  nDebugRow = 0; nDebugRow < rCellProperties.getLength();
-         ++nDebugRow)
-    {
-        const uno::Sequence< beans::PropertyValues > aDebugCurrentRow =
-            rCellProperties[nDebugRow];
-        sal_Int32 nDebugCells = aDebugCurrentRow.getLength();
-        (void) nDebugCells;
-        for (sal_Int32  nDebugCell = 0; nDebugCell < nDebugCells;
-             ++nDebugCell)
-        {
-            const uno::Sequence< beans::PropertyValue >&
-                rDebugCellProperties = aDebugCurrentRow[nDebugCell];
-            const sal_Int32 nDebugCellProperties =
-                rDebugCellProperties.getLength();
-            for (sal_Int32  nDebugProperty = 0;
-                 nDebugProperty < nDebugCellProperties; ++nDebugProperty)
-            {
-                sNames += rDebugCellProperties[nDebugProperty].Name + "-";
-            }
-            sNames += "+";
-        }
-        sNames += "|";
-    }
-    (void)sNames;
-}
-//--<
-#endif
-
 static void
 lcl_ApplyCellProperties(
     const sal_Int32 nCell,
@@ -2273,10 +2237,6 @@ SwXText::convertToTable(
             lcl_ApplyRowProperties(pRowProperties[nRow],
                 xRows->getByIndex(nRow), aRowSeparators[nRow]);
         }
-
-#if OSL_DEBUG_LEVEL > 0
-        lcl_DebugCellProperties(rCellProperties);
-#endif
 
         uno::Reference<table::XCellRange> const xCR(xRet, uno::UNO_QUERY_THROW);
         //apply cell properties

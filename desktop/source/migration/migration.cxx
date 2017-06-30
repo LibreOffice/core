@@ -209,7 +209,6 @@ void Migration::migrateSettingsIfNecessary()
         SAL_WARN( "desktop", "doMigration() exception: " << e.Message);
     }
     OSL_ENSURE(bResult, "Migration has not been successful");
-    (void)bResult;
 }
 
 MigrationImpl::MigrationImpl()

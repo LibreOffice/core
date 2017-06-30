@@ -783,8 +783,8 @@ void ShutdownIcon::SetAutostart( bool bActivate )
         if ((0 != symlink(aDesktopFileUnx.getStr(), aShortcutUnx.getStr())) && (errno == EEXIST))
         {
             unlink(aShortcutUnx.getStr());
-            int ret = symlink(aDesktopFileUnx.getStr(), aShortcutUnx.getStr());
-            (void)ret; //deliberately ignore return value, it's non-critical if it fails
+            (void) symlink(aDesktopFileUnx.getStr(), aShortcutUnx.getStr());
+                //deliberately ignore return value, it's non-critical if it fails
         }
 
         ShutdownIcon *pIcon = ShutdownIcon::createInstance();

@@ -207,7 +207,6 @@ void Diagram::build(  )
 
         const bool bInserted1=getData()->getPointNameMap().insert(
             std::make_pair(aCurrPoint->msModelId,&(*aCurrPoint))).second;
-        (void)bInserted1;
 
         OSL_ENSURE(bInserted1,"Diagram::build(): non-unique point model id");
 
@@ -276,7 +275,6 @@ void Diagram::build(  )
 
         const bool bInserted1=getData()->getConnectionNameMap().insert(
             std::make_pair(aCurrCxn->msModelId,&(*aCurrCxn))).second;
-        (void)bInserted1;
 
         OSL_ENSURE(bInserted1,"Diagram::build(): non-unique connection model id");
 

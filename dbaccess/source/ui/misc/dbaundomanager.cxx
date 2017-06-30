@@ -312,9 +312,8 @@ namespace dbaui
         return *&m_xImpl->rParent;
     }
 
-    void SAL_CALL UndoManager::setParent( const Reference< XInterface >& i_parent )
+    void SAL_CALL UndoManager::setParent( const Reference< XInterface >& )
     {
-        (void)i_parent;
         throw NoSupportException( OUString(), m_xImpl->getThis() );
     }
 

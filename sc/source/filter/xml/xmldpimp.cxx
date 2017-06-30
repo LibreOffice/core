@@ -1660,11 +1660,9 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
     {
         OUString sAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
-        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+        GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         OUString sValue = xAttrList->getValueByIndex( i );
-
-        (void)nPrefix;  //! compare below!
 
         if (IsXMLToken(aLocalName, XML_SOURCE_FIELD_NAME))
                 sGroupSource = sValue;

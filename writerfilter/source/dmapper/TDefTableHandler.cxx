@@ -274,8 +274,6 @@ OUString TDefTableHandler::getThemeColorTypeString(sal_Int32 nType)
 void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
-    (void)nIntValue;
-    (void)rName;
     switch( rName )
     {
         case NS_ooxml::LN_CT_Border_sz:

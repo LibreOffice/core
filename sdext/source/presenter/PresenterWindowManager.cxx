@@ -240,15 +240,9 @@ void SAL_CALL PresenterWindowManager::windowMoved (const awt::WindowEvent& rEven
     }
 }
 
-void SAL_CALL PresenterWindowManager::windowShown (const lang::EventObject& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterWindowManager::windowShown (const lang::EventObject&) {}
 
-void SAL_CALL PresenterWindowManager::windowHidden (const lang::EventObject& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterWindowManager::windowHidden (const lang::EventObject&) {}
 
 //----- XPaintListener --------------------------------------------------------
 
@@ -279,9 +273,8 @@ void SAL_CALL PresenterWindowManager::windowPaint (const awt::PaintEvent& rEvent
 
 //----- XMouseListener --------------------------------------------------------
 
-void SAL_CALL PresenterWindowManager::mousePressed (const css::awt::MouseEvent& rEvent)
+void SAL_CALL PresenterWindowManager::mousePressed (const css::awt::MouseEvent&)
 {
-    (void)rEvent;
     mbIsMouseClickPending = true;
 }
 
@@ -294,15 +287,13 @@ void SAL_CALL PresenterWindowManager::mouseReleased (const css::awt::MouseEvent&
     }
 }
 
-void SAL_CALL PresenterWindowManager::mouseEntered (const css::awt::MouseEvent& rEvent)
+void SAL_CALL PresenterWindowManager::mouseEntered (const css::awt::MouseEvent&)
 {
-    (void)rEvent;
     mbIsMouseClickPending = false;
 }
 
-void SAL_CALL PresenterWindowManager::mouseExited (const css::awt::MouseEvent& rEvent)
+void SAL_CALL PresenterWindowManager::mouseExited (const css::awt::MouseEvent&)
 {
-    (void)rEvent;
     mbIsMouseClickPending = false;
 }
 
@@ -313,10 +304,9 @@ void SAL_CALL PresenterWindowManager::focusGained (const css::awt::FocusEvent& /
     ThrowIfDisposed();
 }
 
-void SAL_CALL PresenterWindowManager::focusLost (const css::awt::FocusEvent& rEvent)
+void SAL_CALL PresenterWindowManager::focusLost (const css::awt::FocusEvent&)
 {
     ThrowIfDisposed();
-    (void)rEvent;
 }
 
 //----- XEventListener --------------------------------------------------------
@@ -921,7 +911,6 @@ void PresenterWindowManager::UpdateWindowSize (const Reference<awt::XWindow>& rx
 
 void PresenterWindowManager::PaintBackground (const awt::Rectangle& rUpdateBox)
 {
-    (void)rUpdateBox;
     if ( ! mxParentWindow.is())
         return;
 

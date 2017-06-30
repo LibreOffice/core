@@ -289,16 +289,12 @@ Any SAL_CALL SdUnoDrawView::getSelection()
 }
 
 void SAL_CALL SdUnoDrawView::addSelectionChangeListener (
-    const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
-{
-    (void)rxListener;
-}
+    const css::uno::Reference<css::view::XSelectionChangeListener>&)
+{}
 
 void SAL_CALL SdUnoDrawView::removeSelectionChangeListener (
-    const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
-{
-    (void)rxListener;
-}
+    const css::uno::Reference<css::view::XSelectionChangeListener>&)
+{}
 
 void SdUnoDrawView::setFastPropertyValue (
     sal_Int32 nHandle,
