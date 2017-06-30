@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_9e58bb58",
+        "filename": "chart2/source/tools/DataSeriesHelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-06-30T07:33:42Z",
+      "side": 1,
+      "message": "given that std::not1 is deprecated in C++17, I\u0027d just instead change the call-site using std::not1 into using a lambda",
+      "revId": "65f35024687a04eb811a6d53b1316a4213104242",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
