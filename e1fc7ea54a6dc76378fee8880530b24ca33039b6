@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_41b916e9",
+        "filename": "sd/source/ui/slidesorter/model/SlsPageDescriptor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-06-30T16:09:50Z",
+      "side": 1,
+      "message": "either mpPage cannot be null (\u003d\u003e assert) or it can (no assert, but maybe SAL_INFO/SAL_WARN if it\u0027s deemed interesting enough)",
+      "revId": "e1fc7ea54a6dc76378fee8880530b24ca33039b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
