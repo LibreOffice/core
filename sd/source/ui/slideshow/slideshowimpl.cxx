@@ -1696,7 +1696,7 @@ void SlideshowImpl::updateSlideShow()
                 // Make sure that the maximum frame count has not been set
                 // too high (only then conversion to milliseconds and long
                 // integer may lead to zero value.)
-                OSL_ASSERT(static_cast<sal_uLong>(fUpdate * 1000.0) > 0);
+                assert(static_cast<sal_uLong>(fUpdate * 1000.0) > 0);
             }
 
             // Use our high resolution timers for the asynchronous callback.

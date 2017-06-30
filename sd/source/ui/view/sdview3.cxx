@@ -276,7 +276,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
     if (mpViewSh != nullptr)
     {
-        OSL_ASSERT (mpViewSh->GetViewShell()!=nullptr);
+        assert (mpViewSh->GetViewShell()!=nullptr);
         SfxInPlaceClient* pIpClient = mpViewSh->GetViewShell()->GetIPClient();
         if( dynamic_cast< ::sd::slidesorter::SlideSorterViewShell *>( mpViewSh ) !=  nullptr
             || (pIpClient!=nullptr && pIpClient->IsObjectInPlaceActive()))
@@ -1001,7 +1001,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     if (mpViewSh!=nullptr)
                     {
-                        OSL_ASSERT (mpViewSh->GetViewShell()!=nullptr);
+                        assert (mpViewSh->GetViewShell()!=nullptr);
                         SfxInPlaceClient* pIpClient
                             = mpViewSh->GetViewShell()->GetIPClient();
                         if (pIpClient!=nullptr && pIpClient->IsObjectInPlaceActive())
@@ -1171,7 +1171,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     if (mpViewSh!=nullptr)
                     {
-                        OSL_ASSERT (mpViewSh->GetViewShell()!=nullptr);
+                        assert (false);
                         SfxInPlaceClient* pIpClient
                             = mpViewSh->GetViewShell()->GetIPClient();
                         if (pIpClient!=nullptr && pIpClient->IsObjectInPlaceActive())

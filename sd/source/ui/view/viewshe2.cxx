@@ -477,7 +477,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
     OUString aString(SdResId(STR_UNDO_CHANGE_PAGEFORMAT));
     pUndoGroup->SetComment(aString);
     SfxViewShell* pViewShell = GetViewShell();
-    OSL_ASSERT (pViewShell!=nullptr);
+    assert (pViewShell!=nullptr);
 
     sal_uInt16 i, nPageCnt = GetDoc()->GetMasterSdPageCount(ePageKind);
 
@@ -639,7 +639,7 @@ void ViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction&)
 void ViewShell::SetActiveWindow (::sd::Window* pWin)
 {
     SfxViewShell* pViewShell = GetViewShell();
-    OSL_ASSERT (pViewShell!=nullptr);
+    assert (pViewShell!=nullptr);
 
     if (pViewShell->GetWindow() != pWin)
     {
@@ -722,7 +722,7 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
     bool bAbort = false;
     GetDocSh()->SetWaitCursor( true );
     SfxViewShell* pViewShell = GetViewShell();
-    OSL_ASSERT (pViewShell!=nullptr);
+    assert (pViewShell!=nullptr);
     bool bChangeDefaultsForChart = false;
     OUString aName;
 
@@ -934,7 +934,7 @@ void ViewShell::SetRuler(bool bRuler)
         }
     }
 
-    OSL_ASSERT(GetViewShell()!=nullptr);
+    assert(GetViewShell()!=nullptr);
     if (IsMainViewShell())
         GetViewShell()->InvalidateBorder();
 }
@@ -966,7 +966,7 @@ void ViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
     const sal_Int32 nIndex = rSequence.getLength();
     rSequence.realloc( nIndex + 1 );
 
-    OSL_ASSERT (GetViewShell()!=nullptr);
+    assert (GetViewShell()!=nullptr);
     // Get the view id from the view shell in the center pane.  This will
     // usually be the called view shell, but to be on the safe side we call
     // the main view shell explicitly.
@@ -986,7 +986,7 @@ void ViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
 
 void ViewShell::VisAreaChanged(const ::tools::Rectangle& /*rRect*/)
 {
-    OSL_ASSERT (GetViewShell()!=nullptr);
+    assert (GetViewShell()!=nullptr);
     GetViewShell()->VisAreaChanged();
 }
 

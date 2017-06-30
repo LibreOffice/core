@@ -744,7 +744,7 @@ void ToolBarManager::Implementation::LockUpdate()
     DBG_ASSERT(mnLockCount<100, "ToolBarManager lock count unusually high");
     if (mnLockCount == 0)
     {
-        OSL_ASSERT(mpSynchronousLayouterLock.get()==nullptr);
+        assert(mpSynchronousLayouterLock.get()==nullptr);
 
         mpSynchronousLayouterLock.reset(new LayouterLock(mxLayouter));
     }
@@ -756,7 +756,7 @@ void ToolBarManager::Implementation::UnlockUpdate()
     SAL_INFO("sd.view", OSL_THIS_FUNC << ": UnlockUpdate " << mnLockCount);
     ::osl::MutexGuard aGuard(maMutex);
 
-    OSL_ASSERT(mnLockCount>0);
+    assert(mnLockCount>0);
     --mnLockCount;
     if (mnLockCount == 0)
     {

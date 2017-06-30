@@ -945,7 +945,7 @@ LifetimeController::LifetimeController (::sd::ViewShellBase& rBase)
 
 LifetimeController::~LifetimeController()
 {
-    OSL_ASSERT(!mbListeningToController && !mbListeningToViewShellBase);
+    assert(!mbListeningToController && !mbListeningToViewShellBase);
 }
 
 void LifetimeController::disposing()

@@ -301,7 +301,7 @@ namespace {
 
         // Set the visible layers
         SdrPageView* pPageView = rPrintView.GetSdrPageView();
-        OSL_ASSERT(pPageView!=nullptr);
+        assert(pPageView!=nullptr);
         pPageView->SetVisibleLayers(rVisibleLayers);
         pPageView->SetPrintableLayers(rPrintableLayers);
 
@@ -1183,7 +1183,7 @@ public:
     */
     void ProcessProperties (const css::uno::Sequence<css::beans::PropertyValue >& rOptions)
     {
-        OSL_ASSERT(!mbIsDisposed);
+        assert(!mbIsDisposed);
         if (mbIsDisposed)
             return;
 
@@ -1222,7 +1222,7 @@ public:
     */
     sal_Int32 GetPrintPageCount()
     {
-        OSL_ASSERT(!mbIsDisposed);
+        assert(!mbIsDisposed);
         if (mbIsDisposed)
             return 0;
         else
@@ -1256,7 +1256,7 @@ public:
     */
     void PrintPage (const sal_Int32 nIndex)
     {
-        OSL_ASSERT(!mbIsDisposed);
+        assert(!mbIsDisposed);
         if (mbIsDisposed)
             return;
 
@@ -1267,7 +1267,7 @@ public:
             return;
 
         SdDrawDocument* pDocument = pViewShell->GetDoc();
-        OSL_ASSERT(pDocument!=nullptr);
+        assert(pDocument!=nullptr);
 
         std::shared_ptr<DrawViewShell> pDrawViewShell(
             std::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
@@ -1279,7 +1279,7 @@ public:
             return;
 
         const std::shared_ptr<PrinterPage> pPage (maPrinterPages[nIndex]);
-        OSL_ASSERT(pPage);
+        assert(pPage);
         if ( ! pPage)
             return;
 
@@ -1580,8 +1580,8 @@ private:
         const sal_Int32 nPageIndex,
         const PageKind ePageKind) const
     {
-        OSL_ASSERT(mrBase.GetDocument() != nullptr);
-        OSL_ASSERT(nPageIndex>=0);
+        assert(mrBase.GetDocument() != nullptr);
+        assert(nPageIndex>=0);
         SdPage* pPage = mrBase.GetDocument()->GetSdPage(
             sal::static_int_cast<sal_uInt16>(nPageIndex),
             ePageKind);
@@ -1755,7 +1755,7 @@ private:
     void PrepareHandout (PrintInfo& rInfo)
     {
         SdDrawDocument* pDocument = mrBase.GetDocument();
-        OSL_ASSERT(pDocument != nullptr);
+        assert(pDocument != nullptr);
         SdPage& rHandoutPage (*pDocument->GetSdPage(0, PageKind::Handout));
 
         const bool bScalePage (mpOptions->IsPageSize());
@@ -1870,7 +1870,7 @@ private:
         const PageKind ePageKind,
         PrintInfo& rInfo)
     {
-        OSL_ASSERT(rInfo.mpPrinter != nullptr);
+        assert(rInfo.mpPrinter != nullptr);
 
         // Fill in page kind specific data.
         SdDrawDocument* pDocument = mrBase.GetMainViewShell()->GetDoc();

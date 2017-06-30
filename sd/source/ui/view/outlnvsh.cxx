@@ -1838,7 +1838,7 @@ void OutlineViewShell::VisAreaChanged(const ::tools::Rectangle& rRect)
 css::uno::Reference<css::accessibility::XAccessible>
     OutlineViewShell::CreateAccessibleDocumentView (::sd::Window* pWindow)
 {
-    OSL_ASSERT (GetViewShell()!=nullptr);
+    assert (GetViewShell()!=nullptr);
     if (GetViewShell()->GetController() != nullptr)
     {
         ::accessibility::AccessibleOutlineView* pDocumentView =

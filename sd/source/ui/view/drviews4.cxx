@@ -830,7 +830,7 @@ void DrawViewShell::ShowMousePosInfo(const ::tools::Rectangle& rRect,
     }
 
     // display with coordinates in StatusBar
-    OSL_ASSERT (GetViewShell()!=nullptr);
+    assert (GetViewShell()!=nullptr);
     if ( !GetViewShell()->GetUIActiveClient() )
     {
         SfxItemSet aSet(

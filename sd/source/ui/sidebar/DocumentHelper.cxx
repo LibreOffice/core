@@ -310,7 +310,7 @@ void DocumentHelper::AssignMasterPageToPageList (
     ::std::vector<SdPage*> aCleanedList;
     for (iPage=rpPageList->begin(); iPage!=rpPageList->end(); ++iPage)
     {
-        OSL_ASSERT(*iPage!=nullptr && (*iPage)->GetModel() == &rTargetDocument);
+        assert(*iPage!=nullptr && (*iPage)->GetModel() == &rTargetDocument);
         if (*iPage != nullptr && (*iPage)->GetLayoutName() != sFullLayoutName)
         {
             aCleanedList.push_back(*iPage);
@@ -476,7 +476,7 @@ SdPage* DocumentHelper::ProvideMasterPage (
     if (pMasterPage == nullptr)
     {
         // The caller should make sure that the master page is valid.
-        OSL_ASSERT(pMasterPage != nullptr);
+        assert(false);
         return nullptr;
     }
     SdDrawDocument* pSourceDocument = static_cast<SdDrawDocument*>(pMasterPage->GetModel());

@@ -635,7 +635,7 @@ void SAL_CALL SlideShow::end()
     // The mbIsInStartup flag should have been reset during the start of the
     // slide show.  Reset it here just in case that something has horribly
     // gone wrong.
-    OSL_ASSERT(!mbIsInStartup);
+    assert(!mbIsInStartup);
     mbIsInStartup = false;
 
     rtl::Reference< SlideshowImpl > xController( mxController );
@@ -788,7 +788,7 @@ void SAL_CALL SlideShow::startWithArguments(const Sequence< PropertyValue >& rAr
     // Stop a running show before starting a new one.
     if( mxController.is() )
     {
-        OSL_ASSERT(!mbIsInStartup);
+        assert(!mbIsInStartup);
         end();
     }
     else if (mbIsInStartup)

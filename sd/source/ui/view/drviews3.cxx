@@ -327,7 +327,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_OBJECTRESIZE:
         {
             // The server likes to change the client size
-            OSL_ASSERT (GetViewShell()!=nullptr);
+            assert (GetViewShell()!=nullptr);
             SfxInPlaceClient* pIPClient = GetViewShell()->GetIPClient();
 
             if ( pIPClient && pIPClient->IsObjectInPlaceActive() )

@@ -241,7 +241,7 @@ void Configuration::PostEvent (
     const Reference<XResourceId>& rxResourceId,
     const bool bActivation)
 {
-    OSL_ASSERT(rxResourceId.is());
+    assert(rxResourceId.is());
 
     if (mxBroadcaster.is())
     {

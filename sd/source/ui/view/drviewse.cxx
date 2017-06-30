@@ -1555,7 +1555,7 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
 
         SdrInsertFlags nOptions = SdrInsertFlags::SETDEFLAYER;
 
-        OSL_ASSERT (GetViewShell()!=nullptr);
+        assert (GetViewShell()!=nullptr);
         SfxInPlaceClient* pIpClient = GetViewShell()->GetIPClient();
         if (pIpClient!=nullptr && pIpClient->IsObjectInPlaceActive())
         {

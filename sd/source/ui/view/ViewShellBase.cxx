@@ -481,7 +481,7 @@ void ViewShellBase::OuterResizePixel (const Point& rOrigin, const Size &rSize)
 
 void ViewShellBase::Rearrange()
 {
-    OSL_ASSERT(GetViewFrame()!=nullptr);
+    assert(GetViewFrame()!=nullptr);
 
     // There is a bug in the communication between embedded objects and the
     // framework::LayoutManager that leads to missing resize updates.  The
@@ -520,7 +520,7 @@ Reference<view::XRenderable> ViewShellBase::GetRenderable()
 
 SfxPrinter* ViewShellBase::GetPrinter (bool bCreate)
 {
-    OSL_ASSERT(mpImpl.get()!=nullptr);
+    assert(mpImpl.get()!=nullptr);
 
     return GetDocShell()->GetPrinter (bCreate);
 }
@@ -529,7 +529,7 @@ sal_uInt16 ViewShellBase::SetPrinter (
     SfxPrinter* pNewPrinter,
     SfxPrinterChangeFlags nDiffFlags)
 {
-    OSL_ASSERT(mpImpl.get()!=nullptr);
+    assert(mpImpl.get()!=nullptr);
 
     GetDocShell()->SetPrinter(pNewPrinter);
 
@@ -908,8 +908,8 @@ OUString ViewShellBase::GetInitialViewShellType()
 
 std::shared_ptr<tools::EventMultiplexer> ViewShellBase::GetEventMultiplexer()
 {
-    OSL_ASSERT(mpImpl.get()!=nullptr);
-    OSL_ASSERT(mpImpl->mpEventMultiplexer.get()!=nullptr);
+    assert(mpImpl.get()!=nullptr);
+    assert(mpImpl->mpEventMultiplexer.get()!=nullptr);
 
     return mpImpl->mpEventMultiplexer;
 }
@@ -921,37 +921,37 @@ const ::tools::Rectangle& ViewShellBase::getClientRectangle() const
 
 std::shared_ptr<ToolBarManager> ViewShellBase::GetToolBarManager() const
 {
-    OSL_ASSERT(mpImpl.get()!=nullptr);
-    OSL_ASSERT(mpImpl->mpToolBarManager.get()!=nullptr);
+    assert(mpImpl.get()!=nullptr);
+    assert(mpImpl->mpToolBarManager.get()!=nullptr);
 
     return mpImpl->mpToolBarManager;
 }
 
 std::shared_ptr<FormShellManager> ViewShellBase::GetFormShellManager() const
 {
-    OSL_ASSERT(mpImpl.get()!=nullptr);
-    OSL_ASSERT(mpImpl->mpFormShellManager.get()!=nullptr);
+    assert(mpImpl.get()!=nullptr);
+    assert(mpImpl->mpFormShellManager.get()!=nullptr);
 
     return mpImpl->mpFormShellManager;
 }
 
 DrawController& ViewShellBase::GetDrawController() const
 {
-    OSL_ASSERT(mpImpl.get()!=nullptr);
+    assert(mpImpl.get()!=nullptr);
 
     return *mpImpl->mpController;
 }
 
 void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabBar)
 {
-    OSL_ASSERT(mpImpl.get()!=nullptr);
+    assert(mpImpl.get()!=nullptr);
 
     mpImpl->mpViewTabBar = rViewTabBar;
 }
 
 vcl::Window* ViewShellBase::GetViewWindow()
 {
-    OSL_ASSERT(mpImpl.get()!=nullptr);
+    assert(mpImpl.get()!=nullptr);
 
     return mpImpl->mpViewWindow.get();
 }

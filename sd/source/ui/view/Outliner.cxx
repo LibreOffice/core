@@ -473,7 +473,7 @@ bool SdOutliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
     std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
     if ( ! pViewShell)
     {
-        OSL_ASSERT(pViewShell);
+        assert(false);
         return true;
     }
 
@@ -536,7 +536,7 @@ void SdOutliner::Initialize (bool bDirectionIsForward)
         std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
         if ( ! pViewShell)
         {
-            OSL_ASSERT(pViewShell);
+            assert(false);
             return;
         }
 
@@ -601,7 +601,7 @@ bool SdOutliner::SearchAndReplaceAll()
     std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
     if ( ! pViewShell)
     {
-        OSL_ASSERT(pViewShell);
+        assert(false);
         return true;
     }
 
@@ -942,7 +942,7 @@ void SdOutliner::RememberStartPosition()
     std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
     if ( ! pViewShell)
     {
-        OSL_ASSERT(pViewShell);
+        assert(false);
         return;
     }
 
@@ -1125,7 +1125,7 @@ void SdOutliner::EndOfSearch()
     std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
     if ( ! pViewShell)
     {
-        OSL_ASSERT(pViewShell);
+        assert(false);
         return;
     }
 
@@ -1374,7 +1374,7 @@ void SdOutliner::SetViewMode (PageKind ePageKind)
         // Save edit mode so that it can be restored when switching the view
         // shell again.
         pDrawViewShell = std::dynamic_pointer_cast<sd::DrawViewShell>(pViewShell);
-        OSL_ASSERT(pDrawViewShell.get()!=nullptr);
+        assert(pDrawViewShell.get()!=nullptr);
         if (pDrawViewShell.get() != nullptr)
             mpImpl->meOriginalEditMode = pDrawViewShell->GetEditMode();
     }
@@ -1387,7 +1387,7 @@ void SdOutliner::SetPage (EditMode eEditMode, sal_uInt16 nPageIndex)
         std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
         std::shared_ptr<sd::DrawViewShell> pDrawViewShell(
             std::dynamic_pointer_cast<sd::DrawViewShell>(pViewShell));
-        OSL_ASSERT(pDrawViewShell.get()!=nullptr);
+        assert(pDrawViewShell.get()!=nullptr);
         if (pDrawViewShell.get() != nullptr)
         {
             pDrawViewShell->ChangeEditMode(eEditMode, false);

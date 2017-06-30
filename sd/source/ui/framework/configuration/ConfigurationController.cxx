@@ -88,7 +88,7 @@ public:
 ConfigurationController::Lock::Lock (const Reference<XConfigurationController>& rxController)
     : mxController(rxController)
 {
-    OSL_ASSERT(mxController.is());
+    assert(mxController.is());
 
     if (mxController.is())
         mxController->lock();
@@ -149,7 +149,7 @@ void ConfigurationController::ProcessEvent()
 {
     if (mpImplementation.get() != nullptr)
     {
-        OSL_ASSERT(mpImplementation->mpQueueProcessor.get()!=nullptr);
+        assert(mpImplementation->mpQueueProcessor.get()!=nullptr);
 
         mpImplementation->mpQueueProcessor->ProcessOneEvent();
     }
@@ -174,7 +174,7 @@ void SAL_CALL ConfigurationController::addConfigurationChangeListener (
     ::osl::MutexGuard aGuard (maMutex);
 
     ThrowIfDisposed();
-    OSL_ASSERT(mpImplementation.get()!=nullptr);
+    assert(mpImplementation.get()!=nullptr);
     mpImplementation->mpBroadcaster->AddListener(rxListener, rsEventType, rUserData);
 }
 
@@ -198,8 +198,8 @@ void SAL_CALL ConfigurationController::notifyEvent (
 
 void SAL_CALL ConfigurationController::lock()
 {
-    OSL_ASSERT(mpImplementation.get()!=nullptr);
-    OSL_ASSERT(mpImplementation->mpConfigurationUpdater.get()!=nullptr);
+    assert(mpImplementation.get()!=nullptr);
+    assert(mpImplementation->mpConfigurationUpdater.get()!=nullptr);
 
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -219,7 +219,7 @@ void SAL_CALL ConfigurationController::unlock()
     if (rBHelper.bDisposed)
         ThrowIfDisposed();
 
-    OSL_ASSERT(mpImplementation->mnLockCount>0);
+    assert(mpImplementation->mnLockCount>0);
     --mpImplementation->mnLockCount;
     if (mpImplementation->mnLockCount == 0)
         mpImplementation->mpConfigurationUpdaterLock.reset();
@@ -510,7 +510,7 @@ void ConfigurationController::ThrowIfDisposed () const
 
     if (mpImplementation.get() == nullptr)
     {
-        OSL_ASSERT(mpImplementation.get() != nullptr);
+        assert(false);
         throw RuntimeException("ConfigurationController not initialized",
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }

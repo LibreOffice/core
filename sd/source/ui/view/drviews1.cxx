@@ -830,7 +830,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
             }
             else
             {
-                OSL_ASSERT(mpFrameView!=nullptr);
+                assert(mpFrameView!=nullptr);
                 mpFrameView->SetSelectedPage(nSelectedPage);
 
                 if (GetDoc()->GetSdPageCount(mePageKind) > nSelectedPage)
@@ -920,7 +920,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
         {
             // tighten VisArea, to possibly deactivate objects
             // !!! only if we are not in presentation mode (#96279) !!!
-            OSL_ASSERT (GetViewShell()!=nullptr);
+            assert (GetViewShell()!=nullptr);
             GetViewShell()->DisconnectAllClients();
             VisAreaChanged(::tools::Rectangle(Point(), Size(1, 1)));
         }
