@@ -91,7 +91,6 @@ public:
     sal_uInt16                  nObj1Lines;        // 1..3
     sal_uInt16                  nObj2Lines;        // 1..3
     sal_uInt16                  nMiddleLine;       // 0xFFFF=none, otherwiese point number of the beginning of the line
-    char                        cOrthoForm;        // form of the right-angled connector, e.g., 'Z','U',I','L','S',...
 
 public:
     SdrEdgeInfoRec()
@@ -99,8 +98,7 @@ public:
         nAngle2(0),
         nObj1Lines(0),
         nObj2Lines(0),
-        nMiddleLine(0xFFFF),
-        cOrthoForm(0)
+        nMiddleLine(0xFFFF)
     {}
 
     Point& ImpGetLineOffsetPoint(SdrEdgeLineCode eLineCode);

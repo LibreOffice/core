@@ -1321,7 +1321,7 @@ void E3dView::InitScene(E3dScene* pScene, double fW, double fH, double fCamZ)
 
     aCam.SetPosAndLookAt(aCamPos, aLookAt);
     aCam.SetFocalLength(GetDefaultCamFocal());
-    aCam.SetDefaults(basegfx::B3DPoint(0.0, 0.0, fDefaultCamPosZ), aLookAt, GetDefaultCamFocal());
+    aCam.SetDefaults(basegfx::B3DPoint(0.0, 0.0, fDefaultCamPosZ), aLookAt);
     pScene->SetCamera(aCam);
 }
 
@@ -1511,10 +1511,6 @@ void E3dView::ResetCreationActive ()
 void E3dView::InitView ()
 {
     eDragConstraint          = E3dDragConstraint::XYZ;
-    fDefaultScaleY           =
-    fDefaultScaleZ           = 1.0;
-    fDefaultRotateY          =
-    fDefaultRotateZ          = 0.0;
     aDefaultLightColor       = RGB_Color(COL_WHITE);
     aDefaultAmbientColor     = RGB_Color(COL_BLACK);
     mpMirrorOverlay          = nullptr;

@@ -57,7 +57,6 @@ void E3dCubeObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 {
     aCubePos = rDefault.GetDefaultCubePos();
     aCubeSize = rDefault.GetDefaultCubeSize();
-    nSideFlags = rDefault.GetDefaultCubeSideFlags();
     bPosIsCenter = rDefault.GetDefaultCubePosIsCenter();
 }
 

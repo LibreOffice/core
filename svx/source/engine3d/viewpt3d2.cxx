@@ -26,13 +26,10 @@ Viewport3D::Viewport3D() :
     aVPN(0, 0, 1),
     aVUV(0, 1, 1),
     aPRP(0, 0, 2),
-    fVPD(-3),
     eProjection(ProjectionType::Perspective),
     aDeviceRect(Point(0,0), Size(-1,-1)),
     aViewPoint (0, 0, 5000),
-    bTfValid(false),
-    fWRatio (1.0),
-    fHRatio (1.0)
+    bTfValid(false)
 {
     aViewWin.X = -1; aViewWin.Y = -1;
     aViewWin.W =  2; aViewWin.H = 2;
@@ -48,9 +45,6 @@ void Viewport3D::SetViewWindow(double fX, double fY, double fW, double fH)
     else            aViewWin.W = 1.0;
     if ( fH > 0 )   aViewWin.H = fH;
     else            aViewWin.H = 1.0;
-
-    fWRatio = aDeviceRect.GetWidth() / aViewWin.W;
-    fHRatio = aDeviceRect.GetHeight() / aViewWin.H;
 }
 
 // Returns observer position (PRP) in world coordinates
@@ -120,12 +114,6 @@ const basegfx::B3DPoint& Viewport3D::GetViewPoint()
 
 void Viewport3D::SetDeviceWindow(const tools::Rectangle& rRect)
 {
-    long nNewW = rRect.GetWidth();
-    long nNewH = rRect.GetHeight();
-
-    fWRatio = nNewW / aViewWin.W;
-    fHRatio = nNewH / aViewWin.H;
-
     aDeviceRect = rRect;
 }
 
@@ -161,14 +149,6 @@ void Viewport3D::SetPRP(const basegfx::B3DPoint& rNewPRP)
     aPRP = rNewPRP;
     aPRP.setX(0.0);
     aPRP.setY(0.0);
-    bTfValid = false;
-}
-
-// Set View Plane Distance
-
-void Viewport3D::SetVPD(double fNewVPD)
-{
-    fVPD = fNewVPD;
     bTfValid = false;
 }
 

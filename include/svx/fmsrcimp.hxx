@@ -169,7 +169,6 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FmSearchEngine final
     {
         css::uno::Reference< css::sdb::XColumn >          xContents;
         sal_uInt32              nFormatKey;
-        bool                    bDoubleHandling;
     };
 
     typedef std::vector<FieldInfo> FieldCollection;

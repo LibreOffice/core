@@ -48,7 +48,6 @@ void E3dDefaultAttributes::Reset()
     aDefaultSphereSize = basegfx::B3DPoint(1000.0, 1000.0, 1000.0);
 
     // Lathe object
-    nDefaultLatheEndAngle = 3600;
     bDefaultLatheSmoothed = true;
     bDefaultLatheSmoothFrontBack = false;
     bDefaultLatheCharacterMode = false;

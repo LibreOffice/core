@@ -229,10 +229,6 @@ protected:
     // material of the object
     Color                   aMaterialAmbientColor;
 
-    // attributes for geometry creation
-    bool                    bCreateNormals              : 1;
-    bool                    bCreateTexture              : 1;
-
 protected:
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
 
