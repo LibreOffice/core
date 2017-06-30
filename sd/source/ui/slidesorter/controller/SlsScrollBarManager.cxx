@@ -548,7 +548,7 @@ void ScrollBarManager::Scroll(
         case Orientation_Horizontal: bIsVertical = false; break;
         case Orientation_Vertical: bIsVertical = true; break;
         default:
-            OSL_ASSERT(eOrientation==Orientation_Horizontal || eOrientation==Orientation_Vertical);
+            assert(eOrientation==Orientation_Horizontal || eOrientation==Orientation_Vertical);
             return;
     }
 
