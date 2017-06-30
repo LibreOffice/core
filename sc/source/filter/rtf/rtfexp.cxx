@@ -42,7 +42,7 @@
 #include "stlpool.hxx"
 #include "ftools.hxx"
 
-void ScFormatFilterPluginImpl::ScExportRTF( SvStream& rStrm, ScDocument* pDoc,
+void ScFormatFilterPlugin::ScExportRTF( SvStream& rStrm, ScDocument* pDoc,
         const ScRange& rRange, const rtl_TextEncoding /*eNach*/ )
 {
     ScRTFExport aEx( rStrm, pDoc, rRange );

@@ -25,7 +25,7 @@
 #include "rtfparse.hxx"
 #include "ftools.hxx"
 
-ErrCode ScFormatFilterPluginImpl::ScImportRTF( SvStream &rStream, const OUString& rBaseURL, ScDocument *pDoc, ScRange& rRange )
+ErrCode ScFormatFilterPlugin::ScImportRTF( SvStream &rStream, const OUString& rBaseURL, ScDocument *pDoc, ScRange& rRange )
 {
     ScRTFImport aImp( pDoc, rRange );
     ErrCode nErr = aImp.Read( rStream, rBaseURL );
@@ -35,7 +35,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportRTF( SvStream &rStream, const OUString
     return nErr;
 }
 
-ScEEAbsImport *ScFormatFilterPluginImpl::CreateRTFImport( ScDocument* pDoc, const ScRange& rRange )
+ScEEAbsImport *ScFormatFilterPlugin::CreateRTFImport( ScDocument* pDoc, const ScRange& rRange )
 {
     return new ScRTFImport( pDoc, rRange );
 }
