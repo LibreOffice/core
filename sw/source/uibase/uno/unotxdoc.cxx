@@ -61,6 +61,8 @@
 #include <unoredlines.hxx>
 #include <unosrch.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/msg.hxx>
+#include <sfx2/msgpool.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objsh.hxx>
 #include <unoprnms.hxx>
@@ -3571,16 +3573,16 @@ void SwXTextDocument::paintDialog(vcl::DialogID /*rDialogID*/, VirtualDevice& rD
 {
     SfxViewShell* pViewShell = pDocShell->GetView();
     SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
-    SfxChildWindow* pSfxChildWindow = SwSpellDialogChildWindow::CreateImpl(&pViewFrame->GetWindow(), SwSpellDialogChildWindow::GetChildWindowId(),
-                                                                           &pViewFrame->GetBindings(), nullptr);
 
-    Size aSize(nWidth, nHeight);
+    SwModule* pMod = SW_MOD();
+    SfxSlotPool* pSlotPool = pMod->GetSlotPool();
+    const SfxSlot* pSlot = pSlotPool->GetUnoSlot(".uno:SpellDialog");
+
+    SfxChildWinFactory* pFactory = pMod->GetChildWinFactory(pSlot->GetSlotId());
+    SfxChildWindow* pSfxChildWindow = pFactory->pCtor(&pViewFrame->GetWindow(), pFactory->nId, &pViewFrame->GetBindings(), &pFactory->aInfo);
 
     vcl::Window* pWindow = pSfxChildWindow->GetWindow();
-
-    pWindow->SetSizePixel(aSize);
-    pWindow->Show();
-    pWindow->Paint(rDevice, tools::Rectangle(Point(), aSize));
+    pWindow->PaintToDevice(&rDevice, Point(0, 0), Size(1, 1) /* Ignored */);
 }
 
 void SwXTextDocument::postDialogMouseEvent(vcl::DialogID /*rDialogID*/, int /*nType*/, int /*nCharCode*/, int /*nKeyCode*/)
