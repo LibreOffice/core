@@ -71,8 +71,6 @@ IMPL_LINK_NOARG(ScMenuFloatingWindow::SubMenuItemData, TimeoutHdl, Timer *, void
     mpParent->handleMenuTimeout(this);
 }
 
-size_t ScMenuFloatingWindow::MENU_NOT_SELECTED = 999;
-
 ScMenuFloatingWindow::ScMenuFloatingWindow(vcl::Window* pParent, ScDocument* pDoc, sal_uInt16 nMenuStackLevel) :
     PopupMenuFloatingWindow(pParent),
     maOpenTimer(this),

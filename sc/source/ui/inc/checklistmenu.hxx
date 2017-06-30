@@ -37,7 +37,8 @@ class ScAccessibleFilterMenu;
 class ScMenuFloatingWindow : public PopupMenuFloatingWindow
 {
 public:
-    static size_t MENU_NOT_SELECTED;
+    static constexpr size_t MENU_NOT_SELECTED = 999;
+
     /**
      * Action to perform when an event takes place.  Create a sub-class of
      * this to implement the desired action.
