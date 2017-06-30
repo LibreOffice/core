@@ -39,7 +39,7 @@ struct ScHTMLImage
     Point               aSpace;
     OUString            aFilterName;
     std::unique_ptr<Graphic>
-                        pGraphic;       // wird von WriteToDocument uebernommen
+                        pGraphic;       // is taken over by WriteToDocument
     sal_Char            nDir;           // 1==hori, 2==verti, 3==beides
 
     ScHTMLImage() :
@@ -51,17 +51,17 @@ struct ScEEParseEntry
 {
     SfxItemSet          aItemSet;
     ESelection          aSel;           // Selection in EditEngine
-    OUString*           pValStr;        // HTML evtl. SDVAL String
-    OUString*           pNumStr;        // HTML evtl. SDNUM String
-    OUString*           pName;          // HTML evtl. Anchor/RangeName
+    OUString*           pValStr;        // HTML possibly SDVAL string
+    OUString*           pNumStr;        // HTML possibly SDNUM string
+    OUString*           pName;          // HTML possibly anchor/RangeName
     OUString            aAltText;       // HTML IMG ALT Text
-    std::vector< std::unique_ptr<ScHTMLImage> > maImageList;       // Grafiken in dieser Zelle
-    SCCOL               nCol;           // relativ zum Beginn des Parse
+    std::vector< std::unique_ptr<ScHTMLImage> > maImageList;       // graphics in this cell
+    SCCOL               nCol;           // relative to the beginning of the parse
     SCROW               nRow;
     sal_uInt16          nTab;           // HTML TableInTable
     sal_uInt16          nTwips;         // RTF ColAdjust etc.
-    SCCOL               nColOverlap;    // merged cells wenn >1
-    SCROW               nRowOverlap;    // merged cells wenn >1
+    SCCOL               nColOverlap;    // merged cells if >1
+    SCROW               nRowOverlap;    // merged cells if >1
     sal_uInt16          nOffset;        // HTML PixelOffset
     sal_uInt16          nWidth;         // HTML PixelWidth
     bool                bHasGraphic:1;  // HTML any image loaded

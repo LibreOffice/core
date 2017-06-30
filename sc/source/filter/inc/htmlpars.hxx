@@ -31,7 +31,7 @@
 #include "rangelst.hxx"
 #include "eeparser.hxx"
 
-const sal_uInt32 SC_HTML_FONTSIZES = 7;        // wie Export, HTML-Options
+const sal_uInt32 SC_HTML_FONTSIZES = 7;        // like export, HTML options
 
 // Pixel tolerance for SeekOffset and related.
 const sal_uInt16 SC_HTML_OFFSET_TOLERANCE_SMALL = 1;    // single table
@@ -156,22 +156,22 @@ private:
     ::std::stack< ScHTMLTableStackEntry* >
                         aTableStack;
     OUString            aString;
-    ScRangeListRef      xLockedList;        // je Table
+    ScRangeListRef      xLockedList;        // per table
     OuterMap*           pTables;
     ScHTMLColOffset     maColOffset;
-    ScHTMLColOffset*    pLocalColOffset;    // je Table
-    sal_uLong           nFirstTableCell;    // je Table
+    ScHTMLColOffset*    pLocalColOffset;    // per table
+    sal_uLong           nFirstTableCell;    // per table
     short               nTableLevel;
     sal_uInt16          nTable;
     sal_uInt16          nMaxTable;
-    SCCOL               nColCntStart;       // erste Col je Table
-    SCCOL               nMaxCol;            // je Table
-    sal_uInt16          nTableWidth;        // je Table
-    sal_uInt16          nColOffset;         // aktuell, Pixel
-    sal_uInt16          nColOffsetStart;    // Startwert je Table, in Pixel
+    SCCOL               nColCntStart;       // first Col per table
+    SCCOL               nMaxCol;            // per table
+    sal_uInt16          nTableWidth;        // per table
+    sal_uInt16          nColOffset;         // current, pixel
+    sal_uInt16          nColOffsetStart;    // start value per table, in pixel
     sal_uInt16          nOffsetTolerance;   // for use with SeekOffset and related
     bool                bTabInTabCell:1;
-    bool                bFirstRow:1;          // je Table, ob in erster Zeile
+    bool                bFirstRow:1;        // per table, whether in first row
     bool                bInCell:1;
     bool                bInTitle:1;
 

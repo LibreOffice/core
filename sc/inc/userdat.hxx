@@ -26,7 +26,7 @@
 #include "global.hxx"
 #include "address.hxx"
 
-// Object-Ids fuer UserData
+// Object IDs for UserData
 #define SC_UD_OBJDATA       1
 #define SC_UD_IMAPDATA      2
 #define SC_UD_MACRODATA     3

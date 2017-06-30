@@ -397,7 +397,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
         bool bOtherDoc = (pRefDoc != m_pDoc && pRefDoc->GetDocumentShell()->HasName());
         if ( bOtherDoc )
         {
-            //  reference to other document - wie inputhdl.cxx
+            //  reference to other document - like inputhdl.cxx
 
             OSL_ENSURE(rRef.aStart.Tab()==rRef.aEnd.Tab(), "nStartTab!=nEndTab");
 

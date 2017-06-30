@@ -510,7 +510,7 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
     bool bOk = true;
     switch (eDataMode)
     {
-        // SC_VALID_ANY schon oben
+        // SC_VALID_ANY already above
 
         case SC_VALID_WHOLE:
         case SC_VALID_DECIMAL:

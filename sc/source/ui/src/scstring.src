@@ -19,7 +19,7 @@
 
 #include "scres.hrc"
 
- // Strings fuer Interface-Namen ------------------------------------------
+ // Strings for interface names -------------------------------------------
 
 String SCSTR_LONG_SCDOC_NAME
 {
@@ -205,7 +205,7 @@ String SCSTR_VALID_LIST
     Text [ en-US ] = "~Entries" ;
 };
 
- // fuer Dialoge:
+ // for dialogues:
 
 String SCSTR_CHARSET_USER
 {

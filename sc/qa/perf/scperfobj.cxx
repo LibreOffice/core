@@ -322,7 +322,7 @@ void ScPerfObj::testSheetNamedRanges()
     // test removeByName
     OUString maNameToRemove("namedRange_4999");
     bool bHasIt = xNamedRanges->hasByName(maNameToRemove);
-    CPPUNIT_ASSERT_MESSAGE("NamedRange initial1 des not exits, can't remove it", bHasIt);
+    CPPUNIT_ASSERT_MESSAGE("NamedRange initial1 does not exist, can't remove it", bHasIt);
 
     if (bHasIt)
     {

@@ -717,7 +717,7 @@ static ImplTextEncodingData const aImplMS1256TextEncodingData
 /* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme, 0x80-0x9F Control-Caracter wie in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-6.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
-/* !!! 0x30-0x39 sind Arabische Zahlen und muessten eigentlich nach 0x0660-0x0669 gemappt werden !!! */
+/* !!! 0x30-0x39 are Arabic numbers and should normally be mapped to 0x0660-0x0669 !!! */
 
 #define ISO88596UNI_START               0xA0
 #define ISO88596UNI_END                 0xF2

@@ -118,7 +118,7 @@ public:
 };
 
 //-------------------------------------------------------------- class ExcBof -
-// Header Record fuer WORKSHEETS
+// Header Record for WORKSHEETS
 
 class ExcBof : public ExcBof_Base
 {
@@ -132,7 +132,7 @@ public:
 };
 
 //------------------------------------------------------------- class ExcBofW -
-// Header Record fuer WORKBOOKS
+// Header Record for WORKBOOKS
 
 class ExcBofW : public ExcBof_Base
 {

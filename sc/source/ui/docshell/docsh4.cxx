@@ -204,7 +204,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             }
 
                             ScDBData* pDBData = GetDBData( ScRange(aPos), SC_DB_IMPORT, ScGetDBSelection::Keep );
-                            OSL_ENSURE(pDBData, "Cannot create DB-Daten");
+                            OSL_ENSURE(pDBData, "Cannot create DB data");
                             sTarget = pDBData->GetName();
                         }
                     }
@@ -1295,7 +1295,7 @@ void ScDocShell::DoAutoStyle( const ScRange& rRange, const OUString& rStyle )
     if (pStyleSheet)
     {
         OSL_ENSURE(rRange.aStart.Tab() == rRange.aEnd.Tab(),
-                        "DoAutoStyle mit mehreren Tabellen");
+                        "DoAutoStyle with several tables");
         SCTAB nTab = rRange.aStart.Tab();
         SCCOL nStartCol = rRange.aStart.Col();
         SCROW nStartRow = rRange.aStart.Row();
@@ -1322,7 +1322,7 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
 
             OUString aNewName = pStyle->GetName();
             OUString aOldName = aNewName;
-            const SfxStyleSheetModifiedHint* pExtendedHint = dynamic_cast<const SfxStyleSheetModifiedHint*>(&rHint); // Name geaendert?
+            const SfxStyleSheetModifiedHint* pExtendedHint = dynamic_cast<const SfxStyleSheetModifiedHint*>(&rHint); // name changed?
             if (pExtendedHint)
                 aOldName = pExtendedHint->GetOldName();
 

@@ -208,7 +208,7 @@ void SAL_CALL ScCellCursorObj::collapseToSize( sal_Int32 nColumns, sal_Int32 nRo
         OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
         ScRange aNewRange( *rRanges[ 0 ] );
 
-        aNewRange.PutInOrder();    //! wirklich?
+        aNewRange.PutInOrder();    //! really?
 
         long nEndX = aNewRange.aStart.Col() + nColumns - 1;
         long nEndY = aNewRange.aStart.Row() + nRows - 1;
@@ -240,7 +240,7 @@ void SAL_CALL ScCellCursorObj::gotoStartOfUsedArea(sal_Bool bExpand)
         ScRange aNewRange( *rRanges[0] );
         SCTAB nTab = aNewRange.aStart.Tab();
 
-        SCCOL nUsedX = 0;       // Anfang holen
+        SCCOL nUsedX = 0;       // fetch the beginning
         SCROW nUsedY = 0;
         if (!pDocSh->GetDocument().GetDataStart( nTab, nUsedX, nUsedY ))
         {
@@ -267,7 +267,7 @@ void SAL_CALL ScCellCursorObj::gotoEndOfUsedArea( sal_Bool bExpand )
         ScRange aNewRange( *rRanges[ 0 ]);
         SCTAB nTab = aNewRange.aStart.Tab();
 
-        SCCOL nUsedX = 0;       // Ende holen
+        SCCOL nUsedX = 0;       // fetch the end
         SCROW nUsedY = 0;
         if (!pDocSh->GetDocument().GetTableArea( nTab, nUsedX, nUsedY ))
         {

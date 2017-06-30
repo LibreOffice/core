@@ -1035,7 +1035,7 @@ void ScDDELinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 static OUString lcl_BuildDDEName( const OUString& rAppl, const OUString& rTopic, const OUString& rItem )
 {
-    //  Appl|Topic!Item (wie Excel)
+    //  Appl|Topic!Item (like Excel)
     OUString aRet = rAppl + "|" + rTopic + "!" + rItem;
     return aRet;
 }

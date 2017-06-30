@@ -140,7 +140,7 @@ ScCondFormatEntryItem::ScCondFormatEntryItem() :
 ScTableConditionalFormat::ScTableConditionalFormat(
         ScDocument* pDoc, sal_uLong nKey, SCTAB nTab, FormulaGrammar::Grammar eGrammar)
 {
-    //  Eintrag aus dem Dokument lesen...
+    //  read the entry from the document...
 
     if ( pDoc && nKey )
     {
@@ -331,7 +331,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         }
         else
         {
-            OSL_FAIL("falsche Property");
+            OSL_FAIL("wrong property");
             //! Exception...
         }
     }
@@ -579,7 +579,7 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, sal_uLong nKey,
                                             const formula::FormulaGrammar::Grammar eGrammar) :
     aPropSet( lcl_GetValidatePropertyMap() )
 {
-    //  Eintrag aus dem Dokument lesen...
+    //  read the entry from the document...
 
     bool bFound = false;
     if ( pDoc && nKey )

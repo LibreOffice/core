@@ -791,7 +791,7 @@ void Chart2Positioner::createPositionMap()
         pCol = pCols->begin()->second;
         if (mbDummyUpperLeft)
             if (pCol->find(0) == pCol->end())
-                (*pCol)[ 0 ] = nullptr;        // Dummy fuer Beschriftung
+                (*pCol)[ 0 ] = nullptr;        // dummy for labeling
         nAllRowCount = static_cast<SCSIZE>(pCol->size());
     }
 

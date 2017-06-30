@@ -50,21 +50,21 @@ class XclExpRoot;
 
 // Excel Imp~/Exp~ -
 
-struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
+struct RootData     // -> incarnation in each case in the ImportExcel object!
 {
-    BiffTyp             eDateiTyp;              // feine Differenzierung
+    BiffTyp             eDateiTyp;              // fine differentiation
     ExtSheetBuffer*     pExtSheetBuff;
     SharedFormulaBuffer*      pShrfmlaBuff;
     ExtNameBuff*        pExtNameBuff;
     ExcelToSc*          pFmlaConverter;
-    XclImpColRowSettings* pColRowBuff;        // Col/Row-Einstellungen 1 Tabelle
+    XclImpColRowSettings* pColRowBuff;        // col/row settings 1 table
 
     // Biff8
     XclImpAutoFilterBuffer* pAutoFilterBuffer;      // ranges for autofilter and advanced filter
     ScRangeListTabs*       pPrintRanges;
     ScRangeListTabs*       pPrintTitles;
 
-    // Erweiterungen fuer Export
+    // extensions for export
     XclExpChTrTabId*        pTabId;             // pointer to rec list, do not destroy
     XclExpUserBViewList*    pUserBViewList;     // pointer to rec list, do not destroy
 
