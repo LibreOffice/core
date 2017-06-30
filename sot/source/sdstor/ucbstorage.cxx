@@ -2618,8 +2618,7 @@ BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode 
             {
                 // check if stream is opened with the same keyword as before
                 // if not, generate a new stream because it could be encrypted vs. decrypted!
-                OString aKey;
-                if ( pElement->m_xStream->m_aKey == aKey )
+                if ( pElement->m_xStream->m_aKey.isEmpty() )
                 {
                     pElement->m_xStream->PrepareCachedForReopen( nMode );
 
