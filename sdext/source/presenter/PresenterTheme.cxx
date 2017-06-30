@@ -249,7 +249,6 @@ public:
 
 private:
     void ProcessFont(
-        ReadContext& rReadContext,
         const OUString& rsKey,
         const Reference<beans::XPropertySet>& rxProperties);
 };
@@ -637,9 +636,9 @@ void PresenterTheme::Theme::Read (
         UNO_QUERY);
     PresenterConfigurationAccess::ForAll(
         xFontNode,
-        [this, &rReadContext] (OUString const& rKey, uno::Reference<beans::XPropertySet> const& xProps)
+        [this] (OUString const& rKey, uno::Reference<beans::XPropertySet> const& xProps)
         {
-            return this->ProcessFont(rReadContext, rKey, xProps);
+            return this->ProcessFont(rKey, xProps);
         });
 }
 
@@ -666,11 +665,9 @@ SharedViewStyle PresenterTheme::Theme::GetViewStyle (const OUString& rsStyleName
 }
 
 void PresenterTheme::Theme::ProcessFont(
-    ReadContext& rReadContext,
     const OUString& rsKey,
     const Reference<beans::XPropertySet>& rxProperties)
 {
-    (void)rReadContext;
     maFontContainer[rsKey] = ReadContext::ReadFont(rxProperties, SharedFontDescriptor());
 }
 
