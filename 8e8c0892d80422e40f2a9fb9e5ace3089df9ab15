@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_0179ce93",
+        "filename": "cui/source/inc/SvxMenuConfigPage.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-30T11:28:11Z",
+      "side": 1,
+      "message": "Haha, good catch",
+      "revId": "8e8c0892d80422e40f2a9fb9e5ace3089df9ab15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
