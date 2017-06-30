@@ -280,7 +280,7 @@ void StgDirEntry::OpenStream( StgIo& rIo )
 // Close the open stream without committing. If the entry is marked as
 // temporary, delete it.
 // Do not delete pCurStrm here!
-// (TLX:??? Zumindest pStgStrm muss deleted werden.)
+// (TLX:??? At least pStgStrm must be deleted.)
 
 void StgDirEntry::Close()
 {
