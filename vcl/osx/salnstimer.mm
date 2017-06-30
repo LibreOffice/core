@@ -35,7 +35,7 @@
         ImplSVData* pSVData = ImplGetSVData();
         if( pSVData->mpSalTimer )
         {
-            bool idle = true; // TODO
+            bool const idle = true; // TODO
             pSVData->mpSalTimer->CallCallback( idle );
 
             // NSTimer does not end nextEventMatchingMask of NSApplication

@@ -926,7 +926,7 @@ void Window::ReleaseGraphics( bool bRelease )
 
 static sal_Int32 CountDPIScaleFactor(sal_Int32 nDPI)
 {
-    sal_Int32 nResult = 100;
+    sal_Int32 nResult;
 
 #ifndef MACOSX
     // Setting of HiDPI is unfortunately all only a heuristic; and to add
@@ -942,6 +942,7 @@ static sal_Int32 CountDPIScaleFactor(sal_Int32 nDPI)
         nResult = 150;
 #else
     (void)nDPI;
+    nResult = 100;
 #endif
 
     return nResult;

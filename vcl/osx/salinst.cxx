@@ -662,7 +662,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
                 // [AquaSalTimer::pRunningTimer fire];
                 if (ImplGetSVData()->mpSalTimer != nullptr)
                 {
-                    bool idle = true; // TODO
+                    bool const idle = true; // TODO
                     ImplGetSVData()->mpSalTimer->CallCallback( idle );
                 }
             }
@@ -1002,8 +1002,7 @@ SalSession* AquaSalInstance::CreateSalSession()
 OUString AquaSalInstance::getOSVersion()
 {
     NSString * versionString = nullptr;
-    NSString * sysVersionDictionaryPath = @"/System/Library/CoreServices/SystemVersion.plist";
-    NSDictionary * sysVersionDict = [ NSDictionary dictionaryWithContentsOfFile: sysVersionDictionaryPath ];
+    NSDictionary * sysVersionDict = [ NSDictionary dictionaryWithContentsOfFile: @"/System/Library/CoreServices/SystemVersion.plist" ];
     if ( sysVersionDict )
         versionString = [ sysVersionDict valueForKey: @"ProductVersion" ];
 
