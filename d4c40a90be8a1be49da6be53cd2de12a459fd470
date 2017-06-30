@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_012b8e83",
+        "filename": "sc/source/filter/xml/XMLConsolidationContext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2017-06-30T09:23:45Z",
+      "side": 1,
+      "message": "As we do a lot more of these; I\u0027d love us to have a helper function that does this - along with a dynamic_cast assert inside that for debug mode \u003d) Is that possible as a follow-up ?",
+      "revId": "d4c40a90be8a1be49da6be53cd2de12a459fd470",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_e125a2ae",
+        "filename": "sc/source/filter/xml/XMLConsolidationContext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2017-06-30T09:23:45Z",
+      "side": 1,
+      "message": "Prolly ultimately cleaner here to pass the iter into the IsXMLToken method - as a follow-up (?) \u003d)",
+      "revId": "d4c40a90be8a1be49da6be53cd2de12a459fd470",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
