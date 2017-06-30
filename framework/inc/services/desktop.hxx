@@ -346,6 +346,15 @@ class Desktop : private cppu::BaseMutex,
          */
         void impl_sendCancelTerminationEvent(const TTerminateListenerList& lCalledListener);
 
+        /** calls notifyTermination() on the clipboard listener
+         *
+         * The system clipboard may decide that it wants copies
+         * in several formats of the clipboard content requiring
+         * nearly all the services
+         *
+         */
+        void impl_sendTerminateToClipboard();
+
         /** calls notifyTermination() on every registered termination listener.
          *
          *  Note: Only normal termination listener (registered in list m_aListenerContainer

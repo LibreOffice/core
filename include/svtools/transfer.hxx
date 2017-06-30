@@ -29,6 +29,7 @@
 #include <sot/exchange.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/XTerminateListener.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
@@ -129,7 +130,7 @@ class SVT_DLLPUBLIC TransferableHelper : public cppu::WeakImplHelper< css::datat
 private:
 
     // nested class to implement the XTerminateListener interface
-    class TerminateListener : public cppu::WeakImplHelper< css::frame::XTerminateListener >
+    class TerminateListener : public cppu::WeakImplHelper< css::frame::XTerminateListener, css::lang::XServiceInfo >
     {
     private:
 
@@ -143,6 +144,11 @@ private:
         // XTerminateListener
         virtual void SAL_CALL queryTermination( const css::lang::EventObject& aEvent ) override;
         virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) override;
+
+        // XServiceInfo
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     public:
 

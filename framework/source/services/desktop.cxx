@@ -325,6 +325,10 @@ sal_Bool SAL_CALL Desktop::terminate()
         aWriteLock.clear();
         /* UNSAFE AREA ------------------------------------------------------------------------------------- */
 
+        // The clipboard listener needs to be the first. It can create copies of the
+        // existing document which needs basically all the available infrastructure.
+        impl_sendTerminateToClipboard();
+
         impl_sendNotifyTerminationEvent();
         {
             SolarMutexGuard aGuard;
@@ -1643,6 +1647,46 @@ void Desktop::impl_sendCancelTerminationEvent(const Desktop::TTerminateListenerL
         }
         catch( const css::uno::Exception& )
         {}
+    }
+}
+
+void Desktop::impl_sendTerminateToClipboard()
+{
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::frame::XTerminateListener>::get());
+    if ( ! pContainer )
+        return;
+
+    ::cppu::OInterfaceIteratorHelper aIterator( *pContainer );
+    while ( aIterator.hasMoreElements() )
+    {
+        try
+        {
+            css::uno::Reference< css::lang::XServiceInfo > xInfo( aIterator.next(), css::uno::UNO_QUERY );
+            if ( !xInfo.is() )
+                continue;
+
+            if ( xInfo->getImplementationName() != "com.sun.star.comp.svt.TransferableHelperTerminateListener" )
+                continue;
+
+            css::uno::Reference< css::frame::XTerminateListener > xListener(xInfo, css::uno::UNO_QUERY);
+            if ( ! xListener.is() )
+                continue;
+
+            css::lang::EventObject aEvent( static_cast< ::cppu::OWeakObject* >(this) );
+            xListener->notifyTermination( aEvent );
+
+            // don't notify twice
+            aIterator.remove();
+        }
+        catch( const css::uno::Exception& )
+        {
+            // clean up container.
+            // E.g. dead remote listener objects can make trouble otherwise.
+            // Iterator implementation allows removing objects during it's used !
+            aIterator.remove();
+        }
     }
 }
 
