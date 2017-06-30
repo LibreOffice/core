@@ -50,7 +50,7 @@ IMPL_LINK_TYPED( AccessibleTabBarBase, WindowEventListener, VclWindowEvent&, rEv
 
     if( ( rEvent.GetId() == VCLEVENT_TABBAR_PAGEREMOVED ) &&
         ( (sal_uInt16)reinterpret_cast<sal_IntPtr>(rEvent.GetData()) == TabBar::PAGE_NOT_FOUND ) &&
-        ( dynamic_cast< AccessibleTabBarPageList *> (this) != nullptr ) )
+        (dynamic_cast<AccessibleTabBarPageList *>(this) == nullptr))
     {
         return;
     }
