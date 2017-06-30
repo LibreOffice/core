@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_01638eb2",
+        "filename": "include/editeng/unotext.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-30T14:21:22Z",
+      "side": 1,
+      "message": "This should be const reference instead, so\n\n const ESelection \u0026 rSel",
+      "range": {
+        "startLine": 595,
+        "startChar": 64,
+        "endLine": 595,
+        "endChar": 85
+      },
+      "revId": "6ffb646eaa512ececc06d1218a839eca970732c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_21588afa",
+        "filename": "include/editeng/unotext.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-30T14:21:22Z",
+      "side": 1,
+      "message": "This should be const reference instead, so\n\n const ESelection \u0026 rSel",
+      "range": {
+        "startLine": 616,
+        "startChar": 78,
+        "endLine": 616,
+        "endChar": 99
+      },
+      "revId": "6ffb646eaa512ececc06d1218a839eca970732c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
