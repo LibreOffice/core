@@ -195,12 +195,11 @@ struct CR_SetLineHeight
     SwUndoTableNdsChg* pUndo;
     SwTwips nMaxSpace, nMaxHeight;
     TableChgMode nMode;
-    sal_uInt16 nLines;
     bool bBigger, bTop;
 
     CR_SetLineHeight( TableChgWidthHeightType eType, SwTableNode* pTNd )
         : pTableNd( pTNd ), pUndo( nullptr ),
-        nMaxSpace( 0 ), nMaxHeight( 0 ), nLines( 0 )
+        nMaxSpace( 0 ), nMaxHeight( 0 )
     {
         bTop = TableChgWidthHeightType::RowTop == extractPosition( eType ) ||
                TableChgWidthHeightType::CellTop == extractPosition( eType );
@@ -212,7 +211,7 @@ struct CR_SetLineHeight
     CR_SetLineHeight( const CR_SetLineHeight& rCpy )
         : pTableNd( rCpy.pTableNd ), pUndo( rCpy.pUndo ),
         nMaxSpace( rCpy.nMaxSpace ), nMaxHeight( rCpy.nMaxHeight ),
-        nMode( rCpy.nMode ), nLines( rCpy.nLines ),
+        nMode( rCpy.nMode ),
         bBigger( rCpy.bBigger ), bTop( rCpy.bTop )
     {}
 
@@ -4278,13 +4277,6 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, TableChgWidthHeightType eType,
                         *ppUndo = new SwUndoAttrTable( *aParam.pTableNd, true );
 
                     CR_SetLineHeight aParam1( aParam );
-                    if( TableChgMode::FixedWidthChangeProp == m_eTableChgMode && !bBigger &&
-                        !aParam.nMaxSpace )
-                    {
-                        // We need to distribute the space evenly among all the Lines.
-                        // That's why we need their count.
-                        aParam1.nLines = nEnd - nStt;
-                    }
 
                     if( bTop )
                     {

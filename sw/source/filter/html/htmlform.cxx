@@ -2300,7 +2300,7 @@ void SwHTMLParser::NewSelect()
     }
 
     Size aSz( MINFLY, MINFLY );
-    m_bFixSelectWidth = m_bFixSelectHeight = true;
+    m_bFixSelectWidth = true;
     if( SVX_CSS1_LTYPE_TWIP== aCSS1PropInfo.m_eWidthType )
     {
         aSz.Width() = convertTwipToMm100( aCSS1PropInfo.m_nWidth );

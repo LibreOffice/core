@@ -622,7 +622,7 @@ void SwLineLayout::MaxAscentDescent( SwTwips& _orAscent,
 
 void SwLineLayout::ResetFlags()
 {
-    m_bFormatAdj = m_bDummy = m_bFntChg = m_bTab = m_bEndHyph = m_bMidHyph = m_bFly
+    m_bFormatAdj = m_bDummy = m_bEndHyph = m_bMidHyph = m_bFly
     = m_bRest = m_bBlinking = m_bClipping = m_bContent = m_bRedline
     = m_bForcedLeftMargin = m_bHanging = false;
 }

@@ -257,8 +257,6 @@ short SwRedlineItr::Seek_(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
                             pAttr->SetPriorityAttr( true );
                             m_Hints.push_back(pAttr);
                             rAttrHandler.PushAndChg( *pAttr, rFnt );
-                            if( RES_CHRATR_COLOR == nWhich )
-                                rFnt.SetNoCol( true );
                         }
                         nWhich = aIter.NextWhich();
                     }
@@ -328,8 +326,6 @@ void SwRedlineItr::Clear_( SwFont* pFnt )
             rAttrHandler.Pop( *pPos );
         SwTextAttr::Destroy(pPos, const_cast<SwDoc&>(rDoc).GetAttrPool() );
     }
-    if( pFnt )
-        pFnt->SetNoCol( false );
 }
 
 sal_Int32 SwRedlineItr::GetNextRedln_( sal_Int32 nNext )
