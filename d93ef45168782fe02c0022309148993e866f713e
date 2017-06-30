@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_de17a352",
+        "filename": "sc/source/ui/view/tabvwsh3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 961,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-30T08:33:02Z",
+      "side": 1,
+      "message": "Please use the same if() block braces indenting we use everywhere else in Calc, so this should be\n\n else if (...)\n {\n     ...\n }",
+      "revId": "d93ef45168782fe02c0022309148993e866f713e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
