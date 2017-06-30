@@ -16,26 +16,20 @@ chart2/source/view/inc/GL3DRenderer.hxx:66
     chart::opengl3D::LightSource pad3 float
 comphelper/source/container/enumerablemap.cxx:299
     comphelper::MapEnumeration m_xKeepMapAlive Reference<class com::sun::star::uno::XInterface>
-compilerplugins/clang/test/datamembershadow.cxx:17
-    Bar x int
-compilerplugins/clang/test/datamembershadow.cxx:21
-    Foo x int
-compilerplugins/clang/test/finalprotected.cxx:17
-    S g1 int
-compilerplugins/clang/test/finalprotected.cxx:20
-    S h1 int
-compilerplugins/clang/test/finalprotected.cxx:29
-    S2 g1 int
-compilerplugins/clang/test/finalprotected.cxx:32
-    S2 h1 int
-compilerplugins/clang/test/passstuffbyref.cxx:13
-    S mv1 class rtl::OUString
-compilerplugins/clang/test/passstuffbyref.cxx:14
-    S mv2 class rtl::OUString
-compilerplugins/clang/test/salbool.cxx:15
-    S b sal_Bool
-compilerplugins/clang/test/unnecessaryoverride-dtor.hxx:42
-    IncludedDerived3 m rtl::Reference<Incomplete>
+connectivity/source/drivers/evoab2/EApi.h:122
+    (anonymous) address_format char *
+connectivity/source/drivers/evoab2/EApi.h:126
+    (anonymous) ext char *
+connectivity/source/drivers/evoab2/NPreparedStatement.hxx:51
+    connectivity::evoab::OEvoabPreparedStatement::Parameter aValue css::uno::Any
+connectivity/source/drivers/evoab2/NPreparedStatement.hxx:52
+    connectivity::evoab::OEvoabPreparedStatement::Parameter nDataType sal_Int32
+connectivity/source/drivers/evoab2/NPreparedStatement.hxx:60
+    connectivity::evoab::OEvoabPreparedStatement m_aParameters std::vector<Parameter>
+connectivity/source/drivers/evoab2/NResultSet.hxx:91
+    connectivity::evoab::OEvoabResultSet m_aStatement css::uno::WeakReferenceHelper
+connectivity/source/drivers/evoab2/NTable.hxx:34
+    connectivity::evoab::OEvoabTable m_xMetaData css::uno::Reference<css::sdbc::XDatabaseMetaData>
 connectivity/source/drivers/mork/MDatabaseMetaData.hxx:29
     connectivity::mork::ODatabaseMetaData m_pMetaDataHelper std::unique_ptr<MDatabaseMetaDataHelper>
 connectivity/source/inc/OTypeInfo.hxx:31
@@ -88,7 +82,7 @@ filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:71
     XMLFilterListBox m_aEnsureResMgr class EnsureResMgr
 filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:130
     XMLFilterSettingsDialog maEnsureResMgr class EnsureResMgr
-framework/inc/dispatch/oxt_handler.hxx:95
+framework/inc/dispatch/oxt_handler.hxx:92
     framework::Oxt_Handler m_xSelfHold css::uno::Reference<css::uno::XInterface>
 include/comphelper/MasterPropertySet.hxx:38
     comphelper::SlaveData mxSlave css::uno::Reference<css::beans::XPropertySet>
@@ -110,9 +104,7 @@ include/svtools/unoevent.hxx:159
     SvEventDescriptor xParentRef css::uno::Reference<css::uno::XInterface>
 include/vcl/uitest/uiobject.hxx:241
     TabPageUIObject mxTabPage VclPtr<class TabPage>
-include/vcl/vclptr.hxx:58
-    vcl::detail::UpCast::S c char [2]
-include/xmloff/formlayerexport.hxx:174
+include/xmloff/formlayerexport.hxx:173
     xmloff::OOfficeFormsExport m_pImpl std::unique_ptr<OFormsRootExport>
 lotuswordpro/source/filter/clone.hxx:23
     detail::has_clone::(anonymous) a char [2]
@@ -142,25 +134,29 @@ sc/qa/unit/ucalc_column.cxx:103
     aInputs aName const char *
 sc/source/filter/inc/sheetdatacontext.hxx:61
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
+sc/source/ui/inc/dataprovider.hxx:46
+    sc::ExternalDataMapper maDocument class ScDocument
 sc/source/ui/inc/docsh.hxx:438
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
+sc/source/ui/vba/vbafont.hxx:36
+    ScVbaFont mPalette class ScVbaPalette
 sd/source/ui/remotecontrol/ZeroconfService.hxx:36
     sd::ZeroconfService port uint
 sd/source/ui/table/TableDesignPane.hxx:113
     sd::TableDesignPane aImpl class sd::TableDesignWidget
 sd/source/ui/view/DocumentRenderer.cxx:1335
     sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
-sd/source/ui/view/viewshel.cxx:1236
+sd/source/ui/view/viewshel.cxx:1233
     sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
-sd/source/ui/view/viewshel.cxx:1237
+sd/source/ui/view/viewshel.cxx:1234
     sd::KeepSlideSorterInSyncWithPageChanges m_aModelLock sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
-sd/source/ui/view/viewshel.cxx:1238
+sd/source/ui/view/viewshel.cxx:1235
     sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock sd::slidesorter::controller::class PageSelector::UpdateLock
-sd/source/ui/view/viewshel.cxx:1239
+sd/source/ui/view/viewshel.cxx:1236
     sd::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
-sd/source/ui/view/ViewShellBase.cxx:201
+sd/source/ui/view/ViewShellBase.cxx:195
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
-sfx2/source/doc/doctempl.cxx:119
+sfx2/source/doc/doctempl.cxx:118
     DocTempl::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
 starmath/inc/view.hxx:224
     SmViewShell maGraphicController class SmGraphicController
@@ -180,7 +176,7 @@ sw/source/uibase/inc/uivwimp.hxx:95
     SwView_Impl xTmpSelDocSh class SfxObjectShellLock
 sw/source/uibase/inc/unodispatch.hxx:46
     SwXDispatchProviderInterceptor::DispatchMutexLock_Impl aGuard class SolarMutexGuard
-toolkit/source/awt/stylesettings.cxx:91
+toolkit/source/awt/stylesettings.cxx:90
     toolkit::StyleMethodGuard m_aGuard class SolarMutexGuard
 unoidl/source/unoidlprovider.cxx:672
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference1_ rtl::Reference<UnoidlProvider>
@@ -192,15 +188,15 @@ vcl/source/gdi/jobset.cxx:34
     ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:35
     ImplOldJobSetupData cPortName char [32]
-vcl/source/gdi/pdfwriter_impl.cxx:5448
+vcl/source/gdi/pdfwriter_impl.cxx:5432
     (anonymous namespace)::(anonymous) extnID SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5449
+vcl/source/gdi/pdfwriter_impl.cxx:5433
     (anonymous namespace)::(anonymous) critical SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5450
+vcl/source/gdi/pdfwriter_impl.cxx:5434
     (anonymous namespace)::(anonymous) extnValue SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5819
+vcl/source/gdi/pdfwriter_impl.cxx:5803
     (anonymous namespace)::(anonymous) statusString SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5820
+vcl/source/gdi/pdfwriter_impl.cxx:5804
     (anonymous namespace)::(anonymous) failInfo SECItem
 vcl/source/uitest/uno/uitest_uno.cxx:35
     UITestUnoObj mpUITest std::unique_ptr<UITest>

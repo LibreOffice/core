@@ -36,8 +36,7 @@ TDefTableHandler::TDefTableHandler() :
 LoggedProperties("TDefTableHandler"),
 m_nLineWidth(0),
 m_nLineType(0),
-m_nLineColor(0),
-m_nLineDistance(0)
+m_nLineColor(0)
 {
 }
 
@@ -294,7 +293,6 @@ void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
         break;
         case NS_ooxml::LN_CT_Border_space:
             appendGrabBag("space", OUString::number(nIntValue));
-            m_nLineDistance = nIntValue;
         break;
         case NS_ooxml::LN_CT_Border_shadow:
             //if 1 then line has shadow - unsupported
@@ -318,7 +316,7 @@ void TDefTableHandler::localResolve(Id rName, const writerfilter::Reference<Prop
 {
     if( pProperties.get())
     {
-        m_nLineWidth = m_nLineType = m_nLineColor = m_nLineDistance = 0;
+        m_nLineWidth = m_nLineType = m_nLineColor = 0;
         std::vector<beans::PropertyValue> aSavedGrabBag;
         if (!m_aInteropGrabBagName.isEmpty())
         {

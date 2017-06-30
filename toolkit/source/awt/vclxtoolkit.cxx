@@ -1300,7 +1300,6 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         }
         else
         {
-            pNewComp->SetCreatedWithToolkit( true );
             xRef = pNewComp;
             pNewWindow->SetComponentInterface( xRef );
         }

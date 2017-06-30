@@ -649,9 +649,6 @@ bool PrintFontManager::analyzeSfntFile( PrintFont* pFont ) const
 
         pFont->m_aEncoding = aInfo.symbolEncoded ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UCS2;
 
-        pFont->m_aGlobalMetricY.width = pFont->m_aGlobalMetricX.width = aInfo.xMax - aInfo.xMin;
-        pFont->m_aGlobalMetricY.height = pFont->m_aGlobalMetricX.height = aInfo.yMax - aInfo.yMin;
-
         if( aInfo.ascender && aInfo.descender )
         {
             pFont->m_nLeading   = aInfo.linegap;
@@ -678,9 +675,6 @@ bool PrintFontManager::analyzeSfntFile( PrintFont* pFont ) const
             pFont->m_nDescend = -aInfo.yMin;
         if( pFont->m_nLeading == 0 )
             pFont->m_nLeading = 15 * (pFont->m_nAscend+pFont->m_nDescend) / 100;
-
-        if( pFont->m_nAscend )
-            pFont->m_aGlobalMetricX.height = pFont->m_aGlobalMetricY.height = pFont->m_nAscend + pFont->m_nDescend;
 
         // get bounding box
         pFont->m_nXMin = aInfo.xMin;

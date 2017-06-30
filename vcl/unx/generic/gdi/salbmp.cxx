@@ -1084,8 +1084,7 @@ struct ImplBmpObj
                     mpBmp( pBmp ), mnMemSize( nMemSize ) {}
 };
 
-ImplSalBitmapCache::ImplSalBitmapCache() :
-    mnTotalSize( 0UL )
+ImplSalBitmapCache::ImplSalBitmapCache()
 {
 }
 
@@ -1109,11 +1108,8 @@ void ImplSalBitmapCache::ImplAdd( X11SalBitmap* pBmp, sal_uLong nMemSize )
             bFound = true;
     }
 
-    mnTotalSize += nMemSize;
-
     if( bFound )
     {
-        mnTotalSize -= pObj->mnMemSize;
         pObj->mnMemSize = nMemSize;
     }
     else
@@ -1130,7 +1126,6 @@ void ImplSalBitmapCache::ImplRemove( X11SalBitmap* pBmp )
         if( (*it)->mpBmp == pBmp )
         {
             (*it)->mpBmp->ImplRemovedFromCache();
-            mnTotalSize -= (*it)->mnMemSize;
             delete *it;
             maBmpList.erase( it );
             break;
@@ -1149,7 +1144,6 @@ void ImplSalBitmapCache::ImplClear()
         delete *it;
     }
     maBmpList.clear();
-    mnTotalSize = 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
