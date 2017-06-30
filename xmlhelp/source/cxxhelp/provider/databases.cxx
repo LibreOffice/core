@@ -366,7 +366,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const OUStrin
             cfgFile.close();
 
             const sal_Unicode* str = fileContent.getStr();
-            OUString current,lang_,program,startid,title;
+            OUString current,program,startid,title;
             OUString order( "1" );
 
             for( sal_Int32 i = 0;i < fileContent.getLength();i++ )
@@ -385,10 +385,6 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const OUStrin
                         else if( current.startsWith("Start") )
                         {
                             startid = current.copy( current.indexOf('=') + 1 );
-                        }
-                        else if( current.startsWith("Language") )
-                        {
-                            lang_ = current.copy( current.indexOf('=') + 1 );
                         }
                         else if( current.startsWith("Program") )
                         {
