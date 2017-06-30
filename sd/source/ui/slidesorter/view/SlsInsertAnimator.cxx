@@ -237,7 +237,7 @@ SharedPageObjectRun InsertAnimator::Implementation::GetRun (
                     nRow,
                     nStartIndex,
                     nEndIndex)).first;
-                OSL_ASSERT(iRun != maRuns.end());
+                assert(iRun != maRuns.end());
             }
         }
     }
@@ -266,7 +266,7 @@ void InsertAnimator::Implementation::AddRun (const std::shared_ptr<PageObjectRun
     }
     else
     {
-        OSL_ASSERT(rRun);
+        assert(false);
     }
 }
 
@@ -280,14 +280,14 @@ void InsertAnimator::Implementation::RemoveRun (const std::shared_ptr<PageObject
             InsertAnimator::Implementation::RunContainer::const_iterator iRun (FindRun(rRun->mnRunIndex));
             if (iRun != maRuns.end())
             {
-                OSL_ASSERT(*iRun == rRun);
+                assert(*iRun == rRun);
                 maRuns.erase(iRun);
             }
         }
     }
     else
     {
-        OSL_ASSERT(rRun);
+        assert(false);
     }
 }
 

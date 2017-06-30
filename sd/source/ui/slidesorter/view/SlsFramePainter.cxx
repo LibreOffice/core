@@ -43,9 +43,9 @@ FramePainter::FramePainter (const BitmapEx& rShadowBitmap)
     }
     else
     {
-        OSL_ASSERT(rShadowBitmap.GetSizePixel().Width() == rShadowBitmap.GetSizePixel().Height());
-        OSL_ASSERT((rShadowBitmap.GetSizePixel().Width()-1)%2 == 0);
-        OSL_ASSERT(((rShadowBitmap.GetSizePixel().Width()-1)/2)%2 == 1);
+        assert(rShadowBitmap.GetSizePixel().Width() == rShadowBitmap.GetSizePixel().Height());
+        assert((rShadowBitmap.GetSizePixel().Width()-1)%2 == 0);
+        assert(((rShadowBitmap.GetSizePixel().Width()-1)/2)%2 == 1);
     }
 }
 
@@ -109,8 +109,8 @@ FramePainter::OffsetBitmap::OffsetBitmap (
     : maBitmap(),
       maOffset()
 {
-    OSL_ASSERT(nHorizontalPosition>=-1 && nHorizontalPosition<=+1);
-    OSL_ASSERT(nVerticalPosition>=-1 && nVerticalPosition<=+1);
+    assert(nHorizontalPosition>=-1 && nHorizontalPosition<=+1);
+    assert(nVerticalPosition>=-1 && nVerticalPosition<=+1);
 
     const sal_Int32 nS (1);
     const sal_Int32 nC (::std::max<sal_Int32>(0,(rBitmap.GetSizePixel().Width()-nS)/2));
@@ -208,7 +208,7 @@ void FramePainter::OffsetBitmap::PaintSide (
     else
     {
         // Diagonal sides indicates an error.
-        OSL_ASSERT(false);
+        assert(false);
     }
 }
 
