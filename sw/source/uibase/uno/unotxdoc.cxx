@@ -3576,24 +3576,28 @@ void SwXTextDocument::paintDialog(const OUString& rDialogUnoName, VirtualDevice&
 
     SwModule* pMod = SW_MOD();
     SfxSlotPool* pSlotPool = pMod->GetSlotPool();
-    const SfxSlot* pSlot = pSlotPool->GetUnoSlot(".uno:SpellDialog");
+    const SfxSlot* pSlot = pSlotPool->GetUnoSlot(rDialogUnoName);
     if (!pSlot)
     {
         // Incorrect uno dialog command ?
-        printf("No slot found");
+        printf("\nNo slot found\n");
         nWidth = nHeight = 0;
         return;
     }
 
     SfxChildWinFactory* pFactory = pMod->GetChildWinFactory(pSlot->GetSlotId());
+    if (!pFactory)
+    {
+        printf("\nNo corresponding factory found. Painting dialog not supported (yet).\n");
+        nWidth = nHeight = 0;
+        return;
+    }
     SfxChildWindow* pSfxChildWindow = pFactory->pCtor(&pViewFrame->GetWindow(), pFactory->nId, &pViewFrame->GetBindings(), &pFactory->aInfo);
 
     vcl::Window* pWindow = pSfxChildWindow->GetWindow();
     // Set the outputsize of the device to exact dimensions of the dialog now
     // since we have the dimensions
     Size aDialogSize = pWindow->get_preferred_size();
-    rDevice.SetOutputSizePixel(aDialogSize);
-
     // let the client know of the dimensions too
     nWidth = aDialogSize.getWidth();
     nHeight = aDialogSize.getHeight();

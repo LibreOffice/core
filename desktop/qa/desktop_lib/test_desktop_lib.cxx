@@ -2165,12 +2165,12 @@ void DesktopLOKTest::testDialogsWriter()
 
     int nOutputWidth = nCanvasWidth;
     int nOutputHeight = nCanvasHeight;
-    pDocument->pClass->paintDialog(pDocument, ".uno:SpellDialog", aBuffer.data(), nOutputWidth, nOutputHeight);
+    pDocument->pClass->paintDialog(pDocument, ".uno:SearchDialog", aBuffer.data(), nOutputWidth, nOutputHeight);
 
-    // Write only the image to the buffer, ignore rest of  it
-    sal_Int32 nDialogStride = cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, nOutputWidth);
-    cairo_surface_t* pSurface = cairo_image_surface_create_for_data(aBuffer.data(), CAIRO_FORMAT_ARGB32, nOutputWidth, nOutputHeight, nDialogStride);
-    cairo_surface_write_to_png(pSurface, "/tmp/dialog.png");
+    cairo_surface_t* pSurface = cairo_image_surface_create_for_data(aBuffer.data(), CAIRO_FORMAT_ARGB32, nCanvasWidth, nCanvasHeight, nStride);
+    // Write only the image to the buffer, clip rest of the empty area.
+    cairo_surface_t* pNewSurface = cairo_surface_create_for_rectangle(pSurface, 0, 0, nOutputWidth, nOutputHeight);
+    cairo_surface_write_to_png(pNewSurface, "/tmp/dialog.png");
 
     CPPUNIT_ASSERT(false);
 }
