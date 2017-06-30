@@ -77,8 +77,7 @@ namespace {
         void Paint (
             const Reference<rendering::XCanvas>& rxCanvas,
             const rendering::ViewState& rViewState,
-            const awt::Rectangle& rBoundingBox,
-            const awt::Point& rOffset);
+            const awt::Rectangle& rBoundingBox);
 
         geometry::RealRectangle2D GetBoundingBox (
             const Reference<rendering::XCanvas>& rxCanvas);
@@ -1489,15 +1488,7 @@ void Button::Paint (
     sal_Int32 nTextHeight (sal::static_int_cast<sal_Int32>(0.5 + aTextBBox.Y2 - aTextBBox.Y1));
 
     PaintIcon(rxCanvas, nTextHeight, rViewState);
-    awt::Point aOffset(0,0);
-    if ( ! IsEnabled())
-        if (mpMode->mpIcon.get() != nullptr)
-        {
-            Reference<rendering::XBitmap> xBitmap (mpMode->mpIcon->GetNormalBitmap());
-            if (xBitmap.is())
-                aOffset.Y = xBitmap->getSize().Height;
-        }
-    mpMode->maText.Paint(rxCanvas, rViewState, GetBoundingBox(), aOffset);
+    mpMode->maText.Paint(rxCanvas, rViewState, GetBoundingBox());
 }
 
 awt::Size Button::CreateBoundingSize (
@@ -1633,7 +1624,7 @@ void Label::Paint (
     if (mpMode.get() == nullptr)
         return;
 
-    mpMode->maText.Paint(rxCanvas, rViewState, GetBoundingBox(), awt::Point(0,0));
+    mpMode->maText.Paint(rxCanvas, rViewState, GetBoundingBox());
 }
 
 bool Label::SetState (const bool bIsOver, const bool bIsPressed)
@@ -1682,10 +1673,8 @@ const PresenterTheme::SharedFontDescriptor& Text::GetFont() const
 void Text::Paint (
     const Reference<rendering::XCanvas>& rxCanvas,
     const rendering::ViewState& rViewState,
-    const awt::Rectangle& rBoundingBox,
-    const awt::Point& rOffset)
+    const awt::Rectangle& rBoundingBox)
 {
-    (void)rOffset;
     OSL_ASSERT(rxCanvas.is());
 
     if (msText.isEmpty())
