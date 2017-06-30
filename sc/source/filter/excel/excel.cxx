@@ -45,7 +45,7 @@
 
 #include <memory>
 
-ErrCode ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPFORMAT eFormat )
+ErrCode ScFormatFilterPlugin::ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPFORMAT eFormat )
 {
     // check the passed Calc document
     OSL_ENSURE( pDocument, "::ScImportExcel - no document" );
@@ -197,7 +197,7 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
     return eRet;
 }
 
-ErrCode ScFormatFilterPluginImpl::ScExportExcel5( SfxMedium& rMedium, ScDocument *pDocument,
+ErrCode ScFormatFilterPlugin::ScExportExcel5( SfxMedium& rMedium, ScDocument *pDocument,
     ExportFormatExcel eFormat, rtl_TextEncoding eNach )
 {
     if( eFormat != ExpBiff5 && eFormat != ExpBiff8 )
