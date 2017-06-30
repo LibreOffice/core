@@ -56,7 +56,6 @@ enum class SwPostItMode
 
 class SwPrintData
 {
-    const SwPrintUIOptions *    m_pPrintUIOptions;  // not owner
     const SwRenderData *        m_pRenderData;      // not owner
 
 public:
@@ -72,15 +71,13 @@ public:
              m_bPrintEmptyPages,
 
              /// #i56195# no field update while printing mail merge documents
-             m_bUpdateFieldsInPrinting,
-             m_bModified;
+             m_bUpdateFieldsInPrinting;
 
     SwPostItMode    m_nPrintPostIts;
     OUString       m_sFaxName;
 
     SwPrintData()
     {
-        m_pPrintUIOptions       = nullptr;
         m_pRenderData        = nullptr;
 
         m_bPrintGraphic           =
@@ -98,7 +95,6 @@ public:
         m_bPrintProspect          =
         m_bPrintProspectRTL       =
         m_bPrintSingleJobs        =
-        m_bModified               =
         m_bPrintBlackFont         =
         m_bPrintHiddenText        =
         m_bPrintTextPlaceholder   = false;
@@ -135,7 +131,6 @@ public:
     /** Note: in the context where this class is used the pointers should always be valid
        during the lifetime of this object */
     const SwRenderData &        GetRenderData() const           { return *m_pRenderData; }
-    void  SetPrintUIOptions( const SwPrintUIOptions *pOpt )     { m_pPrintUIOptions = pOpt; }
     void  SetRenderData( const SwRenderData *pData )            { m_pRenderData = pData; }
 
     bool IsPrintGraphic() const             { return m_bPrintGraphic; }
@@ -176,7 +171,7 @@ public:
     void SetPrintHiddenText( bool b )           { doSetModified(); m_bPrintHiddenText = b; }
     void SetPrintTextPlaceholder( bool b )      { doSetModified(); m_bPrintTextPlaceholder = b; }
 
-    virtual void doSetModified () { m_bModified = true;}
+    virtual void doSetModified () {}
 };
 
 class SwPrintUIOptions : public vcl::PrinterOptionsHelper

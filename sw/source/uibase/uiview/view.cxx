@@ -721,7 +721,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     // If the view is switch from one to another, the 'old' view is given by
     // parameter <pOldSh>.
 
-    m_bCenterCursor = m_bTopCursor = m_bAlwaysShowSel = m_bTabColFromDoc = m_bTabRowFromDoc =
+    m_bCenterCursor = m_bTopCursor = m_bTabColFromDoc = m_bTabRowFromDoc =
     m_bSetTabColFromDoc = m_bSetTabRowFromDoc = m_bAttrChgNotified = m_bAttrChgNotifiedWithRegistrations =
     m_bVerbsActive = m_bDrawRotate = m_bInOuterResizePixel = m_bInInnerResizePixel =
     m_bPasteState = m_bPasteSpecialState = m_bMakeSelectionVisible = false;

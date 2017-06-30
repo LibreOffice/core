@@ -712,8 +712,6 @@ void SwDoc::ClearDoc()
     else
         mpFrameFormatTable->DeleteAndDestroyAll( true );
 
-    mxForbiddenCharsTable.clear();
-
     GetDocumentFieldsManager().ClearFieldTypes();
 
     delete mpNumberFormatter;

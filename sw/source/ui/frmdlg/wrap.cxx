@@ -65,10 +65,6 @@ SwWrapDlg::SwWrapDlg(vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bo
 
 SwWrapTabPage::SwWrapTabPage(vcl::Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "WrapPage" , "modules/swriter/ui/wrappage.ui", &rSet)
-    , m_nOldLeftMargin(0)
-    , m_nOldRightMargin(0)
-    , m_nOldUpperMargin(0)
-    , m_nOldLowerMargin(0)
     , m_nAnchorId(RndStdIds::FLY_AT_PARA)
     , m_nHtmlMode(0)
     , m_pWrtSh(nullptr)
@@ -409,14 +405,6 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         // size
         const SwFormatFrameSize& rFrameSize = static_cast<const SwFormatFrameSize&>(rSet.Get(RES_FRM_SIZE));
         Size aSize = rFrameSize.GetSize();
-
-        // margin
-        const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(rSet.Get(RES_UL_SPACE));
-        const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>(rSet.Get(RES_LR_SPACE));
-        m_nOldLeftMargin  = static_cast< sal_uInt16 >(rLR.GetLeft());
-        m_nOldRightMargin = static_cast< sal_uInt16 >(rLR.GetRight());
-        m_nOldUpperMargin = rUL.GetUpper();
-        m_nOldLowerMargin = rUL.GetLower();
 
         // position
         const SwFormatHoriOrient& rHori = static_cast<const SwFormatHoriOrient&>(rSet.Get(RES_HORI_ORIENT));

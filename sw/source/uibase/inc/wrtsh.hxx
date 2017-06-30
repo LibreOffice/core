@@ -553,7 +553,6 @@ private:
     bool    m_bAddMode        :1;
     bool    m_bBlockMode      :1;
     bool    m_bLayoutMode     :1;
-    bool    m_bCopy           :1;
     bool    m_bSelWrd         :1;
     bool    m_bSelLn          :1;
     bool    m_bIsInClickToEdit:1;

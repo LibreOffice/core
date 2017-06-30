@@ -146,7 +146,6 @@ void SwRenderData::MakeSwPrtOptions(
 
     //! needs to be set after MakeOptions since the assignment operation in that
     //! function will destroy the pointers
-    rOptions.SetPrintUIOptions( pOpt );
     rOptions.SetRenderData( this );
 }
 

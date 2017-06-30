@@ -2932,42 +2932,18 @@ svx/source/sidebar/line/LinePropertyPanel.hxx:106
     svx::sidebar::LinePropertyPanel maCapStyle sfx2::sidebar::ControllerItem
 svx/source/table/tablertfimporter.cxx:53
     sdr::table::RTFCellDefault maItemSet class SfxItemSet
-sw/inc/doc.hxx:328
-    SwDoc mxForbiddenCharsTable rtl::Reference<SvxForbiddenCharactersTable>
-sw/inc/printdata.hxx:59
-    SwPrintData m_pPrintUIOptions const class SwPrintUIOptions *
-sw/inc/printdata.hxx:76
-    SwPrintData m_bModified _Bool
 sw/inc/shellio.hxx:147
     SwReader aFileName class rtl::OUString
 sw/inc/swmodule.hxx:93
     SwModule m_pErrorHandler class SfxErrorHandler *
-sw/inc/view.hxx:232
-    SwView m_bAlwaysShowSel _Bool
-sw/qa/extras/uiwriter/uiwriter.cxx:3796
-    PortionItem msText class rtl::OUString
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState class SwCursorSaveState
-sw/source/core/doc/tblrwcl.cxx:198
-    CR_SetLineHeight nLines sal_uInt16
 sw/source/core/frmedt/fetab.cxx:90
     TableWait m_pWait const std::unique_ptr<SwWait>
-sw/source/core/inc/drawfont.hxx:96
-    SwDrawTextInfo m_bLeft _Bool
-sw/source/core/inc/drawfont.hxx:97
-    SwDrawTextInfo m_bRight _Bool
-sw/source/core/inc/swfont.hxx:166
-    SwFont m_bNoHyph _Bool
-sw/source/core/inc/swfont.hxx:173
-    SwFont m_bNoColorReplace _Bool
 sw/source/core/inc/swfont.hxx:994
     SvStatistics nGetStretchTextSize sal_uInt16
 sw/source/core/layout/dbg_lay.cxx:164
     SwImplEnterLeave nAction enum DbgAction
-sw/source/core/text/porlay.hxx:86
-    SwLineLayout m_bFntChg _Bool
-sw/source/core/text/porlay.hxx:89
-    SwLineLayout m_bTab _Bool
 sw/source/core/text/xmldump.cxx:33
     XmlPortionDumper ofs sal_Int32
 sw/source/filter/html/htmlcss1.cxx:77
@@ -2976,8 +2952,6 @@ sw/source/filter/html/htmlcss1.cxx:78
     SwCSS1ItemIds nFormatPageDesc sal_uInt16
 sw/source/filter/html/htmlcss1.cxx:79
     SwCSS1ItemIds nFormatKeep sal_uInt16
-sw/source/filter/html/swhtml.hxx:467
-    SwHTMLParser m_bFixSelectHeight _Bool
 sw/source/filter/inc/rtf.hxx:28
     RTFSurround::(anonymous union)::(anonymous) nGoldCut sal_uInt8
 sw/source/filter/inc/rtf.hxx:29
@@ -2990,16 +2964,6 @@ sw/source/uibase/inc/uivwimp.hxx:95
     SwView_Impl xTmpSelDocSh class SfxObjectShellLock
 sw/source/uibase/inc/unodispatch.hxx:46
     SwXDispatchProviderInterceptor::DispatchMutexLock_Impl aGuard class SolarMutexGuard
-sw/source/uibase/inc/wrap.hxx:63
-    SwWrapTabPage m_nOldLeftMargin sal_uInt16
-sw/source/uibase/inc/wrap.hxx:64
-    SwWrapTabPage m_nOldRightMargin sal_uInt16
-sw/source/uibase/inc/wrap.hxx:65
-    SwWrapTabPage m_nOldUpperMargin sal_uInt16
-sw/source/uibase/inc/wrap.hxx:66
-    SwWrapTabPage m_nOldLowerMargin sal_uInt16
-sw/source/uibase/inc/wrtsh.hxx:556
-    SwWrtShell m_bCopy _Bool
 toolkit/source/awt/stylesettings.cxx:90
     toolkit::StyleMethodGuard m_aGuard class SolarMutexGuard
 ucb/source/ucp/gio/gio_mount.hxx:46

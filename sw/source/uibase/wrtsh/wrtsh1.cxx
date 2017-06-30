@@ -128,7 +128,6 @@ using namespace com::sun::star;
         m_bBlockMode = \
         m_bExtMode = \
         m_bInSelect = \
-        m_bCopy = \
         m_bLayoutMode = \
         m_bSelWrd = \
         m_bSelLn = \
