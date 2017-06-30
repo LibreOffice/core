@@ -2,6 +2,420 @@
   "comments": [
     {
       "key": {
+        "uuid": "3a461143_e12a02e7",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2483,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-30T20:57:11Z",
+      "side": 1,
+      "message": "maybe \"for special handling of items\", to prevent confusion? (Since it refers to \"Spezial-Behandlungen\", not \"Spezial-Item\".)",
+      "range": {
+        "startLine": 2483,
+        "startChar": 51,
+        "endLine": 2483,
+        "endChar": 63
+      },
+      "revId": "563e6d6c68e87054b34800ee5c17818d9c29c7bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_0130ee55",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5981,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-30T20:57:11Z",
+      "side": 1,
+      "message": "this one has been missed",
+      "range": {
+        "startLine": 5981,
+        "startChar": 37,
+        "endLine": 5981,
+        "endChar": 52
+      },
+      "revId": "563e6d6c68e87054b34800ee5c17818d9c29c7bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_2135ea45",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6049,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-30T20:57:11Z",
+      "side": 1,
+      "message": "missed (maybe \"Helper functions\", like below?)",
+      "range": {
+        "startLine": 6049,
+        "startChar": 4,
+        "endLine": 6049,
+        "endChar": 19
+      },
+      "revId": "563e6d6c68e87054b34800ee5c17818d9c29c7bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_413af637",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6051,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-30T20:57:11Z",
+      "side": 1,
+      "message": "\"for\"",
+      "range": {
+        "startLine": 6051,
+        "startChar": 69,
+        "endLine": 6051,
+        "endChar": 73
+      },
+      "revId": "563e6d6c68e87054b34800ee5c17818d9c29c7bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_613ff225",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6527,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-30T20:57:11Z",
+      "side": 1,
+      "message": "missed (\"cell properties\"?)",
+      "range": {
+        "startLine": 6527,
+        "startChar": 29,
+        "endLine": 6527,
+        "endChar": 44
+      },
+      "revId": "563e6d6c68e87054b34800ee5c17818d9c29c7bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_813cde30",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6564,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-30T20:57:11Z",
+      "side": 1,
+      "message": "\"local\"",
+      "range": {
+        "startLine": 6564,
+        "startChar": 27,
+        "endLine": 6564,
+        "endChar": 32
+      },
+      "revId": "563e6d6c68e87054b34800ee5c17818d9c29c7bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_a149dad2",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6786,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-30T20:57:11Z",
+      "side": 1,
+      "message": "missed",
+      "range": {
+        "startLine": 6786,
+        "startChar": 37,
+        "endLine": 6786,
+        "endChar": 52
+      },
+      "revId": "563e6d6c68e87054b34800ee5c17818d9c29c7bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_c146e6be",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7077,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-30T20:57:11Z",
+      "side": 1,
+      "message": "missed",
+      "range": {
+        "startLine": 7077,
+        "startChar": 39,
+        "endLine": 7077,
+        "endChar": 52
+      },
+      "revId": "563e6d6c68e87054b34800ee5c17818d9c29c7bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_e11122b1",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7083,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-30T20:57:11Z",
+      "side": 1,
+      "message": "missed",
+      "range": {
+        "startLine": 7083,
+        "startChar": 63,
+        "endLine": 7083,
+        "endChar": 78
+      },
+      "revId": "563e6d6c68e87054b34800ee5c17818d9c29c7bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_210c0a94",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7108,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-30T20:57:11Z",
+      "side": 1,
+      "message": "missed",
+      "range": {
+        "startLine": 7108,
+        "startChar": 39,
+        "endLine": 7108,
+        "endChar": 52
+      },
+      "revId": "563e6d6c68e87054b34800ee5c17818d9c29c7bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_411116ac",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7114,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-30T20:57:11Z",
+      "side": 1,
+      "message": "missed",
+      "range": {
+        "startLine": 7114,
+        "startChar": 63,
+        "endLine": 7114,
+        "endChar": 78
+      },
+      "revId": "563e6d6c68e87054b34800ee5c17818d9c29c7bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_61261218",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7129,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-30T20:57:11Z",
+      "side": 1,
+      "message": "missed",
+      "range": {
+        "startLine": 7129,
+        "startChar": 53,
+        "endLine": 7129,
+        "endChar": 68
+      },
+      "revId": "563e6d6c68e87054b34800ee5c17818d9c29c7bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_8123fe04",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7144,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-30T20:57:11Z",
+      "side": 1,
+      "message": "missed",
+      "range": {
+        "startLine": 7144,
+        "startChar": 53,
+        "endLine": 7144,
+        "endChar": 68
+      },
+      "revId": "563e6d6c68e87054b34800ee5c17818d9c29c7bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_a120faf8",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 8640,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-30T20:57:11Z",
+      "side": 1,
+      "message": "missed",
+      "range": {
+        "startLine": 8640,
+        "startChar": 62,
+        "endLine": 8640,
+        "endChar": 77
+      },
+      "revId": "563e6d6c68e87054b34800ee5c17818d9c29c7bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_c11d06bf",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 8721,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-30T20:57:11Z",
+      "side": 1,
+      "message": "missed",
+      "range": {
+        "startLine": 8721,
+        "startChar": 62,
+        "endLine": 8721,
+        "endChar": 76
+      },
+      "revId": "563e6d6c68e87054b34800ee5c17818d9c29c7bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_e17842fb",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 8786,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-30T20:57:11Z",
+      "side": 1,
+      "message": "missed",
+      "range": {
+        "startLine": 8786,
+        "startChar": 62,
+        "endLine": 8786,
+        "endChar": 76
+      },
+      "revId": "563e6d6c68e87054b34800ee5c17818d9c29c7bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_017e2ee4",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 9028,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-30T20:57:11Z",
+      "side": 1,
+      "message": "missed",
+      "range": {
+        "startLine": 9028,
+        "startChar": 69,
+        "endLine": 9028,
+        "endChar": 94
+      },
+      "revId": "563e6d6c68e87054b34800ee5c17818d9c29c7bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_21832ace",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 9413,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-30T20:57:11Z",
+      "side": 1,
+      "message": "missed",
+      "range": {
+        "startLine": 9413,
+        "startChar": 69,
+        "endLine": 9413,
+        "endChar": 94
+      },
+      "revId": "563e6d6c68e87054b34800ee5c17818d9c29c7bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_9e06fb1e",
         "filename": "sot/source/sdstor/storage.cxx",
         "patchSetId": 1
