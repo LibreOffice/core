@@ -52,7 +52,6 @@ private:
     basegfx::B3DVector  aDefaultSphereSize;
 
     // Lathe object
-    long                nDefaultLatheEndAngle;
     bool                bDefaultLatheSmoothed;
     bool                bDefaultLatheSmoothFrontBack;
     bool                bDefaultLatheCharacterMode;

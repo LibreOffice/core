@@ -24,12 +24,9 @@ Camera3D::Camera3D(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLook
                    double fFocalLen) :
     aResetPos(rPos),
     aResetLookAt(rLookAt),
-    fResetFocalLength(fFocalLen),
-    fResetBankAngle(0),
     fBankAngle(0),
     bAutoAdjustProjection(true)
 {
-    SetVPD(0);
     SetPosition(rPos);
     SetLookAt(rLookAt);
     SetFocalLength(fFocalLen);
@@ -37,8 +34,6 @@ Camera3D::Camera3D(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLook
 
 Camera3D::Camera3D()
     : aResetPos(0.0, 0.0, 1.0)
-    , fResetFocalLength(0.0)
-    , fResetBankAngle(0.0)
     , fFocalLength(35.0)
     , fBankAngle(0.0)
     , bAutoAdjustProjection(false)
@@ -47,13 +42,10 @@ Camera3D::Camera3D()
 
 // Set default values for reset
 
-void Camera3D::SetDefaults(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLookAt,
-                            double fFocalLen)
+void Camera3D::SetDefaults(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLookAt)
 {
     aResetPos           = rPos;
     aResetLookAt        = rLookAt;
-    fResetFocalLength   = fFocalLen;
-    fResetBankAngle     = 0;
 }
 
 // Set ViewWindow and adjust PRP

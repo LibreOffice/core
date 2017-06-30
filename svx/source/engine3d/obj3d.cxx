@@ -763,9 +763,7 @@ sdr::properties::BaseProperties* E3dCompoundObject::CreateObjectSpecificProperti
 
 E3dCompoundObject::E3dCompoundObject()
 :   E3dObject(),
-    aMaterialAmbientColor(),
-    bCreateNormals(false),
-    bCreateTexture(false)
+    aMaterialAmbientColor()
 {
     // Set defaults
     E3dDefaultAttributes aDefault;
@@ -774,9 +772,7 @@ E3dCompoundObject::E3dCompoundObject()
 
 E3dCompoundObject::E3dCompoundObject(E3dDefaultAttributes& rDefault)
 :   E3dObject(),
-    aMaterialAmbientColor(),
-    bCreateNormals(false),
-    bCreateTexture(false)
+    aMaterialAmbientColor()
 {
     // Set defaults
     SetDefaultAttributes(rDefault);
@@ -786,9 +782,6 @@ void E3dCompoundObject::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 {
     // Set defaults
     aMaterialAmbientColor = rDefault.GetDefaultAmbientColor();
-
-    bCreateNormals = rDefault.GetDefaultCreateNormals();
-    bCreateTexture = rDefault.GetDefaultCreateTexture();
 }
 
 E3dCompoundObject::~E3dCompoundObject ()

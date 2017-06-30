@@ -266,8 +266,6 @@ SvxSearchDialog::SvxSearchDialog( vcl::Window* pParent, SfxChildWindow* pChildWi
     , pSearchController(nullptr)
     , pOptionsController(nullptr)
     , pFamilyController(nullptr)
-    , pSearchSetController(nullptr)
-    , pReplaceSetController(nullptr)
     , nTransliterationFlags(TransliterationFlags::NONE)
 {
     get(m_pSearchFrame, "searchframe");
@@ -357,8 +355,6 @@ void SvxSearchDialog::dispose()
     DELETEZ( pSearchController );
     DELETEZ( pOptionsController );
     DELETEZ( pFamilyController );
-    DELETEZ( pSearchSetController );
-    DELETEZ( pReplaceSetController );
     rBindings.LeaveRegistrations();
 
     delete pSearchItem;
