@@ -126,6 +126,8 @@ void XSecController::switchGpgSignature()
                                    xGpgSEInitializer->createSecurityContext(OUString()));
         }
     }
+#else
+    (void) this;
 #endif
 }
 
