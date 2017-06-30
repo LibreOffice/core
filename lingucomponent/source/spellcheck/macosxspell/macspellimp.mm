@@ -236,8 +236,7 @@ sal_Int16 MacSpellChecker::GetSpellFailure( const OUString &rWord, const Locale 
         if(rLocale.Country.getLength()>0)
         {
             NSString* aCountry = [[NSString alloc] initWithCharacters: reinterpret_cast<unichar const *>(rLocale.Country.getStr()) length: rLocale.Country.getLength()];
-            NSString* aTag = @"_";
-            NSString* aTaggedCountry = [aTag stringByAppendingString:aCountry];
+            NSString* aTaggedCountry = [@"_" stringByAppendingString:aCountry];
             [aLang autorelease];
             aLang = [aLang  stringByAppendingString:aTaggedCountry];
         }
@@ -338,8 +337,7 @@ Reference< XSpellAlternatives >
         if(rLocale.Country.getLength()>0)
         {
             NSString* aCountry = [[NSString alloc] initWithCharacters: reinterpret_cast<unichar const *>(rLocale.Country.getStr()) length: rLocale.Country.getLength() ];
-            NSString* aTag = @"_";
-            NSString* aTaggedCountry = [aTag stringByAppendingString:aCountry];
+            NSString* aTaggedCountry = [@"_" stringByAppendingString:aCountry];
             [aLang autorelease];
             aLang = [aLang  stringByAppendingString:aTaggedCountry];
         }
