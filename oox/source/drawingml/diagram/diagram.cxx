@@ -317,13 +317,19 @@ void Diagram::addTo( const ShapePtr & pParentShape )
     // collect data, init maps
     build( );
 
+    if (pParentShape->getSize().Width == 0 || pParentShape->getSize().Height == 0)
+        SAL_WARN("oox.drawingml", "Diagram cannot be correctly laid out. Size: "
+            << pParentShape->getSize().Width << "x" << pParentShape->getSize().Height);
+
     pParentShape->setChildSize(pParentShape->getSize());
 
-    // create Shape hierarchy
-    ShapeCreationVisitor aCreationVisitor(pParentShape, *this);
     if( mpLayout->getNode() )
+    {
+        // create Shape hierarchy
+        ShapeCreationVisitor aCreationVisitor(pParentShape, *this);
+        mpLayout->getNode()->setExistingShape(pParentShape);
         mpLayout->getNode()->accept( aCreationVisitor );
-
+    }
     pParentShape->setDiagramDoms( getDomsAsPropertyValues() );
 }
 
