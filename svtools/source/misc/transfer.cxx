@@ -253,6 +253,21 @@ void SAL_CALL TransferableHelper::TerminateListener::notifyTermination( const Ev
     mrParent.ImplFlush();
 }
 
+OUString SAL_CALL TransferableHelper::TerminateListener::getImplementationName()
+{
+    return OUString("com.sun.star.comp.svt.TransferableHelperTerminateListener");
+}
+
+sal_Bool SAL_CALL TransferableHelper::TerminateListener::supportsService(const OUString& /*rServiceName*/)
+{
+    return false;
+}
+
+css::uno::Sequence<OUString> TransferableHelper::TerminateListener::getSupportedServiceNames()
+{
+    return css::uno::Sequence<OUString>();
+}
+
 
 Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor )
 {
