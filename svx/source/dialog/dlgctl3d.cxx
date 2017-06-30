@@ -117,7 +117,7 @@ void Svx3DPreviewControl::Construct()
     rCamera.SetPosAndLookAt(aCamPos, aLookAt);
     double fDefaultCamFocal = mp3DView->GetDefaultCamFocal();
     rCamera.SetFocalLength(fDefaultCamFocal);
-    rCamera.SetDefaults(basegfx::B3DPoint(0.0, 0.0, fDefaultCamPosZ), aLookAt, fDefaultCamFocal);
+    rCamera.SetDefaults(basegfx::B3DPoint(0.0, 0.0, fDefaultCamPosZ), aLookAt);
 
     mpScene->SetCamera( rCamera );
     mpFmPage->InsertObject( mpScene );
@@ -352,7 +352,7 @@ void Svx3DLightControl::Construct2()
         rCamera.SetPosAndLookAt(aCamPos, aLookAt);
         double fDefaultCamFocal = mp3DView->GetDefaultCamFocal();
         rCamera.SetFocalLength(fDefaultCamFocal);
-        rCamera.SetDefaults(basegfx::B3DPoint(0.0, 0.0, fDefaultCamPosZ), aLookAt, fDefaultCamFocal);
+        rCamera.SetDefaults(basegfx::B3DPoint(0.0, 0.0, fDefaultCamPosZ), aLookAt);
 
         mpScene->SetCamera( rCamera );
 

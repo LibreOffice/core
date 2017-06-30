@@ -276,14 +276,6 @@ void FmSearchEngine::BuildAndInsertFieldInfo(const Reference< css::container::XI
     FieldInfo fiCurrent;
     fiCurrent.xContents.set(xCurrentField, UNO_QUERY);
     fiCurrent.nFormatKey = ::comphelper::getINT32(xProperties->getPropertyValue(FM_PROP_FORMATKEY));
-    fiCurrent.bDoubleHandling = false;
-    if (m_xFormatSupplier.is())
-    {
-        Reference< css::util::XNumberFormats >  xNumberFormats(m_xFormatSupplier->getNumberFormats());
-
-        sal_Int16 nFormatType = ::comphelper::getNumberFormatType(xNumberFormats, fiCurrent.nFormatKey) & ~((sal_Int16)css::util::NumberFormat::DEFINED);
-        fiCurrent.bDoubleHandling = (nFormatType != css::util::NumberFormat::TEXT);
-    }
 
     // and memorize
     m_arrUsedFields.insert(m_arrUsedFields.end(), fiCurrent);

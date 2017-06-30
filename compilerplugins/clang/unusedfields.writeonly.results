@@ -1230,48 +1230,14 @@ include/svtools/unoevent.hxx:159
     SvEventDescriptor xParentRef css::uno::Reference<css::uno::XInterface>
 include/svx/bmpmask.hxx:129
     SvxBmpMask aSelItem class SvxBmpMaskSelectItem
-include/svx/camera3d.hxx:39
-    Camera3D fResetFocalLength double
-include/svx/camera3d.hxx:40
-    Camera3D fResetBankAngle double
-include/svx/cube3d.hxx:70
-    E3dCubeObj nSideFlags enum CubeFaces
-include/svx/deflt3d.hxx:55
-    E3dDefaultAttributes nDefaultLatheEndAngle long
 include/svx/float3d.hxx:176
     Svx3DWin pControllerItem class Svx3DCtrlItem *
-include/svx/fmsrcimp.hxx:172
-    FmSearchEngine::FieldInfo bDoubleHandling _Bool
 include/svx/imapdlg.hxx:118
     SvxIMapDlg aIMapItem class SvxIMapDlgItem
-include/svx/obj3d.hxx:233
-    E3dCompoundObject bCreateNormals _Bool
-include/svx/obj3d.hxx:234
-    E3dCompoundObject bCreateTexture _Bool
 include/svx/srchdlg.hxx:231
     SvxSearchDialog pSearchController class SvxSearchController *
 include/svx/srchdlg.hxx:232
     SvxSearchDialog pOptionsController class SvxSearchController *
-include/svx/srchdlg.hxx:234
-    SvxSearchDialog pSearchSetController class SvxSearchController *
-include/svx/srchdlg.hxx:235
-    SvxSearchDialog pReplaceSetController class SvxSearchController *
-include/svx/svdoedge.hxx:94
-    SdrEdgeInfoRec cOrthoForm char
-include/svx/view3d.hxx:49
-    E3dView fDefaultScaleY double
-include/svx/view3d.hxx:50
-    E3dView fDefaultScaleZ double
-include/svx/view3d.hxx:51
-    E3dView fDefaultRotateY double
-include/svx/view3d.hxx:52
-    E3dView fDefaultRotateZ double
-include/svx/viewpt3d.hxx:56
-    Viewport3D fVPD double
-include/svx/viewpt3d.hxx:70
-    Viewport3D fWRatio double
-include/svx/viewpt3d.hxx:71
-    Viewport3D fHRatio double
 include/vcl/menu.hxx:462
     MenuBar::MenuBarButtonCallbackArg bHighlight _Bool
 include/vcl/salnativewidgets.hxx:415

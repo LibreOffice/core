@@ -67,7 +67,6 @@ private:
     // Parameter
     basegfx::B3DPoint                   aCubePos;
     basegfx::B3DVector                  aCubeSize;
-    CubeFaces                           nSideFlags;
 
     // BOOLeans
     bool                                bPosIsCenter : 1;

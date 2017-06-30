@@ -52,8 +52,7 @@ class SVX_DLLPUBLIC Viewport3D
     basegfx::B3DVector          aVPN;           // View Plane Normal
     basegfx::B3DVector          aVUV;           // View Up Vector
     basegfx::B3DPoint           aPRP;           // Projection Reference Point(View-coordinates)
-                                    // up to now only the z-coordinate is considered
-    double          fVPD;           // View Plane Distance
+                                                // up to now only the z-coordinate is considered
 
     ProjectionType  eProjection;    // kind of the projection
     tools::Rectangle aDeviceRect;          // position and size of the output area
@@ -67,9 +66,6 @@ class SVX_DLLPUBLIC Viewport3D
                                     // is calculated by the transformation
     bool            bTfValid;       // flag, if transformation is valid
 
-    double fWRatio;                 // device/view aspect ratio
-    double fHRatio;
-
  public:
     Viewport3D();
 
@@ -77,7 +73,6 @@ class SVX_DLLPUBLIC Viewport3D
     void SetVPN(const basegfx::B3DVector& rNewVPN);
     void SetVUV(const basegfx::B3DVector& rNewVUV);
     void SetPRP(const basegfx::B3DPoint& rNewPRP);
-    void SetVPD(double fNewVPD);
 
     const basegfx::B3DPoint&    GetVRP() const  { return aVRP; }
     const basegfx::B3DVector&   GetVUV() const  { return aVUV; }

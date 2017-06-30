@@ -46,11 +46,6 @@ protected:
     Color                       aDefaultLightColor;             // The parameters for the last colors
     Color                       aDefaultAmbientColor;
 
-    double                      fDefaultScaleY;
-    double                      fDefaultScaleZ;
-    double                      fDefaultRotateY;
-    double                      fDefaultRotateZ;
-
     E3dDragConstraint           eDragConstraint;
 
     // Migrate selections

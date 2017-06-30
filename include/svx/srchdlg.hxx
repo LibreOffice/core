@@ -231,8 +231,6 @@ private:
     SvxSearchController*    pSearchController;
     SvxSearchController*    pOptionsController;
     SvxSearchController*    pFamilyController;
-    SvxSearchController*    pSearchSetController;
-    SvxSearchController*    pReplaceSetController;
 
     mutable TransliterationFlags
                             nTransliterationFlags;

@@ -832,7 +832,6 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const too
     bool bVer2=bObn2 || bUnt2;
     bool bInfo=pInfo!=nullptr;
     if (bInfo) {
-        pInfo->cOrthoForm=0;
         pInfo->nAngle1=nAngle1;
         pInfo->nAngle2=nAngle2;
         pInfo->nObj1Lines=1;
@@ -1282,7 +1281,6 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const too
         } else cForm='?';
         // more shapes:
         if (bInfo) {
-            pInfo->cOrthoForm=cForm;
             if (cForm=='I' || cForm=='L' || cForm=='Z' || cForm=='U') {
                 pInfo->nObj1Lines=1;
                 pInfo->nObj2Lines=1;
