@@ -51,8 +51,7 @@ X11Clipboard::X11Clipboard( SelectionManager& rManager, Atom aSelection ) :
     css::lang::XServiceInfo
     >( rManager.getMutex() ),
 
-        m_rSelectionManager( rManager ),
-        m_xSelectionManager( & rManager ),
+        m_xSelectionManager( &rManager ),
         m_aSelection( aSelection )
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -81,23 +80,23 @@ X11Clipboard::~X11Clipboard()
     MutexGuard aGuard( *Mutex::getGlobalMutex() );
 
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "shutting down instance of X11Clipboard (this=%p, Selection=\"%s\")\n", this, OUStringToOString( m_rSelectionManager.getString( m_aSelection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+    fprintf( stderr, "shutting down instance of X11Clipboard (this=%p, Selection=\"%s\")\n", this, OUStringToOString( m_xSelectionManager->getString( m_aSelection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
     if( m_aSelection != None )
-        m_rSelectionManager.deregisterHandler( m_aSelection );
+        m_xSelectionManager->deregisterHandler( m_aSelection );
     else
     {
-        m_rSelectionManager.deregisterHandler( XA_PRIMARY );
-        m_rSelectionManager.deregisterHandler( m_rSelectionManager.getAtom( "CLIPBOARD" ) );
+        m_xSelectionManager->deregisterHandler( XA_PRIMARY );
+        m_xSelectionManager->deregisterHandler( m_xSelectionManager->getAtom( "CLIPBOARD" ) );
     }
 }
 
 void X11Clipboard::fireChangedContentsEvent()
 {
-    ClearableMutexGuard aGuard( m_rSelectionManager.getMutex() );
+    ClearableMutexGuard aGuard( m_xSelectionManager->getMutex() );
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "X11Clipboard::fireChangedContentsEvent for %s (%" SAL_PRI_SIZET "u listeners)\n",
-             OUStringToOString( m_rSelectionManager.getString( m_aSelection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(), m_aListeners.size() );
+             OUStringToOString( m_xSelectionManager->getString( m_aSelection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(), m_aListeners.size() );
 #endif
     ::std::list< Reference< XClipboardListener > > listeners( m_aListeners );
     aGuard.clear();
@@ -113,7 +112,7 @@ void X11Clipboard::fireChangedContentsEvent()
 
 void X11Clipboard::clearContents()
 {
-    ClearableMutexGuard aGuard(m_rSelectionManager.getMutex());
+    ClearableMutexGuard aGuard(m_xSelectionManager->getMutex());
     // protect against deletion during outside call
     Reference< XClipboard > xThis( static_cast<XClipboard*>(this));
     // copy member references on stack so they can be called
@@ -134,7 +133,7 @@ void X11Clipboard::clearContents()
 
 Reference< XTransferable > SAL_CALL X11Clipboard::getContents()
 {
-    MutexGuard aGuard(m_rSelectionManager.getMutex());
+    MutexGuard aGuard(m_xSelectionManager->getMutex());
 
     if( ! m_aContents.is() )
         m_aContents = new X11Transferable( SelectionManager::get(), m_aSelection );
@@ -146,7 +145,7 @@ void SAL_CALL X11Clipboard::setContents(
     const Reference< XClipboardOwner >& xClipboardOwner )
 {
     // remember old values for callbacks before setting the new ones.
-    ClearableMutexGuard aGuard(m_rSelectionManager.getMutex());
+    ClearableMutexGuard aGuard(m_xSelectionManager->getMutex());
 
     Reference< XClipboardOwner > oldOwner( m_aOwner );
     m_aOwner = xClipboardOwner;
@@ -158,11 +157,11 @@ void SAL_CALL X11Clipboard::setContents(
 
     // for now request ownership for both selections
     if( m_aSelection != None )
-        m_rSelectionManager.requestOwnership( m_aSelection );
+        m_xSelectionManager->requestOwnership( m_aSelection );
     else
     {
-        m_rSelectionManager.requestOwnership( XA_PRIMARY );
-        m_rSelectionManager.requestOwnership( m_rSelectionManager.getAtom( "CLIPBOARD" ) );
+        m_xSelectionManager->requestOwnership( XA_PRIMARY );
+        m_xSelectionManager->requestOwnership( m_xSelectionManager->getAtom( "CLIPBOARD" ) );
     }
 
     // notify old owner on loss of ownership
@@ -175,7 +174,7 @@ void SAL_CALL X11Clipboard::setContents(
 
 OUString SAL_CALL X11Clipboard::getName()
 {
-    return m_rSelectionManager.getString( m_aSelection );
+    return m_xSelectionManager->getString( m_aSelection );
 }
 
 sal_Int8 SAL_CALL X11Clipboard::getRenderingCapabilities()
@@ -185,13 +184,13 @@ sal_Int8 SAL_CALL X11Clipboard::getRenderingCapabilities()
 
 void SAL_CALL X11Clipboard::addClipboardListener( const Reference< XClipboardListener >& listener )
 {
-    MutexGuard aGuard( m_rSelectionManager.getMutex() );
+    MutexGuard aGuard( m_xSelectionManager->getMutex() );
     m_aListeners.push_back( listener );
 }
 
 void SAL_CALL X11Clipboard::removeClipboardListener( const Reference< XClipboardListener >& listener )
 {
-    MutexGuard aGuard( m_rSelectionManager.getMutex() );
+    MutexGuard aGuard( m_xSelectionManager->getMutex() );
     m_aListeners.remove( listener );
 }
 

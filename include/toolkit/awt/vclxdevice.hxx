@@ -33,9 +33,6 @@
 class OutputDevice;
 class VirtualDevice;
 
-// For using nDummy, no incompatible update, add a sal_Bool bCreatedWithToolkitMember later...
-#define FLAGS_CREATEDWITHTOOLKIT    0x00000001
-
 /// An UNO wrapper for the VCL OutputDevice
 class TOOLKIT_DLLPUBLIC VCLXDevice :
                     public css::awt::XDevice,
@@ -51,16 +48,11 @@ private:
     VclPtr<OutputDevice>    mpOutputDevice;
 
 public:
-    sal_uInt32              nFlags;
-
-public:
                             VCLXDevice();
                             virtual ~VCLXDevice() override;
 
     void                    SetOutputDevice( const VclPtr<OutputDevice> &pOutDev ) { mpOutputDevice = pOutDev; }
     const VclPtr<OutputDevice>& GetOutputDevice() const { return mpOutputDevice; }
-
-    void                    SetCreatedWithToolkit( bool bCreatedWithToolkit );
 
     // css::uno::XInterface
     css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;

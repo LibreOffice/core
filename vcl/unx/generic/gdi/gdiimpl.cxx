@@ -127,7 +127,6 @@ X11SalGraphicsImpl::X11SalGraphicsImpl(X11SalGraphics& rParent):
     mnBrushPixel(0),
     mbPenGC(false),
     mbBrushGC(false),
-    mbMonoGC(false),
     mbCopyGC(false),
     mbInvertGC(false),
     mbInvert50GC(false),
@@ -269,7 +268,7 @@ void X11SalGraphicsImpl::freeResources()
     freeGC( pDisplay, mpInvertGC );
     freeGC( pDisplay, mpInvert50GC );
     freeGC( pDisplay, mpStippleGC );
-    mbTrackingGC = mbPenGC = mbBrushGC = mbMonoGC = mbCopyGC = mbInvertGC = mbInvert50GC = mbStippleGC = false;
+    mbTrackingGC = mbPenGC = mbBrushGC = mbCopyGC = mbInvertGC = mbInvert50GC = mbStippleGC = false;
 }
 
 GC X11SalGraphicsImpl::CreateGC( Drawable hDrawable, unsigned long nMask )
@@ -1001,7 +1000,6 @@ void X11SalGraphicsImpl::ResetClipRegion()
         mbPenGC         = false;
         mrParent.bFontGC_ = false;
         mbBrushGC       = false;
-        mbMonoGC        = false;
         mbCopyGC        = false;
         mbInvertGC      = false;
         mbInvert50GC    = false;
@@ -1065,7 +1063,6 @@ bool X11SalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
     mbPenGC         = false;
     mrParent.bFontGC_ = false;
     mbBrushGC       = false;
-    mbMonoGC        = false;
     mbCopyGC        = false;
     mbInvertGC      = false;
     mbInvert50GC    = false;
@@ -1184,7 +1181,6 @@ void X11SalGraphicsImpl::SetXORMode( bool bSet )
         mbPenGC     = false;
         mrParent.bFontGC_ = false;
         mbBrushGC   = false;
-        mbMonoGC        = false;
         mbCopyGC        = false;
         mbInvertGC  = false;
         mbInvert50GC    = false;

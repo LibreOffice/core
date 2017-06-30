@@ -117,10 +117,6 @@ OutputDevice::OutputDevice() :
     maMapRes.mnMapScNumY            = 1;
     maMapRes.mnMapScDenomX          = 1;
     maMapRes.mnMapScDenomY          = 1;
-    maMapRes.mfOffsetX              = 0.0;
-    maMapRes.mfOffsetY              = 0.0;
-    maMapRes.mfScaleX               = 1.0;
-    maMapRes.mfScaleY               = 1.0;
     // struct ImplThresholdRes
     maThresRes.mnThresLogToPixX     = 0;
     maThresRes.mnThresLogToPixY     = 0;

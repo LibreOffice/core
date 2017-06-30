@@ -59,12 +59,6 @@ SearchParam::SearchParam( const OUString &rText,
     m_bWildMatchSel = bWildMatchSel;
 
     nTransliterationFlags = TransliterationFlags::NONE;
-
-    // Parameters for weighted Levenshtein distance
-    bLEV_Relaxed    = true;
-    nLEV_OtherX     = 2;
-    nLEV_ShorterY   = 1;
-    nLEV_LongerZ    = 3;
 }
 
 SearchParam::SearchParam( const SearchParam& rParam )
@@ -79,11 +73,6 @@ SearchParam::SearchParam( const SearchParam& rParam )
     m_bSrchInSel    = rParam.m_bSrchInSel;
     m_bCaseSense    = rParam.m_bCaseSense;
     m_bWildMatchSel = rParam.m_bWildMatchSel;
-
-    bLEV_Relaxed    = rParam.bLEV_Relaxed;
-    nLEV_OtherX     = rParam.nLEV_OtherX;
-    nLEV_ShorterY   = rParam.nLEV_ShorterY;
-    nLEV_LongerZ    = rParam.nLEV_LongerZ;
 
     nTransliterationFlags = rParam.nTransliterationFlags;
 }

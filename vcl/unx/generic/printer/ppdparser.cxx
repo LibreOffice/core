@@ -595,7 +595,6 @@ PPDParser::PPDParser( const OUString& rFile ) :
         m_pInputSlots( nullptr ),
         m_pDefaultResolution( nullptr ),
         m_pResolutions( nullptr ),
-        m_pDuplexTypes( nullptr ),
         m_pFontList( nullptr ),
         m_pTranslator( new PPDTranslator() )
 {
@@ -740,8 +739,6 @@ PPDParser::PPDParser( const OUString& rFile ) :
         m_pDefaultInputSlot = m_pInputSlots->getDefaultValue();
     SAL_INFO_IF(!m_pInputSlots, "vcl.unx.print", "no InputSlot in " << m_aFile);
     SAL_INFO_IF(!m_pDefaultInputSlot, "vcl.unx.print", "no DefaultInputSlot in " << m_aFile);
-
-    m_pDuplexTypes = getKey( OUString( "Duplex" ) );
 
     m_pFontList = getKey( OUString( "Font" ) );
     if (m_pFontList == nullptr) {
