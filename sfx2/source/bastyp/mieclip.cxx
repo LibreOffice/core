@@ -34,7 +34,7 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
     bool bRet = false;
     pStrm.reset();
 
-    OString sLine, sVersion;
+    OString sLine;
     sal_Int32 nStt = -1, nEnd = -1, nFragStart = -1, nFragEnd = -1;
     sal_Int32 nIndex = 0;
 
@@ -44,7 +44,6 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
     if( rStream.ReadLine( sLine ) &&
         sLine.getToken( 0, ':', nIndex ) == "Version" )
     {
-        sVersion = sLine.copy( nIndex );
         while( rStream.ReadLine( sLine ) )
         {
             nIndex = 0;
