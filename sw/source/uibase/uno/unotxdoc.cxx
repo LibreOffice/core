@@ -3569,7 +3569,7 @@ vcl::DialogID SwXTextDocument::findDialog()
     return vcl::DialogID(0);
 }
 
-void SwXTextDocument::paintDialog(vcl::DialogID /*rDialogID*/, VirtualDevice& rDevice, int nWidth, int nHeight)
+void SwXTextDocument::paintDialog(const OUString& rDialogUnoName, VirtualDevice& rDevice, int& nWidth, int& nHeight)
 {
     SfxViewShell* pViewShell = pDocShell->GetView();
     SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
@@ -3577,12 +3577,30 @@ void SwXTextDocument::paintDialog(vcl::DialogID /*rDialogID*/, VirtualDevice& rD
     SwModule* pMod = SW_MOD();
     SfxSlotPool* pSlotPool = pMod->GetSlotPool();
     const SfxSlot* pSlot = pSlotPool->GetUnoSlot(".uno:SpellDialog");
+    if (!pSlot)
+    {
+        // Incorrect uno dialog command ?
+        printf("No slot found");
+        nWidth = nHeight = 0;
+        return;
+    }
 
     SfxChildWinFactory* pFactory = pMod->GetChildWinFactory(pSlot->GetSlotId());
     SfxChildWindow* pSfxChildWindow = pFactory->pCtor(&pViewFrame->GetWindow(), pFactory->nId, &pViewFrame->GetBindings(), &pFactory->aInfo);
 
     vcl::Window* pWindow = pSfxChildWindow->GetWindow();
-    pWindow->PaintToDevice(&rDevice, Point(0, 0), Size(1, 1) /* Ignored */);
+    // Set the outputsize of the device to exact dimensions of the dialog now
+    // since we have the dimensions
+    Size aDialogSize = pWindow->get_preferred_size();
+    rDevice.SetOutputSizePixel(aDialogSize);
+
+    // let the client know of the dimensions too
+    nWidth = aDialogSize.getWidth();
+    nHeight = aDialogSize.getHeight();
+
+    pWindow->PaintToDevice(&rDevice,
+                           Point(0, 0), /* Start painting from top left */
+                           aDialogSize /* Ignored */);
 }
 
 void SwXTextDocument::postDialogMouseEvent(vcl::DialogID /*rDialogID*/, int /*nType*/, int /*nCharCode*/, int /*nKeyCode*/)

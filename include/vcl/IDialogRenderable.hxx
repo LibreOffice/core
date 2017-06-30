@@ -27,8 +27,8 @@ public:
 
     virtual DialogID findDialog() = 0;
 
-    virtual void paintDialog(DialogID rDialogID, VirtualDevice &rDevice,
-                             int nOutputWidth, int nOutputHeight) = 0;
+    virtual void paintDialog(const OUString& rDialogUnoName, VirtualDevice &rDevice,
+                             int& nOutputWidth, int& nOutputHeight) = 0;
 
     virtual void postDialogMouseEvent(DialogID rDialogID, int nType,
                                       int nCharCode, int nKeyCode) = 0;

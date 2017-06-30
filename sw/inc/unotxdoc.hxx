@@ -427,7 +427,7 @@ public:
     OUString getPostIts() override;
 
     vcl::DialogID findDialog() override;
-    void paintDialog(vcl::DialogID rDialogID, VirtualDevice &rDevice, int nWidth, int nHeight) override;
+    void paintDialog(const OUString& rDialogUnoName, VirtualDevice &rDevice, int& nWidth, int& nHeight) override;
     void postDialogMouseEvent(vcl::DialogID rDialogID, int nType,
                              int nCharCode, int nKeyCode) override;
 
