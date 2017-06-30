@@ -88,6 +88,9 @@ public:
     template<std::size_t N> inline ContextCheck Struct(char const (& id)[N])
         const;
 
+    template<std::size_t N> inline ContextCheck Union(char const (& id)[N])
+        const;
+
     template<std::size_t N> inline ContextCheck Function(char const (& id)[N])
         const;
 
@@ -213,6 +216,12 @@ template<std::size_t N> ContextCheck DeclCheck::Struct(char const (& id)[N])
     const
 {
     return detail::checkRecordDecl(decl_, clang::TTK_Struct, id);
+}
+
+template<std::size_t N> ContextCheck DeclCheck::Union(char const (& id)[N])
+    const
+{
+    return detail::checkRecordDecl(decl_, clang::TTK_Union, id);
 }
 
 template<std::size_t N> ContextCheck DeclCheck::Function(char const (& id)[N])

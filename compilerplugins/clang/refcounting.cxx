@@ -69,25 +69,27 @@ public:
     }
 private:
     void checkUnoReference(QualType qt, const Decl* decl,
-                           const std::string& rParentName, const std::string& rDeclName);
+                           const DeclContext* parent, const std::string& rDeclName);
 
     bool visitTemporaryObjectExpr(Expr const * expr);
 };
 
+typedef std::function<bool(Decl const *)> DeclChecker;
+
 bool BaseCheckNotSubclass(const CXXRecordDecl *BaseDefinition, void *p) {
     if (!BaseDefinition)
         return true;
-    const char *pString = static_cast<const char *>(p);
-    if (BaseDefinition->getQualifiedNameAsString() == pString) {
+    auto const & base = *static_cast<const DeclChecker *>(p);
+    if (base(BaseDefinition)) {
         return false;
     }
     return true;
 }
 
-bool isDerivedFrom(const CXXRecordDecl *decl, const char *pString) {
+bool isDerivedFrom(const CXXRecordDecl *decl, DeclChecker base) {
     if (!decl)
         return false;
-    if (decl->getQualifiedNameAsString() == pString)
+    if (base(decl))
         return true;
     if (!decl->hasDefinition()) {
         return false;
@@ -97,11 +99,10 @@ bool isDerivedFrom(const CXXRecordDecl *decl, const char *pString) {
 #if CLANG_VERSION < 30800
             BaseCheckNotSubclass,
 #else
-            [pString](const CXXRecordDecl *BaseDefinition) -> bool
-                { return BaseCheckNotSubclass(
-                        BaseDefinition, const_cast<char *>(pString)); },
+            [&base](const CXXRecordDecl *BaseDefinition) -> bool
+                { return BaseCheckNotSubclass(BaseDefinition, &base); },
 #endif
-            static_cast<void*>(const_cast<char*>(pString)), true))
+            &base, true))
     {
         return true;
     }
@@ -125,25 +126,25 @@ bool containsXInterfaceSubclass(const Type* pType0) {
     if (pRecordDecl) {
         pRecordDecl = pRecordDecl->getCanonicalDecl();
         // these classes override acquire/release and forwards to its parent
-        if (isDerivedFrom(pRecordDecl, "ListenerMultiplexerBase")) { // module UnoTools
+        if (isDerivedFrom(pRecordDecl, [](Decl const * decl) -> bool { return bool(loplugin::DeclCheck(decl).Class("ListenerMultiplexerBase").GlobalNamespace()); })) { // module UnoTools
             return false;
         }
-        if (isDerivedFrom(pRecordDecl, "toolkit::GridEventForwarder")) { // module toolkit
+        if (isDerivedFrom(pRecordDecl, [](Decl const * decl) -> bool { return bool(loplugin::DeclCheck(decl).Class("GridEventForwarder").Namespace("toolkit").GlobalNamespace()); })) { // module toolkit
             return false;
         }
-        if (isDerivedFrom(pRecordDecl, "OWeakSubObject")) { // module svx
+        if (isDerivedFrom(pRecordDecl, [](Decl const * decl) -> bool { return bool(loplugin::DeclCheck(decl).Class("OWeakSubObject").GlobalNamespace()); })) { // module svx
             return false;
         }
-        if (isDerivedFrom(pRecordDecl, "dbaui::OSbaWeakSubObject")) { // module dbaccess
+        if (isDerivedFrom(pRecordDecl, [](Decl const * decl) -> bool { return bool(loplugin::DeclCheck(decl).Class("OSbaWeakSubObject").Namespace("dbaui").GlobalNamespace()); })) { // module dbaccess
             return false;
         }
         // The actual problem child is SlideView, of which this is the parent.
         // Everything in the hierarchy above this wants to be managed via boost::shared_ptr
-        if (isDerivedFrom(pRecordDecl, "slideshow::internal::UnoView")) { // module slideshow
+        if (isDerivedFrom(pRecordDecl, [](Decl const * decl) -> bool { return bool(loplugin::DeclCheck(decl).Class("UnoView").Namespace("internal").Namespace("slideshow").GlobalNamespace()); })) { // module slideshow
             return false;
         }
         // FIXME This class has private operator new, and I cannot figure out how it can be dynamically instantiated
-        if (isDerivedFrom(pRecordDecl, "XPropertyList")) { // module svx
+        if (isDerivedFrom(pRecordDecl, [](Decl const * decl) -> bool { return bool(loplugin::DeclCheck(decl).Class("XPropertyList").GlobalNamespace()); })) { // module svx
             return false;
         }
     }
@@ -232,7 +233,7 @@ bool containsXInterfaceSubclass(const Type* pType0) {
         QualType elementType = pArrayType->getElementType();
         return containsXInterfaceSubclass(elementType);
     } else {
-        return isDerivedFrom(pRecordDecl, "com::sun::star::uno::XInterface");
+        return isDerivedFrom(pRecordDecl, [](Decl const * decl) -> bool { return bool(loplugin::DeclCheck(decl).Class("XInterface").Namespace("uno").Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace()); });
     }
 }
 
@@ -249,9 +250,11 @@ bool containsSvRefBaseSubclass(const Type* pType0) {
     if (pRecordDecl) {
         const ClassTemplateSpecializationDecl* pTemplate = dyn_cast<ClassTemplateSpecializationDecl>(pRecordDecl);
         if (pTemplate) {
-            std::string aName = pTemplate->getQualifiedNameAsString();
-            if (aName == "tools::SvRef")
+            if (loplugin::DeclCheck(pTemplate).Class("SvRef")
+                .Namespace("tools").GlobalNamespace())
+            {
                 return false;
+            }
             for(unsigned i=0; i<pTemplate->getTemplateArgs().size(); ++i) {
                 const TemplateArgument& rArg = pTemplate->getTemplateArgs()[i];
                 if (rArg.getKind() == TemplateArgument::ArgKind::Type &&
@@ -270,7 +273,7 @@ bool containsSvRefBaseSubclass(const Type* pType0) {
         QualType elementType = pArrayType->getElementType();
         return containsSvRefBaseSubclass(elementType.getTypePtr());
     } else {
-        return isDerivedFrom(pRecordDecl, "tools::SvRefBase");
+        return isDerivedFrom(pRecordDecl, [](Decl const * decl) -> bool { return bool(loplugin::DeclCheck(decl).Class("SvRefBase").Namespace("tools").GlobalNamespace()); });
     }
 }
 
@@ -287,9 +290,13 @@ bool containsSalhelperReferenceObjectSubclass(const Type* pType0) {
     if (pRecordDecl) {
         const ClassTemplateSpecializationDecl* pTemplate = dyn_cast<ClassTemplateSpecializationDecl>(pRecordDecl);
         if (pTemplate) {
-            std::string aName = pTemplate->getQualifiedNameAsString();
-            if (aName == "rtl::Reference" || aName == "store::OStoreHandle")
+            auto const dc = loplugin::DeclCheck(pTemplate);
+            if (dc.Class("Reference").Namespace("rtl").GlobalNamespace()
+                || (dc.Class("OStoreHandle").Namespace("store")
+                    .GlobalNamespace()))
+            {
                 return false;
+            }
             for(unsigned i=0; i<pTemplate->getTemplateArgs().size(); ++i) {
                 const TemplateArgument& rArg = pTemplate->getTemplateArgs()[i];
                 if (rArg.getKind() == TemplateArgument::ArgKind::Type &&
@@ -308,7 +315,7 @@ bool containsSalhelperReferenceObjectSubclass(const Type* pType0) {
         QualType elementType = pArrayType->getElementType();
         return containsSalhelperReferenceObjectSubclass(elementType.getTypePtr());
     } else {
-        return isDerivedFrom(pRecordDecl, "salhelper::SimpleReferenceObject");
+        return isDerivedFrom(pRecordDecl, [](Decl const * decl) -> bool { return bool(loplugin::DeclCheck(decl).Class("SimpleReferenceObject").Namespace("salhelper").GlobalNamespace()); });
     }
 }
 
@@ -326,7 +333,7 @@ static bool containsStaticTypeMethod(const CXXRecordDecl* x)
     return false;
 }
 
-void RefCounting::checkUnoReference(QualType qt, const Decl* decl, const std::string& rParentName, const std::string& rDeclName)
+void RefCounting::checkUnoReference(QualType qt, const Decl* decl, const DeclContext* parent, const std::string& rDeclName)
 {
     if (loplugin::TypeCheck(qt).Class("Reference").Namespace("uno").Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace()) {
         const CXXRecordDecl* pRecordDecl = qt->getAsCXXRecordDecl();
@@ -336,11 +343,11 @@ void RefCounting::checkUnoReference(QualType qt, const Decl* decl, const std::st
         if (templateParam && !containsStaticTypeMethod(templateParam)) {
             report(
                 DiagnosticsEngine::Warning,
-                "uno::Reference " + rDeclName + " with template parameter that does not contain ::static_type() "
-                + qt.getAsString()
-                + ", parent is " + rParentName
-                + ", should probably be using rtl::Reference instead",
+                ("uno::Reference %0 with template parameter that does not"
+                 " contain ::static_type() %1%select{|, parent is %3,}2 should"
+                 " probably be using rtl::Reference instead"),
                 decl->getLocation())
+              << rDeclName << qt << (parent != nullptr) << parent
               << decl->getSourceRange();
         }
     }
@@ -389,10 +396,10 @@ bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
     // check for dodgy code managing ref-counted stuff with shared_ptr or unique_ptr or similar stuff
     QualType firstTemplateParamType;
     if (auto recordType = fieldDecl->getType()->getUnqualifiedDesugaredType()->getAs<RecordType>()) {
-        auto recordDeclName = recordType->getDecl()->getName();
-        if (recordDeclName.find("unique_ptr") != StringRef::npos
-            || recordDeclName.find("shared_ptr") != StringRef::npos
-            || recordDeclName.find("intrusive_ptr") != StringRef::npos) // boost
+        auto const tc = loplugin::TypeCheck(fieldDecl->getType());
+        if (tc.Class("unique_ptr").StdNamespace()
+            || tc.Class("shared_ptr").StdNamespace()
+            || tc.Class("intrusive_ptr").Namespace("boost").GlobalNamespace())
         {
             auto templateDecl = dyn_cast<ClassTemplateSpecializationDecl>(recordType->getDecl());
             if (templateDecl && templateDecl->getTemplateArgs().size() > 0)
@@ -446,11 +453,14 @@ bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
             << fieldDecl->getSourceRange();
     }
 
-    std::string aParentName = fieldDecl->getParent()->getQualifiedNameAsString();
-    if ( aParentName == "com::sun::star::uno::BaseReference"
-         || aParentName == "cppu::detail::element_alias"
+    auto const dc = loplugin::DeclCheck(fieldDecl->getParent());
+    if ( (dc.Class("BaseReference").Namespace("uno").Namespace("star")
+          .Namespace("sun").Namespace("com").GlobalNamespace())
+         || (dc.Union("element_alias").Namespace("detail").Namespace("cppu")
+             .GlobalNamespace())
          // this is playing some kind of game to avoid circular references
-         || aParentName == "ucbhelper::ResultSetDataSupplier")
+         || (dc.Class("ResultSetDataSupplier").Namespace("ucbhelper")
+             .GlobalNamespace()))
     {
         return true;
     }
@@ -478,7 +488,9 @@ bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
             << fieldDecl->getSourceRange();
     }
 
-    checkUnoReference(fieldDecl->getType(), fieldDecl, aParentName, "field");
+    checkUnoReference(
+        fieldDecl->getType(), fieldDecl,
+        fieldDecl->getParent(), "field");
 
     return true;
 }
@@ -518,7 +530,7 @@ bool RefCounting::VisitVarDecl(const VarDecl * varDecl) {
               << varDecl->getSourceRange();
         }
     }
-    checkUnoReference(varDecl->getType(), varDecl, "", "var");
+    checkUnoReference(varDecl->getType(), varDecl, nullptr, "var");
     return true;
 }
 
@@ -532,7 +544,7 @@ bool RefCounting::VisitFunctionDecl(const FunctionDecl * functionDecl) {
     if (methodDecl && methodDecl->size_overridden_methods() > 0) {
             return true;
     }
-    checkUnoReference(compat::getReturnType(*functionDecl), functionDecl, "", "return");
+    checkUnoReference(compat::getReturnType(*functionDecl), functionDecl, nullptr, "return");
     return true;
 }
 
