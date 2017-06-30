@@ -687,8 +687,9 @@ void SdrEditView::ForceMarkedObjToAnotherPage()
     }
 }
 
-void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
+std::vector<SdrObject*> SdrEditView::DeleteMarkedList(SdrMarkList const& rMark)
 {
+    std::vector<SdrObject*> ret;
     if (rMark.GetMarkCount()!=0)
     {
         rMark.ForceSort();
@@ -721,8 +722,6 @@ void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
             // make sure, OrderNums are correct:
             rMark.GetMark(0)->GetMarkedSdrObj()->GetOrdNum();
 
-            std::vector< SdrObject* > aRemoved3DObjects;
-
             for(size_t nm = nMarkCount; nm > 0;)
             {
                 --nm;
@@ -742,10 +741,8 @@ void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
 
                 if( !bUndo )
                 {
-                    if( bIs3D )
-                        aRemoved3DObjects.push_back( pObj ); // may be needed later
-                    else
-                        SdrObject::Free(pObj);
+                    // tdf#108863 don't delete objects before EndUndo()
+                    ret.push_back(pObj);
                 }
             }
 
@@ -755,20 +752,21 @@ void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
                 delete aUpdaters.back();
                 aUpdaters.pop_back();
             }
-
-            if( !bUndo )
-            {
-                // now delete removed scene objects
-                while(!aRemoved3DObjects.empty())
-                {
-                    SdrObject::Free( aRemoved3DObjects.back() );
-                    aRemoved3DObjects.pop_back();
-                }
-            }
         }
 
         if( bUndo )
             EndUndo();
+    }
+    return ret;
+}
+
+static void lcl_LazyDelete(std::vector<SdrObject*> & rLazyDelete)
+{
+    // now delete removed scene objects
+    while (!rLazyDelete.empty())
+    {
+        SdrObject::Free( rLazyDelete.back() );
+        rLazyDelete.pop_back();
     }
 }
 
@@ -784,6 +782,7 @@ void SdrEditView::DeleteMarkedObj()
     BrkAction();
     BegUndo(ImpGetResStr(STR_EditDelete),GetDescriptionOfMarkedObjects(),SdrRepeatFunc::Delete);
 
+    std::vector<SdrObject*> lazyDeleteObjects;
     // remove as long as something is selected. This allows to schedule objects for
     // removal for a next run as needed
     while(GetMarkedObjectCount())
@@ -844,7 +843,11 @@ void SdrEditView::DeleteMarkedObj()
 
         // original stuff: remove selected objects. Handle clear will
         // do something only once
-        DeleteMarkedList(GetMarkedObjectList());
+        auto temp(DeleteMarkedList(GetMarkedObjectList()));
+        for (auto p : temp)
+        {
+            lazyDeleteObjects.push_back(p);
+        }
         GetMarkedObjectListWriteAccess().Clear();
         maHdlList.Clear();
 
@@ -874,6 +877,8 @@ void SdrEditView::DeleteMarkedObj()
     // end undo and change messaging moved at the end
     EndUndo();
     MarkListHasChanged();
+
+    lcl_LazyDelete(lazyDeleteObjects);
 }
 
 void SdrEditView::CopyMarkedObj()
