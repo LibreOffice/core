@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_9e06fb1e",
+        "filename": "sot/source/sdstor/storage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-30T08:47:20Z",
+      "side": 1,
+      "message": "This sentence is a bit strange, not correct English and also doesn\u0027t quite fit the original meaning. It probably should be\n\"\nBut IStorage objects are only used and not implemented by ourself, therefore we pretend the IStorage object was passed from the outside and it will be freed with Release().\n\"",
+      "range": {
+        "startLine": 259,
+        "startChar": 3,
+        "endLine": 260,
+        "endChar": 79
+      },
+      "revId": "563e6d6c68e87054b34800ee5c17818d9c29c7bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_be03b70e",
+        "filename": "vcl/source/filter/sgvtext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-30T08:47:20Z",
+      "side": 1,
+      "message": "\"than at the\" beginning..",
+      "range": {
+        "startLine": 102,
+        "startChar": 32,
+        "endLine": 102,
+        "endChar": 40
+      },
+      "revId": "563e6d6c68e87054b34800ee5c17818d9c29c7bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
