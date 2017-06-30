@@ -246,8 +246,7 @@ sal_Int8 SAL_CALL MacabResultSet::getByte(sal_Int32)
 
 ::dbtools::throwFunctionNotSupportedSQLException("getByte", nullptr);
 
-    sal_Int8 nRet = 0;
-    return nRet;
+    return 0;
 }
 
 sal_Int16 SAL_CALL MacabResultSet::getShort(sal_Int32)
@@ -257,8 +256,7 @@ sal_Int16 SAL_CALL MacabResultSet::getShort(sal_Int32)
 
 ::dbtools::throwFunctionNotSupportedSQLException("getShort", nullptr);
 
-    sal_Int16 nRet = 0;
-    return nRet;
+    return 0;
 }
 
 sal_Int32 SAL_CALL MacabResultSet::getInt(sal_Int32 columnIndex)

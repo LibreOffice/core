@@ -526,9 +526,8 @@ sal_Bool MacabCommonStatement::convertFastPropertyValue(
         sal_Int32,
         const Any&)
 {
-    bool bConverted = false;
     // here we have to try to convert
-    return bConverted;
+    return false;
 }
 
 void MacabCommonStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any&)

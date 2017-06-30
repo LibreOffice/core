@@ -66,76 +66,64 @@ OUString SAL_CALL MacabDatabaseMetaData::getCatalogSeparator(  )
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxBinaryLiteralLength(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxRowSize(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxCatalogNameLength(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxCharLiteralLength(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxColumnNameLength(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxColumnsInIndex(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxCursorNameLength(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxConnections(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxColumnsInTable(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxStatementLength(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxTableNameLength(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxTablesInSelect(  )
 {
     // MaxTablesInSelect describes how many tables can participate in the FROM part of a given SELECT statement,
     // currently, the resultset/statement implementations can cope with one table only
-    sal_Int32 nValue = 1;
-    return nValue;
+    return 1;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::doesMaxRowSizeIncludeBlobs(  )
@@ -185,8 +173,7 @@ sal_Bool SAL_CALL MacabDatabaseMetaData::supportsAlterTableWithDropColumn(  )
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxIndexLength(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsNonNullableColumns(  )
@@ -206,8 +193,7 @@ OUString SAL_CALL MacabDatabaseMetaData::getCatalogTerm(  )
 OUString SAL_CALL MacabDatabaseMetaData::getIdentifierQuoteString(  )
 {
     // normally this is "
-    OUString aVal("\"");
-    return aVal;
+    return "\"";
 }
 
 OUString SAL_CALL MacabDatabaseMetaData::getExtraNameCharacters(  )
@@ -223,11 +209,10 @@ sal_Bool SAL_CALL MacabDatabaseMetaData::supportsDifferentTableCorrelationNames(
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::isCatalogAtStart(  )
 {
-    bool bValue = false;
     if (m_bUseCatalog)
     {
     }
-    return bValue;
+    return false;
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::dataDefinitionIgnoredInTransactions(  )
@@ -337,20 +322,17 @@ sal_Bool SAL_CALL MacabDatabaseMetaData::supportsOuterJoins(  )
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxStatements(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxProcedureNameLength(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxSchemaNameLength(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsTransactions(  )
@@ -553,8 +535,7 @@ OUString SAL_CALL MacabDatabaseMetaData::getURL(  )
 {
     // if someday we support more than the default address book,
     // this method should return the URL which was used to create it
-    OUString aValue(  "sdbc:address:macab:" );
-    return aValue;
+    return "sdbc:address:macab:";
 }
 
 OUString SAL_CALL MacabDatabaseMetaData::getUserName(  )
@@ -565,14 +546,12 @@ OUString SAL_CALL MacabDatabaseMetaData::getUserName(  )
 
 OUString SAL_CALL MacabDatabaseMetaData::getDriverName(  )
 {
-    OUString aValue(  "macab" );
-    return aValue;
+    return "macab";
 }
 
 OUString SAL_CALL MacabDatabaseMetaData::getDriverVersion()
 {
-    OUString aValue(MACAB_DRIVER_VERSION);
-    return aValue;
+    return MACAB_DRIVER_VERSION;
 }
 
 OUString SAL_CALL MacabDatabaseMetaData::getDatabaseProductVersion(  )
@@ -673,26 +652,22 @@ sal_Bool SAL_CALL MacabDatabaseMetaData::supportsLimitedOuterJoins(  )
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxColumnsInGroupBy(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxColumnsInOrderBy(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxColumnsInSelect(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxUserNameLength(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0; // 0 means no limit
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsResultSetType( sal_Int32 setType )
