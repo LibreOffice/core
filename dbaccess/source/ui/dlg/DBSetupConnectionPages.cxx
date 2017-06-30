@@ -672,6 +672,8 @@ using namespace ::com::sun::star;
         catch(css::uno::Exception&)
         {
         }
+#else
+        (void) bSuccess;
 #endif
         sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         ScopedVclPtrInstance< OSQLMessageBox > aMsg( this, OUString( ModuleRes( nMessage ) ), OUString() );
