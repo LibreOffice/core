@@ -558,6 +558,9 @@ void ScDocument::FinalTrackFormulas( sal_uInt32 nHintId )
  */
 void ScDocument::TrackFormulas( sal_uInt32 nHintId )
 {
+    if (!pBASM)
+        return;
+
     if (pBASM->IsInBulkBroadcast() && !IsFinalTrackFormulas() && nHintId == SC_HINT_DATACHANGED)
     {
         SetTrackFormulasPending();
