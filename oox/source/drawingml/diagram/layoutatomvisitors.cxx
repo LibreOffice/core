@@ -94,8 +94,13 @@ void ShapeCreationVisitor::visit(ChooseAtom& rAtom)
 void ShapeCreationVisitor::visit(LayoutNode& rAtom)
 {
     ShapePtr pCurrParent(mpParentShape);
-    ShapePtr pCurrShape(rAtom.getShape());
-    if( pCurrShape )
+    ShapePtr pCurrShape(rAtom.getShapeTemplate());
+
+    if (rAtom.getExistingShape())
+    {
+        rAtom.setupShape(rAtom.getExistingShape(), mrDgm, mnCurrIdx);
+    }
+    else if( pCurrShape )
     {
         SAL_INFO(
             "oox.drawingml",

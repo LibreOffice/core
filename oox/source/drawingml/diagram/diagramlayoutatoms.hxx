@@ -238,10 +238,14 @@ public:
         { msStyleLabel = sLabel; }
     void setChildOrder( sal_Int32 nOrder )
         { mnChildOrder = nOrder; }
-    void setShape( const ShapePtr& pShape )
-        { mpShape = pShape; }
-    const ShapePtr& getShape() const
-        { return mpShape; }
+    void setShapeTemplate( const ShapePtr& pShape )
+        { mpShapeTemplate = pShape; }
+    void setExistingShape( const ShapePtr& pShape )
+        { mpExistingShape = pShape; }
+    const ShapePtr& getShapeTemplate() const
+        { return mpShapeTemplate; }
+    const ShapePtr& getExistingShape() const
+        { return mpExistingShape; }
 
     bool setupShape( const ShapePtr& rShape,
                      const Diagram& rDgm,
@@ -251,7 +255,8 @@ private:
     VarMap                       mVariables;
     OUString                     msMoveWith;
     OUString                     msStyleLabel;
-    ShapePtr                     mpShape;
+    ShapePtr                     mpShapeTemplate;
+    ShapePtr                     mpExistingShape;
     sal_Int32                    mnChildOrder;
 };
 

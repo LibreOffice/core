@@ -263,7 +263,7 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
                 pShape.reset( new Shape("com.sun.star.drawing.GroupShape") );
             }
 
-            pNode->setShape( pShape );
+            pNode->setShapeTemplate( pShape );
             return new ShapeContext( *this, ShapePtr(), pShape );
         }
         else
