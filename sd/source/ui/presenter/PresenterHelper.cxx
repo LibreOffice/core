@@ -58,10 +58,7 @@ PresenterHelper::~PresenterHelper()
 
 //----- XInitialize -----------------------------------------------------------
 
-void SAL_CALL PresenterHelper::initialize (const Sequence<Any>& rArguments)
-{
-    (void)rArguments;
-}
+void SAL_CALL PresenterHelper::initialize (const Sequence<Any>&) {}
 
 //----- XPaneHelper ----------------------------------------------------
 
@@ -139,11 +136,9 @@ Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createSharedCanvas (
 
 Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createCanvas (
     const Reference<awt::XWindow>& rxWindow,
-    sal_Int16 nRequestedCanvasFeatures,
+    sal_Int16,
     const OUString& rsOptionalCanvasServiceName)
 {
-    (void)nRequestedCanvasFeatures;
-
     // No shared window is given or an explicit canvas service name is
     // specified.  Create a new canvas.
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(rxWindow);

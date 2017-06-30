@@ -28,9 +28,8 @@ namespace {
 class AllPagesPredicate
 {
 public:
-    bool operator() (const SharedPageDescriptor& rpDescriptor) const
+    bool operator() (const SharedPageDescriptor&) const
     {
-        (void)rpDescriptor;
         return true;
     }
 };

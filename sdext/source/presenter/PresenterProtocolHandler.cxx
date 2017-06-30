@@ -238,17 +238,16 @@ Sequence<OUString> PresenterProtocolHandler::getSupportedServiceNames_static()
 }
 
 Reference<XInterface> PresenterProtocolHandler::Create (
-    const Reference<uno::XComponentContext>& rxContext)
+    SAL_UNUSED_PARAMETER const Reference<uno::XComponentContext>&)
 {
-    return Reference<XInterface>(static_cast<XWeak*>(new PresenterProtocolHandler(rxContext)));
+    return Reference<XInterface>(static_cast<XWeak*>(new PresenterProtocolHandler));
 }
 
 //===== PresenterProtocolHandler =========================================================
 
-PresenterProtocolHandler::PresenterProtocolHandler (const Reference<XComponentContext>& rxContext)
+PresenterProtocolHandler::PresenterProtocolHandler ()
     : PresenterProtocolHandlerInterfaceBase(m_aMutex)
 {
-    (void)rxContext;
 }
 
 PresenterProtocolHandler::~PresenterProtocolHandler()
@@ -301,11 +300,9 @@ PresenterProtocolHandler::getSupportedServiceNames()
 
 Reference<frame::XDispatch> SAL_CALL PresenterProtocolHandler::queryDispatch (
     const css::util::URL& rURL,
-    const OUString& rsTargetFrameName,
-    sal_Int32 nSearchFlags)
+    const OUString&,
+    sal_Int32)
 {
-    (void)rsTargetFrameName;
-    (void)nSearchFlags;
     ThrowIfDisposed();
 
     Reference<frame::XDispatch> xDispatch;
@@ -319,9 +316,8 @@ Reference<frame::XDispatch> SAL_CALL PresenterProtocolHandler::queryDispatch (
 }
 
 Sequence<Reference<frame::XDispatch> > SAL_CALL PresenterProtocolHandler::queryDispatches(
-    const Sequence<frame::DispatchDescriptor>& rDescriptors)
+    const Sequence<frame::DispatchDescriptor>&)
 {
-    (void)rDescriptors;
     ThrowIfDisposed();
     return Sequence<Reference<frame::XDispatch> >();
 }
@@ -487,18 +483,15 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::removeStatusListener (
 //----- document::XEventListener ----------------------------------------------
 
 void SAL_CALL PresenterProtocolHandler::Dispatch::notifyEvent (
-    const css::document::EventObject& rEvent)
+    const css::document::EventObject&)
 {
-    (void)rEvent;
-
     mpCommand->GetState();
 }
 
 //----- lang::XEventListener --------------------------------------------------
 
-void SAL_CALL PresenterProtocolHandler::Dispatch::disposing (const css::lang::EventObject& rEvent)
+void SAL_CALL PresenterProtocolHandler::Dispatch::disposing (const css::lang::EventObject&)
 {
-    (void)rEvent;
     mbIsListeningToWindowManager = false;
 }
 

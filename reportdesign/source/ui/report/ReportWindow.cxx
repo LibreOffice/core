@@ -429,9 +429,8 @@ sal_uInt16 OReportWindow::getZoomFactor(SvxZoomType _eType) const
     return nZoom;
 }
 
-void OReportWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
+void OReportWindow::_propertyChanged(const beans::PropertyChangeEvent&)
 {
-    (void)_rEvent;
     Resize();
     m_aViewsWindow->Resize();
     Invalidate(InvalidateFlags::Transparent);

@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CHARTINS_HXX
 
 Point SwGetChartDialogPos( const vcl::Window *pParentWin, const Size& rDialogSize, const tools::Rectangle& rLogicChart );
-void SwInsertChart( vcl::Window *pParent, SfxBindings *pBindings );
+void SwInsertChart();
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_CHARTINS_HXX
 

@@ -30,7 +30,6 @@ using namespace ::com::sun::star;
 
 void lcl_DumpTableColumnSeparators(const uno::Any & rTableColumnSeparators)
 {
-    (void) rTableColumnSeparators;
 #ifdef DEBUG_WRITERFILTER
     uno::Sequence<text::TableColumnSeparator> aSeq;
     rTableColumnSeparators >>= aSeq;
@@ -49,6 +48,8 @@ void lcl_DumpTableColumnSeparators(const uno::Any & rTableColumnSeparators)
     }
 
     TagLogger::getInstance().endElement();
+#else
+    (void) rTableColumnSeparators;
 #endif // DEBUG_WRITERFILTER
 }
 

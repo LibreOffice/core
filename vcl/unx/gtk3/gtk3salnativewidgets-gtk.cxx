@@ -435,7 +435,6 @@ namespace
 void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                                     cairo_t *cr,
                                     const tools::Rectangle& rControlRectangle,
-                                    ControlType nType,
                                     ControlPart nPart,
                                     const ImplControlValue& rValue )
 {
@@ -760,7 +759,6 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         return;
     }
 
-    (void)nType;
     OSL_ASSERT( rValue.getType() == ControlType::Scrollbar );
     const ScrollbarValue& rScrollbarVal = static_cast<const ScrollbarValue&>(rValue);
     tools::Rectangle        scrollbarRect;
@@ -1053,12 +1051,10 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
 
 void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
                                          cairo_t *cr,
-                                         ControlType nType,
                                          ControlPart nPart,
                                          tools::Rectangle aAreaRect,
                                          ControlState nState )
 {
-    (void)nType;
     GtkBorder            padding, border;
 
     GtkStateFlags stateFlags = NWConvertVCLStateToGTKState(nState);
@@ -1103,7 +1099,6 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
 void GtkSalGraphics::PaintSpinButton(GtkStateFlags flags,
                                      cairo_t *cr,
                                      const tools::Rectangle& rControlRectangle,
-                                     ControlType nType,
                                      ControlPart nPart,
                                      const ImplControlValue& rValue )
 {
@@ -1138,8 +1133,8 @@ void GtkSalGraphics::PaintSpinButton(GtkStateFlags flags,
     }
 
     cairo_translate(cr, -rControlRectangle.Left(), -rControlRectangle.Top());
-    PaintOneSpinButton(mpSpinUpStyle, cr, nType, upBtnPart, rControlRectangle, upBtnState );
-    PaintOneSpinButton(mpSpinDownStyle, cr, nType, downBtnPart, rControlRectangle, downBtnState );
+    PaintOneSpinButton(mpSpinUpStyle, cr, upBtnPart, rControlRectangle, upBtnState );
+    PaintOneSpinButton(mpSpinDownStyle, cr, downBtnPart, rControlRectangle, downBtnState );
     cairo_translate(cr, rControlRectangle.Left(), rControlRectangle.Top());
 
     if (nPart == ControlPart::Entire)
@@ -1152,12 +1147,10 @@ void GtkSalGraphics::PaintSpinButton(GtkStateFlags flags,
 
 #define FALLBACK_ARROW_SIZE 11 * 0.85
 
-tools::Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
+tools::Rectangle GtkSalGraphics::NWGetComboBoxButtonRect(
                                                    ControlPart nPart,
                                                    tools::Rectangle aAreaRect )
 {
-    (void)nType;
-    (void)nPart;
     tools::Rectangle    aButtonRect;
 
     GtkBorder padding;
@@ -1215,7 +1208,7 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
     // plus its actual draw rect excluding adornment
     areaRect = rControlRectangle;
 
-    buttonRect = NWGetComboBoxButtonRect( nType, ControlPart::ButtonDown, areaRect );
+    buttonRect = NWGetComboBoxButtonRect( ControlPart::ButtonDown, areaRect );
 
     tools::Rectangle        aEditBoxRect( areaRect );
     aEditBoxRect.SetSize( Size( areaRect.GetWidth() - buttonRect.GetWidth(), aEditBoxRect.GetHeight() ) );
@@ -2489,10 +2482,10 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         gtk_render_expander(context, cr, -2, -2, nWidth+4, nHeight+4);
         break;
     case RenderType::Scrollbar:
-        PaintScrollbar(context, cr, rControlRegion, nType, nPart, rValue);
+        PaintScrollbar(context, cr, rControlRegion, nPart, rValue);
         break;
     case RenderType::Spinbutton:
-        PaintSpinButton(flags, cr, rControlRegion, nType, nPart, rValue);
+        PaintSpinButton(flags, cr, rControlRegion, nPart, rValue);
         break;
     case RenderType::Combobox:
         PaintCombobox(flags, cr, rControlRegion, nType, nPart, rValue);
@@ -2699,12 +2692,12 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     else if ( (nType==ControlType::Combobox) &&
               ((nPart==ControlPart::ButtonDown) || (nPart==ControlPart::SubEdit)) )
     {
-        aEditRect = NWGetComboBoxButtonRect( nType, nPart, rControlRegion );
+        aEditRect = NWGetComboBoxButtonRect( nPart, rControlRegion );
     }
     else if ( (nType==ControlType::Listbox) &&
               ((nPart==ControlPart::ButtonDown) || (nPart==ControlPart::SubEdit)) )
     {
-        aEditRect = NWGetComboBoxButtonRect( nType, nPart, rControlRegion );
+        aEditRect = NWGetComboBoxButtonRect( nPart, rControlRegion );
     }
     else if (nType == ControlType::Editbox && nPart == ControlPart::Entire)
     {

@@ -33,7 +33,6 @@ void ParallelTimeContainer::activate_st()
         static_cast<std::size_t>(std::count_if(
                                      maChildren.begin(), maChildren.end(),
                                      std::mem_fn(&AnimationNode::resolve) ));
-    (void) nResolvedNodes; // avoid warning
     OSL_ENSURE( nResolvedNodes == maChildren.size(),
                 "### resolving all children failed!" );
 

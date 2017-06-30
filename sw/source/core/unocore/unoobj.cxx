@@ -743,7 +743,6 @@ void SwXTextCursor::DeleteAndInsert(const OUString& rText,
                     SwUnoCursorHelper::DocInsertStringSplitCR(
                         *pDoc, *pCurrent, rText, bForceExpandHints ) );
                 OSL_ENSURE( bSuccess, "Doc->Insert(Str) failed." );
-                (void) bSuccess;
 
                 SwUnoCursorHelper::SelectPam(*pUnoCursor, true);
                 pCurrent->Left(rText.getLength());
@@ -1707,8 +1706,7 @@ SwXTextCursor::setString(const OUString& aString)
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
-    (void) rUnoCursor; // just to check if valid
+    m_pImpl->GetCursorOrThrow(); // just to check if valid
 
     const bool bForceExpandHints( (CursorType::Meta == m_pImpl->m_eType)
         && dynamic_cast<SwXMeta*>(m_pImpl->m_xParentText.get())

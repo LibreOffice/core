@@ -616,7 +616,6 @@ namespace pcr
 
         OSL_ENSURE( _rControlValueType.getTypeClass() == TypeClass_STRING,
             "EventHandler::convertToControlValue: unexpected ControlValue type class!" );
-        (void)_rControlValueType;
 
         OUString sScript( aScriptEvent.ScriptCode );
         if ( !sScript.isEmpty() )

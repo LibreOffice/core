@@ -61,9 +61,8 @@ void SAL_CALL OConnection::release() throw()
 }
 
 
-void OConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)
+void OConnection::construct(const OUString& url)
 {
-    (void) info; // avoid warnings
     SAL_INFO("connectivity.mork", "=> OConnection::construct()" );
     //  open file
     setURL(url);

@@ -356,11 +356,9 @@ uno::Reference < embed::XStorage > const & SvXMLEmbeddedObjectHelper::ImplGetCon
 void SvXMLEmbeddedObjectHelper::ImplReadObject(
         const OUString& rContainerStorageName,
         OUString& rObjName,
-        const SvGlobalName *pClassId,
+        const SvGlobalName *, // pClassId, see "TODO/LATER" below
         SvStream* pTemp )
 {
-    (void)pClassId;
-
     uno::Reference < embed::XStorage > xDocStor( mpDocPersist->getStorage() );
     uno::Reference < embed::XStorage > xCntnrStor( ImplGetContainerStorage( rContainerStorageName ) );
 

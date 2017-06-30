@@ -229,19 +229,16 @@ ErrCode ReadThroughComponent(
     }
     catch(const packages::zip::ZipIOException& r)
     {
-        (void)r;
         SAL_WARN( "sw", "Zip exception caught while importing: " << r.Message);
         return ERRCODE_IO_BROKENPACKAGE;
     }
     catch(const io::IOException& r)
     {
-        (void)r;
         SAL_WARN( "sw", "IO exception caught while importing: " << r.Message);
         return ERR_SWG_READ_ERROR;
     }
     catch(const uno::Exception& r)
     {
-        (void)r;
         SAL_WARN( "sw", "uno exception caught while importing: " << r.Message );
         return ERR_SWG_READ_ERROR;
     }

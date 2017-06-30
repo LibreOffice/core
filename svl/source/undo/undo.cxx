@@ -95,9 +95,8 @@ void SfxUndoAction::Undo()
 }
 
 
-void SfxUndoAction::UndoWithContext( SfxUndoContext& i_context )
+void SfxUndoAction::UndoWithContext( SfxUndoContext& )
 {
-    (void)i_context;
     Undo();
 }
 
@@ -109,9 +108,8 @@ void SfxUndoAction::Redo()
 }
 
 
-void SfxUndoAction::RedoWithContext( SfxUndoContext& i_context )
+void SfxUndoAction::RedoWithContext( SfxUndoContext& )
 {
-    (void)i_context;
     Redo();
 }
 

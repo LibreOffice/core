@@ -102,11 +102,11 @@ protected:
     virtual void   Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     static void    MethClear( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
-    static void    MethGetData( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
+    static void    MethGetData( SbxArray* pPar_, bool bWrite );
     static void    MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
     static void    MethGetText( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
-    static void    MethSetData( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
-    static void    MethSetText( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
+    static void    MethSetData( SbxArray* pPar_, bool bWrite );
+    static void    MethSetText( SbxArray* pPar_, bool bWrite );
 
 public:
 

@@ -597,7 +597,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
     if ( m_pParamDlg )
     {
         eErr = jfw_setVMParameters( m_pParamDlg->GetParameters() );
-        SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setVMParameters"); (void)eErr;
+        SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setVMParameters");
         bModified = true;
     }
 
@@ -607,7 +607,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
         if ( m_pPathDlg->GetOldPath() != sPath )
         {
             eErr = jfw_setUserClassPath( sPath );
-            SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setUserClassPath"); (void)eErr;
+            SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setUserClassPath");
             bModified = true;
         }
     }
@@ -638,7 +638,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
                     }
 
                     eErr = jfw_setSelectedJRE( pInfo );
-                    SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setSelectedJRE"); (void)eErr;
+                    SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setSelectedJRE");
                     bModified = true;
                 }
             }
@@ -649,7 +649,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
     bool bEnabled = false;
     eErr = jfw_getEnabled( &bEnabled );
     DBG_ASSERT( JFW_E_NONE == eErr,
-                "SvxJavaOptionsPage::FillItemSet(): error in jfw_getEnabled" ); (void)eErr;
+                "SvxJavaOptionsPage::FillItemSet(): error in jfw_getEnabled" );
     if ( bEnabled != m_pJavaEnableCB->IsChecked() )
     {
         eErr = jfw_setEnabled( m_pJavaEnableCB->IsChecked() );

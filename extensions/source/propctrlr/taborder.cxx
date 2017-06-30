@@ -353,12 +353,6 @@ namespace pcr
 
                 if( (nLastSelPos + nRelPos - i) > (GetEntryCount()-1) ) return;
 
-#if OSL_DEBUG_LEVEL > 0
-                sal_uLong nSelCount = GetSelectionCount();
-                (void)nSelCount;
-#endif
-
-
                 SvTreeListEntry* pSelEntry = pLastSelected;
                 while( pSelEntry )
                 {

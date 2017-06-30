@@ -244,7 +244,7 @@ extern "C"
     typedef void(* addItemFnc)(void *, const char *);
 }
 
-void GtkInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService)
+void GtkInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUString&, const OUString&)
 {
     EnsureInit();
     OString sGtkURL;
@@ -265,8 +265,6 @@ void GtkInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUStri
     }
     GtkRecentManager *manager = gtk_recent_manager_get_default ();
     gtk_recent_manager_add_item (manager, sGtkURL.getStr());
-    (void)rMimeType;
-    (void)rDocumentService;
 }
 
 SalInfoPrinter* GtkInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,

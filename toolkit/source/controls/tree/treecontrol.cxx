@@ -478,7 +478,6 @@ void SAL_CALL TreeEditListenerMultiplexer::nodeEditing( const Reference< XTreeNo
         }
         catch( const RuntimeException& e )
         {
-            (void)e;
             DISPLAY_EXCEPTION( TreeEditListenerMultiplexer, nodeEditing, e )
         }
     }
@@ -502,7 +501,6 @@ void SAL_CALL TreeEditListenerMultiplexer::nodeEdited( const Reference< XTreeNod
         }
         catch( const RuntimeException& e )
         {
-            (void)e;
             DISPLAY_EXCEPTION( TreeEditListenerMultiplexer, nodeEdited, e )
         }
     }

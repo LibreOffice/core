@@ -53,8 +53,7 @@ public:
         SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
         vcl::Window* pParentWindow,
-        FrameView* pFrameView,
-        const bool bIsCenterPane);
+        FrameView* pFrameView);
 
     virtual ~SlideSorterViewShell() override;
 

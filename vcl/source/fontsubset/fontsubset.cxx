@@ -156,9 +156,8 @@ bool FontSubsetInfo::CreateFontSubsetFromSfnt( sal_Int32* pOutGlyphWidths )
 }
 
 // TODO: replace dummy implementation
-bool FontSubsetInfo::CreateFontSubsetFromType1( const sal_Int32* pOutGlyphWidths)
+bool FontSubsetInfo::CreateFontSubsetFromType1( const sal_Int32* /*pOutGlyphWidths*/)
 {
-    (void)pOutGlyphWidths;
     fprintf(stderr,"CreateFontSubsetFromType1: replace dummy implementation\n");
     return false;
 }

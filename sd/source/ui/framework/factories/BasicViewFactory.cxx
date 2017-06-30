@@ -83,8 +83,7 @@ public:
 
 //===== ViewFactory ===========================================================
 
-BasicViewFactory::BasicViewFactory (
-    const Reference<XComponentContext>& rxContext)
+BasicViewFactory::BasicViewFactory ()
     : BasicViewFactoryInterfaceBase(MutexOwner::maMutex),
       mxConfigurationController(),
       mpViewShellContainer(new ViewShellContainer()),
@@ -94,7 +93,6 @@ BasicViewFactory::BasicViewFactory (
       mpViewCache(new ViewCache()),
       mxLocalPane(new Pane(Reference<XResourceId>(), mpWindow.get()))
 {
-    (void)rxContext;
 }
 
 BasicViewFactory::~BasicViewFactory()
@@ -288,8 +286,7 @@ std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::CreateView (
         rxViewId,
         rFrame,
         rWindow,
-        pFrameView,
-        bIsCenterPane);
+        pFrameView);
     pDescriptor->mxViewId = rxViewId;
 
     if (pDescriptor->mpViewShell.get() != nullptr)
@@ -323,8 +320,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
     const Reference<XResourceId>& rxViewId,
     SfxViewFrame& rFrame,
     vcl::Window& rWindow,
-    FrameView* pFrameView,
-    const bool bIsCenterPane)
+    FrameView* pFrameView)
 {
     std::shared_ptr<ViewShell> pViewShell;
     const OUString& rsViewURL (rxViewId->getResourceURL());
@@ -392,8 +388,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
             &rFrame,
             *mpBase,
             &rWindow,
-            pFrameView,
-            bIsCenterPane);
+            pFrameView);
         pViewShell->GetContentWindow()->set_id("slidesorter");
     }
 
@@ -532,10 +527,10 @@ void BasicViewFactory::ActivateCenterView (
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
-com_sun_star_comp_Draw_framework_BasicViewFactory_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Draw_framework_BasicViewFactory_get_implementation(css::uno::XComponentContext*,
                                                                      css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new sd::framework::BasicViewFactory(context));
+    return cppu::acquire(new sd::framework::BasicViewFactory);
 }
 
 

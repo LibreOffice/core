@@ -146,10 +146,7 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
     }
 }
 
-void CellColorHandler::lcl_sprm(Sprm & rSprm)
-{
-    (void)rSprm;
-}
+void CellColorHandler::lcl_sprm(Sprm &) {}
 
 TablePropertyMapPtr  CellColorHandler::getProperties()
 {

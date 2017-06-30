@@ -855,7 +855,6 @@ void ScDrawView::DeleteMarked()
     ScDrawObjData* pCaptData = nullptr;
     if( SdrObject* pCaptObj = GetMarkedNoteCaption( &pCaptData ) )
     {
-        (void)pCaptObj; // prevent 'unused variable' compiler warning in pro builds
         ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
         ScDocShell* pDocShell = pViewData ? pViewData->GetDocShell() : nullptr;
         ::svl::IUndoManager* pUndoMgr = pDocShell ? pDocShell->GetUndoManager() : nullptr;

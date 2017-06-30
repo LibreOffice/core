@@ -49,7 +49,7 @@ namespace connectivity
 
         public:
             /// @throws css::sdbc::SQLException
-            void construct( const OUString& url,const css::uno::Sequence< css::beans::PropertyValue >& info);
+            void construct( const OUString& url);
             explicit OConnection(MorkDriver* const driver);
             virtual ~OConnection() override;
 

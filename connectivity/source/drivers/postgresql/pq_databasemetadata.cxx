@@ -601,9 +601,8 @@ sal_Bool DatabaseMetaData::supportsTypeConversion(  )
     return false;
 }
 
-sal_Bool DatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_Int32 toType )
+sal_Bool DatabaseMetaData::supportsConvert( sal_Int32, sal_Int32 )
 {
-    (void) fromType; (void) toType;
     return false;
 }
 
@@ -1074,11 +1073,10 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  )
 }
 
 css::uno::Reference< XResultSet > DatabaseMetaData::getProcedures(
-    const css::uno::Any& catalog,
-    const OUString& schemaPattern,
-    const OUString& procedureNamePattern )
+    const css::uno::Any&,
+    const OUString&,
+    const OUString& )
 {
-    (void) catalog; (void) schemaPattern; (void) procedureNamePattern;
 //        1.  PROCEDURE_CAT string =&gt; procedure catalog (may be NULL )
 //        2. PROCEDURE_SCHEM string =&gt; procedure schema (may be NULL )
 //        3. PROCEDURE_NAME string =&gt; procedure name
@@ -1099,12 +1097,11 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getProcedures(
 }
 
 css::uno::Reference< XResultSet > DatabaseMetaData::getProcedureColumns(
-    const css::uno::Any& catalog,
-    const OUString& schemaPattern,
-    const OUString& procedureNamePattern,
-    const OUString& columnNamePattern )
+    const css::uno::Any&,
+    const OUString&,
+    const OUString&,
+    const OUString& )
 {
-    (void) catalog; (void) schemaPattern; (void) procedureNamePattern; (void) columnNamePattern;
     MutexGuard guard( m_xMutex->GetMutex() );
 // LEM TODO: implement
 // LEM TODO: at least fake the columns, even if no row.
@@ -1113,12 +1110,11 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getProcedureColumns(
 }
 
 css::uno::Reference< XResultSet > DatabaseMetaData::getTables(
-    const css::uno::Any& catalog,
+    const css::uno::Any&,
     const OUString& schemaPattern,
     const OUString& tableNamePattern,
-    const css::uno::Sequence< OUString >& types )
+    const css::uno::Sequence< OUString >& )
 {
-    (void) catalog; (void) types;
     Statics &statics = getStatics();
 
     MutexGuard guard( m_xMutex->GetMutex() );
@@ -1446,12 +1442,11 @@ static void columnMetaData2DatabaseTypeDescription(
 
 
 css::uno::Reference< XResultSet > DatabaseMetaData::getColumns(
-    const css::uno::Any& catalog,
+    const css::uno::Any&,
     const OUString& schemaPattern,
     const OUString& tableNamePattern,
     const OUString& columnNamePattern )
 {
-    (void) catalog;
     // LEM TODO: review in comparison with JDBC driver
     Statics &statics = getStatics();
 
@@ -1632,13 +1627,11 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getColumns(
 }
 
 css::uno::Reference< XResultSet > DatabaseMetaData::getColumnPrivileges(
-    const css::uno::Any& catalog,
+    const css::uno::Any&,
     const OUString& schema,
     const OUString& table,
     const OUString& columnNamePattern )
 {
-    (void) catalog;
-
     MutexGuard guard( m_xMutex->GetMutex() );
 
     if (isLog(m_pSettings, LogLevel::Info))
@@ -2247,7 +2240,7 @@ namespace
                                                 //   - BASIC - Supported except for WHERE .. LIKE
                                                 //   - FULL - Supported for all WHERE ..
         static const sal_Int32 UNSIGNED_ATTRIBUTE = 9; // boolean ==> is it unsigned?
-        static const sal_Int32 FIXED_PREC_SCALE = 10; // boolean ==> can it be a money value?
+        // FIXED_PREC_SCALE = 10; boolean ==> can it be a money value?
         static const sal_Int32 AUTO_INCREMENT = 11; // boolean ==> can it be used for
                                                     // an auto-increment value?
         static const sal_Int32 MINIMUM_SCALE = 13; // short ==> minimum scale supported
@@ -2307,7 +2300,6 @@ namespace
             row[MINIMUM_SCALE] <<= OUString("0");      // TODO: what is this ?
             row[MAXIMUM_SCALE] <<= OUString::number( getMaxScale( dataType ) );
             row[NUM_PREC_RADIX] <<= OUString("10");    // TODO: what is this ?
-            (void)FIXED_PREC_SCALE;
             vec.push_back( row );
         }
     }
@@ -2496,9 +2488,8 @@ sal_Bool DatabaseMetaData::supportsResultSetType( sal_Int32 setType )
 }
 
 sal_Bool DatabaseMetaData::supportsResultSetConcurrency(
-    sal_Int32 setType, sal_Int32 concurrency )
+    sal_Int32 setType, sal_Int32 )
 {
-    (void) concurrency;
     if ( ! supportsResultSetType( setType ) )
         return false;
     else

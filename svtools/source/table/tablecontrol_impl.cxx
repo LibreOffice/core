@@ -112,10 +112,9 @@ namespace svt { namespace table
         {
             return false;
         }
-        virtual PColumnModel        getColumnModel( ColPos column ) override
+        virtual PColumnModel        getColumnModel( ColPos ) override
         {
             OSL_FAIL( "EmptyTableModel::getColumnModel: invalid call!" );
-            (void)column;
             return PColumnModel();
         }
         virtual PTableRenderer      getRenderer() const override
@@ -146,14 +145,8 @@ namespace svt { namespace table
         {
             return ScrollbarShowNever;
         }
-        virtual void addTableModelListener( const PTableModelListener& i_listener ) override
-        {
-            (void)i_listener;
-        }
-        virtual void removeTableModelListener( const PTableModelListener& i_listener ) override
-        {
-            (void)i_listener;
-        }
+        virtual void addTableModelListener( const PTableModelListener& ) override {}
+        virtual void removeTableModelListener( const PTableModelListener& ) override {}
         virtual ::boost::optional< ::Color > getLineColor() const override
         {
             return ::boost::optional< ::Color >();
@@ -206,18 +199,15 @@ namespace svt { namespace table
         {
             return true;
         }
-        virtual void getCellContent( ColPos const i_col, RowPos const i_row, css::uno::Any& o_cellContent ) override
+        virtual void getCellContent( ColPos const, RowPos const, css::uno::Any& o_cellContent ) override
         {
-            (void)i_row;
-            (void)i_col;
             o_cellContent.clear();
         }
         virtual void getCellToolTip( ColPos const, RowPos const, css::uno::Any& ) override
         {
         }
-        virtual Any getRowHeading( RowPos const i_rowPos ) const override
+        virtual Any getRowHeading( RowPos const ) const override
         {
-            (void)i_rowPos;
             return Any();
         }
     };
@@ -2552,9 +2542,8 @@ namespace svt { namespace table
         }
     }
 
-    void TableFunctionSet::DeselectAtPoint( const Point& rPoint )
+    void TableFunctionSet::DeselectAtPoint( const Point& )
     {
-        (void)rPoint;
         m_pTableControl->invalidateRow( m_nCurrentRow );
         m_pTableControl->markRowAsDeselected( m_nCurrentRow );
     }

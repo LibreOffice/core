@@ -1311,10 +1311,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             Insert( PROP_GRID_STANDARD_MODE, uno::makeAny( !bSquaredPageMode ) );
             xDocProperties->setPropertyValue( "DefaultPageMode", uno::makeAny( bSquaredPageMode ) );
         }
-        catch ( const uno::Exception& rEx )
+        catch ( const uno::Exception& )
         {
             OSL_ENSURE( false, "Exception in SectionPropertyMap::CloseSectionGroup" );
-            (void)rEx;
         }
 
         Insert( PROP_GRID_BASE_HEIGHT, uno::makeAny( nGridLinePitch ) );

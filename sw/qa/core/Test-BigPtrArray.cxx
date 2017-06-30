@@ -59,20 +59,10 @@ namespace /* private */
         sal_uLong count_;
     };
 
-    void dumpBigPtrArray(const BigPtrArray& bparr)
-    {
-        (void)bparr;
-    }
-
     void fillBigPtrArray(BigPtrArray& bparr, sal_uLong numEntries)
     {
         for (sal_uLong i = 0; i < numEntries; i++)
             bparr.Insert(new BigPtrEntryMock(i), bparr.Count());
-    }
-
-    void printMethodName(const char* name)
-    {
-        (void)name;
     }
 
     bool checkElementPositions(const BigPtrArray& bparr)
@@ -107,8 +97,6 @@ public:
     */
     void test_ctor()
     {
-        printMethodName("test_ctor\n");
-
         BigPtrArray bparr;
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -120,8 +108,6 @@ public:
 
     void test_insert_entries_at_front()
     {
-        printMethodName("test_insert_entries_at_front\n");
-
         BigPtrArray bparr;
 
         for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
@@ -151,17 +137,13 @@ public:
         );
 
         releaseBigPtrArrayContent(bparr);
-        dumpBigPtrArray(bparr);
     }
 
     void test_insert_entries_in_the_middle()
     {
-        printMethodName("test_insert_entries_in_the_middle\n");
-
         BigPtrArray bparr;
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
-        dumpBigPtrArray(bparr);
 
         sal_uLong oldCount = bparr.Count();
 
@@ -180,17 +162,13 @@ public:
         );
 
         releaseBigPtrArrayContent(bparr);
-        dumpBigPtrArray(bparr);
     }
 
     void test_insert_at_already_used_index()
     {
-        printMethodName("test_insert_at_already_used_index\n");
-
         BigPtrArray bparr;
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
-        dumpBigPtrArray(bparr);
 
         const sal_uLong oldCount = bparr.Count();
 
@@ -222,17 +200,13 @@ public:
         );
 
         releaseBigPtrArrayContent(bparr);
-        dumpBigPtrArray(bparr);
     }
 
     void test_insert_at_end()
     {
-        printMethodName("test_insert_at_end\n");
-
         BigPtrArray bparr;
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
-        dumpBigPtrArray(bparr);
 
         sal_uLong oldCount = bparr.Count();
         bparr.Insert(new BigPtrEntryMock(NUM_ENTRIES), bparr.Count());
@@ -250,17 +224,13 @@ public:
         );
 
         releaseBigPtrArrayContent(bparr);
-        dumpBigPtrArray(bparr);
     }
 
     void test_remove_at_front()
     {
-        printMethodName("test_remove_at_front\n");
-
         BigPtrArray bparr;
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
-        dumpBigPtrArray(bparr);
 
         for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
         {
@@ -289,19 +259,14 @@ public:
                 "test_remove_at_front failed",
                 checkElementPositions(bparr)
             );
-
-            dumpBigPtrArray(bparr);
         }
     }
 
     void test_remove_at_back()
     {
-        printMethodName("test_remove_at_back\n");
-
         BigPtrArray bparr;
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
-        dumpBigPtrArray(bparr);
 
         for (int i = NUM_ENTRIES - 1; i >= 0; i--)
         {
@@ -329,19 +294,14 @@ public:
                 "test_remove_at_back failed",
                 checkElementPositions(bparr)
             );
-
-            dumpBigPtrArray(bparr);
         }
     }
 
     void test_remove_in_the_middle()
     {
-        printMethodName("test_remove_in_the_middle\n");
-
         BigPtrArray bparr;
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
-        dumpBigPtrArray(bparr);
 
         while (bparr.Count())
         {
@@ -371,19 +331,14 @@ public:
                 "test_remove_in_the_middle failed",
                 checkElementPositions(bparr)
             );
-
-            dumpBigPtrArray(bparr);
         }
     }
 
     void test_remove_multiple_elements_at_once()
     {
-        printMethodName("test_remove_multiple_elements_at_once\n");
-
         BigPtrArray bparr;
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
-        dumpBigPtrArray(bparr);
 
         while(bparr.Count())
         {
@@ -406,19 +361,14 @@ public:
                 "test_remove_multiple_elements_at_once failed",
                 checkElementPositions(bparr)
             );
-
-            dumpBigPtrArray(bparr);
         }
     }
 
     void test_remove_all_elements_at_once()
     {
-        printMethodName("test_remove_all_elements_at_once\n");
-
         BigPtrArray bparr;
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
-        dumpBigPtrArray(bparr);
 
         releaseBigPtrArrayContent(bparr);
         bparr.Remove(0, bparr.Count());
@@ -428,23 +378,17 @@ public:
             "test_remove_all_elements_at_once failed",
             static_cast<sal_uLong>(0), bparr.Count()
         );
-
-        dumpBigPtrArray(bparr);
     }
 
     void test_move_elements_from_lower_to_higher_pos()
     {
-        printMethodName("test_move_elements_from_lower_to_higher_pos\n");
-
         BigPtrArray bparr;
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
-        dumpBigPtrArray(bparr);
 
         for (sal_uLong i = 0; i < NUM_ENTRIES - 1; i++)
         {
             bparr.Move(i, i + 2);
-            dumpBigPtrArray(bparr);
         }
 
         for (sal_uLong i = 0; i < (NUM_ENTRIES - 1); i++)
@@ -473,17 +417,13 @@ public:
 
     void test_move_elements_from_higher_to_lower_pos()
     {
-        printMethodName("test_move_elements_from_higher_to_lower_pos\n");
-
         BigPtrArray bparr;
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
-        dumpBigPtrArray(bparr);
 
         for (int i = NUM_ENTRIES - 1; i >= 1; i--)
         {
             bparr.Move(i, i - 1);
-            dumpBigPtrArray(bparr);
         }
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE
@@ -512,19 +452,14 @@ public:
 
     void test_move_to_same_position()
     {
-        printMethodName("test_move_to_same_position\n");
-
         BigPtrArray bparr;
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
-        dumpBigPtrArray(bparr);
 
         for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
         {
             bparr.Move(i, i);
         }
-
-        dumpBigPtrArray(bparr);
 
         for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
         {
@@ -542,23 +477,18 @@ public:
         );
 
         releaseBigPtrArrayContent(bparr);
-        dumpBigPtrArray(bparr);
     }
 
     void test_replace_elements()
     {
-        printMethodName("test_replace_elements\n");
-
         BigPtrArray bparr;
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
-        dumpBigPtrArray(bparr);
 
         for (sal_uLong i = 0, j = NUM_ENTRIES - 1; i < NUM_ENTRIES; i++, j--)
         {
             delete bparr[i];
             bparr.Replace(i, new BigPtrEntryMock(j));
-            dumpBigPtrArray(bparr);
         }
 
         for (sal_uLong i = 0; i < NUM_ENTRIES; i++)

@@ -860,12 +860,6 @@ uno::Reference< rdf::XBlankNode > SAL_CALL librdf_Repository::createBlankNode()
     }
 }
 
-bool formatNeedsBaseURI(::sal_Int16 i_Format)
-{
-    (void) i_Format; //FIXME any which don't?
-    return true;
-}
-
 //void SAL_CALL
 uno::Reference<rdf::XNamedGraph> SAL_CALL
 librdf_Repository::importGraph(::sal_Int16 i_Format,
@@ -891,7 +885,7 @@ librdf_Repository::importGraph(::sal_Int16 i_Format,
         throw lang::IllegalArgumentException(
                 "librdf_Repository::importGraph: URI is reserved", *this, 0);
     }
-    if (formatNeedsBaseURI(i_Format) && !i_xBaseURI.is()) {
+    if (!i_xBaseURI.is()) { //FIXME: any i_Format that don't need a base URI?
         throw lang::IllegalArgumentException(
                 "librdf_Repository::importGraph: base URI is null", *this, 3);
     }
@@ -1039,7 +1033,7 @@ librdf_Repository::exportGraph(::sal_Int16 i_Format,
                 "librdf_Repository::exportGraph: "
                 "graph name is null", *this, 2);
     }
-    if (formatNeedsBaseURI(i_Format) && !i_xBaseURI.is()) {
+    if (!i_xBaseURI.is()) { //FIXME: any i_Format that don't need a base URI?
         throw lang::IllegalArgumentException(
                 "librdf_Repository::exportGraph: "
                 "base URI is null", *this, 3);
@@ -1653,10 +1647,8 @@ librdf_Repository::getStatementsRDFa(
 
 // css::lang::XInitialization:
 void SAL_CALL librdf_Repository::initialize(
-    const uno::Sequence< css::uno::Any > & i_rArguments)
+    const uno::Sequence< css::uno::Any > &)
 {
-    (void) i_rArguments;
-
     ::osl::MutexGuard g(m_aMutex);
 
 //    m_pWorld.reset(m_TypeConverter.createWorld(), safe_librdf_free_world);

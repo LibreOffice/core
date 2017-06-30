@@ -1702,9 +1702,8 @@ namespace frm
             f();
         }
 #if HAVE_FEATURE_DBCONNECTIVITY
-        catch( const SQLException& e )
+        catch( const SQLException& )
         {
-            (void)e;
             if ( !_nErrorResourceId )
                 // no information to prepend
                 throw;

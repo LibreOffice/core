@@ -61,23 +61,16 @@ void Listener::init( const css::uno::Reference< css::presentation::XSlideShowCon
 //----- XAnimationListener ----------------------------------------------------
 
 void SAL_CALL Listener::beginEvent(const css::uno::Reference<
-    css::animations::XAnimationNode >&  rNode )
-{
-    (void) rNode;
-}
+    css::animations::XAnimationNode >& )
+{}
 
 void SAL_CALL Listener::endEvent( const css::uno::Reference<
-    css::animations::XAnimationNode >& rNode )
-{
-    (void) rNode;
-}
+    css::animations::XAnimationNode >& )
+{}
 
 void SAL_CALL Listener::repeat( const css::uno::Reference<
-    css::animations::XAnimationNode >& rNode, ::sal_Int32 aRepeat )
-{
-    (void) rNode;
-    (void) aRepeat;
-}
+    css::animations::XAnimationNode >&, ::sal_Int32 )
+{}
 
 //----- XSlideShowListener ----------------------------------------------------
 
@@ -89,9 +82,8 @@ void SAL_CALL Listener::resumed()
 {
 }
 
-void SAL_CALL Listener::slideEnded (sal_Bool bReverse)
+void SAL_CALL Listener::slideEnded (sal_Bool)
 {
-    (void) bReverse;
 }
 
 void SAL_CALL Listener::hyperLinkClicked (const OUString &)
@@ -133,9 +125,8 @@ void SAL_CALL Listener::disposing()
 }
 
 void SAL_CALL Listener::disposing (
-    const css::lang::EventObject& rEvent)
+    const css::lang::EventObject&)
 {
-    (void) rEvent;
     dispose();
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

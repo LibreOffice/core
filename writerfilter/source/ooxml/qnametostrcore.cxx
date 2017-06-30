@@ -34,13 +34,13 @@ QNameToString::Pointer_t const & QNameToString::Instance()
 
 std::string QNameToString::operator()(Id qName)
 {
-    (void) qName;
 #ifdef DEBUG_WRITERFILTER
     Map::const_iterator aIt = mMap.find(qName);
 
     if (aIt != mMap.end())
         return aIt->second;
-
+#else
+    (void) qName;
 #endif
     return std::string();
 }

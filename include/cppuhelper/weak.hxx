@@ -106,17 +106,13 @@ public:
         {}
 #endif
     /** Dummy copy constructor.  Set the reference count to zero.
-
-        @param rObj dummy param
     */
-    OWeakObject( const OWeakObject & rObj )
+    OWeakObject( const OWeakObject & )
         : css::uno::XWeak()
         , m_refCount( 0 )
         , m_pWeakConnectionPoint( NULL )
         , m_pReserved(NULL)
-        {
-            (void) rObj;
-        }
+        {}
     /** Dummy assignment operator. Does not affect reference count.
 
         @return this OWeakObject

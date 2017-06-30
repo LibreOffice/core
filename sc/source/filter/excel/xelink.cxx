@@ -202,8 +202,8 @@ public:
     /** Stores all cells in the given range in the CRN list. */
     void                StoreCellRange( const ScRange& rRange );
 
-    void                StoreCell( const ScAddress& rCell, const ::formula::FormulaToken& rToken );
-    void                StoreCellRange( const ScRange& rRange, const ::formula::FormulaToken& rToken );
+    void                StoreCell_( const ScAddress& rCell );
+    void                StoreCellRange_( const ScRange& rRange );
 
     /** Writes the XCT and all CRN records. */
     virtual void        Save( XclExpStream& rStrm ) override;
@@ -308,8 +308,8 @@ public:
     /** Stores all cells in the given range in the CRN list of the specified SUPBOOK sheet. */
     void                StoreCellRange( const ScRange& rRange, sal_uInt16 nSBTab );
 
-    void                StoreCell( sal_uInt16 nSBTab, const ScAddress& rCell, const ::formula::FormulaToken& rToken );
-    void                StoreCellRange( sal_uInt16 nSBTab, const ScRange& rRange, const ::formula::FormulaToken& rToken );
+    void                StoreCell_( sal_uInt16 nSBTab, const ScAddress& rCell );
+    void                StoreCellRange_( sal_uInt16 nSBTab, const ScRange& rRange );
 
     sal_uInt16          GetTabIndex( const OUString& rTabName ) const;
     sal_uInt16          GetTabCount() const;
@@ -1291,18 +1291,16 @@ void XclExpXct::StoreCellRange( const ScRange& rRange )
     maBoundRange.ExtendTo( rRange );
 }
 
-void XclExpXct::StoreCell( const ScAddress& rCell, const ::formula::FormulaToken& rToken )
+void XclExpXct::StoreCell_( const ScAddress& rCell )
 {
     maUsedCells.SetMultiMarkArea( ScRange( rCell ) );
     maBoundRange.ExtendTo( ScRange( rCell ) );
-    (void)rToken;
 }
 
-void XclExpXct::StoreCellRange( const ScRange& rRange, const ::formula::FormulaToken& rToken )
+void XclExpXct::StoreCellRange_( const ScRange& rRange )
 {
     maUsedCells.SetMultiMarkArea( rRange );
     maBoundRange.ExtendTo( rRange );
-    (void)rToken;
 }
 
 namespace {
@@ -1578,18 +1576,18 @@ void XclExpSupbook::StoreCellRange( const ScRange& rRange, sal_uInt16 nSBTab )
         pXct->StoreCellRange( rRange );
 }
 
-void XclExpSupbook::StoreCell( sal_uInt16 nSBTab, const ScAddress& rCell, const formula::FormulaToken& rToken )
+void XclExpSupbook::StoreCell_( sal_uInt16 nSBTab, const ScAddress& rCell )
 {
     if( XclExpXct* pXct = maXctList.GetRecord( nSBTab ).get() )
-        pXct->StoreCell( rCell, rToken );
+        pXct->StoreCell_( rCell );
 }
 
-void XclExpSupbook::StoreCellRange( sal_uInt16 nSBTab, const ScRange& rRange, const formula::FormulaToken& rToken )
+void XclExpSupbook::StoreCellRange_( sal_uInt16 nSBTab, const ScRange& rRange )
 {
     // multi-table range is not allowed!
     if( rRange.aStart.Tab() == rRange.aEnd.Tab() )
         if( XclExpXct* pXct = maXctList.GetRecord( nSBTab ).get() )
-            pXct->StoreCellRange( rRange, rToken );
+            pXct->StoreCellRange_( rRange );
 }
 
 sal_uInt16 XclExpSupbook::GetTabIndex( const OUString& rTabName ) const
@@ -1868,6 +1866,7 @@ void XclExpSupbookBuffer::StoreCell( sal_uInt16 nFileId, const OUString& rTabNam
         nSupbookId = Append(xSupbook);
     }
 
+    //TODO: remove?
     ScExternalRefCache::TokenRef pToken = pRefMgr->getSingleRefToken(nFileId, rTabName, rCell, nullptr, nullptr);
     if (!pToken.get())
         return;
@@ -1886,7 +1885,7 @@ void XclExpSupbookBuffer::StoreCell( sal_uInt16 nFileId, const OUString& rTabNam
         r.mnSBTab   = nSheetId;
     }
 
-    xSupbook->StoreCell(nSheetId, rCell, *pToken);
+    xSupbook->StoreCell_(nSheetId, rCell);
 }
 
 void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const OUString& rTabName, const ScRange& rRange )
@@ -1908,8 +1907,7 @@ void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const OUString& rT
 
     // If this is a multi-table range, get token for each table.
     using namespace ::formula;
-    vector<FormulaToken*> aMatrixList;
-    aMatrixList.reserve(nTabCount);
+    SCTAB aMatrixListSize = 0; //TODO: remove?
 
     // This is a new'ed instance, so we must manage its life cycle here.
     ScExternalRefCache::TokenArrayRef pArray = pRefMgr->getDoubleRefTokens(nFileId, rTabName, rRange, nullptr);
@@ -1920,7 +1918,7 @@ void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const OUString& rT
     for (FormulaToken* p = aIter.First(); p; p = aIter.Next())
     {
         if (p->GetType() == svMatrix)
-            aMatrixList.push_back(p);
+            ++aMatrixListSize;
         else if (p->GetOpCode() != ocSep)
         {
             // This is supposed to be ocSep!!!
@@ -1928,7 +1926,7 @@ void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const OUString& rT
         }
     }
 
-    if (aMatrixList.size() != static_cast<size_t>(nTabCount))
+    if (aMatrixListSize != nTabCount)
     {
         // matrix size mis-match !
         return;
@@ -1951,7 +1949,7 @@ void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const OUString& rT
             r.mnSBTab   = nSheetId;
         }
 
-        xSupbook->StoreCellRange(nSheetId, aRange, *aMatrixList[nTab]);
+        xSupbook->StoreCellRange_(nSheetId, aRange);
     }
 }
 
@@ -2190,7 +2188,6 @@ void XclExpLinkManagerImpl5::FindExtSheet(
         FindInternal( nDummyExtSheet, rnLastXclTab, nLastScTab );
     }
 
-    (void)pRefLogEntry;     // avoid compiler warning
     OSL_ENSURE( !pRefLogEntry, "XclExpLinkManagerImpl5::FindExtSheet - fill reflog entry not implemented" );
 }
 
@@ -2375,7 +2372,6 @@ void XclExpLinkManagerImpl8::FindExtSheet(
 
 sal_uInt16 XclExpLinkManagerImpl8::FindExtSheet( sal_Unicode cCode )
 {
-    (void)cCode;    // avoid compiler warning
     OSL_ENSURE( (cCode == EXC_EXTSH_OWNDOC) || (cCode == EXC_EXTSH_ADDIN),
         "XclExpLinkManagerImpl8::FindExtSheet - unknown externsheet code" );
     return InsertXti( maSBBuffer.GetXti( EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) );

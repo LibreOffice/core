@@ -332,7 +332,6 @@ void lcl_CloneSubGrids(
         ++pDestIt;
     }
     OSL_ASSERT( pDestIt == pDestEnd );
-    (void)(pDestEnd); // avoid warning
 }
 
 } // anonymous namespace

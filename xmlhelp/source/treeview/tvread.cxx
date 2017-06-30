@@ -366,10 +366,8 @@ extern "C" void start_handler(void *userData,
 }
 
 extern "C" void end_handler(void *userData,
-                 const XML_Char *name )
+                 SAL_UNUSED_PARAMETER const XML_Char * )
 {
-    (void)name;
-
     TVDom **tvDom = static_cast< TVDom** >( userData );
     *tvDom = (*tvDom)->getParent();
 }

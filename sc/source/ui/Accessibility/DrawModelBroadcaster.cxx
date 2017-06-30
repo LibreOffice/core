@@ -69,7 +69,6 @@ void ScDrawModelBroadcaster::Notify( SfxBroadcaster&,
         }
         catch( const uno::RuntimeException& r )
         {
-            (void) r;
             SAL_WARN("sc.ui", "Runtime exception caught while notifying shape. : " << r.Message);
         }
     }

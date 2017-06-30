@@ -611,13 +611,8 @@ void PresenterAccessible::UpdateAccessibilityHierarchy (
     }
 }
 
-void PresenterAccessible::NotifyCurrentSlideChange (
-    const sal_Int32 nCurrentSlideIndex,
-    const sal_Int32 nSlideCount)
+void PresenterAccessible::NotifyCurrentSlideChange ()
 {
-    (void)nCurrentSlideIndex;
-    (void)nSlideCount;
-
     if (mpAccessiblePreview.is())
     {
         PresenterPaneContainer::SharedPaneDescriptor pPreviewPane (GetPreviewPane());
@@ -680,17 +675,15 @@ Reference<XAccessibleContext> SAL_CALL PresenterAccessible::getAccessibleContext
 
 //----- XFocusListener ----------------------------------------------------
 
-void SAL_CALL PresenterAccessible::focusGained (const css::awt::FocusEvent& rEvent)
+void SAL_CALL PresenterAccessible::focusGained (const css::awt::FocusEvent&)
 {
-    (void)rEvent;
     SAL_INFO("sdext.presenter", OSL_THIS_FUNC << ": PresenterAccessible::focusGained at " << this
         << " and window " << mxMainWindow.get());
     AccessibleFocusManager::Instance()->FocusObject(mpAccessibleConsole);
 }
 
-void SAL_CALL PresenterAccessible::focusLost (const css::awt::FocusEvent& rEvent)
+void SAL_CALL PresenterAccessible::focusLost (const css::awt::FocusEvent&)
 {
-    (void)rEvent;
     SAL_INFO("sdext.presenter", OSL_THIS_FUNC << ": PresenterAccessible::focusLost at " << this);
     AccessibleFocusManager::Instance()->FocusObject(nullptr);
 }
@@ -912,9 +905,8 @@ sal_Bool SAL_CALL PresenterAccessible::AccessibleObject::containsPoint (
 }
 
 Reference<XAccessible> SAL_CALL
-    PresenterAccessible::AccessibleObject::getAccessibleAtPoint (const awt::Point& rPoint)
+    PresenterAccessible::AccessibleObject::getAccessibleAtPoint (const awt::Point&)
 {
-    (void)rPoint;
     ThrowIfDisposed();
 
     return Reference<XAccessible>();
@@ -1023,32 +1015,26 @@ void SAL_CALL PresenterAccessible::AccessibleObject::removeAccessibleEventListen
 //----- XWindowListener ---------------------------------------------------
 
 void SAL_CALL PresenterAccessible::AccessibleObject::windowResized (
-    const css::awt::WindowEvent& rEvent)
+    const css::awt::WindowEvent&)
 {
-    (void)rEvent;
-
     FireAccessibleEvent(AccessibleEventId::BOUNDRECT_CHANGED, Any(), Any());
 }
 
 void SAL_CALL PresenterAccessible::AccessibleObject::windowMoved (
-    const css::awt::WindowEvent& rEvent)
+    const css::awt::WindowEvent&)
 {
-    (void)rEvent;
-
     FireAccessibleEvent(AccessibleEventId::BOUNDRECT_CHANGED, Any(), Any());
 }
 
 void SAL_CALL PresenterAccessible::AccessibleObject::windowShown (
-    const css::lang::EventObject& rEvent)
+    const css::lang::EventObject&)
 {
-    (void)rEvent;
     UpdateStateSet();
 }
 
 void SAL_CALL PresenterAccessible::AccessibleObject::windowHidden (
-    const css::lang::EventObject& rEvent)
+    const css::lang::EventObject&)
 {
-    (void)rEvent;
     UpdateStateSet();
 }
 
@@ -1442,11 +1428,12 @@ Sequence<css::beans::PropertyValue> SAL_CALL
         SAL_INFO( "sdext.presenter",
                   "    requested attribute " << nAttributeIndex << " is " << rRequestedAttributes[nAttributeIndex] );
     }
+#else
+    (void)nIndex;
+    (void)rRequestedAttributes;
 #endif
 
     // Character properties are not supported.
-    (void)nIndex;
-    (void)rRequestedAttributes;
     return Sequence<css::beans::PropertyValue>();
 }
 
@@ -1518,9 +1505,8 @@ sal_Int32 SAL_CALL PresenterAccessible::AccessibleParagraph::getSelectionEnd()
 
 sal_Bool SAL_CALL PresenterAccessible::AccessibleParagraph::setSelection (
     sal_Int32 nStartIndex,
-    sal_Int32 nEndIndex)
+    sal_Int32)
 {
-    (void)nEndIndex;
     ThrowIfDisposed();
 
     return setCaretPosition(nStartIndex);
@@ -1594,16 +1580,14 @@ TextSegment SAL_CALL PresenterAccessible::AccessibleParagraph::getTextBehindInde
 }
 
 sal_Bool SAL_CALL PresenterAccessible::AccessibleParagraph::copyText (
-    sal_Int32 nStartIndex,
-    sal_Int32 nEndIndex)
+    sal_Int32,
+    sal_Int32)
 {
     ThrowIfDisposed();
 
     // Return false because copying to clipboard is not supported.
     // It IS supported in the notes view.  There is no need to duplicate
     // this here.
-    (void)nStartIndex;
-    (void)nEndIndex;
     return false;
 }
 

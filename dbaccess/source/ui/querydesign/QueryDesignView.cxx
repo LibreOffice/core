@@ -2731,13 +2731,6 @@ bool OQueryDesignView::PreNotify(NotifyEvent& rNEvt)
 {
     if (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS)
     {
-#if OSL_DEBUG_LEVEL > 0
-        {
-            vcl::Window* pFocus = Application::GetFocusWindow();
-            (void)pFocus;
-        }
-#endif
-
         if ( m_pSelectionBox && m_pSelectionBox->HasChildPathFocus() )
             m_eChildFocus = SELECTION;
         else

@@ -418,10 +418,8 @@ ResultSetBase::getPropertySetInfo()
 
 
 void SAL_CALL ResultSetBase::setPropertyValue(
-    const OUString& aPropertyName, const uno::Any& aValue )
+    const OUString& aPropertyName, const uno::Any& )
 {
-    (void)aValue;
-
     if( aPropertyName == "IsRowCountFinal" ||
         aPropertyName == "RowCount" )
         return;
@@ -495,21 +493,15 @@ void SAL_CALL ResultSetBase::removePropertyChangeListener(
 
 
 void SAL_CALL ResultSetBase::addVetoableChangeListener(
-    const OUString& PropertyName,
-    const uno::Reference< beans::XVetoableChangeListener >& aListener )
-{
-    (void)PropertyName;
-    (void)aListener;
-}
+    const OUString&,
+    const uno::Reference< beans::XVetoableChangeListener >& )
+{}
 
 
 void SAL_CALL ResultSetBase::removeVetoableChangeListener(
-    const OUString& PropertyName,
-    const uno::Reference< beans::XVetoableChangeListener >& aListener )
-{
-    (void)PropertyName;
-    (void)aListener;
-}
+    const OUString&,
+    const uno::Reference< beans::XVetoableChangeListener >& )
+{}
 
 
 // XResultSetMetaDataSupplier

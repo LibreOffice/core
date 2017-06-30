@@ -351,9 +351,8 @@ void SdrTableRTFParser::FillTable()
         mrTableObj.NbcSetSnapRect( aRect );
 
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sdr::table::SdrTableRTFParser::InsertCell(), exception caught!" );
     }
 }

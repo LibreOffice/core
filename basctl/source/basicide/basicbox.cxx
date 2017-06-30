@@ -337,9 +337,8 @@ LanguageBoxControl::LanguageBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, Tool
 {
 }
 
-void LanguageBoxControl::StateChanged( sal_uInt16 nID, SfxItemState eState, const SfxPoolItem* pItem )
+void LanguageBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pItem )
 {
-    (void)nID;
     if (LanguageBox* pBox = static_cast<LanguageBox*>(GetToolBox().GetItemWindow(GetId())))
     {
         if (eState != SfxItemState::DEFAULT)

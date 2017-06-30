@@ -711,7 +711,6 @@ void LocalizationMgr::handleRemoveLocales( const Sequence< Locale >& aLocaleSeq 
 
     DBG_ASSERT( bConsistant,
         "LocalizationMgr::handleRemoveLocales(): sequence contains unsupported locales" );
-    (void)bConsistant;
 }
 
 void LocalizationMgr::handleSetDefaultLocale(const Locale& rLocale)

@@ -181,7 +181,6 @@ namespace param
     sal_Bool ParameterWrapper::convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
     {
         OSL_ENSURE( PROPERTY_ID_VALUE == nHandle, "ParameterWrapper::convertFastPropertyValue: the only non-readonly prop should be our PROPERTY_VALUE!" );
-        (void)nHandle;
 
         // we're lazy here ...
         rOldValue = m_aValue.makeAny();

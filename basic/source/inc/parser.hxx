@@ -54,7 +54,7 @@ class SbiParser : public SbiTokenizer
     void CloseBlock();
     bool Channel( bool bAlways=false );     // parse channel number
     void StmntBlock( SbiToken );
-    void DefType( bool bPrivate );  // Parse type declaration
+    void DefType();  // Parse type declaration
     void DefEnum( bool bPrivate );  // Parse enum declaration
     void DefDeclare( bool bPrivate );
     void EnableCompatibility();

@@ -952,16 +952,14 @@ void LifetimeController::disposing()
 {
 }
 
-void SAL_CALL LifetimeController::disposing (const lang::EventObject& rEvent)
+void SAL_CALL LifetimeController::disposing (const lang::EventObject&)
 {
-    (void)rEvent;
     mbListeningToController = false;
     Update();
 }
 
-void LifetimeController::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint)
+void LifetimeController::Notify (SfxBroadcaster&, const SfxHint& rHint)
 {
-    (void)rBroadcaster;
     if (rHint.GetId() == SfxHintId::Dying)
     {
         mbListeningToViewShellBase = false;

@@ -126,11 +126,6 @@ void WorksheetSettings::importSheetProtection( const AttributeList& rAttribs )
     maSheetProt.mbSelectUnlocked   = rAttribs.getBool( XML_selectUnlockedCells, false );
 }
 
-void WorksheetSettings::importProtectedRanges( const AttributeList& rAttribs )
-{
-    (void)rAttribs; // no attribs known (yet?)
-}
-
 void WorksheetSettings::importProtectedRange( const AttributeList& rAttribs )
 {
     ScEnhancedProtection aProt;

@@ -1780,13 +1780,10 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
                             SwWW8ImplReader& rIo,
                             WW8FlyPara& rWW,
                             const sal_uInt32 nWWPgTop,
-                            const sal_uInt32 nPgLeft,
                             const sal_uInt32 nPgWidth,
                             const sal_Int32 nIniFlyDx,
                             const sal_Int32 nIniFlyDy )
 {
-    (void) nPgLeft;
-
     memset( this, 0, sizeof( WW8SwFlyPara ) );  // initialize
     nNewNetWidth = MINFLY;                    // minimum
 
@@ -2348,7 +2345,6 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
     // containing WW8 page top margin.
     m_xSFlyPara.reset(new WW8SwFlyPara( *m_pPaM, *this, *m_xWFlyPara,
                                   m_aSectionManager.GetWWPageTopMargin(),
-                                  m_aSectionManager.GetPageLeft(),
                                   m_aSectionManager.GetTextAreaWidth(),
                                   m_nIniFlyDx, m_nIniFlyDy));
 
@@ -4791,7 +4787,6 @@ void SwWW8ImplReader::Read_ParaBackColor(sal_uInt16, const sal_uInt8* pData, sho
 
 sal_uInt32 SwWW8ImplReader::ExtractColour(const sal_uInt8* &rpData, bool bVer67)
 {
-    (void) bVer67; // unused in non-debug
     OSL_ENSURE(!bVer67, "Impossible");
     sal_uInt32 nFore = msfilter::util::BGRToRGB(SVBT32ToUInt32(rpData));
     rpData+=4;

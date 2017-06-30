@@ -289,26 +289,16 @@ void SAL_CALL PresenterNotesView::disposing (const lang::EventObject& rEventObje
 
 //----- XWindowListener -------------------------------------------------------
 
-void SAL_CALL PresenterNotesView::windowResized (const awt::WindowEvent& rEvent)
+void SAL_CALL PresenterNotesView::windowResized (const awt::WindowEvent&)
 {
-    (void)rEvent;
     Layout();
 }
 
-void SAL_CALL PresenterNotesView::windowMoved (const awt::WindowEvent& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterNotesView::windowMoved (const awt::WindowEvent&) {}
 
-void SAL_CALL PresenterNotesView::windowShown (const lang::EventObject& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterNotesView::windowShown (const lang::EventObject&) {}
 
-void SAL_CALL PresenterNotesView::windowHidden (const lang::EventObject& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterNotesView::windowHidden (const lang::EventObject&) {}
 
 //----- XPaintListener --------------------------------------------------------
 
@@ -407,10 +397,7 @@ void SAL_CALL PresenterNotesView::keyPressed (const awt::KeyEvent& rEvent)
     }
 }
 
-void SAL_CALL PresenterNotesView::keyReleased (const awt::KeyEvent& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterNotesView::keyReleased (const awt::KeyEvent&) {}
 
 
 void PresenterNotesView::Layout()

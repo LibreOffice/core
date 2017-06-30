@@ -792,10 +792,9 @@ Reference< XNameAccess > SAL_CALL Connection::getTypeMap()
     return nullptr;
 }
 
-void SAL_CALL Connection::setTypeMap(const Reference< XNameAccess >& typeMap)
+void SAL_CALL Connection::setTypeMap(const Reference< XNameAccess >&)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setTypeMap", *this );
-    (void) typeMap;
 }
 
 //----- XCloseable -----------------------------------------------------------

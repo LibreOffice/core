@@ -100,9 +100,8 @@ sal_Bool Driver::acceptsURL( const OUString& url )
 }
 
 Sequence< DriverPropertyInfo > Driver::getPropertyInfo(
-    const OUString& url,const Sequence< PropertyValue >& info )
+    const OUString&,const Sequence< PropertyValue >& )
 {
-    (void)url; (void)info;
     return Sequence< DriverPropertyInfo > ();
 }
 
@@ -214,9 +213,8 @@ private:
 };
 
 Reference< XInterface > OOneInstanceComponentFactory::createInstanceWithArgumentsAndContext(
-    Sequence< Any > const &rArguments, const Reference< XComponentContext > & ctx )
+    Sequence< Any > const &, const Reference< XComponentContext > & ctx )
 {
-    (void)rArguments;
     return createInstanceWithContext( ctx );
 }
 

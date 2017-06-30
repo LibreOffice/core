@@ -50,9 +50,8 @@ using namespace ::osl;
 using namespace ::std;
 
 // ---- XBatchExecution - UNSUPPORTED ----------------------------------------
-void SAL_CALL OStatement::addBatch(const OUString& sql)
+void SAL_CALL OStatement::addBatch(const OUString&)
 {
-    (void) sql;
 }
 
 void SAL_CALL OStatement::clearBatch()

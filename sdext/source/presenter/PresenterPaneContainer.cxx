@@ -184,10 +184,6 @@ PresenterPaneContainer::SharedPaneDescriptor
             {
                 if (pDescriptor->maViewInitialization)
                     pDescriptor->maViewInitialization(rxView);
-
-                // Activate or deactivate the pane/view.
-                if (pDescriptor->maActivator)
-                    pDescriptor->maActivator(pDescriptor->mbIsActive);
             }
             catch (RuntimeException&)
             {
@@ -361,8 +357,6 @@ void SAL_CALL PresenterPaneContainer::disposing (
 void PresenterPaneContainer::PaneDescriptor::SetActivationState (const bool bIsActive)
 {
     mbIsActive = bIsActive;
-    if (maActivator)
-        maActivator(mbIsActive);
 }
 
 } } // end of namespace ::sdext::presenter

@@ -332,7 +332,7 @@ Reference<XResource> PresenterViewFactory::CreateView(
         }
         else if (sResourceURL.equals(msNotesViewURL))
         {
-            xView = CreateNotesView(rxViewId, rxAnchorPane);
+            xView = CreateNotesView(rxViewId);
         }
         else if (sResourceURL.equals(msNextSlidePreviewViewURL))
         {
@@ -433,10 +433,8 @@ Reference<XView> PresenterViewFactory::CreateToolBarView(
 }
 
 Reference<XView> PresenterViewFactory::CreateNotesView(
-    const Reference<XResourceId>& rxViewId,
-    const Reference<XPane>& rxAnchorPane) const
+    const Reference<XResourceId>& rxViewId) const
 {
-    (void)rxAnchorPane;
     Reference<XView> xView;
 
     if ( ! mxConfigurationController.is())
@@ -480,14 +478,6 @@ Reference<XView> PresenterViewFactory::CreateSlideSorterView(
                 rxViewId,
                 Reference<frame::XController>(mxControllerWeak),
                 mpPresenterController));
-        PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
-            mpPresenterController->GetPaneContainer()->FindPaneId(rxViewId->getAnchor()));
-        if (pDescriptor.get() != nullptr)
-        {
-            pDescriptor->maActivator = [] (bool const isActive) {
-                    return PresenterSlideSorter::SetActiveState(isActive);
-                };
-        }
         xView = pView.get();
     }
     catch (RuntimeException&)

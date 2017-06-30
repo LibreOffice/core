@@ -2117,7 +2117,6 @@ bool SwRefPageGetFieldType::MakeSetList( SetGetExpFields& rTmpLst )
                     SwPosition aPos( pDoc->GetNodes().GetEndOfPostIts() );
                     bool const bResult = GetBodyTextNode( *pDoc, aPos, *pFrame );
                     OSL_ENSURE(bResult, "where is the Field?");
-                    (void) bResult; // unused in non-debug
                     pNew = new SetGetExpField( aPos.nNode, pTField,
                                                 &aPos.nContent );
                 }

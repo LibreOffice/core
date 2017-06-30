@@ -205,7 +205,6 @@ PageCache::~PageCache()
     }
     double ave = s_x / double(n);
     SAL_INFO("store", "avg hash chain length: " << ave);
-    (void) ave;
 
     if (m_hash_table != m_hash_table_0)
     {

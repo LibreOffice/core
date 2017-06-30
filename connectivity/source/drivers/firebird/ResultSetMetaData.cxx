@@ -67,20 +67,18 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType(sal_Int32 column)
     return getColumnTypeFromFBType(aType, aSubType, aScale);
 }
 
-sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
+sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32)
 {
     // Firebird is generally case sensitive when using quoted identifiers.
     // IF THIS CHANGES make ResultSet::findColumn to be case-insensitive as needed.
     // Generally names that are entirely UPPERCASE are case insensitive, however
     // there remains some ambiguity if there is another mixed-case-named column
     // of the same name. For safety always assume case insensitive.
-    (void) column;
     return true;
 }
 
-OUString SAL_CALL OResultSetMetaData::getSchemaName(sal_Int32 column)
+OUString SAL_CALL OResultSetMetaData::getSchemaName(sal_Int32)
 {
-    (void) column;
     return OUString(); // Schemas supported by firebird
 }
 
@@ -102,9 +100,8 @@ OUString SAL_CALL OResultSetMetaData::getTableName(sal_Int32 column)
                     RTL_TEXTENCODING_UTF8);
 }
 
-OUString SAL_CALL OResultSetMetaData::getCatalogName(sal_Int32 column)
+OUString SAL_CALL OResultSetMetaData::getCatalogName(sal_Int32)
 {
-    (void) column;
     return OUString(); // Catalogs not supported by firebird
 }
 
@@ -130,16 +127,14 @@ OUString SAL_CALL OResultSetMetaData::getColumnLabel(sal_Int32 column)
     return sRet;
 }
 
-OUString SAL_CALL OResultSetMetaData::getColumnServiceName(sal_Int32 column)
+OUString SAL_CALL OResultSetMetaData::getColumnServiceName(sal_Int32)
 {
     // TODO: implement
-    (void) column;
     return OUString();
 }
 
-sal_Bool SAL_CALL OResultSetMetaData::isCurrency(sal_Int32 column)
+sal_Bool SAL_CALL OResultSetMetaData::isCurrency(sal_Int32)
 {
-    (void) column;
     return false;
 }
 
@@ -179,10 +174,9 @@ sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isSigned(sal_Int32 column)
+sal_Bool SAL_CALL OResultSetMetaData::isSigned(sal_Int32)
 {
     // Unsigned values aren't supported in firebird.
-    (void) column;
     return true;
 }
 
@@ -234,28 +228,24 @@ sal_Int32 SAL_CALL OResultSetMetaData::isNullable(sal_Int32 column)
         return ColumnValue::NO_NULLS;
 }
 
-sal_Bool SAL_CALL OResultSetMetaData::isSearchable(sal_Int32 column)
+sal_Bool SAL_CALL OResultSetMetaData::isSearchable(sal_Int32)
 {
     // TODO: Can the column be used as part of a where clause? Assume yes
-    (void) column;
     return true;
 }
 
-sal_Bool SAL_CALL OResultSetMetaData::isReadOnly(sal_Int32 column)
+sal_Bool SAL_CALL OResultSetMetaData::isReadOnly(sal_Int32)
 {
-    (void) column;
     return m_pConnection->isReadOnly(); // Readonly only available on db level
 }
 
-sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable(sal_Int32 column)
+sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable(sal_Int32)
 {
-    (void) column;
     return !m_pConnection->isReadOnly();
 }
 
-sal_Bool SAL_CALL OResultSetMetaData::isWritable( sal_Int32 column )
+sal_Bool SAL_CALL OResultSetMetaData::isWritable( sal_Int32 )
 {
-    (void) column;
     return !m_pConnection->isReadOnly();
 }
 

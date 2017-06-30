@@ -104,16 +104,12 @@ Any SAL_CALL SdUnoSlideView::getSelection()
 }
 
 void SAL_CALL SdUnoSlideView::addSelectionChangeListener (
-    const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
-{
-    (void)rxListener;
-}
+    const css::uno::Reference<css::view::XSelectionChangeListener>&)
+{}
 
 void SAL_CALL SdUnoSlideView::removeSelectionChangeListener (
-    const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
-{
-    (void)rxListener;
-}
+    const css::uno::Reference<css::view::XSelectionChangeListener>&)
+{}
 
 //----- XDrawView -------------------------------------------------------------
 
@@ -142,10 +138,8 @@ css::uno::Reference<css::drawing::XDrawPage > SAL_CALL
 
 void SdUnoSlideView::setFastPropertyValue (
     sal_Int32 nHandle,
-        const Any& rValue)
+        const Any&)
 {
-    (void)rValue;
-
     throw beans::UnknownPropertyException( OUString::number(nHandle), static_cast<cppu::OWeakObject*>(this));
 }
 

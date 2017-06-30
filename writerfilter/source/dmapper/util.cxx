@@ -31,7 +31,6 @@ std::string XTextRangeToString(uno::Reference< text::XTextRange > const & textRa
 {
     std::string result;
 
-    (void) textRange;
 #ifdef DEBUG_WRITERFILTER
     if (textRange.get())
     {
@@ -44,6 +43,8 @@ std::string XTextRangeToString(uno::Reference< text::XTextRange > const & textRa
     {
         result="(nil)";
     }
+#else
+    (void) textRange;
 #endif
 
     return result;

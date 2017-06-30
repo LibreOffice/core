@@ -596,14 +596,6 @@ namespace xmloff
                     aPropertyStates.push_back( aNumberStyleState );
                 }
 
-#if OSL_DEBUG_LEVEL > 0
-                ::std::vector< XMLPropertyState >::const_iterator aHaveALook = aPropertyStates.begin();
-                for ( ; aHaveALook != aPropertyStates.end(); ++aHaveALook )
-                {
-                    (void)aHaveALook;
-                }
-#endif
-
                 // determine the column style
 
                 if ( !aPropertyStates.empty() )

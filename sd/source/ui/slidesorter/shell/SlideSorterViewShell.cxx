@@ -93,11 +93,8 @@ std::shared_ptr<SlideSorterViewShell> SlideSorterViewShell::Create (
     SfxViewFrame* pFrame,
     ViewShellBase& rViewShellBase,
     vcl::Window* pParentWindow,
-    FrameView* pFrameViewArgument,
-    const bool bIsCenterPane)
+    FrameView* pFrameViewArgument)
 {
-    (void)bIsCenterPane;
-
     std::shared_ptr<SlideSorterViewShell> pViewShell;
     try
     {

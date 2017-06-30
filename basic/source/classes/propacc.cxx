@@ -112,35 +112,27 @@ Any SbPropertyValues::getPropertyValue(
 
 
 void SbPropertyValues::addPropertyChangeListener(
-                    const OUString& aPropertyName,
+                    const OUString&,
                     const Reference< XPropertyChangeListener >& )
-{
-    (void)aPropertyName;
-}
+{}
 
 
 void SbPropertyValues::removePropertyChangeListener(
-                    const OUString& aPropertyName,
+                    const OUString&,
                     const Reference< XPropertyChangeListener >& )
-{
-    (void)aPropertyName;
-}
+{}
 
 
 void SbPropertyValues::addVetoableChangeListener(
-                    const OUString& aPropertyName,
+                    const OUString&,
                     const Reference< XVetoableChangeListener >& )
-{
-    (void)aPropertyName;
-}
+{}
 
 
 void SbPropertyValues::removeVetoableChangeListener(
-                    const OUString& aPropertyName,
+                    const OUString&,
                     const Reference< XVetoableChangeListener >& )
-{
-    (void)aPropertyName;
-}
+{}
 
 
 Sequence< PropertyValue > SbPropertyValues::getPropertyValues()
@@ -162,11 +154,8 @@ void SbPropertyValues::setPropertyValues(const Sequence< PropertyValue >& rPrope
 }
 
 
-void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
+void RTL_Impl_CreatePropertySet( SbxArray& rPar )
 {
-    (void)pBasic;
-    (void)bWrite;
-
     // We need at least one parameter
     // TODO: In this case < 2 is not correct ;-)
     if ( rPar.Count() < 2 )

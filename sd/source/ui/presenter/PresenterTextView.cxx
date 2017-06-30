@@ -97,11 +97,10 @@ private:
 };
 
 // PresenterTextView
-PresenterTextView::PresenterTextView (const Reference<XComponentContext>& rxContext)
+PresenterTextView::PresenterTextView ()
     : PresenterTextViewInterfaceBase(),
       mpImplementation(new Implementation())
 {
-    (void)rxContext;
 }
 
 PresenterTextView::~PresenterTextView()
@@ -509,10 +508,10 @@ void PresenterTextView::Implementation::CheckTop()
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
-com_sun_star_comp_Draw_PresenterTextView_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Draw_PresenterTextView_get_implementation(css::uno::XComponentContext*,
                                                             css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new sd::presenter::PresenterTextView(context));
+    return cppu::acquire(new sd::presenter::PresenterTextView);
 }
 
 

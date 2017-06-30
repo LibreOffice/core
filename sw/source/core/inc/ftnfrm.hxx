@@ -64,11 +64,6 @@ class SwFootnoteFrame: public SwLayoutFrame
     bool bBackMoveLocked : 1;
     // #i49383# - control unlock of position of lower anchored objects.
     bool mbUnlockPosOfLowerObjs : 1;
-#ifdef DBG_UTIL
-protected:
-    virtual SwTwips ShrinkFrame( SwTwips, bool bTst = false, bool bInfo = false ) override;
-    virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
-#endif
 
 public:
     SwFootnoteFrame( SwFrameFormat*, SwFrame*, SwContentFrame*, SwTextFootnote* );

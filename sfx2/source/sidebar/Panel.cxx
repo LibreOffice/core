@@ -152,9 +152,8 @@ void Panel::Resize()
     }
 }
 
-void Panel::DataChanged (const DataChangedEvent& rEvent)
+void Panel::DataChanged (const DataChangedEvent&)
 {
-    (void)rEvent;
     Invalidate();
 }
 

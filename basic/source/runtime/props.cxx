@@ -40,7 +40,6 @@ RTLFUNC(Erl)
 RTLFUNC(Err)
 {
     (void)pBasic;
-    (void)bWrite;
 
     if( SbiRuntime::isVBAEnabled() )
     {

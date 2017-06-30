@@ -16,18 +16,14 @@ using namespace ::connectivity::sdbcx;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdbc;
 
-User::User(const uno::Reference< XConnection >& rConnection):
+User::User():
     OUser(true) // Case Sensitive
-{
-    (void) rConnection;
-}
+{}
 
-User::User(const uno::Reference< XConnection >& rConnection, const OUString& rName):
+User::User(const OUString& rName):
     OUser(rName,
           true) // Case Sensitive
-{
-    (void) rConnection;
-}
+{}
 
 //----- IRefreshableGroups ----------------------------------------------------
 void User::refreshGroups()

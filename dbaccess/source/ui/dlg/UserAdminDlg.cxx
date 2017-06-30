@@ -168,10 +168,7 @@ namespace dbaui
     {
         SetText(_sTitle);
     }
-    void OUserAdminDlg::enableConfirmSettings( bool _bEnable )
-    {
-        (void)_bEnable;
-    }
+    void OUserAdminDlg::enableConfirmSettings( bool ) {}
     void OUserAdminDlg::saveDatasource()
     {
         PrepareLeaveCurrentPage();

@@ -169,9 +169,8 @@ void IndexColumns::appendByDescriptor(
 
 }
 
-void IndexColumns::dropByName( const OUString& elementName )
+void IndexColumns::dropByName( const OUString& )
 {
-    (void) elementName;
     throw css::sdbc::SQLException(
         "SDBC-POSTGRESQL: IndexesColumns.dropByName not yet implemented",
         *this, OUString(), 1, Any() );
@@ -192,9 +191,8 @@ void IndexColumns::dropByName( const OUString& elementName )
 //     dropByIndex( ii->second );
 }
 
-void IndexColumns::dropByIndex( sal_Int32 index )
+void IndexColumns::dropByIndex( sal_Int32 )
 {
-    (void) index;
     throw css::sdbc::SQLException(
         "SDBC-POSTGRESQL: IndexesColumns.dropByIndex not yet implemented",
         *this, OUString(), 1, Any() );

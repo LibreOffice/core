@@ -137,31 +137,23 @@ sal_Bool SAL_CALL PresenterSlidePreview::isAnchorOnly()
 
 //----- XWindowListener -------------------------------------------------------
 
-void SAL_CALL PresenterSlidePreview::windowResized (const awt::WindowEvent& rEvent)
+void SAL_CALL PresenterSlidePreview::windowResized (const awt::WindowEvent&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
     Resize();
 }
 
-void SAL_CALL PresenterSlidePreview::windowMoved (const awt::WindowEvent& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterSlidePreview::windowMoved (const awt::WindowEvent&) {}
 
-void SAL_CALL PresenterSlidePreview::windowShown (const lang::EventObject& rEvent)
+void SAL_CALL PresenterSlidePreview::windowShown (const lang::EventObject&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
     Resize();
 }
 
-void SAL_CALL PresenterSlidePreview::windowHidden (const lang::EventObject& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterSlidePreview::windowHidden (const lang::EventObject&) {}
 
 //----- XPaintListener --------------------------------------------------------
 
@@ -233,7 +225,6 @@ void PresenterSlidePreview::SetSlide (const Reference<drawing::XDrawPage>& rxPag
 
 void PresenterSlidePreview::Paint (const awt::Rectangle& rBoundingBox)
 {
-    (void)rBoundingBox;
     if ( ! mxWindow.is())
         return;
     if ( ! mxCanvas.is())

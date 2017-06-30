@@ -191,7 +191,7 @@ public:
     /// methods inherited from SaveInData
     SvxEntries*         GetEntries() override;
     void                SetEntries( SvxEntries* ) override;
-    bool                HasURL( const OUString& URL ) override { (void)URL; return false; }
+    bool                HasURL( const OUString& ) override { return false; }
     bool                HasSettings() override { return m_xMenuSettings.is(); }
     void                Reset() override;
     bool                Apply() override;

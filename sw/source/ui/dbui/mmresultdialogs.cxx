@@ -1141,7 +1141,6 @@ IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
 
         sal_Int32 nTarget = xConfigItem->MoveResultSet(rInfo.nDBRow);
         OSL_ENSURE( nTarget == rInfo.nDBRow, "row of current document could not be selected");
-        (void)nTarget;
         OSL_ENSURE( !sEMailColumn.isEmpty(), "No email column selected");
         OUString sEMail = lcl_GetColumnValueOf(sEMailColumn, xColAccess);
         SwMailDescriptor aDesc;

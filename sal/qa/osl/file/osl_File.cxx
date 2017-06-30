@@ -3143,8 +3143,7 @@ namespace osl_File
         {
             createTestFile(aTmpName6);
             File tmpFile(aTmpName6);
-            osl::FileBase::RC err = tmpFile.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Read);
-            (void)err;
+            tmpFile.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Read);
             tmpFile.setSize(200);
             tmpFile.close();
             // copy to new path

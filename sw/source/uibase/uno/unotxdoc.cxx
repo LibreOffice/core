@@ -2351,7 +2351,6 @@ SwDoc * SwXTextDocument::GetRenderDoc(
             if (!rpView)
             {
                 bool bIsSwSrcView = false;
-                (void) bIsPDFExport;
                 // aside from maybe PDF export the view should always have been provided!
                 OSL_ENSURE( bIsPDFExport, "view is missing, guessing one..." );
 

@@ -2063,10 +2063,8 @@ void ODocumentDefinition::updateDocumentTitle()
         xTitle->setTitle(sName);
 }
 
-void SAL_CALL ODocumentDefinition::queryClosing( const lang::EventObject& Source, sal_Bool GetsOwnership )
+void SAL_CALL ODocumentDefinition::queryClosing( const lang::EventObject&, sal_Bool )
 {
-    (void) Source;
-    (void) GetsOwnership;
     try
     {
         if ( !close() )

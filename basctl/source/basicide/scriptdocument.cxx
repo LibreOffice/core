@@ -1032,7 +1032,6 @@ namespace basctl
         :m_pImpl( new Impl( Reference< XModel >() ) )
     {
         OSL_ENSURE( _eType == NoDocument, "ScriptDocument::ScriptDocument: unknown SpecialDocument type!" );
-        (void)_eType;
     }
 
 

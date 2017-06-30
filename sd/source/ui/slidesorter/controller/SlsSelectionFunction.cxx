@@ -165,8 +165,7 @@ public:
     void SwitchView (const model::SharedPageDescriptor& rpDescriptor);
 
     void StartDrag (
-        const Point& rMousePosition,
-        const InsertionIndicatorHandler::Mode eMode);
+        const Point& rMousePosition);
 
     bool IsMouseOverIndicatorAllowed() const { return mbIsMouseOverIndicatorAllowed;}
 
@@ -990,10 +989,8 @@ void SelectionFunction::ModeHandler::SwitchView (const model::SharedPageDescript
 }
 
 void SelectionFunction::ModeHandler::StartDrag (
-    const Point& rMousePosition,
-    const InsertionIndicatorHandler::Mode eMode)
+    const Point& rMousePosition)
 {
-    (void)eMode;
     // Do not start a drag-and-drop operation when one is already active.
     // (when dragging pages from one document into another, pressing a
     // modifier key can trigger a MouseMotion event in the originating
@@ -1168,11 +1165,7 @@ bool NormalModeHandler::ProcessMotionEvent (
                         std::abs(maButtonDownLocation->Y() - rDescriptor.maMousePosition.Y()))
                     : 0);
                 if (nDistance > 3)
-                    StartDrag(
-                        rDescriptor.maMousePosition,
-                        (rDescriptor.mnEventCode & CONTROL_MODIFIER) != 0
-                            ? InsertionIndicatorHandler::CopyMode
-                            : InsertionIndicatorHandler::MoveMode);
+                    StartDrag(rDescriptor.maMousePosition);
             }
             break;
         }

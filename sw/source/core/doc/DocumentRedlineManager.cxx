@@ -1704,10 +1704,8 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
     return ( nullptr != pNewRedl ) || bMerged;
 }
 
-bool DocumentRedlineManager::AppendTableRowRedline( SwTableRowRedline* pNewRedl, bool bCallDelete )
+bool DocumentRedlineManager::AppendTableRowRedline( SwTableRowRedline* pNewRedl, bool )
 {
-    (void)bCallDelete;
-
     // #TODO - equivalent for 'SwTableRowRedline'
     /*
     CHECK_REDLINE( this )
@@ -1748,10 +1746,8 @@ bool DocumentRedlineManager::AppendTableRowRedline( SwTableRowRedline* pNewRedl,
     return nullptr != pNewRedl;
 }
 
-bool DocumentRedlineManager::AppendTableCellRedline( SwTableCellRedline* pNewRedl, bool bCallDelete )
+bool DocumentRedlineManager::AppendTableCellRedline( SwTableCellRedline* pNewRedl, bool )
 {
-    (void)bCallDelete;
-
     // #TODO - equivalent for 'SwTableCellRedline'
     /*
     CHECK_REDLINE( this )

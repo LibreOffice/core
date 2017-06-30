@@ -381,7 +381,6 @@ StackMode DiagramHelper::getStackModeFromChartType(
             // property is not MAYBEVOID
             bool bSuccess = ( xProp->getPropertyValue( "StackingDirection" ) >>= eCurrentDirection );
             OSL_ASSERT( bSuccess );
-            (void)(bSuccess);  // avoid warning in non-debug builds
             if( ! bDirectionInitialized )
             {
                 eCommonDirection = eCurrentDirection;

@@ -165,10 +165,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
         uno::Reference< document::XDocumentPropertiesSupplier > xPropSupplier( xModel, uno::UNO_QUERY_THROW);
         xImporter->importProperties( xDocumentStorage, xPropSupplier->getDocumentProperties() );
     }
-    catch( const uno::Exception& rEx )
-    {
-        (void)rEx;
-    }
+    catch( const uno::Exception& ) {}
 }
 
 DomainMapper::~DomainMapper()
@@ -219,10 +216,7 @@ DomainMapper::~DomainMapper()
             xDocProps->setPropertyValue("InteropGrabBag", uno::Any(aGrabBag.getAsConstPropertyValueList()));
         }
     }
-    catch( const uno::Exception& rEx )
-    {
-        (void)rEx;
-    }
+    catch( const uno::Exception& ) {}
 
 #ifdef DEBUG_WRITERFILTER
         TagLogger::getInstance().endDocument();
