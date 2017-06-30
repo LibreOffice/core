@@ -237,7 +237,6 @@ struct CffLocal
     int     mnPrivDictSize;
     int     mnLocalSubrOffs;
     int     mnLocalSubrBase;
-    int     mnLocalSubrCount;
     int     mnLocalSubrBias;
 
     ValType maNominalWidth;
@@ -1285,7 +1284,6 @@ CffLocal::CffLocal()
 ,   mnPrivDictSize( 0)
 ,   mnLocalSubrOffs( 0)
 ,   mnLocalSubrBase( 0)
-,   mnLocalSubrCount( 0)
 ,   mnLocalSubrBias( 0)
 ,   maNominalWidth( 0)
 ,   maDefaultWidth( 0)
@@ -1412,7 +1410,6 @@ bool CffSubsetterContext::initialCffRead()
             mpCffLocal->mnLocalSubrBase = mpCffLocal->mnPrivDictBase + mpCffLocal->mnLocalSubrOffs;
             mpReadPtr = mpBasePtr + mpCffLocal->mnLocalSubrBase;
             const int nSubrCount = (mpReadPtr[0] << 8) + mpReadPtr[1];
-            mpCffLocal->mnLocalSubrCount = nSubrCount;
             mpCffLocal->mnLocalSubrBias = (nSubrCount<1240)?107:(nSubrCount<33900)?1131:32768;
 //          seekIndexEnd( mpCffLocal->mnLocalSubrBase);
         }

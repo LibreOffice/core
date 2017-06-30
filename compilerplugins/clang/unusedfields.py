@@ -128,6 +128,9 @@ for d in definitionSet:
     # ignore reference fields, because writing to them actually writes to another field somewhere else
     if fieldType.endswith("&"):
         continue
+    # ignore the import/export data model stuff
+    if srcLoc.startswith("sc/source/filter/inc/") and "Model" in fieldType:
+        continue
 
     writeonlySet.add((clazz + " " + definitionToTypeMap[d], srcLoc))
 

@@ -258,6 +258,11 @@ void UnusedFields::checkWriteOnly(const FieldDecl* fieldDecl, const Expr* member
     // walk up the tree until we find something interesting
     bool bPotentiallyReadFrom = false;
     bool bDump = false;
+    auto walkupUp = [&]() {
+       child = parent;
+       auto parentsRange = compiler.getASTContext().getParents(*parent);
+       parent = parentsRange.begin() == parentsRange.end() ? nullptr : parentsRange.begin()->get<Stmt>();
+    };
     do
     {
         if (!parent)
@@ -280,9 +285,7 @@ void UnusedFields::checkWriteOnly(const FieldDecl* fieldDecl, const Expr* member
 #endif
              || isa<ExprWithCleanups>(parent))
         {
-            child = parent;
-            auto parentsRange = compiler.getASTContext().getParents(*parent);
-            parent = parentsRange.begin() == parentsRange.end() ? nullptr : parentsRange.begin()->get<Stmt>();
+            walkupUp();
         }
         else if (auto unaryOperator = dyn_cast<UnaryOperator>(parent))
         {
@@ -300,9 +303,7 @@ void UnusedFields::checkWriteOnly(const FieldDecl* fieldDecl, const Expr* member
                 bPotentiallyReadFrom = true;
                 break;
             }
-            child = parent;
-            auto parentsRange = compiler.getASTContext().getParents(*parent);
-            parent = parentsRange.begin() == parentsRange.end() ? nullptr : parentsRange.begin()->get<Stmt>();
+            walkupUp();
         }
         else if (auto caseStmt = dyn_cast<CaseStmt>(parent))
         {
@@ -318,6 +319,15 @@ void UnusedFields::checkWriteOnly(const FieldDecl* fieldDecl, const Expr* member
         {
             bPotentiallyReadFrom = doStmt->getCond() == child;
             break;
+        }
+        else if (auto arraySubscriptExpr = dyn_cast<ArraySubscriptExpr>(parent))
+        {
+            if (arraySubscriptExpr->getIdx() == child)
+            {
+                bPotentiallyReadFrom = true;
+                break;
+            }
+            walkupUp();
         }
         else if (auto callExpr = dyn_cast<CallExpr>(parent))
         {
@@ -378,7 +388,6 @@ void UnusedFields::checkWriteOnly(const FieldDecl* fieldDecl, const Expr* member
                  || isa<LabelStmt>(parent)
                  || isa<CXXForRangeStmt>(parent)
                  || isa<CXXTypeidExpr>(parent)
-                 || isa<ArraySubscriptExpr>(parent)
                  || isa<DefaultStmt>(parent))
         {
             break;

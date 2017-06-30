@@ -166,8 +166,6 @@ private:
     // resolutions
     const PPDValue*                             m_pDefaultResolution;
     const PPDKey*                               m_pResolutions;
-    // duplex commands
-    const PPDKey*                               m_pDuplexTypes;
 
     // fonts
     const PPDKey*                               m_pFontList;

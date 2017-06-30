@@ -41,8 +41,7 @@ namespace x11 {
         css::uno::Reference< css::datatransfer::XTransferable > m_aContents;
         css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner > m_aOwner;
 
-        SelectionManager&                                       m_rSelectionManager;
-        css::uno::Reference< css::lang::XInitialization >   m_xSelectionManager;
+        rtl::Reference<SelectionManager>                        m_xSelectionManager;
         ::std::list< css::uno::Reference< css::datatransfer::clipboard::XClipboardListener > > m_aListeners;
         Atom                                                    m_aSelection;
 

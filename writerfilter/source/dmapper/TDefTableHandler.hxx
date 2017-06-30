@@ -55,7 +55,6 @@ private:
     sal_Int32                                           m_nLineWidth;
     sal_Int32                                           m_nLineType;
     sal_Int32                                           m_nLineColor;
-    sal_Int32                                           m_nLineDistance;
 
     OUString m_aInteropGrabBagName;
     std::vector<css::beans::PropertyValue> m_aInteropGrabBag;

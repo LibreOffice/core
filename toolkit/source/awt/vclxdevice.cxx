@@ -43,7 +43,6 @@
 //  class VCLXDevice
 
 VCLXDevice::VCLXDevice()
-    : nFlags(0)
 {
 }
 
@@ -52,14 +51,6 @@ VCLXDevice::~VCLXDevice()
     //TODO: why was this empty, and everything done in ~VCLXVirtualDevice?
     SolarMutexGuard g;
     mpOutputDevice.reset();
-}
-
-void VCLXDevice::SetCreatedWithToolkit( bool bCreatedWithToolkit )
-{
-    if ( bCreatedWithToolkit )
-        nFlags |= FLAGS_CREATEDWITHTOOLKIT;
-    else
-        nFlags &= ~FLAGS_CREATEDWITHTOOLKIT;
 }
 
 // css::uno::XInterface
