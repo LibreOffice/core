@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/rpath.patch.0 \
 	external/liborcus/visibility.patch.0 \
 	external/liborcus/iOS.patch \
+	external/liborcus/nullptr-in-ostringstream.patch.1 \
 ))
 
 ifeq ($(OS),WNT)
