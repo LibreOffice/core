@@ -33,7 +33,7 @@
 #include <osl/diagnose.h>
 #include <formula/errorcodes.hxx>
 
-void ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* pDoc,
+void ScFormatFilterPlugin::ScExportDif( SvStream& rStream, ScDocument* pDoc,
     const ScAddress& rOutPos, const rtl_TextEncoding eNach )
 {
     SCCOL       nEndCol;
@@ -47,7 +47,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* pDoc,
     ScExportDif( rStream, pDoc, ScRange( aStart, aEnd ), eNach );
 }
 
-void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
+void ScFormatFilterPlugin::ScExportDif( SvStream& rOut, ScDocument* pDoc,
     const ScRange&rRange, const rtl_TextEncoding eCharSet )
 {
     OSL_ENSURE( rRange.aStart <= rRange.aEnd, "*ScExportDif(): Range not sorted!" );
