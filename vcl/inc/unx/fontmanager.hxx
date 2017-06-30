@@ -130,8 +130,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         FontWeight        m_eWeight;
         FontPitch         m_ePitch;
         rtl_TextEncoding  m_aEncoding;
-        CharacterMetric   m_aGlobalMetricX;
-        CharacterMetric   m_aGlobalMetricY;
         int               m_nAscend;
         int               m_nDescend;
         int               m_nLeading;

@@ -104,12 +104,6 @@ private:
     bool m_bCaseSense  : 1;
     bool m_bWildMatchSel : 1;       // wildcard pattern must match entire selection
 
-    // values for the "weight Levenshtein-Distance"
-    bool bLEV_Relaxed : 1;
-    int nLEV_OtherX;
-    int nLEV_ShorterY;
-    int nLEV_LongerZ;
-
     // asian flags - used for the transliteration
     TransliterationFlags nTransliterationFlags;
 

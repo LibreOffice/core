@@ -46,7 +46,6 @@ DomainMapperTableManager::DomainMapperTableManager() :
     m_nGridSpan(1),
     m_nGridBefore(0),
     m_nGridAfter(0),
-    m_nCellBorderIndex(0),
     m_nHeaderRepeat(0),
     m_nTableWidth(0),
     m_bIsInShape(false),
@@ -739,7 +738,6 @@ void DomainMapperTableManager::endOfRowAction()
 
     ++m_nRow;
     m_nCell.back( ) = 0;
-    m_nCellBorderIndex = 0;
     getCurrentGrid()->clear();
     pCurrentSpans->clear();
     pCellWidths->clear();
@@ -756,7 +754,7 @@ void DomainMapperTableManager::endOfRowAction()
 
 void DomainMapperTableManager::clearData()
 {
-    m_nRow = m_nCellBorderIndex = m_nHeaderRepeat = m_nTableWidth = m_nLayoutType = 0;
+    m_nRow = m_nHeaderRepeat = m_nTableWidth = m_nLayoutType = 0;
     m_sTableStyleName.clear();
     m_pTableStyleTextProperies.reset();
 }

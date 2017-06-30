@@ -31,8 +31,7 @@ DropTargetDropContext::DropTargetDropContext(
     ::Window aDropWindow,
     SelectionManager& rManager ) :
         m_aDropWindow( aDropWindow ),
-        m_rManager( rManager ),
-        m_xManagerRef( static_cast< OWeakObject* >(&rManager) )
+        m_xManager( &rManager )
 {
 }
 
@@ -42,17 +41,17 @@ DropTargetDropContext::~DropTargetDropContext()
 
 void DropTargetDropContext::acceptDrop( sal_Int8 dragOperation )
 {
-    m_rManager.accept( dragOperation, m_aDropWindow );
+    m_xManager->accept( dragOperation, m_aDropWindow );
 }
 
 void DropTargetDropContext::rejectDrop()
 {
-    m_rManager.reject( m_aDropWindow );
+    m_xManager->reject( m_aDropWindow );
 }
 
 void DropTargetDropContext::dropComplete( sal_Bool success )
 {
-    m_rManager.dropComplete( success, m_aDropWindow );
+    m_xManager->dropComplete( success, m_aDropWindow );
 }
 
 /*
@@ -63,8 +62,7 @@ DropTargetDragContext::DropTargetDragContext(
     ::Window aDropWindow,
     SelectionManager& rManager ) :
         m_aDropWindow( aDropWindow ),
-        m_rManager( rManager ),
-        m_xManagerRef( static_cast< OWeakObject* >(&rManager) )
+        m_xManager( &rManager )
 {
 }
 
@@ -74,12 +72,12 @@ DropTargetDragContext::~DropTargetDragContext()
 
 void DropTargetDragContext::acceptDrag( sal_Int8 dragOperation )
 {
-    m_rManager.accept( dragOperation, m_aDropWindow );
+    m_xManager->accept( dragOperation, m_aDropWindow );
 }
 
 void DropTargetDragContext::rejectDrag()
 {
-    m_rManager.reject( m_aDropWindow );
+    m_xManager->reject( m_aDropWindow );
 }
 
 /*
@@ -90,8 +88,7 @@ DragSourceContext::DragSourceContext(
     ::Window aDropWindow,
     SelectionManager& rManager ) :
         m_aDropWindow( aDropWindow ),
-        m_rManager( rManager ),
-        m_xManagerRef( static_cast< OWeakObject* >(&rManager) )
+        m_xManager( &rManager )
 {
 }
 
@@ -101,12 +98,12 @@ DragSourceContext::~DragSourceContext()
 
 sal_Int32 DragSourceContext::getCurrentCursor()
 {
-    return m_rManager.getCurrentCursor();
+    return m_xManager->getCurrentCursor();
 }
 
 void DragSourceContext::setCursor( sal_Int32 cursorId )
 {
-    m_rManager.setCursor( cursorId, m_aDropWindow );
+    m_xManager->setCursor( cursorId, m_aDropWindow );
 }
 
 void DragSourceContext::setImage( sal_Int32 )
@@ -115,7 +112,7 @@ void DragSourceContext::setImage( sal_Int32 )
 
 void DragSourceContext::transferablesFlavorsChanged()
 {
-    m_rManager.transferablesFlavorsChanged();
+    m_xManager->transferablesFlavorsChanged();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,6 +24,7 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetDropContext.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -35,9 +36,8 @@ namespace x11 {
     class DropTargetDropContext :
         public ::cppu::WeakImplHelper<css::datatransfer::dnd::XDropTargetDropContext>
     {
-        ::Window                    m_aDropWindow;
-        SelectionManager&           m_rManager;
-        css::uno::Reference< XInterface >     m_xManagerRef;
+        ::Window                              m_aDropWindow;
+        rtl::Reference<SelectionManager>      m_xManager;
     public:
         DropTargetDropContext( ::Window, SelectionManager& );
         virtual ~DropTargetDropContext() override;
@@ -51,9 +51,8 @@ namespace x11 {
     class DropTargetDragContext :
         public ::cppu::WeakImplHelper<css::datatransfer::dnd::XDropTargetDragContext>
     {
-        ::Window                    m_aDropWindow;
-        SelectionManager&           m_rManager;
-        css::uno::Reference< XInterface >     m_xManagerRef;
+        ::Window                              m_aDropWindow;
+        rtl::Reference<SelectionManager>      m_xManager;
     public:
         DropTargetDragContext( ::Window, SelectionManager& );
         virtual ~DropTargetDragContext() override;
@@ -66,9 +65,8 @@ namespace x11 {
     class DragSourceContext :
         public ::cppu::WeakImplHelper<css::datatransfer::dnd::XDragSourceContext>
     {
-        ::Window                    m_aDropWindow;
-        SelectionManager&           m_rManager;
-        css::uno::Reference< XInterface >     m_xManagerRef;
+        ::Window                              m_aDropWindow;
+        rtl::Reference<SelectionManager>      m_xManager;
     public:
         DragSourceContext( ::Window, SelectionManager& );
         virtual ~DragSourceContext() override;

@@ -86,7 +86,6 @@ typedef struct {
     sal_uInt16 aw;                /*- Advance Width (horizontal writing mode)    */
     sal_Int16  lsb;               /*- Left sidebearing (horizontal writing mode) */
     sal_uInt16 ah;                /*- advance height (vertical writing mode)     */
-    sal_Int16  tsb;               /*- top sidebearing (vertical writing mode)    */
 } TTGlyphMetrics;
 
 #define HFORMAT_LINELEN 64
@@ -343,7 +342,7 @@ static void GetMetrics(TrueTypeFont *ttf, sal_uInt32 glyphID, TTGlyphMetrics *me
 {
     const sal_uInt8* table = getTable( ttf, O_hmtx );
 
-    metrics->aw = metrics->lsb = metrics->ah = metrics->tsb = 0;
+    metrics->aw = metrics->lsb = metrics->ah = 0;
     if (!table || !ttf->numberOfHMetrics) return;
 
     if (glyphID < ttf->numberOfHMetrics) {
@@ -360,10 +359,8 @@ static void GetMetrics(TrueTypeFont *ttf, sal_uInt32 glyphID, TTGlyphMetrics *me
 
     if (glyphID < ttf->numOfLongVerMetrics) {
         metrics->ah  = GetUInt16(table, 4 * glyphID);
-        metrics->tsb = GetInt16(table, 4 * glyphID + 2);
     } else {
         metrics->ah  = GetUInt16(table, 4 * (ttf->numOfLongVerMetrics - 1));
-        metrics->tsb = GetInt16(table + ttf->numOfLongVerMetrics * 4, (glyphID - ttf->numOfLongVerMetrics) * 2);
     }
 }
 

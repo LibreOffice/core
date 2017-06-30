@@ -1007,7 +1007,6 @@ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
 ,   sIsPhysical( "IsPhysical"  )
 ,   sNumberingRules( "NumberingRules"  )
 ,   sIsContinuousNumbering( "IsContinuousNumbering"  )
-,   nLevels( 0 )
 ,   bConsecutive( false )
 ,   bOutline( bOutl )
 {
@@ -1161,7 +1160,6 @@ void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
 
         Any aAny = xPropSet->getPropertyValue( sNumberingRules );
         aAny >>= xNumRules;
-        nLevels = xNumRules->getCount();
         if( bOverwrite || bNew )
         {
             FillUnoNumRule(xNumRules);
@@ -1190,7 +1188,6 @@ void SvxXMLListStyleContext::CreateAndInsertAuto() const
 
     const_cast<SvxXMLListStyleContext *>(this)->xNumRules = CreateNumRule(
         GetImport().GetModel() );
-    const_cast<SvxXMLListStyleContext *>(this)->nLevels = xNumRules->getCount();
 
     FillUnoNumRule(xNumRules);
 }

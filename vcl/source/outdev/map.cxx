@@ -145,8 +145,6 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
 static void ImplCalcMapResolution( const MapMode& rMapMode,
                                    long nDPIX, long nDPIY, ImplMapRes& rMapRes )
 {
-    rMapRes.mfScaleX = 1.0;
-    rMapRes.mfScaleY = 1.0;
     switch ( rMapMode.GetMapUnit() )
     {
         case MapUnit::MapRelative:
@@ -251,20 +249,12 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
     {
         rMapRes.mnMapOfsX = aOrigin.X();
         rMapRes.mnMapOfsY = aOrigin.Y();
-        rMapRes.mfOffsetX = aOrigin.X();
-        rMapRes.mfOffsetY = aOrigin.Y();
     }
     else
     {
         auto nXNumerator = aScaleX.GetNumerator();
         auto nYNumerator = aScaleY.GetNumerator();
         assert(nXNumerator != 0 && nYNumerator != 0);
-        rMapRes.mfOffsetX *= aScaleX.GetDenominator();
-        rMapRes.mfOffsetX /= nXNumerator;
-        rMapRes.mfOffsetX += aOrigin.X();
-        rMapRes.mfOffsetY *= aScaleY.GetDenominator();
-        rMapRes.mfOffsetY /= nYNumerator;
-        rMapRes.mfOffsetY += aOrigin.Y();
 
         BigInt aX( rMapRes.mnMapOfsX );
         aX *= BigInt( aScaleX.GetDenominator() );
@@ -303,11 +293,6 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
         aY /= BigInt(nYNumerator);
         rMapRes.mnMapOfsY = (long)aY + aOrigin.Y();
     }
-
-    rMapRes.mfScaleX *= (double)rMapRes.mnMapScNumX * (double)aScaleX.GetNumerator() /
-        ((double)rMapRes.mnMapScDenomX * (double)aScaleX.GetDenominator());
-    rMapRes.mfScaleY *= (double)rMapRes.mnMapScNumY * (double)aScaleY.GetNumerator() /
-        ((double)rMapRes.mnMapScDenomY * (double)aScaleY.GetDenominator());
 
     // calculate scaling factor according to MapMode
     // aTemp? = rMapRes.mnMapSc? * aScale?
@@ -729,8 +714,6 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
             Point aOrigin = rNewMapMode.GetOrigin();
             maMapRes.mnMapOfsX = aOrigin.X();
             maMapRes.mnMapOfsY = aOrigin.Y();
-            maMapRes.mfOffsetX = aOrigin.X();
-            maMapRes.mfOffsetY = aOrigin.Y();
             maMapMode = rNewMapMode;
 
             // #i75163#
@@ -746,10 +729,6 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
             maMapRes.mnMapScDenomY  = mnDPIY;
             maMapRes.mnMapOfsX      = 0;
             maMapRes.mnMapOfsY      = 0;
-            maMapRes.mfOffsetX = 0.0;
-            maMapRes.mfOffsetY = 0.0;
-            maMapRes.mfScaleX = (double)1/(double)mnDPIX;
-            maMapRes.mfScaleY = (double)1/(double)mnDPIY;
         }
 
         // calculate new MapMode-resolution
@@ -1474,10 +1453,6 @@ basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygo
     aMapResSource.mnMapScNumY        = 1;                               \
     aMapResSource.mnMapScDenomX      = 1;                               \
     aMapResSource.mnMapScDenomY      = 1;                               \
-    aMapResSource.mfOffsetX          = 0.0;                             \
-    aMapResSource.mfOffsetY          = 0.0;                             \
-    aMapResSource.mfScaleX           = 1.0;                             \
-    aMapResSource.mfScaleY           = 1.0;                             \
     ImplMapRes aMapResDest(aMapResSource);                              \
                                                                         \
     if ( !mbMap || pMapModeSource != &maMapMode )                       \
@@ -1542,10 +1517,6 @@ static void verifyUnitSourceDest( MapUnit eUnitSource, MapUnit eUnitDest )
     aMapResSource.mnMapScNumY        = 1;                               \
     aMapResSource.mnMapScDenomX      = 1;                               \
     aMapResSource.mnMapScDenomY      = 1;                               \
-    aMapResSource.mfOffsetX          = 0.0;                             \
-    aMapResSource.mfOffsetY          = 0.0;                             \
-    aMapResSource.mfScaleX           = 1.0;                             \
-    aMapResSource.mfScaleY           = 1.0;                             \
     ImplMapRes aMapResDest(aMapResSource);                              \
                                                                         \
     ImplCalcMapResolution( rMapModeSource, 72, 72, aMapResSource );     \

@@ -221,7 +221,6 @@ private:
     typedef ::std::list< ImplBmpObj* > BmpList_impl;
 
     BmpList_impl    maBmpList;
-    sal_uIntPtr     mnTotalSize;
 
 public:
 
