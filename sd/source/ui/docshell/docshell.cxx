@@ -18,6 +18,11 @@
  */
 
 #include "DrawDocShell.hxx"
+
+#include <officecfg/Office/Common.hxx>
+
+#include <unotools/configmgr.hxx>
+
 #include <vcl/svapp.hxx>
 
 #include <sfx2/docfac.hxx>
@@ -108,6 +113,11 @@ void DrawDocShell::Construct( bool bClipboard )
     SetBaseModel( new SdXImpressDocument( this, bClipboard ) );
     SetPool( &mpDoc->GetItemPool() );
     mpUndoManager = new sd::UndoManager;
+    if (!utl::ConfigManager::IsAvoidConfig()
+        && officecfg::Office::Common::Undo::Steps::get() < 1)
+    {
+        mpUndoManager->EnableUndo(false); // tdf#108863 disable if 0 steps
+    }
     mpDoc->SetSdrUndoManager( mpUndoManager );
     mpDoc->SetSdrUndoFactory( new sd::UndoFactory );
     UpdateTablePointers();
