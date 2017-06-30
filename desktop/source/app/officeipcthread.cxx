@@ -755,11 +755,11 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
     }
 
     enum class Kind { Pipe, Dbus };
-    Kind kind = Kind::Pipe;
+    Kind kind;
 #if ENABLE_DBUS
-    if (std::getenv("LIBO_FLATPAK") != nullptr) {
-        kind = Kind::Dbus;
-    }
+    kind = std::getenv("LIBO_FLATPAK") != nullptr ? Kind::Dbus : Kind::Pipe;
+#else
+    kind = Kind::Pipe;
 #endif
     rtl::Reference<IpcThread> thread;
     Status stat = Status(); // silence bogus potentially-uninitialized warnings
