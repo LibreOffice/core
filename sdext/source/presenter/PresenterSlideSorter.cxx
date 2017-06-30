@@ -417,11 +417,6 @@ void SAL_CALL PresenterSlideSorter::disposing()
     }
 }
 
-void PresenterSlideSorter::SetActiveState (const bool bIsActive)
-{
-    (void)bIsActive;
-}
-
 //----- lang::XEventListener --------------------------------------------------
 
 void SAL_CALL PresenterSlideSorter::disposing (const lang::EventObject& rEventObject)

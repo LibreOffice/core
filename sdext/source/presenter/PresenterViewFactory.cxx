@@ -480,14 +480,6 @@ Reference<XView> PresenterViewFactory::CreateSlideSorterView(
                 rxViewId,
                 Reference<frame::XController>(mxControllerWeak),
                 mpPresenterController));
-        PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
-            mpPresenterController->GetPaneContainer()->FindPaneId(rxViewId->getAnchor()));
-        if (pDescriptor.get() != nullptr)
-        {
-            pDescriptor->maActivator = [] (bool const isActive) {
-                    return PresenterSlideSorter::SetActiveState(isActive);
-                };
-        }
         xView = pView.get();
     }
     catch (RuntimeException&)
