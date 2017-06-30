@@ -45,7 +45,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <svl/stritem.hxx>
-#include <svtools/miscopt.hxx>
 #include <svtools/svlbitm.hxx>
 #include "svtools/treelistentry.hxx"
 #include "svtools/viewdataentry.hxx"
@@ -63,9 +62,6 @@
 #include "eventdlg.hxx"
 #include <dialmgr.hxx>
 
-#include <comphelper/documentinfo.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/random.hxx>
 #include <unotools/configmgr.hxx>
 #include <o3tl/make_unique.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -74,7 +70,6 @@
 #include <com/sun/star/frame/XFrames.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
@@ -103,15 +98,6 @@
 #include "dlgname.hxx"
 
 #define ENTRY_HEIGHT 16
-
-static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
-static const char ITEM_DESCRIPTOR_CONTAINER[]   = "ItemDescriptorContainer";
-static const char ITEM_DESCRIPTOR_LABEL[]       = "Label";
-static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
-static const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
-static const char ITEM_DESCRIPTOR_ISVISIBLE[]   = "IsVisible";
-static const char ITEM_DESCRIPTOR_RESOURCEURL[] = "ResourceURL";
-static const char ITEM_DESCRIPTOR_UINAME[]      = "UIName";
 
 namespace uno = com::sun::star::uno;
 namespace frame = com::sun::star::frame;
@@ -184,306 +170,10 @@ void printEntries(SvxEntries* entries)
 
 #endif
 
-OUString
-stripHotKey( const OUString& str )
-{
-    sal_Int32 index = str.indexOf( '~' );
-    if ( index == -1 )
-    {
-        return str;
-    }
-    else
-    {
-        return str.replaceAt( index, 1, OUString() );
-    }
-}
-
-OUString
-replaceSixteen( const OUString& str, sal_Int32 nReplacement )
-{
-    OUString result( str );
-    OUString sixteen = OUString::number( 16 );
-    OUString expected = OUString::number( nReplacement );
-
-    sal_Int32 len = sixteen.getLength();
-    sal_Int32 index = result.indexOf( sixteen );
-
-    while ( index != -1 )
-    {
-        result = result.replaceAt( index, len, expected );
-        index = result.indexOf( sixteen, index );
-    }
-
-    return result;
-}
-
-OUString
-generateCustomMenuURL(
-    SvxEntries* entries,
-    sal_Int32 suffix = 1 )
-{
-    OUString url = "vnd.openoffice.org:CustomMenu" + OUString::number( suffix );
-    if (!entries)
-        return url;
-
-    // now check is there is an already existing entry with this url
-    SvxEntries::const_iterator iter = entries->begin();
-
-    while ( iter != entries->end() )
-    {
-        SvxConfigEntry* pEntry = *iter;
-
-        if ( url == pEntry->GetCommand() )
-        {
-            break;
-        }
-        ++iter;
-    }
-
-    if ( iter != entries->end() )
-    {
-        // url already exists so try the next number up
-        return generateCustomMenuURL( entries, ++suffix );
-    }
-
-    return url;
-}
-
-void RemoveEntry( SvxEntries* pEntries, SvxConfigEntry* pChildEntry )
-{
-    SvxEntries::iterator iter = pEntries->begin();
-
-    while ( iter != pEntries->end() )
-    {
-        if ( pChildEntry == *iter )
-        {
-            pEntries->erase( iter );
-            break;
-        }
-        ++iter;
-    }
-}
-
 bool
 SvxConfigPage::CanConfig( const OUString& aModuleId )
 {
     return !(aModuleId == "com.sun.star.script.BasicIDE" || aModuleId == "com.sun.star.frame.Bibliography");
-}
-
-OUString GetModuleName( const OUString& aModuleId )
-{
-    if ( aModuleId == "com.sun.star.text.TextDocument" ||
-         aModuleId == "com.sun.star.text.GlobalDocument" )
-        return OUString("Writer");
-    else if ( aModuleId == "com.sun.star.text.WebDocument" )
-        return OUString("Writer/Web");
-    else if ( aModuleId == "com.sun.star.drawing.DrawingDocument" )
-        return OUString("Draw");
-    else if ( aModuleId == "com.sun.star.presentation.PresentationDocument" )
-        return OUString("Impress");
-    else if ( aModuleId == "com.sun.star.sheet.SpreadsheetDocument" )
-        return OUString("Calc");
-    else if ( aModuleId == "com.sun.star.script.BasicIDE" )
-        return OUString("Basic");
-    else if ( aModuleId == "com.sun.star.formula.FormulaProperties" )
-        return OUString("Math");
-    else if ( aModuleId == "com.sun.star.sdb.RelationDesign" )
-        return OUString("Relation Design");
-    else if ( aModuleId == "com.sun.star.sdb.QueryDesign" )
-        return OUString("Query Design");
-    else if ( aModuleId == "com.sun.star.sdb.TableDesign" )
-        return OUString("Table Design");
-    else if ( aModuleId == "com.sun.star.sdb.DataSourceBrowser" )
-        return OUString("Data Source Browser" );
-    else if ( aModuleId == "com.sun.star.sdb.DatabaseDocument" )
-        return OUString("Database" );
-
-    return OUString();
-}
-
-OUString GetUIModuleName( const OUString& aModuleId, const uno::Reference< css::frame::XModuleManager2 >& rModuleManager )
-{
-    assert(rModuleManager.is());
-
-    OUString aModuleUIName;
-
-    try
-    {
-        uno::Any a = rModuleManager->getByName( aModuleId );
-        uno::Sequence< beans::PropertyValue > aSeq;
-
-        if ( a >>= aSeq )
-        {
-            for ( sal_Int32 i = 0; i < aSeq.getLength(); ++i )
-            {
-                if ( aSeq[i].Name == "ooSetupFactoryUIName" )
-                {
-                    aSeq[i].Value >>= aModuleUIName;
-                    break;
-                }
-            }
-        }
-    }
-    catch ( uno::RuntimeException& )
-    {
-        throw;
-    }
-    catch ( uno::Exception& )
-    {
-    }
-
-    if ( aModuleUIName.isEmpty() )
-        aModuleUIName = GetModuleName( aModuleId );
-
-    return aModuleUIName;
-}
-
-bool GetMenuItemData(
-    const uno::Reference< container::XIndexAccess >& rItemContainer,
-    sal_Int32 nIndex,
-    OUString& rCommandURL,
-    OUString& rLabel,
-    sal_uInt16& rType,
-    uno::Reference< container::XIndexAccess >& rSubMenu )
-{
-    try
-    {
-        uno::Sequence< beans::PropertyValue > aProp;
-        if ( rItemContainer->getByIndex( nIndex ) >>= aProp )
-        {
-            for ( sal_Int32 i = 0; i < aProp.getLength(); ++i )
-            {
-                if ( aProp[i].Name == ITEM_DESCRIPTOR_COMMANDURL )
-                {
-                    aProp[i].Value >>= rCommandURL;
-                }
-                else if ( aProp[i].Name == ITEM_DESCRIPTOR_CONTAINER )
-                {
-                    aProp[i].Value >>= rSubMenu;
-                }
-                else if ( aProp[i].Name == ITEM_DESCRIPTOR_LABEL )
-                {
-                    aProp[i].Value >>= rLabel;
-                }
-                else if ( aProp[i].Name == ITEM_DESCRIPTOR_TYPE )
-                {
-                    aProp[i].Value >>= rType;
-                }
-            }
-
-            return true;
-        }
-    }
-    catch ( css::lang::IndexOutOfBoundsException& )
-    {
-    }
-
-    return false;
-}
-
-bool GetToolbarItemData(
-    const uno::Reference< container::XIndexAccess >& rItemContainer,
-    sal_Int32 nIndex,
-    OUString& rCommandURL,
-    OUString& rLabel,
-    sal_uInt16& rType,
-    bool& rIsVisible,
-    sal_Int32& rStyle )
-{
-    try
-    {
-        uno::Sequence< beans::PropertyValue > aProp;
-        if ( rItemContainer->getByIndex( nIndex ) >>= aProp )
-        {
-            for ( sal_Int32 i = 0; i < aProp.getLength(); ++i )
-            {
-                if ( aProp[i].Name == ITEM_DESCRIPTOR_COMMANDURL )
-                {
-                    aProp[i].Value >>= rCommandURL;
-                }
-                else if ( aProp[i].Name == ITEM_DESCRIPTOR_STYLE )
-                {
-                    aProp[i].Value >>= rStyle;
-                }
-                else if ( aProp[i].Name == ITEM_DESCRIPTOR_LABEL )
-                {
-                    aProp[i].Value >>= rLabel;
-                }
-                else if ( aProp[i].Name == ITEM_DESCRIPTOR_TYPE )
-                {
-                    aProp[i].Value >>= rType;
-                }
-                else if ( aProp[i].Name == ITEM_DESCRIPTOR_ISVISIBLE )
-                {
-                    aProp[i].Value >>= rIsVisible;
-                }
-            }
-
-            return true;
-        }
-    }
-    catch ( css::lang::IndexOutOfBoundsException& )
-    {
-    }
-
-    return false;
-}
-
-uno::Sequence< beans::PropertyValue >
-ConvertSvxConfigEntry( const SvxConfigEntry* pEntry )
-{
-    uno::Sequence< beans::PropertyValue > aPropSeq( 3 );
-
-    aPropSeq[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
-    aPropSeq[0].Value <<= pEntry->GetCommand();
-
-    aPropSeq[1].Name = ITEM_DESCRIPTOR_TYPE;
-    aPropSeq[1].Value <<= css::ui::ItemType::DEFAULT;
-
-    // If the name has not been changed, then the label can be stored
-    // as an empty string.
-    // It will be initialised again later using the command to label map.
-    aPropSeq[2].Name = ITEM_DESCRIPTOR_LABEL;
-    if ( !pEntry->HasChangedName() && !pEntry->GetCommand().isEmpty() )
-    {
-        aPropSeq[2].Value <<= OUString();
-    }
-    else
-    {
-        aPropSeq[2].Value <<= pEntry->GetName();
-    }
-
-    return aPropSeq;
-}
-
-uno::Sequence< beans::PropertyValue >
-ConvertToolbarEntry( const SvxConfigEntry* pEntry )
-{
-    uno::Sequence< beans::PropertyValue > aPropSeq( 4 );
-
-    aPropSeq[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
-    aPropSeq[0].Value <<= pEntry->GetCommand();
-
-    aPropSeq[1].Name = ITEM_DESCRIPTOR_TYPE;
-    aPropSeq[1].Value <<= css::ui::ItemType::DEFAULT;
-
-    // If the name has not been changed, then the label can be stored
-    // as an empty string.
-    // It will be initialised again later using the command to label map.
-    aPropSeq[2].Name = ITEM_DESCRIPTOR_LABEL;
-    if ( !pEntry->HasChangedName() && !pEntry->GetCommand().isEmpty() )
-    {
-        aPropSeq[2].Value <<= OUString();
-    }
-    else
-    {
-        aPropSeq[2].Value <<= pEntry->GetName();
-    }
-
-    aPropSeq[3].Name = ITEM_DESCRIPTOR_ISVISIBLE;
-    aPropSeq[3].Value <<= pEntry->IsVisible();
-
-    return aPropSeq;
 }
 
 VclPtr<SfxTabPage> CreateSvxMenuConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
@@ -509,43 +199,6 @@ VclPtr<SfxTabPage> CreateSvxToolbarConfigPage( vcl::Window *pParent, const SfxIt
 VclPtr<SfxTabPage> CreateSvxEventConfigPage( vcl::Window *pParent, const SfxItemSet* rSet )
 {
     return VclPtr<SvxEventConfigPage>::Create( pParent, *rSet, SvxEventConfigPage::EarlyInit() );
-}
-
-namespace {
-
-bool showKeyConfigTabPage( const css::uno::Reference< css::frame::XFrame >& xFrame )
-{
-    if (!xFrame.is())
-    {
-        return false;
-    }
-    OUString sModuleId(
-        css::frame::ModuleManager::create(
-            comphelper::getProcessComponentContext())
-        ->identify(xFrame));
-    return !sModuleId.isEmpty()
-        && sModuleId != "com.sun.star.frame.StartModule";
-}
-
-bool EntrySort( SvxConfigEntry* a, SvxConfigEntry* b )
-{
-    return a->GetName().compareTo( b->GetName() ) < 0;
-}
-
-bool SvxConfigEntryModified( SvxConfigEntry* pEntry )
-{
-    SvxEntries* pEntries = pEntry->GetEntries();
-    if ( !pEntries )
-        return false;
-
-    for ( const auto& entry : *pEntries )
-    {
-        if ( entry->IsModified() || SvxConfigEntryModified( entry ) )
-            return true;
-    }
-    return false;
-}
-
 }
 
 /******************************************************************************
@@ -590,7 +243,7 @@ void SvxConfigDialog::SetFrame(const css::uno::Reference< css::frame::XFrame >& 
 {
     m_xFrame = xFrame;
 
-    if (!showKeyConfigTabPage( xFrame ))
+    if (!killmelater::showKeyConfigTabPage( xFrame ))
         RemoveTabPage(m_nKeyboardPageId);
 }
 
@@ -817,7 +470,7 @@ bool SaveInData::LoadSubMenus( const uno::Reference< container::XIndexAccess >& 
 
         sal_uInt16 nType( css::ui::ItemType::DEFAULT );
 
-        bool bItem = GetMenuItemData( xMenuSettings, nIndex,
+        bool bItem = killmelater::GetMenuItemData( xMenuSettings, nIndex,
             aCommandURL, aLabel, nType, xSubMenu );
 
         if ( bItem )
@@ -895,7 +548,7 @@ bool SaveInData::LoadSubMenus( const uno::Reference< container::XIndexAccess >& 
                         pEntry->SetMain();
                     }
 
-                    subMenuTitle += stripHotKey( aLabel );
+                    subMenuTitle += killmelater::stripHotKey( aLabel );
 
                     LoadSubMenus( xSubMenu, subMenuTitle, pEntry, bContextMenu );
                 }
@@ -976,7 +629,7 @@ void MenuSaveInData::Apply(
         SvxConfigEntry* pEntryData = *iter;
 
         uno::Sequence< beans::PropertyValue > aPropValueSeq =
-            ConvertSvxConfigEntry( pEntryData );
+            killmelater::ConvertSvxConfigEntry( pEntryData );
 
         uno::Reference< container::XIndexContainer > xSubMenuBar(
             rFactory->createInstanceWithContext( xContext ),
@@ -1009,7 +662,7 @@ void SaveInData::ApplyMenu(
         if ( pEntry->IsPopup() )
         {
             uno::Sequence< beans::PropertyValue > aPropValueSeq =
-                ConvertSvxConfigEntry( pEntry );
+                killmelater::ConvertSvxConfigEntry( pEntry );
 
             uno::Reference< container::XIndexContainer > xSubMenuBar(
                 rFactory->createInstanceWithContext( xContext ),
@@ -1034,7 +687,7 @@ void SaveInData::ApplyMenu(
         else
         {
             uno::Sequence< beans::PropertyValue > aPropValueSeq =
-                ConvertSvxConfigEntry( pEntry );
+                killmelater::ConvertSvxConfigEntry( pEntry );
             rMenuBar->insertByIndex(
                 rMenuBar->getCount(), uno::Any( aPropValueSeq ));
         }
@@ -1204,7 +857,7 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
                 LoadSubMenus( xPopupMenu, aUIMenuName, pEntry, true );
             }
         }
-        std::sort( m_pRootEntry->GetEntries()->begin(), m_pRootEntry->GetEntries()->end(), EntrySort );
+        std::sort( m_pRootEntry->GetEntries()->begin(), m_pRootEntry->GetEntries()->end(), killmelater::EntrySort );
     }
     return m_pRootEntry->GetEntries();
 }
@@ -1238,7 +891,7 @@ bool ContextMenuSaveInData::Apply()
     SvxEntries* pEntries = GetEntries();
     for ( const auto& pEntry : *pEntries )
     {
-        if ( pEntry->IsModified() || SvxConfigEntryModified( pEntry ) )
+        if ( pEntry->IsModified() || killmelater::SvxConfigEntryModified( pEntry ) )
         {
             css::uno::Reference< css::container::XIndexContainer > xIndexContainer( GetConfigManager()->createSettings(), css::uno::UNO_QUERY );
             css::uno::Reference< css::lang::XSingleComponentFactory > xFactory( xIndexContainer, css::uno::UNO_QUERY );
@@ -1582,7 +1235,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
         // replace %MODULENAME in the label with the correct module name
         uno::Reference< css::frame::XModuleManager2 > xModuleManager(
             css::frame::ModuleManager::create( xContext ));
-        OUString aModuleName = GetUIModuleName( aModuleId, xModuleManager );
+        OUString aModuleName = killmelater::GetUIModuleName( aModuleId, xModuleManager );
 
         OUString title = m_pTopLevel->get_label();
         OUString aSearchString("%MODULENAME" );
@@ -1871,13 +1524,13 @@ void SvxConfigPage::ReloadTopLevelListBox( SvxConfigEntry* pToSelect )
         for ( ; iter != end; ++iter )
         {
             SvxConfigEntry* pEntryData = *iter;
-            const sal_Int32 nPos = m_pTopLevelListBox->InsertEntry( stripHotKey( pEntryData->GetName() ) );
+            const sal_Int32 nPos = m_pTopLevelListBox->InsertEntry( killmelater::stripHotKey( pEntryData->GetName() ) );
             m_pTopLevelListBox->SetEntryData( nPos, pEntryData );
 
             if ( pEntryData == pToSelect )
                 nSelectionPos = nPos;
 
-            AddSubMenusToUI( stripHotKey( pEntryData->GetName() ), pEntryData );
+            AddSubMenusToUI( killmelater::stripHotKey( pEntryData->GetName() ), pEntryData );
         }
     }
 #ifdef DBG_UTIL
@@ -1908,7 +1561,7 @@ void SvxConfigPage::AddSubMenusToUI(
 
         if ( pEntryData->IsPopup() )
         {
-            OUString subMenuTitle = rBaseTitle + aMenuSeparatorStr + stripHotKey( pEntryData->GetName() );
+            OUString subMenuTitle = rBaseTitle + aMenuSeparatorStr + killmelater::stripHotKey( pEntryData->GetName() );
 
             const sal_Int32 nPos = m_pTopLevelListBox->InsertEntry( subMenuTitle );
             m_pTopLevelListBox->SetEntryData( nPos, pEntryData );
@@ -2071,7 +1724,7 @@ SvTreeListEntry* SvxConfigPage::InsertEntryIntoUI(
     }
     else
     {
-        OUString aName = stripHotKey( pNewEntryData->GetName() );
+        OUString aName = killmelater::stripHotKey( pNewEntryData->GetName() );
 
         Image aImage = GetSaveInData()->GetImage(
             pNewEntryData->GetCommand());
@@ -2166,7 +1819,7 @@ bool SvxConfigPage::MoveEntryData(
     if ( pSourceData != nullptr && pTargetData != nullptr )
     {
         // remove the source entry from our list
-        RemoveEntry( pEntries, pSourceData );
+        killmelater::RemoveEntry( pEntries, pSourceData );
 
         SvxEntries::iterator iter = pEntries->begin();
         SvxEntries::const_iterator end = pEntries->end();
@@ -2212,7 +1865,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         {
             SvxConfigEntry* pEntry = *iter;
             SvTreeListEntry* pLBEntry =
-                m_pMenuListBox->InsertEntry( stripHotKey( pEntry->GetName() ) );
+                m_pMenuListBox->InsertEntry( killmelater::stripHotKey( pEntry->GetName() ) );
             pLBEntry->SetUserData( pEntry );
             mpEntries->push_back( pEntry );
 
@@ -2230,7 +1883,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         OUString prefix = CuiResId( RID_SVXSTR_NEW_MENU );
 
         OUString newname = killmelater::generateCustomName( prefix, entries );
-        OUString newurl = generateCustomMenuURL( mpEntries );
+        OUString newurl = killmelater::generateCustomMenuURL( mpEntries );
 
         SvxConfigEntry* pNewEntryData =
             new SvxConfigEntry( newname, newurl, true );
@@ -2239,7 +1892,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         pNewEntryData->SetMain();
 
         pNewMenuEntry =
-            m_pMenuListBox->InsertEntry( stripHotKey( pNewEntryData->GetName() ) );
+            m_pMenuListBox->InsertEntry( killmelater::stripHotKey( pNewEntryData->GetName() ) );
         m_pMenuListBox->Select( pNewMenuEntry );
 
         pNewMenuEntry->SetUserData( pNewEntryData );
@@ -2818,7 +2471,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
             }
         }
 
-        std::sort( GetEntries()->begin(), GetEntries()->end(), EntrySort );
+        std::sort( GetEntries()->begin(), GetEntries()->end(), killmelater::EntrySort );
     }
 
     return pRootEntry->GetEntries();
@@ -2924,7 +2577,7 @@ void ToolbarSaveInData::ApplyToolbar(
         if ( pEntry->IsPopup() )
         {
             uno::Sequence< beans::PropertyValue > aPropValueSeq =
-                ConvertToolbarEntry( pEntry );
+                killmelater::ConvertToolbarEntry( pEntry );
 
             uno::Reference< container::XIndexContainer > xSubMenuBar(
                 rFactory->createInstanceWithContext( xContext ),
@@ -2947,7 +2600,7 @@ void ToolbarSaveInData::ApplyToolbar(
         else
         {
             uno::Sequence< beans::PropertyValue > aPropValueSeq =
-                ConvertToolbarEntry( pEntry );
+                killmelater::ConvertToolbarEntry( pEntry );
 
             rToolbarBar->insertByIndex(
                 rToolbarBar->getCount(), uno::Any( aPropValueSeq ));
@@ -3055,7 +2708,7 @@ void ToolbarSaveInData::RemoveToolbar( SvxConfigEntry* pToolbar )
     {
         OUString url = pToolbar->GetCommand();
         GetConfigManager()->removeSettings( url );
-        RemoveEntry( GetEntries(), pToolbar );
+        killmelater::RemoveEntry( GetEntries(), pToolbar );
         delete pToolbar;
 
         PersistChanges( GetConfigManager() );
@@ -3152,7 +2805,7 @@ void ToolbarSaveInData::LoadToolbar(
 
         sal_uInt16 nType( css::ui::ItemType::DEFAULT );
 
-        bool bItem = GetToolbarItemData( xToolbarSettings, nIndex, aCommandURL,
+        bool bItem = killmelater::GetToolbarItemData( xToolbarSettings, nIndex, aCommandURL,
             aLabel, nType, bIsVisible, nStyle );
 
         if ( bItem )
@@ -3275,7 +2928,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
 
     if ( m_nExpectedSize != 16 )
     {
-        pFtNote->SetText( replaceSixteen( pFtNote->GetText(), m_nExpectedSize ) );
+        pFtNote->SetText( killmelater::replaceSixteen( pFtNote->GetText(), m_nExpectedSize ) );
     }
 
     uno::Reference< uno::XComponentContext > xComponentContext =
