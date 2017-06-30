@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/0001-workaround-a-linking-problem-on-windows.patch \
 	external/liborcus/rpath.patch.0 \
 	external/liborcus/visibility.patch.0 \
+	external/liborcus/nullptr-in-ostringstream.patch.1 \
 ))
 
 ifeq ($(OS),WNT)
