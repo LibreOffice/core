@@ -141,7 +141,7 @@ public:
 
 enum ScMoveUndoMode { SC_UNDO_REFFIRST, SC_UNDO_REFLAST };
 
-class ScMoveUndo: public ScSimpleUndo               // mit Referenzen
+class ScMoveUndo: public ScSimpleUndo               // with references
 {
 public:
                     ScMoveUndo( ScDocShell* pDocSh,

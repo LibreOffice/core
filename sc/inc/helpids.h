@@ -27,7 +27,7 @@
 #define HID_INSWIN_FUNC                                         "SC_HID_INSWIN_FUNC"
 #define HID_INSWIN_INPUT                                        "SC_HID_INSWIN_INPUT"
 
-// Hilfe IDs fuer Dokumentfenster --------------------------------------------
+// Help IDs for document window ----------------------------------------------
 #define HID_SC_WIN_GRIDWIN                                      "SC_HID_SC_WIN_GRIDWIN"
 #define HID_SC_WIN_PREVIEW                                      "SC_HID_SC_WIN_PREVIEW"
 
@@ -185,7 +185,7 @@
 #define HID_MN_FORMAT_ALGN                                      "SC_HID_MN_FORMAT_ALGN"
 #define HID_MN_FORMAT_LINESPACE                                 "SC_HID_MN_FORMAT_LINESPACE"
 
-// Ende Hilfe IDs ------------------------------------------------------------
+// End help IDs ------------------------------------------------------------
 
 #define HID_FUNC_DBANZAHL                                       "SC_HID_FUNC_DBANZAHL"
 #define HID_FUNC_DBANZAHL2                                      "SC_HID_FUNC_DBANZAHL2"

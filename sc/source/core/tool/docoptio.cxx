@@ -47,7 +47,7 @@ static sal_uInt16 lcl_GetDefaultTabDist()
         return 720;                 // 1/2"
 }
 
-//      ScDocOptions - Dokument-Optionen
+//      ScDocOptions - document options
 
 ScDocOptions::ScDocOptions()
 {
@@ -136,7 +136,7 @@ void ScDocOptions::SetFormulaWildcardsEnabled( bool bVal )
     }
 }
 
-//      ScTpCalcItem - Daten fuer die CalcOptions-TabPage
+//      ScTpCalcItem - data for the CalcOptions TabPage
 
 ScTpCalcItem::ScTpCalcItem( sal_uInt16 nWhichP, const ScDocOptions& rOpt )
     :   SfxPoolItem ( nWhichP ),

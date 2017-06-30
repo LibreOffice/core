@@ -41,7 +41,7 @@ enum class SvtScriptType;
 namespace editeng { class SvxBorderLine; }
 
 struct ScHTMLStyle
-{   // Defaults aus StyleSheet
+{   // Defaults from stylesheet
     Color               aBackgroundColor;
     OUString            aFontFamilyName;
     sal_uInt32          nFontHeight;        // Item-Value

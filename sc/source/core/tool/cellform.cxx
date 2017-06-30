@@ -63,7 +63,7 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString
             else
             {
                 // A macro started from the interpreter, which has
-                // access to Formular Cells, becomes a CellText, even if
+                // access to Formula Cells, becomes a CellText, even if
                 // that triggers further interpretation, except if those
                 // cells are already being interpreted.
                 // IdleCalc generally doesn't trigger further interpretation,

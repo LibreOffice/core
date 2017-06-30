@@ -333,7 +333,7 @@ public:
     bool            SelMouseButtonDown( const MouseEvent& rMEvt );
 
     ScDrawView*     GetScDrawView()         { return pDrawView; }
-    // gegen CLOKs
+    // against CLOKs
     SdrView*        GetSdrView()            { return pDrawView; }
 
     bool            IsMinimized() const     { return bMinimized; }
@@ -454,7 +454,7 @@ public:
     void            ScrollToObject( SdrObject* pDrawObj );
     void            MakeVisible( const tools::Rectangle& rHMMRect );
 
-                                    // Zeichnen
+                                    // Drawing
 
     void            PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                         ScUpdateMode eMode = ScUpdateMode::All );

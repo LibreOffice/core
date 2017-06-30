@@ -1998,7 +1998,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             nPaintFlags |= PaintPartFlags::Top;
             break;
         default:
-            OSL_FAIL("Falscher Code beim Einfuegen");
+            OSL_FAIL("Wrong code at inserting");
             bSuccess = false;
             break;
     }
@@ -2502,7 +2502,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             nPaintFlags |= PaintPartFlags::Top;
             break;
         default:
-            OSL_FAIL("Falscher Code beim Loeschen");
+            OSL_FAIL("Wrong code at deleting");
             break;
     }
 

@@ -147,7 +147,7 @@ void ScInterpreter::ScGetDay()
 void ScInterpreter::ScGetMin()
 {
     double fTime = GetDouble();
-    fTime -= ::rtl::math::approxFloor(fTime);       // Datumsanteil weg
+    fTime -= ::rtl::math::approxFloor(fTime);       // date part absent
     long nVal = (long)::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5) % ::tools::Time::secondPerHour;
     PushDouble( (double) (nVal / ::tools::Time::secondPerMinute) );
 }
@@ -155,7 +155,7 @@ void ScInterpreter::ScGetMin()
 void ScInterpreter::ScGetSec()
 {
     double fTime = GetDouble();
-    fTime -= ::rtl::math::approxFloor(fTime);       // Datumsanteil weg
+    fTime -= ::rtl::math::approxFloor(fTime);       // date part absent
     long nVal = (long)::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5) % ::tools::Time::secondPerMinute;
     PushDouble( (double) nVal );
 }
@@ -163,7 +163,7 @@ void ScInterpreter::ScGetSec()
 void ScInterpreter::ScGetHour()
 {
     double fTime = GetDouble();
-    fTime -= ::rtl::math::approxFloor(fTime);       // Datumsanteil weg
+    fTime -= ::rtl::math::approxFloor(fTime);       // date part absent
     long nVal = (long)::rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5) / ::tools::Time::secondPerHour;
     PushDouble((double) nVal);
 }
@@ -171,7 +171,7 @@ void ScInterpreter::ScGetHour()
 void ScInterpreter::ScGetDateValue()
 {
     OUString aInputString = GetString().getString();
-    sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
+    sal_uInt32 nFIndex = 0;                 // for a default country/language
     double fVal;
     if (pFormatter->IsNumberFormat(aInputString, nFIndex, fVal))
     {
@@ -2778,7 +2778,7 @@ void ScInterpreter::ScDde()
         {
             pLink = new ScDdeLink( pDok, aAppl, aTopic, aItem, nMode );
             mpLinkManager->InsertDDELink( pLink, aAppl, aTopic, aItem );
-            if ( mpLinkManager->GetLinks().size() == 1 )                    // erster ?
+            if ( mpLinkManager->GetLinks().size() == 1 )                    // the first one?
             {
                 SfxBindings* pBindings = pDok->GetViewBindings();
                 if (pBindings)

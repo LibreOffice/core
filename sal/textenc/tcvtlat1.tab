@@ -31,7 +31,7 @@
 
 /* IBM-437 */
 /* Dos Latin US - Standard CharSet for Western Script */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/pc/cp437.txt from 04/24/96 Version 2.00 */
 /* Last-Changes from us: */
 
@@ -205,11 +205,11 @@ static ImplTextEncodingData const aImplIBM437TextEncodingData
 /* ======================================================================= */
 
 /* IBM-850 */
-/* Dos Standard CharSet for Western/Europa */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* Dos Standard CharSet for Western/Europe */
+/* 1-byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/pc/cp850.txt from 04/24/96 Version 2.00 */
 /* Last-Changes from us: */
-/* D5 - geaendert auf EURO SIGN and 0x20AC added to D5 */
+/* D5 - changed to EURO SIGN and 0x20AC added to D5 */
 
 /* ----------------------------------------------------------------------- */
 
@@ -340,7 +340,7 @@ static ImplTextEncodingData const aImplIBM850TextEncodingData
 
 /* IBM-860 */
 /* Dos Standard CharSet for Portugiese */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/pc/cp860.txt from 04/24/96 Version 2.00 */
 /* Last-Changes from us: */
 
@@ -513,7 +513,7 @@ static ImplTextEncodingData const aImplIBM860TextEncodingData
 
 /* IBM-861 */
 /* Dos Standard CharSet for Icelandic */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/pc/cp861.txt from 04/24/96 Version 2.00 */
 /* Last-Changes from us: */
 
@@ -688,7 +688,7 @@ static ImplTextEncodingData const aImplIBM861TextEncodingData
 
 /* IBM-863 */
 /* Dos Standard CharSet for Canada-France */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/pc/cp863.txt from 04/24/96 Version 2.00 */
 /* Last-Changes from us: */
 
@@ -863,7 +863,7 @@ static ImplTextEncodingData const aImplIBM863TextEncodingData
 
 /* IBM-865 */
 /* Dos Standard CharSet for Nordic */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/pc/cp865.txt from 04/24/96 Version 2.00 */
 /* Last-Changes from us: */
 
@@ -1037,8 +1037,8 @@ static ImplTextEncodingData const aImplIBM865TextEncodingData
 /* ======================================================================= */
 
 /* ISO-8859-14 */
-/* ungefaehr wie Latin1 */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme, 0x80-0x9F Control-Caracter wie in Unicode */
+/* approximately like Latin1 */
+/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control caracter like in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-14.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
 
@@ -1165,8 +1165,8 @@ static ImplTextEncodingData const aImplISO885914TextEncodingData
 /* ======================================================================= */
 
 /* ISO-8859-15 */
-/* ungefaehr wie Latin1, jedoch mit Euro (ehemaliges CURRENCY-Symbol an A4) */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme, 0x80-0x9F Control-Caracter wie in Unicode */
+/* approximately like Latin1, but with Euro (former CURRENCY symbol to A4) */
+/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control caracter like in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-15.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
 
@@ -1268,8 +1268,8 @@ static ImplTextEncodingData const aImplISO885915TextEncodingData
 
 /* APPLE-Iceland */
 /* Apple CharSet for Iceland */
-/* 1-Byte, 0x00-0x7F ASCII, jedoch eigentich Sonderzeichen zwischen 0x00-0x1F */
-/* die wir aber nicht beruecksichtigen */
+/* 1-byte, 0x00-0x7F ASCII, but actually special characters between 0x00-0x1F */
+/* which we don't consider, though */
 /* Convert-Tables: mappings/vendors/apple/iceland.txt from 02/05/98 */
 /* Last-Changes from us: */
 
@@ -1408,8 +1408,8 @@ static ImplTextEncodingData const aImplAPPLEICELANDTextEncodingData
 
 /* APPLE-Roman */
 /* Standard Apple CharSet for Western */
-/* 1-Byte, 0x00-0x7F ASCII, jedoch eigentich Sonderzeichen zwischen 0x00-0x1F */
-/* die wir aber nicht beruecksichtigen */
+/* 1-byte, 0x00-0x7F ASCII, but actually special characters between 0x00-0x1F */
+/* which we don't consider, though */
 /* Convert-Tables: mappings/vendors/apple/roman.txt from 08/18/98 */
 /* Last-Changes from us: */
 

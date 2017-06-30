@@ -256,7 +256,7 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
         }
     }
 
-    ScRange* pOver = const_cast<ScRange*>(&r);     // fies aber wahr wenn bInList
+    ScRange* pOver = const_cast<ScRange*>(&r);     // nasty but true when bInList
     size_t nOldPos = 0;
     if ( bIsInList )
     {
@@ -1387,18 +1387,18 @@ int SAL_CALL ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
         return 1;
     }
 
-    // gleiche Tabs
+    // equal tabs
     if ( rStartPos1.Col() < rStartPos2.Col() )
         return -1;
     if ( rStartPos1.Col() > rStartPos2.Col() )
         return 1;
-    // gleiche Cols
+    // equal cols
     if ( rStartPos1.Row() < rStartPos2.Row() )
         return -1;
     if ( rStartPos1.Row() > rStartPos2.Row() )
         return 1;
 
-    // erste Ecke gleich, zweite Ecke
+    // first corner equal, second corner
     const ScAddress& rEndPos1 = ps1->pPair->GetRange(0).aEnd;
     const ScAddress& rEndPos2 = ps2->pPair->GetRange(0).aEnd;
     if ( rEndPos1.Tab() == rEndPos2.Tab() )
@@ -1418,12 +1418,12 @@ int SAL_CALL ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
         return 1;
     }
 
-    // gleiche Tabs
+    // equal tabs
     if ( rEndPos1.Col() < rEndPos2.Col() )
         return -1;
     if ( rEndPos1.Col() > rEndPos2.Col() )
         return 1;
-    // gleiche Cols
+    // equal cols
     if ( rEndPos1.Row() < rEndPos2.Row() )
         return -1;
     if ( rEndPos1.Row() > rEndPos2.Row() )
@@ -1447,7 +1447,7 @@ void ScRangePairList::Join( const ScRangePair& r, bool bIsInList )
     SCCOL nCol2 = r1.aEnd.Col();
     SCROW nRow2 = r1.aEnd.Row();
     SCTAB nTab2 = r1.aEnd.Tab();
-    ScRangePair* pOver = const_cast<ScRangePair*>(&r);     // fies aber wahr wenn bInList
+    ScRangePair* pOver = const_cast<ScRangePair*>(&r);     // nasty but true when bInList
     size_t nOldPos = 0;
     if ( bIsInList )
     {
@@ -1484,7 +1484,7 @@ void ScRangePairList::Join( const ScRangePair& r, bool bIsInList )
                 }
             }
             else if ( r1.In( rp1 ) )
-            {   // RangePair p included in RangePair r enthalten, make r the new RangePair
+            {   // RangePair p included in RangePair r, make r the new RangePair
                 *p = r;
                 bJoined = true;
             }

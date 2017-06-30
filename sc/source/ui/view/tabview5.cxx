@@ -179,7 +179,7 @@ ScTabView::~ScTabView()
         SfxLokHelper::forEachOtherView(pThisViewShell, lRemoveWindows);
     }
 
-    aViewData.KillEditView();           // solange GridWin's noch existieren
+    aViewData.KillEditView();           // as long as GridWins still exist
 
     if (pDrawView)
     {

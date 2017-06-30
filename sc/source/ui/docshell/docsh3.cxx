@@ -395,7 +395,7 @@ void ScDocShell::CalcOutputFactor()
         nPrtToScreenFactor = nPrinterWidth / (double) nWindowWidth;
     else
     {
-        OSL_FAIL("GetTextSize gibt 0 ??");
+        OSL_FAIL("GetTextSize returns 0 ??");
         nPrtToScreenFactor = 1.0;
     }
 }
@@ -1078,7 +1078,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                     if ( pAct && pAct->GetActionNumber() > nOldActionMax )
                         pAct->SetComment( rComment );
                     else
-                        OSL_FAIL( "MergeDocument: wohin mit dem Kommentar?!?" );
+                        OSL_FAIL( "MergeDocument: what to do with the comment?!?" );
                 }
 
                 // adjust references

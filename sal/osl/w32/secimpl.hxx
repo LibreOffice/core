@@ -30,7 +30,7 @@ typedef struct {
     HANDLE m_hProfile;
     HANDLE m_hToken;
     sal_Unicode   m_User[USER_BUFFER_SIZE];
-/* ts: Erweiterung um Fileserver-login */
+/* ts: extension by fileserver login */
     NETRESOURCEW *m_pNetResource;
 } oslSecurityImpl;
 
