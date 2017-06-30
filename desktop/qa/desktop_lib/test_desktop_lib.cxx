@@ -2158,18 +2158,15 @@ void DesktopLOKTest::testDialogsWriter()
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     // Just make it big enough so all dialogs can fit, we will trim after we
     // know the actual size.
-    int nCanvasWidth = 1024;
-    int nCanvasHeight = 768;
-    sal_Int32 nStride = cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, nCanvasWidth);
-    std::vector<unsigned char> aBuffer(nStride * nCanvasHeight);
+    int nWidth = 1024;
+    int nHeight = 768;
+    cairo_surface_t* pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
+    unsigned char* pBuffer = cairo_image_surface_get_data(pSurface);
 
-    int nOutputWidth = nCanvasWidth;
-    int nOutputHeight = nCanvasHeight;
-    pDocument->pClass->paintDialog(pDocument, ".uno:SearchDialog", aBuffer.data(), &nOutputWidth, &nOutputHeight);
+    pDocument->pClass->paintDialog(pDocument, ".uno:SearchDialog", pBuffer, &nWidth, &nHeight);
 
-    cairo_surface_t* pSurface = cairo_image_surface_create_for_data(aBuffer.data(), CAIRO_FORMAT_ARGB32, nCanvasWidth, nCanvasHeight, nStride);
     // Write only the image to the buffer, clip rest of the empty area.
-    cairo_surface_t* pNewSurface = cairo_surface_create_for_rectangle(pSurface, 0, 0, nOutputWidth, nOutputHeight);
+    cairo_surface_t* pNewSurface = cairo_surface_create_for_rectangle(pSurface, 0, 0, nWidth, nHeight);
     cairo_surface_write_to_png(pNewSurface, "/tmp/dialog.png");
 
     CPPUNIT_ASSERT(false);
