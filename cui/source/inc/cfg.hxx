@@ -41,8 +41,10 @@
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
+#include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 
@@ -52,6 +54,15 @@
 #include <vcl/msgbox.hxx>
 
 #include "cfgutil.hxx"
+
+static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
+static const char ITEM_DESCRIPTOR_CONTAINER[]   = "ItemDescriptorContainer";
+static const char ITEM_DESCRIPTOR_LABEL[]       = "Label";
+static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
+static const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
+static const char ITEM_DESCRIPTOR_ISVISIBLE[]   = "IsVisible";
+static const char ITEM_DESCRIPTOR_RESOURCEURL[] = "ResourceURL";
+static const char ITEM_DESCRIPTOR_UINAME[]      = "UIName";
 
 static const char ITEM_MENUBAR_URL[] = "private:resource/menubar/menubar";
 static const char ITEM_TOOLBAR_URL[] = "private:resource/toolbar/";
@@ -717,6 +728,25 @@ stripHotKey( const OUString& str )
     }
 }
 
+inline OUString
+replaceSixteen( const OUString& str, sal_Int32 nReplacement )
+{
+    OUString result( str );
+    OUString sixteen = OUString::number( 16 );
+    OUString expected = OUString::number( nReplacement );
+
+    sal_Int32 len = sixteen.getLength();
+    sal_Int32 index = result.indexOf( sixteen );
+
+    while ( index != -1 )
+    {
+        result = result.replaceAt( index, len, expected );
+        index = result.indexOf( sixteen, index );
+    }
+
+    return result;
+}
+
 static sal_Int16 theImageType =
     css::ui::ImageType::COLOR_NORMAL |
     css::ui::ImageType::SIZE_DEFAULT;
@@ -826,6 +856,38 @@ generateCustomName(
     return name;
 }
 
+inline OUString
+generateCustomMenuURL(
+    SvxEntries* entries,
+    sal_Int32 suffix = 1 )
+{
+    OUString url = "vnd.openoffice.org:CustomMenu" + OUString::number( suffix );
+    if (!entries)
+        return url;
+
+    // now check is there is an already existing entry with this url
+    SvxEntries::const_iterator iter = entries->begin();
+
+    while ( iter != entries->end() )
+    {
+        SvxConfigEntry* pEntry = *iter;
+
+        if ( url.equals( pEntry->GetCommand() ) )
+        {
+            break;
+        }
+        ++iter;
+    }
+
+    if ( iter != entries->end() )
+    {
+        // url already exists so try the next number up
+        return generateCustomMenuURL( entries, ++suffix );
+    }
+
+    return url;
+}
+
 inline sal_uInt32 generateRandomValue()
 {
     return comphelper::rng::uniform_uint_distribution(0, std::numeric_limits<unsigned int>::max());
@@ -862,6 +924,256 @@ generateCustomURL(
     }
 
     return url;
+}
+
+inline OUString GetModuleName( const OUString& aModuleId )
+{
+    if ( aModuleId == "com.sun.star.text.TextDocument" ||
+         aModuleId == "com.sun.star.text.GlobalDocument" )
+        return OUString("Writer");
+    else if ( aModuleId == "com.sun.star.text.WebDocument" )
+        return OUString("Writer/Web");
+    else if ( aModuleId == "com.sun.star.drawing.DrawingDocument" )
+        return OUString("Draw");
+    else if ( aModuleId == "com.sun.star.presentation.PresentationDocument" )
+        return OUString("Impress");
+    else if ( aModuleId == "com.sun.star.sheet.SpreadsheetDocument" )
+        return OUString("Calc");
+    else if ( aModuleId == "com.sun.star.script.BasicIDE" )
+        return OUString("Basic");
+    else if ( aModuleId == "com.sun.star.formula.FormulaProperties" )
+        return OUString("Math");
+    else if ( aModuleId == "com.sun.star.sdb.RelationDesign" )
+        return OUString("Relation Design");
+    else if ( aModuleId == "com.sun.star.sdb.QueryDesign" )
+        return OUString("Query Design");
+    else if ( aModuleId == "com.sun.star.sdb.TableDesign" )
+        return OUString("Table Design");
+    else if ( aModuleId == "com.sun.star.sdb.DataSourceBrowser" )
+        return OUString("Data Source Browser" );
+    else if ( aModuleId == "com.sun.star.sdb.DatabaseDocument" )
+        return OUString("Database" );
+
+    return OUString();
+}
+
+inline OUString GetUIModuleName( const OUString& aModuleId, const css::uno::Reference< css::frame::XModuleManager2 >& rModuleManager )
+{
+    assert(rModuleManager.is());
+
+    OUString aModuleUIName;
+
+    try
+    {
+        css::uno::Any a = rModuleManager->getByName( aModuleId );
+        css::uno::Sequence< css::beans::PropertyValue > aSeq;
+
+        if ( a >>= aSeq )
+        {
+            for ( sal_Int32 i = 0; i < aSeq.getLength(); ++i )
+            {
+                if ( aSeq[i].Name == "ooSetupFactoryUIName" )
+                {
+                    aSeq[i].Value >>= aModuleUIName;
+                    break;
+                }
+            }
+        }
+    }
+    catch ( css::uno::RuntimeException& )
+    {
+        throw;
+    }
+    catch ( css::uno::Exception& )
+    {
+    }
+
+    if ( aModuleUIName.isEmpty() )
+        aModuleUIName = GetModuleName( aModuleId );
+
+    return aModuleUIName;
+}
+
+inline bool GetMenuItemData(
+    const css::uno::Reference< css::container::XIndexAccess >& rItemContainer,
+    sal_Int32 nIndex,
+    OUString& rCommandURL,
+    OUString& rLabel,
+    sal_uInt16& rType,
+    css::uno::Reference< css::container::XIndexAccess >& rSubMenu )
+{
+    try
+    {
+        css::uno::Sequence< css::beans::PropertyValue > aProp;
+        if ( rItemContainer->getByIndex( nIndex ) >>= aProp )
+        {
+            for ( sal_Int32 i = 0; i < aProp.getLength(); ++i )
+            {
+                if ( aProp[i].Name == ITEM_DESCRIPTOR_COMMANDURL )
+                {
+                    aProp[i].Value >>= rCommandURL;
+                }
+                else if ( aProp[i].Name == ITEM_DESCRIPTOR_CONTAINER )
+                {
+                    aProp[i].Value >>= rSubMenu;
+                }
+                else if ( aProp[i].Name == ITEM_DESCRIPTOR_LABEL )
+                {
+                    aProp[i].Value >>= rLabel;
+                }
+                else if ( aProp[i].Name == ITEM_DESCRIPTOR_TYPE )
+                {
+                    aProp[i].Value >>= rType;
+                }
+            }
+
+            return true;
+        }
+    }
+    catch ( css::lang::IndexOutOfBoundsException& )
+    {
+    }
+
+    return false;
+}
+
+inline bool GetToolbarItemData(
+    const css::uno::Reference< css::container::XIndexAccess >& rItemContainer,
+    sal_Int32 nIndex,
+    OUString& rCommandURL,
+    OUString& rLabel,
+    sal_uInt16& rType,
+    bool& rIsVisible,
+    sal_Int32& rStyle )
+{
+    try
+    {
+        css::uno::Sequence< css::beans::PropertyValue > aProp;
+        if ( rItemContainer->getByIndex( nIndex ) >>= aProp )
+        {
+            for ( sal_Int32 i = 0; i < aProp.getLength(); ++i )
+            {
+                if ( aProp[i].Name == ITEM_DESCRIPTOR_COMMANDURL )
+                {
+                    aProp[i].Value >>= rCommandURL;
+                }
+                else if ( aProp[i].Name == ITEM_DESCRIPTOR_STYLE )
+                {
+                    aProp[i].Value >>= rStyle;
+                }
+                else if ( aProp[i].Name == ITEM_DESCRIPTOR_LABEL )
+                {
+                    aProp[i].Value >>= rLabel;
+                }
+                else if ( aProp[i].Name == ITEM_DESCRIPTOR_TYPE )
+                {
+                    aProp[i].Value >>= rType;
+                }
+                else if ( aProp[i].Name == ITEM_DESCRIPTOR_ISVISIBLE )
+                {
+                    aProp[i].Value >>= rIsVisible;
+                }
+            }
+
+            return true;
+        }
+    }
+    catch ( css::lang::IndexOutOfBoundsException& )
+    {
+    }
+
+    return false;
+}
+
+inline css::uno::Sequence< css::beans::PropertyValue >
+ConvertSvxConfigEntry( const SvxConfigEntry* pEntry )
+{
+    css::uno::Sequence< css::beans::PropertyValue > aPropSeq( 3 );
+
+    aPropSeq[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
+    aPropSeq[0].Value <<= pEntry->GetCommand();
+
+    aPropSeq[1].Name = ITEM_DESCRIPTOR_TYPE;
+    aPropSeq[1].Value <<= css::ui::ItemType::DEFAULT;
+
+    // If the name has not been changed, then the label can be stored
+    // as an empty string.
+    // It will be initialised again later using the command to label map.
+    aPropSeq[2].Name = ITEM_DESCRIPTOR_LABEL;
+    if ( !pEntry->HasChangedName() && !pEntry->GetCommand().isEmpty() )
+    {
+        aPropSeq[2].Value <<= OUString();
+    }
+    else
+    {
+        aPropSeq[2].Value <<= pEntry->GetName();
+    }
+
+    return aPropSeq;
+}
+
+inline css::uno::Sequence< css::beans::PropertyValue >
+ConvertToolbarEntry( const SvxConfigEntry* pEntry )
+{
+    css::uno::Sequence< css::beans::PropertyValue > aPropSeq( 4 );
+
+    aPropSeq[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
+    aPropSeq[0].Value <<= pEntry->GetCommand();
+
+    aPropSeq[1].Name = ITEM_DESCRIPTOR_TYPE;
+    aPropSeq[1].Value <<= css::ui::ItemType::DEFAULT;
+
+    // If the name has not been changed, then the label can be stored
+    // as an empty string.
+    // It will be initialised again later using the command to label map.
+    aPropSeq[2].Name = ITEM_DESCRIPTOR_LABEL;
+    if ( !pEntry->HasChangedName() && !pEntry->GetCommand().isEmpty() )
+    {
+        aPropSeq[2].Value <<= OUString();
+    }
+    else
+    {
+        aPropSeq[2].Value <<= pEntry->GetName();
+    }
+
+    aPropSeq[3].Name = ITEM_DESCRIPTOR_ISVISIBLE;
+    aPropSeq[3].Value <<= pEntry->IsVisible();
+
+    return aPropSeq;
+}
+
+//Was in anonymous namespace in cfg.cxx
+inline bool showKeyConfigTabPage( const css::uno::Reference< css::frame::XFrame >& xFrame )
+{
+    if (!xFrame.is())
+    {
+        return false;
+    }
+    OUString sModuleId(
+        css::frame::ModuleManager::create(
+            comphelper::getProcessComponentContext())
+        ->identify(xFrame));
+    return !sModuleId.isEmpty()
+        && sModuleId != "com.sun.star.frame.StartModule";
+}
+
+inline bool EntrySort( SvxConfigEntry* a, SvxConfigEntry* b )
+{
+    return a->GetName().compareTo( b->GetName() ) < 0;
+}
+
+inline bool SvxConfigEntryModified( SvxConfigEntry* pEntry )
+{
+    SvxEntries* pEntries = pEntry->GetEntries();
+    if ( !pEntries )
+        return false;
+
+    for ( const auto& entry : *pEntries )
+    {
+        if ( entry->IsModified() || SvxConfigEntryModified( entry ) )
+            return true;
+    }
+    return false;
 }
 
 }
