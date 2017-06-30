@@ -99,7 +99,7 @@
 //                EscSMstr,EscSFarb,EscSBFrb,EscSInts,EscSXDst,EscSYDst,EscSDist,
 //                EscBold, EscLSlnt,EscRSlnt,EscUndln,EscDbUnd,EscKaptF,EscStrik,EscDbStk,
 //                EscSupSc,EscSubSc,Esc2DShd,Esc3DShd,Esc4DShd];
-// Justify muss spaetestens am Anfang des Absatzes stehen
+// Justify must be set no later than at the beginning of the paragraph
 #define  EscSet    '\x1e' /* set flag                                               */
 #define  EscReset  '\x1f' /* reset flag                                             */
 #define  EscDeflt  '\x11' /* set flag to default                                    */

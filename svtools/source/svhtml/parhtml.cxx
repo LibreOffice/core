@@ -1986,8 +1986,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
             break;
 
         case HtmlMeta::Refresh:
-            DBG_ASSERT( !bHTTPEquiv || i_pHTTPHeader,
-        "Reload-URL aufgrund unterlassener MUSS-Aenderung verlorengegangen" );
+            DBG_ASSERT( !bHTTPEquiv || i_pHTTPHeader, "Lost Reload-URL because of omitted MUST change." );
             break;
 
         case HtmlMeta::ContentType:
