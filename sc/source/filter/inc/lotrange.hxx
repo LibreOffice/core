@@ -89,8 +89,6 @@ private:
     LOTUS_ROOT*         m_pLotRoot;
     LR_ID               nIdCnt;
     ScComplexRefData    aComplRef;
-    static SCCOL        nEingCol;
-    static SCROW        nEingRow;
     std::vector<LotusRange*> maRanges;
 
 public:

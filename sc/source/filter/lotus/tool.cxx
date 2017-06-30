@@ -389,9 +389,6 @@ LotusRangeList::LotusRangeList(LOTUS_ROOT* pLotRoot)
     pSingRef->SetFlag3D( false );
 }
 
-SCCOL LotusRangeList::nEingCol;
-SCROW LotusRangeList::nEingRow;
-
 LotusRangeList::~LotusRangeList ()
 {
     std::vector<LotusRange*>::iterator pIter;
