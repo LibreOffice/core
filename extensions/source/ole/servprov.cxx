@@ -227,11 +227,7 @@ bool OneInstanceOleWrapper_Impl::registerClass()
 
 bool OneInstanceOleWrapper_Impl::deregisterClass()
 {
-    HRESULT hresult1 = NOERROR;
-
-    HRESULT hresult2 = CoRevokeClassObject(m_factoryHandle);
-
-    return (hresult1 == NOERROR && hresult2 == NOERROR);
+    return CoRevokeClassObject(m_factoryHandle) == NOERROR;
 }
 
 STDMETHODIMP OneInstanceOleWrapper_Impl::QueryInterface(REFIID riid, void FAR* FAR* ppv)
