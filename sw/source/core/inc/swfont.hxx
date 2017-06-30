@@ -163,14 +163,12 @@ class SW_DLLPUBLIC SwFont
     SwFontScript m_nActual;        // actual font (Latin, CJK or CTL)
 
     // switch for the font-extensions
-    bool m_bNoHyph        :1;  // SwTextNoHyphenHere: no separator
     bool m_bBlink         :1;  // blinking font
     bool m_bPaintBlank    :1;  // blanks not with DrawRect
-    bool m_bFontChg        :1;
+    bool m_bFontChg       :1;
     bool m_bOrgChg        :1;  // nOrgHeight/Ascent are invalid
     bool m_bURL           :1;
     bool m_bGreyWave      :1;  // for the extended TextInput: gray waveline
-    bool m_bNoColorReplace  :1;  // Replacement without colormanipulation
 
 public:
     SwFont( const SwAttrSet* pSet, const IDocumentSettingAccess* pIDocumentSettingAccess );
@@ -247,7 +245,6 @@ public:
     inline void SetRelief( const FontRelief eNew );
 
     // Get/Set-methods for the current setting
-    inline void SetNoHyph( const bool bNew );
     inline void SetBlink( const bool bBlink );
     bool IsBlink() const { return m_bBlink; }
     sal_uInt8 &GetTox() { return m_nToxCount; }
@@ -261,7 +258,6 @@ public:
     bool IsURL() const { return m_bURL; }
     inline void SetGreyWave( const bool bNew );
     bool IsGreyWave() const { return m_bGreyWave; }
-    inline void SetNoCol( const bool bNew );
     bool IsPaintBlank() const { return m_bPaintBlank; }
 
     // setting of the base class font for SwTextCharFormat
@@ -811,11 +807,6 @@ inline void SwFont::SetLanguage( const LanguageType eNewLang, const SwFontScript
     }
 }
 
-inline void SwFont::SetNoHyph( const bool bNew )
-{
-    m_bNoHyph = bNew;
-}
-
 inline void SwFont::SetBlink( const bool bNew )
 {
     m_bBlink = bNew;
@@ -824,11 +815,6 @@ inline void SwFont::SetBlink( const bool bNew )
 inline void SwFont::SetGreyWave( const bool bNew )
 {
     m_bGreyWave = bNew;
-}
-
-inline void SwFont::SetNoCol( const bool bNew )
-{
-    m_bNoColorReplace = bNew;
 }
 
 inline void SwSubFont::SetVertical( const sal_uInt16 nDir, const bool bVertFormat )

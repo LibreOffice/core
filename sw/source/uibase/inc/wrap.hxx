@@ -60,16 +60,11 @@ class SwWrapTabPage: public SfxTabPage
     VclPtr<CheckBox>      m_pWrapOutlineCB;
     VclPtr<CheckBox>      m_pWrapOutsideCB;
 
-    sal_uInt16              m_nOldLeftMargin;
-    sal_uInt16              m_nOldRightMargin;
-    sal_uInt16              m_nOldUpperMargin;
-    sal_uInt16              m_nOldLowerMargin;
+    RndStdIds             m_nAnchorId;
+    sal_uInt16            m_nHtmlMode;
 
-    RndStdIds           m_nAnchorId;
-    sal_uInt16              m_nHtmlMode;
-
-    Size m_aFrameSize;
-    SwWrtShell*         m_pWrtSh;
+    Size                  m_aFrameSize;
+    SwWrtShell*           m_pWrtSh;
 
     bool m_bFormat;
     bool m_bNew;

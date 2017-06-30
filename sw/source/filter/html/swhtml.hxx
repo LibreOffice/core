@@ -464,7 +464,6 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     bool m_bChkJumpMark : 1;      // maybe jump to predetermined mark
     bool m_bUpdateDocStat : 1;
     bool m_bFixSelectWidth : 1;   // Set new width of select?
-    bool m_bFixSelectHeight : 1;  // Set new height of select?
     bool m_bTextArea : 1;
     // 24
     bool m_bSelect : 1;

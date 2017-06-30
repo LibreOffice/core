@@ -648,9 +648,6 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_KERNING,
             true, &pItem ))
             SetFixKerning( static_cast<const SvxKerningItem*>(pItem)->GetValue() );
-        if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_NOHYPHEN,
-            true, &pItem ))
-            SetNoHyph( static_cast<const SvxNoHyphenItem*>(pItem)->GetValue() );
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_BLINK,
             true, &pItem ))
             SetBlink( static_cast<const SvxBlinkItem*>(pItem)->GetValue() );
@@ -693,7 +690,6 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
     else
     {
         Invalidate();
-        m_bNoHyph = false;
         m_bBlink = false;
     }
     m_bPaintBlank = false;
@@ -728,8 +724,6 @@ SwFont::SwFont( const SwFont &rFont )
     m_bPaintBlank = rFont.m_bPaintBlank;
     m_bURL = rFont.m_bURL;
     m_bGreyWave = rFont.m_bGreyWave;
-    m_bNoColorReplace = rFont.m_bNoColorReplace;
-    m_bNoHyph = rFont.m_bNoHyph;
     m_bBlink = rFont.m_bBlink;
 }
 
@@ -745,8 +739,6 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     m_bPaintBlank = false;
     m_bURL = false;
     m_bGreyWave = false;
-    m_bNoColorReplace = false;
-    m_bNoHyph = pAttrSet->GetNoHyphenHere().GetValue();
     m_bBlink = pAttrSet->GetBlink().GetValue();
     m_bOrgChg = true;
     {
@@ -941,8 +933,6 @@ SwFont& SwFont::operator=( const SwFont &rFont )
     m_bPaintBlank = rFont.m_bPaintBlank;
     m_bURL = rFont.m_bURL;
     m_bGreyWave = rFont.m_bGreyWave;
-    m_bNoColorReplace = rFont.m_bNoColorReplace;
-    m_bNoHyph = rFont.m_bNoHyph;
     m_bBlink = rFont.m_bBlink;
     return *this;
 }
