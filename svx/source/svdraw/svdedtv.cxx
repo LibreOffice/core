@@ -713,8 +713,6 @@ std::vector<SdrObject*> SdrEditView::DeleteMarkedList(SdrMarkList const& rMark)
             // make sure, OrderNums are correct:
             rMark.GetMark(0)->GetMarkedSdrObj()->GetOrdNum();
 
-            std::vector< SdrObject* > aRemoved3DObjects;
-
             for(size_t nm = nMarkCount; nm > 0;)
             {
                 --nm;
