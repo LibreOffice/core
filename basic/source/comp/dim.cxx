@@ -271,7 +271,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
         else if( eCurTok == TYPE )
         {
             Next();
-            DefType( bPrivate );
+            DefType(); // TODO: Use bPrivate in DefType()
             return;
         }
     }
@@ -562,14 +562,11 @@ void SbiParser::Erase()
 
 void SbiParser::Type()
 {
-    DefType( false );
+    DefType();
 }
 
-void SbiParser::DefType( bool bPrivate )
+void SbiParser::DefType()
 {
-    // TODO: Use bPrivate
-    (void)bPrivate;
-
     // Read the new Token lesen. It had to be a symbol
     if (!TestSymbol())
         return;

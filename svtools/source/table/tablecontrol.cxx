@@ -287,9 +287,8 @@ namespace svt { namespace table
     }
 
 
-    Reference<XAccessible> TableControl::CreateAccessibleControl( sal_Int32 _nIndex )
+    Reference<XAccessible> TableControl::CreateAccessibleControl( sal_Int32 )
     {
-        (void)_nIndex;
         SAL_WARN( "svtools", "TableControl::CreateAccessibleControl: to be overwritten!" );
         return nullptr;
     }
@@ -379,9 +378,8 @@ namespace svt { namespace table
     }
 
 
-    OUString TableControl::GetRowDescription( sal_Int32 _nRow) const
+    OUString TableControl::GetRowDescription( sal_Int32) const
     {
-        (void)_nRow;
         return OUString( "row description" );
     }
 
@@ -394,9 +392,8 @@ namespace svt { namespace table
     }
 
 
-    OUString TableControl::GetColumnDescription( sal_uInt16 _nColumn) const
+    OUString TableControl::GetColumnDescription( sal_uInt16) const
     {
-        (void)_nColumn;
         return OUString( "col description" );
     }
 
@@ -581,7 +578,7 @@ namespace svt { namespace table
     }
 
 
-    void TableControl::FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const
+    void TableControl::FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 ) const
     {
         if ( IsRowSelected( _nRow ) )
             _rStateSet.AddState( AccessibleStateType::SELECTED );
@@ -595,23 +592,17 @@ namespace svt { namespace table
         _rStateSet.AddState( AccessibleStateType::ENABLED );
         _rStateSet.AddState( AccessibleStateType::SENSITIVE );
         _rStateSet.AddState( AccessibleStateType::ACTIVE );
-
-        (void)_nColumnPos;
     }
 
 
-    tools::Rectangle TableControl::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex)
+    tools::Rectangle TableControl::GetFieldCharacterBounds(sal_Int32,sal_Int32,sal_Int32 nIndex)
     {
-        (void)_nRow;
-        (void)_nColumnPos;
         return GetCharacterBounds(nIndex);
     }
 
 
-    sal_Int32 TableControl::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint)
+    sal_Int32 TableControl::GetFieldIndexAtPoint(sal_Int32,sal_Int32,const Point& _rPoint)
     {
-        (void)_nRow;
-        (void)_nColumnPos;
         return GetIndexForPoint(_rPoint);
     }
 

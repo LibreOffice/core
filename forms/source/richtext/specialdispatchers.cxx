@@ -54,7 +54,6 @@ namespace frm
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         OSL_ENSURE( _rURL.Complete == getFeatureURL().Complete, "OSelectAllDispatcher::dispatch: invalid URL!" );
-        (void)_rURL;
 
         checkDisposed();
 
@@ -109,7 +108,6 @@ namespace frm
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         OSL_ENSURE( _rURL.Complete == getFeatureURL().Complete, "OTextDirectionDispatcher::dispatch: invalid URL!" );
-        (void)_rURL;
 
         checkDisposed();
 

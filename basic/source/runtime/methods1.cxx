@@ -670,7 +670,6 @@ RTLFUNC(DoEvents)
 {
     (void)pBasic;
     (void)bWrite;
-    (void)rPar;
 // don't understand what upstream are up to
 // we already process application events etc. in between
 // basic runtime pcode ( on a timed basis )
@@ -1084,11 +1083,8 @@ static bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
 }
 
 static bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
-                                     bool bBinary, short nBlockLen, bool bIsArray )
+                                     bool bBinary, short nBlockLen )
 {
-    (void)bBinary;
-    (void)bIsArray;
-
     double aDouble;
 
     sal_uInt64 const nFPos = pStrm->Tell();
@@ -1215,7 +1211,7 @@ static bool lcl_WriteReadSbxArray( SbxDimArray& rArr, SvStream* pStrm,
             if( bWrite )
                 bRet = lcl_WriteSbxVariable(*pVar, pStrm, bBinary, 0, true );
             else
-                bRet = lcl_ReadSbxVariable(*pVar, pStrm, bBinary, 0, true );
+                bRet = lcl_ReadSbxVariable(*pVar, pStrm, bBinary, 0 );
             if( !bRet )
                 return false;
         }
@@ -1292,7 +1288,7 @@ void PutGet( SbxArray& rPar, bool bPut )
         if( bPut )
             bRet = lcl_WriteSbxVariable(*pVar, pStrm, !bRandom, nBlockLen, false);
         else
-            bRet = lcl_ReadSbxVariable(*pVar, pStrm, !bRandom, nBlockLen, false);
+            bRet = lcl_ReadSbxVariable(*pVar, pStrm, !bRandom, nBlockLen);
     }
     if( !bRet || pStrm->GetErrorCode() )
         StarBASIC::Error( ERRCODE_BASIC_IO_ERROR );
@@ -1532,7 +1528,7 @@ RTLFUNC(CreateUnoStruct)
     (void)pBasic;
     (void)bWrite;
 
-    RTL_Impl_CreateUnoStruct( pBasic, rPar, bWrite );
+    RTL_Impl_CreateUnoStruct( rPar );
 }
 
 
@@ -1542,7 +1538,7 @@ RTLFUNC(CreateUnoService)
     (void)pBasic;
     (void)bWrite;
 
-    RTL_Impl_CreateUnoService( pBasic, rPar, bWrite );
+    RTL_Impl_CreateUnoService( rPar );
 }
 
 RTLFUNC(CreateUnoServiceWithArguments)
@@ -1550,7 +1546,7 @@ RTLFUNC(CreateUnoServiceWithArguments)
     (void)pBasic;
     (void)bWrite;
 
-    RTL_Impl_CreateUnoServiceWithArguments( pBasic, rPar, bWrite );
+    RTL_Impl_CreateUnoServiceWithArguments( rPar );
 }
 
 
@@ -1559,7 +1555,7 @@ RTLFUNC(CreateUnoValue)
     (void)pBasic;
     (void)bWrite;
 
-    RTL_Impl_CreateUnoValue( pBasic, rPar, bWrite );
+    RTL_Impl_CreateUnoValue( rPar );
 }
 
 
@@ -1569,7 +1565,7 @@ RTLFUNC(GetProcessServiceManager)
     (void)pBasic;
     (void)bWrite;
 
-    RTL_Impl_GetProcessServiceManager( pBasic, rPar, bWrite );
+    RTL_Impl_GetProcessServiceManager( rPar );
 }
 
 
@@ -1579,7 +1575,7 @@ RTLFUNC(CreatePropertySet)
     (void)pBasic;
     (void)bWrite;
 
-    RTL_Impl_CreatePropertySet( pBasic, rPar, bWrite );
+    RTL_Impl_CreatePropertySet( rPar );
 }
 
 
@@ -1589,7 +1585,7 @@ RTLFUNC(HasUnoInterfaces)
     (void)pBasic;
     (void)bWrite;
 
-    RTL_Impl_HasInterfaces( pBasic, rPar, bWrite );
+    RTL_Impl_HasInterfaces( rPar );
 }
 
 
@@ -1598,7 +1594,7 @@ RTLFUNC(IsUnoStruct)
     (void)pBasic;
     (void)bWrite;
 
-    RTL_Impl_IsUnoStruct( pBasic, rPar, bWrite );
+    RTL_Impl_IsUnoStruct( rPar );
 }
 
 
@@ -1607,7 +1603,7 @@ RTLFUNC(EqualUnoObjects)
     (void)pBasic;
     (void)bWrite;
 
-    RTL_Impl_EqualUnoObjects( pBasic, rPar, bWrite );
+    RTL_Impl_EqualUnoObjects( rPar );
 }
 
 RTLFUNC(CreateUnoDialog)
@@ -1615,13 +1611,12 @@ RTLFUNC(CreateUnoDialog)
     (void)pBasic;
     (void)bWrite;
 
-    RTL_Impl_CreateUnoDialog( pBasic, rPar, bWrite );
+    RTL_Impl_CreateUnoDialog( rPar );
 }
 
 // Return the application standard lib as root scope
 RTLFUNC(GlobalScope)
 {
-    (void)pBasic;
     (void)bWrite;
 
     SbxObject* p = pBasic;
@@ -1689,7 +1684,7 @@ RTLFUNC(GetDefaultContext)
     (void)pBasic;
     (void)bWrite;
 
-    RTL_Impl_GetDefaultContext( pBasic, rPar, bWrite );
+    RTL_Impl_GetDefaultContext( rPar );
 }
 
 RTLFUNC(Join)

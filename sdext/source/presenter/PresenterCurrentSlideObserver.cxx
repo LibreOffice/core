@@ -62,23 +62,17 @@ void SAL_CALL PresenterCurrentSlideObserver::disposing()
 //----- XSlideShowListener ----------------------------------------------------
 
 void SAL_CALL PresenterCurrentSlideObserver::beginEvent (
-    const Reference<animations::XAnimationNode>& rNode)
-{
-    (void)rNode;
-}
+    const Reference<animations::XAnimationNode>&)
+{}
 
 void SAL_CALL PresenterCurrentSlideObserver::endEvent (
-    const Reference<animations::XAnimationNode>& rNode)
-{
-    (void)rNode;
-}
+    const Reference<animations::XAnimationNode>&)
+{}
 
 void SAL_CALL PresenterCurrentSlideObserver::repeat (
-    const css::uno::Reference<css::animations::XAnimationNode>& rNode,
+    const css::uno::Reference<css::animations::XAnimationNode>&,
     sal_Int32)
-{
-    (void)rNode;
-}
+{}
 
 void SAL_CALL PresenterCurrentSlideObserver::paused()
 {

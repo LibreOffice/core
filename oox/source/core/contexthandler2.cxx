@@ -111,7 +111,6 @@ void ContextHandler2Helper::implCharacters( const OUString& rChars )
 
 void ContextHandler2Helper::implEndElement( sal_Int32 nElement )
 {
-    (void)nElement;     // prevent "unused parameter" warning in product build
     OSL_ENSURE( getCurrentElementWithMce() == nElement, "ContextHandler2Helper::implEndElement - context stack broken" );
     if( !mxContextStack->empty() )
     {
@@ -135,7 +134,6 @@ void ContextHandler2Helper::implStartRecord( sal_Int32 nRecId, SequenceInputStre
 
 void ContextHandler2Helper::implEndRecord( sal_Int32 nRecId )
 {
-    (void)nRecId;   // prevent "unused parameter" warning in product build
     OSL_ENSURE( getCurrentElementWithMce() == nRecId, "ContextHandler2Helper::implEndRecord - context stack broken" );
     if( !mxContextStack->empty() )
     {

@@ -124,7 +124,6 @@ namespace svx
         ::osl::ClearableMutexGuard aGuard( m_rMutex );
 
         OSL_ENSURE( _rURL.Complete == m_aFeatureURL.Complete, "OSingleFeatureDispatcher::dispatch: not responsible for this URL!" );
-        (void)_rURL;
 
         if ( !m_xFormOperations->isEnabled( m_nFormFeature ) )
             return;
@@ -159,7 +158,6 @@ namespace svx
 
     void SAL_CALL OSingleFeatureDispatcher::addStatusListener( const Reference< XStatusListener >& _rxControl, const URL& _rURL )
     {
-        (void)_rURL;
         OSL_ENSURE( _rURL.Complete == m_aFeatureURL.Complete, "OSingleFeatureDispatcher::addStatusListener: unexpected URL!" );
         OSL_ENSURE( _rxControl.is(), "OSingleFeatureDispatcher::addStatusListener: senseless call!" );
         if ( !_rxControl.is() )
@@ -176,7 +174,6 @@ namespace svx
 
     void SAL_CALL OSingleFeatureDispatcher::removeStatusListener( const Reference< XStatusListener >& _rxControl, const URL& _rURL )
     {
-        (void)_rURL;
         OSL_ENSURE( _rURL.Complete == m_aFeatureURL.Complete, "OSingleFeatureDispatcher::removeStatusListener: unexpected URL!" );
         OSL_ENSURE( _rxControl.is(), "OSingleFeatureDispatcher::removeStatusListener: senseless call!" );
         if ( !_rxControl.is() )

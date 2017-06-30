@@ -197,7 +197,7 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::set(
 #ifdef __CACHE_DIAGNOSE
             OSL_ENSURE( insertion.second, "### inserting new cache entry failed?!" );
 #endif
-            (void) insertion; // avoid warnings
+//TODO:            (void) insertion; // avoid warnings
         }
         else
         {

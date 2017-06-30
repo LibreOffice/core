@@ -238,7 +238,6 @@ namespace svx
 
     void SAL_CALL FmFocusListenerAdapter::disposing( const EventObject& Source )
     {
-        (void)Source;
         DBG_ASSERT( Source.Source == m_xWindow, "FmFocusListenerAdapter::disposing: where did this come from?" );
         m_xWindow.clear();
     }
@@ -340,7 +339,6 @@ namespace svx
 
     void SAL_CALL FmMouseListenerAdapter::disposing( const EventObject& Source )
     {
-        (void)Source;
         DBG_ASSERT( Source.Source == m_xWindow, "FmMouseListenerAdapter::disposing: where did this come from?" );
         m_xWindow.clear();
     }
@@ -1053,10 +1051,7 @@ namespace svx
 
     void FmTextControlShell::formDeactivated( const Reference< runtime::XFormController >& _rxController )
     {
-#if OSL_DEBUG_LEVEL > 0
         SAL_INFO("svx.form", "0x" << OUString::number( reinterpret_cast<sal_IntPtr>(_rxController.get()), 16 ));
-#endif
-        (void)_rxController;
 
         if ( IsActiveControl() )
             controlDeactivated();

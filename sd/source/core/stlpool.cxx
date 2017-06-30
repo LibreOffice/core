@@ -182,7 +182,6 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
 {
     const sal_uInt16 nUsedMask = SFXSTYLEBIT_ALL & ~SFXSTYLEBIT_USERDEF;
 
-    (void)bCheck;
     bool bCreated = false;
 
     SfxStyleSheetBase* pSheet = nullptr;

@@ -268,7 +268,6 @@ bool OAddFieldWindow::PreNotify( NotifyEvent& _rNEvt )
 void OAddFieldWindow::_propertyChanged( const beans::PropertyChangeEvent& _evt )
 {
     OSL_ENSURE( _evt.Source == m_xRowSet, "OAddFieldWindow::_propertyChanged: where did this come from?" );
-    (void)_evt;
     Update();
 }
 

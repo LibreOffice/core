@@ -214,6 +214,39 @@ inline bool isMacroArgExpansion(
 #endif
 }
 
+inline llvm::StringRef getImmediateMacroNameForDiagnostics(
+    clang::SourceLocation Loc, clang::SourceManager const & SM,
+    clang::LangOptions const &LangOpts)
+{
+#if CLANG_VERSION >= 30900
+    return clang::Lexer::getImmediateMacroNameForDiagnostics(Loc, SM, LangOpts);
+#else
+    // Verbatim copy from Clang's lib/Lex/Lexer.cpp:
+
+    assert(Loc.isMacroID() && "Only reasonble to call this on macros");
+    // Walk past macro argument expanions.
+    while (SM.isMacroArgExpansion(Loc))
+        Loc = SM.getImmediateExpansionRange(Loc).first;
+
+    // If the macro's spelling has no FileID, then it's actually a token paste
+    // or stringization (or similar) and not a macro at all.
+    if (!SM.getFileEntryForID(SM.getFileID(SM.getSpellingLoc(Loc))))
+        return StringRef();
+
+    // Find the spelling location of the start of the non-argument expansion
+    // range. This is where the macro name was spelled in order to begin
+    // expanding this macro.
+    Loc = SM.getSpellingLoc(SM.getImmediateExpansionRange(Loc).first);
+
+    // Dig out the buffer where the macro name was spelled and the extents of
+    // the name so that we can render it into the expansion note.
+    std::pair<FileID, unsigned> ExpansionInfo = SM.getDecomposedLoc(Loc);
+    unsigned MacroTokenLength = Lexer::MeasureTokenLength(Loc, SM, LangOpts);
+    StringRef ExpansionBuffer = SM.getBufferData(ExpansionInfo.first);
+    return ExpansionBuffer.substr(ExpansionInfo.second, MacroTokenLength);
+#endif
+}
+
 inline auto getAsTagDecl(clang::Type const& t) -> clang::TagDecl *
 {
 #if CLANG_VERSION >= 30500

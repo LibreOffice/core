@@ -352,8 +352,6 @@ namespace canvas
             const css::uno::Reference< css::uno::XInterface >&      xIf,
             ::sal_Int16                                             nArgPos )
         {
-            (void)pStr; (void)xIf; (void)nArgPos;
-
             if( !rRef.is() )
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -362,6 +360,7 @@ namespace canvas
                     xIf,
                     nArgPos );
 #else
+                (void)pStr; (void)xIf; (void)nArgPos;
                 throw css::lang::IllegalArgumentException();
 #endif
             }

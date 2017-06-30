@@ -497,9 +497,8 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
      return nRet;
 }
 
-oslPipeError SAL_CALL osl_getLastPipeError(oslPipe pPipe)
+oslPipeError SAL_CALL osl_getLastPipeError(SAL_UNUSED_PARAMETER oslPipe)
 {
-    (void) pPipe; /* unused */
     return osl_PipeErrorFromNative(errno);
 }
 

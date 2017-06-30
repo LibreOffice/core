@@ -170,7 +170,6 @@ private:
 
     bool isTransition( NodeState eFromState, NodeState eToState,
                        bool debugAssert = true ) const {
-        (void) debugAssert; // avoid warning
         bool const bRet =((mpStateTransitionTable[eFromState] & eToState) != 0);
         OSL_ENSURE( !debugAssert || bRet, "### state unreachable!" );
         return bRet;

@@ -86,9 +86,6 @@ namespace frm
 
         checkDisposed();
 
-        (void)_rURL;
-        (void)_rArguments;
-
         OSL_ENSURE( _rURL.Complete == getFeatureURL().Complete, "OAttributeDispatcher::dispatch: invalid URL!" );
         SAL_WARN_IF( _rArguments.getLength(), "forms.richtext",
                 "OAttributeDispatcher::dispatch: found arguments, but can't handle arguments at all"
@@ -102,7 +99,6 @@ namespace frm
     void OAttributeDispatcher::onAttributeStateChanged( AttributeId _nAttributeId, const AttributeState& /*_rState*/ )
     {
         OSL_ENSURE( _nAttributeId == m_nAttributeId, "OAttributeDispatcher::onAttributeStateChanged: wrong attribute!" );
-        (void)_nAttributeId;
 
         FeatureStateEvent aEvent( buildStatusEvent() );
         ::comphelper::OInterfaceIteratorHelper2 aIter( getStatusListeners() );

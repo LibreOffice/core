@@ -141,9 +141,8 @@ void Deck::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*r
                            Theme::GetPaint(Theme::Paint_VerticalBorder));
 }
 
-void Deck::DataChanged (const DataChangedEvent& rEvent)
+void Deck::DataChanged (const DataChangedEvent&)
 {
-    (void)rEvent;
     RequestLayout();
 }
 

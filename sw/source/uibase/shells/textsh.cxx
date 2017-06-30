@@ -324,8 +324,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 break;
             if(!rReq.IsAPI())
             {
-                SfxViewFrame* pVFrame = GetView().GetViewFrame();
-                SwInsertChart( &GetView().GetEditWin(), &pVFrame->GetBindings() );
+                SwInsertChart();
             }
             else
             {

@@ -748,8 +748,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream)
             if (nVersion == 0x0003)
             {   // since version 3 there is a "skippable" block at this position
                 OStreamSection aDownCompat(_rxInStream);
-                sal_Int16 nSubVersion = _rxInStream->readShort();
-                (void)nSubVersion;
+                _rxInStream->readShort(); // sub-version
                 // version 0 and higher : the "effective value" property
                 Any aEffectiveValue;
                 {

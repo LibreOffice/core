@@ -159,9 +159,8 @@ sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleRowSelected( sal_Int3
     return false;
 }
 //columns aren't selectable
-sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleColumnSelected( sal_Int32 nColumn )
+sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleColumnSelected( sal_Int32 )
 {
-    (void)nColumn;
     return false;
 }
 //not implemented

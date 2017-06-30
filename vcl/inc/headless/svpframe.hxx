@@ -114,8 +114,8 @@ public:
     virtual void                EndSetClipRegion() override;
 
     /*TODO: functional implementation */
-    virtual void                SetScreenNumber( unsigned int nScreen ) override { (void)nScreen; }
-    virtual void                SetApplicationID(const OUString &rApplicationID) override { (void) rApplicationID; }
+    virtual void                SetScreenNumber( unsigned int ) override {}
+    virtual void                SetApplicationID(const OUString &) override {}
 
 };
 

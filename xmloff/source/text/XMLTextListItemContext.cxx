@@ -106,7 +106,6 @@ XMLTextListItemContext::XMLTextListItemContext(
         else if ( (XML_NAMESPACE_XML == nPrefix) &&
              IsXMLToken(aLocalName, XML_ID)   )
         {
-            (void) rValue;
 //FIXME: there is no UNO API for list items
         }
     }

@@ -10,6 +10,7 @@
 $(eval $(call gb_CompilerTest_CompilerTest,compilerplugins_clang))
 
 $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
+    compilerplugins/clang/test/casttovoid \
     compilerplugins/clang/test/cppunitassertequals \
     compilerplugins/clang/test/datamembershadow \
     compilerplugins/clang/test/externvar \

@@ -407,8 +407,6 @@ IMPL_LINK_NOARG( ODesignView, SplitHdl, SplitWindow*, void )
 
     if ( (aOutputSize.Width() - nTest) >= nMinWidth && nTest > m_aScrollWindow->getMaxMarkerWidth() )
     {
-        long nOldSplitPos = getController().getSplitPos();
-        (void)nOldSplitPos;
         getController().setSplitPos(nTest);
     }
 }

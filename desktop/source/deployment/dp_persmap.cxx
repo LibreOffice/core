@@ -157,9 +157,12 @@ void PersistentMap::open()
 void PersistentMap::readAll()
 {
     // prepare for re-reading the map-file
-    const osl::FileBase::RC nRes = m_MapFile.setPos( osl_Pos_Absolut, 0);
-    (void)nRes;
     m_entries.clear();
+    if (m_MapFile.setPos( osl_Pos_Absolut, 0) != osl::FileBase::E_None)
+    {
+        SAL_WARN("desktop.deployment", "setPos failed");
+        return;
+    }
 
     // read header and check magic
     char aHeaderBytes[ sizeof(PmapMagic)];
@@ -217,8 +220,11 @@ void PersistentMap::flush()
         return;
 
     // write header magic
-    const osl::FileBase::RC nRes = m_MapFile.setPos( osl_Pos_Absolut, 0);
-    (void)nRes;
+    if (m_MapFile.setPos( osl_Pos_Absolut, 0) != osl::FileBase::E_None)
+    {
+        SAL_WARN("desktop.deployment", "setPos failed");
+        return;
+    }
     sal_uInt64 nBytesWritten = 0;
     m_MapFile.write( PmapMagic, sizeof(PmapMagic), nBytesWritten);
 

@@ -41,7 +41,6 @@
 #include <paratr.hxx>
 #include <SwNodeNum.hxx>
 #include <dbgoutsw.hxx>
-#include <SwRewriter.hxx>
 #include <iostream>
 #include <cstdio>
 
@@ -795,22 +794,6 @@ static OUString lcl_dbg_out(SwOutlineNodes & rNodes)
 const char * dbg_out(SwOutlineNodes & rNodes)
 {
     return dbg_out(lcl_dbg_out(rNodes));
-}
-
-//FIXME: this method seems to do nothing at all
-static OUString lcl_dbg_out(const SwRewriter & rRewriter)
-{
-    (void) rRewriter;
-    OUString aResult;
-
-    //aResult = rRewriter.ToString();
-
-    return aResult;
-}
-
-const char * dbg_out(const SwRewriter & rRewriter)
-{
-    return dbg_out(lcl_dbg_out(rRewriter));
 }
 
 static OUString lcl_dbg_out(const SvxNumberFormat & rFormat)

@@ -513,16 +513,17 @@ unsigned int i;
     }
 }
 
-#ifdef HASH_STAT
 static inline int compare_key(struct hash* hash, const char* a, const char* b, int len, int* cost)
 {
+#ifdef HASH_STAT
     *cost += 1;
     hash->memcmp += 1;
+#else
+    (void) hash;
+    (void) cost;
+#endif
     return memcmp(a,b, len);
 }
-#else
-#define compare_key(h,a,b,l,c) memcmp(a,b,l)
-#endif
 
 /* a customized hash_store function that just store the key and return
  * TRUE if the key was effectively stored, or FALSE if the key was already there

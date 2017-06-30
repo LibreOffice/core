@@ -244,31 +244,23 @@ sal_Int64 SAL_CALL ViewShellWrapper::getSomething (const Sequence<sal_Int8>& rId
 
 //===== awt::XWindowListener ==================================================
 
-void SAL_CALL ViewShellWrapper::windowResized (const awt::WindowEvent& rEvent)
+void SAL_CALL ViewShellWrapper::windowResized (const awt::WindowEvent&)
 {
-    (void)rEvent;
     ViewShell* pViewShell (mpViewShell.get());
     if (pViewShell != nullptr)
         pViewShell->Resize();
 }
 
-void SAL_CALL ViewShellWrapper::windowMoved (const awt::WindowEvent& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL ViewShellWrapper::windowMoved (const awt::WindowEvent&) {}
 
-void SAL_CALL ViewShellWrapper::windowShown (const lang::EventObject& rEvent)
+void SAL_CALL ViewShellWrapper::windowShown (const lang::EventObject&)
 {
-    (void)rEvent;
     ViewShell* pViewShell (mpViewShell.get());
     if (pViewShell != nullptr)
         pViewShell->Resize();
 }
 
-void SAL_CALL ViewShellWrapper::windowHidden (const lang::EventObject& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL ViewShellWrapper::windowHidden (const lang::EventObject&) {}
 
 //===== XEventListener ========================================================
 

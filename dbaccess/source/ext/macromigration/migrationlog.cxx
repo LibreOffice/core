@@ -151,8 +151,6 @@ namespace dbmm
         OSL_ENSURE( m_pData->aDocumentLogs.find( _nDocID ) != m_pData->aDocumentLogs.end(),
             "MigrationLog::finishedDocument: document is not known!" );
 
-        DocumentEntry& rDocEntry = m_pData->aDocumentLogs[ _nDocID ];
-        (void)rDocEntry;
         // nothing to do here
     }
 

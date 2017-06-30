@@ -309,15 +309,6 @@ void SdImportTest::testSmoketest()
     const SdrPage *pPage = pDoc->GetPage (1);
     CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
-    const size_t nObjs = pPage->GetObjCount();
-    for (size_t i = 0; i < nObjs; i++)
-    {
-        SdrObject *pObj = pPage->GetObj(i);
-        SdrObjKind eKind = (SdrObjKind) pObj->GetObjIdentifier();
-        SdrTextObj *pTxt = dynamic_cast<SdrTextObj *>( pObj );
-        (void)pTxt; (void)eKind;
-    }
-
     CPPUNIT_ASSERT_MESSAGE( "changed", !pDoc->IsChanged() );
 
     xDocShRef->DoClose();

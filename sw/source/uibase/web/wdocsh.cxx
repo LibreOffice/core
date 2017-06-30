@@ -68,7 +68,6 @@ void SwWebDocShell::FillClass( SvGlobalName * pClassName,
                                    sal_Int32 nVersion,
                                    bool bTemplate /* = false */) const
 {
-    (void)bTemplate;
     OSL_ENSURE( !bTemplate, "No template for Writer Web" );
 
     if (nVersion == SOFFICE_FILEFORMAT_60)

@@ -134,10 +134,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
             // of registered factories.
             mpResourceFactoryContainer->RemoveFactoryForReference(xFactory);
         }
-        catch (Exception& e)
-        {
-            (void)e;
-        }
+        catch (Exception&) {}
 
         if (xResource.is())
         {

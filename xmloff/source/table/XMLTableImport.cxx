@@ -407,7 +407,6 @@ SvXMLImportContext * XMLTableImportContext::ImportColumn( sal_uInt16 nPrefix, co
             else if ( (XML_NAMESPACE_XML == nPrefix2) &&
                  IsXMLToken(aLocalName, XML_ID)   )
             {
-                (void) sValue;
 //FIXME: TODO
             }
         }
@@ -669,7 +668,6 @@ XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport, const Referenc
         else if ( (XML_NAMESPACE_XML == nPrefix2) &&
              IsXMLToken(aLocalName, XML_ID)   )
         {
-            (void) sValue;
 //FIXME: TODO
         }
 //FIXME: RDFa (table:table-cell)

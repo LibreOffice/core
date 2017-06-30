@@ -154,20 +154,20 @@ void Test::testUnoSetThrow()
 
     // ctor taking Reference< interface_type >
     bool bCaughtException = false;
-    try { Reference< Interface1 > x( xNull, UNO_SET_THROW ); (void)x; } catch( const RuntimeException& ) { bCaughtException = true; }
+    try { Reference< Interface1 > x( xNull, UNO_SET_THROW ); } catch( const RuntimeException& ) { bCaughtException = true; }
     CPPUNIT_ASSERT_EQUAL( true, bCaughtException );
 
     bCaughtException = false;
-    try { Reference< Interface1 > x( xFoo, UNO_SET_THROW ); (void)x; } catch( const RuntimeException& ) { bCaughtException = true; }
+    try { Reference< Interface1 > x( xFoo, UNO_SET_THROW ); } catch( const RuntimeException& ) { bCaughtException = true; }
     CPPUNIT_ASSERT_EQUAL( false, bCaughtException );
 
     // ctor taking interface_type*
     bCaughtException = false;
-    try { Reference< Interface1 > x( xNull.get(), UNO_SET_THROW ); (void)x; } catch( const RuntimeException& ) { bCaughtException = true; }
+    try { Reference< Interface1 > x( xNull.get(), UNO_SET_THROW ); } catch( const RuntimeException& ) { bCaughtException = true; }
     CPPUNIT_ASSERT_EQUAL( true, bCaughtException );
 
     bCaughtException = false;
-    try { Reference< Interface1 > x( xFoo.get(), UNO_SET_THROW ); (void)x; } catch( const RuntimeException& ) { bCaughtException = true; }
+    try { Reference< Interface1 > x( xFoo.get(), UNO_SET_THROW ); } catch( const RuntimeException& ) { bCaughtException = true; }
     CPPUNIT_ASSERT_EQUAL( false, bCaughtException );
 
     Reference< Interface1 > x;

@@ -526,9 +526,9 @@ public:
 
     SC_DLLPUBLIC ScRefFlags ParseAny( const OUString&, ScDocument*,
                                       const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
-    SC_DLLPUBLIC ScRefFlags ParseCols( const OUString&, ScDocument*,
+    SC_DLLPUBLIC ScRefFlags ParseCols( const OUString&,
                                        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
-    SC_DLLPUBLIC void ParseRows( const OUString&, ScDocument*,
+    SC_DLLPUBLIC void ParseRows( const OUString&,
                                        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
 
     /** Parse an Excel style reference up to and including the sheet name

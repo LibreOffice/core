@@ -207,11 +207,9 @@ protected:
     virtual void CalculateRowAndColumnCount (const Size& rWindowSize) = 0;
     virtual void CalculateMaxRowAndColumnCount (const Size& rWindowSize) = 0;
     virtual Size CalculateTargetSize (
-        const Size& rWindowSize,
-        const Size& rPreviewModelSize) const = 0;
+        const Size& rWindowSize) const = 0;
     Size GetTargetSize (
         const Size& rWindowSize,
-        const Size& rPreviewModelSize,
         const bool bCalculateWidth,
         const bool bCalculateHeight) const;
     void CalculateVerticalLogicalInsertPosition (
@@ -237,8 +235,7 @@ protected:
     virtual void CalculateRowAndColumnCount (const Size& rWindowSize) override;
     virtual void CalculateMaxRowAndColumnCount (const Size& rWindowSize) override;
     virtual Size CalculateTargetSize (
-        const Size& rWindowSize,
-        const Size& rPreviewModelSize) const override;
+        const Size& rWindowSize) const override;
 };
 
 /** The horizontal layouter has one row and as many columns as there are
@@ -259,8 +256,7 @@ protected:
     virtual void CalculateRowAndColumnCount (const Size& rWindowSize) override;
     virtual void CalculateMaxRowAndColumnCount (const Size& rWindowSize) override;
     virtual Size CalculateTargetSize (
-        const Size& rWindowSize,
-        const Size& rPreviewModelSize) const override;
+        const Size& rWindowSize) const override;
 };
 
 /** The number of columns of the grid layouter is defined via a control in
@@ -285,8 +281,7 @@ protected:
     virtual void CalculateRowAndColumnCount (const Size& rWindowSize) override;
     virtual void CalculateMaxRowAndColumnCount (const Size& rWindowSize) override;
     virtual Size CalculateTargetSize (
-        const Size& rWindowSize,
-        const Size& rPreviewModelSize) const override;
+        const Size& rWindowSize) const override;
 };
 
 //===== Layouter ==============================================================
@@ -519,7 +514,7 @@ bool Layouter::Implementation::Rearrange (
 
     mpPageObjectLayouter.reset(
         new PageObjectLayouter(
-            CalculateTargetSize(rWindowSize, rPreviewModelSize),
+            CalculateTargetSize(rWindowSize),
             rPreviewModelSize,
             mpWindow,
             mnPageCount));
@@ -832,12 +827,9 @@ Range Layouter::Implementation::GetRangeOfVisiblePageObjects (const ::tools::Rec
 
 Size Layouter::Implementation::GetTargetSize (
     const Size& rWindowSize,
-    const Size& rPreviewModelSize,
     const bool bCalculateWidth,
     const bool bCalculateHeight) const
 {
-    (void)rPreviewModelSize;
-
     if (mnColumnCount<=0 || mnRowCount<=0)
         return maPreferredSize;
     if ( ! (bCalculateWidth || bCalculateHeight))
@@ -1008,10 +1000,8 @@ Layouter::Orientation HorizontalImplementation::GetOrientation() const
     return Layouter::HORIZONTAL;
 }
 
-void HorizontalImplementation::CalculateRowAndColumnCount (const Size& rWindowSize)
+void HorizontalImplementation::CalculateRowAndColumnCount (const Size&)
 {
-    (void)rWindowSize;
-
     // Row and column count are fixed (for a given page count.)
     mnColumnCount = mnPageCount;
     mnRowCount = 1;
@@ -1025,10 +1015,9 @@ void HorizontalImplementation::CalculateMaxRowAndColumnCount (const Size& rWindo
 }
 
 Size HorizontalImplementation::CalculateTargetSize (
-    const Size& rWindowSize,
-    const Size& rPreviewModelSize) const
+    const Size& rWindowSize) const
 {
-    return Implementation::GetTargetSize(rWindowSize, rPreviewModelSize, false, true);
+    return Implementation::GetTargetSize(rWindowSize, false, true);
 }
 
 void HorizontalImplementation::CalculateLogicalInsertPosition (
@@ -1059,10 +1048,8 @@ Layouter::Orientation VerticalImplementation::GetOrientation() const
     return Layouter::VERTICAL;
 }
 
-void VerticalImplementation::CalculateRowAndColumnCount (const Size& rWindowSize)
+void VerticalImplementation::CalculateRowAndColumnCount (const Size&)
 {
-    (void)rWindowSize;
-
     // Row and column count are fixed (for a given page count.)
     mnRowCount = mnPageCount;
     mnColumnCount = 1;
@@ -1077,10 +1064,9 @@ void VerticalImplementation::CalculateMaxRowAndColumnCount (const Size& rWindowS
 }
 
 Size VerticalImplementation::CalculateTargetSize (
-    const Size& rWindowSize,
-    const Size& rPreviewModelSize) const
+    const Size& rWindowSize) const
 {
-    return Implementation::GetTargetSize(rWindowSize, rPreviewModelSize, true, false);
+    return Implementation::GetTargetSize(rWindowSize, true, false);
 }
 
 void VerticalImplementation::CalculateLogicalInsertPosition (
@@ -1131,10 +1117,9 @@ void GridImplementation::CalculateMaxRowAndColumnCount (const Size& rWindowSize)
 }
 
 Size GridImplementation::CalculateTargetSize (
-    const Size& rWindowSize,
-    const Size& rPreviewModelSize) const
+    const Size& rWindowSize) const
 {
-    return Implementation::GetTargetSize(rWindowSize, rPreviewModelSize, true, true);
+    return Implementation::GetTargetSize(rWindowSize, true, true);
 }
 
 void GridImplementation::CalculateLogicalInsertPosition (

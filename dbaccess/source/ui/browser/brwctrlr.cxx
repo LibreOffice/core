@@ -1365,7 +1365,6 @@ sal_Bool SbaXDataBrowserController::approveReset(const css::lang::EventObject& /
 void SbaXDataBrowserController::resetted(const css::lang::EventObject& rEvent)
 {
     OSL_ENSURE(rEvent.Source == getControlModel(), "SbaXDataBrowserController::resetted : where did this come from ?");
-    (void)rEvent;
     setCurrentModified( false );
 }
 

@@ -2075,7 +2075,6 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
     }
 
     OSL_ENSURE( bFound, "member not found" );
-    (void)bFound;
 
     //TODO: use Hierarchy and Level in SaveData !!!!
 

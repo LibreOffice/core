@@ -279,6 +279,8 @@ template<std::size_t N> ContextCheck ContextCheck::Struct(char const (& id)[N])
         llvm::dyn_cast_or_null<clang::Decl>(context_), clang::TTK_Struct, id);
 }
 
+bool isExtraWarnUnusedType(clang::QualType type);
+
 }
 
 #endif

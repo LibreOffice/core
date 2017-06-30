@@ -401,11 +401,8 @@ css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog
     return aDlgLib;
 }
 
-void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
+void RTL_Impl_CreateUnoDialog( SbxArray& rPar )
 {
-    (void)pBasic;
-    (void)bWrite;
-
     Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
     // We need at least 1 parameter

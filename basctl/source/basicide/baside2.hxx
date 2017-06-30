@@ -362,7 +362,7 @@ public:
     void            BasicAddWatch();
 
     bool            BasicErrorHdl( StarBASIC* pBasic );
-    BasicDebugFlags BasicBreakHdl( StarBASIC* pBasic );
+    BasicDebugFlags BasicBreakHdl();
     void            AssertValidEditEngine();
 
     void            LoadBasic();

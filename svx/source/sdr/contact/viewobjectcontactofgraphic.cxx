@@ -218,8 +218,6 @@ namespace sdr
         // the event. The parameter allows checking for the correct event.
         void ViewObjectContactOfGraphic::forgetAsynchGraphicLoadingEvent(sdr::event::AsynchGraphicLoadingEvent* pEvent)
         {
-            (void) pEvent; // suppress warning
-
             if(mpAsynchLoadEvent)
             {
                 OSL_ENSURE(!pEvent || mpAsynchLoadEvent.get() == pEvent,

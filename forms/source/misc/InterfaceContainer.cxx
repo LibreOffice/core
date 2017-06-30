@@ -525,7 +525,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
     if (nLen)
     {
         // 1. Version
-        sal_uInt16 nVersion = _rxInStream->readShort(); (void)nVersion;
+        _rxInStream->readShort();
 
         // 2. Objects
         for (sal_Int32 i = 0; i < nLen; i++)

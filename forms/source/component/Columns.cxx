@@ -533,7 +533,7 @@ void SAL_CALL OGridColumn::read(const Reference<XObjectInputStream>& _rxInStream
     }
 
     // 2. Write a version number
-    sal_uInt16 nVersion = _rxInStream->readShort(); (void)nVersion;
+    _rxInStream->readShort(); // version;
     sal_uInt16 nAnyMask = _rxInStream->readShort();
 
     if (nAnyMask & WIDTH)

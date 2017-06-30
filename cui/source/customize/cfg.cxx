@@ -1531,18 +1531,14 @@ void SvxMenuEntriesListBox::dispose()
 
 // drag and drop support
 DragDropMode SvxMenuEntriesListBox::NotifyStartDrag(
-    TransferDataContainer& aTransferDataContainer, SvTreeListEntry* pEntry )
+    TransferDataContainer&, SvTreeListEntry* )
 {
-    (void)aTransferDataContainer;
-    (void)pEntry;
-
     m_bIsInternalDrag = true;
     return GetDragDropMode();
 }
 
-void SvxMenuEntriesListBox::DragFinished( sal_Int8 nDropAction )
+void SvxMenuEntriesListBox::DragFinished( sal_Int8 )
 {
-    (void)nDropAction;
     m_bIsInternalDrag = false;
 }
 
@@ -1593,13 +1589,9 @@ TriState SvxMenuEntriesListBox::NotifyMoving(
 }
 
 TriState SvxMenuEntriesListBox::NotifyCopying(
-    SvTreeListEntry* pTarget, SvTreeListEntry* pSource,
-    SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos)
+    SvTreeListEntry* pTarget, SvTreeListEntry*,
+    SvTreeListEntry*&, sal_uLong&)
 {
-    (void)pSource;
-    (void)rpNewParent;
-    (void)rNewChildPos;
-
     if ( !m_bIsInternalDrag )
     {
         // if the target is NULL then add function to the start of the list
@@ -4846,14 +4838,10 @@ TriState SvxToolbarEntriesListBox::NotifyMoving(
 
 TriState SvxToolbarEntriesListBox::NotifyCopying(
     SvTreeListEntry*  pTarget,
-    SvTreeListEntry*  pSource,
-    SvTreeListEntry*& rpNewParent,
-    sal_uLong&      rNewChildPos)
+    SvTreeListEntry*,
+    SvTreeListEntry*&,
+    sal_uLong&)
 {
-    (void)pSource;
-    (void)rpNewParent;
-    (void)rNewChildPos;
-
     if ( !m_bIsInternalDrag )
     {
         // if the target is NULL then add function to the start of the list

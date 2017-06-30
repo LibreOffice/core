@@ -1014,8 +1014,6 @@ void SlideView::_dispose()
 // XEventListener
 void SlideView::disposing( lang::EventObject const& evt )
 {
-    (void)evt;
-
     // no deregistration necessary anymore, XView has left:
     osl::MutexGuard const guard( m_aMutex );
 

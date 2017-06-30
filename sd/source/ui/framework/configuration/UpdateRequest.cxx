@@ -37,9 +37,8 @@ UpdateRequest::~UpdateRequest() throw()
 {
 }
 
-void SAL_CALL UpdateRequest::execute (const Reference<XConfiguration>& rxConfiguration)
+void SAL_CALL UpdateRequest::execute (const Reference<XConfiguration>&)
 {
-    (void)rxConfiguration;
     // Do nothing here.  The configuration is updated when the request queue
     // becomes empty.
 }
@@ -49,9 +48,8 @@ OUString SAL_CALL UpdateRequest::getName()
     return OUString("UpdateRequest");
 }
 
-void SAL_CALL UpdateRequest::setName (const OUString& rsName)
+void SAL_CALL UpdateRequest::setName (const OUString&)
 {
-    (void)rsName;
     // Ignored.
 }
 

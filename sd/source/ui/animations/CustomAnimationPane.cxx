@@ -900,9 +900,8 @@ void CustomAnimationPane::onContextMenu(const OString &rIdent)
     updateControls();
 }
 
-void CustomAnimationPane::DataChanged (const DataChangedEvent& rEvent)
+void CustomAnimationPane::DataChanged (const DataChangedEvent&)
 {
-    (void)rEvent;
     UpdateLook();
 }
 

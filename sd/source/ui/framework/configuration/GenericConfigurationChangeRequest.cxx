@@ -67,9 +67,8 @@ OUString SAL_CALL GenericConfigurationChangeRequest::getName()
         + FrameworkHelper::ResourceIdToString(mxResourceId);
 }
 
-void SAL_CALL GenericConfigurationChangeRequest::setName (const OUString& rsName)
+void SAL_CALL GenericConfigurationChangeRequest::setName (const OUString&)
 {
-    (void)rsName;
     // Ignored.
 }
 

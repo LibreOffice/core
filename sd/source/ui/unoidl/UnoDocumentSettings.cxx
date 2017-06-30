@@ -377,8 +377,7 @@ uno::Sequence<beans::PropertyValue>
         uno::Reference< lang::XComponent > xComp( xSubStorage, UNO_QUERY );
         if( xComp.is() )
             xSubStorage->dispose();
-    } catch (const uno::Exception &e) {
-        (void)e;
+    } catch (const uno::Exception &) {
 //        fprintf (stderr, "saving etc. exception '%s'\n",
 //                 OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
     }

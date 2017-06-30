@@ -438,10 +438,8 @@ void UCBStream::FlushData()
     }
 }
 
-void    UCBStream::SetSize( sal_uInt64 nSize )
+void    UCBStream::SetSize( sal_uInt64 )
 {
-    (void)nSize;
-
     SAL_WARN("basic", "UCBStream::SetSize not allowed to call from basic" );
     SetError( ERRCODE_IO_GENERAL );
 }

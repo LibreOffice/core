@@ -190,10 +190,8 @@ VclPtr<vcl::Window> CellAppearancePropertyPanel::Create (
 }
 
 void CellAppearancePropertyPanel::DataChanged(
-    const DataChangedEvent& rEvent)
-{
-    (void)rEvent;
-}
+    const DataChangedEvent&)
+{}
 
 void CellAppearancePropertyPanel::HandleContextChange(const vcl::EnumContext& rContext)
 {
@@ -210,10 +208,8 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
     const SfxPoolItem* pState,
-    const bool bIsEnabled)
+    const bool)
 {
-    (void)bIsEnabled;
-
     switch(nSID)
     {
     case SID_FRAME_LINESTYLE:

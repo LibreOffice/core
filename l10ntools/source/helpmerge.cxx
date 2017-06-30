@@ -142,12 +142,9 @@ bool HelpParser::CreatePO(
     return true;
 }
 
-bool HelpParser::Merge( const OString &rPOFile, const OString &rDestinationFile,
+bool HelpParser::Merge( const OString &rDestinationFile,
     const OString& rLanguage , MergeDataFile* pMergeDataFile )
 {
-
-    (void) rPOFile;
-
     SimpleXMLParser aParser;
 
     //TODO: explicit BOM handling?

@@ -595,10 +595,8 @@ void SlideBackground::NotifyItemUpdate(
     const sal_uInt16 nSID,
     const SfxItemState eState,
     const SfxPoolItem* pState,
-    const bool bIsEnabled)
+    const bool)
 {
-    (void)bIsEnabled;
-
     switch(nSID)
     {
 

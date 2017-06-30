@@ -136,8 +136,7 @@ private:
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) const;
 
     css::uno::Reference<css::drawing::framework::XView> CreateNotesView(
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
-        const css::uno::Reference<css::drawing::framework::XPane>& rxPane) const;
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) const;
 
     css::uno::Reference<css::drawing::framework::XView> CreateSlideSorterView(
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) const;

@@ -1558,7 +1558,6 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
         const bool bSuccess( SwUnoCursorHelper::DocInsertStringSplitCR(
                     *pDoc, rCursor, rString, false ) );
         OSL_ENSURE( bSuccess, "DocInsertStringSplitCR" );
-        (void) bSuccess;
         SwUnoCursorHelper::SelectPam(rCursor, true);
         rCursor.Left(rString.getLength());
     }

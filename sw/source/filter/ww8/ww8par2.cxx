@@ -249,7 +249,6 @@ void sw::util::RedlineStack::close( const SwPosition& rPos,
             bool const bResult =
                 pTabDesc->getOldRedlineStack()->close(rPos, eType);
             OSL_ENSURE( bResult, "close without open!");
-            (void) bResult; // unused in non-debug
         }
     }
 }
@@ -3510,7 +3509,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
                 // containing WW8 page top margin.
                 pTableSFlyPara = new WW8SwFlyPara(*m_pPaM, *this, *pTableWFlyPara,
                     m_aSectionManager.GetWWPageTopMargin(),
-                    m_aSectionManager.GetPageLeft(), m_aSectionManager.GetTextAreaWidth(),
+                    m_aSectionManager.GetTextAreaWidth(),
                     m_nIniFlyDx, m_nIniFlyDy);
 
                 // #i45301# - anchor nested table Writer fly frame at-character

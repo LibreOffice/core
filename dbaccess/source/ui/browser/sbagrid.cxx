@@ -1283,9 +1283,8 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
             if (::comphelper::getBOOL(xField->getPropertyValue(PROPERTY_ISREADONLY)))
                 break;
         }
-        catch (const Exception& e )
+        catch (const Exception& )
         {
-            (void)e; // make compiler happy
             // assume RO
             break;
         }

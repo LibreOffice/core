@@ -416,9 +416,8 @@ void ZipPackageFolder::doInsertByName ( ZipPackageEntry *pEntry, bool bSetParent
         else
             maContents[pEntry->getName()] = o3tl::make_unique<ZipContentInfo>(static_cast<ZipPackageStream*>(pEntry));
     }
-    catch(const uno::Exception& rEx)
+    catch(const uno::Exception&)
     {
-        (void)rEx;
         throw;
     }
     if ( bSetParent )

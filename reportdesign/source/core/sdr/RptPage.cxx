@@ -155,8 +155,7 @@ void OReportPage::removeTempObject(SdrObject *_pToRemoveObj)
             SdrObject *aObj = GetObj(i);
             if (aObj && aObj == _pToRemoveObj)
             {
-                SdrObject* pObject = RemoveObject(i);
-                (void)pObject;
+                (void) RemoveObject(i);
                 break;
             }
         }

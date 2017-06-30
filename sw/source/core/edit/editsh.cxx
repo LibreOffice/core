@@ -72,7 +72,6 @@ void SwEditShell::Insert( sal_Unicode c, bool bOnlyCurrCursor )
     {
         const bool bSuccess = GetDoc()->getIDocumentContentOperations().InsertString(rPaM, OUString(c));
         OSL_ENSURE( bSuccess, "Doc->Insert() failed." );
-        (void) bSuccess;
 
         SaveTableBoxContent( rPaM.GetPoint() );
         if( bOnlyCurrCursor )

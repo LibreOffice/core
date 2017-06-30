@@ -287,10 +287,8 @@ void SbStdClipboard::MethClear( SbxVariable*, SbxArray* pPar_, bool )
 
 }
 
-void SbStdClipboard::MethGetData( SbxVariable* pVar, SbxArray* pPar_, bool )
+void SbStdClipboard::MethGetData( SbxArray* pPar_, bool )
 {
-    (void)pVar;
-
     if( !pPar_ || (pPar_->Count() != 2) )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_NUMBER_OF_ARGS );
@@ -335,10 +333,8 @@ void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray* pPar_, bool )
     pVar->PutString( OUString() );
 }
 
-void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar_, bool )
+void SbStdClipboard::MethSetData( SbxArray* pPar_, bool )
 {
-    (void)pVar;
-
     if( !pPar_ || (pPar_->Count() != 3) )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_NUMBER_OF_ARGS );
@@ -354,10 +350,8 @@ void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar_, bool )
 
 }
 
-void SbStdClipboard::MethSetText( SbxVariable* pVar, SbxArray* pPar_, bool )
+void SbStdClipboard::MethSetText( SbxArray* pPar_, bool )
 {
-    (void)pVar;
-
     if( !pPar_ || (pPar_->Count() != 2) )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_NUMBER_OF_ARGS );
@@ -420,11 +414,11 @@ void SbStdClipboard::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         switch( nWhich )
         {
             case METH_CLEAR:            MethClear( pVar, pPar_, bWrite ); return;
-            case METH_GETDATA:          MethGetData( pVar, pPar_, bWrite ); return;
+            case METH_GETDATA:          MethGetData( pPar_, bWrite ); return;
             case METH_GETFORMAT:        MethGetFormat( pVar, pPar_, bWrite ); return;
             case METH_GETTEXT:          MethGetText( pVar, pPar_, bWrite ); return;
-            case METH_SETDATA:          MethSetData( pVar, pPar_, bWrite ); return;
-            case METH_SETTEXT:          MethSetText( pVar, pPar_, bWrite ); return;
+            case METH_SETDATA:          MethSetData( pPar_, bWrite ); return;
+            case METH_SETTEXT:          MethSetText( pPar_, bWrite ); return;
         }
 
         SbxObject::Notify( rBC, rHint );

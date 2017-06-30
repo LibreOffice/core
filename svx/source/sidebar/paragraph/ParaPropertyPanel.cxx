@@ -131,10 +131,7 @@ void ParaPropertyPanel::HandleContextChange (
     mpTBxOutline->Show( maContext.GetApplication_DI() == vcl::EnumContext::Application::DrawImpress );
 }
 
-void ParaPropertyPanel::DataChanged (const DataChangedEvent& rEvent)
-{
-    (void)rEvent;
-}
+void ParaPropertyPanel::DataChanged (const DataChangedEvent&) {}
 
 void ParaPropertyPanel::ReSize()
 {
@@ -198,10 +195,8 @@ void ParaPropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
     const SfxPoolItem* pState,
-    const bool bIsEnabled)
+    const bool)
 {
-    (void)bIsEnabled;
-
     switch (nSID)
     {
     case SID_ATTR_METRIC:

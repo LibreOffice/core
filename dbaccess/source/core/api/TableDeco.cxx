@@ -504,9 +504,8 @@ void ODBTableDecorator::fillPrivileges() const
             }
         }
     }
-    catch(const SQLException& e)
+    catch(const SQLException&)
     {
-        (void)e;
         SAL_WARN("dbaccess", "ODBTableDecorator::ODBTableDecorator : could not collect the privileges !");
     }
 }

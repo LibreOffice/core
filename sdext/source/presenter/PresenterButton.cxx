@@ -230,27 +230,23 @@ css::geometry::IntegerSize2D const & PresenterButton::GetSize()
 
 //----- XWindowListener -------------------------------------------------------
 
-void SAL_CALL PresenterButton::windowResized (const css::awt::WindowEvent& rEvent)
+void SAL_CALL PresenterButton::windowResized (const css::awt::WindowEvent&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
 }
 
-void SAL_CALL PresenterButton::windowMoved (const css::awt::WindowEvent& rEvent)
+void SAL_CALL PresenterButton::windowMoved (const css::awt::WindowEvent&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
 }
 
-void SAL_CALL PresenterButton::windowShown (const css::lang::EventObject& rEvent)
+void SAL_CALL PresenterButton::windowShown (const css::lang::EventObject&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
 }
 
-void SAL_CALL PresenterButton::windowHidden (const css::lang::EventObject& rEvent)
+void SAL_CALL PresenterButton::windowHidden (const css::lang::EventObject&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
 }
 
@@ -288,16 +284,14 @@ void SAL_CALL PresenterButton::windowPaint (const css::awt::PaintEvent& rEvent)
 
 //----- XMouseListener --------------------------------------------------------
 
-void SAL_CALL PresenterButton::mousePressed (const css::awt::MouseEvent& rEvent)
+void SAL_CALL PresenterButton::mousePressed (const css::awt::MouseEvent&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
     meState = PresenterBitmapDescriptor::ButtonDown;
 }
 
-void SAL_CALL PresenterButton::mouseReleased (const css::awt::MouseEvent& rEvent)
+void SAL_CALL PresenterButton::mouseReleased (const css::awt::MouseEvent&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
 
     if (meState == PresenterBitmapDescriptor::ButtonDown)
@@ -310,17 +304,15 @@ void SAL_CALL PresenterButton::mouseReleased (const css::awt::MouseEvent& rEvent
     }
 }
 
-void SAL_CALL PresenterButton::mouseEntered (const css::awt::MouseEvent& rEvent)
+void SAL_CALL PresenterButton::mouseEntered (const css::awt::MouseEvent&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
     meState = PresenterBitmapDescriptor::MouseOver;
     Invalidate();
 }
 
-void SAL_CALL PresenterButton::mouseExited (const css::awt::MouseEvent& rEvent)
+void SAL_CALL PresenterButton::mouseExited (const css::awt::MouseEvent&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
     meState = PresenterBitmapDescriptor::Normal;
     Invalidate();
@@ -328,15 +320,13 @@ void SAL_CALL PresenterButton::mouseExited (const css::awt::MouseEvent& rEvent)
 
 //----- XMouseMotionListener --------------------------------------------------
 
-void SAL_CALL PresenterButton::mouseMoved (const css::awt::MouseEvent& rEvent)
+void SAL_CALL PresenterButton::mouseMoved (const css::awt::MouseEvent&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
 }
 
-void SAL_CALL PresenterButton::mouseDragged (const css::awt::MouseEvent& rEvent)
+void SAL_CALL PresenterButton::mouseDragged (const css::awt::MouseEvent&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
 }
 

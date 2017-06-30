@@ -182,13 +182,9 @@ namespace basprov
     }
 
 
-    Any BasicMethodNodeImpl::invoke( const OUString& aFunctionName, const Sequence< Any >& aParams,
-        Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
+    Any BasicMethodNodeImpl::invoke( const OUString& aFunctionName, const Sequence< Any >&,
+        Sequence< sal_Int16 >&, Sequence< Any >& )
     {
-        (void)aParams;
-        (void)aOutParamIndex;
-        (void)aOutParam;
-
         if ( aFunctionName == BASPROV_PROPERTY_EDITABLE )
         {
             OUString sDocURL, sLibName, sModName;
@@ -268,20 +264,15 @@ namespace basprov
     }
 
 
-    void BasicMethodNodeImpl::setValue( const OUString& aPropertyName, const Any& aValue )
+    void BasicMethodNodeImpl::setValue( const OUString&, const Any& )
     {
-        (void)aPropertyName;
-        (void)aValue;
-
         throw UnknownPropertyException(
             "BasicMethodNodeImpl::setValue: property name is unknown!" );
     }
 
 
-    Any BasicMethodNodeImpl::getValue( const OUString& aPropertyName )
+    Any BasicMethodNodeImpl::getValue( const OUString& )
     {
-        (void)aPropertyName;
-
         throw UnknownPropertyException(
             "BasicMethodNodeImpl::getValue: property name is unknown!" );
     }
@@ -297,10 +288,8 @@ namespace basprov
     }
 
 
-    sal_Bool BasicMethodNodeImpl::hasProperty( const OUString& aName )
+    sal_Bool BasicMethodNodeImpl::hasProperty( const OUString& )
     {
-        (void)aName;
-
         return false;
     }
 

@@ -1599,7 +1599,7 @@ void SAL_CALL OBoundControlModel::read( const Reference< css::io::XObjectInputSt
 {
     OControlModel::read(_rxInStream);
     osl::MutexGuard aGuard(m_aMutex);
-    sal_uInt16 nVersion = _rxInStream->readShort(); (void)nVersion;
+    _rxInStream->readShort(); // version;
     ::comphelper::operator>>( _rxInStream, m_aControlSource);
 }
 
@@ -2073,7 +2073,6 @@ void SAL_CALL OBoundControlModel::loaded( const EventObject& _rEvent )
     ControlModelLock aLock( *this );
     FieldChangeNotifier aBoundFieldNotifier( aLock );
     OSL_ENSURE( _rEvent.Source == m_xAmbientForm, "OBoundControlModel::loaded: where does this come from?" );
-    (void)_rEvent;
     OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::loaded: we should never reach this with an external value binding!" );
     if ( hasExternalValueBinding() )
         return;
@@ -2109,7 +2108,6 @@ void SAL_CALL OBoundControlModel::reloaded( const EventObject& _rEvent )
     ControlModelLock aLock( *this );
     FieldChangeNotifier aBoundFieldNotifier( aLock );
     OSL_ENSURE( _rEvent.Source == m_xAmbientForm, "OBoundControlModel::reloaded: where does this come from?" );
-    (void)_rEvent;
     OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::reloaded: we should never reach this with an external value binding!" );
     if ( hasExternalValueBinding() )
         return;

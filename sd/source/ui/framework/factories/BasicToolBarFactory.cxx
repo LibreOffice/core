@@ -36,13 +36,11 @@ namespace sd { namespace framework {
 
 //===== BasicToolBarFactory ===================================================
 
-BasicToolBarFactory::BasicToolBarFactory (
-    const Reference<XComponentContext>& rxContext)
+BasicToolBarFactory::BasicToolBarFactory ()
     : BasicToolBarFactoryInterfaceBase(m_aMutex),
       mxConfigurationController(),
       mxController()
 {
-    (void)rxContext;
 }
 
 BasicToolBarFactory::~BasicToolBarFactory()
@@ -160,10 +158,10 @@ void BasicToolBarFactory::ThrowIfDisposed() const
 } } // end of namespace sd::framework
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
-com_sun_star_comp_Draw_framework_BasicToolBarFactory_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Draw_framework_BasicToolBarFactory_get_implementation(css::uno::XComponentContext*,
                                                                         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new sd::framework::BasicToolBarFactory(context));
+    return cppu::acquire(new sd::framework::BasicToolBarFactory);
 }
 
 

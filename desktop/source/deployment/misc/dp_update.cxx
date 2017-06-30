@@ -363,7 +363,6 @@ UpdateInfoMap getOnlineUpdateInfos(
                 UpdateInfoMap::value_type(
                     dp_misc::getIdentifier(extension), UpdateInfo(extension)));
             OSL_ASSERT(insertRet.second);
-            (void)insertRet;
         }
     }
     else
@@ -376,7 +375,6 @@ UpdateInfoMap getOnlineUpdateInfos(
                 UpdateInfoMap::value_type(
                     dp_misc::getIdentifier(*i), UpdateInfo(*i)));
             OSL_ASSERT(insertRet.second);
-            (void)insertRet;
         }
     }
 

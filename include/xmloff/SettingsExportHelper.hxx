@@ -60,7 +60,7 @@ class XMLOFF_DLLPUBLIC XMLSettingsExportHelper
                         const OUString& rName) const;
 
     void exportBool(const bool bValue, const OUString& rName) const;
-    static void exportByte(const sal_Int8 nValue, const OUString& rName);
+    static void exportByte();
     void exportShort(const sal_Int16 nValue, const OUString& rName) const;
     void exportInt(const sal_Int32 nValue, const OUString& rName) const;
     void exportLong(const sal_Int64 nValue, const OUString& rName) const;

@@ -1182,7 +1182,7 @@ BasicDebugFlags Shell::CallBasicBreakHdl( StarBASIC* pBasic )
         BasicStopped( &bAppWindowDisabled, &bDispatcherLocked,
                                 &nWaitCount, &pSWActionCount, &pSWLockViewCount );
 
-        nRet = pModWin->BasicBreakHdl( pBasic );
+        nRet = pModWin->BasicBreakHdl();
 
         if ( StarBASIC::IsRunning() )   // if cancelled...
         {

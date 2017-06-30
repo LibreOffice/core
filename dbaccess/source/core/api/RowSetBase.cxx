@@ -1278,7 +1278,6 @@ void ORowSetBase::positionCache( CursorMoveDirection _ePrepareForDirection )
         }
     }
     OSL_ENSURE( bSuccess, "ORowSetBase::positionCache: failed!" );
-    (void)bSuccess;
 
     SAL_INFO("dbaccess", "ORowSetBase::positionCache() Clone = " << m_bClone);
 }

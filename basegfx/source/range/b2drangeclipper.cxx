@@ -345,8 +345,6 @@ namespace basegfx
                     rActiveEdge.getEdgeDirection() == ActiveEdge::PROCEED_LEFT);
                 const bool isSweepLineEnteringRect(
                     rEvent.getEdgeType() == SweepLineEvent::STARTING_EDGE);
-                (void)isActiveEdgeProceedLeft;
-                (void)isSweepLineEnteringRect;
 
                 OSL_ENSURE( isSweepLineEnteringRect == isActiveEdgeProceedLeft,
                             "ImplPolygon::intersect(): sweep initial own edge hit: wrong polygon order" );

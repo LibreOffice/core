@@ -570,7 +570,6 @@ void MappedLockBytes::allocate_Impl (void ** ppPage, sal_uInt16 * pnSize)
 void MappedLockBytes::deallocate_Impl (void * pPage)
 {
     OSL_PRECOND((m_pData <= pPage) && (pPage < m_pData + m_nSize), "contract violation");
-    (void)pPage; // UNUSED
 }
 
 storeError MappedLockBytes::initialize_Impl (rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize)

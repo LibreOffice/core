@@ -494,10 +494,8 @@ void PosSizePropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
     const SfxPoolItem* pState,
-    const bool bIsEnabled)
+    const bool)
 {
-    (void)bIsEnabled;
-
     mpFtAngle->Enable();
     mpMtrAngle->Enable();
     mpDial->Enable();

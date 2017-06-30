@@ -274,11 +274,9 @@ void PageCacheManager::ReleaseCache (const std::shared_ptr<Cache>& rpCache)
 
 std::shared_ptr<PageCacheManager::Cache> PageCacheManager::ChangeSize (
     const std::shared_ptr<Cache>& rpCache,
-    const Size& rOldPreviewSize,
+    const Size&,
     const Size& rNewPreviewSize)
 {
-    (void)rOldPreviewSize;
-
     std::shared_ptr<Cache> pResult;
 
     if (rpCache.get() != nullptr)

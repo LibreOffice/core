@@ -78,7 +78,6 @@ public:
     class PaneDescriptor
     {
     public:
-        typedef ::std::function<void (bool)> Activator;
         typedef ::std::function<std::shared_ptr<PresenterSprite> ()> SpriteProvider;
         css::uno::Reference<css::drawing::framework::XResourceId> mxPaneId;
         OUString msViewURL;
@@ -95,7 +94,6 @@ public:
         bool mbIsOpaque;
         SpriteProvider maSpriteProvider;
         bool mbIsSprite;
-        Activator maActivator;
         css::awt::Point maCalloutAnchorLocation;
 
         void SetActivationState (const bool bIsActive);

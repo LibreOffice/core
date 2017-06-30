@@ -23,10 +23,8 @@
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/ucb/Command.hpp>
 
 namespace chelp {
 
@@ -160,15 +158,9 @@ namespace chelp {
 
         OString getByName( const char* par );
 
-        void open( const css::ucb::Command& aCommand,
-                   sal_Int32 CommandId,
-                   const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment,
-                   const css::uno::Reference< css::io::XActiveDataSink >& xDataSink );
+        void open( const css::uno::Reference< css::io::XActiveDataSink >& xDataSink );
 
-        void open( const css::ucb::Command& aCommand,
-                   sal_Int32 CommandId,
-                   const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment,
-                   const css::uno::Reference< css::io::XOutputStream >& xDataSink );
+        void open( const css::uno::Reference< css::io::XOutputStream >& xDataSink );
 
     private:
 

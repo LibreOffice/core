@@ -127,10 +127,8 @@ Point SwGetChartDialogPos( const vcl::Window *pParentWin, const Size& rDialogSiz
     return aRet;
 }
 
-void SwInsertChart(vcl::Window* pParent, SfxBindings* pBindings )
+void SwInsertChart()
 {
-    (void) pParent;
-    (void) pBindings;
     SwView *pView = ::GetActiveView();
 
     // get range string of marked data

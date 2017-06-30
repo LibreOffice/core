@@ -205,7 +205,6 @@ class StyleAssociationContainer
 {
 public:
     void Read (
-        ReadContext& rReadContext,
         const Reference<container::XHierarchicalNameAccess>& rThemeRoot);
 
     OUString GetStyleName (const OUString& rsResourceName) const;
@@ -215,7 +214,6 @@ private:
     StyleAssociations maStyleAssociations;
 
     void ProcessStyleAssociation(
-        ReadContext& rReadContext,
         const ::std::vector<css::uno::Any>& rValues);
 };
 
@@ -249,7 +247,6 @@ public:
 
 private:
     void ProcessFont(
-        ReadContext& rReadContext,
         const OUString& rsKey,
         const Reference<beans::XPropertySet>& rxProperties);
 };
@@ -611,7 +608,7 @@ void PresenterTheme::Theme::Read (
         SharedBitmapDescriptor());
 
     // Style associations.
-    maStyleAssociations.Read(rReadContext, mxThemeRoot);
+    maStyleAssociations.Read(mxThemeRoot);
 
     // Pane styles.
     maPaneStyles.Read(rReadContext, mxThemeRoot);
@@ -637,9 +634,9 @@ void PresenterTheme::Theme::Read (
         UNO_QUERY);
     PresenterConfigurationAccess::ForAll(
         xFontNode,
-        [this, &rReadContext] (OUString const& rKey, uno::Reference<beans::XPropertySet> const& xProps)
+        [this] (OUString const& rKey, uno::Reference<beans::XPropertySet> const& xProps)
         {
-            return this->ProcessFont(rReadContext, rKey, xProps);
+            return this->ProcessFont(rKey, xProps);
         });
 }
 
@@ -666,11 +663,9 @@ SharedViewStyle PresenterTheme::Theme::GetViewStyle (const OUString& rsStyleName
 }
 
 void PresenterTheme::Theme::ProcessFont(
-    ReadContext& rReadContext,
     const OUString& rsKey,
     const Reference<beans::XPropertySet>& rxProperties)
 {
-    (void)rReadContext;
     maFontContainer[rsKey] = ReadContext::ReadFont(rxProperties, SharedFontDescriptor());
 }
 
@@ -1065,7 +1060,6 @@ PresenterTheme::SharedFontDescriptor ViewStyle::GetFont() const
 //===== StyleAssociationContainer =============================================
 
 void StyleAssociationContainer::Read (
-    ReadContext& rReadContext,
     const Reference<container::XHierarchicalNameAccess>& rxThemeRoot)
 {
     Reference<container::XNameAccess> xStyleAssociationList (
@@ -1081,9 +1075,9 @@ void StyleAssociationContainer::Read (
         PresenterConfigurationAccess::ForAll(
             xStyleAssociationList,
             aProperties,
-            [this, &rReadContext] (std::vector<uno::Any> const& rValues)
+            [this] (std::vector<uno::Any> const& rValues)
             {
-                return this->ProcessStyleAssociation(rReadContext, rValues);
+                return this->ProcessStyleAssociation(rValues);
             });
     }
 }
@@ -1098,11 +1092,8 @@ OUString StyleAssociationContainer::GetStyleName (const OUString& rsResourceName
 }
 
 void StyleAssociationContainer::ProcessStyleAssociation(
-    ReadContext& rReadContext,
     const ::std::vector<Any>& rValues)
 {
-    (void)rReadContext;
-
     if (rValues.size() != 2)
         return;
 

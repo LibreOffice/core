@@ -47,7 +47,6 @@ oslModule SAL_CALL osl_loadModuleRelative(
     try {
         abs = rtl::Uri::convertRelToAbs(base, relativePath);
     } catch (const rtl::MalformedUriException & e) {
-        (void) e; // avoid warnings
         SAL_INFO("sal.osl", "rtl::MalformedUriException <" << e.getMessage() << ">");
         return nullptr;
     }

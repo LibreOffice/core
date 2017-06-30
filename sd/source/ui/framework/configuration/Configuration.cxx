@@ -215,9 +215,9 @@ OUString SAL_CALL Configuration::getName()
     return aString;
 }
 
-void SAL_CALL Configuration::setName (const OUString& rsName)
+void SAL_CALL Configuration::setName (const OUString&)
 {
-    (void)rsName; // rsName is ignored.
+    // ignored.
 }
 
 OUString Configuration::getImplementationName()

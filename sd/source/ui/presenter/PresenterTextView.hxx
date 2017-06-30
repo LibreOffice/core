@@ -27,10 +27,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class XComponentContext;
-} } } }
-
 namespace sd { namespace presenter {
 
 typedef ::cppu::ImplInheritanceHelper <
@@ -45,7 +41,7 @@ class PresenterTextView
     : public PresenterTextViewInterfaceBase
 {
 public:
-    explicit PresenterTextView (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    PresenterTextView ();
     virtual ~PresenterTextView() override;
     PresenterTextView(const PresenterTextView&) = delete;
     PresenterTextView& operator=(const PresenterTextView&) = delete;

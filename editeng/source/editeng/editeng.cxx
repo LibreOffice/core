@@ -1976,11 +1976,10 @@ Point EditEngine::GetDocPosTopLeft( sal_Int32 nParagraph )
     return aPoint;
 }
 
-const SvxNumberFormat* EditEngine::GetNumberFormat( sal_Int32 nPara ) const
+const SvxNumberFormat* EditEngine::GetNumberFormat( sal_Int32 ) const
 {
     // derived objects may override this function to give access to
     // bullet information (see Outliner)
-    (void) nPara;
     return nullptr;
 }
 

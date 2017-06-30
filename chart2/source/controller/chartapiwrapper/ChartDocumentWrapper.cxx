@@ -1351,7 +1351,6 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstanceW
     const uno::Sequence< uno::Any >& Arguments )
 {
     OSL_ENSURE( Arguments.getLength(), "createInstanceWithArguments: Warning: Arguments are ignored" );
-    (void)(Arguments);
 
     return createInstance( ServiceSpecifier );
 }

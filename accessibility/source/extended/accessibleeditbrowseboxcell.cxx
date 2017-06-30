@@ -226,9 +226,8 @@ namespace accessibility
             {
                 xMyContext->dispose();
             }
-            catch( const Exception& e )
+            catch( const Exception& )
             {
-                (void)e;
                 OSL_FAIL( "EditBrowseBoxTableCellAccess::disposing: caught an exception while disposing the context!" );
             }
         }

@@ -125,29 +125,23 @@ sal_Bool SAL_CALL SlideSorterService::isAnchorOnly()
 
 //----- XWindowListener -------------------------------------------------------
 
-void SAL_CALL SlideSorterService::windowResized (const awt::WindowEvent& rEvent)
+void SAL_CALL SlideSorterService::windowResized (const awt::WindowEvent&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
 
     Resize();
 }
 
-void SAL_CALL SlideSorterService::windowMoved (const awt::WindowEvent& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL SlideSorterService::windowMoved (const awt::WindowEvent&) {}
 
-void SAL_CALL SlideSorterService::windowShown (const lang::EventObject& rEvent)
+void SAL_CALL SlideSorterService::windowShown (const lang::EventObject&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
     Resize();
 }
 
-void SAL_CALL SlideSorterService::windowHidden (const lang::EventObject& rEvent)
+void SAL_CALL SlideSorterService::windowHidden (const lang::EventObject&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
 }
 

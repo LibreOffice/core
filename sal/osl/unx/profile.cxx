@@ -214,7 +214,6 @@ sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
         {
             bool bRet = storeProfile(pTmpProfile, true);
             SAL_WARN_IF(!bRet, "sal.osl", "storeProfile(pTmpProfile, true) ==> false");
-            (void)bRet;
         }
     }
     else
@@ -413,7 +412,6 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
 
     bRet=releaseProfile(pProfile);
     SAL_WARN_IF(!bRet, "sal.osl", "releaseProfile(pProfile) ==> false");
-    (void)bRet;
 
     if ( pStr == nullptr )
     {
@@ -783,7 +781,6 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile,
 
     bRet=releaseProfile(pProfile);
     SAL_WARN_IF(!bRet, "sal.osl", "releaseProfile(pProfile) ==> false");
-    (void)bRet;
 
     pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 
@@ -859,7 +856,6 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile,
 
     bRet=releaseProfile(pProfile);
     SAL_WARN_IF(!bRet, "sal.osl", "releaseProfile(pProfile) ==> false");
-    (void)bRet;
 
     pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 
@@ -1797,7 +1793,6 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, bool bWriteable)
                     pProfile->m_Stamp = Stamp;
                     bool bRet = loadProfile(pProfile->m_pFile, pProfile);
                     SAL_WARN_IF(!bRet, "sal.osl", "loadProfile(pProfile->m_pFile, pProfile) ==> false");
-                    (void)bRet;
                 }
             }
             else
@@ -1832,7 +1827,6 @@ static bool releaseProfile(osl_TProfileImpl* pProfile)
         {
             bool bRet = storeProfile(pProfile, false);
             SAL_WARN_IF(!bRet, "sal.osl", "storeProfile(pProfile, false) ==> false");
-            (void)bRet;
         }
 
         closeFileImpl(pProfile->m_pFile,pProfile->m_Flags);

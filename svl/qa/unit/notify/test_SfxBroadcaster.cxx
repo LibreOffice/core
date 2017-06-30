@@ -42,8 +42,7 @@ public:
     MockedSfxListener()
     : mNotifyWasCalled(false) {}
 
-    void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override {
-        (void)(rBC); (void)(rHint); // avoid warnings about unused parameters
+    void Notify(SfxBroadcaster&, const SfxHint&) override {
         mNotifyWasCalled = true;
     }
 

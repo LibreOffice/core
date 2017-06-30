@@ -52,12 +52,11 @@ struct PasswordToOpenModifyDialog_Impl
     DECL_LINK( OkBtnClickHdl, Button*, void );
 
     PasswordToOpenModifyDialog_Impl( PasswordToOpenModifyDialog * pParent,
-            sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify );
+            sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify );
 };
 
 PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
         PasswordToOpenModifyDialog * pParent,
-        sal_uInt16 nMinPasswdLen,
         sal_uInt16 nMaxPasswdLen,
         bool bIsPasswordToModify )
     : m_pParent( pParent )
@@ -84,8 +83,6 @@ PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
         m_pPasswdToModifyED->SetMaxTextLen( nMaxPasswdLen );
         m_pReenterPasswdToModifyED->SetMaxTextLen( nMaxPasswdLen );
     }
-
-    (void) nMinPasswdLen;   // currently not supported
 
     m_pPasswdToOpenED->GrabFocus();
 
@@ -139,12 +136,12 @@ IMPL_LINK_NOARG( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, Button *, void 
 }
 
 PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(
-    vcl::Window * pParent, sal_uInt16 nMinPasswdLen,
+    vcl::Window * pParent,
     sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify)
     : SfxModalDialog( pParent, "PasswordDialog", "cui/ui/password.ui" )
 {
     m_pImpl.reset(new PasswordToOpenModifyDialog_Impl(this,
-        nMinPasswdLen, nMaxPasswdLen, bIsPasswordToModify ) );
+        nMaxPasswdLen, bIsPasswordToModify ) );
 }
 
 

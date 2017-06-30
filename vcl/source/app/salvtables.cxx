@@ -72,7 +72,6 @@ SalMenu* SalInstance::CreateMenu( bool, Menu* )
 
 void SalInstance::DestroyMenu( SalMenu* pMenu )
 {
-    (void)pMenu;
     OSL_ENSURE( pMenu == nullptr, "DestroyMenu called with non-native menus" );
 }
 
@@ -83,7 +82,6 @@ SalMenuItem* SalInstance::CreateMenuItem( const SalItemParams* )
 
 void SalInstance::DestroyMenuItem( SalMenuItem* pItem )
 {
-    (void)pItem;
     OSL_ENSURE( pItem == nullptr, "DestroyMenu called with non-native menus" );
 }
 

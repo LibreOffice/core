@@ -394,7 +394,6 @@ bool DrawViewShell::RelocateToParentWindow (vcl::Window* pParentWindow)
 
 void DrawViewShell::CheckLineTo(SfxRequest& rReq)
 {
-    (void)rReq;
 #ifdef DBG_UTIL
     if(rReq.IsAPI())
     {

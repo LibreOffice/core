@@ -551,15 +551,9 @@ void SAL_CALL UnoDialogControl::windowMoved( const css::awt::WindowEvent& e )
     }
 }
 
-void SAL_CALL UnoDialogControl::windowShown( const EventObject& e )
-{
-    (void)e;
-}
+void SAL_CALL UnoDialogControl::windowShown( const EventObject& ) {}
 
-void SAL_CALL UnoDialogControl::windowHidden( const EventObject& e )
-{
-    (void)e;
-}
+void SAL_CALL UnoDialogControl::windowHidden( const EventObject& ) {}
 
 void SAL_CALL UnoDialogControl::endDialog( ::sal_Int32 i_result )
 {
