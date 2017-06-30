@@ -229,7 +229,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     bool            m_bCenterCursor : 1,
                     m_bTopCursor : 1,
-                    m_bAlwaysShowSel : 1,
                     m_bTabColFromDoc : 1,
                     m_bTabRowFromDoc : 1,
                     m_bSetTabColFromDoc : 1 ,
@@ -310,7 +309,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     SAL_DLLPRIVATE void          HyphStart( SvxSpellArea eSpell );
     SAL_DLLPRIVATE void          SpellKontext(bool bOn = true)
-                                 { m_bCenterCursor = bOn; m_bAlwaysShowSel = bOn; }
+                                 { m_bCenterCursor = bOn; }
 
     // for readonly switching
     SAL_DLLPRIVATE virtual void  Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;

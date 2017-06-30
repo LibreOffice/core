@@ -80,13 +80,11 @@ private:
     SwLineLayout *m_pNext;                // The next Line
     std::vector<long>* m_pLLSpaceAdd;     // Used for justified alignment
     std::deque<sal_uInt16>* m_pKanaComp;  // Used for Kana compression
-    sal_uInt16 m_nRealHeight;                 // The height resulting from line spacing and register
+    sal_uInt16 m_nRealHeight;             // The height resulting from line spacing and register
     bool m_bFormatAdj : 1;
     bool m_bDummy     : 1;
-    bool m_bFntChg    : 1;
     bool m_bEndHyph   : 1;
     bool m_bMidHyph   : 1;
-    bool m_bTab       : 1;
     bool m_bFly       : 1;
     bool m_bRest      : 1;
     bool m_bBlinking  : 1;

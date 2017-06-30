@@ -3783,17 +3783,15 @@ void SwUiWriterTest::testTdf87922()
 struct PortionItem
 {
     PortionItem(OUString const & sItemType, sal_Int32 nLength = 0,
-                sal_uInt16 nTextType = 0, OUString const & sText = OUString())
+                sal_uInt16 nTextType = 0)
         : msItemType(sItemType)
         , mnLength(nLength)
         , mnTextType(nTextType)
-        , msText(sText)
     {}
 
     OUString msItemType;
     sal_Int32 mnLength;
     sal_uInt16 mnTextType;
-    OUString msText;
 };
 
 class PortionHandler : public SwPortionHandler
@@ -3816,11 +3814,11 @@ class PortionHandler : public SwPortionHandler
         mPortionItems.push_back(PortionItem("text", nLength, nType));
     }
 
-    virtual void Special(sal_Int32 nLength, const OUString & rText,
+    virtual void Special(sal_Int32 nLength, const OUString & /*rText*/,
                          sal_uInt16 nType, sal_Int32 /*nHeight*/,
                          sal_Int32 /*nWidth*/, const SwFont* /*pFont*/) override
     {
-        mPortionItems.push_back(PortionItem("special", nLength, nType, rText));
+        mPortionItems.push_back(PortionItem("special", nLength, nType));
     }
 
     virtual void LineBreak(sal_Int32 /*nWidth*/) override

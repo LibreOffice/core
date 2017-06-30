@@ -93,8 +93,6 @@ public:
     bool m_bSize  : 1;
     bool m_bFnt   : 1;
     bool m_bHyph  : 1;
-    bool m_bLeft  : 1;
-    bool m_bRight : 1;
     bool m_bKana  : 1;
     bool m_bOfst  : 1;
     bool m_bAscent: 1;
@@ -152,7 +150,7 @@ public:
         // Get-function:
         m_bPos = m_bWrong = m_bGrammarCheck = m_bSize = m_bFnt = m_bAscent =
         m_bSpace = m_bNumberOfBlanks = m_bUppr =
-        m_bDrawSp = m_bLeft = m_bRight = m_bKana = m_bOfst = m_bHyph =
+        m_bDrawSp = m_bKana = m_bOfst = m_bHyph =
         m_bSperr = false;
 #endif
     }
