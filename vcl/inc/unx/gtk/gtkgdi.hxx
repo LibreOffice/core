@@ -205,24 +205,21 @@ private:
 
     static tools::Rectangle NWGetScrollButtonRect( ControlPart nPart, tools::Rectangle aAreaRect );
     static tools::Rectangle NWGetSpinButtonRect( ControlPart nPart, tools::Rectangle aAreaRect);
-    static tools::Rectangle NWGetComboBoxButtonRect( ControlType nType, ControlPart nPart, tools::Rectangle aAreaRect );
+    static tools::Rectangle NWGetComboBoxButtonRect( ControlPart nPart, tools::Rectangle aAreaRect );
 
     static void PaintScrollbar(GtkStyleContext *context,
                         cairo_t *cr,
                         const tools::Rectangle& rControlRectangle,
-                        ControlType nType,
                         ControlPart nPart,
                         const ImplControlValue& aValue );
            void PaintOneSpinButton( GtkStyleContext *context,
                              cairo_t *cr,
-                             ControlType nType,
                              ControlPart nPart,
                              tools::Rectangle aAreaRect,
                              ControlState nState );
            void PaintSpinButton(GtkStateFlags flags,
                          cairo_t *cr,
                          const tools::Rectangle& rControlRectangle,
-                         ControlType nType,
                          ControlPart nPart,
                          const ImplControlValue& aValue);
     static void PaintCombobox(GtkStateFlags flags,

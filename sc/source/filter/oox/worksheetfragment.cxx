@@ -389,7 +389,9 @@ ContextHandlerRef WorksheetFragment::onCreateContext( sal_Int32 nElement, const 
                 case XLS_TOKEN( dimension ):        importDimension( rAttribs );                                    break;
                 case XLS_TOKEN( sheetFormatPr ):    importSheetFormatPr( rAttribs );                                break;
                 case XLS_TOKEN( sheetProtection ):  getWorksheetSettings().importSheetProtection( rAttribs );       break;
-                case XLS_TOKEN( protectedRanges ):  WorksheetSettings::importProtectedRanges( rAttribs );       return this;
+                case XLS_TOKEN( protectedRanges ):
+                    // no attribs known (yet?)
+                    return this;
                 case XLS_TOKEN( phoneticPr ):       getWorksheetSettings().importPhoneticPr( rAttribs );            break;
                 case XLS_TOKEN( printOptions ):     getPageSettings().importPrintOptions( rAttribs );               break;
                 case XLS_TOKEN( pageMargins ):      getPageSettings().importPageMargins( rAttribs );                break;

@@ -117,7 +117,6 @@ namespace calc
     {
         OSL_ENSURE( _nHandle == PROP_HANDLE_BOUND_CELL, "OCellValueBinding::getFastPropertyValue: invalid handle!" );
             // we only have this one property ....
-        (void)_nHandle;     // avoid warning in product version
 
         _rValue.clear();
         Reference< XCellAddressable > xCellAddress( m_xCell, UNO_QUERY );

@@ -65,11 +65,6 @@ namespace rptui
 
     bool ConditionalExpression::matchExpression( const OUString& _rExpression, const OUString& _rFieldDataSource, OUString& _out_rLHS, OUString& _out_rRHS ) const
     {
-        (void)_rExpression;
-        (void)_rFieldDataSource;
-        (void)_out_rLHS;
-        (void)_out_rRHS;
-
         // if we had regular expression, the matching would be pretty easy ...
         // just replace $1 and $2 in the pattern with (.*), and then get them with \1 resp. \2.
         // Unfortunately, we don't have such a regexp engine ...

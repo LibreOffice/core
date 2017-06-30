@@ -20,8 +20,6 @@
 #include "check.hxx"
 #include "unusedvariablecheck.hxx"
 
-#include <clang/AST/Attr.h>
-
 namespace loplugin
 {
 
@@ -50,42 +48,6 @@ void UnusedVariableCheck::run()
     TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
-bool BaseCheckNotSomethingInterestingSubclass(
-    const CXXRecordDecl *BaseDefinition
-#if CLANG_VERSION < 30800
-    , void *
-#endif
-    )
-{
-    if (BaseDefinition) {
-        auto tc = loplugin::TypeCheck(BaseDefinition);
-        if (tc.Class("Dialog").GlobalNamespace() || tc.Class("SfxPoolItem").GlobalNamespace()) {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool isDerivedFromSomethingInteresting(const CXXRecordDecl *decl) {
-    if (!decl)
-        return false;
-    auto tc = loplugin::TypeCheck(decl);
-    if (tc.Class("Dialog"))
-        return true;
-    if (tc.Class("SfxPoolItem"))
-        return true;
-    if (!decl->hasDefinition()) {
-        return false;
-    }
-    if (// not sure what hasAnyDependentBases() does,
-        // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
-        !decl->hasAnyDependentBases() &&
-        !compat::forallBases(*decl, BaseCheckNotSomethingInterestingSubclass, nullptr, true)) {
-        return true;
-    }
-    return false;
-}
-
 bool UnusedVariableCheck::VisitVarDecl( const VarDecl* var )
     {
     if( ignoreLocation( var ))
@@ -94,41 +56,8 @@ bool UnusedVariableCheck::VisitVarDecl( const VarDecl* var )
         return true;
     if( var->isDefinedOutsideFunctionOrMethod())
         return true;
-    if( CXXRecordDecl* type = var->getType()->getAsCXXRecordDecl())
+    if( loplugin::isExtraWarnUnusedType(var->getType()))
         {
-        bool warn_unused = false;
-        if( type->hasAttrs())
-            {
-            // Clang currently has no support for custom attributes, but
-            // the annotate attribute comes close, so check for __attribute__((annotate("lo_warn_unused")))
-            for( specific_attr_iterator<AnnotateAttr> i = type->specific_attr_begin<AnnotateAttr>(),
-                    e = type->specific_attr_end<AnnotateAttr>();
-                 i != e;
-                 ++i )
-                {
-                if( (*i)->getAnnotation() == "lo_warn_unused" )
-                    {
-                    warn_unused = true;
-                    break;
-                    }
-                }
-            }
-        if( !warn_unused )
-            {
-            auto tc = loplugin::TypeCheck(type);
-            // Check some common non-LO types.
-            if( tc.Class("string").Namespace("std").GlobalNamespace()
-                || tc.Class("basic_string").Namespace("std").GlobalNamespace()
-                || tc.Class("list").Namespace("std").GlobalNamespace()
-                || tc.Class("list").Namespace("__debug").Namespace("std").GlobalNamespace()
-                || tc.Class("vector").Namespace("std").GlobalNamespace()
-                || tc.Class("vector" ).Namespace("__debug").Namespace("std").GlobalNamespace())
-                warn_unused = true;
-            if (!warn_unused && isDerivedFromSomethingInteresting(type))
-                  warn_unused = true;
-            }
-        if( warn_unused )
-            {
             if( const ParmVarDecl* param = dyn_cast< ParmVarDecl >( var ))
                 {
                 if( !param->getDeclName())
@@ -144,7 +73,6 @@ bool UnusedVariableCheck::VisitVarDecl( const VarDecl* var )
             else
                 report( DiagnosticsEngine::Warning, "unused variable %0",
                     var->getLocation()) << var->getDeclName();
-            }
         }
     return true;
     }

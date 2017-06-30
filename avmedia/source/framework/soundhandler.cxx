@@ -224,10 +224,9 @@ void SAL_CALL SoundHandler::dispatchWithNotification(const css::util::URL&      
         m_aUpdateIdle.SetPriority( TaskPriority::LOWER );
         m_aUpdateIdle.Start();
     }
-    catch( css::uno::Exception& e )
+    catch( css::uno::Exception& )
     {
         m_bError = true;
-        (void)e;
         m_xPlayer.clear();
     }
 

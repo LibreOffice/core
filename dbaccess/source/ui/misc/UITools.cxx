@@ -306,9 +306,6 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
             // search the best matching type
     #ifdef DBG_UTIL
             OUString sDBTypeName         = aIter->second->aTypeName;         (void)sDBTypeName;
-            sal_Int32       nDBTypePrecision    = aIter->second->nPrecision;        (void)nDBTypePrecision;
-            sal_Int32       nDBTypeScale        = aIter->second->nMaximumScale;     (void)nDBTypeScale;
-            bool        bDBAutoIncrement    = aIter->second->bAutoIncrement;    (void)bDBAutoIncrement;
     #endif
             if  (   (
                         _sTypeName.isEmpty()

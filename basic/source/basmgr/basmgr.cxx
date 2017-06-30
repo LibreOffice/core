@@ -212,10 +212,7 @@ void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager* pMgr,
 // XEventListener
 
 
-void SAL_CALL BasMgrContainerListenerImpl::disposing( const lang::EventObject& Source )
-{
-    (void)Source;
-}
+void SAL_CALL BasMgrContainerListenerImpl::disposing( const lang::EventObject& ) {}
 
 // XContainerListener
 
@@ -1926,9 +1923,8 @@ void DialogContainer_Impl::replaceByName( const OUString& aName, const uno::Any&
 
 
 // Methods XNameContainer
-void DialogContainer_Impl::insertByName( const OUString& aName, const uno::Any& aElement )
+void DialogContainer_Impl::insertByName( const OUString&, const uno::Any& aElement )
 {
-    (void)aName;
     uno::Type aModuleType = cppu::UnoType<script::XStarBasicDialogInfo>::get();
     const uno::Type& aAnyType = aElement.getValueType();
     if( aModuleType != aAnyType )
@@ -1943,7 +1939,6 @@ void DialogContainer_Impl::insertByName( const OUString& aName, const uno::Any& 
 
 void DialogContainer_Impl::removeByName( const OUString& Name )
 {
-    (void)Name;
     SbxVariable* pVar = mpLib->GetObjects()->Find( Name, SbxClassType::DontCare );
     SbxObject* pObj = dynamic_cast<SbxObject*>(pVar);
     if( !( pObj && ( pObj->GetSbxId() == SBXID_DIALOG ) ) )
@@ -2063,10 +2058,8 @@ void LibraryContainer_Impl::replaceByName( const OUString& aName, const uno::Any
 }
 
 // Methods XNameContainer
-void LibraryContainer_Impl::insertByName( const OUString& aName, const uno::Any& aElement )
+void LibraryContainer_Impl::insertByName( const OUString&, const uno::Any& )
 {
-    (void)aName;
-    (void)aElement;
     // TODO: Insert a complete Library?!
 }
 
@@ -2116,11 +2109,10 @@ void SAL_CALL StarBasicAccess_Impl::createLibrary
 (
     const OUString& LibName,
     const OUString& Password,
-    const OUString& ExternalSourceURL,
+    const OUString&,
     const OUString& LinkTargetURL
 )
 {
-    (void)ExternalSourceURL;
     StarBASIC* pLib = mpMgr->CreateLib( LibName, Password, LinkTargetURL );
     DBG_ASSERT( pLib, "XML Import: Basic library could not be created");
 }
@@ -2129,11 +2121,10 @@ void SAL_CALL StarBasicAccess_Impl::addModule
 (
     const OUString& LibraryName,
     const OUString& ModuleName,
-    const OUString& Language,
+    const OUString&,
     const OUString& Source
 )
 {
-    (void)Language;
     StarBASIC* pLib = mpMgr->GetLib( LibraryName );
     DBG_ASSERT( pLib, "XML Import: Lib for module unknown");
     if( pLib )
@@ -2144,15 +2135,11 @@ void SAL_CALL StarBasicAccess_Impl::addModule
 
 void SAL_CALL StarBasicAccess_Impl::addDialog
 (
-    const OUString& LibraryName,
-    const OUString& DialogName,
-    const uno::Sequence< sal_Int8 >& Data
+    const OUString&,
+    const OUString&,
+    const uno::Sequence< sal_Int8 >&
 )
-{
-    (void)LibraryName;
-    (void)DialogName;
-    (void)Data;
-}
+{}
 
 // Basic XML Import/Export
 uno::Reference< script::XStarBasicAccess > getStarBasicAccess( BasicManager* pMgr )

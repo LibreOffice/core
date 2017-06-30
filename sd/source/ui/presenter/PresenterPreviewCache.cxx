@@ -71,13 +71,12 @@ private:
 
 //===== PresenterPreviewCache =================================================
 
-PresenterPreviewCache::PresenterPreviewCache (const Reference<XComponentContext>& rxContext)
+PresenterPreviewCache::PresenterPreviewCache ()
     : PresenterPreviewCacheInterfaceBase(m_aMutex),
       maPreviewSize(Size(200,200)),
       mpCacheContext(new PresenterCacheContext()),
       mpCache(new PageCache(maPreviewSize, Bitmap::HasFastScale(), mpCacheContext))
 {
-    (void)rxContext;
 }
 
 PresenterPreviewCache::~PresenterPreviewCache()
@@ -247,10 +246,8 @@ void PresenterPreviewCache::PresenterCacheContext::RemovePreviewCreationNotifyLi
 
 void PresenterPreviewCache::PresenterCacheContext::NotifyPreviewCreation (
     CacheKey aKey,
-    const Bitmap& rPreview)
+    const Bitmap&)
 {
-    (void)rPreview;
-
     if ( ! mxSlides.is())
         return;
     const sal_Int32 nCount(mxSlides->getCount());
@@ -362,10 +359,10 @@ void PresenterPreviewCache::PresenterCacheContext::CallListeners (
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
-com_sun_star_comp_Draw_PresenterPreviewCache_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Draw_PresenterPreviewCache_get_implementation(css::uno::XComponentContext*,
                                                                 css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new sd::presenter::PresenterPreviewCache(context));
+    return cppu::acquire(new sd::presenter::PresenterPreviewCache);
 }
 
 

@@ -120,9 +120,8 @@ Any User::queryInterface( const Type & reqType )
 
 
 void User::changePassword(
-    const OUString& oldPassword, const OUString& newPassword )
+    const OUString&, const OUString& newPassword )
 {
-    (void) oldPassword;
     OUStringBuffer buf(128);
     buf.append( "ALTER USER " );
     bufferQuoteIdentifier( buf, extractStringProperty( this, getStatics().NAME ), m_pSettings );
@@ -149,23 +148,20 @@ sal_Int32 User::getPrivileges( const OUString& objName, sal_Int32 objType )
     return 0xffffffff;
 }
 
-sal_Int32 User::getGrantablePrivileges( const OUString& objName, sal_Int32 objType )
+sal_Int32 User::getGrantablePrivileges( const OUString&, sal_Int32 )
 {
-    (void) objName; (void) objType;
     // all privileges
     return 0xffffffff;
 }
 
-void User::grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges )
+void User::grantPrivileges( const OUString&, sal_Int32, sal_Int32 )
 {
-    (void) objName; (void) objType; (void) objPrivileges;
     throw css::sdbc::SQLException("pq_driver: privilege change not implemented yet",
                                              *this, OUString(), 1, Any() );
 }
 
-void User::revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges )
+void User::revokePrivileges( const OUString&, sal_Int32, sal_Int32 )
 {
-    (void) objName; (void) objType; (void) objPrivileges;
     throw css::sdbc::SQLException("pq_driver: privilege change not implemented yet",
                                              *this, OUString(), 1, Any() );
 }

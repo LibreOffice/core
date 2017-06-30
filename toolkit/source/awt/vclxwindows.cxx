@@ -2101,7 +2101,7 @@ void SAL_CALL VCLXListBox::listItemModified( const ItemListEvent& i_rEvent )
     pListBox->InsertEntry( sNewText, aNewImage, i_rEvent.ItemPosition );
 }
 
-void SAL_CALL VCLXListBox::allItemsRemoved( const EventObject& i_rEvent )
+void SAL_CALL VCLXListBox::allItemsRemoved( const EventObject& )
 {
     SolarMutexGuard aGuard;
 
@@ -2109,8 +2109,6 @@ void SAL_CALL VCLXListBox::allItemsRemoved( const EventObject& i_rEvent )
     ENSURE_OR_RETURN_VOID( pListBox, "VCLXListBox::listItemModified: no ListBox?!" );
 
     pListBox->Clear();
-
-    (void)i_rEvent;
 }
 
 void SAL_CALL VCLXListBox::itemListChanged( const EventObject& i_rEvent )
@@ -4543,7 +4541,7 @@ void SAL_CALL VCLXComboBox::listItemModified( const ItemListEvent& i_rEvent )
     pComboBox->InsertEntryWithImage(sNewText, aNewImage, i_rEvent.ItemPosition);
 }
 
-void SAL_CALL VCLXComboBox::allItemsRemoved( const EventObject& i_rEvent )
+void SAL_CALL VCLXComboBox::allItemsRemoved( const EventObject& )
 {
     SolarMutexGuard aGuard;
 
@@ -4551,8 +4549,6 @@ void SAL_CALL VCLXComboBox::allItemsRemoved( const EventObject& i_rEvent )
     ENSURE_OR_RETURN_VOID( pComboBox, "VCLXComboBox::listItemModified: no ComboBox?!" );
 
     pComboBox->Clear();
-
-    (void)i_rEvent;
 }
 
 void SAL_CALL VCLXComboBox::itemListChanged( const EventObject& i_rEvent )

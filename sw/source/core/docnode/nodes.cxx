@@ -1661,7 +1661,6 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
     {
         const bool bSuccess = GoPrevious( &pStt->nNode );
         OSL_ENSURE( bSuccess, "Move() - no ContentNode here" );
-        (void) bSuccess;
     }
     pStt->nContent.Assign( pStt->nNode.GetNode().GetContentNode(),
                             pStt->nContent.GetIndex() );

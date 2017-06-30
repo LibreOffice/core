@@ -244,7 +244,6 @@ void SAL_CALL WrappedPropertySet::setPropertyValues( const Sequence< OUString >&
     }
     //todo: store unknown properties elsewhere
     OSL_ENSURE(!bUnknownProperty,"unknown property");
-    (void)bUnknownProperty;
 //    if( bUnknownProperty )
 //        throw beans::UnknownPropertyException();
 }

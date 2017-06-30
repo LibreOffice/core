@@ -197,9 +197,8 @@ Sequence< OUString > SAL_CALL SvxSimpleUnoModel::getAvailableServiceNames(  )
 }
 
 // XAnyCompareFactory
-uno::Reference< css::ucb::XAnyCompare > SAL_CALL SvxSimpleUnoModel::createAnyCompareByName( const OUString& PropertyName )
+uno::Reference< css::ucb::XAnyCompare > SAL_CALL SvxSimpleUnoModel::createAnyCompareByName( const OUString& )
 {
-    (void)PropertyName;
     return SvxCreateNumRuleCompare();
 }
 
@@ -211,10 +210,8 @@ uno::Reference< container::XNameAccess > SAL_CALL SvxSimpleUnoModel::getStyleFam
 }
 
 // XModel
-sal_Bool SAL_CALL SvxSimpleUnoModel::attachResource( const OUString& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs )
+sal_Bool SAL_CALL SvxSimpleUnoModel::attachResource( const OUString&, const css::uno::Sequence< css::beans::PropertyValue >& )
 {
-    (void)aURL;
-    (void)aArgs;
     return false;
 }
 

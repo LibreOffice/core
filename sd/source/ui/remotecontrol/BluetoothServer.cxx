@@ -877,11 +877,9 @@ registerWithDefaultAdapter( DBusConnection *pConnection )
 }
 
 void ProfileUnregisterFunction
-(DBusConnection *connection, void *user_data)
+(DBusConnection *, void *)
 {
     // We specifically don't need to do anything here.
-    (void) connection;
-    (void) user_data;
 }
 
 DBusHandlerResult ProfileMessageFunction

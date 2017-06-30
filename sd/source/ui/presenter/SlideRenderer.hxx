@@ -26,7 +26,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -46,7 +45,7 @@ class SlideRenderer
       public SlideRendererInterfaceBase
 {
 public:
-    explicit SlideRenderer (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    SlideRenderer ();
     virtual ~SlideRenderer() override;
     SlideRenderer(const SlideRenderer&) = delete;
     SlideRenderer& operator=(const SlideRenderer&) = delete;

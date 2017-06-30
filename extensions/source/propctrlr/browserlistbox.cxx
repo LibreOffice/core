@@ -815,7 +815,6 @@ namespace pcr
     IMPL_LINK(OBrowserListBox, ScrollHdl, ScrollBar*, _pScrollBar, void )
     {
         DBG_ASSERT(_pScrollBar == m_aVScroll.get(), "OBrowserListBox::ScrollHdl: where does this come from?");
-        (void)_pScrollBar;
 
         // disable painting to prevent flicker
         m_aLinesPlayground->EnablePaint(false);

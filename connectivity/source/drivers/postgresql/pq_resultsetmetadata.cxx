@@ -293,15 +293,13 @@ sal_Bool ResultSetMetaData::isAutoIncrement( sal_Int32 column )
     return ret;
 }
 
-sal_Bool ResultSetMetaData::isCaseSensitive( sal_Int32 column )
+sal_Bool ResultSetMetaData::isCaseSensitive( sal_Int32 )
 {
-    (void) column;
     return true; // ??? hmm, numeric types or
 }
 
-sal_Bool ResultSetMetaData::isSearchable( sal_Int32 column )
+sal_Bool ResultSetMetaData::isSearchable( sal_Int32 )
 {
-    (void) column;
     return true; // mmm, what types are not searchable ?
 }
 
@@ -316,9 +314,8 @@ sal_Int32 ResultSetMetaData::isNullable( sal_Int32 column )
         getStatics().IS_NULLABLE, column, css::sdbc::ColumnValue::NULLABLE_UNKNOWN );
 }
 
-sal_Bool ResultSetMetaData::isSigned( sal_Int32 column )
+sal_Bool ResultSetMetaData::isSigned( sal_Int32 )
 {
-    (void) column;
     return true;
 }
 
@@ -342,9 +339,8 @@ OUString ResultSetMetaData::getColumnName( sal_Int32 column )
     return m_colDesc[column-1].name;
 }
 
-OUString ResultSetMetaData::getSchemaName( sal_Int32 column )
+OUString ResultSetMetaData::getSchemaName( sal_Int32 )
 {
-    (void) column;
     return m_schemaName;
 }
 
@@ -412,9 +408,8 @@ OUString ResultSetMetaData::getColumnTypeName( sal_Int32 column )
 }
 
 
-sal_Bool ResultSetMetaData::isReadOnly( sal_Int32 column )
+sal_Bool ResultSetMetaData::isReadOnly( sal_Int32 )
 {
-    (void) column;
     return false;
 }
 
@@ -427,9 +422,8 @@ sal_Bool ResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
 {
     return isWritable(column); // uhh, now it becomes really esoteric ....
 }
-OUString ResultSetMetaData::getColumnServiceName( sal_Int32 column )
+OUString ResultSetMetaData::getColumnServiceName( sal_Int32 )
 {
-    (void) column;
     return OUString();
 }
 

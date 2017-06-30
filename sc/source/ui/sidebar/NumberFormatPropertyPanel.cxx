@@ -170,10 +170,8 @@ VclPtr<vcl::Window> NumberFormatPropertyPanel::Create (
 }
 
 void NumberFormatPropertyPanel::DataChanged(
-    const DataChangedEvent& rEvent)
-{
-    (void)rEvent;
-}
+    const DataChangedEvent&)
+{}
 
 void NumberFormatPropertyPanel::HandleContextChange(
     const vcl::EnumContext& rContext)
@@ -191,10 +189,8 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
     const SfxPoolItem* pState,
-    const bool bIsEnabled)
+    const bool)
 {
-    (void)bIsEnabled;
-
     switch(nSID)
     {
     case SID_NUMBER_TYPE_FORMAT:

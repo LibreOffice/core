@@ -818,8 +818,9 @@ static bool osl_file_queryLocking(sal_uInt32 uFlags)
             // getenv is not thread safe, so minimize use of result
         return enabled;
     }
-#endif
+#else
     (void) uFlags;
+#endif
     return false;
 }
 

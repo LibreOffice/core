@@ -183,8 +183,6 @@ namespace slideshow
 
         void LayerManager::viewChanged( const UnoViewSharedPtr& rView )
         {
-            (void)rView;
-
             // view must be member of mrViews container
             OSL_ASSERT( std::find(mrViews.begin(),
                                   mrViews.end(),

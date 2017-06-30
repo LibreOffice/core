@@ -1041,7 +1041,6 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed
     }
 
     SAL_WARN_IF( !bFound,"comphelper.container", "Object not found for removal!" );
-    (void)bFound;
     if ( xPersist.is() && bKeepToTempStorage )  // #i119941#
     {
         // remove replacement image (if there is one)

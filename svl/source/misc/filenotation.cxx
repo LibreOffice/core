@@ -103,7 +103,6 @@ namespace svt
         }
 
         OSL_ENSURE( bSuccess, "OFileNotation::OFileNotation: could not detect the format!" );
-        (void)bSuccess;
     }
 
     OUString OFileNotation::get(NOTATION _eOutputNotation)

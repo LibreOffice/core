@@ -414,9 +414,8 @@ namespace sfx2
     }
 
 
-    void SAL_CALL DocumentUndoManager::setParent( const Reference< XInterface >& i_parent )
+    void SAL_CALL DocumentUndoManager::setParent( const Reference< XInterface >& )
     {
-        (void)i_parent;
         throw NoSupportException( OUString(), m_pImpl->getThis() );
     }
 

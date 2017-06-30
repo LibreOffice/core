@@ -686,9 +686,8 @@ bool DataBrowserModel::setCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow, const 
             if( xModifiable.is() )
                 xModifiable->setModified(true);
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            (void)(ex);
             bResult = false;
         }
     }
@@ -899,10 +898,7 @@ void DataBrowserModel::updateFromModel()
                             Reference< beans::XPropertySet > xProp( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY );
                             xProp->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXAndYAxis;
                         }
-                        catch( const beans::UnknownPropertyException & ex )
-                        {
-                            (void)ex;
-                        }
+                        catch( const beans::UnknownPropertyException & ) {}
 
                         // add ranges for error bars if present for a series
                         if( StatisticsHelper::usesErrorBarRanges( aSeries[nSeriesIdx] ))

@@ -114,19 +114,17 @@ namespace
 Dll::Dll () :
     m_pShell(nullptr)
 {
-    SfxObjectFactory* pFact = &DocShell::Factory();
-    (void)pFact;
+    SfxObjectFactory& rFactory = DocShell::Factory();
 
     ResMgr* pMgr = ResMgr::CreateResMgr(
         "basctl", Application::GetSettings().GetUILanguageTag());
 
-    auto pModule = o3tl::make_unique<Module>( pMgr, &DocShell::Factory() );
+    auto pModule = o3tl::make_unique<Module>( pMgr, &rFactory );
     SfxModule* pMod = pModule.get();
     SfxApplication::SetModule(SfxToolsModule::Basic, std::move(pModule));
 
     GetExtraData(); // to cause GlobalErrorHdl to be set
 
-    SfxObjectFactory& rFactory = DocShell::Factory();
     rFactory.SetDocumentServiceName( "com.sun.star.script.BasicIDE" );
 
     DocShell::RegisterInterface( pMod );

@@ -134,9 +134,6 @@ OString loadFile(const OUString& rURL)
 
 void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFormat eFormat )
 {
-    (void)rPath;
-    (void)eFormat;
-
 #if HAVE_EXPORT_VALIDATION
     OUString var;
     if( eFormat == test::OOXML )
@@ -209,6 +206,9 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
             CPPUNIT_FAIL(aContentString.getStr());
         }
     }
+#else
+    (void)rPath;
+    (void)eFormat;
 #endif
 }
 

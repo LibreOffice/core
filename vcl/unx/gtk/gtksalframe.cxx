@@ -3032,8 +3032,7 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
                 {
                     sFinalProgram += "--display " + sDisplay;
                 }
-                int returnValue = system(sFinalProgram.getStr());
-                (void)returnValue;
+                (void) system(sFinalProgram.getStr());
             }
         }
     }

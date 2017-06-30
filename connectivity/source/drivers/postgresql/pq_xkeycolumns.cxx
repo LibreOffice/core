@@ -157,9 +157,8 @@ void KeyColumns::refresh()
 
 
 void KeyColumns::appendByDescriptor(
-    const css::uno::Reference< css::beans::XPropertySet >& future )
+    const css::uno::Reference< css::beans::XPropertySet >& )
 {
-    (void) future;
     throw css::sdbc::SQLException(
         "KeyColumns::appendByDescriptor not implemented yet",
         *this, OUString(), 1, Any() );
@@ -174,9 +173,8 @@ void KeyColumns::appendByDescriptor(
 }
 
 
-void KeyColumns::dropByIndex( sal_Int32 index )
+void KeyColumns::dropByIndex( sal_Int32 )
 {
-    (void) index;
     throw css::sdbc::SQLException(
         "KeyColumns::dropByIndex not implemented yet",
         *this, OUString(), 1, Any() );

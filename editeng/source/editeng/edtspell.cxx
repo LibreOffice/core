@@ -255,7 +255,6 @@ void WrongList::TextInserted( size_t nPos, size_t nLength, bool bPosIsSep )
         }
         SAL_WARN_IF(bRefIsValid && rWrong.mnStart >= rWrong.mnEnd, "editeng",
                 "TextInserted, editeng::MisspellRange: Start >= End?!");
-        (void)bRefIsValid;
     }
 
     SAL_WARN_IF(DbgIsBuggy(), "editeng", "InsertWrong: WrongList broken!");

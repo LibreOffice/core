@@ -135,8 +135,8 @@ void Indexes::refresh()
         sal_Int32 index = 0;
         while( rs->next() )
         {
-            static const sal_Int32 C_SCHEMA = 1;
-            static const sal_Int32 C_TABLENAME = 2;
+            // C_SCHEMA = 1
+            // C_TABLENAME = 2
             static const sal_Int32 C_INDEXNAME = 3;
             static const sal_Int32 C_IS_CLUSTERED = 4;
             static const sal_Int32 C_IS_UNIQUE = 5;
@@ -147,7 +147,6 @@ void Indexes::refresh()
                 new Index( m_xMutex, m_origin, m_pSettings,
                            m_schemaName, m_tableName );
 
-            (void) C_SCHEMA; (void) C_TABLENAME;
             bool isUnique = row->getBoolean( C_IS_UNIQUE );
             bool isPrimary = row->getBoolean( C_IS_PRIMARY );
             bool isClusterd = row->getBoolean( C_IS_CLUSTERED );

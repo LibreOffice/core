@@ -374,8 +374,8 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
     {
         sModule = xModuleDetection->identify(xFrame);
     }
-    catch(const css::uno::RuntimeException&rEx)
-        { (void) rEx; throw; }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
     catch(const css::uno::Exception&)
         { return css::uno::Reference< css::ui::XAcceleratorConfiguration >(); }
 

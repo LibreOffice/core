@@ -406,9 +406,8 @@ Reference< XConnection > PreparedStatement::getConnection(  )
 }
 
 
-void PreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 sqlType )
+void PreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 )
 {
-    (void)sqlType;
     MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     checkColumnIndex( parameterIndex );
@@ -416,9 +415,8 @@ void PreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 sqlType )
 }
 
 void PreparedStatement::setObjectNull(
-    sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName )
+    sal_Int32 parameterIndex, sal_Int32, const OUString& )
 {
-    (void) sqlType; (void) typeName;
     MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     checkColumnIndex( parameterIndex );
@@ -554,22 +552,20 @@ void PreparedStatement::setTimestamp(
 }
 
 void PreparedStatement::setBinaryStream(
-    sal_Int32 parameterIndex,
-    const Reference< css::io::XInputStream >& x,
-    sal_Int32 length )
+    sal_Int32,
+    const Reference< css::io::XInputStream >&,
+    sal_Int32 )
 {
-    (void) parameterIndex; (void)x; (void) length;
     throw SQLException(
         "pq_preparedstatement: setBinaryStream not implemented",
         *this, OUString(), 1, Any () );
 }
 
 void PreparedStatement::setCharacterStream(
-    sal_Int32 parameterIndex,
-    const Reference< css::io::XInputStream >& x,
-    sal_Int32 length )
+    sal_Int32,
+    const Reference< css::io::XInputStream >&,
+    sal_Int32 )
 {
-    (void) parameterIndex; (void)x; (void) length;
     throw SQLException(
         "pq_preparedstatement: setCharacterStream not implemented",
         *this, OUString(), 1, Any () );
@@ -589,9 +585,8 @@ void PreparedStatement::setObjectWithInfo(
     sal_Int32 parameterIndex,
     const Any& x,
     sal_Int32 targetSqlType,
-    sal_Int32 scale )
+    sal_Int32 )
 {
-    (void) scale;
     if( css::sdbc::DataType::DECIMAL == targetSqlType ||
         css::sdbc::DataType::NUMERIC == targetSqlType )
     {
@@ -626,30 +621,27 @@ void PreparedStatement::setObjectWithInfo(
 }
 
 void PreparedStatement::setRef(
-    sal_Int32 parameterIndex,
-    const Reference< XRef >& x )
+    sal_Int32,
+    const Reference< XRef >& )
 {
-    (void) parameterIndex; (void)x;
     throw SQLException(
         "pq_preparedstatement: setRef not implemented",
         *this, OUString(), 1, Any () );
 }
 
 void PreparedStatement::setBlob(
-    sal_Int32 parameterIndex,
-    const Reference< XBlob >& x )
+    sal_Int32,
+    const Reference< XBlob >& )
 {
-    (void) parameterIndex; (void)x;
     throw SQLException(
         "pq_preparedstatement: setBlob not implemented",
         *this, OUString(), 1, Any () );
 }
 
 void PreparedStatement::setClob(
-    sal_Int32 parameterIndex,
-    const Reference< XClob >& x )
+    sal_Int32,
+    const Reference< XClob >& )
 {
-    (void) parameterIndex; (void)x;
     throw SQLException(
         "pq_preparedstatement: setClob not implemented",
         *this, OUString(), 1, Any () );

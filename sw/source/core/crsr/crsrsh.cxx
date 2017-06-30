@@ -1549,7 +1549,6 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
                     bool const bResult =
                         pTableFrame->GetCharRect(m_aCharRect, *m_pTableCursor->GetPoint());
                     OSL_ENSURE( bResult, "GetCharRect failed." );
-                    (void) bResult; // non-debug: unused
                 }
             }
 

@@ -92,7 +92,6 @@ void OWizTypeSelectControl::DeactivateAggregate( EControlType eType )
 void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
 {
     OSL_ENSURE(nRow == -1,"nRow must be -1!");
-    (void)nRow;
 
     MultiListBox *pListBox = static_cast<OWizTypeSelect*>(m_pParentTabPage.get())->m_pColumnNames;
 

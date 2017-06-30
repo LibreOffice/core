@@ -265,7 +265,7 @@ namespace rptui
         */
         OSectionView* getSectionRelativeToPosition(const OSectionView* _pSection,Point& _rPnt);
 
-        void MovAction(const Point& rPnt,const OSectionView* _pSection,bool _bMove /*= true */, bool _bControlKeySet);
+        void MovAction(const Point& rPnt,const OSectionView* _pSection, bool _bControlKeySet);
 
         sal_uInt32 getMarkedObjectCount() const;
 

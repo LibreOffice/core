@@ -309,7 +309,6 @@ void Shell::CopyDialogResources(
 TriState ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
                         SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos, bool bMove )
 {
-    (void)pEntry;
     DBG_ASSERT( pEntry, "No entry?" );   // ASS is ok here, should not be reached
     DBG_ASSERT( pTarget, "No target?" ); // with NULL (right at the beginning)
     sal_uInt16 nDepth = GetModel()->GetDepth( pTarget );

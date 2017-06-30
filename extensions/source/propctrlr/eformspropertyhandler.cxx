@@ -476,7 +476,6 @@ namespace pcr
             return InteractiveSelectionResult_Cancelled;
 
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
-        (void)nPropId;
         OSL_ENSURE( ( PROPERTY_ID_BINDING_NAME == nPropId )
                  || ( PROPERTY_ID_BIND_EXPRESSION == nPropId )
                  || ( PROPERTY_ID_XSD_REQUIRED == nPropId )

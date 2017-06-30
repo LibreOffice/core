@@ -87,9 +87,7 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
         break;
         case uno::TypeClass_BYTE:
         {
-            sal_Int8 nInt8 = 0;
-            aAny >>= nInt8;
-            exportByte(nInt8, rName);
+            exportByte();
         }
         break;
         case uno::TypeClass_SHORT:
@@ -195,9 +193,8 @@ void XMLSettingsExportHelper::exportBool(const bool bValue, const OUString& rNam
     m_rContext.EndElement( false );
 }
 
-void XMLSettingsExportHelper::exportByte(const sal_Int8 nValue, const OUString& rName)
+void XMLSettingsExportHelper::exportByte()
 {
-    (void) nValue; (void) rName;
     OSL_ENSURE(false, "XMLSettingsExportHelper::exportByte(): #i114162#:\n"
         "config-items of type \"byte\" are not valid ODF, "
         "so storing them is disabled!\n"

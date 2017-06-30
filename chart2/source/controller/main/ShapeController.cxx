@@ -141,10 +141,8 @@ FeatureState ShapeController::getState( const OUString& rCommand )
     return aReturn;
 }
 
-void ShapeController::execute( const OUString& rCommand, const Sequence< beans::PropertyValue>& rArgs )
+void ShapeController::execute( const OUString& rCommand, const Sequence< beans::PropertyValue>& )
 {
-    (void)rArgs;
-
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( rCommand );
     if ( aIter != m_aSupportedFeatures.end() )
     {

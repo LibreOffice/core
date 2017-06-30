@@ -94,7 +94,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                     const OString sOutput(
                         aArgs.m_sOutputFile +
                         sXhpFile.copy( sXhpFile.lastIndexOf('/') ));
-                    if( !aParser.Merge( aArgs.m_sMergeSrc, sOutput,
+                    if( !aParser.Merge( sOutput,
                         aArgs.m_sLanguage, pMergeDataFile.get() ))
                     {
                         hasNoError = false;
@@ -113,7 +113,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 }
                 hasNoError =
                     aParser.Merge(
-                        aArgs.m_sMergeSrc, aArgs.m_sOutputFile,
+                        aArgs.m_sOutputFile,
                         aArgs.m_sLanguage, pMergeDataFile.get() );
             }
         }

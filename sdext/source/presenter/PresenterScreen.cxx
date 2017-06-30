@@ -232,10 +232,8 @@ void SAL_CALL PresenterScreenListener::notifyEvent( const css::document::EventOb
 
 // XEventListener
 
-void SAL_CALL PresenterScreenListener::disposing (const css::lang::EventObject& rEvent)
+void SAL_CALL PresenterScreenListener::disposing (const css::lang::EventObject&)
 {
-    (void)rEvent;
-
     if (mpPresenterScreen.is())
     {
         mpPresenterScreen->RequestShutdownPresenterScreen();

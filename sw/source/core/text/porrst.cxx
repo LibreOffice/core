@@ -457,7 +457,6 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
 
 void SwHiddenTextPortion::Paint( const SwTextPaintInfo & rInf) const
 {
-    (void)rInf;
 #ifdef DBG_UTIL
     OutputDevice* pOut = const_cast<OutputDevice*>(rInf.GetOut());
     Color aCol( SwViewOption::GetFieldShadingsColor() );
@@ -469,6 +468,8 @@ void SwHiddenTextPortion::Paint( const SwTextPaintInfo & rInf) const
     SwRect aRect( aPos, Size( 100, 200 ) );
     pOut->DrawRect( aRect.SVRect() );
     pOut->SetFillColor( aOldColor );
+#else
+    (void)rInf;
 #endif
 }
 

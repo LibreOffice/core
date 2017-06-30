@@ -1468,10 +1468,8 @@ void SvXMLImport::SetConfigurationSettings(const css::uno::Sequence<css::beans::
 {
 }
 
-void SvXMLImport::SetDocumentSpecificSettings(const OUString& _rSettingsGroupName, const uno::Sequence<beans::PropertyValue>& _rSettings)
+void SvXMLImport::SetDocumentSpecificSettings(const OUString&, const uno::Sequence<beans::PropertyValue>&)
 {
-    (void)_rSettingsGroupName;
-    (void)_rSettings;
 }
 
 ProgressBarHelper*  SvXMLImport::GetProgressBarHelper()

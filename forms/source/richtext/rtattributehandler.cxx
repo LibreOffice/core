@@ -192,7 +192,6 @@ namespace frm
     void ParaAlignmentHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType /*_nForScriptType*/ ) const
     {
         OSL_ENSURE( !_pAdditionalArg, "ParaAlignmentHandler::executeAttribute: this is a simple toggle attribute - no args possible!" );
-        (void)_pAdditionalArg;
         _rNewAttribs.Put( SvxAdjustItem( m_eAdjust, getWhich() ) );
     }
 
@@ -223,7 +222,6 @@ namespace frm
     void LineSpacingHandler::executeAttribute( const SfxItemSet& /*_rCurrentAttribs*/, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType /*_nForScriptType*/ ) const
     {
         OSL_ENSURE( !_pAdditionalArg, "LineSpacingHandler::executeAttribute: this is a simple toggle attribute - no args possible!" );
-        (void)_pAdditionalArg;
 
         SvxLineSpacingItem aLineSpacing( m_nLineSpace, getWhich() );
         aLineSpacing.SetLineSpaceRule( SvxLineSpaceRule::Auto );
@@ -261,7 +259,6 @@ namespace frm
     void EscapementHandler::executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, SvtScriptType /*_nForScriptType*/ ) const    {
         OSL_ENSURE( !_pAdditionalArg, "EscapementHandler::executeAttribute: this is a simple toggle attribute - no args possible!" );
             // well, in theory we could allow an SvxEscapementItem here, but this is not needed
-        (void)_pAdditionalArg;
 
         bool bIsChecked = getCheckState( _rCurrentAttribs ) == eChecked;
         _rNewAttribs.Put( SvxEscapementItem( bIsChecked ? SvxEscapement::Off : m_eEscapement, getWhich() ) );
@@ -351,8 +348,6 @@ namespace frm
 
         if ( pFontHeightItem )
         {
-            // correct measurement units
-            MapUnit eItemMapUnit = pFontHeightItem->GetPropUnit(); (void)eItemMapUnit;
             sal_uLong nHeight = pFontHeightItem->GetHeight();
             if ( _rNewAttribs.GetPool()->GetMetric( getWhich() ) != MapUnit::MapTwip )
             {

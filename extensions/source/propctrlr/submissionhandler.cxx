@@ -389,7 +389,6 @@ namespace pcr
 
         OSL_ENSURE( _rControlValueType.getTypeClass() == TypeClass_STRING,
             "SubmissionPropertyHandler::convertToControlValue: all our controls should use strings for value exchange!" );
-        (void)_rControlValueType;
 
         PropertyId nPropId( m_pInfoService->getPropertyId( _rPropertyName ) );
         switch ( nPropId )

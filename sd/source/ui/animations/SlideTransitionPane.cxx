@@ -528,9 +528,8 @@ void SlideTransitionPane::dispose()
     PanelLayout::dispose();
 }
 
-void SlideTransitionPane::DataChanged (const DataChangedEvent& rEvent)
+void SlideTransitionPane::DataChanged (const DataChangedEvent&)
 {
-    (void)rEvent;
     UpdateLook();
 }
 

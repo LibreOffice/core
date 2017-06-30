@@ -920,11 +920,9 @@ void ScOpenCLTest::testMathFormulaRandom()
 
     for (SCROW i = 0; i <= 15; ++i)
     {
-        double fLibre = rDoc.GetValue(ScAddress(0,i,0));
-        double fExcel = rDocRes.GetValue(ScAddress(0,i,0));
+        rDoc.GetValue(ScAddress(0,i,0)); // LO
+        rDocRes.GetValue(ScAddress(0,i,0)); // Excel
         //because the random numbers will always change,so give the test "true"
-        (void) fLibre;
-        (void) fExcel;
         CPPUNIT_ASSERT(true);
     }
 }

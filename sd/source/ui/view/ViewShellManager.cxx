@@ -94,7 +94,6 @@ class ViewShellManager::Implementation
 {
 public:
     Implementation (
-        ViewShellManager& rManager,
         ViewShellBase& rBase);
     ~Implementation() COVERITY_NOEXCEPT_FALSE;
 
@@ -222,15 +221,13 @@ private:
         SfxShell* pShell,
         ShellId nShellId);
     void DestroyViewShell (ShellDescriptor& rDescriptor);
-    static void DestroySubShell (
-        const SfxShell& rViewShell,
-        const ShellDescriptor& rDescriptor);
+    static void DestroySubShell (const ShellDescriptor& rDescriptor);
 };
 
 //===== ViewShellManager ======================================================
 
 ViewShellManager::ViewShellManager (ViewShellBase& rBase)
-    : mpImpl(new Implementation(*this,rBase)),
+    : mpImpl(new Implementation(rBase)),
       mbValid(true)
 {
 }
@@ -358,7 +355,6 @@ void ViewShellManager::UnlockUpdate()
 //===== ViewShellManager::Implementation ======================================
 
 ViewShellManager::Implementation::Implementation (
-    ViewShellManager& rManager,
     ViewShellBase& rBase)
     : mrBase(rBase),
       maMutex(),
@@ -372,9 +368,7 @@ ViewShellManager::Implementation::Implementation (
       mbFormShellAboveParent(true),
       mpTopShell(nullptr),
       mpTopViewShell(nullptr)
-{
-    (void)rManager;
-}
+{}
 
 ViewShellManager::Implementation::~Implementation() COVERITY_NOEXCEPT_FALSE
 {
@@ -601,7 +595,7 @@ void ViewShellManager::Implementation::DeactivateSubShell (
     rList.erase(iShell);
     TakeShellsFromStack(pShell);
 
-    DestroySubShell(rParentShell, aDescriptor);
+    DestroySubShell(aDescriptor);
 }
 
 void ViewShellManager::Implementation::MoveToTop (const SfxShell& rShell)
@@ -1085,10 +1079,8 @@ void ViewShellManager::Implementation::DestroyViewShell (
 }
 
 void ViewShellManager::Implementation::DestroySubShell (
-    const SfxShell& rParentShell,
     const ShellDescriptor& rDescriptor)
 {
-    (void)rParentShell;
     OSL_ASSERT(rDescriptor.mpFactory.get() != nullptr);
     rDescriptor.mpFactory->ReleaseShell(rDescriptor.mpShell);
 }

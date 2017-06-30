@@ -126,7 +126,6 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
             sal_uInt16 nEnumValue(0);
             bool bSuccess = SvXMLUnitConverter::convertEnum(nEnumValue, _rReadCharacters, _pEnumMap);
             OSL_ENSURE(bSuccess, "PropertyConversion::convertString: could not convert to an enum value!");
-            (void)bSuccess;
 
             if (bEnumAsInt)
                 if (TypeClass_SHORT == _rExpectedType.getTypeClass())

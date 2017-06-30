@@ -266,11 +266,7 @@ void PresenterController::UpdateCurrentSlide (const sal_Int32 nOffset)
     // Update the accessibility object.
     if (IsAccessibilityActive())
     {
-        sal_Int32 nSlideCount (0);
-        Reference<container::XIndexAccess> xIndexAccess(mxSlideShowController, UNO_QUERY);
-        if (xIndexAccess.is())
-            nSlideCount = xIndexAccess->getCount();
-        mpAccessibleObject->NotifyCurrentSlideChange(mnCurrentSlideIndex, nSlideCount);
+        mpAccessibleObject->NotifyCurrentSlideChange();
     }
 }
 
@@ -1042,51 +1038,29 @@ void PresenterController::HandleNumericKeyPress (
 
 //----- XFocusListener --------------------------------------------------------
 
-void SAL_CALL PresenterController::focusGained (const css::awt::FocusEvent& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterController::focusGained (const css::awt::FocusEvent&) {}
 
-void SAL_CALL PresenterController::focusLost (const css::awt::FocusEvent& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterController::focusLost (const css::awt::FocusEvent&) {}
 
 //----- XMouseListener --------------------------------------------------------
 
-void SAL_CALL PresenterController::mousePressed (const css::awt::MouseEvent& rEvent)
+void SAL_CALL PresenterController::mousePressed (const css::awt::MouseEvent&)
 {
-    (void)rEvent;
     if (mxMainWindow.is())
         mxMainWindow->setFocus();
 }
 
-void SAL_CALL PresenterController::mouseReleased (const css::awt::MouseEvent& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterController::mouseReleased (const css::awt::MouseEvent&) {}
 
-void SAL_CALL PresenterController::mouseEntered (const css::awt::MouseEvent& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterController::mouseEntered (const css::awt::MouseEvent&) {}
 
-void SAL_CALL PresenterController::mouseExited (const css::awt::MouseEvent& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterController::mouseExited (const css::awt::MouseEvent&) {}
 
 //----- XMouseMotionListener --------------------------------------------------
 
-void SAL_CALL PresenterController::mouseMoved (const css::awt::MouseEvent& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterController::mouseMoved (const css::awt::MouseEvent&) {}
 
-void SAL_CALL PresenterController::mouseDragged (const css::awt::MouseEvent& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterController::mouseDragged (const css::awt::MouseEvent&) {}
 
 
 void PresenterController::InitializeMainPane (const Reference<XPane>& rxPane)

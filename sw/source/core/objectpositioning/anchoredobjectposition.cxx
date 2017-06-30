@@ -59,7 +59,6 @@ SwAnchoredObjectPosition::SwAnchoredObjectPosition( SdrObject& _rDrawObj )
             dynamic_cast<const SwDrawVirtObj*>( &mrDrawObj) !=  nullptr    || // 'virtual' drawing object
             ( dynamic_cast<const SdrVirtObj*>( &mrDrawObj) ==  nullptr &&    // 'master' drawing object
               dynamic_cast<const SwFlyDrawObj*>( &mrDrawObj) ==  nullptr );  // - indirectly checked
-    (void) bObjOfExceptedType;
     OSL_ENSURE( bObjOfExceptedType,
             "SwAnchoredObjectPosition(..) - object of unexpected type!" );
 #endif

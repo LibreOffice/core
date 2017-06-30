@@ -103,7 +103,6 @@ namespace dbaui
 
         OSL_ENSURE(Reference< XConnection >(_rSource.Source, UNO_QUERY).get() == m_xConnection.get(),
             "DirectSQLDialog::_disposing: where does this come from?");
-        (void)_rSource;
 
         {
             OUString sMessage(ModuleRes(STR_DIRECTSQL_CONNECTIONLOST));

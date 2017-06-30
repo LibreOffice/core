@@ -1191,7 +1191,6 @@ void OAppDetailPageHelper::KeyInput( const KeyEvent& rKEvt )
     SvTreeListBox* pCurrentView = getCurrentView();
     OSL_PRECOND( pCurrentView, "OAppDetailPageHelper::KeyInput: how this?" );
 
-    KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction(); (void)eFunc;
     sal_uInt16      nCode = rKEvt.GetKeyCode().GetCode();
 
     if ( ( KEY_RETURN == nCode ) && pCurrentView )

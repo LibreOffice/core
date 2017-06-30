@@ -107,7 +107,6 @@ namespace abp
         Reference< XDatabaseContext > xContext = lcl_getDataSourceContext( _rxContext );
 
         DBG_ASSERT( !xContext->hasByName( _rName ), "lcl_implCreateAndInsert: name already used!" );
-        (void)_rName;
 
 
         // create a new data source

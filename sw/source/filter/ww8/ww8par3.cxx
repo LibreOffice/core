@@ -612,7 +612,6 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
             }
             OSL_ENSURE(bDone, "tab setting in numbering is "
                 "of unexpected configuration");
-            (void)bDone;
         }
         if ( rNumFormat.GetPositionAndSpaceMode() ==
                                   SvxNumberFormat::LABEL_WIDTH_AND_POSITION )

@@ -307,10 +307,9 @@ namespace dbaccess
         m_aStates.push( pNewState );
     }
 
-    void SAL_CALL SettingsDocumentHandler::endElement( const OUString& i_Name )
+    void SAL_CALL SettingsDocumentHandler::endElement( const OUString& )
     {
         ENSURE_OR_THROW( !m_aStates.empty(), "no active element" );
-        (void)i_Name;
 
         ::rtl::Reference< SettingsImport > pCurrentState( m_aStates.top() );
         pCurrentState->endElement();
@@ -325,23 +324,17 @@ namespace dbaccess
         pCurrentState->characters( i_Chars );
     }
 
-    void SAL_CALL SettingsDocumentHandler::ignorableWhitespace( const OUString& aWhitespaces )
+    void SAL_CALL SettingsDocumentHandler::ignorableWhitespace( const OUString& )
     {
         // ignore them - that's why they're called "ignorable"
-        (void)aWhitespaces;
     }
 
-    void SAL_CALL SettingsDocumentHandler::processingInstruction( const OUString& i_Target, const OUString& i_Data )
+    void SAL_CALL SettingsDocumentHandler::processingInstruction( const OUString&, const OUString& )
     {
         OSL_FAIL( "SettingsDocumentHandler::processingInstruction: unexpected ..." );
-        (void)i_Target;
-        (void)i_Data;
     }
 
-    void SAL_CALL SettingsDocumentHandler::setDocumentLocator( const Reference< XLocator >& i_Locator )
-    {
-        (void)i_Locator;
-    }
+    void SAL_CALL SettingsDocumentHandler::setDocumentLocator( const Reference< XLocator >& ) {}
 
     // SubComponentRecovery
     const OUString SubComponentRecovery::getComponentsStorageName( const SubComponentType i_eType )
@@ -543,8 +536,7 @@ namespace dbaccess
         if ( xDocDefinition.is() )
         {
             Reference< XController > xController( m_xDocumentUI, UNO_QUERY_THROW );
-            Reference< XInterface > xLoader( *new SubComponentLoader( xController, xDocDefinition ) );
-            (void)xLoader;
+            Reference< XInterface >( *new SubComponentLoader( xController, xDocDefinition ) );
         }
 
         return xSubComponent;
@@ -597,8 +589,7 @@ namespace dbaccess
         }
 
         Reference< XController > xController( m_xDocumentUI, UNO_QUERY_THROW );
-        Reference< XInterface > xLoader( *new SubComponentLoader( xController, xSubComponent ) );
-        (void)xLoader;
+        Reference< XInterface >( *new SubComponentLoader( xController, xSubComponent ) );
 
         return xSubComponent;
     }

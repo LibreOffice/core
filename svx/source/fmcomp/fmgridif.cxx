@@ -572,10 +572,9 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& 
                                     {
                                         aOldCursorBookmark = Reference< css::sdbcx::XRowLocate > (xForm, UNO_QUERY)->getBookmark();
                                     }
-                                    catch( const Exception& e )
+                                    catch( const Exception& )
                                     {
                                         DBG_UNHANDLED_EXCEPTION();
-                                        (void)e;
                                     }
                                 }
                             }
@@ -595,10 +594,9 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& 
                     xLocate->moveToBookmark(aOldCursorBookmark);
                 }
             }
-            catch( const Exception& e )
+            catch( const Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION();
-                (void)e;
             }
 
             Reference< css::awt::XView >  xPeerView(getPeer(), UNO_QUERY);

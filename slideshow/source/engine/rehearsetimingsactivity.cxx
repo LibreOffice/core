@@ -468,7 +468,6 @@ void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas )
             canvas, metaFile, cppcanvas::Renderer::Parameters() ) );
     const bool succ = renderer->draw();
     OSL_ASSERT( succ );
-    (void)succ;
 }
 
 

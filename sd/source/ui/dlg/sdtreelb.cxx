@@ -1101,11 +1101,8 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
 /**
  * StartDrag-Request
  */
-void SdPageObjsTLB::StartDrag( sal_Int8 nAction, const Point& rPosPixel)
+void SdPageObjsTLB::StartDrag( sal_Int8, const Point& rPosPixel)
 {
-    (void)nAction;
-    (void)rPosPixel;
-
     SdNavigatorWin* pNavWin = nullptr;
     SvTreeListEntry* pEntry = GetEntry(rPosPixel);
 

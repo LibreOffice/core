@@ -98,9 +98,8 @@ namespace bib
                 ControlModeSwitch( _bDesign )
             );
         }
-        catch( const Exception& e)
+        catch( const Exception&)
         {
-            (void) e;   // make compiler happy
             OSL_FAIL( "FormControlContainer::implSetDesignMode: caught an exception!" );
         }
     }

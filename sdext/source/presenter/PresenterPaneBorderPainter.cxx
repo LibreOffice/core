@@ -386,8 +386,6 @@ PresenterPaneBorderPainter::Renderer::Renderer (
       mbHasCallout(false),
       maCalloutAnchor()
 {
-    (void)rxContext;
-
     Reference<lang::XMultiComponentFactory> xFactory (rxContext->getServiceManager());
     if (xFactory.is())
     {

@@ -325,13 +325,9 @@ void BackendImpl::PackageImpl::processPackage_(
     ::osl::ResettableMutexGuard &,
     bool doRegisterPackage,
     bool /* startup */,
-    ::rtl::Reference<AbortChannel> const & abortChannel,
+    ::rtl::Reference<AbortChannel> const &,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
-    (void)doRegisterPackage;
-    (void)abortChannel;
-    (void)xCmdEnv;
-
     BackendImpl* that = getMyBackend();
     that->implProcessHelp( this, doRegisterPackage, xCmdEnv);
 }

@@ -668,7 +668,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                 bSynchronousRead = false;
                 nStatus = p_set_io_mode( maHandle, SANE_TRUE );
                 CheckConsistency( "sane_set_io_mode" );
-                SAL_WARN_IF(nStatus != SANE_STATUS_GOOD, "extensions.scanner", "driver is confused" ); (void)nStatus;
+                SAL_WARN_IF(nStatus != SANE_STATUS_GOOD, "extensions.scanner", "driver is confused" );
             }
 
             SANE_Int nLen=0;

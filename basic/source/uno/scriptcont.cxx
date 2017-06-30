@@ -117,19 +117,17 @@ SfxScriptLibraryContainer::SfxScriptLibraryContainer( const uno::Reference< embe
 }
 
 // Methods to get library instances of the correct type
-SfxLibrary* SfxScriptLibraryContainer::implCreateLibrary( const OUString& aName )
+SfxLibrary* SfxScriptLibraryContainer::implCreateLibrary( const OUString& )
 {
-    (void)aName;    // Only needed for SfxDialogLibrary
     SfxLibrary* pRet = new SfxScriptLibrary( maModifiable, mxSFI );
     return pRet;
 }
 
-SfxLibrary* SfxScriptLibraryContainer::implCreateLibraryLink( const OUString& aName,
+SfxLibrary* SfxScriptLibraryContainer::implCreateLibraryLink( const OUString&,
                                                               const OUString& aLibInfoFileURL,
                                                               const OUString& StorageURL,
                                                               bool ReadOnly )
 {
-    (void)aName;    // Only needed for SfxDialogLibrary
     SfxLibrary* pRet = new SfxScriptLibrary( maModifiable, mxSFI,
                                              aLibInfoFileURL, StorageURL, ReadOnly );
     return pRet;
@@ -1172,25 +1170,18 @@ void SfxScriptLibrary::storeResources()
     // No resources
 }
 
-void SfxScriptLibrary::storeResourcesToURL( const OUString& URL,
-    const Reference< task::XInteractionHandler >& Handler )
-{
-    (void)URL;
-    (void)Handler;
-}
+void SfxScriptLibrary::storeResourcesToURL( const OUString&,
+    const Reference< task::XInteractionHandler >& )
+{}
 
 void SfxScriptLibrary::storeResourcesAsURL
-    ( const OUString& URL, const OUString& NewName )
-{
-    (void)URL;
-    (void)NewName;
-}
+    ( const OUString&, const OUString& )
+{}
 
 void SfxScriptLibrary::storeResourcesToStorage( const css::uno::Reference
-    < css::embed::XStorage >& xStorage )
+    < css::embed::XStorage >& )
 {
     // No resources
-    (void)xStorage;
 }
 
 bool SfxScriptLibrary::containsValidModule(const Any& rElement)

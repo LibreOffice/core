@@ -259,7 +259,6 @@ namespace sax_fastparser {
             }
         }
         SAL_WARN_IF( !bGood && nLen > 1, "sax", "in '" << OString(pStr,std::min<sal_Int32>(nLen,42)) << "'");
-        (void)bGood;
     }
 
     void FastSaxSerializer::endDocument()

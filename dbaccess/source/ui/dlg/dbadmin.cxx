@@ -223,10 +223,7 @@ void ODbAdminDialog::setTitle(const OUString& _sTitle)
     SetText(_sTitle);
 }
 
-void ODbAdminDialog::enableConfirmSettings( bool _bEnable )
-{
-    (void)_bEnable;
-}
+void ODbAdminDialog::enableConfirmSettings( bool ) {}
 
 void ODbAdminDialog::saveDatasource()
 {

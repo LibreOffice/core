@@ -1209,7 +1209,6 @@ XmlIdRegistryClipboard::RegisterCopyClipboard(Metadatable & i_rCopy,
         const bool success( m_pImpl->TryInsertMetadatable(i_rCopy,
                 i_rReference.First, i_rReference.Second) );
         OSL_ENSURE(success, "RegisterCopyClipboard: TryInsert failed?");
-        (void) success;
     }
     const std::shared_ptr<MetadatableClipboard> xLink(
         CreateClipboard( isContentFile(i_rReference.First)) );

@@ -85,11 +85,8 @@ void SAL_CALL ScriptProtocolHandler::initialize(
 }
 
 Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
-    const URL& aURL, const OUString& sTargetFrameName, sal_Int32 nSearchFlags )
+    const URL& aURL, const OUString&, sal_Int32 )
 {
-    (void)sTargetFrameName;
-    (void)nSearchFlags;
-
     Reference< XDispatch > xDispatcher;
     // get scheme of url
 
@@ -307,20 +304,14 @@ const URL& aURL, const Sequence< PropertyValue >& lArgs )
 }
 
 void SAL_CALL ScriptProtocolHandler::addStatusListener(
-const Reference< XStatusListener >& xControl, const URL& aURL )
+const Reference< XStatusListener >&, const URL& )
 {
-    (void)xControl;
-    (void)aURL;
-
     // implement if status is supported
 }
 
 void SAL_CALL ScriptProtocolHandler::removeStatusListener(
-const Reference< XStatusListener >& xControl, const URL& aURL )
-{
-    (void)xControl;
-    (void)aURL;
-}
+const Reference< XStatusListener >&, const URL& )
+{}
 
 bool
 ScriptProtocolHandler::getScriptInvocation()

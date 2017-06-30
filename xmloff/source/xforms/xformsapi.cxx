@@ -90,7 +90,6 @@ void xforms_addXFormsModel(
 
     // TODO: implement proper error handling
     SAL_WARN_IF( !bSuccess, "xmloff", "can't import model" );
-    (void)bSuccess;
 }
 
 static Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(

@@ -949,7 +949,6 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
             DBG_ASSERT( pPortion->GetKind() != PortionKind::HYPHENATOR, "CreateLines: Hyphenator-Portion!" );
             DBG_ASSERT( nPortionLen || bProcessingEmptyLine, "Empty Portion in CreateLines ?!" );
-            (void)bProcessingEmptyLine;
             if ( pNextFeature && ( pNextFeature->GetStart() == nTmpPos ) )
             {
                 SAL_WARN_IF( bContinueLastPortion,
@@ -1097,7 +1096,6 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             else
             {
                 DBG_ASSERT( nPortionLen || bProcessingEmptyLine, "Empty Portion - Extra Space?!" );
-                (void)bProcessingEmptyLine;
                 SeekCursor( pNode, nTmpPos+1, aTmpFont );
                 aTmpFont.SetPhysFont( GetRefDevice() );
                 ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());

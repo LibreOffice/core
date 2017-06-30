@@ -63,8 +63,6 @@ namespace canvas
                           const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos )
         {
-            (void)pStr; (void)xIf; (void)nArgPos;
-
 #if OSL_DEBUG_LEVEL > 0
             if( !::rtl::math::isFinite( rPoint.X ) )
             {
@@ -80,6 +78,7 @@ namespace canvas
                     xIf, nArgPos );
             }
 #else
+            (void)pStr; (void)xIf; (void)nArgPos;
             if( !::rtl::math::isFinite( rPoint.X ) ||
                 !::rtl::math::isFinite( rPoint.Y ) )
             {
@@ -93,8 +92,6 @@ namespace canvas
                           const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos )
         {
-            (void)pStr; (void)xIf; (void)nArgPos;
-
 #if OSL_DEBUG_LEVEL > 0
             if( !::rtl::math::isFinite( rSegment.Px ) )
             {
@@ -144,6 +141,7 @@ namespace canvas
                     xIf, nArgPos );
             }
 #else
+            (void)pStr; (void)xIf; (void)nArgPos;
             if( !::rtl::math::isFinite( rSegment.Px ) ||
                 !::rtl::math::isFinite( rSegment.Py ) ||
                 !::rtl::math::isFinite( rSegment.C1x ) ||
@@ -161,8 +159,6 @@ namespace canvas
                           const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos )
         {
-            (void)pStr; (void)xIf; (void)nArgPos;
-
 #if OSL_DEBUG_LEVEL > 0
             if( !::rtl::math::isFinite( rRect.X1 ) )
             {
@@ -196,6 +192,7 @@ namespace canvas
                     xIf, nArgPos );
             }
 #else
+            (void)pStr; (void)xIf; (void)nArgPos;
             if( !::rtl::math::isFinite( rRect.X1 ) ||
                 !::rtl::math::isFinite( rRect.Y1 ) ||
                 !::rtl::math::isFinite( rRect.X2 ) ||
@@ -211,8 +208,6 @@ namespace canvas
                           const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos )
         {
-            (void)pStr; (void)xIf; (void)nArgPos;
-
 #if OSL_DEBUG_LEVEL > 0
             const sal_Int32 nBinaryState(
                 100000 * int(!::rtl::math::isFinite( matrix.m00 )) +
@@ -231,6 +226,7 @@ namespace canvas
                     xIf, nArgPos );
             }
 #else
+            (void)pStr; (void)xIf; (void)nArgPos;
             if( !::rtl::math::isFinite( matrix.m00 ) ||
                 !::rtl::math::isFinite( matrix.m01 ) ||
                 !::rtl::math::isFinite( matrix.m02 ) ||
@@ -248,8 +244,6 @@ namespace canvas
                           const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos )
         {
-            (void)pStr; (void)xIf; (void)nArgPos;
-
 #if OSL_DEBUG_LEVEL > 0
             const sal_Int32 nBinaryState(
                 1000 * int(!::rtl::math::isFinite( matrix.m00 )) +
@@ -266,6 +260,7 @@ namespace canvas
                     xIf, nArgPos );
             }
 #else
+            (void)pStr; (void)xIf; (void)nArgPos;
             if( !::rtl::math::isFinite( matrix.m00 ) ||
                 !::rtl::math::isFinite( matrix.m01 ) ||
                 !::rtl::math::isFinite( matrix.m10 ) ||
@@ -519,8 +514,6 @@ namespace canvas
                           const uno::Reference< uno::XInterface >&  xIf,
                           ::sal_Int16                               nArgPos )
         {
-            (void)pStr; (void)xIf; (void)nArgPos;
-
             if( bitmapLayout.ScanLines < 0 )
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -529,6 +522,7 @@ namespace canvas
                     ": verifyInput(): bitmap layout's ScanLines is negative",
                     xIf, nArgPos );
 #else
+                (void)pStr; (void)xIf; (void)nArgPos;
                 throw lang::IllegalArgumentException();
 #endif
             }
@@ -674,8 +668,6 @@ namespace canvas
                                const char*                              pStr,
                                const uno::Reference< uno::XInterface >& xIf )
         {
-            (void)pStr; (void)xIf;
-
             if( size.Width <= 0 )
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -685,6 +677,7 @@ namespace canvas
                     OUString::number(size.Width) + ")",
                     xIf, 0 );
 #else
+                (void)pStr; (void)xIf;
                 throw lang::IllegalArgumentException();
 #endif
             }
@@ -708,8 +701,6 @@ namespace canvas
                                const char*                              pStr,
                                const uno::Reference< uno::XInterface >& xIf )
         {
-            (void)pStr; (void)xIf;
-
             if( size.Width <= 0.0 )
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -719,6 +710,7 @@ namespace canvas
                     OUString::number(size.Width) + ")",
                     xIf, 0 );
 #else
+                (void)pStr; (void)xIf;
                 throw lang::IllegalArgumentException();
 #endif
             }

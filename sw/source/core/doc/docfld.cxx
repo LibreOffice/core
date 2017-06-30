@@ -192,7 +192,6 @@ void SetGetExpField::SetBodyPos( const SwContentFrame& rFrame )
         SwPosition aPos( aIdx );
         bool const bResult = ::GetBodyTextNode( rDoc, aPos, rFrame );
         OSL_ENSURE(bResult, "Where is the field?");
-        (void) bResult; // unused in non-debug
         nNode = aPos.nNode.GetIndex();
         nContent = aPos.nContent.GetIndex();
     }
@@ -1020,7 +1019,6 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFiel
         SwPosition aPos( rDoc.GetNodes().GetEndOfPostIts() );
         bool const bResult = GetBodyTextNode( rDoc, aPos, *pFrame );
         OSL_ENSURE(bResult, "where is the Field");
-        (void) bResult; // unused in non-debug
         pNew = new SetGetExpField( aPos.nNode, &rTField, &aPos.nContent );
     }
 
@@ -1067,7 +1065,6 @@ void SwDocUpdateField::GetBodyNode( const SwSectionNode& rSectNd )
 
             bool const bResult = GetBodyTextNode( rDoc, aPos, *pFrame );
             OSL_ENSURE(bResult, "where is the Field");
-            (void) bResult; // unused in non-debug
             pNew = new SetGetExpField( rSectNd, &aPos );
 
         } while( false );

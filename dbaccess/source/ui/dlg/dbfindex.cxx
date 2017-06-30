@@ -146,7 +146,6 @@ OTableIndex ODbaseIndexDialog::implRemoveIndex(const OUString& _rName, TableInde
         }
     }
 
-    (void)_bMustExist;
     OSL_ENSURE(!_bMustExist || (aSearch != _rList.end()), "ODbaseIndexDialog::implRemoveIndex : did not find the index!");
     return aReturn;
 }
@@ -474,9 +473,8 @@ void OTableInfo::WriteInfFile( const OUString& rDSN ) const
             ::ucbhelper::Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
             aContent.executeCommand( "delete", makeAny( true ) );
         }
-        catch (const Exception& e )
+        catch (const Exception& )
         {
-            (void)e;  // make compiler happy
             // simply silent this. The strange algorithm here does a lot of
             // things even if no files at all were created or accessed, so it's
             // possible that the file we're trying to delete does not even

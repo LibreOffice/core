@@ -482,10 +482,8 @@ void OPreparedStatement::closeBlobAfterWriting(isc_blob_handle& rBlobHandle)
     }
 }
 
-void SAL_CALL OPreparedStatement::setClob( sal_Int32 parameterIndex, const Reference< XClob >& x )
+void SAL_CALL OPreparedStatement::setClob( sal_Int32, const Reference< XClob >& )
 {
-    (void) parameterIndex;
-    (void) x;
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
@@ -542,20 +540,16 @@ void SAL_CALL OPreparedStatement::setBlob(sal_Int32 nParameterIndex,
 }
 
 
-void SAL_CALL OPreparedStatement::setArray( sal_Int32 parameterIndex, const Reference< XArray >& x )
+void SAL_CALL OPreparedStatement::setArray( sal_Int32, const Reference< XArray >& )
 {
-    (void) parameterIndex;
-    (void) x;
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
 
 
-void SAL_CALL OPreparedStatement::setRef( sal_Int32 parameterIndex, const Reference< XRef >& x )
+void SAL_CALL OPreparedStatement::setRef( sal_Int32, const Reference< XRef >& )
 {
-    (void) parameterIndex;
-    (void) x;
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
@@ -646,21 +640,16 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
 }
 
 
-void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName )
+void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32, sal_Int32, const ::rtl::OUString& )
 {
-    (void) parameterIndex;
-    (void) sqlType;
-    (void) typeName;
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
 
 
-void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x )
+void SAL_CALL OPreparedStatement::setObject( sal_Int32, const Any& )
 {
-    (void) parameterIndex;
-    (void) x;
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
@@ -714,22 +703,16 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
 }
 
 
-void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length )
+void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32, const Reference< css::io::XInputStream >&, sal_Int32 )
 {
-    (void) parameterIndex;
-    (void) x;
-    (void) length;
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
 
 
-void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length )
+void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32, const Reference< css::io::XInputStream >&, sal_Int32 )
 {
-    (void) parameterIndex;
-    (void) x;
-    (void) length;
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 

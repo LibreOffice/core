@@ -76,7 +76,6 @@ OUString XMLElement::getNameByIndex( sal_Int16 nPos )
 OUString XMLElement::getTypeByIndex( sal_Int16 nPos )
 {
     OSL_ASSERT( (size_t)nPos < _attrNames.size() );
-    static_cast<void>(nPos);
     // xxx todo
     return OUString();
 }

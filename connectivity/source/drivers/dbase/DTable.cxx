@@ -1160,10 +1160,8 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
             } // switch (getINT32(xCol->getPropertyValue(sPropType)))
         }
     }
-    catch ( const Exception& e )
+    catch ( const Exception& )
     {
-        (void)e;
-
         try
         {
             // we have to drop the file because it is corrupted now
@@ -1356,10 +1354,8 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
                 (*m_pFileStream).WriteUChar( dBaseIIIMemo );
         } // if (bCreateMemo)
     }
-    catch ( const Exception& e )
+    catch ( const Exception& )
     {
-        (void)e;
-
         try
         {
             // we have to drop the file because it is corrupted now
@@ -2515,11 +2511,11 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
                     }
                 }
                 bOk = _pNewTable->InsertRow(*aInsertRow,_pNewTable->m_pColumns);
-                SAL_WARN_IF(!bOk, "connectivity.drivers", "Row could not be inserted!"); (void)bOk;
+                SAL_WARN_IF(!bOk, "connectivity.drivers", "Row could not be inserted!");
             }
             else
             {
-                SAL_WARN_IF(!bOk, "connectivity.drivers", "Row could not be fetched!"); (void)bOk;
+                SAL_WARN_IF(!bOk, "connectivity.drivers", "Row could not be fetched!");
             }
         }
         else

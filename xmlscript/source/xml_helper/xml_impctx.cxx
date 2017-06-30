@@ -568,7 +568,6 @@ void DocumentHandlerImpl::endElement(
     {
         --m_nSkipElements;
         SAL_INFO("xmlscript.xmlhelper", "### received endElement() for \"" << rQElementName << "\".");
-        static_cast<void>(rQElementName);
         return;
     }
 
@@ -664,7 +663,6 @@ OUString ExtendedAttributes::getQNameByIndex( sal_Int32 nIndex )
 
 OUString ExtendedAttributes::getTypeByIndex( sal_Int32 nIndex )
 {
-    static_cast<void>(nIndex);
     SAL_WARN_IF( nIndex >= m_nAttributes , "xmlscript.xmlhelper", "nIndex is bigger then m_nAttributes");
     return OUString(); // unsupported
 }

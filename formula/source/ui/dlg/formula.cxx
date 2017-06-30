@@ -542,7 +542,6 @@ sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
     }
     catch ( const uno::Exception& e )
     {
-        (void)e;
         SAL_WARN("formula.ui", "FormulaDlg_Impl::GetFunctionPos exception! " << e.Message);
     }
 
@@ -981,7 +980,6 @@ OUString FormulaDlg_Impl::RepairFormula(const OUString& aFormula)
     }
     catch ( const uno::Exception& e )
     {
-        (void)e;
         SAL_WARN("formula.ui", "FormulaDlg_Impl::RepairFormula exception! " << e.Message);
     }
     return aResult;

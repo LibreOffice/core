@@ -59,10 +59,8 @@ void NavigatorWrapper::Resize()
     maNavigator->SetSizePixel(GetSizePixel());
 }
 
-css::ui::LayoutSize NavigatorWrapper::GetHeightForWidth (const sal_Int32 nWidth)
+css::ui::LayoutSize NavigatorWrapper::GetHeightForWidth (const sal_Int32)
 {
-    (void)nWidth;
-
     return css::ui::LayoutSize(-1,-1,-1);
 }
 

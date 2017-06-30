@@ -165,9 +165,8 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, vcl::W
         Reference< XPropertySet > xControllerSet( xFrame->getController(), UNO_QUERY_THROW );
         xControllerSet->getPropertyValue( "DrawViewMode" ) >>= eMode;
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_ASSERT(false);
     }
 

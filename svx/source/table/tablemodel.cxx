@@ -1007,9 +1007,8 @@ void TableModel::optimize()
                     nWidth1 += nWidth2;
                     xSet2->setPropertyValue( sWidth, Any( nWidth1 ) );
                 }
-                catch( Exception& e )
+                catch( Exception& )
                 {
-                    (void)e;
                     OSL_FAIL("svx::TableModel::optimize(), exception caught!");
                 }
 
@@ -1045,9 +1044,8 @@ void TableModel::optimize()
                     nHeight1 += nHeight2;
                     xSet2->setPropertyValue( sHeight, Any( nHeight1 ) );
                 }
-                catch( Exception& e )
+                catch( Exception& )
                 {
-                    (void)e;
                     OSL_FAIL("svx::TableModel::optimize(), exception caught!");
                 }
 

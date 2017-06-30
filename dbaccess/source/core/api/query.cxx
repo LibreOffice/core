@@ -253,7 +253,6 @@ void SAL_CALL OQuery::disposing( const EventObject& _rSource )
 {
     MutexGuard aGuard(m_aMutex);
 
-    (void)_rSource;
     OSL_ENSURE(_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinition, UNO_QUERY).get(),
         "OQuery::disposing : where did this call come from ?");
 

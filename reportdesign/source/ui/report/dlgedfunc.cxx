@@ -622,7 +622,6 @@ bool DlgEdFunc::setMovementPointer(const MouseEvent& rMEvt)
     else
     {
         bool bCtrlKey = rMEvt.IsMod1();
-        (void)bCtrlKey;
         if (bCtrlKey)
         {
             m_pParent->SetPointer( Pointer(PointerStyle::MoveDataLink ));
@@ -764,7 +763,7 @@ bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
         }
         bIsSetPoint = setMovementPointer(rMEvt);
         ForceScroll(aPos);
-        m_pParent->getSectionWindow()->getViewsWindow()->MovAction(aPos,&m_rView, m_rView.GetDragMethod() == nullptr, false);
+        m_pParent->getSectionWindow()->getViewsWindow()->MovAction(aPos,&m_rView, false);
     }
 
     if ( !bIsSetPoint )
@@ -868,7 +867,7 @@ bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
         if (m_rView.GetDragMethod()==nullptr)
         {
             // create a selection
-            m_pParent->getSectionWindow()->getViewsWindow()->MovAction(aPnt, &m_rView, true, false);
+            m_pParent->getSectionWindow()->getViewsWindow()->MovAction(aPnt, &m_rView, false);
         }
         else
         {
@@ -882,7 +881,7 @@ bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
             }
             // drag or resize an object
             bool bControlKey = rMEvt.IsMod1();
-            m_pParent->getSectionWindow()->getViewsWindow()->MovAction(aPnt, &m_rView, false, bControlKey);
+            m_pParent->getSectionWindow()->getViewsWindow()->MovAction(aPnt, &m_rView, bControlKey);
         }
     }
 

@@ -241,10 +241,8 @@ VclPtr<vcl::Window> AlignmentPropertyPanel::Create (
 }
 
 void AlignmentPropertyPanel::DataChanged(
-    const DataChangedEvent& rEvent)
-{
-    (void)rEvent;
-}
+    const DataChangedEvent&)
+{}
 
 void AlignmentPropertyPanel::HandleContextChange(
     const vcl::EnumContext& rContext)
@@ -262,10 +260,8 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
     const SfxPoolItem* pState,
-    const bool bIsEnabled)
+    const bool)
 {
-    (void)bIsEnabled;
-
     switch(nSID)
     {
     case SID_H_ALIGNCELL:

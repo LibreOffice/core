@@ -322,10 +322,9 @@ namespace chart
         return *&m_pImpl->getParent();
     }
 
-    void SAL_CALL UndoManager::setParent( const Reference< XInterface >& i_parent )
+    void SAL_CALL UndoManager::setParent( const Reference< XInterface >& )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
-        (void)i_parent;
         throw NoSupportException( OUString(), m_pImpl->getThis() );
     }
 

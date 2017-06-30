@@ -90,10 +90,7 @@ namespace bib
                     else
                         xResUpd->updateRow();
                 }
-                catch( const uno::Exception& rEx)
-                {
-                   (void) rEx;
-                }
+                catch( const uno::Exception&) {}
             }
         }
 

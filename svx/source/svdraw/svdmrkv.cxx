@@ -1749,11 +1749,9 @@ SdrObject* SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrPageView*& rpP
     bool bMarked(nOptions & SdrSearchOptions::MARKED);
     bool bMasters=!bMarked && bool(nOptions & SdrSearchOptions::ALSOONMASTER);
     bool bBack(nOptions & SdrSearchOptions::BACKWARD);
-#if OSL_DEBUG_LEVEL > 0
-    bool bNext(nOptions & SdrSearchOptions::NEXT); (void)bNext; // n.i.
-    bool bBoundCheckOn2ndPass(nOptions & SdrSearchOptions::PASS2BOUND); (void)bBoundCheckOn2ndPass;// n.i.
-    bool bCheckNearestOn3rdPass(nOptions & SdrSearchOptions::PASS3NEAREST); (void)bCheckNearestOn3rdPass;// n.i.
-#endif
+    // nOptions & SdrSearchOptions::NEXT: n.i.
+    // nOptions & SdrSearchOptions::PASS2BOUND: n.i.
+    // nOptions & SdrSearchOptions::PASS3NEAREST// n.i.
     if (nTol<0) nTol=ImpGetHitTolLogic(nTol,nullptr);
     Point aPt(rPnt);
     SdrObject* pObj=nullptr;
