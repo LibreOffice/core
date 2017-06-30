@@ -1731,16 +1731,11 @@ void UCBStorage_Impl::ReadContent()
             {
                 // insert all into the children list
                 OUString aTitle( xRow->getString(1) );
-                OUString aContentType;
                 if ( m_bIsLinked )
                 {
                     // unpacked storages have to deal with the meta-inf folder by themselves
                     if ( aTitle == "META-INF" )
                         continue;
-                }
-                else
-                {
-                    aContentType = xRow->getString(3);
                 }
 
                 bool bIsFolder( xRow->getBoolean(2) );
