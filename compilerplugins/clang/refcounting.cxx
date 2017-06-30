@@ -69,7 +69,7 @@ public:
     }
 private:
     void checkUnoReference(QualType qt, const Decl* decl,
-                           const DeclContext* parent, const std::string& rDeclName);
+                           const RecordDecl* parent, const std::string& rDeclName);
 
     bool visitTemporaryObjectExpr(Expr const * expr);
 };
@@ -333,7 +333,7 @@ static bool containsStaticTypeMethod(const CXXRecordDecl* x)
     return false;
 }
 
-void RefCounting::checkUnoReference(QualType qt, const Decl* decl, const DeclContext* parent, const std::string& rDeclName)
+void RefCounting::checkUnoReference(QualType qt, const Decl* decl, const RecordDecl* parent, const std::string& rDeclName)
 {
     if (loplugin::TypeCheck(qt).Class("Reference").Namespace("uno").Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace()) {
         const CXXRecordDecl* pRecordDecl = qt->getAsCXXRecordDecl();
@@ -347,7 +347,9 @@ void RefCounting::checkUnoReference(QualType qt, const Decl* decl, const DeclCon
                  " contain ::static_type() %1%select{|, parent is %3,}2 should"
                  " probably be using rtl::Reference instead"),
                 decl->getLocation())
-              << rDeclName << qt << (parent != nullptr) << parent
+              << rDeclName << qt << (parent != nullptr)
+              << (parent != nullptr
+                  ? parent->getQualifiedNameAsString() : std::string())
               << decl->getSourceRange();
         }
     }
