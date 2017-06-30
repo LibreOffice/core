@@ -2165,7 +2165,7 @@ void DesktopLOKTest::testDialogsWriter()
 
     int nOutputWidth = nCanvasWidth;
     int nOutputHeight = nCanvasHeight;
-    pDocument->pClass->paintDialog(pDocument, ".uno:SearchDialog", aBuffer.data(), nOutputWidth, nOutputHeight);
+    pDocument->pClass->paintDialog(pDocument, ".uno:SearchDialog", aBuffer.data(), &nOutputWidth, &nOutputHeight);
 
     cairo_surface_t* pSurface = cairo_image_surface_create_for_data(aBuffer.data(), CAIRO_FORMAT_ARGB32, nCanvasWidth, nCanvasHeight, nStride);
     // Write only the image to the buffer, clip rest of the empty area.
