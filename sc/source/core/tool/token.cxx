@@ -356,7 +356,7 @@ void ScRawToken::SetExternal( const sal_Unicode* pStr )
     sal_Int32 nLen = GetStrLen( pStr ) + 1;
     if( nLen >= MAXSTRLEN )
         nLen = MAXSTRLEN-1;
-    // Platz fuer Byte-Parameter lassen!
+    // Leave space for byte parameter!
     memcpy( cStr+1, pStr, nLen * sizeof(sal_Unicode) );
     cStr[ nLen+1 ] = 0;
 }

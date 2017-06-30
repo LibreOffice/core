@@ -306,7 +306,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScHeaderFooterTextObj::createTextCurs
     if (!mxUnoText.is())
         CreateUnoText_Impl();
     return mxUnoText->createTextCursorByRange(aTextPosition);
-    //! wie ScCellObj::createTextCursorByRange, wenn SvxUnoTextRange_getReflection verfuegbar
+    //! like ScCellObj::createTextCursorByRange, if SvxUnoTextRange_getReflection available
 }
 
 void ScHeaderFooterTextObj::FillDummyFieldData( ScHeaderFieldData& rData )

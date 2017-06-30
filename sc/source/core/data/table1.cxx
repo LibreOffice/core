@@ -695,7 +695,7 @@ bool ScTable::GetPrintAreaHor( SCROW nStartRow, SCROW nEndRow,
             --nMaxX;
     }
 
-    for (i=0; i<aCol.size(); i++)               // Daten testen
+    for (i=0; i<aCol.size(); i++)               // test the data
     {
         if (!aCol[i].IsEmptyBlock( nStartRow, nEndRow ))        //TODO: bNotes ??????
         {

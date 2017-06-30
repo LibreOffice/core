@@ -7897,7 +7897,7 @@ void Test::testIntersectionOpExcel()
 
     m_pDoc->SetGrammar(FormulaGrammar::GRAM_ENGLISH_XL_A1);
 
-    // Choose formular positions that don't intersect with those data ranges.
+    // Choose formula positions that don't intersect with those data ranges.
     ScAddress aPos(0,3,0);
     m_pDoc->SetString(aPos,"=B2:D2 C1:C3");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("A4 intersecting references failed", 1.0, m_pDoc->GetValue(aPos));

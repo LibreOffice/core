@@ -238,7 +238,7 @@ void ScContentTree::InitRoot( ScContentId nType )
     BitmapEx aBitmap(aContentBmps[(int)nType - 1]);
     Image aImage(aBitmap);
     OUString aName(ScResId(SCSTR_CONTENT_ROOT + (int)nType));
-    // wieder an die richtige Position:
+    // back to the correct position:
     sal_uInt16 nPos = nRootType != ScContentId::ROOT ? 0 : pPosList[nType]-1;
     SvTreeListEntry* pNew = InsertEntry( aName, aImage, aImage, nullptr, false, nPos );
 
@@ -587,7 +587,7 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
 
         case CommandEventId::ContextMenu:
             {
-                //  Drag-Drop Modus
+                //  drag-and-drop mode
 
                 ScopedVclPtrInstance<PopupMenu> aPop;
                 VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/scalc/ui/dropmenu.ui", "");
@@ -1518,7 +1518,7 @@ void ScContentTree::SetRootType( ScContentId nNew )
     }
 }
 
-void ScContentTree::ToggleRoot()        // nach Selektion
+void ScContentTree::ToggleRoot()        // after selection
 {
     ScContentId nNew = ScContentId::ROOT;
     if ( nRootType == ScContentId::ROOT )

@@ -177,7 +177,7 @@ void ColumnEdit::ExecuteCol()
 {
     SCROW nRow = xDlg->aEdRow->GetRow();
 
-    EvalText(); // setzt nCol
+    EvalText(); // sets nCol
 
     if ( (nCol > 0) && (nRow > 0) )
         xDlg->SetCurrentCell(nCol - 1, nRow - 1);
@@ -316,7 +316,7 @@ IMPL_LINK(ScNavigatorDlg, DocumentSelectHdl, ListBox&, rListBox, void)
 IMPL_LINK(ScNavigatorDlg, ToolBoxSelectHdl, ToolBox*, pToolBox, void)
 {
     sal_uInt16 nSelId = pToolBox->GetCurItemId();
-    //  Modus umschalten ?
+    //  Switch the mode?
     if (nSelId == nZoomId || nSelId == nScenarioId)
     {
         NavListMode eOldMode = eListMode;
@@ -357,7 +357,7 @@ IMPL_LINK(ScNavigatorDlg, ToolBoxSelectHdl, ToolBox*, pToolBox, void)
 
 IMPL_LINK(ScNavigatorDlg, ToolBoxDropdownClickHdl, ToolBox *, pToolBox, void)
 {
-    // the popup menu of the drop modus has to be called in the
+    // the popup menu of the drop mode has to be called in the
     // click (button down) and not in the select (button up)
     if (pToolBox->GetCurItemId() == nDragModeId)
     {

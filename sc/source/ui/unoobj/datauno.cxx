@@ -253,7 +253,7 @@ void ScImportDescriptor::FillImportParam( ScImportParam& rParam, const uno::Sequ
                     rParam.nType   = ScDbQuery;
                     break;
                 default:
-                    OSL_FAIL("falscher Mode");
+                    OSL_FAIL("wrong mode");
                     rParam.bImport = false;
             }
         }
@@ -262,11 +262,11 @@ void ScImportDescriptor::FillImportParam( ScImportParam& rParam, const uno::Sequ
 
 void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq, const ScSortParam& rParam )
 {
-    OSL_ENSURE( rSeq.getLength() == GetPropertyCount(), "falscher Count" );
+    OSL_ENSURE( rSeq.getLength() == GetPropertyCount(), "wrong count" );
 
     beans::PropertyValue* pArray = rSeq.getArray();
 
-    //  Uno-Werte zusammensuchen
+    //  gather Uno values together
 
     table::CellAddress aOutPos;
     aOutPos.Sheet  = rParam.nDestTab;
@@ -285,14 +285,14 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
         {
             pFieldArray[i].Field         = rParam.maKeyState[i].nField;
             pFieldArray[i].IsAscending   = rParam.maKeyState[i].bAscending;
-            pFieldArray[i].FieldType     = table::TableSortFieldType_AUTOMATIC;     // immer Automatic
+            pFieldArray[i].FieldType     = table::TableSortFieldType_AUTOMATIC;     // always automatic
             pFieldArray[i].IsCaseSensitive = rParam.bCaseSens;
             pFieldArray[i].CollatorLocale = rParam.aCollatorLocale;
             pFieldArray[i].CollatorAlgorithm = rParam.aCollatorAlgorithm;
         }
     }
 
-    //  Sequence fuellen
+    //  fill the sequence
 
     pArray[0].Name = SC_UNONAME_ISSORTCOLUMNS;
     pArray[0].Value <<= !rParam.bByRow;
@@ -374,7 +374,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
                     rParam.maKeyState[i].nField     = static_cast<SCCOLROW>( pFieldArray[i].Field );
                     rParam.maKeyState[i].bAscending = pFieldArray[i].SortAscending;
 
-                    // FieldType wird ignoriert
+                    // FieldType is ignored
                     rParam.maKeyState[i].bDoSort = true;
                 }
                 for (i=nCount; i<nSortSize; i++)
@@ -400,7 +400,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
                     rParam.aCollatorLocale = pFieldArray[i].CollatorLocale;
                     rParam.aCollatorAlgorithm = pFieldArray[i].CollatorAlgorithm;
 
-                    // FieldType wird ignoriert
+                    // FieldType is ignored
                     rParam.maKeyState[i].bDoSort = true;
                 }
                 for (i=nCount; i<nSortSize; i++)
@@ -612,7 +612,7 @@ void SAL_CALL ScSubTotalDescriptorBase::addNew(
     PutData(aParam);
 }
 
-//  Flags/Einstellungen als Properties
+//  flags/settings as properties
 
 // XEnumerationAccess
 
@@ -782,17 +782,17 @@ ScSubTotalDescriptor::~ScSubTotalDescriptor()
 
 void ScSubTotalDescriptor::GetData( ScSubTotalParam& rParam ) const
 {
-    rParam = aStoredParam;          // Abfrage fuer Interface
+    rParam = aStoredParam;          // query for interface
 }
 
 void ScSubTotalDescriptor::PutData( const ScSubTotalParam& rParam )
 {
-    aStoredParam = rParam;          // vom Interface gesetzt
+    aStoredParam = rParam;          // set by the interface
 }
 
 void ScSubTotalDescriptor::SetParam( const ScSubTotalParam& rNew )
 {
-    aStoredParam = rNew;            // von aussen gesetzt
+    aStoredParam = rNew;            // set from outside
 }
 
 ScRangeSubTotalDescriptor::ScRangeSubTotalDescriptor(ScDatabaseRangeObj* pPar) :
@@ -979,8 +979,8 @@ uno::Sequence<sheet::TableFilterField> SAL_CALL ScFilterDescriptorBase::getFilte
     ScQueryParam aParam;
     GetData(aParam);
 
-    SCSIZE nEntries = aParam.GetEntryCount();   // allozierte Eintraege im Param
-    SCSIZE nCount = 0;                          // aktive
+    SCSIZE nEntries = aParam.GetEntryCount();   // allocated entries in Param
+    SCSIZE nCount = 0;                          // active
     while ( nCount < nEntries &&
             aParam.GetEntry(nCount).bDoQuery )
         ++nCount;
@@ -1030,7 +1030,7 @@ uno::Sequence<sheet::TableFilterField> SAL_CALL ScFilterDescriptorBase::getFilte
             case SC_TOPPERC:        aField.Operator = sheet::FilterOperator_TOP_PERCENT;      break;
             case SC_BOTPERC:        aField.Operator = sheet::FilterOperator_BOTTOM_PERCENT; break;
             default:
-                OSL_FAIL("Falscher Filter-enum");
+                OSL_FAIL("wrong filter enum");
                 aField.Operator = sheet::FilterOperator_EMPTY;
         }
         pAry[i] = aField;
@@ -1245,8 +1245,8 @@ uno::Sequence<sheet::TableFilterField3> SAL_CALL ScFilterDescriptorBase::getFilt
     ScQueryParam aParam;
     GetData(aParam);
 
-    SCSIZE nEntries = aParam.GetEntryCount();   // allozierte Eintraege im Param
-    SCSIZE nCount = 0;                          // aktive
+    SCSIZE nEntries = aParam.GetEntryCount();   // allocated entries in Param
+    SCSIZE nCount = 0;                          // active
     while ( nCount < nEntries &&
         aParam.GetEntry(nCount).bDoQuery )
         ++nCount;
@@ -1494,17 +1494,17 @@ ScFilterDescriptor::~ScFilterDescriptor()
 
 void ScFilterDescriptor::GetData( ScQueryParam& rParam ) const
 {
-    rParam = aStoredParam;          // Abfrage fuer Interface
+    rParam = aStoredParam;          // query for interface
 }
 
 void ScFilterDescriptor::PutData( const ScQueryParam& rParam )
 {
-    aStoredParam = rParam;          // vom Interface gesetzt
+    aStoredParam = rParam;          // set by the interface
 }
 
 void ScFilterDescriptor::SetParam( const ScQueryParam& rNew )
 {
-    aStoredParam = rNew;            // von aussen gesetzt
+    aStoredParam = rNew;            // set from outside
 }
 
 ScRangeFilterDescriptor::ScRangeFilterDescriptor(ScDocShell* pDocShell, ScDatabaseRangeObj* pPar) :
@@ -2278,7 +2278,7 @@ uno::Sequence<OUString> SAL_CALL ScDatabaseRangesObj::getElementNames()
 {
     SolarMutexGuard aGuard;
 
-    //! "unbenannt" weglassen ?
+    //! need to omit "unnamed"?
 
     if (pDocShell)
     {
@@ -2301,7 +2301,7 @@ sal_Bool SAL_CALL ScDatabaseRangesObj::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
-    //! "unbenannt" weglassen ?
+    //! need to omit "unnamed"?
 
     if (pDocShell)
     {

@@ -2049,14 +2049,14 @@ SCSIZE ScTable::FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCO
             {
                 long nRotVal = static_cast<const SfxInt32Item&>( pPattern->
                         GetItem( ATTR_ROTATE_VALUE, pCondSet )).GetValue();
-                double nRealOrient = nRotVal * F_PI18000;   // 1/100 Grad
+                double nRealOrient = nRotVal * F_PI18000;   // 1/100 degree
                 double nCos = cos( nRealOrient );
                 double nSin = sin( nRealOrient );
                 //TODO: limit !!!
                 //TODO: additional factor for varying PPT X/Y !!!
 
                 // for ScRotateDir::Left this gives a negative value,
-                // if the Modus is considered
+                // if the mode is considered
                 nFactor = -fabs( nCos / nSin );
             }
 

@@ -1052,7 +1052,7 @@ void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
             ScDocument& rDoc = pDocShell->GetDocument();
             if ( eFamily == SfxStyleFamily::Para )
             {
-                // update lineheight
+                // update line height
 
                 ScopedVclPtrInstance< VirtualDevice > pVDev;
                 Point aLogic = pVDev->LogicToPixel( Point(1000,1000), MapUnit::MapTwip );
@@ -1628,7 +1628,7 @@ void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const Sfx
                                 {
                                     bool bBool = false;
                                     *pValue >>= bBool;
-                                    //! sal_Bool-MID fuer ScViewObjectModeItem definieren?
+                                    //! need to define sal_Bool-MID for ScViewObjectModeItem?
                                     rSet.Put( ScViewObjectModeItem( pEntry->nWID,
                                         bBool ? VOBJ_MODE_SHOW : VOBJ_MODE_HIDE ) );
                                 }

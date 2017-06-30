@@ -281,7 +281,7 @@ public:
 };
 
 // --- class ExcBofW8 ------------------------------------------------
-// Header Record fuer WORKBOOKS
+// Header Record for WORKBOOKS
 
 class ExcBofW8 : public ExcBof8_Base
 {
@@ -290,7 +290,7 @@ public:
 };
 
 // --- class ExcBof8 -------------------------------------------------
-// Header Record fuer WORKSHEETS
+// Header Record for WORKSHEETS
 
 class ExcBof8 : public ExcBof8_Base
 {

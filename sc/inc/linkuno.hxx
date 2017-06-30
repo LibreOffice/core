@@ -96,7 +96,7 @@ public:
     virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
                                     const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
-                            // aus get/setPropertyValue gerufen:
+                            // called from get/setPropertyValue:
     OUString         getFileName() const;
     void                    setFileName(const OUString& FileName);
     OUString         getFilter() const;

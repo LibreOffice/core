@@ -974,7 +974,7 @@ bool ScAreaNameIterator::Next( OUString& rName, ScRange& rRange )
 {
     for (;;)
     {
-        if ( bFirstPass )                                   // erst Bereichsnamen
+        if ( bFirstPass )                                   // first the area names
         {
             if ( pRangeName && maRNPos != maRNEnd )
             {
@@ -999,7 +999,7 @@ bool ScAreaNameIterator::Next( OUString& rName, ScRange& rRange )
             }
         }
 
-        if ( !bFirstPass )                                  // dann DB-Bereiche
+        if ( !bFirstPass )                                  // then the DB areas
         {
             if (pDBCollection && maDBPos != maDBEnd)
             {

@@ -802,7 +802,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 nColLast = aIn.ReaduInt8();
 
                 if( nExtSheet >= 0 )
-                    // von extern
+                    // from external
                 {
                     if( rR.pExtSheetBuff->GetScTabIndex( nExtSheet, nTabLast ) )
                     {

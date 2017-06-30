@@ -30,7 +30,7 @@
 
 /* IBM-737 */
 /* Dos Standard CharSet for Greek */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/pc/cp737.txt from 04/24/96 Version 2.00 */
 /* Last-Changes from us: */
 
@@ -189,7 +189,7 @@ static ImplTextEncodingData const aImplIBM737TextEncodingData
 
 /* IBM-775 */
 /* Dos Standard CharSet for BalticRim */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/pc/cp775.txt from 04/24/96 Version 2.00 */
 /* Last-Changes from us: */
 
@@ -395,7 +395,7 @@ static ImplTextEncodingData const aImplIBM775TextEncodingData
 
 /* IBM-852 */
 /* Dos Standard CharSet for Central Europa (Jug., Pol., Tsch., Ung., ...) */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/pc/cp852.txt from 04/24/96 Version 2.00 */
 /* Last-Changes from us: */
 
@@ -601,7 +601,7 @@ static ImplTextEncodingData const aImplIBM852TextEncodingData
 
 /* IBM-855 */
 /* Dos Standard CharSet for Cyrillic */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/pc/cp855.txt from 04/24/96 Version 2.00 */
 /* Last-Changes from us: */
 
@@ -737,7 +737,7 @@ static ImplTextEncodingData const aImplIBM855TextEncodingData
 
 /* IBM-857 */
 /* Dos Standard CharSet for Turkish */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/pc/cp857.txt from 04/24/96 Version 2.00 */
 /* Last-Changes from us: */
 
@@ -872,7 +872,7 @@ static ImplTextEncodingData const aImplIBM857TextEncodingData
 
 /* IBM-866 */
 /* Dos Standard CharSet for CyrillicRussian */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/pc/cp866.txt from 04/24/96 Version 2.00 */
 /* Last-Changes from us: */
 
@@ -1028,7 +1028,7 @@ static ImplTextEncodingData const aImplIBM866TextEncodingData
 
 /* IBM-869 */
 /* Dos Standard CharSet for Greek2 */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/pc/cp869.txt from 04/24/96 Version 2.00 */
 /* Last-Changes from us: */
 
@@ -1174,7 +1174,7 @@ static ImplTextEncodingData const aImplIBM869TextEncodingData
 
 /* MS-1250 */
 /* Windows CodePage for Eastern European (WinLatin2) */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/windows/cp1250.txt from 04/15/98 Version 2.01 */
 /* Last-Changes from us: */
 
@@ -1375,7 +1375,7 @@ static ImplTextEncodingData const aImplMS1250TextEncodingData
 
 /* MS-1251 */
 /* Windows CodePage for Cyrillic */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/windows/cp1251.txt from 04/15/98 Version 2.01 */
 /* Last-Changes from us: */
 
@@ -1510,7 +1510,7 @@ static ImplTextEncodingData const aImplMS1251TextEncodingData
 
 /* MS-1253 */
 /* Windows Standard CharSet for Greek */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/windows/cp1253.txt from 04/15/98 Version 2.01 */
 /* Last-Changes from us: */
 
@@ -1648,7 +1648,7 @@ static ImplTextEncodingData const aImplMS1253TextEncodingData
 
 /* MS-1254 */
 /* Windows Standard CharSet for Turkish */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/windows/cp1254.txt from 04/15/98 Version 2.01 */
 /* Last-Changes from us: */
 
@@ -1779,7 +1779,7 @@ static ImplTextEncodingData const aImplMS1254TextEncodingData
 
 /* MS-1257 */
 /* Windows Standard CharSet for Baltic */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/windows/cp1257.txt from 04/15/98 Version 2.01 */
 /* Last-Changes from us: */
 
@@ -1915,7 +1915,7 @@ static ImplTextEncodingData const aImplMS1257TextEncodingData
 
 /* ISO-8859-2 */
 /* Unix Standard for Eastern European (Latin2) */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme, 0x80-0x9F Control-Caracter wie in Unicode */
+/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control caracter like in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-2.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
 
@@ -2083,7 +2083,7 @@ static ImplTextEncodingData const aImplISO88592TextEncodingData
 
 /* ISO-8859-3 */
 /* Latin3 (Esperanto, Maltese, Turkish) */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme, 0x80-0x9F Control-Caracter wie in Unicode */
+/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control caracter like in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-3.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
 
@@ -2244,7 +2244,7 @@ static ImplTextEncodingData const aImplISO88593TextEncodingData
 
 /* ISO-8859-4 */
 /* Latin4 (Estonian, Latvian, Lithuanian) */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme, 0x80-0x9F Control-Caracter wie in Unicode */
+/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control caracter like in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-4.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
 
@@ -2412,7 +2412,7 @@ static ImplTextEncodingData const aImplISO88594TextEncodingData
 
 /* ISO-8859-5 */
 /* Unix Standard for Cyrillic */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme, 0x80-0x9F Control-Caracter wie in Unicode */
+/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control caracter like in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-5.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
 
@@ -2510,7 +2510,7 @@ static ImplTextEncodingData const aImplISO88595TextEncodingData
 
 /* ISO-8859-7 */
 /* Unix Standard for Greek */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme, 0x80-0x9F Control-Caracter wie in Unicode */
+/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control caracter like in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-7.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
 
@@ -2621,7 +2621,7 @@ static ImplTextEncodingData const aImplISO88597TextEncodingData
 
 /* ISO-8859-9 */
 /* Latin5 (Turkish) */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme, 0x80-0x9F Control-Caracter wie in Unicode */
+/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control caracter like in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-9.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
 
@@ -2721,7 +2721,7 @@ static ImplTextEncodingData const aImplISO88599TextEncodingData
 
 /* ISO-8859-10 */
 /* East European */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme, 0x80-0x9F Control-Caracter wie in Unicode */
+/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control caracter like in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-10.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
 
@@ -2862,7 +2862,7 @@ static ImplTextEncodingData const aImplISO885910TextEncodingData
 
 /* ISO-8859-13 */
 /* East European */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme, 0x80-0x9F Control-Caracter wie in Unicode */
+/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control caracter like in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-13.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
 
@@ -3030,8 +3030,8 @@ static ImplTextEncodingData const aImplISO885913TextEncodingData
 
 /* APPLE-CentEuro */
 /* Apple CharSet for Eastern Europa (Polish, Czech, Slovak, Hungarian, Estonian, Latvian, Lithuanian) */
-/* 1-Byte, 0x00-0x7F ASCII, jedoch eigentich Sonderzeichen zwischen 0x00-0x1F */
-/* die wir aber nicht beruecksichtigen */
+/* 1-byte, 0x00-0x7F ASCII, but actually control character between 0x00-0x1F */
+/* which we don't consider, though */
 /* Convert-Tables: mappings/vendors/apple/centeuro.txt from 02/05/98 */
 /* Last-Changes from us: */
 
@@ -3235,8 +3235,8 @@ static ImplTextEncodingData const aImplAPPLECENTEUROTextEncodingData
 
 /* APPLE-Croatian */
 /* Standard Apple CharSet for Croatian */
-/* 1-Byte, 0x00-0x7F ASCII, jedoch eigentich Sonderzeichen zwischen 0x00-0x1F */
-/* die wir aber nicht beruecksichtigen */
+/* 1-byte, 0x00-0x7F ASCII, but actually control character between 0x00-0x1F */
+/* which we don't consider, though */
 /* Convert-Tables: mappings/vendors/apple/croatien.txt from 02/05/98 */
 /* Last-Changes from us: */
 
@@ -3383,8 +3383,8 @@ static ImplTextEncodingData const aImplAPPLECROATIANTextEncodingData
 
 /* APPLE-Cyrillic */
 /* Apple CharSet for Cyrillic */
-/* 1-Byte, 0x00-0x7F ASCII, jedoch eigentich Sonderzeichen zwischen 0x00-0x1F */
-/* die wir aber nicht beruecksichtigen */
+/* 1-byte, 0x00-0x7F ASCII, but actually control character between 0x00-0x1F */
+/* which we don't consider, though */
 /* Convert-Tables: mappings/vendors/apple/cyrillic.txt from 02/15/98 */
 /* Last-Changes from us: */
 
@@ -3518,8 +3518,8 @@ static ImplTextEncodingData const aImplAPPLECYRILLICTextEncodingData
 
 /* APPLE-Greek */
 /* Apple CharSet for Greek */
-/* 1-Byte, 0x00-0x7F ASCII, jedoch eigentich Sonderzeichen zwischen 0x00-0x1F */
-/* die wir aber nicht beruecksichtigen */
+/* 1-byte, 0x00-0x7F ASCII, but actually control character between 0x00-0x1F */
+/* which we don't consider, though */
 /* Convert-Tables: mappings/vendors/apple/roman.txt from 08/18/98 */
 /* Last-Changes from us: */
 
@@ -3671,9 +3671,9 @@ static ImplTextEncodingData const aImplAPPLEGREEKTextEncodingData
 /* ======================================================================= */
 
 /* APPLE-Romanian */
-/* Standard Apple CharSet for Romanien */
-/* 1-Byte, 0x00-0x7F ASCII, jedoch eigentich Sonderzeichen zwischen 0x00-0x1F */
-/* die wir aber nicht beruecksichtigen */
+/* Standard Apple CharSet for Romanian */
+/* 1-byte, 0x00-0x7F ASCII, but actually control character between 0x00-0x1F */
+/* which we don't consider, though */
 /* Convert-Tables: mappings/vendors/apple/romanian.txt from 02/05/98 */
 /* Last-Changes from us: */
 /* 0xAF --> 0x015E (like Java), Apple Definition: 0x0053+0x0326   # LATIN CAPITAL LETTER S + COMBINING COMMA BELOW */
@@ -3826,8 +3826,8 @@ static ImplTextEncodingData const aImplAPPLEROMANIANTextEncodingData
 
 /* APPLE-Turkish */
 /* Apple CharSet for Turkish */
-/* 1-Byte, 0x00-0x7F ASCII, jedoch eigentich Sonderzeichen zwischen 0x00-0x1F */
-/* die wir aber nicht beruecksichtigen */
+/* 1-byte, 0x00-0x7F ASCII, but actually control character between 0x00-0x1F */
+/* which we don't consider, though */
 /* Convert-Tables: mappings/vendors/apple/turkish.txt from 02/05/98 */
 /* Last-Changes from us: */
 
@@ -3973,8 +3973,8 @@ static ImplTextEncodingData const aImplAPPLETURKISHTextEncodingData
 
 /* APPLE-Ukrainian */
 /* Apple CharSet for Ukrainian */
-/* 1-Byte, 0x00-0x7F ASCII, jedoch eigentich Sonderzeichen zwischen 0x00-0x1F */
-/* die wir aber nicht beruecksichtigen */
+/* 1-byte, 0x00-0x7F ASCII, but actually control character between 0x00-0x1F */
+/* which we don't consider, though */
 /* Convert-Tables: mappings/vendors/apple/ukraine.txt from 02/05/98 */
 /* Last-Changes from us: */
 
@@ -4109,7 +4109,7 @@ static ImplTextEncodingData const aImplAPPLEUKRAINIANTextEncodingData
 
 /* KOI8_R */
 /* Standard Charset for Cyrillic */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: typed per hand */
 /* Last-Changes from us: */
 
@@ -4425,7 +4425,7 @@ static ImplTextEncodingData const aImplKoi8UTextEncodingData
 
 /* PT154 */
 /* Asian Cyrillic */
-/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* 1-byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: typed per hand */
 /* Last-Changes from us: */
 

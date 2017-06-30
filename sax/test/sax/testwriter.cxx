@@ -440,9 +440,9 @@ void OSaxWriterTest::writeParagraph(
 void OSaxWriterTest::testSimple( const Reference< XExtendedDocumentHandler > &r )
 {
     OUString testParagraph = OUString(
-        "Dies ist ein bloeder Test um zu uberpruefen, ob der SAXWriter "
-        "wohl Zeilenumbrueche halbwegs richtig macht oder ob er die Zeile "
-        "bis zum bitteren Ende schreibt." );
+        "This is a stupid test to check whether the SAXWriter possibly makes "
+        "line breaks halfway correctly or whether it writes the line to the "
+        "bitter end." );
 
     OFileWriter *pw = new OFileWriter("output.xml");
     AttributeListImpl *pList = new AttributeListImpl;
@@ -475,7 +475,7 @@ void OSaxWriterTest::testSimple( const Reference< XExtendedDocumentHandler > &r 
     r->startElement( OUString( "hi") , rList );
     r->ignorableWhitespace( OUString() );
 
-    // the enpassant must be converted & -> &amp;
+    // the ampersand must be converted & -> &amp;
     r->characters( OUString( "&#252;") );
 
     // Test added for mib. Tests if errors during conversions occurs
@@ -500,7 +500,7 @@ void OSaxWriterTest::testSimple( const Reference< XExtendedDocumentHandler > &r 
 
 
     r->ignorableWhitespace( OUString() );
-    r->comment( OUString( "Dies ist ein Kommentar !") );
+    r->comment( OUString( "This is a comment !") );
     r->ignorableWhitespace( OUString() );
 
     r->startElement( OUString( "emptytagtest")  , rList );
@@ -613,9 +613,9 @@ void OSaxWriterTest::testPerformance(const  Reference< XExtendedDocumentHandler 
 
     OUString testParagraph =
         OUString(
-            "Dies ist ein bloeder Test um zu uberpruefen, ob der SAXWriter "
-            "wohl Zeilenumbrueche halbwegs richtig macht oder ob er die Zeile "
-            "bis zum bitteren Ende schreibt." );
+            "This is a stupid test to check whether the SAXWriter possibly makes "
+            "line breaks halfway correctly or whether it writes the line to the "
+            "bitter end." );
 
 
     Reference< XAttributeList > rList( (XAttributeList *) pList , UNO_QUERY );

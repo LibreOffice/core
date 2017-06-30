@@ -46,7 +46,7 @@
 #*
 #*  Function:   Constructor of ScFunctionWin Class
 #*
-#*  Input:      Sfx- Verknuepfungen, Fenster, Resource
+#*  Input:      Sfx - links, window, resource
 #*
 #*  Output:     ---
 #*
@@ -235,7 +235,7 @@ void ScFunctionWin::UpdateFunctionList()
             pDesc = pFuncMgr->Next();
         }
     }
-    else // LRU-Liste
+    else // LRU list
     {
         for (::std::vector<const formula::IFunctionDescription*>::iterator iter=aLRUList.begin();
                 iter != aLRUList.end(); ++iter)

@@ -215,7 +215,7 @@ ErrCode ScFormatFilterPlugin::ScImportDif(SvStream& rIn, ScDocument* pDoc, const
 
     if( bSyntErrWarn )
 
-        // FIXME: Add proper Warnung!
+        // FIXME: Add proper warning!
         return SCWARN_IMPORT_RANGE_OVERFLOW;
 
     else if( bOverflowWarn )

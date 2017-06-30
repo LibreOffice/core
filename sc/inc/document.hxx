@@ -410,7 +410,7 @@ private:
         documents, GRAM_ODFF for ODF 1.2 documents. */
     formula::FormulaGrammar::Grammar  eStorageGrammar;
 
-    sal_uLong               nFormulaCodeInTree;             // FormelRPN im Formelbaum
+    sal_uLong               nFormulaCodeInTree;             // formula RPN in the formula tree
     sal_uLong               nXMLImportedFormulaCount;        // progress count during XML import
     sal_uInt16              nInterpretLevel;                // >0 if in interpreter
     sal_uInt16              nMacroInterpretLevel;           // >0 if macro in interpreter

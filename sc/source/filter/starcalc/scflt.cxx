@@ -945,7 +945,7 @@ Sc10Import::~Sc10Import()
     delete pDataBaseCollection;
 
     OSL_ENSURE( pPrgrsBar == nullptr,
-        "*Sc10Import::Sc10Import(): Progressbar lebt noch!?" );
+        "*Sc10Import::Sc10Import(): progress bar is still alive!?" );
 }
 
 ErrCode Sc10Import::Import()

@@ -1193,7 +1193,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     pEditView[eWhich]->SetBackgroundColor( aBackCol );
 
     pEditView[eWhich]->Invalidate();            //  needed?
-    //  needed, wenn position changed
+    //  needed, if position changed
 }
 
 IMPL_LINK( ScViewData, EditEngineHdl, EditStatus&, rStatus, void )

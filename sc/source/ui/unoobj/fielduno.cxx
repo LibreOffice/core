@@ -1118,7 +1118,7 @@ ScEditFieldObj::~ScEditFieldObj()
 
 SvxFieldItem ScEditFieldObj::CreateFieldItem()
 {
-    OSL_ENSURE( !mpEditSource, "CreateFieldItem mit eingefuegtem Feld" );
+    OSL_ENSURE( !mpEditSource, "CreateFieldItem with inserted field" );
     return SvxFieldItem(*getData(), EE_FEATURE_FIELD);
 }
 

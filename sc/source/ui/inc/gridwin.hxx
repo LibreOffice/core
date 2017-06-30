@@ -54,7 +54,7 @@ class SdrHdlList;
 class ScTransferObj;
 struct SpellCallbackInfo;
 
-        //  Maus-Status (nMouseStatus)
+        //  mouse status (nMouseStatus)
 
 #define SC_GM_NONE          0
 #define SC_GM_TABDOWN       1
@@ -64,7 +64,7 @@ struct SpellCallbackInfo;
 #define SC_GM_WATERUNDO     5
 #define SC_GM_URLDOWN       6
 
-        //  Page-Drag-Modus
+        //  page drag mode
 
 #define SC_PD_NONE          0
 #define SC_PD_RANGE_L       1
