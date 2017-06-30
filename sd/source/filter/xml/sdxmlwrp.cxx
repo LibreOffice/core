@@ -453,6 +453,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
             comphelper::getProcessComponentContext();
 
     SdDrawDocument* pDoc = mrDocShell.GetDoc();
+    bool const bWasUndo(pDoc->IsUndoEnabled());
     pDoc->EnableUndo(false);
     pDoc->NewOrLoadCompleted( NEW_DOC );
     pDoc->CreateFirstPages();
@@ -780,7 +781,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
 
     fixupOutlinePlaceholderNumberingDepths(pDoc);
 
-    pDoc->EnableUndo(true);
+    pDoc->EnableUndo(bWasUndo);
     mrDocShell.ClearUndoBuffer();
     return nRet == 0;
 }
