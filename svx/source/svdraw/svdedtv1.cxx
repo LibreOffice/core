@@ -791,7 +791,6 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr) const
     bool bVisible = true, bVisibleDC = false;
     SdrLayerID nLayerId(0);
     bool bLayerDC=false;
-    OUString aObjName;
     long nSnapPosX=0;      bool bSnapPosXDC=false;
     long nSnapPosY=0;      bool bSnapPosYDC=false;
     long nSnapWdt=0;       bool bSnapWdtDC=false;
@@ -847,7 +846,6 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr) const
                 if (!bLogicHgtDiff && aSnapRect.GetHeight()!=aLogicRect.GetHeight()) bLogicHgtDiff=true;
             }
         }
-        aObjName=pObj->GetName();
     }
 
     if (bSnapPosXDC || nAllSnapPosX!=nSnapPosX) rAttr.Put(SdrAllPositionXItem(nAllSnapPosX));
