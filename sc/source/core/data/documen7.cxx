@@ -556,6 +556,9 @@ void ScDocument::FinalTrackFormulas( SfxHintId nHintId )
  */
 void ScDocument::TrackFormulas( SfxHintId nHintId )
 {
+    if (!pBASM)
+        return;
+
     if (pBASM->IsInBulkBroadcast() && !IsFinalTrackFormulas() && nHintId == SfxHintId::ScDataChanged)
     {
         SetTrackFormulasPending();
