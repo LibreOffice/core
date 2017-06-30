@@ -304,9 +304,8 @@ void SAL_CALL FilterHelper::appendFilterGroup( const ::rtl::OUString& /* sGroupT
 
     // append the filter
     if (bPrependSeparator) {
-        rtl::OUString dash("-");
         OUStringList emptyList;
-        m_pFilterList->push_back(FilterEntry(dash, emptyList));
+        m_pFilterList->push_back(FilterEntry("-", emptyList));
     }
 
     const css::beans::StringPair* pSubFilters   = aFilters.getConstArray();
@@ -347,9 +346,8 @@ bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
 
     {
         rtl::OUString aName = [sFilename OUString];
-        rtl::OUString allMatcher(".*");
         for(OUStringList::iterator iter = suffixList.begin(); iter != suffixList.end(); iter++) {
-            if (aName.matchIgnoreAsciiCase(*iter, aName.getLength() - (*iter).getLength()) || ((*iter).equals(allMatcher))) {
+            if (*iter == ".*" || aName.endsWithIgnoreAsciiCase(*iter)) {
                 return true;
             }
         }

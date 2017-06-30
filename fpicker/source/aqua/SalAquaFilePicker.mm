@@ -293,9 +293,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getSelectedFiles()
         }
 #endif
 
-        InfoType info = FULLPATH;
-
-        OUString sFileOrDirURL = [url OUStringForInfo:info];
+        OUString sFileOrDirURL = [url OUStringForInfo:FULLPATH];
 
         aSelectedFiles[nIndex] = sFileOrDirURL;
     }
