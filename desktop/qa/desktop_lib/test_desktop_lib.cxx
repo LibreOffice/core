@@ -2156,22 +2156,15 @@ void DesktopLOKTest::testExtractParameter()
 void DesktopLOKTest::testDialogsWriter()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    int nCanvasWidth = 100;
-    int nCanvasHeight = 300;
+    int nCanvasWidth = 800;
+    int nCanvasHeight = 600;
     sal_Int32 nStride = cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, nCanvasWidth);
     std::vector<unsigned char> aBuffer(nStride * nCanvasHeight);
 
     pDocument->pClass->paintDialog(pDocument, aBuffer.data(), nCanvasWidth, nCanvasHeight);
 
-    for (long y = 0; y < nCanvasHeight; ++y)
-    {
-        unsigned char* c = &aBuffer.data()[y * nStride];
-        for (long x = 0; x < nStride; ++x)
-        {
-            printf ("%02x ", c[x]);
-        }
-        printf ("\n");
-    }
+    cairo_surface_t* pSurface = cairo_image_surface_create_for_data(aBuffer.data(), CAIRO_FORMAT_ARGB32, nCanvasWidth, nCanvasHeight, nStride);
+    cairo_surface_write_to_png(pSurface, "/tmp/dialog.png");
 
     CPPUNIT_ASSERT(false);
 }
