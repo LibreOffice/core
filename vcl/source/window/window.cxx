@@ -926,8 +926,6 @@ void Window::ReleaseGraphics( bool bRelease )
 
 static sal_Int32 CountDPIScaleFactor(sal_Int32 nDPI)
 {
-    sal_Int32 nResult;
-
 #ifndef MACOSX
     // Setting of HiDPI is unfortunately all only a heuristic; and to add
     // insult to an injury, the system is constantly lying to us about
@@ -935,17 +933,16 @@ static sal_Int32 CountDPIScaleFactor(sal_Int32 nDPI)
     // eg. fdo#77059 - set the value from which we do consider the
     // screen hi-dpi to greater than 168
     if (nDPI > 216)      // 96 * 2   + 96 / 4
-        nResult = 250;
+        return 250;
     else if (nDPI > 168) // 96 * 2   - 96 / 4
-        nResult = 200;
+        return 200;
     else if (nDPI > 120) // 96 * 1.5 - 96 / 4
-        nResult = 150;
+        return 150;
 #else
     (void)nDPI;
-    nResult = 100;
 #endif
 
-    return nResult;
+    return 100;
 }
 
 void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
