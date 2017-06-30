@@ -1564,7 +1564,7 @@ bool SvxAutoCorrect::CreateLanguageFile( const LanguageTag& rLanguageTag, bool b
 
     tools::Time nMinTime( 0, 2 ), nAktTime( tools::Time::SYSTEM ), nLastCheckTime( tools::Time::EMPTY );
 
-    std::map<LanguageTag, long>::iterator nFndPos = aLastFileTable.find(rLanguageTag);
+    auto nFndPos = aLastFileTable.find(rLanguageTag);
     if(nFndPos != aLastFileTable.end() &&
        (nLastCheckTime.SetTime(nFndPos->second), nLastCheckTime < nAktTime) &&
        nAktTime - nLastCheckTime < nMinTime)
