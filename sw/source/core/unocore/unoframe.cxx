@@ -122,6 +122,7 @@
 #include <calbck.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/xbtmpit.hxx>
@@ -2950,9 +2951,9 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                         aFrameSet.Put(aFrameSz);
                     }
                     SwFlyFrameFormat* pFormat2 = nullptr;
+                    sal_Int64 nAspect = GetAspectFromGrabBag();
 
-                    // TODO/LATER: Is it the only possible aspect here?
-                    ::svt::EmbeddedObjectRef xObjRef( xIPObj, embed::Aspects::MSOLE_CONTENT );
+                    ::svt::EmbeddedObjectRef xObjRef( xIPObj, nAspect );
                     pFormat2 = pDoc->getIDocumentContentOperations().InsertEmbObject(
                             aPam, xObjRef, &aFrameSet );
                     assert(pFormat2 && "Doc->Insert(notxt) failed.");
@@ -3093,6 +3094,41 @@ void SwXFrame::setSize(const awt::Size& aSize)
 OUString SwXFrame::getShapeType()
 {
     return OUString("FrameShape");
+}
+
+sal_Int64 SwXFrame::GetAspectFromGrabBag()
+{
+    static const char sEmbeddingsPropName[] = "EmbeddedObjects";
+    sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+    OUString sAspect = "";
+
+    if ( !m_pDoc || !m_pDoc->GetDocShell() )
+        return nAspect;
+
+    // get interop grab bag from document
+    uno::Reference < XModel > xModel = m_pDoc->GetDocShell()->GetBaseModel();
+    uno::Reference < beans::XPropertySet > const xDocProps( xModel, uno::UNO_QUERY );
+    comphelper::SequenceAsHashMap aGrabBag( xDocProps->getPropertyValue( "InteropGrabBag" ) );
+
+    // get EmbeddedObjects property from grab bag
+    comphelper::SequenceAsHashMap objectsList;
+    if ( aGrabBag.find( sEmbeddingsPropName ) != aGrabBag.end() )
+        objectsList << aGrabBag[ sEmbeddingsPropName ];
+
+    // find object by name
+    uno::Sequence< beans::PropertyValue > aGrabBagAttribute;
+    OUString sStreamName = "";
+    getPropertyValue("StreamName") >>= sStreamName;
+    comphelper::SequenceAsHashMap::iterator it = objectsList.find( sStreamName );
+    if ( it != objectsList.end() )
+    {
+        it->second >>= aGrabBagAttribute;
+        aGrabBagAttribute[1].Value >>= sAspect;
+        if ( sAspect == "Icon" )
+            nAspect = embed::Aspects::MSOLE_ICON;
+    }
+
+    return nAspect;
 }
 
 SwXTextFrame::SwXTextFrame( SwDoc *_pDoc ) :

@@ -88,6 +88,9 @@ protected:
     static css::uno::Reference<Interface>
     CreateXFrame(SwDoc & rDoc, SwFrameFormat *const pFrameFormat);
 
+    /// Get DrawAspect stored in the grab bag (SaveInteropProperties oox/source/ole/oleobjecthelper.cxx)
+    sal_Int64 GetAspectFromGrabBag();
+
 public:
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 

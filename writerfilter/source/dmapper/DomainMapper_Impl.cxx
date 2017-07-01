@@ -1436,11 +1436,10 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const OLEHandler
         uno::Reference< text::XTextContent > xOLE( m_xTextFactory->createInstance("com.sun.star.text.TextEmbeddedObject"), uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xOLEProperties(xOLE, uno::UNO_QUERY_THROW);
 
+        xOLEProperties->setPropertyValue(getPropertyName(PROP_STREAM_NAME),
+            uno::makeAny(rStreamName));
         OUString aCLSID = pOLEHandler->getCLSID(m_xComponentContext);
-        if (aCLSID.isEmpty())
-            xOLEProperties->setPropertyValue(getPropertyName( PROP_STREAM_NAME ),
-                            uno::makeAny( rStreamName ));
-        else
+        if (!aCLSID.isEmpty())
             xOLEProperties->setPropertyValue("CLSID", uno::makeAny(aCLSID));
 
         awt::Size aSize = pOLEHandler->getSize();
