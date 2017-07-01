@@ -1774,7 +1774,7 @@ ScRefFlags ScRange::ParseAny( const OUString& rString, ScDocument* pDoc,
 }
 
 // Parse only full row references
-ScRefFlags ScRange::ParseCols( const OUString& rStr, ScDocument* pDoc,
+ScRefFlags ScRange::ParseCols( const OUString& rStr,
                                const ScAddress::Details& rDetails )
 {
     if (rStr.isEmpty())
@@ -1783,8 +1783,6 @@ ScRefFlags ScRange::ParseCols( const OUString& rStr, ScDocument* pDoc,
     const sal_Unicode* p = rStr.getStr();
     ScRefFlags nRes = ScRefFlags::ZERO;
     ScRefFlags ignored = ScRefFlags::ZERO;
-
-    (void)pDoc; // make compiler shutup we may need this later
 
     switch (rDetails.eConv)
     {
@@ -1834,7 +1832,7 @@ ScRefFlags ScRange::ParseCols( const OUString& rStr, ScDocument* pDoc,
 }
 
 // Parse only full row references
-void ScRange::ParseRows( const OUString& rStr, ScDocument* pDoc,
+void ScRange::ParseRows( const OUString& rStr,
                                const ScAddress::Details& rDetails )
 {
     if (rStr.isEmpty())
@@ -1842,8 +1840,6 @@ void ScRange::ParseRows( const OUString& rStr, ScDocument* pDoc,
 
     const sal_Unicode* p = rStr.getStr();
     ScRefFlags ignored = ScRefFlags::ZERO;
-
-    (void)pDoc; // make compiler shutup we may need this later
 
     switch (rDetails.eConv)
     {

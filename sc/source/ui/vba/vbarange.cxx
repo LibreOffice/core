@@ -2189,7 +2189,7 @@ ScVbaRange::CellsHelper( const uno::Reference< ov::XHelperInterface >& xParent,
         {
             ScAddress::Details dDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
             ScRange tmpRange;
-            ScRefFlags flags = tmpRange.ParseCols( sCol, &getDocumentFromRange( xRange ), dDetails );
+            ScRefFlags flags = tmpRange.ParseCols( sCol, dDetails );
             if ( (flags & ScRefFlags::COL_VALID) == ScRefFlags::ZERO )
                throw uno::RuntimeException();
             nColumn = tmpRange.aStart.Col() + 1;
@@ -2364,7 +2364,7 @@ ScVbaRange::Rows(const uno::Any& aIndex )
         {
             ScAddress::Details dDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
             ScRange tmpRange;
-            tmpRange.ParseRows( sAddress, &getDocumentFromRange( mxRange ), dDetails );
+            tmpRange.ParseRows( sAddress, dDetails );
             SCROW nStartRow = tmpRange.aStart.Row();
             SCROW nEndRow = tmpRange.aEnd.Row();
 
@@ -2408,7 +2408,7 @@ ScVbaRange::Columns(const uno::Any& aIndex )
         {
             ScAddress::Details dDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
             ScRange tmpRange;
-            tmpRange.ParseCols( sAddress, &getDocumentFromRange( mxRange ), dDetails );
+            tmpRange.ParseCols( sAddress, dDetails );
             SCCOL nStartCol = tmpRange.aStart.Col();
             SCCOL nEndCol = tmpRange.aEnd.Col();
 
