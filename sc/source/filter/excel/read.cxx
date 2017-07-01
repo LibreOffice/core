@@ -72,8 +72,6 @@ ErrCode ImportExcel::Read()
     XclImpNumFmtBuffer&     rNumFmtBfr      = GetNumFmtBuffer();
     XclImpXFBuffer&         rXFBfr          = GetXFBuffer();
     XclImpNameManager&      rNameMgr        = GetNameManager();
-    XclImpObjectManager&    rObjMgr         = GetObjectManager();
-    (void)rObjMgr;
     // call to GetCurrSheetDrawing() cannot be cached (changes in new sheets)
 
     enum Zustand {
