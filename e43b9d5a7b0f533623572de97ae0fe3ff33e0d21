@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "3a461143_4172f6e6",
+        "filename": "sal/osl/unx/pipe.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-01T09:06:19Z",
+      "side": 1,
+      "message": "if you going to mess with critical infrastructure like SAL, you had better get used to verifying these things by looking up the actual definition\n\nhttp://opengrok.libreoffice.org/xref/core/include/osl/diagnose.h#98",
+      "parentUuid": "3a461143_7e74efce",
+      "revId": "e43b9d5a7b0f533623572de97ae0fe3ff33e0d21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_febe1fd3",
         "filename": "sal/osl/w32/pipe.cxx",
         "patchSetId": 6
