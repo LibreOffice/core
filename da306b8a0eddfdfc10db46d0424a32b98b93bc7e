@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_014f0e93",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 2217,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-07-01T10:10:36Z",
+      "side": 1,
+      "message": "Here is the first empty tab inserted, just delete this line.",
+      "revId": "da306b8a0eddfdfc10db46d0424a32b98b93bc7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_e1492290",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 2369,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-07-01T10:10:36Z",
+      "side": 1,
+      "message": "If you delete first always present tab, you should to check if any element in the item list exists.",
+      "revId": "da306b8a0eddfdfc10db46d0424a32b98b93bc7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
