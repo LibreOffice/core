@@ -1370,6 +1370,18 @@ DECLARE_OOXMLIMPORT_TEST(testTdf108714, "tdf108714.docx")
     CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, breakType);
 }
 
+#if defined(_WIN32)
+DECLARE_OOXMLIMPORT_TEST(testTdf108545_embeddedDocxIcon, "tdf108545_embeddedDocxIcon.docx")
+{
+    // Check if document shows an icon for embedded docx document
+    // Due to different fonts used for icon labels on each OS, current checksum is for Windows only
+    uno::Reference<document::XEmbeddedObjectSupplier2> xSupplier(getShape(1), uno::UNO_QUERY);
+    uno::Reference<graphic::XGraphic> xGraphic = xSupplier->getReplacementGraphic();
+    Graphic aGraphic(xGraphic);
+    CPPUNIT_ASSERT_EQUAL(BitmapChecksum(SAL_CONST_UINT64(733876873106730813)), aGraphic.GetChecksum());
+}
+#endif
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
