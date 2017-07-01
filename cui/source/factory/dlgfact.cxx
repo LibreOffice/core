@@ -1535,7 +1535,7 @@ VclPtr<AbstractPasswordToOpenModifyDialog> AbstractDialogFactory_Impl::CreatePas
     vcl::Window * pParent,
     sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify )
 {
-    VclPtrInstance<PasswordToOpenModifyDialog> pDlg( pParent, 0, nMaxPasswdLen, bIsPasswordToModify );
+    VclPtrInstance<PasswordToOpenModifyDialog> pDlg( pParent, nMaxPasswdLen, bIsPasswordToModify );
     return VclPtr<AbstractPasswordToOpenModifyDialog_Impl>::Create( pDlg );
 }
 
