@@ -32,12 +32,12 @@ void DateTest::testDate()
     const Date aMin(1,1,-32768);    // minimum date
     const Date aMax(31,12,32767);   // maximum date
     Date aDate(Date::EMPTY);
-    const long kMinDays = -11968265;
-    const long kMaxDays =  11967900;
+    const sal_Int32 kMinDays = -11968265;
+    const sal_Int32 kMaxDays =  11967900;
 
     // Last day BCE to first day CE is 1 day difference.
-    CPPUNIT_ASSERT_EQUAL( static_cast<long>(1), aCE - aBCE);
-    CPPUNIT_ASSERT_EQUAL( static_cast<long>(-1), aBCE - aCE);
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(1), aCE - aBCE);
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(-1), aBCE - aCE);
     aDate = aBCE;
     CPPUNIT_ASSERT_EQUAL( aCE.GetDate(), (aDate += 1).GetDate());
     aDate = aCE;
