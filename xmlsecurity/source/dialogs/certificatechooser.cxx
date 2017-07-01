@@ -153,6 +153,8 @@ void CertificateChooser::ImplInitialize()
 
     for (auto &secContext : mxSecurityContexts)
     {
+        if (!secContext.is())
+            continue;
         auto secEnvironment = secContext->getSecurityEnvironment();
         if (!secEnvironment.is())
             continue;
