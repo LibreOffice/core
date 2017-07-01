@@ -15,6 +15,7 @@
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XFootnote.hpp>
 #include <pagedesc.hxx>
 
 class Test : public SwModelTestBase
@@ -94,6 +95,24 @@ DECLARE_WW8EXPORT_TEST(testBnc863018b, "bnc863018b.doc")
     // The whitespace above the table should allow text to flow between the table anchor and the table.
     // Since it doesn't, don't add the whitespace.
     CPPUNIT_ASSERT_EQUAL( 1, getPages() );
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf108448_endNote, "tdf108448_endNote.odt")
+{
+    uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xEndnotes(xEndnotesSupplier->getEndnotes(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xEndnote;
+    xEndnotes->getByIndex(0) >>= xEndnote;
+
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xEndnote->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    int nRet = 0;
+    while (xParaEnum->hasMoreElements())
+    {
+        xParaEnum->nextElement();
+        nRet++;
+    }
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of paragraphs in Endnote i", 1, nRet );
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf104805, "tdf104805.doc")
