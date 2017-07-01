@@ -909,6 +909,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
                             {
                                 OutlinerView* pOutlView = ImpMakeOutlinerView(static_cast<vcl::Window*>(&rOutDev), nullptr);
                                 pOutlView->HideCursor();
+                                static_cast<vcl::Window*>(&rOutDev)->SetCursor(nullptr);
                                 pTextEditOutliner->InsertView(pOutlView);
                             }
                         }
