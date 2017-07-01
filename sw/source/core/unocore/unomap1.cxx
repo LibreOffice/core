@@ -865,6 +865,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetEmbeddedPropertyMap
         { OUString(UNO_NAME_GRAPHIC), FN_UNO_REPLACEMENT_GRAPHIC, cppu::UnoType<css::graphic::XGraphic>::get(), PropertyAttribute::MAYBEVOID, 0 },
         { OUString(UNO_NAME_COMPONENT),FN_UNO_COMPONENT, cppu::UnoType<css::lang::XComponent>::get(), PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_EMBEDDED_OBJECT),FN_EMBEDDED_OBJECT, cppu::UnoType<css::embed::XEmbeddedObject>::get(), PROPERTY_NONE, 0},
+        { OUString(UNO_NAME_DRAW_ASPECT),FN_UNO_DRAW_ASPECT, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         //UUUU added FillProperties for SW, same as FILL_PROPERTIES in svx
         // but need own defines in Writer due to later association of strings
         // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
