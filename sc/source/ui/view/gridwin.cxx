@@ -5844,6 +5844,8 @@ void ScGridWindow::UpdateCopySourceOverlay()
 
     DeleteCopySourceOverlay();
 
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
     if (!pViewData->ShowPasteSource())
         return;
     rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
@@ -6104,9 +6106,6 @@ void ScGridWindow::UpdateCursorOverlay()
                 xOverlayManager->add(*pOverlay);
                 mpOOCursors.reset(new sdr::overlay::OverlayObjectList);
                 mpOOCursors->append(*pOverlay);
-
-                // notify the LibreOfficeKit too
-                updateLibreOfficeKitSelection(pViewData, aPixelRects);
             }
         }
     }
@@ -6142,8 +6141,12 @@ void ScGridWindow::UpdateSelectionOverlay()
     {
         // #i70788# get the OverlayManager safely
         rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
-
-        if (xOverlayManager.is())
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            // notify the LibreOfficeKit too
+            updateLibreOfficeKitSelection(pViewData, aPixelRects);
+        }
+        else if (xOverlayManager.is())
         {
             std::vector< basegfx::B2DRange > aRanges;
             const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
@@ -6180,9 +6183,6 @@ void ScGridWindow::UpdateSelectionOverlay()
             xOverlayManager->add(*pOverlay);
             mpOOSelection.reset(new sdr::overlay::OverlayObjectList);
             mpOOSelection->append(*pOverlay);
-
-            // notify the LibreOfficeKit too
-            updateLibreOfficeKitSelection(pViewData, aPixelRects);
         }
     }
     else
@@ -6255,7 +6255,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
         // #i70788# get the OverlayManager safely
         rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
 
-        if (xOverlayManager.is())
+        if (xOverlayManager.is() && !comphelper::LibreOfficeKit::isActive())
         {
             Color aHandleColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
             if (pViewData->GetActivePart() != eWhich)
@@ -6383,7 +6383,7 @@ void ScGridWindow::UpdateDragRectOverlay()
         // #i70788# get the OverlayManager safely
         rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
 
-        if (xOverlayManager.is())
+        if (xOverlayManager.is() && !comphelper::LibreOfficeKit::isActive())
         {
             std::vector< basegfx::B2DRange > aRanges;
             const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
@@ -6431,7 +6431,7 @@ void ScGridWindow::UpdateHeaderOverlay()
         // #i70788# get the OverlayManager safely
         rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
 
-        if (xOverlayManager.is())
+        if (xOverlayManager.is() && !comphelper::LibreOfficeKit::isActive())
         {
             // Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
             std::vector< basegfx::B2DRange > aRanges;
@@ -6499,7 +6499,7 @@ void ScGridWindow::UpdateShrinkOverlay()
         // #i70788# get the OverlayManager safely
         rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
 
-        if (xOverlayManager.is())
+        if (xOverlayManager.is() && !comphelper::LibreOfficeKit::isActive())
         {
             std::vector< basegfx::B2DRange > aRanges;
             const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
