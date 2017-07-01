@@ -41,6 +41,9 @@ namespace com{ namespace sun{ namespace star{
         class XComponentContext;
     }
 }}}
+
+#define DRAW_ASPECT_ICON "Icon"
+
 namespace writerfilter {
 namespace dmapper
 {
@@ -81,6 +84,8 @@ public:
     const css::uno::Reference<css::drawing::XShape>& getShape() { return m_xShape; };
 
     bool isOLEObject() { return m_xInputStream.is(); }
+
+    bool showAsIcon() const { return m_sDrawAspect == DRAW_ASPECT_ICON; }
 
     /// In case of a valid CLSID, import the native data to the previously created empty OLE object.
     void importStream(const css::uno::Reference<css::uno::XComponentContext>& xComponentContext,

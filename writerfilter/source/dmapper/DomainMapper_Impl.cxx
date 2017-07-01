@@ -1437,7 +1437,7 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const OLEHandler
         uno::Reference< beans::XPropertySet > xOLEProperties(xOLE, uno::UNO_QUERY_THROW);
 
         OUString aCLSID = pOLEHandler->getCLSID(m_xComponentContext);
-        if (aCLSID.isEmpty())
+        if (aCLSID.isEmpty() || pOLEHandler->showAsIcon())
             xOLEProperties->setPropertyValue(getPropertyName( PROP_STREAM_NAME ),
                             uno::makeAny( rStreamName ));
         else
