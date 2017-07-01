@@ -182,7 +182,7 @@ namespace SwLangHelper
                 if (aNewLangText == "LANGUAGE_NONE")
                     SwLangHelper::SetLanguage_None( rSh, pOLV, aSelection, bForSelection, aEditAttr );
                 else if (aNewLangText == "RESET_LANGUAGES")
-                    SwLangHelper::ResetLanguages( rSh, pOLV, aSelection, bForSelection );
+                    SwLangHelper::ResetLanguages( rSh, pOLV );
                 else
                     SwLangHelper::SetLanguage( rSh, pOLV, aSelection, aNewLangText, bForSelection, aEditAttr );
 
@@ -366,16 +366,8 @@ namespace SwLangHelper
         }
     }
 
-    void ResetLanguages( SwWrtShell &rWrtSh, bool bIsForSelection )
+    void ResetLanguages( SwWrtShell &rWrtSh, OutlinerView* pOLV )
     {
-        ResetLanguages( rWrtSh, nullptr , ESelection(), bIsForSelection );
-    }
-
-    void ResetLanguages( SwWrtShell &rWrtSh, OutlinerView* pOLV, const ESelection& rSelection, bool bIsForSelection )
-    {
-        (void) bIsForSelection;
-        (void) rSelection;
-
         // reset language for current selection.
         // The selection should already have been expanded to the whole paragraph or
         // to all text in the document if those are the ranges where to reset

@@ -404,7 +404,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     if (aNewLangText == aStrNone)
                         SwLangHelper::SetLanguage_None( rWrtSh, bForSelection, aCoreSet );
                     else if (aNewLangText == aStrResetLangs)
-                        SwLangHelper::ResetLanguages( rWrtSh, bForSelection );
+                        SwLangHelper::ResetLanguages( rWrtSh );
                     else
                         SwLangHelper::SetLanguage( rWrtSh, aNewLangText, bForSelection, aCoreSet );
                     rWrtSh.EndUndo();
