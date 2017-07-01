@@ -77,7 +77,6 @@ struct WW8SwFlyPara
                   SwWW8ImplReader& rIo,
                   WW8FlyPara& rWW,
                   const sal_uInt32 nWWPgTop,
-                  const sal_uInt32 nPgLeft,
                   const sal_uInt32 nPgWidth,
                   const sal_Int32 nIniFlyDx,
                   const sal_Int32 nIniFlyDy );
