@@ -238,12 +238,8 @@ public:
         { msStyleLabel = sLabel; }
     void setChildOrder( sal_Int32 nOrder )
         { mnChildOrder = nOrder; }
-    void setShapeTemplate( const ShapePtr& pShape )
-        { mpShapeTemplate = pShape; }
     void setExistingShape( const ShapePtr& pShape )
         { mpExistingShape = pShape; }
-    const ShapePtr& getShapeTemplate() const
-        { return mpShapeTemplate; }
     const ShapePtr& getExistingShape() const
         { return mpExistingShape; }
 
@@ -255,12 +251,26 @@ private:
     VarMap                       mVariables;
     OUString                     msMoveWith;
     OUString                     msStyleLabel;
-    ShapePtr                     mpShapeTemplate;
     ShapePtr                     mpExistingShape;
     sal_Int32                    mnChildOrder;
 };
 
 typedef std::shared_ptr< LayoutNode > LayoutNodePtr;
+
+class ShapeAtom
+    : public LayoutAtom
+{
+public:
+    ShapeAtom(const ShapePtr& pShape) : mpShapeTemplate(pShape) {}
+    virtual void accept( LayoutAtomVisitor& ) override;
+    const ShapePtr& getShapeTemplate() const
+        { return mpShapeTemplate; }
+
+private:
+    ShapePtr mpShapeTemplate;
+};
+
+typedef std::shared_ptr< ShapeAtom > ShapeAtomPtr;
 
 struct LayoutAtomVisitor
 {
@@ -271,6 +281,7 @@ struct LayoutAtomVisitor
     virtual void visit(ConditionAtom& rAtom) = 0;
     virtual void visit(ChooseAtom& rAtom) = 0;
     virtual void visit(LayoutNode& rAtom) = 0;
+    virtual void visit(ShapeAtom& rAtom) = 0;
 };
 
 } }

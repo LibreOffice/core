@@ -246,31 +246,23 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
     }
     case DGM_TOKEN( shape ):
     {
-        LayoutNodePtr pNode(std::dynamic_pointer_cast<LayoutNode>(mpNode));
-        if( pNode )
+        ShapePtr pShape;
+
+        if( rAttribs.hasAttribute( XML_type ) )
         {
-            ShapePtr pShape;
-
-            if( rAttribs.hasAttribute( XML_type ) )
-            {
-                pShape.reset( new Shape("com.sun.star.drawing.CustomShape") );
-                const sal_Int32 nType(rAttribs.getToken( XML_type, XML_obj ));
-                pShape->setSubType( nType );
-                pShape->getCustomShapeProperties()->setShapePresetType( nType );
-            }
-            else
-            {
-                pShape.reset( new Shape("com.sun.star.drawing.GroupShape") );
-            }
-
-            pNode->setShapeTemplate( pShape );
-            return new ShapeContext( *this, ShapePtr(), pShape );
+            pShape.reset( new Shape("com.sun.star.drawing.CustomShape") );
+            const sal_Int32 nType(rAttribs.getToken( XML_type, XML_obj ));
+            pShape->setSubType( nType );
+            pShape->getCustomShapeProperties()->setShapePresetType( nType );
         }
         else
         {
-            SAL_WARN("oox",  "OOX: encountered a shape in a non layoutNode context" );
+            pShape.reset( new Shape("com.sun.star.drawing.GroupShape") );
         }
-        break;
+
+        ShapeAtomPtr pAtom( new ShapeAtom(pShape) );
+        mpNode->addChild( pAtom );
+        return new ShapeContext( *this, ShapePtr(), pShape );
     }
     case DGM_TOKEN( extLst ):
         return nullptr;
