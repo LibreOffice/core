@@ -1197,6 +1197,7 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
     , eType(eSet)
     , bIsDescriptor(true)
     , m_pCopySource(nullptr)
+    , m_nDrawAspect(embed::Aspects::MSOLE_CONTENT)
 {
     // Register ourselves as a listener to the document (via the page descriptor)
     pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
@@ -1983,6 +1984,16 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             catch ( uno::RuntimeException const & )
             {
             }
+        }
+        else if (FN_UNO_DRAW_ASPECT == pEntry->nWID)
+        {
+            OUString sAspect = "";
+            aValue >>= sAspect;
+
+            if (sAspect == "Icon")
+                m_nDrawAspect = embed::Aspects::MSOLE_ICON;
+            else if (sAspect == "Content")
+                m_nDrawAspect = embed::Aspects::MSOLE_CONTENT;
         }
     }
     else
@@ -2913,8 +2924,8 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
                     if(!bSizeFound)
                     {
-                        //TODO/LATER: from where do I get a ViewAspect? And how do I transport it to the OLENode?
-                        sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+                        //TODO/LATER: how do I transport it to the OLENode?
+                        sal_Int64 nAspect = m_nDrawAspect;
 
                         // TODO/LEAN: VisualArea still needs running state
                         svt::EmbeddedObjectRef::TryRunningState( xIPObj );
@@ -2951,8 +2962,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     }
                     SwFlyFrameFormat* pFormat2 = nullptr;
 
-                    // TODO/LATER: Is it the only possible aspect here?
-                    ::svt::EmbeddedObjectRef xObjRef( xIPObj, embed::Aspects::MSOLE_CONTENT );
+                    ::svt::EmbeddedObjectRef xObjRef( xIPObj, m_nDrawAspect);
                     pFormat2 = pDoc->getIDocumentContentOperations().InsertEmbObject(
                             aPam, xObjRef, &aFrameSet );
                     assert(pFormat2 && "Doc->Insert(notxt) failed.");
