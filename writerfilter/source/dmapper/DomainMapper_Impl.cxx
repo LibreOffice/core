@@ -1443,9 +1443,13 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const OLEHandler
         OUString aCLSID = pOLEHandler->getCLSID(m_xComponentContext);
         if (aCLSID.isEmpty())
             xOLEProperties->setPropertyValue(getPropertyName( PROP_STREAM_NAME ),
-                            uno::makeAny( rStreamName ));
+                        uno::makeAny(rStreamName));
         else
             xOLEProperties->setPropertyValue("CLSID", uno::makeAny(aCLSID));
+
+        OUString aDrawAspect = pOLEHandler->GetDrawAspect();
+        if(!aDrawAspect.isEmpty())
+            xOLEProperties->setPropertyValue("DrawAspect", uno::makeAny(aDrawAspect));
 
         awt::Size aSize = pOLEHandler->getSize();
         if( !aSize.Width )
