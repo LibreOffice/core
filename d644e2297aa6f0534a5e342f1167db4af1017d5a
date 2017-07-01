@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_81869eb7",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5981,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-07-01T07:09:52Z",
+      "side": 1,
+      "message": "\"what\" :)",
+      "range": {
+        "startLine": 5981,
+        "startChar": 37,
+        "endLine": 5981,
+        "endChar": 41
+      },
+      "revId": "d644e2297aa6f0534a5e342f1167db4af1017d5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_a1939af9",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 8721,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-07-01T07:09:52Z",
+      "side": 1,
+      "message": "\"rows\"",
+      "range": {
+        "startLine": 8721,
+        "startChar": 71,
+        "endLine": 8721,
+        "endChar": 78
+      },
+      "revId": "d644e2297aa6f0534a5e342f1167db4af1017d5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_c190a6ef",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 8786,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-07-01T07:09:52Z",
+      "side": 1,
+      "message": "\"rows\"",
+      "range": {
+        "startLine": 8786,
+        "startChar": 71,
+        "endLine": 8786,
+        "endChar": 78
+      },
+      "revId": "d644e2297aa6f0534a5e342f1167db4af1017d5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_01c1cee4",
+        "filename": "sot/source/sdstor/storage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-07-01T07:09:52Z",
+      "side": 1,
+      "message": "Maybe \"set to *the* end\" (i.e., with article), to prevent a misunderstanding of \"end\" as being a verb? (As in: \"a jump needs to be ended\".)",
+      "range": {
+        "startLine": 173,
+        "startChar": 11,
+        "endLine": 173,
+        "endChar": 22
+      },
+      "revId": "d644e2297aa6f0534a5e342f1167db4af1017d5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_e1bbe273",
+        "filename": "sot/source/sdstor/storage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-07-01T07:09:52Z",
+      "side": 1,
+      "message": "\"ourselves\" :)",
+      "range": {
+        "startLine": 259,
+        "startChar": 61,
+        "endLine": 259,
+        "endChar": 68
+      },
+      "revId": "d644e2297aa6f0534a5e342f1167db4af1017d5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
