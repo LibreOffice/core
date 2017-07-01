@@ -41,6 +41,7 @@ class ShapeCreationVisitor : public LayoutAtomVisitor
     virtual void visit(ConditionAtom& rAtom) override;
     virtual void visit(ChooseAtom& rAtom) override;
     virtual void visit(LayoutNode& rAtom) override;
+    virtual void visit(ShapeAtom& rAtom) override;
 
 public:
     ShapeCreationVisitor(const ShapePtr& rParentShape,
@@ -49,6 +50,24 @@ public:
         mrDgm(rDgm),
         mnCurrIdx(0)
     {}
+};
+
+class ShapeTemplateVisitor : public LayoutAtomVisitor
+{
+    ShapePtr mpShape;
+
+    virtual void visit(ConstraintAtom& rAtom) override;
+    virtual void visit(AlgAtom& rAtom) override;
+    virtual void visit(ForEachAtom& rAtom) override;
+    virtual void visit(ConditionAtom& rAtom) override;
+    virtual void visit(ChooseAtom& rAtom) override;
+    virtual void visit(LayoutNode& rAtom) override;
+    virtual void visit(ShapeAtom& rAtom) override;
+
+public:
+    void defaultVisit(LayoutAtom& rAtom);
+    ShapePtr getShapeCopy() const
+        { return mpShape; }
 };
 
 class ShapeLayoutingVisitor : public LayoutAtomVisitor
@@ -62,6 +81,7 @@ class ShapeLayoutingVisitor : public LayoutAtomVisitor
     virtual void visit(ConditionAtom& rAtom) override;
     virtual void visit(ChooseAtom& rAtom) override;
     virtual void visit(LayoutNode& rAtom) override;
+    virtual void visit(ShapeAtom& rAtom) override;
 
 public:
     ShapeLayoutingVisitor(const ShapePtr& rParentShape,
@@ -85,6 +105,7 @@ class ShallowPresNameVisitor : public LayoutAtomVisitor
     virtual void visit(ConditionAtom& rAtom) override;
     virtual void visit(ChooseAtom& rAtom) override;
     virtual void visit(LayoutNode& rAtom) override;
+    virtual void visit(ShapeAtom& rAtom) override;
 
 public:
     explicit ShallowPresNameVisitor(const Diagram& rDgm) :

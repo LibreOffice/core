@@ -94,34 +94,35 @@ void ShapeCreationVisitor::visit(ChooseAtom& rAtom)
 void ShapeCreationVisitor::visit(LayoutNode& rAtom)
 {
     ShapePtr pCurrParent(mpParentShape);
-    ShapePtr pCurrShape(rAtom.getShapeTemplate());
 
     if (rAtom.getExistingShape())
     {
         rAtom.setupShape(rAtom.getExistingShape(), mrDgm, mnCurrIdx);
     }
-    else if( pCurrShape )
-    {
-        SAL_INFO(
-            "oox.drawingml",
-            "processing shape type "
-                << (pCurrShape->getCustomShapeProperties()
-                    ->getShapePresetType()));
-
-        // TODO(F3): cloned shape shares all properties by reference,
-        // don't change them!
-        ShapePtr pClonedShape(
-            new Shape( pCurrShape ));
-
-        if( rAtom.setupShape(pClonedShape, mrDgm, mnCurrIdx) )
-        {
-            pCurrParent->addChild(pClonedShape);
-            pCurrParent = pClonedShape;
-        }
-    }
     else
     {
-        SAL_WARN("oox.drawingml", "ShapeCreationVisitor::visit: no shape set while processing layoutnode named " << rAtom.getName() );
+        ShapeTemplateVisitor aTemplateVisitor;
+        aTemplateVisitor.defaultVisit(rAtom);
+        ShapePtr pShape = aTemplateVisitor.getShapeCopy();
+
+        if (pShape)
+        {
+            SAL_INFO(
+                "oox.drawingml",
+                "processing shape type "
+                    << (pShape->getCustomShapeProperties()
+                        ->getShapePresetType()));
+
+            if (rAtom.setupShape(pShape, mrDgm, mnCurrIdx))
+            {
+                pCurrParent->addChild(pShape);
+                pCurrParent = pShape;
+            }
+        }
+        else
+        {
+            SAL_WARN("oox.drawingml", "ShapeCreationVisitor::visit: no shape set while processing layoutnode named " << rAtom.getName());
+        }
     }
 
     // set new parent for children
@@ -138,6 +139,63 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
     ShapeLayoutingVisitor aLayoutingVisitor(pCurrParent,
                                             rAtom.getName());
     aLayoutingVisitor.defaultVisit(rAtom);
+}
+
+void ShapeCreationVisitor::visit(ShapeAtom& /*rAtom*/)
+{
+    // stop processing
+}
+
+void ShapeTemplateVisitor::defaultVisit(LayoutAtom& rAtom)
+{
+    // visit all children, one of them needs to be the layout algorithm
+    for (const auto& pAtom : rAtom.getChildren())
+        pAtom->accept(*this);
+}
+
+void ShapeTemplateVisitor::visit(ConstraintAtom& /*rAtom*/)
+{
+    // stop processing
+}
+
+void ShapeTemplateVisitor::visit(AlgAtom& /*rAtom*/)
+{
+    // stop processing
+}
+
+void ShapeTemplateVisitor::visit(ForEachAtom& /*rAtom*/)
+{
+    // stop processing
+}
+
+void ShapeTemplateVisitor::visit(ConditionAtom& rAtom)
+{
+    defaultVisit(rAtom);
+}
+
+void ShapeTemplateVisitor::visit(ChooseAtom& rAtom)
+{
+    defaultVisit(rAtom);
+}
+
+void ShapeTemplateVisitor::visit(LayoutNode& /*rAtom*/)
+{
+    // stop processing - only traverse Condition/Choose atoms
+}
+
+void ShapeTemplateVisitor::visit(ShapeAtom& rAtom)
+{
+    if (mpShape)
+    {
+        SAL_WARN("oox.drawingml", "multiple shapes encountered inside LayoutNode");
+        return;
+    }
+
+    ShapePtr pCurrShape(rAtom.getShapeTemplate());
+
+    // TODO(F3): cloned shape shares all properties by reference,
+    // don't change them!
+    mpShape.reset(new Shape(pCurrShape));
 }
 
 void ShapeLayoutingVisitor::defaultVisit(LayoutAtom& rAtom)
@@ -175,6 +233,11 @@ void ShapeLayoutingVisitor::visit(ChooseAtom& rAtom)
 void ShapeLayoutingVisitor::visit(LayoutNode& /*rAtom*/)
 {
     // stop processing - only traverse Condition/Choose atoms
+}
+
+void ShapeLayoutingVisitor::visit(ShapeAtom& /*rAtom*/)
+{
+    // stop processing
 }
 
 void ShallowPresNameVisitor::defaultVisit(LayoutAtom& rAtom)
@@ -217,6 +280,11 @@ void ShallowPresNameVisitor::visit(LayoutNode& rAtom)
     if( aDataNode != mrDgm.getData()->getPointsPresNameMap().end() )
         mnCnt = std::max(mnCnt,
                          aDataNode->second.size());
+}
+
+void ShallowPresNameVisitor::visit(ShapeAtom& /*rAtom*/)
+{
+    // stop processing
 }
 
 } }
