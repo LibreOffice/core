@@ -224,7 +224,7 @@ OUString OLEHandler::getCLSID(const uno::Reference<uno::XComponentContext>& xCom
     OUString aRet;
 
     // See officecfg/registry/data/org/openoffice/Office/Embedding.xcu.
-    if (m_sProgId == "Word.Document.12")
+    if (m_sProgId == "Word.Document.12" && m_sDrawAspect != DRAW_ASPECT_ICON)
     {
         if (officecfg::Office::Common::Filter::Microsoft::Import::WinWordToWriter::get(xComponentContext))
             aRet = "8BC6B165-B1B2-4EDD-aa47-dae2ee689dd6";
