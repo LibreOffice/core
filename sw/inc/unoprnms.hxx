@@ -807,6 +807,7 @@
 #define UNO_NAME_EMBEDDED_OBJECT "EmbeddedObject"
 #define UNO_NAME_RSID "Rsid"
 #define UNO_NAME_PARRSID "ParRsid"
+#define UNO_NAME_DRAW_ASPECT "DrawAspect"
 
 #define UNO_NAME_LINE_STYLE "LineStyle"
 #define UNO_NAME_LINE_WIDTH "LineWidth"

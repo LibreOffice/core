@@ -71,6 +71,8 @@ private:
 
     SwPaM*                          m_pCopySource;
 
+    sal_Int64                       m_nDrawAspect;
+
 protected:
     css::uno::Reference< css::beans::XPropertySet > mxStyleData;
     css::uno::Reference< css::container::XNameAccess >  mxStyleFamily;

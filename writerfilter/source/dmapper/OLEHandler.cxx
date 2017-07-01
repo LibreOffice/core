@@ -251,6 +251,11 @@ OUString OLEHandler::getCLSID(const uno::Reference<uno::XComponentContext>& xCom
     return aRet;
 }
 
+OUString OLEHandler::GetDrawAspect() const
+{
+    return m_sDrawAspect;
+}
+
 OUString OLEHandler::copyOLEOStream(
         uno::Reference<text::XTextDocument> const& xTextDocument)
 {

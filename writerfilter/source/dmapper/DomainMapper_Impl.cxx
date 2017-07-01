@@ -1418,6 +1418,10 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const OLEHandler
         else
             xOLEProperties->setPropertyValue("CLSID", uno::makeAny(OUString(aCLSID)));
 
+        OUString aDrawAspect = pOLEHandler->GetDrawAspect();
+        if(!aDrawAspect.isEmpty())
+            xOLEProperties->setPropertyValue("DrawAspect", uno::makeAny(aDrawAspect));
+
         awt::Size aSize = pOLEHandler->getSize();
         if( !aSize.Width )
             aSize.Width = 1000;
