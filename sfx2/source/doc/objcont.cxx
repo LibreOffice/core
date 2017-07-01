@@ -230,10 +230,10 @@ void SfxObjectShell::UpdateTime_Impl(
             secs/3600, (secs%3600)/60, secs%60, 0);
 
     // Initialize some local member! Its necessary for follow operations!
-    DateTime    aNow( DateTime::SYSTEM );   // Date and time at current moment
-    tools::Time        n24Time     (24,0,0,0)  ;   // Time-value for 24 hours - see follow calculation
-    sal_uIntPtr     nDays       = 0         ;   // Count of days between now and last editing
-    tools::Time        nAddTime    (0)         ;   // Value to add on aOldTime
+    DateTime     aNow( DateTime::SYSTEM );   // Date and time at current moment
+    tools::Time  n24Time     (24,0,0,0)  ;   // Time-value for 24 hours - see follow calculation
+    sal_Int32    nDays       = 0         ;   // Count of days between now and last editing
+    tools::Time  nAddTime    (0)         ;   // Value to add on aOldTime
 
     // Save impossible cases!
     // User has changed time to the past between last editing and now ... it's not possible!!!
