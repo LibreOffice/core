@@ -41,6 +41,9 @@ namespace com{ namespace sun{ namespace star{
         class XComponentContext;
     }
 }}}
+
+#define DRAW_ASPECT_ICON "Icon"
+
 namespace writerfilter {
 namespace dmapper
 {
