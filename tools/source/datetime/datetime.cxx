@@ -76,16 +76,16 @@ bool DateTime::operator <=( const DateTime& rDateTime ) const
         return false;
 }
 
-long DateTime::GetSecFromDateTime( const Date& rDate ) const
+sal_Int64 DateTime::GetSecFromDateTime( const Date& rDate ) const
 {
     if ( Date::operator<( rDate ) )
         return 0;
     else
     {
-        long nSec = Date( *this ) - rDate;
+        sal_Int64 nSec = Date( *this ) - rDate;
         nSec *= 24UL*60*60;
-        long nHour = GetHour();
-        long nMin  = GetMin();
+        sal_Int64 nHour = GetHour();
+        sal_Int64 nMin  = GetMin();
         nSec += (nHour*3600)+(nMin*60)+GetSec();
         return nSec;
     }
@@ -149,14 +149,14 @@ DateTime& DateTime::operator -=( const tools::Time& rTime )
     return *this;
 }
 
-DateTime operator +( const DateTime& rDateTime, long nDays )
+DateTime operator +( const DateTime& rDateTime, sal_Int32 nDays )
 {
     DateTime aDateTime( rDateTime );
     aDateTime += nDays;
     return aDateTime;
 }
 
-DateTime operator -( const DateTime& rDateTime, long nDays )
+DateTime operator -( const DateTime& rDateTime, sal_Int32 nDays )
 {
     DateTime aDateTime( rDateTime );
     aDateTime -= nDays;
@@ -190,7 +190,7 @@ DateTime& DateTime::operator +=( double fTimeInDays )
         fInt = ::rtl::math::approxFloor( fTimeInDays );
         fFrac = fInt >= fTimeInDays ? 0.0 : fTimeInDays - fInt;
     }
-    Date::operator+=( long(fInt) );     // full days
+    Date::operator+=( sal_Int32(fInt) );     // full days
     if ( fFrac )
     {
         tools::Time aTime(0);  // default ctor calls system time, we don't need that
@@ -210,7 +210,7 @@ DateTime operator +( const DateTime& rDateTime, double fTimeInDays )
 
 double operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 )
 {
-    long nDays = static_cast<const Date&>(rDateTime1)
+    sal_Int32 nDays = static_cast<const Date&>(rDateTime1)
         - static_cast<const Date&>(rDateTime2);
     sal_Int64 nTime = rDateTime1.GetNSFromTime() - rDateTime2.GetNSFromTime();
     if ( nTime )
@@ -243,7 +243,7 @@ void DateTime::GetWin32FileDateTime( sal_uInt32 & rLower, sal_uInt32 & rUpper )
     SAL_WARN_IF( nYear < 1601, "tools.datetime", "DateTime::GetWin32FileDateTime - year < 1601: " << nYear);
 
     sal_Int64 aTime = (nYear < 1601 ? 0 : (
-        a100nPerDay * static_cast<sal_Int64>(*this - Date(1,1,1601)) +
+        a100nPerDay * (*this - Date(1,1,1601)) +
         GetNSFromTime()/100));
 
     rLower = sal_uInt32( aTime % SAL_CONST_UINT64( 0x100000000 ) );
@@ -266,11 +266,11 @@ DateTime DateTime::CreateFromWin32FileDateTime( sal_uInt32 rLower, sal_uInt32 rU
     sal_uInt64 nDays = aTime / a100nPerDay;
 
     Date aDate(1,1,1601);
-    // (0xffffffffffffffff / a100nPerDay = 21350398) fits into long
+    // (0xffffffffffffffff / a100nPerDay = 21350398) fits into sal_Int32
     // (0x7fffffff = 2147483647)
-    aDate += static_cast<long>(nDays);
+    aDate += static_cast<sal_Int32>(nDays);
 
-    SAL_WARN_IF( aDate - Date(1,1,1601) != static_cast<long>(nDays), "tools.datetime",
+    SAL_WARN_IF( aDate - Date(1,1,1601) != static_cast<sal_Int32>(nDays), "tools.datetime",
             "DateTime::CreateFromWin32FileDateTime - date truncated to max");
 
     sal_uInt64 nNanos = (aTime - (nDays * a100nPerDay)) * 100;
