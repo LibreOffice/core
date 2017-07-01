@@ -216,14 +216,14 @@ public:
                         { mnDate = rDate.mnDate; return *this; }
     Date&           operator =( const css::util::Date& rUDate )
                         { setDateFromDMY( rUDate.Day, rUDate.Month, rUDate.Year); return *this; }
-    Date&           operator +=( long nDays );
-    Date&           operator -=( long nDays );
+    Date&           operator +=( sal_Int32 nDays );
+    Date&           operator -=( sal_Int32 nDays );
     Date&           operator ++();
     Date&           operator --();
 
-    TOOLS_DLLPUBLIC friend Date     operator +( const Date& rDate, long nDays );
-    TOOLS_DLLPUBLIC friend Date     operator -( const Date& rDate, long nDays );
-    TOOLS_DLLPUBLIC friend long     operator -( const Date& rDate1, const Date& rDate2 );
+    TOOLS_DLLPUBLIC friend Date      operator +( const Date& rDate, sal_Int32 nDays );
+    TOOLS_DLLPUBLIC friend Date      operator -( const Date& rDate, sal_Int32 nDays );
+    TOOLS_DLLPUBLIC friend sal_Int32 operator -( const Date& rDate1, const Date& rDate2 );
 
     /** Obtain number of days in a month of a year.
 
@@ -233,7 +233,7 @@ public:
     static sal_uInt16 GetDaysInMonth( sal_uInt16 nMonth, sal_Int16 nYear );
 
     /// Internally normalizes values.
-    static long DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear );
+    static sal_Int32 DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear );
     /// Semantically identical to IsValidDate() member method.
     static bool IsValidDate( sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear );
     /// Semantically identical to Normalize() member method.
@@ -241,7 +241,7 @@ public:
 
  private:
     /// An accelerated form of DateToDays on this date
-    long GetAsNormalizedDays() const;
+    sal_Int32 GetAsNormalizedDays() const;
 };
 
 #endif
