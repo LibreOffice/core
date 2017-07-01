@@ -94,7 +94,7 @@ namespace sw
         /** Convert from DTTM to Writer's DateTime
 
         */
-        long DateTime2DTTM( const DateTime& rDT );
+        sal_uInt32 DateTime2DTTM( const DateTime& rDT );
 
         /** Convert from Word Date/Time field str to Writer's Date Time str
 

@@ -723,7 +723,7 @@ namespace sw
             return nRet;
         }
 
-        long DateTime2DTTM( const DateTime& rDT )
+        sal_uInt32 DateTime2DTTM( const DateTime& rDT )
         {
         /*
         mint    short   :6  0000003F    minutes (0-59)
@@ -740,9 +740,9 @@ namespace sw
                                                 Saturday=6)
         */
 
-            if ( rDT.GetDate() == 0L )
-                return 0L;
-            long nDT = ( rDT.GetDayOfWeek() + 1 ) % 7;
+            if ( rDT.GetDate() == 0 )
+                return 0;
+            sal_uInt32 nDT = ( rDT.GetDayOfWeek() + 1 ) % 7;
             nDT <<= 9;
             nDT += ( rDT.GetYear() - 1900 ) & 0x1ff;
             nDT <<= 4;
