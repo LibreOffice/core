@@ -511,6 +511,11 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
     return false;
 }
 
+void ShapeAtom::accept( LayoutAtomVisitor& rVisitor )
+{
+    rVisitor.visit(*this);
+}
+
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
