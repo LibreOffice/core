@@ -1280,9 +1280,8 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
     }
 }
 
-GdkNativeWindow GtkSalFrame::findTopLevelSystemWindow( GdkNativeWindow aWindow )
+GdkNativeWindow GtkSalFrame::findTopLevelSystemWindow( GdkNativeWindow )
 {
-    (void)aWindow;
     //FIXME: no findToplevelSystemWindow
     return 0;
 }

@@ -116,10 +116,9 @@ void signalMonitorsChanged( GdkScreen* pScreen, gpointer data )
 
 }
 
-GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event )
+GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* )
 {
     (void) this; // loplugin:staticmethods
-    (void) sys_event;
     //FIXME: implement filterGdkEvent ...
     return GDK_FILTER_CONTINUE;
 }
