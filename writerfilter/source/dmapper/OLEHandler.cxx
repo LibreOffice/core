@@ -55,6 +55,7 @@ using namespace ::com::sun::star;
 
 OLEHandler::OLEHandler(DomainMapper& rDomainMapper) :
 LoggedProperties("OLEHandler"),
+    m_sDrawAspect(),
     m_nWrapMode(text::WrapTextMode_THROUGHT),
     m_rDomainMapper(rDomainMapper)
 {
@@ -237,6 +238,11 @@ OUString OLEHandler::getCLSID(const uno::Reference<uno::XComponentContext>& xCom
         SAL_WARN("writerfilter", "OLEHandler::getCLSID: unhandled m_sProgId: " << m_sProgId);
 
     return aRet;
+}
+
+OUString OLEHandler::GetDrawAspect() const
+{
+    return m_sDrawAspect;
 }
 
 OUString OLEHandler::copyOLEOStream(
