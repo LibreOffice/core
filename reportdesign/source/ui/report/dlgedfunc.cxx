@@ -622,7 +622,6 @@ bool DlgEdFunc::setMovementPointer(const MouseEvent& rMEvt)
     else
     {
         bool bCtrlKey = rMEvt.IsMod1();
-        (void)bCtrlKey;
         if (bCtrlKey)
         {
             m_pParent->SetPointer( Pointer(PointerStyle::MoveDataLink ));
