@@ -117,7 +117,7 @@ class ClientBox : public Control
     std::vector< TClientBoxEntry > m_vEntries;
     std::vector< TClientBoxEntry > m_vRemovedEntries;
 
-    void CalcActiveHeight( const long nPos );
+    void CalcActiveHeight();
     long GetTotalHeight() const;
     void SetupScrollBar();
     void DrawRow(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect, const TClientBoxEntry& rEntry);

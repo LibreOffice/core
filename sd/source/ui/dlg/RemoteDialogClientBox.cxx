@@ -137,9 +137,8 @@ void ClientBox::dispose()
 }
 
 // Title + description
-void ClientBox::CalcActiveHeight( const long nPos )
+void ClientBox::CalcActiveHeight()
 {
-    (void) nPos;
     const ::osl::MutexGuard aGuard( m_entriesMutex );
 
     // get title height
@@ -342,7 +341,7 @@ void ClientBox::DrawRow(vcl::RenderContext& rRenderContext, const ::tools::Recta
 void ClientBox::RecalcAll()
 {
     if ( m_bHasActive )
-        CalcActiveHeight( m_nActive );
+        CalcActiveHeight();
 
     SetupScrollBar();
 
