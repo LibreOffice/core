@@ -353,7 +353,6 @@ void GrammarCheckingIterator::ProcessResult(
                              0 <= rRes.nStartOfNextSentencePosition && rRes.nStartOfNextSentencePosition <= nTextLen &&
                              rRes.nStartOfSentencePosition      <= rRes.nBehindEndOfSentencePosition &&
                              rRes.nBehindEndOfSentencePosition  <= rRes.nStartOfNextSentencePosition;
-        (void) bBoundariesOk;
         DBG_ASSERT( bBoundariesOk, "inconsistent sentence boundaries" );
 
         uno::Reference< text::XMultiTextMarkup > xMulti( rRes.xFlatParagraph, uno::UNO_QUERY );
@@ -430,7 +429,6 @@ void GrammarCheckingIterator::ProcessResult(
 uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarChecker(
     const lang::Locale &rLocale )
 {
-    (void) rLocale;
     uno::Reference< linguistic2::XProofreader > xRes;
 
     // ---- THREAD SAFE START ----
@@ -674,13 +672,11 @@ linguistic2::ProofreadingResult SAL_CALL GrammarCheckingIterator::checkSentenceA
     const uno::Reference< uno::XInterface >& xDoc,
     const uno::Reference< text::XFlatParagraph >& xFlatPara,
     const OUString& rText,
-    const lang::Locale& rLocale,
+    const lang::Locale&,
     sal_Int32 nStartOfSentencePos,
     sal_Int32 nSuggestedEndOfSentencePos,
     sal_Int32 nErrorPosInPara )
 {
-    (void) rLocale;
-
     // for the context menu...
 
     linguistic2::ProofreadingResult aRes;
