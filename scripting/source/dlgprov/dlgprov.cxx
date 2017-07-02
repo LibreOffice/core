@@ -723,10 +723,9 @@ namespace dlgprov
     }
 
     Reference< XWindow > DialogProviderImpl::createContainerWindow(
-        const OUString& URL, const OUString& WindowType,
+        const OUString& URL, const OUString&,
         const Reference< XWindowPeer >& xParent, const Reference< XInterface >& xHandler )
     {
-        (void)WindowType;   // for future use
         if( !xParent.is() )
         {
             throw IllegalArgumentException(
