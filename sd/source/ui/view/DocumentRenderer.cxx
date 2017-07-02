@@ -1232,11 +1232,8 @@ public:
     /** Return a sequence of properties that can be returned by the
         XRenderable::getRenderer() method.
     */
-    css::uno::Sequence<css::beans::PropertyValue> GetProperties (
-        const css::uno::Sequence<css::beans::PropertyValue>& rOptions)
+    css::uno::Sequence<css::beans::PropertyValue> GetProperties ()
     {
-        (void)rOptions;
-
         css::uno::Sequence<css::beans::PropertyValue> aProperties (3);
 
         aProperties[0].Name = "ExtraPrintUIOptions";
@@ -2245,7 +2242,7 @@ Sequence<beans::PropertyValue> SAL_CALL DocumentRenderer::getRenderer (
     (void)nRenderer;
     (void)rSelection;
     mpImpl->ProcessProperties(rOptions);
-    return mpImpl->GetProperties(rOptions);
+    return mpImpl->GetProperties();
 }
 
 void SAL_CALL DocumentRenderer::render (
