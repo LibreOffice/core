@@ -50,7 +50,6 @@ namespace vclcanvas
 
         TextLayout( const css::rendering::StringContext&                aText,
                     sal_Int8                                            nDirection,
-                    sal_Int64                                           nRandomSeed,
                     const CanvasFont::Reference&                        rFont,
                     const css::uno::Reference<
                           css::rendering::XGraphicDevice>&              xDevice,
