@@ -25,7 +25,6 @@
 
 static void validateInput(const std::vector<double>& rKeyStops)
 {
-    (void)rKeyStops;
 #ifdef DBG_UTIL
     OSL_ENSURE( rKeyStops.size() > 1,
                 "KeyStopLerp::KeyStopLerp(): key stop vector must have two entries or more" );
@@ -36,6 +35,8 @@ static void validateInput(const std::vector<double>& rKeyStops)
         if( rKeyStops[i-1] > rKeyStops[i] )
             OSL_FAIL( "KeyStopLerp::KeyStopLerp(): time vector is not sorted in ascending order!" );
     }
+#else
+    (void)rKeyStops;
 #endif
 }
 
