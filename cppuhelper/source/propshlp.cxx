@@ -453,7 +453,6 @@ void OPropertySetHelper::setDependentFastPropertyValue( sal_Int32 i_handle, cons
     // a good idea. The caller is responsible for not invoking this for constrained properties.
     OSL_ENSURE( ( nAttributes & PropertyAttribute::CONSTRAINED ) == 0,
         "OPropertySetHelper::setDependentFastPropertyValue: not to be used for constrained properties!" );
-    (void)nAttributes;
 
     // actually set the new value
     try
