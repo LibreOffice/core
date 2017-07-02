@@ -112,8 +112,7 @@ private:
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         SfxViewFrame& rFrame,
         vcl::Window& rWindow,
-        FrameView* pFrameView,
-        const bool bIsCenterView);
+        FrameView* pFrameView);
 
     void ActivateCenterView (
         const std::shared_ptr<ViewDescriptor>& rpDescriptor);

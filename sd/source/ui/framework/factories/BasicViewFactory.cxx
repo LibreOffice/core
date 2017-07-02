@@ -288,8 +288,7 @@ std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::CreateView (
         rxViewId,
         rFrame,
         rWindow,
-        pFrameView,
-        bIsCenterPane);
+        pFrameView);
     pDescriptor->mxViewId = rxViewId;
 
     if (pDescriptor->mpViewShell.get() != nullptr)
@@ -323,8 +322,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
     const Reference<XResourceId>& rxViewId,
     SfxViewFrame& rFrame,
     vcl::Window& rWindow,
-    FrameView* pFrameView,
-    const bool bIsCenterPane)
+    FrameView* pFrameView)
 {
     std::shared_ptr<ViewShell> pViewShell;
     const OUString& rsViewURL (rxViewId->getResourceURL());
@@ -392,8 +390,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
             &rFrame,
             *mpBase,
             &rWindow,
-            pFrameView,
-            bIsCenterPane);
+            pFrameView);
         pViewShell->GetContentWindow()->set_id("slidesorter");
     }
 
