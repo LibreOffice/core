@@ -27,6 +27,7 @@
 #include <unotools/sharedunocomponent.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/FValue.hxx>
+#include <tools/stream.hxx>
 
 namespace com { namespace sun { namespace star {
 
@@ -786,9 +787,51 @@ namespace dbtools
             OUStringBuffer& _out_rSQLPredicate
         );
 
-
 }   // namespace dbtools
 
+namespace connectivity::dbase
+{
+    enum DBFType  { dBaseIII         = 0x03,
+                    dBaseIV          = 0x04,
+                    dBaseV           = 0x05,
+                    VisualFoxPro     = 0x30,
+                    VisualFoxProAuto = 0x31, // Visual FoxPro with AutoIncrement field
+                    dBaseFS          = 0x43,
+                    dBaseFSMemo      = 0xB3,
+                    dBaseIIIMemo     = 0x83,
+                    dBaseIVMemo      = 0x8B,
+                    dBaseIVMemoSQL   = 0x8E,
+                    FoxProMemo       = 0xF5
+    };
+
+    /** decode a DBase file's codepage byte to a RTL charset
+        @param  _out_nCharset
+            in case of success, the decoded RTL charset is written there.
+            else, this is not written to.
+        @param  nType
+            the file's type byte
+        @param  nCodepage
+            the file's codepage byte
+        @return
+            true if a RTL charset was successfully decoded and written to _out_nCharset
+            false if nothing was written to _out_nCharset
+    */
+    OOO_DLLPUBLIC_DBTOOLS bool dbfDecodeCharset(rtl_TextEncoding &_out_nCharset, sal_uInt8 nType, sal_uInt8 nCodepage);
+
+    /** decode a DBase file's codepage byte to a RTL charset
+        @param  _out_nCharset
+            in case of success, the decoded RTL charset is written there.
+            else, this is not written to.
+        @param  dbf_Stream
+            pointer to a SvStream encapsulating the DBase file.
+            The stream will be rewinded and read from.
+            No guarantee is made on its position afterwards. Caller must reposition it itself.
+        @return
+            true if a RTL charset was successfully decoded and written to _out_nCharset
+            false if nothing was written to _out_nCharset
+    */
+    OOO_DLLPUBLIC_DBTOOLS bool dbfReadCharset(rtl_TextEncoding &nCharSet, SvStream* dbf_Stream);
+} // namespace connectivity::dbase
 
 #endif // INCLUDED_CONNECTIVITY_DBTOOLS_HXX
 

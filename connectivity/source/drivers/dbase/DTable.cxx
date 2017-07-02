@@ -249,9 +249,13 @@ void ODbaseTable::readHeader()
             case dBaseIVMemoSQL:
             case dBaseIIIMemo:
             case FoxProMemo:
-                // TODO: check that the code removed here is not needed when opening a DBF file
-                // from something else than Calc. E.g. Base. If it is, then factorise it into
-                // a function accessible from connectivity and from sc
+                m_pFileStream->SetEndian(SvStreamEndian::LITTLE);
+                if( getConnection()->isTextEncodingDefaulted() &&
+                   !dbfDecodeCharset(m_eEncoding, nType, m_aHeader.trailer[17]))
+                {
+                    m_eEncoding = RTL_TEXTENCODING_IBM_850;
+                }
+                break;
             case dBaseIVMemo:
                 m_pFileStream->SetEndian(SvStreamEndian::LITTLE);
                 break;

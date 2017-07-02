@@ -45,6 +45,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc, \
     comphelper \
     cppu \
     cppuhelper \
+    dbtools \
     drawinglayer \
     editeng \
     for \

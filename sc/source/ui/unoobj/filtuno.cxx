@@ -22,6 +22,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <connectivity/dbtools.hxx>
 
 #include "editutil.hxx"
 #include "filtuno.hxx"
@@ -44,6 +45,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace connectivity::dbase;
 
 #define SCFILTEROPTIONSOBJ_SERVICE      "com.sun.star.ui.dialogs.FilterOptionsDialog"
 #define SCFILTEROPTIONSOBJ_IMPLNAME     "com.sun.star.comp.Calc.FilterOptionsDialog"
@@ -84,97 +86,34 @@ namespace
 
     charsetSource load_CharSet(rtl_TextEncoding &nCharSet, bool bExport, SvStream* dbf_Stream)
     {
+        if (dbfReadCharset(nCharSet, dbf_Stream))
         {
-            sal_uInt8 nType=0;
-            dbf_Stream->ReadUChar( nType );
+            return charsetSource::charset_from_file;
+        }
 
-            switch (nType)
+        Sequence<Any> aValues;
+        const Any *pProperties;
+        Sequence<OUString> aNames { DBF_CHAR_SET };
+        ScLinkConfigItem aItem( OUString::createFromAscii(
+                                    bExport?DBF_SEP_PATH_EXPORT:DBF_SEP_PATH_IMPORT ) );
+
+        aValues = aItem.GetProperties( aNames );
+        pProperties = aValues.getConstArray();
+
+        if( pProperties[0].hasValue() )
+        {
+            sal_Int32 nChar = 0;
+            pProperties[0] >>= nChar;
+            if( nChar >= 0)
             {
-            case dBaseIII:
-            case dBaseIV:
-            case dBaseV:
-            case VisualFoxPro:
-            case VisualFoxProAuto:
-            case dBaseFS:
-            case dBaseFSMemo:
-            case dBaseIVMemoSQL:
-            case dBaseIIIMemo:
-            case FoxProMemo:
-                dbf_Stream->SetEndian(SvStreamEndian::LITTLE);
-
-                dbf_Stream->Seek(STREAM_SEEK_TO_BEGIN + 29);
-                if (! dbf_Stream->IsEof())
-                {
-                    sal_uInt8 nEncoding=0;
-                    dbf_Stream->ReadUChar( nEncoding );
-                    if (nEncoding != 0x00)
-                    {
-                        auto eEncoding(RTL_TEXTENCODING_DONTKNOW);
-                        switch(nEncoding)
-                        {
-                        case 0x01: eEncoding = RTL_TEXTENCODING_IBM_437; break;       // DOS USA  code page 437
-                        case 0x02: eEncoding = RTL_TEXTENCODING_IBM_850; break;       // DOS Multilingual code page 850
-                        case 0x03: eEncoding = RTL_TEXTENCODING_MS_1252; break;       // Windows ANSI code page 1252
-                        case 0x04: eEncoding = RTL_TEXTENCODING_APPLE_ROMAN; break;   // Standard Macintosh
-                        case 0x64: eEncoding = RTL_TEXTENCODING_IBM_852; break;       // EE MS-DOS    code page 852
-                        case 0x65: eEncoding = RTL_TEXTENCODING_IBM_866; break;       // Russian MS-DOS   code page 866
-                        case 0x66: eEncoding = RTL_TEXTENCODING_IBM_865; break;       // Nordic MS-DOS    code page 865
-                        case 0x67: eEncoding = RTL_TEXTENCODING_IBM_861; break;       // Icelandic MS-DOS
-                        //case 0x68: eEncoding = ; break;     // Kamenicky (Czech) MS-DOS
-                        //case 0x69: eEncoding = ; break;     // Mazovia (Polish) MS-DOS
-                        case 0x6A: eEncoding = RTL_TEXTENCODING_IBM_737; break;       // Greek MS-DOS (437G)
-                        case 0x6B: eEncoding = RTL_TEXTENCODING_IBM_857; break;       // Turkish MS-DOS
-                        case 0x6C: eEncoding = RTL_TEXTENCODING_IBM_863; break;       // MS-DOS, Canada
-                        case 0x78: eEncoding = RTL_TEXTENCODING_MS_950; break;        // Windows, Traditional Chinese
-                        case 0x79: eEncoding = RTL_TEXTENCODING_MS_949; break;        // Windows, Korean (Hangul)
-                        case 0x7A: eEncoding = RTL_TEXTENCODING_MS_936; break;        // Windows, Simplified Chinese
-                        case 0x7B: eEncoding = RTL_TEXTENCODING_MS_932; break;        // Windows, Japanese (Shift-jis)
-                        case 0x7C: eEncoding = RTL_TEXTENCODING_MS_874; break;        // Windows, Thai
-                        case 0x7D: eEncoding = RTL_TEXTENCODING_MS_1255; break;       // Windows, Hebrew
-                        case 0x7E: eEncoding = RTL_TEXTENCODING_MS_1256; break;       // Windows, Arabic
-                        case 0x96: eEncoding = RTL_TEXTENCODING_APPLE_CYRILLIC; break;    // Russian Macintosh
-                        case 0x97: eEncoding = RTL_TEXTENCODING_APPLE_CENTEURO; break;    // Eastern European Macintosh
-                        case 0x98: eEncoding = RTL_TEXTENCODING_APPLE_GREEK; break;   // Greek Macintosh
-                        case 0xC8: eEncoding = RTL_TEXTENCODING_MS_1250; break;       // Windows EE   code page 1250
-                        case 0xC9: eEncoding = RTL_TEXTENCODING_MS_1251; break;       // Russian Windows
-                        case 0xCA: eEncoding = RTL_TEXTENCODING_MS_1254; break;       // Turkish Windows
-                        case 0xCB: eEncoding = RTL_TEXTENCODING_MS_1253; break;       // Greek Windows
-                        case 0xCC: eEncoding = RTL_TEXTENCODING_MS_1257; break;       // Windows, Baltic
-                        }
-                        if(eEncoding != RTL_TEXTENCODING_DONTKNOW)
-                        {
-                            nCharSet = eEncoding;
-                            return charsetSource::charset_from_file;
-                        }
-                    }
-                }
+                nCharSet = (rtl_TextEncoding) nChar;
+                return charsetSource::charset_from_user_setting;
             }
         }
-        {
-            Sequence<Any> aValues;
-            const Any *pProperties;
-            Sequence<OUString> aNames { DBF_CHAR_SET };
-            ScLinkConfigItem aItem( OUString::createFromAscii(
-                                        bExport?DBF_SEP_PATH_EXPORT:DBF_SEP_PATH_IMPORT ) );
 
-            aValues = aItem.GetProperties( aNames );
-            pProperties = aValues.getConstArray();
-
-            if( pProperties[0].hasValue() )
-            {
-                sal_Int32 nChar = 0;
-                pProperties[0] >>= nChar;
-                if( nChar >= 0)
-                {
-                    nCharSet = (rtl_TextEncoding) nChar;
-                    return charsetSource::charset_from_user_setting;
-                }
-            }
-
-            // Default choice
-            nCharSet = RTL_TEXTENCODING_IBM_850;
-            return charsetSource::charset_default;
-        }
+        // Default choice
+        nCharSet = RTL_TEXTENCODING_IBM_850;
+        return charsetSource::charset_default;
     }
 
     void save_CharSet( rtl_TextEncoding nCharSet, bool bExport )
