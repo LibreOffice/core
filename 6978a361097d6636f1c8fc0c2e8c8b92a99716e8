@@ -22,6 +22,30 @@
       "revId": "6978a361097d6636f1c8fc0c2e8c8b92a99716e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_64a3809f",
+        "filename": "accessibility/source/standard/vclxaccessibleedit.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-02T11:33:59Z",
+      "side": 1,
+      "message": "yes, that would be a good idea",
+      "parentUuid": "3a461143_c473544c",
+      "range": {
+        "startLine": 397,
+        "startChar": 0,
+        "endLine": 397,
+        "endChar": 51
+      },
+      "revId": "6978a361097d6636f1c8fc0c2e8c8b92a99716e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
