@@ -88,18 +88,16 @@ namespace treeview {
 
         virtual void SAL_CALL
         addChangesListener(
-            const css::uno::Reference< css::util::XChangesListener >& aListener ) override
+            const css::uno::Reference< css::util::XChangesListener >& ) override
         {
             // read only
-            (void)aListener;
         }
 
         virtual void SAL_CALL
         removeChangesListener(
-            const css::uno::Reference< css::util::XChangesListener >& aListener ) override
+            const css::uno::Reference< css::util::XChangesListener >& ) override
         {
             // read only
-            (void)aListener;
         }
 
         // XComponent
@@ -109,17 +107,13 @@ namespace treeview {
         }
 
         virtual void SAL_CALL addEventListener(
-            const css::uno::Reference< css::lang::XEventListener >& xListener ) override
-        {
-            (void)xListener;
-        }
+            const css::uno::Reference< css::lang::XEventListener >& ) override
+        {}
 
         virtual void SAL_CALL
         removeEventListener(
-            const css::uno::Reference< css::lang::XEventListener >& aListener ) override
-        {
-            (void)aListener;
-        }
+            const css::uno::Reference< css::lang::XEventListener >& ) override
+        {}
 
         // Abstract functions
         // XNameAccess

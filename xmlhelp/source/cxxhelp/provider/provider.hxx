@@ -91,16 +91,10 @@ namespace chelp {
         dispose(  ) override;
 
         virtual void SAL_CALL
-        addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override
-        {
-            (void)xListener;
-        }
+        addEventListener( const css::uno::Reference< css::lang::XEventListener >& ) override {}
 
         virtual void SAL_CALL
-        removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override
-        {
-            (void)aListener;
-        }
+        removeEventListener( const css::uno::Reference< css::lang::XEventListener >& ) override {}
 
         // XContainerListener ( derive from XEventListener )
 
@@ -111,16 +105,10 @@ namespace chelp {
         }
 
         virtual void SAL_CALL
-        elementInserted( const css::container::ContainerEvent& Event ) override
-        {
-            (void)Event;
-        }
+        elementInserted( const css::container::ContainerEvent& ) override {}
 
         virtual void SAL_CALL
-        elementRemoved( const css::container::ContainerEvent& Event ) override
-        {
-            (void)Event;
-        }
+        elementRemoved( const css::container::ContainerEvent& ) override {}
 
         virtual void SAL_CALL
         elementReplaced( const css::container::ContainerEvent& Event ) override;
