@@ -351,8 +351,6 @@ namespace frm
 
         if ( pFontHeightItem )
         {
-            // correct measurement units
-            MapUnit eItemMapUnit = pFontHeightItem->GetPropUnit(); (void)eItemMapUnit;
             sal_uLong nHeight = pFontHeightItem->GetHeight();
             if ( _rNewAttribs.GetPool()->GetMetric( getWhich() ) != MapUnit::MapTwip )
             {
