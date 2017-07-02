@@ -142,11 +142,8 @@ write_function( void *ptr, size_t size, size_t nmemb, void *stream )
 
 
 static int
-progress_callback( void *clientp, double dltotal, double dlnow, double ultotal, double ulnow )
+progress_callback( void *clientp, double dltotal, double dlnow, SAL_UNUSED_PARAMETER double, SAL_UNUSED_PARAMETER double )
 {
-    (void) ultotal;
-    (void) ulnow;
-
     OutData *out = static_cast < OutData * > (clientp);
 
     assert(out);

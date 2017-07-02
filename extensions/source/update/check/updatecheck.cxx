@@ -900,8 +900,7 @@ UpdateCheck::install()
         rModel->clearLocalFileName();
 
         xShellExecute->execute(aInstallImage, aParameter, nFlags);
-        ShutdownThread *pShutdownThread = new ShutdownThread( m_xContext );
-        (void) pShutdownThread;
+        new ShutdownThread( m_xContext );
     } catch(const uno::Exception&) {
         m_aUpdateHandler->setErrorMessage( m_aUpdateHandler->getDefaultInstErrMsg() );
     }

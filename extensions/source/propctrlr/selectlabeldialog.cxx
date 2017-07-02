@@ -244,7 +244,6 @@ namespace pcr
     IMPL_LINK(OSelectLabelDialog, OnEntrySelected, SvTreeListBox*, pLB, void)
     {
         DBG_ASSERT(pLB == m_pControlTree, "OSelectLabelDialog::OnEntrySelected : where did this come from ?");
-        (void)pLB;
         SvTreeListEntry* pSelected = m_pControlTree->FirstSelected();
         void* pData = pSelected ? pSelected->GetUserData() : nullptr;
 
@@ -260,7 +259,6 @@ namespace pcr
     IMPL_LINK(OSelectLabelDialog, OnNoAssignmentClicked, Button*, pButton, void)
     {
         DBG_ASSERT(pButton == m_pNoAssignment, "OSelectLabelDialog::OnNoAssignmentClicked : where did this come from ?");
-        (void)pButton;
 
         if (m_pNoAssignment->IsChecked())
             m_pLastSelected = m_pControlTree->FirstSelected();

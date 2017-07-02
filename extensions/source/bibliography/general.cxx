@@ -517,9 +517,8 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
             }
         }
     }
-    catch(const Exception& rEx)
+    catch(const Exception&)
     {
-        (void) rEx; // make compiler happy
         OSL_FAIL("BibGeneralPage::AddXControl: something went wrong!");
     }
     return xCtrModel;
