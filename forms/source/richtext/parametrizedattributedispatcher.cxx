@@ -114,7 +114,6 @@ namespace frm
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         OSL_ENSURE( _rURL.Complete == getFeatureURL().Complete, "OParametrizedAttributeDispatcher::dispatch: invalid URL!" );
-        (void)_rURL;
         if ( m_pMasterDispatcher )
         {
             const SfxPoolItem* pConvertedArgument = convertDispatchArgsToItem( _rArguments );
