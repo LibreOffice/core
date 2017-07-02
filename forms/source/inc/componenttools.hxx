@@ -25,14 +25,13 @@
 #include <com/sun/star/frame/XModel.hpp>
 
 #include <set>
-#include <functional>
 
 
 namespace frm
 {
 
 
-    struct TypeCompareLess : public ::std::binary_function< css::uno::Type, css::uno::Type, bool >
+    struct TypeCompareLess
     {
         bool operator()( const css::uno::Type& _rLHS, const css::uno::Type& _rRHS ) const
         {

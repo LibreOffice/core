@@ -83,7 +83,7 @@ namespace connectivity
 
     //  typedef TDigestHolder
 
-    struct TDigestLess : public std::binary_function< TDigestHolder, TDigestHolder, bool>
+    struct TDigestLess
     {
         bool operator() (const TDigestHolder& x, const TDigestHolder& y) const
         {

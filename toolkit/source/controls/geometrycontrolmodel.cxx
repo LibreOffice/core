@@ -27,7 +27,6 @@
 #include <toolkit/controls/eventcontainer.hxx>
 #include <toolkit/helper/property.hxx>
 #include <algorithm>
-#include <functional>
 
 
 #define GCM_PROPERTY_ID_POS_X               1
@@ -492,7 +491,7 @@
     }
 
 
-    struct PropertyNameLess : public ::std::binary_function< Property, Property, bool >
+    struct PropertyNameLess
     {
         bool operator()( const Property& _rLHS, const Property& _rRHS )
         {

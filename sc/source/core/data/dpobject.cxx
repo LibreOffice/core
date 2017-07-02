@@ -1348,7 +1348,7 @@ public:
     }
 };
 
-class LessByDimOrder : public std::binary_function<sheet::DataPilotFieldFilter, sheet::DataPilotFieldFilter, bool>
+class LessByDimOrder
 {
     const ScDPSaveData::DimOrderType& mrDimOrder;
 

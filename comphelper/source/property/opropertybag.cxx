@@ -32,7 +32,6 @@
 #include <osl/thread.h>
 
 #include <algorithm>
-#include <functional>
 #include <iterator>
 
 
@@ -350,7 +349,7 @@ namespace comphelper
 
     namespace
     {
-        struct ComparePropertyValueByName : public std::binary_function< PropertyValue, PropertyValue, bool >
+        struct ComparePropertyValueByName
         {
             bool operator()( const PropertyValue& _rLHS, const PropertyValue& _rRHS )
             {

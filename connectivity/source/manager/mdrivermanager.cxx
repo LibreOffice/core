@@ -212,7 +212,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
     }
 
     /// an STL argorithm compatible predicate comparing two DriverAccess instances by their implementation names
-    struct CompareDriverAccessByName : public std::binary_function< DriverAccess, DriverAccess, bool >
+    struct CompareDriverAccessByName
     {
 
         bool operator()( const DriverAccess& lhs, const DriverAccess& rhs )
@@ -222,7 +222,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
     };
 
     /// and STL argorithm compatible predicate comparing a DriverAccess' impl name to a string
-    struct EqualDriverAccessToName : public std::binary_function< DriverAccess, OUString, bool >
+    struct EqualDriverAccessToName
     {
         OUString m_sImplName;
         explicit EqualDriverAccessToName(const OUString& _sImplName) : m_sImplName(_sImplName){}

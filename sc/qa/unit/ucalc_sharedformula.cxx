@@ -574,7 +574,7 @@ void Test::testSharedFormulasRefUpdateRange()
     m_pDoc->DeleteTab(0);
 }
 
-struct SortByArea : std::binary_function<sc::AreaListener, sc::AreaListener, bool>
+struct SortByArea
 {
     bool operator ()( const sc::AreaListener& rLeft, const sc::AreaListener& rRight ) const
     {

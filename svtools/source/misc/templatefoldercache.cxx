@@ -41,7 +41,6 @@
 
 #include <vector>
 #include <list>
-#include <functional>
 #include <algorithm>
 
 
@@ -159,10 +158,6 @@ namespace svt
 
     /// compares two TemplateContent by URL
     struct TemplateContentURLLess
-        :public ::std::binary_function  <   ::rtl::Reference< TemplateContent >
-                                        ,   ::rtl::Reference< TemplateContent >
-                                        ,   bool
-                                        >
     {
         bool operator() ( const ::rtl::Reference< TemplateContent >& _rxLHS, const ::rtl::Reference< TemplateContent >& _rxRHS ) const
         {
@@ -203,10 +198,6 @@ namespace svt
     /** does a deep compare of two template contents
     */
     struct TemplateContentEqual
-        :public ::std::binary_function  <   ::rtl::Reference< TemplateContent >
-                                        ,   ::rtl::Reference< TemplateContent >
-                                        ,   bool
-                                        >
     {
 
         bool operator() (const ::rtl::Reference< TemplateContent >& _rLHS, const ::rtl::Reference< TemplateContent >& _rRHS )

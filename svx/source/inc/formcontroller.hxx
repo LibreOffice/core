@@ -79,7 +79,7 @@
 
 #include <cppuhelper/compbase.hxx>
 
-struct FmXTextComponentLess : public ::std::binary_function< css::uno::Reference< css::awt::XTextComponent >, css::uno::Reference< css::awt::XTextComponent> , bool>
+struct FmXTextComponentLess
 {
     bool operator() (const css::uno::Reference< css::awt::XTextComponent >& x, const css::uno::Reference< css::awt::XTextComponent >& y) const
     {

@@ -165,7 +165,7 @@ protected:
 
 };
 
-class approx_less : public std::binary_function<double, double, bool>
+class approx_less
 {
 public:
     bool operator() (double nVal1, double nVal2) const

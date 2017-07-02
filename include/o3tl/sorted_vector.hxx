@@ -11,7 +11,6 @@
 #define INCLUDED_O3TL_SORTED_VECTOR_HXX
 
 #include <vector>
-#include <functional>
 #include <algorithm>
 
 namespace o3tl
@@ -196,7 +195,7 @@ private:
 /** Implements an ordering function over a pointer, where the comparison uses the < operator on the pointed-to types.
     Very useful for the cases where we put pointers to objects inside a sorted_vector.
 */
-template <class T> struct less_ptr_to : public std::binary_function <T*,T*,bool>
+template <class T> struct less_ptr_to
 {
     bool operator() ( T* const& lhs, T* const& rhs ) const
     {

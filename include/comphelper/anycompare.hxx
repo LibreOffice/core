@@ -27,7 +27,6 @@
 
 #include <comphelper/extract.hxx>
 
-#include <functional>
 #include <memory>
 
 
@@ -47,7 +46,7 @@ namespace comphelper
 
     //= LessPredicateAdapter
 
-    struct LessPredicateAdapter : public ::std::binary_function< css::uno::Any, css::uno::Any, bool >
+    struct LessPredicateAdapter
     {
         LessPredicateAdapter( const IKeyPredicateLess& _predicate )
             :m_predicate( _predicate )

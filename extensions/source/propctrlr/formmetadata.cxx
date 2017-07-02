@@ -25,7 +25,6 @@
 #include <comphelper/extract.hxx>
 #include <sal/macros.h>
 #include <algorithm>
-#include <functional>
 
 namespace pcr
 {
@@ -66,7 +65,7 @@ namespace pcr
 
 
     // Compare PropertyInfo
-    struct PropertyInfoLessByName : public std::binary_function< OPropertyInfoImpl, OPropertyInfoImpl, bool >
+    struct PropertyInfoLessByName
     {
         bool operator()( const OPropertyInfoImpl& _rLHS, const OPropertyInfoImpl& _rRHS )
         {

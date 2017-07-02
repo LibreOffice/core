@@ -25,7 +25,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 
-#include <functional>
 #include <map>
 #include <utility>
 
@@ -33,7 +32,7 @@ namespace extensions { namespace resource
 {
     typedef std::pair< OUString, css::lang::Locale> ResourceBundleDescriptor;
 
-    struct ResourceBundleDescriptorLess : public std::binary_function<ResourceBundleDescriptor, ResourceBundleDescriptor, bool>
+    struct ResourceBundleDescriptorLess
     {
         bool operator()( const ResourceBundleDescriptor& _lhs, const ResourceBundleDescriptor& _rhs ) const
         {

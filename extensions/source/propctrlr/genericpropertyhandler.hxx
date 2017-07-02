@@ -38,7 +38,7 @@ namespace pcr
 {
 
 
-    struct TypeLess : std::binary_function< css::uno::Type, css::uno::Type, bool >
+    struct TypeLess
     {
         bool operator()( const css::uno::Type& _rLHS, const css::uno::Type& _rRHS ) const
         {

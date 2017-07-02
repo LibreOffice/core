@@ -306,7 +306,7 @@ lcl_checkRangeDimensions(
     return bOk && aCur == rEnd;
 }
 
-class LessByReference : public std::binary_function<const formula::FormulaToken*, const formula::FormulaToken*, bool>
+class LessByReference
 {
     ScAddress maPos;
     DimensionSelector maFunc;
@@ -327,7 +327,7 @@ public:
  * denoted by token p1. Dimension, in which the comparison takes place, is
  * given by maFunc.
  */
-class AdjacentByReference : public std::binary_function<const formula::FormulaToken*, const formula::FormulaToken*, bool>
+class AdjacentByReference
 {
     ScAddress maPos;
     DimensionSelector maFunc;

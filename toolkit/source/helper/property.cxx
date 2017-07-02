@@ -44,7 +44,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <functional>
 #include <algorithm>
 
 using ::com::sun::star::uno::Any;
@@ -293,7 +292,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
 }
 
 
-struct ImplPropertyInfoCompareFunctor : ::std::binary_function<ImplPropertyInfo,OUString,bool>
+struct ImplPropertyInfoCompareFunctor
 {
     bool operator()(const ImplPropertyInfo& lhs,const ImplPropertyInfo& rhs) const
     {

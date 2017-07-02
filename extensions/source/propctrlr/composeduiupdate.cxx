@@ -47,10 +47,7 @@ namespace pcr
 
     namespace
     {
-        struct HandlerLess : public std::binary_function  <   Reference< XPropertyHandler >
-                                                            ,   Reference< XPropertyHandler >
-                                                            ,   bool
-                                                            >
+        struct HandlerLess
         {
             bool operator()( const Reference< XPropertyHandler >& lhs, const Reference< XPropertyHandler >& rhs) const
             {

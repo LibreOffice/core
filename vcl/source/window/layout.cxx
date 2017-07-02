@@ -869,7 +869,6 @@ static int getButtonPriority(const OString &rType)
 }
 
 class sortButtons
-    : public std::binary_function<const vcl::Window*, const vcl::Window*, bool>
 {
     bool m_bVerticalContainer;
 public:

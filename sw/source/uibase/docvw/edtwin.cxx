@@ -6118,7 +6118,6 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const OUString& rWord )
 namespace {
 
 class CompareIgnoreCaseAsciiFavorExact
-    : public std::binary_function<const OUString&, const OUString&, bool>
 {
     const OUString &m_rOrigWord;
 public:

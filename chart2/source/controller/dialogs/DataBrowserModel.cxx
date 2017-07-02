@@ -234,10 +234,9 @@ struct DataBrowserModel::tDataColumn
     {}
 };
 
-struct DataBrowserModel::implColumnLess : public std::binary_function<
-        DataBrowserModel::tDataColumn, DataBrowserModel::tDataColumn, bool >
+struct DataBrowserModel::implColumnLess
 {
-    bool operator() ( const first_argument_type & rLeft, const second_argument_type & rRight )
+    bool operator() ( const DataBrowserModel::tDataColumn & rLeft, const DataBrowserModel::tDataColumn & rRight )
     {
         if( rLeft.m_xLabeledDataSequence.is() && rRight.m_xLabeledDataSequence.is())
         {

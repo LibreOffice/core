@@ -219,7 +219,7 @@ private:
     sal_Int32 m_nLevel;
 };
 
-struct lcl_setAnyAtLevel : public std::binary_function< vector< uno::Any >, uno::Any, vector< uno::Any > >
+struct lcl_setAnyAtLevel
 {
 public:
 
@@ -239,7 +239,7 @@ private:
     sal_Int32 m_nLevel;
 };
 
-struct lcl_setAnyAtLevelFromStringSequence : public std::binary_function< vector< uno::Any >, OUString, vector< uno::Any > >
+struct lcl_setAnyAtLevelFromStringSequence
 {
 public:
 

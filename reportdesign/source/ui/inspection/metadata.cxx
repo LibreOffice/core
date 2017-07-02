@@ -23,7 +23,6 @@
 #include "RptResId.hrc"
 #include "uistrings.hrc"
 
-#include <functional>
 #include <algorithm>
 
 
@@ -66,7 +65,7 @@ namespace rptui
 
 
     // compare PropertyInfo
-    struct PropertyInfoLessByName : public ::std::binary_function< OPropertyInfoImpl, OPropertyInfoImpl, bool >
+    struct PropertyInfoLessByName
     {
         bool operator()( const OPropertyInfoImpl& _lhs, const OPropertyInfoImpl& _rhs )
         {

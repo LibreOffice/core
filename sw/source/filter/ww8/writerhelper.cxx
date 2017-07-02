@@ -28,7 +28,6 @@
 #include <com/sun/star/container/XChild.hpp>
 
 #include <algorithm>
-#include <functional>
 #include <svl/itemiter.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
@@ -78,8 +77,7 @@ namespace
 
     // #i98791# - adjust sorting
     // Utility to sort SwTextFormatColl's by their assigned outline style list level
-    class outlinecmp : public
-        std::binary_function<const SwTextFormatColl*, const SwTextFormatColl*, bool>
+    class outlinecmp
     {
     public:
         bool operator()(const SwTextFormatColl *pA, const SwTextFormatColl *pB) const

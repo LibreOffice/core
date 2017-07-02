@@ -248,7 +248,7 @@ namespace {
 
 struct ReorderIndex
 {
-    struct LessByPos2 : std::binary_function<ReorderIndex, ReorderIndex, bool>
+    struct LessByPos2
     {
         bool operator() ( const ReorderIndex& r1, const ReorderIndex& r2 ) const
         {

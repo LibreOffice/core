@@ -380,7 +380,7 @@ void SAL_CALL OConnection::clearWarnings(  )
 
 namespace
 {
-    struct CompareTypeByName : public std::binary_function< Type, Type, bool >
+    struct CompareTypeByName
     {
         bool operator() ( const Type& _rLHS, const Type& _rRHS ) const
         {

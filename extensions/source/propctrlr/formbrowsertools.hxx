@@ -24,7 +24,6 @@
 #include <com/sun/star/beans/Property.hpp>
 #include <rtl/ustring.hxx>
 
-#include <functional>
 #include <set>
 
 
@@ -65,10 +64,6 @@ namespace pcr
 
 
     struct PropertyLessByName
-                :public std::binary_function  <   css::beans::Property,
-                                                    css::beans::Property,
-                                                    bool
-                                                >
     {
         bool operator() (const css::beans::Property& _rLhs, const css::beans::Property& _rRhs) const
         {
@@ -78,10 +73,6 @@ namespace pcr
 
 
     struct TypeLessByName
-                :public std::binary_function  <   css::uno::Type,
-                                                    css::uno::Type,
-                                                    bool
-                                                >
     {
         bool operator() (const css::uno::Type& _rLhs, const css::uno::Type& _rRhs) const
         {

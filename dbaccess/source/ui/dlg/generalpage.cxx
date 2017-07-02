@@ -94,7 +94,7 @@ namespace dbaui
         };
         typedef std::vector< DisplayedType > DisplayedTypes;
 
-        struct DisplayedTypeLess : std::binary_function< DisplayedType, DisplayedType, bool >
+        struct DisplayedTypeLess
         {
             bool operator() ( const DisplayedType& _rLHS, const DisplayedType& _rRHS )
             {

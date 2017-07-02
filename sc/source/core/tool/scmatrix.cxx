@@ -1842,7 +1842,7 @@ public:
     }
 };
 
-struct ArrayMul : public std::binary_function<double, double, double>
+struct ArrayMul
 {
     double operator() (const double& lhs, const double& rhs) const
     {

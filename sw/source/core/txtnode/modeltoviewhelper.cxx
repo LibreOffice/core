@@ -43,8 +43,7 @@ struct FieldResult
     { }
 };
 
-class sortfieldresults :
-    public std::binary_function<const FieldResult&, const FieldResult&, bool>
+class sortfieldresults
 {
 public:
     bool operator()(const FieldResult &rOne, const FieldResult &rTwo) const
