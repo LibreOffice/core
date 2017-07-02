@@ -87,6 +87,23 @@
     },
     {
       "key": {
+        "uuid": "3a461143_44b044f5",
+        "filename": "sal/osl/w32/pipe.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2017-07-02T08:42:08Z",
+      "side": 1,
+      "message": "Oops, forgot the warning.",
+      "revId": "92fec0e67f2dbf6aa2a2633b591136351fa501d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_64ce2085",
         "filename": "sal/osl/w32/pipe.cxx",
         "patchSetId": 9
@@ -115,6 +132,24 @@
       "writtenOn": "2017-07-02T07:25:25Z",
       "side": 1,
       "message": "you have changed the logic here, now SetSecurityDescriptorDacl is not called if InitializeSecurityDescriptor fails. Are you sure this is correct?",
+      "revId": "92fec0e67f2dbf6aa2a2633b591136351fa501d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_24ab388b",
+        "filename": "sal/osl/w32/pipe.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2017-07-02T08:42:08Z",
+      "side": 1,
+      "message": "Actually, it\u0027s frankly amazing this worked at all. The security descriptor needs to be first initialized, then a null DACL added to the descriptor. \n\nBut as this was all done in an OSL_VERIFY, it got compiled out of non-debug builds and thus we allocated memory for a security descriptor, and then assigned it to lpSecurityDescriptor....\n\nBut yes, I\u0027ve made a mistake where I put the SAL_WARN.",
+      "parentUuid": "3a461143_84cb0c72",
       "revId": "92fec0e67f2dbf6aa2a2633b591136351fa501d0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
