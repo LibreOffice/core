@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_a44e48bf",
+        "filename": "include/comphelper/accessiblecontexthelper.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-02T18:09:49Z",
+      "side": 1,
+      "message": "sorry, should have been more specific - this part you removed is dropping the solar mutex for the duration of the guard.\nthe other changes look ok",
+      "revId": "e584b14b0071b3e43acf38a640a7fe0285bda3d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
