@@ -391,8 +391,6 @@ void SfxStateCache::SetState_Impl
     bool bMaybeDirty
 )
 {
-    (void)bMaybeDirty; //unused
-
     // If a hard update occurs between enter- and leave-registrations is a
     // can also intermediate Cached exist without controller.
     if ( !pController && !pInternalController )

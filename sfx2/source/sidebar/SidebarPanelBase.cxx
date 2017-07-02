@@ -107,10 +107,8 @@ void SAL_CALL SidebarPanelBase::notifyContextChangeEvent (
 }
 
 void SAL_CALL SidebarPanelBase::disposing (
-    const css::lang::EventObject& rEvent)
+    const css::lang::EventObject&)
 {
-    (void)rEvent;
-
     mxFrame = nullptr;
     mpControl = nullptr;
 }
@@ -136,10 +134,8 @@ Reference<XInterface> SAL_CALL SidebarPanelBase::getRealInterface()
 }
 
 Reference<accessibility::XAccessible> SAL_CALL SidebarPanelBase::createAccessible (
-    const Reference<accessibility::XAccessible>& rxParentAccessible)
+    const Reference<accessibility::XAccessible>&)
 {
-    (void)rxParentAccessible;
-
     // Not yet implemented.
     return nullptr;
 }
