@@ -218,9 +218,9 @@ if (SYSTEM_VIGRA != YES)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_EXPAT != YES)
-    MD5 = 2f47841c829facb346eb6e3fab5212e2
-    name = expat-2.2.0.tar.bz2
-    URL1 = https://sourceforge.net/projects/expat/files/expat/2.2.0/expat-2.2.0.tar.bz2
+    MD5 = d9c3baeab58774cefc2f04faf29f2cf8
+    name = expat-2.2.1.tar.bz2
+    URL1 = https://sourceforge.net/projects/expat/files/expat/2.2.1/expat-2.2.1.tar.bz2
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_CURL != YES)

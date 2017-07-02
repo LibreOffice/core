@@ -1,5 +1,5 @@
---- misc/expat-2.2.0/lib/makefile.mk	Wed Aug 20 14:33:55 2008
-+++ misc/build/expat-2.2.0/lib/makefile.mk	Wed Aug 20 14:26:42 2008
+--- misc/expat-2.2.1/lib/makefile.mk	Wed Aug 20 14:33:55 2008
++++ misc/build/expat-2.2.1/lib/makefile.mk	Wed Aug 20 14:26:42 2008
 @@ -1 +1,83 @@
 -dummy
 +#**************************************************************
@@ -85,32 +85,19 @@
 +.INCLUDE :  set_wntx64.mk
 +.INCLUDE :	target.mk
 +.INCLUDE :  tg_wntx64.mk
---- misc/expat-2.2.0/lib/xmltok.c	2016-06-21 05:58:38.000000000 -0700
-+++ misc/build/expat-2.2.0/lib/xmltok.c	2016-08-05 10:08:54.265761000 -0700
-@@ -402,7 +402,7 @@
-     case BT_LEAD2:
-       if (fromLim - from < 2) {
-         res = XML_CONVERT_INPUT_INCOMPLETE;
--        break;
-+        goto after;
-       }
-       *to++ = (unsigned short)(((from[0] & 0x1f) << 6) | (from[1] & 0x3f));
-       from += 2;
-@@ -410,7 +410,7 @@
-     case BT_LEAD3:
-       if (fromLim - from < 3) {
-         res = XML_CONVERT_INPUT_INCOMPLETE;
--        break;
-+        goto after;
-       }
-       *to++ = (unsigned short)(((from[0] & 0xf) << 12)
-                                | ((from[1] & 0x3f) << 6) | (from[2] & 0x3f));
-@@ -441,6 +441,8 @@
-       break;
-     }
-   }
-+  if (from < fromLim)
-+    res = XML_CONVERT_OUTPUT_EXHAUSTED;
- after:
-   *fromP = from;
-   *toP = to;
+--- misc/expat-2.2.1/lib/siphash.h	Sat Jun 17  09:07:38 2017
++++ misc/build/expat-2.2.1/lib/siphash.h	Fri Jun 30  15:45:22 2017
+@@ -76,7 +76,13 @@
+ #define SIPHASH_H
+ 
+ #include <stddef.h> /* size_t */
++#if defined(_MSC_VER) && _MSC_VER < 1600
++typedef unsigned __int64 uint64_t;
++typedef unsigned __int32 uint32_t;
++typedef unsigned __int8 uint8_t;
++#else
+ #include <stdint.h> /* uint64_t uint32_t uint8_t */
++#endif
+ 
+ 
+ #define SIP_ROTL(x, b) (uint64_t)(((x) << (b)) | ( (x) >> (64 - (b))))

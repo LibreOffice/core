@@ -1,6 +1,6 @@
-diff -ur misc/expat-2.2.0/lib/expat_external.h misc/build/expat-2.2.0/lib/expat_external.h
---- misc/expat-2.2.0/lib/expat_external.h	2016-06-21 05:58:38.000000000 -0700
-+++ misc/build/expat-2.2.0/lib/expat_external.h	2016-07-31 17:10:53.551556000 -0700
+diff -ur misc/expat-2.2.1/lib/expat_external.h misc/build/expat-2.2.0/lib/expat_external.h
+--- misc/expat-2.2.1/lib/expat_external.h	2016-06-21 05:58:38.000000000 -0700
++++ misc/build/expat-2.2.1/lib/expat_external.h	2016-07-31 17:10:53.551556000 -0700
 @@ -7,10 +7,6 @@
  
  /* External API definitions */
