@@ -69,25 +69,17 @@ namespace utl
         bool    m_bHasOwnership;
     };
 
-    void SAL_CALL CloseListener_Impl::queryClosing( const EventObject& i_source, sal_Bool i_deliverOwnership )
+    void SAL_CALL CloseListener_Impl::queryClosing( const EventObject&, sal_Bool i_deliverOwnership )
     {
-        (void)i_source;
-
         if ( !m_bHasOwnership )
             m_bHasOwnership = i_deliverOwnership;
 
         throw CloseVetoException();
     }
 
-    void SAL_CALL CloseListener_Impl::notifyClosing( const EventObject& i_source )
-    {
-        (void)i_source;
-    }
+    void SAL_CALL CloseListener_Impl::notifyClosing( const EventObject& ) {}
 
-    void SAL_CALL CloseListener_Impl::disposing( const EventObject& i_source )
-    {
-        (void)i_source;
-    }
+    void SAL_CALL CloseListener_Impl::disposing( const EventObject& ) {}
 
     //= CloseVeto_Data
 
