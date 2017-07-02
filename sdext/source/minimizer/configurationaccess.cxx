@@ -335,7 +335,6 @@ Reference< XInterface > ConfigurationAccess::GetConfigurationNode(
     {
         SAL_WARN("sdext.minimizer", "caught exception while getting configuration node "
                   << sPathToNode << " : " << rException.Message);
-        (void)rException;
     }
     return xNode;
 }

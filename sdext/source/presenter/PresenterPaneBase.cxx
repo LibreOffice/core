@@ -241,27 +241,23 @@ sal_Bool SAL_CALL PresenterPaneBase::isAnchorOnly()
 
 //----- XWindowListener -------------------------------------------------------
 
-void SAL_CALL PresenterPaneBase::windowResized (const awt::WindowEvent& rEvent)
+void SAL_CALL PresenterPaneBase::windowResized (const awt::WindowEvent&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
 }
 
-void SAL_CALL PresenterPaneBase::windowMoved (const awt::WindowEvent& rEvent)
+void SAL_CALL PresenterPaneBase::windowMoved (const awt::WindowEvent&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
 }
 
-void SAL_CALL PresenterPaneBase::windowShown (const lang::EventObject& rEvent)
+void SAL_CALL PresenterPaneBase::windowShown (const lang::EventObject&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
 }
 
-void SAL_CALL PresenterPaneBase::windowHidden (const lang::EventObject& rEvent)
+void SAL_CALL PresenterPaneBase::windowHidden (const lang::EventObject&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
 }
 

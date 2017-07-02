@@ -223,29 +223,25 @@ void SAL_CALL PresenterHelpView::disposing (const lang::EventObject& rEventObjec
 
 //----- XWindowListener -------------------------------------------------------
 
-void SAL_CALL PresenterHelpView::windowResized (const awt::WindowEvent& rEvent)
+void SAL_CALL PresenterHelpView::windowResized (const awt::WindowEvent&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
     Resize();
 }
 
-void SAL_CALL PresenterHelpView::windowMoved (const awt::WindowEvent& rEvent)
+void SAL_CALL PresenterHelpView::windowMoved (const awt::WindowEvent&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
 }
 
-void SAL_CALL PresenterHelpView::windowShown (const lang::EventObject& rEvent)
+void SAL_CALL PresenterHelpView::windowShown (const lang::EventObject&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
     Resize();
 }
 
-void SAL_CALL PresenterHelpView::windowHidden (const lang::EventObject& rEvent)
+void SAL_CALL PresenterHelpView::windowHidden (const lang::EventObject&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
 }
 

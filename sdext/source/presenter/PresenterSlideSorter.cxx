@@ -442,31 +442,27 @@ void SAL_CALL PresenterSlideSorter::disposing (const lang::EventObject& rEventOb
 
 //----- XWindowListener -------------------------------------------------------
 
-void SAL_CALL PresenterSlideSorter::windowResized (const awt::WindowEvent& rEvent)
+void SAL_CALL PresenterSlideSorter::windowResized (const awt::WindowEvent&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
     mbIsLayoutPending = true;
     mpPresenterController->GetPaintManager()->Invalidate(mxWindow);
 }
 
-void SAL_CALL PresenterSlideSorter::windowMoved (const awt::WindowEvent& rEvent)
+void SAL_CALL PresenterSlideSorter::windowMoved (const awt::WindowEvent&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
 }
 
-void SAL_CALL PresenterSlideSorter::windowShown (const lang::EventObject& rEvent)
+void SAL_CALL PresenterSlideSorter::windowShown (const lang::EventObject&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
     mbIsLayoutPending = true;
     mpPresenterController->GetPaintManager()->Invalidate(mxWindow);
 }
 
-void SAL_CALL PresenterSlideSorter::windowHidden (const lang::EventObject& rEvent)
+void SAL_CALL PresenterSlideSorter::windowHidden (const lang::EventObject&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
 }
 
@@ -474,8 +470,6 @@ void SAL_CALL PresenterSlideSorter::windowHidden (const lang::EventObject& rEven
 
 void SAL_CALL PresenterSlideSorter::windowPaint (const css::awt::PaintEvent& rEvent)
 {
-    (void)rEvent;
-
     // Deactivated views must not be painted.
     if ( ! mbIsPresenterViewActive)
         return;
@@ -531,14 +525,10 @@ void SAL_CALL PresenterSlideSorter::mouseReleased (const css::awt::MouseEvent& r
     }
 }
 
-void SAL_CALL PresenterSlideSorter::mouseEntered (const css::awt::MouseEvent& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterSlideSorter::mouseEntered (const css::awt::MouseEvent&) {}
 
-void SAL_CALL PresenterSlideSorter::mouseExited (const css::awt::MouseEvent& rEvent)
+void SAL_CALL PresenterSlideSorter::mouseExited (const css::awt::MouseEvent&)
 {
-    (void)rEvent;
     mnSlideIndexMousePressed = -1;
     if (mpMouseOverManager.get() != nullptr)
         mpMouseOverManager->SetSlide(mnSlideIndexMousePressed, awt::Rectangle(0,0,0,0));
@@ -575,10 +565,7 @@ void SAL_CALL PresenterSlideSorter::mouseMoved (const css::awt::MouseEvent& rEve
     }
 }
 
-void SAL_CALL PresenterSlideSorter::mouseDragged (const css::awt::MouseEvent& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterSlideSorter::mouseDragged (const css::awt::MouseEvent&) {}
 
 //----- XResourceId -----------------------------------------------------------
 
@@ -596,10 +583,8 @@ sal_Bool SAL_CALL PresenterSlideSorter::isAnchorOnly()
 //----- XPropertyChangeListener -----------------------------------------------
 
 void SAL_CALL PresenterSlideSorter::propertyChange (
-    const css::beans::PropertyChangeEvent& rEvent)
-{
-    (void)rEvent;
-}
+    const css::beans::PropertyChangeEvent&)
+{}
 
 //----- XSlidePreviewCacheListener --------------------------------------------
 
@@ -614,10 +599,8 @@ void SAL_CALL PresenterSlideSorter::notifyPreviewCreation (
 
 //----- XDrawView -------------------------------------------------------------
 
-void SAL_CALL PresenterSlideSorter::setCurrentPage (const Reference<drawing::XDrawPage>& rxSlide)
+void SAL_CALL PresenterSlideSorter::setCurrentPage (const Reference<drawing::XDrawPage>&)
 {
-    (void)rxSlide;
-
     ThrowIfDisposed();
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
 

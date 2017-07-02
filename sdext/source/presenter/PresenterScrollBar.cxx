@@ -56,7 +56,7 @@ public:
     void SetMouseArea (const PresenterScrollBar::Area& reArea);
 
 private:
-    void Callback (const TimeValue& rCurrentTime);
+    void Callback ();
     void Execute();
 
     sal_Int32 mnMousePressRepeaterTaskId;
@@ -321,25 +321,13 @@ void PresenterScrollBar::Paint (
 
 //----- XWindowListener -------------------------------------------------------
 
-void SAL_CALL PresenterScrollBar::windowResized (const css::awt::WindowEvent& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterScrollBar::windowResized (const css::awt::WindowEvent&) {}
 
-void SAL_CALL PresenterScrollBar::windowMoved (const css::awt::WindowEvent& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterScrollBar::windowMoved (const css::awt::WindowEvent&) {}
 
-void SAL_CALL PresenterScrollBar::windowShown (const css::lang::EventObject& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterScrollBar::windowShown (const css::lang::EventObject&) {}
 
-void SAL_CALL PresenterScrollBar::windowHidden (const css::lang::EventObject& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterScrollBar::windowHidden (const css::lang::EventObject&) {}
 
 //----- XPaintListener --------------------------------------------------------
 
@@ -370,24 +358,18 @@ void SAL_CALL PresenterScrollBar::mousePressed (const css::awt::MouseEvent& rEve
     mpMousePressRepeater->Start(meButtonDownArea);
 }
 
-void SAL_CALL PresenterScrollBar::mouseReleased (const css::awt::MouseEvent& rEvent)
+void SAL_CALL PresenterScrollBar::mouseReleased (const css::awt::MouseEvent&)
 {
-    (void)rEvent;
-
     mpMousePressRepeater->Stop();
 
     if (mxPresenterHelper.is())
         mxPresenterHelper->releaseMouse(mxWindow);
 }
 
-void SAL_CALL PresenterScrollBar::mouseEntered (const css::awt::MouseEvent& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterScrollBar::mouseEntered (const css::awt::MouseEvent&) {}
 
-void SAL_CALL PresenterScrollBar::mouseExited (const css::awt::MouseEvent& rEvent)
+void SAL_CALL PresenterScrollBar::mouseExited (const css::awt::MouseEvent&)
 {
-    (void)rEvent;
     if (meMouseMoveArea != None)
     {
         const Area eOldMouseMoveArea (meMouseMoveArea);
@@ -602,9 +584,8 @@ PresenterVerticalScrollBar::~PresenterVerticalScrollBar()
 {
 }
 
-double PresenterVerticalScrollBar::GetDragDistance (const sal_Int32 nX, const sal_Int32 nY) const
+double PresenterVerticalScrollBar::GetDragDistance (const sal_Int32, const sal_Int32 nY) const
 {
-    (void)nX;
     const double nDistance (nY - maDragAnchor.Y);
     if (nDistance == 0)
         return 0;
@@ -636,9 +617,8 @@ sal_Int32 PresenterVerticalScrollBar::GetSize() const
     return mnScrollBarWidth;
 }
 
-double PresenterVerticalScrollBar::GetMinor (const double nX, const double nY) const
+double PresenterVerticalScrollBar::GetMinor (const double nX, const double) const
 {
-    (void)nY;
     return nX;
 }
 
@@ -791,7 +771,7 @@ void PresenterScrollBar::MousePressRepeater::Start (const PresenterScrollBar::Ar
         auto pThis(shared_from_this());
         mnMousePressRepeaterTaskId = PresenterTimer::ScheduleRepeatedTask (
             mpScrollBar->GetComponentContext(),
-            [pThis] (TimeValue const& rTime) { return pThis->Callback(rTime); },
+            [pThis] (TimeValue const&) { return pThis->Callback(); },
             500000000,
             250000000);
     }
@@ -822,10 +802,8 @@ void PresenterScrollBar::MousePressRepeater::SetMouseArea(const PresenterScrollB
     }
 }
 
-void PresenterScrollBar::MousePressRepeater::Callback (const TimeValue& rCurrentTime)
+void PresenterScrollBar::MousePressRepeater::Callback ()
 {
-    (void)rCurrentTime;
-
     if (mpScrollBar.get() == nullptr)
     {
         Stop();

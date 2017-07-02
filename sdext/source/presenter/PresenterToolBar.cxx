@@ -493,27 +493,19 @@ void SAL_CALL PresenterToolBar::disposing (const lang::EventObject& rEventObject
 
 //----- XWindowListener -------------------------------------------------------
 
-void SAL_CALL PresenterToolBar::windowResized (const awt::WindowEvent& rEvent)
+void SAL_CALL PresenterToolBar::windowResized (const awt::WindowEvent&)
 {
-    (void)rEvent;
     mbIsLayoutPending = true;
 }
 
-void SAL_CALL PresenterToolBar::windowMoved (const awt::WindowEvent& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterToolBar::windowMoved (const awt::WindowEvent&) {}
 
-void SAL_CALL PresenterToolBar::windowShown (const lang::EventObject& rEvent)
+void SAL_CALL PresenterToolBar::windowShown (const lang::EventObject&)
 {
-    (void)rEvent;
     mbIsLayoutPending = true;
 }
 
-void SAL_CALL PresenterToolBar::windowHidden (const lang::EventObject& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL PresenterToolBar::windowHidden (const lang::EventObject&) {}
 
 //----- XPaintListener --------------------------------------------------------
 void SAL_CALL PresenterToolBar::windowPaint (const css::awt::PaintEvent& rEvent)
@@ -572,10 +564,9 @@ void SAL_CALL PresenterToolBar::mouseMoved (const css::awt::MouseEvent& rEvent)
         CheckMouseOver(rEvent, true);
  }
 
-void SAL_CALL PresenterToolBar::mouseDragged (const css::awt::MouseEvent& rEvent)
+void SAL_CALL PresenterToolBar::mouseDragged (const css::awt::MouseEvent&)
 {
     ThrowIfDisposed();
-    (void)rEvent;
 }
 
 //----- XDrawView -------------------------------------------------------------
@@ -1328,16 +1319,12 @@ void Element::UpdateState()
 
 //----- lang::XEventListener --------------------------------------------------
 
-void SAL_CALL Element::disposing (const css::lang::EventObject& rEvent)
-{
-    (void)rEvent;
-}
+void SAL_CALL Element::disposing (const css::lang::EventObject&) {}
 
 //----- document::XEventListener ----------------------------------------------
 
-void SAL_CALL Element::notifyEvent (const css::document::EventObject& rEvent)
+void SAL_CALL Element::notifyEvent (const css::document::EventObject&)
 {
-    (void)rEvent;
     UpdateState();
 }
 
@@ -1570,7 +1557,6 @@ PresenterBitmapDescriptor::Mode Button::GetMode() const
 
 void SAL_CALL Button::disposing (const css::lang::EventObject& rEvent)
 {
-    (void)rEvent;
     mbIsListenerRegistered = false;
     Element::disposing(rEvent);
 }
@@ -1627,11 +1613,9 @@ void Label::Paint (
     mpMode->maText.Paint(rxCanvas, rViewState, GetBoundingBox());
 }
 
-bool Label::SetState (const bool bIsOver, const bool bIsPressed)
+bool Label::SetState (const bool, const bool)
 {
     // For labels there is no mouse over effect.
-    (void)bIsOver;
-    (void)bIsPressed;
     return Element::SetState(false, false);
 }
 
@@ -1930,9 +1914,8 @@ void VerticalSeparator::Paint (
 }
 
 awt::Size VerticalSeparator::CreateBoundingSize (
-    const Reference<rendering::XCanvas>& rxCanvas)
+    const Reference<rendering::XCanvas>&)
 {
-    (void)rxCanvas;
     return awt::Size(1,20);
 }
 
@@ -1981,9 +1964,8 @@ void HorizontalSeparator::Paint (
 }
 
 awt::Size HorizontalSeparator::CreateBoundingSize (
-    const Reference<rendering::XCanvas>& rxCanvas)
+    const Reference<rendering::XCanvas>&)
 {
-    (void)rxCanvas;
     return awt::Size(20,1);
 }
 

@@ -80,7 +80,6 @@ Reference<rendering::XCanvas> SAL_CALL PresenterSpritePane::getCanvas()
 
 void SAL_CALL PresenterSpritePane::windowResized (const awt::WindowEvent& rEvent)
 {
-    (void)rEvent;
     PresenterPaneBase::windowResized(rEvent);
 
     mpSprite->Resize(geometry::RealSize2D(rEvent.Width, rEvent.Height));
@@ -90,7 +89,6 @@ void SAL_CALL PresenterSpritePane::windowResized (const awt::WindowEvent& rEvent
 
 void SAL_CALL PresenterSpritePane::windowMoved (const awt::WindowEvent& rEvent)
 {
-    (void)rEvent;
     PresenterPaneBase::windowMoved(rEvent);
 
     awt::Rectangle aBox (
@@ -101,7 +99,6 @@ void SAL_CALL PresenterSpritePane::windowMoved (const awt::WindowEvent& rEvent)
 
 void SAL_CALL PresenterSpritePane::windowShown (const lang::EventObject& rEvent)
 {
-    (void)rEvent;
     PresenterPaneBase::windowShown(rEvent);
 
     mpSprite->Show();
@@ -116,7 +113,6 @@ void SAL_CALL PresenterSpritePane::windowShown (const lang::EventObject& rEvent)
 
 void SAL_CALL PresenterSpritePane::windowHidden (const lang::EventObject& rEvent)
 {
-    (void)rEvent;
     PresenterPaneBase::windowHidden(rEvent);
 
     mpSprite->Hide();
@@ -126,9 +122,8 @@ void SAL_CALL PresenterSpritePane::windowHidden (const lang::EventObject& rEvent
 
 //----- XPaintListener --------------------------------------------------------
 
-void SAL_CALL PresenterSpritePane::windowPaint (const awt::PaintEvent& rEvent)
+void SAL_CALL PresenterSpritePane::windowPaint (const awt::PaintEvent&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
 
     /*
