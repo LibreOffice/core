@@ -141,10 +141,7 @@ void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArgument
                     xDialogModel->removeByName(*pIter);
                     insertByName(*pIter,aElement);
                 }
-                catch(const Exception& ex)
-                {
-                    (void)ex;
-                }
+                catch(const Exception&) {}
             }
             Reference<XPropertySet> xDialogProp(xDialogModel,UNO_QUERY);
             if ( xDialogProp.is() )
@@ -296,15 +293,9 @@ void SAL_CALL UnoControlTabPage::windowMoved( const css::awt::WindowEvent& e )
     }
 }
 
-void SAL_CALL UnoControlTabPage::windowShown( const css::lang::EventObject& e )
-{
-    (void)e;
-}
+void SAL_CALL UnoControlTabPage::windowShown( const css::lang::EventObject& ) {}
 
-void SAL_CALL UnoControlTabPage::windowHidden( const css::lang::EventObject& e )
-{
-    (void)e;
-}
+void SAL_CALL UnoControlTabPage::windowHidden( const css::lang::EventObject& ) {}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 stardiv_Toolkit_UnoControlTabPageModel_get_implementation(
