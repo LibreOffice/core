@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_04639cb2",
+        "filename": "sc/source/filter/dif/difexp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-07-02T02:59:57Z",
+      "side": 1,
+      "message": "Can you change the condition here and all related places also to aOS.isEmpty()",
+      "revId": "3ad7614120c936224927b590f3129b38ac017e85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
