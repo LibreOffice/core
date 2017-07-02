@@ -16,6 +16,24 @@
       "revId": "6c86bc4efec6b8aa923fc51f7c60206a82ac2226",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_04d55c42",
+        "filename": "framework/source/services/desktop.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1672,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-07-02T02:41:55Z",
+      "side": 1,
+      "message": "I think it makes sense to have the aIterator.remove in two places. They represent completely different conditions and at least for me it makes it clearer why we can the remove method in the specific cases.\n\nSadly it is nearly impossible to prove that there will always be only one TransferableHelper. There are a dozen subclasses which seem to be instantiated when needed from local code. I had a quick check and it might be that there are two instances at a time. I think there might always be at least one per application, e.g. ScModule stores the calc TranferableHelper and it is quite difficult to provide or disprove that the writer one would have been destroyed by then.",
+      "parentUuid": "3a461143_a181da91",
+      "revId": "6c86bc4efec6b8aa923fc51f7c60206a82ac2226",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
