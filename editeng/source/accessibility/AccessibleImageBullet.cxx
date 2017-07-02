@@ -105,10 +105,8 @@ namespace accessibility
         return 0;
     }
 
-    uno::Reference< XAccessible > SAL_CALL  AccessibleImageBullet::getAccessibleChild( sal_Int32 i )
+    uno::Reference< XAccessible > SAL_CALL  AccessibleImageBullet::getAccessibleChild( sal_Int32 )
     {
-        (void)i;
-
         throw lang::IndexOutOfBoundsException("No children available",
                                               uno::Reference< uno::XInterface >
                                               ( static_cast< ::cppu::OWeakObject* > (this) ) ); // static_cast: disambiguate hierarchy

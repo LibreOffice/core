@@ -2107,12 +2107,7 @@ namespace accessibility
         try
         {
             SvxEditViewForwarder& rCacheVF = GetEditViewForwarder( true );
-            #if OSL_DEBUG_LEVEL > 0
-            SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
-            (void)rCacheTF;
-            #else
             GetTextForwarder();                                         // MUST be after GetEditViewForwarder(), see method docs
-            #endif
 
             bool aRetVal;
 
@@ -2413,14 +2408,7 @@ namespace accessibility
     {
         SolarMutexGuard aGuard;
 
-        #if OSL_DEBUG_LEVEL > 0
-        SvxAccessibleTextAdapter& rCacheTF =
-        #endif
-            GetTextForwarder();
-
-        #if OSL_DEBUG_LEVEL > 0
-        (void)rCacheTF;
-        #endif
+        GetTextForwarder();
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getCharacterAttributes: index value overflow");
@@ -2510,14 +2498,7 @@ namespace accessibility
 
         SolarMutexGuard aGuard;
 
-        #if OSL_DEBUG_LEVEL > 0
-        SvxAccessibleTextAdapter& rCacheTF =
-        #endif
-            GetTextForwarder();
-
-        #if OSL_DEBUG_LEVEL > 0
-        (void)rCacheTF;
-        #endif
+        GetTextForwarder();
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getCharacterAttributes: index value overflow");
