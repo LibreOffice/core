@@ -502,7 +502,6 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
             }
         }
         DBG_ASSERT( bCheck, "SvNumberFormatter::ReplaceSystemCL: couldn't convert" );
-        (void)bCheck;
 
         delete pOldEntry;
     }
