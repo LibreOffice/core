@@ -222,9 +222,7 @@ private:
         SfxShell* pShell,
         ShellId nShellId);
     void DestroyViewShell (ShellDescriptor& rDescriptor);
-    static void DestroySubShell (
-        const SfxShell& rViewShell,
-        const ShellDescriptor& rDescriptor);
+    static void DestroySubShell (const ShellDescriptor& rDescriptor);
 };
 
 //===== ViewShellManager ======================================================
@@ -601,7 +599,7 @@ void ViewShellManager::Implementation::DeactivateSubShell (
     rList.erase(iShell);
     TakeShellsFromStack(pShell);
 
-    DestroySubShell(rParentShell, aDescriptor);
+    DestroySubShell(aDescriptor);
 }
 
 void ViewShellManager::Implementation::MoveToTop (const SfxShell& rShell)
@@ -1085,10 +1083,8 @@ void ViewShellManager::Implementation::DestroyViewShell (
 }
 
 void ViewShellManager::Implementation::DestroySubShell (
-    const SfxShell& rParentShell,
     const ShellDescriptor& rDescriptor)
 {
-    (void)rParentShell;
     OSL_ASSERT(rDescriptor.mpFactory.get() != nullptr);
     rDescriptor.mpFactory->ReleaseShell(rDescriptor.mpShell);
 }
