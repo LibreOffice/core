@@ -1342,10 +1342,8 @@ void OViewsWindow::EndAction()
     ::std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction(eEndAction) );
 }
 
-void OViewsWindow::MovAction(const Point& _aPnt,const OSectionView* _pSection,bool _bMove, bool _bControlKeySet)
+void OViewsWindow::MovAction(const Point& _aPnt,const OSectionView* _pSection, bool _bControlKeySet)
 {
-    (void)_bMove;
-
     Point aRealMousePos = _aPnt;
     Point aCurrentSectionPos;
     SAL_INFO(
