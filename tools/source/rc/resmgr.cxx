@@ -796,7 +796,6 @@ void ResMgr::DestroyAllResMgr()
 
 void ResMgr::Init( const OUString& rFileName )
 {
-    (void) rFileName; // avoid warning about unused parameter
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
     if ( !pImpRes )
