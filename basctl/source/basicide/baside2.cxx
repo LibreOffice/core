@@ -622,11 +622,8 @@ bool ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
     return false;
 }
 
-BasicDebugFlags ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
+BasicDebugFlags ModulWindow::BasicBreakHdl()
 {
-    // #i69280 Required in Window despite normal usage in next command!
-    (void)pBasic;
-
     // Return value: sal_uInt16 => see SB-Debug-Flags
     sal_uInt16 nErrorLine = StarBASIC::GetLine();
 
