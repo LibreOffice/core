@@ -48,6 +48,7 @@ namespace comphelper
                 :public ::cppu::BaseMutex
                 ,public OAccessibleContextHelper_Base
     {
+        friend class OContextEntryGuard;
     private:
         std::unique_ptr<OContextHelper_Impl>    m_pImpl;
 
@@ -103,21 +104,6 @@ namespace comphelper
         */
         virtual css::lang::Locale SAL_CALL getLocale(  ) override;
 
-    public:
-        // helper struct for granting selective access rights
-        struct OAccessControl
-        {
-            friend class OContextEntryGuard;
-            friend class OContextHelper_Impl;
-            friend class OExternalLockGuard;
-        private:
-            OAccessControl() { }
-        };
-
-        // ensures that the object is alive
-        inline  void            ensureAlive( const OAccessControl& ) const;
-        inline  ::osl::Mutex&   GetMutex( const OAccessControl& );
-
     protected:
         // OComponentHelper
         virtual void SAL_CALL disposing() override;
@@ -162,21 +148,8 @@ namespace comphelper
     };
 
 
-    inline  void OAccessibleContextHelper::ensureAlive( const OAccessControl& ) const
-    {
-        ensureAlive();
-    }
-
-
-    inline  ::osl::Mutex& OAccessibleContextHelper::GetMutex( const OAccessControl& )
-    {
-        return GetMutex();
-    }
-
-
     //= OContextEntryGuard
 
-    typedef ::osl::ClearableMutexGuard  OContextEntryGuard_Base;
     /** helper class for guarding the entry into OAccessibleContextHelper methods.
 
         <p>The class has two responsibilities:
@@ -189,7 +162,7 @@ namespace comphelper
         you derived class.
         </p>
     */
-    class OContextEntryGuard : public OContextEntryGuard_Base
+    class OContextEntryGuard : public ::osl::ClearableMutexGuard
     {
     public:
         /** constructs the guard
@@ -206,9 +179,9 @@ namespace comphelper
 
 
     inline OContextEntryGuard::OContextEntryGuard( OAccessibleContextHelper* _pContext  )
-        :OContextEntryGuard_Base( _pContext->GetMutex( OAccessibleContextHelper::OAccessControl() ) )
+        : ::osl::MutexGuard( _pContext->GetMutex() )
     {
-        _pContext->ensureAlive( OAccessibleContextHelper::OAccessControl() );
+        _pContext->ensureAlive();
     }
 
 
