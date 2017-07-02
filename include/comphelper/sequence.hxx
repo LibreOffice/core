@@ -174,7 +174,6 @@ namespace comphelper
         css::uno::Sequence< TYPE > aContainer;
         bool bSuccess = _rSequenceAny >>= aContainer;
         OSL_ENSURE(bSuccess, "OSequenceIterator::OSequenceIterator: invalid Any!");
-        (void)bSuccess;
         construct(aContainer);
     }
 

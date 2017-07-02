@@ -63,9 +63,8 @@ namespace comphelper
             else
                 m_xLogger = xPool->getDefaultLogger();
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-            (void)e;
             OSL_FAIL( "EventLogger_Impl::impl_createLogger_nothrow: caught an exception!" );
         }
     }
@@ -90,9 +89,8 @@ namespace comphelper
         {
             return m_pImpl->getLogger()->isLoggable( _nLogLevel );
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-            (void)e;
             OSL_FAIL( "EventLogger::isLoggable: caught an exception!" );
         }
 
@@ -157,9 +155,8 @@ namespace comphelper
                 xLogger->log( _nLogLevel, sMessage );
             }
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-            (void)e;
             OSL_FAIL( "EventLogger::impl_log: caught an exception!" );
         }
 
