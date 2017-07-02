@@ -55,8 +55,7 @@ public:
     PresenterCustomSprite (
         const rtl::Reference<PresenterCanvas>& rpCanvas,
         const Reference<rendering::XCustomSprite>& rxSprite,
-        const Reference<awt::XWindow>& rxBaseWindow,
-        const css::geometry::RealSize2D& rSpriteSize);
+        const Reference<awt::XWindow>& rxBaseWindow);
     PresenterCustomSprite(const PresenterCustomSprite&) = delete;
     PresenterCustomSprite& operator=(const PresenterCustomSprite&) = delete;
     virtual void SAL_CALL disposing() override;
@@ -88,7 +87,6 @@ private:
     Reference<rendering::XCustomSprite> mxSprite;
     Reference<awt::XWindow> mxBaseWindow;
     geometry::RealPoint2D maPosition;
-    geometry::RealSize2D maSpriteSize;
 
     /// @throws css::lang::DisposedException
     void ThrowIfDisposed();
@@ -384,14 +382,12 @@ Reference<rendering::XCustomSprite> SAL_CALL
         return new PresenterCustomSprite(
             this,
             xSpriteCanvas->createCustomSprite(rSpriteSize),
-            mxSharedWindow,
-            rSpriteSize);
+            mxSharedWindow);
     else if (mxUpdateCanvas.is())
         return new PresenterCustomSprite(
             this,
             mxUpdateCanvas->createCustomSprite(rSpriteSize),
-            mxUpdateWindow,
-            rSpriteSize);
+            mxUpdateWindow);
     else
         return nullptr;
 }
@@ -644,11 +640,8 @@ awt::Point PresenterCanvas::GetOffset (const Reference<awt::XWindow>& rxBaseWind
 
 Reference<rendering::XPolyPolygon2D> PresenterCanvas::UpdateSpriteClip (
     const Reference<rendering::XPolyPolygon2D>& rxOriginalClip,
-    const geometry::RealPoint2D& rLocation,
-    const geometry::RealSize2D& rSize)
+    const geometry::RealPoint2D& rLocation)
 {
-    (void)rSize;
-
     // Check used resources and just return the original clip when not
     // every one of them is available.
     if ( ! mxWindow.is())
@@ -717,14 +710,12 @@ void PresenterCanvas::ThrowIfDisposed()
 PresenterCustomSprite::PresenterCustomSprite (
     const rtl::Reference<PresenterCanvas>& rpCanvas,
     const Reference<rendering::XCustomSprite>& rxSprite,
-    const Reference<awt::XWindow>& rxBaseWindow,
-    const css::geometry::RealSize2D& rSpriteSize)
+    const Reference<awt::XWindow>& rxBaseWindow)
     : PresenterCustomSpriteInterfaceBase(m_aMutex),
       mpCanvas(rpCanvas),
       mxSprite(rxSprite),
       mxBaseWindow(rxBaseWindow),
-      maPosition(0,0),
-      maSpriteSize(rSpriteSize)
+      maPosition(0,0)
 {
 }
 
@@ -775,7 +766,7 @@ void SAL_CALL PresenterCustomSprite::clip (const Reference<rendering::XPolyPolyg
     // The clip region is expected in the coordinate system of the sprite.
     // UpdateSpriteClip() integrates the window bounds, transformed into the
     // sprites coordinate system, with the given clip.
-    mxSprite->clip(mpCanvas->UpdateSpriteClip(rxClip, maPosition, maSpriteSize));
+    mxSprite->clip(mpCanvas->UpdateSpriteClip(rxClip, maPosition));
 }
 
 void SAL_CALL PresenterCustomSprite::setPriority (const double nPriority)
