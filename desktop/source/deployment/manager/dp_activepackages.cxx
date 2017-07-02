@@ -121,7 +121,9 @@ ActivePackages::ActivePackages(OUString const & url)
     : m_map(url)
 #endif
 {
+#if !HAVE_FEATURE_EXTENSIONS
     (void) url;
+#endif
 }
 
 ActivePackages::~ActivePackages() {}

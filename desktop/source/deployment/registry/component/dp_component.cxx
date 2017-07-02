@@ -1614,7 +1614,6 @@ BackendImpl::OtherPlatformPackageImpl::processPackage_(
     Reference<XCommandEnvironment> const& /* xCmdEnv */)
 {
     OSL_PRECOND(!bRegisterPackage, "this class can only be used for removing packages!");
-    (void) bRegisterPackage;
 
     OUString const aURL(getURL());
 
