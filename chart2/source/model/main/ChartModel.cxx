@@ -1011,7 +1011,6 @@ awt::Size SAL_CALL ChartModel::getVisualAreaSize( ::sal_Int64 nAspect )
 {
     OSL_ENSURE( nAspect == embed::Aspects::MSOLE_CONTENT,
                 "No aspects other than content are supported" );
-    (void)(nAspect); // avoid warning in non-debug builds
     // other possible aspects are MSOLE_THUMBNAIL, MSOLE_ICON and MSOLE_DOCPRINT
 
     return m_aVisualAreaSize;
@@ -1021,7 +1020,6 @@ embed::VisualRepresentation SAL_CALL ChartModel::getPreferredVisualRepresentatio
 {
     OSL_ENSURE( nAspect == embed::Aspects::MSOLE_CONTENT,
                 "No aspects other than content are supported" );
-    (void)(nAspect); // avoid warning in non-debug builds
 
     embed::VisualRepresentation aResult;
 
@@ -1059,7 +1057,6 @@ embed::VisualRepresentation SAL_CALL ChartModel::getPreferredVisualRepresentatio
 {
     OSL_ENSURE( nAspect == embed::Aspects::MSOLE_CONTENT,
                 "No aspects other than content are supported" );
-    (void)(nAspect); // avoid warning in non-debug builds
     return embed::EmbedMapUnits::ONE_100TH_MM;
 }
 
@@ -1194,7 +1191,6 @@ Reference< uno::XInterface > SAL_CALL ChartModel::createInstanceWithArguments(
             const OUString& rServiceSpecifier , const Sequence< Any >& Arguments )
 {
     OSL_ENSURE( Arguments.getLength(), "createInstanceWithArguments: Warning: Arguments are ignored" );
-    (void)(Arguments); // avoid warning in non-debug builds
     return createInstance( rServiceSpecifier );
 }
 

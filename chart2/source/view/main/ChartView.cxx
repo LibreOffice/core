@@ -3129,7 +3129,6 @@ Reference< uno::XInterface > ChartView::createInstance( const OUString& aService
 Reference< uno::XInterface > ChartView::createInstanceWithArguments( const OUString& ServiceSpecifier, const uno::Sequence< uno::Any >& Arguments )
 {
     OSL_ENSURE( Arguments.getLength(), "ChartView::createInstanceWithArguments: arguments are ignored" );
-    (void) Arguments; // avoid warning
     return createInstance( ServiceSpecifier );
 }
 

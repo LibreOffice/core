@@ -279,8 +279,6 @@ FeatureState DrawCommandDispatch::getState( const OUString& rCommand )
 
 void DrawCommandDispatch::execute( const OUString& rCommand, const Sequence< beans::PropertyValue>& rArgs )
 {
-    (void)rArgs;
-
     ChartDrawMode eDrawMode = CHARTDRAW_SELECT;
     SdrObjKind eKind = OBJ_NONE;
 
