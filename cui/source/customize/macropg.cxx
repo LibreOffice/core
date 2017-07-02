@@ -85,7 +85,6 @@ static long nTabs[] =
 IMPL_LINK( MacroEventListBox, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
 {
     DBG_ASSERT( pBar == maHeaderBar.get(), "*MacroEventListBox::HeaderEndDrag_Impl: something is wrong here..." );
-    (void)pBar;
 
     if( !maHeaderBar->GetCurItemId() )
         return;
