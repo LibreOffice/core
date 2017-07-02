@@ -1195,9 +1195,8 @@ bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, ScRang
             ScRangeName* pRangeName = rDoc.GetRangeName(nCurTab);
             if (pRangeName)
             {
-                bool bLocalName = pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(sAddress)) != nullptr;
-                // TODO: Handle local names correctly.
-                (void)bLocalName;
+                // TODO: Handle local names correctly:
+                // bool bLocalName = pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(sAddress)) != nullptr;
             }
         }
         char aChar = 0;

@@ -620,11 +620,9 @@ void XclExpBiff8Encrypter::EncryptBytes( SvStream& rStrm, vector<sal_uInt8>& aBy
 
         bool bRet = maCodec.Encode(&aBytes[nPos], nEncBytes, &aBytes[nPos], nEncBytes);
         OSL_ENSURE(bRet, "XclExpBiff8Encrypter::EncryptBytes: encryption failed!!");
-        (void) bRet; // to remove a silly compiler warning.
 
         std::size_t nRet = rStrm.WriteBytes(&aBytes[nPos], nEncBytes);
         OSL_ENSURE(nRet == nEncBytes, "XclExpBiff8Encrypter::EncryptBytes: fail to write to stream!!");
-        (void) nRet; // to remove a silly compiler warning.
 
         nStrmPos = rStrm.Tell();
         nBlockOffset = GetOffsetInBlock(nStrmPos);

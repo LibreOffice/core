@@ -404,10 +404,8 @@ void ScDrawShell::GetDrawAttrStateForIFBX( SfxItemSet& rSet )
     }
 }
 
-void ScDrawShell::Activate (const bool bMDI)
+void ScDrawShell::Activate (const bool)
 {
-    (void)bMDI;
-
     ContextChangeEventMultiplexer::NotifyContextChange(
         GetFrame()->GetFrame().GetController(),
         vcl::EnumContext::GetContextEnum(

@@ -2190,7 +2190,6 @@ void XclExpLinkManagerImpl5::FindExtSheet(
         FindInternal( nDummyExtSheet, rnLastXclTab, nLastScTab );
     }
 
-    (void)pRefLogEntry;     // avoid compiler warning
     OSL_ENSURE( !pRefLogEntry, "XclExpLinkManagerImpl5::FindExtSheet - fill reflog entry not implemented" );
 }
 
@@ -2375,7 +2374,6 @@ void XclExpLinkManagerImpl8::FindExtSheet(
 
 sal_uInt16 XclExpLinkManagerImpl8::FindExtSheet( sal_Unicode cCode )
 {
-    (void)cCode;    // avoid compiler warning
     OSL_ENSURE( (cCode == EXC_EXTSH_OWNDOC) || (cCode == EXC_EXTSH_ADDIN),
         "XclExpLinkManagerImpl8::FindExtSheet - unknown externsheet code" );
     return InsertXti( maSBBuffer.GetXti( EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) );

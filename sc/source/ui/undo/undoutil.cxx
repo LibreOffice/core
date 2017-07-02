@@ -81,7 +81,6 @@ ScDBData* ScUndoUtil::GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, SCTAB
                 bWasTemp = true;
         }
         OSL_ENSURE(bWasTemp, "Undo: didn't find database range");
-        (void)bWasTemp;
         pRet = pDoc->GetAnonymousDBData(nTab);
         if (!pRet)
         {

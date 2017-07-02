@@ -367,7 +367,6 @@ void ScMyStylesImportHelper::AddRange()
 
 void ScMyStylesImportHelper::AddColumnStyle(const OUString& sStyleName, const sal_Int32 nColumn, const sal_Int32 nRepeat)
 {
-    (void)nColumn;  // avoid warning in product version
     OSL_ENSURE(static_cast<sal_uInt32>(nColumn) == aColDefaultStyles.size(), "some columns are absent");
     ScMyStylesSet::iterator aItr(GetIterator(&sStyleName));
     OSL_ENSURE(aItr != aCellStyles.end(), "no column default style");

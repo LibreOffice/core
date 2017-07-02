@@ -1207,7 +1207,6 @@ OpCodeProviderImpl::OpCodeProviderImpl( const FunctionInfoVector& rFuncInfos,
             initOpCode( OPCODE_DDE,           aTokenMap, "DDE", nullptr );
 
         OSL_ENSURE( bIsValid, "OpCodeProviderImpl::OpCodeProviderImpl - opcodes not initialized" );
-        (void)bIsValid;
 
         // OPCODE_PLUS_SIGN and OPCODE_ADD should be equal, otherwise "+" has to be passed above
         OSL_ENSURE( OPCODE_PLUS_SIGN == OPCODE_ADD, "OpCodeProviderImpl::OpCodeProviderImpl - need opcode mapping for OPCODE_PLUS_SIGN" );
