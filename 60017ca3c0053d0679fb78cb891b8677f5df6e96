@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_c446f4be",
+        "filename": "sc/source/ui/unoobj/filtuno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-07-02T13:37:26Z",
+      "side": 1,
+      "message": "the \"true\" comes from a later commit that was not squashed / backported. Change \"true\" back to bMultiByte.",
+      "range": {
+        "startLine": 337,
+        "startChar": 104,
+        "endLine": 337,
+        "endChar": 122
+      },
+      "revId": "60017ca3c0053d0679fb78cb891b8677f5df6e96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
