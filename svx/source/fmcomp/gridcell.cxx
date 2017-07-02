@@ -588,7 +588,6 @@ void DbCellControl::implDoPropertyListening(const OUString& _rPropertyName, bool
 
         DBG_ASSERT( !_bWarnIfNotExistent || ( xPSI.is() && xPSI->hasPropertyByName( _rPropertyName ) ),
             "DbCellControl::doPropertyListening: no property set info or non-existent property!" );
-        (void)_bWarnIfNotExistent;
 
         if ( xPSI.is() && xPSI->hasPropertyByName( _rPropertyName ) )
             m_pModelChangeBroadcaster->addProperty( _rPropertyName );
@@ -2835,7 +2834,6 @@ CellControllerRef DbFilterField::CreateController() const
 void DbFilterField::updateFromModel( Reference< XPropertySet > _rxModel )
 {
     OSL_ENSURE( _rxModel.is() && m_pWindow, "DbFilterField::updateFromModel: invalid call!" );
-    (void)_rxModel;
 
     OSL_FAIL( "DbListBox::updateFromModel: not implemented yet (how the hell did you reach this?)!" );
     // TODO: implement this.
@@ -3353,17 +3351,15 @@ void SAL_CALL FmXGridCell::removeMouseMotionListener( const Reference< awt::XMou
 }
 
 
-void SAL_CALL FmXGridCell::addPaintListener( const Reference< awt::XPaintListener >& _rxListener )
+void SAL_CALL FmXGridCell::addPaintListener( const Reference< awt::XPaintListener >& )
 {
     OSL_FAIL( "FmXGridCell::addPaintListener: not implemented" );
-    (void)_rxListener;
 }
 
 
-void SAL_CALL FmXGridCell::removePaintListener( const Reference< awt::XPaintListener >& _rxListener )
+void SAL_CALL FmXGridCell::removePaintListener( const Reference< awt::XPaintListener >& )
 {
     OSL_FAIL( "FmXGridCell::removePaintListener: not implemented" );
-    (void)_rxListener;
 }
 
 

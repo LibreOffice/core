@@ -580,9 +580,8 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
             }
         }
     }
-    catch(const Exception& e)
+    catch(const Exception&)
     {
-        (void)e;
         OSL_FAIL("FmFormPageImpl::findFormForDataSource: caught an exception!");
     }
 

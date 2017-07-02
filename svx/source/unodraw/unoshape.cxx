@@ -1791,14 +1791,8 @@ void SAL_CALL SvxShape::setPropertyValues( const css::uno::Sequence< OUString >&
             {
                 setPropertyValue( *pNames, *pValues );
             }
-            catch( beans::UnknownPropertyException& e )
-            {
-                (void)e;
-            }
-            catch( uno::Exception& ex )
-            {
-                (void)ex;
-            }
+            catch( beans::UnknownPropertyException& ) {}
+            catch( uno::Exception& ) {}
         }
     }
     else
@@ -1812,14 +1806,8 @@ void SAL_CALL SvxShape::setPropertyValues( const css::uno::Sequence< OUString >&
             {
                 xSet->setPropertyValue( *pNames, *pValues );
             }
-            catch( beans::UnknownPropertyException& e )
-            {
-                (void)e;
-            }
-            catch( uno::Exception& ex )
-            {
-                (void)ex;
-            }
+            catch( beans::UnknownPropertyException& ) {}
+            catch( uno::Exception& ) {}
         }
     }
 

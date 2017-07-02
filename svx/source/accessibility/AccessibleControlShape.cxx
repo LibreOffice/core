@@ -503,9 +503,8 @@ bool AccessibleControlShape::ensureListeningState(
         else
             OSL_FAIL( "AccessibleControlShape::ensureListeningState: this property does not exist at this model!" );
     }
-    catch( const Exception& e )
+    catch( const Exception& )
     {
-        (void)e;    // make compiler happy
         OSL_FAIL( "AccessibleControlShape::ensureListeningState: could not change the listening state!" );
     }
 
@@ -694,9 +693,8 @@ bool AccessibleControlShape::ensureControlModelAccess()
         if ( m_xControlModel.is() )
             m_xModelPropsMeta = m_xControlModel->getPropertySetInfo();
     }
-    catch( const Exception& e )
+    catch( const Exception& )
     {
-        (void)e;    // make compiler happy
         OSL_FAIL( "AccessibleControlShape::ensureControlModelAccess: caught an exception!" );
     }
 

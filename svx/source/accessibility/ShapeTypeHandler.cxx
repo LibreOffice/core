@@ -159,11 +159,6 @@ void ShapeTypeHandler::AddShapeTypeList (int nDescriptorCount,
 
     for (int i=0; i<nDescriptorCount; i++)
     {
-    #if OSL_DEBUG_LEVEL > 0
-        ShapeTypeId nId (aDescriptorList[i].mnShapeTypeId);
-        (void)nId;
-    #endif
-
         // Fill Type descriptor.
         maShapeTypeDescriptorList[nFirstId+i].mnShapeTypeId = aDescriptorList[i].mnShapeTypeId;
         maShapeTypeDescriptorList[nFirstId+i].msServiceName = aDescriptorList[i].msServiceName;
