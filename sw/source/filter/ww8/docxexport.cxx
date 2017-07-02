@@ -1277,7 +1277,7 @@ void DocxExport::WriteVBA()
     uno::Reference<io::XOutputStream> xProjectStream;
     if (xMacrosStream.is())
     {
-        // First handle the the project stream, this sets xProjectStream.
+        // First handle the project stream, this sets xProjectStream.
         std::unique_ptr<SvStream> pIn(utl::UcbStreamHelper::CreateStream(xMacrosStream));
 
         xProjectStream = GetFilter().openFragmentStream("word/vbaProject.bin", "application/vnd.ms-office.vbaProject");

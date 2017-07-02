@@ -55,7 +55,7 @@ void ProgressBarWrapper::setStatusBar( const uno::Reference< awt::XWindow >& rSt
 
     if ( m_bOwnsInstance )
     {
-        // dispose XWindow reference our our status bar
+        // dispose XWindow reference our status bar
         uno::Reference< lang::XComponent > xComponent( m_xStatusBar, uno::UNO_QUERY );
         try
         {

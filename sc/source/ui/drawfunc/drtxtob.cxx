@@ -305,7 +305,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     if (!bDone)
                         ExecuteGlobal( rReq );      // normal at View
 
-                    //  If "text" is received by InsertURL of ViewShell, the the DrawShell is turned off !!!
+                    //  If "text" is received by InsertURL of ViewShell, then the DrawShell is turned off !!!
                 }
             }
             break;
