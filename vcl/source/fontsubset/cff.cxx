@@ -522,10 +522,8 @@ void CffSubsetterContext::readDictOp()
             mpCffLocal->mnPrivDictSize = popInt();
             break;
         case 'r': { // ROS operands
-            int nSid1 = popInt();
-            int nSid2 = popInt();
-            (void)nSid1; // TODO: use
-            (void)nSid2; // TODO: use
+            popInt(); // TODO: use sid1
+            popInt(); // TODO: use sid2
             popVal();
             mbCIDFont = true;
             } break;
@@ -1004,9 +1002,8 @@ void CffSubsetterContext::convertOneTypeEsc()
         assert( nNum >= 0);
         assert( nNum < mnStackIdx-2 );
         (void)nNum; // TODO: implement
-        const int nOfs = static_cast<int>(pTop[-1]);
+        // TODO: implement: const int nOfs = static_cast<int>(pTop[-1]);
         mnStackIdx -= 2;
-        (void)nOfs;// TODO: implement
         break;
         }
     case TYPE2OP::HFLEX1: {
@@ -1035,8 +1032,7 @@ void CffSubsetterContext::convertOneTypeEsc()
             assert( mnStackIdx == 13 );
             writeCurveTo( mnStackIdx, -13, -12, -11, -10, -9, -8 );
             writeCurveTo( mnStackIdx,  -7,  -6,  -5,  -4, -3, -2 );
-            const ValType nFlexDepth =  mnValStack[ mnStackIdx-1 ];
-            (void)nFlexDepth; // ignoring nFlexDepth
+            // ignoring ValType nFlexDepth = mnValStack[ mnStackIdx-1 ];
             mnStackIdx -= 13;
         }
         break;

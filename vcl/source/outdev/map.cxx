@@ -1476,8 +1476,6 @@ basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygo
 
 static void verifyUnitSourceDest( MapUnit eUnitSource, MapUnit eUnitDest )
 {
-    (void) eUnitSource;
-    (void) eUnitDest;
     DBG_ASSERT( eUnitSource != MapUnit::MapSysFont
                 && eUnitSource != MapUnit::MapAppFont
                 && eUnitSource != MapUnit::MapRelative,

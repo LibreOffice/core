@@ -405,7 +405,7 @@ void ImplImageTree::createStyle()
         OSL_ASSERT(!aUrl.HasError());
 
         bool ok = aUrl.Append("images_" + maCurrentStyle, INetURLObject::EncodeMechanism::All);
-        OSL_ASSERT(ok); (void) ok;
+        OSL_ASSERT(ok);
         sThemeUrl = aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE) + ".zip";
 
     }

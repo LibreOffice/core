@@ -1792,7 +1792,7 @@ protected:
      *
      * @param pRectangle If 0, that means the whole area, otherwise the area in logic coordinates.
      */
-    virtual void LogicInvalidate(const tools::Rectangle* pRectangle) { (void)pRectangle; }
+    virtual void LogicInvalidate(const tools::Rectangle* /*pRectangle*/) {}
 
 private:
 
