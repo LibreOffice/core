@@ -249,7 +249,6 @@ void sw::util::RedlineStack::close( const SwPosition& rPos,
             bool const bResult =
                 pTabDesc->getOldRedlineStack()->close(rPos, eType);
             OSL_ENSURE( bResult, "close without open!");
-            (void) bResult; // unused in non-debug
         }
     }
 }

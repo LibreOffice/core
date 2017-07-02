@@ -315,8 +315,7 @@ void SwUndoInsLayFormat::RepeatImpl(::sw::RepeatContext & rContext)
         OSL_FAIL( "What kind of anchor is this?" );
     }
 
-    SwFrameFormat* pFlyFormat = pDoc->getIDocumentLayoutAccess().CopyLayoutFormat( *pFrameFormat, aAnchor, true, true );
-    (void) pFlyFormat;
+    (void) pDoc->getIDocumentLayoutAccess().CopyLayoutFormat( *pFrameFormat, aAnchor, true, true );
 }
 
 OUString SwUndoInsLayFormat::GetComment() const

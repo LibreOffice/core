@@ -107,9 +107,8 @@ ToxTextGeneratorTest::EmptyStringIsReturnedAsNumStringIfToxSourcesIsEmpty()
 class MockedToxTabStopTokenHandler : public ToxTabStopTokenHandler {
 public:
     virtual HandledTabStopToken
-    HandleTabStopToken(const SwFormToken& aToken, const SwTextNode& targetNode,
-            const SwRootFrame *currentLayout) const override {
-        (void)(aToken); (void)(targetNode); (void)(currentLayout); // avoid unused warnings.
+    HandleTabStopToken(const SwFormToken&, const SwTextNode&,
+            const SwRootFrame *) const override {
         return HandledTabStopToken();
     }
 };
@@ -127,10 +126,8 @@ public:
 
 private:
     SwChapterField
-    ObtainChapterField(SwChapterFieldType* chapterFieldType, const SwFormToken* chapterToken,
-            const SwContentFrame* contentFrame, const SwContentNode *contentNode) const override {
-        // get rid of 'unused-parameters' warnings
-        (void)(chapterFieldType);(void)(chapterToken);(void)(contentFrame);(void)(contentNode);
+    ObtainChapterField(SwChapterFieldType*, const SwFormToken*,
+            const SwContentFrame*, const SwContentNode *) const override {
         return mChapterField;
     }
 

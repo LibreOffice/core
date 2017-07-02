@@ -279,8 +279,6 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
                     == rCmp.GetContentNode(), "Point in wrong Node" );
         OSL_ENSURE( rCmp.GetMark()->nContent.GetIdxReg()
                     == rCmp.GetContentNode(false), "Mark in wrong Node" );
-        bool bTst = *rCmp.GetPoint() == *rCmp.GetMark();
-        (void) bTst;
     }
 }
 #endif

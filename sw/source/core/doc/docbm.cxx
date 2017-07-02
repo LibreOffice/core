@@ -304,9 +304,10 @@ namespace
                 typeid(*pMark).name() << " " <<
                 pMark->GetName());
         }
+#else
+        (void) rMarks;
 #endif
         assert(std::is_sorted(rMarks.begin(), rMarks.end(), lcl_MarkOrderingByStart));
-        (void) rMarks;
     };
 }
 

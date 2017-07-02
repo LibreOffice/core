@@ -668,14 +668,12 @@ void SwFormatPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
                 bool const bResult =
                     static_cast<SwFormat*>(pDefinedIn)->ResetFormatAttr(RES_PAGEDESC);
                 OSL_ENSURE( bResult, "FormatPageDesc not deleted" );
-                (void) bResult; // unused in non-debug
             }
             else if( typeid(SwContentNode) == typeid( pDefinedIn ))
             {
                 bool const bResult = static_cast<SwContentNode*>(pDefinedIn)
                         ->ResetAttr(RES_PAGEDESC);
                 OSL_ENSURE( bResult, "FormatPageDesc not deleted" );
-                (void) bResult; // unused in non-debug
             }
             break;
 

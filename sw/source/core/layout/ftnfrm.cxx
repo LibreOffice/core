@@ -453,36 +453,6 @@ void SwFootnoteFrame::InvalidateNxtFootnoteCnts( SwPageFrame *pPage )
     }
 }
 
-#ifdef DBG_UTIL
-SwTwips SwFootnoteFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
-{
-    static sal_uInt16 nNum = USHRT_MAX;
-    SwTextFootnote* pTextFootnote = GetAttr();
-    if ( pTextFootnote->GetFootnote().GetNumber() == nNum )
-    {
-        int bla = 5;
-        (void)bla;
-
-    }
-    return SwLayoutFrame::GrowFrame( nDist, bTst, bInfo );
-}
-
-SwTwips SwFootnoteFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
-{
-    static sal_uInt16 nNum = USHRT_MAX;
-    if( nNum != USHRT_MAX )
-    {
-        SwTextFootnote* pTextFootnote = GetAttr();
-        if( pTextFootnote->GetFootnote().GetNumber() == nNum )
-        {
-            int bla = 5;
-            (void)bla;
-        }
-    }
-    return SwLayoutFrame::ShrinkFrame( nDist, bTst, bInfo );
-}
-#endif
-
 void SwFootnoteFrame::Cut()
 {
     if ( GetNext() )

@@ -277,10 +277,8 @@ void WrapPropertyPanel::NotifyItemUpdate(
     const sal_uInt16 nSId,
     const SfxItemState eState,
     const SfxPoolItem* pState,
-    const bool bIsEnabled)
+    const bool)
 {
-    (void)bIsEnabled;
-
     if ( eState == SfxItemState::DEFAULT &&
         dynamic_cast< const SfxBoolItem *>( pState ) !=  nullptr )
     {

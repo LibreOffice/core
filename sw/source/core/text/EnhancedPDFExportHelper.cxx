@@ -389,7 +389,6 @@ bool SwTaggedPDFHelper::CheckRestoreTag() const
     if ( nRestoreCurrentTag != -1 )
     {
         const bool bSuccess = mpPDFExtOutDevData->SetCurrentStructureElement( nRestoreCurrentTag );
-        (void)bSuccess;
         OSL_ENSURE( bSuccess, "Failed to restore reopened tag" );
 
 #if OSL_DEBUG_LEVEL > 1

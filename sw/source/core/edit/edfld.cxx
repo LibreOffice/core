@@ -161,7 +161,6 @@ void SwEditShell::Insert2(SwField& rField, const bool bForceExpandHints)
     {
         const bool bSuccess(GetDoc()->getIDocumentContentOperations().InsertPoolItem(rPaM, aField, nInsertFlags));
         OSL_ENSURE( bSuccess, "Doc->Insert(Field) failed");
-        (void) bSuccess;
     }
 
     EndAllAction();
