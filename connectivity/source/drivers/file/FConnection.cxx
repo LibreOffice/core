@@ -83,7 +83,7 @@ void SAL_CALL OConnection::release() throw()
 
 bool OConnection::matchesExtension( const OUString& _rExt ) const
 {
-    if ( isCaseSensitveExtension() )
+    if ( isCaseSensitiveExtension() )
         return ( getExtension() == _rExt );
 
     OUString sMyExtension( getExtension().toAsciiLowerCase() );

@@ -126,7 +126,7 @@ namespace connectivity
             bool                matchesExtension( const OUString& _rExt ) const;
 
             const OUString&    getExtension()            const { return m_aFilenameExtension; }
-            bool         isCaseSensitveExtension()   const { return m_bCaseSensitiveExtension; }
+            bool         isCaseSensitiveExtension()   const { return m_bCaseSensitiveExtension; }
             OFileDriver*     getDriver()                 const { return m_pDriver; }
             bool         showDeleted()               const { return m_bShowDeleted; }
             bool         isCheckEnabled()            const { return m_bCheckSQL92; }
