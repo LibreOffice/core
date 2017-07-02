@@ -50,10 +50,8 @@ ClientBoxEntry::ClientBoxEntry(const std::shared_ptr<ClientInfo>& pClientInfo)
 ClientBoxEntry::~ClientBoxEntry()
 {}
 
-void ClientRemovedListener::disposing( lang::EventObject const & rEvt )
-{
-    (void) rEvt;
-}
+void ClientRemovedListener::disposing( lang::EventObject const & )
+{}
 
 ClientRemovedListener::~ClientRemovedListener()
 {

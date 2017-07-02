@@ -45,7 +45,7 @@ class PresentationFactoryProvider
       public PresentationFactoryProviderInterfaceBase
 {
 public:
-    explicit PresentationFactoryProvider (const Reference<XComponentContext>& rxContext);
+    PresentationFactoryProvider ();
 
     virtual void SAL_CALL disposing() override;
 
@@ -128,10 +128,9 @@ Reference<XResource> SAL_CALL PresentationFactory::createResource (
 }
 
 void SAL_CALL PresentationFactory::releaseResource (
-    const Reference<XResource>& rxView)
+    const Reference<XResource>&)
 {
     ThrowIfDisposed();
-    (void)rxView;
 
     Reference<lang::XUnoTunnel> xTunnel (mxController, UNO_QUERY);
     if (xTunnel.is())
@@ -150,18 +149,14 @@ void SAL_CALL PresentationFactory::releaseResource (
 //===== XConfigurationChangeListener ==========================================
 
 void SAL_CALL PresentationFactory::notifyConfigurationChange (
-    const ConfigurationChangeEvent& rEvent)
-{
-    (void)rEvent;
-}
+    const ConfigurationChangeEvent&)
+{}
 
 //===== lang::XEventListener ==================================================
 
 void SAL_CALL PresentationFactory::disposing (
-    const lang::EventObject& rEventObject)
-{
-    (void)rEventObject;
-}
+    const lang::EventObject&)
+{}
 
 void PresentationFactory::ThrowIfDisposed() const
 {
@@ -176,11 +171,9 @@ namespace {
 
 //===== PresentationFactoryProvider ===========================================
 
-PresentationFactoryProvider::PresentationFactoryProvider (
-    const Reference<XComponentContext>& rxContext)
+PresentationFactoryProvider::PresentationFactoryProvider ()
     : PresentationFactoryProviderInterfaceBase(maMutex)
 {
-    (void)rxContext;
 }
 
 void PresentationFactoryProvider::disposing()
@@ -218,10 +211,10 @@ void SAL_CALL PresentationFactoryProvider::initialize(
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
-com_sun_star_comp_Draw_framework_PresentationFactoryProvider_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Draw_framework_PresentationFactoryProvider_get_implementation(css::uno::XComponentContext*,
                                                                     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new sd::framework::PresentationFactoryProvider(context));
+    return cppu::acquire(new sd::framework::PresentationFactoryProvider);
 }
 
 

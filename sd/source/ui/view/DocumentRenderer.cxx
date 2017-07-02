@@ -741,13 +741,12 @@ namespace {
         virtual void Print (
             Printer& rPrinter,
             SdDrawDocument& rDocument,
-            ViewShell& rViewShell,
+            ViewShell&,
             View* pView,
             DrawView& rPrintView,
             const SdrLayerIDSet& rVisibleLayers,
             const SdrLayerIDSet& rPrintableLayers) const override
         {
-            (void)rViewShell;
             SdPage* pPageToPrint = rDocument.GetSdPage(mnPageIndex, mePageKind);
             rPrinter.SetMapMode(maMap);
             PrintPage(
@@ -792,13 +791,12 @@ namespace {
         virtual void Print (
             Printer& rPrinter,
             SdDrawDocument& rDocument,
-            ViewShell& rViewShell,
+            ViewShell&,
             View* pView,
             DrawView& rPrintView,
             const SdrLayerIDSet& rVisibleLayers,
             const SdrLayerIDSet& rPrintableLayers) const override
         {
-            (void)rViewShell;
             SdPage* pPageToPrint = rDocument.GetSdPage(mnPageIndex, mePageKind);
             if (pPageToPrint==nullptr)
                 return;
@@ -875,13 +873,12 @@ namespace {
         virtual void Print (
             Printer& rPrinter,
             SdDrawDocument& rDocument,
-            ViewShell& rViewShell,
+            ViewShell&,
             View* pView,
             DrawView& rPrintView,
             const SdrLayerIDSet& rVisibleLayers,
             const SdrLayerIDSet& rPrintableLayers) const override
         {
-            (void)rViewShell;
             MapMode aMap (maMap);
             SdPage* pPageToPrint = rDocument.GetSdPage(mnFirstPageIndex, mePageKind);
             if (pPageToPrint)
@@ -1091,18 +1088,12 @@ namespace {
         virtual void Print (
             Printer& rPrinter,
             SdDrawDocument& rDocument,
-            ViewShell& rViewShell,
-            View* pView,
-            DrawView& rPrintView,
-            const SdrLayerIDSet& rVisibleLayers,
-            const SdrLayerIDSet& rPrintableLayers) const override
+            ViewShell&,
+            View*,
+            DrawView&,
+            const SdrLayerIDSet&,
+            const SdrLayerIDSet&) const override
         {
-            (void)rViewShell;
-            (void)pView;
-            (void)rPrintView;
-            (void)rVisibleLayers;
-            (void)rPrintableLayers;
-
             // Set up the printer.
             rPrinter.SetMapMode(maMap);
 
@@ -2226,31 +2217,27 @@ DocumentRenderer::~DocumentRenderer()
 //----- XRenderable -----------------------------------------------------------
 
 sal_Int32 SAL_CALL DocumentRenderer::getRendererCount (
-    const css::uno::Any& aSelection,
+    const css::uno::Any&,
     const css::uno::Sequence<css::beans::PropertyValue >& rOptions)
 {
-    (void)aSelection;
     mpImpl->ProcessProperties(rOptions);
     return mpImpl->GetPrintPageCount();
 }
 
 Sequence<beans::PropertyValue> SAL_CALL DocumentRenderer::getRenderer (
-    sal_Int32 nRenderer,
-    const css::uno::Any& rSelection,
+    sal_Int32,
+    const css::uno::Any&,
     const css::uno::Sequence<css::beans::PropertyValue>& rOptions)
 {
-    (void)nRenderer;
-    (void)rSelection;
     mpImpl->ProcessProperties(rOptions);
     return mpImpl->GetProperties();
 }
 
 void SAL_CALL DocumentRenderer::render (
     sal_Int32 nRenderer,
-    const css::uno::Any& rSelection,
+    const css::uno::Any&,
     const css::uno::Sequence<css::beans::PropertyValue>& rOptions)
 {
-    (void)rSelection;
     mpImpl->ProcessProperties(rOptions);
     mpImpl->PrintPage(nRenderer);
 }

@@ -22,7 +22,6 @@
 
 #include <com/sun/star/drawing/XSlidePreviewCache.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include "cache/SlsPageCache.hxx"
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -42,7 +41,7 @@ class PresenterPreviewCache
       public PresenterPreviewCacheInterfaceBase
 {
 public:
-    explicit PresenterPreviewCache (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    PresenterPreviewCache ();
     virtual ~PresenterPreviewCache() override;
     PresenterPreviewCache(const PresenterPreviewCache&) = delete;
     PresenterPreviewCache& operator=(const PresenterPreviewCache&) = delete;

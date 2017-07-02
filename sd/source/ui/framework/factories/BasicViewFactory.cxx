@@ -83,8 +83,7 @@ public:
 
 //===== ViewFactory ===========================================================
 
-BasicViewFactory::BasicViewFactory (
-    const Reference<XComponentContext>& rxContext)
+BasicViewFactory::BasicViewFactory ()
     : BasicViewFactoryInterfaceBase(MutexOwner::maMutex),
       mxConfigurationController(),
       mpViewShellContainer(new ViewShellContainer()),
@@ -94,7 +93,6 @@ BasicViewFactory::BasicViewFactory (
       mpViewCache(new ViewCache()),
       mxLocalPane(new Pane(Reference<XResourceId>(), mpWindow.get()))
 {
-    (void)rxContext;
 }
 
 BasicViewFactory::~BasicViewFactory()
@@ -529,10 +527,10 @@ void BasicViewFactory::ActivateCenterView (
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
-com_sun_star_comp_Draw_framework_BasicViewFactory_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Draw_framework_BasicViewFactory_get_implementation(css::uno::XComponentContext*,
                                                                      css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new sd::framework::BasicViewFactory(context));
+    return cppu::acquire(new sd::framework::BasicViewFactory);
 }
 
 

@@ -433,30 +433,26 @@ void SAL_CALL PresenterCanvas::disposing (const css::lang::EventObject& rEvent)
 
 //----- XWindowListener -------------------------------------------------------
 
-void SAL_CALL PresenterCanvas::windowResized (const css::awt::WindowEvent& rEvent)
+void SAL_CALL PresenterCanvas::windowResized (const css::awt::WindowEvent&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
     mbOffsetUpdatePending = true;
 }
 
-void SAL_CALL PresenterCanvas::windowMoved (const css::awt::WindowEvent& rEvent)
+void SAL_CALL PresenterCanvas::windowMoved (const css::awt::WindowEvent&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
     mbOffsetUpdatePending = true;
 }
 
-void SAL_CALL PresenterCanvas::windowShown (const css::lang::EventObject& rEvent)
+void SAL_CALL PresenterCanvas::windowShown (const css::lang::EventObject&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
     mbOffsetUpdatePending = true;
 }
 
-void SAL_CALL PresenterCanvas::windowHidden (const css::lang::EventObject& rEvent)
+void SAL_CALL PresenterCanvas::windowHidden (const css::lang::EventObject&)
 {
-    (void)rEvent;
     ThrowIfDisposed();
 }
 
@@ -485,12 +481,9 @@ sal_Bool SAL_CALL PresenterCanvas::hasAlpha()
 }
 
 Reference<rendering::XBitmap> SAL_CALL PresenterCanvas::getScaledBitmap(
-    const css::geometry::RealSize2D& rNewSize,
-    sal_Bool bFast)
+    const css::geometry::RealSize2D&,
+    sal_Bool)
 {
-    (void)rNewSize;
-    (void)bFast;
-
     ThrowIfDisposed();
 
     // Not implemented.

@@ -1000,10 +1000,8 @@ Layouter::Orientation HorizontalImplementation::GetOrientation() const
     return Layouter::HORIZONTAL;
 }
 
-void HorizontalImplementation::CalculateRowAndColumnCount (const Size& rWindowSize)
+void HorizontalImplementation::CalculateRowAndColumnCount (const Size&)
 {
-    (void)rWindowSize;
-
     // Row and column count are fixed (for a given page count.)
     mnColumnCount = mnPageCount;
     mnRowCount = 1;
@@ -1050,10 +1048,8 @@ Layouter::Orientation VerticalImplementation::GetOrientation() const
     return Layouter::VERTICAL;
 }
 
-void VerticalImplementation::CalculateRowAndColumnCount (const Size& rWindowSize)
+void VerticalImplementation::CalculateRowAndColumnCount (const Size&)
 {
-    (void)rWindowSize;
-
     // Row and column count are fixed (for a given page count.)
     mnRowCount = mnPageCount;
     mnColumnCount = 1;

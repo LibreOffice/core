@@ -26,7 +26,6 @@
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/compbase.hxx>
 
@@ -65,8 +64,7 @@ class BasicViewFactory
       public BasicViewFactoryInterfaceBase
 {
 public:
-    explicit BasicViewFactory (
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    BasicViewFactory ();
     virtual ~BasicViewFactory() override;
 
     virtual void SAL_CALL disposing() override;

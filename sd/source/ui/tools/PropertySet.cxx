@@ -118,23 +118,19 @@ void SAL_CALL PropertySet::removePropertyChangeListener (
 }
 
 void SAL_CALL PropertySet::addVetoableChangeListener (
-    const OUString& rsPropertyName,
-    const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
+    const OUString&,
+    const css::uno::Reference<css::beans::XVetoableChangeListener>&)
 {
     // Constraint properties are not supported and thus no vetoable
     // listeners.
-    (void)rsPropertyName;
-    (void)rxListener;
 }
 
 void SAL_CALL PropertySet::removeVetoableChangeListener (
-    const OUString& rsPropertyName,
-    const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
+    const OUString&,
+    const css::uno::Reference<css::beans::XVetoableChangeListener>&)
 {
     // Constraint properties are not supported and thus no vetoable
     // listeners.
-    (void)rsPropertyName;
-    (void)rxListener;
 }
 
 void PropertySet::CallListeners (
