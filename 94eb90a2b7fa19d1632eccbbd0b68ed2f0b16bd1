@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_445da4e8",
+        "filename": "sc/source/ui/Accessibility/AccessibleSpreadsheet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-07-02T03:06:07Z",
+      "side": 1,
+      "message": "This looks strange with the next if. This one requires some investigation.",
+      "revId": "94eb90a2b7fa19d1632eccbbd0b68ed2f0b16bd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_6472a07e",
+        "filename": "sc/source/ui/drawfunc/fuins2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-07-02T03:06:07Z",
+      "side": 1,
+      "message": "This again looks suspicious.",
+      "revId": "94eb90a2b7fa19d1632eccbbd0b68ed2f0b16bd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_846f8c91",
+        "filename": "sc/source/ui/pagedlg/areasdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-07-02T03:06:07Z",
+      "side": 1,
+      "message": "This looks extremely suspicious.",
+      "revId": "94eb90a2b7fa19d1632eccbbd0b68ed2f0b16bd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_a46c889d",
+        "filename": "sc/source/ui/unoobj/docuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2570,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-07-02T03:06:07Z",
+      "side": 1,
+      "message": "This looks strange. If we assert here it means we assume that in the next condition it will always be true.",
+      "revId": "94eb90a2b7fa19d1632eccbbd0b68ed2f0b16bd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
