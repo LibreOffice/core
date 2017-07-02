@@ -51,7 +51,6 @@ void SAL_CALL OComponentEnumeration::disposing( const EventObject& aEvent )
 
     // Safe impossible cases
     // This method is not specified for all incoming parameters.
-    (void) aEvent;
     SAL_WARN_IF( !aEvent.Source.is(), "fwk", "OComponentEnumeration::disposing(): Invalid parameter detected!" );
 
     // Reset instance to defaults, release references and free memory.
