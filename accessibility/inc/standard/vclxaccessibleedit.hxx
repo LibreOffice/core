@@ -34,8 +34,8 @@ typedef ::cppu::ImplHelper2<
     css::accessibility::XAccessibleAction,
     css::accessibility::XAccessibleEditableText > VCLXAccessibleEdit_BASE;
 
-class VCLXAccessibleEdit : public VCLXAccessibleTextComponent,
-                           public VCLXAccessibleEdit_BASE
+class VCLXAccessibleEdit final : public VCLXAccessibleTextComponent,
+                                 public VCLXAccessibleEdit_BASE
 {
     friend class VCLXAccessibleBox;
 
