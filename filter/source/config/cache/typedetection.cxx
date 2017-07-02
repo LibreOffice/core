@@ -296,7 +296,7 @@ int getFlatTypeRank(const OUString& rType)
  * types, then types that are supported by the document service come next.
  * Lastly, sort them alphabetically.
  */
-struct SortByPriority : public std::binary_function<FlatDetectionInfo, FlatDetectionInfo, bool>
+struct SortByPriority
 {
     bool operator() (const FlatDetectionInfo& r1, const FlatDetectionInfo& r2) const
     {
@@ -320,7 +320,7 @@ struct SortByPriority : public std::binary_function<FlatDetectionInfo, FlatDetec
     }
 };
 
-struct SortByType : public std::binary_function<FlatDetectionInfo, FlatDetectionInfo, bool>
+struct SortByType
 
 {
     bool operator() (const FlatDetectionInfo& r1, const FlatDetectionInfo& r2) const
@@ -329,7 +329,7 @@ struct SortByType : public std::binary_function<FlatDetectionInfo, FlatDetection
     }
 };
 
-struct EqualByType : public std::binary_function<FlatDetectionInfo, FlatDetectionInfo, bool>
+struct EqualByType
 {
     bool operator() (const FlatDetectionInfo& r1, const FlatDetectionInfo& r2) const
     {

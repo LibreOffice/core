@@ -67,8 +67,8 @@ namespace connectivity
         typedef std::pair<sal_Int64,sal_Int32> TVoidPtr;
         typedef std::allocator< TVoidPtr > TVoidAlloc;
         typedef std::vector<TVoidPtr> TVoidVector;
-        /// unary_function Functor object for class ZZ returntype is void
-        struct OOO_DLLPUBLIC_ODBCBASE TBookmarkPosMapCompare : std::binary_function< css::uno::Sequence<sal_Int8>, css::uno::Sequence<sal_Int8>, bool >
+        /// Functor object for class ZZ returntype is void
+        struct OOO_DLLPUBLIC_ODBCBASE TBookmarkPosMapCompare
         {
             bool operator()( const css::uno::Sequence<sal_Int8>& _rLH,
                                     const css::uno::Sequence<sal_Int8>& _rRH) const

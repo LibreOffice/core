@@ -23,7 +23,6 @@
 
 #include <utility>
 #include <algorithm>
-#include <functional>
 #include <vector>
 
 namespace chart
@@ -60,7 +59,7 @@ tDoubleVectorPair
     return aResult;
 }
 
-class isValid : public std::binary_function< double, double, bool >
+class isValid
 {
 public:
     bool operator()( double x, double y )
@@ -71,7 +70,7 @@ public:
     }
 };
 
-class isValidAndXPositive : public std::binary_function< double, double, bool >
+class isValidAndXPositive
 {
 public:
     bool operator()( double x, double y )
@@ -83,7 +82,7 @@ public:
     }
 };
 
-class isValidAndYPositive : public std::binary_function< double, double, bool >
+class isValidAndYPositive
 {
 public:
     bool operator()( double x, double y )
@@ -95,7 +94,7 @@ public:
     }
 };
 
-class isValidAndYNegative : public std::binary_function< double, double, bool >
+class isValidAndYNegative
 {
 public:
     bool operator()( double x, double y )
@@ -107,7 +106,7 @@ public:
     }
 };
 
-class isValidAndBothPositive : public std::binary_function< double, double, bool >
+class isValidAndBothPositive
 {
 public:
     bool operator()( double x, double y )
@@ -120,7 +119,7 @@ public:
     }
 };
 
-class isValidAndXPositiveAndYNegative : public std::binary_function< double, double, bool >
+class isValidAndXPositiveAndYNegative
 {
 public:
     bool operator()( double x, double y )

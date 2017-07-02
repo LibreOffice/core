@@ -15,7 +15,6 @@
 #include <vector>
 #include <iterator>
 #include <algorithm>
-#include <functional>
 
 using namespace std;
 
@@ -254,7 +253,7 @@ void print_buckets(const vector<bucket>& buckets, const char* msg)
     cout << "---" << endl;
 }
 
-struct less_by_value : std::binary_function<bucket, bucket, bool>
+struct less_by_value
 {
     bool operator() (const bucket& left, const bucket& right) const
     {
@@ -262,7 +261,7 @@ struct less_by_value : std::binary_function<bucket, bucket, bool>
     }
 };
 
-struct less_by_data_index : std::binary_function<bucket, bucket, bool>
+struct less_by_data_index
 {
     bool operator() (const bucket& left, const bucket& right) const
     {
@@ -270,7 +269,7 @@ struct less_by_data_index : std::binary_function<bucket, bucket, bool>
     }
 };
 
-struct equal_by_value : std::binary_function<bucket, bucket, bool>
+struct equal_by_value
 {
     bool operator() (const bucket& left, const bucket& right) const
     {

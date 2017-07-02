@@ -73,7 +73,7 @@ enum class ControlModification
     HEIGHT_GREATEST    =     10,
 };
 
-class AnyConverter : public ::std::binary_function< OUString,css::uno::Any,css::uno::Any >
+class AnyConverter
 {
 public:
     virtual ~AnyConverter(){}

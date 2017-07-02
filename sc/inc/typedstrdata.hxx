@@ -36,22 +36,22 @@ public:
     StringType GetStringType() const { return meStrType;}
     double GetValue() const { return mfValue; }
 
-    struct LessCaseSensitive : std::binary_function<ScTypedStrData, ScTypedStrData, bool>
+    struct LessCaseSensitive
     {
         bool operator() (const ScTypedStrData& left, const ScTypedStrData& right) const;
     };
 
-    struct LessCaseInsensitive : std::binary_function<ScTypedStrData, ScTypedStrData, bool>
+    struct LessCaseInsensitive
     {
         bool operator() (const ScTypedStrData& left, const ScTypedStrData& right) const;
     };
 
-    struct EqualCaseSensitive : std::binary_function<ScTypedStrData, ScTypedStrData, bool>
+    struct EqualCaseSensitive
     {
         bool operator() (const ScTypedStrData& left, const ScTypedStrData& right) const;
     };
 
-    struct EqualCaseInsensitive : std::binary_function<ScTypedStrData, ScTypedStrData, bool>
+    struct EqualCaseInsensitive
     {
         bool operator() (const ScTypedStrData& left, const ScTypedStrData& right) const;
     };

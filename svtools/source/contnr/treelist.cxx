@@ -1524,7 +1524,7 @@ void SvTreeList::Resort()
 
 namespace {
 
-class SortComparator : public std::binary_function<SvTreeListEntry,SvTreeListEntry,bool>
+class SortComparator
 {
     SvTreeList& mrList;
 public:

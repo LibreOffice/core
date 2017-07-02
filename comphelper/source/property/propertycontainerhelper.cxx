@@ -41,7 +41,7 @@ using namespace ::com::sun::star::beans;
 namespace
 {
     // comparing two property descriptions
-    struct PropertyDescriptionHandleCompare : public std::binary_function< PropertyDescription, PropertyDescription, bool >
+    struct PropertyDescriptionHandleCompare
     {
         bool operator() (const PropertyDescription& x, const PropertyDescription& y) const
         {

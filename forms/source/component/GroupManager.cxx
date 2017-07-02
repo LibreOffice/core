@@ -65,7 +65,7 @@ bool OGroupCompAcc::operator==( const OGroupCompAcc& rCompAcc ) const
     return m_xComponent == rCompAcc.m_xComponent;
 }
 
-class OGroupCompAccLess : public ::std::binary_function<OGroupCompAcc, OGroupCompAcc, sal_Bool>
+class OGroupCompAccLess
 {
 public:
     bool operator() (const OGroupCompAcc& lhs, const OGroupCompAcc& rhs) const
@@ -101,7 +101,7 @@ bool OGroupComp::operator==( const OGroupComp& rComp ) const
     return m_nTabIndex == rComp.GetTabIndex() && m_nPos == rComp.GetPos();
 }
 
-class OGroupCompLess : public ::std::binary_function<OGroupComp, OGroupComp, sal_Bool>
+class OGroupCompLess
 {
 public:
     bool operator() (const OGroupComp& lhs, const OGroupComp& rhs) const

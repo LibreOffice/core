@@ -509,7 +509,7 @@ public:
 
     namespace
     {
-        class CellDataLessComparison : public ::std::binary_function< sal_Int32, sal_Int32, bool >
+        class CellDataLessComparison
         {
         public:
             CellDataLessComparison(

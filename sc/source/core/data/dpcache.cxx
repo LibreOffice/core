@@ -195,7 +195,7 @@ struct PrintBucket
 
 #endif
 
-struct LessByValue : std::binary_function<Bucket, Bucket, bool>
+struct LessByValue
 {
     bool operator() (const Bucket& left, const Bucket& right) const
     {
@@ -203,7 +203,7 @@ struct LessByValue : std::binary_function<Bucket, Bucket, bool>
     }
 };
 
-struct LessByOrderIndex : std::binary_function<Bucket, Bucket, bool>
+struct LessByOrderIndex
 {
     bool operator() (const Bucket& left, const Bucket& right) const
     {
@@ -211,7 +211,7 @@ struct LessByOrderIndex : std::binary_function<Bucket, Bucket, bool>
     }
 };
 
-struct LessByDataIndex : std::binary_function<Bucket, Bucket, bool>
+struct LessByDataIndex
 {
     bool operator() (const Bucket& left, const Bucket& right) const
     {
@@ -219,7 +219,7 @@ struct LessByDataIndex : std::binary_function<Bucket, Bucket, bool>
     }
 };
 
-struct EqualByOrderIndex : std::binary_function<Bucket, Bucket, bool>
+struct EqualByOrderIndex
 {
     bool operator() (const Bucket& left, const Bucket& right) const
     {

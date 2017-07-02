@@ -47,7 +47,6 @@
 #include <tools/simplerm.hxx>
 
 #include <algorithm>
-#include <functional>
 #include <list>
 #include <set>
 #include <unordered_set>
@@ -410,7 +409,7 @@ struct ImpContent
     sal_uInt32    nOffset;
 };
 
-struct ImpContentLessCompare : public ::std::binary_function< ImpContent, ImpContent, bool>
+struct ImpContentLessCompare
 {
     bool operator() (const ImpContent& rLhs, const ImpContent& rRhs) const
     {

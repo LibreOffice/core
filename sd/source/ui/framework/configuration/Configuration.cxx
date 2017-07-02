@@ -33,7 +33,6 @@ namespace {
     for STL containers.
 */
 class XResourceIdLess
-    :   public ::std::binary_function <Reference<XResourceId>, Reference<XResourceId>, bool>
 {
 public:
     bool operator () (const Reference<XResourceId>& rId1, const Reference<XResourceId>& rId2) const

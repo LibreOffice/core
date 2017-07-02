@@ -275,7 +275,7 @@ class OSharedConnectionManager : public ::cppu::WeakImplHelper< XEventListener >
     } TConnectionHolder;
 
     // the less-compare functor, used for the stl::map
-    struct TDigestLess : public std::binary_function< TDigestHolder, TDigestHolder, bool>
+    struct TDigestLess
     {
         bool operator() (const TDigestHolder& x, const TDigestHolder& y) const
         {

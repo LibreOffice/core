@@ -21,7 +21,6 @@
 #include <list>
 #include <utility>
 #include <algorithm>
-#include <functional>
 #include <iostream>
 
 #include <i18nlangtag/mslangid.hxx>
@@ -158,8 +157,7 @@ MSWordAttrIter::~MSWordAttrIter()
     m_rExport.m_pChpIter = pOld;
 }
 
-class sortswflys :
-    public std::binary_function<const ww8::Frame&, const ww8::Frame&, bool>
+class sortswflys
 {
 public:
     bool operator()(const ww8::Frame &rOne, const ww8::Frame &rTwo) const
@@ -1879,7 +1877,7 @@ bool MSWordExportBase::GetAnnotationMarks( const SwTextNode& rNd, sal_Int32 nStt
     return ( rArr.size() > 0 );
 }
 
-class CompareMarksEnd : public std::binary_function < const IMark *, const IMark *, bool >
+class CompareMarksEnd
 {
 public:
     bool operator() ( const IMark * pOneB, const IMark * pTwoB ) const

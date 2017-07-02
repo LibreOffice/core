@@ -2758,7 +2758,7 @@ void EditDoc::dumpAsXml(struct _xmlTextWriter* pWriter) const
 
 namespace {
 
-struct LessByStart : std::binary_function<std::unique_ptr<EditCharAttrib>, std::unique_ptr<EditCharAttrib>, bool>
+struct LessByStart
 {
     bool operator() (const std::unique_ptr<EditCharAttrib>& left, const std::unique_ptr<EditCharAttrib>& right) const
     {

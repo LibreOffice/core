@@ -32,10 +32,6 @@ namespace xmloff
     */
     template < class IAFCE >
     struct OInterfaceCompare
-        :public ::std::binary_function  <   css::uno::Reference< IAFCE >
-                                        ,   css::uno::Reference< IAFCE >
-                                        ,   bool
-                                        >
     {
         bool operator() (const css::uno::Reference< IAFCE >& lhs, const css::uno::Reference< IAFCE >& rhs) const
         {

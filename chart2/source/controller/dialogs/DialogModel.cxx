@@ -46,7 +46,6 @@
 #include <utility>
 #include <algorithm>
 #include <iterator>
-#include <functional>
 #include <numeric>
 
 using namespace ::com::sun::star;
@@ -349,8 +348,7 @@ Reference< XDataSeries > lcl_CreateNewSeries(
     return xResult;
 }
 
-struct lcl_addSeriesNumber : public std::binary_function<
-        sal_Int32, Reference< XDataSeriesContainer >, sal_Int32 >
+struct lcl_addSeriesNumber
 {
     sal_Int32 operator() ( sal_Int32 nCurrentNumber, const Reference< XDataSeriesContainer > & xCnt ) const
     {

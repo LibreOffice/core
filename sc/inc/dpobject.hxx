@@ -324,7 +324,7 @@ public:
         OUString maCommand;
         DBType(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand);
 
-        struct less : public ::std::binary_function<DBType, DBType, bool>
+        struct less
         {
             bool operator() (const DBType& left, const DBType& right) const;
         };

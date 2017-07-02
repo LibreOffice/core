@@ -240,7 +240,7 @@ namespace frm
         };
 
 
-        struct PropertyValueLessByName : public ::std::binary_function< PropertyValue, PropertyValue, bool >
+        struct PropertyValueLessByName
         {
             bool operator()( const PropertyValue& _lhs, const PropertyValue& _rhs ) const
             {

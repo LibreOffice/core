@@ -44,7 +44,7 @@ namespace com { namespace sun { namespace star {
 
 namespace dbaui
 {
-    struct SbaURLCompare : public std::binary_function< css::util::URL, css::util::URL, bool>
+    struct SbaURLCompare
     {
         bool operator() (const css::util::URL& x, const css::util::URL& y) const { return x.Complete == y.Complete; }
     };

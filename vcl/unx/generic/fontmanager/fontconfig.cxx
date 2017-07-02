@@ -150,7 +150,7 @@ namespace
 
     //Sort fonts so that fonts with the same family name are side-by-side, with
     //those with higher version numbers first
-    class SortFont : public ::std::binary_function< const FcPattern*, const FcPattern*, bool >
+    class SortFont
     {
     public:
         bool operator()(const FcPattern *a, const FcPattern *b)

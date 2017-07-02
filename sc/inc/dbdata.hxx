@@ -101,7 +101,7 @@ private:
     using ScRefreshTimer::operator==;
 
 public:
-    struct less : public ::std::binary_function<std::unique_ptr<ScDBData>, std::unique_ptr<ScDBData>, bool>
+    struct less
     {
         bool operator() (const std::unique_ptr<ScDBData>& left, const std::unique_ptr<ScDBData>& right) const;
     };

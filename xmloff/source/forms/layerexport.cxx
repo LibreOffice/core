@@ -458,7 +458,7 @@ namespace xmloff
 
     namespace
     {
-        struct AccumulateSize : public ::std::binary_function< size_t, MapPropertySet2Map::value_type, size_t >
+        struct AccumulateSize
         {
             size_t operator()( size_t _size, const MapPropertySet2Map::value_type& _map ) const
             {

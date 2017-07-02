@@ -46,7 +46,7 @@ using namespace formula;
 
 namespace {
 
-struct MatrixAdd : public ::std::binary_function<double,double,double>
+struct MatrixAdd
 {
     double operator() (const double& lhs, const double& rhs) const
     {
@@ -54,7 +54,7 @@ struct MatrixAdd : public ::std::binary_function<double,double,double>
     }
 };
 
-struct MatrixSub : public ::std::binary_function<double,double,double>
+struct MatrixSub
 {
     double operator() (const double& lhs, const double& rhs) const
     {
@@ -62,7 +62,7 @@ struct MatrixSub : public ::std::binary_function<double,double,double>
     }
 };
 
-struct MatrixMul : public ::std::binary_function<double,double,double>
+struct MatrixMul
 {
     double operator() (const double& lhs, const double& rhs) const
     {
@@ -70,7 +70,7 @@ struct MatrixMul : public ::std::binary_function<double,double,double>
     }
 };
 
-struct MatrixDiv : public ::std::binary_function<double,double,double>
+struct MatrixDiv
 {
     double operator() (const double& lhs, const double& rhs) const
     {
@@ -78,7 +78,7 @@ struct MatrixDiv : public ::std::binary_function<double,double,double>
     }
 };
 
-struct MatrixPow : public ::std::binary_function<double,double,double>
+struct MatrixPow
 {
     double operator() (const double& lhs, const double& rhs) const
     {

@@ -22,7 +22,6 @@
 #include <sal/config.h>
 
 #include <math.h>
-#include <functional>
 #include <memory>
 
 #include <rtl/ustring.hxx>
@@ -35,7 +34,7 @@ namespace comphelper
 
 // comparison functors
 
-struct UStringMixLess : public ::std::binary_function< OUString, OUString, bool>
+struct UStringMixLess
 {
     bool m_bCaseSensitive;
 public:
@@ -51,7 +50,7 @@ public:
     bool isCaseSensitive() const {return m_bCaseSensitive;}
 };
 
-class UStringMixEqual: public std::binary_function<OUString, OUString, bool>
+class UStringMixEqual
 {
     bool m_bCaseSensitive;
 
@@ -64,7 +63,7 @@ public:
     bool isCaseSensitive() const {return m_bCaseSensitive;}
 };
 
-class TPropertyValueEqualFunctor : public ::std::binary_function< css::beans::PropertyValue,OUString,bool>
+class TPropertyValueEqualFunctor
 {
 public:
     TPropertyValueEqualFunctor()
@@ -77,7 +76,6 @@ public:
 
 /// by-value less functor for std::set<std::unique_ptr<T>>
 template<class T> struct UniquePtrValueLess
-    : public ::std::binary_function<std::unique_ptr<T>, std::unique_ptr<T>, bool>
 {
         bool operator()(std::unique_ptr<T> const& lhs,
                         std::unique_ptr<T> const& rhs) const
@@ -115,10 +113,6 @@ bool ContainerUniquePtrEquals(
 */
 template < class IAFCE >
 struct OInterfaceCompare
-    :public ::std::binary_function  <   css::uno::Reference< IAFCE >
-                                    ,   css::uno::Reference< IAFCE >
-                                    ,   bool
-                                    >
 {
     bool operator() (const css::uno::Reference< IAFCE >& lhs, const css::uno::Reference< IAFCE >& rhs) const
     {
@@ -131,7 +125,7 @@ struct OInterfaceCompare
 };
 
 template <class Tp, class Arg>
-class mem_fun1_t : public ::std::binary_function<Tp*,Arg,void>
+class mem_fun1_t
 {
     typedef void (Tp::*_fun_type)(Arg);
 public:

@@ -25,7 +25,6 @@
 #include <svdata.hxx>
 #include "menubarwindow.hxx"
 
-#include <functional>
 #include <algorithm>
 
 namespace {
@@ -51,7 +50,7 @@ Point ImplTaskPaneListGetPos( const vcl::Window *w )
 }
 
 // compares window pos left-to-right
-struct LTRSort : public ::std::binary_function< const vcl::Window*, const vcl::Window*, bool >
+struct LTRSort
 {
     bool operator()( const vcl::Window* w1, const vcl::Window* w2 ) const
     {
@@ -64,7 +63,7 @@ struct LTRSort : public ::std::binary_function< const vcl::Window*, const vcl::W
             return ( pos1.X() < pos2.X() );
     }
 };
-struct LTRSortBackward : public ::std::binary_function< const vcl::Window*, const vcl::Window*, bool >
+struct LTRSortBackward
 {
     bool operator()( const vcl::Window* w2, const vcl::Window* w1 ) const
     {

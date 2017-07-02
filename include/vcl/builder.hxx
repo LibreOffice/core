@@ -326,7 +326,6 @@ private:
     void        delete_by_name(const OString& sID);
 
     class sortIntoBestTabTraversalOrder
-        : public std::binary_function<const vcl::Window*, const vcl::Window*, bool>
     {
     public:
                 sortIntoBestTabTraversalOrder(VclBuilder *pBuilder)

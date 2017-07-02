@@ -350,9 +350,7 @@ namespace sw
             SetEndIfOpen& operator=(const SetEndIfOpen&) = delete;
         };
 
-        class CompareRedlines:
-            public std::binary_function<const SwFltStackEntry*, const SwFltStackEntry*,
-            bool>
+        class CompareRedlines
         {
         public:
             bool operator()(const SwFltStackEntry *pOneE, const SwFltStackEntry *pTwoE)
