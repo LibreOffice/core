@@ -279,25 +279,25 @@ bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
                 sal_uInt16  nCode = rKEvt.GetKeyCode().GetCode();
                 if (nCode == KEY_UP)
                 {
-                    // Scroll nach oben
+                    // scroll up
                     nX = 0;
                     nY =-1;
                 }
                 else if (nCode == KEY_DOWN)
                 {
-                    // Scroll nach unten
+                    // scroll down
                     nX = 0;
                     nY = 1;
                 }
                 else if (nCode == KEY_LEFT)
                 {
-                    // Scroll nach links
+                    // scroll left
                     nX =-1;
                     nY = 0;
                 }
                 else if (nCode == KEY_RIGHT)
                 {
-                    // Scroll nach rechts
+                    // scroll right
                     nX = 1;
                     nY = 0;
                 }

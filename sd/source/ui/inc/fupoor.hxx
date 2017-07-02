@@ -46,10 +46,10 @@ class Window;
 class FuPoor : public SimpleReferenceComponent
 {
 public:
-    static const int HITPIX = 2;                   // Hit-Toleranz in Pixel
-    static const int HITLOG = 53;                  // Hit tolerance in mm100
-    static const int DRGPIX = 2;                   // Drag MinMove in Pixel
-    static const int DRGLOG = 53;                  // Minimal drag move in mm100
+    static const int HITPIX = 2;                   // hit tolerance in pixel
+    static const int HITLOG = 53;                  // hit tolerance in mm100
+    static const int DRGPIX = 2;                   // minimal drag move in pixel
+    static const int DRGLOG = 53;                  // minimal drag move in mm100
 
 
     virtual void DoExecute( SfxRequest& rReq );
@@ -64,7 +64,7 @@ public:
     virtual void DoPaste();
     virtual void DoPasteUnformatted();
 
-    // Mouse- & Key-Events; Returnwert=sal_True: Event wurde bearbeitet
+    // mouse & key events; return value = sal_True: event has been handled
     virtual bool KeyInput(const KeyEvent& rKEvt);
     virtual bool MouseMove(const MouseEvent& );
     virtual bool MouseButtonUp(const MouseEvent& rMEvt);

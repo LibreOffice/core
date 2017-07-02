@@ -100,7 +100,7 @@ SFX_IMPL_OBJECTFACTORY(
 void DrawDocShell::Construct( bool bClipboard )
 {
     mbInDestruction = false;
-    SetSlotFilter();     // setzt Filter zurueck
+    SetSlotFilter();     // resets the filter
 
     mbOwnDocument = mpDoc == nullptr;
     if( mbOwnDocument )

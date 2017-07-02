@@ -851,7 +851,7 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
         Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
         Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
-        aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
+        aScaleWidth.ReduceInaccurate(10);       // compatible to the SdrOle2Obj
         aScaleHeight.ReduceInaccurate(10);
         pSdClient->SetSizeScale(aScaleWidth, aScaleHeight);
 

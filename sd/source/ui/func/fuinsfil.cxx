@@ -681,7 +681,7 @@ bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
     // transfer Outliner content to SdDrawDocument
     pOlView->PrepareClose();
 
-    // einlesen wie im Zeichenmodus
+    // read in like in the character mode
     if (InsSDDinDrMode(pMedium))
     {
         ::Outliner* pOutliner = pOlView->GetViewByWindow(mpWindow)->GetOutliner();
