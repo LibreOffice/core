@@ -126,7 +126,7 @@ public:
 
     void UpdateMapMode();
 
-    double  GetVisibleX();          // Interface fuer ScrollBars
+    double  GetVisibleX();          // interface for ScrollBars
     double  GetVisibleY();
     void    SetVisibleXY(double fX, double fY);
     double  GetVisibleWidth();

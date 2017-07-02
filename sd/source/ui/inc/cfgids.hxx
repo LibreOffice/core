@@ -22,7 +22,7 @@
 
 #include <sfx2/sfx.hrc>
 
-// Item-Ids fuer Config-Items
+// Item IDs for config items
 #define SDCFG_IMPRESS           (SFX_ITEMTYPE_SD_BEGIN + 1)
 #define SDCFG_DRAW              (SFX_ITEMTYPE_SD_BEGIN + 3)
 

@@ -95,7 +95,7 @@ public:
 
     void Paint (const ::tools::Rectangle& rRect, ::sd::Window* pWin);
 
-                    // Callbacks fuer LINKs
+                    // Callbacks for LINKs
     DECL_LINK( ParagraphInsertedHdl, ::Outliner::ParagraphHdlParam, void );
     DECL_LINK( ParagraphRemovingHdl, ::Outliner::ParagraphHdlParam, void );
     DECL_LINK( DepthChangedHdl, ::Outliner::DepthChangeHdlParam, void );

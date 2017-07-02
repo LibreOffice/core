@@ -1436,7 +1436,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
     if (pSourceDoc)
     {
         std::vector<StyleReplaceData> aReplList; // List of replaced stylesheets
-        bool bLayoutReloaded = false;   // Wurde ex. Layout wieder geladen?
+        bool bLayoutReloaded = false;   // Was ex. layout reloaded?
 
         // LayoutName, Page and Notes page
         if (rLayoutName.isEmpty())

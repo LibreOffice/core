@@ -307,7 +307,7 @@ public:
         administrator.
         @return
             The number of layers managed by the layer tab control.  The
-            returned value is independent of whether the layer modus is
+            returned value is independent of whether the layer mode is
             currently active and the tab control is visible.
     */
     int GetTabLayerCount() const;

@@ -83,7 +83,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
     /*********************************************************************
     |* Name of the layout of the page
     \********************************************************************/
-    OUString aOldLayoutName(maLayoutName);    // merken
+    OUString aOldLayoutName(maLayoutName);    // memorize
     OUStringBuffer aBuf(rLayoutName);
     aBuf.append(SD_LT_SEPARATOR).append(STR_LAYOUT_OUTLINE);
     maLayoutName = aBuf.makeStringAndClear();
