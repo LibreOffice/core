@@ -1647,10 +1647,8 @@ librdf_Repository::getStatementsRDFa(
 
 // css::lang::XInitialization:
 void SAL_CALL librdf_Repository::initialize(
-    const uno::Sequence< css::uno::Any > & i_rArguments)
+    const uno::Sequence< css::uno::Any > &)
 {
-    (void) i_rArguments;
-
     ::osl::MutexGuard g(m_aMutex);
 
 //    m_pWorld.reset(m_TypeConverter.createWorld(), safe_librdf_free_world);
