@@ -184,9 +184,8 @@ sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleRowSelected( sal_Int32
 }
 
 //columns aren't selectable
-sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleColumnSelected( sal_Int32 nColumn )
+sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleColumnSelected( sal_Int32 )
 {
-    (void) nColumn;
     return false;
 }
 
@@ -220,7 +219,6 @@ sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleSelected(
 
     ensureIsAlive();
     ensureIsValidAddress( nRow, nColumn );
-    (void) nColumn;
     //selection of single cells not possible, so if row is selected, the cell will be selected too
     return isAccessibleRowSelected(nRow);
 }
@@ -282,12 +280,11 @@ AccessibleGridControlTable::getSelectedAccessibleChild( sal_Int32 nSelectedChild
 }
 //not implemented yet, because only row selection possible
 void SAL_CALL AccessibleGridControlTable::deselectAccessibleChild(
-        sal_Int32 nSelectedChildIndex )
+        sal_Int32 )
 {
     SolarMutexGuard aSolarGuard;
 
     ensureIsAlive();
-    (void)nSelectedChildIndex;
 }
 // XInterface -----------------------------------------------------------------
 
